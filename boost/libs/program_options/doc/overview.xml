@@ -111,7 +111,7 @@ desc.add_options()
     <para>The call to the <code>value</code> function creates an instance of
     suitable class, derived from <code>options_semantic</code>. Calling member
     functions of that instance allows one to specify additional information (this
-    essentially emulates named parameters to the constructor). Calls to
+    essentially emulates named parameters of the constructor). Calls to
     <code>operator()</code> on the object returned by <code>add_options</code>
     forward arguments to the constructor of the <code>option_description</code>
     class and add the new instance.</para>

@@ -7,23 +7,24 @@
 ]>
 
 <section>
-  <title>Options description</title>
+  <title>Options Description</title>
 
-  <para>The options description layer allows to specify what options are
-    allowed -- and how they are should be processed. There are two
+  <para>The options description layer enables the programmer to specify what
+    options are allowed and how they are should be processed. There are two
     sublayers: syntactic and semantic. The syntactic layer allows the parsers
-    to group tokens into (name, value) pairs, where value is just vector of
-    string. The semantic layer is responsible for converting value of option 
-    into more usable C++ types. 
+    to group tokens into (name, value) pairs, where value is just a vector of
+    strings (<code>std::vector&lt;std::string&gt;</code>). The semantic layer
+    is responsible for converting the value of the option into more usable C++
+    types.
   </para>
 
   <para>This separation is an important part of library design. The parsers
-    use only syntactic layer, which takes away some of the freddom -- actually,
-    freedom to use overly complex structures. For example, it's not easily
-    possible to parse syntax like: <screen>calc --expression=1 + 2/3</screen>
-    because it's not possible to parse "1 + 2/3" without known that it's C
-    expression. With a little help from user the task becomes trivial, and the
-    syntax becomes much clear: <screen>calc --expression="1 + 2/3"</screen>
+    use only the syntactic layer, which takes away some of the freedom to use
+    overly complex structures. For example, it's not easy to parse syntax
+    like: <screen>calc --expression=1 + 2/3</screen> because it's not possible
+    to parse <screen>1 + 2/3</screen> without knowing that it's a C
+    expression. With a little help the from user the task becomes trivial, and the
+    syntax becomes much more clear: <screen>calc --expression="1 + 2/3"</screen>.
   </para>
 
   <section><title>Syntactic layer</title>
@@ -39,7 +40,7 @@
         ;
       </programlisting>
       This declares one option named "help" and associates a description with
-      it. No much, but it's just a start.
+      it. Not much, but it's a start.
     </para>
     
     <para>To make an option accept a parameter, you need to pass a third
@@ -53,7 +54,7 @@
       </programlisting>
       Since we're talking about syntactic layer, we can't expect any
       interesting logic yet. In fact, the passed value name is only used for
-      help message, and the value itself will represented as vector of string,
+      the help message, and the value itself will represented as a vector of strings,
       leaving all interpretation to the user.       
     </para>
     
@@ -82,14 +83,14 @@
   <section>
     <title>Semantic layer</title>
 
-    <para>The sematic layer is more interesting. As said before, it converts
+    <para>The semantic layer is more interesting. As said before, it converts
       values, represented as vector of strings, into C++ type that the programmer
       desires. In order to do so, it's necessary to pass something smarter
       than a value name. That "smarter" thing is a pointer to the 
       <classname>boost::program_options::value_semantic</classname> abstract
       class. Most of the time, you'd be using the 
       <classname>boost::program_options::typed_value</classname>, created via
-      call to <functionname>boost::program_options::value</functionname>
+      a call to the <functionname>boost::program_options::value</functionname>
       function.
       For example:
       <programlisting>
@@ -111,7 +112,7 @@
         ("verbose", "change verbosity level", value&lt;int&gt;("number")->default_value(0))
         ;        
       </programlisting>
-      would cause the "verbose" option to have value of 0 when nothing else if
+      would cause the "verbose" option to have the value of 0 when nothing else if
       specified. For the complete list of methods which can be be called on the
       pointer, refer to class
       <classname>boost::program_options::typed_value</classname> documentation.                  
@@ -123,8 +124,8 @@
     <title>Positional options</title>
 
     <para>Our definition of option as (name, value) pairs is simple and
-    usefull, but in one special case of command line, there's a
-    problem. Command line can include <firstterm>positional option</firstterm>,
+    useful, but in one special case of the command line, there's a
+    problem. A command line can include a <firstterm>positional option</firstterm>,
     which does not specify any name at all, for example:
       <screen>
         archiver --compression=9 /etc/passwd
@@ -147,19 +148,18 @@
       <programlisting>
         positional_options_description pd;
         pd.add("input-file", 1, 1);</programlisting>
-      specifies that for exactly one, first, positinal option the guessed
+      specifies that for exactly one, first, positional option the guessed
       name will be "input-file".
     </para>
 
-    <para>It's possible to specify that a number of positional options will be
-    given the same name, or even all positional options. 
+    <para>It's possible to specify that a number, or even all positional options, be
+      given the same name.
       <programlisting>
         positional_options_description pd;
         pd.add("output-file", 2, 2).add_optional("input-file", 0, -1);
-      </programlisting>
-      In the above examples, first two positional options will be associated
-      with name "output-file", and all others (which can be omitted), with the
-      name "input-file".
+      </programlisting>]
+      In the above example, the first two positional options will be associated
+      with name "output-file", and any others with the name "input-file"."
     </para>
     
   </section>
@@ -191,3 +191,12 @@
   </section>
 
 </section>
+
+<!--
+     Local Variables:
+     mode: xml
+     sgml-indent-data: t     
+     sgml-parent-document: ("program_options.xml" "section")
+     sgml-set-face: t
+     End:
+-->

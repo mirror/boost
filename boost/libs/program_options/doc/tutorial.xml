@@ -60,16 +60,16 @@ if (vm.count(&quot;compression&quot;)) {
   </para>
   
   <para>After that, an object of class <code>variables_map</code> is
-    declared. That class is indented to store values of options, and can store
-    values of arbitrary types. The following calls to
-    <code>parse_command_line</code>, <code>store</code> and <code>notify</code>
-    functions cause <code>vm</code> to contain all option found on the command
+    declared. That class is intended to store values of options, and can store
+    values of arbitrary types. Next, the calls to <code>store</code>,
+    <code>parse_command_line</code> and <code>notify</code> functions cause
+    <code>vm</code> to contain all the options found on the command
     line.</para>
 
   <para>And now, finally, we can use the options as we like. The
     <code>variables_map</code> class can be used just like
     <code>std::map</code>, except that values stored there must be converted to
-    the desired type with the <code>as</code> method, as shown above.
+    the desired type with the <code>as</code> method shown above.
   </para>
 
   <para>It's now a good time to try compiling the code yourself, but if
@@ -92,9 +92,9 @@ Compression level was set to 10.
   <section>
     <title>Option details</title>
     
-  <para>Option value, surely, can have other types than <code>int</code>, and
+  <para>An Option value, surely, can have other types than <code>int</code>, and
   can have other interesting properties, which we'll discuss right now. The
-  complete version of code snipped below can be found in
+  complete version of the code snipped below can be found in
   "example/options_description.cpp".</para>
 
   <para>Imagine we're writing a compiler. It should take the optimizaiton
@@ -117,21 +117,20 @@ desc.add_options()
   <para>The "--help" option should be familiar from the previous example. 
     It's a good idea to have this option in all cases.</para>
 
-  <para>The "optimization" option shows
-    two new features. First, we specify the address of variable. After 
-    storing values, that variable will have the value of the option. Second,
-    we specify a default value of 10, which will be used if no value is
-    specified by the user. 
+  <para>The "optimization" option shows two new features. First, we specify
+    the address of the variable(<code>&opt</code>). After storing values, that
+    variable will have the value of the option. Second, we specify a default
+    value of 10, which will be used if no value is specified by the user.
   </para>
 
-  <para>The "include-path" option is an example of the only case, where
-    interface of the <code>options_description</code> class serves specific
+  <para>The "include-path" option is an example of the only case where
+    the interface of the <code>options_description</code> class serves only one
     source -- the command line. Users typically like to use short option names
     for common options, and the "include-path,I" name specifies that short
     option name is "I". So, both "--include-path" and "-I" can be used.
   </para>
     
-  <para>The "input-file" option is used to specify the list of files to
+  <para>The "input-file" option specifies the list of files to
     process. That's okay for a start, but, of course, writing something like:
     <screen>
 compiler --input-file=a.cpp
@@ -144,8 +143,8 @@ compiler a.cpp
   </para>
 
   <para>
-    The command line tokens which don't have any option name, like above, are
-    called "positional options" by this library. They can be handled,
+    The command line tokens which have no option name, as above, are
+    called "positional options" by this library. They can be handled
     too. With a little help from the user, the library can decide that "a.cpp"
     really means the same as "--input-file=a.cpp". Here's the additional code
     we need:
@@ -162,16 +161,16 @@ po::notify(vm);
 
   <para>
     The first two lines say that all positional options should be translated
-    into "input-file" option. Also note that we use the
+    into "input-file" options. Also note that we use the
     &command_line_parser; class to parse the command
     line, not the &parse_command_line;
     function. The latter is a convenient wrapper for simple cases, but now we
     need to pass additional information.
   </para>
 
-  <para>By now, all options are described and parsed. We'll save ourself the
-  trouble of implementing the rest of compiler logic, and only print the
-  options:
+  <para>By now, all options are described and parsed. We'll save ourselves the
+      trouble of implementing the rest of the compiler logic and only print the
+      options:
     <programlisting>
 if (vm.count(&quot;include-path&quot;))
 {
@@ -220,17 +219,17 @@ Optimization level is 4
     <title>Multiple sources</title>
 
     <para>It's quite likely that specifying all options to our compiler on the
-    command line will annoy users. What if user installs a new library and
+    command line will annoy users. What if a user installs a new library and
     wants to always pass an additional command line element? What if he has
     made some choices which should be applied on every run? It's desirable to
-    create a config file with common setting, which will used together with
-    command line.
+    create a config file with common settings which will used together with
+    the command line.
     </para>
 
-    <para>Of course, there should be a need to combine the values from command
-    line and config file. For example, optimization level specified on command
-    line should override value from config file. On the other hand, include
-    paths are better merged together.
+    <para>Of course, there will be a need to combine the values from command
+    line and config file. For example, the optimization level specified on the
+    command line should override the value from the config file. On the other
+    hand, include paths should be combined.
     </para>
 
     <para>Let's see the code now. The complete program is in
@@ -240,7 +239,7 @@ Optimization level is 4
       not all options are alike. Some options, like "input-file" above, should
       not be presented in an automatic help message. Some options make sense only
       in the config file. Finally, it's nice to have some structure in the help message,
-      not jump a long list of options. Let's declare several option groups:
+      not just a long list of options. Let's declare several option groups:
       <programlisting>
 // Declare a group of options that will be 
 // allowed only on command line
@@ -269,8 +268,8 @@ hidden.add_options()
     (&quot;input-file&quot;, po::value&lt; vector&lt;string&gt; &gt;(), &quot;input file&quot;)
     ;        
 </programlisting>
-      Note the call to the <code>composing</code> method in declaration of the
-      "include-path" option. It tells that values from different sources
+      Note the call to the <code>composing</code> method in the declaration of the
+      "include-path" option. It tells the library that values from different sources
       should be composed together, as we'll see shortly.
     </para>
 
@@ -289,13 +288,13 @@ visible.add(generic).add(config);
       </programlisting>
     </para>
 
-    <para>Parsing and storing of values follows the usual pattern, except that
+    <para>The parsing and storing of values follows the usual pattern, except that
       we additionally call <functionname>parse_config_file</functionname>, and
       call the &store; function twice. But what
       happens if the same value is specified both on the command line and in
       config file. Usually, the value stored first is preferred. This is what
       happens for the "--optimization" option. For "composing" options, like
-      "include-file", the values are merged together.
+      "include-file", the values are merged.
     </para>
 
     <para>Here's an example session:
@@ -319,10 +318,10 @@ Include paths are: foo /opt
 Input files are: a.cpp b.cpp
 Optimization level is 4
 </screen>
-      The first invocation uses values from configuration file. The last
+      The first invocation uses values from the configuration file. The second
       invocation also uses values from command line. As we see, the include
-      paths on command line and config file are merged, while optimization is
-      taked from command line.
+      paths on the command line and in the configuration file are merged,
+      while optimization is taken from the command line.
     </para>
       
   </section>

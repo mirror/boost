@@ -32,3 +32,48 @@ The program_options.reference.html may contain one-liner
 > though, to distinguish "char strings in local 8-bit encoding" from the
 > Standard but it may confuse some readers.  I can't think of a good
 > alternative right now.
+
+> [By the way, "positional options" _desperately_ needs an entry in the
+> glossary. It's the most mystifying term in the library.]
+
+> If not already stated, you should note that all options must appear in the
+> options description layer (or class or object).  No options may make their
+> first appearance in the runtime configuration file, for instance.  The
+> library doesn't like surprises.  (I bring this up because other
+> initialization libraries allow an option to be declared in the
+> configuration file alone.  The file reader stores the option and parses it
+> to determine its type, for example, Boolean, double, integer or string.)
+
+-----------
+> "In the simplest case, the name is explicitly specified, which allows the
+> program to decide if such an option is known."
+>
+> or
+>
+> "In the simplest case, the name is explicitly specified and the program
+> decides that the option is known."
+> (This paragraph is a bit hard to read.  Maybe when I understand the library
+> better I can suggest some wording which flows more smoothly.)
+
+Maybe some explanation can help. Most of the time, input source contains both 
+the name of option and the value, for example, --foo=10. In this case, we 
+just lookup the option name, decide we know this option, and process it.
+
+In one specific case -- positional command line options, we don't have 
+explicit name. For example:
+
+   my_prog 1 2 3
+
+so more complex logic is necessary.
+
+
+> Rather than clutter up this list it might be better for the word "sources"
+> to be a link to another part of the document which lists the sources and
+> the order of precedence.
+
+Style of 'screen' in docs.
+
+> Perhaps you should include some sample output to show correct and incorrect
+> locale support or include a link to somewhere else in Boost where the
+> reader can find more information.  I wouldn't know a Unicode if it came up
+> and bit me on the ankle.

@@ -40,11 +40,11 @@
     <title>Introduction</title>
 
     <para>The program_options library allows program developers to obtain
-    <emphasis>program options</emphasis>, i.e. (name,value) pairs from the user,
+    <emphasis>program options</emphasis>, i.e. (name, value) pairs from the user,
     via conventional methods such as command line and config file.</para>
 
-    <para>Why would you use such a library, and why it's better than parsing
-    your command line by trivial hand-written code? Some of the reasons are:
+    <para>Why would you use such a library, and why is it better than parsing
+    your command line by trivial hand-written code?
       <itemizedlist>
         <listitem>
           <para>It's easier. The syntax for declaring options is simple, and
@@ -61,8 +61,8 @@
         </listitem>
         <listitem>
           <para>Options can be read from anywhere. Sooner or later the command
-          line will be not enough for your users, and you'd want config files
-          or maybe even environment variables. These can be added without significanto 
+          line will be not enough for your users, and you'll want config files
+          or maybe even environment variables. These can be added without significant 
           effort on your part.
           </para>
         </listitem>        
@@ -78,12 +78,13 @@
 
   <xi:include href="tutorial.xml"/>  
   <xi:include href="overview.xml"/>  
+  <xi:include href="options_description.xml"/>  
+
+  
   
   <xi:include href="howto.xml"/>
   <xi:include href="design.xml"/>
-  <xi:include href="acknowledgements.xml"/>
-  <xi:include href="changes.xml"/>
-    
+  <xi:include href="acknowledgements.xml"/>    
   
   <xi:include href="autodoc.boostbook"/> 
 </library>

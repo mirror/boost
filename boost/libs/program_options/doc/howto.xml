@@ -34,29 +34,30 @@
     need to change definition of all the options. In fact, for many options,
     like integer ones, it makes no sense. But to makes use of Unicode, you'd
     need <emphasis>some</emphasis> Unicode-aware options. They are different
-    from ordinary option is
+    from ordinary option in
     that they accept <code>wstring</code> input, and process it using wide
     character streams. Creating an Unicode-aware option is easy, just use the
     the <code>wvalue</code> function instead of the regular <code>value</code>.
     </para>
 
-    <para>When ascii parser passes data to ascii option, or unicode parser
-      passes data to unicode option, the data is not changed at all. So, ascii
-      option will see string in local 8 bit encoding, and unicode option will
-      see whatever string was passes as unicode input.
+    <para>When an ascii parser passes data to an ascii option, or a Unicode parser
+      passes data to a Unicode option, the data are not changed at all. So,
+      the ascii
+      option will see a string in local 8 bit encoding, and the Unicode option will
+      see whatever string was passes as the Unicode input.
     </para>
 
-    <para>The interesting question is what happens when unicode data is passed
-      to ascii option, and vice versa. The library perform automatic
-      conversion from Unicode to local 8 bit encoding. For example, if command
-      line is always ascii, but you use <code>wstring</code> options, then the
-      ascii input will be converted into unicode.     
+    <para>What happens when unicode data is passed to an ascii option, and
+      vice versa? The library automatically performs the conversion from
+      Unicode to local 8-bit encoding. For example, if command line is in
+      ascii, but you use <code>wstring</code> options, then the ascii input
+      will be converted into unicode.
     </para>
 
-    <para>To perform the conversion, library uses the<code>codecvt&lt;wchar_t,
-    char&gt;</code> locale facet from the global locale. This means that if
-    you want to work with string which use local 8 bit encoding (as opposed to
-    7 bit ascii subset),  your application should start with:
+    <para>To perform the conversion, the library uses the <code>codecvt&lt;wchar_t,
+    char&gt;</code> locale facet from the global locale. If
+    you want to work with strings that use local 8-bit encoding (as opposed to
+    7-bit ascii subset),  your application should start with:
       <programlisting>
 locale::global(locale(""));
       </programlisting>
@@ -64,7 +65,7 @@ locale::global(locale(""));
       locale. 
     </para>
 
-    <para>It's wise to check the status of C++ locale support on your
+    <para>It's wise to check the status of the C++ locale support on your
       implementation, though. The quick test involves three steps:
       <orderedlist>
         <listitem>
