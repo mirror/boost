@@ -54,7 +54,7 @@ main()
 
   std::cout << "Now do the same test for universal time -- a few less iterations" << std::endl;
   max = 10;
-  for (int i = 0; i<max; i++)
+  for (i = 0; i<max; i++)
   {
     for (int j=0; j<100000; j++)
     {
