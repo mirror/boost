@@ -10,7 +10,7 @@
 //
 // This software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
- 
+
 // For more information, see http://www.boost.org
 
 #ifndef BOOST_SIGNALS_TRACKABLE_HPP
@@ -37,25 +37,25 @@ namespace BOOST_SIGNALS_NAMESPACE {
     friend class detail::signal_base_impl;
     friend class detail::slot_base;
     void signal_connected(connection, BOOST_SIGNALS_NAMESPACE::detail::bound_object&) const;
-    
+
   protected:
     trackable() : connected_signals(), dying(false) {}
     trackable(const trackable&) : connected_signals(), dying(false) {}
     ~trackable();
-    
+
     trackable& operator=(const trackable&)
     {
       connected_signals.clear();
       return *this;
     }
-    
+
   private:
     typedef std::list<connection> connection_list;
     typedef connection_list::iterator connection_iterator;
-    
+
     // List of connections that this object is part of
     mutable connection_list connected_signals;
-    
+
     // True when the object is being destroyed
     mutable bool dying;
   };
@@ -66,8 +66,8 @@ namespace BOOST_SIGNALS_NAMESPACE {
     // A visitor that adds each trackable object to a vector
     class bound_objects_visitor {
     public:
-      bound_objects_visitor(std::vector<const trackable*>& v) : 
-        bound_objects(v) 
+      bound_objects_visitor(std::vector<const trackable*>& v) :
+        bound_objects(v)
       {
       }
 
@@ -82,7 +82,7 @@ namespace BOOST_SIGNALS_NAMESPACE {
       template<typename T>
       void decode(const reference_wrapper<T>& t, int) const
       {
-        add_if_trackable(t.get_pointer());
+        maybe_get_pointer(t.get(), truth<false>());
       }
 
       template<typename T>
@@ -96,7 +96,8 @@ namespace BOOST_SIGNALS_NAMESPACE {
       template<typename T>
       void maybe_get_pointer(const T& t, truth<true>) const
       {
-        add_if_trackable(t);
+        //        add_if_trackable(t);
+        maybe_get_pointer(*t, truth<false>());
       }
 
       template<typename T>
@@ -104,18 +105,20 @@ namespace BOOST_SIGNALS_NAMESPACE {
       {
         // Take the address of this object, because the object itself may be
         // trackable
-        add_if_trackable(addressof(t));
+        typedef truth<(is_base_and_derived<trackable, T>::value)> is_trackable;
+        add_if_trackable(&t, is_trackable());
       }
 
       // add_if_trackable() adds trackable objects to the list of bound objects
-      inline void add_if_trackable(const trackable* b) const
+      inline void add_if_trackable(const trackable* b, truth<true>) const
       {
         if (b) {
           bound_objects.push_back(b);
         }
       }
 
-      inline void add_if_trackable(const void*) const
+      template<typename T>
+      inline void add_if_trackable(const T*, truth<false>) const
       {
       }
 
