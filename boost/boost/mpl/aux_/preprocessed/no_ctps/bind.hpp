@@ -159,6 +159,7 @@ is_bind_helper(bind0<F>*);
 } // namespace aux
 
 BOOST_MPL_AUX_ARITY_SPEC(1, bind0)
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(1, bind0)
 
 namespace aux {
 
@@ -219,6 +220,7 @@ is_bind_helper(bind1< F,T1 >*);
 } // namespace aux
 
 BOOST_MPL_AUX_ARITY_SPEC(2, bind1)
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(2, bind1)
 
 namespace aux {
 
@@ -284,6 +286,7 @@ is_bind_helper(bind2< F,T1,T2 >*);
 } // namespace aux
 
 BOOST_MPL_AUX_ARITY_SPEC(3, bind2)
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(3, bind2)
 
 namespace aux {
 
@@ -354,6 +357,7 @@ is_bind_helper(bind3< F,T1,T2,T3 >*);
 } // namespace aux
 
 BOOST_MPL_AUX_ARITY_SPEC(4, bind3)
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(4, bind3)
 
 namespace aux {
 
@@ -430,6 +434,7 @@ is_bind_helper(bind4< F,T1,T2,T3,T4 >*);
 } // namespace aux
 
 BOOST_MPL_AUX_ARITY_SPEC(5, bind4)
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(5, bind4)
 
 namespace aux {
 
@@ -513,6 +518,7 @@ is_bind_helper(bind5< F,T1,T2,T3,T4,T5 >*);
 } // namespace aux
 
 BOOST_MPL_AUX_ARITY_SPEC(6, bind5)
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(6, bind5)
 
 namespace aux {
 
@@ -572,6 +578,11 @@ struct bind
 };
 
 BOOST_MPL_AUX_ARITY_SPEC(
+      6
+    , bind
+    )
+
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(
       6
     , bind
     )

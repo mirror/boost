@@ -83,6 +83,7 @@ struct resolve_bind_arg<
 } // namespace aux
 
 BOOST_MPL_AUX_ARITY_SPEC(1, bind0)
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(1, bind0)
 
 template<
       typename F
@@ -133,6 +134,7 @@ struct resolve_bind_arg<
 } // namespace aux
 
 BOOST_MPL_AUX_ARITY_SPEC(2, bind1)
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(2, bind1)
 
 template<
       typename F, typename T1
@@ -184,6 +186,7 @@ struct resolve_bind_arg<
 } // namespace aux
 
 BOOST_MPL_AUX_ARITY_SPEC(3, bind2)
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(3, bind2)
 
 template<
       typename F, typename T1, typename T2
@@ -236,6 +239,7 @@ struct resolve_bind_arg<
 } // namespace aux
 
 BOOST_MPL_AUX_ARITY_SPEC(4, bind3)
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(4, bind3)
 
 template<
       typename F, typename T1, typename T2, typename T3
@@ -290,6 +294,7 @@ struct resolve_bind_arg<
 } // namespace aux
 
 BOOST_MPL_AUX_ARITY_SPEC(5, bind4)
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(5, bind4)
 
 template<
       typename F, typename T1, typename T2, typename T3, typename T4
@@ -347,6 +352,7 @@ struct resolve_bind_arg<
 } // namespace aux
 
 BOOST_MPL_AUX_ARITY_SPEC(6, bind5)
+BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(6, bind5)
 
 /// primary template (not a specialization!)
 
