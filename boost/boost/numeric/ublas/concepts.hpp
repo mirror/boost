@@ -1142,11 +1142,9 @@ namespace boost { namespace numeric { namespace ublas {
         // Sparse Storage
 #if defined (INTERNAL) || defined (INTERNAL_STORAGE_SPARSE)
         SparseStorageContainerConcept<const map_array<std::size_t, double> >::constraints ();
-//FIXME - fails with pair<const I, T> allocator definition
-//        MutableSparseStorageContainerConcept<map_array<std::size_t, double> >::constraints ();
+        MutableSparseStorageContainerConcept<map_array<std::size_t, double> >::constraints ();
         RandomAccessIteratorConcept<map_array<std::size_t, double>::const_iterator, std::ptrdiff_t, std::pair<std::size_t, double> >::constraints ();
-//FIXME - fails with pair<const I, T> allocator definition
-//        MutableRandomAccessIteratorConcept<map_array<std::size_t, double>::iterator, std::ptrdiff_t, std::pair<std::size_t, double> >::constraints ();
+        MutableRandomAccessIteratorConcept<map_array<std::size_t, double>::iterator, std::ptrdiff_t, std::pair<std::size_t, double> >::constraints ();
 
 #ifdef BOOST_UBLAS_DEPRACATED
         SparseStorageContainerConcept<const set_array<std::size_t> >::constraints ();
@@ -1488,7 +1486,6 @@ namespace boost { namespace numeric { namespace ublas {
         MutableIndexedBidirectional2DIteratorConcept<sparse_matrix<double>::reverse_iterator1,
                                                      sparse_matrix<double>::reverse_iterator2>::constraints ();
 
-/* FIXME - sparse_vector_of_sparse_vector broken
         MatrixConcept<const sparse_vector_of_sparse_vector<double> >::constraints ();
         MutableMatrixConcept<sparse_vector_of_sparse_vector<double> >::constraints ();
         IndexedBidirectional2DIteratorConcept<sparse_vector_of_sparse_vector<double>::const_iterator1,
@@ -1499,7 +1496,6 @@ namespace boost { namespace numeric { namespace ublas {
                                               sparse_vector_of_sparse_vector<double>::const_reverse_iterator2>::constraints ();
         MutableIndexedBidirectional2DIteratorConcept<sparse_vector_of_sparse_vector<double>::reverse_iterator1,
                                                      sparse_vector_of_sparse_vector<double>::reverse_iterator2>::constraints ();
-*/
 
         MatrixConcept<const compressed_matrix<double> >::constraints ();
         MutableMatrixConcept<compressed_matrix<double> >::constraints ();
