@@ -15,12 +15,14 @@
 # include <assert.h>
 # include <boost/type_traits.hpp>
 # include <boost/static_assert.hpp>
+# include <boost/concept_archetype.hpp> // for detail::dummy_constructor
 
 namespace boost {
 
   // use this for the value type
 struct dummyT { 
   dummyT() { }
+  dummyT(detail::dummy_constructor) { }
   dummyT(int x) : m_x(x) { }
   int foo() const { return m_x; } 
   bool operator==(const dummyT& d) const { return m_x == d.m_x; }
