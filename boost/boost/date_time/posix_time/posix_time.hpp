@@ -16,7 +16,7 @@
 #if defined(BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES)
 #include "boost/date_time/posix_time/date_duration_operators.hpp"
 #endif
-#if defined(BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS)
+#if defined(BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS)
 #include "boost/date_time/posix_time/time_formatters_limited.hpp"
 #else
 #include "boost/date_time/posix_time/time_formatters.hpp"

@@ -4,7 +4,6 @@
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
  */
-
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/testfrmwk.hpp"
 
@@ -87,14 +86,8 @@ main()
     std::istringstream iss("01:02:03.000004 garbage");
     iss >> td;
     check("Stream in time_duration", td == time_duration(1,2,3,4));
-#ifndef BOOST_NO_CWCHAR
-    std::wistringstream wiss(L"01:02:03");//.000004");
-    wiss >> td;
-    check("Wide stream in time_duration", td == time_duration(1,2,3));
-#else
-    check("Wide stream in time_duration not supported by this compiler", false);
-#endif
   }
+#if !defined(BOOST_NO_STD_ITERATOR_TRAITS) // vc6 & vc7
   {
     std::istringstream iss("2003-May-13 01:02:03");
     iss >> t1;
@@ -107,22 +100,15 @@ main()
     check("Stream in ptime3", t1 == ptime(date(2003,Feb,13), time_duration(11,10,9)));
 
     try {
-          std::istringstream iss4("2003-xxx-13 11:10:09");
-          iss3 >> t1;
-          check("Stream bad ptime", false); //never reach here, bad month exception
+      std::istringstream iss4("2003-xxx-13 11:10:09");
+      iss3 >> t1;
+      check("Stream bad ptime", false); //never reach here, bad month exception
     }
     catch(std::exception& e) {
       std::cout << "Got expected exception: " << e.what() << std::endl;
       check("Stream bad ptime", true); 
     }
 
-#ifndef BOOST_NO_CWCHAR
-    std::wistringstream wiss(L"2003-May-23 03:20:10");
-    wiss >> t1;
-    check("Wide stream in ptime", t1 == ptime(date(2003,May,23), time_duration(3,20,10)));
-#else
-    check("Wide stream in ptime not supported by this compiler", false);
-#endif
   }
   {
     date d1(2001,Aug,1), d2(2003,May,13);
@@ -131,23 +117,39 @@ main()
     std::istringstream iss("[2001-Aug-01 15:32:18.020304/2003-May-13 01:02:03]");
     iss >> tp;
     check("Stream in time_period", tp == result);
-#ifndef BOOST_NO_CWCHAR
-    d1 = date(2004,Jan,1);
-    d2 = date(2004,May,13);
-    td1 = time_duration(2,3,4);
-    td2 = time_duration(1,0,0);
-    result = time_period(ptime(d1,td1), ptime(d2,td2));
-    std::wistringstream wiss(L"[2004-Jan-01 02:03:04/2004-May-13 01:00:00]");
-    wiss >> tp;
-    check("Wide stream in time_period", tp == result);
-#else
-    check("Wide stream in time_period not supported by this compiler", false);
-#endif
   }
 
+#if !(defined(BOOST_NO_STD_WSTRING) || defined(BOOST_NO_CWCHAR))
+  /*** wide streaming ***/
+  {
+    std::wistringstream wiss1(L"01:02:03");//.000004");
+    wiss1 >> td;
+    check("Wide stream in time_duration", td == time_duration(1,2,3));
+    
+    std::wistringstream wiss2(L"2003-May-23 03:20:10");
+    wiss2 >> t1;
+    check("Wide stream in ptime", t1 == ptime(date(2003,May,23), time_duration(3,20,10)));
+    
+    std::wistringstream wiss3(L"[2004-Jan-01 02:03:04/2004-May-13 01:00:00]");
+    wiss3 >> tp;
+    date d1 = date(2004,Jan,1);
+    date d2 = date(2004,May,13);
+    time_duration td1 = time_duration(2,3,4);
+    time_duration td2 = time_duration(1,0,0);
+    time_period result = time_period(ptime(d1,td1), ptime(d2,td2));
+    check("Wide stream in time_period", tp == result);
+  }
 #else
-  check("No tests executed - Locales not supported by this compiler", false);
+  check("Wide streaming not available for this compiler", false);
+#endif // BOOST_NO_STD_WSTRING || BOOST_NO_CWCHAR
 
+#else  // BOOST_NO_STD_ITERATOR_TRAITS
+  check("Streaming in of alphabetic dates (Ex: 2003-Aug-21) \
+      not supported by this compiler", false);
+#endif // BOOST_NO_STD_ITERATOR_TRAITS
+
+#else  //BOOST_DATE_TIME_NO_LOCALE
+  check("No tests executed - Locales not supported by this compiler", false);
 #endif //BOOST_DATE_TIME_NO_LOCALE
 
   return printTestStats();

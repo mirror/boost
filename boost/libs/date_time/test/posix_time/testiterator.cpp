@@ -9,7 +9,7 @@
 #include <iostream>
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/testfrmwk.hpp"
-#if defined(BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS)
+#if defined(BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS)
 #include "boost/date_time/gregorian/formatters_limited.hpp"
 #else
 #include "boost/date_time/gregorian/formatters.hpp"

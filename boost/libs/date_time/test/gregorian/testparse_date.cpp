@@ -63,7 +63,7 @@ main()
     date d11 = from_us_string("feb 29 2000");
     check("american date with comma: feb 29 2000 ", d11 == d);
 
-#if defined(BOOST_DATE_TIME_NO_LOCALE)
+#if defined(BOOST_DATE_TIME_NO_LOCALE) || defined(BOOST_NO_STD_ITERATOR_TRAITS)
     check("input streaming for date not available", false); // force a failure
 #else
     {

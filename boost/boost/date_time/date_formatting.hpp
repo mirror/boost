@@ -17,7 +17,7 @@
 #include <iomanip>
 
 /* NOTE: "formatter" code for older compilers, ones that define 
- * BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS, is located in 
+ * BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS, is located in  
  * date_formatting_limited.hpp
  */
 

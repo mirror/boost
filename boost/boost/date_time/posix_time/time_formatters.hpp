@@ -19,7 +19,7 @@
 #include "boost/date_time/time_parsing.hpp"
 
 /* NOTE: The "to_*_string" code for older compilers, ones that define 
- * BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS, is located in 
+ * BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS, is located in 
  * formatters_limited.hpp
  */
 
@@ -94,12 +94,7 @@ namespace posix_time {
   inline std::string to_simple_string(time_duration td) {
     return to_simple_string_type<char>(td);
   }
-  //! Time duration to wstring -hh::mm::ss.fffffff. Example: 10:09:03.0123456
-  /*!\ingroup time_format
-   */
-  inline std::wstring to_simple_wstring(time_duration td) {
-    return to_simple_string_type<wchar_t>(td);
-  }
+
 
   // template function called by wrapper functions:
   // to_*_string(time_duration) & to_*_wstring(time_duration)
@@ -168,13 +163,7 @@ namespace posix_time {
   inline std::string to_iso_string(time_duration td){
     return to_iso_string_type<char>(td);
   }
-  //! Time duration in iso format -hhmmss,fffffff Example: 10:09:03,0123456
-  /*!\ingroup time_format
-   */
-  inline std::wstring to_iso_wstring(time_duration td){
-    return to_iso_string_type<wchar_t>(td);
-  }
-  
+
   //! Time to simple format CCYY-mmm-dd hh:mm:ss.fffffff
   /*!\ingroup time_format
    */
@@ -194,9 +183,6 @@ namespace posix_time {
   inline std::string to_simple_string(ptime t){
     return to_simple_string_type<char>(t);
   }
-  inline std::wstring to_simple_wstring(ptime t){
-    return to_simple_string_type<wchar_t>(t);
-  }
 
   // function called by wrapper functions to_*_string(time_period) 
   // & to_*_wstring(time_period)
@@ -213,12 +199,6 @@ namespace posix_time {
    */
   inline std::string to_simple_string(time_period tp){
     return to_simple_string_type<char>(tp);
-  }
-  //! Convert to wstring of form [YYYY-mmm-DD HH:MM::SS.ffffff/YYYY-mmm-DD HH:MM::SS.fffffff]
-  /*!\ingroup time_format
-   */
-  inline std::wstring to_simple_wstring(time_period tp){
-    return to_simple_string_type<wchar_t>(tp);
   }
 
   // function called by wrapper functions to_*_string(time_period) 
@@ -241,12 +221,7 @@ namespace posix_time {
   inline std::string to_iso_string(ptime t){
     return to_iso_string_type<char>(t);
   }
-  //! Convert iso short form YYYYMMDDTHHMMSS where T is the date-time separator
-  /*!\ingroup time_format
-   */
-  inline std::wstring to_iso_wstring(ptime t){
-    return to_iso_string_type<wchar_t>(t);
-  }
+
 
   // function called by wrapper functions to_*_string(time_period) 
   // & to_*_wstring(time_period)
@@ -268,12 +243,43 @@ namespace posix_time {
   inline std::string to_iso_extended_string(ptime t){
     return to_iso_extended_string_type<char>(t);
   }
+
+#if !defined(BOOST_NO_STD_WSTRING)
+  //! Time duration to wstring -hh::mm::ss.fffffff. Example: 10:09:03.0123456
+  /*!\ingroup time_format
+   */
+  inline std::wstring to_simple_wstring(time_duration td) {
+    return to_simple_string_type<wchar_t>(td);
+  }
+  //! Time duration in iso format -hhmmss,fffffff Example: 10:09:03,0123456
+  /*!\ingroup time_format
+   */
+  inline std::wstring to_iso_wstring(time_duration td){
+    return to_iso_string_type<wchar_t>(td);
+  }
+    inline std::wstring to_simple_wstring(ptime t){
+    return to_simple_string_type<wchar_t>(t);
+  }
+  //! Convert to wstring of form [YYYY-mmm-DD HH:MM::SS.ffffff/YYYY-mmm-DD HH:MM::SS.fffffff]
+  /*!\ingroup time_format
+   */
+  inline std::wstring to_simple_wstring(time_period tp){
+    return to_simple_string_type<wchar_t>(tp);
+  }
+  //! Convert iso short form YYYYMMDDTHHMMSS where T is the date-time separator
+  /*!\ingroup time_format
+   */
+  inline std::wstring to_iso_wstring(ptime t){
+    return to_iso_string_type<wchar_t>(t);
+  }
   //! Convert to form YYYY-MM-DDTHH:MM:SS where T is the date-time separator
   /*!\ingroup time_format
    */
   inline std::wstring to_iso_extended_wstring(ptime t){
     return to_iso_extended_string_type<wchar_t>(t);
   }
+
+#endif // BOOST_NO_STD_WSTRING
 
 
   /* ATTENTION: The following operator<< functions are exactly duplicated

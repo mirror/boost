@@ -21,6 +21,13 @@
 // To Force no default constructors for date & ptime, un-comment following
 //#define DATE_TIME_NO_DEFAULT_CONSTRUCTOR
 
+// Include extensions to date_duration - comment out to remove this feature
+#define BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES
+// these extensions are known to cause problems with gcc295
+#if defined(__GNUC__) && (__GNUC__ < 3)
+#undef BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES
+#endif
+
 #if (defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION) || (defined(__BORLANDC__)))
 #define BOOST_DATE_TIME_NO_MEMBER_INIT
 #endif
@@ -57,17 +64,18 @@ namespace std {
 }
 #endif
 
-// workaround for errors associated with wide string output 
-// modifications. compilers affected are:
+// workaround for errors associated with output for date classes 
+// modifications and input streaming for time classes. 
+// Compilers affected are:
 // Borland 551, gcc295 (not stlport), msvc6, mingw, cygwin
 // Any of these compilers *should* work if used with StlPort's streams
 #if ((defined(__GNUC__) && (__GNUC__ < 3)) || \
      (defined(_MSC_VER) && (_MSC_VER <= 1200)) || \
-     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0564)) || \
-     (defined(BOOST_NO_STD_WSTRING))) && \
+     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0564)) ) && \
      !defined(_STLP_OWN_IOSTREAMS)
-#define BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS
+#define BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS
 #endif
+
 
 /* The following handles the definition of the necessary macros
  * for dll building on Win32 platforms.

@@ -13,7 +13,7 @@
 using namespace boost::gregorian;
 
 int main(){
-#ifdef BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS
+#if defined(BOOST_NO_STD_WSTRING) || defined(BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS)
   check("No wstring/wstream support for this compiler", false);
 #else
   std::wstring res, ws;

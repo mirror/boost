@@ -12,7 +12,7 @@
 #include "boost/date_time/compiler_config.hpp"
 #include "boost/date_time/gregorian/gregorian_types.hpp"
 #include "boost/date_time/gregorian/greg_facet.hpp"
-#if defined(BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS)
+#if defined(BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS)
 #include "boost/date_time/date_formatting_limited.hpp"
 #else
 #include "boost/date_time/date_formatting.hpp"
@@ -21,7 +21,7 @@
 #include "boost/date_time/date_format_simple.hpp"
 
 /* NOTE: "to_*_string" code for older compilers, ones that define 
- * BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS, is located in 
+ * BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS, is located in 
  * formatters_limited.hpp
  */
 
@@ -40,12 +40,7 @@ namespace gregorian {
   inline std::string to_simple_string(const date& d) {
     return to_simple_string_type<char>(d);
   }
-  //! To YYYY-mmm-DD string where mmm 3 char month name. Example:  2002-Jan-01
-  /*!\ingroup date_format
-   */
-  inline std::wstring to_simple_wstring(const date& d) {
-    return to_simple_string_type<wchar_t>(d);
-  }
+
 
   // wrapper function for to_simple_(w)string(date_period)
   template<class charT>
@@ -63,12 +58,6 @@ namespace gregorian {
   inline std::string to_simple_string(const date_period& d) {
     return to_simple_string_type<char>(d);
   }
-  //! Convert date period to simple string. Example: [2002-Jan-01/2002-Jan-02]
-  /*!\ingroup date_format
-   */
-  inline std::wstring to_simple_wstring(const date_period& d) {
-    return to_simple_string_type<wchar_t>(d);
-  }
 
   // wrapper function for to_iso_(w)string(date_period)
   template<class charT>
@@ -83,12 +72,6 @@ namespace gregorian {
   inline std::string to_iso_string(const date_period& d) {
     return to_iso_string_type<char>(d);
   }
-  //! Date period to iso standard format CCYYMMDD/CCYYMMDD. Example: 20021225/20021231
-  /*!\ingroup date_format
-   */
-  inline std::wstring to_iso_wstring(const date_period& d) {
-    return to_iso_string_type<wchar_t>(d);
-  }
 
 
   // wrapper function for to_iso_extended_(w)string(date)
@@ -102,12 +85,6 @@ namespace gregorian {
   inline std::string to_iso_extended_string(const date& d) {
     return to_iso_extended_string_type<char>(d);
   }
-  //! Convert to iso extended format string CCYY-MM-DD. Example 2002-12-31
-  /*!\ingroup date_format
-   */
-  inline std::wstring to_iso_extended_wstring(const date& d) {
-    return to_iso_extended_string_type<wchar_t>(d);
-  }
 
   // wrapper function for to_iso_(w)string(date)
   template<class charT>
@@ -120,12 +97,7 @@ namespace gregorian {
   inline std::string to_iso_string(const date& d) {
     return to_iso_string_type<char>(d);
   }
-  //! Convert to iso standard string YYYYMMDD. Example: 20021231
-  /*!\ingroup date_format
-   */
-  inline std::wstring to_iso_wstring(const date& d) {
-    return to_iso_string_type<wchar_t>(d);
-  }
+
   
   
 
@@ -146,10 +118,43 @@ namespace gregorian {
   inline std::string to_sql_string(const date& d) {
     return to_sql_string_type<char>(d);
   }
+
+
+#if !defined(BOOST_NO_STD_WSTRING)
+  //! Convert date period to simple string. Example: [2002-Jan-01/2002-Jan-02]
+  /*!\ingroup date_format
+   */
+  inline std::wstring to_simple_wstring(const date_period& d) {
+    return to_simple_string_type<wchar_t>(d);
+  }
+  //! To YYYY-mmm-DD string where mmm 3 char month name. Example:  2002-Jan-01
+  /*!\ingroup date_format
+   */
+  inline std::wstring to_simple_wstring(const date& d) {
+    return to_simple_string_type<wchar_t>(d);
+  }
+  //! Date period to iso standard format CCYYMMDD/CCYYMMDD. Example: 20021225/20021231
+  /*!\ingroup date_format
+   */
+  inline std::wstring to_iso_wstring(const date_period& d) {
+    return to_iso_string_type<wchar_t>(d);
+  }
+  //! Convert to iso extended format string CCYY-MM-DD. Example 2002-12-31
+  /*!\ingroup date_format
+   */
+  inline std::wstring to_iso_extended_wstring(const date& d) {
+    return to_iso_extended_string_type<wchar_t>(d);
+  }
+  //! Convert to iso standard string YYYYMMDD. Example: 20021231
+  /*!\ingroup date_format
+   */
+  inline std::wstring to_iso_wstring(const date& d) {
+    return to_iso_string_type<wchar_t>(d);
+  }
   inline std::wstring to_sql_wstring(const date& d) {
     return to_sql_string_type<wchar_t>(d);
   }
-
+#endif // BOOST_NO_STD_WSTRING
 
 } } //namespace gregorian
 
