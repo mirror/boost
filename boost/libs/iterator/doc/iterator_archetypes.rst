@@ -23,7 +23,7 @@ Reference
 ``iterator_archetype`` Synopsis
 ...............................
 
-.. parsed-literal::
+::
 
     namespace iterator_archetypes
     {
@@ -57,7 +57,7 @@ Reference
 The access category types provided correspond to the following
 standard iterator access concept combinations:
 
-.. parsed-literal::
+::
 
     readable_iterator_t :=
   
@@ -101,7 +101,7 @@ concepts or any more derived traversal concepts.
 
 The nested trait types are defined as follows:
 
-.. parsed-literal::
+::
 
    if (AccessCategory == readable_iterator_t)
      
