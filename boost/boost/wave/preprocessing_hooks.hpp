@@ -96,11 +96,30 @@ struct default_preprocessing_hooks {
 
     ///////////////////////////////////////////////////////////////////////////
     //  
+    //  The function 'found_include_directive' is called, whenever a #include
+    //  directive was located.
+    //
+    //  The parameter 'filename' contains the (expanded) file name found after 
+    //  the #include directive. This has the format '<file>', '"file"' or 
+    //  'file'.
+    //  The formats '<file>' or '"file"' are used for #include directives found 
+    //  in the preprocessed token stream, the format 'file' is used for files
+    //  specified through the --force_include command line argument.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    void 
+    found_include_directive(std::string const &filename) 
+    {}
+    
+    ///////////////////////////////////////////////////////////////////////////
+    //  
     //  The function 'opened_include_file' is called, whenever a file referred 
     //  by an #include directive was successfully located and opened.
     //
-    //  The parameter 'filename' contains the full file system path of the 
-    //  opened file.
+    //  The parameter 'filename' contains the file system path of the 
+    //  opened file (this is relative to the directory of the currently 
+    //  processed file or a absolute path depending on the paths given as the
+    //  include search paths).
     //
     //  The include_depth parameter contains the current include file depth.
     //
@@ -109,8 +128,8 @@ struct default_preprocessing_hooks {
     //  
     ///////////////////////////////////////////////////////////////////////////
     void 
-    opened_include_file(std::string const &filename, std::size_t include_depth,
-        bool is_system_include) 
+    opened_include_file(std::string const &relname, std::string const &absname, 
+        std::size_t include_depth, bool is_system_include) 
     {}
     
     ///////////////////////////////////////////////////////////////////////////

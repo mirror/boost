@@ -107,7 +107,7 @@ struct trace_include_files
     trace_include_files(set<string> &files_) : files(files_) {}
     
     void 
-    opened_include_file(string const &filename, 
+    opened_include_file(string const &relname, string const &filename, 
         std::size_t include_depth, bool is_system_include) 
     {
         set<string>::iterator it = files.find(filename);

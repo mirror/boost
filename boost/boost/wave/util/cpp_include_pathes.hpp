@@ -14,6 +14,7 @@
 #include <string>
 #include <list>
 #include <set>
+#include <utility>
 
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -53,9 +54,14 @@ namespace util {
 ///////////////////////////////////////////////////////////////////////////////
 class include_pathes
 {
-    typedef std::list<boost::filesystem::path> include_list_t;
-    typedef std::set<std::string> pragma_once_set_t;
+    typedef std::list<std::pair<boost::filesystem::path, std::string> > 
+        include_list_type;
+    typedef include_list_type::value_type include_value_type;
     
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    typedef std::set<std::string> pragma_once_set_t;
+#endif
+
 public:
     include_pathes()
     :   was_sys_include_path(false),
@@ -68,20 +74,20 @@ public:
             system_include_pathes : user_include_pathes);
     }
     void set_sys_include_delimiter() { was_sys_include_path = true; }
-    bool find_include_file (std::string &s, bool is_system, 
+    bool find_include_file (std::string &s, std::string &dir, bool is_system, 
         char const *current_file) const;
     void set_current_directory(char const *path_);
 
     void init_initial_path() { boost::filesystem::initial_path(); }
     
 protected:
-    bool find_include_file (std::string &s, include_list_t const &pathes,
-        char const *) const;
-    bool add_include_path(char const *path_, include_list_t &pathes_);
+    bool find_include_file (std::string &s, std::string &dir, 
+        include_list_type const &pathes, char const *) const;
+    bool add_include_path(char const *path_, include_list_type &pathes_);
 
 private:
-    include_list_t user_include_pathes;
-    include_list_t system_include_pathes;
+    include_list_type user_include_pathes;
+    include_list_type system_include_pathes;
     bool was_sys_include_path;          // saw a set_sys_include_delimiter()
     boost::filesystem::path current_dir;
 
@@ -106,7 +112,7 @@ private:
 //  include path).
 inline
 bool include_pathes::add_include_path (
-    char const *path_, include_list_t &pathes_)
+    char const *path_, include_list_type &pathes_)
 {
     namespace fs = boost::filesystem;
     if (path_) {
@@ -118,7 +124,7 @@ bool include_pathes::add_include_path (
             return false;
         }
 
-        pathes_.push_back (newpath);
+        pathes_.push_back (include_value_type(newpath, path_));
         return true;
     }
     return false;
@@ -127,11 +133,11 @@ bool include_pathes::add_include_path (
 ///////////////////////////////////////////////////////////////////////////////
 //  Find an include file by traversing the list of include directories
 inline
-bool include_pathes::find_include_file (std::string &s, 
-    include_list_t const &pathes, char const *current_file) const
+bool include_pathes::find_include_file (std::string &s, std::string &dir, 
+    include_list_type const &pathes, char const *current_file) const
 {
     namespace fs = boost::filesystem;
-    typedef include_list_t::const_iterator const_include_list_iter_t;
+    typedef include_list_type::const_iterator const_include_list_iter_t;
 
     const_include_list_iter_t it = pathes.begin();
     const_include_list_iter_t include_pathes_end = pathes.end();
@@ -148,7 +154,7 @@ bool include_pathes::find_include_file (std::string &s,
 
         fs::path file_path (current_file, fs::native);
         for (/**/; it != include_pathes_end; ++it) {
-            fs::path currpath ((*it).string(), fs::native);
+            fs::path currpath ((*it).first.string(), fs::native);
 	          if (std::equal(currpath.begin(), currpath.end(), file_path.begin())) 
 	          {
                 ++it;     // start searching with the next directory
@@ -159,11 +165,15 @@ bool include_pathes::find_include_file (std::string &s,
 #endif
 
     for (/**/; it != include_pathes_end; ++it) {
-        fs::path currpath ((*it).string(), fs::native);
+        fs::path currpath ((*it).first.string(), fs::native);
         currpath /= fs::path(s, fs::native);      // append filename
 
         if (fs::exists(currpath)) {
-            s = currpath.string();                // found the required file
+            fs::path dirpath ((*it).second, fs::native);
+            dirpath /= fs::path(s, fs::native);
+            
+            dir = dirpath.normalize().string();
+            s = currpath.normalize().string();    // found the required file
             return true;
         }
     }
@@ -174,8 +184,8 @@ bool include_pathes::find_include_file (std::string &s,
 //  Find an include file by searching the user and system includes in the 
 //  correct sequence (as it was configured by the user of the driver program)
 inline bool 
-include_pathes::find_include_file (std::string &s, bool is_system, 
-    char const *current_file) const
+include_pathes::find_include_file (std::string &s, std::string &dir, 
+    bool is_system, char const *current_file) const
 {
     namespace fs = boost::filesystem;
     
@@ -189,20 +199,24 @@ include_pathes::find_include_file (std::string &s, bool is_system,
             if (fs::exists(currpath) && 0 == current_file) {
             // if 0 != current_path (#include_next handling) it can't be
             // the file in the current directory
-                s = currpath.string();    // found in local directory
+                fs::path dirpath (current_dir.string(), fs::native);
+                dirpath /= fs::path(s, fs::native);
+
+                dir = dirpath.normalize().string();
+                s = currpath.normalize().string();    // found in local directory
                 return true;
             }   
 
         // iterate all user include file directories to find the file
             if (0 == current_file)
-                return find_include_file(s, user_include_pathes, 0);
+                return find_include_file(s, dir, user_include_pathes, 0);
 
         // #include_next doesn't distinguish between <file> and "file"
         // ... fall through
         }
 
     // iterate all user include file directories to find the file
-        if (find_include_file(s, user_include_pathes, current_file))
+        if (find_include_file(s, dir, user_include_pathes, current_file))
             return true;
 
     // if nothing found, fall through
@@ -210,7 +224,7 @@ include_pathes::find_include_file (std::string &s, bool is_system,
     }
 
 // iterate all system include file directories to find the file
-    return find_include_file (s, system_include_pathes, current_file);
+    return find_include_file (s, dir, system_include_pathes, current_file);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

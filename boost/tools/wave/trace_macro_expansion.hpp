@@ -323,8 +323,24 @@ public:
         return false;
     }
         
+    ///////////////////////////////////////////////////////////////////////////
+    //  
+    //  The function 'opened_include_file' is called, whenever a file referred 
+    //  by an #include directive was successfully located and opened.
+    //
+    //  The parameter 'filename' contains the file system path of the 
+    //  opened file (this is relative to the directory of the currently 
+    //  processed file or a absolute path depending on the paths given as the
+    //  include search paths).
+    //
+    //  The include_depth parameter contains the current include file depth.
+    //
+    //  The is_system_include parameter denotes, whether the given file was 
+    //  found as a result of a #include <...> directive.
+    //  
+    ///////////////////////////////////////////////////////////////////////////
     void 
-    opened_include_file(std::string const &filename, 
+    opened_include_file(std::string const &relname, std::string const &absname, 
         std::size_t include_depth, bool is_system_include) 
     {
         if (enabled_include_tracing()) {
@@ -333,9 +349,11 @@ public:
                 includestrm << " ";
                 
             if (is_system_include)
-                includestrm << "<" << filename << ">" << std::endl;
+                includestrm << "<" << relname << "> (" << absname << ")";
             else
-                includestrm << "\"" << filename << "\"" << std::endl;
+                includestrm << "\"" << relname << "\" (" << absname << ")";
+
+            includestrm << std::endl;
         }
     }
 

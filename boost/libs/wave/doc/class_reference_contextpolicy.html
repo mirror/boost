@@ -67,7 +67,10 @@
         <span class="keyword">void</span> <a href="class_reference_contextpolicy.html#expanded_macro">rescanned_macro</a>(ContainerT <span class="keyword">const</span> &amp;result);
 
         <span class="comment">// include file tracing functions</span>
-        <span class="keyword">void </span><a href="class_reference_contextpolicy.html#opened_include_file">opened_include_file</a>(std::string <span class="keyword">const</span> &amp;filename, 
+        <span class="keyword">void</span> <a href="class_reference_contextpolicy.html#found_include_directive">found_include_directive</a>(std::string <span class="keyword">const</span> &amp;filename);
+
+        <span class="keyword">void </span><a href="class_reference_contextpolicy.html#opened_include_file">opened_include_file</a>(std::string <span class="keyword">const</span> &amp;relname, 
+            std::string const&amp; absname,
             std::size_t include_depth, <span class="keyword">bool</span> is_system_include); 
 
         <span class="keyword">void</span> <a href="class_reference_contextpolicy.html#returning_from_include_file">returning_from_include_file</a>();
@@ -163,15 +166,30 @@
     sequence.</p>
 </blockquote>
 <h3>Include file tracing functions</h3>
+<p><a name="opened_include_file" id="found_include_directive"></a><strong>found_include_directive</strong></p>
+<pre>    <span class="keyword">void</span> found_include_directive(std::string <span class="keyword">const</span> &amp;filename);
+</pre>
+<blockquote>
+  <p>The function <tt>found_include_directive</tt> is called whenever whenever a #include directive was located..</p>
+  <p>The parameter <tt>filename</tt> contains the (expanded) file name found after 
+    the <span class="preprocessor">#include</span> directive. This has the format <tt>&lt;file&gt;</tt>, <tt>&quot;file&quot;</tt> or 
+    <tt>file</tt>. 
+    The formats <tt>&lt;file&gt;</tt> or <tt>&quot;file&quot;</tt> are used for <span class="preprocessor">#include</span> directives found 
+    in the preprocessed token stream, the format <tt>file</tt> is used for files
+    specified through the --force_include command line argument.<br>
+  </p>
+</blockquote>
 <p><a name="opened_include_file" id="opened_include_file"></a><strong>opened_include_file</strong></p>
-<pre>    <span class="keyword">void</span> opened_include_file(std::string <span class="keyword">const</span> &amp;filename, 
+<pre>    <span class="keyword">void</span> opened_include_file(std::string <span class="keyword">const</span> &amp;rel_filename, 
+        std::string <span class="keyword">const</span> &amp;abs_filename, 
         std::size_t include_depth, <span class="keyword">bool</span> is_system_include);
 </pre>
 <blockquote> 
   <p>The function <tt>opened_include_file</tt> is called whenever a file referred 
-    by an #include directive was successfully located and opened.</p>
-  <p>The parameter <tt>filename</tt> contains the full file system path of the 
-    opened file.</p>
+    by an <span class="preprocessor">#include</span> directive was successfully located and opened.</p>
+  <p>The parameter <tt>rel_filename</tt> contains the (normalised) probably relative file system path of the opened file. The concrete format of this file name depends on the format of the include search path given to the library beforehand.</p>
+  <p>The parameter <tt>abs_filename</tt> contains the (normalised) full file system path of the 
+      opened file.</p>
   <p>The <tt>include_depth</tt> parameter contains the current include file depth. 
   </p>
   <p>The <tt>is_system_include</tt> parameter denotes, if the given file was found 
@@ -257,7 +275,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Monday, March 14, 2005  21:52<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Wednesday, March 16, 2005  20:35<!-- #EndDate -->
 </span></p>
 </body>
 </html>

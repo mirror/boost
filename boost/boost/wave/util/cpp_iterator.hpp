@@ -239,7 +239,7 @@ private:
     typedef typename parse_tree_match_t::container_t    parse_tree_type;       // parse_node_type::children_t
 
 // type of a token sequence
-    typedef typename ContextT::token_sequence_type           token_sequence_type;
+    typedef typename ContextT::token_sequence_type      token_sequence_type;
     
 public:
     template <typename IteratorT>
@@ -268,7 +268,8 @@ public:
 
 protected:
     friend class pp_iterator<ContextT>;
-    void on_include_helper(char const *s, bool is_system, bool include_next);
+    void on_include_helper(char const *t, char const *s, bool is_system, 
+        bool include_next);
     
 protected:
     result_type const &get_next_token();
@@ -837,7 +838,7 @@ token_id id = cpp_grammar_type::found_directive;
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
     case T_PP_QHEADER_NEXT: // #include_next "..."
 #endif 
-        on_include ((*nodeval.begin()).get_value(), false,
+        on_include ((*nodeval.begin()).get_value(), false, 
             T_PP_QHEADER_NEXT == id);
         break;
 
@@ -925,8 +926,8 @@ token_id id = cpp_grammar_type::found_directive;
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContextT> 
 inline void  
-pp_iterator_functor<ContextT>::on_include (string_type const &s, bool is_system,
-    bool include_next) 
+pp_iterator_functor<ContextT>::on_include (string_type const &s, 
+    bool is_system, bool include_next) 
 {
     BOOST_ASSERT(ctx.get_if_block_status());
 
@@ -944,28 +945,34 @@ typename string_type::size_type pos_begin =
         BOOST_WAVE_THROW(preprocess_exception, bad_include_statement, s, act_pos);
     }
 
+std::string file_token(s.substr(pos_begin, pos_end-pos_begin).c_str());
 std::string file_path(s.substr(pos_begin+1, pos_end-pos_begin-1).c_str());
 
 // finally include the file
-    on_include_helper(file_path.c_str(), is_system, include_next);
+    on_include_helper(file_token.c_str(), file_path.c_str(), is_system, 
+        include_next);
 }
        
 template <typename ContextT> 
 inline void  
-pp_iterator_functor<ContextT>::on_include_helper (
-    char const *s, bool is_system, bool include_next) 
+pp_iterator_functor<ContextT>::on_include_helper (char const *f, char const *s, 
+    bool is_system, bool include_next) 
 {
     namespace fs = boost::filesystem;
 
 // try to locate the given file, searching through the include path lists
 std::string file_path(s);
+std::string dir_path;
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
 char const *current_name = include_next ? iter_ctx->real_filename.c_str() : 0;
 #else
 char const *current_name = 0;   // never try to match current file name
 #endif
 
-    if (!ctx.find_include_file (file_path, is_system, current_name)) {
+// call the include policy trace function
+    ctx.get_trace_policy().found_include_directive(f);
+
+    if (!ctx.find_include_file (file_path, dir_path, is_system, current_name)) {
         BOOST_WAVE_THROW(preprocess_exception, bad_include_file, file_path, act_pos);
     }
 
@@ -989,7 +996,7 @@ fs::path native_path(file_path, fs::native);
             act_pos, ctx.get_language()));
 
     // call the include policy trace function
-        ctx.get_trace_policy().opened_include_file(file_path,
+        ctx.get_trace_policy().opened_include_file(dir_path, file_path,
             ctx.get_iteration_depth(), is_system);
 
     // store current file position
@@ -1258,7 +1265,7 @@ token_sequence_type toexpand;
     typename token_sequence_type::iterator begin2 = toexpand.begin();
     ctx.expand_whole_tokensequence(begin2, toexpand.end(), expanded);
 
-// replace all remaining (== undefined) identifiers with a integer lliteral '0'
+// replace all remaining (== undefined) identifiers with an integer literal '0'
     typename token_sequence_type::iterator exp_end = expanded.end();
     for (typename token_sequence_type::iterator exp_it = expanded.begin();
          exp_it != exp_end; ++exp_it)
@@ -1284,8 +1291,7 @@ token_sequence_type toexpand;
 #endif
 
 // parse the expression and enter the #if block
-    typedef typename ContextT::token_type token_type;
-    ctx.enter_if_block(grammars::expression_grammar_gen<token_type>::
+    ctx.enter_if_block(grammars::expression_grammar_gen<result_type>::
             evaluate(expanded.begin(), expanded.end(), act_pos,
                 ctx.get_if_block_status()));
 }
@@ -1322,7 +1328,7 @@ token_sequence_type toexpand;
     typename token_sequence_type::iterator begin2 = toexpand.begin();
     ctx.expand_whole_tokensequence(begin2, toexpand.end(), expanded);
     
-// replace all remaining (== undefined) identifiers with a integer lliteral '0'
+// replace all remaining (== undefined) identifiers with an integer literal '0'
     typename token_sequence_type::iterator exp_end = expanded.end();
     for (typename token_sequence_type::iterator exp_it = expanded.begin();
          exp_it != exp_end; ++exp_it)
@@ -1347,8 +1353,7 @@ token_sequence_type toexpand;
 #endif
 
 // parse the expression and enter the #elif block
-    typedef typename ContextT::token_type token_type;
-    ctx.enter_elif_block(grammars::expression_grammar_gen<token_type>::
+    ctx.enter_elif_block(grammars::expression_grammar_gen<result_type>::
             evaluate(expanded.begin(), expanded.end(), act_pos,
                 ctx.get_if_block_status()));
 }
@@ -1382,7 +1387,7 @@ namespace {
         using namespace boost::wave;
         if (T_INTLIT == token_id(*first)) {
         // extract line number
-            using namespace std;    // some system have atoi in namespace std
+            using namespace std;    // some systems have atoi in namespace std
             line = atoi((*first).get_value().c_str());
             
         // extract file name (if it is given)
@@ -1428,7 +1433,7 @@ get_token_value<result_type, parse_node_type> get_value;
 const_tree_iterator_t first = make_ref_transform_iterator(begin, get_value);
 const_tree_iterator_t last = make_ref_transform_iterator(end, get_value);
     
-// try to interpret the #line body as a number followed by an optional
+// try to interprete the #line body as a number followed by an optional
 // string literal
 int line = 0;
 string_type file_name;
@@ -1471,7 +1476,7 @@ string_type file_name;
 ///////////////////////////////////////////////////////////////////////////////
 namespace {
 
-    // trim all whitespace from the begin and the end of the given string
+    // trim all whitespace from the beginning and the end of the given string
     template <typename StringT>
     inline StringT 
     trim_whitespace(StringT const &s)
@@ -1700,7 +1705,7 @@ private:
         boost::spirit::multi_pass<input_policy_type, boost::wave::util::functor_input>
         base_t;
     typedef pp_iterator<ContextT> self_type;
-    typedef boost::wave::util::functor_input functor_input_t;
+    typedef boost::wave::util::functor_input functor_input_type;
     
 public:
     pp_iterator() 
@@ -1715,9 +1720,9 @@ public:
     
     void force_include(char const *path_, bool is_last)
     { 
-        this->get_functor().on_include_helper(path_, false, false); 
+        this->get_functor().on_include_helper(path_, path_, false, false); 
         if (is_last) {
-            this->functor_input_t::
+            this->functor_input_type::
                 template inner<input_policy_type>::advance_input();
         }
     }
