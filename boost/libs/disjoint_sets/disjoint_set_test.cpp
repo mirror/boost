@@ -16,8 +16,14 @@ struct test_disjoint_set {
     // The following tests are pretty lame, just a basic sanity check.
     // Industrial strength tests still need to be written.
     
-    std::size_t elts[] = { 0, 1, 2, 3 }; 
-    const int N = sizeof(elts)/sizeof(std::size_t);
+#if !defined(__MWERKS__) || __MWERKS__ > 0x3003
+    std::size_t elts[]
+#else
+    std::size_t elts[4]
+#endif 
+        = { 0, 1, 2, 3 };
+    
+    const int N = sizeof(elts)/sizeof(*elts);
     
     DisjointSet ds(N);
 
