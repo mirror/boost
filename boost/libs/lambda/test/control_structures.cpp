@@ -22,7 +22,6 @@
 #include "boost/lambda/lambda.hpp"
 #include "boost/lambda/if.hpp"
 #include "boost/lambda/loops.hpp"
-#include "boost/minmax.hpp"
 
 #include <iostream>
 #include <algorithm>
@@ -106,8 +105,8 @@ void simple_ifs () {
 
   int x, y;
   x = -1; y = 1;
-  BOOST_TEST(if_then_else_return(_1 < _2, _2, _1)(x, y) == std_max(x ,y));
-  BOOST_TEST(if_then_else_return(_1 < _2, _2, _1)(y, x) == std_max(x ,y));
+  BOOST_TEST(if_then_else_return(_1 < _2, _2, _1)(x, y) == (std::max)(x ,y));
+  BOOST_TEST(if_then_else_return(_1 < _2, _2, _1)(y, x) == (std::max)(x ,y));
 }
 
 

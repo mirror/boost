@@ -41,7 +41,7 @@ struct short_string
       size_t e_limit = this->e_limit; // avoid warnings on some compilers
       size_t src_len = strlen(src);
       
-      len_ = boost::std_min(src_len, e_limit-1);
+      len_ = (std::min)(src_len, e_limit-1);
       std::copy(src, src + len_, buffer_);
       buffer_[len_] = '\0';
    }

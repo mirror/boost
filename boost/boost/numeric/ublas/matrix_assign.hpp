@@ -37,8 +37,9 @@ namespace boost { namespace numeric { namespace ublas {
                                     BOOST_UBLAS_TYPE_CHECK_MIN);
 #else
         // GCC 3.1, oops?!
+        BOOST_USING_STD_MAX();
         return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-               std_max (real_type (std_max (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
+               max BOOST_PREVENT_MACRO_SUBSTITUTION (real_type (max BOOST_PREVENT_MACRO_SUBSTITUTION (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
                          real_type (BOOST_UBLAS_TYPE_CHECK_MIN));
 #endif
     }
@@ -509,6 +510,7 @@ namespace boost { namespace numeric { namespace ublas {
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
     void matrix_assign (F1, M &m, const matrix_expression<E> &e, F2, packed_proxy_tag, row_major_tag) {
+        BOOST_USING_STD_MIN();
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F1 functor1_type;
@@ -535,13 +537,13 @@ namespace boost { namespace numeric { namespace ublas {
         if (it1_size > 0 && it1e_size > 0)
             diff1 = it1.index1 () - it1e.index1 ();
         if (diff1 != 0) {
-            difference_type size1 = std_min (diff1, it1e_size);
+            difference_type size1 = min BOOST_PREVENT_MACRO_SUBSTITUTION (diff1, it1e_size);
             if (size1 > 0) {
                 it1e += size1;
                 it1e_size -= size1;
                 diff1 -= size1;
             }
-            size1 = std_min (- diff1, it1_size);
+            size1 = min BOOST_PREVENT_MACRO_SUBSTITUTION (- diff1, it1_size);
             if (size1 > 0) {
                 it1_size -= size1;
                 if (boost::is_same<BOOST_UBLAS_TYPENAME functor1_type::assign_category, assign_tag>::value) {
@@ -564,7 +566,7 @@ namespace boost { namespace numeric { namespace ublas {
                 diff1 += size1;
             }
         }
-        difference_type size1 (std_min (it1_size, it1e_size));
+        difference_type size1 (min BOOST_PREVENT_MACRO_SUBSTITUTION (it1_size, it1e_size));
         it1_size -= size1;
         it1e_size -= size1;
         while (-- size1 >= 0) {
@@ -584,13 +586,13 @@ namespace boost { namespace numeric { namespace ublas {
             difference_type diff2 (0);
             if (it2_size > 0 && it2e_size > 0) {
                 diff2 = it2.index2 () - it2e.index2 ();
-                difference_type size2 = std_min (diff2, it2e_size);
+                difference_type size2 = min BOOST_PREVENT_MACRO_SUBSTITUTION (diff2, it2e_size);
                 if (size2 > 0) {
                     it2e += size2;
                     it2e_size -= size2;
                     diff2 -= size2;
                 }
-                size2 = std_min (- diff2, it2_size);
+                size2 = min BOOST_PREVENT_MACRO_SUBSTITUTION (- diff2, it2_size);
                 if (size2 > 0) {
                     it2_size -= size2;
                     if (boost::is_same<BOOST_UBLAS_TYPENAME functor1_type::assign_category, assign_tag>::value) {
@@ -602,7 +604,7 @@ namespace boost { namespace numeric { namespace ublas {
                     diff2 += size2;
                 }
             }
-            difference_type size2 (std_min (it2_size, it2e_size));
+            difference_type size2 (min BOOST_PREVENT_MACRO_SUBSTITUTION (it2_size, it2e_size));
             it2_size -= size2;
             it2e_size -= size2;
             while (-- size2 >= 0)
@@ -644,6 +646,7 @@ namespace boost { namespace numeric { namespace ublas {
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
     void matrix_assign (F1, M &m, const matrix_expression<E> &e, F2, packed_proxy_tag, column_major_tag) {
+        BOOST_USING_STD_MIN();
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         typedef F1 functor1_type;
@@ -670,13 +673,13 @@ namespace boost { namespace numeric { namespace ublas {
         if (it2_size > 0 && it2e_size > 0)
             diff2 = it2.index2 () - it2e.index2 ();
         if (diff2 != 0) {
-            difference_type size2 = std_min (diff2, it2e_size);
+            difference_type size2 = min BOOST_PREVENT_MACRO_SUBSTITUTION (diff2, it2e_size);
             if (size2 > 0) {
                 it2e += size2;
                 it2e_size -= size2;
                 diff2 -= size2;
             }
-            size2 = std_min (- diff2, it2_size);
+            size2 = min BOOST_PREVENT_MACRO_SUBSTITUTION (- diff2, it2_size);
             if (size2 > 0) {
                 it2_size -= size2;
                 if (boost::is_same<BOOST_UBLAS_TYPENAME functor1_type::assign_category, assign_tag>::value) {
@@ -699,7 +702,7 @@ namespace boost { namespace numeric { namespace ublas {
                 diff2 += size2;
             }
         }
-        difference_type size2 (std_min (it2_size, it2e_size));
+        difference_type size2 (min BOOST_PREVENT_MACRO_SUBSTITUTION (it2_size, it2e_size));
         it2_size -= size2;
         it2e_size -= size2;
         while (-- size2 >= 0) {
@@ -719,13 +722,13 @@ namespace boost { namespace numeric { namespace ublas {
             difference_type diff1 (0);
             if (it1_size > 0 && it1e_size > 0) {
                 diff1 = it1.index1 () - it1e.index1 ();
-                difference_type size1 = std_min (diff1, it1e_size);
+                difference_type size1 = min BOOST_PREVENT_MACRO_SUBSTITUTION (diff1, it1e_size);
                 if (size1 > 0) {
                     it1e += size1;
                     it1e_size -= size1;
                     diff1 -= size1;
                 }
-                size1 = std_min (- diff1, it1_size);
+                size1 = min BOOST_PREVENT_MACRO_SUBSTITUTION (- diff1, it1_size);
                 if (size1 > 0) {
                     it1_size -= size1;
                     if (boost::is_same<BOOST_UBLAS_TYPENAME functor1_type::assign_category, assign_tag>::value) {
@@ -737,7 +740,7 @@ namespace boost { namespace numeric { namespace ublas {
                     diff1 += size1;
                 }
             }
-            difference_type size1 (std_min (it1_size, it1e_size));
+            difference_type size1 (min BOOST_PREVENT_MACRO_SUBSTITUTION (it1_size, it1e_size));
             it1_size -= size1;
             it1e_size -= size1;
             while (-- size1 >= 0)

@@ -671,8 +671,10 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator find (size_type i) const {
-            i = std_max (i, index_);
-            i = std_min (i, index_ + 1);
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
+            i = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, index_);
+            i = min BOOST_PREVENT_MACRO_SUBSTITUTION (i, index_ + 1);
             return const_iterator (*this, i);
         }
 

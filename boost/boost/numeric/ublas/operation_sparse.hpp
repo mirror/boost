@@ -31,6 +31,8 @@ namespace boost { namespace numeric { namespace ublas {
                  const matrix_expression<E2> &e2,
                  M &m, const F &f,
                  row_major_tag) {
+        BOOST_USING_STD_MIN();
+        BOOST_USING_STD_MAX();
         typedef M matrix_type;
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
@@ -62,8 +64,8 @@ namespace boost { namespace numeric { namespace ublas {
                 while (itr != itr_end) {
                     size_type j (itr.index ());
                     temporary (j) += *it2 * *itr;
-                    jb = std_min (jb, j);
-                    je = std_max (je, j);
+                    jb = min BOOST_PREVENT_MACRO_SUBSTITUTION (jb, j);
+                    je = max BOOST_PREVENT_MACRO_SUBSTITUTION (je, j);
                     ++ itr;
                 }
                 ++ it2;
@@ -94,6 +96,8 @@ namespace boost { namespace numeric { namespace ublas {
                  const matrix_expression<E2> &e2,
                  M &m, const F &f,
                  column_major_tag) {
+        BOOST_USING_STD_MIN();
+        BOOST_USING_STD_MAX();
         typedef M matrix_type;
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
@@ -125,8 +129,8 @@ namespace boost { namespace numeric { namespace ublas {
                 while (itc != itc_end) {
                     size_type i (itc.index ());
                     temporary (i) += *it1 * *itc;
-                    ib = std_min (ib, i);
-                    ie = std_max (ie, i);
+                    ib = min BOOST_PREVENT_MACRO_SUBSTITUTION (ib, i);
+                    ie = max BOOST_PREVENT_MACRO_SUBSTITUTION (ie, i);
                     ++ itc;
                 }
                 ++ it1;

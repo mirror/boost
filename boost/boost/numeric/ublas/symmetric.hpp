@@ -1379,25 +1379,26 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_iterator1 &operator += (difference_type n) {
+                BOOST_USING_STD_MIN();
                 BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
                 if (current_ == 0) {
-                    size_type d = std_min (n, it1_end_ - it1_);
+                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_end_ - it1_);
                     it1_ += d;
                     n -= d;
                     if (n > 0 || (end_ == 1 && it1_ == it1_end_)) {
                         BOOST_UBLAS_CHECK (end_ == 1, external_logic ());
-                        d = std_min (n, it2_end_ - it2_begin_);
+                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_end_ - it2_begin_);
                         it2_ = it2_begin_ + d;
                         n -= d;
                         current_ = 1;
                     }
                 } else /* if (current_ == 1) */ {
-                    size_type d = std_min (n, it2_end_ - it2_);
+                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_end_ - it2_);
                     it2_ += d;
                     n -= d;
                     if (n > 0 || (end_ == 0 && it2_ == it2_end_)) {
                         BOOST_UBLAS_CHECK (end_ == 0, external_logic ());
-                        d = std_min (n, it1_end_ - it1_begin_);
+                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_end_ - it1_begin_);
                         it1_ = it1_begin_ + d;
                         n -= d;
                         current_ = 0;
@@ -1408,25 +1409,26 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_iterator1 &operator -= (difference_type n) {
+                BOOST_USING_STD_MIN();
                 BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
                 if (current_ == 0) {
-                    size_type d = std_min (n, it1_ - it1_begin_);
+                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_ - it1_begin_);
                     it1_ -= d;
                     n -= d;
                     if (n > 0) {
                         BOOST_UBLAS_CHECK (end_ == 1, external_logic ());
-                        d = std_min (n, it2_end_ - it2_begin_);
+                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_end_ - it2_begin_);
                         it2_ = it2_end_ - d;
                         n -= d;
                         current_ = 1;
                     }
                 } else /* if (current_ == 1) */ {
-                    size_type d = std_min (n, it2_ - it2_begin_);
+                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_ - it2_begin_);
                     it2_ -= d;
                     n -= d;
                     if (n > 0) {
                         BOOST_UBLAS_CHECK (end_ == 0, external_logic ());
-                        d = std_min (n, it1_end_ - it1_begin_);
+                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_end_ - it1_begin_);
                         it1_ = it1_end_ - d;
                         n -= d;
                         current_ = 0;
@@ -1826,25 +1828,26 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_iterator2 &operator += (difference_type n) {
+                BOOST_USING_STD_MIN();
                 BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
                 if (current_ == 0) {
-                    size_type d = std_min (n, it1_end_ - it1_);
+                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_end_ - it1_);
                     it1_ += d;
                     n -= d;
                     if (n > 0 || (end_ == 1 && it1_ == it1_end_)) {
                         BOOST_UBLAS_CHECK (end_ == 1, external_logic ());
-                        d = std_min (n, it2_end_ - it2_begin_);
+                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_end_ - it2_begin_);
                         it2_ = it2_begin_ + d;
                         n -= d;
                         current_ = 1;
                     }
                 } else /* if (current_ == 1) */ {
-                    size_type d = std_min (n, it2_end_ - it2_);
+                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_end_ - it2_);
                     it2_ += d;
                     n -= d;
                     if (n > 0 || (end_ == 0 && it2_ == it2_end_)) {
                         BOOST_UBLAS_CHECK (end_ == 0, external_logic ());
-                        d = std_min (n, it1_end_ - it1_begin_);
+                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_end_ - it1_begin_);
                         it1_ = it1_begin_ + d;
                         n -= d;
                         current_ = 0;
@@ -1855,25 +1858,26 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_iterator2 &operator -= (difference_type n) {
+                BOOST_USING_STD_MIN();
                 BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
                 if (current_ == 0) {
-                    size_type d = std_min (n, it1_ - it1_begin_);
+                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_ - it1_begin_);
                     it1_ -= d;
                     n -= d;
                     if (n > 0) {
                         BOOST_UBLAS_CHECK (end_ == 1, external_logic ());
-                        d = std_min (n, it2_end_ - it2_begin_);
+                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_end_ - it2_begin_);
                         it2_ = it2_end_ - d;
                         n -= d;
                         current_ = 1;
                     }
                 } else /* if (current_ == 1) */ {
-                    size_type d = std_min (n, it2_ - it2_begin_);
+                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_ - it2_begin_);
                     it2_ -= d;
                     n -= d;
                     if (n > 0) {
                         BOOST_UBLAS_CHECK (end_ == 0, external_logic ());
-                        d = std_min (n, it1_end_ - it1_begin_);
+                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_end_ - it1_begin_);
                         it1_ = it1_end_ - d;
                         n -= d;
                         current_ = 0;

@@ -149,7 +149,7 @@ namespace detail {
                 if(buf.pcount()== 0 || 
                    (res_beg[0] !=oss.widen('+') && res_beg[0] !=oss.widen('-')  ))
                     prefix_space = oss.widen(' ');
-            std::streamsize res_size = std_min(
+            std::streamsize res_size = (std::min)(
                 static_cast<std::streamsize>(specs.truncate_ - !!prefix_space), 
                 buf.pcount() );
             mk_str(res, res_beg, res_size, w, oss.fill(), fl, 
@@ -194,7 +194,7 @@ namespace detail {
                 }
                 // we now have the minimal-length output
                 const Ch * tmp_beg = buf.pbase();
-                std::streamsize tmp_size = std_min(static_cast<std::streamsize>(specs.truncate_),
+                std::streamsize tmp_size = (std::min)(static_cast<std::streamsize>(specs.truncate_),
                                                     buf.pcount() );
                                                     
                 std::streamsize d;
@@ -205,13 +205,13 @@ namespace detail {
                 else { // hum..  we need to pad (multi_output, or spacepad present)
                     std::streamsize i = prefix_space;
                     //find where we should pad
-                    std::streamsize sz = std_min(res_size+prefix_space, tmp_size);
+                    std::streamsize sz = (std::min)(res_size+prefix_space, tmp_size);
                     for(; i<sz && tmp_beg[i] == res[i-prefix_space]; ++i) {}
                     if(i>=tmp_size) i=prefix_space;
                     res.assign(tmp_beg, i);
                     if(d>0) res.append(static_cast<size_type>( d ), oss2.fill());
                     res.append(tmp_beg+i, tmp_size-i);
-                    assert(i+(tmp_size-i)+std_max(d,(std::streamsize)0) == w);
+                    assert(i+(tmp_size-i)+(std::max)(d,(std::streamsize)0) == w);
                     assert(res.size() == (std::size_t)w);
                 }
             }

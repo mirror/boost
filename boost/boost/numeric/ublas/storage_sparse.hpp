@@ -343,6 +343,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
+            BOOST_USING_STD_MIN();
             BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
             if (size > capacity_) {
                 pointer data = new value_type [size << 1];
@@ -351,8 +352,8 @@ namespace boost { namespace numeric { namespace ublas {
                 //     throw std::bad_alloc ();
                 // if (! data_)
                 //     throw std::bad_alloc ();
-                std::copy (data_, data_ + std_min (size, size_), data);
-                std::fill (data + std_min (size, size_), data + size, value_type ());
+                std::copy (data_, data_ + min BOOST_PREVENT_MACRO_SUBSTITUTION (size, size_), data);
+                std::fill (data + min BOOST_PREVENT_MACRO_SUBSTITUTION (size, size_), data + size, value_type ());
                 delete [] data_;
                 capacity_ = size << 1;
                 data_ = data;
@@ -753,6 +754,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
+            BOOST_USING_STD_MIN();
             BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
             if (size > capacity_) {
                 pointer data = new value_type [size << 1];
@@ -761,8 +763,8 @@ namespace boost { namespace numeric { namespace ublas {
                 //     throw std::bad_alloc ();
                 // if (! data_)
                 //     throw std::bad_alloc ();
-                std::copy (data_, data_ + std_min (size, size_), data);
-                std::fill (data + std_min (size, size_), data + size, value_type ());
+                std::copy (data_, data_ + min BOOST_PREVENT_MACRO_SUBSTITUTION (size, size_), data);
+                std::fill (data + min BOOST_PREVENT_MACRO_SUBSTITUTION (size, size_), data + size, value_type ());
                 delete [] data_;
                 capacity_ = size << 1;
                 data_ = data;

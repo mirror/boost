@@ -2066,17 +2066,21 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator1 find1 (int rank, size_type i, size_type j) const {
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
             if (rank == 1) {
-                i = std_max (i, j);
-                i = std_min (i, j + 1);
+                i = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
+                i = min BOOST_PREVENT_MACRO_SUBSTITUTION (i, j + 1);
             }
             return const_iterator1 (*this, i, j);
         }
         BOOST_UBLAS_INLINE
         const_iterator2 find2 (int rank, size_type i, size_type j) const {
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
             if (rank == 1) {
-                j = std_max (j, i);
-                j = std_min (j, i + 1);
+                j = max BOOST_PREVENT_MACRO_SUBSTITUTION (j, i);
+                j = min BOOST_PREVENT_MACRO_SUBSTITUTION (j, i + 1);
             }
             return const_iterator2 (*this, i, j);
         }

@@ -37,8 +37,9 @@ namespace boost { namespace numeric { namespace ublas {
                                     BOOST_UBLAS_TYPE_CHECK_MIN);
 #else
         // GCC 3.1, oops?!
+        BOOST_USING_STD_MAX();
         return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-               std_max (real_type (std_max (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
+               max BOOST_PREVENT_MACRO_SUBSTITUTION (real_type (max BOOST_PREVENT_MACRO_SUBSTITUTION (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
                          real_type (BOOST_UBLAS_TYPE_CHECK_MIN));
 #endif
     }
@@ -279,6 +280,7 @@ namespace boost { namespace numeric { namespace ublas {
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
     void vector_assign (F, V &v, const vector_expression<E> &e, packed_proxy_tag) {
+        BOOST_USING_STD_MIN();
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
         typedef F functor_type;
         typedef typename V::difference_type difference_type;
@@ -300,14 +302,14 @@ namespace boost { namespace numeric { namespace ublas {
         difference_type it_size (it_end - it);
         difference_type ite_size (ite_end - ite);
         if (it_size > 0 && ite_size > 0) {
-            difference_type size (std_min (difference_type (it.index () - ite.index ()), ite_size));
+            difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (it.index () - ite.index ()), ite_size));
             if (size > 0) {
                 ite += size;
                 ite_size -= size;
             }
         }
         if (it_size > 0 && ite_size > 0) {
-            difference_type size (std_min (difference_type (ite.index () - it.index ()), it_size));
+            difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (ite.index () - it.index ()), it_size));
             if (size > 0) {
                 it_size -= size;
                 if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
@@ -318,7 +320,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        difference_type size (std_min (it_size, ite_size));
+        difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (it_size, ite_size));
         it_size -= size;
         ite_size -= size;
         while (-- size >= 0)
@@ -496,6 +498,7 @@ namespace boost { namespace numeric { namespace ublas {
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
     void vector_swap (F, V &v, vector_expression<E> &e, packed_proxy_tag) {
+        BOOST_USING_STD_MIN();
         typedef F functor_type;
         typedef typename V::difference_type difference_type;
         typename V::iterator it (v.begin ());
@@ -505,18 +508,18 @@ namespace boost { namespace numeric { namespace ublas {
         difference_type it_size (it_end - it);
         difference_type ite_size (ite_end - ite);
         if (it_size > 0 && ite_size > 0) {
-            difference_type size (std_min (difference_type (it.index () - ite.index ()), ite_size));
+            difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (it.index () - ite.index ()), ite_size));
             if (size > 0) {
                 ite += size;
                 ite_size -= size;
             }
         }
         if (it_size > 0 && ite_size > 0) {
-            difference_type size (std_min (difference_type (ite.index () - it.index ()), it_size));
+            difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (ite.index () - it.index ()), it_size));
             if (size > 0)
                 it_size -= size;
         }
-        difference_type size (std_min (it_size, ite_size));
+        difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (it_size, ite_size));
         it_size -= size;
         ite_size -= size;
         while (-- size >= 0)

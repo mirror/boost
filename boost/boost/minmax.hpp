@@ -15,38 +15,10 @@
 #include <algorithm> // for std::min and std::max
 #include <boost/config.hpp>
 
-namespace boost
-{
+#define BOOST_USING_STD_MIN()\
+	using std::min
 
-template< typename T >
-inline T const & std_min( T const & a, T const & b )
-{
-    using std::min;
-
-    return min BOOST_PREVENT_MACRO_SUBSTITUTION ( a, b );
-}
-
-template< typename T >
-inline T const & std_max( T const & a, T const & b )
-{
-    using std::max;
-
-    return max BOOST_PREVENT_MACRO_SUBSTITUTION ( a, b );
-}
-
-// Overloads for unsigned long to work around a bug in the Borland headers
-#ifdef __BORLANDC__
-inline unsigned long const & std_min( unsigned long const & a, unsigned long const & b )
-{
-    return a < b ? a : b;
-}
-
-inline unsigned long const & std_max( unsigned long const & a, unsigned long const & b )
-{
-    return a > b ? a : b;
-}
-#endif
-
-}
+#define BOOST_USING_STD_MAX()\
+	using std::max
 
 #endif // BOOST_MINMAX_HPP

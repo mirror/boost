@@ -379,12 +379,14 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2, size_type non_zeros = 0) {
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
             size1_ = size1;
             size2_ = size2;
-            non_zeros_ = std_max (non_zeros, std_min (size1_, size2_));
+            non_zeros_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros, min BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_));
             // Guarding against overflow.
             // Thanks to Alexei Novakov for the hint.
-            // non_zeros_ = std_min (non_zeros_, size1_ * size2_);
+            // non_zeros_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros_, size1_ * size2_);
             if (size1_ > 0 && non_zeros_ / size1_ >= size2_)
                 non_zeros_ = size1_ * size2_;
             detail::reserve (data (), non_zeros_);
@@ -394,10 +396,12 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0) {
-            non_zeros_ = std_max (non_zeros, std_min (size1_, size2_));
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
+            non_zeros_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros, min BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_));
             // Guarding against overflow.
             // Thanks to Alexei Novakov for the hint.
-            // non_zeros_ = std_min (non_zeros_, size1_ * size2_);
+            // non_zeros_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros_, size1_ * size2_);
             if (size1_ > 0 && non_zeros_ / size1_ >= size2_)
                 non_zeros_ = size1_ * size2_;
             detail::reserve (data (), non_zeros_);
@@ -2697,12 +2701,14 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2, size_type non_zeros = 0, bool preserve = true) {
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
             size1_ = size1;
             size2_ = size2;
-            non_zeros_ = std_max (non_zeros, std_min (size1_, size2_));
+            non_zeros_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros, min BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_));
             // Guarding against overflow.
             // Thanks to Alexei Novakov for the hint.
-            // non_zeros_ = std_min (non_zeros_, size1_ * size2_);
+            // non_zeros_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros_, size1_ * size2_);
             if (size1_ > 0 && non_zeros_ / size1_ >= size2_)
                 non_zeros_ = size1_ * size2_;
             filled1_ = 1;
@@ -2716,10 +2722,12 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0, bool preserve = true) {
-            non_zeros_ = std_max (non_zeros, std_min (size1_, size2_));
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
+            non_zeros_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros, min BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_));
             // Guarding against overflow.
             // Thanks to Alexei Novakov for the hint.
-            // non_zeros_ = std_min (non_zeros_, size1_ * size2_);
+            // non_zeros_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros_, size1_ * size2_);
             if (size1_ > 0 && non_zeros_ / size1_ >= size2_)
                 non_zeros_ = size1_ * size2_;
             detail::resize (index2_data (), non_zeros_, preserve);
@@ -3031,9 +3039,10 @@ namespace boost { namespace numeric { namespace ublas {
         // BOOST_UBLAS_INLINE
         const_iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) const {
             for (;;) {
+                BOOST_USING_STD_MIN();
                 size_type address1 (functor_type::address1 (i, size1_, j, size2_));
                 size_type address2 (functor_type::address2 (i, size1_, j, size2_));
-                vector_const_iterator_type itv (index1_data ().begin () + std_min (filled1_ - 1, address1));
+                vector_const_iterator_type itv (index1_data ().begin () + min BOOST_PREVENT_MACRO_SUBSTITUTION (filled1_ - 1, address1));
                 if (filled1_ <= address1 + 1)
                     return const_iterator1 (*this, rank, i, j, itv, index2_data ().begin () + filled2_);
 
@@ -3068,9 +3077,10 @@ namespace boost { namespace numeric { namespace ublas {
         // BOOST_UBLAS_INLINE
         iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) {
             for (;;) {
+                BOOST_USING_STD_MIN();
                 size_type address1 (functor_type::address1 (i, size1_, j, size2_));
                 size_type address2 (functor_type::address2 (i, size1_, j, size2_));
-                vector_iterator_type itv (index1_data ().begin () + std_min (filled1_ - 1, address1));
+                vector_iterator_type itv (index1_data ().begin () + min BOOST_PREVENT_MACRO_SUBSTITUTION (filled1_ - 1, address1));
                 if (filled1_ <= address1 + 1)
                     return iterator1 (*this, rank, i, j, itv, index2_data ().begin () + filled2_);
 
@@ -3105,9 +3115,10 @@ namespace boost { namespace numeric { namespace ublas {
         // BOOST_UBLAS_INLINE
         const_iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) const {
             for (;;) {
+                BOOST_USING_STD_MIN();
                 size_type address1 (functor_type::address1 (i, size1_, j, size2_));
                 size_type address2 (functor_type::address2 (i, size1_, j, size2_));
-                vector_const_iterator_type itv (index1_data ().begin () + std_min (filled1_ - 1, address1));
+                vector_const_iterator_type itv (index1_data ().begin () + min BOOST_PREVENT_MACRO_SUBSTITUTION (filled1_ - 1, address1));
                 if (filled1_ <= address1 + 1)
                     return const_iterator2 (*this, rank, i, j, itv, index2_data ().begin () + filled2_);
 
@@ -3142,9 +3153,10 @@ namespace boost { namespace numeric { namespace ublas {
         // BOOST_UBLAS_INLINE
         iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) {
             for (;;) {
+                BOOST_USING_STD_MIN();
                 size_type address1 (functor_type::address1 (i, size1_, j, size2_));
                 size_type address2 (functor_type::address2 (i, size1_, j, size2_));
-                vector_iterator_type itv (index1_data ().begin () + std_min (filled1_ - 1, address1));
+                vector_iterator_type itv (index1_data ().begin () + min BOOST_PREVENT_MACRO_SUBSTITUTION (filled1_ - 1, address1));
                 if (filled1_ <= address1 + 1)
                     return iterator2 (*this, rank, i, j, itv, index2_data ().begin () + filled2_);
 
@@ -4005,12 +4017,14 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2, size_type non_zeros = 0, bool preserve = true) {
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
             size1_ = size1;
             size2_ = size2;
-            non_zeros_ = std_max (non_zeros, std_min (size1_, size2_));
+            non_zeros_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros, min BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_));
             // Guarding against overflow.
             // Thanks to Alexei Novakov for the hint.
-            // non_zeros_ = std_min (non_zeros_, size1_ * size2_);
+            // non_zeros_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros_, size1_ * size2_);
             // FIX: coordinate_vector may contain duplicate elements.
             // if (size1_ > 0 && non_zeros_ / size1_ >= size2_)
             //     non_zeros_ = size1_ * size2_;
@@ -4023,10 +4037,12 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0, bool preserve = true) {
-            non_zeros_ = std_max (non_zeros, std_min (size1_, size2_));
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
+            non_zeros_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros, min BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_));
             // Guarding against overflow.
             // Thanks to Alexei Novakov for the hint.
-            // non_zeros_ = std_min (non_zeros_, size1_ * size2_);
+            // non_zeros_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros_, size1_ * size2_);
             // FIX: coordinate_vector may contain duplicate elements.
             // if (size1_ > 0 && non_zeros_ / size1_ >= size2_)
             //     non_zeros_ = size1_ * size2_;

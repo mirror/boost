@@ -860,11 +860,12 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator find (size_type i) const {
+            BOOST_USING_STD_MIN();
             const_iterator1_type it1 (e1_.find (i));
             const_iterator1_type it1_end (e1_.find (size ()));
             const_iterator2_type it2 (e2_.find (i));
             const_iterator2_type it2_end (e2_.find (size ()));
-            i = std_min (it1 != it1_end ? it1.index () : size (),
+            i = min BOOST_PREVENT_MACRO_SUBSTITUTION (it1 != it1_end ? it1.index () : size (),
                           it2 != it2_end ? it2.index () : size ());
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator (*this, i);
@@ -975,7 +976,8 @@ namespace boost { namespace numeric { namespace ublas {
                     if (it2_ != it2_end_)
                         index2 = it2_.index ();
                 }
-                i_ = std_min (index1, index2);
+                BOOST_USING_STD_MIN();
+                i_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (index1, index2);
             }
             BOOST_UBLAS_INLINE
             void decrement (sparse_bidirectional_iterator_tag) {
@@ -993,7 +995,8 @@ namespace boost { namespace numeric { namespace ublas {
                     if (it2_ != it2_end_)
                         index2 = it2_.index ();
                 }
-                i_ = std_max (index1, index2);
+                BOOST_USING_STD_MAX();
+                i_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (index1, index2);
             }
             BOOST_UBLAS_INLINE
             value_type dereference (sparse_bidirectional_iterator_tag) const {

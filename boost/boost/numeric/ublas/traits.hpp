@@ -88,15 +88,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_inf (const_reference t) {
             // Oops, should have known that!
-            return std_max (type_traits<real_type>::abs (self_type::real (t)),
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (type_traits<real_type>::abs (self_type::real (t)),
                              type_traits<real_type>::abs (self_type::imag (t)));
         }
 
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
@@ -172,8 +174,9 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
@@ -252,8 +255,9 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
@@ -329,8 +333,9 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
@@ -395,15 +400,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_inf (const_reference t) {
             // Oops, should have known that!
-            return std_max (type_traits<real_type>::abs (self_type::real (t)),
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (type_traits<real_type>::abs (self_type::real (t)),
                              type_traits<real_type>::abs (self_type::imag (t)));
         }
 
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
@@ -470,15 +477,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_inf (const_reference t) {
             // Oops, should have known that!
-            return std_max (type_traits<real_type>::abs (self_type::real (t)),
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (type_traits<real_type>::abs (self_type::real (t)),
                              type_traits<real_type>::abs (self_type::imag (t)));
         }
 
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
@@ -542,15 +551,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_inf (const_reference t) {
             // Oops, should have known that!
-            return std_max (type_traits<real_type>::abs (self_type::real (t)),
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (type_traits<real_type>::abs (self_type::real (t)),
                              type_traits<real_type>::abs (self_type::imag (t)));
         }
 
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
@@ -616,8 +627,9 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
@@ -684,8 +696,9 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
@@ -749,8 +762,9 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
@@ -816,15 +830,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_inf (const_reference t) {
             // Oops, should have known that!
-            return std_max (type_traits<real_type>::abs (self_type::real (t)),
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (type_traits<real_type>::abs (self_type::real (t)),
                              type_traits<real_type>::abs (self_type::imag (t)));
         }
 
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
@@ -891,15 +907,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_inf (const_reference t) {
             // Oops, should have known that!
-            return std_max (type_traits<real_type>::abs (self_type::real (t)),
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (type_traits<real_type>::abs (self_type::real (t)),
                              type_traits<real_type>::abs (self_type::imag (t)));
         }
 
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
@@ -963,15 +981,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_inf (const_reference t) {
             // Oops, should have known that!
-            return std_max (type_traits<real_type>::abs (self_type::real (t)),
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (type_traits<real_type>::abs (self_type::real (t)),
                              type_traits<real_type>::abs (self_type::imag (t)));
         }
 
         static
         BOOST_UBLAS_INLINE
         bool equals (const_reference t1, const_reference t2) {
+            BOOST_USING_STD_MAX();
             return self_type::norm_inf (t1 - t2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-                   std_max (std_max (self_type::norm_inf (t1),
+                   max BOOST_PREVENT_MACRO_SUBSTITUTION (max BOOST_PREVENT_MACRO_SUBSTITUTION (self_type::norm_inf (t1),
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }

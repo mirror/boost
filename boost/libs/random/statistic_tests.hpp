@@ -26,7 +26,6 @@
 
 #include <boost/random.hpp>
 #include <boost/config.hpp>
-#include <boost/minmax.hpp>
 
 
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
@@ -176,7 +175,7 @@ public:
         previous = val;
         ++length;
       } else {
-        count(std_min(length, classes())-1);
+        count((std::min)(length, classes())-1);
         length = 0;
         previous = init;
         // don't use this value, so that runs are independent
@@ -212,7 +211,7 @@ public:
       if(value < low || value > high)
         ++length;
       else {
-        count(std_min(length, classes()-1));
+        count((std::min)(length, classes()-1));
         length = 0;
         ++i;
       }
@@ -309,7 +308,7 @@ public:
             break;     // one complete set
         }
       }
-      count(std_min(r-d, classes()-1));
+      count((std::min)(r-d, classes()-1));
     }
   }
   double probability(unsigned int r) const
@@ -387,7 +386,7 @@ public:
         if(spacing[i] == spacing[i+1])
           ++k;
       }
-      count(std_min(k, classes()-1));
+      count((std::min)(k, classes()-1));
     }
   }
 
@@ -470,17 +469,17 @@ public:
       int k = static_cast<int>(std::floor(m*y));
       if(k >= m)
         --k;    // should not happen
-      a[k] = std_min(a[k], y);
-      b[k] = std_max(b[k], y);
+      a[k] = (std::min)(a[k], y);
+      b[k] = (std::max)(b[k], y);
       ++c[k];
     }
     double kplus = 0, kminus = 0;
     int j = 0;
     for(int k = 0; k < m; ++k) {
       if(c[k] > 0) {
-        kminus = std_max(kminus, a[k]-j/static_cast<double>(n));
+        kminus = (std::max)(kminus, a[k]-j/static_cast<double>(n));
         j += c[k];
-        kplus = std_max(kplus, j/static_cast<double>(n) - b[k]);
+        kplus = (std::max)(kplus, j/static_cast<double>(n) - b[k]);
       }
     }
     kplus *= std::sqrt(double(n));
@@ -520,7 +519,7 @@ private:
     {
       double mx = f();
       for(int i = 1; i < t; ++i)
-        mx = std_max(mx, f());
+        mx = (std::max)(mx, f());
       return mx;
     }
   private:

@@ -165,10 +165,12 @@ template<class T, class Policies> inline
 interval<T, Policies> intersect(const interval<T, Policies>& x,
                                 const interval<T, Policies>& y)
 {
+  BOOST_USING_STD_MIN();
+  BOOST_USING_STD_MAX();
   if (interval_lib::detail::test_input(x, y))
     return interval<T, Policies>::empty();
-  const T& l = std_max(x.lower(), y.lower());
-  const T& u = std_min(x.upper(), y.upper());
+  const T& l = max BOOST_PREVENT_MACRO_SUBSTITUTION(x.lower(), y.lower());
+  const T& u = min BOOST_PREVENT_MACRO_SUBSTITUTION(x.upper(), y.upper());
   if (l <= u) return interval<T, Policies>(l, u, true);
   else        return interval<T, Policies>::empty();
 }
@@ -177,6 +179,8 @@ template<class T, class Policies> inline
 interval<T, Policies> hull(const interval<T, Policies>& x,
                            const interval<T, Policies>& y)
 {
+  BOOST_USING_STD_MIN();
+  BOOST_USING_STD_MAX();
   bool bad_x = interval_lib::detail::test_input(x);
   bool bad_y = interval_lib::detail::test_input(y);
   if (bad_x)
@@ -184,13 +188,15 @@ interval<T, Policies> hull(const interval<T, Policies>& x,
     else       return y;
   else
     if (bad_y) return x;
-  return interval<T, Policies>(std_min(x.lower(), y.lower()),
-                               std_max(x.upper(), y.upper()), true);
+  return interval<T, Policies>(min BOOST_PREVENT_MACRO_SUBSTITUTION(x.lower(), y.lower()),
+                               max BOOST_PREVENT_MACRO_SUBSTITUTION(x.upper(), y.upper()), true);
 }
 
 template<class T, class Policies> inline
 interval<T, Policies> hull(const interval<T, Policies>& x, const T& y)
 {
+  BOOST_USING_STD_MIN();
+  BOOST_USING_STD_MAX();
   bool bad_x = interval_lib::detail::test_input(x);
   bool bad_y = interval_lib::detail::test_input<T, Policies>(y);
   if (bad_y)
@@ -198,13 +204,15 @@ interval<T, Policies> hull(const interval<T, Policies>& x, const T& y)
     else       return x;
   else
     if (bad_x) return interval<T, Policies>(y, y, true);
-  return interval<T, Policies>(std_min(x.lower(), y),
-                               std_max(x.upper(), y), true);
+  return interval<T, Policies>(min BOOST_PREVENT_MACRO_SUBSTITUTION(x.lower(), y),
+                               max BOOST_PREVENT_MACRO_SUBSTITUTION(x.upper(), y), true);
 }
 
 template<class T, class Policies> inline
 interval<T, Policies> hull(const T& x, const interval<T, Policies>& y)
 {
+  BOOST_USING_STD_MIN();
+  BOOST_USING_STD_MAX();
   bool bad_x = interval_lib::detail::test_input<T, Policies>(x);
   bool bad_y = interval_lib::detail::test_input(y);
   if (bad_x)
@@ -212,8 +220,8 @@ interval<T, Policies> hull(const T& x, const interval<T, Policies>& y)
     else       return y;
   else
     if (bad_y) return interval<T, Policies>(x, x, true);
-  return interval<T, Policies>(std_min(x, y.lower()),
-                               std_max(x, y.upper()), true);
+  return interval<T, Policies>(min BOOST_PREVENT_MACRO_SUBSTITUTION(x, y.lower()),
+                               max BOOST_PREVENT_MACRO_SUBSTITUTION(x, y.upper()), true);
 }
 
 template<class T> inline
@@ -245,7 +253,8 @@ T norm(const interval<T, Policies>& x)
     typedef typename Policies::checking checking;
     return checking::nan();
   }
-  return std_max(-x.lower(), x.upper());
+  BOOST_USING_STD_MAX();
+  return max BOOST_PREVENT_MACRO_SUBSTITUTION(-x.lower(), x.upper());
 }
 
 template<class T, class Policies> inline
@@ -256,7 +265,8 @@ interval<T, Policies> abs(const interval<T, Policies>& x)
     return I::empty();
   if (!interval_lib::user::is_neg(x.lower())) return x;
   if (!interval_lib::user::is_pos(x.upper())) return -x;
-  return I(static_cast<T>(0), std_max(-x.lower(), x.upper()), true);
+  BOOST_USING_STD_MAX();
+  return I(static_cast<T>(0), max BOOST_PREVENT_MACRO_SUBSTITUTION(-x.lower(), x.upper()), true);
 }
 
 template<class T, class Policies> inline
@@ -266,7 +276,8 @@ interval<T, Policies> max BOOST_PREVENT_MACRO_SUBSTITUTION (const interval<T, Po
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
     return I::empty();
-  return I(std_max(x.lower(), y.lower()), std_max(x.upper(), y.upper()), true);
+  BOOST_USING_STD_MAX();
+  return I(max BOOST_PREVENT_MACRO_SUBSTITUTION(x.lower(), y.lower()), max BOOST_PREVENT_MACRO_SUBSTITUTION(x.upper(), y.upper()), true);
 }
 
 template<class T, class Policies> inline
@@ -275,7 +286,8 @@ interval<T, Policies> max BOOST_PREVENT_MACRO_SUBSTITUTION (const interval<T, Po
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
     return I::empty();
-  return I(std_max(x.lower(), y), std_max(x.upper(), y), true);
+  BOOST_USING_STD_MAX();
+  return I(max BOOST_PREVENT_MACRO_SUBSTITUTION(x.lower(), y), max BOOST_PREVENT_MACRO_SUBSTITUTION(x.upper(), y), true);
 }
 
 template<class T, class Policies> inline
@@ -284,7 +296,8 @@ interval<T, Policies> max BOOST_PREVENT_MACRO_SUBSTITUTION (const T& x, const in
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
     return I::empty();
-  return I(std_max(x, y.lower()), std_max(x, y.upper()), true);
+  BOOST_USING_STD_MAX();
+  return I(max BOOST_PREVENT_MACRO_SUBSTITUTION(x, y.lower()), max BOOST_PREVENT_MACRO_SUBSTITUTION(x, y.upper()), true);
 }
 
 template<class T, class Policies> inline
@@ -294,7 +307,8 @@ interval<T, Policies> min BOOST_PREVENT_MACRO_SUBSTITUTION (const interval<T, Po
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
     return I::empty();
-  return I(std_min(x.lower(), y.lower()), std_min(x.upper(), y.upper()), true);
+  BOOST_USING_STD_MIN();
+  return I(min BOOST_PREVENT_MACRO_SUBSTITUTION(x.lower(), y.lower()), min BOOST_PREVENT_MACRO_SUBSTITUTION(x.upper(), y.upper()), true);
 }
 
 template<class T, class Policies> inline
@@ -303,7 +317,8 @@ interval<T, Policies> min BOOST_PREVENT_MACRO_SUBSTITUTION (const interval<T, Po
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
     return I::empty();
-  return I(std_min(x.lower(), y), std_min(x.upper(), y), true);
+  BOOST_USING_STD_MIN();
+  return I(min BOOST_PREVENT_MACRO_SUBSTITUTION(x.lower(), y), min BOOST_PREVENT_MACRO_SUBSTITUTION(x.upper(), y), true);
 }
 
 template<class T, class Policies> inline
@@ -312,7 +327,8 @@ interval<T, Policies> min BOOST_PREVENT_MACRO_SUBSTITUTION (const T& x, const in
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
     return I::empty();
-  return I(std_min(x, y.lower()), std_min(x, y.upper()), true);
+  BOOST_USING_STD_MIN();
+  return I(min BOOST_PREVENT_MACRO_SUBSTITUTION(x, y.lower()), min BOOST_PREVENT_MACRO_SUBSTITUTION(x, y.upper()), true);
 }
 
 } // namespace numeric

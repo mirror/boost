@@ -142,6 +142,7 @@ T pow_aux(const T& x_, int pwr, Rounding& rnd) // x and pwr are positive
 template<class T, class Policies> inline
 interval<T, Policies> pow(const interval<T, Policies>& x, int pwr)
 {
+  BOOST_USING_STD_MAX();
   using interval_lib::detail::pow_aux;
   typedef interval<T, Policies> I;
 
@@ -170,7 +171,7 @@ interval<T, Policies> pow(const interval<T, Policies>& x, int pwr)
     if (pwr & 1) {   // [-1,1]^1
       return I(-pow_aux(-x.lower(), pwr, rnd), pow_aux(x.upper(), pwr, rnd), true);
     } else {         // [-1,1]^2
-      return I(static_cast<T>(0), pow_aux(std_max(-x.lower(), x.upper()), pwr, rnd), true);
+      return I(static_cast<T>(0), pow_aux(max BOOST_PREVENT_MACRO_SUBSTITUTION(-x.lower(), x.upper()), pwr, rnd), true);
     }
   } else {                                // [1,2]
     return I(pow_aux(x.lower(), pwr, rnd), pow_aux(x.upper(), pwr, rnd), true);

@@ -11,7 +11,6 @@
 
 #include <cassert>
 #include <cfloat>
-#include <boost/minmax.hpp>
 #include "regex_comparison.hpp"
 #ifdef BOOST_HAS_POSIX
 #include <boost/timer.hpp>
@@ -51,7 +50,7 @@ double time_match(const std::string& re, const std::string& text, bool icase)
          regexec(&e, text.c_str(), e.re_nsub, what, 0);
       }
       run = tim.elapsed();
-      result = std_min(run, result);
+      result = (std::min)(run, result);
    }
    regfree(&e);
    return result / iter;
@@ -117,7 +116,7 @@ double time_find_all(const std::string& re, const std::string& text, bool icase)
          }
       }
       run = tim.elapsed();
-      result = std_min(run, result);
+      result = (std::min)(run, result);
    }
    return result / iter;
 }

@@ -498,7 +498,8 @@ void * pool<UserAllocator>::ordered_malloc(const size_type n)
     return ret;
 
   // Not enougn memory in our storages; make a new storage,
-  next_size = std_max(next_size, num_chunks);
+  BOOST_USING_STD_MAX();
+  next_size = max BOOST_PREVENT_MACRO_SUBSTITUTION(next_size, num_chunks);
   const size_type POD_size = next_size * partition_size +
       details::pool::ct_lcm<sizeof(size_type), sizeof(void *)>::value + sizeof(size_type);
   char * const ptr = UserAllocator::malloc(POD_size);

@@ -9,7 +9,6 @@
  *
  */
 
-#include <boost/minmax.hpp>
 #include "regex_comparison.hpp"
 #if defined(BOOST_HAS_GRETA)
 #include <cassert>
@@ -49,7 +48,7 @@ double time_match(const std::string& re, const std::string& text, bool icase)
          e.match(text, what);
       }
       run = tim.elapsed();
-      result = std_min(run, result);
+      result = (std::min)(run, result);
    }
    return result / iter;
 }
@@ -95,7 +94,7 @@ double time_find_all(const std::string& re, const std::string& text, bool icase)
          }
       }
       run = tim.elapsed();
-      result = std_min(run, result);
+      result = (std::min)(run, result);
    }
    return result / iter;
 }

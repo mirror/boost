@@ -791,8 +791,10 @@ main()
   {
     typedef less_than_comparable_archetype<> T;
     T a(dummy_cons), b(dummy_cons);
-    const T& c = std_min(a, b);
-    const T& d = std_max(a, b);
+    BOOST_USING_STD_MIN();
+    BOOST_USING_STD_MAX();
+    const T& c = min BOOST_PREVENT_MACRO_SUBSTITUTION(a, b);
+    const T& d = max BOOST_PREVENT_MACRO_SUBSTITUTION(a, b);
     ignore_unused_variable_warning(c);
     ignore_unused_variable_warning(d);
   }
@@ -801,8 +803,10 @@ main()
     binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
     typedef convertible_to_archetype<Arg> T;
     T a(dummy_cons), b(dummy_cons);
-    const T& c = std_min(a, b, comp);
-    const T& d = std_max(a, b, comp);
+    BOOST_USING_STD_MIN();
+    BOOST_USING_STD_MAX();
+    const T& c = min BOOST_PREVENT_MACRO_SUBSTITUTION(a, b, comp);
+    const T& d = max BOOST_PREVENT_MACRO_SUBSTITUTION(a, b, comp);
     ignore_unused_variable_warning(c);
     ignore_unused_variable_warning(d);
   }

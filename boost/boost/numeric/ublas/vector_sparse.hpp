@@ -371,9 +371,11 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size, size_type non_zeros = 0) {
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
             size_ = size;
-            non_zeros_ = std_max (non_zeros, size_type (1));
-            non_zeros_ = std_min (non_zeros_, size_);
+            non_zeros_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros, size_type (1));
+            non_zeros_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros_, size_);
             detail::reserve (data (), non_zeros_);
             data ().clear ();
         }
@@ -381,8 +383,10 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0) {
-            non_zeros_ = std_max (non_zeros, size_type (1));
-            non_zeros_ = std_min (non_zeros_, size_);
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
+            non_zeros_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros, size_type (1));
+            non_zeros_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros_, size_);
             detail::reserve (data (), non_zeros_);
         }
 
@@ -882,9 +886,11 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size, size_type non_zeros = 0, bool preserve = true) {
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
             size_ = size;
-            non_zeros_ = std_max (non_zeros, size_type (1));
-            non_zeros_ = std_min (non_zeros_, size_);
+            non_zeros_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros, size_type (1));
+            non_zeros_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros_, size_);
             filled_ = 0;
             detail::resize (index_data (), non_zeros_, preserve);
             detail::resize (value_data (), non_zeros_, preserve);
@@ -893,8 +899,10 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0, bool preserve = true) {
-            non_zeros_ = std_max (non_zeros, size_type (1));
-            non_zeros_ = std_min (non_zeros_, size_);
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
+            non_zeros_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros, size_type (1));
+            non_zeros_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros_, size_);
             detail::resize (index_data (), non_zeros_, preserve);
             detail::resize (value_data (), non_zeros_, preserve);
         }
@@ -1451,10 +1459,12 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size, size_type non_zeros = 0, bool preserve = true) {
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
             size_ = size;
-            non_zeros_ = std_max (non_zeros, size_type (1));
+            non_zeros_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros, size_type (1));
             // FIX: coordinate_vector may contain duplicate elements.
-            // non_zeros_ = std_min (non_zeros_, size_);
+            // non_zeros_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros_, size_);
             filled_ = 0;
             detail::resize (index_data (), non_zeros_, preserve);
             detail::resize (value_data (), non_zeros_, preserve);
@@ -1463,9 +1473,11 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0, bool preserve = true) {
-            non_zeros_ = std_max (non_zeros, size_type (1));
+            BOOST_USING_STD_MIN();
+            BOOST_USING_STD_MAX();
+            non_zeros_ = max BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros, size_type (1));
             // FIX: coordinate_vector may contain duplicate elements.
-            // non_zeros_ = std_min (non_zeros_, size_);
+            // non_zeros_ = min BOOST_PREVENT_MACRO_SUBSTITUTION (non_zeros_, size_);
             detail::resize (index_data (), non_zeros_, preserve);
             detail::resize (value_data (), non_zeros_, preserve);
         }

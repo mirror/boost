@@ -9,7 +9,6 @@
  *
  */
 
-#include <boost/minmax.hpp>
 #include "regex_comparison.hpp"
 #include <boost/timer.hpp>
 #include <boost/regex.hpp>
@@ -46,7 +45,7 @@ double time_match(const std::string& re, const std::string& text, bool icase)
          boost::regex_match(text, what, e);
       }
       run = tim.elapsed();
-      result = std_min(run, result);
+      result = (std::min)(run, result);
    }
    return result / iter;
 }
@@ -87,7 +86,7 @@ double time_find_all(const std::string& re, const std::string& text, bool icase)
          boost::regex_grep(&dummy_grep_proc, text, e);
       }
       run = tim.elapsed();
-      result = std_min(run, result);
+      result = (std::min)(run, result);
    }
    return result / iter;
 }

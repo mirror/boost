@@ -233,7 +233,7 @@ struct fibonacci_validation<T, P, Q>  \
   BOOST_STATIC_CONSTANT(bool, is_specialized = true);     \
   static T value() { return V; }      \
   static T tolerance()                \
-    { return std_max(E, static_cast<T>(5*std::numeric_limits<T>::epsilon())); } \
+{ return (std::max)(E, static_cast<T>(5*std::numeric_limits<T>::epsilon())); } \
 };
 // (The extra static_cast<T> in the std::max call above is actually
 // unnecessary except for HP aCC 1.30, which claims that

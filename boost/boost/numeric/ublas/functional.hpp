@@ -721,6 +721,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end) const {
+            BOOST_USING_STD_MIN();
             result_type t = result_type ();
             difference_type it1_size (it1_end - it1);
             difference_type it2_size (it2_end - it2);
@@ -728,20 +729,20 @@ namespace boost { namespace numeric { namespace ublas {
             if (it1_size > 0 && it2_size > 0)
                 diff = it2.index () - it1.index ();
             if (diff != 0) {
-                difference_type size = std_min (diff, it1_size);
+                difference_type size = min BOOST_PREVENT_MACRO_SUBSTITUTION (diff, it1_size);
                 if (size > 0) {
                     it1 += size;
                     it1_size -= size;
                     diff -= size;
                 }
-                size = std_min (- diff, it2_size);
+                size = min BOOST_PREVENT_MACRO_SUBSTITUTION (- diff, it2_size);
                 if (size > 0) {
                     it2 += size;
                     it2_size -= size;
                     diff += size;
                 }
             }
-            difference_type size (std_min (it1_size, it2_size));
+            difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (it1_size, it2_size));
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
             return t;
@@ -862,6 +863,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end) const {
+            BOOST_USING_STD_MIN();
             result_type t = result_type ();
             difference_type it1_size (it1_end - it1);
             difference_type it2_size (it2_end - it2);
@@ -869,20 +871,20 @@ namespace boost { namespace numeric { namespace ublas {
             if (it1_size > 0 && it2_size > 0)
                 diff = it2.index () - it1.index2 ();
             if (diff != 0) {
-                difference_type size = std_min (diff, it1_size);
+                difference_type size = min BOOST_PREVENT_MACRO_SUBSTITUTION (diff, it1_size);
                 if (size > 0) {
                     it1 += size;
                     it1_size -= size;
                     diff -= size;
                 }
-                size = std_min (- diff, it2_size);
+                size = min BOOST_PREVENT_MACRO_SUBSTITUTION (- diff, it2_size);
                 if (size > 0) {
                     it2 += size;
                     it2_size -= size;
                     diff += size;
                 }
             }
-            difference_type size (std_min (it1_size, it2_size));
+            difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (it1_size, it2_size));
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
             return t;
@@ -1026,6 +1028,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end) const {
+            BOOST_USING_STD_MIN();
             result_type t = result_type ();
             difference_type it1_size (it1_end - it1);
             difference_type it2_size (it2_end - it2);
@@ -1033,20 +1036,20 @@ namespace boost { namespace numeric { namespace ublas {
             if (it1_size > 0 && it2_size > 0)
                 diff = it2.index1 () - it1.index ();
             if (diff != 0) {
-                difference_type size = std_min (diff, it1_size);
+                difference_type size = min BOOST_PREVENT_MACRO_SUBSTITUTION (diff, it1_size);
                 if (size > 0) {
                     it1 += size;
                     it1_size -= size;
                     diff -= size;
                 }
-                size = std_min (- diff, it2_size);
+                size = min BOOST_PREVENT_MACRO_SUBSTITUTION (- diff, it2_size);
                 if (size > 0) {
                     it2 += size;
                     it2_size -= size;
                     diff += size;
                 }
             }
-            difference_type size (std_min (it1_size, it2_size));
+            difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (it1_size, it2_size));
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
             return t;
@@ -1199,6 +1202,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end, packed_random_access_iterator_tag) const {
+            BOOST_USING_STD_MIN();
             result_type t = result_type ();
             difference_type it1_size (it1_end - it1);
             difference_type it2_size (it2_end - it2);
@@ -1206,20 +1210,20 @@ namespace boost { namespace numeric { namespace ublas {
             if (it1_size > 0 && it2_size > 0)
                 diff = it2.index1 () - it1.index2 ();
             if (diff != 0) {
-                difference_type size = std_min (diff, it1_size);
+                difference_type size = min BOOST_PREVENT_MACRO_SUBSTITUTION (diff, it1_size);
                 if (size > 0) {
                     it1 += size;
                     it1_size -= size;
                     diff -= size;
                 }
-                size = std_min (- diff, it2_size);
+                size = min BOOST_PREVENT_MACRO_SUBSTITUTION (- diff, it2_size);
                 if (size > 0) {
                     it2 += size;
                     it2_size -= size;
                     diff += size;
                 }
             }
-            difference_type size (std_min (it1_size, it2_size));
+            difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (it1_size, it2_size));
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
             return t;
@@ -1411,12 +1415,13 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type upper_element (size_type i, size_type size1, size_type j, size_type size2) {
+            BOOST_USING_STD_MAX();
             BOOST_UBLAS_CHECK (i < size1, bad_index ());
             BOOST_UBLAS_CHECK (j < size2, bad_index ());
             BOOST_UBLAS_CHECK (i <= j, bad_index ());
             // sigma_i (size - i) = size * i - i * (i - 1) / 2
             // i = 0 1 2 3, sigma = 0 4 7 9
-            return (i * (2 * std_max (size1, size2) - i + 1)) / 2 + j - i;
+            return (i * (2 * max BOOST_PREVENT_MACRO_SUBSTITUTION (size1, size2) - i + 1)) / 2 + j - i;
         }
 
         static
@@ -1561,12 +1566,13 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type lower_element (size_type i, size_type size1, size_type j, size_type size2) {
+            BOOST_USING_STD_MAX();
             BOOST_UBLAS_CHECK (i < size1, bad_index ());
             BOOST_UBLAS_CHECK (j < size2, bad_index ());
             BOOST_UBLAS_CHECK (i >= j, bad_index ());
             // sigma_j (size - j) = size * j - j * (j - 1) / 2
             // j = 0 1 2 3, sigma = 0 4 7 9
-            return i - j + (j * (2 * std_max (size1, size2) - j + 1)) / 2;
+            return i - j + (j * (2 * max BOOST_PREVENT_MACRO_SUBSTITUTION (size1, size2) - j + 1)) / 2;
         }
         static
         BOOST_UBLAS_INLINE
@@ -1684,7 +1690,8 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type packed_size (size_type size1, size_type size2) {
-            size_type size = std_max (size1, size2);
+            BOOST_USING_STD_MAX();
+            size_type size = max BOOST_PREVENT_MACRO_SUBSTITUTION (size1, size2);
             return ((size + 1) * size) / 2;
         }
 
@@ -1713,22 +1720,26 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return std_max (i, j);
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return std_min (i + 1, j);
+            BOOST_USING_STD_MIN();
+            return min BOOST_PREVENT_MACRO_SUBSTITUTION (i + 1, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return std_max (i, j);
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return std_min (i + 1, j);
+            BOOST_USING_STD_MIN();
+            return min BOOST_PREVENT_MACRO_SUBSTITUTION (i + 1, j);
         }
     };
     struct upper {
@@ -1738,7 +1749,8 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type packed_size (size_type size1, size_type size2) {
-            size_type size = std_max (size1, size2);
+            BOOST_USING_STD_MAX();
+            size_type size = max BOOST_PREVENT_MACRO_SUBSTITUTION (size1, size2);
             return ((size + 1) * size) / 2;
         }
 
@@ -1767,22 +1779,26 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return std_min (i, j + 1);
+            BOOST_USING_STD_MIN();
+            return min BOOST_PREVENT_MACRO_SUBSTITUTION (i, j + 1);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return std_max (i, j);
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return std_min (i, j + 1);
+            BOOST_USING_STD_MIN();
+            return min BOOST_PREVENT_MACRO_SUBSTITUTION (i, j + 1);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return std_max (i, j);
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
     };
     struct unit_lower {
@@ -1792,7 +1808,8 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type packed_size (size_type size1, size_type size2) {
-            size_type size = std_max (size1, size2);
+            BOOST_USING_STD_MAX();
+            size_type size = max BOOST_PREVENT_MACRO_SUBSTITUTION (size1, size2);
             return ((size + 1) * size) / 2;
         }
 
@@ -1821,22 +1838,26 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return std_max (i, j);
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return std_min (i + 1, j);
+            BOOST_USING_STD_MIN();
+            return min BOOST_PREVENT_MACRO_SUBSTITUTION (i + 1, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return std_max (i, j);
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return std_min (i, j);
+            BOOST_USING_STD_MIN();
+            return min BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
     };
     struct unit_upper {
@@ -1846,7 +1867,8 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type packed_size (size_type size1, size_type size2) {
-            size_type size = std_max (size1, size2);
+            BOOST_USING_STD_MAX();
+            size_type size = max BOOST_PREVENT_MACRO_SUBSTITUTION (size1, size2);
             return ((size + 1) * size) / 2;
         }
 
@@ -1875,22 +1897,26 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return std_min (i, j + 1);
+            BOOST_USING_STD_MIN();
+            return min BOOST_PREVENT_MACRO_SUBSTITUTION (i, j + 1);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return std_max (i, j);
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return std_min (i, j);
+            BOOST_USING_STD_MIN();
+            return min BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return std_max (i, j);
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
     };
     struct strict_lower {
@@ -1900,7 +1926,8 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type packed_size (size_type size1, size_type size2) {
-            size_type size = std_max (size1, size2);
+            BOOST_USING_STD_MAX();
+            size_type size = max BOOST_PREVENT_MACRO_SUBSTITUTION (size1, size2);
             return ((size + 1) * size) / 2;
         }
 
@@ -1929,22 +1956,26 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return std_max (i, j);
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return std_min (i, j);
+            BOOST_USING_STD_MIN();
+            return min BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return std_max (i, j);
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return std_min (i, j);
+            BOOST_USING_STD_MIN();
+            return min BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
     };
     struct strict_upper {
@@ -1954,7 +1985,8 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type packed_size (size_type size1, size_type size2) {
-            size_type size = std_max (size1, size2);
+            BOOST_USING_STD_MAX();
+            size_type size = max BOOST_PREVENT_MACRO_SUBSTITUTION (size1, size2);
             return ((size + 1) * size) / 2;
         }
 
@@ -1983,22 +2015,26 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return std_min (i, j);
+            BOOST_USING_STD_MIN();
+            return min BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return std_max (i, j);
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return std_min (i, j);
+            BOOST_USING_STD_MIN();
+            return min BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return std_max (i, j);
+            BOOST_USING_STD_MAX();
+            return max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
         }
     };
 
