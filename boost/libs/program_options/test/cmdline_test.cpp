@@ -62,7 +62,7 @@ struct test_case {
    The "boost::program_options" in parameter type is needed because CW9 
    has std::detail and it causes an ambiguity.
 */
-void apply_syntax(boost::program_options::detail::cmdline& cmd, 
+void apply_syntax(cmdline& cmd, 
                   const char* syntax)
 {
    
@@ -114,7 +114,7 @@ void test_cmdline(const char* syntax,
                 xinput.push_back(s);
             }
         }
-        detail::cmdline cmd(xinput, style);
+        cmdline cmd(xinput, style);
 
         apply_syntax(cmd, syntax);
 
