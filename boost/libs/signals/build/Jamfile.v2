@@ -12,7 +12,10 @@ project boost/signals
     ;
 
 # Base names of the source files for libboost_signals
-CPP_SOURCES =
-    trackable connection signal_base slot ;
+SOURCES = trackable connection signal_base slot ;
 
-lib boost_signals : $(CPP_SOURCES).cpp ;
+lib boost_signals : $(SOURCES).cpp 
+    :         
+        <link>static:<define>BOOST_SIGNALS_NO_LIB=1
+        <link>dynamic:<define>BOOST_SIGNALS_DYN_LINK=1
+    ;

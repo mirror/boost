@@ -10,10 +10,7 @@
 #ifndef BOOST_SIGNALS_SIGNAL_BASE_HEADER
 #define BOOST_SIGNALS_SIGNAL_BASE_HEADER
 
-#ifdef BOOST_SIGNALS_IN_LIBRARY_SOURCE
-#  define BOOST_FUNCTION_SILENT_DEPRECATED
-#endif
-
+#include <boost/signals/detail/config.hpp>
 #include <boost/signals/detail/signals_common.hpp>
 #include <boost/signals/connection.hpp>
 #include <boost/signals/trackable.hpp>
@@ -24,6 +21,10 @@
 #include <map>
 #include <utility>
 #include <vector>
+
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
 
 namespace boost {
   namespace BOOST_SIGNALS_NAMESPACE {
@@ -184,5 +185,9 @@ namespace boost {
     } // end namespace detail
   } // end namespace BOOST_SIGNALS_NAMESPACE
 } // end namespace boost
+
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
 
 #endif // BOOST_SIGNALS_SIGNAL_BASE_HEADER

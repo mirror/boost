@@ -28,6 +28,10 @@
 #  include <string>
 #endif // !BOOST_SIGNALS_SIGNAL_TEMPLATE_HEADER_INCLUDED
 
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+
 // Include the appropriate functionN header
 #define BOOST_SIGNAL_FUNCTION_N_HEADER BOOST_JOIN(<boost/function/function,BOOST_SIGNALS_NUM_ARGS.hpp>)
 #include BOOST_SIGNAL_FUNCTION_N_HEADER
@@ -345,3 +349,7 @@ namespace boost {
 #undef BOOST_SIGNALS_FUNCTION
 #undef BOOST_SIGNALS_SIGNAL
 #undef BOOST_SIGNALS_COMMA_IF_NONZERO_ARGS
+
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif

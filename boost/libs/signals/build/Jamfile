@@ -10,24 +10,55 @@
 # declare the location of this subproject relative to the root
 subproject libs/signals/build ;
 
-# Base names of the source files for libboost_signals
-CPP_SOURCES =
-    trackable connection signal_base slot ;
+#
+# this template defines the options common to
+# all signals builds and tests:
+#
+template signals-options
+   : # sources
+   : # requirements
+     <define>BOOST_SIGNALS_NO_LIB=1        
+     <sysinclude>$(BOOST_ROOT)
+   ;
 
-dll boost_signals : ../src/$(CPP_SOURCES).cpp
-    : <sysinclude>$(BOOST_ROOT)
-    : debug release 
+#
+# this template defines the options common to
+# all signals dll builds and tests:
+#
+template signals-dll-options
+   : <template>signals-options # sources
+   : # requirements
+     <define>BOOST_SIGNALS_DYN_LINK=1      
+     <runtime-link>dynamic
+   ;
+
+SOURCES = trackable connection signal_base slot ;
+       
+lib boost_signals : ../src/$(SOURCES).cpp <template>signals-options
+    : 
+    : 
+        debug release
     ;
 
-lib boost_signals : ../src/$(CPP_SOURCES).cpp
-    : <sysinclude>$(BOOST_ROOT) <define>BOOST_SIGNALS_STATIC_LINK
-    : debug release 
-    ;
 
-stage ../../../lib
-    : <dll>boost_signals
-    : <tag><debug>"d"
-    : debug release
+dll boost_signals : ../src/$(SOURCES).cpp <template>signals-dll-options
+    : 
+    : 
+        debug release
+    ;
+    
+local version-tag = [ MATCH "^([^.]+).([^.]+)" : $(BOOST_VERSION) ] ;
+version-tag = $(version-tag:J="_") ;
+
+stage stage/lib : <lib>boost_signals <dll>boost_signals
+    :
+        <locate>$(BOOST_ROOT)
+        common-stage-tag
+        <tag><postfix>-$(version-tag)
+        <target>stage
+        <target>all
+    :
+        debug release
     ;
 
 install signals lib

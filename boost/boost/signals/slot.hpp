@@ -16,6 +16,10 @@
 #include <boost/visit_each.hpp>
 #include <cassert>
 
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+
 namespace boost {
   namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
@@ -128,5 +132,9 @@ namespace boost {
     SlotFunction slot_function;
   };
 } // end namespace boost
+
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
 
 #endif // BOOST_SIGNALS_SLOT_HEADER

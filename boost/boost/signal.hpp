@@ -27,6 +27,10 @@
 #include <boost/signals/signal10.hpp>
 #include <boost/function.hpp>
 
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+
 namespace boost {
 #ifndef BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
   namespace BOOST_SIGNALS_NAMESPACE {
@@ -344,5 +348,9 @@ namespace boost {
 #endif // ndef BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
 
 } // end namespace boost
+
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
 
 #endif // BOOST_SIGNAL_HPP

@@ -18,6 +18,10 @@
 #include <cassert>
 #include <utility>
 
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+
 namespace boost {
   namespace BOOST_SIGNALS_NAMESPACE {
     class trackable;
@@ -269,5 +273,9 @@ namespace boost {
     } // end namespace detail
   } // end namespace BOOST_SIGNALS_NAMESPACE
 } // end namespace boost
+
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
 
 #endif // BOOST_SIGNALS_CONNECTION_HPP

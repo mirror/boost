@@ -14,33 +14,13 @@
 #  define BOOST_SIGNALS_NAMESPACE signals
 #endif
 
-/*****************************************************************************
- *
- *  Set up dll import/export options:
- *
- ****************************************************************************/
-#if defined(_MSC_VER) && defined(_DLL)
-#  define BOOST_SIGNALS_HAS_DLL_RUNTIME
-#endif
-
-#if defined(BOOST_SIGNALS_HAS_DLL_RUNTIME) && !defined(BOOST_SIGNALS_STATIC_LINK)
-#   if defined(BOOST_SIGNALS_IN_LIBRARY_SOURCE)
-#       define BOOST_SIGNALS_DECL __declspec(dllexport)
-#       define BOOST_SIGNALS_BUILD_DLL
-#   else
-#       define BOOST_SIGNALS_DECL __declspec(dllimport)
-#  endif
-#endif
-
-#ifndef BOOST_SIGNALS_DECL
-#  define BOOST_SIGNALS_DECL
-#endif
-
-/*****************************************************************************
- ****************************************************************************/
-
 #include <boost/type_traits/conversion_traits.hpp>
 #include <boost/ref.hpp>
+#include <boost/signals/detail/config.hpp>
+
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
 
 namespace boost {
   namespace BOOST_SIGNALS_NAMESPACE {
@@ -174,5 +154,9 @@ namespace boost {
     } // end namespace detail
   } // end namespace BOOST_SIGNALS_NAMESPACE
 } // end namespace boost
+
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
 
 #endif // BOOST_SIGNALS_COMMON_HEADER

@@ -7,7 +7,7 @@
 
 // For more information, see http://www.boost.org
 
-#define BOOST_SIGNALS_IN_LIBRARY_SOURCE
+#define BOOST_SIGNALS_SOURCE
 
 #include <boost/signals/slot.hpp>
 

@@ -18,6 +18,10 @@
 #include <list>
 #include <vector>
 
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+
 namespace boost {
 
 namespace BOOST_SIGNALS_NAMESPACE {
@@ -183,5 +187,9 @@ namespace BOOST_SIGNALS_NAMESPACE {
 } // end namespace BOOST_SIGNALS_NAMESPACE
 
 } // end namespace boost
+
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
 
 #endif // BOOST_SIGNALS_TRACKABLE_HPP

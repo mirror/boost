@@ -16,35 +16,35 @@
  *
  */
 
-#ifndef BOOST_SIGNALS_LIBRARY_INCLUDE_HPP
-#define BOOST_SIGNALS_LIBRARY_INCLUDE_HPP
+#ifndef BOOST_SIGNALS_CONFIG_HPP
+#define BOOST_SIGNALS_CONFIG_HPP
 
-/*****************************************************************************
- *
- *  Set up dll import/export options:
- *
- ****************************************************************************/
-#if defined(_MSC_VER) && defined(_DLL)
-#  define BOOST_SIGNALS_HAS_DLL_RUNTIME
-#endif
-
-#if defined(BOOST_SIGNALS_HAS_DLL_RUNTIME) && !defined(BOOST_SIGNALS_STATIC_LINK)
-#   if defined(BOOST_SIGNALS_IN_LIBRARY_SOURCE)
-#       define BOOST_SIGNALS_DECL __declspec(dllexport)
-#       define BOOST_SIGNALS_BUILD_DLL
-#   else
-#       define BOOST_SIGNALS_DECL __declspec(dllimport)
-#  endif
-#endif
+#ifdef BOOST_HAS_DECLSPEC
+#  if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_SIGNALS_DYN_LINK)
+#    ifdef BOOST_SIGNALS_SOURCE
+#      define BOOST_SIGNALS_DECL __declspec(dllexport)
+#    else
+#      define BOOST_SIGNALS_DECL __declspec(dllimport)
+#    endif  // BOOST_SIGNALS_SOURCE
+#  endif  // DYN_LINK
+#endif  // BOOST_HAS_DECLSPEC
 
 #ifndef BOOST_SIGNALS_DECL
 #  define BOOST_SIGNALS_DECL
 #endif
 
-/*****************************************************************************
- ****************************************************************************/
+// Setup autolinking
+#if !defined(BOOST_SIGNALS_SOURCE) && !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_SIGNALS_NO_LIB)
+#  define BOOST_LIB_NAME boost_signals
 
-#endif // BOOST_SIGNALS_LIBRARY_INCLUDE_HPP
+#  if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_SIGNALS_DYN_LINK)
+#    define BOOST_DYN_LINK
+#  endif
+
+#  include <boost/config/auto_link.hpp>
+#endif // autolinking on
+
+#endif // BOOST_SIGNALS_CONFIG_HPP
 
 
 
