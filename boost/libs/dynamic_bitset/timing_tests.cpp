@@ -49,7 +49,7 @@
 
 namespace {
 
-    // the m_ prefixes below, are mainly to avoid problems with g++;
+    // the m_ prefixes, below, are mainly to avoid problems with g++:
     // see http://gcc.gnu.org/ml/gcc-bugs/1999-03n/msg00884.html
     //
     class boost_version {
@@ -65,8 +65,7 @@ namespace {
     };
 
 
-    // don't use basic_ostream, to avoid
-    // headaches with broken compilers
+    // give up using basic_ostream, to avoid headaches with old libraries
      std::ostream& operator<<(std::ostream& os, const boost_version & v) {
         return os << v.m_major << '.' << v.m_minor << '.' << v.m_subminor;
      }
