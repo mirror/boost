@@ -1,6 +1,6 @@
 /* Copyright (c) 2001 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include <iostream>
@@ -8,6 +8,25 @@
 #include "boost/date_time/testfrmwk.hpp"
 #include "boost/date_time/gregorian/formatters.hpp"
 
+void iterate_backward(const boost::posix_time::ptime *answers, int ary_len, 
+    const boost::posix_time::time_duration& td)
+{
+  using namespace boost::posix_time;
+  using namespace boost::gregorian;
+  
+  int i = ary_len -1;
+  ptime end = answers[i];
+  time_iterator titr(end,td);
+  
+  std::cout << "counting down by previous duration..." << std::endl;
+  for (; titr >= answers[0]; --titr) {
+    std::cout << to_simple_string(*titr) << std::endl;
+    check("iterating backward", answers[i] == *titr);
+    --i;
+  }
+  check("iterating backward count", i == -1); // check the number of iterations
+  std::cout << std::endl;
+}
 
 int
 main() 
@@ -28,6 +47,7 @@ main()
   }
   check("iterator -- 1 sec", i == 4); // check the number of iterations
 
+  iterate_backward(answer1, 4, seconds(1));
 
   //iterate by hours
   const ptime answer2[] = {ptime(d), ptime(d,hours(1)),
@@ -40,6 +60,8 @@ main()
     i++;
   }
   check("iterator -- 1 hour", i == 4); // check the number of iterations
+
+  iterate_backward(answer2, 4, hours(1));
 
 
   //iterate by 15 mintues
@@ -55,6 +77,8 @@ main()
   }
   check("iterator -- 15 min", i == 6); // check the number of iterations
 
+  iterate_backward(answer3, 6, minutes(15));
+
   //iterate by .1 seconds
   const ptime answer4[] = {ptime(d), ptime(d,time_duration(0,0,0,1000)),
                            ptime(d,time_duration(0,0,0,2000)),
@@ -68,7 +92,36 @@ main()
   }
   check("iterator -- tenth sec", i == 4); // check the number of iterations
 
+  iterate_backward(answer4, 4, time_duration(0,0,0,1000));
 
+  //iterate by crazy duration
+  time_duration crzyd = duration_from_string("2:18:32.423"); 
+  const ptime answer5[] = {ptime(d), ptime(d,crzyd),
+                           ptime(d, crzyd * 2),
+                           ptime(d, crzyd * 3)};
+  i=0;
+  time_iterator titr5(start,crzyd); 
+  for (; titr5 < ptime(d,crzyd * 4); ++titr5) {
+    std::cout << to_simple_string(*titr5) << std::endl;
+    check("iterator -- crazy duration", answer5[i] == *titr5);
+    i++;
+  }
+  check("iterator -- crazy duration", i == 4); // check the number of iterations
+
+  iterate_backward(answer5, 4, crzyd);
+
+  //iterate up by neg_dur
+  time_duration pos_dur = minutes(3);
+  time_duration neg_dur = -pos_dur;
+  time_iterator up_itr(start, neg_dur), dn_itr(start, pos_dur);
+
+  for(i=0; i < 10; ++i)
+  {
+    check("up-by-neg == backward iterate", *up_itr == *dn_itr);
+    ++up_itr; // up by -3
+    --dn_itr; // down by 3
+  }
+  
  
   return printTestStats();
 }
