@@ -29,7 +29,11 @@
 //
 // there are multiple versions of the is_convertible
 // template, almost every compiler seems to require its
-// own version:
+// own version.
+//
+// Thanks to Andrei Alexandrescu for the original version of the
+// conversion detection technique!
+//
 
 namespace boost{
 
