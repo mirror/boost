@@ -99,7 +99,7 @@ void validate(const std::string & name, const PRNG &)
   // allow for a simple eyeball check for MSVC instantiation brokenness
   // (if the numbers for all generators are the same, it's obviously broken)
   std::cout << val << std::endl;
-  BOOST_TEST(result);
+  BOOST_CHECK(result);
 }
 
 void validate_all()
@@ -223,18 +223,18 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
 
   URNG urng2 = urng;             // copy constructor
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // MSVC brokenness
-  BOOST_TEST(urng == urng2);     // operator==
-  BOOST_TEST(!(urng != urng2));  // operator!=
+  BOOST_CHECK(urng == urng2);     // operator==
+  BOOST_CHECK(!(urng != urng2));  // operator!=
   urng();
   urng2 = urng;                  // copy assignment
-  BOOST_TEST(urng == urng2);
+  BOOST_CHECK(urng == urng2);
 #endif // BOOST_MSVC
 
   const std::vector<int> v(9999u, 0x41);
   std::vector<int>::const_iterator it = v.begin();
   std::vector<int>::const_iterator it_end = v.end();
   URNG urng3(it, it_end);
-  BOOST_TEST(it != v.begin());
+  BOOST_CHECK(it != v.begin());
   std::cout << "; seeding uses " << (it - v.begin()) << " words" << std::endl;
 
   bool have_exception = false;
@@ -245,7 +245,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   } catch(std::invalid_argument& x) {
     have_exception = true;
   }
-  BOOST_TEST(have_exception);
+  BOOST_CHECK(have_exception);
 
   // check for min/max members
   ResultType min = (urng3.min)();
@@ -277,7 +277,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
       urng();
       urng2();
     }
-    BOOST_TEST(urng == urng2);
+    BOOST_CHECK(urng == urng2);
 #endif // BOOST_MSVC
   }
   
@@ -297,7 +297,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
       urng();
       urng2();
     }
-    BOOST_TEST(urng == urng2);
+    BOOST_CHECK(urng == urng2);
 #endif // BOOST_MSVC
   }
 #endif // BOOST_NO_STD_WSTREAMBUF, BOOST_NO_STD_WSTRING
@@ -422,8 +422,8 @@ void test_uniform_int(Generator & gen)
   typedef boost::variate_generator<Generator&, int_gen> level_one;
 
   level_one uint12(gen, int_gen(1,2));
-  BOOST_TEST((uint12.distribution().min)() == 1);
-  BOOST_TEST((uint12.distribution().max)() == 2);
+  BOOST_CHECK((uint12.distribution().min)() == 1);
+  BOOST_CHECK((uint12.distribution().max)() == 2);
   check_uniform_int(uint12, 100000);
   level_one uint16(gen, int_gen(1,6));
   check_uniform_int(uint16, 100000);
