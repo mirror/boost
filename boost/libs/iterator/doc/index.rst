@@ -29,7 +29,7 @@ __ ../../../index.htm
            components for building iterators based on these
            extended concepts and includes several useful iterator
            adaptors. The extended iterator concepts have been
-           carefully designed so that so that old-style iterators
+           carefully designed so that old-style iterators
            can fit in the new concepts and so that new-style
            iterators will be compatible with old-style algorithms,
            though algorithms may need to be updated if they want to
