@@ -61,10 +61,9 @@ public:
 
     void reset(T * p = 0) // never throws
     {
-        if (ptr != p)
+        if(ptr != p)
         {
-            checked_delete(ptr);
-            ptr = p;
+            this_type(p).swap(*this);
         }
     }
 
