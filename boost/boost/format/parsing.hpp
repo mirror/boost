@@ -375,6 +375,16 @@ namespace detail {
         }
         return num_items;
     }
+    template<class String> inline
+    void append_string(String& dst, const String& src, 
+                       const typename String::size_type beg, 
+                       const typename String::size_type end) {
+#if !defined(BOOST_NO_STRING_APPEND)
+        dst.append(src.begin()+beg, src.begin()+end);
+#else
+        dst += src.substr(beg, end-beg);
+#endif
+    }
 
 } // detail namespace
 } // io namespace
@@ -390,7 +400,7 @@ namespace detail {
         // parse the format-string 
         using namespace std;
 #if !defined(BOOST_NO_STD_LOCALE)
-        const std::ctype<Ch> & fac = std::use_facet<std::ctype<Ch> > (getloc());
+        const std::ctype<Ch> & fac = BOOST_USE_FACET( std::ctype<Ch>, getloc());
 #else
         io::basic_oaltstringstream<Ch, Tr, Alloc> fac; 
         //has widen and narrow even on compilers without locale
@@ -413,14 +423,14 @@ namespace detail {
         while( (i1=buf.find(arg_mark,i1)) != string_type::npos ) {
             string_type & piece = (cur_item==0) ? prefix_ : items_[cur_item-1].appendix_;
             if( buf[i1+1] == buf[i1] ) { // escaped mark, '%%' 
-                piece.append(buf.begin()+i0, buf.begin()+i1+1);
+                io::detail::append_string(piece, buf, i0, i1+1);
                 i1+=2; i0=i1;
                 continue; 
             }
             BOOST_ASSERT(  static_cast<unsigned int>(cur_item) < items_.size() || cur_item==0);
 
             if(i1!=i0)
-                piece.append(buf.begin()+i0, buf.begin()+i1);
+                io::detail::append_string(piece, buf, i0, i1);
             ++i1;
             it = buf.begin()+i1;
             bool parse_ok = io::detail::parse_printf_directive(
@@ -446,7 +456,7 @@ namespace detail {
         // store the final piece of string
         {
             string_type & piece = (cur_item==0) ? prefix_ : items_[cur_item-1].appendix_;
-            piece.append(buf.begin()+i0, buf.end());
+            io::detail::append_string(piece, buf, i0, buf.size());
         }
     
         if( !ordered_args) {
