@@ -69,6 +69,18 @@ template<class F> struct result_traits< unspecified, reference_wrapper<F> >
 
 #endif
 
+// ref_compare
+
+template<class T> bool ref_compare(T const & a, T const & b, long)
+{
+    return a == b;
+}
+
+template<class T> bool ref_compare(reference_wrapper<T> const & a, reference_wrapper<T> const & b, int)
+{
+    return a.get_pointer() == b.get_pointer();
+}
+
 // bind_t forward declaration for listN
 
 template<class R, class F, class L> class bind_t;
@@ -83,6 +95,11 @@ public:
 
     T & get() { return t_; }
     T const & get() const { return t_; }
+
+    bool operator==(value const & rhs) const
+    {
+        return t_ == rhs.t_;
+    }
 
 private:
 
@@ -157,6 +174,11 @@ public:
     {
     }
 
+    bool operator==(list0 const &) const
+    {
+        return true;
+    }
+
 #ifdef BOOST_NO_VOID_RETURNS
 
     template<class R> struct evaluator
@@ -201,6 +223,11 @@ public:
     template<class V> void accept(V & v) const
     {
         BOOST_BIND_VISIT_EACH(v, a1_, 0);
+    }
+
+    bool operator==(list1 const & rhs) const
+    {
+        return ref_compare(a1_, rhs.a1_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
@@ -255,6 +282,11 @@ public:
     {
         BOOST_BIND_VISIT_EACH(v, a1_, 0);
         BOOST_BIND_VISIT_EACH(v, a2_, 0);
+    }
+
+    bool operator==(list2 const & rhs) const
+    {
+        return ref_compare(a1_, rhs.a1_, 0) && ref_compare(a2_, rhs.a2_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
@@ -313,6 +345,11 @@ public:
         BOOST_BIND_VISIT_EACH(v, a1_, 0);
         BOOST_BIND_VISIT_EACH(v, a2_, 0);
         BOOST_BIND_VISIT_EACH(v, a3_, 0);
+    }
+
+    bool operator==(list3 const & rhs) const
+    {
+        return ref_compare(a1_, rhs.a1_, 0) && ref_compare(a2_, rhs.a2_, 0) && ref_compare(a3_, rhs.a3_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
@@ -375,6 +412,13 @@ public:
         BOOST_BIND_VISIT_EACH(v, a2_, 0);
         BOOST_BIND_VISIT_EACH(v, a3_, 0);
         BOOST_BIND_VISIT_EACH(v, a4_, 0);
+    }
+
+    bool operator==(list4 const & rhs) const
+    {
+        return
+            ref_compare(a1_, rhs.a1_, 0) && ref_compare(a2_, rhs.a2_, 0) && ref_compare(a3_, rhs.a3_, 0) &&
+            ref_compare(a4_, rhs.a4_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
@@ -441,6 +485,13 @@ public:
         BOOST_BIND_VISIT_EACH(v, a3_, 0);
         BOOST_BIND_VISIT_EACH(v, a4_, 0);
         BOOST_BIND_VISIT_EACH(v, a5_, 0);
+    }
+
+    bool operator==(list5 const & rhs) const
+    {
+        return
+            ref_compare(a1_, rhs.a1_, 0) && ref_compare(a2_, rhs.a2_, 0) && ref_compare(a3_, rhs.a3_, 0) &&
+            ref_compare(a4_, rhs.a4_, 0) && ref_compare(a5_, rhs.a5_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
@@ -511,6 +562,13 @@ public:
         BOOST_BIND_VISIT_EACH(v, a4_, 0);
         BOOST_BIND_VISIT_EACH(v, a5_, 0);
         BOOST_BIND_VISIT_EACH(v, a6_, 0);
+    }
+
+    bool operator==(list6 const & rhs) const
+    {
+        return
+            ref_compare(a1_, rhs.a1_, 0) && ref_compare(a2_, rhs.a2_, 0) && ref_compare(a3_, rhs.a3_, 0) &&
+            ref_compare(a4_, rhs.a4_, 0) && ref_compare(a5_, rhs.a5_, 0) && ref_compare(a6_, rhs.a6_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
@@ -585,6 +643,14 @@ public:
         BOOST_BIND_VISIT_EACH(v, a5_, 0);
         BOOST_BIND_VISIT_EACH(v, a6_, 0);
         BOOST_BIND_VISIT_EACH(v, a7_, 0);
+    }
+
+    bool operator==(list7 const & rhs) const
+    {
+        return
+            ref_compare(a1_, rhs.a1_, 0) && ref_compare(a2_, rhs.a2_, 0) && ref_compare(a3_, rhs.a3_, 0) &&
+            ref_compare(a4_, rhs.a4_, 0) && ref_compare(a5_, rhs.a5_, 0) && ref_compare(a6_, rhs.a6_, 0) &&
+            ref_compare(a7_, rhs.a7_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
@@ -663,6 +729,14 @@ public:
         BOOST_BIND_VISIT_EACH(v, a6_, 0);
         BOOST_BIND_VISIT_EACH(v, a7_, 0);
         BOOST_BIND_VISIT_EACH(v, a8_, 0);
+    }
+
+    bool operator==(list8 const & rhs) const
+    {
+        return
+            ref_compare(a1_, rhs.a1_, 0) && ref_compare(a2_, rhs.a2_, 0) && ref_compare(a3_, rhs.a3_, 0) &&
+            ref_compare(a4_, rhs.a4_, 0) && ref_compare(a5_, rhs.a5_, 0) && ref_compare(a6_, rhs.a6_, 0) &&
+            ref_compare(a7_, rhs.a7_, 0) && ref_compare(a8_, rhs.a8_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
@@ -745,6 +819,14 @@ public:
         BOOST_BIND_VISIT_EACH(v, a7_, 0);
         BOOST_BIND_VISIT_EACH(v, a8_, 0);
         BOOST_BIND_VISIT_EACH(v, a9_, 0);
+    }
+
+    bool operator==(list9 const & rhs) const
+    {
+        return
+            ref_compare(a1_, rhs.a1_, 0) && ref_compare(a2_, rhs.a2_, 0) && ref_compare(a3_, rhs.a3_, 0) &&
+            ref_compare(a4_, rhs.a4_, 0) && ref_compare(a5_, rhs.a5_, 0) && ref_compare(a6_, rhs.a6_, 0) &&
+            ref_compare(a7_, rhs.a7_, 0) && ref_compare(a8_, rhs.a8_, 0) && ref_compare(a9_, rhs.a9_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
@@ -963,6 +1045,8 @@ template<class R, class F, class L> class bind_t
 {
 public:
 
+    typedef bind_t this_type;
+
     bind_t(F f, L const & l): f_(f), l_(l) {}
 
 #define BOOST_BIND_EVALUATE return l_(type<result_type>(), f_, a)
@@ -979,6 +1063,8 @@ template<class R> struct bind_t_generator
 template<class F, class L> class implementation
 {
 public:
+
+    typedef implementation this_type;
 
     implementation(F f, L const & l): f_(f), l_(l) {}
 
@@ -1001,6 +1087,8 @@ private:
 
 public:
 
+    typedef implementation this_type;
+
     implementation(F f, L const & l): f_(f), l_(l) {}
 
 #define BOOST_BIND_EVALUATE L::BOOST_NESTED_TEMPLATE evaluator<result_type>::type::eval(l_, f_, a);
@@ -1020,6 +1108,18 @@ public:
 };
 
 #endif
+
+// bind_t::operator==
+
+template<class R, class F, class L> bool operator==(bind_t<R, F, L> const & a, bind_t<R, F, L> const & b)
+{
+    return a.compare(b);
+}
+
+template<class R, class F, class L> bool operator!=(bind_t<R, F, L> const & a, bind_t<R, F, L> const & b)
+{
+    return !a.compare(b);
+}
 
 // add_value
 

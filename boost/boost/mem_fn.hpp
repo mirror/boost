@@ -308,6 +308,16 @@ public:
     {
         return (t.*f_);
     }
+
+    bool operator==(dm const & rhs) const
+    {
+        return f_ == rhs.f_;
+    }
+
+    bool operator!=(dm const & rhs) const
+    {
+        return f_ != rhs.f_;
+    }
 };
 
 } // namespace _mfi

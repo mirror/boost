@@ -27,6 +27,11 @@ template<int I> class arg
 {
 };
 
+template<int I> bool operator==(arg<I> const &, arg<I> const &)
+{
+    return true;
+}
+
 } // namespace boost
 
 #endif // #ifndef BOOST_BIND_ARG_HPP_INCLUDED
