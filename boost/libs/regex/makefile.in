@@ -4,7 +4,7 @@ ALL_DEP=@ac_all_dep@
 base: ./build/libboost_regex.a
 
 ./build/libboost_regex.a: $(ALL_DEP)
-	sh dmi.sh lib
+	sh dmi.sh build
 
 
 jgrep : base
@@ -23,6 +23,7 @@ install : base
 	echo no install option available
 	
 all : base jgrep test timer
+
 
 
 

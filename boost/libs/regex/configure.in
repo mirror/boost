@@ -1657,7 +1657,7 @@ AC_DEFINE(BOOST_RE_AUTO_CONF)
 AC_MSG_RESULT(***)
 AC_MSG_RESULT($0: setting up headers...)
 AC_MSG_RESULT(***)
-AC_OUTPUT(lib/makefile example/jgrep/makefile example/timer/makefile test/regress/makefile makefile)
+AC_OUTPUT(build/makefile example/jgrep/makefile example/timer/makefile test/regress/makefile makefile)
 AC_MSG_RESULT(***)
 AC_MSG_RESULT($0: regex++ package tuned for use with \"${CXX}\" compiler.)
 AC_MSG_RESULT($0: To restore original settings - copy jm_opt.in to ../../boost/regex/detail/regex_options.hpp)
@@ -1669,6 +1669,7 @@ cat jm_opt.out > ../../boost/regex/detail/regex_options.hpp
 sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/regex/detail/regex_options.hpp > jm_opt.out
 cat jm_opt.out > ../../boost/regex/detail/regex_options.hpp
 rm -f jm_opt.out
+
 
 
 

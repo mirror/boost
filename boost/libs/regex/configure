@@ -3773,7 +3773,7 @@ done
 
 ac_given_srcdir=$srcdir
 
-trap 'rm -fr `echo "lib/makefile example/jgrep/makefile example/timer/makefile test/regress/makefile makefile ../../boost/regex/detail/regex_options.hpp:jm_opt.in" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+trap 'rm -fr `echo "build/makefile example/jgrep/makefile example/timer/makefile test/regress/makefile makefile ../../boost/regex/detail/regex_options.hpp:jm_opt.in" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -3852,7 +3852,7 @@ EOF
 
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"lib/makefile example/jgrep/makefile example/timer/makefile test/regress/makefile makefile"}
+CONFIG_FILES=\${CONFIG_FILES-"build/makefile example/jgrep/makefile example/timer/makefile test/regress/makefile makefile"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
@@ -4036,6 +4036,7 @@ cat jm_opt.out > ../../boost/regex/detail/regex_options.hpp
 sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/regex/detail/regex_options.hpp > jm_opt.out
 cat jm_opt.out > ../../boost/regex/detail/regex_options.hpp
 rm -f jm_opt.out
+
 
 
 
