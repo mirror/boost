@@ -13,6 +13,10 @@
 #define BOOST_DATE_TIME_NO_MEMBER_INIT
 #endif
 
+//Define INT64_C for some Metrowerks compilers
+#if (defined(__MWERKS__) && (__MWERKS__ <= 0x2407) && (!defined(INT64_C)))
+#define INT64_C(value)  long long(value)
+#endif
 
 /* Copyright (c) 2002
  * CrystalClear Software, Inc.
