@@ -103,7 +103,12 @@ void xml_woarchive_impl<Archive>::save(const std::string & s){
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
 void xml_woarchive_impl<Archive>::save(const std::wstring & ws){
-    os << ws;
+    typedef iterators::xml_escape<std::wstring::const_iterator> xmbtows;
+    std::copy(
+        xmbtows(BOOST_MAKE_PFTO_WRAPPER(ws.data())),
+        xmbtows(BOOST_MAKE_PFTO_WRAPPER(ws.data() + ws.size())),
+        boost::archive::iterators::ostream_iterator<wchar_t>(os)
+    );
 }
 #endif //BOOST_NO_STD_WSTRING
 
@@ -116,6 +121,12 @@ void xml_woarchive_impl<Archive>::save(const char * s){
 template<class Archive>
 void xml_woarchive_impl<Archive>::save(const wchar_t * ws){
     os << ws;
+    typedef iterators::xml_escape<const wchar_t *> xmbtows;
+    std::copy(
+        xmbtows(BOOST_MAKE_PFTO_WRAPPER(ws)),
+        xmbtows(BOOST_MAKE_PFTO_WRAPPER(ws + std::wcslen(ws))),
+        boost::archive::iterators::ostream_iterator<wchar_t>(os)
+    );
 }
 #endif
 
