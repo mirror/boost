@@ -11,6 +11,7 @@
 #define BOOST_NUMERIC_INTERVAL_CHECKING_HPP
 
 #include <stdexcept>
+#include <string>
 #include <cassert>
 #include <boost/limits.hpp>
 

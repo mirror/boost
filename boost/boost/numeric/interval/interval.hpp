@@ -11,6 +11,7 @@
 #define BOOST_NUMERIC_INTERVAL_INTERVAL_HPP
 
 #include <stdexcept>
+#include <string>
 #include <boost/numeric/interval/detail/interval_prototype.hpp>
 
 namespace boost {
