@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost empty.hpp header file
+// boost blank.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -14,10 +14,10 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_EMPTY_HPP
-#define BOOST_EMPTY_HPP
+#ifndef BOOST_BLANK_HPP
+#define BOOST_BLANK_HPP
 
-#include "boost/empty_fwd.hpp"
+#include "boost/blank_fwd.hpp"
 
 #include <iosfwd> // for std::basic_ostream forward declare
 
@@ -29,7 +29,7 @@
 
 namespace boost {
 
-struct empty
+struct blank
 {
 };
 
@@ -37,19 +37,19 @@ struct empty
 //
 
 template <>
-struct is_pod< empty >
+struct is_pod< blank >
     : mpl::true_
 {
 };
 
 template <>
-struct is_empty< empty >
+struct is_empty< blank >
     : mpl::true_
 {
 };
 
 template <>
-struct is_stateless< empty >
+struct is_stateless< blank >
     : mpl::true_
 {
 };
@@ -57,12 +57,12 @@ struct is_stateless< empty >
 // relational operators
 //
 
-inline bool operator==(const empty&, const empty&)
+inline bool operator==(const blank&, const blank&)
 {
     return true;
 }
 
-inline bool operator<(const empty&, const empty&)
+inline bool operator<(const blank&, const blank&)
 {
     return false;
 }
@@ -72,7 +72,7 @@ inline bool operator<(const empty&, const empty&)
 BOOST_TEMPLATED_STREAM_TEMPLATE(E,T)
 inline BOOST_TEMPLATED_STREAM(ostream, E,T)& operator<<(
       BOOST_TEMPLATED_STREAM(ostream, E,T)& out
-    , const empty&
+    , const blank&
     )
 {
     // (output nothing)
@@ -81,4 +81,4 @@ inline BOOST_TEMPLATED_STREAM(ostream, E,T)& operator<<(
 
 } // namespace boost
 
-#endif // BOOST_EMPTY_HPP
+#endif // BOOST_BLANK_HPP

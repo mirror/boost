@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost empty_fwd.hpp header file
+// boost blank_fwd.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -14,13 +14,13 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_EMPTY_FWD_HPP
-#define BOOST_EMPTY_FWD_HPP
+#ifndef BOOST_BLANK_FWD_HPP
+#define BOOST_BLANK_FWD_HPP
 
 namespace boost {
 
-struct empty;
+struct blank;
 
 } // namespace boost
 
-#endif // BOOST_EMPTY_FWD_HPP
+#endif // BOOST_BLANK_FWD_HPP
