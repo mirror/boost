@@ -235,7 +235,7 @@ namespace detail {
     return &(*i);
   }
 
-  // Dummy version for iterators that don't support member access
+  // Dummy version for non-random access iterators 
   template <class Iter, class Diff, class Cat>
   inline void advance_impl(Iter&, Diff, Cat) { }
 
@@ -247,6 +247,21 @@ namespace detail {
         i.policies().advance<Iter>(i.iter(), n);
 #else
         i.policies().advance(i.iter(), n);
+#endif
+  }
+
+  // Dummy version for non-bidirectional iterators 
+  template <class Iter, class Cat>
+  inline void decrement_impl(Iter&, Cat) { }
+
+  // Real version
+  template <class Iter>
+  inline typename Iter::pointer
+  decrement_impl(Iter& i, std::bidirectional_iterator_tag) {
+#ifdef __MWERKS__
+        i.policies().decrement<Iter>(i.iter());
+#else
+        i.policies().decrement(i.iter());
 #endif
   }
 
@@ -336,11 +351,7 @@ public:
     Self operator++(int) { Self tmp(*this); ++*this; return tmp; }
     
     Self& operator--() {
-#ifdef __MWERKS__
-        policies().decrement<Iterator>(iter());
-#else
-        policies().decrement(iter());
-#endif
+        detail::decrement_impl(*this, iterator_category());
         return *this;
     }
     
