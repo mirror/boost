@@ -7,6 +7,8 @@
 
 //  Metrowerks C++ compiler setup:
 
+#   define BOOST_NO_STD_LOCALE  // missing ctype_base
+
 #   if __MWERKS__ <= 0x2301  // 5.3
 #     define BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 #     define BOOST_NO_POINTER_TO_MEMBER_CONST

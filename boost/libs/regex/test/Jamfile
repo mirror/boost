@@ -1,5 +1,11 @@
 subproject libs/regex/test ;
 
+local test-dir = $(BOOST_ROOT)$(SLASH)libs$(SLASH)regex$(SLASH)test$(SLASH)regress$(SLASH) ;
+
+local test-files = $(test-dir)tests.txt
+  # dwa -- not sure if this is generally applicable
+  #  $(test-dir)test1252.txt
+  ;
 
 unit-test regress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
@@ -8,6 +14,8 @@ unit-test regress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
+        : 
+                $(test-files)
 	;
 
 unit-test wregress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
@@ -18,6 +26,8 @@ unit-test wregress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
 		<define>TEST_UNICODE=1
 	: 
 		debug
+        : 
+                $(test-files)
 	;
 
 unit-test posix_api_check_c : c_compiler_checks/posix_api_check.c
@@ -27,6 +37,8 @@ unit-test posix_api_check_c : c_compiler_checks/posix_api_check.c
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
+        : 
+                $(test-files)
 	;
 
 unit-test wide_posix_api_check_c : c_compiler_checks/wide_posix_api_check.c
@@ -36,6 +48,8 @@ unit-test wide_posix_api_check_c : c_compiler_checks/wide_posix_api_check.c
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
+        : 
+                $(test-files)
 	;
 
 unit-test posix_api_check : c_compiler_checks/posix_api_check.cpp
@@ -45,6 +59,8 @@ unit-test posix_api_check : c_compiler_checks/posix_api_check.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
+        : 
+                $(test-files)
 	;
 
 unit-test wide_posix_api_check : c_compiler_checks/wide_posix_api_check.cpp
@@ -54,6 +70,8 @@ unit-test wide_posix_api_check : c_compiler_checks/wide_posix_api_check.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
+        : 
+                $(test-files)
 	;
 
 
