@@ -20,7 +20,8 @@ bool bcp_implementation::is_source_file(const fs::path& p)
       ".*\\."
       "(?:"
          "c|cxx|h|hxx|inc|.?pp"
-      ")"
+      ")", 
+      boost::regex::perl | boost::regex::icase
       );
    return boost::regex_match(p.string(), e);
 }
