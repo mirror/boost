@@ -94,10 +94,10 @@ function gcc_gen()
 	echo > $tout
 	echo > $iout
 
-	libname="boost_regex"
+	libname="boost_regex-gcc-${boost_version}"
 	opts="\$(C1)"
 	gcc_gen_lib
-	libname="boost_regex_debug"
+	libname="boost_regex-gcc-d-${boost_version}"
 	opts="\$(C2)"
 	gcc_gen_lib
 	
@@ -163,10 +163,10 @@ function gcc_gen_shared()
 	echo > $tout
 	echo > $iout
 
-	libname="boost_regex"
+	libname="boost_regex-gcc-${boost_version}"
 	opts="\$(C1)"
 	gcc_gen_lib
-	libname="boost_regex_debug"
+	libname="boost_regex-gcc-d-${boost_version}"
 	opts="\$(C2)"
 	gcc_gen_lib
 	

@@ -4,7 +4,7 @@
 #
 # Sun Workshop 6 and greater:
 #
-CXX= CC $(INCLUDES) -I../../../../ -I./ $(CXXFLAGS) -L../../build/sunpro $(LDFLAGS)
+CXX= CC $(INCLUDES) -I../../../../ -I./ $(CXXFLAGS) -L../../../../stage/lib -L../../build/sunpro $(LDFLAGS)
 #
 # sources to compile for each test:
 #
@@ -94,6 +94,7 @@ clean:
 	rm -f *.o
 	rm -fr SunWS_cache
 	rm -fr r rm rs rms rw rmw rsw rmsw
+
 
 
 

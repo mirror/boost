@@ -18,7 +18,7 @@ TLINK32 = $(BCROOT)\bin\ILink32.exe
 
 IDE_LinkFLAGS32 =  -L$(BCROOT)\LIB
 LINKOPTS= -ap -Tpe -x
-CFLAGS= -tWC -DSTRICT; -Vx -Ve -w-inl -w-aus -w-csu -w-eff -w-rch -I$(BCROOT)\include;..\..\..\..\; -L$(BCROOT)\lib\obj -L$(BCROOT)\lib\release -L..\..\build\bcb6 $(CXXFLAGS)
+CFLAGS= -tWC -DSTRICT; -Vx -Ve -w-inl -w-aus -w-csu -w-eff -w-rch -I$(BCROOT)\include;..\..\..\..\; -L..\..\..\..\stage\lib -L$(BCROOT)\lib\obj -L$(BCROOT)\lib\release -L..\..\build\bcb $(CXXFLAGS)
 
 BPI= vcl.bpi rtl.bpi vclx.bpi vcle.lib
 
@@ -26,7 +26,8 @@ BPL= vcl.lib rtl.lib vcle.lib
       
 
 all :: r1.exe r2.exe r3.exe r4.exe r5.exe r6.exe r1m.exe r2m.exe r3m.exe r4m.exe r5m.exe r6m.exe r1v.exe r2v.exe r3v.exe r4v.exe r5v.exe r6v.exe r1l.exe r2l.exe r3l.exe r4l.exe r5l.exe r6l.exe r1lm.exe r2lm.exe r3lm.exe r4lm.exe r5lm.exe r6lm.exe r1lv.exe r2lv.exe r3lv.exe r4lv.exe r5lv.exe r6lv.exe
-	copy ..\..\build\bcb6\*.dll
+	-copy ..\..\build\bcb6\*.dll
+	-copy ..\..\..\..\stage\lib\*bcb*.dll
 	echo testing static single threaded version....
 	r1 tests.txt test1252.txt
 	r2 tests.txt
@@ -183,6 +184,9 @@ r5lv.exe : $(SOURCES)
 
 r6lv.exe : $(SOURCES)
 	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er6lv.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES) $(BPI)
+
+
+
 
 
 

@@ -18,7 +18,7 @@ TLINK32 = $(BCROOT)\bin\ILink32.exe
 
 IDE_LinkFLAGS32 =  -L$(BCROOT)\LIB
 LINKOPTS= -ap -Tpe -x
-CFLAGS= -O2 -tWC -DSTRICT; -Vx -Ve -w-inl -w-aus -w-csu -w-eff -w-rch -I$(BCROOT)\include;..\..\..\..\; -L..\..\build\bcb5 $(CXXFLAGS)
+CFLAGS= -O2 -tWC -DSTRICT; -Vx -Ve -w-inl -w-aus -w-csu -w-eff -w-rch -I$(BCROOT)\include;..\..\..\..\; -L..\..\..\..\stage\lib -L..\..\build\bcb5 $(CXXFLAGS)
 
 all :: r1.exe r2.exe r3.exe r4.exe r5.exe r6.exe r1m.exe r2m.exe r3m.exe r4m.exe r5m.exe r6m.exe r1v.exe r2v.exe r3v.exe r4v.exe r5v.exe r6v.exe r1l.exe r2l.exe r3l.exe r4l.exe r5l.exe r6l.exe r1lm.exe r2lm.exe r3lm.exe r4lm.exe r5lm.exe r6lm.exe r1lv.exe r2lv.exe r3lv.exe r4lv.exe r5lv.exe r6lv.exe
 	echo testing static single threaded version....
@@ -177,6 +177,7 @@ r5lv.exe : $(SOURCES)
 
 r6lv.exe : $(SOURCES)
 	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er6lv.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES)
+
 
 
 

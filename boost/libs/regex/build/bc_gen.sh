@@ -46,7 +46,7 @@ EOF
 		obj=`echo "$file" | sed 's/.*src\/\(.*\)cpp/\1obj/g'`
 		obj="$subdir\\$libname\\$obj"
 		all_obj="$all_obj $obj"
-		all_lib_obj="$all_lib_obj -+$obj"
+		all_lib_obj="$all_lib_obj -+\"$obj\""
 		echo "$obj: $file \$(ALL_HEADER)" >> $tout
 		echo "	bcc32 @&&|" >> $tout
 		echo "-c \$(INCLUDES) $opts \$(CXXFLAGS) -o$obj $file" >> $tout
@@ -71,7 +71,7 @@ EOF
 #	 now for the main target for this library:
 	echo $subdir\\$libname.lib : $all_obj >> $tout
 	echo "	tlib @&&|" >> $tout
-	echo "/P128 /C /u /a \$(XSFLAGS) $subdir\\$libname.lib $all_lib_obj" >> $tout
+	echo "/P128 /C /u /a \$(XSFLAGS) \"$subdir\\$libname.lib\" $all_lib_obj" >> $tout
 	echo "|" >> $tout
 	echo "" >> $tout
 }
@@ -142,57 +142,29 @@ function bcb_gen()
 	echo > $tout
 	rm -f $iout
 
-	libname="libboost_regex_${subdir}_ss"
+	libname="libboost_regex-${subdir}-s-${boost_version}"
 	opts="-tWM- -D_NO_VCL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../"
 	bcb_gen_lib
 
-	libname="libboost_regex_${subdir}_ms"
+	libname="libboost_regex-${subdir}-mt-s-${boost_version}"
 	opts="-tWM -D_NO_VCL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../"
 	bcb_gen_lib
 	
-	libname="boost_regex_${subdir}_md"
+	libname="boost_regex-${subdir}-mt-${boost_version}"
 	opts="-tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_dll
 
-	libname="boost_regex_${subdir}_sd"
+	libname="boost_regex-${subdir}-${boost_version}"
 	opts="-tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_dll
 	
-	libname="libboost_regex_${subdir}_md"
+	libname="libboost_regex-${subdir}-mt-${boost_version}"
 	opts="-tWD -tWM -tWR -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_lib
 
-	libname="libboost_regex_${subdir}_sd"
+	libname="libboost_regex-${subdir}-${boost_version}"
 	opts="-tWD -tWR -tWM- -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_lib
-	
-	if test "$has_stlport" = "yes"; then
-	
-	libname="libboost_regex_${subdir}_ssdd"
-	opts="-tWM- -D_STLP_DEBUG -D_NO_VCL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../"
-	bcb_gen_lib
-
-	libname="libboost_regex_${subdir}_msdd"
-	opts="-tWM -D_STLP_DEBUG -D_NO_VCL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../"
-	bcb_gen_lib
-	
-	libname="boost_regex_${subdir}_mddd"
-	opts="-tWD -tWM -tWR -D_STLP_DEBUG -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
-	bcb_gen_dll
-
-	libname="boost_regex_${subdir}_sddd"
-	opts="-tWD -tWR -tWM- -D_STLP_DEBUG -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
-	bcb_gen_dll
-	
-	libname="libboost_regex_${subdir}_mddd"
-	opts="-tWD -tWM -tWR -D_STLP_DEBUG -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
-	bcb_gen_lib
-
-	libname="libboost_regex_${subdir}_sddd"
-	opts="-tWD -tWR -tWM- -D_STLP_DEBUG -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
-	bcb_gen_lib
-	
-	fi	
 	
 	cat > $out << EOF
 #
@@ -252,11 +224,6 @@ EOF
 . common.sh
 
 #
-# generate C++ Builder 4 files:
-out="bcb4.mak"
-subdir="bcb4"
-bcb_gen
-#
 # generate C++ Builder 5 files:
 out="bcb5.mak"
 subdir="bcb5"
@@ -264,7 +231,7 @@ bcb_gen
 #
 # generate C++ Builder 6 files:
 out="bcb6.mak"
-subdir="bcb6"
+subdir="bcb"
 has_stlport="yes"
 bcb_gen
 

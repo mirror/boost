@@ -3,7 +3,7 @@
 #
 # g++ 2.95 and greater
 #
-CXX= g++ $(INCLUDES) -I../../../../ -I./ $(CXXFLAGS) -L../../build/gcc $(LDFLAGS)
+CXX= g++ $(INCLUDES) -L../../../../stage/lib -I../../../../ -I./ $(CXXFLAGS) -L../../build/gcc $(LDFLAGS)
 #
 # sources to compile for each test:
 #
@@ -17,6 +17,7 @@ gcc_regress : $(SOURCES)
 
 debug : $(SOURCES)
 	$(CXX) -g -o gcc_regress $(SOURCES) -lboost_regex_debug $(LIBS)
+
 
 
 

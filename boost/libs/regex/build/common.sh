@@ -50,5 +50,6 @@ for file in ../src/*.cpp; do
 	fi
 done
 
-
+boost_version=$(grep 'define.*BOOST_LIB_VERSION' ../../../boost/version.hpp | sed 's/.*"\([^"]*\)".*/\1/')
+echo Boost version tag = $boost_version
 

@@ -43,117 +43,17 @@ dll boost_regex : ../src/$(SOURCES).cpp <template>regex-dll-options
     : 
         debug release
     ;
+    
+local version-tag = [ MATCH "^([^.]+).([^.]+)" : $(BOOST_VERSION) ] ;
+version-tag = $(version-tag:J="_") ;
 
-if $(NT)
-{
-   # on NT we use the name mangling scheme defined in
-   # boost/regex/config/regex_library_include.hpp :
-   
-   rule boost-regex-stage-tag ( toolset variant : properties * )
-   {
-      local lib-thread-opt = s ;
-      if <threading>multi in $(properties)
-      {
-         lib-thread-opt = m ;
-      }
-       
-      local lib-rt-opt = s ;
-      if <runtime-link>dynamic in $(properties)
-      {
-         lib-rt-opt = d ;
-      }
-       
-      local lib-debug-opt = "" ;
-      if [ MATCH .*(debug).* : $(variant) ]
-      {
-         lib-debug-opt = d ;
-      }
-       
-      local lib-toolset = $(toolset) ;
-       
-      local warning-var = regex.$(toolset)-warning-issued ;
-      local warning ;
-       
-      switch $(toolset)
-      {
-           
-      case borland :
-         if ! ( BORLAND_VERSION) in 4 5 6 )
-         {
-               BORLAND_VERSION = 6 ; # chose default version
-               warning = "BORLAND_VERSION not set to 4, 5, or 6: staged Boost.Regex library will be named appropriately for version" $(BORLAND_VERSION) ;
-         }
-         lib-toolset = bcb$(BORLAND_VERSION) ;
-        
-      case msvc :
-         warning = "msvc toolset builds Boost.Regex library for vc6; use vc7 or vc7.1 toolsets for other versions" ;
-         lib-toolset = vc6 ;
-         if <runtime-link>dynamic in $(properties)
-         {
-               lib-thread-opt = m ;
-         }
-
-        
-      case msvc-stlport :
-         warning = "msvc-stlport toolset only builds Boost.Regex library for use with vc6" ;
-         lib-toolset = vc6-stlport ;
-         if <runtime-build>debug in $(properties)
-         {
-               lib-debug-opt = dd ;
-         }
-         if <runtime-link>dynamic in $(properties)
-         {
-               lib-thread-opt = m ;
-         }
-      case vc7 :
-         warning = "vc7 toolset builds Boost.Regex library for vc7.0; use msvc or vc7.1 toolsets for other versions" ;
-      
-      case vc7.1 :
-         warning = "vc7.1 toolset builds Boost.Regex library for vc7.1; use vc7 or msvc toolsets for other versions" ;
-         lib-toolset = vc71 ;
-         if <runtime-link>dynamic in $(properties)
-         {
-               lib-thread-opt = m ;
-         }
-      }
-       
-      if $(warning) && ! $($(warning-var))
-      {
-         ECHO Warning: $(warning) ;
-         $(warning-var) = issued ;
-      }
-      return $(properties) <tag><$(variant)>_$(lib-toolset)_$(lib-thread-opt)$(lib-rt-opt)$(lib-debug-opt) ;
-   }
-
-}
-else
-{
-   
-   # On Unix platforms we use a simplified naming scheme, 
-   # just appending _mt for multi-threaded builds and 
-   # _debug for debug builds.
-   
-   rule boost-regex-stage-tag ( toolset variant : properties * )
-   {
-      local lib-thread-opt = "" ;
-      if <threading>multi in $(properties)
-      {
-         lib-thread-opt = _mt ;
-      }
-       
-      local lib-debug-opt = "" ;
-      if [ MATCH .*(debug).* : $(variant) ]
-      {
-         lib-debug-opt = _debug ;
-      }
-       
-      return $(properties) <tag><$(variant)>$(lib-thread-opt)$(lib-debug-opt) ;
-   }
-}
-      
-stage bin-stage : <lib>boost_regex <dll>boost_regex
+stage stage/lib : <lib>boost_regex <dll>boost_regex
     :
-        boost-regex-stage-tag
+        <locate>$(BOOST_ROOT)
+        common-stage-tag
+        <tag><postfix>-$(version-tag)
+        <target>stage
+        <target>all
     :
         debug release
     ;
