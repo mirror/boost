@@ -131,6 +131,8 @@ public:
     for(unsigned int i = 0; i < classes-1; ++i)
       limit[i] = invert_monotone_inc(probability, (i+1)*0.05, 0, 1000);
     limit[classes-1] = std::numeric_limits<double>::infinity();
+    if(limit[classes-1] < std::numeric_limits<double>::max())
+      limit[classes-1] = std::numeric_limits<double>::max();
 #if 0
     std::cout << __PRETTY_FUNCTION__ << ": ";
     for(unsigned int i = 0; i < classes; ++i)
