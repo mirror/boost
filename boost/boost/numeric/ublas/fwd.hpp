@@ -20,21 +20,6 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
-    // Borrowed from Dave Abraham's noncopyable.
-    // I believe this should be part of utility.hpp one day...
-    namespace nonassignable_  // protection from unintended ADL
-    {
-        class nonassignable {
-        protected:
-            nonassignable () {}
-            ~nonassignable () {}
-        private:  // emphasize the following members are private
-            const nonassignable& operator= (const nonassignable &);
-        }; // nonassignable
-    }
-    typedef nonassignable_::nonassignable nonassignable;
-
-
 	// Storage types
     template<class T, class ALLOC = std::allocator<T> >
     class unbounded_array;
@@ -101,10 +86,8 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T>
     class unit_vector;
-
     template<class T>
     class zero_vector;
-
     template<class T>
     class scalar_vector;
 
@@ -113,10 +96,8 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class A = map_std<std::size_t, T> >
     class sparse_vector;
-
     template<class T, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
     class compressed_vector;
-
     template<class T, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
     class coordinate_vector;
 
@@ -135,10 +116,8 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T>
     class identity_matrix;
-
     template<class T>
     class zero_matrix;
-
     template<class T>
     class scalar_matrix;
 
@@ -167,55 +146,31 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class F1 = lower, class F2 = row_major, class A = unbounded_array<T> >
     class triangular_matrix;
-
     template<class M, class F = lower>
     class triangular_adaptor;
 
     template<class T, class F1 = lower, class F2 = row_major, class A = unbounded_array<T> >
     class symmetric_matrix;
-
     template<class M, class F = lower>
     class symmetric_adaptor;
 
     template<class T, class F1 = lower, class F2 = row_major, class A = unbounded_array<T> >
     class hermitian_matrix;
-
     template<class M, class F = lower>
     class hermitian_adaptor;
 
     template<class T, class F = row_major, class A = map_std<std::size_t, T> >
     class sparse_matrix;
-
     template<class T, class F = row_major, class A = map_std<std::size_t, map_std<std::size_t, T> > >
     class sparse_vector_of_sparse_vector;
-
     template<class T, class F = row_major, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
     class compressed_matrix;
-
     template<class T, class F = row_major, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
     class coordinate_matrix;
 
 	// Evaluation tags
     struct concrete_tag {};
     struct abstract_tag {};
-
-    // Some syntactic sugar. I'd like to drop it ;-)
-    template<class V>
-    typename V::size_type num_elements (const V &v) {
-        return v.size ();
-    }
-    template<class M>
-    typename M::size_type num_rows (const M &m) {
-        return m.size1 ();
-    }
-    template<class M>
-    typename M::size_type num_columns (const M &m) {
-        return m.size2 ();
-    }
-    template<class MV>
-    typename MV::size_type num_non_zeros (const MV &mv) {
-        return mv.non_zeros ();
-    }
 
 }}}
 

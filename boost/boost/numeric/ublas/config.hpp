@@ -357,6 +357,9 @@ bool disable_type_check<Dummy>::value = false;
 // #define BOOST_UBLAS_PROXY_CONST_MEMBER
 
 
+// Include declerations and functions
 #include <boost/numeric/ublas/fwd.hpp>
+#include <boost/numeric/ublas/definitions.hpp>
+
 
 #endif
