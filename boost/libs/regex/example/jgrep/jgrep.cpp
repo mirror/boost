@@ -90,6 +90,7 @@ bool ogrep_predicate<iterator, Allocator>::operator()(const boost::match_results
 
 void process_grep(const char* file)
 {
+   try{
    using namespace boost;
    mapfile f(file);
    unsigned int count = 0;
@@ -117,6 +118,14 @@ void process_grep(const char* file)
       {
          cout << "File " << file << "(" << f.size() << "bytes):" << endl << "0 lines match" << endl;
       }
+   }
+   }
+   catch(const std::exception& e)
+   {
+      std::cerr << std::endl << e.what() << std::endl;
+   }
+   catch(...)
+   {
    }
 }
 
