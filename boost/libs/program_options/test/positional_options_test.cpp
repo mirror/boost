@@ -7,6 +7,9 @@
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
 using namespace boost::program_options;
+// We'll use po::value everywhere to workaround vc6 bug.
+namespace po = boost::program_options;
+
 
 #include <boost/limits.hpp>
 #include <boost/test/test_tools.hpp>
@@ -43,9 +46,9 @@ void test_parsing()
 {
     options_description desc;
     desc.add_options()
-        ("first", value<int>())
-        ("second", value<int>())
-        ("input-file", value< vector<string> >())
+        ("first", po::value<int>())
+        ("second", po::value<int>())
+        ("input-file", po::value< vector<string> >())
     ;
 
     positional_options_description p;

@@ -151,7 +151,8 @@ namespace boost { namespace program_options {
     typed_value<T>*
     value()
     {
-        return value<T>(0);
+        // Explicit qualification is vc6 workaround.
+        return boost::program_options::value<T>(0);
     }
 
     template<class T>

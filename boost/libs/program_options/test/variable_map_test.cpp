@@ -9,6 +9,8 @@
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/detail/utf8_codecvt_facet.hpp>
 using namespace boost::program_options;
+// We'll use po::value everywhere to workaround vc6 bug.
+namespace po = boost::program_options;
 
 #include <boost/function.hpp>
 using namespace boost;
@@ -43,8 +45,8 @@ void test_variable_map()
     options_description desc;
     desc.add_options()
         ("foo,f", new untyped_value)
-        ("bar,b", value<string>()->implicit())
-        ("biz,z", value<string>()->implicit())
+        ("bar,b", po::value<string>()->implicit())
+        ("biz,z", po::value<string>()->implicit())
         ("baz", new untyped_value())
         ("output,o", new untyped_value(), "")
         ;
@@ -66,7 +68,7 @@ void test_variable_map()
     desc.add_options()
     ("zee", bool_switch(), "")
     ("zoo", bool_switch(), "")
-    ("zak", value<int>(&i), "")
+    ("zak", po::value<int>(&i), "")
     ("opt", bool_switch(), "");
 
     char* cmdline4_[] = { "--zee=On", "--zoo", "--zak=13" };
@@ -86,9 +88,9 @@ void test_variable_map()
 
     options_description desc2;
     desc2.add_options()
-    ("vee", value<string>()->default_value("42"))
-    ("voo", value<string>())
-    ("iii", value<int>()->default_value(123))
+    ("vee", po::value<string>()->default_value("42"))
+    ("voo", po::value<string>())
+    ("iii", po::value<int>()->default_value(123))
     ;
     char* cmdline5_[] = {  "--voo=1" };
     vector<string> cmdline5 = sv(cmdline5_,
@@ -115,10 +117,10 @@ void test_semantic_values()
     options_description desc;
     desc.add_options()
     ("foo", new untyped_value())
-    ("bar", value<int>())
-    ("biz", value< vector<string> >())
-    ("baz", value< vector<string> >()->multitoken())
-    ("int", value< vector<int> >()->notifier(notifier))
+    ("bar", po::value<int>())
+    ("biz", po::value< vector<string> >())
+    ("baz", po::value< vector<string> >()->multitoken())
+    ("int", po::value< vector<int> >()->notifier(notifier))
     ;
 
        
@@ -175,13 +177,13 @@ void test_priority()
     desc.add_options()
     // Value of this option will be specified in two sources,
     // and only first one should be used.
-    ("first", value< vector<int > >())
+    ("first", po::value< vector<int > >())
     // Value of this option will have default value in the first source,
     // and explicit assignment in the second, so the second should be used.
-    ("second", value< vector<int > >()->default_value(vector<int>(1, 1), ""))
-    ("aux", value< vector<int > >())
+    ("second", po::value< vector<int > >()->default_value(vector<int>(1, 1), ""))
+    ("aux", po::value< vector<int > >())
      // This will have values in both sources, and values should be combined
-    ("include", value< vector<int> >()->composing())
+    ("include", po::value< vector<int> >()->composing())
     ;
 
     char* cmdline1_[] = { "--first=1", "--aux=10", "--first=3", "--include=1" };

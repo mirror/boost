@@ -7,6 +7,8 @@
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/options_description.hpp>
 using namespace boost::program_options;
+// We'll use po::value everywhere to workaround vc6 bug.
+namespace po = boost::program_options;
 
 #include <boost/function.hpp>
 using namespace boost;
@@ -108,11 +110,12 @@ void test_command_line()
     BOOST_TEST(a2.arguments().size() == 1);
     BOOST_TEST(a2.arguments()[0] == "file");
     #endif
-
+    
     options_description desc;
     desc.add_options()
         ("foo,f", new untyped_value(), "")
-        ("bar,b", value<string>()->implicit(), "")
+        // Explicit qualification is a workaround for vc6
+        ("bar,b", po::value<std::string>()->implicit(), "")
         ("baz", new untyped_value())
         ("plug*", new untyped_value())
         ;
