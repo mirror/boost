@@ -384,13 +384,13 @@ main()
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         , dummyT
 #endif
-        > filter_gen;
+        >::type filter_iter;
     
-    filter_gen::type i(array, filter_gen::policies_type(one_or_four(), array + N));
+    filter_iter i(array, filter_iter::policies_type(one_or_four(), array + N));
     boost::forward_iterator_test(i, dummyT(1), dummyT(4));
 
     enum { is_forward = boost::is_same<
-           filter_gen::type::iterator_category,
+           filter_iter::iterator_category,
            std::forward_iterator_tag>::value };
     BOOST_STATIC_ASSERT(is_forward);
 
