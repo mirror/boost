@@ -273,25 +273,29 @@ namespace boost
   
       void advance(typename super_t::difference_type n)
       {
+# if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) // seems to get instantiated incorrectly
           BOOST_STATIC_ASSERT(
               (detail::is_tag< 
-                   random_access_traversal_tag
-                 , BOOST_ARG_DEPENDENT_TYPENAME super_t::iterator_category::traversal
+               random_access_traversal_tag
+               , BOOST_ARG_DEPENDENT_TYPENAME super_t::iterator_category::traversal
                >::value)
               );
+# endif 
           m_iterator += n;
       }
   
       void increment() { ++m_iterator; }
 
       void decrement() 
-      { 
+      {
+# if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) // seems to get instantiated incorrectly
            BOOST_STATIC_ASSERT(
-               (detail::is_tag< 
-                    bidirectional_traversal_tag
-                  , BOOST_ARG_DEPENDENT_TYPENAME super_t::iterator_category::traversal
-                >::value)
-               );
+              (detail::is_tag< 
+                   bidirectional_traversal_tag
+                 , BOOST_ARG_DEPENDENT_TYPENAME super_t::iterator_category::traversal
+               >::value)
+              );
+# endif 
            --m_iterator;
       }
 
