@@ -24,6 +24,7 @@
 #include <boost/type_traits/is_reference.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
+#include <boost/type_traits/decay.hpp>
 #include <boost/mpl/if.hpp>
 #include <deque>
 #include <cstddef>
@@ -53,6 +54,19 @@ namespace assign_detail
     // Part 0: common conversion code
     /////////////////////////////////////////////////////////////////////////
 
+    template< class T >
+    struct assign_decay
+    {
+        //
+        // Add constness to array parameters
+        // to support string literals properly
+        //
+        typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
+            is_array<T>,
+            ::boost::decay<const T>,
+            ::boost::decay<T> >::type type;
+    };
+    
     template< class T, std::size_t sz >
     type_traits::yes_type is_array( const array<T,sz>* );
     type_traits::no_type is_array( ... );
@@ -120,7 +134,7 @@ namespace assign_detail
 // old Dinkumware doesn't support iterator type as template
             Container result;
             BOOST_DEDUCED_TYPENAME Derived::iterator 
-                it  = static_cast<const Derived*>(this)->begin(); 
+                it  = static_cast<const Derived*>(this)->begin(), 
                 end = static_cast<const Derived*>(this)->end();
             while( it != end )
             {
@@ -216,14 +230,17 @@ namespace assign_detail
     /////////////////////////////////////////////////////////////////////////    
 
     template< class T > 
-    class generic_list : public converter< generic_list<T> >
+    class generic_list : 
+        public converter< generic_list< BOOST_DEDUCED_TYPENAME assign_decay<T>::type > >
     {
-        typedef std::deque<T>  impl_type;
-        mutable impl_type      values_;
+        typedef BOOST_DEDUCED_TYPENAME assign_decay<T>::type Ty;
+        typedef std::deque<Ty>  impl_type;
+        mutable impl_type       values_;
         
     public:
         typedef BOOST_DEDUCED_TYPENAME impl_type::iterator         iterator;
         typedef BOOST_DEDUCED_TYPENAME impl_type::const_iterator   const_iterator;
+        //typedef iterator                                           const_iterator;
         typedef BOOST_DEDUCED_TYPENAME impl_type::value_type       value_type;
         typedef BOOST_DEDUCED_TYPENAME impl_type::size_type        size_type;
         typedef BOOST_DEDUCED_TYPENAME impl_type::difference_type  difference_type;
@@ -240,12 +257,11 @@ namespace assign_detail
     public:
         generic_list& operator()()
         {
-            this->push_back( T() );
+            this->push_back( Ty() );
             return *this;
         }
         
-        template< class U >
-        generic_list& operator()( U u )
+        generic_list& operator()( const Ty& u )
         {
             this->push_back( u );
             return *this;
@@ -257,16 +273,18 @@ namespace assign_detail
 #endif        
 #define BOOST_ASSIGN_MAX_PARAMETERS (BOOST_ASSIGN_MAX_PARAMS - 1) 
 #define BOOST_ASSIGN_PARAMS1(n) BOOST_PP_ENUM_PARAMS(n, class U)
-#define BOOST_ASSIGN_PARAMS2(n) BOOST_PP_ENUM_BINARY_PARAMS(n, U, u)
+#define BOOST_ASSIGN_PARAMS2(n) BOOST_PP_ENUM_BINARY_PARAMS(n, U, const& u)
 #define BOOST_ASSIGN_PARAMS3(n) BOOST_PP_ENUM_PARAMS(n, u)
 #define BOOST_ASSIGN_PARAMS4(n) BOOST_PP_ENUM_PARAMS(n, U)
+#define BOOST_ASSIGN_PARAMS2_NO_REF(n) BOOST_PP_ENUM_BINARY_PARAMS(n, U, u)
+//#define BOOST_ASSIGN_PARAMS_DECAY(n) BOOST_PP_ENUM_BINARY_PARAMS(n, BOOST_DEDUCED_TYPENAME assign_decay<U, >::type )
 
 #define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
 #define BOOST_PP_LOCAL_MACRO(n) \
     template< class U, BOOST_ASSIGN_PARAMS1(n) > \
-    generic_list& operator()(U u, BOOST_ASSIGN_PARAMS2(n) ) \
+    generic_list& operator()(U const& u, BOOST_ASSIGN_PARAMS2(n) ) \
     { \
-        this->push_back(T(u, BOOST_ASSIGN_PARAMS3(n))); \
+        this->push_back( Ty(u, BOOST_ASSIGN_PARAMS3(n))); \
         return *this; \
     } \
     /**/
@@ -356,10 +374,16 @@ namespace assign_detail
     };
 
     template< class T, int N >
-    struct static_generic_list : public converter< static_generic_list<T,N> >
+    struct static_generic_list : 
+        public converter< static_generic_list< BOOST_DEDUCED_TYPENAME assign_decay<T>::type ,N> >
     {
-        typedef BOOST_DEDUCED_TYPENAME 
-            remove_reference<T>::type                 internal_value_type; 
+    private:
+        typedef BOOST_DEDUCED_TYPENAME assign_decay<T>::type Ty;
+        //typedef BOOST_DEDUCED_TYPENAME 
+        //    remove_reference<Ty>::type                internal_value_type; 
+        typedef Ty                                      internal_value_type;
+
+    public:
         typedef assign_reference<internal_value_type> value_type;
         typedef value_type*                           iterator;
         typedef const value_type*                     const_iterator;
@@ -420,7 +444,7 @@ namespace assign
     
     template< class T >
     inline assign_detail::generic_list<T> 
-    list_of( T t )
+    list_of( const T& t )
     {
         return assign_detail::generic_list<T>()( t );
     }
@@ -443,7 +467,7 @@ namespace assign
 #define BOOST_PP_LOCAL_MACRO(n) \
     template< class T, class U, BOOST_ASSIGN_PARAMS1(n) > \
     inline assign_detail::generic_list<T> \
-    list_of(U u, BOOST_ASSIGN_PARAMS2(n) ) \
+    list_of(U const& u, BOOST_ASSIGN_PARAMS2(n) ) \
     { \
         return assign_detail::generic_list<T>()(u, BOOST_ASSIGN_PARAMS3(n)); \
     } \
@@ -455,7 +479,7 @@ namespace assign
 #define BOOST_PP_LOCAL_MACRO(n) \
     template< class U, BOOST_ASSIGN_PARAMS1(n) > \
     inline assign_detail::generic_list< tuple<U, BOOST_ASSIGN_PARAMS4(n)> > \
-    tuple_list_of(U u, BOOST_ASSIGN_PARAMS2(n) ) \
+    tuple_list_of(U u, BOOST_ASSIGN_PARAMS2_NO_REF(n) ) \
     { \
         return assign_detail::generic_list< tuple<U, BOOST_ASSIGN_PARAMS4(n)> >()( tuple<U,BOOST_ASSIGN_PARAMS4(n)>( u, BOOST_ASSIGN_PARAMS3(n) )); \
     } \
@@ -465,17 +489,27 @@ namespace assign
 
 
     template< class Key, class T >
-    inline assign_detail::generic_list< std::pair<Key,T> >
-    map_list_of( Key k, T t )
+    inline assign_detail::generic_list< std::pair
+        < 
+            BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<Key>::type, 
+            BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type
+        > >
+    map_list_of( const Key& k, const T& t )
     {
-        return assign_detail::generic_list< std::pair<Key,T> >()( k, t );
+        typedef BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<Key>::type k_type;
+        typedef BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type   t_type;
+        return assign_detail::generic_list< std::pair<k_type,t_type> >()( k, t );
     }
 
     template< class F, class S >
-    inline assign_detail::generic_list< std::pair<F,S> >
-    pair_list_of( F f, S s )
+    inline assign_detail::generic_list< std::pair
+        < 
+            BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<F>::type, 
+            BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<S>::type
+        > >
+    pair_list_of( const F& f, const S& s )
     {
-        return assign_detail::generic_list< std::pair<F,S> >()( f, s );
+        return map_list_of( f, s );
     }
 
 
