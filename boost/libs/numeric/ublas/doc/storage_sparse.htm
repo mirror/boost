@@ -175,13 +175,20 @@ default <code>T ()</code>.</td>
 <td>Swaps the contents of the arrays.</td>
 </tr>
 <tr>
-<td><code>pointer insert (pointer it, const value_type
+<td><code>std::pair<iterator, bool> insert (const value_type
+&amp;p)</code></td>
+<td>Inserts <code>p</code> into the array. The second part of the return value is <code>true</code>
+if <code>p</code> was inserted and <code>false</code> if was not inserted because it was aleady
+present.</td>
+</tr>
+<tr>
+<td><code>iterator insert (iterator it, const value_type
 &amp;p)</code></td>
 <td>Inserts <code>p</code> into the array, using <code>it</code> as
 a hint to where it will be inserted.</td>
 </tr>
 <tr>
-<td><code>void erase (pointer it)</code></td>
+<td><code>void erase (iterator it)</code></td>
 <td>Erases the value at <code>it</code>.</td>
 </tr>
 <tr>
@@ -189,32 +196,32 @@ a hint to where it will be inserted.</td>
 <td>Clears the array.</td>
 </tr>
 <tr>
-<td><code>const_pointer find (index_type i) const</code></td>
+<td><code>const_iterator find (index_type i) const</code></td>
 <td>Finds an element whose index is <code>i</code>.</td>
 </tr>
 <tr>
-<td><code>pointer find (index_type i)</code></td>
+<td><code>iterator find (index_type i)</code></td>
 <td>Finds an element whose index is <code>i</code>.</td>
 </tr>
 <tr>
-<td><code>const_pointer lower_bound (index_type i)
+<td><code>const_iterator lower_bound (index_type i)
 const</code></td>
 <td>Finds the first element whose index is not less than
 <code>i</code> .</td>
 </tr>
 <tr>
-<td><code>pointer lower_bound (index_type i)</code></td>
+<td><code>iterator lower_bound (index_type i)</code></td>
 <td>Finds the first element whose index is not less than
 <code>i</code> .</td>
 </tr>
 <tr>
-<td><code>const_pointer upper_bound (index_type i)
+<td><code>const_iterator upper_bound (index_type i)
 const</code></td>
 <td>Finds the first element whose index is greater than
 <code>i</code> .</td>
 </tr>
 <tr>
-<td><code>pointer upper_bound (index_type i)</code></td>
+<td><code>iterator upper_bound (index_type i)</code></td>
 <td>Finds the first element whose index is greater than
 <code>i</code> .</td>
 </tr>
