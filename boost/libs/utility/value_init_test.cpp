@@ -73,7 +73,8 @@ void test ( T const& y, T const& z )
   boost::value_initialized<T> const x_c ;
   BOOST_TEST ( y == x_c ) ;
   BOOST_TEST ( y == get(x_c) ) ;
-  static_cast<T&>(x_c) = z ;
+  T& x_c_ref = x_c ;
+  x_c_ref = z ;
   BOOST_TEST ( x_c == z ) ;
   #ifdef PRODUCE_ERROR_1
   get(x_c) = z ; // this should produce an ERROR
