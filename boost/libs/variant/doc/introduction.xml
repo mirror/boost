@@ -26,8 +26,9 @@ include:</para>
     <code><functionname>boost::apply_visitor</functionname></code>.</listitem>
   <listitem>Run-time checked explicit value retrieval via
     <code><functionname>boost::get</functionname></code>.</listitem>
-  <listitem>Support for recursive variant types via
-    <code><classname>boost::recursive_variant</classname></code>.</listitem>
+  <listitem>Support for recursive variant types via both
+    <code><classname>boost::make_recursive_variant</classname></code> and
+    <code><classname>boost::recursive_wrapper</classname></code>.</listitem>
   <listitem>Efficient, stack-based implementation.</listitem>
 </itemizedlist>
 

@@ -542,8 +542,6 @@
 
       <typedef name="type">
         <type>variant&lt; <emphasis>unspecified</emphasis> &gt;</type>
-
-        <description>TODO</description>
       </typedef>
 
       <description>
