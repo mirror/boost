@@ -2130,7 +2130,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_le
             return len;
          }
          return len;
-	  case re_detail::syntax_element_startmark: 
+     case re_detail::syntax_element_startmark: 
          if(static_cast<const re_detail::re_brace*>(dat)->index == -2) 
             return 0; 
          // fall through: 
