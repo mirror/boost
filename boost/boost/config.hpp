@@ -11,7 +11,7 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
-//   13 Jan 01  SGI IRIX and Compaq Tru64 Unix compiler support added
+//   13 Jan 01  SGI MIPSpro and Compaq Tru64 Unix compiler support added
 //              (Jens Maurer)
 //   13 Jan 01  BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP (Jens Maurer)
 //   17 Nov 00  BOOST_NO_AUTO_PTR (John Maddock)
@@ -214,15 +214,21 @@
 #   define BOOST_NO_SLIST
 #   define BOOST_NO_HASH
 
-//  SGI IRIX CC --------------------------------------------------------
+//  SGI MIPSpro C++ --------------------------------------------------------
 
 #elif defined __sgi
-#   define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+
+#   if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 240
+#     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#   endif
 
 //  Compaq Tru64 Unix cxx ---------------------------------------------------
 
 #elif defined __DECCXX
-#   define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+
+#   if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 240
+#     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#   endif
 
 //  Greenhills C++ -----------------------------------------------------------//
 
