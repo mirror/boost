@@ -56,7 +56,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        triangular_matrix (): 
+        triangular_matrix ():
             size1_ (0), size2_ (0),
             data_ (0) {}
         BOOST_UBLAS_INLINE
@@ -912,7 +912,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
         typedef typename M::const_pointer const_pointer;
@@ -927,10 +927,17 @@ namespace boost { namespace numeric { namespace ublas {
                                        typename M::const_pointer,
                                        typename M::pointer>::type pointer;
 #endif
+#ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+        typedef typename M::closure_type matrix_closure_type;
+#else
+        typedef typename detail::ct_if<boost::is_const<M>::value,
+                                       typename M::const_closure_type,
+                                       typename M::closure_type>::type matrix_closure_type;
+#endif
         typedef const triangular_adaptor<M, F> const_self_type;
         typedef triangular_adaptor<M, F> self_type;
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
-        typedef matrix_reference<self_type> closure_type;
+        typedef const_self_type const_closure_type;
+        typedef self_type closure_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  packed_proxy_tag>::storage_category storage_category;
         typedef typename F::packed_category packed_category;
@@ -938,13 +945,13 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        triangular_adaptor (): 
+        triangular_adaptor ():
             data_ (nil_) {}
         BOOST_UBLAS_INLINE
-        triangular_adaptor (matrix_type &data): 
+        triangular_adaptor (matrix_type &data):
             data_ (data) {}
         BOOST_UBLAS_INLINE
-        triangular_adaptor (const triangular_adaptor &m): 
+        triangular_adaptor (const triangular_adaptor &m):
             data_ (m.data_) {}
 
         // Accessors
@@ -957,11 +964,11 @@ namespace boost { namespace numeric { namespace ublas {
             return data_.size2 ();
         }
         BOOST_UBLAS_INLINE
-        const_matrix_type &data () const {
+        const matrix_closure_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
-        matrix_type &data () {
+        matrix_closure_type &data () {
             return data_;
         }
 
@@ -1686,7 +1693,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        matrix_type &data_;
+        matrix_closure_type data_;
         static matrix_type nil_;
         static value_type zero_;
         static value_type one_;
@@ -1853,6 +1860,13 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class E1, class E2, class C>
     BOOST_UBLAS_INLINE
+    void inplace_solve (const matrix_expression<E1> &e1,
+                        vector_expression<E2> &e2,
+                        C) {
+        inplace_solve (e1, e2, C (), vector_tag ());
+    }
+    template<class E1, class E2, class C>
+    BOOST_UBLAS_INLINE
     typename matrix_vector_solve_traits<E1, E2>::result_type
     solve (const matrix_expression<E1> &e1,
            const vector_expression<E2> &e2,
@@ -2006,6 +2020,13 @@ namespace boost { namespace numeric { namespace ublas {
         inplace_solve (e1, e2, upper_tag (), vector_tag (), dispatch_category ());
     }
 
+    template<class E1, class E2, class C>
+    BOOST_UBLAS_INLINE
+    void inplace_solve (vector_expression<E1> &e1,
+                        const matrix_expression<E2> &e2,
+                        C) {
+        inplace_solve (e1, e2, vector_tag (), C ());
+    }
     template<class E1, class E2, class C>
     BOOST_UBLAS_INLINE
     typename matrix_vector_solve_traits<E1, E2>::result_type
@@ -2187,6 +2208,13 @@ namespace boost { namespace numeric { namespace ublas {
         inplace_solve (e1, e2, upper_tag (), matrix_tag (), dispatch_category ());
     }
 
+    template<class E1, class E2, class C>
+    BOOST_UBLAS_INLINE
+    void inplace_solve (const matrix_expression<E1> &e1,
+                        matrix_expression<E2> &e2,
+                        C) {
+        inplace_solve (e1, e2, C (), matrix_tag ());
+    }
     template<class E1, class E2, class C>
     BOOST_UBLAS_INLINE
     typename matrix_matrix_solve_traits<E1, E2>::result_type

@@ -24,122 +24,21 @@
 #include <boost/type_traits.hpp>
 #include <boost/limits.hpp>
 
-#ifdef BOOST_MSVC
-// Disable some MSVC specific warnings.
-#pragma warning (disable: 4355)
-#pragma warning (disable: 4503)
-#pragma warning (disable: 4786)
-#endif
-
-
-
-#ifdef BOOST_MSVC
-// MSVC doesn't always accept the 'typename' keyword.
-#define BOOST_UBLAS_TYPENAME
-// MSVC doesn't accept the 'using' keyword (at least for importing base members).
-#define BOOST_UBLAS_USING
-#else
-#define BOOST_UBLAS_TYPENAME typename
-#define BOOST_UBLAS_USING using
-#endif
-// This could be eliminated.
-#define BOOST_UBLAS_EXPLICIT explicit
-
-
-
-// #ifdef BOOST_MSVC
-// With MSVC we can could perform IO via basic_stream
-// #define BOOST_UBLAS_USE_BASIC_STREAM
-// #else
-// IO via streams
-#define BOOST_UBLAS_USE_STREAM
-// #endif
-
-
-
-// Enable different sparse element proxies
-// These fix a [1] = a [0] = 1, but probably won't work on broken compilers.
-// Thanks to Marc Duflot for spotting this.
-// #define BOOST_UBLAS_STRICT_STORAGE_SPARSE
-#define BOOST_UBLAS_STRICT_VECTOR_SPARSE
-#define BOOST_UBLAS_STRICT_MATRIX_SPARSE
-
-
-
-// Enable performance options in release mode
-#ifdef NDEBUG
-
-#ifdef BOOST_MSVC
-// MSVC has special inlining options
-#pragma inline_recursion (on)
-#pragma inline_depth (255)
-#pragma auto_inline (on)
-// #define BOOST_UBLAS_INLINE __forceinline
-#define BOOST_UBLAS_INLINE __inline
-#else
-#define BOOST_UBLAS_INLINE inline
-#endif
-
-// Do not check sizes!
-#define BOOST_UBLAS_USE_FAST_SAME
-
-// Use expression templates.
-#define BOOST_UBLAS_USE_ET
-
-// Disable performance options in debug mode
-#else
-
-#ifdef BOOST_MSVC
-// MSVC has special inlining options
-// #pragma inline_recursion (off)
-// #pragma inline_depth ()
-// #pragma auto_inline (off)
-#endif
-#define BOOST_UBLAS_INLINE
-
-#ifdef BOOST_MSVC
-// Use expression templates (otherwise we get many ICE's)
-#define BOOST_UBLAS_USE_ET
-#endif
-
-// Bounds check
-#define BOOST_UBLAS_BOUNDS_CHECK
-// Type check for non dense matrices
-#define BOOST_UBLAS_TYPE_CHECK
-
-#endif
-
-
-
-// Use invariant hoisting.
-#define BOOST_UBLAS_USE_INVARIANT_HOISTING
-
-// Use Duff's device
-// #define BOOST_UBLAS_USE_DUFF_DEVICE
-
-// Choose evaluation method for dense vectors and matrices
-#define BOOST_UBLAS_USE_INDEXING
-// #define BOOST_UBLAS_USE_ITERATING
-// #define BOOST_UBLAS_ITERATOR_THRESHOLD 0
-// #define BOOST_UBLAS_ITERATOR_THRESHOLD (std::numeric_limits<std::ptrdiff_t>::max ())
-
-// ET options
-#define BOOST_UBLAS_ET_VALUE
-// #define BOOST_UBLAS_ET_REFERENCE
-// #define BOOST_UBLAS_ET_CLOSURE_VALUE
-#define BOOST_UBLAS_ET_CLOSURE_REFERENCE
-
-// Use indexed iterators.
-// #define BOOST_UBLAS_USE_INDEXED_ITERATOR
-
 
 
 // Compiler specific problems
 #ifdef BOOST_MSVC
 
+// Disable some MSVC specific warnings.
+#pragma warning (disable: 4355)
+#pragma warning (disable: 4503)
+#pragma warning (disable: 4786)
+
 // Open problems:
 // MSVC lacks some specializations in <cmath>
 #define BOOST_UBLAS_C_MATH
+// MSVC lacks std::abort() in <cstdlib>
+#define BOOST_UBLAS_C_STDLIB
 // MSVC allows to implement free function as friends.
 #define BOOST_UBLAS_FRIEND_FUNCTION
 
@@ -247,6 +146,112 @@
 
 
 
+#ifdef BOOST_MSVC
+// MSVC doesn't always accept the 'typename' keyword.
+#define BOOST_UBLAS_TYPENAME
+// MSVC doesn't accept the 'using' keyword (at least for importing base members).
+#define BOOST_UBLAS_USING
+#else
+#define BOOST_UBLAS_TYPENAME typename
+#define BOOST_UBLAS_USING using
+#endif
+// This could be eliminated.
+#define BOOST_UBLAS_EXPLICIT explicit
+
+
+
+// #ifdef BOOST_MSVC
+// With MSVC we could perform IO via basic_stream
+// #define BOOST_UBLAS_USE_BASIC_STREAM
+// #else
+// IO via streams
+#define BOOST_UBLAS_USE_STREAM
+// #endif
+
+// Enable assignment of non conformant proxies
+// Thanks to Michael Stevens for spotting this.
+#define BOOST_UBLAS_NON_CONFORMANT_PROXIES
+
+// Enable different sparse element proxies
+// These fix a [1] = a [0] = 1, but probably won't work on broken compilers.
+// Thanks to Marc Duflot for spotting this.
+#ifndef BOOST_MSVC_STD_ITERATOR
+// #define BOOST_UBLAS_STRICT_STORAGE_SPARSE
+#define BOOST_UBLAS_STRICT_VECTOR_SPARSE
+#define BOOST_UBLAS_STRICT_MATRIX_SPARSE
+#endif
+
+// Enable compile time typedefs for proxies
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+// Doesn't work under Borland
+#ifndef __BORLANDC__
+#define BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
+#define BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+#endif
+#endif
+
+// Enable performance options in release mode
+#ifdef NDEBUG
+
+#ifdef BOOST_MSVC
+// MSVC has special inlining options
+#pragma inline_recursion (on)
+#pragma inline_depth (255)
+#pragma auto_inline (on)
+// #define BOOST_UBLAS_INLINE __forceinline
+#define BOOST_UBLAS_INLINE __inline
+#else
+#define BOOST_UBLAS_INLINE inline
+#endif
+
+// Do not check sizes!
+#define BOOST_UBLAS_USE_FAST_SAME
+
+// Use expression templates.
+#define BOOST_UBLAS_USE_ET
+
+// Disable performance options in debug mode
+#else
+
+#ifdef BOOST_MSVC
+// MSVC has special inlining options
+// #pragma inline_recursion (off)
+// #pragma inline_depth ()
+// #pragma auto_inline (off)
+#endif
+#define BOOST_UBLAS_INLINE
+
+#ifdef BOOST_MSVC
+// Use expression templates (otherwise we get many ICE's)
+#define BOOST_UBLAS_USE_ET
+#endif
+
+// Bounds check
+#define BOOST_UBLAS_BOUNDS_CHECK
+// Type check for non dense matrices
+#define BOOST_UBLAS_TYPE_CHECK
+
+#endif
+
+
+
+// Use invariant hoisting.
+#define BOOST_UBLAS_USE_INVARIANT_HOISTING
+
+// Use Duff's device
+// #define BOOST_UBLAS_USE_DUFF_DEVICE
+
+// Choose evaluation method for dense vectors and matrices
+#define BOOST_UBLAS_USE_INDEXING
+// #define BOOST_UBLAS_USE_ITERATING
+// #define BOOST_UBLAS_ITERATOR_THRESHOLD 0
+// #define BOOST_UBLAS_ITERATOR_THRESHOLD (std::numeric_limits<std::ptrdiff_t>::max ())
+
+// Use indexed iterators.
+// #define BOOST_UBLAS_USE_INDEXED_ITERATOR
+
+
+
 // Forward declarations
 namespace boost { namespace numeric { namespace ublas {
 
@@ -325,10 +330,10 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, class A = map_array<std::size_t, T> >
     class sparse_vector;
 
-    template<class T, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T>, std::size_t IB = 0>
+    template<class T, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
     class compressed_vector;
 
-    template<class T, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T>, std::size_t IB = 0>
+    template<class T, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
     class coordinate_vector;
 
     struct unknown_orientation_tag {};
@@ -390,10 +395,10 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, class F = row_major, class A = map_array<std::size_t, map_array<std::size_t, T> > >
     class sparse_vector_of_sparse_vector;
 
-    template<class T, class F = row_major, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T>, std::size_t IB = 0>
+    template<class T, class F = row_major, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
     class compressed_matrix;
 
-    template<class T, class F = row_major, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T>, std::size_t IB = 0>
+    template<class T, class F = row_major, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
     class coordinate_matrix;
 
     template<class V>

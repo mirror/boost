@@ -151,7 +151,7 @@ namespace boost { namespace numeric { namespace ublas {
         // FIXME: GCC 3.1 warns, if enabled
 #ifndef __GNUC__
         BOOST_UBLAS_INLINE
-        operator const const_reference () const {
+        operator const_reference () const {
             return d_;
         }
 #endif
@@ -184,7 +184,7 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
         typedef T &reference;
 #elif defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
-        typedef sparse_vector_element<sparse_vector> reference;
+        typedef sparse_vector_element<sparse_vector<T, A> > reference;
 #elif defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE)
         typedef typename map_traits<A>::reference reference;
 #endif
@@ -577,7 +577,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
-#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
+#if defined (BOOST_MSVC_STD_ITERATOR) || (! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE))
                 return (*it_).second;
 #elif defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
                 return reference ((*this) (), &(*it_).second, index ());
@@ -666,12 +666,12 @@ namespace boost { namespace numeric { namespace ublas {
 
     // Array based sparse vector class
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
-    template<class T, class IA, class TA, std::size_t IB>
+    template<class T, std::size_t IB, class IA, class TA>
     class compressed_vector:
-        public vector_expression<compressed_vector<T, IA, TA, IB> > {
+        public vector_expression<compressed_vector<T, IB, IA, TA> > {
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        BOOST_UBLAS_USING vector_expression<compressed_vector<T, IA, TA, IB> >::operator ();
+        BOOST_UBLAS_USING vector_expression<compressed_vector<T, IB, IA, TA> >::operator ();
 #endif
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -681,14 +681,14 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
         typedef T &reference;
 #else
-        typedef sparse_vector_element<compressed_vector> reference;
+        typedef sparse_vector_element<compressed_vector<T, IB, IA, TA> > reference;
 #endif
         typedef const T *const_pointer;
         typedef T *pointer;
         typedef IA index_array_type;
         typedef TA value_array_type;
-        typedef const compressed_vector<T, IA, TA, IB> const_self_type;
-        typedef compressed_vector<T, IA, TA, IB> self_type;
+        typedef const compressed_vector<T, IB, IA, TA> const_self_type;
+        typedef compressed_vector<T, IB, IA, TA> self_type;
         typedef const vector_const_reference<const_self_type> const_closure_type;
         typedef vector_reference<self_type> closure_type;
         typedef typename IA::const_iterator const_iterator_type;
@@ -733,6 +733,10 @@ namespace boost { namespace numeric { namespace ublas {
             return filled_;
         }
         BOOST_UBLAS_INLINE
+        static size_type index_base () {
+            return index_base_;
+        }
+        BOOST_UBLAS_INLINE
         const index_array_type &index_data () const {
             return index_data_;
         }
@@ -747,10 +751,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         value_array_type &value_data () {
             return value_data_;
-        }
-        BOOST_UBLAS_INLINE
-        size_type index_base () {
-            return index_base_;
         }
 
         // Resizing
@@ -1132,7 +1132,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
-#ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
+#if defined (BOOST_MSVC_STD_ITERATOR) || ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
                 return (*this) ().value_data () [it_ - (*this) ().index_data ().begin ()];
 #else
                 return reference ((*this) (), &(*this) ().value_data () [it_ - (*this) ().index_data ().begin ()], index ());
@@ -1229,17 +1229,17 @@ namespace boost { namespace numeric { namespace ublas {
         friend class const_iterator;
     };
 
-    template<class T, class IA, class TA, std::size_t IB>
-    typename compressed_vector<T, IA, TA, IB>::value_type compressed_vector<T, IA, TA, IB>::zero_ = 0;
+    template<class T, std::size_t IB, class IA, class TA>
+    typename compressed_vector<T, IB, IA, TA>::value_type compressed_vector<T, IB, IA, TA>::zero_ = 0;
 
     // Array based sparse vector class
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
-    template<class T, class IA, class TA, std::size_t IB>
+    template<class T, std::size_t IB, class IA, class TA>
     class coordinate_vector:
-        public vector_expression<coordinate_vector<T, IA, TA, IB> > {
+        public vector_expression<coordinate_vector<T, IB, IA, TA> > {
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-        BOOST_UBLAS_USING vector_expression<coordinate_vector<T, IA, TA, IB> >::operator ();
+        BOOST_UBLAS_USING vector_expression<coordinate_vector<T, IB, IA, TA> >::operator ();
 #endif
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -1249,14 +1249,14 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
         typedef T &reference;
 #else
-        typedef sparse_vector_element<coordinate_vector> reference;
+        typedef sparse_vector_element<coordinate_vector<T, IB, IA, TA> > reference;
 #endif
         typedef const T *const_pointer;
         typedef T *pointer;
         typedef IA index_array_type;
         typedef TA value_array_type;
-        typedef const coordinate_vector<T, IA, TA, IB> const_self_type;
-        typedef coordinate_vector<T, IA, TA, IB> self_type;
+        typedef const coordinate_vector<T, IB, IA, TA> const_self_type;
+        typedef coordinate_vector<T, IB, IA, TA> self_type;
         typedef const vector_const_reference<const_self_type> const_closure_type;
         typedef vector_reference<self_type> closure_type;
         typedef typename IA::const_iterator const_iterator_type;
@@ -1301,6 +1301,10 @@ namespace boost { namespace numeric { namespace ublas {
             return filled_;
         }
         BOOST_UBLAS_INLINE
+        static size_type index_base () {
+            return index_base_;
+        }
+        BOOST_UBLAS_INLINE
         const index_array_type &index_data () const {
             return index_data_;
         }
@@ -1315,10 +1319,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         value_array_type &value_data () {
             return value_data_;
-        }
-        BOOST_UBLAS_INLINE
-        size_type index_base () {
-            return index_base_;
         }
 
         // Resizing
@@ -1505,8 +1505,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void sort () const {
             if (! sorted_) {
-                typedef std::pair<typename index_array_type::value_type,
-                                  typename value_array_type::value_type> pair_type;
+                typedef std::pair<BOOST_UBLAS_TYPENAME index_array_type::value_type,
+                                  BOOST_UBLAS_TYPENAME value_array_type::value_type> pair_type;
                 unbounded_array<pair_type> a (filled_);
                 size_type i;
                 for (i = 0; i < filled_; ++ i)
@@ -1722,7 +1722,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
-#ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
+#if defined (BOOST_MSVC_STD_ITERATOR) || ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
                 return (*this) ().value_data () [it_ - (*this) ().index_data ().begin ()];
 #else
                 return reference ((*this) (), &(*this) ().value_data () [it_ - (*this) ().index_data ().begin ()], index ());
@@ -1820,8 +1820,8 @@ namespace boost { namespace numeric { namespace ublas {
         friend class const_iterator;
     };
 
-    template<class T, class IA, class TA, std::size_t IB>
-    typename coordinate_vector<T, IA, TA, IB>::value_type coordinate_vector<T, IA, TA, IB>::zero_ = 0;
+    template<class T, std::size_t IB, class IA, class TA>
+    typename coordinate_vector<T, IB, IA, TA>::value_type coordinate_vector<T, IB, IA, TA>::zero_ = 0;
 
 }}}
 

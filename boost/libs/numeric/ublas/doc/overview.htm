@@ -419,15 +419,25 @@ how BLAS calls may be mapped onto our classes. </p>
     </tr>
     <tr>
         <td><code>_t_sv</code></td>
-        <td><code>x = solve (A, x, tag) </code>or<br>
-        <code>x = solve (trans (A), x, tag) </code>or<code><br>
-        x = solve (herm (A), x, tag)</code></td>
-        <td><em>x &lt;- A</em><sup><em>-1</em></sup><em> x </em>or<em><br>
+        <td><code>y = solve (A, x, tag) </code>or<br>
+        <code>inplace_solve (A, x, tag) </code>or<br>
+        <code>y = solve (trans (A), x, tag) </code>or<code><br>
+        inplace_solve (trans (A), x, tag) </code>or<font
+        face="Courier New"><code><br>
+        </code></font><code>y = solve (herm (A), x, tag)</code>or<code><br>
+        inplace_solve (herm (A), x, tag)</code></td>
+        <td><em>y &lt;- A</em><sup><em>-1</em></sup><em> x </em>or<em><br>
+        x &lt;- A</em><sup><em>-1</em></sup><em> x </em>or<em><br>
+        y &lt;- A</em><sup><em>T</em></sup><sup><sup><em>-1</em></sup></sup><em>
+        x </em>or<em><br>
         x &lt;- A</em><sup><em>T</em></sup><sup><sup><em>-1</em></sup></sup><em>
         x </em>or<em><br>
+        y &lt;- A</em><sup><em>H</em></sup><sup><sup><em>-1</em></sup></sup><em>
+        x</em> or<em><br>
         x &lt;- A</em><sup><em>H</em></sup><sup><sup><em>-1</em></sup></sup><em>
         x</em></td>
-        <td>Solves a linear equation for a triangular matrix.</td>
+        <td>Solves a system of linear equations with triangular
+        form, i.e. <em>A </em>is triangular.</td>
     </tr>
     <tr>
         <td><code>_g_mv<br>
@@ -506,15 +516,23 @@ how BLAS calls may be mapped onto our classes. </p>
     </tr>
     <tr>
         <td><code>_t_sm</code></td>
-        <td><code>B = solve (A, B, tag) </code>or<br>
-        <code>B = solve (trans (A), B, tag) </code>or<code><br>
-        B = solve (herm (A), B, tag)</code></td>
-        <td><em>B &lt;- A</em><sup><em>-1</em></sup><em> B </em>or<em><br>
-        B &lt;- A</em><sup><em>T</em></sup><sup><sup><em>-1</em></sup></sup><em>
+        <td><code>C = solve (A, B, tag) </code>or<br>
+        <code>inplace_solve (A, B, tag) </code>or<br>
+        <code>C = solve (trans (A), B, tag) </code>or<code><br>
+        inplace_solve (trans (A), B, tag) </code>or<code><br>
+        C = solve (herm (A), B, tag)</code> or<code><br>
+        inplace_solve (herm (A), B, tag)</code></td>
+        <td><em>C &lt;- A</em><sup><em>-1</em></sup><em> B </em>or<em><br>
+        B &lt;- A</em><sup><em>-1</em></sup><em> B </em>or<em><br>
+        C &lt;- A</em><sup><em>T</em></sup><sup><sup><em>-1</em></sup></sup><em>
         B </em>or<em><br>
+        B &lt;- A</em><sup><em>-1</em></sup><em> B </em>or<em><br>
+        C &lt;- A</em><sup><em>H</em></sup><sup><sup><em>-1</em></sup></sup><em>
+        B</em> or<em><br>
         B &lt;- A</em><sup><em>H</em></sup><sup><sup><em>-1</em></sup></sup><em>
         B</em></td>
-        <td>Solves a linear equation for a triangular matrix.</td>
+        <td>Solves a system of linear equations with triangular
+        form, i.e. <em>A </em>is triangular.</td>
     </tr>
     <tr>
         <td><code>_g_mm<br>
@@ -633,6 +651,18 @@ most common constructions of vectors and matrices comes next.</p>
         &nbsp;&nbsp;v (size, non_zeros)</code></td>
         <td>Constructs a sparse vector, storage is provided by a
         map array.</td>
+    </tr>
+    <tr>
+        <td><code>compressed_vector&lt;T&gt; <br>
+        &nbsp;&nbsp;v (size, non_zeros)</code></td>
+        <td>Constructs a compressed vector.<br>
+        The storage layout usually is BLAS compliant.</td>
+    </tr>
+    <tr>
+        <td><code>coordinate_vector&lt;T&gt; <br>
+        &nbsp;&nbsp;v (size, non_zeros)</code></td>
+        <td>Constructs a coordinate vector.<br>
+        The storage layout usually is BLAS compliant.</td>
     </tr>
     <tr>
         <td><code>vector_range&lt;V&gt; <br>
@@ -802,6 +832,38 @@ most common constructions of vectors and matrices comes next.</p>
         major, storage is provided by a map array.</td>
     </tr>
     <tr>
+        <td><code>compressed_matrix&lt;T, <br>
+        &nbsp;row_major&gt; <br>
+        &nbsp;&nbsp;m (size1, size2, non_zeros)</code></td>
+        <td>Constructs a compressed matrix, orientation is row
+        major.<br>
+        The storage layout usually is BLAS compliant.</td>
+    </tr>
+    <tr>
+        <td><code>compressed_matrix&lt;T, <br>
+        &nbsp;column_major&gt; <br>
+        &nbsp;&nbsp;m (size1, size2, non_zeros)</code></td>
+        <td>Constructs a compressed matrix, orientation is column
+        major.<br>
+        The storage layout usually is BLAS compliant.</td>
+    </tr>
+    <tr>
+        <td><code>coordinate_matrix&lt;T, <br>
+        &nbsp;row_major&gt; <br>
+        &nbsp;&nbsp;m (size1, size2, non_zeros)</code></td>
+        <td>Constructs a coordinate matrix, orientation is row
+        major.<br>
+        The storage layout usually is BLAS compliant.</td>
+    </tr>
+    <tr>
+        <td><code>coordinate_matrix&lt;T, <br>
+        &nbsp;column_major&gt; <br>
+        &nbsp;&nbsp;m (size1, size2, non_zeros)</code></td>
+        <td>Constructs a coordinate matrix, orientation is column
+        major.<br>
+        The storage layout usually is BLAS compliant.</td>
+    </tr>
+    <tr>
         <td><code>matrix_row&lt;M&gt; <br>
         &nbsp;&nbsp;mr (m, i)</code></td>
         <td>Constructs a sub vector of a dense, packed or sparse
@@ -940,6 +1002,10 @@ config.hpp. But we suspect this optimization to be fragile.</p>
         type="circle">
             <li><a href="vector_sparse.htm#sparse_vector">Sparse
                 Vector</a></li>
+            <li><a href="vector_sparse.htm#compressed_vector">Compressed
+                Vector</a></li>
+            <li><a href="vector_sparse.htm#coordinate_vector">Coordinate
+                Vector</a></li>
         </ul>
     </li>
     <li><a href="vector_proxy.htm">Vector Proxies</a><ul
@@ -1002,6 +1068,10 @@ config.hpp. But we suspect this optimization to be fragile.</p>
     <li><a href="matrix_sparse.htm">Sparse Matrix</a><ul
         type="circle">
             <li><a href="matrix_sparse.htm#sparse_matrix">Sparse
+                Matrix</a></li>
+            <li><a href="matrix_sparse.htm#compressed_matrix">Compressed
+                Matrix</a></li>
+            <li><a href="matrix_sparse.htm#coordinate_matrix">Coordinate
                 Matrix</a></li>
         </ul>
     </li>

@@ -152,11 +152,13 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element access
         // FIXME: GCC 3.1 warn's, if enabled
-        // BOOST_UBLAS_INLINE
-        // const sparse_storage_element_traits<data_value_type>::data_const_reference
-        // operator [] (typename sparse_storage_element_traits<data_value_type>::index_type i) const {
-        //     return d_ [i];
-        // }
+#ifndef __GNUC__
+        BOOST_UBLAS_INLINE
+        typename sparse_storage_element_traits<data_value_type>::data_const_reference
+        operator [] (typename sparse_storage_element_traits<data_value_type>::index_type i) const {
+            return d_ [i];
+        }
+#endif
         BOOST_UBLAS_INLINE
         typename sparse_storage_element_traits<data_value_type>::data_reference
         operator [] (typename sparse_storage_element_traits<data_value_type>::index_type i) {
@@ -220,12 +222,14 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
-        // FIXME: GCC 3.1 warn's, if enabled
         // Conversion
+        // FIXME: GCC 3.1 warn's, if enabled
+#ifndef __GNUC__
         BOOST_UBLAS_INLINE
-        // operator const data_const_reference () const {
-        //     return d_;
-        // }
+        operator data_const_reference () const {
+            return d_;
+        }
+#endif
         BOOST_UBLAS_INLINE
         operator data_reference () {
             return d_;

@@ -150,10 +150,6 @@ SOURCE=..\..\..\..\boost\numeric\ublas\iterator.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\boost\numeric\ublas\math.hpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\boost\numeric\ublas\matrix.hpp
 # End Source File
 # Begin Source File

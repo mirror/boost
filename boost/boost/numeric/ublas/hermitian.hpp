@@ -933,7 +933,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         // FIXME: no better way to not return the address of a temporary?
         // typedef typename M::const_reference const_reference;
         typedef typename M::value_type const_reference;
@@ -955,10 +955,17 @@ namespace boost { namespace numeric { namespace ublas {
                                        typename M::const_pointer,
                                        typename M::pointer>::type pointer;
 #endif
+#ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+        typedef typename M::closure_type matrix_closure_type;
+#else
+        typedef typename detail::ct_if<boost::is_const<M>::value,
+                                       typename M::const_closure_type,
+                                       typename M::closure_type>::type matrix_closure_type;
+#endif
         typedef const hermitian_adaptor<M, F> const_self_type;
         typedef hermitian_adaptor<M, F> self_type;
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
-        typedef matrix_reference<self_type> closure_type;
+        typedef const_self_type const_closure_type;
+        typedef self_type closure_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  packed_proxy_tag>::storage_category storage_category;
         typedef typename F::packed_category packed_category;
@@ -966,7 +973,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        hermitian_adaptor (): 
+        hermitian_adaptor ():
             data_ (nil_) {
             BOOST_UBLAS_CHECK (data_.size1 () == data_.size2 (), bad_size ());
         }
@@ -991,11 +998,11 @@ namespace boost { namespace numeric { namespace ublas {
             return data_.size2 ();
         }
         BOOST_UBLAS_INLINE
-        const_matrix_type &data () const {
+        const matrix_closure_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
-        matrix_type &data () {
+        matrix_closure_type &data () {
             return data_;
         }
 
@@ -1717,7 +1724,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        matrix_type &data_;
+        matrix_closure_type data_;
         static matrix_type nil_;
         static value_type conj_;
     };

@@ -347,6 +347,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef F functor_type;
         typedef typename V::size_type size_type;
         typedef typename V::value_type value_type;
+        typedef typename V::reference reference;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
         indexing_vector_assign (scalar_assign<value_type, value_type> (), cv, v);
@@ -365,6 +366,7 @@ namespace boost { namespace numeric { namespace ublas {
                 functor_type () (*it, value_type ());
                 ++ it;
             } else if (compare > 0) {
+#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
                 // Sparse proxies don't need to be conformant.
                 // Thanks to Michael Stevens for suggesting this.
                 size_type index (ite.index ());
@@ -372,8 +374,10 @@ namespace boost { namespace numeric { namespace ublas {
                 restart (v, index, it, it_end);
                 // The proxies could reference the same container.
                 restart (e, index, ite, ite_end);
+#endif
             }
         }
+#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
         while (ite != ite_end) {
             // Sparse proxies don't need to be conformant.
             // Thanks to Michael Stevens for suggesting this.
@@ -382,6 +386,7 @@ namespace boost { namespace numeric { namespace ublas {
             // The proxies could reference the same container.
             restart (e, index, ite, ite_end);
         }
+#endif
         while (it != it_end) {
             functor_type () (*it, value_type ());
             ++ it;
@@ -462,6 +467,7 @@ namespace boost { namespace numeric { namespace ublas {
                 functor_type () (*it, *ite);
                 ++ it, ++ ite;
             } else if (compare < 0) {
+#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
                 // Sparse proxies don't need to be conformant.
                 // Thanks to Michael Stevens for suggesting this.
                 size_type index (it.index ());
@@ -469,7 +475,9 @@ namespace boost { namespace numeric { namespace ublas {
                 restart (v, index, it, it_end);
                 // The proxies could reference the same container.
                 restart (e, index, ite, ite_end);
+#endif
             } else if (compare > 0) {
+#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
                 // Sparse proxies don't need to be conformant.
                 // Thanks to Michael Stevens for suggesting this.
                 size_type index (ite.index ());
@@ -477,8 +485,10 @@ namespace boost { namespace numeric { namespace ublas {
                 restart (e, index, ite, ite_end);
                 // The proxies could reference the same container.
                 restart (v, index, it, it_end);
+#endif
             }
         }
+#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
         while (ite != ite_end) {
             // Sparse proxies don't need to be conformant.
             // Thanks to Michael Stevens for suggesting this.
@@ -495,6 +505,7 @@ namespace boost { namespace numeric { namespace ublas {
             // The proxies could reference the same container.
             restart (v, index, it, it_end);
         }
+#endif
     }
 
     // Dispatcher

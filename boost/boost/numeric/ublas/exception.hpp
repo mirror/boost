@@ -17,6 +17,7 @@
 #ifndef BOOST_UBLAS_EXCEPTION_H
 #define BOOST_UBLAS_EXCEPTION_H
 
+#include <cstdlib>
 #include <exception>
 #include <stdexcept>
 #include <iostream>
@@ -39,7 +40,11 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-            abort ();
+#ifdef BOOST_UBLAS_C_STDLIB
+            ::abort ();
+#else
+            std::abort ();
+#endif
 #endif
         }
     };
@@ -57,7 +62,11 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-            abort ();
+#ifdef BOOST_UBLAS_C_STDLIB
+            ::abort ();
+#else
+            std::abort ();
+#endif
 #endif
         }
     };
@@ -75,7 +84,11 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-            abort ();
+#ifdef BOOST_UBLAS_C_STDLIB
+            ::abort ();
+#else
+            std::abort ();
+#endif
 #endif
         }
     };
@@ -93,7 +106,11 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-            abort ();
+#ifdef BOOST_UBLAS_C_STDLIB
+            ::abort ();
+#else
+            std::abort ();
+#endif
 #endif
         }
     };
@@ -111,7 +128,11 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-            abort ();
+#ifdef BOOST_UBLAS_C_STDLIB
+            ::abort ();
+#else
+            std::abort ();
+#endif
 #endif
         }
     };
@@ -129,7 +150,11 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-            abort ();
+#ifdef BOOST_UBLAS_C_STDLIB
+            ::abort ();
+#else
+            std::abort ();
+#endif
 #endif
         }
     };
@@ -147,7 +172,11 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-            abort ();
+#ifdef BOOST_UBLAS_C_STDLIB
+            ::abort ();
+#else
+            std::abort ();
+#endif
 #endif
         }
     };
@@ -165,7 +194,11 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-            abort ();
+#ifdef BOOST_UBLAS_C_STDLIB
+            ::abort ();
+#else
+            std::abort ();
+#endif
 #endif
         }
     };

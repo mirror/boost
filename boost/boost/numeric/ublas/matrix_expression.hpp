@@ -243,7 +243,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i, size_type j) const {
-            return e_ (i, j);
+            return expression () (i, j);
         }
 
         typedef const_iterator1_type const_iterator1;
@@ -254,39 +254,39 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator1 find_first1 (int rank, size_type i, size_type j) const {
-            return const_iterator1 (e_.find_first1 (rank, i, j));
+            return expression ().find_first1 (rank, i, j);
         }
         BOOST_UBLAS_INLINE
         const_iterator1 find_last1 (int rank, size_type i, size_type j) const {
-            return const_iterator1 (e_.find_last1 (rank, i, j));
+            return expression ().find_last1 (rank, i, j);
         }
         BOOST_UBLAS_INLINE
         const_iterator2 find_first2 (int rank, size_type i, size_type j) const {
-            return const_iterator2 (e_.find_first2 (rank, i, j));
+            return expression ().find_first2 (rank, i, j);
         }
         BOOST_UBLAS_INLINE
         const_iterator2 find_last2 (int rank, size_type i, size_type j) const {
-            return const_iterator2 (e_.find_last2 (rank, i, j));
+            return expression ().find_last2 (rank, i, j);
         }
 
         // Iterators are the iterators of the referenced expression.
 
         BOOST_UBLAS_INLINE
         const_iterator1 begin1 () const {
-            return e_.begin1 ();
+            return expression ().begin1 ();
         }
         BOOST_UBLAS_INLINE
         const_iterator1 end1 () const {
-            return e_.end1 ();
+            return expression ().end1 ();
         }
 
         BOOST_UBLAS_INLINE
         const_iterator2 begin2 () const {
-            return e_.begin2 ();
+            return expression ().begin2 ();
         }
         BOOST_UBLAS_INLINE
         const_iterator2 end2 () const {
-            return e_.end2 ();
+            return expression ().end2 ();
         }
 
         // Reverse iterators
@@ -380,17 +380,17 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2) {
-            e_.resize (size1, size2);
+            expression ().resize (size1, size2);
         }
 
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i, size_type j) const {
-            return e_ (i, j);
+            return expression () (i, j);
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) {
-            return e_ (i, j);
+            return expression () (i, j);
         }
 
         typedef const_iterator1_type const_iterator1;
@@ -401,73 +401,73 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator1 find_first1 (int rank, size_type i, size_type j) const {
-            return const_iterator1 (e_.find_first1 (rank, i, j));
+            return expression ().find_first1 (rank, i, j);
         }
         BOOST_UBLAS_INLINE
         iterator1 find_first1 (int rank, size_type i, size_type j) {
-            return iterator1 (e_.find_first1 (rank, i, j));
+            return expression ().find_first1 (rank, i, j);
         }
         BOOST_UBLAS_INLINE
         const_iterator1 find_last1 (int rank, size_type i, size_type j) const {
-            return const_iterator1 (e_.find_last1 (rank, i, j));
+            return expression ().find_last1 (rank, i, j);
         }
         BOOST_UBLAS_INLINE
         iterator1 find_last1 (int rank, size_type i, size_type j) {
-            return iterator1 (e_.find_last1 (rank, i, j));
+            return expression ().find_last1 (rank, i, j);
         }
         BOOST_UBLAS_INLINE
         const_iterator2 find_first2 (int rank, size_type i, size_type j) const {
-            return const_iterator2 (e_.find_first2 (rank, i, j));
+            return expression ().find_first2 (rank, i, j);
         }
         BOOST_UBLAS_INLINE
         iterator2 find_first2 (int rank, size_type i, size_type j) {
-            return iterator2 (e_.find_first2 (rank, i, j));
+            return expression ().find_first2 (rank, i, j);
         }
         BOOST_UBLAS_INLINE
         const_iterator2 find_last2 (int rank, size_type i, size_type j) const {
-            return const_iterator2 (e_.find_last2 (rank, i, j));
+            return expression ().find_last2 (rank, i, j);
         }
         BOOST_UBLAS_INLINE
         iterator2 find_last2 (int rank, size_type i, size_type j) {
-            return iterator2 (e_.find_last2 (rank, i, j));
+            return expression ().find_last2 (rank, i, j);
         }
 
         // Iterators are the iterators of the referenced expression.
 
         BOOST_UBLAS_INLINE
         const_iterator1 begin1 () const {
-            return e_.begin1 ();
+            return expression ().begin1 ();
         }
         BOOST_UBLAS_INLINE
         const_iterator1 end1 () const {
-            return e_.end1 ();
+            return expression ().end1 ();
         }
 
         BOOST_UBLAS_INLINE
         iterator1 begin1 () {
-            return e_.begin1 ();
+            return expression ().begin1 ();
         }
         BOOST_UBLAS_INLINE
         iterator1 end1 () {
-            return e_.end1 ();
+            return expression ().end1 ();
         }
 
         BOOST_UBLAS_INLINE
         const_iterator2 begin2 () const {
-            return e_.begin2 ();
+            return expression ().begin2 ();
         }
         BOOST_UBLAS_INLINE
         const_iterator2 end2 () const {
-            return e_.end2 ();
+            return expression ().end2 ();
         }
 
         BOOST_UBLAS_INLINE
         iterator2 begin2 () {
-            return e_.begin2 ();
+            return expression ().begin2 ();
         }
         BOOST_UBLAS_INLINE
         iterator2 end2 () {
-            return e_.end2 ();
+            return expression ().end2 ();
         }
 
         // Reverse iterators
@@ -557,7 +557,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+        typedef typename E1::const_closure_type expression1_closure_type;
+        typedef typename E2::const_closure_type expression2_closure_type;
         typedef const vector_matrix_binary<E1, E2, F> const_closure_type;
+        typedef const_closure_type closure_type;
         typedef unknown_orientation_tag orientation_category;
         typedef typename E1::const_iterator const_iterator1_type;
         typedef typename E2::const_iterator const_iterator2_type;
@@ -581,11 +584,11 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_.size ();
         }
         BOOST_UBLAS_INLINE
-        const expression1_type &expression1 () const {
+        const expression1_closure_type &expression1 () const {
             return e1_;
         }
         BOOST_UBLAS_INLINE
-        const expression2_type &expression2 () const {
+        const expression2_closure_type &expression2 () const {
             return e2_;
         }
 
@@ -1026,20 +1029,13 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-#ifdef BOOST_UBLAS_ET_VALUE
-        expression1_type e1_;
-        expression2_type e2_;
-#endif
-#ifdef BOOST_UBLAS_ET_REFERENCE
-        const expression1_type &e1_;
-        const expression2_type &e2_;
-#endif
+        expression1_closure_type e1_;
+        expression2_closure_type e2_;
     };
 
     template<class E1, class E2, class F>
     struct vector_matrix_binary_traits {
-        typedef vector_matrix_binary<typename E1::const_closure_type, 
-                                     typename E2::const_closure_type, F> expression_type;
+        typedef vector_matrix_binary<E1, E2, F> expression_type;
 #ifdef BOOST_UBLAS_USE_ET
         typedef expression_type result_type; 
 #else
@@ -1073,7 +1069,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+        typedef typename E::const_closure_type expression_closure_type;
         typedef const matrix_unary1<E, F> const_closure_type;
+        typedef const_closure_type closure_type;
         typedef typename E::orientation_category orientation_category;
         typedef typename E::const_iterator1 const_iterator1_type;
         typedef typename E::const_iterator2 const_iterator2_type;
@@ -1097,7 +1095,7 @@ namespace boost { namespace numeric { namespace ublas {
             return e_.size2 ();
         }
         BOOST_UBLAS_INLINE
-        const expression_type &expression () const {
+        const expression_closure_type &expression () const {
             return e_;
         }
 
@@ -1436,17 +1434,12 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-#ifdef BOOST_UBLAS_ET_VALUE
-        expression_type e_;
-#endif
-#ifdef BOOST_UBLAS_ET_REFERENCE
-        const expression_type &e_;
-#endif
+        expression_closure_type e_;
     };
 
     template<class E, class F>
     struct matrix_unary1_traits {
-        typedef matrix_unary1<typename E::const_closure_type, F> expression_type;
+        typedef matrix_unary1<E, F> expression_type;
 #ifdef BOOST_UBLAS_USE_ET
         typedef expression_type result_type; 
 #else
@@ -1506,7 +1499,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+        typedef typename E::const_closure_type expression_closure_type;
         typedef const matrix_unary2<E, F> const_closure_type;
+        typedef const_closure_type closure_type;
         typedef typename E::orientation_category orientation_category;
         typedef typename E::const_iterator1 const_iterator2_type;
         typedef typename E::const_iterator2 const_iterator1_type;
@@ -1530,7 +1525,7 @@ namespace boost { namespace numeric { namespace ublas {
             return e_.size1 ();
         }
         BOOST_UBLAS_INLINE
-        const expression_type &expression () const {
+        const expression_closure_type &expression () const {
             return e_;
         }
 
@@ -1869,17 +1864,12 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-#ifdef BOOST_UBLAS_ET_VALUE
-        expression_type e_;
-#endif
-#ifdef BOOST_UBLAS_ET_REFERENCE
-        const expression_type &e_;
-#endif
+        expression_closure_type e_;
     };
 
     template<class E, class F>
     struct matrix_unary2_traits {
-        typedef matrix_unary2<typename E::const_closure_type, F> expression_type;
+        typedef matrix_unary2<E, F> expression_type;
 #ifdef BOOST_UBLAS_USE_ET
         typedef expression_type result_type; 
 #else
@@ -1922,7 +1912,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+        typedef typename E1::const_closure_type expression1_closure_type;
+        typedef typename E2::const_closure_type expression2_closure_type;
         typedef const matrix_binary<E1, E2, F> const_closure_type;
+        typedef const_closure_type closure_type;
         typedef unknown_orientation_tag orientation_category;
         typedef typename E1::const_iterator1 const_iterator11_type;
         typedef typename E1::const_iterator2 const_iterator12_type;
@@ -1948,11 +1941,11 @@ namespace boost { namespace numeric { namespace ublas {
             return BOOST_UBLAS_SAME (e1_.size2 (), e2_.size2 ());
         }
         BOOST_UBLAS_INLINE
-        const expression1_type &expression1 () const {
+        const expression1_closure_type &expression1 () const {
             return e1_;
         }
         BOOST_UBLAS_INLINE
-        const expression2_type &expression2 () const {
+        const expression2_closure_type &expression2 () const {
             return e2_;
         }
 
@@ -2571,20 +2564,13 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-#ifdef BOOST_UBLAS_ET_VALUE
-        expression1_type e1_;
-        expression2_type e2_;
-#endif
-#ifdef BOOST_UBLAS_ET_REFERENCE
-        const expression1_type &e1_;
-        const expression2_type &e2_;
-#endif
+        expression1_closure_type e1_;
+        expression2_closure_type e2_;
     };
 
     template<class E1, class E2, class F>
     struct matrix_binary_traits {
-        typedef matrix_binary<typename E1::const_closure_type, 
-                              typename E2::const_closure_type, F> expression_type;
+        typedef matrix_binary<E1, E2, F> expression_type;
 #ifdef BOOST_UBLAS_USE_ET
         typedef expression_type result_type; 
 #else
@@ -2633,7 +2619,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+        typedef E1 expression1_closure_type;
+        typedef typename E2::const_closure_type expression2_closure_type;
         typedef const matrix_binary_scalar1<E1, E2, F> const_closure_type;
+        typedef const_closure_type closure_type;
         typedef typename E2::orientation_category orientation_category;
         typedef typename E1::value_type const_iterator1_type;
         typedef typename E2::const_iterator1 const_iterator21_type;
@@ -2658,11 +2647,11 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_.size2 ();
         }
         BOOST_UBLAS_INLINE
-        const expression1_type &expression1 () const {
+        const expression1_closure_type &expression1 () const {
             return e1_;
         }
         BOOST_UBLAS_INLINE
-        const expression2_type &expression2 () const {
+        const expression2_closure_type &expression2 () const {
             return e2_;
         }
 
@@ -3013,20 +3002,13 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-#ifdef BOOST_UBLAS_ET_VALUE
-        expression1_type e1_;
-        expression2_type e2_;
-#endif
-#ifdef BOOST_UBLAS_ET_REFERENCE
-        const expression1_type &e1_;
-        const expression2_type &e2_;
-#endif
+        expression1_closure_type e1_;
+        expression2_closure_type e2_;
     };
 
     template<class T1, class E2, class F>
     struct matrix_binary_scalar1_traits {
-        typedef matrix_binary_scalar1<scalar_const_reference<T1>,
-                                      typename E2::const_closure_type, F> expression_type;
+        typedef matrix_binary_scalar1<scalar_const_reference<T1>, E2, F> expression_type;
 #ifdef BOOST_UBLAS_USE_ET
         typedef expression_type result_type;
 #else
@@ -3061,7 +3043,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+        typedef typename E1::const_closure_type expression1_closure_type;
+        typedef E2 expression2_closure_type;
         typedef const matrix_binary_scalar2<E1, E2, F> const_closure_type;
+        typedef const_closure_type closure_type;
         typedef typename E1::orientation_category orientation_category;
         typedef typename E1::const_iterator1 const_iterator11_type;
         typedef typename E1::const_iterator2 const_iterator12_type;
@@ -3086,11 +3071,11 @@ namespace boost { namespace numeric { namespace ublas {
             return e1_.size2 ();
         }
         BOOST_UBLAS_INLINE
-        const expression1_type &expression1 () const {
+        const expression1_closure_type &expression1 () const {
             return e1_;
         }
         BOOST_UBLAS_INLINE
-        const expression2_type &expression2 () const {
+        const expression2_closure_type &expression2 () const {
             return e2_;
         }
 
@@ -3441,20 +3426,13 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-#ifdef BOOST_UBLAS_ET_VALUE
-        expression1_type e1_;
-        expression2_type e2_;
-#endif
-#ifdef BOOST_UBLAS_ET_REFERENCE
-        const expression1_type &e1_;
-        const expression2_type &e2_;
-#endif
+        expression1_closure_type e1_;
+        expression2_closure_type e2_;
     };
 
     template<class E1, class T2, class F>
     struct matrix_binary_scalar2_traits {
-        typedef matrix_binary_scalar2<typename E1::const_closure_type,
-                                      scalar_const_reference<T2>, F> expression_type;
+        typedef matrix_binary_scalar2<E1, scalar_const_reference<T2>, F> expression_type;
 #ifdef BOOST_UBLAS_USE_ET
         typedef expression_type result_type; 
 #else
@@ -3499,7 +3477,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+        typedef typename E1::const_closure_type expression1_closure_type;
+        typedef typename E2::const_closure_type expression2_closure_type;
         typedef const matrix_vector_binary1<E1, E2, F> const_closure_type;
+        typedef const_closure_type closure_type;
         typedef typename E1::const_iterator1 const_iterator1_type;
         typedef typename E2::const_iterator const_iterator2_type;
         typedef unknown_storage_tag storage_category;
@@ -3518,11 +3499,11 @@ namespace boost { namespace numeric { namespace ublas {
             return e1_.size1 (); 
         }
         BOOST_UBLAS_INLINE
-        const expression1_type &expression1 () const {
+        const expression1_closure_type &expression1 () const {
             return e1_;
         }
         BOOST_UBLAS_INLINE
-        const expression2_type &expression2 () const {
+        const expression2_closure_type &expression2 () const {
             return e2_;
         }
 
@@ -3755,14 +3736,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-#ifdef BOOST_UBLAS_ET_VALUE
-        expression1_type e1_;
-        expression2_type e2_;
-#endif
-#ifdef BOOST_UBLAS_ET_REFERENCE
-        const expression1_type &e1_;
-        const expression2_type &e2_;
-#endif
+        expression1_closure_type e1_;
+        expression2_closure_type e2_;
     };
 
     template<class T1, class E1, class T2, class E2>
@@ -3770,9 +3745,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef unknown_storage_tag storage_category;
         typedef row_major_tag orientation_category;
         typedef typename promote_traits<T1, T2>::promote_type promote_type;
-        typedef matrix_vector_binary1<typename E1::const_closure_type,
-                                      typename E2::const_closure_type,
-                                      matrix_vector_prod1<T1, T2, promote_type> > expression_type;
+        typedef matrix_vector_binary1<E1, E2, matrix_vector_prod1<T1, T2, promote_type> > expression_type;
 #ifdef BOOST_UBLAS_USE_ET
         typedef expression_type result_type;
 #else
@@ -3867,7 +3840,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+        typedef typename E1::const_closure_type expression1_closure_type;
+        typedef typename E2::const_closure_type expression2_closure_type;
         typedef const matrix_vector_binary2<E1, E2, F> const_closure_type;
+        typedef const_closure_type closure_type;
         typedef typename E1::const_iterator const_iterator1_type;
         typedef typename E2::const_iterator2 const_iterator2_type;
         typedef unknown_storage_tag storage_category;
@@ -3886,11 +3862,11 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_.size2 (); 
         }
         BOOST_UBLAS_INLINE
-        const expression1_type &expression1 () const {
+        const expression1_closure_type &expression1 () const {
             return e1_;
         }
         BOOST_UBLAS_INLINE
-        const expression2_type &expression2 () const {
+        const expression2_closure_type &expression2 () const {
             return e2_;
         }
 
@@ -4124,14 +4100,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-#ifdef BOOST_UBLAS_ET_VALUE
-        expression1_type e1_;
-        expression2_type e2_;
-#endif
-#ifdef BOOST_UBLAS_ET_REFERENCE
-        const expression1_type &e1_;
-        const expression2_type &e2_;
-#endif
+        expression1_closure_type e1_;
+        expression2_closure_type e2_;
     };
 
     template<class T1, class E1, class T2, class E2>
@@ -4139,9 +4109,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef unknown_storage_tag storage_category;
         typedef column_major_tag orientation_category;
         typedef typename promote_traits<T1, T2>::promote_type promote_type;
-        typedef matrix_vector_binary2<typename E1::const_closure_type,
-                                      typename E2::const_closure_type,
-                                      matrix_vector_prod2<T1, T2, promote_type> > expression_type;
+        typedef matrix_vector_binary2<E1, E2, matrix_vector_prod2<T1, T2, promote_type> > expression_type;
 #ifdef BOOST_UBLAS_USE_ET
         typedef expression_type result_type;
 #else
@@ -4236,7 +4204,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+        typedef typename E1::const_closure_type expression1_closure_type;
+        typedef typename E2::const_closure_type expression2_closure_type;
         typedef const matrix_matrix_binary<E1, E2, F> const_closure_type;
+        typedef const_closure_type closure_type;
         typedef unknown_orientation_tag orientation_category;
         typedef typename E1::const_iterator1 const_iterator11_type;
         typedef typename E1::const_iterator2 const_iterator12_type;
@@ -4262,11 +4233,11 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_.size2 ();
         }
         BOOST_UBLAS_INLINE
-        const expression1_type &expression1 () const {
+        const expression1_closure_type &expression1 () const {
             return e1_;
         }
         BOOST_UBLAS_INLINE
-        const expression2_type &expression2 () const {
+        const expression2_closure_type &expression2 () const {
             return e2_;
         }
 
@@ -4767,14 +4738,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-#ifdef BOOST_UBLAS_ET_VALUE
-        expression1_type e1_;
-        expression2_type e2_;
-#endif
-#ifdef BOOST_UBLAS_ET_REFERENCE
-        const expression1_type &e1_;
-        const expression2_type &e2_;
-#endif
+        expression1_closure_type e1_;
+        expression2_closure_type e2_;
     };
 
     template<class T1, class E1, class T2, class E2>
@@ -4782,9 +4747,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef unknown_storage_tag storage_category;
         typedef unknown_orientation_tag orientation_category;
         typedef typename promote_traits<T1, T2>::promote_type promote_type;
-        typedef matrix_matrix_binary<typename E1::const_closure_type,
-                                     typename E2::const_closure_type,
-                                     matrix_matrix_prod<T1, T2, promote_type> > expression_type;
+        typedef matrix_matrix_binary<E1, E2, matrix_matrix_prod<T1, T2, promote_type> > expression_type;
 #ifdef BOOST_UBLAS_USE_ET
         typedef expression_type result_type;
 #else
@@ -4869,6 +4832,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef E expression_type;
         typedef F functor_type;
         typedef typename F::result_type value_type;
+        typedef typename E::const_closure_type expression_closure_type;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -4880,7 +4844,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Accessors
         BOOST_UBLAS_INLINE
-        const expression_type &expression () const {
+        const expression_closure_type &expression () const {
             return e_;
         }
 
@@ -4890,17 +4854,12 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-#ifdef BOOST_UBLAS_ET_VALUE
-        expression_type e_;
-#endif
-#ifdef BOOST_UBLAS_ET_REFERENCE
-        const expression_type &e_;
-#endif
+        expression_closure_type e_;
     };
     
     template<class E, class F>
     struct matrix_scalar_unary_traits {
-        typedef matrix_scalar_unary<typename E::const_closure_type, F> expression_type;
+        typedef matrix_scalar_unary<E, F> expression_type;
 #ifdef BOOST_UBLAS_USE_ET
          typedef expression_type result_type; 
 #else

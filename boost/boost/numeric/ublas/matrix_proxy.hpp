@@ -38,7 +38,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
         typedef typename M::const_pointer const_pointer;
@@ -53,15 +53,16 @@ namespace boost { namespace numeric { namespace ublas {
                                        typename M::const_pointer,
                                        typename M::pointer>::type pointer;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_REFERENCE
-        typedef const vector_const_reference<const matrix_row<matrix_type> > const_closure_type;
-        typedef vector_reference<matrix_row<matrix_type> > closure_type;
+#ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+        typedef typename M::closure_type matrix_closure_type;
+#else
+        typedef typename detail::ct_if<boost::is_const<M>::value,
+                                       typename M::const_closure_type,
+                                       typename M::closure_type>::type matrix_closure_type;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_VALUE
         typedef const matrix_row<matrix_type> const_closure_type;
         typedef matrix_row<matrix_type> closure_type;
-#endif
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_iterator2 const_iterator_type;
         typedef typename M::iterator2 iterator_type;
 #else
@@ -94,11 +95,11 @@ namespace boost { namespace numeric { namespace ublas {
             return i_;
         }
         BOOST_UBLAS_INLINE
-        const_matrix_type &data () const {
+        const matrix_closure_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
-        matrix_type &data () {
+        matrix_closure_type &data () {
             return data_;
         }
 
@@ -509,7 +510,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        matrix_type &data_;
+        matrix_closure_type data_;
         size_type i_;
         static matrix_type nil_;
     };
@@ -526,7 +527,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class M>
     BOOST_UBLAS_INLINE
-    const matrix_row<const M> row (const M &data, std::size_t i) {
+    matrix_row<const M> row (const M &data, std::size_t i) {
         return matrix_row<const M> (data, i);
     }
 #endif
@@ -544,7 +545,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
         typedef typename M::const_pointer const_pointer;
@@ -559,15 +560,16 @@ namespace boost { namespace numeric { namespace ublas {
                                        typename M::const_pointer,
                                        typename M::pointer>::type pointer;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_REFERENCE
-        typedef const vector_const_reference<const matrix_column<matrix_type> > const_closure_type;
-        typedef vector_reference<matrix_column<matrix_type> > closure_type;
+#ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+        typedef typename M::closure_type matrix_closure_type;
+#else
+        typedef typename detail::ct_if<boost::is_const<M>::value,
+                                       typename M::const_closure_type,
+                                       typename M::closure_type>::type matrix_closure_type;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_VALUE
         typedef const matrix_column<matrix_type> const_closure_type;
         typedef matrix_column<matrix_type> closure_type;
-#endif
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_iterator1 const_iterator_type;
         typedef typename M::iterator1 iterator_type;
 #else
@@ -600,11 +602,11 @@ namespace boost { namespace numeric { namespace ublas {
             return j_;
         }
         BOOST_UBLAS_INLINE
-        const_matrix_type &data () const {
+        const matrix_closure_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
-        matrix_type &data () {
+        matrix_closure_type &data () {
             return data_;
         }
 
@@ -1015,7 +1017,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        matrix_type &data_;
+        matrix_closure_type data_;
         size_type j_;
         static matrix_type nil_;
     };
@@ -1032,7 +1034,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class M>
     BOOST_UBLAS_INLINE
-    const matrix_column<const M> column (const M &data, std::size_t j) {
+    matrix_column<const M> column (const M &data, std::size_t j) {
         return matrix_column<const M> (data, j);
     }
 #endif
@@ -1050,7 +1052,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
         typedef typename M::const_pointer const_pointer;
@@ -1065,14 +1067,15 @@ namespace boost { namespace numeric { namespace ublas {
                                        typename M::const_pointer,
                                        typename M::pointer>::type pointer;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_REFERENCE
-        typedef const vector_const_reference<const matrix_vector_range<matrix_type> > const_closure_type;
-        typedef vector_reference<matrix_vector_range<matrix_type> > closure_type;
+#ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+        typedef typename M::closure_type matrix_closure_type;
+#else
+        typedef typename detail::ct_if<boost::is_const<M>::value,
+                                       typename M::const_closure_type,
+                                       typename M::closure_type>::type matrix_closure_type;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_VALUE
         typedef const matrix_vector_range<matrix_type> const_closure_type;
         typedef matrix_vector_range<matrix_type> closure_type;
-#endif
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         typedef range<>::const_iterator const_iterator1_type;
         typedef range<>::const_iterator iterator1_type;
@@ -1089,7 +1092,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        matrix_vector_range (): 
+        matrix_vector_range ():
             data_ (nil_), r1_ (), r2_ () {}
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         BOOST_UBLAS_INLINE
@@ -1121,11 +1124,11 @@ namespace boost { namespace numeric { namespace ublas {
             return BOOST_UBLAS_SAME (r1_.size (), r2_.size ());
         }
         BOOST_UBLAS_INLINE
-        const_matrix_type &data () const {
+        const matrix_closure_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
-        matrix_type &data () {
+        matrix_closure_type &data () {
             return data_;
         }
 
@@ -1528,7 +1531,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        matrix_type &data_;
+        matrix_closure_type data_;
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         range<> r1_;
         range<> r2_;
@@ -1555,7 +1558,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
         typedef typename M::const_pointer const_pointer;
@@ -1570,14 +1573,15 @@ namespace boost { namespace numeric { namespace ublas {
                                        typename M::const_pointer,
                                        typename M::pointer>::type pointer;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_REFERENCE
-        typedef const vector_const_reference<const matrix_vector_slice<matrix_type> > const_closure_type;
-        typedef vector_reference<matrix_vector_slice<matrix_type> > closure_type;
+#ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+        typedef typename M::closure_type matrix_closure_type;
+#else
+        typedef typename detail::ct_if<boost::is_const<M>::value,
+                                       typename M::const_closure_type,
+                                       typename M::closure_type>::type matrix_closure_type;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_VALUE
         typedef const matrix_vector_slice<matrix_type> const_closure_type;
         typedef matrix_vector_slice<matrix_type> closure_type;
-#endif
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         typedef slice<>::const_iterator const_iterator1_type;
         typedef slice<>::const_iterator iterator1_type;
@@ -1629,14 +1633,14 @@ namespace boost { namespace numeric { namespace ublas {
         // Accessors
         BOOST_UBLAS_INLINE
         size_type size () const {
-            return BOOST_UBLAS_SAME (s1_.size (), s2_.size ()); 
+            return BOOST_UBLAS_SAME (s1_.size (), s2_.size ());
         }
         BOOST_UBLAS_INLINE
-        const_matrix_type &data () const {
+        const matrix_closure_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
-        matrix_type &data () {
+        matrix_closure_type &data () {
             return data_;
         }
 
@@ -2051,7 +2055,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        matrix_type &data_;
+        matrix_closure_type data_;
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         slice<> s1_;
         slice<> s2_;
@@ -2080,7 +2084,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
         typedef typename M::const_pointer const_pointer;
@@ -2095,14 +2099,15 @@ namespace boost { namespace numeric { namespace ublas {
                                        typename M::const_pointer,
                                        typename M::pointer>::type pointer;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_REFERENCE
-        typedef const vector_const_reference<const matrix_vector_indirect<matrix_type, indirect_array_type> > const_closure_type;
-        typedef vector_reference<matrix_vector_indirect<matrix_type, indirect_array_type> > closure_type;
+#ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+        typedef typename M::closure_type matrix_closure_type;
+#else
+        typedef typename detail::ct_if<boost::is_const<M>::value,
+                                       typename M::const_closure_type,
+                                       typename M::closure_type>::type matrix_closure_type;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_VALUE
         typedef const matrix_vector_indirect<matrix_type, indirect_array_type> const_closure_type;
         typedef matrix_vector_indirect<matrix_type, indirect_array_type> closure_type;
-#endif
         typedef typename IA::const_iterator const_iterator1_type;
         typedef typename IA::const_iterator iterator1_type;
         typedef typename IA::const_iterator const_iterator2_type;
@@ -2130,11 +2135,11 @@ namespace boost { namespace numeric { namespace ublas {
             return BOOST_UBLAS_SAME (ia1_.size (), ia2_.size ());
         }
         BOOST_UBLAS_INLINE
-        const_matrix_type &data () const {
+        const matrix_closure_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
-        matrix_type &data () {
+        matrix_closure_type &data () {
             return data_;
         }
         BOOST_UBLAS_INLINE
@@ -2553,7 +2558,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        matrix_type &data_;
+        matrix_closure_type data_;
         indirect_array_type ia1_;
         indirect_array_type ia2_;
         static matrix_type nil_;
@@ -2575,7 +2580,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
         typedef typename M::const_pointer const_pointer;
@@ -2590,15 +2595,16 @@ namespace boost { namespace numeric { namespace ublas {
                                        typename M::const_pointer,
                                        typename M::pointer>::type pointer;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_REFERENCE
-        typedef const matrix_const_reference<const matrix_range<matrix_type> > const_closure_type;
-        typedef matrix_reference<matrix_range<matrix_type> > closure_type;
+#ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+        typedef typename M::closure_type matrix_closure_type;
+#else
+        typedef typename detail::ct_if<boost::is_const<M>::value,
+                                       typename M::const_closure_type,
+                                       typename M::closure_type>::type matrix_closure_type;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_VALUE
         typedef const matrix_range<matrix_type> const_closure_type;
         typedef matrix_range<matrix_type> closure_type;
-#endif
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_iterator1 const_iterator1_type;
         typedef typename M::iterator1 iterator1_type;
         typedef typename M::const_iterator2 const_iterator2_type;
@@ -2631,9 +2637,27 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (r2_.start () <= data_.size2 () &&
                                r2_.start () + r2_.size () <= data_.size2 (), bad_index ());
         }
+        BOOST_UBLAS_INLINE
+        matrix_range (const matrix_closure_type &data, const range<> &r1, const range<> &r2, int):
+            data_ (data), r1_ (r1.preprocess (data.size1 ())), r2_ (r2.preprocess (data.size2 ())) {
+            // Early checking of preconditions.
+            BOOST_UBLAS_CHECK (r1_.start () <= data_.size1 () &&
+                               r1_.start () + r1_.size () <= data_.size1 (), bad_index ());
+            BOOST_UBLAS_CHECK (r2_.start () <= data_.size2 () &&
+                               r2_.start () + r2_.size () <= data_.size2 (), bad_index ());
+        }
 #else
         BOOST_UBLAS_INLINE
         matrix_range (matrix_type &data, const range &r1, const range &r2):
+            data_ (data), r1_ (r1), r2_ (r2) {
+            // Early checking of preconditions.
+            BOOST_UBLAS_CHECK (r1_.start () <= data_.size1 () &&
+                               r1_.start () + r1_.size () <= data_.size1 (), bad_index ());
+            BOOST_UBLAS_CHECK (r2_.start () <= data_.size2 () &&
+                               r2_.start () + r2_.size () <= data_.size2 (), bad_index ());
+        }
+        BOOST_UBLAS_INLINE
+        matrix_range (const matrix_closure_type &data, const range &r1, const range &r2, int):
             data_ (data), r1_ (r1), r2_ (r2) {
             // Early checking of preconditions.
             BOOST_UBLAS_CHECK (r1_.start () <= data_.size1 () &&
@@ -2646,26 +2670,26 @@ namespace boost { namespace numeric { namespace ublas {
         // Accessors
         BOOST_UBLAS_INLINE
         size_type start1 () const {
-            return r1_.start (); 
+            return r1_.start ();
         }
         BOOST_UBLAS_INLINE
-        size_type size1 () const { 
+        size_type size1 () const {
             return r1_.size ();
         }
         BOOST_UBLAS_INLINE
-        size_type start2() const { 
-            return r2_.start (); 
+        size_type start2() const {
+            return r2_.start ();
         }
         BOOST_UBLAS_INLINE
         size_type size2 () const { 
             return r2_.size ();
         }
         BOOST_UBLAS_INLINE
-        const_matrix_type &data () const {
+        const matrix_closure_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
-        matrix_type &data () {
+        matrix_closure_type &data () {
             return data_;
         }
 
@@ -2698,23 +2722,23 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         BOOST_UBLAS_INLINE
         matrix_range<matrix_type> project (const range<> &r1, const range<> &r2) const {
-            return matrix_range<matrix_type>  (data_, r1_.compose (r1), r2_.compose (r2));
+            return matrix_range<matrix_type>  (data_, r1_.compose (r1), r2_.compose (r2), 0);
         }
 #else
         BOOST_UBLAS_INLINE
         matrix_range<matrix_type> project (const range &r1, const range &r2) const {
-            return matrix_range<matrix_type>  (data_, r1_.compose (r1), r2_.compose (r2));
+            return matrix_range<matrix_type>  (data_, r1_.compose (r1), r2_.compose (r2), 0);
         }
 #endif
 
         // Assignment
         BOOST_UBLAS_INLINE
-        matrix_range &operator = (const matrix_range &mr) { 
-            matrix_assign (scalar_assign<value_type, value_type> (), *this, mr); 
+        matrix_range &operator = (const matrix_range &mr) {
+            matrix_assign (scalar_assign<value_type, value_type> (), *this, mr);
             return *this;
         }
         BOOST_UBLAS_INLINE
-        matrix_range &assign_temporary (matrix_range &mr) { 
+        matrix_range &assign_temporary (matrix_range &mr) {
             return *this = mr;
         }
         template<class AE>
@@ -2744,7 +2768,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_range& operator -= (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<value_type, value_type> (), *this, matrix<value_type> (*this - ae)); 
+            matrix_assign (scalar_assign<value_type, value_type> (), *this, matrix<value_type> (*this - ae));
             return *this;
         }
         template<class AE>
@@ -2894,8 +2918,13 @@ namespace boost { namespace numeric { namespace ublas {
             public iterator_base_traits<typename const_iterator1_type::iterator_category>::template
                         iterator_base<const_iterator1, value_type>::type {
 #else
+#ifndef BOOST_MSVC
             public random_access_iterator_base<typename const_iterator1_type::iterator_category,
                                                const_iterator1, value_type> {
+#else
+            public random_access_iterator_base<typename M::const_iterator1::iterator_category,
+                                               const_iterator1, value_type> {
+#endif
 #endif                                               
         public:
             typedef typename const_iterator1_type::iterator_category iterator_category;
@@ -3019,8 +3048,13 @@ namespace boost { namespace numeric { namespace ublas {
             public iterator_base_traits<typename iterator1_type::iterator_category>::template
                         iterator_base<iterator1, value_type>::type {
 #else
+#ifndef BOOST_MSVC
             public random_access_iterator_base<typename iterator1_type::iterator_category,
                                                iterator1, value_type> {
+#else
+            public random_access_iterator_base<typename M::iterator1::iterator_category,
+                                               iterator1, value_type> {
+#endif
 #endif                                               
         public:
             typedef typename iterator1_type::iterator_category iterator_category;
@@ -3143,8 +3177,13 @@ namespace boost { namespace numeric { namespace ublas {
             public iterator_base_traits<typename const_iterator2_type::iterator_category>::template
                         iterator_base<const_iterator2, value_type>::type {
 #else
+#ifndef BOOST_MSVC
             public random_access_iterator_base<typename const_iterator2_type::iterator_category,
                                                const_iterator2, value_type> {
+#else
+            public random_access_iterator_base<typename M::const_iterator2::iterator_category,
+                                               const_iterator2, value_type> {
+#endif
 #endif                                               
         public:
             typedef typename const_iterator2_type::iterator_category iterator_category;
@@ -3268,8 +3307,13 @@ namespace boost { namespace numeric { namespace ublas {
             public iterator_base_traits<typename iterator2_type::iterator_category>::template
                         iterator_base<iterator2, value_type>::type {
 #else
+#ifndef BOOST_MSVC
             public random_access_iterator_base<typename iterator2_type::iterator_category,
                                                iterator2, value_type> {
+#else
+            public random_access_iterator_base<typename M::iterator2::iterator_category,
+                                               iterator2, value_type> {
+#endif
 #endif
         public:
             typedef typename iterator2_type::iterator_category iterator_category;
@@ -3424,7 +3468,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        matrix_type &data_;
+        matrix_closure_type data_;
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         range<> r1_;
         range<> r2_;
@@ -3448,7 +3492,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class M>
     BOOST_UBLAS_INLINE
-    const matrix_range<const M> project (const M &data, const range<> &r1, const range<> &r2) {
+    matrix_range<const M> project (const M &data, const range<> &r1, const range<> &r2) {
         return matrix_range<const M> (data, r1, r2);
     }
     template<class M>
@@ -3466,7 +3510,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class M>
     BOOST_UBLAS_INLINE
-    const matrix_range<const M> project (const M &data, const range &r1, const range &r2) {
+    matrix_range<const M> project (const M &data, const range &r1, const range &r2) {
         return matrix_range<const M> (data, r1, r2);
     }
     template<class M>
@@ -3490,7 +3534,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
         typedef typename M::const_pointer const_pointer;
@@ -3505,14 +3549,15 @@ namespace boost { namespace numeric { namespace ublas {
                                        typename M::const_pointer,
                                        typename M::pointer>::type pointer;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_REFERENCE
-        typedef const matrix_const_reference<const matrix_slice<matrix_type> > const_closure_type;
-        typedef matrix_reference<matrix_slice<matrix_type> > closure_type;
+#ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+        typedef typename M::closure_type matrix_closure_type;
+#else
+        typedef typename detail::ct_if<boost::is_const<M>::value,
+                                       typename M::const_closure_type,
+                                       typename M::closure_type>::type matrix_closure_type;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_VALUE
         typedef const matrix_slice<matrix_type> const_closure_type;
         typedef matrix_slice<matrix_type> closure_type;
-#endif
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         typedef slice<>::const_iterator const_iterator1_type;
         typedef slice<>::const_iterator iterator1_type;
@@ -3542,9 +3587,27 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (s2_.start () <= data_.size2 () &&
                                s2_.start () + s2_.stride () * (s2_.size () - (s2_.size () > 0)) <= data_.size2 (), bad_index ());
         }
+        BOOST_UBLAS_INLINE
+        matrix_slice (const matrix_closure_type &data, const slice<> &s1, const slice<> &s2, int):
+            data_ (data), s1_ (s1.preprocess (data.size1 ())), s2_ (s2.preprocess (data.size2 ())) {
+            // Early checking of preconditions.
+            BOOST_UBLAS_CHECK (s1_.start () <= data_.size1 () &&
+                               s1_.start () + s1_.stride () * (s1_.size () - (s1_.size () > 0)) <= data_.size1 (), bad_index ());
+            BOOST_UBLAS_CHECK (s2_.start () <= data_.size2 () &&
+                               s2_.start () + s2_.stride () * (s2_.size () - (s2_.size () > 0)) <= data_.size2 (), bad_index ());
+        }
 #else
         BOOST_UBLAS_INLINE
         matrix_slice (matrix_type &data, const slice &s1, const slice &s2):
+            data_ (data), s1_ (s1), s2_ (s2) {
+            // Early checking of preconditions.
+            BOOST_UBLAS_CHECK (s1_.start () <= data_.size1 () &&
+                               s1_.start () + s1_.stride () * (s1_.size () - (s1_.size () > 0)) <= data_.size1 (), bad_index ());
+            BOOST_UBLAS_CHECK (s2_.start () <= data_.size2 () &&
+                               s2_.start () + s2_.stride () * (s2_.size () - (s2_.size () > 0)) <= data_.size2 (), bad_index ());
+        }
+        BOOST_UBLAS_INLINE
+        matrix_slice (const matrix_closure_type &data, const slice &s1, const slice &s2, int):
             data_ (data), s1_ (s1), s2_ (s2) {
             // Early checking of preconditions.
             BOOST_UBLAS_CHECK (s1_.start () <= data_.size1 () &&
@@ -3580,11 +3643,11 @@ namespace boost { namespace numeric { namespace ublas {
             return s2_.size ();
         }
         BOOST_UBLAS_INLINE
-        const_matrix_type &data () const {
+        const matrix_closure_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
-        matrix_type &data () {
+        matrix_closure_type &data () {
             return data_;
         }
 
@@ -3617,20 +3680,20 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         BOOST_UBLAS_INLINE
         matrix_slice<matrix_type> project (const range<> &r1, const range<> &r2) const {
-            return matrix_slice<matrix_type>  (data_, s1_.compose (r1), s2_.compose (r2));
+            return matrix_slice<matrix_type>  (data_, s1_.compose (r1), s2_.compose (r2), 0);
         }
         BOOST_UBLAS_INLINE
         matrix_slice<matrix_type> project (const slice<> &s1, const slice<> &s2) const {
-            return matrix_slice<matrix_type>  (data_, s1_.compose (s1), s2_.compose (s2));
+            return matrix_slice<matrix_type>  (data_, s1_.compose (s1), s2_.compose (s2), 0);
         }
 #else
         BOOST_UBLAS_INLINE
         matrix_slice<matrix_type> project (const range &r1, const range &r2) const {
-            return matrix_slice<matrix_type>  (data_, s1_.compose (r1), s2_.compose (r2));
+            return matrix_slice<matrix_type>  (data_, s1_.compose (r1), s2_.compose (r2), 0);
         }
         BOOST_UBLAS_INLINE
         matrix_slice<matrix_type> project (const slice &s1, const slice &s2) const {
-            return matrix_slice<matrix_type>  (data_, s1_.compose (s1), s2_.compose (s2));
+            return matrix_slice<matrix_type>  (data_, s1_.compose (s1), s2_.compose (s2), 0);
         }
 #endif
 
@@ -3671,7 +3734,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_slice& operator -= (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<value_type, value_type> (), *this, matrix<value_type> (*this - ae)); 
+            matrix_assign (scalar_assign<value_type, value_type> (), *this, matrix<value_type> (*this - ae));
             return *this;
         }
         template<class AE>
@@ -4343,7 +4406,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        matrix_type &data_;
+        matrix_closure_type data_;
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         slice<> s1_;
         slice<> s2_;
@@ -4374,7 +4437,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class M>
     BOOST_UBLAS_INLINE
-    const matrix_slice<const M> project (const M &data, const slice<> &s1, const slice<> &s2) {
+    matrix_slice<const M> project (const M &data, const slice<> &s1, const slice<> &s2) {
         return matrix_slice<const M> (data, s1, s2);
     }
     template<class M>
@@ -4399,7 +4462,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class M>
     BOOST_UBLAS_INLINE
-    const matrix_slice<const M> project (const M &data, const slice &s1, const slice &s2) {
+    matrix_slice<const M> project (const M &data, const slice &s1, const slice &s2) {
         return matrix_slice<const M> (data, s1, s2);
     }
     template<class M>
@@ -4427,7 +4490,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
         typedef typename M::const_pointer const_pointer;
@@ -4442,14 +4505,15 @@ namespace boost { namespace numeric { namespace ublas {
                                        typename M::const_pointer,
                                        typename M::pointer>::type pointer;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_REFERENCE
-        typedef const matrix_const_reference<const matrix_indirect<matrix_type, indirect_array_type> > const_closure_type;
-        typedef matrix_reference<matrix_indirect<matrix_type, indirect_array_type> > closure_type;
+#ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+        typedef typename M::closure_type matrix_closure_type;
+#else
+        typedef typename detail::ct_if<boost::is_const<M>::value,
+                                       typename M::const_closure_type,
+                                       typename M::closure_type>::type matrix_closure_type;
 #endif
-#ifdef BOOST_UBLAS_ET_CLOSURE_VALUE
         typedef const matrix_indirect<matrix_type, indirect_array_type> const_closure_type;
         typedef matrix_indirect<matrix_type, indirect_array_type> closure_type;
-#endif
         typedef typename IA::const_iterator const_iterator1_type;
         typedef typename IA::const_iterator iterator1_type;
         typedef typename IA::const_iterator const_iterator2_type;
@@ -4469,9 +4533,15 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix_indirect (matrix_type &data, const indirect_array_type &ia1, const indirect_array_type &ia2):
             data_ (data), ia1_ (ia1.preprocess (data.size1 ())), ia2_ (ia2.preprocess (data.size2 ())) {}
+        BOOST_UBLAS_INLINE
+        matrix_indirect (const matrix_closure_type &data, const indirect_array_type &ia1, const indirect_array_type &ia2, int):
+            data_ (data), ia1_ (ia1.preprocess (data.size1 ())), ia2_ (ia2.preprocess (data.size2 ())) {}
 #else
         BOOST_UBLAS_INLINE
         matrix_indirect (matrix_type &data, const indirect_array_type &ia1, const indirect_array_type &ia2):
+            data_ (data), ia1_ (ia1), ia2_ (ia2) {}
+        BOOST_UBLAS_INLINE
+        matrix_indirect (const matrix_closure_type &data, const indirect_array_type &ia1, const indirect_array_type &ia2, int):
             data_ (data), ia1_ (ia1), ia2_ (ia2) {}
 #endif
 
@@ -4485,11 +4555,11 @@ namespace boost { namespace numeric { namespace ublas {
             return ia2_.size ();
         }
         BOOST_UBLAS_INLINE
-        const_matrix_type &data () const {
+        const matrix_closure_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
-        matrix_type &data () {
+        matrix_closure_type &data () {
             return data_;
         }
         BOOST_UBLAS_INLINE
@@ -4538,25 +4608,25 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         BOOST_UBLAS_INLINE
         matrix_indirect<matrix_type, indirect_array_type> project (const range<> &r1, const range<> &r2) const {
-            return matrix_indirect<matrix_type, indirect_array_type> (data_, ia1_.compose (r1), ia2_.compose (r2));
+            return matrix_indirect<matrix_type, indirect_array_type> (data_, ia1_.compose (r1), ia2_.compose (r2), 0);
         }
         BOOST_UBLAS_INLINE
         matrix_indirect<matrix_type, indirect_array_type> project (const slice<> &s1, const slice<> &s2) const {
-            return matrix_indirect<matrix_type, indirect_array_type> (data_, ia1_.compose (s1), ia2_.compose (s2));
+            return matrix_indirect<matrix_type, indirect_array_type> (data_, ia1_.compose (s1), ia2_.compose (s2), 0);
         }
 #else
         BOOST_UBLAS_INLINE
         matrix_indirect<matrix_type, indirect_array_type> project (const range &r1, const range &r2) const {
-            return matrix_indirect<matrix_type, indirect_array_type> (data_, ia1_.compose (r1), ia2_.compose (r2));
+            return matrix_indirect<matrix_type, indirect_array_type> (data_, ia1_.compose (r1), ia2_.compose (r2), 0);
         }
         BOOST_UBLAS_INLINE
         matrix_indirect<matrix_type, indirect_array_type> project (const slice &s1, const slice &s2) const {
-            return matrix_indirect<matrix_type, indirect_array_type> (data_, ia1_.compose (s1), ia2_.compose (s2));
+            return matrix_indirect<matrix_type, indirect_array_type> (data_, ia1_.compose (s1), ia2_.compose (s2), 0);
         }
 #endif
         BOOST_UBLAS_INLINE
         matrix_indirect<matrix_type, indirect_array_type> project (const indirect_array_type &ia1, const indirect_array_type &ia2) const {
-            return matrix_indirect<matrix_type, indirect_array_type> (data_, ia1_.compose (ia1), ia2_.compose (ia2));
+            return matrix_indirect<matrix_type, indirect_array_type> (data_, ia1_.compose (ia1), ia2_.compose (ia2), 0);
         }
 
         // Assignment
@@ -5268,7 +5338,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        matrix_type &data_;
+        matrix_closure_type data_;
         indirect_array_type ia1_;
         indirect_array_type ia2_;
         static matrix_type nil_;
@@ -5314,7 +5384,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     // template<class M, class IA>
     // BOOST_UBLAS_INLINE
-    // const matrix_indirect<const M, IA> project (const M &data, const IA &ia1, const IA &ia2) {
+    // matrix_indirect<const M, IA> project (const M &data, const IA &ia1, const IA &ia2) {
     //     return matrix_indirect<const M, IA> (data, ia1, ia2);
     // }
     // template<class M, class IA>
@@ -5331,7 +5401,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class M, class A>
     BOOST_UBLAS_INLINE
-    const matrix_indirect<const M, indirect_array<A> > project (const M &data, const indirect_array<A> &ia1, const indirect_array<A> &ia2) {
+    matrix_indirect<const M, indirect_array<A> > project (const M &data, const indirect_array<A> &ia1, const indirect_array<A> &ia2) {
         return matrix_indirect<const M, indirect_array<A> > (data, ia1, ia2);
     }
     template<class M, class A>

@@ -872,6 +872,7 @@ namespace boost { namespace numeric { namespace ublas {
     ZeroElement (double) {
         return 0.;
     }
+#ifndef BOOST_MSVC
     template<>
     std::complex<float>
     ZeroElement (std::complex<float>) {
@@ -880,8 +881,9 @@ namespace boost { namespace numeric { namespace ublas {
     template<>
     std::complex<double>
     ZeroElement (std::complex<double>) {
-        return std::complex<float> (0.);
+        return std::complex<double> (0.);
     }
+#endif
     template<>
     vector<float> 
     ZeroElement (vector<float>) {
@@ -892,6 +894,7 @@ namespace boost { namespace numeric { namespace ublas {
     ZeroElement (vector<double>) {
         return zero_vector<double> ();
     }
+#ifndef BOOST_MSVC
     template<>
     vector<std::complex<float> > 
     ZeroElement (vector<std::complex<float> >) {
@@ -902,6 +905,7 @@ namespace boost { namespace numeric { namespace ublas {
     ZeroElement (vector<std::complex<double> >) {
         return zero_vector<std::complex<double> > ();
     }
+#endif
     template<>
     matrix<float> 
     ZeroElement (matrix<float>) {
@@ -912,6 +916,7 @@ namespace boost { namespace numeric { namespace ublas {
     ZeroElement (matrix<double>) {
         return zero_matrix<double> ();
     }
+#ifndef BOOST_MSVC
     template<>
     matrix<std::complex<float> > 
     ZeroElement (matrix<std::complex<float> >) {
@@ -922,6 +927,7 @@ namespace boost { namespace numeric { namespace ublas {
     ZeroElement (matrix<std::complex<double> >) {
         return zero_matrix<std::complex<double> > ();
     }
+#endif
 
     template<class T>
     T 
@@ -936,6 +942,7 @@ namespace boost { namespace numeric { namespace ublas {
     OneElement (double) {
         return 1.;
     }
+#ifndef BOOST_MSVC
     template<>
     std::complex<float>
     OneElement (std::complex<float>) {
@@ -946,6 +953,7 @@ namespace boost { namespace numeric { namespace ublas {
     OneElement (std::complex<double>) {
         return std::complex<double> (1.);
     }
+#endif
     template<>
     matrix<float> 
     OneElement (matrix<float>) {
@@ -956,6 +964,7 @@ namespace boost { namespace numeric { namespace ublas {
     OneElement (matrix<double>) {
         return identity_matrix<double> ();
     }
+#ifndef BOOST_MSVC
     template<>
     matrix<std::complex<float> > 
     OneElement (matrix<std::complex<float> >) {
@@ -966,6 +975,7 @@ namespace boost { namespace numeric { namespace ublas {
     OneElement (matrix<std::complex<double> >) {
         return identity_matrix<std::complex<double> > ();
     }
+#endif
 
     template<class E1, class E2>
     bool 
@@ -1641,6 +1651,7 @@ namespace boost { namespace numeric { namespace ublas {
         VectorSpaceConcept<double, matrix<double> >::constraints ();
         LinearOperatorConcept<double, vector<double>, matrix<double> >::constraints ();
 
+#ifndef BOOST_MSVC
         AdditiveAbelianGroupConcept<std::complex<float> >::constraints ();
         CommutativeRingWithIdentityConcept<std::complex<float> >::constraints ();
         FieldConcept<std::complex<float> >::constraints ();
@@ -1656,6 +1667,7 @@ namespace boost { namespace numeric { namespace ublas {
         RingWithIdentityConcept<matrix<std::complex<double> > >::constraints (0);
         VectorSpaceConcept<std::complex<double>, matrix<std::complex<double> > >::constraints ();
         LinearOperatorConcept<std::complex<double>, vector<std::complex<double> >, matrix<std::complex<double> > >::constraints ();
+#endif
 #endif
     }
 

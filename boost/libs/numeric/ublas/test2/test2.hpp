@@ -67,7 +67,9 @@ struct test_blas_3 {
 
 #define USE_FLOAT
 #define USE_DOUBLE
+#ifndef BOOST_MSVC
 #define USE_STD_COMPLEX
+#endif
 
 #endif
 

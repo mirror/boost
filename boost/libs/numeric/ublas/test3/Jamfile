@@ -7,6 +7,6 @@ exe test3
     : <include>$(BOOST_ROOT)
       <define>BOOST_UBLAS_SAFE
       <define>USE_RANGE
-      <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+      <borland><*><cxxflags>"-w-8026 -w-8027 -w-8030 -w-8057 -w-8084 -w-8092"
     ;
 
