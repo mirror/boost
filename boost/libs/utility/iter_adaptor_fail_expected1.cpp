@@ -11,15 +11,15 @@
 // Revision History
 // 21 Jan 01 Initial version (Jeremy Siek)
 
-#include <list>
 #include <boost/config.hpp>
+#include <list>
 #include <boost/pending/iterator_adaptors.hpp>
-#include <boost/detail/iterator.hpp>
 
 int main()
 {
-    typedef boost::iterator_adaptor<int*, boost::default_iterator_policies,
-        int,int&,int*,std::bidirectional_iterator_tag> adaptor_type;
+  typedef boost::iterator_adaptor<std::list<int>::iterator,
+    boost::default_iterator_policies,
+    int,int&,int*,std::bidirectional_iterator_tag> adaptor_type;
   
   adaptor_type i;
   i += 4;
