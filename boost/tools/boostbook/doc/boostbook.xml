@@ -262,34 +262,33 @@ using boostbook : DOCBOOK_XSL_DIR
     </section>
 
     <section id="boostbook.fop">
-      <title>Configuring Apache FOP for PostScript/PDF Output</title>
+      <title>Configuring PDF and PostScript Output</title>
 
-      <para>This section describes the steps required to configure
-      <ulink url="http://xml.apache.org/fop/index.html">Apache
-      FOP</ulink> to generate PostScript and PDF output for BoostBook
-      documents. To begin, you will need two pieces of software:
+      <para>In order to generate PDF and PostScript output, you have to
+      install two tools:
         <itemizedlist> 
           <listitem><simpara>A Java interpreter, available at <ulink url="http://java.sun.com"/>.</simpara></listitem>
           <listitem><simpara>Apache FOP, available at <ulink url="http://xml.apache.org/fop/download.html"/>. Version 0.20.4 seems to be most stable.</simpara></listitem>
         </itemizedlist> 
       </para>
  
-      <para>Once Java is installed (we'll call Java's directory
-      <code>JAVA_HOME</code>) and Apache FOP has been extracted into a
-      directory (we'll call FOP's directory <code>FOP_DIR</code>), we
-      need to configure Boost.Build to use FOP. Edit your
-      <filename>user-config.jam</filename> or
-      <filename>site-config.jam</filename> and add the following,
-      replacing <code>FOP_DIR</code> with the directory where Apache
-      FOP is installed, and replace <code>JAVA_HOME</code> with the
-      directory where Java is installed:
-
-<programlisting>using fop : FOP_DIR
-          : JAVA_HOME
-          ;</programlisting>
-
-      In some cases, <code>JAVA_HOME</code> is optional, but it often
-      helps to specify it.</para>
+      <para>Install the Java interpreter and then unpack Apache FOP to some
+      directory. The top level directory of the FOP tool should contain a main
+      script called <filename>fop.sh</filename> on Unix and
+      <filename>fop.bat</filename> on Windows. You need to specify the
+      location of that script and Java location to Boost.Build. Add the
+      following to your <filename>user-config.jam</filename> or
+      <filename>site-config.jam</filename>: 
+<programlisting>
+using fop : FOP_COMMAND 
+          : JAVA_HOME 
+          ;
+</programlisting> replacing
+      <code>FOP_COMMAND</code> with the full path to the FOP main script, and
+      replacing <code>JAVA_HOME</code> with the directory where Java is
+      installed. If the <envar>JAVA_HOME</envar> environment variable is
+      already set, you don't need to specify it above.
+      </para>
     
       <para>To test PDF generation, switch to the directory <filename
       class="directory">$BOOST_ROOT/doc</filename> and execute the
