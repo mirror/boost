@@ -456,12 +456,12 @@ namespace boost {
     function() : base_type() {}                                     
                                                                             
     template<typename Functor>                                              
-    function(Functor BOOST_MSVC_ONLY(const &) f) : base_type(f) {}
+    function(Functor BOOST_FUNCTION_TARGET_FIX(const &) f) : base_type(f) {}
                       
     function(const self_type& f) : base_type(static_cast<const base_type&>(f)){}
          
     template<typename Functor>
-    self_type& operator=(Functor BOOST_MSVC_ONLY(const &) f)
+    self_type& operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
       self_type(f).swap(*this);
       return *this;
@@ -476,11 +476,11 @@ namespace boost {
     self_type& operator=(const self_type& f)
     {   
       self_type(f).swap(*this);
-      return *this;                                                         
-    }                                                           
+      return *this;
+    }
 
     template<typename Functor>
-    void set(Functor BOOST_MSVC_ONLY(const &) f)
+    void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
       self_type(f).swap(*this);
     }

@@ -203,7 +203,7 @@ namespace boost {
     // MSVC chokes if the following two constructors are collapsed into
     // one with a default parameter.
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(Functor BOOST_MSVC_ONLY(const &) f) :
+    BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f) :
       function_base(), Mixin(), invoker(0)
     {
       this->assign_to(f);
@@ -244,14 +244,15 @@ namespace boost {
     // handle BOOST_FUNCTION_FUNCTION as the type of the temporary to 
     // construct.
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION& operator=(Functor f)
+    BOOST_FUNCTION_FUNCTION& 
+    operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
       self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
       return *this;
     }
 
     template<typename Functor>
-    void set(Functor f)
+    void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
       self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
     }

@@ -25,10 +25,10 @@
 #include <boost/type_traits.hpp>
 #include <boost/ref.hpp>
 
-#ifdef BOOST_MSVC
-#  define BOOST_MSVC_ONLY(x) x
+#if defined(BOOST_MSVC) || defined(__MWERKS__)
+#  define BOOST_FUNCTION_TARGET_FIX(x) x
 #else
-#  define BOOST_MSVC_ONLY(x)
+#  define BOOST_FUNCTION_TARGET_FIX(x)
 #endif // not MSVC
 
 namespace boost {
