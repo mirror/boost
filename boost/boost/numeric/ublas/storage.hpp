@@ -1620,6 +1620,10 @@ namespace boost { namespace numeric { namespace ublas {
             return lhs.equal(rhs);
         }
         BOOST_UBLAS_INLINE
+        friend bool operator != (const self_type& lhs, const self_type& rhs) {
+            return !lhs.equal(rhs);
+        }
+        BOOST_UBLAS_INLINE
         friend bool operator < (const self_type& lhs, const self_type& rhs) {
             return lhs.less(rhs);
         }
@@ -1645,6 +1649,11 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     bool operator == (const index_pair<V>& lhs, const index_pair<V>& rhs) {
         return lhs.equal(rhs);
+    }
+    template<class V>
+    BOOST_UBLAS_INLINE
+    bool operator != (const index_pair<V>& lhs, const index_pair<V>& rhs) {
+        return !lhs.equal(rhs);
     }
     template<class V>
     BOOST_UBLAS_INLINE
@@ -1797,6 +1806,10 @@ namespace boost { namespace numeric { namespace ublas {
             return lhs.equal(rhs);
         }
         BOOST_UBLAS_INLINE
+        friend bool operator != (const self_type& lhs, const self_type& rhs) {
+            return !lhs.equal(rhs);
+        }
+        BOOST_UBLAS_INLINE
         friend bool operator < (const self_type& lhs, const self_type& rhs) {
             return lhs.less(rhs);
         }
@@ -1822,6 +1835,11 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M>
     BOOST_UBLAS_INLINE
     bool operator == (const index_triple<M>& lhs, const index_triple<M>& rhs) {
+        return lhs.equal(rhs);
+    }
+    template<class M>
+    BOOST_UBLAS_INLINE
+    bool operator != (const index_triple<M>& lhs, const index_triple<M>& rhs) {
         return lhs.equal(rhs);
     }
     template<class M>
