@@ -282,27 +282,27 @@ namespace boost {
   // A helper class for constructing a property map
   // from a class that implements operator[]
 
-  template <class T, class PA>
+  template <class T, class PropertyMap>
   struct put_get_at_helper { };
 
-  template <class PA, class T, class K>
+  template <class PropertyMap, class T, class K>
   inline T 
-  get(const put_get_at_helper<T,PA>& pa, const K& k)
+  get(const put_get_at_helper<T,PropertyMap>& pa, const K& k)
   {
-    T v = static_cast<const PA&>(pa)[k];
+    T v = static_cast<const PropertyMap&>(pa)[k];
     return v;
   }
-  template <class PA, class T, class K, class V>
+  template <class PropertyMap, class T, class K, class V>
   inline void
-  put(put_get_at_helper<T,PA>& pa, K k, const V& v)
+  put(put_get_at_helper<T,PropertyMap>& pa, K k, const V& v)
   {
-    static_cast<PA&>(pa)[k] = v;
+    static_cast<PropertyMap&>(pa)[k] = v;
   }
-  template <class PA, class T, class K>
+  template <class PropertyMap, class T, class K>
   inline T& 
-  at(put_get_at_helper<T,PA>& pa, K k)
+  at(put_get_at_helper<T,PropertyMap>& pa, K k)
   {
-    T& v = static_cast<PA&>(pa)[k];
+    T& v = static_cast<PropertyMap&>(pa)[k];
     return v;
   }
 
