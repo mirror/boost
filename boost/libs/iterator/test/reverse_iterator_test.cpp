@@ -46,7 +46,8 @@ int main()
 	const dummyT
       , boost::iterator_archetypes::readable_iterator_t
       , boost::bidirectional_traversal_tag
-    > Iter;      
+    > iter;
+	typedef boost::reverse_iterator<iter> Iter;
     boost::function_requires< boost::InputIteratorConcept<Iter> >();
     boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
     boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
@@ -56,7 +57,8 @@ int main()
 	dummyT
       , boost::iterator_archetypes::writable_iterator_t
       , boost::bidirectional_traversal_tag
-    > Iter;      
+    > iter;
+	typedef boost::reverse_iterator<iter> Iter;
     boost::function_requires< boost_concepts::WritableIteratorConcept<Iter, dummyT> >();
     boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
   }
@@ -65,7 +67,8 @@ int main()
 	dummyT
       , boost::iterator_archetypes::readable_writable_iterator_t
       , boost::bidirectional_traversal_tag
-    > Iter;      
+    > iter;
+	typedef boost::reverse_iterator<iter> Iter;
     boost::function_requires< boost::InputIteratorConcept<Iter> >();
     boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
     boost::function_requires< boost_concepts::WritableIteratorConcept<Iter> >();
@@ -76,7 +79,8 @@ int main()
 	const dummyT
       , boost::iterator_archetypes::readable_lvalue_iterator_t
       , boost::bidirectional_traversal_tag
-    > Iter;      
+    > iter;
+	typedef boost::reverse_iterator<iter> Iter;
     boost::function_requires< boost::BidirectionalIteratorConcept<Iter> >();
     boost::function_requires< boost_concepts::ReadableLvalueIteratorConcept<Iter> >();
     boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
@@ -86,7 +90,8 @@ int main()
 	dummyT
       , boost::iterator_archetypes::writable_lvalue_iterator_t
       , boost::bidirectional_traversal_tag
-    > Iter;      
+    > iter;
+	typedef boost::reverse_iterator<iter> Iter;
     boost::function_requires< boost::BidirectionalIteratorConcept<Iter> >();
     boost::function_requires< boost_concepts::WritableLvalueIteratorConcept<Iter> >();
     boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
