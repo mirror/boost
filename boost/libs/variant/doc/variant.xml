@@ -42,8 +42,8 @@
   <xi:include href="introduction.xml"/>
   <xi:include href="tutorial/tutorial.xml"/>
   <xi:include href="reference/reference.xml"/>
-<!--
   <xi:include href="design.xml"/>
+<!--
   <xi:include href="rationale.xml"/>
 -->
   <xi:include href="misc.xml"/>

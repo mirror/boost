@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+  "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<section>
+  <title>Design Overview</title>
+
+  <using-namespace name="boost"/>
+
+  <section>
+    <title>Stack-based Storage</title>
+
+    <para>TODO</para>
+  </section>
+  
+  <section>
+    <title>&quot;Never-Empty&quot; Guarantee</title>
+
+    <section>
+      <title>The Guarantee</title>
+      
+      <para>All instances <code>v</code> of type
+        <code><classname>variant</classname>&lt;T1,T2,...,TN&gt;</code>
+        guarantee that <code>v</code> has constructed content of one of the
+        types <code>T<emphasis>i</emphasis></code>, even if an operation on
+        <code>v</code> has previously failed.</para>
+
+      <para>This implies that <code>variant</code> may be viewed precisely as
+        a union of <emphasis>exactly</emphasis> its bounded types. This
+        &quot;never-empty&quot; property insulates the user from the
+        possibility of undefined <code>variant</code> content and the
+        significant additional complexity-of-use attendant with such a
+        possibility.</para>
+    </section>
+
+    <section>
+      <title>The Implementation Problem</title>
+
+      <para>While this guarantee might at first seem &quot;obvious,&quot; it is
+        in fact not even straightforward how to implement it in general (i.e.,
+        without unreasonably restrictive additional requirements on
+        <link linkref="variant.concepts.bounded-type">bounded types</link>).</para>
+
+      <para>The central difficulty emerges in the details of
+        <code>variant</code> assignment. Given two instances <code>v1</code>
+        and <code>v2</code> of some concrete <code>variant</code> type, there
+        are two distinct, fundamental cases we must consider for the assignment
+        <code>v1 = v2</code>.</para>
+
+      <para>First consider the case that the <code>v1</code> and
+        <code>v2</code> each contains a value of the same type. Call this type
+        <code>T</code>. In this situation, assignment is perfectly
+        straightforward: use <code>T::operator=</code>.</para>
+
+      <para>However, we must also consider the case that <code>v1</code> and
+        <code>v2</code> contain values <emphasis>of distinct types</emphasis>.
+        Call these types <code>T</code> and <code>U</code>. At this point,
+        since <code>variant</code> manages its content on the stack, the
+        left-hand side of the assignment (i.e., <code>v1</code>) must destroy
+        its content so as to permit in-place copy-construction of the content
+        of the right-hand side (i.e., <code>v2</code>). In the end, whereas
+        <code>v1</code> began with content of type <code>T</code>, it ends
+        with content of type <code>U</code>, namely a copy of the content of
+        <code>v2</code>.</para>
+
+      <para>The crux of the problem, then, is this: in the event that
+        copy-construction of the content of <code>v2</code> fails, how can
+        <code>v1</code> maintain its &quot;never-empty&quot; guarantee?
+        By the time copy-construction from <code>v2</code> is attempted,
+        <code>v1</code> has already destroyed its content!</para>
+    </section>
+
+    <section>
+      <title>The &quot;Ideal&quot; Solution: False Hopes</title>
+
+      <para>TODO: Discuss undefined (and thread-unsafe) nature of
+        memcpy-away/memcpy-back approach.</para>
+    </section>
+
+    <section>
+      <title>An Initial Solution: Double Storage</title>
+
+      <para>TODO</para>
+    </section>
+
+    <section>
+      <title>Some Optimizations</title>
+
+      <para>TODO: Discuss nothrow-copy and &quot;fallback type&quot;
+        optimizations.</para>
+    </section>
+
+    <section>
+      <title>Current Approach: Temporary Heap Backup</title>
+      
+      <para>TODO</para>
+    </section>
+
+  </section>
+</section>
