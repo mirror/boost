@@ -216,4 +216,4 @@ int main(int argc, char*argv[])
   distrib(iter, "minstd_rand", boost::minstd_rand());
   distrib(iter, "kreutzer1986", boost::kreutzer1986());
   distrib(iter, "mt19937", boost::mt19937());
-};
+}
