@@ -1,11 +1,13 @@
-/* Copyright (c) 2001 CrystalClear Software, Inc.
+/* Copyright (c) 2001, 2003 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst 
  */
 
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include "boost/date_time/testfrmwk.hpp"
 #include <iostream>
+#include <string>
+#include <sstream>
 
 int
 main() 
@@ -26,7 +28,7 @@ main()
   check("Partial date operator<",    pd1 < pd2);
   check("Partial date operator<",   !(pd2 < pd1));
 
-  typedef boost::date_time::last_kday_of_month<date> lastkday;
+  typedef last_day_of_the_week_in_month lastkday;
 
   //Find last Sunday in Feb
   lastkday lsif(Sunday, Feb);
@@ -37,7 +39,7 @@ main()
   lastkday lfif(Friday, Feb);
   check("Last kday",     date(2002,Feb,22) == lfif.get_date(2002));
 
-  typedef boost::date_time::first_kday_of_month<date> firstkday;
+  typedef first_day_of_the_week_in_month firstkday;
 
   firstkday fsif(Sunday, Feb);
   std::cout << to_simple_string(fsif.get_date(2002)) << std::endl; //24th
@@ -47,7 +49,7 @@ main()
   firstkday ffif(Friday, Feb);
   check("First kday",     date(2002,Feb,1) == ffif.get_date(2002));
   
-  typedef boost::date_time::first_kday_after<date> firstkdayafter;
+  typedef first_day_of_the_week_after firstkdayafter;
   firstkdayafter fkaf(Monday);
   std::cout << to_simple_string(fkaf.get_date(date(2002,Feb,1)))
             << std::endl; //feb 4
@@ -56,7 +58,7 @@ main()
   check("kday after",date(2002,Feb,7) == fkaf2.get_date(date(2002,Feb,1)));
   check("kday after",date(2002,Feb,28)== fkaf2.get_date(date(2002,Feb,21)));
 
-  typedef boost::date_time::first_kday_before<date> firstkdaybefore;
+  typedef first_day_of_the_week_before firstkdaybefore;
   firstkdaybefore fkbf(Monday);
   std::cout << to_simple_string(fkaf.get_date(date(2002,Feb,10)))
             << std::endl; //feb 4
@@ -64,13 +66,62 @@ main()
   firstkdaybefore fkbf2(Thursday);
   check("kday before",date(2002,Jan,31) == fkbf2.get_date(date(2002,Feb,1)));
   check("kday before",date(2002,Feb,7)== fkbf2.get_date(date(2002,Feb,14)));
+
+  typedef nth_day_of_the_week_in_month nthkdayofmonth;
+  nthkdayofmonth nkd1(nthkdayofmonth::third, Sunday, Jul);
+  check("nth_kday 1", date(1969, Jul, 20) == nkd1.get_date(1969));
+  nthkdayofmonth nkd2(nthkdayofmonth::second, Monday, Dec);
+  check("nth_kday 2", date(1980, Dec, 8) == nkd2.get_date(1980));
+  nthkdayofmonth nkd3(nthkdayofmonth::fifth, Wednesday, Jan);
+  check("nth_kday fifth wed jan 2003 2003-Jan-29", 
+        date(2003, Jan, 29) == nkd3.get_date(2003));
+  nthkdayofmonth nkd4(nthkdayofmonth::fifth, Monday, Jan);
+  check("nth_kday fifth mon jan 2003 (actaully 4th) 2003-Jan-27", 
+        date(2003, Jan, 27) == nkd4.get_date(2003));
+
+#ifndef BOOST_DATE_TIME_NO_LOCALE
+
+  // streaming tests...
+  std::stringstream ss("");
+  std::string s("");
+  
+  ss.str("");
+  ss << pd1;
+  s = "1 Jan";
+  check("streaming partial_date", ss.str() == s);
+  
+  ss.str("");
+  ss << lsif;
+  s = "last Sun of Feb";
+  check("streaming last_kday_of_month", ss.str() == s);
+  
+  ss.str("");
+  ss << fsif;
+  s = "first Sun of Feb";
+  check("streaming first_kday_of_month", ss.str() == s);
+  
+  ss.str("");
+  ss << fkaf;
+  s = "Mon after";
+  check("streaming first_kday_after", ss.str() == s);
+  
+  ss.str("");
+  ss << fkbf;
+  s = "Mon before";
+  check("streaming first_kday_before", ss.str() == s);
+  
+  ss.str("");
+  ss << nkd1;
+  s = "third Sun of Jul";
+  check("streaming nth_kday", ss.str() == s);
+#endif // NO_LOCAL
   
   return printTestStats();
 
 }
 
 /*
- * Copyright (c) 2001
+ * Copyright (c) 2001, 2003
  * CrystalClear Software, Inc.
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -80,8 +131,5 @@ main()
  * in supporting documentation.  CrystalClear Software makes no
  * representations about the suitability of this software for any
  * purpose.  It is provided as is without express or implied warranty.
- *
- *
- * Author:  Jeff Garland (jeff@CrystalClearSoftware.com)
  *
  */
