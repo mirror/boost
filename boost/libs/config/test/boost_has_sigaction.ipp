@@ -15,8 +15,8 @@ namespace boost_has_sigaction{
 void f()
 {
     // this is never called, it just has to compile:
-    struct sigaction* sa1 = NULL ;
-    struct sigaction* sa2 = NULL ;
+    struct sigaction* sa1 = 0 ;
+    struct sigaction* sa2 = 0 ;
     int res = sigaction(0, sa1, sa2);
     (void) &res;
 }
