@@ -567,7 +567,7 @@ public:
    typedef typename S::value_type value_type;
    typedef typename S::pointer pointer;
    typedef typename S::reference reference;
-   typedef typename std::output_iterator_tag iterator_category;
+   typedef          std::output_iterator_tag iterator_category;
 
    string_out_iterator(S& s) : out(&s) {}
    string_out_iterator& operator++() { return *this; }
