@@ -108,7 +108,7 @@ where *iterator-category* is defined as follows:
 .. include:: facade_iterator_category.rst
 
 The ``enable_if_interoperable`` template used above is for exposition
-purposes.  The member operators should be only be in an overload set
+purposes.  The member operators should only be in an overload set
 provided the derived types ``Dr1`` and ``Dr2`` are interoperable, 
 meaning that at least one of the types is convertible to the other.  The
 ``enable_if_interoperable`` approach uses SFINAE to take the operators
@@ -393,4 +393,4 @@ __ `operator arrow`_
 
 :Returns: if ``is_convertible<Dr2,Dr1>::value``, then
   ``-lhs.distance_to(rhs)``. Otherwise,
-  ``-rhs.distance_to(lhs)``.
+  ``rhs.distance_to(lhs)``.
