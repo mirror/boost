@@ -146,11 +146,34 @@ namespace boost {
     typename property_traits<PA>::value_type val;
   };
 
-} // namespace boost
+  struct identity_property_map;
 
-#include <boost/detail/property_map.hpp>
+  // A helper class for constructing a property map
+  // from a class that implements operator[]
 
-namespace boost {
+  template <class T, class PA>
+  struct put_get_at_helper { };
+
+  template <class PA, class T, class K>
+  inline T 
+  get(const put_get_at_helper<T,PA>& pa, const K& k)
+  {
+    T v = static_cast<const PA&>(pa)[k];
+    return v;
+  }
+  template <class PA, class T, class K, class V>
+  inline void
+  put(put_get_at_helper<T,PA>& pa, K k, const V& v)
+  {
+    static_cast<PA&>(pa)[k] = v;
+  }
+  template <class PA, class T, class K>
+  inline T& 
+  at(put_get_at_helper<T,PA>& pa, K k)
+  {
+    T& v = static_cast<PA&>(pa)[k];
+    return v;
+  }
 
   //=========================================================================
   // Adapter to turn a RandomAccessIterator into a property map
@@ -164,7 +187,7 @@ namespace boost {
 #endif
      class IDfunc = identity_property_map>
   class random_access_iterator_property_map 
-    : public boost::detail::put_get_at_helper< T, 
+    : public boost::put_get_at_helper< T, 
         random_access_iterator_property_map<RandomAccessIterator,
         T, R, IDfunc> >
   {
@@ -206,7 +229,7 @@ namespace boost {
   //=========================================================================
   // A property map that applies the identity function
   struct identity_property_map
-    : public boost::detail::put_get_at_helper<std::size_t, 
+    : public boost::put_get_at_helper<std::size_t, 
         identity_property_map>
   {
     typedef void key_type;
@@ -224,7 +247,7 @@ namespace boost {
   // A property map that does not do anything, for
   // when you have to supply a property map, but don't need it.
   class dummy_property_map 
-    : public boost::detail::put_get_at_helper< int, dummy_property_map  > 
+    : public boost::put_get_at_helper< int, dummy_property_map  > 
   {
   public:
     typedef void          key_type; 
@@ -242,21 +265,6 @@ namespace boost {
     value_type c;
   };
 
-#if 0
-  //=========================================================================
-  // An adapter that takes a property map and adds operator[]
-  // using a proxy class for the reference type.
-
-  // The pa2dec_adaptor isn't very good because it
-  // doesn't handle lvalue property maps.
-  // Need to use property_map_adaptor instead, but
-  // had VC++ porting problems with that... -JGS
-  template <class PA, class T, class K>
-  inline detail::pa2dec_adaptor<PA, T, K>
-  adapt_property_map(PA pa, T, K) {
-    return detail::pa2dec_adaptor<PA, T, K>(pa);
-  }
-#endif
 
 } // namespace boost
 
