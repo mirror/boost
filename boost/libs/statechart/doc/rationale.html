@@ -206,10 +206,11 @@ tackle <b>as
 long as the error can be propagated to the state machine client</b>. In this case 
 a failed action simply propagates a C++ exception into the framework. The framework 
 usually does not catch the exception so that the state machine client can handle 
-it. But, after doing so, the client can no longer use 
+it. Note that, after doing so, the client can no longer use 
 the state machine object because it is either in an unknown state or the 
 framework has already reset the state because of the exception (e.g. with a 
-scope guard).<br>
+scope guard). That is, by their nature, state machines typically only offer 
+basic exception safety.<br>
 However, error handling with traditional FSM frameworks becomes surprisingly cumbersome as soon 
 as a lot of actions can fail and the state machine <b>itself</b> needs to gracefully handle 
 these errors. Usually, a failing action (e.g. x()) then posts an appropriate error event and sets a global error variable to 
@@ -322,10 +323,6 @@ type. This is currently also true for applications requiring non-FIFO queuing
 schemes. However, boost::fsm will probably provide a <code>priority_scheduler</code> 
 in the future so that custom schedulers need to be implemented only in rare 
 cases.</p>
-<p>It is currently not possible to specially handle events that have not 
-triggered a reaction (and would thus be silently discarded). However, a 
-facility allowing this on a per-event basis will probably be added in the 
-not-too-distant future.</p>
 <h2><a name="User actions: Member functions vs. function objects">User 
 actions: Member functions vs. function objects</a></h2>
 <p>All user-supplied functions (<code>react</code> member functions, entry-, 
@@ -361,13 +358,12 @@ scenario:</p>
   are preallocated so that event dispatch &amp; transition amounts to nothing more 
 	than two virtual calls and one pointer assignment</li>
 </ul>
-<p>The Benchmarks - compiled with MSVC7.1 (single threaded), running on an 
-3.2GHz Intel Pentium 4 - produced the following results:</p>
+<p>The Benchmarks - compiled with MSVC7.1 (single threaded), running on 
+3.2GHz Intel Pentium 4 / 1.6GHz Pentium M - produced the following 
+dispatch and transition times per event:</p>
 <ul>
-  <li>Handcrafted: 10 nanoseconds to dispatch one event and make the resulting 
-	transition</li>
-  <li>1-bit-BitMachine with customized memory management: 130 nanoseconds to 
-	dispatch one event and make the resulting transition</li>
+  <li>Handcrafted: 10 nanoseconds / 10 nanoseconds</li>
+  <li>1-bit-BitMachine with customized memory management: 130ns / 220ns</li>
 </ul>
 <p>Although this is a big difference I still think it will not be noticeable 
 in most&nbsp;real-world applications. No matter whether an application uses 
@@ -377,24 +373,25 @@ handcrafted or boost::fsm machines it will...</p>
   as many events as in the benchmarks. Unless a state machine is abused for 
   parsing, it will almost always spend a good deal of time waiting for events 
 	(which typically come from a human operator, from machinery or 
-	electronic devices over often comparatively slow I/O channels)</li>
+	from electronic devices over often comparatively slow I/O channels)</li>
   <li>often run state machines in their own threads. This adds considerable 
   locking and thread-switching overhead. Performance tests with the PingPong 
   example, where two asynchronous state machines exchange events, gave the 
   following times to process one event and perform the resulting in-state 
   reaction (using the library with <code>boost::fast_pool_allocator&lt;&gt;</code>):<ul>
-    <li>Single-threaded (no locking and waiting): 840ns</li>
+    <li>Single-threaded (no locking and waiting): 840ns / 840ns</li>
     <li>Multi-threaded with one thread (the scheduler uses mutex locking but 
-    never has to wait for events): 6500ns</li>
+    never has to wait for events): 6500ns / 4800ns</li>
     <li>Multi-threaded with two threads (both schedulers use mutex locking and 
-    exactly one always waits for an event): 14000ns</li>
+    exactly one always waits for an event): 14000ns / 7000ns</li>
   </ul>
   <p>As mentioned above, there definitely is some room to improve the 
   timings for the asynchronous machines. Moreover, these are very crude 
 	benchmarks, designed to show the overhead of locking and thread context 
 	switching. The overhead in a real-world application will typically be 
 	smaller and other operating systems can certainly do better in this area. 
-	However, the fact remains that the threading overhead is typically larger 
+	However, I strongly believe that on most platforms the threading overhead is 
+	usually larger 
 	than the time that boost::fsm spends for event dispatch and transition. Handcrafted machines will 
   inevitably have the same overhead, making raw single-threaded dispatch and 
   transition speed much less important</li>
@@ -414,8 +411,9 @@ optimization:</p>
   <tr>
     <td width="25%" rowspan="2"><b>Machine configuration<br>
     # states / # outgoing transitions per state</b></td>
-    <td width="75%" colspan="3"><b>Event dispatch &amp; transition time 
-    MSVC 7.1 / GCC 3.4.2 [nanoseconds]</b></td>
+    <td width="75%" colspan="3"><b>Event dispatch &amp; transition time [nanoseconds]<br>
+	<font color="#FF0000">MSVC 7.1: 3.2GHz Pentium 4 / 1.6GHz Pentium M</font><br>
+	<font color="#0000FF">GCC 3.4.2: 3.2GHz Pentium 4 / 1.6GHz Pentium M</font></b></td>
   </tr>
   <tr>
     <td width="25%">Out of the box</td>
@@ -427,51 +425,63 @@ optimization:</p>
   </tr>
   <tr>
     <td width="25%">2 / 1</td>
-    <td width="25%">410 / 540</td>
-    <td width="25%">490 / 510</td>
-    <td width="25%">130 / 320</td>
+    <td width="25%"><font color="#FF0000">410 / 460</font><br>
+	<font color="#0000FF">540 / 480</font></td>
+    <td width="25%"><font color="#FF0000">490 / 570</font><br>
+<font color="#0000FF">510 / 500</font></td>
+    <td width="25%"><font color="#FF0000">130 / 220</font><br>
+<font color="#0000FF">320 / 230</font></td>
   </tr>
   <tr>
     <td width="25%">4 / 2</td>
-    <td width="25%">440 / 560</td>
-    <td width="25%">530 / 570</td>
-    <td width="25%">160 / 330</td>
+    <td width="25%"><font color="#FF0000">440 / 470</font><br>
+<font color="#0000FF">560 / 480</font></td>
+    <td width="25%"><font color="#FF0000">530 / 640</font><br>
+<font color="#0000FF">570 / 550</font></td>
+    <td width="25%"><font color="#FF0000">160 / 240</font><br>
+<font color="#0000FF">330 / 240</font></td>
   </tr>
   <tr>
     <td width="25%">8 / 3</td>
-    <td width="25%">450 / 580</td>
-    <td width="25%">580 / 610</td>
-    <td width="25%">180 / 340</td>
+    <td width="25%"><font color="#FF0000">450 / 470</font><br>
+<font color="#0000FF">580 / 510</font></td>
+    <td width="25%"><font color="#FF0000">580 / 700</font><br>
+<font color="#0000FF">610 / 630</font></td>
+    <td width="25%"><font color="#FF0000">180 / 250</font><br>
+<font color="#0000FF">340 / 260</font></td>
   </tr>
   <tr>
     <td width="25%">16 / 4</td>
-    <td width="25%">490 / 710</td>
-    <td width="25%">720 / 770</td>
-    <td width="25%">230 / 460</td>
+    <td width="25%"><font color="#FF0000">490 / 480</font><br>
+<font color="#0000FF">710 / 670</font></td>
+    <td width="25%"><font color="#FF0000">720 / 790</font><br>
+<font color="#0000FF">770 / 750</font></td>
+    <td width="25%"><font color="#FF0000">230 / 260</font><br>
+<font color="#0000FF">460 / 360</font></td>
   </tr>
   <tr>
     <td width="25%">32 / 5</td>
-    <td width="25%">590 / 790</td>
-    <td width="25%">820 / 920</td>
-    <td width="25%">340 / 590</td>
+    <td width="25%"><font color="#FF0000">590 / 520</font><br>
+<font color="#0000FF">790 / 690</font></td>
+    <td width="25%"><font color="#FF0000">820 / 880</font><br>
+<font color="#0000FF">920 / 910</font></td>
+    <td width="25%"><font color="#FF0000">340 / 280</font><br>
+<font color="#0000FF">590 / 470</font></td>
   </tr>
   </table>
 <h2><a name="Memory management customization">Memory management customization</a></h2>
 <p>Out of the box, all internal data is allocated on the normal heap. This 
-should be satisfactory for applications where all the following prerequisites 
+should be satisfactory for applications where both the following prerequisites 
 are met:</p>
 <ul>
   <li>There are no deterministic reaction time (hard real-time) requirements</li>
-  <li>The application will typically not process more than a handful of events 
-  per second. This is just a general guideline, some platforms can easily cope 
-  with more than 100000 events per second (see timings above)</li>
   <li>The application will never run long enough for heap fragmentation to 
   become a problem. This is of course an issue for all long running programs 
   not only the ones employing this library. However, it should be noted that 
   fragmentation problems could show up earlier than with traditional FSM 
   frameworks</li>
 </ul>
-<p>Should an application not meet any of these prerequisites customization of 
+<p>Should an application not meet these prerequisites customization of 
 all memory management (not just boost::fsm's) should be considered, which is 
 supported as follows:</p>
 <ul>
@@ -576,7 +586,7 @@ consume how many cycles:</p>
   Searches linearly for a suitable state, using one <code>dynamic_cast</code> 
   per visited state</li>
   <li>State entry and exit: Profiling of the fully optimized 1-bit-BitMachine 
-  suggested that about 100ns of the 210ns total are spent destructing the 
+  suggested that roughly half of the total dispatch time is spent destructing the 
   exited state and constructing the entered state. Obviously, transitions 
   where the <a href="definitions.html#Innermost common context">innermost 
   common context</a> is &quot;far&quot; from the leaf states and/or with lots of 
@@ -584,7 +594,14 @@ consume how many cycles:</p>
 	a few states leading to significant amounts of time spent for a transition</li>
   <li><code>state_downcast&lt;&gt;()</code>: Searches linearly for the requested 
   state, using one virtual call and one RTTI comparison per visited state</li>
-  <li>History: For a state containing a history pseudo state a binary search 
+  <li>Deep history: For all innermost states inside a state passing either
+	<code>has_deep_history</code> or <code>has_full_history</code> to its 
+	state base class, a binary search 
+	through the (usually small) history map must be performed on each exit. 
+	History slot allocation is performed exactly once, at first exit</li>
+	<li>Shallow history: For all direct inner states of a state passing either
+	<code>has_shallow_history</code> or <code>has_full_history</code> to its 
+	state base class, a binary search 
 	through the (usually small) history map must be performed on each exit. 
 	History slot allocation is performed exactly once, at first exit</li>
   <li>Event dispatch: One virtual call followed by a linear search for a 
@@ -597,6 +614,11 @@ consume how many cycles:</p>
 	are added to a given state configuration, the worst-case time is tripled</li>
 </ol>
 <h2><a name="Limitations">Limitations</a></h2>
+<h4>&quot;Lost&quot; events</h4>
+<p>It is currently not possible to specially handle events that have not 
+triggered a reaction (and would thus be silently discarded). However, a 
+facility allowing this will probably be added in the 
+not-too-distant future.</p>
 <h4>Deferring and posting events</h4>
 <p>For performance reasons and because synchronous state machines often do not 
 need to queue events, it is possible to operate such machines entirely with 
@@ -636,8 +658,8 @@ struct choice_point : fsm::state&lt; MostDerived, Context,
 
   choice_point( my_context ctx ) : base_type( ctx )
   {
-    base_type::post_event(
-      boost::intrusive_ptr&lt; make_choice &gt;( new make_choice() ) );
+    this-&gt;post_event( boost::intrusive_ptr&lt; make_choice &gt;(
+      new make_choice() ) );
   }
 };
 
@@ -646,9 +668,10 @@ struct choice_point : fsm::state&lt; MostDerived, Context,
 struct MyChoicePoint;
 struct Machine : fsm::state_machine&lt; Machine, MyChoicePoint &gt; {};
 
-struct Destination1;
-struct Destination2;
-struct Destination3;
+struct Dest1 : fsm::simple_state&lt; Dest1, Machine &gt; {};
+struct Dest2 : fsm::simple_state&lt; Dest2, Machine &gt; {};
+struct Dest3 : fsm::simple_state&lt; Dest3, Machine &gt; {};
+
 struct MyChoicePoint : choice_point&lt; MyChoicePoint, Machine &gt;
 {
   MyChoicePoint( my_context ctx ) : my_base( ctx ) {}
@@ -657,15 +680,15 @@ struct MyChoicePoint : choice_point&lt; MyChoicePoint, Machine &gt;
   {
     if ( /* ... */ )
     {
-      return transit&lt; Destination1 &gt;();
+      return transit&lt; Dest1 &gt;();
     }
     else if ( /* ... */ )
     {
-      return transit&lt; Destination2 &gt;();
+      return transit&lt; Dest2 &gt;();
     }
     else
     {
-      return transit&lt; Destination3 &gt;();
+      return transit&lt; Dest3 &gt;();
     }
   }
 };</pre>
@@ -730,7 +753,7 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38839" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->29 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38840" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
