@@ -1,5 +1,5 @@
 
-subproject libs/smart_container/test ;
+subproject libs/ptr_container/test ;
 
 import testing ;
 
@@ -14,7 +14,7 @@ rule sc-test ( name )
 }
 
 
-test-suite smart-container :
+test-suite ptr_container :
     [ sc-test ptr_vector ]
     [ sc-test ptr_list ]
     [ sc-test ptr_deque ]
