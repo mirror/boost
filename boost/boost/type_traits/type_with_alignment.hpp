@@ -12,8 +12,8 @@
 #include "boost/preprocessor/list/for_each_i.hpp"
 #include "boost/preprocessor/tuple/to_list.hpp"
 #include "boost/preprocessor/cat.hpp"
-#include <boost/preprocessor/list/transform.hpp>
-#include <boost/preprocessor/list/append.hpp>
+#include "boost/preprocessor/list/transform.hpp"
+#include "boost/preprocessor/list/append.hpp"
 #include "boost/type_traits/alignment_of.hpp"
 #include "boost/type_traits/is_pod.hpp"
 #include "boost/static_assert.hpp"
@@ -56,12 +56,12 @@ typedef int (alignment_dummy::*member_function_ptr)();
         BOOST_PP_LIST_APPEND(BOOST_TT_ALIGNMENT_BASE_TYPES,     \
                              BOOST_TT_ALIGNMENT_STRUCT_TYPES)
 
-#define BOOST_TT_CHOOSE_MIN_ALIGNMENT(R,P,I,T)                               \
-        typename mpl::if_c<                                                  \
-           (alignment_of<T>::value == target && !BOOST_PP_CAT(found,I)),     \
-           T, char>::type BOOST_PP_CAT(t,I);                                 \
-        enum { BOOST_PP_CAT(found,BOOST_PP_INC(I)) =                         \
-               alignment_of<T>::value == target || BOOST_PP_CAT(found,I) } ;
+#define BOOST_TT_CHOOSE_MIN_ALIGNMENT(R,P,I,T)                                 \
+        typename mpl::if_c<                                                    \
+           (alignment_of< T >::value == target && !BOOST_PP_CAT(found,I)),     \
+           T, char>::type BOOST_PP_CAT(t,I);                                   \
+        enum { BOOST_PP_CAT(found,BOOST_PP_INC(I)) =                           \
+               alignment_of< T >::value == target || BOOST_PP_CAT(found,I) } ;
 
 #define BOOST_TT_CHOOSE_T(R,P,I,T) T BOOST_PP_CAT(t,I);
 
