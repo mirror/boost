@@ -15,6 +15,9 @@
 // Title:  STL container support, including support for built-in arrays
 // Version: $Id$
 
+// Dec 4, 2000  Added some more typedefs to array_traits including
+//              an iterator type to supersede iter_type. -J.Siek
+
 // -------------------------------------------------------------------------- 
 
 #if !defined(BOOST_ARRAY_HPP)
@@ -34,10 +37,14 @@ namespace boost
   template <typename Cont>
     struct array_traits
     {
-      typedef typename Cont::iterator  iter_type;
+      typedef typename Cont::iterator  iterator;
+      typedef iterator iter_type; // just for backward compatibility
       typedef typename Cont::size_type size_type;
-      static iter_type begin(Cont &cont) { return cont.begin(); }
-      static iter_type end(Cont &cont) { return cont.end(); }
+      typedef typename Cont::value_type value_type;
+      typedef typename Cont::reference referece;
+      typedef typename Cont::pointer pointer;
+      static iterator begin(Cont &cont) { return cont.begin(); }
+      static iterator end(Cont &cont) { return cont.end(); }
       static size_type size(Cont &cont) { return cont.size(); }
     };
 
@@ -46,10 +53,14 @@ namespace boost
   template <typename Cont>
     struct array_traits<Cont const>
     {
-      typedef typename Cont::const_iterator  iter_type;
-      typedef typename Cont::size_type       size_type;
-      static iter_type begin(Cont const &cont) { return cont.begin(); }
-      static iter_type end(Cont const &cont) { return cont.end(); }
+      typedef typename Cont::const_iterator iterator;
+      typedef iterator iter_type; // just for backward compatibility
+      typedef typename Cont::size_type size_type;
+      typedef typename Cont::value_type value_type;
+      typedef typename Cont::const_reference reference;
+      typedef typename Cont::const_pointer pointer;
+      static iterator begin(Cont const &cont) { return cont.begin(); }
+      static iterator end(Cont const &cont) { return cont.end(); }
       static size_type size(Cont const &cont) { return cont.size(); }
     };
 
@@ -58,22 +69,29 @@ namespace boost
   template <typename T, size_t sz>
     struct array_traits<T[sz]>
     {
-      typedef T*     iter_type;
+      typedef T* iterator;
+      typedef iterator iter_type; // just for backward compatibility
+      typedef T value_type;
+      typedef value_type& reference;
       typedef size_t size_type;
-      static iter_type begin(T (&array)[sz]) { return array; }
-      static iter_type end(T (&array)[sz]) { return array + sz; }
+      static iterator begin(T (&array)[sz]) { return array; }
+      static iterator end(T (&array)[sz]) { return array + sz; }
       static size_type size(T (&)[sz]) { return sz; }
     };
-  
+
   // --- a special version for const built-in arrays ------------------------ 
 
   template <typename T, size_t sz>
     struct array_traits<T const[sz]>
     {
-      typedef T const*     iter_type;
+      typedef T const* iterator;
+      typedef iterator iter_type; // just for backward compatibility
       typedef size_t size_type;
-      static iter_type begin(T const (&array)[sz]) { return array; }
-      static iter_type end(T const (&array)[sz]) { return array + sz; }
+      typedef T const value_type;
+      typedef value_type& reference;
+      typedef value_type* pointer;
+      static iterator begin(T const (&array)[sz]) { return array; }
+      static iterator end(T const (&array)[sz]) { return array + sz; }
       static size_type size(T const (&array)[sz]) { return sz; }
     };
 
@@ -83,11 +101,11 @@ namespace boost
   // --- general version of the global accessor functions --------------------- 
 
   template <typename Cont>
-    inline typename array_traits<Cont>::iter_type
+    inline typename array_traits<Cont>::iterator
     begin(Cont &cont) { return array_traits<Cont>::begin(cont); }
 
   template <typename Cont>
-    inline typename array_traits<Cont>::iter_type
+    inline typename array_traits<Cont>::iterator
     end(Cont &cont) { return array_traits<Cont>::end(cont); }
 
   template <typename Cont>
@@ -98,11 +116,11 @@ namespace boost
   // --- to welcome some help. So here we go:
 
   template <typename T, size_t sz>
-    inline typename array_traits<T[sz]>::iter_type
+    inline typename array_traits<T[sz]>::iterator
     begin(T (&a)[sz]) { return array_traits<T[sz]>::begin(a); }
   
   template <typename T, size_t sz>
-    inline typename array_traits<T[sz]>::iter_type
+    inline typename array_traits<T[sz]>::iterator
     end(T (&a)[sz]) { return array_traits<T[sz]>::end(a); }
   
   template <typename T, size_t sz>
@@ -116,7 +134,8 @@ namespace boost
   template <typename T>
     struct array_traits<T*>
     {
-      typedef T*     iter_type;
+      typedef T*     iterator;
+      typedef iterator iter_type; // just for backward compatibility
       typedef size_t size_type;
     };
 #endif
@@ -124,11 +143,11 @@ namespace boost
   // --- egcs-1998-11-22 apparently likes an extra const version: -------------
 #ifdef __GNUG__
   template <typename T, size_t sz>
-    inline typename array_traits<T const[sz]>::iter_type
+    inline typename array_traits<T const[sz]>::iterator
     begin(T const(&a)[sz]) { return array_traits<T const[sz]>::begin(a); }
   
   template <typename T, size_t sz>
-    inline typename array_traits<T const[sz]>::iter_type
+    inline typename array_traits<T const[sz]>::iterator
     end(T const(&a)[sz]) { return array_traits<T const[sz]>::end(a); }
   
   template <typename T, size_t sz>
