@@ -61,7 +61,7 @@ struct if_
     BOOST_MPL_AUX_LAMBDA_SUPPORT(3,if_,(C,T1,T2))
 };
 
-#elif defined(BOOST_MSVC) && (BOOST_MSVC <= 1200)
+#elif defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
 
 // MSVC6.5-specific version
 
@@ -92,9 +92,13 @@ struct if_
  private:
     template<bool> struct answer        { typedef T1 type; };
     template<>     struct answer<false>	{ typedef T2 type; };
- 
+
+    // agurt, 17/sep/02: in some situations MSVC 7.0 doesn't 
+    // handle 'answer<C::value>' expression very well
+    enum { c_ = C::value };
+
  public:
-    typedef typename answer< C::value >::type type;
+    typedef typename answer<c_>::type type;
 };
 
 #else
