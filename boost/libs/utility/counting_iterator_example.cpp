@@ -35,6 +35,8 @@ int main(int, char*[])
 
   std::vector<std::vector<int>::iterator> pointers;
 
+  // VC6 gets an internal compiler error on this
+#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
   // Use counting iterator to fill in the array of pointers.
   std::copy(boost::make_counting_iterator(numbers.begin()),
 	    boost::make_counting_iterator(numbers.end()),
@@ -42,7 +44,6 @@ int main(int, char*[])
 
   // Use indirect iterator to print out numbers by accessing
   // them through the array of pointers.
-#ifndef BOOST_MSVC
   std::cout << "indirectly printing out the numbers from 0 to " 
 	    << N << std::endl;
   std::copy(boost::make_indirect_iterator(pointers.begin()),
