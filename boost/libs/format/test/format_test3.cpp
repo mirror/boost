@@ -34,7 +34,7 @@ int test_main(int, char* [])
     using namespace std;
     using boost::format;
     using boost::io::group;
-    using boost::io::str;
+    using boost::str;
 
     string s, s2;
     // special paddings 
