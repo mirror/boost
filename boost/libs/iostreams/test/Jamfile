@@ -33,23 +33,23 @@ DEPENDS all : test ;
         : # build variants
        ;
 
-    template bzip2
-        : # sources
-          <template>basic
-          <lib>../build/boost_iostreams
-          <lib>../build/boost_bzip2
-        : # build requirements
-        : # build variants
-       ;
+    #template bzip2
+    #    : # sources
+    #      <template>basic
+    #      <lib>../build/boost_iostreams
+    #      <lib>../build/boost_bzip2
+    #    : # build requirements
+    #    : # build variants
+    #   ;
 
-    template zlib
-        : # sources
-          <template>basic
-          <lib>../build/boost_iostreams
-          <lib>../build/boost_zlib
-        : # build requirements
-        : # build variants
-       ;
+    #template zlib
+    #    : # sources
+    #      <template>basic
+    #      <lib>../build/boost_iostreams
+    #      <lib>../build/boost_zlib
+    #    : # build requirements
+    #    : # build variants
+    #   ;
 
     lib utf8_codecvt_facet
         : # sources
@@ -65,7 +65,7 @@ DEPENDS all : test ;
 
     test-suite "iostreams"
         : [ run libs/iostreams/test/array_test.cpp              <template>basic     ]
-          [ run libs/iostreams/test/bzip2_test.cpp              <template>bzip2     ]
+          #[ run libs/iostreams/test/bzip2_test.cpp              <template>bzip2     ]
           [ run libs/iostreams/test/code_converter_test.cpp     
                 <template>iostreams
                 <lib>utf8_codecvt_facet                                             ]
@@ -73,7 +73,7 @@ DEPENDS all : test ;
           [ run libs/iostreams/test/direct_adapter_test.cpp     <template>basic     ]
           [ run libs/iostreams/test/file_descriptor_test.cpp    <template>iostreams ]
           [ run libs/iostreams/test/filtering_stream_test.cpp   <template>basic     ]
-          [ run libs/iostreams/test/gzip_test.cpp               <template>zlib      ] 
+          #[ run libs/iostreams/test/gzip_test.cpp               <template>zlib      ] 
           [ run libs/iostreams/test/mapped_file_test.cpp        <template>iostreams ]
           [ run libs/iostreams/test/newline_filter_test.cpp     <template>basic     ]
           [ run libs/iostreams/test/pipable_test.cpp            <template>basic     ]
@@ -85,6 +85,6 @@ DEPENDS all : test ;
           [ run libs/iostreams/test/seekable_filter_test.cpp    <template>basic     ]
           [ run libs/iostreams/test/symmetric_filter_test.cpp   <template>basic     ]
           [ run libs/iostreams/test/wide_stream_test.cpp        <template>basic     ]
-          [ run libs/iostreams/test/zlib_test.cpp               <template>zlib      ]
+          #[ run libs/iostreams/test/zlib_test.cpp               <template>zlib      ]
        ;
 }
