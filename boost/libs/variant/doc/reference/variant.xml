@@ -23,6 +23,12 @@
 
         <simpara><emphasis role="bold">Notes</emphasis>:</simpara>
         <itemizedlist>
+          <listitem>The bounded types of the <code>variant</code> are exposed
+            via the nested typedef <code>types</code>, which is an
+            <libraryname>MPL</libraryname>-compatible Sequence containing the
+            set of types that must be handled by any
+            <link linkend="variant.concepts.static-visitor">visitor</link> to
+            the <code>variant</code>.</listitem>
           <listitem>All members of <code>variant</code> satisfy at least the
             basic guarantee of exception-safety. That is, all operations on
             a <code>variant</code> remain defined even after previous
@@ -60,12 +66,6 @@
 
       <typedef name="types">
         <type><emphasis>unspecified</emphasis></type>
-
-        <description>
-          <simpara>Exposed as an <libraryname>MPL</libraryname>-compatible
-            Sequence, <code>types</code> is the set of bounded types that must
-            be handled by any visitor to <code>variant</code>.</simpara>
-        </description>
       </typedef>
 
       <destructor>
