@@ -527,11 +527,11 @@ public:
 
    template <class ST, class SA>
    explicit reg_expression(const std::basic_string<charT, ST, SA>& p, flag_type f = regbase::normal, const Allocator& a = Allocator())
-    : data(a), pkmp(0) { set_expression(p, f | regbase::use_except); }
+    : data(a), pkmp(0), error_code_(REG_EMPTY), _expression(0) { set_expression(p, f | regbase::use_except); }
 
    template <class I>
    reg_expression(I first, I last, flag_type f = regbase::normal, const Allocator& al = Allocator())
-    : data(al), pkmp(0)
+    : data(al), pkmp(0), error_code_(REG_EMPTY), _expression(0)
    {
       size_type len = last-first;
       scoped_array<charT> a(new charT[len]);
