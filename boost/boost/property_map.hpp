@@ -177,6 +177,7 @@ namespace boost {
   template <class T>
   inline const T& get(const T* pa, std::ptrdiff_t k) { return pa[k]; }
 
+  // at() is deprecated, going with operator[] for lvalue property maps
   template <class T>
   inline T& at(T* pa, std::ptrdiff_t k) { return pa[k]; }
 
