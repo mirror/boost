@@ -14,6 +14,7 @@
 #include <boost/range/config.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
+#include <boost/range/empty.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <iterator>
 #include <algorithm>
@@ -191,6 +192,16 @@ namespace boost {
 
 //  iterator range free-standing operators ---------------------------//
 
+        template< class Iterator >
+        inline bool empty( const iterator_range<Iterator>& r )
+        {
+            //
+            // this will preserve the well-defined empty() even 
+            // though 'r' is singular.
+            //
+            return r.empty();
+        }
+        
         //! iterator_range output operator
         /*!
             Output the range to an ostream. Elements are outputed

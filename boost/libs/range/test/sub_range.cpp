@@ -121,6 +121,8 @@ void check_iterator_range()
     BOOST_CHECK( singular_srange.empty() );
     BOOST_CHECK( singular_srange.size() == 0 );
 
+    BOOST_CHECK( empty( singular_irange ) );
+    BOOST_CHECK( empty( singular_srange ) );
 }
 
 
