@@ -47,8 +47,8 @@
 			where <STRONG>U</STRONG> is an accessible base of <STRONG>T</STRONG>, and to <STRONG>
 				shared_ptr&lt;void&gt;</STRONG>.</P>
 		<h2><a name="BestPractices">Best Practices</a></h2>
-		<P>A simple guideline that nearly eliminates the possibility of memory leaks 
-			is: always use a named smart pointer variable to hold the result of <STRONG>new. </STRONG>
+		<P>A simple guideline that nearly eliminates the possibility of memory leaks is: 
+			always use a named smart pointer variable to hold the result of <STRONG>new. </STRONG>
 			Every occurence of the <STRONG>new</STRONG> keyword in the code should have the 
 			form:</P>
 		<PRE>shared_ptr&lt;T&gt; p(new Y);</PRE>
@@ -172,7 +172,7 @@ void bad()
 			<p><b>Exception safety:</b> If an exception is thrown, the constructor has no 
 				effect.</p>
 		</blockquote>
-		<P><EM>[The poscondition of use_count() == 1 is too strong. Having the nothrow 
+		<P><EM>[The postcondition of use_count() == 1 is too strong. Having the nothrow 
 				guarantee is important, since <STRONG>reset()</STRONG> is specified in terms of 
 				the default constructor, but the current specification requires that a count be 
 				allocated. Therefore, this postcondition will be dropped in a future release. 
@@ -221,15 +221,15 @@ void bad()
 		<P><EM> Another possible implementation is to use a global pointer-to-count map instead 
 				of intrusive counting. <STRONG>shared_from_this</STRONG> would no longer be 
 				O(1), which is a concern for some users, although I do not expect any 
-				performance problems, since the operation is rare. Maintaining a global 
-				map is difficult; it needs to be initialized before any <STRONG>shared_ptr</STRONG>
-				instances are constructed, and the initialization needs to be thread safe. 
-				In addition, under the Windows dynamic library model, it is possible for 
-				several maps to exist.</EM></P>
+				performance problems, since the operation is rare. Maintaining a global map is 
+				difficult; it needs to be initialized before any <STRONG>shared_ptr</STRONG> instances 
+				are constructed, and the initialization needs to be thread safe. In addition, 
+				under the Windows dynamic library model, it is possible for several maps to 
+				exist.</EM></P>
 		<P><EM> It is not yet clear which implementation should be used, or whether the 
 				specification should allow both; nevertheless, the ability to make a <STRONG>shared_ptr</STRONG>
-				from <STRONG>this</STRONG> is considered essential by experienced smart 
-				pointer users.</EM><EM>]</EM></P>
+				from <STRONG>this</STRONG> is considered essential by experienced smart pointer 
+				users.</EM><EM>]</EM></P>
 		<pre>template&lt;typename Y, typename D&gt; shared_ptr(Y * p, D d);</pre>
 		<blockquote>
 			<p><b>Requirements:</b> <B>p</B> must be convertible to <B>T *</B>. <STRONG>D</STRONG>
@@ -263,8 +263,7 @@ void bad()
 				requires an overload set that breaks on many compilers due to 14.5.5.2 problems 
 				(and of course it will break on compilers that don't do partial ordering at 
 				all.)</EM></P>
-		<P><EM>The requrement will be removed when the aforementioned issues are 
-				resolved.]</EM></P>
+		<P><EM>The requrement will be removed when the aforementioned issues are resolved.]</EM></P>
 		<pre>shared_ptr(shared_ptr const &amp; r); // never throws
 template&lt;typename Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
 		<blockquote>
@@ -336,7 +335,7 @@ q = p;
 			<p>both assignments may be no-ops.</p>
 		</BLOCKQUOTE>
 		<P><EM>[Some experts consider the note to be redundant, as it appears to essentially 
-				mirror the "as if" rile. However, experience suggests that when C++ code is 
+				mirror the "as if" rule. However, experience suggests that when C++ code is 
 				used to describe effects, it is often misinterpreted as required 
 				implementation. In addition, it is not entirely clear whether the "as if" rule 
 				actually applies here, so it's better to be explicit about the possible 
@@ -398,8 +397,8 @@ q = p;
 		<h3><a name="conversions">conversions</a></h3>
 		<pre>operator <i>unspecified-bool-type</i> () const; // never throws</pre>
 		<blockquote>
-			<p><b>Returns:</b> an unspecified value that, when used in boolean contexts, 
-				is equivalent to <code>get() != 0</code>.</p>
+			<p><b>Returns:</b> an unspecified value that, when used in boolean contexts, is 
+				equivalent to <code>get() != 0</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> This conversion operator allows <b>shared_ptr</b> objects to be 
 				used in boolean contexts, like <code>if (p &amp;&amp; p-&gt;valid()) {}</code>. 
@@ -432,9 +431,9 @@ q = p;
 		<pre>template&lt;typename T&gt;
   bool operator&lt;(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;T&gt; const &amp; b); // never throws</pre>
 		<blockquote>
-			<p><b>Returns:</b> an unspecified value such that <b>operator&lt;</b> is a 
-				strict weak ordering as described in section 25.3 <code>[lib.alg.sorting]</code>
-				of the C++ standard.</p>
+			<p><b>Returns:</b> an unspecified value such that <b>operator&lt;</b> is a strict 
+				weak ordering as described in section 25.3 <code>[lib.alg.sorting]</code> of 
+				the C++ standard.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> Allows <STRONG>shared_ptr</STRONG> objects to be used as keys in 
 				associative containers.</P>
@@ -555,12 +554,12 @@ q = p;
 			type.</p>
 		<h2><a name="ThreadSafety">Thread Safety</a></h2>
 		<p><STRONG>shared_ptr</STRONG> objects offer the same level of thread safety as 
-			built-in types. A <STRONG>shared_ptr</STRONG> instance can be "read" 
-			(accessed using only const operations) simultaneously by multiple threads. 
-			Different <STRONG>shared_ptr</STRONG> instances can be "written to" (accessed 
-			using mutable operations such as <STRONG>operator= </STRONG>or <STRONG>reset</STRONG>) 
-			simultaneosly by multiple threads (even when these instances are copies, and 
-			share the same reference count underneath.)</p>
+			built-in types. A <STRONG>shared_ptr</STRONG> instance can be "read" (accessed 
+			using only const operations) simultaneously by multiple threads. Different <STRONG>shared_ptr</STRONG>
+			instances can be "written to" (accessed using mutable operations such as <STRONG>operator=
+			</STRONG>or <STRONG>reset</STRONG>) simultaneosly by multiple threads (even 
+			when these instances are copies, and share the same reference count 
+			underneath.)</p>
 		<P>Any other simultaneous accesses result in undefined behavior.</P>
 		<P>Examples:</P>
 		<pre>
