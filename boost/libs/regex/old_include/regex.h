@@ -68,16 +68,7 @@ public:
 template <class iterator, class Allocator, class charT, class traits, class Allocator2>
 bool query_match(iterator first, iterator last, boost::match_results<iterator, Allocator>& m, const reg_expression<charT, traits, Allocator2>& e, unsigned flags = match_default)
 {
-   // prepare m for failure:
-   if((flags & match_init) == 0)
-   {
-      m.set_size(e.mark_count(), first, last);
-      m.set_base(first);
-      m.set_line(1, first);
-   }
-   boost::re_detail::_priv_match_data<iterator, Allocator> pd(m);
-   iterator restart;
-   return boost::re_detail::query_match_aux(first, last, m, e, flags, pd, &restart);
+   return regex_search(first, last, m, e, flags | match_continuous);
 }
 
 //
@@ -144,13 +135,7 @@ inline bool query_match(const std::basic_string<wchar_t>& s,
 template <class iterator, class Allocator, class charT, class traits, class Allocator2>
 bool reg_search(iterator first, iterator last, boost::match_results<iterator, Allocator>& m, const reg_expression<charT, traits, Allocator2>& e, unsigned flags = match_default)
 {
-   if(e.flags() & regbase::failbit)
-      return false;
-
-   typedef typename traits::size_type traits_size_type;
-   typedef typename traits::uchar_type traits_uchar_type;
-
-   return boost::re_detail::reg_grep2(boost::re_detail::grep_search_predicate<iterator, Allocator>(&m), first, last, e, flags, m.allocator());
+   return boost::regex_search(first, last, m, e, flags);
 }
 
 //
@@ -226,7 +211,7 @@ inline bool reg_search(const std::basic_string<wchar_t>& s,
 template <class Predicate, class iterator, class charT, class traits, class Allocator>
 inline unsigned int reg_grep(Predicate foo, iterator first, iterator last, const reg_expression<charT, traits, Allocator>& e, unsigned flags = match_default)
 {
-   return boost::re_detail::reg_grep2(foo, first, last, e, flags, e.allocator());
+   return boost::regex_grep(foo, first, last, e, flags);
 }
 
 //
@@ -345,7 +330,7 @@ struct grep_adaptor
 template <class Out, class iterator, class charT, class traits, class Allocator>
 inline unsigned int reg_grep_old(Out oi, iterator first, iterator last, const reg_expression<charT, traits, Allocator>& e, unsigned flags = match_default)
 {
-   return boost::re_detail::reg_grep2(re_detail::grep_adaptor<Out, iterator, Allocator>(oi, e.allocator()), first, last, e, flags, e.allocator());
+   return boost::regex_grep(re_detail::grep_adaptor<Out, iterator, Allocator>(oi, e.allocator()), first, last, e, flags);
 }
 
 template <class OutputIterator, class iterator, class Allocator, class charT>
@@ -407,9 +392,9 @@ using deprecated::reg_search;
 using deprecated::reg_grep;
 using deprecated::reg_format;
 using deprecated::reg_merge;
-using re_detail::jm_def_alloc;
+//using re_detail::jm_def_alloc;
 using deprecated::char_regex_traits_i;
-using re_detail::re_alloc_binder;
+//using re_detail::re_alloc_binder;
 using re_detail::padding_size;
 
 
@@ -440,7 +425,7 @@ using boost::deprecated::reg_search;
 using boost::deprecated::reg_grep;
 using boost::deprecated::reg_format;
 using boost::deprecated::reg_merge;
-using boost::re_detail::jm_def_alloc;
+//using boost::re_detail::jm_def_alloc;
 
 #endif
 
