@@ -404,15 +404,17 @@ namespace std {
 // but it's use may generate either warnings (with -ansi), or errors
 // (with -pedantic -ansi) unless it's use is prefixed by __extension__
 //
+#if defined(BOOST_HAS_LONG_LONG)
 namespace boost{
-#ifdef __GNUC__
+#  ifdef __GNUC__
    __extension__ typedef long long long_long_type;
    __extension__ typedef unsigned long long ulong_long_type;
-#else
+#  else
    typedef long long long_long_type;
    typedef unsigned long long ulong_long_type;
-#endif
+#  endif
 }
+#endif
 
 // BOOST_[APPEND_]EXPLICIT_TEMPLATE_[NON_]TYPE macros --------------------------//
 //
