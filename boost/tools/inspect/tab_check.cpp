@@ -21,6 +21,7 @@ namespace boost
      register_signature( ".hxx" );
      register_signature( ".ipp" );
      register_signature( "Jamfile" );
+     register_signature( ".py" );
    }
      
    void tab_check::inspect(
