@@ -17,7 +17,7 @@
 <a href="../../../../boost/preprocessor/tuple/elem.hpp">Click here to see the header.</a>
 */
 
-#include <boost/preprocessor/identity.hpp>
+#include <boost/preprocessor/expand.hpp>
 
 //! Expands to the I:th element of an N-tuple.
 /*!
@@ -49,7 +49,7 @@ See also BOOST_PP_LIMIT_TUPLE.
 // this workaround invokes undefined behavior, but it works as desired.
 #  define BOOST_PP_TUPLE_ELEM_DELAY(N,I,T) BOOST_PP_TUPLE##N##_ELEM##I##T
 #else
-#  define BOOST_PP_TUPLE_ELEM_DELAY(N,I,T) BOOST_PP_IDENTITY(BOOST_PP_TUPLE##N##_ELEM##I T)()
+#  define BOOST_PP_TUPLE_ELEM_DELAY(N,I,T) BOOST_PP_EXPAND(BOOST_PP_TUPLE##N##_ELEM##I T)
 #endif
 
 // NOTE: TUPLE_ELEM can be implemented in O(N*N) space and O(N) time instead
