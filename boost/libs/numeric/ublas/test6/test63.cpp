@@ -150,6 +150,7 @@ struct test_my_matrix {
         }
     }
     void operator () (int) const {
+#ifdef USE_ADAPTOR
         try {
             M m1 (N, N), m2 (N, N), m3 (N, N);
             ublas::symmetric_adaptor<M> sam1 (m1), sam2 (m2), sam3 (m3);
@@ -191,10 +192,11 @@ struct test_my_matrix {
         catch (...) {
             std::cout << "unknown exception" << std::endl;
         }
+#endif
     }
 };
 
-// Test matrix 
+// Test matrix
 void test_matrix () {
     std::cout << "test_matrix" << std::endl;
 

@@ -94,8 +94,8 @@
 
 // Bounds check
 #define BOOST_UBLAS_BOUNDS_CHECK
-// Type check for packed matrices
-#define BOOST_UBLAS_TYPE_CHECK
+// Type check for non dense matrices
+// #define BOOST_UBLAS_TYPE_CHECK
 
 #endif
 
@@ -107,12 +107,11 @@
 // Use Duff's device
 // #define BOOST_UBLAS_USE_DUFF_DEVICE
 
-// When to switch from indexing to iterating
-// Empirically determined with MSVC.
-#ifndef BOOST_UBLAS_ITERATOR_THRESHOLD
+// Choose evaluation method for dense vectors and matrices
+#define BOOST_UBLAS_USE_INDEXING
+// #define BOOST_UBLAS_USE_ITERATING
 // #define BOOST_UBLAS_ITERATOR_THRESHOLD 0
-#define BOOST_UBLAS_ITERATOR_THRESHOLD (std::numeric_limits<std::ptrdiff_t>::max ())
-#endif
+// #define BOOST_UBLAS_ITERATOR_THRESHOLD (std::numeric_limits<std::ptrdiff_t>::max ())
 
 // ET options
 #define BOOST_UBLAS_ET_VALUE

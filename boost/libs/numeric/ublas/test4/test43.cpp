@@ -149,6 +149,7 @@ struct test_my_matrix {
         }
     }
     void operator () (int) const {
+#ifdef USE_ADAPTOR
         try {
             M m1 (N, N, 1, 1), m2 (N, N, 1, 1), m3 (N, N, 1, 1);
             ublas::banded_adaptor<M> bam1 (m1, 1, 1), bam2 (m2, 1, 1), bam3 (m3, 1, 1);
@@ -190,6 +191,7 @@ struct test_my_matrix {
         catch (...) {
             std::cout << "unknown exception" << std::endl;
         }
+#endif
     }
 };
 

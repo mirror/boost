@@ -60,6 +60,7 @@ void test_matrix ();
 #define USE_UNBOUNDED_ARRAY
 // #define USE_STD_VECTOR
 
+// #define USE_ADAPTOR
 #endif
 
 

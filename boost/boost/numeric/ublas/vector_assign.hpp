@@ -79,12 +79,18 @@ namespace boost { namespace numeric { namespace ublas {
     // BOOST_UBLAS_INLINE
     void evaluate_vector_assign_scalar (const F &f, V &v, const T &t, dense_proxy_tag) {
         typedef F functor_type;
+#ifdef BOOST_UBLAS_USE_INDEXING
+        indexing_vector_assign_scalar (functor_type (), v, t);
+#elif BOOST_UBLAS_USE_ITERATING
+        iterating_vector_assign_scalar (functor_type (), v, t);
+#else
         typedef typename V::difference_type difference_type;
         difference_type size (v.size ());
         if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
             iterating_vector_assign_scalar (functor_type (), v, t);
         else
             indexing_vector_assign_scalar (functor_type (), v, t);
+#endif
     }
     // Packed (proxy) case
     template<class F, class V, class T>
@@ -155,12 +161,18 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         void operator () (V &v, const T &t, dense_proxy_tag) {
+#ifdef BOOST_UBLAS_USE_INDEXING
+            indexing_assign (v, t);
+#elif BOOST_UBLAS_USE_ITERATING
+            iterating_assign (v, t);
+#else
             typedef typename V::difference_type difference_type;
             difference_type size (v.size ());
             if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
                 iterating_assign (v, t);
             else
                 indexing_assign (v, t);
+#endif
         }
         // Packed (proxy) case
         template<class V, class T>
@@ -311,13 +323,18 @@ namespace boost { namespace numeric { namespace ublas {
     // BOOST_UBLAS_INLINE
     void evaluate_vector_assign (const F &f, V &v, const vector_expression<E> &e, dense_proxy_tag) {
         typedef F functor_type;
-        typedef typename V::size_type size_type;
+#ifdef BOOST_UBLAS_USE_INDEXING
+        indexing_vector_assign (functor_type (), v, e);
+#elif BOOST_UBLAS_USE_ITERATING
+        iterating_vector_assign (functor_type (), v, e);
+#else
         typedef typename V::difference_type difference_type;
         difference_type size (BOOST_UBLAS_SAME (v.size (), e ().size ()));
         if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
             iterating_vector_assign (functor_type (), v, e);
         else
             indexing_vector_assign (functor_type (), v, e);
+#endif
     }
     // Packed (proxy) case
     template<class F, class V, class E>
@@ -452,13 +469,18 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         void operator () (V &v, const vector_expression<E> &e, dense_proxy_tag) {
-            typedef typename V::size_type size_type;
+#ifdef BOOST_UBLAS_USE_INDEXING
+            indexing_assign (v, e);
+#elif BOOST_UBLAS_USE_ITERATING
+            iterating_assign (v, e);
+#else
             typedef typename V::difference_type difference_type;
             difference_type size (BOOST_UBLAS_SAME (v.size (), e ().size ()));
             if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
                 iterating_assign (v, e);
             else
                 indexing_assign (v, e);
+#endif
         }
         // Packed (proxy) case
         template<class V, class E>

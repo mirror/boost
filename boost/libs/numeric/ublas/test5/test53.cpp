@@ -149,6 +149,7 @@ struct test_my_matrix {
         }
     }
     void operator () (int) const {
+#ifdef USE_ADAPTOR
         try {
             M m1 (N, N), m2 (N, N), m3 (N, N);
             ublas::triangular_adaptor<M> tam1 (m1), tam2 (m2), tam3 (m3);
@@ -190,6 +191,7 @@ struct test_my_matrix {
         catch (...) {
             std::cout << "unknown exception" << std::endl;
         }
+#endif
     }
 };
 

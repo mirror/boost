@@ -1627,11 +1627,18 @@ namespace boost { namespace numeric { namespace ublas {
         // Dense random access specialization
         BOOST_UBLAS_INLINE
         value_type evaluate (dense_random_access_iterator_tag) const {
+#ifdef BOOST_UBLAS_USE_INDEXING
+            return functor_type () (e_);
+#elif BOOST_UBLAS_USE_ITERATING
+            difference_type size = e_.size ();
+            return functor_type () (size, e_.begin ());
+#else
             difference_type size = e_.size ();
             if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
                 return functor_type () (size, e_.begin ());
             else
                 return functor_type () (e_);
+#endif
         }
 
         // Packed bidirectional specialization
@@ -1753,11 +1760,18 @@ namespace boost { namespace numeric { namespace ublas {
         // Dense random access specialization
         BOOST_UBLAS_INLINE
         value_type evaluate (dense_random_access_iterator_tag) const {
+#ifdef BOOST_UBLAS_USE_INDEXING
+            return functor_type () (e1_, e2_);
+#elif BOOST_UBLAS_USE_ITERATING
+            difference_type size = BOOST_UBLAS_SAME (e1_.size (), e2_.size ());
+            return functor_type () (size, e1_.begin (), e2_.begin ());
+#else
             difference_type size = BOOST_UBLAS_SAME (e1_.size (), e2_.size ());
             if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
                 return functor_type () (size, e1_.begin (), e2_.begin ());
             else
                 return functor_type () (e1_, e2_);
+#endif
         }
 
         // Packed bidirectional specialization

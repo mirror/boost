@@ -174,9 +174,13 @@ namespace boost { namespace numeric { namespace ublas {
     // BOOST_UBLAS_INLINE
     void evaluate_matrix_assign_scalar (const F &f, M &m, const T &t, dense_proxy_tag, C c) {
         typedef F functor_type;
-        typedef typename M::size_type size_type;
-        typedef typename M::difference_type difference_type;
         typedef C orientation_category;
+#ifdef BOOST_UBLAS_USE_INDEXING
+        indexing_matrix_assign_scalar (functor_type (), m, t, orientation_category ());
+#elif BOOST_UBLAS_USE_ITERATING
+        iterating_matrix_assign_scalar (functor_type (), m, t, orientation_category ());
+#else
+        typedef typename M::difference_type difference_type;
         difference_type size1 (m.size1 ());
         difference_type size2 (m.size2 ());
         if (size1 >= BOOST_UBLAS_ITERATOR_THRESHOLD &&
@@ -184,6 +188,7 @@ namespace boost { namespace numeric { namespace ublas {
             iterating_matrix_assign_scalar (functor_type (), m, t, orientation_category ());
         else
             indexing_matrix_assign_scalar (functor_type (), m, t, orientation_category ());
+#endif
     }
     // Packed (proxy) row major case
     template<class F, class M, class T>
@@ -442,9 +447,13 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         void operator () (M &m, const T &t, dense_proxy_tag, C c) {
-            typedef typename M::size_type size_type;
-            typedef typename M::difference_type difference_type;
             typedef C orientation_category;
+#ifdef BOOST_UBLAS_USE_INDEXING
+            indexing_assign (m, t, orientation_category ());
+#elif BOOST_UBLAS_USE_ITERATING
+            iterating_assign (m, t, orientation_category ());
+#else
+            typedef typename M::difference_type difference_type;
             difference_type size1 (m.size1 ());
             difference_type size2 (m.size2 ());
             if (size1 >= BOOST_UBLAS_ITERATOR_THRESHOLD &&
@@ -452,6 +461,7 @@ namespace boost { namespace numeric { namespace ublas {
                 iterating_assign (m, t, orientation_category ());
             else
                 indexing_assign (m, t, orientation_category ());
+#endif
         }
         // Packed (proxy) row major case
         template<class M, class T>
@@ -790,9 +800,13 @@ namespace boost { namespace numeric { namespace ublas {
     // BOOST_UBLAS_INLINE
     void evaluate_matrix_assign (const F &f, M &m, const matrix_expression<E> &e, dense_proxy_tag, C c) {
         typedef F functor_type;
-        typedef typename M::size_type size_type;
-        typedef typename M::difference_type difference_type;
         typedef C orientation_category;
+#ifdef BOOST_UBLAS_USE_INDEXING
+        indexing_matrix_assign (functor_type (), m, e, orientation_category ());
+#elif BOOST_UBLAS_USE_ITERATING
+        iterating_matrix_assign (functor_type (), m, e, orientation_category ());
+#else
+        typedef typename M::difference_type difference_type;
         difference_type size1 (BOOST_UBLAS_SAME (m.size1 (), e ().size1 ()));
         difference_type size2 (BOOST_UBLAS_SAME (m.size2 (), e ().size2 ()));
         if (size1 >= BOOST_UBLAS_ITERATOR_THRESHOLD &&
@@ -800,6 +814,7 @@ namespace boost { namespace numeric { namespace ublas {
             iterating_matrix_assign (functor_type (), m, e, orientation_category ());
         else
             indexing_matrix_assign (functor_type (), m, e, orientation_category ());
+#endif
     }
     // Packed (proxy) row major case
     template<class F, class M, class E>
@@ -1536,9 +1551,13 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         void operator () (M &m, const matrix_expression<E> &e, dense_proxy_tag, C c) {
-            typedef typename M::size_type size_type;
-            typedef typename M::difference_type difference_type;
             typedef C orientation_category;
+#ifdef BOOST_UBLAS_USE_INDEXING
+            indexing_assign (m, e, orientation_category ());
+#elif BOOST_UBLAS_USE_ITERATING
+            iterating_assign (m, e, orientation_category ());
+#else
+            typedef typename M::difference_type difference_type;
             difference_type size1 (BOOST_UBLAS_SAME (m.size1 (), e ().size1 ()));
             difference_type size2 (BOOST_UBLAS_SAME (m.size2 (), e ().size2 ()));
             if (size1 >= BOOST_UBLAS_ITERATOR_THRESHOLD &&
@@ -1546,6 +1565,7 @@ namespace boost { namespace numeric { namespace ublas {
                 iterating_assign (m, e, orientation_category ());
             else
                 indexing_assign (m, e, orientation_category ());
+#endif
         }
         // Packed (proxy) row major case
         template<class M, class E>

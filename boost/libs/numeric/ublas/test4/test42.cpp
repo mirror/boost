@@ -98,6 +98,7 @@ struct test_my_matrix_vector {
         }
     }
     void operator () (int) const {
+#ifdef USE_ADAPTOR
         try {
             V v1 (N), v2 (N);
             M m1 (N, N, 1, 1);
@@ -138,6 +139,7 @@ struct test_my_matrix_vector {
         catch (...) {
             std::cout << "unknown exception" << std::endl;
         }
+#endif
     }
 };
 

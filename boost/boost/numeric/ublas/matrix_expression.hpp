@@ -3790,6 +3790,24 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             value_type dereference (dense_random_access_iterator_tag) const {
                 const matrix_vector_binary1 &mvb = (*this) ();
+#ifdef BOOST_UBLAS_USE_INDEXING
+                return mvb (index ());
+#elif BOOST_UBLAS_USE_ITERATING
+                difference_type size = BOOST_UBLAS_SAME (mvb.expression1 ().size2 (), mvb.expression2 ().size ());
+#ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
+#ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
+                return functor_type () (size, (*it1_).begin (), e2_begin_);
+#else
+                return functor_type () (size, (*it1_).begin (), mvb.expression2 ().begin ());
+#endif
+#else
+#ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
+                return functor_type () (size, it1_.begin (), e2_begin_);
+#else
+                return functor_type () (size, it1_.begin (), mvb.expression2 ().begin ());
+#endif
+#endif
+#else
                 difference_type size = BOOST_UBLAS_SAME (mvb.expression1 ().size2 (), mvb.expression2 ().size ());
                 if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
@@ -3807,6 +3825,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
                 else
                     return mvb (index ());
+#endif
             }
 
             // Packed bidirectional specialization
@@ -4180,6 +4199,24 @@ sparse_bidirectional_iterator_tag ());
             BOOST_UBLAS_INLINE
             value_type dereference (dense_random_access_iterator_tag) const {
                 const matrix_vector_binary2 &mvb = (*this) ();
+#ifdef BOOST_UBLAS_USE_INDEXING
+                return mvb (index ());
+#elif BOOST_UBLAS_USE_ITERATING
+                difference_type size = BOOST_UBLAS_SAME (mvb.expression2 ().size1 (), mvb.expression1 ().size ());
+#ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
+#ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
+                return functor_type () (size, e1_begin_, (*it2_).begin ());
+#else
+                return functor_type () (size, mvb.expression1 ().begin (), (*it2_).begin ());
+#endif
+#else
+#ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
+                return functor_type () (size, e1_begin_, it2_.begin ());
+#else
+                return functor_type () (size, mvb.expression1 ().begin (), it2_.begin ());
+#endif
+#endif
+#else
                 difference_type size = BOOST_UBLAS_SAME (mvb.expression2 ().size1 (), mvb.expression1 ().size ());
                 if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
@@ -4197,6 +4234,7 @@ sparse_bidirectional_iterator_tag ());
 #endif
                 else
                     return mvb (index ());
+#endif
             }
 
             // Packed bidirectional specialization
@@ -4658,15 +4696,26 @@ sparse_bidirectional_iterator_tag ());
             BOOST_UBLAS_INLINE
             value_type dereference (dense_random_access_iterator_tag) const {
                 const matrix_matrix_binary &mmb = (*this) ();
+#ifdef BOOST_UBLAS_USE_INDEXING
+                return mmb (index1 (), index2 ());
+#elif BOOST_UBLAS_USE_ITERATING
+                difference_type size = BOOST_UBLAS_SAME (mmb.expression1 ().size2 (), mmb.expression2 ().size1 ());
+#ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
+                return functor_type () (size, it1_.begin (), it2_begin_);
+#else
+                return functor_type () (size, it1_.begin (), it2_.begin ());
+#endif
+#else
                 difference_type size = BOOST_UBLAS_SAME (mmb.expression1 ().size2 (), mmb.expression2 ().size1 ());
                 if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
 #ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
-                    return functor_type () (size, it1_.begin (), it2_begin_); 
+                    return functor_type () (size, it1_.begin (), it2_begin_);
 #else
-                    return functor_type () (size, it1_.begin (), it2_.begin ()); 
+                    return functor_type () (size, it1_.begin (), it2_.begin ());
 #endif
-                else 
-                    return mmb (index1 (), index2 ()); 
+                else
+                    return mmb (index1 (), index2 ());
+#endif
             }
 
             // Packed bidirectional specialization
@@ -4841,15 +4890,26 @@ sparse_bidirectional_iterator_tag ());
             BOOST_UBLAS_INLINE
             value_type dereference (dense_random_access_iterator_tag) const {
                 const matrix_matrix_binary &mmb = (*this) ();
+#ifdef BOOST_UBLAS_USE_INDEXING
+                return mmb (index1 (), index2 ());
+#elif BOOST_UBLAS_USE_ITERATING
+                difference_type size = BOOST_UBLAS_SAME (mmb.expression1 ().size2 (), mmb.expression2 ().size1 ());
+#ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
+                return functor_type () (size, it1_begin_, it2_.begin ());
+#else
+                return functor_type () (size, it1_.begin (), it2_.begin ());
+#endif
+#else
                 difference_type size = BOOST_UBLAS_SAME (mmb.expression1 ().size2 (), mmb.expression2 ().size1 ());
                 if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
 #ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
-                    return functor_type () (size, it1_begin_, it2_.begin ()); 
+                    return functor_type () (size, it1_begin_, it2_.begin ());
 #else
                     return functor_type () (size, it1_.begin (), it2_.begin ());
 #endif
-                else 
-                    return mmb (index1 (), index2 ()); 
+                else
+                    return mmb (index1 (), index2 ());
+#endif
             }
 
             // Packed bidirectional specialization
