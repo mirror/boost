@@ -28,7 +28,7 @@ struct translate_int_type_impl;
 //
 template<typename SourceTr, typename TargetTr>
 typename TargetTr::int_type 
-translate_char(typename SourceTr::int_type c) 
+translate_int_type(typename SourceTr::int_type c) 
 { 
     typedef translate_int_type_impl<is_same<SourceTr, TargetTr>::value> impl;
     return impl::template inner<SourceTr, TargetTr>::translate(c);
