@@ -39,8 +39,8 @@ BOOST_PP_DEF(/)
 </div>
 <div>
 	<b>Notes:</b>&nbsp; You can extend this example by defining more and different kinds of operators.&nbsp;
-	Before doing so, consider using the <i>algebraic categories</i> technique introduced in <a href="bibliography.html#barton">[Barton]</a>
-	or a <i>layered architecture</i> (see for instance <a href="bibliography.html#czarnecki">[Czarnecki]</a>).&nbsp;
+	Before doing so, consider using the <i>algebraic categories</i> technique introduced in <a href="../bibliography.html#barton">[Barton]</a>
+	or a <i>layered architecture</i> (see for instance <a href="../bibliography.html#czarnecki">[Czarnecki]</a>).&nbsp;
 	However, at some point you must type the operator tokens <code>*</code>, <code>/</code>, <code>+</code>, <code>-</code>, etc.,
 	because it is impossible to generate them using templates.&nbsp;
 	The resulting <i>categorical repetition</i> of tokens can be eliminated by using preprocessor metaprogramming.
@@ -213,7 +213,7 @@ BOOST_PP_REPEAT(ARITHMETIC_TYPE_CNT, BOOST_PP_DEF, _)
 #undef BOOST_PP_DEF
 </pre></div>
 <div>
-	<b>Note:</b>&nbsp; The repetition of the above example can be eliminated using template metaprogramming <a href="bibliography.html#czarnecki">[Czarnecki]</a> as well.&nbsp;
+	<b>Note:</b>&nbsp; The repetition of the above example can be eliminated using template metaprogramming <a href="../bibliography.html#czarnecki">[Czarnecki]</a> as well.&nbsp;
 	However categorical repetition of operator tokens cannot be completely eliminated by using template metaprogramming.
 </div>
 
