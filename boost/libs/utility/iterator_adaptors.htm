@@ -129,11 +129,11 @@
     <p><tt>iterator_adaptor</tt> is declared like this:
 <pre>
 template &lt;class Base, class Policies, 
-    class Value = typename std::iterator_traits&lt;Base&gt;::value_type,
-    class Reference = <i>...(see below)</i>,
-    class Pointer = <i>...(see below)</i>,
-    class Category = typename std::iterator_traits&lt;Base&gt;::iterator_category,
-    class Distance = typename std::iterator_traits&lt;Base&gt;::difference_type&gt;
+    class ValueOrNamedParams = typename std::iterator_traits&lt;Base&gt;::value_type,
+    class ReferenceOrNamedParams = <i>...(see below)</i>,
+    class PointerOrNamedParams = <i>...(see below)</i>,
+    class CategoryOrNamedParams = typename std::iterator_traits&lt;Base&gt;::iterator_category,
+    class DistanceOrNamedParams = typename std::iterator_traits&lt;Base&gt;::difference_type&gt;
 struct iterator_adaptor;
 </pre>
 
@@ -203,8 +203,79 @@ struct iterator_adaptor;
         <td>The <tt>difference_type</tt> for the resulting iterator.<br>
          <b>Default:</b>
         <tt>std::iterator_traits&lt;BaseType&gt;::difference_type</tt> 
+
+      <tr>
+         <td><tt>NamedParams</tt>
+
+         <td>A list of named template parameters generated using the
+            <a href="#iterator_traits_generator">
+            <tt>iterator_traits_generator</tt></a> class (see below).
     </table>
 
+    <h3><a name="named_template_parameters">Named Template Parameters</a></h3>
+    
+    With seven template parameters, providing arguments for
+    <tt>iterator_adaptor</tt> in the correct order can be challenging.
+    Also, often times one would like to specify the sixth or seventh
+    template parameter, but use the defaults for the third through
+    fifth. As a solution to these problems we provide a mechanism for
+    naming the last five template parameters, and providing them in
+    any order through the <tt>iterator_traits_generator</tt> class.
+
+<a name="iterator_traits_generator">
+    <blockquote>
+<pre>
+class iterator_traits_generator
+{
+public:
+  template &lt;class Value&gt;
+  struct value_type : public <i>recursive magic</i> { };
+
+  template &lt;class Reference&gt;
+  struct reference : public <i>recursive magic</i> { };
+
+  template &lt;class Pointer&gt;
+  struct pointer : public <i>recursive magic</i> { };
+
+  template &lt;class Distance&gt;
+  struct difference_type : public <i>recursive magic</i> { };
+
+  template &lt;class Category&gt;
+  struct iterator_category : public <i>recursive magic</i> { };
+};
+</pre>
+    </blockquote>
+</a>
+
+    The <tt>iterator_traits_generator</tt> is used to create a list of
+    of template arguments. For example, suppose you want to set the
+    <tt>Reference</tt> and <tt>Category</tt> parameters, and use the
+    defaults for the rest. Then you can use the traits generator as
+    follows:
+
+    <blockquote>
+<pre>
+iterator_traits_generator::reference&lt;foo&gt;::category&lt;std::input_iterator_tag&gt;
+</pre>
+    </blockquote>
+
+    This generated type can then be passed into the
+    <tt>iterator_adaptor</tt> class to replace any of the last five
+    parameters. If you use the traits generator in the <i>i</i>th
+    parameter position, then the parameters <i>i</i> through 7 will
+    use the types specified in the generator.
+
+    <blockquote>
+<pre>
+iterator_adaptor&lt;foo_iterator, foo_policies,
+    iterator_traits_generator
+    ::reference&lt;foo&gt;
+    ::category&lt;std::input_iterator_tag&gt;
+&gt;
+</pre>
+    </blockquote>
+
+    
     <h3><a name="policies">The Policies Class</a></h3>
 
     <p>The main task in using <tt>iterator_adaptor</tt> is creating an
