@@ -12,6 +12,7 @@ MV	= /bin/mv
 EGREP	= /bin/egrep
 ECHO	= /bin/echo
 PERL	= /usr/bin/perl
+PYTHON	= python
 CAT	= /bin/cat
 TOUCH 	= /bin/touch
 ZIP	= /usr/bin/zip
@@ -48,7 +49,7 @@ PRINTZIP = prints.zip
 SLIDEZIP = slides.zip
 
 # ... Depend
-DEPENDFILES = .depend .depend-rst
+DEPENDFILES = .depend
 GENFILE	    = .generated
 
 # ... List of extensions and files generated
@@ -211,26 +212,21 @@ clean:
 	${RMRF} ${generated}
 
 # ... Target: create dependencies
-depend: .depend-rst
+depend: .depend
 
 # ... Target: dependency file (parse TEXFILES for multiinclude and includegraphics)
-.depend: GNUmakefile ${TEXFILES}
-	${RMRF} $@
-	@for t in ${TEXSTEMS} ; do \
-		${ECHO} "Scanning $$t.tex"; \
-		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /\\multiinclude(\[.*?\])?{(.*?)}/ && print "$$target: $$2.0\n";}' $$t.pdf < $$t.tex >> $@; \
-		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /\\includegraphics(\[.*?\])?{(.*?)\.(.*?)}/ && print "$$target: $$2.$$3\n";}' $$t.pdf < $$t.tex >> $@; \
-	done
+# .depend: GNUmakefile ${TEXFILES}
+# 	${RMRF} $@
+# 	@for t in ${TEXSTEMS} ; do \
+# 		${ECHO} "Scanning $$t.tex"; \
+# 		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /\\multiinclude(\[.*?\])?{(.*?)}/ && print "$$target: $$2.0\n";}' $$t.pdf < $$t.tex >> $@; \
+# 		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /\\includegraphics(\[.*?\])?{(.*?)\.(.*?)}/ && print "$$target: $$2.$$3\n";}' $$t.pdf < $$t.tex >> $@; \
+# 	done
 
-.depend-rst: GNUmakefile ${RSTFILES}
+.depend: GNUmakefile ${RSTFILES}
 	${RMRF} $@
-	@for t in ${RSTSTEMS} ; do \
-		${ECHO} "Scanning $$t.rst"; \
-		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /^\.\. (include|image)::\s+(.*)/ && print "$$target: $$2\n";}' $$t.html < $$t.rst >> $@; \
-		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /^\.\. (include|image)::\s+(.*)/ && print "$$target: $$2\n";}' $$t.tex < $$t.rst >> $@; \
-	done
-
+	${PYTHON} scanrst.py ${RSTFILES} > $@
 
 # ... include dependency files
 # -include .depend
--include .depend-rst
+-include .depend

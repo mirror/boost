@@ -1415,7 +1415,7 @@ else
 <tt class="literal"><span class="pre">R</span></tt> is <tt class="literal"><span class="pre">reference</span></tt> and <tt class="literal"><span class="pre">V</span></tt> is <tt class="literal"><span class="pre">value_type</span></tt>, and where: if
 <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is <tt class="literal"><span class="pre">use_default</span></tt>, <tt class="literal"><span class="pre">C</span></tt> is
 <tt class="literal"><span class="pre">iterator_traversal&lt;Iterator&gt;::type</span></tt> and otherwise <tt class="literal"><span class="pre">C</span></tt> is
-<tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>:</p>
+<tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>.</p>
 <blockquote>
 <ul>
 <li><p class="first">if <tt class="literal"><span class="pre">C</span></tt> is convertible to <tt class="literal"><span class="pre">std::input_iterator_tag</span></tt> or
@@ -1465,38 +1465,42 @@ convertible, and not to any more-derived traversal tag type.</p>
 </div>
 <div class="section" id="indirect-iterator-requirements">
 <h4><a class="toc-backref" href="#id45" name="indirect-iterator-requirements"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></h4>
-<p><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> argument shall be <tt class="literal"><span class="pre">use_default</span></tt> or it
-shall be convertible to one of the standard iterator or traversal
-tags. If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is not <tt class="literal"><span class="pre">use_default</span></tt>, it shall
-indicate the traversal category modeled by <tt class="literal"><span class="pre">Iterator</span></tt>.  If</p>
-<p>The expression <tt class="literal"><span class="pre">*v</span></tt>, where <tt class="literal"><span class="pre">v</span></tt> is an object of type
+<p>The expression <tt class="literal"><span class="pre">*v</span></tt>, where <tt class="literal"><span class="pre">v</span></tt> is an object of
 <tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt>, shall be valid
-expression and convertible to <tt class="literal"><span class="pre">reference</span></tt>.  Also
-<tt class="literal"><span class="pre">indirect_iterator::reference</span></tt> must be convertible to
-<tt class="literal"><span class="pre">indirect_iterator::value</span></tt>.  There are further requirements on
-the <tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt> if the <tt class="literal"><span class="pre">Value</span></tt>
+expression and convertible to <tt class="literal"><span class="pre">reference</span></tt>.  <tt class="literal"><span class="pre">Iterator</span></tt> shall
+model the traversal concept indicated by <tt class="literal"><span class="pre">iterator_category</span></tt>.
+<tt class="literal"><span class="pre">Value</span></tt>, <tt class="literal"><span class="pre">Reference</span></tt>, and <tt class="literal"><span class="pre">Difference</span></tt> shall be chosen so
+that <tt class="literal"><span class="pre">value_type</span></tt>, <tt class="literal"><span class="pre">reference</span></tt>, and <tt class="literal"><span class="pre">difference_type</span></tt> meet
+the requirements indicated by <tt class="literal"><span class="pre">iterator_category</span></tt>.</p>
+<p>[Note: there are further requirements on the
+<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt> if the <tt class="literal"><span class="pre">Value</span></tt>
 parameter is not <tt class="literal"><span class="pre">use_default</span></tt>, as implied by the algorithm for
-deducing the default for the <tt class="literal"><span class="pre">value_type</span></tt> member.</p>
+deducing the default for the <tt class="literal"><span class="pre">value_type</span></tt> member.]</p>
 </div>
 <div class="section" id="indirect-iterator-models">
 <h4><a class="toc-backref" href="#id46" name="indirect-iterator-models"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></h4>
-<p>If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is a standard iterator tag,
-<tt class="literal"><span class="pre">indirect_iterator</span></tt> is a model of the iterator concept corresponding
-to the tag, otherwise <tt class="literal"><span class="pre">indirect_iterator</span></tt> satisfies the requirements
-of the most refined standard traversal concept that is satisfied by
-the <tt class="literal"><span class="pre">Iterator</span></tt> argument.</p>
-<p><tt class="literal"><span class="pre">indirect_iterator</span></tt> models Readable Iterator.  If
-<tt class="literal"><span class="pre">indirect_iterator::reference(*v)</span> <span class="pre">=</span> <span class="pre">t</span></tt> is a valid expression (where
-<tt class="literal"><span class="pre">t</span></tt> is an object of type <tt class="literal"><span class="pre">indirect_iterator::value_type</span></tt>) then
-<tt class="literal"><span class="pre">indirect_iterator</span></tt> models Writable Iterator. If
-<tt class="literal"><span class="pre">indirect_iterator::reference</span></tt> is a reference then
-<tt class="literal"><span class="pre">indirect_iterator</span></tt> models Lvalue Iterator.</p>
+<p>In addition to the concepts indicated by <tt class="literal"><span class="pre">iterator_category</span></tt>, a
+specialization of <tt class="literal"><span class="pre">indirect_iterator</span></tt> models the following
+concepts, Where <tt class="literal"><span class="pre">v</span></tt> is an object of
+<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt>:</p>
+<blockquote>
+<ul class="simple">
+<li>Readable Iterator if <tt class="literal"><span class="pre">reference(*v)</span></tt> is convertible to
+<tt class="literal"><span class="pre">value_type</span></tt>.</li>
+<li>Writable Iterator if <tt class="literal"><span class="pre">reference(*v)</span> <span class="pre">=</span> <span class="pre">t</span></tt> is a valid
+expression (where <tt class="literal"><span class="pre">t</span></tt> is an object of type
+<tt class="literal"><span class="pre">indirect_iterator::value_type</span></tt>)</li>
+<li>Lvalue Iterator if <tt class="literal"><span class="pre">reference</span></tt> is a reference type.</li>
+</ul>
+</blockquote>
+<p>Two specializations of <tt class="literal"><span class="pre">indirect_iterator</span></tt> are interoperable if
+their <tt class="literal"><span class="pre">Iterator</span></tt> parameters are interoperable.</p>
 </div>
 <div class="section" id="indirect-iterator-operations">
 <h4><a class="toc-backref" href="#id47" name="indirect-iterator-operations"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></h4>
-<p>In addition to the operations required by the concepts modeled by
-<tt class="literal"><span class="pre">indirect_iterator</span></tt>, <tt class="literal"><span class="pre">indirect_iterator</span></tt> provides the following
-operations.</p>
+<p>In addition to the operations required by the concepts described
+above, specializations of <tt class="literal"><span class="pre">indirect_iterator</span></tt> provide the
+following operations.</p>
 <p><tt class="literal"><span class="pre">indirect_iterator();</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />

@@ -70,45 +70,52 @@ following pseudo-code.  We use the abbreviation
 ``R`` is ``reference`` and ``V`` is ``value_type``, and where: if
 ``CategoryOrTraversal`` is ``use_default``, ``C`` is
 ``iterator_traversal<Iterator>::type`` and otherwise ``C`` is
-``CategoryOrTraversal``:
+``CategoryOrTraversal``.
 
   .. include:: facade_iterator_category.rst
 
 ``indirect_iterator`` requirements
 ..................................
 
-The expression ``*v``, where ``v`` is an object of type
+The expression ``*v``, where ``v`` is an object of
 ``iterator_traits<Iterator>::value_type``, shall be valid
-expression and convertible to ``reference``.  [Note: there are
-further requirements on the
+expression and convertible to ``reference``.  ``Iterator`` shall
+model the traversal concept indicated by ``iterator_category``.
+``Value``, ``Reference``, and ``Difference`` shall be chosen so
+that ``value_type``, ``reference``, and ``difference_type`` meet
+the requirements indicated by ``iterator_category``.
+
+[Note: there are further requirements on the
 ``iterator_traits<Iterator>::value_type`` if the ``Value``
 parameter is not ``use_default``, as implied by the algorithm for
 deducing the default for the ``value_type`` member.]
 
-
 ``indirect_iterator`` models
 ............................
 
-If ``CategoryOrTraversal`` is a standard iterator tag,
-``indirect_iterator`` is a model of the iterator concept
-corresponding to the tag.  Otherwise, ``indirect_iterator``
-satisfies the requirements of the most refined standard traversal
-concept that is satisfied by the ``Iterator`` argument.
+In addition to the concepts indicated by ``iterator_category``, a
+specialization of ``indirect_iterator`` models the following
+concepts, Where ``v`` is an object of
+``iterator_traits<Iterator>::value_type``:
 
-``indirect_iterator`` models Readable Iterator.  If
-``indirect_iterator::reference(*v) = t`` is a valid expression (where
-``t`` is an object of type ``indirect_iterator::value_type``) then
-``indirect_iterator`` models Writable Iterator. If
-``indirect_iterator::reference`` is a reference then
-``indirect_iterator`` models Lvalue Iterator.
+  * Readable Iterator if ``reference(*v)`` is convertible to
+    ``value_type``.
+   
+  * Writable Iterator if ``reference(*v) = t`` is a valid
+    expression (where ``t`` is an object of type
+    ``indirect_iterator::value_type``)
 
+  * Lvalue Iterator if ``reference`` is a reference type.
+
+Two specializations of ``indirect_iterator`` are interoperable if
+their ``Iterator`` parameters are interoperable.
 
 ``indirect_iterator`` operations
 ................................
 
-In addition to the operations required by the concepts modeled by
-``indirect_iterator``, ``indirect_iterator`` provides the following
-operations.
+In addition to the operations required by the concepts described
+above, specializations of ``indirect_iterator`` provide the
+following operations.
 
 
 ``indirect_iterator();``
