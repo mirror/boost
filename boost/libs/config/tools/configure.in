@@ -130,7 +130,7 @@ else
 fi
 
 # add the -AA conformance option to CXXFLAGS for HP aCC only
-if test $CXX = 'aCC'
+if test $CXX = 'aCC'; then
    CXXFLAGS="-AA $CXXFLAGS"
 fi
 
