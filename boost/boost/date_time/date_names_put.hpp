@@ -6,10 +6,9 @@
  */
 
 
-#include "boost/config.hpp" //sets BOOST_NO_STD_LOCALE
+#include "boost/date_time/locale_config.hpp" // set BOOST_DATE_TIME_NO_LOCALE
 
-//This file basically becomes a noop if locales are not supported
-#ifndef BOOST_NO_STD_LOCALE
+#ifndef BOOST_DATE_TIME_NO_LOCALE
 
 #include "boost/date_time/special_defs.hpp"
 #include "boost/date_time/date_defs.hpp"

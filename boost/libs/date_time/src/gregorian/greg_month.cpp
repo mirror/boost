@@ -12,8 +12,8 @@
 
 namespace boost {
 namespace date_time {
-#ifndef BOOST_NO_STD_LOCALE
 
+#ifndef BOOST_DATE_TIME_NO_LOCALE
 
   // instantiate facet template into gregorian library
   std::locale::id date_names_put<gregorian::greg_facet_config>::id;

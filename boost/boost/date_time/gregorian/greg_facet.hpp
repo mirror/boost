@@ -1,16 +1,16 @@
-#ifndef GREGORIAN_FORMATTERS_HPP___
-#define GREGORIAN_FORMATTERS_HPP___
+#ifndef GREGORIAN_FACET_HPP___
+#define GREGORIAN_FACET_HPP___
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
  * Author: Jeff Garland 
  */
 
 #include "boost/date_time/gregorian/gregorian_types.hpp"
-#include "boost/date_time/date_names_put.hpp"
-#include "boost/date_time/date_formatting_locales.hpp"
+#include "boost/date_time/date_formatting_locales.hpp" // sets BOOST_DATE_TIME_NO_LOCALE
 
 //This file basically becomes a noop if locales are not supported
-#ifndef BOOST_NO_STD_LOCALE
+#ifndef BOOST_DATE_TIME_NO_LOCALE
+
 
 namespace boost {
 namespace gregorian {
@@ -41,26 +41,6 @@ namespace gregorian {
 #endif  
     
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Copyright (c) 2002
  * CrystalClear Software, Inc.
  *

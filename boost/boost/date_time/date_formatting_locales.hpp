@@ -5,7 +5,10 @@
  * Author: Jeff Garland 
  */
 
-#ifndef BOOST_NO_STD_LOCALE
+
+#include "boost/date_time/locale_config.hpp" // set BOOST_DATE_TIME_NO_LOCALE
+
+#ifndef BOOST_DATE_TIME_NO_LOCALE
 
 #include "boost/date_time/iso_format.hpp"
 #include "boost/date_time/date_names_put.hpp"
