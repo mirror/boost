@@ -13,22 +13,19 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/arithmetic/add.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/dec.hpp>
 #include <boost/preprocessor/inc.hpp>
 #include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/preprocessor/while.hpp>
 
-/** Expands to the sum of X and Y.
+/** <P>Expands to the sum of X and Y.</P>
 
-For example, BOOST_PP_ADD(4,3) expands to 7 (a single token).
+<P>For example, BOOST_PP_ADD(4,3) expands to 7 (a single token).</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_ADD(X,Y) BOOST_PP_ADD_D(0,X,Y)
 

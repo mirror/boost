@@ -13,20 +13,17 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/arithmetic/div.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/comparison/less_equal.hpp>
 #include <boost/preprocessor/inc.hpp>
 
-/** Expands to the quotient of X and Y.
+/** <P>Expands to the quotient of X and Y.</P>
 
-For example, BOOST_PP_DIV(4,3) expands to 1 (a single token).
+<P>For example, BOOST_PP_DIV(4,3) expands to 1 (a single token).</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_DIV(X,Y) BOOST_PP_DIV_D(0,X,Y)
 

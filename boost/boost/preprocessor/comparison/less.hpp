@@ -13,19 +13,16 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/comparison/less.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/comparison/less_equal.hpp>
 #include <boost/preprocessor/comparison/not_equal.hpp>
 #include <boost/preprocessor/logical/and.hpp>
 
-/** Expands to 1 if X<Y and 0 otherwise.
+/** <P>Expands to 1 if X<Y and 0 otherwise.</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_LESS(X,Y) BOOST_PP_LESS_D(0,X,Y)
 

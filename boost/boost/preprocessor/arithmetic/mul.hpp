@@ -13,19 +13,16 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/arithmetic/mul.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/arithmetic/add.hpp>
 
-/** Expands to the product of X and Y.
+/** <P>Expands to the product of X and Y.</P>
 
-For example, BOOST_PP_MUL(4,3) expands to 12 (a single token).
+<P>For example, BOOST_PP_MUL(4,3) expands to 12 (a single token).</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_MUL(X,Y) BOOST_PP_MUL_D(0,X,Y)
 

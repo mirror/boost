@@ -13,17 +13,14 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/comparison/greater.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/comparison/less.hpp>
 
-/** Expands to 1 if X>Y and 0 otherwise.
+/** <P>Expands to 1 if X>Y and 0 otherwise.</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_GREATER(X,Y) BOOST_PP_GREATER_D(0,X,Y)
 
