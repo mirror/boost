@@ -22,7 +22,12 @@
 #    define BOOST_PP_IIF_OO(par) BOOST_PP_IIF_I ## par
 # endif
 #
-# define BOOST_PP_IIF_I(bit, t, f) BOOST_PP_IIF_ ## bit(t, f)
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
+#    define BOOST_PP_IIF_I(bit, t, f) BOOST_PP_IIF_ ## bit(t, f)
+# else
+#    define BOOST_PP_IIF_I(bit, t, f) BOOST_PP_IIF_II(BOOST_PP_IIF_ ## bit(t, f))
+#    define BOOST_PP_IIF_II(id) id
+# endif
 #
 # define BOOST_PP_IIF_0(t, f) f
 # define BOOST_PP_IIF_1(t, f) t
