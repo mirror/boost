@@ -1085,7 +1085,7 @@ struct bitset_test {
       size_type len = str.length();
       // {spaces}
       for( ; pos < len && is_white_space(is, str[pos]); ++pos)
-        ;
+        {}
       size_type after_spaces = pos;
       // {digits} or part of them
       const typename Bitset::size_type max_digits =
