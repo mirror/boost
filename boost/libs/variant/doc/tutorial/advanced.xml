@@ -298,13 +298,13 @@ int_tree_t var(result);</programlisting>
 public:
 
     template &lt;typename T, typename U&gt;
-    bool operator()( const T &amp;, const U &amp; )
+    bool operator()( const T &amp;, const U &amp; ) const
     {
         return false; // cannot compare different types
     }
 
     template &lt;typename T&gt;
-    bool operator()( const T &amp; lhs, const T &amp; rhs )
+    bool operator()( const T &amp; lhs, const T &amp; rhs ) const
     {
         return lhs == rhs;
     }
