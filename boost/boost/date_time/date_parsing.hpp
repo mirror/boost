@@ -143,7 +143,7 @@ namespace date_time {
           }
         } //switch
       }
-      return date_type(ymd);
+      return date_type(ymd.year, ymd.month, ymd.day);
     }
     
     //! Generic function to parse undelimited date (eg: 20020201)
