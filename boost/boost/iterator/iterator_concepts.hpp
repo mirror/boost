@@ -269,7 +269,7 @@ namespace detail
       template <typename Iterator1, typename Iterator2>
       static void constraints(Iterator1 const& i1, Iterator2 const& i2)
       {
-          Operations<boost::incrementable_traversal_tag>(i1, i2);
+          Operations<boost::incrementable_traversal_tag>::constraints(i1, i2);
           i1 == i2;
           i1 != i2;
 
