@@ -77,7 +77,7 @@ basic_text_iprimitive<IStream>::load_binary(
     );
                 
     char * caddr = static_cast<char *>(address);
-    unsigned int padding = 2 - count % 3;
+    std::size_t padding = 2 - count % 3;
     
     // take care that we don't increment anymore than necessary
     while(--count > 0){

@@ -29,13 +29,13 @@ namespace std{
 #endif
 
 #include <boost/io/ios_state.hpp>
-#include <boost/utf8_codecvt_facet.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/pfto.hpp>
 
 #include <boost/serialization/string.hpp>
 #include <boost/archive/add_facet.hpp>
 #include <boost/archive/archive_exception.hpp>
+#include <boost/archive/detail/utf8_codecvt_facet.hpp>
 
 #include <boost/archive/iterators/mb_from_wchar.hpp>
 
@@ -182,7 +182,7 @@ xml_wiarchive_impl<Archive>::xml_wiarchive_impl(
         archive_locale.reset(
             add_facet(
                 std::locale::classic(),
-                new utf8_codecvt_facet<std::wistream::char_type, char>
+                new detail::utf8_codecvt_facet
             )
         );
         is.imbue(* archive_locale);

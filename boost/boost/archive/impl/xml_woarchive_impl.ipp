@@ -31,7 +31,6 @@ namespace std{
 #endif
 
 #include <boost/throw_exception.hpp>
-#include <boost/utf8_codecvt_facet.hpp>
 #include <boost/pfto.hpp>
 
 #include <boost/archive/iterators/xml_escape.hpp>
@@ -40,6 +39,7 @@ namespace std{
 #include <boost/archive/iterators/dataflow_exception.hpp>
 
 #include <boost/archive/add_facet.hpp>
+#include <boost/archive/detail/utf8_codecvt_facet.hpp>
 
 namespace boost {
 namespace archive {
@@ -145,12 +145,12 @@ xml_woarchive_impl<Archive>::xml_woarchive_impl(
     // we can hack around this by using a static codecvt that never
     // gets destroyed.
     if(0 == (flags & no_codecvt)){
-        utf8_codecvt_facet_wchar_t *pfacet;
+        detail::utf8_codecvt_facet *pfacet;
         #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-            static utf8_codecvt_facet_wchar_t facet(static_cast<size_t>(1));
+            static detail::utf8_codecvt_facet facet(static_cast<size_t>(1));
             pfacet = & facet;
         #else
-            pfacet = new utf8_codecvt_facet_wchar_t;
+            pfacet = new detail::utf8_codecvt_facet;
         #endif
         archive_locale.reset(add_facet(std::locale::classic(), pfacet));
         os.imbue(* archive_locale);

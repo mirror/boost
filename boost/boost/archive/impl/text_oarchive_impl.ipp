@@ -44,7 +44,7 @@ BOOST_DECL_ARCHIVE
 #endif
 text_oarchive_impl<Archive>::save(const char * s)
 {
-    unsigned len = std::ostream::traits_type::length(s);
+    std::size_t len = std::ostream::traits_type::length(s);
     *this->This() << len;
     this->This()->newtoken();
     os << s;
@@ -57,7 +57,7 @@ BOOST_DECL_ARCHIVE
 #endif
 text_oarchive_impl<Archive>::save(const std::string &s)
 {
-    unsigned size = s.size();
+    std::size_t size = s.size();
     *this->This() << size;
     this->This()->newtoken();
     os << s;
