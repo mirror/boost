@@ -99,11 +99,11 @@ template &lt;typename Block, typename Allocator&gt;
 class dynamic_bitset
 {
 public:
-    typedef Block block_type;
-    typedef <i>implementation-defined</i> size_type;
-    enum { block_size = CHAR_BIT * sizeof(Block) };
+    typedef Block <a href="#block_type">block_type</a>;
+    typedef <i>implementation-defined</i> <a href="#size_type">size_type</a>;
+    enum { <a href="#block_size">block_size</a> = CHAR_BIT * sizeof(Block) };
 
-    class reference
+    class <a href="#reference">reference</a>
     {
     public:
         // An automatically generated copy constructor.
@@ -121,135 +121,114 @@ public:
         operator bool() const;
         reference&amp; flip();
     };
-    typedef bool const_reference;
+    typedef bool <a href="#const_reference">const_reference</a>;
 
-    explicit dynamic_bitset(const Allocator&amp; alloc = Allocator());
+    explicit <a href="#cons1">dynamic_bitset</a>(const Allocator&amp; alloc = Allocator());
 
-    explicit dynamic_bitset(size_type num_bits, unsigned long value = 0,
+    explicit <a href="#cons2">dynamic_bitset</a>(size_type num_bits, unsigned long value = 0,
                             const Allocator&amp; alloc = Allocator());
 
     template &lt;typename CharT, typename Traits, typename Alloc&gt;
-    explicit dynamic_bitset(const std::basic_string&lt;CharT, Traits, Alloc&gt;&amp; s, 
+    explicit <a href="#cons3">dynamic_bitset</a>(const std::basic_string&lt;CharT, Traits, Alloc&gt;&amp; s, 
         typename std::basic_string&lt;CharT, Traits, Alloc&gt;::size_type pos = 0, 
-        typename std::basic_string&lt;CharT, Traits, Alloc&gt;::size_type n 
-            = std::basic_string&lt;CharT, Traits, Alloc&gt;::npos,
+        typename std::basic_string&lt;CharT, Traits, Alloc&gt;::size_type n = std::basic_string&lt;CharT, Traits, Alloc&gt;::npos,
         const Allocator&amp; alloc = Allocator());
 
     template &lt;typename BlockInputIterator&gt;
-    dynamic_bitset(BlockInputIterator first, BlockInputIterator last,
+    <a href="#cons4">dynamic_bitset</a>(BlockInputIterator first, BlockInputIterator last,
                    const Allocator&amp; alloc = Allocator());
 
-    dynamic_bitset(const dynamic_bitset&amp; b);
+    <a href="#cons5">dynamic_bitset</a>(const dynamic_bitset&amp; b);
 
-    void swap(dynamic_bitset&amp; b);
+    void <a href="#swap">swap</a>(dynamic_bitset&amp; b);
 
-    dynamic_bitset&amp; operator=(const dynamic_bitset&amp; b);
+    dynamic_bitset&amp; <a href="#assign">operator=</a>(const dynamic_bitset&amp; b);
 
-    void resize(size_type num_bits, bool value = false);
-    void clear();
-    void push_back(bool bit);
-    void append(Block block);
+    void <a href="#resize">resize</a>(size_type num_bits, bool value = false);
+    void <a href="#clear">clear</a>();
+    void <a href="#push_back">push_back</a>(bool bit);
+    void <a href="#append1">append</a>(Block block);
     template &lt;typename BlockInputIterator&gt;
-    void append(BlockInputIterator first, BlockInputIterator last);
+    void <a href="#append2">append</a>(BlockInputIterator first, BlockInputIterator last);
 
-    dynamic_bitset&amp; operator&amp;=(const dynamic_bitset&amp; b);
-    dynamic_bitset&amp; operator|=(const dynamic_bitset&amp; b);
-    dynamic_bitset&amp; operator^=(const dynamic_bitset&amp; b);
-    dynamic_bitset&amp; operator-=(const dynamic_bitset&amp; b);
-    dynamic_bitset&amp; operator&lt;&lt;=(size_type n);
-    dynamic_bitset&amp; operator&gt;&gt;=(size_type n);
-    dynamic_bitset operator&lt;&lt;(size_type n) const;
-    dynamic_bitset operator&gt;&gt;(size_type n) const;
+    dynamic_bitset&amp; <a href="#op-and-assign">operator&amp;=</a>(const dynamic_bitset&amp; b);
+    dynamic_bitset&amp; <a href="#op-or-assign">operator|=</a>(const dynamic_bitset&amp; b);
+    dynamic_bitset&amp; <a href="#op-xor-assign">operator^=</a>(const dynamic_bitset&amp; b);
+    dynamic_bitset&amp; <a href="#op-sub-assign">operator-=</a>(const dynamic_bitset&amp; b);
+    dynamic_bitset&amp; <a href="#op-sl-assign">operator&lt;&lt;=</a>(size_type n);
+    dynamic_bitset&amp; <a href="#op-sr-assign">operator&gt;&gt;=</a>(size_type n);
+    dynamic_bitset <a href="#op-sl">operator&lt;&lt;</a>(size_type n) const;
+    dynamic_bitset <a href="#op-sr">operator&gt;&gt;</a>(size_type n) const;
 
-    dynamic_bitset&amp; set(size_type n, bool val = true);
-    dynamic_bitset&amp; set();
-    dynamic_bitset&amp; reset(size_type n);
-    dynamic_bitset&amp; reset();
-    dynamic_bitset&amp; flip(size_type n);
-    dynamic_bitset&amp; flip();
-    bool test(size_type n) const;
-    bool any() const;
-    bool none() const;
-    dynamic_bitset operator~() const;
-    size_type count() const;
+    dynamic_bitset&amp; <a href="#set2">set</a>(size_type n, bool val = true);
+    dynamic_bitset&amp; <a href="#set1">set</a>();
+    dynamic_bitset&amp; <a href="#reset2">reset</a>(size_type n);
+    dynamic_bitset&amp; <a href="#reset1">reset</a>();
+    dynamic_bitset&amp; <a href="#flip2">flip</a>(size_type n);
+    dynamic_bitset&amp; <a href="#flip1">flip</a>();
+    bool <a href="#test">test</a>(size_type n) const;
+    bool <a href="#any">any</a>() const;
+    bool <a href="#none">none</a>() const;
+    dynamic_bitset <a href="#op-not">operator~</a>() const;
+    size_type <a href="#count">count</a>() const;
 
-    reference operator[](size_type pos) { return reference(*this, pos); }
-    bool operator[](size_type pos) const { return test(pos); }
+    reference <a href="#bracket">operator[]</a>(size_type pos) { return reference(*this, pos); }
+    bool <a href="#const-bracket">operator[]</a>(size_type pos) const { return test(pos); }
 
-    unsigned long to_ulong() const;
+    unsigned long <a href="#to_ulong">to_ulong</a>() const;
   
-    size_type size() const;
-
-    template &lt;typename B, typename A&gt;
-    friend bool operator==(const dynamic_bitset&lt;B, A&gt;&amp; a, 
-                           const dynamic_bitset&lt;B, A&gt;&amp; b);
-    template &lt;typename B, typename A&gt;
-    friend bool operator&lt;(const dynamic_bitset&lt;B, A&gt;&amp; a, 
-                          const dynamic_bitset&lt;B, A&gt;&amp; b);
-    template &lt;typename B, typename A&gt;
-    friend bool operator&gt;(const dynamic_bitset&lt;B, A&gt;&amp; a, 
-                          const dynamic_bitset&lt;B, A&gt;&amp; b);
-
-    template &lt;typename B, typename A, typename BlockOutputIterator&gt;
-    friend void to_block_range(const dynamic_bitset&lt;B, A&gt;&amp; b, 
-                               BlockOutputIterator result);
+    size_type <a href="#size">size</a>() const;
 };
 
-template &lt;typename Block, typename Allocator&gt;
-bool operator!=(const dynamic_bitset&lt;Block, Allocator&gt;&amp; a, 
-                const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+template &lt;typename B, typename A&gt;
+bool <a href="#op-equal">operator==</a>(const dynamic_bitset&lt;B, A&gt;&amp; a, const dynamic_bitset&lt;B, A&gt;&amp; b);
 
 template &lt;typename Block, typename Allocator&gt;
-bool operator&lt;=(const dynamic_bitset&lt;Block, Allocator&gt;&amp; a, 
-                const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+bool <a href="#op-not-equal">operator!=</a>(const dynamic_bitset&lt;Block, Allocator&gt;&amp; a, const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+
+template &lt;typename B, typename A&gt;
+bool <a href="#op-less">operator&lt;</a>(const dynamic_bitset&lt;B, A&gt;&amp; a, const dynamic_bitset&lt;B, A&gt;&amp; b);
 
 template &lt;typename Block, typename Allocator&gt;
-bool operator&gt;(const dynamic_bitset&lt;Block, Allocator&gt;&amp; a, 
-               const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+bool <a href="#op-less-equal">operator&lt;=</a>(const dynamic_bitset&lt;Block, Allocator&gt;&amp; a, const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
 
 template &lt;typename Block, typename Allocator&gt;
-bool operator&gt;=(const dynamic_bitset&lt;Block, Allocator&gt;&amp; a, 
-                const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+bool <a href="#op-greater">operator&gt;</a>(const dynamic_bitset&lt;Block, Allocator&gt;&amp; a, const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
 
-template &lt;typename CharT, typename Traits, typename Block, typename Allocator&gt;
-std::basic_ostream&lt;CharT, Traits&gt;&amp;
-operator&lt;&lt;(std::basic_ostream&lt;CharT, Traits&gt;&amp; os, 
-           const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
-
-template &lt;typename CharT, typename Traits, typename Block, typename Allocator&gt;
-std::basic_istream&lt;CharT, Traits&gt;&amp;
-operator&gt;&gt;(std::basic_istream&lt;CharT, Traits&gt;&amp; is, 
-           dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+template &lt;typename Block, typename Allocator&gt;
+bool <a href="#op-greater-equal">operator&gt;=</a>(const dynamic_bitset&lt;Block, Allocator&gt;&amp; a, const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
 
 template &lt;typename Block, typename Allocator&gt;
 dynamic_bitset&lt;Block, Allocator&gt;
-operator&amp;(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b1, 
-          const dynamic_bitset&lt;Block, Allocator&gt;&amp; b2);
+<a href="#op-and">operator&amp;</a>(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b1, const dynamic_bitset&lt;Block, Allocator&gt;&amp; b2);
 
 template &lt;typename Block, typename Allocator&gt;
 dynamic_bitset&lt;Block, Allocator&gt;
-operator|(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b1, 
-          const dynamic_bitset&lt;Block, Allocator&gt;&amp; b2);
+<a href="#op-or">operator|</a>(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b1, const dynamic_bitset&lt;Block, Allocator&gt;&amp; b2);
 
 template &lt;typename Block, typename Allocator&gt;
 dynamic_bitset&lt;Block, Allocator&gt;
-operator^(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b1,
-          const dynamic_bitset&lt;Block, Allocator&gt;&amp; b2);
+<a href="#op-xor">operator^</a>(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b1, const dynamic_bitset&lt;Block, Allocator&gt;&amp; b2);
 
 template &lt;typename Block, typename Allocator&gt;
 dynamic_bitset&lt;Block, Allocator&gt;
-operator-(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b1,
-          const dynamic_bitset&lt;Block, Allocator&gt;&amp; b2);
+<a href="#op-sub">operator-</a>(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b1, const dynamic_bitset&lt;Block, Allocator&gt;&amp; b2);
 
 template &lt;typename Block, typename Allocator, typename CharT, typename Alloc&gt;
-void 
-to_string(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b, 
+void <a href="#to_string">to_string</a>(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b, 
           std::basic_string&lt;CharT, Alloc&gt;&amp; s);
 
 template &lt;typename Block, typename Allocator, typename BlockOutputIterator&gt;
-void
-to_block_range(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b, 
-               BlockOutputIterator result);
+void to_block_range(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b, 
+                    BlockOutputIterator result);
+
+template &lt;typename CharT, typename Traits, typename Block, typename Allocator&gt;
+std::basic_ostream&lt;CharT, Traits&gt;&amp;
+<a href="#op-out">operator&lt;&lt;</a>(std::basic_ostream&lt;CharT, Traits&gt;&amp; os, const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+
+template &lt;typename CharT, typename Traits, typename Block, typename Allocator&gt;
+std::basic_istream&lt;CharT, Traits&gt;&amp;
+<a href="#op-in">operator&gt;&gt;</a>(std::basic_istream&lt;CharT, Traits&gt;&amp; is, dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
 
 } // namespace boost
 </pre>
@@ -488,7 +467,7 @@ None.
 <hr>
 
 <pre>
-dynamic_bitset::reference
+<a name="reference">dynamic_bitset::reference</a>
 </pre>
 A proxy class that acts as a reference to a single bit.  It contains
 an assignment operator, a conversion to <tt>bool</tt>, an
@@ -527,23 +506,28 @@ variable <tt>x</tt> is a <tt>bool</tt>.
 </table>
 
 <hr>
-
 <pre>
-dynamic_bitset::size_type
+<a name="const_reference">dynamic_bitset::const_reference</a>
+</pre>
+The type <tt>bool</tt>.
+
+<hr>
+<pre>
+<a name="size_type">dynamic_bitset::size_type</a>
 </pre>
 The unsigned integer for representing the size of the bit set.
 
 <hr>
 
 <pre>
-dynamic_bitset::block_type
+<a name="block_type">dynamic_bitset::block_type</a>
 </pre>
 The same type as the <tt>Block</tt> template parameter.
 
 <hr>
 
 <pre>
-dynamic_bitset::block_size
+<a name="block_size">dynamic_bitset::block_size</a>
 </pre>
 The number of bits in a <tt>Block</tt>.
 
@@ -554,7 +538,7 @@ The number of bits in a <tt>Block</tt>.
 <hr>
 
 <pre>
-dynamic_bitset(const Allocator&amp; alloc = Allocator())
+<a name="cons1">dynamic_bitset</a>(const Allocator&amp; alloc = Allocator())
 </pre>
 
 <b>Effects:</b> Constructs a bitset of size zero. 
@@ -572,7 +556,7 @@ Default Constructible</a>.)
 <hr>
 
 <pre>
-dynamic_bitset(size_type num_bits,
+<a name="cons2">dynamic_bitset</a>(size_type num_bits,
                unsigned long value = 0,
                const Allocator& alloc = Allocator())
 </pre>
@@ -598,7 +582,7 @@ operations such as <tt>resize</tt> to allocate memory.<br>
 <hr>
 
 <pre>
-dynamic_bitset(const dynamic_bitset&amp; x)
+<a name="cons5">dynamic_bitset</a>(const dynamic_bitset&amp; x)
 </pre>
 
 <b>Effects:</b> Constructs a bitset that is a copy of the bitset
@@ -619,7 +603,7 @@ Assignable</A>.)
 <pre>
 template &lt;typename BlockInputIterator&gt;
 explicit
-dynamic_bitset(BlockInputIterator first, BlockInputIterator last,
+<a name="cons4">dynamic_bitset</a>(BlockInputIterator first, BlockInputIterator last,
                const Allocator&amp; alloc = Allocator());
 </pre>
 
@@ -645,9 +629,10 @@ Iterator</a> and its <tt>value_type</tt> must be the same type as
 <pre>
 template&lt;typename Char, typename Traits, typename Alloc&gt;
 explicit
-dynamic_bitset(const <A href="http://www.sgi.com/tech/stl/basic_string.html">std::basic_string</A>&lt;Char,Traits,Alloc&gt;&amp; s,
-               size_type pos = 0,
-               size_type n = <A href="http://www.sgi.com/tech/stl/basic_string.html">std::basic_string</A>&lt;Char,Traits,Alloc&gt;::npos) 
+<a name="cons3">dynamic_bitset</a>(const <A href="http://www.sgi.com/tech/stl/basic_string.html">std::basic_string</A>&lt;Char,Traits,Alloc&gt;&amp; s,
+               typename std::basic_string&lt;CharT, Traits, Alloc&gt;::size_type pos = 0,
+               typename std::basic_string&lt;CharT, Traits, Alloc&gt;::size_type n = <A href="http://www.sgi.com/tech/stl/basic_string.html">std::basic_string</A>&lt;Char,Traits,Alloc&gt;::npos,
+               const Allocator&amp; alloc = Allocator()) 
 </pre>
 
 <b>Effects:</b> Constructs a bitset from a string of 0's and 1's.  The
@@ -684,9 +669,19 @@ and destroys the bitset object itself.<br>
 <h3><a name="member-functions">Member Functions</a></h3>
 
 <hr>
+<pre>
+void <a name="swap">swap</a>(dynamic_bitset&amp; b);
+</pre>
+<b>Effects:</b> The contents of this bitset and bitset <tt>b</tt>
+  are exchanged.<br>
+<b>Postconditions:</b> This bitset is equal to the original <tt>b</tt>,
+  and <tt>b</tt> is equal to the previous version of this bitset.<br>
+<b>Throws:</b> nothing.
+
+<hr>
 
 <pre>
-dynamic_bitset&amp; operator=(const dynamic_bitset&amp; x)
+dynamic_bitset&amp; <a name="assign">operator=</a>(const dynamic_bitset&amp; x)
 </pre>
 
 <b>Effects:</b> This bitset becomes a copy of the bitset <tt>x</tt>.<br>
@@ -706,7 +701,7 @@ dynamic_bitset&amp; operator=(const dynamic_bitset&amp; x)
 <hr>
 
 <pre>
-void resize(size_type num_bits, bool value = false);
+void <a name="resize">resize</a>(size_type num_bits, bool value = false);
 </pre>
 
 <b>Effects:</b> Changes the number of bits of the bitset to
@@ -726,7 +721,7 @@ discarded).<br>
 <hr>
 
 <pre>
-void clear()
+void <a name="clear">clear</a>()
 </pre>
 <b>Effects:</b> The size of the bitset becomes zero.<br>
 
@@ -735,7 +730,7 @@ void clear()
 <hr>
 
 <pre>
-void push_back(bool value);
+void <a name="push_back">push_back</a>(bool value);
 </pre>
 <b>Effects:</b> Increases the size of the bitset by one, and sets the value of
 the new most-significant bit to <tt>value</tt>.<br>
@@ -746,7 +741,7 @@ the new most-significant bit to <tt>value</tt>.<br>
 <hr>
 
 <pre>
-void append(Block value);
+void <a name="append1">append</a>(Block value);
 </pre>
 <b>Effects:</b> Appends the bits in <tt>value</tt> to the bitset
 (appends to the most-significant end).  This increases the size of the
@@ -762,7 +757,7 @@ bit at position <tt>(s + i)</tt> is set to <tt>((value >> i) &
 
 <pre>
 template &lt;typename BlockInputIterator&gt;
-void append(BlockInputIterator first, BlockInputIterator last);
+void <a name="append2">append</a>(BlockInputIterator first, BlockInputIterator last);
 </pre>
 <b>Effects:</b> This function provides the same end result as the following
 code, but is typically more efficient.
@@ -782,7 +777,7 @@ Iterator</a> and the <tt>value_type</tt> must be the same type as
 <hr>
 
 <pre>
-dynamic_bitset&amp; operator&amp;=(const dynamic_bitset&amp; rhs)
+dynamic_bitset&amp; <a name="op-and-assign">operator&amp;=</a>(const dynamic_bitset&amp; rhs)
 </pre>
 
 <b>Requires:</b> <tt>this-&gt;size() == rhs.size()</tt>.<br>
@@ -800,7 +795,7 @@ for (size_type i = 0; i != this->size(); ++i)
 
 <hr>
 
-<pre>dynamic_bitset&amp; operator|=(const dynamic_bitset&amp; rhs)
+<pre>dynamic_bitset&amp; <a name="op-or-assign">operator|=</a>(const dynamic_bitset&amp; rhs)
 </pre>
 <b>Requires:</b> <tt>this-&gt;size() == rhs.size()</tt>.<br>
 
@@ -818,7 +813,7 @@ for (size_type i = 0; i != this->size(); ++i)
 <hr>
 
 <pre>
-dynamic_bitset&amp; operator^=(const dynamic_bitset&amp; rhs)
+dynamic_bitset&amp; <a name="op-xor-assign">operator^=</a>(const dynamic_bitset&amp; rhs)
 </pre>
 <b>Requires:</b> <tt>this-&gt;size() == rhs.size()</tt>.<br>
 
@@ -836,7 +831,7 @@ for (size_type i = 0; i != this->size(); ++i)
 <hr>
 
 <pre>
-dynamic_bitset&amp; operator-=(const dynamic_bitset&amp; rhs)
+dynamic_bitset&amp; <a name="op-sub-assign">operator-=</a>(const dynamic_bitset&amp; rhs)
 </pre>
 <b>Requires:</b> <tt>this-&gt;size() == rhs.size()</tt>.<br>
 
@@ -854,7 +849,7 @@ for (size_type i = 0; i != this->size(); ++i)
 <hr>
 
 <pre>
-dynamic_bitset&amp; operator&lt;&lt;=(size_type n)
+dynamic_bitset&amp; <a name="op-sl-assign">operator&lt;&lt;=</a>(size_type n)
 </pre>
 <b>Effects:</b> Shifts the bits in this bitset to the left by
 <tt>n</tt> bits. For each bit in the bitset, the bit at position pos
@@ -868,7 +863,7 @@ or zero if no such bit exists.<br>
 <hr>
 
 <pre>
-dynamic_bitset&amp; operator&gt;&gt;=(size_type n)
+dynamic_bitset&amp; <a name="op-sr-assign">operator&gt;&gt;=</a>(size_type n)
 </pre>
 <b>Effects:</b> Shifts the bits in this bitset to the right by
 <tt>n</tt> bits. For each bit in the bitset, the bit at position
@@ -882,7 +877,7 @@ zero if no such bit exists.<br>
 <hr>
 
 <pre>
-dynamic_bitset operator&lt;&lt;(size_type n) const
+dynamic_bitset <a name="op-sl">operator&lt;&lt;</a>(size_type n) const
 </pre>
 <b>Returns:</b> a copy of <tt>*this</tt> shifted to the left by <tt>n</tt>
 bits.  For each bit in the returned bitset, the bit at position pos
@@ -898,7 +893,7 @@ constructing a temporary copy of <tt>b</tt> and then using
 <hr>
 
 <pre>
-dynamic_bitset operator&gt;&gt;(size_type n) const
+dynamic_bitset <a name="op-sr">operator&gt;&gt;</a>(size_type n) const
 </pre>
 
 <b>Returns:</b> a copy of <tt>*this</tt> shifted to the right by
@@ -915,7 +910,7 @@ temporary copy of <tt>b</tt> and then using
 <hr>
 
 <pre>
-dynamic_bitset&amp; set()
+dynamic_bitset&amp; <a name="set1">set</a>()
 </pre>
 <b>Effects:</b> Sets every bit in this bitset to 1.<br>
 <b>Returns:</b> <tt>*this</tt><br>
@@ -924,7 +919,7 @@ dynamic_bitset&amp; set()
 <hr>
 
 <pre>
-dynamic_bitset&amp; flip()
+dynamic_bitset&amp; <a name="flip1">flip</a>()
 </pre>
 <b>Effects:</b> Flips the value of every bit in this bitset.<br>
 <b>Returns:</b> <tt>*this</tt><br>
@@ -933,7 +928,7 @@ dynamic_bitset&amp; flip()
 <hr>
 
 <pre>
-dynamic_bitset operator~() const
+dynamic_bitset <a name="op-not">operator~</a>() const
 </pre>
 <b>Returns:</b> a copy of <tt>*this</tt> with all of its bits flipped.<br>
 <b>Throws:</b> An allocation error if memory is exhausted
@@ -942,7 +937,7 @@ dynamic_bitset operator~() const
 <hr>
 
 <pre>
-dynamic_bitset&amp; reset()
+dynamic_bitset&amp; <a name="reset1">reset</a>()
 </pre>
 <b>Effects:</b> Clears every bit in this bitset.<br>
 <b>Returns:</b> <tt>*this</tt><br>
@@ -950,7 +945,7 @@ dynamic_bitset&amp; reset()
 <hr>
 
 <pre>
-dynamic_bitset&amp; set(size_type n, bool val = true)
+dynamic_bitset&amp; <a name="set2">set</a>(size_type n, bool val = true)
 </pre>
 
 <b>Effects:</b> Sets bit <tt>n</tt> if <tt>val</tt> is <tt>true</tt>,
@@ -965,7 +960,7 @@ this-&gt;size()</tt>.
 <hr>
 
 <pre>
-dynamic_bitset&amp; reset(size_type n)
+dynamic_bitset&amp; <a name="reset2">reset</a>(size_type n)
 </pre>
 <b>Effects:</b> Clears bit <tt>n</tt>.<br>
 <b>Returns:</b> <tt>*this</tt><br>
@@ -974,7 +969,7 @@ dynamic_bitset&amp; reset(size_type n)
 <hr>
 
 <pre>
-dynamic_bitset&amp; flip(size_type n)
+dynamic_bitset&amp; <a name="flip2">flip</a>(size_type n)
 </pre>
 <b>Effects:</b> Flips bit <tt>n</tt>.<br>
 <b>Returns:</b> <tt>*this</tt><br>
@@ -983,14 +978,14 @@ dynamic_bitset&amp; flip(size_type n)
 <hr>
 
 <pre>
-size_type size() const
+size_type <a name="size">size</a>() const
 </pre>
 <b>Returns:</b> the number of bits in this bitset.<br>
 <b>Throws:</b> nothing.
 <hr>
 
 <pre>
-size_type count() const
+size_type <a name="count">count</a>() const
 </pre>
 <b>Returns:</b> the number of bits in this bitset that are set.<br>
 <b>Throws:</b> nothing.
@@ -998,7 +993,7 @@ size_type count() const
 <hr>
 
 <pre>
-bool any() const
+bool <a name="any">any</a>() const
 </pre>
 <b>Returns:</b> <tt>true</tt> if any bits in this bitset are set,
 and otherwise returns <tt>false</tt>.<br>
@@ -1007,7 +1002,7 @@ and otherwise returns <tt>false</tt>.<br>
 <hr>
 
 <pre>
-bool none() const
+bool <a name="none">none</a>() const
 </pre>
 <b>Returns:</b> <tt>true</tt> if no bits are set, and otherwise
 returns <tt>false</tt>.<br>
@@ -1016,7 +1011,7 @@ returns <tt>false</tt>.<br>
 <hr>
 
 <pre>
-bool test(size_type n) const
+bool <a name="test">test</a>(size_type n) const
 </pre>
 <b>Returns:</b> <tt>true</tt> if bit <tt>n</tt> is set and
 <tt>false</tt> is bit <tt>n</tt> is 0.<br>
@@ -1026,7 +1021,7 @@ bool test(size_type n) const
 <hr>
 
 <pre>
-reference operator[](size_type n)
+reference <a name="bracket">operator[]</a>(size_type n)
 </pre>
 </TD>
 <b>Returns:</b> a <tt>reference</tt> to bit <tt>n</tt>.  Note that
@@ -1041,7 +1036,7 @@ proxy is not the same as the true reference type <tt>bool&amp;</tt>.<br>
 <hr>
 
 <pre>
-bool operator[](size_type n) const
+bool <a name="const-bracket">operator[]</a>(size_type n) const
 </pre>
 <b>Returns:</b> <tt>true</tt> if bit <tt>n</tt> is set. <br>
 
@@ -1050,7 +1045,7 @@ bool operator[](size_type n) const
 <hr>
 
 <pre>
-unsigned long to_ulong() const
+unsigned long <a name="to_ulong">to_ulong</a>() const
 </pre>
 <b>Returns:</b> An <tt>unsigned long</tt> integer whose bits
 corresponds to the bits in this bitset, as long as there are no bits
@@ -1063,7 +1058,7 @@ can not be represented in an <tt>unsigned long</tt>.
 <hr>
 
 <pre>
-bool operator==(const dynamic_bitset&amp; rhs) const
+bool <a name="op-equal">operator==</a>(const dynamic_bitset&amp; rhs) const
 </pre>
 <b>Returns:</b> <tt>true</tt> if <tt>this-&gt;size() ==
 rhs.size()</tt> and if for all <tt>i</tt> in the range
@@ -1079,7 +1074,7 @@ returns <tt>false</tt>.<br>
 <hr>
 
 <pre>
-bool operator!=(const dynamic_bitset&amp; rhs) const
+bool <a name="op-not-equal">operator!=</a>(const dynamic_bitset&amp; rhs) const
 </pre>
 <b>Returns:</b> <tt>!((*this) == rhs)</tt><br>
 <b>Throws:</b> nothing.<br>
@@ -1090,7 +1085,7 @@ bool operator!=(const dynamic_bitset&amp; rhs) const
 <hr>
 
 <pre>
-bool operator&lt;(const dynamic_bitset&amp; rhs) const
+bool <a name="op-less">operator&lt;</a>(const dynamic_bitset&amp; rhs) const
 </pre>
 <b>Returns:</b> <tt>true</tt> if this bitset is lexicographically less
 than <tt>rhs</tt>, and returns <tt>false</tt> otherwise.  (See the
@@ -1105,7 +1100,7 @@ ordering). <br>
 <hr>
 
 <pre>
-bool operator&gt;(const dynamic_bitset&amp; rhs) const
+bool <a name="op-greater">operator&gt;</a>(const dynamic_bitset&amp; rhs) const
 </pre>
 <b>Returns:</b> <tt>!((*this) < rhs || (*this) == rhs)</tt><br>
 <b>Throws:</b> nothing.<br>
@@ -1116,7 +1111,7 @@ Comparable</A>.)
 <hr>
 
 <pre>
-bool operator&lt;=(const dynamic_bitset&amp; rhs) const
+bool <a name="op-less-equal">operator&lt;=</a>(const dynamic_bitset&amp; rhs) const
 </pre>
 <b>Returns:</b> <tt>(*this) < rhs || (*this) == rhs</tt><br>
 <b>Throws:</b> nothing.<br>
@@ -1126,7 +1121,7 @@ bool operator&lt;=(const dynamic_bitset&amp; rhs) const
 <hr>
 
 <pre>
-bool operator&gt;=(const dynamic_bitset&amp; rhs) const
+bool <a name="op-greater-equal">operator&gt;=</a>(const dynamic_bitset&amp; rhs) const
 </pre>
 <b>Returns:</b> <tt>(*this) > rhs || (*this) == rhs</tt><br>
 <b>Throws:</b> nothing.<br>
@@ -1140,8 +1135,60 @@ bool operator&gt;=(const dynamic_bitset&amp; rhs) const
 <hr>
 
 <pre>
+dynamic_bitset <a name="op-and">operator&amp;</a>(const dynamic_bitset&amp; a, const dynamic_bitset&amp; b)
+</pre>
+<b>Requires:</b> <tt>a.size() == b.size()</tt><br>
+<b>Returns:</b> A new bitset that is the bitwise-AND of the bitsets
+<tt>a</tt> and <tt>b</tt>.  Note that the expression <tt>b1 &amp;
+b2</tt> is equivalent to creating a temporary copy of <tt>b1</tt>,
+using <tt>operator&amp;=</tt>, and returning the temporary copy.<br>
+<b>Throws:</b> An allocation error if memory is exhausted
+  (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
+
+<hr>
+
+<pre>
+dynamic_bitset <a name="op-or">operator|</a>(const dynamic_bitset&amp; a, const dynamic_bitset&amp; b)
+</pre>
+<b>Requires:</b> <tt>a.size() == b.size()</tt><br>
+<b>Returns:</b> A new bitset that is the bitwise-OR of the bitsets
+<tt>a</tt> and <tt>b</tt>.  Note that the expression <tt>b1 &amp;
+b2</tt> is equivalent to creating a temporary copy of <tt>b1</tt>,
+using <tt>operator&amp;=</tt>, and returning the temporary copy.<br>
+<b>Throws:</b> An allocation error if memory is exhausted
+  (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
+
+<hr>
+
+<pre>
+dynamic_bitset <a name="op-xor">operator^</a>(const dynamic_bitset&amp; a, const dynamic_bitset&amp; b)
+</pre>
+<b>Requires:</b> <tt>a.size() == b.size()</tt><br>
+<b>Returns:</b> A new bitset that is the bitwise-XOR of the bitsets
+<tt>a</tt> and <tt>b</tt>.  Note that the expression <tt>b1 &amp;
+b2</tt> is equivalent to creating a temporary copy of <tt>b1</tt>,
+using <tt>operator&amp;=</tt>, and returning the temporary copy.<br>
+<b>Throws:</b> An allocation error if memory is exhausted
+  (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
+
+<hr>
+
+<pre>
+dynamic_bitset <a name="op-sub">operator-</a>(const dynamic_bitset&amp; a, const dynamic_bitset&amp; b)
+</pre>
+<b>Requires:</b> <tt>a.size() == b.size()</tt><br>
+<b>Returns:</b> A new bitset that is the set difference of the bitsets
+<tt>a</tt> and <tt>b</tt>.  Note that the expression <tt>b1 - b2</tt>
+is equivalent to creating a temporary copy of <tt>b1</tt>,
+using <tt>operator-=</tt>, and returning the temporary copy.<br>
+<b>Throws:</b> An allocation error if memory is exhausted
+  (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
+
+<hr>
+
+<pre>
 template &lt;typename CharT, typename Alloc&gt;
-void to_string(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b,
+void <a name="to_string">to_string</a>(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b,
                <A href="http://www.sgi.com/tech/stl/basic_string.html">std::basic_string</A>&lt;Char,Traits,Alloc&gt;& s)
 </pre>
 
@@ -1165,63 +1212,30 @@ position <tt>i</tt> in the string corresponds to bit position
   properly.
 
 <hr>
-
 <pre>
-dynamic_bitset operator&amp;(const dynamic_bitset&amp; a, const dynamic_bitset&amp; b)
+template &lt;typename Char, typename Traits, typename Block, typename Alloc&gt;
+basic_ostream&lt;Char, Traits&gt;&amp;
+<a name="op-out">operator&lt;&lt;</a>(basic_ostream&lt;Char, Traits&gt;&amp; os, const dynamic_bitset&lt;Block, Alloc&gt;&amp; x)
 </pre>
-<b>Requires:</b> <tt>a.size() == b.size()</tt><br>
-<b>Returns:</b> A new bitset that is the bitwise-AND of the bitsets
-<tt>a</tt> and <tt>b</tt>.  Note that the expression <tt>b1 &amp;
-b2</tt> is equivalent to creating a temporary copy of <tt>b1</tt>,
-using <tt>operator&amp;=</tt>, and returning the temporary copy.<br>
+Output a <tt>dynamic_bitset</tt> to an output stream.  This function
+behaves as if it converts the <tt>dynamic_bitset</tt> to a string and then
+writes that string to the output stream.  That is, it is equivalent to
+<pre>
+std::basic_string&lt;Char, Traits&gt; s;
+to_string(x, s):
+os &lt;&lt; s;
+</pre>
 <b>Throws:</b> An allocation error if memory is exhausted
   (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
-
+ Also will throw <tt>std::ios_base::failure</tt> if there is a problem
+ writing to the stream.
 <hr>
 
-<pre>
-dynamic_bitset operator|(const dynamic_bitset&amp; a, const dynamic_bitset&amp; b)
-</pre>
-<b>Requires:</b> <tt>a.size() == b.size()</tt><br>
-<b>Returns:</b> A new bitset that is the bitwise-OR of the bitsets
-<tt>a</tt> and <tt>b</tt>.  Note that the expression <tt>b1 &amp;
-b2</tt> is equivalent to creating a temporary copy of <tt>b1</tt>,
-using <tt>operator&amp;=</tt>, and returning the temporary copy.<br>
-<b>Throws:</b> An allocation error if memory is exhausted
-  (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
-
-<hr>
-
-<pre>
-dynamic_bitset operator^(const dynamic_bitset&amp; a, const dynamic_bitset&amp; b)
-</pre>
-<b>Requires:</b> <tt>a.size() == b.size()</tt><br>
-<b>Returns:</b> A new bitset that is the bitwise-XOR of the bitsets
-<tt>a</tt> and <tt>b</tt>.  Note that the expression <tt>b1 &amp;
-b2</tt> is equivalent to creating a temporary copy of <tt>b1</tt>,
-using <tt>operator&amp;=</tt>, and returning the temporary copy.<br>
-<b>Throws:</b> An allocation error if memory is exhausted
-  (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
-
-<hr>
-
-<pre>
-dynamic_bitset operator-(const dynamic_bitset&amp; a, const dynamic_bitset&amp; b)
-</pre>
-<b>Requires:</b> <tt>a.size() == b.size()</tt><br>
-<b>Returns:</b> A new bitset that is the set difference of the bitsets
-<tt>a</tt> and <tt>b</tt>.  Note that the expression <tt>b1 - b2</tt>
-is equivalent to creating a temporary copy of <tt>b1</tt>,
-using <tt>operator-=</tt>, and returning the temporary copy.<br>
-<b>Throws:</b> An allocation error if memory is exhausted
-  (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
-
-<hr>
 
 <pre>
 template &lt;typename Char, typename Traits, typename Block, typename Alloc&gt;
 basic_istream&lt;Char,Traits&gt;&amp;
-operator&gt;&gt;(basic_istream&lt;Char,Traits&gt;&amp; is, dynamic_bitset&lt;Block, Alloc&gt;&amp; x)
+<a name="op-in">operator&gt;&gt;</a>(basic_istream&lt;Char,Traits&gt;&amp; is, dynamic_bitset&lt;Block, Alloc&gt;&amp; x)
 </pre>
 <b>Effects:</b> Extracts a <tt>dynamic_bitset</tt> from an input
 stream.  This function first skips whitespace, then extracts up to
@@ -1241,25 +1255,6 @@ input stream will be <tt>a</tt>.<br>
  reading from the stream.
 
 <hr>
-<pre>
-template &lt;typename Char, typename Traits, typename Block, typename Alloc&gt;
-basic_ostream&lt;Char, Traits&gt;&amp;
-operator&lt;&lt;(basic_ostream&lt;Char, Traits&gt;&amp; os, const dynamic_bitset&lt;Block, Alloc&gt;&amp; x)
-</pre>
-Output a <tt>dynamic_bitset</tt> to an output stream.  This function
-behaves as if it converts the <tt>dynamic_bitset</tt> to a string and then
-writes that string to the output stream.  That is, it is equivalent to
-<pre>
-std::basic_string&lt;Char, Traits&gt; s;
-to_string(x, s):
-os &lt;&lt; s;
-</pre>
-<b>Throws:</b> An allocation error if memory is exhausted
-  (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
- Also will throw <tt>std::ios_base::failure</tt> if there is a problem
- writing to the stream.
-<hr>
-
 
 <h3><a name="see-also">See also</a></h3>
 <tt><A href="http://www.sgi.com/tech/stl/bitset.html">std::bitset</A></tt>, 
