@@ -18,6 +18,7 @@
 #define BOOST_MPL_REPLACE_HPP_INCLUDED
 
 #include "boost/mpl/replace_if.hpp"
+#include "boost/mpl/protect.hpp"
 #include "boost/mpl/same_as.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 
@@ -32,7 +33,7 @@ template<
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(NewType)
     >
 struct replace
-    : replace_if< Sequence,same_as<OldType>,NewType >
+    : replace_if< Sequence, protect< same_as<OldType> >, NewType >
 {
 };
 
