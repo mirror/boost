@@ -382,14 +382,16 @@ void basic_format<Ch, Traits> ::parse(const string_t & buf)
     int cur_it=0;
     while( (i1=buf.find(arg_mark,i1)) != string::npos ) 
     {
-      assert(  static_cast<unsigned int>(cur_it) < items_.size() || cur_it==0);
       string_t & piece = (cur_it==0) ? prefix_ : items_[cur_it-1].appendix_;
+
       if( buf[i1+1] == buf[i1] ) // escaped mark, '%%'
       {
         piece += buf.substr(i0, i1-i0) + buf[i1]; 
         i1+=2; i0=i1;
         continue; 
       }
+      assert(  static_cast<unsigned int>(cur_it) < items_.size() || cur_it==0);
+
       if(i1!=i0) piece += buf.substr(i0, i1-i0);
       ++i1;
       

@@ -280,10 +280,9 @@ precise syntax, rather than the standard C printf, which does not support positi
 <br>
 <i> Note that it is an error to use positional format specifications</i>
 (e.g. <i>%3$+d</i>) 
-<i> mixed with non-positional ones</i> (e.g. <i>%+d</i>) .
+<i> mixed with non-positional ones</i> (e.g. <i>%+d</i>) <i>in the same format string.</i>
 <br>
-In the Open-group specification, referring to the same argument several times (e.g. <i>"%1$d %1$d"</i>) has undefined behaviour, but not for Boost.format, 
-which allows each argument to be reffered to any number of times. The only constraint is
+In the Open-group specification, referring to the same argument several times (e.g. <i>"%1$d %1$d"</i>) has undefined behaviour.  Boost.format's behaviour in such cases is to allow each argument to be reffered to any number of times. The only constraint is
 that it expects exactly <i>P</i> arguments, <i>P</i> being the maximum argument number used in the
  format string. (e.g., for "%1$d %10$d", <i>P</i> == 10 ).
 <br>Supplying more, or less, than <i>P</i> arguments raises an exception. 
@@ -428,7 +427,11 @@ of types, but merely sets the flags that are associated with this type specifica
 	    <td>1-character output</td> 
 	    <td>only the first character of the conversion string is used.</td> 
 </tr>
-
+<tr>
+            <td><b>%</b></td>
+            <td>print the character <i>%</i></td>
+            <td>N/A</td>
+</tr>
 </table>
 <p>Note that the 'n' type specification is ignored (and so is the corresponding argument),
  because it does not fit in this context.
