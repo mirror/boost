@@ -72,6 +72,12 @@ Do not change this file unless you really really have to, add options to
 #if (defined(__WIN32__) || defined(_WIN32) || defined(WIN32)) && !defined(__GNUC__)
    #define BOOST_RE_PLATFORM_W32
 #endif
+
+#ifdef __MWERKS__
+// no std::maessages facet
+#define BOOST_RE_NO_MESSAGES
+#endif
+
 #ifdef __BORLANDC__
 
    #if __BORLANDC__ < 0x500

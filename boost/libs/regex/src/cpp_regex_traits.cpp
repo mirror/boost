@@ -28,9 +28,6 @@
 #include <map>
 #include <boost/cregex.hpp>
 #include "primary_transform.hpp"
-#include <locale> // dwa 10/20/2000 - needed for definition of std::messages
-#include <wchar.h> // dwa 10/20/2000 - needed for wcscpy
-
 
 #ifndef BOOST_RE_NO_LOCALE_H
 
@@ -188,9 +185,10 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
    : is(&sbuf)
 {
    is.imbue(l);
+#ifndef BOOST_RE_NO_MESSAGES
    const std::messages<char>* pm = &BOOST_RE_USE_FACET(l, std::messages<char>);
    std::messages<char>::catalog cat = regex_message_catalogue.size() ? pm->open(regex_message_catalogue, l) : -1;
-
+#endif
    std::memset(syntax_map, cpp_regex_traits<char>::syntax_char, 256);
    unsigned int i;
    scoped_array<char> a;
@@ -206,14 +204,17 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
       }
       re_get_default_message(a.get(), array_size, i+100);
       std::string s = a.get();
+#ifndef BOOST_RE_NO_MESSAGES
       if((int)cat >= 0)
          s = pm->get(cat, 0, i+100, s);
+#endif
       for(unsigned int j = 0; j < s.size(); ++j)
       {
          syntax_map[s[j]] = (unsigned char)(i);
       }
    }
 
+#ifndef BOOST_RE_NO_MESSAGES
    // load any custom collate names:
    std::string c1, c2;
    i = 400;
@@ -235,6 +236,7 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
       ++i;
       c2 = pm->get(cat, 0, i, c1);
    }
+#endif
 /*
    std::string n("zero");
    std::map<std::string, std::string, std::less<std::string > >::const_iterator pos = collating_elements.find(n);
@@ -252,6 +254,7 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
 */
    std::string m;
    std::string s;
+#ifndef BOOST_RE_NO_MESSAGES
    if((int)cat >= 0)
    {
       for(i = 0; i < re_classes_max; ++i)
@@ -266,9 +269,10 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
          error_strings[i] = s;
       }
    }
-   
+
    if((int)cat >= 0)
       pm->close(cat);
+#endif
 }
 
 std::string cpp_regex_traits_base::set_message_catalogue(const std::string& l)
@@ -512,7 +516,11 @@ std::wstring BOOST_RE_CALL to_wide(const std::string& is, const std::codecvt<wch
 template <>
 struct message_data<wchar_t>
 {
+#ifndef BOOST_RE_NO_MESSAGES
    typedef std::messages<wchar_t>::string_type string_type;
+#else
+   typedef std::wstring string_type;
+#endif
 
    string_type name;
 
@@ -541,9 +549,10 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
    syntax_map m;
    typedef std::codecvt<wchar_t, char, std::mbstate_t> cvt_type;
    const cvt_type& cvt = BOOST_RE_USE_FACET(l, cvt_type);
+#ifndef BOOST_RE_NO_MESSAGES
    const std::messages<wchar_t>& msgs = BOOST_RE_USE_FACET(l, std::messages<wchar_t>);
    std::messages<wchar_t>::catalog cat = regex_message_catalogue.size() ? msgs.open(regex_message_catalogue, l) : -1;
-
+#endif
    scoped_array<char> a;
    unsigned array_size = 0;
    unsigned new_size;
@@ -560,8 +569,10 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
       re_get_default_message(a.get(), array_size, i+100);
       std::string ns = a.get();
       string_type s = to_wide(ns, cvt);
+#ifndef BOOST_RE_NO_MESSAGES
       if((int)cat >= 0)
          s = BOOST_RE_USE_FACET(l, std::messages<wchar_t>).get(cat, 0, i+100, s);
+#endif
       for(unsigned int j = 0; j < s.size(); ++j)
       {
          if((s[j] <= UCHAR_MAX) && (s[j] >= 0))
@@ -575,6 +586,7 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
       }
    }
 
+#ifndef BOOST_RE_NO_MESSAGES
    // load any custom collate names:
    string_type c1, c2;
    i = 400;
@@ -615,6 +627,7 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
 
    if((int)cat >= 0)
       msgs.close(cat);
+#endif      
 }
 
 } // namespace re_detail
@@ -784,7 +797,7 @@ unsigned int BOOST_RE_CALL cpp_regex_traits<wchar_t>::strwiden(wchar_t *s1, unsi
    std::string s(s2);
    std::wstring ws = re_detail::to_wide(s2, *pcdv);
    if(len > ws.size())
-      wcscpy(s1, ws.c_str());
+      std::wcscpy(s1, ws.c_str());
    return ws.size()+1;
 }
 

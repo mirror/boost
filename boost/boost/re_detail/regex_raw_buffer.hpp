@@ -120,7 +120,7 @@ private:
       typename alloc_inst_type::pointer last;
       alloc_data(const Allocator& a) : alloc_inst_type(a){}
    } alloc_inst;
-   raw_storage<Allocator>::pointer start, end;
+   pointer start, end;
 public:
 
    raw_storage(const Allocator& a = Allocator());

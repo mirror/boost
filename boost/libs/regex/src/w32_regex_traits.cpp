@@ -559,7 +559,7 @@ bool BOOST_RE_CALL w32_regex_traits<wchar_t>::lookup_collatename(std::basic_stri
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    std::string t_out;
-   bool result = re_detail::w32_traits_base::do_lookup_collate(t_out, buf.get());
+   bool result = base_type::do_lookup_collate(t_out, buf.get());
    if(t_out.size() == 0) result = false;
    if(result)
    {
@@ -599,7 +599,7 @@ bool BOOST_RE_CALL w32_regex_traits<wchar_t>::do_lookup_collate(std::basic_strin
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    std::string t_out;
-   bool result =  re_detail::w32_traits_base::do_lookup_collate(t_out, buf.get());
+   bool result =  base_type::do_lookup_collate(t_out, buf.get());
    if(result)
    {
       len = strwiden((wchar_t*)0, 0, t_out.c_str());

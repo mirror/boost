@@ -179,6 +179,7 @@ public:
 template<>
 class BOOST_RE_IX_DECL c_regex_traits<char> : public re_detail::c_traits_base
 {
+   typedef re_detail::c_traits_base base_type;
 public:
    typedef char char_type;
    typedef unsigned char uchar_type;
@@ -263,6 +264,7 @@ private:
 template<>
 class BOOST_RE_IX_DECL c_regex_traits<wchar_t> : public re_detail::c_traits_base
 {
+   typedef re_detail::c_traits_base base_type;
 public:
    typedef wchar_t char_type;
    typedef unsigned short uchar_type;
@@ -384,6 +386,7 @@ class w32_regex_traits;
 template<>
 class BOOST_RE_IX_DECL w32_regex_traits<char> : public re_detail::w32_traits_base
 {
+   typedef re_detail::w32_traits_base base_type;
 public:
    typedef char char_type;
    typedef unsigned char uchar_type;
@@ -458,6 +461,7 @@ private:
 template<>
 class BOOST_RE_IX_DECL w32_regex_traits<wchar_t> : public re_detail::w32_traits_base
 {
+   typedef re_detail::w32_traits_base base_type;
 public:
    typedef wchar_t char_type;
    typedef unsigned short uchar_type;
@@ -583,6 +587,7 @@ class cpp_regex_traits;
 template<>
 class BOOST_RE_IX_DECL cpp_regex_traits<char> : public re_detail::cpp_regex_traits_base
 {
+   typedef re_detail::cpp_regex_traits_base base_type;
 private:
    re_detail::message_data<char>* pmd;
    const unsigned char* psyntax;
@@ -667,6 +672,7 @@ public:
 template<>
 class BOOST_RE_IX_DECL cpp_regex_traits<wchar_t> : public re_detail::cpp_regex_traits_base
 {
+   typedef re_detail::cpp_regex_traits_base base_type;
 public:
    typedef wchar_t char_type;
    typedef unsigned short uchar_type;

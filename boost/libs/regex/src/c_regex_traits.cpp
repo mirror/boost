@@ -29,7 +29,6 @@
 #include <boost/regex_traits.hpp>
 #include <boost/re_detail/regex_synch.hpp>
 #include <boost/re_detail/regex_cstring.hpp>
-#include <wchar.h> // dwa 10/20/2000 - needed for definition of wcslen()
 
 #include "primary_transform.hpp"
 
@@ -560,7 +559,7 @@ bool BOOST_RE_CALL c_regex_traits<wchar_t>::lookup_collatename(std::basic_string
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    std::string t_out;
-   bool result = re_detail::c_traits_base::do_lookup_collate(t_out, buf.get());
+   bool result = base_type::do_lookup_collate(t_out, buf.get());
    if(t_out.size() == 0) result = false;
    if(result)
    {
@@ -782,7 +781,7 @@ bool BOOST_RE_CALL c_regex_traits<wchar_t>::do_lookup_collate(std::basic_string<
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    std::string t_out;
-   bool result =  re_detail::c_traits_base::do_lookup_collate(t_out, buf.get());
+   bool result = base_type::do_lookup_collate(t_out, buf.get());
    if(result)
    {
       len = strwiden((wchar_t*)0, 0, t_out.c_str());
@@ -1000,7 +999,7 @@ c_regex_traits<wchar_t> c_regex_traits<wchar_t>::init_;
 unsigned int BOOST_RE_CALL c_regex_traits<wchar_t>::strnarrow(char *s1, unsigned int len, const wchar_t *s2)
 {
    BOOST_RE_GUARD_STACK
-   unsigned int size = wcslen(s2) + 1;
+   unsigned int size = std::wcslen(s2) + 1;
    if(size > len)
       return size;
    return std::wcstombs(s1, s2, len);
@@ -1009,7 +1008,7 @@ unsigned int BOOST_RE_CALL c_regex_traits<wchar_t>::strnarrow(char *s1, unsigned
 unsigned int BOOST_RE_CALL c_regex_traits<wchar_t>::strwiden(wchar_t *s1, unsigned int len, const char *s2)
 {
    BOOST_RE_GUARD_STACK
-   unsigned int size = strlen(s2) + 1;
+   unsigned int size = std::strlen(s2) + 1;
    if(size > len)
       return size;
    size = std::mbstowcs(s1, s2, len);

@@ -72,7 +72,7 @@ private:
    };
 
    data alloc_inst;
-   mutable node* stack;
+   mutable node* m_stack;
    mutable node* unused;
    node base;
    size_type block_size;
@@ -96,51 +96,51 @@ public:
 
    bool BOOST_RE_CALL empty()
    {
-      return (stack->start == stack->end) && (stack->next == 0);
+      return (m_stack->start == m_stack->end) && (m_stack->next == 0);
    }
 
    bool BOOST_RE_CALL good()
    {
-      return (stack->start != stack->end) || (stack->next != 0);
+      return (m_stack->start != m_stack->end) || (m_stack->next != 0);
    }
 
    T& BOOST_RE_CALL peek()
    {
-      if(stack->start == stack->end)
+      if(m_stack->start == m_stack->end)
          pop_aux();
-      return *stack->end;
+      return *m_stack->end;
    }
 
    const T& BOOST_RE_CALL peek()const
    {
-      if(stack->start == stack->end)
+      if(m_stack->start == m_stack->end)
          pop_aux();
-      return *stack->end;
+      return *m_stack->end;
    }
 
    void BOOST_RE_CALL pop()
    {
-      if(stack->start == stack->end)
+      if(m_stack->start == m_stack->end)
          pop_aux();
-      jm_destroy(stack->end);
-      ++(stack->end);
+      jm_destroy(m_stack->end);
+      ++(m_stack->end);
    }
 
    void BOOST_RE_CALL pop(T& t)
    {
-      if(stack->start == stack->end)
+      if(m_stack->start == m_stack->end)
          pop_aux();
-      t = *stack->end;
-      jm_destroy(stack->end);
-      ++(stack->end);
+      t = *m_stack->end;
+      jm_destroy(m_stack->end);
+      ++(m_stack->end);
    }
 
    void BOOST_RE_CALL push(const T& t)
    {
-      if(stack->end == stack->last)
+      if(m_stack->end == m_stack->last)
          push_aux();
-      --(stack->end);
-      jm_construct(stack->end, t);
+      --(m_stack->end);
+      jm_construct(m_stack->end, t);
    }
 
 };
@@ -151,7 +151,7 @@ jstack<T, Allocator>::jstack(size_type n, const Allocator& a)
 {
   unused = 0;
   block_size = n;
-  stack = &base;
+  m_stack = &base;
   base.last = reinterpret_cast<T*>(alloc_inst.buf);
   base.end = base.start = base.last + 16;
   base.next = 0;
@@ -166,14 +166,14 @@ void BOOST_RE_CALL jstack<T, Allocator>::push_aux()
    {
       new_node = unused;
       unused = new_node->next;
-      new_node->next = stack;
-      stack = new_node;
+      new_node->next = m_stack;
+      m_stack = new_node;
    }
    else
    {
       new_node = get_node();
-      new_node->next = stack;
-      stack = new_node;
+      new_node->next = m_stack;
+      m_stack = new_node;
    }
 }
 
@@ -182,9 +182,9 @@ void BOOST_RE_CALL jstack<T, Allocator>::pop_aux()const
 {
    // make sure that we have a valid item
    // on TOS:
-   jm_assert(stack->next);
-   register node* p = stack;
-   stack = p->next;
+   jm_assert(m_stack->next);
+   register node* p = m_stack;
+   m_stack = p->next;
    p->next = unused;
    unused = p;
 }
@@ -201,10 +201,10 @@ jstack<T, Allocator>::~jstack()
       unused = unused->next;
       alloc_inst.deallocate((unsigned char*)condemned, sizeof(node) + sizeof(T) * block_size);
    }
-   while(stack != &base)
+   while(m_stack != &base)
    {
-      condemned = stack;
-      stack = stack->next;
+      condemned = m_stack;
+      m_stack = m_stack->next;
       alloc_inst.deallocate((unsigned char*)condemned, sizeof(node) + sizeof(T) * block_size);
    }
 }
