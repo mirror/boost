@@ -122,7 +122,7 @@ bool A::operator<(const A &rhs) const
 // Workaround this by putting the overloads in the boost::serialization namespace.
 
 #if defined(_MSC_VER) && (_MSC_VER == 1310) \
-|| BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+|| defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 namespace boost { namespace serialization {
 #endif
 
@@ -148,7 +148,7 @@ inline void load_construct_data(
 }
 
 #if defined(_MSC_VER) && (_MSC_VER == 1310) \
-|| BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+|| defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 }} // namespace boost::serialization
 #endif
 
