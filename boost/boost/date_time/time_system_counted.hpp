@@ -79,11 +79,11 @@ namespace date_time {
     }
     bool is_pos_infinity()const
     {
-      return impl_type::is_pos_infinity(time_count_.as_number());
+      return impl_type::is_pos_inf(time_count_.as_number());
     }
     bool is_neg_infinity()const
     {
-      return impl_type::is_neg_infinity(time_count_.as_number());
+      return impl_type::is_neg_inf(time_count_.as_number());
     }
     bool is_not_a_date_time()const
     {
@@ -226,3 +226,4 @@ namespace date_time {
 
 
 #endif
+
