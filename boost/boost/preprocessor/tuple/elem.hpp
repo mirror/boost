@@ -17,8 +17,6 @@
 <a href="../../../../boost/preprocessor/tuple/elem.hpp">Click here to see the header.</a>
 */
 
-#include <boost/preprocessor/expand.hpp>
-
 //! Expands to the I:th element of an N-tuple.
 /*!
 For example,
@@ -48,8 +46,13 @@ See BOOST_PP_LIMIT_TUPLE.
 // This is a workaround for a CodeWarrior PP bug. Strictly speaking
 // this workaround invokes undefined behavior, but it works as desired.
 #  define BOOST_PP_TUPLE_ELEM_DELAY(N,I,T) BOOST_PP_TUPLE##N##_ELEM##I##T
-#else
+#elif !defined(BOOST_NO_COMPILER_CONFIG) && defined(_MSC_VER)
+#  include <boost/preprocessor/expand.hpp>
+// This is a workaround for a MSVC++ PP bug. It should not be necessary
+// to use BOOST_PP_EXPAND(). Works on standard conforming compilers, too.
 #  define BOOST_PP_TUPLE_ELEM_DELAY(N,I,T) BOOST_PP_EXPAND(BOOST_PP_TUPLE##N##_ELEM##I T)
+#else
+#  define BOOST_PP_TUPLE_ELEM_DELAY(N,I,T) BOOST_PP_TUPLE##N##_ELEM##I T
 #endif
 
 // NOTE: TUPLE_ELEM can be implemented in O(N*N) space and O(N) time instead
