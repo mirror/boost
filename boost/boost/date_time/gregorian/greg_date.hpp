@@ -74,7 +74,8 @@ namespace gregorian {
     day_of_year_type day_of_year() const
     {
       date start_of_year(year(), 1, 1);
-      return ((*this-start_of_year).days() + 1);
+      unsigned short doy = static_cast<unsigned short>((*this-start_of_year).days() + 1);
+      return day_of_year_type(doy);
     }
     //!Return the Modified Julian Day number for the date.
     long modjulian_day() const
