@@ -125,7 +125,7 @@ namespace boost {
                     ForwardIteratorT SegmentEnd )
 
                 {
-                    if(InsertIt!=SegmentEnd)
+                    if(InsertIt!=SegmentBegin)
                     {
                         // Call replace to do the job
                         replace( Input, InsertIt, SegmentBegin, Storage );
