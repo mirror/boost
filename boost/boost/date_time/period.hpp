@@ -80,6 +80,7 @@ namespace date_time {
     bool is_after(const point_rep& point) const;
     period intersection(const period& other) const;
     period merge(const period& other) const;
+    period merge_inclusive(const period& other) const;
   private:
     point_rep begin_;
     point_rep last_;
@@ -317,6 +318,28 @@ namespace date_time {
       
     }
     return period<point_rep,duration_rep>(begin_,begin_); // no intersect return null
+  }
+
+  //! Same as merge for intersecting periods, inclusive merge otherwise.
+  /*! Combines two periods and any gap between them such that 
+   *  start = min(p1.start, p2.start)
+   *  end   = max(p1.end  , p2.end)
+   *@code
+   *        [---p1---)
+   *                       [---p2---)
+   * result:
+   *        [-----------p3----------) 
+   *@endcode
+   */
+  template<class point_rep, class duration_rep>
+  inline
+  period<point_rep,duration_rep>
+  period<point_rep,duration_rep>::merge_inclusive(const period<point_rep,duration_rep>& other) const 
+  {
+    point_rep start = min(begin_, other.begin_);
+    point_rep last   = max(end(), other.end());
+    return period<point_rep,duration_rep>(start, last);
+      
   }
 
 
