@@ -88,6 +88,8 @@ int main()
    r.assign(c_exp, c_exp+1);
    r.assign(c_exp, c_exp+1, boost::regex::perl);
 #endif 
+
+#ifndef BOOST_NO_STD_ITERATOR
    //
    //check iterators work with std lib algorithms:
    //
@@ -97,6 +99,7 @@ int main()
    boost::cregex_token_iterator rk, rm;
    std::distance(rk, rm);
    std::advance(rk, 0);
+#endif
    return 0;
 }
 
