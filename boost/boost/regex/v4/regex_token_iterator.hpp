@@ -51,11 +51,11 @@ public:
    regex_token_iterator_implementation(const regex_type* p, BidirectionalIterator last, const std::vector<int>& v, match_flag_type f)
       : end(last), pre(p), subs(v), flags(f){}
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-   template <std::size_t N>
-   regex_token_iterator_implementation(const regex_type* p, BidirectionalIterator last, const int (&submatches)[N], match_flag_type f)
+   template <std::size_t CN>
+   regex_token_iterator_implementation(const regex_type* p, BidirectionalIterator last, const int (&submatches)[CN], match_flag_type f)
       : end(last), pre(p), flags(f)
    { 
-      for(std::size_t i = 0; i < N; ++i)
+      for(std::size_t i = 0; i < CN; ++i)
          subs.push_back(submatches[i]); 
    }
 #endif

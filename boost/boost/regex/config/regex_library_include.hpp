@@ -28,16 +28,18 @@ Libraries for Borland and Microsoft compilers are automatically
 selected here, the name of the lib is selected according to the following
 formula:
 
-BOOST_LIB_NAME
+BOOST_LIB_PREFIX 
+   + BOOST_LIB_NAME
    + "_"
    + BOOST_LIB_TOOLSET
    + "_"
    + BOOST_LIB_THREAD_OPT
    + BOOST_LIB_RT_OPT
-   + BOOST_LIB_LINK_OPT
    + BOOST_LIB_DEBUG_OPT
 
 These are defined as:
+
+BOOST_LIB_PREFIX:     "lib" for static libraries otherwise "".
 
 BOOST_LIB_NAME:       The base name of the lib (boost_regex).
 
@@ -48,9 +50,6 @@ BOOST_LIB_THREAD_OPT: "s" for single thread builds,
 
 BOOST_LIB_RT_OPT:     "s" for static runtime,
                       "d" for dynamic runtime.
-
-BOOST_LIB_LINK_OPT:   "s" for static link,
-                      "i" for dynamic link.
 
 BOOST_LIB_DEBUG_OPT:  nothing for release builds,
                       "d" for debug builds,
@@ -138,9 +137,9 @@ BOOST_LIB_DEBUG_OPT:  nothing for release builds,
 #  undef BOOST_REGEX_STATIC_LINK
 #endif
 #if (defined(_DLL) || defined(_RTLDLL)) && !defined(BOOST_REGEX_STATIC_LINK)
-#  define BOOST_LIB_LINK_OPT "i"
+#  define BOOST_LIB_PREFIX 
 #else
-#  define BOOST_LIB_LINK_OPT "s"
+#  define BOOST_LIB_PREFIX "lib"
 #endif
 
 //
@@ -160,13 +159,14 @@ BOOST_LIB_DEBUG_OPT:  nothing for release builds,
 // now include the lib:
 //
 #if defined(BOOST_LIB_NAME) \
+      && defined(BOOST_LIB_PREFIX) \
       && defined(BOOST_LIB_TOOLSET) \
       && defined(BOOST_LIB_THREAD_OPT) \
       && defined(BOOST_LIB_RT_OPT) \
-      && defined(BOOST_LIB_LINK_OPT) \
       && defined(BOOST_LIB_DEBUG_OPT)
 
-#  pragma comment(lib, BOOST_LIB_NAME "_" BOOST_LIB_TOOLSET "_" BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT BOOST_LIB_LINK_OPT BOOST_LIB_DEBUG_OPT ".lib")
+#  pragma comment(lib, BOOST_LIB_PREFIX BOOST_LIB_NAME "_" BOOST_LIB_TOOLSET "_" BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT BOOST_LIB_DEBUG_OPT ".lib")
+//#  pragma message ("Linking to lib file: " BOOST_LIB_PREFIX BOOST_LIB_NAME "_" BOOST_LIB_TOOLSET "_" BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT BOOST_LIB_DEBUG_OPT ".lib")
 
 #endif
 
