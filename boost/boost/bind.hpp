@@ -1133,6 +1133,18 @@ template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, c
     typedef list9<B1, B2, B3, B4, B5, B6, B7, B8, B9> type;
 };
 
+// g++ 2.95 specific helper; used by the data member overload
+
+template<class T> struct add_cref
+{
+    typedef T const & type;
+};
+
+template<> struct add_cref<void>
+{
+    typedef void type;
+};
+
 } // namespace _bi
 
 // visit_each
@@ -1403,14 +1415,29 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 
 // data member pointers
 
+#if defined(__GNUC__) && (__GNUC__ == 2)
+
 template<class R, class T, class A1>
-    _bi::bind_t< R const &, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
+_bi::bind_t< typename _bi::add_cref<R>::type, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
+    BOOST_BIND(R T::*f, A1 a1)
+{
+    typedef _mfi::dm<R, T> F;
+    typedef typename _bi::list_av_1<A1>::type list_type;
+    return _bi::bind_t<typename _bi::add_cref<R>::type, F, list_type>(F(f), list_type(a1));
+}
+
+#else
+
+template<class R, class T, class A1>
+_bi::bind_t< R const &, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
     BOOST_BIND(R T::*f, A1 a1)
 {
     typedef _mfi::dm<R, T> F;
     typedef typename _bi::list_av_1<A1>::type list_type;
     return _bi::bind_t<R const &, F, list_type>(F(f), list_type(a1));
 }
+
+#endif
 
 } // namespace boost
 
