@@ -3,6 +3,11 @@
 #include<boost/token_iterator.hpp>
 #include<string>
 
+#ifdef __BORLANDC__
+// compiler bug fix:
+template class boost::token_iterator_generator<boost::offset_separator>::type;
+#endif
+
 int main(){
    using namespace std;
    using namespace boost;
