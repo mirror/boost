@@ -48,8 +48,8 @@ struct resolve_traits {
     typedef typename 
             mpl::if_<
                 mpl::and_<
-                    is_dereferenceable<T>,
-                    boost::detail::is_incrementable<T>
+                    boost::detail::is_incrementable<T>, // Must come first
+                    is_dereferenceable<T>               // for CW 9.[0-4]
                 >,
                 output_iterator_adapter<Mode, Ch, T>,
                 const T&
