@@ -9,6 +9,10 @@
 #ifndef BOOST_MULTI_INDEX_DETAIL_INDEX_NODE_BASE_HPP
 #define BOOST_MULTI_INDEX_DETAIL_INDEX_NODE_BASE_HPP
 
+#if defined(_MSC_VER)&&(_MSC_VER>=1200)
+#pragma once
+#endif
+
 #if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/archive/archive_exception.hpp>
