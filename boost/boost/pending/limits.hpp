@@ -101,34 +101,34 @@ template<class T> const float_round_style numeric_limits<T>::round_style;
 #define __KAI_NUMERIC_LIMITS_FLOAT(T)    \
     static const bool is_specialized = true;  \
     static const int  radix = 2;    \
-    				\
+                                    \
     static const bool is_signed = true;    \
     static const bool is_integer = false;  \
     static const bool is_exact = false;    \
-    				\
+                                    \
     static const bool has_infinity = true;  \
     static const bool has_quiet_NaN = true;  \
     static const bool has_signaling_NaN = true;  \
     static const bool has_denorm = false;  \
     static const bool has_denorm_loss = false;  \
-    				\
+                                    \
     static const bool is_iec559 = sizeof(T)<=8;  \
     static const bool is_bounded = true;  \
     static const bool is_modulo = false;  \
     static const bool traps = true;    \
     static const bool tinyness_before = true;  \
-     				\
+                                     \
     static T round_error ()   MSIPL_THROW    { return (T)0.5F; }      \
     static const float_round_style round_style = round_to_nearest;  \
     static T infinity ()      MSIPL_THROW {return *(T*)(void*)data.value[0];}\
     static T quiet_NaN ()     MSIPL_THROW {return *(T*)(void*)data.value[1];}\
     static T signaling_NaN () MSIPL_THROW {return *(T*)(void*)data.value[2];}\
-private:    			\
+private:                            \
     static const struct data_t {    \
-  T align;  			\
+  T align;                          \
   int value[3][sizeof(T)/sizeof(int)];  \
-    } data;    			\
-public:    				\
+    } data;                            \
+public:                                    \
 
 template<>
 class numeric_limits <float> {
@@ -203,50 +203,50 @@ public:
 // The definitions are not intended to be universally portable.
 // They are designed with KAI C++ targets in mind. -ADR
 
-#define __KAI_NUMERIC_LIMITS_INTEGRAL(T)    	\
-    static const bool is_specialized = true;    	\
-    						\
-    static const int radix = 2;    			\
-    static const int min_exponent = 0;    		\
-    static const int max_exponent = 0;    		\
-    static const int min_exponent10 = 0;    	\
-    static const int max_exponent10 = 0;    	\
-    						\
-    static const bool is_integer = true;    	\
-    static const bool is_exact = true;    		\
-    						\
-    static const bool has_infinity = false;    	\
-    static const bool has_quiet_NaN = false;    	\
+#define __KAI_NUMERIC_LIMITS_INTEGRAL(T)            \
+    static const bool is_specialized = true;            \
+                                                    \
+    static const int radix = 2;                            \
+    static const int min_exponent = 0;                    \
+    static const int max_exponent = 0;                    \
+    static const int min_exponent10 = 0;            \
+    static const int max_exponent10 = 0;            \
+                                                    \
+    static const bool is_integer = true;            \
+    static const bool is_exact = true;                    \
+                                                    \
+    static const bool has_infinity = false;            \
+    static const bool has_quiet_NaN = false;            \
     static const bool has_signaling_NaN = false;    \
-    static const bool has_denorm = false;    	\
-    static const bool has_denorm_loss = false;    	\
-    						\
-    static const bool is_iec559 = false;    	\
-    static const bool is_bounded = true;    	\
-    static const bool is_modulo = true;    		\
-    static const bool traps = false;    		\
-    static const bool tinyness_before = false;    	\
-    						\
+    static const bool has_denorm = false;            \
+    static const bool has_denorm_loss = false;            \
+                                                    \
+    static const bool is_iec559 = false;            \
+    static const bool is_bounded = true;            \
+    static const bool is_modulo = true;                    \
+    static const bool traps = false;                    \
+    static const bool tinyness_before = false;            \
+                                                    \
     static T infinity ()       MSIPL_THROW { return 0; }  \
     static T quiet_NaN ()      MSIPL_THROW { return 0; }  \
     static T signaling_NaN () MSIPL_THROW { return 0; }    \
     static T epsilon ()     MSIPL_THROW { return 1; }    \
     static T denorm_min ()  MSIPL_THROW { return min (); }  \
     static T round_error () MSIPL_THROW { return 0; }    \
-    						\
+                                                    \
     static const float_round_style round_style = round_toward_zero;
 
-#define __KAI_NUMERIC_LIMITS_SIGNED(T)     		\
-    static const int digits = 8*sizeof(T)-1;    	\
+#define __KAI_NUMERIC_LIMITS_SIGNED(T)                     \
+    static const int digits = 8*sizeof(T)-1;            \
     /* Following presumes 8, 16, 32, or 64-bit T. */    \
-    static const int digits10 = 7*sizeof(T)/3;     	\
-    static const bool is_signed = true;    		
+    static const int digits10 = 7*sizeof(T)/3;             \
+    static const bool is_signed = true;                    
 
-#define __KAI_NUMERIC_LIMITS_UNSIGNED(T)     	\
-    static const int digits = 8*sizeof(T);    	\
+#define __KAI_NUMERIC_LIMITS_UNSIGNED(T)             \
+    static const int digits = 8*sizeof(T);            \
     /* Following presumes 8, 16, 32, or 64-bit T. */    \
     static const int digits10 = 12*sizeof(T)/5;      \
-    static const bool is_signed = false;    		
+    static const bool is_signed = false;                    
 
 template<>
 class numeric_limits <int> {
@@ -308,7 +308,7 @@ public:
     __KAI_NUMERIC_LIMITS_INTEGRAL(char)
     static const int digits = CHAR_MIN<0 ? 7 : 8;
     static const int digits10 = 2;
-    static const bool is_signed = CHAR_MIN<0;    		
+    static const bool is_signed = CHAR_MIN<0;                    
     static char min () MSIPL_THROW { return CHAR_MIN; }
     static char max () MSIPL_THROW { return CHAR_MAX; }
 };
@@ -382,7 +382,7 @@ public:
     static bool epsilon ()     MSIPL_THROW { return false; }
     static bool denorm_min ()  MSIPL_THROW { return min (); }
     static bool round_error () MSIPL_THROW { return false; }
-    						
+                                                    
     static const float_round_style round_style = round_toward_zero;
 
     static const int digits = 1;

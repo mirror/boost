@@ -46,7 +46,7 @@ template <class ParentPA, class RankPA, class Vertex,
           class ComponentRepresentative>
 inline void
 link_sets(ParentPA p, RankPA rank, Vertex i, Vertex j,
-	  ComponentRepresentative comp_rep)
+          ComponentRepresentative comp_rep)
 {
   i = comp_rep(p, i);
   j = comp_rep(p, j);

@@ -168,7 +168,7 @@ namespace boost {
     {
       extend_sets(x,y);
       detail::link_sets(&parent[0], &rank[0], 
-			get(id,x), get(id,y), rep);
+                        get(id,x), get(id,y), rep);
     }
     template <class Element>
     inline void 

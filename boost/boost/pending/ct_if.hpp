@@ -32,7 +32,7 @@ namespace boost {
     
     struct SelectFirstType {
       template<class A, class B>
-      struct Template {	typedef A type; };
+      struct Template {        typedef A type; };
     };
     
     struct SelectSecondType {

@@ -663,9 +663,9 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
       REQUIRE(Sequence, DefaultConstructible);
 
       Sequence 
-	c(n),
-	c2(n, t),
-	c3(first, last);
+        c(n),
+        c2(n, t),
+        c3(first, last);
 
       c.insert(p, t);
       c.insert(p, n, t);
@@ -827,9 +827,9 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
       REQUIRE(SortedAssociativeContainer, ReversibleContainer);
 
       SortedAssociativeContainer 
-	c(kc),
-	c2(first, last),
-	c3(first, last, kc);
+        c(kc),
+        c2(first, last),
+        c3(first, last, kc);
 
       p = c.upper_bound(k);
       p = c.lower_bound(k);

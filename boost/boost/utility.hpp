@@ -78,9 +78,9 @@ namespace boost
       inline tied(A& a, B& b) : _a(a), _b(b) { }
       template <class U, class V>
       inline tied& operator=(const std::pair<U,V>& p) {
-	_a = p.first;
-	_b = p.second;
-	return *this;
+        _a = p.first;
+        _b = p.second;
+        return *this;
       }
     protected:
       A& _a;

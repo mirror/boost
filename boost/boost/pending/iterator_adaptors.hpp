@@ -475,7 +475,7 @@ struct reverse_iterator_policies
     
     template <class Difference, class Iterator1, class Iterator2>
     Difference distance(type<Difference>, const Iterator1& x, 
-			const Iterator2& y) const
+                        const Iterator2& y) const
         { return x - y; }
     
     template <class Iterator1, class Iterator2>
