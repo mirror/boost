@@ -86,7 +86,29 @@ namespace boost
         size_type       size() const     { return base::size();  }   
 
     };
-        
+
+    template< class ForwardRange, class ForwardRange2 >
+    inline bool operator==( const sub_range<ForwardRange>& l,
+                            const sub_range<ForwardRange2>& r )
+    {
+        return range_detail::equal( l, r );
+    }
+
+    template< class ForwardRange, class ForwardRange2 >
+    inline bool operator!=( const sub_range<ForwardRange>& l,
+                            const sub_range<ForwardRange2>& r )
+    {
+        return !range_detail::equal( l, r );
+    }
+
+    template< class ForwardRange, class ForwardRange2 >
+    inline bool operator<( const sub_range<ForwardRange>& l,
+                           const sub_range<ForwardRange2>& r )
+    {
+        return range_detail::less_than( l, r );
+    }
+
+
 } // namespace 'boost'
 
 #endif
