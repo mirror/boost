@@ -74,7 +74,9 @@ template<
     , typename N3 = na, typename N4 = na, typename N5 = na
     >
 struct divides
+
     : if_<
+
           is_na<N3>
         , divides2< N1,N2 >
         , divides<
@@ -82,6 +84,7 @@ struct divides
             , N3, N4, N5
             >
         >::type
+
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(
           5

@@ -205,7 +205,11 @@ template<
     BOOST_MPL_PP_DEF_PARAMS_TAIL(2, typename N, na)
     >
 struct AUX778076_OP_NAME
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+    : aux::msvc_eti_base< typename if_<
+#else
     : if_<
+#endif
           is_na<N3>
         , BOOST_PP_CAT(AUX778076_OP_NAME,2)<N1,N2>
         , AUX778076_OP_NAME<
@@ -213,6 +217,9 @@ struct AUX778076_OP_NAME
             , BOOST_MPL_PP_EXT_PARAMS(3, BOOST_PP_INC(AUX778076_OP_ARITY), N)
             >
         >::type
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+    >
+#endif
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(
           AUX778076_OP_ARITY

@@ -75,7 +75,9 @@ template<
     , typename N3 = na, typename N4 = na, typename N5 = na
     >
 struct bitor_
+
     : if_<
+
           is_na<N3>
         , bitor_2< N1,N2 >
         , bitor_<
@@ -83,6 +85,7 @@ struct bitor_
             , N3, N4, N5
             >
         >::type
+
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(
           5

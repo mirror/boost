@@ -74,7 +74,9 @@ template<
     , typename N3 = na, typename N4 = na, typename N5 = na
     >
 struct minus
-    : if_<
+
+    : aux::msvc_eti_base< typename if_<
+
           is_na<N3>
         , minus2< N1,N2 >
         , minus<
@@ -82,6 +84,9 @@ struct minus
             , N3, N4, N5
             >
         >::type
+
+    >
+
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(
           5
