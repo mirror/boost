@@ -16,7 +16,7 @@
 //  BOOST_WAVE_VERSION & 0x0000FF is the sub-minor version
 //  BOOST_WAVE_VERSION & 0x00FF00 is the minor version
 //  BOOST_WAVE_VERSION & 0xFF0000 is the major version
-#define BOOST_WAVE_VERSION                 0x01221
+#define BOOST_WAVE_VERSION                 0x010115
 
 //  The following defines contain the same information as above
 #define BOOST_WAVE_VERSION_MAJOR           1
