@@ -13,7 +13,7 @@
 #include <boost/config.hpp>
 #include <boost/pending/limits.hpp>
 
-#if defined(__GNUC__) || defined(__KCC) || defined(__ghs)
+#if defined(__GNUC__) || defined(__KCC) || defined(__ghs) || defined(__MWERKS__)
 #define BOOST_FPTR &
 #else
 #define BOOST_FPTR

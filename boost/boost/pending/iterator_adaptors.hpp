@@ -227,7 +227,13 @@ public:
         { return *(*this + n); }
     
     Self& operator++() {
+#ifdef __MWERKS__
+        // Odd bug, MWERKS couldn't  deduce the type for the member template
+        // Workaround by explicitly specifying the type.
+        policies().increment<Iterator>(iter());
+#else
         policies().increment(iter());
+#endif
         return *this;
     }
 
