@@ -2,21 +2,17 @@
 #ifndef BOOST_MPL_LESS_EQUAL_HPP_INCLUDED
 #define BOOST_MPL_LESS_EQUAL_HPP_INCLUDED
 
-// + file: boost/mpl/less_equal.hpp
-// + last modified: 25/feb/03
-
-// Copyright (c) 2000-03
-// Aleksey Gurtovoy
+// Copyright (c) 2000-03 Aleksey Gurtovoy
 //
-// Permission to use, copy, modify, distribute and sell this software
-// and its documentation for any purpose is hereby granted without fee, 
-// provided that the above copyright notice appears in all copies and 
-// that both the copyright notice and this permission notice appear in 
-// supporting documentation. No representations are made about the 
-// suitability of this software for any purpose. It is provided "as is" 
-// without express or implied warranty.
+// Use, modification and distribution are subject to the Boost Software 
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy 
+// at http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
+
+// $Source$
+// $Date$
+// $Revision$
 
 #include "boost/mpl/bool.hpp"
 #include "boost/mpl/integral_c.hpp"
@@ -34,10 +30,13 @@ template<
     >
 struct less_equal
 {
-    BOOST_STATIC_CONSTANT(bool, value = (
-          BOOST_MPL_AUX_VALUE_WKND(T1)::value 
-            <= BOOST_MPL_AUX_VALUE_WKND(T2)::value
-        ));
+    enum
+    { 
+        msvc71_wknd_ = ( BOOST_MPL_AUX_VALUE_WKND(T1)::value 
+                        <= BOOST_MPL_AUX_VALUE_WKND(T2)::value )
+    };
+
+    BOOST_STATIC_CONSTANT(bool, value = msvc71_wknd_);
 
 #if !defined(__BORLANDC__)
     typedef bool_<value> type;
