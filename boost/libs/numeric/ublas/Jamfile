@@ -27,6 +27,8 @@ subinclude libs/numeric/ublas/bench2 ;
 subinclude libs/numeric/ublas/bench3 ;
 subinclude libs/numeric/ublas/bench4 ;
 
+import testing ;
+
 SOURCES = concepts ;
 
 exe concepts
@@ -40,3 +42,99 @@ exe concepts
       <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
     ;
 
+test-suite uBLAS
+    : [ run test1/test1.cpp
+            test1/test11.cpp
+            test1/test12.cpp
+            test1/test13.cpp
+        : # args
+        : # input files
+        : # requirements
+
+          # borland warns so often that successful compilation is prevented.
+            <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+            <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+      ]
+      [ run test2/test2.cpp
+            test2/test21.cpp
+            test2/test22.cpp
+            test2/test23.cpp
+        : # args
+        : # input files
+        : # requirements
+
+          # borland warns so often that successful compilation is prevented.
+            <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+            <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+      ]
+      [ run test3/test3.cpp
+            test3/test31.cpp
+            test3/test32.cpp
+            test3/test33.cpp
+        : # args
+        : # input files
+        : # requirements
+
+          # borland warns so often that successful compilation is prevented.
+            <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+            <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+      ]
+      [ run test4/test4.cpp
+            test4/test41.cpp
+            test4/test42.cpp
+            test4/test43.cpp
+        : # args
+        : # input files
+        : # requirements
+
+          # borland warns so often that successful compilation is prevented.
+            <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+            <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+      ]
+      [ run test5/test5.cpp
+            test5/test51.cpp
+            test5/test52.cpp
+            test5/test53.cpp
+        : # args
+        : # input files
+        : # requirements
+
+          # borland warns so often that successful compilation is prevented.
+            <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+            <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+      ]
+      [ run test6/test6.cpp
+            test6/test61.cpp
+            test6/test62.cpp
+            test6/test63.cpp
+        : # args
+        : # input files
+        : # requirements
+
+          # borland warns so often that successful compilation is prevented.
+            <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+            <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+      ]
+      [ run test7/test7.cpp
+            test7/test71.cpp
+            test7/test72.cpp
+            test7/test73.cpp
+        : # args
+        : # input files
+        : # requirements
+
+          # borland warns so often that successful compilation is prevented.
+            <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+            <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+	    <define>BOOST_UBLAS_USE_INTERVAL
+      ]
+      [ run concepts.cpp
+        : # args
+        : # input files
+        : # requirements
+
+          # borland warns so often that successful compilation is prevented.
+            <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+            <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+      ]
+    ;
