@@ -56,7 +56,7 @@ public:
   typedef const copy_map_entry<Node>* const_iterator;
 
   copy_map(
-    const Allocator al,std::size_t size,Node* header_org,Node* header_cpy):
+    const Allocator& al,std::size_t size,Node* header_org,Node* header_cpy):
     al_(al),size_(size),spc(al_,size_),n(0),
     header_org_(header_org),header_cpy_(header_cpy),released(false)
   {}
