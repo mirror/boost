@@ -9,7 +9,7 @@
 #ifndef BOOST_MULTI_INDEX_DETAIL_AUTO_SPACE_HPP
 #define BOOST_MULTI_INDEX_DETAIL_AUTO_SPACE_HPP
 
-#include <boost/detail/allocator.hpp>
+#include <boost/detail/allocator_utilities.hpp>
 #include <boost/noncopyable.hpp>
 #include <memory>
 
