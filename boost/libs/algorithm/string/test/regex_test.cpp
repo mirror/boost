@@ -52,7 +52,7 @@ static void find_test()
     BOOST_CHECK(( (ch_result.begin() - pch1 ) == 3) && ( (ch_result.end() - pch1 ) == 6 ) );
 
     // multi-type comparison test
-/*    nc_vresult=find_regex( vec1, rx );
+    nc_vresult=find_regex( vec1, rx );
     BOOST_CHECK( 
         (distance<vector<int>::const_iterator>( vec1.begin(),nc_vresult.begin()) == 3) &&
         (distance<vector<int>::const_iterator>( vec1.begin(),nc_vresult.end()) == 6) );
@@ -61,7 +61,7 @@ static void find_test()
     BOOST_CHECK( 
         (distance<vector<int>::const_iterator>( vec1.begin(),cv_vresult.begin()) == 3) &&
         (distance<vector<int>::const_iterator>( vec1.begin(),cv_vresult.end()) == 6) );
-*/
+
     // find_all_regex test
     find_all_regex( tokens, str1, rx );
 
