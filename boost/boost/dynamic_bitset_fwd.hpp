@@ -1,4 +1,4 @@
-// (C) Copyright Chuck Allison and Jeremy Siek 2001, 2002. 
+// (C) Copyright Chuck Allison and Jeremy Siek 2001, 2002.
 //
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all
