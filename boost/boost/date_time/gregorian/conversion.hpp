@@ -9,7 +9,13 @@
  * $Date$
  */
 
+#include <exception>
 #include "boost/date_time/gregorian/gregorian_types.hpp"
+#if defined(BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS)
+#include "boost/date_time/gregorian/formatters_limited.hpp"
+#else
+#include "boost/date_time/gregorian/formatters.hpp"
+#endif // BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS
 #include "boost/date_time/c_time.hpp"
 
 namespace boost {
@@ -17,10 +23,14 @@ namespace boost {
 namespace gregorian {
 
 
-  //! Converts a date to a tm struct - all associated time components are left unset.
+  //! Converts a date to a tm struct. Throws out_of_range exception if date is a special value
   inline
-  tm to_tm(date d) 
+  tm to_tm(const date& d) 
   {
+    if(d.is_pos_infinity() || d.is_neg_infinity() || d.is_not_a_date()){
+      std::string s("tm unable to handle date value of " + to_simple_string(d));
+      throw std::out_of_range(s);
+    }
     tm datetm;
     boost::gregorian::date::ymd_type ymd = d.year_month_day();
     datetm.tm_year = ymd.year-1900; 
@@ -29,7 +39,7 @@ namespace gregorian {
     datetm.tm_wday = d.day_of_week();
     datetm.tm_yday = d.day_of_year()-1;
     datetm.tm_hour = datetm.tm_min = datetm.tm_sec = 0;
-    datetm.tm_isdst = -1; //?
+    datetm.tm_isdst = -1; // negative because not enough info to set tm_isdst
     return datetm;
   }
 

@@ -243,8 +243,21 @@ namespace local_time {
       }
       return false;
     }
+    //! Returns object's time value as a utc representation
     utc_time_type utc_time() const 
     {
+      return utc_time_type(time_);
+    }
+    //! Returns object's time value as a local representation
+    utc_time_type local_time() const 
+    {
+      if(zone_ != NULL){
+        utc_time_type lt = this->utc_time() + zone_->base_utc_offset();
+        if (is_dst()) {
+          lt += zone_->dst_offset();
+        }
+        return lt;
+      }
       return utc_time_type(time_);
     }
     //! Returns string in the form "2003-Aug-20 05:00:00 EDT"
@@ -267,8 +280,12 @@ namespace local_time {
       if (is_dst_) {
         lt += zone_->dst_offset();
       }
-      ss << lt << " ";
-      if (is_dst_) {
+      if(zone_ == NULL) {
+        ss << utc_time() << " UTC";
+        return ss.str();
+      }
+      ss << local_time() << " ";
+      if (is_dst()) {
         ss << zone_->dst_zone_abbrev();
       }
       else {
@@ -370,7 +387,6 @@ namespace local_time {
   typedef local_date_time_base<> local_date_time;
 
 } }
-
 
 
 #endif

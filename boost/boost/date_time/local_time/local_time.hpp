@@ -13,6 +13,7 @@
 #include "boost/date_time/local_time/posix_time_zone.hpp"
 #include "boost/date_time/local_time/time_zone.hpp"
 #include "boost/date_time/local_time/tz_database.hpp"
+#include "boost/date_time/local_time/conversion.hpp"
 #include "boost/date_time/time_zone_base.hpp"
 
 
