@@ -41,6 +41,7 @@ public:
   result_type max() const { return max_value; }
   explicit random_device(const std::string& token = default_token);
   ~random_device();
+  double entropy() const;
   unsigned int operator()();
 
 private:

@@ -111,6 +111,11 @@ boost::random_device::~random_device()
   delete pimpl;
 }
 
+double boost::random_device::entropy()
+{
+  return 10;
+}
+
 unsigned int boost::random_device::operator()()
 {
   return pimpl->next();
