@@ -163,10 +163,9 @@ to express their type requirements. The result is algorithms that are
 usable in more situations and have fewer type requirements.
 
 For the next working paper (but not for TR1), the committee should
-consider the following changes to the type requirements of
-algorithms.  These changes are phrased as phrased as textual
-substitutions, listing the algorithms to which each textual
-substitution applies.
+consider the following changes to the type requirements of algorithms.
+These changes are phrased as textual substitutions, listing the
+algorithms to which each textual substitution applies.
 
 Forward Iterator -> Forward Traversal Iterator and Readable Iterator
 
