@@ -53,9 +53,9 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy = empty_function_policy,
-          typename Mixin = empty_function_mixin,
-          typename Allocator = std::allocator<function_base>
+          typename Policy,
+          typename Mixin,
+          typename Allocator
         >
         struct params
         {
@@ -78,9 +78,9 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy = empty_function_policy,
-          typename Mixin = empty_function_mixin,
-          typename Allocator = std::allocator<function_base>
+          typename Policy,
+          typename Mixin,
+          typename Allocator
         >
         struct params
         {
@@ -103,9 +103,9 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy = empty_function_policy,
-          typename Mixin = empty_function_mixin,
-          typename Allocator = std::allocator<function_base>
+          typename Policy,
+          typename Mixin,
+          typename Allocator
         >
         struct params
         {
@@ -128,9 +128,9 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy = empty_function_policy,
-          typename Mixin = empty_function_mixin,
-          typename Allocator = std::allocator<function_base>
+          typename Policy,
+          typename Mixin,
+          typename Allocator
         >
         struct params
         {
@@ -153,9 +153,9 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy = empty_function_policy,
-          typename Mixin = empty_function_mixin,
-          typename Allocator = std::allocator<function_base>
+          typename Policy,
+          typename Mixin,
+          typename Allocator
         >
         struct params
         {
@@ -178,9 +178,9 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy = empty_function_policy,
-          typename Mixin = empty_function_mixin,
-          typename Allocator = std::allocator<function_base>
+          typename Policy,
+          typename Mixin,
+          typename Allocator
         >
         struct params
         {
@@ -204,9 +204,9 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy = empty_function_policy,
-          typename Mixin = empty_function_mixin,
-          typename Allocator = std::allocator<function_base>
+          typename Policy,
+          typename Mixin,
+          typename Allocator
         >
         struct params
         {
@@ -230,9 +230,9 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy = empty_function_policy,
-          typename Mixin = empty_function_mixin,
-          typename Allocator = std::allocator<function_base>
+          typename Policy,
+          typename Mixin,
+          typename Allocator
         >
         struct params
         {
@@ -256,9 +256,9 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy = empty_function_policy,
-          typename Mixin = empty_function_mixin,
-          typename Allocator = std::allocator<function_base>
+          typename Policy,
+          typename Mixin,
+          typename Allocator
         >
         struct params
         {
@@ -282,9 +282,9 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy = empty_function_policy,
-          typename Mixin = empty_function_mixin,
-          typename Allocator = std::allocator<function_base>
+          typename Policy,
+          typename Mixin,
+          typename Allocator
         >
         struct params
         {
@@ -308,9 +308,9 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy = empty_function_policy,
-          typename Mixin = empty_function_mixin,
-          typename Allocator = std::allocator<function_base>
+          typename Policy,
+          typename Mixin,
+          typename Allocator
         >
         struct params
         {
