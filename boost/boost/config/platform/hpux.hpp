@@ -29,7 +29,29 @@
 # define BOOST_HAS_PTHREADS 
 #endif
 
+// the following are always available:
 #ifndef BOOST_HAS_GETTIMEOFDAY
-// gettimeofday is always available
-#define BOOST_HAS_GETTIMEOFDAY
+#  define BOOST_HAS_GETTIMEOFDAY
 #endif
+#ifndef BOOST_HAS_SCHED_YIELD
+#    define BOOST_HAS_SCHED_YIELD
+#endif
+#ifndef BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
+#    define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
+#endif
+#ifndef BOOST_HAS_NL_TYPES_H
+#    define BOOST_HAS_NL_TYPES_H
+#endif
+#ifndef BOOST_HAS_NANOSLEEP
+#    define BOOST_HAS_NANOSLEEP
+#endif
+#ifndef BOOST_HAS_GETTIMEOFDAY
+#    define BOOST_HAS_GETTIMEOFDAY
+#endif
+#ifndef BOOST_HAS_DIRENT_H
+#    define BOOST_HAS_DIRENT_H
+#endif
+#ifndef BOOST_HAS_CLOCK_GETTIME
+#    define BOOST_HAS_CLOCK_GETTIME
+#endif
+

@@ -22,25 +22,20 @@
 #    define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #endif
 
-#if (__HP_aCC <= 33900)
+#if (__HP_aCC <= 33900) || !defined(BOOST_STRICT_CONFIG)
 #    define BOOST_NO_UNREACHABLE_RETURN_DETECTION
-#    define BOOST_MSVC6_MEMBER_TEMPLATES
-#    define BOOST_HAS_UNISTD_H
-#    define BOOST_HAS_SCHED_YIELD
-#    define BOOST_HAS_PTHREADS
-#    define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
-#    define BOOST_HAS_PARTIAL_STD_ALLOCATOR
-#    define BOOST_HAS_NL_TYPES_H
-#    define BOOST_HAS_NANOSLEEP
-#    define BOOST_HAS_LONG_LONG
-#    define BOOST_HAS_GETTIMEOFDAY
-#    define BOOST_HAS_DIRENT_H
-#    define BOOST_HAS_CLOCK_GETTIME
 #    define BOOST_NO_TEMPLATE_TEMPLATES
 #    define BOOST_NO_SWPRINTF
-#    define BOOST_NO_STD_ALLOCATOR
 #    define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+//     std lib config should set this one already:
+//#    define BOOST_NO_STD_ALLOCATOR
 #endif 
+
+// optional features rather than defects:
+#if (__HP_aCC >= 33900)
+#    define BOOST_HAS_LONG_LONG
+#    define BOOST_HAS_PARTIAL_STD_ALLOCATOR
+#endif
 
 #define BOOST_COMPILER "HP aCC version " BOOST_STRINGIZE(__HP_aCC)
 
@@ -57,4 +52,6 @@
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
 #endif
+
+
 
