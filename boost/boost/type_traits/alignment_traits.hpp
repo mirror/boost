@@ -16,8 +16,15 @@
 #ifndef BOOST_ICE_TYPE_TRAITS_HPP
 #include <boost/type_traits/ice.hpp>
 #endif
+#include <boost/preprocessor/list/for_each_i.hpp>
+#include <boost/preprocessor/tuple/to_list.hpp>
+#include <boost/preprocessor/cat.hpp>
+#include <boost/type_traits/transform_traits.hpp>
+#include <boost/static_assert.hpp>
 
 namespace boost{
+template <class T> struct alignment_of;
+
 //
 // get the alignment of some arbitrary type:
 namespace detail{
@@ -76,9 +83,111 @@ struct alignment_of<const volatile void>
 { BOOST_STATIC_CONSTANT(std::size_t, value = 0); };
 #endif
 
+namespace detail {
+class alignment_dummy;
+typedef void (*function_ptr)();
+typedef int (alignment_dummy::*member_ptr);
+typedef int (alignment_dummy::*member_function_ptr)();
+
+/*
+ * The ct_if implementation is temporary code. It will be replaced with MPL
+ * in the future...
+ */
+struct select_then 
+{       
+  template<typename Then, typename Else>
+  struct result
+  {       
+    typedef Then type;
+  };
+};
+ 
+struct select_else
+{
+  template<typename Then, typename Else>
+  struct result
+  { 
+    typedef Else type;
+  };
+};
+ 
+template<bool Condition>
+struct ct_if_selector
+{
+  typedef select_then type;
+};
+ 
+template<>
+struct ct_if_selector<false>
+{
+  typedef select_else type;
+};
+ 
+template<bool Condition, typename Then, typename Else>
+struct ct_if
+{
+  typedef typename ct_if_selector<Condition>::type select;
+  typedef typename select::template result<Then,Else>::type type;
+};
+
+#define BOOST_TT_ALIGNMENT_TYPES BOOST_PP_TUPLE_TO_LIST( \
+        11, ( \
+        char, short, int, long, float, double, long double \
+        , void*, function_ptr, member_ptr, member_function_ptr))
+
+#define BOOST_TT_CHOOSE_LOWER_ALIGNMENT(R,P,I,T) \
+        typename ct_if< \
+           alignment_of<T>::value <= target, T, char>::type BOOST_PP_CAT(t,I);
+
+#define BOOST_TT_CHOOSE_T(R,P,I,T) T BOOST_PP_CAT(t,I);
+           
+template <std::size_t target>
+union lower_alignment
+{
+  BOOST_PP_LIST_FOR_EACH_I(
+      BOOST_TT_CHOOSE_LOWER_ALIGNMENT
+      , ignored, BOOST_TT_ALIGNMENT_TYPES)
+};
+
+union max_align
+{
+  BOOST_PP_LIST_FOR_EACH_I(
+      BOOST_TT_CHOOSE_T
+      , ignored, BOOST_TT_ALIGNMENT_TYPES)
+};
+
+#undef BOOST_TT_ALIGNMENT_TYPES
+#undef BOOST_TT_CHOOSE_LOWER_ALIGNMENT
+#undef BOOST_TT_CHOOSE_T
+
+}
+
+// This alignment method originally due to Brian Parker, implemented by David
+// Abrahams, and then ported here by Doug Gregor. 
+template <int Align>
+class type_with_alignment
+{
+  typedef detail::lower_alignment<Align> t1;
+
+  BOOST_STATIC_CONSTANT(bool, t1_aligned =
+			(alignment_of<t1>::value >= Align)
+			& (alignment_of<t1>::value % Align == 0));
+  
+  typedef typename detail::ct_if<
+            t1_aligned
+            , t1
+            , detail::max_align
+          >::type align_t;
+
+  BOOST_STATIC_CONSTANT(std::size_t, found = alignment_of<align_t>::value);
+  
+  BOOST_STATIC_ASSERT(found >= Align);
+  BOOST_STATIC_ASSERT(found % Align == 0);
+  
+public:
+  typedef align_t type;
+};
+
 } // namespace boost
 
 #endif // ALIGNMENT_TYPE_TRAITS_HPP
-
- 
-

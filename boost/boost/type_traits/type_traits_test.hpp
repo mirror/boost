@@ -197,6 +197,28 @@ struct test_align<T&>
 
 #define align_test(T) test_align<T>::do_it()
 
+template<class T>
+struct test_type_with_align 
+{
+  static void do_it()
+  {
+    typedef typename boost::type_with_alignment<
+                       boost::alignment_of<T>::value>::type 
+      align_t;
+    int align = boost::alignment_of<T>::value;
+    int new_align = boost::alignment_of<align_t>::value;
+    ++test_count;
+    if (new_align % align != 0) {
+      ++failures;
+      std::cerr << "checking for an object with same alignment as " 
+		<< typeid(T).name() << "...failed" << std::endl;
+      std::cerr << "\tfound: " << typeid(align_t).name() << std::endl;
+    }
+  }
+};
+
+#define type_with_align_test(T) test_type_with_align<T>::do_it()
+
 //
 // the following code allows us to test that a particular
 // template functions correctly when instanciated inside another template

@@ -36,6 +36,11 @@ int cpp_main(int argc, char* argv[])
    align_test(VD);
    value_test(0, ::boost::alignment_of<void>::value);
 
+   type_with_align_test(int);
+   type_with_align_test(int(*)(int));
+   type_with_align_test(VB);
+   type_with_align_test(VD);
+   type_with_align_test(char[13]);
    return check_result(argc, argv);
 }
 

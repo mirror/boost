@@ -31,6 +31,7 @@ first. </p>
 <a href="#properties">Type Properties</a>
 <a href="#relationships">Relationships Between Types</a>
 <a href="#transformations">Transformations Between Types</a>
+<a href="#synthesized">Synthesizing Types</a>
 <a href="#compiler">Compiler Support Information</a>
 <a href="#headers">Type traits headers</a>
 <a href="#example">Example Code</a></pre>
@@ -776,6 +777,39 @@ built-in type, but for they own types too:</p>
 <p>Note that the macro
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION evaluates to
 nothing on those compilers that do support partial specialization.</p>
+
+<h2><a name="synthesized"></a>Synthesizing Types</h2>
+<p> The following template synthesizes a type with the desired properties.
+
+<table border="0" cellpadding="7" cellspacing="1" width="100%">
+    <tr>
+        <td valign="top" width="5%">&nbsp;</td>
+        <td valign="top" width="23%" bgcolor="#008080"><p
+        align="center">Expression</p>
+        </td>
+        <td valign="top" width="28%" bgcolor="#008080"><p
+        align="center">Description</p>
+        </td>
+        <td valign="top" width="13%" bgcolor="#008080"><p
+        align="center">Reference</p>
+        </td>
+        <td valign="top" width="25%" bgcolor="#008080"><p
+        align="center">Compiler requirements</p>
+        </td>
+        <td valign="top" width="5%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="5%">&nbsp;</td>
+        <td valign="top" width="23%" bgcolor="#C0C0C0"><code>::boost::type_with_alignment&lt;Align&gt;::type</code></td>
+        <td valign="top" width="28%" bgcolor="#C0C0C0">Attempts to find a
+        built-in or POD type with an alignment that is a multiple of Align.
+            </td>
+        <td valign="top" width="13%" bgcolor="#C0C0C0"></td>
+        <td width="25%" bgcolor="#C0C0C0"><p align="center"></p>
+        </td>
+        <td valign="top" width="5%">&nbsp;</td>
+    </tr>
+</table>
 
 <h2><a name="compiler"></a>Compiler Support Information</h2>
 
