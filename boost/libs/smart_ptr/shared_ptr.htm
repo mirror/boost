@@ -10,6 +10,14 @@
 
 <h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="center" width="277" height="86">Class
 <a name="shared_ptr">shared_ptr</a></h1>
+<p><a href="#Introduction">Introduction<br>
+Synopsis</a><br>
+<a href="#Members">Members</a><br>
+<a href="#shared_ptr_example">Example</a><br>
+<a href="#Handle/Body">Handle/Body Idiom</a><br>
+<a href="smarttests.htm">Frequently Asked Questions<br>
+Smart Pointer Timings</a></p>
+<h2><a name="Introduction">Introduction</a></h2>
 <p>Class <strong>shared_ptr</strong> stores a pointer to a dynamically allocated
 object. (Dynamically allocated objects are allocated with the C++ <tt>new</tt>
 expression.)&nbsp;&nbsp; The object pointed to is guaranteed to be deleted when
@@ -33,7 +41,7 @@ object A dangling with a use_count() of 1.</p>
 <p>The class is a template parameterized on <tt>T</tt>, the type of the object
 pointed to.&nbsp;&nbsp; <tt>T</tt> must meet the smart pointer <a href="smart_ptr.htm#Common requirements">Common
 requirements</a>.</p>
-<h2>Class shared_ptr Synopsis</h2>
+<h2>Class shared_ptr <a name="Synopsis"> Synopsis</a></h2>
 <pre>#include &lt;<a href="../../boost/smart_ptr.hpp">boost/smart_ptr.hpp</a>&gt;
 namespace boost {
 
@@ -112,7 +120,7 @@ than supplying a full range of comparison operators (&lt;, &gt;, &lt;=, &gt;=).<
 name BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION is defined.</p>
 <p>The current implementation does not supply the member template functions if
 the macro name BOOST_NO_MEMBER_TEMPLATES is defined.</p>
-<h2>Class shared_ptr Members</h2>
+<h2>Class shared_ptr <a name="Members"> Members</a></h2>
 <h3>shared_ptr <a name="shared_ptr_element_type">element_type</a></h3>
 <pre>typedef T element_type;</pre>
 <p>Provides the type of the stored pointer.</p>
@@ -218,19 +226,25 @@ which uses a <b>shared_ptr&lt;&gt;</b> to an incomplete type to hide the
 implementation.&nbsp;&nbsp; The
 instantiation of member functions which require a complete type occurs in the <a href="shared_ptr_example2.cpp">shared_ptr_example2.cpp</a>
 implementation file.</p>
-<h2>FAQ</h2>
+<h2><a name="FAQ">Frequently Asked Questions</a></h2>
 <p><b>Q</b>. Why doesn't <b>shared_ptr</b> have template parameters supplying
 traits or policies to allow extensive user customization?<br>
 <b>A</b>. Parameterization discourages users.&nbsp; <b>Shared_ptr</b> is
 carefully crafted to meet common needs without extensive parameterization.
 Someday a highly configurable smart pointer may be invented that is also very
 easy to use and very hard to misuse.&nbsp; Until then, <b>shared_ptr</b> is the
-smart pointer of choice for a wide range of applications.</p>
+smart pointer of choice for a wide range of applications.&nbsp; (Those
+interested in policy based smart pointers should read <a href="http://cseng.aw.com/book/0,,0201704315,00.html">Modern
+C++ Design</a> by Andrei Alexandrescu.)</p>
+<p><b>Q</b>. Why doesn't <b>shared_ptr</b> use a linked list implementation?<br>
+<b>A</b>. A linked list implementation does not offer enough advantages to
+offset the added cost of an extra pointer.&nbsp; See <a href="smarttests.htm">timings</a>
+page.</p>
 <p><b>Q</b>. Why don't <b>shared_ptr</b> (and the other Boost smart pointers)
 supply an automatic conversion to <b>T*</b>?<br>
 <b>A</b>. Automatic conversion is believed to be too error prone.</p>
 <hr>
-<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->24 May, 2001<!--webbot bot="Timestamp" endspan i-checksum="13964" -->
+<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->12 July, 2001<!--webbot bot="Timestamp" endspan i-checksum="21065" -->
 </p>
 <p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
 modify, sell and distribute this document is granted provided this copyright
