@@ -44,9 +44,11 @@ public: // structors
 
 public: // modifiers
 
-    incomplete& operator=(incomplete rhs)
+    incomplete& operator=(const incomplete& rhs)
     {
-        swap(rhs);
+        incomplete temp(rhs);
+        swap(temp);
+
         return *this;
     }
 
