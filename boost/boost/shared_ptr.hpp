@@ -140,8 +140,10 @@ public:
 #endif
 
     template<class Y>
-    explicit shared_ptr(weak_ptr<Y> const & r): px(r.px), pn(r.pn) // may throw
+    explicit shared_ptr(weak_ptr<Y> const & r): pn(r.pn) // may throw
     {
+        // it is now safe to copy r.px, as pn(r.pn) did not throw
+        px = r.px;
     }
 
     template<class Y>
@@ -166,7 +168,7 @@ public:
     template<class Y>
     shared_ptr(shared_ptr<Y> const & r, detail::polymorphic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
     {
-        if (px == 0)
+        if(px == 0)
         {
             boost::throw_exception(std::bad_cast());
         }

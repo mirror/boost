@@ -99,7 +99,9 @@ private:
 
 long X::instances = 0;
 
-struct Y: public A, public X
+// virtual inheritance stresses the implementation
+
+struct Y: public A, public virtual X
 {
     static long instances;
 
@@ -770,6 +772,11 @@ void weak_ptr_constructor()
     }
     catch(boost::bad_weak_ptr)
     {
+    }
+
+    {
+        boost::weak_ptr<Y> wp2(wp);
+        boost::weak_ptr<X> wp3(wp);
     }
 }
 

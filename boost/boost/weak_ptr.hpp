@@ -16,6 +16,8 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <cstring> // for std::memcpy
+
 #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
 # pragma warning(push)
 # pragma warning(disable:4284) // odd return type for operator->
@@ -42,8 +44,11 @@ public:
 //  generated copy constructor, assignment, destructor are fine
 
     template<class Y>
-    weak_ptr(weak_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
+    weak_ptr(weak_ptr<Y> const & r): pn(r.pn) // never throws
     {
+        // r.px may be an invalid pointer value
+        using namespace std;
+        memcpy(&this->px, &r.px, sizeof(r.px));
     }
 
     template<class Y>
