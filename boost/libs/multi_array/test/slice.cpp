@@ -41,46 +41,7 @@ struct view_traits_const {
 };
 
 
-/////////////////////////////////////////////////////////////////////////
-// choose view_traits begins
-//
-
-#if 0
-struct choose_view_traits_const {
-  template <typename Array>
-  struct bind {
-    typedef view_traits_const<Array> type;
-  };
-};
-
-struct choose_view_traits_mutable {
-  template <typename Array>
-  struct bind {
-    typedef view_traits_mutable<Array> type;
-  };
-};
-
-
-template <typename ConstnessTag>
-struct view_traits_gen_helper {
-  typedef choose_view_traits_mutable choice;
-};
-
-template <>
-struct view_traits_gen_helper<const_array_tag> {
-  typedef choose_view_traits_const choice;
-};
-
-template <typename Array, typename ConstTag>
-struct view_traits_generator {
-private:
-  typedef typename view_traits_gen_helper<ConstTag>::choice Choice;
-public:
-  typedef typename Choice::template bind<Array>::type type;
-};
-
-#else
-
+// Meta-program selects the proper view_traits implementation.
 template <typename Array, typename ConstTag>
 struct view_traits_generator :
   boost::mpl::if_< boost::is_same<ConstTag,const_array_tag>,
@@ -88,10 +49,6 @@ struct view_traits_generator :
                    view_traits_mutable<Array> >
 {};
 
-#endif // 0
-//
-// choose view_traits ends
-/////////////////////////////////////////////////////////////////////////
 
 template <typename Array, typename ViewTraits>
 void test_views(Array& A, const ViewTraits&) {
