@@ -72,9 +72,11 @@
 #endif
 
 //
-// RW defines _RWSTD_ALLOCATOR if the allocator is conformant and in use:
+// RW defines _RWSTD_ALLOCATOR if the allocator is conformant and in use
+// (the or _HPACC_ part is a hack - the library seems to define _RWSTD_ALLOCATOR
+// on HP aCC systems even though the allocator is in fact broken):
 //
-#if !defined(_RWSTD_ALLOCATOR)
+#if !defined(_RWSTD_ALLOCATOR) || defined(_HPACC_) || defined(__HP_aCC)
 #  define BOOST_NO_STD_ALLOCATOR
 #endif
 
