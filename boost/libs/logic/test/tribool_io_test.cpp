@@ -8,7 +8,10 @@
 #include <sstream>
 #include <string>
 #include <iostream>
-#include <locale>
+
+#ifndef BOOST_NO_STD_LOCALE
+#  include <locale>
+#endif
 
 int test_main(int, char*[])
 {
@@ -41,6 +44,7 @@ int test_main(int, char*[])
             << std::endl;
   BOOST_TEST(out.str() == "2");
 
+#ifndef BOOST_NO_STD_LOCALE
   const std::numpunct<char>& punct =
     BOOST_USE_FACET(std::numpunct<char>, out.getloc());
 
@@ -67,9 +71,9 @@ int test_main(int, char*[])
             << std::endl;
   BOOST_TEST(out.str() == "indeterminate");
 
-#if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
+#  if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
   // No template constructors, so we can't build the test locale
-#else
+#  else
   // Give indeterminate a new name, and output it via boolalpha
   std::locale global;
   std::locale test_locale(global, new indeterminate_name<char>("maybe"));
@@ -79,7 +83,8 @@ int test_main(int, char*[])
   std::cout << "Output indeterminate (boolalpha - \"maybe\"): " << out.str()
             << std::endl;
   BOOST_TEST(out.str() == "maybe");
-#endif
+#  endif
+#endif // ! BOOST_NO_STD_LOCALE
 
   // Checking tribool input
 
