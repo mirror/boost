@@ -18,7 +18,7 @@ using boost::lexical_cast;
 
 int main(){
 #ifdef BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS
-  check("No tests run for this compiler", true);
+  check("No wstring/wstream support for this compiler", false);
 #else
   
   std::wstring res, ws;
