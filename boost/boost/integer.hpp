@@ -9,7 +9,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
-//   30 Jul 00  Add typename syntax fix (Jens Maurer) 
+//   01 Apr 01  Modified to use new <boost/limits.hpp> header. (John Maddock)
+//   30 Jul 00  Add typename syntax fix (Jens Maurer)
 //   28 Aug 99  Initial version
 
 #ifndef BOOST_INTEGER_HPP

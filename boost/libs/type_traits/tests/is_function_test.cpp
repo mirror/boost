@@ -8,7 +8,11 @@
 #include "boost/type_traits/type_traits_test.hpp"
 
 template <class T>
+#ifndef __BORLANDC__
 void is_function_test(T& foo)
+#else
+void is_function_test(const T& foo)
+#endif
 {
    value_test(true, ::boost::is_function<T>::value);
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION

@@ -12,7 +12,7 @@
 
 #include <cstddef>
 #include <cstdlib>
-#include <limits>
+#include <boost/limits.hpp>
 #include <new>
 
 template <typename T>

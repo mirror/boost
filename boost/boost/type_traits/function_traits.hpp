@@ -140,15 +140,15 @@ struct is_function
 private:
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
    typedef typename detail::is_function_chooser< ::boost::is_reference<T>::value>::template rebind<T> binder;
-   typedef typename binder::type type;
+   typedef typename binder::type m_type;
 #else
    // without partial specialistaion we can't use is_reference on
    // function types, that leaves this template broken in the case that
    // T is a reference:
-   typedef detail::is_function_helper<T> type;
+   typedef detail::is_function_helper<T> m_type;
 #endif
 public:
-   BOOST_STATIC_CONSTANT(bool, value = type::value);
+   BOOST_STATIC_CONSTANT(bool, value = m_type::value);
 };
 
 } // boost

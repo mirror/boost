@@ -13,12 +13,13 @@
  * $Id$
  *
  * Revision history
+ *   01 April 2001: Modified to use new <boost/limits.hpp> header. (JMaddock)
  */
 
 #ifndef INTEGRATE_HPP
 #define INTEGRATE_HPP
 
-#include <limits>
+#include <boost/limits.hpp>
 
 template<class UnaryFunction>
 inline typename UnaryFunction::result_type 

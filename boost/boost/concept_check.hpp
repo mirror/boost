@@ -5,13 +5,16 @@
 // "as is" without express or implied warranty, and with no claim as
 // to its suitability for any purpose.
 //
+// Revision History:
+//   01 April 2001: Modified to use new <boost/limits.hpp> header. (JMaddock)
+//
 #ifndef BOOST_CONCEPT_CHECKS_HPP
 #define BOOST_CONCEPT_CHECKS_HPP
 
 #include <boost/config.hpp>
 #include <boost/iterator.hpp>
 #include <utility>
-#include <boost/pending/limits.hpp>
+#include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 
 #if defined(BOOST_MSVC) || defined(__BORLANDC__)

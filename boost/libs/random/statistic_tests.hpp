@@ -20,7 +20,7 @@
 #include <stdexcept>
 #include <iterator>
 #include <vector>
-#include <limits>
+#include <boost/limits.hpp>
 #include <algorithm>
 #include <cmath>
 

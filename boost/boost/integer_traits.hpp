@@ -18,8 +18,8 @@
 #ifndef BOOST_INTEGER_TRAITS_HPP
 #define BOOST_INTEGER_TRAITS_HPP
 
-#include <limits>
 #include <boost/config.hpp>
+#include <boost/limits.hpp>
 
 // This is an implementation detail and not part of the interface
 #include <limits.h>

@@ -11,7 +11,7 @@
 #define BOOST_POOL_ALLOC_HPP
 
 // std::numeric_limits
-#include <limits>
+#include <boost/limits.hpp>
 // new, std::bad_alloc
 #include <new>
 

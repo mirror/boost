@@ -48,7 +48,7 @@ namespace boost {
   class static_object {
   public:
     static T& get() {
-     char d[sizeof(T)];
+     static char d[sizeof(T)];
       return *reinterpret_cast<T*>(d);
     }
   };

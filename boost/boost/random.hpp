@@ -15,6 +15,7 @@
  * $Id$
  *
  * Revision history
+ *  2001-04-01  Modified to use new <boost/limits.hpp> header. (JMaddock)
  *  2000-02-18  portability fixes (thanks to Beman Dawes)
  *  2000-02-21  shuffle_output, inversive_congruential_schrage,
  *              generator_iterator, uniform_smallint
@@ -36,7 +37,7 @@
 #define BOOST_RANDOM_HPP
 
 #include <iostream>
-#include <limits>
+#include <boost/limits.hpp>
 #include <cmath>           // for std::log etc.
 #include <cstddef>         // std::ptrdiff_t
 #include <cassert>
