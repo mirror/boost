@@ -283,7 +283,7 @@ namespace boost {
 #ifndef BOOST_FUNCTION_NO_ENABLE_IF
                             ,typename detail::function::enable_if<
                             (::boost::type_traits::ice_not<
-                             is_same<Functor, int>::value>::value),
+                             (is_same<Functor, int>::value)>::value),
                                         int>::type = 0
 #endif // BOOST_FUNCTION_NO_ENABLE_IF
                             ) :
@@ -330,7 +330,8 @@ namespace boost {
     template<typename Functor>
 #ifndef BOOST_FUNCTION_NO_ENABLE_IF
     typename detail::function::enable_if<
-               (::boost::type_traits::ice_not<is_same<Functor, int>::value>::value),
+               (::boost::type_traits::ice_not<
+                 (is_same<Functor, int>::value)>::value),
                BOOST_FUNCTION_FUNCTION&>::type
 #else
     BOOST_FUNCTION_FUNCTION&
@@ -578,7 +579,8 @@ public:
   function(Functor f
 #ifndef BOOST_FUNCTION_NO_ENABLE_IF
            ,typename detail::function::enable_if<
-                       (::boost::type_traits::ice_not<is_same<Functor, int>::value>::value),
+                       (::boost::type_traits::ice_not<
+                          (is_same<Functor, int>::value)>::value),
                        int>::type = 0
 #endif
            ) :
@@ -603,7 +605,8 @@ public:
   template<typename Functor>
 #ifndef BOOST_FUNCTION_NO_ENABLE_IF
   typename detail::function::enable_if<
-                      (::boost::type_traits::ice_not<is_same<Functor, int>::value>::value),
+                      (::boost::type_traits::ice_not<
+                         (is_same<Functor, int>::value)>::value),
                       self_type&>::type
 #else
   self_type&
