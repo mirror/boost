@@ -4,6 +4,12 @@
   class reverse_iterator
   {
   public:
+    typedef iterator_traits<Iterator>::value_type value_type;
+    typedef iterator_traits<Iterator>::reference reference;
+    typedef iterator_traits<Iterator>::pointer pointer;
+    typedef iterator_traits<Iterator>::difference_type difference_type;
+    typedef /* see below */ iterator_category;
+
     reverse_iterator() {}
     explicit reverse_iterator(Iterator x) ;
 
@@ -19,6 +25,11 @@
   private:
     Iterator m_iterator; // exposition
   };
+
+
+The ``iterator_category`` member is a type convertible to the tags
+corresponding to each standard concept modeled by
+``reverse_iterator``, as described in the models section.
 
 
 ``reverse_iterator`` requirements
