@@ -4,7 +4,7 @@
 //
 //  weak_ptr.hpp
 //
-//  Copyright (c) 2001, 2002 Peter Dimov
+//  Copyright (c) 2001, 2002, 2003 Peter Dimov
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -37,7 +37,7 @@ public:
 
     typedef T element_type;
 
-    weak_ptr(): px(0), pn()
+    weak_ptr(): px(0), pn() // never throws in 1.30+
     {
     }
 
@@ -92,7 +92,7 @@ public:
 
 #endif
 
-    void reset()
+    void reset() // never throws in 1.30+
     {
         this_type().swap(*this);
     }
