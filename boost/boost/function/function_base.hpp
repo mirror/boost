@@ -60,16 +60,16 @@ namespace boost { namespace python { namespace objects {
 #endif
 
 // Borland C++ 5.6.0 doesn't support enable_if
-#if defined(__BORLANDC__) && __BORLANDC__ <= 0x560 && !defined(BOOST_STRICT_CONFIG)
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x561)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
 // Metrowerks 7.2 doesn't support enable_if
-#if defined(__MWERKS__) && __MWERKS__ <= 0x2407 && !defined(BOOST_STRICT_CONFIG)
+#if BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
-#if defined(__SUNPRO_CC) && __SUNPRO_CC <= 0x540 && !defined(BOOST_STRICT_CONFIG)
+#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x540)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
@@ -377,26 +377,26 @@ public:
 void operator==(const function_base&, const function_base&);
 void operator!=(const function_base&, const function_base&);
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-inline bool operator==(const function_base& f, 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+inline bool operator==(const function_base& f,
                        detail::function::useless_clear_type*)
 {
   return f.empty();
 }
-  
-inline bool operator!=(const function_base& f, 
+
+inline bool operator!=(const function_base& f,
                        detail::function::useless_clear_type*)
 {
   return !f.empty();
 }
 
-inline bool operator==(detail::function::useless_clear_type*, 
+inline bool operator==(detail::function::useless_clear_type*,
                        const function_base& f)
 {
   return f.empty();
 }
-  
-inline bool operator!=(detail::function::useless_clear_type*, 
+
+inline bool operator!=(detail::function::useless_clear_type*,
                        const function_base& f)
 {
   return !f.empty();
