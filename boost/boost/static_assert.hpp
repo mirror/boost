@@ -15,6 +15,7 @@
 #define BOOST_STATIC_ASSERT_HPP
 
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 
 #ifdef __BORLANDC__
 //
@@ -56,7 +57,8 @@ template<int x> struct static_assert_test{};
 // style casts: too many compilers currently have problems with static_cast
 // when used inside integral constant expressions.
 //
-#if !defined(BOOST_BUGGY_INTEGRAL_CONSTANT_EXPRESSIONS) && !defined(__MWERKS__)
+#if !defined(BOOST_BUGGY_INTEGRAL_CONSTANT_EXPRESSIONS) && \
+    !BOOST_WORKAROUND(__MWERKS__, < 0x3003)
 
 #if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
 // __LINE__ macro broken when -ZI is used see Q199057
