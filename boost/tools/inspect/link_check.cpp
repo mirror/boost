@@ -41,7 +41,8 @@ namespace boost
       const path & full_path )
     {
       // keep track of paths already encountered to reduce disk activity
-      m_paths[ relative_to( full_path, fs::initial_path() ) ] |= m_present;
+      if ( !is_directory( full_path ) )
+        m_paths[ relative_to( full_path, fs::initial_path() ) ] |= m_present;
     }
 
 //  inspect ( .htm, .html )  -------------------------------------------------//
@@ -151,6 +152,7 @@ namespace boost
      for ( m_path_map::const_iterator itr = m_paths.begin();
        itr != m_paths.end(); ++itr )
      {
+// std::clog << itr->first << " " << itr->second << "\n";
        if ( (itr->second & m_linked_to) != m_linked_to
          && (itr->first.rfind( ".html" ) == itr->first.size()-5
           || itr->first.rfind( ".htm" ) == itr->first.size()-4)
