@@ -60,7 +60,7 @@ DEPENDS all : test ;
    [ run posix_time/testparse_time.cpp
      <lib>../build/boost_date_time 
     : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
-   [ run posix_time/testperiod.cpp
+   [ run posix_time/testtime_period.cpp
      <lib>../build/boost_date_time
     : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
    [ run posix_time/testtime.cpp
@@ -70,6 +70,7 @@ DEPENDS all : test ;
      <lib>../build/boost_date_time
     : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
  ;
+
 
 }
 
