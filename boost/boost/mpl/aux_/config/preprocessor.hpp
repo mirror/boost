@@ -3,10 +3,9 @@
 #define BOOST_MPL_AUX_CONFIG_PREPROCESSOR_HPP_INCLUDED
 
 // + file: boost/mpl/aux_/config/preprocessor.hpp
-// + last modified: 23/jun/03
+// + last modified: 02/sep/03
 
-// Copyright (c) 2000-03
-// Aleksey Gurtovoy
+// Copyright (C) 2000-03 Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
 // and its documentation for any purpose is hereby granted without fee, 
@@ -20,11 +19,9 @@
 
 #include "boost/mpl/aux_/config/workaround.hpp"
 
-#if    !defined( BOOST_MPL_PREPROCESSING_MODE ) \
-    && (   BOOST_WORKAROUND( __MWERKS__, BOOST_TESTED_AT(0x3003) ) \
-        || BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x561) ) \
-        || BOOST_WORKAROUND( __IBMCPP__, BOOST_TESTED_AT(502) ) \
-        )
+#if    BOOST_WORKAROUND(__MWERKS__, <= 0x3003) \
+    || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
+    || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(502))
 
 #   define BOOST_MPL_BROKEN_PP_MACRO_EXPANSION
 
