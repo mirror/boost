@@ -137,7 +137,7 @@ istream& get_line(istream& is, nstring_type& s, char delim)
 {
    char c = (char)is.get();
    s.erase(s.begin(), s.end());
-   while((c != delim) && (c != EOF))
+   while((c != delim) && is.good())
    {
       s.append(1, c);
       c = (char)is.get();
@@ -176,7 +176,7 @@ istream& get_line(istream& is, string_type& s, char delim)
 {
    char c = (char)is.get();
    s.erase(s.begin(), s.end());
-   while((c != delim) && (c != EOF))
+   while((c != delim) && is.good())
    {
       s.append(1, c);
       c = (char)is.get();
