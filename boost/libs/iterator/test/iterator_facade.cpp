@@ -11,12 +11,12 @@
 // This is a really, really limited test so far.  All we're doing
 // right now is checking that the postfix++ proxy for single-pass
 // iterators works properly.
-template <class Ref, class CategoryOrTraversal = boost::single_pass_traversal_tag>
+template <class Ref>
 class counter_iterator
   : public boost::iterator_facade<
-        counter_iterator<Ref, CategoryOrTraversal>
+        counter_iterator<Ref>
       , int const
-      , CategoryOrTraversal
+      , boost::single_pass_traversal_tag
       , Ref
     >
 {
@@ -63,9 +63,7 @@ int main()
     boost::readable_iterator_test(counter_iterator<int const&>(&state), 0);
     state = 3;
     boost::readable_iterator_test(counter_iterator<proxy>(&state), 3);
-    state = 5;
-    boost::readable_iterator_test(counter_iterator<proxy,std::output_iterator_tag>(&state), 5);
-    boost::writable_iterator_test(counter_iterator<proxy,std::output_iterator_tag>(&state), 9, 7);
+    boost::writable_iterator_test(counter_iterator<proxy>(&state), 9, 7);
     BOOST_ASSERT(state == 7);
     return 0;
 }

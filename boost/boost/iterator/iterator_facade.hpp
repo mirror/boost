@@ -22,6 +22,7 @@
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_pointer.hpp>
 #include <boost/type_traits/remove_const.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_pod.hpp>
 
@@ -195,6 +196,43 @@ namespace boost
         Iterator stored_iterator;
     };
 
+# ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+    template <class Reference, class Value>
+    struct is_non_proxy_reference_impl
+    {
+        static Reference r;
+        
+        template <class R>
+        static typename mpl::if_<
+            is_convertible<
+                R const volatile*
+              , Value const volatile*
+            >
+          , char[1]
+          , char[2]
+        >::type& helper(R const&);
+        
+        BOOST_STATIC_CONSTANT(bool, value = sizeof(helper(r)) == 1);
+    };
+        
+    template <class Reference, class Value>
+    struct is_non_proxy_reference
+      : mpl::bool_<
+            is_non_proxy_reference_impl<Reference, Value>::value
+        >
+    {};
+# else 
+    template <class Reference, class Value>
+    struct is_non_proxy_reference
+      : is_convertible<
+            typename remove_reference<Reference>::type
+            const volatile*
+          , Value const volatile*
+        >
+    {};
+# endif 
+        
     // A metafunction to choose the result type of postfix ++
     //
     // Because the C++98 input iterator requirements say that *r++ has
@@ -209,7 +247,7 @@ namespace boost
     // supports the operator<.  Since there are any number of such
     // operations, we're not going to try to support them.  Therefore,
     // even if r++ returns a proxy, *r++ will only return a proxy if
-    // CategoryOrTraversal is convertible to std::output_iterator_tag.
+    // *r also returns a proxy.
     template <class Iterator, class Value, class Reference, class CategoryOrTraversal>
     struct postfix_increment_result
       : mpl::apply_if<
@@ -227,9 +265,9 @@ namespace boost
                 >
             >
           , mpl::if_<
-                is_convertible<CategoryOrTraversal,std::output_iterator_tag>
-              , writable_postfix_increment_proxy<Iterator>
+                is_non_proxy_reference<Reference,Value>
               , postfix_increment_proxy<Iterator>
+              , writable_postfix_increment_proxy<Iterator>
             >
           , mpl::identity<Iterator>
         >
