@@ -206,8 +206,6 @@ using std::distance;
 #  define BOOST_REGEX_NO_W32
 #endif
 
-#ifdef __COMO__
-
 
 /*****************************************************************************
  *
@@ -626,6 +624,7 @@ inline void pointer_construct(T* p, const T& t)
 #endif
 
 #endif
+
 
 
 
