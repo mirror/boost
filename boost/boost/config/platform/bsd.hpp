@@ -32,7 +32,7 @@
 // FreeBSD 3.x has pthreads support, but defines _POSIX_THREADS in <pthread.h>
 // and not in <unistd.h>
 //
-#if (defined(__FreeBSD__) && (__FreeBSD__ <= 3)) || defined(__OpenBSD__)
+#if defined(__FreeBSD__) && (__FreeBSD__ <= 3)
 #  define BOOST_HAS_PTHREADS
 #endif
 
@@ -54,16 +54,10 @@
 #define BOOST_HAS_GETTIMEOFDAY
 #define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
 
-//
-// On *BSD thread support not enabled unless _POSIX_THREADS is defined:
-//
-#if !defined(_POSIX_THREADS) && defined(BOOST_HAS_THREADS)
-#  undef BOOST_HAS_THREADS
-#endif
-
 // boilerplate code:
 #define BOOST_HAS_UNISTD_H
 #include <boost/config/posix_features.hpp>
+
 
 
 
