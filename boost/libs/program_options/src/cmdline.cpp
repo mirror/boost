@@ -734,9 +734,10 @@ namespace boost { namespace program_options { namespace detail {
         typedef boost::program_options::ambiguous_option ambiguous_option;
 
         if (e) {
-            invalid_command_line_syntax::kind_t re;
-            if (e == ed_success) 
-                return;
+            // Assignment needed 
+            invalid_command_line_syntax::kind_t re 
+                = invalid_command_line_syntax::extra_parameter;
+
             switch(e) {
             case ed_unknown_option:
                 re = invalid_command_line_syntax::extra_parameter;
@@ -762,12 +763,9 @@ namespace boost { namespace program_options { namespace detail {
             case ed_extra_parameter:
                 re = invalid_command_line_syntax::extra_parameter;
                 break;
-            // Needed to suppress gcc warning about uninitialized 're'
-            // We've enumerated all value, except for ed_success, handled
-            // before the switch. Unless we have default with return, gcc
-            // will complain about possibly uninitialized 're' below.
-            default:
-                assert(false && "uknown error");
+            // Gcc cannot understand that we can't ever have 'ed_success'
+            // here because of if (e)                
+            case ed_success:
                 return;                
             }
             throw invalid_command_line_syntax(m_current, re);
