@@ -11,6 +11,8 @@
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/multi_index/detail/no_duplicate_tags.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/mpl/transform.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/preprocessor/facilities/intercept.hpp> 
 #include <boost/preprocessor/repetition/enum_binary_params.hpp> 
@@ -18,7 +20,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 
-/* An alias to mpl::vector used to hide MPL from the user.
+/* A wrapper of mpl::vector used to hide MPL from the user.
  * tag contains types used as tag names for indices in get() functions.
  */
 
@@ -65,7 +67,14 @@ template<
 >
 struct tag:private detail::tag_marker
 {
-  typedef mpl::vector<BOOST_PP_ENUM_PARAMS(BOOST_MULTI_INDEX_TAG_SIZE,T)> type;
+  /* The mpl::transform pass produces shorter symbols (without
+   * trailing mpl::na's.)
+   */
+
+  typedef typename mpl::transform<
+    mpl::vector<BOOST_PP_ENUM_PARAMS(BOOST_MULTI_INDEX_TAG_SIZE,T)>,
+    mpl::identity<mpl::_1>
+  >::type type;
 
   BOOST_STATIC_ASSERT(detail::no_duplicate_tags<type>::value);
 };
