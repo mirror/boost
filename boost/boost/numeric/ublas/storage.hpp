@@ -1133,12 +1133,12 @@ namespace boost { namespace numeric { namespace ublas {
         // Composition
         BOOST_UBLAS_INLINE
         basic_slice compose (const basic_range<size_type, difference_type> &r) const {
-            BOOST_UBLAS_CHECK (start_ >= stride_ * r.start (), bad_index ());
+            BOOST_UBLAS_CHECK (stride_ >=0 || start_ >= -stride_ * r.start(), bad_index ());
             return basic_slice (start_ + stride_ * r.start (), stride_, r.size ());
         }
         BOOST_UBLAS_INLINE
         basic_slice compose (const basic_slice &s) const {
-            BOOST_UBLAS_CHECK (start_ >= stride_ * s.start_, bad_index ());
+            BOOST_UBLAS_CHECK (stride_ >=0 || start_ >= -stride_ * s.start_, bad_index ());
             return basic_slice (start_ + stride_ * s.start_, stride_ * s.stride_, s.size_);
         }
 
