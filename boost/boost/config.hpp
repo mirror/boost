@@ -16,7 +16,7 @@
 //              comment (Dave Abrahams). 
 //   10 Jul 00  BOOST_NO_POINTER_TO_MEMBER_CONST added (Mark Rodgers)
 //   26 Jun 00  BOOST_NO_STD_ITERATOR, BOOST_MSVC_STD_ITERATOR,
-//              BOOST_NO_ITERATOR_TRAITS, BOOST_NO_USING_TEMPLATE,
+//              BOOST_NO_STD_ITERATOR_TRAITS, BOOST_NO_USING_TEMPLATE,
 //              added (Jeremy Siek)
 //   20 Jun 00  BOOST_MSVC added (Aleksey Gurtovoy)
 //   14 Jun 00  BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS (Jens M.)
@@ -52,10 +52,6 @@
 
 //  BOOST_NO_INCLASS_MEMBER_INITIALIZATION: Compiler violates std::9.4.2/4. 
 
-//  BOOST_NO_ITERATOR_TRAITS: The compiler does not provide a standard
-//  compliant implementation of std::iterator_traits. Note that
-//  the compiler may still have a non-standard implementation.
-
 //  BOOST_NO_MEMBER_TEMPLATES: Member template functions not fully supported.
 //  Also see BOOST_MSVC6_MEMBER_TEMPLATES in the Compiler Control section below.
 
@@ -76,6 +72,10 @@
 
 //  BOOST_NO_STD_ITERATOR: The C++ implementation fails to provide the
 //  std::iterator class.
+
+//  BOOST_NO_STD_ITERATOR_TRAITS: The compiler does not provide a standard
+//  compliant implementation of std::iterator_traits. Note that
+//  the compiler may still have a non-standard implementation.
 
 //  BOOST_NO_STDC_NAMESPACE: The contents of C++ standard headers for C library
 //  functions (the <c...> headers) have not been placed in namespace std.
