@@ -65,7 +65,7 @@ read(T& t, Source& src, typename io_char<T>::type* s, std::streamsize n)
 
 template<typename T>
 void putback(T& t, typename io_char<T>::type c)
-{ return detail::read_impl<T>::putback(detail::unwrap(t), c); }
+{ detail::read_impl<T>::putback(detail::unwrap(t), c); }
 
 template<typename T>
 void put(T& t, typename io_char<T>::type c)
