@@ -132,7 +132,7 @@ class pretty:
         self.output = open(name, "w")
         self.prev_line = ''
 
-        self.re_header_name_comment = re.compile(r"^\s*//\s*boost\s+(mpl(/\w+)+\.hpp)\s+header\s+file\s*$")
+        self.re_header_name_comment = re.compile(r"^\s*//\s+\+\s+file:\s+(boost/mpl(/\w+)+\.hpp)s*$")
         self.header_was_written = 0
 
         self.re_junk = re.compile(r"^\s*(#|//[^:]).*$")
@@ -168,7 +168,7 @@ class pretty:
             self.header_was_written = 1
             match = self.re_header_name_comment.match(line)
             self.output.write( \
-                "// preprocessed version of 'boost/%s' header\n"\
+                "// preprocessed version of '%s' header\n"\
                 "// see the original for copyright information\n\n" \
                 % match.group(1)
                 )

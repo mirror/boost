@@ -1,4 +1,4 @@
-// preprocessed version of 'boost/mpl/aux_/lambda_expr.hpp' header
+// preprocessed version of 'boost/mpl/full_lambda.hpp' header
 // see the original for copyright information
 
 namespace boost {
