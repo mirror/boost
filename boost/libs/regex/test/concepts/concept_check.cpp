@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (c) 2003
- * Dr John Maddock
+ * John Maddock
  *
  * Use, modification and distribution are subject to the 
  * Boost Software License, Version 1.0. (See accompanying file 
@@ -86,7 +86,7 @@ int main()
          regex_traits_tester_type1
       >
    >();
-#ifndef __MWERKS__ // MWCW tries to instantiate std::basic_string<boost::char_architype>, not sure whose bug this is....
+#if !defined(__MWERKS__) && !defined(__SUNPRO_CC) // MWCW tries to instantiate std::basic_string<boost::char_architype>, not sure whose bug this is....
    typedef boost::basic_regex<boost::char_architype, boost::regex_traits_architype<boost::char_architype> > regex_traits_tester_type2;
    boost::function_requires<
       boost::BaseRegexConcept<

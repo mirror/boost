@@ -1,7 +1,7 @@
 /*
 *
 * Copyright (c) 2002
-* Dr John Maddock
+* John Maddock
 *
 * All rights reserved.
 * May not be transfered or disclosed to a third party without

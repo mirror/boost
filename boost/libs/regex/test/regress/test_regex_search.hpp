@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (c) 2004
- * Dr John Maddock
+ * John Maddock
  *
  * Use, modification and distribution are subject to the 
  * Boost Software License, Version 1.0. (See accompanying file 
@@ -47,18 +47,18 @@ void test_sub_match(const boost::sub_match<BidirectionalIterator>& sub, Bidirect
    }
    else
    {
-      if(std::distance(base, sub.first) != answer_table[2*i])
+      if(boost::re_detail::distance(base, sub.first) != answer_table[2*i])
       {
          BOOST_REGEX_TEST_ERROR(
             "Error in start location of sub-expression " 
-            << i << ", found " << std::distance(base, sub.first) 
+            << i << ", found " << boost::re_detail::distance(base, sub.first) 
             << ", expected " << answer_table[2*i] << ".", charT);
       }
-      if(std::distance(base, sub.second) != answer_table[1+ 2*i])
+      if(boost::re_detail::distance(base, sub.second) != answer_table[1+ 2*i])
       {
          BOOST_REGEX_TEST_ERROR(
             "Error in end location of sub-expression " 
-            << i << ", found " << std::distance(base, sub.second) 
+            << i << ", found " << boost::re_detail::distance(base, sub.second) 
             << ", expected " << answer_table[1 + 2*i] << ".", charT);
       }
    }
@@ -238,21 +238,21 @@ void test_regex_token_iterator(boost::basic_regex<charT, traits>& r)
 #pragma warning(push)
 #pragma warning(disable:4244)
 #endif
-      if(std::distance(search_text.begin(), start2->first) != last_end2)
+      if(boost::re_detail::distance(search_text.begin(), start2->first) != last_end2)
       {
          BOOST_REGEX_TEST_ERROR(
             "Error in location of start of field split, found: " 
-            << std::distance(search_text.begin(), start2->first)
+            << boost::re_detail::distance(search_text.begin(), start2->first)
             << ", expected: "
             << last_end2
             << ".", charT);
       }
       int expected_end = static_cast<int>(answer_table[0] < 0 ? search_text.size() : answer_table[0]);
-      if(std::distance(search_text.begin(), start2->second) != expected_end)
+      if(boost::re_detail::distance(search_text.begin(), start2->second) != expected_end)
       {
          BOOST_REGEX_TEST_ERROR(
             "Error in location of end2 of field split, found: "
-            << std::distance(search_text.begin(), start2->second)
+            << boost::re_detail::distance(search_text.begin(), start2->second)
             << ", expected: "
             << expected_end
             << ".", charT);
