@@ -44,27 +44,40 @@ int main()
 {
    regex_t re;
    int result;
+   wchar_t buf[256];
+   char nbuf[256];
+   int i;
    result = regcomp(&re, expression, REG_AWK);
    if(result > REG_NOERROR)
    {
-      wchar_t buf[256];
       regerror(result, &re, buf, sizeof(buf));
-      wprintf(buf);
+      for(i = 0; i < 256; ++i)
+         nbuf[i] = buf[i];
+      printf(nbuf);
       return result;
    }
-   assert(re.re_nsub == 0);
+   if(re.re_nsub != 0)
+   {
+      regfree(&re);
+      exit(-1);
+   }
    matches[0].rm_so = 0;
    matches[0].rm_eo = wcslen(text);
    result = regexec(&re, text, 1, matches, REG_NOTBOL | REG_NOTEOL | REG_STARTEND);
    if(result > REG_NOERROR)
    {
-      wchar_t buf[256];
       regerror(result, &re, buf, sizeof(buf));
-      wprintf(buf);
+      for(i = 0; i < 256; ++i)
+         nbuf[i] = buf[i];
+      printf(nbuf);
       regfree(&re);
       return result;
    }
-   assert(matches[0].rm_so == matches[0].rm_eo == 1);
+   if((matches[0].rm_so != matches[0].rm_eo) || (matches[0].rm_eo != 1))
+   {
+      regfree(&re);
+      exit(-1);
+   }
    regfree(&re);
    printf("no errors found\n");
    return 0;
@@ -73,4 +86,6 @@ int main()
 #else
 #  error "This library has not been configured for wide character support"
 #endif
+
+
 
