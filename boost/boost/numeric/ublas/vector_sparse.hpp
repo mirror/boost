@@ -262,7 +262,7 @@ namespace boost { namespace numeric { namespace ublas {
         sparse_vector (size_type size, size_type non_zeros = 0):
             vector_expression<self_type> (),
             size_ (size), non_zeros_ (non_zeros), data_ () {
-            reserve (non_zeros_);
+            detail::map_reserve (data(), non_zeros_);
         }
         BOOST_UBLAS_INLINE
         sparse_vector (const sparse_vector &v):
@@ -273,7 +273,7 @@ namespace boost { namespace numeric { namespace ublas {
         sparse_vector (const vector_expression<AE> &ae, size_type non_zeros = 0):
             vector_expression<self_type> (),
             size_ (ae ().size ()), non_zeros_ (non_zeros), data_ () {
-            reserve (non_zeros_);
+            detail::map_reserve (data(), non_zeros_);
             vector_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
@@ -297,20 +297,25 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Resizing
         BOOST_UBLAS_INLINE
-        void resize (size_type size, size_type non_zeros = 0) {
+        void resize (size_type size, size_type non_zeros = 0, bool preserve = true) {
             size_ = size;
             non_zeros_ = (std::max) (non_zeros, size_type (1));
             non_zeros_ = (std::min) (non_zeros_, size_);
-            detail::reserve (data (), non_zeros_);
-            data ().clear ();
+            if (preserve) {
+                data ().erase (data ().lower_bound(size_), data ().end());
+            }
+            else {
+                data ().clear ();
+            }
+            detail::map_reserve (data (), non_zeros_);
         }
 
         // Reserving
         BOOST_UBLAS_INLINE
-        void reserve (size_type non_zeros = 0) {
+        void reserve (size_type non_zeros = 0, bool preserve = true) {
             non_zeros_ = (std::max) (non_zeros, size_type (1));
             non_zeros_ = (std::min) (non_zeros_, size_);
-            detail::reserve (data (), non_zeros_);
+            detail::map_reserve (data (), non_zeros_);
         }
 
         // Proxy support
@@ -790,18 +795,22 @@ namespace boost { namespace numeric { namespace ublas {
             size_ = size;
             non_zeros_ = (std::max) (non_zeros, size_type (1));
             non_zeros_ = (std::min) (non_zeros_, size_);
-            filled_ = 0;
-            detail::resize (index_data (), non_zeros_, preserve);
-            detail::resize (value_data (), non_zeros_, preserve);
+            if (preserve) {
+                index_data (). resize (non_zeros_, size_type ());
+                value_data (). resize (non_zeros_, value_type ());
+                filled_ = (std::min) (non_zeros_, filled_);
+            }
+            else {
+                index_data (). resize (non_zeros_);
+                value_data (). resize (non_zeros_);
+                filled_ = 0;
+            }
         }
 
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0, bool preserve = true) {
-            non_zeros_ = (std::max) (non_zeros, size_type (1));
-            non_zeros_ = (std::min) (non_zeros_, size_);
-            detail::resize (index_data (), non_zeros_, preserve);
-            detail::resize (value_data (), non_zeros_, preserve);
+            resize (size_, non_zeros, preserve);
         }
 
         // Proxy support
@@ -854,10 +863,10 @@ namespace boost { namespace numeric { namespace ublas {
                 size_ = v.size_;
                 non_zeros_ = v.non_zeros_;
                 filled_ = v.filled_;
-                detail::resize (index_data (), non_zeros_, false);
-                detail::resize (value_data (), non_zeros_, false);
                 index_data () = v.index_data ();
                 value_data () = v.value_data ();
+                BOOST_UBLAS_CHECK (non_zeros_ == index_data ().size (), internal_logic ());
+                BOOST_UBLAS_CHECK (non_zeros_ == value_data ().size (), internal_logic ());
             }
             return *this;
         }
@@ -1333,23 +1342,28 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size, size_type non_zeros = 0, bool preserve = true) {
+            non_zeros = (std::max) (non_zeros, size_type (1));
+            sort ();    // remove duplicate elements.
+            non_zeros = (std::min) (non_zeros, size_);
+            if (preserve) {
+                sort ();
+                index_data (). resize (non_zeros, size_type ());
+                value_data (). resize (non_zeros, value_type ());
+                filled_ = (std::min) (non_zeros_, filled_);
+                }
+            else {
+                index_data (). resize (non_zeros);
+                value_data (). resize (non_zeros);
+                filled_ = 0;
+            }
             size_ = size;
-            non_zeros_ = (std::max) (non_zeros, size_type (1));
-            // FIX: coordinate_vector may contain duplicate elements.
-            // non_zeros_ = (std::min) (non_zeros_, size_);
-            filled_ = 0;
-            detail::resize (index_data (), non_zeros_, preserve);
-            detail::resize (value_data (), non_zeros_, preserve);
+            non_zeros_ = non_zeros_;
         }
 
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0, bool preserve = true) {
-            non_zeros_ = (std::max) (non_zeros, size_type (1));
-            // FIX: coordinate_vector may contain duplicate elements.
-            // non_zeros_ = (std::min) (non_zeros_, size_);
-            detail::resize (index_data (), non_zeros_, preserve);
-            detail::resize (value_data (), non_zeros_, preserve);
+            resize (size_, non_zeros, preserve);
         }
 
         // Proxy support
@@ -1407,10 +1421,10 @@ namespace boost { namespace numeric { namespace ublas {
                 non_zeros_ = v.non_zeros_;
                 filled_ = v.filled_;
                 sorted_ = v.sorted_;
-                detail::resize (index_data (), non_zeros_, false);
-                detail::resize (value_data (), non_zeros_, false);
                 index_data () = v.index_data ();
                 value_data () = v.value_data ();
+                BOOST_UBLAS_CHECK (non_zeros_ == index_data ().size (), internal_logic ());
+                BOOST_UBLAS_CHECK (non_zeros_ == value_data ().size (), internal_logic ());
             }
             return *this;
         }
