@@ -213,7 +213,7 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
       if(s != merge_string)
       {
          begin_error();
-         cout << "merge result mismatch: found \"" << make_narrow(s.c_str()) << "\" expected \"" << make_narrow(merge_string.c_str()) << "\"" << endl;
+         cout << "merge result mismatch: found \"" << make_narrow(s).c_str() << "\" expected \"" << make_narrow(merge_string.c_str()) << "\"" << endl;
       }
       return;
    }
@@ -713,8 +713,8 @@ void begin_error()
    if(line != last_line)
    {
       cout << "Error in line " << line << " of file " << file << endl;
-      cout << "Expression: " << make_narrow(expression.c_str()) << endl;
-      cout << "Search text: " << make_narrow(search_text.c_str()) << endl;
+      cout << "Expression: " << make_narrow(expression).c_str() << endl;
+      cout << "Search text: " << make_narrow(search_text).c_str() << endl;
       cout << "Flags: ";
       bool started = false;
       unsigned int id = 0;
@@ -724,7 +724,7 @@ void begin_error()
          {
             if(started)
                cout << " | ";
-            cout << make_narrow(flag_data[id].name);
+            cout << make_narrow(flag_data[id].name).c_str();
             started = true;
          }
          ++id;

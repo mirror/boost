@@ -101,7 +101,7 @@ int main(int argc, char * argv[])
          string_type s;
          get_line(is, s);
          ++line;
-         jm_trace("Reading test script line " << line << " " << make_narrow(s.c_str()));
+         jm_trace("Reading test script line " << line << " " << make_narrow(s).c_str());
          parse_input_line(s);
          if(do_test)
          {

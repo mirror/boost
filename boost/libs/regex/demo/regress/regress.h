@@ -51,14 +51,14 @@ using std::endl;
 typedef wchar_t char_t;
 #endif
 
-#define NO_POSIX_TEST
 typedef std::basic_string<char_t> string_type;
 typedef std::basic_string<char> nstring_type;
 inline istream& get_line(istream& is, nstring_type& s, char delim = '\n');
 istream& get_line(istream& is, string_type& s, char delim = L'\n');
 #define BOOST_RE_STR(x) L##x
 std::string make_narrow(const wchar_t* ptr);
-//ostream& operator << (ostream& os, const string_type& s);
+inline std::string make_narrow(const std::wstring& s)
+{ return make_narrow(s.c_str()); }
 
 #else // TEST_UNICODE
 
@@ -71,11 +71,11 @@ typedef char char_t;
 typedef std::basic_string<char_t> string_type;
 inline istream& get_line(istream& is, string_type& s, char delim = '\n');
 #define BOOST_RE_STR(x) x
-#define make_narrow(x) x
+inline std::string make_narrow(const std::string& s)
+{ return s; }
 
 #endif // TEST_UNICODE
 
-//ostream& operator << (ostream& os, const wchar_t* s);
 void parse_input_line(const string_type& s);
 void expand_escapes(string_type& s);
 void run_tests();
