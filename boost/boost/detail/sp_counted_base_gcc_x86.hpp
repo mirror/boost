@@ -68,11 +68,11 @@ inline void atomic_increment( int * pw )
 
 inline int atomic_conditional_increment( int * pw )
 {
-    // int r = *pw;
-    // if( r != 0 ) ++*pw;
-    // return r;
+    // int rv = *pw;
+    // if( rv != 0 ) ++*pw;
+    // return rv;
 
-    int r;
+    int rv, tmp;
 
     __asm__
     (
@@ -80,18 +80,18 @@ inline int atomic_conditional_increment( int * pw )
         "0:\n\t"
         "test %%eax, %%eax\n\t"
         "je 1f\n\t"
-        "movl %%eax, %%ebx\n\t"
-        "incl %%ebx\n\t"
+        "movl %%eax, %2\n\t"
+        "incl %2\n\t"
         "lock\n\t"
-        "cmpxchgl %%ebx, %0\n\t"
+        "cmpxchgl %2, %0\n\t"
         "jne 0b\n\t"
         "1:":
-        "=m"( *pw ), "=&a"( r ): // outputs (%0, %1)
-        "m"( *pw ): // input (%2)
-        "ebx", "cc" // clobbers
+        "=m"( *pw ), "=&a"( rv ), "=&r"( tmp ): // outputs (%0, %1, %2)
+        "m"( *pw ): // input (%3)
+        "cc" // clobbers
     );
 
-    return r;
+    return rv;
 }
 
 class sp_counted_base
