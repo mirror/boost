@@ -60,13 +60,21 @@ See BOOST_PP_LIST_CONS().
 /*!
 See BOOST_PP_LIST_IS_NIL().
 */
-#define BOOST_PP_LIST_IS_CONS(L) BOOST_PP_TUPLE3_ELEM2 L
+#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
+#  define BOOST_PP_LIST_IS_CONS(L) BOOST_PP_TUPLE_ELEM(3,2,L)
+#else
+#  define BOOST_PP_LIST_IS_CONS(L) BOOST_PP_TUPLE3_ELEM2 L
+#endif
 
 //! Expands to 1 if the list is nil and 0 otherwise.
 /*!
 See BOOST_PP_LIST_IS_CONS().
 */
-#define BOOST_PP_LIST_IS_NIL(L) BOOST_PP_NOT(BOOST_PP_TUPLE3_ELEM2 L)
+#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
+#  define BOOST_PP_LIST_IS_NIL(L) BOOST_PP_NOT(BOOST_PP_TUPLE_ELEM(3,2,L))
+#else
+#  define BOOST_PP_LIST_IS_NIL(L) BOOST_PP_NOT(BOOST_PP_TUPLE3_ELEM2 L)
+#endif
 
 //! Expands to the first element of the list. The list must not be nil.
 /*!
@@ -80,7 +88,11 @@ expands to 1.
 
 See BOOST_PP_LIST_REST().
 */
-#define BOOST_PP_LIST_FIRST(L) BOOST_PP_TUPLE3_ELEM0 L
+#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
+#  define BOOST_PP_LIST_FIRST(L) BOOST_PP_TUPLE_ELEM(3,0,L)
+#else
+#  define BOOST_PP_LIST_FIRST(L) BOOST_PP_TUPLE3_ELEM0 L
+#endif
 
 //! Expands to a list of all but the first element of the list. The list must not be nil.
 /*!
@@ -94,5 +106,9 @@ expands to a list containing 2, 3, 4 and 5.
 
 See BOOST_PP_LIST_FIRST().
 */
-#define BOOST_PP_LIST_REST(L) BOOST_PP_TUPLE3_ELEM1 L
+#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
+#  define BOOST_PP_LIST_REST(L) BOOST_PP_TUPLE_ELEM(3,1,L)
+#else
+#  define BOOST_PP_LIST_REST(L) BOOST_PP_TUPLE3_ELEM1 L
+#endif
 #endif
