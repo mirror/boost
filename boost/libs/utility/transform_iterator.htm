@@ -27,7 +27,7 @@ function object, and then returns the result. The following
 
 <pre>
   value_type transform_iterator::operator*() const {
-    return f(*this->base_iterator);
+    return this->f(*this->base_iterator);
   }
 </pre>
 
@@ -47,6 +47,8 @@ namespace boost {
   make_transform_iterator(BaseIterator base, const AdaptableUnaryFunction&amp; f = AdaptableUnaryFunction());
 }
 </pre>
+
+<hr>
 
 <h2><a name="transform_iterator_generator">The Transform Iterator Type
 Generator</a></h2>
@@ -110,9 +112,13 @@ The output from this part is:
 
 <TR>
 <TD><a href="http://www.sgi.com/tech/stl/AdaptableUnaryFunction.html"><tt>AdaptableUnaryFunction</tt></a></TD>
-<TD>The function object that transforms each element in the iterator range.
-If you want the resulting iterator to behave as an iterator, the result of the function
-should be solely a function of its argument.</TD>
+<TD>The function object that transforms each element in the iterator
+range.  The <tt>argument_type</tt> of the function object must match
+the value type of the base iterator.  The <tt>result_type</tt> of the
+function object will be the resulting iterator's
+<tt>value_type</tt>. If you want the resulting iterator to behave as
+an iterator, the result of the function should be solely a function of
+its argument.</TD>
 </TR>
 
 <TR>
