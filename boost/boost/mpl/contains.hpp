@@ -19,7 +19,7 @@
 
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/find.hpp"
-#include "boost/mpl/logical_not.hpp"
+#include "boost/mpl/logical/not.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/type_traits/is_same.hpp"
