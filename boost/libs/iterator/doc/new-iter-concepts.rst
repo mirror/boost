@@ -134,77 +134,12 @@ appropriate old requirements.
    a tag that is not input_iterator_tag but that
    is convertible to input_iterator_tag? -JGS
 
-The algorithms in the standard library benefit from the new iterator
-concepts because the new concepts provide a more accurate way to
-express their type requirements. The result is algorithms that are
-usable in more situations and have fewer type requirements. The
-following lists the proposed changes to the type requirements of
-algorithms.
-
-Forward Iterator -> Forward Traversal Iterator and Readable Iterator
-
-  ``find_end, adjacent_find, search, search_n, rotate_copy,
-  lower_bound, upper_bound, equal_range, binary_search,
-  min_element, max_element``
-
-Forward Iterator (1) -> Single Pass Iterator and Readable Iterator,
-Forward Iterator (2) -> Forward Traversal Iterator and Readable Iterator
-
-  ``find_first_of``
-
-Forward Iterator -> Readable Iterator and Writable Iterator
-
-  ``iter_swap``
-
-Forward Iterator -> Single Pass Iterator and Writable Iterator
-
-  ``fill, generate``
-
-Forward Iterator -> Forward Traversal Iterator and Swappable Iterator
-
-  ``rotate``
-
-Forward Iterator (1) -> Swappable Iterator and Single Pass Iterator,
-Forward Iterator (2) -> Swappable Iterator and  Incrementable Iterator
-
-  ``swap_ranges``
-
-Forward Iterator -> Forward Traversal Iterator and Readable Iterator and Writable Iterator
-  ``remove, remove_if, unique``
-
-Forward Iterator -> Single Pass Iterator and Readable Iterator and Writable Iterator
-
-  ``replace, replace_if``
-
-Bidirectional Iterator -> Bidirectional Traversal Iterator and Swappable Iterator
-  ``reverse``
-
-Bidirectional Iterator -> Bidirectional Traversal Iterator and Readable and Swappable Iterator
-  ``partition``
-
-Bidirectional Iterator (1) -> Bidirectional Traversal Iterator and Readable Iterator, 
-Bidirectional Iterator (2) -> Bidirectional Traversal Iterator and Writable Iterator
-
-  ``copy_backwards``
-
-Bidirectional Iterator -> Bidirectional Traversal Iterator and Swappable Iterator and Readable Iterator
-  ``next_permutation, prev_permutation``
-
-Bidirectional Iterator -> Bidirectional Traversal Iterator and Readable Iterator and Writable Iterator
-  ``stable_partition, inplace_merge``
-
-Bidirectional Iterator -> Bidirectional Traversal Iterator and Readable Iterator
-  ``reverse_copy``
-
-Random Access Iterator -> Random Access Traversal Iterator and Readable and Writable Iterator
-  ``random_shuffle, sort, stable_sort, partial_sort, nth_element, push_heap, pop_heap
-  make_heap, sort_heap``
-
-Input Iterator (2) -> Incrementable Iterator and Readable Iterator
-  ``equal, mismatch``
-
-Input Iterator (2) -> Incrementable Iterator and Readable Iterator
-  ``transform``
+The algorithms in the standard library could benefit from the new
+iterator concepts because the new concepts provide a more accurate way
+to express their type requirements. The result is algorithms that are
+usable in more situations, have fewer type requirements, and that are
+backward compatible. However, this proposal does not include making
+these changes.
 
 ========
  Design
