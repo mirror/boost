@@ -4,6 +4,7 @@
 	Version="7.10"
 	Name="PingPong"
 	ProjectGUID="{11CCA9FC-6012-4B64-8C61-808D0F8D1B51}"
+	RootNamespace="PingPong"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -40,7 +41,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/PingPong.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\..\..\bin\boost\libs\thread\build\boost_thread.dll\vc7.1\debug\threading-multi"
+				AdditionalLibraryDirectories="&quot;..\..\..\..\bin\boost\libs\thread\build\boost_thread.dll\vc-7_1\debug\threading-multi&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/PingPong.pdb"
 				SubSystem="1"
@@ -48,7 +49,8 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="xcopy &quot;$(ProjectDir)..\..\..\..\bin\boost\libs\thread\build\boost_thread.dll\vc-7_1\$(ConfigurationName)\threading-multi\boost_thread-vc71-mt-*.dll&quot; &quot;$(TargetDir)&quot; /f /i /r /y"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -97,7 +99,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/PingPong.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\..\..\bin\boost\libs\thread\build\boost_thread.dll\vc7.1\release\threading-multi"
+				AdditionalLibraryDirectories="&quot;..\..\..\..\bin\boost\libs\thread\build\boost_thread.dll\vc-7_1\release\threading-multi&quot;"
 				GenerateDebugInformation="FALSE"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -106,7 +108,8 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="xcopy &quot;$(ProjectDir)..\..\..\..\bin\boost\libs\thread\build\boost_thread.dll\vc-7_1\$(ConfigurationName)\threading-multi\boost_thread-vc71-mt-*.dll&quot; &quot;$(TargetDir)&quot; /f /i /r /y"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
