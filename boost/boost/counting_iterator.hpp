@@ -161,8 +161,9 @@ template <class Incrementable>
 struct counting_iterator_traits {
  private:
     typedef ::boost::detail::counting_iterator_traits_select<(
-        detail::is_numeric<Incrementable>::value
-     )>::template traits<Incrementable> traits;
+        ::boost::detail::is_numeric<Incrementable>::value
+        )> binder;
+    typedef typename binder::template traits<Incrementable> traits;
  public:
     typedef Incrementable value_type;
     typedef const Incrementable& reference;
