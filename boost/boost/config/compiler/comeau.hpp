@@ -10,7 +10,6 @@
 #include "boost/config/compiler/common_edg.hpp"
 
 #if (__COMO_VERSION__ <= 4245) || !defined(BOOST_STRICT_CONFIG)
-#  define BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
 #  if defined(_MSC_VER) && _MSC_VER <= 1300
 #     define BOOST_NO_STDC_NAMESPACE
 #     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
