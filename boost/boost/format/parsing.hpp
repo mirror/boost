@@ -385,7 +385,7 @@ void basic_format<Ch, Traits> ::parse(const string_t & buf)
     typename string_t::size_type i0 = i1;
     bool special_things=false;
     int cur_it=0;
-    while( (i1=buf.find(arg_mark,i1)) != string::npos ) 
+    while( (i1=buf.find(arg_mark,i1)) != string_t::npos ) 
     {
       string_t & piece = (cur_it==0) ? prefix_ : items_[cur_it-1].appendix_;
 
