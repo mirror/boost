@@ -33,7 +33,7 @@ int main()
     
     BOOST_STATIC_ASSERT((mpl::count_if< types, boost::is_float<_> >::type::value == 1));
     BOOST_STATIC_ASSERT((mpl::count_if< types, boost::is_same<_,char&> >::type::value == 2));
-    BOOST_STATIC_ASSERT((mpl::count_if< types, boost::is_same<_,void> >::type::value == 0));
+    BOOST_STATIC_ASSERT((mpl::count_if< types, boost::is_same<_,void*> >::type::value == 0));
 
     BOOST_STATIC_ASSERT((mpl::count_if< values, mpl::lt<5> >::type::value == 4));
     BOOST_STATIC_ASSERT((mpl::count_if< values, mpl::eq<0>  >::type::value == 2));

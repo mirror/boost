@@ -1,9 +1,9 @@
 //-----------------------------------------------------------------------------
-// boost mpl/v2_1/type_traits.hpp header file
+// boost mpl/aux_/has_type.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
-// Copyright (c) 2000-02
+// Copyright (c) 2002
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -14,18 +14,13 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_MPL_V2_1_TYPE_TRAITS_HPP_INCLUDED
-#define BOOST_MPL_V2_1_TYPE_TRAITS_HPP_INCLUDED
+#ifndef BOOST_MPL_AUX_HAS_TYPE_HPP_INCLUDED
+#define BOOST_MPL_AUX_HAS_TYPE_HPP_INCLUDED
 
-#include "boost/mpl/quote.hpp"
-#include "boost/type_traits/is_same.hpp"
-#include "boost/type_traits/is_float.hpp"
+#include "boost/mpl/aux_/has_xxx.hpp"
 
-namespace boost { namespace mpl { namespace v2_1 {
+namespace boost { namespace mpl { namespace aux {
+BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_type, type, true)
+}}}
 
-struct is_float : mpl::quote1<boost::is_float> {};
-struct is_same : mpl::quote2<boost::is_same> {};
-
-}}} // namespace boost::mpl::v2_1
-
-#endif // BOOST_MPL_V2_1_TYPE_TRAITS_HPP_INCLUDED
+#endif // BOOST_MPL_AUX_HAS_TYPE_HPP_INCLUDED

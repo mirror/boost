@@ -87,7 +87,7 @@ template<
 struct le_result1< true,false,F,L1 >
 {
     typedef bind1<
-          meta_fun1<F>
+          quote1<F>
         , typename L1::type
         > type;
 };
@@ -99,7 +99,7 @@ template<
 struct le_result1< true,true,F,L1 >
 {
     typedef protect< bind1<
-          meta_fun1<F>
+          quote1<F>
         , typename L1::type
         > > type;
 };
@@ -173,7 +173,7 @@ template<
 struct le_result2< true,false,F,L1,L2 >
 {
     typedef bind2<
-          meta_fun2<F>
+          quote2<F>
         , typename L1::type, typename L2::type
         > type;
 };
@@ -185,7 +185,7 @@ template<
 struct le_result2< true,true,F,L1,L2 >
 {
     typedef protect< bind2<
-          meta_fun2<F>
+          quote2<F>
         , typename L1::type, typename L2::type
         > > type;
 };
@@ -261,7 +261,7 @@ template<
 struct le_result3< true,false,F,L1,L2,L3 >
 {
     typedef bind3<
-          meta_fun3<F>
+          quote3<F>
         , typename L1::type, typename L2::type, typename L3::type
         > type;
 };
@@ -273,7 +273,7 @@ template<
 struct le_result3< true,true,F,L1,L2,L3 >
 {
     typedef protect< bind3<
-          meta_fun3<F>
+          quote3<F>
         , typename L1::type, typename L2::type, typename L3::type
         > > type;
 };
@@ -351,7 +351,7 @@ template<
 struct le_result4< true,false,F,L1,L2,L3,L4 >
 {
     typedef bind4<
-          meta_fun4<F>
+          quote4<F>
         , typename L1::type, typename L2::type, typename L3::type
         , typename L4::type
         > type;
@@ -364,7 +364,7 @@ template<
 struct le_result4< true,true,F,L1,L2,L3,L4 >
 {
     typedef protect< bind4<
-          meta_fun4<F>
+          quote4<F>
         , typename L1::type, typename L2::type, typename L3::type
         , typename L4::type
         > > type;
@@ -449,7 +449,7 @@ template<
 struct le_result5< true,false,F,L1,L2,L3,L4,L5 >
 {
     typedef bind5<
-          meta_fun5<F>
+          quote5<F>
         , typename L1::type, typename L2::type, typename L3::type
         , typename L4::type, typename L5::type
         > type;
@@ -466,7 +466,7 @@ template<
 struct le_result5< true,true,F,L1,L2,L3,L4,L5 >
 {
     typedef protect< bind5<
-          meta_fun5<F>
+          quote5<F>
         , typename L1::type, typename L2::type, typename L3::type
         , typename L4::type, typename L5::type
         > > type;

@@ -25,7 +25,7 @@
 #   include "boost/mpl/lambda_fwd.hpp"
 #   include "boost/mpl/bind.hpp"
 #   include "boost/mpl/protect.hpp"
-#   include "boost/mpl/meta_fun.hpp"
+#   include "boost/mpl/quote.hpp"
 #   include "boost/mpl/bool_c.hpp"
 #   include "boost/mpl/aux_/template_arity.hpp"
 #   include "boost/mpl/aux_/config/ttp.hpp"
@@ -230,7 +230,7 @@ template<
 struct BOOST_PP_CAT(le_result,i)< true,false,F,AUX_LAMBDA_PARAMS(i, L) >
 {
     typedef BOOST_PP_CAT(bind,i)<
-          BOOST_PP_CAT(meta_fun,i)<F>
+          BOOST_PP_CAT(quote,i)<F>
         , BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_RESULT, L)
         > type;
 };
@@ -242,7 +242,7 @@ template<
 struct BOOST_PP_CAT(le_result,i)< true,true,F,AUX_LAMBDA_PARAMS(i, L) >
 {
     typedef protect< BOOST_PP_CAT(bind,i)<
-          BOOST_PP_CAT(meta_fun,i)<F>
+          BOOST_PP_CAT(quote,i)<F>
         , BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_RESULT, L)
         > > type;
 };
@@ -328,7 +328,7 @@ struct lambda_impl< F<AUX_LAMBDA_PARAMS(i, T)>, Protect AUX_LAMBDA_IMPL_ARITY >
     /**/
 
     typedef BOOST_PP_CAT(bind,i)<
-          BOOST_PP_CAT(meta_fun,i)<F>
+          BOOST_PP_CAT(quote,i)<F>
         , BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_INVOCATION, T)
         > type;
 

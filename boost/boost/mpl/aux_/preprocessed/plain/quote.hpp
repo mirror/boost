@@ -1,16 +1,31 @@
-// preprocessed version of 'boost/mpl/meta_fun.hpp' header
+// preprocessed version of 'boost/mpl/quote.hpp' header
 // see the original for copyright information
 
 namespace boost {
 namespace mpl {
 
+template< typename T, bool has_type_ = aux::has_type<T>::value >
+struct quote_impl
+
+    : T
+{
+};
+
+template< typename T >
+struct quote_impl< T,false >
+{
+    typedef T type;
+};
+
 template<
       template< typename P1 > class F
     >
-struct meta_fun1
+struct quote1
 {
     template< typename U1 > struct apply
-        : F<U1>
+
+        : quote_impl< F<U1> >
+
     {
     };
 };
@@ -18,10 +33,12 @@ struct meta_fun1
 template<
       template< typename P1, typename P2 > class F
     >
-struct meta_fun2
+struct quote2
 {
     template< typename U1, typename U2 > struct apply
-        : F< U1,U2 >
+
+        : quote_impl< F<U1,U2> >
+
     {
     };
 };
@@ -29,10 +46,12 @@ struct meta_fun2
 template<
       template< typename P1, typename P2, typename P3 > class F
     >
-struct meta_fun3
+struct quote3
 {
     template< typename U1, typename U2, typename U3 > struct apply
-        : F< U1,U2,U3 >
+
+        : quote_impl< F<U1,U2,U3> >
+
     {
     };
 };
@@ -40,13 +59,15 @@ struct meta_fun3
 template<
       template< typename P1, typename P2, typename P3, typename P4 > class F
     >
-struct meta_fun4
+struct quote4
 {
     template<
           typename U1, typename U2, typename U3, typename U4
         >
     struct apply
-        : F< U1,U2,U3,U4 >
+
+        : quote_impl< F<U1,U2,U3,U4> >
+
     {
     };
 };
@@ -58,14 +79,16 @@ template<
         >
       class F
     >
-struct meta_fun5
+struct quote5
 {
     template<
           typename U1, typename U2, typename U3, typename U4
         , typename U5
         >
     struct apply
-        : F< U1,U2,U3,U4,U5 >
+
+        : quote_impl< F<U1,U2,U3,U4,U5> >
+
     {
     };
 };
