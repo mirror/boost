@@ -18,6 +18,11 @@ struct convertible_from
     convertible_from(T);
 };
 
+struct base2 { };
+struct middle2 : virtual base2 { };
+struct derived2 : middle2 { };
+
+
 TT_TEST_BEGIN(is_convertible)
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<Derived,Base>::value), true);
@@ -27,6 +32,18 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<Base,Derived>::value), false
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<Derived,Derived>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<NonDerived,Base>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,int>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<virtual_inherit2,virtual_inherit1>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<VD,VB>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<polymorphic_derived1,polymorphic_base>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<polymorphic_derived2,polymorphic_base>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<polymorphic_base,polymorphic_derived1>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<polymorphic_base,polymorphic_derived2>::value), false);
+#ifndef BOOST_NO_IS_ABSTRACT
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<test_abc1,test_abc1>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<Base,test_abc1>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<polymorphic_derived2,test_abc1>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int,test_abc1>::value), false);
+#endif
    
 // The following four do not compile without member template support:
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,void>::value), false);

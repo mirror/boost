@@ -19,7 +19,7 @@
 #include <typeinfo>
 #include <boost/call_traits.hpp>
 
-#include <boost/type_traits/type_traits_test.hpp>
+#include <libs/type_traits/test/test.hpp>
 
 // a way prevent warnings for unused variables
 template<class T> inline void unused_variable(const T&) {}

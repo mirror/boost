@@ -309,6 +309,25 @@ struct test_abc3 : public test_abc1
 
 struct incomplete_type;
 
+struct polymorphic_base
+{
+   virtual void method();
+};
+
+struct polymorphic_derived1 : polymorphic_base
+{
+};
+
+struct polymorphic_derived2 : polymorphic_base
+{
+   virtual void method();
+};
+
+struct virtual_inherit1 : virtual Base { };
+struct virtual_inherit2 : virtual_inherit1 { };
+
+
+
 typedef void foo0_t();
 typedef void foo1_t(int);
 typedef void foo2_t(int&, double);

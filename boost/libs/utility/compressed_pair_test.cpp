@@ -14,7 +14,7 @@
 #include <cassert>
 
 #include <boost/compressed_pair.hpp>
-#include <boost/type_traits/type_traits_test.hpp>
+#include <libs/type_traits/test/test.hpp>
 #define BOOST_INCLUDE_MAIN
 #include <boost/test/test_tools.hpp>
 
