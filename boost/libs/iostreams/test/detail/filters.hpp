@@ -150,7 +150,7 @@ struct identity_seekable_multichar_filter : multichar_filter<seekable> {
     { return boost::iostreams::read(s, buf, n); }
     template<typename Sink>
     void write(Sink& s, const char* buf, std::streamsize n)
-    { return boost::iostreams::write(s, buf, n); }
+    { boost::iostreams::write(s, buf, n); }
     template<typename Device>
     std::streamoff seek(Device& d, std::streamoff off, std::ios::seekdir way)
     { return boost::iostreams::seek(d, off, way); }
