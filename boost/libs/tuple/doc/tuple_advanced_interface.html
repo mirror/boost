@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Tuple library advanced features</title>
+<body bgcolor="#FFFFFF" text="#000000">
+
+<IMG SRC="../../../c++boost.gif" 
+     ALT="C++ Boost" width="277" height="86">
+
+  </head>
+
+  <body>
+    <h1>Tuple library advanced features</h1>
+
+
+<h2>Metafunctions for tuple types</h2>
+<p>
+Suppose <code>T</code> is a tuple type, and <code>N</code> is a constant integral expression. 
+
+<code><pre>tuple_element&lt;N, T&gt;::type</pre></code>
+
+gives the type of the <code>N</code>th element in the tuple type <code>T</code>.
+</p>
+
+<code><pre>tuple_length&lt;T&gt;::value</pre></code>
+
+gives the length of the tuple type <code>T</code>.
+</p>
+
+<h2>Cons lists</h2>
+
+<p>
+Tuples are internally represented as <i>cons lists</i>.
+For example, the tuple 
+
+<code><pre>tuple&lt;A, B, C, D&gt;</pre></code>
+
+ inherits from the type
+<code><pre>cons&lt;A, cons&lt;B, cons&lt;C, cons&lt;D, null_type&gt; &gt; &gt; &gt;
+</pre></code>
+
+The tuple template provides the typedef <code>inherited</code> to access the cons list representation. E.g.:
+<code>tuple&lt;A&gt;::inherited</code> is the type <code>cons&lt;A, null_type&gt;</code>.
+</p>
+
+<h4>Empty tuple</h4>
+<p>
+The internal representation of the empty tuple <code>tuple&lt;&gt</code> is <code>null_type</code>.
+</p>
+
+<h4>Head and tail</h4>
+<p>
+Both tuple template and the cons templates provide the typedefs <code>head_type</code> and <code>tail_type</code>.
+The <code>head_type</code> typedef gives the type of the first element of the tuple (or the cons list).
+The 
+<code>tail_type</code> typedef gives the remaining cons list after removing the first element.
+The head element is stored in the member variable <code>head</code> and the tail list in the member variable <code>tail</code>.
+Cons lists provide the member function <code>get_head()</code> for getting a reference to the head of a cons list, and <code>get_tail()</code> for getting a reference to the tail.
+There are const and non-const versions of both functions.
+</p>
+<p>
+Note that in a one element tuple, <code>tail_type</code> equals <code>null_type</code> and the <code>get_tail()</code> function returns an object of type <code>null_type</code>.
+</p>
+<p>
+The empty tuple (<code>null_type</code>) has no head or tail, hence the <code>get_head</code> and <code>get_tail</code> functions are not provided.
+</p>
+
+<p>
+Treating tuples as cons lists gives a convenient means to define generic functions to manipulate tuples. For example, the following pair of function templates assign 0 to each element of a tuple (obviously, the assignments must be valid operations for the element types):
+
+<pre><code>inline void set_to_zero(const null_type&amp;) {};
+
+template &lt;class H, class T&gt;
+inline void set_to_zero(cons&lt;H, T&gt;&amp; x) { x.get_head() = 0; set_to_zero(x.get_tail()); }
+</code></pre>
+<p>
+
+<h2>Traits classes for tuple element types</h2>
+
+<h4><code>tuple_access_traits</code></h4>
+<p>
+The template <code>tuple_access_traits</code> defines three type functions. Let <code>T</code> be a type of an element in a tuple:
+<ol>
+<li><code>tuple_access_traits&lt;T&gt;::type</code> maps <code>T</code> to the return type of the non-const access functions (nonmeber and member <code>get</code> functions, and the <code>get_head</code> function).</li>
+<li><code>tuple_access_traits&lt;T&gt;::const_type</code> maps <code>T</code> to the return type of the const access functions.</li>
+<li><code>tuple_access_traits&lt;T&gt;::parameter_type</code> maps <code>T</code> to the parameter type of the tuple constructor.</li>
+</ol>
+<h4><code>make_tuple_traits</code></h4>
+
+The element types of the tuples that are created with the <code>make_tuple</code> functions are computed with the type function <code>make_tuple_traits</code>. 
+The type function call <code>make_tuple_traits&lt;T&gt;::type</code> implements the following type mapping:
+<ul>
+<li><i>any reference type</i> -&gt; <i>compile time error</i>
+</li>
+<li><i>any array type</i> -&gt; <i>constant reference to the array type</i>
+</li>
+<li><code>reference_wrapper&lt;T&gt;</code> -&gt; <code>T&amp;</code>
+</li>
+<li><code>T</code> -&gt; <code>T</code>
+</li>
+</ul>
+
+Objects of type <code>reference_wrapper</code> are created with the <code>ref</code> and <code>cref</code> functions (see <A href="tuple_users_guide.html#make_tuple">The <code>make_tuple</code> function</A>.)
+</p>
+
+<p>Note, that the <code>reference_wrapper</code> template and the <code>ref</code> and <code>cref</code> functions are defined in a separate hpp-file <code>reference_wrappers.hpp</code>, which can be included without including the rest of the tuple library.
+</p>
+
+<A href="tuple_users_guide.html">Back to the user's guide</A>
+<hr>
+
+<p>&copy; Copyright Jaakko J&auml;rvi 2001.</p>
+  </body>
+</html>
