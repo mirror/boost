@@ -7,7 +7,7 @@
 <title>Iterator Archetype</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, Zephyr Associates, Inc." />
-<meta name="date" content="2004-01-16" />
+<meta name="date" content="2004-01-27" />
 <meta name="copyright" content="Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2004. All rights reserved" />
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
@@ -26,7 +26,7 @@
 <td><a class="first reference" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="reference" href="http://www.osl.iu.edu">Open Systems
 Lab</a>, <a class="last reference" href="http://www.styleadvisor.com">Zephyr Associates, Inc.</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2004-01-16</td></tr>
+<td>2004-01-27</td></tr>
 <tr><th class="docinfo-name">Copyright:</th>
 <td>Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2004. All rights reserved</td></tr>
 </tbody>
@@ -35,7 +35,11 @@ Lab</a>, <a class="last reference" href="http://www.styleadvisor.com">Zephyr Ass
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">abstract:</th><td class="field-body">iterator archetypes provide a means to check the compile time requirements of a generic component on its iterator arguments.</td>
+<tr class="field"><th class="field-name">abstract:</th><td class="field-body">The <tt class="literal"><span class="pre">iterator_archetype</span></tt> class constructs a minimal implementation of
+one of the iterator access concepts and one of the iterator traversal concepts.
+This is used for doing a compile-time check to see if a the type requirements
+of a template are really enough to cover the implementation of the template.
+For further information see the documentation for the <a class="reference" href="../../concept_check/index.html"><tt class="literal"><span class="pre">boost::concept_check</span></tt></a> library.</td>
 </tr>
 </tbody>
 </table>

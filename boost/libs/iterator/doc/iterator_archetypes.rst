@@ -13,7 +13,15 @@
 .. _`Open Systems Lab`: http://www.osl.iu.edu
 .. _`Zephyr Associates, Inc.`: http://www.styleadvisor.com
 
-:abstract: iterator archetypes provide a means to check the compile time requirements of a generic component on its iterator arguments.
+:abstract: The ``iterator_archetype`` class constructs a minimal implementation of
+  one of the iterator access concepts and one of the iterator traversal concepts.
+  This is used for doing a compile-time check to see if a the type requirements
+  of a template are really enough to cover the implementation of the template.
+  For further information see the documentation for the |concepts|_ library.
+
+.. |concepts| replace:: ``boost::concept_check``
+.. _concepts: ../../concept_check/index.html
+
 
 .. contents:: Table of Contents
 
