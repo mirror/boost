@@ -1140,7 +1140,10 @@ public:
 // Implements Copy on Write over any storage
 ////////////////////////////////////////////////////////////////////////////////
 
-template <class Storage, typename Align = typename Storage::value_type*>
+template <
+    typename Storage, 
+    typename Align = BOOST_DEDUCED_TYPENAME Storage::value_type*
+>
 class CowString
 {
     typedef typename Storage::value_type E;
@@ -1863,15 +1866,15 @@ public:
 private:
     template <int i> class Selector {};
     
-    template <class U1, class U2> struct SameType 
-    {
-        enum { result = false };
-    };
-    
-    template <class U> struct SameType<U, U>
-    {
-        enum { result = true };
-    };
+//    template <class U1, class U2> struct SameType 
+//    {
+//        enum { result = false };
+//    };
+//    
+//    template <class U> struct SameType<U, U>
+//    {
+//        enum { result = true };
+//    };
     
     template<class ReallyAnIntegral>
     flex_string& ReplaceImpl(iterator i1, iterator i2,
