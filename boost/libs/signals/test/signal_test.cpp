@@ -65,7 +65,7 @@ test_zero_args()
   make_int i62(62, 61);
 
   {
-    boost::signal<int>::combiner<max_or_default<int> >::type s0;
+    boost::signal<int (), max_or_default<int> > s0;
 
     std::cout << "sizeof(signal) = " << sizeof(s0) << std::endl;
     boost::signals::connection c2 = s0.connect(i2);
@@ -100,13 +100,13 @@ test_zero_args()
   }  
 
   {
-    boost::signal<int>::combiner<max_or_default<int> >::type s0;
+    boost::signal<int (), max_or_default<int> > s0;
     boost::signals::connection c2 = s0.connect(i2);
     boost::signals::connection c72 = s0.connect(i72);
     boost::signals::connection c62 = s0.connect(i62);
     boost::signals::connection c42 = s0.connect(i42);
 
-    const boost::signal<int>::combiner<max_or_default<int> >::type& cs0 = s0;
+    const boost::signal<int (), max_or_default<int> >& cs0 = s0;
     BOOST_TEST(cs0() == 72);
   }  
 
@@ -114,7 +114,7 @@ test_zero_args()
     make_increasing_int<7> i7;
     make_increasing_int<10> i10;
 
-    boost::signal<int>::combiner<max_or_default<int> >::type s0;
+    boost::signal<int (), max_or_default<int> > s0;
     boost::signals::connection c7 = s0.connect(i7);
     boost::signals::connection c10 = s0.connect(i10);
 
@@ -126,7 +126,7 @@ test_zero_args()
 static void
 test_one_arg()
 {
-  boost::signal<int, int>::combiner<max_or_default<int> >::type s1;
+  boost::signal<int (int value), max_or_default<int> > s1;
 
   s1.connect(std::negate<int>());
   s1.connect(std::bind1st(std::multiplies<int>(), 2));
@@ -138,14 +138,14 @@ test_one_arg()
 static void
 test_signal_signal_connect()
 {
-  boost::signal<int, int>::combiner<max_or_default<int> >::type s1;
+  boost::signal<int (int value), max_or_default<int> > s1;
 
   s1.connect(std::negate<int>()); 
 
   BOOST_TEST(s1(3) == -3);
 
   {
-    boost::signal<int, int>::combiner<max_or_default<int> >::type s2;
+    boost::signal<int (int value), max_or_default<int> > s2;
     s1.connect(s2);
     s2.connect(std::bind1st(std::multiplies<int>(), 2));
     s2.connect(std::bind1st(std::multiplies<int>(), -3));
