@@ -662,7 +662,8 @@ token_id id = token_id(*iter_ctx->first);
         }
         else if (!unput_queue.empty() 
             || T_IDENTIFIER == id 
-            || IS_CATEGORY(id, KeywordTokenType)) 
+            || IS_CATEGORY(id, KeywordTokenType)
+            || IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType))
         {
         //  call the lexer, preprocess the required number of tokens, put them
         //  into the unput queue

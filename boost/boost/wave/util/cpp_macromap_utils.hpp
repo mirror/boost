@@ -173,8 +173,11 @@ token_equals(TokenT const &left, TokenT const &right)
     {
     //  if the existing token is of type T_PARAMETERBASE, then the right token 
     //  must be of type T_IDENTIFIER or a keyword
-        return (T_IDENTIFIER == token_id(right) || 
-                IS_CATEGORY(right, KeywordTokenType)) && 
+    token_id id = token_id(right);
+     
+        return (T_IDENTIFIER == id || 
+                IS_CATEGORY(id, KeywordTokenType) ||
+                IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType)) && 
             left.get_value() == right.get_value();
     }
 

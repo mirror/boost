@@ -336,6 +336,8 @@ struct cpp_grammar :
                         !list_p(
                             (   ch_p(T_IDENTIFIER) 
                             |   pattern_p(KeywordTokenType, TokenTypeMask)
+                            |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                                    ExtTokenTypeMask)   // and, bit_and etc.
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
                             |   ch_p(T_ELLIPSIS)
 #endif
@@ -364,6 +366,8 @@ struct cpp_grammar :
                     ]
                     >>  (   ch_p(T_IDENTIFIER) 
                         |   pattern_p(KeywordTokenType, TokenTypeMask)
+                        |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                                ExtTokenTypeMask)   // and, bit_and etc.
                         )
                 ;
 
@@ -523,6 +527,8 @@ struct cpp_grammar :
                 =   no_node_d[*ppsp]
                     >>  (   ch_p(T_IDENTIFIER) 
                         |   pattern_p(KeywordTokenType, TokenTypeMask)
+                        |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                                ExtTokenTypeMask)   // and, bit_and etc.
                         ) 
                 ;
 

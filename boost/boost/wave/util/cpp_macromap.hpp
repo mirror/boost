@@ -312,8 +312,11 @@ macromap<ContextT>::is_defined(IteratorT const &begin,
     {
     // in normal mode the name under inspection should consist of an identifier
     // only
-        if (T_IDENTIFIER != token_id(*begin) && 
-            !IS_CATEGORY(*begin, KeywordTokenType)) 
+    token_id id = token_id(*begin);
+
+        if (T_IDENTIFIER != id && 
+            !IS_CATEGORY(id, KeywordTokenType) &&
+            !IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType)) 
         {
             BOOST_WAVE_THROW(preprocess_exception, invalid_macroname, 
                 impl::get_full_name(begin, end), main_pos);
@@ -321,8 +324,7 @@ macromap<ContextT>::is_defined(IteratorT const &begin,
 
     IteratorT it = begin;
     string_type name ((*it).get_value());
-    typename defined_macros_type::iterator cit(
-        current_macros -> find(name));
+    typename defined_macros_type::iterator cit(current_macros -> find(name));
 
         if (++it != end) {
         // there should be only one token as the inspected name
@@ -446,7 +448,9 @@ macromap<ContextT>::expand_tokensequence_worker(
             id = token_id(*first);
         }
             
-        if (T_IDENTIFIER == id || IS_CATEGORY(id, KeywordTokenType)) {
+        if (T_IDENTIFIER == id || IS_CATEGORY(id, KeywordTokenType) ||
+            IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType)) 
+        {
         // try to replace this identifier as a macro
             if (expand_operator_defined && (*first).get_value() == "defined") {
             // resolve operator defined()
@@ -998,7 +1002,8 @@ macromap<ContextT>::expand_macro(ContainerT &expanded,
     if (0 == scope) scope = current_macros;
     
     BOOST_ASSERT(T_IDENTIFIER == token_id(curr_token) ||
-        IS_CATEGORY(token_id(curr_token), KeywordTokenType));
+        IS_CATEGORY(token_id(curr_token), KeywordTokenType) ||
+        IS_EXTCATEGORY(token_id(curr_token), OperatorTokenType|AltExtTokenType));
         
     if (it == scope->end()) {
         ++first;    // advance
@@ -1478,7 +1483,8 @@ macromap<ContextT>::concat_tokensequence(ContainerT &expanded)
             token_id id = impl::next_token<iterator_type>::peek(next, end, false);
             
                 if (IS_CATEGORY(id, IdentifierTokenType) || 
-                    IS_CATEGORY(id, KeywordTokenType))
+                    IS_CATEGORY(id, KeywordTokenType) ||
+                    IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType))
                 {
                     concat_result += (*++next).get_value();
                 }

@@ -70,6 +70,8 @@ struct predefined_macros_grammar :
             plain_define
                 =   (   ch_p(T_IDENTIFIER)
                     |   pattern_p(KeywordTokenType, TokenTypeMask)
+                    |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                            ExtTokenTypeMask)   // and, bit_and etc.
                     )
                     >>  !macro_parameters
                     >>  !macro_definition
@@ -82,6 +84,11 @@ struct predefined_macros_grammar :
                        !list_p(
                             (   ch_p(T_IDENTIFIER)
                             |   pattern_p(KeywordTokenType, TokenTypeMask)
+                            |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                                    ExtTokenTypeMask)   // and, bit_and etc.
+#if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+                            |   ch_p(T_ELLIPSIS)
+#endif
                             ), 
                             no_node_d
                             [

@@ -67,8 +67,11 @@ struct macro_definition {
         typename definition_container_t::iterator it = macrodefinition.begin(); 
 
             for (/**/; it != end; ++it) {
-                if (T_IDENTIFIER == token_id(*it) || 
-                    IS_CATEGORY(token_id(*it), KeywordTokenType)) 
+            token_id id = *it;
+            
+                if (T_IDENTIFIER == id || 
+                    IS_CATEGORY(id, KeywordTokenType) ||
+                    IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType)) 
                 {
                 // may be a parameter to replace
                     const_parameter_iterator_t cend = macroparameters.end();

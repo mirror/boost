@@ -53,9 +53,9 @@ CHANGELOG
 - The file names passed to the preprocessing hooks are now normalised.
 - Changed the opened_include_file() preprocessing hook to receive the correct
   relative path even if the included file was found in the current directory.
-- Fixed a problem wrt the include path handling, which prevented relative paths
-  from beeing correctly used to construct the required absolute paths at 
-  include file search time.
+- Fixed a bug which reported 'defined(or)' as invalid (similarly all the other
+  alternative bit operation token types).
+- Fixed a bug which prevented to define variadic macros from the command line.
 
 Mon Feb 21 09:30:04 WEST 2005
 Version 1.1.14 (Fixes in response to the Boost review)
@@ -832,7 +832,7 @@ Mon Mar 17 19:53:29     2003
   since there is some whitespace left, which may be removed)
     
 Sun Mar 16 23:19:11     2003
-- Fixed a problem with include pathes given on the command line, if the file
+- Fixed a problem with include paths given on the command line, if the file
   to preprocess was not given as a full path (driver executable).
 - Fixed a problem with path names containing blanks (driver executable).
 - Cleaned command line and argument handling (driver executable).
@@ -944,7 +944,7 @@ Sun Mar  2 20:10:04     2003
   corresponding expectations.
 - Added config file support to allow for predefined option sets (for instance
   for the emulation of other compilers)
-- Changed the way, how include pathes are defined. It resembles now the 
+- Changed the way, how include paths are defined. It resembles now the 
   behaviour of gcc. 
   Any directories specified with '-I' options before an eventually given '-I-' 
   option are searched only for the case of '#include "file"', they are not 

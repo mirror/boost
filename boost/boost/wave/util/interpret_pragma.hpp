@@ -73,9 +73,18 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
         
         if (!parse (++it, end, 
                         (   ch_p(T_IDENTIFIER)
-                            [spirit_assign_actor(option)] 
+                            [
+                                spirit_assign_actor(option)
+                            ] 
                         |   pattern_p(KeywordTokenType, TokenTypeMask)
-                            [spirit_assign_actor(option)]
+                            [
+                                spirit_assign_actor(option)
+                            ] 
+                        |   pattern_p(OperatorTokenType|AltExtTokenType, 
+                                ExtTokenTypeMask)   // and, bit_and etc.
+                            [
+                                spirit_assign_actor(option)
+                            ] 
                         )
                     >> !(   ch_p(T_LEFTPAREN) 
                         >>  lexeme_d[
