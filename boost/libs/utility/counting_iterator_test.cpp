@@ -27,7 +27,7 @@
 #include <climits>
 #include <iterator>
 #include <stdlib.h>
-#include <boost/utility.hpp>
+#include <boost/tuple/tuple.hpp>
 #include <vector>
 #include <list>
 #include <cassert>
