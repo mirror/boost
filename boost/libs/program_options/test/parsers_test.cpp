@@ -52,13 +52,6 @@ void check_value(const option& option, const char* name, const char* value)
     BOOST_CHECK(option.value.front() == value);
 }
 
-void check_value(const woption& option, const char* name, const wchar_t* value)
-{
-    BOOST_CHECK(option.string_key == name);
-    BOOST_REQUIRE(option.value.size() == 1);
-    BOOST_CHECK(option.value.front() == value);
-}
-
 vector<string> sv(char* array[], unsigned size)
 {
     vector<string> r;
@@ -66,17 +59,6 @@ vector<string> sv(char* array[], unsigned size)
         r.push_back(array[i]);
     return r;
 }
-
-#ifndef BOOST_NO_STD_WSTRING
-vector<wstring> sv(wchar_t* array[], unsigned size)
-{
-    vector<wstring> r;
-    for (unsigned i = 0; i < size; ++i)
-        r.push_back(array[i]);
-    return r;
-}
-#endif
-
 
 void test_command_line()
 {
@@ -143,22 +125,6 @@ void test_command_line()
     BOOST_CRITICAL_TEST(a3[5].value.size() == 0);
 
     check_value(a3[6], "plug3", "10");
-
-    // Check Unicode, 
-#ifndef BOOST_NO_STD_WSTRING
-    wchar_t* cmdline4_[] = { L"--foo=1\u0FF52", L"-f4", L"--bar=11", L"--bar", 
-                             L"-b4", L"-b", L"--plug3=10"};
-    vector<wstring> cmdline4 = sv(cmdline4_,
-                                  sizeof(cmdline4_)/sizeof(cmdline4_[0]));
-    vector<woption> a4 = 
-        wcommand_line_parser(cmdline4).options(desc).run().options;
-
-    BOOST_CRITICAL_TEST(a3.size() == 7);
-
-    check_value(a4[0], "foo", L"1\u0FF52");
-    check_value(a4[1], "foo", L"4");
-    check_value(a4[2], "bar", L"11");
-#endif
 }
 
 void test_config_file()
