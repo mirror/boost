@@ -250,12 +250,16 @@ namespace boost{
     char_separator(const Char* dropped_delims,
                    const Char* kept_delims = 0,
                    empty_token_policy empty_tokens = drop_empty_tokens)
-      : m_kept_delims(kept_delims ? string_type(kept_delims) : string_type()),
-        m_dropped_delims(dropped_delims),
+      : m_dropped_delims(dropped_delims),
         m_use_ispunct(false),
         m_use_isspace(false),
         m_empty_tokens(empty_tokens),
-        m_output_done(false) { }
+        m_output_done(false)
+    {
+      // Borland workaround
+      if (kept_delims)
+	m_kept_delims = kept_delims;
+    }
 
  		// use ispunct() for kept delimiters and isspace for dropped.
     explicit
