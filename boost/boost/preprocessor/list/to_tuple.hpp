@@ -13,7 +13,6 @@
  * See http://www.boost.org for most recent version.
  */
 
-#include <boost/preprocessor/comma_if.hpp>
 #include <boost/preprocessor/list/enum.hpp>
 
 /** <p>Converts the list to a tuple.</p>

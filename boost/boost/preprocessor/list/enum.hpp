@@ -13,8 +13,10 @@
  * See http://www.boost.org for most recent version.
  */
 
-#include <boost/preprocessor/comma_if.hpp>
-#include <boost/preprocessor/list/for_each.hpp>
+#include <boost/preprocessor/comma.hpp>
+#include <boost/preprocessor/empty.hpp>
+#include <boost/preprocessor/for.hpp>
+#include <boost/preprocessor/list/adt.hpp>
 
 /** <p>Converts the list to a comma separated list.</p>
 
@@ -32,13 +34,15 @@
 
 <h3>Uses</h3>
 <ul>
-  <li>BOOST_PP_LIST_FOR_EACH()</li>
+  <li>BOOST_PP_FOR()</li>
 </ul>
 */
 #define BOOST_PP_LIST_ENUM(L) BOOST_PP_LIST_ENUM_R(0,L)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PP_LIST_ENUM_R(R,L) BOOST_PP_LIST_FOR_EACH_R(R,BOOST_PP_LIST_ENUM_F,_,L)
-#define BOOST_PP_LIST_ENUM_F(I,_,X) BOOST_PP_COMMA_IF(I) X
+#define BOOST_PP_LIST_ENUM_R(R,L) BOOST_PP_FOR##R((L,BOOST_PP_EMPTY),BOOST_PP_LIST_ENUM_C,BOOST_PP_LIST_ENUM_F,BOOST_PP_LIST_ENUM_I)
+#define BOOST_PP_LIST_ENUM_C(R,P) BOOST_PP_TUPLE_ELEM(3,2,BOOST_PP_TUPLE_ELEM(2,0,P))
+#define BOOST_PP_LIST_ENUM_F(R,P) (BOOST_PP_TUPLE_ELEM(3,1,BOOST_PP_TUPLE_ELEM(2,0,P)),BOOST_PP_COMMA)
+#define BOOST_PP_LIST_ENUM_I(R,P) BOOST_PP_TUPLE_ELEM(2,1,P)() BOOST_PP_TUPLE_ELEM(3,0,BOOST_PP_TUPLE_ELEM(2,0,P))
 #endif
 #endif

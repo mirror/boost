@@ -20,6 +20,8 @@
 #include <boost/preprocessor/list/cat.hpp>
 #include <boost/preprocessor/list/filter.hpp>
 #include <boost/preprocessor/list/first_n.hpp>
+#include <boost/preprocessor/list/for_each.hpp>
+#include <boost/preprocessor/list/for_each_product.hpp>
 #include <boost/preprocessor/list/size.hpp>
 #include <boost/preprocessor/list/to_tuple.hpp>
 #include <boost/preprocessor/list/transform.hpp>
