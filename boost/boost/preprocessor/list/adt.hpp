@@ -54,10 +54,21 @@
 #
 # /* BOOST_PP_LIST_IS_CONS */
 #
-# define BOOST_PP_LIST_IS_CONS(list) BOOST_PP_IS_BINARY(list)
+# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_BCC
+#    define BOOST_PP_LIST_IS_CONS(list) BOOST_PP_IS_BINARY(list)
+# else
+#    define BOOST_PP_LIST_IS_CONS(list) BOOST_PP_LIST_IS_CONS_D(list)
+#    define BOOST_PP_LIST_IS_CONS_D(list) BOOST_PP_LIST_IS_CONS_ ## list
+#    define BOOST_PP_LIST_IS_CONS_(head, tail) 1
+#    define BOOST_PP_LIST_IS_CONS_BOOST_PP_NIL 0
+# endif
 #
 # /* BOOST_PP_LIST_IS_NIL */
 #
-# define BOOST_PP_LIST_IS_NIL(list) BOOST_PP_COMPL(BOOST_PP_IS_BINARY(list))
+# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_BCC
+#    define BOOST_PP_LIST_IS_NIL(list) BOOST_PP_COMPL(BOOST_PP_IS_BINARY(list))
+# else
+#    define BOOST_PP_LIST_IS_NIL(list) BOOST_PP_COMPL(BOOST_PP_LIST_IS_CONS(list))
+# endif
 #
 # endif

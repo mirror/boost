@@ -21,9 +21,10 @@
 #
 # /* BOOST_PP_TUPLE_ELEM */
 #
-# if BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_IDEAL
-#    define BOOST_PP_TUPLE_ELEM(size, i, tuple) BOOST_PP_TUPLE_ELEM_D(BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM_EX_, size) tuple, i)
-#    define BOOST_PP_TUPLE_ELEM_D(tuple, i) BOOST_PP_TUPLE_ELEM_ ## i tuple
+# if BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_IDEAL || BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_BCC
+#    define BOOST_PP_TUPLE_ELEM(size, i, tuple) BOOST_PP_TUPLE_ELEM_D(size, i, tuple)
+#    define BOOST_PP_TUPLE_ELEM_D(size, i, tuple) BOOST_PP_TUPLE_ELEM_D_II(BOOST_PP_TUPLE_ELEM_EX_ ## size tuple, i)
+#    define BOOST_PP_TUPLE_ELEM_D_II(tuple, i) BOOST_PP_TUPLE_ELEM_ ## i tuple
 # elif ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
 #    define BOOST_PP_TUPLE_ELEM(size, index, tuple) BOOST_PP_TUPLE_ELEM_I(size, index, tuple)
 #    define BOOST_PP_TUPLE_ELEM_I(size, i, tuple) BOOST_PP_TUPLE_ELEM_II(BOOST_PP_TUPLE_ELEM_EX_ ## size, i, tuple)

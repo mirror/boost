@@ -20,7 +20,8 @@
 #
 # define BOOST_PP_CONFIG_MSVC 0x0004
 # define BOOST_PP_CONFIG_MWCW 0x0008
-# define BOOST_PP_CONFIG_EDG 0x0010
+# define BOOST_PP_CONFIG_BCC 0x0010
+# define BOOST_PP_CONFIG_EDG 0x0020
 #
 # ifndef BOOST_PP_CONFIG_FLAGS
 #    if defined(__EDG__)
@@ -29,6 +30,8 @@
 #        define BOOST_PP_CONFIG_FLAGS (BOOST_PP_CONFIG_MSVC)
 #    elif defined(__MWERKS__)
 #        define BOOST_PP_CONFIG_FLAGS (BOOST_PP_CONFIG_MWCW)
+#    elif defined(__BORLANDC__)
+#        define BOOST_PP_CONFIG_FLAGS (BOOST_PP_CONFIG_BCC)
 #    else
 #        define BOOST_PP_CONFIG_FLAGS (BOOST_PP_CONFIG_STRICT | BOOST_PP_CONFIG_IDEAL)
 #    endif

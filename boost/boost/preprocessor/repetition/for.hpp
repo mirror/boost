@@ -28,11 +28,15 @@
 # endif
 #
 # define BOOST_PP_FOR BOOST_PP_CAT(BOOST_PP_FOR_, BOOST_PP_AUTO_REC(BOOST_PP_FOR_P, 256))
-# define BOOST_PP_FOR_P(n) BOOST_PP_IS_NULLARY(BOOST_PP_FOR_ ## n(1, BOOST_PP_FOR_SR_P, BOOST_PP_FOR_SR_O, BOOST_PP_FOR_SR_M))
 #
-# define BOOST_PP_FOR_SR_P(r, s) s
-# define BOOST_PP_FOR_SR_O(r, s) 0
-# define BOOST_PP_FOR_SR_M(r, s) ()
+# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_BCC
+#    define BOOST_PP_FOR_P(n) BOOST_PP_IS_NULLARY(BOOST_PP_FOR_ ## n(1, BOOST_PP_FOR_SR_P, BOOST_PP_FOR_SR_O, BOOST_PP_FOR_SR_M))
+#    define BOOST_PP_FOR_SR_P(r, s) s
+#    define BOOST_PP_FOR_SR_O(r, s) 0
+#    define BOOST_PP_FOR_SR_M(r, s) ()
+# else
+#    include <boost/preprocessor/repetition/detail/bcc/for_p.hpp>
+# endif
 #
 # define BOOST_PP_FOR_257(s, p, o, m) BOOST_PP_ERROR(0x0002)
 #
