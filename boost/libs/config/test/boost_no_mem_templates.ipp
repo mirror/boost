@@ -42,6 +42,7 @@ void test_proc(T i)
    typedef typename ifoo::BOOST_NESTED_TEMPLATE nested<double> bound_t;
    typedef typename bound_t::other other;
    other o;
+   (void) &o;
 }
 
 int test()

@@ -15,7 +15,7 @@ namespace boost_no_std_messages{
 int test()
 {
    const std::messages<char>* pmf = 0;
-   (void)pmf;
+   (void) &pmf;
    return 0;
 }
 

@@ -21,8 +21,8 @@ int test()
    // construct a pointer to a facet:
    //
    const std::ctype<char>* pct = 0;
-   (void)l1;
-   (void)pct;
+   (void) &l1;
+   (void) &pct;
    return 0;
 }
 

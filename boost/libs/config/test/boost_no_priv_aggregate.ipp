@@ -25,6 +25,7 @@ public:
 int test()
 {
    t inst = { 0, 0, };
+   (void) &inst;      // avoid "unused variable" warning
    return 0;
 }
 

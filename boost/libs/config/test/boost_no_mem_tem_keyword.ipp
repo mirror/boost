@@ -39,6 +39,7 @@ void test_proc(T i)
    typedef typename ifoo::template nested<double> bound_t;
    typedef typename bound_t::other other;
    other o;
+   (void) &o;         // avoid "unused variable" warning
 }
 
 #else

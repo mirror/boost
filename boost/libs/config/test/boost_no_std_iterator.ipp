@@ -43,17 +43,17 @@ int test()
    //
    // suppress some warnings:
    //
-   (void)v;
-   (void)d;
-   (void)p;
-   (void)r;
-   (void)cat;
+   (void) &v;
+   (void) &d;
+   (void) &p;
+   (void) &r;
+   (void) &cat;
 
-   (void)v2;
-   (void)d2;
-   (void)p2;
-   (void)r2;
-   (void)cat2;
+   (void) &v2;
+   (void) &d2;
+   (void) &p2;
+   (void) &r2;
+   (void) &cat2;
 
    return 0;
 }

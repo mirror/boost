@@ -37,9 +37,9 @@ void foo_test(T)
    typedef typename foo_type::BOOST_NESTED_TEMPLATE bar<UDT2> bar_type;
    foo<T> ft;
    bar_type bt;
-   (void)bt;
-   (void)ft;
-};
+   (void) &bt;
+   (void) &ft;
+}
 
 int test()
 {

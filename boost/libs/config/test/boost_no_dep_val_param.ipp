@@ -26,6 +26,7 @@ struct typifier
 int test()
 {
    X<typifier<int> > x;
+   (void) &x;        // avoid "unused variable" warning
    return 0;
 }
 
