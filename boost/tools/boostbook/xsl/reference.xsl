@@ -60,12 +60,8 @@
 
     <xsl:choose>
       <xsl:when test="count(ancestor::namespace)=0">
-        <xsl:call-template name="synopsis">
-          <xsl:with-param name="text">
-            <xsl:call-template name="namespace-synopsis">
-              <xsl:with-param name="indentation" select="$indentation"/>
-            </xsl:call-template>
-          </xsl:with-param>
+        <xsl:call-template name="namespace-synopsis">
+          <xsl:with-param name="indentation" select="$indentation"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>

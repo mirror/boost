@@ -106,11 +106,18 @@
           </xsl:call-template>
         </xsl:if>
 
-        <xsl:apply-templates mode="synopsis" select="namespace">
-          <xsl:with-param name="indentation" select="0"/>
-        </xsl:apply-templates>
-        
-        <xsl:apply-templates mode="reference"/>
+        <xsl:if test="namespace|class|struct|union">
+          <xsl:call-template name="synopsis">
+            <xsl:with-param name="text">
+              <xsl:apply-templates mode="synopsis" 
+                select="namespace|class|struct|union">
+                <xsl:with-param name="indentation" select="0"/>
+              </xsl:apply-templates>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:if>
+
+        <xsl:apply-templates mode="namespace-reference"/>
       </section>
     </xsl:if>
   </xsl:template>
@@ -389,4 +396,10 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
   <!-- Swallow using-namespace and using-class directives along with
        last-revised elements -->
   <xsl:template match="using-namespace|using-class|last-revised"/>
+
+  <!-- If there is no "namespace-reference" mode, forward to
+       "reference" mode -->
+  <xsl:template match="*" mode="namespace-reference">
+    <xsl:apply-templates select="." mode="reference"/>
+  </xsl:template>
 </xsl:stylesheet>
