@@ -29,10 +29,10 @@ of the library is the interface definition, captured as a <a
 href="#sec:property-map-concepts">set of concepts</a>. In addition
 there are supporting <a href="#sec:property-map-tags">category
 tags</a> and a <a href="#sec:property-map-traits">traits class</a>, as
-well as <a href="#sec:property-map-classes">some classes</a> that
+well as <a href="#sec:property-map-types">some types</a> that
 implement the property map interface. These classes are not meant to
 fulfill all mapping needs, but more to serve as an example of how to
-implement the interface.
+implement the interface as well as covering a few common cases.
 
 <h2><A NAME="sec:property-map-concepts"></A>
 Property Map Concepts
@@ -182,11 +182,27 @@ functions are defined in <tt>&lt;boost/property_map.hpp&gt;</tt>.
      typedef typename PropertyMap::category category;
   };
 
+}</PRE>
+
+<h2><a name="sec:property-map-types">Property Map Types</a></h2>
+
+<ul>
+  <li>Builtin C++ pointer types.<br>
+
+    The following specialization of the <tt>property_traits</tt> class
+    and the overloads of <tt>put()</tt> and <tt>get()</tt> make it
+    possible to use builtin C++ pointer types as property maps. These
+    are defined in <tt>boost/property_map.hpp</tt>. More specifically,
+    it means that <tt>T*</tt> is a model of <a
+    href="./LvaluePropertyMap.html">LvaluePropertyMap</a>, given a key
+    type that is at least convertible <tt>std::ptrdiff_t</tt>.
+
+<PRE>namespace boost {
   // specialization for using pointers as property maps
   template &lt;class T&gt;
   struct property_traits&lt;T*&gt; {
     typedef T value_type;
-    typedef ptrdiff_t key_type;
+    typedef std::ptrdiff_t key_type;
     typedef random_access_iterator_pa_tag category;
   };
 
@@ -198,10 +214,7 @@ functions are defined in <tt>&lt;boost/property_map.hpp&gt;</tt>.
   const T&amp; get(const T* pmap, std::ptrdiff_t k) { return pmap[k]; }
 
 }</PRE>
-
-<h2><a name="sec:property-map-classes">Property Map Classes</a></h2>
-
-<ul>
+  </li>
   <li><a href="./identity_property_map.html">identity_property_map</a> </li>
   <li><a href="./iterator_property_map.html">random_access_iterator_property_map</a></li>
 </ul>
