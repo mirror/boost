@@ -1155,3 +1155,16 @@ type, just that they be convertible.
           , typename enable_if_convertible<I2, Iterator>::type* = 0      // exposition only
           , typename enable_if_convertible<F2, UnaryFunction>::type* = 0 // exposition only
       );
+
+
+9.44y ``indirect_iterator`` and smart pointers
+==============================================
+
+:Submitter: Dave Abrahams
+
+``indirect_iterator`` should be able to iterate over containers of
+smart pointers, but the mechanism that allows it was left out of
+the specification, even though it's present in the Boost
+specification
+
+:Proposed resolution: Add ``pointee`` and ``indirect_reference``
