@@ -25,7 +25,7 @@ namespace date_time {
     typename date_type::ymd_type ymd(year_type::min(),1,1);
     boost::tokenizer<boost::char_delimiters_separator<char> > tok(s);
     for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end();++beg){
-      int i = boost::lexical_cast<int>(*beg);
+      unsigned short i = boost::lexical_cast<unsigned short>(*beg);
       switch(pos) {
       case 0: ymd.year = i; break;
       case 1: ymd.month = i; break;
@@ -48,7 +48,7 @@ namespace date_time {
     boost::offset_separator osf(offsets, offsets+3); 
     boost::tokenizer<boost::offset_separator> tok(s, osf);
     for(boost::tokenizer<boost::offset_separator>::iterator ti=tok.begin(); ti!=tok.end();++ti){
-      int i = boost::lexical_cast<int>(*ti);
+      unsigned short i = boost::lexical_cast<unsigned short>(*ti);
       //      std::cout << i << std::endl;
       switch(pos) {
       case 0: ymd.year = i; break;
