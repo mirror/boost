@@ -1,4 +1,3 @@
-#include <boost/config.hpp> /* prevents some nasty warns in MSVC */
 #include <utility>
 #include <functional>
 #include <algorithm>
@@ -8,6 +7,7 @@
 #include <list>
 #include <set>
 
+#include <boost/config.hpp> /* prevents some nasty warns in MSVC */
 #include <boost/algorithm/minmax_element.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
@@ -174,7 +174,9 @@ void test_minmax(CIterator first, CIterator last, int n)
 }
 
 template <class Container, class Iterator, class Value>
-void test_container(Iterator first, Iterator last, int n, Container* dummy = 0 )
+void test_container(Iterator first, Iterator last, int n,
+                    Container* dummy = 0
+		    BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Value) )
 {
   Container c(first, last);
   test_minmax(c.begin(), c.end(), n);
@@ -191,7 +193,7 @@ void test_range(Iterator first, Iterator last, int n)
 }
 
 template <class Value>
-void test(int n)
+void test(int n BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Value))
 {
   // Populate test vector with identical values
   std::vector<Value> test_vector(n, Value(1));

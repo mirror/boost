@@ -1,7 +1,7 @@
 #include <utility>
 #include <functional>
-#include <iostream>
 
+#include <boost/config.hpp>
 #include <boost/algorithm/minmax.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 
@@ -40,7 +40,7 @@ private:
 };
 
 template <class Value>
-void test()
+void test(BOOST_EXPLICIT_TEMPLATE_TYPE(Value))
 {
   using namespace boost;
   Value zero(0), one(1);
