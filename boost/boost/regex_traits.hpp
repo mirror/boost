@@ -149,6 +149,11 @@ public:
    };
    static std::string set_message_catalogue(const std::string& s);
 protected:
+#if defined(__MWERKS__) && __MWERKS__ <= 0x6000
+   friend class c_regex_traits<char>;
+   friend class c_regex_traits<wchar_t>;
+#endif 
+
    static char regex_message_catalogue[200];
    enum syntax_map_size
    {
