@@ -42,6 +42,8 @@ namespace boost { namespace date_time {
     static const char_type default_period_closed_range_end_delimeter[2];
 
     enum range_display_options { AS_OPEN_RANGE, AS_CLOSED_RANGE };
+
+    //! Constructor that sets up period formatter options -- default should suffice most cases.
     period_formatter(range_display_options range_option = AS_CLOSED_RANGE, 
                      const char_type* const period_separator = default_period_separator, 
                      const char_type* const period_start_delimeter = default_period_start_delimeter,
@@ -54,6 +56,7 @@ namespace boost { namespace date_time {
       m_closed_range_end_delimeter(period_closed_range_end_delimeter)
     {}
 
+    //! Puts the characters between period elements into stream -- default is /
     OutItrT put_period_separator(OutItrT& oitr) const 
     {
       const_itr_type ci = m_period_separator.begin();
@@ -63,6 +66,8 @@ namespace boost { namespace date_time {
       }
       return oitr;
     }
+
+    //! Puts the period start characters into stream -- default is [
     OutItrT put_period_start_delimeter(OutItrT& oitr) const 
     {
       const_itr_type ci = m_period_start_delimeter.begin();
@@ -72,6 +77,8 @@ namespace boost { namespace date_time {
       }
       return oitr;
     }
+
+    //! Puts the period end characters into stream as controled by open/closed range setting.
     OutItrT put_period_end_delimeter(OutItrT& oitr) const 
     {
       
@@ -96,11 +103,53 @@ namespace boost { namespace date_time {
       return m_range_option;
     }
 
+    //! Reset the range_option control
     void 
     range_option(range_display_options option) const
     {
       m_range_option = option;
     }
+
+    //! Generic code to output a period -- no matter the period type.
+    /*! This generic code will output any period using a facet to
+     *  to output the 'elements'.  For example, in the case of a date_period
+     *  the elements will be instances of a date which will be formatted 
+     *  according the to setup in the passed facet parameter.
+     * 
+     *  The steps for formatting a period are always the same:
+     *  - put the start delimiter
+     *  - put start element
+     *  - put the separator 
+     *  - put either last or end element depending on range settings
+     *  - put end delimeter depending on range settings
+     *
+     *  Thus for a typical date period the result might look like this:
+     *@code
+     *
+     *    [March 01, 2004/June 07, 2004]   <-- closed range
+     *    [March 01, 2004/June 08, 2004)   <-- open range
+     *
+     *@endcode
+     */
+    template<class period_type, class facet_type>
+    OutItrT put_period(OutItrT next, 
+                       std::ios_base& a_ios, 
+                       char_type a_fill, 
+                       const period_type& p,
+                       const facet_type& facet) const {
+      put_period_start_delimeter(next);
+      next = facet.put(next, a_ios, a_fill, p.begin());
+      put_period_separator(next);
+      if (m_range_option == AS_CLOSED_RANGE) {
+        facet.put(next, a_ios, a_fill, p.last());
+      }
+      else {
+        facet.put(next, a_ios, a_fill, p.end());
+      }
+      put_period_end_delimeter(next);
+      return next;
+    }
+
       
   private:
     string_type m_period_separator;
