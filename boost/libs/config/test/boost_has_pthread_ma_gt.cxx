@@ -10,7 +10,7 @@
 #include <pthread.h>
 
 
-namespace boost_has_pthread_mutexattr_gettype{
+namespace boost_has_pthread_mutexattr_settype{
 
 void f()
 {
@@ -27,6 +27,7 @@ int test()
 }
 
 }
+
 
 
 
