@@ -468,7 +468,7 @@
 				RelativePath="..\..\..\boost\archive\text_woarchive.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\boost\utf8_codecvt_facet.hpp">
+				RelativePath="..\..\..\boost\archive\detail\utf8_codecvt_facet.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\xml_wiarchive.hpp">
