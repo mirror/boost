@@ -9,7 +9,7 @@
 //  in all copies. This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 
-// ideas taken from RÅ¸diger Loos's format class
+// ideas taken from Rudiger Loos's format class
 // and Karl Nelson's ofstream (also took its parsing code as basis for printf parsing)
 
 // ------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ namespace detail {
       char cur_ch = os.narrow( s[start], 0);
       assert(cur_ch != 0 ); // since we called isdigit, this should not happen.
       n *= 10;
-      n += cur_ch - '0'; // Åß22.2.1.1.2 of the C++ standard
+      n += cur_ch - '0'; // 22.2.1.1.2 of the C++ standard
       ++start;
     }
     return n;
