@@ -1,7 +1,7 @@
 #ifndef BOOST_BIND_HPP_INCLUDED
 #define BOOST_BIND_HPP_INCLUDED
 
-#if _MSC_VER+0 >= 1020
+#if _MSC_VER >= 1020
 #pragma once
 #endif
 
@@ -78,6 +78,8 @@ template<class T> class type {};
 
 // listN
 
+#ifdef BOOST_NO_VOID_RETURNS
+
 template <class R> struct evaluator0;
 template <class R> struct evaluator1;
 template <class R> struct evaluator2;
@@ -88,6 +90,8 @@ template <class R> struct evaluator6;
 template <class R> struct evaluator7;
 template <class R> struct evaluator8;
 template <class R> struct evaluator9;
+
+#endif
 
 class list0
 {
@@ -105,15 +109,23 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template <class R>
-    struct evaluator
+    template<class R, class F, class A> R operator()(type<R>, F f, A &) const
     {
-        typedef evaluator0<R> type;
-    };
-    
+        return f();
+    }
+
     template<class V> void accept(V &) const
     {
     }
+
+#ifdef BOOST_NO_VOID_RETURNS
+
+	template<class R> struct evaluator
+	{
+        typedef evaluator0<R> type;
+	};
+
+#endif
 
 private:
 
@@ -138,16 +150,28 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template <class R>
-    struct evaluator
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
-        typedef evaluator1<R> type;
-    };
-    
+        return f(a[a1_]);
+    }
+
     template<class V> void accept(V & v) const
     {
         v(a1_);
     }
+
+#ifdef BOOST_NO_VOID_RETURNS
+
+	template<class R> struct evaluator
+	{
+        typedef evaluator1<R> type;
+	};
+
+#else
+
+private:
+
+#endif
 
     A1 a1_;
 
@@ -175,17 +199,29 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template <class R>
-    struct evaluator
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
-        typedef evaluator2<R> type;
-    };
-    
+        return f(a[a1_], a[a2_]);
+    }
+
     template<class V> void accept(V & v) const
     {
         v(a1_);
         v(a2_);
     }
+
+#ifdef BOOST_NO_VOID_RETURNS
+
+	template<class R> struct evaluator
+	{
+        typedef evaluator2<R> type;
+	};
+
+#else
+
+private:
+
+#endif
 
     A1 a1_;
     A2 a2_;
@@ -215,18 +251,30 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template <class R>
-    struct evaluator
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
-        typedef evaluator3<R> type;
-    };
-    
+        return f(a[a1_], a[a2_], a[a3_]);
+    }
+
     template<class V> void accept(V & v) const
     {
         v(a1_);
         v(a2_);
         v(a3_);
     }
+
+#ifdef BOOST_NO_VOID_RETURNS
+
+	template<class R> struct evaluator
+	{
+        typedef evaluator3<R> type;
+	};
+
+#else
+
+private:
+
+#endif
 
     A1 a1_;
     A2 a2_;
@@ -258,12 +306,11 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template <class R>
-    struct evaluator
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
-        typedef evaluator4<R> type;
-    };
-    
+        return f(a[a1_], a[a2_], a[a3_], a[a4_]);
+    }
+
     template<class V> void accept(V & v) const
     {
         v(a1_);
@@ -271,6 +318,19 @@ public:
         v(a3_);
         v(a4_);
     }
+
+#ifdef BOOST_NO_VOID_RETURNS
+
+	template<class R> struct evaluator
+	{
+        typedef evaluator4<R> type;
+	};
+
+#else
+
+private:
+
+#endif
 
     A1 a1_;
     A2 a2_;
@@ -304,12 +364,11 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template <class R>
-    struct evaluator
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
-        typedef evaluator5<R> type;
-    };
-    
+        return f(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
+    }
+
     template<class V> void accept(V & v) const
     {
         v(a1_);
@@ -318,6 +377,19 @@ public:
         v(a4_);
         v(a5_);
     }
+
+#ifdef BOOST_NO_VOID_RETURNS
+
+	template<class R> struct evaluator
+	{
+        typedef evaluator5<R> type;
+	};
+
+#else
+
+private:
+
+#endif
 
     A1 a1_;
     A2 a2_;
@@ -353,12 +425,11 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template <class R>
-    struct evaluator
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
-        typedef evaluator6<R> type;
-    };
-    
+        return f(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
+    }
+
     template<class V> void accept(V & v) const
     {
         v(a1_);
@@ -368,6 +439,19 @@ public:
         v(a5_);
         v(a6_);
     }
+
+#ifdef BOOST_NO_VOID_RETURNS
+
+	template<class R> struct evaluator
+	{
+        typedef evaluator6<R> type;
+	};
+
+#else
+
+private:
+
+#endif
 
     A1 a1_;
     A2 a2_;
@@ -405,12 +489,11 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template <class R>
-    struct evaluator
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
-        typedef evaluator7<R> type;
-    };
-    
+        return f(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
+    }
+
     template<class V> void accept(V & v) const
     {
         v(a1_);
@@ -421,6 +504,19 @@ public:
         v(a6_);
         v(a7_);
     }
+
+#ifdef BOOST_NO_VOID_RETURNS
+
+	template<class R> struct evaluator
+	{
+        typedef evaluator7<R> type;
+	};
+
+#else
+
+private:
+
+#endif
 
     A1 a1_;
     A2 a2_;
@@ -460,12 +556,11 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template <class R>
-    struct evaluator
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
-        typedef evaluator8<R> type;
-    };
-    
+        return f(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
+    }
+
     template<class V> void accept(V & v) const
     {
         v(a1_);
@@ -477,6 +572,19 @@ public:
         v(a7_);
         v(a8_);
     }
+
+#ifdef BOOST_NO_VOID_RETURNS
+
+	template<class R> struct evaluator
+	{
+        typedef evaluator8<R> type;
+	};
+
+#else
+
+private:
+
+#endif
 
     A1 a1_;
     A2 a2_;
@@ -518,12 +626,11 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template <class R>
-    struct evaluator
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
-        typedef evaluator9<R> type;
-    };
-    
+        return f(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
+    }
+
     template<class V> void accept(V & v) const
     {
         v(a1_);
@@ -536,6 +643,19 @@ public:
         v(a8_);
         v(a9_);
     }
+
+#ifdef BOOST_NO_VOID_RETURNS
+
+	template<class R> struct evaluator
+	{
+        typedef evaluator9<R> type;
+	};
+
+#else
+
+private:
+
+#endif
 
     A1 a1_;
     A2 a2_;
@@ -552,7 +672,7 @@ private:
     list9 & operator= (list9 const &);
 };
 
-// bind_t
+#ifdef BOOST_NO_VOID_RETURNS
 
 template <class R> struct evaluator0
 {
@@ -734,358 +854,67 @@ template <> struct evaluator9<void>
     }
 };
 
-template <class R>
-struct bind_t_generator
+#endif
+
+// bind_t
+
+#ifndef BOOST_NO_VOID_RETURNS
+
+template<class R, class F, class L> class bind_t
 {
-  template<class F, class L>
-  struct implementation
-  {
-    typedef typename result_traits<R, F>::type result_type;
+public:
 
-    implementation(F f, L const & l): f_(f), l_(l) {}
+    bind_t(F f, L const & l): f_(f), l_(l) {}
 
-    result_type operator()()
-    {
-        list0 a;
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    result_type operator()() const
-    {
-        list0 a;
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1> result_type operator()(A1 & a1)
-    {
-        list1<A1 &> a(a1);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1> result_type operator()(A1 & a1) const
-    {
-        list1<A1 &> a(a1);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1, class A2> result_type operator()(A1 & a1, A2 & a2)
-    {
-        list2<A1 &, A2 &> a(a1, a2);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1, class A2> result_type operator()(A1 & a1, A2 & a2) const
-    {
-        list2<A1 &, A2 &> a(a1, a2);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1, class A2, class A3> result_type operator()(A1 & a1, A2 & a2, A3 & a3)
-    {
-        list3<A1 &, A2 &, A3 &> a(a1, a2, a3);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1, class A2, class A3> result_type operator()(A1 & a1, A2 & a2, A3 & a3) const
-    {
-        list3<A1 &, A2 &, A3 &> a(a1, a2, a3);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1, class A2, class A3, class A4> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4)
-    {
-        list4<A1 &, A2 &, A3 &, A4 &> a(a1, a2, a3, a4);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1, class A2, class A3, class A4> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4) const
-    {
-        list4<A1 &, A2 &, A3 &, A4 &> a(a1, a2, a3, a4);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1, class A2, class A3, class A4, class A5> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5)
-    {
-        list5<A1 &, A2 &, A3 &, A4 &, A5 &> a(a1, a2, a3, a4, a5);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1, class A2, class A3, class A4, class A5> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5) const
-    {
-        list5<A1 &, A2 &, A3 &, A4 &, A5 &> a(a1, a2, a3, a4, a5);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1, class A2, class A3, class A4, class A5, class A6> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6)
-    {
-        list6<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &> a(a1, a2, a3, a4, a5, a6);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1, class A2, class A3, class A4, class A5, class A6> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6) const
-    {
-        list6<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &> a(a1, a2, a3, a4, a5, a6);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7)
-    {
-        list7<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &> a(a1, a2, a3, a4, a5, a6, a7);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7) const
-    {
-        list7<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &> a(a1, a2, a3, a4, a5, a6, a7);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8)
-    {
-        list8<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &, A8 &> a(a1, a2, a3, a4, a5, a6, a7, a8);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8) const
-    {
-        list8<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &, A8 &> a(a1, a2, a3, a4, a5, a6, a7, a8);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8, A9 & a9)
-    {
-        list9<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &, A8 &, A9 &> a(a1, a2, a3, a4, a5, a6, a7, a8, a9);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8, A9 & a9) const
-    {
-        list9<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &, A8 &, A9 &> a(a1, a2, a3, a4, a5, a6, a7, a8, a9);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A> result_type eval(A & a)
-    {
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class A> result_type eval(A & a) const
-    {
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        return evaluator::eval(l_, f_, a);
-    }
-
-    template<class V> void accept(V & v) const
-    {
-        v(f_);
-        l_.accept(v);
-    }
+#define BOOST_BIND_EVALUATE return l_(type<result_type>(), f_, a)
+#include <boost/bind/bind_template.hpp>
+#undef BOOST_BIND_EVALUATE
 
 private:
 
-    F f_;
-    L l_;
-
-    implementation & operator= (implementation const &);
-  };
+    bind_t & operator= (bind_t const &);
 };
 
-template <>
-struct bind_t_generator<void>
+#else
+
+template <class R> struct bind_t_generator
 {
-  template<class F, class L>
-  struct implementation
-  {
-    typedef typename result_traits<void, F>::type result_type;
+
+template<class F, class L> class implementation
+{
+public:
 
     implementation(F f, L const & l): f_(f), l_(l) {}
 
-    result_type operator()()
-    {
-        list0 a;
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    result_type operator()() const
-    {
-        list0 a;
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1> result_type operator()(A1 & a1)
-    {
-        list1<A1 &> a(a1);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1> result_type operator()(A1 & a1) const
-    {
-        list1<A1 &> a(a1);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2> result_type operator()(A1 & a1, A2 & a2)
-    {
-        list2<A1 &, A2 &> a(a1, a2);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2> result_type operator()(A1 & a1, A2 & a2) const
-    {
-        list2<A1 &, A2 &> a(a1, a2);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3> result_type operator()(A1 & a1, A2 & a2, A3 & a3)
-    {
-        list3<A1 &, A2 &, A3 &> a(a1, a2, a3);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3> result_type operator()(A1 & a1, A2 & a2, A3 & a3) const
-    {
-        list3<A1 &, A2 &, A3 &> a(a1, a2, a3);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4)
-    {
-        list4<A1 &, A2 &, A3 &, A4 &> a(a1, a2, a3, a4);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4) const
-    {
-        list4<A1 &, A2 &, A3 &, A4 &> a(a1, a2, a3, a4);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5)
-    {
-        list5<A1 &, A2 &, A3 &, A4 &, A5 &> a(a1, a2, a3, a4, a5);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5) const
-    {
-        list5<A1 &, A2 &, A3 &, A4 &, A5 &> a(a1, a2, a3, a4, a5);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6)
-    {
-        list6<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &> a(a1, a2, a3, a4, a5, a6);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6) const
-    {
-        list6<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &> a(a1, a2, a3, a4, a5, a6);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7)
-    {
-        list7<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &> a(a1, a2, a3, a4, a5, a6, a7);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7) const
-    {
-        list7<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &> a(a1, a2, a3, a4, a5, a6, a7);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8)
-    {
-        list8<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &, A8 &> a(a1, a2, a3, a4, a5, a6, a7, a8);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8) const
-    {
-        list8<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &, A8 &> a(a1, a2, a3, a4, a5, a6, a7, a8);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8, A9 & a9)
-    {
-        list9<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &, A8 &, A9 &> a(a1, a2, a3, a4, a5, a6, a7, a8, a9);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8, A9 & a9) const
-    {
-        list9<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &, A8 &, A9 &> a(a1, a2, a3, a4, a5, a6, a7, a8, a9);
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-      
-    template<class A> result_type eval(A & a)
-    {
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-
-    template<class A> result_type eval(A & a) const
-    {
-        typedef typename L::template evaluator<result_type>::type evaluator;
-        evaluator::eval(l_, f_, a);
-    }
-
-    template<class V> void accept(V & v) const
-    {
-        v(f_);
-        l_.accept(v);
-    }
+#define BOOST_BIND_EVALUATE return L::BOOST_NESTED_TEMPLATE evaluator<result_type>::type::eval(l_, f_, a);
+#include <boost/bind/bind_template.hpp>
+#undef BOOST_BIND_EVALUATE
 
 private:
 
-    F f_;
-    L l_;
+    implementation & operator= (implementation const &);
+};
+
+};
+
+template<> struct bind_t_generator<void>
+{
+
+template<class F, class L> class implementation
+{
+public:
+
+    implementation(F f, L const & l): f_(f), l_(l) {}
+
+#define BOOST_BIND_EVALUATE L::BOOST_NESTED_TEMPLATE evaluator<result_type>::type::eval(l_, f_, a);
+#include <boost/bind/bind_template.hpp>
+#undef BOOST_BIND_EVALUATE
+
+private:
 
     implementation & operator= (implementation const &);
-  };
+};
+
 };
 
 #if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
@@ -1093,13 +922,18 @@ private:
 #pragma warning(disable: 4097) // typedef name 'base' used as a synonym for class
 #endif
 
-template<class R, class F, class L> class bind_t
-  : public bind_t_generator<R>::template implementation<F, L>
+template<class R, class F, class L> class bind_t: public bind_t_generator<R>::BOOST_NESTED_TEMPLATE implementation<F, L>
 {
+private:
+
     typedef typename bind_t_generator<R>::template implementation<F, L> base;
- public:
+
+public:
+
     bind_t(F f, L const & l): base(f, l) {}
- private:
+
+private:
+
     bind_t & operator= (bind_t const &);
 };
 
@@ -1107,9 +941,11 @@ template<class R, class F, class L> class bind_t
 #pragma warning(pop)
 #endif
 
+#endif
+
 // add_value
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || (__SUNPRO_CC+0 >= 0x530)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || (__SUNPRO_CC >= 0x530)
 
 template<class T> struct add_value
 {

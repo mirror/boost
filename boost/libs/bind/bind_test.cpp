@@ -174,7 +174,7 @@ struct Y
     short operator()(short & r) const { return ++r; }
     int operator()(int a, int b) const { return a + 10 * b; }
     long operator() (long a, long b, long c) const { return a + 10 * b + 100 * c; }
-    void operator() (long a, long b, long c, const char*) const { global_result = a + 10 * b + 100 * c; }
+    void operator() (long a, long b, long c, long d) const { global_result = a + 10 * b + 100 * c + 1000 * d; }
 };
 
 void function_object_test()
@@ -189,9 +189,9 @@ void function_object_test()
     BOOST_TEST( bind<short>(Y(), ref(i))() == 8 );
     BOOST_TEST( bind<int>(Y(), i, _1)(k) == 38 );
     BOOST_TEST( bind<long>(Y(), i, _1, 9)(k) == 938 );
-#if !defined(__MWERKS__) || __MWERKS__ > 0x2406     // Fails for this version of the compiler.
-    BOOST_TEST( (bind<void>(Y(), i, _1, 9, "nothing")(k), (global_result == 938)) );
-#endif
+
+    bind<void>(Y(), i, _1, 9, 4)(k);
+    BOOST_TEST( global_result == 4938 );
 }
 
 //
