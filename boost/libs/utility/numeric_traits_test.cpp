@@ -7,9 +7,11 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  23 Jan 2001 Added test for wchar_t (David Abrahams)
 //  23 Jan 2001 Now statically selecting a test for signed numbers to avoid
 //              warnings with fancy compilers. Added commentary and
-//              additional dumping of traits data for tested types.
+//              additional dumping of traits data for tested types (David
+//              Abrahams).
 //  21 Jan 2001 Initial version (David Abrahams)
 
 #include <boost/detail/numeric_traits.hpp>
@@ -363,6 +365,7 @@ int main()
     test<char>();
     test<unsigned char>();
     test<signed char>();
+    test<wchar_t>();
     test<short>();
     test<unsigned short>();
     test<int>();
