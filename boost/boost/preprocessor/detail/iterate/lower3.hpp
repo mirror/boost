@@ -8,6 +8,8 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
+# line 1 ""
+#
 # ifndef BOOST_PP_ITERATION_BOUND
 #   error BOOST_PP:  BOOST_PP_ITERATION_BOUND must be set prior to including BOOST_PP_SET_LBOUND()
 # endif

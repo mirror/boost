@@ -8,6 +8,8 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
+# line 1 ""
+#
 # ifdef BOOST_PP_LOCAL_ITERATION_LIMITS
 #   define BOOST_PP_LOCAL_START BOOST_PP_TUPLE_ELEM(2, 0, BOOST_PP_LOCAL_ITERATION_LIMITS)
 #   define BOOST_PP_LOCAL_FINISH BOOST_PP_TUPLE_ELEM(2, 1, BOOST_PP_LOCAL_ITERATION_LIMITS)

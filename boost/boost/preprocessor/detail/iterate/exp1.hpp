@@ -8,6 +8,8 @@
 #  *                                                                          *
 #  ************************************************************************** */
 # 
+# line 1 ""
+#
 # ifdef BOOST_PP_ITERATION_LIMITS
 #   ifndef BOOST_PP_FILENAME_1
 #      error BOOST_PP:  depth #1 filename is not defined
@@ -35,8 +37,6 @@
 # endif
 #
 # define BOOST_PP_IS_ITERATING
-#
-# line 1 ""
 #
 # if (BOOST_PP_ITERATION_START_1 <= 0) && (BOOST_PP_ITERATION_FINISH_1 >= 0)
 #   define BOOST_PP_ITERATION_1 0
