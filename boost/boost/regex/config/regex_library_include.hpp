@@ -136,7 +136,7 @@ BOOST_LIB_DEBUG_OPT:  nothing for release builds,
 #if defined(BOOST_REGEX_STATIC_LINK) && defined(BOOST_REGEX_DYN_LINK)
 #  undef BOOST_REGEX_STATIC_LINK
 #endif
-#if (defined(_DLL) || defined(_RTLDLL)) && !defined(BOOST_REGEX_STATIC_LINK)
+#if (defined(_DLL) || defined(_RTLDLL)) && defined(BOOST_REGEX_DYN_LINK)
 #  define BOOST_LIB_PREFIX 
 #else
 #  define BOOST_LIB_PREFIX "lib"
@@ -149,7 +149,7 @@ BOOST_LIB_DEBUG_OPT:  nothing for release builds,
 #  define BOOST_LIB_DEBUG_OPT "dd"
 #elif defined(BOOST_MSVC) && defined(_DEBUG)
 #  define BOOST_LIB_DEBUG_OPT "d"
-#elif defined(__BORLANDC__) && (__BORLANDC__ == 0x560) && (defined(_STLP_DEBUG) || defined(__STL_DEBUG))
+#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (defined(_STLP_DEBUG) || defined(__STL_DEBUG))
 #  define BOOST_LIB_DEBUG_OPT "dd"
 #else
 #  define BOOST_LIB_DEBUG_OPT 

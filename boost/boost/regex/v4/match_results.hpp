@@ -140,7 +140,7 @@ public:
    }
    const_iterator end() const
    {
-      m_subs.end();
+      return m_subs.end();
    }
    // format:
    template <class OutputIterator>

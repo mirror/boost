@@ -761,14 +761,14 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_paren(boo
    }
    // unwind stack:
    m_backup_state = pmp+1;
-   destroy(pmp);
+   boost::re_detail::destroy(pmp);
    return true; // keep looking
 }
 
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_recursion_stopper(bool)
 {
-   destroy(m_backup_state++);
+   boost::re_detail::destroy(m_backup_state++);
    pstate = 0;   // nothing left to search
    return false; // end of stack nothing more to search
 }
@@ -781,7 +781,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_assertion
    position = pmp->position;
    bool result = (r == pmp->positive);
    m_recursive_result = pmp->positive ? r : !r;
-   destroy(pmp++);
+   boost::re_detail::destroy(pmp++);
    m_backup_state = pmp;
    return !result; // return false if the assertion was matched to stop search.
 }
@@ -795,7 +795,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_alt(bool 
       pstate = pmp->pstate;
       position = pmp->position;
    }
-   destroy(pmp++);
+   boost::re_detail::destroy(pmp++);
    m_backup_state = pmp;
    return r; 
 }
@@ -804,7 +804,7 @@ template <class BidiIterator, class Allocator, class traits, class Allocator2>
 bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_repeater_counter(bool)
 {
    saved_repeater<BidiIterator>* pmp = static_cast<saved_repeater<BidiIterator>*>(m_backup_state);
-   destroy(pmp++);
+   boost::re_detail::destroy(pmp++);
    m_backup_state = pmp;
    return true; // keep looking
 }
@@ -816,7 +816,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_extra_blo
    void* condemmed = m_stack_base;
    m_stack_base = pmp->base;
    m_backup_state = pmp->end;
-   destroy(pmp);
+   boost::re_detail::destroy(pmp);
    block_cache.put(condemmed);
    return true; // keep looking
 }
@@ -825,7 +825,7 @@ template <class BidiIterator, class Allocator, class traits, class Allocator2>
 inline void perl_matcher<BidiIterator, Allocator, traits, Allocator2>::destroy_single_repeat()
 {
    saved_single_repeat<BidiIterator>* p = static_cast<saved_single_repeat<BidiIterator>*>(m_backup_state);
-   destroy(p++);
+   boost::re_detail::destroy(p++);
    m_backup_state = p;
 }
 
@@ -1195,7 +1195,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_non_greed
       pstate = pmp->pstate;
       ++(*next_count);
    }
-   destroy(pmp++);
+   boost::re_detail::destroy(pmp++);
    m_backup_state = pmp;
    return r;
 }

@@ -362,7 +362,7 @@ public:
 
    template <class I>
    basic_regex(I first, I last, flag_type f = regex_constants::normal, const Allocator& al = Allocator())
-      : reg_expression<charT, traits, Allocator>(first, last, f, a){}
+      : reg_expression<charT, traits, Allocator>(first, last, f, al){}
 
    template <class ST, class SA>
    basic_regex& BOOST_REGEX_CALL operator=(const std::basic_string<charT, ST, SA>& p)

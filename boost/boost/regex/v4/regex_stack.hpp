@@ -47,8 +47,9 @@ namespace boost{
 template <class T, class Allocator = BOOST_DEFAULT_ALLOCATOR(T) >
 class jstack
 {
-private:
+public:
    typedef typename boost::detail::rebind_allocator<unsigned char, Allocator>::type allocator_type;
+private:
    typedef typename boost::detail::rebind_allocator<T, Allocator>::type             T_alloc_type;
    typedef typename T_alloc_type::size_type                              size_type;
    typedef T value_type;

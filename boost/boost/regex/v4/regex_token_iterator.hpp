@@ -42,7 +42,7 @@ class regex_token_iterator_implementation
    const regex_type*                    pre;    // the expression
    match_flag_type                      flags;  // match flags
    std::basic_string<charT>             result; // the current string result
-   std::vector<int>::size_type          N;      // the current sub-expression being enumerated
+   int                                  N;      // the current sub-expression being enumerated
    std::vector<int>                     subs;   // the sub-expressions to enumerate
 
 public:
