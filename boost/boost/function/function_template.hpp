@@ -32,7 +32,7 @@
 #ifndef BOOST_NO_STD_ALLOCATOR
 #  define BOOST_FUNCTION_DEFAULT_ALLOCATOR std::allocator<function_base>
 #else
-#  define BOOST_FUNCTION_DEFAULT_ALLOCATOR void
+#  define BOOST_FUNCTION_DEFAULT_ALLOCATOR int
 #endif // BOOST_NO_STD_ALLOCATOR
 
 namespace boost {
@@ -660,7 +660,7 @@ namespace boost {
     }
 
     template<typename To>
-    To& cast(To* = 0)
+    To& cast(To* dummy = 0)
     {
       assert(typeid(To) != typeid(void));
       assert(typeid(To) == this->target_type());
@@ -670,14 +670,14 @@ namespace boost {
 
 #ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
       impl_type* i = reinterpret_cast<impl_type*>(impl);
-      return cast_helper<To>(i->pointer(), tag());
+      return cast_helper(i->pointer(), tag(), dummy);
 #else
-      return cast_helper<To>(functor, tag());
+      return cast_helper(functor, tag(), dummy);
 #endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
     }
 
     template<typename To>
-    const To& cast(To* = 0) const
+    const To& cast(To* dummy = 0) const
     {
       assert(typeid(To) != typeid(void));
       assert(typeid(To) == this->target_type());
@@ -687,9 +687,9 @@ namespace boost {
 
 #ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
       impl_type* i = reinterpret_cast<impl_type*>(impl);
-      return cast_helper<To>(i->pointer(), tag());
+      return cast_helper(i->pointer(), tag(), dummy);
 #else
-      return cast_helper<To>(functor, tag());
+      return cast_helper(functor, tag(), dummy);
 #endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
     }
 
@@ -850,9 +850,9 @@ namespace boost {
                              Mixin,
                              Allocator
                            >& f,
-                           To* = 0)
+                           To* dummy = 0)
   {
-    return f.template cast<To>();
+    return f.cast(dummy);
   }
 
   template<typename To, typename R 
@@ -865,9 +865,9 @@ namespace boost {
                                          Mixin,
                                          Allocator
                                        >& f,
-                                 To* = 0)
+                                 To* dummy = 0)
   {
-    return f.template cast<To>();
+    return f.cast(dummy);
   }
 }
 
