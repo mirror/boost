@@ -12,6 +12,7 @@
 #define BOOST_FWD_TYPE_TRAITS_HPP
 
 #include <cstdlib>
+#include <cstddef>
 
 #ifndef BOOST_CONFIG_HPP
 #include <boost/config.hpp>

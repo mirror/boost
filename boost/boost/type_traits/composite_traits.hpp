@@ -20,8 +20,6 @@
 #ifndef COMPOSITE_TYPE_TRAITS_HPP
 #define COMPOSITE_TYPE_TRAITS_HPP
 
-#include <cstddef>
-
 #ifndef BOOST_ICE_TYPE_TRAITS_HPP
 #include <boost/type_traits/ice.hpp>
 #endif
