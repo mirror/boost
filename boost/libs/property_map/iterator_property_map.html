@@ -11,7 +11,7 @@
   -- purpose.  It is provided "as is" without express or implied warranty.
   -->
 <Head>
-<Title>Random Access Iterator Property Map Adaptor</Title>
+<Title>Iterator Property Map Adaptor</Title>
 <BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
 	ALINK="#ff0000"> 
 <IMG SRC="../../c++boost.gif" 
@@ -20,9 +20,9 @@
 <BR Clear>
 
 
-<H2><A NAME="sec:random-access-iterator-property-map"></A>
+<H2><A NAME="sec:iterator-property-map"></A>
 <PRE>
-random_access_iterator_property_map&lt;<a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">RandomAccessIterator</a>, T, R, OffsetMap&gt;
+iterator_property_map&lt;<a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">RandomAccessIterator</a>, T, R, OffsetMap&gt;
 </PRE>
 </H2>
 
@@ -86,7 +86,7 @@ int main(int, char*[])
   typedef boost::property_map&lt;Graph, boost::id_tag&gt;::type EdgeID_PMap;
   EdgeID_PMap edge_id = get(boost::edge_index(), G);
 
-  boost::random_access_iterator_property_map&lt;int*, int, int&, EdgeID_PMap&gt;
+  boost::iterator_property_map&lt;int*, int, int&, EdgeID_PMap&gt;
      capacity_pa(capacity, edge_id),
      flow_pa(flow, edge_id);
 
@@ -157,7 +157,7 @@ class has the following members.
 <hr>
 
 <pre>
-property_traits&lt;random_access_iterator_property_map&gt;::value_type
+property_traits&lt;iterator_property_map&gt;::value_type
 </pre>
 This is the same type as
 <TT>std::iterator_traits&lt;Iterator&gt;::value_type</TT>.
@@ -165,7 +165,7 @@ This is the same type as
 <hr>
 
 <pre>
-random_access_iterator_property_map(Iterator i)
+iterator_property_map(Iterator i)
 </pre>
 Constructor.
 
@@ -186,7 +186,7 @@ The operator bracket for property access. The <TT>reference</TT> and
 
 <pre>
   template &lt;class RAIter, class OffsetMap&gt;
-  random_access_iterator_property_map&lt;RAIter,
+  iterator_property_map&lt;RAIter,
     typename std::iterator_traits&lt;RAIter&gt;::value_type,
     typename std::iterator_traits&lt;RAIter&gt;::reference,
     OffsetMap&gt;
@@ -199,7 +199,7 @@ A function for conveniently creating an iterator map.
 
 <pre>
   template &lt;class RAIter, class OffsetMap, class ValueType&gt;
-  random_access_iterator_property_map&lt;RAIter,
+  iterator_property_map&lt;RAIter,
     typename std::iterator_traits&lt;RAIter&gt;::value_type,
     typename std::iterator_traits&lt;RAIter&gt;::reference,
     OffsetMap&gt;
