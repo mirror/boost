@@ -325,7 +325,7 @@ namespace boost {
                     typedef ForwardIteratorT input_iterator_type;
                     typedef iterator_range<ForwardIteratorT> result_type;
 
-                    if ( (End<=Begin) || (End < (Begin+m_N) ) ) 
+                    if ( (End<=Begin) || ( static_cast<unsigned int>(End-Begin) < m_N ) )
                         return result_type( Begin, End );
 
                     return result_type(Begin,Begin+m_N);
@@ -414,7 +414,7 @@ namespace boost {
                     typedef ForwardIteratorT input_iterator_type;
                     typedef iterator_range<ForwardIteratorT> result_type;
 
-                    if ( (End<=Begin) || (End < (Begin+m_N) ) ) 
+                    if ( (End<=Begin) || ( static_cast<unsigned int>(End-Begin) < m_N ) )  
                         return result_type( Begin, End );
 
                     return result_type( End-m_N, End );
