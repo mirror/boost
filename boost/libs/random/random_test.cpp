@@ -134,47 +134,62 @@ void validate_all()
  * Check function signatures
  */
 
-template<class Dist>
-void instantiate_dist(const char * name, const Dist& dist)
+template<class URNG, class Dist>
+void instantiate_dist(URNG& urng, const char * name, const Dist& dist)
 {
-  // check reference maintenance throughout
-  typename Dist::base_type& b = dist.base();
-  Dist d = dist;       // copy ctor
-  typename Dist::result_type result = d();
-  (void) &result;      // avoid "unused variable" warning
-  b();
-  BOOST_TEST(d.base() == b);
-  d.reset();
-  d = dist;            // copy assignment
-  b();
-  BOOST_TEST(d.base() == b);
+  // this makes a copy of urng
+  boost::variate_generator<URNG, Dist> gen(urng, dist);
 
-  Dist d2(dist.base());    // single-argument constructor
-  d2();
+  // this keeps a reference to urng
+  boost::variate_generator<URNG&, Dist> genref(urng, dist);
 
-  typename Dist::adaptor_type& adapt = d2.adaptor();
-  adapt();
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+  // and here is a pointer to (a copy of) the urng
+  URNG copy = urng;
+  boost::variate_generator<URNG*, Dist> genptr(&copy, dist);
+#endif
+
+  for(int i = 0; i < 1000; ++i) {
+    (void) gen();
+    (void) genref();
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    (void) genptr();
+#endif
+  }
+  typename Dist::result_type g = gen();
+  BOOST_CHECK(std::abs(g - genref()) < 1e-6);
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+  BOOST_CHECK(std::abs(g - genptr()) < 1e-6);
+#endif
+
+  (void) gen.engine();
+  gen.distribution().reset();
+
+  Dist d = dist;            // copy ctor
+  d = dist;                 // copy assignment
 
 #if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   {
     std::ostringstream file;
-    file << d.base() << std::endl;
+    file << urng << std::endl;
     file << d;
     std::istringstream input(file.str());
     // std::cout << file.str() << std::endl;
-    typename Dist::base_type engine;
-    input >> engine;
+    URNG restored_engine;
+    input >> restored_engine;
     input >> std::ws;
-    Dist restored_dist(engine);
+    Dist restored_dist;
     input >> restored_dist;
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // MSVC brokenness
+    boost::variate_generator<URNG, Dist> old(urng, d);
+    boost::variate_generator<URNG, Dist> restored(restored_engine, restored_dist);
     // advance some more so that state is exercised
-    for(int i = 0; i < 10000; ++i) {
-      d();
-      restored_dist();
+    for(int i = 0; i < 1000; ++i) {
+      (void) old();
+      (void) restored();
     }
-    BOOST_CHECK_MESSAGE((std::abs(double(d()-restored_dist())) < 0.0001),
-                        (std::string(name) + " d == restored_dist"));
+    BOOST_CHECK_MESSAGE((std::abs(old()-restored()) < 0.0001),
+                        (std::string(name) + " old == restored_dist"));
 #endif // BOOST_MSVC
   }
 #endif // BOOST_NO_OPERATORS_IN_NAMESPACE
@@ -183,24 +198,20 @@ void instantiate_dist(const char * name, const Dist& dist)
 template<class URNG, class RealType>
 void instantiate_real_dist(URNG& urng, RealType /* ignored */)
 {
-  instantiate_dist("uniform_01",
-                   boost::uniform_01<URNG, RealType>(urng));
-  instantiate_dist("uniform_real",
-                   boost::uniform_real<URNG, RealType>(urng, 0, 2.1));
-  instantiate_dist("triangle_distribution",
-                   boost::triangle_distribution<URNG, RealType>(urng, 1, 1.5, 7));
-  instantiate_dist("exponential_distribution",
-                   boost::exponential_distribution<URNG, RealType>(urng, 5));
-  instantiate_dist("normal_distribution",
-                   boost::normal_distribution<URNG, RealType>(urng));
-  instantiate_dist("lognormal_distribution",
-                   boost::lognormal_distribution<URNG, RealType>(urng, 1, 1));
-  instantiate_dist("poisson_distribution",
-                   boost::poisson_distribution<URNG, RealType>(urng, 1));
-  instantiate_dist("cauchy_distribution",
-                   boost::cauchy_distribution<URNG, RealType>(urng, 1));
-  instantiate_dist("gamma_distribution",
-                   boost::gamma_distribution<URNG, RealType>(urng, 1));
+  instantiate_dist(urng, "uniform_real",
+                   boost::uniform_real<RealType>(0, 2.1));
+  instantiate_dist(urng, "triangle_distribution",
+                   boost::triangle_distribution<RealType>(1, 1.5, 7));
+  instantiate_dist(urng, "exponential_distribution",
+                   boost::exponential_distribution<RealType>(5));
+  instantiate_dist(urng, "normal_distribution",
+                   boost::normal_distribution<RealType>());
+  instantiate_dist(urng, "lognormal_distribution",
+                   boost::lognormal_distribution<RealType>(1, 1));
+  instantiate_dist(urng, "cauchy_distribution",
+                   boost::cauchy_distribution<RealType>(1));
+  instantiate_dist(urng, "gamma_distribution",
+                   boost::gamma_distribution<RealType>(1));
 }
 
 template<class URNG, class ResultType>
@@ -240,6 +251,12 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   }
   BOOST_TEST(have_exception);
 
+  // check for min/max members
+  ResultType min = urng3.min();
+  (void) &min;
+  ResultType max = urng3.max();
+  (void) &max;
+
 #if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   // Streamable concept not supported for broken compilers
 
@@ -278,22 +295,27 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
     std::wistringstream input(file.str());
     input >> urng;
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // MSVC brokenness
+    // advance some more so that state is exercised
+    for(int i = 0; i < 10000; ++i) {
+      urng();
+      urng2();
+    }
     BOOST_TEST(urng == urng2);
 #endif // BOOST_MSVC
   }
-#endif // BOOST_NO_OPERATORS_IN_NAMESPACE
+#endif // BOOST_NO_OPERATORS_IN_NAMESPACE etc.
 
   // instantiate various distributions with this URNG
-  instantiate_dist("uniform_smallint",
-                   boost::uniform_smallint<URNG>(urng, 0, 11));
-  instantiate_dist("uniform_int",
-                   boost::uniform_int<URNG>(urng, -200, 20000));
-  instantiate_dist("geometric_distribution",
-                   boost::geometric_distribution<URNG>(urng, 0.8));
-  instantiate_dist("bernoulli_distribution",
-                   boost::bernoulli_distribution<URNG>(urng, 0.2));
-  instantiate_dist("binomial_distribution",
-                   boost::binomial_distribution<URNG>(urng, 4, 0.2));
+  // instantiate_dist(urng, "uniform_smallint", boost::uniform_smallint(0, 11));
+  instantiate_dist(urng, "uniform_int", boost::uniform_int<>(-200, 20000));
+  instantiate_dist(urng, "bernoulli_distribution",
+                   boost::bernoulli_distribution<>(0.2));
+  instantiate_dist(urng, "binomial_distribution",
+                   boost::binomial_distribution<>(4, 0.2));
+  instantiate_dist(urng, "geometric_distribution",
+                   boost::geometric_distribution<>(0.8));
+  instantiate_dist(urng, "poisson_distribution",
+                   boost::poisson_distribution<>(1));
 
   instantiate_real_dist(urng, 1.0f);
   instantiate_real_dist(urng, 1.0);
@@ -326,9 +348,10 @@ void instantiate_all()
   instantiate_urng("ecuyer1988", ecuyer1988(), 0);
   instantiate_urng("kreutzer1986", kreutzer1986(), 0);
   instantiate_urng("hellekalek1995", hellekalek1995(), 0);
-  
+
   instantiate_urng("mt11213b", mt11213b(), 0u);
   instantiate_urng("mt19937", mt19937(), 0u);
+
   mt19937 mt(boost::uint32_t(17));  // needs to be an exact type match for MSVC
   int i = 42;
   mt.seed(boost::uint32_t(i));
@@ -395,41 +418,32 @@ void check_uniform_int(Generator & gen, int iter)
 template<class Generator>
 void test_uniform_int(Generator & gen)
 {
-  typedef boost::uniform_int<Generator, int>  int_gen;
+  typedef boost::uniform_int<int> int_gen;
 
   // large range => small range (modulo case)
-  int_gen uint12(gen,1,2);
-  BOOST_TEST(uint12.min() == 1);
-  BOOST_TEST(uint12.max() == 2);
+  typedef boost::variate_generator<Generator&, int_gen> level_one;
+
+  level_one uint12(gen, int_gen(1,2));
+  BOOST_TEST(uint12.distribution().min() == 1);
+  BOOST_TEST(uint12.distribution().max() == 2);
   check_uniform_int(uint12, 100000);
-  int_gen uint16(gen,1,6);
+  level_one uint16(gen, int_gen(1,6));
   check_uniform_int(uint16, 100000);
 
   // test chaining to get all cases in operator()
-  typedef boost::uniform_int<int_gen, int> intint_gen;
 
   // identity map
-  intint_gen uint01(uint12, 0, 1);
+  typedef boost::variate_generator<level_one&, int_gen> level_two;
+  level_two uint01(uint12, int_gen(0, 1));
   check_uniform_int(uint01, 100000);
 
   // small range => larger range
-  intint_gen uint05(uint12, -3, 2);
+  level_two uint05(uint12, int_gen(-3, 2));
   check_uniform_int(uint05, 100000);
 
-  typedef boost::uniform_int<intint_gen, int> intintint_gen;
-
-#if 0
-  // This takes a lot of time to run and is of questionable net effect:
-  // avoid for now.
-
-  // small => larger range, not power of two
-  // (for unknown reasons, this has noticeably uneven distribution)
-  intintint_gen uint1_49(uint05, 1, 49);
-  check_uniform_int(uint1_49, 500000);
-#endif
-
   // larger => small range, rejection case
-  intintint_gen uint1_4(uint05, 1, 4);
+  typedef boost::variate_generator<level_two&, int_gen> level_three;
+  level_three uint1_4(uint05, int_gen(1, 4));
   check_uniform_int(uint1_4, 100000);
 }
 
@@ -471,15 +485,16 @@ int test_main(int, char*[])
   test_uniform_int(mt);
 
   // bug report from Ken Mahler:  This used to lead to an endless loop.
-  boost::minstd_rand r1;
-  boost::uniform_int<boost::minstd_rand, unsigned int> r2(r1, 0, 0xffffffff);
+  typedef boost::uniform_int<unsigned int> uint_dist;
+  boost::minstd_rand mr;
+  boost::variate_generator<boost::minstd_rand, uint_dist> r2(mr,
+                                                            uint_dist(0, 0xffffffff));
   r2();
   r2();
 
   // bug report from Fernando Cacciola:  This used to lead to an endless loop.
   // also from Douglas Gregor
-  boost::minstd_rand rnd;
-  boost::uniform_int<boost::minstd_rand> x(rnd,0,8361);
+  boost::variate_generator<boost::minstd_rand, boost::uniform_int<> > x(mr, boost::uniform_int<>(0, 8361));
   (void) x();
 
   return 0;

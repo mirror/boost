@@ -90,42 +90,40 @@ private:
 };
 
 
-// make distributions (and underlying engines) runtime-exchangeable,
+// decoration of variate_generator to make it runtime-exchangeable
 // for speed comparison
 template<class Ret>
-class DistributionBase
+class RandomGenBase
 {
 public:
-  virtual void reset() = 0;
   virtual Ret operator()() = 0;
-  virtual ~DistributionBase() { }
+  virtual ~RandomGenBase() { }
 };
 
-template<class Dist, class Ret = typename Dist::result_type>
-class Distribution
-  : public DistributionBase<Ret>
+template<class URNG, class Dist, class Ret = typename Dist::result_type>
+class DynamicRandomGenerator
+  : public RandomGenBase<Ret>
 {
 public:
-  Distribution(const Dist& d) : _d(d) { }
-  void reset() { _d.reset(); }
-  Ret operator()() { return _d(); }
+  DynamicRandomGenerator(URNG& urng, const Dist& d) : _rng(urng, d) { }
+  Ret operator()() { return _rng(); }
 private:
-  Dist _d;
+  boost::variate_generator<URNG&, Dist> _rng;
 };
 
 template<class Ret>
-class GenericDistribution
+class GenericRandomGenerator
 {
 public:
   typedef Ret result_type;
 
-  GenericDistribution() { };
-  void set(boost::shared_ptr<DistributionBase<Ret> > p) { _p = p; }
+  GenericRandomGenerator() { };
+  void set(boost::shared_ptr<RandomGenBase<Ret> > p) { _p = p; }
   // takes over ownership
-  void set(DistributionBase<Ret> * p) { _p.reset(p); }
+  void set(RandomGenBase<Ret> * p) { _p.reset(p); }
   Ret operator()() { return (*_p)(); }
 private:
-  boost::shared_ptr<DistributionBase<Ret> > _p;
+  boost::shared_ptr<RandomGenBase<Ret> > _p;
 };
 
 
@@ -141,6 +139,7 @@ void show_elapsed(double end, int iter, const std::string & name)
             << std::endl;
 }
 
+#if 0
 template<class RNG>
 void timing(RNG & rng, int iter, const std::string& name)
 {
@@ -151,9 +150,22 @@ void timing(RNG & rng, int iter, const std::string& name)
     tmp = rng();
   show_elapsed(t.elapsed(), iter, name);
 }
+#endif
+
+// overload for using a copy, allows more concise invocation
+template<class RNG>
+void timing(RNG rng, int iter, const std::string& name)
+{
+  // make sure we're not optimizing too much
+  volatile typename RNG::result_type tmp;
+  boost::timer t;
+  for(int i = 0; i < iter; i++)
+    tmp = rng();
+  show_elapsed(t.elapsed(), iter, name);
+}
 
 template<class RNG>
-void timing_sphere(RNG & rng, int iter, const std::string & name)
+void timing_sphere(RNG rng, int iter, const std::string & name)
 {
   boost::timer t;
   for(int i = 0; i < iter; i++) {
@@ -167,10 +179,9 @@ void timing_sphere(RNG & rng, int iter, const std::string & name)
 template<class RNG>
 void run(int iter, const std::string & name, const RNG &)
 {
-  RNG rng;
   std::cout << (RNG::has_fixed_range ? "fixed-range " : "");
   // BCC has trouble with string autoconversion for explicit specializations
-  timing(rng, iter, std::string(name));
+  timing(RNG(), iter, std::string(name));
 }
 
 #ifdef HAVE_DRAND48
@@ -178,7 +189,7 @@ void run(int iter, const std::string & name, const RNG &)
 void run(int iter, const std::string & name, int)
 {
   std::srand48(1);
-  timing(std::lrand48, iter, name);
+  timing(&std::lrand48, iter, name);
 }
 #endif
 
@@ -193,47 +204,62 @@ void run(int iter, const std::string & name, float)
 }
 #endif
 
+template<class PRNG, class Dist>
+inline boost::variate_generator<PRNG&, Dist> make_gen(PRNG & rng, Dist d)
+{
+  return boost::variate_generator<PRNG&, Dist>(rng, d);
+}
+
 template<class Gen>
 void distrib(int iter, const std::string & name, const Gen &)
 {
   Gen gen;
 
-  boost::uniform_smallint<Gen> usmallint(gen, -2, 4);
-  timing(usmallint, iter, name + " uniform_smallint");
+  timing(make_gen(gen, boost::uniform_int<>(-2, 4)),
+         iter, name + " uniform_int");
 
-  boost::uniform_int<Gen> uint(gen, -2, 4);
-  timing(uint, iter, name + " uniform_int");
+  timing(make_gen(gen, boost::geometric_distribution<>(0.5)),
+         iter, name + " geometric");
 
-  boost::geometric_distribution<Gen> geo(gen, 0.5);
-  timing(geo, iter, name + " geometric");
+  timing(make_gen(gen, boost::binomial_distribution<int>(4, 0.8)),
+         iter, name + " binomial");
+
+  timing(make_gen(gen, boost::poisson_distribution<>(1)),
+         iter, name + " poisson");
 
 
-  boost::uniform_01<Gen> uni(gen);
-  timing(uni, iter, name + " uniform_01");
+  timing(make_gen(gen, boost::uniform_real<>(-5.3, 4.8)),
+         iter, name + " uniform_real");
 
-  boost::uniform_real<Gen> ur(gen, -5.3, 4.8);
-  timing(ur, iter, name + " uniform_real");
+  timing(make_gen(gen, boost::triangle_distribution<>(1, 2, 7)),
+         iter, name + " triangle");
 
-  boost::triangle_distribution<Gen> tria(gen, 1, 2, 7);
-  timing(tria, iter, name + " triangle");
+  timing(make_gen(gen, boost::exponential_distribution<>(3)),
+         iter, name + " exponential");
 
-  boost::exponential_distribution<Gen> ex(gen, 3);
-  timing(ex, iter, name + " exponential");
+  timing(make_gen(gen, boost::normal_distribution<>()),
+                  iter, name + " normal polar");
 
-  boost::normal_distribution<Gen,double> no2(gen);
-  timing(no2, iter, name + " normal polar");
+  timing(make_gen(gen, boost::lognormal_distribution<>()),
+         iter, name + " lognormal");
 
-  boost::lognormal_distribution<Gen,double> lnorm(gen, 1, 1);
-  timing(lnorm, iter, name + " lognormal");
+  timing(make_gen(gen, boost::cauchy_distribution<>()),
+         iter, name + " cauchy");
 
-  boost::cauchy_distribution<Gen,double> cauchy(gen);
-  timing(cauchy, iter, name + " cauchy");
+  timing(make_gen(gen, boost::cauchy_distribution<>()),
+         iter, name + " gamma");
 
-  boost::gamma_distribution<Gen,double> gamma(gen, 0.4);
-  timing(gamma, iter, name + " gamma");
+  timing_sphere(make_gen(gen, boost::uniform_on_sphere<>(3)),
+                iter/10, name + " uniform_on_sphere");
+}
 
-  boost::uniform_on_sphere<Gen> usph(gen, 3);
-  timing_sphere(usph, iter/10, name + " uniform_on_sphere");
+
+template<class URNG, class Dist>
+inline boost::shared_ptr<DynamicRandomGenerator<URNG, Dist> >
+make_dynamic(URNG & rng, const Dist& d)
+{
+  typedef DynamicRandomGenerator<URNG, Dist> type;
+  return boost::shared_ptr<type>(new type(rng, d));
 }
 
 template<class Gen>
@@ -242,52 +268,41 @@ void distrib_runtime(int iter, const std::string & n, const Gen &)
   std::string name = n + " virtual function ";
   Gen gen;
 
-  GenericDistribution<int> g_int;
+  GenericRandomGenerator<int> g_int;
 
-  boost::uniform_smallint<Gen> usmallint(gen, -2, 4);
-  g_int.set(new Distribution<boost::uniform_smallint<Gen> >(usmallint));
-  timing(g_int, iter, name + "uniform_smallint");
-
-  boost::uniform_int<Gen> uint(gen, -2, 4);
-  g_int.set(new Distribution<boost::uniform_int<Gen> >(uint));
+  g_int.set(make_dynamic(gen, boost::uniform_int<>(-2,4)));
   timing(g_int, iter, name + "uniform_int");
 
-  boost::geometric_distribution<Gen> geo(gen, 0.5);
-  g_int.set(new Distribution<boost::geometric_distribution<Gen> >(geo));
+  g_int.set(make_dynamic(gen, boost::geometric_distribution<>(0.5)));
   timing(g_int, iter, name + "geometric");
 
-  GenericDistribution<double> g;
+  g_int.set(make_dynamic(gen,  boost::binomial_distribution<>(4, 0.8)));
+  timing(g_int, iter, name + "binomial");
 
-  boost::uniform_01<Gen> uni(gen);
-  g.set(new Distribution<boost::uniform_01<Gen> >(uni));
-  timing(g, iter, name + "uniform_01");
+  g_int.set(make_dynamic(gen, boost::poisson_distribution<>(1)));
+  timing(g_int, iter, name + "poisson");
 
-  boost::uniform_real<Gen> ur(gen, -5.3, 4.8);
-  g.set(new Distribution<boost::uniform_real<Gen> >(ur));
+  GenericRandomGenerator<double> g;
+
+  g.set(make_dynamic(gen, boost::uniform_real<>(-5.3, 4.8)));
   timing(g, iter, name + "uniform_real");
 
-  boost::triangle_distribution<Gen> tria(gen, 1, 2, 7);
-  g.set(new Distribution<boost::triangle_distribution<Gen> >(tria));
+  g.set(make_dynamic(gen, boost::triangle_distribution<>(1, 2, 7)));
   timing(g, iter, name + "triangle");
 
-  boost::exponential_distribution<Gen> ex(gen, 3);
-  g.set(new Distribution<boost::exponential_distribution<Gen> >(ex));
+  g.set(make_dynamic(gen, boost::exponential_distribution<>(3)));
   timing(g, iter, name + "exponential");
 
-  boost::normal_distribution<Gen,double> no2(gen);
-  g.set(new Distribution<boost::normal_distribution<Gen,double> >(no2));
+  g.set(make_dynamic(gen, boost::normal_distribution<>()));
   timing(g, iter, name + "normal polar");
 
-  boost::lognormal_distribution<Gen,double> lnorm(gen, 1, 1);
-  g.set(new Distribution<boost::lognormal_distribution<Gen,double> >(lnorm));
+  g.set(make_dynamic(gen, boost::lognormal_distribution<>()));
   timing(g, iter, name + "lognormal");
 
-  boost::cauchy_distribution<Gen,double> cauchy(gen);
-  g.set(new Distribution<boost::cauchy_distribution<Gen,double> >(cauchy));
+  g.set(make_dynamic(gen, boost::cauchy_distribution<>()));
   timing(g, iter, name + "cauchy");
 
-  boost::gamma_distribution<Gen,double> gamma(gen, 0.4);
-  g.set(new Distribution<boost::gamma_distribution<Gen,double> >(gamma));
+  g.set(make_dynamic(gen, boost::gamma_distribution<>(0.4)));
   timing(g, iter, name + "gamma");
 }
 

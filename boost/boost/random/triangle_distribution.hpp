@@ -29,48 +29,43 @@ namespace boost {
 
 // triangle distribution, with a smallest, b most probable, and c largest
 // value.
-template<class UniformRandomNumberGenerator, class RealType = double,
-        class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
+template<class RealType = double>
 class triangle_distribution
 {
 public:
-  typedef Adaptor adaptor_type;
-  typedef UniformRandomNumberGenerator base_type;
+  typedef RealType input_type;
   typedef RealType result_type;
 
-  explicit triangle_distribution(base_type & rng,
-                                 result_type a = result_type(0),
+  explicit triangle_distribution(result_type a = result_type(0),
                                  result_type b = result_type(0.5),
                                  result_type c = result_type(1))
-    : _rng(rng), _a(a), _b(b), _c(c)
+    : _a(a), _b(b), _c(c)
   {
     assert(_a <= _b && _b <= _c);
     init();
   }
 
   // compiler-generated copy ctor and assignment operator are fine
+  result_type a() const { return _a; }
+  result_type b() const { return _b; }
+  result_type c() const { return _c; }
 
-  adaptor_type& adaptor() { return _rng; }
-  base_type& base() const { return _rng.base(); }
-  void reset() { _rng.reset(); }
+  void reset() { }
 
-  result_type operator()()
+  template<class Engine>
+  result_type operator()(Engine& eng)
   {
 #ifndef BOOST_NO_STDC_NAMESPACE
     using std::sqrt;
 #endif
-    result_type u = _rng();
+    result_type u = eng();
     if( u <= q1 )
       return _a + p1*sqrt(u);
     else
       return _c - d3*sqrt(d2*u-d1);
   }
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend bool operator==(const triangle_distribution& x, 
-                         const triangle_distribution& y)
-  { return x._a == y._a && x._b == y._b && x._c == y._c && x._rng == y._rng; }
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const triangle_distribution& td)
@@ -89,12 +84,6 @@ public:
   }
 #endif
 
-#else
-  // Use a member function
-  bool operator==(const triangle_distribution& rhs) const
-  { return _a == rhs._a && _b == rhs._b && _c == rhs._c && _rng == rhs._rng;  }
-#endif
-
 private:
   void init()
   {
@@ -108,7 +97,6 @@ private:
     p1 = sqrt(d1 * d2);
   }
 
-  adaptor_type _rng;
   result_type _a, _b, _c;
   result_type d1, d2, d3, q1, p1;
 };

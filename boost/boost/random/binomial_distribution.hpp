@@ -21,24 +21,21 @@
 
 #include <cmath>
 #include <cassert>
-#include <boost/random/uniform_01.hpp>
+#include <boost/random/bernoulli_distribution.hpp>
 
 namespace boost {
 
 // Knuth
-template<class UniformRandomNumberGenerator, class IntType = int,
-         class RealType = double,
-         class Adaptor = bernoulli_distribution<UniformRandomNumberGenerator, RealType> >
+template<class IntType = int, class RealType = double>
 class binomial_distribution
 {
 public:
-  typedef Adaptor adaptor_type;
-  typedef UniformRandomNumberGenerator base_type;
+  typedef typename bernoulli_distribution<RealType>::input_type input_type;
   typedef IntType result_type;
 
-  explicit binomial_distribution(base_type & rng, IntType t = 1,
+  explicit binomial_distribution(IntType t = 1,
                                  const RealType& p = RealType(0.5))
-    : _rng(rng, p), _t(t)
+    : _t(t)
   {
     assert(t >= 0);
     assert(RealType(0) <= 0 && p <= RealType(1));
@@ -46,35 +43,27 @@ public:
 
   // compiler-generated copy ctor and assignment operator are fine
 
-  adaptor_type& adaptor() { return _rng; }
-  base_type& base() const { return _rng.base(); }
   IntType t() const { return _t; }
-  RealType p() const { return _rng.p(); }
-  void reset() { _rng.reset(); }
+  RealType p() const { return _bernoulli.p(); }
+  void reset() { }
 
-  result_type operator()()
+  template<class Engine>
+  result_type operator()(Engine& eng)
   {
     // TODO: This is O(_t), but it should be O(log(_t)) for large _t
     result_type n = 0;
     for(IntType i = 0; i < _t; ++i)
-      if(_rng())
+      if(_bernoulli(eng))
         ++n;
     return n;
   }
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend bool operator==(const binomial_distribution& x, 
-                         const binomial_distribution& y)
-  {
-    return x._t == y._t && x._rng == y._rng;
-  }
-
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const binomial_distribution& bd)
   {
-    os << bd._rng << " " << bd._t;
+    os << bd._bernoulli << " " << bd._t;
     return os;
   }
 
@@ -82,20 +71,13 @@ public:
   friend std::basic_istream<CharT,Traits>&
   operator>>(std::basic_istream<CharT,Traits>& is, binomial_distribution& bd)
   {
-    is >> std::ws >> bd._rng >> std::ws >> bd._t;
+    is >> std::ws >> bd._bernoulli >> std::ws >> bd._t;
     return is;
-  }
-#else
-  // Use a member function
-  bool operator==(const binomial_distribution& rhs) const
-  {
-    return _t == rhs._t && _rng == rhs._rng;
   }
 #endif
 
-#endif
 private:
-  adaptor_type _rng;
+  bernoulli_distribution<RealType> _bernoulli;
   IntType _t;
 };
 

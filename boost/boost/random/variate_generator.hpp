@@ -1,0 +1,125 @@
+/* boost random/variate_generator.hpp header file
+ *
+ * Copyright Jens Maurer 2002
+ * Permission to use, copy, modify, sell, and distribute this software
+ * is hereby granted without fee provided that the above copyright notice
+ * appears in all copies and that both that copyright notice and this
+ * permission notice appear in supporting documentation,
+ *
+ * Jens Maurer makes no representations about the suitability of this
+ * software for any purpose. It is provided "as is" without express or
+ * implied warranty.
+ *
+ * See http://www.boost.org for most recent version including documentation.
+ *
+ * $Id$
+ *
+ */
+
+#ifndef BOOST_RANDOM_RANDOM_GENERATOR_HPP
+#define BOOST_RANDOM_RANDOM_GENERATOR_HPP
+
+#include <boost/config.hpp>
+
+// implementation details
+#include <boost/random/uniform_01.hpp>
+#include <boost/random/detail/pass_through_engine.hpp>
+#include <boost/random/detail/uniform_int_float.hpp>
+#include <boost/random/detail/ptr_helper.hpp>
+
+
+namespace boost {
+
+namespace random {
+namespace detail {
+
+template<bool have_int, bool want_int>
+struct engine_helper;
+
+// for consistency, always have two levels of decorations
+template<>
+struct engine_helper<true, true>
+{
+  template<class Engine, class DistInputType>
+  struct impl
+  {
+    typedef pass_through_engine<Engine> type;
+  };
+};
+
+template<>
+struct engine_helper<false, false>
+{
+  template<class Engine, class DistInputType>
+  struct impl
+  {
+    typedef uniform_01<Engine, DistInputType> type;
+  };
+};
+
+template<>
+struct engine_helper<true, false>
+{
+  template<class Engine, class DistInputType>
+  struct impl
+  {
+    typedef uniform_01<Engine, DistInputType> type;
+  };
+};
+
+template<>
+struct engine_helper<false, true>
+{
+  template<class Engine, class DistInputType>
+  struct impl
+  {
+    typedef uniform_int_float<Engine, unsigned long> type;
+  };
+};
+
+} // namespace detail
+} // namespace random
+
+
+template<class Engine, class Distribution>
+class variate_generator
+{
+private:
+  typedef random::detail::pass_through_engine<Engine> decorated_engine;
+  typedef typename decorated_engine::base_type engine_value_type;
+
+public:
+  typedef Engine engine_type;
+  typedef Distribution distribution_type;
+  typedef typename Distribution::result_type result_type;
+
+  variate_generator(Engine e, Distribution d)
+    : _eng(decorated_engine(e)), _dist(d) { };
+
+  result_type operator()() { return _dist(_eng); }
+  template<class T>
+  result_type operator()(T value) { return _dist(_eng, value); }
+  
+  engine_value_type& engine() { return _eng.base().base(); }
+  const engine_value_type& engine() const { return _eng.base().base(); }
+
+  distribution_type& distribution() { return _dist; }
+  const distribution_type& distribution() const { return _dist; }
+
+  result_type min() const { return distribution().min(); }
+  result_type max() const { return distribution().max(); }
+
+private:
+  enum {
+    have_int = std::numeric_limits<typename decorated_engine::result_type>::is_integer,
+    want_int = std::numeric_limits<typename Distribution::input_type>::is_integer
+  };
+  typedef typename random::detail::engine_helper<have_int, want_int>::impl<decorated_engine, typename Distribution::input_type>::type internal_engine_type;
+
+  internal_engine_type _eng;
+  distribution_type _dist;
+};
+
+} // namespace boost
+
+#endif // BOOST_RANDOM_RANDOM_GENERATOR_HPP

@@ -123,6 +123,7 @@ public:
   bool operator!=(linear_feedback_shift rhs) const
   { return !(*this == rhs); }
 #endif
+
 private:
   UIntType wordmask; // avoid "left shift count >= width of type" warnings
   UIntType value;

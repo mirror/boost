@@ -34,7 +34,6 @@ template<class UniformRandomNumberGenerator, class RealType = double>
 class uniform_01
 {
 public:
-  typedef uniform_01<UniformRandomNumberGenerator, RealType> adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
@@ -44,10 +43,10 @@ public:
   BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
 
-  explicit uniform_01(base_type & rng)
-    : _rng(&rng),
+  explicit uniform_01(base_type rng)
+    : _rng(rng),
       _factor(result_type(1) /
-              (result_type(_rng->max()-_rng->min()) +
+              (result_type(_rng.max()-_rng.min()) +
                result_type(std::numeric_limits<base_result>::is_integer ? 1 : 0)))
   {
   }
@@ -55,42 +54,35 @@ public:
 
   result_type min() const { return result_type(0); }
   result_type max() const { return result_type(1); }
-  adaptor_type& adaptor() { return *this; }
-  base_type& base() const { return *_rng; }
+  base_type& base() { return _rng; }
+  const base_type& base() const { return _rng; }
   void reset() { }
 
   result_type operator()() {
-    return result_type((*_rng)() - _rng->min()) * _factor;
+    return result_type(_rng() - _rng.min()) * _factor;
   }
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend bool operator==(const uniform_01& x, const uniform_01& y)
-  { return *x._rng == *y._rng; }
-
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
-  operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_01&)
+  operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_01& u)
   {
+    os << u._rng;
     return os;
   }
 
   template<class CharT, class Traits>
   friend std::basic_istream<CharT,Traits>&
-  operator>>(std::basic_istream<CharT,Traits>& is, uniform_01&)
+  operator>>(std::basic_istream<CharT,Traits>& is, uniform_01& u)
   {
+    is >> u._rng;
     return is;
   }
 #endif
 
-#else
-  // Use a member function
-  bool operator==(const uniform_01& rhs) const
-  { return *_rng == *rhs._rng;  }
-#endif
 private:
   typedef typename base_type::result_type base_result;
-  base_type * _rng;
+  base_type _rng;
   result_type _factor;
 };
 

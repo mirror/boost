@@ -88,7 +88,7 @@ set(result_type min, result_type max)
   assert(min < max);
 
   _range = static_cast<base_result>(_max-_min)+1;
-  _factor = 1;
+  int _factor = 1;
   
   // LCGs get bad when only taking the low bits.
   // (probably put this logic into a partial template specialization)
@@ -153,82 +153,65 @@ private:
 };
 
 
-// simulate partial specialization
-template<bool is_integer>
-struct uniform_smallint;
-
-template<>
-struct uniform_smallint<true>
-{
-  template<class UniformRandomNumberGenerator, class IntType>
-  struct impl
-  {
-    typedef uniform_smallint_integer<UniformRandomNumberGenerator, IntType> type;
-  };
-};
-
-template<>
-struct uniform_smallint<false>
-{
-  template<class UniformRandomNumberGenerator, class IntType>
-  struct impl
-  {
-    typedef uniform_smallint_float<UniformRandomNumberGenerator, IntType> type;
-  };
-};
-
 } // namespace detail
 
 
 
 
-template<class UniformRandomNumberGenerator, class IntType = int>
+template<class IntType = int>
 class uniform_smallint
 {
-private:
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-  typedef typename detail::uniform_smallint<std::numeric_limits<typename UniformRandomNumberGenerator::result_type>::is_integer>::BOOST_NESTED_TEMPLATE impl<UniformRandomNumberGenerator, IntType>::type impl_type;
-#elif BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x0570) )
-  typedef typename detail::uniform_smallint< boost::is_float<typename UniformRandomNumberGenerator::result_type>::value == false >::BOOST_NESTED_TEMPLATE impl<UniformRandomNumberGenerator, IntType>::type impl_type;
-#else
-  BOOST_STATIC_CONSTANT(bool, base_float = (boost::is_float<typename UniformRandomNumberGenerator::result_type>::value == false));
-  typedef typename detail::uniform_smallint<base_float>::BOOST_NESTED_TEMPLATE impl<UniformRandomNumberGenerator, IntType>::type impl_type;
-#endif
-
 public:
-  typedef uniform_smallint<UniformRandomNumberGenerator, IntType> adaptor_type;
-  typedef UniformRandomNumberGenerator base_type;
+  typedef IntType input_type;
   typedef IntType result_type;
-  BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
 
-  explicit uniform_smallint(base_type & rng, IntType min = 0, IntType max = 9)
-    : _impl(rng, min, max)
-  {
-    // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
+  BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
 #endif
-  }
 
-  result_type min() const { return _impl.min(); }
-  result_type max() const { return _impl.max(); }
-  adaptor_type& adaptor() { return *this; }
-  base_type& base() const { return _impl.base(); }
+  explicit uniform_smallint(IntType min = 0, IntType max = 9)
+    : _min(min), _max(max)
+  { }
+
+  result_type min() const { return _min; }
+  result_type max() const { return _max; }
   void reset() { }
 
-  result_type operator()() { return _impl(); }
+  template<class Engine>
+  result_type operator()(Engine& eng)
+  {
+    typedef typename Engine::result_type base_result;
+    base_result _range = static_cast<base_result>(_max-_min)+1;
+    int _factor = 1;
+    
+    // LCGs get bad when only taking the low bits.
+    // (probably put this logic into a partial template specialization)
+    // Check how many low bits we can ignore before we get too much
+    // quantization error.
+    base_result r_base = eng.max() - eng.min();
+    if(r_base == std::numeric_limits<base_result>::max()) {
+      _factor = 2;
+      r_base /= 2;
+    }
+    r_base += 1;
+    if(r_base % _range == 0) {
+      // No quantization effects, good
+      _factor = r_base / _range;
+    } else {
+      // carefully avoid overflow; pessimizing heree
+      for( ; r_base/_range/32 >= _range; _factor *= 2)
+        r_base /= 2;
+    }
 
-  // deprecated
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend bool operator==(const uniform_smallint& x, const uniform_smallint& y)
-  { return x.min() == y.min() && x.max() == y.max() && x.base() == y.base(); }
+    return ((eng() - eng.min()) / _factor) % _range + _min;
+  }
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_smallint& ud)
   {
-    os << ud.min() << " " << ud.max();
+    os << ud._min << " " << ud._max;
     return os;
   }
 
@@ -239,29 +222,16 @@ public:
 # if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292)) && BOOST_MSVC > 1300
       return detail::extract_uniform_int(is, ud, ud._impl);
 # else
-    IntType min, max;
-    is >> std::ws >> min >> std::ws >> max;
-    ud._impl.set(min, max);
+    is >> std::ws >> ud._min >> std::ws >> ud._max;
     return is;
-# endif 
+# endif
   }
 #endif
 
-#else
-  // Use a member function
-  bool operator==(const uniform_smallint& rhs) const
-  { return min() == rhs.min() && max() == rhs.max() && base() == rhs.base();  }
-#endif
-
 private:
-  impl_type _impl;  
+  result_type _min;
+  result_type _max;
 };
-
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-//  A definition is required even for integral static constants
-template<class UniformRandomNumberGenerator, class IntType>
-const bool uniform_smallint<UniformRandomNumberGenerator, IntType>::has_fixed_range;
-#endif
 
 } // namespace boost
 

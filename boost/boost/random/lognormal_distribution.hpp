@@ -23,6 +23,8 @@
 
 #include <cmath>      // std::exp, std::sqrt
 #include <cassert>
+#include <boost/limits.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/random/normal_distribution.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
@@ -41,53 +43,47 @@ namespace boost {
   using std::exp;
 #endif
 
-template<class UniformRandomNumberGenerator, class RealType = double,
-        class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
+template<class RealType = double>
 class lognormal_distribution
 {
 public:
-  typedef Adaptor adaptor_type;
-  typedef UniformRandomNumberGenerator base_type;
+  typedef typename normal_distribution<RealType>::input_type input_type;
   typedef RealType result_type;
 
-  explicit lognormal_distribution(base_type & rng,
-                                  result_type mean = result_type(1),
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+    BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
+#endif
+
+  explicit lognormal_distribution(result_type mean = result_type(1),
                                   result_type sigma = result_type(1))
-    : _mean(mean), _sigma(sigma),
-      _rng(rng, std::log(mean*mean/std::sqrt(sigma*sigma + mean*mean)),
-           std::sqrt(std::log(sigma*sigma/mean/mean+result_type(1))))
+    : _mean(mean), _sigma(sigma)
   { 
     assert(mean > result_type(0));
+    init();
   }
 
   // compiler-generated copy ctor and assignment operator are fine
 
-  adaptor_type& adaptor() { return _rng.adaptor(); }
-  base_type& base() const { return _rng.base(); }
-  RealType mean() const { return _mean; }
-  RealType sigma() const { return _sigma; }
-  void reset() { _rng.reset(); }
+  RealType& mean() const { return _mean; }
+  RealType& sigma() const { return _sigma; }
+  void reset() { _normal.reset(); }
 
-  result_type operator()()
+  template<class Engine>
+  result_type operator()(Engine& eng)
   {
 #ifndef BOOST_NO_STDC_NAMESPACE
     // allow for Koenig lookup
     using std::exp;
 #endif
-    return exp(_rng());
+    return exp(_normal(eng) * _nsigma + _nmean);
   }
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend bool operator==(const lognormal_distribution& x, 
-                         const lognormal_distribution& y)
-  { return x._rng == y._rng; }
-
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const lognormal_distribution& ld)
   {
-    os << ld._rng << " " << ld._mean << " " << ld._sigma;
+    os << ld._normal << " " << ld._mean << " " << ld._sigma;
     return os;
   }
 
@@ -95,19 +91,26 @@ public:
   friend std::basic_istream<CharT,Traits>&
   operator>>(std::basic_istream<CharT,Traits>& is, lognormal_distribution& ld)
   {
-    is >> std::ws >> ld._rng >> std::ws >> ld._mean >> std::ws >> ld._sigma;
+    is >> std::ws >> ld._normal >> std::ws >> ld._mean >> std::ws >> ld._sigma;
+    ld.init();
     return is;
   }
 #endif
 
-#else
-  // Use a member function
-  bool operator==(const lognormal_distribution& rhs) const
-  { return _rng == rhs._rng;  }
-#endif
 private:
+  void init()
+  {
+#ifndef BOOST_NO_STDC_NAMESPACE
+    // allow for Koenig lookup
+    using std::exp; using std::log; using std::sqrt;
+#endif
+    _nmean = log(_mean*_mean/sqrt(_sigma*_sigma + _mean*_mean));
+    _nsigma = sqrt(log(_sigma*_sigma/_mean/_mean+result_type(1)));
+  }
+
   RealType _mean, _sigma;
-  normal_distribution<base_type, result_type, adaptor_type> _rng;
+  RealType _nmean, _nsigma;
+  normal_distribution<result_type> _normal;
 };
 
 } // namespace boost

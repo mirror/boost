@@ -26,24 +26,20 @@
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/random/uniform_01.hpp>
 
 namespace boost {
 
 // uniform distribution on a real range
-template<class UniformRandomNumberGenerator, class RealType = double,
-        class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
+template<class RealType = double>
 class uniform_real
 {
 public:
-  typedef Adaptor adaptor_type;
-  typedef UniformRandomNumberGenerator base_type;
+  typedef RealType input_type;
   typedef RealType result_type;
-  BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
 
-  explicit uniform_real(base_type & rng, RealType min = RealType(0),
+  explicit uniform_real(RealType min = RealType(0),
                         RealType max = RealType(1)) 
-    : _rng(rng), _min(min), _max(max)
+    : _min(min), _max(max)
   {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
     BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
@@ -55,17 +51,12 @@ public:
 
   result_type min() const { return _min; }
   result_type max() const { return _max; }
-  adaptor_type& adaptor() { return _rng; }
-  base_type& base() const { return _rng.base(); }
-  void reset() { _rng.reset(); }
+  void reset() { }
 
-  result_type operator()() { return _rng() * (_max - _min) + _min; }
+  template<class Engine>
+  result_type operator()(Engine& eng) { return eng() * (_max - _min) + _min; }
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend bool operator==(const uniform_real& x, const uniform_real& y)
-  { return x._min == y._min && x._max == y._max && x._rng == y._rng; }
-
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_real& ud)
@@ -83,21 +74,9 @@ public:
   }
 #endif
 
-#else
-  // Use a member function
-  bool operator==(const uniform_real& rhs) const
-  { return _min == rhs._min && _max == rhs._max && _rng == rhs._rng;  }
-#endif
 private:
-  adaptor_type _rng;
   RealType _min, _max;
 };
-
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-//  A definition is required even for integral static constants
-template<class UniformRandomNumberGenerator, class RealType, class Adaptor>
-const bool uniform_real<UniformRandomNumberGenerator, RealType, Adaptor>::has_fixed_range;
-#endif
 
 } // namespace boost
 

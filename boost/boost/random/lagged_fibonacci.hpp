@@ -29,6 +29,7 @@
 #include <boost/cstdint.hpp>
 #include <boost/random/linear_congruential.hpp>
 #include <boost/random/uniform_01.hpp>
+#include <boost/random/detail/pass_through_engine.hpp>
 
 namespace boost {
 namespace random {
@@ -289,7 +290,10 @@ public:
   template<class Generator>
   void seed(Generator & gen)
   {
-    uniform_01<Generator, RealType> gen01(gen);
+    // use pass-by-reference, but wrap argument in pass_through_engine
+    typedef detail::pass_through_engine<Generator&> ref_gen;
+    uniform_01<ref_gen, RealType> gen01 =
+      uniform_01<ref_gen, RealType>(ref_gen(gen));
     // I could have used std::generate_n, but it takes "gen" by value
     for(unsigned int j = 0; j < long_lag; ++j)
       x[j] = gen01();

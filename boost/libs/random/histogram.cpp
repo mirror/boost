@@ -114,42 +114,50 @@ void histogram(RNG base, int samples, double from, double to,
             << "\n" << std::endl;
 }
 
+template<class PRNG, class Dist>
+inline boost::variate_generator<PRNG&, Dist> make_gen(PRNG & rng, Dist d)
+{
+  return boost::variate_generator<PRNG&, Dist>(rng, d);
+}
 
 template<class PRNG>
 void histograms()
 {
   PRNG rng;
   using namespace boost;
-  histogram(uniform_smallint<PRNG>(rng, 0, 5), 100000, -1, 6, "uniform_smallint(0,5)");
-  histogram(uniform_int<PRNG>(rng, 0, 5), 100000, -1, 6, "uniform_int(0,5)");
-  histogram(uniform_01<PRNG>(rng), 100000, -0.5, 1.5, "uniform_01(0,1)");
-  histogram(bernoulli_distribution<PRNG>(rng, 0.2), 100000, -0.5, 1.5,
+  histogram(make_gen(rng, uniform_smallint<>(0, 5)), 100000, -1, 6,
+            "uniform_smallint(0,5)");
+  histogram(make_gen(rng, uniform_int<>(0, 5)), 100000, -1, 6,
+            "uniform_int(0,5)");
+  histogram(make_gen(rng, uniform_real<>(0,1)), 100000, -0.5, 1.5,
+            "uniform_real(0,1)");
+  histogram(make_gen(rng, bernoulli_distribution<>(0.2)), 100000, -0.5, 1.5,
             "bernoulli(0.2)");
-  histogram(binomial_distribution<PRNG>(rng, 4, 0.2), 100000, -1, 5,
+  histogram(make_gen(rng, binomial_distribution<>(4, 0.2)), 100000, -1, 5,
             "binomial(4, 0.2)");
-  histogram(triangle_distribution<PRNG>(rng, 1, 2, 8), 100000, 0, 10,
+  histogram(make_gen(rng, triangle_distribution<>(1, 2, 8)), 100000, 0, 10,
             "triangle(1,2,8)");
-  histogram(geometric_distribution<PRNG>(rng, 5.0/6.0), 100000, 0, 10,
+  histogram(make_gen(rng, geometric_distribution<>(5.0/6.0)), 100000, 0, 10,
             "geometric(5/6)");
-  histogram(exponential_distribution<PRNG>(rng, 0.3), 100000, 0, 10,
+  histogram(make_gen(rng, exponential_distribution<>(0.3)), 100000, 0, 10,
             "exponential(0.3)");
-  histogram(cauchy_distribution<PRNG>(rng), 100000, -5, 5,
+  histogram(make_gen(rng, cauchy_distribution<>()), 100000, -5, 5,
             "cauchy");
-  histogram(lognormal_distribution<PRNG>(rng, 3, 2), 100000, 0, 10,
+  histogram(make_gen(rng, lognormal_distribution<>(3, 2)), 100000, 0, 10,
             "lognormal");
-  histogram(normal_distribution<PRNG>(rng), 100000, -3, 3,
+  histogram(make_gen(rng, normal_distribution<>()), 100000, -3, 3,
             "normal");
-  histogram(normal_distribution<PRNG>(rng, 0.5, 0.5), 100000, -3, 3,
+  histogram(make_gen(rng, normal_distribution<>(0.5, 0.5)), 100000, -3, 3,
             "normal(0.5, 0.5)");
-  histogram(poisson_distribution<PRNG>(rng, 1.5), 100000, 0, 5,
+  histogram(make_gen(rng, poisson_distribution<>(1.5)), 100000, 0, 5,
             "poisson(1.5)");
-  histogram(poisson_distribution<PRNG>(rng, 10), 100000, 0, 20,
+  histogram(make_gen(rng, poisson_distribution<>(10)), 100000, 0, 20,
             "poisson(10)");
-  histogram(gamma_distribution<PRNG>(rng, 0.5), 100000, 0, 0.5,
+  histogram(make_gen(rng, gamma_distribution<>(0.5)), 100000, 0, 0.5,
             "gamma(0.5)");
-  histogram(gamma_distribution<PRNG>(rng, 1), 100000, 0, 3,
+  histogram(make_gen(rng, gamma_distribution<>(1)), 100000, 0, 3,
             "gamma(1)");
-  histogram(gamma_distribution<PRNG>(rng, 2), 100000, 0, 6,
+  histogram(make_gen(rng, gamma_distribution<>(2)), 100000, 0, 6,
             "gamma(2)");
 }
 

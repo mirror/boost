@@ -34,19 +34,15 @@ namespace boost {
 #endif
 
 // geometric distribution: p(i) = (1-p) * pow(p, i-1)   (integer)
-template<class UniformRandomNumberGenerator, class IntType = int,
-         class RealType = double,
-         class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
+template<class IntType = int, class RealType = double>
 class geometric_distribution
 {
 public:
-  typedef Adaptor adaptor_type;
-  typedef UniformRandomNumberGenerator base_type;
+  typedef RealType input_type;
   typedef IntType result_type;
 
-  explicit geometric_distribution(base_type & rng,
-                                  const RealType& p = RealType(0.5))
-    : _rng(rng), _p(p)
+  explicit geometric_distribution(const RealType& p = RealType(0.5))
+    : _p(p)
   {
     assert(RealType(0) < p && p < RealType(1));
     init();
@@ -55,25 +51,19 @@ public:
   // compiler-generated copy ctor and assignment operator are fine
 
   RealType p() const { return _p; }
-  adaptor_type& adaptor() { return _rng; }
-  base_type& base() const { return _rng.base(); }
-  void reset() { _rng.reset(); }
+  void reset() { }
 
-  result_type operator()()
+  template<class Engine>
+  result_type operator()(Engine& eng)
   {
 #ifndef BOOST_NO_STDC_NAMESPACE
     using std::log;
     using std::floor;
 #endif
-    return IntType(floor(log(RealType(1)-_rng()) / _log_p)) + IntType(1);
+    return IntType(floor(log(RealType(1)-eng()) / _log_p)) + IntType(1);
   }
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend bool operator==(const geometric_distribution& x, 
-                         const geometric_distribution& y)
-  { return x._log_p == y._log_p && x._rng == y._rng; }
-
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const geometric_distribution& gd)
@@ -92,11 +82,6 @@ public:
   }
 #endif
 
-#else
-  // Use a member function
-  bool operator==(const geometric_distribution& rhs) const
-  { return _log_p == rhs._log_p && _rng == rhs._rng;  }
-#endif
 private:
   void init()
   {
@@ -106,7 +91,6 @@ private:
     _log_p = log(_p);
   }
 
-  adaptor_type _rng;
   RealType _p;
   RealType _log_p;
 };

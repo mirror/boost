@@ -28,32 +28,27 @@
 
 namespace boost {
 
-template<class UniformRandomNumberGenerator, class RealType = double,
-         class Cont = std::vector<RealType>,
-         class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
+template<class RealType = double, class Cont = std::vector<RealType> >
 class uniform_on_sphere
 {
 public:
-  typedef Adaptor adaptor_type;
-  typedef UniformRandomNumberGenerator base_type;
+  typedef RealType input_type;
   typedef Cont result_type;
 
-  explicit uniform_on_sphere(base_type & rng, int dim = 2)
-    : _rng(rng), _container(dim), _dim(dim) { }
+  explicit uniform_on_sphere(int dim = 2) : _container(dim), _dim(dim) { }
 
   // compiler-generated copy ctor and assignment operator are fine
 
-  adaptor_type& adaptor() { return _rng.adaptor(); }
-  base_type& base() const { return _rng.base(); }
-  void reset() { _rng.reset(); }
+  void reset() { _normal.reset(); }
 
-  const result_type & operator()()
+  template<class Engine>
+  const result_type & operator()(Engine& eng)
   {
     RealType sqsum = 0;
     for(typename Cont::iterator it = _container.begin();
         it != _container.end();
         ++it) {
-      RealType val = _rng();
+      RealType val = _normal(eng);
       *it = val;
       sqsum += val * val;
     }
@@ -66,12 +61,7 @@ public:
     return _container;
   }
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend bool operator==(const uniform_on_sphere& x, 
-                         const uniform_on_sphere& y)
-  { return x._dim == y._dim && x._rng == y._rng; }
-
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_on_sphere& sd)
@@ -90,13 +80,8 @@ public:
   }
 #endif
 
-#else
-  // Use a member function
-  bool operator==(const uniform_on_sphere& rhs) const
-  { return _dim == rhs._dim && _rng == rhs._rng; }
-#endif
 private:
-  normal_distribution<base_type, RealType, Adaptor> _rng;
+  normal_distribution<RealType> _normal;
   result_type _container;
   int _dim;
 };

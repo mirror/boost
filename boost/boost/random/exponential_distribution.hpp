@@ -25,48 +25,40 @@
 #include <cassert>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/random/uniform_01.hpp>
 
 namespace boost {
 
 // exponential distribution: p(x) = lambda * exp(-lambda * x)
-template<class UniformRandomNumberGenerator, class RealType = double,
-        class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
+template<class RealType = double>
 class exponential_distribution
 {
 public:
-  typedef Adaptor adaptor_type;
-  typedef UniformRandomNumberGenerator base_type;
+  typedef RealType input_type;
   typedef RealType result_type;
 
 #if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) && !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
   BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
 
-  explicit exponential_distribution(base_type& rng,
-                                    result_type lambda = result_type(1))
-    : _rng(rng), _lambda(lambda) { assert(lambda > result_type(0)); }
+  explicit exponential_distribution(result_type lambda = result_type(1))
+    : _lambda(lambda) { assert(lambda > result_type(0)); }
 
   // compiler-generated copy ctor and assignment operator are fine
 
-  adaptor_type& adaptor() { return _rng; }
-  base_type& base() const { return _rng.base(); }
-  void reset() { _rng.reset(); }
+  result_type lambda() const { return _lambda; }
 
-  result_type operator()()
+  void reset() { }
+
+  template<class Engine>
+  result_type operator()(Engine& eng)
   { 
 #ifndef BOOST_NO_STDC_NAMESPACE
     using std::log;
 #endif
-    return -result_type(1) / _lambda * log(result_type(1)-_rng());
+    return -result_type(1) / _lambda * log(result_type(1)-eng());
   }
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend bool operator==(const exponential_distribution& x, 
-                         const exponential_distribution& y)
-  { return x._lambda == y._lambda && x._rng == y._rng; }
-
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const exponential_distribution& ed)
@@ -84,13 +76,7 @@ public:
   }
 #endif
 
-#else
-  // Use a member function
-  bool operator==(const exponential_distribution& rhs) const
-  { return _lambda == rhs._lambda && _rng == rhs._rng;  }
-#endif
 private:
-  adaptor_type _rng;
   result_type _lambda;
 };
 

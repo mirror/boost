@@ -21,24 +21,26 @@
 
 #include <cmath>
 #include <cassert>
-#include <boost/random/uniform_01.hpp>
+#include <boost/limits.hpp>
+#include <boost/static_assert.hpp>
 
 namespace boost {
 
 // Knuth
-template<class UniformRandomNumberGenerator, class IntType = int,
-         class RealType = double,
-         class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
+template<class IntType = int, class RealType = double>
 class poisson_distribution
 {
 public:
-  typedef Adaptor adaptor_type;
-  typedef UniformRandomNumberGenerator base_type;
+  typedef RealType input_type;
   typedef IntType result_type;
 
-  explicit poisson_distribution(base_type & rng,
-                                const RealType& mean = RealType(1))
-    : _rng(rng), _mean(mean)
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+  BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
+  BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
+#endif
+
+  explicit poisson_distribution(const RealType& mean = RealType(1))
+    : _mean(mean)
   {
     assert(mean > RealType(0));
     init();
@@ -46,30 +48,22 @@ public:
 
   // compiler-generated copy ctor and assignment operator are fine
 
-  adaptor_type& adaptor() { return _rng; }
-  base_type& base() const { return _rng.base(); }
   RealType mean() const { return _mean; }
-  void reset() { _rng.reset(); }
+  void reset() { }
 
-  result_type operator()()
+  template<class Engine>
+  result_type operator()(Engine& eng)
   {
     // TODO: This is O(_mean), but it should be O(log(_mean)) for large _mean
     RealType product = RealType(1);
-    for(int m = 0; ; ++m) {
-      product *= _rng();
+    for(result_type m = 0; ; ++m) {
+      product *= eng();
       if(product <= _exp_mean)
         return m;
     }
   }
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend bool operator==(const poisson_distribution& x, 
-                         const poisson_distribution& y)
-  {
-    return x._mean == y._mean && x._rng == y._rng;
-  }
-
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const poisson_distribution& pd)
@@ -88,14 +82,6 @@ public:
   }
 #endif
 
-#else
-  // Use a member function
-  bool operator==(const poisson_distribution& rhs) const
-  {
-    return _mean == rhs._mean && _rng == rhs._rng;
-  }
-#endif
-
 private:
   void init()
   {
@@ -106,7 +92,6 @@ private:
     _exp_mean = exp(-_mean);
   }
 
-  adaptor_type _rng;
   RealType _mean;
   // some precomputed data from the parameters
   RealType _exp_mean;
