@@ -29,9 +29,15 @@
                                             + __GNUC_MINOR__ * 100)
 
 // workaround for gcc bug c++/8419 - gps
+
+namespace boost { namespace detail {
+    template <typename T> T make_non_const(T t) { return t; }
+}}
+
 #if defined(__GNUC__) && BOOST_WORKAROUND(BOOST_DYNAMIC_BITSET_GNUC_VERSION, \
                                           BOOST_TESTED_AT(30300))
-# define BOOST_DYNAMIC_BITSET_WRAP_CONSTANT(expr) ((void)0, expr)
+# define BOOST_DYNAMIC_BITSET_WRAP_CONSTANT(expr) \
+         (boost::detail::make_non_const(expr))
 #else
 # define BOOST_DYNAMIC_BITSET_WRAP_CONSTANT(expr) (expr)
 #endif
