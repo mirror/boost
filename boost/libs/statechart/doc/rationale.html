@@ -240,7 +240,7 @@ disadvantages to this approach:</p>
 	<li>Since C++ 
 	destructors should virtually never throw, one cannot simply propagate an 
 	exception from an exit action as one does when any of the other actions fails</li>
-	<li>If a <code>state_machine&lt;&gt;</code> object is destructed then all currently active states are 
+	<li>When a <code>state_machine&lt;&gt;</code> object is destructed then all currently active states are 
 	inevitably also destructed. That is, state machine termination is tied to 
 	the destruction of the state machine object</li>
 </ul>
@@ -753,7 +753,7 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->29 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38840" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40404" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
