@@ -214,6 +214,8 @@
 #     define BOOST_MSVC_STD_ITERATOR
 #     define BOOST_NO_STD_ITERATOR_TRAITS
 #     define BOOST_NO_STDC_NAMESPACE
+#     define BOOST_NO_SLIST
+#     define BOOST_NO_HASH
 #   endif
 
 
