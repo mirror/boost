@@ -157,9 +157,18 @@ but don't want the parenthesis to spit out another marked sub-expression,
 in this case a non-marking parenthesis (?:expression) can be used.
 For example the following expression creates no sub-expressions: </p>
 
-<p>&quot;(?:abc)*&quot; <br>
-&nbsp; <br>
-&nbsp; </p>
+<p>&quot;(?:abc)*&quot;</p>
+
+<p><em>Forward Lookahead Asserts</em>&nbsp; </p>
+
+<p>There are two forms of these; one for positive forward
+lookahead asserts, and one for negative lookahead asserts:</p>
+
+<p>&quot;(?=abc)&quot; matches zero characters only if they are
+followed by the expression &quot;abc&quot;.</p>
+
+<p>&quot;(?!abc)&quot; matches zero characters only if they are
+not followed by the expression &quot;abc&quot;.</p>
 
 <p><i>Alternatives</i> </p>
 
