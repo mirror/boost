@@ -1029,7 +1029,7 @@ private: // helpers, for structors (below)
 
     };
 
-    friend class preprocessor_list_initializer;
+    friend struct preprocessor_list_initializer;
 
     typedef preprocessor_list_initializer
         initializer;
