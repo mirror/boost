@@ -124,18 +124,13 @@ public:
 
     element_type& operator*() const 
         { 
-            BOOST_STATIC_ASSERT(!is_array); return *ptr(); 
+            /*BOOST_STATIC_ASSERT(!is_array);*/ return *ptr(); 
         }
 
     element_type* operator->() const 
         { 
-            BOOST_STATIC_ASSERT(!is_array); return ptr(); 
+            /*BOOST_STATIC_ASSERT(!is_array);*/ return ptr(); 
         }    
-
-    element_type& operator[](std::size_t i) const 
-        { 
-            BOOST_STATIC_ASSERT(is_array); return ptr()[i]; 
-        }
 
     element_type* release()
         {

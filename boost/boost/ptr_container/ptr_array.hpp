@@ -26,7 +26,7 @@
 namespace boost
 {
 
-    namespace ptr_container_ptr_container_detail
+    namespace ptr_container_detail
     {
         template
         <
@@ -59,12 +59,12 @@ namespace boost
     >
     class ptr_array : public 
         ptr_sequence_adapter< T, 
-                              ptr_container_ptr_container_detail::ptr_array_impl<void*,N>,
+                              ptr_container_detail::ptr_array_impl<void*,N>,
                               CloneAllocator >
     {  
     private:
         typedef ptr_sequence_adapter< T,   
-                                      ptr_container_ptr_container_detail::ptr_array_impl<void*,N>,
+                                      ptr_container_detail::ptr_array_impl<void*,N>,
                                       CloneAllocator >
             base_class;
 
@@ -130,7 +130,7 @@ namespace boost
 
             this->enforce_null_policy( r, "Null pointer in 'ptr_array::replace()'" );
             
-            auto_type res( reinterpret_cast<U*>( this->c_private()[idx] ) ); // nothrow
+            auto_type res( static_cast<U*>( this->c_private()[idx] ) ); // nothrow
             this->c_private()[idx] = r;                                      // nothrow
             return move(res);                                                // nothrow
         }
@@ -144,7 +144,7 @@ namespace boost
             if( idx >= N )
                 throw bad_index( "'replace()' aout of bounds" );
 
-            auto_type res( reinterpret_cast<U*>( this->c_private()[idx] ) ); // nothrow
+            auto_type res( static_cast<U*>( this->c_private()[idx] ) ); // nothrow
             this->c_private()[idx] = ptr.release();                          // nothrow
             return move(res);                                                // nothrow
         }
