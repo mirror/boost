@@ -162,7 +162,11 @@ namespace std {
 
 // Thanks to Kresimir Fresl for porting to Comeau.
 #if defined (__COMO__) && ! defined (BOOST_STRICT_CONFIG)
-// Comeau should not have any problems
+
+// Without this we don't get abs overloads for float types in <cmath>
+// This should should be library version specific, but to find this out we need to include a header!
+#include <cstdlib>
+
 #endif
 
 
