@@ -81,9 +81,11 @@ namespace export_impl
             }
         };
         static void instantiate(){
+            #if defined(__GNUC__) && (__GNUC__ >= 3)
             BOOST_STATIC_ASSERT(
                 Archive::is_loading::value || Archive::is_saving::value
             );
+            #endif
             mpl::apply_if<
                 BOOST_DEDUCED_TYPENAME Archive::is_saving,
                 mpl::identity<o>,
