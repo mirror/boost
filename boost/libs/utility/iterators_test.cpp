@@ -9,16 +9,25 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  29 May 01 Factored implementation, added comparison tests, use Test Tools
+//            library (Daryle Walker)
 //  12 Dec 99 Initial version with iterator operators (Jeremy Siek)
 
-#include <string>
-#include <iostream>
-using namespace std;
+#define  BOOST_INCLUDE_MAIN
+#include <boost/test/test_tools.hpp>  // for main
 
-#include <boost/operators.hpp>
-using namespace boost;
+#include <boost/config.hpp>     // for BOOST_STATIC_CONSTANT
+#include <boost/cstdlib.hpp>    // for boost::exit_success
+#include <boost/operators.hpp>  // for boost::random_access_iterator_helper
+
+#include <cstddef>    // for std::ptrdiff_t, std::size_t
+#include <cstring>    // for std::strcmp
+#include <iostream>   // for std::cout (std::endl, ends, and flush indirectly)
+#include <string>     // for std::string
+#include <strstream>  // for std::ostrstream
 
 
+// Iterator test class
 template <class T, class R, class P>
 struct test_iter
   : public boost::random_access_iterator_helper<
@@ -29,7 +38,7 @@ struct test_iter
   typedef std::ptrdiff_t Distance;
 
 public:
-  test_iter(T* i) : _i(i) { }
+  explicit test_iter(T* i =0) : _i(i) { }
   test_iter(const self& x) : _i(x._i) { }
   self& operator=(const self& x) { _i = x._i; return *this; }
   Reference operator*() const { return *_i; }
@@ -43,127 +52,280 @@ public:
     return x._i - y._i; 
   }
 protected:
-  T* _i;
+  P _i;
 };
 
-
-int
-main()
+// Iterator operator testing classes
+class test_opr_base
 {
-  string array[] = { "apple", "orange", "pear", "peach", "grape", "plum"  };
-  {
-    test_iter<string,string&,string*> i = array, 
-      ie = array + sizeof(array)/sizeof(string);
+protected:
+    // Test data and types
+    BOOST_STATIC_CONSTANT( std::size_t, fruit_length = 6u );
+    BOOST_STATIC_CONSTANT( std::size_t, scratch_length = 40u );
 
-    // Tests for all of the operators added by random_access_iterator_helper
+    typedef std::string  fruit_array_type[ fruit_length ];
+    typedef char         scratch_array_type[ scratch_length ];
 
-    // test i++
-    while (i != ie)
-      cout << *i++ << " ";
-    cout << endl;
-    i = array;
+    static  fruit_array_type    fruit;
+    static  scratch_array_type  scratch;
 
-    // test i--
-    while (ie != i) {
-      ie--;
-      cout << *ie << " ";
+};  // test_opr_base
+
+template <typename T, typename R = T&, typename P = T*>
+class test_opr
+    : public test_opr_base
+{
+    typedef test_opr<T, R, P>  self_type;
+
+public:
+    // Types
+    typedef T  value_type;
+    typedef R  reference;
+    typedef P  pointer;
+
+    typedef test_iter<T, R, P>  iter_type;
+
+    // Test controller
+    static  void  master_test( char const name[] );
+
+private:
+    // Test data
+    static  iter_type const  fruit_begin, fruit_end;
+
+    // Test parts
+    static  void  post_increment_test();
+    static  void  post_decrement_test();
+    static  void  indirect_referral_test();
+    static  void  offset_addition_test();
+    static  void  reverse_offset_addition_test();
+    static  void  offset_subtraction_test();
+    static  void  comparison_test();
+    static  void  indexing_test();
+
+};  // test_opr
+
+
+// Class-static data definitions
+typename test_opr_base::fruit_array_type
+ test_opr_base::fruit = { "apple", "orange", "pear", "peach", "grape", "plum" };
+
+typename test_opr_base::scratch_array_type
+ test_opr_base::scratch = "";
+
+template <typename T, typename R, typename P>
+typename test_opr<T, R, P>::iter_type const
+ test_opr<T, R, P>::fruit_begin( fruit );
+
+template <typename T, typename R, typename P>
+typename test_opr<T, R, P>::iter_type const
+ test_opr<T, R, P>::fruit_end( fruit + fruit_length );
+
+
+// Main testing function
+int
+test_main( int , char * [] )
+{
+    using std::string;
+
+    typedef test_opr<string, string &, string *>              test1_type;
+    typedef test_opr<string, string const &, string const *>  test2_type;
+
+    test1_type::master_test( "non-const string" );
+    test2_type::master_test( "const string" );
+
+    return boost::exit_success;
+}
+
+// Tests for all of the operators added by random_access_iterator_helper
+template <typename T, typename R, typename P>
+void
+test_opr<T, R, P>::master_test
+(
+    char const  name[]
+)
+{
+    std::cout << "Doing test run for " << name << '.' << std::endl;
+
+    post_increment_test();
+    post_decrement_test();
+    indirect_referral_test();
+    offset_addition_test();
+    reverse_offset_addition_test();
+    offset_subtraction_test();
+    comparison_test();
+    indexing_test();
+}
+
+// Test post-increment
+template <typename T, typename R, typename P>
+void
+test_opr<T, R, P>::post_increment_test
+(
+)
+{
+    std::cout << "\tDoing post-increment test." << std::endl;
+
+    std::ostrstream  oss( scratch, scratch_length );
+    for ( iter_type i = fruit_begin ; i != fruit_end ; )
+    {
+        oss << *i++ << ' ';
     }
-    cout << endl;
-    ie = array + sizeof(array)/sizeof(string);
 
-    // test i->m
-    while (i != ie) {
-      cout << i->size() << " ";
-      ++i;
+    oss << std::ends;
+    BOOST_TEST( std::strcmp(oss.str(), "apple orange pear peach grape plum ")
+     == 0 );
+}
+
+// Test post-decrement
+template <typename T, typename R, typename P>
+void
+test_opr<T, R, P>::post_decrement_test
+(
+)
+{
+    std::cout << "\tDoing post-decrement test." << std::endl;
+
+    std::ostrstream  oss( scratch, scratch_length );
+    for ( iter_type i = fruit_end ; i != fruit_begin ; )
+    {
+        i--;
+        oss << *i << ' ';
     }
-    cout << endl;
-    i = array;
 
-    // test i + n
-    while (i < ie) {
-      cout << *i << " ";
-      i = i + 2;
+    oss << std::ends;
+    BOOST_TEST( std::strcmp(oss.str(), "plum grape peach pear orange apple ")
+     == 0 );
+}
+
+// Test indirect structure referral
+template <typename T, typename R, typename P>
+void
+test_opr<T, R, P>::indirect_referral_test
+(
+)
+{
+    std::cout << "\tDoing indirect reference test." << std::endl;
+
+    std::ostrstream  oss( scratch, scratch_length );
+    for ( iter_type i = fruit_begin ; i != fruit_end ; ++i )
+    {
+        oss << i->size() << ' ';
     }
-    cout << endl;
-    i = array;
 
-    // test n + i
-    while (i < ie) {
-      cout << *i << " ";
-      i = ptrdiff_t(2) + i;
+    oss << std::ends;
+    BOOST_TEST( std::strcmp(oss.str(), "5 6 4 5 5 4 ") == 0 );
+}
+
+// Test offset addition
+template <typename T, typename R, typename P>
+void
+test_opr<T, R, P>::offset_addition_test
+(
+)
+{
+    std::cout << "\tDoing offset addition test." << std::endl;
+
+    std::ptrdiff_t const  two = 2;
+    std::ostrstream       oss( scratch, scratch_length );
+    for ( iter_type i = fruit_begin ; i != fruit_end ; i = i + two )
+    {
+        oss << *i << ' ';
     }
-    cout << endl;
-    i = array;
 
-    // test i - n
-    while (ie > i) {
-      ie = ie - 2;
-      cout << *ie << " ";
+    oss << std::ends;
+    BOOST_TEST( std::strcmp(oss.str(), "apple pear grape ") == 0 );
+}
+
+// Test offset addition, in reverse order
+template <typename T, typename R, typename P>
+void
+test_opr<T, R, P>::reverse_offset_addition_test
+(
+)
+{
+    std::cout << "\tDoing reverse offset addition test." << std::endl;
+
+    std::ptrdiff_t const  two = 2;
+    std::ostrstream       oss( scratch, scratch_length );
+    for ( iter_type i = fruit_begin ; i != fruit_end ; i = two + i )
+    {
+        oss << *i << ' ';
     }
-    cout << endl;
-    ie = array + sizeof(array)/sizeof(string);
 
-    // test i[n]
-    for (std::size_t j = 0; j < sizeof(array)/sizeof(string); ++j)
-      cout << i[j] << " ";
-    cout << endl;
-  }
-  {
-    test_iter<string, const string&, const string*> i = array, 
-      ie = array + sizeof(array)/sizeof(string);
+    oss << std::ends;
+    BOOST_TEST( std::strcmp(oss.str(), "apple pear grape ") == 0 );
+}
 
-    // Tests for all of the operators added by random_access_iterator_helper
+// Test offset subtraction
+template <typename T, typename R, typename P>
+void
+test_opr<T, R, P>::offset_subtraction_test
+(
+)
+{
+    std::cout << "\tDoing offset subtraction test." << std::endl;
 
-    // test i++
-    while (i != ie)
-      cout << *i++ << " ";
-    cout << endl;
-    i = array;
-
-    // test i--
-    while (ie != i) {
-      ie--;
-      cout << *ie << " ";
+    std::ptrdiff_t const  two = 2;
+    std::ostrstream       oss( scratch, scratch_length );
+    for ( iter_type i = fruit_end ; fruit_begin < i ; )
+    {
+        i = i - two;
+        if ( (fruit_begin < i) || (fruit_begin == i) )
+        {
+            oss << *i << ' ';
+        }
     }
-    cout << endl;
-    ie = array + sizeof(array)/sizeof(string);
 
-    // test i->m
-    while (i != ie) {
-      cout << i->size() << " ";
-      ++i;
+    oss << std::ends;
+    BOOST_TEST( std::strcmp(oss.str(), "grape pear apple ") == 0 );
+}
+
+// Test comparisons
+template <typename T, typename R, typename P>
+void
+test_opr<T, R, P>::comparison_test
+(
+)
+{
+    using std::cout;
+    using std::ptrdiff_t;
+
+    cout << "\tDoing comparison tests.\n\t\tPass:";
+
+    for ( iter_type i = fruit_begin ; i != fruit_end ; ++i )
+    {
+        ptrdiff_t const  i_offset = i - fruit_begin;
+
+        cout << ' ' << *i << std::flush;
+        for ( iter_type j = fruit_begin ; j != fruit_end ; ++j )
+        {
+            ptrdiff_t const  j_offset = j - fruit_begin;
+
+            BOOST_TEST( (i != j) == (i_offset != j_offset) );
+            BOOST_TEST( (i > j) == (i_offset > j_offset) );
+            BOOST_TEST( (i <= j) == (i_offset <= j_offset) );
+            BOOST_TEST( (i >= j) == (i_offset >= j_offset) );
+        }
     }
-    cout << endl;
-    i = array;
+    cout << std::endl;
+}
 
-    // test i + n
-    while (i < ie) {
-      cout << *i << " ";
-      i = i + 2;
+// Test indexing
+template <typename T, typename R, typename P>
+void
+test_opr<T, R, P>::indexing_test
+(
+)
+{
+    std::cout << "\tDoing indexing test." << std::endl;
+
+    std::ostrstream  oss( scratch, scratch_length );
+    for ( std::size_t k = 0u ; k < fruit_length ; ++k )
+    {
+        oss << fruit_begin[ k ] << ' ';
     }
-    cout << endl;
-    i = array;
 
-    // test n + i
-    while (i < ie) {
-      cout << *i << " ";
-      i = ptrdiff_t(2) + i;
-    }
-    cout << endl;
-    i = array;
-
-    // test i - n
-    while (ie > i) {
-      ie = ie - 2;
-      cout << *ie << " ";
-    }
-    cout << endl;
-    ie = array + sizeof(array)/sizeof(string);
-
-    // test i[n]
-    for (std::size_t j = 0; j < sizeof(array)/sizeof(string); ++j)
-      cout << i[j] << " ";
-    cout << endl;
-  }
-  return 0;
+    oss << std::ends;
+    BOOST_TEST( std::strcmp(oss.str(), "apple orange pear peach grape plum ")
+     == 0 );
 }
