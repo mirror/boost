@@ -44,5 +44,6 @@ DEPENDS all : test ;
     [ run libs/variant/test/test8.cpp
        : : : : variant_test8 ]
     [ run libs/variant/test/recursive_variant_test.cpp ]
+    [ run libs/variant/test/variant_reference_test.cpp ]
    ; 
 }
