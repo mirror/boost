@@ -160,11 +160,40 @@ test_signal_signal_connect()
   BOOST_TEST(s1(3) == -3);
 }
 
+struct EventCounter 
+{
+  EventCounter() : count(0) {}
+
+  void operator()()
+  {
+    ++count;
+  }
+
+  int count;
+};
+
+static void
+test_ref()
+{
+  EventCounter ec;
+  boost::signal0<void> s;
+
+  {
+    boost::signals::scoped_connection c = s.connect(boost::ref(ec));
+    BOOST_TEST(ec.count == 0);
+    s();
+    BOOST_TEST(ec.count == 1);
+  }  
+  s();
+  BOOST_TEST(ec.count == 1);
+}
+
 int
 test_main(int, char* [])
 {
   test_zero_args();
   test_one_arg();
-  test_signal_signal_connect();
+  test_signal_signal_connect(); 
+  test_ref();
   return 0;
 }
