@@ -460,8 +460,8 @@ f1(i,d);         // #1
 tie(i,d) = f2(); // #2
 </code></pre>
 See 
-[<a href=#publ_1>1</a>,
-<a href=#publ_2>2</a>]
+[<a href="#publ_1">1</a>,
+<a href="#publ_2">2</a>]
  for more in-depth discussions about efficiency.
 
 <h4>Effect on Compile Time</h4>
@@ -472,8 +472,8 @@ Depending on the compiler and the tuple length, it may be more than 10 times slo
 However, as a realistic program is likely to contain a lot of code in addition to tuple definitions, the difference is probably unnoticeable.
 Compile time increases between 5 to 10 percentages were measured for programs which used tuples very frequently.
 With the same test programs, memory consumption of compiling increased between 22% to 27%. See  
-[<a href=#publ_1>1</a>,
-<a href=#publ_2>2</a>]
+[<a href="#publ_1">1</a>,
+<a href="#publ_2">2</a>]
 for details.
 </p>
 
@@ -492,7 +492,7 @@ Below is a list of compilers and known problems with each compiler:
 </table>
 
 <h2><a name = "thanks">Acknowledgements</a></h2>
-Gary Powell has been an indispensable helping hand. In particular, stream manipulators for tuples were his idea. Doug Gregor came up with a working version for MSVC. Thanks to Jeremy Siek, William Kempf and Jens Maurer for their help and suggestions. 
+Gary Powell has been an indispensable helping hand. In particular, stream manipulators for tuples were his idea. Doug Gregor came up with a working version for MSVC, David Abrahams found a way to get rid of most of the restrictions for compilers not supporting partial specialization. Thanks to Jeremy Siek, William Kempf and Jens Maurer for their help and suggestions. 
 The comments by Vesa Karvonen, John Max Skaller, Ed Brey, Beman Dawes, David Abrahams and Hartmut Kaiser helped to improve the
 library.
 The idea for the tie mechanism came from an old usenet article by Ian McCulloch, where he proposed something similar for std::pairs.
@@ -514,7 +514,7 @@ J&auml;rvi J.: <i>ML-Style Tuple Assignment in Standard C++ - Extending the Mult
 
 <hr>
 
-<p>Last modified 2001-09-13</p>
+<p>Last modified 2003-09-07</p>
 
 <p>&copy; Copyright <a href="../../../people/jaakko_jarvi.htm"> Jaakko J&auml;rvi</a> 2001. 
 
