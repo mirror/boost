@@ -11,7 +11,7 @@
 #include "boost/multi_array/copy_array.hpp"
 #include "boost/multi_array/iterator.hpp"
 #include "boost/multi_array/subarray.hpp"
-#include "boost/multi_array_ref.hpp"
+#include "boost/multi_array/multi_array_ref.hpp"
 #include "boost/multi_array/algorithm.hpp"
 #include "boost/array.hpp"
 #include "boost/type_traits.hpp"
@@ -46,11 +46,6 @@ public:
   typedef typename super_type::extent_range extent_range;
 
 
-  // concept checks
-  // BOOST_CLASS_REQUIRES(T,DefaultConstructibleConcept);
-  // BOOST_CLASS_REQUIRES(T,AssignableConcept);
-  // BOOST_CLASS_REQUIRES(T,LessThanComparableConcept);
-  // BOOST_CLASS_REQUIRES(T,CopyConstructibleConcept);
   template <std::size_t NDims>
   struct const_array_view {
     typedef boost::detail::multi_array::const_multi_array_view<T,NDims> type;

@@ -7,7 +7,6 @@
 #include "boost/test/test_tools.hpp"
 
 #include "boost/multi_array.hpp"
-#include "boost/multi_array_ref.hpp"
 #include <algorithm>
 #include <list>
 

@@ -3,7 +3,7 @@
 //   const_iterator/iterator conversion  test
 //
 
-#include "boost/multi_array_ref.hpp"
+#include "boost/multi_array.hpp"
 
 #define BOOST_INCLUDE_MAIN
 #include "boost/test/test_tools.hpp"

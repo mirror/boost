@@ -34,7 +34,6 @@
 //  int test_main(int,char**) { return run_generative_tests(); }
 //
 #include "boost/multi_array.hpp"
-#include "boost/multi_array_ref.hpp"
 
 #define BOOST_INCLUDE_MAIN
 #include "boost/test/test_tools.hpp"

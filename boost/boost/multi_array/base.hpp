@@ -47,7 +47,7 @@ namespace multi_array_types {
 // own objects.  On the other hand, one may not want the overhead of 
 // object creation in small-memory environments.  Thus, the objects
 // can be left undefined by defining BOOST_MULTI_ARRAY_NO_GENERATORS 
-// before loading multi_array.hpp or multi_array_ref.hpp
+// before loading multi_array.hpp.
 #if !BOOST_MULTI_ARRAY_NO_GENERATORS
 namespace {
   multi_array_types::extent_gen extents;
