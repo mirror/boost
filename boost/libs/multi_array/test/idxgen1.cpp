@@ -27,7 +27,7 @@ bool operator==(const boost::detail::multi_array::
 }
 
 int
-test_main(int,char**)
+test_main(int,char*[])
 {
   typedef boost::detail::multi_array::index_range<int,std::size_t> range;
 

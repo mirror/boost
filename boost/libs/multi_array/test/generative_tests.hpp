@@ -31,7 +31,7 @@
 //  Since generative-tests uses the Boost.Test framework, you must
 //  define at least the following:
 //
-//  int test_main(int,char**) { return run_generative_tests(); }
+//  int test_main(int,char*[]) { return run_generative_tests(); }
 //
 #include "boost/multi_array.hpp"
 

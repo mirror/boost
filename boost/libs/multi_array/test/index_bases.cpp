@@ -11,7 +11,7 @@
 #include <vector>
 #include <iostream>
 int
-test_main(int,char**)
+test_main(int,char*[])
 {
   typedef boost::multi_array<double, 3> array;
   typedef boost::multi_array_ref<double, 3> array_ref;

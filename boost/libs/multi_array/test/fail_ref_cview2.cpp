@@ -12,7 +12,7 @@
 #include "boost/type.hpp"
 
 int
-test_main(int,char**)
+test_main(int,char*[])
 {
   const int ndims=3;
   typedef boost::multi_array_ref<int,ndims> array_ref;

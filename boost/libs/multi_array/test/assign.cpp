@@ -56,6 +56,6 @@ void access(Array&, const const_array_tag&) {
 }
 
 
-int test_main(int,char**) {
+int test_main(int,char*[]) {
   return run_generative_tests();
 }

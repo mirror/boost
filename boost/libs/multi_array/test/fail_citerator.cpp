@@ -9,7 +9,7 @@
 #include "boost/test/test_tools.hpp"
 
 
-int test_main(int,char**) {
+int test_main(int,char*[]) {
   typedef boost::multi_array<int,3> array;
 
   typedef array::iterator iterator1;

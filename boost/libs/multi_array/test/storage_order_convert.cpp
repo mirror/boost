@@ -8,7 +8,7 @@
 #include "boost/multi_array/storage_order.hpp"
 
 int 
-test_main(int,char**) {
+test_main(int,char*[]) {
 
   using namespace boost;
 

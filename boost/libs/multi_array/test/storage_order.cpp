@@ -10,7 +10,7 @@
 #include "boost/array.hpp"
 
 int
-test_main(int,char**)
+test_main(int,char*[])
 {
   const int ndims=3;
   
