@@ -478,7 +478,7 @@ void * pool<UserAllocator>::ordered_malloc_need_resize()
 }
 
 template <typename UserAllocator>
-void * pool<UserAllocator>::ordered_malloc(const pool::size_type n)
+void * pool<UserAllocator>::ordered_malloc(const size_type n)
 {
   const size_type partition_size = alloc_size();
   const size_type total_req_size = n * requested_size;
