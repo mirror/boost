@@ -18,6 +18,7 @@
 #include <cassert>
 #include <string>
 #include <cctype>
+#include <iterator>
 
 namespace boost{
 
@@ -163,7 +164,69 @@ namespace boost{
     }
   };
 
-   
+  
+  // Get the iterator category
+
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION // No partial specialization
+#ifdef __SGI_STL_PORT // STLPort
+	#if __SGI_STL_PORT <= 0x400
+#define BOOST_DETAIL_ITERATOR_CATEGORY(iter,tp) std::__ITERATOR_CATEGORY(iter) 
+	#else
+#define BOOST_DETAIL_ITERATOR_CATEGORY(iter,tp) std::_STLP_ITERATOR_CATEGORY(iter,tp) 
+	#endif
+#elif BOOST_RWSTD_VER
+  #define BOOST_DETAIL_ITERATOR_CATEGORY(iter,tp) std::__iterator_category(iter) 
+#elif defined(__STL_CONFIG_H)
+  #define BOOST_DETAIL_ITERATOR_CATEGORY(iter,tp) std::iterator_category(iter) 
+#elif (defined(BOOST_MSVC) || defined(__ICL)) && (defined(_YVALS) || defined(_CPPLIB_VER))
+  #define BOOST_DETAIL_ITERATOR_CATEGORY(iter,tp) std::_Iter_cat(iter) 
+#else
+
+ #define BOOST_DETAIL_ITERATOR_CATEGORY(iter,tp) \
+  std::iterator_traits<tp>::iterator_category()
+#endif 
+#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+ #define BOOST_DETAIL_ITERATOR_CATEGORY(iter,tp) \
+  std::iterator_traits<tp>::iterator_category()
+#endif
+
+
+  namespace detail{
+      // For everything except input iterators
+      template<class T>
+      struct assign_or_plus_equal{
+          template<class Iter, class Tok>
+          static void assign(Iter b, Iter e, Tok& t){
+            t.assign(b,e);
+          }
+          // Borland C++ seems to have a linking problem with
+          // string.assign
+#ifdef __BORLANDC__
+          template<class Iter>
+          static void assign(Iter b, Iter e, std::string& t){
+              t = std::string(b,e);
+          }
+#endif
+          template<class Tok, class Val>
+          static void plus_equal(Tok& t, const Val& v){
+          }
+      };
+
+      // For input iterators
+      template<>
+          struct assign_or_plus_equal<std::input_iterator_tag>{
+          template<class Iter, class Tok>
+          static void assign(Iter b, Iter e, Tok& t){
+          }
+          template<class Tok, class Val>
+          static void plus_equal(Tok& t, const Val& v){
+              t+=v;
+          }
+      };
+  }
+
+  
+
   //===========================================================================
   // The offset_separator class, which is a model of TokenizerFunction.
   // Offset breaks a string into tokens based on a range of offsets
@@ -175,6 +238,45 @@ namespace boost{
      unsigned int curoffset_;
 	 bool bwrapoffsets_;
 	 bool breturnpartiallast_;
+
+     // Get next for input iterators
+     template<typename InputIterator, typename Token, typename Category>
+     bool get_next(InputIterator& next, InputIterator end, Token& tok, 
+     Category)
+	  {
+         typedef detail::assign_or_plus_equal<Category> assigner;
+        assert(!offsets_.empty());
+		
+		tok = Token();
+
+		if(next==end)
+			return false;
+
+
+        if(curoffset_==offsets_.size()){
+			if(bwrapoffsets_)
+				curoffset_=0;
+			else
+				return false;
+        }
+
+        InputIterator cur = next;
+        int c = offsets_[curoffset_];
+		int i = 0;
+        for(; i < c; ++i){
+           if(next==end)break;
+           assigner::plus_equal(tok,*next);
+           ++next;
+		}
+		
+		if(!breturnpartiallast_)
+			if(i < (c-1) )
+				return false;
+
+        ++curoffset_;
+        assigner::assign(cur,next,tok);
+        return true;
+     }
 
   public:
      template<typename Iter>
@@ -192,38 +294,12 @@ namespace boost{
 		  curoffset_ = 0;
 	 }
 
-
      template<typename InputIterator, typename Token>
-     bool operator()(InputIterator& next, InputIterator end, Token& tok)
-	  {
-        assert(!offsets_.empty());
-		
-		tok = Token();
-
-		if(next==end)
-			return false;
-
-
-        if(curoffset_==offsets_.size())
-			if(bwrapoffsets_)
-				curoffset_=0;
-			else
-				return false;
-        
-        int c = offsets_[curoffset_];
-		int i = 0;
-        for(; i < c; ++i){
-           if(next==end)break;
-		   tok+=*next++;
-		}
-		
-		if(!breturnpartiallast_)
-			if(i < (c-1) )
-				return false;
-
-        ++curoffset_;
-        return true;
+     bool operator()(InputIterator& next, InputIterator end, Token& tok){
+         return get_next(next,end,tok,
+             BOOST_DETAIL_ITERATOR_CATEGORY(end,InputIterator));
      }
+
   };
 
   //===========================================================================
@@ -279,7 +355,38 @@ namespace boost{
 			}
 		 }
 	 }
+     template<class InputIterator,class Token,class Category>
+     bool get_next(InputIterator& next, InputIterator end,Token& tok,Category){
+          
+         typedef detail::assign_or_plus_equal<Category> assigner;
 
+		 tok = Token();
+		 
+		 // skip past all nonreturnable delims
+		 // skip past the returnable only if we are not returning delims
+		 for(;next!=end && ( is_nonret(*next) || (is_ret(*next) 
+			 && !return_delims_ ) );++next){}
+		 
+		 if(next == end){
+			 return false;
+		 }
+		 
+         InputIterator cur = next;
+		 // if we are to return delims and we are one a returnable one
+		 // move past it and stop
+		 if(is_ret(*next) && return_delims_){
+             assigner::plus_equal(tok,*next);
+			 ++next;
+		 }
+         else{
+			 // append all the non delim characters
+			 for(;next!=end && !is_nonret(*next) && !is_ret(*next);++next)
+                 assigner::plus_equal(tok,*next);
+         }
+
+         assigner::assign(cur,next,tok);         
+         return true;
+	 }
   public:
 
      explicit char_delimiters_separator(bool return_delims = false, 
@@ -293,33 +400,13 @@ namespace boost{
 
   public:
 
-     template<class InputIterator,class Token>
-     bool operator()(InputIterator& next, InputIterator end,Token& tok){
-		 tok = Token();
-		 
-		 // skip past all nonreturnable delims
-		 // skip past the returnable only if we are not returning delims
-		 for(;next!=end && ( is_nonret(*next) || (is_ret(*next) 
-			 && !return_delims_ ) );++next){}
-		 
-		 if(next == end){
-			 return false;
-		 }
-		 
-		 // if we are to return delims and we are one a returnable one
-		 // move past it and stop
-		 if(is_ret(*next) && return_delims_){
-			 tok+=*next;
-			 ++next;
-		 }
-		 else
-			 // append all the non delim characters
-			 for(;next!=end && !is_nonret(*next) && !is_ret(*next);++next)
-				 tok+=*next;
-			 
-			 
-		 return true;
-	 }
+     template<typename InputIterator, typename Token>
+     bool operator()(InputIterator& next, InputIterator end, Token& tok){
+         return get_next(next,end,tok,
+             BOOST_DETAIL_ITERATOR_CATEGORY(end,InputIterator));
+     }
+
+
   };
 
 
