@@ -38,6 +38,9 @@ CHANGELOG
 - Fixed a bug which reported wrong line numbers for error encountered during 
   retokenisation (concatenation).
 - Fixed a bug in the unescaping code.
+- Fixed a compilation error of the testwave executable (added a missing 
+  namespace specifier).
+- Added a missing header to make cpp.re.cpp compile on CW.
 
 Tue Mar 22 14:52:45 WEST 2005
 Version 1.1.15
