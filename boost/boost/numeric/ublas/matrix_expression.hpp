@@ -330,17 +330,11 @@ namespace boost { namespace numeric { namespace ublas {
 
          // Swapping
         BOOST_UBLAS_INLINE
-        void swap (matrix_reference &v) {
-            if (this != &v) {
-                expression ().swap (v.expression ());
+        void swap (matrix_reference &m) {
+            if (!same_closure (*this, m)) {
+                expression ().swap (m.expression ());
             }
         }
-#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
-        BOOST_UBLAS_INLINE
-        friend void swap (matrix_reference &m1, matrix_reference &m2) {
-            m1.swap (m2);
-        }
-#endif
 
         // Closure comparison
         BOOST_UBLAS_INLINE
