@@ -7,7 +7,17 @@
 #ifndef TT_TEST_HPP
 #define TT_TEST_HPP
 
-#include <boost/test/unit_test.hpp>
+#ifdef USE_UNIT_TEST
+#  include <boost/test/unit_test.hpp>
+#endif
+#include <boost/utility.hpp>
+#include <iostream>
+#include <typeinfo>
+
+#ifdef __BORLANDC__
+// we have to turn off these warnings overwise we get swamped by the things:
+#pragma option -w-8008 -w-8066
+#endif
 
 //
 // basic configuration:
@@ -30,6 +40,7 @@
 
 #endif
 
+#ifdef USE_UNIT_TEST
 //
 // global unit, this is not safe, but until the unit test framework uses
 // shared_ptr throughout this is about as good as it gets :-(
@@ -55,6 +66,47 @@ public:
    void trait_name(){
 
 #define TT_TEST_END }}
+
+#else
+
+//
+// replacements for Unit test macros:
+//
+int error_count = 0;
+
+#define BOOST_CHECK_MESSAGE(pred, message)\
+   do{\
+   if(!(pred))\
+   {\
+      std::cerr << __FILE__ << ":" << __LINE__ << ": " << message << std::endl;\
+      ++error_count;\
+   }\
+   }while(0)
+
+#define BOOST_WARN_MESSAGE(pred, message)\
+   do{\
+   if(!(pred))\
+   {\
+      std::cerr << __FILE__ << ":" << __LINE__ << ": " << message << std::endl;\
+   }\
+   }while(0)
+
+#define BOOST_MESSAGE(message)\
+   do{ std::cout << __FILE__ << ":" << __LINE__ << ": " << message << std::endl; }while(0)
+
+#define BOOST_CHECK(pred)\
+   do{ \
+      if(!(pred)){\
+         std::cout << __FILE__ << ":" << __LINE__ << ": Error in " << BOOST_STRINGIZE(pred) << std::endl;\
+         ++error_count;\
+      } \
+   }while(0)
+
+#define TT_TEST_BEGIN(trait_name)\
+   int main(){
+#define TT_TEST_END return error_count; }
+
+#endif
 
 #define TRANSFORM_CHECK(name, from_suffix, to_suffix)\
    BOOST_CHECK_TYPE(bool to_suffix, name<bool from_suffix>::type);\

@@ -7,7 +7,11 @@
 #ifndef BOOST_CHECK_TYPE_HPP
 #define BOOST_CHECK_TYPE_HPP
 
+#ifdef USE_UNIT_TEST
 #include <boost/test/test_tools.hpp>
+#else
+#include "test.hpp"
+#endif
 #include <boost/type_traits/is_same.hpp>
 
 /*

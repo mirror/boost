@@ -18,6 +18,8 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
 #endif
+#include <stdexcept>
+#include <exception>
 
 //
 // VC++ emits an awful lot of warnings unless we define these:

@@ -7,7 +7,11 @@
 #ifndef BOOST_CHECK_INTEGRAL_CONSTANT_HPP
 #define BOOST_CHECK_INTEGRAL_CONSTANT_HPP
 
+#ifdef USE_UNIT_TEST
 #include <boost/test/test_tools.hpp>
+#else
+#include "test.hpp"
+#endif
 
 namespace boost{
    namespace detail{
