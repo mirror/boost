@@ -374,11 +374,23 @@ template<class T> inline T * get_pointer(shared_ptr<T> const & p)
 
 // operator<<
 
+#if defined(__GNUC__) &&  (__GNUC__ < 3)
+
+template<class Y> std::ostream & operator<< (std::ostream & os, shared_ptr<Y> const & p)
+{
+    os << p.get();
+    return os;
+}
+
+#else
+
 template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::basic_ostream<E, T> & os, shared_ptr<Y> const & p)
 {
     os << p.get();
     return os;
 }
+
+#endif
 
 // get_deleter (experimental)
 
