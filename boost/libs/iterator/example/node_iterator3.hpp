@@ -47,8 +47,10 @@ class node_iter
     )
       : super_t(other.base()) {}
 
- private:
+# if !BOOST_WORKAROUND(__GNUC__, == 2)
+ private: // GCC2 can't grant friendship to template member functions    
     friend class boost::iterator_core_access;
+# endif     
     void increment() { this->base_reference() = this->base()->next(); }
 };
 

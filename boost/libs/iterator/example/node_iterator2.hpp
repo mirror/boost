@@ -44,9 +44,9 @@ class node_iter
 
 
 # if !BOOST_WORKAROUND(__GNUC__, == 2)
- private: // GCC2 can't even grant that friendship to template member functions
-# endif 
+ private: // GCC2 can't grant friendship to template member functions    
     friend class boost::iterator_core_access;
+# endif 
 
     template <class OtherValue>
     bool equal(node_iter<OtherValue> const& other) const
@@ -54,14 +54,14 @@ class node_iter
         return this->m_node == other.m_node;
     }
 
- private:
     void increment() { m_node = m_node->next(); }
 
     Value& dereference() const { return *m_node; }
 
 # ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
  public:
-# else 
+# else
+ private:
     template <class> friend class node_iter;
 # endif 
     Value* m_node;

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <list>
+#include <deque>
+#include <algorithm>
 #include <boost/iterator/permutation_iterator.hpp>
 #include <boost/cstdlib.hpp>
 
@@ -10,7 +11,7 @@ int main() {
   int i = 0;
 
   typedef std::vector< int > element_range_type;
-  typedef std::list< int > index_type;
+  typedef std::deque< int > index_type;
 
   static const int element_range_size = 10;
   static const int index_size = 4;
