@@ -16,8 +16,7 @@
 #include <boost/tokenizer.hpp>
 #include <boost/array.hpp>
 
-#define BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>
+#include <boost/test/minimal.hpp>
 
 int test_main( int argc, char* argv[] )
 {
@@ -31,7 +30,7 @@ int test_main( int argc, char* argv[] )
         typedef tokenizer<char_separator<char> > Tok;
         char_separator<char> sep("-;|");
         Tok t(test_string, sep);
-    BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));       
+    BOOST_REQUIRE(equal(t.begin(),t.end(),answer));       
   }
   {
         const string test_string = ";;Hello|world||-foo--bar;yow;baz|";
@@ -40,14 +39,14 @@ int test_main( int argc, char* argv[] )
         typedef tokenizer<char_separator<char> > Tok;
         char_separator<char> sep("-;", "|", boost::keep_empty_tokens);
         Tok t(test_string, sep);
-    BOOST_CRITICAL_TEST(equal(t.begin(), t.end(), answer));
+    BOOST_REQUIRE(equal(t.begin(), t.end(), answer));
   }
   {
     const string test_string = "This,,is, a.test..";
     string answer[] = {"This","is","a","test"};
     typedef tokenizer<> Tok;
     Tok t(test_string);
-    BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));
+    BOOST_REQUIRE(equal(t.begin(),t.end(),answer));
   }
 
   {
@@ -55,7 +54,7 @@ int test_main( int argc, char* argv[] )
     string answer[] = {"Field 1","embedded,comma","quote \""," escape \\"};
     typedef tokenizer<escaped_list_separator<char> > Tok;
     Tok t(test_string);
-    BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));
+    BOOST_REQUIRE(equal(t.begin(),t.end(),answer));
 
   }
 
@@ -65,7 +64,7 @@ int test_main( int argc, char* argv[] )
     typedef tokenizer<escaped_list_separator<char> > Tok;
     escaped_list_separator<char> sep("\\^",",;","\"\'");
     Tok t(test_string,sep);
-    BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));
+    BOOST_REQUIRE(equal(t.begin(),t.end(),answer));
 
   }
 
@@ -76,7 +75,7 @@ int test_main( int argc, char* argv[] )
     boost::array<int,3> offsets = {{2,2,4}};
     offset_separator func(offsets.begin(),offsets.end());
     Tok t(test_string,func);
-    BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));
+    BOOST_REQUIRE(equal(t.begin(),t.end(),answer));
 
   }
 
@@ -89,7 +88,7 @@ int test_main( int argc, char* argv[] )
     Iter begin = make_token_iterator<string>(test_string.begin(),
       test_string.end(),char_delimiters_separator<char>());
     Iter end;
-    BOOST_CRITICAL_TEST(equal(begin,end,answer));
+    BOOST_REQUIRE(equal(begin,end,answer));
   }
 
   {
@@ -99,7 +98,7 @@ int test_main( int argc, char* argv[] )
     Iter begin = make_token_iterator<string>(test_string.begin(),
       test_string.end(),escaped_list_separator<char>());
     Iter end;
-    BOOST_CRITICAL_TEST(equal(begin,end,answer));
+    BOOST_REQUIRE(equal(begin,end,answer));
 
   }
 
@@ -113,7 +112,7 @@ int test_main( int argc, char* argv[] )
       test_string.end(),func);
     Iter end= make_token_iterator<string>(test_string.end(),
       test_string.end(),func);
-    BOOST_CRITICAL_TEST(equal(begin,end,answer));
+    BOOST_REQUIRE(equal(begin,end,answer));
 
   }
   
@@ -129,13 +128,13 @@ int test_main( int argc, char* argv[] )
     other = beg;
     ++other;
 
-    BOOST_CRITICAL_TEST(*beg=="bc");
-    BOOST_CRITICAL_TEST(*other=="def");
+    BOOST_REQUIRE(*beg=="bc");
+    BOOST_REQUIRE(*other=="def");
     
     other = make_token_iterator<string>(test_string.begin(),
         test_string.end(),f);
 
-    BOOST_CRITICAL_TEST(*other=="a");
+    BOOST_REQUIRE(*other=="a");
   }
 
   // Test non-default constructed char_delimiters_separator
@@ -143,7 +142,7 @@ int test_main( int argc, char* argv[] )
     const string test_string = "how,are you, doing";
     string answer[] = {"how",",","are you",","," doing"};
     tokenizer<> t(test_string,char_delimiters_separator<char>(true,",",""));
-    BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));
+    BOOST_REQUIRE(equal(t.begin(),t.end(),answer));
   }
 
   return 0;
