@@ -131,6 +131,8 @@ class ios_all_word_saver;
     explicit  saver_class( state_type &amp;s );
               saver_class( state_type &amp;s, <var>aspect_type</var> const &amp;new_value );
              ~saver_class();
+
+    void  restore();
 };
 </pre></blockquote>
 
@@ -141,8 +143,9 @@ and not a base class object.  The first constructor takes a stream
 object and saves a reference to the stream and the current value of a
 particular stream attribute.  The second constructor works like the
 first, and uses its second argument to change the stream's attribute to
-the new <var>aspect_type</var> value given.  The destructor changes the
-stream's attribute back to the saved value.</p>
+the new <var>aspect_type</var> value given.  The destructor restores the
+stream's attribute to the saved value.  The restoration can be activated
+early (and often) with the <code>restore</code> member function.</p>
 
 <table border="1" align="center">
 	<caption>Basic IOStreams State Saver Classes</caption>
@@ -189,6 +192,8 @@ class <var>saver_class</var>
     explicit  saver_class( state_type &amp;s );
               saver_class( state_type &amp;s, <var>aspect_type</var> const &amp;new_value );
              ~saver_class();
+
+    void  restore();
 };
 </pre></blockquote>
 
@@ -201,8 +206,9 @@ class object.  The first constructor takes a stream object and saves a
 reference to the stream and the current value of a particular stream
 attribute.  The second constructor works like the first, and uses its
 second argument to change the stream's attribute to the new
-<var>aspect_type</var> value given.  The destructor changes the stream's
-attribute back to the saved value.</p>
+<var>aspect_type</var> value given.  The destructor restores the stream's
+attribute to the saved value.  The restoration can be activated
+early (and often) with the <code>restore</code> member function.</p>
 
 <table border="1" align="center">
 	<caption>Advanced IOStreams State Saver Class Templates</caption>
@@ -303,6 +309,8 @@ class <var>saver_class</var>
     explicit  saver_class( state_type &amp;s, index_type i );
               saver_class( state_type &amp;s, index_type i, <var>aspect_type</var> const &amp;new_value );
              ~saver_class();
+
+    void  restore();
 };
 </pre></blockquote>
 
@@ -319,7 +327,9 @@ object and index and saves a reference to the stream and the current
 value of a particular stream attribute.  The second constructor works
 like the first, and uses its third argument to change the stream's
 attribute to the new <var>aspect_type</var> value given.  The destructor
-changes the stream's attribute back to the saved value.</p>
+restores the stream's attribute to the saved value.  The restoration can
+be activated early (and often) with the <code>restore</code> member
+function.</p>
 
 <table border="1" align="center">
 	<caption>IOStream User-Defined State Saver Classes</caption>
@@ -356,15 +366,20 @@ to have its state preserved.  The
 <code>boost::io::ios_all_word_saver</code> saver class combines the
 saver classes that preserve user-defined formatting information.  Its
 constructor takes the stream to have its attributes saved and the index
-of the user-defined attributes.</p>
+of the user-defined attributes.  The destructor for each class restores
+the saved state.  Restoration can be activated early (and often) for a
+class with the <code>restore</code> member function.</p>
 
 <h2><a name="example">Example</a></h2>
 
 <p>The code used in the <a href="#rationale">rationale</a> can be
 improved at two places.  The printing function could use a saver around
 the code that changes the formatting state.  Or the calling function can
-surround the call with a saver.  Or both can be done for paranoia's
-sake.</p>
+surround the call with a saver.  Or both can be done, especially if the
+user does not know if the printing function uses a state saver.  If the
+user wants a series of changes back &amp; forth, without surrounding each
+change within a separate block, the <code>restore</code> member function
+can be called between each trial.</p>
 
 <blockquote><pre>#include &lt;boost/io/ios_state.hpp&gt;
 #include &lt;ios&gt;
@@ -381,6 +396,7 @@ void  new_hex_my_byte( std::ostream &amp;os, char byte )
 int  main()
 {
     using std::cout;
+    using std::cerr;
 
     //...
 
@@ -388,6 +404,16 @@ int  main()
         boost::io::ios_all_saver  ias( cout );
 
         new_hex_my_byte( cout, 'A' );
+    }
+
+    //...
+
+    {
+        boost::io::ios_all_saver  ias( cerr );
+
+        new_hex_my_byte( cerr, 'b' );
+        ias.restore();
+        new_hex_my_byte( cerr, 'C' );
     }
 
     //...
@@ -422,15 +448,19 @@ int  main()
 <h3><a name="history">History</a></h3>
 
 <dl>
+	<dt>28 Feb 2005, Daryle Walker
+	<dd>Added the <code>restore</code> member functions, based on suggestions
+	    by Gennadiy Rozental and Rob Stewart
+
 	<dt>13 Mar 2002, Daryle Walker
 	<dd>Initial version
 </dl>
 
 <hr>
 
-<p>Revised: 13 March 2002</p>
+<p>Revised: 28 February 2005</p>
 
-<p>Copyright 2002 Daryle Walker.  Use, modification, and distribution
+<p>Copyright 2002, 2005 Daryle Walker.  Use, modification, and distribution
 are subject to the Boost Software License, Version 1.0.  (See accompanying
 file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at
 &lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.)</p>
