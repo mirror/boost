@@ -42,9 +42,9 @@
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_LIST_APPEND(L,P) BOOST_PP_LIST_APPEND_D(0,L,P)
+#define BOOST_PP_LIST_APPEND(L,R) BOOST_PP_LIST_APPEND_D(0,L,R)
 
 /** <p>Can be used inside BOOST_PP_WHILE().</p> */
-#define BOOST_PP_LIST_APPEND_D(D,L,P) BOOST_PP_LIST_FOLD_RIGHT_D(D,BOOST_PP_LIST_APPEND_F,L,P)
+#define BOOST_PP_LIST_APPEND_D(D,L,R) BOOST_PP_LIST_FOLD_RIGHT_D(D,BOOST_PP_LIST_APPEND_F,L,R)
 #define BOOST_PP_LIST_APPEND_F(D,H,P) (H,P,1)
 #endif
