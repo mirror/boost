@@ -26,7 +26,7 @@
 
 #if defined(BOOST_MPL_USE_APPLY_INTERNALLY) \
     || defined(BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES) \
-    || (defined(BOOST_MSVC) && (BOOST_MSVC <= 1300))
+    || defined(BOOST_MSVC) && (BOOST_MSVC < 1300 || BOOST_MSVC == 1300 && defined(BOOST_MPL_PREPROCESSING_MODE))
 
 #   if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #       include "boost/mpl/apply.hpp"
