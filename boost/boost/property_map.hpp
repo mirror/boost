@@ -307,6 +307,7 @@ namespace boost {
       boost::function_requires<ConvertibleConcept<Category, LvalueTag> >();
 
       reference ref = pmap[k];
+      ignore_unused_variable_warning(ref);
     }
     PMap pmap;
     Key k;
