@@ -11,8 +11,6 @@
 // ----------------------------------------------------------------------------
 
 
-
-
 //  this file defines  wrapper classes to hide non-conforming 
 // std::char_traits<>  and std::allocator<> traits
 //  and Includes : config_macros.hpp (defines config macros
@@ -52,9 +50,17 @@ namespace boost {
 #include <boost/format/detail/config_macros.hpp>
    // sets-up macros and load compiler-specific workarounds headers.
 
-#if !defined( BOOST_FORMAT_STREAMBUF_DEFINED)
+#if !defined(BOOST_FORMAT_STREAMBUF_DEFINED)
+// workarounds-gcc-2.95 might have defined own streambuf
 #include <streambuf>
 #endif
+
+#if !defined(BOOST_FORMAT_OSTREAM_DEFINED)
+// workarounds-gcc-2.95 might already have included <iostream>
+#include <ostream>
+#endif
+
+
 
 namespace boost {
     namespace io {

@@ -23,14 +23,15 @@
 // . specialise CompatAlloc and CompatTraits to wrap gcc-2.95's 
 //    string_char_traits and std::alloc 
 
-#if  BOOST_WORKAROUND(__GNUC__, < 3) & defined(__STL_CONFIG_H) 
+#if  BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
+   // only for gcc-2.95's native stdlib
 
-   // only for broken gcc stdlib
 #ifndef BOOST_FORMAT_WORKAROUNDS_GCC295_H
 #define BOOST_FORMAT_WORKAROUNDS_GCC295_H
 
+// SGI STL doesnt have <ostream> and others, so we need iostream.
 #include <iostream> 
-   // SGI STL doesnt have <ostream> and others, so we need iostream.
+#define BOOST_FORMAT_OSTREAM_DEFINED
 
 #include <streambuf.h>
 #define BOOST_FORMAT_STREAMBUF_DEFINED

@@ -23,14 +23,15 @@
 // make sure our local macros wont override something :
 #if defined(BOOST_NO_LOCALE_ISDIGIT) || defined(BOOST_OVERLOAD_FOR_NON_CONST) \
   || defined(BOOST_IO_STD) || defined( BOOST_IO_NEEDS_USING_DECLARATION ) \
-    || defined(BOOST_NO_TEMPLATE_STD_STREAM)
+    || defined(BOOST_NO_TEMPLATE_STD_STREAM) \
+    || defined(BOOST_FORMAT_STREAMBUF_DEFINED) || defined(BOOST_FORMAT_OSTREAM_DEFINED)
 #error "boost::format uses a local macro that is already defined."
 #endif
 
 // specific workarounds. each header can define BOOS_IO_STD if it 
 // needs. (e.g. because of IO_NEEDS_USING_DECLARATION)
 #include <boost/format/detail/workarounds_gcc-2.95.hpp>
-#include <boost/format/detail/workarounds_stlport.hpp>  // stlport workarounds
+#include <boost/format/detail/workarounds_stlport.hpp>
 
 #ifndef BOOST_IO_STD
 #  define BOOST_IO_STD ::std::
@@ -48,8 +49,8 @@
 #define BOOST_NO_OVERLOAD_FOR_NON_CONST
 #endif
 
-// gcc-2.95's stringstream is not usable, unless it's the one from STLPORT :
-#if BOOST_WORKAROUND(__GNUC__, < 3) && !(defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) 
+// gcc-2.95's native stringstream is not usable
+#if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
 #define BOOST_FORMAT_IGNORE_STRINGSTREAM  
 #endif
 

@@ -21,11 +21,12 @@
 namespace boost {
 
     template <class Ch, 
-#if !( BOOST_WORKAROUND(__GNUC__, <3) &&  defined(__STL_CONFIG_H) )
+#if !( BOOST_WORKAROUND(__GNUC__, <3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION) )
+    // gcc-2.95's native  stdlid needs special treatment
         class Tr = BOOST_IO_STD char_traits<Ch>, class Alloc = std::allocator<Ch> > 
 #else
-              class Tr = std::string_char_traits<Ch>, class Alloc = std::alloc > 
-#endif  // gcc-2.96 has traits in a non-conformant 'string_char_traits' template
+        class Tr = std::string_char_traits<Ch>, class Alloc = std::alloc > 
+#endif
     class basic_format;
 
     typedef basic_format<char >     format;
