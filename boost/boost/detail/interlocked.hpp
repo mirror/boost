@@ -29,17 +29,9 @@
 
 #elif defined( BOOST_MSVC ) || defined( BOOST_INTEL_WIN )
 
-# if defined( BOOST_MSVC ) && ( BOOST_MSVC >= 1400 )
-
-#  include <intrin.h>
-
-# else
-
 extern "C" long __cdecl _InterlockedIncrement( long volatile * );
 extern "C" long __cdecl _InterlockedDecrement( long volatile * );
 extern "C" long __cdecl _InterlockedCompareExchange( long volatile *, long, long );
-
-# endif
 
 # pragma intrinsic( _InterlockedIncrement )
 # pragma intrinsic( _InterlockedDecrement )
