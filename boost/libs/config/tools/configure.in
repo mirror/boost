@@ -144,9 +144,9 @@ AC_CHECK_LIB(rt, clock)
 #
 # enumerate test files and test each one:
 #
-for file in $boost_base/libs/config/test/boost_no*.cxx; do
+for file in $boost_base/libs/config/test/boost_no*.ipp; do
 
-   basename=`echo $file | sed 's/.*boost_\(.*\)\.cxx/\1/'`
+   basename=`echo $file | sed 's/.*boost_\(.*\)\.ipp/\1/'`
    macroname=`cat $file | grep '^//[[]    []]*MACRO:' | sed 's/.*MACRO:[[]    []]*\([[]_A-Z0-9[]]*\).*/\1/'`
    title=`cat $file | grep '^//[[]  []]*TITLE:' | sed 's/.*TITLE:[[]    []]*\([[]^  []].*\)/\1/'`
    namespace=`echo $macroname | tr [[:upper:]] [[:lower:]]`
@@ -169,7 +169,7 @@ for file in $boost_base/libs/config/test/boost_no*.cxx; do
 #include "test.hpp"
 
 #ifndef $macroname
-#include "boost_$basename.cxx"
+#include "boost_$basename.ipp"
 #else
 namespace ${namespace} = empty_boost;
 #endif
@@ -192,7 +192,7 @@ int main(){ return ${namespace}::test(); } ]
 #include "test.hpp"
 
 #ifdef $macroname
-#include "boost_$basename.cxx"
+#include "boost_$basename.ipp"
 #else
 #error "this file should not compile"
 #endif
@@ -212,9 +212,9 @@ done
 #
 # enumerate optional test files and test each one:
 #
-for file in $boost_base/libs/config/test/boost_has*.cxx; do
+for file in $boost_base/libs/config/test/boost_has*.ipp; do
 
-   basename=`echo $file | sed 's/.*boost_\(.*\)\.cxx/\1/'`
+   basename=`echo $file | sed 's/.*boost_\(.*\)\.ipp/\1/'`
    macroname=`cat $file | grep '^//[[]    []]*MACRO:' | sed 's/.*MACRO:[[]    []]*\([[]_A-Z0-9[]]*\).*/\1/'`
    title=`cat $file | grep '^//[[]  []]*TITLE:' | sed 's/.*TITLE:[[]    []]*\([[]^  []].*\)/\1/'`
    namespace=`echo $macroname | tr [[:upper:]] [[:lower:]]`
@@ -233,7 +233,7 @@ for file in $boost_base/libs/config/test/boost_has*.cxx; do
 #include "test.hpp"
 
 #ifdef $macroname
-#include "boost_$basename.cxx"
+#include "boost_$basename.ipp"
 #else
 namespace ${namespace} = empty_boost;
 #endif
@@ -253,7 +253,7 @@ int main(){ return ${namespace}::test(); }]
 #include "test.hpp"
 
 #ifndef $macroname
-#include "boost_$basename.cxx"
+#include "boost_$basename.ipp"
 #else
 #error "this file should not compile"
 #endif
@@ -279,7 +279,7 @@ int main(){ return ${namespace}::test(); }]
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#include "boost_$basename.cxx"
+#include "boost_$basename.ipp"
 
 int main(){ return ${namespace}::test(); }]
    ,
@@ -415,6 +415,7 @@ cat_conts="$cat_conts"
 )
 
 fi
+
 
 
 

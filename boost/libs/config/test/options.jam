@@ -16,7 +16,7 @@ template config_options
 
 template config_test_options
    : # sources
-     <lib>../../test/build/boost_prg_exec_monitor 
+     <lib>../../test/build/boost_test_exec_monitor 
      <template>config_options
    ;
  
