@@ -57,13 +57,6 @@ private:
 protected:
     void save_start(const char *name){}
     void save_end(const char *name){}
-    void init(){
-        // write signature in an archive version independent manner
-        const std::string file_signature(ARCHIVE_SIGNATURE);
-        * this->This() << file_signature;
-        // write library version
-        * this->This() << ARCHIVE_VERSION;
-    }
     common_oarchive() : 
         basic_oarchive(),
         interface_oarchive<Archive>()

@@ -77,7 +77,6 @@ namespace std{
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/nvp.hpp>
-#include <boost/serialization/force_include.hpp>
 
 #include <boost/archive/archive_exception.hpp>
 
@@ -152,7 +151,7 @@ BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
 ) const {
     // make sure call is routed through the higest interface that might
     // be specialized by the user.
-    boost::serialization::serialize_adl<Archive, T>(
+    boost::serialization::serialize_adl(
         boost::smart_cast_reference<Archive &>(ar),
         * static_cast<T *>(x), 
         file_version
@@ -373,10 +372,12 @@ struct load_pointer_type {
     struct abstract
     {
         static const basic_pointer_iserializer * register_type(Archive & /* ar */){
+            #if ! defined(__BORLANDC__)
             typedef BOOST_DEDUCED_TYPENAME 
                 boost::serialization::type_info_implementation<T>::type::is_polymorphic typex;
             // it has? to be polymorphic
             BOOST_STATIC_ASSERT(typex::value);
+            #endif
             return static_cast<basic_pointer_iserializer *>(NULL);
          }
     };

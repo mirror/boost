@@ -70,7 +70,6 @@
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/void_cast.hpp>
-#include <boost/serialization/force_include.hpp>
 
 #include <boost/archive/archive_exception.hpp>
 
@@ -145,7 +144,7 @@ inline BOOST_DLLEXPORT void oserializer<Archive, T>::save_object_data(
 ) const {
     // make sure call is routed through the highest interface that might
     // be specialized by the user.
-    boost::serialization::serialize_adl<Archive, T>(
+    boost::serialization::serialize_adl(
         boost::smart_cast_reference<Archive &>(ar),
         * static_cast<T *>(const_cast<void *>(x)),
         version()
@@ -223,7 +222,9 @@ struct save_non_pointer_type {
             // make sure call is routed through the highest interface that might
             // be specialized by the user.
             boost::serialization::serialize_adl(
-                ar, const_cast<T &>(t), ::boost::serialization::version<T>::value
+                ar, 
+                const_cast<T &>(t), 
+                ::boost::serialization::version<T>::value
             );
         }
     };

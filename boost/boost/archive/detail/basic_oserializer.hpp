@@ -16,7 +16,11 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <cstdlib> // NULL
+#include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/detail/basic_serializer.hpp>
+
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
 
@@ -28,21 +32,19 @@ namespace serialization {
 namespace archive {
 namespace detail {
 
-class basic_oarchive;
-class basic_pointer_oserializer;
+class BOOST_DECL_ARCHIVE basic_oarchive;
+class BOOST_DECL_ARCHIVE basic_pointer_oserializer;
 
-class basic_oserializer : public basic_serializer
+class BOOST_DECL_ARCHIVE basic_oserializer : 
+    public basic_serializer
 {
 private:
     basic_pointer_oserializer *bpos;
 protected:
     explicit basic_oserializer(
-            const boost::serialization::extended_type_info & type_
-    ) :
-        basic_serializer(type_), 
-        bpos(NULL)
-    {}
-    virtual ~basic_oserializer(){}
+        const boost::serialization::extended_type_info & type_
+    );
+    virtual ~basic_oserializer();
 public:
     bool serialized_as_pointer() const {
         return bpos != NULL;
@@ -69,5 +71,7 @@ public:
 } // namespace detail
 } // namespace serialization
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_SERIALIZATION_BASIC_OSERIALIZER_HPP

@@ -20,6 +20,8 @@
 #include <boost/archive/detail/basic_serializer.hpp>
 #include <boost/archive/detail/basic_pointer_oserializer.hpp>
 
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
+
 namespace boost {
 
 namespace serialization {
@@ -30,9 +32,11 @@ namespace archive {
 namespace detail {
 
 template<class Archive>
-class archive_pointer_oserializer : public basic_pointer_oserializer {
+class archive_pointer_oserializer : 
+    public basic_pointer_oserializer {
 protected:
-    explicit archive_pointer_oserializer(
+    explicit BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    archive_pointer_oserializer(
         const boost::serialization::extended_type_info & type_
     );
 public:
@@ -40,7 +44,9 @@ public:
     // type_info.  returns NULL, if there is no such instance. This
     // would indicate that the no object of the specified type was saved
     // any where in the code.
-    static const basic_pointer_oserializer * find(
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    static const basic_pointer_oserializer *
+    find(
         const boost::serialization::extended_type_info & type_
     );
     virtual ~archive_pointer_oserializer(){}
@@ -49,5 +55,7 @@ public:
 } // namespace detail
 } // namespace archive
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_ARCHIVE_POINTER_OSERIALIZER_POINTER_HPP

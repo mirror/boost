@@ -16,22 +16,21 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 #include <string>
-#include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/static_warning.hpp>
 
-#include <boost/serialization/nvp.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/archive/detail/oserializer.hpp>
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost { 
 namespace archive {
 namespace detail {
 
-class basic_oserializer;
-class basic_pointer_oserializer;
+class BOOST_DECL_ARCHIVE basic_oserializer;
+class BOOST_DECL_ARCHIVE basic_pointer_oserializer;
 
 template<class Archive>
 class interface_oarchive 
@@ -115,5 +114,7 @@ public:
 } // namespace detail
 } // namespace archive
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_DETAIL_INTERFACE_IARCHIVE_HPP

@@ -30,13 +30,14 @@ namespace std{
 #endif
 
 #include <boost/archive/polymorphic_iarchive.hpp>
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost { 
 namespace archive {
 namespace detail{
 
-class basic_iserializer;
-class basic_pointer_iserializer;
+class BOOST_DECL_ARCHIVE basic_iserializer;
+class BOOST_DECL_ARCHIVE basic_pointer_iserializer;
 
 template<class ArchiveImplementation>
 class polymorphic_iarchive_impl : 
@@ -141,7 +142,7 @@ private:
         ArchiveImplementation::load_end(name);
     }
 
-    virtual void register_basic_serializer(const detail::basic_iserializer & bis){
+    virtual void register_basic_serializer(const basic_iserializer & bis){
         ArchiveImplementation::register_basic_serializer(bis);
     }
 public:
@@ -188,16 +189,14 @@ public:
         std::basic_istream<_Elem, _Tr> & is, 
         unsigned int flags = 0
     ) :
-        ArchiveImplementation(is, flags | boost::archive::no_header)
-    {
-        // postpone archive initialization until build is complete
-        if(0 == flags & no_header)
-            ArchiveImplementation::init();
-    }
+        ArchiveImplementation(is, flags)
+    {}
 };
 
 } // namespace detail
 } // namespace archive
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_DETAIL_POLYMORPHIC_IARCHIVE_IMPL_HPP

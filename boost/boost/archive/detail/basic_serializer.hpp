@@ -17,6 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/noncopyable.hpp>
+#include <boost/config.hpp>
 #include <boost/serialization/extended_type_info.hpp>
 
 namespace boost { 

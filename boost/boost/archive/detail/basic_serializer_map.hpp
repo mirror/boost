@@ -18,6 +18,11 @@
 
 #include <set>
 
+#include <boost/config.hpp>
+#include <boost/archive/detail/auto_link_archive.hpp>
+
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
+
 namespace boost { 
 namespace serialization {
     class extended_type_info;
@@ -26,7 +31,7 @@ namespace serialization {
 namespace archive {
 namespace detail  {
 
-class basic_serializer;
+class BOOST_DECL_ARCHIVE basic_serializer;
 
 struct type_info_pointer_compare
 {
@@ -37,7 +42,7 @@ struct type_info_pointer_compare
     }
 };
 
-struct basic_serializer_map
+struct BOOST_DECL_ARCHIVE basic_serializer_map
 {
     typedef std::set<const basic_serializer *, type_info_pointer_compare> map_type;
     map_type map;
@@ -45,10 +50,13 @@ struct basic_serializer_map
     const basic_serializer * tfind(
         const boost::serialization::extended_type_info & type_
     ) const;
+	basic_serializer_map();
 };
 
 } // namespace detail
 } // namespace archive
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_TYPEINFO_EXTENDED_MAP_HPP

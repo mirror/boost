@@ -30,13 +30,14 @@ namespace std{
 #endif
 
 #include <boost/archive/polymorphic_oarchive.hpp>
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost { 
 namespace archive {
 namespace detail{
 
-class basic_oserializer;
-class basic_pointer_oserializer;
+class BOOST_DECL_ARCHIVE basic_oserializer;
+class BOOST_DECL_ARCHIVE basic_pointer_oserializer;
 
 template<class ArchiveImplementation>
 class polymorphic_oarchive_impl : 
@@ -188,16 +189,14 @@ public:
         std::basic_ostream<_Elem, _Tr> & os, 
         unsigned int flags = 0
     ) :
-        ArchiveImplementation(os, flags | no_header)
-    {
-        // postpone archive initialization until build is complete
-        if(0 == (flags & no_header))
-            ArchiveImplementation::init();
-    }
+        ArchiveImplementation(os, flags)
+    {}
 };
 
 } // namespace detail
 } // namespace archive
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_DETAIL_POLYMORPHIC_OARCHIVE_IMPL_HPP

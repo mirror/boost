@@ -17,7 +17,6 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
-
 #include <boost/detail/workaround.hpp>
 
 // can't use this - much as I'd like to as borland doesn't support it
@@ -26,16 +25,18 @@
 #include <boost/archive/basic_archive.hpp>
 #include <boost/serialization/tracking.hpp>
 
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
+
 namespace boost {
 namespace archive {
 namespace detail {
 
-class basic_oarchive_impl;
-class basic_oserializer;
-class basic_pointer_oserializer;
+class BOOST_DECL_ARCHIVE basic_oarchive_impl;
+class BOOST_DECL_ARCHIVE basic_oserializer;
+class BOOST_DECL_ARCHIVE basic_pointer_oserializer;
 //////////////////////////////////////////////////////////////////////
 // class basic_oarchive - write serialized objects to an output stream
-class basic_oarchive
+class BOOST_DECL_ARCHIVE basic_oarchive
 {
     friend class basic_oarchive_impl;
     // hide implementation of this class to minimize header conclusion
@@ -59,9 +60,7 @@ protected:
     virtual ~basic_oarchive();
 
 public:
-    unsigned int library_version() const{
-        return ARCHIVE_VERSION;
-    }
+    unsigned int library_version() const;
     void save_object(
         const void *x, 
         const basic_oserializer & bos
@@ -72,20 +71,21 @@ public:
     );
     void register_basic_serializer(const basic_oserializer & bos);
     void save_null_pointer(){
-        vsave(null_pointer_tag);
+        vsave(NULL_POINTER_TAG);
     }
-    void end_preamble(){} // default implementation does nothing
+    void end_preamble(); // default implementation does nothing
 };
 
 } // namespace detail
 } // namespace archive
 } // namespace boost
 
-
 // required by smart_cast for compilers not implementing 
 // partial template specialization
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(
     boost::archive::detail::basic_oarchive
 )
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif //BOOST_ARCHIVE_BASIC_OARCHIVE_HPP

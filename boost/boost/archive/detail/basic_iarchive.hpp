@@ -1,5 +1,5 @@
-#ifndef BOOST_ARCHIVE_BASIC_IARCHIVE_HPP
-#define BOOST_ARCHIVE_BASIC_IARCHIVE_HPP
+#ifndef BOOST_ARCHIVE_DETAIL_BASIC_IARCHIVE_HPP
+#define BOOST_ARCHIVE_DETAIL_BASIC_IARCHIVE_HPP
 
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
@@ -16,13 +16,12 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <boost/config.hpp>
 // can't use this - much as I'd like to as borland doesn't support it
 // #include <boost/scoped_ptr.hpp>
 
-#include <boost/serialization/tracking.hpp>
-
 #include <boost/archive/basic_archive.hpp>
+
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
 
@@ -34,11 +33,11 @@ namespace archive {
 namespace detail {
 
 class basic_iarchive_impl;
-class basic_iserializer;
-class basic_pointer_iserializer;
+class BOOST_DECL_ARCHIVE basic_iserializer;
+class BOOST_DECL_ARCHIVE basic_pointer_iserializer;
 //////////////////////////////////////////////////////////////////////
 // class basic_iarchive - read serialized objects from a input stream
-class basic_iarchive 
+class BOOST_DECL_ARCHIVE basic_iarchive 
 {
     friend class basic_iarchive_impl;
     // hide implementation of this class to minimize header conclusion
@@ -57,15 +56,11 @@ public: // note: not part of the public API.
     void
     next_object_pointer(void *t);
 protected:
-    void init(unsigned int archive_library_version_){
-        archive_library_version = archive_library_version_;
-    }
+    void init(unsigned int archive_library_version_);
     basic_iarchive();
     virtual ~basic_iarchive();
 public:
-    unsigned int library_version() const{
-        return archive_library_version;
-    }
+    unsigned int library_version() const;
     void load_object(
         void *t, 
         const basic_iserializer & bis
@@ -91,4 +86,6 @@ BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(
     boost::archive::detail::basic_iarchive
 )
 
-#endif //BOOST_ARCHIVE_BASIC_IARCHIVE_HPP
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
+
+#endif //BOOST_ARCHIVE_DETAIL_BASIC_IARCHIVE_HPP
