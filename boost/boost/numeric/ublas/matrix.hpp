@@ -153,7 +153,7 @@ namespace boost { namespace numeric { namespace ublas {
                 assign_temporary (temporary);
             }
             else {
-                detail::resize (data (), functor_type::storage_size (size1, size2), preserve);
+                data ().resize (functor_type::storage_size (size1, size2));
                 size1_ = size1;
                 size2_ = size2;
             }
@@ -1066,7 +1066,7 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (functor_type::size1 (size1_, size2_) + 1) {
             for (size_type k = 0; k < functor_type::size1 (size1_, size2_); ++ k)
-                detail::resize (data () [k], functor_type::size2 (size1_, size2_), false);
+                data ()[k].resize (functor_type::size2 (size1_, size2_));
             matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
@@ -1093,9 +1093,16 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size1, size_type size2, bool preserve = true) {
             size1_ = size1;
             size2_ = size2;
-            detail::resize (data (), functor_type::size1 (size1, size2) + 1, preserve);
-            for (size_type k = 0; k < functor_type::size1 (size1, size2); ++ k)
-                detail::resize (data () [k], functor_type::size2 (size1, size2), preserve);
+            if (preserve)
+                data ().resize (functor_type::size1 (size1, size2) + 1, BOOST_UBLAS_TYPENAME array_type::value_type ());
+            else
+                data ().resize (functor_type::size1 (size1, size2) + 1);
+            for (size_type k = 0; k < functor_type::size1 (size1, size2); ++ k) {
+                if (preserve)
+                    data () [k].resize (functor_type::size2 (size1, size2), value_type ());
+                else
+                    data () [k].resize (functor_type::size2 (size1, size2));
+            }
         }
 
         // Element access
