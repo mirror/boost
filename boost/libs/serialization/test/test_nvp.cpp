@@ -8,12 +8,6 @@
 
 // should pass compilation and execution
 
-#include <cstdio> // for tmpnam
-#include <boost/config.hpp>
-#ifdef BOOST_NO_STDC_NAMESPACE
-namespace std{ using ::tmpnam; }
-#endif
-
 #include <fstream>
 
 #include "test_tools.hpp"

@@ -10,11 +10,6 @@
 // should pass compilation and execution
 
 #include <cstdio>
-#include <boost/config.hpp>
-#if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ using ::tmpnam; }
-#endif
-
 #include <string>
 #include <fstream>
 

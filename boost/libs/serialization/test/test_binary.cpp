@@ -8,7 +8,6 @@
 
 // should pass compilation and execution
 
-#include <cstdio> // for tmpnam
 #include <cstdlib> // for rand()
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
