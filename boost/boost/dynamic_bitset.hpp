@@ -279,6 +279,7 @@ public:
     unsigned long to_ulong() const;
   
     size_type size() const;
+    size_type num_blocks() const;
 
     bool is_subset_of(const dynamic_bitset& a) const;
     bool is_proper_subset_of(const dynamic_bitset& a) const;
@@ -1045,6 +1046,13 @@ inline typename dynamic_bitset<Block, Allocator>::size_type
 dynamic_bitset<Block, Allocator>::size() const
 {
     return this->m_num_bits;
+}
+
+template <typename Block, typename Allocator>
+inline typename dynamic_bitset<Block, Allocator>::size_type
+dynamic_bitset<Block, Allocator>::num_blocks() const
+{
+    return this->m_num_blocks;
 }
 
 
