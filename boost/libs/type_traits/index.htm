@@ -31,7 +31,7 @@
             A transformation from one type to another.</li>
       </ol>
       <p>If you are new to this library then the accompanying <a href="c++_type_traits.htm">
-            article</a> provides a the background information and motivation.</p>
+            article</a> provides the background information and motivation.</p>
       <p>All of the integral expressions in this library are <a href="../../more/int_const_guidelines.htm">
             <em>integral constant expressions</em></a>, these can sometimes cause 
          compiler problems in use, so there is a related set of <a href="../../more/int_const_guidelines.htm">
@@ -349,6 +349,16 @@
             <td valign="top" width="25%" bgcolor="#c0c0c0">&nbsp;</td>
             <td valign="top" width="5%">&nbsp;</td>
          </tr>
+         <TR>
+            <TD vAlign="top" width="5%"></TD>
+            <TD vAlign="top" width="23%" bgColor="#c0c0c0"><FONT face="Courier New">::boost::is_polymorphic&lt;T&gt;::value</FONT></TD>
+            <TD vAlign="top" width="28%" bgColor="#c0c0c0">Evaluates to true only if T is a 
+               polymorphic type.</TD>
+            <TD vAlign="top" width="13%" bgColor="#c0c0c0">10.3</TD>
+            <TD vAlign="top" width="25%" bgColor="#c0c0c0">Requires knowledge of the compilers 
+               ABI, does actually seem to work with the magority of compilers though.</TD>
+            <TD vAlign="top" width="5%"></TD>
+         </TR>
          <tr>
             <td valign="top" width="5%">&nbsp;</td>
             <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::is_POD&lt;T&gt;::value</code></td>
