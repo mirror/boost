@@ -121,7 +121,8 @@ template<                                                               \
     , typename BOOST_MPL_AUX_NA_PARAM(Inserter)                         \
     >                                                                   \
 struct name                                                             \
-    : if_<                                                              \
+{                                                                       \
+      typedef typename if_<                                             \
           or_<                                                          \
               is_na<OperationOrInserter>                                \
             , is_lambda_expression< Seq2OrOperation >                   \
@@ -129,8 +130,7 @@ struct name                                                             \
             >                                                           \
         , name##1<Seq1,Seq2OrOperation,OperationOrInserter>             \
         , name##2<Seq1,Seq2OrOperation,OperationOrInserter,Inserter>    \
-        >::type                                                         \
-{                                                                       \
+        >::type type;                                                   \
 };                                                                      \
 BOOST_MPL_AUX_NA_SPEC(4, name)                                          \
 /**/
