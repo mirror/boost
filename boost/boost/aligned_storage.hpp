@@ -68,14 +68,17 @@ public: // constants
             )
         );
 
-#if !BOOST_WORKAROUND(__GNUC__, <= 2)
+#if defined(__GNUC__) &&\
+    (__GNUC__ >  3) ||\
+    (__GNUC__ == 3 && (__GNUC_MINOR__ >  2 ||\
+                      (__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >=3)))
 
 private: // noncopyable
 
     aligned_storage(const aligned_storage&);
     aligned_storage& operator=(const aligned_storage&);
 
-#else // gcc2.x
+#else // gcc less than 3.2.3
 
 public: // _should_ be noncopyable, but GCC compiler emits error
 
