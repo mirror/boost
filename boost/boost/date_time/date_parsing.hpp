@@ -61,16 +61,14 @@ namespace date_time {
     month_str_to_ushort(std::string s) {
       if((s.at(0) >= '0') && (s.at(0) <= '9')) {
         return boost::lexical_cast<unsigned short>(s);
-      } else {
-#if !defined(__MWERKS__)
+      } 
+      else {
         s = convert_to_lower(s);
-#endif
         typename month_type::month_map_ptr_type ptr = month_type::get_month_map_ptr();
         typename month_type::month_map_type::iterator iter = ptr->find(s);
-        if(iter != ptr->end()) // required for STLport
-          {
-            return iter->second;
-          }
+        if(iter != ptr->end()) { // required for STLport
+          return iter->second;
+        }
       }
       return 13; // intentionally out of range - name not found
     }
@@ -87,9 +85,11 @@ namespace date_time {
       std::string spec_str("");
       if(order_spec == ymd_order_iso) {
         spec_str = "ymd";
-      } else if(order_spec == ymd_order_dmy) {
+      } 
+      else if(order_spec == ymd_order_dmy) {
         spec_str = "dmy";
-      } else { // (order_spec == ymd_order_us)
+      } 
+      else { // (order_spec == ymd_order_us)
         spec_str = "mdy";
       }
       
@@ -101,20 +101,23 @@ namespace date_time {
       for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end(), pos < spec_str.size(); ++beg, ++pos) {
         unsigned short i =0;
         switch(spec_str.at(pos)) {
-        case 'y': {
-          i = boost::lexical_cast<unsigned short>(*beg);
-          ymd.year = i;
-          break;
-        }
-        case 'm': {
-          ymd.month = month_str_to_ushort<month_type>(*beg);
-          break;
-        }
-        case 'd': {
-          i = boost::lexical_cast<unsigned short>(*beg);
-          ymd.day = i;
-          break;
-        }
+          case 'y': 
+          {
+            i = boost::lexical_cast<unsigned short>(*beg);
+            ymd.year = i;
+            break;
+          }
+          case 'm': 
+          {
+            ymd.month = month_str_to_ushort<month_type>(*beg);
+            break;
+          }
+          case 'd': 
+          {
+            i = boost::lexical_cast<unsigned short>(*beg);
+            ymd.day = i;
+            break;
+          }
         } //switch
       }
       return date_type(ymd);

@@ -28,11 +28,6 @@
 // include these types before we try to re-define them
 #include "boost/cstdint.hpp"
 
-//Define INT64_C for some Metrowerks compilers
-#if (defined(__MWERKS__) && (!defined(INT64_C)))
-#define INT64_C(value)  long long(value)
-#endif
-
 //Define INT64_C for compilers that don't have it
 #if (!defined(INT64_C))
 #define INT64_C(value)  int64_t(value)
