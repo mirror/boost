@@ -1,4 +1,4 @@
-//  (C) Copyright Jeremy Siek 1999. Permission to copy, use, modify,
+//  (C) Copyright Jeremy Siek 1999-2001. Permission to copy, use, modify,
 //  sell and distribute this software is granted provided this
 //  copyright notice appears in all copies. This software is provided
 //  "as is" without express or implied warranty, and with no claim as
@@ -200,6 +200,7 @@ namespace boost {
   struct ReadablePropertyMapConcept
   {
     typedef typename property_traits<PMap>::key_type key_type;
+    typedef typename property_traits<PMap>::reference reference;
     typedef typename property_traits<PMap>::category Category;
     typedef boost::readable_property_map_tag ReadableTag;
     void constraints() {
@@ -215,11 +216,14 @@ namespace boost {
   struct readable_property_map_archetype {
     typedef KeyArchetype key_type;
     typedef ValueArchetype value_type;
+    typedef convertible_to_archetype<ValueArchetype> reference;
     typedef readable_property_map_tag category;
   };
   template <typename K, typename V>
-  V get(const readable_property_map_archetype<K,V>&, const K&) {
-    return static_object<V>::get();
+  const typename readable_property_map_archetype<K,V>::reference&
+  get(const readable_property_map_archetype<K,V>&, const K&) {
+    typedef typename readable_property_map_archetype<K,V>::reference R;
+    return static_object<R>::get();
   }
 
 
@@ -241,7 +245,8 @@ namespace boost {
   struct writable_property_map_archetype {
     typedef KeyArchetype key_type;
     typedef ValueArchetype value_type;
-    typedef readable_property_map_tag category;
+    typedef void reference;
+    typedef writable_property_map_tag category;
   };
   template <typename K, typename V>
   void put(const writable_property_map_archetype<K,V>&, const K&, const V&) { }
@@ -265,6 +270,7 @@ namespace boost {
   {
     typedef KeyArchetype key_type;
     typedef ValueArchetype value_type;
+    typedef convertible_to_archetype<ValueArchetype> reference;
     typedef read_write_property_map_tag category;
   };
 
@@ -274,12 +280,17 @@ namespace boost {
   {
     typedef typename property_traits<PMap>::category Category;
     typedef boost::lvalue_property_map_tag LvalueTag;
-    typedef const typename property_traits<PMap>::value_type& const_reference;
-    void constraints() {
-      function_requires< ReadWritePropertyMapConcept<PMap, Key> >();
-      function_requires< ConvertibleConcept<Category, LvalueTag> >();
+    typedef typename property_traits<PMap>::reference reference;
 
-      const_reference ref = pmap[k];
+    void constraints() {
+      function_requires< ReadablePropertyMapConcept<PMap, Key> >();
+      function_requires< ConvertibleConcept<Category, LvalueTag> >();
+      
+      typedef typename require_same<
+        const typename property_traits<PMap>::value_type&,
+        reference>::type req;
+
+      reference ref = pmap[k];
       ignore_unused_variable_warning(ref);
     }
     PMap pmap;
@@ -291,10 +302,10 @@ namespace boost {
   {
     typedef KeyArchetype key_type;
     typedef ValueArchetype value_type;
+    typedef const ValueArchetype& reference;
     typedef lvalue_property_map_tag category;
     const value_type& operator[](const key_type&) const {
-      static value_type s_v;
-      return s_v;
+      return static_object<value_type>::get();
     }
   };
 
@@ -303,10 +314,13 @@ namespace boost {
   {
     typedef typename property_traits<PMap>::category Category;
     typedef boost::lvalue_property_map_tag LvalueTag;
-    typedef typename property_traits<PMap>::value_type& reference;
+    typedef typename property_traits<PMap>::reference reference;
     void constraints() { 
       boost::function_requires< ReadWritePropertyMapConcept<PMap, Key> >();
       boost::function_requires<ConvertibleConcept<Category, LvalueTag> >();
+      typedef typename require_same<
+        typename property_traits<PMap>::value_type&,
+        reference>::type req;
 
       reference ref = pmap[k];
       ignore_unused_variable_warning(ref);
@@ -321,10 +335,10 @@ namespace boost {
   {
     typedef KeyArchetype key_type;
     typedef ValueArchetype value_type;
+    typedef ValueArchetype& reference;
     typedef lvalue_property_map_tag category;
     value_type& operator[](const key_type&) const { 
-      static value_type s_v;
-      return s_v;
+      return static_object<value_type>::get();
     }
   };
 
