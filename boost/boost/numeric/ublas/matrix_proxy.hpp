@@ -18,6 +18,7 @@
 #define BOOST_UBLAS_MATRIX_PROXY_H
 
 #include <boost/numeric/ublas/matrix_expression.hpp>
+#include <boost/numeric/ublas/detail/vector_assign.hpp>
 #include <boost/numeric/ublas/detail/matrix_assign.hpp>
 #include <boost/numeric/ublas/detail/temporary.hpp>
 
