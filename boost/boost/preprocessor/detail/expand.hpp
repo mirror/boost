@@ -11,6 +11,6 @@
  * See http://www.boost.org for most recent version.
  */
 
-#define BOOST_PP_DETAIL_EXPAND(X) BOOST_PP_DETAIL_EXPAND_DELAY(X)
-#define BOOST_PP_DETAIL_EXPAND_DELAY(X) X
+#define BOOST_PP_DETAIL_EXPAND(X) X
+#define BOOST_PP_DETAIL_EXPAND2(X,Y) BOOST_PP_DETAIL_EXPAND(X Y)
 #endif
