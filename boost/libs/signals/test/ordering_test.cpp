@@ -20,6 +20,7 @@
 #include <vector>
 #include <algorithm>
 #include <cstdlib>
+#include <ctime> 
 
 std::vector<int> valuesOutput;
 bool ungrouped1 = false;
@@ -69,13 +70,16 @@ struct write_ungrouped3 {
 
 int test_main(int, char* [])
 {
+  using namespace std;
+  srand(time(0));
+
   std::vector<int> sortedValues;
 
   boost::signal0<void> sig;
   sig.connect(write_ungrouped1());
   for (int i = 0; i < 100; ++i) {
     using namespace std;
-    int v = random() % 100;
+    int v = rand() % 100;
     sortedValues.push_back(v);
     sig.connect(v, emit_int(v));
 
