@@ -18,6 +18,11 @@
 /** <p>Expands to the logical NOT of the operand.</p>
 
 <p>For example, <code>BOOST_PP_NOT(0)</code> expands to <code>1</code> (a single token).</p>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/logical_test.cpp">logical_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_NOT(X) BOOST_PP_NOR(X,X)
 

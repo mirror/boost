@@ -35,6 +35,11 @@ explosion.</p>
 <ul>
   <li>BOOST_PP_FOR()</li>
 </ul>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_LIST_FOR_EACH_PRODUCT(F,N,T_OF_L) BOOST_PP_LIST_FOR_EACH_PRODUCT_R(0,F,N,T_OF_L)
 

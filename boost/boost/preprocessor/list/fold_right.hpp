@@ -40,6 +40,11 @@ list <code>L</code> (from the right or the end of the list).</p>
 <ul>
   <li>BOOST_PP_LIST_FOLD_LEFT()</li>
 </ul>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_LIST_FOLD_RIGHT(F,L,P) BOOST_PP_LIST_FOLD_RIGHT_D(0,F,L,P)
 

@@ -18,6 +18,11 @@
 /** <p>Expands to the logical AND of the operands.</p>
 
 <p>For example, <code>BOOST_PP_AND(0,5)</code> expands to <code>0</code> (a single token).</p>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/logical_test.cpp">logical_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_AND(X,Y) BOOST_PP_NOR(BOOST_PP_NOT(X),BOOST_PP_NOT(Y))
 

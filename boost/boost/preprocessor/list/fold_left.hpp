@@ -44,6 +44,11 @@ list <code>L</code> (from the left or the start of the list).</p>
 <ul>
   <li>BOOST_PP_WHILE()</li>
 </ul>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_LIST_FOLD_LEFT(F,P,L) BOOST_PP_LIST_FOLD_LEFT_D(0,F,P,L)
 

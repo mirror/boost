@@ -18,6 +18,11 @@
 /** <p>Expands to the logical NEITHER OR of the operands.</p>
 
 <p>For example, <code>BOOST_PP_NOR(0,5)</code> expands to <code>0</code> (a single token).</p>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/logical_test.cpp">logical_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_NOR(X,Y) BOOST_PP_NOR_BOOL(BOOST_PP_BOOL(X),BOOST_PP_BOOL(Y))
 

@@ -18,6 +18,11 @@
 /** <p>Expands to the logical EXCLUSIVE OR of the operands.</p>
 
 <p>For example, <code>BOOST_PP_XOR(1,2)</code> expands to <code>0</code> (a single token).</p>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/logical_test.cpp">logical_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_XOR(X,Y) BOOST_PP_NOR(BOOST_PP_NOR(X,Y),BOOST_PP_AND(X,Y))
 

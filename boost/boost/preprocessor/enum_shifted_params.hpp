@@ -34,6 +34,11 @@
   <li>This macro facilitates a typical usage of the library. Shifted parameter
       lists are common in template metaprograms.</li>
 </ul>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/repeat_2nd_test.cpp">repeat_2nd_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_ENUM_SHIFTED_PARAMS(N,P) BOOST_PP_ENUM_SHIFTED(N,BOOST_PP_ENUM_SHIFTED_PARAMS_F,P)
 

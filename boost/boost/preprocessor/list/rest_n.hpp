@@ -41,6 +41,11 @@ list <code>L</code>.</p>
 <ul>
   <li>BOOST_PP_WHILE()</li>
 </ul>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_LIST_REST_N(N,L) BOOST_PP_LIST_REST_N_D(0,N,L)
 

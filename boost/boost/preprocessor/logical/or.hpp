@@ -18,6 +18,11 @@
 /** <p>Expands to the logical OR of the operands.</p>
 
 <p>For example, <code>BOOST_PP_OR(0,2)</code> expands to <code>1</code> (a single token).</p>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/logical_test.cpp">logical_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_OR(X,Y) BOOST_PP_NOT(BOOST_PP_NOR(X,Y))
 

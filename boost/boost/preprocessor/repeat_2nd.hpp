@@ -13,7 +13,13 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <p>Same as BOOST_PP_REPEAT(), but implemented independently.</p> */
+/** <p>Same as BOOST_PP_REPEAT(), but implemented independently.</p>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/repeat_2nd_test.cpp">repeat_2nd_test.cpp</a></li>
+</ul>
+*/
 #define BOOST_PP_REPEAT_2ND(N,M,P) BOOST_PP_REPEAT_2ND_DELAY(N,M,P)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

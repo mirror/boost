@@ -28,6 +28,11 @@
 <ul>
   <li>BOOST_PP_REPEAT()</li>
 </ul>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/repeat_test.cpp">repeat_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_ENUM_PARAMS(N,P) BOOST_PP_ENUM(N,BOOST_PP_ENUM_PARAMS_F,P)
 

@@ -24,6 +24,11 @@ single token).</p>
 <ul>
   <li>BOOST_PP_WHILE()</li>
 </ul>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/arithmetic_test.cpp">arithmetic_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_MUL(X,Y) BOOST_PP_MUL_D(0,X,Y)
 
