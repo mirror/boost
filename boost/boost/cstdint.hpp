@@ -147,6 +147,7 @@ namespace boost
 
 # if defined(BOOST_HAS_LONG_LONG) && \
    !defined(BOOST_MSVC) && !defined(__BORLANDC__) && \
+   (!defined(__GLIBCPP__) || defined(_GLIBCPP_USE_LONG_LONG)) && \
    (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
 #    if defined(__hpux)
      // HP-UX's value of ULONG_LONG_MAX is unusable in preprocessor expressions
