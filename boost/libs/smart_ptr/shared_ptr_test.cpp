@@ -196,6 +196,45 @@ template<class T> void test_is_nonzero(boost::shared_ptr<T> const & p)
     BOOST_TEST(p.get() != 0);
 }
 
+class foo
+{
+public:
+
+    void setWeak(boost::shared_ptr<foo> s)
+    {
+        w = s;
+    }
+
+private:
+
+    boost::weak_ptr<foo> w;
+};
+ 
+class deleter
+{
+public:
+
+    deleter(): lock(0)
+    {
+    }
+
+    ~deleter()
+    {
+        BOOST_TEST(lock == 0);
+    }
+
+    void operator() (foo * p)
+    {
+        ++lock;
+        delete p;
+        --lock;
+    }
+ 
+private:
+
+    int lock;
+};
+ 
 int main()
 {
     using namespace boost;
@@ -367,6 +406,13 @@ int main()
     }
 
     BOOST_TEST(cnt == 0);
+
+    // Test case by Per Kristensen
+    {
+        boost::shared_ptr<foo> s(new foo, deleter());
+        s->setWeak(s);
+        s.reset();
+    }
 
     return boost::report_errors();
 }

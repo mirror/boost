@@ -120,19 +120,28 @@ public:
     void release() // nothrow
     {
         long new_use_count;
-        long new_weak_count;
+        long new_weak_count = 0;
 
         {
 #ifdef BOOST_HAS_THREADS
             mutex_type::scoped_lock lock(mtx_);
 #endif
             new_use_count = --use_count_;
-            new_weak_count = --weak_count_;
+
+            if(new_use_count != 0)
+            {
+                new_weak_count = --weak_count_;
+            }
         }
 
         if(new_use_count == 0)
         {
             dispose();
+
+#ifdef BOOST_HAS_THREADS
+            mutex_type::scoped_lock lock(mtx_);
+#endif
+            new_weak_count = --weak_count_;
         }
 
         if(new_weak_count == 0)
