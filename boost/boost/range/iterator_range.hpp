@@ -541,23 +541,6 @@ namespace boost
             return SeqT( begin( r ), end( r ) );
         }
 
-        //! transform a range into a sequence
-        /*!
-            Create a new sequence from the elements in the range, transformed
-            by a function
-
-            \param Range An input range
-            \param Func Transformation function
-            \return New sequence
-        */
-        template< typename SeqT, typename Range, typename FuncT >
-        inline SeqT transform_range( const Range& r, FuncT Func )
-        {
-            SeqT Seq;
-            std::transform( begin( r ), end( r ), std::back_inserter(Seq), Func );
-            return Seq;
-        }
-
 } // namespace 'boost'
 
 #undef BOOST_OLD_IOSTREAMS

@@ -25,15 +25,6 @@
 using namespace boost;
 using namespace std;
 
-struct add_one
-{
-    template< class T >
-    T operator()( T r ) const
-    {
-        return r + 1;
-    }
-};
-
 void check_sub_range()
 {
       
@@ -95,11 +86,6 @@ void check_sub_range()
     string res  = copy_range<string>( r );
     BOOST_CHECK( equal( res.begin(), res.end(), r.begin() ) );
     
-    typedef vector<char> string_type;
-    string_type res2 = transform_range<string_type>( r, add_one() );
-    BOOST_CHECK( res2[0] == 'i' );
-    BOOST_CHECK( *res2.rbegin() == 'e' );
-     
     r.empty();
     s.empty();
     r.size();

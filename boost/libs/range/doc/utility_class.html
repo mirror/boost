@@ -197,13 +197,7 @@ class=keyword>const;</span>
     </span><span class=identifier>Sequence </span><a href="#copy_range"><span 
 class=identifier>copy_range</span></a><span class=special>( </span><span 
 class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
-
-    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>Sequence</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>ForwardRange</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>Func </span><span class=special>&gt;
-    </span><span class=identifier>Sequence </span><a 
-href="#transform_range"><span
-class=identifier>transform_range</span></a><span class=special>( </span><span 
-class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r</span><span class=special>, </span><span class=identifier>Func </span><span class=identifier>func </span><span class=special>);
-</span>
+    </span>
 <span class=special>} </span><span class=comment>// namespace 'boost'</span>
     </pre>
 
@@ -277,18 +271,6 @@ return make_iterator_range( new_begin, new_end );
 <code>Sequence copy_range( const ForwardRange& r );</code>
 <blockquote>
     <i>Returns</i> <code>Sequence( begin(r), end(r) );</code>
-</blockquote>
-</p>
-
-<p>
-<a name="transform_range"></a>
-<code>Sequence transform_range( const ForwardRange& r, Func func );</code>
-<blockquote>
-<i>Effects</i> <br>
-<code>Sequence seq;</code> <br>
-<code>std::transform( begin(r), end(r), std::back_inserter(seq), func );</code> 
-<br>
-<code>return seq;</code>
 </blockquote>
 </p>
 
