@@ -215,6 +215,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef value_type &reference;
         typedef const value_type *const_pointer;
         typedef value_type *pointer;
+        // Iterators simply are pointers.
+        typedef const_pointer const_iterator;
+        typedef pointer iterator;
+
         typedef const T &data_const_reference;
 #ifndef BOOST_UBLAS_STRICT_MAP_ARRAY
         typedef T &data_reference;
@@ -348,8 +352,10 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Element insertion and deletion
+        
+        // From Back Insertion Sequence concept
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
-        pointer push_back (pointer it, const value_type &p) {
+        iterator push_back (iterator it, const value_type &p) {
             if (size () == 0 || (it = end () - 1)->first < p.first) {
                 resize (size () + 1);
                 *(it = end () - 1) = p;
@@ -358,34 +364,34 @@ namespace boost { namespace numeric { namespace ublas {
             external_logic ().raise ();
             return it;
         }
+        // Form Unique Associative Container concept
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
-        pointer insert (pointer it, const value_type &p) {
-            it = detail::lower_bound (begin (), end (), p, detail::less_pair<value_type> ());
+        std::pair<iterator,bool> insert (const value_type &p) {
+            iterator it = detail::lower_bound (begin (), end (), p, detail::less_pair<value_type> ());
+            if (it->first == p.first)
+            	return std::make_pair (it, false);
             difference_type n = it - begin ();
-            BOOST_UBLAS_CHECK (size () == 0 || size () == size_type (n) || it->first != p.first, external_logic ());
+            BOOST_UBLAS_CHECK (size () == 0 || size () == size_type (n), external_logic ());
             resize (size () + 1);
-            it = begin () + n;
+            it = begin () + n;	// allow for invalidation
             std::copy_backward (it, end () - 1, end ());
             *it = p;
-            return it;
+            return std::make_pair (it, true);
+        }
+        // Form Sorted Associative Container concept
+        // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
+        iterator insert (iterator hint, const value_type &p) {
+        	return insert (p).first;
         }
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
         void erase (pointer it) {
             BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
-            // Fixed by George Katsirelos.
-            // (*it).second = mapped_type (0);
             std::copy (it + 1, end (), it);
             resize (size () - 1);
         }
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
         void erase (pointer it1, pointer it2) {
             BOOST_UBLAS_CHECK (begin () <= it1 && it1 < it2 && it2 <= end (), bad_index ());
-            // Fixed by George Katsirelos.
-            // while (it1 != it2) {
-            //     BOOST_UBLAS_CHECK (begin () <= it1 && it1 < end (), bad_index ());
-            //     (*it1).second = mapped_type (0);
-            //     ++ it1;
-            // }
             std::copy (it2, end (), it1);
             resize (size () - (it2 - it1));
         }
@@ -418,10 +424,6 @@ namespace boost { namespace numeric { namespace ublas {
             return detail::lower_bound (begin (), end (), value_type (i, mapped_type (0)), detail::less_pair<value_type> ());
         }
 
-        // Iterators simply are pointers.
-
-        typedef const_pointer const_iterator;
-
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
             return data_;
@@ -430,8 +432,6 @@ namespace boost { namespace numeric { namespace ublas {
         const_iterator end () const {
             return data_ + size_;
         }
-
-        typedef pointer iterator;
 
         BOOST_UBLAS_INLINE
         iterator begin () {
