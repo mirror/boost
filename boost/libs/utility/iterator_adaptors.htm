@@ -13,7 +13,9 @@
 align="center" width="277" height="86">
 
 <h1>Header
-<a href="../../boost/pending/iterator_adaptors.hpp">boost/iterator_adaptors.hpp</a></h1>
+<a href="../../boost/pending/iterator_adaptors.hpp">boost/iterator_adaptors.hpp</a>
+and
+<a href="../../boost/pending/integer_range.hpp">boost/integer_range.hpp</a></h1>
 
 <p>The file <tt>boost/iterator_adaptors.hpp</tt>
 includes the main <tt>iterator_adaptors</tt> class and several other classes
@@ -26,6 +28,13 @@ for constructing commonly used iterator adaptors.</p>
   <li><a href="#indirect_iterators"><tt>Indirect Iterator Adaptors</tt></a>
   <li><a href="#projection_iterators"><tt>Projection Iterator Adaptors</tt></a>
   <li><a href="#reverse_iterators"><tt>reverse_iterators</tt></a>
+</ul>
+
+<p>The file <tt>boost/integer_range.hpp</tt> includes a class that
+  uses iterator adaptors to create an iterator that increments over a
+  range of integers. The file also includes a &quot;container&quot; type
+  that creates a container-interface for the range of integers.
+<ul>
   <li><a href="#integer_range"><tt>integer_range</tt></a>
 </ul>
 
@@ -168,12 +177,11 @@ constructors.
 
 This is the class used inside of the <tt>iterator_adaptors</tt> type
 generator. Use this class directly (instead of using
-<tt>iterator_adaptors</tt>) when there is no difference between the
-const and non-const versions of the iterator type. Often this is
-because there is only a const (read-only) version of the iterator, as
-is the case for <tt>std::set</tt>'s iterators. Use the same type for
-the <tt>Iterator</tt> and <tt>NonconstIterator</tt> template
-arguments.
+<tt>iterator_adaptors</tt>) when you are interested in creating only
+one of the iterator types (either const or non-const) or when there is
+no difference between the const and non-const versions of the iterator
+type (often this is because there is only a const (read-only) version
+of the iterator, as is the case for <tt>std::set</tt>'s iterators).
 
 <p>
 <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
@@ -223,6 +231,7 @@ href="#2">[2]</a>.
   template &lt;class AdaptableUnaryFunction&gt;
   struct transform_iterator_policies : public default_iterator_policies
   {
+    transform_iterator_policies() { }
     transform_iterator_policies(const AdaptableUnaryFunction& f) : m_f(f) { }
 
     template &lt;class Reference, class Iterator&gt;
@@ -422,6 +431,133 @@ struct indirect_iterators
 
 <h3><a name="projection_iterators">The Projection Iterator Adaptors</a></h3>
 
+The projection iterator adaptor is very similar to the transform
+iterator, except for a subtle difference in the return type: the
+tranform iterator returns the result of the unary function by value,
+whereas the projection iterator returns the result by reference.
+Therefore, these two adaptors cater to different kinds of unary
+functions. Transform iterator caters to functions that create new
+objects, whereas projection iterator caters to a function that somehow
+obtains a reference to an object that already exists. An example of a
+unary function that is suitable for use with the projection adaptor is
+<tt>select1st_</tt>:
+
+<p>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
+<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
+<PRE>
+template &lt;class Pair&gt;
+struct select1st_ 
+  : public std::unary_function&lt;Pair, typename Pair::first_type&gt;
+{
+  const typename Pair::first_type& operator()(const Pair& x) const {
+    return x.first;
+  }
+  typename Pair::first_type& operator()(Pair& x) const {
+    return x.first;
+  }
+};
+</PRE></TD></TABLE>
+
+The implementation of projection iterator is as follows.  First, the
+policies class is the same as the transform iterator's policies class.
+
+<p>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
+<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
+<PRE>
+template &lt;class AdaptableUnaryFunction&gt;
+struct projection_iterator_policies : public default_iterator_policies
+{
+    projection_iterator_policies() { }
+    projection_iterator_policies(const AdaptableUnaryFunction& f) : m_f(f) { }
+
+    template &lt;class Reference, class Iterator&gt;
+    Reference dereference (type&lt;Reference&gt;, Iterator const& iter) const {
+        return m_f(*iter);
+    }
+
+    AdaptableUnaryFunction m_f;    
+};
+</PRE></TD></TABLE>
+
+Next we have two traits classes. We use <tt>value_type&</tt> for the
+reference type of the mutable projection iterator, and <tt>const
+value_type&</tt> for the immutable projection iterator.
+
+<p>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
+<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
+<PRE>
+template &lt;class AdaptableUnaryFunction, class Traits&gt;
+struct projection_iterator_traits {
+    typedef typename AdaptableUnaryFunction::result_type value_type;
+    typedef value_type& reference;
+    typedef value_type* pointer;
+    typedef typename Traits::difference_type difference_type;
+    typedef typename Traits::iterator_category iterator_category;
+};
+
+template &lt;class AdaptableUnaryFunction, class Traits&gt;
+struct const_projection_iterator_traits {
+    typedef typename AdaptableUnaryFunction::result_type value_type;
+    typedef value_type const& reference;
+    typedef value_type const* pointer;
+    typedef typename Traits::difference_type difference_type;
+    typedef typename Traits::iterator_category iterator_category;
+};
+</PRE></TD></TABLE>
+
+And to finish up, we create three generator classes that
+use <tt>iterator_adaptor</tt> to create the projection iterator
+types. The class <tt>projection_iterator</tt> creates a mutable
+projection iterator type. The class <tt>const_projection_iterator</tt>
+creates an immutable projection iterator type, and
+<tt>projection_iterators</tt> creates both mutable and immutable
+projection iterator types.
+
+<p>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
+<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
+<PRE>
+template &lt;class AdaptableUnaryFunction, class Iterator,
+          class Traits = std::iterator_traits&lt;Iterator&gt;
+         &gt;
+struct projection_iterator {
+    typedef projection_iterator_traits&lt;AdaptableUnaryFunction, Traits&gt;
+            Projection_Traits;
+    typedef iterator_adaptor&lt;Iterator,
+            projection_iterator_policies&lt;AdaptableUnaryFunction&gt;,
+            Projection_Traits&gt; type;
+};
+
+template &lt;class AdaptableUnaryFunction, class Iterator,
+          class Traits = std::iterator_traits&lt;Iterator&gt;
+         &gt;
+struct const_projection_iterator {
+    typedef const_projection_iterator_traits&lt;AdaptableUnaryFunction,
+            Traits&gt; Projection_Traits;
+    typedef iterator_adaptor&lt;Iterator,
+            projection_iterator_policies&lt;AdaptableUnaryFunction&gt;,
+            Projection_Traits&gt; type;
+};
+
+template &lt;class AdaptableUnaryFunction, class Iterator, class ConstIterator,
+          class Traits = std::iterator_traits&lt;Iterator&gt;,
+          class ConstTraits = std::iterator_traits&lt;ConstIterator&gt;
+         &gt;
+struct projection_iterators {
+    typedef projection_iterator_traits&lt;AdaptableUnaryFunction, Traits&gt;
+            Projection_Traits;
+    typedef const_projection_iterator_traits&lt;AdaptableUnaryFunction,
+            ConstTraits&gt; Const_Projection_Traits;
+    typedef iterator_adaptors&lt;Iterator, ConstIterator,
+            Projection_Traits, Const_Projection_Traits,
+            projection_iterator_policies&lt;AdaptableUnaryFunction&gt; &gt; Adaptors;
+    typedef typename Adaptors::iterator iterator;
+    typedef typename Adaptors::const_iterator const_iterator;
+};
+</PRE></TD></TABLE>
 
 
 <h3><a name="reverse_iterators">The Reverse Iterators Class</a></h3>
@@ -538,9 +674,9 @@ iterator.
 <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
 <TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
 <PRE>
+template &lt;class IntegerType&gt;
 struct counting_iterator_policies : public default_iterator_policies
 {
-  template &lt;class IntegerType&gt;
   IntegerType dereference(type&lt;IntegerType&gt;, const IntegerType& i) const
     { return i; }
 };
