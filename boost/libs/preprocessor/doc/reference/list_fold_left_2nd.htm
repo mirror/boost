@@ -19,48 +19,28 @@
 
 <hr>
 
-<a href="list_adt.htm">Prev</a> <a href="list_at.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<a href="list_fold_left.htm">Prev</a> <a href="list_fold_right.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
 <hr>
 
-<h1>#include &lt;<a href="../../../../boost/preprocessor/list/append.hpp">boost/preprocessor/list/append.hpp</a>&gt;</h1>
+<h1>#include &lt;<a href="../../../../boost/preprocessor/list/fold_left_2nd.hpp">boost/preprocessor/list/fold_left_2nd.hpp</a>&gt;</h1>
 
 <hr>
 
-<h2><a name="BOOST_PP_LIST_APPEND">#define BOOST_PP_LIST_APPEND</a>(L,R)</h2>
- <p>Catenates two lists together.</p>
-
-<p>For example,</p>
-
-<pre>
-  <a href="list_append.htm#BOOST_PP_LIST_APPEND">BOOST_PP_LIST_APPEND</a>
-  ( <a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(2,(1,2))
-  , <a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(2,(3,4))
-  )
-</pre>
-
-<p>expands to the same as:</p>
-
-<pre>
-  <a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(4,(1,2,3,4))
-</pre>
+<h2><a name="BOOST_PP_LIST_FOLD_LEFT_2ND">#define BOOST_PP_LIST_FOLD_LEFT_2ND</a>(F,P,L)</h2>
+ <p>Same as <a href="list_fold_left.htm#BOOST_PP_LIST_FOLD_LEFT">BOOST_PP_LIST_FOLD_LEFT</a>(), but implemented independently.</p>
 
 <h3>Uses</h3>
 <ul>
-  <li><a href="list_fold_right.htm#BOOST_PP_LIST_FOLD_RIGHT">BOOST_PP_LIST_FOLD_RIGHT</a>()</li>
-</ul>
-
-<h3>Test</h3>
-<ul>
-  <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
+  <li><a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>()</li>
 </ul>
 
 <hr>
 
-<h2><a name="BOOST_PP_LIST_APPEND_D">#define BOOST_PP_LIST_APPEND_D</a>(D,L,R)</h2>
+<h2><a name="BOOST_PP_LIST_FOLD_LEFT_2ND_D">#define BOOST_PP_LIST_FOLD_LEFT_2ND_D</a>(D,F,P,L)</h2>
  <p>Can be used inside <a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>().</p> 
 <hr>
 
-<a href="list_adt.htm">Prev</a> <a href="list_at.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<a href="list_fold_left.htm">Prev</a> <a href="list_fold_right.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
 <hr>
 
 <p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
