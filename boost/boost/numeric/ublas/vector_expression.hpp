@@ -351,19 +351,6 @@ namespace boost { namespace numeric { namespace ublas {
             return e_;
         }
 
-        // Resizing
-#ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-        BOOST_UBLAS_INLINE
-        void resize (size_type size) {
-            expression ().resize (size);
-        }
-#else
-        BOOST_UBLAS_INLINE
-        void resize (size_type size) const {
-            expression ().resize (size);
-        }
-#endif
-
         // Element access
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
         BOOST_UBLAS_INLINE
