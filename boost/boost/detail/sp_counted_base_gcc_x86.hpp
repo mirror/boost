@@ -45,11 +45,25 @@ inline long atomic_exchange_and_add( long * pw, long dv )
         "lock\n\t"
         "xadd %1, %0":
         "=m"( *pw ), "=r"( r ): // outputs (%0, %1)
-        "0"( *pw ), "1"( dv ): // inputs (%0, %1)
+        "m"( *pw ), "1"( dv ): // inputs (%2, %3 == %1)
         "memory", "cc" // clobbers
     );
 
     return r;
+}
+
+inline void atomic_increment( long * pw )
+{
+    //atomic_exchange_and_add( pw, 1 );
+
+    __asm__
+    (
+        "lock\n\t"
+        "incl %0":
+        "=m"( *pw ): // output (%0)
+        "m"( *pw ): // input (%1)
+        "cc" // clobbers
+    );
 }
 
 inline long atomic_conditional_increment( long * pw )
@@ -72,7 +86,7 @@ inline long atomic_conditional_increment( long * pw )
         "jne 0b\n\t"
         "1:":
         "=m"( *pw ), "=&eax"( r ): // outputs (%0, %1)
-        "0"( *pw ): // input (%0)
+        "m"( *pw ): // input (%2)
         "ebx", "memory", "cc" // clobbers
     );
 
@@ -115,12 +129,12 @@ public:
 
     void add_ref_copy()
     {
-        atomic_exchange_and_add( &use_count_, +1 );
+        atomic_increment( &use_count_ );
     }
 
     bool add_ref_lock() // true on success
     {
-		return atomic_conditional_increment( &use_count_ ) != 0;
+        return atomic_conditional_increment( &use_count_ ) != 0;
     }
 
     void release() // nothrow
@@ -134,7 +148,7 @@ public:
 
     void weak_add_ref() // nothrow
     {
-        atomic_exchange_and_add( &weak_count_, +1 );
+        atomic_increment( &weak_count_ );
     }
 
     void weak_release() // nothrow
