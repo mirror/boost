@@ -221,7 +221,9 @@ void test_unicode();
 // template instances:
 // we pretty much have to instantiate these separately
 // otherwise compilation times are really excessive...
+// Unfortunately this doesn't work with SunPro:
 //
+#ifndef __SUNPRO_CC
 #ifndef BOOST_REGEX_TEST_INSTANCES
 #define template template<>
 #endif
@@ -238,6 +240,7 @@ template void test<wchar_t, test_invalid_regex_tag>(const wchar_t&, const test_i
 
 #ifndef BOOST_REGEX_TEST_INSTANCES
 #undef template
+#endif
 #endif
 
 #endif
