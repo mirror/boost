@@ -147,7 +147,8 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
         <code>DOCBOOK_XSL_DIR</code>).</para>
         </listitem>
 
-        <listitem><para>The DocBook DTD, available at the <ulink
+        <listitem><para>The DocBook DTD, available as a ZIP archive at
+        the <ulink
         url="http://www.oasis-open.org/docbook/xml/4.2/index.shtml">OASIS
         DocBook site</ulink>. Extract the DocBook DTD to a directory
         on your hard disk (which we'll refer to as the
