@@ -51,14 +51,7 @@ namespace
     class Wrapped1
         : boost::operators<Wrapped1<T> >
         , boost::shiftable<Wrapped1<T> >
-        ,
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1300))                 \
-    || BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(3))                   \
-    || BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, BOOST_TESTED_AT(800))  \
-    || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
-          public
-#endif 
-          boost::bool_testable<Wrapped1<T> >
+        , boost::bool_testable<Wrapped1<T> >
     {
     public:
         explicit Wrapped1( T v = T() ) : _value(v) {}
@@ -89,9 +82,7 @@ namespace
           { _value >>= x._value; return *this; }
         Wrapped1& operator++()               { ++_value; return *this; }
         Wrapped1& operator--()               { --_value; return *this; }
-        
-        typedef T (Wrapped1::*safe_bool)() const;
-        operator safe_bool () const { return _value ? &Wrapped1::value : 0; }
+        operator bool() const { return _value != 0; }
         
     private:
         T _value;

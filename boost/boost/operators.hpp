@@ -316,15 +316,9 @@ template <class T, class B = ::boost::detail::empty_base>
 struct bool_testable : B
 {
     friend bool operator!(const T& t) { return !static_cast<bool>(t); }
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
 private:
-#if !BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 600)
     typedef signed char private_number_type;
-# if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1301))                \
-    || BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, BOOST_TESTED_AT(800))  \
-    || BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(3))                   \
-    || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
- public:
-# endif
     operator private_number_type() const;
 #endif 
 };
