@@ -51,6 +51,11 @@ rule run-invoke ( test-name : sources * : defn * )
             std::locale-support
             # <threading>single
             # <runtime-link>static
+            <cwpro-9.2><*><runtime-link>static
+            <cwpro-8.3><*><runtime-link>static
+            <cw-9.2><*><runtime-link>static
+            <cw-8.3><*><runtime-link>static
+            <cw><*><runtime-link>static
             <stlport-iostream>on 
             <borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
             <borland-5.5.1><*><cxxflags>"-w-8080 -w-8071 -w-8057"
@@ -75,9 +80,13 @@ rule run-invoke ( test-name : sources * : defn * )
             : # args
             : # input files
             : # requirements
-                std::locale-support
                 # <threading>single
                 # <runtime-link>static
+                <cwpro-9.2><*><runtime-link>static
+                <cwpro-8.3><*><runtime-link>static
+                <cw-9.2><*><runtime-link>static
+                <cw-8.3><*><runtime-link>static
+                <cw><*><runtime-link>static
                 <stlport-iostream>on 
                 <borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
                 <borland-5.5.1><*><cxxflags>"-w-8080 -w-8071 -w-8057"
@@ -95,7 +104,10 @@ rule run-invoke ( test-name : sources * : defn * )
 rule test-bsl-run ( test-name : sources * )
 {
     return [ 
-        run-invoke $(test-name) : $(test-name).cpp $(sources).cpp
+        run-invoke $(test-name) 
+        : 
+            $(test-name).cpp $(sources).cpp
+            <lib>../../serialization/build/boost_serialization
     ] ;
 }
 
@@ -106,22 +118,28 @@ rule test-bsl-run_archive ( test-name : archive-name : sources * ) {
             run-invoke $(test-name)_$(archive-name)
             : 
                 $(test-name).cpp $(sources).cpp
-                <lib>../../../libs/serialization/build/boost_wserialization
+                <lib>../../serialization/build/boost_serialization
+                <lib>../../serialization/build/boost_wserialization
             :
                 BOOST_ARCHIVE_TEST=$(archive-name).hpp
         ] ;
     case "*" :
         return [
             run-invoke $(test-name)_$(archive-name)
-            : $(test-name).cpp $(sources).cpp
-            : BOOST_ARCHIVE_TEST=$(archive-name).hpp
+            : 
+                $(test-name).cpp $(sources).cpp
+                <lib>../../serialization/build/boost_serialization
+            : 
+                BOOST_ARCHIVE_TEST=$(archive-name).hpp
         ] ;
     }
 }
 
 rule test-bsl-run_polymorphic_archive ( test-name : sources * ) {
     for local defn in $(BOOST_ARCHIVE_LIST) {
-        test-bsl-run_archive $(test-name) : polymorphic_$(defn:LB) : $(sources) ;
+        test-bsl-run_archive $(test-name) : polymorphic_$(defn:LB) 
+        : 
+            $(sources) ;
     }
 }
 
@@ -181,18 +199,8 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ test-bsl-run test_traits_pass ]
         [ test-bsl-run test_private_ctor ]
         [ test-bsl-run test_mult_archive_types ]
-        [
-            run-invoke test_codecvt_null 
-            :
-                test_codecvt_null.cpp
-                <lib>../../../libs/serialization/build/boost_wserialization
-        ]
-        [
-            run-invoke test_utf8_codecvt
-            :
-                test_utf8_codecvt.cpp
-                <lib>../../../libs/serialization/build/boost_wserialization
-        ]
+        [ run-invoke test_codecvt_null : test_codecvt_null.cpp ../src/codecvt_null.cpp ]
+        [ run-invoke test_utf8_codecvt : test_utf8_codecvt.cpp ../src/utf8_codecvt_facet.cpp ]
 
         # demos
         [ test-bsl-run test_demo ]
