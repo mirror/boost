@@ -1,4 +1,4 @@
-//  Demonstrate and test boost/operators.hpp on std::iterators  -------------//
+//  Test boost/iterator_adaptors.hpp
 
 //  (C) Copyright Jeremy Siek 1999. Permission to copy, use, modify,
 //  sell and distribute this software is granted provided this
@@ -9,7 +9,6 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
-//  04 Mar 01 Workaround for Borland (Dave Abrahams)
 //  19 Feb 01 Take adavantage of improved iterator_traits to do more tests
 //            on MSVC. Hack around an MSVC-with-STLport internal compiler
 //            error. (David Abrahams)
@@ -60,28 +59,6 @@ struct my_iterator_tag : public std::random_access_iterator_tag { };
 
 using boost::dummyT;
 
-struct my_iter_traits {
-  typedef dummyT value_type;
-  typedef dummyT* pointer;
-  typedef dummyT& reference;
-  typedef my_iterator_tag iterator_category;
-  typedef std::ptrdiff_t difference_type;
-};
-
-struct my_const_iter_traits {
-  typedef dummyT value_type;
-  typedef const dummyT* pointer;
-  typedef const dummyT& reference;
-  typedef my_iterator_tag iterator_category;
-  typedef std::ptrdiff_t difference_type;
-};
-
-typedef boost::iterator_adaptor<dummyT*, 
-  boost::default_iterator_policies, dummyT> my_iterator;
-
-typedef boost::iterator_adaptor<const dummyT*, 
-  boost::default_iterator_policies, const dummyT> const_my_iterator;
-
 
 struct mult_functor {
   typedef int result_type;
@@ -118,78 +95,6 @@ typedef std::deque<int> storage;
 typedef std::deque<int*> pointer_deque;
 typedef std::set<storage::iterator> iterator_set;
 
-void more_indirect_iterator_tests()
-{
-// For some reason all heck breaks loose in the compiler under these conditions.
-#if !defined(BOOST_MSVC) || !defined(__STL_DEBUG)
-    storage store(1000);
-    std::generate(store.begin(), store.end(), rand);
-    
-    pointer_deque ptr_deque;
-    iterator_set iter_set;
-
-    for (storage::iterator p = store.begin(); p != store.end(); ++p)
-    {
-        ptr_deque.push_back(&*p);
-        iter_set.insert(p);
-    }
-
-    typedef boost::indirect_iterator_pair_generator<
-        pointer_deque::iterator
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        , int
-#endif
-    > IndirectDeque;
-
-    IndirectDeque::iterator db(ptr_deque.begin());
-    IndirectDeque::iterator de(ptr_deque.end());
-    assert(static_cast<std::size_t>(de - db) == store.size());
-    assert(db + store.size() == de);
-    IndirectDeque::const_iterator dci(db);
-    assert(db == dci);
-    assert(dci == db);
-    assert(dci != de);
-    assert(dci < de);
-    assert(dci <= de);
-    assert(de >= dci);
-    assert(de > dci);
-    dci = de;
-    assert(dci == de);
-
-    boost::random_access_iterator_test(db + 1, store.size() - 1, boost::next(store.begin()));
-    
-    *db = 999;
-    assert(store.front() == 999);
-
-    typedef boost::indirect_iterator_generator<
-        iterator_set::iterator
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        , int
-#endif
-        >::type indirect_set_iterator;
-
-    typedef boost::indirect_iterator_generator<
-        iterator_set::iterator,
-        const int
-        >::type const_indirect_set_iterator;
-
-    indirect_set_iterator sb(iter_set.begin());
-    indirect_set_iterator se(iter_set.end());
-    const_indirect_set_iterator sci(iter_set.begin());
-    assert(sci == sb);
-    assert(sci != se);
-    sci = se;
-    assert(sci == se);
-    
-    *boost::prior(se) = 888;
-    assert(store.back() == 888);
-    assert(std::equal(sb, se, store.begin()));
-
-    boost::bidirectional_iterator_test(boost::next(sb), store[1], store[2]);
-    assert(std::equal(db, de, store.begin()));
-#endif    
-}
-
 int
 main()
 {
@@ -211,65 +116,12 @@ main()
 
   // Test the iterator_adaptor
   {
-    my_iterator i(array);
+    boost::iterator_adaptor<dummyT*, boost::default_iterator_policies, dummyT> i(array);
     boost::random_access_iterator_test(i, N, array);
     
-    const_my_iterator j(array);
+    boost::iterator_adaptor<const dummyT*, boost::default_iterator_policies, const dummyT> j(array);
     boost::random_access_iterator_test(j, N, array);
     boost::const_nonconst_iterator_test(i, ++j);
-  }
-
-  // Test transform_iterator
-  {
-    int x[N], y[N];
-    for (int k = 0; k < N; ++k)
-      x[k] = k;
-    std::copy(x, x + N, y);
-
-    for (int k2 = 0; k2 < N; ++k2)
-      x[k2] = x[k2] * 2;
-
-    boost::transform_iterator_generator<mult_functor, int*>::type
-      i(y, mult_functor(2));
-    boost::input_iterator_test(i, x[0], x[1]);
-    boost::input_iterator_test(boost::make_transform_iterator(&y[0], mult_functor(2)), x[0], x[1]);
-  }
-  
-  // Test indirect_iterator_generator
-  {
-    dummyT* ptr[N];
-    for (int k = 0; k < N; ++k)
-      ptr[k] = array + k;
-
-    typedef boost::indirect_iterator_generator<dummyT**
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        , dummyT
-#endif
-      >::type indirect_iterator;
-
-    typedef boost::indirect_iterator_generator<dummyT**, const dummyT>::type const_indirect_iterator;
-
-    indirect_iterator i(ptr);
-    boost::random_access_iterator_test(i, N, array);
-
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    boost::random_access_iterator_test(boost::make_indirect_iterator(ptr), N, array);
-#endif
-    
-    // check operator->
-    assert((*i).m_x == i->foo());
-
-    const_indirect_iterator j(ptr);
-    boost::random_access_iterator_test(j, N, array);
-
-    dummyT*const* const_ptr = ptr;
-    
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    boost::random_access_iterator_test(boost::make_indirect_iterator(const_ptr), N, array);
-#endif
-    boost::const_nonconst_iterator_test(i, ++j);
-
-    more_indirect_iterator_tests();
   }
 
   // Test projection_iterator_pair_generator
@@ -377,28 +229,33 @@ main()
 
   // Test filter iterator
   {
-    // Using typedefs for filter_gen::type and filter_gen::policies_type
-    // confused Borland terribly.
+    // Using typedefs for filter_gen::type confused Borland terribly.
     typedef boost::detail::non_bidirectional_category<dummyT*>::type category;
     
-    typedef ::boost::filter_iterator_generator<one_or_four, dummyT*
+    typedef boost::filter_iterator_generator<one_or_four, dummyT*
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         , dummyT
 #endif
-        > filter_iter_gen;
+        >::type filter_iter;
 
-#ifndef __BORLANDC__
-    typedef filter_iter_gen::type filter_iter;
+#if defined(__BORLANDC__)
+    // Borland is choking on accessing the policies_type explicitly
+    // from the filter_iter. 
+    boost::forward_iterator_test(make_filter_iterator(array, array+N, 
+						      one_or_four()),
+				 dummyT(1), dummyT(4));
 #else
-# define filter_iter filter_iter_gen::type // Borland has a problem with the above
-#endif
     filter_iter i(array, filter_iter::policies_type(one_or_four(), array + N));
     boost::forward_iterator_test(i, dummyT(1), dummyT(4));
+#endif
 
+#if !defined(__BORLANDC__)
+    // 
     enum { is_forward = boost::is_same<
            filter_iter::iterator_category,
            std::forward_iterator_tag>::value };
     BOOST_STATIC_ASSERT(is_forward);
+#endif
 
     // On compilers not supporting partial specialization, we can do more type
     // deduction with deque iterators than with pointers... unless the library
@@ -439,12 +296,24 @@ main()
   // check operator-> with a forward iterator
   {
     boost::forward_iterator_archetype<dummyT> forward_iter;
+#if defined(__BORLANDC__)
     typedef boost::iterator_adaptor<boost::forward_iterator_archetype<dummyT>,
       boost::default_iterator_policies,
       dummyT, const dummyT&, const dummyT*, 
       std::forward_iterator_tag, std::ptrdiff_t> adaptor_type;
+#else
+    typedef boost::iterator_adaptor<boost::forward_iterator_archetype<dummyT>,
+      boost::default_iterator_policies,
+      boost::iterator_traits_generator
+        ::value_type<dummyT>
+        ::reference<const dummyT&>
+        ::pointer<const dummyT*> 
+        ::iterator_category<std::forward_iterator_tag>
+        ::difference_type<std::ptrdiff_t> > adaptor_type;
+#endif
     adaptor_type i(forward_iter);
-    if (0) // don't do this, just make sure it compiles
+    int zero = 0;
+    if (zero) // don't do this, just make sure it compiles
       assert((*i).m_x == i->foo());      
   }
   // check operator-> with an input iterator
@@ -455,10 +324,10 @@ main()
       dummyT, const dummyT&, const dummyT*, 
       std::input_iterator_tag, std::ptrdiff_t> adaptor_type;
     adaptor_type i(input_iter);
-    if (0) // don't do this, just make sure it compiles
+    int zero = 0;
+    if (zero) // don't do this, just make sure it compiles
       assert((*i).m_x == i->foo());      
   }
-
   std::cout << "test successful " << std::endl;
   return 0;
 }
