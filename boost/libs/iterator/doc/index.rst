@@ -17,7 +17,7 @@ __ ../../../index.htm
                 Lab`_, University of Hanover `Institute for Transport
                 Railway Operation and Construction`_
 :date:          $Date$
-:copyright:     Copyright Dave Abrahams, Jeremy Siek, Thomas Witt 2003. All rights reserved
+:copyright:     Copyright David Abrahams, Jeremy Siek, Thomas Witt 2003. All rights reserved
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 .. _`Open Systems Lab`: http://www.osl.iu.edu
@@ -37,7 +37,7 @@ __ ../../../index.htm
            report.  The components of the Boost Iterator Library
            replace the older Boost Iterator Adaptor Library.
 
-.. _concepts: ../../more/generic_programming.html
+.. _concepts: ../../../more/generic_programming.html#concept
 
 .. contents:: **Table of Contents**
 
@@ -52,16 +52,17 @@ __ ../../../index.htm
 The iterator categories defined in C++98 are extremely limiting
 because they bind together two orthogonal concepts: traversal and
 element access.  For example, because a random access iterator is
-required to return a reference (and not a proxy) when dereferenced, it
-is impossible to capture the capabilities of
-``vector<bool>::iterator`` using the C++98 categories.  The infamous
-"``vector<bool>`` is not a container, and its iterators aren't random
-access iterators", debacle about which Herb Sutter wrote two papers
-for the standards comittee (n1185_ and n1211_), and a `Guru of the
-Week`__.  New-style iterators go well beyond patching up
-``vector<bool>``, though.  There are lots of other iterators already
-in use which can't be adequately represented by the existing concepts.
-For details about the new iterator concepts, see our
+required to return a reference (and not a proxy) when dereferenced,
+it is impossible to capture the capabilities of
+``vector<bool>::iterator`` using the C++98 categories.  This is the
+infamous "``vector<bool>`` is not a container, and its iterators
+aren't random access iterators", debacle about which Herb Sutter
+wrote two papers for the standards comittee (n1185_ and n1211_),
+and a `Guru of the Week`__.  New-style iterators go well beyond
+patching up ``vector<bool>``, though: there are lots of other
+iterators already in use which can't be adequately represented by
+the existing concepts.  For details about the new iterator
+concepts, see our
 
 .. _n1185: http://www.gotw.ca/publications/N1185.pdf
 .. _n1211: http://www.gotw.ca/publications/N1211.pdf

@@ -47,15 +47,15 @@ __ :
 ---------------------------------
 
 The ``Derived`` template parameter must be a derived class of
-``iterator_adaptor``. The ``Base`` type must implement the expressions
-involving ``m_iterator`` in the specifications of those private member
-functions of ``iterator_adaptor`` that are not redefined by the
-``Derived`` class and that are needed to model the concept
-corresponding to the chosen ``Category`` according to the requirements
-of ``iterator_facade``.  The rest of the template parameters specify
-the types for the member typedefs in ``iterator_facade``.  The
-following pseudo-code specifies the traits types for
-``iterator_adaptor``.
+``iterator_adaptor``. The ``Base`` type must implement the
+expressions involving ``m_iterator`` in the specifications of those
+private member functions of ``iterator_adaptor`` that are not
+redefined by the ``Derived`` class and that are needed to model the
+concept corresponding to the ``iterator_adaptor``\ 's ``category``
+typedef according to the requirements of ``iterator_facade``.  The
+rest of the template parameters specify the types for the member
+typedefs in ``iterator_facade``.  The following pseudo-code
+specifies the traits types for ``iterator_adaptor``.
 
 ::
 
@@ -79,20 +79,21 @@ following pseudo-code specifies the traits types for
 
     if (Category == use_default)
         iterator_category = iterator_tag< 
-            access_category< 
-                iterator< iterator_traits<Base>::iterator_category,
-                          Value,
-                          Distance,
-                          Value*,
-                          Reference > >,
-            traversal_category<
-                iterator< iterator_traits<Base>::iterator_category,
-                          Value,
-                          Distance,
-                          Value*,
-                          Reference > >
+            access_category< Base >,
+            traversal_category< Base >
+        >
+    else if (Category is an access tag)
+        iterator_category = iterator_tag<
+            Category
+        ...
+    
+    else if (Category is a traversal tag)
+        ...
     else
         iterator_category = Category;
+        // Actually the above is wrong.  See the use of
+        // access_category_tag and
+        // new_category_to_access/iter_category_to_access.
 
 
 ..  Replaced with new semantics --thw
@@ -101,6 +102,7 @@ following pseudo-code specifies the traits types for
     else
         iterator_category = Category;
 
+    Fix this up!!
 
 
 ``iterator_adaptor`` public operations

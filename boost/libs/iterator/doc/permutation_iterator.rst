@@ -7,7 +7,7 @@
 :organization: `Boost Consulting`_, Indiana University `Open Systems
                Lab`_
 :date: $Date$
-:copyright: Copyright Toon Knapen, Dave Abrahams, Roland Richter, and Jeremy Siek 2003. All rights reserved
+:copyright: Copyright Toon Knapen, David Abrahams, Roland Richter, and Jeremy Siek 2003. All rights reserved
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 .. _`Open Systems Lab`: http://www.osl.iu.edu

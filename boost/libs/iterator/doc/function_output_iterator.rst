@@ -8,7 +8,7 @@
                Lab`_, University of Hanover `Institute for Transport
                Railway Operation and Construction`_
 :date: $Date$
-:copyright: Copyright Dave Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved
+:copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 .. _`Open Systems Lab`: http://www.osl.iu.edu
