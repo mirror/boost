@@ -19,7 +19,9 @@
 #include <set>
 #include <algorithm>
 #include <iostream>
-#include <boost/utility.hpp>
+// Note: tie() use to live in boost/utility.hpp, but
+// not it is part of the more general Boost Tuple Library.
+#include <boost/tuple/tuple.hpp>
 
 int
 main(int, char*[])
