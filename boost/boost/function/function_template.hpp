@@ -307,6 +307,9 @@ namespace boost {
 
     ~BOOST_FUNCTION_FUNCTION() { clear(); }
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+    // MSVC 6.0 and prior require all definitions to be inline, but
+    // these definitions can become very costly.
     result_type operator()(BOOST_FUNCTION_PARMS) const
     {
       if (this->empty())
@@ -322,6 +325,9 @@ namespace boost {
       return result;
 #endif // BOOST_NO_VOID_RETURNS
     }
+#else
+    result_type operator()(BOOST_FUNCTION_PARMS) const;
+#endif
 
     // The distinction between when to use BOOST_FUNCTION_FUNCTION and
     // when to use self_type is obnoxious. MSVC cannot handle self_type as
@@ -555,6 +561,32 @@ namespace boost {
   {
     f1.swap(f2);
   }
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+  template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS,
+           typename Allocator>
+  typename BOOST_FUNCTION_FUNCTION<
+      R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS, 
+      Allocator>::result_type
+   BOOST_FUNCTION_FUNCTION<R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS,
+
+                           Allocator>
+  ::operator()(BOOST_FUNCTION_PARMS) const
+  {
+      if (this->empty())
+        boost::throw_exception(bad_function_call());
+
+      internal_result_type result = invoker(this->functor
+                                            BOOST_FUNCTION_COMMA
+                                            BOOST_FUNCTION_ARGS);
+
+#  ifndef BOOST_NO_VOID_RETURNS
+      return static_cast<result_type>(result);
+#  else
+      return result;
+#  endif // BOOST_NO_VOID_RETURNS
+    }
+#endif
 
 // Poison comparisons between boost::function objects of the same type.
 template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
