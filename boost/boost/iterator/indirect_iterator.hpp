@@ -12,11 +12,15 @@
 #include <boost/iterator.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 
-#include <boost/iterator/iterator_traits.hpp>
-
-#include <boost/type_traits/remove_cv.hpp>
+#include <boost/pointee.hpp>
+#include <boost/indirect_reference.hpp>
+#include <boost/detail/iterator.hpp>
 
 #include <boost/python/detail/indirect_traits.hpp>
+
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/add_reference.hpp>
+
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/apply_if.hpp>
@@ -39,43 +43,6 @@ namespace boost
 
   namespace detail
   {
-    template <class T>
-    struct iterator_is_mutable
-        : mpl::not_<
-              boost::python::detail::is_reference_to_const<
-                 typename iterator_reference<T>::type
-              >
-          >
-    {
-    };
-
-    // If the Value parameter is unspecified, we use this metafunction
-    // to deduce the default type
-    template <class Dereferenceable>
-    struct default_indirect_value
-    {
-        typedef typename mpl::if_<
-            iterator_is_mutable<Dereferenceable>
-        , typename iterator_value<Dereferenceable>::type
-        , typename iterator_value<Dereferenceable>::type const
-        >::type type;
-    };
-
-    // If the Reference parameter is unspecified, we use this metafunction
-    // to deduce the default type
-    template <class Dereferenceable, class Value>
-    struct default_indirect_reference
-    {
-        struct use_value_ref { typedef Value& type; };
-
-        typedef typename 
-        mpl::apply_if<
-            is_same<Value, use_default>
-            , iterator_reference<Dereferenceable>
-            , use_value_ref
-        >::type type;
-    };
-    
     template <class Iter, class Value, class Category, class Reference, class Difference>
     struct indirect_base
     {
@@ -85,11 +52,16 @@ namespace boost
             indirect_iterator<Iter, Value, Category, Reference, Difference>
           , Iter
           , typename ia_dflt_help<
-                Value, default_indirect_value<dereferenceable>
+                Value, pointee<dereferenceable>
             >::type
           , Category
           , typename ia_dflt_help<
-                Reference, default_indirect_reference<dereferenceable, Value>
+                Reference
+              , mpl::apply_if<
+                    is_same<Value,use_default>
+                  , indirect_reference<dereferenceable>
+                  , add_reference<Value>
+                >
             >::type
           , Difference
         > type;

@@ -26,6 +26,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
 
+#include <boost/mpl/aux_/has_xxx.hpp>
+
 #include <boost/type_traits/broken_compiler_spec.hpp>
 #include <vector>
 #include <stdlib.h>
@@ -139,6 +141,10 @@ void more_indirect_iterator_tests()
     assert(std::equal(db, de, store.begin()));
 }
 
+// element_type detector; defaults to true so the test passes when
+// has_xxx isn't implemented
+BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_element_type, element_type, true)
+    
 int
 main()
 {
@@ -146,6 +152,10 @@ main()
                      dummyT(3), dummyT(4), dummyT(5) };
   const int N = sizeof(array)/sizeof(dummyT);
 
+# if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+  boost::shared_ptr<dummyT> zz((dummyT*)0);  // Why? I don't know, but it suppresses a bad instantiation.
+# endif
+  
   typedef std::vector<boost::shared_ptr<dummyT> > shared_t;
   shared_t shared;
   
@@ -154,9 +164,8 @@ main()
     typedef boost::indirect_iterator<shared_t::iterator> iter_t;
 
     BOOST_STATIC_ASSERT(
-        boost::detail::has_element_type<
-        boost::shared_ptr<dummyT>
-        // std::iterator_traits<shared_t::iterator>::value_type
+        has_element_type<
+            boost::detail::iterator_traits<shared_t::iterator>::value_type
         >::value
         );
     

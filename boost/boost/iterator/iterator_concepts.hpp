@@ -346,35 +346,50 @@ namespace detail
 
   } // namespace detail
 
-  template <typename Iterator, typename ConstIterator>
-  class InteroperableConcept
-  {
-  public:
-    typedef typename boost::iterator_traversal<Iterator>::type traversal_category;
-    typedef typename boost::detail::iterator_traits<Iterator>::difference_type
-      difference_type;
+    template <typename Iterator, typename ConstIterator>
+    class InteroperableConcept
+    {
+     public:
+        typedef typename boost::detail::pure_traversal_tag<
+            typename boost::iterator_traversal<
+                Iterator
+            >::type
+        >::type traversal_category;
+        
+        typedef typename
+          boost::detail::iterator_traits<Iterator>::difference_type
+        difference_type;
 
-    typedef typename boost::iterator_traversal<ConstIterator>::type
-      const_traversal_category;
-    typedef typename boost::detail::iterator_traits<ConstIterator>::difference_type
-      const_difference_type;
+        typedef typename boost::detail::pure_traversal_tag<
+            typename boost::iterator_traversal<
+                ConstIterator
+            >::type
+        >::type const_traversal_category;
+        
+        typedef typename
+          boost::detail::iterator_traits<ConstIterator>::difference_type
+        const_difference_type;
 
-    void constraints() {
-      BOOST_STATIC_ASSERT((boost::is_same< difference_type,
-                                           const_difference_type>::value));
-      BOOST_STATIC_ASSERT((boost::is_same< traversal_category,
-                                           const_traversal_category>::value));
-      
-      // ToDo check what the std really requires
-      
-      // detail::Operations<traversal_category>::constraints(i, ci);
+        void constraints()
+        {
+            BOOST_STATIC_ASSERT(
+                (boost::is_same< difference_type, const_difference_type>::value)
+            );
+            
+            BOOST_STATIC_ASSERT(
+                (boost::is_same< traversal_category, const_traversal_category>::value)
+            );
 
-      ci = i;
+            // ToDo check what the std really requires
 
-    }
-    Iterator      i;
-    ConstIterator ci;
-  };
+            // detail::Operations<traversal_category>::constraints(i, ci);
+
+            ci = i;
+
+        }
+        Iterator      i;
+        ConstIterator ci;
+    };
 
 } // namespace boost_concepts
 

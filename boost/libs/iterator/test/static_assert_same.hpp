@@ -7,6 +7,7 @@
 # define STATIC_ASSERT_SAME_DWA2003530_HPP
 
 # include <boost/type.hpp>
+# include <boost/static_assert.hpp>
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T, class U>
@@ -31,5 +32,9 @@ struct static_assert_same
     : boost::mpl::if_<boost::is_same<T,U>,boost::mpl::true_,void>::type
 {};
 #endif
+
+#define STATIC_ASSERT_SAME( T1,T2 )                   \
+   enum { BOOST_JOIN(boost_static_assert_enum_, __LINE__) \
+          = static_assert_same<T1,T2>::value }
 
 #endif // STATIC_ASSERT_SAME_DWA2003530_HPP

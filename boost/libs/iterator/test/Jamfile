@@ -18,7 +18,13 @@ test-suite iterator
     # compilation problems.
     [ run is_convertible_fail.cpp ]  
 
-    [ run zip_iterator_test.cpp ]
+    [ run zip_iterator_test.cpp
+        : : : 
+        
+        # stlport's debug mode generates long symbols which overwhelm
+        # vc6
+        <msvc-stlport><*><runtime-build>release 
+    ]
       
     # These tests should work for just about everything.
     [ compile is_lvalue_iterator.cpp ]

@@ -21,7 +21,13 @@ namespace boost { namespace detail {
 //
 //
 template <bool GreaterEqual, bool LessEqual>
-struct minimum_category_impl;
+struct minimum_category_impl
+# if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+{
+    typedef void type;
+}
+# endif 
+;
 
 template <class T1, class T2>
 struct error_not_related_by_convertibility;
@@ -58,15 +64,9 @@ template <>
 struct minimum_category_impl<false,false>
 {
     template <class T1, class T2> struct apply
-# if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
-    {
-        typedef void type;
-    };
-# else 
     : error_not_related_by_convertibility<T1,T2>
     {
     };
-# endif 
 };
 
 template <class T1 = mpl::_1, class T2 = mpl::_2>

@@ -14,26 +14,44 @@
 
 #include <boost/iterator/indirect_iterator.hpp>
 #include <boost/static_assert.hpp>
+#include "static_assert_same.hpp"
 #include <boost/type_traits/same_traits.hpp>
 
 struct zow { };
 
 struct my_ptr {
-  typedef zow value_type;
-  typedef const zow& reference;
-  typedef const zow* pointer;
-  typedef void difference_type;
-  typedef boost::no_traversal_tag iterator_category;
+  typedef zow const element_type;
+//  typedef const zow& reference;
+//  typedef const zow* pointer;
+//  typedef void difference_type;
+//  typedef boost::no_traversal_tag iterator_category;
 };
 
+BOOST_TT_BROKEN_COMPILER_SPEC(my_ptr)
+BOOST_TT_BROKEN_COMPILER_SPEC(zow)
+
+#ifndef BOOST_ITERATOR_REF_CONSTNESS_KILLS_WRITABILITY
+    
+# define STATIC_ASSERT_SAME_POINTER(P1, P2)                         \
+    STATIC_ASSERT_SAME(                                             \
+        boost::remove_const<boost::remove_pointer<P1>::type>::type  \
+      , boost::remove_const<boost::remove_pointer<P2>::type>::type  \
+    )
+
+#else
+    
+# define STATIC_ASSERT_SAME_POINTER(P1, P2) STATIC_ASSERT_SAME(P1,P2)
+    
+#endif
+    
 int main()
 {
   {
     typedef boost::indirect_iterator<int**> Iter;
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::value_type, int>::value));
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::reference, int&>::value));  
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::pointer, int*>::value));  
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::difference_type, std::ptrdiff_t>::value));
+    STATIC_ASSERT_SAME(Iter::value_type, int);
+    STATIC_ASSERT_SAME(Iter::reference, int&);  
+    STATIC_ASSERT_SAME_POINTER(Iter::pointer, int*);  
+    STATIC_ASSERT_SAME(Iter::difference_type, std::ptrdiff_t);
     
     BOOST_STATIC_ASSERT((boost::is_convertible<Iter::iterator_category,
 			 std::random_access_iterator_tag>::value));
@@ -42,28 +60,34 @@ int main()
   }
   {
     typedef boost::indirect_iterator<int const**> Iter;
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::value_type, int>::value));
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::reference, const int&>::value));  
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::pointer, const int*>::value));  
+    STATIC_ASSERT_SAME(Iter::value_type, int);
+    STATIC_ASSERT_SAME(Iter::reference, const int&);
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  // Borland drops const all over the place
+    STATIC_ASSERT_SAME_POINTER(Iter::pointer, const int*);
+#endif 
   }
   {
     typedef boost::indirect_iterator<int**, int> Iter;
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::value_type, int>::value));
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::reference, int&>::value));  
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::pointer, int*>::value));  
+    STATIC_ASSERT_SAME(Iter::value_type, int);
+    STATIC_ASSERT_SAME(Iter::reference, int&);  
+    STATIC_ASSERT_SAME_POINTER(Iter::pointer, int*);  
   }
   {
     typedef boost::indirect_iterator<int**, const int> Iter;
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::value_type, int>::value));
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::reference, const int&>::value));  
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::pointer, const int*>::value));  
+    STATIC_ASSERT_SAME(Iter::value_type, int);
+    STATIC_ASSERT_SAME(Iter::reference, const int&);  
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  // Borland drops const all over the place
+    STATIC_ASSERT_SAME_POINTER(Iter::pointer, const int*);
+#endif 
   }
   {
     typedef boost::indirect_iterator<my_ptr*> Iter;
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::value_type, zow>::value));
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::reference, const zow&>::value));  
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::pointer, const zow*>::value));  
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::difference_type, std::ptrdiff_t>::value));
+    STATIC_ASSERT_SAME(Iter::value_type, zow);
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  // Borland drops const all over the place
+    STATIC_ASSERT_SAME(Iter::reference, const zow&);
+    STATIC_ASSERT_SAME_POINTER(Iter::pointer, const zow*);  
+#endif 
+    STATIC_ASSERT_SAME(Iter::difference_type, std::ptrdiff_t);
     
     BOOST_STATIC_ASSERT((boost::is_convertible<Iter::iterator_category,
 			 std::random_access_iterator_tag>::value));
@@ -72,9 +96,10 @@ int main()
   }
   {
     typedef boost::indirect_iterator<char**, int, std::random_access_iterator_tag, long&, short> Iter;
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::value_type, int>::value));
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::reference, long&>::value));  
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::pointer, int*>::value));  
-    BOOST_STATIC_ASSERT((boost::is_same<Iter::difference_type, short>::value));  
+    STATIC_ASSERT_SAME(Iter::value_type, int);
+    STATIC_ASSERT_SAME(Iter::reference, long&);  
+    STATIC_ASSERT_SAME_POINTER(Iter::pointer, int*);  
+    STATIC_ASSERT_SAME(Iter::difference_type, short);  
   }
+  return 0;
 }

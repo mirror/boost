@@ -46,6 +46,7 @@
 #include <vector>
 #include <list>
 #include <set>
+#include <functional>
 #include <boost/tuple/tuple.hpp>
 #include <boost/iterator/transform_iterator.hpp>
 #include <boost/iterator/is_readable_iterator.hpp>
