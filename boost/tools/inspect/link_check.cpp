@@ -44,7 +44,7 @@ namespace boost
       const path & full_path )
     {
       // keep track of paths already encountered to reduce disk activity
-      if ( !is_directory( full_path ) )
+      if ( !fs:is_directory( full_path ) )
         m_paths[ relative_to( full_path, fs::initial_path() ) ] |= m_present;
     }
 
