@@ -26,9 +26,9 @@ namespace gregorian {
 
 
   /*! Returns a shared pointer to a map of Month strings & numbers.
-   * Strings are both full names and abbreviations.</br>
-   * Ex. ("jan",1), ("february",2), etc...</br>
-   * Note: All characters are lowercase - for case insensitivity</br> 
+   * Strings are both full names and abbreviations.
+   * Ex. ("jan",1), ("february",2), etc...
+   * Note: All characters are lowercase - for case insensitivity
    */
   greg_month::month_map_ptr_type greg_month::get_month_map_ptr()
   {
