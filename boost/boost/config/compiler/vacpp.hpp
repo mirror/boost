@@ -26,6 +26,7 @@
 #endif
 
 #if (__IBMCPP__ <= 600) || !defined(BOOST_STRICT_CONFIG)
+#  define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #endif
 
 //
