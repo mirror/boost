@@ -8,16 +8,53 @@
 
     <h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86">Boost.Function Tutorial</h1>
 
-<p> Boost.Function has two syntactical forms: the preferred form and the compatibility form. The tutorial is therefore split into two sections: the first section introduces Boost.Function using the <a href="#preferred">preferred form</a> and the second section introduces Boost.Function using a <a href="#compatibility">compatibility form</a> that is available on all supported compilers. If you intend to write code to be compiled only on conforming compilers, use the preferred form; if compatibility with nonconforming compilers (e.g., Borland C++ 5.5.1 or Microsoft Visual C++ 6.0/7.0) is required, use the compatibility form. The compatibility form coincides with the older Boost.Function usage.
+<p> Boost.Function has two syntactical forms: the preferred form and the compatibility form. The preferred form fits more closely with the C++ language and reduces the number of separate template parameters that need to be considered, often improving readability; however, the preferred form is not supported on all platforms due to compiler bugs. The compatible form will work on all compilers supported by Boost.Function. Consult the table below to determine which syntactic form to use for your compiler.
 
-<a name="preferred"><h2>Preferred Syntactic Form: Basic Usage</h2></a>
+    <center>
+      <table border=1 cellspacing=1>
+          <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
+          <tr>
+            <td>
+              <ul>
+                <li>GNU C++ 2.95.x, 3.0.x, 3.1.x</li>
+                <li>Comeau C++ 4.2.45.2</li>
+                <li>SGI MIPSpro 7.3.0</li>
+                <li>Intel C++ 5.0, 6.0</li>
+              </ul>
+            </td>
+            <td>
+              <li>Microsoft Visual C++ 6.0, 7.0</li>
+              <li>Borland C++ 5.5.1</li>
+            </td>
+          </tr>
+      </table>
+      </center>
+
+<p> If your compiler does not appear in this list, please try the preferred syntax and report your results to the Boost list so that we can keep this table up-to-date.
+
+<a name="preferred"><h2>Basic Usage</h2></a>
 <p> A function wrapper is defined simply by instantiating the <code>function</code> class template with the desired return type and argument types, formulated as a C++ function type. Any number of arguments may be supplied, up to some implementation-defined limit (10 is the default maximum). The following declares a function object wrapper <code>f</code> that takes two <code>int</code> parameters and returns a <code>float</code>:
-<pre>
+<center>
+<table border=1 cellspacing=1>
+        <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
+        <tr>
+          <td>
+            <pre>
 boost::<a href="reference.html#function">function</a>&lt;float (int x, int y)&gt; f;
-</pre>
+            </pre>
+          </td>
+          <td>
+            <pre>
+boost::<a href="reference.html#functionN">function2</a>&lt;float, int, int&gt; f;
+            </pre>
+          </td>
+        </tr>
+</table>
+</center>
 
 <p> By default, function object wrappers are empty, so we can create a 
 function object to assign to <code>f</code>:
+
 <pre>
 struct int_div { 
   float operator()(int x, int y) const { return ((float)x)/y; }; 
@@ -34,9 +71,25 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
 
 <p> We are free to assign any compatible function object to <code>f</code>. If <code>int_div</code> had been declared to take two <code>long</code> operands,
 the implicit conversions would have been applied to the arguments without any user interference. The only limit on the types of arguments is that they be CopyConstructible, so we can even use references and arrays:
-<pre>
+<center>
+<table border=1 cellspacing=1>
+        <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
+          <tr>
+            <td>
+              <pre>
 boost::function&lt;void (int values[], int n, int&amp; sum, float&amp; avg)&gt; sum_avg;
+              </pre>
+            </td>
+            <td>
+              <pre>
+boost::function4&lt;void, int[], int, int&amp;, float&gt; sum_avg;
+              </pre>
+            </td>
+          </tr>
+</table>
+</center>
 
+<pre>
 void do_sum_avg(int values[], int n, int& sum, float&amp; avg)
 {
   sum = 0;
@@ -71,22 +124,53 @@ else
 <a name="member_func">
 <p> In many systems, callbacks often call to member functions of a particular
 object. This is often referred to as "argument binding", and is beyond the scope of Boost.Function. The use of member functions directly, however, is supported, so the following code is valid:
-<pre>
-  struct X {
-    int foo(int);
-  };
 
-  boost::function&lt;int (X*, int)&gt; f;
-  f = &amp;X::foo;
+<center>
+<table border=1 cellspacing=1>
+        <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
+          <tr>
+            <td>
+<pre>
+struct X {
+  int foo(int);
+};
+
+boost::function&lt;int (X*, int)&gt; f;
+
+f = &amp;X::foo;
   
-  X x;
-  f(&amp;x, 5);
+X x;
+f(&amp;x, 5);
 </pre>
+            </td>
+            <td>
+<pre>
+struct X {
+  int foo(int);
+};
+
+boost::function2&lt;int, X*, int&gt; f;
+
+f = &amp;X::foo;
+  
+X x;
+f(&amp;x, 5);
+</pre>
+            </td>
+          </tr>
+</table>
+</center>
+
 <p> Several libraries exist that support argument binding. Three such libraries are summarized below:
 <ul>
   <li> <a href="../../bind/bind.html">Boost.Bind</a>. This library allows binding of arguments for any function object. It is lightweight and very portable.</li>
 
   <li> The C++ Standard library. Using <code>std::bind1st</code> and <code>std::mem_fun</code> together one can bind the object of a pointer-to-member function for use with Boost.Function:
+<center>
+<table border=1 cellspacing=1>
+        <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
+          <tr>
+            <td>
 <pre>
   struct X {
     int foo(int);
@@ -94,9 +178,26 @@ object. This is often referred to as "argument binding", and is beyond the scope
 
   boost::function&lt;int (int)&gt; f;
   X x;
-  f = std::bind1st(std::mem_fun(&X::foo), &x);
+  f = std::bind1st(std::mem_fun(&amp;X::foo), &amp;x);
 
-  f(5); // Call x.foo(5)</pre></li>
+  f(5); // Call x.foo(5)</pre>
+            </td>
+            <td>
+<pre>
+  struct X {
+    int foo(int);
+  };
+
+  boost::function1&lt;int, int&gt; f;
+  X x;
+  f = std::bind1st(std::mem_fun(&amp;X::foo), &amp;x);
+
+  f(5); // Call x.foo(5)</pre>
+            </td>
+          </tr>
+</table>
+</center>
+</li>
 
   <li><a href="../../lambda/doc/index.html">The Boost.Lambda library</a>. This library provides a powerful composition mechanism to construct function objects that uses very natural C++ syntax. Lambda requires a compiler that is reasonably conformant to the C++ standard. </li>
 </ul>
@@ -109,7 +210,11 @@ function object. This is done using the <a
 href="../../bind/ref.html"><code>ref</code></a> and <a
 href="../../bind/ref.html"><code>cref</code></a> functions to wrap a
 reference to a function object:
-
+<center>
+<table border=1 cellspacing=1>
+        <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
+          <tr>
+            <td>
 <pre>
   stateful_type a_function_object;
   boost::function&lt;int (int)&gt; f;
@@ -117,114 +222,8 @@ reference to a function object:
 
   boost::function&lt;int (int)&gt; f2(f);
 </pre>
-
-Here, <code>f</code> will not make a copy of
-<code>a_function_object</code>, nor will <code>f2</code> when it is
-targeted to <code>f</code>'s reference to
-<code>a_function_object</code>. Additionally, when using references to
-function objects, Boost.Function will not throw exceptions during
-    assignment or construction.
- 
-<a name="compatibility"><h2>Compatible Syntactic Form: Basic usage</h2></a>
-<p> A function wrapper is defined simply by instantiating a <code>function<em>I</em></code> class template with the desired return type and argument types, where <em>I</em> denotes the number of argument types. Any number of arguments may be supplied, up to some implementation-defined limit (10 is the default maximum). The following declares a function object wrapper <code>f</code> that takes two <code>int</code> parameters and returns a <code>float</code>:
-<pre>
-boost::<a href="reference.html#functionN">function2</a>&lt;float, int, int&gt; f;
-</pre>
-
-<p> By default, function object wrappers are empty, so we can create a 
-function object to assign to <code>f</code>:
-<pre>
-struct int_div { 
-  float operator()(int x, int y) const { return ((float)x)/y; }; 
-};
-
-f = int_div();
-</pre>
-
-<p> Now we can use <code>f</code> to execute the underlying function object
-<code>int_div</code>:
-<pre>
-std::cout &lt;&lt; f(5, 3) &lt;&lt; std::endl;
-</pre>
-
-<p> We are free to assign any compatible function object to <code>f</code>. If <code>int_div</code> had been declared to take two <code>long</code> operands,
-the implicit conversions would have been applied to the arguments without any user interference. The only limit on the types of arguments is that they be CopyConstructible, so we can even use references and arrays:
-<pre>
-boost::function4&lt;void, int[], int, int&amp;, float&amp;&gt; sum_avg;
-
-void do_sum_avg(int values[], int n, int&amp; sum, float&amp; avg)
-{
-  sum = 0;
-  for (int i = 0; i &lt; n; i++)
-    sum += values[i];
-  avg = (float)sum / n;
-}
-
-sum_avg = &amp;do_sum_avg;
-</pre>
-
-<p> Invoking a function object wrapper that does not actually contain a function object is a precondition violation, much like trying to call through a null function pointer. We can check for an empty function object wrapper by querying its <code><a href="reference.html#empty">empty</a>()</code> method or, more succinctly, by using it in a boolean context: if it evaluates true, it contains a function object target, i.e.,
-<pre>
-if (f)
-  std::cout << f(5, 3) << std::endl;
-else
-  std::cout << "f has no target, so it is unsafe to call" << std::endl;
-</pre>
-
-<p> We can clear out a function target using the <code><a href="reference.html#functionN_clear">clear</a>()</code> member function.
-
-<h3>Free functions</h3>
-<p> Free function pointers can be considered singleton function objects with const function call operators, and can therefore be directly used with the function object wrappers:
-<pre>
-  float mul_ints(int x, int y) { return ((float)x) * y; }
-  f = &amp;mul_ints;
-</pre>
-
-<p> Note that the <code>&amp;</code> isn't really necessary unless you happen to be using Microsoft Visual C++ version 6.
-
-<h3>Member functions</h3>
-<a name="member_func">
-<p> In many systems, callbacks often call to member functions of a particular
-object. This is often referred to as "argument binding", and is beyond the scope of Boost.Function. The use of member functions directly, however, is supported, so the following code is valid:
-<pre>
-  struct X {
-    int foo(int);
-  };
-
-  boost::function2&lt;int, X*, int&gt; f;
-  f = &amp;X::foo;
-  
-  X x;
-  f(&amp;x, 5);
-</pre>
-<p> Several libraries exist that support argument binding. Three such libraries are summarized below:
-<ul>
-  <li> <a href="../../bind/bind.html">Boost.Bind</a>. This library allows binding of arguments for any function object. It is lightweight and very portable.</li>
-
-  <li> The C++ Standard library. Using <code>std::bind1st</code> and <code>std::mem_fun</code> together one can bind the object of a pointer-to-member function for use with Boost.Function:
-<pre>
-  struct X {
-    int foo(int);
-  };
-
-  boost::function1&lt;int, int&gt; f;
-  X x;
-  f = std::bind1st(std::mem_fun(&X::foo), &x);
-
-  f(5); // Call x.foo(5)</pre></li>
-
-  <li><a href="../../lambda/doc/index.html">The Boost.Lambda library</a>. This library provides a powerful composition mechanism to construct function objects that uses very natural C++ syntax. Lambda requires a compiler that is reasonably conformant to the C++ standard. </li>
-</ul>
-
-<h3>References to Functions</h3>
-<p> In some cases it is expensive (or semantically incorrect) to have
-Boost.Function clone a function object. In such cases, it is possible
-to request that Boost.Function keep only a reference to the actual
-function object. This is done using the <a
-href="../../bind/ref.html"><code>ref</code></a> and <a
-href="../../bind/ref.html"><code>cref</code></a> functions to wrap a
-reference to a function object:
-
+            </td>
+            <td>
 <pre>
   stateful_type a_function_object;
   boost::function1&lt;int, int&gt; f;
@@ -232,6 +231,10 @@ reference to a function object:
 
   boost::function1&lt;int, int&gt; f2(f);
 </pre>
+            </td>
+          </tr>
+</table>
+</center>
 
 Here, <code>f</code> will not make a copy of
 <code>a_function_object</code>, nor will <code>f2</code> when it is
@@ -244,7 +247,7 @@ function objects, Boost.Function will not throw exceptions during
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 12:47:11 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Fri Jul 19 17:17:15 EDT 2002
+Last modified: Mon Aug  5 01:32:30 EDT 2002
 <!-- hhmts end -->
   </body>
 </html>
