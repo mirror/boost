@@ -24,7 +24,7 @@ local test-files = $(test-dir)tests.txt
            :
                     regress ]
 
-            [ run regress/parse.cpp lregress/regress.cpp regress/tests.cpp
+            [ run regress/parse.cpp regress/regress.cpp regress/tests.cpp
                     <lib>../build/boost_regex 
                     <lib>../../test/build/boost_prg_exec_monitor
             : 
