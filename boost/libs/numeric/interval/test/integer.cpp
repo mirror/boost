@@ -24,7 +24,7 @@ int main() {
   I x, y;
   x = 4 - (2 * y + 1) / 3;
 # ifdef __BORLANDC__
-  detail::ignore_warnings();
+  ::detail::ignore_warnings();
 # endif
   return 0;
 }

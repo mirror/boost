@@ -42,7 +42,7 @@ int test_main(int, char *[]) {
   BOOST_TEST(test_pow(-3, -2, 1, 1, 0));
 
 # ifdef __BORLANDC__
-  detail::ignore_warnings();
+  ::detail::ignore_warnings();
 # endif
   return 0;
 }

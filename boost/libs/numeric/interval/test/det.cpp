@@ -103,7 +103,7 @@ int test_main(int, char *[]) {
   BOOST_TEST(test<double>());
   BOOST_TEST(test<long double>());
 # ifdef __BORLANDC__
-  detail::ignore_warnings();
+  ::detail::ignore_warnings();
 # endif
   return 0;
 }

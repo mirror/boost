@@ -128,7 +128,7 @@ int test_main(int, char *[]) {
   //test_all_unaries<long double>();
   //test_all_binaries<long double>();
 # ifdef __BORLANDC__
-  detail::ignore_warnings();
+  ::detail::ignore_warnings();
 # endif
   return 0;
 }

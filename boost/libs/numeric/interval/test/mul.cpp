@@ -125,7 +125,7 @@ int test_main(int, char*[]) {
   BOOST_CHECK(test_sqrt(-1, 2));
 
 # ifdef __BORLANDC__
-  detail::ignore_warnings();
+  ::detail::ignore_warnings();
 # endif
   return 0;
 }
