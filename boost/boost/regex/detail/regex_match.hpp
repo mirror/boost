@@ -31,7 +31,7 @@ namespace boost{
    namespace re_detail{
 
 #ifdef __BORLANDC__
-   #pragma option push -a4 -b -Ve -pc -w-8026
+   #pragma option push -a4 -b -Ve -pc -w-8026 -w-8027
 #endif
 
 //
@@ -54,6 +54,13 @@ inline int string_compare(const std::wstring& s, const wchar_t* p)
 { return std::wcscmp(s.c_str(), p); }
 # define STR_COMP(s,p) string_compare(s,p)
 #endif
+
+template<class charT>
+inline const charT* re_skip_past_null(const charT* p)
+{
+  while (*p != 0) ++p;
+  return ++p;
+}
 
 template <class iterator, class charT, class traits_type, class Allocator>
 iterator BOOST_REGEX_CALL re_is_set_member(iterator next, 
@@ -103,8 +110,7 @@ iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
          if(*p == 0) // if null we've matched
             return set_->isnot ? next : (ptr == next) ? ++next : ptr;
 
-         while(*p)++p;
-         ++p;     // skip null
+         p = re_skip_past_null(p);     // skip null
       }
    }
 
@@ -283,6 +289,11 @@ bool query_match_aux(iterator first,
                      _priv_match_data<iterator, Allocator>& pd,
                      iterator* restart)
 {
+# ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4127)
+#endif
+
    typedef access_t<charT, traits, Allocator2> access;
 
    if(e.flags() & regbase::failbit)
@@ -1030,6 +1041,9 @@ bool query_match_aux(iterator first,
    // if we get to here then everything has failed
    // and no match was found:
    return false;
+# ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 }
 #if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 } // namespace
@@ -1257,9 +1271,9 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
    case regbase::restart_fixed_lit:
    {
       const kmp_info<charT>* info = access::get_kmp(e);
-     std::ptrdiff_t len = info->len;
+      int len = info->len;
       const charT* x = info->pstr;
-     std::ptrdiff_t j = 0; 
+      int j = 0; 
       bool icase = e.flags() & regbase::icase;
       while (first != last) 
       {
@@ -1901,6 +1915,8 @@ inline unsigned int regex_grep(bool (*foo)(const match_results<std::basic_string
 } // namespace boost
 
 #endif   // BOOST_REGEX_MATCH_HPP
+
+
 
 
 

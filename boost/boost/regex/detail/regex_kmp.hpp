@@ -40,10 +40,10 @@ namespace boost{
 template <class charT>
 struct kmp_info
 {
-   std::size_t size;
-   std::size_t len;
+   unsigned int size;
+   unsigned int len;
    const charT* pstr;
-   std::ptrdiff_t kmp_next[1];
+   int kmp_next[1];
 };
 
 template <class charT, class Allocator>
@@ -57,11 +57,11 @@ template <class iterator, class charT, class Trans, class Allocator>
 kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans translate, const Allocator& a) 
 {    
    typedef typename boost::detail::rebind_allocator<char, Allocator>::type atype;
-   std::ptrdiff_t i, j, m;
+   int i, j, m;
    i = 0;
-   m = boost::re_detail::distance(first, last);
+   m = static_cast<int>(boost::re_detail::distance(first, last));
    ++m;
-   std::size_t size = sizeof(kmp_info<charT>) + sizeof(int)*m + sizeof(charT)*m;
+   unsigned int size = sizeof(kmp_info<charT>) + sizeof(int)*m + sizeof(charT)*m;
    --m;
    //
    // allocate struct and fill it in:
@@ -106,9 +106,6 @@ kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans transla
 } // namespace boost
 
 #endif   // BOOST_REGEX_KMP_HPP
-
-
-
 
 
 
