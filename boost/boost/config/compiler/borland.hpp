@@ -25,17 +25,28 @@
 #endif
 
 // Version 6.0 and below:
-#if (__BORLANDC__ <= 0x560) || !defined(BOOST_STRICT_CONFIG)
-#  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
+#if (__BORLANDC__ <= 0x560)
 #  define BOOST_NO_INTEGRAL_INT64_T
+#endif
+
+// Version 7.0 (Kylix) and below:
+#if (__BORLANDC__ <= 0x570) || !defined(BOOST_STRICT_CONFIG)
+#  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #  define BOOST_NO_PRIVATE_IN_AGGREGATE
-#  define BOOST_NO_SWPRINTF
 #  define BOOST_NO_USING_TEMPLATE
 #  define BOOST_BCB_PARTIAL_SPECIALIZATION_BUG
 #  define BOOST_NO_TEMPLATE_TEMPLATES
    // we shouldn't really need this - but too many things choke
    // without it, this needs more investigation:
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+
+#  ifdef _WIN32
+#     define BOOST_NO_SWPRINTF
+#  elif defined(linux)
+      // we should really be able to do without this
+      // but the wcs* functions aren't imported into std::
+#     define BOOST_NO_STDC_NAMESPACE
+#  endif
 #endif
 
 // Borland C++Builder 6 defaults to using STLPort.  If _USE_OLD_RW_STL is
@@ -78,7 +89,7 @@
 #endif
 //
 // last known and checked version is 5.6:
-#if (__BORLANDC__ > 0x560)
+#if (__BORLANDC__ > 0x570)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
