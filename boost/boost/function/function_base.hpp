@@ -24,6 +24,7 @@
 #include <boost/config.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/ref.hpp>
+#include <boost/pending/ct_if.hpp>
 
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__ICL) && __ICL <= 600 || defined(__MWERKS__) && __MWERKS__ < 0x2406
 #  define BOOST_FUNCTION_TARGET_FIX(x) x
@@ -33,58 +34,15 @@
 
 #if defined (BOOST_MSVC) && (BOOST_MSVC >= 1300)
 #  define BOOST_FUNCTION_DEPRECATED_PRE __declspec(deprecated)
-#  define BOOST_FUNCTION_DEPRECATED_INSIDE
+#  define BOOST_FUNCTION_DEPRECATED_INNER
 #else
 #  define BOOST_FUNCTION_DEPRECATED_PRE
-#  define BOOST_FUNCTION_DEPRECATED_INSIDE int deprecated;
+#  define BOOST_FUNCTION_DEPRECATED_INNER int deprecated;
 #endif
 
 namespace boost {
   namespace detail {
     namespace function {
-      /*
-       * The ct_if implementation is temporary code. When a Boost metaprogramming
-       * library is introduced, Boost.Function will use it instead. 
-       */
-      namespace intimate {
-        struct SelectThen 
-        {       
-          template<typename Then, typename Else>
-          struct Result
-          {       
-            typedef Then type;
-          };
-        };
- 
-        struct SelectElse
-        {
-          template<typename Then, typename Else>
-          struct Result
-          { 
-            typedef Else type;
-          };
-        };
- 
-        template<bool Condition>
-        struct Selector
-        {
-          typedef SelectThen type;
-        };
- 
-        template<>
-        struct Selector<false>
-        {
-          typedef SelectElse type;
-        };
-      } // end namespace intimate 
- 
-      template<bool Condition, typename Then, typename Else>
-      struct ct_if
-      {
-        typedef typename intimate::Selector<Condition>::type select;
-        typedef typename select::template Result<Then,Else>::type type;
-      };
-
       /**
        * A union of a function pointer and a void pointer. This is necessary
        * because 5.2.10/6 allows reinterpret_cast<> to safely cast between 

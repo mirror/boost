@@ -229,11 +229,16 @@ namespace boost {
   template<
     typename R BOOST_FUNCTION_COMMA
     BOOST_FUNCTION_TEMPLATE_PARMS,
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
     typename Policy    = empty_function_policy,
     typename Mixin     = empty_function_mixin,
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
     typename Allocator = BOOST_FUNCTION_DEFAULT_ALLOCATOR
   >
-  class BOOST_FUNCTION_FUNCTION : public function_base, public Mixin
+  class BOOST_FUNCTION_FUNCTION : public function_base
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
+                                , public Mixin
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
   {
     typedef typename detail::function::function_return_type<R>::type 
       internal_result_type;
@@ -253,36 +258,58 @@ namespace boost {
 #else
     typedef internal_result_type result_type;
 #endif // BOOST_NO_VOID_RETURNS
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
     typedef Policy    policy_type;
     typedef Mixin     mixin_type;
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
     typedef Allocator allocator_type;
     typedef BOOST_FUNCTION_FUNCTION self_type;
 
-    BOOST_FUNCTION_FUNCTION() : function_base(), Mixin(), invoker(0) {}
+    BOOST_FUNCTION_FUNCTION() : function_base()
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
+                              , Mixin()
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
+                              , invoker(0) {}
 
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
     explicit BOOST_FUNCTION_FUNCTION(const Mixin& m) : 
-      function_base(), Mixin(m), invoker(0) 
+      function_base(), 
+      Mixin(m), 
+      invoker(0) 
     {
     }
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
 
     // MSVC chokes if the following two constructors are collapsed into
     // one with a default parameter.
     template<typename Functor>
     BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f) :
-      function_base(), Mixin(), invoker(0)
+      function_base(), 
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
+      Mixin(), 
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
+      invoker(0)
     {
       this->assign_to(f);
     }
 
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
     template<typename Functor>
     BOOST_FUNCTION_FUNCTION(Functor f, const Mixin& m) :
-      function_base(), Mixin(m), invoker(0)
+      function_base(), 
+      Mixin(m), 
+      invoker(0)
     {
       this->assign_to(f);
     }
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
 
     BOOST_FUNCTION_FUNCTION(const BOOST_FUNCTION_FUNCTION& f) :
-      function_base(), Mixin(static_cast<const Mixin&>(f)), invoker(0)
+      function_base(),
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
+      Mixin(static_cast<const Mixin&>(f)), 
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
+      invoker(0)
     {
       this->assign_to_own(f);
     }
@@ -293,14 +320,19 @@ namespace boost {
     {
       assert(!this->empty());
 
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
       policy_type policy;
       policy.precall(this);
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
 
       internal_result_type result = invoker(function_base::functor 
                                             BOOST_FUNCTION_COMMA
                                             BOOST_FUNCTION_ARGS);
 
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
       policy.postcall(this);
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
+
 #ifndef BOOST_NO_VOID_RETURNS
       return static_cast<result_type>(result);
 #else
@@ -317,17 +349,23 @@ namespace boost {
     BOOST_FUNCTION_FUNCTION& 
     operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
       self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
+#else
+      self_type(f).swap(*this);
+#endif // BOOST_FUNCTION_NO_DEPRECATED
       return *this;
     }
 
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
     template<typename Functor>
-	BOOST_FUNCTION_DEPRECATED_PRE
+    BOOST_FUNCTION_DEPRECATED_PRE
     void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
       BOOST_FUNCTION_DEPRECATED_INNER
       self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
     }
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
 
     // Assignment from another BOOST_FUNCTION_FUNCTION
     BOOST_FUNCTION_FUNCTION& operator=(const BOOST_FUNCTION_FUNCTION& f)
@@ -339,8 +377,9 @@ namespace boost {
       return *this;
     }
 
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
     // Assignment from another BOOST_FUNCTION_FUNCTION
-	BOOST_FUNCTION_DEPRECATED_PRE
+    BOOST_FUNCTION_DEPRECATED_PRE
     void set(const BOOST_FUNCTION_FUNCTION& f)
     {
       BOOST_FUNCTION_DEPRECATED_INNER
@@ -349,6 +388,7 @@ namespace boost {
 
       self_type(f).swap(*this);
     }
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
 
     void swap(BOOST_FUNCTION_FUNCTION& other)
     {
@@ -358,7 +398,9 @@ namespace boost {
       std::swap(function_base::manager, other.manager);
       std::swap(function_base::functor, other.functor);
       std::swap(invoker, other.invoker);
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
       std::swap(static_cast<Mixin&>(*this), static_cast<Mixin&>(other));
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
     }
 
     // Clear out a target, if there is one
@@ -506,19 +548,26 @@ namespace boost {
   };
 
   template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
-           typename Policy, typename Mixin, typename Allocator>
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
+           typename Policy, typename Mixin, 
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
+           typename Allocator>
   inline void swap(BOOST_FUNCTION_FUNCTION<
                      R BOOST_FUNCTION_COMMA
                      BOOST_FUNCTION_TEMPLATE_ARGS ,
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
                      Policy,
                      Mixin,
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
                      Allocator
                    >& f1,
                    BOOST_FUNCTION_FUNCTION<
                      R BOOST_FUNCTION_COMMA 
                      BOOST_FUNCTION_TEMPLATE_ARGS,
+#ifndef BOOST_FUNCTION_NO_DEPRECATED
                      Policy,
                      Mixin,
+#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
                      Allocator
                    >& f2)
   {
