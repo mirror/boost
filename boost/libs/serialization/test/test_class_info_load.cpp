@@ -1,5 +1,5 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// test_level_class_info_save.cpp: test implementation level trait
+// test_class_info_load.cpp: test implementation level trait
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
 // Use, modification and distribution is subject to the Boost Software
@@ -9,20 +9,21 @@
 // test implementation level "object_class_info"
 // should pass compilation and execution
 
-#include <fstream>
+#include <cstdio>
 #include <string>
+#include <fstream>
+
 
 #include <boost/static_assert.hpp>
 #include <boost/serialization/level.hpp>
-#include <boost/serialization/version.hpp>
 #include <boost/serialization/tracking.hpp>
+#include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
 
 #include <boost/archive/tmpdir.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include "test_tools.hpp"
 
-// first case : serialize WITHOUT class information
 class A
 {
     friend class boost::serialization::access;
@@ -42,16 +43,14 @@ BOOST_CLASS_IMPLEMENTATION(A, ::boost::serialization::object_serializable)
 BOOST_CLASS_TRACKING(A, ::boost::serialization::track_never)
 
 // second case : serialize WITH class information
-class B;
-BOOST_CLASS_VERSION(B, 3)
-
 class B
 {
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & /*ar*/, const unsigned int file_version){
-        // verify at execution that correct version number is passed on save
-        BOOST_CHECK(file_version == ::boost::serialization::version<B>::value);
+        // verify at execution that the version number corresponds to the saved
+        // one
+        BOOST_CHECK(file_version == 3);
         ++count;
     }
 public:
@@ -60,19 +59,22 @@ public:
 };
 
 BOOST_CLASS_IMPLEMENTATION(B, ::boost::serialization::object_class_info)
-BOOST_CLASS_TRACKING(B, boost::serialization::track_always)
+BOOST_CLASS_TRACKING(B, ::boost::serialization::track_never)
+BOOST_CLASS_VERSION(B, 4)
 
-void out(const char *testfile, const A & a, const B & b)
+void in(const char *testfile, A & a, B & b)
 {
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
-    // write object twice to check tracking
-    oa << BOOST_SERIALIZATION_NVP(a);
-    oa << BOOST_SERIALIZATION_NVP(a);
-    BOOST_CHECK(a.count == 2);  // no tracking => redundant saves
-    oa << BOOST_SERIALIZATION_NVP(b);
-    oa << BOOST_SERIALIZATION_NVP(b);
-    BOOST_CHECK(b.count == 1);  // tracking => no redundant saves
+    test_istream is(testfile, TEST_STREAM_FLAGS);
+    test_iarchive ia(is);
+    ia >> BOOST_SERIALIZATION_NVP(a);
+    ia >> BOOST_SERIALIZATION_NVP(a);
+    BOOST_CHECK(a.count == 2);  // no tracking => redundant loads
+    ia >> BOOST_SERIALIZATION_NVP(b);
+    ia >> BOOST_SERIALIZATION_NVP(b);
+    // note: archive was saved with tracking so that is what determines
+    // whether tracking is perform on load - regardless of the latest
+    // tracking setting.
+    BOOST_CHECK(b.count == 1);
 }
 
 int
@@ -85,7 +87,7 @@ test_main( int /* argc */, char* /* argv */[] )
     filename += '/';
     filename += BOOST_PP_STRINGIZE(testfile_);
     filename += BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST);
-    out(filename.c_str(), a, b);
+    in(filename.c_str(), a, b);
     return boost::exit_success;
 }
 
