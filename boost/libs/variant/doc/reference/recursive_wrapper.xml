@@ -133,9 +133,9 @@
           </description>
 
           <requires>
-            <simpara><code>T</code> must fulfill the requirements of the
-              <link linkend="variant.concepts.assignable"><emphasis>Assignable</emphasis></link>
-              concept.</simpara>
+            <simpara><code>T</code> must fulfill the requirements of
+            the <conceptname>Assignable</conceptname>
+            concept.</simpara>
           </requires>
 
           <throws>
@@ -159,7 +159,7 @@
 
           <requires>
             <simpara><code>T</code> must fulfill the requirements of the
-              <link linkend="variant.concepts.assignable"><emphasis>Assignable</emphasis></link>
+              <conceptname>Assignable</conceptname>
               concept.</simpara>
           </requires>
 

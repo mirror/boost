@@ -220,7 +220,7 @@
 
           <requires>
             <simpara>Every bounded type must fulfill the requirements of the
-              <link linkend="variant.concepts.assignable"><emphasis>Assignable</emphasis></link>
+              <conceptname>Assignable</conceptname>
               concept.</simpara>
           </requires>
 
@@ -250,7 +250,7 @@
 
           <requires>
             <simpara>Every bounded type must fulfill the requirements of the
-              <link linkend="variant.concepts.assignable"><emphasis>Assignable</emphasis></link>
+              <conceptname>Assignable</conceptname>
               concept.</simpara>
           </requires>
 
@@ -292,7 +292,7 @@
                 one of the bounded types (i.e., <code>T1</code>,
                 <code>T2</code>, etc.).</listitem>
               <listitem>Every bounded type must fulfill the requirements of the
-                <link linkend="variant.concepts.assignable"><emphasis>Assignable</emphasis></link>
+                <conceptname>Assignable</conceptname>
                 concept.</listitem>
             </itemizedlist>
           </requires>
@@ -400,7 +400,7 @@
           <requires>
             <simpara>Every bounded type of the <code>variant</code> must
               fulfill the requirements of the
-              <link linkend="variant.concepts.equality-comparable"><emphasis>EqualityComparable</emphasis></link>
+              <conceptname>EqualityComparable</conceptname>
               concept.</simpara>
           </requires>
 
@@ -451,7 +451,7 @@
           <requires>
             <simpara>Every bounded type of the <code>variant</code> must
               fulfill the requirements of the
-              <link linkend="variant.concepts.lessthan-comparable"><emphasis>LessThanComparable</emphasis></link>
+              <conceptname>LessThanComparable</conceptname>
               concept.</simpara>
           </requires>
 
