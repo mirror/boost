@@ -161,12 +161,23 @@ namespace boost
 //  16-bit types  -----------------------------------------------------------//
 
 # if USHRT_MAX == 0xffff
+#  if defined(__crayx1)
+     // The Cray X1 has a 16-bit short, however it is not recommend
+     // for use in performance critical code.
+     typedef short           int16_t;
+     typedef short           int_least16_t;
+     typedef int             int_fast16_t;
+     typedef unsigned short  uint16_t;
+     typedef unsigned short  uint_least16_t;
+     typedef unsigned int    uint_fast16_t;
+#  else
      typedef short           int16_t;
      typedef short           int_least16_t;
      typedef short           int_fast16_t;
      typedef unsigned short  uint16_t;
      typedef unsigned short  uint_least16_t;
      typedef unsigned short  uint_fast16_t;
+#  endif
 # elif (USHRT_MAX == 0xffffffff) && defined(CRAY)
      // no 16-bit types on Cray:
      typedef short           int_least16_t;
@@ -378,6 +389,7 @@ BOOST_HAS_STDINT_H is defined (John Maddock).
 # undef UINTMAX_C
 
 #endif // __STDC_CONSTANT_MACROS_DEFINED etc.
+
 
 
 
