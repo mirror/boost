@@ -19,6 +19,9 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 
+#define BOOST_INCLUDE_MAIN
+#include <boost/test/test_tools.hpp>
+
 #include <vector>
 #include <memory>
 #include <stdexcept>
@@ -141,11 +144,11 @@ void test(boost::shared_ptr<int> const & pi)
 
 int const m = 16; // threads
 
-int main()
+int test_main( int, char ** )
 {
     std::puts(title);
 
-    boost::shared_ptr<int> pi(new int);
+    boost::shared_ptr<int> pi(new int(42));
 
     pthread_t a[m];
 
@@ -158,4 +161,6 @@ int main()
     {
         pthread_join(a[i], 0);
     }
+
+    return 0;
 }

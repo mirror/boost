@@ -16,11 +16,17 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 //
 
+#ifndef BOOST_LWM_WIN32_USE_CRITICAL_SECTION
+# include <windows.h>
+#endif
+
 namespace boost
 {
 
 namespace detail
 {
+
+#ifndef BOOST_LWM_WIN32_USE_CRITICAL_SECTION
 
 // avoid including <windows.h>
 
@@ -67,12 +73,63 @@ public:
 
             // Note: adding a Sleep(0) here will make
             // the mutex more fair and will increase the overall
-            // performance of the application substantially in
+            // performance of some applications substantially in
             // high contention situations, but will penalize the
             // low contention / single thread case up to 5x
         }
     };
 };
+
+#else
+
+class lightweight_mutex
+{
+private:
+
+    CRITICAL_SECTION cs_;
+
+    lightweight_mutex(lightweight_mutex const &);
+    lightweight_mutex & operator=(lightweight_mutex const &);
+
+public:
+
+    lightweight_mutex()
+    {
+        ::InitializeCriticalSection(&cs_);
+    }
+
+    ~lightweight_mutex()
+    {
+        ::DeleteCriticalSection(&cs_);
+    }
+
+    class scoped_lock;
+    friend class scoped_lock;
+
+    class scoped_lock
+    {
+    private:
+
+        lightweight_mutex & m_;
+
+        scoped_lock(scoped_lock const &);
+        scoped_lock & operator=(scoped_lock const &);
+
+    public:
+
+        explicit scoped_lock(lightweight_mutex & m): m_(m)
+        {
+            ::EnterCriticalSection(&m_.cs_);
+        }
+
+        ~scoped_lock()
+        {
+            ::LeaveCriticalSection(&m_.cs_);
+        }
+    };
+};
+
+#endif
 
 } // namespace detail
 
