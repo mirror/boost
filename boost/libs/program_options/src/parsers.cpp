@@ -126,7 +126,7 @@ namespace boost { namespace program_options {
             }
         }
 
-        parse_command_line(cmd, result);
+        detail::parse_command_line(cmd, result);
 
         if (m_positional)
         {
