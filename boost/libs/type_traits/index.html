@@ -854,7 +854,7 @@ bool const y = boost::is_convertible&lt;D*,A*&gt;::value;     // error
       <P>Occationally the end user may need to provide their own specialization for one 
          of the type traits - typically where intrinsic compiler support is required to 
          implement a specific trait fully.&nbsp; These specializations should derive 
-         from boost::true_type or boost::false_type as appropriate:</P>
+         from boost::mpl::true_ or boost::mpl::false_ as appropriate:</P>
       <PRE>#  include &lt;boost/type_traits/is_pod.hpp&gt;
 #  include &lt;boost/type_traits/is_class.hpp&gt;
 #  include &lt;boost/type_traits/is_union.hpp&gt;
@@ -870,16 +870,16 @@ namespace boost
 {
 template&lt;&gt;
 struct is_pod&lt;my_pod&gt; 
-   : public true_type{};
+   : public mpl::true_{};
 template&lt;&gt;
 struct is_pod&lt;my_union&gt; 
-   : public true_type{};
+   : public mpl::true_{};
 template&lt;&gt;
 struct is_union&lt;my_union&gt; 
-   : public true_type{};
+   : public mpl::true_{};
 template&lt;&gt;
 struct is_class&lt;my_union&gt; 
-   : public false_type{};
+   : public mpl::false_{};
 }
 
       </PRE>

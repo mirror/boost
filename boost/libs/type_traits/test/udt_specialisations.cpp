@@ -20,16 +20,16 @@ namespace tt
 {
 template<>
 struct is_pod<my_pod> 
-   : public true_type{};
+   : public mpl::true_{};
 template<>
 struct is_pod<my_union> 
-   : public true_type{};
+   : public mpl::true_{};
 template<>
 struct is_union<my_union> 
-   : public true_type{};
+   : public mpl::true_{};
 template<>
 struct is_class<my_union> 
-   : public false_type{};
+   : public mpl::false_{};
 }
 
 TT_TEST_BEGIN(is_pod)
