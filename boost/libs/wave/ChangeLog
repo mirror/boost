@@ -37,7 +37,8 @@ CHANGELOG
 - Fixed a bug in the white space eater component.
 - Fixed a bug which reported wrong line numbers for error encountered during 
   retokenisation (concatenation).
-  
+- Fixed a bug in the unescaping code.
+
 Tue Mar 22 14:52:45 WEST 2005
 Version 1.1.15
 - Fixed a bug where the complete set of C99 predefined macros were pre-defined

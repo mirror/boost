@@ -60,7 +60,7 @@ namespace impl {
                 {
                     result += value.substr(pos, pos1-pos);
                 }
-                pos1 = value.find_first_of ("\\", pos = pos1+1);
+                pos1 = value.find_first_of ("\\", (pos = pos1)+1);
             } while (pos1 != StringT::npos);
             result += value.substr(pos);
         }
