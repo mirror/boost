@@ -241,7 +241,14 @@ Some people prefer the name &quot;toggle&quot; to
 
 
 <h3>Definition</h3>
-Defined in the header <A href="../../boost/dynamic_bitset.hpp">boost/dynamic_bitset.hpp</A>.
+
+<p>Defined in the header <A href="../../boost/dynamic_bitset.hpp">
+boost/dynamic_bitset.hpp</A>. Also, there is a forward declaration for
+class <tt>dynamic_bitset</tt> in the header <A
+href="../../boost/dynamic_bitset_fwd.hpp">
+boost/dynamic_bitset_fwd.hpp</A></p>.
+
+
 <h3>Template parameters</h3>
 <Table border>
 <TR>
@@ -302,11 +309,25 @@ dynamic_bitset::reference
 A proxy class that acts as a reference to a single bit.  It contains
 an assignment operator, a conversion to <tt>bool</tt>, an
 <tt>operator~</tt>, and a member function <tt>flip</tt>.  It exists
-only as a helper class for <tt>dynamic_bitset</tt>'s <tt>operator[]</tt>.
-That is, it supports the expressions <tt>x = b[i]</tt>, <tt>b[i] =
-x</tt>, <tt>b[i] = b[j]</tt>, <tt>x = ~b[i]</tt>, and
-<tt>b[i].flip()</tt>.  (Where <tt>b</tt> is a <tt>dynamic_bitset</tt> and
-<tt>x</tt> is a <tt>bool</tt>.)
+only as a helper class for <tt>dynamic_bitset</tt>'s
+<tt>operator[]</tt>.  The following table describes the valid
+operations on the <tt>reference</tt> type. Assume that <tt>b</tt> is
+an instance of <tt>dynamic_bitset</tt>, <tt>i, j</tt> are of
+<tt>size_type</tt> and in the range <tt>[0,b.size())</tt>. The
+variables <tt>bi, bj</tt> are of type <tt>reference</tt> and
+initialized with <tt> b[i]</tt> and <tt>b[j]</tt> respectively.  The
+variable <tt>x</tt> is a <tt>bool</tt>.
+
+<table border=1>
+<tr><th>Expression</th><th>Semantics</th></tr>
+<tr><td><tt>x = bi</tt></td>     <td>Assign the ith bit of <tt>b</tt> to <tt>x</tt>.</td></tr>
+<tr><td><tt>(bool)bi</tt></td>     <td>Return the ith bit of <tt>b</tt>.</td></tr>
+<tr><td><tt>bi = x</tt></td>     <td>Set the ith bit of <tt>b</tt> to the value of <tt>x</tt> and return <tt>bi</tt>.</td></tr>
+<tr><td><tt>bi = bj</tt></td>  <td>Set the ith bit of <tt>b</tt> to the value of the jth bit of <tt>b</tt> and return <tt>bi</tt>.</td></tr>     
+<tr><td><tt>x = ~b[i]</tt></td>    <td>Assign the opposite of the ith bit of <tt>b</tt> to <tt>x</tt>.</td></tr>
+<tr><td><tt>(bool)~b[i]</tt></td>    <td>Return the opposite of the ith bit of <tt>b</tt>.</td></tr>
+<tr><td><tt>b[i].flip()</tt>       <td>Flip the ith bit of <tt>b</tt> and return <tt>bi</tt>.</td></tr>
+</table>
 
 <hr>
 
@@ -570,6 +591,22 @@ with the bits in this bitset. This is equivalent to:
 <pre>
 for (size_type i = 0; i != this->size(); ++i)
   (*this)[i] = (*this)[i] ^ rhs[i];
+</pre>
+
+<b>Returns:</b><tt>*this</tt>.
+
+<hr>
+
+<pre>
+dynamic_bitset&amp; operator-=(const dynamic_bitset&amp; rhs)
+</pre>
+<b>Requires:</b> <tt>this-&gt;size() == rhs.size()</tt>.<br>
+
+<b>Effects:</b> Computes the set difference of
+this bitset and the <tt>rhs</tt> bitset. This is equivalent to:
+<pre>
+for (size_type i = 0; i != this->size(); ++i)
+  (*this)[i] = (*this)[i] && !rhs[i];
 </pre>
 
 <b>Returns:</b><tt>*this</tt>.
@@ -889,6 +926,17 @@ dynamic_bitset operator^(const dynamic_bitset&amp; a, const dynamic_bitset&amp; 
 <tt>a</tt> and <tt>b</tt>.  Note that the expression <tt>b1 &amp;
 b2</tt> is equivalent to creating a temporary copy of <tt>b1</tt>,
 using <tt>operator&amp;=</tt>, and returning the temporary copy.
+
+<hr>
+
+<pre>
+dynamic_bitset operator-(const dynamic_bitset&amp; a, const dynamic_bitset&amp; b)
+</pre>
+<b>Requires:</b> <tt>a.size() == b.size()</tt><br>
+<b>Returns:</b>A new bitset that is the set difference of the bitsets
+<tt>a</tt> and <tt>b</tt>.  Note that the expression <tt>b1 - b2</tt>
+is equivalent to creating a temporary copy of <tt>b1</tt>,
+using <tt>operator-=</tt>, and returning the temporary copy.
 
 <hr>
 
