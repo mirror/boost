@@ -52,7 +52,7 @@ typedef int (alignment_dummy::*member_function_ptr)();
         , void*, function_ptr, member_ptr, member_function_ptr))
 #endif
 
-#define BOOST_TT_HAS_ONE_T(D,Data,T) boost::detail::has_one_T<T>
+#define BOOST_TT_HAS_ONE_T(D,Data,T) boost::detail::has_one_T< T >
 
 #define BOOST_TT_ALIGNMENT_STRUCT_TYPES                         \
         BOOST_PP_LIST_TRANSFORM(BOOST_TT_HAS_ONE_T,             \
