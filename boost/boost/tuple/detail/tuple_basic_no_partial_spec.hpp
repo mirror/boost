@@ -68,6 +68,10 @@ namespace tuples {
     >
     class tuple;
 
+// forward declaration of cons
+    template<typename Head, typename Tail = null_type>
+    struct cons;
+
     namespace detail {
 
       // Takes a pointer and routes all assignments to whatever it points to
@@ -99,10 +103,63 @@ namespace tuples {
       };
 
     template <typename T> struct add_const_reference : add_reference<typename add_const<T>::type> {};
+
+    template <class MyTail>
+    struct init_tail
+    {
+        // Each of vc6 and vc7 seem to require a different formulation
+        // of this return type
+        template <class H, class T>
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+        static typename add_const<typename add_reference<T>::type>::type
+#else
+        static typename add_const_reference<T>::type
+#endif 
+        execute( cons<H,T> const& u, long )
+        {
+            return u.get_tail();
+        }
+    };
+
+    template <>
+    struct init_tail<null_type>
+    {
+        template <class H>
+        static null_type execute( cons<H,null_type> const& u, long )
+        {
+            return null_type();
+        }
+
+        template <class U>
+        static null_type execute(U const&, ...)
+        {
+            return null_type();
+        }
+     private:
+        template <class H, class T>
+        void execute( cons<H,T> const&, int);
+    };
+    
+    template <class Other>
+    Other const&
+    init_head( Other const& u, ... )
+    {
+        return u;
+    }
+    
+    template <class H, class T>
+    typename add_reference<typename add_const<H>::type>::type
+    init_head( cons<H,T> const& u, int )
+    {
+        return u.get_head();
+    }
+
+    inline char**** init_head(null_type const&, int);
+    
   } // end of namespace detail
 
     // cons builds a heterogenous list of types
-   template<typename Head, typename Tail = null_type>
+   template<typename Head, typename Tail>
    struct cons
    {
      typedef cons self_type;
@@ -123,15 +180,17 @@ namespace tuples {
 
      head_cref get_head() const { return head; }
      tail_cref get_tail() const { return tail; }
-  
+
+     cons() : head(), tail() {}
+       
 #if defined BOOST_MSVC
       template<typename Tail>
-      explicit cons(head_cref h /* = head_type() */, // causes MSVC 6.5 to barf.
+      cons(head_cref h /* = head_type() */, // causes MSVC 6.5 to barf.
                     const Tail& t) : head(h), tail(t.head, t.tail)
       {
       }
 
-      explicit cons(head_cref h /* = head_type() */, // causes MSVC 6.5 to barf.
+      cons(head_cref h /* = head_type() */, // causes MSVC 6.5 to barf.
                     const null_type& t) : head(h), tail(t)
       {
       }
@@ -150,6 +209,12 @@ namespace tuples {
       }
 #endif
 
+      template <class U>
+      cons( const U& u )
+        : head(detail::init_head(u, 0))
+        , tail(detail::init_tail<Tail>::execute(u, 0L))
+       {
+       }
 
       template<typename Other>
       cons& operator=(const Other& other)
@@ -437,23 +502,31 @@ namespace tuples {
       typedef cons1 inherited;
       typedef tuple self_type;
 
-      explicit tuple(t1_cref t1 = T1(), 
-                     t2_cref t2 = T2(),
-                     t3_cref t3 = T3(),
-                     t4_cref t4 = T4(),
-                     t5_cref t5 = T5(),
-                     t6_cref t6 = T6(),
-                     t7_cref t7 = T7(),
-                     t8_cref t8 = T8(),
-                     t9_cref t9 = T9(),
-                     t10_cref t10 = T10()
-          ) :
+      tuple() : cons1(T1(), cons2(T2(), cons3(T3(), cons4(T4(), cons5(T5(), cons6(T6(),cons7(T7(),cons8(T8(),cons9(T9(),cons10(T10()))))))))))
+        {}
+        
+      tuple(
+          t1_cref t1,
+          t2_cref t2,
+          t3_cref t3 = T3(),
+          t4_cref t4 = T4(),
+          t5_cref t5 = T5(),
+          t6_cref t6 = T6(),
+          t7_cref t7 = T7(),
+          t8_cref t8 = T8(),
+          t9_cref t9 = T9(),
+          t10_cref t10 = T10()
+      ) :
         cons1(t1, cons2(t2, cons3(t3, cons4(t4, cons5(t5, cons6(t6,cons7(t7,cons8(t8,cons9(t9,cons10(t10))))))))))
       {
       }
 
+      explicit tuple(t1_cref t1)
+        : cons1(t1, cons2(T2(), cons3(T3(), cons4(T4(), cons5(T5(), cons6(T6(),cons7(T7(),cons8(T8(),cons9(T9(),cons10(T10()))))))))))
+      {}
+        
       template<typename Head, typename Tail>
-      explicit tuple(const cons<Head, Tail>& other) : 
+      tuple(const cons<Head, Tail>& other) : 
         cons1(other.head, other.tail)
       {
       }

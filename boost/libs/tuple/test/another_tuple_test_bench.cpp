@@ -103,7 +103,6 @@ void foo2() {
 
 void foo4() 
 {
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   double d = 2.7; 
   A a;
   tuple<int, double&, const A&> t(1, d, a);
@@ -118,8 +117,6 @@ void foo4()
 #endif
 #ifdef E10
   dummy(get<5>(ct)); // illegal index
-#endif
-
 #endif
 }
 

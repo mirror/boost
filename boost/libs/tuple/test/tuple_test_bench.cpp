@@ -22,6 +22,7 @@
 
 #include "boost/type_traits/is_const.hpp"
 
+#include "boost/ref.hpp"
 #include <string>
 #include <utility>
 
@@ -81,7 +82,6 @@ public:
 
 typedef tuple<int> t1;
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 typedef tuple<double&, const double&, const double, double*, const double*> t2;
 typedef tuple<A, int(*)(char, int), C> t3;
 typedef tuple<std::string, std::pair<A, B> > t4;
@@ -92,22 +92,16 @@ typedef tuple<volatile int, const volatile char&, int(&)(float) > t6;
 typedef tuple<B(A::*)(C&), A&> t7;
 #endif
 
-#endif
-
 // -----------------------------------------------------------------------
 // -tuple construction tests ---------------------------------------------
 // -----------------------------------------------------------------------
 
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 no_copy y;
 tuple<no_copy&> x = tuple<no_copy&>(y); // ok
-#endif
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 char cs[10];
 tuple<char(&)[10]> v2(cs);  // ok
-#endif
 
 void
 construction_test()
@@ -162,12 +156,10 @@ construction_test()
   //  dummy(tuple<double&>()); // should fail, not defaults for references
   //  dummy(tuple<const double&>()); // likewise
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   double dd = 5;
   dummy(tuple<double&>(dd)); // ok
 
   dummy(tuple<const double&>(dd+3.14)); // ok, but dangerous
-#endif
 
   //  dummy(tuple<double&>(dd+3.14)); // should fail,
   //                                  // temporary to non-const reference
@@ -180,7 +172,6 @@ construction_test()
 
 void element_access_test()
 {
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   double d = 2.7;
   A a;
   tuple<int, double&, const A&, int> t(1, d, a, 2);
@@ -211,45 +202,18 @@ void element_access_test()
   ++get<0>(t);
   BOOST_TEST(get<0>(t) == 6);
 
-  using boost::tuples::element;
+  BOOST_STATIC_ASSERT((boost::is_const<boost::tuples::element<0, tuple<int, float> >::type>::value != true));
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+  BOOST_STATIC_ASSERT((boost::is_const<boost::tuples::element<0, const tuple<int, float> >::type>::value));
+#endif 
 
-  BOOST_STATIC_ASSERT((boost::is_const<element<0, tuple<int, float> >::type>::value != true));
-  BOOST_STATIC_ASSERT((boost::is_const<element<0, const tuple<int, float> >::type>::value));
-
-  BOOST_STATIC_ASSERT((boost::is_const<element<1, tuple<int, float> >::type>::value != true));
-  BOOST_STATIC_ASSERT((boost::is_const<element<1, const tuple<int, float> >::type>::value));
+  BOOST_STATIC_ASSERT((boost::is_const<boost::tuples::element<1, tuple<int, float> >::type>::value != true));
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+  BOOST_STATIC_ASSERT((boost::is_const<boost::tuples::element<1, const tuple<int, float> >::type>::value));
+#endif 
 
 
   dummy(i); dummy(i2); dummy(j); dummy(e); // avoid warns for unused variables
-#else
-  double d = 2.7; 
-  A a;
-  tuple<int, double, const A, int> t(1, d, a, 2);
-
-  int i  = get<0>(t);
-  int i2 = get<3>(t);
-
-  BOOST_TEST(i == 1 && i2 == 2);
-   
-  get<0>(t) = 5;
-  BOOST_TEST(t.head == 5);
-   
-  //  get<0>(ct) = 5; // can't assign to const
-
-  double e = get<1>(t);
-  BOOST_TEST(e > 2.69 && e < 2.71);
-     
-  get<1>(t) = 3.14+i;
-  BOOST_TEST(get<1>(t) > 4.13 && get<1>(t) < 4.15);
-
-  //  get<4>(t) = A(); // can't assign to const
-  //  dummy(get<5>(ct)); // illegal index
-
-  ++get<0>(t);
-  BOOST_TEST(get<0>(t) == 6);
-
-  dummy(i); dummy(i2); dummy(e); // avoid warns for unused variables
-#endif
 }
 
 
@@ -320,31 +284,27 @@ make_tuple_test()
   BOOST_TEST(get<1>(t2) == "Hi");
 
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
     A a = A(); B b;
     const A ca = a;
-    make_tuple(cref(a), b);
-    make_tuple(ref(a), b);
-    make_tuple(ref(a), cref(b));
+    make_tuple(boost::cref(a), b);
+    make_tuple(boost::ref(a), b);
+    make_tuple(boost::ref(a), boost::cref(b));
 
-    make_tuple(ref(ca));
-#endif
+    make_tuple(boost::ref(ca));
      
 // the result of make_tuple is assignable:
    BOOST_TEST(make_tuple(2, 4, 6) == 
              (make_tuple(1, 2, 3) = make_tuple(2, 4, 6)));
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     make_tuple("Donald", "Daisy"); // should work;
-#endif
+#endif 
     //    std::make_pair("Doesn't","Work"); // fails
 
 // You can store a reference to a function in a tuple
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
     tuple<void(&)()> adf(make_tuple_test);
 
     dummy(adf); // avoid warning for unused variable
-#endif
  
 // But make_tuple doesn't work 
 // with function references, since it creates a const qualified function type
@@ -450,7 +410,6 @@ ordering_test()
 // ----------------------------------------------------------------------------
 void cons_test()
 {
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   using tuples::cons;
   using tuples::null_type;
 
@@ -462,7 +421,6 @@ void cons_test()
 
   cons<char, cons<int, cons<float, null_type> > > x;
   dummy(x);
-#endif
 }
 
 // ----------------------------------------------------------------------------
