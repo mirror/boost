@@ -39,7 +39,7 @@ Examples of tuples:
   4-tuple: (A B C, D, EF, 34)
 \endverbatim</PRE>
 
-See also BOOST_PP_LIMIT_TUPLE.
+See BOOST_PP_LIMIT_TUPLE.
 */
 #define BOOST_PP_TUPLE_ELEM(N,I,T) BOOST_PP_TUPLE_ELEM_DELAY(N,I,T)
 

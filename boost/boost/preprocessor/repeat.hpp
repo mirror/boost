@@ -79,7 +79,7 @@ Since recursive expansion of macros is not allowed by the C++ preprocessor,
 replacing the BOOST_PP_REPEAT_2ND above with BOOST_PP_REPEAT, would not
 produce the above expansion.
 
-See also BOOST_PP_FOR().
+See BOOST_PP_FOR().
 */
 #define BOOST_PP_REPEAT(N,M,P) BOOST_PP_REPEAT_DELAY(N,M,P)
 
