@@ -15,7 +15,7 @@
 #ifndef BOOST_INTEGER_HPP
 #define BOOST_INTEGER_HPP
 
-#include <limits>
+#include <boost/limits.hpp>
 
 namespace boost
 {
