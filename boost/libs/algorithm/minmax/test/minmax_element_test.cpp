@@ -13,24 +13,24 @@
 #include <boost/iterator/reverse_iterator.hpp>
 
 class custom {
-  int _M_x;
+  int m_x;
   friend bool operator<(custom const& x, custom const& y);
   friend std::ostream& operator<<(std::ostream& str, custom const& x);
 public:
-  explicit custom(int x = 0) : _M_x(x) {}
-  custom(custom const& y) : _M_x(y._M_x) {}
-  custom operator+(custom const& y) const { return custom(_M_x+y._M_x); }
-  custom& operator+=(custom const& y) { _M_x += y._M_x; return *this; }
+  explicit custom(int x = 0) : m_x(x) {}
+  custom(custom const& y) : m_x(y.m_x) {}
+  custom operator+(custom const& y) const { return custom(m_x+y.m_x); }
+  custom& operator+=(custom const& y) { m_x += y.m_x; return *this; }
 };
 
 bool operator< (custom const& x, custom const& y)
 {
-  return x._M_x < y._M_x;
+  return x.m_x < y.m_x;
 }
 
 std::ostream& operator<<(std::ostream& str, custom const& x)
 { 
-    str << x._M_x;
+    str << x.m_x;
     return str;
 }
 
@@ -65,17 +65,17 @@ void tie(std::pair<T1, T2> p, T3& first, T4& second)
 template <class Value>
 struct less_count : std::less<Value> {
     typedef std::less<Value> Base;
-  less_count(less_count<Value> const& lc) : _M_counter(lc._M_counter) {}
-  less_count(int& counter) : _M_counter(counter) {}
+  less_count(less_count<Value> const& lc) : m_counter(lc.m_counter) {}
+  less_count(int& counter) : m_counter(counter) {}
   bool operator()(Value const& a, Value const& b) const {
-    ++_M_counter;
+    ++m_counter;
     return Base::operator()(a,b);
   }
   void reset() {
-    _M_counter = 0;
+    m_counter = 0;
   }
 private:
-  int& _M_counter;
+  int& m_counter;
 };
 
 inline int opt_min_count(int n) {
@@ -104,7 +104,7 @@ void test_minmax(CIterator first, CIterator last, int n)
   typedef boost::reverse_iterator<CIterator> RCIterator;
   // assume that CIterator is BidirectionalIter
   CIterator min, max;
-  RCIterator rfirst(last), rlast(first), rmin(min), rmax(max);
+  RCIterator rfirst(last), rlast(first), rmin, rmax;
   int counter = 0;
   less_count<Value> lc(counter);
 
@@ -114,6 +114,7 @@ void test_minmax(CIterator first, CIterator last, int n)
 
   CHECK_EQUAL_ITERATORS( min, std::min_element(first, last), first );
   CHECK_EQUAL_ITERATORS( max, std::max_element(first, last), first );
+  
   // second version, comp function object (keeps a counter!)
   lc.reset();
   tie( boost::minmax_element(first, last, lc), min, max );
@@ -140,6 +141,7 @@ void test_minmax(CIterator first, CIterator last, int n)
   tie( boost::last_min_last_max_element(first, last), min, max );
   CHECK_EQUAL_ITERATORS( min, boost::last_min_element(first, last), first );
   CHECK_EQUAL_ITERATORS( max, boost::last_max_element(first, last), first );
+
   // second version, comp function object (keeps a counter!)
   lc.reset();
   min = boost::first_min_element(first, last, lc);
@@ -184,7 +186,7 @@ void test_container(Iterator first, Iterator last, int n, Container* dummy = 0 )
 }
 
 template <class Iterator>
-void test_range(Iterator first, Iterator last, int n, char* name)
+void test_range(Iterator first, Iterator last, int n, char* /* name */)
 {
   typedef typename std::iterator_traits<Iterator>::value_type Value;
   // Test various containers with these values
