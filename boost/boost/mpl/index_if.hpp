@@ -57,29 +57,29 @@ struct index_if
 {
 private:
 
-    typedef typename begin<Sequence>::type first_;
-    typedef typename end<Sequence>::type last_;
     typedef typename lambda<Predicate>::type pred_;
 
     typedef typename iter_fold_if<
-          first_
+          Sequence
         , int_<0>
         , protect< aux::index_if_op >
-        , protect< aux::find_if_pred<pred_,last_> >
+        , protect< aux::find_if_pred<pred_> >
         >::type result_;
 
+    typedef typename end<Sequence>::type not_found_;
     typedef typename result_::first result_index_;
     typedef typename result_::second result_iterator_;
 
 public:
 
     typedef typename if_<
-          is_same< result_iterator_,last_ >
+          is_same< result_iterator_,not_found_ >
         , void_
         , result_index_
         >::type type;
 
     BOOST_MPL_AUX_LAMBDA_SUPPORT(2,index_if,(Sequence,Predicate))
+
 };
 
 BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END

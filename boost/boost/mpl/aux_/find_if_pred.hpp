@@ -4,7 +4,7 @@
 //-----------------------------------------------------------------------------
 //
 // Copyright (c) 2000-02
-// Aleksey Gurtovoy
+// Aleksey Gurtovoy, Eric Friedman
 //
 // Permission to use, copy, modify, distribute and sell this software
 // and its documentation for any purpose is hereby granted without fee, 
@@ -18,25 +18,19 @@
 #define BOOST_MPL_AUX_FIND_IF_PRED_HPP_INCLUDED
 
 #include "boost/mpl/aux_/iter_apply.hpp"
-#include "boost/mpl/apply.hpp"
 #include "boost/mpl/not.hpp"
-#include "boost/mpl/or.hpp"
-#include "boost/type_traits/is_same.hpp"
 
 namespace boost {
 namespace mpl {
 namespace aux {
 
-template< typename Predicate, typename LastIterator >
+template< typename Predicate >
 struct find_if_pred
 {
-    template< typename State, typename Iterator >
+    template< typename Iterator >
     struct apply
     {
-        typedef not_< or_<
-              is_same<Iterator,LastIterator>
-            , aux::iter_apply1<Predicate,Iterator>
-            > > type;
+        typedef not_< aux::iter_apply1<Predicate,Iterator> > type;
     };
 };
 

@@ -18,35 +18,15 @@
 #define BOOST_MPL_FIND_IF_HPP_INCLUDED
 
 #include "boost/mpl/aux_/find_if_pred.hpp"
-#include "boost/mpl/aux_/iter_fold_if_impl.hpp"
-#include "boost/mpl/begin_end.hpp"
-#include "boost/mpl/always.hpp"
+#include "boost/mpl/arg.hpp"
 #include "boost/mpl/lambda.hpp"
+#include "boost/mpl/iter_fold_if.hpp"
+#include "boost/mpl/protect.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
 
 namespace boost {
 namespace mpl {
-
-namespace aux {
-/*
-template< typename LastIterator >
-struct find_if_pred
-{
-    template<
-          typename Predicate
-        , typename Iterator
-        >
-    struct apply
-    {
-        typedef typename not_< or_<
-              is_same<Iterator,LastIterator>
-            , aux::iter_apply1<Predicate,Iterator>
-            > >::type type;
-    };
-};
-*/
-} // namespace aux
 
 BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
 
@@ -56,22 +36,23 @@ template<
     >
 struct find_if
 {
- private:
-    typedef typename begin<Sequence>::type first_;
-    typedef typename end<Sequence>::type last_;
+private:
+
     typedef typename lambda<Predicate>::type pred_;
 
- public:
-    typedef typename aux::iter_fold_if_impl<
-          first_
+    typedef typename iter_fold_if<
+          Sequence
         , void
-        , mpl::arg<1>
-        , aux::find_if_pred< pred_, last_ >
-        , void
-        , always<false_>
-        >::iterator type;
+        , protect< arg<1> > // ignore
+        , protect< aux::find_if_pred<pred_> >
+        >::type result_;
+
+public:
+
+    typedef typename result_::second type;
 
     BOOST_MPL_AUX_LAMBDA_SUPPORT(2,find_if,(Sequence,Predicate))
+
 };
 
 BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
