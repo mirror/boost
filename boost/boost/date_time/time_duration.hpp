@@ -146,7 +146,10 @@ namespace date_time {
       ticks_ /= divisor;
       return *this;
     }
-    
+    time_duration operator*(int rhs) const
+    {
+      return time_duration(ticks_ * rhs);
+    }
     tick_type ticks() const 
     { 
       return ticks_;
@@ -156,6 +159,8 @@ namespace date_time {
     explicit time_duration(tick_type in) : ticks_(in) {};
     tick_type ticks_;
   };
+
+
 
   //! Template for instantiating derived adjusting durations
   /* These templates are designed to work with multiples of
