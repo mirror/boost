@@ -46,6 +46,9 @@ using std::endl;
 #if defined(BOOST_MSVC) && defined(_DEBUG)
 #include <CRTDBG.H>
 #endif
+#ifdef TIME_TEST
+#include <boost/timer.hpp>
+#endif
 
 
 //
@@ -83,6 +86,9 @@ int cpp_main(int argc, char * argv[])
    tmpFlag &= ~_CRTDBG_CHECK_CRT_DF;
    _CrtSetDbgFlag( tmpFlag );
 #endif
+#ifdef TIME_TEST
+   boost::timer tim;
+#endif
    if(argc < 2)
        usage();
    int i;
@@ -113,6 +119,10 @@ int cpp_main(int argc, char * argv[])
       }
       cout << line << " lines, " << tests << " tests completed in file " << argv[i] << endl;
    }
+#ifdef TIME_TEST
+   double elapsed_time = tim.elapsed();
+   cout << "Elapsed time = " << elapsed_time << "s" << endl;
+#endif
 
    return error_count;
 }
