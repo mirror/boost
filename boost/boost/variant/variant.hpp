@@ -27,7 +27,7 @@
 
 #include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
-#include "boost/mpl/aux_/nested_type_wknd.hpp"
+#include "boost/mpl/aux_/value_wknd.hpp"
 
 #include "boost/aligned_storage.hpp"
 #include "boost/assert.hpp"
@@ -123,10 +123,24 @@ private: // helpers, for metafunction result (below)
 
 public: // metafunction result
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+
     typedef aligned_storage<
-          BOOST_MPL_AUX_NESTED_TYPE_WKND(max_size)::value
-        , BOOST_MPL_AUX_NESTED_TYPE_WKND(max_alignment)::value
+          BOOST_MPL_AUX_VALUE_WKND(max_size)::value
+        , BOOST_MPL_AUX_VALUE_WKND(max_alignment)::value
         > type;
+
+#else // MSVC7 and below
+
+    BOOST_STATIC_CONSTANT(std::size_t, max_size_c = max_size::value);
+    BOOST_STATIC_CONSTANT(std::size_t, max_alignment_c = max_alignment::value);
+
+    typedef aligned_storage<
+          max_size_c
+        , max_alignment_c
+        > type;
+
+#endif // MSVC workaround
 
 };
 
@@ -445,7 +459,7 @@ private: // static precondition assertions, cont.
         ));
     */
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1300))
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
     // [Assert no top-level const-qualified types:]
     BOOST_STATIC_ASSERT((
@@ -458,7 +472,7 @@ private: // static precondition assertions, cont.
             >::type::value
         ));
 
-#endif // avoid on BOOST_MSVC
+#endif // avoid on MSVC7 and below
 
 private: // representation
 

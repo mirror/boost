@@ -17,7 +17,11 @@
 #ifndef BOOST_VARIANT_DETAIL_APPLY_VISITOR_UNARY_HPP
 #define BOOST_VARIANT_DETAIL_APPLY_VISITOR_UNARY_HPP
 
-#include "boost/variant/detail/define_forwarding_func.hpp"
+#include "boost/detail/workaround.hpp"
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#   include "boost/variant/detail/define_forwarding_func.hpp"
+#endif
 
 namespace boost {
 
@@ -45,10 +49,12 @@ namespace boost {
     }                                                                   \
     /**/
 #
-BOOST_VARIANT_AUX_DEFINE_FORWARDING_FUNC( 
-      BOOST_VARIANT_AUX_APPLY_VISITOR_FUNC
-    , 2
-    )
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    BOOST_VARIANT_AUX_DEFINE_FORWARDING_FUNC(BOOST_VARIANT_AUX_APPLY_VISITOR_FUNC, 2)
+#else
+    BOOST_VARIANT_AUX_APPLY_VISITOR_FUNC(BOOST_VARIANT_AUX_NOTHING,BOOST_VARIANT_AUX_NOTHING)
+    BOOST_VARIANT_AUX_APPLY_VISITOR_FUNC(BOOST_VARIANT_AUX_NOTHING,const)
+#endif
 #
 #undef BOOST_VARIANT_AUX_APPLY_VISITOR_FUNC
 
