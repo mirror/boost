@@ -122,15 +122,26 @@ public:
 
     element_type* get() const { return ptr(); }
 
-    element_type& operator*() const 
+    element_type& operator*() 
         { 
             /*BOOST_STATIC_ASSERT(!is_array);*/ return *ptr(); 
         }
 
-    element_type* operator->() const 
+    const element_type& operator*() const 
+        { 
+            /*BOOST_STATIC_ASSERT(!is_array);*/ return *ptr(); 
+        }
+
+    element_type* operator->()  
         { 
             /*BOOST_STATIC_ASSERT(!is_array);*/ return ptr(); 
         }    
+
+    const element_type* operator->() const 
+        { 
+            /*BOOST_STATIC_ASSERT(!is_array);*/ return ptr(); 
+        }    
+
 
     element_type* release()
         {
@@ -172,6 +183,7 @@ private:
             BOOST_STATIC_ASSERT(convertible::value);
         }   
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300 )
     template<typename Ptr> struct cant_move_from_const;
 
     template<typename TT, typename DD> 
@@ -181,6 +193,10 @@ private:
 
     template<typename Ptr> 
     static_move_ptr(Ptr&, typename cant_move_from_const<Ptr>::type = 0);
+#else // BOOST_WORKAROUND(BOOST_MSVC, <= 1300 )
+    template<typename Ptr> 
+    static_move_ptr(Ptr&);
+#endif
 
     static_move_ptr(static_move_ptr&);
 
@@ -190,12 +206,12 @@ private:
                      move_ptrs::enable_if_convertible<
                          TT, T, static_move_ptr&
                      >::type::type* = 0 );
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-    template<typename TT, typename DD>
-    friend class static_move_ptr;
-#else
+//#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+//    template<typename TT, typename DD>
+//    friend class static_move_ptr;
+//#else
     public:
-#endif
+//#endif
     typename impl_type::first_reference 
     ptr() { return impl_.first(); } 
 
