@@ -93,6 +93,7 @@ class codecvt_null<wchar_t> : public std::codecvt<wchar_t, char, std::mbstate_t>
 #if defined(_STLPORT_VERSION) && (_STLPORT_VERSION < 0x500)
 namespace std {
 
+#if 0
 template <> 
 locale::locale(
     const locale& __loc, 
@@ -116,6 +117,7 @@ locale::locale(
     if (__f != 0)
         this->_M_insert(__f, boost::archive::codecvt_null<wchar_t> ::id);
 }
+#endif
 
 } // namespace std
 #endif
