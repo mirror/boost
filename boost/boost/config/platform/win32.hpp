@@ -45,5 +45,6 @@
 #ifndef BOOST_DISABLE_WIN32
 // WEK: Added
 #define BOOST_HAS_FTIME
+#define BOOST_WINDOWS 1
 
 #endif
