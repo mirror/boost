@@ -59,8 +59,8 @@ namespace boost_concepts {
   template <typename Iterator>
   class ReadableIteratorConcept {
   public:
-    typedef BOOST_DEDUCED_TYPENAME ::boost::detail::iterator_traits<Iterator>::value_type value_type;
-    typedef BOOST_DEDUCED_TYPENAME ::boost::detail::iterator_traits<Iterator>::reference reference;
+    typedef BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::value_type value_type;
+    typedef BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::reference reference;
 
     void constraints() {
       boost::function_requires< boost::SGIAssignableConcept<Iterator> >();
