@@ -34,6 +34,7 @@
 #   include "boost/mpl/aux_/preprocessor/repeat.hpp"
 #   include "boost/mpl/int_fwd.hpp"
 #   include "boost/preprocessor/cat.hpp"
+#   include "boost/preprocessor/empty.hpp"
 #   include "boost/preprocessor/arithmetic/inc.hpp"
 #   include "boost/preprocessor/iterate.hpp"
 #else
@@ -46,6 +47,7 @@
 #include "boost/mpl/if.hpp"
 #include "boost/mpl/or.hpp"
 #include "boost/type_traits/is_same.hpp"
+#include "boost/type_traits/is_pointer.hpp"
 
 #include "boost/incomplete.hpp"
 
@@ -60,6 +62,9 @@ namespace detail { namespace variant {
 
 #if !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
 
+//
+// primary template
+//
 template <
       typename T, typename RecursiveVariant
       BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(
@@ -71,15 +76,62 @@ struct enable_recursive_impl
     typedef T type;
 };
 
-template <typename RecursiveVariant>
+//
+// tag substitution specializations
+//
+
+#define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(CV_) \
+    template <typename RecursiveVariant> \
+    struct enable_recursive_impl< \
+          CV_ ::boost::recursive_variant_ \
+        , RecursiveVariant \
+          BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>) \
+        > \
+    { \
+        typedef RecursiveVariant type; \
+    }; \
+    /**/
+
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG( BOOST_PP_EMPTY() )
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(const)
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(volatile)
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(const volatile)
+
+#undef BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG
+
+//
+// pointer specializations
+//
+template <typename T, typename RecursiveVariant>
 struct enable_recursive_impl<
-      ::boost::recursive_variant_
+      T*
     , RecursiveVariant
       BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>)
-    > 
+    >
 {
-    typedef RecursiveVariant type;
+    typedef typename enable_recursive_impl<
+          T, RecursiveVariant
+        >::type * type;
 };
+
+//
+// reference specializations
+//
+template <typename T, typename RecursiveVariant>
+struct enable_recursive_impl<
+      T&
+    , RecursiveVariant
+      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>)
+    >
+{
+    typedef typename enable_recursive_impl<
+          T, RecursiveVariant
+        >::type & type;
+};
+
+//
+// template expression (i.e., F<...>) specializations
+//
 
 #define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEF_IMPL(N) \
     typedef typename enable_recursive_impl<   \
@@ -128,7 +180,7 @@ struct enable_recursive_impl
 // (detail) metafunction enable_recursive
 //
 // Attempts recursive variant substitution and wraps with boost::incomplete
-// if substituion occurs *and* NoWrapper is false_.
+// if substituion occurs w/ non-pointer result *and* NoWrapper is false_.
 //
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -150,7 +202,10 @@ public: // metafunction result
 
     // [Wrap with incomplete only if rebind really changed something:]
     typedef typename mpl::if_<
-          is_same< t_,T >
+          mpl::or_<
+              is_same< t_,T >
+            , is_pointer<t_>
+            >
         , t_
         , boost::incomplete<t_>
         >::type type;
@@ -170,7 +225,11 @@ public: // metafunction result
 
     // [Wrap with incomplete only if rebind really changed something:]
     typedef typename mpl::if_<
-          mpl::or_< NoWrapper, is_same< t_,T > >
+          mpl::or_<
+              NoWrapper
+            , is_same< t_,T >
+            , is_pointer<t_>
+            >
         , t_
         , boost::incomplete<t_>
         >::type type;
