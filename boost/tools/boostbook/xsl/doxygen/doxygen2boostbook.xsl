@@ -19,6 +19,10 @@
     This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
   </xsl:param>
 
+  <!-- The substring used to identify unspecified types that we can't
+       mask from within Doxygen. This is a hack (big surprise). -->
+  <xsl:param name="boost.doxygen.detail">detail::</xsl:param>
+
   <xsl:output method="xml" indent="yes" standalone="yes"/>
 
   <xsl:key name="compounds-by-kind" match="compounddef" use="@kind"/>
@@ -651,10 +655,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       <xsl:apply-templates select="briefdescription" mode="passthrough"/>
       <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
       
-      <type>
-        <xsl:apply-templates select="type/text()|type/*"
-          mode="passthrough"/>
-      </type>
+      <type><xsl:apply-templates select="type"/></type>
     </typedef>
   </xsl:template>
 
@@ -667,15 +668,21 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       </xsl:attribute>
 
       <!-- Parameter type -->
-      <paramtype>
-        <xsl:apply-templates select="type"/>
-      </paramtype>
+      <paramtype><xsl:apply-templates select="type"/></paramtype>
 
       <!-- Default argument -->
       <xsl:if test="defval">
         <default>
-          <xsl:apply-templates select="defval/*|defval/text()" 
-            mode="passthrough"/>
+          <xsl:choose>
+            <xsl:when test="contains(string(defval), $boost.doxygen.detail)">
+              <emphasis>unspecified</emphasis>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="defval/*|defval/text()" 
+                mode="passthrough"/>
+            </xsl:otherwise>
+          </xsl:choose>
+
         </default>
       </xsl:if>
 
@@ -786,9 +793,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
             </xsl:attribute>
             
             <!-- Return type -->
-            <type>
-              <xsl:apply-templates select="type"/>
-            </type>
+            <type><xsl:apply-templates select="type"/></type>
             
             <xsl:call-template name="function.children"/>
           </function>          
@@ -905,9 +910,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       </xsl:if>
 
       <!-- Return type -->
-      <type>
-        <xsl:apply-templates select="type"/>
-      </type>
+      <type><xsl:apply-templates select="type"/></type>
 
       <xsl:call-template name="function.children"/>
     </method>
@@ -1035,7 +1038,14 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
   </xsl:template>
 
   <xsl:template match="type">
-    <xsl:apply-templates mode="type"/>
+    <xsl:choose>
+      <xsl:when test="contains(string(.), $boost.doxygen.detail)">
+        <emphasis>unspecified</emphasis>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates mode="type"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="ref" mode="type">

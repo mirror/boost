@@ -376,7 +376,16 @@
           </xsl:when>
           <xsl:when test="$parameter/default">
             <xsl:text> = </xsl:text>
-            <xsl:value-of select="string($parameter/default)"/>
+            <xsl:choose>
+              <xsl:when test="$final">
+                <xsl:apply-templates
+                  select="$parameter/default/*|$parameter/default/text()"
+                  mode="annotation"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="string($parameter/default)"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:when>
         </xsl:choose>
       </xsl:variable>
@@ -399,7 +408,7 @@
                 <xsl:with-param name="highlight" select="true()"/>
               </xsl:apply-templates>
               <xsl:value-of select="$name"/>
-              <xsl:value-of select="$default"/>
+              <xsl:copy-of select="$default"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="concat($prefix, $text)"/>
