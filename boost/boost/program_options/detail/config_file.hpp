@@ -15,8 +15,11 @@
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/option.hpp>
 #include <boost/program_options/eof_iterator.hpp>
-
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/shared_ptr.hpp>
+
+#include <boost/detail/workaround.hpp>
 
 namespace boost { namespace program_options { namespace detail {
 
@@ -135,7 +138,21 @@ namespace boost { namespace program_options { namespace detail {
 
     template<>
     bool
-    basic_config_file_iterator<wchar_t>::getline(std::string& s);
+    basic_config_file_iterator<wchar_t>::getline(std::string& s)
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202))
+        // When the function is out-of-line, Metrowerks tries to use
+        // the unspecialized version below, which causes an error.
+        std::wstring ws;
+        if (std::getline(*is, ws)) {
+            s = to_utf8(ws);
+            return true;
+        } else {
+            return false;
+        }                    
+#else
+;
+#endif
+
 
     template<class charT>
     bool

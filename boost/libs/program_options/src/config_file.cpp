@@ -137,6 +137,8 @@ namespace boost { namespace program_options { namespace detail {
         return false;
     }
 
+// On Metrowerks, the function is defined inline.
+#if ! BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202))
 #ifndef BOOST_NO_STD_WSTRING
     template<>
     bool
@@ -158,6 +160,7 @@ namespace boost { namespace program_options { namespace detail {
         }            
     }
 #endif    
+#endif
 
 }}}
 
