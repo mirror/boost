@@ -28,8 +28,8 @@ namespace assign
 {
 
     template< class V, class A, class V2 >
-    inline list_inserter< assign_detail::call_push_back< std::slist<V,A> >, V >
-    operator+=( std::slist<V,A>& c, V2 v )
+    inline list_inserter< assign_detail::call_push_back< BOOST_STD_EXTENSION_NAMESPACE::slist<V,A> >, V >
+    operator+=( BOOST_STD_EXTENSION_NAMESPACE::slist<V,A>& c, V2 v )
     {
         return push_back( c )( v );
     }
