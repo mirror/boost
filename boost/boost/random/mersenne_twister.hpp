@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include <algorithm>     // std::copy
+#include <iterator>      // std::ostream_iterator
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
