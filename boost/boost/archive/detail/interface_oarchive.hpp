@@ -22,7 +22,6 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/static_warning.hpp>
 
-#include <boost/pfto.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/archive/detail/oserializer.hpp>

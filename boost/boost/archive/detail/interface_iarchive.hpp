@@ -20,7 +20,6 @@
 #include <boost/cstdint.hpp>
 #include <boost/mpl/bool.hpp>
 
-#include <boost/pfto.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/archive/detail/iserializer.hpp>
 
