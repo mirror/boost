@@ -39,15 +39,16 @@ public:
 
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
 
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+  BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
+#endif
+
   explicit uniform_01(base_type & rng)
     : _rng(rng),
       _factor(1.0 /
               (static_cast<result_type>(_rng.max()-_rng.min()) +
                (std::numeric_limits<base_result>::is_integer ? 1.0 : 0.0)))
   {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
-#endif
   }
   // compiler-generated copy ctor is fine
   // assignment is disallowed because there is a reference member

@@ -61,13 +61,13 @@ public:
   friend bool operator==(const binomial_distribution& x, 
                          const binomial_distribution& y)
   {
-    return x._mean == y._mean && x._rng == y._rng;
+    return x._t == y._t && x._rng == y._rng;
   }
 #else
   // Use a member function
   bool operator==(const binomial_distribution& rhs) const
   {
-    return _mean == rhs._mean && _rng == rhs._rng;
+    return _t == rhs._t && _rng == rhs._rng;
   }
 #endif
 private:

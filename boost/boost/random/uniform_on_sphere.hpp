@@ -75,7 +75,7 @@ public:
 private:
   normal_distribution<base_type, RealType> _rng;
   result_type _container;
-  const int _dim;
+  int _dim;
 };
 
 } // namespace boost

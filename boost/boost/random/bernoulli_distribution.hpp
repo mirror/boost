@@ -64,7 +64,7 @@ private:
   typedef typename base_type::result_type base_result;
   base_type & _rng;
   RealType _p;
-  const base_result _threshold;
+  base_result _threshold;
 };
 
 } // namespace boost

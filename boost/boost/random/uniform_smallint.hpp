@@ -44,7 +44,10 @@ public:
   typedef IntType result_type;
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
 
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
   BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
+  BOOST_STATIC_ASSERT(std::numeric_limits<typename base_type::result_type>::is_integer);
+#endif
 
   uniform_smallint(base_type & rng, IntType min, IntType max);
 
@@ -119,7 +122,10 @@ public:
   typedef IntType result_type;
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
 
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
   BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
+  BOOST_STATIC_ASSERT(!std::numeric_limits<typename base_type::result_type>::is_integer);
+#endif
 
   uniform_smallint(base_type & rng, IntType min, IntType max);
 

@@ -38,15 +38,17 @@ class uniform_int
 public:
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
+
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
+
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+  BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
+#endif
 
   uniform_int(base_type & rng, IntType min, IntType max) 
     : _rng(rng), _min(min), _max(max), _range(_max - _min),
       _bmin(_rng.min()), _brange(_rng.max() - _bmin)
   {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
-#endif
     assert(min < max);
     if(random::equal_signed_unsigned(_brange, _range))
       _range_comparison = 0;

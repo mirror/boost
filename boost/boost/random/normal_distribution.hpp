@@ -42,6 +42,10 @@ public:
     assert(sigma >= 0);
   }
 
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+    BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
+#endif
+
   // compiler-generated copy constructor is NOT fine, need to purge cache
   normal_distribution(const normal_distribution& other)
     : _rng(other._rng), _mean(other._mean), _sigma(other._sigma), _valid(false)

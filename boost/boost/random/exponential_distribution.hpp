@@ -23,6 +23,8 @@
 
 #include <cmath>
 #include <cassert>
+#include <boost/limits.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/random/uniform_01.hpp>
 
 namespace boost {
@@ -34,6 +36,10 @@ class exponential_distribution
 public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
+
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+  BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
+#endif
 
   exponential_distribution(base_type& rng, result_type lambda)
     : _rng(rng), _lambda(lambda) { assert(lambda > 0); }
@@ -62,7 +68,7 @@ public:
 #endif
 private:
   uniform_01<base_type, RealType> _rng;
-  const result_type _lambda;
+  result_type _lambda;
 };
 
 } // namespace boost
