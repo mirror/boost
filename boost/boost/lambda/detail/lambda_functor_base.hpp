@@ -332,58 +332,58 @@ public:
 //  Function actions, casts, throws,... all go via these classes.
 
 
-template<class Act, class Args>						  
-class lambda_functor_base<action<0, Act>, Args> 		          
-{									  
-public:									  
+template<class Act, class Args>  
+class lambda_functor_base<action<0, Act>, Args>           
+{  
+public:  
 //  Args args; not needed
-  explicit lambda_functor_base(const Args& a) {}		  
-									  
-  template<class SigArgs> struct sig {					  
+  explicit lambda_functor_base(const Args& a) {}  
+  
+  template<class SigArgs> struct sig {  
     typedef typename return_type_N<Act, null_type>::type type;
   };
-									  
-  template<class RET, CALL_TEMPLATE_ARGS>				  
-  RET call(CALL_FORMAL_ARGS) const {					  
+  
+  template<class RET, CALL_TEMPLATE_ARGS>  
+  RET call(CALL_FORMAL_ARGS) const {  
     return Act::template apply<RET>();
   }
 };
 
 
-#if defined BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART			  
+#if defined BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART  
 #error "Multiple defines of BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART"  
-#endif									  
-									  
-									  
-#define BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(ARITY)		\
-template<class Act, class Args>						\
-class lambda_functor_base<action<ARITY, Act>, Args>			\
-{									\
-public:									\
-  Args args;								\
-									\
-  explicit lambda_functor_base(const Args& a) : args(a) {}		\
-									\
-  template<class SigArgs> struct sig {					\
-    typedef typename							\
-    detail::deduce_non_ref_argument_types<Args, SigArgs>::type rets_t;	\
-  public:								\
-    typedef typename							\
-      return_type_N_prot<Act, rets_t>::type type;			\
-  };									\
-									\
-									\
-  template<class RET, CALL_TEMPLATE_ARGS>				\
-  RET call(CALL_FORMAL_ARGS) const {					\
-    using boost::tuples::get;						\
-    using detail::constify_rvals;					\
-    using detail::r_select;						\
-    using detail::element_or_null;                                      \
+#endif  
+  
+  
+#define BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(ARITY)             \
+template<class Act, class Args>                                        \
+class lambda_functor_base<action<ARITY, Act>, Args>                    \
+{                                                                      \
+public:                                                                \
+  Args args;                                                           \
+                                                                       \
+  explicit lambda_functor_base(const Args& a) : args(a) {}             \
+                                                                       \
+  template<class SigArgs> struct sig {                                 \
+    typedef typename                                                   \
+    detail::deduce_non_ref_argument_types<Args, SigArgs>::type rets_t; \
+  public:                                                              \
+    typedef typename                                                   \
+      return_type_N_prot<Act, rets_t>::type type;                      \
+  };                                                                   \
+                                                                       \
+                                                                       \
+  template<class RET, CALL_TEMPLATE_ARGS>                              \
+  RET call(CALL_FORMAL_ARGS) const {                                   \
+    using boost::tuples::get;                                          \
+    using detail::constify_rvals;                                      \
+    using detail::r_select;                                            \
+    using detail::element_or_null;                                     \
     using detail::deduce_argument_types;                                
 
 BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(1)
 
-  typedef typename 							
+  typedef typename
     deduce_argument_types<Args, tuple<CALL_REFERENCE_TYPES> >::type rets_t;
   typedef typename element_or_null<0, rets_t>::type rt0;
 
@@ -396,7 +396,7 @@ BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(1)
 
 BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(2)
   
-  typedef typename 							
+  typedef typename 
     deduce_argument_types<Args, tuple<CALL_REFERENCE_TYPES> >::type rets_t;
   typedef typename element_or_null<0, rets_t>::type rt0;
   typedef typename element_or_null<1, rets_t>::type rt1;
@@ -410,7 +410,7 @@ BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(2)
 
 BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(3)
 
-  typedef typename 							
+  typedef typename 
     deduce_argument_types<Args, tuple<CALL_REFERENCE_TYPES> >::type rets_t;
 
   typedef typename element_or_null<0, rets_t>::type rt0;
@@ -426,7 +426,7 @@ BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(3)
 };
 
 BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(4)
-  typedef typename 							
+  typedef typename 
     deduce_argument_types<Args, tuple<CALL_REFERENCE_TYPES> >::type rets_t;
   typedef typename element_or_null<0, rets_t>::type rt0;
   typedef typename element_or_null<1, rets_t>::type rt1;
@@ -443,7 +443,7 @@ BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(4)
 };
 
 BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(5)
-  typedef typename 							
+  typedef typename 
     deduce_argument_types<Args, tuple<CALL_REFERENCE_TYPES> >::type rets_t;
   typedef typename element_or_null<0, rets_t>::type rt0;
   typedef typename element_or_null<1, rets_t>::type rt1;
@@ -463,7 +463,7 @@ BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(5)
 
 BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(6)
 
-  typedef typename 							
+  typedef typename 
     deduce_argument_types<Args, tuple<CALL_REFERENCE_TYPES> >::type rets_t;
   typedef typename element_or_null<0, rets_t>::type rt0;
   typedef typename element_or_null<1, rets_t>::type rt1;
@@ -485,7 +485,7 @@ BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(6)
 };
 
 BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(7)
-  typedef typename 							
+  typedef typename 
     deduce_argument_types<Args, tuple<CALL_REFERENCE_TYPES> >::type rets_t;
   typedef typename element_or_null<0, rets_t>::type rt0;
   typedef typename element_or_null<1, rets_t>::type rt1;
@@ -509,7 +509,7 @@ BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(7)
 };
 
 BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(8)
-  typedef typename 							
+  typedef typename 
     deduce_argument_types<Args, tuple<CALL_REFERENCE_TYPES> >::type rets_t;
   typedef typename element_or_null<0, rets_t>::type rt0;
   typedef typename element_or_null<1, rets_t>::type rt1;
@@ -534,7 +534,7 @@ BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(8)
 };
 
 BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(9)
-  typedef typename 							
+  typedef typename 
     deduce_argument_types<Args, tuple<CALL_REFERENCE_TYPES> >::type rets_t;
   typedef typename element_or_null<0, rets_t>::type rt0;
   typedef typename element_or_null<1, rets_t>::type rt1;
@@ -561,7 +561,7 @@ BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(9)
 };
 
 BOOST_LAMBDA_LAMBDA_FUNCTOR_BASE_FIRST_PART(10) 
-  typedef typename 							
+  typedef typename 
     deduce_argument_types<Args, tuple<CALL_REFERENCE_TYPES> >::type rets_t;
   typedef typename element_or_null<0, rets_t>::type rt0;
   typedef typename element_or_null<1, rets_t>::type rt1;

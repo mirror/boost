@@ -43,13 +43,13 @@ public:
 
   template<class SigArgs> struct sig { 
   private:
-    typedef typename							
+    typedef typename
       detail::deduce_argument_types<Args, SigArgs>::type rets_t;      
-  public:								
+  public:
     typedef typename return_type_2_comma< // comma needs special handling
       typename detail::element_or_null<0, rets_t>::type,
       typename detail::element_or_null<1, rets_t>::type
-    >::type type;	
+    >::type type;
   };
 
 };  
@@ -61,27 +61,27 @@ namespace detail {
 
 template<class Action, class Bound, class Open> class binary_rt {
   private:
-    typedef typename							
+    typedef typename
       detail::deduce_argument_types<Bound, Open>::type rets_t;      
-  public:								
+  public:
     typedef typename return_type_2_prot<
       Action,  
       typename detail::element_or_null<0, rets_t>::type,
       typename detail::element_or_null<1, rets_t>::type
-    >::type type;	
+    >::type type;
 };
 
 
   // same for unary actions
 template<class Action, class Bound, class Open> class unary_rt {
   private:
-    typedef typename							
+    typedef typename
       detail::deduce_argument_types<Bound, Open>::type rets_t;      
-  public:								
+  public:
     typedef typename return_type_1_prot<
       Action,  
       typename detail::element_or_null<0, rets_t>::type
-    >::type type;	
+    >::type type;
 };
 
 
@@ -102,7 +102,7 @@ public:
            detail::select(boost::tuples::get<1>(args), CALL_ACTUAL_ARGS); 
   }
   template<class SigArgs> struct sig { 
-    typedef typename							
+    typedef typename
       detail::binary_rt<logical_action<and_action>, Args, SigArgs>::type type;
   };      
 };  
@@ -123,7 +123,7 @@ public:
   }
 
   template<class SigArgs> struct sig { 
-    typedef typename							
+    typedef typename
       detail::binary_rt<logical_action<or_action>, Args, SigArgs>::type type;
   };      
 };  
@@ -143,69 +143,69 @@ public:
   }
 
   template<class SigArgs> struct sig { 
-    typedef typename							
+    typedef typename
       detail::binary_rt<other_action<subscript_action>, Args, SigArgs>::type 
         type;
   };      
 };  
 
 
-#define BOOST_LAMBDA_BINARY_ACTION(SYMBOL, ACTION_CLASS)		  \
-template<class Args>							  \
-class lambda_functor_base<ACTION_CLASS, Args> {				  \
-public:									  \
-  Args args;								  \
-public:									  \
-  explicit lambda_functor_base(const Args& a) : args(a) {}		  \
-									  \
-  template<class RET, CALL_TEMPLATE_ARGS>				  \
-  RET call(CALL_FORMAL_ARGS) const {					  \
+#define BOOST_LAMBDA_BINARY_ACTION(SYMBOL, ACTION_CLASS)  \
+template<class Args>                                                      \
+class lambda_functor_base<ACTION_CLASS, Args> {                           \
+public:                                                                   \
+  Args args;                                                              \
+public:                                                                   \
+  explicit lambda_functor_base(const Args& a) : args(a) {}                \
+                                                                          \
+  template<class RET, CALL_TEMPLATE_ARGS>                                 \
+  RET call(CALL_FORMAL_ARGS) const {                                      \
     return detail::select(boost::tuples::get<0>(args), CALL_ACTUAL_ARGS)  \
-           SYMBOL							  \
+           SYMBOL                                                         \
            detail::select(boost::tuples::get<1>(args), CALL_ACTUAL_ARGS); \
-  }									  \
-  template<class SigArgs> struct sig { 					  \
-    typedef typename							  \
-      detail::binary_rt<ACTION_CLASS, Args, SigArgs>::type type;	  \
-  };									  \
+  }                                                                       \
+  template<class SigArgs> struct sig {                                    \
+    typedef typename                                                      \
+      detail::binary_rt<ACTION_CLASS, Args, SigArgs>::type type;          \
+  };                                                                      \
 };  
 
-#define BOOST_LAMBDA_PREFIX_UNARY_ACTION(SYMBOL, ACTION_CLASS)		  \
-template<class Args>							  \
-class lambda_functor_base<ACTION_CLASS, Args> {				  \
-public:									  \
-  Args args;								  \
-public:									  \
-  explicit lambda_functor_base(const Args& a) : args(a) {}		  \
-									  \
-  template<class RET, CALL_TEMPLATE_ARGS>				  \
-  RET call(CALL_FORMAL_ARGS) const {					  \
-    return SYMBOL							  \
+#define BOOST_LAMBDA_PREFIX_UNARY_ACTION(SYMBOL, ACTION_CLASS)            \
+template<class Args>                                                      \
+class lambda_functor_base<ACTION_CLASS, Args> {                           \
+public:                                                                   \
+  Args args;                                                              \
+public:                                                                   \
+  explicit lambda_functor_base(const Args& a) : args(a) {}                \
+                                                                          \
+  template<class RET, CALL_TEMPLATE_ARGS>                                 \
+  RET call(CALL_FORMAL_ARGS) const {                                      \
+    return SYMBOL                                                         \
            detail::select(boost::tuples::get<0>(args), CALL_ACTUAL_ARGS); \
-  }									  \
-  template<class SigArgs> struct sig { 					  \
-    typedef typename							  \
-      detail::unary_rt<ACTION_CLASS, Args, SigArgs>::type type;	          \
-  };									  \
+  }                                                                       \
+  template<class SigArgs> struct sig {                                    \
+    typedef typename                                                      \
+      detail::unary_rt<ACTION_CLASS, Args, SigArgs>::type type;           \
+  };                                                                      \
 };  
 
-#define BOOST_LAMBDA_POSTFIX_UNARY_ACTION(SYMBOL, ACTION_CLASS)		  \
-template<class Args>							  \
-class lambda_functor_base<ACTION_CLASS, Args> {				  \
-public:									  \
-  Args args;								  \
-public:									  \
-  explicit lambda_functor_base(const Args& a) : args(a) {}		  \
-									  \
-  template<class RET, CALL_TEMPLATE_ARGS>				  \
-  RET call(CALL_FORMAL_ARGS) const {					  \
-    return								  \
+#define BOOST_LAMBDA_POSTFIX_UNARY_ACTION(SYMBOL, ACTION_CLASS)           \
+template<class Args>                                                      \
+class lambda_functor_base<ACTION_CLASS, Args> {                           \
+public:                                                                   \
+  Args args;                                                              \
+public:                                                                   \
+  explicit lambda_functor_base(const Args& a) : args(a) {}                \
+                                                                          \
+  template<class RET, CALL_TEMPLATE_ARGS>                                 \
+  RET call(CALL_FORMAL_ARGS) const {                                      \
+    return                                                                \
     detail::select(boost::tuples::get<0>(args), CALL_ACTUAL_ARGS) SYMBOL; \
-  }									  \
-  template<class SigArgs> struct sig { 					  \
-    typedef typename							  \
-      detail::unary_rt<ACTION_CLASS, Args, SigArgs>::type type;	          \
-  };									  \
+  }                                                                       \
+  template<class SigArgs> struct sig {                                    \
+    typedef typename                                                      \
+      detail::unary_rt<ACTION_CLASS, Args, SigArgs>::type type;           \
+  };                                                                      \
 };  
 
 BOOST_LAMBDA_BINARY_ACTION(+,arithmetic_action<plus_action>)

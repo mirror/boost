@@ -87,11 +87,11 @@ template <> struct promote_to_int<short int> { typedef int type; };
 // of unsigned short int, otherwise go to unsigned int.
 template <> struct promote_to_int<unsigned short int>
 { 
-	typedef
-		detail::IF<sizeof(int) <= sizeof(unsigned short int),	
+        typedef
+                detail::IF<sizeof(int) <= sizeof(unsigned short int),        
 // I had the logic reversed but ">" messes up the parsing.
-		unsigned int,
-		int>::RET type; 
+                unsigned int,
+                int>::RET type; 
 };
 
 
@@ -490,22 +490,22 @@ struct return_type_2_arithmetic_phase_2 {
 // struct so I don't have to type this twice.
 struct promotion_of_unsigned_int
 {
-	typedef
-	detail::IF<sizeof(long) <= sizeof(unsigned int),	
+        typedef
+        detail::IF<sizeof(long) <= sizeof(unsigned int),        
 // I had the logic reversed but ">" messes up the parsing.
-		unsigned long,
-		long>::RET type; 
+                unsigned long,
+                long>::RET type; 
 };
 
 template<>
 struct return_type_2_arithmetic_phase_2<unsigned int, long>
 {
-	typedef promotion_of_unsigned_int::type type;
+        typedef promotion_of_unsigned_int::type type;
 };
 template<>
 struct return_type_2_arithmetic_phase_2<long, unsigned int>
 {
-	typedef promotion_of_unsigned_int::type type;
+        typedef promotion_of_unsigned_int::type type;
 };
 
 

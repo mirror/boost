@@ -56,30 +56,30 @@
 namespace boost {
 namespace lambda {
 
-#define BOOST_LAMBDA_IS_INSTANCE_OF_TEMPLATE(INDEX)			    \
-									    \
-namespace detail {							    \
-									    \
-template <template<BOOST_LAMBDA_CLASS_LIST(INDEX,T)> class F>		    \
-struct BOOST_PP_CAT(conversion_tester_,INDEX) {				    \
-  template<BOOST_LAMBDA_CLASS_ARG_LIST(INDEX,A)>			    \
-  BOOST_PP_CAT(conversion_tester_,INDEX)				    \
-    (const F<BOOST_LAMBDA_ARG_LIST(INDEX,A)>&);				    \
-};									    \
-									    \
-} /* end detail */							    \
-									    \
+#define BOOST_LAMBDA_IS_INSTANCE_OF_TEMPLATE(INDEX)                         \
+                                                                            \
+namespace detail {                                                          \
+                                                                            \
+template <template<BOOST_LAMBDA_CLASS_LIST(INDEX,T)> class F>               \
+struct BOOST_PP_CAT(conversion_tester_,INDEX) {                             \
+  template<BOOST_LAMBDA_CLASS_ARG_LIST(INDEX,A)>                            \
+  BOOST_PP_CAT(conversion_tester_,INDEX)                                    \
+    (const F<BOOST_LAMBDA_ARG_LIST(INDEX,A)>&);                             \
+};                                                                          \
+                                                                            \
+} /* end detail */                                                          \
+                                                                            \
 template <class From, template <BOOST_LAMBDA_CLASS_LIST(INDEX,T)> class To> \
-struct BOOST_PP_CAT(is_instance_of_,INDEX)				    \
-{									    \
- private:								    \
-   typedef ::boost::is_convertible<					    \
-     From,								    \
-     BOOST_PP_CAT(detail::conversion_tester_,INDEX)<To>			    \
-   > helper_type;							    \
-									    \
-public:									    \
-  BOOST_STATIC_CONSTANT(bool, value = helper_type::value);		    \
+struct BOOST_PP_CAT(is_instance_of_,INDEX)                                  \
+{                                                                           \
+ private:                                                                   \
+   typedef ::boost::is_convertible<                                         \
+     From,                                                                  \
+     BOOST_PP_CAT(detail::conversion_tester_,INDEX)<To>                     \
+   > helper_type;                                                           \
+                                                                            \
+public:                                                                     \
+  BOOST_STATIC_CONSTANT(bool, value = helper_type::value);                  \
 };
 
 

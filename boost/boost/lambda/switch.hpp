@@ -184,29 +184,29 @@ public:
 
 // switch with default being the sole label - doesn't make much sense but
 // it is there for completeness
-// template<class Args>						
-// class								
-// lambda_functor_base<						
-//   action<							
-//     2,								
-//     return_void_action<switch_action<detail::default_label> >	
-//   >,								
-//   Args								
-// >								
-// {								
-//   Args args;							
-// public:								
-//   explicit lambda_functor_base(const Args& a) : args(a) {}	
-// 								
-//   template<class RET, class A, class B, class C>		
-//   RET call(A& a, B& b, C& c) const {				
-//     switch( detail::select(::boost::tuples::get<0>(args), a, b, c) )	
-//     {								
-//       default:							
-//         detail::select(::boost::tuples::get<1>(args), a, b, c);		
-//         break;							
-//     }								
-//   }								
+// template<class Args>
+// class
+// lambda_functor_base<
+//   action<
+//     2,
+//     return_void_action<switch_action<detail::default_label> >
+//   >,
+//   Args
+// >
+// {
+//   Args args;
+// public:
+//   explicit lambda_functor_base(const Args& a) : args(a) {}
+// 
+//   template<class RET, class A, class B, class C>
+//   RET call(A& a, B& b, C& c) const {
+//     switch( detail::select(::boost::tuples::get<0>(args), a, b, c) )
+//     {
+//       default:
+//         detail::select(::boost::tuples::get<1>(args), a, b, c);
+//         break;
+//     }
+//   }
 // };
 
 
@@ -287,88 +287,88 @@ public:
 // BOOST_LAMBDA_A_I_LIST(N, X) is a list of form X0, X1, ..., XN
 // BOOST_LAMBDA_A_I_B_LIST(N, X, Y) is a list of form X0 Y, X1 Y, ..., XN Y
 
-#define BOOST_LAMBDA_A_I(i, A) 		\
+#define BOOST_LAMBDA_A_I(i, A) \
 BOOST_PP_COMMA_IF(i) BOOST_PP_CAT(A,i)
 
-#define BOOST_LAMBDA_A_I_B(i, T) 		\
+#define BOOST_LAMBDA_A_I_B(i, T) \
 BOOST_PP_COMMA_IF(i) BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,0,T),i) BOOST_PP_TUPLE_ELEM(2,1,T)
 
-#define BOOST_LAMBDA_A_I_LIST(i, A) 				\
-BOOST_PP_REPEAT(i,BOOST_LAMBDA_A_I, A) 		
+#define BOOST_LAMBDA_A_I_LIST(i, A) \
+BOOST_PP_REPEAT(i,BOOST_LAMBDA_A_I, A) 
 
-#define BOOST_LAMBDA_A_I_B_LIST(i, A, B) 			\
-BOOST_PP_REPEAT(i,BOOST_LAMBDA_A_I_B, (A,B)) 		
+#define BOOST_LAMBDA_A_I_B_LIST(i, A, B) \
+BOOST_PP_REPEAT(i,BOOST_LAMBDA_A_I_B, (A,B)) 
 
 
 // Switch related macros -------------------------------------------
-#define BOOST_LAMBDA_SWITCH_CASE_BLOCK(N, A)				  \
-  case Case##N:								  \
+#define BOOST_LAMBDA_SWITCH_CASE_BLOCK(N, A) \
+  case Case##N: \
   detail::select(::boost::tuples::get<BOOST_PP_INC(N)>(args), CALL_ACTUAL_ARGS); \
   break;
 
-#define BOOST_LAMBDA_SWITCH_CASE_BLOCK_LIST(N) 			\
+#define BOOST_LAMBDA_SWITCH_CASE_BLOCK_LIST(N) \
 BOOST_PP_REPEAT(N, BOOST_LAMBDA_SWITCH_CASE_BLOCK, FOO)
 // 2 case type:
 
-#define BOOST_LAMBDA_SWITCH_NO_DEFAULT_CASE(N)				      \
-template<class Args, BOOST_LAMBDA_A_I_LIST(N, int Case)>		      \
-class									      \
-lambda_functor_base<							      \
-      switch_action<BOOST_PP_INC(N),					      \
-        BOOST_LAMBDA_A_I_B_LIST(N, detail::case_label<Case,>)		      \
-      >,       								      \
-  Args									      \
->									      \
-{									      \
-public:									      \
-  Args args;								      \
-  template <class SigArgs> struct sig { typedef void type; };		      \
-public:									      \
-  explicit lambda_functor_base(const Args& a) : args(a) {}		      \
-									      \
-  template<class RET, CALL_TEMPLATE_ARGS>				      \
-  RET call(CALL_FORMAL_ARGS) const {					      \
+#define BOOST_LAMBDA_SWITCH_NO_DEFAULT_CASE(N)                                \
+template<class Args, BOOST_LAMBDA_A_I_LIST(N, int Case)>                      \
+class                                                                         \
+lambda_functor_base<                                                          \
+      switch_action<BOOST_PP_INC(N),                                          \
+        BOOST_LAMBDA_A_I_B_LIST(N, detail::case_label<Case,>)                 \
+      >,                                                                      \
+  Args                                                                        \
+>                                                                             \
+{                                                                             \
+public:                                                                       \
+  Args args;                                                                  \
+  template <class SigArgs> struct sig { typedef void type; };                 \
+public:                                                                       \
+  explicit lambda_functor_base(const Args& a) : args(a) {}                    \
+                                                                              \
+  template<class RET, CALL_TEMPLATE_ARGS>                                     \
+  RET call(CALL_FORMAL_ARGS) const {                                          \
     switch( detail::select(::boost::tuples::get<0>(args), CALL_ACTUAL_ARGS) ) \
-    {									      \
-      BOOST_LAMBDA_SWITCH_CASE_BLOCK_LIST(N)				      \
-    }									      \
-  }									      \
+    {                                                                         \
+      BOOST_LAMBDA_SWITCH_CASE_BLOCK_LIST(N)                                  \
+    }                                                                         \
+  }                                                                           \
 };
 
-	
+        
 
-#define BOOST_LAMBDA_SWITCH_WITH_DEFAULT_CASE(N)			      \
-template<								      \
-  class Args BOOST_PP_COMMA_IF(BOOST_PP_DEC(N))				      \
-  BOOST_LAMBDA_A_I_LIST(BOOST_PP_DEC(N), int Case)			      \
->									      \
-class									      \
-lambda_functor_base<							      \
-      switch_action<BOOST_PP_INC(N),					      \
-        BOOST_LAMBDA_A_I_B_LIST(BOOST_PP_DEC(N),			      \
-                                detail::case_label<Case, >)		      \
-        BOOST_PP_COMMA_IF(BOOST_PP_DEC(N))				      \
-        detail::default_label						      \
-      >,       								      \
-  Args									      \
->									      \
-{									      \
-public:									      \
-  Args args;								      \
-  template <class SigArgs> struct sig { typedef void type; };		      \
-public:									      \
-  explicit lambda_functor_base(const Args& a) : args(a) {}		      \
-									      \
-  template<class RET, CALL_TEMPLATE_ARGS>				      \
-  RET call(CALL_FORMAL_ARGS) const {					      \
+#define BOOST_LAMBDA_SWITCH_WITH_DEFAULT_CASE(N)                              \
+template<                                                                     \
+  class Args BOOST_PP_COMMA_IF(BOOST_PP_DEC(N))                               \
+  BOOST_LAMBDA_A_I_LIST(BOOST_PP_DEC(N), int Case)                            \
+>                                                                             \
+class                                                                         \
+lambda_functor_base<                                                          \
+      switch_action<BOOST_PP_INC(N),                                          \
+        BOOST_LAMBDA_A_I_B_LIST(BOOST_PP_DEC(N),                              \
+                                detail::case_label<Case, >)                   \
+        BOOST_PP_COMMA_IF(BOOST_PP_DEC(N))                                    \
+        detail::default_label                                                 \
+      >,                                                                      \
+  Args                                                                        \
+>                                                                             \
+{                                                                             \
+public:                                                                       \
+  Args args;                                                                  \
+  template <class SigArgs> struct sig { typedef void type; };                 \
+public:                                                                       \
+  explicit lambda_functor_base(const Args& a) : args(a) {}                    \
+                                                                              \
+  template<class RET, CALL_TEMPLATE_ARGS>                                     \
+  RET call(CALL_FORMAL_ARGS) const {                                          \
     switch( detail::select(::boost::tuples::get<0>(args), CALL_ACTUAL_ARGS) ) \
-    {									      \
-        BOOST_LAMBDA_SWITCH_CASE_BLOCK_LIST(BOOST_PP_DEC(N))		      \
-      default:								      \
+    {                                                                         \
+        BOOST_LAMBDA_SWITCH_CASE_BLOCK_LIST(BOOST_PP_DEC(N))                  \
+      default:                                                                \
         detail::select(::boost::tuples::get<N>(args), CALL_ACTUAL_ARGS);      \
-        break;								      \
-    }									      \
-  }									      \
+        break;                                                                \
+    }                                                                         \
+  }                                                                           \
 };
 
 
@@ -414,43 +414,43 @@ switch_statement(const lambda_functor<TestArg>& a1) {
 }
 
 
-#define HELPER(N, FOO)					\
-BOOST_PP_COMMA_IF(N)					\
-BOOST_PP_CAT(						\
-  const tagged_lambda_functor<detail::switch_case_tag<TagData,	\
-  N>)								\
+#define HELPER(N, FOO)                                         \
+BOOST_PP_COMMA_IF(N)                                           \
+BOOST_PP_CAT(                                                  \
+  const tagged_lambda_functor<detail::switch_case_tag<TagData, \
+  N>)                                                          \
 BOOST_PP_COMMA() Arg##N>& a##N
 
 #define HELPER_LIST(N) BOOST_PP_REPEAT(N, HELPER, FOO)
 
 
-#define BOOST_LAMBDA_SWITCH_STATEMENT(N)				\
-template <class TestArg,						\
-          BOOST_LAMBDA_A_I_LIST(N, class TagData),			\
-          BOOST_LAMBDA_A_I_LIST(N, class Arg)>				\
-inline const								\
-lambda_functor<								\
-  lambda_functor_base<							\
-        switch_action<BOOST_PP_INC(N), 				        \
-          BOOST_LAMBDA_A_I_LIST(N, TagData)				\
-        >,								\
-    tuple<lambda_functor<TestArg>, BOOST_LAMBDA_A_I_LIST(N, Arg)>	\
-  >									\
->									\
-switch_statement(							\
-  const lambda_functor<TestArg>& ta,					\
-  HELPER_LIST(N)							\
-)									\
-{									\
-  return								\
-      lambda_functor_base<						\
-            switch_action<BOOST_PP_INC(N),				\
-              BOOST_LAMBDA_A_I_LIST(N, TagData)				\
-            >,								\
-        tuple<lambda_functor<TestArg>, BOOST_LAMBDA_A_I_LIST(N, Arg)>	\
-      >									\
-    ( tuple<lambda_functor<TestArg>, BOOST_LAMBDA_A_I_LIST(N, Arg)>	\
-        (ta, BOOST_LAMBDA_A_I_LIST(N, a) ));				\
+#define BOOST_LAMBDA_SWITCH_STATEMENT(N)                              \
+template <class TestArg,                                              \
+          BOOST_LAMBDA_A_I_LIST(N, class TagData),                    \
+          BOOST_LAMBDA_A_I_LIST(N, class Arg)>                        \
+inline const                                                          \
+lambda_functor<                                                       \
+  lambda_functor_base<                                                \
+        switch_action<BOOST_PP_INC(N),                                \
+          BOOST_LAMBDA_A_I_LIST(N, TagData)                           \
+        >,                                                            \
+    tuple<lambda_functor<TestArg>, BOOST_LAMBDA_A_I_LIST(N, Arg)>     \
+  >                                                                   \
+>                                                                     \
+switch_statement(                                                     \
+  const lambda_functor<TestArg>& ta,                                  \
+  HELPER_LIST(N)                                                      \
+)                                                                     \
+{                                                                     \
+  return                                                              \
+      lambda_functor_base<                                            \
+            switch_action<BOOST_PP_INC(N),                            \
+              BOOST_LAMBDA_A_I_LIST(N, TagData)                       \
+            >,                                                        \
+        tuple<lambda_functor<TestArg>, BOOST_LAMBDA_A_I_LIST(N, Arg)> \
+      >                                                               \
+    ( tuple<lambda_functor<TestArg>, BOOST_LAMBDA_A_I_LIST(N, Arg)>   \
+        (ta, BOOST_LAMBDA_A_I_LIST(N, a) ));                          \
 }
 
 
@@ -458,16 +458,16 @@ switch_statement(							\
 
 // Here's the actual generation
 
-#define BOOST_LAMBDA_SWITCH(N) 			\
-BOOST_LAMBDA_SWITCH_NO_DEFAULT_CASE(N)		\
+#define BOOST_LAMBDA_SWITCH(N)           \
+BOOST_LAMBDA_SWITCH_NO_DEFAULT_CASE(N)   \
 BOOST_LAMBDA_SWITCH_WITH_DEFAULT_CASE(N)        
 
 // Use this to avoid case 0, these macros work only from case 1 upwards
-#define BOOST_LAMBDA_SWITCH_HELPER(N, A)		\
+#define BOOST_LAMBDA_SWITCH_HELPER(N, A) \
 BOOST_LAMBDA_SWITCH( BOOST_PP_INC(N) )
 
 // Use this to avoid cases 0 and 1, these macros work only from case 2 upwards
-#define BOOST_LAMBDA_SWITCH_STATEMENT_HELPER(N, A)			     \
+#define BOOST_LAMBDA_SWITCH_STATEMENT_HELPER(N, A) \
 BOOST_LAMBDA_SWITCH_STATEMENT(BOOST_PP_INC(N))
 
 

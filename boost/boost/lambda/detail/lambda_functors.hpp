@@ -178,33 +178,33 @@ public:
          sig<tuple<CALL_REFERENCE_TYPES> >::type>(CALL_ACTUAL_ARGS); 
   }
 
-  template<class A>							
-  const lambda_functor<lambda_functor_base<				
-                  other_action<assignment_action>,		
-                  boost::tuple<lambda_functor,				
+  template<class A>
+  const lambda_functor<lambda_functor_base<
+                  other_action<assignment_action>,
+                  boost::tuple<lambda_functor,
                   typename const_copy_argument <const A>::type> > >
-  operator=(const A& a) const {						
-    return lambda_functor_base<				
-                  other_action<assignment_action>,		
-                  boost::tuple<lambda_functor,				
+  operator=(const A& a) const {
+    return lambda_functor_base<
+                  other_action<assignment_action>,
+                  boost::tuple<lambda_functor,
                   typename const_copy_argument <const A>::type> >
-     (  boost::tuple<lambda_functor,					
-             typename const_copy_argument <const A>::type>(*this, a) );	
-  }									
+     (  boost::tuple<lambda_functor,
+             typename const_copy_argument <const A>::type>(*this, a) );
+  }
 
-  template<class A>							 
-  const lambda_functor<lambda_functor_base<				 
-                  other_action<subscript_action>,		 
-                  boost::tuple<lambda_functor,				 
-                        typename const_copy_argument <const A>::type> >	> 
-  operator[](const A& a) const {					 
-    return lambda_functor_base<				 
-                  other_action<subscript_action>,		 
-                  boost::tuple<lambda_functor,				 
+  template<class A> 
+  const lambda_functor<lambda_functor_base< 
+                  other_action<subscript_action>, 
+                  boost::tuple<lambda_functor, 
+                        typename const_copy_argument <const A>::type> > > 
+  operator[](const A& a) const { 
+    return lambda_functor_base< 
+                  other_action<subscript_action>, 
+                  boost::tuple<lambda_functor, 
                         typename const_copy_argument <const A>::type> >
-     ( boost::tuple<lambda_functor,					 
+     ( boost::tuple<lambda_functor, 
              typename const_copy_argument <const A>::type>(*this, a ) ); 
-  }									 
+  } 
 };
 
 

@@ -57,9 +57,9 @@ namespace {
   boost::lambda::placeholder2_type free2 = boost::lambda::placeholder2_type();
   boost::lambda::placeholder3_type free3 = boost::lambda::placeholder3_type();
 
-	boost::lambda::placeholder1_type& _1 = free1;
-	boost::lambda::placeholder2_type& _2 = free2;
-	boost::lambda::placeholder3_type& _3 = free3;
+  boost::lambda::placeholder1_type& _1 = free1;
+  boost::lambda::placeholder2_type& _2 = free2;
+  boost::lambda::placeholder3_type& _3 = free3;
   // _1, _2, ... naming scheme by Peter Dimov
 } // unnamed
    

@@ -419,7 +419,7 @@ try_catch(
 
 template <class TryArg, class Catch1, class LF1, 
                         class Catch2, class LF2, 
-			class Catch3, class LF3>
+                        class Catch3, class LF3>
 inline const lambda_functor< 
   lambda_functor_base< 
     action<4, try_catch_action<catch_action<detail::catch_block<Catch1>, detail::catch_block<Catch2>, Catch3> > >, 
@@ -442,8 +442,8 @@ try_catch(
 
 template <class TryArg, class Catch1, class LF1, 
                         class Catch2, class LF2, 
-			class Catch3, class LF3, 
-			class Catch4, class LF4>
+                        class Catch3, class LF3, 
+                        class Catch4, class LF4>
 inline const 
 lambda_functor< 
   lambda_functor_base< 
@@ -476,9 +476,9 @@ try_catch(
 
 template <class TryArg, class Catch1, class LF1, 
                         class Catch2, class LF2, 
-			class Catch3, class LF3, 
-			class Catch4, class LF4, 
-			class Catch5, class LF5>
+                        class Catch3, class LF3, 
+                        class Catch4, class LF4, 
+                        class Catch5, class LF5>
 inline const 
 lambda_functor< 
   lambda_functor_base< 
@@ -514,10 +514,10 @@ try_catch(
 
 template <class TryArg, class Catch1, class LF1, 
                         class Catch2, class LF2, 
-			class Catch3, class LF3, 
-			class Catch4, class LF4, 
-			class Catch5, class LF5, 
-			class Catch6, class LF6>
+                        class Catch3, class LF3, 
+                        class Catch4, class LF4, 
+                        class Catch5, class LF5, 
+                        class Catch6, class LF6>
 inline const 
 lambda_functor< 
   lambda_functor_base< 
@@ -555,10 +555,10 @@ try_catch(
 
 template <class TryArg, class Catch1, class LF1, 
                         class Catch2, class LF2, 
-			class Catch3, class LF3, 
-			class Catch4, class LF4, 
-			class Catch5, class LF5, 
-			class Catch6, class LF6,
+                        class Catch3, class LF3, 
+                        class Catch4, class LF4, 
+                        class Catch5, class LF5, 
+                        class Catch6, class LF6,
                         class Catch7, class LF7>
 inline const 
 lambda_functor< 
@@ -600,12 +600,12 @@ try_catch(
 
 template <class TryArg, class Catch1, class LF1, 
                         class Catch2, class LF2, 
-			class Catch3, class LF3, 
-			class Catch4, class LF4, 
-			class Catch5, class LF5, 
-			class Catch6, class LF6, 
-			class Catch7, class LF7, 
-			class Catch8, class LF8>
+                        class Catch3, class LF3, 
+                        class Catch4, class LF4, 
+                        class Catch5, class LF5, 
+                        class Catch6, class LF6, 
+                        class Catch7, class LF7, 
+                        class Catch8, class LF8>
 inline const 
 lambda_functor< 
   lambda_functor_base< 
@@ -649,13 +649,13 @@ try_catch(
 
 template <class TryArg, class Catch1, class LF1, 
                         class Catch2, class LF2, 
-			class Catch3, class LF3, 
+                        class Catch3, class LF3, 
                         class Catch4, class LF4, 
-			class Catch5, class LF5, 
-			class Catch6, class LF6, 
-			class Catch7, class LF7, 
-			class Catch8, class LF8, 
-			class Catch9, class LF9>
+                        class Catch5, class LF5, 
+                        class Catch6, class LF6, 
+                        class Catch7, class LF7, 
+                        class Catch8, class LF8, 
+                        class Catch9, class LF9>
 inline const 
   lambda_functor< 
     lambda_functor_base< 

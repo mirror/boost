@@ -158,8 +158,8 @@ inline const lambda_functor<
 ll_const_cast(const Arg1& a1) { 
   return 
       lambda_functor_base<
-	action<1, cast_action<const_cast_action<T> > >, 
-	tuple<typename const_copy_argument <const Arg1>::type>
+        action<1, cast_action<const_cast_action<T> > >, 
+        tuple<typename const_copy_argument <const Arg1>::type>
       > 
       ( tuple<typename const_copy_argument <const Arg1>::type>(a1));
 }
@@ -176,7 +176,7 @@ ll_reinterpret_cast(const Arg1& a1) {
   return 
       lambda_functor_base<
         action<1, cast_action<reinterpret_cast_action<T> > >, 
-	tuple<typename const_copy_argument <const Arg1>::type> 
+        tuple<typename const_copy_argument <const Arg1>::type> 
       > 
       ( tuple<typename const_copy_argument <const Arg1>::type>(a1));
 }
@@ -213,7 +213,7 @@ ll_sizeof(const lambda_functor<Arg1>& a1) {
   return 
       lambda_functor_base<
         action<1, sizeof_action>, 
-	tuple<lambda_functor<Arg1> >
+        tuple<lambda_functor<Arg1> >
       > 
       ( tuple<lambda_functor<Arg1> >(a1));
 }

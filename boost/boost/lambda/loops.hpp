@@ -223,7 +223,7 @@ public:
 
   template<class RET, CALL_TEMPLATE_ARGS>
   RET call(CALL_FORMAL_ARGS) const {
-	  while(detail::select(boost::tuples::get<0>(args), CALL_ACTUAL_ARGS)) {}
+          while(detail::select(boost::tuples::get<0>(args), CALL_ACTUAL_ARGS)) {}
   }
 };
 
@@ -258,7 +258,7 @@ public:
 
   template<class RET, CALL_TEMPLATE_ARGS>
   RET call(CALL_FORMAL_ARGS) const {
-	  do {} while (detail::select(boost::tuples::get<0>(args), CALL_ACTUAL_ARGS) );
+          do {} while (detail::select(boost::tuples::get<0>(args), CALL_ACTUAL_ARGS) );
   }
 };
 

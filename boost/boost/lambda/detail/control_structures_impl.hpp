@@ -202,21 +202,21 @@ inline const
       other_action<ifthenelsereturn_action>, 
       tuple<lambda_functor<Arg1>,
           typename const_copy_argument<Arg2>::type,
-	  typename const_copy_argument<Arg3>::type>
+          typename const_copy_argument<Arg3>::type>
   > 
 >
 if_then_else_return(const lambda_functor<Arg1>& a1, 
-		    const Arg2 & a2, 
-		    const Arg3 & a3) {
+                    const Arg2 & a2, 
+                    const Arg3 & a3) {
   return 
       lambda_functor_base<
         other_action<ifthenelsereturn_action>, 
         tuple<lambda_functor<Arg1>,
               typename const_copy_argument<Arg2>::type,
-	      typename const_copy_argument<Arg3>::type>
+              typename const_copy_argument<Arg3>::type>
       > ( tuple<lambda_functor<Arg1>,
               typename const_copy_argument<Arg2>::type,
-	      typename const_copy_argument<Arg3>::type> (a1, a2, a3) );
+              typename const_copy_argument<Arg3>::type> (a1, a2, a3) );
 }
 
 namespace detail {
@@ -271,7 +271,7 @@ struct return_type_2_ifthenelsereturn<1, false, false, false, A, B> {
          2,
          boost::is_convertible<plainA,plainB>::value, 
          boost::is_convertible<plainB,plainA>::value,
-	 boost::is_same<plainA,plainB>::value,
+         boost::is_same<plainA,plainB>::value,
          plainA, 
          plainB>::type type;
 };
@@ -445,7 +445,7 @@ public:
 
   template<class RET, CALL_TEMPLATE_ARGS>
   RET call(CALL_FORMAL_ARGS) const {
-	  while(detail::select(boost::tuples::get<0>(args), CALL_ACTUAL_ARGS)) {}
+          while(detail::select(boost::tuples::get<0>(args), CALL_ACTUAL_ARGS)) {}
   }
 };
 
@@ -480,7 +480,7 @@ public:
 
   template<class RET, CALL_TEMPLATE_ARGS>
   RET call(CALL_FORMAL_ARGS) const {
-	  do {} while (detail::select(boost::tuples::get<0>(args), CALL_ACTUAL_ARGS) );
+          do {} while (detail::select(boost::tuples::get<0>(args), CALL_ACTUAL_ARGS) );
   }
 };
 
@@ -527,7 +527,7 @@ lambda_functor_base<other_action<ifthenelsereturn_action>, Args> {
 public:
   Args args;
 
-  template <class SigArgs> struct sig {				
+  template <class SigArgs> struct sig {
   private:
     typedef typename detail::nth_return_type_sig<1, Args, SigArgs>::type ret1;
     typedef typename detail::nth_return_type_sig<2, Args, SigArgs>::type ret2;

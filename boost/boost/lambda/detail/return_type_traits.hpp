@@ -117,7 +117,7 @@ namespace detail {
     typedef typename detail::IF_type<
 //      boost::is_reference<T>::value && !boost::is_const<non_ref_T>::value,
       ice_and<boost::is_reference<T>::value,
-	      ice_not<boost::is_const<non_ref_T>::value>::value>::value,
+              ice_not<boost::is_const<non_ref_T>::value>::value>::value,
       detail::identity_mapping<T>,
       const_copy_argument<non_ref_T> // handles funtion and array 
     >::type type;                      // types correctly

@@ -529,4 +529,4 @@ template <class T> inline const T&  make_const(const T& t) { return t; }
 
 
    
-#endif	// BOOST_LAMBDA_TRAITS_HPP
+#endif // BOOST_LAMBDA_TRAITS_HPP

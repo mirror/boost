@@ -32,12 +32,12 @@ namespace lambda {
 // freeE placeholders and maybe free1 and free2  (EXCEPTION).
 // RETHROW means, that a rethrow expression is used somewhere in the lambda_functor.
 
-enum { NONE		= 0x00, // Notice we are using bits as flags here.
-       FIRST		= 0x01, 
-       SECOND		= 0x02, 
-       THIRD		= 0x04, 
-       EXCEPTION	= 0x08, 
-       RETHROW		= 0x10};
+enum { NONE             = 0x00, // Notice we are using bits as flags here.
+       FIRST            = 0x01, 
+       SECOND           = 0x02, 
+       THIRD            = 0x04, 
+       EXCEPTION        = 0x08, 
+       RETHROW          = 0x10};
 
 
 template<class T>
