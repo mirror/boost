@@ -19,7 +19,9 @@
 //  typedef <unspecified> boost::detail::lightweight_mutex;
 //
 //  boost::detail::lightweight_mutex meets a subset of the Mutex concept
-//  requirements: http://www.boost.org/libs/thread/doc/mutex_concept.html#Mutex
+//  requirements:
+//
+//  http://www.boost.org/doc/html/threads/concepts.html#threads.concepts.Mutex
 //
 //  * Used by the smart pointer library
 //  * Performance oriented
