@@ -101,9 +101,25 @@ int cpp_main(int argc, char* argv[])
    value_test(true, boost::is_member_pointer<mf3>::value)
    value_test(true, boost::is_member_pointer<mf4>::value)
    value_test(true, boost::is_member_pointer<cmf>::value)
+   value_test(true, boost::is_member_pointer<mp>::value)
    value_test(false, boost::is_member_pointer<void>::value)
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
    value_test(false, boost::is_member_pointer<test_abc1>::value)
+#endif
+
+   value_test(false, boost::is_member_function_pointer<f1>::value)
+   value_test(false, boost::is_member_function_pointer<f2>::value)
+   value_test(false, boost::is_member_function_pointer<f3>::value)
+   value_test(false, boost::is_member_function_pointer<void*>::value)
+   value_test(true, boost::is_member_function_pointer<mf1>::value)
+   value_test(true, boost::is_member_function_pointer<mf2>::value)
+   value_test(true, boost::is_member_function_pointer<mf3>::value)
+   value_test(true, boost::is_member_function_pointer<mf4>::value)
+   value_test(true, boost::is_member_function_pointer<cmf>::value)
+   value_test(false, boost::is_member_function_pointer<mp>::value)
+   value_test(false, boost::is_member_function_pointer<void>::value)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__BORLANDC__)
+   value_test(false, boost::is_member_function_pointer<test_abc1>::value)
 #endif
 
    value_test(false, boost::is_enum<int>::value)
