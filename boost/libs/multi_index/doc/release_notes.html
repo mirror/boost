@@ -34,14 +34,24 @@ Acknowledgements
 
 <p>
 <ul>
+  <li>Added <a href="advanced_topics.html#hashed_indices">hashed indices</a>,
+    whose interface is based on the specification for unordered associative
+    containers by the C++ Standard Library Technical Report (TR1).
   <li>Added <a href="advanced_topics.html#serialization">serialization support</a>
     for <a href="../../serialization/index.html">Boost.Serialization</a>.
   </li>
-  <li>Internal changes aimed at reducing the length of symbol names generated
-    by the compiler. This results in shorter and more readable error messages
-    and has also a beneficial impact on compilers with strict limits on symbol
-    name lengths.
+  <li>Destruction of <code>multi_index_container</code>s and <code>clear</code>
+    memfuns now perform faster.
   </li>
+  <li>Internal changes aimed at reducing the length of symbol names generated
+    by the compiler; cuts of up to a 50% can be achieved with respect to the
+    Boost 1.32 release. This results in much shorter and more readable error
+    messages and has also a beneficial impact on compilers with strict limits on
+    symbol name lengths. Additionally, a section on further
+    <a href="compiler_specifics.html#symbol_reduction">reduction of symbol name
+    lengths</a> has been added.
+  </li>
+  <li>Restructured some parts of the documentation, new examples.</li>
   <li>Maintenance fixes.</li>
 </ul>
 </p>
@@ -60,9 +70,9 @@ Acknowledgements
 
 <br>
 
-<p>Revised December 14th 2004</p>
+<p>Revised March 3rd 2005</p>
 
-<p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
