@@ -124,8 +124,6 @@ struct Waiting;
 struct Player : fsm::asynchronous_state_machine<
   Player, Waiting, MyScheduler, MyAllocator >
 {
-  typedef fsm::asynchronous_state_machine< 
-    Player, Waiting, MyScheduler, MyAllocator > BaseType;
   public:
     Player( 
       my_context ctx,
