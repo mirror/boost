@@ -48,7 +48,7 @@ namespace boost {
         const_iterator end() const { return elems+N; }
 
         // reverse iterator support
-#if !defined(BOOST_MSVC_STD_ITERATOR)
+#if    !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
         typedef std::reverse_iterator<iterator> reverse_iterator;
         typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 #else
