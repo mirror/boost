@@ -25,7 +25,6 @@
 #include <boost/checked_delete.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/detail/shared_count.hpp>
-#include <boost/type_traits/ice.hpp>
 
 #include <memory>             // for std::auto_ptr
 #include <algorithm>          // for std::swap
@@ -323,12 +322,6 @@ template<typename T> inline T * get_pointer(shared_ptr<T> const & p)
 {
     return p.get();
 }
-
-namespace detail {
-  // is_pointerlike_helper enables Signals library to recognize shared_ptr
-  template<typename T>
-  type_traits::yes_type is_pointerlike_helper(const shared_ptr<T>&, int);
-} // end namespace detail
 
 // shared_from_this() creates a shared_ptr from a raw pointer (usually 'this')
 
