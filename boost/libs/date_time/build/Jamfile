@@ -36,6 +36,6 @@ lib boost_date_time : ../src/gregorian/$(CPP_SOURCES).cpp
     : debug release <runtime-link>static 
     ;
 
-install data_time lib
-    : <dll>boost_date_time <lib>boost_date_time
+install date_time lib
+    : [ unless $(NT) : <dll>boost_date_time ] <lib>boost_date_time
     ;
