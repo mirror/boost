@@ -12,6 +12,14 @@
 #include <string>
 #include <boost/config.hpp>
 #include <locale>
+#include <cstddef> // size_t
+
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
 
 #include <boost/archive/wcslen.hpp>
 #include <boost/archive/codecvt_null.hpp>
@@ -47,7 +55,7 @@ void text_oarchive_impl<Archive>::save(const std::string &s)
 template<class Archive>
 void text_oarchive_impl<Archive>::save(const wchar_t * ws)
 {
-    size_t l = std::wcslen(ws);
+    std::size_t l = std::wcslen(ws);
     * this->This() << l;
     this->This()->newtoken();
     os.write((const char *)ws, l * sizeof(wchar_t)/sizeof(char));
@@ -58,7 +66,7 @@ void text_oarchive_impl<Archive>::save(const wchar_t * ws)
 template<class Archive>
 void text_oarchive_impl<Archive>::save(const std::wstring &ws)
 {
-    size_t l = ws.size();
+    std::size_t l = ws.size();
     * this->This() << l;
     this->This()->newtoken();
     os.write((const char *)(ws.data()), l * sizeof(wchar_t)/sizeof(char));

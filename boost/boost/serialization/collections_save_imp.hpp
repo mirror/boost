@@ -18,6 +18,7 @@
 
 // helper function templates for serialization of collections
 
+#include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
 
 namespace boost{
