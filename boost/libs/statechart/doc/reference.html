@@ -377,7 +377,10 @@ namespace fsm
     <li>enters (constructs) the state specified with the <code>InitialState</code> 
     template parameter</li>
     <li>enters the tree formed by the direct and indirect inner initial states 
-    of <code>InitialState</code> depth first</li>
+    of <code>InitialState</code> depth first. The inner states of each state 
+    are entered according to the number of their orthogonal region. The state 
+    in orthogonal region 0 is always entered first, then the state in region 1 
+    and so on</li>
   </ol>
   </li>
   <li>Constructs a function object <code>exceptionEventHandler</code> with an
@@ -423,11 +426,9 @@ library itself but only in code supplied through template parameters:</p>
   <li>transition-actions</li>
 </ul>
 <pre>void <a name="terminate">terminate</a>();</pre>
-<p><b>Effects</b>: The state machine exits (destructs) all currently active 
-states. <a href="definitions.html#Innermost state">Innermost states</a> are 
-exited first. Other states are exited as soon as all their direct and indirect 
-inner states have been exited. Also discards all remaining events and clears 
-all history information.</p>
+<p><b>Effects</b>: <a href="#simple_state::terminate">Terminates</a> the 
+currently active outermost state. Also discards all remaining events and 
+clears all history information.</p>
 <pre>void <a name="process_event">process_event</a>( const <a href="#Class event_base">event_base</a> &amp; );</pre>
 <p><b>Effects</b>:</p>
 <ol>
@@ -1210,16 +1211,19 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
   <li>Exits (destructs) all currently active direct and indirect inner states 
   of the innermost common outer state of this state and <code>DestinationState</code>. 
   Innermost states are exited first. Other states are exited as soon as all 
-  their direct and indirect inner states have been exited</li>
+  their direct and indirect inner states have been exited. The inner states of 
+  each state are exited according to the number of their orthogonal region. 
+  The state in the orthogonal region with the highest number is always exited 
+  first, then the state in the region with the second-highest number and so on</li>
   <li>Enters (constructs) the state that is both a direct inner state of the 
   innermost common outer state and either the <code>DestinationState</code> 
   itself or a direct or indirect outer state of <code>DestinationState</code>
   </li>
   <li>Enters (constructs) the tree formed by the direct and indirect inner 
   states of the previously entered state down to the <code>DestinationState</code> 
-  depth first</li>
-  <li>Enters (constructs) the tree formed by the direct and indirect inner 
-  initial states of <code>DestinationState</code> depth first</li>
+  and beyond depth first. The inner states of each state are entered according 
+  to the number of their orthogonal region. The state in orthogonal region 0 
+  is always entered first, then the state in region 1 and so on</li>
   <li>Instructs the state machine to discard the current event and to continue 
   with the processing of the remaining events (see <code>
   <a href="#process_event">state_machine&lt;&gt;::process_event</a>()</code> for 
@@ -1251,7 +1255,10 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
   <li>Exits (destructs) all currently active direct and indirect inner states 
   of the innermost common outer state of this state and <code>DestinationState</code>. 
   Innermost states are exited first. Other states are exited as soon as all 
-  their direct and indirect inner states have been exited</li>
+  their direct and indirect inner states have been exited. The inner states of 
+  each state are exited according to the number of their orthogonal region. 
+  The state in the orthogonal region with the highest number is always exited 
+  first, then the state in the region with the second-highest number and so on</li>
   <li>Executes the passed transition action, forwarding the passed event</li>
   <li>Enters (constructs) the state that is both a direct inner state of the 
   innermost common outer state and either the <code>DestinationState</code> 
@@ -1259,9 +1266,9 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
   </li>
   <li>Enters (constructs) the tree formed by the direct and indirect inner 
   states of the previously entered state down to the <code>DestinationState</code> 
-  depth first</li>
-  <li>Enters (constructs) the tree formed by the direct and indirect inner 
-  initial states of <code>DestinationState</code> depth first</li>
+  and beyond depth first. The inner states of each state are entered according 
+  to the number of their orthogonal region. The state in orthogonal region 0 
+  is always entered first, then the state in region 1 and so on</li>
   <li>Instructs the state machine to discard the current event and to continue 
   with the processing of the remaining events (see <code>
   <a href="#process_event">state_machine&lt;&gt;::process_event</a>()</code> for 
@@ -1282,13 +1289,22 @@ attempt to access anything except stack objects before returning to its caller</
 functions, which are called by <code>
 <a href="#Class template custom_reaction">custom_reaction&lt;&gt;</a></code> 
 instantiations. All direct and indirect callers must be exception-neutral<br>
-<b>Effects</b>: Terminates the state and instructs the state machine to 
-discard the current event and to continue with the processing of the remaining 
-events (see <code><a href="#process_event">state_machine&lt;&gt;::process_event</a>()</code> 
-for details)<br>
+<b>Effects</b>: Exits (destructs) this state and all its direct and indirect 
+inner states. Innermost states are exited first. Other states are exited as 
+soon as all their direct and indirect inner states have been exited. The inner 
+states of each state are exited according to the number of their orthogonal 
+region. The state in the orthogonal region with the highest number is always 
+exited first, then the state in the region with the second-highest number and 
+so on. Also instructs the state machine to discard the current event and to 
+continue with the processing of the remaining events (see <code>
+<a href="#process_event">state_machine&lt;&gt;::process_event</a>()</code> for 
+details)<br>
 <b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
 result</a></code> enumeration. The user-supplied <code>react</code> member 
 function must return this value to its caller<br>
+<b>Note</b>: If this state is the only currently active inner state of its 
+direct outer state then the direct outer state is terminated also. The same 
+applies recursively for all indirect outer states<br>
 <b>Caution</b>: Inevitably exits (destructs) this state before returning to 
 the calling <code>react</code> member function, which must therefore not 
 attempt to access anything except stack objects before returning to its caller</p>
@@ -1358,7 +1374,7 @@ state_machine&lt;&gt;::state_cast</a>&lt;&gt;()</code><br>
 <b>Throws</b>: Has exactly the same semantics as <code><a href="#state_cast">
 state_machine&lt;&gt;::state_cast</a>&lt;&gt;()</code><b><br>
 Note</b>: The result is <b>unspecified</b> if this function is called when the 
-machine is not stable</p>
+machine is <a href="definitions.html#Unstable state machine">unstable</a></p>
 <pre>template&lt; class Target &gt;
 Target <a name="simple_state::state_downcast">state_downcast</a>() const;</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
@@ -1369,7 +1385,7 @@ Returns</b>: Has exactly the same semantics as <code>
 <b>Throws</b>: Has exactly the same semantics as <code>
 <a href="#state_downcast">state_machine&lt;&gt;::state_downcast</a>&lt;&gt;()</code><b><br>
 Note</b>: The result is <b>unspecified</b> if this function is called when the 
-machine is not stable</p>
+machine is <a href="definitions.html#Unstable state machine">unstable</a></p>
 <pre>state_iterator <a name="simple_state::state_begin">state_begin</a>() const;</pre>
 <pre>state_iterator <a name="simple_state::state_end">state_end</a>() const;</pre>
 <p><b>Require</b>: If called from a constructor of a direct or indirect 
@@ -1379,7 +1395,7 @@ Return</b>: Have exactly the same semantics as <code><a href="#state_begin">
 state_machine&lt;&gt;::state_begin</a>()</code> and <code><a href="#state_end">
 state_machine&lt;&gt;::state_end</a>()</code><br>
 <b>Note</b>: The result is <b>unspecified</b> if these functions are called 
-when the machine is not stable</p>
+when the machine is <a href="definitions.html#Unstable state machine">unstable</a></p>
 <h3>Class template <code>simple_state</code> static functions</h3>
 <pre>static id_type <a name="static_type">static_type</a>();</pre>
 <p><b>Returns</b>: A value unambiguously identifying the type of <code>
@@ -1863,7 +1879,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 April, 2004<!--webbot bot="Timestamp" endspan i-checksum="29901" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13979" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file
