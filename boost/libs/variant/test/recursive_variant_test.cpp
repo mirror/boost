@@ -51,10 +51,10 @@ struct vector_printer
 
 int test_main(int , char* [])
 {
-    typedef boost::variant<
+    typedef boost::recursive_variant<
           int
-        , std::vector<boost::recursive_variant>
-        > var_t;
+        , std::vector<boost::recursive_variant_>
+        >::type var_t;
 
     std::vector<var_t> vec;
     vec.push_back(3);

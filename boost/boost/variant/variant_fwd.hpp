@@ -18,20 +18,14 @@
 #define BOOST_VARIANT_VARIANT_FWD_HPP
 
 #include "boost/config.hpp"
-#include "boost/mpl/limits/list.hpp"
+#include "boost/empty_fwd.hpp"
+#include "boost/mpl/arg.hpp"
 #include "boost/mpl/void.hpp"
 #include "boost/preprocessor/cat.hpp"
-#include "boost/preprocessor/dec.hpp"
 #include "boost/preprocessor/enum_params.hpp"
+#include "boost/preprocessor/enum_shifted.hpp"
+#include "boost/preprocessor/enum_shifted_params.hpp"
 #include "boost/preprocessor/repeat.hpp"
-
-#include "boost/empty_fwd.hpp"
-
-#if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
-#   include "boost/preprocessor/enum_params_with_a_default.hpp"
-#else
-#   include "boost/preprocessor/enum_params_with_defaults.hpp"
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_LIMIT_TYPES
@@ -39,17 +33,44 @@
 // Implementation-defined preprocessor symbol describing the actual
 // length of variant's pseudo-variadic template parameter list.
 //
+#include "boost/mpl/limits/list.hpp"
 #define BOOST_VARIANT_LIMIT_TYPES \
     BOOST_MPL_LIMIT_LIST_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
-// BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
+// macro BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
 //
 // Defined if variant does not support variant<Types> syntax (see below). 
 //
 #if defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 #   define BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
 #endif
+
+///////////////////////////////////////////////////////////////////////////////
+// macro BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT
+//
+// Defined if MPL lambda facility should be used as workaround for broken
+// compilers. (Thus, only types w/ MPL lambda workarounds can be accepted.)
+//
+
+#include "boost/mpl/aux_/config/ctps.hpp"
+#include "boost/mpl/aux_/config/ttp.hpp"
+
+#if defined(BOOST_NO_TEMPLATE_TEMPLATE_PARAMETERS) \
+ || defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+ && !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
+#   define BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
+// macro BOOST_VARIANT_RECURSIVE_VARIANT_MAX_ARITY
+//
+// Exposes maximum allowed arity of class templates with recursive_variant
+// arguments. (That is, variant< ..., T<[1], recursive_variant, ... [N]> >.)
+//
+#include "boost/mpl/limits/arity.hpp"
+#define BOOST_VARIANT_RECURSIVE_VARIANT_MAX_ARITY \
+    BOOST_MPL_METAFUNCTION_MAX_ARITY
 
 ///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_ENUM_PARAMS
@@ -60,6 +81,14 @@
 //
 #define BOOST_VARIANT_ENUM_PARAMS( param )  \
     BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, param)
+
+///////////////////////////////////////////////////////////////////////////////
+// macro BOOST_VARIANT_ENUM_SHIFTED_PARAMS
+//
+// Convenience macro for enumeration of BOOST_VARIANT_LIMIT_TYPES-1 params.
+//
+#define BOOST_VARIANT_ENUM_SHIFTED_PARAMS( param )  \
+    BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_VARIANT_LIMIT_TYPES, param)
 
 
 namespace boost {
@@ -101,7 +130,7 @@ struct convert_void< void_ >
 
 #if defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
-// (detail) tags voidNN -- NN defined on [0, BOOST_VARIANT_LIMIT_TYPES - 1)
+// (detail) tags voidNN -- NN defined on [0, BOOST_VARIANT_LIMIT_TYPES)
 //
 // Defines void types that are each unique and specializations of
 // convert_void that yields mpl::void_ for each voidNN type.
@@ -118,7 +147,7 @@ struct convert_void< void_ >
     /**/
 
 BOOST_PP_REPEAT(
-      BOOST_PP_DEC(BOOST_VARIANT_LIMIT_TYPES)
+      BOOST_VARIANT_LIMIT_TYPES
     , BOOST_VARIANT_DETAIL_DEFINE_VOID_N
     , _
     )
@@ -128,6 +157,35 @@ BOOST_PP_REPEAT(
 #endif // BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE workaround
 
 }} // namespace detail::variant
+
+///////////////////////////////////////////////////////////////////////////////
+// (detail) macro BOOST_VARIANT_AUX_DECLARE_PARAM
+//
+// Template parameter list for variant and recursive_variant declarations.
+//
+
+#if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
+
+#   define BOOST_VARIANT_AUX_DECLARE_PARAMS_IMPL(z, N, T) \
+    typename BOOST_PP_CAT(T,N) = detail::variant::void_ \
+    /**/
+
+#else // defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
+
+#   define BOOST_VARIANT_AUX_DECLARE_PARAMS_IMPL(z, N, T) \
+    typename BOOST_PP_CAT(T,N) = BOOST_PP_CAT(detail::variant::void,N) \
+    /**/
+
+#endif // BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE workaround
+
+#define BOOST_VARIANT_AUX_DECLARE_PARAMS \
+      typename T0 = boost::empty \
+    , BOOST_PP_ENUM_SHIFTED( \
+          BOOST_VARIANT_LIMIT_TYPES \
+        , BOOST_VARIANT_AUX_DECLARE_PARAMS_IMPL \
+        , T \
+        ) \
+    /**/
 
 ///////////////////////////////////////////////////////////////////////////////
 // class template variant (concept inspired by Andrei Alexandrescu)
@@ -145,30 +203,29 @@ BOOST_PP_REPEAT(
 // or
 //   variant<>, which is variant<boost::empty>
 //
-template <
+template < BOOST_VARIANT_AUX_DECLARE_PARAMS > class variant;
 
-    typename First = boost::empty,
+///////////////////////////////////////////////////////////////////////////////
+// metafunction recursive_variant
+//
+// Exposes a boost::variant with recursive_variant_ tags (below) substituted
+// with the variant itself (wrapped as needed with boost::incomplete).
+//
+template < BOOST_VARIANT_AUX_DECLARE_PARAMS > struct recursive_variant;
 
-#if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
+#undef BOOST_VARIANT_AUX_DECLARE_PARAMS_IMPL
+#undef BOOST_VARIANT_AUX_DECLARE_PARAMS
 
-    BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
-        BOOST_PP_DEC(BOOST_VARIANT_LIMIT_TYPES)
-      , typename T
-      , detail::variant::void_
-      )
-
-#else// defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
-
-    BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS(
-        BOOST_PP_DEC(BOOST_VARIANT_LIMIT_TYPES)
-      , typename T
-      , detail::variant::void//NN
-      )
-
-#endif // BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE workaround
-
-  >
-class variant;
+///////////////////////////////////////////////////////////////////////////////
+// type recursive_variant_
+//
+// Tag type indicates where recursive variant substitution should occur.
+//
+#if !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
+    struct recursive_variant_;
+#else
+    typedef mpl::arg<1> recursive_variant_;
+#endif
 
 } // namespace boost
 

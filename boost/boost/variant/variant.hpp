@@ -22,8 +22,9 @@
 #include <typeinfo> // for typeid, std::type_info
 
 #include "boost/variant/variant_fwd.hpp"
+#include "boost/variant/detail/enable_recursive_fwd.hpp"
+#include "boost/variant/detail/make_variant_list.hpp"
 #include "boost/variant/detail/visitation_impl.hpp"
-#include "boost/variant/detail/enable_recursive_stub.hpp"
 
 #include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/variant/detail/has_nothrow_move.hpp"
@@ -60,12 +61,11 @@
 #include "boost/mpl/int.hpp"
 #include "boost/mpl/is_sequence.hpp"
 #include "boost/mpl/iter_fold.hpp"
-#include "boost/mpl/front.hpp"
-#include "boost/mpl/list.hpp"
 #include "boost/mpl/logical.hpp"
 #include "boost/mpl/max_element.hpp"
 #include "boost/mpl/next.hpp"
 #include "boost/mpl/pair.hpp"
+#include "boost/mpl/protect.hpp"
 #include "boost/mpl/remove_if.hpp"
 #include "boost/mpl/sizeof.hpp"
 #include "boost/mpl/size_t.hpp"
@@ -92,6 +92,7 @@
 #   include "boost/mpl/long.hpp"
 #   include "boost/mpl/O1_size.hpp"
 #endif
+
 
 namespace boost {
 
@@ -492,45 +493,13 @@ public: // visitor interfaces
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) metafunction make_variant_list
-//
-// Provides a MPL-compatible sequence with the specified non-void types
-// as arguments.
-//
-// Rationale: see class template convert_void (variant_fwd.hpp) and using-
-// declaration workaround (below).
-//
-template < BOOST_VARIANT_ENUM_PARAMS(typename T) >
-struct make_variant_list
-{
-public: // metafunction result
-
-    // [Define a macro to convert any void(NN) tags to mpl::void...]
-#   define BOOST_VARIANT_AUX_CONVERT_VOID(z, N,_)   \
-        typename convert_void<BOOST_PP_CAT(T,N)>::type
-
-    // [...so that the specified types can be passed to mpl::list...]
-    typedef typename mpl::list< 
-          BOOST_PP_ENUM(
-              BOOST_VARIANT_LIMIT_TYPES
-            , BOOST_VARIANT_AUX_CONVERT_VOID
-            , _
-            )
-        >::type type;
-
-    // [...and, finally, the conversion macro can be undefined:]
-#   undef BOOST_VARIANT_AUX_CONVERT_VOID
-
-};
-
-#if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
-
-///////////////////////////////////////////////////////////////////////////////
 // (detail) support for MPL-Sequence initializer
 //
 // The generated inheritance hierarchy allows variant to follow standard
 // overload resolution rules on any specified set of bounded types.
 //
+
+#if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
 // (detail) quoted metafunction make_initializer_node
 //
@@ -593,6 +562,13 @@ public: // static functions
 
 };
 
+#else // defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
+
+//
+// MPL-sequence initializer cannot be supported on these compilers.
+// See preprocessor_list_initializer workaround below.
+//
+
 #endif // !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
 }} // namespace detail::variant
@@ -603,56 +579,75 @@ public: // static functions
 // See docs and boost/variant/variant_fwd.hpp for more information.
 //
 template <
-    BOOST_VARIANT_ENUM_PARAMS(typename T_)
-  >
+      typename T0_
+#if !defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
+    , BOOST_VARIANT_ENUM_SHIFTED_PARAMS(typename T)
+#elif !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+    , BOOST_VARIANT_ENUM_SHIFTED_PARAMS(typename wknd_T)
+#else // MSVC6
+    , BOOST_VARIANT_ENUM_SHIFTED_PARAMS(typename T)
+#endif
+    >
 class variant
 {
+private: // private typedefs
+
+    struct is_recursive
+        : detail::variant::is_recursive_flag<T0_>
+    {
+    };
 
 #if !defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
 
 private: // helpers, for typedefs (below)
 
     typedef typename mpl::apply_if<
-          mpl::is_sequence<T_0>
-        , mpl::identity<T_0>
+          is_recursive
+        , T0_
+        , mpl::identity< T0_ >
+        >::type T0;
+
+    typedef typename mpl::apply_if<
+          mpl::is_sequence<T0>
+        , mpl::identity<T0>
         , detail::variant::make_variant_list<
-              BOOST_VARIANT_ENUM_PARAMS(T_)
+              BOOST_VARIANT_ENUM_PARAMS(T)
             >
-        >::type plain_nonrecursive_types;
+        >::type initial_types;
 
 public: // typedefs
 
-    typedef typename mpl::transform<
-          plain_nonrecursive_types
-        , mpl::protect< detail::variant::quoted_enable_recursive<variant> >
+    typedef typename mpl::apply_if<
+          is_recursive
+        , mpl::transform<
+              initial_types
+            , mpl::protect<
+                  detail::variant::quoted_enable_recursive<variant>
+                >
+            >
+        , mpl::identity< initial_types >
         >::type types;
 
-private: // private typedefs
-
-    typedef typename mpl::front<types>::type T0;
-
-#else // defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
+#elif !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
 private: // helpers, for typedefs (below)
 
-#   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    typedef typename mpl::apply_if<
+          is_recursive
+        , T0_
+        , mpl::identity< T0_ >
+        >::type wknd_T0;
 
-    typedef variant wknd_self_t;
-
-    #define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEFS(z,N,_)  \
-        typedef typename detail::variant::enable_recursive< \
-              BOOST_PP_CAT(T_,N)                            \
-            , wknd_self_t                                   \
-            >::type BOOST_PP_CAT(T,N);                      \
+    #define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEFS(z,N,_) \
+        typedef typename mpl::apply_if<                \
+              is_recursive                             \
+            , detail::variant::enable_recursive<       \
+                  BOOST_PP_CAT(wknd_T,N)               \
+                , variant                              \
+                >                                      \
+            , mpl::identity< BOOST_PP_CAT(wknd_T,N) >  \
+            >::type BOOST_PP_CAT(T,N);                 \
         /**/
-
-#   else // MSVC7 and below
-
-    #define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEFS(z,N,_)  \
-        typedef BOOST_PP_CAT(T_,N) BOOST_PP_CAT(T,N);   \
-        /**/
-
-#   endif // MSVC7 and below workaround
 
     BOOST_PP_REPEAT(
           BOOST_VARIANT_LIMIT_TYPES
@@ -670,24 +665,40 @@ public: // typedefs
 
 private: // static precondition assertions
 
-    // Sequences are not supported for compilers that do not support
-    // using declarations in templates (see below).
-
-#   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-
+    // NOTE TO USER :
+    // variant< type-sequence > syntax is not supported on this compiler!
+    //
     BOOST_STATIC_ASSERT((
           ::boost::mpl::not_< mpl::is_sequence<T0> >::value
         ));
 
-#   else // MSVC6
+#else // MSVC6
+
+public: // typedefs
+
+    typedef T0_ T0;
+
+    typedef typename detail::variant::make_variant_list<
+          BOOST_VARIANT_ENUM_PARAMS(T)
+        >::type types;
+
+private: // static precondition assertions
 
     // for some reason, msvc needs following all on one line:
-    BOOST_STATIC_CONSTANT(bool, msvc_not_is_sequence_T0 = mpl::not_< mpl::is_sequence<T0> >::value);
+    BOOST_STATIC_CONSTANT(bool, msvc_not_is_recursive = mpl::not_< is_recursive >::value);
+    BOOST_STATIC_CONSTANT(bool, msvc_not_is_sequence_T0 = mpl::not_< mpl::is_sequence<T0_> >::value);
+
+    // NOTE TO USER :
+    // recursive_variant is not supported on MSVC6!
+    //
+    BOOST_STATIC_ASSERT(msvc_not_is_recursive);
+
+    // NOTE TO USER :
+    // variant< type-sequence > syntax is not supported on MSVC6!
+    //
     BOOST_STATIC_ASSERT(msvc_not_is_sequence_T0);
 
-#   endif // MSVC6 workaround
-
-#endif // BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
+#endif // BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT and MSVC6 workaround
 
 private: // static precondition assertions, cont.
 
