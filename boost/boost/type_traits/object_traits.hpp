@@ -380,6 +380,21 @@ template <typename T> struct is_empty
 
 #endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
+/**********************************************
+ *
+ * is_stateless
+ *
+ **********************************************/
+template <typename T>
+struct is_stateless
+{
+  BOOST_STATIC_CONSTANT(bool, value = 
+    (::boost::type_traits::ice_and<
+       ::boost::has_trivial_copy<T>::value,
+       ::boost::has_trivial_destructor<T>::value
+     >::value));
+};
+
 template <class Base, class Derived>
 struct is_base_and_derived
 {
