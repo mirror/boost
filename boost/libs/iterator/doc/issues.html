@@ -237,9 +237,19 @@ at <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">http://www.b
 <li><a class="reference" href="#id2" id="id12" name="id12"><tt class="literal"><span class="pre">is_writable_iterator</span></tt></a></li>
 </ul>
 </li>
+<li><a class="reference" href="#naming-issues" id="id13" name="id13">Naming Issues</a><ul>
+<li><a class="reference" href="#traversal-concepts-and-tags" id="id14" name="id14">Traversal Concepts and Tags</a></li>
+<li><a class="reference" href="#access-traits" id="id15" name="id15">Access Traits</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#proposed-solution" id="id13" name="id13">Proposed Solution</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#proposed-solution-in-progress" id="id16" name="id16">Proposed Solution (in progress)</a><ul>
+<li><a class="reference" href="#overview" id="id17" name="id17">Overview</a></li>
+<li><a class="reference" href="#details" id="id18" name="id18">Details</a></li>
+<li><a class="reference" href="#impact-on-n1530-iterator-facade-and-adaptor" id="id19" name="id19">Impact on N1530 (Iterator Facade and Adaptor)</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section" id="introduction">
@@ -307,7 +317,8 @@ false negatives for some otherwise-writable forward iterators whose
 <tt class="literal"><span class="pre">reference</span></tt> type is not a mutable reference.  Also, it will
 report false positives for any forward, bidirectional, or random
 access iterator whose <tt class="literal"><span class="pre">reference</span></tt> is a mutable reference but
-whose <tt class="literal"><span class="pre">value_type</span></tt> is not assignable.</p>
+whose <tt class="literal"><span class="pre">value_type</span></tt> is not assignable (e.g. has a private
+assignment operator).</p>
 </div>
 <div class="section" id="is-swappable-iterator">
 <h3><a class="toc-backref" href="#id9" name="is-swappable-iterator"><tt class="literal"><span class="pre">is_swappable_iterator</span></tt></a></h3>
@@ -361,7 +372,7 @@ on the iterator's <tt class="literal"><span class="pre">value_type</span></tt>, 
 writable, and its <tt class="literal"><span class="pre">value_type</span></tt> must be copy-constructible.  But
 then, <tt class="literal"><span class="pre">iter_swap</span></tt> must work in that case, because its default
 implementation just calls <tt class="literal"><span class="pre">swap</span></tt> on the dereferenced iterators.
-The only purpose for the swappable concept is to represent
+The only purpose for the swappable iterator concept is to represent
 iterators which do not fulfill the properties listed above, but
 which are nonetheless swappable because the user has provided an
 overload or specialization of <tt class="literal"><span class="pre">iter_swap</span></tt>.  In other words,
@@ -388,19 +399,81 @@ same with iterators using their <tt class="literal"><span class="pre">reference<
 accessibility of an assignment operator on the <tt class="literal"><span class="pre">value_type</span></tt>,
 which determines writability, does not change that.</p>
 <p>The one plausible argument we can imagine for
-<tt class="literal"><span class="pre">is_writable_iterator</span></tt> and <tt class="literal"><span class="pre">is_swappable_iterator</span></tt> is to remove
-algorithms from an overload set using a SFINAE technique like
-<a class="reference" href="http://tinyurl.com/tsr7">enable_if</a>, but that seems to be too small a gain for the
-requirements imposed on iterator implementors by the need to report
-writability and swappability, especially since it can't be done
-correctly for all existing iterators.</p>
+<tt class="literal"><span class="pre">is_writable_iterator</span></tt> and <tt class="literal"><span class="pre">is_swappable_iterator</span></tt> is that they
+can be used to remove algorithms from an overload set using a
+SFINAE technique like <a class="reference" href="http://tinyurl.com/tsr7">enable_if</a>, thus minimizing unintentional
+matches due to Koenig Lookup.  If it means requiring explicit
+indications of writability and swappability from new-style iterator
+implementors, however, it seems to be too small a gain to be worth
+the cost.  That's especially true since we can't get many existing
+old-style iterators to meet the same requirements.</p>
+</div>
+</div>
+<div class="section" id="naming-issues">
+<h2><a class="toc-backref" href="#id13" name="naming-issues">Naming Issues</a></h2>
+<div class="section" id="traversal-concepts-and-tags">
+<h3><a class="toc-backref" href="#id14" name="traversal-concepts-and-tags">Traversal Concepts and Tags</a></h3>
+<p>Howard Hinnant pointed out some inconsistencies with the naming of
+these tag types:</p>
+<pre class="literal-block">
+incrementable_iterator_tag            // ++r, r++
+single_pass_iterator_tag              // adds a == b, a != b
+forward_traversal_iterator_tag        // adds multi-pass capability
+bidirectional_traversal_iterator_tag  // adds --r, r--
+random_access_traversal_iterator_tag  // adds r+n,n+r,r-n,r[n],etc.
+</pre>
+<p>Howard thought that it might be better if all tag names contained
+the word &quot;traversal&quot;.</p>
+<p>It's not clear that would result in the best possible names,
+though.  For example, incrementable iterators can only make a
+single pass over their input.  What really distinguishes single
+pass iterators from incrementable iterators is not that they can
+make a single pass, but that they are equality comparable.  Forward
+traversal iterators really distinguish themselves by introducing
+multi-pass capability.  Without entering a &quot;Parkinson's Bicycle
+Shed&quot; type of discussion, it might be worth giving the names of
+these tags (and the associated concepts) some extra attention.</p>
+</div>
+<div class="section" id="access-traits">
+<h3><a class="toc-backref" href="#id15" name="access-traits">Access Traits</a></h3>
+<p>The names <tt class="literal"><span class="pre">is_readable</span></tt>, <tt class="literal"><span class="pre">is_writable</span></tt>, and <tt class="literal"><span class="pre">is_swappable</span></tt>
+are probably too general for their semantics.  In particular, a
+swappable iterator is only swappable in the same sense that a
+mutable iterator is mutable: the trait refers to the iterator's
+referent.  It would probably be better to add the <tt class="literal"><span class="pre">_iterator</span></tt>
+suffix to each of these names.</p>
 </div>
 </div>
 </div>
-<div class="section" id="proposed-solution">
-<h1><a class="toc-backref" href="#id13" name="proposed-solution">Proposed Solution</a></h1>
-<p>(incomplete)</p>
-<p>Change <tt class="literal"><span class="pre">iterator_traits</span></tt> as follows:</p>
+<div class="section" id="proposed-solution-in-progress">
+<h1><a class="toc-backref" href="#id16" name="proposed-solution-in-progress">Proposed Solution (in progress)</a></h1>
+<p>We believe that <tt class="literal"><span class="pre">is_readable_iterator</span></tt> is a fine name for the
+proposed <tt class="literal"><span class="pre">is_readable</span></tt> trait and will use that from here on.  In
+order to avoid confusion, however, and because we aren't terribly
+convinced of any answer yet, we are going to phrase this solution
+in terms of the existing traversal concept and tag names.  We'll
+propose a few possible traversal naming schemes at the end of this
+section.</p>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id17" name="overview">Overview</a></h2>
+<p>Following the dictum that what we can't do well probably shouldn't
+be done at all, we'd like to solve many of the problems above by
+eliminating details and simplifying the library as proposed.  In
+particular, we'd eliminate <tt class="literal"><span class="pre">is_writable</span></tt> and <tt class="literal"><span class="pre">is_swappable</span></tt>,
+and remove the requirements which say that writable, and swappable
+iterators must support these traits.  <tt class="literal"><span class="pre">is_readable_iterator</span></tt> has
+proven to be useful and will be retained, but since it can be
+implemented with no special hints from the iterator, it will not be
+mentioned in the readable iterator requirements.  Since we don't
+want to require the user to explicitly specify access category
+information, we'll change <tt class="literal"><span class="pre">iterator_tag</span></tt> so that it computes the
+old-style category in terms of the iterator's traversal category,
+<tt class="literal"><span class="pre">reference</span></tt>, and <tt class="literal"><span class="pre">value_type</span></tt>.</p>
+</div>
+<div class="section" id="details">
+<h2><a class="toc-backref" href="#id18" name="details">Details</a></h2>
+<p>A cleaner solution would change <tt class="literal"><span class="pre">iterator_traits</span></tt> as follows,
+though this does not constitute a &quot;pure bolt-on&quot;:</p>
 <pre class="literal-block">
 iterator_traits&lt;I&gt;::iterator_category
   = if (I::iterator_category is a type) // use mpl::has_xxx (SFINAE)
@@ -413,7 +486,7 @@ iterator_traits&lt;I&gt;::iterator_category
 
     t = iterator_traversal&lt;I&gt;::type
     
-    if (is_lvalue_iterator&lt;I&gt;::value)
+    if (I is an lvalue iterator)
     {
        if (t is convertible to random_access_traversal_tag)
           return std::random_access_iterator_tag
@@ -424,18 +497,23 @@ iterator_traits&lt;I&gt;::iterator_category
     }
 
     if (t is convertible to single_pass_traversal_tag
-        &amp;&amp; is_readable_iterator&lt;I&gt;::value
+        &amp;&amp; I is a readable iterator
     )
        return input_output_iterator_tag // (**)
     else
        return std::output_iterator_tag
 </pre>
 </div>
+<div class="section" id="impact-on-n1530-iterator-facade-and-adaptor">
+<h2><a class="toc-backref" href="#id19" name="impact-on-n1530-iterator-facade-and-adaptor">Impact on <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1530.html">N1530</a> (Iterator Facade and Adaptor)</a></h2>
+<p>XXX</p>
+</div>
+</div>
 </div>
 <hr class="footer" />
 <div class="footer">
 <a class="reference" href="issues.rst">View document source</a>.
-Generated on: 2003-11-05 21:37 UTC.
+Generated on: 2003-11-06 03:02 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

@@ -92,7 +92,8 @@ false negatives for some otherwise-writable forward iterators whose
 ``reference`` type is not a mutable reference.  Also, it will
 report false positives for any forward, bidirectional, or random
 access iterator whose ``reference`` is a mutable reference but
-whose ``value_type`` is not assignable.
+whose ``value_type`` is not assignable (e.g. has a private
+assignment operator).
 
 ``is_swappable_iterator``
 -------------------------
@@ -181,22 +182,89 @@ accessibility of an assignment operator on the ``value_type``,
 which determines writability, does not change that.
 
 The one plausible argument we can imagine for
-``is_writable_iterator`` and ``is_swappable_iterator`` is to remove
-algorithms from an overload set using a SFINAE technique like
-enable_if_, but that seems to be too small a gain for the
-requirements imposed on iterator implementors by the need to report
-writability and swappability, especially since it can't be done
-correctly for all existing iterators.
+``is_writable_iterator`` and ``is_swappable_iterator`` is that they
+can be used to remove algorithms from an overload set using a
+SFINAE technique like enable_if_, thus minimizing unintentional
+matches due to Koenig Lookup.  If it means requiring explicit
+indications of writability and swappability from new-style iterator
+implementors, however, it seems to be too small a gain to be worth
+the cost.  That's especially true since we can't get many existing
+old-style iterators to meet the same requirements.
 
 .. _enable_if: http://tinyurl.com/tsr7
 
-===================
- Proposed Solution
-===================
+Naming Issues
+=============
 
-(incomplete)
+Traversal Concepts and Tags
+---------------------------
 
-Change ``iterator_traits`` as follows::
+Howard Hinnant pointed out some inconsistencies with the naming of
+these tag types::
+
+  incrementable_iterator_tag            // ++r, r++
+  single_pass_iterator_tag              // adds a == b, a != b
+  forward_traversal_iterator_tag        // adds multi-pass capability
+  bidirectional_traversal_iterator_tag  // adds --r, r--
+  random_access_traversal_iterator_tag  // adds r+n,n+r,r-n,r[n],etc.
+
+Howard thought that it might be better if all tag names contained
+the word "traversal".
+
+It's not clear that would result in the best possible names,
+though.  For example, incrementable iterators can only make a
+single pass over their input.  What really distinguishes single
+pass iterators from incrementable iterators is not that they can
+make a single pass, but that they are equality comparable.  Forward
+traversal iterators really distinguish themselves by introducing
+multi-pass capability.  Without entering a "Parkinson's Bicycle
+Shed" type of discussion, it might be worth giving the names of
+these tags (and the associated concepts) some extra attention.
+
+Access Traits
+-------------
+
+The names ``is_readable``, ``is_writable``, and ``is_swappable``
+are probably too general for their semantics.  In particular, a
+swappable iterator is only swappable in the same sense that a
+mutable iterator is mutable: the trait refers to the iterator's
+referent.  It would probably be better to add the ``_iterator``
+suffix to each of these names.
+
+================================
+ Proposed Solution (in progress)
+================================
+
+We believe that ``is_readable_iterator`` is a fine name for the
+proposed ``is_readable`` trait and will use that from here on.  In
+order to avoid confusion, however, and because we aren't terribly
+convinced of any answer yet, we are going to phrase this solution
+in terms of the existing traversal concept and tag names.  We'll
+propose a few possible traversal naming schemes at the end of this
+section.
+
+Overview
+========
+
+Following the dictum that what we can't do well probably shouldn't
+be done at all, we'd like to solve many of the problems above by
+eliminating details and simplifying the library as proposed.  In
+particular, we'd eliminate ``is_writable`` and ``is_swappable``,
+and remove the requirements which say that writable, and swappable
+iterators must support these traits.  ``is_readable_iterator`` has
+proven to be useful and will be retained, but since it can be
+implemented with no special hints from the iterator, it will not be
+mentioned in the readable iterator requirements.  Since we don't
+want to require the user to explicitly specify access category
+information, we'll change ``iterator_tag`` so that it computes the
+old-style category in terms of the iterator's traversal category,
+``reference``, and ``value_type``.
+
+Details
+=======
+
+A cleaner solution would change ``iterator_traits`` as follows,
+though this does not constitute a "pure bolt-on"::
 
   iterator_traits<I>::iterator_category
     = if (I::iterator_category is a type) // use mpl::has_xxx (SFINAE)
@@ -209,7 +277,7 @@ Change ``iterator_traits`` as follows::
 
       t = iterator_traversal<I>::type
       
-      if (is_lvalue_iterator<I>::value)
+      if (I is an lvalue iterator)
       {
          if (t is convertible to random_access_traversal_tag)
             return std::random_access_iterator_tag
@@ -220,10 +288,14 @@ Change ``iterator_traits`` as follows::
       }
 
       if (t is convertible to single_pass_traversal_tag
-          && is_readable_iterator<I>::value
+          && I is a readable iterator
       )
          return input_output_iterator_tag // (**)
       else
          return std::output_iterator_tag
 
 
+Impact on N1530_ (Iterator Facade and Adaptor)
+==============================================
+
+XXX
