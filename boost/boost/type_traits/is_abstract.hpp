@@ -61,16 +61,16 @@ struct is_abstract_imp
    // according to review status issue #337
    //
    template<class U>
-   static type_traits::no_type check(U (*)[1]);
+   static type_traits::no_type check_sig(U (*)[1]);
    template<class U>
-   static type_traits::yes_type check(...);
+   static type_traits::yes_type check_sig(...);
 
    // GCC2 won't even parse this template if we embed the computation
    // of s1 in the computation of value.
 #ifdef __GNUC__
-   BOOST_STATIC_CONSTANT(unsigned, s1 = sizeof(is_abstract_imp<T>::template check<T>(0)));
+   BOOST_STATIC_CONSTANT(unsigned, s1 = sizeof(is_abstract_imp<T>::template check_sig<T>(0)));
 #else
-   BOOST_STATIC_CONSTANT(unsigned, s1 = sizeof(check<T>(0)));
+   BOOST_STATIC_CONSTANT(unsigned, s1 = sizeof(check_sig<T>(0)));
 #endif
     
    BOOST_STATIC_CONSTANT(bool, value = 
