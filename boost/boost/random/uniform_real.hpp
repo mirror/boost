@@ -64,6 +64,22 @@ public:
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const uniform_real& x, const uniform_real& y)
   { return x._min == y._min && x._max == y._max && x._rng == y._rng; }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_real& ud)
+  {
+    os << ud._min << " " << ud._max;
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, uniform_real& ud)
+  {
+    is >> std::ws >> ud._min >> std::ws >> ud._max;
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const uniform_real& rhs) const

@@ -46,10 +46,18 @@ public:
   typedef IntType result_type;
 
   uniform_int_integer(base_type & rng, IntType min, IntType max) 
-    : _rng(&rng), _min(min), _max(max), _range(_max - _min),
-      _bmin(_rng->min()), _brange(_rng->max() - _bmin)
+    : _rng(&rng), _bmin(_rng->min()), _brange(_rng->max() - _bmin)
   {
     assert(min < max);
+    set(min, max);
+  }
+
+  void set(result_type min, result_type max)
+  {
+    _min = min;
+    _max = max;
+    _range = _max - _min;
+    
     if(random::equal_signed_unsigned(_brange, _range))
       _range_comparison = 0;
     else if(random::lessthan_signed_unsigned(_brange, _range))
@@ -135,9 +143,17 @@ public:
   typedef IntType result_type;
 
   uniform_int_float(base_type & rng, IntType min, IntType max)
-    : _rng(rng), _min(min), _max(max),
-      _range(static_cast<base_result>(_max-_min)+1)
-  { }
+    : _rng(rng)
+  {
+    set(min,max);
+  }
+
+  void set(result_type min, result_type max)
+  {
+    _min = min;
+    _max = max;
+    _range = static_cast<base_result>(_max-_min)+1;
+  }
 
   result_type min() const { return _min; }
   result_type max() const { return _max; }
@@ -221,6 +237,24 @@ public:
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const uniform_int& x, const uniform_int& y)
   { return x.min() == y.min() && x.max() == y.max() && x.base() == y.base(); }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_int& ud)
+  {
+    os << ud.min() << " " << ud.max();
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, uniform_int& ud)
+  {
+    IntType min, max;
+    is >> std::ws >> min >> std::ws >> max;
+    ud.impl.set(min, max);
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const uniform_int& rhs) const

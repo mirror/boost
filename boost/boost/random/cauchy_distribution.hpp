@@ -70,6 +70,22 @@ public:
   {
     return x._median == y._median && x._sigma == y._sigma && x._rng == y._rng; 
   }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const cauchy_distribution& cd)
+  {
+    os << cd._median << " " << cd._sigma;
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, cauchy_distribution& cd)
+  {
+    is >> std::ws >> cd._median >> std::ws >> cd._sigma;
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const cauchy_distribution& rhs) const

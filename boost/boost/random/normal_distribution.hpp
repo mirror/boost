@@ -93,6 +93,25 @@ public:
     return x._mean == y._mean && x._sigma == y._sigma && 
       x._valid == y._valid && x._rng == y._rng;
   }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const normal_distribution& nd)
+  {
+    os << nd._mean << " " << nd._sigma << " "
+       << nd._valid << " " << nd._cached_rho << " " << nd._r1;
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, normal_distribution& nd)
+  {
+    is >> std::ws >> nd._mean >> std::ws >> nd._sigma
+       >> std::ws >> nd._valid >> std::ws >> nd._cached_rho
+       >> std::ws >> nd._r1;
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const normal_distribution& rhs) const

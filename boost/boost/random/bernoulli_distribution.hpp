@@ -37,13 +37,12 @@ public:
   explicit bernoulli_distribution(base_type & rng,
                                   const RealType& p = RealType(0.5)) 
     : _rng(&rng),
-      _p(p),
-      _threshold(static_cast<base_result>
-                 (p * RealType(_rng->max() - _rng->min())) + _rng->min())
+      _p(p)
   {
     // for p == 0, we can only set _threshold = 0, which is not enough
     assert(p >= 0);
     assert(p <= 1);
+    init();
   }
 
   // compiler-generated copy ctor and assignment operator are fine
@@ -60,12 +59,36 @@ public:
   friend bool operator==(const bernoulli_distribution& x, 
                          const bernoulli_distribution& y)
   { return x._threshold == y._threshold && *x._rng == *y._rng; }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const bernoulli_distribution& bd)
+  {
+    os << bd._p;
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, bernoulli_distribution& bd)
+  {
+    is >> std::ws >> bd._p;
+    bd.init();
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const bernoulli_distribution& rhs) const
   { return _threshold == rhs._threshold && *_rng == *rhs._rng;  }
 #endif
+
 private:
+  void init()
+  {
+    _threshold = static_cast<base_result>
+      (_p * RealType(_rng->max() - _rng->min())) + _rng->min();
+  }
+
   typedef typename base_type::result_type base_result;
   base_type * _rng;
   RealType _p;

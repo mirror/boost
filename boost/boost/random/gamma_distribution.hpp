@@ -41,11 +41,7 @@ public:
     : _rng(rng), _exp(rng, result_type(1)), _alpha(alpha)
   {
     assert(alpha > result_type(0));
- #ifndef BOOST_NO_STDC_NAMESPACE
-    // allow for Koenig lookup
-    using std::exp;
-#endif
-   _p = exp(result_type(1)) / (_alpha + exp(result_type(1)));
+    init();
   }
 
   // compiler-generated copy ctor and assignment operator are fine
@@ -104,18 +100,43 @@ public:
   friend bool operator==(const gamma_distribution& x, 
                          const gamma_distribution& y)
   {
-    return x._mean == y._mean && x._sigma == y._sigma && 
-      x._valid == y._valid && x._rng == y._rng;
+    return x._alpha == y._alpha && x._rng == y._rng;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const gamma_distribution& gd)
+  {
+    os << gd._alpha;
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, gamma_distribution& gd)
+  {
+    is >> std::ws >> gd._alpha;
+    gd.init();
+    return is;
   }
 #else
   // Use a member function
   bool operator==(const gamma_distribution& rhs) const
   {
-    return _mean == rhs._mean && _sigma == rhs._sigma && 
-      _valid == rhs._valid && _rng == rhs._rng;
+    return _alpha == rhs._alpha && _rng == rhs._rng;
   }
 #endif
+
 private:
+  void init()
+  {
+#ifndef BOOST_NO_STDC_NAMESPACE
+    // allow for Koenig lookup
+    using std::exp;
+#endif
+    _p = exp(result_type(1)) / (_alpha + exp(result_type(1)));
+  }
+
   adaptor_type _rng;
   exponential_distribution<base_type, RealType, Adaptor> _exp;
   result_type _alpha;

@@ -49,10 +49,7 @@ public:
     : _rng(rng), _p(p)
   {
     assert(RealType(0) < p && p < RealType(1));
-#ifndef BOOST_NO_STDC_NAMESPACE
-    using std::log;
-#endif
-    _log_p = log(p);
+    init();
   }
 
   // compiler-generated copy ctor and assignment operator are fine
@@ -75,12 +72,37 @@ public:
   friend bool operator==(const geometric_distribution& x, 
                          const geometric_distribution& y)
   { return x._log_p == y._log_p && x._rng == y._rng; }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const geometric_distribution& gd)
+  {
+    os << gd._p;
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, geometric_distribution& gd)
+  {
+    is >> std::ws >> gd._p;
+    gd.init();
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const geometric_distribution& rhs) const
   { return _log_p == rhs._log_p && _rng == rhs._rng;  }
 #endif
 private:
+  void init()
+  {
+#ifndef BOOST_NO_STDC_NAMESPACE
+    using std::log;
+#endif
+    _log_p = log(_p);
+  }
+
   adaptor_type _rng;
   RealType _p;
   RealType _log_p;

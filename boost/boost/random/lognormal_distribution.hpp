@@ -53,7 +53,8 @@ public:
   explicit lognormal_distribution(base_type & rng,
                                   result_type mean = result_type(1),
                                   result_type sigma = result_type(1))
-    : _rng(rng, std::log(mean*mean/std::sqrt(sigma*sigma + mean*mean)),
+    : _mean(mean), _sigma(sigma),
+      _rng(rng, std::log(mean*mean/std::sqrt(sigma*sigma + mean*mean)),
            std::sqrt(std::log(sigma*sigma/mean/mean+result_type(1))))
   { 
     assert(mean > result_type(0));
@@ -63,6 +64,8 @@ public:
 
   adaptor_type& adaptor() { return _rng.adaptor(); }
   base_type& base() const { return _rng.base(); }
+  RealType& mean() const { return _mean; }
+  RealType& sigma() const { return _sigma; }
   void reset() { _rng.reset(); }
 
   result_type operator()()
@@ -78,12 +81,29 @@ public:
   friend bool operator==(const lognormal_distribution& x, 
                          const lognormal_distribution& y)
   { return x._rng == y._rng; }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const lognormal_distribution& ld)
+  {
+    os << ld._rng << " " << ld._mean << " " << ld._sigma;
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, lognormal_distribution& ld)
+  {
+    is >> std::ws >> ld._rng >> std::ws >> ld._mean >> std::ws >> ld._sigma;
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const lognormal_distribution& rhs) const
   { return _rng == rhs._rng;  }
 #endif
 private:
+  RealType _mean, _sigma;
   normal_distribution<base_type, result_type, adaptor_type> _rng;
 };
 

@@ -45,7 +45,11 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
 
-  uniform_smallint_integer(base_type & rng, IntType min, IntType max);
+  uniform_smallint_integer(base_type & rng, IntType min, IntType max)
+    : _rng(&rng)
+  { set(min, max); }
+
+  void set(result_type min, result_type max);
   
   result_type min() const { return _min; }
   result_type max() const { return _max; }
@@ -66,12 +70,15 @@ private:
 };
 
 template<class UniformRandomNumberGenerator, class IntType>
-uniform_smallint_integer<UniformRandomNumberGenerator, IntType>::
-uniform_smallint_integer(base_type & rng, IntType min, IntType max) 
-  : _rng(&rng), _min(min), _max(max),
-    _range(static_cast<base_result>(_max-_min)+1), _factor(1)
+void uniform_smallint_integer<UniformRandomNumberGenerator, IntType>::
+set(result_type min, result_type max) 
 {
+  _min = min;
+  _max = max;
   assert(min < max);
+
+  _range = static_cast<base_result>(_max-_min)+1;
+  _factor = 1;
   
   // LCGs get bad when only taking the low bits.
   // (probably put this logic into a partial template specialization)
@@ -106,10 +113,16 @@ public:
 #endif
 
   uniform_smallint_float(base_type & rng, IntType min, IntType max)
-    : _rng(rng), _min(min), _max(max),
-      _range(static_cast<base_result>(_max-_min)+1)
+    : _rng(rng)
   {
     assert(min < max);
+  }
+
+  void set(result_type min, result_type max)
+  {
+    _min = min;
+    _max = max;
+    _range = static_cast<base_result>(_max-_min)+1;
   }
 
   result_type min() const { return _min; }
@@ -195,6 +208,24 @@ public:
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const uniform_smallint& x, const uniform_smallint& y)
   { return x.min() == y.min() && x.max() == y.max() && x.base() == y.base(); }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_smallint& ud)
+  {
+    os << ud.min() << " " << ud.max();
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, uniform_smallint& ud)
+  {
+    IntType min, max;
+    is >> std::ws >> min >> std::ws >> max;
+    ud._impl.set(min, max);
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const uniform_smallint& rhs) const

@@ -65,6 +65,22 @@ public:
   friend bool operator==(const exponential_distribution& x, 
                          const exponential_distribution& y)
   { return x._lambda == y._lambda && x._rng == y._rng; }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const exponential_distribution& ed)
+  {
+    os << ed._lambda;
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, exponential_distribution& ed)
+  {
+    is >> std::ws >> ed._lambda;
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const exponential_distribution& rhs) const

@@ -70,6 +70,23 @@ public:
   friend bool operator==(const uniform_on_sphere& x, 
                          const uniform_on_sphere& y)
   { return x._dim == y._dim && x._rng == y._rng; }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_on_sphere& sd)
+  {
+    os << sd._dim;
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, uniform_on_sphere& sd)
+  {
+    is >> std::ws >> sd._dim;
+    sd._container.resize(sd._dim);
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const uniform_on_sphere& rhs) const

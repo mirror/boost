@@ -42,15 +42,10 @@ public:
                                  result_type a = result_type(0),
                                  result_type b = result_type(0.5),
                                  result_type c = result_type(1))
-    : _rng(rng), _a(a), _b(b), _c(c),
-      d1(_b-_a), d2(_c-_a), d3(_c-_b), q1(d1/d2), p1(d1*d2)
+    : _rng(rng), _a(a), _b(b), _c(c)
   {
-#ifndef BOOST_NO_STDC_NAMESPACE
-    using std::sqrt;
-#endif
-    d3 = sqrt(d3);
-    p1 = sqrt(p1);
     assert(_a <= _b && _b <= _c);
+    init();
   }
 
   // compiler-generated copy ctor and assignment operator are fine
@@ -74,12 +69,42 @@ public:
   friend bool operator==(const triangle_distribution& x, 
                          const triangle_distribution& y)
   { return x._a == y._a && x._b == y._b && x._c == y._c && x._rng == y._rng; }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const triangle_distribution& td)
+  {
+    os << td._a << " " << td._b << " " << td._c;
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, triangle_distribution& td)
+  {
+    is >> std::ws >> td._a >> std::ws >> td._b >> std::ws >> td._c;
+    td.init();
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const triangle_distribution& rhs) const
   { return _a == rhs._a && _b == rhs._b && _c == rhs._c && _rng == rhs._rng;  }
 #endif
+
 private:
+  void init()
+  {
+#ifndef BOOST_NO_STDC_NAMESPACE
+    using std::sqrt;
+#endif
+    d1 = _b - _a;
+    d2 = _c - _a;
+    d3 = sqrt(_c - _b);
+    q1 = d1 / d2;
+    p1 = sqrt(d1 * d2);
+  }
+
   adaptor_type _rng;
   result_type _a, _b, _c;
   result_type d1, d2, d3, q1, p1;

@@ -68,6 +68,22 @@ public:
   {
     return x._t == y._t && x._rng == y._rng;
   }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const binomial_distribution& bd)
+  {
+    os << bd._rng << " " << bd._t;
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, binomial_distribution& bd)
+  {
+    is >> std::ws >> bd._rng >> std::ws >> bd._t;
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const binomial_distribution& rhs) const

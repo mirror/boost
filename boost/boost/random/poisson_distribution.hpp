@@ -40,12 +40,8 @@ public:
                                 const RealType& mean = RealType(1))
     : _rng(rng), _mean(mean)
   {
-#ifndef BOOST_NO_STDC_NAMESPACE
-    // allow for Koenig lookup
-    using std::exp;
-#endif
     assert(mean > RealType(0));
-    _exp_mean = exp(-_mean);
+    init();
   }
 
   // compiler-generated copy ctor and assignment operator are fine
@@ -72,6 +68,23 @@ public:
   {
     return x._mean == y._mean && x._rng == y._rng;
   }
+
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const poisson_distribution& pd)
+  {
+    os << pd._mean;
+    return os;
+  }
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, poisson_distribution& pd)
+  {
+    is >> std::ws >> pd._mean;
+    pd.init();
+    return is;
+  }
 #else
   // Use a member function
   bool operator==(const poisson_distribution& rhs) const
@@ -79,7 +92,17 @@ public:
     return _mean == rhs._mean && _rng == rhs._rng;
   }
 #endif
+
 private:
+  void init()
+  {
+#ifndef BOOST_NO_STDC_NAMESPACE
+    // allow for Koenig lookup
+    using std::exp;
+#endif
+    _exp_mean = exp(-_mean);
+  }
+
   adaptor_type _rng;
   RealType _mean;
   // some precomputed data from the parameters
