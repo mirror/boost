@@ -9,8 +9,10 @@
         <classname>std::exception</classname>
       </inherit>
 
-      <purpose>The exception thrown in the event of a visitor
-        unable to handle the visited value.</purpose>
+      <purpose>
+        <simpara>The exception thrown in the event of a visitor
+          unable to handle the visited value.</simpara>
+      </purpose>
 
       <method name="what" specifiers="virtual" cv="const">
         <type>const char *</type>
