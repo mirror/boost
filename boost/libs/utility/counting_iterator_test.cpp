@@ -6,6 +6,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 //
 // Revision History
+// 16 Feb 2001  Added a missing const. Made the tests run (somewhat) with
+//              plain MSVC again. (David Abrahams)
 // 11 Feb 2001  #if 0'd out use of counting_iterator on non-numeric types in
 //              MSVC without STLport, so that the other tests may proceed
 //              (David Abrahams)
@@ -210,7 +212,7 @@ public:
   my_int3(int x) : m_int(x) { }
   my_int3& operator++() { ++m_int; return *this; }
   my_int3& operator+=(std::ptrdiff_t n) { m_int += n; return *this; }
-  std::ptrdiff_t operator-(const my_int3& x) { return m_int - x.m_int; }
+  std::ptrdiff_t operator-(const my_int3& x) const { return m_int - x.m_int; }
   my_int3& operator--() { --m_int; return *this; }
   bool operator==(const my_int3& x) const { return m_int == x.m_int; }
   bool operator!=(const my_int3& x) const { return m_int != x.m_int; }
@@ -221,11 +223,6 @@ private:
 
 int main()
 {
-    // Test user-defined type.
-    test_integer<my_int1>();
-    test_integer<my_int2>();
-    test_integer<my_int3>();
-
     // Test the built-in integer types.
     test_integer<char>();
     test_integer<unsigned char>();
@@ -242,9 +239,13 @@ int main()
     test_integer<unsigned long long>();
 #endif
 
-   // wrapping an iterator causes an INTERNAL COMPILER ERROR in MSVC without
-   // STLport. I'm clueless as to why. 
+   // wrapping an iterator or non-built-in integer type causes an INTERNAL
+   // COMPILER ERROR in MSVC without STLport. I'm clueless as to why.
 #if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
+    // Test user-defined type.
+    test_integer<my_int1>();
+    test_integer<my_int2>();
+    test_integer<my_int3>();
     
    // Some tests on container iterators, to prove we handle a few different categories
     test_container<std::vector<int> >();
