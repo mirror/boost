@@ -69,6 +69,7 @@
 #include "boost/mpl/find_if.hpp"
 #include "boost/mpl/front.hpp"
 #include "boost/mpl/identity.hpp"
+#include "boost/mpl/if.hpp"
 #include "boost/mpl/int.hpp"
 #include "boost/mpl/is_sequence.hpp"
 #include "boost/mpl/iterator_range.hpp"
