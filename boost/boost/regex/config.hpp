@@ -57,6 +57,9 @@
 #ifdef __MWERKS__
 #  define BOOST_REGEX_NO_EXTERNAL_TEMPLATES
 #endif
+#ifdef __IBMCPP__
+#  define BOOST_REGEX_NO_EXTERNAL_TEMPLATES
+#endif
 
 
 
@@ -608,5 +611,6 @@ inline void pointer_construct(T* p, const T& t)
 #endif
 
 #endif
+
 
 
