@@ -14,7 +14,13 @@
 #define BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING
 #define BOOST_MULTI_INDEX_ENABLE_SAFE_MODE
 
+#include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
+#include <boost/detail/workaround.hpp>
 #include <boost/multi_index/safe_mode_errors.hpp>
+
+#if BOOST_WORKAROUND(__IBMCPP__,<=600)
+#pragma info(nolan) /* suppress warnings about offsetof with non-POD types */
+#endif
 
 struct safe_mode_exception
 {
