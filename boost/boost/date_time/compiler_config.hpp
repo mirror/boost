@@ -50,6 +50,18 @@ namespace std {
 }
 #endif
 
+// workaround for errors associated with wide string output 
+// modifications. compilers affected are:
+// Borland 551, gcc295 (not stlport), msvc6, mingw
+// Any of these compilers *should* work if used with StlPort's streams
+#if ((defined(__GNUC__) && (__GNUC__ < 3)) || \
+     (defined(_MSC_VER) && (_MSC_VER <= 1200)) || \
+     (defined(__MINGW32__)) || \
+     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0551))) && \
+     !defined(_STLP_OWN_IOSTREAMS)
+#define BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS
+#endif
+
 /* The following handles the definition of the necessary macros
  * for dll building on Win32 platforms.
  * 
