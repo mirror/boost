@@ -14,6 +14,10 @@
 
 // See http://www.boost.org/libs/compose for Documentation.
 
+#ifndef BOOST_DEPRECATED
+#  error Boost.Compose has been deprecated in favor of Boost.Bind or Boost.Lambda, and will be removed in a future release. You may define the macro BOOST_DEPRECATED to suppress this warning.
+#endif
+
 #ifndef BOOST_COMPOSE_HPP
 #define BOOST_COMPOSE_HPP
 
@@ -43,7 +47,7 @@ class pointer_to_nullary_function : public nullary_function<Result>
     }
     explicit pointer_to_nullary_function(Result (*x)()) : ptr(x) {
     }
-    Result operator()() const { 
+    Result operator()() const {
         return ptr();
     }
 };
