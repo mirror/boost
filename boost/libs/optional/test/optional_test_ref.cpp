@@ -21,7 +21,7 @@
 #pragma hdrstop
 #endif
 
-#include "boost/detail/none.hpp"
+#include "boost/none.hpp"
 
 #include "boost/test/minimal.hpp"
 
