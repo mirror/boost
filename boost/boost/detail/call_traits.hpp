@@ -109,7 +109,7 @@ struct call_traits<T&const volatile>
    typedef T& param_type;  // hh removed const
 };
 #endif
-
+#ifndef __SUNPRO_CC
 template <typename T, std::size_t N>
 struct call_traits<T [N]>
 {
@@ -135,6 +135,7 @@ public:
    typedef const array_type& const_reference;
    typedef const T* const param_type;
 };
+#endif
 
 }
 
