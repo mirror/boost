@@ -10,6 +10,7 @@
 // system headers
 #include <string>
 #include <iostream>
+#include <vector>
 
 // include boost
 #include <boost/config.hpp>

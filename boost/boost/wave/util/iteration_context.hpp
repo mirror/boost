@@ -51,7 +51,7 @@ public:
         char buffer[22];    // 21 bytes holds all NUL-terminated unsigned 64-bit numbers
 
             using namespace std;    // for some systems ltoa is in namespace std
-            sprintf(buffer, "%d", max_include_nesting_depth);
+            sprintf(buffer, "%d", (int)max_include_nesting_depth);
             BOOST_WAVE_THROW(preprocess_exception, include_nesting_too_deep, 
                 buffer, pos);
         }

@@ -1209,7 +1209,7 @@ string_type const &value = curr_token.get_value();
     char buffer[22];    // 21 bytes holds all NUL-terminated unsigned 64-bit numbers
 
         using namespace std;    // for some systems sprintf is in namespace std
-        sprintf(buffer, "%d", ctx.get_iteration_depth());
+        sprintf(buffer, "%d", (int)ctx.get_iteration_depth());
         expanded.push_back(token_type(T_INTLIT, buffer, curr_token.get_position()));
         return true;
     }
