@@ -20,7 +20,7 @@
 int main()
 {
   typedef boost::iterator_adaptor<int*, boost::default_iterator_policies,
-    boost::iterator<std::input_iterator_tag, int> > adaptor_type;
+    int,int&,int*,std::input_iterator_tag> adaptor_type;
   
   adaptor_type iter;
   --iter;

@@ -18,8 +18,8 @@
 
 int main()
 {
-  typedef boost::iterator_adaptor<int*, boost::default_iterator_policies,
-    boost::iterator<std::bidirectional_iterator_tag, int> > adaptor_type;
+    typedef boost::iterator_adaptor<int*, boost::default_iterator_policies,
+        int,int&,int*,std::bidirectional_iterator_tag> adaptor_type;
   
   adaptor_type i;
   i += 4;

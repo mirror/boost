@@ -24,7 +24,7 @@ public:
 int main()
 {
   typedef boost::iterator_adaptor<foo*, boost::default_iterator_policies,
-    boost::iterator<std::input_iterator_tag, foo> > adaptor_type;
+      foo,foo&,foo*,std::input_iterator_tag> adaptor_type;
   
   adaptor_type i;
   i->bar();
