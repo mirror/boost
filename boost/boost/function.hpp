@@ -21,6 +21,8 @@
 
 #include <boost/function/function_base.hpp>
 #include <boost/type_traits/function_traits.hpp>
+#include <boost/type_traits/same_traits.hpp>
+#include <boost/type_traits/ice.hpp>
 #include <boost/function/function0.hpp>
 #include <boost/function/function1.hpp>
 #include <boost/function/function2.hpp>
@@ -54,7 +56,7 @@ namespace boost {
       };
 
       template<typename R>
-      struct function_traits<R ()>
+      struct function_traits<R (*)(void)>
       {
         BOOST_STATIC_CONSTANT(int, arity = 0);
         typedef R result_type;
@@ -71,7 +73,7 @@ namespace boost {
       };
       
       template<typename R, typename T1>
-      struct function_traits<R (T1)>
+      struct function_traits<R (*)(T1)>
       {
         BOOST_STATIC_CONSTANT(int, arity = 1);
         typedef R result_type;
@@ -88,7 +90,7 @@ namespace boost {
       };
       
       template<typename R, typename T1, typename T2>
-      struct function_traits<R (T1, T2)>
+      struct function_traits<R (*)(T1, T2)>
       {
         BOOST_STATIC_CONSTANT(int, arity = 2);
         typedef R result_type;
@@ -105,7 +107,7 @@ namespace boost {
       };
 
       template<typename R, typename T1, typename T2, typename T3>
-      struct function_traits<R (T1, T2, T3)>
+      struct function_traits<R (*)(T1, T2, T3)>
       {
         BOOST_STATIC_CONSTANT(int, arity = 3);
         typedef R result_type;
@@ -122,7 +124,7 @@ namespace boost {
       };
 
       template<typename R, typename T1, typename T2, typename T3, typename T4>
-      struct function_traits<R (T1, T2, T3, T4)>
+      struct function_traits<R (*)(T1, T2, T3, T4)>
       {
         BOOST_STATIC_CONSTANT(int, arity = 4);
         typedef R result_type;
@@ -140,7 +142,7 @@ namespace boost {
 
       template<typename R, typename T1, typename T2, typename T3, typename T4,
                typename T5>
-      struct function_traits<R (T1, T2, T3, T4, T5)>
+      struct function_traits<R (*)(T1, T2, T3, T4, T5)>
       {
         BOOST_STATIC_CONSTANT(int, arity = 5);
         typedef R result_type;
@@ -158,7 +160,7 @@ namespace boost {
 
       template<typename R, typename T1, typename T2, typename T3, typename T4,
                typename T5, typename T6>
-      struct function_traits<R (T1, T2, T3, T4, T5, T6)>
+      struct function_traits<R (*)(T1, T2, T3, T4, T5, T6)>
       {
         BOOST_STATIC_CONSTANT(int, arity = 6);
         typedef R result_type;
@@ -176,7 +178,7 @@ namespace boost {
 
       template<typename R, typename T1, typename T2, typename T3, typename T4,
                typename T5, typename T6, typename T7>
-      struct function_traits<R (T1, T2, T3, T4, T5, T6, T7)>
+      struct function_traits<R (*)(T1, T2, T3, T4, T5, T6, T7)>
       {
         BOOST_STATIC_CONSTANT(int, arity = 7);
         typedef R result_type;
@@ -194,7 +196,7 @@ namespace boost {
 
       template<typename R, typename T1, typename T2, typename T3, typename T4,
                typename T5, typename T6, typename T7, typename T8>
-      struct function_traits<R (T1, T2, T3, T4, T5, T6, T7, T8)>
+      struct function_traits<R (*)(T1, T2, T3, T4, T5, T6, T7, T8)>
       {
         BOOST_STATIC_CONSTANT(int, arity = 8);
         typedef R result_type;
@@ -212,7 +214,7 @@ namespace boost {
 
       template<typename R, typename T1, typename T2, typename T3, typename T4,
                typename T5, typename T6, typename T7, typename T8, typename T9>
-      struct function_traits<R (T1, T2, T3, T4, T5, T6, T7, T8, T9)>
+      struct function_traits<R (*)(T1, T2, T3, T4, T5, T6, T7, T8, T9)>
       {
         BOOST_STATIC_CONSTANT(int, arity = 9);
         typedef R result_type;
@@ -231,7 +233,7 @@ namespace boost {
       template<typename R, typename T1, typename T2, typename T3, typename T4,
                typename T5, typename T6, typename T7, typename T8, typename T9,
                typename T10>
-      struct function_traits<R (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>
+      struct function_traits<R (*)(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>
       {
         BOOST_STATIC_CONSTANT(int, arity = 10);
         typedef R result_type;
@@ -531,6 +533,12 @@ namespace boost {
         };
       };
 
+      template<typename T1, typename T2>
+      struct is_not_same
+      {
+	BOOST_STATIC_CONSTANT(bool, value = !(is_same<T1, T2>::value));
+      };
+
       template<
         typename InR, 
         typename InT1, 
@@ -550,54 +558,65 @@ namespace boost {
       class get_function_impl
       {
         BOOST_STATIC_CONSTANT(bool, encoded_param = is_function<InR>::value);
-        typedef function_traits<InR> traits;
+        typedef function_traits<InR*> traits;
       public:                       
 
-        typedef typename ct_if<encoded_param,
+        typedef typename ct_if<(is_function<InR>::value),
                                typename traits::result_type,
                                InR>::type R;
-        typedef typename ct_if<encoded_param,
+        typedef typename ct_if<(is_function<InR>::value),
                                typename traits::arg1_type,
                                InT1>::type T1;
-        typedef typename ct_if<encoded_param,
+        typedef typename ct_if<(is_function<InR>::value),
                                typename traits::arg2_type,
                                InT2>::type T2;
-        typedef typename ct_if<encoded_param,
+        typedef typename ct_if<(is_function<InR>::value),
                                typename traits::arg3_type,
                                InT3>::type T3;
-        typedef typename ct_if<encoded_param,
+        typedef typename ct_if<(is_function<InR>::value),
                                typename traits::arg4_type,
                                InT4>::type T4;
-        typedef typename ct_if<encoded_param,
+        typedef typename ct_if<(is_function<InR>::value),
                                typename traits::arg5_type,
                                InT5>::type T5;
-        typedef typename ct_if<encoded_param,
+        typedef typename ct_if<(is_function<InR>::value),
                                typename traits::arg6_type,
                                InT6>::type T6;
-        typedef typename ct_if<encoded_param,
+        typedef typename ct_if<(is_function<InR>::value),
                                typename traits::arg7_type,
                                InT7>::type T7;
-        typedef typename ct_if<encoded_param,
+        typedef typename ct_if<(is_function<InR>::value),
                                typename traits::arg8_type,
                                InT8>::type T8;
-        typedef typename ct_if<encoded_param,
+        typedef typename ct_if<(is_function<InR>::value),
                                typename traits::arg9_type,
                                InT9>::type T9;
-        typedef typename ct_if<encoded_param,
+        typedef typename ct_if<(is_function<InR>::value),
                                typename traits::arg10_type,
                                InT10>::type T10;        
-        typedef typename ct_if<(encoded_param && 
-                                !is_same<InT1, unusable>::value),
-                               InT1,
-                               InPolicy>::type Policy;
-        typedef typename ct_if<(encoded_param && 
-                                !is_same<InT2, unusable>::value),
-                               InT2,
-                               InMixin>::type Mixin;
-        typedef typename ct_if<(encoded_param && 
-                                !is_same<InT3, unusable>::value),
-                               InT3,
-                               InAllocator>::type Allocator;
+        typedef typename ct_if<
+	                   (type_traits::ice_and<
+	                     (is_function<InR>::value),
+			     (is_not_same<InT1, unusable>::value)
+	                    >::value),
+                           InT1,
+                           InPolicy>::type Policy;
+
+        typedef typename ct_if<
+	                   (type_traits::ice_and<
+	                     (is_function<InR>::value),
+			     (is_not_same<InT2, unusable>::value)
+	                    >::value),
+                           InT2,
+                           InMixin>::type Mixin;
+
+        typedef typename ct_if<
+	                   (type_traits::ice_and<
+	                     (is_function<InR>::value),
+			     (is_not_same<InT3, unusable>::value)
+	                    >::value),
+                           InT3,
+                           InAllocator>::type Allocator;
 
         typedef typename real_get_function_impl<
           (count_used_args<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>::value)
