@@ -41,16 +41,31 @@ main()
     // date objects from strings & strings to date objects
     date d(2000, 2, 29);
     date d2 = from_string("2000-2-29");
-    date d3 = from_string("2000-FEB-29");
-    date d4 = from_string("2000-february-29");
-    date d5 = from_string(to_simple_string(d));
-    date d6 = from_string(to_iso_extended_string(d));
-    
     check("2000-2-29", d2 == d);
+    date d3 = from_string("2000-FEB-29");
     check("2000-FEB-29 (uppercase)", d3 == d);
+    date d4 = from_string("2000-february-29");
     check("2000-february-29 (lowercase)", d4 == d);
+    date d5 = from_string(to_simple_string(d));
     check("date to string to date", d5 == d);
+    date d6 = from_string(to_iso_extended_string(d));
     check("date to string to date", d6 == d);
+    date d7 = from_us_string("Feb-29-2000");
+    check("date from month-day-year string", d7 == d);
+    date d8 = from_uk_string("29-Feb-2000");
+    check("date from day-month-year string", d8 == d);
+    
+    date d9 = from_us_string(__DATE__);
+    std::cout << "Today's date: " << to_simple_string(d9) << std::endl;
+    date d10 = from_us_string("Feb 29, 2000");
+    std::cout << "With comma: " << to_simple_string(d10) << std::endl;
+    check("american date with comma: Feb 29, 2000 ", d10 == d);
+
+    date d11 = from_us_string("feb 29 2000");
+    check("american date with comma: feb 29 2000 ", d11 == d);
+
+
+
 
     // check proper range
     d = date(2001, 1, 1);
