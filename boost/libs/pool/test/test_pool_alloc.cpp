@@ -77,10 +77,13 @@ struct tester
 #endif
     mem.check_in(this);
   }
+#ifdef VERBOSE
   tester(const tester & other)
   {
-#ifdef VERBOSE
     std::cout << this << ": tester::tester(" << &other << ')' << std::endl;
+#else
+  tester(const tester &)
+  {
 #endif
     mem.check_in(this);
   }
@@ -121,8 +124,8 @@ void test()
     for (int i = 0; i < 10; ++i)
       v.push_back(pool.construct(13, 13));
     std::random_shuffle(v.begin(), v.end());
-    for (int i = 0; i < 5; ++i)
-      pool.destroy(v[i]);
+    for (int j = 0; j < 5; ++j)
+      pool.destroy(v[j]);
   }
 
   {
@@ -136,7 +139,7 @@ void test()
     {
       pool.construct(13, 13);
     }
-    for (int i = 0; i < 5; ++i)
+    for (int j = 0; j < 5; ++j)
     {
       try
       {
