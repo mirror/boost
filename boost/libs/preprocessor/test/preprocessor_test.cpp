@@ -1,13 +1,13 @@
-//  Copyright (C) 2001
-//  Housemarque, Inc.
-//  http://www.housemarque.com
-//  
-//  Permission to copy, use, modify, sell and distribute this software is
-//  granted provided this copyright notice appears in all copies. This
-//  software is provided "as is" without express or implied warranty, and
-//  with no claim as to its suitability for any purpose.
+// Copyright (C) 2001
+// Housemarque Oy
+// http://www.housemarque.com
+//
+// Permission to copy, use, modify, sell and distribute this software is
+// granted provided this copyright notice appears in all copies. This
+// software is provided "as is" without express or implied warranty, and
+// with no claim as to its suitability for any purpose.
 
-//  See http://www.boost.org for most recent version.
+// See http://www.boost.org for most recent version.
 
 #include <boost/preprocessor.hpp>
 
@@ -63,10 +63,10 @@ static const char stringize_test[4] = BOOST_PREPROCESSOR_STRINGIZE(__LINE__);
 
 // ***
 
-//  RATIONALE:
-//  - All forms of ENUM_PARAMS must be tested with 0 and n, where n is
-//  sufficiently large to exceed imaginable usage like. 50 should be
-//  suffient in this case. 
+// RATIONALE:
+// - All forms of ENUM_PARAMS must be tested with 0 and n, where n is
+// sufficiently large to exceed imaginable usage like. 50 should be
+// suffient in this case. 
 
 #ifndef ENUM_PARAMS_TEST_MAX
 #define ENUM_PARAMS_TEST_MAX 50
@@ -90,6 +90,20 @@ TEST_ENUM_PARAMS(ENUM_PARAMS_TEST_MAX)
 #undef TEST_ENUM_PARAMS
 
 // ***
+
+//  RATIONALE:
+// - BOOST_PREPROCESSOR_REPEAT, BOOST_PREPROCESSOR_REPEAT_2ND, ... must work
+// together.
+// - BOOST_PREPROCESSOR_REPEAT is already tested with
+// BOOST_PREPROCESSOR_ENUM_PARAMS.
+// - The tested repeat count should exceed imaginable usage.
+// - Testing the generation of is_function_helper()s upto 40 arguments should
+// be sufficient in this case. Many compilers may fail the repetition tests
+// (at least with higher counts). However, the primary purpose of the
+// repetition primitives is to enable configurability with reasonable
+// defaults, and not necessarily "the most impressive repetition".
+// - ENUM_SHIFTED_PARAMS must be tested so that the shifted range is shown to
+// be correct.
 
 #ifndef IS_FUNCTION_HELPER_TEST_MAX
 #define IS_FUNCTION_HELPER_TEST_MAX 40
