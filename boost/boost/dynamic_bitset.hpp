@@ -1039,14 +1039,11 @@ to_ulong() const
     const size_type nwords =
       (sizeof(unsigned long) + sizeof(Block) - 1) / sizeof(Block);
 
-    size_type min_nwords = nwords;
     if (this->m_num_blocks > nwords) {
       for (size_type i = nwords; i < this->m_num_blocks; ++i)
         if (this->m_bits[i])
           throw overflow;
     }
-    else
-      min_nwords = this->m_num_blocks;
 
     unsigned long result = 0;
     size_type N = std::min(sizeof(unsigned long) * CHAR_BIT, this->size());
