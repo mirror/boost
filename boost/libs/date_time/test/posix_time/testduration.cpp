@@ -1,12 +1,18 @@
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002-2004 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
+ * $Date$
  */
 
 #include "boost/date_time/posix_time/posix_time_duration.hpp"
+#include "boost/date_time/compiler_config.hpp"
+#if defined(BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS)
+#include "boost/date_time/posix_time/time_formatters_limited.hpp"
+#else
 #include "boost/date_time/posix_time/time_formatters.hpp"
+#endif
 #include "boost/date_time/testfrmwk.hpp"
 
 

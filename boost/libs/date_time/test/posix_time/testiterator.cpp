@@ -3,12 +3,17 @@
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
+ * $Date$
  */
 
 #include <iostream>
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/testfrmwk.hpp"
+#if defined(BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS)
+#include "boost/date_time/gregorian/formatters_limited.hpp"
+#else
 #include "boost/date_time/gregorian/formatters.hpp"
+#endif
 
 void iterate_backward(const boost::posix_time::ptime *answers, int ary_len, 
     const boost::posix_time::time_duration& td)
