@@ -19,7 +19,7 @@
 
 #include "boost/mpl/aux_/preprocessor/tuple.hpp"
 
-#if !defined(__MWERKS__) || __MWERKS__ > 0x3002
+#if !defined(__MWERKS__) || __MWERKS__ > 0x3003
 #   define BOOST_MPL_PP_SUB(i,j) \
     BOOST_MPL_PP_SUB_DELAY(i,j)
 
