@@ -1128,4 +1128,19 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     </xsl:choose>
   </xsl:template>
 
+  <!-- Handle program listings -->
+  <xsl:template match="programlisting" mode="passthrough">
+    <programlisting>
+      <xsl:apply-templates mode="programlisting"/>
+    </programlisting>
+  </xsl:template>
+
+  <xsl:template match="highlight|sp" mode="programlisting">
+    <xsl:apply-templates mode="programlisting"/>
+  </xsl:template>
+
+  <xsl:template match="*" mode="programlisting">
+    <xsl:apply-templates select="." mode="passthrough"/>
+  </xsl:template>
+
  </xsl:stylesheet>
