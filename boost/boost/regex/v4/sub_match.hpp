@@ -51,16 +51,16 @@ struct sub_match : public std::pair<BidiIterator, BidiIterator>
    }
    difference_type BOOST_REGEX_CALL length()const
    {
-      difference_type n = boost::re_detail::distance((BidiIterator)first, (BidiIterator)second);
+      difference_type n = boost::re_detail::distance((BidiIterator)this->first, (BidiIterator)this->second);
       return n;
    }
    std::basic_string<value_type> str()const
    {
       std::basic_string<value_type> result;
-      std::size_t len = boost::re_detail::distance((BidiIterator)first, (BidiIterator)second);
+      std::size_t len = boost::re_detail::distance((BidiIterator)this->first, (BidiIterator)this->second);
       result.reserve(len);
-      BidiIterator i = first;
-      while(i != second)
+      BidiIterator i = this->first;
+      while(i != this->second)
       {
          result.append(1, *i);
          ++i;

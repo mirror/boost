@@ -123,6 +123,7 @@ using regex_constants::match_nosubs;
 using regex_constants::format_all;
 using regex_constants::format_sed;
 using regex_constants::format_perl;
+using regex_constants::format_default;
 using regex_constants::format_no_copy;
 using regex_constants::format_first_only;
 //using regex_constants::format_is_if;

@@ -57,40 +57,22 @@ template class BOOST_REGEX_DECL reg_expression< BOOST_REGEX_CHAR_T >;
 
 #pragma option pop
 
-#elif defined(BOOST_MSVC)
+#elif defined(BOOST_MSVC) || defined(__GNUC__)
 
 #  ifndef BOOST_REGEX_INSTANTIATE
 #     define template extern template
 #  endif
 
-#pragma warning(push)
-#pragma warning(disable : 4251 4231 4660)
+#  ifdef BOOST_MSVC
+#     pragma warning(push)
+#     pragma warning(disable : 4251 4231 4660)
+#  endif
 
 template class BOOST_REGEX_DECL reg_expression< BOOST_REGEX_CHAR_T >;
 
-#pragma warning(pop)
-
-#  ifdef template
-#     undef template
+#  ifdef BOOST_MSVC
+#     pragma warning(pop)
 #  endif
-
-#elif !defined(BOOST_REGEX_HAS_DLL_RUNTIME)
-
-//
-// for each [member] function declare a full specialisation of that
-// [member] function, then instantiate it in one translation unit.
-// This is not guarenteed to work according to the standard, but in
-// practice it should work for all compilers (unless they use a realy
-// perverse name mangling convention).  Unfortunately this approach
-// does *not* work for Win32 style import/export, because that can
-// alter the class layout.
-//
-
-#  ifndef BOOST_REGEX_INSTANTIATE
-#     define template template<>
-#  endif
-
-template unsigned int BOOST_REGEX_CALL reg_expression<BOOST_REGEX_CHAR_T>::set_expression(const BOOST_REGEX_CHAR_T* p, const BOOST_REGEX_CHAR_T* end, reg_expression<BOOST_REGEX_CHAR_T>::flag_type f);
 
 #  ifdef template
 #     undef template
