@@ -386,6 +386,32 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
                cout << "string comparison failed for result" << std::endl;
             }
          }
+         //
+         // now try addition operators:
+         string_type sa(1, (string_type::value_type)'a');
+         if(
+            ((m[0] + sa) != (s + sa))
+            || (sa + m[0]) != (sa + s)
+            || ((m[0] + m[0]) != (s + s))
+            || ((m[0] + m[0]) != (s + s))
+            || ((m[0] + sa[0]) != (s + sa[0]))
+            || ((sa[0] + m[0]) != (sa[0] + s))
+            )
+         {
+               begin_error();
+               cout << "string addition failed for result" << std::endl;
+         }
+         if(s.find_first_of((string_type::value_type)0) == string_type::npos)
+         {
+            if(
+               ((m[0] + sa.c_str()) != (s + sa))
+               || ((sa.c_str() + m[0]) != (sa + s))
+              )
+            {
+                  begin_error();
+                  cout << "string addition failed for result" << std::endl;
+            }
+         }
 #endif
 
          //

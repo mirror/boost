@@ -64,6 +64,24 @@ int main()
    >();
 #endif
 #endif
+   //
+   // verify basic_regex member functions:
+   //
+   const char* c_exp = "abc";
+   r = c_exp;
+   r = r;
+   r = s;
+   if((r.mark_count()) || (0 == r.max_size()) || (r.empty()) || (0 == r.size()) || (r.begin() == r.end())) abort();
+
+   r.assign(r);
+   r.assign(c_exp);
+   r.assign(c_exp, boost::regex::perl);
+   r.assign(c_exp, 1, boost::regex::perl);
+   r.assign(s);
+   r.assign(s, boost::regex::perl);
+   r.assign(c_exp, c_exp+1);
+   r.assign(c_exp, c_exp+1, boost::regex::perl);
+   
    return 0;
 }
 
