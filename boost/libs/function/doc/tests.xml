@@ -12,19 +12,16 @@
   </run-test>
 
   <run-test filename="allocator_test.cpp">
-    <lib>../../../libs/test/build/boost_test_exec_monitor</lib>
     <purpose><para>Test the use of custom allocators.</para></purpose>
     <if-fails><para>Allocators are ignored by the implementation.</para></if-fails>
   </run-test>
 
   <run-test filename="stateless_test.cpp">
-    <lib>../../../libs/test/build/boost_test_exec_monitor</lib>
     <purpose><para>Test the optimization of stateless function objects in the Boost.Function library.</para></purpose>
     <if-fails><para>The exception-safety and performance guarantees given for stateless function objects may not be met by the implementation.</para></if-fails>
   </run-test>
 
   <run-test filename="lambda_test.cpp">
-    <lib>../../../libs/test/build/boost_test_exec_monitor</lib>
     <purpose><para>Test the interaction between Boost.Function and Boost.Lambda.</para></purpose>
     <if-fails><para>Either Boost.Lambda does not work on the platform, or Boost.Function cannot safely be applied without the use of <functionname>boost::unlambda</functionname>.</para></if-fails>
   </run-test>

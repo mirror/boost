@@ -29,11 +29,11 @@ DEPENDS all : test ;
 
   [ run libs/function/test/function_n_test.cpp :  :  :  :  ]
 
-  [ run libs/function/test/allocator_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor :  :  :  :  ]
+  [ run libs/function/test/allocator_test.cpp :  :  :  :  ]
 
-  [ run libs/function/test/stateless_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor :  :  :  :  ]
+  [ run libs/function/test/stateless_test.cpp :  :  :  :  ]
 
-  [ run libs/function/test/lambda_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor :  :  :  :  ]
+  [ run libs/function/test/lambda_test.cpp :  :  :  :  ]
 
   [ compile-fail libs/function/test/function_test_fail1.cpp :  :  :  :  ]
 

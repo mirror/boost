@@ -7,8 +7,7 @@
 
 // For more information, see http://www.boost.org
 
-#define BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>
+#include <boost/test/minimal.hpp>
 #include <cassert>
 #include <functional>
 #include <boost/function.hpp>
