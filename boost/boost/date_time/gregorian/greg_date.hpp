@@ -45,10 +45,10 @@ namespace gregorian {
     typedef gregorian_calendar::date_int_type date_int_type;
     typedef date_duration  duration_type;
     //! Main constructor with year, month, day
-    date(year_type year, month_type month, day_type day) 
-      : date_time::date<date, gregorian_calendar, date_duration>(year, month, day)
+    date(year_type y, month_type m, day_type d) 
+      : date_time::date<date, gregorian_calendar, date_duration>(y, m, d)
     {
-      if (gregorian_calendar::end_of_month_day(year, month) < day) {
+      if (gregorian_calendar::end_of_month_day(y, m) < d) {
         throw bad_day_of_month(std::string("Day of month is not valid for year"));
       }
     }

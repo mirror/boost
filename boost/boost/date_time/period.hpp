@@ -66,8 +66,8 @@ namespace date_time {
     typedef point_rep point_type;
     typedef duration_rep duration_type;
 
-    period(point_rep begin, point_rep end);
-    period(point_rep begin, duration_rep len);
+    period(point_rep first_point, point_rep end_point);
+    period(point_rep first_point, duration_rep len);
     point_rep begin() const;
     point_rep end() const;
     point_rep last() const;
@@ -95,10 +95,10 @@ namespace date_time {
    */
   template<class point_rep, class duration_rep>
   inline
-  period<point_rep,duration_rep>::period(point_rep begin, 
-                                         point_rep end) : 
-    begin_(begin), 
-    last_(end - duration_rep::unit())
+  period<point_rep,duration_rep>::period(point_rep first_point, 
+                                         point_rep end_point) : 
+    begin_(first_point), 
+    last_(end_point - duration_rep::unit())
   {}
 
   //! create a period as [begin, begin+len)
@@ -106,9 +106,9 @@ namespace date_time {
    */
   template<class point_rep, class duration_rep>
   inline
-  period<point_rep,duration_rep>::period(point_rep begin, duration_rep len) :
-    begin_(begin), 
-    last_(begin + len-duration_rep::unit()) 
+  period<point_rep,duration_rep>::period(point_rep first_point, duration_rep len) :
+    begin_(first_point), 
+    last_(first_point + len-duration_rep::unit()) 
   {}
 
 

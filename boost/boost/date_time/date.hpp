@@ -67,8 +67,8 @@ namespace date_time {
     typedef typename calendar::date_rep_type date_rep_type;
     typedef typename calendar::date_int_type date_int_type;
     typedef typename calendar::day_of_week_type day_of_week_type;
-    date(year_type year, month_type month, day_type day) 
-      : days_(calendar::day_number(ymd_type(year, month, day)))
+    date(year_type y, month_type m, day_type d) 
+      : days_(calendar::day_number(ymd_type(y, m, d)))
     {}
     date(const ymd_type& ymd) 
       : days_(calendar::day_number(ymd))
