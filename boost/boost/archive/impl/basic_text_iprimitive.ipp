@@ -72,13 +72,19 @@ void basic_text_iprimitive<IStream>::load_binary(
     );
                 
     char * caddr = static_cast<char *>(address);
+    unsigned int padding = 2 - count % 3;
     
     // take care that we don't increment anymore than necessary
     while(--count > 0){
         *caddr++ = static_cast<char>(*ti_begin);
         ++ti_begin;
     }
-    *caddr = static_cast<char>(*ti_begin);
+    *caddr++ = static_cast<char>(*ti_begin);
+    
+    if(padding > 1)
+        ++ti_begin;
+        if(padding > 2)
+            ++ti_begin;
 }
 
 template<class IStream>

@@ -52,13 +52,20 @@ void basic_text_oprimitive<OStream>::save_binary(
         > 
         base64_text;
 
+    boost::archive::iterators::ostream_iterator<CharType> oi(os);
     std::copy(
         base64_text(BOOST_MAKE_PFTO_WRAPPER(static_cast<const char *>(address))),
         base64_text(
             BOOST_MAKE_PFTO_WRAPPER(static_cast<const char *>(address) + count)
         ),
-        boost::archive::iterators::ostream_iterator<CharType>(os)
+        oi
     );
+    unsigned int padding = 2 - count % 3;
+    if(padding > 1)
+        *oi = '=';
+        if(padding > 2)
+            *oi = '=';
+
 }
 
 template<class OStream>
