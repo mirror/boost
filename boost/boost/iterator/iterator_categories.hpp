@@ -27,6 +27,9 @@ namespace boost {
 //
 // Traversal Categories
 //
+
+struct no_traversal_tag {};
+
 struct incrementable_traversal_tag {};
   
 struct single_pass_traversal_tag
