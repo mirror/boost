@@ -10,7 +10,7 @@
 #include <cwchar>
 #include <boost/static_assert.hpp>
 
-#if defined(__BORLANDC__) && !defined(WCHAR_MIN)
+#if !defined(WCHAR_MIN)
 #define WCHAR_MIN 0
 #endif
 
@@ -28,4 +28,5 @@ int main()
 {
    return 0;
 }
+
 
