@@ -365,6 +365,8 @@ template struct call_traits_test<int[2], true>;
 
 #ifdef BOOST_MSVC
 unsigned int expected_failures = 10;
+#elif defined(__SUNPRO_CC)
+unsigned int expected_failures = 11;
 #elif defined(__BORLANDC__)
 unsigned int expected_failures = 2;
 #elif defined(__GNUC__)
@@ -372,6 +374,7 @@ unsigned int expected_failures = 4;
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
 
 

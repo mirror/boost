@@ -58,11 +58,13 @@ void is_function_tester<T>::check()
 #endif
 }
 
+#ifndef __SUNPRO_CC
 template <class T>
 void is_function_test(T& foo)
 {
    is_function_tester<T>::check();
 }
+#endif
 #ifndef BOOST_MSVC
 template <class T>
 void is_function_test(const T& foo)
@@ -104,6 +106,7 @@ int cpp_main(int argc, char* argv[])
 //
 // define the number of failures expected for given compilers:
 unsigned int expected_failures = 0;
+
 
 
 

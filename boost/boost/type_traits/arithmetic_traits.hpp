@@ -23,7 +23,7 @@
 #include <boost/type_traits/fwd.hpp>
 #endif
 
-#include <climits> // for ULLONG_MAX/ULONG_LONG_MAX
+#include <limits.h> // for ULLONG_MAX/ULONG_LONG_MAX
 
 namespace boost{
 
@@ -261,6 +261,7 @@ struct is_fundamental
 } // namespace boost
 
 #endif
+
 
 
 

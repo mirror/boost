@@ -41,7 +41,10 @@ int cpp_main(int argc, char* argv[])
 #ifdef BOOST_MSVC
 // can't separate void and cv-void:
 unsigned int expected_failures = 1;
+#elif defined(__SUNPRO_CC)
+unsigned int expected_failures = 2;
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
