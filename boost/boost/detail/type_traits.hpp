@@ -465,8 +465,9 @@ template <typename T, std::size_t sz> struct is_POD<T[sz]>
 //
 // is one type convertable to another?
 template <class From, class To>
-class is_convertible
+struct is_convertible
 {
+private:
  typedef char (&no)[1];
  typedef char (&yes)[2];
 #  if defined(__BORLANDC__) || defined(__GNUC__)
@@ -636,6 +637,7 @@ public:
 #undef BOOST_HAS_TRIVIAL_DESTRUCTOR
 
 #endif // BOOST_DETAIL_TYPE_TRAITS_HPP
+
 
 
 
