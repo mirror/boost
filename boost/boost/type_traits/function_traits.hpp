@@ -25,7 +25,7 @@
 //
 // is a type a function?
 // Please note that this implementation is unnecessarily complex:
-// we could just use is_convertible<T*, const volatile void*>::value,
+// we could just use !is_convertible<T*, const volatile void*>::value,
 // except that some compilers erroneously allow conversions from
 // function pointers to void*.
 //
@@ -107,7 +107,7 @@ struct is_function_helper
 {
    static T* t;
    BOOST_STATIC_CONSTANT(bool, value = sizeof(is_function_tester(t)) == sizeof(::boost::type_traits::yes_type));
-   //BOOST_STATIC_CONSTANT(bool, value = (::boost::is_convertible<T*, const volatile void*>::value));
+   //BOOST_STATIC_CONSTANT(bool, value = (!::boost::is_convertible<T*, const volatile void*>::value));
 };
 
 #endif
