@@ -21,11 +21,11 @@ the base container adaptor for sparse vectors. For a
 the non-zero elements <em>v</em><sub><em>i</em></sub> are mapped to
 consecutive elements of the associative container, i.e. for
 elements <em>k</em> =
-<em>v</em><sub><em>i</em></sub><sub><sub><em>1</em></sub></sub><sub>
-<em></em></sub>and <em>k + 1 =
-v</em><sub><em>i</em></sub><sub><sub><em>2</em></sub></sub><sub><em>
-</em></sub>of the container holds <em>i</em><sub><em>1</em></sub>
-<em>&lt; i</em><sub><em>2</em></sub>.</p>
+<em>v</em><sub><em>i</em></sub><sub><sub><em>1</em></sub></sub>and
+<em>k + 1 =
+v</em><sub><em>i</em></sub><sub><sub><em>2</em></sub></sub>of the
+container holds <em>i</em><sub><em>1</em></sub> <em>&lt;
+i</em><sub><em>2</em></sub>.</p>
 
 <h4>Example</h4>
 
@@ -305,181 +305,6 @@ the reversed <code>sparse_vector</code>.</td>
 adapted array are <code>map_array&lt;std::size_t, T&gt;</code> and
 <code>std::map&lt;std::size_t, T&gt;</code>.</p>
 
-<h4>Interface</h4>
-
-<pre>
-<code>// Array based sparse vector class<br>
-    template&lt;class T, class A&gt;<br>
-    class sparse_vector:<br>
-        public vector_expression&lt;sparse_vector&lt;T, A&gt; &gt; {<br>
-    public:<br>
-        typedef std::size_t size_type;<br>
-        typedef std::ptrdiff_t difference_type;<br>
-        typedef T value_type;<br>
-        typedef const T &amp;const_reference;<br>
-        typedef T &amp;reference;<br>
-        typedef const T *const_pointer;<br>
-        typedef T *pointer;<br>
-        typedef A array_type;<br>
-        typedef const A const_array_type;<br>
-        typedef const sparse_vector&lt;T, A&gt; const_self_type;<br>
-        typedef sparse_vector&lt;T, A&gt; self_type;<br>
-        typedef const vector_const_reference&lt;const_self_type&gt; const_closure_type;<br>
-        typedef vector_reference&lt;self_type&gt; closure_type;<br>
-        typedef typename A::const_iterator const_iterator_type;<br>
-        typedef typename A::iterator iterator_type;<br>
-        typedef sparse_tag storage_category;<br>
-<br>
-        // Construction and destruction<br>
-        sparse_vector ();<br>
-        sparse_vector (size_type size, size_type non_zeros = 0);<br>
-        sparse_vector (const sparse_vector &amp;v);<br>
-        template&lt;class AE&gt;<br>
-        sparse_vector (const vector_expression&lt;AE&gt; &amp;ae, size_type non_zeros = 0);<br>
-<br>
-        // Accessors<br>
-        size_type size () const;<br>
-        size_type non_zeros () const;<br>
-        const_array_type &amp;data () const;<br>
-        array_type &amp;data ();<br>
-<br>
-        // Resizing<br>
-        void resize (size_type size, size_type non_zeros = 0);<br>
-<br>
-        // Element access<br>
-        const_reference operator () (size_type i) const;<br>
-        reference operator () (size_type i);<br>
-<br>
-        const_reference operator [] (size_type i) const;<br>
-        reference operator [] (size_type i);<br>
-<br>
-        // Assignment<br>
-        sparse_vector &amp;operator = (const sparse_vector &amp;v);<br>
-        sparse_vector &amp;assign_temporary (sparse_vector &amp;v);<br>
-        template&lt;class AE&gt;<br>
-        sparse_vector &amp;operator = (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        sparse_vector &amp;reset (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        sparse_vector &amp;assign (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        sparse_vector &amp;operator += (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        sparse_vector &amp;plus_assign (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        sparse_vector &amp;operator -= (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        sparse_vector &amp;minus_assign (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AT&gt;<br>
-        sparse_vector &amp;operator *= (const AT &amp;at);<br>
-        template&lt;class AT&gt;<br>
-        sparse_vector &amp;operator /= (const AT &amp;at);<br>
-<br>
-        // Swapping<br>
-        void swap (sparse_vector &amp;v);<br>
-        friend void swap (sparse_vector &amp;v1, sparse_vector &amp;v2);<br>
-<br>
-        // Element insertion and erasure<br>
-        void insert (size_type i, const_reference t);<br>
-        void erase (size_type i);<br>
-        void clear ();<br>
-<br>
-        class const_iterator;<br>
-        class iterator;<br>
-<br>
-        // Element lookup<br>
-        const_iterator find (size_type i) const;<br>
-        iterator find (size_type i);<br>
-        const_iterator find_first (size_type i) const;<br>
-        iterator find_first (size_type i);<br>
-        const_iterator find_last (size_type i) const;<br>
-        iterator find_last (size_type i);<br>
-<br>
-        // Iterators simply are pointers.<br>
-<br>
-        class const_iterator:<br>
-            public container_const_reference&lt;sparse_vector&gt;,<br>
-            public bidirectional_iterator_base&lt;const_iterator, value_type&gt; {<br>
-        public:<br>
-            typedef sparse_bidirectional_iterator_tag iterator_category;<br>
-            typedef typename sparse_vector::difference_type difference_type;<br>
-            typedef typename sparse_vector::value_type value_type;<br>
-            typedef typename sparse_vector::const_reference reference;<br>
-            typedef typename sparse_vector::const_pointer pointer;<br>
-<br>
-            // Construction and destruction<br>
-            const_iterator ();<br>
-            const_iterator (const sparse_vector &amp;v, const const_iterator_type &amp;it);<br>
-            const_iterator (const iterator &amp;it);<br>
-<br>
-            // Arithmetic<br>
-            const_iterator &amp;operator ++ ();<br>
-            const_iterator &amp;operator -- ();<br>
-<br>
-            // Dereference<br>
-            reference operator * () const;<br>
-<br>
-            // Index<br>
-            size_type index () const;<br>
-<br>
-            // Assignment<br>
-            const_iterator &amp;operator = (const const_iterator &amp;it);<br>
-<br>
-            // Comparison<br>
-            bool operator == (const const_iterator &amp;it) const;<br>
-        };<br>
-<br>
-        const_iterator begin () const;<br>
-        const_iterator end () const;<br>
-<br>
-        class iterator:<br>
-            public container_reference&lt;sparse_vector&gt;,<br>
-            public bidirectional_iterator_base&lt;iterator, value_type&gt; {<br>
-        public:<br>
-            typedef sparse_bidirectional_iterator_tag iterator_category;<br>
-            typedef typename sparse_vector::difference_type difference_type;<br>
-            typedef typename sparse_vector::value_type value_type;<br>
-            typedef typename sparse_vector::reference reference;<br>
-            typedef typename sparse_vector::pointer pointer;<br>
-<br>
-            // Construction and destruction<br>
-            iterator ();<br>
-            iterator (sparse_vector &amp;v, const iterator_type &amp;it);<br>
-<br>
-            // Arithmetic<br>
-            iterator &amp;operator ++ ();<br>
-            iterator &amp;operator -- ();<br>
-<br>
-            // Dereference<br>
-            reference operator * () const;<br>
-<br>
-            // Index<br>
-            size_type index () const;<br>
-<br>
-            // Assignment<br>
-            iterator &amp;operator = (const iterator &amp;it);<br>
-<br>
-            // Comparison<br>
-            bool operator == (const iterator &amp;it) const;<br>
-        };<br>
-<br>
-        iterator begin ();<br>
-        iterator end ();<br>
-<br>
-        // Reverse iterator<br>
-<br>
-        typedef reverse_iterator_base&lt;const_iterator&gt; const_reverse_iterator;<br>
-<br>
-        const_reverse_iterator rbegin () const;<br>
-        const_reverse_iterator rend () const;<br>
-<br>
-        typedef reverse_iterator_base&lt;iterator&gt; reverse_iterator;<br>
-<br>
-        reverse_iterator rbegin ();<br>
-        reverse_iterator rend ();<br>
-    };</code>
-</pre>
-
 <h2><a name="compressed_vector"></a> Compressed Vector</h2>
 
 <h4>Description</h4>
@@ -490,11 +315,10 @@ For a <em>n</em>-dimensional compressed vector and <em>0 &lt;= i
 &lt; n</em> the non-zero elements <em>v</em><sub><em>i</em></sub>
 are mapped to consecutive elements of the index and value
 container, i.e. for elements <em>k</em> =
-<em>v</em><sub><em>i</em></sub><sub><sub><em>1</em></sub></sub><sub>
-<em></em></sub>and <em>k + 1 =
-v</em><sub><em>i</em></sub><sub><sub><em>2</em></sub></sub><sub><em>
-</em></sub>of these containers holds
-<em>i</em><sub><em>1</em></sub> <em>&lt;
+<em>v</em><sub><em>i</em></sub><sub><sub><em>1</em></sub></sub>and
+<em>k + 1 =
+v</em><sub><em>i</em></sub><sub><sub><em>2</em></sub></sub>of these
+containers holds <em>i</em><sub><em>1</em></sub> <em>&lt;
 i</em><sub><em>2</em></sub>.</p>
 
 <h4>Example</h4>
@@ -794,184 +618,6 @@ the adapted array are <code>unbounded_array&lt;&gt;</code> ,
 <code>bounded_array&lt;&gt;</code> and
 <code>std::vector&lt;&gt;</code> .</p>
 
-<h4>Interface</h4>
-
-<pre>
-<code>// Array based sparse vector class<br>
-    template&lt;class T, std::size_t IB, class IA, class TA&gt;<br>
-    class compressed_vector:<br>
-        public vector_expression&lt;compressed_vector&lt;T, IB, IA, TA&gt; &gt; {<br>
-    public:<br>
-        typedef std::size_t size_type;<br>
-        typedef std::ptrdiff_t difference_type;<br>
-        typedef T value_type;<br>
-        typedef const T &amp;const_reference;<br>
-        typedef T &amp;reference;<br>
-        typedef const T *const_pointer;<br>
-        typedef T *pointer;<br>
-        typedef IA index_array_type;<br>
-        typedef TA value_array_type;<br>
-        typedef const compressed_vector&lt;T, IB, IA, TA&gt; const_self_type;<br>
-        typedef compressed_vector&lt;T, IB, IA, TA&gt; self_type;<br>
-        typedef const vector_const_reference&lt;const_self_type&gt; const_closure_type;<br>
-        typedef vector_reference&lt;self_type&gt; closure_type;<br>
-        typedef typename IA::const_iterator const_iterator_type;<br>
-        typedef typename IA::iterator iterator_type;<br>
-        typedef sparse_tag storage_category;<br>
-<br>
-        // Construction and destruction<br>
-        compressed_vector ();<br>
-        compressed_vector (size_type size, size_type non_zeros = 0);<br>
-        compressed_vector (const compressed_vector &amp;v);<br>
-        template&lt;class AE&gt;<br>
-        compressed_vector (const vector_expression&lt;AE&gt; &amp;ae, size_type non_zeros = 0);<br>
-<br>
-        // Accessors<br>
-        size_type size () const;<br>
-        size_type non_zeros () const;<br>
-        static size_type index_base ();<br>
-        const index_array_type &amp;index_data () const;<br>
-        index_array_type &amp;index_data ();<br>
-        const value_array_type &amp;value_data () const;<br>
-        value_array_type &amp;value_data ();<br>
-<br>
-        // Resizing<br>
-        void resize (size_type size, size_type non_zeros = 0);<br>
-<br>
-        // Element access<br>
-        const_reference operator () (size_type i) const;<br>
-        reference operator () (size_type i);<br>
-<br>
-        const_reference operator [] (size_type i) const;<br>
-        reference operator [] (size_type i);<br>
-<br>
-        // Assignment<br>
-        compressed_vector &amp;operator = (const compressed_vector &amp;v);<br>
-        compressed_vector &amp;assign_temporary (compressed_vector &amp;v);<br>
-        template&lt;class AE&gt;<br>
-        compressed_vector &amp;operator = (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        compressed_vector &amp;reset (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        compressed_vector &amp;assign (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        compressed_vector &amp;operator += (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        compressed_vector &amp;plus_assign (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        compressed_vector &amp;operator -= (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        compressed_vector &amp;minus_assign (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AT&gt;<br>
-        compressed_vector &amp;operator *= (const AT &amp;at);<br>
-        template&lt;class AT&gt;<br>
-        compressed_vector &amp;operator /= (const AT &amp;at);<br>
-<br>
-        // Swapping<br>
-        void swap (compressed_vector &amp;v);<br>
-        friend void swap (compressed_vector &amp;v1, compressed_vector &amp;v2);<br>
-<br>
-        // Element insertion and erasure<br>
-        void insert (size_type i, const_reference t);<br>
-        void erase (size_type i);<br>
-        void clear ();<br>
-<br>
-        class const_iterator;<br>
-        class iterator;<br>
-<br>
-        // Element lookup<br>
-        const_iterator find (size_type i) const;<br>
-        iterator find (size_type i);<br>
-        const_iterator find_first (size_type i) const;<br>
-        iterator find_first (size_type i);<br>
-        const_iterator find_last (size_type i) const;<br>
-        iterator find_last (size_type i);<br>
-<br>
-        // Iterators simply are pointers.<br>
-<br>
-        class const_iterator:<br>
-            public container_const_reference&lt;compressed_vector&gt;,<br>
-            public bidirectional_iterator_base&lt;const_iterator, value_type&gt; {<br>
-        public:<br>
-            typedef sparse_bidirectional_iterator_tag iterator_category;<br>
-            typedef typename compressed_vector::difference_type difference_type;<br>
-            typedef typename compressed_vector::value_type value_type;<br>
-            typedef typename compressed_vector::const_reference reference;<br>
-            typedef typename compressed_vector::const_pointer pointer;<br>
-<br>
-            // Construction and destruction<br>
-            const_iterator ();<br>
-            const_iterator (const compressed_vector &amp;v, const const_iterator_type &amp;it);<br>
-            const_iterator (const iterator &amp;it);<br>
-<br>
-            // Arithmetic<br>
-            const_iterator &amp;operator ++ ();<br>
-            const_iterator &amp;operator -- ();<br>
-<br>
-            // Dereference<br>
-            reference operator * () const;<br>
-<br>
-            // Index<br>
-            size_type index () const;<br>
-<br>
-            // Assignment<br>
-            const_iterator &amp;operator = (const const_iterator &amp;it);<br>
-<br>
-            // Comparison<br>
-            bool operator == (const const_iterator &amp;it) const;<br>
-        };<br>
-<br>
-        const_iterator begin () const;<br>
-        const_iterator end () const;<br>
-<br>
-        class iterator:<br>
-            public container_reference&lt;compressed_vector&gt;,<br>
-            public bidirectional_iterator_base&lt;iterator, value_type&gt; {<br>
-        public:<br>
-            typedef sparse_bidirectional_iterator_tag iterator_category;<br>
-            typedef typename compressed_vector::difference_type difference_type;<br>
-            typedef typename compressed_vector::value_type value_type;<br>
-            typedef typename compressed_vector::reference reference;<br>
-            typedef typename compressed_vector::pointer pointer;<br>
-<br>
-            // Construction and destruction<br>
-            iterator ();<br>
-            iterator (compressed_vector &amp;v, const iterator_type &amp;it);<br>
-<br>
-            // Arithmetic<br>
-            iterator &amp;operator ++ ();<br>
-            iterator &amp;operator -- ();<br>
-<br>
-            // Dereference<br>
-            reference operator * () const;<br>
-<br>
-            // Index<br>
-            size_type index () const;<br>
-<br>
-            // Assignment<br>
-            iterator &amp;operator = (const iterator &amp;it);<br>
-<br>
-            // Comparison<br>
-            bool operator == (const iterator &amp;it) const;<br>
-        };<br>
-<br>
-        iterator begin ();<br>
-        iterator end ();<br>
-<br>
-        // Reverse iterator<br>
-<br>
-        typedef reverse_iterator_base&lt;const_iterator&gt; const_reverse_iterator;<br>
-<br>
-        const_reverse_iterator rbegin () const;<br>
-        const_reverse_iterator rend () const;<br>
-<br>
-        typedef reverse_iterator_base&lt;iterator&gt; reverse_iterator;<br>
-<br>
-        reverse_iterator rbegin ();<br>
-        reverse_iterator rend ();<br>
-    };</code>
-</pre>
-
 <h2><a name="coordinate_vector"></a> Coordinate Vector</h2>
 
 <h4>Description</h4>
@@ -982,11 +628,10 @@ For a <em>n</em>-dimensional sorted coordinate vector and <em>0
 &lt;= i &lt; n</em> the non-zero elements
 <em>v</em><sub><em>i</em></sub> are mapped to consecutive elements
 of the index and value container, i.e. for elements <em>k</em> =
-<em>v</em><sub><em>i</em></sub><sub><sub><em>1</em></sub></sub><sub>
-<em></em></sub>and <em>k + 1 =
-v</em><sub><em>i</em></sub><sub><sub><em>2</em></sub></sub><sub><em>
-</em></sub>of these containers holds
-<em>i</em><sub><em>1</em></sub> <em>&lt;
+<em>v</em><sub><em>i</em></sub><sub><sub><em>1</em></sub></sub>and
+<em>k + 1 =
+v</em><sub><em>i</em></sub><sub><sub><em>2</em></sub></sub>of these
+containers holds <em>i</em><sub><em>1</em></sub> <em>&lt;
 i</em><sub><em>2</em></sub>.</p>
 
 <h4>Example</h4>
@@ -1286,184 +931,6 @@ the adapted array are <code>unbounded_array&lt;&gt;</code> ,
 <code>bounded_array&lt;&gt;</code> and
 <code>std::vector&lt;&gt;</code> .</p>
 
-<h4>Interface</h4>
-
-<pre>
-<code>// Array based sparse vector class<br>
-    template&lt;class T, std::size_t IB, class IA, class TA&gt;<br>
-    class coordinate_vector:<br>
-        public vector_expression&lt;coordinate_vector&lt;T, IB, IA, TA&gt; &gt; {<br>
-    public:<br>
-        typedef std::size_t size_type;<br>
-        typedef std::ptrdiff_t difference_type;<br>
-        typedef T value_type;<br>
-        typedef const T &amp;const_reference;<br>
-        typedef T &amp;reference;<br>
-        typedef const T *const_pointer;<br>
-        typedef T *pointer;<br>
-        typedef IA index_array_type;<br>
-        typedef TA value_array_type;<br>
-        typedef const coordinate_vector&lt;T, IB, IA, TA&gt; const_self_type;<br>
-        typedef coordinate_vector&lt;T, IB, IA, TA&gt; self_type;<br>
-        typedef const vector_const_reference&lt;const_self_type&gt; const_closure_type;<br>
-        typedef vector_reference&lt;self_type&gt; closure_type;<br>
-        typedef typename IA::const_iterator const_iterator_type;<br>
-        typedef typename IA::iterator iterator_type;<br>
-        typedef sparse_tag storage_category;<br>
-<br>
-        // Construction and destruction<br>
-        coordinate_vector ();<br>
-        coordinate_vector (size_type size, size_type non_zeros = 0);<br>
-        coordinate_vector (const coordinate_vector &amp;v);<br>
-        template&lt;class AE&gt;<br>
-        coordinate_vector (const vector_expression&lt;AE&gt; &amp;ae, size_type non_zeros = 0);<br>
-<br>
-        // Accessors<br>
-        size_type size () const;<br>
-        size_type non_zeros () const;<br>
-        static size_type index_base ();<br>
-        const index_array_type &amp;index_data () const;<br>
-        index_array_type &amp;index_data ();<br>
-        const value_array_type &amp;value_data () const;<br>
-        value_array_type &amp;value_data ();<br>
-<br>
-        // Resizing<br>
-        void resize (size_type size, size_type non_zeros = 0);<br>
-<br>
-        // Element access<br>
-        const_reference operator () (size_type i) const;<br>
-        reference operator () (size_type i);<br>
-<br>
-        const_reference operator [] (size_type i) const;<br>
-        reference operator [] (size_type i);<br>
-<br>
-        // Assignment<br>
-        coordinate_vector &amp;operator = (const coordinate_vector &amp;v);<br>
-        coordinate_vector &amp;assign_temporary (coordinate_vector &amp;v);<br>
-        template&lt;class AE&gt;<br>
-        coordinate_vector &amp;operator = (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        coordinate_vector &amp;reset (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        coordinate_vector &amp;assign (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        coordinate_vector &amp;operator += (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        coordinate_vector &amp;plus_assign (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        coordinate_vector &amp;operator -= (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AE&gt;<br>
-        coordinate_vector &amp;minus_assign (const vector_expression&lt;AE&gt; &amp;ae);<br>
-        template&lt;class AT&gt;<br>
-        coordinate_vector &amp;operator *= (const AT &amp;at);<br>
-        template&lt;class AT&gt;<br>
-        coordinate_vector &amp;operator /= (const AT &amp;at);<br>
-<br>
-        // Swapping<br>
-        void swap (coordinate_vector &amp;v);<br>
-        friend void swap (coordinate_vector &amp;v1, coordinate_vector &amp;v2);<br>
-<br>
-        // Element insertion and erasure<br>
-        void insert (size_type i, const_reference t);<br>
-        void erase (size_type i);<br>
-        void clear ();<br>
-<br>
-        class const_iterator;<br>
-        class iterator;<br>
-<br>
-        // Element lookup<br>
-        const_iterator find (size_type i) const;<br>
-        iterator find (size_type i);<br>
-        const_iterator find_first (size_type i) const;<br>
-        iterator find_first (size_type i);<br>
-        const_iterator find_last (size_type i) const;<br>
-        iterator find_last (size_type i);<br>
-<br>
-        // Iterators simply are pointers.<br>
-<br>
-        class const_iterator:<br>
-            public container_const_reference&lt;coordinate_vector&gt;,<br>
-            public bidirectional_iterator_base&lt;const_iterator, value_type&gt; {<br>
-        public:<br>
-            typedef sparse_bidirectional_iterator_tag iterator_category;<br>
-            typedef typename coordinate_vector::difference_type difference_type;<br>
-            typedef typename coordinate_vector::value_type value_type;<br>
-            typedef typename coordinate_vector::const_reference reference;<br>
-            typedef typename coordinate_vector::const_pointer pointer;<br>
-<br>
-            // Construction and destruction<br>
-            const_iterator ();<br>
-            const_iterator (const coordinate_vector &amp;v, const const_iterator_type &amp;it);<br>
-            const_iterator (const iterator &amp;it);<br>
-<br>
-            // Arithmetic<br>
-            const_iterator &amp;operator ++ ();<br>
-            const_iterator &amp;operator -- ();<br>
-<br>
-            // Dereference<br>
-            reference operator * () const;<br>
-<br>
-            // Index<br>
-            size_type index () const;<br>
-<br>
-            // Assignment<br>
-            const_iterator &amp;operator = (const const_iterator &amp;it);<br>
-<br>
-            // Comparison<br>
-            bool operator == (const const_iterator &amp;it) const;<br>
-        };<br>
-<br>
-        const_iterator begin () const;<br>
-        const_iterator end () const;<br>
-<br>
-        class iterator:<br>
-            public container_reference&lt;coordinate_vector&gt;,<br>
-            public bidirectional_iterator_base&lt;iterator, value_type&gt; {<br>
-        public:<br>
-            typedef sparse_bidirectional_iterator_tag iterator_category;<br>
-            typedef typename coordinate_vector::difference_type difference_type;<br>
-            typedef typename coordinate_vector::value_type value_type;<br>
-            typedef typename coordinate_vector::reference reference;<br>
-            typedef typename coordinate_vector::pointer pointer;<br>
-<br>
-            // Construction and destruction<br>
-            iterator ();<br>
-            iterator (coordinate_vector &amp;v, const iterator_type &amp;it);<br>
-<br>
-            // Arithmetic<br>
-            iterator &amp;operator ++ ();<br>
-            iterator &amp;operator -- ();<br>
-<br>
-            // Dereference<br>
-            reference operator * () const;<br>
-<br>
-            // Index<br>
-            size_type index () const;<br>
-<br>
-            // Assignment<br>
-            iterator &amp;operator = (const iterator &amp;it);<br>
-<br>
-            // Comparison<br>
-            bool operator == (const iterator &amp;it) const;<br>
-        };<br>
-<br>
-        iterator begin ();<br>
-        iterator end ();<br>
-<br>
-        // Reverse iterator<br>
-<br>
-        typedef reverse_iterator_base&lt;const_iterator&gt; const_reverse_iterator;<br>
-<br>
-        const_reverse_iterator rbegin () const;<br>
-        const_reverse_iterator rend () const;<br>
-<br>
-        typedef reverse_iterator_base&lt;iterator&gt; reverse_iterator;<br>
-<br>
-        reverse_iterator rbegin ();<br>
-        reverse_iterator rend ();<br>
-    };</code>
-</pre>
-
 <hr>
 <p>Copyright (&copy;) 2000-2002 Joerg Walter, Mathias Koch<br>
  Permission to copy, use, modify, sell and distribute this document
@@ -1473,7 +940,6 @@ warranty, and with no claim as to its suitability for any
 purpose.</p>
 
 <p>Last revised: 1/15/2003</p>
-
 </body>
 </html>
 

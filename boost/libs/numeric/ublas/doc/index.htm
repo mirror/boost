@@ -273,27 +273,29 @@ Matrix Operations</a></li>
 Dinkumware STL. Other compilers known to accept the library are</p>
 
 <ul>
-<li>MSVC 6.0 with STLPort-4.5.3</li>
+<li>MSVC 6.0 with STLPort-4.5.3, 7.0, 7.1</li>
 
 <li>BCC 5.5</li>
 
-<li>GCC 2.95.x, 3.0.x, 3.1</li>
+<li>GCC 2.95.x, 3.0.x, 3.1.x, 3.2.x, 3.3.x</li>
 
-<li>ICC 5.0, 6.0</li>
+<li>ICC 5.0, 6.0, 7.0, 7.1</li>
 
 <li>Comeau 4.2.x</li>
 
 <li>MWCW</li>
 </ul>
 
+<p>For possible problems please consider to consult the Boost
+regression tests.</p>
+
 <h2>Download</h2>
 
-<p>You can download the current stable release of the source code
-from <a href=
-"http://www.genesys-e.org/ublas/downloads/ublas.zip">here</a> .
+<p>You can download the latest release of the source code from <a
+href="http://groups.yahoo.com/group/ublas-dev/files">here</a> .
 Prerequisite is the latest stable release of the <a href=
-"http://www.boost.org">Boost</a> libraries Configuration, Timer and
-optionally SmartPointer.</p>
+"http://www.boost.org">Boost</a> libraries Configuration,
+MetaProgramming, TypeTraits, Timer and optionally SmartPointer.</p>
 
 <h2>CVS Access</h2>
 
@@ -325,8 +327,8 @@ here</a> .</p>
 
 <h2>Mailing lists</h2>
 
-<p>uBLAS has no dedicated mailing list. Feel free to use the
-mailing lists of <a href="http://www.boost.org">Boost</a> .</p>
+<p>uBLAS has a dedicated <a href=
+"http://groups.yahoo.com/group/ublas-dev">mailing list</a> .</p>
 
 <h2>Authors and Credits</h2>
 
@@ -375,11 +377,6 @@ reintroducing temporaries using either <code>prod (A,</code>
 <code><em>matrix_type</em></code> <code>(prod (B, C)))</code> or
 <code>prod (A, prod&lt;</code><code><em>matrix_type</em></code>
 <code>&gt; (B, C))</code>.</p>
-
-<h2>Contact Information</h2>
-
-<p>If you have a problem, or have found a bug, please send us a <a
-href="mailto:ublas@genesys-e.org">note</a> .</p>
 
 <hr>
 <p>Copyright (&copy;) 2000-2002 Joerg Walter, Mathias Koch<br>
