@@ -524,7 +524,7 @@ public:
       set_expression(first, last, f | regbase::use_except);
       return *this;
    }
-#if !defined(BOOST_NO_MEMBER_TEMPLATES) && !(defined(__IBMCPP__) && (__IBMCPP__ <= 500))
+#if !defined(BOOST_NO_MEMBER_TEMPLATES) && !(defined(__IBMCPP__) && (__IBMCPP__ <= 502))
 
    template <class ST, class SA>
    unsigned int BOOST_REGEX_CALL set_expression(const std::basic_string<charT, ST, SA>& p, flag_type f = regbase::normal)
