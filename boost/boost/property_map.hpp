@@ -22,6 +22,7 @@ namespace boost {
   struct property_traits {
     typedef typename PA::key_type key_type;
     typedef typename PA::value_type value_type; 
+    typedef typename PA::reference reference;
     typedef typename PA::category   category;
   };
 
