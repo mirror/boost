@@ -23,6 +23,7 @@
 #include <typeinfo> // for typeid, std::type_info
 
 #include "boost/variant/variant_fwd.hpp"
+#include "boost/variant/detail/forced_return.hpp"
 #include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/variant/detail/has_nothrow_move.hpp"
 #include "boost/variant/detail/move.hpp"
@@ -34,7 +35,6 @@
 #include "boost/mpl/aux_/value_wknd.hpp"
 
 #include "boost/aligned_storage.hpp"
-#include "boost/assert.hpp"
 #include "boost/compressed_pair.hpp"
 #include "boost/empty.hpp"
 #include "boost/incomplete_fwd.hpp"
@@ -602,45 +602,6 @@ inline const T& cast_storage(const void* storage, T* = 0)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) function template forced_return
-//
-// Should never be called at runtime, but (artificially) satisfies
-// compile-time requirement of returning a result value. (TODO: Determine the
-// most efficient way to handle this -- as below? by throwing? by recursive
-// call to forced_return itself? etc.)
-//
-
-#if !defined(BOOST_MSVC)
-
-namespace {
-
-template <typename T>
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T)
-forced_return()
-{
-    BOOST_ASSERT(false);
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T) (*dummy)() = 0;
-    return dummy();
-}
-
-}
-
-#else // defined(BOOST_MSVC)
-
-__declspec(noreturn) inline void forced_return_no_return() {};
-
-template <typename T>
-inline
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T)
-forced_return()
-{
-    BOOST_ASSERT(false);
-    forced_return_no_return();
-}
-
-#endif // BOOST_MSVC optimization
-
-///////////////////////////////////////////////////////////////////////////////
 // (detail) function template apply_visitor_impl
 //
 // Invokes the given visitor on the type in the given variant storage.
@@ -683,7 +644,7 @@ apply_visitor_impl(Visitor&, VoidPtrCV, unrolled*, long)
 {
     // should never be here at runtime:
     typedef typename Visitor::result_type result_type;
-    return forced_return< result_type >();
+    return ::boost::detail::variant::forced_return< result_type >();
 }
 
 template <
@@ -700,7 +661,7 @@ apply_visitor_impl(
 {
     // should never be here at runtime:
     typedef typename Visitor::result_type result_type;
-    return forced_return< result_type >();
+    return ::boost::detail::variant::forced_return< result_type >();
 }
 
 template <
