@@ -65,7 +65,7 @@
             </ul>
 
           <li>
-            Specialized Iterator Adaptors 
+            <a name="specialized_adaptors">Specialized Iterator Adaptors</a> 
 
             <ul>
               <li><a href="indirect_iterator.htm">Indirect Iterator Adaptor</a>
@@ -261,18 +261,21 @@ iterator_traits_generator::reference&lt;foo&gt;::category&lt;std::input_iterator
 </pre>
     </blockquote>
 
-    This generated type can then be passed into the
-    <tt>iterator_adaptor</tt> class to replace any of the last five
-    parameters. If you use the traits generator in the <i>i</i>th
-    parameter position, then the parameters <i>i</i> through 7 will
-    use the types specified in the generator.
+    This generated type can then be passed into the <tt>iterator_adaptor</tt>
+    class to replace any of the last five parameters. If you use the traits
+    generator in the <i>i</i>th parameter position, then the parameters <i>i</i>
+    through 7 will use the types specified in the generator. For example, the
+    following adapts <tt>foo_iterator</tt> to create an <a href=
+    "http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a> with
+    <tt>reference</tt> type <tt>foo</tt>, and whose other traits are determined
+    according to the defaults described <a href="#template_parameters">above</a>.
 
     <blockquote>
 <pre>
 iterator_adaptor&lt;foo_iterator, foo_policies,
     iterator_traits_generator
     ::reference&lt;foo&gt;
-    ::category&lt;std::input_iterator_tag&gt;
+    ::iterator_category&lt;std::input_iterator_tag&gt;
 &gt;
 </pre>
     </blockquote>
@@ -281,22 +284,22 @@ iterator_adaptor&lt;foo_iterator, foo_policies,
     <h3><a name="policies">The Policies Class</a></h3>
 
     <p>The main task in using <tt>iterator_adaptor</tt> is creating an
-    appropriate <tt>Policies</tt> class. The <tt>Policies</tt> class will
-    become the functional heart of the iterator adaptor, supplying the core
-    iterator operations that will determine how your new adaptor class will
-    behave. The <tt>iterator_adaptor</tt> template defines all of the operators
-    required of a <a href=
+    appropriate <tt>Policies</tt> class. The <tt>Policies</tt> class will become
+    the functional heart of the resulting iterator, supplying the core
+    operations that determine its behavior. The <tt>iterator_adaptor</tt>
+    template defines all of the operators required of a <a href=
     "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access
-    Iterator</a>. Your <tt>Policies</tt> class must implement three, four, or
-    seven of the core iterator operations below depending on the iterator
-    categories you want it to support.<br>
+    Iterator</a> by dispatching to a <tt>Policies</tt> object. Your
+    <tt>Policies</tt> class must implement a subset of the core iterator
+    operations below corresponding to the iterator categories you want it to
+    support.<br>
     <br>
     
 
     <table border="1" summary="iterator_adaptor Policies operations">
       <caption>
         <b>Core Iterator Operations</b><br>
-        <tt>T</tt>: iterator type; <tt>p</tt>: object of type T; <tt>n</tt>: <tt>T::size_type</tt>; <tt>x</tt>: <tt>T::difference_type</tt>; <tt>p1</tt>, <tt>p2</tt>: iterators
+        <tt>T</tt>: adapted iterator type; <tt>p</tt>: object of type T; <tt>n</tt>: <tt>T::size_type</tt>; <tt>x</tt>: <tt>T::difference_type</tt>; <tt>p1</tt>, <tt>p2</tt>: iterators
       </caption>
 
       <tr>
@@ -439,7 +442,8 @@ struct <a name="default_iterator_policies">default_iterator_policies</a>
     range of iterators. If we had used concrete types above, we'd have tied the
     usefulness of <tt>default_iterator_policies</tt> to a particular range of
     adapted iterators. If you follow the same pattern with your
-    <tt>Policies</tt> classes, you may achieve the same sort of reusability.
+    <tt>Policies</tt> classes, you can use them to generate more specialized
+    adaptors along the lines of <a href="#specialized_adaptors">those supplied by this library</a>.
 
     <h3><a name="additional_members">Additional Members</a></h3>
     In addition to all of the member functions required of a <a href=
