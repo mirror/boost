@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title></title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document">
+<div class="section" id="class-ptr-vector">
+<h1><a name="class-ptr-vector">Class <tt class="docutils literal"><span class="pre">ptr_vector</span></tt></a></h1>
+<p>A <tt class="docutils literal"><span class="pre">ptr_list&lt;T&gt;</span></tt> is a pointer container that uses an underlying <tt class="docutils literal"><span class="pre">std:list&lt;void*&gt;</span></tt>
+to store the pointers.</p>
+<p><strong>See also:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a></li>
+<li><a class="reference" href="ptr_sequence_adapter.html">ptr_sequence_adapter</a></li>
+</ul>
+<p><strong>Navigate:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="ptr_container.html">home</a></li>
+<li><a class="reference" href="reference.html">reference</a></li>
+</ul>
+<p><strong>Synopsis:</strong></p>
+<pre class="literal-block">
+namespace boost
+{      
+
+    template
+    &lt; 
+        class T, 
+        class CloneAllocator = heap_clone_allocator,
+        class Allocator      = std::allocator&lt;void*&gt;
+    &gt;
+    class ptr_list : public ptr_sequence_adapter
+                            &lt;
+                                T,
+                                std::list&lt;void*,Allocator&gt;,
+                                CloneAllocator
+                            &gt;
+    {
+    
+    public: // <a class="reference" href="#modifiers">modifiers</a>
+        void                push_front( T* x );
+        auto_type           pop_front();
+     
+    public: // <a class="reference" href="#list-operations">list operations</a>
+        void  merge( ptr_list&amp; x ); 
+        template&lt; typename Compare &gt; 
+        void  merge( ptr_list&amp; x, Compare comp );
+        
+        void  reverse();
+
+    }; // class 'ptr_list'
+
+} // namespace 'boost'  
+</pre>
+</div>
+<div class="section" id="semantics">
+<h1><a name="semantics">Semantics</a></h1>
+<a class="target" id="modifiers" name="modifiers"></a><div class="section" id="semantics-modifiers">
+<h2><a name="semantics-modifiers">Semantics: modifiers</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">push_front(</span> <span class="pre">T*</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">x</span> <span class="pre">!=</span> <span class="pre">0</span></tt></li>
+<li>Effects: Inserts the pointer into container and takes ownership of it</li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_pointer</span></tt> if <tt class="docutils literal"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">0</span></tt></li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<!-- - ``void push_front( const T& x );``
+
+    - Effects: push_front( allocate_clone( x ) );
+
+    - Exception safety: Strong guarantee -->
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">auto_type</span> <span class="pre">pop_front():</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements:<tt class="docutils literal"><span class="pre">not</span> <span class="pre">empty()</span></tt></li>
+<li>Effects: Removes the first element in the container</li>
+<li>Postconditions: <tt class="docutils literal"><span class="pre">size()</span></tt> is one less</li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_ptr_container_operation</span></tt> if <tt class="docutils literal"><span class="pre">empty()</span> <span class="pre">==</span> <span class="pre">true</span></tt></li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<a class="target" id="list-operations" name="list-operations"></a></div>
+<div class="section" id="semantics-list-operations">
+<h2><a name="semantics-list-operations">Semantics: list operations</a></h2>
+<!-- - ``void splice( iterator before, ptr_list& x );``
+
+    - Requirements:``&x != this``
+
+    - Effects: inserts the all of ``x``'s elements before ``before``
+
+    - Postconditions: ``x.empty()``
+    
+    - Throws: nothing
+
+    - Remark: prefer this to ``transfer( before, x );``
+
+- ``void  splice( iterator before, ptr_list& x, iterator i );``
+
+    - Not ready yet
+
+- ``void splice( iterator before, ptr_list& x, iterator first, iterator last );``
+
+    - Not ready yet -->
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">merge(</span> <span class="pre">ptr_list&amp;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Not ready yet</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">typename</span> <span class="pre">Compare</span> <span class="pre">&gt;</span> 
+<span class="pre">void</span> <span class="pre">merge(</span> <span class="pre">ptr_list&amp;</span> <span class="pre">x,</span> <span class="pre">Compare</span> <span class="pre">comp</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Not ready yet</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">reverse();</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: reverses the underlying sequence</li>
+<li>Throws: nothing</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

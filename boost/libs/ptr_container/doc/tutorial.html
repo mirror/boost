@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Tutorial</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="tutorial">
+<h1 class="title">Tutorial</h1>
+<p>The tutorial shows you the most simple usage of the
+library. It is assumed that the reader is familiar
+with the use of standard containers. Although
+the tutorial is devided into sections, it is recommended
+that you read it all from top to bottom.</p>
+<ul class="simple">
+<li><a class="reference" href="#basic-usage">Basic usage</a></li>
+<li><a class="reference" href="#indirected-interface">Indirected interface</a></li>
+<li><a class="reference" href="#sequence-containers">Sequence containers</a></li>
+<li><a class="reference" href="#associative-containers">Associative containers</a></li>
+<li><a class="reference" href="#null-values">Null values</a></li>
+<li><a class="reference" href="#clonability">Clonability</a></li>
+<li><a class="reference" href="#new-functions">New functions</a></li>
+</ul>
+<div class="section" id="basic-usage">
+<h1><a name="basic-usage">Basic usage</a></h1>
+<p>The most important aspect of a pointer container is that it manages
+memory for you. This means that you in most cases do not need to worry
+about deleting memory.</p>
+<p>Let us assume that we have an OO-hierarchy of animals</p>
+<pre class="literal-block">
+class animal : <a class="reference" href="http://www.boost.org/libs/utility/utility.htm#Class_noncopyable">boost::noncopyable</a>
+{
+public:
+    virtual ~animal() {}
+    void     eat();
+    // ...
+};
+
+class mammal : public animal
+{
+    // ...
+};
+
+class bird : public animal
+{
+    // ...
+};
+</pre>
+<p>Then the managing of the animals is straight-forward. Imagine a 
+Zoo:</p>
+<pre class="literal-block">
+class zoo
+{
+    boost::ptr_vector&lt;animal&gt; the_animals;
+public:
+
+    void add_animal( animal* a )
+    {
+        the_animals.push_back( a );
+    }
+};
+</pre>
+<p>Notice how just pass the class name to the container; there
+is no <tt class="docutils literal"><span class="pre">*</span></tt> to indicate it is a pointer.
+With this declaration we can now say:</p>
+<pre class="literal-block">
+zoo the_zoo;
+the_zoo.add_animal( new mammal(&quot;joe&quot;) );
+the_zoo.add_animal( new bird(&quot;dodo&quot;) );
+</pre>
+<p>Thus we heap-allocate all elements of the container
+and never rely on copy-semantics.</p>
+</div>
+<div class="section" id="indirected-interface">
+<h1><a name="indirected-interface">Indirected interface</a></h1>
+<p>As particular feature of the pointer containers is that
+the query interface is indirected. For example,</p>
+<pre class="literal-block">
+boost::ptr_vector&lt;animal&gt; vec;
+vec.push_back( new animal ); // you add it as pointer ...
+vec[0].eat();                // but get a reference back
+</pre>
+<p>This indirection also happens to iterators, so</p>
+<pre class="literal-block">
+typedef std::vector&lt;animal*&gt; std_vec;
+std_vec vec;
+...
+std_vec::iterator i = vec.begin();
+(*i)-&gt;eat(); // '*' needed
+</pre>
+<p>now becomes</p>
+<pre class="literal-block">
+typedef boost::ptr_vector&lt;animal&gt;  ptr_vec;
+ptr_vec vec;
+ptr_vec::iterator i = vec.begin();
+i-&gt;eat(); // no indirection needed
+</pre>
+</div>
+<div class="section" id="sequence-containers">
+<h1><a name="sequence-containers">Sequence containers</a></h1>
+<p>The sequence containers used when you do not need to
+keep an ordering on your elements. You can basically
+expect all operations of the normal standard containers
+to be available. So, for example, with a  <tt class="docutils literal"><span class="pre">ptr_deque</span></tt>
+and <tt class="docutils literal"><span class="pre">ptr_list</span></tt> object you can say:</p>
+<pre class="literal-block">
+boost::ptr_deque&lt;animal&gt; deq;
+deq.push_front( new animal );    
+deq.pop_front();
+</pre>
+<p>because <tt class="docutils literal"><span class="pre">std::deque</span></tt> and <tt class="docutils literal"><span class="pre">std::list</span></tt> has <tt class="docutils literal"><span class="pre">push_front()</span></tt>
+and <tt class="docutils literal"><span class="pre">pop_front</span></tt> members.</p>
+<p>If the standard sequence support
+random access, so does the pointer container; for example:</p>
+<pre class="literal-block">
+for( boost::ptr_deque&lt;animal&gt;::size_type i = 0u;
+     i != deq.size(); ++i )
+     deq[i].eat();
+</pre>
+<p>The <tt class="docutils literal"><span class="pre">`ptr_vector</span></tt> also allows you to specify the size of
+the buffer to allocate; for example</p>
+<pre class="literal-block">
+boost::ptr_vector&lt;animal&gt; animals( 10u );
+</pre>
+<p>will reserve room for 10 animals.</p>
+</div>
+<div class="section" id="associative-containers">
+<h1><a name="associative-containers">Associative containers</a></h1>
+<p>To keep an ordering on our animals, we could use a <tt class="docutils literal"><span class="pre">ptr_set</span></tt>:</p>
+<pre class="literal-block">
+boost::ptr_set&lt;animal&gt; set;
+set.insert( new monkey(&quot;bobo&quot;) );
+set.insert( new whale(&quot;anna&quot;) );
+...
+</pre>
+<p>This requires that <tt class="docutils literal"><span class="pre">operator&lt;()</span></tt> is defined for animals. One
+way to do this could be</p>
+<pre class="literal-block">
+inline bool operator&lt;( const animal&amp; l, const animal&amp; r )
+{
+    return l.name() &lt; r.name();
+}
+</pre>
+<p>if we wanted to keep the animals sorted by name.</p>
+<p>Maybe you want to keep all the animals in zoo ordered wrt.
+their name, but it so happens that many animals have the
+same name. We can then use a <tt class="docutils literal"><span class="pre">ptr_multimap</span></tt>:</p>
+<pre class="literal-block">
+typedef boost::ptr_multimap&lt;std::string,animal&gt; zoo_type;
+zoo_type zoo;
+std::string bobo = &quot;bobo&quot;,
+            anna = &quot;anna&quot;;
+zoo.insert( bobo, new monkey(bobo) );
+zoo.insert( bobo, new elephant(bobo) );
+zoo.insert( anna, new whale(anna) );
+zoo.insert( anna, new emu(anna) );
+</pre>
+<p>Note that must create the key as an lvalue 
+(due to exception-safety issues); the following would not 
+have compiled</p>
+<pre class="literal-block">
+zoo.insert( &quot;bobo&quot;, // this is bad, but you get compile error
+            new monkey(&quot;bobo&quot;) );
+</pre>
+<p>If a multimap is not needed, we can use <tt class="docutils literal"><span class="pre">operator[]()</span></tt>
+to avoid the clumsiness:</p>
+<pre class="literal-block">
+boost::ptr_map&lt;std::string,animal&gt; animals;
+animals[&quot;bobo&quot;].set_name(&quot;bobo&quot;);
+</pre>
+<p>This requires a default constructor for animals and
+a function to do the initialization, in this case <tt class="docutils literal"><span class="pre">set_name()</span></tt>;</p>
+</div>
+<div class="section" id="null-values">
+<h1><a name="null-values">Null values</a></h1>
+<p>By default, if you try to insert null into a container, an exception
+is thrown. If you want to allow nulls, then you must
+say so explicitly when declaring the container variable</p>
+<pre class="literal-block">
+boost::ptr_vector&lt; boost::nullable&lt;animal&gt; &gt; animals_type;
+animals_type animals;
+...
+animals.insert( animals.end(), new dodo(&quot;fido&quot;) );
+animals.insert( animals.begin(), 0 ) // ok
+</pre>
+<p>Once you have inserted a null into the container, you must
+always check if the value is null before accessing the object</p>
+<pre class="literal-block">
+for( animals_type::iterator i = animals.begin();
+     i != animals.end(); ++i )
+{
+    if( !boost::is_null(i) ) // always check for validity
+        i-&gt;eat();
+}
+</pre>
+<p>If the container support random access, you may also check this as</p>
+<pre class="literal-block">
+for( animals_type::size_type i = 0u; 
+     i != animals.size(); ++i )
+{
+    if( !animals.is_null(i) )
+         animals[i].eat();
+}
+</pre>
+<p>Note that it is meaningless to insert
+null into <tt class="docutils literal"><span class="pre">ptr_set</span></tt> and <tt class="docutils literal"><span class="pre">ptr_multiset</span></tt>.</p>
+</div>
+<div class="section" id="clonability">
+<h1><a name="clonability">Clonability</a></h1>
+<p>In OO programming it is typical to prohibit copying of objects; the 
+objects may sometimes be allowed to be clonable; for example,:</p>
+<pre class="literal-block">
+animal* animal::clone() const
+{
+    return do_clone(); // implemented by private virtual function
+}
+</pre>
+<p>If the OO hierarchy thus allows cloning, we need to tell the 
+pointer containers how cloning is to be done. This is simply
+done by defining a free-standing function, <tt class="docutils literal"><span class="pre">new_clone()</span></tt>, 
+in the same namespace as
+the object hierarchy:</p>
+<pre class="literal-block">
+inline animal* new_clone( const animal&amp; a )
+{
+    return a.clone();
+}
+</pre>
+<p>That is all, now a lot of functions in a pointer container
+can exploit the clonability of the animal objects. For example</p>
+<pre class="literal-block">
+typedef boost::ptr_list&lt;animal&gt; zoo_type;
+zoo_type zoo, another_zoo;
+...
+another_zoo.assign( zoo.begin(), zoo.end() );
+</pre>
+<p>will fill another zoo with clones of the first zoo. Similarly,
+insert() can now insert clones into your pointer container</p>
+<pre class="literal-block">
+another_zoo.insert( another_zoo.begin(), zoo.begin(), zoo.end() );
+</pre>
+<p>The whole container can now also be cloned</p>
+<pre class="literal-block">
+zoo_type yet_another_zoo = zoo.clone();
+</pre>
+</div>
+<div class="section" id="new-functions">
+<h1><a name="new-functions">New functions</a></h1>
+<p>Given that we know we are working with pointers, a few new functions
+make sense. For example, say you want to remove an
+animal from the zoo</p>
+<pre class="literal-block">
+zoo_type::auto_type the_animal = zoo.release( zoo.begin() );
+the_animal-&gt;eat();
+animal* the_animal_ptr = the_animal.release(); // now this is not deleted
+zoo.release(2); // for random access containers
+</pre>
+<p>You can think of <tt class="docutils literal"><span class="pre">auto_type</span></tt> as a non-copyable form of 
+<tt class="docutils literal"><span class="pre">std::auto_ptr</span></tt>. Notice that when you release an object, the
+pointer is removed from the container and the containers size
+shrinks. You can also release the entire container if you
+want to return it from a function</p>
+<pre class="literal-block">
+boost::ptr_deque&lt;animal&gt; get_zoo()
+{
+    boost::ptr_deque&lt;animal&gt;  result;
+    ...
+    return result.release(); // give up ownership
+}
+...
+boost::ptr_deque&lt;animal&gt; animals = get_zoo();    
+</pre>
+<p>Let us assume we want to move an animal object from
+one zoo to another. In other words, we want to move the 
+animal and the responsibility of it to another zoo</p>
+<pre class="literal-block">
+another_zoo.transfer( another_zoo.end(), // insert before end 
+                      zoo.begin(),       // insert this animal ...
+                      zoo );             // from this container
+</pre>
+<p>This kind of &quot;move-semantics&quot; is different from
+normal value-based containers. You can think of <tt class="docutils literal"><span class="pre">transfer()</span></tt>
+as the same as <tt class="docutils literal"><span class="pre">splice()</span></tt> on <tt class="docutils literal"><span class="pre">std::list</span></tt>.</p>
+<p>If you want to replace an element, you can easily do so</p>
+<pre class="literal-block">
+zoo_type::auto_type old_animal = zoo.replace( zoo.begin(), new monkey(&quot;bibi&quot;) ); 
+zoo.replace( 2, old_animal.release() ); // for random access containers
+</pre>
+<p>A map is a little different to iterator over than normal standard maps.
+Now we say</p>
+<pre class="literal-block">
+typedef boost::ptr_map&lt;std::String, boost::nullable&lt;animal&gt; &gt; animal_map;
+animal_map map;
+...
+for( animal_map::iterator i = map.begin();
+     i != map.end(); ++i )
+{
+    std::cout &lt;&lt; &quot;\n key: &quot; &lt;&lt; i.key();
+    std::cout &lt;&lt; &quot;\n age: &quot;;
+    
+    if( boost::is_null(i) )
+        std::cout &lt;&lt; &quot;unknown&quot;;
+    else
+        std::cout &lt;&lt; i-&gt;age(); 
+ }
+</pre>
+<p>Maps can also be indexed with bounds-checking</p>
+<pre class="literal-block">
+try
+{
+    animal&amp; bobo = map.at(&quot;bobo&quot;);
+}
+catch( boost::bad_ptr_container_operation&amp; e )
+{
+    // &quot;bobo&quot; not found
+}        
+</pre>
+<p>That is all; now you have learned all the basics!</p>
+<p><strong>Navigate</strong></p>
+<blockquote>
+<ul class="simple">
+<li><a class="reference" href="ptr_container.html">home</a></li>
+<li><a class="reference" href="examples.html">examples</a></li>
+</ul>
+</blockquote>
+</div>
+</div>
+</body>
+</html>

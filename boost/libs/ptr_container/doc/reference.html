@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Reference</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="reference">
+<h1 class="title">Reference</h1>
+<p>The documentation is divided into a an explanation for 
+each container. All the common interface is explained only once,
+but links are always provided to the relevant links.
+Please make sure you understand 
+the <a class="reference" href="reference.html#the-clonable-concept">Clonable</a> concept and 
+the <a class="reference" href="reference.html#the-clone-allocator-concept">Clone Allocator</a> concept.</p>
+<ul class="simple">
+<li><a class="reference" href="conventions.html">Conventions</a></li>
+<li><a class="reference" href="#the-clonable-concept">The Clonable concept</a></li>
+<li><a class="reference" href="#the-clone-allocator-concept">The Clone Allocator concept</a></li>
+<li>Class <a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a></li>
+<li>Class <a class="reference" href="associative_ptr_container.html">associative_ptr_container</a></li>
+<li><a class="reference" href="#pointer-container-adapters">Pointer container adapters</a><ul>
+<li><a class="reference" href="ptr_sequence_adapter.html">ptr_sequence_adapter</a></li>
+<li><a class="reference" href="ptr_set_adapter.html">ptr_set_adapter</a></li>
+<li><a class="reference" href="ptr_multiset_adapter.html">ptr_multiset_adapter</a></li>
+<li><a class="reference" href="ptr_map_adapter.html">ptr_map_adapter</a></li>
+<li><a class="reference" href="ptr_multimap_adapter.html">ptr_multimap_adapter</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#sequence-containers">Sequence containers</a><ul>
+<li><a class="reference" href="ptr_vector.html">ptr_vector</a></li>
+<li><a class="reference" href="ptr_deque.html">ptr_deque</a></li>
+<li><a class="reference" href="ptr_list.html">ptr_list</a></li>
+<li><a class="reference" href="ptr_array.html">ptr_array</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#associative-containers">Associative containers</a><ul>
+<li><a class="reference" href="ptr_set.html">ptr_set</a></li>
+<li><a class="reference" href="ptr_multiset.html">ptr_multiset</a></li>
+<li><a class="reference" href="ptr_map.html">ptr_map</a></li>
+<li><a class="reference" href="ptr_multimap.html">ptr_multimap</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#map-iterator-operations">Map iterator operations</a></li>
+<li><a class="reference" href="indirect_fun.html">Indirected functions</a></li>
+<li><a class="reference" href="#class-nullable">Class nullable</a></li>
+<li><a class="reference" href="#exception-classes">Exception classes</a></li>
+</ul>
+<div class="section" id="the-clonable-concept">
+<h1><a name="the-clonable-concept">The Clonable concept</a></h1>
+<p><strong>Refinement of</strong></p>
+<ul class="simple">
+<li>Copy Constructible</li>
+<li>Heap Allocable</li>
+<li>Heap Deallocable</li>
+</ul>
+<p>The Clonable concept is introduced to formalize the requirements for 
+copying heap-allocated objects.  A type <tt class="docutils literal"><span class="pre">T</span></tt> might be Clonable even though it 
+is not Assignable or Copy Constructible.  Notice that many operations on 
+the containers does not even require the stored type to be Clonable.</p>
+<p><strong>Notation</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="41%" />
+<col width="18%" />
+<col width="20%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><strong>Type</strong></td>
+<td><strong>Object</strong> (<tt class="docutils literal"><span class="pre">const</span></tt> or non-<tt class="docutils literal"><span class="pre">const</span></tt>)</td>
+<td><strong>Pointer</strong></td>
+<td><strong>Describes</strong></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">T</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">a</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">ptr</span></tt></td>
+<td>A Clonable type</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Valid expressions</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="18%" />
+<col width="58%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><strong>Expression</strong></td>
+<td><strong>Type</strong></td>
+<td><strong>Semantics</strong></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">new_clone(a);</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">T*</span></tt></td>
+<td>Allocate a new object that can be considered equivalent to the <tt class="docutils literal"><span class="pre">a</span></tt> object</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">delete_clone(ptr);</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">void</span></tt></td>
+<td>Deallocate an object previously allocated with <tt class="docutils literal"><span class="pre">allocate_clone()</span></tt>. Must not throw</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="default-implementation">
+<h2><a name="default-implementation">Default implementation</a></h2>
+<p>In the <tt class="docutils literal"><span class="pre">&lt;boost/ptr_container/heap_manager.hpp&gt;</span></tt> header a default implementation
+of the two functions is given:</p>
+<pre class="literal-block">
+namespace boost
+{
+    template&lt; class T &gt;
+    inline T* new_clone( const T&amp; t )
+    {
+        return new T( t );
+    }
+
+    template&lt; class T &gt;
+    void delete_clone( const T* t )
+    {
+        checked_delete( r );
+    }
+}
+</pre>
+<p>Notice that this implementation  makes normal Copy Constructible classes are automatically 
+Clonable unless <tt class="docutils literal"><span class="pre">operator</span> <span class="pre">new()</span></tt> or <tt class="docutils literal"><span class="pre">operator</span> <span class="pre">delete()</span></tt> are hidden.</p>
+<p>The two functions represent a layer of indirection which is necessary to support 
+classes that are not Copy Constructible by default.  Notice that the implementation 
+relies on argument-dependent lookup (ADL) to find the right version of 
+<tt class="docutils literal"><span class="pre">new_clone()</span></tt> and <tt class="docutils literal"><span class="pre">delete_clone()</span></tt>. This means that one does not need to overload or specialize 
+the function is the boost namespace, but it can be placed together with 
+the rest of the interface of the class.  If you are implementing a class 
+inline in headers, remember to forward declare the functions.</p>
+</div>
+</div>
+<div class="section" id="the-clone-allocator-concept">
+<h1><a name="the-clone-allocator-concept">The Clone Allocator concept</a></h1>
+<p>The Clone Allocator concept is introduced to formalize the way
+pointer containers controls memory of
+the stored objects (and not the pointers to the stored objects).
+The clone allocator allows
+users to apply custom allocators/deallocators for the cloned objects.</p>
+<p>More information can be found below:</p>
+<div class="contents topic" id="contents">
+<ul class="simple">
+<li><a class="reference" href="#clone-allocator-requirements" id="id14" name="id14">Clone Allocator requirements</a></li>
+<li><a class="reference" href="#class-heap-clone-allocator" id="id15" name="id15">Class <tt class="docutils literal"><span class="pre">heap_clone_allocator</span></tt></a></li>
+<li><a class="reference" href="#class-view-clone-allocator" id="id16" name="id16">Class <tt class="docutils literal"><span class="pre">view_clone_allocator</span></tt></a></li>
+</ul>
+</div>
+<div class="section" id="clone-allocator-requirements">
+<h2><a class="toc-backref" href="#id14" name="clone-allocator-requirements">Clone Allocator requirements</a></h2>
+<p><strong>Notation</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="39%" />
+<col width="43%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><strong>Type</strong></td>
+<td><strong>Object</strong> (<tt class="docutils literal"><span class="pre">const</span></tt> or non-<tt class="docutils literal"><span class="pre">const</span></tt>)</td>
+<td><strong>Describes</strong></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">T</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">a</span></tt></td>
+<td>A type</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">T*</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">ptr</span></tt></td>
+<td>A pointer to <tt class="docutils literal"><span class="pre">T</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Valid expressions</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="6%" />
+<col width="69%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><strong>Expression</strong></td>
+<td><strong>Type</strong></td>
+<td><strong>Semantics</strong></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">CloneAllocator::allocate_clone(a);</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">T*</span></tt></td>
+<td>Allocate a new object that can be considered equivalent to the <tt class="docutils literal"><span class="pre">a</span></tt> object</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">CloneAllocator::deallocate_clone(ptr);</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">void</span></tt></td>
+<td>Deallocate an object previously allocated with <tt class="docutils literal"><span class="pre">CloneAllocator::allocate_clone()</span></tt> or a compatible allocator. Must not throw.</td>
+</tr>
+</tbody>
+</table>
+<p>The library comes with two predefined clone allocators.</p>
+</div>
+<div class="section" id="class-heap-clone-allocator">
+<h2><a class="toc-backref" href="#id15" name="class-heap-clone-allocator">Class <tt class="docutils literal"><span class="pre">heap_clone_allocator</span></tt></a></h2>
+<p>This is the default clone allocator used by all pointer containers. For most
+purposes you will never have to change this default.</p>
+<p><strong>Definition</strong></p>
+<pre class="literal-block">
+namespace boost
+{        
+    struct heap_clone_allocator
+    {
+        template&lt; class U &gt;
+        static U* allocate_clone( const U&amp; r )
+        {
+            return new_clone( r );
+        }
+
+        template&lt; class U &gt;
+        static void deallocate_clone( const U* r ) const
+        {
+            delete_clone( r );
+        }
+    };
+}
+</pre>
+<p>Notice that the above definition allows you to support custom allocation
+schemes by relying on <tt class="docutils literal"><span class="pre">new_clone()</span></tt> and <tt class="docutils literal"><span class="pre">delete_clone()</span></tt>.</p>
+</div>
+<div class="section" id="class-view-clone-allocator">
+<h2><a class="toc-backref" href="#id16" name="class-view-clone-allocator">Class <tt class="docutils literal"><span class="pre">view_clone_allocator</span></tt></a></h2>
+<p>This class provides a way to remove ownership properties of the
+pointer containers. As its name implies, this means that you can
+instead use the pointer containers as a view into an existing
+container.</p>
+<p><strong>Definition</strong></p>
+<pre class="literal-block">
+namespace boost
+{
+    struct view_clone_allocator
+    {
+        template&lt; class U &gt;
+        static U* allocate_clone( const U&amp; r )
+        {
+            return const_cast&lt;U*&gt;(&amp;r);
+        }
+
+        template&lt; class U &gt;
+        static void deallocate_clone( const U* )
+        {
+            // empty
+        }
+    };
+}
+</pre>
+<p><strong>See also</strong></p>
+<ul class="simple">
+<li><a class="reference" href="examples.html#changing-the-clone-allocator">Changing the clone allocator</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="pointer-container-adapters">
+<h1><a name="pointer-container-adapters">Pointer container adapters</a></h1>
+<p>The pointer container adapters are used when you
+want to make a pointer container starting from
+your own &quot;normal&quot; container. For example, you
+might have a map class that is extends <tt class="docutils literal"><span class="pre">std::map</span></tt>
+in some way; the adapter class then allows you
+to use your map class as a basis for a new
+pointer container.</p>
+<p>The library provides an adapter for each type
+of standard container:</p>
+<ul class="simple">
+<li><a class="reference" href="ptr_sequence_adapter.html">ptr_sequence_adapter</a></li>
+<li><a class="reference" href="ptr_set_adapter.html">ptr_set_adapter</a></li>
+<li><a class="reference" href="ptr_multiset_adapter.html">ptr_multiset_adapter</a></li>
+<li><a class="reference" href="ptr_map_adapter.html">ptr_map_adapter</a></li>
+<li><a class="reference" href="ptr_multimap_adapter.html">ptr_multimap_adapter</a></li>
+</ul>
+</div>
+<div class="section" id="pointer-containers">
+<h1><a name="pointer-containers">Pointer containers</a></h1>
+<p>The pointer containers of this library are all built using
+the <a class="reference" href="#pointer-container-adapters">pointer container adapters</a>. There is a pointer container
+for each type of &quot;normal&quot; standard container:</p>
+<div class="section" id="sequence-containers">
+<h2><a name="sequence-containers">Sequence containers</a></h2>
+<blockquote>
+<ul class="simple">
+<li><a class="reference" href="ptr_vector.html">ptr_vector</a></li>
+<li><a class="reference" href="ptr_deque.html">ptr_deque</a></li>
+<li><a class="reference" href="ptr_list.html">ptr_list</a></li>
+<li><a class="reference" href="ptr_array.html">ptr_array</a></li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="associative-containers">
+<h2><a name="associative-containers">Associative containers</a></h2>
+<blockquote>
+<ul class="simple">
+<li><a class="reference" href="ptr_set.html">ptr_set</a></li>
+<li><a class="reference" href="ptr_multiset.html">ptr_multiset</a></li>
+<li><a class="reference" href="ptr_map.html">ptr_map</a></li>
+<li><a class="reference" href="ptr_multimap.html">ptr_multimap</a></li>
+</ul>
+</blockquote>
+</div>
+</div>
+<div class="section" id="map-iterator-operations">
+<h1><a name="map-iterator-operations">Map iterator operations</a></h1>
+<p>The map iterators are a bit different compared to the normal ones.  The 
+reason is that it is a bit clumsy to access the key and the mapped object 
+through i-&gt;first and i-&gt;second, and one tends to forget what is what. 
+Moreover, and more importantly, we also want to hide the pointer as much as possibble.
+The new style can be illustrated with a small example:</p>
+<pre class="literal-block">
+typedef ptr_map&lt;string,int&gt; map_t;
+map_t  m;
+m[ &quot;foo&quot; ] = 4; // insert pair
+m[ &quot;bar&quot; ] = 5; // ditto
+...
+for( map_t::iterator i = m.begin(); i != m.end(); ++i )
+{
+         *i += 42; // add 42 to each value
+         cout &lt;&lt; &quot;value=&quot; &lt;&lt; *i &lt;&lt; &quot;, key=&quot; &lt;&lt; i.key() &lt;&lt; &quot;n&quot;;
+} 
+</pre>
+<p>So the difference from the normal map iterator is that</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">operator*()</span></tt> returns a reference to the mapped object (normally it returns a reference to a <tt class="docutils literal"><span class="pre">std::pair</span></tt>, and</li>
+<li>that the key can be accessed through the <tt class="docutils literal"><span class="pre">key()</span></tt> function.</li>
+</ul>
+</div>
+<div class="section" id="class-nullable">
+<h1><a name="class-nullable">Class <tt class="docutils literal"><span class="pre">nullable</span></tt></a></h1>
+<p>The purpose of the class is simply to tell the containers
+that null values should be allowed. Its definition is
+trivial:</p>
+<pre class="literal-block">
+namespace boost
+{
+    template&lt; class T &gt;
+    struct nullable
+    {
+        typedef T type;
+    };  
+}
+</pre>
+<p>Please notice that <tt class="docutils literal"><span class="pre">nullable</span></tt> has no effect on the containers
+interface (except for <tt class="docutils literal"><span class="pre">is_null()</span></tt> functions). For example, it
+does not make sense to do</p>
+<pre class="literal-block">
+boost::ptr_vector&lt; boost::nullable&lt;T&gt; &gt; vec;
+vec.push_back( new boost::nullable&lt;T&gt; ); // no no
+boost::nullable&lt;T&gt;&amp; ref = vec[0];        // also no no
+</pre>
+</div>
+<div class="section" id="exception-classes">
+<h1><a name="exception-classes">Exception classes</a></h1>
+<p>There are three exceptions that are thrown by this library.  The exception 
+hierarchy looks as follows:</p>
+<pre class="literal-block">
+namespace boost
+{
+    class bad_ptr_container_operation : public std::exception
+    {
+    public:
+        bad_ptr_container_operation( const char* what );
+    };
+    
+    class bad_index : public bad_ptr_container_operation
+    {
+    public:
+        bad_index( const char* what );
+    };
+
+    class bad_pointer : public bad_ptr_container_operation
+    {
+    public:
+        bad_pointer();
+        bad_pointer( const char* what );
+    };
+}
+</pre>
+<ul class="simple">
+<li><a class="reference" href="ptr_container.html">home</a></li>
+</ul>
+</div>
+</div>
+</body>
+</html>

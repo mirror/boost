@@ -1,0 +1,71 @@
+Hi,
+
+3. improve docs as discussed during the review
+
+5. add more debug checks after access to ptr_begin(), ptr_end()
+
+7. improve tests
+
+8. test for replace and 0. All functions that can take a null
+   might need to handle it??
+
+-------------------
+
+10) Specify difference between assignment from an input_iterator (basic exception safety guarantee)
+    and any other iterator (strong exception safety guarantee). Provide a iterator wrapper
+    which implement the input_iterator concept to achieve that particular performance characteristic:
+    vector.assign( fast_copy_iterator( other.begin() ), other.end() );
+
+20) Add two sources and a discussion on defaults: http://www.gotw.ca/gotw/054.htm, http://www.codeproject.com/vcpp/stl/vector_vs_deque.asp
+
+45) update all functions with correct exception specs
+
+46) add description to erase() which returns end in some circumstances
+
+47) Consider if list implemetation of multi-insert can benefit
+    from strong exception-safety.
+    
+48) should the clone_allocator be changed to
+
+    struct shared_ptr_allocator
+    {
+        typedef shared_ptr<T> ptr_type;
+        
+        ptr_type allocate_clone( const T& r )
+        {
+            return ptr_type( new_clone(r) );
+        }
+        
+        void deallocate_clone( const ptr_type& )
+        { }
+        
+        template< class Iter >
+        ptr_type get_ptr_from_iterator( Iter i )
+        {
+            // default reurn &*i;
+            return *i;
+        }
+   };
+   
+    shared_ptr<Foo> new_clone( const Foo& r )
+    { ... }; // bad for generality 
+
+74) consider simple static assert by nesting a typedef a la
+T::boost_indirect_container
+
+75) toturial:
+
+ptr_map:
+
+add default constructor
+
+map[ "foo" ].set_data( "Bla bla", 6 );
+
+boost.assign -support:
+
+ptr_insert( ptr_map )( "foo", "bla bla", 3 )
+                     ( "bar", "foo", 3 );
+                     
+        
+
+

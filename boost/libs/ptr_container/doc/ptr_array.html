@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title></title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document">
+<div class="section" id="class-ptr-array">
+<h1><a name="class-ptr-array">Class <tt class="docutils literal"><span class="pre">ptr_array</span></tt></a></h1>
+<p>A <tt class="docutils literal"><span class="pre">ptr_array&lt;T,size&gt;</span></tt> is a pointer container that uses an underlying <tt class="docutils literal"><span class="pre">boost::array&lt;void*,size&gt;</span></tt>
+to store the pointers. The class is useful when there is no requirement
+of dynamic expansion and when absolute no overhead is tolerable.</p>
+<p><strong>See also:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a></li>
+<li><a class="reference" href="ptr_sequence_adapter.html">ptr_sequence_adapter</a></li>
+<li><a class="reference" href="ptr_vector.html">ptr_vector</a></li>
+</ul>
+<p><strong>Navigate:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="ptr_container.html">home</a></li>
+<li><a class="reference" href="reference.html">reference</a></li>
+</ul>
+<p><strong>Synopsis:</strong></p>
+<pre class="literal-block">
+namespace boost
+{      
+
+    template
+    &lt; 
+        class T, 
+        size_t N, 
+        CloneAllocator = heap_clone_allocator
+    &gt;
+    class ptr_array : public <em>implementation-defined</em>
+    {
+    public: // <a class="reference" href="#construct-copy-destroy">construct/copy/destroy</a>
+        ptr_array();
+        ptr_array( std::auto_ptr&lt;ptr_array&gt;&amp; r );
+
+    public: // <a class="reference" href="reversible_ptr_container.html#iterators">iterators</a>
+
+    public: // <a class="reference" href="reversible_ptr_container.html#capacity">capacity</a>
+
+    public: // <a class="reference" href="#element-access">element access</a>
+        T&amp;        front();
+        const T&amp;  front() const;
+        T&amp;        back();
+        const T&amp;  back() const;
+        
+        template&lt; size_t idx &gt;
+        T&amp;        at();
+        template&lt; size_t idx &gt;
+        const T&amp;  at() const;
+        T&amp;        at( size_t );
+        const T&amp;  at( size_t );
+
+        T&amp;        operator[]( size_t );
+        const T&amp;  operator[]( size_t ) const;
+
+    public: // <a class="reference" href="#modifiers">modifiers</a>
+        void  swap( ptr_array&amp; r );
+
+        template&lt; size_t idx &gt;
+        auto_type replace( T* r );
+        auto_type replace( size_t idx, T* r );
+
+    public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
+        std::auto_ptr&lt;ptr_array&gt;  clone() const;    
+        std::auto_ptr&lt;ptr_array&gt;  release();
+        template&lt; size_t idx &gt;
+        bool                      is_null() const;
+        bool                      is_null( size_t idx ) const;
+     
+    }; //  class 'ptr_sequence_adapter'
+
+} // namespace 'boost'  
+</pre>
+</div>
+<div class="section" id="semantics">
+<h1><a name="semantics">Semantics</a></h1>
+<a class="target" id="construct-copy-destroy" name="construct-copy-destroy"></a><div class="section" id="semantics-construct-copy-destroy">
+<h2><a name="semantics-construct-copy-destroy">Semantics: construct/copy/destroy</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_array();</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: construct array where each element is null</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_array(</span> <span class="pre">std::auto_ptr&lt;ptr_array&gt;&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: take ownership of the supplied pointers</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<a class="target" id="element-access" name="element-access"></a></div>
+<div class="section" id="semantics-element-access">
+<h2><a name="semantics-element-access">Semantics: element access</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">T&amp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">front();</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">const</span> <span class="pre">T&amp;</span> <span class="pre">front()</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">empty();</span></tt></li>
+<li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">*begin();</span></tt></li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_ptr_container_operation</span></tt> if <tt class="docutils literal"><span class="pre">empty()</span> <span class="pre">==</span> <span class="pre">true</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">T&amp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">back();</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">const</span> <span class="pre">T&amp;</span> <span class="pre">back()</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">empty();</span></tt></li>
+<li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">*--end();</span></tt></li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_ptr_container_operation</span></tt> if <tt class="docutils literal"><span class="pre">empty()</span> <span class="pre">==</span> <span class="pre">true</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">size_t</span> <span class="pre">idx</span> <span class="pre">&gt;</span> <span class="pre">T&amp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">at(</span> <span class="pre">size_type</span> <span class="pre">n</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">size_t</span> <span class="pre">idx</span> <span class="pre">&gt;</span> <span class="pre">const</span> <span class="pre">T&amp;</span> <span class="pre">at(</span> <span class="pre">size_type</span> <span class="pre">n</span> <span class="pre">)</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">idx</span> <span class="pre">&lt;</span> <span class="pre">size()</span></tt> (compile-time enforced)</li>
+<li>Effects: Returns a reference to the <tt class="docutils literal"><span class="pre">n</span></tt>'th element</li>
+<li>Throws: nothing</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">T&amp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">at(</span> <span class="pre">size_type</span> <span class="pre">n</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">const</span> <span class="pre">T&amp;</span> <span class="pre">at(</span> <span class="pre">size_type</span> <span class="pre">n</span> <span class="pre">)</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">n</span> <span class="pre">&lt;</span> <span class="pre">size()</span></tt></li>
+<li>Effects: Returns a reference to the <tt class="docutils literal"><span class="pre">n</span></tt>'th element</li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_index</span></tt> if <tt class="docutils literal"><span class="pre">n</span> <span class="pre">&gt;=size()</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">T&amp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">operator[](</span> <span class="pre">size_type</span> <span class="pre">n</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">const</span> <span class="pre">T&amp;</span> <span class="pre">operator[](</span> <span class="pre">size_type</span> <span class="pre">n</span> <span class="pre">)</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">n</span> <span class="pre">&lt;</span> <span class="pre">size()</span></tt></li>
+<li>Effects: Returns a reference to the <tt class="docutils literal"><span class="pre">n</span></tt>'th element</li>
+<li>Throws: Nothing</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<a class="target" id="modifiers" name="modifiers"></a></div>
+<div class="section" id="semantics-modifiers">
+<h2><a name="semantics-modifiers">Semantics: modifiers</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">swap(</span> <span class="pre">ptr_array&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: swaps the two arrays</li>
+<li>Complexity: Linear</li>
+<li>Throws: nothing</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">size_t</span> <span class="pre">idx</span> <span class="pre">&gt;</span> <span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">T*</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul>
+<li><p class="first">Requirements:</p>
+<blockquote>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">idx</span> <span class="pre">&lt;</span> <span class="pre">size()</span></tt> (compile-time enforced)</li>
+<li><tt class="docutils literal"><span class="pre">r</span> <span class="pre">!=</span> <span class="pre">0</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first">Effects: returns the object indexed by <tt class="docutils literal"><span class="pre">idx</span></tt> and replaces it with <tt class="docutils literal"><span class="pre">r</span></tt>.</p>
+</li>
+<li><p class="first">Throws: <tt class="docutils literal"><span class="pre">bad_pointer</span></tt> if <tt class="docutils literal"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">0</span></tt>.</p>
+</li>
+<li><p class="first">Exception safety: Strong guarantee</p>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">size_t</span> <span class="pre">idx,</span> <span class="pre">T*</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: `` x != 0 and idx &lt; size()``</li>
+<li>Effects: returns the object indexed by <tt class="docutils literal"><span class="pre">idx</span></tt> and replaces it with <tt class="docutils literal"><span class="pre">x</span></tt>.</li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_index</span></tt> if <tt class="docutils literal"><span class="pre">idx</span> <span class="pre">&gt;=</span> <span class="pre">size()</span></tt> and <tt class="docutils literal"><span class="pre">bad_pointer</span></tt> if <tt class="docutils literal"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">0</span></tt>.</li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<a class="target" id="pointer-container-requirements" name="pointer-container-requirements"></a></div>
+<div class="section" id="semantics-pointer-container-requirements">
+<h2><a name="semantics-pointer-container-requirements">Semantics: pointer container requirements</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">std::auto_ptr&lt;ptr_array&gt;</span>&nbsp; <span class="pre">clone()</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Returns a deep copy of the container</li>
+<li>Throws: <tt class="docutils literal"><span class="pre">std::bad_alloc</span></tt> if there is not enough memory to make a clone of the container</li>
+<li>Complexity: Linear</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">std::auto_ptr&lt;ptr_array&gt;</span>&nbsp; <span class="pre">release();</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Releases ownership of the container. This is a useful way of returning a container from a function.</li>
+<li>Postconditions: <tt class="docutils literal"><span class="pre">empty()</span> <span class="pre">==</span> <span class="pre">true</span></tt> and all pointers are null</li>
+<li>Throws: <tt class="docutils literal"><span class="pre">std::bad_alloc</span></tt> if the return value cannot be allocated</li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">size_t</span> <span class="pre">idx</span> <span class="pre">&gt;</span> <span class="pre">bool</span> <span class="pre">is_null()</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">idx</span> <span class="pre">&lt;</span> <span class="pre">size()</span></tt> (compile-time enforced)</li>
+<li>Effects: returns whether the pointer at index <tt class="docutils literal"><span class="pre">idx</span></tt> is null</li>
+<li>Exception safety: Nothrow guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">bool</span> <span class="pre">is_null(</span> <span class="pre">size_type</span> <span class="pre">idx</span> <span class="pre">)</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">idx</span> <span class="pre">&lt;</span> <span class="pre">size()</span></tt></li>
+<li>Effects: returns whether the pointer at index <tt class="docutils literal"><span class="pre">idx</span></tt> is null</li>
+<li>Exception safety: Nothrow guarantee</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

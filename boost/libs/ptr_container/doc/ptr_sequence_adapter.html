@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title></title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document">
+<div class="section" id="class-ptr-sequence-adapter">
+<h1><a name="class-ptr-sequence-adapter">Class <tt class="docutils literal"><span class="pre">ptr_sequence_adapter</span></tt></a></h1>
+<p>This section describes all the common operations for all the pointer
+sequences:</p>
+<ul class="simple">
+<li><a class="reference" href="ptr_vector.html">ptr_vector</a>,</li>
+<li><a class="reference" href="ptr_list.html">ptr_list</a>,</li>
+<li><a class="reference" href="ptr_deque.html">ptr_deque</a>,</li>
+</ul>
+<p>The <tt class="docutils literal"><span class="pre">ptr_sequence_adapter</span></tt> is also a concrete class that you can use to create custom pointer
+containers from.</p>
+<p><strong>See also:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a></li>
+</ul>
+<p><strong>Navigate:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="ptr_container.html">home</a></li>
+<li><a class="reference" href="reference.html">reference</a></li>
+</ul>
+<p><strong>Synopsis:</strong></p>
+<pre class="literal-block">
+namespace boost
+{      
+
+    template
+    &lt; 
+        class T, 
+        class VoidPtrSeq,
+        class CloneAllocator = heap_clone_allocator
+    &gt;
+    class ptr_sequence_adapter 
+    {
+    public: // <a class="reference" href="#construct-copy-destroy">construct/copy/destroy</a>
+        template&lt; class InputIterator &gt;
+        assign( InputIterator first, InputIterator last );
+        template&lt; class InputRange &gt;
+        assign( const InputRange&amp; e );
+    
+    public: // <a class="reference" href="#element-access">element access</a>
+        T&amp;        front();
+        const T&amp;  front() const;
+        T&amp;        back();
+        const T&amp;  back() const;
+    
+    public: // <a class="reference" href="#modifiers">modifiers</a>
+        void      push_back( T* x );
+        auto_type pop_back();
+        iterator  insert( iterator position, T* x );
+        template&lt; class InputIterator &gt;
+        void      insert( iterator position, InputIterator first, InputIterator last ); 
+        template&lt; class InputRange &gt;
+        void      insert( iterator position, const InputRange&amp; r );
+        iterator  erase( iterator position );
+        iterator  erase( iterator first, iterator last );
+        template&lt; class Range &gt;
+        iterator  erase( const Range&amp; r );
+    
+    public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
+
+        void  transfer( iterator before, iterator object, 
+                        ptr_sequence_adapter&amp; from );
+        void  transfer( iterator before, iterator first, iterator last,
+                        ptr_sequence_adapter&amp; from );
+        void template&lt; class Range&gt; 
+        void transfer( iterator before, const Range&amp; r, ptr_sequence_adapter&amp; from );
+        void transfer( iterator before, ptr_sequence_adapter&amp; from );
+
+     public: // <a class="reference" href="ptr_list.html">ptr_list interface</a>
+     
+     public: // <a class="reference" href="ptr_vector.html">ptr_vector interface</a>
+
+     public: // <a class="reference" href="ptr_deque.html">ptr_deque interface</a> 
+     
+    }; //  class 'ptr_sequence_adapter'
+
+} // namespace 'boost'  
+</pre>
+</div>
+<div class="section" id="semantics">
+<h1><a name="semantics">Semantics</a></h1>
+<a class="target" id="construct-copy-destroy" name="construct-copy-destroy"></a><div class="section" id="semantics-construct-copy-destroy">
+<h2><a name="semantics-construct-copy-destroy">Semantics: construct/copy/destroy</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">InputIterator</span> <span class="pre">&gt;</span>
+<span class="pre">void</span> <span class="pre">assign(</span> <span class="pre">InputIterator</span> <span class="pre">first,</span> <span class="pre">InputIterator</span> <span class="pre">last</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">(first,last]</span></tt> is a valid range</li>
+<li>Effects: <tt class="docutils literal"><span class="pre">clear();</span> <span class="pre">insert(</span> <span class="pre">first,</span> <span class="pre">last</span> <span class="pre">);</span></tt></li>
+<li>Postconditions: <tt class="docutils literal"><span class="pre">size()</span> <span class="pre">==</span> <span class="pre">std::distance(</span> <span class="pre">first,</span> <span class="pre">last</span> <span class="pre">);</span></tt></li>
+<li>Exception safety: strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">InputRange</span> <span class="pre">&gt;</span>
+<span class="pre">void</span> <span class="pre">assign(</span> <span class="pre">const</span> <span class="pre">InputRange&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: <tt class="docutils literal"><span class="pre">assign(</span> <span class="pre">boost::begin(r),</span> <span class="pre">boost::end(r)</span> <span class="pre">);</span></tt></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<!-- - ``assign( size_type n, const T& u )``
+
+- Effects: ``clear(); insert( begin(), n, u );``
+
+- Postconditions: ``size() == n``
+
+- Exception safety: Strong guarantee -->
+<!-- void resize( size_type sz, const T& x );
+Effects: 
+
+if ( sz > size() )
+    insert( end(), sz-size(), x );
+    else if ( sz < size() )
+    erase( begin()+sz, end() );
+    else
+    ; //do nothing 
+
+Postconditions: size() == sz
+
+Exception safety: Strong guarantee -->
+<a class="target" id="element-access" name="element-access"></a></div>
+<div class="section" id="semantics-element-access">
+<h2><a name="semantics-element-access">Semantics: element access</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">T&amp;</span> <span class="pre">front();</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">empty();</span></tt></li>
+<li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">*begin();</span></tt></li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_ptr_container_operation</span></tt> if <tt class="docutils literal"><span class="pre">empty()</span> <span class="pre">==</span> <span class="pre">true</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">const</span> <span class="pre">T&amp;</span> <span class="pre">front()</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">empty();</span></tt></li>
+<li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">*begin();</span></tt></li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_ptr_container_operation</span></tt> if <tt class="docutils literal"><span class="pre">empty()</span> <span class="pre">==</span> <span class="pre">true</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">T&amp;</span> <span class="pre">back();</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">empty();</span></tt></li>
+<li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">*--end();</span></tt></li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_ptr_container_operation</span></tt> if <tt class="docutils literal"><span class="pre">empty()</span> <span class="pre">==</span> <span class="pre">true</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">const</span> <span class="pre">T&amp;</span> <span class="pre">back()</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">empty();</span></tt></li>
+<li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">*--end();</span></tt></li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_ptr_container_operation</span></tt> if <tt class="docutils literal"><span class="pre">empty()</span> <span class="pre">==</span> <span class="pre">true</span></tt></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<a class="target" id="modifiers" name="modifiers"></a></div>
+<div class="section" id="semantics-modifiers">
+<h2><a name="semantics-modifiers">Semantics: modifiers</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">push_back(</span> <span class="pre">T*</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">x</span> <span class="pre">!=</span> <span class="pre">0</span></tt></li>
+<li>Effects: Inserts the pointer into container and takes ownership of it</li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_pointer</span></tt> if <tt class="docutils literal"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">0</span></tt></li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<!-- - ``void push_back( const T& x );``
+
+- Effects: ``push_back( CloneAllocator::clone( x ) );``
+
+- Exception safety: Strong guarantee -->
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">auto_type</span> <span class="pre">pop_back();</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements:<tt class="docutils literal"><span class="pre">not</span> <span class="pre">empty()</span></tt></li>
+<li>Effects: Removes the last element in the container</li>
+<li>Postconditions: <tt class="docutils literal"><span class="pre">size()</span></tt> is one less</li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_ptr_container_operation</span></tt> if <tt class="docutils literal"><span class="pre">empty()</span> <span class="pre">==</span> <span class="pre">true</span></tt></li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">iterator</span> <span class="pre">insert(</span> <span class="pre">iterator</span> <span class="pre">position,</span> <span class="pre">T*</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: position is a valid iterator from the container and 
+<tt class="docutils literal"><span class="pre">x</span> <span class="pre">!=</span> <span class="pre">0</span></tt></li>
+<li>Effects: Inserts <tt class="docutils literal"><span class="pre">x</span></tt> before position and returns an iterator pointing to it</li>
+<li>Throws: <tt class="docutils literal"><span class="pre">bad_pointer</span></tt> if <tt class="docutils literal"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">0</span></tt></li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<!-- - ``iterator insert( iterator position, const T& x );``
+
+- Requirements: ``position`` is a valid iterator from the container
+
+- Effects: ``return insert( position, CloneAllocator::clone( x ) );``
+
+- Exception safety: Strong guarantee
+
+- ``void insert( iterator position, size_type n, const T& x );``
+
+- Requirements: ``position`` is a valid iterator from the container
+
+- Effects: Inserts ``n`` clones of ``x`` before position into the container 
+
+- Exception safety: Strong guarantee -->
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">InputIterator</span> <span class="pre">&gt;</span>
+<span class="pre">void</span> <span class="pre">insert(</span> <span class="pre">iterator</span> <span class="pre">position,</span> <span class="pre">InputIterator</span> <span class="pre">first,</span> <span class="pre">InputIterator</span> <span class="pre">last</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">position</span></tt> is a valid iterator from the container</li>
+<li>Effects: Inserts a cloned range before <tt class="docutils literal"><span class="pre">position</span></tt></li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">InputRange</span> <span class="pre">&gt;</span>
+<span class="pre">void</span> <span class="pre">insert(</span> <span class="pre">iterator</span> <span class="pre">position,</span> <span class="pre">const</span> <span class="pre">InputRange&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: <tt class="docutils literal"><span class="pre">insert(</span> <span class="pre">position,</span> <span class="pre">boost::begin(r),</span> <span class="pre">boost::end(r)</span> <span class="pre">);</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">iterator</span> <span class="pre">erase(</span> <span class="pre">iterator</span> <span class="pre">position</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">position</span></tt> is a valid iterator from the container</li>
+<li>Effects: Removes the element defined by <tt class="docutils literal"><span class="pre">position</span></tt> and returns an iterator to the following element</li>
+<li>Throws: Nothing</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">iterator</span> <span class="pre">erase(</span> <span class="pre">iterator</span> <span class="pre">first,</span> <span class="pre">iterator</span> <span class="pre">last</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">[first,last)</span></tt> is a valid range</li>
+<li>Effects: Removes the range of element defined by <tt class="docutils literal"><span class="pre">[first,last)</span></tt> and returns an iterator to the following element</li>
+<li>Throws: Nothing</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Range</span> <span class="pre">&gt;</span>
+<span class="pre">void</span> <span class="pre">erase(</span> <span class="pre">const</span> <span class="pre">Range&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: <tt class="docutils literal"><span class="pre">erase(</span> <span class="pre">boost::begin(r),</span> <span class="pre">boost::end(r)</span> <span class="pre">);</span></tt></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<a class="target" id="pointer-container-requirements" name="pointer-container-requirements"></a></div>
+<div class="section" id="semantics-pointer-container-requirements">
+<h2><a name="semantics-pointer-container-requirements">Semantics: pointer container requirements</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">iterator</span> <span class="pre">object,</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">from.empty()</span></tt></li>
+<li>Effects: Inserts the object defined by <tt class="docutils literal"><span class="pre">object</span></tt> into the container and remove it from <tt class="docutils literal"><span class="pre">from</span></tt>.</li>
+<li>Postconditions: <tt class="docutils literal"><span class="pre">size()</span></tt> is one more, <tt class="docutils literal"><span class="pre">from.size()</span></tt> is one less.</li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">iterator</span> <span class="pre">first,</span> <span class="pre">iterator</span> <span class="pre">last,</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">from.empty()</span></tt></li>
+<li>Effects: Inserts the objects defined by the range <tt class="docutils literal"><span class="pre">[first,last)</span></tt> into the container and remove it from <tt class="docutils literal"><span class="pre">from</span></tt>.</li>
+<li>Postconditions: Let <tt class="docutils literal"><span class="pre">N</span> <span class="pre">==</span> <span class="pre">std::distance(first,last);</span></tt> then <tt class="docutils literal"><span class="pre">size()</span></tt> is <tt class="docutils literal"><span class="pre">N</span></tt> more, <tt class="docutils literal"><span class="pre">from.size()</span></tt> is <tt class="docutils literal"><span class="pre">N</span></tt> less.</li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Range&gt;</span> <span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">const</span> <span class="pre">Range&amp;</span> <span class="pre">r,</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: <tt class="docutils literal"><span class="pre">transfer(before,</span> <span class="pre">boost::begin(r),</span> <span class="pre">boost::end(r),</span> <span class="pre">from);</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Transfers all objects from <tt class="docutils literal"><span class="pre">from</span></tt> into the container. Insertion
+takes place before <tt class="docutils literal"><span class="pre">before</span></tt>.</li>
+<li>Postconditions: <tt class="docutils literal"><span class="pre">from.empty();</span></tt></li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

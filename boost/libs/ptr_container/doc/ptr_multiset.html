@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Class ptr_multiset</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="class-ptr-multiset">
+<h1 class="title">Class <tt class="docutils literal"><span class="pre">ptr_multiset</span></tt></h1>
+<p>A <tt class="docutils literal"><span class="pre">ptr_multiset&lt;T&gt;</span></tt> is a pointer container that uses an underlying <tt class="docutils literal"><span class="pre">std::multiset&lt;void*&gt;</span></tt>
+to store the pointers.</p>
+<p><strong>See also:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a></li>
+<li><a class="reference" href="associative_ptr_container.html">associative_ptr_container</a></li>
+<li><a class="reference" href="ptr_multiset_adapter.html">ptr_multiset_adapter</a></li>
+<li><a class="reference" href="indirect_fun.html">void_ptr_indirect_fun</a></li>
+</ul>
+<p><strong>Navigate:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="ptr_container.html">home</a></li>
+<li><a class="reference" href="reference.html">reference</a></li>
+</ul>
+<p><strong>Synopsis:</strong></p>
+<pre class="literal-block">
+namespace boost
+{
+
+    template
+    &lt; 
+        class Key, 
+        class Compare        = std::less&lt;Key&gt;,
+        class CloneAllocator = heap_clone_allocator,
+        class Allocator      = std::allocator&lt;void*&gt;
+    &gt;
+    class ptr_multiset : public ptr_multiset_adapter
+                                &lt;
+                                    Key,
+                                    std::multiset&lt;void*,void_ptr_indirect_fun&lt;Compare,Key&gt;,Allocator&gt;,
+                                    CloneAllocator
+                                &gt;
+    {
+        // see references
+        
+    }; //  class 'ptr_multiset'
+
+} // namespace 'boost'  
+</pre>
+<p><strong>Remarks:</strong></p>
+<ul class="simple">
+<li>Using <tt class="docutils literal"><span class="pre">nullable&lt;T&gt;</span></tt> as <tt class="docutils literal"><span class="pre">Key</span></tt> is meaningless and not allowed</li>
+</ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title></title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document">
+<div class="section" id="class-associative-ptr-container">
+<h1><a name="class-associative-ptr-container">Class <tt class="docutils literal"><span class="pre">associative_ptr_container</span></tt></a></h1>
+<p>This section describes all the common operations for all associative
+pointer containers (in addition to <tt class="docutils literal"><span class="pre">reversible_ptr_container</span></tt>):</p>
+<ul class="simple">
+<li><a class="reference" href="ptr_map_adapter.html">ptr_map_adapter</a></li>
+<li><a class="reference" href="ptr_multimap_adapter.html">ptr_multimap_adapter</a></li>
+<li><a class="reference" href="ptr_map.html">ptr_map</a></li>
+<li><a class="reference" href="ptr_multimap.html">ptr_multimap</a></li>
+<li><a class="reference" href="ptr_set_adapter.html">ptr_set_adapter</a></li>
+<li><a class="reference" href="ptr_multiset.html">ptr_multiset_adapter</a></li>
+<li><a class="reference" href="ptr_set.html">ptr_set</a></li>
+<li><a class="reference" href="ptr_multiset.html">ptr_multiset</a></li>
+</ul>
+<p><strong>See also:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a></li>
+<li><a class="reference" href="http://www.boost.org/libs/range/doc/utility_class.html#iter_range">iterator_range</a></li>
+</ul>
+<p><strong>Navigate:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="ptr_container.html">home</a></li>
+<li><a class="reference" href="reference.html">reference</a></li>
+</ul>
+<p><strong>Synopsis:</strong></p>
+<pre class="literal-block">
+namespace boost
+{
+    template
+    &lt; 
+        class Key, 
+        class CloneAllocator = heap_clone_allocator 
+    &gt;
+    class associative_ptr_container 
+    {
+    public: // <a class="reference" href="#typedefs">typedefs</a>
+        typedef ...   key_type;
+        typedef ...   key_compare;
+        typedef ...   value_compare;
+
+    public: // <a class="reference" href="#observers">observers</a>
+        key_compare    key_comp() const;
+        value_compare  value_comp() const;
+
+    public: // <a class="reference" href="#modifiers">modifiers</a>         
+        template&lt; typename InputIterator &gt;
+        void       insert( InputIterator first, InputIterator last );     
+        template&lt; class InputRange &gt;
+        void       insert( const InputRange&amp; r );
+        void       erase( iterator position ); 
+        size_type  erase( const key_type&amp; x );
+        template&lt; class Range &gt;
+        void       erase( const Range&amp; r );
+        void       erase( iterator first, iterator last );
+
+    public: // <a class="reference" href="#algorithms">algorithms</a>
+        iterator                        find( const key_type&amp; x );
+        const_iterator                  find( const key_type&amp; x ) const;
+        size_type                       count( const key_type&amp; x ) const;              
+        iterator                        lower_bound( const key_type&amp; x );                     
+        const_iterator                  lower_bound( const key_type&amp; x ) const;
+        iterator                        upper_bound( const key_type&amp; x );                           
+        const_iterator                  upper_bound( const key_type&amp; x ) const;
+        iterator_range&lt;iterator&gt;        equal_range( const key_type&amp; x );                 
+        iterator_range&lt;const_iterator&gt;  equal_range( const key_type&amp; x ) const;
+     
+    }; //  class 'associative_ptr_container'
+    
+} // namespace 'boost'  
+</pre>
+</div>
+<div class="section" id="semantics">
+<h1><a name="semantics">Semantics</a></h1>
+<a class="target" id="typedefs" name="typedefs"></a><div class="section" id="semantics-typedefs">
+<h2><a name="semantics-typedefs">Semantics: typedefs</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">typedef</span> <span class="pre">...</span> <span class="pre">key_type;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>if we are dealing with a map, then simply the key type</li>
+<li>if we are dealing with a set, then the <em>indirected</em> key type, that is, 
+given <tt class="docutils literal"><span class="pre">ptr_set&lt;T&gt;</span></tt>, <tt class="docutils literal"><span class="pre">key_type*</span></tt> will be <tt class="docutils literal"><span class="pre">T*</span></tt>.</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">typedef</span> <span class="pre">...</span> <span class="pre">key_compare;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>comparison object type that determines the order of elements in the container</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">typedef</span> <span class="pre">...</span> <span class="pre">value_compare;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>comparison object type that determines the order of elements in the container</li>
+<li>if we are dealing with a map, then this comparison simply forwards to the <tt class="docutils literal"><span class="pre">key_compare</span></tt> comparison operation</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<a class="target" id="observers" name="observers"></a></div>
+<div class="section" id="semantics-observers">
+<h2><a name="semantics-observers">Semantics: observers</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">key_compare</span> <span class="pre">key_comp()</span> <span class="pre">const;</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">value_compare</span> <span class="pre">value_comp()</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>returns copies of objects used to determine the order of elements</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<a class="target" id="modifiers" name="modifiers"></a></div>
+<div class="section" id="semantics-modifiers">
+<h2><a name="semantics-modifiers">Semantics: modifiers</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">typename</span> <span class="pre">InputIterator</span> <span class="pre">&gt;</span>
+<span class="pre">void</span> <span class="pre">insert(</span> <span class="pre">InputIterator</span> <span class="pre">first,</span> <span class="pre">InputIterator</span> <span class="pre">last</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">[first,last)</span></tt> is a valid range</li>
+<li>Effects: Inserts a cloned range</li>
+<li>Exception safety: Basic guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">InputRange</span> <span class="pre">&gt;</span>
+<span class="pre">void</span> <span class="pre">insert(</span> <span class="pre">const</span> <span class="pre">InputRange&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: <tt class="docutils literal"><span class="pre">insert(</span> <span class="pre">boost::begin(r),</span> <span class="pre">boost::end(r)</span> <span class="pre">);</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">erase(</span> <span class="pre">iterator</span> <span class="pre">position</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">position</span></tt> is a valid iterator from the container</li>
+<li>Effects: Removes the element defined by <tt class="docutils literal"><span class="pre">position</span></tt>.</li>
+<li>Throws: Nothing</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">size_type</span> <span class="pre">erase(</span> <span class="pre">const</span> <span class="pre">key_type&amp;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Removes all the elements in the container with a key equivalent to <tt class="docutils literal"><span class="pre">x</span></tt> and returns the number of erased elements.</li>
+<li>Throws: Nothing</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">erase(</span> <span class="pre">iterator</span> <span class="pre">first,</span> <span class="pre">iterator</span> <span class="pre">last</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">[first,last)</span></tt> is a valid range</li>
+<li>Effects: Removes the range of elements defined by <tt class="docutils literal"><span class="pre">[first,last)</span></tt>.</li>
+<li>Throws: Nothing</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Range</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">erase(</span> <span class="pre">const</span> <span class="pre">Range&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: <tt class="docutils literal"><span class="pre">erase(</span> <span class="pre">boost::begin(r),</span> <span class="pre">boost::end(r)</span> <span class="pre">);</span></tt></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<a class="target" id="algorithms" name="algorithms"></a></div>
+<div class="section" id="semantics-algorithms">
+<h2><a name="semantics-algorithms">Semantics: algorithms</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">iterator</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">find(</span> <span class="pre">const</span> <span class="pre">Key&amp;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">const_iterator</span> <span class="pre">find(</span> <span class="pre">const</span> <span class="pre">Key&amp;</span> <span class="pre">x</span> <span class="pre">)</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Searches for the key and returns <tt class="docutils literal"><span class="pre">end()</span></tt> on failure.</li>
+<li>Complexity: Logarithmic</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">size_type</span> <span class="pre">count(</span> <span class="pre">const</span> <span class="pre">Key&amp;</span> <span class="pre">x</span> <span class="pre">)</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Counts the elements with a key equivalent to <tt class="docutils literal"><span class="pre">x</span></tt></li>
+<li>Complexity: Logarithmic</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">iterator</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">lower_bound(</span> <span class="pre">const</span> <span class="pre">Key&amp;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">const_iterator</span> <span class="pre">lower_bound(</span> <span class="pre">const</span> <span class="pre">Key&amp;</span> <span class="pre">x</span> <span class="pre">)</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Returns an iterator pointing to the first element with a key not less than <tt class="docutils literal"><span class="pre">x</span></tt></li>
+<li>Complexity: Logarithmic</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">iterator</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">upper_bound(</span> <span class="pre">const</span> <span class="pre">Key&amp;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">const_iterator</span> <span class="pre">upper_bound(</span> <span class="pre">const</span> <span class="pre">Key&amp;</span> <span class="pre">x</span> <span class="pre">)</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Returns an iterator pointing to the first element with a key greater than <tt class="docutils literal"><span class="pre">x</span></tt></li>
+<li>Complexity: Logarithmic</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">iterator_range&lt;iterator&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">equal_range(</span> <span class="pre">const</span> <span class="pre">Key&amp;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">iterator_range&lt;const_iterator&gt;</span> <span class="pre">equal_range(</span> <span class="pre">const</span> <span class="pre">Key&amp;</span> <span class="pre">x</span> <span class="pre">)</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">boost::make_iterator_range(</span> <span class="pre">lower_bound(</span> <span class="pre">x</span> <span class="pre">),</span> <span class="pre">upper_bound(</span> <span class="pre">x</span> <span class="pre">)</span> <span class="pre">);</span></tt></li>
+<li>Complexity: Logarithmic</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<!-- - ``reference       at( const key_type& key );``
+- ``const_reference at( const key_type& key ) const;`` 
+
+- Requirements: the key exists
+
+- Effects: returns the object with key ``key``
+
+- Throws: ``bad_ptr_container_operation`` if the key does not exist                                  -->
+<a class="target" id="pointer-container-requirements" name="pointer-container-requirements"></a></div>
+</div>
+</div>
+</body>
+</html>

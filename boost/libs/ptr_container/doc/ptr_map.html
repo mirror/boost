@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Class ptr_map</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="class-ptr-map">
+<h1 class="title">Class <tt class="docutils literal"><span class="pre">ptr_map</span></tt></h1>
+<p>A <tt class="docutils literal"><span class="pre">ptr_map&lt;Key,T&gt;</span></tt> is a pointer container that uses an underlying <tt class="docutils literal"><span class="pre">std::map&lt;Key,void*&gt;</span></tt>
+to store the pointers.</p>
+<p><strong>See also:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a></li>
+<li><a class="reference" href="associative_ptr_container.html">associative_ptr_container</a></li>
+<li><a class="reference" href="ptr_map_adapter.html">ptr_map_adapter</a></li>
+<li><a class="reference" href="reference.html#map-iterator-operations">new map iterators</a></li>
+</ul>
+<!-- class `indirect_fun <indirect_fun.html>`_ -->
+<p><strong>Navigate:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="ptr_container.html">home</a></li>
+<li><a class="reference" href="reference.html">reference</a></li>
+</ul>
+<p><strong>Synopsis:</strong></p>
+<pre class="literal-block">
+namespace boost
+{
+
+    template
+    &lt; 
+        class Key, 
+        class T, 
+        class Compare        = std::less&lt;Key&gt;, 
+        class CloneAllocator = heap_clone_allocator,
+        class Allocator      = std::allocator&lt; std::pair&lt;const Key,void*&gt; &gt;
+    &gt;
+    class ptr_map : public ptr_map_adapter
+                           &lt;
+                               T,
+                               std::map&lt;Key,void*,Compare,Allocator&gt;,
+                               CloneAllocator
+                           &gt;
+    {
+        // see references
+        
+    }; //  class 'ptr_map'
+
+} // namespace 'boost'  
+</pre>
+</div>
+</body>
+</html>

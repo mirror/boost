@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title></title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document">
+<div class="section" id="class-ptr-set-adapter">
+<h1><a name="class-ptr-set-adapter">Class <tt class="docutils literal"><span class="pre">ptr_set_adapter</span></tt></a></h1>
+<p>This class is used to build custom pointer containers with
+an underlying set-like container. The interface of the class is an extension
+of the interface from <tt class="docutils literal"><span class="pre">associative_ptr_container</span></tt>.</p>
+<p><strong>See also:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a></li>
+<li><a class="reference" href="associative_ptr_container.html">associative_ptr_container</a></li>
+<li><a class="reference" href="ptr_set.html">ptr_set</a></li>
+</ul>
+<p><strong>Navigate:</strong></p>
+<ul class="simple">
+<li><a class="reference" href="ptr_container.html">home</a></li>
+<li><a class="reference" href="reference.html">reference</a></li>
+</ul>
+<p><strong>Synopsis:</strong></p>
+<pre class="literal-block">
+namespace boost
+{
+    template
+    &lt; 
+        class Key, 
+        class VoidPtrSet,
+        class CloneAllocator = heap_clone_allocator 
+    &gt;
+    class ptr_set_adapter 
+    {
+        
+    public: // <a class="reference" href="#modifiers">modifiers</a>         
+        std::pair&lt;iterator,bool&gt;  insert( Key* x );                         
+
+    public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
+        bool      transfer( iterator object, ptr_set_adapter&amp; from );
+        size_type transfer( iterator first, iterator last, ptr_set_adapter&amp; from );
+        template&lt; class Range &gt;
+        size_type transfer( const Range&amp; r, ptr_set_adapter&amp; from );
+        size_type transfer( ptr_set_adapter&amp; from );
+
+    }; //  class 'ptr_set_adapter'
+
+} // namespace 'boost'  
+</pre>
+</div>
+<div class="section" id="semantics">
+<h1><a name="semantics">Semantics</a></h1>
+<a class="target" id="modifiers" name="modifiers"></a><div class="section" id="semantics-modifiers">
+<h2><a name="semantics-modifiers">Semantics: modifiers</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">std::pair&lt;iterator,bool&gt;</span> <span class="pre">insert(</span> <span class="pre">key_type*</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">x</span> <span class="pre">!=</span> <span class="pre">0</span></tt></li>
+<li>Effects: Takes ownership of <tt class="docutils literal"><span class="pre">x</span></tt> and insert it if there is no equivalent of it already. The <tt class="docutils literal"><span class="pre">bool</span></tt> part of the return value indicates insertion and the iterator points to the element with key <tt class="docutils literal"><span class="pre">x</span></tt>.</li>
+<li>Throws: bad_pointer if <tt class="docutils literal"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">0</span></tt></li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<!-- - ``std::pair<iterator,bool> insert( const key_type& x );``
+
+- Effects: ``return insert( allocate_clone( x ) );``
+
+- Exception safety: Strong guarantee -->
+<a class="target" id="pointer-container-requirements" name="pointer-container-requirements"></a></div>
+<div class="section" id="semantics-pointer-container-requirements">
+<h2><a name="semantics-pointer-container-requirements">Semantics: pointer container requirements</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">bool</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">object,</span> <span class="pre">ptr_set_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">from.empty()</span></tt></li>
+<li>Effects: Inserts the object defined by <tt class="docutils literal"><span class="pre">object</span></tt> into the container and remove it from <tt class="docutils literal"><span class="pre">from</span></tt> 
+iff no equivalent object exists.</li>
+<li>Returns: whether the object was transfered</li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">first,</span> <span class="pre">iterator</span> <span class="pre">last,</span> <span class="pre">ptr__set_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">from.empty()</span></tt></li>
+<li>Effects: Inserts the objects defined by the range <tt class="docutils literal"><span class="pre">[first,last)</span></tt> into the container and remove it from <tt class="docutils literal"><span class="pre">from</span></tt>.
+An object is only transferred if no equivalent object exists.</li>
+<li>Returns: the number of transfered objects</li>
+<li>Exception safety: Basic guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Range</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">const</span> <span class="pre">Range&amp;</span> <span class="pre">r,</span> <span class="pre">ptr_set_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">transfer(</span> <span class="pre">boost::begin(r),</span> <span class="pre">boost::end(r),</span> <span class="pre">from</span> <span class="pre">);</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">size_type</span> <span class="pre">transfer(</span> <span class="pre">ptr_set_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">transfer(</span> <span class="pre">from.begin(),</span> <span class="pre">from.end(),</span> <span class="pre">from</span> <span class="pre">);</span></tt>.</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Boost Pointer Container Library</title>
+<meta name="author" content="Thorsten Ottosen" />
+<meta name="date" content="24th of September" />
+<meta name="copyright" content="Thorsten Ottosen 2004. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt)." />
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="boost-pointer-container-library">
+<h1 class="title"><img alt="Boost" src="cboost.gif" /> Pointer Container Library</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>Thorsten Ottosen</td></tr>
+<tr><th class="docinfo-name">Contact:</th>
+<td><a class="first last reference" href="mailto:nesotto&#64;cs.auc.dk">nesotto&#64;cs.auc.dk</a></td></tr>
+<tr class="field"><th class="docinfo-name">organizations:</th><td class="field-body"><a class="reference" href="http://www.cs.auc.dk">Department of Computer Science</a>, Aalborg University, and <a class="reference" href="http://www.dezide.com">Dezide Aps</a></td>
+</tr>
+<tr><th class="docinfo-name">Date:</th>
+<td>24th of September</td></tr>
+<tr><th class="docinfo-name">Copyright:</th>
+<td>Thorsten Ottosen 2004. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">LICENSE_1_0.txt</a>).</td></tr>
+</tbody>
+</table>
+<div class="section" id="overview">
+<h1><a name="overview">Overview</a></h1>
+<p>Boost.Pointer Container provides containers for holding heap-allocated
+objects in an exception-safe manner and with minimal overhead. 
+The aim of the library is in particular to make OO programming
+easier in C++ by establishing a standard set of classes, methods 
+and designs for dealing with OO specific problems</p>
+<ul class="simple">
+<li><a class="reference" href="#motivation">Motivation</a></li>
+<li><a class="reference" href="tutorial.html">Tutorial</a></li>
+<li><a class="reference" href="reference.html">Reference</a><ul>
+<li><a class="reference" href="reference.html#conventions">Conventions</a></li>
+<li><a class="reference" href="reference.html#the-clonable-concept">The Clonable Concept</a></li>
+<li><a class="reference" href="reference.html#the-clone-allocator-concept">The Clone Allocator Concept</a></li>
+<li><a class="reference" href="reference.html#pointer-container-adapters">Pointer container adapters</a></li>
+<li><a class="reference" href="reference.html#sequence-containers">Sequence container classes</a><ul>
+<li><a class="reference" href="ptr_vector.html">ptr_vector</a></li>
+<li><a class="reference" href="ptr_deque.html">ptr_deque</a></li>
+<li><a class="reference" href="ptr_list.html">ptr_list</a></li>
+<li><a class="reference" href="ptr_array.html">ptr_array</a></li>
+</ul>
+</li>
+<li><a class="reference" href="reference.html#associative-containers">Associative container classes</a><ul>
+<li><a class="reference" href="ptr_set.html">ptr_set</a></li>
+<li><a class="reference" href="ptr_multiset.html">ptr_multiset</a></li>
+<li><a class="reference" href="ptr_map.html">ptr_map</a></li>
+<li><a class="reference" href="ptr_multimap.html">ptr_multimap</a></li>
+</ul>
+</li>
+<li><a class="reference" href="indirect_fun.html">Indirected functions</a></li>
+<li><a class="reference" href="reference.html#class-nullable">Class nullable</a></li>
+<li><a class="reference" href="reference.html#exception-classes">Exception classes</a></li>
+</ul>
+</li>
+<li><a class="reference" href="guidelines.html">Usage guidelines</a></li>
+<li><a class="reference" href="examples.html">Examples</a></li>
+<li><a class="reference" href="headers.html">Library headers</a></li>
+<li><a class="reference" href="#portability">Portability</a></li>
+<li><a class="reference" href="faq.html">FAQ</a></li>
+<li><a class="reference" href="#acknowledgements">Acknowledgements</a></li>
+<li><a class="reference" href="#references">References</a></li>
+</ul>
+</div>
+<div class="section" id="motivation">
+<h1><a name="motivation">Motivation</a></h1>
+<p>Whenever a programmer wants to have a container of pointers to 
+heap-allocated objects, there is usually only one exception-safe way:
+to make a container of pointer pointers like <tt class="docutils literal"><span class="pre">boost::shared_ptr</span></tt>.
+This approach is suboptimal if</p>
+<ol class="arabic simple">
+<li>the stored objects are not shared, but owned exclusively, or</li>
+<li>the overhead implied by pointer pointers is inappropriate</li>
+</ol>
+<p>This library therefore provides standard-like containers that are for storing 
+heap-allocated or <a class="reference" href="reference.html#the-clonable-concept">cloned</a> objects (or in case of a map, the mapped object must be 
+a heap-allocated or cloned object). For each of the standard 
+containers there is a pointer container equivalent that takes ownership of 
+the objects in an exception safe manner.  In this respect the library is intended 
+to solve the so-called 
+<a class="reference" href="faq.html#what-is-the-polymorphic-class-problem">polymorphic class problem</a>.</p>
+<p>The advantages of pointer containers are</p>
+<ol class="arabic simple">
+<li>Exception-safe pointer storage and manipulation.</li>
+<li>Notational convenience compared to the use of containers of pointers.</li>
+<li>Can be used for types that are neither Assignable nor Copy Constructible.</li>
+<li>No memory-overhead as containers of pointer pointers can have (see <a class="footnote-reference" href="#id21" id="id2" name="id2">[11]</a> and <a class="footnote-reference" href="#id23" id="id3" name="id3">[12]</a>).</li>
+<li>Usually faster than using containers of pointer pointers (see <a class="footnote-reference" href="#id21" id="id4" name="id4">[11]</a> and <a class="footnote-reference" href="#id23" id="id5" name="id5">[12]</a>).</li>
+<li>The interface is slightly changed towards the domain of pointers  
+instead of relying on the normal value-based interface. For example,
+now it is possible for <tt class="docutils literal"><span class="pre">pop_back()</span></tt> to return the removed element.</li>
+</ol>
+<p>The disadvantages are</p>
+<ol class="arabic simple">
+<li>Less flexible than containers of pointer pointers</li>
+</ol>
+</div>
+<div class="section" id="portability">
+<h1><a name="portability">Portability</a></h1>
+<p>The review version has been tested with</p>
+<ul class="simple">
+<li>vc7.1</li>
+<li>gcc 3.3.3</li>
+<li>como 4.3.3 (+dinkumware lib)</li>
+</ul>
+<p>and it requires the current boost-cvs to work.</p>
+<p>There is known problems with</p>
+<ul class="simple">
+<li>libcomo: some really irritating concept-checking prohibits <tt class="docutils literal"><span class="pre">vector&lt;T*&gt;</span></tt> if <tt class="docutils literal"><span class="pre">T</span></tt> is abstract.</li>
+</ul>
+</div>
+<div class="section" id="acknowledgements">
+<h1><a name="acknowledgements">Acknowledgements</a></h1>
+<p>The following people have been helpful:</p>
+<ul class="simple">
+<li>Bjørn D. Rasmussen for showing me his crappy code that motivated me to start this library</li>
+<li>Pavel Vozenilek for asking me to make the adapters</li>
+<li>David Abrahams for the <tt class="docutils literal"><span class="pre">indirect_fun</span></tt> design</li>
+<li>Pavol Droba for being review manager</li>
+<li>Ross Boylan for trying out a prototype for real</li>
+<li>Felipe Magno de Almeida for giving fedback based on using the
+library in production code even before the library was part of boost</li>
+<li>Jonathan Turkanis for supplying his <tt class="docutils literal"><span class="pre">move_ptr</span></tt> framework 
+which is used internally</li>
+</ul>
+</div>
+<div class="section" id="references">
+<h1><a name="references">References</a></h1>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id6">[1]</a></td><td>Matt Austern: <a class="reference" href="http://www.cuj.com/documents/s=7990/cujcexp1910austern/">&quot;The Standard Librarian: Containers of Pointers&quot;</a> , C/C++ Users Journal Experts Forum.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id8">[2]</a></td><td>Bjarne Stroustrup, &quot;The C++ Programming Language&quot;, <a class="reference" href="http://www.research.att.com/~bs/3rd_safe.pdf">Appendix E: &quot;Standard-Library Exception Safety&quot;</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id10">[3]</a></td><td>Herb Sutter, &quot;Exceptional C++&quot;.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id11">[4]</a></td><td>Herb Sutter, &quot;More Exceptional C++&quot;.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id12" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id12">[5]</a></td><td>Kevlin Henney: <a class="reference" href="http://www.cuj.com/documents/s=7986/cujcexp2002henney/henney.htm">&quot;From Mechanism to Method: The Safe Stacking of Cats&quot;</a> , C++ Experts Forum, February 2002.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id14" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id14">[6]</a></td><td>Some of the few earlier attempts of pointer containers I have seen are the rather interesting <a class="reference" href="http://www.ntllib.org/asp.html">NTL</a> and the 
+<a class="reference" href="http://ootips.org/yonat/4dev/pointainer.h">pointainer</a>. 
+As of this writing both libraries are not exceptions-safe and can leak.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id15" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id15">[7]</a></td><td>INTERNATIONAL STANDARD, Programming languages --- C++, ISO/IEC 14882, 1998. See section 23 in particular.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id16" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id16">[8]</a></td><td>C++ Standard Library Closed Issues List (Revision 27), 
+Item 218, <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-closed.html#218">Algorithms do not use binary predicate objects for default comparisons</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id18" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id18">[9]</a></td><td>C++ Standard Library Active Issues List (Revision 27), 
+Item 226, <a class="reference" href="http://gcc.gnu.org/onlinedocs/libstdc++/ext/lwg-active.html#226">User supplied specializations or overloads of namespace std function templates</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id20" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id20">[10]</a></td><td>Harald Nowak, &quot;A remove_if for vector&quot;, C/C++ Users Journal, July 2001.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id21" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id21">[11]</a></td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> Boost smart pointer <a class="reference" href="http://www.boost.org/libs/ptr_ptr/smarttests.htm">timings</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id23" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id23">[12]</a></td><td><em>(<a class="fn-backref" href="#id3">1</a>, <a class="fn-backref" href="#id5">2</a>)</em> <a class="reference" href="http://www.ntllib.org/asp.html">NTL</a>: Array vs std::vector and boost::shared_ptr</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id24" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id24">[13]</a></td><td>Kevlin Henney, <a class="reference" href="http://www.two-sdg.demon.co.uk/curbralan/papers/europlop/NullObject.pdf">Null Object</a>, 2002.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</body>
+</html>
