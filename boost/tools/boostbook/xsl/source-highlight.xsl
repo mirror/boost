@@ -151,7 +151,7 @@
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="classname|methodname|functionname|libraryname|
+  <xsl:template match="classname|methodname|functionname|libraryname|enumname|
                        conceptname|macroname" mode="highlight">
     <xsl:apply-templates select="." mode="annotation"/>
   </xsl:template>

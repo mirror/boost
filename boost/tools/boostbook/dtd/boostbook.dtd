@@ -82,7 +82,7 @@
 <!ELEMENT libraryinfo (author+, copyright*, legalnotice*, librarypurpose, librarycategory*)>
 <!ATTLIST libraryinfo %boost.common.attrib;>
 
-<!ELEMENT librarypurpose (#PCDATA|code|ulink|functionname|methodname|classname|macroname|headername)*>
+<!ELEMENT librarypurpose (#PCDATA|code|ulink|functionname|methodname|classname|macroname|headername|enumname)*>
 <!ATTLIST librarypurpose %boost.common.attrib;>
 
 <!ELEMENT librarycategory (#PCDATA)>
@@ -290,6 +290,11 @@
     alt          CDATA  #IMPLIED
     %boost.common.attrib;>
 
+<!ELEMENT enumname (#PCDATA)>
+<!ATTLIST enumname 
+    alt          CDATA  #IMPLIED
+    %boost.common.attrib;>
+
 <!ELEMENT macroname (#PCDATA)>
 <!ATTLIST macroname %boost.common.attrib;>
 
@@ -387,7 +392,7 @@
      name        CDATA #IMPLIED>
 
 <!--========== Customize the DocBook DTD ==========-->
-<!ENTITY % local.tech.char.class "|functionname|libraryname|code">
+<!ENTITY % local.tech.char.class "|functionname|libraryname|enumname|code">
 <!ENTITY % local.para.class 
         "|using-namespace|using-class|librarylist|librarycategorylist">
 <!ENTITY % local.descobj.class "|libraryinfo">
