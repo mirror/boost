@@ -43,7 +43,7 @@ void prologue()
 template <typename T>
 void timing_test()
 {
-    const unsigned long num = 100000;
+    const unsigned long num = 10000;
     
     std::size_t dummy = 0; // this is printed at the end of the test,
                            // to prevent the optimizer to eliminate
