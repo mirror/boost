@@ -532,12 +532,13 @@ fsm::result Idle::react( const EvConfig &amp; )
 {
   return transit&lt; Configuring &gt;();
 }</pre>
-<p><b><font color="#FF0000">Caution: Any call to <code>simple_state&lt;&gt;::transit&lt;&gt;()</code> 
-or <code>simple_state&lt;&gt;::terminate()</code> (see
-<a href="reference.html#transit1">reference</a>) will inevitably destruct the 
-state object (similar to <code>delete this;</code>)! That is, code executed 
-after any of these calls may invoke undefined behavior!</font></b> That's why 
-these functions should only be called as part of a return statement.</p>
+<p><b><font color="#FF0000">Caution: Any call to <code>
+simple_state&lt;&gt;::transit&lt;&gt;()</code> or <code>simple_state&lt;&gt;::terminate()</code> 
+(see <a href="reference.html#transit1">reference</a>) will inevitably destruct 
+the state object (similar to <code>delete this;</code>)! That is, code 
+executed after any of these calls may invoke undefined behavior!</font></b> 
+That's why these functions should only be called as part of a return 
+statement.</p>
 <h3><a name="Guards">Guards</a></h3>
 <p>The inner workings of the Shooting state could look as follows:</p>
 <p><img border="0" src="Camera2.gif" width="427" height="427"></p>
@@ -803,12 +804,12 @@ and the appropriate states entered. The former is expressed by passing either
 <code>has_shallow_history</code>, <code>has_deep_history</code> or <code>
 has_full_history</code> (which combines shallow and deep history) as the last 
 parameter to the <code>simple_state</code> and <code>state</code> class 
-templates. The latter is expressed by specifying either <code>shallow_history&lt;&gt;</code> 
-or <code>deep_history&lt;&gt;</code> as a transition destination or, as we'll see in 
-an instant, as an inner initial state. Because it is possible that a state 
-containing a history pseudo state has never been entered before a transition 
-to history is made, both class templates demand a parameter specifying the 
-default state to enter in such situations.</p>
+templates. The latter is expressed by specifying either <code>
+shallow_history&lt;&gt;</code> or <code>deep_history&lt;&gt;</code> as a transition 
+destination or, as we'll see in an instant, as an inner initial state. Because 
+it is possible that a state containing a history pseudo state has never been 
+entered before a transition to history is made, both class templates demand a 
+parameter specifying the default state to enter in such situations.</p>
 <p>The redundancy necessary for using history is checked for consistency at 
 compile time. That is, the state machine wouldn't have compiled had we 
 forgotten to pass <code>has_deep_history</code> to the base of <code>
@@ -950,11 +951,12 @@ currently resides in. To some extent this is already possible with <code>
 state_cast&lt;&gt;()</code> and <code>state_downcast&lt;&gt;()</code> but their utility is 
 rather limited because both only return a yes/no answer to the question &quot;Are 
 you in state X?&quot;. It is possible to ask more sophisticated questions when you 
-pass an additional base class rather than a state class to <code>state_cast&lt;&gt;()</code> 
-but this involves more work (all states need to derive from and implement the 
-additional base), is slow (under the hood <code>state_cast&lt;&gt;()</code> uses
-<code>dynamic_cast</code>), forces projects to compile with C++ RTTI turned on 
-and has a negative impact on state entry/exit speed.</p>
+pass an additional base class rather than a state class to <code>
+state_cast&lt;&gt;()</code> but this involves more work (all states need to derive 
+from and implement the additional base), is slow (under the hood <code>
+state_cast&lt;&gt;()</code> uses <code>dynamic_cast</code>), forces projects to 
+compile with C++ RTTI turned on and has a negative impact on state entry/exit 
+speed.</p>
 <p>Especially for debugging it would be so much more useful being able to ask 
 &quot;In which state(s) are you?&quot;. For this purpose it is possible to iterate over 
 all active <b>innermost</b> states with <code>state_machine&lt;&gt;::state_begin()</code> 
@@ -975,9 +977,10 @@ configuration as follows (see the Keyboard example for the complete code):</p>
     ++region;
   }
 }</pre>
-<p>If necessary, the outer states can be accessed with <code>state_machine&lt;&gt;::state_base_type::outer_state_ptr()</code>, 
-which returns a pointer to <code>const state_machine&lt;&gt;::state_base_type</code>. 
-When called on an outermost state this function simply returns 0.</p>
+<p>If necessary, the outer states can be accessed with <code>
+state_machine&lt;&gt;::state_base_type::outer_state_ptr()</code>, which returns a 
+pointer to <code>const state_machine&lt;&gt;::state_base_type</code>. When called on 
+an outermost state this function simply returns 0.</p>
 <h3><a name="State type information">State type information</a></h3>
 <p>To cut down on executable size some applications must be compiled with C++ 
 RTTI turned off. This would render the ability to iterate over all active 
@@ -1229,17 +1232,16 @@ associated with. All these <code>Worker</code> member functions only push an
 appropriate item into the schedulers' queue and then return immediately. A 
 dedicated thread will later pop the items out of the queue to have them 
 processed.</p>
-<p>Applications will usually first create a <code>fifo_scheduler&lt;&gt;</code> object 
-and then call <code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and <code>
-fifo_scheduler&lt;&gt;::initiate_processor()</code> to schedule the creation and 
-initiation of one or 
-more <code>asynchronous_state_machine&lt;&gt;</code> subclass objects. Finally, <code>
-fifo_scheduler&lt;&gt;::operator()()</code> is either called directly to let the 
-machine(s) run in the current thread, or, a <code>boost::function&lt;&gt;</code> 
-object referencing <code>operator()()</code> is passed to a new <code>
-boost::thread</code>. Alternatively, the latter could also be done right after 
-constructing the <code>fifo_scheduler&lt;&gt;</code> object. In the following code, we are running one state machine 
-in a new <code>
+<p>Applications will usually first create a <code>fifo_scheduler&lt;&gt;</code> 
+object and then call <code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and
+<code>fifo_scheduler&lt;&gt;::initiate_processor()</code> to schedule the creation 
+and initiation of one or more <code>asynchronous_state_machine&lt;&gt;</code> 
+subclass objects. Finally, <code>fifo_scheduler&lt;&gt;::operator()()</code> is 
+either called directly to let the machine(s) run in the current thread, or, a
+<code>boost::function&lt;&gt;</code> object referencing <code>operator()()</code> is 
+passed to a new <code>boost::thread</code>. Alternatively, the latter could 
+also be done right after constructing the <code>fifo_scheduler&lt;&gt;</code> 
+object. In the following code, we are running one state machine in a new <code>
 boost::thread</code> and the other in the main thread (see the PingPong 
 example for the full source code):</p>
 <pre>struct Waiting;
@@ -1320,13 +1322,13 @@ int main()
 
   return 0;
 }</pre>
-<p>In all the examples above, <code>fifo_scheduler&lt;&gt;::operator()()</code> waits on an empty event 
-queue and will only return after a call to <code>fifo_scheduler&lt;&gt;::terminate()</code>. 
-The <code>Player</code> state machine calls this 
-function on its scheduler object right before terminating.</p>
+<p>In all the examples above, <code>fifo_scheduler&lt;&gt;::operator()()</code> 
+waits on an empty event queue and will only return after a call to <code>
+fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machine 
+calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28879" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->21 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28864" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file
