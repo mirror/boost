@@ -54,8 +54,8 @@ int test_main(int, char* [])
       BOOST_ERROR("(user-type) formatting result incorrect");
     }
 
-    s = str(format("%0+4d %0+8d %-08d\n") % 8 % r % r);
-    if(s  != "+008 +0016/+9 16/9    \n") {
+    s = str(format("[%0+4d %0+8d %-08d]\n") % 8 % r % r);
+    if(s  != "[+008 +0016/+9 16/9    ]\n") {
       cerr << s;  
       BOOST_ERROR("(zero-padded user-type) formatting result incorrect");
     }
@@ -75,16 +75,6 @@ int test_main(int, char* [])
     if(s  != "ro        u.\n") {
       cerr << s;  
       BOOST_ERROR("(truncation) formatting result incorrect");
-    }
-
-
-    // nesting formats :
-    s = str( format("%2$014x [%1%] %|2$05|\n") % (format("%05s / %s") % -18 % 7)
-             %group(showbase, -100)
-             );
-    if( s != "0x0000ffffff9c [-0018 / 7] -0100\n" ){
-      cerr << s ;
-      BOOST_ERROR("nesting did not work");
     }
 
    // width in format-string is overridden by setw manipulator :
@@ -113,19 +103,6 @@ int test_main(int, char* [])
     if(s != "_0x2  101 _0x2 103")
       BOOST_ERROR("formatting error. (not-restoring state ?)");
 
-
-    // special paddings 
-    s = str( format("[%=6s] [%+6s] [%+6s] [% 6s] [%+6s]\n") 
-                      % 123
-                      % group(internal, setfill('W'), 234)
-                      % group(internal, setfill('X'), -345)
-                      % group(setfill('Y'), 456)
-                      % group(setfill('Z'), -10 ) );
-
-    if(s != "[  123 ] [+WW234] [-XX345] [YY 456] [ZZZ-10]\n" ) {
-      cerr << s ;
-      BOOST_ERROR("formatting error. (with special paddings)");
-    }
 
 
     // flag '0' is tricky . 

@@ -31,6 +31,13 @@ test-suite "format"
               : std::locale-support
         ]
 
+        [ run format_test3.cpp 
+                <lib>../../../libs/test/build/boost_test_exec_monitor
+              : # args
+              : # input files
+              : std::locale-support
+        ]
+
         [ run format_test_wstring.cpp 
                 <lib>../../../libs/test/build/boost_test_exec_monitor
               : # args
