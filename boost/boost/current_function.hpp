@@ -35,7 +35,7 @@ inline void current_function_helper()
 
 # define BOOST_CURRENT_FUNCTION __FUNCSIG__
 
-#elif defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)
+#elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
 
 # define BOOST_CURRENT_FUNCTION __FUNCTION__
 
