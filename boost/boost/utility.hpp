@@ -24,6 +24,7 @@
 
 #include <boost/config.hpp>
 #include <cstddef>            // for size_t
+#include <utility>            // for std::pair
 
 namespace boost
 {
