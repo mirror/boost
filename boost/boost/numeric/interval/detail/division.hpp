@@ -92,7 +92,7 @@ interval<T, Policies> div_positive(const T& x, const T& yu)
 {
   // assert(yu > T(0));
   typedef interval<T, Policies> I;
-  if (is_zero(x)) return I(0, 0, true);
+  if (is_zero(x)) return I(static_cast<T>(0), static_cast<T>(0), true);
   typename Policies::rounding rnd;
   typedef typename Policies::checking checking;
   const T& inf = checking::inf();
@@ -127,7 +127,7 @@ interval<T, Policies> div_negative(const T& x, const T& yl)
 {
   // assert(yl < T(0));
   typedef interval<T, Policies> I;
-  if (is_zero(x)) return I(0, 0, true);
+  if (is_zero(x)) return I(static_cast<T>(0), static_cast<T>(0), true);
   typename Policies::rounding rnd;
   typedef typename Policies::checking checking;
   const T& inf = checking::inf();
@@ -148,7 +148,7 @@ interval<T, Policies> div_zero(const interval<T, Policies>& x)
 template<class T, class Policies> inline
 interval<T, Policies> div_zero(const T& x)
 {
-  if (is_zero(x)) return interval<T, Policies>(0, 0, true);
+  if (is_zero(x)) return interval<T, Policies>(static_cast<T>(0), static_cast<T>(0), true);
   else return interval<T, Policies>::whole();
 }
 

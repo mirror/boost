@@ -127,7 +127,7 @@ template<class T, class Rounding> inline
 T pow_aux(const T& x_, int pwr, Rounding& rnd) // x and pwr are positive
 {
   T x = x_;
-  T y = (pwr & 1) ? x_ : 1;
+  T y = (pwr & 1) ? x_ : static_cast<T>(1);
   pwr >>= 1;
   while (pwr > 0) {
     x = rnd.mul_up(x, x);
@@ -154,7 +154,7 @@ interval<T, Policies> pow(const interval<T, Policies>& x, int pwr)
         && interval_lib::detail::is_zero(x.upper()))
       return I::empty();
     else
-      return I(1);
+      return I(static_cast<T>(1));
   else if (pwr < 0)
     return interval_lib::multiplicative_inverse(pow(x, -pwr));
 
@@ -172,7 +172,7 @@ interval<T, Policies> pow(const interval<T, Policies>& x, int pwr)
       return I(-pow_aux(-x.lower(), pwr, rnd), pow_aux(x.upper(), pwr, rnd), true);
     } else {         // [-1,1]^2
       BOOST_NUMERIC_INTERVAL_using_max(max);
-      return I(0, pow_aux(max(-x.lower(), x.upper()), pwr, rnd), true);
+      return I(static_cast<T>(0), pow_aux(max(-x.lower(), x.upper()), pwr, rnd), true);
     }
   } else {                                // [1,2]
     return I(pow_aux(x.lower(), pwr, rnd), pow_aux(x.upper(), pwr, rnd), true);
@@ -186,7 +186,7 @@ interval<T, Policies> sqrt(const interval<T, Policies>& x)
   if (interval_lib::detail::test_input(x) || interval_lib::detail::is_neg(x.upper()))
     return I::empty();
   typename Policies::rounding rnd;
-  T l = (x.lower() <= static_cast<T>(0)) ? 0 : rnd.sqrt_down(x.lower());
+  T l = (x.lower() <= static_cast<T>(0)) ? static_cast<T>(0) : rnd.sqrt_down(x.lower());
   return I(l, rnd.sqrt_up(x.upper()), true);
 }
 
@@ -204,7 +204,7 @@ interval<T, Policies> square(const interval<T, Policies>& x)
   else if (interval_lib::detail::is_pos(x.lower()))
     return I(rnd.mul_down(xl, xl), rnd.mul_up(xu, xu), true);
   else
-    return I(0, (-xl > xu ? rnd.mul_up(xl, xl) : rnd.mul_up(xu, xu)), true);
+    return I(static_cast<T>(0), (-xl > xu ? rnd.mul_up(xl, xl) : rnd.mul_up(xu, xu)), true);
 }
 
 } // namespace numeric
