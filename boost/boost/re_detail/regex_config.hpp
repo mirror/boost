@@ -221,7 +221,7 @@ Do not change this file unless you really really have to, add options to
 
    //
    // import export options:
-   #ifdef _DLL
+   #if defined(_DLL) && !defined(BOOST_RE_STATIC_LIB)
       #ifdef BOOST_RE_BUILD_DLL
          #define BOOST_RE_IX_DECL __declspec( dllexport )
       #elif !defined(BOOST_REGEX_LIBRARY_INCLUDE_HPP) && !defined(BOOST_RE_NO_LIB)
@@ -439,9 +439,6 @@ typedef unsigned long jm_uintfast32_t;
       #ifdef __STL_LIMITED_DEFAULT_TEMPLATES
          #define BOOST_RE_NO_TRICKY_DEFAULT_PARAM
          #define BOOST_RE_NO_STRING_DEF_ARGS  
-      #endif
-      #ifndef __STL_USE_EXCEPTIONS
-         #error exception handling support required
       #endif
 
       #include <algorithm>

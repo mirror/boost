@@ -51,14 +51,14 @@ struct kmp_info
 };
 
 template <class charT, class Allocator>
-void kmp_free(kmp_info<charT>* pinfo, Allocator a)
+void kmp_free(kmp_info<charT>* pinfo, const Allocator& a)
 {
    typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(char, Allocator) atype;
    atype(a).deallocate((char*)pinfo, pinfo->size);
 }
 
 template <class iterator, class charT, class Trans, class Allocator>
-kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans translate, Allocator a) 
+kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans translate, const Allocator& a) 
 {    
    typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(char, Allocator) atype;
    int i, j, m;
