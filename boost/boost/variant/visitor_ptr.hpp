@@ -17,7 +17,6 @@
 #ifndef BOOST_VARIANT_VISITOR_PTR_HPP
 #define BOOST_VARIANT_VISITOR_PTR_HPP
 
-#include "boost/variant/bad_visit.hpp"
 #include "boost/variant/static_visitor.hpp"
 
 #include "boost/mpl/apply_if.hpp"
@@ -26,6 +25,24 @@
 #include "boost/type_traits/add_reference.hpp"
 
 namespace boost {
+
+//////////////////////////////////////////////////////////////////////////
+// class bad_visit
+//
+// Exception thrown when a visitation attempt fails due to invalid
+// visited subtype or contents.
+//
+struct bad_visit
+    : std::exception
+{
+public:
+    virtual const char * what() const throw()
+    {
+        return "boost::bad_visit: "
+               "failed visitation using boost::apply_visitor";
+    }
+};
+
 
 //////////////////////////////////////////////////////////////////////////
 // function template visitor_ptr
