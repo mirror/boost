@@ -21,6 +21,10 @@
 #include <new> // for placement new
 #include <typeinfo> // for typeid, std::type_info
 
+#include "boost/variant/detail/config.hpp"
+#include "boost/mpl/aux_/config/eti.hpp"
+#include "boost/mpl/aux_/value_wknd.hpp"
+
 #include "boost/variant/variant_fwd.hpp"
 #include "boost/variant/detail/backup_holder.hpp"
 #include "boost/variant/detail/enable_recursive_fwd.hpp"
@@ -34,11 +38,6 @@
 #include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/variant/detail/has_nothrow_move.hpp"
 #include "boost/variant/detail/move.hpp"
-
-#include "boost/config.hpp"
-#include "boost/detail/workaround.hpp"
-#include "boost/mpl/aux_/config/eti.hpp"
-#include "boost/mpl/aux_/value_wknd.hpp"
 
 #include "boost/detail/reference_content.hpp"
 #include "boost/aligned_storage.hpp"
@@ -1326,9 +1325,7 @@ private: // helpers, for structors, below
 
 public: // structors, cont.
 
-#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) \
- && !BOOST_WORKAROUND(BOOST_INTEL, BOOST_TESTED_AT(700)) \
- && !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if !defined(BOOST_VARIANT_AUX_BROKEN_CONSTRUCTOR_TEMPLATE_ORDERING)
 
     template <typename T>
     variant(const T& operand)
@@ -1342,8 +1339,7 @@ public: // structors, cont.
         convert_construct(operand, 1L);
     }
 
-#elif !defined(BOOST_VARIANT_AUX_NO_SFINAE) \
-   && !BOOST_WORKAROUND(BOOST_INTEL, BOOST_TESTED_AT(700))
+#elif defined(BOOST_VARIANT_AUX_HAS_CONSTRUCTOR_TEMPLATE_ORDERING_SFINAE_WKND)
 
     // For compilers that cannot distinguish between T& and const T& in
     // template constructors, but do support SFINAE, we can workaround:
@@ -1366,7 +1362,7 @@ public: // structors, cont.
         convert_construct(operand, 1L);
     }
 
-#else // defined(BOOST_NO_SFINAE)
+#else // !defined(BOOST_VARIANT_AUX_HAS_CONSTRUCTOR_TEMPLATE_ORDERING_SFINAE_WKND)
 
     // For compilers that cannot distinguish between T& and const T& in
     // template constructors, and do NOT support SFINAE, we can't workaround:
@@ -1377,7 +1373,7 @@ public: // structors, cont.
         convert_construct(operand, 1L);
     }
 
-#endif // CW8 and MSVC7 (and below) workarounds
+#endif // BOOST_VARIANT_AUX_BROKEN_CONSTRUCTOR_TEMPLATE_ORDERING workarounds
 
 public: // structors, cont.
 
