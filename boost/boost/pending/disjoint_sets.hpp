@@ -135,8 +135,8 @@ namespace boost {
 
   
 
-  template <class ID = identity_property_accessor,
-            class InverseID = identity_property_accessor,
+  template <class ID = identity_property_map,
+            class InverseID = identity_property_map,
             class FindCompress = representative_with_full_path_compression
             >
   class disjoint_sets_with_storage
