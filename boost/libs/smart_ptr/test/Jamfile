@@ -1,6 +1,6 @@
 #  Boost.SmartPtr Library test Jamfile
 #
-#  Copyright (c) 2003 Peter Dimov
+#  Copyright (c) 2003-2005 Peter Dimov
 #  Copyright (c) 2003 Dave Abrahams
 #
 #  Permission to copy, use, modify, sell and distribute this software
@@ -28,6 +28,7 @@ DEPENDS all : smart_ptr ;
           [ run intrusive_ptr_test.cpp ]
           [ run atomic_count_test.cpp ]
           [ compile-fail shared_ptr_assign_fail.cpp ]
+          [ compile-fail shared_ptr_delete_fail.cpp ]
         ;
     
     # this one is too slow to run unless explicitly requested, and ALL

@@ -1,6 +1,6 @@
 #  Boost.SmartPtr Library test Jamfile
 #
-#  Copyright (c) 2003 Peter Dimov
+#  Copyright (c) 2003-2005 Peter Dimov
 #  Copyright (c) 2003 Dave Abrahams
 #
 #  Permission to copy, use, modify, sell and distribute this software
@@ -22,16 +22,6 @@ import testing ;
           [ run intrusive_ptr_test.cpp ]
           [ run atomic_count_test.cpp ]
           [ compile-fail shared_ptr_assign_fail.cpp ]
+          [ compile-fail shared_ptr_delete_fail.cpp ]
         ;
-    
-    # this one is too slow to run unless explicitly requested, and ALL
-    # tests are run by default when this file is subincluded from
-    # boost/status, so it's guarded from that case.  It will only be
-    # built from this directory when the targets "test" (all tests) or
-    # "shared_ptr_alloc_test" are requested.
-    #!!!
-    #if [ in-invocation-subdir ]
-    #{
-    #    run shared_ptr_alloc_test.cpp ;
-    #}
 }
