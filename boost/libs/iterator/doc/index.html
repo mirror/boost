@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
+<title>The Boost Iterator Library </title>
+<link rel="stylesheet" href="../../../rst.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="the-boost-iterator-library-logo">
+<h1 class="title">The Boost Iterator Library <a class="reference" href="../../../index.htm"><img alt="" src="../../../c++boost.gif" /></a></h1>
+<hr />
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Authors:</th><td class="field-body">David Abrahams, Jeremy Siek, Thomas Witt</td>
+</tr>
+<tr class="field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="reference" href="mailto:jsiek&#64;osl.iu.edu">jsiek&#64;osl.iu.edu</a>, <a class="reference" href="mailto:witt&#64;ive.uni-hannover.de">witt&#64;ive.uni-hannover.de</a></td>
+</tr>
+<tr class="field"><th class="field-name">organizations:</th><td class="field-body"><a class="reference" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="reference" href="http://www.osl.iu.edu">Open Systems
+Lab</a>, University of Hanover <a class="reference" href="http://www.ive.uni-hannover.de">Institute for Transport
+Railway Operation and Construction</a></td>
+</tr>
+<tr class="field"><th class="field-name">date:</th><td class="field-body">$Date$</td>
+</tr>
+<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Copyright Dave Abrahams, Jeremy Siek, Thomas Witt 2003. All rights reserved</td>
+</tr>
+</tbody>
+</table>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Abstract:</th><td class="field-body">The Boost Iterator Library is a system of <a class="reference" href="../../more/generic_programming.html">concepts</a> which
+extend the C++ standard iterator definition and a framework
+of components for building iterators based on these
+extended concepts.  The extended iterator concepts have
+been carefully designed so that new-style iterators will be
+compatible with old-style algorithms, though algorithms may
+need to be updated if they want to take full advantage of
+the new-style iterators.  Several components of this
+library have been proposed for the C++ standard technical
+report.  The components of the Boost Iterator Library
+replace the older Boost Iterator Adaptor Library.</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title"><a name="table-of-contents"><strong>Table of Contents</strong></a></p>
+<ul class="simple">
+<li><a class="reference" href="#new-style-iterators" id="id5" name="id5">New-Style Iterators</a></li>
+<li><a class="reference" href="#iterator-facade-and-adaptor" id="id6" name="id6">Iterator Facade and Adaptor</a></li>
+<li><a class="reference" href="#specialized-adaptors" id="id7" name="id7">Specialized Adaptors</a></li>
+<li><a class="reference" href="#iterator-utilities" id="id8" name="id8">Iterator Utilities</a><ul>
+<li><a class="reference" href="#traits" id="id9" name="id9">Traits</a></li>
+<li><a class="reference" href="#testing-and-concept-checking" id="id10" name="id10">Testing and Concept Checking</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#upgrading-from-the-old-boost-iterator-adaptor-library" id="id11" name="id11">Upgrading from the old Boost Iterator Adaptor Library</a></li>
+<li><a class="reference" href="#history" id="id12" name="id12">History</a></li>
+</ul>
+</div>
+<hr />
+<div class="section" id="new-style-iterators">
+<h1><a class="toc-backref" href="#id5" name="new-style-iterators">New-Style Iterators</a></h1>
+<p>The iterator categories defined in C++98 are extremely limiting
+because they bind together two orthogonal concepts: traversal and
+element access.  For example, because a random access iterator is
+required to return a reference (and not a proxy) when dereferenced, it
+is impossible to capture the capabilities of
+<tt class="literal"><span class="pre">vector&lt;bool&gt;::iterator</span></tt> using the C++98 categories.  The infamous
+&quot;<tt class="literal"><span class="pre">vector&lt;bool&gt;</span></tt> is not a container, and its iterators aren't random
+access iterators&quot;, debacle about which Herb Sutter wrote two papers
+for the standards comittee (<a class="reference" href="http://www.gotw.ca/publications/N1185.pdf">n1185</a> and <a class="reference" href="http://www.gotw.ca/publications/N1211.pdf">n1211</a>), and a <a class="reference" href="http://www.gotw.ca/gotw/050.htm">Guru of the
+Week</a>.  New-style iterators go well beyond patching up
+<tt class="literal"><span class="pre">vector&lt;bool&gt;</span></tt>, though.  There are lots of other iterators already
+in use which can't be adequately represented by the existing concepts.
+For details about the new iterator concepts, see our</p>
+<blockquote>
+<a class="reference" href="new-iter-concepts.html">Standard Proposal For New-Style Iterators</a></blockquote>
+</div>
+<div class="section" id="iterator-facade-and-adaptor">
+<h1><a class="toc-backref" href="#id6" name="iterator-facade-and-adaptor">Iterator Facade and Adaptor</a></h1>
+<p>Writing standard-conforming iterators is tricky.  In order to ease the
+implementation of new iterators, the iterator library provides the
+<a class="reference" href="iterator_facade.html"><tt class="literal"><span class="pre">iterator_facade</span></tt></a> class template, which implements many useful
+defaults and compile-time checks designed to help the author iterator
+ensure that his iterator is correct.  It is common to define a new
+iterator which behaves like another iterator, but modifies some aspect
+of its behavior.  For that purpose, the library supplies the
+<a class="reference" href="iterator_adaptor.html"><tt class="literal"><span class="pre">iterator_adaptor</span></tt></a> class template, which is specially designed to
+take advantage of as much of the underlying iterator's behavior as
+possible.</p>
+<p>Both <a class="reference" href="iterator_facade.html"><tt class="literal"><span class="pre">iterator_facade</span></tt></a> and <a class="reference" href="iterator_adaptor.html"><tt class="literal"><span class="pre">iterator_adaptor</span></tt></a> as well as many of
+the <a class="reference" href="#specialized-adaptors">specialized adaptors</a> mentioned below have been proposed for
+standardization; see our</p>
+<blockquote>
+<a class="reference" href="facade-and-adaptor.html">Standard Proposal For Iterator Facade and Adaptor</a></blockquote>
+<p>for more details.</p>
+</div>
+<div class="section" id="specialized-adaptors">
+<h1><a class="toc-backref" href="#id7" name="specialized-adaptors">Specialized Adaptors</a></h1>
+<p>The iterator library supplies a useful suite of standard-conforming
+iterator templates based on the Boost <a class="reference" href="#iterator-facade-and-adaptor">iterator facade and adaptor</a>.</p>
+<ul class="simple">
+<li><a class="reference" href="counting_iterator.html"><tt class="literal"><span class="pre">counting_iterator</span></tt></a>: an iterator over a sequence of consecutive values.
+Implements a &quot;lazy sequence&quot;</li>
+<li><a class="reference" href="filter_iterator.html"><tt class="literal"><span class="pre">filter_iterator</span></tt></a>: an iterator over the subset of elements of some
+sequence which satisfy a given predicate</li>
+<li><a class="reference" href="indirect_iterator.html"><tt class="literal"><span class="pre">indirect_iterator</span></tt></a>: an iterator over the objects <em>pointed-to</em> by the
+elements of some sequence.</li>
+<li><a class="reference" href="permutation_iterator.html"><tt class="literal"><span class="pre">permutation_iterator</span></tt></a>: an iterator over the elements of some random-access
+sequence, rearranged according to some sequence of integer indices.</li>
+<li><a class="reference" href="reverse_iterator.html"><tt class="literal"><span class="pre">reverse_iterator</span></tt></a>: an iterator which traverses the elements of some
+bidirectional sequence in reverse.  Corrects many of the
+shortcomings of C++98's <tt class="literal"><span class="pre">std::reverse_iterator</span></tt>.</li>
+<li><a class="reference" href="transform_iterator.html"><tt class="literal"><span class="pre">transform_iterator</span></tt></a>: an iterator over elements which are the result of
+applying some functional transformation to the elements of an
+underlying sequence.  This component also replaces the old
+<tt class="literal"><span class="pre">projection_iterator_adaptor</span></tt>.</li>
+</ul>
+</div>
+<div class="section" id="iterator-utilities">
+<h1><a class="toc-backref" href="#id8" name="iterator-utilities">Iterator Utilities</a></h1>
+<div class="section" id="traits">
+<h2><a class="toc-backref" href="#id9" name="traits">Traits</a></h2>
+<ul class="simple">
+<li><a class="reference" href="iterator_traits.html"><tt class="literal"><span class="pre">iterator_traits.hpp</span></tt></a>: Provides <a class="reference" href="../../mpl/doc/index.html">MPL</a>-compatible metafunctions which
+retrieve an iterator's traits.  Also corrects for the deficiencies
+of broken implementations of <tt class="literal"><span class="pre">std::iterator_traits</span></tt>.</li>
+<li><a class="reference" href="interoperable.html"><tt class="literal"><span class="pre">interoperable.hpp</span></tt></a>: Provides an <a class="reference" href="../../mpl/doc/index.html">MPL</a>-compatible metafunction for
+testing iterator interoperability</li>
+</ul>
+</div>
+<div class="section" id="testing-and-concept-checking">
+<h2><a class="toc-backref" href="#id10" name="testing-and-concept-checking">Testing and Concept Checking</a></h2>
+<ul class="simple">
+<li><a class="reference" href="iterator_archetypes.html"><tt class="literal"><span class="pre">iterator_archetypes.hpp</span></tt></a>: Add summary here</li>
+<li><a class="reference" href="iterator_concepts.html"><tt class="literal"><span class="pre">iterator_concepts.hpp</span></tt></a>: Add summary</li>
+</ul>
+</div>
+</div>
+<div class="section" id="upgrading-from-the-old-boost-iterator-adaptor-library">
+<h1><a class="toc-backref" href="#id11" name="upgrading-from-the-old-boost-iterator-adaptor-library">Upgrading from the old Boost Iterator Adaptor Library</a></h1>
+<p>Turn your policy class into the body of the iterator</p>
+<p>Use transform_iterator with a true reference type for
+projection_iterator.</p>
+</div>
+<div class="section" id="history">
+<h1><a class="toc-backref" href="#id12" name="history">History</a></h1>
+<p>In 2000 Dave Abrahams was writing an iterator for a container of
+pointers, which would access the pointed-to elements when
+dereferenced.  Naturally, being a library writer, he decided to
+generalize the idea and the Boost Iterator Adaptor library was born.
+Dave was inspired by some writings of Andrei Alexandrescu and chose a
+policy based design (though he probably didn't capture Andrei's idea
+very well - there was only one policy class for all the iterator's
+orthogonal properties).  Soon Jeremy Siek realized he would need the
+library and they worked together to produce a &quot;Boostified&quot; version,
+which was reviewed and accepted into the library.  They wrote a paper
+and made several important revisions of the code.</p>
+<p>Eventually, several shortcomings of the older library began to make
+the need for a rewrite apparent.  Dave and Jeremy started working at
+the Santa Cruz C++ committee meeting in 2002, and had quickly
+generated a working prototype.  Thomas Witt expressed interest and
+became the voice of compile-time checking for the project...</p>
+<!-- LocalWords:  Abrahams Siek Witt const bool Sutter's WG int UL LI href Lvalue
+LocalWords:  ReadableIterator WritableIterator SwappableIterator cv pre iter
+LocalWords:  ConstantLvalueIterator MutableLvalueIterator CopyConstructible TR
+LocalWords:  ForwardTraversalIterator BidirectionalTraversalIterator lvalue
+LocalWords:  RandomAccessTraversalIterator dereferenceable Incrementable tmp
+LocalWords:  incrementable xxx min prev inplace png oldeqnew AccessTag struct
+LocalWords:  TraversalTag typename lvalues DWA Hmm JGS -->
+</div>
+</div>
+<hr class="footer"/>
+<div class="footer">
+<a class="reference" href="index.rst">View document source</a>.
+Generated on: 2003-07-29 22:24 UTC.
+Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+</div>
+</body>
+</html>
