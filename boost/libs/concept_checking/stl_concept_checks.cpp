@@ -25,11 +25,13 @@
 #include <slist>
 #endif
 
-//#define BOOST_HIDE_EXPECTED_ERRORS
+#define BOOST_HIDE_EXPECTED_ERRORS
 
 int
 main()
 {
+  using namespace boost;
+
 #if defined(_ITERATOR_) && defined(BOOST_HIDE_EXPECTED_ERRORS)
   // VC++ STL implementation is not standard conformant and
   // fails to pass these concept checks
@@ -39,27 +41,27 @@ main()
   typedef std::list<int> List;
 
   // VC++ missing pointer and const_pointer typedefs
-  BOOST_FUNCTION_REQUIRES(Vector, Mutable_RandomAccessContainerConcept);
-  BOOST_FUNCTION_REQUIRES(Vector, BackInsertionSequenceConcept);
+  function_requires< Mutable_RandomAccessContainerConcept<Vector> >();
+  function_requires< BackInsertionSequenceConcept<Vector> >();
 
 #if !(defined(__GNUC__) && defined(BOOST_HIDE_EXPECTED_ERRORS))
 #if !(defined(__sgi) && defined(BOOST_HIDE_EXPECTED_ERRORS))
   // old deque iterator missing n + iter operation
-  BOOST_FUNCTION_REQUIRES(Deque, Mutable_RandomAccessContainerConcept);
+  function_requires< Mutable_RandomAccessContainerConcept<Deque> >();
 #endif
   // warnings about signed and unsigned in old deque version
-  BOOST_FUNCTION_REQUIRES(Deque, FrontInsertionSequenceConcept);
-  BOOST_FUNCTION_REQUIRES(Deque, BackInsertionSequenceConcept);
+  function_requires< FrontInsertionSequenceConcept<Deque> >();
+  function_requires< BackInsertionSequenceConcept<Deque> >();
 #endif
 
   // VC++ missing pointer and const_pointer typedefs
-  BOOST_FUNCTION_REQUIRES(List, Mutable_ReversibleContainerConcept);
-  BOOST_FUNCTION_REQUIRES(List, FrontInsertionSequenceConcept);
-  BOOST_FUNCTION_REQUIRES(List, BackInsertionSequenceConcept);
+  function_requires< Mutable_ReversibleContainerConcept<List> >();
+  function_requires< FrontInsertionSequenceConcept<List> >();
+  function_requires< BackInsertionSequenceConcept<List> >();
 
 #ifndef BOOST_NO_SLIST
   typedef std::slist<int> SList;
-  BOOST_FUNCTION_REQUIRES(SList, FrontInsertionSequenceConcept);
+  function_requires< FrontInsertionSequenceConcept<SList> >();
 #endif
 
   typedef std::set<int> Set;
@@ -67,21 +69,21 @@ main()
   typedef std::map<int,int> Map;
   typedef std::multimap<int,int> MultiMap;
 
-  BOOST_FUNCTION_REQUIRES(Set, SortedAssociativeContainerConcept);
-  BOOST_FUNCTION_REQUIRES(Set, SimpleAssociativeContainerConcept);
-  BOOST_FUNCTION_REQUIRES(Set, UniqueAssociativeContainerConcept);
+  function_requires< SortedAssociativeContainerConcept<Set> >();
+  function_requires< SimpleAssociativeContainerConcept<Set> >();
+  function_requires< UniqueAssociativeContainerConcept<Set> >();
 
-  BOOST_FUNCTION_REQUIRES(MultiSet, SortedAssociativeContainerConcept);
-  BOOST_FUNCTION_REQUIRES(MultiSet, SimpleAssociativeContainerConcept);
-  BOOST_FUNCTION_REQUIRES(MultiSet, MultipleAssociativeContainerConcept);
+  function_requires< SortedAssociativeContainerConcept<MultiSet> >();
+  function_requires< SimpleAssociativeContainerConcept<MultiSet> >();
+  function_requires< MultipleAssociativeContainerConcept<MultiSet> >();
 
-  BOOST_FUNCTION_REQUIRES(Map, SortedAssociativeContainerConcept);
-  BOOST_FUNCTION_REQUIRES(Map, UniqueAssociativeContainerConcept);
-  BOOST_FUNCTION_REQUIRES(Map, PairAssociativeContainerConcept);
+  function_requires< SortedAssociativeContainerConcept<Map> >();
+  function_requires< UniqueAssociativeContainerConcept<Map> >();
+  function_requires< PairAssociativeContainerConcept<Map> >();
 
-  BOOST_FUNCTION_REQUIRES(MultiMap, SortedAssociativeContainerConcept);
-  BOOST_FUNCTION_REQUIRES(MultiMap, MultipleAssociativeContainerConcept);
-  BOOST_FUNCTION_REQUIRES(MultiMap, PairAssociativeContainerConcept);
+  function_requires< SortedAssociativeContainerConcept<MultiMap> >();
+  function_requires< MultipleAssociativeContainerConcept<MultiMap> >();
+  function_requires< PairAssociativeContainerConcept<MultiMap> >();
 #endif
 
   return 0;

@@ -51,7 +51,8 @@ The documentation is organized into the following sections.
 <LI><a href="#implementation">Implementation</a></LI>
 <LI><a href="#reference">Reference</a></LI>
   <OL>
-  <LI><a href="#macros">Macros</a></LI>
+  <LI><a href="#functions">Functions</a></LI>
+  <LI><a href="#classes">Classes</a></LI>
   <LI><a href="#basic-concepts">Basic Concept Checking Classes</a></LI>
   <LI><a href="#iterator-concepts">Iterator Concept Checking Classes</a></LI>
   <LI><a href="#function-object-concepts">Function Object Concept Checking Classes</a></LI>
@@ -100,14 +101,6 @@ What is required is a mechanism for enforcing ``concept safety'' at
 Library uses some standard C++ constructs to enforce early concept
 compliance and that provides more informative error messages upon
 non-compliance. 
-
-<!--
-Move this stuff to history:
-
-We have applied this mechanism to the SGI
-implementation of STL, and the changes are now in the main
-distribution.
--->
 
 <p>
 Note that this technique only addresses the syntactic
@@ -234,55 +227,76 @@ RandomAccessIterator</a>).
 
 <h2><a name="using-concept-checks">Using Concept Checks</a></h2>
 
-The Boost Concept Checking Library defines several macros that make it
-convenient to ensure that some type (or collection of types) models a
-given concept. The <tt>REQUIRE</tt> macros can be used in function
-bodies and the <tt>CLASS_REQUIRES</tt> macros can be used in class
-bodies. The purpose of the macros is to check that the given
-<i>type</i> models the specified <i>concept</i>.  We use macros so
-that the checks can be conditionally removed in situations where
-faster compile time is needed.
+For each concept there is a concept checking class which can be used
+to make sure that a given type (or set of types) models the concept.
+The Boost Concept Checking Library includes concept checking classes
+for all of the concepts used in the C++ standard library and a few
+more. The <a href="#reference">Reference</a> section below lists these
+concept checking classes. In addition, other boost libraries come with
+concept checking classes for the concepts that are particular to those
+libraries.  An example of one of these classes is the
+<tt>EqualityComparableConcept</tt> class.
 
 <pre>
-  REQUIRE(<i>type</i>, <i>concept</i>);
-  REQUIRE2(<i>type1</i>, <i>type2</i>, <i>concept</i>);
-  REQUIRE3(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>concept</i>);
-  REQUIRE4(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>type4</i>, <i>concept</i>);
+  template &lt;class T&gt; struct EqualityComparableConcept;
+</pre>
 
-  CLASS_REQUIRES(<i>type</i>, <i>concept</i>);
-  CLASS_REQUIRES2(<i>type1</i>, <i>type2</i>, <i>concept</i>);
-  CLASS_REQUIRES3(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>concept</i>);
-  CLASS_REQUIRES4(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>type4</i>, <i>concept</i>);
+Each concept checking class has a member function named
+<tt>constraints()</tt> which contains the valid expressions for the
+concept. To check whether some type, say <tt>foo</tt>, is
+EqualityComparable, we need to instantiate the concept checking class
+with foo: <tt>EqualityComparableConcept&lt;foo&gt;</tt> and then find
+a way to get the compiler to compile the <tt>constraints()</tt>
+function without actually calling it. The Boost Concept Checking
+Library defines two utilities that make this easy:
+<tt>function_requires()</tt> and <tt>class_requires</tt>.
+<tt>function_requires()</tt> function can be used in function bodies
+and the <tt>class_requires</tt> class can be used inside class
+bodies. The <tt>function_requires()</tt> function takes no arguments,
+but has a template parameter for the concept checking class. This
+means that the instantiated concept checking class must be given as an
+explicit template argument, as shown below.
+
+<pre>
+  void some_function_using_foo() {
+    function_requires&lt; EqualityComparableConcept&lt;foo&gt; &gt;();
+    // ...
+  };
+</pre>
+
+The <tt>class_requires</tt> is a class template with a template
+parameter for the concept checking class. Accessing the nested
+<tt>check</tt> type within <tt>class_requires</tt> triggers the the
+concept checking.
+
+<pre>
+  struct some_class_using_foo {
+    typedef class_requires&lt; EqualityComparableConcept&lt;foo&gt; &gt;::check req1;
+  };
 </pre>
 
 To add concept checks to the <tt>std::stable_sort()</tt> function the
-library implementor would simply insert <tt>REQUIRE</tt> at the top of
-<tt>std::stable_sort()</tt> to make sure the template parameter type
-models <a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
+library implementor would simply insert <tt>function_requires()</tt>
+at the top of <tt>std::stable_sort()</tt> to make sure the template
+parameter type models <a
+href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
 RandomAccessIterator</a>. In addition, <tt>std::stable_sort()</tt>
 requires that the <tt>value_type</tt> of the iterators be
 <a href="http://www.sgi.com/Technology/STL/LessThanComparable.html">
-LessThanComparable</a>, so we also use <tt>REQUIRE</tt> to check this.
+LessThanComparable</a>, so we also use <tt>function_requires()</tt> to
+check this.
 
 <pre>
   template &lt;class RandomAccessIter&gt;
   void stable_sort(RandomAccessIter first, RandomAccessIter last)
   {
-    REQUIRE(RandomAccessIter, RandomAccessIterator);
+    function_requires&lt; RandomAccessIteratorConcept&lt;RandomAccessIter&gt; &gt;();
     typedef typename std::iterator_traits&lt;RandomAccessIter&gt;::value_type value_type;
-    REQUIRE(value_type, LessThanComparable);
+    function_requires&lt; LessThanComparableConcept&lt;value_type&gt; &gt;();
     ...
   }
 </pre>
 
-The Boost Concept Checking library includes a concept checking class
-for each of the concepts described in the SGI STL documentation.  The
-second argument to <tt>REQUIRE</tt> indicates which concept checking
-class should be used. In the above example, the use of
-<tt>LessThanComparable</tt> indicates that the
-<tt>LessThanComparable_concept</tt> class will be used to check the
-value type.  The <a href="#reference">Reference</a> section below
-lists the concept checking classes.
 
 
 <!-- There are a few places where the SGI STL documentation differs
@@ -292,8 +306,8 @@ these cases we use the definition from the C++ Standard.  -->
 <p>
 Some concepts deal with more than one type. In this case the
 corresponding concept checking class will have multiple template
-parameters.  The following example shows how the <tt>REQUIRE2</tt>
-macro is used with the <a
+parameters.  The following example shows how
+<tt>function_requires()</tt> is used with the <a
 href="../property_map/ReadWritePropertyMap.html">ReadWritePropertyMap</a>
 concept which takes two type parameters: a property map and the key
 type for the map.
@@ -306,24 +320,25 @@ type for the map.
     Buffer& Q, BFSVisitor vis, ColorMap color)
   {
     typedef typename graph_traits&lt;IncidenceGraph&gt;::vertex_descriptor Vertex;
-    REQUIRE2(ColorMap, Vertex, ReadWritePropertyMap);
+    function_requires&lt; ReadWritePropertyMap&lt;ColorMap, Vertex&gt; &gt;();
     ...
   }
 </pre>
 
 
-As an example of using the <tt>CLASS_REQUIRES</tt> macro we look at a
-concept check that could be added to <tt>std::vector</tt>. One
-requirement that is placed on the element type is that it must be <a
+As an example of using <tt>class_requires</tt> we look at a concept
+check that could be added to <tt>std::vector</tt>. One requirement
+that is placed on the element type is that it must be <a
 href="http://www.sgi.com/Technology/STL/Assignable.html">Assignable</a>.
-We can check this by inserting <tt>CLASS_REQUIRES(T, Assignable)</tt>
-at the top of the definition for <tt>std::vector</tt>.
+We can check this by inserting
+<tt>class_requires&lt;AssignableConcept&lt;T&gt; &gt;</tt> at the top
+of the definition for <tt>std::vector</tt>.
 
 <pre>
   namespace std {
     template &lt;class T&gt;
     struct vector {
-      CLASS_REQUIRES(T, Assignable);
+      typedef typename class_requires&lt; AssignableConcept&lt;T&gt; &gt;::check req;
       ...
     };
   }
@@ -333,9 +348,10 @@ at the top of the definition for <tt>std::vector</tt>.
 Although the concept checks are designed for use by generic library
 implementors, they can also be useful to end users. Sometimes one may
 not be sure whether some type models a particular concept. This can
-easily be checked by creating a small program and using the
-<tt>REQUIRE</tt> macro with the type and concept in question.  The
-file <a href="./stl_concept_checks.cpp"><tt>stl_concept_checks.cpp</tt></a>
+easily be checked by creating a small program and using
+<tt>function_requires()</tt> with the type and concept in question.
+The file <a
+href="./stl_concept_checks.cpp"><tt>stl_concept_checks.cpp</tt></a>
 gives and example of applying the concept checks to STL
 containers. The file is listed here:
 
@@ -356,37 +372,37 @@ containers. The file is listed here:
     typedef std::deque&lt;int&gt; Deque;
     typedef std::list&lt;int&gt; List;
 
-    REQUIRE(Vector, Mutable_RandomAccessContainer);
-    REQUIRE(Vector, BackInsertionSequence);
+    function_requires&lt; Mutable_RandomAccessContainer&lt;Vector&gt; &gt;();
+    function_requires&lt; BackInsertionSequence&lt;Vector&gt; &gt;();
 
-    REQUIRE(Deque, Mutable_RandomAccessContainer);
-    REQUIRE(Deque, FrontInsertionSequence);
-    REQUIRE(Deque, BackInsertionSequence);
+    function_requires&lt; Mutable_RandomAccessContainer&lt;Deque&gt; &gt;();
+    function_requires&lt; FrontInsertionSequence&lt;Deque&gt; &gt;();
+    function_requires&lt; BackInsertionSequence&lt;Deque&gt; &gt;();
 
-    REQUIRE(List, Mutable_ReversibleContainer);
-    REQUIRE(List, FrontInsertionSequence);
-    REQUIRE(List, BackInsertionSequence);
+    function_requires&lt; Mutable_ReversibleContainer&lt;List&gt; &gt;();
+    function_requires&lt; FrontInsertionSequence&lt;List&gt; &gt;();
+    function_requires&lt; BackInsertionSequence&lt;List&gt; &gt;();
 
     typedef std::set&lt;int&gt; Set;
     typedef std::multiset&lt;int&gt; MultiSet;
     typedef std::map&lt;int,int&gt; Map;
     typedef std::multimap&lt;int,int&gt; MultiMap;
 
-    REQUIRE(Set, SortedAssociativeContainer);
-    REQUIRE(Set, SimpleAssociativeContainer);
-    REQUIRE(Set, UniqueAssociativeContainer);
+    function_requires&lt; SortedAssociativeContainer&lt;Set&gt; &gt;();
+    function_requires&lt; SimpleAssociativeContainer&lt;Set&gt; &gt;();
+    function_requires&lt; UniqueAssociativeContainer&lt;Set&gt; &gt;();
 
-    REQUIRE(MultiSet, SortedAssociativeContainer);
-    REQUIRE(MultiSet, SimpleAssociativeContainer);
-    REQUIRE(MultiSet, MultipleAssociativeContainer);
+    function_requires&lt; SortedAssociativeContainer&lt;MultiSet&gt; &gt;();
+    function_requires&lt; SimpleAssociativeContainer&lt;MultiSet&gt; &gt;();
+    function_requires&lt; MultipleAssociativeContainer&lt;MultiSet&gt; &gt;();
 
-    REQUIRE(Map, SortedAssociativeContainer);
-    REQUIRE(Map, UniqueAssociativeContainer);
-    REQUIRE(Map, PairAssociativeContainer);
+    function_requires&lt; SortedAssociativeContainer&lt;Map&gt; &gt;();
+    function_requires&lt; UniqueAssociativeContainer&lt;Map&gt; &gt;();
+    function_requires&lt; PairAssociativeContainer&lt;Map&gt; &gt;();
 
-    REQUIRE(MultiMap, SortedAssociativeContainer);
-    REQUIRE(MultiMap, MultipleAssociativeContainer);
-    REQUIRE(MultiMap, PairAssociativeContainer);
+    function_requires&lt; SortedAssociativeContainer&lt;MultiMap&gt; &gt;();
+    function_requires&lt; MultipleAssociativeContainer&lt;MultiMap&gt; &gt;();
+    function_requires&lt; PairAssociativeContainer&lt;MultiMap&gt; &gt;();
 
     return 0;
   }
@@ -434,10 +450,11 @@ enforce the associated types of the concept.
   struct RandomAccessIterator_concept
   {
     void constraints() {
-      REQUIRE(Iter, BidirectionalIterator);
-      REQUIRE(Iter, LessThanComparable);
-      REQUIRE2(typename std::iterator_traits&lt;Iter&gt;::iterator_category,
-        std::random_access_iterator_tag, Convertible);
+      function_requires&lt; BidirectionalIteratorConcept&lt;Iter&gt; &gt;();
+      function_requires&lt; LessThanComparableConcept&lt;Iter&gt; &gt;();
+      function_requires&lt; ConvertibleConcept&lt;
+        typename std::iterator_traits&lt;Iter&gt;::iterator_category,
+        std::random_access_iterator_tag&gt; &gt;();
 
       i += n;
       i = i + n; i = n + i;
@@ -739,8 +756,9 @@ We can still use the function pointer mechanism to cause instantiation
 of the constraints function, however now it will be a member function
 pointer. To make it easy for the library implementor to invoke the
 concept checks, we wrap the member function pointer mechanism in a
-macro named <tt>REQUIRE</tt>. The following code snippet shows how to
-use <tt>REQUIRE</tt> to make sure that the iterator is a
+function named <tt>function_requires()</tt>. The following code
+snippet shows how to use <tt>function_requires()</tt> to make sure
+that the iterator is a
 <a
 href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
 RandomAccessIterator</a>.
@@ -749,155 +767,156 @@ RandomAccessIterator</a>.
   template &lt;class RandomAccessIter&gt;
   void stable_sort(RandomAccessIter first, RandomAccessIter last)
   {
-    REQUIRE(RandomAccessIter, RandomAccessIterator);
+    function_requires< RandomAccessIteratorConcept<RandomAccessIter> >();
     ...
   }
 </pre>
 
-The definition of the <tt>REQUIRE</tt> is as follows. The
-<tt>type_var</tt> is the type we wish to check, and <tt>concept</tt>
-is the name that corresponds to the concept checking class.  We assign
-the address of the constraints member function to the function pointer
-<tt>x</tt>, which causes the instantiation of the constraints function
-and checking of the concept's valid expressions. We then assign
-<tt>x</tt> to <tt>x</tt> to avoid unused variable compiler warnings,
-and wrap everything in a do-while loop to prevent name collisions.
+The definition of the <tt>function_requires()</tt> is as follows. The
+<tt>Concept</tt> is the concept checking class that has been
+instantiated with the modeling type.  We assign the address of the
+constraints member function to the function pointer <tt>x</tt>, which
+causes the instantiation of the constraints function and checking of
+the concept's valid expressions. We then assign <tt>x</tt> to
+<tt>x</tt> to avoid unused variable compiler warnings, and wrap
+everything in a do-while loop to prevent name collisions.
 
 <pre>
-  #define REQUIRE(type_var, concept)                \
-  do {                                              \
-    void (concept##_concept &lt;type_var&gt;::*x)() =     \
-      concept##_concept &lt;type_var&gt;::constraints;    \
-    x = x;                                          \
-  } while (0)
+  template <class Concept>
+  void function_requires()
+  {
+    void (Concept::*x)() = BOOST_FPTR Concept::constraints;
+    ignore_unused_variable_warning(x);
+  }
 </pre>
 
 To check the type parameters of class templates, we provide the
-<tt>CLASS_REQUIRES</tt> macro which can be used inside the body of a
-class definition (whereas the <tt>REQUIRES</tt> macro can only be used
-inside of a function body).  This macro declares a nested class
-template, where the template parameter is a function pointer. We then
-use the nested class type in a typedef with the function pointer type
-of the constraint function as the template argument. We use the
-<tt>type_var</tt> and <tt>concept</tt> names in the nested class and
-typedef names to help prevent name collisions.
+<tt>class_requires</tt> class which can be used inside the body of a
+class definition (whereas <tt>function_requires()</tt> can only be
+used inside of a function body).  <tt>class_requires</tt> declares a
+nested class template, where the template parameter is a function
+pointer. We then use the nested class type in a typedef with the
+function pointer type of the constraint function as the template
+argument.
 
 <pre>
-  #define CLASS_REQUIRES(type_var, concept)          \
-    typedef void (concept##_concept &lt;type_var&gt;       \
-      ::* func##type_var##concept)();                \
-                                                     \
-    template &lt;func##type_var##concept FuncPtr&gt;       \
-    struct dummy_struct_##type_var##concept { };     \
-                                                     \
-    typedef dummy_struct_##type_var##concept&lt;        \
-      concept##_concept &lt;type_var&gt;::constraints&gt;     \
-      dummy_typedef_##type_var##concept
+  template &lt;class Concept&gt;
+  class class_requires
+  {
+    typedef void (Concept::* function_pointer)();
+
+    template &lt;function_pointer Fptr&gt;
+    struct dummy_struct { };
+  public:
+    typedef dummy_struct&lt; BOOST_FPTR Concept::constraints &gt; check;
+  };
 </pre>
 
-In addition, there are versions of <tt>REQUIRE</tt> and
-<tt>CLASS_REQUIRES</tt> that take more arguments, to handle concepts
-that include interactions between two or more types.
-<tt>CLASS_REQUIRES</tt> was not used in the implementation of the STL
-concept checks because several compilers do not implement template
-parameters of function pointer type.
-
+<tt>class_requires</tt> was not used in the implementation of the
+Boost Concept Checking Library concept checks because several
+compilers do not implement template parameters of function pointer
+type.
 
 
 
 <h2><a name="reference">Reference</a></h2>
 
 
-<h3><a name="macros">Macros</a></h3>
+<h3><a name="functions">Functions</a></h3>
 
 <pre>
-  // Apply concept checks in function definitions.
-  REQUIRE(<i>type</i>, <i>concept</i>);
-  REQUIRE2(<i>type1</i>, <i>type2</i>, <i>concept</i>);
-  REQUIRE3(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>concept</i>);
-  REQUIRE4(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>type4</i>, <i>concept</i>);
+  template &lt;class Concept&gt;
+  void function_requires();
+</pre>
+
+<h3><a name="classes">Classes</a></h3>
+<pre>
+  template &lt;class Concept&gt;
+  struct class_requires {
+    typedef ... check;
+  };
 </pre>
 
 <pre>
-  // Apply concept checks in class definitions.
-  CLASS_REQUIRES(<i>type</i>, <i>concept</i>);
-  CLASS_REQUIRES2(<i>type1</i>, <i>type2</i>, <i>concept</i>);
-  CLASS_REQUIRES3(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>concept</i>);
-  CLASS_REQUIRES4(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>type4</i>, <i>concept</i>);
-</pre>
-
-<pre>
-  // Make sure that <i>type1</i> and <i>type2</i> are exactly the same type
-  REQUIRE_SAME_TYPE(<i>type1</i>, <i>type2</i>);
+  // Make sure that <i>Type1</i> and <i>Type2</i> are exactly the same type.
+  // If they are not, then the nested typedef for <tt>type</tt> will
+  // not exist and cause a compiler error.
+  template &lt;class Type1, class Type2&gt;
+  struct require_same {
+    typedef ... type;
+  };
+  // usage example
+  typedef typedef require_same<int,int>::type req1; // this will compile OK
+  typedef typedef require_same<int,float>::type req1; // this will cause a compiler error
 </pre>
 
 <h3><a name="basic-concepts">Basic Concept Checking Classes</a></h3>
 
 <pre>
   template &lt;class T&gt; struct Integer_concept; // Is T a built-in integer type?
-  template &lt;class T&gt; struct SignedInteger_concept; // Is T a built-in signed integer type?
-  template &lt;class X, class Y&gt; struct Convertible_concept; // Is X convertible to Y?
-  template &lt;class T&gt; struct Assignable_concept;
-  template &lt;class T&gt; struct DefaultConstructible_concept;
-  template &lt;class T&gt; struct CopyConstructible_concept;
-  template &lt;class T&gt; struct Boolean_concept;
-  template &lt;class T&gt; struct EqualityComparable_concept;
+  template &lt;class T&gt; struct SignedIntegerConcept; // Is T a built-in signed integer type?
+  template &lt;class X, class Y&gt; struct ConvertibleConcept; // Is X convertible to Y?
+  template &lt;class T&gt; struct AssignableConcept;
+  template &lt;class T&gt; struct DefaultConstructibleConcept;
+  template &lt;class T&gt; struct CopyConstructibleConcept;
+  template &lt;class T&gt; struct BooleanConcept;
+  template &lt;class T&gt; struct EqualityComparableConcept;
   // Is class T equality comparable on the left side with type Left?
-  template &lt;class T, class Left&gt; struct LeftEqualityComparable_concept;
-  template &lt;class T&gt; struct LessThanComparable_concept;
+  template &lt;class T, class Left&gt; struct LeftEqualityComparableConcept;
+  template &lt;class T&gt; struct LessThanComparableConcept;
 </pre>
 
 <h3><a name="iterator-concepts">Iterator Concept Checking Classes</a></h3>
 
 <pre>
-  template &lt;class Iter&gt; struct TrivialIterator_concept;
-  template &lt;class Iter&gt; struct Mutable_TrivialIterator_concept;
-  template &lt;class Iter&gt; struct InputIterator_concept;
-  template &lt;class Iter, class T&gt; struct OutputIterator_concept;
-  template &lt;class Iter&gt; struct ForwardIterator_concept;
-  template &lt;class Iter&gt; struct Mutable_ForwardIterator_concept;
-  template &lt;class Iter&gt; struct BidirectionalIterator_concept;
-  template &lt;class Iter&gt; struct Mutable_BidirectionalIterator_concept;
-  template &lt;class Iter&gt; struct RandomAccessIterator_concept;
-  template &lt;class Iter&gt; struct Mutable_RandomAccessIterator_concept;
+  template &lt;class Iter&gt; struct TrivialIteratorConcept;
+  template &lt;class Iter&gt; struct Mutable_TrivialIteratorConcept;
+  template &lt;class Iter&gt; struct InputIteratorConcept;
+  template &lt;class Iter, class T&gt; struct OutputIteratorConcept;
+  template &lt;class Iter&gt; struct ForwardIteratorConcept;
+  template &lt;class Iter&gt; struct Mutable_ForwardIteratorConcept;
+  template &lt;class Iter&gt; struct BidirectionalIteratorConcept;
+  template &lt;class Iter&gt; struct Mutable_BidirectionalIteratorConcept;
+  template &lt;class Iter&gt; struct RandomAccessIteratorConcept;
+  template &lt;class Iter&gt; struct Mutable_RandomAccessIteratorConcept;
 </pre>
 
 <h3><a name="function-object-concepts">Function Object Concept Checking Classes</a></h3>
 
 <pre>
-  template &lt;class Func, class Return&gt; struct Generator_concept;
-  template &lt;class Func, class Return, class Arg&gt; struct UnaryFunction_concept;
-  template &lt;class Func, class Return, class First, class Second&gt; struct BinaryFunction_concept;
-  template &lt;class Func, class Arg&gt; struct UnaryPredicate_concept;
-  template &lt;class Func, class First, class Second&gt; struct BinaryPredicate_concept;
-  template &lt;class Func, class First, class Second&gt; struct Const_BinaryPredicate_concept {;
+  template &lt;class Func, class Return&gt; struct GeneratorConcept;
+  template &lt;class Func, class Return, class Arg&gt; struct UnaryFunctionConcept;
+  template &lt;class Func, class Return, class First, class Second&gt; struct BinaryFunctionConcept;
+  template &lt;class Func, class Arg&gt; struct UnaryPredicateConcept;
+  template &lt;class Func, class First, class Second&gt; struct BinaryPredicateConcept;
+  template &lt;class Func, class First, class Second&gt; struct Const_BinaryPredicateConcept {;
 </pre>
 
 <h3><a name="container-concepts">Container Concept Checking Classes</a></h3>
 
 <pre>
-  template &lt;class C&gt; struct Container_concept;
-  template &lt;class C&gt; struct Mutable_Container_concept;
+  template &lt;class C&gt; struct ContainerConcept;
+  template &lt;class C&gt; struct Mutable_ContainerConcept;
 
-  template &lt;class C&gt; struct ForwardContainer_concept;
-  template &lt;class C&gt; struct Mutable_ForwardContainer_concept;
+  template &lt;class C&gt; struct ForwardContainerConcept;
+  template &lt;class C&gt; struct Mutable_ForwardContainerConcept;
 
-  template &lt;class C&gt; struct ReversibleContainer_concept;
-  template &lt;class C&gt; struct Mutable_ReversibleContainer_concept;
+  template &lt;class C&gt; struct ReversibleContainerConcept;
+  template &lt;class C&gt; struct Mutable_ReversibleContainerConcept;
 
-  template &lt;class C&gt; struct RandomAccessContainer_concept;
-  template &lt;class C&gt; struct Mutable_RandomAccessContainer_concept;
+  template &lt;class C&gt; struct RandomAccessContainerConcept;
+  template &lt;class C&gt; struct Mutable_RandomAccessContainerConcept;
 
-  template &lt;class C&gt; struct Sequence_concept;
-  template &lt;class C&gt; struct FrontInsertionSequence_concept;
-  template &lt;class C&gt; struct BackInsertionSequence_concept;
+  template &lt;class C&gt; struct SequenceConcept;
+  template &lt;class C&gt; struct FrontInsertionSequenceConcept;
+  template &lt;class C&gt; struct BackInsertionSequenceConcept;
 
-  template &lt;class C&gt; struct AssociativeContainer_concept;
-  template &lt;class C&gt; struct UniqueAssociativeContainer_concept;
-  template &lt;class C&gt; struct MultipleAssociativeContainer_concept;
-  template &lt;class C&gt; struct SimpleAssociativeContainer_concept;
-  template &lt;class C&gt; struct PairAssociativeContainer_concept;
-  template &lt;class C&gt; struct SortedAssociativeContainer_concept;
+  template &lt;class C&gt; struct AssociativeContainerConcept;
+  template &lt;class C&gt; struct UniqueAssociativeContainerConcept;
+  template &lt;class C&gt; struct MultipleAssociativeContainerConcept;
+  template &lt;class C&gt; struct SimpleAssociativeContainerConcept;
+  template &lt;class C&gt; struct PairAssociativeContainerConcept;
+  template &lt;class C&gt; struct SortedAssociativeContainerConcept;
 </pre>
 
 

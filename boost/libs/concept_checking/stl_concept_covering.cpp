@@ -30,17 +30,17 @@ main()
   }
   {
     /*
-      SGI STL Docs and the C++ standard (25.1.2) BOOST_FUNCTION_REQUIRESments for
+      SGI STL Docs and the C++ standard (25.1.2) requirements for
       std::for_each() are broken. They should be specified as follows:
 
-      template <class InputIterator, class LeftEqualityComparable>
+      template <class InputIterator, class T>
       InputIterator find(InputIterator first, InputIterator last,
-                         const LeftEqualityComparable& value)
+                         const T& value)
       {
-        BOOST_FUNCTION_REQUIRES(InputIterator, InputIterator);
+        function_requires< InputIteratorConcept<InputIterator> >();
         typedef typename std::iterator_traits<InputIterator>::value_type 
           value_type;
-        BOOST_FUNCTION_REQUIRES(LeftEqualityComparable, value_type, LeftEqualityComparable);
+        function_requires< EqualityComparable2<value_type, T> >();
         ...
       }
     */
@@ -74,7 +74,7 @@ main()
   {
     typedef input_iterator_archetype<null_archetype> InIter;
     InIter in;
-    BOOST_FUNCTION_REQUIRES(InIter, InputIteratorConcept);
+    function_requires< InputIteratorConcept<InIter> >();
     left_equality_comparable_archetype<null_archetype> value(dummy_cons);
     std::iterator_traits<InIter>::difference_type
       n = std::count(in, in, value);
