@@ -19,103 +19,103 @@ int test_main(int,char*[])
   tribool y(true); // true
   tribool z(maybe); // maybe
 
-  BOOST_TEST(!x);
-  BOOST_TEST(x == false);
-  BOOST_TEST(false == x);
-  BOOST_TEST(x != true);
-  BOOST_TEST(true != x);
-  BOOST_TEST(maybe(x == maybe));
-  BOOST_TEST(maybe(maybe == x));
-  BOOST_TEST(maybe(x != maybe));
-  BOOST_TEST(maybe(maybe != x));
-  BOOST_TEST(x == x);
-  BOOST_TEST(!(x != x));
-  BOOST_TEST(!(x && true));
-  BOOST_TEST(!(true && x));
-  BOOST_TEST(x || true);
-  BOOST_TEST(true || x);
+  BOOST_CHECK(!x);
+  BOOST_CHECK(x == false);
+  BOOST_CHECK(false == x);
+  BOOST_CHECK(x != true);
+  BOOST_CHECK(true != x);
+  BOOST_CHECK(maybe(x == maybe));
+  BOOST_CHECK(maybe(maybe == x));
+  BOOST_CHECK(maybe(x != maybe));
+  BOOST_CHECK(maybe(maybe != x));
+  BOOST_CHECK(x == x);
+  BOOST_CHECK(!(x != x));
+  BOOST_CHECK(!(x && true));
+  BOOST_CHECK(!(true && x));
+  BOOST_CHECK(x || true);
+  BOOST_CHECK(true || x);
 
-  BOOST_TEST(y);
-  BOOST_TEST(y == true);
-  BOOST_TEST(true == y);
-  BOOST_TEST(y != false);
-  BOOST_TEST(false != y);
-  BOOST_TEST(maybe(y == maybe));
-  BOOST_TEST(maybe(maybe == y));
-  BOOST_TEST(maybe(y != maybe));
-  BOOST_TEST(maybe(maybe != y));
-  BOOST_TEST(y == y);
-  BOOST_TEST(!(y != y));
+  BOOST_CHECK(y);
+  BOOST_CHECK(y == true);
+  BOOST_CHECK(true == y);
+  BOOST_CHECK(y != false);
+  BOOST_CHECK(false != y);
+  BOOST_CHECK(maybe(y == maybe));
+  BOOST_CHECK(maybe(maybe == y));
+  BOOST_CHECK(maybe(y != maybe));
+  BOOST_CHECK(maybe(maybe != y));
+  BOOST_CHECK(y == y);
+  BOOST_CHECK(!(y != y));
 
-  BOOST_TEST(maybe(z || !z));
-  BOOST_TEST(maybe(z == true));
-  BOOST_TEST(maybe(true == z));
-  BOOST_TEST(maybe(z == false));
-  BOOST_TEST(maybe(false == z));
-  BOOST_TEST(maybe(z == maybe));
-  BOOST_TEST(maybe(maybe == z));
-  BOOST_TEST(maybe(z != maybe));
-  BOOST_TEST(maybe(maybe != z));
-  BOOST_TEST(maybe(z == z));
-  BOOST_TEST(maybe(z != z));
+  BOOST_CHECK(maybe(z || !z));
+  BOOST_CHECK(maybe(z == true));
+  BOOST_CHECK(maybe(true == z));
+  BOOST_CHECK(maybe(z == false));
+  BOOST_CHECK(maybe(false == z));
+  BOOST_CHECK(maybe(z == maybe));
+  BOOST_CHECK(maybe(maybe == z));
+  BOOST_CHECK(maybe(z != maybe));
+  BOOST_CHECK(maybe(maybe != z));
+  BOOST_CHECK(maybe(z == z));
+  BOOST_CHECK(maybe(z != z));
 
-  BOOST_TEST(!(x == y));
-  BOOST_TEST(x != y);
-  BOOST_TEST(maybe(x == z));
-  BOOST_TEST(maybe(x != z));
-  BOOST_TEST(maybe(y == z));
-  BOOST_TEST(maybe(y != z));
+  BOOST_CHECK(!(x == y));
+  BOOST_CHECK(x != y);
+  BOOST_CHECK(maybe(x == z));
+  BOOST_CHECK(maybe(x != z));
+  BOOST_CHECK(maybe(y == z));
+  BOOST_CHECK(maybe(y != z));
 
-  BOOST_TEST(!(x && y));
-  BOOST_TEST(x || y);
-  BOOST_TEST(!(x && z));
-  BOOST_TEST(maybe(y && z));
-  BOOST_TEST(maybe(z && z));
-  BOOST_TEST(maybe(z || z));
-  BOOST_TEST(maybe(x || z));
-  BOOST_TEST(y || z);
+  BOOST_CHECK(!(x && y));
+  BOOST_CHECK(x || y);
+  BOOST_CHECK(!(x && z));
+  BOOST_CHECK(maybe(y && z));
+  BOOST_CHECK(maybe(z && z));
+  BOOST_CHECK(maybe(z || z));
+  BOOST_CHECK(maybe(x || z));
+  BOOST_CHECK(y || z);
 
-  BOOST_TEST(maybe(y && maybe));
-  BOOST_TEST(maybe(maybe && y));
-  BOOST_TEST(!(x && maybe));
-  BOOST_TEST(!(maybe && x));
+  BOOST_CHECK(maybe(y && maybe));
+  BOOST_CHECK(maybe(maybe && y));
+  BOOST_CHECK(!(x && maybe));
+  BOOST_CHECK(!(maybe && x));
 
-  BOOST_TEST(maybe || y);
-  BOOST_TEST(y || maybe);
-  BOOST_TEST(maybe(x || maybe));
-  BOOST_TEST(maybe(maybe || x));
+  BOOST_CHECK(maybe || y);
+  BOOST_CHECK(y || maybe);
+  BOOST_CHECK(maybe(x || maybe));
+  BOOST_CHECK(maybe(maybe || x));
 
   // Test the if (z) ... else (!z) ... else ... idiom
   if (z) {
-    BOOST_TEST(false);
+    BOOST_CHECK(false);
   }
   else if (!z) {
-    BOOST_TEST(false);
+    BOOST_CHECK(false);
   }
   else {
-    BOOST_TEST(true);
+    BOOST_CHECK(true);
   }
 
   z = true;
   if (z) {
-    BOOST_TEST(true);
+    BOOST_CHECK(true);
   }
   else if (!z) {
-    BOOST_TEST(false);
+    BOOST_CHECK(false);
   }
   else {
-    BOOST_TEST(false);
+    BOOST_CHECK(false);
   }
 
   z = false;
   if (z) {
-    BOOST_TEST(false);
+    BOOST_CHECK(false);
   }
   else if (!z) {
-    BOOST_TEST(true);
+    BOOST_CHECK(true);
   }
   else {
-    BOOST_TEST(false);
+    BOOST_CHECK(false);
   }
 
   std::cout << "no errors detected\n";

@@ -15,103 +15,103 @@ int test_main(int, char*[])
   tribool y(true); // true
   tribool z(indeterminate); // indeterminate
 
-  BOOST_TEST(!x);
-  BOOST_TEST(x == false);
-  BOOST_TEST(false == x);
-  BOOST_TEST(x != true);
-  BOOST_TEST(true != x);
-  BOOST_TEST(indeterminate(x == indeterminate));
-  BOOST_TEST(indeterminate(indeterminate == x));
-  BOOST_TEST(indeterminate(x != indeterminate));
-  BOOST_TEST(indeterminate(indeterminate != x));
-  BOOST_TEST(x == x);
-  BOOST_TEST(!(x != x));
-  BOOST_TEST(!(x && true));
-  BOOST_TEST(!(true && x));
-  BOOST_TEST(x || true);
-  BOOST_TEST(true || x);
+  BOOST_CHECK(!x);
+  BOOST_CHECK(x == false);
+  BOOST_CHECK(false == x);
+  BOOST_CHECK(x != true);
+  BOOST_CHECK(true != x);
+  BOOST_CHECK(indeterminate(x == indeterminate));
+  BOOST_CHECK(indeterminate(indeterminate == x));
+  BOOST_CHECK(indeterminate(x != indeterminate));
+  BOOST_CHECK(indeterminate(indeterminate != x));
+  BOOST_CHECK(x == x);
+  BOOST_CHECK(!(x != x));
+  BOOST_CHECK(!(x && true));
+  BOOST_CHECK(!(true && x));
+  BOOST_CHECK(x || true);
+  BOOST_CHECK(true || x);
 
-  BOOST_TEST(y);
-  BOOST_TEST(y == true);
-  BOOST_TEST(true == y);
-  BOOST_TEST(y != false);
-  BOOST_TEST(false != y);
-  BOOST_TEST(indeterminate(y == indeterminate));
-  BOOST_TEST(indeterminate(indeterminate == y));
-  BOOST_TEST(indeterminate(y != indeterminate));
-  BOOST_TEST(indeterminate(indeterminate != y));
-  BOOST_TEST(y == y);
-  BOOST_TEST(!(y != y));
+  BOOST_CHECK(y);
+  BOOST_CHECK(y == true);
+  BOOST_CHECK(true == y);
+  BOOST_CHECK(y != false);
+  BOOST_CHECK(false != y);
+  BOOST_CHECK(indeterminate(y == indeterminate));
+  BOOST_CHECK(indeterminate(indeterminate == y));
+  BOOST_CHECK(indeterminate(y != indeterminate));
+  BOOST_CHECK(indeterminate(indeterminate != y));
+  BOOST_CHECK(y == y);
+  BOOST_CHECK(!(y != y));
 
-  BOOST_TEST(indeterminate(z || !z));
-  BOOST_TEST(indeterminate(z == true));
-  BOOST_TEST(indeterminate(true == z));
-  BOOST_TEST(indeterminate(z == false));
-  BOOST_TEST(indeterminate(false == z));
-  BOOST_TEST(indeterminate(z == indeterminate));
-  BOOST_TEST(indeterminate(indeterminate == z));
-  BOOST_TEST(indeterminate(z != indeterminate));
-  BOOST_TEST(indeterminate(indeterminate != z));
-  BOOST_TEST(indeterminate(z == z));
-  BOOST_TEST(indeterminate(z != z));
+  BOOST_CHECK(indeterminate(z || !z));
+  BOOST_CHECK(indeterminate(z == true));
+  BOOST_CHECK(indeterminate(true == z));
+  BOOST_CHECK(indeterminate(z == false));
+  BOOST_CHECK(indeterminate(false == z));
+  BOOST_CHECK(indeterminate(z == indeterminate));
+  BOOST_CHECK(indeterminate(indeterminate == z));
+  BOOST_CHECK(indeterminate(z != indeterminate));
+  BOOST_CHECK(indeterminate(indeterminate != z));
+  BOOST_CHECK(indeterminate(z == z));
+  BOOST_CHECK(indeterminate(z != z));
 
-  BOOST_TEST(!(x == y));
-  BOOST_TEST(x != y);
-  BOOST_TEST(indeterminate(x == z));
-  BOOST_TEST(indeterminate(x != z));
-  BOOST_TEST(indeterminate(y == z));
-  BOOST_TEST(indeterminate(y != z));
+  BOOST_CHECK(!(x == y));
+  BOOST_CHECK(x != y);
+  BOOST_CHECK(indeterminate(x == z));
+  BOOST_CHECK(indeterminate(x != z));
+  BOOST_CHECK(indeterminate(y == z));
+  BOOST_CHECK(indeterminate(y != z));
 
-  BOOST_TEST(!(x && y));
-  BOOST_TEST(x || y);
-  BOOST_TEST(!(x && z));
-  BOOST_TEST(indeterminate(y && z));
-  BOOST_TEST(indeterminate(z && z));
-  BOOST_TEST(indeterminate(z || z));
-  BOOST_TEST(indeterminate(x || z));
-  BOOST_TEST(y || z);
+  BOOST_CHECK(!(x && y));
+  BOOST_CHECK(x || y);
+  BOOST_CHECK(!(x && z));
+  BOOST_CHECK(indeterminate(y && z));
+  BOOST_CHECK(indeterminate(z && z));
+  BOOST_CHECK(indeterminate(z || z));
+  BOOST_CHECK(indeterminate(x || z));
+  BOOST_CHECK(y || z);
 
-  BOOST_TEST(indeterminate(y && indeterminate));
-  BOOST_TEST(indeterminate(indeterminate && y));
-  BOOST_TEST(!(x && indeterminate));
-  BOOST_TEST(!(indeterminate && x));
+  BOOST_CHECK(indeterminate(y && indeterminate));
+  BOOST_CHECK(indeterminate(indeterminate && y));
+  BOOST_CHECK(!(x && indeterminate));
+  BOOST_CHECK(!(indeterminate && x));
 
-  BOOST_TEST(indeterminate || y);
-  BOOST_TEST(y || indeterminate);
-  BOOST_TEST(indeterminate(x || indeterminate));
-  BOOST_TEST(indeterminate(indeterminate || x));
+  BOOST_CHECK(indeterminate || y);
+  BOOST_CHECK(y || indeterminate);
+  BOOST_CHECK(indeterminate(x || indeterminate));
+  BOOST_CHECK(indeterminate(indeterminate || x));
 
   // Test the if (z) ... else (!z) ... else ... idiom
   if (z) {
-    BOOST_TEST(false);
+    BOOST_CHECK(false);
   }
   else if (!z) {
-    BOOST_TEST(false);
+    BOOST_CHECK(false);
   }
   else {
-    BOOST_TEST(true);
+    BOOST_CHECK(true);
   }
 
   z = true;
   if (z) {
-    BOOST_TEST(true);
+    BOOST_CHECK(true);
   }
   else if (!z) {
-    BOOST_TEST(false);
+    BOOST_CHECK(false);
   }
   else {
-    BOOST_TEST(false);
+    BOOST_CHECK(false);
   }
 
   z = false;
   if (z) {
-    BOOST_TEST(false);
+    BOOST_CHECK(false);
   }
   else if (!z) {
-    BOOST_TEST(true);
+    BOOST_CHECK(true);
   }
   else {
-    BOOST_TEST(false);
+    BOOST_CHECK(false);
   }
 
   std::cout << "no errors detected\n";

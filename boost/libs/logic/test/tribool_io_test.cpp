@@ -27,14 +27,14 @@ int test_main(int, char*[])
   x = false;
   out << x;
   std::cout << "Output false (noboolalpha): " << out.str() << std::endl;
-  BOOST_TEST(out.str() == "0");
+  BOOST_CHECK(out.str() == "0");
 
   // Output true (noboolalpha)
   out.str(std::string());
   x = true;
   out << x;
   std::cout << "Output true (noboolalpha): " << out.str() << std::endl;
-  BOOST_TEST(out.str() == "1");
+  BOOST_CHECK(out.str() == "1");
 
   // Output indeterminate (noboolalpha)
   out.str(std::string());
@@ -42,7 +42,7 @@ int test_main(int, char*[])
   out << x;
   std::cout << "Output indeterminate (noboolalpha): " << out.str()
             << std::endl;
-  BOOST_TEST(out.str() == "2");
+  BOOST_CHECK(out.str() == "2");
 
 #ifndef BOOST_NO_STD_LOCALE
   const std::numpunct<char>& punct =
@@ -53,7 +53,7 @@ int test_main(int, char*[])
   x = false;
   out << std::boolalpha << x;
   std::cout << "Output false (boolalpha): " << out.str() << std::endl;
-  BOOST_TEST(out.str() == punct.falsename());
+  BOOST_CHECK(out.str() == punct.falsename());
 
   // Output true (boolalpha)
   out.str(std::string());
@@ -61,7 +61,7 @@ int test_main(int, char*[])
   out << std::boolalpha << x;
   std::cout << "Output true (boolalpha): " << out.str() << std::endl;
 
-  BOOST_TEST(out.str() == punct.truename());
+  BOOST_CHECK(out.str() == punct.truename());
 
   // Output indeterminate (boolalpha - default name)
   out.str(std::string());
@@ -69,7 +69,7 @@ int test_main(int, char*[])
   out << std::boolalpha << x;
   std::cout << "Output indeterminate (boolalpha - default name): " << out.str()
             << std::endl;
-  BOOST_TEST(out.str() == "indeterminate");
+  BOOST_CHECK(out.str() == "indeterminate");
 
 #  if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
   // No template constructors, so we can't build the test locale
@@ -82,7 +82,7 @@ int test_main(int, char*[])
   out << std::boolalpha << x;
   std::cout << "Output indeterminate (boolalpha - \"maybe\"): " << out.str()
             << std::endl;
-  BOOST_TEST(out.str() == "maybe");
+  BOOST_CHECK(out.str() == "maybe");
 #  endif
 #endif // ! BOOST_NO_STD_LOCALE
 
@@ -93,7 +93,7 @@ int test_main(int, char*[])
     std::istringstream in("0");
     std::cout << "Input \"0\" (checks for false)" << std::endl;
     in >> x;
-    BOOST_TEST(x == false);
+    BOOST_CHECK(x == false);
   }
 
   // Input true (noboolalpha)
@@ -101,7 +101,7 @@ int test_main(int, char*[])
     std::istringstream in("1");
     std::cout << "Input \"1\" (checks for true)" << std::endl;
     in >> x;
-    BOOST_TEST(x == true);
+    BOOST_CHECK(x == true);
   }
 
   // Input false (noboolalpha)
@@ -109,14 +109,14 @@ int test_main(int, char*[])
     std::istringstream in("2");
     std::cout << "Input \"2\" (checks for indeterminate)" << std::endl;
     in >> x;
-    BOOST_TEST(indeterminate(x));
+    BOOST_CHECK(indeterminate(x));
   }
 
   // Input bad number (noboolalpha)
   {
     std::istringstream in("3");
     std::cout << "Input \"3\" (checks for failure)" << std::endl;
-    BOOST_TEST(!(in >> x));
+    BOOST_CHECK(!(in >> x));
   }
 
   // Input false (boolalpha)
@@ -124,7 +124,7 @@ int test_main(int, char*[])
     std::istringstream in("false");
     std::cout << "Input \"false\" (checks for false)" << std::endl;
     in >> std::boolalpha >> x;
-    BOOST_TEST(x == false);
+    BOOST_CHECK(x == false);
   }
 
   // Input true (boolalpha)
@@ -132,7 +132,7 @@ int test_main(int, char*[])
     std::istringstream in("true");
     std::cout << "Input \"true\" (checks for true)" << std::endl;
     in >> std::boolalpha >> x;
-    BOOST_TEST(x == true);
+    BOOST_CHECK(x == true);
   }
 
   // Input indeterminate (boolalpha)
@@ -141,7 +141,7 @@ int test_main(int, char*[])
     std::cout << "Input \"indeterminate\" (checks for indeterminate)"
               << std::endl;
     in >> std::boolalpha >> x;
-    BOOST_TEST(indeterminate(x));
+    BOOST_CHECK(indeterminate(x));
   }
 
   // Input bad string (boolalpha)
@@ -149,7 +149,7 @@ int test_main(int, char*[])
     std::istringstream in("bad");
     std::cout << "Input \"bad\" (checks for failure)"
               << std::endl;
-    BOOST_TEST(!(in >> std::boolalpha >> x));
+    BOOST_CHECK(!(in >> std::boolalpha >> x));
   }
 
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
@@ -163,7 +163,7 @@ int test_main(int, char*[])
     std::cout << "Input \"maybe\" (checks for indeterminate, uses locales)"
               << std::endl;
     in >> std::boolalpha >> x;
-    BOOST_TEST(indeterminate(x));
+    BOOST_CHECK(indeterminate(x));
   }
 
   // Input indeterminate named "true_or_false" (boolalpha)
@@ -175,7 +175,7 @@ int test_main(int, char*[])
     std::cout << "Input \"true_or_false\" (checks for indeterminate)"
               << std::endl;
     in >> std::boolalpha >> x;
-    BOOST_TEST(indeterminate(x));
+    BOOST_CHECK(indeterminate(x));
   }
 #endif
 
