@@ -9,6 +9,38 @@
 #include <iostream>
 #include <boost/iterator_adaptors.hpp>
 
+// What a bummer. We can't use std::binder1st with transform iterator
+// because it does not have a default constructor. Here's a version
+// that does.
+
+namespace boost {
+
+  template <class Operation> 
+  class binder1st
+    : public std::unary_function<typename Operation::second_argument_type,
+			         typename Operation::result_type> {
+  protected:
+    Operation op;
+    typename Operation::first_argument_type value;
+  public:
+    binder1st() { } // this had to be added!
+    binder1st(const Operation& x,
+	      const typename Operation::first_argument_type& y)
+	: op(x), value(y) {}
+    typename Operation::result_type
+    operator()(const typename Operation::second_argument_type& x) const {
+      return op(value, x); 
+    }
+  };
+
+  template <class Operation, class T>
+  inline binder1st<Operation> bind1st(const Operation& op, const T& x) {
+    typedef typename Operation::first_argument_type arg1_type;
+    return binder1st<Operation>(op, arg1_type(x));
+  }
+
+} // namespace boost
+
 int
 main(int, char*[])
 {
@@ -20,11 +52,11 @@ main(int, char*[])
   int x[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
   const int N = sizeof(x)/sizeof(int);
 
-  typedef std::binder1st< std::multiplies<int> > Function;
+  typedef boost::binder1st< std::multiplies<int> > Function;
   typedef boost::transform_iterator_generator<Function, int*>::type doubling_iterator;
 
-  doubling_iterator i(x, std::bind1st(std::multiplies<int>(), 2)),
-    i_end(x + N, std::bind1st(std::multiplies<int>(), 2));
+  doubling_iterator i(x, boost::bind1st(std::multiplies<int>(), 2)),
+    i_end(x + N, boost::bind1st(std::multiplies<int>(), 2));
 
   std::cout << "multiplying the array by 2:" << std::endl;
   while (i != i_end)
