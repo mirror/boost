@@ -87,7 +87,7 @@
 #endif
 
 // Version 7.1
-#if BOOST == 1310
+#if BOOST_MSVC == 1310
 
 // One of these workarounds is needed for MSVC 7.1 AFAIK
 // (thanks to John Maddock and Martin Lauer).
