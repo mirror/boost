@@ -47,6 +47,8 @@
 #include <cwchar> // for WCHAR_MIN and WCHAR_MAX
 #endif
 
+// The macros are not named appropriately.  We don't care about integer
+// bit layout, but about floating-point NaN (etc.) bit patterns.
 #if defined(__sparc) || defined(__sparc__) || defined(__powerpc__) || defined(__ppc__) || defined(__hppa) || defined(_MIPSEB)
 #define BOOST_BIG_ENDIAN
 #elif defined(__i386__)
