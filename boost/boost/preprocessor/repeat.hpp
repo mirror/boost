@@ -1,16 +1,16 @@
 #ifndef BOOST_PREPROCESSOR_REPEAT_HPP
 #define BOOST_PREPROCESSOR_REPEAT_HPP
 
-//  Copyright (C) 2001
-//  Housemarque, Inc.
-//  http://www.housemarque.com
-//  
-//  Permission to copy, use, modify, sell and distribute this software is
-//  granted provided this copyright notice appears in all copies. This
-//  software is provided "as is" without express or implied warranty, and
-//  with no claim as to its suitability for any purpose.
+// Copyright (C) 2001
+// Housemarque Oy
+// http://www.housemarque.com
+//
+// Permission to copy, use, modify, sell and distribute this software is
+// granted provided this copyright notice appears in all copies. This
+// software is provided "as is" without express or implied warranty, and
+// with no claim as to its suitability for any purpose.
 
-//  See http://www.boost.org for most recent version.
+// See http://www.boost.org for most recent version.
 
 /*! \file
 
@@ -26,16 +26,6 @@ In other words, expands to the sequence:
 \endverbatim</PRE>
 
 See BOOST_PREPROCESSOR_LIMIT_MAG.
-
-RATIONALE:
-- BOOST_PREPROCESSOR_REPEAT, BOOST_PREPROCESSOR_REPEAT_2ND, ... must work together.
-- BOOST_PREPROCESSOR_REPEAT is already tested with BOOST_PREPROCESSOR_ENUM_PARAMS.
-- The tested repeat count should exceed imaginable usage.
-- Testing the generation of is_function_helper()s upto 40 arguments should be
-sufficient in this case. Many compilers may fail the repetition tests (at
-least with higher counts). However, the primary purpose of the repetition
-primitives is to enable configurability with reasonable defaults, and not
-necessarily "the most impressive repetition".
 */
 #define BOOST_PREPROCESSOR_REPEAT(N,M,P) BOOST_PREPROCESSOR_REPEAT_DELAY(N,M,P)
 

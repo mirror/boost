@@ -1,16 +1,16 @@
 #ifndef BOOST_PREPROCESSOR_ENUM_SHIFTED_PARAMS_HPP
 #define BOOST_PREPROCESSOR_ENUM_SHIFTED_PARAMS_HPP
 
-//  Copyright (C) 2001
-//  Housemarque, Inc.
-//  http://www.housemarque.com
-//  
-//  Permission to copy, use, modify, sell and distribute this software is
-//  granted provided this copyright notice appears in all copies. This
-//  software is provided "as is" without express or implied warranty, and
-//  with no claim as to its suitability for any purpose.
+// Copyright (C) 2001
+// Housemarque Oy
+// http://www.housemarque.com
+//
+// Permission to copy, use, modify, sell and distribute this software is
+// granted provided this copyright notice appears in all copies. This
+// software is provided "as is" without express or implied warranty, and
+// with no claim as to its suitability for any purpose.
 
-//  See http://www.boost.org for most recent version.
+// See http://www.boost.org for most recent version.
 
 /*! \file
 
@@ -46,8 +46,6 @@ NOTE: The implementation uses BOOST_PREPROCESSOR_REPEAT().
 RATIONALE:
 - This macro facilitates a typical usage of the library. Shifted parameter
 lists are common in template metaprograms. 
-- ENUM_SHIFTED_PARAMS must be tested so that the shifted range is shown to be
-correct.
 */
 #define BOOST_PREPROCESSOR_ENUM_SHIFTED_PARAMS(N,P) BOOST_PREPROCESSOR_REPEAT(BOOST_PREPROCESSOR_DEC(N),BOOST_PREPROCESSOR_SHIFTED_PARAM,P)
 

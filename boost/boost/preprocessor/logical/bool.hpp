@@ -1,16 +1,16 @@
 #ifndef BOOST_PREPROCESSOR_LOGICAL_BOOL_HPP
 #define BOOST_PREPROCESSOR_LOGICAL_BOOL_HPP
 
-//  Copyright (C) 2001
-//  Housemarque, Inc.
-//  http://www.housemarque.com
-//  
-//  Permission to copy, use, modify, sell and distribute this software is
-//  granted provided this copyright notice appears in all copies. This
-//  software is provided "as is" without express or implied warranty, and
-//  with no claim as to its suitability for any purpose.
+// Copyright (C) 2001
+// Housemarque Oy
+// http://www.housemarque.com
+//
+// Permission to copy, use, modify, sell and distribute this software is
+// granted provided this copyright notice appears in all copies. This
+// software is provided "as is" without express or implied warranty, and
+// with no claim as to its suitability for any purpose.
 
-//  See http://www.boost.org for most recent version.
+// See http://www.boost.org for most recent version.
 
 /*! \file
 
@@ -21,8 +21,8 @@
 #define BOOST_PREPROCESSOR_BOOL(X) BOOST_PREPROCESSOR_BOOL_DELAY(X)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-//  BOOL can be implemented in O(1) tokens using saturated ADD & SUB.
-//  Unfortunately, it would result in significantly slower preprocessing.
+// BOOL can be implemented in O(1) tokens using saturated ADD & SUB.
+// Unfortunately, it would result in significantly slower preprocessing.
 #define BOOST_PREPROCESSOR_BOOL_DELAY(X) BOOST_PREPROCESSOR_BOOL##X
 #define BOOST_PREPROCESSOR_BOOL0 0
 #define BOOST_PREPROCESSOR_BOOL1 1
