@@ -3,7 +3,7 @@
 
 // Copyright 2004-5 The Trustees of Indiana University.
 
-// Use, modification and distribution is subject to the Boost Software 
+// Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
@@ -37,7 +37,7 @@ namespace detail {
   // read_value -
   //   A wrapper around lexical_cast, which does not behave as
   //   desired for std::string types.
-  template<typename Value> 
+  template<typename Value>
   inline Value read_value(const std::string& value)
   { return boost::lexical_cast<Value>(value); }
 
@@ -54,7 +54,7 @@ class dynamic_property_map
 {
 public:
   virtual ~dynamic_property_map() { }
-  
+
   virtual boost::any get(const any& key) = 0;
   virtual std::string get_string(const any& key) = 0;
   virtual void put(const any& key, const any& value) = 0;
@@ -112,7 +112,7 @@ struct dynamic_const_put_error  : public dynamic_property_exception {
   }
 };
 
-      
+
 namespace detail {
 
 //
@@ -124,16 +124,16 @@ class dynamic_property_map_adaptor : public dynamic_property_map
   typedef typename property_traits<PropertyMap>::key_type key_type;
   typedef typename property_traits<PropertyMap>::value_type value_type;
   typedef typename property_traits<PropertyMap>::category category;
-  
-  // do_put - overloaded dispatches from the put() member function.  
+
+  // do_put - overloaded dispatches from the put() member function.
   //   Attempts to "put" to a property map that does not model
   //   WritablePropertyMap result in a runtime exception.
-  
+
   //   in_value must either hold an object of value_type or a string that
   //   can be converted to value_type via iostreams.
   void do_put(const any& in_key, const any& in_value, mpl::bool_<true>)
   {
-    using boost::put; 
+    using boost::put;
 
     key_type key = any_cast<key_type>(in_key);
     if (in_value.type() == typeid(value_type))
@@ -146,42 +146,42 @@ class dynamic_property_map_adaptor : public dynamic_property_map
       } else {
         put(property_map, key, detail::read_value<value_type>(v));
 
-      }      
+      }
     }
   }
-  
+
   void do_put(const any&, const any&, mpl::bool_<false>)
   {
     throw dynamic_const_put_error();
   }
-  
+
 public:
   explicit dynamic_property_map_adaptor(const PropertyMap& property_map)
     : property_map(property_map) { }
-  
-  virtual boost::any get(const any& key)
-  { 
-    using boost::get; 
 
-    return get(property_map, any_cast<key_type>(key)); 
+  virtual boost::any get(const any& key)
+  {
+    using boost::get;
+
+    return get(property_map, any_cast<key_type>(key));
   }
-  
+
   virtual std::string get_string(const any& key)
-  { 
+  {
     using boost::get;
 
     std::ostringstream out;
-    out << get(property_map, any_cast<key_type>(key)); 
+    out << get(property_map, any_cast<key_type>(key));
     return out.str();
   }
 
   virtual void put(const any& in_key, const any& in_value)
-  { 
+  {
     do_put(in_key, in_value,
-           mpl::bool_<(is_convertible<category*, 
+           mpl::bool_<(is_convertible<category*,
                                       writable_property_map_tag*>::value)>());
   }
-  
+
   virtual const std::type_info& key()   const { return typeid(key_type); }
   virtual const std::type_info& value() const { return typeid(value_type); }
 
@@ -210,7 +210,7 @@ public:
 
   dynamic_properties(const generate_fn_type& g = generate_fn_type()) :
     generate_fn(g) {}
-  
+
   ~dynamic_properties()
   {
     for (property_maps_type::iterator i = property_maps.begin();
@@ -220,13 +220,13 @@ public:
   }
 
   template<typename PropertyMap>
-  dynamic_properties& 
+  dynamic_properties&
   property(const std::string& name, PropertyMap property_map)
   {
-    // Tbd: exception safety 
+    // Tbd: exception safety
     std::auto_ptr<dynamic_property_map> pm(
       new detail::dynamic_property_map_adaptor<PropertyMap>(property_map));
-    property_maps_type::iterator i = 
+    property_maps_type::iterator i =
       property_maps.insert(property_maps_type::value_type(name, 0));
     i->second = pm.release();
 
@@ -238,20 +238,20 @@ public:
   iterator       end()         { return property_maps.end(); }
   const_iterator end() const   { return property_maps.end(); }
 
-  iterator lower_bound(const std::string& name) 
+  iterator lower_bound(const std::string& name)
   { return property_maps.lower_bound(name); }
-  
+
   const_iterator lower_bound(const std::string& name) const
   { return property_maps.lower_bound(name); }
 
-  void 
+  void
   insert(const std::string& name, std::auto_ptr<dynamic_property_map> pm)
   {
     property_maps.insert(property_maps_type::value_type(name, pm.release()));
   }
 
   template<typename Key, typename Value>
-  std::auto_ptr<dynamic_property_map> 
+  std::auto_ptr<dynamic_property_map>
   generate(const std::string& name, const Key& key, const Value& value)
   {
     if(!generate_fn) {
@@ -268,8 +268,8 @@ private:
 };
 
 template<typename Key, typename Value>
-bool 
-put(const std::string& name, dynamic_properties& dp, const Key& key, 
+bool
+put(const std::string& name, dynamic_properties& dp, const Key& key,
     const Value& value)
 {
   for (dynamic_properties::iterator i = dp.lower_bound(name);
@@ -296,7 +296,7 @@ get(const std::string& name, const dynamic_properties& dp, const Key& key)
 {
   for (dynamic_properties::const_iterator i = dp.lower_bound(name);
        i != dp.end() && i->first == name; ++i) {
-    if (i->second->key() == typeid(key)) 
+    if (i->second->key() == typeid(key))
       return any_cast<Value>(i->second->get(key));
   }
 
@@ -309,7 +309,7 @@ get(const std::string& name, const dynamic_properties& dp, const Key& key)
 {
   for (dynamic_properties::const_iterator i = dp.lower_bound(name);
        i != dp.end() && i->first == name; ++i) {
-    if (i->second->key() == typeid(key)) 
+    if (i->second->key() == typeid(key))
       return i->second->get_string(key);
   }
 
@@ -319,4 +319,4 @@ get(const std::string& name, const dynamic_properties& dp, const Key& key)
 
 }
 
-#endif DYNAMIC_PROPERTY_MAP_RG09302004_HPP
+#endif // DYNAMIC_PROPERTY_MAP_RG09302004_HPP
