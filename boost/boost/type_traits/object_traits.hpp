@@ -27,7 +27,7 @@
 #include "boost/type_traits/is_compound.hpp"
 #include "boost/type_traits/is_empty.hpp"
 #include "boost/type_traits/is_object.hpp"
-#include "boost/type_traits/is_POD.hpp"
+#include "boost/type_traits/is_pod.hpp"
 #include "boost/type_traits/is_scalar.hpp"
 #include "boost/type_traits/is_stateless.hpp"
 
