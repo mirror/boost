@@ -1062,7 +1062,7 @@ struct bitset_test {
         const bool exceptional_state = has_flags(is, is.exceptions());
         BOOST_CHECK(exceptional_state == did_throw);
     }
- 
+
     typedef typename String::size_type size_type;
     typedef typename String::value_type Ch;
     size_type after_digits = 0;
@@ -1080,7 +1080,7 @@ struct bitset_test {
       //
       // The values of b.max_size() and is.width() may lead to
       // ignore part of the digits, if any.
-      
+
       size_type pos = 0;
       size_type len = str.length();
       // {spaces}
@@ -1107,7 +1107,7 @@ struct bitset_test {
 
       // failbit <=> there are no digits, except for the library
       // issue explained below.
-      // 
+      //
       if(num_digits == 0) {
         if(after_digits == len && has_stream_exceptions &&
             (is.exceptions() & std::ios::eofbit) != std::ios::goodbit) {
@@ -1129,8 +1129,28 @@ struct bitset_test {
         BOOST_CHECK(!has_flags(is, std::ios::failbit));
 
 
-      if(num_digits == 0 && after_digits == len) { // reaches eof in sentry
+      if(num_digits == 0 && after_digits == len) {
+        // The VC6 library has a bug/non-conformity in the sentry
+        // constructor. It uses code like
+        //  // skip whitespaces...
+        //  int_type _C = rdbuf()->sgetc();
+        //  while (!_Tr::eq_int_type(_Tr::eof(), _C) ...
+        //
+        // For an empty file the while statement is never "entered"
+        // and the stream remains in good() state; thus the sentry
+        // object gives "true" when converted to bool. This is worse
+        // than the case above, because not only failbit is not set,
+        // but no bit is set at all, end we end up clearing the
+        // bitset though there's nothing in the file to be extracted.
+        // Note that the dynamic_bitset docs say a sentry object is
+        // constructed and then converted to bool, thus we rely on
+        // what the underlying library does. - gps
+        //
+#if !defined(BOOST_DINKUMWARE_STDLIB) || (BOOST_DINKUMWARE_STDLIB >= 306) // what about STLPORT? - gps
         BOOST_CHECK(b == a_copy);
+#else
+        BOOST_CHECK(b.empty() == true);
+#endif
       }
       else {
         String sub = str.substr(after_spaces, num_digits); // gps
@@ -1153,7 +1173,7 @@ struct bitset_test {
       BOOST_CHECK(remainder == str.substr(after_digits));
     else
       BOOST_CHECK(remainder == str);
-  
+
   }
 
 
