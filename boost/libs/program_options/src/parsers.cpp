@@ -328,8 +328,10 @@ namespace boost { namespace program_options {
                 string result;
                 if (s.find(prefix) == 0) {
                     for(string::size_type n = prefix.size(); n < s.size(); ++n) 
-                    {
-                        result.push_back(tolower(s[n]));
+                    {	
+                        // Intel-Win-7.1 does not understand
+			// push_back on string.		    
+                        result += tolower(s[n]);
                     }
                 }
                 return result;
