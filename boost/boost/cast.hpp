@@ -236,6 +236,24 @@ namespace boost
         template <class X, class Y>
         static inline bool check(X x, Y)
             { return x >= 0 && static_cast<X>(static_cast<Y>(x)) != x; }
+        
+# if defined(BOOST_MSVC) && BOOST_MSVC <= 1200
+        // MSVC6 can't static_cast  unsigned __int64 -> floating types
+#  define BOOST_UINT64_CAST(src_type)                                   \
+        static inline bool check(src_type x, unsigned __int64)          \
+        {                                                               \
+            if (x < 0) return false;                                    \
+            unsigned __int64 y = static_cast<unsigned __int64>(x);      \
+            bool odd = y & 0x1;                                         \
+            __int64 div2 = static_cast<__int64>(y >> 1);                \
+            return ((static_cast<src_type>(div2) * 2.0) + odd) != x;    \
+        }
+
+        BOOST_UINT64_CAST(long double);
+        BOOST_UINT64_CAST(double);
+        BOOST_UINT64_CAST(float);
+#  undef BOOST_UINT64_CAST
+# endif 
     };
 
     template<>
