@@ -13,6 +13,7 @@
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <boost/noncopyable.hpp>
 #include <string>
 #include <cassert>
 
