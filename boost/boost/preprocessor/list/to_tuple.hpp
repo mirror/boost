@@ -33,7 +33,7 @@
 
 <h3>Uses</h3>
 <ul>
-  <li>BOOST_PP_LIST_FOR_EACH()</li>
+  <li>BOOST_PP_FOR()</li>
 </ul>
 */
 #define BOOST_PP_LIST_TO_TUPLE(L) BOOST_PP_LIST_TO_TUPLE_R(0,L)
