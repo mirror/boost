@@ -1,0 +1,59 @@
+subproject libs/range/test ;
+
+SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
+include testing.jam ;
+DEPENDS all : test ;
+
+{
+test-suite range
+    : [ run
+            array.cpp
+	    : :
+	    :
+	    : array_test
+       ]         
+     [ run
+            iterator_pair.cpp
+    	    : :
+	    :
+	    : iterator_pair_test
+       ]         
+     [ run
+            std_container.cpp
+    	    : :
+	    :
+	    : std_container_test
+       ]         
+     [ run            
+	    string.cpp
+    	    : :
+	    :
+	    : string_test
+       ]         
+     [ run            
+	    iterator_range.cpp
+    	    : :
+	    :
+	    : iterator_range
+       ]         
+
+     [ run
+            partial_workaround.cpp	
+    	    : :
+	    :
+	    : workaround_test
+       ]
+     [ run
+     	    algorithm_example.cpp	
+    	    : :
+	    :
+	    : example_test
+       ]
+       
+     [ run
+     	    reversible_range.cpp	
+    	    : :
+	    :
+	    : reversible_range_test
+       ]  ;
+}
