@@ -67,7 +67,7 @@ practical uses of <code>operator,()</code></i>.  <!-- p.  247 --> <br><b>Bjarne
 Stroustrup</b>, The Design and Evolution of C++ </p> <p> The purpose of this 
 library is to make it easy to fill containers with data by overloading 
 <code>operator,()</code> and <code>operator()()</code>.  These two operators 
-makes it possible to construct lists of values which are then copied into a 
+make it possible to construct lists of values that are then copied into a 
 container: </p> <ul> <li> A comma-separated list: <p> 
        <!--  vector< int > v; v += 1,2,3,4,5,6,7,8,9; -->
  
@@ -134,7 +134,7 @@ components are explained in these sections:
     </span><span class=identifier>values </span><span class=special>+= </span><span class=number>1</span><span class=special>,</span><span class=number>2</span><span class=special>,</span><span class=number>3</span><span class=special>,</span><span class=number>4</span><span class=special>,</span><span class=number>5</span><span class=special>,</span><span class=number>6</span><span class=special>,</span><span class=number>7</span><span class=special>,</span><span class=number>8</span><span class=special>,</span><span class=number>9</span><span class=special>; </span><span class=comment>// insert values at the end of the container
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>values</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>9 </span><span class=special>);
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>values</span><span class=special>[</span><span class=number>0</span><span class=special>] </span><span class=special>== </span><span class=number>1 </span><span class=special>);
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>values</span><span class=special>[</span><span class=number>9</span><span class=special>] </span><span class=special>== </span><span class=number>9 </span><span class=special>);
+    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>values</span><span class=special>[</span><span class=number>8</span><span class=special>] </span><span class=special>== </span><span class=number>9 </span><span class=special>);
 </span><span class=special>}</span></pre></blockquote>
 
     Here we only stuffed constants into the container, but the list can
@@ -170,8 +170,9 @@ class=identifier>hpp</span><span class=special>&gt; </span><span class=comment>/
         </span><span class=special>( </span><span class=string>&quot;july&quot;</span><span class=special>,      </span><span class=number>31 </span><span class=special>)( </span><span class=string>&quot;august&quot;</span><span class=special>,   </span><span class=number>31 </span><span class=special>)
         </span><span class=special>( </span><span class=string>&quot;september&quot;</span><span class=special>, </span><span class=number>30 </span><span class=special>)( </span><span class=string>&quot;october&quot;</span><span class=special>,  </span><span class=number>31 </span><span class=special>)
         </span><span class=special>( </span><span class=string>&quot;november&quot;</span><span class=special>,  </span><span class=number>30 </span><span class=special>)( </span><span class=string>&quot;december&quot;</span><span class=special>, </span><span class=number>31 </span><span class=special>);
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>m</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>12 </span><span class=special>);    
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>m</span><span class=special>[</span><span class=string>&quot;january&quot;</span><span class=special>] </span><span class=special>== </span><span class=number>31 </span><span class=special>);
+    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>months</span><span class=special>.</span><span 
+class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>12 </span><span class=special>);
+    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>months</span><span class=special>[</span><span class=string>&quot;january&quot;</span><span class=special>] </span><span class=special>== </span><span class=number>31 </span><span class=special>);
 </span><span class=special>}</span> </pre></blockquote>
 
    Note that <code>operator()()</code> is much more handy when
@@ -214,7 +215,8 @@ objects, for example,
 <span class=identifier>deque</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt; </span><span class=identifier>di</span><span class=special>;    </span>
 <span class=identifier>push_front</span><span class=special>( </span><span class=identifier>di </span><span class=special>) </span><span class=special>= </span><span class=number>1</span><span class=special>,</span><span class=number>2</span><span class=special>,</span><span class=number>3</span><span class=special>,</span><span class=number>4</span><span class=special>,</span><span class=number>5</span><span class=special>,</span><span class=number>6</span><span class=special>,</span><span class=number>7</span><span class=special>,</span><span class=number>8</span><span class=special>,</span><span class=number>9</span><span class=special>;</span>
 <span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>di</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>9 </span><span class=special>);    </span>
-<span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>di</span><span class=special>[</span><span class=number>8</span><span class=special>] </span><span class=special>== </span><span class=number>9 </span><span class=special>);    </span>
+<span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span 
+class=identifier>di</span><span class=special>[</span><span class=number>0</span><span class=special>] </span><span class=special>== </span><span class=number>9 </span><span class=special>);    </span>
 </pre>
 </blockquote>
 <p>
@@ -256,8 +258,7 @@ class=identifier>names2 </span><span class=special>= </span><span
 class=special>(</span><span class=identifier>list_of</span><span class=special>( </span><span class=string>&quot;Mr. Foo&quot; </span><span class=special>), </span><span class=string>&quot;Mr. Bar&quot;</span><span class=special>, </span><span class=string>&quot;Mrs. FooBar&quot; </span><span
 class=special>).</span><span class=identifier>to_adapter();
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>names</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>3 </span><span class=special>);
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>names</span><span class=special>[</span><span class=number>0</span><span class=special>] </span><span class=special>== </span><span class=string>&quot;Mr. Foo&quot; </span><span class=special>);
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>names</span><span class=special>[</span><span class=number>2</span><span class=special>] </span><span class=special>== </span><span class=string>&quot;Mrs. FooBar&quot; </span><span class=special>);
+    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>names</span><span class=special>.</span><span class=identifier>top</span><span class=special>()</span><span class=special> == </span><span class=string>&quot;Mrs. FooBar&quot; </span><span class=special>);
 </span><span class=special>}   </span></pre></blockquote>
   If we need to initialize a container adapter, we need to help the compiler a 
 little by calling <code>to_adapter()</code>. As the second example also shows, 
@@ -350,7 +351,7 @@ A more general list can be constructed with <code>repeat_fun()</code>:
     </span><span class=identifier>next</span><span class=special>( </span><span class=identifier>T </span><span class=identifier>seed </span><span class=special>) </span><span class=special>: </span><span class=identifier>seed</span><span class=special>(</span><span class=identifier>seed</span><span class=special>) 
     </span><span class=special>{ </span><span class=special>}
     
-    </span><span class=identifier>T </span><span class=keyword>operator</span><span class=special>()() </span><span class=keyword>const
+    </span><span class=identifier>T </span><span class=keyword>operator</span><span class=special>()() </span><span class=keyword>
     </span><span class=special>{
         </span><span class=keyword>return </span><span class=identifier>seed</span><span class=special>++;
     </span><span class=special>}</span>
@@ -474,7 +475,7 @@ object does the insertion or assignment by overloading <code>operator,()</code>
   
   <p>
   All forwarding is done by passing objects by value. Originally
-  <code>const</code> references was used, but it lead to many problems
+  <code>const</code> references was used, but it led to many problems
   with string-literals. One thing to remember is that references 
   can be passed by using <code>boost::<a href=http://www.boost.org/doc/html/ref.html>ref</a></code>.
   </p>
