@@ -1379,12 +1379,12 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::set_express
          {
             ((re_detail::re_jump*)dat)->alt.i = data.size();
             mark.pop();
-            dat = (re_detail::re_jump*)((unsigned char*)data.data() + mark.peek());
             if(mark.empty())
             {
                fail(REG_EPAREN);
                return error_code();
             }
+            dat = (re_detail::re_jump*)((unsigned char*)data.data() + mark.peek());
          }
 
          dat = add_simple(0, re_detail::syntax_element_endmark, sizeof(re_detail::re_brace));
