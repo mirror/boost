@@ -38,7 +38,7 @@
 #  define BOOST_FUNCTION_COMPARE_TYPE_ID(X,Y) \
      (std::strcmp((X).name(),(Y).name()) == 0)
 # else
-#  define BOOST_FUNCTION_COMPARE_TYPE_ID(X,Y) (X==Y)
+#  define BOOST_FUNCTION_COMPARE_TYPE_ID(X,Y) ((X)==(Y))
 #endif
 
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__ICL) && __ICL <= 600 || defined(__MWERKS__) && __MWERKS__ < 0x2406 && !defined(BOOST_STRICT_CONFIG)
@@ -200,8 +200,9 @@ namespace boost {
           case check_functor_type_tag:
             {
               std::type_info* t = static_cast<std::type_info*>(f.obj_ptr);
-              bool equal = BOOST_FUNCTION_COMPARE_TYPE_ID(typeid(F), *t);
-              return equal? f : make_any_pointer(reinterpret_cast<void*>(0));
+              return BOOST_FUNCTION_COMPARE_TYPE_ID(typeid(F), *t)?
+                f
+                : make_any_pointer(reinterpret_cast<void*>(0));
             }
           }
 
@@ -295,9 +296,8 @@ namespace boost {
           if (op == check_functor_type_tag) {
             std::type_info* type =
               static_cast<std::type_info*>(functor_ptr.obj_ptr);
-            bool equal =
-              BOOST_FUNCTION_COMPARE_TYPE_ID(typeid(Functor), *type);
-            return (equal? functor_ptr
+            return (BOOST_FUNCTION_COMPARE_TYPE_ID(typeid(Functor), *type)?
+                    functor_ptr
                     : make_any_pointer(reinterpret_cast<void*>(0)));
           }
           else {
@@ -493,5 +493,7 @@ namespace detail {
   } // end namespace function
 } // end namespace detail
 } // end namespace boost
+
+#undef BOOST_FUNCTION_COMPARE_TYPE_ID
 
 #endif // BOOST_FUNCTION_BASE_HEADER
