@@ -21,10 +21,10 @@
 
 
 <H2><A NAME="sec:iterator-property-map"></A>
+</h2>
 <PRE>
 iterator_property_map&lt;<a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">RandomAccessIterator</a>, OffsetMap, T, R&gt;
 </PRE>
-</H2>
 
 <P>
 This property map is an adaptor that converts any random access
@@ -41,7 +41,7 @@ random access iterator.
 <pre>
 // print out the capacity and flow for all the edges in the graph
 template &lt;class Graph, class CapacityPMap, class FlowPMap&gt;
-void print_network(Graph& G, CapacityPMap capacity, FlowPMap flow)
+void print_network(Graph&amp; G, CapacityPMap capacity, FlowPMap flow)
 {
   typedef typename boost::graph_traits&lt;Graph&gt;::vertex_iterator    Viter;
   typedef typename boost::graph_traits&lt;Graph&gt;::out_edge_iterator OutEdgeIter;
@@ -50,17 +50,17 @@ void print_network(Graph& G, CapacityPMap capacity, FlowPMap flow)
   Viter ui, uiend;
   for (boost::tie(ui, uiend) = vertices(G); ui != uiend; ++ui) {
     OutEdgeIter out, out_end;
-    std::cout &lt;&lt; *ui &lt;&lt; "\t";
+    std::cout &lt;&lt; *ui &lt;&lt; &quot;\t&quot;;
 
     for(boost::tie(out, out_end) = out_edges(*ui, G); out != out_end; ++out)
-      std::cout &lt;&lt; "--(" &lt;&lt; get(capacity, *out) &lt;&lt; ", " 
-	   &lt;&lt; get(flow, *out) &lt;&lt; ")--> " &lt;&lt; target(*out,G) &lt;&lt; "\t";
-    std::cout &lt;&lt; std::endl &lt;&lt; "\t";
+      std::cout &lt;&lt; &quot;--(&quot; &lt;&lt; get(capacity, *out) &lt;&lt; &quot;, &quot; 
+	   &lt;&lt; get(flow, *out) &lt;&lt; &quot;)--&gt; &quot; &lt;&lt; target(*out,G) &lt;&lt; &quot;\t&quot;;
+    std::cout &lt;&lt; std::endl &lt;&lt; &quot;\t&quot;;
 
     InEdgeIter in, in_end;    
     for(boost::tie(in, in_end) = in_edges(*ui, G); in != in_end; ++in)
-      std::cout &lt;&lt; "<--(" &lt;&lt; get(capacity, *in) &lt;&lt; "," &lt;&lt; get(flow, *in) &lt;&lt; ")-- "
-           &lt;&lt; source(*in,G) &lt;&lt; "\t";
+      std::cout &lt;&lt; &quot;&lt;--(&quot; &lt;&lt; get(capacity, *in) &lt;&lt; &quot;,&quot; &lt;&lt; get(flow, *in) &lt;&lt; &quot;)-- &quot;
+           &lt;&lt; source(*in,G) &lt;&lt; &quot;\t&quot;;
     std::cout &lt;&lt; std::endl;
   }
 }
@@ -218,7 +218,7 @@ your compiler does not support partial specialization
 <TABLE>
 <TR valign=top>
 <TD nowrap>Copyright &copy 2000</TD><TD>
-<A HREF=file:///c:/boost/site/people/jeremy_siek.htm>Jeremy Siek</A>,
+<a HREF="../../people/jeremy_siek.htm">Jeremy Siek</a>,
 Univ.of Notre Dame (<A
 HREF="mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</A>)<br>
 <A HREF=http://www.lsc.nd.edu/~llee1>Lie-Quan Lee</A>, Univ.of Notre Dame (<A HREF="mailto:llee1@lsc.nd.edu">llee1@lsc.nd.edu</A>)<br>

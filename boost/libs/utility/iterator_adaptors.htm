@@ -93,7 +93,7 @@
        <a href="function_output_iterator.htm">Function Output Iterator Adaptor</a>
     </ul>
 
-    <p><b><a href="file:///c:/boost/site/people/dave_abrahams.htm">Dave
+    <p><b><a href="../../people/dave_abrahams.htm">Dave
     Abrahams</a></b> started the library, applying <a href=
     "../../more/generic_programming.html#policy">policy class</a> technique and
     handling const/non-const iterator interactions. He also contributed the
@@ -611,10 +611,10 @@ int main(int, char*[])
 {
   int x[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
   const int N = sizeof(x)/sizeof(int);
-  std::cout &lt;&lt; "multiplying the array by 2:" &lt;&lt; std::endl;
+  std::cout &lt;&lt; &quot;multiplying the array by 2:&quot; &lt;&lt; std::endl;
   std::copy(boost::make_transform_iterator(x, std::bind1st(std::multiplies&lt;int&gt;(), 2)),
       boost::make_transform_iterator(x + N, std::bind1st(std::multiplies&lt;int&gt;(), 2)),
-      std::ostream_iterator&lt;int&gt;(std::cout, " "));
+      std::ostream_iterator&lt;int&gt;(std::cout, &quot; &quot;));
   std::cout &lt;&lt; std::endl;
   return 0;
 }
@@ -860,7 +860,7 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
     <hr>
 
     <p>Revised 
-    <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->12 Jul 2001<!--webbot bot="Timestamp" endspan i-checksum="14985" -->
+    <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->20 Aug 2001<!--webbot bot="Timestamp" endspan i-checksum="14750" -->
 
 
     <p>&copy; Copyright Dave Abrahams and Jeremy Siek 2001. Permission to copy,
