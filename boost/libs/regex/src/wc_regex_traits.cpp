@@ -83,6 +83,8 @@ c_regex_traits<wchar_t>::string_type BOOST_REGEX_CALL c_regex_traits<wchar_t>::t
    case ::boost::re_detail::sort_delim:
          // get a regular sort key, and then truncate everything after the delim:
          result = c_regex_traits<wchar_t>::transform(&*result.begin(), &*result.begin() + result.size());
+         if(result.size() && (result[0] == s_delim))
+            break;
          std::size_t i;
          for(i = 0; i < result.size(); ++i)
          {

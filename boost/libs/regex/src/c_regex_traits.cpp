@@ -91,6 +91,8 @@ c_regex_traits<char>::string_type BOOST_REGEX_CALL c_regex_traits<char>::transfo
    case ::boost::re_detail::sort_delim:
          // get a regular sort key, and then truncate everything after the delim:
          result = transform(p1, p2);
+         if(result.size() && (result[0] == s_delim))
+            break;
          std::size_t i;
          for(i = 0; i < result.size(); ++i)
          {
