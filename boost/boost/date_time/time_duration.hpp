@@ -163,7 +163,7 @@ namespace date_time {
     {
       return duration_type(ticks_ + d.ticks_);
     }
-    duration_type operator/(int divisor) 
+    duration_type operator/(int divisor) const
     {
       return duration_type(ticks_ / divisor);
     }
