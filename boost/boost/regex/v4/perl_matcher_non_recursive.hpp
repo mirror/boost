@@ -40,24 +40,6 @@ inline void inplace_destroy(T* p)
    p->~T();
 }
 
-enum saved_state_type
-{
-   saved_type_end = 0,
-   saved_type_paren = 1,
-   saved_type_recurse = 2,
-   saved_type_assertion = 3,
-   saved_state_alt = 4,
-   saved_state_repeater_count = 5,
-   saved_state_extra_block = 6,
-   saved_state_greedy_single_repeat = 7,
-   saved_state_rep_slow_dot = 8,
-   saved_state_rep_fast_dot = 9,
-   saved_state_rep_char = 10,
-   saved_state_rep_short_set = 11,
-   saved_state_rep_long_set = 12,
-   saved_state_non_greedy_long_repeat = 13
-};
-
 struct saved_state
 {
    unsigned int id;
@@ -1202,7 +1184,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_non_greed
 
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 typename perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_proc_type const
-perl_matcher<BidiIterator, Allocator, traits, Allocator2>::s_unwind_table[] = 
+perl_matcher<BidiIterator, Allocator, traits, Allocator2>::s_unwind_table[re_detail::saved_state_count] = 
 {
    &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_end,
    &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_paren,

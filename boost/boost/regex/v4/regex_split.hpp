@@ -36,7 +36,7 @@ namespace re_detail{
 template <class charT>
 const reg_expression<charT>& get_default_expression(charT)
 {
-   static const charT expression_text[] = { '\\', 's', '+', '\00', };
+   static const charT expression_text[4] = { '\\', 's', '+', '\00', };
    static const reg_expression<charT> e(expression_text);
    return e;
 }

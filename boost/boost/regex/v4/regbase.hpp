@@ -81,7 +81,8 @@ public:
       restart_buf = 3,
       restart_continue = 4,
       restart_lit = 5,
-      restart_fixed_lit = 6
+      restart_fixed_lit = 6, 
+      restart_count = 7
    };
 
    flag_type BOOST_REGEX_CALL flags()const

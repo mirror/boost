@@ -768,7 +768,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_restart_lit
 
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 typename perl_matcher<BidiIterator, Allocator, traits, Allocator2>::matcher_proc_type const
-perl_matcher<BidiIterator, Allocator, traits, Allocator2>::s_match_vtable[] = 
+perl_matcher<BidiIterator, Allocator, traits, Allocator2>::s_match_vtable[re_detail::syntax_element_count] = 
 {
    (&perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_startmark),
    &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_endmark,
@@ -811,7 +811,7 @@ perl_matcher<BidiIterator, Allocator, traits, Allocator2>::s_match_vtable[] =
 
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 typename perl_matcher<BidiIterator, Allocator, traits, Allocator2>::matcher_proc_type const
-perl_matcher<BidiIterator, Allocator, traits, Allocator2>::s_find_vtable[] = 
+perl_matcher<BidiIterator, Allocator, traits, Allocator2>::s_find_vtable[regbase::restart_count] = 
 {
    &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_restart_any,
    &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_restart_word,

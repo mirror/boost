@@ -248,6 +248,25 @@ public:
 
 struct saved_state;
 
+enum saved_state_type
+{
+   saved_type_end = 0,
+   saved_type_paren = 1,
+   saved_type_recurse = 2,
+   saved_type_assertion = 3,
+   saved_state_alt = 4,
+   saved_state_repeater_count = 5,
+   saved_state_extra_block = 6,
+   saved_state_greedy_single_repeat = 7,
+   saved_state_rep_slow_dot = 8,
+   saved_state_rep_fast_dot = 9,
+   saved_state_rep_char = 10,
+   saved_state_rep_short_set = 11,
+   saved_state_rep_long_set = 12,
+   saved_state_non_greedy_long_repeat = 13, 
+   saved_state_count = 14
+};
+
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 class perl_matcher
 {
@@ -358,9 +377,9 @@ private:
    repeater_count<BidiIterator> rep_obj;
 
    // table of functions to match states:
-   static const matcher_proc_type s_match_vtable[];
+   static const matcher_proc_type s_match_vtable[re_detail::syntax_element_count];
    // table of functions to search for matching attempt start:
-   static const matcher_proc_type s_find_vtable[];
+   static const matcher_proc_type s_find_vtable[regbase::restart_count];
 
 
 #ifdef BOOST_REGEX_NON_RECURSIVE
@@ -405,7 +424,7 @@ private:
    // how many memory blocks have we used up?:
    unsigned used_block_count;
    // table of pointers to unwind proceedures:
-   static const unwind_proc_type s_unwind_table[];
+   static const unwind_proc_type s_unwind_table[re_detail::saved_state_count];
 #endif
 
    // these operations aren't allowed, so are declared private:
