@@ -31,6 +31,14 @@ void check(const T&)
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    BOOST_CHECK(::tt::is_pod<t2>::value == true);
 #endif
+
+   typedef typename tt::aligned_storage<T::value,-1L>::type t3;
+   BOOST_MESSAGE(typeid(t3).name());
+   BOOST_CHECK(::tt::alignment_of<t3>::value == ::boost::alignment_of< ::boost::detail::max_align>::value);
+   BOOST_CHECK((sizeof(t3) % T::value) == 0);
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   BOOST_CHECK(::tt::is_pod<t3>::value == true);
+#endif
 }
 
 TT_TEST_BEGIN(type_with_alignment)
@@ -59,6 +67,7 @@ check(tt::integral_constant<std::size_t,::tt::alignment_of<mf2>::value>());
 check(tt::integral_constant<std::size_t,::tt::alignment_of<POD_UDT>::value>());
 check(tt::integral_constant<std::size_t,::tt::alignment_of<empty_UDT>::value>());
 check(tt::integral_constant<std::size_t,::tt::alignment_of<union_UDT>::value>());
+check(tt::integral_constant<std::size_t,::tt::alignment_of<boost::detail::max_align>::value>());
 
 TT_TEST_END
 
