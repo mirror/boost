@@ -43,11 +43,7 @@ namespace detail {
 
     struct is_static_visitor_tag { };
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
     typedef void static_visitor_default_return;
-#else
-    typedef struct { } static_visitor_default_return;
-#endif
 
 } // namespace detail
 
@@ -57,19 +53,7 @@ class static_visitor
 {
 public: // typedefs
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-
     typedef R result_type;
-
-#else // MSVC6
-
-    typedef typename mpl::if_<
-          is_same<R, detail::static_visitor_default_return>
-        , void
-        , R
-        >::type result_type;
-
-#endif // MSVC6 workaround
 
 protected: // for use as base class only
 
