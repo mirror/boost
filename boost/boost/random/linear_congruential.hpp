@@ -116,16 +116,22 @@ public:
   { return !(x == y); }
     
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-  template<class CharT, class Traits, class IntType_, IntType_ a_, IntType_ c_, IntType_ m_, IntType_ val_>
+  template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os,
-             linear_congruential<IntType_,a_,c_,m_,val_> const& lcg);
+             const linear_congruential& lcg)
+  {
+    return os << lcg._x;
+  }
 
-  template<class CharT, class Traits, class IntType_, IntType_ a_, IntType_ c_, IntType_ m_, IntType_ val_>
+  template<class CharT, class Traits>
   friend std::basic_istream<CharT,Traits>&
-  operator>>(std::basic_istream<CharT,Traits>&,
-             linear_congruential<IntType_,a_,c_,m_,val_>&);
-    
+  operator>>(std::basic_istream<CharT,Traits>& is,
+             linear_congruential& lcg)
+  {
+    return is >> lcg._x;
+  }
+ 
 private:
 #endif
 #endif
@@ -151,7 +157,7 @@ operator>>(std::istream& is,
 {
     return is >> lcg._x;
 }
-#else 
+#elif defined(BOOST_NO_OPERATORS_IN_NAMESPACE) || defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 template<class CharT, class Traits, class IntType, IntType a, IntType c, IntType m, IntType val>
 std::basic_ostream<CharT,Traits>&
 operator<<(std::basic_ostream<CharT,Traits>& os,
