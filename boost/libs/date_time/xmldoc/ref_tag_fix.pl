@@ -43,7 +43,9 @@ sub make_title {
 sub rewrite_tags {
   my $filename = shift || die "Error: argument 1 missing to sub $!";
   my $id_tag = shift || die "Error: argument 2 missing to sub $!";
-  my ($line, @new_file, $title);
+  my ($line, @new_file, $title, $processed);
+  
+  $processed = 1; # has this file already been processed?
   
   print "...processing $filename...\n";
 
@@ -56,6 +58,7 @@ sub rewrite_tags {
     if($line =~ /<library-reference>/) {
       push(@new_file, "<section id=\"$id_tag\">\n");
       push(@new_file, "<title>$title</title>\n");
+      $processed = 0; # file had not been previously processed 
     }
     elsif($line =~ /<\/library-reference>/) {
       push(@new_file, "</section>\n");
@@ -70,12 +73,18 @@ sub rewrite_tags {
   open(OTP, ">$filename") || die "File open (write) failed: $!";
   print OTP shift(@new_file);
 
-  print OTP <<EO_LIC;
+  if($processed == 0){ # has not been previously processed so add license
+    my($day, $year) = (localtime)[3,5];
+    my $month = (qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec))[(localtime)[4]];
+    $year += 1900; # adjust year
+    print OTP <<EO_LIC;
 <!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
+<!-- date source directory processed: $year-$month-$day -->
 EO_LIC
+  }
 
   foreach(@new_file){
     print OTP "$_";
@@ -95,4 +104,7 @@ Change log
         - renamed fix_id sub to rewrite_tags.
 8/31/2004
         - added license to this file and writes license to boostbook files
-        
+11/01/2004
+        - fixed minor bug that placed multiple license statements in files if
+          input file had already had it's tags fixed.
+        - added a processed date to the license statement
