@@ -17,10 +17,10 @@ namespace fsm = boost::fsm;
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class MostDerived, class Context >
-struct InnermostDefault : fsm::state< MostDerived, Context >
+template< class MostDerived, class Context, class Reactions = fsm::no_reactions >
+struct InnermostDefault : fsm::state< MostDerived, Context, Reactions >
 {
-  typedef fsm::state< MostDerived, Context > base_type;
+  typedef fsm::state< MostDerived, Context, Reactions > base_type;
   typedef typename base_type::my_context my_context;
   typedef InnermostDefault my_base;
 
