@@ -168,8 +168,12 @@ namespace boost { namespace numeric { namespace ublas {
             // Difference
             n = it1 - it2;
             // Element operator
+#ifdef BOOST_UBLAS_ITERATOR_IS_INDEXABLE
             t = it [n];
+#endif
             t = *(it + n);
+            ignore_unused_variable_warning (itp);
+            ignore_unused_variable_warning (itm);
             ignore_unused_variable_warning (t);
         }
     };
@@ -187,7 +191,9 @@ namespace boost { namespace numeric { namespace ublas {
             difference_type n (0);
             value_type t = value_type ();
             // Element assignment
+#ifdef BOOST_UBLAS_ITERATOR_IS_INDEXABLE
             it [n] = t;
+#endif
             *(it + n) = t;
         }
     };
