@@ -69,7 +69,7 @@ T checked_upper(const interval<T, Policies>& x)
 template<class T, class Policies> inline
 T width(const interval<T, Policies>& x)
 {
-  if (interval_lib::detail::test_input(x)) return 0;
+  if (interval_lib::detail::test_input(x)) return static_cast<T>(0);
   typename Policies::rounding rnd;
   return rnd.sub_up(x.upper(), x.lower());
 }
