@@ -21,7 +21,7 @@ struct list<
         >
     : list0<  >
 {
-    typedef list0<  > type;
+    typedef list0<  >::type type;
 };
 
 template<
@@ -32,7 +32,7 @@ struct list<
         >
     : list1<T0>
 {
-    typedef list1<T0> type;
+    typedef typename list1<T0>::type type;
 };
 
 template<
@@ -41,7 +41,7 @@ template<
 struct list< T0,T1,void_,void_,void_,void_,void_,void_,void_,void_ >
     : list2< T0,T1 >
 {
-    typedef list2< T0,T1 > type;
+    typedef typename list2< T0,T1 >::type type;
 };
 
 template<
@@ -50,7 +50,7 @@ template<
 struct list< T0,T1,T2,void_,void_,void_,void_,void_,void_,void_ >
     : list3< T0,T1,T2 >
 {
-    typedef list3< T0,T1,T2 > type;
+    typedef typename list3< T0,T1,T2 >::type type;
 };
 
 template<
@@ -59,7 +59,7 @@ template<
 struct list< T0,T1,T2,T3,void_,void_,void_,void_,void_,void_ >
     : list4< T0,T1,T2,T3 >
 {
-    typedef list4< T0,T1,T2,T3 > type;
+    typedef typename list4< T0,T1,T2,T3 >::type type;
 };
 
 template<
@@ -68,7 +68,7 @@ template<
 struct list< T0,T1,T2,T3,T4,void_,void_,void_,void_,void_ >
     : list5< T0,T1,T2,T3,T4 >
 {
-    typedef list5< T0,T1,T2,T3,T4 > type;
+    typedef typename list5< T0,T1,T2,T3,T4 >::type type;
 };
 
 template<
@@ -78,7 +78,7 @@ template<
 struct list< T0,T1,T2,T3,T4,T5,void_,void_,void_,void_ >
     : list6< T0,T1,T2,T3,T4,T5 >
 {
-    typedef list6< T0,T1,T2,T3,T4,T5 > type;
+    typedef typename list6< T0,T1,T2,T3,T4,T5 >::type type;
 };
 
 template<
@@ -88,7 +88,7 @@ template<
 struct list< T0,T1,T2,T3,T4,T5,T6,void_,void_,void_ >
     : list7< T0,T1,T2,T3,T4,T5,T6 >
 {
-    typedef list7< T0,T1,T2,T3,T4,T5,T6 > type;
+    typedef typename list7< T0,T1,T2,T3,T4,T5,T6 >::type type;
 };
 
 template<
@@ -98,7 +98,7 @@ template<
 struct list< T0,T1,T2,T3,T4,T5,T6,T7,void_,void_ >
     : list8< T0,T1,T2,T3,T4,T5,T6,T7 >
 {
-    typedef list8< T0,T1,T2,T3,T4,T5,T6,T7 > type;
+    typedef typename list8< T0,T1,T2,T3,T4,T5,T6,T7 >::type type;
 };
 
 template<
@@ -108,7 +108,7 @@ template<
 struct list< T0,T1,T2,T3,T4,T5,T6,T7,T8,void_ >
     : list9< T0,T1,T2,T3,T4,T5,T6,T7,T8 >
 {
-    typedef list9< T0,T1,T2,T3,T4,T5,T6,T7,T8 > type;
+    typedef typename list9< T0,T1,T2,T3,T4,T5,T6,T7,T8 >::type type;
 };
 
 // primary template (not a specialization!)

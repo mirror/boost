@@ -57,6 +57,7 @@
 #   include "boost/preprocessor/enum.hpp"
 #   include "boost/preprocessor/repeat.hpp"
 #   include "boost/preprocessor/comma_if.hpp"
+#   include "boost/preprocessor/expr_if.hpp"
 #   include "boost/preprocessor/iterate.hpp"
 
 #   include "boost/config.hpp"
@@ -184,7 +185,7 @@ template<
 struct list< AUX_LIST_N_PARTIAL_SPEC_PARAMS(i, T, void_) >
     : BOOST_PP_CAT(list,i)< AUX_LIST_N_PARAMS(i, T) >
 {
-    typedef BOOST_PP_CAT(list,i)< AUX_LIST_N_PARAMS(i, T) > type;
+    typedef BOOST_PP_EXPR_IF(i,typename) BOOST_PP_CAT(list,i)< AUX_LIST_N_PARAMS(i, T) >::type type;
 };
 
 #endif // i == BOOST_MPL_LIMIT_LIST_SIZE
@@ -201,9 +202,9 @@ struct list_impl_chooser<i>
         >
     struct result_
     {
-        typedef BOOST_PP_CAT(list,i)<
+        typedef typename BOOST_PP_CAT(list,i)<
               AUX_LIST_N_PARAMS(i, T)
-            > type;
+            >::type type;
     };
 };
 
