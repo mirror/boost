@@ -18,10 +18,9 @@
 #define BOOST_UBLAS_STORAGE_H
 
 #include <algorithm>
-#include <valarray>
 #include <vector>
 
-#ifndef BOOST_UBLAS_SIMPLE_ARRAY_ADAPTOR
+#ifdef BOOST_UBLAS_SHALLOW_ARRAY_ADAPTOR
 #include <boost/shared_array.hpp>
 #endif
 
@@ -462,9 +461,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_BOUNDED_ARRAY_ALIGN value_type data_ [N];
     };
 
-#ifdef BOOST_UBLAS_SIMPLE_ARRAY_ADAPTOR
-
-    // Array adaptor
+    // Array adaptor with normal deep copy semantics of elements
     template<class T>
     class array_adaptor {
     public:
@@ -497,20 +494,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         array_adaptor (size_type size, pointer data):
             size_ (size), own_ (false), data_ (data) {}
-#ifdef BOOST_UBLAS_DEEP_COPY
         BOOST_UBLAS_INLINE
         array_adaptor (const array_adaptor &a):
             size_ (a.size_), own_ (true), data_ (new value_type [a.size_]) {
             *this = a;
         }
-#else
-        BOOST_UBLAS_INLINE
-        array_adaptor (const array_adaptor &a):
-            size_ (a.size_), own_ (a.own_), data_ (a.data_) {
-            if (own_)
-                external_logic ().raise ();
-        }
-#endif
         BOOST_UBLAS_INLINE
         ~array_adaptor () {
             if (own_) {
@@ -695,20 +683,22 @@ namespace boost { namespace numeric { namespace ublas {
         pointer data_;
     };
 
-#else
-
+#ifdef BOOST_UBLAS_SHALLOW_ARRAY_ADAPTOR
+    // Array adaptor with shallow (reference) copy semantics of elements.
+    // shared_array are used maitain reference counting.
+    // This class breaks the normal copy semantics for a storage container and is very dangerous!
     template<class T>
-    struct leaker {
-        typedef void result_type;
-        typedef T *argument_type;
+    class shallow_array_adaptor {
 
-        BOOST_UBLAS_INLINE
-        result_type operator () (argument_type x) {}
-    };
+        template<class T>
+        struct leaker {
+            typedef void result_type;
+            typedef T *argument_type;
 
-    // Array adaptor
-    template<class T>
-    class array_adaptor {
+            BOOST_UBLAS_INLINE
+            result_type operator () (argument_type x) {}
+        };
+
     public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -720,38 +710,32 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        array_adaptor ():
+        shallow_array_adaptor ():
             size_ (0), own_ (true), data_ (new value_type [0]) {
             std::fill (data_.get (), data_.get () + size_, value_type ());
         }
         explicit BOOST_UBLAS_INLINE
-        array_adaptor (no_init):
+        shallow_array_adaptor (no_init):
             size_ (0), own_ (true), data_ (new value_type [0]) {}
         explicit BOOST_UBLAS_INLINE
-        array_adaptor (size_type size):
+        shallow_array_adaptor (size_type size):
             size_ (size), own_ (true), data_ (new value_type [size]) {
             std::fill (data_.get (), data_.get () + size_, value_type ());
         }
         BOOST_UBLAS_INLINE
-        array_adaptor (size_type size, no_init):
+        shallow_array_adaptor (size_type size, no_init):
             size_ (size), own_ (true), data_ (new value_type [size]) {
         }
         BOOST_UBLAS_INLINE
-        array_adaptor (size_type size, pointer data):
+        shallow_array_adaptor (size_type size, pointer data):
             size_ (size), own_ (false), data_ (data, leaker<value_type> ()) {}
-#ifdef BOOST_UBLAS_DEEP_COPY
+
         BOOST_UBLAS_INLINE
-        array_adaptor (const array_adaptor &a):
-            size_ (a.size_), own_ (true), data_ (new value_type [a.size_]) {
-            *this = a;
-        }
-#else
-        BOOST_UBLAS_INLINE
-        array_adaptor (const array_adaptor &a):
+        shallow_array_adaptor (const shallow_array_adaptor &a):
             size_ (a.size_), own_ (a.own_), data_ (a.data_) {}
-#endif
+
         BOOST_UBLAS_INLINE
-        ~array_adaptor () {
+        ~shallow_array_adaptor () {
         }
 
         // Resizing
@@ -796,7 +780,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Assignment
         BOOST_UBLAS_INLINE
-        array_adaptor &operator = (const array_adaptor &a) {
+        shallow_array_adaptor &operator = (const shallow_array_adaptor &a) {
             if (this != &a) {
                 resize (a.size_, false);
                 std::copy (a.data_.get (), a.data_.get () + a.size_, data_.get ());
@@ -804,7 +788,7 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
         BOOST_UBLAS_INLINE
-        array_adaptor &assign_temporary (array_adaptor &a) {
+        shallow_array_adaptor &assign_temporary (shallow_array_adaptor &a) {
             if (own_ && a.own_)
                 swap (a);
             else
@@ -814,7 +798,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Swapping
         BOOST_UBLAS_INLINE
-        void swap (array_adaptor &a) {
+        void swap (shallow_array_adaptor &a) {
             if (this != &a) {
                 std::swap (size_, a.size_);
                 std::swap (own_, a.own_);
@@ -823,7 +807,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
-        friend void swap (array_adaptor &a1, array_adaptor &a2) {
+        friend void swap (shallow_array_adaptor &a1, shallow_array_adaptor &a2) {
             a1.swap (a2);
         }
 #endif
