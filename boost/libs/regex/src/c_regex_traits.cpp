@@ -499,7 +499,7 @@ void BOOST_REGEX_CALL c_traits_base::do_update_ctype()
 
    // now update the character class map,
    // and lower case map:
-   std::memset(class_map, 0, map_size);
+   std::memset(class_map, 0, sizeof(class_map));
    for(i = 0; i < map_size; ++i)
    {
       if(std::isalpha(i))
@@ -519,9 +519,9 @@ void BOOST_REGEX_CALL c_traits_base::do_update_ctype()
       if(std::isxdigit(i))
          class_map[i] |= char_class_xdigit;
    }
-   class_map['_'] |= char_class_underscore;
-   class_map[' '] |= char_class_blank;
-   class_map['\t'] |= char_class_blank;
+   class_map[(unsigned char)'_'] |= char_class_underscore;
+   class_map[(unsigned char)' '] |= char_class_blank;
+   class_map[(unsigned char)'\t'] |= char_class_blank;
    for(i = 0; i < map_size; ++i)
    {
       lower_case_map[i] = (char)std::tolower(i);

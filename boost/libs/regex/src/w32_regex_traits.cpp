@@ -302,7 +302,7 @@ void BOOST_REGEX_CALL w32_traits_base::do_init()
       {
          class_map[i] &= char_class_win;
       }
-      class_map['_'] |= char_class_underscore;
+      class_map[(unsigned char)'_'] |= char_class_underscore;
       LCMapStringA(GetUserDefaultLCID(), LCMAP_LOWERCASE, buf, map_size, lower_case_map, map_size);
       //
       // update our collating elements:
