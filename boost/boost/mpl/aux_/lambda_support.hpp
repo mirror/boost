@@ -21,6 +21,7 @@
 
 #if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
 
+#   define BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(i, name, params) /**/
 #   define BOOST_MPL_AUX_LAMBDA_SUPPORT(i,name,params) /**/
 
 #else
@@ -35,23 +36,41 @@
     typedef_ param BOOST_PP_CAT(arg,BOOST_PP_INC(i)); \
     /**/
 
-#   define BOOST_MPL_AUX_LAMBDA_SUPPORT(i,name,params) \
-    struct rebind \
+#   define BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(i, name, params) \
+    BOOST_STATIC_CONSTANT(int, arity = i); \
+    BOOST_PP_LIST_FOR_EACH_I_R( \
+          1 \
+        , BOOST_MPL_AUX_LAMBDA_SUPPORT_ARG_TYPEDEF_FUNC \
+        , typedef \
+        , BOOST_PP_TUPLE_TO_LIST(i,params) \
+        ) \
+    friend class BOOST_PP_CAT(name,_rebind); \
+    typedef BOOST_PP_CAT(name,_rebind) rebind; \
+/**/
+
+#if !defined(__BORLANDC__)
+#   define BOOST_MPL_AUX_LAMBDA_SUPPORT(i, name, params) \
+    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(i, name, params) \
+}; \
+struct BOOST_PP_CAT(name,_rebind) \
+{ \
+    template< BOOST_MPL_PP_PARAMS(i,typename U) > struct apply \
+        : name< BOOST_MPL_PP_PARAMS(i,U) > \
     { \
-        BOOST_STATIC_CONSTANT(int, arity = i); \
-        BOOST_PP_LIST_FOR_EACH_I_R( \
-              1 \
-            , BOOST_MPL_AUX_LAMBDA_SUPPORT_ARG_TYPEDEF_FUNC \
-            , typedef \
-            , BOOST_PP_TUPLE_TO_LIST(i,params) \
-            ) \
-        \
-        template< BOOST_MPL_PP_PARAMS(i,typename U) > struct apply \
-        { \
-            typedef typename name< BOOST_MPL_PP_PARAMS(i,U) >::type type; \
-        }; \
     }; \
-    /**/
+/**/
+#else
+#   define BOOST_MPL_AUX_LAMBDA_SUPPORT(i, name, params) \
+    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(i, name, params) \
+}; \
+struct BOOST_PP_CAT(name,_rebind) \
+{ \
+    template< BOOST_MPL_PP_PARAMS(i,typename U) > struct apply \
+    { \
+        typedef typename name< BOOST_MPL_PP_PARAMS(i,U) >::type type; \
+    }; \
+/**/
+#endif
 
 #endif // BOOST_MPL_NO_FULL_LAMBDA_SUPPORT
 

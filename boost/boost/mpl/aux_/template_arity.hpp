@@ -25,7 +25,7 @@ namespace boost {
 namespace mpl {
 namespace aux {
 
-// gcc ICEs on |has_rebind|
+// gcc ICE-s on 'has_rebind'
 #if !defined(__GNUC__)
 
 template< bool >
@@ -37,32 +37,14 @@ struct template_arity_impl
     };
 };
 
-#if defined(__BORLANDC__) && (__BORLANDC__ >= 0x561 && !defined(BOOST_STRICT_CONFIG))
-template< typename Rebind >
-struct template_arity_value
-{
-    BOOST_STATIC_CONSTANT(int, value = Rebind::arity);
-};
-
-template<>
-struct template_arity_impl<true>
-{
-    template< typename F > struct result_
-        : template_arity_value<typename F::rebind>
-    {
-    };
-};
-#else
 template<>
 struct template_arity_impl<true>
 {
     template< typename F > struct result_
     {
-        typedef typename F::rebind f_;
-        BOOST_STATIC_CONSTANT(int, value = f_::arity);
+        BOOST_STATIC_CONSTANT(int, value = F::arity);
     };
 };
-#endif
 
 template< typename F >
 struct template_arity

@@ -33,7 +33,7 @@ BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1,trait) \
 template<> struct trait<spec> \
 { \
     typedef result type; \
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,trait,(spec)) \
+    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(1,trait,(spec)) \
 }; \
 /**/
 

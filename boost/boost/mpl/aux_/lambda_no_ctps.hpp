@@ -102,7 +102,7 @@ struct lambda
 
 #   define AUX_LAMBDA_INVOCATION(unused, i, T) \
     , typename lambda< \
-          typename f_::BOOST_PP_CAT(arg,BOOST_PP_INC(i)) \
+          typename F::BOOST_PP_CAT(arg,BOOST_PP_INC(i)) \
         , false \
         >::type \
     /**/

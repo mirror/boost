@@ -48,7 +48,7 @@ template<> struct trait<spec> \
     : mpl::size_t_c< C > \
 { \
     BOOST_TT_AUX_SIZE_T_TRAIT_VALUE_DECL(C) \
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,trait,(spec)) \
+    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(1,trait,(spec)) \
 }; \
 /**/
 
