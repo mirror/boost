@@ -99,7 +99,7 @@ fulfills the property map requirements.
 
 
 template &lt;typename AddressMap&gt;
-void generic_foo_algorithm(AddressMap address)
+void foo(AddressMap address)
 {
   typedef typename boost::property_traits&lt;AddressMap&gt;::value_type value_type;
   typedef typename boost::property_traits&lt;AddressMap&gt;::key_type key_type;
