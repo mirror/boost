@@ -717,6 +717,9 @@ void print_platform_macros()
    PRINT_MACRO(LLONG_MAX);
    PRINT_MACRO(LONG_LONG_MAX);
    PRINT_MACRO(LONGLONG_MAX);
+   PRINT_MACRO(ULLONG_MAX); // <boost/cstdint.hpp> uses these, so we need to know them
+   PRINT_MACRO(ULONG_LONG_MAX);
+   PRINT_MACRO(ULONGLONG_MAX);
    // general C99:
    PRINT_MACRO(__STDC_IEC_559__);
    PRINT_MACRO(__STDC_IEC_559_COMPLEX__);
