@@ -131,7 +131,7 @@ template <typename T> struct is_pointer_helper<T*const volatile>
 { BOOST_DECL_MC(bool, value, true); };
 } // namespace detail
 template <typename T> struct is_pointer
-{ BOOST_DECL_MC(bool, value, (::boost::type_traits::ice_and< ::boost::detail::is_pointer_helper<T>::value, !::boost::is_member_pointer<T>::value>::value)); };
+{ BOOST_DECL_MC(bool, value, (::boost::type_traits::ice_and< ::boost::detail::is_pointer_helper<T>::value, ::boost::type_traits::ice_not< ::boost::is_member_pointer<T>::value >::value >::value)); };
 #else
 template <typename T>
 struct is_pointer 
@@ -254,8 +254,8 @@ template <typename T> struct is_enum
 {
    BOOST_DECL_MC(bool, value,
       (::boost::type_traits::ice_and<
-         !::boost::is_arithmetic<T>::value,
-         !::boost::is_reference<T>::value,
+         ::boost::type_traits::ice_not< ::boost::is_arithmetic<T>::value>::value,
+         ::boost::type_traits::ice_not< ::boost::is_reference<T>::value>::value,
          ::boost::is_convertible<T, detail::int_convertible>::value
       >::value));
 };
