@@ -90,7 +90,7 @@ int test_main(int, char* [])
 
   // 17 at beginning, 42 at end
   sortedValues.insert(sortedValues.begin(), 17);
-  sig.connect(emit_int(17), boost::signals::at_front);
+  sig.connect(emit_int(17), boost::BOOST_SIGNALS_NAMESPACE::at_front);
   sortedValues.push_back(42);
   sig.connect(emit_int(42));
 
