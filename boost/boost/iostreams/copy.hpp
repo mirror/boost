@@ -21,14 +21,12 @@
 #include <algorithm>                        // copy.
 #include <ios>                              // failure.
 #include <utility>                          // pair.
-#include <boost/bind.hpp>                   // used w/ scope_guard.
-#include <boost/ref.hpp>                    // used w/ scope_guard.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/detail/buffer.hpp>       
-#include <boost/iostreams/detail/enable_if_stream.hpp>                  
-#include <boost/iostreams/detail/resolve.hpp>                  
-#include <boost/iostreams/detail/scope_guard.hpp>               
+#include <boost/iostreams/detail/closer.hpp>    
+#include <boost/iostreams/detail/enable_if_stream.hpp>                      
+#include <boost/iostreams/detail/resolve.hpp>                   
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/is_direct.hpp>
 #include <boost/iostreams/operations.hpp>          // read, write, close.
@@ -113,31 +111,20 @@ std::streamsize copy_impl( Source& src, Sink& snk,
     return total;
 }
 
-#include <boost/iostreams/detail/scope_guard_prefix.hpp> // CW workaround.
-    template<typename Source, typename Sink>
-    std::streamsize copy_impl(Source src, Sink snk, std::streamsize buffer_size)
-    {
-        using namespace std;
-        typedef BOOST_IOSTREAMS_CHAR_TYPE(Source) src_char;
-        typedef BOOST_IOSTREAMS_CHAR_TYPE(Source) snk_char;
-        BOOST_STATIC_ASSERT((is_same<src_char, snk_char>::value));
-        ios::openmode m = ios::in | ios::out;
-        #if !BOOST_WORKAROUND(__BORLANDC__, < 0x600)
-            void (*close_src)(Source&, ios::openmode) = iostreams::close;
-            void (*close_snk)(Sink&, ios::openmode) = iostreams::close;
-            BOOST_SAFE_GUARD(boost::bind(close_src, ref(src), m));
-            BOOST_SCOPE_GUARD(boost::bind(close_snk, ref(snk), m));
-        #endif
-        streamsize result =
-            copy_impl( src, snk, buffer_size, 
-                       is_direct<Source>(), is_direct<Sink>() );
-        #if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
-            iostreams::close(src, m);
-            iostreams::close(snk, m);
-        #endif
-        return result; 
-    }
-#include <boost/iostreams/detail/scope_guard_suffix.hpp>
+template<typename Source, typename Sink>
+std::streamsize copy_impl(Source src, Sink snk, std::streamsize buffer_size)
+{
+    using namespace std;
+    typedef BOOST_IOSTREAMS_CHAR_TYPE(Source) src_char;
+    typedef BOOST_IOSTREAMS_CHAR_TYPE(Source) snk_char;
+    BOOST_STATIC_ASSERT((is_same<src_char, snk_char>::value));
+    external_closer<Source> close_source(src, ios::in | ios::out);
+    external_closer<Sink> close_sink(snk, ios::in | ios::out);
+    streamsize result =
+        copy_impl( src, snk, buffer_size, 
+                    is_direct<Source>(), is_direct<Sink>() );
+    return result; 
+}
 
 } // End namespace detail.
                     
