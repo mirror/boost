@@ -71,12 +71,14 @@ struct is_big_char
 {
    typedef typename traits::uchar_type traits_uchar_type;
    typedef typename traits::size_type traits_size_type;
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
    static bool test(char)
    { return false; }
    static bool test(unsigned char)
    { return false; }
    static bool test(signed char)
    { return false; }
+#endif
    template <class charT> static bool test(charT c)
    { return (traits_size_type)(traits_uchar_type)c >= 256; }
 };
