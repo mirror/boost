@@ -39,26 +39,14 @@ main()
     // date objects from strings & strings to date objects
     date d(2000, 2, 29);
     date d2 = from_string("2000-2-29");
-#if defined(BOOST_DATE_TIME_NO_STD_TRANSFORM)
-    // std::transform is responsible for case insensitivity
-    // if it's missing we need to be exact with case
-    date d3 = from_string("2000-Feb-29");
-    date d4 = from_string("2000-February-29");
-#else
     date d3 = from_string("2000-FEB-29");
     date d4 = from_string("2000-february-29");
-#endif //BOOST_DATE_TIME_NO_STD_TRANSFORM
     date d5 = from_string(to_simple_string(d));
     date d6 = from_string(to_iso_extended_string(d));
     
     check("2000-2-29", d2 == d);
-#if defined(BOOST_DATE_TIME_NO_STD_TRANSFORM)
-    check("2000-Feb-29", d3 == d);
-    check("2000-February-29", d4 == d);
-#else
     check("2000-FEB-29 (uppercase)", d3 == d);
     check("2000-february-29 (lowercase)", d4 == d);
-#endif //BOOST_DATE_TIME_NO_STD_TRANSFORM
     check("date to string to date", d5 == d);
     check("date to string to date", d6 == d);
 

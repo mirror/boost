@@ -2,13 +2,17 @@
 
 /* Copyright (c) 2000 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
+#ifndef BOOST_DATE_TIME_SOURCE
+#define BOOST_DATE_TIME_SOURCE
+#endif
 #include "boost/date_time/gregorian/greg_month.hpp"
 #include "boost/date_time/gregorian/greg_facet.hpp"
 #include "boost/date_time/date_format_simple.hpp"
 #include "boost/date_time/gregorian/formatters.hpp"
+#include "boost/date_time/date_parsing.hpp"
 
 namespace boost {
 namespace gregorian {
@@ -22,8 +26,7 @@ namespace gregorian {
    * Strings are both full names and abbreviations.</br>
    * Ex. ("jan",1), ("february",2), etc...</br>
    * Note: All characters are lowercase - for case insensitivity</br> 
-   * Note: Case-insensitivity does not function with MSVC 6.0. In this case
-   * the first letter is capitalized only. */
+   */
   greg_month::month_map_ptr_type greg_month::get_month_map_ptr()
   {
     static month_map_ptr_type month_map_ptr(new greg_month::month_map_type())
@@ -34,21 +37,11 @@ namespace gregorian {
       for(unsigned short i = 1; i <= 12; ++i) {
         greg_month m(static_cast<month_enum>(i));
         s = m.as_long_string();
-#if defined(BOOST_DATE_TIME_NO_STD_TRANSFORM)
-#else
-        std::transform(s.begin(), s.end(),
-                       s.begin(),
-                       tolower);
-#endif
+	s = date_time::convert_to_lower(s);
         month_map_ptr->insert(std::make_pair(s, i));
         
         s = m.as_short_string();
-#if defined(BOOST_DATE_TIME_NO_STD_TRANSFORM)
-#else
-        std::transform(s.begin(), s.end(),
-                       s.begin(),
-                       tolower);
-#endif
+	s = date_time::convert_to_lower(s);
         month_map_ptr->insert(std::make_pair(s, i));
       }
     }
@@ -87,4 +80,5 @@ namespace gregorian {
  * representations about the suitability of this software for any
  * purpose.  It is provided "as is" without express or implied warranty.
  */
+
 
