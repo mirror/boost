@@ -87,8 +87,8 @@ namespace boost { namespace program_options {
                    const std::vector<std::string>& new_tokens,
                    bool utf8) const;
     protected: // interface for derived classes.
-        virtual void parse(boost::any& value_store, 
-                           const std::vector<std::string>& new_tokens) 
+        virtual void xparse(boost::any& value_store, 
+                            const std::vector<std::string>& new_tokens) 
             const = 0;
     };
 
@@ -99,8 +99,8 @@ namespace boost { namespace program_options {
                    const std::vector<std::string>& new_tokens,
                    bool utf8) const;
     protected: // interface for derived classes.
-        virtual void parse(boost::any& value_store, 
-                           const std::vector<std::wstring>& new_tokens) 
+        virtual void xparse(boost::any& value_store, 
+                            const std::vector<std::wstring>& new_tokens) 
             const = 0;
     };
 
@@ -124,8 +124,8 @@ namespace boost { namespace program_options {
             the first string from 'new_tokens' to 'value_store', without
             any modifications.
          */
-        void parse(boost::any& value_store,
-                   const std::vector<std::string>& new_tokens) const;
+        void xparse(boost::any& value_store,
+                    const std::vector<std::string>& new_tokens) const;
 
         /** Does nothing. */
         bool apply_default(boost::any&) const { return false; }
@@ -229,8 +229,8 @@ namespace boost { namespace program_options {
 
         /** Creates an instance of the 'validator' class and calls
             it's operator() to perform actual convertion. */
-        void parse(boost::any& value_store, 
-                   const std::vector< std::basic_string<charT> >& new_tokens) const;
+        void xparse(boost::any& value_store, 
+                    const std::vector< std::basic_string<charT> >& new_tokens) const;
 
         /** If default value was specified via previous call to 
             'default_value', stores that value into 'value_store'.

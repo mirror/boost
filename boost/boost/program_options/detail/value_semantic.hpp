@@ -148,8 +148,8 @@ namespace boost { namespace program_options {
     template<class T, class charT>
     void 
     typed_value<T, charT>::
-    parse(boost::any& value_store, 
-          const std::vector<std::basic_string<charT> >& new_tokens) const
+    xparse(boost::any& value_store, 
+           const std::vector<std::basic_string<charT> >& new_tokens) const
     {
         // The only reason for using 'validator' class and
         // therefore adding a new level of indirection is that

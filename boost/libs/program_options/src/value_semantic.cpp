@@ -26,10 +26,10 @@ namespace boost { namespace program_options {
                 std::wstring w = from_utf8(new_tokens[i]);
                 local_tokens.push_back(to_local_8_bit(w));
             }
-            parse(value_store, local_tokens);
+            xparse(value_store, local_tokens);
         } else {
             // Already in local encoding, pass unmodified
-            parse(value_store, new_tokens);
+            xparse(value_store, new_tokens);
         }        
     }
 
@@ -53,7 +53,7 @@ namespace boost { namespace program_options {
             }
         }      
 
-        parse(value_store, tokens);  
+        xparse(value_store, tokens);  
     }
 
 
@@ -66,8 +66,8 @@ namespace boost { namespace program_options {
     }
 
     void 
-    untyped_value::parse(boost::any& value_store,
-                         const std::vector<std::string>& new_tokens) const
+    untyped_value::xparse(boost::any& value_store,
+                          const std::vector<std::string>& new_tokens) const
     {
         if (!value_store.empty()) 
             throw multiple_occurences("multiple_occurences");
