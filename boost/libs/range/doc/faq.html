@@ -20,9 +20,8 @@
     <h2  >FAQ</h2> <a name="FAQ" ></a>
     <ol  >
         <li  >
-            <i>Why is there no difference between <code  >iterator_of&lt;C&gt;::type</code> 
-            and <code  >const_iterator_of&lt;C&gt;::type</code> for <code  >std::pair&lt;iterator, 
-            iterator&gt;</code></i>.
+            <i>Why is there no difference between <code  >range_iterator&lt;C&gt;::type</code> 
+            and <code  >range_const_iterator&lt;C&gt;::type</code> for <code>std::pair&lt;iterator, iterator&gt;</code></i>.
         </li>
         <p  >
         In general it is not possible nor desirable to find a corresponding <code  >const_iterator</code>. 
@@ -83,12 +82,12 @@ is somewhat more convenient than a <code>pair</code>. </p>
     </span><span class=keyword>namespace </span><span class=identifier>range_detail                
     </span><span class=special>{
         </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;            
-        </span><span class=keyword>typename </span><span class=identifier>iterator_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;:</span><span class=identifier>type </span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>)
+        </span><span class=keyword>typename </span><span class=identifier>range_iterator</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;:</span><span class=identifier>type </span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>)
         </span><span class=special>{ </span><span class=comment>/* normal implementation */ </span><span class=special>}
     </span><span class=special>}   
                 
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;                
-    </span><span class=keyword>typename </span><span class=identifier>iterator_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>)
+    </span><span class=keyword>typename </span><span class=identifier>range_iterator</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>)
     </span><span class=special>{
         </span><span class=comment>//        
         // Create ADL hook

@@ -35,7 +35,8 @@
 
     The <code>iterator_range</code> class is templated on an <a href="">Forward 
     Traversal Iterator</a> and should be used whenever fairly general code is needed. 
-    The <code>sub_range</code> class is templated on an <a href="range.htm#forward_range">Forward 
+    The <code>sub_range</code> class is templated on an <a 
+href="range.html#forward_range">Forward
     Range</a> and it is less general, but a bit easier to use since its template 
     argument is easier to specify. The biggest difference is, however, that a 
     <code>sub_range</code> can propagate constness because it knows what a 
@@ -52,8 +53,8 @@ corresponding <code>const_iterator</code> is. </p>
     <p>
     The intention of the <code>iterator_range</code> class is to encapsulate two 
     iterators so they fulfill the <a
-      href="range.htm#forward_range">Forward Range</a> concept. A few other functions 
-      are also provided for convenience.
+      href="range.html#forward_range">Forward Range</a> concept. A few other 
+functions are also provided for convenience.
     </p>
     <p>
     If the template argument is not a model of Forward Traversal Iterator, one can 
@@ -209,12 +210,11 @@ class can propagate constness since it knows what a corresponding
 <span class=keyword>namespace </span><span class=identifier>boost</span>
 <span class=special>{
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
-    </span><span class=keyword>class </span><span class=identifier>sub_range </span><span class=special>: </span><span class=keyword>public </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>result_iterator_of</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;
+    </span><span class=keyword>class </span><span class=identifier>sub_range </span><span class=special>: </span><span class=keyword>public </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>range_result_iterator</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;
     </span><span class=special>{
     </span><span class=keyword>public</span><span class=special>: </span>
-        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>iterator_of</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span 
-class=special>&gt;::</span><span class=identifier>type       </span><span class=identifier>iterator</span><span class=special>;</span>
-        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>const_iterator_of</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>const_iterator</span><span class=special>;</span>
+        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>range_result_iterator</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><spanclass=special>&gt;::</span><span class=identifier>type </span><span class=identifier>iterator</span><span class=special>;</span>
+        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>range_const_iterator</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type  </span><span class=identifier>const_iterator</span><span class=special>;</span>
     
     <span class=keyword>public</span><span class=special>: </span><span class=comment>// construction, assignment
         </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator </span><span class=special>&gt;

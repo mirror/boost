@@ -103,7 +103,7 @@ functions as free-standing functions to allow for a layer of indirection. </p>
     
     <h3>Description</h3>
     <p>
-    A range X where <code>iterator_of&lt;X>::type</code> is a model of <a 
+    A range X where <code>range_iterator&lt;X>::type</code> is a model of <a 
 href="../../iterator/doc/new-iter-concepts.html#single-pass-iterators-lib-single-pass-iterators">
 Single Pass Iterator</a>
 
@@ -115,19 +115,19 @@ Single Pass Iterator</a>
     <table border="1" cellpadding="5">
         <TR>
             <TD VAlign="top">Value type</TD>
-            <TD VAlign="top"><code>value_type_of&lt;X>::type</code></TD>
+            <TD VAlign="top"><code>range_value&lt;X>::type</code></TD>
             <TD VAlign="top">The type of the object stored in a Range.
         </TR>
         <TR>
             <TD VAlign="top">Iterator type</TD>
-            <TD VAlign="top"><code>iterator_of&lt;X>::type</code></TD>
+            <TD VAlign="top"><code>range_iterator&lt;X>::type</code></TD>
             <TD VAlign="top">The type of iterator used to iterate through a Range's elements. 
             The iterator's value type is expected to be the Range's value type.  A 
             conversion from the iterator type to the const iterator type must exist.
         </TR>
         <TR>
             <TD VAlign="top">Const iterator type</TD>
-            <TD VAlign="top"><code>const_iterator_of&lt;X>::type</code></TD>
+            <TD VAlign="top"><code>range_const_iterator&lt;X>::type</code></TD>
             <TD VAlign="top">A type of iterator that may be used to examine, but not to 
             modify, a Range's elements.</TD>
         </TR>
@@ -155,14 +155,14 @@ Single Pass Iterator</a>
         <TR>
             <TD VAlign="top">Beginning of range</TD>
             <TD VAlign="top"><code>begin(a)</code></TD>
-            <TD VAlign="top"><code>iterator_of&lt;X>::type</code> if 
-<code>a</code> is mutable, <code>const_iterator_of&lt;X>::type</code> 
+            <TD VAlign="top"><code>range_iterator&lt;X>::type</code> if 
+<code>a</code> is mutable, <code>range_const_iterator&lt;X>::type</code> 
 otherwise</TD> </TR>
         <TR>
             <TD VAlign="top">End of range</TD>
             <TD VAlign="top"><code>end(a)</code></TD>
-            <TD VAlign="top"><code>iterator_of&lt;X>::type</code> if 
-<code>a</code> is mutable, <code>const_iterator_of&lt;X>::type</code> 
+            <TD VAlign="top"><code>range_iterator&lt;X>::type</code> if 
+<code>a</code> is mutable, <code>range_const_iterator&lt;X>::type</code> 
 otherwise</TD>
         </TR>
         <tr>
@@ -243,7 +243,7 @@ otherwise</TD>
 
     <h3>Description</h3>
     <p>
-    A range <code>X</code> where <code>iterator_of&lt;X>::type</code> is a model 
+    A range <code>X</code> where <code>range_iterator&lt;X>::type</code> is a model 
 of <a 
 href="../../iterator/doc/new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">Forward Traversal Iterator</a>
     </p>
@@ -256,14 +256,14 @@ Range</a>
     <table cellpadding="5" border="1">
         <TR>
             <TD VAlign="top">Distance type</TD>
-            <TD VAlign="top"><code>difference_type_of&lt;X>::type</code></TD>
+            <TD VAlign="top"><code>range_difference&lt;X>::type</code></TD>
             <TD VAlign="top">A signed integral type used to represent the distance between 
             two of the Range's iterators.  This type must be the same as the iterator's 
             distance type.</TD>
         </TR>
         <TR>
             <TD VAlign="top">Size type</TD>
-            <TD VAlign="top"><code>size_type_of&lt;X>::type</code></TD>
+            <TD VAlign="top"><code>range_size&lt;X>::type</code></TD>
             <TD VAlign="top">An unsigned integral type that can represent any nonnegative 
             value of the Range's distance type.</TD>
         </tr>
@@ -280,7 +280,7 @@ Range</a>
         <TR>
             <TD VAlign="top">Size of range</TD>
             <TD VAlign="top"><code>size(a)</code></TD>
-            <TD VAlign="top"><code>size_type</code></TD>
+            <TD VAlign="top"><code>range_size&lt;X>::type</code></TD>
         </TR>
     </table>
 
@@ -331,7 +331,7 @@ of elements. Note <code>size(a) == 0u</code> is equivalent to
 
     <h3>Description</h3> This concept provides access to iterators that traverse in 
     both directions (forward and reverse). The 
-<code>iterator_of&lt;X>::type</code> iterator must meet all of the requirements 
+<code>range_iterator&lt;X>::type</code> iterator must meet all of the requirements 
 of <a
 href="../../iterator/doc/new-iter-concepts.html#bidirectional-traversal-iterator
 s-lib-bidirectional-traversal-iterators">Bidirectional Traversal Iterator.</a>
@@ -343,7 +343,7 @@ s-lib-bidirectional-traversal-iterators">Bidirectional Traversal Iterator.</a>
     <Table border>
         <TR>
             <TD VAlign="top">Reverse Iterator type</TD>
-            <TD VAlign="top"><code>reverse_iterator_of&lt;X>::type</code></TD>
+            <TD VAlign="top"><code>range_reverse_iterator&lt;X>::type</code></TD>
             <TD VAlign="top">The type of iterator used to iterate through a Range's elements 
             in reverse order.  The iterator's value type is expected to be the Range's value 
             type.  A conversion from the reverse iterator type to the const reverse iterator 
@@ -352,7 +352,7 @@ s-lib-bidirectional-traversal-iterators">Bidirectional Traversal Iterator.</a>
         <TR>
             <TD VAlign="top">Const reverse iterator type</TD>
             <TD 
-VAlign="top"><code>const_reverse_iterator_of&ltX>::type</code></TD>
+VAlign="top"><code>range_const_reverse_iterator&ltX>::type</code></TD>
             <TD VAlign="top">A type of reverse iterator that may be used to examine, but not 
             to modify, a Range's elements.</TD>
         </TR>
@@ -371,19 +371,19 @@ VAlign="top"><code>const_reverse_iterator_of&ltX>::type</code></TD>
         <TR>
             <TD VAlign="top">Beginning of range</TD>
             <TD VAlign="top"><code>rbegin(a)</code></TD>
-            <TD VAlign="top"><code>reverse_iterator_of&lt;X>::type</code> if 
-<code>a</code> is mutable, <code>const_reverse_iterator_of&lt;X>::type</code> 
+            <TD VAlign="top"><code>range_reverse_iterator&lt;X>::type</code> if 
+<code>a</code> is mutable, <code>range_const_reverse_iterator&lt;X>::type</code> 
 otherwise.</TD>
             <TD VAlign="top">Equivalent to 
-<code>reverse_iterator_of&lt;X>::type(end(a))</code>.</TD> </TR>
+<code>range_reverse_iterator&lt;X>::type(end(a))</code>.</TD> </TR>
         <TR>
             <TD VAlign="top">End of range</TD>
             <TD VAlign="top"><code>rend(a)</code></TD>
-            <TD VAlign="top"><code>reverse_iterator_of&lt;X>::type</code> if 
-<code>a</code> is mutable, <code>const_reverse_iterator_of&lt;X>::type</code> 
+            <TD VAlign="top"><code>range_reverse_iterator&lt;X>::type</code> if 
+<code>a</code> is mutable, <code>range_const_reverse_iterator&lt;X>::type</code> 
 otherwise.</TD>
             <TD VAlign="top">Equivalent to 
-<code>reverse_iterator_of&lt;X>::type(begin(a))</code>.</TD> </tr>
+<code>range_reverse_iterator&lt;X>::type(begin(a))</code>.</TD> </tr>
 
     </table>
 
@@ -413,7 +413,7 @@ otherwise.</TD>
 
     <a name=random_access_range><h2>Random Access Range</h2> <h3>Description</h3>
     <p>
-    A range <code>X</code> where <code>iterator_of&lt;X>::type</code> is a model 
+    A range <code>X</code> where <code>range_iterator&lt;X>::type</code> is a model 
 of <a
       href="../../iterator/doc/new-iter-concept.html#random-access-traversal-iterators
 -lib-random-access-traversal-iterators">Random Access Traversal Iterator</a>
