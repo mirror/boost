@@ -74,13 +74,4 @@
 #  define BOOST_NO_STD_ITERATOR
 #endif
 
-//
-// Define BOOST_NO_CWCHAR and BOOST_NO_CWCTYPE for platforms known to
-// have C libraries without <wchar_t.h> or <wctype.h>:
-//
-#if defined(__APPLE_CC__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
-#  define BOOST_NO_CWCHAR
-#  define BOOST_NO_CWCTYPE
-#endif
-
 #define BOOST_STDLIB "SGI standard library"
