@@ -49,6 +49,8 @@
 // See http://www.boost.org for most recent version including documentation.
 
 // Revision History
+// 11 Feb 2001 - Rolled back ineffective Borland-specific code
+//               (David Abrahams)
 // 10 Feb 2001 - Rolled in supposed Borland fixes from John Maddock, but
 //               not seeing any improvement yet (David Abrahams)
 // 06 Feb 2001 - Factored if_true out into boost/detail/select_type.hpp
@@ -125,37 +127,9 @@ namespace boost { namespace detail {
   };
 #endif
 
-#ifdef __BORLANDC__ // // This code from John Maddock, but doesn't seem to make any difference
-template <class T, bool is_signed, bool is_big, bool is_ptr_diff>
-struct select_diff
-{
-   typedef std::ptrdiff_t difference_type;
-};
-template <class T, bool is_ptr_diff>
-struct select_diff<T, true, true, is_ptr_diff>
-{
-   typedef T difference_type;
-};
-template <class T, bool is_ptr_diff>
-struct select_diff<T, false, true, is_ptr_diff>
-{
-   typedef intmax_t difference_type;
-};
-template <class T, bool is_signed>
-struct select_diff<T, is_signed, false, true>
-{
-   typedef std::ptrdiff_t difference_type;
-};
-template <class T, bool is_signed>
-struct select_diff<T, is_signed, false, false>
-{
-   typedef intmax_t difference_type;
-};
-#endif
-
   // Template class integer_traits<Integer> -- traits of various integer types
   // This should probably be rolled into boost::integer_traits one day, but I
-// need it to work without <limits>
+  // need it to work without <limits>
   template <class Integer>
   struct integer_traits
   {
@@ -190,14 +164,6 @@ struct select_diff<T, is_signed, false, false>
    // else
         intmax_t
       >::type>::type>::type difference_type;
-# elif defined(__BORLANDC__) // This code from John Maddock, but doesn't seem to make any difference
-      BOOST_STATIC_ASSERT(boost::is_integral<Integer>::value);
-      typedef select_diff<Integer,
-         (::boost::detail::is_signed<Integer>::value),
-         (sizeof(Integer) >= sizeof(intmax_t)),
-         (sizeof(Integer) < sizeof(std::ptrdiff_t))> t;
-      typedef typename t::difference_type difference_type;
-
 #else
       BOOST_STATIC_ASSERT(boost::is_integral<Integer>::value);
 
