@@ -157,7 +157,7 @@ public:
 
    size_type BOOST_REGEX_CALL index(void* ptr)
    {
-      return (unsigned char*)ptr - (unsigned char*)data();
+      return reinterpret_cast<unsigned char*>(ptr) - reinterpret_cast<unsigned char*>(data());
    }
 
    void BOOST_REGEX_CALL clear()
@@ -168,7 +168,7 @@ public:
    void BOOST_REGEX_CALL align()
    {
       // move end up to a boundary:
-      end = (unsigned char*)start + ((((unsigned char*)end - (unsigned char*)start) + padding_mask) & ~padding_mask);
+      end = reinterpret_cast<unsigned char*>(start) + (((reinterpret_cast<unsigned char*>(end) - reinterpret_cast<unsigned char*>(start)) + padding_mask) & ~padding_mask);
    }
 
    Allocator BOOST_REGEX_CALL allocator()const;

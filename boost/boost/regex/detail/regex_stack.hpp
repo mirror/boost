@@ -84,8 +84,8 @@ public:
 
    node* BOOST_REGEX_CALL get_node()
    {
-      node* new_stack = (node*)alloc_inst.allocate(sizeof(node) + sizeof(T) * block_size);
-      new_stack->last = (T*)(new_stack+1);
+      node* new_stack = reinterpret_cast<node*>(alloc_inst.allocate(sizeof(node) + sizeof(T) * block_size));
+      new_stack->last = reinterpret_cast<T*>(new_stack+1);
       new_stack->start = new_stack->end = new_stack->last + block_size;
       new_stack->next = 0;
       return new_stack;
@@ -196,13 +196,13 @@ jstack<T, Allocator>::~jstack()
    {
       condemned = unused;
       unused = unused->next;
-      alloc_inst.deallocate((unsigned char*)condemned, sizeof(node) + sizeof(T) * block_size);
+      alloc_inst.deallocate(reinterpret_cast<unsigned char*>(condemned), sizeof(node) + sizeof(T) * block_size);
    }
    while(m_stack != &base)
    {
       condemned = m_stack;
       m_stack = m_stack->next;
-      alloc_inst.deallocate((unsigned char*)condemned, sizeof(node) + sizeof(T) * block_size);
+      alloc_inst.deallocate(reinterpret_cast<unsigned char*>(condemned), sizeof(node) + sizeof(T) * block_size);
    }
 }
 

@@ -1462,7 +1462,7 @@ namespace re_detail{
 template <class iterator, class charT, class traits_type, class Allocator>
 iterator BOOST_REGEX_CALL re_is_set_member(iterator next, 
                           iterator last, 
-                          re_set_long* set_, 
+                          const re_set_long* set_, 
                           const reg_expression<charT, traits_type, Allocator>& e);
 } // namepsace re_detail
 

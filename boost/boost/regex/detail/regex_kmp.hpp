@@ -50,7 +50,7 @@ template <class charT, class Allocator>
 void kmp_free(kmp_info<charT>* pinfo, const Allocator& a)
 {
    typedef typename boost::detail::rebind_allocator<char, Allocator>::type atype;
-   atype(a).deallocate((char*)pinfo, pinfo->size);
+   atype(a).deallocate(reinterpret_cast<char*>(pinfo), pinfo->size);
 }
 
 template <class iterator, class charT, class Trans, class Allocator>
@@ -66,10 +66,10 @@ kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans transla
    //
    // allocate struct and fill it in:
    //
-   kmp_info<charT>* pinfo = (kmp_info<charT>*)atype(a).allocate(size);
+   kmp_info<charT>* pinfo = reinterpret_cast<kmp_info<charT>*>(atype(a).allocate(size));
    pinfo->size = size;
    pinfo->len = m;
-   charT* p = (charT*)((char*)pinfo + sizeof(kmp_info<charT>) + sizeof(int)*(m+1));
+   charT* p = reinterpret_cast<charT*>(reinterpret_cast<char*>(pinfo) + sizeof(kmp_info<charT>) + sizeof(int)*(m+1));
    pinfo->pstr = p;
    while(first != last)
    {
