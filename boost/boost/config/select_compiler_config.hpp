@@ -10,13 +10,13 @@
 // locate which compiler we are using and define
 // BOOST_COMPILER_CONFIG as needed: 
 
-#if defined __GNUC__
-//  GNU C++:
-#   define BOOST_COMPILER_CONFIG "boost/config/compiler/gcc.hpp"
-
-# elif defined __COMO__
+# if defined __COMO__
 //  Comeau C++
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/comeau.hpp"
+
+# elif defined __GNUC__
+//  GNU C++:
+#   define BOOST_COMPILER_CONFIG "boost/config/compiler/gcc.hpp"
 
 #elif defined __KCC
 //  Kai C++
