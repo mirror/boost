@@ -4,6 +4,7 @@
 	Version="7.10"
 	Name="demo_portable_archive"
 	ProjectGUID="{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
+	RootNamespace="demo_portable_archive"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -11,43 +12,49 @@
 	</Platforms>
 	<Configurations>
 		<Configuration
-			Name="Debug|Win32"
-			OutputDirectory="Debug"
-			IntermediateDirectory="Debug"
+			Name="Debug runtime-static|Win32"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/debug/runtime-link-static/&quot;"
+			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="1"
-			CharacterSet="2">
+			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/Zm800"
+				AdditionalOptions="/Zm800 /Ob0"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)/../../..&quot;"
+				ImproveFloatingPointConsistency="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
-				MinimalRebuild="TRUE"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				EnableFunctionLevelLinking="TRUE"
+				MinimalRebuild="FALSE"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="5"
+				BufferSecurityCheck="FALSE"
+				EnableFunctionLevelLinking="FALSE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
-				ObjectFile="$(ProjectDir)../example/bin/$(InputName).exe/vc7/$(OutDir)/runtime-link-static/$(InputName).obj"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="4"/>
+				DebugInformationFormat="1"
+				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7.1/debug/threading-multi/libboost_serialization.lib $(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc7.1/$(OutDir)/threading-multi/libboost_test_exec_monitor.lib"
-				OutputFile="$(ProjectDir)../example/bin/$(InputName).exe/vc7/$(OutDir)/runtime-link-static/demo_portable_archive.exe"
+				IgnoreImportLibrary="TRUE"
+				AdditionalDependencies="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/runtime-link-static/libboost_serialization.lib&quot;"
 				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				Description="run $(TargetName) with $(ConfigurationName)"
+				CommandLine="&quot;$(TargetDir)/$(TargetName).exe&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -66,37 +73,166 @@
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="Release"
-			IntermediateDirectory="Release"
+			Name="Debug runtime-dynamic|Win32"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/debug/threading-multi/&quot;"
+			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="1"
-			CharacterSet="2">
+			CharacterSet="0">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/Zm800 /Ob0"
+				Optimization="0"
+				ImproveFloatingPointConsistency="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				MinimalRebuild="FALSE"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="3"
+				BufferSecurityCheck="FALSE"
+				EnableFunctionLevelLinking="FALSE"
+				TreatWChar_tAsBuiltInType="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="1"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="TRUE"
+				AdditionalDependencies="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/threading-multi/libboost_serialization.lib&quot;"
+				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories=""
+				GenerateDebugInformation="TRUE"
+				SubSystem="1"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="run $(TargetName) with $(ConfigurationName)"
+				CommandLine="&quot;$(TargetDir)/$(TargetName).exe&quot;"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Debug runtime-static threading-multi|Win32"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/debug/runtime-link-static/threading-multi/&quot;"
+			IntermediateDirectory="$(OutDir)"
+			ConfigurationType="1"
+			CharacterSet="0">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/Zm800 /Ob0"
+				Optimization="0"
+				ImproveFloatingPointConsistency="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				MinimalRebuild="FALSE"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="1"
+				BufferSecurityCheck="FALSE"
+				EnableFunctionLevelLinking="FALSE"
+				TreatWChar_tAsBuiltInType="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="1"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="TRUE"
+				AdditionalDependencies="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/runtime-link-static/threading-multi/libboost_serialization.lib&quot;"
+				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories=""
+				GenerateDebugInformation="TRUE"
+				SubSystem="1"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="run $(TargetName) with $(ConfigurationName)"
+				CommandLine="&quot;$(TargetDir)/$(TargetName).exe&quot;"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release runtime-static|Win32"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/release/runtime-link-static/&quot;"
+			IntermediateDirectory="$(OutDir)"
+			ConfigurationType="1"
+			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/Zm800"
-				Optimization="3"
+				Optimization="2"
+				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				ImproveFloatingPointConsistency="TRUE"
+				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)/../../..&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				StringPooling="TRUE"
+				StringPooling="FALSE"
 				RuntimeLibrary="4"
+				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
-				ObjectFile="$(ProjectDir)../example/bin/$(InputName).exe/vc7/$(OutDir)/runtime-link-static/$(InputName).obj"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="3"/>
+				DebugInformationFormat="1"
+				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7/$(OutDir)/runtime-link-static/libboost_serialization.lib $(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_wserialization.lib/vc7/$(OutDir)/runtime-link-static/libboost_wserialization.lib $(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc7/$(OutDir)/runtime-link-static/libboost_test_exec_monitor.lib"
-				OutputFile="$(OutDir)/demo_portable_archive.exe"
+				IgnoreImportLibrary="TRUE"
+				AdditionalDependencies="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/runtime-link-static/libboost_serialization.lib&quot;"
 				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="FALSE"
 				SubSystem="1"
 				OptimizeReferences="1"
@@ -105,7 +241,137 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				Description="run $(TargetName) with $(ConfigurationName)"
+				CommandLine="&quot;$(TargetDir)/$(TargetName).exe&quot;"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release runtime-static threading-multi|Win32"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/release/runtime-link-static/threading-multi&quot;"
+			IntermediateDirectory="$(OutDir)"
+			ConfigurationType="1"
+			CharacterSet="0">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/Zm800"
+				Optimization="2"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				ImproveFloatingPointConsistency="TRUE"
+				FavorSizeOrSpeed="1"
+				OmitFramePointers="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				StringPooling="FALSE"
+				RuntimeLibrary="0"
+				BufferSecurityCheck="FALSE"
+				EnableFunctionLevelLinking="TRUE"
+				TreatWChar_tAsBuiltInType="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="1"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="TRUE"
+				AdditionalDependencies="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/runtime-link-static/threading-multi/libboost_serialization.lib&quot;"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories=""
+				GenerateDebugInformation="FALSE"
+				SubSystem="1"
+				OptimizeReferences="1"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="run $(TargetName) with $(ConfigurationName)"
+				CommandLine="&quot;$(TargetDir)/$(TargetName).exe&quot;"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release runtime-dynamic|Win32"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/release/threading-multi/&quot;"
+			IntermediateDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/release/threading-multi/&quot;"
+			ConfigurationType="1"
+			CharacterSet="0">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/Zm800 /Ob0"
+				Optimization="0"
+				ImproveFloatingPointConsistency="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				MinimalRebuild="FALSE"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="2"
+				BufferSecurityCheck="FALSE"
+				EnableFunctionLevelLinking="TRUE"
+				TreatWChar_tAsBuiltInType="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="1"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="TRUE"
+				AdditionalDependencies="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/threading-multi/libboost_serialization.lib&quot;"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories=""
+				GenerateDebugInformation="FALSE"
+				SubSystem="1"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="run $(TargetName) with $(ConfigurationName)"
+				CommandLine="&quot;$(TargetDir)/$(TargetName).exe&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -129,12 +395,6 @@
 	<Files>
 		<File
 			RelativePath="..\example\demo_portable_archive.cpp">
-		</File>
-		<File
-			RelativePath="..\example\portable_iarchive.hpp">
-		</File>
-		<File
-			RelativePath="..\example\portable_oarchive.hpp">
 		</File>
 	</Files>
 	<Globals>
