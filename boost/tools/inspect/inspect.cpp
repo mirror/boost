@@ -80,8 +80,11 @@ namespace
   bool visit_predicate( const path & pth )
   {
     string leaf( pth.leaf() );
-    return leaf != "CVS" && leaf != "bin"
-      && leaf != "status"
+    return
+      leaf != "CVS"
+      && leaf != "bin"
+      && leaf != "jam_src" // this really out of our hands
+      && leaf != "status"  // too many issues with generated HTML files
       ;
   }
 
@@ -195,24 +198,24 @@ namespace
     {
       if ( current.library != itr->library )
       {
-        current.library = itr->library;
-        current.rel_path.clear();
-        current.msg.clear();
         std::cout << "\n\n" << itr->library;
       }
-      if ( current.rel_path != itr->rel_path )
+      if ( current.library != itr->library
+        || current.rel_path != itr->rel_path )
       {
-        current.rel_path = itr->rel_path;
-        current.msg.clear();
         std::cout << "\n   " << itr->rel_path;
         sep = ": ";
       }
-      if ( current.msg != itr->msg )
+      if ( current.library != itr->library
+        || current.rel_path != itr->rel_path
+        || current.msg != itr->msg )
       {
         std::cout << sep << itr->msg;
         sep = ", ";
-        current.msg = itr->msg;
       }
+      current.library = itr->library;
+      current.rel_path = itr->rel_path;
+      current.msg = itr->msg;
    }
   }
 
@@ -242,11 +245,11 @@ namespace boost
       err_msg.rel_path = relative_to( full_path, fs::initial_path() );
       err_msg.msg = msg;
       msgs.push_back( err_msg );
-/*
-      std::cout << library_name << ": "
-        << relative_to( full_path, fs::initial_path() ) << ": "
-        << msg << '\n';
-*/
+
+//     std::cout << library_name << ": "
+//        << full_path.string() << ": "
+//        << msg << '\n';
+
     }
 
 //  impute_library  ----------------------------------------------------------//
@@ -254,13 +257,13 @@ namespace boost
     string impute_library( const path & full_dir_path )
     {
       path relative( relative_to( full_dir_path, fs::initial_path() ) );
-      if ( relative.empty() ) return relative.string();
+      if ( relative.empty() ) return "boost-root";
       string first( *relative.begin() );
       string second( ++relative.begin() == relative.end()
         ? string() : *++relative.begin() );
 
-      if ( first == "boost" ) return second.empty()
-        ? string( "unknown" ) : second;
+      if ( first == "boost" )
+        return second.empty() ? string( "unknown" ) : second;
 
       return (( first == "libs" || first == "tools" ) && !second.empty())
         ? second : first;
@@ -281,8 +284,7 @@ int cpp_main( int argc, char * argv[] )
   inspectors.push_back( inspector_element( new boost::inspect::long_name_check ) );
   inspectors.push_back( inspector_element( new boost::inspect::link_check ) );
 
-  visit_all( "", fs::initial_path(), inspectors );
-//  std::cout << "visit complete" << std::endl;
+  visit_all( "boost-root", fs::initial_path(), inspectors );
 
   // close
   for ( inspector_list::iterator itr = inspectors.begin();
