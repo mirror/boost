@@ -32,7 +32,7 @@
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-namespace boost {				    
+namespace boost {    
 
 using tuples::tuple;
 using tuples::make_tuple;
@@ -85,4 +85,4 @@ get(const tuples::cons<Head, Tail>& t, tuples::detail::workaround_holder<N>* = 0
 } // end namespace boost
 
 
-#endif	// BOOST_TUPLE_HPP
+#endif // BOOST_TUPLE_HPP

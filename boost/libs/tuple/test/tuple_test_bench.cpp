@@ -186,7 +186,7 @@ void element_access_test()
 
   double e = get<1>(t);
   BOOST_TEST(e > 2.69 && e < 2.71);
-	     
+     
   get<1>(t) = 3.14+i;
   BOOST_TEST(get<1>(t) > 4.13 && get<1>(t) < 4.15);
 
@@ -214,7 +214,7 @@ void element_access_test()
 
   double e = get<1>(t);
   BOOST_TEST(e > 2.69 && e < 2.71);
-	     
+     
   get<1>(t) = 3.14+i;
   BOOST_TEST(get<1>(t) > 4.13 && get<1>(t) < 4.15);
 
@@ -308,7 +308,7 @@ make_tuple_test()
      
 // the result of make_tuple is assignable:
    BOOST_TEST(make_tuple(2, 4, 6) == 
-	     (make_tuple(1, 2, 3) = make_tuple(2, 4, 6)));
+             (make_tuple(1, 2, 3) = make_tuple(2, 4, 6)));
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
     make_tuple("Donald", "Daisy"); // should work;

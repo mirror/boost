@@ -25,7 +25,7 @@
 #   if (__GNUC__ == 2 && __GNUC_MINOR__ <= 97) 
 #define BOOST_NO_TEMPLATED_STREAMS
 #endif
-#endif	// __GNUC__
+#endif // __GNUC__
 
 #if defined BOOST_NO_TEMPLATED_STREAMS
 #include <iostream>
@@ -36,8 +36,6 @@
 
 #include "boost/tuple/tuple.hpp"
 
-
-				    
 namespace boost {
 namespace tuples {
 
@@ -71,8 +69,8 @@ public:
      // parentheses and space are the default manipulators
      if (!c) {
        switch(m) {
-         case open : c = '('; break;					    
-         case close : c = ')'; break;					    
+         case open : c = '('; break;
+         case close : c = ')'; break;
          case delimiter : c = ' '; break;
        }
      }
@@ -94,8 +92,8 @@ public:
      // parentheses and space are the default manipulators
      if (!c) {
        switch(m) {
-         case open :  c = i.widen('('); break;					    
-         case close : c = i.widen(')'); break;					    
+         case open :  c = i.widen('('); break;
+         case close : c = i.widen(')'); break;
          case delimiter : c = i.widen(' '); break;
        }
      }
@@ -112,7 +110,7 @@ public:
      // convertible long.
       i.iword(get_stream_index(m)) = static_cast<long>(c);
    }
-#endif	// BOOST_NO_TEMPLATED_STREAMS
+#endif // BOOST_NO_TEMPLATED_STREAMS
 };
 
 } // end of namespace detail
@@ -141,8 +139,8 @@ public:
   void set(std::basic_ios<CharType, CharTrait> &io) const {
      detail::format_info::set_manipulator(io, mt, f_c);
   }
-#endif	// BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#endif	// BOOST_NO_TEMPLATED_STREAMS
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#endif // BOOST_NO_TEMPLATED_STREAMS
 };
 
 #if defined (BOOST_NO_TEMPLATED_STREAMS)
@@ -212,7 +210,7 @@ template<class T1>
 inline std::ostream& print(std::ostream& o, const cons<T1, null_type>& t) {
   return o << t.head;
 }
-#endif	// BOOST_NO_TEMPLATED_STREAMS
+#endif // BOOST_NO_TEMPLATED_STREAMS
  
 inline std::ostream& print(std::ostream& o, const null_type&) { return o; }
 
@@ -226,7 +224,7 @@ print(std::ostream& o, const cons<T1, T2>& t) {
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   if (tuples::length<T2>::value == 0)
-	return o;
+    return o;
 #endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   o << d;
   
@@ -263,14 +261,14 @@ print(std::basic_ostream<CharType, CharTrait>& o, const cons<T1, T2>& t) {
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   if (tuples::length<T2>::value == 0)
-	return o;
+    return o;
 #endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   o << d;
 
   return print(o, t.tail);
 }
 
-#endif	// BOOST_NO_TEMPLATED_STREAMS
+#endif  // BOOST_NO_TEMPLATED_STREAMS
 
 } // namespace detail
 
@@ -314,7 +312,7 @@ operator<<(std::basic_ostream<CharType, CharTrait>& o,
 
   return o;
 }
-#endif	// BOOST_NO_TEMPLATED_STREAMS
+#endif // BOOST_NO_TEMPLATED_STREAMS
 
    
 // -------------------------------------------------------------
@@ -357,7 +355,7 @@ read (std::istream &is, cons<T1, null_type>& t1) {
 }
 #else
 inline std::istream& read(std::istream& i, const null_type&) { return i; }
-#endif	// !BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#endif // !BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    
 template<class T1, class T2>
 inline std::istream& 
@@ -369,7 +367,7 @@ read(std::istream &is, cons<T1, T2>& t1) {
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   if (tuples::length<T2>::value == 0)
-	return is;
+    return is;
 #endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
   extract_and_check_delimiter(is, format_info::delimiter);
@@ -444,7 +442,7 @@ template<class CharType, class CharTrait>
 inline std::basic_istream<CharType, CharTrait>& 
 read(std::basic_istream<CharType, CharTrait>& i, const null_type&) { return i; }
 
-#endif	// !BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#endif // !BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 template<class CharType, class CharTrait, class T1, class T2>
 inline std::basic_istream<CharType, CharTrait>& 
@@ -456,7 +454,7 @@ read(std::basic_istream<CharType, CharTrait> &is, cons<T1, T2>& t1) {
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   if (tuples::length<T2>::value == 0)
-	return is;
+    return is;
 #endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
   extract_and_check_delimiter(is, format_info::delimiter);
@@ -494,11 +492,11 @@ operator>>(std::basic_istream<CharType, CharTrait>& is, cons<T1, T2>& t1) {
   return is;
 }
 
-#endif	// BOOST_NO_TEMPLATED_STREAMS
+#endif // BOOST_NO_TEMPLATED_STREAMS
 
 } // end of namespace tuples
 } // end of namespace boost
 
-#endif	// BOOST_TUPLE_IO_HPP
+#endif // BOOST_TUPLE_IO_HPP
 
 

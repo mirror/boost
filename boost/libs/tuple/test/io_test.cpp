@@ -75,7 +75,7 @@ int test_main(int argc, char * argv[] ) {
   
   // When teading tuples from a stream, manipulators must be set correctly:
   ifstream tmp3("temp.tmp");
-  tuple<string, string, int> j;		    
+  tuple<string, string, int> j;
 
 #if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   tmp3 >> j; 
