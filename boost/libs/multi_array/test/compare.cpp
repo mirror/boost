@@ -34,9 +34,9 @@ test_main(int, char*[])
     std::vector<double> vals(num_elements, 4.5);
     A.assign(vals.begin(),vals.end());
     array B(A);
-    BOOST_TEST(A == B);
-    BOOST_TEST(B == A);
-    BOOST_TEST(A[0] == B[0]);
+    BOOST_CHECK(A == B);
+    BOOST_CHECK(B == A);
+    BOOST_CHECK(A[0] == B[0]);
   }
   // Assignment Operator
   {
@@ -44,15 +44,15 @@ test_main(int, char*[])
     std::vector<double> vals(num_elements, 4.5);
     A.assign(vals.begin(),vals.end());
     B = A;
-    BOOST_TEST(A == B);
-    BOOST_TEST(B == A);
-    BOOST_TEST(B[0] == A[0]);
+    BOOST_CHECK(A == B);
+    BOOST_CHECK(B == A);
+    BOOST_CHECK(B[0] == A[0]);
 
     typedef array::index_range range;
     array::index_gen indices;
     array::array_view<2>::type C = A[indices[2][range()][range()]];
     array::array_view<2>::type D = B[indices[2][range()][range()]];
-    BOOST_TEST(C == D);
+    BOOST_CHECK(C == D);
   }
   // Different Arrays
   {
@@ -62,15 +62,15 @@ test_main(int, char*[])
     A.assign(valsA.begin(),valsA.end());
     B.assign(valsB.begin(),valsB.end());
 
-    BOOST_TEST(A != B);
-    BOOST_TEST(B != A);
-    BOOST_TEST(A[0] != B[0]);
+    BOOST_CHECK(A != B);
+    BOOST_CHECK(B != A);
+    BOOST_CHECK(A[0] != B[0]);
 
     typedef array::index_range range;
     array::index_gen indices;
     array::array_view<2>::type C = A[indices[2][range()][range()]];
     array::array_view<2>::type D = B[indices[2][range()][range()]];
-    BOOST_TEST(C != D);
+    BOOST_CHECK(C != D);
   }
 
   // Comparisons galore!
@@ -108,30 +108,30 @@ test_main(int, char*[])
     A.assign(valsA,valsA+num_elements);
     B.assign(valsB,valsB+num_elements);
 
-    BOOST_TEST(B < A);
-    BOOST_TEST(A > B);
+    BOOST_CHECK(B < A);
+    BOOST_CHECK(A > B);
 
-    BOOST_TEST(B <= A);
-    BOOST_TEST(A >= B);
+    BOOST_CHECK(B <= A);
+    BOOST_CHECK(A >= B);
 
-    BOOST_TEST(B[0] == A[0]);
-    BOOST_TEST(B[2] < A[2]);
+    BOOST_CHECK(B[0] == A[0]);
+    BOOST_CHECK(B[2] < A[2]);
 
     array C = A;
     
-    BOOST_TEST(C <= A);
-    BOOST_TEST(C >= A);
+    BOOST_CHECK(C <= A);
+    BOOST_CHECK(C >= A);
 
-    BOOST_TEST(!(C < A));
-    BOOST_TEST(!(C > A));
+    BOOST_CHECK(!(C < A));
+    BOOST_CHECK(!(C > A));
 
     typedef array::index_range range;
     array::index_gen indices;
     array::array_view<2>::type D = A[indices[2][range()][range()]];
     array::array_view<2>::type E = B[indices[2][range()][range()]];
 
-    BOOST_TEST(E < D);
-    BOOST_TEST(E <= D);
+    BOOST_CHECK(E < D);
+    BOOST_CHECK(E <= D);
   }
 
 

@@ -52,9 +52,9 @@ test_main(int,char*[])
     for (array::index i = 0; i != 4; ++i)
       for (array::index j = 0; j != 3; ++j)
         for (array::index k = 0; k != 2; ++k) {
-          BOOST_TEST(A[i][j][k] == *ptr);
-          BOOST_TEST(B[i][j][k] == *ptr);
-          BOOST_TEST(C[i][j][k] == *ptr++);
+          BOOST_CHECK(A[i][j][k] == *ptr);
+          BOOST_CHECK(B[i][j][k] == *ptr);
+          BOOST_CHECK(C[i][j][k] == *ptr++);
         }
   }
 
@@ -80,9 +80,9 @@ test_main(int,char*[])
     for (array::index i = 0; i != 4; ++i)
       for (array::index j = 1; j != 4; ++j)
         for (array::index k = -1; k != 1; ++k) {
-          BOOST_TEST(A[i][j][k] == *ptr);
-          BOOST_TEST(B[i][j][k] == *ptr);
-          BOOST_TEST(C[i][j][k] == *ptr++);
+          BOOST_CHECK(A[i][j][k] == *ptr);
+          BOOST_CHECK(B[i][j][k] == *ptr);
+          BOOST_CHECK(C[i][j][k] == *ptr++);
         }
   }
   

@@ -51,7 +51,7 @@ test_main(int, char*[])
   myarray.assign(data,data+data_size);
 
   array3vec myvec(5,myarray);
-  BOOST_TEST(myarray == myvec[1]);
+  BOOST_CHECK(myarray == myvec[1]);
 
   array3::array_view<2>::type myview =
     myarray[indices[1][range(0,2)][range(1,3)]];
@@ -65,8 +65,8 @@ test_main(int, char*[])
 
   myvec.push_back(myarray);
 
-  BOOST_TEST(myarray != myvec[1]);
-  BOOST_TEST(myarray == myvec[5]);
+  BOOST_CHECK(myarray != myvec[1]);
+  BOOST_CHECK(myarray == myvec[5]);
 
   return boost::exit_success;
 }

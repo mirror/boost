@@ -19,7 +19,7 @@ void test_one(typename I::base_type x, typename I::base_type f) {
   const int nb = 10000;
   for(int i = 0; i < nb; i++) y *= f;
   for(int i = 0; i < nb; i++) y *= g;
-  BOOST_TEST(in(x, y));
+  BOOST_CHECK(in(x, y));
 # ifdef __BORLANDC__
   ::detail::ignore_unused_variable_warning(nb);
 # endif

@@ -64,18 +64,18 @@ test_main(int,char*[])
   {
     boost::detail::multi_array::index_gen<3,3> is1 =
       indices[range(0,1,2)][range(1,2,3)][range(2,3,4)];
-    BOOST_TEST(is1.ranges_[0] == range(0,1,2));
-    BOOST_TEST(is1.ranges_[1] == range(1,2,3));
-    BOOST_TEST(is1.ranges_[2] == range(2,3,4));
+    BOOST_CHECK(is1.ranges_[0] == range(0,1,2));
+    BOOST_CHECK(is1.ranges_[1] == range(1,2,3));
+    BOOST_CHECK(is1.ranges_[2] == range(2,3,4));
   }
 
   {
     boost::detail::multi_array::index_gen<3,2> is2 = 
       indices[range(0,1,2)][2][range(2,3,4)];
-    BOOST_TEST(is2.ranges_[0] == range(0,1,2));
-    BOOST_TEST(is2.ranges_[1] == range(2));
-    BOOST_TEST(is2.ranges_[1].is_degenerate());
-    BOOST_TEST(is2.ranges_[2] == range(2,3,4));
+    BOOST_CHECK(is2.ranges_[0] == range(0,1,2));
+    BOOST_CHECK(is2.ranges_[1] == range(2));
+    BOOST_CHECK(is2.ranges_[1].is_degenerate());
+    BOOST_CHECK(is2.ranges_[2] == range(2,3,4));
   }
 
   return boost::exit_success;

@@ -50,7 +50,7 @@ template <typename Array>
 void access(Array& A, const const_array_tag&) {
   typedef boost::multi_array<int,3> array3;
   array3 acopy(A);
-  BOOST_TEST(equal(acopy,A));
+  BOOST_CHECK(equal(acopy,A));
   ++tests_run;
 }
 

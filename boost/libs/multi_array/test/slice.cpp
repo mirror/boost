@@ -71,10 +71,10 @@ void test_views(Array& A, const ViewTraits&) {
     for (index i = 0; i != 2; ++i)
       for (index j = 0; j != 2; ++j)
         for (index k = 0; k != 2; ++k) {
-          BOOST_TEST(B[i][j][k] == A[idx0+i][idx1+j+1][idx2+k*2]);
+          BOOST_CHECK(B[i][j][k] == A[idx0+i][idx1+j+1][idx2+k*2]);
           boost::array<index,3> elmts;
           elmts[0]=i; elmts[1]=j; elmts[2]=k;
-          BOOST_TEST(B(elmts) == A[idx0+i][idx1+j+1][idx2+k*2]);
+          BOOST_CHECK(B(elmts) == A[idx0+i][idx1+j+1][idx2+k*2]);
         }
   }
   // Degenerate dimensions
@@ -84,10 +84,10 @@ void test_views(Array& A, const ViewTraits&) {
     
     for (index i = 0; i != 2; ++i)
       for (index j = 0; j != 2; ++j) {
-        BOOST_TEST(B[i][j] == A[idx0+i][idx1+1][idx2+j*2]);
+        BOOST_CHECK(B[i][j] == A[idx0+i][idx1+1][idx2+j*2]);
         boost::array<index,2> elmts;
         elmts[0]=i; elmts[1]=j;
-        BOOST_TEST(B(elmts) == A[idx0+i][idx1+1][idx2+j*2]);
+        BOOST_CHECK(B(elmts) == A[idx0+i][idx1+1][idx2+j*2]);
       }
   }
   ++tests_run;

@@ -67,7 +67,7 @@ test_main(int,char*[])
     for (array::index i = 0; i != 2; ++i)
       for (array::index j = 0; j != 3; ++j)
         for (array::index k = 0; k != 4; ++k)
-          BOOST_TEST(A[i][j][k] == *num++);
+          BOOST_CHECK(A[i][j][k] == *num++);
   }
 
   // Mimic fortran_storage_order using
@@ -88,7 +88,7 @@ test_main(int,char*[])
     for (array::index i = 0; i != 2; ++i)
       for (array::index j = 0; j != 3; ++j)
         for (array::index k = 0; k != 4; ++k)
-          BOOST_TEST(A[i][j][k] == *num++);
+          BOOST_CHECK(A[i][j][k] == *num++);
   }
 
   // general_storage_order with arbitrary storage order
@@ -119,7 +119,7 @@ test_main(int,char*[])
     for (array::index i = 0; i != 2; ++i)
       for (array::index j = 0; j != 3; ++j)
         for (array::index k = 0; k != 4; ++k)
-          BOOST_TEST(A[i][j][k] == *num++);
+          BOOST_CHECK(A[i][j][k] == *num++);
   }
 
 
@@ -152,7 +152,7 @@ test_main(int,char*[])
     for (array::index i = 0; i != 2; ++i)
       for (array::index j = 0; j != 3; ++j)
         for (array::index k = 0; k != 4; ++k)
-          BOOST_TEST(A[i][j][k] == *num++);
+          BOOST_CHECK(A[i][j][k] == *num++);
   }
 
   return boost::exit_success;

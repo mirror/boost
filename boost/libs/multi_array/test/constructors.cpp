@@ -30,10 +30,10 @@ void check_shape(const Array& A,
                  int* strides,
                  unsigned int num_elements)
 {
-  BOOST_TEST(A.num_elements() == num_elements);
-  BOOST_TEST(A.size() == *sizes);
-  BOOST_TEST(std::equal(sizes, sizes + A.num_dimensions(), A.shape()));
-  BOOST_TEST(std::equal(strides, strides + A.num_dimensions(), A.strides()));
+  BOOST_CHECK(A.num_elements() == num_elements);
+  BOOST_CHECK(A.size() == *sizes);
+  BOOST_CHECK(std::equal(sizes, sizes + A.num_dimensions(), A.shape()));
+  BOOST_CHECK(std::equal(strides, strides + A.num_dimensions(), A.strides()));
   check_shape(A[0], ++sizes, ++strides, num_elements / A.size());
 }
 
@@ -132,20 +132,20 @@ test_main(int, char*[])
     A.assign(vals.begin(),vals.end());
     boost::multi_array<double, 3> B(A);
     check_shape(B, &sizes[0], strides, num_elements);
-    BOOST_TEST(equal(A, B));
+    BOOST_CHECK(equal(A, B));
 
     double ptr[27];
     boost::multi_array_ref<double, 3> C(ptr,sizes);
     A.assign(vals.begin(),vals.end());
     boost::multi_array_ref<double, 3> D(C);
     check_shape(D, &sizes[0], strides, num_elements);
-    BOOST_TEST(C.data() == D.data());
+    BOOST_CHECK(C.data() == D.data());
 
     const double* cptr = ptr;
     boost::const_multi_array_ref<double, 3> E(cptr,sizes);
     boost::const_multi_array_ref<double, 3> F(E);
     check_shape(F, &sizes[0], strides, num_elements);
-    BOOST_TEST(E.data() == F.data());
+    BOOST_CHECK(E.data() == F.data());
   }
 
 
@@ -161,15 +161,15 @@ test_main(int, char*[])
     boost::const_multi_array_ref<double, 3> C(A);
     check_shape(B, &sizes[0], strides, num_elements);
     check_shape(C, &sizes[0], strides, num_elements);
-    BOOST_TEST(B.data() == A.data());
-    BOOST_TEST(C.data() == A.data());
+    BOOST_CHECK(B.data() == A.data());
+    BOOST_CHECK(C.data() == A.data());
 
     double ptr[27];
     boost::multi_array_ref<double, 3> D(ptr,sizes);
     D.assign(vals.begin(),vals.end());
     boost::const_multi_array_ref<double, 3> E(D);
     check_shape(E, &sizes[0], strides, num_elements);
-    BOOST_TEST(E.data() == D.data());
+    BOOST_CHECK(E.data() == D.data());
   }
 
   // Assignment Operator
@@ -182,7 +182,7 @@ test_main(int, char*[])
     A.assign(vals.begin(),vals.end());
     B = A;
     check_shape(B, &sizes[0], strides, num_elements);
-    BOOST_TEST(equal(A, B));
+    BOOST_CHECK(equal(A, B));
 
     double ptr1[27];
     double ptr2[27];
@@ -190,7 +190,7 @@ test_main(int, char*[])
     C.assign(vals.begin(),vals.end());
     D = C;
     check_shape(D, &sizes[0], strides, num_elements);
-    BOOST_TEST(equal(C,D));
+    BOOST_CHECK(equal(C,D));
   }
 
 
@@ -209,8 +209,8 @@ test_main(int, char*[])
     subarray::value_type C = B[0];
 
     // should comparisons between the types work?
-    BOOST_TEST(equal(A[1][0],C));
-    BOOST_TEST(equal(B[0],C));
+    BOOST_CHECK(equal(A[1][0],C));
+    BOOST_CHECK(equal(B[0],C));
   }
   return boost::exit_success;
 }

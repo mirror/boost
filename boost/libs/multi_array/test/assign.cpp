@@ -59,7 +59,7 @@ void access(Array& A, const mutable_array_tag&) {
 
   A = filler;
 
-  BOOST_TEST(equal(A,filler));
+  BOOST_CHECK(equal(A,filler));
   ++tests_run;
 }
 

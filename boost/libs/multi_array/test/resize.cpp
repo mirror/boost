@@ -60,13 +60,13 @@ int test_main(int,char*[]) {
     0,0
   };
 
-  BOOST_TEST(std::equal(A_resize,A_resize+(4*3*2),A.data()));
+  BOOST_CHECK(std::equal(A_resize,A_resize+(4*3*2),A.data()));
 
 
   {
     marray defaultA;
     defaultA.resize(boost::extents[2][3][4]);
-    BOOST_TEST(std::accumulate(defaultA.data(),
+    BOOST_CHECK(std::accumulate(defaultA.data(),
                                defaultA.data()+(2*3*4),0) == 0);
   }
   return boost::exit_success;
