@@ -1,15 +1,9 @@
 /*
  *
- * Copyright (c) 2003
- * Dr John Maddock
- *
- * Permission to use, copy, modify, distribute and sell this software
- * and its documentation for any purpose is hereby granted without fee,
- * provided that the above copyright notice appear in all copies and
- * that both that copyright notice and this permission notice appear
- * in supporting documentation.  Dr John Maddock makes no representations
- * about the suitability of this software for any purpose.  
- * It is provided "as is" without express or implied warranty.
+ * Copyright (c) 2003 Dr John Maddock
+ * Use, modification and distribution is subject to the 
+ * Boost Software License, Version 1.0. (See accompanying file 
+ * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  * This file implements the cpp_main entry point
  */
@@ -17,6 +11,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <boost/filesystem/path.hpp>
 #include "bcp.hpp"
 
 #ifdef BOOST_NO_STDC_NAMESPACE
@@ -46,8 +41,20 @@ void show_usage()
       "output-path:      the path to which files will be copied\n";
 }
 
+bool filesystem_name_check( const std::string & name )
+{
+   return true;
+}
+
 int cpp_main(int argc, char* argv[])
 {
+   //
+   // Before anything else replace Boost.filesystem's file
+   // name checker with one that does nothing (we only deal
+   // with files that already exist, if they're not portable
+   // names it's too late for us to do anything about it).
+   //
+   boost::filesystem::path::default_name_check(filesystem_name_check);
    //
    // without arguments just show help:
    //

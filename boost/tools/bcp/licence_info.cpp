@@ -1,15 +1,9 @@
 /*
  *
- * Copyright (c) 2003
- * Dr John Maddock
- *
- * Permission to use, copy, modify, distribute and sell this software
- * and its documentation for any purpose is hereby granted without fee,
- * provided that the above copyright notice appear in all copies and
- * that both that copyright notice and this permission notice appear
- * in supporting documentation.  Dr John Maddock makes no representations
- * about the suitability of this software for any purpose.  
- * It is provided "as is" without express or implied warranty.
+ * Copyright (c) 2003 Dr John Maddock
+ * Use, modification and distribution is subject to the 
+ * Boost Software License, Version 1.0. (See accompanying file 
+ * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
 
@@ -28,7 +22,7 @@ std::pair<const licence_info*, int> get_licences()
          "\\d[^[:alpha:]]+"
             "([[:alpha:]]"
                "(?:"
-                  "(?!Permission\\b|All\\b"
+                  "(?!Use\\b|Permission\\b|All\\b"
                ")[^\\n\\d]"
             ")+"
          ")"
@@ -48,6 +42,21 @@ std::pair<const licence_info*, int> get_licences()
 
    static const licence_info licences[] = 
    {
+	   licence_info( boost::regex("Use\\W+modification\\W+and\\W+distribution\\W+is\\W+subject\\W+to\\W+the\\W+"
+         "Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
+         ,
+         boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
+         ,
+         generic_author_format
+         ,
+         "Boost Software License, Version 1.0"
+         ,
+         "<P>Copyright (c) <I>Date</I> <I>Author</I></P>"
+         "<P>Use, modification and distribution is subject to the "
+         "Boost Software License, Version 1.0. (See accompanying file "
+         "LICENSE_1_0.txt or copy at <a href=\"http://www.boost.org/LICENSE_1_0.txt\">http://www.boost.org/LICENSE_1_0.txt)</a></P>"
+		 )
+      ,
 	   licence_info( boost::regex("Permission\\W+to\\W+use\\W+copy\\W+modify\\W+distribute\\W+and\\W+sell\\W+this\\W+software\\W+and\\W+its\\W+documentation"
          "\\W+for\\W+any\\W+purpose\\W+is\\W+hereby\\W+granted\\W+without\\W+fee"
          "\\W+provided\\W+that\\W+the\\W+above\\W+copyright\\W+notice\\W+appears?\\W+in\\W+all\\W+copies\\W+and"
@@ -87,7 +96,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost style licence #1"
+         "Old style Boost licence #1"
          ,
          "<P>Copyright (c) <I>Date</I><BR>"
          "<I>Author</I><BR>"
@@ -114,7 +123,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost style licence #2"
+         "Old style Boost licence #2"
          ,
          "<P>Copyright (c) <I>Date</I> <I>Author</I>.<BR><BR>\n"
          "Permission to copy, use, modify, sell and distribute this software<BR>\n"
@@ -136,7 +145,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost style licence #3"
+         "Old style Boost licence #3"
          ,
          "<P>(C) Copyright <I>Author</I> <I>Date</I>.  Permission to copy, use, "
          "modify, sell, and distribute this software is granted provided "
@@ -156,7 +165,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost Style Licence #4"
+         "Old style Boost licence #4"
          ,
          "<P>Copyright (C) <I>Date Author</I><BR>"
          "<BR>"
@@ -224,7 +233,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost style licence #5"
+         "Old style Boost licence #5"
          ,
          "<P>Copyright (C) <I>Date Author</I></P>"
          "<p>Permission to copy, use, modify, sell and distribute this software is "
@@ -265,7 +274,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost Style Licence #6"
+         "Old style Boost licence #6"
          ,
          "<P>Copyright <I>Author Data</I></P>"
          "<P>Permission to use, copy, modify, sell, and distribute this software "
@@ -288,7 +297,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost Style Licence #7"
+         "Old style Boost licence #7"
          ,
          "<P>Copyright <I>Author Date</I>. Permission to copy, "
          "use, modify, sell and distribute this software is granted provided "
@@ -317,7 +326,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost Style Licence #8"
+         "Old style Boost licence #8"
          ,
          "<P>Phoenix V0.9<BR>Copyright (c) <I>Date</I> Joel de Guzman</P>"
          "<P>This software is provided 'as-is', without any express or implied "
@@ -349,7 +358,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost Style Licence #9"
+         "Old style Boost licence #9"
          ,
          "<P>Copyright <I> Author Date</I><BR>"
          "Permission to use, copy, modify, sell, and distribute this software "
@@ -371,7 +380,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost Style Licence #10"
+         "Old style Boost licence #10"
          ,
          "<P>Copyright <I>Author Date</I>. All rights reserved.</P>"
          "<P>Permission to use, copy, modify, and distribute this software for any "
@@ -393,7 +402,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost Style Licence #11"
+         "Old style Boost licence #11"
          ,
          "<P>This material is provided \"as is\", with absolutely no warranty expressed "
          "or implied. Any use is at your own risk.</P>"
@@ -417,7 +426,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost Style Licence #12"
+         "Old style Boost licence #12"
          ,
          "<P>Copyright (C) <I>Date Author</I></P><P>Permission to copy, use, and distribute this software is granted, provided "
          "that this copyright notice appears in all copies.<BR>"
@@ -441,7 +450,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost Style Licence #13"
+         "Old style Boost licence #13"
          ,
          "<P>Copyright (C) <I>Date Author</I></P>"
          "<P>Permission to copy and use this software is granted, "
