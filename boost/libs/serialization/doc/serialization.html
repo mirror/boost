@@ -386,28 +386,9 @@ inline void load_construct_data(
     // previously allocated memory. 
     ::new(t)T();
 }
-
-template&lt;class Archive, class T&gt;
-void load_object_ptr(
-    Archive &amp; ar, 
-    T * &amp; t,
-    const unsigned int file_version
-){
-    t = static_cast&lt;T *&gt;(operator new(sizeof(T));
-    load_construct_data(ar, t, file_version);
-    ar &gt;&gt; * t;
-}
 </code></pre>
-This code
-<ol>
-    <li>allocates memory from the heap large enough to hold the
-    object.
-    <li>invokes the overridable <code style="white-space: normal">load_construct_data</code>
-    to initialize the object.
-    <li>the default <code style="white-space: normal">load_construct_data</code> invoke the
-    default constructor "in-place" to initialize the memory.
-</ol>
-which effectively creates a new object and returns its pointer.
+The default <code style="white-space: normal">load_construct_data</code> invokes the
+default constructor "in-place" to initialize the memory.
 <p>
 If there is no such default constructor, the function templates
 <code style="white-space: normal">load_construct_data</code> and 
