@@ -47,7 +47,10 @@ public:
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-//  The definition is required even for integral static constants
+//  A definition is required even for integral static constants
+template<class T, T min_val, T max_val>
+const bool integer_traits_base<T, min_val, max_val>::is_integral;
+
 template<class T, T min_val, T max_val>
 const T integer_traits_base<T, min_val, max_val>::const_min;
 
