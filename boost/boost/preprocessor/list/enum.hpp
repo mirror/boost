@@ -21,13 +21,13 @@
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_LIST_ENUM(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
+BOOST_PP_LIST_ENUM(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  A,B,C
+A,B,C
 </pre>
 
 <h3>Uses</h3>

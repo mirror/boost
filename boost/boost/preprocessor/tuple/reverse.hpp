@@ -18,7 +18,7 @@
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_TUPLE_REVERSE(3,(A,B,C))
+BOOST_PP_TUPLE_REVERSE(3,(A,B,C))
 </pre>
 
 <p>expands to <code>(C,B,A)</code>.</p>

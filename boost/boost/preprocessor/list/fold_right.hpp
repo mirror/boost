@@ -21,32 +21,32 @@ list <code>LIST</code> (from the right or the end of the list).</p>
 <p>In other words, expands to:</p>
 
 <pre>
-  OP
-  ( D
-  , BOOST_PP_LIST_AT(LIST,0)
-  , ... OP
+OP
+( D
+, BOOST_PP_LIST_AT(LIST,0)
+, ... OP
+      ( D
+      , BOOST_PP_LIST_AT(LIST,BOOST_PP_SUB(BOOST_PP_LIST_SIZE(LIST),2))
+      , OP
         ( D
-        , BOOST_PP_LIST_AT(LIST,BOOST_PP_SUB(BOOST_PP_LIST_SIZE(LIST),2))
-        , OP
-          ( D
-          , BOOST_PP_LIST_AT(LIST,BOOST_PP_SUB(BOOST_PP_LIST_SIZE(LIST),1))
-          , STATE
-          )
-        ) ...
-  )
+        , BOOST_PP_LIST_AT(LIST,BOOST_PP_SUB(BOOST_PP_LIST_SIZE(LIST),1))
+        , STATE
+        )
+      ) ...
+)
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TEST(D,X,STATE) BOOST_PP_CAT(STATE,X)
-  BOOST_PP_LIST_FOLD_RIGHT(TEST,_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
+#define TEST(D,X,STATE) BOOST_PP_CAT(STATE,X)
+BOOST_PP_LIST_FOLD_RIGHT(TEST,_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  _CBA
+_CBA
 </pre>
 
 <h3>Uses</h3>

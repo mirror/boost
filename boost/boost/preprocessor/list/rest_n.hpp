@@ -23,13 +23,13 @@ list <code>LIST</code>.</p>
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_LIST_REST_N(2,BOOST_PP_TUPLE_TO_LIST(4,(+,-,*,/)))
+BOOST_PP_LIST_REST_N(2,BOOST_PP_TUPLE_TO_LIST(4,(+,-,*,/)))
 </pre>
 
 <p>expands to the same as:</p>
 
 <pre>
-  BOOST_PP_TUPLE_TO_LIST(2,(*,/))
+BOOST_PP_TUPLE_TO_LIST(2,(*,/))
 </pre>
 
 <h3>See</h3>

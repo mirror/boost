@@ -20,13 +20,13 @@
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_LIST_REVERSE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
+BOOST_PP_LIST_REVERSE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
 </pre>
 
 <p>expands to the same as:</p>
 
 <pre>
-  BOOST_PP_TUPLE_TO_LIST(3,(C,B,A))
+BOOST_PP_TUPLE_TO_LIST(3,(C,B,A))
 </pre>
 
 <h3>Uses</h3>

@@ -18,7 +18,7 @@
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_IF(0,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
+BOOST_PP_IF(0,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
 </pre>
 
 <p>expands to nothing.</p>

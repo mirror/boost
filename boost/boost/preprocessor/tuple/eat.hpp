@@ -21,7 +21,7 @@ BOOST_PP_EMPTY().</p>
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_IF(0,BOOST_PP_ENUM_PARAMS,BOOST_PP_TUPLE_EAT(2))(10,P)
+BOOST_PP_IF(0,BOOST_PP_ENUM_PARAMS,BOOST_PP_TUPLE_EAT(2))(10,P)
 </pre>
 
 <p>expands to nothing.</p>

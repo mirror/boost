@@ -20,16 +20,16 @@
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_LIST_APPEND
-  ( BOOST_PP_TUPLE_TO_LIST(2,(1,2))
-  , BOOST_PP_TUPLE_TO_LIST(2,(3,4))
-  )
+BOOST_PP_LIST_APPEND
+( BOOST_PP_TUPLE_TO_LIST(2,(1,2))
+, BOOST_PP_TUPLE_TO_LIST(2,(3,4))
+)
 </pre>
 
 <p>expands to the same as:</p>
 
 <pre>
-  BOOST_PP_TUPLE_TO_LIST(4,(1,2,3,4))
+BOOST_PP_TUPLE_TO_LIST(4,(1,2,3,4))
 </pre>
 
 <h3>Uses</h3>

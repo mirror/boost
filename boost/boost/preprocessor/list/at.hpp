@@ -21,7 +21,7 @@ first element is at index <code>0</code>.</p>
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_LIST_AT(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)),1)
+BOOST_PP_LIST_AT(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)),1)
 </pre>
 
 <p>expands to <code>B</code>.</p>

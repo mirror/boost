@@ -21,22 +21,22 @@
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  BOOST_PP_CAT(PARAM,0) = DEFAULT,
-  BOOST_PP_CAT(PARAM,1) = DEFAULT,
-  ...,
-  BOOST_PP_CAT(PARAM,BOOST_PP_DEC(COUNT)) = DEFAULT
+BOOST_PP_CAT(PARAM,0) = DEFAULT,
+BOOST_PP_CAT(PARAM,1) = DEFAULT,
+...,
+BOOST_PP_CAT(PARAM,BOOST_PP_DEC(COUNT)) = DEFAULT
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(3,x,y)
+BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(3,x,y)
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  x0 = y, x1 = y, x2 = y
+x0 = y, x1 = y, x2 = y
 </pre>
 
 <h3>Uses</h3>

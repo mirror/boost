@@ -32,18 +32,18 @@
 BOOST_PP_LIST_CONS(). For example,</p>
 
 <pre>
-  BOOST_PP_LIST_CONS(1,
-  BOOST_PP_LIST_CONS(2,
-  BOOST_PP_LIST_CONS(3,
-  BOOST_PP_LIST_CONS(4,
-  BOOST_PP_LIST_CONS(5,
-  BOOST_PP_LIST_NIL)))))
+BOOST_PP_LIST_CONS(1,
+BOOST_PP_LIST_CONS(2,
+BOOST_PP_LIST_CONS(3,
+BOOST_PP_LIST_CONS(4,
+BOOST_PP_LIST_CONS(5,
+BOOST_PP_LIST_NIL)))))
 </pre>
 
 <p>Short lists can also be build from tuples:</p>
 
 <pre>
-  BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5))
+BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5))
 </pre>
 
 <p>Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.</p>
@@ -52,16 +52,16 @@ BOOST_PP_LIST_CONS(). For example,</p>
 and BOOST_PP_LIST_FOLD_RIGHT_2ND():</p>
 
 <pre>
-  BOOST_PP_LIST_FOLD_RIGHT_2ND
-  ( BOOST_PP_LIST_APPEND_D
-  , BOOST_PP_TUPLE_TO_LIST
-    ( N
-    , BOOST_PP_TUPLE_TO_LIST(M, (E11, E12, ..., E1M) )
-    , BOOST_PP_TUPLE_TO_LIST(M, (E21, E22, ..., E2M) )
-    , ...
-    , BOOST_PP_TUPLE_TO_LIST(M, (EN1, EN2, ..., ENM) )
-    )
+BOOST_PP_LIST_FOLD_RIGHT_2ND
+( BOOST_PP_LIST_APPEND_D
+, BOOST_PP_TUPLE_TO_LIST
+  ( N
+  , BOOST_PP_TUPLE_TO_LIST(M, (E11, E12, ..., E1M) )
+  , BOOST_PP_TUPLE_TO_LIST(M, (E21, E22, ..., E2M) )
+  , ...
+  , BOOST_PP_TUPLE_TO_LIST(M, (EN1, EN2, ..., ENM) )
   )
+)
 </pre>
 */
 #define BOOST_PP_LIST_CONS(FIRST,REST) (FIRST,REST,1)
@@ -88,7 +88,7 @@ and BOOST_PP_LIST_FOLD_RIGHT_2ND():</p>
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_LIST_FIRST(BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5)))
+BOOST_PP_LIST_FIRST(BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5)))
 </pre>
 
 <p>expands to 1.</p>
@@ -106,13 +106,13 @@ and BOOST_PP_LIST_FOLD_RIGHT_2ND():</p>
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_LIST_REST(BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5)))
+BOOST_PP_LIST_REST(BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5)))
 </pre>
 
 <p>expands to the same as:</p>
 
 <pre>
-  BOOST_PP_TUPLE_TO_LIST(4,(2,3,4,5))
+BOOST_PP_TUPLE_TO_LIST(4,(2,3,4,5))
 </pre>
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)

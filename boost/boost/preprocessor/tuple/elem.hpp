@@ -18,7 +18,7 @@
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_TUPLE_ELEM(2,1,(A,B))
+BOOST_PP_TUPLE_ELEM(2,1,(A,B))
 </pre>
 
 <p>expands to <code>B</code>.</p>

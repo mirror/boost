@@ -22,21 +22,21 @@
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  MACRO(1,DATA), MACRO(2,DATA), ..., MACRO(BOOST_PP_DEC(COUNT),DATA)
+MACRO(1,DATA), MACRO(2,DATA), ..., MACRO(BOOST_PP_DEC(COUNT),DATA)
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TYPED_PARAM(INDEX,DATA)\
-    BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,0,DATA),INDEX) BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,1,DATA),INDEX)
-  BOOST_PP_ENUM_SHIFTED(3,TYPED_PARAM,(X,x))
+#define TYPED_PARAM(INDEX,DATA)\
+  BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,0,DATA),INDEX) BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,1,DATA),INDEX)
+BOOST_PP_ENUM_SHIFTED(3,TYPED_PARAM,(X,x))
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  X1 x1, X2 x2
+X1 x1, X2 x2
 </pre>
 
 <h3>Uses</h3>

@@ -21,7 +21,7 @@
 <p>In other words, expands to:</p>
 
 <pre>
-  OP(D, ... OP(D, OP(D,STATE) ) ... )
+OP(D, ... OP(D, OP(D,STATE) ) ... )
 </pre>
 
 <p>The depth of iteration is determined by <code>PRED(D,STATE)</code>.</p>
@@ -29,15 +29,15 @@
 <p>For example,</p>
 
 <pre>
-  #define PRED(D,STATE) BOOST_PP_LESS_D(D,BOOST_PP_TUPLE_ELEM(2,0,STATE),BOOST_PP_TUPLE_ELEM(2,1,STATE))
-  #define OP(D,STATE) (BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2,0,STATE)),BOOST_PP_TUPLE_ELEM(2,1,STATE))
-  BOOST_PP_WHILE(PRED,OP,(0,3))
+#define PRED(D,STATE) BOOST_PP_LESS_D(D,BOOST_PP_TUPLE_ELEM(2,0,STATE),BOOST_PP_TUPLE_ELEM(2,1,STATE))
+#define OP(D,STATE) (BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2,0,STATE)),BOOST_PP_TUPLE_ELEM(2,1,STATE))
+BOOST_PP_WHILE(PRED,OP,(0,3))
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  (3,3)
+(3,3)
 </pre>
 
 <h3>Legend</h3>

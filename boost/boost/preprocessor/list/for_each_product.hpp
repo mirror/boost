@@ -28,20 +28,20 @@ explosion.</p>
 <p>For example,</p>
 
 <pre>
-  #define TEST(R,X) X
-  BOOST_PP_LIST_FOR_EACH_PRODUCT
-  ( TEST
-  , 2
-  , ( BOOST_PP_TUPLE_TO_LIST(3,(A,B,C))
-    , BOOST_PP_TUPLE_TO_LIST(2,(1,2))
-    )
+#define TEST(R,X) X
+BOOST_PP_LIST_FOR_EACH_PRODUCT
+( TEST
+, 2
+, ( BOOST_PP_TUPLE_TO_LIST(3,(A,B,C))
+  , BOOST_PP_TUPLE_TO_LIST(2,(1,2))
   )
+)
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  (A,1) (A,2) (B,1) (B,2) (C,1) (C,2) 
+(A,1) (A,2) (B,1) (B,2) (C,1) (C,2) 
 </pre>
 
 <h3>Example</h3>

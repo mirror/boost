@@ -30,7 +30,7 @@
 <p>In other words, expands to:</p>
 
 <pre>
-  OP(D, ... OP(D, OP(D,STATE) ) ... )
+OP(D, ... OP(D, OP(D,STATE) ) ... )
 </pre>
 
 <p>The depth of iteration is determined by <code>PRED(D,STATE)</code>.</p>
@@ -38,15 +38,15 @@
 <p>For example,</p>
 
 <pre>
-  #define PRED(D,STATE) <a href="comparison_less.htm#BOOST_PP_LESS_D">BOOST_PP_LESS_D</a>(D,<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,STATE),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,STATE))
-  #define OP(D,STATE) (<a href="inc.htm#BOOST_PP_INC">BOOST_PP_INC</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,STATE)),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,STATE))
-  <a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>(PRED,OP,(0,3))
+#define PRED(D,STATE) <a href="comparison_less.htm#BOOST_PP_LESS_D">BOOST_PP_LESS_D</a>(D,<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,STATE),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,STATE))
+#define OP(D,STATE) (<a href="inc.htm#BOOST_PP_INC">BOOST_PP_INC</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,STATE)),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,STATE))
+<a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>(PRED,OP,(0,3))
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  (3,3)
+(3,3)
 </pre>
 
 <h3>Legend</h3>

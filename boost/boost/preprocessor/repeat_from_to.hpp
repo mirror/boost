@@ -22,20 +22,20 @@
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  MACRO(FIRST,DATA) MACRO(BOOST_PP_INC(FIRST),DATA) ... MACRO(BOOST_PP_DEC(LAST),DATA)
+MACRO(FIRST,DATA) MACRO(BOOST_PP_INC(FIRST),DATA) ... MACRO(BOOST_PP_DEC(LAST),DATA)
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TEST(INDEX,DATA) DATA(INDEX);
-  BOOST_PP_REPEAT_FROM_TO(4,7,TEST,X)
+#define TEST(INDEX,DATA) DATA(INDEX);
+BOOST_PP_REPEAT_FROM_TO(4,7,TEST,X)
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  X(4); X(5); X(6);
+X(4); X(5); X(6);
 </pre>
 
 <h3>Uses</h3>

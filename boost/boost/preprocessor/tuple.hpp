@@ -24,9 +24,9 @@ constitutes a single macro parameter.</p>
 <p>Examples of tuples:</p>
 
 <pre>
-  (const, volatile)    // 2-tuple
-  (*, /, %)            // 3-tuple
-  (1, "2", '3', (4,5)) // 4-tuple
+(const, volatile)    // 2-tuple
+(*, /, %)            // 3-tuple
+(1, "2", '3', (4,5)) // 4-tuple
 </pre>
 
 <p>Tuples can be used for representing structured data.</p>

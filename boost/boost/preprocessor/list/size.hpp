@@ -21,7 +21,7 @@
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_LIST_SIZE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
+BOOST_PP_LIST_SIZE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
 </pre>
 
 <p>expands to <code>3</code>.</p>

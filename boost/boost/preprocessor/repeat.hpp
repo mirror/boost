@@ -18,20 +18,20 @@
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  MACRO(0,DATA) MACRO(1,DATA) ... MACRO(BOOST_PP_DEC(COUNT),DATA)
+MACRO(0,DATA) MACRO(1,DATA) ... MACRO(BOOST_PP_DEC(COUNT),DATA)
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TEST(INDEX,DATA) DATA(INDEX);
-  BOOST_PP_REPEAT(3,TEST,X)
+#define TEST(INDEX,DATA) DATA(INDEX);
+BOOST_PP_REPEAT(3,TEST,X)
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  X(0); X(1); X(2);
+X(0); X(1); X(2);
 </pre>
 
 <h3>2D and 3D repetition</h3>

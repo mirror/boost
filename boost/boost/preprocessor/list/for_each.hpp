@@ -21,23 +21,23 @@ BOOST_PP_LIST_SIZE(LIST)).</p>
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  MACRO(R,DATA,BOOST_PP_LIST_AT(LIST,0))
-  MACRO(R,DATA,BOOST_PP_LIST_AT(LIST,1))
-  ...
-  MACRO(R,DATA,BOOST_PP_LIST_AT(LIST,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(LIST))))
+MACRO(R,DATA,BOOST_PP_LIST_AT(LIST,0))
+MACRO(R,DATA,BOOST_PP_LIST_AT(LIST,1))
+...
+MACRO(R,DATA,BOOST_PP_LIST_AT(LIST,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(LIST))))
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TEST(R,DATA,X) BOOST_PP_CAT(DATA,X)();
-  BOOST_PP_LIST_FOR_EACH(TEST,prefix_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
+#define TEST(R,DATA,X) BOOST_PP_CAT(DATA,X)();
+BOOST_PP_LIST_FOR_EACH(TEST,prefix_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  prefix_A(); prefix_B(); prefix_C();
+prefix_A(); prefix_B(); prefix_C();
 </pre>
 
 <h3>Example</h3>

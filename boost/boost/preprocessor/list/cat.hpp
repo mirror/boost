@@ -21,13 +21,13 @@
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_LIST_CAT(BOOST_PP_TUPLE_TO_LIST(3,(1,2,3)))
+BOOST_PP_LIST_CAT(BOOST_PP_TUPLE_TO_LIST(3,(1,2,3)))
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  123
+123
 </pre>
 
 <h3>Uses</h3>

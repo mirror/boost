@@ -31,23 +31,23 @@
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  MACRO(R,DATA,0,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(LIST,0))
-  MACRO(R,DATA,1,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(LIST,1))
-  ...
-  MACRO(R,DATA,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(LIST)),<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(LIST,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(LIST))))
+MACRO(R,DATA,0,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(LIST,0))
+MACRO(R,DATA,1,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(LIST,1))
+...
+MACRO(R,DATA,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(LIST)),<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(LIST,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(LIST))))
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TEST(R,DATA,INDEX,X) <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(DATA,X)(INDEX);
-  <a href="list_for_each_i.htm#BOOST_PP_LIST_FOR_EACH_I">BOOST_PP_LIST_FOR_EACH_I</a>(TEST,prefix_,<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(3,(A,B,C)))
+#define TEST(R,DATA,INDEX,X) <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(DATA,X)(INDEX);
+<a href="list_for_each_i.htm#BOOST_PP_LIST_FOR_EACH_I">BOOST_PP_LIST_FOR_EACH_I</a>(TEST,prefix_,<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(3,(A,B,C)))
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  prefix_A(0); prefix_B(1); prefix_C(2);
+prefix_A(0); prefix_B(1); prefix_C(2);
 </pre>
 
 <h3>Uses</h3>

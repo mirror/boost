@@ -21,19 +21,19 @@
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  BOOST_PP_CAT(PARAM,0), BOOST_PP_CAT(PARAM,1), ..., BOOST_PP_CAT(PARAM,BOOST_PP_DEC(COUNT))
+BOOST_PP_CAT(PARAM,0), BOOST_PP_CAT(PARAM,1), ..., BOOST_PP_CAT(PARAM,BOOST_PP_DEC(COUNT))
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_ENUM_PARAMS(3,x)
+BOOST_PP_ENUM_PARAMS(3,x)
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  x0, x1, x2
+x0, x1, x2
 </pre>
 
 <h3>Uses</h3>

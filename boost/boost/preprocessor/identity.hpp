@@ -23,13 +23,13 @@ invoked.</p>
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_IF(1,BOOST_PP_IDENTITY(X),BOOST_PP_EMPTY)<b>()</b>
+BOOST_PP_IF(1,BOOST_PP_IDENTITY(X),BOOST_PP_EMPTY)<b>()</b>
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  X
+X
 </pre>
 
 <h3>Test</h3>

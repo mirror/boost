@@ -30,20 +30,20 @@
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  MACRO(FIRST,DATA) MACRO(<a href="inc.htm#BOOST_PP_INC">BOOST_PP_INC</a>(FIRST),DATA) ... MACRO(<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(LAST),DATA)
+MACRO(FIRST,DATA) MACRO(<a href="inc.htm#BOOST_PP_INC">BOOST_PP_INC</a>(FIRST),DATA) ... MACRO(<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(LAST),DATA)
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TEST(INDEX,DATA) DATA(INDEX);
-  <a href="repeat_from_to.htm#BOOST_PP_REPEAT_FROM_TO">BOOST_PP_REPEAT_FROM_TO</a>(4,7,TEST,X)
+#define TEST(INDEX,DATA) DATA(INDEX);
+<a href="repeat_from_to.htm#BOOST_PP_REPEAT_FROM_TO">BOOST_PP_REPEAT_FROM_TO</a>(4,7,TEST,X)
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  X(4); X(5); X(6);
+X(4); X(5); X(6);
 </pre>
 
 <h3>Uses</h3>

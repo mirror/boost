@@ -22,24 +22,24 @@ list <code>LIST</code> (from the left or the start of the list).</p>
 <p>In other words, expands to:</p>
 
 <pre>
-  OP
-  ( D
-  , ... OP(D, OP(D,STATE,BOOST_PP_LIST_AT(LIST,0)), BOOST_PP_LIST_AT(LIST,1)) ...
-  , BOOST_PP_LIST_AT(LIST,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(LIST))
-  )
+OP
+( D
+, ... OP(D, OP(D,STATE,BOOST_PP_LIST_AT(LIST,0)), BOOST_PP_LIST_AT(LIST,1)) ...
+, BOOST_PP_LIST_AT(LIST,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(LIST))
+)
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TEST(D,STATE,X) BOOST_PP_CAT(STATE,X)
-  BOOST_PP_LIST_FOLD_LEFT(TEST,_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
+#define TEST(D,STATE,X) BOOST_PP_CAT(STATE,X)
+BOOST_PP_LIST_FOLD_LEFT(TEST,_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  _ABC
+_ABC
 </pre>
 
 <h3>Note</h3>

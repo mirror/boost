@@ -21,13 +21,13 @@ for which <code>PRED(D,DATA,X)</code> is true.</p>
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_LIST_FILTER(BOOST_PP_NOT_EQUAL_D,2,BOOST_PP_TUPLE_TO_LIST(3,(1,2,3)))
+BOOST_PP_LIST_FILTER(BOOST_PP_NOT_EQUAL_D,2,BOOST_PP_TUPLE_TO_LIST(3,(1,2,3)))
 </pre>
 
 <p>expands to the same as:</p>
 
 <pre>
-  BOOST_PP_TUPLE_TO_LIST(2,(1,3))
+BOOST_PP_TUPLE_TO_LIST(2,(1,3))
 </pre>
 
 <h3>Uses</h3>

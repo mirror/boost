@@ -20,16 +20,16 @@
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_TUPLE_TO_LIST(3,(A,B,C))
+BOOST_PP_TUPLE_TO_LIST(3,(A,B,C))
 </pre>
 
 <p>expands to the same as</p>
 
 <pre>
-  BOOST_PP_LIST_CONS(A,
-  BOOST_PP_LIST_CONS(B,
-  BOOST_PP_LIST_CONS(C,
-  BOOST_PP_LIST_NIL)))
+BOOST_PP_LIST_CONS(A,
+BOOST_PP_LIST_CONS(B,
+BOOST_PP_LIST_CONS(C,
+BOOST_PP_LIST_NIL)))
 </pre>
 
 <h3>See</h3>

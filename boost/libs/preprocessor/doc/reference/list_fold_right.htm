@@ -31,32 +31,32 @@ list <code>LIST</code> (from the right or the end of the list).</p>
 <p>In other words, expands to:</p>
 
 <pre>
-  OP
-  ( D
-  , <a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(LIST,0)
-  , ... OP
+OP
+( D
+, <a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(LIST,0)
+, ... OP
+      ( D
+      , <a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(LIST,<a href="arithmetic_sub.htm#BOOST_PP_SUB">BOOST_PP_SUB</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(LIST),2))
+      , OP
         ( D
-        , <a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(LIST,<a href="arithmetic_sub.htm#BOOST_PP_SUB">BOOST_PP_SUB</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(LIST),2))
-        , OP
-          ( D
-          , <a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(LIST,<a href="arithmetic_sub.htm#BOOST_PP_SUB">BOOST_PP_SUB</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(LIST),1))
-          , STATE
-          )
-        ) ...
-  )
+        , <a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(LIST,<a href="arithmetic_sub.htm#BOOST_PP_SUB">BOOST_PP_SUB</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(LIST),1))
+        , STATE
+        )
+      ) ...
+)
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TEST(D,X,STATE) <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(STATE,X)
-  <a href="list_fold_right.htm#BOOST_PP_LIST_FOLD_RIGHT">BOOST_PP_LIST_FOLD_RIGHT</a>(TEST,_,<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(3,(A,B,C)))
+#define TEST(D,X,STATE) <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(STATE,X)
+<a href="list_fold_right.htm#BOOST_PP_LIST_FOLD_RIGHT">BOOST_PP_LIST_FOLD_RIGHT</a>(TEST,_,<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(3,(A,B,C)))
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  _CBA
+_CBA
 </pre>
 
 <h3>Uses</h3>

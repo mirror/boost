@@ -22,11 +22,11 @@
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  MACRO(R,STATE)
-  MACRO(R,OP(R,STATE))
-  MACRO(R,OP(R,OP(R,STATE)))
-  ...
-  MACRO(R,OP(R,OP(...OP(R,STATE)...)))
+MACRO(R,STATE)
+MACRO(R,OP(R,STATE))
+MACRO(R,OP(R,OP(R,STATE)))
+...
+MACRO(R,OP(R,OP(...OP(R,STATE)...)))
 </pre>
 
 <p>The length of the sequence is determined by <code>PRED(R,STATE)</code>.</p>
@@ -34,16 +34,16 @@
 <p>For example,</p>
 
 <pre>
-  #define PRED(R,STATE) BOOST_PP_LESS(BOOST_PP_TUPLE_ELEM(2,0,STATE),BOOST_PP_TUPLE_ELEM(2,1,STATE))
-  #define OP(R,STATE) (BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2,0,STATE)),BOOST_PP_TUPLE_ELEM(2,1,STATE))
-  #define MACRO(R,STATE) BOOST_PP_TUPLE_ELEM(2,0,STATE)
-  BOOST_PP_FOR((0,3),PRED,OP,MACRO)
+#define PRED(R,STATE) BOOST_PP_LESS(BOOST_PP_TUPLE_ELEM(2,0,STATE),BOOST_PP_TUPLE_ELEM(2,1,STATE))
+#define OP(R,STATE) (BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2,0,STATE)),BOOST_PP_TUPLE_ELEM(2,1,STATE))
+#define MACRO(R,STATE) BOOST_PP_TUPLE_ELEM(2,0,STATE)
+BOOST_PP_FOR((0,3),PRED,OP,MACRO)
 </pre>
 
 <p>expands to:</p>
 
 <pre>
-  0 1 2
+0 1 2
 </pre>
 
 <h3>Legend</h3>

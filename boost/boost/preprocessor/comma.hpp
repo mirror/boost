@@ -21,7 +21,7 @@ for separating macro parameters.</p>
 <p>For example,</p>
 
 <pre>
-  BOOST_PP_IF(1,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
+BOOST_PP_IF(1,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
 </pre>
 
 <p>expands to a comma.</p>
