@@ -194,7 +194,7 @@ void run_tests()
     CHECK(( ++r8 == r7 ));
 
     /* abs tests */
-#ifdef _MSC_VER // BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 // This is a nasty hack, required because some compilers do not implement
 // "Koenig Lookup". Basically, if I call abs(r), the C++ standard says that
 // the compiler should look for a definition of abs in the namespace which
