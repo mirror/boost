@@ -72,12 +72,28 @@ void check_list_inserter()
     BOOST_CHECK_EQUAL( v[18], 8 );
     BOOST_CHECK_EQUAL( v[8], 7 ); 
     BOOST_CHECK_EQUAL( v[16], 7 ); 
+
+#if !( defined(_MSC_VER) && (_MSC_VER >= 1020) )
     push_back( v ) = repeat_fun( 10, &rand );
+#else
+    push_back( v ).repeat_fun( 10, &rand );
+#endif
+
     BOOST_CHECK_EQUAL( v.size(), 29u );
-    
+
+#if !( defined(_MSC_VER) && (_MSC_VER >= 1020) )
     push_back( v ) = 1,repeat( 10, 2 ),3;
+#else
+    push_back( v )(1).repeat( 10, 2 )(3);
+#endif
     BOOST_CHECK_EQUAL( v.size(), 41u );
+
+#if !( defined(_MSC_VER) && (_MSC_VER >= 1020) )
     push_back( v ) = 1,repeat_fun( 10, &rand ),2;
+#else
+	    push_back( v )(1).repeat_fun( 10, &rand )(2);
+#endif
+
     BOOST_CHECK_EQUAL( v.size(), 53u );
     
     typedef map<string,int> map_t;

@@ -57,7 +57,7 @@ void test_sequence_list_of_int()
     C c3 = ba::list_of(1).repeat( 1, 2 )(3);
     BOOST_CHECK_EQUAL( c3.size(), 3u );
         
-    c3 = ba::list_of(1).repeat_fun( 10, &std::rand )(2)(3);
+    c3 = ba::list_of(1).repeat_fun( 10, &rand )(2)(3);
     BOOST_CHECK_EQUAL( c3.size(), 13u );
 }
 

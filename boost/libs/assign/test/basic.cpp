@@ -8,18 +8,18 @@
 // For more information, see http://www.boost.org/libs/assign/
 //
 
-#include <boost/assign.hpp>
+#include <boost/assign/std/vector.hpp>
+#include <boost/assign/std/map.hpp>
 #include <string>
-#include <vector>
-#include <map>
 
 using namespace std;
+using namespace boost;
 using namespace boost::assign;
 
 void check_basic_usage()
 {
     vector<int> v;
-    v += 3,4,5,6,7,8,9;
+    v += 1,2,3,4,5,6,7,8,9;
     push_back( v )(10)(11);
     map<string,int> m;
     insert( m )( "foo", 1 )( "bar", 2 );

@@ -235,7 +235,7 @@ namespace assign_detail
         }
         
         template< class Adapter >
-        Adapter convert_to_adapter() const
+        Adapter convert_to_adapter( const Adapter* = 0 ) const
         {
             Adapter a;
             BOOST_DEDUCED_TYPENAME std::deque<T>::const_iterator 
@@ -279,9 +279,9 @@ namespace assign_detail
         }
         
         template< class Adapter >
-        Adapter to_adapter( Adapter& ) const
+        Adapter to_adapter( Adapter& a ) const
         {
-            return convert_to_adapter<Adapter>(); 
+            return this->convert_to_adapter( &a ); 
         }
 
         template< class Array >

@@ -147,6 +147,9 @@ namespace assign
         explicit list_inserter( Function fun ) : insert_( fun )
         {}
         
+        list_inserter( const list_inserter& r ) : insert_( r.insert_ )
+        {}
+        
         template< class Function2, class Arg >
         list_inserter( list_inserter<Function2,Arg> r ) 
         : insert_( r.fun_private() ) 
@@ -283,12 +286,21 @@ namespace assign
         return list_inserter< Function >( fun );
     }
     
+    template< class Function, class Argument >
+    inline list_inserter<Function,Argument>
+    make_list_inserter( Function fun, Argument* )
+    {
+        return list_inserter<Function,Argument>( fun );
+    }
+
     template< class C >
     inline list_inserter< assign_detail::call_push_back<C>, 
                           BOOST_DEDUCED_TYPENAME C::value_type >
     push_back( C& c )
     {
-        return make_list_inserter( assign_detail::call_push_back<C>( c ) );
+        static BOOST_DEDUCED_TYPENAME C::value_type* p = 0;
+        return make_list_inserter( assign_detail::call_push_back<C>( c ), 
+                                   p );
     }
     
     template< class C >
@@ -296,7 +308,9 @@ namespace assign
                           BOOST_DEDUCED_TYPENAME C::value_type >
     push_front( C& c )
     {
-        return make_list_inserter( assign_detail::call_push_front<C>( c ) );
+        static BOOST_DEDUCED_TYPENAME C::value_type* p = 0;
+        return make_list_inserter( assign_detail::call_push_front<C>( c ),
+                                   p );
     }
 
     template< class C >
@@ -304,7 +318,9 @@ namespace assign
                           BOOST_DEDUCED_TYPENAME C::value_type >
     insert( C& c )
     {
-        return make_list_inserter( assign_detail::call_insert<C>( c ) );
+        static BOOST_DEDUCED_TYPENAME C::value_type* p = 0;
+        return make_list_inserter( assign_detail::call_insert<C>( c ),
+                                   p );
     }
 
     template< class C >
@@ -312,7 +328,9 @@ namespace assign
                           BOOST_DEDUCED_TYPENAME C::value_type >
     push( C& c )
     {
-        return make_list_inserter( assign_detail::call_push<C>( c ) );
+        static BOOST_DEDUCED_TYPENAME C::value_type* p = 0;
+        return make_list_inserter( assign_detail::call_push<C>( c ),
+                                   p );
     }
     
 } // namespace 'assign'

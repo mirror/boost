@@ -61,10 +61,10 @@ public:
     my_vector() : data_( 10, 0 )
     { }
     
-    ba::list_inserter< range_inserter< std::vector<T> >, T >
+    ba::list_inserter< range_inserter< vector_t >, T >
     operator=( T r )
     {
-        return ba::make_list_inserter( make_range_inserter( data_ ) )( r );
+        return ba::make_list_inserter( range_inserter< vector_t >( data_ ), &r )( r );
     }
     
     size_type size() const
