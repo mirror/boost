@@ -48,42 +48,47 @@
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
 
 #   define BOOST_TT_AUX_BOOL_TRAIT_DEF1(trait,T,C)      \
-    template < typename T > struct trait;               \
-                                                        \
-    namespace mpl_rebind                                \
+    template< typename T > struct trait                 \
+        BOOST_TT_AUX_BOOL_C_BASE(C)                     \
     {                                                   \
-      template < typename T >                           \
-      struct rebind_##trait                             \
+        BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C)           \
+        struct rebind;                                  \
+    };                                                  \
+                                                        \
+      template < typename X >                           \
+      struct trait< X >::rebind                         \
       {                                                 \
           enum { arity = 1 };                           \
-          typedef T arg1;                               \
-                                                        \
+          typedef X arg1;                               \
           template< typename U1 >                       \
           struct apply : trait< U1 >                    \
           {                                             \
           };                                            \
       };                                                \
-    }                                                   \
-                                                        \
-    template< typename T > struct trait                 \
+    /**/
+
+
+#   define BOOST_TT_AUX_BOOL_TRAIT_DEF2(trait,T1,T2,C)  \
+    template< typename T1, typename T2 > struct trait   \
         BOOST_TT_AUX_BOOL_C_BASE(C)                     \
     {                                                   \
         BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C)           \
-        typedef mpl_rebind::rebind_##trait< T > rebind; \
+        struct rebind;                                  \
     };                                                  \
+                                                        \
+      template < typename X1, typename X2 >             \
+      struct trait< X1,X2 >::rebind                     \
+      {                                                 \
+          enum { arity = 2 };                           \
+          typedef X1 arg1;                              \
+          typedef X2 arg2;                              \
+          template< typename U1, typename U2 >          \
+          struct apply : trait< U1,U2 >                 \
+          {                                             \
+          };                                            \
+      };                                                \
     /**/
 
-
-#   define BOOST_TT_AUX_BOOL_TRAIT_DEF2(trait,T1,T2,C) \
-    template< typename T1, typename T2 > struct trait \
-        BOOST_TT_AUX_BOOL_C_BASE(C) \
-    { \
-        BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
-        BOOST_MPL_AUX_LAMBDA_SUPPORT(2,trait,(T1,T2)) \
-    }; \
-    \
-    BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(2,trait) \
-    /**/
 #else
 
 #   define BOOST_TT_AUX_BOOL_TRAIT_DEF1(trait,T,C) \
