@@ -582,15 +582,17 @@ template <
       typename T0_
 #if !defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
     , BOOST_VARIANT_ENUM_SHIFTED_PARAMS(typename T)
-#elif !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#elif !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     , BOOST_VARIANT_ENUM_SHIFTED_PARAMS(typename wknd_T)
-#else // MSVC6
+#else // MSVC7 and below
     , BOOST_VARIANT_ENUM_SHIFTED_PARAMS(typename T)
 #endif
     >
 class variant
 {
 private: // private typedefs
+
+    typedef variant wknd_self_t;
 
     struct is_recursive
         : detail::variant::is_recursive_flag<T0_>
@@ -622,13 +624,13 @@ public: // typedefs
         , mpl::transform<
               initial_types
             , mpl::protect<
-                  detail::variant::quoted_enable_recursive<variant>
+                  detail::variant::quoted_enable_recursive<wknd_self_t>
                 >
             >
         , mpl::identity< initial_types >
         >::type types;
 
-#elif !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#elif !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
 private: // helpers, for typedefs (below)
 
@@ -643,7 +645,7 @@ private: // helpers, for typedefs (below)
               is_recursive                             \
             , detail::variant::enable_recursive<       \
                   BOOST_PP_CAT(wknd_T,N)               \
-                , variant                              \
+                , wknd_self_t                          \
                 >                                      \
             , mpl::identity< BOOST_PP_CAT(wknd_T,N) >  \
             >::type BOOST_PP_CAT(T,N);                 \
@@ -672,7 +674,7 @@ private: // static precondition assertions
           ::boost::mpl::not_< mpl::is_sequence<T0> >::value
         ));
 
-#else // MSVC6
+#else // MSVC7 and below
 
 public: // typedefs
 
@@ -686,19 +688,19 @@ private: // static precondition assertions
 
     // for some reason, msvc needs following all on one line:
     BOOST_STATIC_CONSTANT(bool, msvc_not_is_recursive = mpl::not_< is_recursive >::value);
-    BOOST_STATIC_CONSTANT(bool, msvc_not_is_sequence_T0 = mpl::not_< mpl::is_sequence<T0_> >::value);
+    BOOST_STATIC_CONSTANT(bool, msvc_not_is_sequence_T0 = mpl::not_< mpl::is_sequence<T0> >::value);
 
     // NOTE TO USER :
-    // recursive_variant is not supported on MSVC6!
+    // recursive_variant is not supported on MSVC7 and below!
     //
     BOOST_STATIC_ASSERT(msvc_not_is_recursive);
 
     // NOTE TO USER :
-    // variant< type-sequence > syntax is not supported on MSVC6!
+    // variant< type-sequence > syntax is not supported on MSVC7 and below!
     //
     BOOST_STATIC_ASSERT(msvc_not_is_sequence_T0);
 
-#endif // BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT and MSVC6 workaround
+#endif // BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT & MSVC 7 and below workaround
 
 private: // static precondition assertions, cont.
 
