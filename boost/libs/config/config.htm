@@ -616,6 +616,15 @@ f(&amp;bar); // should choose #2.</pre>
         use at compile-time.</td>
     </tr>
     <tr>
+        <td>BOOST_NO_LONG_LONG_NUMERIC_LIMITS</td>
+        <td>Standard library</td>
+        <td>There is no specialization for numeric_limits&lt;long
+        long&gt; and numeric_limits&lt;unsigned long long&gt;.
+        &lt;boost/limits.hpp&gt; will then add these
+        specializations as a standard library &quot;fix&quot;
+        only if the compiler supports the long long datatype.</td>
+    </tr>
+    <tr>
         <td>BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS</td>
         <td>Compiler</td>
         <td>The compiler does not support the specialization of
@@ -640,6 +649,16 @@ f(&amp;bar); // should choose #2.</pre>
         <td valign="top" width="16%">Compiler</td>
         <td valign="top" width="33%">Member template functions
         not fully supported.</td>
+    </tr>
+    <tr>
+        <td>BOOST_NO_MS_INT64_NUMERIC_LIMITS</td>
+        <td>Standard library</td>
+        <td>There is no specialization for
+        numeric_limits&lt;__int64&gt; and
+        numeric_limits&lt;unsigned __int64&gt;. &lt;boost/limits.hpp&gt;
+        will then add these specializations as a standard library
+        &quot;fix&quot;, only if the compiler supports the __int64
+        datatype.</td>
     </tr>
     <tr>
         <td valign="top" width="51%">BOOST_NO_OPERATORS_IN_NAMESPACE</td>
@@ -722,6 +741,12 @@ f(&amp;bar); // should choose #2.</pre>
         <td valign="top" width="16%">Standard library</td>
         <td valign="top" width="33%">The standard library lacks a
         conforming std::use_facet.</td>
+    </tr>
+    <tr>
+        <td>BOOST_NO_STD_WSTREAM</td>
+        <td>Standard library</td>
+        <td>The standard library's implementation of std::basic_streambuf&lt;wchar_t&gt;
+        is either missing, incomplete, or buggy.</td>
     </tr>
     <tr>
         <td valign="top" width="51%">BOOST_NO_STD_WSTRING</td>
