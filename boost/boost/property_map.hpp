@@ -193,78 +193,78 @@ namespace boost {
   //=========================================================================
   // concept checks for property maps
 
-  template <class PA, class Key>
-  struct ReadablePropertyMap_concept
+  template <class PMap, class Key>
+  struct ReadablePropertyMapConcept
   {
-    typedef typename property_traits<PA>::key_type key_type;
-    typedef typename property_traits<PA>::category Category;
+    typedef typename property_traits<PMap>::key_type key_type;
+    typedef typename property_traits<PMap>::category Category;
     typedef boost::readable_property_map_tag ReadableTag;
     void constraints() {
-      REQUIRE2(Category, ReadableTag, Convertible);
+      function_requires< ConvertibleConcept<Category, ReadableTag> >();
 
-      val = get(pa, k);
+      val = get(pmap, k);
     }
-    PA pa;
+    PMap pmap;
     Key k;
-    typename property_traits<PA>::value_type val;
+    typename property_traits<PMap>::value_type val;
   };
 
-  template <class PA, class Key>
-  struct WritablePropertyMap_concept
+  template <class PMap, class Key>
+  struct WritablePropertyMapConcept
   {
-    typedef typename property_traits<PA>::key_type key_type;
-    typedef typename property_traits<PA>::category Category;
+    typedef typename property_traits<PMap>::key_type key_type;
+    typedef typename property_traits<PMap>::category Category;
     typedef boost::writable_property_map_tag WritableTag;
     void constraints() {
-      REQUIRE2(Category, WritableTag, Convertible);
-      put(pa, k, val);
+      function_requires< ConvertibleConcept<Category, WritableTag> >();
+      put(pmap, k, val);
     }
-    PA pa;
+    PMap pmap;
     Key k;
-    typename property_traits<PA>::value_type val;
+    typename property_traits<PMap>::value_type val;
   };
 
-  template <class PA, class Key>
-  struct ReadWritePropertyMap_concept
+  template <class PMap, class Key>
+  struct ReadWritePropertyMapConcept
   {
-    typedef typename property_traits<PA>::category Category;
+    typedef typename property_traits<PMap>::category Category;
     typedef boost::read_write_property_map_tag ReadWriteTag;
     void constraints() {
-      REQUIRE2(PA, Key, ReadablePropertyMap);
-      REQUIRE2(PA, Key, WritablePropertyMap);
-      REQUIRE2(Category, ReadWriteTag, Convertible);
+      function_requires< ReadablePropertyMapConcept<PMap, Key> >();
+      function_requires< WritablePropertyMapConcept<PMap, Key> >();
+      function_requires< ConvertibleConcept<Category, ReadWriteTag> >();
     }
   };
 
-  template <class PA, class Key>
-  struct LvaluePropertyMap_concept
+  template <class PMap, class Key>
+  struct LvaluePropertyMapConcept
   {
-    typedef typename property_traits<PA>::category Category;
+    typedef typename property_traits<PMap>::category Category;
     typedef boost::lvalue_property_map_tag LvalueTag;
-    typedef const typename property_traits<PA>::value_type& const_reference;
-    void constraints() { 
-      REQUIRE2(PA, Key, ReadWritePropertyMap);
-      REQUIRE2(Category, LvalueTag, Convertible);
+    typedef const typename property_traits<PMap>::value_type& const_reference;
+    void constraints() {
+      function_requires< ReadWritePropertyMapConcept<PMap, Key> >();
+      function_requires< ConvertibleConcept<Category, LvalueTag> >();
 
-      const_reference ref = pa[k];
+      const_reference ref = pmap[k];
     }
-    PA pa;
+    PMap pmap;
     Key k;
   };
 
-  template <class PA, class Key>
-  struct Mutable_LvaluePropertyMap_concept
+  template <class PMap, class Key>
+  struct Mutable_LvaluePropertyMapConcept
   {
-    typedef typename property_traits<PA>::category Category;
+    typedef typename property_traits<PMap>::category Category;
     typedef boost::lvalue_property_map_tag LvalueTag;
-    typedef typename property_traits<PA>::value_type& reference;
+    typedef typename property_traits<PMap>::value_type& reference;
     void constraints() { 
-      REQUIRE2(PA, Key, ReadWritePropertyMap);
-      REQUIRE2(Category, LvalueTag, Convertible);
+      function_requires< ReadWritePropertyMapConcept<PMap, Key> >();
+      function_requires<ConvertibleConcept<Category, LvalueTag> >();
 
-      reference ref = pa[k];
+      reference ref = pmap[k];
     }
-    PA pa;
+    PMap pmap;
     Key k;
   };
 
@@ -337,7 +337,7 @@ namespace boost {
     typename std::iterator_traits<RAIter>::reference,
     ID >
   make_iterator_property_map(RAIter iter, ID id) {
-    REQUIRE(RAIter, RandomAccessIterator);
+    function_requires< RandomAccessIteratorConcept<RAIter> >();
     typedef random_access_iterator_property_map<
     RAIter,
     typename std::iterator_traits<RAIter>::value_type,
@@ -350,7 +350,7 @@ namespace boost {
   inline random_access_iterator_property_map<
     RAIter, Value, Value&, ID>
   make_iterator_property_map(RAIter iter, ID id, Value) {
-    REQUIRE(RAIter, RandomAccessIterator);
+    function_requires< RandomAccessIteratorConcept<RAIter> >();
     typedef random_access_iterator_property_map<
       RAIter, Value, Value&, ID> PMap;
     return PMap(iter, id);

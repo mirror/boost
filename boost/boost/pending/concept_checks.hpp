@@ -19,81 +19,46 @@
 #define BOOST_FPTR
 #endif
 
-#define BOOST_FUNCTION_REQUIRES(type_var, concept) \
-do { \
-  void (concept<type_var>::*x)() = BOOST_FPTR concept<type_var>::constraints; \
-  x = x; } while (0)
+namespace boost {
 
-#define BOOST_FUNCTION_REQUIRES2(type_var1, type_var2, concept) \
-do { \
-  void (concept<type_var1, type_var2>::*x)() = \
-    BOOST_FPTR concept<type_var1, type_var2>::constraints; \
-  x = x; } while (0)
+template <class T> void ignore_unused_variable_warning(const T&) { }
 
-#define BOOST_FUNCTION_REQUIRES3(type_var1, type_var2, type_var3,concept) \
-do { \
-  void (concept <type_var1, type_var2, type_var3>::*x)() = \
-    BOOST_FPTR concept <type_var1, type_var2, type_var3>::constraints; \
-  x = x; } while (0)
+template <class Concept>
+void function_requires()
+{
+#if !defined(NDEBUG)
+  void (Concept::*x)() = BOOST_FPTR Concept::constraints;
+  ignore_unused_variable_warning(x);
+#endif
+}
 
-#define BOOST_FUNCTION_REQUIRES4(type_var1, type_var2, type_var3,type_var4,concept) \
-do { \
- void (concept <type_var1,type_var2,type_var3,type_var4>::*x)() = \
- BOOST_FPTR concept <type_var1, type_var2, type_var3, type_var4>::constraints;\
-  x = x; } while (0)
+template <class Concept>
+class class_requires
+{
+#if defined(NDEBUG)
+public:
+  typedef int check;
+#else
+  typedef void (Concept::* function_pointer)();
 
-
-#define BOOST_CLASS_REQUIRES(type_var, concept) \
-  typedef void (concept <type_var>::* __func##type_var##concept)(); \
-  template <__func##type_var##concept _Tp1> \
-  struct __dummy_struct_##type_var##concept { }; \
-  typedef __dummy_struct_##type_var##concept< \
-    BOOST_FPTR concept <type_var>::constraints> \
-    __dummy_typedef_##type_var##concept
-
-#define BOOST_CLASS_REQUIRES2(type_var1, type_var2, concept) \
-  typedef void (concept <type_var1,type_var2>::* __func##type_var1##type_var2##concept)(); \
-  template <__func##type_var1##type_var2##concept _Tp1> \
-  struct __dummy_struct_##type_var1##type_var2##concept { }; \
-  typedef __dummy_struct_##type_var1##type_var2##concept< \
-    BOOST_FPTR concept <type_var1,type_var2>::constraints> \
-    __dummy_typedef_##type_var1##type_var2##concept
-
-#define BOOST_CLASS_REQUIRES3(type_var1, type_var2, type_var3, concept) \
-  typedef void (concept <type_var1,type_var2,type_var3>::* __func##type_var1##type_var2##type_var3##concept)(); \
-  template <__func##type_var1##type_var2##type_var3##concept _Tp1> \
-  struct __dummy_struct_##type_var1##type_var2##type_var3##concept { }; \
-  typedef __dummy_struct_##type_var1##type_var2##type_var3##concept< \
-    BOOST_FPTR concept <type_var1,type_var2,type_var3>::constraints>  \
-  __dummy_typedef_##type_var1##type_var2##type_var3##concept
-
-#define BOOST_CLASS_REQUIRES4(type_var1, type_var2, type_var3, type_var4, concept) \
-  typedef void (concept <type_var1,type_var2,type_var3,type_var4>::* __func##type_var1##type_var2##type_var3##type_var4##concept)(); \
-  template <__func##type_var1##type_var2##type_var3##type_var4##concept _Tp1> \
-  struct __dummy_struct_##type_var1##type_var2##type_var3##type_var4##concept { }; \
-  typedef __dummy_struct_##type_var1##type_var2##type_var3##type_var4##concept< \
-    BOOST_FPTR concept <type_var1,type_var2,type_var3,type_var4>::constraints>  \
-    __dummy_typedef_##type_var1##type_var2##type_var3##type_var4##concept
-
+  template <function_pointer Fptr>
+  struct dummy_struct { };
+public:
+  typedef dummy_struct< BOOST_FPTR Concept::constraints > check;
+#endif
+};
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T, class U>
-struct require_same_type { };
+struct require_same { };
 
 template <class T>
-struct require_same_type<T,T> { typedef T type; };
+struct require_same<T,T> { typedef T type; };
 #else
+// This version does not perform checking, but will not do any harm.
 template <class T, class U>
-struct require_same_type { typedef T type; };
+struct require_same { typedef T type; };
 #endif
-
-#define BOOST_FUNCTION_REQUIRES_SAME_TYPE(X,Y) \
-  typedef typename require_same_type<X,Y>::type X##_same_##Y
-
-#define BOOST_CLASS_REQUIRES_SAME_TYPE(X,Y) \
-  typedef typename require_same_type<X,Y>::type X##_same_##Y
-
-template <class T> void ignore_unused_variable_warning(const T&) { }
 
   template <class T>
   struct IntegerConcept {
@@ -125,6 +90,24 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   template <> struct SignedIntegerConcept<short> { void constraints() {} };
   template <> struct SignedIntegerConcept<int> { void constraints() {} };
   template <> struct SignedIntegerConcept<long> { void constraints() {} };
+  // etc.
+#endif      
+
+  template <class T>
+  struct UnsignedIntegerConcept {
+    void constraints() { 
+#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+      error__type_must_be_an_unsigned_integer_type();
+#endif      
+    }
+  };
+#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+  template <> struct UnsignedIntegerConcept<unsigned short>
+    { void constraints() {} };
+  template <> struct UnsignedIntegerConcept<unsigned int>
+    { void constraints() {} };
+  template <> struct UnsignedIntegerConcept<unsigned long>
+    { void constraints() {} };
   // etc.
 #endif      
 
@@ -224,11 +207,10 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
       require_boolean_expr(a == b);
       require_boolean_expr(a != b);
     }
-    bool boolean;
     TT a, b;
   };
 
-  template <class XX, class YY>
+  template <class AA, class BB>
   struct EqualityComparable2Concept
   {
     void constraints() {
@@ -237,21 +219,30 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
       require_boolean_expr(a != b);
       require_boolean_expr(b != a);
     }
-    XX a;
-    YY b;
+    AA a;
+    BB b;
   };
 
-  // Use LessThanOpConcept (see below) instead of
-  // LessThanComparableConcept when you want to express comparison
-  // between two different types.
   template <class TT>
   struct LessThanComparableConcept
   {
     void constraints() {
       require_boolean_expr(a < b);
     }
-    bool boolean;
     TT a, b;
+  };
+
+  template <class AA, class BB>
+  struct LessThanComparable2Concept
+  {
+    void constraints() {
+      function_requires< LessThanComparableConcept<AA> >();
+      function_requires< LessThanComparableConcept<BB> >();
+      require_boolean_expr(a < b);
+      require_boolean_expr(b < a);
+    }
+    AA a;
+    BB b;
   };
 
   // This is equivalent to SGI STL's LessThanComparable.
@@ -259,19 +250,24 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct ComparableConcept
   {
     void constraints() {
+      function_requires< EqualityComparableConcept<TT> >();
       require_boolean_expr(a < b);
       require_boolean_expr(a > b);
       require_boolean_expr(a <= b);
       require_boolean_expr(a >= b);
     }
-    bool boolean;
     TT a, b;
   };
 
-  template <class XX, class YY>
+  // This is a generalization of SGI STL's LessThanComparable
+  // concept to 2 types.
+  template <class AA, class BB>
   struct Comparable2Concept
   {
     void constraints() {
+      function_requires< EqualityComparable2Concept<AA,BB> >();
+      function_requires< ComparableConcept<AA> >();
+      function_requires< ComparableConcept<BB> >();
       require_boolean_expr(a < b);
       require_boolean_expr(b < a);
       require_boolean_expr(a > b);
@@ -281,9 +277,8 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
       require_boolean_expr(a >= b);
       require_boolean_expr(b >= a);
     }
-    bool boolean;
-    XX a;
-    YY b;
+    AA a;
+    BB b;
   };
 
   //===========================================================================
@@ -293,9 +288,9 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct TrivialIteratorConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(TT, AssignableConcept);
-      BOOST_FUNCTION_REQUIRES(TT, DefaultConstructibleConcept);
-      BOOST_FUNCTION_REQUIRES(TT, EqualityComparableConcept);
+      function_requires< AssignableConcept<TT> >();
+      function_requires< DefaultConstructibleConcept<TT> >();
+      function_requires< EqualityComparableConcept<TT> >();
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
       typedef typename std::iterator_traits<TT>::value_type V;
 #endif
@@ -308,7 +303,7 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct Mutable_TrivialIteratorConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(TT, TrivialIteratorConcept);
+      function_requires< TrivialIteratorConcept<TT> >();
       *i = *j;            // require dereference and assignment
     }
     TT i, j;
@@ -318,16 +313,17 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct InputIteratorConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(TT, TrivialIteratorConcept);
+      function_requires< TrivialIteratorConcept<TT> >();
       // require iterator_traits typedef's
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
       typedef typename std::iterator_traits<TT>::difference_type D;
-      BOOST_FUNCTION_REQUIRES(D, SignedIntegerConcept);
+      function_requires< SignedIntegerConcept<D> >();
       typedef typename std::iterator_traits<TT>::reference R;
       typedef typename std::iterator_traits<TT>::pointer P;
       typedef typename std::iterator_traits<TT>::iterator_category C;
-      BOOST_FUNCTION_REQUIRES2(typename std::iterator_traits<TT>::iterator_category,
-               std::input_iterator_tag, ConvertibleConcept);
+      function_requires< ConvertibleConcept<
+        typename std::iterator_traits<TT>::iterator_category,
+        std::input_iterator_tag> >();
 #endif
       ++i;                // require preincrement operator
       i++;                // require postincrement operator
@@ -339,7 +335,7 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct OutputIteratorConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(TT, AssignableConcept);
+      function_requires< AssignableConcept<TT> >();
       ++i;                // require preincrement operator
       i++;                // require postincrement operator
       *i++ = t;           // require postincrement and assignment
@@ -352,10 +348,11 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct ForwardIteratorConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(TT, InputIteratorConcept);
+      function_requires< InputIteratorConcept<TT> >();
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
-      BOOST_FUNCTION_REQUIRES2(typename std::iterator_traits<TT>::iterator_category,
-               std::forward_iterator_tag, ConvertibleConcept);
+      function_requires< ConvertibleConcept<
+        typename std::iterator_traits<TT>::iterator_category,
+        std::forward_iterator_tag> >();
       typedef typename std::iterator_traits<TT>::reference reference;
       reference r = *i;
       ignore_unused_variable_warning(r);
@@ -368,7 +365,7 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct Mutable_ForwardIteratorConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(TT, ForwardIteratorConcept);
+      function_requires< ForwardIteratorConcept<TT> >();
       *i++ = *i;         // require postincrement and assignment
     }
     TT i;
@@ -378,10 +375,11 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct BidirectionalIteratorConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(TT, ForwardIteratorConcept);
+      function_requires< ForwardIteratorConcept<TT> >();
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
-      BOOST_FUNCTION_REQUIRES2(typename std::iterator_traits<TT>::iterator_category,
-               std::bidirectional_iterator_tag, ConvertibleConcept);
+      function_requires< ConvertibleConcept<
+        typename std::iterator_traits<TT>::iterator_category,
+        std::bidirectional_iterator_tag> >();
 #endif
       --i;                // require predecrement operator
       i--;                // require postdecrement operator
@@ -393,8 +391,8 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct Mutable_BidirectionalIteratorConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(TT, BidirectionalIteratorConcept);
-      BOOST_FUNCTION_REQUIRES(TT, Mutable_ForwardIteratorConcept);
+      function_requires< BidirectionalIteratorConcept<TT> >();
+      function_requires< Mutable_ForwardIteratorConcept<TT> >();
       *i-- = *i;                  // require postdecrement and assignment
     }
     TT i;
@@ -405,11 +403,12 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct RandomAccessIteratorConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(TT, BidirectionalIteratorConcept);
-      BOOST_FUNCTION_REQUIRES(TT, ComparableConcept);
+      function_requires< BidirectionalIteratorConcept<TT> >();
+      function_requires< ComparableConcept<TT> >();
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
-      BOOST_FUNCTION_REQUIRES2(typename std::iterator_traits<TT>::iterator_category,
-        std::random_access_iterator_tag, ConvertibleConcept);
+      function_requires< ConvertibleConcept<
+        typename std::iterator_traits<TT>::iterator_category,
+        std::random_access_iterator_tag> >();
       typedef typename std::iterator_traits<TT>::reference R;
 #endif
 
@@ -433,8 +432,8 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct Mutable_RandomAccessIteratorConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(TT, RandomAccessIteratorConcept);
-      BOOST_FUNCTION_REQUIRES(TT, Mutable_BidirectionalIteratorConcept);
+      function_requires< RandomAccessIteratorConcept<TT> >();
+      function_requires< Mutable_BidirectionalIteratorConcept<TT> >();
       i[n] = *i;                  // require element access and assignment
     }
     TT i;
@@ -544,7 +543,7 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
       const_constraints(f);
     }
     void const_constraints(const Func& fun) {
-      BOOST_FUNCTION_REQUIRES3(Func, First, Second, BinaryPredicateConcept);
+      function_requires<BinaryPredicateConcept<Func, First, Second> >();
       // operator() must be a const member function
       require_boolean_expr(fun(a, b));
     }
@@ -602,8 +601,8 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
     typedef typename Container::const_iterator const_iterator;
 
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(const_iterator, InputIteratorConcept);
-      BOOST_FUNCTION_REQUIRES(Container, AssignableConcept);
+      function_requires< InputIteratorConcept<const_iterator> >();
+      function_requires< AssignableConcept<Container> >();
       const Container c;
       i = c.begin();
       i = c.end();
@@ -625,9 +624,9 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
     typedef typename Container::pointer pointer;
     
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(Container, ContainerConcept);
-      BOOST_FUNCTION_REQUIRES(value_type, AssignableConcept);
-      BOOST_FUNCTION_REQUIRES(iterator, InputIteratorConcept);
+      function_requires< ContainerConcept<Container> >();
+      function_requires< AssignableConcept<value_type> >();
+      function_requires< InputIteratorConcept<iterator> >();
 
       i = c.begin();
       i = c.end();
@@ -641,9 +640,9 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct ForwardContainerConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(ForwardContainer, ContainerConcept);
+      function_requires< ContainerConcept<ForwardContainer> >();
       typedef typename ForwardContainer::const_iterator const_iterator;
-      BOOST_FUNCTION_REQUIRES(const_iterator, ForwardIteratorConcept);
+      function_requires< ForwardIteratorConcept<const_iterator> >();
     }
   };  
 
@@ -651,10 +650,10 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct Mutable_ForwardContainerConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(ForwardContainer, ForwardContainerConcept);
-      BOOST_FUNCTION_REQUIRES(ForwardContainer, Mutable_ContainerConcept);
+      function_requires< ForwardContainerConcept<ForwardContainer> >();
+      function_requires< Mutable_ContainerConcept<ForwardContainer> >();
       typedef typename ForwardContainer::iterator iterator;
-      BOOST_FUNCTION_REQUIRES(iterator, Mutable_ForwardIteratorConcept);
+      function_requires< Mutable_ForwardIteratorConcept<iterator> >();
     }
   };  
 
@@ -666,9 +665,9 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
       const_reverse_iterator;
 
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(ReversibleContainer, ForwardContainerConcept);
-      BOOST_FUNCTION_REQUIRES(const_iterator, BidirectionalIteratorConcept);
-      BOOST_FUNCTION_REQUIRES(const_reverse_iterator, BidirectionalIteratorConcept);
+      function_requires< ForwardContainerConcept<ReversibleContainer> >();
+      function_requires< BidirectionalIteratorConcept<const_iterator> >();
+      function_requires< BidirectionalIteratorConcept<const_reverse_iterator> >();
 
       const ReversibleContainer c;
       const_reverse_iterator i = c.rbegin();
@@ -683,10 +682,10 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
     typedef typename ReversibleContainer::reverse_iterator reverse_iterator;
 
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(ReversibleContainer, ReversibleContainerConcept);
-      BOOST_FUNCTION_REQUIRES(ReversibleContainer, Mutable_ForwardContainerConcept);
-      BOOST_FUNCTION_REQUIRES(iterator, Mutable_BidirectionalIteratorConcept);
-      BOOST_FUNCTION_REQUIRES(reverse_iterator, Mutable_BidirectionalIteratorConcept);
+      function_requires< ReversibleContainerConcept<ReversibleContainer> >();
+      function_requires< Mutable_ForwardContainerConcept<ReversibleContainer> >();
+      function_requires< Mutable_BidirectionalIteratorConcept<iterator> >();
+      function_requires< Mutable_BidirectionalIteratorConcept<reverse_iterator> >();
 
       reverse_iterator i = c.rbegin();
       i = c.rend();
@@ -704,9 +703,9 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
       const_reverse_iterator;
 
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(RandomAccessContainer, ReversibleContainerConcept);
-      BOOST_FUNCTION_REQUIRES(const_iterator, RandomAccessIteratorConcept);
-      BOOST_FUNCTION_REQUIRES(const_reverse_iterator, RandomAccessIteratorConcept);
+      function_requires< ReversibleContainerConcept<RandomAccessContainer> >();
+      function_requires< RandomAccessIteratorConcept<const_iterator> >();
+      function_requires< RandomAccessIteratorConcept<const_reverse_iterator> >();
 
       const RandomAccessContainer c;
       const_reference r = c[n];
@@ -724,10 +723,10 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
     typedef typename RandomAccessContainer::reverse_iterator reverse_iterator;
 
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(RandomAccessContainer, RandomAccessContainerConcept);
-      BOOST_FUNCTION_REQUIRES(RandomAccessContainer, Mutable_ReversibleContainerConcept);
-      BOOST_FUNCTION_REQUIRES(iterator, Mutable_RandomAccessIteratorConcept);
-      BOOST_FUNCTION_REQUIRES(reverse_iterator, Mutable_RandomAccessIteratorConcept);
+      function_requires< RandomAccessContainerConcept<RandomAccessContainer> >();
+      function_requires< Mutable_ReversibleContainerConcept<RandomAccessContainer> >();
+      function_requires< Mutable_RandomAccessIteratorConcept<iterator> >();
+      function_requires< Mutable_RandomAccessIteratorConcept<reverse_iterator> >();
 
       reference r = c[i];
       ignore_unused_variable_warning(r);
@@ -740,16 +739,16 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   template <class Sequence>
   struct SequenceConcept
   {
-    // Matt Austern's book puts DefaultConstructible here, the C++
-    // standard places it in Container
-    //    BOOST_CLASS_REQUIRES(Sequence, DefaultConstructible);
 
     typedef typename Sequence::reference reference;
     typedef typename Sequence::const_reference const_reference;
 
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(Sequence, Mutable_ForwardContainerConcept);
-      BOOST_FUNCTION_REQUIRES(Sequence, DefaultConstructibleConcept);
+      // Matt Austern's book puts DefaultConstructible here, the C++
+      // standard places it in Container
+      //    function_requires< DefaultConstructible<Sequence> >();
+      function_requires< Mutable_ForwardContainerConcept<Sequence> >();
+      function_requires< DefaultConstructibleConcept<Sequence> >();
 
       Sequence 
         c(n),
@@ -785,7 +784,7 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct FrontInsertionSequenceConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(FrontInsertionSequence, SequenceConcept);
+      function_requires< SequenceConcept<FrontInsertionSequence> >();
 
       c.push_front(t);
       c.pop_front();
@@ -801,7 +800,7 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
     typedef typename BackInsertionSequence::const_reference const_reference;
 
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(BackInsertionSequence, SequenceConcept);
+      function_requires< SequenceConcept<BackInsertionSequence> >();
 
       c.push_back(t);
       c.pop_back();
@@ -820,8 +819,8 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct AssociativeContainerConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(AssociativeContainer, ForwardContainerConcept);
-      BOOST_FUNCTION_REQUIRES(AssociativeContainer, DefaultConstructibleConcept);
+      function_requires< ForwardContainerConcept<AssociativeContainer> >();
+      function_requires< DefaultConstructibleConcept<AssociativeContainer> >();
     
       i = c.find(k);
       r = c.equal_range(k);
@@ -851,7 +850,7 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct UniqueAssociativeContainerConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(UniqueAssociativeContainer, AssociativeContainerConcept);
+      function_requires< AssociativeContainerConcept<UniqueAssociativeContainer> >();
     
       UniqueAssociativeContainer c(first, last);
       
@@ -869,7 +868,7 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct MultipleAssociativeContainerConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(MultipleAssociativeContainer, AssociativeContainerConcept);
+      function_requires< AssociativeContainerConcept<MultipleAssociativeContainer> >();
 
       MultipleAssociativeContainer c(first, last);
       
@@ -888,10 +887,10 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct SimpleAssociativeContainerConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(SimpleAssociativeContainer, AssociativeContainerConcept);
+      function_requires< AssociativeContainerConcept<SimpleAssociativeContainer> >();
       typedef typename SimpleAssociativeContainer::key_type key_type;
       typedef typename SimpleAssociativeContainer::value_type value_type;
-      BOOST_FUNCTION_REQUIRES_SAME_TYPE(key_type, value_type);
+      typedef typename require_same<key_type, value_type>::type req;
     }
   };
 
@@ -899,12 +898,12 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct PairAssociativeContainerConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(SimpleAssociativeContainer, AssociativeContainerConcept);
+      function_requires< AssociativeContainerConcept<SimpleAssociativeContainer> >();
       typedef typename SimpleAssociativeContainer::key_type key_type;
       typedef typename SimpleAssociativeContainer::value_type value_type;
       typedef typename SimpleAssociativeContainer::mapped_type mapped_type;
       typedef std::pair<const key_type, mapped_type> required_value_type;
-      BOOST_FUNCTION_REQUIRES_SAME_TYPE(value_type, required_value_type);
+      typedef typename require_same<value_type, required_value_type>::type req;
     }
   };
 
@@ -912,8 +911,8 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct SortedAssociativeContainerConcept
   {
     void constraints() {
-      BOOST_FUNCTION_REQUIRES(SortedAssociativeContainer, AssociativeContainerConcept);
-      BOOST_FUNCTION_REQUIRES(SortedAssociativeContainer, ReversibleContainerConcept);
+      function_requires< AssociativeContainerConcept<SortedAssociativeContainer> >();
+      function_requires< ReversibleContainerConcept<SortedAssociativeContainer> >();
 
       SortedAssociativeContainer 
         c(kc),
@@ -952,6 +951,8 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   };
 
   // HashedAssociativeContainer
+
+} // namespace boost
 
 #endif // BOOST_CONCEPT_CHECKS_HPP
 

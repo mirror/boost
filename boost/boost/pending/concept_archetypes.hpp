@@ -291,7 +291,7 @@ namespace boost {
     self& operator=(const self&) { return *this;  }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
-    input_proxy<T> operator*() { return input_proxy<T>(); }
+    input_proxy<T> operator*() const { return input_proxy<T>(); }
   };
 } // namespace boost
 
@@ -327,7 +327,7 @@ namespace boost {
     self& operator=(const self&) { return *this;  }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
-    input_output_proxy<T> operator*() { return input_output_proxy<T>(); }
+    input_output_proxy<T> operator*() const { return input_output_proxy<T>(); }
   };
 } // namespace boost
 
@@ -358,7 +358,7 @@ namespace boost {
     self& operator=(const self&) { return *this;  }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
-    reference operator*() { return static_object<T>::get(); }
+    reference operator*() const { return static_object<T>::get(); }
     self& operator++() { return *this; }
     self operator++(int) { return *this; }
   };
@@ -382,7 +382,7 @@ namespace boost {
     self& operator=(const self&) { return *this;  }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
-    reference operator*() { return output_proxy(); }
+    reference operator*() const { return output_proxy(); }
     self& operator++() { return *this; }
     self operator++(int) { return *this; }
   };
@@ -402,7 +402,7 @@ namespace boost {
     self& operator=(const self&) { return *this;  }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
-    reference operator*() { return static_object<T>::get(); }
+    reference operator*() const { return static_object<T>::get(); }
     self& operator++() { return *this; }
     self operator++(int) { return *this; }
   };
@@ -422,7 +422,7 @@ namespace boost {
     self& operator=(const self&) { return *this;  }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
-    reference operator*() { return static_object<T>::get(); }
+    reference operator*() const { return static_object<T>::get(); }
     self& operator++() { return *this; }
     self operator++(int) { return *this; }
     self& operator--() { return *this; }
@@ -444,7 +444,7 @@ namespace boost {
     self& operator=(const self&) { return *this;  }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
-    reference operator*() { return static_object<T>::get(); }
+    reference operator*() const { return static_object<T>::get(); }
     self& operator++() { return *this; }
     self operator++(int) { return *this; }
     self& operator--() { return *this; }
