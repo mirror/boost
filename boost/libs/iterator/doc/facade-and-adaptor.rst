@@ -196,10 +196,6 @@ which were easily implemented using ``iterator_adaptor``:
 * ``transform_iterator``, which applies a user-defined function object
   to the underlying values when dereferenced.
 
-* ``projection_iterator``, which is similar to ``transform_iterator``
-  except that when dereferenced it returns a reference instead of
-  a value.
-
 * ``filter_iterator``, which provides a view of an iterator range in
   which some elements of the underlying range are skipped.
 
