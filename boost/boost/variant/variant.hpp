@@ -27,6 +27,7 @@
 
 #include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
+#include "boost/mpl/aux_/config/eti.hpp"
 #include "boost/mpl/aux_/value_wknd.hpp"
 
 #include "boost/aligned_storage.hpp"
@@ -143,6 +144,16 @@ public: // metafunction result
 #endif // MSVC workaround
 
 };
+
+#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
+
+template<>
+struct make_storage<int>
+{
+    typedef int type;
+};
+
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 // (detail) class null_storage
@@ -411,6 +422,8 @@ class variant
 
 private:
 
+    // borland seemingly cannot use template arguments within class scope,
+    // so we define the following typedefs to workaround:
     #define BOOST_VARIANT_AUX_BORLAND_TYPEDEFS(z,N,_)  \
         typedef BOOST_PP_CAT(T_,N) BOOST_PP_CAT(T,N);  \
         /**/
@@ -430,9 +443,9 @@ private: // static precondition assertions
     // Sequences are not supported for compilers that do not support
     // using declarations in templates (see below).
     BOOST_STATIC_ASSERT((
-          ::boost::mpl::not_< // !is_sequence<T0>
-              mpl::is_sequence<T0>
-            >::type::value
+          BOOST_MPL_AUX_VALUE_WKND(
+              mpl::not_< mpl::is_sequence<T0> >
+            )::value
         ));
 
 #endif // BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
