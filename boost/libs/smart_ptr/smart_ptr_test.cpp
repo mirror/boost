@@ -27,7 +27,7 @@
 
 bool boost_error(char const *, char const *, char const *, long)
 {
-	return true; // fail with assert()
+  return true; // fail with assert()
 }
 
 class Incomplete;
