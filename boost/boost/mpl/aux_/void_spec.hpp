@@ -17,12 +17,14 @@
 #ifndef BOOST_MPL_AUX_VOID_SPEC_HPP_INCLUDED
 #define BOOST_MPL_AUX_VOID_SPEC_HPP_INCLUDED
 
+#include "boost/mpl/lambda_fwd.hpp"
 #include "boost/mpl/void.hpp"
-#include "boost/mpl/aux_/arity.hpp"
-#include "boost/mpl/aux_/template_arity_fwd.hpp"
 #include "boost/mpl/aux_/preprocessor/params.hpp"
 #include "boost/mpl/aux_/preprocessor/enum.hpp"
 #include "boost/mpl/aux_/preprocessor/def_params_tail.hpp"
+#include "boost/mpl/aux_/arity.hpp"
+#include "boost/mpl/aux_/template_arity_fwd.hpp"
+#include "boost/mpl/aux_/lambda_arity_param.hpp"
 #include "boost/mpl/aux_/config/dtp.hpp"
 #include "boost/mpl/aux_/config/ttp.hpp"
 #include "boost/mpl/aux_/config/lambda.hpp"
@@ -68,6 +70,30 @@ struct name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
 }; \
 /**/
 
+#if defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
+#   define BOOST_MPL_AUX_VOID_SPEC_LAMBDA(i, name) \
+template<> \
+struct lambda< \
+      name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
+    , true \
+    > \
+{ \
+    typedef name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > type; \
+}; \
+/**/
+#else
+#   define BOOST_MPL_AUX_VOID_SPEC_LAMBDA(i, name) \
+template<> \
+struct lambda< \
+      name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
+    BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1) \
+    > \
+{ \
+    typedef name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > type; \
+}; \
+/**/
+#endif
+
 #if defined(BOOST_EXTENDED_TEMPLATE_PARAMETERS_MATCHING) || \
     defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT) && \
     defined(BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION)
@@ -99,12 +125,14 @@ struct template_arity< \
 
 #define BOOST_MPL_AUX_VOID_SPEC(i, name) \
 BOOST_MPL_AUX_VOID_SPEC_MAIN(i, name) \
+BOOST_MPL_AUX_VOID_SPEC_LAMBDA(i, name) \
 BOOST_MPL_AUX_VOID_SPEC_ARITY(i, name) \
 BOOST_MPL_AUX_VOID_SPEC_TEMPLATE_ARITY(i, i, name) \
 /**/
 
 #define BOOST_MPL_AUX_VOID_SPEC_EXT(i, j, name) \
 BOOST_MPL_AUX_VOID_SPEC_MAIN(i, name) \
+BOOST_MPL_AUX_VOID_SPEC_LAMBDA(i, name) \
 BOOST_MPL_AUX_VOID_SPEC_ARITY(i, name) \
 BOOST_MPL_AUX_VOID_SPEC_TEMPLATE_ARITY(i, j, name) \
 /**/
