@@ -351,6 +351,8 @@ bool query_match_aux(iterator first,
             // longer one.
             if((flags & match_not_null) && (first == temp_match[0].first))
                goto failure;
+            if((flags & match_all) && (first != last))
+               goto failure;
             temp_match.set_second(first);
             m.maybe_assign(temp_match);
             match_found = true;
@@ -1653,9 +1655,7 @@ bool regex_match(iterator first, iterator last, match_results<iterator, Allocato
    re_detail::_priv_match_data<iterator, Allocator> pd(m);
    iterator restart;
    bool result = re_detail::query_match_aux(first, last, m, e, flags, pd, &restart);
-   if(result && (last == m[0].second))
-      return true;
-   return false;
+   return result;
 }
 template <class iterator, class charT, class traits, class Allocator2>
 bool regex_match(iterator first, iterator last, const reg_expression<charT, traits, Allocator2>& e, unsigned flags = match_default)
