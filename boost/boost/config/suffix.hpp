@@ -326,27 +326,33 @@ namespace std {
 #     define BOOST_STATIC_CONSTANT(type, assignment) static const type assignment
 #  endif
 
-// BOOST_USE_FACET workaround ----------------------------------------------//
+// BOOST_USE_FACET / HAS_FACET workaround ----------------------------------//
 // When the standard library does not have a conforming std::use_facet there
 // are various workarounds available, but they differ from library to library.
-// This macro provides a consistent way to access a locale's facets.
+// The same problem occurs with has_facet.
+// These macros provide a consistent way to access a locale's facets.
 // Usage:
 //    replace
 //       std::use_facet<Type>(loc);
 //    with
 //       BOOST_USE_FACET(Type, loc);
 //    Note do not add a std:: prefix to the front of BOOST_USE_FACET!
+//  Use for BOOST_HAS_FACET is analagous.
 
 #if defined(BOOST_NO_STD_USE_FACET)
 #  ifdef BOOST_HAS_TWO_ARG_USE_FACET
 #     define BOOST_USE_FACET(Type, loc) std::use_facet(loc, static_cast<Type*>(0))
+#     define BOOST_HAS_FACET(Type, loc) std::has_facet(loc, static_cast<Type*>(0))
 #  elif defined(BOOST_HAS_MACRO_USE_FACET)
 #     define BOOST_USE_FACET(Type, loc) std::_USE(loc, Type)
+#     define BOOST_HAS_FACET(Type, loc) std::_HAS(loc, Type)
 #  elif defined(BOOST_HAS_STLP_USE_FACET)
 #     define BOOST_USE_FACET(Type, loc) (*std::_Use_facet<Type >(loc))
+#     define BOOST_HAS_FACET(Type, loc) std::has_facet< Type >(loc)
 #  endif
 #else
 #  define BOOST_USE_FACET(Type, loc) std::use_facet< Type >(loc)
+#  define BOOST_HAS_FACET(Type, loc) std::has_facet< Type >(loc)
 #endif
 
 // BOOST_NESTED_TEMPLATE workaround ------------------------------------------//
