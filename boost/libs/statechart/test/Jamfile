@@ -1,5 +1,5 @@
 ##############################################################################
-# (c) Copyright Andreas Huber Doenni 2004
+# (c) Copyright Andreas Huber Doenni 2004-2005
 # Distributed under the Boost Software License, Version 1.0. (See accompany-
 # ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ##############################################################################
@@ -34,7 +34,9 @@ rule fsm-run ( source : name : additional-options * )
 rule fsm-st-run ( source : name : additional-options * )
 {
   return [ fsm-run $(source) : $(name)
-    : $(additional-options) <threading>single ] ;
+    : <threading>single
+      <define>BOOST_DISABLE_THREADS
+      $(additional-options) ] ;
 }
 
 rule fsm-st-run-variants ( source )
