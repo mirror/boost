@@ -127,7 +127,10 @@
     <typedef name="..."/>
     <typedef name="argN_type"><type>TN</type></typedef>
 
-    <static-constant type="int" name="arity" value="N"/>
+    <static-constant name="arity">
+      <type>int</type>
+      <default>N</default>
+    </static-constant>
 
     <constructor>
       <postconditions><simpara><code>this-><methodname>empty</methodname>()</code></simpara></postconditions>
@@ -311,7 +314,10 @@
     <typedef name="..."/>
     <typedef name="argN_type"><type>TN</type></typedef>
 
-    <static-constant type="int" name="arity" value="N"/>
+    <static-constant name="arity">
+      <type>int</type>
+      <default>N</default>
+    </static-constant>
 
     <constructor>
       <postconditions><simpara><code>this-><methodname>empty</methodname>()</code></simpara></postconditions>

@@ -193,7 +193,10 @@
         <computeroutput><classname>reference_wrapper</classname></computeroutput>.</para>
       </description>
 
-      <static-constant type="bool" name="value" value="unspecified"/>
+      <static-constant name="value">
+        <type>bool</type>
+        <default><emphasis>unspecified</emphasis></default>
+      </static-constant>
     </class>
 
     <class name="unwrap_reference">

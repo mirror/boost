@@ -125,7 +125,10 @@
              <type>std::ptrdiff_t</type>
           </typedef>
 
-          <static-constant name="static_size" type="size_type" value="N"/>
+          <static-constant name="static_size">
+            <type>size_type</type>
+            <default>N</default>
+          </static-constant>
 
           <copy-assignment>
             <template>

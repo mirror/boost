@@ -71,7 +71,10 @@
       <typedef name="..."/>
       <typedef name="argN_type"><type>TN</type></typedef>
 
-      <static-constant type="int" name="arity" value="N"/>
+      <static-constant name="arity">
+        <type>int</type>
+        <default>N</default>
+      </static-constant>
 
       <constructor>
         <parameter name="combiner">
