@@ -272,7 +272,7 @@ template <typename T>
 struct add_volatile
 {
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1200
-    // This bogus warning will appear when add_const is applied to a
+    // This bogus warning will appear when add_volatile is applied to a
     // const volatile reference because we can't detect const volatile
     // references with MSVC6.
 # pragma warning(push)
