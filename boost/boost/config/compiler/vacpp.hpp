@@ -12,7 +12,7 @@
 #  define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
 #endif
 
-#if (__IBMCPP__ <= 502) || !defined(BOOST_STRICT_CONFIG)
+#if (__IBMCPP__ <= 502) 
 // Actually the compiler supports inclass member initialization but it
 // requires a definition for the class member and it doesn't recognize
 // it as an integral constant expression when used as a template argument.
@@ -21,7 +21,7 @@
 #  define BOOST_NO_MEMBER_TEMPLATE_KEYWORD
 #endif
 
-#if (__IBMCPP__ <= 600)
+#if (__IBMCPP__ <= 600) || !defined(BOOST_STRICT_CONFIG)
 #endif
 
 //
