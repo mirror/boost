@@ -79,9 +79,15 @@
 #  define BOOST_DISABLE_WIN32
 #endif
 
+# if _MSC_VER == 1200
+#   define BOOST_COMPILER_VERSION 6.0
+# elif _MSC_VER == 1300
+#   define BOOST_COMPILER_VERSION 7.0
+# else
+#   define BOOST_COMPILER_VERSION _MSC_VER
+# endif
 
-
-#define BOOST_COMPILER "Microsoft Visual C++ version " BOOST_STRINGIZE(_MSC_VER)
+#define BOOST_COMPILER "Microsoft Visual C++ version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
 
 //
 // versions check:
