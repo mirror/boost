@@ -6,7 +6,9 @@
 //  See http://www.boost.org for most recent version including documentation.
 //
 // Revision History
+// 28 Jan 2001  Removed not_an_iterator detritus (David Abrahams)
 // 24 Jan 2001  Initial revision (David Abrahams)
+
 #include <boost/counting_iterator.hpp>
 #include <boost/detail/iterator.hpp>
 #include <climits>
@@ -36,8 +38,6 @@ template <class T> struct is_numeric
 #endif
     };
 };
-
-struct not_an_iterator_tag {};
 
 // Special tests for RandomAccess CountingIterators.
 template <class CountingIterator>
