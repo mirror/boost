@@ -64,11 +64,12 @@ public:
 </pre></blockquote>
 
 <p>This is undefined because C++'s initialization order mandates that
-the base class is initialized before the member it uses.  Ron Klatchko
-developed a way around this by using the initialization order in his
-favor.  Base classes are intialized in order of declaration, so moving
-the desired member to another base class, that is initialized before the
-desired base class, can ensure proper initialization.</p>
+the base class is initialized before the member it uses.  <a
+href="http://www.moocat.org">R. Samuel Klatchko</a> developed a way
+around this by using the initialization order in his favor.  Base
+classes are intialized in order of declaration, so moving the desired
+member to another base class, that is initialized before the desired
+base class, can ensure proper initialization.</p>
 
 <p>A custom base class can be made for this idiom:</p>
 
@@ -325,7 +326,9 @@ with the exact pointer type used in <code>switcher</code>'s constructor.</p>
 	<dt><a href="../../people/ed_brey.htm">Ed Brey</a>
 	<dd>Suggested some interface changes.
 
-	<dt>Ron Klatchko (<a href="mailto:ron@crl.com">ron@crl.com</a>)
+	<dt><a href="http://www.moocat.org">R. Samuel Klatchko</a> (<a
+	href="mailto:rsk@moocat.org">rsk@moocat.org</a>, <a
+	href="mailto:rsk@brightmail.com">rsk@brightmail.com</a>)
 	<dd>Invented the idiom of how to use a class member for initializing
 		a base class.
 
