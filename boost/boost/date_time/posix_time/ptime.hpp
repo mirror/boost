@@ -45,6 +45,10 @@ namespace posix_time {
     ptime(const time_rep_type& rhs):
       date_time::base_time<time_type,time_system_type>(rhs)
     {}
+    //! Construct from special value
+    ptime(const special_values sv) : date_time::base_time<time_type,time_system_type>(gregorian::date(sv), time_duration_type(sv))
+    {}
+      
   };
 
 
