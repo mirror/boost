@@ -81,6 +81,7 @@ private:
     string_type filename;
     string_type value;
     bool at_eof;
+    boost::wave::language_support language;
     
     static token_cache<string_type> const cache;
 };
@@ -92,14 +93,14 @@ inline
 lexer<IteratorT, PositionT>::lexer(IteratorT const &first, 
         IteratorT const &last, PositionT const &pos, 
         boost::wave::language_support language) 
-:   filename(pos.get_file()), at_eof(false)
+:   filename(pos.get_file()), at_eof(false), language(language)
 {
     memset(&scanner, '\0', sizeof(Scanner));
     scanner.fd = -1;
     scanner.eol_offsets = aq_create();
     scanner.first = scanner.act = (uchar *)&(*first);
     scanner.last = scanner.first + std::distance(first, last);  
-    scanner.line = 1;                   // start with line_no 1
+    scanner.line = pos.get_line();
     scanner.error_proc = report_error;
     scanner.file_name = filename.c_str();
     
@@ -112,8 +113,6 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     scanner.act_in_c99_mode = boost::wave::need_c99(language);
 #endif
-
-    boost::ignore_unused_variable_warning(language);
 }
 
 template <typename IteratorT, typename PositionT>
@@ -139,14 +138,16 @@ lexer<IteratorT, PositionT>::get()
     case T_IDENTIFIER:
     // test identifier characters for validity (throws if invalid chars found)
         value = string_type((char const *)scanner.tok, scanner.cur-scanner.tok);
-        impl::validate_identifier_name(value, scanner.line, -1, filename); 
+        if (!(language & support_option_no_character_validation))
+            impl::validate_identifier_name(value, scanner.line, -1, filename); 
         break;
     
     case T_STRINGLIT:
     case T_CHARLIT:
     // test literal characters for validity (throws if invalid chars found)
         value = string_type((char const *)scanner.tok, scanner.cur-scanner.tok);
-        impl::validate_literal(value, scanner.line, -1, filename); 
+        if (!(language & support_option_no_character_validation))
+            impl::validate_literal(value, scanner.line, -1, filename); 
         break;
 
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0

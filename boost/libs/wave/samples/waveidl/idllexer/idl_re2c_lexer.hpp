@@ -85,6 +85,7 @@ private:
     scanner_t scanner;
     string_type filename;
     bool at_eof;
+    boost::wave::language_support language;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -94,7 +95,7 @@ inline
 lexer<IteratorT, PositionT>::lexer(IteratorT const &first, 
         IteratorT const &last, PositionT const &pos, 
         boost::wave::language_support language) 
-:   filename(pos.get_file()), at_eof(false)
+:   filename(pos.get_file()), at_eof(false), language(language)
 {
     using namespace boost::wave::cpplexer::re2clex;
     
@@ -103,7 +104,7 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
     scanner.eol_offsets = aq_create();
     scanner.first = scanner.act = (uchar *)&(*first);
     scanner.last = scanner.first + std::distance(first, last);
-    scanner.line = 1;                   // start with line_no 1
+    scanner.line = pos.get_line();
     scanner.error_proc = report_error;
     scanner.file_name = filename.c_str();
 
@@ -139,13 +140,17 @@ lexer<IteratorT, PositionT>::get()
     
     if (T_IDENTIFIER == id) {
     // test identifier characters for validity (throws if invalid chars found)
-        boost::wave::cpplexer::impl::validate_identifier_name(value, 
-            scanner.line, -1, filename); 
+        if (!(language & support_option_no_character_validation)) {
+            boost::wave::cpplexer::impl::validate_identifier_name(value, 
+                scanner.line, -1, filename); 
+        }
     }
     else if (T_STRINGLIT == id || T_CHARLIT == id) {
     // test literal characters for validity (throws if invalid chars found)
-        boost::wave::cpplexer::impl::validate_literal(value, scanner.line, -1, 
-            filename); 
+        if (!(language & support_option_no_character_validation)) {
+            boost::wave::cpplexer::impl::validate_literal(value, scanner.line, 
+                -1, filename); 
+        }
     }
     else if (T_EOF == id) {
     // T_EOF is returned as a valid token, the next call will return T_EOI,

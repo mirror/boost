@@ -483,7 +483,7 @@ public:
 
     slex_functor(IteratorT const &first_, IteratorT const &last_, 
             PositionT const &pos_, boost::wave::language_support language)
-    :   first(first_, last_, pos_), at_eof(false)
+    :   first(first_, last_, pos_), at_eof(false), language(language)
     {
         // initialize lexer dfa tables
         init_lexer(lexer, language);  
@@ -512,18 +512,22 @@ public:
                     case T_IDENTIFIER:
                     // test identifier characters for validity (throws if 
                     // invalid chars found)
-                        using boost::wave::cpplexer::impl::validate_identifier_name;
-                        validate_identifier_name(token_val, 
-                            pos.get_line(), pos.get_column(), pos.get_file()); 
+                        if (!(language & support_option_no_character_validation)) {
+                            using boost::wave::cpplexer::impl::validate_identifier_name;
+                            validate_identifier_name(token_val, 
+                                pos.get_line(), pos.get_column(), pos.get_file()); 
+                        }
                         break;
 
                     case T_STRINGLIT:
                     case T_CHARLIT:
                     // test literal characters for validity (throws if invalid 
                     // chars found)
-                        using boost::wave::cpplexer::impl::validate_literal;
-                        validate_literal(token_val, 
-                            pos.get_line(), pos.get_column(), pos.get_file()); 
+                        if (!(language & support_option_no_character_validation)) {
+                            using boost::wave::cpplexer::impl::validate_literal;
+                            validate_literal(token_val, 
+                                pos.get_line(), pos.get_column(), pos.get_file()); 
+                        }
                         break;
                         
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
@@ -556,6 +560,7 @@ public:
 private:
     iterator_type first;
     iterator_type last;
+    boost::wave::language_support language;
     static lexer<IteratorT, PositionT> lexer;   // needed only once
     
     bool at_eof;

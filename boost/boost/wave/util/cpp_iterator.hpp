@@ -400,16 +400,23 @@ pp_iterator_functor<ContextT>::operator()()
 // loop over skippable whitespace until something significant is found
 bool skipped_newline = false;
 bool was_seen_newline = seen_newline;
-
+token_id id = T_ANY;
+    
     do {
     // get_next_token assigns result to act_token member
         if (!seen_newline && skipped_newline)
             seen_newline = true;
         get_next_token();
+
+    // if comments shouldn't be preserved replace them with newlines
+        id = token_id(act_token);
+        if (T_CPPCOMMENT == id && !need_preserve_comments(ctx.get_language()))
+        {
+            act_token.set_token_id(T_NEWLINE);
+            act_token.set_value("\n");
+        }
         
     } while (eater.may_skip(act_token, skipped_newline));
-    
-token_id id = token_id(act_token);
     
 // if there were skipped any newline, we must emit a #line directive
     if ((must_emit_line_directive || (was_seen_newline && skipped_newline)) && 
@@ -755,12 +762,15 @@ lexer_type it = iter_ctx->first;
 
     if (!next_token_is_pp_directive(it, iter_ctx->last)) {
     // eventually skip null pp directive (no need to do it via the parser)
-        if (it != iter_ctx->last && T_POUND == BASE_TOKEN(token_id(*it)) &&
-            is_pp_null(it, iter_ctx->last))
-        {
-            seen_newline = true;
-            iter_ctx->first = it;   // start over with the next line
-            return true;
+        if (it != iter_ctx->last && T_POUND == BASE_TOKEN(token_id(*it))) {
+            if (is_pp_null(it, iter_ctx->last)) {
+                seen_newline = true;
+                iter_ctx->first = it;   // start over with the next line
+                return true;
+            }
+            else {
+                on_illformed((*it).get_value());
+            }
         }
         
     // this line does not contain a pp directive, so simply return

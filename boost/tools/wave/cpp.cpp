@@ -95,6 +95,7 @@ int print_copyright()
     char const *copyright[] = {
         "",
         "Wave: A Standard conformant C++ preprocessor based on the Boost.Wave library",
+        "http://www.boost.org/",
         "",
         "Copyright (c) 2001-2005 Hartmut Kaiser, Distributed under the Boost",
         "Software License, Version 1.0. (See accompanying file",

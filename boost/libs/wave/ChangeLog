@@ -31,7 +31,13 @@ CHANGELOG
 - Allowed to specify more than one config file ('@' syntax) on the command line
   of the wave driver executable.
 - Changed copyrights in all files to reflect the acceptance of Wave into Boost.
-
+- Unknown preprocessing directives were not recognised anymore.
+- If comments shouldn't be preserved all C++ comments are replaced by newline
+  tokens (instead of beeing igored completely).
+- Fixed a bug in the white space eater component.
+- Fixed a bug which reported wrong line numbers for error encountered during 
+  retokenisation (concatenation).
+  
 Tue Mar 22 14:52:45 WEST 2005
 Version 1.1.15
 - Fixed a bug where the complete set of C99 predefined macros were pre-defined
