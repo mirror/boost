@@ -20,6 +20,7 @@
 #include <cstddef> // for std::size_t
 
 #include "boost/config.hpp"
+#include "boost/detail/workaround.hpp"
 #include "boost/type_traits/alignment_of.hpp"
 #include "boost/type_traits/type_with_alignment.hpp"
 
@@ -27,14 +28,15 @@
 #include "boost/mpl/identity.hpp"
 
 namespace boost {
-namespace detail {
+
+namespace detail { namespace aligned_storage {
 
 BOOST_STATIC_CONSTANT(
       std::size_t
-    , alignment_of_max_align = alignment_of<max_align>::value
+    , alignment_of_max_align = ::boost::alignment_of<max_align>::value
     );
 
-} // namespace detail
+}} // namespace detail::aligned_storage
 
 template <
       std::size_t size_
@@ -48,11 +50,11 @@ private: // representation
     {
         char buf[size_];
 
-        BOOST_DEDUCED_TYPENAME mpl::apply_if_c<
-          alignment_ == std::size_t(-1)
-        , mpl::identity<detail::max_align>
-        , type_with_alignment<alignment_>
-        > align_;
+        typename mpl::apply_if_c<
+              alignment_ == std::size_t(-1)
+            , mpl::identity<detail::max_align>
+            , type_with_alignment<alignment_>
+            >::type align_;
     } data_;
 
 public: // constants
@@ -65,26 +67,26 @@ public: // constants
           std::size_t
         , alignment = (
               alignment_ == std::size_t(-1)
-            ? detail::alignment_of_max_align
+            ? ::boost::detail::aligned_storage::alignment_of_max_align
             : alignment_
             )
         );
 
-#if BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(2))
-
-public: // _should_ be noncopyable, but GCC compiler emits error
-
-    aligned_storage(const aligned_storage&);
-    aligned_storage& operator=(const aligned_storage&);
-
-#else// !BOOST_WORKAROUND(__GNUC__, ...)
+#if !BOOST_WORKAROUND(__GNUC__, <= 2)
 
 private: // noncopyable
 
     aligned_storage(const aligned_storage&);
     aligned_storage& operator=(const aligned_storage&);
 
-#endif// BOOST_WORKAROUND(__GNUC__, ...)
+#else // gcc2.x
+
+public: // _should_ be noncopyable, but GCC compiler emits error
+
+    aligned_storage(const aligned_storage&);
+    aligned_storage& operator=(const aligned_storage&);
+
+#endif // gcc2.x workaround
 
 public: // structors
 
@@ -103,12 +105,33 @@ public: // accessors
         return &data_.buf[0];
     }
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
     const void* address() const
     {
         return &data_.buf[0];
     }
 
+#else // MSVC6
+
+    const void* address() const;
+
+#endif // MSVC6 workaround
+
 };
+
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
+// MSVC6 seems not to like inline functions with const void* returns, so we
+// declare the following here:
+
+template <std::size_t S, std::size_t A>
+const void* aligned_storage<S,A>::address() const
+{
+    return const_cast< aligned_storage<S,A>* >(this)->address();
+}
+
+#endif // MSVC6 workaround
 
 } // namespace boost
 
