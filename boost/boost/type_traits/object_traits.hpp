@@ -390,8 +390,10 @@ struct is_stateless
 {
   BOOST_STATIC_CONSTANT(bool, value = 
     (::boost::type_traits::ice_and<
+       ::boost::has_trivial_constructor<T>::value,
        ::boost::has_trivial_copy<T>::value,
-       ::boost::has_trivial_destructor<T>::value
+       ::boost::has_trivial_destructor<T>::value,
+       ::boost::is_class<T>::value
      >::value));
 };
 
