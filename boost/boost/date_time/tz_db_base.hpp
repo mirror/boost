@@ -165,9 +165,9 @@ namespace boost {
         if(!ifs){
           throw data_not_accessible(pathspec);
         }
-        getline(ifs, buff); // first line is column headings
+        std::getline(ifs, buff); // first line is column headings
 
-        while( getline(ifs, buff)) {
+        while( std::getline(ifs, buff)) {
           parse_string(buff);
         }
       }
