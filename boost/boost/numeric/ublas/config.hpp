@@ -126,7 +126,7 @@
 // Intel Compiler
 #if defined (BOOST_INTEL) && ! defined (BOOST_STRICT_CONFIG)
 
-#if (BOOST_INTEL >= 710)
+#if (BOOST_INTEL_LINUX >= 710)
 // By inspection of compiler results
 #define BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
 #endif
