@@ -326,7 +326,7 @@ iterator_category(const debug_iterator<T>&) {
 }
 }
 #endif
-#ifdef BOOST_MSVC
+#if (defined(BOOST_MSVC) || defined(__ICL)) && (defined(_YVALS) || defined(_CPPLIB_VER))
 namespace std{
 template <class T>
 inline random_access_iterator_tag __cdecl
@@ -361,6 +361,7 @@ typedef boost::reg_expression<char_t, boost::c_regex_traits<char_t>, jm_debug_al
 #define REG_MERGE_COPY 16
 
 #endif
+
 
 
 

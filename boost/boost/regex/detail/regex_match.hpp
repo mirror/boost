@@ -1192,13 +1192,13 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
                ++cmatches;
                if(foo(m) == false)
                   return cmatches;
+               if(m[0].second == last)
+                  return cmatches;
                _skip_and_inc(clines, last_line, first, restart);
                next_base = m[0].second;
                pd.temp_match.init_fail(next_base, last);
                m.init_fail(next_base, last);
                j = 0;
-               if(m[0].second == last)
-                  return cmatches;
             }
             else
             {

@@ -307,10 +307,10 @@ full list of macros and their usage.
 #   endif
 #endif
 
-#ifdef _REENTRANT
+#if defined(_REENTRANT) || defined(_PTHREADS)
 //
-// several compilers define _REENTRANT when 
-// threading support is turned on:
+// Several compilers define _REENTRANT or 
+// _PTHREADS when threading support is turned on:
 //
 #define BOOST_RE_THREADS
 #endif
