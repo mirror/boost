@@ -15,17 +15,16 @@
 #      Boost.date_time modules
 #
 
-# declare the location of this subproject relative to the root
-subproject libs/date_time/build ;
+project boost/date_time
+    : requirements $(DATE_TIME_PROPERTIES)
+        <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG 
+        #uncomment the line below and comment out the line above to change to 64 bit counted time implementation
+        <define>DATE_TIME_INLINE 
+    ;
 
-local DATE_TIME_PROPERTIES = $(DATE_TIME_PROPERTIES) <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ;
-
-#uncomment the line below and comment out the line above to change to 64 bit counted time implementation
-#local DATE_TIME_PROPERTIES = $(DATE_TIME_PROPERTIES) <define>DATE_TIME_INLINE ;
-
-local DATE_TIME_INCLUDES = <include>$(BOOST_ROOT) ;
 
 #######################
+# WARNING: this rule was not updated for V2
 rule date_time-test ( test-name : sources + )
 {
     unit-test $(test-name) : $(sources) <lib>boost_date_time
@@ -34,8 +33,7 @@ rule date_time-test ( test-name : sources + )
 
 rule date_time-example ( example-name : sources + )
 {
-    exe $(example-name) : $(sources) <lib>boost_date_time
-                        : $(DATE_TIME_INCLUDES) $(DATE_TIME_PROPERTIES) ;
+    exe $(example-name) : $(sources) boost_date_time ;
 }
 
 #######################
@@ -47,21 +45,10 @@ rule date_time-example ( example-name : sources + )
 # Base names of the source files for libboost_date_time
 local GREGORIAN_CPP_SOURCES = gregorian_types greg_month greg_weekday ;
 
-lib boost_date_time : ../src/gregorian/$(GREGORIAN_CPP_SOURCES).cpp
-    # requirements
-    : <sysinclude>$(BOOST_ROOT)
-      $(DATE_TIME_INCLUDES)
-      $(DATE_TIME_PROPERTIES) ;
-
-#dll libboost_gdtl
-#  # $(SUFDLL[1])
-#    :  ../gregorian/src/$(GREGORIAN_CPP_SOURCES).cpp
-#	# requirements
-#      : $(DATE_TIME_INCLUDES)
-#	<shared-linkable>true
-#        <runtime-link>dynamic
-#	$(DATE_TIME_PROPERTIES)
-#          ;
+lib boost_date_time : ../src/gregorian/$(GREGORIAN_CPP_SOURCES).cpp ;
+    
+# V2 does not support any tests yet 
+if $(0) {
 
 ############# tests ###########
 # Generic tests
@@ -96,9 +83,10 @@ date_time-test testdst_rules      : ../test/posix_time/testdst_rules.cpp ;
 date_time-test testiterator      : ../test/posix_time/testiterator.cpp ;
 date_time-test testtime_clock    : ../test/posix_time/testclock.cpp ;
 date_time-test testparse_time    : ../test/posix_time/testparse_time.cpp ;
-
+}
 
 ############# examples  ############
+
 
 date_time-example dates_as_strings : ../example/gregorian/dates_as_strings.cpp ;
 date_time-example end_of_month_day : ../example/gregorian/end_of_month_day.cpp ;
