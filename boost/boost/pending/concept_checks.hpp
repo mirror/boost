@@ -491,10 +491,14 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   template <class Func, class First, class Second>
   struct Const_BinaryPredicate_concept {
     void constraints() { 
-      REQUIRE3(Func, First, Second, BinaryPredicate);
-      require_boolean_expr(f(a, b)); // operator() must be a const member function
+      const_constraints(f);
     }
-    const Func f;
+    void const_constraints(const Func& fun) {
+      REQUIRE3(Func, First, Second, BinaryPredicate);
+      // operator() must be a const member function
+      require_boolean_expr(fun(a, b));
+    }
+    Func f;
     First a;
     Second b;
   };
