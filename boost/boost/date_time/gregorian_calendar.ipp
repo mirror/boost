@@ -1,6 +1,6 @@
 /* Copyright (c) 2001-2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #ifndef NO_BOOST_DATE_TIME_INLINE 
@@ -18,10 +18,10 @@ namespace date_time {
   unsigned short
   gregorian_calendar_base<ymd_type_,date_int_type_>::day_of_week(const ymd_type& ymd) 
   {
-    unsigned short a = (14-ymd.month)/12;
-    unsigned short y = ymd.year - a;
-    unsigned short m = ymd.month + 12*a - 2;
-    unsigned short d = (ymd.day + y + (y/4) - (y/100) + (y/400) + (31*m)/12) % 7;
+    unsigned short a = static_cast<unsigned short>((14-ymd.month)/12);
+    unsigned short y = static_cast<unsigned short>(ymd.year - a);
+    unsigned short m = static_cast<unsigned short>(ymd.month + 12*a - 2);
+    unsigned short d = static_cast<unsigned short>((ymd.day + y + (y/4) - (y/100) + (y/400) + (31*m)/12) % 7);
     //std::cout << year << "-" << month << "-" << day << " is day: " << d << "\n";
     return d;
   }
@@ -56,7 +56,7 @@ namespace date_time {
     }
     //if the week is not in current year recalculate using the previous year as the beginning year
     else if (week == 0) {
-      julianbegin = julian_day_number(ymd_type((ymd.year-1),1,1));
+      julianbegin = julian_day_number(ymd_type(static_cast<unsigned short>(ymd.year-1),1,1));
       juliantoday = julian_day_number(ymd);
       day = (julianbegin + 3) % 7;
       week = (juliantoday + day - julianbegin + 4)/7;
@@ -75,9 +75,9 @@ namespace date_time {
   date_int_type_
   gregorian_calendar_base<ymd_type_,date_int_type_>::day_number(const ymd_type& ymd) 
   {
-    unsigned short a = (14-ymd.month)/12;
-    unsigned short y = ymd.year + 4800 - a;
-    unsigned short m = ymd.month + 12*a - 3;
+    unsigned short a = static_cast<unsigned short>((14-ymd.month)/12);
+    unsigned short y = static_cast<unsigned short>(ymd.year + 4800 - a);
+    unsigned short m = static_cast<unsigned short>(ymd.month + 12*a - 3);
     unsigned long  d = ymd.day + ((153*m + 2)/5) + 365*y + (y/4) - (y/100) + (y/400) - 32045;
     return d;
   }
@@ -122,7 +122,7 @@ namespace date_time {
     year_type year = static_cast<year_type>(100*b + d - 4800 + (m/10));
     //std::cout << year << "-" << month << "-" << day << "\n";
 
-    return ymd_type(year,month,day);
+    return ymd_type(static_cast<unsigned short>(year),month,day);
   }
 
   //! Change a day number into a year-month-day

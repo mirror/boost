@@ -75,7 +75,7 @@ namespace date_time {
         std::string& first,
         std::string& second)
   {
-    int sep_pos = s.find(sep);
+    int sep_pos = static_cast<int>(s.find(sep));
     first = s.substr(0,sep_pos);
     second = s.substr(sep_pos+1);
     return true;
