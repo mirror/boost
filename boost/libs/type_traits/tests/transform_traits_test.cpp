@@ -481,7 +481,7 @@ unsigned int expected_failures = 1; // cv-qualified references
 #endif
 #elif defined(__HP_aCC)
 unsigned int expected_failures = 272; // remove_const/remove_volatile/remove_cv don't work
-#elif defined(__EDG_VERSION__) && __EDG_VERSION__ < 245
+#elif defined(__EDG_VERSION__) && __EDG_VERSION__ < 238
 unsigned int expected_failures = 1;
 #else
 unsigned int expected_failures = 0;

@@ -298,8 +298,10 @@ unsigned int expected_failures = 9;
 #elif defined(__SUNPRO_CC)
 #if (__SUNPRO_CC <= 0x520)
 unsigned int expected_failures = 55;
-#else // (__SUNPRO_CC <= 0x530)
+#elif (__SUNPRO_CC < 0x530)
 unsigned int expected_failures = 25;
+#else
+unsigned int expected_failures = 0;
 #endif
 #elif defined(__MWERKS__)
 unsigned int expected_failures = 10;
@@ -307,15 +309,9 @@ unsigned int expected_failures = 10;
 unsigned int expected_failures = 0;
 #elif defined(__HP_aCC)
 unsigned int expected_failures = 2;
-#elif defined(__EDG_VERSION__) && __EDG_VERSION__ < 245
+#elif defined(__EDG_VERSION__) && __EDG_VERSION__ < 243
 unsigned int expected_failures = 3;
 #else
 unsigned int expected_failures = 0;
 #endif
-
-
-
-
-
-
 
