@@ -42,7 +42,7 @@ namespace boost
       typedef iterator iter_type; // just for backward compatibility
       typedef typename Cont::size_type size_type;
       typedef typename Cont::value_type value_type;
-      typedef typename Cont::reference referece;
+      typedef typename Cont::reference reference;
       typedef typename Cont::pointer pointer;
       static iterator begin(Cont &cont) { return cont.begin(); }
       static iterator end(Cont &cont) { return cont.end(); }
