@@ -43,7 +43,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         sparse_vector_element (const value_type &d):
             container_reference<vector_type> (), it_ (), i_ (), d_ (d), dirty_ (false) {
-            // This constructor is only needed to enable compiling adaptors of sparse vectors.
             external_logic ().raise ();
         }
         BOOST_UBLAS_INLINE
@@ -58,6 +57,9 @@ namespace boost { namespace numeric { namespace ublas {
             else
                 d_ = *it;
         }
+        BOOST_UBLAS_INLINE
+        sparse_vector_element (const sparse_vector_element &p):
+            container_reference<vector_type> (p), it_ (p.it_), i_ (p.i_), d_ (p.d_), dirty_ (p.dirty_) {}
         BOOST_UBLAS_INLINE
         ~sparse_vector_element () {
             if (dirty_) {
@@ -171,17 +173,30 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Conversion
-        // FIXME: GCC 3.1 warns, if enabled
-#ifndef __GNUC__
         BOOST_UBLAS_INLINE
         operator const_reference () const {
             return d_;
         }
-#endif
+#ifdef BOOST_UBLAS_DEPRECATED
         BOOST_UBLAS_INLINE
         operator reference () {
             dirty_ = true;
             return d_;
+        }
+#endif
+
+        // Swapping
+        BOOST_UBLAS_INLINE
+        void swap (sparse_vector_element &p) {
+            if (this != &p) {
+                dirty_ = true;
+                p.dirty_ = true;
+                std::swap (d_, p.d_);
+            }
+        }
+        BOOST_UBLAS_INLINE
+        friend void swap (sparse_vector_element &p1, sparse_vector_element &p2) {
+            p1.swap (p2);
         }
 
     private:
@@ -189,6 +204,83 @@ namespace boost { namespace numeric { namespace ublas {
         size_type i_;
         value_type d_;
         bool dirty_;
+    };
+
+    template<class V>
+    struct type_traits<sparse_vector_element<V> > {
+        typedef typename V::value_type element_type;
+        typedef type_traits<sparse_vector_element<V> > self_type;
+        typedef typename type_traits<element_type>::value_type value_type;
+        typedef typename type_traits<element_type>::const_reference const_reference;
+        typedef sparse_vector_element<V> reference;
+        typedef typename type_traits<element_type>::real_type real_type;
+        typedef typename type_traits<element_type>::precision_type precision_type;
+
+        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = type_traits<element_type>::plus_complexity);
+        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = type_traits<element_type>::multiplies_complexity);
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type real (const_reference t) {
+            return type_traits<element_type>::real (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type imag (const_reference t) {
+            return type_traits<element_type>::imag (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type conj (const_reference t) {
+            return type_traits<element_type>::conj (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type abs (const_reference t) {
+            return type_traits<element_type>::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type sqrt (const_reference t) {
+            return type_traits<element_type>::sqrt (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_1 (const_reference t) {
+            return type_traits<element_type>::norm_1 (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_2 (const_reference t) {
+            return type_traits<element_type>::norm_2 (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_inf (const_reference t) {
+            return type_traits<element_type>::norm_inf (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        bool equals (const_reference t1, const_reference t2) {
+            return type_traits<element_type>::equals (t1, t2);
+        }
+    };
+
+    template<class V1, class T2>
+    struct promote_traits<sparse_vector_element<V1>, T2> {
+        typedef typename promote_traits<typename sparse_vector_element<V1>::value_type, T2>::promote_type promote_type;
+    };
+    template<class T1, class V2>
+    struct promote_traits<T1, sparse_vector_element<V2> > {
+        typedef typename promote_traits<T1, typename sparse_vector_element<V2>::value_type>::promote_type promote_type;
+    };
+    template<class V1, class V2>
+    struct promote_traits<sparse_vector_element<V1>, sparse_vector_element<V2> > {
+        typedef typename promote_traits<typename sparse_vector_element<V1>::value_type,
+                                        typename sparse_vector_element<V2>::value_type>::promote_type promote_type;
     };
 
 #endif
@@ -246,7 +338,7 @@ namespace boost { namespace numeric { namespace ublas {
         sparse_vector (const vector_expression<AE> &ae, size_type non_zeros = 0):
             size_ (ae ().size ()), non_zeros_ (non_zeros), data_ () {
             reserve (non_zeros_);
-            vector_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
         // Accessors
@@ -363,7 +455,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_vector &assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -380,7 +472,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_vector &plus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_plus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -397,19 +489,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_vector &minus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_minus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         sparse_vector &operator *= (const AT &at) {
-            vector_assign_scalar (scalar_multiplies_assign<value_type, AT> (), *this, at);
+            vector_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         sparse_vector &operator /= (const AT &at) {
-            vector_assign_scalar (scalar_divides_assign<value_type, AT> (), *this, at);
+            vector_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
             return *this;
         }
 
@@ -736,7 +828,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_ (ae ().size ()), non_zeros_ (non_zeros), filled_ (0),
             index_data_ (non_zeros), value_data_ (non_zeros) {
             reserve (non_zeros_, false);
-            vector_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
         // Accessors
@@ -880,7 +972,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         compressed_vector &assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -897,7 +989,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         compressed_vector &plus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_plus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -914,19 +1006,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         compressed_vector &minus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_minus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         compressed_vector &operator *= (const AT &at) {
-            vector_assign_scalar (scalar_multiplies_assign<value_type, AT> (), *this, at);
+            vector_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         compressed_vector &operator /= (const AT &at) {
-            vector_assign_scalar (scalar_divides_assign<value_type, AT> (), *this, at);
+            vector_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
             return *this;
         }
 
@@ -1300,7 +1392,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_ (ae ().size ()), non_zeros_ (non_zeros), filled_ (0),
             sorted_ (true), index_data_ (non_zeros), value_data_ (non_zeros) {
             reserve (non_zeros_, false);
-            vector_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
         // Accessors
@@ -1451,7 +1543,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_vector &assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -1468,7 +1560,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_vector &plus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_plus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -1485,19 +1577,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_vector &minus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_minus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         coordinate_vector &operator *= (const AT &at) {
-            vector_assign_scalar (scalar_multiplies_assign<value_type, AT> (), *this, at);
+            vector_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         coordinate_vector &operator /= (const AT &at) {
-            vector_assign_scalar (scalar_divides_assign<value_type, AT> (), *this, at);
+            vector_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
             return *this;
         }
 

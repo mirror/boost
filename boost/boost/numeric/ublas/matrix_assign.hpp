@@ -516,8 +516,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, row_major_tag ());
-        indexing_matrix_assign (functor1_type (), cm, e, row_major_tag ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, m, row_major_tag ());
+        indexing_matrix_assign (functor1_type::template make_debug_functor<typename matrix<value_type, row_major>::reference, value_type> (), cm, e, row_major_tag ());
 #endif
         typename M::iterator1 it1 (m.begin1 ());
         typename M::iterator1 it1_end (m.end1 ());
@@ -646,8 +646,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, column_major_tag ());
-        indexing_matrix_assign (functor1_type (), cm, e, column_major_tag ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, m, column_major_tag ());
+        indexing_matrix_assign (functor1_type::template make_debug_functor<typename matrix<value_type, column_major>::reference, value_type>  (), cm, e, column_major_tag ());
 #endif
         typename M::iterator2 it2 (m.begin2 ());
         typename M::iterator2 it2_end (m.end2 ());
@@ -774,8 +774,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, row_major_tag ());
-        indexing_matrix_assign (functor_type (), cm, e, row_major_tag ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, m, row_major_tag ());
+        indexing_matrix_assign (functor_type::template make_debug_functor<typename matrix<value_type, row_major>::reference, value_type>  (), cm, e, row_major_tag ());
 #endif
         m.clear ();
         typename E::const_iterator1 it1e (e ().begin1 ());
@@ -812,8 +812,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, column_major_tag ());
-        indexing_matrix_assign (functor_type (), cm, e, column_major_tag ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, m, column_major_tag ());
+        indexing_matrix_assign (functor_type::template make_debug_functor<typename matrix<value_type, column_major>::reference, value_type>  (), cm, e, column_major_tag ());
 #endif
         m.clear ();
         typename E::const_iterator2 it2e (e ().begin2 ());
@@ -852,8 +852,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, row_major_tag ());
-        indexing_matrix_assign (functor1_type (), cm, e, row_major_tag ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, m, row_major_tag ());
+        indexing_matrix_assign (functor1_type::template make_debug_functor<typename matrix<value_type, row_major>::reference, value_type>  (), cm, e, row_major_tag ());
 #endif
         typename M::iterator1 it1 (m.begin1 ());
         typename M::iterator1 it1_end (m.end1 ());
@@ -1059,8 +1059,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, column_major_tag ());
-        indexing_matrix_assign (functor1_type (), cm, e, column_major_tag ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, m, column_major_tag ());
+        indexing_matrix_assign (functor1_type::template make_debug_functor<typename matrix<value_type, column_major>::reference, value_type>  (), cm, e, column_major_tag ());
 #endif
         typename M::iterator2 it2 (m.begin2 ());
         typename M::iterator2 it2_end (m.end2 ());

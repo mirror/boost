@@ -26,8 +26,11 @@
 #include <boost/utility.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
+#include <boost/mpl/vector.hpp>
+#include <boost/mpl/find.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_const.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 
 // Compiler specific problems: default configuration
 #if defined (BOOST_STRICT_CONFIG) || ! (\

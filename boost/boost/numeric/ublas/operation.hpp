@@ -74,7 +74,7 @@ namespace boost { namespace numeric { namespace ublas {
             v.assign (zero_vector<value_type> (e1.size1 ()));
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v);
-        indexing_vector_assign (scalar_plus_assign<value_type, value_type> (), cv, prod (e1, e2));
+        indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, orientation_category ());
 #ifdef BOOST_UBLAS_TYPE_CHECK
@@ -197,7 +197,7 @@ namespace boost { namespace numeric { namespace ublas {
             v.assign (zero_vector<value_type> (e1 ().size1 ()));
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v);
-        indexing_vector_assign (scalar_plus_assign<value_type, value_type> (), cv, prod (e1, e2));
+        indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, iterator_category ());
 #ifdef BOOST_UBLAS_TYPE_CHECK
@@ -269,7 +269,7 @@ namespace boost { namespace numeric { namespace ublas {
             v.assign (zero_vector<value_type> (e2 ().size2 ()));
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v);
-        indexing_vector_assign (scalar_plus_assign<value_type, value_type> (), cv, prod (e1, e2));
+        indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, orientation_category ());
 #ifdef BOOST_UBLAS_TYPE_CHECK
@@ -392,7 +392,7 @@ namespace boost { namespace numeric { namespace ublas {
             v.assign (zero_vector<value_type> (e2 ().size2 ()));
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v);
-        indexing_vector_assign (scalar_plus_assign<value_type, value_type> (), cv, prod (e1, e2));
+        indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, iterator_category ());
 #ifdef BOOST_UBLAS_TYPE_CHECK
@@ -428,7 +428,7 @@ namespace boost { namespace numeric { namespace ublas {
 
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, prod (e1, e2), row_major_tag ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
 #endif
         size_type size1 (e1 ().size1 ());
         size_type size2 (e1 ().size2 ());
@@ -455,7 +455,7 @@ namespace boost { namespace numeric { namespace ublas {
 
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, prod (e1, e2), row_major_tag ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
 #endif
         typename expression1_type::const_iterator1 it1 (e1 ().begin1 ());
         typename expression1_type::const_iterator1 it1_end (e1 ().end1 ());
@@ -501,8 +501,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 
 #ifdef BOOST_UBLAS_TYPE_CHECK
-        matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, prod (e1, e2), column_major_tag ());
+        matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
 #endif
         size_type size1 (e2 ().size1 ());
         size_type size2 (e2 ().size2 ());
@@ -529,7 +529,7 @@ namespace boost { namespace numeric { namespace ublas {
 
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, prod (e1, e2), column_major_tag ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
 #endif
         typename expression2_type::const_iterator2 it2 (e2 ().begin2 ());
         typename expression2_type::const_iterator2 it2_end (e2 ().end2 ());
@@ -631,7 +631,7 @@ namespace boost { namespace numeric { namespace ublas {
 
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, prod (e1, e2), row_major_tag ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
 #endif
         size_type size (BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ()));
         for (size_type k = 0; k < size; ++ k) {
@@ -659,8 +659,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 
 #ifdef BOOST_UBLAS_TYPE_CHECK
-        matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, prod (e1, e2), column_major_tag ());
+        matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
 #endif
         size_type size (BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ()));
         for (size_type k = 0; k < size; ++ k) {

@@ -171,7 +171,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T1, class T2>
     struct scalar_binary_assign_functor {
-        typedef typename type_traits<T1>::reference argument1_type;
+        typedef typename type_traits<typename boost::remove_reference<T1>::type>::reference argument1_type;
         typedef typename type_traits<T2>::const_reference argument2_type;
     };
 
@@ -189,6 +189,14 @@ namespace boost { namespace numeric { namespace ublas {
         void operator () (argument1_type t1, argument2_type t2) const {
             t1 = t2;
         }
+
+        template<class U1, class U2>
+        static
+        BOOST_UBLAS_INLINE
+        scalar_assign<U1, U2> make_debug_functor () {
+            return scalar_assign<U1, U2> ();
+        }
+
     };
     template<class T1, class T2>
     struct scalar_plus_assign:
@@ -200,6 +208,13 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void operator () (argument1_type t1, argument2_type t2) const {
             t1 += t2;
+        }
+
+        template<class U1, class U2>
+        static
+        BOOST_UBLAS_INLINE
+        scalar_plus_assign<U1, U2> make_debug_functor () {
+            return scalar_plus_assign<U1, U2> ();
         }
     };
     template<class T1, class T2>
@@ -213,6 +228,13 @@ namespace boost { namespace numeric { namespace ublas {
         void operator () (argument1_type t1, argument2_type t2) const {
             t1 -= t2;
         }
+
+        template<class U1, class U2>
+        static
+        BOOST_UBLAS_INLINE
+        scalar_minus_assign<U1, U2> make_debug_functor () {
+            return scalar_minus_assign<U1, U2> ();
+        }
     };
     template<class T1, class T2>
     struct scalar_multiplies_assign:
@@ -224,6 +246,13 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void operator () (argument1_type t1, argument2_type t2) const {
             t1 *= t2;
+        }
+
+        template<class U1, class U2>
+        static
+        BOOST_UBLAS_INLINE
+        scalar_multiplies_assign<U1, U2> make_debug_functor () {
+            return scalar_multiplies_assign<U1, U2> ();
         }
     };
     template<class T1, class T2>
@@ -237,13 +266,19 @@ namespace boost { namespace numeric { namespace ublas {
         void operator () (argument1_type t1, argument2_type t2) const {
             t1 /= t2;
         }
+
+        template<class U1, class U2>
+        static
+        BOOST_UBLAS_INLINE
+        scalar_divides_assign<U1, U2> make_debug_functor () {
+            return scalar_divides_assign<U1, U2> ();
+        }
     };
 
     template<class T1, class T2>
     struct scalar_binary_swap_functor {
-        typedef typename type_traits<T1>::reference argument1_type;
-        typedef typename type_traits<T2>::reference argument2_type;
-        typedef typename promote_traits<T1, T2>::promote_type result_type;
+        typedef typename type_traits<typename boost::remove_reference<T1>::type>::reference argument1_type;
+        typedef typename type_traits<typename boost::remove_reference<T2>::type>::reference argument2_type;
     };
 
     template<class T1, class T2>
@@ -251,11 +286,17 @@ namespace boost { namespace numeric { namespace ublas {
         public scalar_binary_swap_functor<T1, T2> {
         typedef typename scalar_binary_swap_functor<T1, T2>::argument1_type argument1_type;
         typedef typename scalar_binary_swap_functor<T1, T2>::argument2_type argument2_type;
-        typedef typename scalar_binary_swap_functor<T1, T2>::result_type result_type;
 
         BOOST_UBLAS_INLINE
         void operator () (argument1_type t1, argument2_type t2) const {
             std::swap (t1, t2);
+        }
+
+        template<class U1, class U2>
+        static
+        BOOST_UBLAS_INLINE
+        scalar_swap<U1, U2> make_debug_functor () {
+            return scalar_swap<U1, U2> ();
         }
     };
 

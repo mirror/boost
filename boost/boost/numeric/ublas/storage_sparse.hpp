@@ -153,20 +153,19 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Element access
-        // FIXME: GCC 3.1 warn's, if enabled
-#ifndef __GNUC__
         BOOST_UBLAS_INLINE
         typename sparse_storage_element_traits<data_value_type>::data_const_reference
         operator [] (typename sparse_storage_element_traits<data_value_type>::index_type i) const {
             return d_ [i];
         }
-#endif
+#ifdef BOOST_UBLAS_DEPRECATED
         BOOST_UBLAS_INLINE
         typename sparse_storage_element_traits<data_value_type>::data_reference
         operator [] (typename sparse_storage_element_traits<data_value_type>::index_type i) {
             dirty_ = true;
             return d_ [i];
         }
+#endif
 
         // Assignment
         template<class D>

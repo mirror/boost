@@ -36,7 +36,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T real_type;
         typedef T precision_type;
 
-#ifdef BOOST_UBLAS_DEPRECATED
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 0);
         BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 0);
 
@@ -100,7 +99,6 @@ namespace boost { namespace numeric { namespace ublas {
                                        self_type::norm_inf (t2)),
                              BOOST_UBLAS_TYPE_CHECK_MIN);
         }
-#endif
     };
 
     template<>
@@ -558,161 +556,6 @@ namespace boost { namespace numeric { namespace ublas {
     };
 #endif
 
-    template<class T1, class T2>
-    struct promote_traits {
-        // Default promotion will badly fail, if the types are different.
-        // Thanks to Kresimir Fresl for spotting this.
-        BOOST_STATIC_ASSERT ((boost::is_same<T1, T2>::value));
-        typedef T1 promote_type;
-    };
-
-    template<>
-    struct promote_traits<float, double> {
-        typedef double promote_type;
-    };
-    template<>
-    struct promote_traits<double, float> {
-        typedef double promote_type;
-    };
-#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
-    template<>
-    struct promote_traits<float, long double> {
-        typedef long double promote_type;
-    };
-    template<>
-    struct promote_traits<long double, float> {
-        typedef long double promote_type;
-    };
-    template<>
-    struct promote_traits<double, long double> {
-        typedef long double promote_type;
-    };
-    template<>
-    struct promote_traits<long double, double> {
-        typedef long double promote_type;
-    };
-#endif
-
-    template<>
-    struct promote_traits<float, std::complex<float> > {
-        typedef std::complex<float> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<float>, float> {
-        typedef std::complex<float> promote_type;
-    };
-    template<>
-    struct promote_traits<float, std::complex<double> > {
-        typedef std::complex<double> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<double>, float> {
-        typedef std::complex<double> promote_type;
-    };
-#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
-    template<>
-    struct promote_traits<float, std::complex<long double> > {
-        typedef std::complex<long double> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<long double>, float> {
-        typedef std::complex<long double> promote_type;
-    };
-#endif
-
-    template<>
-    struct promote_traits<double, std::complex<float> > {
-        // Here we'd better go the conservative way.
-        // typedef std::complex<float> promote_type;
-        typedef std::complex<double> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<float>, double> {
-        // Here we'd better go the conservative way.
-        // typedef std::complex<float> promote_type;
-        typedef std::complex<double> promote_type;
-    };
-    template<>
-    struct promote_traits<double, std::complex<double> > {
-        typedef std::complex<double> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<double>, double> {
-        typedef std::complex<double> promote_type;
-    };
-#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
-    template<>
-    struct promote_traits<double, std::complex<long double> > {
-        typedef std::complex<long double> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<long double>, double> {
-        typedef std::complex<long double> promote_type;
-    };
-#endif
-
-#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
-    template<>
-    struct promote_traits<long double, std::complex<float> > {
-        // Here we'd better go the conservative way.
-        // typedef std::complex<float> promote_type;
-        typedef std::complex<long double> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<float>, long double> {
-        // Here we'd better go the conservative way.
-        // typedef std::complex<float> promote_type;
-        typedef std::complex<long double> promote_type;
-    };
-    template<>
-    struct promote_traits<long double, std::complex<double> > {
-        // Here we'd better go the conservative way.
-        // typedef std::complex<double> promote_type;
-        typedef std::complex<long double> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<double>, long double> {
-        // Here we'd better go the conservative way.
-        // typedef std::complex<double> promote_type;
-        typedef std::complex<long double> promote_type;
-    };
-    template<>
-    struct promote_traits<long double, std::complex<long double> > {
-        typedef std::complex<long double> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<long double>, long double> {
-        typedef std::complex<long double> promote_type;
-    };
-#endif
-
-    template<>
-    struct promote_traits<std::complex<float>, std::complex<double> > {
-        typedef std::complex<double> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<double>, std::complex<float> > {
-        typedef std::complex<double> promote_type;
-    };
-#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
-    template<>
-    struct promote_traits<std::complex<float>, std::complex<long double> > {
-        typedef std::complex<long double> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<long double>, std::complex<float> > {
-        typedef std::complex<long double> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<double>, std::complex<long double> > {
-        typedef std::complex<long double> promote_type;
-    };
-    template<>
-    struct promote_traits<std::complex<long double>, std::complex<double> > {
-        typedef std::complex<long double> promote_type;
-    };
-#endif
-
 #ifdef BOOST_UBLAS_USE_INTERVAL
     template<>
     struct type_traits<boost::numeric::interval<float> > {
@@ -1134,7 +977,217 @@ namespace boost { namespace numeric { namespace ublas {
     };
 #endif
 #endif
+#endif
 
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    template<class T1, class T2>
+    struct promote_traits {
+        typedef boost::mpl::vector<int
+                                  , unsigned int
+                                  , long
+                                  , unsigned long
+                                  , float
+                                  , double
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+                                  , long double
+#endif
+                                  > builtins;
+        typedef typename boost::mpl::find<builtins, T1>::type iter1;
+        typedef typename boost::mpl::find<builtins, T2>::type iter2;
+        BOOST_STATIC_CONSTANT (int, index1 = iter1::pos::value);
+        BOOST_STATIC_CONSTANT (int, index2 = iter2::pos::value);
+        typedef typename boost::mpl::if_c<index1 >= index2,
+                                          iter1,
+                                          iter2>::type::type builtin_promote_type;
+        typedef typename boost::mpl::if_c<boost::is_same<T1, T2>::value,
+                                          T1,
+                                          builtin_promote_type>::type promote_type;                         
+    };
+
+    template<class T1, class T2>
+    struct promote_traits<std::complex<T1>, T2> {
+        typedef std::complex<typename promote_traits<T1, T2>::promote_type> promote_type;
+    };
+    template<class T1, class T2>
+    struct promote_traits<T1, std::complex<T2> > {
+        typedef std::complex<typename promote_traits<T1, T2>::promote_type> promote_type;
+    };
+    template<class T1, class T2>
+    struct promote_traits<std::complex<T1>, std::complex<T2> > {
+        typedef std::complex<typename promote_traits<T1, T2>::promote_type> promote_type;
+    };
+
+#ifdef BOOST_UBLAS_USE_INTERVAL
+    template<class T1, class T2>
+    struct promote_traits<boost::numeric::interval<T1>, T2> {
+        typedef boost::numeric::interval<typename promote_traits<T1, T2>::promote_type> promote_type;
+    };
+    template<class T1, class T2>
+    struct promote_traits<T1, boost::numeric::interval<T2> > {
+        typedef boost::numeric::interval<typename promote_traits<T1, T2>::promote_type> promote_type;
+    };
+    template<class T1, class T2>
+    struct promote_traits<boost::numeric::interval<T1>, boost::numeric::interval<T2> > {
+        typedef boost::numeric::interval<typename promote_traits<T1, T2>::promote_type> promote_type;
+    };
+#endif
+#else
+    template<class T1, class T2>
+    struct promote_traits {
+        // Default promotion will badly fail, if the types are different.
+        // Thanks to Kresimir Fresl for spotting this.
+        BOOST_STATIC_ASSERT ((boost::is_same<T1, T2>::value));
+        typedef T1 promote_type;
+    };
+
+    template<>
+    struct promote_traits<float, double> {
+        typedef double promote_type;
+    };
+    template<>
+    struct promote_traits<double, float> {
+        typedef double promote_type;
+    };
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+    template<>
+    struct promote_traits<float, long double> {
+        typedef long double promote_type;
+    };
+    template<>
+    struct promote_traits<long double, float> {
+        typedef long double promote_type;
+    };
+    template<>
+    struct promote_traits<double, long double> {
+        typedef long double promote_type;
+    };
+    template<>
+    struct promote_traits<long double, double> {
+        typedef long double promote_type;
+    };
+#endif
+
+    template<>
+    struct promote_traits<float, std::complex<float> > {
+        typedef std::complex<float> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<float>, float> {
+        typedef std::complex<float> promote_type;
+    };
+    template<>
+    struct promote_traits<float, std::complex<double> > {
+        typedef std::complex<double> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<double>, float> {
+        typedef std::complex<double> promote_type;
+    };
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+    template<>
+    struct promote_traits<float, std::complex<long double> > {
+        typedef std::complex<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<long double>, float> {
+        typedef std::complex<long double> promote_type;
+    };
+#endif
+
+    template<>
+    struct promote_traits<double, std::complex<float> > {
+        // Here we'd better go the conservative way.
+        // typedef std::complex<float> promote_type;
+        typedef std::complex<double> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<float>, double> {
+        // Here we'd better go the conservative way.
+        // typedef std::complex<float> promote_type;
+        typedef std::complex<double> promote_type;
+    };
+    template<>
+    struct promote_traits<double, std::complex<double> > {
+        typedef std::complex<double> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<double>, double> {
+        typedef std::complex<double> promote_type;
+    };
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+    template<>
+    struct promote_traits<double, std::complex<long double> > {
+        typedef std::complex<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<long double>, double> {
+        typedef std::complex<long double> promote_type;
+    };
+#endif
+
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+    template<>
+    struct promote_traits<long double, std::complex<float> > {
+        // Here we'd better go the conservative way.
+        // typedef std::complex<float> promote_type;
+        typedef std::complex<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<float>, long double> {
+        // Here we'd better go the conservative way.
+        // typedef std::complex<float> promote_type;
+        typedef std::complex<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<long double, std::complex<double> > {
+        // Here we'd better go the conservative way.
+        // typedef std::complex<double> promote_type;
+        typedef std::complex<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<double>, long double> {
+        // Here we'd better go the conservative way.
+        // typedef std::complex<double> promote_type;
+        typedef std::complex<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<long double, std::complex<long double> > {
+        typedef std::complex<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<long double>, long double> {
+        typedef std::complex<long double> promote_type;
+    };
+#endif
+
+    template<>
+    struct promote_traits<std::complex<float>, std::complex<double> > {
+        typedef std::complex<double> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<double>, std::complex<float> > {
+        typedef std::complex<double> promote_type;
+    };
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+    template<>
+    struct promote_traits<std::complex<float>, std::complex<long double> > {
+        typedef std::complex<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<long double>, std::complex<float> > {
+        typedef std::complex<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<double>, std::complex<long double> > {
+        typedef std::complex<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<std::complex<long double>, std::complex<double> > {
+        typedef std::complex<long double> promote_type;
+    };
+#endif
+
+#ifdef BOOST_UBLAS_USE_INTERVAL
     template<>
     struct promote_traits<boost::numeric::interval<float>, boost::numeric::interval<double> > {
         typedef boost::numeric::interval<double> promote_type;
@@ -1281,6 +1334,7 @@ namespace boost { namespace numeric { namespace ublas {
     struct promote_traits<boost::complex<boost::numeric::interval<long double> >, boost::complex<boost::numeric::interval<double> > > {
         typedef boost::complex<boost::numeric::interval<long double> > promote_type;
     };
+#endif
 #endif
 #endif
 #endif

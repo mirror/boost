@@ -34,7 +34,7 @@ namespace boost { namespace numeric { namespace ublas {
         V v (e1 ().size1 ());
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
-        indexing_vector_assign (scalar_assign<value_type, value_type> (), cv, prod (e1, e2));
+        indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         size_type i_size = e1 ().size1 ();
         size_type j_size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size ());
@@ -87,7 +87,7 @@ namespace boost { namespace numeric { namespace ublas {
         V v (e2 ().size2 ());
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
-        indexing_vector_assign (scalar_assign<value_type, value_type> (), cv, prod (e1, e2));
+        indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         size_type i_size = BOOST_UBLAS_SAME (e1 ().size (), e2 ().size1 ());
         size_type j_size = e2 ().size2 ();
@@ -140,7 +140,7 @@ namespace boost { namespace numeric { namespace ublas {
         M m (e1 ().size1 (), e2 ().size2 ());
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, prod (e1, e2), row_major_tag ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
         disable_type_check = true;
 #endif
         size_type i_size = e1 ().size1 ();
@@ -199,7 +199,7 @@ namespace boost { namespace numeric { namespace ublas {
         M m (e1 ().size1 (), e2 ().size2 ());
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, prod (e1, e2), column_major_tag ());
+        indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
         disable_type_check = true;
 #endif
         size_type i_size = e1 ().size1 ();
