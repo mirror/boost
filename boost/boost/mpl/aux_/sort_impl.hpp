@@ -17,9 +17,10 @@
 #ifndef BOOST_MPL_AUX_SORT_IMPL_HPP_INCLUDED
 #define BOOST_MPL_AUX_SORT_IMPL_HPP_INCLUDED
 
+#include "boost/mpl/aux_/select1st_wknd.hpp"
+#include "boost/mpl/aux_/select2nd_wknd.hpp"
 #include "boost/mpl/apply.hpp"
 #include "boost/mpl/apply_if.hpp"
-#include "boost/mpl/bind.hpp" // for bind2nd
 #include "boost/mpl/copy_backward.hpp"
 #include "boost/mpl/empty.hpp"
 #include "boost/mpl/front.hpp"
@@ -36,6 +37,17 @@ namespace aux {
 
 template < typename Sequence, typename Predicate > struct quick_sort;
 
+template <typename Predicate, typename Pivot>
+struct quick_sort_pred
+{
+    template <typename T>
+    struct apply
+    {
+        typedef typename apply2< Predicate, T, Pivot >::type
+            type;
+    };
+};
+
 template <typename Sequence, typename Predicate>
 struct quick_sort_impl
 {
@@ -46,23 +58,21 @@ private:
 
     typedef typename partition<
           seq_
-        , bind2nd< Predicate,pivot_ >
+        , protect< quick_sort_pred<Predicate,pivot_> >
         >::type partitioned;
 
     typedef typename quick_sort<
-          typename partitioned::first, Predicate
+          typename BOOST_MPL_AUX_SELECT1ST_WKND(partitioned), Predicate
         >::type first_part;
     typedef typename quick_sort<
-          typename partitioned::second, Predicate
+          typename BOOST_MPL_AUX_SELECT2ND_WKND(partitioned), Predicate
         >::type second_part;
 
 public:
 
     typedef typename copy_backward<
           first_part
-        , typename push_front<
-              second_part,pivot_
-            >::type
+        , typename push_front< second_part,pivot_ >::type
         , push_front<_,_>
         >::type type;
 
@@ -85,8 +95,10 @@ struct sort_traits
 {
     template< typename Sequence, typename Predicate >
     struct algorithm
-        : aux::quick_sort< Sequence,Predicate >
     {
+        typedef typename aux::quick_sort<
+              Sequence, Predicate
+            >::type type;
     };
 };
 
