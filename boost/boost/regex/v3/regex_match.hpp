@@ -1229,6 +1229,7 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
    I next_base;
    I base = first;
    bool need_init;
+   bool leading_match = false;
    const traits& traits_inst = e.get_traits();
    // dwa 9/13/00 suppress incorrect MSVC warning - it claims this is never
    // referenced
@@ -1262,6 +1263,7 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
       if(query_match_aux(first, last, m, e, flags, pd, &restart))
       {
          ++cmatches;
+         leading_match = true;
          if(foo(m) == false)
             return cmatches;
          if(m[0].second == last)
@@ -1284,6 +1286,7 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
             else
             {
                need_init = false;
+               leading_match = false;
                for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart)
                    {} // dwa 10/20/2000 - warning suppression for MWCW
                if(restart != last)
@@ -1627,6 +1630,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
    break;
    case regbase::restart_continue:
    {
+      if(!leading_match)
+         return cmatches;
       while(first != last)
       {
          if( access::can_start(*first, _map, (unsigned char)mask_any) )
