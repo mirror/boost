@@ -25,9 +25,7 @@
 
 #include <boost/format/format_fwd.hpp>
 #include <boost/format/internals_fwd.hpp>
-
 #include <boost/format/internals.hpp>
-
 #include <boost/format/outsstream.hpp>
 
 namespace boost {

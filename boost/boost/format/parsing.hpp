@@ -184,7 +184,7 @@ Ch wrap_widen(char c, Stream &os)
     
   parse_flags: 
     // handle flags
-    while ( i1 <buf.size()) // as long as char is one of + - = # 0 l h   or ' '
+    while ( i1 <buf.size()) // as long as char is one of + - = _ # 0 l h   or ' '
       {  
         // misc switches
         switch (wrap_narrow(buf[i1], 0, os)) 
@@ -198,6 +198,9 @@ Ch wrap_widen(char c, Stream &os)
             break;
           case '=':
             fpar->pad_scheme_ |= format_item_t::centered;
+            break;
+          case '_':
+            fpar->ref_state_.flags_ |= std::ios_base::internal;
             break;
           case ' ':
             fpar->pad_scheme_ |= format_item_t::spacepad;

@@ -24,7 +24,7 @@
 #include <boost/format/format_class.hpp>
 #include <boost/format/group.hpp>
 
-#include <boost/format/msvc_disambiguater.hpp>
+#include <boost/format/detail/msvc_disambiguater.hpp>
 #include <boost/throw_exception.hpp>
 
 namespace boost {

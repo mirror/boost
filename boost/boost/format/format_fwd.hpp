@@ -3,7 +3,6 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 //  (C) Samuel Krempp 2001
-//                  krempp@crans.ens-cachan.fr
 //  Permission to copy, use, modify, sell and
 //  distribute this software is granted provided this copyright notice appears
 //  in all copies. This software is provided "as is" without express or implied
@@ -22,8 +21,7 @@
 #include <string>
 #include <iosfwd>
 
-#include <boost/config.hpp>
-#include <boost/format/macros_default.hpp> 
+#include <boost/format/detail/config_macros.hpp> 
 
 namespace boost {
 
@@ -38,7 +36,9 @@ class basic_format;
 typedef basic_format<char >     format;
 
 
-#if !defined(BOOST_NO_STD_WSTRING) && !defined(BOOST_NO_STD_WSTREAMBUF)
+#if !defined(BOOST_NO_STD_WSTRING)  \
+    && !defined(BOOST_NO_STD_WSTREAMBUF) \
+    && !defined(BOOST_NO_STRINGSTREAM)  // we repalce stringstream by strstream, so no wchar support.
 typedef basic_format<wchar_t >  wformat;
 #endif
 
