@@ -15,6 +15,11 @@
 #include <iostream>
 #include <string>
 
+// This should be included before "using namespace boost",
+// otherwise gcc headers will be confused with boost::iterator
+// namespace.
+#include <boost/test/included/unit_test_framework.hpp> 
+
 using namespace boost;
 using namespace std;
 
@@ -76,7 +81,6 @@ void check_iterator_range()
     BOOST_CHECK( !equal( s2.begin(), s2.end(), res2.begin() ) );
 }
 
-#include <boost/test/included/unit_test_framework.hpp> 
 
 using boost::unit_test_framework::test_suite;
 
