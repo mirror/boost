@@ -704,7 +704,7 @@ namespace fsm
       typedef asynchronous_state_machine my_base;
 
       asynchronous_state_machine(
-        const processor_context &amp; myContext );
+        typename event_processor&lt; Scheduler &gt;::my_context ctx );
       ~asynchronous_state_machine();  
   };
 }
@@ -712,7 +712,7 @@ namespace fsm
 <h3>Class template <code>asynchronous_state_machine</code> constructor and 
 destructor</h3>
 <pre>asynchronous_state_machine(
-  const processor_context &amp; myContext );</pre>
+  typename event_processor&lt; Scheduler &gt;::my_context ctx );</pre>
 <p><b>Effects</b>: Constructs a non-running asynchronous state machine<br>
 <b>Note</b>: Users cannot create <code>asynchronous_state_machine&lt;&gt;</code> 
 subtype objects directly. This can only be done through an object of the
@@ -2100,7 +2100,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->30 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38823" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40404" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
