@@ -24,7 +24,12 @@
 #    define BOOST_PP_BITOR_OO(par) BOOST_PP_BITOR_I ## par
 # endif
 #
-# define BOOST_PP_BITOR_I(x, y) BOOST_PP_BITOR_ ## x ## y
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
+#    define BOOST_PP_BITOR_I(x, y) BOOST_PP_BITOR_ ## x ## y
+# else
+#    define BOOST_PP_BITOR_I(x, y) BOOST_PP_BITOR_ID(BOOST_PP_BITOR_ ## x ## y)
+#    define BOOST_PP_BITOR_ID(id) id
+# endif
 #
 # define BOOST_PP_BITOR_00 0
 # define BOOST_PP_BITOR_01 1

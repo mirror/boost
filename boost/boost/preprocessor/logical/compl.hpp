@@ -24,7 +24,12 @@
 #    define BOOST_PP_COMPL_OO(par) BOOST_PP_COMPL_I ## par
 # endif
 #
-# define BOOST_PP_COMPL_I(x) BOOST_PP_COMPL_ ## x
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
+#    define BOOST_PP_COMPL_I(x) BOOST_PP_COMPL_ ## x
+# else
+#    define BOOST_PP_COMPL_I(x) BOOST_PP_COMPL_ID(BOOST_PP_COMPL_ ## x)
+#    define BOOST_PP_COMPL_ID(id) id
+# endif
 #
 # define BOOST_PP_COMPL_0 1
 # define BOOST_PP_COMPL_1 0

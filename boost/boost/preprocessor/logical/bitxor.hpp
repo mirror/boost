@@ -24,7 +24,12 @@
 #    define BOOST_PP_BITXOR_OO(par) BOOST_PP_BITXOR_I ## par
 # endif
 #
-# define BOOST_PP_BITXOR_I(x, y) BOOST_PP_BITXOR_ ## x ## y
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
+#    define BOOST_PP_BITXOR_I(x, y) BOOST_PP_BITXOR_ ## x ## y
+# else
+#    define BOOST_PP_BITXOR_I(x, y) BOOST_PP_BITXOR_ID(BOOST_PP_BITXOR_ ## x ## y)
+#    define BOOST_PP_BITXOR_ID(id) id
+# endif
 #
 # define BOOST_PP_BITXOR_00 0
 # define BOOST_PP_BITXOR_01 1

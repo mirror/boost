@@ -24,7 +24,12 @@
 #    define BOOST_PP_BITAND_OO(par) BOOST_PP_BITAND_I ## par
 # endif
 #
-# define BOOST_PP_BITAND_I(x, y) BOOST_PP_BITAND_ ## x ## y
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
+#    define BOOST_PP_BITAND_I(x, y) BOOST_PP_BITAND_ ## x ## y
+# else
+#    define BOOST_PP_BITAND_I(x, y) BOOST_PP_BITAND_ID(BOOST_PP_BITAND_ ## x ## y)
+#    define BOOST_PP_BITAND_ID(res) res
+# endif
 #
 # define BOOST_PP_BITAND_00 0
 # define BOOST_PP_BITAND_01 0
