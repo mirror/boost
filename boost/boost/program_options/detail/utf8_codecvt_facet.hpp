@@ -131,7 +131,7 @@ protected:
         const char * from,
         const char * from_end, 
         size_t max_limit
-    ) const throw();;
+    ) const throw();
 
     // Largest possible value do_length(state,from,from_end,1) could return.
     virtual int do_max_length() const throw () {
