@@ -90,7 +90,7 @@
         <!-- Copy assignment operators return a reference to the class
              they are in, unless another type has been explicitly
              provided in the element. -->
-        <xsl:when test="$copy-assign-for and not(type) and type">
+        <xsl:when test="$copy-assign-for and not(type)">
           <xsl:value-of select="concat($copy-assign-for, '&amp; ')"/>
         </xsl:when>
 
@@ -226,7 +226,7 @@
           <!-- Copy assignment operators return a reference to the class
                they are in, unless another type has been explicitly
                provided in the element. -->
-          <xsl:when test="$copy-assign-for and not(type) and type">
+          <xsl:when test="$copy-assign-for and not(type)">
             <xsl:value-of select="concat($copy-assign-for, '&amp; ')"/>
           </xsl:when>
 
@@ -278,7 +278,7 @@
           <!-- Copy assignment operators return a reference to the class
                they are in, unless another type has been explicitly
                provided in the element. -->
-          <xsl:when test="$copy-assign-for and not(type) and type">
+          <xsl:when test="$copy-assign-for and not(type)">
             <xsl:value-of select="concat($copy-assign-for, '&amp; ')"/>
           </xsl:when>
 
