@@ -28,6 +28,7 @@ boost::regex e("<\\s*A\\s+[^>]*href\\s*=\\s*\"([^\"]*)\"",
 void load_file(std::string& s, std::istream& is)
 {
    s.erase();
+   if(is.bad()) return;
    //
    // attempt to grow string buffer to match file size,
    // this doesn't always work...
