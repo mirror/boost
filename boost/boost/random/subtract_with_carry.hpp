@@ -20,6 +20,7 @@
 #include <iostream>
 #include <algorithm>     // std::equal
 #include <stdexcept>
+#include <cmath>         // std::pow
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
