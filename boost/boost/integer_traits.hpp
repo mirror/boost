@@ -21,8 +21,11 @@
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 
-// This is an implementation detail and not part of the interface
+// These are an implementation detail and not part of the interface
 #include <limits.h>
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T
+#include <wchar.h>
+#endif
 
 
 namespace boost {
@@ -30,11 +33,7 @@ template<class T>
 class integer_traits : public std::numeric_limits<T>
 {
 public:
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  static const bool is_integral = false;
-#else
-  enum { is_integral = false };
-#endif
+  BOOST_STATIC_CONSTANT(bool, is_integral = false);
 };
 
 namespace detail {
@@ -42,18 +41,20 @@ template<class T, T min_val, T max_val>
 class integer_traits_base
 {
 public:
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  static const bool is_integral = true;
-  static const T const_min = min_val;
-  static const T const_max = max_val;
-#else
-  enum {
-    is_integral = true,
-    const_min = min_val,
-    const_max = max_val
-  };
-#endif
+  BOOST_STATIC_CONSTANT(bool, is_integral = true);
+  BOOST_STATIC_CONSTANT(T, const_min = min_val);
+  BOOST_STATIC_CONSTANT(T, const_max = max_val);
 };
+
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  The definition is required even for integral static constants
+template<class T, T min_val, T max_val>
+const T integer_traits_base<T, min_val, max_val>::const_min;
+
+template<class T, T min_val, T max_val>
+const T integer_traits_base<T, min_val, max_val>::const_max;
+#endif
+
 } // namespace detail
 
 template<>
@@ -80,7 +81,13 @@ class integer_traits<unsigned char>
     public detail::integer_traits_base<unsigned char, 0, UCHAR_MAX>
 { };
 
-// What about wchar_t ?
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T
+template<>
+class integer_traits<wchar_t>
+  : public std::numeric_limits<wchar_t>,
+    public detail::integer_traits_base<wchar_t, WCHAR_MIN, WCHAR_MAX>
+{ };
+#endif // BOOST_NO_INTRINSIC_WCHAR_T
 
 template<>
 class integer_traits<short>
