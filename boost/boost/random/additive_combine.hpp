@@ -57,25 +57,51 @@ public:
   additive_combine(typename MLCG1::result_type seed1, 
                    typename MLCG2::result_type seed2)
     : _mlcg1(seed1), _mlcg2(seed2) { }
+  template<class It> additive_combine(It& first, It last)
+    : _mlcg1(first, last), _mlcg2(first, last) { }
+
+  void seed(typename MLCG1::result_type seed1,
+            typename MLCG2::result_type seed2)
+  {
+    _mlcg1(seed1);
+    _mlcg2(seed2);
+  }
+
+  template<class It> void seed(It& first, It last)
+  {
+    _mlcg1.seed(first, last);
+    _mlcg2.seed(first, last);
+  }
+
   result_type operator()() {
     result_type z = _mlcg1() - _mlcg2();
     if(z < 1)
       z += MLCG1::modulus-1;
     return z;
   }
-  bool validation(result_type x) const { return val == x; }
+  static bool validation(result_type x) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend std::ostream& operator<<(std::ostream& os, const additive_combine& r)
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const additive_combine& r)
   { os << r._mlcg1 << " " << r._mlcg2; return os; }
-  friend std::istream& operator>>(std::istream& is, additive_combine& r)
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, additive_combine& r)
   { is >> r._mlcg1 >> std::ws >> r._mlcg2; return is; }
+
   friend bool operator==(const additive_combine& x, const additive_combine& y)
   { return x._mlcg1 == y._mlcg1 && x._mlcg2 == y._mlcg2; }
+  friend bool operator!=(const additive_combine& x, const additive_combine& y)
+  { return !(x == y); }
 #else
   // Use a member function; Streamable concept not supported.
   bool operator==(const additive_combine& rhs) const
   { return _mlcg1 == rhs._mlcg1 && _mlcg2 == rhs._mlcg2; }
+  bool operator!=(const additive_combine& rhs) const
+  { return !(*this == rhs); }
 #endif
 private:
   MLCG1 _mlcg1;

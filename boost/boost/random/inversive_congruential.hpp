@@ -57,26 +57,46 @@ public:
     if(b == 0) 
       assert(y0 > 0); 
   }
+  template<class It> inversive_congruential(It& first, It last)
+  { seed(first, last); }
+
   void seed(IntType y0) { value = y0; if(b == 0) assert(y0 > 0); }
+  template<class It> void seed(It& first, It last)
+  {
+    if(first == last)
+      throw std::invalid_argument("inversive_congruential::seed");
+    value = *first++;
+  }
   IntType operator()()
   {
     typedef const_mod<IntType, p> do_mod;
     value = do_mod::mult_add(a, do_mod::invert(value), b);
     return value;
   }
+
   bool validation(result_type x) const { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend std::ostream& operator<<(std::ostream& os, inversive_congruential x)
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, inversive_congruential x)
   { os << x.value; return os; }
-  friend std::istream& operator>>(std::istream& is, inversive_congruential& x)
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, inversive_congruential& x)
   { is >> x.value; return is; }
+
   friend bool operator==(inversive_congruential x, inversive_congruential y)
   { return x.value == y.value; }
+  friend bool operator!=(inversive_congruential x, inversive_congruential y)
+  { return !(x == y); }
 #else
   // Use a member function; Streamable concept not supported.
   bool operator==(inversive_congruential rhs) const
   { return value == rhs.value; }
+  bool operator!=(inversive_congruential rhs) const
+  { return !(x == y); }
 #endif
 private:
   IntType value;
