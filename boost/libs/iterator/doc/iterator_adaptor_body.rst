@@ -1,8 +1,7 @@
 .. Version 1.2 of this ReStructuredText document corresponds to
    n1530_, the paper accepted by the LWG for TR1.
 
-.. Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
-   rights reserved
+.. Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. 
 
 The ``iterator_adaptor`` class template adapts some ``Base`` [#base]_
 type to create a new iterator.  Instantiations of ``iterator_adaptor``

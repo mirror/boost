@@ -1,8 +1,7 @@
 .. Version 1.1 of this ReStructuredText document corresponds to
    n1530_, the paper accepted by the LWG.
 
-.. Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
-   rights reserved
+.. Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. 
 
 Each specialization of the ``iterator_adaptor`` class template is derived from
 a specialization of ``iterator_facade``. The core interface functions

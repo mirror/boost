@@ -17,7 +17,7 @@
          revision of paper n1297_, n1477_, and n1531_.
 
 :copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt
-         2003. All rights reserved
+         2003. 
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 .. _`Open Systems Lab`: http://www.osl.iu.edu

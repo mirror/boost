@@ -17,7 +17,7 @@
 
 .. _n1530: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1530.html
 
-:copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved
+:copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. 
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 .. _`Open Systems Lab`: http://www.osl.iu.edu

@@ -1,8 +1,7 @@
 .. Version 1.3 of this ReStructuredText document corresponds to
    n1530_, the paper accepted by the LWG for TR1.
 
-.. Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
-   rights reserved
+.. Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. 
 
 
 .. parsed-literal::
