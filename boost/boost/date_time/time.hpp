@@ -78,6 +78,10 @@ namespace date_time {
     {
       return time_system::zone_name(time_);
     }
+    std::string zone_abbrev() const
+    {
+      return time_system::zone_name(time_);
+    }
 
     //! check to see if date is not a value
     bool is_not_a_date_time()  const
