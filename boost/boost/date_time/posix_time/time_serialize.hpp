@@ -1,7 +1,7 @@
 #ifndef POSIX_TIME_SERIALIZE_HPP___
 #define POSIX_TIME_SERIALIZE_HPP___
 
-/* Copyright (c) 2004 CrystalClear Software, Inc.
+/* Copyright (c) 2004-2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -128,8 +128,8 @@ void save(Archive & ar,
           const posix_time::time_period& tp, 
           unsigned int version)
 {
-  typename posix_time::ptime beg(tp.begin().date(), tp.begin().time_of_day());
-  typename posix_time::ptime end(tp.end().date(), tp.end().time_of_day());
+  posix_time::ptime beg(tp.begin().date(), tp.begin().time_of_day());
+  posix_time::ptime end(tp.end().date(), tp.end().time_of_day());
   ar & make_nvp("time_period_begin", beg);
   ar & make_nvp("time_period_end", end);
 }
@@ -143,10 +143,10 @@ void load(Archive & ar,
           boost::posix_time::time_period & tp, 
           unsigned int version)
 {
-  typename posix_time::time_duration td(1,0,0);
-  typename gregorian::date d(gregorian::not_a_date_time);
-  typename posix_time::ptime beg(d,td);
-  typename posix_time::ptime end(d,td);
+  posix_time::time_duration td(1,0,0);
+  gregorian::date d(gregorian::not_a_date_time);
+  posix_time::ptime beg(d,td);
+  posix_time::ptime end(d,td);
   ar & make_nvp("time_period_begin", beg);
   ar & make_nvp("time_period_end", end);
   tp = boost::posix_time::time_period(beg, end);
@@ -158,10 +158,10 @@ inline void load_construct_data(Archive & ar,
                                 boost::posix_time::time_period* tp, 
                                 const unsigned int file_version)
 {
-  typename posix_time::time_duration td(1,0,0);
-  typename gregorian::date d(gregorian::not_a_date_time);
-  typename posix_time::ptime beg(d,td);
-  typename posix_time::ptime end(d,td);
+  posix_time::time_duration td(1,0,0);
+  gregorian::date d(gregorian::not_a_date_time);
+  posix_time::ptime beg(d,td);
+  posix_time::ptime end(d,td);
   new(tp) boost::posix_time::time_period(beg,end);
 }
 
