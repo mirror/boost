@@ -64,7 +64,7 @@ namespace detail{
 
 #ifndef BOOST_NO_IS_ABSTRACT
 template<class T>
-struct is_abstract_imp
+struct is_abstract_imp2
 {
    // Deduction fails if T is void, function type, 
    // reference type (14.8.2/2)or an abstract class type 
@@ -89,11 +89,38 @@ struct is_abstract_imp
 #endif
     
    BOOST_STATIC_CONSTANT(bool, value = 
-      (::boost::type_traits::ice_and<
-         ::boost::is_class<T>::value,
-         (s1 == sizeof(type_traits::yes_type))
-      >::value));
+      (s1 == sizeof(type_traits::yes_type)));
 };
+
+template <bool v>
+struct is_abstract_select
+{
+   template <class T>
+   struct rebind
+   {
+      typedef is_abstract_imp2<T> type;
+   };
+};
+template <>
+struct is_abstract_select<false>
+{
+   template <class T>
+   struct rebind
+   {
+      typedef false_type type;
+   };
+};
+
+template <class T>
+struct is_abstract_imp
+{
+   typedef is_abstract_select< ::boost::is_class<T>::value> selector;
+   typedef typename selector::template rebind<T> binder;
+   typedef typename binder::type type;
+
+   BOOST_STATIC_CONSTANT(bool, value = type::value);
+};
+
 #endif
 }
 
