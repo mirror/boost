@@ -17,8 +17,8 @@
 #ifndef BOOST_VARIANT_VARIANT_FWD_HPP
 #define BOOST_VARIANT_VARIANT_FWD_HPP
 
-#include "boost/config.hpp"
-#include "boost/detail/workaround.hpp"
+#include "boost/variant/detail/config.hpp"
+
 #include "boost/blank_fwd.hpp"
 #include "boost/mpl/arg.hpp"
 #include "boost/mpl/void.hpp"
@@ -39,6 +39,17 @@
     BOOST_MPL_LIMIT_LIST_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
+// macro BOOST_VARIANT_NO_REFERENCE_SUPPORT
+//
+// Defined if variant does not support references as bounded types. 
+//
+#if defined(BOOST_VARIANT_AUX_BROKEN_CONSTRUCTOR_TEMPLATE_ORDERING) \
+ && !defined(BOOST_VARIANT_AUX_HAS_CONSTRUCTOR_TEMPLATE_ORDERING_SFINAE_WKND) \
+ && !defined(BOOST_VARIANT_NO_REFERENCE_SUPPORT)
+#   define BOOST_VARIANT_NO_REFERENCE_SUPPORT
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
 //
 // Defined if variant does not support make_variant_over (see below). 
@@ -50,8 +61,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT
 //
-// Defined if MPL lambda facility should be used as workaround for broken
-// compilers. (Thus, only types w/ MPL lambda workarounds can be accepted.)
+// Defined if make_recursive_variant cannot be supported as documented.
+//
+// Note: Currently, MPL lambda facility is used as workaround if defined, and
+// so only types declared w/ MPL lambda workarounds will work.
 //
 
 #include "boost/variant/detail/substitute_fwd.hpp"
