@@ -40,7 +40,7 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-#ifdef BOOST_UBLAS_C_STDLIB
+#ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
             std::abort ();
@@ -62,7 +62,7 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-#ifdef BOOST_UBLAS_C_STDLIB
+#ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
             std::abort ();
@@ -84,7 +84,7 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-#ifdef BOOST_UBLAS_C_STDLIB
+#ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
             std::abort ();
@@ -106,7 +106,7 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-#ifdef BOOST_UBLAS_C_STDLIB
+#ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
             std::abort ();
@@ -128,7 +128,7 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-#ifdef BOOST_UBLAS_C_STDLIB
+#ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
             std::abort ();
@@ -150,7 +150,7 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-#ifdef BOOST_UBLAS_C_STDLIB
+#ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
             std::abort ();
@@ -172,7 +172,7 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-#ifdef BOOST_UBLAS_C_STDLIB
+#ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
             std::abort ();
@@ -194,7 +194,7 @@ namespace boost { namespace numeric { namespace ublas {
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
             throw *this;
 #else
-#ifdef BOOST_UBLAS_C_STDLIB
+#ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
             std::abort ();

@@ -119,7 +119,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         real_type abs (const_reference t) {
-#ifdef BOOST_UBLAS_C_MATH
+#ifdef BOOST_NO_STDC_NAMESPACE
             return ::fabsf (t);
 #else
             return std::abs (t);
@@ -128,7 +128,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         value_type sqrt (const_reference t) {
-#ifdef BOOST_UBLAS_C_MATH
+#ifdef BOOST_NO_STDC_NAMESPACE
             return ::sqrtf (t);
 #else
             return std::sqrt (t);
@@ -197,7 +197,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         real_type abs (const_reference t) {
-#ifdef BOOST_UBLAS_C_MATH
+#ifdef BOOST_NO_STDC_NAMESPACE
             return ::fabs (t);
 #else
             return std::abs (t);
@@ -206,7 +206,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         value_type sqrt (const_reference t) {
-#ifdef BOOST_UBLAS_C_MATH
+#ifdef BOOST_NO_STDC_NAMESPACE
             return ::sqrt (t);
 #else
             return std::sqrt (t);
@@ -272,7 +272,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         real_type abs (const_reference t) {
-#ifdef BOOST_UBLAS_C_MATH
+#ifdef BOOST_NO_STDC_NAMESPACE
             return ::fabsl (t);
 #else
             return std::abs (t);
@@ -281,7 +281,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         value_type sqrt (const_reference t) {
-#ifdef BOOST_UBLAS_C_MATH
+#ifdef BOOST_NO_STDC_NAMESPACE
             return ::sqrtl (t);
 #else
             return std::sqrt (t);

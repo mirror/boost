@@ -783,7 +783,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                     BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
-#if defined (BOOST_MSVC_STD_ITERATOR) || (! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE))
+#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return (*it_).second;
 #elif defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return reference ((*this) (), &(*it_).second, index1 (), index2 ());
@@ -1062,7 +1062,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                     BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
-#if defined (BOOST_MSVC_STD_ITERATOR) || (! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE))
+#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return (*it_).second;
 #elif defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return reference ((*this) (), &(*it_).second, index1 (), index2 ());
@@ -1858,7 +1858,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                     BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
-#if defined (BOOST_MSVC_STD_ITERATOR) || (! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE))
+#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return (*it_).second;
 #elif defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return reference ((*this) (), &(*it_).second, index1 (), index2 ());
@@ -2169,7 +2169,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                     BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
-#if defined (BOOST_MSVC_STD_ITERATOR) || (! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE))
+#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return (*it_).second;
 #elif defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return reference ((*this) (), &(*it_).second, index1 (), index2 ());
@@ -3112,7 +3112,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                     BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
-#if defined (BOOST_MSVC_STD_ITERATOR) || ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
+#if ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return (*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()];
 #else
                     return reference ((*this) (), &(*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()], index1 (), index2 ());
@@ -3401,7 +3401,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                     BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
-#if defined (BOOST_MSVC_STD_ITERATOR) || ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
+#if ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return (*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()];
 #else
                     return reference ((*this) (), &(*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()], index1 (), index2 ());
@@ -4353,7 +4353,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                     BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
-#if defined (BOOST_MSVC_STD_ITERATOR) || ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
+#if ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return (*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()];
 #else
                     return reference ((*this) (), &(*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()], index1 (), index2 ());
@@ -4642,7 +4642,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                     BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
-#if defined (BOOST_MSVC_STD_ITERATOR) || ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
+#if ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return (*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()];
 #else
                     return reference ((*this) (), &(*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()], index1 (), index2 ());

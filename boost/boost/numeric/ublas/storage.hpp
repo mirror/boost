@@ -813,7 +813,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         array_adaptor ():
             size_ (0), own_ (true), data_ (new value_type [0]) {
-            std::fill (data_, data_ + size_, value_type ());
+            std::fill (data_.get (), data_.get () + size_, value_type ());
         }
         BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
         array_adaptor (no_init):
@@ -824,7 +824,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Assuming std compliant allocator as requested during review.
             // if (! data_.get ())
             //     throw std::bad_alloc ();
-            std::fill (data_, data_ + size_, value_type ());
+            std::fill (data_.get (), data_.get () + size_, value_type ());
         }
         BOOST_UBLAS_INLINE
         array_adaptor (size_type size, no_init):

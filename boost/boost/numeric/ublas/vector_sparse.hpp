@@ -581,7 +581,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
-#if defined (BOOST_MSVC_STD_ITERATOR) || (! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE))
+#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
                 return (*it_).second;
 #elif defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
                 return reference ((*this) (), &(*it_).second, index ());
@@ -1140,7 +1140,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
-#if defined (BOOST_MSVC_STD_ITERATOR) || ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
+#if ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
                 return (*this) ().value_data () [it_ - (*this) ().index_data ().begin ()];
 #else
                 return reference ((*this) (), &(*this) ().value_data () [it_ - (*this) ().index_data ().begin ()], index ());
@@ -1734,7 +1734,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
-#if defined (BOOST_MSVC_STD_ITERATOR) || ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
+#if ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
                 return (*this) ().value_data () [it_ - (*this) ().index_data ().begin ()];
 #else
                 return reference ((*this) (), &(*this) ().value_data () [it_ - (*this) ().index_data ().begin ()], index ());

@@ -38,10 +38,6 @@
 #pragma warning (disable: 4786)
 
 // Open problems:
-// MSVC lacks some specializations in <cmath>
-#define BOOST_UBLAS_C_MATH
-// MSVC lacks std::abort() in <cstdlib>
-#define BOOST_UBLAS_C_STDLIB
 // MSVC allows to implement free function as friends.
 #define BOOST_UBLAS_FRIEND_FUNCTION
 
@@ -111,8 +107,6 @@
 #define BOOST_UBLAS_TYPENAME typename
 
 // Open problems:
-// ICL lacks some specializations in <cmath>
-#define BOOST_UBLAS_C_MATH
 
 #define BOOST_UBLAS_USE_LONG_DOUBLE
 
@@ -123,8 +117,6 @@
 #ifdef __ICC
 
 // Open problems:
-// ICC lacks some specializations in <cmath>
-#define BOOST_UBLAS_C_MATH
 // ICC allows to implement free function as friends.
 #define BOOST_UBLAS_FRIEND_FUNCTION
 // ICC sometimes needs qualified type names.
@@ -137,8 +129,6 @@
 // Thanks to Kresimir Fresl for porting to Comeau.
 #ifdef __COMO__
 
-// Comeau lacks some specializations in <cmath>
-#define BOOST_UBLAS_C_MATH
 // Comeau 4.2.45 seems to have problems with BOOST_UBLAS_FRIEND_FUNCTION (this seems to be arguable).
 // Comeau allows to use iterator_base_traits.
 #define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
@@ -178,7 +168,7 @@
 // Enable different sparse element proxies
 // These fix a [1] = a [0] = 1, but probably won't work on broken compilers.
 // Thanks to Marc Duflot for spotting this.
-#ifndef BOOST_MSVC_STD_ITERATOR
+#ifndef BOOST_MSVC
 // #define BOOST_UBLAS_STRICT_STORAGE_SPARSE
 #define BOOST_UBLAS_STRICT_VECTOR_SPARSE
 #define BOOST_UBLAS_STRICT_MATRIX_SPARSE
