@@ -8,6 +8,7 @@
 
 #include "boost/limits.hpp" //work around compilers without limits
 #include "boost/date_time/special_defs.hpp"
+#include "boost/date_time/locale_config.hpp"
 #include <iostream>
 
 namespace boost {
@@ -208,7 +209,7 @@ public:
         return int_adapter::neg_infinity();
       }
     }
-    return int_adapter(value_ + rhs.as_number());
+    return int_adapter<int_type>(value_ + rhs.as_number());
   }
 
   int_adapter operator+(const int_type rhs) const
@@ -257,7 +258,7 @@ public:
         return int_adapter::neg_infinity();
       }
     }
-    return int_adapter(value_ - rhs.as_number());
+    return int_adapter<int_type>(value_ - rhs.as_number());
   }
   int_adapter operator-(const int_type rhs) const
   {
@@ -324,7 +325,7 @@ public:
     }
     return int_adapter<int_type>(value_ / rhs);
   }
-
+#ifndef BOOST_DATE_TIME_NO_LOCALE
   /*! Expected output is either a numeric representation 
    * or a special values representation.<BR> 
    * Ex. "12", "+infinity", "not-a-number", etc. */
@@ -354,7 +355,7 @@ public:
     }
     return os;
   }
-
+#endif
 private:
   int_type value_;
   

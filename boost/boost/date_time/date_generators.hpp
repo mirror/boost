@@ -13,6 +13,22 @@
 namespace boost {
 namespace date_time {
 
+  //! Base class for all generators that take a year and produce a date.
+  /*! This class is a base class for polymorphic function objects that take
+      a year and produce a concrete date.
+      @param date_type The type representing a date.  This type must
+       export a calender_type which defines a year_type.
+   */
+  template<class date_type>
+  class year_based_generator {
+  public:
+    typedef typename date_type::calendar_type calendar_type;
+    typedef typename calendar_type::year_type        year_type;
+    year_based_generator() {};
+    virtual ~year_based_generator() {};
+    virtual date_type get_date(year_type y) const = 0;
+  };
+
   //! Generates a date by applying the year to the given month and day.
   /*!
     Example usage: 
@@ -23,7 +39,7 @@ namespace date_time {
     \ingroup date_alg
    */
   template<class date_type>
-  class partial_date {
+  class partial_date : public year_based_generator<date_type> {
   public:
     typedef typename date_type::calendar_type calendar_type;
     typedef typename calendar_type::day_type         day_type;
@@ -79,7 +95,7 @@ namespace date_time {
    *  \ingroup date_alg
    */
   template<class date_type>
-  class nth_kday_of_month {
+  class nth_kday_of_month : public year_based_generator<date_type> {
   public:
     typedef typename date_type::calendar_type calendar_type;
     typedef typename calendar_type::day_of_week_type  day_of_week_type;
@@ -141,7 +157,7 @@ namespace date_time {
    *  \ingroup date_alg
    */
   template<class date_type>
-  class first_kday_of_month {
+  class first_kday_of_month : public year_based_generator<date_type> {
   public:
     typedef typename date_type::calendar_type calendar_type;
     typedef typename calendar_type::day_of_week_type  day_of_week_type;
@@ -190,7 +206,7 @@ namespace date_time {
    *  \ingroup date_alg
    */
   template<class date_type>
-  class last_kday_of_month {
+  class last_kday_of_month : public year_based_generator<date_type> {
   public:
     typedef typename date_type::calendar_type calendar_type;
     typedef typename calendar_type::day_of_week_type  day_of_week_type;
@@ -309,7 +325,7 @@ namespace date_time {
 
 
 /*
- * Copyright (c) 2001
+ * Copyright (c) 2001-2003
  * CrystalClear Software, Inc.
  *
  * Permission to use, copy, modify, distribute and sell this software
