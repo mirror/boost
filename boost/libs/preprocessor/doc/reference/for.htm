@@ -1,62 +1,85 @@
-<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE><BODY bgcolor="#FFFFFF">
-
-<a href="index.htm"><IMG height=86 alt="c++boost.gif (8819 bytes)" src="../../../../c++boost.gif" width=277 align=center></a>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
+<title>Boost.Preprocessor</title>
+</head>
+<body bgcolor="#FFFFFF" link="#0000ff" vlink="#800080">
+<table border="0" cellpadding="7" cellspacing="0" width="100%" summary=
+    "header">
+  <tr> 
+    <td valign="top" width="300"> 
+      <h3><a href="../../../../index.htm"><img height="86" width="277" alt="C++ Boost" src="../../../../c++boost.gif" border="0"></a></h3>
+    </td>
+    <td valign="top"> 
+      <h1 align="center">Boost.Preprocessor</h1>
+      <h2 align="center">Reference</h2>
+    </td>
+  </tr>
+</table>
 
 <hr>
 
-<H1>#include &lt;<a href="../../../../boost/preprocessor/for.hpp">boost/preprocessor/for.hpp</a>&gt;</H1>
+<a href="expand.htm">Prev</a> <a href="identity.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<hr>
+
+<h1>#include &lt;<a href="../../../../boost/preprocessor/for.hpp">boost/preprocessor/for.hpp</a>&gt;</h1>
 
 <hr>
 
-<H2><a name="BOOST_PP_FOR">#define BOOST_PP_FOR</a>(X,C,F,I)</H2>
- <P>Repeats I(R,X) and iterates F(R,X) while C(R,X) is true.</P>
+<h2><a name="BOOST_PP_FOR">#define BOOST_PP_FOR</a>(X,C,F,I)</h2>
+ <p>Repeats <code>I(R,X)</code> and iterates <code>F(R,X)</code> while
+<code>C(R,X)</code> is true.</p>
 
-<P>In other words, expands to the sequence:</P>
+<p>In other words, expands to the sequence:</p>
 
-<PRE>
+<pre>
   I(R,X)  I(R,F(R,X))  I(R,F(R,F(R,X)))  ...  I(R,F(R,F(...F(R,X)...)))
-</PRE>
+</pre>
 
-<P>The length of the sequence is determined by C(R,X).</P>
+<p>The length of the sequence is determined by <code>C(R,X)</code>.</p>
 
-<H3>Legend</H3>
-<UL>
-  <LI><B>X</B> is the current state of iteration. The state is usually a tuple.
-  <LI><B>C</B> is the condition for iteration. It must expand to a decimal
-      integer literal.
-  <LI><B>F</B> is the iterated macro. Note that if the state is a tuple, then
-      F(R,X) usually expands to a tuple of the same number of elements.
-  <LI><B>I</B> is the state instantiation macro.
-  <LI><B>R</B> is the recursion depth and should only be used as a parameter to
+<h3>Legend</h3>
+<ul>
+  <li><b>X</b> is the current state of iteration. The state is usually a tuple.</li>
+  <li><b>C</b> is the condition for iteration. It must expand to a decimal
+      integer literal.</li>
+  <li><b>F</b> is the iterated macro. Note that if the state is a tuple, then
+      F(R,X) usually expands to a tuple of the same number of elements.</li>
+  <li><b>I</b> is the state instantiation macro.</li>
+  <li><b>R</b> is the recursion depth and should only be used as a parameter to
       other macros using <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>() or for invoking <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>##R()
       directly. For each macro using <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>(), there is a version of the
       macro, distinguished by the R suffix, that accepts an additional
       recursion depth as the first parameter. This technique is necessary to
       avoid recursively expanding the same macro again, which is not permitted
-      by the C++ preprocessor.
-</UL>
+      by the C++ preprocessor.</li>
+</ul>
 
-<H3><a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>() vs <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>()</H3>
+<h3><a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>() vs <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>()</h3>
 
-<P><a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>() is a generalization of <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>(). This means that
+<p><a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>() is a generalization of <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>(). This means that
 <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>() can be implemented using <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>(). However,
 <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>() was introduced earlier, is generally easier to use, and is
-still quite useful on its own.</P>
+still quite useful on its own.</p>
 
-<H3>2D and 3D repetition</H3>
+<h3>2D and 3D repetition</h3>
 
-<P><a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>() can be used for multidimensional repetition simply by
-invoking <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>##R() directly.</P>
+<p><a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>() can be used for multidimensional repetition simply by
+invoking <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>##R() directly.</p>
 
 <hr>
 
-<p>(C) Copyright Housemarque Oy 2002</p>
+<a href="expand.htm">Prev</a> <a href="identity.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<hr>
 
-<p>Permission to copy, use, modify, sell and distribute this document is granted
+<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+
+<p><i>&copy; Copyright <a href="http://www.housemarque.com">Housemarque Oy</a> 2002</i></p>
+
+<p><i>Permission to copy, use, modify, sell and distribute this document is granted
 provided this copyright notice appears in all copies. This document is provided
 "as is" without express or implied warranty, and with no claim as to its suitability
-for any purpose.</p>
+for any purpose.</i></p>
 
-<p>Generated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
-
-</BODY></HTML>
+</body></html>

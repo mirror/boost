@@ -1,111 +1,121 @@
-<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE><BODY bgcolor="#FFFFFF">
-
-<a href="index.htm"><IMG height=86 alt="c++boost.gif (8819 bytes)" src="../../../../c++boost.gif" width=277 align=center></a>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
+<title>Boost.Preprocessor</title>
+</head>
+<body bgcolor="#FFFFFF" link="#0000ff" vlink="#800080">
+<table border="0" cellpadding="7" cellspacing="0" width="100%" summary=
+    "header">
+  <tr> 
+    <td valign="top" width="300"> 
+      <h3><a href="../../../../index.htm"><img height="86" width="277" alt="C++ Boost" src="../../../../c++boost.gif" border="0"></a></h3>
+    </td>
+    <td valign="top"> 
+      <h1 align="center">Boost.Preprocessor</h1>
+      <h2 align="center">Reference</h2>
+    </td>
+  </tr>
+</table>
 
 <hr>
 
-<H1>#include &lt;<a href="../../../../boost/preprocessor/list/adt.hpp">boost/preprocessor/list/adt.hpp</a>&gt;</H1>
+<a href="list.htm">Prev</a> <a href="list_append.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<hr>
+
+<h1>#include &lt;<a href="../../../../boost/preprocessor/list/adt.hpp">boost/preprocessor/list/adt.hpp</a>&gt;</h1>
+ <p>This header defines the fundamental list operations.</p>
+
+<h3>Note</h3>
+<ul>
+  <li>The internal representation of lists is hidden. Although there aren't
+      compelling reasons to change the representation, you should avoid
+      writing code that depends on the internal representation details.</li>
+</ul>
 
 <hr>
 
-<H2><a name="BOOST_PP_LIST_CONS">#define BOOST_PP_LIST_CONS</a>(H,T)</H2>
- <P>List constructor.</P>
+<h2><a name="BOOST_PP_LIST_CONS">#define BOOST_PP_LIST_CONS</a>(H,T)</h2>
+ <p>List constructor.</p>
 
-<P>Lists are build using list constructors <a href="list_adt.htm#BOOST_PP_LIST_NIL">BOOST_PP_LIST_NIL</a> and
-<a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(). For example,</P>
+<p>Lists are build using list constructors <a href="list_adt.htm#BOOST_PP_LIST_NIL">BOOST_PP_LIST_NIL</a> and
+<a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(). For example,</p>
 
-<PRE>
+<pre>
   <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(1,
   <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(2,
   <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(3,
   <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(4,
   <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(5,
   <a href="list_adt.htm#BOOST_PP_LIST_NIL">BOOST_PP_LIST_NIL</a>)))))
-</PRE>
+</pre>
 
-<P>Short lists can also be build from tuples:</P>
+<p>Short lists can also be build from tuples:</p>
 
-<PRE>
+<pre>
   <a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(5,(1,2,3,4,5))
-</PRE>
+</pre>
 
-<P>Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.</P>
+<p>Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.</p>
 
-<hr>
-
-<H2><a name="BOOST_PP_LIST_NIL">#define BOOST_PP_LIST_NIL</a></H2>
- <P>List nil constructor.</P>
-
-<H3>See</H3>
-<UL>
-  <LI><a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>()
-</UL>
+<p>Longer lists can be built with the help of <a href="list_append.htm#BOOST_PP_LIST_APPEND">BOOST_PP_LIST_APPEND</a>().</p>
 
 <hr>
 
-<H2><a name="BOOST_PP_LIST_IS_CONS">#define BOOST_PP_LIST_IS_CONS</a>(L)</H2>
- <P>Expands to 1 if the list is not nil and 0 otherwise.</P>
-
-<H3>See</H3>
-<UL>
-  <LI><a href="list_adt.htm#BOOST_PP_LIST_IS_NIL">BOOST_PP_LIST_IS_NIL</a>()
-</UL>
-
+<h2><a name="BOOST_PP_LIST_NIL">#define BOOST_PP_LIST_NIL</a></h2>
+ <p>List nil constructor.</p> 
 <hr>
 
-<H2><a name="BOOST_PP_LIST_IS_NIL">#define BOOST_PP_LIST_IS_NIL</a>(L)</H2>
- <P>Expands to 1 if the list is nil and 0 otherwise.</P>
-
-<H3>See</H3>
-<UL>
-  <LI><a href="list_adt.htm#BOOST_PP_LIST_IS_CONS">BOOST_PP_LIST_IS_CONS</a>()
-</UL>
-
+<h2><a name="BOOST_PP_LIST_IS_CONS">#define BOOST_PP_LIST_IS_CONS</a>(L)</h2>
+ <p>Expands to 1 if the list is not nil and 0 otherwise.</p> 
 <hr>
 
-<H2><a name="BOOST_PP_LIST_FIRST">#define BOOST_PP_LIST_FIRST</a>(L)</H2>
- <P>Expands to the first element of the list. The list must not be nil.</P>
+<h2><a name="BOOST_PP_LIST_IS_NIL">#define BOOST_PP_LIST_IS_NIL</a>(L)</h2>
+ <p>Expands to 1 if the list is nil and 0 otherwise.</p> 
+<hr>
 
-<P>For example,</P>
+<h2><a name="BOOST_PP_LIST_FIRST">#define BOOST_PP_LIST_FIRST</a>(L)</h2>
+ <p>Expands to the first element of the list. The list must not be nil.</p>
 
-<PRE>
+<p>For example,</p>
+
+<pre>
   <a href="list_adt.htm#BOOST_PP_LIST_FIRST">BOOST_PP_LIST_FIRST</a>(<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(5,(1,2,3,4,5)))
-</PRE>
+</pre>
 
-<P>expands to 1.</P>
-
-<H3>See</H3>
-<UL>
-  <LI><a href="list_adt.htm#BOOST_PP_LIST_REST">BOOST_PP_LIST_REST</a>()
-</UL>
+<p>expands to 1.</p>
 
 <hr>
 
-<H2><a name="BOOST_PP_LIST_REST">#define BOOST_PP_LIST_REST</a>(L)</H2>
- <P>Expands to a list of all but the first element of the list. The list must not be nil.</P>
+<h2><a name="BOOST_PP_LIST_REST">#define BOOST_PP_LIST_REST</a>(L)</h2>
+ <p>Expands to a list of all but the first element of the list.</p>
 
-<P>For example,</P>
+<p>The list must not be nil.</p>
 
-<PRE>
+<p>For example,</p>
+
+<pre>
   <a href="list_adt.htm#BOOST_PP_LIST_REST">BOOST_PP_LIST_REST</a>(<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(5,(1,2,3,4,5)))
-</PRE>
+</pre>
 
-<P>expands to a list containing 2, 3, 4 and 5.</P>
+<p>expands to the same as:</p>
 
-<H3>See</H3>
-<UL>
-  <LI><a href="list_adt.htm#BOOST_PP_LIST_FIRST">BOOST_PP_LIST_FIRST</a>()
-</UL>
+<pre>
+  <a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(4,(2,3,4,5))
+</pre>
 
 <hr>
 
-<p>(C) Copyright Housemarque Oy 2002</p>
+<a href="list.htm">Prev</a> <a href="list_append.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<hr>
 
-<p>Permission to copy, use, modify, sell and distribute this document is granted
+<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+
+<p><i>&copy; Copyright <a href="http://www.housemarque.com">Housemarque Oy</a> 2002</i></p>
+
+<p><i>Permission to copy, use, modify, sell and distribute this document is granted
 provided this copyright notice appears in all copies. This document is provided
 "as is" without express or implied warranty, and with no claim as to its suitability
-for any purpose.</p>
+for any purpose.</i></p>
 
-<p>Generated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
-
-</BODY></HTML>
+</body></html>

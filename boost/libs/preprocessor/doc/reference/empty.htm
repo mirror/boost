@@ -1,79 +1,56 @@
-<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE><BODY bgcolor="#FFFFFF">
-
-<a href="index.htm"><IMG height=86 alt="c++boost.gif (8819 bytes)" src="../../../../c++boost.gif" width=277 align=center></a>
-
-<hr>
-
-<H1>#include &lt;<a href="../../../../boost/preprocessor/empty.hpp">boost/preprocessor/empty.hpp</a>&gt;</H1>
-
-<hr>
-
-<H2><a name="BOOST_PP_EMPTY">#define BOOST_PP_EMPTY</a>()</H2>
- <P>Expands to nothing. Used with <a href="if.htm#BOOST_PP_IF">BOOST_PP_IF</a>() and as an unused parameter.</P>
-
-<P>Example usage as the implementation of <a href="comma_if.htm#BOOST_PP_COMMA_IF">BOOST_PP_COMMA_IF</a>(C):</P>
-
-<PRE>
-  #define <a href="comma_if.htm#BOOST_PP_COMMA_IF">BOOST_PP_COMMA_IF</a>(C)\
-    <a href="if.htm#BOOST_PP_IF">BOOST_PP_IF</a>(C,<a href="comma.htm#BOOST_PP_COMMA">BOOST_PP_COMMA</a>,<a href="empty.htm#BOOST_PP_EMPTY">BOOST_PP_EMPTY</a>)()
-</PRE>
-
-<P>Example usage as an unused macro parameter:</P>
-
-<PRE>
-  #define BOOST_PP_DEF(CV)\
-    template<class base>\
-    CV() typename implement_subscript_using_begin_subscript<base>::value_type&\
-      implement_subscript_using_begin_subscript<base>::operator[]\
-      ( index_type\
-          i\
-      ) CV()\
-    { return base::begin()[i];\
-    }
-
-  BOOST_PP_DEF(<a href="empty.htm#BOOST_PP_EMPTY">BOOST_PP_EMPTY</a>)
-  BOOST_PP_DEF(const <a href="empty.htm#BOOST_PP_EMPTY">BOOST_PP_EMPTY</a>)
-  #undef BOOST_PP_DEF
-</PRE>
-
-<P>The above expands to:</P>
-
-<PRE>
-  template<class base>
-  typename implement_subscript_using_begin_subscript<base>::value_type&
-    implement_subscript_using_begin_subscript<base>::operator[]
-    ( index_type
-        i
-    )
-  { return base::begin()[i];
-  }
-
-  template<class base>
-  const typename implement_subscript_using_begin_subscript<base>::value_type&
-    implement_subscript_using_begin_subscript<base>::operator[]
-    ( index_type
-        i
-    ) const
-  { return base::begin()[i];
-  }
-</PRE>
-
-<P>In case you wonder, the above code is part of a generalized layer for
-implementing the subscripting operators of a random access container.</P>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
+<title>Boost.Preprocessor</title>
+</head>
+<body bgcolor="#FFFFFF" link="#0000ff" vlink="#800080">
+<table border="0" cellpadding="7" cellspacing="0" width="100%" summary=
+    "header">
+  <tr> 
+    <td valign="top" width="300"> 
+      <h3><a href="../../../../index.htm"><img height="86" width="277" alt="C++ Boost" src="../../../../c++boost.gif" border="0"></a></h3>
+    </td>
+    <td valign="top"> 
+      <h1 align="center">Boost.Preprocessor</h1>
+      <h2 align="center">Reference</h2>
+    </td>
+  </tr>
+</table>
 
 <hr>
 
-<H2><a name="BOOST_PREPROCESSOR_EMPTY">#define BOOST_PREPROCESSOR_EMPTY</a>()</H2>
- <P>Obsolete. Use <a href="empty.htm#BOOST_PP_EMPTY">BOOST_PP_EMPTY</a>().</P> 
+<a href="dec.htm">Prev</a> <a href="enum.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
 <hr>
 
-<p>(C) Copyright Housemarque Oy 2002</p>
+<h1>#include &lt;<a href="../../../../boost/preprocessor/empty.hpp">boost/preprocessor/empty.hpp</a>&gt;</h1>
 
-<p>Permission to copy, use, modify, sell and distribute this document is granted
+<hr>
+
+<h2><a name="BOOST_PP_EMPTY">#define BOOST_PP_EMPTY</a>()</h2>
+ <p>Expands to nothing. Used with <a href="if.htm#BOOST_PP_IF">BOOST_PP_IF</a>() and as an unused parameter.</p>
+
+<h3>Example</h3>
+<ul>
+  <li><a href="../../example/subscript_layer.cpp">subscript_layer.cpp</a></li>
+</ul>
+
+<hr>
+
+<h2><a name="BOOST_PREPROCESSOR_EMPTY">#define BOOST_PREPROCESSOR_EMPTY</a>()</h2>
+ <p>Obsolete. Use <a href="empty.htm#BOOST_PP_EMPTY">BOOST_PP_EMPTY</a>().</p> 
+<hr>
+
+<a href="dec.htm">Prev</a> <a href="enum.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<hr>
+
+<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+
+<p><i>&copy; Copyright <a href="http://www.housemarque.com">Housemarque Oy</a> 2002</i></p>
+
+<p><i>Permission to copy, use, modify, sell and distribute this document is granted
 provided this copyright notice appears in all copies. This document is provided
 "as is" without express or implied warranty, and with no claim as to its suitability
-for any purpose.</p>
+for any purpose.</i></p>
 
-<p>Generated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
-
-</BODY></HTML>
+</body></html>

@@ -1,64 +1,86 @@
-<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE><BODY bgcolor="#FFFFFF">
-
-<a href="index.htm"><IMG height=86 alt="c++boost.gif (8819 bytes)" src="../../../../c++boost.gif" width=277 align=center></a>
-
-<hr>
-
-<H1>#include &lt;<a href="../../../../boost/preprocessor/limits.hpp">boost/preprocessor/limits.hpp</a>&gt;</H1>
-
-<hr>
-
-<H2><a name="BOOST_PP_LIMIT_DIM">#define BOOST_PP_LIMIT_DIM</a></H2>
- <P>Expands to the number of dimensions of repeat supported by the
-library.</P>
-
-<P>The repeat macros are named <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>(), <a href="repeat_2nd.htm#BOOST_PP_REPEAT_2ND">BOOST_PP_REPEAT_2ND</a>(),
-<a href="repeat_3rd.htm#BOOST_PP_REPEAT_3RD">BOOST_PP_REPEAT_3RD</a>(), ...</P>
-
-<hr>
-
-<H2><a name="BOOST_PP_LIMIT_MAG">#define BOOST_PP_LIMIT_MAG</a></H2>
- <P>Expands to the maximum straight numeric literal supported by the
-library.</P>
-
-<P>This is also the limit of the repetition primitives (<a href="enum.htm#BOOST_PP_ENUM">BOOST_PP_ENUM</a> family
-and <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a> family).</P>
-
-<H3>Note</H3>
-<UL>
-  <LI>Only decimal integer literals in the range [0,<a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>]
-      are supported.
-  <LI>All arithmetic operations (<a href="arithmetic_add.htm#BOOST_PP_ADD">BOOST_PP_ADD</a>(),<a href="arithmetic_sub.htm#BOOST_PP_SUB">BOOST_PP_SUB</a>(),<a href="arithmetic_mul.htm#BOOST_PP_MUL">BOOST_PP_MUL</a>(),
-      <a href="arithmetic_div.htm#BOOST_PP_DIV">BOOST_PP_DIV</a>(),...) use saturation arithmetic.
-  <LI>The maximum repetition count supported by the library may not be reached
-      due to compiler limitations.
-</UL>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
+<title>Boost.Preprocessor</title>
+</head>
+<body bgcolor="#FFFFFF" link="#0000ff" vlink="#800080">
+<table border="0" cellpadding="7" cellspacing="0" width="100%" summary=
+    "header">
+  <tr> 
+    <td valign="top" width="300"> 
+      <h3><a href="../../../../index.htm"><img height="86" width="277" alt="C++ Boost" src="../../../../c++boost.gif" border="0"></a></h3>
+    </td>
+    <td valign="top"> 
+      <h1 align="center">Boost.Preprocessor</h1>
+      <h2 align="center">Reference</h2>
+    </td>
+  </tr>
+</table>
 
 <hr>
 
-<H2><a name="BOOST_PP_LIMIT_TUPLE">#define BOOST_PP_LIMIT_TUPLE</a></H2>
- <P>Expands to the maximum tuple length supported by the library.</P> 
+<a href="inc.htm">Prev</a> <a href="list.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
 <hr>
 
-<H2><a name="BOOST_PREPROCESSOR_LIMIT_DIM">#define BOOST_PREPROCESSOR_LIMIT_DIM</a></H2>
- <P>Obsolete. Use <a href="limits.htm#BOOST_PP_LIMIT_DIM">BOOST_PP_LIMIT_DIM</a>.</P> 
+<h1>#include &lt;<a href="../../../../boost/preprocessor/limits.hpp">boost/preprocessor/limits.hpp</a>&gt;</h1>
+
 <hr>
 
-<H2><a name="BOOST_PREPROCESSOR_LIMIT_MAG">#define BOOST_PREPROCESSOR_LIMIT_MAG</a></H2>
- <P>Obsolete. Use <a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>.</P> 
+<h2><a name="BOOST_PP_LIMIT_DIM">#define BOOST_PP_LIMIT_DIM</a></h2>
+ <p>Expands to the number of dimensions of repeat supported by the
+library.</p>
+
+<p>The repeat macros are named <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>(), <a href="repeat_2nd.htm#BOOST_PP_REPEAT_2ND">BOOST_PP_REPEAT_2ND</a>(),
+<a href="repeat_3rd.htm#BOOST_PP_REPEAT_3RD">BOOST_PP_REPEAT_3RD</a>(), ...</p>
+
 <hr>
 
-<H2><a name="BOOST_PREPROCESSOR_LIMIT_TUPLE">#define BOOST_PREPROCESSOR_LIMIT_TUPLE</a></H2>
- <P>Obsolete. Use <a href="limits.htm#BOOST_PP_LIMIT_TUPLE">BOOST_PP_LIMIT_TUPLE</a>.</P> 
+<h2><a name="BOOST_PP_LIMIT_MAG">#define BOOST_PP_LIMIT_MAG</a></h2>
+ <p>Expands to the maximum straight numeric literal supported by the
+library.</p>
+
+<p>This is also the limit of the repetition primitives (<a href="enum.htm#BOOST_PP_ENUM">BOOST_PP_ENUM</a> family
+and <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a> family).</p>
+
+<h3>Note</h3>
+<ul>
+  <li>Only decimal integer literals in the range [0, <a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>]
+      are supported.</li>
+  <li>All arithmetic operations (<a href="arithmetic_add.htm#BOOST_PP_ADD">BOOST_PP_ADD</a>(), <a href="arithmetic_sub.htm#BOOST_PP_SUB">BOOST_PP_SUB</a>(),
+      <a href="arithmetic_mul.htm#BOOST_PP_MUL">BOOST_PP_MUL</a>(), <a href="arithmetic_div.htm#BOOST_PP_DIV">BOOST_PP_DIV</a>()) use saturation arithmetic.</li>
+  <li>The maximum repetition count supported by the library may not be reached
+      due to compiler limitations.</li>
+</ul>
+
 <hr>
 
-<p>(C) Copyright Housemarque Oy 2002</p>
+<h2><a name="BOOST_PP_LIMIT_TUPLE">#define BOOST_PP_LIMIT_TUPLE</a></h2>
+ <p>Expands to the maximum tuple length supported by the library.</p> 
+<hr>
 
-<p>Permission to copy, use, modify, sell and distribute this document is granted
+<h2><a name="BOOST_PREPROCESSOR_LIMIT_DIM">#define BOOST_PREPROCESSOR_LIMIT_DIM</a></h2>
+ <p>Obsolete. Use <a href="limits.htm#BOOST_PP_LIMIT_DIM">BOOST_PP_LIMIT_DIM</a>.</p> 
+<hr>
+
+<h2><a name="BOOST_PREPROCESSOR_LIMIT_MAG">#define BOOST_PREPROCESSOR_LIMIT_MAG</a></h2>
+ <p>Obsolete. Use <a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>.</p> 
+<hr>
+
+<h2><a name="BOOST_PREPROCESSOR_LIMIT_TUPLE">#define BOOST_PREPROCESSOR_LIMIT_TUPLE</a></h2>
+ <p>Obsolete. Use <a href="limits.htm#BOOST_PP_LIMIT_TUPLE">BOOST_PP_LIMIT_TUPLE</a>.</p> 
+<hr>
+
+<a href="inc.htm">Prev</a> <a href="list.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<hr>
+
+<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+
+<p><i>&copy; Copyright <a href="http://www.housemarque.com">Housemarque Oy</a> 2002</i></p>
+
+<p><i>Permission to copy, use, modify, sell and distribute this document is granted
 provided this copyright notice appears in all copies. This document is provided
 "as is" without express or implied warranty, and with no claim as to its suitability
-for any purpose.</p>
+for any purpose.</i></p>
 
-<p>Generated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
-
-</BODY></HTML>
+</body></html>
