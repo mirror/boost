@@ -8,7 +8,7 @@ local test-files = $(test-dir)tests.txt
   ;
 
 unit-test regress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -20,7 +20,7 @@ unit-test regress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
 	;
 
 unit-test wregress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -33,7 +33,7 @@ unit-test wregress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
 	;
 
 unit-test posix_api_check_c : c_compiler_checks/posix_api_check.c
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -44,7 +44,7 @@ unit-test posix_api_check_c : c_compiler_checks/posix_api_check.c
 	;
 
 unit-test wide_posix_api_check_c : c_compiler_checks/wide_posix_api_check.c
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -55,7 +55,7 @@ unit-test wide_posix_api_check_c : c_compiler_checks/wide_posix_api_check.c
 	;
 
 unit-test posix_api_check : c_compiler_checks/posix_api_check.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -66,7 +66,7 @@ unit-test posix_api_check : c_compiler_checks/posix_api_check.cpp
 	;
 
 unit-test wide_posix_api_check : c_compiler_checks/wide_posix_api_check.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -75,6 +75,7 @@ unit-test wide_posix_api_check : c_compiler_checks/wide_posix_api_check.cpp
 		debug
         : 
 	;
+
 
 
 

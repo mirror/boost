@@ -2,7 +2,7 @@ subproject libs/regex/example ;
 
 
 unit-test timer : timer/regex_timer.cpp 
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -14,7 +14,7 @@ unit-test timer : timer/regex_timer.cpp
 	;
 
 unit-test jgrep : jgrep/jgrep.cpp jgrep/main.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -26,7 +26,7 @@ unit-test jgrep : jgrep/jgrep.cpp jgrep/main.cpp
 	;
 
 unit-test credit_card_example : snippets/credit_card_example.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -37,7 +37,7 @@ unit-test credit_card_example : snippets/credit_card_example.cpp
 
 
 unit-test partial_regex_grep : snippets/partial_regex_grep.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -49,7 +49,7 @@ unit-test partial_regex_grep : snippets/partial_regex_grep.cpp
 	;
 
 unit-test partial_regex_match : snippets/partial_regex_match.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -61,7 +61,7 @@ unit-test partial_regex_match : snippets/partial_regex_match.cpp
 	;
 
 unit-test regex_grep_example_1 : snippets/regex_grep_example_1.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -73,7 +73,7 @@ unit-test regex_grep_example_1 : snippets/regex_grep_example_1.cpp
 	;
 
 unit-test regex_grep_example_2 : snippets/regex_grep_example_2.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -85,7 +85,7 @@ unit-test regex_grep_example_2 : snippets/regex_grep_example_2.cpp
 	;
 
 unit-test regex_grep_example_3 : snippets/regex_grep_example_3.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -97,7 +97,7 @@ unit-test regex_grep_example_3 : snippets/regex_grep_example_3.cpp
 	;
 
 unit-test regex_grep_example_4 : snippets/regex_grep_example_4.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -109,7 +109,7 @@ unit-test regex_grep_example_4 : snippets/regex_grep_example_4.cpp
 	;
 
 unit-test regex_match_example : snippets/regex_match_example.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -121,7 +121,7 @@ unit-test regex_match_example : snippets/regex_match_example.cpp
 	;
 
 unit-test regex_merge_example : snippets/regex_merge_example.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -133,7 +133,7 @@ unit-test regex_merge_example : snippets/regex_merge_example.cpp
 	;
 
 unit-test regex_search_example : snippets/regex_search_example.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -145,7 +145,7 @@ unit-test regex_search_example : snippets/regex_search_example.cpp
 	;
 
 unit-test regex_split_example_1 : snippets/regex_split_example_1.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -157,7 +157,7 @@ unit-test regex_split_example_1 : snippets/regex_split_example_1.cpp
 	;
 
 unit-test regex_split_example_2 : snippets/regex_split_example_2.cpp
-   <lib>../build/libboost_regex$(SUFLIB) 
+   <lib>../build/boost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
@@ -167,6 +167,7 @@ unit-test regex_split_example_2 : snippets/regex_split_example_2.cpp
 	:
 		../index.htm
 	;
+
 
 
 
