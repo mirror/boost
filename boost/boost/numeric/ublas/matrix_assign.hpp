@@ -477,7 +477,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef F functor_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#ifdef BOOST_UBLAS_TYPE_CHECK_TOO_STRONG
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
         indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, row_major_tag ());
         indexing_matrix_assign (functor_type (), cm, e, row_major_tag ());
@@ -558,8 +558,9 @@ namespace boost { namespace numeric { namespace ublas {
                 functor_type () (*it2, value_type ()), ++ it2;
             ++ it1;
         }
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+#ifdef BOOST_UBLAS_TYPE_CHECK_TOO_STRONG
+        if (! disable_type_check)
+            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
 #endif
     }
     // Packed (proxy) column major case
@@ -572,7 +573,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef F functor_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#ifdef BOOST_UBLAS_TYPE_CHECK_TOO_STRONG
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
         indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, column_major_tag ());
         indexing_matrix_assign (functor_type (), cm, e, column_major_tag ());
@@ -653,8 +654,9 @@ namespace boost { namespace numeric { namespace ublas {
                 functor_type () (*it1, value_type ()), ++ it1;
             ++ it2;
         }
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+#ifdef BOOST_UBLAS_TYPE_CHECK_TOO_STRONG
+        if (! disable_type_check)
+            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
 #endif
     }
     // Sparse row major case
@@ -686,7 +688,8 @@ namespace boost { namespace numeric { namespace ublas {
             ++ it1e;
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+        if (! disable_type_check)
+            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
 #endif
     }
     // Sparse column major case
@@ -718,7 +721,8 @@ namespace boost { namespace numeric { namespace ublas {
             ++ it2e;
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+        if (! disable_type_check)
+            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
 #endif
     }
     // Sparse proxy row major case
@@ -838,7 +842,8 @@ namespace boost { namespace numeric { namespace ublas {
             ++ it1;
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+        if (! disable_type_check)
+            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
 #endif
     }
     // Sparse proxy column major case
@@ -958,7 +963,8 @@ namespace boost { namespace numeric { namespace ublas {
             ++ it2;
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+        if (! disable_type_check)
+            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
 #endif
     }
 

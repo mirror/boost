@@ -1,3 +1,19 @@
+//
+//  Copyright (c) 2000-2002
+//  Joerg Walter, Mathias Koch
+//
+//  Permission to use, copy, modify, distribute and sell this software
+//  and its documentation for any purpose is hereby granted without fee,
+//  provided that the above copyright notice appear in all copies and
+//  that both that copyright notice and this permission notice appear
+//  in supporting documentation.  The authors make no representations
+//  about the suitability of this software for any purpose.
+//  It is provided "as is" without express or implied warranty.
+//
+//  The authors gratefully acknowledge the support of
+//  GeNeSys mbH & Co. KG in producing this work.
+//
+
 #ifdef BOOST_MSVC
 
 #pragma warning (disable: 4355)
@@ -15,7 +31,7 @@
 
 #include "test1.hpp"
 
-// Test vector expression templates 
+// Test vector expression templates
 template<class V, int N>
 struct test_my_vector {
     typedef typename V::value_type value_type;
@@ -24,7 +40,7 @@ struct test_my_vector {
 
     template<class VP>
     void operator () (VP &v1, VP &v2, VP &v3) const {
-        try {            
+        try {
             value_type t;
             size_type i;
             real_type n;
@@ -115,7 +131,7 @@ struct test_my_vector {
         }
     }
     void operator () () const {
-        try {            
+        try {
             V v1 (N), v2 (N), v3 (N);
             (*this) (v1, v2, v3);
 

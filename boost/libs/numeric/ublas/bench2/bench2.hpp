@@ -1,3 +1,19 @@
+//
+//  Copyright (c) 2000-2002
+//  Joerg Walter, Mathias Koch
+//
+//  Permission to use, copy, modify, distribute and sell this software
+//  and its documentation for any purpose is hereby granted without fee,
+//  provided that the above copyright notice appear in all copies and
+//  that both that copyright notice and this permission notice appear
+//  in supporting documentation.  The authors make no representations
+//  about the suitability of this software for any purpose.
+//  It is provided "as is" without express or implied warranty.
+//
+//  The authors gratefully acknowledge the support of
+//  GeNeSys mbH & Co. KG in producing this work.
+//
+
 #ifndef BENCH2_H
 #define BENCH2_H
 
@@ -28,15 +44,15 @@ struct c_matrix_traits {
     typedef T type [N] [M];
 };
 
-template<class T, int N> 
+template<class T, int N>
 struct initialize_c_vector  {
 #ifdef BOOST_MSVC
     BOOST_UBLAS_INLINE
     void operator () (typename c_vector_traits<T, N>::type v) {
-#else 
+#else
     void operator () (typename c_vector_traits<T, N>::type &v) {
-#endif 
-        for (int i = 0; i < N; ++ i) 
+#endif
+        for (int i = 0; i < N; ++ i)
             v [i] = rand () * 1.f;
 //            v [i] = 0.f;
         }
@@ -45,21 +61,21 @@ template<class V>
 BOOST_UBLAS_INLINE
 void initialize_vector (V &v) {
     int size = v.size ();
-    for (int i = 0; i < size; ++ i) 
+    for (int i = 0; i < size; ++ i)
         v [i] = rand () * 1.f;
 //        v [i] = 0.f;
 }
 
-template<class T, int N, int M> 
+template<class T, int N, int M>
 struct initialize_c_matrix  {
 #ifdef BOOST_MSVC
     BOOST_UBLAS_INLINE
     void operator () (typename c_matrix_traits<T, N, M>::type m) {
-#else 
+#else
     void operator () (typename c_matrix_traits<T, N, M>::type &m) {
-#endif 
-        for (int i = 0; i < N; ++ i) 
-            for (int j = 0; j < M; ++ j) 
+#endif
+        for (int i = 0; i < N; ++ i)
+            for (int j = 0; j < M; ++ j)
                 m [i] [j] = rand () * 1.f;
 //                m [i] [j] = 0.f;
     }
@@ -69,8 +85,8 @@ BOOST_UBLAS_INLINE
 void initialize_matrix (M &m, ublas::row_major_tag) {
     int size1 = m.size1 ();
     int size2 = m.size2 ();
-    for (int i = 0; i < size1; ++ i) 
-        for (int j = 0; j < size2; ++ j) 
+    for (int i = 0; i < size1; ++ i)
+        for (int j = 0; j < size2; ++ j)
             m (i, j) = rand () * 1.f;
 //            m (i, j) = 0.f;
 }
@@ -79,8 +95,8 @@ BOOST_UBLAS_INLINE
 void initialize_matrix (M &m, ublas::column_major_tag) {
     int size1 = m.size1 ();
     int size2 = m.size2 ();
-    for (int j = 0; j < size2; ++ j) 
-        for (int i = 0; i < size1; ++ i) 
+    for (int j = 0; j < size2; ++ j)
+        for (int i = 0; i < size1; ++ i)
             m (i, j) = rand () * 1.f;
 //            m (i, j) = 0.f;
 }
@@ -102,9 +118,9 @@ struct sink_c_vector {
 #ifdef BOOST_MSVC
     BOOST_UBLAS_INLINE
     void operator () (const typename c_vector_traits<T, N>::type v) {
-#else 
+#else
     void operator () (const typename c_vector_traits<T, N>::type &v) {
-#endif 
+#endif
         static typename c_vector_traits<T, N>::type g_v;
         for (int i = 0; i < N; ++ i)
             g_v [i] = v [i];
@@ -121,9 +137,9 @@ struct sink_c_matrix {
 #ifdef BOOST_MSVC
     BOOST_UBLAS_INLINE
     void operator () (const typename c_matrix_traits<T, N, M>::type m) {
-#else 
+#else
     void operator () (const typename c_matrix_traits<T, N, M>::type &m) {
-#endif 
+#endif
     static typename c_matrix_traits<T, N, M>::type g_m;
     for (int i = 0; i < N; ++ i)
         for (int j = 0; j < M; ++ j)

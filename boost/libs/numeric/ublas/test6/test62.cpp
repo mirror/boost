@@ -1,3 +1,19 @@
+//
+//  Copyright (c) 2000-2002
+//  Joerg Walter, Mathias Koch
+//
+//  Permission to use, copy, modify, distribute and sell this software
+//  and its documentation for any purpose is hereby granted without fee,
+//  provided that the above copyright notice appear in all copies and
+//  that both that copyright notice and this permission notice appear
+//  in supporting documentation.  The authors make no representations
+//  about the suitability of this software for any purpose.
+//  It is provided "as is" without express or implied warranty.
+//
+//  The authors gratefully acknowledge the support of
+//  GeNeSys mbH & Co. KG in producing this work.
+//
+
 #ifdef BOOST_MSVC
 
 #pragma warning (disable: 4355)
@@ -17,7 +33,7 @@
 
 #include "test6.hpp"
 
-// Test matrix & vector expression templates 
+// Test matrix & vector expression templates
 template<class V, class M, int N>
 struct test_my_matrix_vector {
     typedef typename V::value_type value_type;
@@ -44,7 +60,7 @@ struct test_my_matrix_vector {
             m1 = ublas::outer_prod (v1, v2);
             std::cout << "outer_prod (v1, v2) = " << m1 << std::endl;
 
-            // Matrix vector product 
+            // Matrix vector product
             initialize_matrix (m1, ublas::lower_tag ());
             initialize_vector (v1);
             v2 = ublas::prod (m1, v1);

@@ -363,7 +363,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_1 (const_reference t) {
             // Oops, should have known that!
-            return type_traits<real_type>::abs (self_type::real (t)) + 
+            return type_traits<real_type>::abs (self_type::real (t)) +
                    type_traits<real_type>::abs (self_type::imag (t));
         }
         static
@@ -375,7 +375,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_inf (const_reference t) {
             // Oops, should have known that!
-            return std::max (type_traits<real_type>::abs (self_type::real (t)), 
+            return std::max (type_traits<real_type>::abs (self_type::real (t)),
                              type_traits<real_type>::abs (self_type::imag (t)));
         }
 
@@ -440,7 +440,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_1 (const_reference t) {
             // Oops, should have known that!
-            return type_traits<real_type>::abs (self_type::real (t)) + 
+            return type_traits<real_type>::abs (self_type::real (t)) +
                    type_traits<real_type>::abs (self_type::imag (t));
         }
         static
@@ -452,7 +452,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_inf (const_reference t) {
             // Oops, should have known that!
-            return std::max (type_traits<real_type>::abs (self_type::real (t)), 
+            return std::max (type_traits<real_type>::abs (self_type::real (t)),
                              type_traits<real_type>::abs (self_type::imag (t)));
         }
 
@@ -514,7 +514,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_1 (const_reference t) {
             // Oops, should have known that!
-            return type_traits<real_type>::abs (self_type::real (t)) + 
+            return type_traits<real_type>::abs (self_type::real (t)) +
                    type_traits<real_type>::abs (self_type::imag (t));
         }
         static
@@ -526,7 +526,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         real_type norm_inf (const_reference t) {
             // Oops, should have known that!
-            return std::max (type_traits<real_type>::abs (self_type::real (t)), 
+            return std::max (type_traits<real_type>::abs (self_type::real (t)),
                              type_traits<real_type>::abs (self_type::imag (t)));
         }
 
@@ -696,6 +696,590 @@ namespace boost { namespace numeric { namespace ublas {
     struct promote_traits<std::complex<long double>, std::complex<double> > {
         typedef std::complex<long double> promote_type;
     };
+#endif
+
+#ifdef BOOST_UBLAS_USE_INTERVAL
+    template<>
+    struct type_traits<boost::numeric::interval<float> > {
+        typedef type_traits<boost::numeric::interval<float> > self_type;
+        typedef boost::numeric::interval<float> value_type;
+        typedef const boost::numeric::interval<float> &const_reference;
+        typedef boost::numeric::interval<float> &reference;
+        typedef boost::numeric::interval<float> real_type;
+        typedef boost::numeric::interval<double> precision_type;
+
+        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
+        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 1);
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type real (const_reference t) {
+                return t;
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type imag (const_reference t) {
+                return 0;
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type conj (const_reference t) {
+                return t;
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type abs (const_reference t) {
+            return boost::numeric::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type sqrt (const_reference t) {
+            return boost::numeric::sqrt (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_1 (const_reference t) {
+            return self_type::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_2 (const_reference t) {
+            return self_type::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_inf (const_reference t) {
+            return self_type::abs (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        bool equals (const_reference t1, const_reference t2) {
+            // Check, that the values match at least half.
+            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
+            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+                   std::max (std::max (self_type::norm_inf (t1),
+                                       self_type::norm_inf (t2)),
+                             std::numeric_limits<real_type>::min ());
+        }
+    };
+    template<>
+    struct type_traits<boost::numeric::interval<double> > {
+        typedef type_traits<boost::numeric::interval<double> > self_type;
+        typedef boost::numeric::interval<double> value_type;
+        typedef const boost::numeric::interval<double> &const_reference;
+        typedef boost::numeric::interval<double> &reference;
+        typedef boost::numeric::interval<double> real_type;
+#ifndef BOOST_UBLAS_USE_LONG_DOUBLE
+        typedef boost::numeric::interval<double> precision_type;
+#else
+        typedef boost::numeric::interval<boost::numeric::interval<long double> > precision_type;
+#endif
+
+        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
+        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 1);
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type real (const_reference t) {
+                return t;
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type imag (const_reference t) {
+                return 0;
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type conj (const_reference t) {
+                return t;
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type abs (const_reference t) {
+            return boost::numeric::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type sqrt (const_reference t) {
+            return boost::numeric::sqrt (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_1 (const_reference t) {
+            return self_type::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_2 (const_reference t) {
+            return self_type::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_inf (const_reference t) {
+            return self_type::abs (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        bool equals (const_reference t1, const_reference t2) {
+            // Check, that the values match at least half.
+            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
+            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+                   std::max (std::max (self_type::norm_inf (t1),
+                                       self_type::norm_inf (t2)),
+                             std::numeric_limits<real_type>::min ());
+        }
+    };
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+    template<>
+    struct type_traits<boost::numeric::interval<long double> > {
+        typedef type_traits<boost::numeric::interval<long double> > self_type;
+        typedef boost::numeric::interval<long double> value_type;
+        typedef const boost::numeric::interval<long double> &const_reference;
+        typedef boost::numeric::interval<long double> &reference;
+        typedef boost::numeric::interval<long double> real_type;
+        typedef boost::numeric::interval<long double> precision_type;
+
+        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
+        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 1);
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type real (const_reference t) {
+                return t;
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type imag (const_reference t) {
+                return 0;
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type conj (const_reference t) {
+                return t;
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type abs (const_reference t) {
+            return boost::numeric::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type sqrt (const_reference t) {
+            return boost::numeric::sqrt (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_1 (const_reference t) {
+            return self_type::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_2 (const_reference t) {
+            return self_type::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_inf (const_reference t) {
+            return self_type::abs (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        bool equals (const_reference t1, const_reference t2) {
+            // Check, that the values match at least half.
+            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
+            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+                   std::max (std::max (self_type::norm_inf (t1),
+                                       self_type::norm_inf (t2)),
+                             std::numeric_limits<real_type>::min ());
+        }
+    };
+#endif
+
+#ifdef BOOST_UBLAS_USE_BOOST_COMPLEX
+    template<>
+    struct type_traits<boost::complex<boost::numeric::interval<float> > > {
+        typedef type_traits<boost::complex<boost::numeric::interval<float> > > self_type;
+        typedef boost::complex<boost::numeric::interval<float> > value_type;
+        typedef const boost::complex<boost::numeric::interval<float> > &const_reference;
+        typedef boost::complex<boost::numeric::interval<float> > &reference;
+        typedef boost::numeric::interval<float> real_type;
+        typedef boost::complex<double> precision_type;
+
+        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
+        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 6);
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type real (const_reference t) {
+                // return t.real ();
+                return std::real (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type imag (const_reference t) {
+                // return t.imag ();
+                return std::imag (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type conj (const_reference t) {
+                // return t.conj ();
+                return std::conj (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type abs (const_reference t) {
+                return boost::numeric::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type sqrt (const_reference t) {
+                return boost::numeric::sqrt (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_1 (const_reference t) {
+            // Oops, should have known that!
+            return type_traits<real_type>::abs (self_type::real (t)) +
+                   type_traits<real_type>::abs (self_type::imag (t));
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_2 (const_reference t) {
+            return self_type::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_inf (const_reference t) {
+            // Oops, should have known that!
+            return std::max (type_traits<real_type>::abs (self_type::real (t)),
+                             type_traits<real_type>::abs (self_type::imag (t)));
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        bool equals (const_reference t1, const_reference t2) {
+            // Check, that the values match at least half.
+            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
+            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+                   std::max (std::max (self_type::norm_inf (t1),
+                                       self_type::norm_inf (t2)),
+                             std::numeric_limits<real_type>::min ());
+        }
+    };
+    template<>
+    struct type_traits<boost::complex<double> > {
+        typedef type_traits<boost::complex<double> > self_type;
+        typedef boost::complex<double> value_type;
+        typedef const boost::complex<double> &const_reference;
+        typedef boost::complex<double> &reference;
+        typedef double real_type;
+#ifndef BOOST_UBLAS_USE_LONG_DOUBLE
+        typedef boost::complex<double> precision_type;
+#else
+        typedef boost::complex<boost::numeric::interval<long double> > precision_type;
+#endif
+
+        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
+        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 6);
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type real (const_reference t) {
+                // return t.real ();
+                return std::real (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type imag (const_reference t) {
+                // return t.imag ();
+                return std::imag (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type conj (const_reference t) {
+                // return t.conj ();
+                return std::conj (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type abs (const_reference t) {
+                return boost::numeric::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type sqrt (const_reference t) {
+                return boost::numeric::sqrt (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_1 (const_reference t) {
+            // Oops, should have known that!
+            return type_traits<real_type>::abs (self_type::real (t)) +
+                   type_traits<real_type>::abs (self_type::imag (t));
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_2 (const_reference t) {
+            return self_type::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_inf (const_reference t) {
+            // Oops, should have known that!
+            return std::max (type_traits<real_type>::abs (self_type::real (t)),
+                             type_traits<real_type>::abs (self_type::imag (t)));
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        bool equals (const_reference t1, const_reference t2) {
+            // Check, that the values match at least half.
+            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
+            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+                   std::max (std::max (self_type::norm_inf (t1),
+                                       self_type::norm_inf (t2)),
+                             std::numeric_limits<real_type>::min ());
+        }
+    };
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+    template<>
+    struct type_traits<boost::complex<boost::numeric::interval<long double> > > {
+        typedef type_traits<boost::complex<boost::numeric::interval<long double> > > self_type;
+        typedef boost::complex<boost::numeric::interval<long double> > value_type;
+        typedef const boost::complex<boost::numeric::interval<long double> > &const_reference;
+        typedef boost::complex<boost::numeric::interval<long double> > &reference;
+        typedef boost::numeric::interval<long double> real_type;
+        typedef boost::complex<boost::numeric::interval<long double> > precision_type;
+
+        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
+        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 6);
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type real (const_reference t) {
+                // return t.real ();
+                return std::real (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type imag (const_reference t) {
+                // return t.imag ();
+                return std::imag (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type conj (const_reference t) {
+                // return t.conj ();
+                return std::conj (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type abs (const_reference t) {
+                return boost::numeric::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        value_type sqrt (const_reference t) {
+                return boost::numeric::sqrt (t);
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_1 (const_reference t) {
+            // Oops, should have known that!
+            return type_traits<real_type>::abs (self_type::real (t)) +
+                   type_traits<real_type>::abs (self_type::imag (t));
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_2 (const_reference t) {
+            return self_type::abs (t);
+        }
+        static
+        BOOST_UBLAS_INLINE
+        real_type norm_inf (const_reference t) {
+            // Oops, should have known that!
+            return std::max (type_traits<real_type>::abs (self_type::real (t)),
+                             type_traits<real_type>::abs (self_type::imag (t)));
+        }
+
+        static
+        BOOST_UBLAS_INLINE
+        bool equals (const_reference t1, const_reference t2) {
+            // Check, that the values match at least half.
+            static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
+            return self_type::norm_inf (t1 - t2) < sqrt_epsilon *
+                   std::max (std::max (self_type::norm_inf (t1),
+                                       self_type::norm_inf (t2)),
+                             std::numeric_limits<real_type>::min ());
+        }
+    };
+#endif
+#endif
+
+    template<>
+    struct promote_traits<boost::numeric::interval<float>, boost::numeric::interval<double> > {
+        typedef boost::numeric::interval<double> promote_type;
+    };
+    template<>
+    struct promote_traits<boost::numeric::interval<double>, boost::numeric::interval<float> > {
+        typedef boost::numeric::interval<double> promote_type;
+    };
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+    template<>
+    struct promote_traits<boost::numeric::interval<float>, boost::numeric::interval<long double> > {
+        typedef boost::numeric::interval<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<boost::numeric::interval<long double>, boost::numeric::interval<float> > {
+        typedef boost::numeric::interval<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<boost::numeric::interval<double>, boost::numeric::interval<long double> > {
+        typedef boost::numeric::interval<long double> promote_type;
+    };
+    template<>
+    struct promote_traits<boost::numeric::interval<long double>, boost::numeric::interval<double> > {
+        typedef boost::numeric::interval<long double> promote_type;
+    };
+#endif
+
+#ifdef BOOST_UBLAS_USE_BOOST_COMPLEX
+    template<>
+    struct promote_traits<boost::numeric::interval<float>, boost::complex<boost::numeric::interval<float> > > {
+        typedef boost::complex<boost::numeric::interval<float> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<float> >, boost::numeric::interval<float> > {
+        typedef boost::complex<boost::numeric::interval<float> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::numeric::interval<float>, boost::complex<boost::numeric::interval<double> > > {
+        typedef boost::complex<boost::numeric::interval<double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<double> >, boost::numeric::interval<float> > {
+        typedef boost::complex<boost::numeric::interval<double> > promote_type;
+    };
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+    template<>
+    struct promote_traits<boost::numeric::interval<float>, boost::complex<boost::numeric::interval<long double> > > {
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<long double> >, boost::numeric::interval<float> > {
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+#endif
+
+    template<>
+    struct promote_traits<boost::numeric::interval<double>, boost::complex<boost::numeric::interval<float> > > {
+        // Here we'd better go the conservative way.
+        // typedef boost::complex<boost::numeric::interval<float> > promote_type;
+        typedef boost::complex<boost::numeric::interval<double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<float> >, boost::numeric::interval<double> > {
+        // Here we'd better go the conservative way.
+        // typedef boost::complex<boost::numeric::interval<float> > promote_type;
+        typedef boost::complex<boost::numeric::interval<double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::numeric::interval<double>, boost::complex<boost::numeric::interval<double> > > {
+        typedef boost::complex<boost::numeric::interval<double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<double> >, boost::numeric::interval<double> > {
+        typedef boost::complex<boost::numeric::interval<double> > promote_type;
+    };
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+    template<>
+    struct promote_traits<boost::numeric::interval<double>, boost::complex<boost::numeric::interval<long double> > > {
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<long double> >, boost::numeric::interval<double> > {
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+#endif
+
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+    template<>
+    struct promote_traits<boost::numeric::interval<long double>, boost::complex<boost::numeric::interval<float> > > {
+        // Here we'd better go the conservative way.
+        // typedef boost::complex<boost::numeric::interval<float> > promote_type;
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<float> >, boost::numeric::interval<long double> > {
+        // Here we'd better go the conservative way.
+        // typedef boost::complex<boost::numeric::interval<float> > promote_type;
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::numeric::interval<long double>, boost::complex<boost::numeric::interval<double> > > {
+        // Here we'd better go the conservative way.
+        // typedef boost::complex<boost::numeric::interval<double> > promote_type;
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<double> >, boost::numeric::interval<long double> > {
+        // Here we'd better go the conservative way.
+        // typedef boost::complex<boost::numeric::interval<double> > promote_type;
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::numeric::interval<long double>, boost::complex<boost::numeric::interval<long double> > > {
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<long double> >, boost::numeric::interval<long double> > {
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+#endif
+
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<float> >, boost::complex<boost::numeric::interval<double> > > {
+        typedef boost::complex<boost::numeric::interval<double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<double> >, boost::complex<boost::numeric::interval<float> > > {
+        typedef boost::complex<boost::numeric::interval<double> > promote_type;
+    };
+#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<float> >, boost::complex<boost::numeric::interval<long double> > > {
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<long double> >, boost::complex<boost::numeric::interval<float> > > {
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<double> >, boost::complex<boost::numeric::interval<long double> > > {
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+    template<>
+    struct promote_traits<boost::complex<boost::numeric::interval<long double> >, boost::complex<boost::numeric::interval<double> > > {
+        typedef boost::complex<boost::numeric::interval<long double> > promote_type;
+    };
+#endif
+#endif
 #endif
 
     struct unknown_storage_tag {};

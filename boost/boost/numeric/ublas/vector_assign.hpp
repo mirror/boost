@@ -319,7 +319,8 @@ namespace boost { namespace numeric { namespace ublas {
         while (-- size >= 0)
             functor_type () (*it, value_type ()), ++ it;
 #ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
+        if (! disable_type_check)
+            BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
 #endif
     }
     // Sparse case
@@ -345,7 +346,8 @@ namespace boost { namespace numeric { namespace ublas {
             ++ ite;
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
+        if (! disable_type_check)
+            BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
 #endif
     }
     // Sparse proxy case
@@ -403,7 +405,8 @@ namespace boost { namespace numeric { namespace ublas {
             ++ it;
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
+        if (! disable_type_check)
+            BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
 #endif
     }
 

@@ -1,0 +1,13 @@
+subproject libs/numeric/ublas/bench4 ;
+
+SOURCES = bench4 bench41 bench42 bench43 ;
+
+exe bench4
+    : $(SOURCES).cpp
+    : <include>$(BOOST_ROOT)
+      <define>BOOST_UBLAS_USE_INTERVAL
+      <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+      <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+    ;
+
+

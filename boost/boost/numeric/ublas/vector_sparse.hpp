@@ -411,7 +411,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (v.data ());
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (sparse_vector &v1, sparse_vector &v2) {
             v1.swap (v2);
@@ -942,7 +942,7 @@ namespace boost { namespace numeric { namespace ublas {
                 value_data ().swap (v.value_data ());
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (compressed_vector &v1, compressed_vector &v2) {
             v1.swap (v2);
@@ -1241,11 +1241,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         static size_type zero_based (size_type k_based_index) {
             return k_based_index - index_base_;
-	}
+        }
         BOOST_UBLAS_INLINE
         static size_type k_based (size_type zero_based_index) {
             return zero_based_index + index_base_;
-	}
+        }
 
         friend class iterator;
         friend class const_iterator;
@@ -1524,7 +1524,7 @@ namespace boost { namespace numeric { namespace ublas {
                 value_data ().swap (v.value_data ());
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (coordinate_vector &v1, coordinate_vector &v2) {
             v1.swap (v2);
@@ -1840,11 +1840,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         static size_type zero_based (size_type k_based_index) {
             return k_based_index - index_base_;
-	}
+        }
         BOOST_UBLAS_INLINE
         static size_type k_based (size_type zero_based_index) {
             return zero_based_index + index_base_;
-	}
+        }
 
         friend class iterator;
         friend class const_iterator;

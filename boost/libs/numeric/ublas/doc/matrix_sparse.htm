@@ -39,8 +39,8 @@ with column major orientation.</p>
 <pre>int main () {
     using namespace boost::numeric::ublas;
     sparse_matrix&lt;double&gt; m (3, 3, 3 * 3);
-    for (int i = 0; i &lt; m.size1 (); ++ i) 
-        for (int j = 0; j &lt; m.size2 (); ++ j) 
+    for (int i = 0; i &lt; m.size1 (); ++ i)
+        for (int j = 0; j &lt; m.size2 (); ++ j)
             m (i, j) = 3 * i + j;
     std::cout &lt;&lt; m &lt;&lt; std::endl;
 }</pre>
@@ -1729,7 +1729,7 @@ and <code>std::vector&lt;&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator1 &amp;operator = (const const_iterator1 &amp;it);
 
             // Comparison
@@ -1772,7 +1772,7 @@ and <code>std::vector&lt;&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator1 &amp;operator = (const iterator1 &amp;it);
 
             // Comparison
@@ -1816,7 +1816,7 @@ and <code>std::vector&lt;&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator2 &amp;operator = (const const_iterator2 &amp;it);
 
             // Comparison
@@ -1859,7 +1859,7 @@ and <code>std::vector&lt;&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator2 &amp;operator = (const iterator2 &amp;it);
 
             // Comparison

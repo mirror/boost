@@ -22,29 +22,29 @@ namespace boost { namespace numeric { namespace ublas {
     namespace blas_1 {
 
         template<class V>
-        typename type_traits<typename V::value_type>::real_type 
+        typename type_traits<typename V::value_type>::real_type
         asum (const V &v) {
             return norm_1 (v);
         }
         template<class V>
-        typename type_traits<typename V::value_type>::real_type 
+        typename type_traits<typename V::value_type>::real_type
         nrm2 (const V &v) {
             return norm_2 (v);
         }
         template<class V>
-        typename type_traits<typename V::value_type>::real_type 
+        typename type_traits<typename V::value_type>::real_type
         amax (const V &v) {
             return norm_inf (v);
         }
 
         template<class V1, class V2>
-        typename promote_traits<typename V1::value_type, typename V2::value_type>::promote_type 
+        typename promote_traits<typename V1::value_type, typename V2::value_type>::promote_type
         dot (const V1 &v1, const V2 &v2) {
             return inner_prod (v1, v2);
         }
 
         template<class V1, class V2>
-        V1 & 
+        V1 &
         copy (V1 &v1, const V2 &v2) {
             return v1.assign (v2);
         }
@@ -67,7 +67,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         template<class T1, class V1, class T2, class V2>
-        void 
+        void
         rot (const T1 &t1, V1 &v1, const T2 &t2, V2 &v2) {
             typedef typename promote_traits<BOOST_UBLAS_TYPENAME V1::value_type, BOOST_UBLAS_TYPENAME V2::value_type>::promote_type promote_type;
             vector<promote_type> vt (t1 * v1 + t2 * v2);
@@ -102,9 +102,9 @@ namespace boost { namespace numeric { namespace ublas {
         gr (M &m, const T &t, const V1 &v1, const V2 &v2) {
 #ifdef BOOST_UBLAS_USE_ET
             return m += t * outer_prod (v1, v2);
-#else 
+#else
             return m = m + t * outer_prod (v1, v2);
-#endif 
+#endif
         }
 
         template<class M, class T, class V>
@@ -112,18 +112,18 @@ namespace boost { namespace numeric { namespace ublas {
         sr (M &m, const T &t, const V &v) {
 #ifdef BOOST_UBLAS_USE_ET
             return m += t * outer_prod (v, v);
-#else 
+#else
             return m = m + t * outer_prod (v, v);
-#endif 
+#endif
         }
         template<class M, class T, class V>
         M &
         hr (M &m, const T &t, const V &v) {
 #ifdef BOOST_UBLAS_USE_ET
             return m += t * outer_prod (v, conj (v));
-#else 
+#else
             return m = m + t * outer_prod (v, conj (v));
-#endif 
+#endif
         }
 
         template<class M, class T, class V1, class V2>
@@ -131,9 +131,9 @@ namespace boost { namespace numeric { namespace ublas {
         sr2 (M &m, const T &t, const V1 &v1, const V2 &v2) {
 #ifdef BOOST_UBLAS_USE_ET
             return m += t * (outer_prod (v1, v2) + outer_prod (v2, v1));
-#else 
+#else
             return m = m + t * (outer_prod (v1, v2) + outer_prod (v2, v1));
-#endif 
+#endif
         }
         template<class M, class T, class V1, class V2>
         M &
@@ -142,7 +142,7 @@ namespace boost { namespace numeric { namespace ublas {
             return m += t * outer_prod (v1, conj (v2)) + type_traits<T>::conj (t) * outer_prod (v2, conj (v1));
 #else
             return m = m + t * outer_prod (v1, conj (v2)) + type_traits<T>::conj (t) * outer_prod (v2, conj (v1));
-#endif 
+#endif
         }
 
     }

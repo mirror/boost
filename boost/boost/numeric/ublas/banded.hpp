@@ -171,7 +171,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Assignment
         BOOST_UBLAS_INLINE
-        banded_matrix &operator = (const banded_matrix &m) { 
+        banded_matrix &operator = (const banded_matrix &m) {
             BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
             BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
             BOOST_UBLAS_CHECK (lower_ == m.lower_, bad_size ());
@@ -184,13 +184,13 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
         BOOST_UBLAS_INLINE
-        banded_matrix &assign_temporary (banded_matrix &m) { 
+        banded_matrix &assign_temporary (banded_matrix &m) {
             swap (m);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        banded_matrix &operator = (const matrix_expression<AE> &ae) { 
+        banded_matrix &operator = (const matrix_expression<AE> &ae) {
 #ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
             return assign_temporary (self_type (ae, lower_, upper_));
 #else
@@ -277,7 +277,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (banded_matrix &m1, banded_matrix &m2) {
             m1.swap (m2);
@@ -531,7 +531,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator1 &operator = (const const_iterator1 &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -654,7 +654,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator1 &operator = (const iterator1 &it) {
                 container_reference<self_type>::assign (&it ());
@@ -1248,7 +1248,7 @@ namespace boost { namespace numeric { namespace ublas {
                 matrix_swap (scalar_swap<value_type, value_type> (), *this, m);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (banded_adaptor &m1, banded_adaptor &m2) {
             m1.swap (m2);

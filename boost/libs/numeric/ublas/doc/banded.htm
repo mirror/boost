@@ -29,7 +29,7 @@ matrices is packed.</p>
 <pre>int main () {
     using namespace boost::numeric::ublas;
     banded_matrix&lt;double&gt; m (3, 3, 1, 1);
-    for (int i = 0; i &lt; m.size1 (); ++ i) 
+    for (int i = 0; i &lt; m.size1 (); ++ i)
         for (int j = std::max (i - 1, 0); j &lt; std::min (i + 2, m.size2 ()); ++ j)
             m (i, j) = 3 * i + j;
     std::cout &lt;&lt; m &lt;&lt; std::endl;
@@ -330,11 +330,11 @@ and <code>std::vector&lt;T&gt;</code>. </p>
 
 <h4>Interface</h4>
 
-<pre><code>    // Array based banded matrix class 
+<pre><code>    // Array based banded matrix class
     template&lt;class T, class F, class A&gt;
-    class banded_matrix: 
+    class banded_matrix:
         public matrix_expression&lt;banded_matrix&lt;T, F, A&gt; &gt; {
-    public:      
+    public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -466,7 +466,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator1 &amp;operator = (const const_iterator1 &amp;it);
 
             // Comparison
@@ -512,7 +512,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator1 &amp;operator = (const iterator1 &amp;it);
 
             // Comparison
@@ -559,7 +559,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator2 &amp;operator = (const const_iterator2 &amp;it);
 
             // Comparison
@@ -605,7 +605,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator2 &amp;operator = (const iterator2 &amp;it);
 
             // Comparison
@@ -644,7 +644,7 @@ banded matrix adaptor for other matrices.</p>
     using namespace boost::numeric::ublas;
     matrix&lt;double&gt; m (3, 3);
     banded_adaptor&lt;matrix&lt;double&gt; &gt; ba (m, 1, 1);
-    for (int i = 0; i &lt; ba.size1 (); ++ i) 
+    for (int i = 0; i &lt; ba.size1 (); ++ i)
         for (int j = std::max (i - 1, 0); j &lt; std::min (i + 2, ba.size2 ()); ++ j)
             ba (i, j) = 3 * i + j;
     std::cout &lt;&lt; ba &lt;&lt; std::endl;
@@ -903,11 +903,11 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
 
 <h4>Interface</h4>
 
-<pre><code>    // Banded matrix adaptor class 
+<pre><code>    // Banded matrix adaptor class
     template&lt;class M&gt;
-    class banded_adaptor: 
+    class banded_adaptor:
         public matrix_expression&lt;banded_adaptor&lt;M&gt; &gt; {
-    public:      
+    public:
         typedef const M const_matrix_type;
         typedef M matrix_type;
         typedef typename M::size_type size_type;
@@ -1027,7 +1027,7 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator1 &amp;operator = (const const_iterator1 &amp;it);
 
             // Comparison
@@ -1073,7 +1073,7 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator1 &amp;operator = (const iterator1 &amp;it);
 
             // Comparison
@@ -1120,7 +1120,7 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator2 &amp;operator = (const const_iterator2 &amp;it);
 
             // Comparison
@@ -1166,7 +1166,7 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator2 &amp;operator = (const iterator2 &amp;it);
 
             // Comparison

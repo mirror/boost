@@ -1,3 +1,19 @@
+//
+//  Copyright (c) 2000-2002
+//  Joerg Walter, Mathias Koch
+//
+//  Permission to use, copy, modify, distribute and sell this software
+//  and its documentation for any purpose is hereby granted without fee,
+//  provided that the above copyright notice appear in all copies and
+//  that both that copyright notice and this permission notice appear
+//  in supporting documentation.  The authors make no representations
+//  about the suitability of this software for any purpose.
+//  It is provided "as is" without express or implied warranty.
+//
+//  The authors gratefully acknowledge the support of
+//  GeNeSys mbH & Co. KG in producing this work.
+//
+
 #ifdef BOOST_MSVC
 
 #pragma warning (disable: 4355)
@@ -55,7 +71,7 @@ void test_blas_1<V, N>::operator () () {
         ublas::blas_1::copy (v1, v2);
         std::cout << "copy (v1, v2) = " << v1 << std::endl;
 
-        // _swap 
+        // _swap
         initialize_vector (v1);
         initialize_vector (v2);
         ublas::blas_1::swap (v1, v2);

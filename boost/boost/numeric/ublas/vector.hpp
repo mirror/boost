@@ -101,25 +101,25 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
-            return data () [i]; 
+            return data () [i];
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) {
-            return data () [i]; 
+            return data () [i];
         }
 
         BOOST_UBLAS_INLINE
-        const_reference operator [] (size_type i) const { 
-            return (*this) (i); 
+        const_reference operator [] (size_type i) const {
+            return (*this) (i);
         }
         BOOST_UBLAS_INLINE
-        reference operator [] (size_type i) { 
+        reference operator [] (size_type i) {
             return (*this) (i);
         }
 
         // Assignment
         BOOST_UBLAS_INLINE
-        vector &operator = (const vector &v) { 
+        vector &operator = (const vector &v) {
             BOOST_UBLAS_CHECK (size_ == v.size_, bad_size ());
             size_ = v.size_;
             data () = v.data ();
@@ -213,7 +213,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (v.data ());
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (vector &v1, vector &v2) {
             v1.swap (v2);
@@ -616,7 +616,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (index_, v.index_);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (unit_vector &v1, unit_vector &v2) {
             v1.swap (v2);
@@ -855,7 +855,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (size_, v.size_);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (zero_vector &v1, zero_vector &v2) {
             v1.swap (v2);
@@ -1065,7 +1065,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (value_, v.value_);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (scalar_vector &v1, scalar_vector &v2) {
             v1.swap (v2);
@@ -1410,7 +1410,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap_ranges (data_, data_ + size_, v.data_);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (c_vector &v1, c_vector &v2) {
             v1.swap (v2);
@@ -1550,7 +1550,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it_ - v.begin ().it_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator &operator = (const const_iterator &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -1649,7 +1649,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it_ - v.begin ().it_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator &operator = (const iterator &it) {
                 container_reference<self_type>::assign (&it ());

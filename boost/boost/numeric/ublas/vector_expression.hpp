@@ -1554,7 +1554,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it1_.index ();
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator &operator = (const const_iterator &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -1587,7 +1587,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_iterator begin () const {
-            return find_first (0); 
+            return find_first (0);
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
@@ -1715,7 +1715,7 @@ namespace boost { namespace numeric { namespace ublas {
     struct vector_scalar_unary_traits {
         typedef vector_scalar_unary<E, F> expression_type;
 #if defined (BOOST_UBLAS_USE_ET) && defined (BOOST_UBLAS_USE_SCALAR_ET)
-         typedef expression_type result_type; 
+         typedef expression_type result_type;
 #else
          typedef typename F::result_type result_type;
 #endif
@@ -1829,11 +1829,11 @@ namespace boost { namespace numeric { namespace ublas {
         // Sparse bidirectional specialization
         BOOST_UBLAS_INLINE
         value_type evaluate (sparse_bidirectional_iterator_tag) const {
-            return functor_type () (e1_.begin (), e1_.end (), e2_.begin (), e2_.end (), sparse_bidirectional_iterator_tag ()); 
+            return functor_type () (e1_.begin (), e1_.end (), e2_.begin (), e2_.end (), sparse_bidirectional_iterator_tag ());
         }
 
         BOOST_UBLAS_INLINE
-        operator value_type () const { 
+        operator value_type () const {
             return evaluate (iterator_category ());
         }
 
@@ -1846,7 +1846,7 @@ namespace boost { namespace numeric { namespace ublas {
     struct vector_scalar_binary_traits {
         typedef vector_scalar_binary<E1, E2, F> expression_type;
 #if defined (BOOST_UBLAS_USE_ET) && defined (BOOST_UBLAS_USE_SCALAR_ET)
-        typedef expression_type result_type; 
+        typedef expression_type result_type;
 #else
         typedef typename F::result_type result_type;
 #endif
@@ -1855,30 +1855,30 @@ namespace boost { namespace numeric { namespace ublas {
     // inner_prod (v1, v2) = sum (v1 [i] * v2 [i]
     template<class E1, class E2>
     BOOST_UBLAS_INLINE
-    typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<typename E1::value_type, 
+    typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<typename E1::value_type,
                                                                    typename E2::value_type,
                                                                    typename promote_traits<typename E1::value_type,
-                                                                                           typename E2::value_type>::promote_type> >::result_type 
-    inner_prod (const vector_expression<E1> &e1, 
+                                                                                           typename E2::value_type>::promote_type> >::result_type
+    inner_prod (const vector_expression<E1> &e1,
                 const vector_expression<E2> &e2) {
-        typedef BOOST_UBLAS_TYPENAME vector_scalar_binary_traits<E1, E2, vector_inner_prod<BOOST_UBLAS_TYPENAME E1::value_type, 
+        typedef BOOST_UBLAS_TYPENAME vector_scalar_binary_traits<E1, E2, vector_inner_prod<BOOST_UBLAS_TYPENAME E1::value_type,
                                                                                            BOOST_UBLAS_TYPENAME E2::value_type,
-                                                                                           BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type, 
+                                                                                           BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type,
                                                                                                                                BOOST_UBLAS_TYPENAME E2::value_type>::promote_type> >::expression_type expression_type;
         return expression_type (e1 (), e2 ());
     }
 
     template<class E1, class E2>
     BOOST_UBLAS_INLINE
-    typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<typename E1::value_type, 
+    typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<typename E1::value_type,
                                                                    typename E2::value_type,
-                                                                   typename type_traits<typename promote_traits<typename E1::value_type, 
-                                                                                                                typename E2::value_type>::promote_type>::precision_type> >::result_type 
-    prec_inner_prod (const vector_expression<E1> &e1, 
+                                                                   typename type_traits<typename promote_traits<typename E1::value_type,
+                                                                                                                typename E2::value_type>::promote_type>::precision_type> >::result_type
+    prec_inner_prod (const vector_expression<E1> &e1,
                      const vector_expression<E2> &e2) {
-        typedef BOOST_UBLAS_TYPENAME vector_scalar_binary_traits<E1, E2, vector_inner_prod<BOOST_UBLAS_TYPENAME E1::value_type, 
+        typedef BOOST_UBLAS_TYPENAME vector_scalar_binary_traits<E1, E2, vector_inner_prod<BOOST_UBLAS_TYPENAME E1::value_type,
                                                                                            BOOST_UBLAS_TYPENAME E2::value_type,
-                                                                                           BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type, 
+                                                                                           BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type,
                                                                                                                                                                 BOOST_UBLAS_TYPENAME E2::value_type>::promote_type>::precision_type> >::expression_type expression_type;
         return expression_type (e1 (), e2 ());
     }

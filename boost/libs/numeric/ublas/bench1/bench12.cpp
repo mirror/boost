@@ -1,3 +1,19 @@
+//
+//  Copyright (c) 2000-2002
+//  Joerg Walter, Mathias Koch
+//
+//  Permission to use, copy, modify, distribute and sell this software
+//  and its documentation for any purpose is hereby granted without fee,
+//  provided that the above copyright notice appear in all copies and
+//  that both that copyright notice and this permission notice appear
+//  in supporting documentation.  The authors make no representations
+//  about the suitability of this software for any purpose.
+//  It is provided "as is" without express or implied warranty.
+//
+//  The authors gratefully acknowledge the support of
+//  GeNeSys mbH & Co. KG in producing this work.
+//
+
 #ifdef BOOST_MSVC
 
 #pragma warning (disable: 4355)
@@ -347,13 +363,13 @@ void bench_2<T, N>::operator () (int runs) {
                         ublas::vector<T, ublas::bounded_array<T, N> >, N> () (runs, safe_tag ());
 
     header ("matrix<bounded_array>, vector<bounded_array> fast");
-    bench_my_outer_prod<ublas::matrix<T, ublas::row_major, ublas::bounded_array<T, N * N> >, 
+    bench_my_outer_prod<ublas::matrix<T, ublas::row_major, ublas::bounded_array<T, N * N> >,
                         ublas::vector<T, ublas::bounded_array<T, N> >, N> () (runs, fast_tag ());
 #endif
 
 #ifdef USE_UNBOUNDED_ARRAY
     header ("matrix<unbounded_array>, vector<unbounded_array> safe");
-    bench_my_outer_prod<ublas::matrix<T, ublas::row_major, ublas::unbounded_array<T> >, 
+    bench_my_outer_prod<ublas::matrix<T, ublas::row_major, ublas::unbounded_array<T> >,
                         ublas::vector<T, ublas::unbounded_array<T> >, N> () (runs, safe_tag ());
 
     header ("matrix<unbounded_array>, vector<unbounded_array> fast");
@@ -363,7 +379,7 @@ void bench_2<T, N>::operator () (int runs) {
 
 #ifdef USE_STD_VALARRAY
     header ("matrix<std::valarray>, vector<std::valarray> safe");
-    bench_my_outer_prod<ublas::matrix<T, ublas::row_major, std::valarray<T> >, 
+    bench_my_outer_prod<ublas::matrix<T, ublas::row_major, std::valarray<T> >,
                         ublas::vector<T, std::valarray<T> >, N> () (runs, safe_tag ());
 
     header ("matrix<std::valarray>, vector<std::valarray> fast");
@@ -407,13 +423,13 @@ void bench_2<T, N>::operator () (int runs) {
                                 ublas::vector<T, ublas::bounded_array<T, N> >, N> () (runs, safe_tag ());
 
     header ("matrix<bounded_array>, vector<bounded_array> fast");
-    bench_my_matrix_vector_prod<ublas::matrix<T, ublas::row_major, ublas::bounded_array<T, N * N> >, 
+    bench_my_matrix_vector_prod<ublas::matrix<T, ublas::row_major, ublas::bounded_array<T, N * N> >,
                                 ublas::vector<T, ublas::bounded_array<T, N> >, N> () (runs, fast_tag ());
 #endif
 
 #ifdef USE_UNBOUNDED_ARRAY
     header ("matrix<unbounded_array>, vector<unbounded_array> safe");
-    bench_my_matrix_vector_prod<ublas::matrix<T, ublas::row_major, ublas::unbounded_array<T> >, 
+    bench_my_matrix_vector_prod<ublas::matrix<T, ublas::row_major, ublas::unbounded_array<T> >,
                                 ublas::vector<T, ublas::unbounded_array<T> >, N> () (runs, safe_tag ());
 
     header ("matrix<unbounded_array>, vector<unbounded_array> fast");
@@ -423,7 +439,7 @@ void bench_2<T, N>::operator () (int runs) {
 
 #ifdef USE_STD_VALARRAY
     header ("matrix<std::valarray>, vector<std::valarray> safe");
-    bench_my_matrix_vector_prod<ublas::matrix<T, ublas::row_major, std::valarray<T> >, 
+    bench_my_matrix_vector_prod<ublas::matrix<T, ublas::row_major, std::valarray<T> >,
                                 ublas::vector<T, std::valarray<T> >, N> () (runs, safe_tag ());
 
     header ("matrix<std::valarray>, vector<std::valarray> fast");

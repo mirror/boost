@@ -1,3 +1,19 @@
+//
+//  Copyright (c) 2000-2002
+//  Joerg Walter, Mathias Koch
+//
+//  Permission to use, copy, modify, distribute and sell this software
+//  and its documentation for any purpose is hereby granted without fee,
+//  provided that the above copyright notice appear in all copies and
+//  that both that copyright notice and this permission notice appear
+//  in supporting documentation.  The authors make no representations
+//  about the suitability of this software for any purpose.
+//  It is provided "as is" without express or implied warranty.
+//
+//  The authors gratefully acknowledge the support of
+//  GeNeSys mbH & Co. KG in producing this work.
+//
+
 #ifdef BOOST_MSVC
 
 #pragma warning (disable: 4355)
@@ -68,25 +84,25 @@ void test_blas_3<M, N>::operator () () {
         initialize_matrix (m2, ublas::lower_tag ());
         initialize_matrix (m3);
         ublas::blas_3::tsm (m1, value_type (1), m2, ublas::lower_tag ());
-        std::cout << "tsm (m1, 1, m2) = " << m1 << " " << ublas::prod (m2, m1) - value_type (1) * m3 << std::endl;            
+        std::cout << "tsm (m1, 1, m2) = " << m1 << " " << ublas::prod (m2, m1) - value_type (1) * m3 << std::endl;
         initialize_matrix (m1);
         initialize_matrix (m2, ublas::upper_tag ());
         ublas::blas_3::tsm (m1, value_type (1), ublas::trans (m2), ublas::lower_tag ());
-        std::cout << "tsm (m1, 1, trans (m2)) = " << m1 << " " << ublas::prod (ublas::trans (m2), m1) - value_type (1) * m3 << std::endl;            
+        std::cout << "tsm (m1, 1, trans (m2)) = " << m1 << " " << ublas::prod (ublas::trans (m2), m1) - value_type (1) * m3 << std::endl;
 #ifdef USE_STD_COMPLEX
         initialize_matrix (m1);
         initialize_matrix (m2, ublas::upper_tag ());
         ublas::blas_3::tsm (m1, value_type (1), ublas::herm (m2), ublas::lower_tag ());
-        std::cout << "tsm (m1, 1, herm (m2)) = " << m1 << " " << ublas::prod (ublas::herm (m2), m1) - value_type (1) * m3 << std::endl;            
+        std::cout << "tsm (m1, 1, herm (m2)) = " << m1 << " " << ublas::prod (ublas::herm (m2), m1) - value_type (1) * m3 << std::endl;
 #endif
         initialize_matrix (m1);
         initialize_matrix (m2, ublas::upper_tag ());
         ublas::blas_3::tsm (m1, value_type (1), m2, ublas::upper_tag ());
-        std::cout << "tsm (m1, 1, m2) = " << m1 << " " << ublas::prod (m2, m1) - value_type (1) * m3 << std::endl;            
+        std::cout << "tsm (m1, 1, m2) = " << m1 << " " << ublas::prod (m2, m1) - value_type (1) * m3 << std::endl;
         initialize_matrix (m1);
         initialize_matrix (m2, ublas::lower_tag ());
         ublas::blas_3::tsm (m1, value_type (1), ublas::trans (m2), ublas::upper_tag ());
-        std::cout << "tsm (m1, 1, trans (m2)) = " << m1 << " " << ublas::prod (ublas::trans (m2), m1) - value_type (1) * m3 << std::endl;            
+        std::cout << "tsm (m1, 1, trans (m2)) = " << m1 << " " << ublas::prod (ublas::trans (m2), m1) - value_type (1) * m3 << std::endl;
 #ifdef USE_STD_COMPLEX
         initialize_matrix (m1);
         initialize_matrix (m2, ublas::lower_tag ());

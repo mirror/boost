@@ -28,12 +28,12 @@ symmetric matrices is packed.</p>
 <pre>int main () {
     using namespace boost::numeric::ublas;
     symmetric_matrix&lt;double, lower&gt; ml (3, 3);
-    for (int i = 0; i &lt; ml.size1 (); ++ i) 
+    for (int i = 0; i &lt; ml.size1 (); ++ i)
         for (int j = 0; j &lt;= i; ++ j)
             ml (i, j) = 3 * i + j;
     std::cout &lt;&lt; ml &lt;&lt; std::endl;
     symmetric_matrix&lt;double, upper&gt; mu (3, 3);
-    for (int i = 0; i &lt; m.size1 (); ++ i) 
+    for (int i = 0; i &lt; m.size1 (); ++ i)
         for (int j = i; j &lt; m.size2 (); ++ j)
             mu (i, j) = 3 * i + j;
     std::cout &lt;&lt; mu &lt;&lt; std::endl;
@@ -332,11 +332,11 @@ and <code>std::vector&lt;T&gt;</code>. </p>
 
 <h4>Interface</h4>
 
-<pre><code>    // Array based symmetric matrix class 
+<pre><code>    // Array based symmetric matrix class
     template&lt;class T, class F1, class F2, class A&gt;
-    class symmetric_matrix: 
+    class symmetric_matrix:
         public matrix_expression&lt;symmetric_matrix&lt;T, F1, F2, A&gt; &gt; {
-    public:      
+    public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -466,7 +466,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator1 &amp;operator = (const const_iterator1 &amp;it);
 
             // Comparison
@@ -512,7 +512,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator1 &amp;operator = (const iterator1 &amp;it);
 
             // Comparison
@@ -559,7 +559,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator2 &amp;operator = (const const_iterator2 &amp;it);
 
             // Comparison
@@ -605,7 +605,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator2 &amp;operator = (const iterator2 &amp;it);
 
             // Comparison
@@ -644,12 +644,12 @@ a symmetric matrix adaptor for other matrices.</p>
     using namespace boost::numeric::ublas;
     matrix&lt;double&gt; m (3, 3);
     symmetric_adaptor&lt;matrix&lt;double&gt;, lower&gt; sal (m);
-    for (int i = 0; i &lt; sal.size1 (); ++ i) 
+    for (int i = 0; i &lt; sal.size1 (); ++ i)
         for (int j = 0; j &lt;= i; ++ j)
             sal (i, j) = 3 * i + j;
     std::cout &lt;&lt; sal &lt;&lt; std::endl;
     symmetric_adaptor&lt;matrix&lt;double&gt;, upper&gt; sau (m);
-    for (int i = 0; i &lt; sau.size1 (); ++ i) 
+    for (int i = 0; i &lt; sau.size1 (); ++ i)
         for (int j = i; j &lt; sau.size2 (); ++ j)
             sau (i, j) = 3 * i + j;
     std::cout &lt;&lt; sau &lt;&lt; std::endl;
@@ -909,11 +909,11 @@ for the type of the symmetric adaptor are <code>lower</code> and <code>upper</co
 
 <h4>Interface</h4>
 
-<pre><code>    // Symmetric matrix adaptor class 
+<pre><code>    // Symmetric matrix adaptor class
     template&lt;class M, class F&gt;
-    class symmetric_adaptor: 
+    class symmetric_adaptor:
         public matrix_expression&lt;symmetric_adaptor&lt;M, F&gt; &gt; {
-    public:      
+    public:
         typedef const M const_matrix_type;
         typedef M matrix_type;
         typedef F functor_type;
@@ -1030,7 +1030,7 @@ for the type of the symmetric adaptor are <code>lower</code> and <code>upper</co
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator1 &amp;operator = (const const_iterator1 &amp;it);
 
             // Comparison
@@ -1076,7 +1076,7 @@ for the type of the symmetric adaptor are <code>lower</code> and <code>upper</co
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator1 &amp;operator = (const iterator1 &amp;it);
 
             // Comparison
@@ -1123,7 +1123,7 @@ for the type of the symmetric adaptor are <code>lower</code> and <code>upper</co
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator2 &amp;operator = (const const_iterator2 &amp;it);
 
             // Comparison
@@ -1169,7 +1169,7 @@ for the type of the symmetric adaptor are <code>lower</code> and <code>upper</co
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator2 &amp;operator = (const iterator2 &amp;it);
 
             // Comparison

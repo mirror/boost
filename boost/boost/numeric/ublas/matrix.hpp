@@ -71,7 +71,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix (size_type size1, size_type size2):
             size1_ (size1), size2_ (size2), data_ (size1 * size2) {}
         BOOST_UBLAS_INLINE
-        matrix (size_type size1, size_type size2, const array_type &data): 
+        matrix (size_type size1, size_type size2, const array_type &data):
             size1_ (size1), size2_ (size2), data_ (data) {}
         BOOST_UBLAS_INLINE
         matrix (const matrix &m):
@@ -79,17 +79,17 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix (const matrix_expression<AE> &ae):
-            size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (ae ().size1 () * ae ().size2 ()) { 
+            size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (ae ().size1 () * ae ().size2 ()) {
             matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
         // Accessors
         BOOST_UBLAS_INLINE
-        size_type size1 () const { 
+        size_type size1 () const {
             return size1_;
         }
         BOOST_UBLAS_INLINE
-        size_type size2 () const { 
+        size_type size2 () const {
             return size2_;
         }
         BOOST_UBLAS_INLINE
@@ -121,7 +121,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Assignment
         BOOST_UBLAS_INLINE
-        matrix &operator = (const matrix &m) { 
+        matrix &operator = (const matrix &m) {
             BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
             BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
             size1_ = m.size1_;
@@ -130,7 +130,7 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
         BOOST_UBLAS_INLINE
-        matrix &assign_temporary (matrix &m) { 
+        matrix &assign_temporary (matrix &m) {
             swap (m);
             return *this;
         }
@@ -147,7 +147,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        matrix &reset (const matrix_expression<AE> &ae) { 
+        matrix &reset (const matrix_expression<AE> &ae) {
             self_type temporary (ae);
             resize (temporary.size1 (), temporary.size2 ());
             return assign_temporary (temporary);
@@ -171,8 +171,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        matrix &plus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_plus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        matrix &plus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_plus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -188,8 +188,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        matrix &minus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_minus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        matrix &minus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_minus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
@@ -219,7 +219,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (matrix &m1, matrix &m2) {
             m1.swap (m2);
@@ -1094,7 +1094,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (vector_of_vector &m1, vector_of_vector &m2) {
             m1.swap (m2);
@@ -1934,7 +1934,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (size2_, m.size2_);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (identity_matrix &m1, identity_matrix &m2) {
             m1.swap (m2);
@@ -2377,7 +2377,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (size2_, m.size2_);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (zero_matrix &m1, zero_matrix &m2) {
             m1.swap (m2);
@@ -2805,7 +2805,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (value_, m.value_);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (scalar_matrix &m1, scalar_matrix &m2) {
             m1.swap (m2);
@@ -3351,7 +3351,7 @@ namespace boost { namespace numeric { namespace ublas {
                     std::swap_ranges (data_ [i], data_ [i] + size2_, m.data_ [i]);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (c_matrix &m1, c_matrix &m2) {
             m1.swap (m2);
@@ -3793,12 +3793,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             const_iterator1 begin () const {
                 const self_type &m = (*this) ();
-                return m.find_first1 (1, 0, index2 ()); 
+                return m.find_first1 (1, 0, index2 ());
             }
             BOOST_UBLAS_INLINE
             const_iterator1 end () const {
                 const self_type &m = (*this) ();
-                return m.find_first1 (1, m.size1 (), index2 ()); 
+                return m.find_first1 (1, m.size1 (), index2 ());
             }
             BOOST_UBLAS_INLINE
             const_reverse_iterator1 rbegin () const {
@@ -3924,7 +3924,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             iterator1 end () const {
                 self_type &m = (*this) ();
-                return m.find_first1 (1, m.size1 (), index2 ()); 
+                return m.find_first1 (1, m.size1 (), index2 ());
             }
             BOOST_UBLAS_INLINE
             reverse_iterator1 rbegin () const {

@@ -220,7 +220,7 @@ href="expression.htm#vector_expression">Vector Expression</a>.</p>
     template&lt;class V&gt;
     class vector_range:
         public vector_expression&lt;vector_range&lt;V&gt; &gt; {
-    public:      
+    public:
         typedef const V const_vector_type;
         typedef V vector_type;
         typedef typename V::size_type size_type;
@@ -238,12 +238,12 @@ href="expression.htm#vector_expression">Vector Expression</a>.</p>
                                                  dense_proxy_tag&gt;::storage_category storage_category;
 
         // Construction and destruction
-        vector_range (); 
-        vector_range (vector_type &amp;data, const range &amp;r); 
+        vector_range ();
+        vector_range (vector_type &amp;data, const range &amp;r);
 
         // Accessors
-        size_type start () const; 
-        size_type size () const; 
+        size_type start () const;
+        size_type size () const;
         const_vector_type &amp;data () const;
         vector_type &amp;data ();
 
@@ -320,7 +320,7 @@ href="expression.htm#vector_expression">Vector Expression</a>.</p>
             // Index
             size_type index () const;
 
-            // Assignment 
+            // Assignment
             const_iterator &amp;operator = (const const_iterator &amp;it);
 
             // Comparison
@@ -358,7 +358,7 @@ href="expression.htm#vector_expression">Vector Expression</a>.</p>
             // Index
             size_type index () const;
 
-            // Assignment 
+            // Assignment
             iterator &amp;operator = (const iterator &amp;it);
 
             // Comparison
@@ -442,7 +442,7 @@ addressing a slice of a vector.</p>
     using namespace boost::numeric::ublas;
     vector&lt;double&gt; v (3);
     vector_slice&lt;vector&lt;double&gt; &gt; vs (v, slice (0, 1, 3));
-    for (int i = 0; i &lt; vs.size (); ++ i) 
+    for (int i = 0; i &lt; vs.size (); ++ i)
         vs (i) = i;
     std::cout &lt;&lt; vs &lt;&lt; std::endl;
 }</pre>
@@ -633,7 +633,7 @@ href="expression.htm#vector_expression">Vector Expression</a>.</p>
     template&lt;class V&gt;
     class vector_slice:
         public vector_expression&lt;vector_slice&lt;V&gt; &gt; {
-    public:      
+    public:
         typedef const V const_vector_type;
         typedef V vector_type;
         typedef typename V::size_type size_type;
@@ -735,7 +735,7 @@ href="expression.htm#vector_expression">Vector Expression</a>.</p>
             // Index
             size_type index () const;
 
-            // Assignment 
+            // Assignment
             const_iterator &amp;operator = (const const_iterator &amp;it);
 
             // Comparison
@@ -773,7 +773,7 @@ href="expression.htm#vector_expression">Vector Expression</a>.</p>
             // Index
             size_type index () const;
 
-            // Assignment 
+            // Assignment
             iterator &amp;operator = (const iterator &amp;it);
 
             // Comparison

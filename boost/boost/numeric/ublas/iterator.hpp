@@ -131,7 +131,7 @@ namespace boost { namespace numeric { namespace ublas {
             ++ d;
             return tmp;
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator ++ (derived_iterator_type &d, int) {
             derived_iterator_type tmp (d);
@@ -148,7 +148,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifndef BOOST_UBLAS_FRIEND_FUNCTION
+#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     template<class IC, class I, class T>
     BOOST_UBLAS_INLINE
     typename forward_iterator_base<IC, I, T>::derived_iterator_type operator ++ (forward_iterator_base<IC, I, T> &it, int) {
@@ -174,7 +174,7 @@ namespace boost { namespace numeric { namespace ublas {
             ++ d;
             return tmp;
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator ++ (derived_iterator_type &d, int) {
             derived_iterator_type tmp (d);
@@ -189,7 +189,7 @@ namespace boost { namespace numeric { namespace ublas {
             -- d;
             return tmp;
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator -- (derived_iterator_type &d, int) {
             derived_iterator_type tmp (d);
@@ -206,7 +206,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifndef BOOST_UBLAS_FRIEND_FUNCTION
+#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     template<class IC, class I, class T>
     BOOST_UBLAS_INLINE
     typename bidirectional_iterator_base<IC, I, T>::derived_iterator_type operator ++ (bidirectional_iterator_base<IC, I, T> &it, int) {
@@ -245,7 +245,7 @@ namespace boost { namespace numeric { namespace ublas {
             ++ d;
             return tmp;
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator ++ (derived_iterator_type &d, int) {
             derived_iterator_type tmp (d);
@@ -260,7 +260,7 @@ namespace boost { namespace numeric { namespace ublas {
             -- d;
             return tmp;
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator -- (derived_iterator_type &d, int) {
             derived_iterator_type tmp (d);
@@ -273,7 +273,7 @@ namespace boost { namespace numeric { namespace ublas {
             derived_iterator_type tmp (*static_cast<const derived_iterator_type *> (this));
             return tmp += n;
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator + (const derived_iterator_type &d, derived_difference_type n) {
             derived_iterator_type tmp (d);
@@ -285,7 +285,7 @@ namespace boost { namespace numeric { namespace ublas {
             derived_iterator_type tmp (*static_cast<const derived_iterator_type *> (this));
             return tmp -= n;
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator - (const derived_iterator_type &d, derived_difference_type n) {
             derived_iterator_type tmp (d);
@@ -316,7 +316,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifndef BOOST_UBLAS_FRIEND_FUNCTION
+#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     template<class IC, class I, class T>
     BOOST_UBLAS_INLINE
     typename random_access_iterator_base<IC, I, T>::derived_iterator_type operator ++ (random_access_iterator_base<IC, I, T> &it, int) {
@@ -723,7 +723,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend reverse_iterator_base operator + (const reverse_iterator_base &it, difference_type n) {
             reverse_iterator_base tmp (it);
@@ -754,7 +754,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifndef BOOST_UBLAS_FRIEND_FUNCTION
+#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     template<class I>
     BOOST_UBLAS_INLINE
     reverse_iterator_base<I> operator + (const reverse_iterator_base<I> &it, std::ptrdiff_t n) {
@@ -834,7 +834,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend reverse_iterator_base1 operator + (const reverse_iterator_base1 &it, difference_type n) {
             reverse_iterator_base1 tmp (it);
@@ -892,7 +892,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifndef BOOST_UBLAS_FRIEND_FUNCTION
+#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     template<class I>
     BOOST_UBLAS_INLINE
     reverse_iterator_base1<I> operator + (const reverse_iterator_base1<I> &it, std::ptrdiff_t n) {
@@ -972,7 +972,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend reverse_iterator_base2 operator + (const reverse_iterator_base2 &it, difference_type n) {
             reverse_iterator_base2 tmp (it);
@@ -1030,7 +1030,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifndef BOOST_UBLAS_FRIEND_FUNCTION
+#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     template<class I>
     BOOST_UBLAS_INLINE
     reverse_iterator_base2<I> operator + (const reverse_iterator_base2<I> &it, std::ptrdiff_t n) {
@@ -1675,15 +1675,15 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
-            return (*this) ().find_first1 (1, 0, index2 ()); 
+            return (*this) ().find_first1 (1, 0, index2 ());
         }
         BOOST_UBLAS_INLINE
         dual_iterator_type end () const {
-            return (*this) ().find_first1 (1, (*this) ().size1 (), index2 ()); 
+            return (*this) ().find_first1 (1, (*this) ().size1 (), index2 ());
         }
         BOOST_UBLAS_INLINE
         dual_reverse_iterator_type rbegin () const {
-            return dual_reverse_iterator_type (end ()); 
+            return dual_reverse_iterator_type (end ());
         }
         BOOST_UBLAS_INLINE
         dual_reverse_iterator_type rend () const {
@@ -1743,9 +1743,9 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class C, class IC>
     class indexed_const_iterator2:
-        public container_const_reference<C>, 
+        public container_const_reference<C>,
         public random_access_iterator_base<IC,
-                                           indexed_const_iterator2<C, IC>, 
+                                           indexed_const_iterator2<C, IC>,
                                            typename C::value_type,
                                            typename C::const_reference> {
     public:
@@ -1770,7 +1770,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         indexed_const_iterator2 (const container_type &c, size_type it1, size_type it2):
             container_const_reference<container_type> (c), it1_ (it1), it2_ (it2) {}
-        BOOST_UBLAS_INLINE 
+        BOOST_UBLAS_INLINE
         indexed_const_iterator2 (const iterator_type &it):
             container_const_reference<container_type> (it ()), it1_ (it.index1 ()), it2_ (it.index2 ()) {}
 
@@ -1826,15 +1826,15 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
-            return (*this) ().find_first1 (1, 0, index2 ()); 
+            return (*this) ().find_first1 (1, 0, index2 ());
         }
         BOOST_UBLAS_INLINE
         dual_iterator_type end () const {
-            return (*this) ().find_first1 (1, (*this) ().size1 (), index2 ()); 
+            return (*this) ().find_first1 (1, (*this) ().size1 (), index2 ());
         }
         BOOST_UBLAS_INLINE
         dual_reverse_iterator_type rbegin () const {
-            return dual_reverse_iterator_type (end ()); 
+            return dual_reverse_iterator_type (end ());
         }
         BOOST_UBLAS_INLINE
         dual_reverse_iterator_type rend () const {

@@ -417,7 +417,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (hermitian_matrix &m1, hermitian_matrix &m2) {
             m1.swap (m2);
@@ -1371,7 +1371,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &m)
                 matrix_swap (scalar_swap<value_type, value_type> (), *this, m); 
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (hermitian_adaptor &m1, hermitian_adaptor &m2) {
             m1.swap (m2);

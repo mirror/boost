@@ -77,9 +77,9 @@ including class <code>matrix</code> itself.</p>
         typedef E expression_type;
         typedef matrix_tag type_category;
 
-        // This class could define an common interface for all 
+        // This class could define an common interface for all
         // statically derived expression type classes.
-        // Due to a compiler deficiency - one can not reference class typedefs of E 
+        // Due to a compiler deficiency - one can not reference class typedefs of E
         // on MSVC 6.0 (error C2027) - we only implement the casts.
 
         const expression_type &amp;operator () () const;
@@ -2698,7 +2698,7 @@ F&gt; &gt;</code>.</p>
             public container_const_reference&lt;matrix_matrix_binary&gt;,
             public random_access_iterator_base&lt;const_iterator1, value_type&gt; {
         public:
-            typedef typename restrict_traits&lt;typename E1::const_iterator1::iterator_category, 
+            typedef typename restrict_traits&lt;typename E1::const_iterator1::iterator_category,
                                              typename E2::const_iterator2::iterator_category&gt;::iterator_category iterator_category;
             typedef typename matrix_matrix_binary::difference_type difference_type;
             typedef typename matrix_matrix_binary::value_type value_type;
@@ -2739,7 +2739,7 @@ F&gt; &gt;</code>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator1 &amp;operator = (const const_iterator1 &amp;it);
 
             // Comparison
@@ -2754,7 +2754,7 @@ F&gt; &gt;</code>.</p>
             public container_const_reference&lt;matrix_matrix_binary&gt;,
             public random_access_iterator_base&lt;const_iterator2, value_type&gt; {
         public:
-            typedef typename restrict_traits&lt;typename E1::const_iterator1::iterator_category, 
+            typedef typename restrict_traits&lt;typename E1::const_iterator1::iterator_category,
                                              typename E2::const_iterator2::iterator_category&gt;::iterator_category iterator_category;
             typedef typename matrix_matrix_binary::difference_type difference_type;
             typedef typename matrix_matrix_binary::value_type value_type;
@@ -2795,7 +2795,7 @@ F&gt; &gt;</code>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator2 &amp;operator = (const const_iterator2 &amp;it);
 
             // Comparison
@@ -2823,38 +2823,38 @@ F&gt; &gt;</code>.</p>
     struct matrix_matrix_binary_traits {
         typedef unknown_orientation_tag dispatch_category;
         typedef typename promote_traits&lt;T1, T2&gt;::promote_type promote_type;
-        typedef matrix_matrix_binary&lt;typename E1::const_closure_type, 
-                                     typename E2::const_closure_type, 
+        typedef matrix_matrix_binary&lt;typename E1::const_closure_type,
+                                     typename E2::const_closure_type,
                                      matrix_matrix_prod&lt;T1, T2, promote_type&gt; &gt; expression_type;
-        typedef expression_type result_type; 
+        typedef expression_type result_type;
     };
 
     template&lt;class E1, class E2&gt;
-    typename matrix_matrix_binary_traits&lt;typename E1::value_type, E1, 
+    typename matrix_matrix_binary_traits&lt;typename E1::value_type, E1,
                                          typename E2::value_type, E2&gt;::result_type
-    prod (const matrix_expression&lt;E1&gt; &amp;e1, 
+    prod (const matrix_expression&lt;E1&gt; &amp;e1,
           const matrix_expression&lt;E2&gt; &amp;e2,
           unknown_orientation_tag);
 
     // Dispatcher
     template&lt;class E1, class E2&gt;
-    typename matrix_matrix_binary_traits&lt;typename E1::value_type, E1, 
+    typename matrix_matrix_binary_traits&lt;typename E1::value_type, E1,
                                          typename E2::value_type, E2&gt;::result_type
-    prod (const matrix_expression&lt;E1&gt; &amp;e1, 
+    prod (const matrix_expression&lt;E1&gt; &amp;e1,
           const matrix_expression&lt;E2&gt; &amp;e2);
 
     template&lt;class E1, class E2&gt;
-    typename matrix_matrix_binary_traits&lt;typename type_traits&lt;typename E1::value_type&gt;::precision_type, E1, 
+    typename matrix_matrix_binary_traits&lt;typename type_traits&lt;typename E1::value_type&gt;::precision_type, E1,
                                          typename type_traits&lt;typename E2::value_type&gt;::precision_type, E2&gt;::result_type
-    prec_prod (const matrix_expression&lt;E1&gt; &amp;e1, 
+    prec_prod (const matrix_expression&lt;E1&gt; &amp;e1,
                const matrix_expression&lt;E2&gt; &amp;e2,
                unknown_orientation_tag);
 
     // Dispatcher
     template&lt;class E1, class E2&gt;
-    typename matrix_matrix_binary_traits&lt;typename type_traits&lt;typename E1::value_type&gt;::precision_type, E1, 
+    typename matrix_matrix_binary_traits&lt;typename type_traits&lt;typename E1::value_type&gt;::precision_type, E1,
                                          typename type_traits&lt;typename E2::value_type&gt;::precision_type, E2&gt;::result_type
-    prec_prod (const matrix_expression&lt;E1&gt; &amp;e1, 
+    prec_prod (const matrix_expression&lt;E1&gt; &amp;e1,
                const matrix_expression&lt;E2&gt; &amp;e2);
 
     template&lt;class M, class E1, class E2&gt;
@@ -2902,8 +2902,8 @@ product of the matrix expressions.</p>
 <pre>int main () {
     using namespace boost::numeric::ublas;
     matrix&lt;double &gt; m1 (3, 3), m2 (3, 3);
-    for (int i = 0; i &lt; std::min (m1.size1 (), m2.size1 ()); ++ i) 
-        for (int j = 0; j &lt; std::min (m1.size2 (), m2.size2 ()); ++ j) 
+    for (int i = 0; i &lt; std::min (m1.size1 (), m2.size1 ()); ++ i)
+        for (int j = 0; j &lt; std::min (m1.size2 (), m2.size2 ()); ++ j)
             m1 (i, j) = m2 (i, j) = 3 * i + j;
 
     std::cout &lt;&lt; prod (m1, m2) &lt;&lt; std::endl;
@@ -2920,29 +2920,29 @@ product of the matrix expressions.</p>
     };
 
     template&lt;class E1, class E2&gt;
-    void inplace_solve (const matrix_expression&lt;E1&gt; &amp;e1, 
+    void inplace_solve (const matrix_expression&lt;E1&gt; &amp;e1,
                         E2 &amp;e2,
                         lower_tag,
                         matrix_tag);
     template&lt;class E1, class E2&gt;
-    void inplace_solve (const matrix_expression&lt;E1&gt; &amp;e1, 
+    void inplace_solve (const matrix_expression&lt;E1&gt; &amp;e1,
                         E2 &amp;e2,
                         upper_tag,
                         matrix_tag);
     template&lt;class E1, class E2&gt;
-    void inplace_solve (const matrix_expression&lt;E1&gt; &amp;e1, 
+    void inplace_solve (const matrix_expression&lt;E1&gt; &amp;e1,
                         E2 &amp;e2,
                         unit_lower_tag,
                         matrix_tag);
     template&lt;class E1, class E2&gt;
-    void inplace_solve (const matrix_expression&lt;E1&gt; &amp;e1, 
+    void inplace_solve (const matrix_expression&lt;E1&gt; &amp;e1,
                         E2 &amp;e2,
                         unit_upper_tag,
                         matrix_tag);
 
     template&lt;class E1, class E2, class C&gt;
     typename matrix_matrix_solve_traits&lt;E1, E2&gt;::result_type
-    solve (const matrix_expression&lt;E1&gt; &amp;e1, 
+    solve (const matrix_expression&lt;E1&gt; &amp;e1,
            const matrix_expression&lt;E2&gt; &amp;e2,
            C);</code></pre>
 
@@ -2981,8 +2981,8 @@ product of the matrix expressions.</p>
 <pre>int main () {
     using namespace boost::numeric::ublas;
     matrix&lt;double &gt; m1 (3, 3), m2 (3, 3);
-    for (int i = 0; i &lt; std::min (m1.size1 (), m2.size1 ()); ++ i) 
-        for (int j = 0; j &lt;= i; ++ j) 
+    for (int i = 0; i &lt; std::min (m1.size1 (), m2.size1 ()); ++ i)
+        for (int j = 0; j &lt;= i; ++ j)
             m1 (i, j) = m2 (i, j) = 3 * i + j;
 
     std::cout &lt;&lt; solve (m1, m2, lower_tag ()) &lt;&lt; std::endl;

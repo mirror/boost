@@ -76,8 +76,8 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        symmetric_matrix (): 
-            size_ (0), 
+        symmetric_matrix ():
+            size_ (0),
             data_ (0) {}
         BOOST_UBLAS_INLINE
         symmetric_matrix (size_type size):
@@ -88,28 +88,28 @@ namespace boost { namespace numeric { namespace ublas {
             size_ (BOOST_UBLAS_SAME (size1, size2)),
             data_ (functor1_type::packed_size (size1, size2)) {}
         BOOST_UBLAS_INLINE
-        symmetric_matrix (size_type size, const array_type &data): 
+        symmetric_matrix (size_type size, const array_type &data):
             size_ (size),
             data_ (data) {}
         BOOST_UBLAS_INLINE
-        symmetric_matrix (const symmetric_matrix &m): 
+        symmetric_matrix (const symmetric_matrix &m):
             size_ (m.size_),
             data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
-        symmetric_matrix (const matrix_expression<AE> &ae): 
-            size_ (BOOST_UBLAS_SAME (ae ().size1 (), ae ().size2 ())), 
+        symmetric_matrix (const matrix_expression<AE> &ae):
+            size_ (BOOST_UBLAS_SAME (ae ().size1 (), ae ().size2 ())),
             data_ (functor1_type::packed_size (ae ().size1 (), ae ().size2 ())) {
-            matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+            matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
         // Accessors
         BOOST_UBLAS_INLINE
-        size_type size1 () const { 
+        size_type size1 () const {
             return size_;
         }
         BOOST_UBLAS_INLINE
-        size_type size2 () const { 
+        size_type size2 () const {
             return size_;
         }
         BOOST_UBLAS_INLINE
@@ -155,7 +155,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Assignment
         BOOST_UBLAS_INLINE
-        symmetric_matrix &operator = (const symmetric_matrix &m) { 
+        symmetric_matrix &operator = (const symmetric_matrix &m) {
             BOOST_UBLAS_CHECK (size_ == m.size_, bad_size ());
             size_ = m.size_;
             data () = m.data ();
@@ -186,8 +186,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        symmetric_matrix &assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        symmetric_matrix &assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -203,8 +203,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        symmetric_matrix &plus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_plus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        symmetric_matrix &plus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_plus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -249,7 +249,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (symmetric_matrix &m1, symmetric_matrix &m2) {
             m1.swap (m2);
@@ -1125,7 +1125,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &m) 
                 matrix_swap (scalar_swap<value_type, value_type> (), *this, m);
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (symmetric_adaptor &m1, symmetric_adaptor &m2) {
             m1.swap (m2);

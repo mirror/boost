@@ -27,19 +27,52 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_const.hpp>
 
-
-
 // Compiler specific problems
-#ifdef BOOST_MSVC
+#if defined (BOOST_STRICT_CONFIG) || ! (\
+        defined (BOOST_MSVC) || \
+        defined (__GNUC__) || \
+        defined (__BORLANDC__) || \
+        defined (_ICL) || \
+        defined (_ICC) || \
+        defined (__COMO__))
+
+#define BOOST_UBLAS_TYPENAME typename
+#define BOOST_UBLAS_USING using
+// This could be eliminated.
+#define BOOST_UBLAS_EXPLICIT explicit
+
+#define BOOST_UBLAS_USE_LONG_DOUBLE
+
+#define BOOST_UBLAS_USE_STREAM
+
+#endif
+
+
+
+// Microsoft Visual C++
+#if defined (BOOST_MSVC) && ! (BOOST_MSVC > 1300 && defined (BOOST_STRICT_CONFIG))
 
 // Disable some MSVC specific warnings.
 #pragma warning (disable: 4355)
 #pragma warning (disable: 4503)
 #pragma warning (disable: 4786)
 
-// Open problems:
-// MSVC allows to implement free function as friends.
-#define BOOST_UBLAS_FRIEND_FUNCTION
+// MSVC doesn't always accept the 'typename' keyword.
+#define BOOST_UBLAS_TYPENAME
+// MSVC doesn't accept the 'using' keyword (at least for importing base members).
+#define BOOST_UBLAS_USING
+#define BOOST_UBLAS_EXPLICIT explicit
+
+// #ifdef BOOST_MSVC
+// With MSVC we could perform IO via basic_stream
+// #define BOOST_UBLAS_USE_BASIC_STREAM
+// #else
+// IO via streams
+#define BOOST_UBLAS_USE_STREAM
+// #endif
+
+#define BOOST_UBLAS_NO_ELEMENT_PROXIES
+#define BOOST_UBLAS_NO_SMART_PROXIES
 
 // Using MSVC the following is missing:
 // namespace std {
@@ -70,15 +103,13 @@
 
 
 
-#ifdef __GNUC__
+// GNU Compiler Collection
+#if defined (__GNUC__) && ! defined (BOOST_STRICT_CONFIG)
 
-// Open problems:
-// GCC 2.95.3 is known not to accept BOOST_UBLAS_FRIEND_FUNCTION (this seems to be arguable).
-// GCC 3.x.x allows to implement free function as friends.
-#if !(__GNUC__ <= 2 && __GNUC_MINOR__ <= 95)
-#define BOOST_UBLAS_FRIEND_FUNCTION
-#endif
-// GCC 2.95.3 is known not to accept BOOST_UBLAS_MUTABLE_TEMPORARY (this seems to be correct).
+#define BOOST_UBLAS_TYPENAME typename
+#define BOOST_UBLAS_USING using
+#define BOOST_UBLAS_EXPLICIT explicit
+
 // GCC 2.95.3 allows to use iterator_base_traits.
 #define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
 // GCC 2.95.3 needs BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS (this seems to be arguable).
@@ -86,19 +117,29 @@
 
 #define BOOST_UBLAS_USE_LONG_DOUBLE
 
+#define BOOST_UBLAS_USE_STREAM
+
 #endif
 
 
 
-#ifdef __BORLANDC__
+// Borland Compiler
+#if defined (__BORLANDC__) && ! defined (BOOST_STRICT_CONFIG)
 
-// Open problems:
-// BCC allows to implement free function as friends.
-#define BOOST_UBLAS_FRIEND_FUNCTION
+#define BOOST_UBLAS_TYPENAME typename
+#define BOOST_UBLAS_USING using
+#define BOOST_UBLAS_EXPLICIT explicit
+
+#define BOOST_UBLAS_USE_LONG_DOUBLE
+
+#define BOOST_UBLAS_USE_STREAM
+
+#define BOOST_UBLAS_NO_ELEMENT_PROXIES
+#define BOOST_UBLAS_NO_SMART_PROXIES
 
 // BCC's <complex> broken.
 // Thanks to John Maddock for providing a workaround.
-#if defined(_STLPORT_VERSION) && defined(_STLP_USE_OWN_NAMESPACE) && ! defined(std)
+#if defined(_STLPORT_VERSION) && defined(_STLP_USE_OWN_NAMESPACE) && !defined(std)
 #include <complex>
 namespace std {
     using stlport::abs;
@@ -111,68 +152,55 @@ namespace std {
 
 
 // Thanks to Roberto Andres Ruiz Vial for porting to Intel.
-#ifdef __ICL
+#if defined (__ICL) && ! defined (BOOST_STRICT_CONFIG)
 
-// Maybe BOOST_MSVC is set when using ICL with MSVC?
 #define BOOST_UBLAS_TYPENAME typename
-
-// Open problems:
+#define BOOST_UBLAS_USING using
+#define BOOST_UBLAS_EXPLICIT explicit
 
 #define BOOST_UBLAS_USE_LONG_DOUBLE
+
+#define BOOST_UBLAS_USE_STREAM
 
 #endif
 
 
 
-#ifdef __ICC
+// Intel Compiler under Linux
+#if defined (__ICC) && ! defined (BOOST_STRICT_CONFIG)
 
-// Open problems:
-// ICC allows to implement free function as friends.
-#define BOOST_UBLAS_FRIEND_FUNCTION
+#define BOOST_UBLAS_TYPENAME typename
+#define BOOST_UBLAS_USING using
+#define BOOST_UBLAS_EXPLICIT explicit
+
 // ICC sometimes needs qualified type names.
 #define BOOST_UBLAS_QUALIFIED_TYPENAME
+
+#define BOOST_UBLAS_USE_LONG_DOUBLE
+
+#define BOOST_UBLAS_USE_STREAM
 
 #endif
 
 
 
 // Thanks to Kresimir Fresl for porting to Comeau.
-#ifdef __COMO__
+#if defined (__COMO__) && ! defined (BOOST_STRICT_CONFIG)
 
-// Comeau 4.2.45 seems to have problems with BOOST_UBLAS_FRIEND_FUNCTION (this seems to be arguable).
-#if (__COMO_VERSION__ >= 4300)
-#define BOOST_UBLAS_FRIEND_FUNCTION
-#endif
+#define BOOST_UBLAS_TYPENAME typename
+#define BOOST_UBLAS_USING using
+#define BOOST_UBLAS_EXPLICIT explicit
+
 // Comeau allows to use iterator_base_traits.
 #define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
 
 #define BOOST_UBLAS_USE_LONG_DOUBLE
 
-#endif
-
-
-
-#ifdef BOOST_MSVC
-// MSVC doesn't always accept the 'typename' keyword.
-#define BOOST_UBLAS_TYPENAME
-// MSVC doesn't accept the 'using' keyword (at least for importing base members).
-#define BOOST_UBLAS_USING
-#else
-#define BOOST_UBLAS_TYPENAME typename
-#define BOOST_UBLAS_USING using
-#endif
-// This could be eliminated.
-#define BOOST_UBLAS_EXPLICIT explicit
-
-
-
-// #ifdef BOOST_MSVC
-// With MSVC we could perform IO via basic_stream
-// #define BOOST_UBLAS_USE_BASIC_STREAM
-// #else
-// IO via streams
 #define BOOST_UBLAS_USE_STREAM
-// #endif
+
+#endif
+
+
 
 // Enable assignment of non conformant proxies
 // Thanks to Michael Stevens for spotting this.
@@ -181,7 +209,7 @@ namespace std {
 // Enable different sparse element proxies
 // These fix a [1] = a [0] = 1, but probably won't work on broken compilers.
 // Thanks to Marc Duflot for spotting this.
-#if ! defined (BOOST_MSVC) && ! defined (__BORLANDC__)
+#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
 // #define BOOST_UBLAS_STRICT_STORAGE_SPARSE
 #define BOOST_UBLAS_STRICT_VECTOR_SPARSE
 #define BOOST_UBLAS_STRICT_MATRIX_SPARSE
@@ -189,16 +217,15 @@ namespace std {
 #endif
 
 // Enable compile time typedefs for proxies
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-// Doesn't work under Borland
-#ifndef __BORLANDC__
+#ifndef BOOST_UBLAS_NO_SMART_PROXIES
 #define BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
 // #define BOOST_UBLAS_REFERENCE_CONST_MEMBER
 #define BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
 // #define BOOST_UBLAS_PROXY_CONST_MEMBER
 #define BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
 #endif
-#endif
+
+
 
 // Enable performance options in release mode
 #ifdef NDEBUG
@@ -241,6 +268,10 @@ namespace std {
 // Type check for non dense matrices
 #define BOOST_UBLAS_TYPE_CHECK
 
+#endif
+
+#ifdef BOOST_UBLAS_BOUNDS_CHECK
+static bool disable_type_check = false;
 #endif
 
 

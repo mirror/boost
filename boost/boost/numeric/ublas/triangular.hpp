@@ -63,32 +63,32 @@ namespace boost { namespace numeric { namespace ublas {
             size1_ (0), size2_ (0),
             data_ (0) {}
         BOOST_UBLAS_INLINE
-        triangular_matrix (size_type size1, size_type size2): 
+        triangular_matrix (size_type size1, size_type size2):
             size1_ (size1), size2_ (size2),
             data_ (functor1_type::packed_size (size1, size2)) {}
         BOOST_UBLAS_INLINE
-        triangular_matrix (size_type size1, size_type size2, const array_type &data): 
+        triangular_matrix (size_type size1, size_type size2, const array_type &data):
             size1_ (size1), size2_ (size2),
             data_ (data) {}
         BOOST_UBLAS_INLINE
-        triangular_matrix (const triangular_matrix &m): 
+        triangular_matrix (const triangular_matrix &m):
             size1_ (m.size1_), size2_ (m.size2_),
             data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
-        triangular_matrix (const matrix_expression<AE> &ae): 
+        triangular_matrix (const matrix_expression<AE> &ae):
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()),
             data_ (functor1_type::packed_size (ae ().size1 (), ae ().size2 ())) {
-            matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+            matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
         // Accessors
         BOOST_UBLAS_INLINE
-        size_type size1 () const { 
+        size_type size1 () const {
             return size1_;
         }
         BOOST_UBLAS_INLINE
-        size_type size2 () const { 
+        size_type size2 () const {
             return size2_;
         }
         BOOST_UBLAS_INLINE
@@ -131,7 +131,7 @@ namespace boost { namespace numeric { namespace ublas {
                 // Raising exceptions abstracted as requested during review.
                 // throw external_logic ();
                 external_logic ().raise ();
-#endif                
+#endif
                 return one_;
             } else {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
@@ -145,7 +145,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Assignment
         BOOST_UBLAS_INLINE
-        triangular_matrix &operator = (const triangular_matrix &m) { 
+        triangular_matrix &operator = (const triangular_matrix &m) {
             BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
             BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
             size1_ = m.size1_;
@@ -154,13 +154,13 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
         BOOST_UBLAS_INLINE
-        triangular_matrix &assign_temporary (triangular_matrix &m) { 
+        triangular_matrix &assign_temporary (triangular_matrix &m) {
             swap (m);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        triangular_matrix &operator = (const matrix_expression<AE> &ae) { 
+        triangular_matrix &operator = (const matrix_expression<AE> &ae) {
 #ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
             return assign_temporary (self_type (ae));
 #else
@@ -178,8 +178,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        triangular_matrix &assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        triangular_matrix &assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -195,8 +195,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        triangular_matrix &plus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_plus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        triangular_matrix &plus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_plus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -243,7 +243,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (triangular_matrix &m1, triangular_matrix &m2) {
             m1.swap (m2);
@@ -1149,7 +1149,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &m)
                 matrix_swap (scalar_swap<value_type, value_type> (), *this, m); 
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (triangular_adaptor &m1, triangular_adaptor &m2) {
             m1.swap (m2);

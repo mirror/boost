@@ -76,9 +76,9 @@ including class <code>vector</code> itself.</p>
         typedef E expression_type;
         typedef vector_tag type_category;
 
-        // This class could define an common interface for all 
+        // This class could define an common interface for all
         // statically derived expression type classes.
-        // Due to a compiler deficiency - one can not reference class typedefs of E 
+        // Due to a compiler deficiency - one can not reference class typedefs of E
         // on MSVC 6.0 (error C2027) - we only implement the casts.
 
         const expression_type &amp;operator () () const;
@@ -1507,7 +1507,7 @@ vector_expression&lt;vector_binary_scalar2&lt;E1, E2, F&gt; &gt; </code>resp.</p
             // Index
             size_type index () const;
 
-            // Assignment 
+            // Assignment
             const_iterator &amp;operator = (const const_iterator &amp;it);
 
             // Comparison
@@ -1532,34 +1532,34 @@ vector_expression&lt;vector_binary_scalar2&lt;E1, E2, F&gt; &gt; </code>resp.</p
 
 <pre><code>    template&lt;class T1, class E2, class F&gt;
     struct vector_binary_scalar1_traits {
-        typedef vector_binary_scalar1&lt;scalar_const_reference&lt;T1&gt;, 
+        typedef vector_binary_scalar1&lt;scalar_const_reference&lt;T1&gt;,
                                       typename E2::const_closure_type, F&gt; expression_type;
-        typedef expression_type result_type; 
+        typedef expression_type result_type;
     };
 
     // (t * v) [i] = t * v [i]
     template&lt;class T1, class E2&gt;
     typename vector_binary_scalar1_traits&lt;T1, E2, scalar_multiplies&lt;T1, typename E2::value_type&gt; &gt;::result_type
-    operator * (const T1 &amp;e1, 
+    operator * (const T1 &amp;e1,
                 const vector_expression&lt;E2&gt; &amp;e2);
 
     template&lt;class E1, class T2, class F&gt;
     struct vector_binary_scalar2_traits {
         typedef vector_binary_scalar2&lt;typename E1::const_closure_type,
                                       scalar_const_reference&lt;T2&gt;, F&gt; expression_type;
-        typedef expression_type result_type; 
+        typedef expression_type result_type;
     };
 
     // (v * t) [i] = v [i] * t
     template&lt;class E1, class T2&gt;
     typename vector_binary_scalar2_traits&lt;E1, T2, scalar_multiplies&lt;typename E1::value_type, T2&gt; &gt;::result_type
-    operator * (const vector_expression&lt;E1&gt; &amp;e1, 
+    operator * (const vector_expression&lt;E1&gt; &amp;e1,
                 const T2 &amp;e2);
 
     // (v / t) [i] = v [i] / t
     template&lt;class E1, class T2&gt;
     typename vector_binary_scalar2_traits&lt;E1, T2, scalar_divides&lt;typename E1::value_type, T2&gt; &gt;::result_type
-    operator / (const vector_expression&lt;E1&gt; &amp;e1, 
+    operator / (const vector_expression&lt;E1&gt; &amp;e1,
                 const T2 &amp;e2);</code></pre>
 
 <h4>Description</h4>
@@ -1594,7 +1594,7 @@ with the reciprocal of the scalar. </p>
 <pre>int main () {
     using namespace boost::numeric::ublas;
     vector&lt;double&gt; v (3);
-    for (int i = 0; i &lt; v.size (); ++ i) 
+    for (int i = 0; i &lt; v.size (); ++ i)
         v (i) = i;
 
     std::cout &lt;&lt; 2.0 * v &lt;&lt; std::endl;
@@ -1670,7 +1670,7 @@ first element having maximal absolute value.</p>
 <pre>int main () {
     using namespace boost::numeric::ublas;
     vector&lt;double&gt; v (3);
-    for (int i = 0; i &lt; v.size (); ++ i) 
+    for (int i = 0; i &lt; v.size (); ++ i)
         v (i) = i;
 
     std::cout &lt;&lt; sum (v) &lt;&lt; std::endl;
@@ -1691,19 +1691,19 @@ first element having maximal absolute value.</p>
 
     // inner_prod (v1, v2) = sum (v1 [i] * v2 [i]
     template&lt;class E1, class E2&gt;
-    typename vector_scalar_binary_traits&lt;E1, E2, vector_inner_prod&lt;typename E1::value_type, 
+    typename vector_scalar_binary_traits&lt;E1, E2, vector_inner_prod&lt;typename E1::value_type,
                                                                    typename E2::value_type,
-                                                                   typename promote_traits&lt;typename E1::value_type, 
-                                                                                           typename E2::value_type&gt;::promote_type&gt; &gt;::result_type 
-    inner_prod (const vector_expression&lt;E1&gt; &amp;e1, 
+                                                                   typename promote_traits&lt;typename E1::value_type,
+                                                                                           typename E2::value_type&gt;::promote_type&gt; &gt;::result_type
+    inner_prod (const vector_expression&lt;E1&gt; &amp;e1,
                 const vector_expression&lt;E2&gt; &amp;e2);
 
     template&lt;class E1, class E2&gt;
-    typename vector_scalar_binary_traits&lt;E1, E2, vector_inner_prod&lt;typename E1::value_type, 
+    typename vector_scalar_binary_traits&lt;E1, E2, vector_inner_prod&lt;typename E1::value_type,
                                                                    typename E2::value_type,
-                                                                   typename type_traits&lt;typename promote_traits&lt;typename E1::value_type, 
-                                                                                                                typename E2::value_type&gt;::promote_type&gt;::precision_type&gt; &gt;::result_type 
-    prec_inner_prod (const vector_expression&lt;E1&gt; &amp;e1, 
+                                                                   typename type_traits&lt;typename promote_traits&lt;typename E1::value_type,
+                                                                                                                typename E2::value_type&gt;::promote_type&gt;::precision_type&gt; &gt;::result_type
+    prec_inner_prod (const vector_expression&lt;E1&gt; &amp;e1,
                      const vector_expression&lt;E2&gt; &amp;e2);</code></pre>
 
 <h4>Description</h4>
@@ -1740,7 +1740,7 @@ double precision inner product of the vector expressions<code>.</code></p>
 <pre>int main () {
     using namespace boost::numeric::ublas;
     vector&lt;double&gt; v1 (3), v2 (3);
-    for (int i = 0; i &lt; std::min (v1.size (), v2.size ()); ++ i) 
+    for (int i = 0; i &lt; std::min (v1.size (), v2.size ()); ++ i)
         v1 (i) = v2 (i) = i;
 
     std::cout &lt;&lt; inner_prod (v1, v2) &lt;&lt; std::endl;
@@ -1748,10 +1748,10 @@ double precision inner product of the vector expressions<code>.</code></p>
 
 <hr>
 
-<p>Copyright (©) 2000-2002 Joerg Walter, Mathias Koch <br> 
-Permission to copy, use, modify, sell and distribute this document is granted 
-provided this copyright notice appears in all copies. This document is provided 
-``as is'' without express or implied warranty, and with no claim as to its suitability 
+<p>Copyright (©) 2000-2002 Joerg Walter, Mathias Koch <br>
+Permission to copy, use, modify, sell and distribute this document is granted
+provided this copyright notice appears in all copies. This document is provided
+``as is'' without express or implied warranty, and with no claim as to its suitability
 for any purpose.</p>
 
 <p>Last revised: 8/3/2002</p>

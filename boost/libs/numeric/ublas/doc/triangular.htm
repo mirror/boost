@@ -35,12 +35,12 @@ packed.</p>
 <pre>int main () {
     using namespace boost::numeric::ublas;
     triangular_matrix&lt;double, lower&gt; ml (3, 3);
-    for (int i = 0; i &lt; ml.size1 (); ++ i) 
+    for (int i = 0; i &lt; ml.size1 (); ++ i)
         for (int j = 0; j &lt;= i; ++ j)
             ml (i, j) = 3 * i + j;
     std::cout &lt;&lt; ml &lt;&lt; std::endl;
     triangular_matrix&lt;double, upper&gt; mu (3, 3);
-    for (int i = 0; i &lt; m.size1 (); ++ i) 
+    for (int i = 0; i &lt; m.size1 (); ++ i)
         for (int j = i; j &lt; m.size2 (); ++ j)
             mu (i, j) = 3 * i + j;
     std::cout &lt;&lt; mu &lt;&lt; std::endl;
@@ -342,11 +342,11 @@ and <code>std::vector&lt;T&gt;</code>. </p>
 
 <h4>Interface</h4>
 
-<pre><code>    // Array based triangular matrix class 
+<pre><code>    // Array based triangular matrix class
     template&lt;class T, class F1, class F2, class A&gt;
-    class triangular_matrix: 
+    class triangular_matrix:
         public matrix_expression&lt;triangular_matrix&lt;T, F1, F2, A&gt; &gt; {
-    public:      
+    public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -474,7 +474,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator1 &amp;operator = (const const_iterator1 &amp;it);
 
             // Comparison
@@ -520,7 +520,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator1 &amp;operator = (const iterator1 &amp;it);
 
             // Comparison
@@ -567,7 +567,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator2 &amp;operator = (const const_iterator2 &amp;it);
 
             // Comparison
@@ -613,7 +613,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator2 &amp;operator = (const iterator2 &amp;it);
 
             // Comparison
@@ -652,12 +652,12 @@ a triangular matrix adaptor for other matrices.</p>
     using namespace boost::numeric::ublas;
     matrix&lt;double&gt; m (3, 3);
     triangular_adaptor&lt;matrix&lt;double&gt;, lower&gt; tal (m);
-    for (int i = 0; i &lt; tal.size1 (); ++ i) 
+    for (int i = 0; i &lt; tal.size1 (); ++ i)
         for (int j = 0; j &lt;= i; ++ j)
             tal (i, j) = 3 * i + j;
     std::cout &lt;&lt; tal &lt;&lt; std::endl;
     triangular_adaptor&lt;matrix&lt;double&gt;, upper&gt; tau (m);
-    for (int i = 0; i &lt; tau.size1 (); ++ i) 
+    for (int i = 0; i &lt; tau.size1 (); ++ i)
         for (int j = i; j &lt; tau.size2 (); ++ j)
             tau (i, j) = 3 * i + j;
     std::cout &lt;&lt; tau &lt;&lt; std::endl;
@@ -918,11 +918,11 @@ for the type of the triangular adaptor are <code>lower</code>, <code>unit_lower<
 
 <h4>Interface</h4>
 
-<pre><code>    // Triangular matrix adaptor class 
+<pre><code>    // Triangular matrix adaptor class
     template&lt;class M, class F&gt;
-    class triangular_adaptor: 
+    class triangular_adaptor:
         public matrix_expression&lt;triangular_adaptor&lt;M, F&gt; &gt; {
-    public:      
+    public:
         typedef const M const_matrix_type;
         typedef M matrix_type;
         typedef F functor_type;
@@ -1039,7 +1039,7 @@ for the type of the triangular adaptor are <code>lower</code>, <code>unit_lower<
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator1 &amp;operator = (const const_iterator1 &amp;it);
 
             // Comparison
@@ -1085,7 +1085,7 @@ for the type of the triangular adaptor are <code>lower</code>, <code>unit_lower<
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator1 &amp;operator = (const iterator1 &amp;it);
 
             // Comparison
@@ -1132,7 +1132,7 @@ for the type of the triangular adaptor are <code>lower</code>, <code>unit_lower<
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator2 &amp;operator = (const const_iterator2 &amp;it);
 
             // Comparison
@@ -1178,7 +1178,7 @@ for the type of the triangular adaptor are <code>lower</code>, <code>unit_lower<
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator2 &amp;operator = (const iterator2 &amp;it);
 
             // Comparison

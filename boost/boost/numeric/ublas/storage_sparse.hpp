@@ -381,7 +381,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (size_, a.size_);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (map_array &a1, map_array &a2) {
             a1.swap (a2);
@@ -665,8 +665,8 @@ namespace boost { namespace numeric { namespace ublas {
             //     throw std::bad_alloc ();
         }
         BOOST_UBLAS_INLINE
-        set_array (const set_array &a): 
-            capacity_ (a.size_), data_ (new value_type [a.size_]), size_ (a.size_) { 
+        set_array (const set_array &a):
+            capacity_ (a.size_), data_ (new value_type [a.size_]), size_ (a.size_) {
             // Assuming std compliant allocator as requested during review.
             // if (! data_)
             //     throw std::bad_alloc ();
@@ -747,7 +747,7 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
         BOOST_UBLAS_INLINE
-        set_array &assign_temporary (set_array &a) { 
+        set_array &assign_temporary (set_array &a) {
             swap (a);
             return *this;
         }
@@ -763,7 +763,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (size_, a.size_);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (set_array &a1, set_array &a2) {
             a1.swap (a2);
@@ -809,7 +809,7 @@ namespace boost { namespace numeric { namespace ublas {
             resize (size () + it2 - it1);
             it = begin () + n;
             std::copy (it1, it2, it);
-            std::sort (begin (), end (), std::less<value_type> ()); 
+            std::sort (begin (), end (), std::less<value_type> ());
 #endif
         }
         // This function seems to be big. So we do not let the compiler inline it.

@@ -26,7 +26,7 @@ addressing a row of a matrix.</p>
     matrix&lt;double&gt; m (3, 3);
     for (int i = 0; i &lt; m.size1 (); ++ i) {
         matrix_row&lt;matrix&lt;double&gt; &gt; mr (m, i);
-        for (int j = 0; j &lt; mr.size (); ++ j) 
+        for (int j = 0; j &lt; mr.size (); ++ j)
             mr (j) = 3 * i + j;
         std::cout &lt;&lt; mr &lt;&lt; std::endl;
     }
@@ -208,7 +208,7 @@ href="expression.htm#vector_expression">Vector Expression</a>.</p>
     template&lt;class M&gt;
     class matrix_row:
         public vector_expression&lt;matrix_row&lt;M&gt; &gt; {
-    public:      
+    public:
         typedef const M const_matrix_type;
         typedef M matrix_type;
         typedef typename M::size_type size_type;
@@ -2495,7 +2495,7 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator1 &amp;operator = (const const_iterator1 &amp;it);
 
             // Comparison
@@ -2541,7 +2541,7 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator1 &amp;operator = (const iterator1 &amp;it);
 
             // Comparison
@@ -2588,7 +2588,7 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator2 &amp;operator = (const const_iterator2 &amp;it);
 
             // Comparison
@@ -2634,7 +2634,7 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator2 &amp;operator = (const iterator2 &amp;it);
 
             // Comparison
@@ -2707,8 +2707,8 @@ construction of matrix slices.</p>
 <pre>int main () {
     using namespace boost::numeric::ublas;
     matrix&lt;double&gt; m (3, 3);
-    for (int i = 0; i &lt; m.size1 (); ++ i) 
-        for (int j = 0; j &lt; m.size2 (); ++ j) 
+    for (int i = 0; i &lt; m.size1 (); ++ i)
+        for (int j = 0; j &lt; m.size2 (); ++ j)
             project (m, slice (0, 1, 3), slice (0, 1, 3)) (i, j) = 3 * i + j;
     std::cout &lt;&lt; project (m, slice (0, 1, 3), slice (0, 1, 3)) &lt;&lt; std::endl;
 }</pre>

@@ -5009,18 +5009,18 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         operator value_type () const {
-            return functor_type () (e_); 
+            return functor_type () (e_);
         }
 
     private:
         expression_closure_type e_;
     };
-    
+
     template<class E, class F>
     struct matrix_scalar_unary_traits {
         typedef matrix_scalar_unary<E, F> expression_type;
 #ifdef BOOST_UBLAS_USE_ET
-         typedef expression_type result_type; 
+         typedef expression_type result_type;
 #else
          typedef typename F::result_type result_type;
 #endif

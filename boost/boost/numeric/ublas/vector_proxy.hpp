@@ -263,7 +263,7 @@ namespace boost { namespace numeric { namespace ublas {
                 vector_swap (scalar_swap<value_type, value_type> (), *this, vr);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (vector_range &vr1, vector_range &vr2) {
             vr1.swap (vr2);
@@ -882,7 +882,7 @@ namespace boost { namespace numeric { namespace ublas {
                 vector_swap (scalar_swap<value_type, value_type> (), *this, vs);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (vector_slice &vs1, vector_slice &vs2) {
             vs1.swap (vs2);
@@ -1491,7 +1491,7 @@ namespace boost { namespace numeric { namespace ublas {
                 vector_swap (scalar_swap<value_type, value_type> (), *this, vi);
             }
         }
-#ifdef BOOST_UBLAS_FRIEND_FUNCTION
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (vector_indirect &vi1, vector_indirect &vi2) {
             vi1.swap (vi2);

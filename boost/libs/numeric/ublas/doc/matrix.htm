@@ -29,8 +29,8 @@ container for column major orientation.</p>
 <pre>int main () {
     using namespace boost::numeric::ublas;
     matrix&lt;double&gt; m (3, 3);
-    for (int i = 0; i &lt; m.size1 (); ++ i) 
-        for (int j = 0; j &lt; m.size2 (); ++ j) 
+    for (int i = 0; i &lt; m.size1 (); ++ i)
+        for (int j = 0; j &lt; m.size2 (); ++ j)
             m (i, j) = 3 * i + j;
     std::cout &lt;&lt; m &lt;&lt; std::endl;
 }</pre>
@@ -443,7 +443,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator1 &amp;operator = (const const_iterator1 &amp;it);
 
             // Comparison
@@ -489,7 +489,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator1 &amp;operator = (const iterator1 &amp;it);
 
             // Comparison
@@ -536,7 +536,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator2 &amp;operator = (const const_iterator2 &amp;it);
 
             // Comparison
@@ -582,7 +582,7 @@ and <code>std::vector&lt;T&gt;</code>. </p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             iterator2 &amp;operator = (const iterator2 &amp;it);
 
             // Comparison
@@ -764,9 +764,9 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
 
 <pre><code>    // Identity matrix class
     template&lt;class T&gt;
-    class identity_matrix: 
+    class identity_matrix:
         public matrix_expression&lt;identity_matrix&lt;T&gt; &gt; {
-    public:      
+    public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -854,7 +854,7 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator1 &amp;operator = (const const_iterator1 &amp;it);
 
             // Comparison
@@ -902,7 +902,7 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator2 &amp;operator = (const const_iterator2 &amp;it);
 
             // Comparison
@@ -1078,9 +1078,9 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
 
 <pre><code>    // Zero matrix class
     template&lt;class T&gt;
-    class zero_matrix: 
+    class zero_matrix:
         public matrix_expression&lt;zero_matrix&lt;T&gt; &gt; {
-    public:      
+    public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -1163,7 +1163,7 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator1 &amp;operator = (const const_iterator1 &amp;it);
 
             // Comparison
@@ -1207,7 +1207,7 @@ href="expression.htm#matrix_expression">Matrix Expression</a>.</p>
             size_type index1 () const;
             size_type index2 () const;
 
-            // Assignment 
+            // Assignment
             const_iterator2 &amp;operator = (const const_iterator2 &amp;it);
 
             // Comparison

@@ -31,7 +31,7 @@ elements of the associative container, i.e. for elements <em>k</em>
 <pre>int main () {
     using namespace boost::numeric::ublas;
     sparse_vector&lt;double&gt; v (3, 3);
-    for (int i = 0; i &lt; v.size (); ++ i) 
+    for (int i = 0; i &lt; v.size (); ++ i)
         v (i) = i;
     std::cout &lt;&lt; v &lt;&lt; std::endl;
 }</pre>
@@ -268,11 +268,11 @@ and <code>std::map&lt;std::size_t, T&gt;</code>. </p>
 
 <h4>Interface</h4>
 
-<pre><code>    // Array based sparse vector class 
+<pre><code>    // Array based sparse vector class
     template&lt;class T, class A&gt;
-    class sparse_vector: 
+    class sparse_vector:
         public vector_expression&lt;sparse_vector&lt;T, A&gt; &gt; {
-    public:      
+    public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -291,7 +291,7 @@ and <code>std::map&lt;std::size_t, T&gt;</code>. </p>
         typedef sparse_tag storage_category;
 
         // Construction and destruction
-        sparse_vector (); 
+        sparse_vector ();
         sparse_vector (size_type size, size_type non_zeros = 0);
         sparse_vector (const sparse_vector &amp;v);
         template&lt;class AE&gt;
@@ -458,7 +458,7 @@ container, i.e. for elements <em>k</em> = <em>v</em><sub><em>i</em></sub><sub><s
 <pre>int main () {
     using namespace boost::numeric::ublas;
     compressed_vector&lt;double&gt; v (3, 3);
-    for (int i = 0; i &lt; v.size (); ++ i) 
+    for (int i = 0; i &lt; v.size (); ++ i)
         v (i) = i;
     std::cout &lt;&lt; v &lt;&lt; std::endl;
 }</pre>
@@ -714,11 +714,11 @@ and <code>std::vector&lt;&gt;</code>. </p>
 
 <h4>Interface</h4>
 
-<pre><code>    // Array based sparse vector class 
+<pre><code>    // Array based sparse vector class
     template&lt;class T, std::size_t IB, class IA, class TA&gt;
-    class compressed_vector: 
+    class compressed_vector:
         public vector_expression&lt;compressed_vector&lt;T, IB, IA, TA&gt; &gt; {
-    public:      
+    public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -737,7 +737,7 @@ and <code>std::vector&lt;&gt;</code>. </p>
         typedef sparse_tag storage_category;
 
         // Construction and destruction
-        compressed_vector (); 
+        compressed_vector ();
         compressed_vector (size_type size, size_type non_zeros = 0);
         compressed_vector (const compressed_vector &amp;v);
         template&lt;class AE&gt;
@@ -907,7 +907,7 @@ container, i.e. for elements <em>k</em> = <em>v</em><sub><em>i</em></sub><sub><s
 <pre>int main () {
     using namespace boost::numeric::ublas;
     coordinate_vector&lt;double&gt; v (3, 3);
-    for (int i = 0; i &lt; v.size (); ++ i) 
+    for (int i = 0; i &lt; v.size (); ++ i)
         v (i) = i;
     std::cout &lt;&lt; v &lt;&lt; std::endl;
 }</pre>
@@ -1163,11 +1163,11 @@ and <code>std::vector&lt;&gt;</code>. </p>
 
 <h4>Interface</h4>
 
-<pre><code>    // Array based sparse vector class 
+<pre><code>    // Array based sparse vector class
     template&lt;class T, std::size_t IB, class IA, class TA&gt;
-    class coordinate_vector: 
+    class coordinate_vector:
         public vector_expression&lt;coordinate_vector&lt;T, IB, IA, TA&gt; &gt; {
-    public:      
+    public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -1186,7 +1186,7 @@ and <code>std::vector&lt;&gt;</code>. </p>
         typedef sparse_tag storage_category;
 
         // Construction and destruction
-        coordinate_vector (); 
+        coordinate_vector ();
         coordinate_vector (size_type size, size_type non_zeros = 0);
         coordinate_vector (const coordinate_vector &amp;v);
         template&lt;class AE&gt;
