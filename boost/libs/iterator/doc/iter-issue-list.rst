@@ -1049,49 +1049,49 @@ c++std-lib-12641:
       ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``. The
       ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
 
-  These are the defaults, right? If the user supplies their own types that's
-  what gets passed to iterator_adaptor. And again, the specification should
-  be in terms of the specialization of iterator_adaptor, and not in terms of
-  the result:
+These are the defaults, right? If the user supplies their own types that's
+what gets passed to iterator_adaptor. And again, the specification should
+be in terms of the specialization of iterator_adaptor, and not in terms of
+the result:
 
-  Reference argument to iterator_adaptor::
+Reference argument to iterator_adaptor::
 
-      if (Reference != use_default)
+    if (Reference != use_default)
         Reference
-      else
+    else
         result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type
 
-  Value argument to iterator_adaptor::
+Value argument to iterator_adaptor::
 
-      if (Value != use_default)
+    if (Value != use_default)
         Value
-      else if (Reference != use_default)
+    else if (Reference != use_default)
         remove_reference<reference>::type
-      else
+    else
         remove_reference<result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type>::type
 
-  There's probably a better way to specify that last alternative, but I've
-  been at this too long, and it's all turning into a maze of twisty passages,
-  all alike.
+There's probably a better way to specify that last alternative, but I've
+been at this too long, and it's all turning into a maze of twisty passages,
+all alike.
 
 :Proposed resolution:
 
 Replace:
 
-      The reference type of transform_iterator is
-      ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``. The
-      ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
+    The reference type of transform_iterator is
+    ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``. The
+    ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
 
 with:
 
-      If ``Reference`` is ``use_default`` then the ``reference`` member of
-      ``transform_iterator`` is
-      ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``.
-      Otherwise, ``reference`` is ``Reference``.
+    If ``Reference`` is ``use_default`` then the ``reference`` member of
+    ``transform_iterator`` is
+    ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``.
+    Otherwise, ``reference`` is ``Reference``.
 
-      If ``Value`` is ``use_default`` then the ``value_type`` member is
-      ``remove_cv<remove_reference<reference> >::type``.  Otherwise,
-      ``value_type`` is ``Value``.
+    If ``Value`` is ``use_default`` then the ``value_type`` member is
+    ``remove_cv<remove_reference<reference> >::type``.  Otherwise,
+    ``value_type`` is ``Value``.
 
 
 filter_iterator details unspecified
@@ -1112,11 +1112,26 @@ The paper says::
              /* see details */ >
  
 That comment covers the Access, Traversal, Reference, and Difference
-arguments. The only specification for any of these in the details is::
+arguments. The only specification for any of these in the details is:
  
-   The access category of the filter_iterator will be the same as
-   the access category of Iterator.
+    The access category of the filter_iterator will be the same as
+    the access category of Iterator.
  
 Needs more.
 
-:Proposed resolution:   **Needs work** (Jeremy)
+:Proposed resolution:
+
+Add to the synopsis::
+
+    typedef iterator_traits<Iterator>::value_type value_type;
+    typedef iterator_traits<Iterator>::reference reference;
+    typedef iterator_traits<Iterator>::pointer pointer;
+    typedef iterator_traits<Iterator>::difference_type difference_type;
+    typedef /* see below */ iterator_category;
+
+and add just after the synopsis:
+
+    If ``Iterator`` models Readable Lvalue Iterator and Forward Traversal
+    Iterator then ``iterator_category`` is convertible to
+    ``std::forward_iterator_tag``. Otherwise ``iterator_category`` is
+    convertible to ``std::input_iterator_tag``.

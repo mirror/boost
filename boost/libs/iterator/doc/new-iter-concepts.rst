@@ -291,6 +291,13 @@ reason for the fine grain slicing of the concepts into the
 Incrementable and Single Pass is to provide concepts that are exact
 matches with the original input and output iterator requirements.
 
+This proposal also includes a concept for specifying when an iterator
+is interoperable with another iterator, in the sense that ``int*`` is
+interoperable with ``int const*``.
+
+- Interoperable Iterators
+
+
 The relationship between the new iterator concepts and the old are
 given in the following diagram.
 
@@ -655,6 +662,79 @@ constant object of type ``Distance``.
 
 .. TR1: random_access_traversal_iterator_tag changed to
    random_access_traversal_tag for consistency
+
+
+Interoperable Iterators [lib.interoperable.iterators]
+-----------------------------------------------------
+
+A class or built-in type ``X`` that models Single Pass Iterator is
+*interoperable with* a class or built-in type ``Y`` that also models
+Single Pass Iterator if both ``X`` and ``Y`` have the same difference
+type and traversal tag and if the following expressions are valid and
+respect the stated semantics. In the tables below, ``x`` is an object
+of type ``X``, ``y`` is an object of type ``Y``, ``Distance`` is
+``iterator_traits<X>::difference_type``, and ``n`` represents a
+constant object of type ``Distance``.
+
+If the traversal tag for ``X`` and ``Y`` is convertible to
+``single_pass_traversal_tag`` then the following requirements must be
+met.
+
++-------------------------------------------+-------------------------------------------------+---------------------------------------------------+
+|Expression                                 |Return Type                                      |Assertion/Precondition/Postcondition               |
++===========================================+=================================================+===================================================+
+|``y = x``                                  |``Y``                                            |post: ``y == x``                                   |
++-------------------------------------------+-------------------------------------------------+---------------------------------------------------+
+|``x == y``                                 |convertible to ``bool``                          |``==`` is an equivalence relation over its domain. |
++-------------------------------------------+-------------------------------------------------+---------------------------------------------------+
+|``y == x``                                 |convertible to ``bool``                          |``==`` is an equivalence relation over its domain. |
++-------------------------------------------+-------------------------------------------------+---------------------------------------------------+
+|``x != y``                                 |convertible to ``bool``                          |``bool(a==b) != bool(a!=b)`` over its domain.      |
++-------------------------------------------+-------------------------------------------------+---------------------------------------------------+
+|``y != x``                                 |convertible to ``bool``                          |``bool(a==b) != bool(a!=b)`` over its domain.      |
++-------------------------------------------+-------------------------------------------------+---------------------------------------------------+
+
+If the traversal tag for ``X`` and ``Y`` is convertible to
+``random_access_traversal_tag`` then the following requirements must
+be met.
+
++-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
+|Expression                                 |Return Type                                      |Operational Semantics    |Assertion/            |
+|                                           |                                                 |                         |Precondition          |
++===========================================+=================================================+=========================+======================+
+|``x < y``                                  |convertible to ``bool``                          |``y - x > 0``            |``<`` is a total      |
+|                                           |                                                 |                         |ordering relation     |
++-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
+|``y < x``                                  |convertible to ``bool``                          |``x - y > 0``            |``<`` is a total      |
+|                                           |                                                 |                         |ordering relation     |
++-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
+|``x > y``                                  |convertible to ``bool``                          |``y < x``                |``>`` is a total      |
+|                                           |                                                 |                         |ordering relation     |
++-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
+|``y > x``                                  |convertible to ``bool``                          |``x < y``                |``>`` is a total      |
+|                                           |                                                 |                         |ordering relation     |
++-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
+|``x >= y``                                 |convertible to ``bool``                          |``!(x < y)``             |                      |
++-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
+|``y >= x``                                 |convertible to ``bool``                          |``!(y < x)``             |                      |
++-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
+|``x <= y``                                 |convertible to ``bool``                          |``!(x > y)``             |                      |
++-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
+|``y <= x``                                 |convertible to ``bool``                          |``!(y > x)``             |                      |
++-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
+|``y - x``                                  |``Distance``                                     |``x < y ?  distance(x,y) |pre: there exists a   |
+|                                           |                                                 |: -distance(y,x)``       |value ``n`` of        |
+|                                           |                                                 |                         |``Distance`` such that|
+|                                           |                                                 |                         |``x + n == y``.  ``y  |
+|                                           |                                                 |                         |== x + (y - x)``.     |
++-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
+|``x - y``                                  |``Distance``                                     |``y < x ?  distance(y,x) |pre: there exists a   |
+|                                           |                                                 |: -distance(x,y)``       |value ``n`` of        |
+|                                           |                                                 |                         |``Distance`` such that|
+|                                           |                                                 |                         |``y + n == x``.  ``x  |
+|                                           |                                                 |                         |== y + (x - y)``.     |
++-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
+
 
 
 Addition to [lib.iterator.synopsis]
