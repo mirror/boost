@@ -11,6 +11,7 @@
 #define BOOST_STRING_DETAIL_COLLECTION_TRAITS_HPP
 
 #include <boost/algorithm/string/config.hpp>
+#include <cstddef>
 #include <string>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_pointer.hpp>
