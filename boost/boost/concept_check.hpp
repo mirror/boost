@@ -429,6 +429,61 @@ struct require_same { typedef T type; };
     Second b;
   };
 
+  template <class Func, class Return>
+  struct AdaptableGeneratorConcept
+  {
+    void constraints() {
+      typedef typename Func::result_type result_type;
+      BOOST_STATIC_ASSERT((is_convertible<result_type, Return>::value));
+      function_requires< GeneratorConcept<Func, result_type> >();
+    }
+  };
+
+  template <class Func, class Return, class Arg>
+  struct AdaptableUnaryFunctionConcept
+  {
+    void constraints() {
+      typedef typename Func::argument_type argument_type;
+      typedef typename Func::result_type result_type;
+      BOOST_STATIC_ASSERT((is_convertible<result_type, Return>::value));
+      BOOST_STATIC_ASSERT((is_convertible<Arg, argument_type>::value));
+      function_requires< UnaryFunctionConcept<Func, result_type, argument_type> >();
+    }
+  };
+
+  template <class Func, class Return, class First, class Second>
+  struct AdaptableBinaryFunctionConcept
+  {
+    void constraints() {
+      typedef typename Func::first_argument_type first_argument_type;
+      typedef typename Func::second_argument_type second_argument_type;
+      typedef typename Func::result_type result_type;
+      BOOST_STATIC_ASSERT((is_convertible<result_type, Return>::value));
+      BOOST_STATIC_ASSERT((is_convertible<First, first_argument_type>::value));
+      BOOST_STATIC_ASSERT((is_convertible<Second, second_argument_type>::value));
+      function_requires< BinaryFunctionConcept<Func, result_type, 
+        first_argument_type, second_argument_type> >();
+    }
+  };
+
+  template <class Func, class Arg>
+  struct AdaptablePredicateConcept
+  {
+    void constraints() {
+      function_requires< UnaryPredicateConcept<Func, Arg> >();
+      function_requires< AdaptableUnaryFunctionConcept<Func, bool, Arg> >();
+    }
+  };
+
+  template <class Func, class First, class Second>
+  struct AdaptableBinaryPredicateConcept
+  {
+    void constraints() {
+      function_requires< BinaryPredicateConcept<Func, First, Second> >();
+      function_requires< AdaptableBinaryFunctionConcept<Func, bool, First, Second> >();
+    }
+  };
+
   //===========================================================================
   // Iterator Concepts
 
