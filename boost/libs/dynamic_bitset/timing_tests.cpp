@@ -15,10 +15,10 @@
 //   If you are interested in this program or any other sorts of
 //   benchmarks for dynamic_bitset please make a request on the
 //   boost list, which could encourage me to continue working on
-//   such things.
+//   these things.
 
 //   If you have a platform with CHAR_BIT >= 9 and are using
-//   boost::dynamic_bitset<> with it, I also suggest you to experiment
+//   boost::dynamic_bitset<> with it I also suggest you to experiment
 //   with the size of the count table in detail/dynamic_bitset.hpp and
 //   see if you can achieve any significant speed gain.
 //
