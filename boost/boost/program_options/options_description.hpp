@@ -1,4 +1,5 @@
 // Copyright Vladimir Prus 2002-2004.
+// Copyright Bertolt Mildner 2004.
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -96,7 +97,7 @@ namespace program_options {
         std::string format_parameter() const;
 
     private:
-
+    
         option_description& name(const char* name);
 
         std::string m_short_name, m_long_name, m_description;
@@ -141,13 +142,15 @@ namespace program_options {
     */
     class BOOST_PROGRAM_OPTIONS_DECL options_description {
     public:
-
+        static const unsigned m_default_line_length = 80;
+        
         /** Creates the instance. */
-        options_description();
+        options_description(unsigned line_length = m_default_line_length);
         /** Creates the instance. The 'caption' parameter gives the name of
             this 'options_description' instance. Primarily useful for output.
         */
-        options_description(const std::string& caption);
+        options_description(const std::string& caption,
+                            unsigned line_length = m_default_line_length);
         /** Adds new variable description. Throws duplicate_variable_error if
             either short or long name matches that of already present one. 
         */
@@ -211,10 +214,10 @@ namespace program_options {
         typedef std::pair<name2index_iterator, name2index_iterator> 
             approximation_range;
 
-
         approximation_range find_approximation(const std::string& prefix) const;
 
         std::string m_caption;
+        const unsigned m_line_length;
         // Data organization is chosen because:
         // - there could be two names for one option
         // - option_add_proxy needs to know the last added option

@@ -1,4 +1,5 @@
 // Copyright Vladimir Prus 2002-2004.
+// Copyright Bertolt Mildner 2004.
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -12,6 +13,7 @@
 #include <boost/program_options/parsers.hpp>
 
 #include <boost/lexical_cast.hpp>
+#include <boost/tokenizer.hpp>
 
 #include <boost/detail/workaround.hpp>
 
@@ -150,11 +152,13 @@ namespace boost { namespace program_options {
         return *this;
     }
 
-    options_description::options_description()
+    options_description::options_description(unsigned line_length)
+    : m_line_length(line_length)
     {}
 
-    options_description::options_description(const string& caption)
-    : m_caption(caption)
+    options_description::options_description(const string& caption,
+                                             unsigned line_length)
+    : m_caption(caption), m_line_length(line_length)
     {}
 
     void
@@ -275,21 +279,200 @@ namespace boost { namespace program_options {
     }
 
     namespace {
+
+        void format_paragraph(std::ostream& os,
+                              std::string par,
+                              unsigned first_column_width,
+                              unsigned line_length)
+        {                    
+            // index of tab (if present) is used as additional indent relative
+            // to first_column_width if paragrapth is spanned over multiple
+            // lines if tab is not on first line it is ignored
+            unsigned par_indent = par.find('\t');
+
+            if (par_indent == string::npos)
+            {
+                par_indent = 0;
+            }
+            else
+            {
+                // only one tab per paragraph allowed
+                if (count(par.begin(), par.end(), '\t') > 1)
+                {
+                    throw program_options::error(
+                        "Only one tab per paragraph is allowed");
+                }
+          
+                // erase tab from string
+                par.erase(par_indent, 1);
+
+                // this assert may fail due to user error or 
+                // environment conditions!
+                assert(par_indent < (line_length - first_column_width));
+
+                // ignore tab if not on first line
+                if (par_indent >= (line_length - first_column_width))
+                {
+                    par_indent = 0;
+                }            
+            }
+          
+            if (par.size() < (line_length - first_column_width))
+            {
+                os << par;
+            }
+            else
+            {
+                string::const_iterator       line_begin = par.begin();
+                const string::const_iterator par_end = par.end();
+
+                bool first_line = true; // of current paragraph!
+            
+                unsigned indent = first_column_width;
+            
+                while (line_begin < par_end)  // paragraph lines
+                {
+                    if (!first_line)
+                    {
+                        // trimm leading single spaces
+                        // if (firstchar == ' ') &&
+                        //    ((exists(firstchar + 1) && (firstchar + 1 != ' '))
+                        if ((*line_begin == ' ') &&
+                            ((line_begin + 1 < par_end) &&
+                             (*(line_begin + 1) != ' ')))
+                        {
+                            line_begin += 1;  // line_begin != line_end
+                        }
+                    }
+
+                    string::const_iterator line_end;
+                
+                    if (line_begin + (line_length - indent) > par_end)
+                    {
+                        line_end = par_end;
+                    }
+                    else
+                    {
+                        line_end = line_begin + (line_length - indent);
+                    }
+            
+                    // prevent chopped words
+                    // if (lastchar != ' ') &&
+                    //    ((exists(lastchar + 1) && (lastchar + 1 != ' '))
+                    if ((*(line_end - 1) != ' ') &&
+                        ((line_end < par_end) && (*line_end != ' ')))
+                    {
+                        // find last ' ' in the second half of the current paragraph line
+                        string::const_iterator last_space =
+                            find(reverse_iterator<string::const_iterator>(line_end - 1),
+                                 reverse_iterator<string::const_iterator>(line_begin - 1),
+                                 ' ')
+                            .base();
+                
+                        if (last_space != line_begin - 1)
+                        {                 
+                            // is last_space within the second half ot the 
+                            // current line
+                            if (unsigned(distance(last_space, line_end)) < 
+                                (line_length - indent) / 2)
+                            {
+                                line_end = last_space;
+                            }
+                        }                                                
+                    } // prevent chopped words
+             
+                    // write line to stream
+                    copy(line_begin, line_end, ostream_iterator<char>(os));
+              
+                    if (first_line)
+                    {
+                        indent = first_column_width + par_indent;
+                        first_line = false;
+                    }
+
+                    // more lines to follow?
+                    if (line_end != par_end)
+                    {
+                        os << '\n';
+                
+                        for(unsigned pad = indent; pad > 0; --pad)
+                        {
+                            os.put(' ');
+                        }                                                        
+                    }
+              
+                    // next line starts after of this line
+                    line_begin = line_end;              
+                } // paragraph lines
+            }          
+        }                              
+        
+        void format_description(std::ostream& os,
+                                const std::string& desc, 
+                                unsigned first_column_width,
+                                unsigned line_length)
+        {
+            // we need to use one char less per line to work correctly if actual
+            // console has longer lines
+            assert(line_length > 1);
+            if (line_length > 1)
+            {
+                --line_length;
+            }
+
+            // line_length must be larger than first_column_width
+            // this assert may fail due to user error or environment conditions!
+            assert(line_length > first_column_width);
+
+            typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+          
+            tokenizer paragraphs(
+                desc,
+                char_separator<char>("\n", "", boost::keep_empty_tokens));
+          
+            tokenizer::const_iterator       par_iter = paragraphs.begin();                
+            const tokenizer::const_iterator par_end = paragraphs.end();
+
+            while (par_iter != par_end)  // paragraphs
+            {
+                format_paragraph(os, *par_iter, first_column_width, 
+                                 line_length);
+            
+                ++par_iter;
+            
+                // prepair next line if any
+                if (par_iter != par_end)
+                {
+                    os << '\n';
+              
+                    for(unsigned pad = first_column_width; pad > 0; --pad)
+                    {
+                        os.put(' ');
+                    }                    
+                }            
+            }  // paragraphs
+        }
+    
         void format_one(std::ostream& os, const option_description& opt, 
-                        unsigned first_column_width)
+                        unsigned first_column_width, unsigned line_length)
         {
             stringstream ss;
             ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
             
             // Don't use ss.rdbuf() since g++ 2.96 is buggy on it.
             os << ss.str();
-            
-            if (!opt.description().empty()) {
-                
-                for(int pad = first_column_width - ss.str().size(); pad > 0; --pad) {
+
+            if (!opt.description().empty())
+            {
+                for(unsigned pad = first_column_width - ss.str().size(); 
+                    pad > 0; 
+                    --pad)
+                {
                     os.put(' ');
                 }
-                os << " : " << opt.description();
+            
+                format_description(os, opt.description(),
+                                   first_column_width, line_length);
             }
         }
     }
@@ -319,7 +502,7 @@ namespace boost { namespace program_options {
 
             const option_description& opt = *options[i];
 
-            format_one(os, opt, width);
+            format_one(os, opt, width, m_line_length);
 
             os << "\n";
         }
