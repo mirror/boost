@@ -22,6 +22,9 @@
 #include <typeinfo> // for std::type_info
 
 #include "boost/variant/variant_fwd.hpp"
+#include "boost/variant/detail/move.hpp"
+#include "boost/variant/detail/has_nothrow_move.hpp"
+
 #include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
 #include "boost/aligned_storage.hpp"
@@ -35,10 +38,10 @@
 #include "boost/preprocessor/enum.hpp"
 #include "boost/preprocessor/enum_params.hpp"
 #include "boost/preprocessor/repeat.hpp"
-#include "boost/type_traits/add_const.hpp"
 #include "boost/type_traits/alignment_of.hpp"
 #include "boost/type_traits/is_const.hpp"
 #include "boost/type_traits/is_same.hpp"
+#include "boost/variant/static_visitor.hpp"
 
 #include "boost/mpl/apply_if.hpp"
 #include "boost/mpl/begin_end.hpp"
@@ -63,10 +66,6 @@
 #include "boost/mpl/transform.hpp"
 #include "boost/mpl/void.hpp"
 
-// The following are new/in-progress headers:
-#include "boost/variant/detail/move.hpp"
-#include "boost/variant/static_visitor.hpp"
-#include "boost/variant/detail/has_nothrow_move.hpp"
 
 //////////////////////////////////////////////////////////////////////////
 // BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
@@ -163,7 +162,7 @@ struct destroyer
 public: // visitor interfaces
 
     template <typename T>
-    void operator()(T& operand) const
+    result_type operator()(T& operand) const
     {
         operand.~T();
 
@@ -196,7 +195,7 @@ public: // structors
 public: // visitor interfaces
 
     template <typename T>
-    void operator()(const T& operand) const
+    result_type operator()(const T& operand) const
     {
         new(storage_) T(operand);
     }
@@ -225,7 +224,7 @@ public: // structors
 public: // visitor interfaces
 
     template <typename T>
-    void operator()(T& operand) const
+    result_type operator()(T& operand) const
     {
         boost::detail::variant::move_swap(operand, *static_cast<T*>(toswap_));
     }
@@ -862,7 +861,7 @@ private: // helpers, for modifiers (below)
     public: // visitor interfaces
 
         template <typename T>
-        void operator()(const T& operand)
+        result_type operator()(const T& operand)
         {
             typedef typename detail::variant::has_nothrow_move_constructor<T>::type
                 has_nothrow_move_constructor;
@@ -1009,7 +1008,7 @@ private: // helpers, for modifiers, cont. (below)
     public: // visitor interfaces
 
         template <typename T>
-        void operator()(T& rhs_content)
+        result_type operator()(T& rhs_content)
         {
             typedef typename detail::variant::has_nothrow_move_constructor<T>::type
                 has_nothrow_move_constructor;

@@ -19,6 +19,7 @@
 
 #include "boost/config.hpp"
 #include "boost/type_traits/is_base_and_derived.hpp"
+#include "boost/mpl/void.hpp"
 
 #include "boost/mpl/aux_/lambda_support.hpp" // used by is_static_visitor
 
@@ -35,16 +36,27 @@ namespace detail {
 
     struct is_static_visitor_tag { };
 
+#if !defined(BOOST_NO_VOID_RETURNS)
+    typedef void static_visitor_default_return;
+#else
+    typedef ::boost::mpl::void_ static_visitor_default_return;
+#endif
+
 } // namespace detail
 
-template <typename R = void>
-struct static_visitor
+template <typename R = detail::static_visitor_default_return>
+class static_visitor
     : public detail::is_static_visitor_tag
 {
+public: // typedefs
+
     typedef R result_type;
 
-protected:
+protected: // for use as base class only
+
+    static_visitor() { }
     ~static_visitor() { }
+
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -58,6 +70,8 @@ protected:
 template <typename T>
 struct is_static_visitor
 {
+public: // metafunction result
+
     typedef typename is_base_and_derived<
           detail::is_static_visitor_tag
         , T
@@ -66,6 +80,7 @@ struct is_static_visitor
     BOOST_STATIC_CONSTANT(bool, value = type::value);
 
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_static_visitor,(T))
+
 };
 
 } // namespace boost

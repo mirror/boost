@@ -12,7 +12,7 @@ using namespace boost;
 
 typedef variant<float, std::string, int, std::vector<std::string> > t_var1;
 
-struct int_sum : static_visitor<void>
+struct int_sum : static_visitor<>
 {
    int_sum() : result_(0) { }
 
@@ -21,9 +21,9 @@ struct int_sum : static_visitor<void>
       result_ += t;
    }
 
-   void operator()(float ) { }
-   void operator()(const std::string& ) { }
-   void operator()(const std::vector<std::string>& ) { }
+   result_type operator()(float ) { }
+   result_type operator()(const std::string& ) { }
+   result_type operator()(const std::vector<std::string>& ) { }
 
    int result_;
 }; 

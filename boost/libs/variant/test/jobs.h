@@ -166,18 +166,18 @@ private:
 };  //int_printer
 
 
-struct int_adder : boost::static_visitor<void>
+struct int_adder : boost::static_visitor<>
 {
    
    int_adder(int rhs) : rhs_(rhs) { }
 
-   void operator()(int& lhs) const
+   result_type operator()(int& lhs) const
    {
       lhs += rhs_;
    }
 
    template<typename T>
-   void operator()(const T& ) const
+   result_type operator()(const T& ) const
    {
       //Do nothing
    }
