@@ -169,7 +169,9 @@ struct make_recursive_variant_over
 {
 private: // precondition assertions
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     BOOST_STATIC_ASSERT(( ::boost::mpl::is_sequence<Types>::value ));
+#endif
 
 public: // metafunction result
 
