@@ -53,9 +53,9 @@
 <h4 style="margin-left: 40pt;"><a href="#err_short_form">Inappropriate use of bind(f, ...)</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#err_long_form">Inappropriate use of bind&lt;R&gt;(f, ...)</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#err_nonstd">Binding a nonstandard function</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#err_const_arg"><b>const</b> in signatures</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#err_msvc_using">MSVC specific: using boost::bind;</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#err_msvc_class_template">MSVC specific: class templates shadow function templates</a></h4>
-<h4 style="margin-left: 40pt;"><a href="#err_msvc_const_arg">MSVC specific: const in signatures</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#err_msvc_ellipsis">MSVC specific: ... in signatures treated as type</a></h4>
 
 <h3 style="margin-left: 20pt;"><a href="#Interface">Interface</a></h3>
@@ -608,7 +608,7 @@ The error is usually reported in <b>bind.hpp</b>, at a line similar to:
 </p>
 
 <pre>
-    A2 operator[] (arg<2>) const { return a2_; }
+    return f(a[a1_]);
 </pre>
 
 <p>
@@ -651,6 +651,26 @@ syntax for functions and member function pointers.
 (to be written)
 </p>
 
+<h3><a name="err_const_arg"><b>const</b> in signatures</a></h3>
+
+<p>
+Some compilers, including MSVC 6.0 and Borland C++ 5.5.1, have problems
+with the top-level <b>const</b> in function signatures:
+</p>
+
+<pre>
+int f(int const);
+
+int main()
+{
+    boost::bind(f, 1);     // error
+}
+</pre>
+
+<p>
+Workaround: remove the <b>const</b> qualifier from the argument.
+</p>
+
 <h3><a name="err_msvc_using">MSVC specific: using boost::bind;</a></h3>
 
 <p>
@@ -681,25 +701,6 @@ class templates named <b>bind</b> (ironically, such code is often an MSVC
 specific workaround.) You may try to patch the library in question or contact
 its author/maintainer. The other option is use the
 <a href="#BOOST_BIND">BOOST_BIND</a> macro to rename <b>bind</b>.
-</p>
-
-<h3><a name="err_msvc_const_arg">MSVC specific: const in signatures</a></h3>
-
-<p>
-MSVC 6.0 has problems with <b>const</b> in function signatures:
-</p>
-
-<pre>
-int f(int const);
-
-int main()
-{
-    boost::bind(f, 1);     // error
-}
-</pre>
-
-<p>
-Workaround: remove the <b>const</b> qualifier from the argument.
 </p>
 
 <h3><a name="err_msvc_ellipsis">MSVC specific: ... in signatures treated as type</a></h3>
