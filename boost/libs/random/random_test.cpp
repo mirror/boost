@@ -81,6 +81,11 @@ bool check(float x, const boost::ranlux3_01&)
 bool check(float x, const boost::ranlux4_01&)
 { return std::abs(x-8587295/std::pow(2.0f,24)) < 1e-6; }
 
+bool check(double x, const boost::ranlux64_3_01&)
+{ return std::abs(x-0.838413) < 1e-6; }
+bool check(double x, const boost::ranlux64_4_01&)
+{ return std::abs(x-0.59839) < 1e-6; }
+
 template<class PRNG>
 void validate(const std::string & name, const PRNG &)
 {
@@ -114,6 +119,8 @@ void validate_all()
   validate("ranlux4", ranlux4());
   validate("ranlux3_01", ranlux3_01());
   validate("ranlux4_01", ranlux4_01());
+  validate("ranlux64_3_01", ranlux64_3_01());
+  validate("ranlux64_4_01", ranlux64_4_01());
   validate("taus88", taus88());
   validate("lagged_fibonacci607", lagged_fibonacci607());
 }
@@ -337,6 +344,9 @@ void instantiate_all()
 
   instantiate_urng("ranlux3_01", ranlux3_01(), 0.0f);
   instantiate_urng("ranlux4_01", ranlux4_01(), 0.0f);
+
+  instantiate_urng("ranlux64_3_01", ranlux64_3_01(), 0.0);
+  instantiate_urng("ranlux64_4_01", ranlux64_4_01(), 0.0);
 
   instantiate_urng("taus88", taus88(), 0u);
 }
