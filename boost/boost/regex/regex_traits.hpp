@@ -47,8 +47,6 @@ struct mss
 BOOST_REGEX_DECL bool BOOST_REGEX_CALL re_lookup_def_collate_name(std::string& buf, const char* name);
 BOOST_REGEX_DECL std::size_t BOOST_REGEX_CALL re_get_default_message(char* buf, std::size_t len, std::size_t id);
 extern BOOST_REGEX_DECL const char *re_default_error_messages[];
-BOOST_REGEX_DECL bool BOOST_REGEX_CALL re_lookup_def_collate_name(std::string& buf, const char* name);
-//extern BOOST_REGEX_DECL const wchar_t combining_ranges[];
 
 #ifndef BOOST_NO_WREGEX
 extern BOOST_REGEX_DECL wchar_t wide_lower_case_map[];
