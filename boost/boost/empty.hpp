@@ -21,7 +21,6 @@
 
 #include <iosfwd> // for std::basic_ostream forward declare
 
-#include "boost/config.hpp"
 #include "boost/detail/templated_streams.hpp"
 #include "boost/mpl/bool.hpp"
 #include "boost/type_traits/is_pod.hpp"
@@ -33,18 +32,17 @@ struct empty
 };
 
 template <>
-struct is_pod<empty>
+struct is_pod< empty >
+    : mpl::true_
 {
-    BOOST_STATIC_CONSTANT(bool, value = true);
-    typedef mpl::bool_<value> type;
 };
 
-bool operator==(const empty&, const empty&)
+inline bool operator==(const empty&, const empty&)
 {
     return true;
 }
 
-bool operator<(const empty&, const empty&)
+inline bool operator<(const empty&, const empty&)
 {
     return false;
 }
