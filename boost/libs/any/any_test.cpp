@@ -189,10 +189,7 @@ namespace any_tests // test definitions
 
 // Copyright Kevlin Henney, 2000, 2001. All rights reserved.
 //
-// Permission to use, copy, modify, and distribute this software for any
-// purpose is hereby granted without fee, provided that this copyright and
-// permissions notice appear in all copies and derivatives, and that no
-// charge may be made for the software and its documentation except to cover
-// cost of distribution.
+// Distributed under the Boost Software License, Version 1.0. (See
+// accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 //
-// This software is provided "as is" without express or implied warranty.
