@@ -18,8 +18,12 @@
 #include <boost/cstdint.hpp>
 
 #ifdef NDEBUG
-#error This test makes no sense with NDEBUG defined
-#endif
+int main()
+{
+  std::cout << "This test makes no sense with NDEBUG defined.\n";
+  return 0;
+}
+#else
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 //
@@ -212,5 +216,4 @@ int main()
   std::cout << "OK\n";
   return 0;
 }
-
-
+#endif
