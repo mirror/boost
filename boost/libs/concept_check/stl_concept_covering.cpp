@@ -84,7 +84,7 @@ namespace boost { // so Koenig lookup will find
   }
   inner_prod::RetAdd 
   operator+(const inner_prod::T&, 
-	    const inner_prod::RetMult&) {
+            const inner_prod::RetMult&) {
     return inner_prod::RetAdd(dummy_cons);
   }
 }
