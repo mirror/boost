@@ -51,6 +51,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::size_type size_type;
         typedef typename V::difference_type difference_type;
         typedef typename V::value_type value_type;
+        // FIXME unbounded_array with push_back maybe better
         std::vector<size_type> index;
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());
