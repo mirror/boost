@@ -53,6 +53,21 @@ namespace tuples {
     // a helper function to provide a const null_type type temporary
     inline const null_type cnull_type() { return null_type(); }
 
+// forward declaration of tuple
+    template<
+      typename T1 = null_type, 
+      typename T2 = null_type, 
+      typename T3 = null_type, 
+      typename T4 = null_type,
+      typename T5 = null_type,
+      typename T6 = null_type,
+      typename T7 = null_type,
+      typename T8 = null_type,
+      typename T9 = null_type,
+      typename T10 = null_type
+    >
+    class tuple;
+
     namespace detail {
 
       // Takes a pointer and routes all assignments to whatever it points to
@@ -263,6 +278,10 @@ namespace tuples {
     {
       BOOST_STATIC_CONSTANT(int, value = 1 + length<typename Tuple::tail_type>::value);
     };
+    
+    template<> struct length<tuple<> > {
+      BOOST_STATIC_CONSTANT(int, value = 0);
+    };
 
     template<>
     struct length<null_type>
@@ -318,15 +337,15 @@ namespace tuples {
     // tuple class
     template<
       typename T1, 
-      typename T2 = null_type, 
-      typename T3 = null_type, 
-      typename T4 = null_type,
-      typename T5 = null_type,
-      typename T6 = null_type,
-      typename T7 = null_type,
-      typename T8 = null_type,
-      typename T9 = null_type,
-      typename T10 = null_type
+      typename T2, 
+      typename T3, 
+      typename T4,
+      typename T5,
+      typename T6,
+      typename T7,
+      typename T8,
+      typename T9,
+      typename T10
     >
     class tuple : 
       public detail::map_tuple_to_cons<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>::cons1

@@ -67,6 +67,17 @@ template<class T> struct length;
 
 namespace detail {
 
+#ifdef BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+
+  template<int N> struct workaround_holder {};
+
+#  define BOOST_TUPLE_DUMMY_PARM        , detail::workaround_holder<N>* = 0
+#  define BOOST_TUPLE_SINGLE_DUMMY_PARM detail::workaround_holder<N>* = 0
+#else
+#  define BOOST_TUPLE_DUMMY_PARM
+#  define BOOST_TUPLE_SINGLE_DUMMY_PARM
+#endif
+
 // -- generate error template, referencing to non-existing members of this 
 // template is used to produce compilation errors intentionally
 template<class T>
@@ -196,7 +207,7 @@ template<int N, class HT, class TT>
 inline typename access_traits<
                   typename element<N, cons<HT, TT> >::type
                 >::non_const_type
-get(cons<HT, TT>& c) { 
+get(cons<HT, TT>& c BOOST_TUPLE_DUMMY_PARM) { 
   return detail::get_class<N>::template 
          get<
            typename access_traits<
@@ -211,16 +222,13 @@ template<int N, class HT, class TT>
 inline typename access_traits<
                   typename element<N, cons<HT, TT> >::type
                 >::const_type
-get(const cons<HT, TT>& c) { 
+get(const cons<HT, TT>& c BOOST_TUPLE_DUMMY_PARM) { 
   return detail::get_class<N>::template 
          get<
            typename access_traits<
              typename element<N, cons<HT, TT> >::type
          >::const_type>(c);
 } 
-
-
-
 
 // -- the cons template  --------------------------------------------------
 
@@ -346,7 +354,7 @@ struct cons<HT, null_type> {
   typename access_traits<
              typename element<N, cons>::type
             >::non_const_type
-  get() {
+  get(BOOST_TUPLE_SINGLE_DUMMY_PARM) {
     return boost::tuples::get<N>(*this);
   }
 
@@ -354,7 +362,7 @@ struct cons<HT, null_type> {
   typename access_traits<
              typename element<N, cons>::type
            >::const_type
-  get() const {
+  get(BOOST_TUPLE_SINGLE_DUMMY_PARM) const {
     return boost::tuples::get<N>(*this);
   }
 
@@ -365,6 +373,11 @@ struct cons<HT, null_type> {
 template<class T>
 struct length  {
   BOOST_STATIC_CONSTANT(int, value = 1 + length<typename T::tail_type>::value);
+};
+
+template<>
+struct length<tuple<> > {
+  BOOST_STATIC_CONSTANT(int, value = 0);
 };
 
 template<>
@@ -753,6 +766,8 @@ tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7, T8& t8,
 } // end of namespace tuples
 } // end of namespace boost
 
+#undef BOOST_TUPLE_DUMMY_PARM
+#undef BOOST_TUPLE_SINGLE_DUMMY_PARM
 
 #endif	// BOOST_TUPLE_BASIC_HPP
 
