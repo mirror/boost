@@ -44,6 +44,7 @@ public:
   result_type max() const;
   explicit random_device(const std::string& token = default_token);
   ~random_device();
+  double entropy() const;
   unsigned int operator()();
 };
 </pre>
@@ -80,6 +81,15 @@ not be available on all platforms.
 optionally using the given <code>token</code> as an access
 specification (for example, a URL) to some implementation-defined
 service for monitoring a stochastic process.
+
+<pre>    double entropy() const</pre>
+<strong>Returns:</strong> An entropy estimate for the random numbers
+returned by operator(), in the range <code>min()</code> to
+log<sub>2</sub>( <code>max()</code>+1).  A deterministic random
+number generator (e.g. a pseudo-random number engine) has entropy 0.
+<br>
+<strong>Throws:</strong> Nothing.
+
 
 <h3>Implementation Note for Linux</h3>
 
