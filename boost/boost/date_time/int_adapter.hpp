@@ -440,22 +440,22 @@ private:
   //! Assumes 'this' is a special value
   int_adapter mult_div_specials(const int& rhs) const
   {
-    int min; 
+    int minimum; 
     // quiets compiler warnings
     bool is_signed = std::numeric_limits<int_type>::is_signed;
     if(is_signed) {
-      min = 0;
+      minimum = 0;
     }
     else {
-      min = 1;// there is no zero with unsigned
+      minimum = 1;// there is no zero with unsigned
     }
     if(this->is_nan()) {
       return int_adapter<int_type>(not_a_number());
     }
-    if((*this > 0 && rhs > 0) || (*this < min && rhs < 0)) {
+    if((*this > 0 && rhs > 0) || (*this < minimum && rhs < 0)) {
         return int_adapter<int_type>(pos_infinity());
     }
-    if((*this > 0 && rhs < 0) || (*this < min && rhs > 0)) {
+    if((*this > 0 && rhs < 0) || (*this < minimum && rhs > 0)) {
         return int_adapter<int_type>(neg_infinity());
     }
     //implied -> if(this->value_ == 0 || rhs.value_ == 0)
