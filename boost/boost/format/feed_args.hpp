@@ -15,11 +15,12 @@
 #define BOOST_FORMAT_FEED_ARGS_HPP
 
 #include <boost/config.hpp>
+#include <boost/assert.hpp>
+#include <boost/throw_exception.hpp>
+
 #include <boost/format/format_class.hpp>
 #include <boost/format/group.hpp>
-
 #include <boost/format/detail/msvc_disambiguater.hpp>
-#include <boost/throw_exception.hpp>
 
 namespace boost {
 namespace io {
@@ -210,8 +211,8 @@ namespace detail {
                     res.assign(tmp_beg, i);
                     if(d>0) res.append(static_cast<size_type>( d ), oss2.fill());
                     res.append(tmp_beg+i, tmp_size-i);
-                    assert(i+(tmp_size-i)+(std::max)(d,(std::streamsize)0) == w);
-                    assert(res.size() == (std::size_t)w);
+                    BOOST_ASSERT(i+(tmp_size-i)+(std::max)(d,(std::streamsize)0) == w);
+                    BOOST_ASSERT(res.size() == (std::size_t)w);
                 }
             }
         }

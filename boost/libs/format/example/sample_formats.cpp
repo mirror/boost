@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <cassert>
 
 #include "boost/format.hpp"
 
