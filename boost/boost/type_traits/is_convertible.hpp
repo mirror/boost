@@ -125,8 +125,13 @@ struct is_convertible_impl
         == sizeof(::boost::type_traits::yes_type);
 };
 
-#else
-
+#elif 0
+//
+// This is *almost* an ideal world implementation as it doesn't rely
+// on undefined behaviour by passing UDT's through (...).
+// Unfortunately it doesn't quite pass all the tests for most compilers (sigh...)
+// Enable this for your compiler if is_convertible_test.cpp will compile it...
+//
 struct any_conversion
 {
     template <typename T> any_conversion(const volatile T&);
@@ -142,6 +147,24 @@ struct is_convertible_impl
 
     BOOST_STATIC_CONSTANT(bool, value = 
         sizeof( _m_check(_m_from, 0) ) == sizeof(::boost::type_traits::yes_type)
+        );
+};
+
+#else
+
+//
+// This version seems to work pretty well for a wide spectrum of compilers, 
+// however it does rely on undefined behaviour by passing UDT's through (...).
+//
+template <typename From, typename To>
+struct is_convertible_impl
+{
+    static ::boost::type_traits::no_type BOOST_TT_DECL _m_check(...);
+    static ::boost::type_traits::yes_type BOOST_TT_DECL _m_check(To);
+    static From _m_from;
+
+    BOOST_STATIC_CONSTANT(bool, value = 
+        sizeof( _m_check(_m_from) ) == sizeof(::boost::type_traits::yes_type)
         );
 };
 
@@ -240,3 +263,4 @@ TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_CV_SPEC(long double)
 #include "boost/type_traits/detail/bool_trait_undef.hpp"
 
 #endif // BOOST_TT_IS_CONVERTIBLE_HPP_INCLUDED
+
