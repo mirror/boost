@@ -146,6 +146,8 @@ public:
 
     A1 operator[] (arg<1>) const { return a1_; }
 
+    A1 operator[] (arg<1> (*) ()) const { return a1_; }
+
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
     template<class T> T const & operator[] (value<T> const & v) const { return v.get(); }
@@ -190,6 +192,9 @@ public:
 
     A1 operator[] (arg<1>) const { return a1_; }
     A2 operator[] (arg<2>) const { return a2_; }
+
+    A1 operator[] (arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (arg<2> (*) ()) const { return a2_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -238,6 +243,10 @@ public:
     A1 operator[] (arg<1>) const { return a1_; }
     A2 operator[] (arg<2>) const { return a2_; }
     A3 operator[] (arg<3>) const { return a3_; }
+
+    A1 operator[] (arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (arg<3> (*) ()) const { return a3_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -289,6 +298,11 @@ public:
     A2 operator[] (arg<2>) const { return a2_; }
     A3 operator[] (arg<3>) const { return a3_; }
     A4 operator[] (arg<4>) const { return a4_; }
+
+    A1 operator[] (arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (arg<3> (*) ()) const { return a3_; }
+    A4 operator[] (arg<4> (*) ()) const { return a4_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -343,6 +357,12 @@ public:
     A3 operator[] (arg<3>) const { return a3_; }
     A4 operator[] (arg<4>) const { return a4_; }
     A5 operator[] (arg<5>) const { return a5_; }
+
+    A1 operator[] (arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (arg<3> (*) ()) const { return a3_; }
+    A4 operator[] (arg<4> (*) ()) const { return a4_; }
+    A5 operator[] (arg<5> (*) ()) const { return a5_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -400,6 +420,13 @@ public:
     A4 operator[] (arg<4>) const { return a4_; }
     A5 operator[] (arg<5>) const { return a5_; }
     A6 operator[] (arg<6>) const { return a6_; }
+
+    A1 operator[] (arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (arg<3> (*) ()) const { return a3_; }
+    A4 operator[] (arg<4> (*) ()) const { return a4_; }
+    A5 operator[] (arg<5> (*) ()) const { return a5_; }
+    A6 operator[] (arg<6> (*) ()) const { return a6_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -460,6 +487,14 @@ public:
     A5 operator[] (arg<5>) const { return a5_; }
     A6 operator[] (arg<6>) const { return a6_; }
     A7 operator[] (arg<7>) const { return a7_; }
+
+    A1 operator[] (arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (arg<3> (*) ()) const { return a3_; }
+    A4 operator[] (arg<4> (*) ()) const { return a4_; }
+    A5 operator[] (arg<5> (*) ()) const { return a5_; }
+    A6 operator[] (arg<6> (*) ()) const { return a6_; }
+    A7 operator[] (arg<7> (*) ()) const { return a7_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -523,6 +558,15 @@ public:
     A6 operator[] (arg<6>) const { return a6_; }
     A7 operator[] (arg<7>) const { return a7_; }
     A8 operator[] (arg<8>) const { return a8_; }
+
+    A1 operator[] (arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (arg<3> (*) ()) const { return a3_; }
+    A4 operator[] (arg<4> (*) ()) const { return a4_; }
+    A5 operator[] (arg<5> (*) ()) const { return a5_; }
+    A6 operator[] (arg<6> (*) ()) const { return a6_; }
+    A7 operator[] (arg<7> (*) ()) const { return a7_; }
+    A8 operator[] (arg<8> (*) ()) const { return a8_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -589,6 +633,16 @@ public:
     A7 operator[] (arg<7>) const { return a7_; }
     A8 operator[] (arg<8>) const { return a8_; }
     A9 operator[] (arg<9>) const { return a9_; }
+
+    A1 operator[] (arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (arg<3> (*) ()) const { return a3_; }
+    A4 operator[] (arg<4> (*) ()) const { return a4_; }
+    A5 operator[] (arg<5> (*) ()) const { return a5_; }
+    A6 operator[] (arg<6> (*) ()) const { return a6_; }
+    A7 operator[] (arg<7> (*) ()) const { return a7_; }
+    A8 operator[] (arg<8> (*) ()) const { return a8_; }
+    A9 operator[] (arg<9> (*) ()) const { return a9_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -916,6 +970,11 @@ template<int I> struct add_value< arg<I> >
     typedef arg<I> type;
 };
 
+template<int I> struct add_value< arg<I> (*) () >
+{
+    typedef arg<I> (*type) ();
+};
+
 template<class R, class F, class L> struct add_value< bind_t<R, F, L> >
 {
     typedef bind_t<R, F, L> type;
@@ -947,6 +1006,7 @@ typedef char (&_avt_r2) [2];
 template<class T> _avt_r1 _avt_f(value<T>);
 template<class T> _avt_r1 _avt_f(reference_wrapper<T>);
 template<int I> _avt_r1 _avt_f(arg<I>);
+template<int I> _avt_r1 _avt_f(arg<I> (*) ());
 template<class R, class F, class L> _avt_r1 _avt_f(bind_t<R, F, L>);
 
 _avt_r2 _avt_f(...);

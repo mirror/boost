@@ -19,31 +19,20 @@
 //
 
 #include <boost/bind/arg.hpp>
-#include <boost/config.hpp>
-
-// With MSVC precompiled headers, unnamed namespaces are not unique
-
-#ifdef BOOST_MSVC
-# define BOOST_BIND_STATIC static
-#else
-# define BOOST_BIND_STATIC
-#endif
 
 namespace
 {
 
-BOOST_BIND_STATIC boost::arg<1> _1;
-BOOST_BIND_STATIC boost::arg<2> _2;
-BOOST_BIND_STATIC boost::arg<3> _3;
-BOOST_BIND_STATIC boost::arg<4> _4;
-BOOST_BIND_STATIC boost::arg<5> _5;
-BOOST_BIND_STATIC boost::arg<6> _6;
-BOOST_BIND_STATIC boost::arg<7> _7;
-BOOST_BIND_STATIC boost::arg<8> _8;
-BOOST_BIND_STATIC boost::arg<9> _9;
+static inline boost::arg<1> _1() { return boost::arg<1>(); }
+static inline boost::arg<2> _2() { return boost::arg<2>(); }
+static inline boost::arg<3> _3() { return boost::arg<3>(); }
+static inline boost::arg<4> _4() { return boost::arg<4>(); }
+static inline boost::arg<5> _5() { return boost::arg<5>(); }
+static inline boost::arg<6> _6() { return boost::arg<6>(); }
+static inline boost::arg<7> _7() { return boost::arg<7>(); }
+static inline boost::arg<8> _8() { return boost::arg<8>(); }
+static inline boost::arg<9> _9() { return boost::arg<9>(); }
 
 } // unnamed namespace
-
-#undef BOOST_BIND_STATIC
 
 #endif // #ifndef BOOST_BIND_PLACEHOLDERS_HPP_INCLUDED
