@@ -27,6 +27,8 @@
 
 #include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
+#include "boost/mpl/aux_/nested_type_wknd.hpp"
+
 #include "boost/aligned_storage.hpp"
 #include "boost/assert.hpp"
 #include "boost/compressed_pair.hpp"
@@ -115,17 +117,15 @@ private: // helpers, for metafunction result (below)
     typedef typename max_value<
           Types, mpl::sizeof_<mpl::_1>
         >::type max_size;
-
     typedef typename max_value<
           Types, alignment_of<mpl::_1>
-        >::type max_align;
-
+        >::type max_alignment;
 
 public: // metafunction result
 
     typedef aligned_storage<
-          ::boost::detail::variant::make_storage<Types>::max_size::value
-        , ::boost::detail::variant::make_storage<Types>::max_align::value
+          BOOST_MPL_AUX_NESTED_TYPE_WKND(max_size)::value
+        , BOOST_MPL_AUX_NESTED_TYPE_WKND(max_alignment)::value
         > type;
 
 };
