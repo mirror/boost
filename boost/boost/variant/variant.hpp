@@ -73,6 +73,7 @@
 #include "boost/mpl/protect.hpp"
 #include "boost/mpl/push_front.hpp"
 #include "boost/mpl/same_as.hpp"
+#include "boost/mpl/size_t.hpp"
 #include "boost/mpl/sizeof.hpp"
 #include "boost/mpl/transform.hpp"
 
@@ -227,9 +228,19 @@ private: // helpers, for metafunction result (below)
     typedef typename max_value<
           types, mpl::sizeof_<mpl::_1>
         >::type max_size;
+
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
+
     typedef typename max_value<
           types, alignment_of<mpl::_1>
         >::type max_alignment;
+
+#else // borland
+
+    // temporary workaround -- use maximal alignment
+    typedef mpl::size_t< -1 > max_alignment;
+
+#endif // borland workaround
 
 public: // metafunction result
 
