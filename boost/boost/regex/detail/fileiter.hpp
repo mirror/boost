@@ -333,7 +333,7 @@ public:
    typedef const char*               value_type;
    typedef const char**              pointer;
    typedef const char*&              reference;
-   typedef std::input_iterator_tag   category;
+   typedef std::input_iterator_tag   iterator_category;
 
    file_iterator();
    file_iterator(const char* wild);
@@ -380,7 +380,7 @@ public:
    typedef const char*               value_type;
    typedef const char**              pointer;
    typedef const char*&              reference;
-   typedef std::input_iterator_tag   category;
+   typedef std::input_iterator_tag   iterator_category;
 
    directory_iterator();
    directory_iterator(const char* wild);
@@ -429,6 +429,7 @@ using boost::re_detail::mapfile;
 } // namespace boost
 
 #endif     // _FILEITER_H
+
 
 
 

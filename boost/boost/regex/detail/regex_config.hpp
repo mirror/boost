@@ -307,7 +307,7 @@ full list of macros and their usage.
 #   endif
 #endif
 
-#if defined(_REENTRANT) || defined(_PTHREADS)
+#if (defined(_REENTRANT) || defined(_PTHREADS)) && !defined(_NOTHREADS)
 //
 // Several compilers define _REENTRANT or 
 // _PTHREADS when threading support is turned on:
