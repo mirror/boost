@@ -16,6 +16,7 @@ void f()
 {
     // this is never called, it just has to compile:
     int res = sched_yield();
+    (void) &res;
 }
 
 int test()

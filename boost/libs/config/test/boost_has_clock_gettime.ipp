@@ -17,6 +17,7 @@ void f()
     // this is never called, it just has to compile:
     timespec tp;
     int res = clock_gettime(CLOCK_REALTIME, &tp);
+    (void) &res;
 }
 
 int test()

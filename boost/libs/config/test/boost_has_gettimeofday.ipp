@@ -17,6 +17,7 @@ void f()
     // this is never called, it just has to compile:
     timeval tp;
     int res = gettimeofday(&tp, 0);
+    (void) &res;
 }
 
 int test()

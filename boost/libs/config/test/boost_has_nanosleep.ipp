@@ -15,9 +15,10 @@ namespace boost_has_nanosleep{
 void f()
 {
     // this is never called, it just has to compile:
-    timespec ts = {0};
+    timespec ts = {0, 0};
     timespec rm;
     int res = nanosleep(&ts, &rm);
+    (void) &res;
 }
 
 int test()
