@@ -23,6 +23,10 @@
 #include "boost/mpl/aux_/config/overload_resolution.hpp"
 #include "boost/config.hpp"
 
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
+# include "boost/type_traits/is_reference.hpp"
+#endif
+
 namespace boost {
 namespace mpl {
 namespace aux {
@@ -57,21 +61,40 @@ struct has_rebind
 // note that the code is _not_ standard-conforming, but it works, 
 // and it resolves some nasty ICE cases with the above implementation
 
-template< typename T, typename rebind = int >
-struct has_rebind : T
+template < bool ref = true >
+struct has_rebind_impl
 {
- private:
-    static no_tag test(int*);
-    static yes_tag test(...);
+    template < typename T > struct apply
+    {
+        BOOST_STATIC_CONSTANT(bool, value = false);
+    };
+};
 
- public:
-    BOOST_STATIC_CONSTANT(bool, value = 
-        sizeof(test(static_cast<rebind*>(0))) != sizeof(no_tag)
-        );
+template <>
+struct has_rebind_impl< false >
+{
+    template < typename T, typename rebind = int >
+    struct apply : T
+    {
+     private:
+        static no_tag test(int*);
+        static yes_tag test(...);
+
+     public:
+        BOOST_STATIC_CONSTANT(
+            bool, value = sizeof(test(static_cast<rebind*>(0))) != sizeof(no_tag)
+            );
+    };
+};
+
+template < typename T >
+struct has_rebind
+    : has_rebind_impl<boost::detail::is_reference_impl<T>::value>::template apply<T>
+{
 };
 
 #   define AUX_HAS_REBIND_SPEC(T) \
-    template<> struct has_rebind<T,int> \
+    template<> struct has_rebind<T> \
     { \
         enum { value = false }; \
     }; \

@@ -25,6 +25,11 @@
 #include "boost/mpl/aux_/config/bind.hpp"
 #include "boost/mpl/aux_/config/lambda.hpp"
 
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#   include "boost/type_traits/is_reference.hpp"
+#endif 
+
+
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include "boost/mpl/placeholder.hpp"
 #   include "boost/mpl/void.hpp"
@@ -295,12 +300,32 @@ aux::yes_tag is_bind_helper(arg<N>*);
 template< typename F, typename T > aux::yes_tag is_bind_helper(bind1st<F,T>*);
 template< typename F, typename T > aux::yes_tag is_bind_helper(bind2nd<F,T>*);
 
-template< typename T > struct is_bind_template
+template < bool ref = true >
+struct is_bind_template_impl
 {
-    BOOST_STATIC_CONSTANT(bool, value =
-        sizeof(aux::is_bind_helper(static_cast<T*>(0)))
-            == sizeof(aux::yes_tag)
-        );
+    template < typename T >
+    struct apply
+    {
+        BOOST_STATIC_CONSTANT(bool, value = false);
+    };
+};
+
+template <>
+struct is_bind_template_impl<false>
+{
+    template< typename T >
+    struct apply
+    {
+        BOOST_STATIC_CONSTANT(bool, value = sizeof(aux::is_bind_helper(static_cast<T*>(0)))
+                              == sizeof(aux::yes_tag)
+            );
+    };
+};
+
+template< typename T > struct is_bind_template
+    : is_bind_template_impl<boost::detail::is_reference_impl< T >::value>
+        ::template apply< T >
+{
 };
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
