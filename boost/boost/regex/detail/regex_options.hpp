@@ -415,9 +415,7 @@ syntax error
 #endif
 
 
-#ifndef BOOST_RE_NO_EXCEPTION_H
-#include <exception>
-#endif
+#include <stdexcept>
 
 #ifndef BOOST_RE_NO_ITERATOR_H
 #include <iterator>

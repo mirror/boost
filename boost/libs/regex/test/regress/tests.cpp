@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     tests.cpp
-  *   VERSION  3.04
+  *   VERSION  3.10
   *
   * the actual tests conducted by regress.
   *

@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_config.hpp
-  *   VERSION      3.04
+  *   VERSION      3.10
   *   DESCRIPTION: auto-configure options for regular expression code.
   */
 
@@ -1197,13 +1197,13 @@ namespace std{
 #if !defined(BOOST_RE_NO_LOCALE_H) && !defined (__STL_NO_NATIVE_MBSTATE_T)
    using ::mbstate_t;
 #endif
+#endif // BOOST_RE_NO_WCSTRING
    using ::fseek;
    using ::fread;
    using ::ftell;
    using ::fopen;
    using ::fclose;
    using ::FILE;
-#endif // BOOST_RE_NO_WCSTRING
 }
 
 #endif

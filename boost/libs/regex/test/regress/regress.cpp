@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     regress.cpp
-  *   VERSION  3.04
+  *   VERSION  3.10
   *
   * main() and associated code for regress.
   *
@@ -111,6 +111,10 @@ int main(int argc, char * argv[])
       }
       cout << line << " lines, " << tests << " tests completed in file " << argv[i] << endl;
    }
+   if(error_count)
+      cout << "There were " << error_count << " failures in total..." << endl;
+   else
+      cout << "No failures detected..." << endl;
 
    return error_count;
 }

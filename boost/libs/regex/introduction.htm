@@ -23,7 +23,7 @@ content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
         </td>
         <td valign="top" width="50%"><h3 align="center">Regex++,
         Introduction.</h3>
-        <p><i>(version 3.04, 18 April 2000)</i> </p>
+        <p><i>(version 3.10, 18 April 2000)</i> </p>
         <pre><i>Copyright (c) 1998-2000
 Dr John Maddock
 
@@ -40,7 +40,7 @@ It is provided &quot;as is&quot; without express or implied warranty.</i></pre>
 
 <hr>
 
-<h3><a name="intro"><i></i></a><i>Introduction</i></h3>
+<h3><a name="intro"></a><i>Introduction</i></h3>
 
 <p>Regular expressions are a form of pattern-matching that are
 often used in text processing; many users will be familiar with
@@ -203,8 +203,8 @@ equivalence classes - as well as providing compatibility with
 other regular expression libraries including GNU and BSD4 regex
 packages, and to a more limited extent perl 5. </p>
 
-<h3><a name="Installation"><i></i></a><i>Installation and
-Configuration Options</i> </h3>
+<h3><a name="Installation"></a><i>Installation and Configuration
+Options</i> </h3>
 
 <p><em>[ </em><strong><i>Important</i></strong><em>: If you are
 upgrading from the 2.x version of this library then you will find
@@ -220,17 +220,18 @@ extracting, then you'd better stop reading this, delete the files
 you just extracted, and try again! </p>
 
 <p>Currently the library will automatically detect and configure
-itself for Borland, Microsoft and gcc compilers only. The library
-will also detect the HP, SGI, Rogue Wave, or Microsoft STL
-implementations. If the STL type is detected, then the library
-will attempt to extract suitable compiler configuration options
-from the STL used. Otherwise the library will assume that the
-compiler is fully compliant with the C++ standard: unless various
-options are defined to depreciate features not implemented by
-your compiler. These options are documented in &lt;boost/regex/detail/regex_options.hpp&gt;,
-if you want to add permanent configuration options add them to
-&lt;boost/regex/detail/regex_options.hpp&gt; which is provided for
-this purpose - this will allow you to keep your configuration
+itself for Borland, Microsoft, GNU, SGI, Kai, Compaq, Sun and HP
+compilers. The library will also detect the HP, SGI, Rogue Wave,
+or Microsoft STL implementations. If the STL type is detected,
+then the library will attempt to extract suitable compiler
+configuration options from the STL used. Otherwise the library
+will assume that the compiler is fully compliant with the C++
+standard: unless various options are defined to depreciate
+features not implemented by your compiler. These options are
+documented in &lt;boost/regex/detail/regex_options.hpp&gt;, if
+you want to add permanent configuration options add them to
+&lt;boost/regex/detail/regex_options.hpp&gt; which is provided
+for this purpose - this will allow you to keep your configuration
 options between library versions by retaining &lt;boost/regex/detail/regex_options.hpp&gt;.
 </p>
 
@@ -407,6 +408,47 @@ multithreading/wide character/nls support if they are not enabled
 by default on your platform. When the configure script completes,
 run one of the makefiles described above.</p>
 
+<p><b>Sun Workshop 6.1</b></p>
+
+<p>There is a makefile for the sun (6.1) compiler (C++ version 3.10).
+From the command prompt change to the &lt;boost&gt;/libs/regex/build
+directory and type: </p>
+
+<p>dmake -f sunpro.mak </p>
+
+<p>At the end of the build process you should have a sunpro sub-directory
+containing single and multithread versions of the library (libboost_regex.a,
+libboost_regex.so, libboost_regex_mt.a and libboost_regex_mt.so).
+When you build projects that use regex++, you will need to add
+the boost install directory to your list of include paths and add
+&lt;boost&gt;/libs/regex/build/sunpro/ to your library search
+path. </p>
+
+<p>Both of the these makefiles support the following environment
+variables:</p>
+
+<p>CXXFLAGS: extra compiler options - note that this applies to
+both the single and multithreaded builds.</p>
+
+<p>INCLUDES: additional include directories.</p>
+
+<p>LDFLAGS: additional linker options.</p>
+
+<p>LIBS: additional library files.</p>
+
+<p>LIBSUFFIX: a suffix to mangle the library name with (defaults
+to nothing).</p>
+
+<p>This makefile does not set any architecture specific options
+like -xarch=v9, you can set these by defining the appropriate
+macros, for example:</p>
+
+<p>dmake CXXFLAGS=&quot;-xarch=v9&quot; LDFLAGS=&quot;-xarch=v9&quot;
+LIBSUFFIX=&quot;_v9&quot; -f sunpro.mak</p>
+
+<p>will build v9 variants of the regex library named
+libboost_regex_v9.a etc.</p>
+
 <p><b>Other compilers:</b> </p>
 
 <p>Run configure, this will set up the headers and generate
@@ -445,13 +487,13 @@ code can do. Other compiler features may be implemented (and
 therefore detected by configure) but known to be buggy, again in
 this case it may be necessary to disable the feature in order to
 compile regex++ to stable code. The output file from configure is
-&lt;boost&gt;/boost/regex/detail/regex_options.hpp, this file lists
-all the macros that can be defined to configure regex++ along
-with a description to illustrate their usage, experiment changing
-options in regex_options.hpp one at a time until you achieve the
-effect you require. If you mail me questions about configure
-output, be sure to include both regex_options.hpp and config.log
-with your message. </p>
+&lt;boost&gt;/boost/regex/detail/regex_options.hpp, this file
+lists all the macros that can be defined to configure regex++
+along with a description to illustrate their usage, experiment
+changing options in regex_options.hpp one at a time until you
+achieve the effect you require. If you mail me questions about
+configure output, be sure to include both regex_options.hpp and
+config.log with your message. </p>
 
 <hr>
 

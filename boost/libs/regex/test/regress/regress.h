@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     regress.h
-  *   VERSION  3.04
+  *   VERSION  3.10
   *
   * Function and data declarations for regress.
   *
