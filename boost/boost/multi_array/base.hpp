@@ -192,21 +192,14 @@ struct choose_value_accessor_one {
   };
 };
 
-
-template <std::size_t NumDims>
-struct value_accessor_gen_helper {
-  typedef choose_value_accessor_n choice;
-};
-
-template <>
-struct value_accessor_gen_helper<1> {
-  typedef choose_value_accessor_one choice;
-};
-
 template <typename T, std::size_t NumDims>
 struct value_accessor_generator {
 private:
-  typedef typename value_accessor_gen_helper<NumDims>::choice Choice;
+  //  typedef typename value_accessor_gen_helper<NumDims>::choice Choice;
+  typedef typename
+  mpl::if_c<(NumDims == 1),
+    choose_value_accessor_one,
+    choose_value_accessor_n>::type Choice;
 public:
   typedef typename Choice::template bind<T,NumDims>::type type;
 };

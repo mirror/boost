@@ -143,21 +143,6 @@ public:
 
 };
 
-
-
-template <typename T, std::size_t NumDims, typename value_type,
-  typename reference_type, typename tag, typename difference_type>
-struct iterator_generator {
-  typedef  array_iterator<T,T*,NumDims,tag,reference_type> type;
-};
-
-template <typename T,  std::size_t NumDims, typename value_type,
-  typename reference_type, typename tag, typename difference_type>
-struct const_iterator_generator {
-  typedef array_iterator<T,const T*,NumDims,tag,reference_type> type;
-};
-
-
 } // namespace multi_array
 } // namespace detail
 } // namespace boost
