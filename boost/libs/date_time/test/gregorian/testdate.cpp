@@ -110,6 +110,48 @@ main()
     check("day out of range", true);
   }
 
+  try {
+    date d20(2000, Feb, 31);
+    check("day out of range", false);
+    //never reached if working -- but stops compiler warnings :-)
+    std::cout << "Oops: " << to_iso_string(d20) << std::endl;
+  }
+  catch (bad_day_of_month) {
+    check("day out of range", true);
+  }
+
+  //more subtle -- one day past in a leap year
+  try {
+    date d21(2000, Feb, 30);
+    check("day out of range", false);
+    //never reached if working -- but stops compiler warnings :-)
+    std::cout << "Oops: " << to_iso_string(d21) << std::endl;
+  }
+  catch (bad_day_of_month) {
+    check("day out of range", true);
+  }
+
+  //more subtle -- one day past in a leap year
+  try {
+    date d22(2000, Feb, 29);
+    check("last day of month ok", true);
+    std::cout << to_iso_string(d22) << std::endl; //stop compiler warning
+  }
+  catch (bad_day_of_month) {
+    check("last day of month -- oops bad exception", false);
+  }
+
+  //Not a leap year -- now Feb 29 is bad
+  try {
+    date d23(1999, Feb, 29);
+    check("day out of range", false);
+    //never reached if working -- but stops compiler warnings :-)
+    std::cout << "Oops: " << to_iso_string(d23) << std::endl;
+  }
+  catch (bad_day_of_month) {
+    check("day out of range", true);
+  }
+
   //check out some special values
   check("check not a date - false",           !d7.is_not_a_date());
   check("check positive infinity - false",    !d7.is_pos_infinity());
@@ -141,6 +183,7 @@ main()
   std::cout << d15.day_of_week().as_long_string() << std::endl;
   check("check infinity - min compare   ",      d10 < d15);
 
+  // most of this testing is in the gregorian_calendar tests
   std::cout << d15.julian_day() << std::endl;
   check("check julian day   ", d15.julian_day() == 2232400);
   check("check modjulian day   ", d15.modjulian_day() == -167601);
@@ -148,6 +191,24 @@ main()
   check("check julian day   ", d16.julian_day() == 2453065);
   check("check modjulian day   ", d16.modjulian_day() == 53064);
 
+  // most of this testing is in the gregorian_calendar tests
+  date d31(2000, Jun, 1);
+  check("check iso week number   ", d31.week_number() == 22);
+  date d32(2000, Aug, 1);
+  check("check iso week number   ", d32.week_number() == 31);
+  date d33(2000, Oct, 1);
+  check("check iso week number   ", d33.week_number() == 39);
+  date d34(2000, Dec, 1);
+  check("check iso week number   ", d34.week_number() == 48);
+  date d35(2000, Dec, 24);
+  check("check iso week number   ", d35.week_number() == 51);
+  date d36(2000, Dec, 25);
+  check("check iso week number   ", d36.week_number() == 52);
+  date d37(2000, Dec, 31);
+  check("check iso week number   ", d37.week_number() == 52);
+  date d38(2001, Jan, 1);
+  check("check iso week number   ", d38.week_number() == 1);
+  
 //   std::cout << d16.julian_day() << std::endl;
 //   std::cout << d16.modjulian_day() << std::endl;
 
