@@ -351,10 +351,29 @@ void do_switch_yes_defaults_tests() {
 
 }
 
+void test_empty_cases() {
+
+  using namespace boost::lambda;  
+
+  // ---
+  switch_statement( 
+      _1,
+      default_statement()
+  )(make_const(1));
+
+  switch_statement( 
+      _1,
+      case_statement<1>()
+  )(make_const(1));
+
+}
+
 int test_main(int, char* []) {
 
   do_switch_no_defaults_tests();
   do_switch_yes_defaults_tests();
+
+  test_empty_cases();
 
   return EXIT_SUCCESS;
 
