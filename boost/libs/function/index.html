@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Boost.Function</title>
+  </head>
+
+  <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+
+  <h1><IMG SRC="../../c++boost.gif" WIDTH="276" HEIGHT="86">Header &lt;<a HREF="../../boost/function.hpp">boost/function.hpp</a>&gt;</h1>
+
+<p> The header &lt;<a HREF="../../boost/function.hpp">boost/function.hpp</a>&gt; includes a family of class templates that are function object wrappers. The notion is similar to a generalized callback. It shares features with function pointers in that both define a call interface (e.g., a function taking two integer arguments and returning a floating-point value) through which some implementation can be called, and the implementation that is invoked may change throughout the course of the program.
+
+<p> Generally, any place in which a function pointer would be used to defer a call or make a callback, Boost.Function can be used instead to allow the user greater flexibility in the implementation of the target. Targets can be any 'compatible' function object (or function pointer), meaning that the arguments to the interface designated by Boost.Function can be converted to the arguments of the target function object.
+
+<ul>
+  <li><a href="#usage">Basic usage</a>
+     <ul>
+       <li>Free functions</li>
+       <li>Member functions</li>
+     </ul>
+    </li>
+  <li><a href="#family">The <code>function</code> family</a></li>
+  <li><a href="#operations">Operations on function object wrappers</a></li>
+  <li><a href="#advanced">Advanced usage</a>
+    <ul>
+      <li><a href="#policies">Policies</a></li>
+      <li><a href="#mixins">Mixins</a></li>
+      <li><a href="#allocators">Allocators</a></li>
+      <li><a href="#synchronizing">Example: Synchronized functions</a></li>
+   </ul>
+  </li>
+  <li><a href="#vspointers">Boost.Function vs. Function Pointers</a></li>
+  <li><a href="#performance">Performance</a></li>
+  <li><a href="#portability">Portability</a></li>
+  <li><a href="#design">Design rationale</a></li>
+  <li><a href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+<h2>Basic usage</h2>
+<a name="usage"></a>
+<p> A wrapper is defined simply by specializing a <code>function</code> object with the desired return type and argument types. Any number of arguments may be supplied, up to some implementation-defined limit (10 is the default maximum). The following declares a function object wrapper <code>f</code> that takes two <code>int</code> parameters and returns a <code>float</code>:
+<pre>
+boost::function&lt;float, int, int&gt; f;
+</pre>
+
+<p> By default, function object wrappers are empty, so we can create a 
+function object to assign to <code>f</code>:
+<pre>
+struct int_div { float operator()(int x, int y) const { return ((float)x)/y; }; };
+f = int_div();
+</pre>
+
+<p> Now we can use <code>f</code> to execute the underlying function object
+<code>int_div</code>:
+<pre>
+  std::cout << f(5, 3) << std::endl;
+</pre>
+
+<p> We are free to assign any compatible function object to <code>f</code>. If <code>int_div</code> had been declared to take two <code>long</code> operands,
+the implicit conversions would have been applied without any user interference.
+
+<p> Invoking a function object wrapper that does not actually contain a function object is a precondition violation. We can check for an empty function object wrapper by querying its <code>empty()</code> method or, more succinctly, by using it in a boolean context: if it evaluates true, it contains a function object target, i.e.,
+<pre>
+  if (f)
+    std::cout << f(5, 3) << std::endl;
+  else
+    std::cout << "f has no target" << std::endl;
+</pre>
+
+<p> We can clear out a function target using the <code>clear()</code> member functor. 
+
+<h3>Free functions</h3>
+<p> Free function pointers can be considered singleton function objects with const function call operators, and can therefore be directly used with the function object wrappers:
+<pre>
+  float mul_ints(int x, int y) { return ((float)x) * y; }
+  f = &mul_ints;
+</pre>
+
+<h3>Member functions</h3>
+<a name="member_func">
+<p> In many systems, callbacks often call to member functions of a particular
+object. Handling argument binding is beyond the scope of Boost.Function. However, there are several libraries that perform 'argument binding', including
+<ul>
+  <li> The C++ Standard library. Using <code>std::bind1st</code> and <code>std::mem_fun</code> together one can bind the object of a pointer-to-member function for use with Boost.Function:
+<pre>
+  struct X {
+    int foo(int);
+  };
+
+  boost::function&lt;int, int&gt; f;
+  X x;
+  f = std::bind1st(std::mem_fun(&X::foo), &x);
+
+  f(5); // Call x.foo(5)</pre></li>
+
+  <li><a href="http://lambda.cs.utu.fi/">The Lambda library</a>. This library provides a powerful composition mechanism to construct function objects that uses very natural C++ syntax. Lambda requires a compiler that is reasonably conformant to the C++ standard. Note that it is not a Boost library.</li>
+
+  <li>Peter Dimov's <a href="http://groups.yahoo.com/group/boost/files/bind/bind.hpp">bind</a> library. It has a smaller scope than the Lambda Library but is more tolerant of broken compilers. It is an unreviewed library in development.</li>
+</ul>
+
+<h2>The <code>function</code> family</h2>
+<a name="family"></a>
+<p> The header &lt;<a HREF="../../boost/function.hpp">boost/function.hpp</a>&gt; defines the primary entry point to the function object wrappers, the class template <code>boost::function</code>. This class template is essentially a thin wrapper around a set of similar numbered function object wrappers, <code>boost::function0</code>, <code>boost::function1</code>, etc., where the number indicates the number of arguments passed to the function object target. The declaration of <code>f</code> above could also be written as:
+<pre>
+boost::function2&lt;float, int, int&gt; f;
+</pre>
+
+<p> The numbered class templates contain most of the implementation and are each distinct class templates. They may be helpful if used in shared libraries, where the number of arguments supported by Boost.Function may change between revisions. Additionally, some compilers (e.g., Microsoft Visual C++ 6.0) have been known to be incapable of compiling <code>boost::function</code> in some instances but are able to handle the numbered variants.
+
+<h2>Operations on function object wrappers</h2>
+<a name="operations"></a>
+<p>Each function object wrapper type (that has N actual arguments) supports the following operations:
+<table border=1>
+  <tr>
+    <th>Syntax</th> 
+    <th>Semantics</th>
+  </tr>
+  <tr>
+    <td><pre>
+f = func_obj;
+f.set(func_obj);</pre></td>
+    <td>Clears out <code>f</code>'s current target and retargets <code>f</code> to a copy of <code>func_obj</code>.</td>
+  </tr>
+  <tr>
+     <td><pre>
+f.clear();</pre></td>
+     <td>Removes <code>f</code>'s target, if it has one.</td>
+  </tr>
+  <tr>
+     <td><pre>
+(bool)f
+!f.empty()</pre></td>
+     <td>True if <code>f</code> has no target. The conversion to <code>bool</code> evaluates true if a target exists, whereas <code>empty()</code> returns true if no target exists.</td>
+   </tr>
+   <tr>
+     <td><pre>f(a1, a2, ..., aN)</pre></td>
+     <td>Invoke <code>f</code>'s current target with the given arguments.
+   </tr>
+   <tr>
+     <td><pre>
+swap(f1, f2);
+f1.swap(f2);</pre></td>
+     <td>Swap the targets of <code>f1</code> and <code>f2</code>, which must be of the same type. No exceptions will be thrown.
+   </tr>
+</table>
+
+<p> Additionally, function object wrappers may be default-constructed (as empty) or constructed from any compatible function object. They are copy constructible and copy-assignable.
+
+<p> All function object wrappers derive from <code>boost::function_base</code>, which implements the <code>empty()</code> member function and the <code>bool</code> conversion. Additionally, no other class may inherit <code>boost::function_base</code>, so user code may rely on the implicit base pointer conversion to determine if a type is a <code>boost::function</code> type or one of its variants.
+
+<h2>Advanced usage</h2>
+<a name="advanced"></a>
+
+<p> The <code>boost::function</code> family supports additional customization by means of policies, mixins, and allocators. The specific usage of each of these will be explained in later sections, but they share a common problem: how to replace each default with your own version. 
+
+<p>For the numbered function object wrappers, one need only specify the new classes as a template parameter in the appropriate position. The following is a general definition for each of the numbered function object wrappers:
+<pre>
+  template&lt;typename Return,
+           typename Arg1,
+           typename Arg2,
+           ...
+           typename ArgN,
+           typename Policy    = empty_function_policy,
+    	   typename Mixin     = empty_function_mixin,
+    	   typename Allocator = std::allocator&lt;function_base&gt;
+           &gt; class functionN { /* ... */ };
+</pre>
+
+<p> With <code>boost::function</code> it is not so clear, because support for an arbitrary number of parameters means that it is impossible to specify just the last parameter, but not 5 of the parameters in between. Therefore, <code>boost::function</code> doubles as a generative interface for the underlying numbered class templates that uses named template parameters. For instance, to specify both a policy and an allocator for a function object wrapper <code>f</code> taking an <code>int</code> and returning an <code>int</code>, use:
+<pre>
+  function&lt;int, int&gt;::policy&lt;MyPolicy&gt;::allocator&lt;MyAllocator&gt;::type f;
+</pre>
+
+<p> The named template parameters <code>policy</code>, <code>mixin</code> and <code>allocator</code> each take one template parameter (the replacement class) and may be nested as above to generate a function object wrapper. The <code>::type</code> at the end accesses the actual type that fits the given properties.
+
+<h3>Policies</h3>
+<a name="policies"></a>
+<p> Policies define what happens directly before and directly after an invocation of a function object target is made. A policy must have two member functions, <code>precall</code> and <code>postcall</code>, each of which must be able to accept a <code>const</code> function object wrapper pointer. The following policy will print "before" prior to execution and "after" afterwards:
+
+<pre>
+struct print_policy {
+  void precall(const boost::function_base*) { std::cout << "before"; }
+  void postcall(const boost::function_base*) { std::cout << "after"; }
+};
+</pre>
+
+<p> A new instance of the policy class will be created prior to calling the function object target and will be preserved until after the call has returned. Therefore, for any invocation the <code>precall</code> and <code>postcall</code> will be executed on the same policy class instance; however, policy class instances will not be kept between target invocations.
+
+<p> Policies are further <a href="http://www.boost.org/more/generic_programming.html#policy">described</a> in the Boost discussion on <a href="http://www.boost.org/more/generic_programming.html">generic programming techniques</a>.
+
+<h3>Mixins</h3>
+<a name="mixins"></a>
+<p> The function object wrappers allow any class to be "mixed in" as a base class. This allows extra members and/or functionality to be included by the user. This can be used, for instance, to overcome the limitations of policies by storing data between invocations in a base class instead of in a <code>static</code> member of a policy class. 
+
+<h3>Allocators</h3>
+<a name="allocators"></a>
+<p> The function object wrappers allow the user to specify a new allocator to handle the cloning of function object targets (when the wrappers are copied). The allocators used are the same as the C++ standard library allocators. The wrappers assume the allocators are stateless, and will create a new instance each time they are used (because they are rebound very often). This shares the semantics of most standard library implementations, and is explicitly allowed by the C++ standard.
+
+<h3>Example: Synchronized callbacks</h3>
+<a name="synchronizing"></a>
+<p> Synchronization of callbacks in a multithreaded environment is extremely important. Using mixins and policies, a Boost.Function object may implement its own synchronization policy that ensures that only one thread can be in the callback function at any given point in time.
+
+<p> We will use the prototype Boost.Threads library for its <code>recursive_mutex</code>. Since the mutex is on a per-callback basis, we will add a mutex to the <code>boost::function</code> by mixin it in with this mixin class:
+<pre>
+class SynchronizedMixin {
+  mutable boost::recursive_mutex mutex;
+};
+</pre>
+
+<p> Next, we create a policy that obtains a lock before the target is called (via the <code>precall</code> function) and releases the lock after the target has been called (via the <code>postcall</code> function):
+
+<pre>
+class SynchronizedPolicy {
+  std::auto_ptr&lt;boost::recursive_mutex::lock&gt; lock;
+
+  void precall(const SynchronizedMixin* f) 
+  {
+    lock.reset(new boost::recursive_mutex::lock(f->mutex));
+  }
+
+  void postcall(const SynchronizedMixin* f)
+  {
+    lock.reset();
+  }
+};
+</pre>
+
+<p>The use of <code>std::auto_ptr</code> ensures that the lock will be destroyed (and therefore released) if an exception is thrown by the target function. Now we can use the policy and mixin together to create a synchronized callback:
+
+<pre>
+boost::function2&lt;float, int, int, SynchronizedPolicy, SynchronizedMixin&gt; f;
+</pre>
+
+<h2>Boost.Function vs. Function Pointers</h2>
+<a name="vspointers"></a>
+<p>Boost.Function has several advantages over function pointers, namely:
+
+<ul>
+   <li>Boost.Function allows arbitrary compatible function objects to be targets (instead of requiring an exact function signature).</li>
+
+   <li>Boost.Function may be used with argument-binding and other function object construction libraries.</li>
+   
+   <li>Boost.Function has predictible debug behavior when an empty function object is called. </li>
+
+   <li>Boost.Function can be adapted to perform operations before and after each call, allowing, for instance, synchronization primitives to be made part of the function type.</li>
+</ul>
+
+And, of course, function pointers have several advantages over Boost.Function:
+
+<ul>
+    <li> Function pointers are smaller (the size of one pointer instead of three) </li>
+    <li> Function pointers are faster (Boost.Function may require two calls through function pointers) </li>
+    <li> Function pointers are backward-compatible with C libraries.</li>
+    <li> More readable error messages. </li>
+</ul>
+
+
+<p> The above two lists were adapted from comments made by Darin Adler.
+
+<h2>Performance</h2>
+<a name="performance"></a>
+<h3>Function object wrapper size</h3>
+<p> Function object wrappers will be the size of two function pointers plus one function pointer or data pointer (whichever is larger). On common 32-bit platforms, this amounts to 12 bytes per wrapper. Additionally, the function object target will be allocated on the heap.
+
+<h3>Copying efficiency</h3>
+<p> Copying function object wrappers requires allocating member for a copy of the function object target. The default allocator may be replaced with a faster custom allocator if the cost of this cloning becomes prohibitive.
+
+<h3>Invocation efficiency</h3>
+<p> With a properly inlining compiler, an invocation of a function object requires one call through a function pointer. If the call is to a free function pointer, an additional call must be made to that function pointer (unless the compiler has very powerful interprocedural analysis).
+
+<h2>Portability</h2>
+<a name="portability"></a>
+<p> The function object wrappers have been designed to be as portable as possible, and to support many compilers even when they do not support the C++ standard well. The following compilers have passed all of the testcases included with <code>boost::function</code>.
+<ul>
+  <li>GCC 2.95.3</li>
+  <li>GCC 3.0</li>
+  <li>SGI MIPSpro 7.3.0</li>
+  <li>Borland C++ 5.5.1</li>
+  <li>Comeau C++ 4.2.44 (beta 3)</li>
+  <li>Metrowerks Codewarrior 6.1</li>
+</ul>
+
+<p> The following compilers work with <code>boost::function</code>, but have some problems:
+<ul>
+  <li>Microsoft Visual C++ 6.0 (service pack 5): allocators not supported, some problems with <code>boost::function</code> class template (numbered variants seem to work)</li>
+  <li>Intel C++ 5.0: allocators not supported</li>
+</ul>
+
+<p> If your compiler is not listed, there is a small set of tests to stress the capabilities of the <code>boost::function</code> library. A standards-compliant compiler should compile the code without any modifications, but if you find you run into problems the following macros can be defined to adapt the function object wrappers to a broken compiler:
+<table border=1>
+  <tr>
+    <th>Macro name</th>
+    <th>Effect and symptoms</th>
+  </tr>
+  <tr>
+    <td>BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS</td>
+    <td>When enabled, this macro uses virtual functions instead of the default function pointers. In most cases, this will generate larger executables. However, if a compiler optimizes virtual function calls well it may result in smaller, faster executables. Enabling this macro also fixes some code generation problems in some compilers...
+  </tr>
+  <tr>
+    <td>BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING</td>
+    <td><code>boost::function</code> stresses function template ordering more than most compilers can handle. If your compiler is having trouble with free function pointer assignments, try defining this macro</td>
+  </tr>
+  <tr>
+    <td>BOOST_NO_DEPENDENT_BASE_LOOKUP</td>
+    <td>If your compiler cannot seem to find operators defined in a dependent base class (i.e., if you are trying to use <code>boost::function</code> operators and your compiler isn't finding them), try defining this macro</td>
+  </tr>
+  <tr>
+    <td>BOOST_NO_DEPENDENT_NESTED_DERIVATIONS</td>
+    <td>If your compiler can't handle the code in the <code>function_traits_builder</code> class, try defining this.</td>
+  </tr>
+  <tr>
+    <td>BOOST_WEAK_CONVERSION_OPERATORS</td>
+    <td>If expressions such as <code>!f</code> (for a <code>boost::function</code> object <code>f</code>) fail, try to define this. Note that this may allow some meaningless expressions to compile, such as <code>f+4</code>.</td>
+  </tr>
+</table>
+
+<h2>Design rationale</h2>
+<a name="design"></a>
+
+<h3>Combatting virtual function bloat</h3>
+<p> The use of virtual functions tends to cause 'code bloat' on many compilers. When a class contains a virtual function, it is necessary to emit an additional function that classifies the type of the object. It has been our experience that these auxiliary functions increase the size of the executable significantly when many <code>boost::function</code> objects are used. 
+
+<p> In Boost.Function, an alternative but equivalent approach was taken using free functions instead of virtual functions. The Boost.Function object essentially holds two pointers to make a valid target call: a void pointer to the function object it contains and a void pointer to an "invoker" that can call the function object, given the function pointer. This invoker function performs the argument and return value conversions Boost.Function provides. A third pointer points to a free function called the "manager", which handles the cloning and destruction of function objects. The scheme is typesafe because the only functions that actually handle the function object, the invoker and the manager, are instantiated given the type of the function object, so they can safely cast the incoming void pointer (the function object pointer) to the appropriate type.
+
+<p> A compiler with strong interprocedural analysis could significantly reduce the overhead associated with virtual function calls such that the alternative used by Boost.Function is less efficient. No compiler has yet been found where this is true, but when it does occur the BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS macro can be defined to revert to the simpler implementation based on virtual functions.
+
+
+    <hr>
+    <address><a href="mailto:gregod@cs.rpi.edu">Doug Gregor</a></address>
+  </body>
+</html>
