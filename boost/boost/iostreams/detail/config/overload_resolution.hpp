@@ -12,7 +12,12 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif          
+
+// Temporarily prevent tests from linking on GCC 2.95
+#if BOOST_WORKAROUND(__GNUC__, ==2)
+int main() { }
+#endif        
 
 #include <boost/config.hpp> // BOOST_MSVC.
 #include <boost/detail/workaround.hpp>
