@@ -88,7 +88,7 @@ void class_index::IndexClasses(const std::string& file)
    start = file.begin();
    end = file.end();
    base = start;
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) && !defined(_STLP_VERSION)
+#if BOOST_WORKAROUND(_MSC_VER, < 1300) && !defined(_STLP_VERSION)
    boost::regex_grep(std::bind1st(std::mem_fun1(&class_index::grep_callback), this),
             start,
             end,

@@ -28,7 +28,7 @@ int main()
 #ifndef BOOST_NO_WREGEX
    // VC6 and VC7 can't cope with the iterator architypes, 
    // don't bother testing as it doesn't work:
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
+#if !BOOST_WORKAROUND(_MSC_VER, < 1310)
    typedef boost::bidirectional_iterator_archetype<wchar_t> iterator_type;
    boost::wregex r;
    iterator_type a, b;

@@ -41,7 +41,7 @@ using std::endl;
 #endif
 
 #include "jgrep.h"
-
+#ifndef BOOST_REGEX_NO_FILEITER
 
 //
 // class ogrep_predicate
@@ -146,12 +146,4 @@ void process_grep(const char* file)
    }
 }
 
-
-
-
-
-
-
-
-
-
+#endif

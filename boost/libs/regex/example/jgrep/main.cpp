@@ -40,6 +40,7 @@ using std::endl;
 #include <boost/regex/v4/fileiter.hpp>
 #endif
 #include "jgrep.h"
+#ifndef BOOST_REGEX_NO_FILEITER
 
 #ifndef JM_ALGO_INCLUDED
 // HP and SGI STL's use <algo.h> instead
@@ -282,7 +283,20 @@ int main(int argc, char * argv[])
    return 0;
 }
 
+#else
 
+#include <iostream>
+
+int main(int argc, char * argv[])
+{
+   std::cout <<
+   "\n<note>\n"
+   "This functionality is not available on with this compiler on this platform.\n"
+   "</note>\n";
+   return 0;
+}
+
+#endif
 
 
 
