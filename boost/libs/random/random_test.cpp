@@ -253,7 +253,7 @@ void test_uniform_int(Generator & gen)
 #if defined(BOOST_MSVC) && _MSC_VER <= 1200
 
 // These explicit instantiations are necessary, otherwise MSVC does
-// find the <boost/operators.hpp> inline friends.
+// not find the <boost/operators.hpp> inline friends.
 // We ease the typing with a suitable preprocessor macro.
 #define INSTANT(x) \
 template class boost::uniform_smallint<x>; \
@@ -275,6 +275,7 @@ INSTANT(boost::hellekalek1995)
 INSTANT(boost::mt19937)
 INSTANT(boost::mt11213b)
 
+#undef INSTANT
 #endif
 
 int test_main(int, char*[])
@@ -284,15 +285,17 @@ int test_main(int, char*[])
   boost::mt19937 mt;
   test_uniform_int(mt);
 
-  // bug report from Ken Mahler:  This lead to an endless loop.
+  // bug report from Ken Mahler:  This used to lead to an endless loop.
   boost::minstd_rand r1;
   boost::uniform_int<boost::minstd_rand, unsigned int> r2(r1, 0, 0xffffffff);
   r2();
   r2();
 
-  // bug report from Fernando Cacciola
+  // bug report from Fernando Cacciola:  This used to lead to an endless loop.
+  // also from Douglas Gregor
   boost::minstd_rand rnd;
-  boost::uniform_int<boost::minstd_rand> x(rnd,0,8361);  // --> This CTOR loops forever.
+  boost::uniform_int<boost::minstd_rand> x(rnd,0,8361);
+  (void) x();
 
   return 0;
 }
