@@ -14,6 +14,7 @@
 #include <boost/preprocessor/dec.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/empty.hpp>
+#include <boost/preprocessor/tuple/elem.hpp>
 
 /* The time complexity of DELAY(N) is O(pow(2,N)).
  *
@@ -31,7 +32,7 @@
  */
 
 #ifndef DELAY_MAX
-#define DELAY_MAX 16
+#define DELAY_MAX 15
 #endif
 
 #define DELAY(N) BOOST_PP_TUPLE_ELEM(2,0,(BOOST_PP_EMPTY,BOOST_PP_WHILE(DELAY_C,BOOST_PP_CAT(DELAY_F,N),BOOST_PP_DEC(N))))()

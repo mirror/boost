@@ -16,6 +16,7 @@
 #include <boost/preprocessor/expr_if.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/stringize.hpp>
+#include <boost/preprocessor/tuple/elem.hpp>
 
 #include <libs/preprocessor/test/test.hpp>
 
