@@ -527,7 +527,7 @@ public:
   {
     using namespace boost;
     std::cout << "birthday spacing: " << std::flush;
-    uniform_int<RNG> uni(rng, 0, (1<<25));
+    uniform_int<RNG> uni(rng, 0, (1<<25)-1);
     birthday_spacing_experiment bsp(4, 512, (1<<25));
     std::cout << run_experiment(bsp, uni, n1);
 #if 0
