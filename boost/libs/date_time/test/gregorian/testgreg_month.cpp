@@ -56,6 +56,5 @@ int
 main() 
 {
   test_month();
-  printTestStats();
-  return 0;
+  return printTestStats();
 };

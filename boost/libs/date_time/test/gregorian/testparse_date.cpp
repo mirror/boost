@@ -105,7 +105,6 @@ main()
 //Duration rep
 //CCYYMMDDThhmmss/PnYnMnDTnHnMnS
 
-  printTestStats();
+  return printTestStats();
 
-  return 0;
 }
