@@ -103,8 +103,8 @@ public:
                 BOOST_IOSTREAMS_CHAR_TRAITS(char_type))* sb )
     { 
         bool result = any_impl::flush(t_, sb);
-        if (sb) 
-            result = sb->BOOST_IOSTREAMS_PUBSYNC() && result; 
+        if (sb && !sb->BOOST_IOSTREAMS_PUBSYNC())
+            result = false;
         return result;
     }
 
