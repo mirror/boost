@@ -43,10 +43,10 @@ template<
     >
 struct joint_view
 {
-    typedef typename begin<Sequence1_>::type first1_;
-    typedef typename end<Sequence1_>::type last1_;
-    typedef typename begin<Sequence2_>::type first2_;
-    typedef typename end<Sequence2_>::type last2_;
+    typedef typename mpl::begin<Sequence1_>::type   first1_;
+    typedef typename mpl::end<Sequence1_>::type     last1_;
+    typedef typename mpl::begin<Sequence2_>::type   first2_;
+    typedef typename mpl::end<Sequence2_>::type     last2_;
 
     // agurt, 25/may/03: for the 'size_traits' implementation above
     typedef Sequence1_ sequence1_;
@@ -54,8 +54,8 @@ struct joint_view
 
     typedef joint_view type;
     typedef aux::joint_view_tag tag;
-    typedef joint_iter<first1_,last1_,first2_> begin;
-    typedef joint_iter<last1_,last1_,last2_> end;
+    typedef joint_iter<first1_,last1_,first2_>  begin;
+    typedef joint_iter<last1_,last1_,last2_>    end;
 };
 
 BOOST_MPL_AUX_NA_SPEC(2, joint_view)
