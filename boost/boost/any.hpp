@@ -175,13 +175,11 @@ namespace boost
 
 }
 
-// Copyright Kevlin Henney, 2000, 2001. All rights reserved.
+// Copyright Kevlin Henney, 2000, 2001, 2002. All rights reserved.
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose is hereby granted without fee, provided that this copyright and
-// permissions notice appear in all copies and derivatives, and that no
-// charge may be made for the software and its documentation except to cover
-// cost of distribution.
+// permissions notice appear in all copies and derivatives.
 //
 // This software is provided "as is" without express or implied warranty.
 
