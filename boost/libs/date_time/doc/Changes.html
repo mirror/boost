@@ -80,7 +80,9 @@
         </tr>
         <tr class="content">
            <td class="nowrap">Feature</td>
-           <td>Added from_time_t function to convert time_t to a ptime.
+           <td>Added from_time_t function to convert time_t to a ptime. See
+               <a href="class_ptime.html#constructfromtimet">from_time_t</a>
+                from more.
           </td>
         </tr>
         <tr class="content">
@@ -127,15 +129,14 @@
                multiple formats ("2003-10-31","2003-Oct-31", and 
                "2003-October-31").
                Thus, date d = from_simple_string("2003-Feb-27") is now
-               allowed.  A bad month name string (
-               from_simple_string("2003-SomeBogusMonthName-27")) will 
+               allowed.  A bad month name string 
+               (from_simple_string("2003-SomeBogusMonthName-27")) will 
                cause a bad_month exception.  In addition, there are 
-	       new convenience functions that handle different orderings of the
-               year, month, and day.  from_us_date and from_uk_date provide
-               parsing for the order month-day-year and day-month-year
-               respectively.  
-               On most compilers the month string compare is case
-               insensitive.
+ 	       new convenience functions that handle different orderings of the
+               year, month, and day.  The from_us_date and from_uk_date
+               <a href="class_date.html#constructfromstring">(reference)</a> 
+               provide parsing for the order month-day-year and day-month-year respectively.  
+               On most compilers the month string compare is case insensitive.
                Thanks to Bart Garst for this work.
           </td>
         </tr>
@@ -234,9 +235,9 @@
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Mon Jan 19 19:49:48 MST 2004
+Last modified: Sun Feb  1 11:14:27 MST 2004
 <!-- hhmts end -->
- by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
+ by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2004
 </small></address>
 </body>
 </html>
