@@ -26,7 +26,7 @@ namespace detail {
 
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)) \
  && !BOOST_WORKAROUND(__SUNPRO_CC , BOOST_TESTED_AT(0x540)) \
- && !BOOST_WORKAROUND(__EDG_VERSION__, <= 238)
+ && !BOOST_WORKAROUND(__EDG_VERSION__, <= 243)
                              // The EDG version number is a lower estimate.
                              // It is not currently known which EDG version
                              // exactly fixes the problem.
