@@ -71,8 +71,6 @@ struct outer_constructor
       to_construct::shallow_construct( pContext, outermostContext );
     to_construct::template deep_construct_inner<
       first_inner_initial_list >( pInnerContext, outermostContext );
-    mpl::front< inner_context_list >::type::reserve_history_slot(
-      outermostContext );
     constructor< inner_context_list, OutermostContext >::construct(
       pInnerContext, outermostContext );
     to_construct::template deep_construct_inner<

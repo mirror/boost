@@ -2,7 +2,7 @@
 
 <head>
 <meta http-equiv="Content-Language" content="en-us">
-<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
@@ -35,12 +35,13 @@
   configuration</a></dt>
   <dd><a href="#Intel 7.0 (Win32, MS Visual Studio 6 std library)">Intel 7.0 
   (Win32, MS Visual Studio 6 std library)</a></dd>
+  <dt><a href="#Incompatible_compilers">Incompatible compilers</a></dt>
 </dl>
 <h1><a name="General configuration">General configuration</a></h1>
 <h2><a name="Introduction">Introduction</a></h2>
 <p>The library uses several configuration macros in
-<a href="http://www.boost.org/libs/config/config.htm">&lt;boost/config.hpp&gt;</a>, 
-as well as one configuration macro meant to be supplied by the application. 
+<a href="../../../libs/config/config.htm">&lt;boost/config.hpp&gt;</a>, 
+as well as two configuration macros meant to be supplied by the application. 
 Moreover, two commonly available compiler options also have an impact on the 
 available features.</p>
 <h2><a name="Debug mode compilation options">Debug mode compilation options</a></h2>
@@ -54,7 +55,7 @@ available features.</p>
 options</a></h2>
 <ul>
   <li>C++ RTTI can be turned on or off. When turned off, the use of <code>
-  state_cast&lt;&gt;()</code> leads to a compile time error (<code>state_downcast&lt;&gt;()</code> 
+  <a href="reference.html#state_cast">state_cast&lt;&gt;()</a></code> leads to a compile time error (<code><a href="reference.html#state_downcast">state_downcast&lt;&gt;()</a></code> 
   is still available). Moreover, <code>BOOST_FSM_USE_NATIVE_RTTI</code> must 
   not be defined simultaneously</li>
   <li>C++ exception handling can be turned on or off. When turned off, 
@@ -62,7 +63,7 @@ options</a></h2>
   handling support</a> is no longer available</li>
 </ul>
 <h2><a name="Application Defined Macros">Application Defined Macros</a></h2>
-<p>The following macro may be defined by an application using the library:</p>
+<p>The following macros may be defined by an application using the library:</p>
 <table summary="application defined macros" width="100%" cellpadding="2" border="3">
   <tr>
     <td width="226"><b>Macro</b></td>
@@ -71,7 +72,9 @@ options</a></h2>
   <tr>
     <td width="226"><code>BOOST_FSM_USE_NATIVE_RTTI</code></td>
     <td width="893">When defined, the library no longer uses its own 
-    speed-optimized RTTI implementation. Instead, native C++ RTTI is employed. 
+    speed-optimized RTTI implementation. Instead, native C++ RTTI is employed 
+	(see <a href="rationale.html#RTTI customization">RTTI 
+	customization</a> in the Rationale for more information). 
     This has the following effects:<ul>
       <li>All states need to store one pointer less, leading to a best-case 
       state machine memory footprint reduction of about 15%</li>
@@ -79,23 +82,50 @@ options</a></h2>
       type information</a> is no longer available</li>
       <li>Under most circumstances, dispatch speed degrades. This is because 
       native C++ RTTI values are retrieved through an additional indirection 
-      on almost all platforms</li>
+      on almost all platforms. See
+		<a href="rationale.html#Speed versus scalability tradeoffs">
+		Speed versus scalability tradeoffs</a> in the Rationale for timings</li>
     </ul>
     </td>
   </tr>
+  <tr>
+    <td width="226"><code>BOOST_FSM_RELAX_TRANSITION_CONTEXT</code></td>
+    <td width="893">When defined, the sequence of actions that are called during 
+	a transition is relaxed. That is, its is no longer necessary that all states 
+	up to the innermost common context are exited before the transition action 
+	is called (as mandated by the UML standard). Instead, the transition action 
+	can be a member of either the transition source or any direct or indirect 
+	outer context and is called as soon as all possibly active inner states have 
+	been exited. Then all remaining active states up to the innermost common 
+	context are exited before entering all states down to the transition 
+	destination</td>
+  </tr>
 </table>
+<p>Both macros need to be consistently defined or undefined for all translation 
+units that are later linked into the same executable. Not doing so will 
+inevitably lead to ODR violations. Depending on compiler and linker technology 
+such violations may or may not manifest themselves in link-time errors.</p>
 <h1><a name="Compiler-specific configuration">Compiler-specific configuration</a></h1>
 <h2><a name="Intel 7.0 (Win32, MS Visual Studio 6 std library)">Intel 7.0 
 (Win32, MS Visual Studio 6 std library)</a></h2>
 <p>By default, this compiler has argument dependent lookup disabled. ADL must 
-be enabled to compile the library without errors. To enable ADL, &quot;<code>/Qoption,c,--arg_dep_lookup</code>&quot; 
-must be added to the compiler command line (without the quotes).</p>
+be enabled to compile the library without errors. To enable ADL, <code>/Qoption,c,--arg_dep_lookup</code> 
+must be added to the compiler command line. See
+<a href="../../../boost/config/compiler/intel.hpp">&lt;boost/config/compiler/intel.hpp&gt;</a> 
+for more information</p>
+<h1><a name="Incompatible_compilers">Incompatible compilers</a></h1>
+<p>The following compilers are known to be unable to compile boost::fsm:</p>
+<ul>
+	<li>MSVC 6.0 &amp; 7.0</li>
+	<li>BCB (all versions)</li>
+</ul>
 <hr>
 <p>Revised 
-      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->22 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13984" -->
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->17 October, 2004<!--webbot bot="Timestamp" endspan i-checksum="38688" -->
 </p>
-<p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
-2003-2004</i></p>
+<p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
+2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
+the email address behind the link</font></b></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

@@ -23,6 +23,7 @@
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/front.hpp>
 #include <boost/mpl/at.hpp>
+#include <boost/mpl/find.hpp>
 #include <boost/mpl/find_if.hpp>
 #include <boost/mpl/contains.hpp>
 #include <boost/mpl/distance.hpp>
@@ -37,6 +38,10 @@
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/or.hpp>
+
+#include <boost/mpl/plus.hpp>
+#include <boost/mpl/max_element.hpp>
+#include <boost/mpl/greater.hpp>
 
 #include <boost/get_pointer.hpp>
 #include <boost/intrusive_ptr.hpp>
@@ -294,7 +299,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     template< class DestinationState >
     result transit()
     {
-      return transit_impl< DestinationState >(
+      return transit_impl< DestinationState, MostDerived >(
         detail::no_transition_function() );
     }
 
@@ -303,7 +308,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       void ( TransitionContext::*pTransitionAction )( const Event & ),
       const Event & evt )
     {
-      return transit_impl< DestinationState >(
+      return transit_impl< DestinationState, TransitionContext >(
         detail::transition_function< TransitionContext, Event >(
           pTransitionAction, evt ) );
     }
@@ -311,7 +316,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     result terminate()
     {
       state_base_type::reaction_initiated();
-      outermost_context().terminate( *this );
+      outermost_context().terminate_as_reaction( *this );
       return do_discard_event;
     }
 
@@ -337,7 +342,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     //////////////////////////////////////////////////////////////////////////
     simple_state() : pContext_( 0 ) {}
 
-    virtual ~simple_state()
+    ~simple_state()
     {
       // As a result of a throwing derived class constructor, this destructor
       // can be called before the context is set.
@@ -347,9 +352,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         {
           outermost_context().release_events( this );
         }
-
-        check_store_shallow_history< stores_shallow_history >();
-        check_store_deep_history< stores_deep_history >();
 
         pContext_->remove_inner_state( orthogonal_position::value );
       }
@@ -424,6 +426,16 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
     typedef mpl::bool_< false > history_destination;
 
+    virtual const state_base_type * outer_state_ptr() const
+    {
+      typedef typename mpl::if_<
+        is_same< outermost_context_type, context_type >,
+        outer_state_ptr_impl_outermost,
+        outer_state_ptr_impl_non_outermost
+      >::type impl;
+      return impl::outer_state_ptr_impl( *this );
+    }
+
     virtual result react_impl(
       const event_base_type & evt,
       typename rtti_policy_type::id_type eventType )
@@ -445,14 +457,67 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       return reactionResult;
     }
 
-    virtual const state_base_type * outer_state_ptr() const
+    virtual void exit_impl(
+      typename base_type::direct_state_base_ptr_type & pSelf,
+      typename state_base_type::node_state_base_ptr_type & pOutermostUnstableState,
+      bool callExitActions )
     {
-      typedef typename mpl::if_<
-        is_same< outermost_context_type, context_type >,
-        outer_state_ptr_impl_outermost,
-        outer_state_ptr_impl_non_outermost
-      >::type impl;
-      return impl::outer_state_ptr_impl( *this );
+      inner_context_ptr_type pMostDerivedSelf =
+        polymorphic_downcast< MostDerived * >( this );
+      pSelf = 0;
+      exit_impl( pMostDerivedSelf, pOutermostUnstableState, callExitActions );
+    }
+
+    void exit_impl(
+      inner_context_ptr_type & pSelf,
+      typename state_base_type::node_state_base_ptr_type & pOutermostUnstableState,
+      bool callExitActions )
+    {
+      switch ( this->ref_count() )
+      {
+        case 2:
+        {
+          if ( get_pointer( pOutermostUnstableState ) ==
+            static_cast< state_base_type * >( this ) )
+          {
+            pContext_->set_outermost_unstable_state( pOutermostUnstableState );
+            // fall through to next case intended
+          }
+          else
+          {
+            break;
+          }
+        }
+        case 1:
+        {
+          if ( get_pointer( pOutermostUnstableState ) == 0 )
+          {
+            pContext_->set_outermost_unstable_state( pOutermostUnstableState );
+          }
+
+          if ( callExitActions )
+          {
+            pSelf->exit();
+            check_store_shallow_history< stores_shallow_history >();
+            check_store_deep_history< stores_deep_history >();
+          }
+
+          context_ptr_type pContext = pContext_;
+          pSelf = 0;
+          pContext->exit_impl( pContext, pOutermostUnstableState, callExitActions );
+          break;
+        }
+        default:
+        {
+          break;
+        }
+      }
+    }
+
+    void set_outermost_unstable_state(
+      typename state_base_type::node_state_base_ptr_type & pOutermostUnstableState )
+    {
+      pOutermostUnstableState = this;
     }
 
     template< class OtherContext >
@@ -515,26 +580,14 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         pInnerContext, outermostContext );
     }
 
-    static void reserve_history_slot(
-      outermost_context_type & outermostContext )
-    {
-      reserve_shallow_history_slot< typename context_type::shallow_history >(
-        outermostContext );
-      reserve_deep_history_slot< typename context_type::deep_history >(
-        outermostContext );
-    }
-
     template< class LeafState >
     void store_deep_history_impl()
     {
-      if ( !state_base_type::termination_state() )
-      {
-        detail::deep_history_storer<
-          context_type::inherited_deep_history::value,
-          context_type::deep_history::value
-        >::template store_deep_history< MostDerived, LeafState >(
-          *pContext_ );
-      }
+      detail::deep_history_storer<
+        context_type::inherited_deep_history::value,
+        context_type::deep_history::value
+      >::template store_deep_history< MostDerived, LeafState >(
+        *pContext_ );
     }
 
   private:
@@ -606,7 +659,9 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     };
     friend struct context_impl_this_context;
 
-    template< class DestinationState, class TransitionAction >
+    template< class DestinationState,
+              class TransitionContext,
+              class TransitionAction >
     result transit_impl( const TransitionAction & transitionAction )
     {
       base_type::reaction_initiated();
@@ -618,11 +673,14 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
           mpl::placeholders::_ > >::type common_context_iter;
       typedef typename mpl::deref< common_context_iter >::type
         common_context_type;
+      typedef typename mpl::distance<
+        typename mpl::begin< context_type_list >::type,
+        common_context_iter >::type termination_state_position;
+      typedef typename mpl::push_front< context_type_list, MostDerived >::type
+        possible_transition_contexts;
       typedef typename mpl::at<
-        typename mpl::push_front< context_type_list, MostDerived >::type,
-        typename mpl::distance<
-          typename mpl::begin< context_type_list >::type,
-          common_context_iter >::type >::type termination_state_type;
+        possible_transition_contexts,
+        termination_state_position >::type termination_state_type;
 
       // If you receive a
       // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or
@@ -645,9 +703,64 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       outermost_context_type & outermostContext(
         pCommonContext->outermost_context() );
 
-      outermostContext.terminate( terminationState );
-      outermostContext.add( pCommonContext, true );
+      #ifdef BOOST_FSM_RELAX_TRANSITION_CONTEXT
+      #ifdef BOOST_MSVC
+      #  pragma warning( push )
+      #  pragma warning( disable: 4127 ) // conditional expression is constantt
+      #endif
+
+      typedef typename mpl::distance<
+        typename mpl::begin< possible_transition_contexts >::type,
+        typename mpl::find<
+          possible_transition_contexts, TransitionContext >::type
+      >::type proposed_transition_context_position;
+
+      typedef typename mpl::plus<
+        termination_state_position,
+        mpl::long_< 1 >
+      >::type uml_transition_context_position;
+
+      typedef typename mpl::deref< typename mpl::max_element<
+        mpl::list<
+          proposed_transition_context_position,
+          uml_transition_context_position >,
+        mpl::greater< mpl::placeholders::_, mpl::placeholders::_ >
+      >::type >::type real_transition_context_position;
+
+      typedef typename mpl::at<
+        possible_transition_contexts,
+        real_transition_context_position >::type real_transition_context_type;
+
+      if ( ( proposed_transition_context_position::value == 0 ) &&
+           ( inner_initial_list_size::value == 0 ) )
+      {
+        transitionAction( *polymorphic_downcast< MostDerived * >( this ) );
+        outermostContext.terminate_as_part_of_transit( terminationState );
+      }
+      else if ( proposed_transition_context_position::value >=
+                uml_transition_context_position::value )
+      {
+        real_transition_context_type & transitionContext =
+          context< real_transition_context_type >();
+        outermostContext.terminate_as_part_of_transit( terminationState );
+        transitionAction( transitionContext );
+      }
+      else
+      {
+        intrusive_ptr< real_transition_context_type > pTransitionContext =
+          &context< real_transition_context_type >();
+        outermostContext.terminate_as_part_of_transit( *pTransitionContext );
+        transitionAction( *pTransitionContext );
+        pTransitionContext = 0;
+        outermostContext.terminate_as_part_of_transit( terminationState );
+      }
+      #ifdef BOOST_MSVC
+      #  pragma warning( pop )
+      #endif
+      #else
+      outermostContext.terminate_as_part_of_transit( terminationState );
       transitionAction( *pCommonContext );
+      #endif
 
       typedef typename detail::make_context_list<
         common_context_type, DestinationState >::type context_list_type;
@@ -753,7 +866,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
             typename current_inner::context_type::inner_initial_list,
             typename current_inner::orthogonal_position >::type >::value ) );
 
-        current_inner::reserve_history_slot( outermostContext );
         current_inner::deep_construct( pInnerContext, outermostContext );
 
         typedef typename mpl::pop_front< InnerList >::type recurse_list;
@@ -786,35 +898,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
           pInnerContext, outermostContext );
     }
 
-    struct reserve_shallow_history_slot_impl_no
-    {
-      static void reserve_shallow_history_slot_impl(
-        outermost_context_type & ) {}
-    };
-
-    struct reserve_shallow_history_slot_impl_yes
-    {
-      static void reserve_shallow_history_slot_impl(
-        outermost_context_type & outermostContext )
-      {
-        outermostContext.template reserve_shallow_history_slot<
-          MostDerived >();
-      }
-    };
-
-    template< class ReserveShallowHistorySlot >
-    static void reserve_shallow_history_slot(
-      outermost_context_type & outermostContext )
-    {
-      typedef typename mpl::if_<
-        ReserveShallowHistorySlot,
-        reserve_shallow_history_slot_impl_yes,
-        reserve_shallow_history_slot_impl_no
-      >::type impl;
-
-      impl::reserve_shallow_history_slot_impl( outermostContext );
-    }
-
     struct check_store_shallow_history_impl_no
     {
       template< class State >
@@ -826,13 +909,8 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       template< class State >
       static void check_store_shallow_history_impl( State & stt )
       {
-        // If we are not the termination state then it can only be one of our
-        // direct or indirect outer states
-        if ( !stt.state_base_type::termination_state() )
-        {
-          stt.outermost_context().template store_shallow_history<
-            MostDerived >();
-        }
+        stt.outermost_context().template store_shallow_history<
+          MostDerived >();
       }
     };
     friend struct check_store_shallow_history_impl_yes;
@@ -848,48 +926,18 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       impl::check_store_shallow_history_impl( *this );
     }
 
-    struct reserve_deep_history_slot_impl_no
-    {
-      static void reserve_deep_history_slot_impl(
-        outermost_context_type & ) {}
-    };
-
-    struct reserve_deep_history_slot_impl_yes
-    {
-      static void reserve_deep_history_slot_impl(
-        outermost_context_type & outermostContext )
-      {
-        outermostContext.template reserve_deep_history_slot<
-          MostDerived >();
-      }
-    };
-
-    template< class ReserveDeepHistorySlot >
-    static void reserve_deep_history_slot(
-      outermost_context_type & outermostContext )
-    {
-      typedef typename mpl::if_<
-        ReserveDeepHistorySlot,
-        reserve_deep_history_slot_impl_yes,
-        reserve_deep_history_slot_impl_no
-      >::type impl;
-
-      impl::reserve_deep_history_slot_impl( outermostContext );
-    }
-
     struct check_store_deep_history_impl_no
     {
       template< class State >
       static void check_store_deep_history_impl( State & ) {}
     };
 
-    struct check_store_deep_history_impl_yes {
+    struct check_store_deep_history_impl_yes
+    {
       template< class State >
       static void check_store_deep_history_impl( State & stt )
       {
         stt.store_deep_history_impl< MostDerived >();
-        // If we are not the termination state then it can only be one of our
-        // direct or indirect outer states
       }
     };
     friend struct check_store_deep_history_impl_yes;
@@ -911,7 +959,41 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
 
 
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 } // namespace fsm
+#endif
+
+
+
+template< class MostDerived, class Context, class Reactions,
+          class InnerInitial, history_mode historyMode >
+inline void intrusive_ptr_add_ref( const ::boost::fsm::simple_state<
+  MostDerived, Context, Reactions, InnerInitial, historyMode > * pBase )
+{
+  pBase->add_ref();
+}
+
+template< class MostDerived, class Context, class Reactions,
+          class InnerInitial, history_mode historyMode >
+inline void intrusive_ptr_release( const ::boost::fsm::simple_state<
+  MostDerived, Context, Reactions, InnerInitial, historyMode > * pBase )
+{
+  if ( pBase->release() )
+  {
+    // The cast is necessary because the simple_state destructor is non-
+    // virtual (and inaccessible from this context)
+    delete polymorphic_downcast< const MostDerived * >( pBase );
+  }
+}
+
+
+
+#ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+} // namespace fsm
+#endif
+
+
+
 } // namespace boost
 
 

@@ -118,7 +118,7 @@ struct rtti_policy
 
     protected:
       ////////////////////////////////////////////////////////////////////////
-      virtual ~rtti_base_type() {}
+      ~rtti_base_type() {}
 
     #ifdef BOOST_FSM_USE_NATIVE_RTTI
       rtti_base_type( id_provider_type ) {}
@@ -176,7 +176,7 @@ struct rtti_policy
 
     protected:
       ////////////////////////////////////////////////////////////////////////
-      virtual ~rtti_derived_type() {}
+      ~rtti_derived_type() {}
 
       #ifdef BOOST_FSM_USE_NATIVE_RTTI
       rtti_derived_type() : Base( false ) {}

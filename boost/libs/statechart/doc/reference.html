@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Language" content="en-us">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
 <title>The boost::fsm library - Reference</title>
@@ -44,6 +44,12 @@
   <dt><a href="#fifo_scheduler.hpp">fifo_scheduler.hpp</a></dt>
   <dd><a href="#Class template fifo_scheduler">Class template <code>
   fifo_scheduler</code></a></dd>
+  <dt><a href="#exception_translator.hpp">exception_translator.hpp</a></dt>
+  <dd><a href="#Class template exception_translator">Class template 
+	<code>exception_translator</code></a></dd>
+  <dt><a href="#null_exception_translator.hpp">null_exception_translator.hpp</a></dt>
+  <dd><a href="#Class template null_exception_translator">Class template 
+	<code>null_exception_translator</code></a></dd>
   <dt>&nbsp;</dt>
   <dt><a href="#simple_state.hpp">simple_state.hpp</a></dt>
   <dd><a href="#Typedef no_reactions">Typedef <code>no_reactions</code></a></dd>
@@ -261,7 +267,7 @@ well-formed and have the indicated results:</p>
       <li><code>f.terminated() == true</code></li>
       <li>The application is single-threaded and the internal queue is empty</li>
       <li>The application is multi-threaded and the internal queue is empty 
-      and the scheduler was created as non-blocking</li>
+      and the worker was created as non-blocking</li>
       <li><code>n != 0</code> and the number of work items that have been 
       processed since <code>operator()()</code> was called equals <code>n</code></li>
     </ul>
@@ -318,7 +324,7 @@ well-formed and have the indicated results:</p>
     <td width="51%">A model of the ExceptionTranslator concept</td>
     <td width="18%">see <a href="#ExceptionTranslator">ExceptionTranslator 
     concept </a></td>
-    <td width="19%"><code>exception_translator&lt;&gt;</code></td>
+    <td width="19%"><code>null_exception_translator</code></td>
   </tr>
 </table>
 <h3>Class template <code>state_machine</code> synopsis</h3>
@@ -330,7 +336,7 @@ namespace fsm
     class MostDerived,
     class InitialState,
     class Allocator = std::allocator&lt; void &gt;,
-    class ExceptionTranslator = exception_translator&lt;&gt; &gt;
+    class ExceptionTranslator = null_exception_translator &gt;
   class state_machine : noncopyable
   {
     public:
@@ -365,7 +371,15 @@ namespace fsm
 <pre><a name="state_machine">state_machine</a>();</pre>
 <p><b>Effects</b>: Constructs a non-running state machine</p>
 <pre><a name="~state_machine">~state_machine</a>();</pre>
-<p><b>Effects</b>: <code>terminate();</code></p>
+<p>
+<b>Effects</b>: Destructs the currently active outermost state and all its 
+direct and indirect inner states. Innermost states are destructed first. Other 
+states are destructed as soon as all their direct and indirect inner states have 
+been destructed. The inner states of each state are destructed according to the 
+number of their orthogonal region. The state in the orthogonal region with the 
+highest number is always destructed first, then the state in the region with the 
+second-highest number and so on<br>
+<b>Note</b>: Does not attempt to call any <code>exit</code> member functions</p>
 <h3>Class template <code>state_machine</code> modifier functions</h3>
 <pre>void <a name="initiate">initiate</a>();</pre>
 <p><b>Effects</b>:</p>
@@ -387,6 +401,9 @@ namespace fsm
   <code>operator()()</code> returning <code>bool</code> and accepting an 
   exception event parameter that processes the passed exception event, with 
   the following differences to the processing of normal events:<ul type="disc">
+    <li>From the moment when the exception has been thrown until right after the 
+	execution of the exception event reaction, states that need to be exited are only 
+	destructed but no <code>exit</code> member functions are called</li>
     <li><a href="definitions.html#Reaction">Reaction</a> search always starts 
     with the outermost <a href="definitions.html#Unstable state">unstable 
     state</a></li>
@@ -410,8 +427,15 @@ namespace fsm
   <li>Passes <code>action</code>, <code>exceptionEventHandler</code> and the
   <code><a href="#Enum result">result</a></code> value <code>
   handlerSuccessResult</code> to <code>ExceptionTranslator::operator()()</code>. 
-  If <code>ExceptionTranslator::operator()()</code> throws an exception, <code>
-  terminate()</code> is called and the exception is propagated to the caller. 
+  If <code>ExceptionTranslator::operator()()</code> throws an exception, the 
+	exception is propagated to the caller. If the caller catches the exception, 
+	the currently active outermost state and all its direct and indirect inner 
+	states are destructed. Innermost states are destructed first. Other states 
+	are destructed as soon as all their direct and indirect inner states have 
+	been destructed. The inner states of each state are destructed according to 
+	the number of their orthogonal region. The state in the orthogonal region 
+	with the highest number is always destructed first, then the state in the 
+	region with the second-highest number and so on. 
   Continues with step 5 otherwise (the return value is discarded)</li>
   <li>Processes all posted events (see <code>process_event()</code>)</li>
 </ol>
@@ -422,13 +446,69 @@ library itself but only in code supplied through template parameters:</p>
   <li><code>operator new()</code> (used to allocate states)</li>
   <li><code>Allocator::allocate()</code></li>
   <li>state constructors</li>
-  <li><code>react</code> functions</li>
+  <li><code>react</code> member functions</li>
+	<li><code>exit</code> member functions</li>
   <li>transition-actions</li>
 </ul>
 <pre>void <a name="terminate">terminate</a>();</pre>
-<p><b>Effects</b>: <a href="#simple_state::terminate">Terminates</a> the 
-currently active outermost state. Also discards all remaining events and 
-clears all history information.</p>
+<p><b>Effects</b>:</p>
+<ol>
+  <li>Constructs a function object <code>action</code> with a parameter-less
+  <code>operator()()</code> returning <code><a href="#Enum result">result</a></code> 
+  that <a href="#simple_state::terminate">terminates</a> the currently active 
+	outermost state, discards all remaining events and clears all history 
+	information</li>
+  <li>Constructs a function object <code>exceptionEventHandler</code> with an
+  <code>operator()()</code> returning <code>bool</code> and accepting an 
+  exception event parameter that processes the passed exception event, with 
+  the following differences to the processing of normal events:<ul type="disc">
+    <li>From the moment when the exception has been thrown until right after the 
+	execution of the exception event reaction, states that need to be exited are only 
+	destructed but no <code>exit</code> member functions are called</li>
+    <li><a href="definitions.html#Reaction">Reaction</a> search always starts 
+    with the outermost <a href="definitions.html#Unstable state">unstable 
+    state</a></li>
+    <li>As for normal events, reaction search moves outward when the current 
+    state cannot handle the event. However, if there is no outer state (an
+    <a href="definitions.html#Outermost state">outermost state</a> has been 
+    reached) the reaction search is considered unsuccessful. That is, 
+    exception events will never be dispatched to orthogonal regions other than 
+    the one that caused the exception event</li>
+    <li>Should an exception be thrown during exception event reaction search 
+    or reaction execution then the exception is propagated out of the <code>
+    exceptionEventHandler</code> function object (that is, <code>
+    ExceptionTranslator</code> is <b>not</b> used to translate exceptions 
+    thrown while processing an exception event)</li>
+    <li>If no reaction could be found for the exception event or if the state 
+    machine is not stable after processing the exception event, <code>false</code> 
+    is returned from the <code>exceptionEventHandler</code> function object. 
+    Otherwise, <code>true</code> is returned</li>
+  </ul>
+  </li>
+  <li>Passes <code>action</code>, <code>exceptionEventHandler</code> and the
+  <code><a href="#Enum result">result</a></code> value <code>
+  handlerSuccessResult</code> to <code>ExceptionTranslator::operator()()</code>. 
+  If <code>ExceptionTranslator::operator()()</code> throws an exception, the 
+	exception is propagated to the caller. If the caller catches the exception, 
+	the currently active outermost state and all its direct and indirect inner 
+	states are destructed. Innermost states are destructed first. Other states 
+	are destructed as soon as all their direct and indirect inner states have 
+	been destructed. The inner states of each state are destructed according to 
+	the number of their orthogonal region. The state in the orthogonal region 
+	with the highest number is always destructed first, then the state in the 
+	region with the second-highest number and so on</li>
+</ol>
+<p><b>Throws</b>: Any exceptions propagated from <code>
+ExceptionTranslator::operator()</code>. Exceptions never originate in the 
+library itself but only in code supplied through template parameters:</p>
+<ul>
+  <li><code>operator new()</code> (used to allocate states)</li>
+  <li><code>Allocator::allocate()</code></li>
+  <li>state constructors</li>
+  <li><code>react</code> member functions</li>
+	<li><code>exit</code> member functions</li>
+  <li>transition-actions</li>
+</ul>
 <pre>void <a name="process_event">process_event</a>( const <a href="#Class event_base">event_base</a> &amp; );</pre>
 <p><b>Effects</b>:</p>
 <ol>
@@ -453,27 +533,29 @@ clears all history information.</p>
   <code>operator()()</code> accepting an exception event parameter and 
   returning <code>bool</code> that processes the passed exception event, with 
   the following differences to the processing of normal events:<ul type="disc">
-    <li>If the state machine is stable when the exception event is processed 
+    <li>From the moment when the exception has been thrown until right after the 
+	execution of the exception event reaction, states that need to be exited are only 
+	destructed but no <code>exit</code> member functions are called</li>
+	<li>If the state machine is stable when the exception event is processed 
     then exception event reaction search starts with the innermost state that 
     was last visited during the last normal event reaction search (the 
     exception event was generated as a result of this normal reaction search)</li>
-    <li>If the state machine is
+	<li>If the state machine is
     <a href="definitions.html#Unstable state machine">unstable</a> when the 
     exception event is processed then exception event reaction search starts 
     with the outermost <a href="definitions.html#Unstable state">unstable 
     state</a></li>
-    <li>As for normal events, reaction search moves outward when the current 
+	<li>As for normal events, reaction search moves outward when the current 
     state cannot handle the event. However, if there is no outer state (an
     <a href="definitions.html#Outermost state">outermost state</a> has been 
     reached) the reaction search is considered unsuccessful. That is, 
     exception events will never be dispatched to orthogonal regions other than 
     the one that caused the exception event</li>
-    <li>Should an exception be thrown during exception event reaction search 
-    or reaction execution then the exception is propagated out of the <code>
-    exceptionEventHandler</code> function object (that is, <code>
-    ExceptionTranslator</code> is <b>not</b> used to translate exceptions 
+	<li>Should an exception be thrown during exception event reaction search 
+    or reaction execution then the exception is propagated out of the <code>exceptionEventHandler</code> function object (that is, 
+	<code>ExceptionTranslator</code> is <b>not</b> used to translate exceptions 
     thrown while processing an exception event)</li>
-    <li>If no reaction could be found for the exception event or if the state 
+	<li>If no reaction could be found for the exception event or if the state 
     machine is not stable after processing the exception event, <code>false</code> 
     is returned from the <code>exceptionEventHandler</code> function object. 
     Otherwise, <code>true</code> is returned</li>
@@ -505,7 +587,8 @@ library itself but only in code supplied through template parameters:</p>
   <li><code>operator new()</code> (used to allocate states)</li>
   <li><code>Allocator::allocate()</code></li>
   <li>state constructors</li>
-  <li><code>react</code> functions</li>
+  <li><code>react</code> member functions</li>
+	<li><code>exit</code> member functions</li>
   <li>transition-actions</li>
 </ul>
 <h3>Class template <code>state_machine</code> observer functions</h3>
@@ -547,9 +630,8 @@ reference type and none of the active states has a most derived type equal to
 <code>i</code> of type <code>state_iterator</code>, <code>*i</code> returns a
 <code>const state_base_type &amp;</code> and <code>i.operator-&gt;()</code> returns a
 <code>const state_base_type *</code><br>
-<b>Note</b>: An individual innermost states' position in the range is 
-arbitrary. It may change with each call to a modifier function. Moreover, all 
-iterators are invalidated when a modifier function is called</p>
+<b>Note</b>: The position of a given innermost state in the range is 
+arbitrary. It may change with each call to a modifier function. Moreover, all iterators are invalidated whenever a modifier function is called</p>
 <h1>Header &lt;boost/fsm/<a name="asynchronous_state_machine.hpp">asynchronous_state_machine.hpp</a>&gt;</h1>
 <h2><a name="Class template asynchronous_state_machine">Class template <code>
 asynchronous_state_machine</code></a></h2>
@@ -597,7 +679,7 @@ asynchronous_state_machine</code></a></h2>
     <td width="51%">A model of the ExceptionTranslator concept</td>
     <td width="18%">see <a href="#ExceptionTranslator">ExceptionTranslator 
     concept </a></td>
-    <td width="19%"><code>exception_translator&lt;&gt;</code></td>
+    <td width="19%"><code>null_exception_translator</code></td>
   </tr>
 </table>
 <h3>Class template <code>asynchronous_state_machine</code> synopsis</h3>
@@ -610,7 +692,7 @@ namespace fsm
     class InitialState,
     class Scheduler = fifo_scheduler&lt;&gt;,
     class Allocator = std::allocator&lt; void &gt;,
-    class ExceptionTranslator = exception_translator&lt;&gt; &gt;
+    class ExceptionTranslator = null_exception_translator &gt;
   class asynchronous_state_machine :
     public event_processor&lt; Scheduler &gt;
   {
@@ -668,7 +750,7 @@ namespace fsm
     public:
       virtual <a href="#~event_processor">~event_processor</a>();
 
-      Scheduler &amp; <a href="#my_scheduler">my_scheduler</a>() const
+      Scheduler &amp; <a href="#my_scheduler">my_scheduler</a>() const;
 
       typedef typename Scheduler::processor_handle
         processor_handle;
@@ -921,6 +1003,82 @@ objects</p>
 <p><b>Requires</b>: Must only be called from the thread that also calls <code>
 operator()()</code><br>
 <b>Returns</b>: <code>FifoWorker::terminated();</code></p>
+<h1>Header &lt;boost/fsm/<a name="exception_translator.hpp">exception_translator.hpp</a>&gt;</h1>
+<h2><a name="Class template exception_translator">Class template <code>
+exception_translator</code></a></h2>
+<p>This class template is a model of the <a href="#ExceptionTranslator">
+ExceptionTranslator concept</a>.</p>
+<h3>Class template <code>exception_translator</code> parameters</h3>
+<table border="3" cellpadding="2" width="100%" id="table1">
+  <tr>
+    <td width="12%"><b>Template parameter</b></td>
+    <td width="30%"><b>Requirements</b></td>
+    <td width="35%"><b>Semantics</b></td>
+    <td width="24%"><b>Default</b></td>
+  </tr>
+  <tr>
+    <td width="12%"><code>ExceptionEvent</code></td>
+    <td width="30%">A most-derived direct or indirect subclass of the <code>
+    <a href="#Class template event">event</a></code> class template</td>
+    <td width="35%">The type of event that is dispatched when an exception is 
+	propagated into the framework</td>
+    <td width="24%"><code>exception_thrown</code></td>
+  </tr>
+</table>
+<h3>Class template <code>exception_translator</code> synopsis &amp; semantics</h3>
+<pre>namespace boost
+{
+namespace fsm
+{
+  class exception_thrown : public event&lt; exception_thrown &gt; {};
+
+  template&lt; class ExceptionEvent = exception_thrown &gt;
+  struct exception_translator
+  {
+    template&lt; class Action, class ExceptionEventHandler &gt;
+    fsm::result operator()(
+      Action action,
+      ExceptionEventHandler eventHandler,
+      result handlerSuccessResult )
+    {
+      try
+      {
+        return action();
+      }
+      catch( ... )
+      {
+        if ( !eventHandler( ExceptionEvent() ) )
+        {
+          throw;
+        }
+
+        return handlerSuccessResult;
+      }
+    }
+  };
+}
+}</pre>
+<h1>Header &lt;boost/fsm/<a name="null_exception_translator.hpp">null_exception_translator.hpp</a>&gt;</h1>
+<h2><a name="Class template null_exception_translator">Class <code>
+null_exception_translator</code></a></h2>
+<p>This class is a model of the <a href="#ExceptionTranslator">
+ExceptionTranslator concept</a>.</p>
+<h3>Class <code>null_exception_translator</code> synopsis &amp; semantics</h3>
+<pre>namespace boost
+{
+namespace fsm
+{
+  struct null_exception_translator
+  {
+    template&lt; class Action, class ExceptionEventHandler &gt;
+    fsm::result operator()(
+      Action action, ExceptionEventHandler, result )
+    {
+      return action();
+    }
+  };
+}
+}</pre>
 <h1>Header &lt;boost/fsm/<a name="simple_state.hpp">simple_state.hpp</a>&gt;</h1>
 <h2><a name="Typedef no_reactions">Typedef <code>no_reactions</code></a></h2>
 <p>This is the default value for the <code>Reactions</code> parameter of the
@@ -981,7 +1139,7 @@ Target <b>state_downcast</b>() const;
 
 state_iterator <b><a name="simple_state::state_begin">state_begin</a></b>() const;
 state_iterator <b><a name="simple_state::state_end">state_end</a></b>() const;</pre>
-<p>States that need to call any of these functions from their constructors 
+<p>States that need to call any of these member functions from their constructors 
 must derive from the <code>state</code> class template.</p>
 <h3>Class template <code>simple_state</code> parameters</h3>
 <table border="3" cellpadding="2" width="100%" id="AutoNumber5">
@@ -1129,9 +1287,11 @@ namespace fsm
       template&lt; class CustomId &gt;
       static void <a href="#custom_static_type_ptr( const CustomId * )">custom_static_type_ptr</a>( const CustomId * );
 
+      void exit() {}
+
     protected:
       <a href="#simple_state">simple_state</a>();
-      virtual <a href="#~simple_state">~simple_state</a>();
+      <a href="#~simple_state">~simple_state</a>();
   };
 }
 }</pre>
@@ -1139,14 +1299,12 @@ namespace fsm
 <pre><a name="simple_state">simple_state</a>();</pre>
 <p><b>Requires</b>: The constructors of all direct and indirect subclasses 
 must be exception-neutral<b><br>
-Effects</b>: Depending on the <code>historyMode</code> parameter, reserves 
-storage to store none, shallow, deep or both histories<br>
+Effects</b>: Constructs a state object<br>
 <b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
 (the template parameter passed to the base class of <code>
 outermost_context_type</code>)</p>
-<pre>virtual <a name="~simple_state">~simple_state</a>();</pre>
-<p><b>Effects</b>: Depending on the <code>historyMode</code> parameter, stores 
-none, shallow, deep or both histories. Pushes all events deferred by the state 
+<pre><a name="~simple_state">~simple_state</a>();</pre>
+<p><b>Effects</b>: Pushes all events deferred by the state 
 into the posted events queue</p>
 <h3>Class template <code>simple_state</code> modifier functions</h3>
 <pre>void <a name="post_event">post_event</a>(
@@ -1208,15 +1366,27 @@ functions, which are called by <code>
 instantiations. All direct and indirect callers must be exception-neutral<br>
 <b>Effects</b>:</p>
 <ol>
-  <li>Exits (destructs) all currently active direct and indirect inner states 
-  of the innermost common outer state of this state and <code>DestinationState</code>. 
+  <li>Exits all currently active direct and indirect inner states of the 
+	innermost common context of this state and <code>DestinationState</code>. 
   Innermost states are exited first. Other states are exited as soon as all 
   their direct and indirect inner states have been exited. The inner states of 
   each state are exited according to the number of their orthogonal region. 
   The state in the orthogonal region with the highest number is always exited 
-  first, then the state in the region with the second-highest number and so on</li>
+  first, then the state in the region with the second-highest number and so on.<br>
+	The process of exiting a state consists of the following steps:<ol>
+  <li>If there is an exception pending that has not yet been handled 
+	successfully then only step 5 is executed</li>
+	<li>If present then the user-supplied <code>exit</code> member function is 
+	called. If <code>exit</code> throws then steps 3 and 4 are not executed</li>
+	<li>If the state has shallow history then shallow history information is 
+	saved</li>
+	<li>If the state is an innermost state then deep history information is 
+	saved for all direct and indirect outer states that have deep history</li>
+	<li>The state object is destructed</li>
+</ol>
+	</li>
   <li>Enters (constructs) the state that is both a direct inner state of the 
-  innermost common outer state and either the <code>DestinationState</code> 
+	innermost common context and either the <code>DestinationState</code> 
   itself or a direct or indirect outer state of <code>DestinationState</code>
   </li>
   <li>Enters (constructs) the tree formed by the direct and indirect inner 
@@ -1232,11 +1402,15 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
 <p><b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
 result</a></code> enumeration. The user-supplied <code>react</code> member 
 function must return this value to its caller<br>
-<b>Throws</b>: Any exceptions propagated from <code>operator new()</code> 
-(used to allocate states), <code>Allocator::allocate()</code> (the template 
-parameter passed to the base class of <code>outermost_context_type</code>) or 
-state constructors<br>
-<b>Caution</b>: Inevitably exits (destructs) this state before returning to 
+<b>Throws</b>: Any exceptions propagated from:</p>
+<ul>
+  <li><code>operator new()</code> (used to allocate states)</li>
+  <li><code>Allocator::allocate()</code> (the template 
+parameter passed to the base class of <code>outermost_context_type</code>)</li>
+  <li>state constructors</li>
+  <li><code>exit</code> member functions</li>
+</ul>
+<p><b>Caution</b>: Inevitably destructs this state before returning to 
 the calling <code>react</code> member function, which must therefore not 
 attempt to access anything except stack objects before returning to its caller</p>
 <pre>template&lt;
@@ -1252,16 +1426,28 @@ functions, which are called by <code>
 instantiations. All direct and indirect callers must be exception-neutral<br>
 <b>Effects</b>:</p>
 <ol>
-  <li>Exits (destructs) all currently active direct and indirect inner states 
-  of the innermost common outer state of this state and <code>DestinationState</code>. 
+  <li>Exits all currently active direct and indirect inner states of the 
+	innermost common context of this state and <code>DestinationState</code>. 
   Innermost states are exited first. Other states are exited as soon as all 
   their direct and indirect inner states have been exited. The inner states of 
   each state are exited according to the number of their orthogonal region. 
   The state in the orthogonal region with the highest number is always exited 
-  first, then the state in the region with the second-highest number and so on</li>
+  first, then the state in the region with the second-highest number and so on.<br>
+	The process of exiting a state consists of the following steps:<ol>
+  <li>If there is an exception pending that has not yet been handled 
+	successfully then only step 5 is executed</li>
+  <li>If present then the user-supplied <code>exit</code> member function is 
+	called. If <code>exit</code> throws then steps 3 and 4 are not executed</li>
+	<li>If the state has shallow history then shallow history information is 
+	saved</li>
+	<li>If the state is an innermost state then deep history information is 
+	saved for all direct and indirect outer states that have deep history</li>
+	<li>The state object is destructed</li>
+</ol>
+	</li>
   <li>Executes the passed transition action, forwarding the passed event</li>
   <li>Enters (constructs) the state that is both a direct inner state of the 
-  innermost common outer state and either the <code>DestinationState</code> 
+	innermost common context and either the <code>DestinationState</code> 
   itself or a direct or indirect outer state of <code>DestinationState</code>
   </li>
   <li>Enters (constructs) the tree formed by the direct and indirect inner 
@@ -1277,11 +1463,16 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
 <p><b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
 result</a></code> enumeration. The user-supplied <code>react</code> member 
 function must return this value to its caller<br>
-<b>Throws</b>: Any exceptions propagated from <code>operator new()</code> 
-(used to allocate states), <code>Allocator::allocate()</code> (the template 
-parameter passed to the base class of <code>outermost_context_type</code>), 
-state constructors or the transition action<br>
-<b>Caution</b>: Inevitably exits (destructs) this state before returning to 
+<b>Throws</b>: Any exceptions propagated from:</p>
+<ul>
+  <li><code>operator new()</code> (used to allocate states)</li>
+  <li><code>Allocator::allocate()</code> (the template 
+parameter passed to the base class of <code>outermost_context_type</code>)</li>
+  <li>state constructors</li>
+  <li><code>exit</code> member functions</li>
+	<li>the transition action</li>
+</ul>
+<p><b>Caution</b>: Inevitably destructs this state before returning to 
 the calling <code>react</code> member function, which must therefore not 
 attempt to access anything except stack objects before returning to its caller</p>
 <pre><a href="#Enum result">result</a> <a name="simple_state::terminate">terminate</a>();</pre>
@@ -1289,23 +1480,43 @@ attempt to access anything except stack objects before returning to its caller</
 functions, which are called by <code>
 <a href="#Class template custom_reaction">custom_reaction&lt;&gt;</a></code> 
 instantiations. All direct and indirect callers must be exception-neutral<br>
-<b>Effects</b>: Exits (destructs) this state and all its direct and indirect 
+<b>Effects</b>: Exits this state and all its direct and indirect 
 inner states. Innermost states are exited first. Other states are exited as 
 soon as all their direct and indirect inner states have been exited. The inner 
 states of each state are exited according to the number of their orthogonal 
 region. The state in the orthogonal region with the highest number is always 
 exited first, then the state in the region with the second-highest number and 
-so on. Also instructs the state machine to discard the current event and to 
+so on<br>
+The process of exiting a state consists of the following steps:</p>
+<ol>
+  <li>If there is an exception pending that has not yet been handled 
+	successfully then only step 5 is executed</li>
+  <li>If present then the user-supplied <code>exit</code> member function is 
+	called. If <code>exit</code> throws then steps 3 and 4 are not executed</li>
+	<li>If the state has shallow history then shallow history information is 
+	saved</li>
+	<li>If the state is an innermost state then deep history information is 
+	saved for all direct and indirect outer states that have deep history</li>
+	<li>The state object is destructed</li>
+</ol>
+<p>Also instructs the state machine to discard the current event and to 
 continue with the processing of the remaining events (see <code>
 <a href="#process_event">state_machine&lt;&gt;::process_event</a>()</code> for 
 details)<br>
 <b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
 result</a></code> enumeration. The user-supplied <code>react</code> member 
 function must return this value to its caller<br>
-<b>Note</b>: If this state is the only currently active inner state of its 
+<b>Throws</b>: Any exceptions propagated from:</p>
+<ul>
+  <li><code>Allocator::allocate()</code> (the template 
+parameter passed to the base class of <code>outermost_context_type</code>, used 
+	to allocate space to save history)</li>
+	<li><code>exit</code> member functions</li>
+</ul>
+<p><b>Note</b>: If this state is the only currently active inner state of its 
 direct outer state then the direct outer state is terminated also. The same 
 applies recursively for all indirect outer states<br>
-<b>Caution</b>: Inevitably exits (destructs) this state before returning to 
+<b>Caution</b>: Inevitably destructs this state before returning to 
 the calling <code>react</code> member function, which must therefore not 
 attempt to access anything except stack objects before returning to its caller</p>
 <pre>template&lt;
@@ -1453,7 +1664,7 @@ Target <b>state_downcast</b>() const;
 
 state_iterator <b><a name="simple_state::state_begin">state_begin</a></b>() const;
 state_iterator <b><a name="simple_state::state_end">state_end</a></b>() const;</pre>
-<p>States that do not need to call any of these functions from their 
+<p>States that do not need to call any of these member functions from their 
 constructors should rather derive from the <code>
 <a href="#Class template simple_state">simple_state</a></code> class template, 
 what saves the implementation of the forwarding constructor.</p>
@@ -1480,7 +1691,7 @@ namespace fsm
       typedef state my_base;
 
       state( my_context ctx );
-      virtual ~state();
+      ~state();
   };
 }
 }</pre>
@@ -1879,9 +2090,10 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->22 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13984" --></p>
-<p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
-2003-2004</i></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->17 October, 2004<!--webbot bot="Timestamp" endspan i-checksum="38688" --></p>
+<p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
+2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
+the email address behind the link</font></b></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

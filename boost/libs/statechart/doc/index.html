@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Language" content="en-us">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
 <title>The boost::fsm library - Overview</title>
@@ -21,7 +21,7 @@
     <h1 align="center">The boost::fsm library</h1>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2004/05/22<!--webbot bot="Timestamp" endspan i-checksum="12600" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2004/10/18<!--webbot bot="Timestamp" endspan i-checksum="12323" --></font></td>
   </tr>
 </table>
 <hr>
@@ -29,8 +29,9 @@
 <p>Welcome to boost::fsm, a C++ library for finite state machines. Features 
 include:</p>
 <ul>
-  <li>Straightforward transformation from UML state chart to executable C++ 
-  code and vice versa (no code generator required)</li>
+  <li>Straightforward transformation from UML state chart to executable C++ code 
+	and vice versa (currently, this needs to be done manually both ways but it 
+	should not be difficult to automate these tasks)</li>
   <li>Comprehensive <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">
   UML semantics</a> support:<ul>
     <li>Hierarchical (composite, nested) states</li>
@@ -53,7 +54,13 @@ include:</p>
 distribution 1.31.0:</p>
 <ul>
   <li>MSVC 7.1 (the compiler coming with MS Visual Studio 2003)</li>
-  <li>GCC 3.2 (MinGW; Red Hat Linux)</li>
+  <li>GCC 3.3.1 (MinGW)</li>
+</ul>
+<p>In addition, the previous version of the library has also been tested on 
+the following platforms (I expect the current version to work, but it hasn't 
+been tested yet):</p>
+<ul>
+  <li>GCC 3.2 (MinGW, Red Hat Linux)</li>
   <li>
   <a href="configuration.html#Intel 7.0 (Win32, MS Visual Studio 6 std library)">
   Intel 7.0 (Win32, MS Visual Studio 6 std library)</a></li>
@@ -63,6 +70,8 @@ distribution 1.31.0:</p>
 the making:</p>
 <ol>
   <li>Implement regression tests</li>
+	<li>Improve performance for state machines that use <code>
+	null_exception_translator</code></li>
   <li>Design a facility allowing to specially handle events that did not 
   trigger a reaction</li>
   <li>Implement <code>priority_scheduler&lt;&gt;</code></li>
@@ -96,6 +105,19 @@ welcome!</b></p>
 </dl>
 <hr>
 <h2>Change history</h2>
+<p>18 October, 2004</p>
+<ul>
+	<li><b>Breaking change</b>: Out of the box, a state machine no longer uses
+	<code>exception_translator&lt;&gt;</code> to translate exceptions propagated into 
+	the framework. Instead, <code>null_exception_translator</code> is now used, 
+	which does not catch or translate any exceptions. Updated docs accordingly</li>
+	<li>Implemented <a href="tutorial.html#Two_stage_exit">two stage exit</a> and updated docs accordingly</li>
+	<li>Implemented an experimental feature that allows a transition action to 
+	be a member of the transition source or any of its direct or indirect 
+	contexts, see 
+	<a href="configuration.html#Application Defined Macros">BOOST_FSM_RELAX_TRANSITION_CONTEXT</a></li>
+	<li>Various small code and documentation improvements</li>
+</ul>
 <p>22 May, 2004</p>
 <ul>
   <li>Integrated the Intel 7.0 workarounds provided by Pavel Vozenilek (most 
@@ -243,9 +265,10 @@ welcome!</b></p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->22 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13984" --></p>
-<p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
-2003-2004</i></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->18 October, 2004<!--webbot bot="Timestamp" endspan i-checksum="38690" --></p>
+<p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
+2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
+the email address behind the link</font></b></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

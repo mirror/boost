@@ -10,9 +10,6 @@
 
 #include <boost/fsm/event.hpp>
 #include <boost/fsm/result.hpp>
-#include <boost/fsm/detail/avoid_unused_warning.hpp>
-
-#include <boost/config.hpp> // BOOST_NO_EXCEPTIONS
 
 
 
@@ -38,11 +35,6 @@ struct exception_translator
     ExceptionEventHandler eventHandler,
     result handlerSuccessResult )
   {
-    #ifdef BOOST_NO_EXCEPTIONS
-    detail::avoid_unused_warning( eventHandler );
-    detail::avoid_unused_warning( handlerSuccessResult );
-    return action();
-    #else
     try
     {
       return action();
@@ -56,7 +48,6 @@ struct exception_translator
 
       return handlerSuccessResult;
     }
-    #endif
   }
 };
 

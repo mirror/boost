@@ -51,12 +51,6 @@ class shallow_history
       outermostContext.template construct_with_shallow_history<
         DefaultState >( pContext );
     }
-
-    static void reserve_history_slot(
-      outermost_context_type & outermostContext )
-    {
-      DefaultState::reserve_history_slot( outermostContext );
-    }
 };
 
 

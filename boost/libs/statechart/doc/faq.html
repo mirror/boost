@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Language" content="en-us">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
 <title>The boost::fsm library - FAQ</title>
@@ -25,21 +25,25 @@
 </table>
 <hr>
 <dl class="page-index">
-  <dt><a href="#Does boost::fsm support polymorphic events">Does boost::fsm 
+  <dt><a href="#Does_boost::fsm_support_polymorphic_events">Does boost::fsm 
   support polymorphic events?</a></dt>
   <dt>
-  <a href="#How can I hide the inner workings of a state machine from its clients">
+  <a href="#How_can_I_hide_the_inner_workings_of_a_state_machine_from_its_clients">
   How can I hide the inner workings of a state machine from its clients?</a></dt>
   <dt>
-  <a href="#Is it possible to inherit from a given state machine and modify its layout in the subclass">
+  <a href="#Is_it_possible_to_inherit_from_a_given_state_machine_and_modify_its_layout_in_the_subclass">
   Is it possible to inherit from a given state machine and modify its layout 
   in the subclass?</a></dt>
   <dt>
-  <a href="#Why are exit-actions called in the wrong order when I use multiple inheritance">
+  <a href="#Why_are_exit-actions_called_in_the_wrong_order_when_I_use_multiple_inheritance">
   Why are exit-actions called in the wrong order when I use multiple 
-  inheritance?</a></dt>
+	inheritance?</a></dt>
+  <dt><a href="#Is_boost::fsm_suitable_for_embedded_applications">Is boost::fsm suitable for embedded applications?</a></dt>
+  <dt>
+	<a href="#Is_your_library_suitable_for_applications_with_hard_real-time_requirements">
+	Is your library suitable for applications with hard real-time requirements</a>?</dt>
 </dl>
-<h2><a name="Does boost::fsm support polymorphic events">Does boost::fsm 
+<h2><a name="Does_boost::fsm_support_polymorphic_events">Does boost::fsm 
 support polymorphic events?</a></h2>
 <p>No. Although events can be derived from each other to write common code 
 only once, <a href="definitions.html#Reaction">reactions</a> can only be 
@@ -76,7 +80,7 @@ struct Off : fsm::simple_state&lt; Off, Mp3Player, mpl::list&lt;
   }
 };</pre>
 <h2>
-<a name="How can I hide the inner workings of a state machine from its clients">
+<a name="How_can_I_hide_the_inner_workings_of_a_state_machine_from_its_clients">
 How can I hide the inner workings of a state machine from its clients?</a></h2>
 <p>To see why and how this is possible it is important to recall the following 
 facts:</p>
@@ -122,7 +126,7 @@ StopWatch::StopWatch()
   <b>initiate();</b>
 }</pre>
 <h2>
-<a name="Is it possible to inherit from a given state machine and modify its layout in the subclass">
+<a name="Is_it_possible_to_inherit_from_a_given_state_machine_and_modify_its_layout_in_the_subclass">
 Is it possible to inherit from a given state machine and modify its layout in 
 the subclass?</a></h2>
 <p>Yes, but contrary to what some FSM code generators allow, boost::fsm 
@@ -166,9 +170,14 @@ struct MyPump : PumpBase
 </b>  }
 };</pre>
 <h2>
-<a name="Why are exit-actions called in the wrong order when I use multiple inheritance">
-Why are exit-actions called in the wrong order when I use multiple 
-inheritance?</a></h2>
+<a name="Why_are_exit-actions_called_in_the_wrong_order_when_I_use_multiple_inheritance">
+Why are exit-actions called in the wrong order when I use multiple inheritance?</a></h2>
+<p><b>Update</b>: The implementation has changed considerably in this area. It 
+is still possible to get this behavior under rare circumstances (when an action 
+propagates an exception in a state machine with orthogonal regions <b>and</b> if 
+the state chart layout satisfies certain conditions), but it can no longer be 
+demonstrated with the example program below. However, the described workaround 
+is still valid and ensures that this behavior will never show up.</p>
 <p>They definitely aren't for the <code>simple_state</code> and <code>state</code> 
 subclasses, but the destructors of additional bases might be called in 
 construction order (rather than the reverse construction order):</p>
@@ -223,36 +232,82 @@ Outer exited
 Inner exited</pre>
 <p>That is, the <b><code>EntryExitDisplayer</code> base class portion</b> of
 <code>Outer</code> is destructed before the one of <code>Inner</code> although
-<code>Inner::~Inner()</code> is called before <code>Outer::~Outer()</code>. 
-This somewhat counter-intuitive behavior is caused by the following facts: </p>
+<code>Inner::~Inner()</code> is called before <code>Outer::~Outer()</code>. This 
+somewhat counter-intuitive behavior is caused by the following facts: </p>
 <ul>
   <li>The <code>simple_state&lt;&gt;</code> base class portion of <code>Inner</code> 
   is responsible to destruct <code>Outer</code></li>
   <li>Destructors of base class portions are called in the reverse order of 
-  construction</li>
+	construction</li>
 </ul>
-<p>So, when the <code>Outer</code> destructor is called the call stack looks 
-as follows:</p>
+<p>So, when the <code>Outer</code> destructor is called the call stack looks as 
+follows:</p>
 <pre>Outer::~Outer()
 simple_state&lt; Inner, ... &gt;::~simple_state()
 Inner::~Inner()</pre>
 <p>Note that <code>Inner::~Inner()</code> did not yet have a chance to destroy 
-its <code>EntryExitDisplayer</code> base class portion, as it first has to 
-call the destructor of the <b>second</b> base class. Now <code>Outer::~Outer()</code> 
+its <code>EntryExitDisplayer</code> base class portion, as it first has to call 
+the destructor of the <b>second</b> base class. Now <code>Outer::~Outer()</code> 
 will first destruct its <code>simple_state&lt; Outer, ... &gt;</code> base class 
-portion and then do the same with its <code>EntryExitDisplayer</code> base 
-class portion. The stack then unwinds back to <code>Inner::~Inner()</code>, 
-which can then finally finish by calling <code>
+portion and then do the same with its <code>EntryExitDisplayer</code> base class 
+portion. The stack then unwinds back to <code>Inner::~Inner()</code>, which can 
+then finally finish by calling <code>
 EntryExitDisplayer::~EntryExitDisplayer()</code>.</p>
 <p>Luckily, there is an easy work-around: Always let <code>simple_state&lt;&gt;</code> 
 and <code>state&lt;&gt;</code> be the first base class of a state. This ensures that 
 destructors of additional bases are called before recursion employed by state 
 base destructors can alter the order of destruction.</p>
+<h2><a name="Is_boost::fsm_suitable_for_embedded_applications">Is boost::fsm suitable for embedded applications?</a></h2>
+<p>It depends. As explained under
+<a href="rationale.html#Speed versus scalability tradeoffs">Speed 
+versus scalability tradeoffs</a> in the Rationale, the virtually limitless scalability 
+offered by this library does have its 
+price. Especially small and simple FSMs can easily be implemented so that they 
+consume fewer cycles and less memory and occupy less code space in the 
+executable. Here are some obviously <b>very rough</b> estimates:</p>
+<ul>
+	<li>For a state machine with at most one simultaneously active state (that 
+	is, the machine is flat and does not have orthogonal regions) with trivial 
+	actions, customized memory management and compiled with a good optimizing 
+	compiler, a Pentium 4 class CPU should not spend more than 1000 cycles 
+	inside <code>state_machine&lt;&gt;::process_event()</code>. This worst-case 
+	dispatch and transition time scales more or less linearly with the number of 
+	simultaneously active states for more complex state machines, with the 
+	typical average being much lower than that. So, a fairly complex machine 
+	with at most 10 simultaneously active states running on a 100MHz CPU should 
+	be able to process more than 10'000 events per second</li>
+	<li>A single state machine object uses typically less than 1KB of memory, 
+	even if it implements a very complex machine</li>
+	<li>For code size, it is difficult to give a concrete guideline but tests 
+	with the BitMachine example suggest that code size scales more or less 
+	linearly with the number of states (transitions seem to have only little 
+	impact). When compiled with MSVC7.1 on Windows, 32 states and 224 
+	transitions seem to fit in ~108KB executable code (with all optimizations 
+	turned on).<br>
+	Moreover, the library can be compiled with C++ RTTI and exception handling turned off, 
+	resulting in significant savings on most platforms</li>
+</ul>
+<p>As mentioned above, these are very rough estimates derived from the use of 
+the library on a desktop PC, so they should only be used to decide whether there 
+is a point in making your own performance tests on your target platform.</p>
+<h2>
+<a name="Is_your_library_suitable_for_applications_with_hard_real-time_requirements">
+Is your library suitable for applications with hard real-time requirements?</a></h2>
+<p>Yes. Out of the box, the only operations taking potentially non-deterministic 
+time that the library performs are calls to 
+global <code>operator new</code> and <code>dynamic_cast</code>s. Global <code>
+operator new</code> calls can be avoided by passing a custom allocator to&nbsp;
+<code>state_machine&lt;&gt;</code> <b>and</b> by giving all state classes a custom <code>
+operator new</code>. <code>dynamic_cast</code>s can be avoided by not calling the
+<code>state_cast&lt;&gt;</code> member functions of <code>state_machine&lt;&gt;</code>,
+<code>simple_state&lt;&gt;</code> and <code>state&lt;&gt;</code> but using the 
+deterministic variant <code>state_downcast&lt;&gt;</code> instead.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->22 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13984" --></p>
-<p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
-2003-2004</i></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->17 October, 2004<!--webbot bot="Timestamp" endspan i-checksum="38688" --></p>
+<p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
+2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
+the email address behind the link</font></b></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

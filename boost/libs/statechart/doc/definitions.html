@@ -2,7 +2,7 @@
 
 <head>
 <meta http-equiv="Content-Language" content="en-us">
-<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
@@ -35,7 +35,7 @@ here</a>.</p>
 <h2>Definitions</h2>
 <dl class="page-index">
   <dt><a href="#Context">Context</a></dt>
-  <dt><a href="#Innermost common outer state">Innermost common outer state</a></dt>
+  <dt><a href="#Innermost common context">Innermost common context</a></dt>
   <dt><a href="#Innermost state">Innermost state</a></dt>
   <dt><a href="#In-state reaction">In-state reaction</a></dt>
   <dt><a href="#Outermost state">Outermost state</a></dt>
@@ -51,9 +51,9 @@ is defined by what is passed as the <code>Context</code> template parameter of
 the <code><a href="reference.html#Class template simple_state">simple_state</a></code> 
 and <code><a href="reference.html#Class template state">state</a></code> class 
 templates.</p>
-<h3><a name="Innermost common outer state">Innermost common outer state</a></h3>
-<p>The innermost common outer state of two states is the first direct or 
-indirect outer state that both states have in common. Also known as Least 
+<h3><a name="Innermost common context">Innermost common context</a></h3>
+<p>The innermost common context of two states is the first direct or 
+indirect context that both states have in common. Also known as Least 
 Common Ancestor (UML).</p>
 <h3><a name="Innermost state">Innermost state</a></h3>
 <p>An innermost state is a state that does not itself have inner states. Also 
@@ -66,7 +66,7 @@ exits nor enters any states. Also known as inner transition or internal
 transition (UML).</p>
 <h3><a name="Outermost state">Outermost state</a></h3>
 <p>An outermost state is a state that does not itself have outer states. Note 
-that an outermost state is different from a UML top state. A state machine can 
+that an outermost state is different from the UML top state. A state machine can 
 have an arbitrary number of the former but only exactly one of the latter. 
 boost::fsm only supports outermost states.</p>
 <h3><a name="Polymorphic events">Polymorphic events</a></h3>
@@ -101,46 +101,44 @@ to mix a reaction of type 2-4 with anything else but type 1.</p>
 <p>A reaction is always associated with exactly one state type and exactly one 
 event type.</p>
 <h3><a name="Unstable state">Unstable state</a></h3>
-<p>A state is unstable from the moment when it has been entered until just 
-before its last <b>direct</b> inner state is entered. Once a state is stable 
-it can only become unstable again by being the
-<a href="#Innermost common outer state">innermost common outer state</a> in a 
-transition.<br>
-<b>Note</b>: A termination never leaves any states unstable. For example, 
-consider the active state A with two orthogonal regions in which the inner 
-states B and C are each active. Terminating either B or C does not make A 
-unstable. Neither does terminating both, as that inevitably also terminates A.</p>
+<p>A state is unstable from the moment when it has been entered until after its last <b>direct</b> 
+inner state has been entered. A state is also unstable from the moment just 
+before its first <b>direct</b> inner state is exited until right before the 
+state itself is exited.</p>
 <h3><a name="Unstable state machine">Unstable state machine</a></h3>
 <p>A state machine is unstable if at least one of its currently active states 
 is unstable. This is the case during the following three operations:</p>
 <ul>
   <li>Initiation: From the moment after the first state has been entered until 
-  right before the last state of the initial state configuration is entered</li>
-  <li>Transition: From the moment after the first state of the current state 
-  configuration has been exited until right before the last state of the 
-  destination state configuration is entered</li>
-  <li>Termination: From the moment after the first state has been exited until 
-  right before the last terminated state is exited. However, a termination 
-  will never leave a state machine in an unstable state since state-exit 
-  actions cannot fail</li>
+  after the last state of the initial state configuration has been entered</li>
+  <li>Transition: From the moment just before the first state of the current state 
+  configuration is exited until after the last state of the 
+  destination state configuration has been entered</li>
+  <li>Termination: From the moment just before the first state is exited until 
+	right before the last terminated state is exited. A successfully executed termination 
+	(no exception was thrown) never leaves any states unstable. For example, 
+	consider the active state A with two orthogonal regions in which the inner 
+	states B and C are each active. Terminating either B or C does not make A 
+	unstable. Neither does terminating both, as that inevitably also terminates 
+	A</li>
 </ul>
 <p>Under normal circumstances a state machine has Run-To-Completion semantics, 
-that is, processing of an event is fully completed before the machine returns 
-to the client or before the next event is dequeued. Therefore, a state machine 
+that is, it is always stable before the machine returns 
+to the client or before the next event is dequeued. So, a state machine 
 is usually only unstable when it is busy processing an event and becomes 
 stable again right before it has finished processing the event. However, this 
-can not be guaranteed when either transition actions or entry actions fail 
-(exit actions cannot fail). Such a failure is reported by an event, which must 
-be processed while the state machine is unstable. Exception event processing 
-rules ensure that a state machine is never be unstable when it returns to the 
+can not be guaranteed when entry, exit or transition actions fail. Such a failure is reported by an event, which must 
+be processed while the state machine is unstable. However, exception event processing 
+rules ensure that a state machine is never unstable when it returns to the 
 client (see <code><a href="reference.html#process_event">state_machine&lt;&gt;::process_event()</a></code> 
 for details).</p>
 <hr>
 <p>Revised 
-      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->22 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13984" -->
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->17 October, 2004<!--webbot bot="Timestamp" endspan i-checksum="38688" -->
 </p>
-<p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
-2003-2004</i></p>
+<p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
+2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
+the email address behind the link</font></b></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

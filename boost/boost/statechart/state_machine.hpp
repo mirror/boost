@@ -9,7 +9,7 @@
 
 
 #include <boost/fsm/event.hpp>
-#include <boost/fsm/exception_translator.hpp>
+#include <boost/fsm/null_exception_translator.hpp>
 #include <boost/fsm/result.hpp>
 
 #include <boost/fsm/detail/rtti_policy.hpp>
@@ -231,7 +231,7 @@ class history_key
 template< class MostDerived,
           class InitialState, 
           class Allocator = std::allocator< void >,
-          class ExceptionTranslator = exception_translator<> >
+          class ExceptionTranslator = null_exception_translator >
 class state_machine : noncopyable
 {
   public:
@@ -244,21 +244,32 @@ class state_machine : noncopyable
     void initiate()
     {
       terminate();
-      translator_(
-        initial_construct_function( *this ),
-        exception_event_handler( *this ),
-        do_discard_event );
+
+      {
+        terminator guard( *this );
+        translator_(
+          initial_construct_function( *this ),
+          exception_event_handler( *this ),
+          do_discard_event );
+        guard.dismiss();
+      }
+
       process_queued_events();
     }
 
     void terminate()
     {
-      terminate( *this );
+      terminator guard( *this );
+      translator_(
+        terminate_function( *this ),
+        exception_event_handler( *this ),
+        do_discard_event );
+      guard.dismiss();
     }
 
     bool terminated() const
     {
-      return currentStates_.size() == 0;
+      return pOutermostState_ == 0;
     }
 
     void process_event( const event_base_type & evt )
@@ -274,7 +285,7 @@ class state_machine : noncopyable
 
       for ( typename state_list_type::const_iterator pCurrentLeafState =
               currentStates_.begin();
-            pCurrentLeafState != currentStates_.end();
+            pCurrentLeafState != currentStatesEnd_;
             ++pCurrentLeafState )
       {
         const state_base_type * pCurrentState(
@@ -317,7 +328,7 @@ class state_machine : noncopyable
 
       for ( typename state_list_type::const_iterator pCurrentLeafState =
               currentStates_.begin();
-            pCurrentLeafState != currentStates_.end();
+            pCurrentLeafState != currentStatesEnd_;
             ++pCurrentLeafState )
       {
         const state_base_type * pCurrentState(
@@ -352,7 +363,8 @@ class state_machine : noncopyable
       public:
         //////////////////////////////////////////////////////////////////////
         explicit state_iterator(
-          typename state_base_type::state_list_type::const_iterator baseIterator
+          typename state_base_type::state_list_type::const_iterator 
+            baseIterator
         ) : baseIterator_( baseIterator ) {}
 
         const state_base_type & operator*() const { return **baseIterator_; }
@@ -377,7 +389,8 @@ class state_machine : noncopyable
         }
 
       private:
-        typename state_base_type::state_list_type::const_iterator baseIterator_;
+        typename state_base_type::state_list_type::const_iterator
+          baseIterator_;
     };
 
     state_iterator state_begin() const
@@ -387,14 +400,16 @@ class state_machine : noncopyable
 
     state_iterator state_end() const
     {
-      return state_iterator( currentStates_.end() );
+      return state_iterator( currentStatesEnd_ );
     }
 
   protected:
     //////////////////////////////////////////////////////////////////////////
     state_machine() :
+      currentStatesEnd_( currentStates_.end() ),
       pOutermostState_( 0 ),
-      isInnermostCommonOuter_( false )
+      isInnermostCommonOuter_( false ),
+      isExceptionPending_( false )
     {
     }
 
@@ -402,7 +417,7 @@ class state_machine : noncopyable
     // polymorphic_downcast can be used to cast to MostDerived.
     virtual ~state_machine()
     {
-      terminate();
+      terminate_impl( false );
     }
 
   public:
@@ -418,7 +433,9 @@ class state_machine : noncopyable
 
     typedef MostDerived outermost_context_type;
     typedef MostDerived * inner_context_ptr_type;
-    typedef typename state_base_type::state_base_ptr_type state_base_ptr_type;
+    typedef typename state_base_type::node_state_base_ptr_type
+      node_state_base_ptr_type;
+    typedef typename state_base_type::leaf_state_ptr_type leaf_state_ptr_type;
     typedef typename state_base_type::state_list_type state_list_type;
 
     typedef mpl::clear< mpl::list<> >::type context_type_list;
@@ -434,6 +451,17 @@ class state_machine : noncopyable
       return do_forward_event;
     }
 
+    void exit_impl(
+      inner_context_ptr_type &,
+      typename state_base_type::node_state_base_ptr_type &,
+      bool ) {}
+
+    void set_outermost_unstable_state(
+      typename state_base_type::node_state_base_ptr_type &
+        pOutermostUnstableState )
+    {
+      pOutermostUnstableState = 0;
+    }
 
     // Returns a reference to the context identified by the template
     // parameter. This can either be _this_ object or one of its direct or
@@ -464,49 +492,16 @@ class state_machine : noncopyable
       return *polymorphic_downcast< const MostDerived * >( this );
     }
 
-
-    void terminate( state_machine & )
+    void terminate_as_reaction( state_base_type & theState )
     {
+      terminate_impl( theState, !isExceptionPending_ );
       pOutermostUnstableState_ = 0;
-      isInnermostCommonOuter_ = false;
-
-      if ( pOutermostState_ != 0 )
-      {
-        terminate( *pOutermostState_ ); // this also empties deferredMap_
-      }
-
-      eventQueue_.clear();
-      shallowHistoryMap_.clear();
-      deepHistoryMap_.clear();
     }
 
-    void terminate( state_base_type & theState )
+    void terminate_as_part_of_transit( state_base_type & theState )
     {
-      theState.set_termination_state();
-
-      if ( ( currentStates_.size() == 1 ) &&
-        get_pointer( pOutermostUnstableState_ ) == 0 )
-      {
-        // The following optimization is only correct for a stable machine
-        // without orthogonal states.
-        currentStates_.clear();
-      }
-      else
-      {
-        // If the state machine is unstable at this point then the termination
-        // is *guaranteed* to bring the machine back into a stable state
-        // because the termination reaction can only be triggered by the
-        // outermost unstable state or one of its direct or indirect outer
-        // states.
-
-        // This would work for all cases, but is unnecessarily inefficient
-        // for a stable non-orthogonal state machine.
-        theState.remove_from_state_list(
-          currentStates_, pOutermostUnstableState_ );
-
-        BOOST_ASSERT( get_pointer( pOutermostUnstableState_ ) == 0 );
-        isInnermostCommonOuter_ = false;
-      }
+      terminate_impl( theState, !isExceptionPending_ );
+      isInnermostCommonOuter_ = true;
     }
 
     void post_event( const event_base_ptr_type & pEvent )
@@ -523,7 +518,7 @@ class state_machine : noncopyable
     {
       // The second dummy argument is necessary because the call to the
       // overloaded function add_impl would otherwise be ambiguous.
-      intrusive_ptr< state_base_type > pNewOutermostUnstableStateCandidate =
+      node_state_base_ptr_type pNewOutermostUnstableStateCandidate =
         add_impl( pState, *pState );
 
       const state_base_type * const pCurrentOutermostUnstableState =
@@ -537,14 +532,9 @@ class state_machine : noncopyable
           isInnermostCommonOuter_ ) &&
         ( pCurrentOutermostUnstableState == pState->outer_state_ptr() ) )
       {
-        pOutermostUnstableState_ = pNewOutermostUnstableStateCandidate;
         isInnermostCommonOuter_ = isInnermostCommonOuter;
+        pOutermostUnstableState_ = pNewOutermostUnstableStateCandidate;
       }
-    }
-
-    void add( state_machine *, bool )
-    {
-      BOOST_ASSERT( machine_status() == no_state );
     }
 
 
@@ -579,14 +569,6 @@ class state_machine : noncopyable
       }
     }
 
-
-    template< class ForState >
-    void reserve_shallow_history_slot()
-    {
-      reserve_history_slot_impl( 
-        shallowHistoryMap_,
-        history_key_type::make_history_key< ForState >() );
-    }
 
     template< class HistorizedState >
     void store_shallow_history()
@@ -631,14 +613,6 @@ class state_machine : noncopyable
         shallowHistoryMap_, pContext );
     }
 
-
-    template< class ForState >
-    void reserve_deep_history_slot()
-    {
-      reserve_history_slot_impl( 
-        deepHistoryMap_,
-        history_key_type::make_history_key< ForState >() );
-    }
 
     template< class HistorizedState, class LeafState >
     void store_deep_history()
@@ -700,9 +674,7 @@ class state_machine : noncopyable
     {
       public:
         //////////////////////////////////////////////////////////////////////
-        initial_construct_function(
-          state_machine & machine
-        ) :
+        initial_construct_function( state_machine & machine ) :
           machine_( machine )
         {
         }
@@ -717,49 +689,68 @@ class state_machine : noncopyable
         //////////////////////////////////////////////////////////////////////
         state_machine & machine_;
     };
-
     friend class initial_construct_function;
+
+    class terminate_function
+    {
+      public:
+        //////////////////////////////////////////////////////////////////////
+        terminate_function( state_machine & machine ) : machine_( machine ) {}
+
+        result operator()()
+        {
+          machine_.terminate_impl( true );
+          return do_discard_event; // there is nothing to be consumed
+        }
+
+      private:
+        //////////////////////////////////////////////////////////////////////
+        state_machine & machine_;
+    };
+    friend class terminate_function;
 
     template< class ExceptionEvent >
     bool handle_exception_event(
       const ExceptionEvent & exceptionEvent,
       state_base_type * pCurrentState )
     {
-      const machine_status_enum status = machine_status();
-
-      if ( status == no_state )
+      if ( terminated() )
       {
-        // there is not state that could handle the exception -> bail out
+        // there is no state that could handle the exception -> bail out
         return false;
       }
 
       // If we are stable, an event handler has thrown.
-      // Otherwise, either a state constructor or a transition action
-      // has thrown and the state machine is now in an invalid state.
+      // Otherwise, either a state constructor, a transition action or an exit
+      // function has thrown and the state machine is now in an invalid state.
       // This situation can be resolved by the exception event handler
       // function by orderly transiting to another state or terminating.
       // As a result of this, the machine must not be unstable when this
       // function is left.
-      state_base_type * const pHandlingState =
-        status == stable ? pCurrentState : &unstable_state();
+      state_base_type * const pOutermostUnstableState =
+        get_pointer( pOutermostUnstableState_ );
+      state_base_type * const pHandlingState = pOutermostUnstableState == 0 ?
+        pCurrentState : pOutermostUnstableState;
 
       BOOST_ASSERT( pHandlingState != 0 );
 
+      isExceptionPending_ = true;
       const result reactionResult = pHandlingState->react_impl(
         exceptionEvent, exceptionEvent.dynamic_type() );
 
       if ( reactionResult == do_defer_event )
       {
         // For intrusive_from_this() to work, the exception event must have
-        // been allocated with new. Out of the box this is not the case, so
-        // users will have to replace the exception_translator should they
-        // ever need to do so. Deferring exception events makes sense only in
-        // very rare cases and is dangerous unless operator new never throws.
+        // been allocated with new. With the library-supplied
+        // exception_translator this is not the case, so users will have to
+        // craft their own should they ever need to defer an exception event.
+        // Deferring exception events makes sense only in very rare cases and
+        // is dangerous unless operator new never throws.
         defer_event( exceptionEvent, pHandlingState );
       }
 
       return ( reactionResult != do_forward_event ) &&
-        ( machine_status() != unstable );
+        ( get_pointer( pOutermostUnstableState_ ) == 0 );
     }
 
     class exception_event_handler
@@ -787,7 +778,6 @@ class state_machine : noncopyable
         state_machine & machine_;
         state_base_type * pCurrentState_;
     };
-
     friend class exception_event_handler;
 
     class terminator
@@ -795,27 +785,30 @@ class state_machine : noncopyable
       public:
         terminator( state_machine & machine ) :
           machine_( machine ), dismissed_( false ) {}
-        ~terminator() { if ( !dismissed_ ) { machine_.terminate(); } }
+        ~terminator()
+        {
+          if ( !dismissed_ ) { machine_.terminate_impl( false ); }
+        }
         void dismiss() { dismissed_ = true; }
 
       private:
         state_machine & machine_;
         bool dismissed_;
     };
+    friend class terminator;
 
 
     void send_event( const event_base_type & evt )
     {
       terminator guard( *this );
-      BOOST_ASSERT( machine_status() != unstable );
-
+      BOOST_ASSERT( get_pointer( pOutermostUnstableState_ ) == 0 );
+      isExceptionPending_ = false;
       typename rtti_policy_type::id_type eventType = evt.dynamic_type();
-
       result reactionResult = do_forward_event;
       typename state_list_type::iterator pState = currentStates_.begin();
 
       while ( ( reactionResult == do_forward_event ) &&
-        ( pState != currentStates_.end() ) )
+        ( pState != currentStatesEnd_ ) )
       {
         // CAUTION: The following statement could modify our state list!
         // We must not continue iterating if the event was consumed
@@ -859,47 +852,70 @@ class state_machine : noncopyable
     }
 
 
-    enum machine_status_enum
+    void terminate_impl( bool callExitActions )
     {
-      no_state,
-      unstable,
-      stable
-    };
-
-    machine_status_enum machine_status() const
-    {
-      if ( get_pointer( pOutermostUnstableState_ ) != 0 )
+      if ( !terminated() )
       {
-        return unstable;
+        // this also empties deferredMap_
+        terminate_impl( *pOutermostState_, callExitActions );
       }
-      else if ( currentStates_.empty() )
+
+      eventQueue_.clear();
+      shallowHistoryMap_.clear();
+      deepHistoryMap_.clear();
+    }
+
+    void terminate_impl( state_base_type & theState, bool callExitActions )
+    {
+      isInnermostCommonOuter_ = false;
+
+      if ( currentStates_.begin() == currentStatesEnd_ )
       {
-        return no_state;
+        // We can only get here when the state machine is non-orthogonal and
+        // unstable
+        BOOST_ASSERT( get_pointer( pOutermostUnstableState_ ) != 0 );
+        node_state_base_ptr_type pSelf = pOutermostUnstableState_;
+        pSelf->exit_impl( pSelf, pOutermostUnstableState_, callExitActions );
+      }
+      else if ( currentStates_.begin() == --currentStatesEnd_ )
+      {
+        // The following optimization is only correct for a machine
+        // without orthogonal states.
+        leaf_state_ptr_type & pState = *currentStatesEnd_;
+        pState->exit_impl(
+          pState, pOutermostUnstableState_, callExitActions );
       }
       else
       {
-        return stable;
+        // This would work for all cases, but is unnecessarily inefficient
+        // for a non-orthogonal state machine.
+        theState.remove_from_state_list(
+          ++currentStatesEnd_, pOutermostUnstableState_, callExitActions );
       }
     }
 
-    state_base_type & unstable_state()
-    {
-      BOOST_ASSERT( machine_status() == unstable );
-      return *pOutermostUnstableState_;
-    }
 
-    intrusive_ptr< state_base_type > add_impl(
-      const intrusive_ptr< detail::leaf_state<
-        allocator_type, rtti_policy_type > > & pState,
+    node_state_base_ptr_type add_impl(
+      const leaf_state_ptr_type & pState,
       detail::leaf_state< allocator_type, rtti_policy_type > & )
     {
-      pState->set_list_position( 
-        currentStates_.insert( currentStates_.end(), pState ) );
+      if ( currentStatesEnd_ == currentStates_.end() )
+      {
+        pState->set_list_position( 
+          currentStates_.insert( currentStatesEnd_, pState ) );
+      }
+      else
+      {
+        *currentStatesEnd_ = pState;
+        pState->set_list_position( currentStatesEnd_ );
+        ++currentStatesEnd_;
+      }
+
       return 0;
     }
 
-    intrusive_ptr< state_base_type > add_impl(
-      const intrusive_ptr< state_base_type > & pState,
+    node_state_base_ptr_type add_impl(
+      const node_state_base_ptr_type & pState,
       state_base_type & )
     {
       return pState;
@@ -931,25 +947,12 @@ class state_machine : noncopyable
       #endif
     > history_map_type;
 
-    void reserve_history_slot_impl(
-      history_map_type & historyMap, 
-      const history_key_type & historyId )
-    {
-      historyMap.insert(
-        std::make_pair( historyId, static_cast< void (*)() >( 0 ) ) );
-    }
-
     void store_history_impl(
       history_map_type & historyMap,
       const history_key_type & historyId,
       void (*pConstructFunction)() )
     {
-      // Make sure we don't save history if the most derived class constructor
-      // throws (test only necessary with state).
-      if ( machine_status() != unstable )
-      {
-        historyMap[ historyId ] = pConstructFunction;
-      }
+      historyMap[ historyId ] = pConstructFunction;
     }
 
     template< class DefaultState >
@@ -959,10 +962,8 @@ class state_machine : noncopyable
     {
       typename history_map_type::iterator pFoundSlot = historyMap.find(
         history_key_type::make_history_key< DefaultState >() );
-      // The slot is allocated before this state is entered.
-      BOOST_ASSERT( pFoundSlot != historyMap.end() );
       
-      if ( pFoundSlot->second == 0 )
+      if ( pFoundSlot == historyMap.end() )
       {
         // We have never entered this state before.
         DefaultState::deep_construct(
@@ -978,9 +979,6 @@ class state_machine : noncopyable
         // following reinterpret_cast is the second half of such a sequence.
         construct_function * const pConstructFunction =
           reinterpret_cast< construct_function * >( pFoundSlot->second );
-        // Delete history, so that transitions to history from inside will
-        // go to the default state.
-        pFoundSlot->second = 0;
         (*pConstructFunction)(
           pContext, *polymorphic_downcast< MostDerived * >( this ) );
       }
@@ -1012,12 +1010,14 @@ class state_machine : noncopyable
     event_queue_type eventQueue_;
     deferred_map_type deferredMap_;
     state_list_type currentStates_;
+    typename state_list_type::iterator currentStatesEnd_;
     state_base_type * pOutermostState_;
-    state_base_ptr_type pOutermostUnstableState_;
     bool isInnermostCommonOuter_;
+    node_state_base_ptr_type pOutermostUnstableState_;
+    ExceptionTranslator translator_;
+    bool isExceptionPending_;
     history_map_type shallowHistoryMap_;
     history_map_type deepHistoryMap_;
-    ExceptionTranslator translator_;
 };
 
 

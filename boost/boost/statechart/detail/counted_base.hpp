@@ -48,10 +48,15 @@ class counted_base : private count_base< NeedsLocking >
       return base_type::count_ != 0;
     }
 
+    long ref_count() const
+    {
+      return base_type::count_;
+    }
+
   protected:
     //////////////////////////////////////////////////////////////////////////
     counted_base() {}
-    virtual ~counted_base() {}
+    ~counted_base() {}
 
     // do nothing copy implementation is intentional (the number of
     // referencing pointers of the source and the destination is not changed
@@ -69,47 +74,16 @@ class counted_base : private count_base< NeedsLocking >
       ++base_type::count_;
     }
 
-    void release() const
+    bool release() const
     {
-      if ( --base_type::count_ == 0 )
-      {
-        delete this;
-      }
+      return --base_type::count_ == 0;
     }
 };
 
 
 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 } // namespace detail
 } // namespace fsm
-#endif
-
-
-
-template< bool NeedsLocking >
-inline void intrusive_ptr_add_ref(
-  const ::boost::fsm::detail::counted_base< NeedsLocking > * pBase )
-{
-  pBase->add_ref();
-}
-
-template< bool NeedsLocking >
-inline void intrusive_ptr_release(
-  const ::boost::fsm::detail::counted_base< NeedsLocking > * pBase )
-{
-  pBase->release();
-}
-
-
-
-#ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-} // namespace detail
-} // namespace fsm
-#endif
-
-
-
 } // namespace boost
 
 

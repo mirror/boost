@@ -48,7 +48,7 @@ class state : public simple_state<
       base_type::set_context( ctx.pContext_ );
     }
 
-    virtual ~state() {}
+    ~state() {}
 
   public:
     //////////////////////////////////////////////////////////////////////////

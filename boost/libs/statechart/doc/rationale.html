@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Language" content="en-us">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
 <title>The boost::fsm library - Rationale</title>
@@ -154,8 +154,8 @@ used to implement static machines:</p>
 <ul>
   <li>No compile-time optimizations and validations can be made. For example, 
   boost::fsm determines the
-  <a href="definitions.html#Innermost common outer state">innermost common 
-  outer state</a> of the transition-source and destination state at compile 
+  <a href="definitions.html#Innermost common context">innermost common 
+  context</a> of the transition-source and destination state at compile 
   time. Moreover, compile time checks ensure that the state machine is valid 
   (e.g. that there are no transitions between orthogonal states).</li>
   <li>Double dispatch must inevitably be implemented with some kind of a 
@@ -196,61 +196,74 @@ terms of error handling equally critical situation in the Tutorial under
 state information out of the machine</a> when <code>Running::~Running()</code> 
 accesses its outer state <code>Active</code>. Had the entry action of <code>
 Active</code> failed and had <code>Running</code> been entered anyway then
-<code>Running</code>'s exit action would have invoked undefined behavior.<br>
+<code>Running</code>'s exit action would have invoked undefined behavior.
 The error handling situation with outer and inner states resembles the one 
 with base and derived classes: If a base class constructor fails (by throwing 
 an exception) the construction is aborted, the derived class constructor is 
-not called and the object never comes to life.</p>
-<p>If an FSM framework does not account for failing actions, the user is 
-forced to adopt cumbersome workarounds. For example, a failing action would 
-have to post an appropriate error event and set a global error variable to 
-true. Every following action would first have to check the error variable 
+not called and the object never comes to life.<br>
+In most traditional FSM frameworks such an error situation is relatively easy to 
+tackle <b>as 
+long as the error can be propagated to the state machine client</b>. In this case 
+a failed action simply propagates a C++ exception into the framework. The framework 
+usually does not catch the exception so that the state machine client can handle 
+it. But, after doing so, the client can no longer use 
+the state machine object because it is either in an unknown state or the 
+framework has already reset the state because of the exception (e.g. with a 
+scope guard).<br>
+However, error handling with traditional FSM frameworks becomes surprisingly cumbersome as soon 
+as a lot of actions can fail and the state machine <b>itself</b> needs to gracefully handle 
+these errors. Usually, a failing action (e.g. x()) then posts an appropriate error event and sets a global error variable to 
+true. Every following action (e.g. y()) first has to check the error variable 
 before doing anything. After all actions have completed (by doing nothing!), 
-the previously posted error event would have to be processed what would lead 
-to the remedy action being executed. Please note that it is not sufficient to 
+the previously posted error event has to be processed what leads 
+to the execution of the remedy action. Please note that it is not sufficient to 
 simply queue the error event as other events could still be pending. Instead, 
-the error event has absolute priority and would have to be dealt with 
-immediately.</p>
-<p>So, to be safe, programmers would have to encapsulate the code of <b>every</b> 
-action in <code>if ( !error ) { /* action */ }</code> blocks. Moreover, a
-<code>try { /* action */ } catch ( ... ) { /* post error event */ error = 
-true; }</code> statement would often have to be added because called functions 
-might throw and letting an exception propagate out of a user action would at 
-best terminate the state machine immediately. Writing all this boiler-plate 
-code is simply boring and quite unnecessary.</p>
+the error event has absolute priority and has to be dealt with 
+immediately. There are slightly less cumbersome approaches to FSM error handling 
+but these usually necessitate a change of the state chart layout and thus 
+obscure the normal behavior. No matter what approach is used, programmers are 
+normally forced to write a lot of code that deals with errors and most of that 
+code is <b>not</b> devoted to error handling but to error propagation.</p>
 <h3>Error handling support in boost::fsm</h3>
+<p>C++ exceptions may be propagated from any action to signal a failure. 
+Depending on how the state machine is configured, such an exception is either 
+immediately propagated to the state machine client or caught and converted into 
+a special event that is dispatched immediately. For more information see the
+<a href="tutorial.html#Exception handling">Exception handling</a> 
+chapter in the Tutorial.</p>
+<h3>Two stage exit</h3>
+<p>In boost::fsm, an exit action can be implemented by adding a 
+destructor to a state. Due to the nature of destructors, there are two 
+disadvantages to this approach:</p>
 <ul>
-  <li>C++ exceptions are used for all error handling. Except from exit-actions 
-  (mapped to state-destructors and exceptions should almost never be 
-  propagated from destructors), exceptions can be propagated from all user 
-  functions.</li>
-  <li>A customizable per state machine policy specifies how to convert all 
-  exceptions propagated from user code. Out of the box, an <code>
-  exception_thrown</code> event is generated.</li>
-  <li>An exception event is always processed immediately and thus has absolute 
-  priority over any possibly pending events. The event queue stays as it was 
-  until the exception event has been processed.</li>
-  <li>The processing logic is as follows:
-  <ul>
-    <li>Exception events resulting from failed <code>react</code> functions 
-    are sent to the <a href="definitions.html#Innermost state">innermost state</a> 
-    that was last visited during <a href="definitions.html#Reaction">reaction</a> 
-    search</li>
-    <li>Exception events resulting from failed entry actions are sent to the 
-    outer state of the state that the machine tried to enter</li>
-    <li>Exception events resulting from failed transition actions are sent to 
-    the <a href="definitions.html#Innermost common outer state">innermost 
-    common outer state</a></li>
-  </ul>
-  <p>In the last two cases the state-machine is not in a stable state when the 
-  exception event is generated and leaving it there (e.g. by ignoring the 
-  exception event) would violate an invariant of state machines. So, the 
-  exception event reaction must either be a transition or a termination to 
-  bring the machine back into a stable state. That's why the framework checks 
-  that the state machine is stable after processing an exception event. If 
-  this is not the case the state machine is terminated and the exception is 
-  rethrown. </li>
+	<li>Since C++ 
+	destructors should virtually never throw, one cannot simply propagate an 
+	exception from an exit action as one does when any of the other actions fails</li>
+	<li>If a <code>state_machine&lt;&gt;</code> object is destructed then all currently active states are 
+	inevitably also destructed. That is, state machine termination is tied to 
+	the destruction of the state machine object</li>
 </ul>
+<p>In my experience, neither of the above points is usually problem in practice 
+since ...</p>
+<ul>
+	<li>exit actions cannot often fail. If they can, such a failure is usually 
+	either<ul>
+	<li>not 
+	of interest to the outside world, i.e. the failure can simply be 
+	ignored</li>
+	<li>so severe, that the application needs to be terminated anyway. In such a 
+	situation stack unwind is almost never desirable and the failure is better 
+	signaled through other mechanisms (e.g. abort())</li>
+</ul>
+	</li>
+	<li>to clean up properly, often exit actions <b>must</b> be executed 
+	when a state machine object is destructed, even if it is destructed as a 
+	result of a stack unwind</li>
+</ul>
+<p>However, several people have put forward theoretical arguments and real-world 
+scenarios, which show that the exit action to destructor mapping <b>can</b> be a 
+problem and that workarounds are overly cumbersome. That's why 
+<a href="tutorial.html#Two_stage_exit">two stage exit</a> is now supported.</p>
 <h2><a name="Asynchronous state machines">Asynchronous state machines</a></h2>
 <h3>Requirements</h3>
 <p>For asynchronous state machines different applications have rather varied 
@@ -320,7 +333,7 @@ exit- and transition-actions) must be class members. The reasons for this are
 as follows: </p>
 <ul>
   <li>The concept of state-local storage mandates that state-entry and 
-  state-exit actions (mapped to constructors and destructors) are implemented 
+  state-exit actions are implemented 
   as members.</li>
   <li><code>react</code> member functions and transition actions often access 
   state-local data. So, it is most natural to implement these functions as 
@@ -353,7 +366,7 @@ Intel Pentium M 1600 - produced the following results:</p>
 <ul>
   <li>Handcrafted: 10 nanoseconds to dispatch one event and make the resulting 
   transition.</li>
-  <li>1-bit-BitMachine with customized memory management: 210 nanoseconds to 
+  <li>1-bit-BitMachine with customized memory management: 200 nanoseconds to 
   dispatch one event and make the resulting transition.</li>
 </ul>
 <p>Although this is a big difference I still think it will not be noticeable 
@@ -368,11 +381,11 @@ handcrafted or boost::fsm machines it will...</p>
   example, where two asynchronous state machines exchange events, gave the 
   following times to process one event and perform the resulting in-state 
   reaction (using the library with <code>boost::fast_pool_allocator&lt;&gt;</code>):<ul>
-    <li>Single-threaded (no locking and waiting): 590ns</li>
+    <li>Single-threaded (no locking and waiting): 760ns</li>
     <li>Multi-threaded with one thread (the scheduler uses mutex locking but 
-    never has to wait for events): 4300ns</li>
+    never has to wait for events): 4500ns</li>
     <li>Multi-threaded with two threads (both schedulers use mutex locking and 
-    exactly one always waits for an event): 7000ns</li>
+    exactly one always waits for an event): 7200ns</li>
   </ul>
   <p>As mentioned above there definitely is some room to improve the 
   multi-threaded timings. However, a quick test has shown that the MT overhead 
@@ -408,54 +421,41 @@ optimization:</p>
   </tr>
   <tr>
     <td width="25%">2 / 1</td>
-    <td width="25%">680</td>
-    <td width="25%">790</td>
-    <td width="25%">210</td>
+    <td width="25%">360</td>
+    <td width="25%">480</td>
+    <td width="25%">200</td>
   </tr>
   <tr>
     <td width="25%">4 / 2</td>
-    <td width="25%">690</td>
-    <td width="25%">850</td>
+    <td width="25%">390</td>
+    <td width="25%">540</td>
     <td width="25%">210</td>
   </tr>
   <tr>
     <td width="25%">8 / 3</td>
-    <td width="25%">690</td>
-    <td width="25%">910</td>
-    <td width="25%">220</td>
+    <td width="25%">480</td>
+    <td width="25%">680</td>
+    <td width="25%">210</td>
   </tr>
   <tr>
     <td width="25%">16 / 4</td>
-    <td width="25%">710</td>
-    <td width="25%">990</td>
-    <td width="25%">230</td>
+    <td width="25%">380</td>
+    <td width="25%">670</td>
+    <td width="25%">220</td>
   </tr>
   <tr>
     <td width="25%">32 / 5</td>
-    <td width="25%">740</td>
-    <td width="25%">1090</td>
+    <td width="25%">410</td>
+    <td width="25%">770</td>
     <td width="25%">240</td>
   </tr>
   <tr>
     <td width="25%">64 / 6</td>
-    <td width="25%">820</td>
-    <td width="25%">1250</td>
-    <td width="25%">310</td>
+    <td width="25%">600</td>
+    <td width="25%">910</td>
+    <td width="25%">300</td>
   </tr>
 </table>
-<h3>Possible optimizations</h3>
-<p>Currently, a <code>std::list&lt;&gt;</code> is used for state storage. This could 
-be replaced with an intrusive linked list container what would eliminate 50% 
-of the <code>operator new()</code> and <code>operator delete()</code> calls 
-made during an event dispatch &amp; transition cycle of the smallest BitMachine. I 
-would guess that this could speed it up by 25%-50%. However, event dispatch is 
-not affected and can quickly consume considerable time, as the 
-6-bit-BitMachine shows. Moreover, most states of real-world machines are quite 
-deeply nested and the average transition involves the deallocation and 
-allocation of 2 states. Since <code>std::list&lt;&gt;</code> allocations occur only 
-once per transition and orthogonal region, the relative performance gain of 
-this optimization becomes much smaller for typical machines and does not seem 
-to be worth the effort of hand-crafting an intrusive linked list.</p>
 <h2><a name="Memory management customization">Memory management customization</a></h2>
 <p>Out of the box, all internal data is allocated on the normal heap. This 
 should be satisfactory for applications where all the following prerequisites 
@@ -515,7 +515,7 @@ grows when C++ RTTI is turned on. So, given the small per machine object
 savings, option 2 only makes sense in applications where both of the following 
 conditions hold:</p>
 <ul>
-  <li>So few events are processed that event dispatch will never become a 
+  <li>Event dispatch will never become a 
   bottleneck</li>
   <li>There is a need to reduce the memory allocated at runtime (at the cost 
   of a larger executable)</li>
@@ -574,28 +574,27 @@ consume how many cycles:</p>
 <ol>
   <li><code>state_cast&lt;&gt;()</code>: By far the most cycle-consuming feature. 
   Searches linearly for a suitable state, using one <code>dynamic_cast</code> 
-  per visited state.</li>
+  per visited state</li>
   <li>State entry and exit: Profiling of the fully optimized 1-bit-BitMachine 
   suggested that about 100ns of the 210ns total are spent destructing the 
   exited state and constructing the entered state. Obviously, transitions 
-  where the <a href="definitions.html#Innermost common outer state">innermost 
-  common outer state</a> is &quot;far&quot; from the leaf states and/or with lots of 
-  orthogonal states can easily cause the destruction and construction of quite 
-  a few states leading to significant amounts of time spent for a transition.</li>
+  where the <a href="definitions.html#Innermost common context">innermost 
+  common context</a> is &quot;far&quot; from the leaf states and/or with lots of 
+	orthogonal states can easily cause the destruction and construction of quite 
+	a few states leading to significant amounts of time spent for a transition</li>
   <li><code>state_downcast&lt;&gt;()</code>: Searches linearly for the requested 
-  state, using one virtual call and one RTTI comparison per visited state.</li>
+  state, using one virtual call and one RTTI comparison per visited state</li>
   <li>History: For a state containing a history pseudo state a binary search 
-  through the (usually small) history map must be performed on each entry and 
-  exit. History slot allocation is performed exactly once, before first entry.</li>
+	through the (usually small) history map must be performed on each exit. 
+	History slot allocation is performed exactly once, at first exit</li>
   <li>Event dispatch: One virtual call followed by a linear search for a 
   suitable <a href="definitions.html#Reaction">reaction</a>, using one RTTI 
-  comparison per visited reaction.</li>
+	comparison per visited reaction</li>
   <li>Orthogonal states: One additional virtual call for each exited state <b>
-  if</b> there is more than one active leaf state before a transition. It 
-  should also be noted that the worst-case event dispatch time is multiplied 
-  in the presence of orthogonal states. For example, if two orthogonal leaf 
-  states are added to a given state configuration, the worst-case time is 
-  tripled.</li>
+  if</b> there is more than one active leaf state before a transition. It should 
+	also be noted that the worst-case event dispatch time is multiplied in the 
+	presence of orthogonal states. For example, if two orthogonal leaf states 
+	are added to a given state configuration, the worst-case time is tripled</li>
 </ol>
 <h2><a name="Limitations">Limitations</a></h2>
 <h4>Deferring and posting events</h4>
@@ -731,9 +730,10 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->22 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13984" --></p>
-<p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
-2003-2004</i></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->17 October, 2004<!--webbot bot="Timestamp" endspan i-checksum="38688" --></p>
+<p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
+2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
+the email address behind the link</font></b></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

@@ -50,6 +50,11 @@ namespace detail
 
 
 
+template< class Allocator, class RttiPolicy >
+class leaf_state;
+template< class Allocator, class RttiPolicy >
+class node_state_base;
+
 typedef unsigned char orthogonal_position_type;
 
 
@@ -68,8 +73,8 @@ class state_base :
 
   public:
     //////////////////////////////////////////////////////////////////////////
-    // Returns a pointer to the immediate outer state _if_ there is one,
-    // returns 0 otherwise (this is the outermost state then)
+    void exit() {}
+
     virtual const state_base * outer_state_ptr() const = 0;
 
   protected:
@@ -77,12 +82,11 @@ class state_base :
     state_base( typename RttiPolicy::id_provider_type idProvider ) :
       base_type( idProvider ),
       reactionEnabled_( false ),
-      deferredEvents_( false ),
-      terminationState_( false )
+      deferredEvents_( false )
     {
     }
 
-    virtual ~state_base() {}
+    ~state_base() {}
 
   protected:
     //////////////////////////////////////////////////////////////////////////
@@ -122,52 +126,79 @@ class state_base :
       pContext->add_inner_state( position, this );
     }
 
-    bool termination_state() const
-    {
-      return terminationState_;
-    }
-
   public:
     //////////////////////////////////////////////////////////////////////////
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
-    void set_termination_state()
-    {
-      terminationState_ = true;
-    }
-
     virtual result react_impl(
       const event_base & evt,
       typename RttiPolicy::id_type eventType ) = 0;
 
-    typedef intrusive_ptr< state_base< Allocator, RttiPolicy > >
-      state_base_ptr_type;
+    typedef intrusive_ptr< node_state_base< Allocator, RttiPolicy > >
+      node_state_base_ptr_type;
+    typedef intrusive_ptr< leaf_state< Allocator, RttiPolicy > >
+      leaf_state_ptr_type;
     typedef std::list<
-      state_base_ptr_type
+      leaf_state_ptr_type
       #if !defined( BOOST_NO_STD_ALLOCATOR ) && \
         !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
       // TODO: Add allocator support for broken std libs when
       // the workaround is available in boost::detail
-      , typename Allocator::template rebind< state_base_ptr_type >::other
+      , typename Allocator::template rebind< leaf_state_ptr_type >::other
       #endif
     > state_list_type;
 
     virtual void remove_from_state_list(
-      state_list_type & states,
-      state_base_ptr_type & pUnstableState ) = 0;
+      typename state_list_type::iterator & statesEnd,
+      node_state_base_ptr_type & pOutermostUnstableState,
+      bool callExitActions ) = 0;
 
   private:
     //////////////////////////////////////////////////////////////////////////
     bool reactionEnabled_;
     bool deferredEvents_;
-    bool terminationState_;
 };
 
 
 
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 } // namespace detail
 } // namespace fsm
+#endif
+
+
+
+template< class Allocator, class RttiPolicy >
+inline void intrusive_ptr_add_ref(
+  const ::boost::fsm::detail::state_base< Allocator, RttiPolicy > * pBase )
+{
+  pBase->add_ref();
+}
+
+template< class Allocator, class RttiPolicy >
+inline void intrusive_ptr_release( 
+  const ::boost::fsm::detail::state_base< Allocator, RttiPolicy > * pBase )
+{
+  if ( pBase->release() )
+  {
+    // The state_base destructor is *not* virtual for performance reasons
+    // but intrusive_ptr< state_base > objects are nevertheless used to point
+    // to states. This assert ensures that such a pointer is never the last
+    // one referencing a state object.
+    BOOST_ASSERT( false );
+  }
+}
+
+
+
+#ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+} // namespace detail
+} // namespace fsm
+#endif
+
+
+
 } // namespace boost
 
 

@@ -45,11 +45,40 @@ class event_base : public detail::rtti_policy::rtti_base_type<
     }
 
     virtual ~event_base() {}
+
+    friend void intrusive_ptr_release(
+      const ::boost::fsm::event_base * pBase );
 };
 
 
 
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 } // namespace fsm
+#endif
+
+
+
+inline void intrusive_ptr_add_ref( const ::boost::fsm::event_base * pBase )
+{
+  pBase->add_ref();
+}
+
+inline void intrusive_ptr_release( const ::boost::fsm::event_base * pBase )
+{
+  if ( pBase->release() )
+  {
+    delete pBase;
+  }
+}
+
+
+
+#ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+} // namespace fsm
+#endif
+
+
+
 } // namespace boost
 
 

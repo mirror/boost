@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Language" content="en-us">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
 <title>The boost::fsm library - Tutorial</title>
@@ -683,11 +683,11 @@ fsm::result Focused::react( const EvShutterFull &amp; )
 order:</p>
 <ol>
   <li>Starting from the innermost active state, all exit actions up to but 
-  excluding the <a href="definitions.html#Innermost common outer state">
-  innermost common outer state</a>.</li>
-  <li>The transition action (if present).</li>
-  <li>Starting from the innermost common outer state, all entry actions down 
-  to the target state followed by the entry actions of the initial states.</li>
+  excluding the <a href="definitions.html#Innermost common context">
+  innermost common context</a></li>
+  <li>The transition action (if present)</li>
+  <li>Starting from the innermost common context, all entry actions down 
+	to the target state followed by the entry actions of the initial states</li>
 </ol>
 <p>Example:</p>
 <p><img border="0" src="LCA.gif" width="604" height="304"></p>
@@ -1069,11 +1069,32 @@ int main()
   }
 }</pre>
 <h3><a name="Exception handling">Exception handling</a></h3>
-<p>Exceptions can be propagated from all user code except from state exit 
-actions (mapped to destructors and destructors should virtually never throw in 
-C++). Out of the box, <code>state_machine&lt;&gt;</code> does the following:</p>
+<p>Exceptions can be propagated from all user code except from state 
+destructors. Out of the box, the state machine framework is configured for 
+simple exception handling and does not catch any 
+of these exceptions, so they are immediately propagated to the state machine client. A 
+scope guard inside the <code>state_machine&lt;&gt;</code> ensures that all state 
+objects are destructed before the exception is caught by the client. The scope 
+guard does not attempt to call any <code>exit</code> functions (see
+<a href="#Two_stage_exit">Two stage exit</a> below) that states 
+might define as these could themselves throw other exceptions which would mask 
+the original exception. Consequently, if a state machine should do something 
+more sensible when exceptions are thrown, it has to catch them before they are 
+propagated into the boost::fsm framework.
+This exception handling scheme is often appropriate but it can lead to 
+considerable code duplication in state machines where many actions can trigger 
+exceptions that need to be handled inside the state machine (see
+<a href="rationale.html#Error handling">Error handling</a> in the Rationale). <br>
+That's why exception handling can be customized through the <code>
+ExceptionTranslator</code> parameter of the <code>state_machine</code> class 
+template. Since the out-of-the box behavior is to <b>not</b> translate any 
+exceptions, the default argument for this parameter is <code>
+null_exception_translator</code>. A <code>state_machine&lt;&gt;</code> 
+subclass can be configured for advanced exception handling by specifying the 
+library-supplied <code>exception_translator&lt;&gt;</code> instead. This way, the following 
+happens when an exception is propagated from user code:</p>
 <ol>
-  <li>The exception is caught</li>
+  <li>The exception is caught inside the framework</li>
   <li>In the catch block, an <code>exception_thrown</code> event is allocated 
   on the stack</li>
   <li>Also in the catch block, an <b>immediate</b> dispatch of the <code>
@@ -1085,16 +1106,26 @@ C++). Out of the box, <code>state_machine&lt;&gt;</code> does the following:</p>
   original exception is rethrown so that the client of the state machine can 
   handle the exception</li>
 </ol>
-<p>This behavior is implemented in the <code>exception_translator</code> class 
-template, which is the default for the <code>ExceptionTranslator</code> 
-parameter of the <code>state_machine</code> class template. It was introduced 
-because users would want to change this on some platforms to work around buggy 
-exception handling implementations (see <a href="#Discriminating exceptions">
-Discriminating exceptions</a>).</p>
-<p>boost::fsm can also be used in applications compiled with C++ exception 
-handling turned off but doing so means losing <b>all</b> error handling 
-support, making proper error handling much more cumbersome (see
-<a href="rationale.html#Error handling">Error handling</a> in the Rationale).</p>
+<p>On platforms with buggy exception handling implementations users would 
+probably want to implement their own model of the
+<a href="reference.html#ExceptionTranslator">ExceptionTranslator concept</a> 
+(see also <a href="#Discriminating exceptions">Discriminating exceptions</a>).</p>
+<h4>Successful exception handling</h4>
+<p>An exception is considered handled successfully, if:</p>
+<ul>
+  <li>an appropriate reaction for the <code>exception_thrown</code> event has 
+  been found, <b>and</b></li>
+  <li>the state machine is in a stable state after the reaction has completed.</li>
+</ul>
+<p>The second condition is important for scenarios 2 and 3 in the next 
+section. In these scenarios, the state machine is in the middle of a 
+transition when the exception is handled. The machine would be left in an 
+invalid state, should the reaction simply discard the event without doing 
+anything else. <code>exception_translator&lt;&gt;</code> simply rethrows the original 
+exception if the exception handling was unsuccessful. Just as with simple 
+exception handling, in this case a scope guard inside the <code>state_machine&lt;&gt;</code> 
+ensures that all state objects are destructed before the exception is caught by 
+the client. </p>
 <h4>Which states can react to an <code>exception_thrown</code> event?</h4>
 <p>Short answer: If the state machine is stable when the exception is thrown, 
 the state that caused the exception is first tried for a reaction. Otherwise 
@@ -1112,13 +1143,13 @@ first tried for a reaction.</p>
   <br>
   </li>
   <li>A state entry action (constructor) propagates an exception:<br>
-&nbsp;<ul>
+	<ul>
     <li>If there are no orthogonal regions, the direct outer state of the 
     state that caused the exception is first tried for a reaction, so the 
     following machine will transit to Defective after trying to enter Stopped:<br>
     <br>
     <img border="0" src="ThrowingEntryAction.gif" width="438" height="241"><br>
-&nbsp;</li>
+	</li>
     <li>If there are orthogonal regions, the outermost
     <a href="definitions.html#Unstable state">unstable state</a> is first 
     tried for a reaction. The outermost unstable state is found by first 
@@ -1146,7 +1177,7 @@ first tried for a reaction.</p>
     initiation is clearly defined (orthogonal region 0 is always initiated 
     first, then region 1 and so forth), users <b>can</b> accurately control 
     when and where they want to handle exceptions<br>
-&nbsp;</li>
+	</li>
   </ul>
   </li>
   <li>A transition action propagates an exception: The innermost common outer 
@@ -1165,23 +1196,8 @@ receiving an EvNumLockPressed event:</p>
 <p>
 <img border="0" src="ExceptionsAndOrthogonalStates.gif" width="571" height="331"></p>
 <p>Instead, the machine is terminated and the original exception rethrown.</p>
-<h4>Successful exception handling</h4>
-<p>An exception is considered handled successfully, if:</p>
-<ul>
-  <li>an appropriate reaction for the <code>exception_thrown</code> event has 
-  been found, <b>and</b></li>
-  <li>the state machine is in a stable state after the reaction has completed.</li>
-</ul>
-<p>The second condition is important for scenarios 2 and 3 in the last 
-section. In these scenarios, the state machine is in the middle of a 
-transition when the exception is handled. The machine would be left in an 
-invalid state, should the reaction simply discard the event without doing 
-anything else.</p>
-<p>The out of the box behavior for unsuccessful exception handling is to 
-rethrow the original exception. The state machine is terminated before the 
-exception is propagated to the machine client.</p>
 <h4><a name="Discriminating exceptions">Discriminating exceptions</a></h4>
-<p>Because the <code>exception_thrown</code> object is dispatched from within 
+<p>Because the <code>exception_thrown</code> event is dispatched from within 
 the catch block, we can rethrow and catch the exception in a custom reaction:</p>
 <pre>struct Defective : fsm::simple_state&lt;
   Defective, Purifier &gt; {};
@@ -1230,6 +1246,46 @@ very popular compiler.</b> If you have to use one of these platforms, you can
 pass a customized exception translator class to the <code>state_machine</code> 
 class template. This will allow you to generate different events depending on 
 the type of the exception.</p>
+<h4><a name="Two_stage_exit">Two stage exit</a></h4>
+<p>If a <code>simple_state&lt;&gt;</code> or <code>state&lt;&gt;</code> subclass declares a 
+public member function with the signature <code>void exit()</code> then this 
+function is called just before the state object is destructed. As explained 
+under
+<a href="rationale.html#Error handling">Error handling</a> in the Rationale, 
+this is useful for two things that would otherwise be difficult or cumbersome to 
+achieve with destructors only:</p>
+<ol>
+	<li>To signal a failure in an exit action</li>
+	<li>To execute certain exit actions <b>only</b> during a transition or a 
+	termination but not when the state machine object is destructed</li>
+</ol>
+<p>A few points to consider before employing <code>exit()</code>:</p>
+<ul>
+	<li>There is no guarantee that <code>exit()</code> will be called:<ul>
+		<li>If the client destructs the state machine object without calling
+		<code>terminate()</code> beforehand then the currently active states are 
+		destructed without calling <code>exit()</code> beforehand. This is necessary 
+		because an exception that is possibly thrown from <code>exit()</code> 
+		could not be propagated on to the state machine client</li>
+		<li><code>exit()</code> is not called when a previously executed action 
+		propagated an exception and that exception has not (yet) been handled 
+		successfully. This is because a new exception that could possibly be 
+		thrown from <code>exit()</code> would mask the original exception</li>
+	</ul>
+	</li>
+	<li>A state is considered exited, even if its <code>exit</code> function 
+	propagated an exception. That is, the state object is inevitably destructed 
+	right after calling <code>exit()</code>, regardless of whether <code>exit()</code> 
+	propagated an exception or not. A state machine configured for advanced 
+	exception handling is therefore always unstable while handling an exception 
+	propagated from an <code>exit</code> function</li>
+	<li>In a state machine configured for advanced exception handling the 
+	processing rules for an exception event resulting from an exception 
+	propagated from <code>exit()</code> are analogous to the ones defined for 
+	exceptions propagated from state constructors. That is, the outermost 
+	unstable state is first tried for a reaction and the dispatcher then moves 
+	outward until an appropriate reaction is found</li>
+</ul>
 <h3><a name="Submachines &amp; parameterized states">Submachines &amp; 
 parameterized states</a></h3>
 <p>Submachines are to event-driven programming what functions are to 
@@ -1394,9 +1450,10 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->22 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13984" --></p>
-<p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
-2003-2004</i></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->17 October, 2004<!--webbot bot="Timestamp" endspan i-checksum="38688" --></p>
+<p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
+2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
+the email address behind the link</font></b></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
 copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

@@ -51,12 +51,6 @@ class deep_history
       outermostContext.template construct_with_deep_history< DefaultState >(
         pContext );
     }
-
-    static void reserve_history_slot(
-      outermost_context_type & outermostContext )
-    {
-      DefaultState::reserve_history_slot( outermostContext );
-    }
 };
 
 

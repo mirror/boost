@@ -10,8 +10,10 @@
 
 #include <boost/fsm/state_machine.hpp>
 #include <boost/fsm/fifo_scheduler.hpp>
+#include <boost/fsm/null_exception_translator.hpp>
 #include <boost/fsm/event_processor.hpp>
 
+#include <memory>   // std::allocator
 
 
 namespace boost
@@ -30,7 +32,7 @@ template< class MostDerived,
           class InitialState,
           class Scheduler = fifo_scheduler<>,
           class Allocator = std::allocator< void >,
-          class ExceptionTranslator = exception_translator<> >
+          class ExceptionTranslator = null_exception_translator >
 class asynchronous_state_machine : public state_machine<
   MostDerived, InitialState, Allocator, ExceptionTranslator >,
   public event_processor< Scheduler >
@@ -57,16 +59,6 @@ class asynchronous_state_machine : public state_machine<
     void terminate()
     {
       processor_base::terminate();
-    }
-
-    void terminate( asynchronous_state_machine & machine )
-    {
-      machine_base::terminate( machine );
-    }
-
-    void terminate( typename machine_base::state_base_type & theState )
-    {
-      machine_base::terminate( theState );
     }
 
   private:
