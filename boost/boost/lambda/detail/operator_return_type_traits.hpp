@@ -562,22 +562,17 @@ struct return_type_2<bitwise_action<Act>, A, B>
 
 namespace detail {
 
+#ifdef BOOST_NO_TEMPLATED_STREAMS
+
 template<class A, class B>
 struct leftshift_type {
 
   typedef typename detail::IF<
-#ifdef BOOST_NO_TEMPLATED_STREAMS
     boost::is_convertible<
       typename boost::remove_reference<A>::type*,
       std::ostream*
     >::value,
-#else
-    is_instance_of_2< 
-      typename boost::remove_reference<A>::type,
-      std::basic_ostream
-    >::value, 
-#endif
-    typename boost::add_reference<A>::type, //reference to the stream 
+    std::ostream&, 
     typename detail::remove_reference_and_cv<A>::type
   >::RET type;
 };
@@ -586,21 +581,54 @@ template<class A, class B>
 struct rightshift_type {
 
   typedef typename detail::IF<
-#ifdef BOOST_NO_TEMPLATED_STREAMS
+
     boost::is_convertible<
       typename boost::remove_reference<A>::type*,
       std::istream*
     >::value, 
-#else
-    is_instance_of_2< 
-      typename boost::remove_reference<A>::type,
-      std::basic_istream
-    >::value, 
-#endif
-    typename boost::add_reference<A>::type, //reference to the stream 
+    std::istream&,
     typename detail::remove_reference_and_cv<A>::type
   >::RET type;
 };
+
+#else
+
+template <class T> struct get_ostream_type {
+  typedef std::basic_ostream<typename T::char_type, 
+                             typename T::traits_type>& type;
+};
+
+template <class T> struct get_istream_type {
+  typedef std::basic_istream<typename T::char_type, 
+                             typename T::traits_type>& type;
+};
+
+template<class A, class B>
+struct leftshift_type {
+private:
+  typedef typename boost::remove_reference<A>::type plainA;
+public:
+  typedef typename detail::IF_type<
+    is_instance_of_2<plainA, std::basic_ostream>::value, 
+    get_ostream_type<plainA>, //reference to the stream 
+    detail::remove_reference_and_cv<A>
+  >::type type;
+};
+
+template<class A, class B>
+struct rightshift_type {
+private:
+  typedef typename boost::remove_reference<A>::type plainA;
+public:
+  typedef typename detail::IF_type<
+    is_instance_of_2<plainA, std::basic_istream>::value, 
+    get_istream_type<plainA>, //reference to the stream 
+    detail::remove_reference_and_cv<A>
+  >::type type;
+};
+
+
+#endif
 
 } // end detail
 
