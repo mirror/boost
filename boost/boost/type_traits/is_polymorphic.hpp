@@ -36,8 +36,9 @@ struct is_polymorphic_imp1
    {
       d2();
       virtual ~d2()throw();
-#  ifndef BOOST_MSVC
-      // for some reason this messes up VC++ when T has virtual bases:
+#  if !defined(BOOST_MSVC) && !defined(__ICL)
+      // for some reason this messes up VC++ when T has virtual bases,
+      // probably likewise for compilers that use the same ABI:
       struct unique{};
       virtual void foo(unique*);
 #  endif
