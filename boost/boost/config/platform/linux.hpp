@@ -25,6 +25,14 @@
 #  endif
 #endif
 
+//
+// If glibc is past version 2 then we definitely have
+// gettimeofday, earlier versions may or may not have it:
+//
+#if defined(__GLIBC__) && (__GLIBC__ >= 2)
+#  define BOOST_HAS_GETTIMEOFDAY
+#endif
+
 #if defined(__GLIBC__) && defined(__GLIBC_PREREQ)
 // __GLIBC_PREREQ is available since 2.1.2
 
