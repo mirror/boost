@@ -1,8 +1,9 @@
 //  license_check header  ----------------------------------------------------//
 
 //  Copyright Beman Dawes 2002, 2003.
-//  Use, modification, and distribution is subject to the Boost Software
-//  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+//  Copyright Rene Rivera 2004.
+//  Distributed under the Boost Software License, Version 1.0.
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_LICENSE_CHECK_HPP
@@ -14,7 +15,7 @@ namespace boost
 {
   namespace inspect
   {
-    class license_check : public inspector
+    class license_check : public source_inspector
     {
       long m_files_with_errors;
     public:

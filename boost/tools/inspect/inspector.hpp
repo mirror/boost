@@ -1,8 +1,9 @@
 //  inspector header  --------------------------------------------------------//
 
 //  Copyright Beman Dawes 2002.
-//  Use, modification, and distribution is subject to the Boost Software
-//  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+//  Copyright Rene Rivera 2004.
+//  Distributed under the Boost Software License, Version 1.0.
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_INSPECTOR_HPP
@@ -57,6 +58,22 @@ namespace boost
 
     private:
       string_set m_signatures;
+    };
+    
+    // for inspection of source code of one form or other
+    class source_inspector : public inspector
+    {
+    public:
+      // registers the basic set of known source signatures
+      source_inspector();
+    };
+    
+    // for inspection of hypertext, specifically html
+    class hypertext_inspector : public inspector
+    {
+    public:
+      // registers the set of known html source signatures
+      hypertext_inspector();
     };
 
     inline string relative_to( const path & src_arg, const path & base_arg )

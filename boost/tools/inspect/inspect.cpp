@@ -1,8 +1,9 @@
 //  inspect program  ---------------------------------------------------------//
 
-//  (C) Copyright Beman Dawes 2002
-//  Use, modification, and distribution is subject to the Boost Software
-//  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+//  Copyright Beman Dawes 2002.
+//  Copyright Rene Rivera 2004.
+//  Distributed under the Boost Software License, Version 1.0.
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  This program recurses through sub-directories looking for various problems.
@@ -314,6 +315,60 @@ namespace boost
 //        << full_path.string() << ": "
 //        << msg << '\n';
 
+    }
+    
+    source_inspector::source_inspector()
+    {
+      // C/C++ source code...
+      register_signature( ".c" );
+      register_signature( ".cpp" );
+      register_signature( ".css" );
+      register_signature( ".cxx" );
+      register_signature( ".h" );
+      register_signature( ".hpp" );
+      register_signature( ".hxx" );
+      register_signature( ".inc" );
+      register_signature( ".ipp" );
+      
+      // Boost.Build BJam source code...
+      register_signature( "Jamfile" );
+      register_signature( ".jam" );
+      register_signature( ".v2" );
+      
+      // Other scripts; Python, shell, autoconfig, etc.
+      register_signature( "configure.in" );
+      register_signature( "GNUmakefile" );
+      register_signature( "Makefile" );
+      register_signature( ".bat" );
+      register_signature( ".mak" );
+      register_signature( ".pl" );
+      register_signature( ".py" );
+      register_signature( ".sh" );
+      
+      // Hypertext, Boost.Book, and other text...
+      register_signature( "news" );
+      register_signature( "readme" );
+      register_signature( "todo" );
+      register_signature( "NEWS" );
+      register_signature( "README" );
+      register_signature( "TODO" );
+      register_signature( ".boostbook" );
+      register_signature( ".htm" );
+      register_signature( ".html" );
+      register_signature( ".rst" );
+      register_signature( ".sgml" );
+      register_signature( ".shtml" );
+      register_signature( ".txt" );
+      register_signature( ".xml" );
+      register_signature( ".xsd" );
+      register_signature( ".xsl" );
+    }
+    
+    hypertext_inspector::hypertext_inspector()
+    {
+      register_signature( ".htm" );
+      register_signature( ".html" );
+      register_signature( ".shtml" );
     }
 
 //  impute_library  ----------------------------------------------------------//

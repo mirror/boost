@@ -1,8 +1,8 @@
 //  copyright_check implementation  ------------------------------------------------//
 
 //  Copyright Beman Dawes 2002.
-//  Use, modification, and distribution is subject to the Boost Software
-//  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+//  Distributed under the Boost Software License, Version 1.0.
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 #include "copyright_check.hpp"
@@ -13,17 +13,6 @@ namespace boost
   {
    copyright_check::copyright_check() : m_files_with_errors(0)
    {
-     register_signature( ".c" );
-     register_signature( ".cpp" );
-     register_signature( ".cxx" );
-     register_signature( ".h" );
-     register_signature( ".hpp" );
-     register_signature( ".hxx" );
-     register_signature( ".htm" );
-     register_signature( ".html" );
-     register_signature( ".ipp" );
-     register_signature( "Jamfile" );
-     register_signature( ".jam" );
    }
      
    void copyright_check::inspect(
