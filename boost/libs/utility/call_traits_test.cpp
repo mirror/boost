@@ -245,7 +245,7 @@ int main(int argc, char *argv[ ])
    type_test(int&, boost::call_traits<int&>::reference)
    type_test(const int&, boost::call_traits<int&>::const_reference)
    type_test(int&, boost::call_traits<int&>::param_type)
-#if !(defined(__GNUC__) && (__GNUC__ < 4))
+#if !(defined(__GNUC__) && ((__GNUC__ < 3) || (__GNUC__ == 3) && (__GNUC_MINOR__ < 1))
    type_test(int&, boost::call_traits<cr_type>::value_type)
    type_test(int&, boost::call_traits<cr_type>::reference)
    type_test(const int&, boost::call_traits<cr_type>::const_reference)
@@ -418,13 +418,14 @@ unsigned int expected_failures = 6;
 #endif
 #elif defined(__BORLANDC__)
 unsigned int expected_failures = 2;
-#elif defined(__GNUC__)
+#elif (defined(__GNUC__) && ((__GNUC__ < 3) || (__GNUC__ == 3) && (__GNUC_MINOR__ < 1)))
 unsigned int expected_failures = 4;
 #elif defined(__HP_aCC)
 unsigned int expected_failures = 24;
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
 
 
