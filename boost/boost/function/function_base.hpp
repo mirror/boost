@@ -53,8 +53,8 @@ namespace boost { namespace python { namespace objects {
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
-// MSVC 6.0 doesn't support enable_if
-#if defined(BOOST_MSVC) && BOOST_MSVC <= 1200 && !defined(BOOST_NO_CONFIG)
+// MSVC 7.0 doesn't support enable_if
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 && !defined(BOOST_NO_CONFIG)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
