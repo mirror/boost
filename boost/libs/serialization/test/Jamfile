@@ -10,7 +10,9 @@
 subproject libs/serialization/test ;
 
 # bring in rules for testing
-import testing.jam ;
+import testing ;
+
+import ../build/serialization ;
 
 {
 
@@ -34,37 +36,6 @@ if ! $(BOOST_ARCHIVE_LIST) {
 # look in BOOST_ROOT for sources first, just in this Jamfile
 local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
 
-# building this library needs a working version of spirit
-rule spirit-support ( toolset variant : properties * )
-{
-    local requires-spirit ;
-    switch $(toolset) {
-    case "borland*" :
-        requires-spirit = true ;
-    case "msvc-stlport" :
-        requires-spirit = true ;
-    case "msvc*" :
-        requires-spirit = true ;
-    case "iw*" :
-        requires-spirit = true ;
-    case "vc7" :
-        requires-spirit = true ;
-    case "vc7-stlport" :
-        requires-spirit = true ;
-    }
-    if $(requires-spirit) {
-        if  $(SPIRIT_ROOT) # && ( exist $(SPIRIT_ROOT) )
-        {
-            properties += <include>$(SPIRIT_ROOT) ;
-        }
-        else {
-            echo spirit 1.6x required to build library with this compiler ;
-            properties += <build>no ;
-        }
-    }
-    return $(properties) ;
-}
-
 rule run-template ( test-name : sources * : requirements * ) {
     return [
         run
@@ -73,7 +44,7 @@ rule run-template ( test-name : sources * : requirements * ) {
         : # command
         : # input files
         : # requirements
-            spirit-support
+            serialization::requirements
             <borland-5_5_1><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062 -w-8008 -w-0018 -w-8066"
             <borland-5_6_4><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062"
             <include>$(BOOST_ROOT)
@@ -87,40 +58,6 @@ rule run-template ( test-name : sources * : requirements * ) {
         : # default-build
             debug
     ] ;
-}
-
-# certain tool sets are known apriori not to support wide char i/o
-rule wide-char-io-support ( toolset variant : properties * )
-{
-    local requires-wchar ;
-    switch $(toolset) {
-    case "como*" :
-        requires-wchar = true ;
-    case "mingw*" :
-        requires-wchar = true ;
-    }
-    if $(requires_wchar) {
-        echo wide char i/o not supported by this standard library ;
-        properties += <build>no ;
-    }
-    return $(properties) ;
-}
-
-# certain tool sets are known apriori not to support creation of DLLS
-rule shared-libraries-support ( toolset variant : properties * )
-{
-    switch $(toolset) {
-    case "como*" :
-        echo DLLs cannot be built with this compiler ;
-        properties += <build>no ;
-    case "cw*" :
-        echo DLLs cannot be built with this compiler ;
-        properties += <build>no ;
-    }
-    # if static = [ get-values runtime-link : $(properties) ] {
-    #     echo DLLS cannot be built with static runtime linking ;
-    #     properties += <build>no ;
-    # }
 }
 
 # each of the following tests is run with each type of archive
@@ -146,7 +83,6 @@ rule run-invoke ( test-name : sources * : defns * )
             $(sources)
             <dll>../build/boost_serialization
         : # requiremens
-            shared-libraries-support
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
             <define>BOOST_ALL_DYN_LINK=1
@@ -167,7 +103,7 @@ rule run-winvoke ( test-name : sources * : defns * )
             <lib>../build/boost_serialization
             <lib>../build/boost_wserialization
         : # requirements
-            wide-char-io-support
+            toolset::require-wide-char-io-support
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
             # msvc stlport 4.5.3 only works with static lib
@@ -183,8 +119,7 @@ rule run-winvoke ( test-name : sources * : defns * )
             <dll>../build/boost_serialization
             <dll>../build/boost_wserialization
         : # requiremens
-            wide-char-io-support
-            shared-libraries-support
+            toolset::require-wide-char-io-support
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
             <define>BOOST_ALL_DYN_LINK=1
