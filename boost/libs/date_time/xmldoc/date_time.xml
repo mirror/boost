@@ -16,6 +16,7 @@
     <year>2002</year>
     <year>2003</year>
     <year>2004</year>
+    <year>2005</year>
     <holder>CrystalClear Software, Inc</holder>
   </copyright>
 
@@ -38,13 +39,15 @@
    A set of date-time libraries based on generic programming concepts.
   </para>
 </section>
+
    <xi:include href="conceptual.xml"/> 
    <xi:include href="gregorian.xml"/> 
    <xi:include href="posix_time.xml"/> 
+   <xi:include href="local_time.xml"/> 
    <xi:include href="details.xml"/> 
    <xi:include href="examples.xml"/> 
-   <!--<xi:include href="date_time.doxygen.boostbook"/>  -->
    <xi:include href="doxy.xml"/>
 <!-- add more sections here -->
+<!--  <xi:include href="local_date_time.xml"/>   -->
 
 </library>

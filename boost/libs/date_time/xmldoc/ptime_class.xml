@@ -35,53 +35,66 @@
   <anchor id="ptime_header" />
   <bridgehead renderas="sect3">Header</bridgehead>
   <para>
-    <programlisting>
-      #include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
-      or
-      #include "boost/date_time/posix_time/posix_time_types.hpp" //no i/o just types
-    </programlisting>
+    <programlisting>#include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
+or
+#include "boost/date_time/posix_time/posix_time_types.hpp" //no i/o just types</programlisting>
   </para>
 
   <anchor id="ptime_constr" />
   <bridgehead renderas="sect3">Construction</bridgehead>
   <para>
     <informaltable frame="all">
-      <tgroup cols="3">
+      <tgroup cols="2">
+        <colspec colwidth="33%" />
+        <colspec colwidth="66%" />
 	<thead>
 	  <row>
-	    <entry>Syntax</entry>
+	    <entry valign="top" morerows="1">Syntax</entry>
 	    <entry>Description</entry>
+	  </row>
+	  <row>
 	    <entry>Example</entry>
 	  </row>
 	</thead>
 	<tbody>
-	  <row>
-	    <entry>ptime(date,time_duration)</entry>
+          <row>
+	    <entry valign="top" morerows="1"><screen>ptime(date,time_duration)</screen></entry>
 	    <entry>Construct from a date and offset</entry>
-	    <entry>
-	      ptime t1(date(2002,Jan,10), time_duration(1,2,3));
-	      ptime t2(date(2002,Jan,10), hours(1)+nanosec(5));
+	  </row>
+	  <row>
+	    <entry><screen>
+ptime t1(date(2002,Jan,10), time_duration(1,2,3));
+ptime t2(date(2002,Jan,10), hours(1)+nanosec(5));</screen>
 	    </entry>
-	  </row>
+          </row>
+
 	  <row>
-	    <entry>ptime(ptime)</entry>
+	    <entry valign="top" morerows="1"><screen>ptime(ptime)</screen></entry>
 	    <entry>Copy constructor</entry>
-	    <entry>ptime t3(t1)</entry>
 	  </row>
 	  <row>
-	    <entry>ptime(special_values sv)</entry>
+	    <entry><screen>ptime t3(t1)</screen></entry>
+          </row>
+          
+	  <row>
+	    <entry valign="top" morerows="1"><screen>ptime(special_values sv)</screen></entry>
 	    <entry>Constructor for infinities, not-a-date-time, max_date_time, and min_date_time</entry>
-	    <entry>
-	      ptime d1(neg_infin);
-	      ptime d2(pos_infin);
-	      ptime d3(not_a_date_time);
-	      ptime d4(max_date_time);
-	      ptime d5(min_date_time);</entry>
 	  </row>
 	  <row>
-	    <entry>ptime;</entry>
+	    <entry><screen>
+ptime d1(neg_infin);
+ptime d2(pos_infin);
+ptime d3(not_a_date_time);
+ptime d4(max_date_time);
+ptime d5(min_date_time);</screen></entry>
+          </row>
+          
+          <row>
+	    <entry valign="top" morerows="1"><screen>ptime;</screen></entry>
 	    <entry>Default constructor. Creates a ptime object initialized to not_a_date_time. NOTE: this constructor can be disabled by defining DATE_TIME_NO_DEFAULT_CONSTRUCTOR (see compiler_config.hpp)</entry>
-	    <entry>ptime p; // p =&gt; not_a_date_time</entry>
+	  </row>
+	  <row>
+	    <entry><screen>ptime p; // p =&gt; not_a_date_time</screen></entry>
 	  </row>
 	</tbody>
       </tgroup>
@@ -93,26 +106,35 @@
   <bridgehead renderas="sect3">Construct from String</bridgehead>
   <para>
     <informaltable frame="all">
-      <tgroup cols="3">
+      <tgroup cols="2">
+        <colspec colwidth="33%" />
+        <colspec colwidth="66%" />
 	<thead>
 	  <row>
-	    <entry>Syntax</entry>
+	    <entry valign="top" morerows="1">Syntax</entry>
 	    <entry>Description</entry>
+	  </row>
+	  <row>
 	    <entry>Example</entry>
 	  </row>
 	</thead>
 	<tbody>
-	  <row>
-	    <entry>ptime time_from_string(const std::string&amp;)</entry>
+          <row>
+	    <entry valign="top" morerows="1"><screen>ptime time_from_string(std::string)</screen></entry>
 	    <entry>From delimited string.</entry>
-	    <entry>std::string ts("2002-01-20 23:59:59.000");
-ptime t(time_from_string(ts))</entry>
 	  </row>
 	  <row>
-	    <entry>ptime from_iso_string(const std::string&amp;)</entry>
+	    <entry><screen>std::string ts("2002-01-20 23:59:59.000");
+ptime t(time_from_string(ts))</screen></entry>
+          </row>
+
+	  <row>
+	    <entry valign="top" morerows="1"><screen>ptime from_iso_string(std::string)</screen></entry>
 	    <entry>From non delimited iso form string.</entry>
-	    <entry>std::string ts("20020131T235959");
-ptime t(from_iso_string(ts))</entry>
+	  </row>
+          <row>
+	    <entry><screen>std::string ts("20020131T235959");
+ptime t(from_iso_string(ts))</screen></entry>
 	  </row>
 	</tbody>
       </tgroup>
@@ -124,29 +146,41 @@ ptime t(from_iso_string(ts))</entry>
   <bridgehead renderas="sect3">Construct from Clock</bridgehead>
   <para>
     <informaltable frame="all">
-      <tgroup cols="3">
+      <tgroup cols="2">
+        <colspec colwidth="33%" />
+        <colspec colwidth="66%" />
 	<thead>
 	  <row>
-	    <entry>Syntax</entry>
+	    <entry valign="top" morerows="1">Syntax</entry>
 	    <entry>Description</entry>
+	  </row>
+	  <row>
 	    <entry>Example</entry>
 	  </row>
 	</thead>
 	<tbody>
-	  <row>
-	    <entry>static ptime second_clock::local_time();</entry>
+          <row>
+	    <entry valign="top" morerows="1"><screen>ptime second_clock::local_time()</screen></entry>
 	    <entry>Get the local time, second level resolution, based on the time zone settings of the computer.</entry>
-	    <entry>ptime t(second_clock::local_time())</entry>
 	  </row>
 	  <row>
-	    <entry>static ptime second_clock::universal_time()</entry>
+	    <entry><screen>ptime t(second_clock::local_time());</screen></entry>
+          </row>
+
+	  <row>
+	    <entry valign="top" morerows="1"><screen>static ptime second_clock::universal_time()</screen></entry>
 	    <entry>Get the UTC time.</entry>
-	    <entry>ptime t(second_clock::universal_day())</entry>
 	  </row>
 	  <row>
-	    <entry>static ptime microsec_clock::local_time()</entry>
+	    <entry><screen>ptime t(second_clock::universal_day())</screen></entry>
+          </row>
+          
+          <row>
+	    <entry valign="top" morerows="1"><screen>ptime microsec_clock::local_time()</screen></entry>
 	    <entry>Get the local time using a subsecond resolution clock.  On Unix systems this is implemented using GetTimeOfDay.  On most Win32 platforms it is implemented using ftime.  Win32 systems often do not achieve microsecond resolution via this API.  If higher resolution is critical to your application test your platform to see the acheived resolution.</entry>
-	    <entry>ptime t(microsec_clock::local_time())</entry>
+	  </row>
+	  <row>
+	    <entry><screen>ptime t(microsec_clock::local_time());</screen></entry>
 	  </row>
 	</tbody>
       </tgroup>
@@ -158,24 +192,33 @@ ptime t(from_iso_string(ts))</entry>
   <bridgehead renderas="sect3">Construct using Conversion Functions</bridgehead>
   <para>
     <informaltable frame="all">
-      <tgroup cols="3">
+      <tgroup cols="2">
+        <colspec colwidth="33%" />
+        <colspec colwidth="66%" />
 	<thead>
 	  <row>
-	    <entry>Syntax</entry>
+	    <entry valign="top" morerows="1">Syntax</entry>
 	    <entry>Description</entry>
+	  </row>
+	  <row>
 	    <entry>Example</entry>
 	  </row>
 	</thead>
 	<tbody>
-	  <row>
-	    <entry>ptime from_time_t(time_t t);</entry>
+          <row>
+	    <entry valign="top" morerows="1"><screen>ptime from_time_t(time_t t);</screen></entry>
 	    <entry>Converts a time_t into a ptime.</entry>
-	    <entry>ptime t = from_time_t(tt);</entry>
 	  </row>
 	  <row>
-            <entry>ptime from_ftime&lt;ptime&gt;(FILETIME ft);</entry>
+	    <entry><screen>ptime t = from_time_t(tt);</screen></entry>
+          </row>
+
+          <row>
+            <entry valign="top" morerows="1"><screen>ptime from_ftime&lt;ptime&gt;(FILETIME ft);</screen></entry>
             <entry>Creates a ptime object from a FILETIME structure.</entry>
-            <entry>ptime t = from_ftime&lt;ptime&gt;(ft);</entry>
+	  </row>
+	  <row>
+            <entry><screen>ptime t = from_ftime&lt;ptime&gt;(ft);</screen></entry>
 	  </row>
 	</tbody>
       </tgroup>
@@ -187,31 +230,40 @@ ptime t(from_iso_string(ts))</entry>
   <bridgehead renderas="sect3">Accessors</bridgehead>
   <para>
     <informaltable frame="all">
-      <tgroup cols="3">
+      <tgroup cols="2">
+        <colspec colwidth="33%" />
+        <colspec colwidth="66%" />
 	<thead>
 	  <row>
-	    <entry>Syntax</entry>
+	    <entry valign="top" morerows="1">Syntax</entry>
 	    <entry>Description</entry>
+	  </row>
+	  <row>
 	    <entry>Example</entry>
 	  </row>
 	</thead>
 	<tbody>
-	  <row>
-	    <entry>date date() const</entry>
+          <row>
+	    <entry valign="top" morerows="1"><screen>date date()</screen></entry>
 	    <entry>Get the date part of a time.</entry>
-	    <entry>
-	      date d(2002,Jan,10);
-	      ptime t(d, hour(1));
-	      t.date() --> 2002-Jan-10;
-	    </entry>
 	  </row>
 	  <row>
-	    <entry>time_duration time_of_day() const</entry>
+	    <entry><screen>
+date d(2002,Jan,10);
+ptime t(d, hour(1));
+t.date() --> 2002-Jan-10;</screen>
+	    </entry>
+          </row>
+
+	  <row>
+	    <entry valign="top" morerows="1"><screen>time_duration time_of_day()</screen></entry>
 	    <entry>Get the time offset in the day.</entry>
-	    <entry>
-	      date d(2002,Jan,10);
-	      ptime t(d, hour(1));
-	      t.time_of_day() --> 01:00:00;
+	  </row>
+	  <row>
+	    <entry><screen>
+date d(2002,Jan,10);
+ptime t(d, hour(1));
+t.time_of_day() --> 01:00:00;</screen>
 	    </entry>
 	  </row>
 	</tbody>
@@ -224,29 +276,41 @@ ptime t(from_iso_string(ts))</entry>
   <bridgehead renderas="sect3">Conversion to String</bridgehead>
   <para>
     <informaltable frame="all">
-      <tgroup cols="3">
+      <tgroup cols="2">
+        <colspec colwidth="33%" />
+        <colspec colwidth="66%" />
 	<thead>
 	  <row>
-	    <entry>Syntax</entry>
+	    <entry valign="top" morerows="1">Syntax</entry>
 	    <entry>Description</entry>
+	  </row>
+	  <row>
 	    <entry>Example</entry>
 	  </row>
 	</thead>
 	<tbody>
-	  <row>
-	    <entry>std::string to_simple_string(ptime)</entry>
-	    <entry>To YYYY-mmm-DD HH:MM:SS.fffffffff string where mmm 3 char month name. Fractional seconds only included if non-zero.</entry>
-	    <entry>2002-Jan-01 10:00:01.123456789</entry>
+          <row>
+	    <entry valign="top" morerows="1"><screen>std::string to_simple_string(ptime)</screen></entry>
+            <entry>To <code>YYYY-mmm-DD HH:MM:SS.fffffffff</code> string where <code>mmm</code> 3 char month name. Fractional seconds only included if non-zero.</entry>
 	  </row>
 	  <row>
-	    <entry>std::string to_iso_string(ptime)</entry>
-	    <entry>Convert to form YYYYMMDDTHHMMSS,fffffffff where T is the date-time separator</entry>
-	    <entry>20020131T100001,123456789</entry>
+	    <entry><screen>2002-Jan-01 10:00:01.123456789</screen></entry>
+          </row>
+
+	  <row>
+	    <entry valign="top" morerows="1"><screen>std::string to_iso_string(ptime)</screen></entry>
+            <entry>Convert to form <code>YYYYMMDDTHHMMSS,fffffffff</code> where <code>T</code> is the date-time separator</entry>
 	  </row>
 	  <row>
-	    <entry>std::string to_iso_extended_string(ptime)</entry>
-	    <entry>Convert to form YYYY-MM-DDTHH:MM:SS,fffffffff where T is the date-time separator</entry>
-	    <entry>2002-01-31T10:00:01,123456789</entry>
+	    <entry><screen>20020131T100001,123456789</screen></entry>
+          </row>
+          
+          <row>
+	    <entry valign="top" morerows="1"><screen>std::string to_iso_extended_string(ptime)</screen></entry>
+            <entry>Convert to form <code>YYYY-MM-DDTHH:MM:SS,fffffffff</code> where <code>T</code> is the date-time separator</entry>
+	  </row>
+	  <row>
+	    <entry><screen>2002-01-31T10:00:01,123456789</screen></entry>
 	  </row>
 	</tbody>
       </tgroup>
@@ -258,70 +322,91 @@ ptime t(from_iso_string(ts))</entry>
   <bridgehead renderas="sect3">Operators</bridgehead>
   <para>
     <informaltable frame="all">
-      <tgroup cols="3">
+      <tgroup cols="2">
+        <colspec colwidth="33%" />
+        <colspec colwidth="66%" />
 	<thead>
 	  <row>
-	    <entry>Syntax</entry>
+	    <entry valign="top" morerows="1">Syntax</entry>
 	    <entry>Description</entry>
+	  </row>
+	  <row>
 	    <entry>Example</entry>
 	  </row>
 	</thead>
 	<tbody>
-	  <row>
-	    <entry>
-	      operator==, operator!=,
-	      operator>, operator&lt;
-	      operator>=, operator&lt;=
+          <row>
+	    <entry valign="top" morerows="1"><screen>
+operator==, operator!=,
+operator>, operator&lt;,
+operator>=, operator&lt;=</screen>
 	    </entry>
 	    <entry>A full complement of comparison operators</entry>
-	    <entry>t1 == t2, etc</entry>
 	  </row>
 	  <row>
-	    <entry>ptime operator+(date_duration) const</entry>
+	    <entry><screen>t1 == t2, etc</screen></entry>
+          </row>
+
+	  <row>
+	    <entry valign="top" morerows="1"><screen>ptime operator+(date_duration)</screen></entry>
 	    <entry>Return a ptime adding a day offset</entry>
-	    <entry>
-	      date d(2002,Jan,1);
-	      ptime t(d,minutes(5));
-	      date_duration dd(1);
-	      ptime t2 = t + dd;
-	    </entry>
 	  </row>
 	  <row>
-	    <entry>ptime operator-(date_duration) const</entry>
+	    <entry><screen>
+date d(2002,Jan,1);
+ptime t(d,minutes(5));
+date_duration dd(1);
+ptime t2 = t + dd;</screen>
+	    </entry>
+          </row>
+          
+	  <row>
+	    <entry valign="top" morerows="1"><screen>ptime operator-(date_duration)</screen></entry>
 	    <entry>Return a ptime subtracting a day offset</entry>
-	    <entry>
-	      date d(2002,Jan,1);
-	      ptime t(d,minutes(5));
-	      date_duration dd(1);
-	      ptime t2 = t - dd;
-	    </entry>
 	  </row>
 	  <row>
-	    <entry>ptime operator+(time_duration) const</entry>
+	    <entry><screen>
+date d(2002,Jan,1);
+ptime t(d,minutes(5));
+date_duration dd(1);
+ptime t2 = t - dd;</screen>
+	    </entry>
+          </row>
+          
+	  <row>
+	    <entry valign="top" morerows="1"><screen>ptime operator+(time_duration)</screen></entry>
 	    <entry>Return a ptime adding a time duration</entry>
-	    <entry>
-	      date d(2002,Jan,1);
-	      ptime t(d,minutes(5));
-	      ptime t2 = t + hours(1) + minutes(2);
-	    </entry>
 	  </row>
 	  <row>
-	    <entry>ptime operator-(time_duration) const</entry>
+	    <entry><screen>
+date d(2002,Jan,1);
+ptime t(d,minutes(5));
+ptime t2 = t + hours(1) + minutes(2);</screen>
+	    </entry>
+          </row>
+          
+	  <row>
+	    <entry valign="top" morerows="1"><screen>ptime operator-(time_duration)</screen></entry>
 	    <entry>Return a ptime subtracting a time duration</entry>
-	    <entry>
-	      date d(2002,Jan,1);
-	      ptime t(d,minutes(5));
-	      ptime t2 = t - minutes(2);
-	    </entry>
 	  </row>
 	  <row>
-	    <entry>time_duration operator-(ptime) const</entry>
+	    <entry><screen>
+date d(2002,Jan,1);
+ptime t(d,minutes(5));
+ptime t2 = t - minutes(2);</screen>
+	    </entry>
+          </row>
+          
+          <row>
+	    <entry valign="top" morerows="1"><screen>time_duration operator-(ptime)</screen></entry>
 	    <entry>Take the difference between two times.</entry>
-	    <entry>
-	      date d(2002,Jan,1);
-	      ptime t1(d,minutes(5));
-	      ptime t2(d,seconds(5));
-	      time_duration t3 = t2 - t1;//negative result
+	  </row>
+	  <row>
+	    <entry><screen>
+date d(2002,Jan,1);
+ptime t1(d,minutes(5));
+ptime t2(d,seconds(5));
+time_duration t3 = t2 - t1;//negative result</screen>
 	    </entry>
 	  </row>
 	</tbody>
@@ -329,6 +414,4 @@ ptime t(from_iso_string(ts))</entry>
     </informaltable>
   </para>
 
-
-  <link linkend="top">top</link>
 </section>

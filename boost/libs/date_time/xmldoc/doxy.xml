@@ -17,5 +17,6 @@
   <xi:include href="date_time_autodoc.boostbook"/>
   <xi:include href="gregorian_autodoc.boostbook"/>
   <xi:include href="posix_time_autodoc.boostbook"/>
+  <xi:include href="local_time_autodoc.boostbook"/>
 </section>
 

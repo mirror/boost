@@ -26,50 +26,66 @@
   <anchor id="iterators_header" />
   <bridgehead renderas="sect3">Header</bridgehead>
   <para>
-    <programlisting>
-      #include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
-      or
-      #include "boost/date_time/gregorian/gregorian_types.hpp" //no i/o just types
-    </programlisting>
+    <programlisting>#include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
+or
+#include "boost/date_time/gregorian/gregorian_types.hpp" //no i/o just types</programlisting>
   </para>
 
   <anchor id="iterators_overview" />
   <bridgehead renderas="sect3">Overview</bridgehead>
   <informaltable frame="all">
-    <tgroup cols="3">
+    <tgroup cols="2">
+      <colspec colwidth="33%" />
+      <colspec colwidth="66%" />
       <thead>
 	<row>
-	  <entry>Class</entry>
+	  <entry valign="top" morerows="1">Class</entry>
 	  <entry>Construction Parameters</entry>
+	</row>
+	<row>
 	  <entry>Description</entry>
 	</row>
       </thead>
       <tbody>
+        <row>
+	  <entry valign="top" morerows="1"><screen>date_iterator</screen></entry>
+	  <entry><screen></screen></entry>
+	</row>
 	<row>
-	  <entry>date_iterator</entry>
-	  <entry></entry>
 	  <entry>Common base class for all day level iterators.</entry>
+        </row>
+
+	<row>
+	  <entry valign="top" morerows="1"><screen>day_iterator</screen></entry>
+	  <entry><screen>day_iterator(date start_date, int day_count=1)</screen></entry>
 	</row>
 	<row>
-	  <entry>day_iterator</entry>
-	  <entry>date start_date, int day_count=1</entry>
 	  <entry>Iterate day_count days at a time.</entry>
+        </row>
+        
+	<row>
+	  <entry valign="top" morerows="1"><screen>week_iterator</screen></entry>
+	  <entry><screen>week_iterator(date start_date, int week_offset=1)</screen></entry>
 	</row>
 	<row>
-	  <entry>week_iterator</entry>
-	  <entry> date start_date, int week_offset=1</entry>
 	  <entry>Iterate week_offset weeks at a time.</entry>
+        </row>
+        
+	<row>
+	  <entry valign="top" morerows="1"><screen>month_iterator</screen></entry>
+	  <entry><screen>month_iterator(date start_date, int month_offset=1)</screen></entry>
 	</row>
 	<row>
-	  <entry>month_iterator</entry>
-	  <entry>date start_date, int month_offset=1</entry>
 	  <entry>
 	    Iterate month_offset months. There are special rules for handling the end of the month. These are: if start date is last day of the month, always adjust to last day of the month. If date is beyond the end of the month (eg: jan 31 + 1 month) adjust back to end of month.
 	  </entry>
+        </row>
+        
+        <row>
+	  <entry valign="top" morerows="1"><screen>year_iterator</screen></entry>
+	  <entry><screen>year_iterator(date start_date, int year_offset=1)</screen></entry>
 	</row>
 	<row>
-	  <entry>year_iterator</entry>
-	  <entry>date start_date, int year_offset=1</entry>
 	  <entry>Iterate year_offset years. The year_iterator will always land on the day of the date parameter except when date is Feb 28 in a non-leap year. In this case the iterator will return Feb 29 for leap years (eg: 2003-Feb-28, 2004-Feb-29, 2005-Feb-28).</entry>
 	</row>
       </tbody>
@@ -77,5 +93,4 @@
   </informaltable>
 
 
-  <link linkend="top">top</link>
 </section>

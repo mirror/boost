@@ -29,43 +29,61 @@
   <anchor id="local_utc_header" />
   <bridgehead renderas="sect3">Header</bridgehead>
   <para>
-    <programlisting>
-      #include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
-      or
-      #include "boost/date_time/gregorian/gregorian_types.hpp" //no i/o just types
-    </programlisting>
+    <programlisting>#include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
+or
+#include "boost/date_time/gregorian/gregorian_types.hpp" //no i/o just types</programlisting>
   </para>
 
   <anchor id="local_utc_overview" />
   <bridgehead renderas="sect3">Overview</bridgehead>
   <para>
     <informaltable frame="all">
-      <tgroup cols="3">
+      <tgroup cols="2">
+        <colspec colwidth="33%" />
+        <colspec colwidth="66%" />
 	<thead>
 	  <row>
-	    <entry>Class</entry>
+	    <entry valign="top" morerows="1">Class</entry>
 	    <entry>Description</entry>
+	  </row>
+	  <row>
 	    <entry>Example</entry>
 	  </row>
 	</thead>
 	<tbody>
-	  <row>
-	    <entry>date_time::c_local_adjustor&lt;ptime>::utc_to_local(ptime)</entry>
+          <row>
+            <entry valign="top" morerows="1"><screen>
+c_local_adjustor&lt;ptime&gt;::utc_to_local(ptime)</screen></entry>
 	    <entry>Calculate local machine time from a UTC time based on time zone settings and the C API.</entry>
-	    <entry>
-	      typedef boost::date_time::c_local_adjustor&lt;ptime> local_adj;
-	      ptime t10(date(2002,Jan,1), hours(7));
-	      ptime t11 = local_adj::utc_to_local(t10);
+	  </row>
+	  <row>
+            <entry><screen>
+using namespace boost::date_time;
+typedef c_local_adjustor&lt;ptime> local_adj;
+ptime t10(date(2002,Jan,1), hours(7));
+ptime t11 = local_adj::utc_to_local(t10);</screen>
 	    </entry>
-	  </row>
+          </row>
+
 	  <row>
-	    <entry>date_time::local_adjustor&lt;ptime, utc_offset, dst_rules>::utc_to_local(ptime)</entry>
+            <entry valign="top" morerows="1"><screen>
+local_adjustor&lt;ptime, 
+               utc_offset,
+               dst_rules>::utc_to_local(ptime)</screen></entry>
 	    <entry>Calculate local machine time from a UTC time based daylight savings rules and utc offset</entry>
-	    <entry><link linkend="date_time.examples.local_utc_conversion">example</link></entry>
 	  </row>
 	  <row>
-	    <entry>date_time::local_adjustor&lt;ptime, utc_offset, dst_rules>::local_to_utc(ptime)</entry>
+	    <entry><link linkend="date_time.examples.local_utc_conversion">example</link></entry>
+          </row>
+          
+	  <row>
+            <entry valign="top" morerows="1"><screen>
+local_adjustor&lt;ptime, 
+               utc_offset, 
+               dst_rules&gt;::local_to_utc(ptime)</screen></entry>
 	    <entry>Calculate UTC time based on daylight savings rules and utc offset.</entry>
+	  </row>
+          <row>
 	    <entry><link linkend="date_time.examples.local_utc_conversion">example</link></entry>
 	  </row>
 	</tbody>
@@ -73,6 +91,4 @@
     </informaltable>
   </para>
 
-
-  <link linkend="top">top</link>
 </section>

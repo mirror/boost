@@ -3,7 +3,7 @@
 # additional comments at bottom of file
 
 #############################################################################
-#  Copyright (c) 2001-2004 CrystalClear Software, Inc.                      #
+#  Copyright (c) 2001-2005 CrystalClear Software, Inc.                      #
 #  Subject to the Boost Software License, Version 1.0.                      #
 #  (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0) #
 #############################################################################
@@ -16,7 +16,8 @@ use strict;
 my %files = (
   'date_time_autodoc.boostbook'  => 'date_time_reference',
   'gregorian_autodoc.boostbook'  => 'gregorian_reference',
-  'posix_time_autodoc.boostbook' => 'posix_time_reference'
+  'posix_time_autodoc.boostbook' => 'posix_time_reference',
+  'local_time_autodoc.boostbook' => 'local_time_reference'
 );
 
 
@@ -78,7 +79,7 @@ sub rewrite_tags {
     my $month = (qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec))[(localtime)[4]];
     $year += 1900; # adjust year
     print OTP <<EO_LIC;
-<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -108,3 +109,6 @@ Change log
         - fixed minor bug that placed multiple license statements in files if
           input file had already had it's tags fixed.
         - added a processed date to the license statement
+12/02/2005
+        - added local_time_autodoc.boostbook
+        - updated copyrights to 2005

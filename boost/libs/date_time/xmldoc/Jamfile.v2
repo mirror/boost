@@ -10,7 +10,11 @@ boostbook date_time : date_time.xml ;
 local date_time_files = [ set.difference  
 	[ glob ../../../boost/date_time/*.hpp ] : 
 	[ glob ../../../boost/date_time/testfrmwk.hpp 
-		../../../boost/date_time/time_zone*.hpp ] 
+	#	../../../boost/date_time/time_zone_base.hpp  
+	#	../../../boost/date_time/time_zone_names.hpp  
+	#	../../../boost/date_time/tz_db_base.hpp  
+	#	../../../boost/date_time/dst_transition_generators.hpp 
+        ] 
 	] ;
 
 local gregorian_files = [ set.difference  
@@ -35,10 +39,10 @@ doxygen posix_time_autodoc :
         <doxygen:param>ENABLE_PREPROCESSING=NO 
 	;
 
-#doxygen date_time_local_time_autodoc :
-#        [ glob ../../../boost/date_time/local_time/*.hpp ] : 
-#        <doxygen:param>ENABLE_PREPROCESSING=NO 
-#        ;
+doxygen local_time_autodoc :
+        [ glob ../../../boost/date_time/local_time/*.hpp ] : 
+        <doxygen:param>ENABLE_PREPROCESSING=NO 
+        ;
 
 
 

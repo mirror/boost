@@ -32,6 +32,8 @@
   <para>
     <informaltable frame="all">
       <tgroup cols="2">
+        <colspec colwidth="33%" />
+        <colspec colwidth="66%" />
 	<thead>
 	  <row>
 	    <entry>Example</entry>
@@ -39,24 +41,26 @@
 	  </row>
 	</thead>
 	<tbody>
-	  <row>
-	    <entry><link linkend="date_time.examples.days_alive">Days Alive</link> <link linkend="date_time.examples.days_till_new_year">Days Till New Year</link></entry>
+          <row>
+            <entry valign="top"><literallayout>
+<link linkend="date_time.examples.days_alive">Days Alive</link> &nbsp; 
+<link linkend="date_time.examples.days_till_new_year">Days Till New Year</link></literallayout></entry>
 	    <entry>Simple date arithmetic. Retrieve current day from clock.</entry>
 	  </row>
 	  <row>
-	    <entry><link linkend="date_time.examples.dates_as_strings">Dates as strings</link></entry>
+	    <entry valign="top"><literallayout><link linkend="date_time.examples.dates_as_strings">Dates as strings</link></literallayout></entry>
 	    <entry>Simple parsing and formatting of dates from/to strings</entry>
 	  </row>
 	  <row>
-	    <entry><link linkend="date_time.examples.date_period_calc">Date Period Calculations</link></entry>
+	    <entry valign="top"><literallayout><link linkend="date_time.examples.date_period_calc">Date Period Calculations</link></literallayout></entry>
 	    <entry>See if a date is in a set of date periods (eg: is it a holiday/weekend)</entry>
 	  </row>
 	  <row>
-	    <entry><link linkend="date_time.examples.print_month">Print a month</link></entry>
+	    <entry valign="top"><literallayout><link linkend="date_time.examples.print_month">Print a month</link></literallayout></entry>
 	    <entry>Small utility program which prints out all the days in a month from command line. Need to know if 1999-Jan-1 was a Friday or a Saturday? This program shows how to do it.</entry>
 	  </row>
-	  <row>
-	    <entry><link linkend="date_time.examples.print_holidays">Print Holidays</link></entry>
+          <row>
+	    <entry valign="top"><literallayout><link linkend="date_time.examples.print_holidays">Print Holidays</link></literallayout></entry>
 	    <entry>Uses date generators to convert abstract specification into concrete set of dates.</entry>
 	  </row>
 	</tbody>
@@ -72,6 +76,4 @@
   <xi:include href="gregorian_calendar.xml" />
   <xi:include href="day_clock_class.xml" />
   
-  <link linkend="top">top</link>
-
 </section>

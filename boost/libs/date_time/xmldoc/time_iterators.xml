@@ -55,30 +55,34 @@
   <anchor id="time_iter_header" />
   <bridgehead renderas="sect3">Header</bridgehead>
   <para>
-    <programlisting>
-      #include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
-      or
-      #include "boost/date_time/posix_time/posix_time_types.hpp" //no i/o just types
-    </programlisting>
+    <programlisting>#include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
+or
+#include "boost/date_time/posix_time/posix_time_types.hpp" //no i/o just types</programlisting>
   </para>
 
   <anchor id="time_iter_overview" />
   <bridgehead renderas="sect3">Overview</bridgehead>
   <para>
     <informaltable frame="all">
-      <tgroup cols="3">
+      <tgroup cols="2">
+        <colspec colwidth="33%" />
+        <colspec colwidth="66%" />
 	<thead>
 	  <row>
-	    <entry>Class</entry>
-	    <entry>Construction Parameters</entry>
+	    <entry valign="top" morerows="1">Class</entry>
 	    <entry>Description</entry>
+          </row>
+          <row>
+            <entry>Construction Parameters</entry>
 	  </row>
 	</thead>
 	<tbody>
 	  <row>
-	    <entry>time_iterator</entry>
-	    <entry>ptime start_time, time_duration increment</entry>
+            <entry valign="top" morerows="1"><screen>time_iterator</screen></entry>
 	    <entry>Iterate incrementing by the specified duration.</entry>
+          </row>
+          <row>
+            <entry><screen>ptime start_time, time_duration increment</screen></entry>
 	  </row>
 	</tbody>
       </tgroup>
@@ -90,55 +94,65 @@
   <bridgehead renderas="sect3">Operators</bridgehead>
   <para>
     <informaltable frame="all">
-      <tgroup cols="3">
+      <tgroup cols="2">
+        <colspec colwidth="33%" />
+        <colspec colwidth="66%" />
 	<thead>
 	  <row>
-	    <entry>Syntax</entry>
+	    <entry valign="top" morerows="1">Syntax</entry>
 	    <entry>Description</entry>
+	  </row>
+	  <row>
 	    <entry>Example</entry>
 	  </row>
 	</thead>
 	<tbody>
-	  <row>
-	    <entry>
-	      operator==(const ptime&amp; rhs),
-	      operator!=(const ptime&amp; rhs),
-	      operator>, operator&lt;
-	      operator>=, operator&lt;=
+          <row>
+	    <entry valign="top" morerows="1"><screen>
+operator==(const ptime&amp; rhs),
+operator!=(const ptime&amp; rhs),
+operator>, operator&lt;,
+operator>=, operator&lt;=</screen>
 	    </entry>
 	    <entry>A full complement of comparison operators</entry>
-	    <entry>
-	      date d(2002,Jan,1);
-	      ptime start_time(d, hours(1));
-	      //increment by 10 minutes
-	      time_iterator titr(start_time, minutes(10));
-	      ptime end_time = start_time + hours(2);
-	      if (titr == end_time) // false
-	      if (titr != end_time) // true
-	      if (titr >= end_time) // false
-	      if (titr &lt;= end_time) // true
-	    </entry>
 	  </row>
 	  <row>
-	    <entry>prefix increment</entry>
+	    <entry><screen>
+date d(2002,Jan,1);
+ptime start_time(d, hours(1));
+//increment by 10 minutes
+time_iterator titr(start_time, minutes(10));
+ptime end_time = start_time + hours(2);
+if (titr == end_time) // false
+if (titr != end_time) // true
+if (titr >= end_time) // false
+if (titr &lt;= end_time) // true</screen>
+	    </entry>
+          </row>
+
+	  <row>
+	    <entry valign="top" morerows="1"><screen>prefix increment</screen></entry>
 	    <entry>Increment the iterator by the specified duration.</entry>
-	    <entry>
-	      //increment by 10 milli seconds
-	      time_iterator titr(start_time, milliseconds(10));
-	      ++titr; // == start_time + 10 milliseconds
-	    </entry>
 	  </row>
 	  <row>
-	    <entry>prefix decrement</entry>
+	    <entry><screen>
+//increment by 10 milli seconds
+time_iterator titr(start_time, milliseconds(10));
+++titr; // == start_time + 10 milliseconds</screen>
+	    </entry>
+          </row>
+          
+	  <row>
+	    <entry valign="top" morerows="1"><screen>prefix decrement</screen></entry>
 	    <entry>Decrement the iterator by the specified time duration.</entry>
-	    <entry>Example time_iterator titr(start_time, time_duration(1,2,3));
---titr; // == start_time - 1 hour, 2 minutes, and 3 seconds</entry>
+	  </row>
+          <row>
+	    <entry><screen>time_iterator titr(start_time, time_duration(1,2,3));
+--titr; // == start_time - 1 hour, 2 minutes, and 3 seconds</screen></entry>
 	  </row>
 	</tbody>
       </tgroup>
     </informaltable>
   </para>
 
-
-  <link linkend="top">top</link>
 </section>
