@@ -86,13 +86,17 @@ namespace boost {
        * so function requires a union of the two. */
       union any_pointer 
       {
+        class incomplete;
+
         void* obj_ptr;
         const void* const_obj_ptr;
         void (*func_ptr)();
+        void (incomplete::*mem_func_ptr)();
 
         explicit any_pointer(void* p) : obj_ptr(p) {}
         explicit any_pointer(const void* p) : const_obj_ptr(p) {}
         explicit any_pointer(void (*p)()) : func_ptr(p) {}
+        explicit any_pointer(void (incomplete::*p)()) : mem_func_ptr(p) {}
       };
 
       /**
@@ -139,7 +143,7 @@ namespace boost {
                             function_ptr_tag,
                             function_obj_tag>::type ptr_or_obj_tag;
 
-        typedef typename IF<(is_member_pointer<F>::value),
+        typedef typename IF<(is_member_function_pointer<F>::value),
                             member_ptr_tag,
                             ptr_or_obj_tag>::type ptr_or_obj_or_mem_tag;
 
@@ -156,7 +160,7 @@ namespace boost {
       // The trivial manager does nothing but return the same pointer (if we
       // are cloning) or return the null pointer (if we are deleting).
       inline any_pointer trivial_manager(any_pointer f, 
-                                  functor_manager_operation_type op)
+                                         functor_manager_operation_type op)
       {
         if (op == clone_functor_tag)
           return f;
