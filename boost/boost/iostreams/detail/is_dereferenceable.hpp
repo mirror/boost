@@ -8,6 +8,13 @@
 #ifndef BOOST_IOSTREAMS_DETAIL_IS_DEREFERENCEABLE_HPP_INCLUDED
 #define BOOST_IOSTREAMS_DETAIL_IS_DEREFERENCEABLE_HPP_INCLUDED
 
+# include <boost/type_traits/detail/bool_trait_def.hpp>
+# include <boost/type_traits/detail/template_arity_spec.hpp>
+# include <boost/type_traits/remove_cv.hpp>
+# include <boost/mpl/aux_/lambda_support.hpp>
+# include <boost/mpl/bool.hpp>
+# include <boost/detail/workaround.hpp>
+
 namespace boost { namespace iostreams { namespace detail { 
 
 // is_dereferenceable<T> metafunction
@@ -49,7 +56,7 @@ namespace is_dereferenceable_
   template <class T>
   struct impl
   {
-      static typename remove_cv<T>::type& x;
+      static typename boost::remove_cv<T>::type& x;
 
       BOOST_STATIC_CONSTANT(
           bool
@@ -60,11 +67,18 @@ namespace is_dereferenceable_
 
 # undef BOOST_comma
 
-template <class T>
-struct is_dereferenceable
-    : mpl::bool_< ::boost::detail::is_incrementable_::impl<T>::value >
-    { };
+template<typename T> 
+struct is_dereferenceable 
+    BOOST_TT_AUX_BOOL_C_BASE(is_dereferenceable_::impl<T>::value)
+{ 
+    BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(is_dereferenceable_::impl<T>::value)
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_dereferenceable,(T))
+};
 
-} } } // End namespaces detail, iostreams, boost.
+} } 
+
+BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1, ::boost::iostreams::detail::is_dereferenceable)
+
+} // End namespaces detail, iostreams, boost.
 
 #endif // BOOST_IOSTREAMS_DETAIL_IS_DEREFERENCEABLE_HPP_INCLUDED
