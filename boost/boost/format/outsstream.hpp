@@ -20,12 +20,12 @@
 #ifndef BOOST_FORMAT_OUTSSTREAM_H
 #define BOOST_FORMAT_OUTSSTREAM_H
 
-#ifndef BOOST_NO_STRINGSTREAM
+#if !defined( BOOST_NO_STRINGSTREAM)  & ! BOOST_WORKAROUND(__GNUC__, <3)
 #include <sstream>
 #else
 #include <strstream>
 #include <string>
-#endif
+#endif // BOOST_NO_STRING_STREAM
 
 #include <boost/assert.hpp>
 
@@ -33,8 +33,9 @@
 namespace boost {
 namespace io {
 
-#ifndef BOOST_NO_STRINGSTREAM  // g++ 2.95 might fail there, see boost/config/stdlib/sgi.hpp
 
+
+#if !defined( BOOST_NO_STRINGSTREAM)  & ! BOOST_WORKAROUND(__GNUC__, <3)
 template<class Ch, class Tr = std::char_traits<Ch> >
 class basic_outsstream : private std::basic_stringbuf<Ch, Tr>, 
                          public BOOST_IO_STD basic_ostream<Ch, Tr>
