@@ -144,7 +144,7 @@ namespace boost
 
 //  64-bit types + intmax_t and uintmax_t  ----------------------------------//
 
-# if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX)
+# if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || (defined(ULONGLONG_MAX) && !defined(BOOST_MSVC) && !defined(__BORLANDC__))
 #    if (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615U) || (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615U) || (defined(ULONGLONG_MAX) && ULONGLONG_MAX == 18446744073709551615U)
                                                                  // 2**64 - 1
      typedef long long            intmax_t;
@@ -310,4 +310,5 @@ Added 23rd September (John Maddock).
 # undef UINTMAX_C
 
 #endif // __STDC_CONSTANT_MACROS_DEFINED etc.
+
 
