@@ -25,6 +25,7 @@
 #include "boost/mpl/aux_/preprocessor/params.hpp"
 #include "boost/mpl/aux_/preprocessor/repeat.hpp"
 #include "boost/mpl/int_fwd.hpp"
+#include "boost/mpl/limits/arity.hpp"
 #include "boost/preprocessor/cat.hpp"
 #include "boost/preprocessor/empty.hpp"
 #include "boost/preprocessor/arithmetic/inc.hpp"
@@ -134,7 +135,7 @@ struct substitute<
     BOOST_VARIANT_AUX_SUBSTITUTE_TYPEDEF_IMPL( BOOST_PP_INC(N) ) \
     /**/
 
-#define BOOST_PP_ITERATION_LIMITS (0,BOOST_MPL_METAFUNCTION_MAX_ARITY)
+#define BOOST_PP_ITERATION_LIMITS (0,BOOST_MPL_LIMIT_METAFUNCTION_ARITY)
 #define BOOST_PP_FILENAME_1 "boost/variant/detail/substitute.hpp"
 #include BOOST_PP_ITERATE()
 

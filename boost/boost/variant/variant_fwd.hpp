@@ -17,6 +17,7 @@
 
 #include "boost/blank_fwd.hpp"
 #include "boost/mpl/arg.hpp"
+#include "boost/mpl/limits/arity.hpp"
 #include "boost/mpl/aux_/na.hpp"
 #include "boost/preprocessor/cat.hpp"
 #include "boost/preprocessor/enum.hpp"
@@ -79,7 +80,7 @@
 //
 #include "boost/mpl/limits/arity.hpp"
 #define BOOST_VARIANT_RECURSIVE_VARIANT_MAX_ARITY \
-    BOOST_MPL_METAFUNCTION_MAX_ARITY
+    BOOST_MPL_LIMIT_METAFUNCTION_ARITY
 
 ///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_ENUM_PARAMS
