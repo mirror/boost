@@ -377,7 +377,7 @@ template<typename T>
   {
     bool operator()(const boost::shared_ptr<T>& a,
         const boost::shared_ptr<T>& b) const
-      { return less<T*>()(a.get(),b.get()); }
+      { return std::less<T*>()(a.get(),b.get()); }
   };
 
 template<typename T>
@@ -386,7 +386,7 @@ template<typename T>
   {
     bool operator()(const boost::shared_array<T>& a,
         const boost::shared_array<T>& b) const
-      { return less<T*>()(a.get(),b.get()); }
+      { return std::less<T*>()(a.get(),b.get()); }
   };
 
 } // namespace std

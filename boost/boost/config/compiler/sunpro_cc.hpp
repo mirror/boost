@@ -32,7 +32,13 @@
        // SunPro 5.3 has better support for partial specialization,
        // but breaks when compiling std::less<shared_ptr<T> >
        // (Jens Maurer 4 Nov 2001).
-#      define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+       // std::less specialization fixed as reported by George
+       // Heintzelman; partial specialization re-enabled
+       // (Peter Dimov 17 Jan 2002)
+
+//#      define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
        // integral constant expressions with 64 bit numbers fail
 #      define BOOST_NO_INTEGRAL_INT64_T
 #    endif
