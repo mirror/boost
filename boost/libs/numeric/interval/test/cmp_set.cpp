@@ -1,7 +1,7 @@
-/* Boost test/cmp_lex.cpp
- * test compare::lexicographic
+/* Boost test/cmp_set.cpp
+ * test compare::set
  *
- * Copyright 2002-2003 Guillaume Melquiond
+ * Copyright 2004 Guillaume Melquiond
  *
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or
