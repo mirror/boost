@@ -80,26 +80,6 @@
 #endif
 
 #define BOOST_UBLAS_NO_ELEMENT_PROXIES
-// This seems to work now thanks to the great work of the MPL team!
-// #define BOOST_UBLAS_NO_SMART_PROXIES
-
-// Using MSVC the following is missing:
-// namespace std {
-//
-//     typedef unsigned size_t;
-//     typedef signed ptrdiff_t;
-//
-//     template<class T>
-//     const T &max (const T &t1, const T &t2) {
-//         return t1 > t2 ? t1 : t2;
-//     }
-//     template<class T>
-//     const T &min (const T &t1, const T &t2) {
-//         return t1 < t2 ? t1 : t2;
-//     }
-//
-// }
-// But boost provides it for us.
 
 // This seems to be a problem in boost.config, but won't be fixed.
 #ifdef __SGI_STL_PORT
@@ -250,13 +230,11 @@ namespace std {
 #endif
 
 // Enable compile time typedefs for proxies
-#ifndef BOOST_UBLAS_NO_SMART_PROXIES
 #define BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
 // #define BOOST_UBLAS_REFERENCE_CONST_MEMBER
 #define BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
 // #define BOOST_UBLAS_PROXY_CONST_MEMBER
 #define BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
-#endif
 
 
 
