@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <iterator>
 #include <memory>
+#include <cstring>
 
 #include <boost/timer.hpp>
 #include <boost/type_traits.hpp>
