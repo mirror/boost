@@ -130,7 +130,7 @@ private:
     }
     #endif
     virtual void load_binary(void * t, std::size_t size){
-        ArchiveImplementation::load(t);
+        ArchiveImplementation::load_binary(t, size);
     }
 
     // used for xml and other tagged formats default does nothing

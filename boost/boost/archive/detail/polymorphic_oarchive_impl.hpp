@@ -127,7 +127,7 @@ private:
         return ArchiveImplementation::library_version();
     }
     virtual void save_binary(const void * t, std::size_t size){
-        ArchiveImplementation::save(t);
+        ArchiveImplementation::save_binary(t, size);
     }
 
     // used for xml and other tagged formats default does nothing
