@@ -35,6 +35,10 @@
 #   define BOOST_NO_INTRINSIC_WCHAR_T
 #endif
 
+#if !__option(exceptions)
+#   define BOOST_NO_EXCEPTIONS
+#endif
+
 #   if __MWERKS__ == 0x3000
 #     define BOOST_COMPILER_VERSION 8.0
 #   elif __MWERKS__ == 0x3001
