@@ -23,12 +23,22 @@
 
 #include <boost/re_detail/regex_config.hpp>
 #include <boost/re_detail/regex_raw_buffer.hpp>
+#include <boost/regex.hpp>
+#include <ostream>
 
 #ifdef BOOST_MSVC
 #include <crtdbg.h>
 #endif
 
 #ifdef BOOST_RE_DEBUG
+
+namespace boost { namespace re_detail {
+ostream& operator<<(ostream& s, syntax_element_type x)
+{
+    return s << static_cast<unsigned long>(x);
+}
+}} // namespace boost::re_detail
+
 
 namespace {
 
