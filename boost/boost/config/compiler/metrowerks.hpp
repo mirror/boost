@@ -37,7 +37,7 @@
 #     define BOOST_NO_SFINAE
 #    endif
 
-#   if(__MWERKS__ <= 0x3204)  // 9.3
+#   if(__MWERKS__ <= 0x3205)  // 9.4
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #     define BOOST_NO_IS_ABSTRACT
 #    endif
@@ -67,6 +67,8 @@
 #     define BOOST_COMPILER_VERSION 9.2
 #   elif __MWERKS__ == 0x3204
 #     define BOOST_COMPILER_VERSION 9.3
+#   elif __MWERKS__ == 0x3205
+#     define BOOST_COMPILER_VERSION 9.4
 #   else
 #     define BOOST_COMPILER_VERSION __MWERKS__
 #   endif
@@ -84,7 +86,7 @@
 #endif
 //
 // last known and checked version:
-#if (__MWERKS__ > 0x3204)
+#if (__MWERKS__ > 0x3205)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
