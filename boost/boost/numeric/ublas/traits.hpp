@@ -41,32 +41,32 @@ namespace boost { namespace numeric { namespace ublas {
 
         static
         BOOST_UBLAS_INLINE
-        real_type real (const_reference t) {
+        real_type real (const_reference) {
             external_logic ().raise ();
             return 0;
         }
         static
         BOOST_UBLAS_INLINE
-        real_type imag (const_reference t) {
+        real_type imag (const_reference) {
             external_logic ().raise ();
             return 0;
         }
         static
         BOOST_UBLAS_INLINE
-        value_type conj (const_reference t) {
+        value_type conj (const_reference) {
             external_logic ().raise ();
             return 0;
         }
 
         static
         BOOST_UBLAS_INLINE
-        real_type abs (const_reference t) {
+        real_type abs (const_reference) {
             external_logic ().raise ();
             return 0;
         }
         static
         BOOST_UBLAS_INLINE
-        value_type sqrt (const_reference t) {
+        value_type sqrt (const_reference) {
             external_logic ().raise ();
             return 0;
         }

@@ -61,21 +61,26 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         vector ():
+            vector_expression<self_type> (),
             size_ (0), data_ (0) {}
         BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
         vector (size_type size):
+            vector_expression<self_type> (),
             size_ (size), data_ (0) {
             resize (size);
         }
         BOOST_UBLAS_INLINE
         vector (size_type size, const array_type &data):
+            vector_expression<self_type> (),
             size_ (size), data_ (data) {}
         BOOST_UBLAS_INLINE
         vector (const vector &v):
+            vector_expression<self_type> (),
             size_ (v.size_), data_ (v.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         vector (const vector_expression<AE> &ae):
+            vector_expression<self_type> (),
             size_ (ae ().size ()), data_ (0) {
 #ifndef BOOST_UBLAS_TYPE_CHECK
             resize (ae ().size (), false);
@@ -583,12 +588,15 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         unit_vector ():
+            vector_expression<self_type> (),
             size_ (0), index_ (0) {}
         BOOST_UBLAS_INLINE
         unit_vector (size_type size, size_type index):
+            vector_expression<self_type> (),
             size_ (size), index_ (index) {}
         BOOST_UBLAS_INLINE
         unit_vector (const unit_vector &v):
+            vector_expression<self_type> (),
             size_ (v.size_), index_ (v.index_) {}
 
         // Accessors
@@ -830,12 +838,15 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         zero_vector ():
+            vector_expression<self_type> (),
             size_ (0) {}
         BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
         zero_vector (size_type size):
+            vector_expression<self_type> (),
             size_ (size) {}
         BOOST_UBLAS_INLINE
         zero_vector (const zero_vector &v):
+            vector_expression<self_type> (),
             size_ (v.size_) {}
 
         // Accessors
@@ -852,7 +863,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element access
         BOOST_UBLAS_INLINE
-        const_reference operator () (size_type i) const {
+        const_reference operator () (size_type /* i */) const {
             return zero_;
         }
 
@@ -898,7 +909,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator find (size_type i) const {
-            return const_iterator (*this, 0);
+            return const_iterator (*this, i);
         }
 
         // Iterators simply are pointers.
@@ -1036,12 +1047,15 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         scalar_vector ():
+            vector_expression<self_type> (),
             size_ (0), value_ () {}
         BOOST_UBLAS_INLINE
         scalar_vector (size_type size, const value_type &value):
+            vector_expression<self_type> (),
             size_ (size), value_ (value) {}
         BOOST_UBLAS_INLINE
         scalar_vector (const scalar_vector &v):
+            vector_expression<self_type> (),
             size_ (v.size_), value_ (v.value_) {}
 
         // Accessors

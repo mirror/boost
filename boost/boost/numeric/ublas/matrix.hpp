@@ -67,21 +67,26 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         matrix ():
+            matrix_expression<self_type> (),
             size1_ (0), size2_ (0), data_ (0) {}
         BOOST_UBLAS_INLINE
         matrix (size_type size1, size_type size2):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), data_ (0) {
             resize (size1, size2);
         }
         BOOST_UBLAS_INLINE
         matrix (size_type size1, size_type size2, const array_type &data):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), data_ (data) {}
         BOOST_UBLAS_INLINE
         matrix (const matrix &m):
+            matrix_expression<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix (const matrix_expression<AE> &ae):
+            matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (0) {
 #ifndef BOOST_UBLAS_TYPE_CHECK
             resize (ae ().size1 (), ae ().size2 (), false);
@@ -280,7 +285,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element lookup
         BOOST_UBLAS_INLINE
-        const_iterator1 find1 (int rank, size_type i, size_type j) const {
+        const_iterator1 find1 (int /* rank */, size_type i, size_type j) const {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator1 (*this, i, j);
 #else
@@ -288,7 +293,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
         BOOST_UBLAS_INLINE
-        iterator1 find1 (int rank, size_type i, size_type j) {
+        iterator1 find1 (int /* rank */, size_type i, size_type j) {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return iterator1 (*this, i, j);
 #else
@@ -296,7 +301,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
         BOOST_UBLAS_INLINE
-        const_iterator2 find2 (int rank, size_type i, size_type j) const {
+        const_iterator2 find2 (int /* rank */, size_type i, size_type j) const {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator2 (*this, i, j);
 #else
@@ -304,7 +309,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
         BOOST_UBLAS_INLINE
-        iterator2 find2 (int rank, size_type i, size_type j) {
+        iterator2 find2 (int /* rank */, size_type i, size_type j) {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return iterator2 (*this, i, j);
 #else
@@ -1003,18 +1008,22 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         vector_of_vector ():
+            matrix_expression<self_type> (),
             size1_ (0), size2_ (0), data_ (1) {}
         BOOST_UBLAS_INLINE
         vector_of_vector (size_type size1, size_type size2):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), data_ (1) {
             resize (size1, size2);
         }
         BOOST_UBLAS_INLINE
         vector_of_vector (const vector_of_vector &m):
+            matrix_expression<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_of_vector (const matrix_expression<AE> &ae):
+            matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (1) {
             resize (ae ().size1 (), ae ().size2 (), false);
             matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
@@ -1022,7 +1031,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Accessors
         BOOST_UBLAS_INLINE
-        size_type size1 () const { 
+        size_type size1 () const {
             return size1_;
         }
         BOOST_UBLAS_INLINE
@@ -1957,15 +1966,19 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         identity_matrix ():
+            matrix_expression<self_type> (),
             size1_ (0), size2_ (0) {}
         BOOST_UBLAS_INLINE
         identity_matrix (size_type size):
+            matrix_expression<self_type> (),
             size1_ (size), size2_ (size) {}
         BOOST_UBLAS_INLINE
         identity_matrix (size_type size1, size_type size2):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2) {}
         BOOST_UBLAS_INLINE
         identity_matrix (const identity_matrix &m):
+            matrix_expression<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_) {}
 
         // Accessors
@@ -2424,15 +2437,19 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         zero_matrix ():
+            matrix_expression<self_type> (),
             size1_ (0), size2_ (0) {}
         BOOST_UBLAS_INLINE
         zero_matrix (size_type size):
+            matrix_expression<self_type> (),
             size1_ (size), size2_ (size) {}
         BOOST_UBLAS_INLINE
         zero_matrix (size_type size1, size_type size2):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2) {}
         BOOST_UBLAS_INLINE
         zero_matrix (const zero_matrix &m):
+            matrix_expression<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_) {}
 
         // Accessors
@@ -2459,7 +2476,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element access
         BOOST_UBLAS_INLINE
-        const_reference operator () (size_type i, size_type j) const {
+        const_reference operator () (size_type /* i */, size_type /* j */) const {
             return zero_;
         }
 
@@ -2876,12 +2893,15 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         scalar_matrix ():
+            matrix_expression<self_type> (),
             size1_ (0), size2_ (0), value_ () {}
         BOOST_UBLAS_INLINE
         scalar_matrix (size_type size1, size_type size2, const value_type &value):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), value_ (value) {}
         BOOST_UBLAS_INLINE
         scalar_matrix (const scalar_matrix &m):
+            matrix_expression<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), value_ (m.value_) {}
 
         // Accessors

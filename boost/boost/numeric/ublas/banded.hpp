@@ -58,25 +58,30 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         banded_matrix ():
+            matrix_expression<self_type> (),
             size1_ (0), size2_ (0),
             lower_ (0), upper_ (0), data_ (0) {}
         BOOST_UBLAS_INLINE
         banded_matrix (size_type size1, size_type size2, size_type lower = 0, size_type upper = 0):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2),
             lower_ (lower), upper_ (upper), data_ (0) {
             resize (size1, size2, lower, upper);
         }
         BOOST_UBLAS_INLINE
         banded_matrix (size_type size1, size_type size2, size_type lower, size_type upper, const array_type &data):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2),
             lower_ (lower), upper_ (upper), data_ (data) {}
         BOOST_UBLAS_INLINE
         banded_matrix (const banded_matrix &m):
+            matrix_expression<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_),
             lower_ (m.lower_), upper_ (m.upper_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_matrix (const matrix_expression<AE> &ae, size_type lower = 0, size_type upper = 0):
+            matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()),
             lower_ (lower), upper_ (upper), data_ (0) {
 #ifndef BOOST_UBLAS_TYPE_CHECK
@@ -1122,12 +1127,15 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         banded_adaptor ():
+            matrix_expression<self_type> (),
             data_ (nil_), lower_ (0), upper_ (0) {}
         BOOST_UBLAS_INLINE
         banded_adaptor (matrix_type &data, size_type lower = 0, size_type upper = 0):
+            matrix_expression<self_type> (),
             data_ (data), lower_ (lower), upper_ (upper) {}
         BOOST_UBLAS_INLINE
         banded_adaptor (const banded_adaptor &m):
+            matrix_expression<self_type> (),
             data_ (m.data_), lower_ (m.lower_), upper_ (m.upper_) {}
 
         // Accessors

@@ -328,18 +328,22 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         sparse_vector ():
+            vector_expression<self_type> (),
             size_ (0), non_zeros_ (0), data_ () {}
         BOOST_UBLAS_INLINE
         sparse_vector (size_type size, size_type non_zeros = 0):
+            vector_expression<self_type> (),
             size_ (size), non_zeros_ (non_zeros), data_ () {
             reserve (non_zeros_);
         }
         BOOST_UBLAS_INLINE
         sparse_vector (const sparse_vector &v):
+            vector_expression<self_type> (),
             size_ (v.size_), non_zeros_ (v.non_zeros_), data_ (v.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_vector (const vector_expression<AE> &ae, size_type non_zeros = 0):
+            vector_expression<self_type> (),
             size_ (ae ().size ()), non_zeros_ (non_zeros), data_ () {
             reserve (non_zeros_);
             vector_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
@@ -815,21 +819,25 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         compressed_vector ():
+            vector_expression<self_type> (),
             size_ (0), non_zeros_ (0), filled_ (0),
             index_data_ (), value_data_ () {}
         BOOST_UBLAS_INLINE
         compressed_vector (size_type size, size_type non_zeros = 0):
+            vector_expression<self_type> (),
             size_ (size), non_zeros_ (non_zeros), filled_ (0),
             index_data_ (non_zeros), value_data_ (non_zeros) {
             reserve (non_zeros_);
         }
         BOOST_UBLAS_INLINE
         compressed_vector (const compressed_vector &v):
+            vector_expression<self_type> (),
             size_ (v.size_), non_zeros_ (v.non_zeros_), filled_ (v.filled_),
             index_data_ (v.index_data_), value_data_ (v.value_data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         compressed_vector (const vector_expression<AE> &ae, size_type non_zeros = 0):
+            vector_expression<self_type> (),
             size_ (ae ().size ()), non_zeros_ (non_zeros), filled_ (0),
             index_data_ (non_zeros), value_data_ (non_zeros) {
             reserve (non_zeros_, false);
@@ -1380,21 +1388,25 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         coordinate_vector ():
+            vector_expression<self_type> (),
             size_ (0), non_zeros_ (0), filled_ (0),
             sorted_ (true), index_data_ (), value_data_ () {}
         BOOST_UBLAS_INLINE
         coordinate_vector (size_type size, size_type non_zeros = 0):
+            vector_expression<self_type> (),
             size_ (size), non_zeros_ (non_zeros), filled_ (0),
             sorted_ (true), index_data_ (non_zeros), value_data_ (non_zeros) {
             reserve (non_zeros_);
         }
         BOOST_UBLAS_INLINE
         coordinate_vector (const coordinate_vector &v):
+            vector_expression<self_type> (),
             size_ (v.size_), non_zeros_ (v.non_zeros_), filled_ (v.filled_),
             sorted_ (v.sorted_), index_data_ (v.index_data_), value_data_ (v.value_data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_vector (const vector_expression<AE> &ae, size_type non_zeros = 0):
+            vector_expression<self_type> (),
             size_ (ae ().size ()), non_zeros_ (non_zeros), filled_ (0),
             sorted_ (true), index_data_ (non_zeros), value_data_ (non_zeros) {
             reserve (non_zeros_, false);

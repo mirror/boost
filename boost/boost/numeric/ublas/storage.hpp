@@ -1072,7 +1072,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         template<class T>
         BOOST_UBLAS_INLINE
-        void resize (std::vector<T> &a, typename std::vector<T>::size_type size, bool preserve) {
+        void resize (std::vector<T> &a, typename std::vector<T>::size_type size, bool /* preserve */) {
             a.resize (size);
         }
 
@@ -1741,11 +1741,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         index_pair(V& v, size_type i) :
-            container_reference<V>(v), i_(i),
+            boost::noncopyable (), container_reference<V>(v), i_(i),
             v1_(v.data1_[i]), v2_(v.data2_[i]), dirty_(false) {}
         BOOST_UBLAS_INLINE
         index_pair(const self_type& rhs) :
-            container_reference<V>(rhs()), i_(rhs.i_),
+            boost::noncopyable (), container_reference<V>(rhs()), i_(rhs.i_),
             v1_(rhs.v1_), v2_(rhs.v2_), dirty_(false) {}
         BOOST_UBLAS_INLINE
         ~index_pair() {
@@ -1898,11 +1898,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         index_triple(M& m, size_type i) :
-            container_reference<M>(m), i_(i),
+            boost::noncopyable (), container_reference<M>(m), i_(i),
             v1_(m.data1_[i]), v2_(m.data2_[i]), v3_(m.data3_[i]), dirty_(false) {}
         BOOST_UBLAS_INLINE
         index_triple(const self_type& rhs) :
-            container_reference<M>(rhs()), i_(rhs.i_),
+            boost::noncopyable (), container_reference<M>(rhs()), i_(rhs.i_),
             v1_(rhs.v1_), v2_(rhs.v2_), v3_(rhs.v3_), dirty_(false) {}
         BOOST_UBLAS_INLINE
         ~index_triple() {

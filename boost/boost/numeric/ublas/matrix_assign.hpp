@@ -96,7 +96,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class T>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void iterating_matrix_assign_scalar (const F &f, M &m, const T &t, row_major_tag) {
+    void iterating_matrix_assign_scalar (F, M &m, const T &t, row_major_tag) {
         typedef F functor_type;
         typedef typename M::difference_type difference_type;
         difference_type size1 (m.size1 ());
@@ -124,7 +124,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class T>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void iterating_matrix_assign_scalar (const F &f, M &m, const T &t, column_major_tag) {
+    void iterating_matrix_assign_scalar (F, M &m, const T &t, column_major_tag) {
         typedef F functor_type;
         typedef typename M::difference_type difference_type;
         difference_type size2 (m.size2 ());
@@ -152,7 +152,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class T>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void indexing_matrix_assign_scalar (const F &f, M &m, const T &t, row_major_tag) {
+    void indexing_matrix_assign_scalar (F, M &m, const T &t, row_major_tag) {
         typedef F functor_type;
         typedef typename M::difference_type difference_type;
         difference_type size1 (m.size1 ());
@@ -171,7 +171,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class T>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void indexing_matrix_assign_scalar (const F &f, M &m, const T &t, column_major_tag) {
+    void indexing_matrix_assign_scalar (F, M &m, const T &t, column_major_tag) {
         typedef F functor_type;
         typedef typename M::difference_type difference_type;
         difference_type size2 (m.size2 ());
@@ -191,7 +191,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class T, class C>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_assign_scalar (const F &f, M &m, const T &t, dense_proxy_tag, C c) {
+    void matrix_assign_scalar (F, M &m, const T &t, dense_proxy_tag, C) {
         typedef F functor_type;
         typedef C orientation_category;
 #ifdef BOOST_UBLAS_USE_INDEXING
@@ -213,7 +213,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class T>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_assign_scalar (const F &f, M &m, const T &t, packed_proxy_tag, row_major_tag) {
+    void matrix_assign_scalar (F, M &m, const T &t, packed_proxy_tag, row_major_tag) {
         typedef F functor_type;
         typedef typename M::difference_type difference_type;
         typename M::iterator1 it1 (m.begin1 ());
@@ -235,7 +235,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class T>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_assign_scalar (const F &f, M &m, const T &t, packed_proxy_tag, column_major_tag) {
+    void matrix_assign_scalar (F, M &m, const T &t, packed_proxy_tag, column_major_tag) {
         typedef F functor_type;
         typedef typename M::difference_type difference_type;
         typename M::iterator2 it2 (m.begin2 ());
@@ -257,7 +257,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class T>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_assign_scalar (const F &f, M &m, const T &t, sparse_proxy_tag, row_major_tag) {
+    void matrix_assign_scalar (F, M &m, const T &t, sparse_proxy_tag, row_major_tag) {
         typedef F functor_type;
         typename M::iterator1 it1 (m.begin1 ());
         typename M::iterator1 it1_end (m.end1 ());
@@ -278,7 +278,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class T>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_assign_scalar (const F &f, M &m, const T &t, sparse_proxy_tag, column_major_tag) {
+    void matrix_assign_scalar (F, M &m, const T &t, sparse_proxy_tag, column_major_tag) {
         typedef F functor_type;
         typename M::iterator2 it2 (m.begin2 ());
         typename M::iterator2 it2_end (m.end2 ());
@@ -299,7 +299,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Dispatcher
     template<class F, class M, class T>
     BOOST_UBLAS_INLINE
-    void matrix_assign_scalar (const F &f, M &m, const T &t) {
+    void matrix_assign_scalar (F, M &m, const T &t) {
         typedef F functor_type;
         typedef typename M::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
@@ -380,7 +380,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class E>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void iterating_matrix_assign (const F &f, M &m, const matrix_expression<E> &e, row_major_tag) {
+    void iterating_matrix_assign (F, M &m, const matrix_expression<E> &e, row_major_tag) {
         typedef F functor_type;
         typedef typename M::difference_type difference_type;
         difference_type size1 (BOOST_UBLAS_SAME (m.size1 (), e ().size1 ()));
@@ -413,7 +413,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class E>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void iterating_matrix_assign (const F &f, M &m, const matrix_expression<E> &e, column_major_tag) {
+    void iterating_matrix_assign (F, M &m, const matrix_expression<E> &e, column_major_tag) {
         typedef F functor_type;
         typedef typename M::difference_type difference_type;
         difference_type size2 (BOOST_UBLAS_SAME (m.size2 (), e ().size2 ()));
@@ -446,7 +446,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class E>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void indexing_matrix_assign (const F &f, M &m, const matrix_expression<E> &e, row_major_tag) {
+    void indexing_matrix_assign (F, M &m, const matrix_expression<E> &e, row_major_tag) {
         typedef F functor_type;
         typedef typename M::difference_type difference_type;
         difference_type size1 (BOOST_UBLAS_SAME (m.size1 (), e ().size1 ()));
@@ -465,7 +465,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class E>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void indexing_matrix_assign (const F &f, M &m, const matrix_expression<E> &e, column_major_tag) {
+    void indexing_matrix_assign (F, M &m, const matrix_expression<E> &e, column_major_tag) {
         typedef F functor_type;
         typedef typename M::difference_type difference_type;
         difference_type size2 (BOOST_UBLAS_SAME (m.size2 (), e ().size2 ()));
@@ -485,7 +485,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class E, class C>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_assign (const F &f, M &m, const matrix_expression<E> &e, full, dense_proxy_tag, C c) {
+    void matrix_assign (F, M &m, const matrix_expression<E> &e, full, dense_proxy_tag, C) {
         typedef F functor_type;
         typedef C orientation_category;
 #ifdef BOOST_UBLAS_USE_INDEXING
@@ -507,7 +507,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F1, class M, class E, class F2>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_assign (const F1 &f1, M &m, const matrix_expression<E> &e, const F2 &f2, packed_proxy_tag, row_major_tag) {
+    void matrix_assign (F1, M &m, const matrix_expression<E> &e, F2, packed_proxy_tag, row_major_tag) {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F1 functor1_type;
@@ -642,7 +642,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F1, class M, class E, class F2>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_assign (const F1 &f1, M &m, const matrix_expression<E> &e, const F2 &f2, packed_proxy_tag, column_major_tag) {
+    void matrix_assign (F1, M &m, const matrix_expression<E> &e, F2, packed_proxy_tag, column_major_tag) {
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         typedef F1 functor1_type;
@@ -777,7 +777,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class E>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_assign (const F &f, M &m, const matrix_expression<E> &e, full, sparse_tag, row_major_tag) {
+    void matrix_assign (F, M &m, const matrix_expression<E> &e, full, sparse_tag, row_major_tag) {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F functor_type;
@@ -820,7 +820,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class E>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_assign (const F &f, M &m, const matrix_expression<E> &e, full, sparse_tag, column_major_tag) {
+    void matrix_assign (F, M &m, const matrix_expression<E> &e, full, sparse_tag, column_major_tag) {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F functor_type;
@@ -863,7 +863,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F1, class M, class E, class F2>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_assign (const F1 &f1, M &m, const matrix_expression<E> &e, const F2 &f2, sparse_proxy_tag, row_major_tag) {
+    void matrix_assign (F1, M &m, const matrix_expression<E> &e, F2, sparse_proxy_tag, row_major_tag) {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F1 functor1_type;
@@ -1075,7 +1075,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F1, class M, class E, class F2>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_assign (const F1 &f1, M &m, const matrix_expression<E> &e, const F2 &f2, sparse_proxy_tag, column_major_tag) {
+    void matrix_assign (F1, M &m, const matrix_expression<E> &e, F2, sparse_proxy_tag, column_major_tag) {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F1 functor1_type;
@@ -1287,7 +1287,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Dispatcher
     template<class F, class M, class E>
     BOOST_UBLAS_INLINE
-    void matrix_assign (const F &f, M &m, const matrix_expression<E> &e) {
+    void matrix_assign (F, M &m, const matrix_expression<E> &e) {
         typedef F functor_type;
         typedef typename matrix_assign_traits<BOOST_UBLAS_TYPENAME M::storage_category,
                                               BOOST_UBLAS_TYPENAME F::assign_category,
@@ -1302,7 +1302,7 @@ namespace boost { namespace numeric { namespace ublas {
     }
     template<class F1, class M, class E, class F2>
     BOOST_UBLAS_INLINE
-    void matrix_assign (const F1 &f1, M &m, const matrix_expression<E> &e, const F2 &f2) {
+    void matrix_assign (F1, M &m, const matrix_expression<E> &e, F2) {
         typedef F1 functor1_type;
         typedef F2 functor2_type;
         typedef typename matrix_assign_traits<BOOST_UBLAS_TYPENAME M::storage_category,
@@ -1336,7 +1336,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class E>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_swap (const F &f, M &m, matrix_expression<E> &e, full, dense_proxy_tag, row_major_tag) {
+    void matrix_swap (F, M &m, matrix_expression<E> &e, full, dense_proxy_tag, row_major_tag) {
         typedef F functor_type;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -1362,7 +1362,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F, class M, class E>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_swap (const F &f, M &m, matrix_expression<E> &e, full, dense_proxy_tag, column_major_tag) {
+    void matrix_swap (F, M &m, matrix_expression<E> &e, full, dense_proxy_tag, column_major_tag) {
         typedef F functor_type;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -1388,7 +1388,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F1, class M, class E, class F2>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_swap (const F1 &f1, M &m, matrix_expression<E> &e, const F2 &f2, packed_proxy_tag, row_major_tag) {
+    void matrix_swap (F1, M &m, matrix_expression<E> &e, F2, packed_proxy_tag, row_major_tag) {
         typedef F1 functor1_type;
         typedef F2 functor2_type;
         typedef typename M::size_type size_type;
@@ -1415,7 +1415,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F1, class M, class E, class F2>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_swap (const F1 &f1, M &m, matrix_expression<E> &e, const F2 &f2, packed_proxy_tag, column_major_tag) {
+    void matrix_swap (F1, M &m, matrix_expression<E> &e, F2, packed_proxy_tag, column_major_tag) {
         typedef F1 functor1_type;
         typedef F2 functor2_type;
         typedef typename M::size_type size_type;
@@ -1442,7 +1442,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F1, class M, class E, class F2>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_swap (const F1 &f1, M &m, matrix_expression<E> &e, const F2 &f2, sparse_proxy_tag, row_major_tag) {
+    void matrix_swap (F1, M &m, matrix_expression<E> &e, F2, sparse_proxy_tag, row_major_tag) {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F1 functor1_type;
@@ -1701,7 +1701,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class F1, class M, class E, class F2>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-    void matrix_swap (const F1 &f1, M &m, matrix_expression<E> &e, const F2 &f2, sparse_proxy_tag, column_major_tag) {
+    void matrix_swap (F1, M &m, matrix_expression<E> &e, F2, sparse_proxy_tag, column_major_tag) {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F1 functor1_type;
@@ -1962,7 +1962,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Dispatcher
     template<class F, class M, class E>
     BOOST_UBLAS_INLINE
-    void matrix_swap (const F &f, M &m, matrix_expression<E> &e) {
+    void matrix_swap (F, M &m, matrix_expression<E> &e) {
         typedef F functor_type;
         typedef typename matrix_swap_traits<BOOST_UBLAS_TYPENAME M::storage_category,
                                             BOOST_UBLAS_TYPENAME E::const_iterator1::iterator_category,
@@ -1974,7 +1974,7 @@ namespace boost { namespace numeric { namespace ublas {
     }
     template<class F1, class M, class E, class F2>
     BOOST_UBLAS_INLINE
-    void matrix_swap (const F1 &f1, M &m, matrix_expression<E> &e, const F2 &f2) {
+    void matrix_swap (F1, M &m, matrix_expression<E> &e, F2) {
         typedef F1 functor1_type;
         typedef F2 functor2_type;
         typedef typename matrix_swap_traits<BOOST_UBLAS_TYPENAME M::storage_category,

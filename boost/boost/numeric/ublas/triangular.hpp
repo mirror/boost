@@ -60,21 +60,26 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         triangular_matrix ():
+            matrix_expression<self_type> (),
             size1_ (0), size2_ (0), data_ (0) {}
         BOOST_UBLAS_INLINE
         triangular_matrix (size_type size1, size_type size2):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), data_ (0) {
             resize (size1, size2);
         }
         BOOST_UBLAS_INLINE
         triangular_matrix (size_type size1, size_type size2, const array_type &data):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), data_ (data) {}
         BOOST_UBLAS_INLINE
         triangular_matrix (const triangular_matrix &m):
+            matrix_expression<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         triangular_matrix (const matrix_expression<AE> &ae):
+            matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (0) {
 #ifndef BOOST_UBLAS_TYPE_CHECK
             resize (ae ().size1 (), ae ().size2 (), false);
@@ -1021,12 +1026,15 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         triangular_adaptor ():
+            matrix_expression<self_type> (),
             data_ (nil_) {}
         BOOST_UBLAS_INLINE
         triangular_adaptor (matrix_type &data):
+            matrix_expression<self_type> (),
             data_ (data) {}
         BOOST_UBLAS_INLINE
         triangular_adaptor (const triangular_adaptor &m):
+            matrix_expression<self_type> (),
             data_ (m.data_) {}
 
         // Accessors

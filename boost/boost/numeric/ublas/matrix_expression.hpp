@@ -4513,7 +4513,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element lookup
         BOOST_UBLAS_INLINE
-        const_iterator1 find1 (int rank, size_type i, size_type j) const {
+        const_iterator1 find1 (int /* rank */, size_type i, size_type j) const {
             // FIXME: sparse matrix tests fail!
             // const_iterator11_type it11 (e1_.find1 (rank, i, 0));
             const_iterator11_type it11 (e1_.find1 (0, i, 0));
@@ -4527,7 +4527,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
         BOOST_UBLAS_INLINE
-        const_iterator2 find2 (int rank, size_type i, size_type j) const {
+        const_iterator2 find2 (int /* rank */, size_type i, size_type j) const {
             // FIXME: sparse matrix tests fail!
             // const_iterator22_type it22 (e2_.find2 (rank, 0, j));
             const_iterator22_type it22 (e2_.find2 (0, 0, j));

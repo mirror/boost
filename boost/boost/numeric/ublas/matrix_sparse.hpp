@@ -332,18 +332,22 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         sparse_matrix ():
+            matrix_expression<self_type> (),
             size1_ (0), size2_ (0), non_zeros_ (0), data_ () {}
         BOOST_UBLAS_INLINE
         sparse_matrix (size_type size1, size_type size2, size_type non_zeros = 0):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), non_zeros_ (non_zeros), data_ () {
             reserve (non_zeros_);
         }
         BOOST_UBLAS_INLINE
         sparse_matrix (const sparse_matrix &m):
+            matrix_expression<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), non_zeros_ (m.non_zeros_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_matrix (const matrix_expression<AE> &ae, size_type non_zeros = 0):
+            matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), non_zeros_ (non_zeros), data_ () {
             reserve (non_zeros_);
             matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
@@ -484,7 +488,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_matrix &plus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -585,7 +589,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_BOUNDS_CHECK
             size_type index1 = size_type (-1);
 #endif
-            while (it != it_end) {
+            while (rank == 1 && it != it_end) {
                 index2 = functor_type::index2 ((*it).first, size1_, size2_);
 #ifdef BOOST_UBLAS_BOUNDS_CHECK
                 index1 = functor_type::index1 ((*it).first, size1_, size2_);
@@ -624,7 +628,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_BOUNDS_CHECK
             size_type index1 = size_type (-1);
 #endif
-            while (it != it_end) {
+            while (rank == 1 && it != it_end) {
                 index2 = functor_type::index2 ((*it).first, size1_, size2_);
 #ifdef BOOST_UBLAS_BOUNDS_CHECK
                 index1 = functor_type::index1 ((*it).first, size1_, size2_);
@@ -663,7 +667,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_BOUNDS_CHECK
             size_type index2 = size_type (-1);
 #endif
-            while (it != it_end) {
+            while (rank == 1 && it != it_end) {
                 index1 = functor_type::index1 ((*it).first, size1_, size2_);
 #ifdef BOOST_UBLAS_BOUNDS_CHECK
                 index2 = functor_type::index2 ((*it).first, size1_, size2_);
@@ -702,7 +706,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_BOUNDS_CHECK
             size_type index2 = size_type (-1);
 #endif
-            while (it != it_end) {
+            while (rank == 1 && it != it_end) {
                 index1 = functor_type::index1 ((*it).first, size1_, size2_);
 #ifdef BOOST_UBLAS_BOUNDS_CHECK
                 index2 = functor_type::index2 ((*it).first, size1_, size2_);
@@ -1443,20 +1447,24 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         sparse_vector_of_sparse_vector ():
+            matrix_expression<self_type> (),
             size1_ (0), size2_ (0), non_zeros_ (0), data_ () {
             data_ [functor_type::size1 (size1_, size2_)] = vector_data_value_type ();
         }
         BOOST_UBLAS_INLINE
         sparse_vector_of_sparse_vector (size_type size1, size_type size2, size_type non_zeros = 0):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), non_zeros_ (non_zeros), data_ () {
             data_ [functor_type::size1 (size1_, size2_)] = vector_data_value_type ();
         }
         BOOST_UBLAS_INLINE
         sparse_vector_of_sparse_vector (const sparse_vector_of_sparse_vector &m):
+            matrix_expression<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), non_zeros_ (m.non_zeros_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_vector_of_sparse_vector (const matrix_expression<AE> &ae, size_type non_zeros = 0):
+            matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), non_zeros_ (non_zeros), data_ () {
             data_ [functor_type::size1 (size1_, size2_)] = vector_data_value_type ();
             matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
@@ -2600,6 +2608,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         compressed_matrix ():
+            matrix_expression<self_type> (),
             size1_ (0), size2_ (0), non_zeros_ (0),
             filled1_ (1), filled2_ (0),
             index1_data_ (1),
@@ -2608,6 +2617,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         compressed_matrix (size_type size1, size_type size2, size_type non_zeros = 0):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), non_zeros_ (non_zeros),
             filled1_ (1), filled2_ (0),
             index1_data_ (functor_type::size1 (size1_, size2_) + 1),
@@ -2617,6 +2627,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         compressed_matrix (const compressed_matrix &m):
+            matrix_expression<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), non_zeros_ (m.non_zeros_),
             filled1_ (m.filled1_), filled2_ (m.filled2_),
             index1_data_ (m.index1_data_),
@@ -2626,6 +2637,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         compressed_matrix (const matrix_expression<AE> &ae, size_type non_zeros = 0):
+            matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), non_zeros_ (non_zeros),
             filled1_ (1), filled2_ (0),
             index1_data_ (functor_type::size1 (ae ().size1 (), ae ().size2 ()) + 1),
@@ -3910,12 +3922,14 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         coordinate_matrix ():
+            matrix_expression<self_type> (),
             size1_ (0), size2_ (0), non_zeros_ (0),
             filled_ (0),
             sorted_ (true), index1_data_ (),
             index2_data_ (), value_data_ () {}
         BOOST_UBLAS_INLINE
         coordinate_matrix (size_type size1, size_type size2, size_type non_zeros = 0):
+            matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), non_zeros_ (non_zeros),
             filled_ (0),
             sorted_ (true), index1_data_ (non_zeros),
@@ -3924,6 +3938,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         coordinate_matrix (const coordinate_matrix &m):
+            matrix_expression<self_type> (),
             size1_ (m.size1_), size2_ (m.size2_), non_zeros_ (m.non_zeros_),
             filled_ (m.filled_),
             sorted_ (m.sorted_), index1_data_ (m.index1_data_),
@@ -3931,6 +3946,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_matrix (const matrix_expression<AE> &ae, size_type non_zeros = 0):
+            matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), non_zeros_ (non_zeros),
             filled_ (0),
             sorted_ (true), index1_data_ (non_zeros),

@@ -26,10 +26,10 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         noalias_proxy (C& lval):
-            lval_ (lval) {}
+            boost::nonassignable (), lval_ (lval) {}
         BOOST_UBLAS_INLINE
         noalias_proxy (const noalias_proxy& p):
-            lval_ (p.lval_) {}
+            boost::nonassignable (), lval_ (p.lval_) {}
 
         template <class E>
         BOOST_UBLAS_INLINE

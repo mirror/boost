@@ -667,12 +667,12 @@ namespace boost { namespace numeric { namespace ublas {
 
         template<class I, class T>
         BOOST_UBLAS_INLINE
-        void reserve (std::map<I, T> &a, typename std::map<I, T>::size_type capacity) {}
+        void reserve (std::map<I, T> &/* a */, typename std::map<I, T>::size_type /* capacity */) {}
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         template<class I, class T>
         BOOST_UBLAS_INLINE
-        typename std::map<I, T>::mapped_type &make_reference (std::map<I, T> &a, typename std::map<I, T>::iterator it) {
+        typename std::map<I, T>::mapped_type &make_reference (std::map<I, T> &/* a */, typename std::map<I, T>::iterator it) {
             return (*it).second;
         }
 #endif

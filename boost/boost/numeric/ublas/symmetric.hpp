@@ -77,26 +77,32 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         symmetric_matrix ():
+            matrix_expression<self_type> (),
             size_ (0), data_ (0) {}
         BOOST_UBLAS_INLINE
         symmetric_matrix (size_type size):
+            matrix_expression<self_type> (),
             size_ (BOOST_UBLAS_SAME (size, size)), data_ (0) {
             resize (size);
         }
         BOOST_UBLAS_INLINE
         symmetric_matrix (size_type size1, size_type size2):
+            matrix_expression<self_type> (),
             size_ (BOOST_UBLAS_SAME (size1, size2)), data_ (0) {
             resize (size1, size2);
         }
         BOOST_UBLAS_INLINE
         symmetric_matrix (size_type size, const array_type &data):
+            matrix_expression<self_type> (),
             size_ (size), data_ (data) {}
         BOOST_UBLAS_INLINE
         symmetric_matrix (const symmetric_matrix &m):
+            matrix_expression<self_type> (),
             size_ (m.size_), data_ (m.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         symmetric_matrix (const matrix_expression<AE> &ae):
+            matrix_expression<self_type> (),
             size_ (BOOST_UBLAS_SAME (ae ().size1 (), ae ().size2 ())), data_ (0) {
 #ifndef BOOST_UBLAS_TYPE_CHECK
             resize (ae ().size1 (), ae ().size2 (), false);
@@ -331,7 +337,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element lookup
         BOOST_UBLAS_INLINE
-        const_iterator1 find1 (int rank, size_type i, size_type j) const {
+        const_iterator1 find1 (int /* rank */, size_type i, size_type j) const {
             return const_iterator1 (*this, i, j);
         }
         BOOST_UBLAS_INLINE
@@ -341,7 +347,7 @@ namespace boost { namespace numeric { namespace ublas {
             return iterator1 (*this, i, j);
         }
         BOOST_UBLAS_INLINE
-        const_iterator2 find2 (int rank, size_type i, size_type j) const {
+        const_iterator2 find2 (int /* rank */, size_type i, size_type j) const {
             return const_iterator2 (*this, i, j);
         }
         BOOST_UBLAS_INLINE
@@ -1021,16 +1027,19 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         symmetric_adaptor ():
+            matrix_expression<self_type> (),
             data_ (nil_) {
             BOOST_UBLAS_CHECK (data_.size1 () == data_.size2 (), bad_size ());
         }
         BOOST_UBLAS_INLINE
         symmetric_adaptor (matrix_type &data):
+            matrix_expression<self_type> (),
             data_ (data) {
             BOOST_UBLAS_CHECK (data_.size1 () == data_.size2 (), bad_size ());
         }
         BOOST_UBLAS_INLINE
         symmetric_adaptor (const symmetric_adaptor &m):
+            matrix_expression<self_type> (),
             data_ (m.data_) {
             BOOST_UBLAS_CHECK (data_.size1 () == data_.size2 (), bad_size ());
         }
