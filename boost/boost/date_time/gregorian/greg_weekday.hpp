@@ -48,8 +48,10 @@ namespace gregorian {
     unsigned short as_number() const {return value_;}
     const char* as_short_string() const;
     const char* as_long_string()  const;
+#ifndef BOOST_NO_CWCHAR
     const wchar_t* as_short_wstring() const;
     const wchar_t* as_long_wstring()  const;
+#endif // BOOST_NO_CWCHAR
     weekday_enum as_enum() const {return static_cast<weekday_enum>(value_);}
 
 

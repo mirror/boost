@@ -72,6 +72,24 @@ namespace date_time {
       }
       return 13; // intentionally out of range - name not found
     }
+ 
+    //! Find index of a string in either of 2 arrays
+    /*! find_match searches both arrays for a match to 's'. Indexing of the 
+     * arrays is from 0 to 'limit'. The index of the match is returned.
+     * Ex. "Jan" returns 0, "Dec" returns 11, "Tue" returns 2.
+     * 'limit' can be sent in with: greg_month::max(), 
+     * greg_weekday::max() or date_time::NumSpecialValues */
+    template<class charT>
+    short find_match(const charT* const* short_names, 
+		     const charT* const* long_names, const int limit,
+		     const std::basic_string<charT>& s) {
+      for(int i = 0; i <= limit; ++i){
+	if(short_names[i] == s || long_names[i] == s){
+	  return i;
+	}
+      }
+      return limit+1; // not-found, return a value out of range
+    }
     
     //! Generic function to parse a delimited date (eg: 2002-02-10)
     /*! Accepted formats are: "2003-02-10" or " 2003-Feb-10" or
@@ -213,7 +231,7 @@ namespace date_time {
       return parse_date<date_type>(ss.str());
     }
 #endif // BOOST_NO_STD_WSTRING
-#if (defined(_MSC_VER) && (_MSC_VER <= 1200))
+#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))
     // This function cannot be compiled with MSVC 6.0 due to internal compiler shorcomings
 #else
     //! function called by wrapper functions: date_period_from_(w)string()
