@@ -119,7 +119,7 @@ namespace boost {
 // ---   class basic_oaltstringstream ----------------------------------------
         template <class Ch, class Tr, class Alloc>
         class basic_oaltstringstream 
-            : base_from_member< shared_ptr< basic_altstringbuf< Ch, Tr, Alloc> > >  ,
+            : private base_from_member< shared_ptr< basic_altstringbuf< Ch, Tr, Alloc> > >,
               public CompatOStream< ::std::basic_ostream<Ch, Tr> > ::compatible_type
         {
             class No_Op { 
