@@ -15,7 +15,9 @@
 #include "boost/date_time/date_format_simple.hpp"
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 #include "boost/date_time/time_formatting_streams.hpp"
- 
+
+#include "boost/date_time/time_parsing.hpp"
+
 /* NOTE: The "to_*_string" code for older compilers, ones that define 
  * BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS, is located in 
  * formatters_limited.hpp
@@ -314,6 +316,81 @@ namespace posix_time {
     return os;
   }
 
+/******** input streaming ********/
+  template<class charT>
+  inline
+  std::basic_istream<charT>& operator>>(std::basic_istream<charT>& is, time_duration& td)
+  {
+    // need to create a std::string and parse it
+    std::basic_string<charT> inp_s;
+    std::stringstream out_ss;
+    is >> inp_s;
+    typename std::basic_string<charT>::iterator b = inp_s.begin();
+    while(*b != '\0'){
+      out_ss << out_ss.narrow(*b, 0);
+      ++b;
+    }
+    
+    td = date_time::parse_delimited_time_duration<time_duration>(out_ss.str());
+    return is;
+  }
+
+  template<class charT>
+  inline
+  std::basic_istream<charT>& operator>>(std::basic_istream<charT>& is, ptime& pt)
+  {
+    gregorian::date d(not_a_date_time);
+    time_duration td(0,0,0);
+    is >> d >> td;
+    pt = ptime(d, td);
+
+    return is;
+  }
+
+  /** operator>> for time_period. time_period must be in 
+   * "[date time_duration/date time_duration]" format. */
+  template<class charT>
+  inline
+  std::basic_istream<charT>& operator>>(std::basic_istream<charT>& is, time_period& tp)
+  {
+    gregorian::date d(not_a_date_time);
+    time_duration td(0,0,0);
+    ptime beg(d, td);
+    ptime end(beg);
+    std::basic_string<charT> s;
+    // get first date string and remove leading '['
+    is >> s;
+    {
+      std::basic_stringstream<charT> ss;
+      ss << s.substr(s.find('[')+1);
+      ss >> d;
+    }
+    // get first time_duration & second date string, remove the '/'
+    // and split into 2 strings
+    is >> s; 
+    {
+      std::basic_stringstream<charT> ss;
+      ss << s.substr(0, s.find('/'));
+      ss >> td;
+    }
+    beg = ptime(d, td);
+    {
+      std::basic_stringstream<charT> ss;
+      ss << s.substr(s.find('/')+1);
+      ss >> d;
+    }
+    // get last time_duration and remove the trailing ']'
+    is >> s;
+    {
+      std::basic_stringstream<charT> ss;
+      ss << s.substr(0, s.find(']'));
+      ss >> td;
+    }
+    end = ptime(d, td);
+
+    tp = time_period(beg,end);
+    return is;
+  }
 
 
 #endif //BOOST_DATE_TIME_NO_LOCALE
