@@ -13,6 +13,18 @@ rule program-options-test ( name )
     ;
 }
 
+rule program-options-dll-test ( name )
+{
+    return [ 
+	run $(name).cpp <dll>../build/boost_program_options
+	<lib>../../test/build/boost_test_exec_monitor : :
+    : <include>$(BOOST_ROOT) 
+      std::facet-support std::locale-support 
+    : $(name)_dll ]
+    ;
+}
+
+
 test-suite program_options : 
     [ program-options-test options_description_test ]
     [ program-options-test parsers_test ]
@@ -20,5 +32,13 @@ test-suite program_options :
     [ program-options-test cmdline_test ]
     [ program-options-test positional_options_test ]
     [ program-options-test unicode_test ]
+    [ program-options-dll-test options_description_test ]
+    [ program-options-dll-test parsers_test ]
+    [ program-options-dll-test variable_map_test ]
+    [ program-options-dll-test cmdline_test ]
+    [ program-options-dll-test positional_options_test ]
+    [ program-options-dll-test unicode_test ]
+    
+    
     ;
 
