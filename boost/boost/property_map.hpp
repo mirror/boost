@@ -358,7 +358,7 @@ namespace boost {
   // Adapter to turn a RandomAccessIterator into a property map
 
   template <class RandomAccessIterator, 
-    class IDfunc = identity_property_map
+    class IndexMap
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
     , class T, class R
 #else
@@ -368,7 +368,7 @@ namespace boost {
      >
   class iterator_property_map
     : public boost::put_get_at_helper< T, 
-        iterator_property_map<RandomAccessIterator, IDfunc,
+        iterator_property_map<RandomAccessIterator, IndexMap,
         T, R> >
   {
   public:
@@ -378,13 +378,13 @@ namespace boost {
 
     inline iterator_property_map(
       RandomAccessIterator cc = RandomAccessIterator(), 
-      const IDfunc& _id = IDfunc() ) 
-      : iter(cc), id(_id) { }
+      const IndexMap& _id = IndexMap() ) 
+      : iter(cc), index(_id) { }
     template <class Key>
-    inline R operator[](Key v) const { return *(iter + id[v]) ; }
+    inline R operator[](Key v) const { return *(iter + get(index, v)) ; }
   protected:
     RandomAccessIterator iter;
-    IDfunc id;
+    IndexMap index;
   };
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
