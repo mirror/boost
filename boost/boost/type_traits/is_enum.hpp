@@ -15,6 +15,7 @@
 #include "boost/type_traits/is_arithmetic.hpp"
 #include "boost/type_traits/is_reference.hpp"
 #include "boost/type_traits/is_convertible.hpp"
+#include "boost/type_traits/is_array.hpp"
 #ifdef __GNUC__
 #include <boost/type_traits/is_function.hpp>
 #endif
@@ -91,15 +92,15 @@ template <>
 struct is_enum_helper<false>
 {
     template <typename T> struct type
-        : ::boost::is_convertible<T,::boost::detail::int_convertible>
+       : ::boost::is_convertible<typename boost::add_reference<T>::type,::boost::detail::int_convertible>
     {
     };
 };
 
 template <typename T> struct is_enum_impl
 {
-   typedef ::boost::add_reference<T> ar_t;
-   typedef typename ar_t::type r_type;
+   //typedef ::boost::add_reference<T> ar_t;
+   //typedef typename ar_t::type r_type;
 
 #if defined(__GNUC__)
 
@@ -110,6 +111,7 @@ template <typename T> struct is_enum_impl
          , ::boost::is_reference<T>::value
          , ::boost::is_function<T>::value
          , is_class_or_union<T>::value
+         , is_array<T>::value
       >::value));
 #else
    BOOST_STATIC_CONSTANT(bool, selector =
@@ -117,6 +119,7 @@ template <typename T> struct is_enum_impl
            ::boost::is_arithmetic<T>::value
          , ::boost::is_reference<T>::value
          , ::boost::is_function<T>::value
+         , is_array<T>::value
       >::value));
 #endif // BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION
 
@@ -126,6 +129,7 @@ template <typename T> struct is_enum_impl
            ::boost::is_arithmetic<T>::value
          , ::boost::is_reference<T>::value
          , is_class_or_union<T>::value
+         , is_array<T>::value
        // However, not doing this on non-conforming compilers prevents
        // a dependency recursion.
       >::value));
@@ -139,7 +143,7 @@ template <typename T> struct is_enum_impl
     typedef ::boost::detail::is_enum_helper<selector> se_t;
 #endif
 
-    typedef typename se_t::template type<r_type> helper;
+    typedef typename se_t::template type<T> helper;
     BOOST_STATIC_CONSTANT(bool, value = helper::value);
 };
 
