@@ -22,14 +22,14 @@
 
 <H2><A NAME="sec:iterator-property-map"></A>
 <PRE>
-iterator_property_map&lt;<a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">RandomAccessIterator</a>, T, R, OffsetMap&gt;
+iterator_property_map&lt;<a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">RandomAccessIterator</a>, OffsetMap, T, R&gt;
 </PRE>
 </H2>
 
 <P>
 This property map is an adaptor that converts any random access
 iterator into a <a
-href="./LvaluePropertyMap.html">LvaluePropertyMap</a>.
+href="./LvaluePropertyMap.html">Lvalue Property Map</a>.
 The <tt>OffsetMap</tt> type is responsible for converting
 key objects to integers that can be used as offsets with the
 random access iterator.
@@ -86,7 +86,7 @@ int main(int, char*[])
   typedef boost::property_map&lt;Graph, boost::id_tag&gt;::type EdgeID_PMap;
   EdgeID_PMap edge_id = get(boost::edge_index(), G);
 
-  boost::iterator_property_map&lt;int*, int, int&, EdgeID_PMap&gt;
+  boost::iterator_property_map&lt;int*, EdgeID_PMap, int, int&amp;&gt;
      capacity_pa(capacity, edge_id),
      flow_pa(flow, edge_id);
 
@@ -104,7 +104,7 @@ int main(int, char*[])
 <p>
 <H3>Model Of</H3>
 
-<a href="./LvaluePropertyMap.html">LvaluePropertyMap</a>
+<a href="./LvaluePropertyMap.html">Lvalue Property Map</a>
 
 <P>
 
@@ -120,9 +120,16 @@ int main(int, char*[])
 
 <TR>
 <TD><TT>Iterator</TT></TD> 
-<TD>Must be a model of <a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">RandomAccessIterator</a>.</TD>
+<TD>Must be a model of <a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">Random Access Iterator</a>.</TD>
 <TD>&nbsp;</td>
 </tr>
+
+<TR>
+<TD><TT>OffsetMap</TT></TD> <TD>Must be a model of <a
+href="./ReadablePropertyMap.html">Readable Property Map</a>
+and the value type must be convertible to the difference type of the
+iterator.</TD> <TD><TT>boost::identity_property_map</TT></TD>
+</TR>
 
 <TR>
 <TD><TT>T</TT></TD>
@@ -137,13 +144,6 @@ int main(int, char*[])
 <TD><TT>std::iterator_traits&lt;RandomAccessIterator&gt;::reference</TT></TD>
 </TR>
 
-<TR>
-<TD><TT>OffsetMap</TT></TD> <TD>Must be a model of <a
-href="./ReadablePropertyMap.html">ReadablePropertyMap</a>
-and the value type must be convertible to the difference type of the
-iterator.</TD> <TD><TT>boost::identity_property_map</TT></TD>
-</TR>
-
 </TABLE>
 <P>
 
@@ -151,7 +151,7 @@ iterator.</TD> <TD><TT>boost::identity_property_map</TT></TD>
 
 <P>
 In addition the methods and functions required by <a
-href="./LvaluePropertyMap.html">LvaluePropertyMap</a>, this
+href="./LvaluePropertyMap.html">Lvalue Property Map</a>, this
 class has the following members.
 
 <hr>
@@ -186,10 +186,10 @@ The operator bracket for property access. The <TT>reference</TT> and
 
 <pre>
   template &lt;class RAIter, class OffsetMap&gt;
-  iterator_property_map&lt;RAIter,
+  iterator_property_map&lt;RAIter, OffsetMap,
     typename std::iterator_traits&lt;RAIter&gt;::value_type,
-    typename std::iterator_traits&lt;RAIter&gt;::reference,
-    OffsetMap&gt;
+    typename std::iterator_traits&lt;RAIter&gt;::reference
+    &gt;
   make_iterator_property_map(RAIter iter, OffsetMap omap)
 </pre>
 A function for conveniently creating an iterator map.
@@ -199,10 +199,10 @@ A function for conveniently creating an iterator map.
 
 <pre>
   template &lt;class RAIter, class OffsetMap, class ValueType&gt;
-  iterator_property_map&lt;RAIter,
+  iterator_property_map&lt;RAIter, OffsetMap,
     typename std::iterator_traits&lt;RAIter&gt;::value_type,
-    typename std::iterator_traits&lt;RAIter&gt;::reference,
-    OffsetMap&gt;
+    typename std::iterator_traits&lt;RAIter&gt;::reference
+    &gt;
   make_iterator_property_map(RAIter iter, OffsetMap omap, ValueType dummy_arg)
 </pre>
 Use this function instead of the 2-argument version if
