@@ -34,6 +34,17 @@ namespace boost {
         : store(new std::vector<T>()), index(index)
         {}
 
+        vector_property_map(unsigned initial_size, 
+                            const IndexMap& index = IndexMap())
+        : store(new std::vector<T>(initial_size)), index(index)
+        {}
+
+        void reserve(unsigned size)
+        {
+            store->reserve(size);
+        }
+            
+    public:
         // Copy ctor absent, default semantics is OK.
         // Assignment operator absent, default semantics is OK.
         // CONSIDER: not sure that assignment to 'index' is correct.
@@ -48,7 +59,11 @@ namespace boost {
     private:
         // Conceptually, we have a vector of infinite size. For practical 
         // purposes, we start with an empty vector and grow it as needed.
-        shared_ptr< std::vector<T> > store;
+        // Note that we cannot store pointer to vector here -- we cannot
+        // store pointer to data, because if copy of property map resizes
+        // the vector, the pointer to data will be invalidated. 
+        // I wonder if class 'pmap_ref' is simply needed.
+        shared_ptr< std::vector<T> > store;        
         IndexMap index;
     };
     

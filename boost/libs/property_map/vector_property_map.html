@@ -129,6 +129,15 @@ Constructor which takes an index map.
 <hr>
 
 <pre>
+vector_property_map(unsigned initial_size, const IndexMap& index = IndexMap())
+</pre>
+This constructor version allows to specify maximum index of element
+that will be stored. Correct number will improve performance, but semantic
+is always the same.
+
+<hr>
+
+<pre>
 vector_property_map(const vector_property_map&amp;)
 </pre>
 Copy constructor. The copy will share the same data and changes
@@ -144,9 +153,18 @@ Assignment operator. The semantic is the same as for copy constructor.
 <hr>
 
 <pre>
-reference operator[](const key_type&amp; v) const {
+reference operator[](const key_type&amp; v) const
 </pre>
 The operator bracket for property access.
+
+<hr>
+
+<pre>
+void reserve(unsigned size)
+</pre>
+Reserve the space for storing elements with maximum index of 'size'. Unless
+element with greater index is accesses, all accesses will be take O(1) time.
+
 
 <hr>
 
