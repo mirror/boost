@@ -12,6 +12,7 @@
   <xi:include href="ex_date_period_calc.xml"/>
   <xi:include href="ex_print_holidays.xml"/>
   <xi:include href="ex_print_month.xml"/>
+  <xi:include href="ex_month_add.xml"/>
   <!-- posix_time examples -->
   <xi:include href="ex_time_math.xml"/>
   <xi:include href="ex_print_hours.xml"/>
