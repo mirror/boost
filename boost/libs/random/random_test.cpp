@@ -78,35 +78,6 @@ void validate_all()
  * Check function signatures
  */
 
-template<class Generator>
-void instantiate_iterator_interface(Generator & gen)
-{
-  ++gen;
-  gen++;
-  typename Generator::result_type res = *gen;
-  typename Generator::pointer p = &res;
-  (void) &p;
-  typename Generator::reference ref = res;
-  (void) &ref;
-  typename Generator::difference_type diff = 0;
-  (void) &diff;
-  typedef typename Generator::iterator_category iterator_category;
-  std::input_iterator_tag it = iterator_category();
-  (void) &it;
-
-  BOOST_TEST(res == *gen++);
-  BOOST_TEST(gen == gen);
-#if 0
-  // Distribution functions may have a cache which is purged on copy.
-  // Thus, the copy never compares equal.  Example: normal_distribution.
-  Generator gen2 = gen;
-  BOOST_TEST(gen == gen2);     // must be equal to a copy
-  ++gen2;
-  // this is only correct for elementary generators, others have ref members
-  BOOST_TEST(gen != gen2);
-#endif
-}
-
 template<class URNG, class ResultType>
 void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
 {
@@ -146,35 +117,25 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
 
   // instantiate various distributions with this URNG
   boost::uniform_smallint<URNG> unismall(urng, 0, 11);
-  instantiate_iterator_interface(unismall);
   unismall();
   boost::uniform_int<URNG> uni_int(urng, -200, 20000);
-  instantiate_iterator_interface(uni_int);
   uni_int();
   boost::uniform_real<URNG> uni_real(urng, 0, 2.1);
-  instantiate_iterator_interface(uni_real);
   uni_real();
 
   boost::bernoulli_distribution<URNG> ber(urng, 0.2);
-  instantiate_iterator_interface(ber);
   ber();
   boost::geometric_distribution<URNG> geo(urng, 0.8);
-  instantiate_iterator_interface(geo);
   geo();
   boost::triangle_distribution<URNG> tria(urng, 1, 1.5, 7);
-  instantiate_iterator_interface(tria);
   tria();
   boost::exponential_distribution<URNG> ex(urng, 5);
-  instantiate_iterator_interface(ex);
   ex();
   boost::normal_distribution<URNG> norm(urng);
-  instantiate_iterator_interface(norm);
   norm();
   boost::lognormal_distribution<URNG> lnorm(urng, 1, 1);
-  instantiate_iterator_interface(lnorm);
   lnorm();
   boost::uniform_on_sphere<URNG> usph(urng, 2);
-  instantiate_iterator_interface(usph);
   usph();
 }
 
