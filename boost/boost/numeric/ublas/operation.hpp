@@ -103,6 +103,30 @@ namespace boost { namespace numeric { namespace ublas {
         return axpy_prod (e1, e2, v, true);
     }
 
+    template<class V, class T1, class L1, class IA1, class TA1, class E2>
+    BOOST_UBLAS_INLINE
+    V &
+    axpy_prod (const coordinate_matrix<T1, L1, 0, IA1, TA1> &e1,
+               const vector_expression<E2> &e2,
+               V &v, bool init = true) {
+        typedef typename V::size_type size_type;
+        typedef typename V::value_type value_type;
+        typedef L1 layout_type;
+
+        size_type size1 = e1.size1();
+        size_type size2 = e1.size2();
+
+        if (init) {
+            noalias(v) = zero_vector<value_type>(size1);
+        }
+
+        for (size_type i = 0; i < e1.nnz(); ++i) {
+            size_type row_index = layout_type::element1( e1.index1_data () [i], size1, e1.index2_data () [i], size2 );
+            size_type col_index = layout_type::element2( e1.index1_data () [i], size1, e1.index2_data () [i], size2 );
+            v( row_index ) += e1.value_data () [i] * e2 () (col_index);
+        }
+    }
+
     template<class V, class E1, class E2>
     BOOST_UBLAS_INLINE
     V &
