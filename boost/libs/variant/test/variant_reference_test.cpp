@@ -18,6 +18,7 @@
 #include "boost/test/minimal.hpp"
 
 #include "boost/mpl/bool.hpp"
+#include "boost/type_traits/add_reference.hpp"
 #include "boost/type_traits/is_pointer.hpp"
 
 /////
@@ -39,13 +40,15 @@ bool check_base_derived(Base& b, Derived& d, int)
 }
 
 template <typename T>
-T& wknd_get(boost::variant<T&>& var, long)
+    typename boost::add_reference<T>::type
+wknd_get(boost::variant<T&>& var, long)
 {
     return boost::get<T>(var);
 }
 
 template <typename T>
-T& wknd_get(boost::variant<T>& var, int)
+    typename boost::add_reference<T>::type
+wknd_get(boost::variant<T>& var, int)
 {
     return boost::get<T>(var);
 }
