@@ -145,6 +145,9 @@ main()
   int weeknum13 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(9999,12,31));
   check("ToWeekNumber 9999-12-31 is week 52", weeknum13 == 52);
 
+  int weeknum14 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(2003,12,29));
+  check("ToWeekNumber 2003-12-29 is week 1", weeknum14 == 1);
+
 
   unsigned long jday1 = gregorian_calendar::day_number(gregorian_calendar::ymd_type(2000,1,1));
   unsigned long jday2 = gregorian_calendar::day_number(gregorian_calendar::ymd_type(2001,1,1));
