@@ -56,8 +56,10 @@ bool check(int x, const boost::minstd_rand0&) { return x == 1043618065; }
 // validation values from the publications
 bool check(int x, const boost::minstd_rand&) { return x == 399268537; }
 
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
 // by experiment from lrand48()
 bool check(unsigned long x, const boost::rand48&) { return x == 1993516219; }
+#endif
 
 // ????
 bool check(unsigned long x, const boost::taus88&) { return x == 3535848941U; }
@@ -135,6 +137,20 @@ void instantiate_dist(const Dist& dist)
   d = dist;            // copy assignment
   b();
   BOOST_TEST(d.base() == b);
+}
+
+template<class URNG, class RealType>
+void instantiate_real_dist(URNG& urng, RealType /* ignored */)
+{
+  instantiate_dist(boost::uniform_01<URNG, RealType>(urng));
+  instantiate_dist(boost::uniform_real<URNG, RealType>(urng, 0, 2.1));
+  instantiate_dist(boost::triangle_distribution<URNG, RealType>(urng, 1, 1.5, 7));
+  instantiate_dist(boost::exponential_distribution<URNG, RealType>(urng, 5));
+  instantiate_dist(boost::normal_distribution<URNG, RealType>(urng));
+  instantiate_dist(boost::lognormal_distribution<URNG, RealType>(urng, 1, 1));
+  instantiate_dist(boost::poisson_distribution<URNG, RealType>(urng, 1));
+  instantiate_dist(boost::cauchy_distribution<URNG, RealType>(urng, 1));
+  instantiate_dist(boost::gamma_distribution<URNG, RealType>(urng, 1));
 }
 
 template<class URNG, class ResultType>
@@ -217,21 +233,17 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
 #endif // BOOST_NO_OPERATORS_IN_NAMESPACE
 
   // instantiate various distributions with this URNG
-  instantiate_dist(boost::uniform_01<URNG>(urng));
   instantiate_dist(boost::uniform_smallint<URNG>(urng, 0, 11));
   instantiate_dist(boost::uniform_int<URNG>(urng, -200, 20000));
-  instantiate_dist(boost::uniform_real<URNG>(urng, 0, 2.1));
-
+  instantiate_dist(boost::geometric_distribution<URNG>(urng, 0.8));
   instantiate_dist(boost::bernoulli_distribution<URNG>(urng, 0.2));
   instantiate_dist(boost::binomial_distribution<URNG>(urng, 4, 0.2));
-  instantiate_dist(boost::geometric_distribution<URNG>(urng, 0.8));
-  instantiate_dist(boost::triangle_distribution<URNG>(urng, 1, 1.5, 7));
-  instantiate_dist(boost::exponential_distribution<URNG>(urng, 5));
-  instantiate_dist(boost::normal_distribution<URNG>(urng));
-  instantiate_dist(boost::lognormal_distribution<URNG>(urng, 1, 1));
   instantiate_dist(boost::poisson_distribution<URNG>(urng, 1));
-  instantiate_dist(boost::cauchy_distribution<URNG>(urng, 1));
-  instantiate_dist(boost::gamma_distribution<URNG>(urng, 1));
+
+  instantiate_real_dist(urng, 1.0f);
+  instantiate_real_dist(urng, 1.0);
+  instantiate_real_dist(urng, 1.0l);
+
   instantiate_dist(boost::uniform_on_sphere<URNG>(urng, 2));
 }
 
