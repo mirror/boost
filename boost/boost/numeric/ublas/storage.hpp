@@ -617,7 +617,7 @@ namespace boost { namespace numeric { namespace ublas {
 
 #ifdef BOOST_UBLAS_SHALLOW_ARRAY_ADAPTOR
     // Array adaptor with shallow (reference) copy semantics of elements.
-    // shared_array are used maitain reference counting.
+    // shared_array is used to maintain reference counts.
     // This class breaks the normal copy semantics for a storage container and is very dangerous!
     template<class T>
     class shallow_array_adaptor:
