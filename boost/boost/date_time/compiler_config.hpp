@@ -19,7 +19,7 @@
 #endif
 
 //Work around compilers that don't have std::abs
-#if (defined(__GNUC__) && (__GNUC__ <= 3)) || (defined(BOOST_MSVC) && _MSC_VER <= 1200)
+#if (defined(__GNUC__) && (__GNUC__ <= 3)) || (defined(BOOST_MSVC) && _MSC_VER <= 1200) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x561))
 #  define BOOST_NO_LONG_LONG_ABS
 #endif
 
