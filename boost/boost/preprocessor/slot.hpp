@@ -12,6 +12,7 @@
 #  ************************************************************************** */
 #
 # include <boost/preprocessor/detail/cat.hpp>
+# include <boost/preprocessor/detail/line.hpp>
 #
 # define BOOST_PP_SLOT_LIMIT 5
 #
