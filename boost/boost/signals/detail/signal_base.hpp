@@ -18,10 +18,10 @@
 #include <boost/any.hpp>
 #include <boost/utility.hpp>
 #include <boost/function/function2.hpp>
-#include <map>
 #include <utility>
 #include <vector>
-
+#include <list>
+#include <map>
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
@@ -102,7 +102,7 @@ namespace boost {
 
         friend class temporarily_set_clearing;
 
-        signal_base_impl(const compare_type&);
+        signal_base_impl(const compare_type&, const any&);
         ~signal_base_impl();
 
         // Disconnect all slots connected to this signal
@@ -148,6 +148,7 @@ namespace boost {
         typedef slot_container_type::iterator slot_iterator;
         typedef slot_container_type::value_type stored_slot_type;
         mutable slot_container_type slots_;
+        any combiner_;
       };
 
       class BOOST_SIGNALS_DECL signal_base : public noncopyable {
@@ -156,7 +157,7 @@ namespace boost {
 
         friend class call_notification;
 
-        signal_base(const compare_type& comp);
+        signal_base(const compare_type& comp, const any& combiner);
         ~signal_base();
 
       public:

@@ -15,9 +15,11 @@
 namespace boost {
   namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
-      signal_base_impl::signal_base_impl(const compare_type& comp) :
-        call_depth(0),
-        slots_(comp)
+      signal_base_impl::signal_base_impl(const compare_type& comp,
+                                         const any& combiner)
+        : call_depth(0),
+          slots_(comp),
+          combiner_(combiner)
       {
         flags.delayed_disconnect = false;
         flags.clearing = false;
@@ -229,9 +231,10 @@ namespace boost {
         }
       }
 
-    signal_base::signal_base(const compare_type& comp) : impl()
+    signal_base::signal_base(const compare_type& comp, const any& combiner)
+      : impl()
     {
-      impl.reset(new signal_base_impl(comp));
+      impl.reset(new signal_base_impl(comp, combiner));
     }
 
     signal_base::~signal_base()

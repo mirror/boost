@@ -25,7 +25,6 @@
 #  include <cassert>
 #  include <functional>
 #  include <memory>
-#  include <string>
 #endif // !BOOST_SIGNALS_SIGNAL_TEMPLATE_HEADER_INCLUDED
 
 #ifdef BOOST_HAS_ABI_HEADERS
@@ -192,8 +191,8 @@ namespace boost {
     explicit
     BOOST_SIGNALS_SIGNAL(const Combiner& c = Combiner(),
                          const GroupCompare& comp = GroupCompare()) :
-      BOOST_SIGNALS_NAMESPACE::detail::signal_base(real_group_compare_type(comp)),
-      combiner(c)
+      BOOST_SIGNALS_NAMESPACE::detail::signal_base(real_group_compare_type(comp),
+                                                   c)
     {
     }
 
@@ -211,8 +210,11 @@ namespace boost {
     result_type operator()(BOOST_SIGNALS_PARMS);
     result_type operator()(BOOST_SIGNALS_PARMS) const;
 
-  private:
-    Combiner combiner;
+    Combiner& combiner()
+    { return *any_cast<Combiner>(&impl->combiner_); }
+
+    const Combiner& combiner() const
+    { return *any_cast<const Combiner>(&impl->combiner_); }
   };
 
   template<
@@ -296,10 +298,10 @@ namespace boost {
     call_bound_slot f(&args);
 
     // Let the combiner call the slots via a pair of input iterators
-    return combiner(slot_call_iterator(notification.impl->slots_.begin(),
-                                       impl->slots_.end(), f),
-                    slot_call_iterator(notification.impl->slots_.end(),
-                                       impl->slots_.end(), f));
+    return combiner()(slot_call_iterator(notification.impl->slots_.begin(),
+                                         impl->slots_.end(), f),
+                      slot_call_iterator(notification.impl->slots_.end(),
+                                         impl->slots_.end(), f));
   }
 
   template<
@@ -335,10 +337,10 @@ namespace boost {
     call_bound_slot f(&args);
 
     // Let the combiner call the slots via a pair of input iterators
-    return combiner(slot_call_iterator(notification.impl->slots_.begin(),
-                                       impl->slots_.end(), f),
-                    slot_call_iterator(notification.impl->slots_.end(),
-                                       impl->slots_.end(), f));
+    return combiner()(slot_call_iterator(notification.impl->slots_.begin(),
+                                         impl->slots_.end(), f),
+                      slot_call_iterator(notification.impl->slots_.end(),
+                                         impl->slots_.end(), f));
   }
 } // namespace boost
 

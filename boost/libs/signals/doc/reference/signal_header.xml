@@ -270,6 +270,20 @@
           way to synthesize a return value).</simpara></notes>
         </overloaded-method>
       </method-group>
+
+      <method-group name="combiner access">
+        <overloaded-method name="combiner">
+          <signature>
+            <type>combiner_type&amp;</type>
+          </signature>
+          <signature cv="const">
+            <type>const combiner_type&amp;</type>
+          </signature>
+
+          <returns><simpara>A reference to the stored combiner.</simpara></returns>
+          <throws><simpara>Will not throw.</simpara></throws>
+        </overloaded-method>
+      </method-group>
     </class>
 
     <class name="signal">
