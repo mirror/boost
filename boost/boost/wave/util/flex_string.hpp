@@ -245,6 +245,7 @@ typename Allocator::pointer Reallocate(
     void*)
 {
     // @@@ not implemented
+    return NULL;
 }
 
 template <class Allocator>
@@ -256,6 +257,7 @@ typename Allocator::pointer Reallocate(
     mallocator<void>*)
 {
     // @@@ not implemented
+    return NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
