@@ -11,80 +11,91 @@ subproject libs/iostreams/test ;
 # bring in rules for testing
 import testing ;
 
+# import compression libraries
+import $(BOOST_ROOT)/libs/iostreams/build/bzip2.jam ;
+import $(BOOST_ROOT)/libs/iostreams/build/zlib.jam ;
+
 # Make tests run by default.
 DEPENDS all : test ;
 
 {
     # look in BOOST_ROOT for sources first, just in this Jamfile
     local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
-    
-    template basic
-        : # sources
-          <lib>../../../libs/test/build/boost_unit_test_framework
-        : # build requirements
-        : # build variants
-       ;
 
-    template iostreams
+    template bzip2
         : # sources
           <template>basic
           <lib>../build/boost_iostreams
+          <lib>../build/boost_bzip2
         : # build requirements
+            <define>BOOST_IOSTREAMS_NO_LIB
+        : # build variants
+        ;
+
+    template zlib
+        : # sources
+          <template>basic
+          <lib>../build/boost_iostreams
+          <lib>../build/boost_zlib
+        : # build requirements
+            <define>BOOST_IOSTREAMS_NO_LIB
         : # build variants
        ;
 
-    #template bzip2
-    #    : # sources
-    #      <template>basic
-    #      <lib>../build/boost_iostreams
-    #      <lib>../build/boost_bzip2
-    #    : # build requirements
-    #    : # build variants
-    #   ;
-
-    #template zlib
-    #    : # sources
-    #      <template>basic
-    #      <lib>../build/boost_iostreams
-    #      <lib>../build/boost_zlib
-    #    : # build requirements
-    #    : # build variants
-    #   ;
-
-    lib utf8_codecvt_facet
-        : # sources
-          ./detail/utf8_codecvt_facet.cpp 
-          ./detail/utf8_codecvt_facet.cpp 
-        : # build requirements
-          <template>iostreams
-          <include>$(BOOST_ROOT) <sysinclude>$(BOOST_ROOT)
-          std::locale-support
-        : # build variants
-          debug release  
-        ;
+    rule test-iostreams ( sources * : requirements * ) {
+        return [
+            run
+                $(sources)
+                <lib>../../test/build/boost_unit_test_framework
+            : # command
+            : # input files
+            : # build requirements
+                <define>BOOST_IOSTREAMS_NO_LIB
+                $(requirements)
+        ] ;
+    }
 
     test-suite "iostreams"
-        : [ run libs/iostreams/test/array_test.cpp              <template>basic     ]
-          #[ run libs/iostreams/test/bzip2_test.cpp              <template>bzip2     ]
-          [ run libs/iostreams/test/code_converter_test.cpp     
-                <template>iostreams
-                <lib>utf8_codecvt_facet                                             ]
-          [ run libs/iostreams/test/copy_test.cpp               <template>basic     ]
-          [ run libs/iostreams/test/direct_adapter_test.cpp     <template>basic     ]
-          [ run libs/iostreams/test/file_descriptor_test.cpp    <template>iostreams ]
-          [ run libs/iostreams/test/filtering_stream_test.cpp   <template>basic     ]
-          #[ run libs/iostreams/test/gzip_test.cpp               <template>zlib      ] 
-          [ run libs/iostreams/test/mapped_file_test.cpp        <template>iostreams ]
-          [ run libs/iostreams/test/newline_filter_test.cpp     <template>basic     ]
-          [ run libs/iostreams/test/pipable_test.cpp            <template>basic     ]
-          [ run libs/iostreams/test/regex_filter_test.cpp     
-                <template>basic 
-                <lib>../../regex/build/boost_regex                                  ]
-          [ run libs/iostreams/test/reverse_test.cpp            <template>basic     ]
-          [ run libs/iostreams/test/seekable_file_test.cpp      <template>basic     ]
-          [ run libs/iostreams/test/seekable_filter_test.cpp    <template>basic     ]
-          [ run libs/iostreams/test/symmetric_filter_test.cpp   <template>basic     ]
-          [ run libs/iostreams/test/wide_stream_test.cpp        <template>basic     ]
-          #[ run libs/iostreams/test/zlib_test.cpp               <template>zlib      ]
+        : [ test-iostreams libs/iostreams/test/array_test.cpp ]
+          [ test-iostreams 
+                libs/iostreams/test/code_converter_test.cpp    
+                libs/iostreams/src/file_descriptor.cpp    
+                libs/iostreams/test/detail/utf8_codecvt_facet.cpp 
+              : # build requirements 
+                std::locale-support ]   
+          [ test-iostreams libs/iostreams/test/copy_test.cpp ]
+          [ test-iostreams libs/iostreams/test/direct_adapter_test.cpp ]
+          [ test-iostreams 
+                libs/iostreams/test/file_descriptor_test.cpp 
+                libs/iostreams/src/file_descriptor.cpp ]
+          [ test-iostreams libs/iostreams/test/filtering_stream_test.cpp ]
+          [ test-iostreams 
+                libs/iostreams/test/mapped_file_test.cpp 
+                libs/iostreams/src/mapped_file.cpp ]
+          [ test-iostreams libs/iostreams/test/newline_filter_test.cpp ]
+          [ test-iostreams libs/iostreams/test/pipable_test.cpp ]
+          [ test-iostreams 
+                libs/iostreams/test/regex_filter_test.cpp     
+                <lib>../../regex/build/boost_regex ]
+          [ test-iostreams libs/iostreams/test/reverse_test.cpp ]
+          [ test-iostreams libs/iostreams/test/seekable_file_test.cpp ]
+          [ test-iostreams libs/iostreams/test/seekable_filter_test.cpp ]
+          [ test-iostreams libs/iostreams/test/symmetric_filter_test.cpp ]
+          [ test-iostreams libs/iostreams/test/wide_stream_test.cpp ]
+          [ test-iostreams 
+                libs/iostreams/test/bzip2_test.cpp 
+                <template>bzip2
+              : # build requirements
+                <define>BOOST_IOSTREAMS_NO_LIB ]   
+          [ test-iostreams 
+                libs/iostreams/test/gzip_test.cpp 
+                <template>zlib
+              : # build requirements
+                <define>BOOST_IOSTREAMS_NO_LIB ]   
+          [ test-iostreams 
+                libs/iostreams/test/zlib_test.cpp 
+                <template>zlib
+              : # build requirements
+                <define>BOOST_IOSTREAMS_NO_LIB ]   
        ;
 }
