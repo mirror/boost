@@ -23,7 +23,7 @@
 
 // These are an implementation detail and not part of the interface
 #include <limits.h>
-#ifndef BOOST_NO_INTRINSIC_WCHAR_T
+#if !defined(BOOST_NO_INTRINSIC_WCHAR_T) && !defined(BOOST_NO_CWCHAR)
 #include <wchar.h>
 #endif
 
@@ -85,7 +85,9 @@ class integer_traits<unsigned char>
 template<>
 class integer_traits<wchar_t>
   : public std::numeric_limits<wchar_t>,
-#if defined(__BORLANDC__) || defined(__CYGWIN__) || defined(__MINGW32__) || (defined(__BEOS__) && defined(__GNUC__))
+#if defined(WCHAR_MIN) && defined(WCHAR_MAX)
+    public detail::integer_traits_base<wchar_t, WCHAR_MIN, WCHAR_MAX>
+#elif defined(__BORLANDC__) || defined(__CYGWIN__) || defined(__MINGW32__) || (defined(__BEOS__) && defined(__GNUC__))
     // No WCHAR_MIN and WCHAR_MAX, whar_t is short and unsigned:
     public detail::integer_traits_base<wchar_t, 0, 0xffff>
 #elif defined(__sgi) && (!defined(__SGI_STL_PORT) || __SGI_STL_PORT < 0x400)
@@ -96,7 +98,7 @@ class integer_traits<wchar_t>
     // (also, std::numeric_limits<wchar_t> appears to return the wrong values)
     public detail::integer_traits_base<wchar_t, 0, UINT_MAX>
 #else
-    public detail::integer_traits_base<wchar_t, WCHAR_MIN, WCHAR_MAX>
+#error No WCHAR_MIN and WCHAR_MAX present, please adjust integer_traits<> for your compiler.
 #endif
 { };
 #endif // BOOST_NO_INTRINSIC_WCHAR_T
