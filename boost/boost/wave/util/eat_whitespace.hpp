@@ -25,20 +25,27 @@ template <typename TokenT>
 class eat_whitespace {
 
 public:
-    eat_whitespace();
+    eat_whitespace(bool preserve_comments);
     
     bool may_skip (TokenT &token, bool &skipped_newline);
+
+protected:
+    bool skip_cppcomment(boost::wave::token_id id)
+    {
+        return !preserve_comments && T_CPPCOMMENT == id;
+    }
     
 private:
     typedef bool state_t(TokenT &token, bool &skipped_newline);
     state_t eat_whitespace::* state;
     state_t general, newline, newline_2nd, whitespace;
+    bool preserve_comments;
 };
 
 template <typename TokenT>
 inline 
-eat_whitespace<TokenT>::eat_whitespace()
-:   state(&eat_whitespace::newline) 
+eat_whitespace<TokenT>::eat_whitespace(bool preserve_comments)
+:   state(&eat_whitespace::newline), preserve_comments(preserve_comments)
 {
 }
 
@@ -53,7 +60,7 @@ template <typename TokenT>
 inline bool 
 eat_whitespace<TokenT>::general(TokenT &token, bool &skipped_newline) 
 {
-    using boost::wave::token_id;
+    using namespace boost::wave;
 
     token_id id = token_id(token);
     if (T_NEWLINE == id || T_CPPCOMMENT == id) {
@@ -70,7 +77,7 @@ eat_whitespace<TokenT>::general(TokenT &token, bool &skipped_newline)
             }
         }
 
-        if (token.get_value().size() > 1)
+        if (!preserve_comments && token.get_value().size() > 1)
             token.set_value(" ");   // replace with a single space
     }
     else {
@@ -89,7 +96,7 @@ eat_whitespace<TokenT>::newline(TokenT &token, bool &skipped_newline)
     if (T_NEWLINE == id || T_CPPCOMMENT == id) {
         skipped_newline = true;
         state = &eat_whitespace::newline_2nd;
-        return true;
+        return skip_cppcomment(id);
     }
     else if (T_SPACE != id && T_SPACE2 != id && T_CCOMMENT != id) {
         return general(token, skipped_newline);
@@ -101,6 +108,7 @@ eat_whitespace<TokenT>::newline(TokenT &token, bool &skipped_newline)
         {
             skipped_newline = true;
         }
+        return !preserve_comments;
     }
     return true;
 }
@@ -120,13 +128,13 @@ eat_whitespace<TokenT>::newline_2nd(TokenT &token, bool &skipped_newline)
         {
             skipped_newline = true;
         }
-        return true;
+        return !preserve_comments;
     }
     if (T_NEWLINE != id && T_CPPCOMMENT != id) 
         return general(token, skipped_newline);
 
     skipped_newline = true;
-    return true;
+    return T_NEWLINE == id || skip_cppcomment(id);
 }
 
 template <typename TokenT>
@@ -145,6 +153,7 @@ eat_whitespace<TokenT>::whitespace(TokenT &token, bool &skipped_newline)
         {
             skipped_newline = true;
         }
+        return !preserve_comments;
     }
     return true;
 }

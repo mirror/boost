@@ -27,6 +27,9 @@ enum language_support {
     support_variadics = 0x02,
     support_c99 = support_variadics | 0x04,
 #endif 
+
+    support_option_mask = 0xFF00,
+    support_option_preserve_comments = 0x0100,
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,7 +42,7 @@ enum language_support {
 inline bool
 need_cpp(language_support language) 
 {
-    return language == support_cpp;
+    return (language & ~support_option_mask) == support_cpp;
 }
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
@@ -82,20 +85,7 @@ enable_variadics(language_support language, bool enable = true)
 inline bool
 need_c99(language_support language) 
 {
-    return language == support_c99;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  enable_c99
-//
-//      Set, whether to support C99 (alternatively C++98 is supported)
-//
-///////////////////////////////////////////////////////////////////////////////
-inline language_support
-enable_c99(bool enable = true)
-{
-    return enable ? support_c99 : support_cpp;
+    return (language & ~support_option_mask) == support_c99;
 }
 
 #else  // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
@@ -121,14 +111,35 @@ need_c99(language_support language)
     return false;
 }
 
+#endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+
 ///////////////////////////////////////////////////////////////////////////////
-inline language_support
-enable_c99(bool enable = true)
+//  
+//  need_preserve_comments
+//
+//      Extract, if the comments have to be preserved
+//
+///////////////////////////////////////////////////////////////////////////////
+inline bool 
+need_preserve_comments(language_support language) 
 {
-    return support_cpp;
+    return (language & support_option_preserve_comments) ? true : false;
 }
 
-#endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+///////////////////////////////////////////////////////////////////////////////
+//  
+//  enable_preserve_comments
+//
+//      Set preserve comments support in the language to support
+//
+///////////////////////////////////////////////////////////////////////////////
+inline language_support
+enable_preserve_comments(language_support language, bool enable = true)
+{
+    if (enable)
+        return static_cast<language_support>(language | support_option_preserve_comments);
+    return static_cast<language_support>(language & ~support_option_preserve_comments);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace wave

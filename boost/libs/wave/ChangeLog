@@ -23,6 +23,8 @@ TODO (known issues):
 
 CHANGELOG
 
+Tue Mar 22 14:52:45 WEST 2005
+Version 1.1.15
 - Fixed a bug where the complete set of C99 predefined macros were pre-defined
   when in C++ mode and variadics were enabled.
 - When in variadics or C99 mode the __BASE_FILE__ predefined macro expanded to
@@ -56,7 +58,11 @@ CHANGELOG
 - Fixed a bug which reported 'defined(or)' as invalid (similarly all the other
   alternative bit operation token types).
 - Fixed a bug which prevented to define variadic macros from the command line.
-
+- Added a 'preserve comments' mode to preserve the comments in the input stream
+  not inserted into macro definitions.
+- Added a new --preserve (-p) command line switch to the wave driver 
+  application to allow comments to be preserved in the generated output stream.
+  
 Mon Feb 21 09:30:04 WEST 2005
 Version 1.1.14 (Fixes in response to the Boost review)
 

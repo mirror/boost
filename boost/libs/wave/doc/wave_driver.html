@@ -54,6 +54,7 @@
     --variadics:                 enable variadics and placemarkers in C++ mode
     --c99:                       enable C99 mode (implies variadics and placemarkers)
     -l [ --listincludes ] arg:   list included file to a file [arg] or to stdout [-]
+    -p [ --preserve ]:           preserve comments
 
 </pre>
 <P dir="ltr">The possible options are straightforward and self explanatory. The 
@@ -164,6 +165,10 @@
 <blockquote>
   <p dir="ltr">Enable the output of the names of all opened include files. The path specifies the filename to use for the output of the generated include log. If the filename given equals to <tt>'-'</tt> (without the quotes), the include log is put into the standard output stream (stdout).</p>
 </blockquote>
+<p dir="ltr">-p [--preserve] </p>
+<blockquote>
+  <p dir="ltr">Preserve the comments from the input stream not located inside of macro definitions. The comments located inside macro definitions are skipped even if this option is specified. If this option is not specified on the command line all comments are skipped. </p>
+</blockquote>
 <p dir="ltr">@ [--config-file] option</p>
 <blockquote> 
   <p dir="ltr">Some of the possible command line options may be specified inside 
@@ -219,7 +224,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Monday, March 14, 2005  11:11<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Tuesday, March 22, 2005  14:06<!-- #EndDate -->
 </span></p>
 </body>
 </html>

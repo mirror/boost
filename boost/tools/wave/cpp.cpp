@@ -360,6 +360,12 @@ boost::wave::util::file_position_type current_position;
             ctx.set_language(boost::wave::enable_variadics(ctx.get_language()));
         }
 #endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+
+     // enable preserving comments mode
+        if (vm.count("preserve")) {
+            ctx.set_language(
+                boost::wave::enable_preserve_comments(ctx.get_language()));
+        }
         
     // add include directories to the system include search paths
         if (vm.count("sysinclude")) {
@@ -488,23 +494,14 @@ boost::wave::util::file_position_type current_position;
     // >>>>>>>>>>>>> Here the actual preprocessing happens. <<<<<<<<<<<<<<<<<<<
     // loop over all generated tokens outputting the generated text 
         while (first != last) {
-        // print out the string representation of this token (skip comments)
-            using namespace boost::wave;
-
         // store the last known good token position
             current_position = (*first).get_position();
 
-        token_id id = token_id(*first);
+        // print out the current token value
+            output << (*first).get_value();
 
-            if (T_CPPCOMMENT == id || T_NEWLINE == id) {
-            // C++ comment tokens contain the trailing newline
-                output << endl;
-            }
-            else if (id != T_CCOMMENT) {
-            // print out the current token value
-                output << (*first).get_value();
-            }
-            ++first;        // advance to the next token
+        // advance to the next token
+            ++first;
         }
     }
     catch (boost::wave::cpp_exception &e) {
@@ -594,6 +591,7 @@ main (int argc, char *argv[])
 #endif 
             ("listincludes,l", po::value<string>(), 
                 "list included file to a file [arg] or to stdout [-]")
+            ("preserve,p", "preserve comments")
         ;
     
     // combine the options for the different usage schemes

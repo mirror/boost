@@ -252,7 +252,8 @@ public:
                 pos_.get_file().c_str()
             )), 
         seen_newline(true), must_emit_line_directive(false),
-        act_pos(ctx_.get_main_pos()), last_line(0)
+        act_pos(ctx_.get_main_pos()), last_line(0),
+        eater(need_preserve_comments(ctx_.get_language()))
     {
         act_pos.set_file(pos_.get_file());
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
