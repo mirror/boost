@@ -21,8 +21,8 @@
 namespace boost { namespace iostreams { namespace detail {
 
 struct default_codecvt { 
-    typedef wchar_t         intern_type;
-    typedef char            extern_type;
+    typedef wchar_t         intern_type, from_type;
+    typedef char            extern_type, to_type;
     typedef std::mbstate_t  state_type;
 };
 
