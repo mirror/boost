@@ -154,7 +154,7 @@ int test_main(int, char*[])
 
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
   // No template constructors, so we can't build the test locale
-#else
+#elif !defined(BOOST_NO_STD_LOCALE)
 
   // Input indeterminate named "maybe" (boolalpha)
   {
