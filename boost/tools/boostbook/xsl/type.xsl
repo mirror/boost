@@ -342,7 +342,130 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
     </xsl:if>
   </xsl:template>
 
-  <!-- Emit a list of base classes -->
+  <!-- Format base classes on a single line -->
+  <xsl:template name="print.base.classes.single">
+    <xsl:apply-templates select="inherit"/>
+  </xsl:template>
+
+  <xsl:template name="print.base.classes.multi">
+    <xsl:param name="indentation"/>
+    
+    <xsl:variable name="n" select="count(inherit)"/>
+    <xsl:for-each select="inherit">
+      <!-- Indentation -->
+      <xsl:if test="position() &gt; 1">
+        <xsl:call-template name="indent">
+          <xsl:with-param name="indentation" select="$indentation"/>
+        </xsl:call-template>
+      </xsl:if>
+
+      <!-- Output the access specifier -->
+      <xsl:variable name="access">
+        <xsl:choose>
+          <xsl:when test="@access">
+            <xsl:value-of select="@access"/>
+          </xsl:when>
+          <xsl:when test="parent::class|parent::class-specialization">
+            <xsl:text>private</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>public</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:call-template name="highlight-keyword">
+        <xsl:with-param name="keyword" select="@access"/>
+      </xsl:call-template>
+      <xsl:text> </xsl:text>
+
+      <!-- Output the type -->
+      <xsl:choose>
+        <xsl:when test="type">
+          <xsl:apply-templates select="type/*|type/text()" mode="annotation"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates mode="annotation"/>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <!-- Output a comma if not at the end -->
+      <xsl:if test="position() &lt; $n">
+        <xsl:text>,</xsl:text>
+      </xsl:if>
+
+      <!-- Output a comment if we have one -->
+      <xsl:if test="purpose">
+        <xsl:choose>
+          <xsl:when test="position() &lt; $n">
+            <xsl:text>  </xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>   </xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:call-template name="highlight-comment">
+          <xsl:with-param name="text">
+            <xsl:text>// </xsl:text>
+            <xsl:apply-templates select="purpose/*|purpose/text()"
+              mode="annotation"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
+
+      <xsl:if test="position() &lt; $n">
+        <xsl:text>&#10;</xsl:text>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="print.base.classes">
+    <xsl:param name="indentation" select="0"/>
+    <xsl:param name="base-indentation" select="0"/>
+
+    <xsl:variable name="single-line-candidate" select="not(inherit/purpose)"/>
+    <xsl:variable name="single-line">
+      <xsl:if test="$single-line-candidate">
+        <xsl:call-template name="print.base.classes.single"/>
+      </xsl:if>
+    </xsl:variable>
+
+    <xsl:choose>
+      <xsl:when test="$single-line-candidate and 
+                      (string-length($single-line) + $indentation + 3
+                        &lt; $max-columns)">
+        <xsl:call-template name="print.base.classes.single"/>
+        <xsl:text> {</xsl:text>
+      </xsl:when>
+      <xsl:when test="$single-line-candidate and
+                      (string-length($single-line) + $base-indentation + 5
+                        &lt; $max-columns)">
+        <xsl:text>&#10;</xsl:text>
+        <xsl:call-template name="indent">
+          <xsl:with-param name="indentation" select="$base-indentation"/>
+        </xsl:call-template>
+        <xsl:text>  : </xsl:text>
+        <xsl:call-template name="print.base.classes.single"/>
+        <xsl:text>&#10;</xsl:text>
+        <xsl:call-template name="indent">
+          <xsl:with-param name="indentation" select="$base-indentation"/>
+        </xsl:call-template>
+        <xsl:text>{</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text> : </xsl:text>
+        <xsl:call-template name="print.base.classes.multi">
+          <xsl:with-param name="indentation" select="$indentation + 3"/>
+        </xsl:call-template>
+        <xsl:text>&#10;</xsl:text>
+        <xsl:call-template name="indent">
+          <xsl:with-param name="indentation" select="$base-indentation"/>
+        </xsl:call-template>
+        <xsl:text>{</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- Emit a list of base classes without comments and on a single line -->
   <xsl:template match="inherit">
     <xsl:choose>
       <xsl:when test="position()=1">
@@ -500,11 +623,23 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
     <xsl:value-of select="@name"/>
     <xsl:apply-templates select="specialization"/>
     
-    <!-- Base class list -->
-    <xsl:apply-templates select="inherit"/>
-    
-    <!-- Opening brace and public designator -->
-    <xsl:text> {</xsl:text>
+    <xsl:choose>
+      <xsl:when test="inherit">
+        <!-- Base class list (with opening brace) -->
+        <xsl:call-template name="print.base.classes">
+          <xsl:with-param name="indentation" 
+            select="string-length($class-key) + string-length(@name) 
+                    + $indentation + 1"/>
+          <xsl:with-param name="base-indentation" select="$indentation"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- Opening brace -->
+        <xsl:text> {</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+
+    <!-- Public designator -->
     <xsl:if test="contains(local-name(.), 'class')">
       <xsl:text>&#10;</xsl:text>
       <xsl:call-template name="indent">
