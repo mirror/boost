@@ -31,6 +31,6 @@ namespace boost_no_auto_ptr = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_auto_ptr::test();
-}	
-	
+   return boost_no_auto_ptr::test();
+}  
+   

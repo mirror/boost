@@ -31,6 +31,6 @@ namespace boost_has_nl_types_h = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_has_nl_types_h::test();
-}	
-	
+   return boost_has_nl_types_h::test();
+}  
+   

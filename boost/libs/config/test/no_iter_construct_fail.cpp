@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_templated_iterator_constructors::test();
-}	
-	
+   return boost_no_templated_iterator_constructors::test();
+}  
+   

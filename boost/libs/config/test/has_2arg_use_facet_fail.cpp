@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_has_two_arg_use_facet::test();
-}	
-	
+   return boost_has_two_arg_use_facet::test();
+}  
+   

@@ -78,11 +78,11 @@ void test_float_limits(const T &, const char * msg)
   const T snan = lim::signaling_NaN();
 
   std::cout << "IEEE-compatible: " << lim::is_iec559
-	    << ", traps: " << lim::traps
-	    << ", bounded: " << lim::is_bounded
-	    << ", exact: " << lim::is_exact << '\n'
-	    << "min: " << lim::min() << ", max: " << lim::max() << '\n'
-	    << "infinity: " << infinity << ", QNaN: " << qnan << '\n';
+       << ", traps: " << lim::traps
+       << ", bounded: " << lim::is_bounded
+       << ", exact: " << lim::is_exact << '\n'
+       << "min: " << lim::min() << ", max: " << lim::max() << '\n'
+       << "infinity: " << infinity << ", QNaN: " << qnan << '\n';
   print_hex_val(lim::max(), "max");
   print_hex_val(infinity, "infinity");
   print_hex_val(qnan, "qnan");

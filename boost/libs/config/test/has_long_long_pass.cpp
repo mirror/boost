@@ -31,6 +31,6 @@ namespace boost_has_long_long = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_has_long_long::test();
-}	
-	
+   return boost_has_long_long::test();
+}  
+   

@@ -31,6 +31,6 @@ namespace boost_has_sched_yield = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_has_sched_yield::test();
-}	
-	
+   return boost_has_sched_yield::test();
+}  
+   

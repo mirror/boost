@@ -110,7 +110,7 @@ void print_compiler_macros()
   PRINT_MACRO(__FUNC__);
   PRINT_MACRO(_M_IX86);
   PRINT_MACRO(__MSDOS__);
-  PRINT_MACRO(__MT__	);
+  PRINT_MACRO(__MT__ );
   PRINT_MACRO(__PASCAL__);
   PRINT_MACRO(__STDC__);
   PRINT_MACRO(__TLS__);

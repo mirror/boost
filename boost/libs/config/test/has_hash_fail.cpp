@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_has_hash::test();
-}	
-	
+   return boost_has_hash::test();
+}  
+   

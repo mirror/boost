@@ -31,6 +31,6 @@ namespace boost_no_template_partial_specialization = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_template_partial_specialization::test();
-}	
-	
+   return boost_no_template_partial_specialization::test();
+}  
+   

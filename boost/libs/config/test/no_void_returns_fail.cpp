@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_void_returns::test();
-}	
-	
+   return boost_no_void_returns::test();
+}  
+   

@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_std_allocator::test();
-}	
-	
+   return boost_no_std_allocator::test();
+}  
+   

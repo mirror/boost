@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_private_in_aggregate::test();
-}	
-	
+   return boost_no_private_in_aggregate::test();
+}  
+   

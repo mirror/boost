@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_cv_specializations::test();
-}	
-	
+   return boost_no_cv_specializations::test();
+}  
+   

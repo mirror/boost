@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_member_template_keyword::test();
-}	
-	
+   return boost_no_member_template_keyword::test();
+}  
+   

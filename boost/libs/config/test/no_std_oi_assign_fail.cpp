@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_std_output_iterator_assign::test();
-}	
-	
+   return boost_no_std_output_iterator_assign::test();
+}  
+   

@@ -78,7 +78,7 @@ $as_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set || { LC_MESSAGES=C; ex
 # We need space, tab and new line, in precisely that order.
 as_nl='
 '
-IFS=" 	$as_nl"
+IFS="    $as_nl"
 
 # CDPATH.
 $as_unset CDPATH || test "${CDPATH+set}" != set || { CDPATH=:; export CDPATH; }
@@ -745,7 +745,7 @@ do
   | --no-cr | --no-c) ;;
   -no-recursion | --no-recursion | --no-recursio | --no-recursi \
   | --no-recurs | --no-recur | --no-recu | --no-rec | --no-re | --no-r) ;;
-  *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
+  *" "*|*"  "*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
     ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"`
     ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
     ac_sep=" " ;;
@@ -772,7 +772,7 @@ trap 'exit_status=$?
     *ac_space=\ *)
       sed -n \
         "s/'"'"'/'"'"'\\\\'"'"''"'"'/g;
-    	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='"'"'\\2'"'"'/p"
+        s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='"'"'\\2'"'"'/p"
       ;;
     *)
       sed -n \
@@ -858,7 +858,7 @@ echo "$as_me:   current value: $ac_new_val" >&2;}
   # we pass some twice (in addition to the command line arguments).
   if test "$ac_new_set" = set; then
     case $ac_new_val in
-    *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
+    *" "*|*"   "*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
       ac_arg=$ac_var=`echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"`
       ac_configure_args="$ac_configure_args '$ac_arg'"
       ;;
@@ -883,7 +883,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *c*,-n*) ECHO_N= ECHO_C='
-' ECHO_T='	' ;;
+' ECHO_T='  ' ;;
   *c*,*  ) ECHO_N=-n ECHO_C= ECHO_T= ;;
   *)      ECHO_N= ECHO_C='\c' ECHO_T= ;;
 esac
@@ -909,7 +909,7 @@ if test "${enable_test+set}" = set; then
 fi;
 
 if test "foo"$enable_test = "foo"; then
-	enable_test="no"
+   enable_test="no"
 fi
 
 cat << EOF
@@ -950,19 +950,19 @@ if test "${enable_extension+set}" = set; then
   enableval="$enable_extension"
 
 case "$enableval" in
-	no) echo "$as_me:953: result: Info :.cpp used as extension for tests" >&5
+   no) echo "$as_me:953: result: Info :.cpp used as extension for tests" >&5
 echo "${ECHO_T}Info :.cpp used as extension for tests" >&6
-	    ac_ext=cpp
-      	;;
-	 *) echo "$as_me:957: result: Argument : .$enableval used as extension" >&5
+       ac_ext=cpp
+         ;;
+    *) echo "$as_me:957: result: Argument : .$enableval used as extension" >&5
 echo "${ECHO_T}Argument : .$enableval used as extension" >&6
-	ac_ext=$enableval
+   ac_ext=$enableval
 esac
 
 else
   echo "$as_me:963: result: Info : .cpp used as extension for tests" >&5
 echo "${ECHO_T}Info : .cpp used as extension for tests" >&6
-	ac_ext=cpp
+   ac_ext=cpp
 
 fi;
 
@@ -1146,9 +1146,9 @@ if test "$cross_compiling" != yes; then
     cross_compiling=no
   else
     if test "$cross_compiling" = maybe; then
-	cross_compiling=yes
+   cross_compiling=yes
     else
-	{ { echo "$as_me:1151: error: cannot run C++ compiled programs.
+   { { echo "$as_me:1151: error: cannot run C++ compiled programs.
 If you meant to cross compile, use \`--host'." >&5
 echo "$as_me: error: cannot run C++ compiled programs.
 If you meant to cross compile, use \`--host'." >&2;}
@@ -1607,10 +1607,10 @@ ac_cv_lib_rt=ac_cv_lib_rt_main
 #
 for file in ./test/boost_no*.cxx; do
 
-	basename=`echo $file | sed 's/.*boost_\(.*\)\.cxx/\1/'`
-	macroname=`cat $file | grep '^//[] 	[]*MACRO:' | sed 's/.*MACRO:[] 	[]*\([]_A-Z0-9[]*\).*/\1/'`
-	title=`cat $file | grep '^//[] 	[]*TITLE:' | sed 's/.*TITLE:[] 	[]*\([]^ 	[].*\)/\1/'`
-	namespace=`echo $macroname | tr [:upper:] [:lower:]`
+   basename=`echo $file | sed 's/.*boost_\(.*\)\.cxx/\1/'`
+   macroname=`cat $file | grep '^//[]  []*MACRO:' | sed 's/.*MACRO:[]   []*\([]_A-Z0-9[]*\).*/\1/'`
+   title=`cat $file | grep '^//[]   []*TITLE:' | sed 's/.*TITLE:[]   []*\([]^    [].*\)/\1/'`
+   namespace=`echo $macroname | tr [:upper:] [:lower:]`
 
 #echo file      = $file
 #echo basename  = $basename
@@ -1618,15 +1618,15 @@ for file in ./test/boost_no*.cxx; do
 #echo title     = $title
 #echo namespace = $namespace
 
-	ac_ext=$use_ac_ext
-	if test $enable_test = 'yes'; then
-		echo "$as_me:1623: checking $title (pass expected) " >&5
+   ac_ext=$use_ac_ext
+   if test $enable_test = 'yes'; then
+      echo "$as_me:1623: checking $title (pass expected) " >&5
 echo $ECHO_N "checking $title (pass expected) ... $ECHO_C" >&6
-	else
-		echo "$as_me:1626: checking $title " >&5
+   else
+      echo "$as_me:1626: checking $title " >&5
 echo $ECHO_N "checking $title ... $ECHO_C" >&6
-	fi
-	cat >conftest.$ac_ext <<_ACEOF
+   fi
+   cat >conftest.$ac_ext <<_ACEOF
 #line 1630 "configure"
 #include "confdefs.h"
 
@@ -1642,7 +1642,7 @@ namespace ${namespace} = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return ${namespace}::test();
+   return ${namespace}::test();
 }
 #define main _main
 
@@ -1674,17 +1674,17 @@ else
 cat conftest.$ac_ext >&5
 echo "$as_me:1675: result: Failed" >&5
 echo "${ECHO_T}Failed" >&6
-	required_defs="$macroname $required_defs"
+   required_defs="$macroname $required_defs"
 
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 
-	if test $enable_test = 'yes'; then
+   if test $enable_test = 'yes'; then
 
-	ac_ext=$use_ac_ext
-	echo "$as_me:1685: checking $title (fail expected) " >&5
+   ac_ext=$use_ac_ext
+   echo "$as_me:1685: checking $title (fail expected) " >&5
 echo $ECHO_N "checking $title (fail expected) ... $ECHO_C" >&6
-	cat >conftest.$ac_ext <<_ACEOF
+   cat >conftest.$ac_ext <<_ACEOF
 #line 1688 "configure"
 #include "confdefs.h"
 
@@ -1700,7 +1700,7 @@ echo $ECHO_N "checking $title (fail expected) ... $ECHO_C" >&6
 
 int cpp_main( int, char *[] )
 {
-	return ${namespace}::test();
+   return ${namespace}::test();
 }
 #define main _main
 
@@ -1726,7 +1726,7 @@ if { (eval echo "$as_me:1716: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
   echo "$as_me:1727: result: failed" >&5
 echo "${ECHO_T}failed" >&6
-	required_undefs="$macroname $required_undefs"
+   required_undefs="$macroname $required_undefs"
 
 else
   echo "$as_me: failed program was:" >&5
@@ -1737,7 +1737,7 @@ echo "${ECHO_T}OK" >&6
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 
-	fi
+   fi
 
 done
 
@@ -1746,21 +1746,21 @@ done
 #
 for file in ./test/boost_has*.cxx; do
 
-	basename=`echo $file | sed 's/.*boost_\(.*\)\.cxx/\1/'`
-	macroname=`cat $file | grep '^//[] 	[]*MACRO:' | sed 's/.*MACRO:[] 	[]*\([]_A-Z0-9[]*\).*/\1/'`
-	title=`cat $file | grep '^//[] 	[]*TITLE:' | sed 's/.*TITLE:[] 	[]*\([]^ 	[].*\)/\1/'`
-	namespace=`echo $macroname | tr [:upper:] [:lower:]`
+   basename=`echo $file | sed 's/.*boost_\(.*\)\.cxx/\1/'`
+   macroname=`cat $file | grep '^//[]  []*MACRO:' | sed 's/.*MACRO:[]   []*\([]_A-Z0-9[]*\).*/\1/'`
+   title=`cat $file | grep '^//[]   []*TITLE:' | sed 's/.*TITLE:[]   []*\([]^    [].*\)/\1/'`
+   namespace=`echo $macroname | tr [:upper:] [:lower:]`
 
-#	echo $file
-#	echo $basename
-#	echo $macroname
-#	echo $title
+#  echo $file
+#  echo $basename
+#  echo $macroname
+#  echo $title
 
-	ac_ext=$use_ac_ext
-	if test $enable_test = 'yes'; then
-	echo "$as_me:1761: checking $title (pass expected) " >&5
+   ac_ext=$use_ac_ext
+   if test $enable_test = 'yes'; then
+   echo "$as_me:1761: checking $title (pass expected) " >&5
 echo $ECHO_N "checking $title (pass expected) ... $ECHO_C" >&6
-	cat >conftest.$ac_ext <<_ACEOF
+   cat >conftest.$ac_ext <<_ACEOF
 #line 1764 "configure"
 #include "confdefs.h"
 
@@ -1776,7 +1776,7 @@ namespace ${namespace} = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return ${namespace}::test();
+   return ${namespace}::test();
 }
 #define main _main
 
@@ -1808,14 +1808,14 @@ else
 cat conftest.$ac_ext >&5
 echo "$as_me:1809: result: Failed" >&5
 echo "${ECHO_T}Failed" >&6
-	required_undefs="$macroname $required_undefs"
+   required_undefs="$macroname $required_undefs"
 
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 
-	echo "$as_me:1816: checking $title (fail expected) " >&5
+   echo "$as_me:1816: checking $title (fail expected) " >&5
 echo $ECHO_N "checking $title (fail expected) ... $ECHO_C" >&6
-	cat >conftest.$ac_ext <<_ACEOF
+   cat >conftest.$ac_ext <<_ACEOF
 #line 1819 "configure"
 #include "confdefs.h"
 
@@ -1831,7 +1831,7 @@ echo $ECHO_N "checking $title (fail expected) ... $ECHO_C" >&6
 
 int cpp_main( int, char *[] )
 {
-	return ${namespace}::test();
+   return ${namespace}::test();
 }
 #define main _main
 
@@ -1856,26 +1856,26 @@ if { (eval echo "$as_me:1847: \"$ac_link\"") >&5
   echo "$as_me:1856: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
 
-	echo "$as_me:1859: result: failed" >&5
+   echo "$as_me:1859: result: failed" >&5
 echo "${ECHO_T}failed" >&6
-	required_defs="$macroname $required_defs"
+   required_defs="$macroname $required_defs"
 
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
 
-	echo "$as_me:1867: result: OK" >&5
+   echo "$as_me:1867: result: OK" >&5
 echo "${ECHO_T}OK" >&6
 
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 
-	else
+   else
 
-	ac_ext=$use_ac_ext
-	echo "$as_me:1876: checking $title" >&5
+   ac_ext=$use_ac_ext
+   echo "$as_me:1876: checking $title" >&5
 echo $ECHO_N "checking $title... $ECHO_C" >&6
-	cat >conftest.$ac_ext <<_ACEOF
+   cat >conftest.$ac_ext <<_ACEOF
 #line 1879 "configure"
 #include "confdefs.h"
 
@@ -1887,7 +1887,7 @@ echo $ECHO_N "checking $title... $ECHO_C" >&6
 
 int cpp_main( int, char *[] )
 {
-	return ${namespace}::test();
+   return ${namespace}::test();
 }
 #define main _main
 
@@ -1912,21 +1912,21 @@ if { (eval echo "$as_me:1903: \"$ac_link\"") >&5
   echo "$as_me:1912: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
 
-		echo "$as_me:1915: result: Yes" >&5
+      echo "$as_me:1915: result: Yes" >&5
 echo "${ECHO_T}Yes" >&6
-		required_defs="$macroname $required_defs"
+      required_defs="$macroname $required_defs"
 
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
 
-		echo "$as_me:1923: result: no" >&5
+      echo "$as_me:1923: result: no" >&5
 echo "${ECHO_T}no" >&6
 
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 
-	fi
+   fi
 
 done
 
@@ -2009,13 +2009,13 @@ test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 # trailing colons and then remove the whole line if VPATH becomes empty
 # (actually we leave an empty line to preserve line numbers).
 if test "x$srcdir" = x.; then
-  ac_vpsub='/^[ 	]*VPATH[ 	]*=/{
+  ac_vpsub='/^[   ]*VPATH[    ]*=/{
 s/:*\$(srcdir):*/:/;
 s/:*\${srcdir}:*/:/;
 s/:*@srcdir@:*/:/;
-s/^\([^=]*=[ 	]*\):*/\1/;
+s/^\([^=]*=[   ]*\):*/\1/;
 s/:*$//;
-s/^[^=]*=[ 	]*$//;
+s/^[^=]*=[  ]*$//;
 }'
 fi
 
@@ -2029,13 +2029,13 @@ fi
 cat >confdef2opt.sed <<\EOF
 t clear
 : clear
-s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\),-D\1=\2,g
+s,^[  ]*#[  ]*define[   ][    ]*\([^   (][^  (]*([^)]*)\)[  ]*\(.*\),-D\1=\2,g
 t quote
-s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\),-D\1=\2,g
+s,^[  ]*#[  ]*define[   ][    ]*\([^   ][^   ]*\)[    ]*\(.*\),-D\1=\2,g
 t quote
 d
 : quote
-s,[ 	`~#$^&*(){}\\|;'"<>?],\\&,g
+s,[   `~#$^&*(){}\\|;'"<>?],\\&,g
 s,\[,\\&,g
 s,\],\\&,g
 s,\$,$$,g
@@ -2128,7 +2128,7 @@ $as_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set || { LC_MESSAGES=C; ex
 # We need space, tab and new line, in precisely that order.
 as_nl='
 '
-IFS=" 	$as_nl"
+IFS="    $as_nl"
 
 # CDPATH.
 $as_unset CDPATH || test "${CDPATH+set}" != set || { CDPATH=:; export CDPATH; }

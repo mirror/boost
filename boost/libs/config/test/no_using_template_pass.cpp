@@ -31,6 +31,6 @@ namespace boost_no_using_template = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_using_template::test();
-}	
-	
+   return boost_no_using_template::test();
+}  
+   

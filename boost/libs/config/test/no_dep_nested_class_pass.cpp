@@ -31,6 +31,6 @@ namespace boost_no_dependent_nested_derivations = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_dependent_nested_derivations::test();
-}	
-	
+   return boost_no_dependent_nested_derivations::test();
+}  
+   

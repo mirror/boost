@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_dependent_types_in_template_value_parameters::test();
-}	
-	
+   return boost_no_dependent_types_in_template_value_parameters::test();
+}  
+   

@@ -31,6 +31,6 @@ namespace boost_has_pthread_delay_np = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_has_pthread_delay_np::test();
-}	
-	
+   return boost_has_pthread_delay_np::test();
+}  
+   

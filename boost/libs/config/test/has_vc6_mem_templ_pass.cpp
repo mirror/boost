@@ -31,6 +31,6 @@ namespace boost_msvc6_member_templates = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_msvc6_member_templates::test();
-}	
-	
+   return boost_msvc6_member_templates::test();
+}  
+   

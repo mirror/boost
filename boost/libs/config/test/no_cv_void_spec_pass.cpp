@@ -31,6 +31,6 @@ namespace boost_no_cv_void_specializations = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_cv_void_specializations::test();
-}	
-	
+   return boost_no_cv_void_specializations::test();
+}  
+   

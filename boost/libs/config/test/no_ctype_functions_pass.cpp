@@ -31,6 +31,6 @@ namespace boost_no_ctype_functions = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_ctype_functions::test();
-}	
-	
+   return boost_no_ctype_functions::test();
+}  
+   

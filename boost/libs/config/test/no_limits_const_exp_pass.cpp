@@ -31,6 +31,6 @@ namespace boost_no_limits_compile_time_constants = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_limits_compile_time_constants::test();
-}	
-	
+   return boost_no_limits_compile_time_constants::test();
+}  
+   

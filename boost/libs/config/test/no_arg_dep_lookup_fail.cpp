@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_argument_dependent_lookup::test();
-}	
-	
+   return boost_no_argument_dependent_lookup::test();
+}  
+   

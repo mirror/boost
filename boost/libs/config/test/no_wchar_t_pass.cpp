@@ -31,6 +31,6 @@ namespace boost_no_intrinsic_wchar_t = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_intrinsic_wchar_t::test();
-}	
-	
+   return boost_no_intrinsic_wchar_t::test();
+}  
+   

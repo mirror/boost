@@ -31,6 +31,6 @@ namespace boost_no_function_template_ordering = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_function_template_ordering::test();
-}	
-	
+   return boost_no_function_template_ordering::test();
+}  
+   

@@ -31,6 +31,6 @@ namespace boost_has_stdint_h = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_has_stdint_h::test();
-}	
-	
+   return boost_has_stdint_h::test();
+}  
+   

@@ -31,6 +31,6 @@ namespace boost_has_gettimeofday = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_has_gettimeofday::test();
-}	
-	
+   return boost_has_gettimeofday::test();
+}  
+   

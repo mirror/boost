@@ -31,6 +31,6 @@ namespace boost_has_winthreads = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_has_winthreads::test();
-}	
-	
+   return boost_has_winthreads::test();
+}  
+   

@@ -31,6 +31,6 @@ namespace boost_no_std_messages = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_std_messages::test();
-}	
-	
+   return boost_no_std_messages::test();
+}  
+   

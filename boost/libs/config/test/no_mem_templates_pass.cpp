@@ -31,6 +31,6 @@ namespace boost_no_member_templates = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_member_templates::test();
-}	
-	
+   return boost_no_member_templates::test();
+}  
+   

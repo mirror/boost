@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_inclass_member_initialization::test();
-}	
-	
+   return boost_no_inclass_member_initialization::test();
+}  
+   

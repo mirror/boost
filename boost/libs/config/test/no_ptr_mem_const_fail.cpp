@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_pointer_to_member_const::test();
-}	
-	
+   return boost_no_pointer_to_member_const::test();
+}  
+   

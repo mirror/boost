@@ -31,6 +31,6 @@ namespace boost_has_hash = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_has_hash::test();
-}	
-	
+   return boost_has_hash::test();
+}  
+   

@@ -31,6 +31,6 @@ namespace boost_has_sgi_type_traits = empty_boost;
 
 int cpp_main( int, char *[] )
 {
-	return boost_has_sgi_type_traits::test();
-}	
-	
+   return boost_has_sgi_type_traits::test();
+}  
+   

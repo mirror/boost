@@ -31,6 +31,6 @@
 
 int cpp_main( int, char *[] )
 {
-	return boost_no_explicit_function_template_arguments::test();
-}	
-	
+   return boost_no_explicit_function_template_arguments::test();
+}  
+   
