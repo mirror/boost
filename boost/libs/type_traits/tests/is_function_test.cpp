@@ -17,25 +17,11 @@ struct is_function_tester
 template <class T>
 void is_function_tester<T>::check()
 {
-   if(false == ::boost::is_function<T>::value)
-   {
-      // if we're not a function then we must be a
-      // function pointer:
-      value_test(false, ::boost::is_function<T>::value);
+   // if we're a function then we must not be a
+   // function pointer:
+   value_test(true, ::boost::is_function<T>::value);
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      value_test(true, ::boost::is_pointer<T>::value);
-#endif
-   }
-   else
-   {
-      // if we're a function then we must not be a
-      // function pointer:
-      value_test(true, ::boost::is_function<T>::value);
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      value_test(false, ::boost::is_pointer<T>::value);
-#endif
-   }
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, ::boost::is_pointer<T>::value);
    value_test(false, ::boost::is_void<T>::value);
    value_test(false, ::boost::is_integral<T>::value);
    value_test(false, ::boost::is_float<T>::value);
@@ -58,32 +44,19 @@ void is_function_tester<T>::check()
 #endif
 }
 
-template <class T>
-void is_function_test(T*)
-{
-   is_function_tester<T>::check();
-}
-template <class T>
-void is_function_test(T)
-{
-   is_function_tester<T>::check();
-}
-
-
-void foo0(){}
-void foo1(int){}
-void foo2(int&, double){}
-void foo3(int&, bool, int, int){}
-void foo4(int, bool, int*, int[], int, int, int, int, int){}
-
-
 int cpp_main(int argc, char* argv[])
 {
-   is_function_test(&foo0);
-   is_function_test(&foo1);
-   is_function_test(&foo2);
-   is_function_test(&foo3);
-   is_function_test(&foo4);
+   typedef void foo0_t();
+   typedef void foo1_t(int);
+   typedef void foo2_t(int&, double);
+   typedef void foo3_t(int&, bool, int, int);
+   typedef void foo4_t(int, bool, int*, int[], int, int, int, int, int);
+
+   is_function_tester<foo0_t>::check();
+   is_function_tester<foo1_t>::check();
+   is_function_tester<foo2_t>::check();
+   is_function_tester<foo3_t>::check();
+   is_function_tester<foo4_t>::check();
 
    value_test(false, ::boost::is_function<void>::value);
    value_test(false, ::boost::is_function<int>::value);
