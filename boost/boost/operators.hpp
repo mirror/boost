@@ -78,9 +78,10 @@
 
 #include <boost/config.hpp>
 #include <boost/iterator.hpp>
+#include <boost/preprocessor/seq/cat.hpp>
 
 #if defined(__sgi) && !defined(__GNUC__)
-#pragma set woff 1234
+#   pragma set woff 1234
 #endif
 
 #if defined(BOOST_MSVC)
@@ -152,6 +153,9 @@ struct equality_comparable1 : B
      friend bool operator!=(const T& x, const T& y) { return !(x == y); }
 };
 
+// A macro which produces "name_2left" from "name".
+#define BOOST_OPERATOR2_LEFT(name) BOOST_PP_SEQ_CAT_S(1,(name)(2)(_)(left))
+
 //  NRVO-friendly implementation (contributed by Daniel Frey) ---------------//
 
 #if defined(BOOST_HAS_NRVO) || defined(BOOST_FORCE_SYMMETRIC_OPERATORS)
@@ -178,33 +182,34 @@ struct NAME##1 : B                                                            \
     { T nrv( lhs ); nrv OP##= rhs; return nrv; }                              \
 };
 
-#define BOOST_BINARY_OPERATOR_NON_COMMUTATIVE( NAME, OP )                     \
-template <class T, class U, class B = ::boost::detail::empty_base>            \
-struct NAME##2 : B                                                            \
-{                                                                             \
-  friend T operator OP( const T& lhs, const U& rhs )                          \
-    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                              \
-};                                                                            \
-                                                                              \
-template <class T, class U, class B = ::boost::detail::empty_base>            \
-struct NAME##2_left : B                                                       \
-{                                                                             \
-  friend T operator OP( const U& lhs, const T& rhs )                          \
-    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                              \
-};                                                                            \
-                                                                              \
-template <class T, class B = ::boost::detail::empty_base>                     \
-struct NAME##1 : B                                                            \
-{                                                                             \
-  friend T operator OP( const T& lhs, const T& rhs )                          \
-    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                              \
+#define BOOST_BINARY_OPERATOR_NON_COMMUTATIVE( NAME, OP )           \
+template <class T, class U, class B = ::boost::detail::empty_base>  \
+struct NAME##2 : B                                                  \
+{                                                                   \
+  friend T operator OP( const T& lhs, const U& rhs )                \
+    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                    \
+};                                                                  \
+                                                                    \
+template <class T, class U, class B = ::boost::detail::empty_base>  \
+struct BOOST_OPERATOR2_LEFT(NAME) : B                               \
+{                                                                   \
+  friend T operator OP( const U& lhs, const T& rhs )                \
+    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                    \
+};                                                                  \
+                                                                    \
+template <class T, class B = ::boost::detail::empty_base>           \
+struct NAME##1 : B                                                  \
+{                                                                   \
+  friend T operator OP( const T& lhs, const T& rhs )                \
+    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                    \
 };
 
 #else // defined(BOOST_HAS_NRVO) || defined(BOOST_FORCE_SYMMETRIC_OPERATORS)
 
-// For compilers without NRVO the following code is optimal, but not symmetric!
-// Note that the implementation of NAME##2_left only looks cool, but doesn't
-// provide optimization opportunities to the compiler :)
+// For compilers without NRVO the following code is optimal, but not
+// symmetric!  Note that the implementation of
+// BOOST_OPERATOR2_LEFT(NAME) only looks cool, but doesn't provide
+// optimization opportunities to the compiler :)
 
 #define BOOST_BINARY_OPERATOR_COMMUTATIVE( NAME, OP )                         \
 template <class T, class U, class B = ::boost::detail::empty_base>            \
@@ -220,24 +225,24 @@ struct NAME##1 : B                                                            \
   friend T operator OP( T lhs, const T& rhs ) { return lhs OP##= rhs; }       \
 };
 
-#define BOOST_BINARY_OPERATOR_NON_COMMUTATIVE( NAME, OP )                     \
-template <class T, class U, class B = ::boost::detail::empty_base>            \
-struct NAME##2 : B                                                            \
-{                                                                             \
-  friend T operator OP( T lhs, const U& rhs ) { return lhs OP##= rhs; }       \
-};                                                                            \
-                                                                              \
-template <class T, class U, class B = ::boost::detail::empty_base>            \
-struct NAME##2_left : B                                                       \
-{                                                                             \
-  friend T operator OP( const U& lhs, const T& rhs )                          \
-    { return T( lhs ) OP##= rhs; }                                            \
-};                                                                            \
-                                                                              \
-template <class T, class B = ::boost::detail::empty_base>                     \
-struct NAME##1 : B                                                            \
-{                                                                             \
-  friend T operator OP( T lhs, const T& rhs ) { return lhs OP##= rhs; }       \
+#define BOOST_BINARY_OPERATOR_NON_COMMUTATIVE( NAME, OP )               \
+template <class T, class U, class B = ::boost::detail::empty_base>      \
+struct NAME##2 : B                                                      \
+{                                                                       \
+  friend T operator OP( T lhs, const U& rhs ) { return lhs OP##= rhs; } \
+};                                                                      \
+                                                                        \
+template <class T, class U, class B = ::boost::detail::empty_base>      \
+struct BOOST_OPERATOR2_LEFT(NAME) : B                                   \
+{                                                                       \
+  friend T operator OP( const U& lhs, const T& rhs )                    \
+    { return T( lhs ) OP##= rhs; }                                      \
+};                                                                      \
+                                                                        \
+template <class T, class B = ::boost::detail::empty_base>               \
+struct NAME##1 : B                                                      \
+{                                                                       \
+  friend T operator OP( T lhs, const T& rhs ) { return lhs OP##= rhs; } \
 };
 
 #endif // defined(BOOST_HAS_NRVO) || defined(BOOST_FORCE_SYMMETRIC_OPERATORS)
@@ -253,6 +258,7 @@ BOOST_BINARY_OPERATOR_COMMUTATIVE( orable, | )
 
 #undef BOOST_BINARY_OPERATOR_COMMUTATIVE
 #undef BOOST_BINARY_OPERATOR_NON_COMMUTATIVE
+#undef BOOST_OPERATOR2_LEFT
 
 //  incrementable and decrementable contributed by Jeremy Siek
 
