@@ -32,6 +32,9 @@
    && (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
 #  define BOOST_HAS_LONG_LONG
 #endif
+#if !defined(BOOST_HAS_LONG_LONG) && !defined(BOOST_NO_INTEGRAL_INT64_T)
+#  define BOOST_NO_INTEGRAL_INT64_T
+#endif
 
 // GCC 3.x will clean up all of those nasty macro definitions that
 // BOOST_NO_CTYPE_FUNCTIONS is intended to help work around, so undefine

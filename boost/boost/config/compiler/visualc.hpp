@@ -73,6 +73,20 @@
 #  define BOOST_NO_EXCEPTIONS   
 #endif 
 
+//
+// __int64 support:
+//
+#if _MSC_VER >= 1200
+#   define BOOST_HAS_MS_INT64
+#endif
+//
+// long long support:
+//
+#if _MSC_VER >= 1301
+#   define BOOST_HAS_LONG_LONG
+#endif
+
+
 
 #define BOOST_COMPILER "Microsoft Visual C++ version " BOOST_STRINGIZE(_MSC_VER)
 

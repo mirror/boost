@@ -46,6 +46,10 @@
 #include <float.h>
 #endif
 
+#if __BORLANDC__ >= 0x530
+#  define BOOST_HAS_MS_INT64
+#endif
+
 //
 // check for exception handling support:
 #ifndef _CPPUNWIND

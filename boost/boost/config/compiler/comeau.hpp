@@ -22,6 +22,11 @@
 #     define BOOST_NO_VOID_RETURNS
 #  endif
 
+#  if defined(_MSC_VER) && (_MSC_VER >= 1200)
+#     define BOOST_HAS_MS_INT64
+#  endif
+
+
 #endif
 
 #define BOOST_COMPILER "Comeau compiler version " BOOST_STRINGIZE(__COMO_VERSION__)

@@ -133,7 +133,7 @@ namespace detail {
     // For a while, this wasn't true, but we rely on it below. This is a regression assert.
     BOOST_STATIC_ASSERT(::boost::is_integral<char>::value);
 # ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-#  if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX)
+#  if defined(BOOST_HAS_LONG_LONG)
     BOOST_STATIC_CONSTANT(bool,
                           value = (
                               std::numeric_limits<T>::is_specialized

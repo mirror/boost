@@ -52,6 +52,9 @@
 #  ifndef _NATIVE_WCHAR_T_DEFINED
 #     define BOOST_NO_INTRINSIC_WCHAR_T
 #  endif
+#  if _MSC_VER >= 1200
+#     define BOOST_HAS_MS_INT64
+#  endif
 #  define BOOST_NO_SWPRINTF
 #endif
 
