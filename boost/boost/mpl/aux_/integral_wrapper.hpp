@@ -33,7 +33,11 @@
 #endif
 
 #if !defined(AUX_WRAPPER_INST)
-#   define AUX_WRAPPER_INST(value) mpl::AUX_WRAPPER_NAME< value >
+#   if BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
+#       define AUX_WRAPPER_INST(value) AUX_WRAPPER_NAME< value >
+#   else 
+#       define AUX_WRAPPER_INST(value) mpl::AUX_WRAPPER_NAME< value >
+#   endif
 #endif
 
 namespace boost { namespace mpl {
