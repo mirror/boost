@@ -20,7 +20,7 @@
 #include <boost/numeric/interval/rounded_arith.hpp>
 
 // define appropriate specialization of rounding_control for built-in types
-#if defined(__i386__) || defined(__BORLANDC__) || defined(BOOST_MSVC)
+#if defined(__i386__) || defined(_M_IX86) || defined(__BORLANDC__)
 #  include <boost/numeric/interval/detail/x86_rounding_control.hpp>
 #elif defined(powerpc) || defined(__powerpc__) || defined(__ppc__)
 #  include <boost/numeric/interval/detail/ppc_rounding_control.hpp>
@@ -29,7 +29,7 @@
 #elif defined(__USE_ISOC99)
 #  include <boost/numeric/interval/detail/c99_rounding_control.hpp>
 #else
-#  error Boost::interval: Please specify rounding control mechanism.
+#  error Boost.Numeric.Interval: Please specify rounding control mechanism.
 #endif
 
 namespace boost {
