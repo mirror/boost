@@ -14,14 +14,14 @@
 
 #    if (__SUNPRO_CC <= 0x520)
        //
-       // Sunpro 5.3 and later:
+       // Sunpro 5.2 and earler:
        //
-       // although sunpro 5.3 supports the syntax for
+       // although sunpro 5.2 supports the syntax for
        // inline initialization it often gets the value
        // wrong, especially where the value is computed
        // from other constants (J Maddock 6th May 2001)
 #      define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-       // although sunpro 5.3 supports the syntax for
+       // although sunpro 5.2 supports the syntax for
        // partial specialization, it often seems to
        // bind to the wrong specialization.  Better
        // to disable it until suppport becomes more stable
@@ -49,6 +49,7 @@
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
 #endif
+
 
 
 
