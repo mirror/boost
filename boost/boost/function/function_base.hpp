@@ -372,7 +372,7 @@ public:
 void operator==(const function_base&, const function_base&);
 void operator!=(const function_base&, const function_base&);
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
 inline bool operator==(const function_base& f,
                        detail::function::useless_clear_type*)
 {
