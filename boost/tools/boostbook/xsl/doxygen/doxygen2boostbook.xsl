@@ -276,8 +276,14 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
     <xsl:if test="$include-header='yes'">
       <header>
         <xsl:attribute name="name">
-          <xsl:value-of select="concat($boost.doxygen.header.prefix, 
-                                       string(compoundname))"/>
+          <xsl:value-of select="$boost.doxygen.header.prefix"/>
+          <xsl:if 
+            test="not(substring($boost.doxygen.header.prefix, 
+                                string-length($boost.doxygen.header.prefix))
+                      = '/')">
+            <xsl:text>/</xsl:text>
+          </xsl:if>
+          <xsl:value-of select="string(compoundname)"/>
         </xsl:attribute>
         
         <xsl:if test="briefdescription/*|detaileddescription/*">
