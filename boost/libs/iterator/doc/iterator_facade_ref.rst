@@ -107,16 +107,6 @@ where *iterator-category* is defined as follows:
 
 .. include:: facade_iterator_category.rst
 
-If ``CategoryOrTraversal`` is ``use_default`` then
-``iterator_traversal<Derived>::type`` is convertible to the most
-derived standard traversal tag type to which
-``iterator_traversal<Iterator>::type`` is also convertible, and not to
-any more-derived traversal tag type.  Otherwise
-``iterator_traversal<Derived>::type`` is convertible to the most
-derived standard traversal tag type to which ``CategoryOrTraversal``
-is also convertible, and not to any more-derived traversal tag type.
-
-
 The ``enable_if_interoperable`` template used above is for exposition
 purposes.  The member operators should be only be in an overload set
 provided the derived types ``Dr1`` and ``Dr2`` are interoperable, 
