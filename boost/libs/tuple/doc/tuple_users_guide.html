@@ -416,8 +416,9 @@ parseable.
 
 <h2><a name = "performance">Performance</a></h2>
 
-Tuples are efficient. All functions are small inlined one-liners and a decent compiler will eliminate any extra cost. 
-Particularly, there is no performance difference between this code:
+All tuple access and construction functions are small inlined one-liners. 
+Therefore, a decent compiler can eliminate any extra cost of using tuples compared to using hand written tuple like classes. 
+Particularly, with a decent compiler there is no performance difference between this code:
 
 <pre><code>class hand_made_tuple { 
   A a; B b; C c;
@@ -439,6 +440,8 @@ and this code:
 t.get&lt;0&gt;(); t.get&lt;1&gt;(); t.get&lt;2&gt;(); 
 </code></pre>
 
+<p>Note, that there are widely used compilers (e.g. bcc 5.5.1) which fail to optimize this kind of tuple usage.
+</p>  
 <p>
 Depending on the optimizing ability of the compiler, the tier mechanism may have a small performance penalty compared to using
 non-const reference parameters as a mechanism for returning multiple values from a function. 
