@@ -13,6 +13,13 @@
 // Revision History:
 
 // 10 Feb 2001   David Abrahams
+//      Removed traits argument from iterator_adaptor<> and switched to
+//        explicit trait specification for maximum ease-of-use.
+//      Added comments to detail::iterator_defaults<>
+//      Began using detail::iterator_defaults<> unconditionally for code clarity
+//      Changed uses of `Iterator' to `Base' where non-iterators can be used.
+//
+// 10 Feb 2001   David Abrahams
 //      Rolled in supposed Borland fixes from John Maddock, but not seeing any
 //      improvement yet
 //
@@ -210,24 +217,24 @@ struct default_iterator_policies
     // and thought they were non-const. Also, Sun C++ does not like static
     // function templates.
 
-    template <class Iterator>
-    void initialize(Iterator&)
+    template <class Base>
+    void initialize(Base&)
         { }
 
-    template <class Reference, class Iterator>
-    Reference dereference(type<Reference>, const Iterator& x) const
+    template <class Reference, class Base>
+    Reference dereference(type<Reference>, const Base& x) const
         { return *x; }
 
-    template <class Iterator>
-    void increment(Iterator& x)
+    template <class Base>
+    void increment(Base& x)
         { ++x; }
 
-    template <class Iterator>
-    void decrement(Iterator& x)
+    template <class Base>
+    void decrement(Base& x)
         { --x; }
 
-    template <class Iterator, class DifferenceType>
-    void advance(Iterator& x, DifferenceType n)
+    template <class Base, class DifferenceType>
+    void advance(Base& x, DifferenceType n)
         { x += n; }
 
     template <class Difference, class Iterator1, class Iterator2>
@@ -360,21 +367,19 @@ namespace detail {
     return &(*i);
   }
 
-  template <class Traits>
+  template <class Category, class Value, class Pointer>
   struct operator_arrow_result_generator
   {
-      typedef typename Traits::iterator_category category;
-      typedef operator_arrow_proxy<typename Traits::value_type> proxy;
-      typedef typename Traits::pointer pointer;
+      typedef operator_arrow_proxy<Value> proxy;
       
-      enum { is_input_iter = boost::is_convertible<category,std::input_iterator_tag>::value
-             & !boost::is_convertible<category,std::forward_iterator_tag>::value };
+      enum { is_input_iter = boost::is_convertible<Category,std::input_iterator_tag>::value
+             & !boost::is_convertible<Category,std::forward_iterator_tag>::value };
       
       typedef typename boost::detail::if_true<(is_input_iter)>::template
       then<
         proxy,
    // else
-        pointer
+        Pointer
       >::type type;
   };
 
@@ -391,30 +396,37 @@ namespace detail {
   }
 
 # ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+   // Select default pointer and reference types for adapted non-pointer
+   // iterators based on the iterator and the value_type. Poor man's partial
+   // specialization is in use here.
    template <bool is_pointer>
    struct iterator_defaults_select
    {
        template <class Iterator,class Value>
        struct traits
        {
-           typedef typename boost::detail::iterator_traits<Iterator>::value_type value_type;
+           // The assumption is that iterator_traits can deduce these types
+           // properly as long as the iterator is not a pointer.
            typedef typename boost::detail::iterator_traits<Iterator>::pointer pointer;
            typedef typename boost::detail::iterator_traits<Iterator>::reference reference;
        };
    };
 
+   // Select default pointer and reference types for adapted pointer iterators
+   // given a (possibly-const) value_type.
    template <>
    struct iterator_defaults_select<true>
    {
        template <class Iterator,class Value>
        struct traits
        {
-           typedef Value value_type;
            typedef Value* pointer;
            typedef Value& reference;
        };
    };
 
+   // Consolidate selection of the default pointer and reference type
    template <class Iterator,class Value>
    struct iterator_defaults
    {
@@ -427,49 +439,91 @@ namespace detail {
    template <class Iterator,class Value>
    struct iterator_defaults : iterator_traits<Iterator>
    {
-       typedef typename iterator_traits<Iterator>::pointer pointer;
-       typedef typename iterator_traits<Iterator>::reference reference;
+       enum {
+           is_iterator_value_type = 
+              ::boost::is_same<Value,typename iterator_traits<Iterator>::value_type>::value
+       };
+       
+       typedef typename if_true<(
+               is_iterator_value_type
+           )>::template then<
+                typename iterator_traits<Iterator>::pointer,
+                Value*
+       >::type pointer;
+       
+       typedef typename if_true<(
+               is_iterator_value_type
+           )>::template then<
+                typename iterator_traits<Iterator>::reference,
+                Value&
+       >::type reference;
+       
    };
-
 # endif
 } // namespace detail
 
+// This macro definition is only temporary in this file
+# if !defined(BOOST_MSVC)
+#  define BOOST_ARG_DEPENDENT_TYPENAME typename
+# else
+#  define BOOST_ARG_DEPENDENT_TYPENAME
+# endif
+
+template <class T> struct undefined;
 
 //============================================================================
 //iterator_adaptor - Adapts a generic piece of data as an iterator. Adaptation
 //      is especially easy if the data being adapted is itself an iterator
 //
-//   Iterator - the iterator type being wrapped.
+//   Base - the base (usually iterator) type being wrapped.
 //
 //   Policies - a set of policies determining how the resulting iterator
 //      works.
 //
-//   Traits - a class satisfying the same requirements as a specialization of
-//      std::iterator_traits for the resulting iterator.
+//   Value - if supplied, the value_type of the resulting iterator, unless
+//      const. If const, a conforming compiler strips constness for the
+//      value_type. If not supplied, iterator_traits<Base>::value_type is used
 //
-template <class Iterator, class Policies, 
-          class Traits = boost::detail::iterator_traits<Iterator>
+//   Reference - the reference type of the resulting iterator, and in
+//      particular, the result type of operator*(). If not supplied but
+//      Value is supplied, Value& is used. Otherwise
+//      iterator_traits<Base>::reference is used.
+//
+//   Pointer - the pointer type of the resulting iterator, and in
+//      particular, the result type of operator->(). If not
+//      supplied but Value is supplied, Value* is used. Otherwise
+//      iterator_traits<Base>::pointer is used.
+//
+//   Category - the iterator_category of the resulting iterator. If not
+//      supplied, iterator_traits<Base>::iterator_category is used.
+//
+//   Distance - the difference_type of the resulting iterator. If not
+//      supplied, iterator_traits<Base>::difference_type is used.
+template <class Base, class Policies, 
+    class Value = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Base>::value_type,
+    class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Base,Value>::reference,
+    class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Base,Value>::pointer,
+    class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Base>::iterator_category,
+    class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Base>::difference_type
          >
 struct iterator_adaptor :
 #ifdef BOOST_RELOPS_AMBIGUITY_BUG
     iterator_comparisons<
-          iterator_adaptor<Iterator,Policies,Traits>,
+          iterator_adaptor<Base,Policies,Value,Reference,Pointer,Category,Distance>,
 #endif
-          boost::iterator<typename Traits::iterator_category, 
-              typename Traits::value_type, typename Traits::difference_type,
-              typename Traits::pointer, typename Traits::reference>
+    boost::iterator<Category,Value,Distance,Pointer,Reference>
 #ifdef BOOST_RELOPS_AMBIGUITY_BUG
 >
 #endif
 {
-    typedef iterator_adaptor<Iterator, Policies, Traits> Self;
+    typedef iterator_adaptor<Base,Policies,Value,Reference,Pointer,Category,Distance> self;
 public:
-    typedef typename Traits::difference_type difference_type;
-    typedef typename Traits::value_type value_type;
-    typedef typename Traits::pointer pointer;
-    typedef typename Traits::reference reference;
-    typedef typename Traits::iterator_category iterator_category;
-    typedef Iterator iterator_type;
+    typedef Distance difference_type;
+    typedef typename boost::remove_const<Value>::type value_type;
+    typedef Pointer pointer;
+    typedef Reference reference;
+    typedef Category iterator_category;
+    typedef Base base_type;
 
     enum { is_input_or_output_iter = 
            boost::is_convertible<iterator_category*,std::input_iterator_tag*>::value
@@ -487,16 +541,17 @@ public:
 
     iterator_adaptor() { }
 
-    iterator_adaptor(const Iterator& it, const Policies& p = Policies())
+    iterator_adaptor(const Base& it, const Policies& p = Policies())
         : m_iter_p(it, p) {
       policies().initialize(iter());
     }
 
-    template <class OtherIter, class OtherTraits>
-    iterator_adaptor (const iterator_adaptor<OtherIter, Policies,
-            OtherTraits>& src)
-            : m_iter_p(src.iter(), src.policies()) {
-      policies().initialize(iter());
+    template <class Iter2, class Value2, class Pointer2, class Reference2>
+    iterator_adaptor (
+        const iterator_adaptor<Iter2,Policies,Value2,Reference2,Pointer2,Category,Distance>& src)
+            : m_iter_p(src.iter(), src.policies())
+    {
+        policies().initialize(iter());
     }
 
 #ifdef BOOST_MSVC
@@ -516,7 +571,7 @@ public:
 # pragma warning( disable : 4284 )
 #endif
 
-    typename boost::detail::operator_arrow_result_generator<Traits>::type
+    typename boost::detail::operator_arrow_result_generator<Category,value_type,Pointer>::type
     operator->() const
         { return detail::operator_arrow(*this, iterator_category()); }
 
@@ -527,116 +582,148 @@ public:
     value_type operator[](difference_type n) const
         { return *(*this + n); }
     
-    Self& operator++() {
+    self& operator++() {
 #ifdef __MWERKS__
         // Odd bug, MWERKS couldn't  deduce the type for the member template
         // Workaround by explicitly specifying the type.
-        policies().increment<Iterator>(iter());
+        policies().increment<Base>(iter());
 #else
         policies().increment(iter());
 #endif
         return *this;
     }
 
-    Self operator++(int) { Self tmp(*this); ++*this; return tmp; }
+    self operator++(int) { self tmp(*this); ++*this; return tmp; }
     
-    Self& operator--() {
+    self& operator--() {
         detail::decrement_impl(*this, iterator_category());
         return *this;
     }
     
-    Self operator--(int) { Self tmp(*this); --*this; return tmp; }
+    self operator--(int) { self tmp(*this); --*this; return tmp; }
 
-    Self& operator+=(difference_type n) {
+    self& operator+=(difference_type n) {
         detail::advance_impl(*this, n, iterator_category());
         return *this;
     }
   
-    Self& operator-=(difference_type n) {
+    self& operator-=(difference_type n) {
         detail::advance_impl(*this, -n, iterator_category());
         return *this;
     }
 
-    iterator_type base() const { return m_iter_p.first(); }
+    base_type base() const { return m_iter_p.first(); }
 
+    // Moved from global scope to avoid ambiguity with the operator-() which
+    // subtracts iterators from one another.
+    self operator-(Distance x)
+        { self result(*this); return result -= x; }
 private:
     typedef Policies policies_type;
-    compressed_pair<Iterator,Policies> m_iter_p;
-public: // too many compilers have trouble when these are private.
+    compressed_pair<Base,Policies> m_iter_p;
+
+public: // implementation details (too many compilers have trouble when these are private).
     Policies& policies() { return m_iter_p.second(); }
     const Policies& policies() const { return m_iter_p.second(); }
-    Iterator& iter() { return m_iter_p.first(); }
-    const Iterator& iter() const { return m_iter_p.first(); }
+    
+    Base& iter() { return m_iter_p.first(); }
+    const Base& iter() const { return m_iter_p.first(); }
 };
 
-
-template <class Iterator, class Policies, class Traits>
-iterator_adaptor<Iterator,Policies,Traits>
-operator-(iterator_adaptor<Iterator,Policies,Traits> p, const typename Traits::difference_type x)
-{
-    return p -= x;
-}
-
-template <class Iterator, class Policies, class Traits>
-iterator_adaptor<Iterator,Policies,Traits>
-operator+(iterator_adaptor<Iterator,Policies,Traits> p, typename Traits::difference_type x)
+template <class Base, class Policies, class Value, class Reference, class Pointer,
+    class Category, class Distance1, class Distance2>
+iterator_adaptor<Base,Policies,Value,Reference,Pointer,Category,Distance1>
+operator+(
+    iterator_adaptor<Base,Policies,Value,Reference,Pointer,Category,Distance1> p,
+    Distance2 x)
 {
     return p += x;
 }
 
-template <class Iterator, class Policies, class Traits>
-iterator_adaptor<Iterator,Policies,Traits>
-operator+(typename Traits::difference_type x, iterator_adaptor<Iterator,Policies,Traits> p)
+template <class Base, class Policies, class Value, class Reference, class Pointer,
+    class Category, class Distance1, class Distance2>
+iterator_adaptor<Base,Policies,Value,Reference,Pointer,Category,Distance1>
+operator+(
+    Distance2 x,
+    iterator_adaptor<Base,Policies,Value,Reference,Pointer,Category,Distance1> p)
 {
     return p += x;
 }
 
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
-typename Traits1::difference_type operator-(
-    const iterator_adaptor<Iterator1,Policies,Traits1>& x,
-    const iterator_adaptor<Iterator2,Policies,Traits2>& y )
+template <class Iterator1, class Iterator2, class Policies, class Value1, class Value2,
+    class Reference1, class Reference2, class Pointer1, class Pointer2, class Category,
+    class Distance>
+Distance operator-(
+    const iterator_adaptor<Iterator1,Policies,Value1,Reference1,Pointer1,Category,Distance>& x,
+    const iterator_adaptor<Iterator2,Policies,Value2,Reference2,Pointer2,Category,Distance>& y)
 {
-    typedef typename Traits1::difference_type difference_type;
-    return x.policies().distance(type<difference_type>(), y.iter(), x.iter());
+    return x.policies().distance(type<Distance>(), y.iter(), x.iter());
 }
 
 #ifndef BOOST_RELOPS_AMBIGUITY_BUG
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
+template <class Iterator1, class Iterator2, class Policies, class Value1, class Value2,
+    class Reference1, class Reference2, class Pointer1, class Pointer2,
+    class Category, class Distance>
 inline bool 
-operator==(const iterator_adaptor<Iterator1,Policies,Traits1>& x, const iterator_adaptor<Iterator2,Policies,Traits2>& y) {
+operator==(
+    const iterator_adaptor<Iterator1,Policies,Value1,Reference1,Pointer1,Category,Distance>& x,
+    const iterator_adaptor<Iterator2,Policies,Value2,Reference2,Pointer2,Category,Distance>& y)
+{
     return x.policies().equal(x.iter(), y.iter());
 }
 
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
+template <class Iterator1, class Iterator2, class Policies, class Value1, class Value2,
+    class Reference1, class Reference2, class Pointer1, class Pointer2,
+    class Category, class Distance>
 inline bool 
-operator<(const iterator_adaptor<Iterator1,Policies,Traits1>& x, const iterator_adaptor<Iterator2,Policies,Traits2>& y) {
+operator<(
+    const iterator_adaptor<Iterator1,Policies,Value1,Reference1,Pointer1,Category,Distance>& x,
+    const iterator_adaptor<Iterator2,Policies,Value2,Reference2,Pointer2,Category,Distance>& y)
+{
     return x.policies().less(x.iter(), y.iter());
 }
 
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
+template <class Iterator1, class Iterator2, class Policies, class Value1, class Value2,
+    class Reference1, class Reference2, class Pointer1, class Pointer2,
+    class Category, class Distance>
 inline bool 
-operator>(const iterator_adaptor<Iterator1,Policies,Traits1>& x,
-          const iterator_adaptor<Iterator2,Policies,Traits2>& y) { 
+operator>(
+    const iterator_adaptor<Iterator1,Policies,Value1,Reference1,Pointer1,Category,Distance>& x,
+    const iterator_adaptor<Iterator2,Policies,Value2,Reference2,Pointer2,Category,Distance>& y)
+{ 
     return x.policies().less(y.iter(), x.iter());
 }
 
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
+template <class Iterator1, class Iterator2, class Policies, class Value1, class Value2,
+    class Reference1, class Reference2, class Pointer1, class Pointer2,
+    class Category, class Distance>
 inline bool 
-operator>=(const iterator_adaptor<Iterator1,Policies,Traits1>& x, const iterator_adaptor<Iterator2,Policies,Traits2>& y) {
+operator>=(
+    const iterator_adaptor<Iterator1,Policies,Value1,Reference1,Pointer1,Category,Distance>& x,
+    const iterator_adaptor<Iterator2,Policies,Value2,Reference2,Pointer2,Category,Distance>& y)
+{
     return !x.policies().less(x.iter(), y.iter());
 }
 
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
+template <class Iterator1, class Iterator2, class Policies, class Value1, class Value2,
+    class Reference1, class Reference2, class Pointer1, class Pointer2,
+    class Category, class Distance>
 inline bool 
-operator<=(const iterator_adaptor<Iterator1,Policies,Traits1>& x,
-           const iterator_adaptor<Iterator2,Policies,Traits2>& y) {
+operator<=(
+    const iterator_adaptor<Iterator1,Policies,Value1,Reference1,Pointer1,Category,Distance>& x,
+    const iterator_adaptor<Iterator2,Policies,Value2,Reference2,Pointer2,Category,Distance>& y)
+{
     return !x.policies().less(y.iter(), x.iter());
 }
 
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
+template <class Iterator1, class Iterator2, class Policies, class Value1, class Value2,
+    class Reference1, class Reference2, class Pointer1, class Pointer2,
+    class Category, class Distance>
 inline bool 
-operator!=(const iterator_adaptor<Iterator1,Policies,Traits1>& x, 
-           const iterator_adaptor<Iterator2,Policies,Traits2>& y) {
+operator!=(
+    const iterator_adaptor<Iterator1,Policies,Value1,Reference1,Pointer1,Category,Distance>& x, 
+    const iterator_adaptor<Iterator2,Policies,Value2,Reference2,Pointer2,Category,Distance>& y)
+{
     return !x.policies().equal(x.iter(), y.iter());
 }
 #endif
@@ -663,14 +750,11 @@ struct transform_iterator_policies : public default_iterator_policies
 template <class AdaptableUnaryFunction, class Iterator>
 class transform_iterator_generator
 {
-    typedef typename boost::detail::iterator_traits<Iterator>::difference_type
-      difference_type;
     typedef typename AdaptableUnaryFunction::result_type value_type;
 public:
-    typedef boost::iterator<std::input_iterator_tag, 
-      value_type, difference_type, value_type*, value_type> transform_traits;
     typedef iterator_adaptor<Iterator, 
-      transform_iterator_policies<AdaptableUnaryFunction>, transform_traits>
+      transform_iterator_policies<AdaptableUnaryFunction>,
+        value_type, value_type, value_type*, std::input_iterator_tag>
       type;
 };
 
@@ -706,13 +790,6 @@ struct indirect_iterator_policies : public default_iterator_policies
         { return **x; }
 };
 
-// This macro definition is only temporary in this file
-# if !defined(BOOST_MSVC)
-#  define BOOST_ARG_DEPENDENT_TYPENAME typename
-# else
-#  define BOOST_ARG_DEPENDENT_TYPENAME
-# endif
-
 namespace detail {
 # if !defined(BOOST_MSVC) // stragely instantiated even when unused! Maybe try a recursive template someday ;-)
   template <class T>
@@ -731,18 +808,10 @@ template <class OuterIterator,      // Mutable or Immutable, does not matter
           , class Reference = Value&
           , class Pointer = Value*
          >
-class indirect_iterator_generator
+struct indirect_iterator_generator
 {
-    typedef boost::detail::iterator_traits<OuterIterator> outer_traits;
-    typedef typename outer_traits::difference_type difference_type;
-    typedef typename outer_traits::iterator_category iterator_category;
-
-    typedef typename boost::remove_const<Value>::type value_type;
-    typedef Pointer pointer;
-    typedef Reference reference;
-public:
-    typedef boost::iterator<iterator_category, value_type, difference_type, pointer, reference> indirect_traits;
-    typedef iterator_adaptor<OuterIterator, indirect_iterator_policies, indirect_traits> type;
+    typedef iterator_adaptor<OuterIterator,
+        indirect_iterator_policies,Value,Reference,Pointer> type;
 };
 
 template <class OuterIterator,      // Mutable or Immutable, does not matter
@@ -763,18 +832,7 @@ struct indirect_iterator_pair_generator
     Value, ConstReference, ConstPointer>::type const_iterator;
 };
 
-// Tried to allow InnerTraits to be provided by explicit template
-// argument to the function, but could not get it to work. -Jeremy Siek
-template <class Value, class OuterIterator>
-inline typename indirect_iterator_generator<OuterIterator,Value>::type
-make_indirect_iterator(OuterIterator base, Value* = 0)
-{
-    typedef typename indirect_iterator_generator
-        <OuterIterator, Value>::type result_t;
-    return result_t(base);
-}
-
-# if 0 // This just doesn't seem to work under any circumstances!
+#ifndef BOOST_MSVC
 template <class OuterIterator>
 inline typename indirect_iterator_generator<OuterIterator>::type
 make_indirect_iterator(OuterIterator base)
@@ -783,28 +841,27 @@ make_indirect_iterator(OuterIterator base)
         <OuterIterator>::type result_t;
     return result_t(base);
 }
-# endif
-
+#endif
 
 //=============================================================================
 // Reverse Iterators Adaptor
 
 struct reverse_iterator_policies : public default_iterator_policies
 {
-    template <class Reference, class Iterator>
-    Reference dereference(type<Reference>, const Iterator& x) const
+    template <class Reference, class BidirectionalIterator>
+    Reference dereference(type<Reference>, const BidirectionalIterator& x) const
         { return *boost::prior(x); }
     
-    template <class Iterator>
-    void increment(Iterator& x) const
+    template <class BidirectionalIterator>
+    void increment(BidirectionalIterator& x) const
         { --x; }
     
-    template <class Iterator>
-    void decrement(Iterator& x) const
+    template <class BidirectionalIterator>
+    void decrement(BidirectionalIterator& x) const
         { ++x; }
     
-    template <class Iterator, class DifferenceType>
-    void advance(Iterator& x, DifferenceType n) const
+    template <class BidirectionalIterator, class DifferenceType>
+    void advance(BidirectionalIterator& x, DifferenceType n) const
         { x -= n; }
     
     template <class Difference, class Iterator1, class Iterator2>
@@ -821,25 +878,24 @@ struct reverse_iterator_policies : public default_iterator_policies
         { return y < x; }
 };
   
-template <class Iterator,
-    class Value = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::value_type,
-    class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Iterator,Value>::pointer,
-    class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Iterator,Value>::reference,
-    class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::iterator_category,
-    class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::difference_type
+template <class BidirectionalIterator,
+    class Value = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<BidirectionalIterator>::value_type,
+    class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<BidirectionalIterator,Value>::reference,
+    class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<BidirectionalIterator,Value>::pointer,
+    class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<BidirectionalIterator>::iterator_category,
+    class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<BidirectionalIterator>::difference_type
          >
 struct reverse_iterator_generator
 {
-    typedef typename boost::remove_const<Value>::type value_type;
-    typedef boost::iterator<Category,value_type,Distance,Pointer,Reference> traits;
-    typedef iterator_adaptor<Iterator,reverse_iterator_policies,traits> type;
+    typedef iterator_adaptor<BidirectionalIterator,reverse_iterator_policies,
+        Value,Reference,Pointer,Category,Distance> type;
 };
 
-template <class Iterator>
-inline typename reverse_iterator_generator<Iterator>::type
-make_reverse_iterator(Iterator base)
+template <class BidirectionalIterator>
+inline typename reverse_iterator_generator<BidirectionalIterator>::type
+make_reverse_iterator(BidirectionalIterator base)
 {
-    typedef typename reverse_iterator_generator<Iterator>::type result_t;
+    typedef typename reverse_iterator_generator<BidirectionalIterator>::type result_t;
     return result_t(base);
 }
 
@@ -862,28 +918,18 @@ struct projection_iterator_policies : public default_iterator_policies
 
 template <class AdaptableUnaryFunction, class Iterator>
 class projection_iterator_generator {
-    typedef boost::detail::iterator_traits<Iterator> Traits;
     typedef typename AdaptableUnaryFunction::result_type value_type;
-    typedef boost::iterator<typename Traits::iterator_category, 
-        value_type, typename Traits::difference_type, value_type*, value_type&>
-            projection_traits;
+    typedef projection_iterator_policies<AdaptableUnaryFunction> policies;
 public:
-    typedef iterator_adaptor<Iterator,
-        projection_iterator_policies<AdaptableUnaryFunction>,
-            projection_traits> type;
+    typedef iterator_adaptor<Iterator,policies,value_type> type;
 };
 
 template <class AdaptableUnaryFunction, class Iterator>
 class const_projection_iterator_generator {
-    typedef boost::detail::iterator_traits<Iterator> Traits;
     typedef typename AdaptableUnaryFunction::result_type value_type;
-    typedef boost::iterator<typename Traits::iterator_category, 
-        value_type, typename Traits::difference_type, const value_type*, const value_type&>
-            projection_traits;
+    typedef projection_iterator_policies<AdaptableUnaryFunction> policies;
 public:
-    typedef iterator_adaptor<Iterator,
-        projection_iterator_policies<AdaptableUnaryFunction>,
-            projection_traits> type;
+    typedef iterator_adaptor<Iterator,policies,value_type,const value_type&,const value_type*> type;
 };
 
 template <class AdaptableUnaryFunction, class Iterator, class ConstIterator>
@@ -1000,8 +1046,6 @@ template <class Predicate, class Iterator,
     class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::difference_type
          >
 class filter_iterator_generator {
-    typedef typename boost::remove_const<Value>::type value_type;
-    typedef boost::iterator<Category,value_type,Distance,Pointer,Reference> traits;
     enum {
         is_bidirectional
            = boost::is_convertible<Category*, std::bidirectional_iterator_tag*>::value
@@ -1011,7 +1055,8 @@ class filter_iterator_generator {
 #endif
  public:
     typedef filter_iterator_policies<Predicate,Iterator> policies_type;
-    typedef iterator_adaptor<Iterator, policies_type, traits> type;
+    typedef iterator_adaptor<Iterator,policies_type,
+        Value,Reference,Pointer,Category,Distance> type;
 };
 
 // This keeps MSVC happy; it doesn't like to deduce default template arguments
