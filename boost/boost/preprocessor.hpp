@@ -26,6 +26,7 @@ Includes all PREPROCESSOR library headers.
 #include <boost/preprocessor/enum_params_with_a_default.hpp>
 #include <boost/preprocessor/enum_params_with_defaults.hpp>
 #include <boost/preprocessor/enum_shifted_params.hpp>
+#include <boost/preprocessor/expand.hpp>
 #include <boost/preprocessor/for.hpp>
 #include <boost/preprocessor/limits.hpp>
 #include <boost/preprocessor/list.hpp>
