@@ -8,8 +8,8 @@
 
 subproject libs/iostreams/build ;
 
-import $(BOOST_ROOT)/libs/iostreams/build/bzip2.jam ;
-import $(BOOST_ROOT)/libs/iostreams/build/zlib.jam ;
+#import $(BOOST_ROOT)/libs/iostreams/build/bzip2.jam ;
+#import $(BOOST_ROOT)/libs/iostreams/build/zlib.jam ;
 
 SOURCES = file_descriptor mapped_file ; 
 
