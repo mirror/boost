@@ -105,6 +105,7 @@ namespace boost_concepts {
       void constraints()
       {
         const value_type& r = *i;
+        boost::ignore_unused_variable_warning(r);
       }
     Iterator i;
   };
