@@ -4,19 +4,6 @@
 <header name="boost/variant/visitor_ptr.hpp">
   <namespace name="boost">
 
-    <class name="bad_visit">
-      <inherit access="public">
-        <classname>std::exception</classname>
-      </inherit>
-
-      <purpose>The exception thrown in the event of a visitor
-        unable to handle the visited value.</purpose>
-
-      <method name="what" specifiers="virtual" cv="const">
-        <type>const char *</type>
-      </method>
-    </class>
-
     <class name="visitor_ptr_t">
       <template>
         <template-type-parameter name="T"/>

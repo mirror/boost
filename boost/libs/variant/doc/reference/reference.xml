@@ -8,7 +8,7 @@
   <header name="boost/variant.hpp">
     <section id="variant.header.include-all">
       <para>This header exists simply as a convenience to the user, including
-      all of the headers that are part of the library.</para>
+      all of the headers in the <code>boost/variant</code> directory.</para>
     </section>
   </header>
 
@@ -16,6 +16,7 @@
   <xi:include href="variant.xml"/>
   <xi:include href="apply_visitor.xml"/>
   <xi:include href="get.xml"/>
+  <xi:include href="bad_visit.xml"/>
   <xi:include href="static_visitor.xml"/>
   <xi:include href="visitor_ptr.xml"/>
 </library-reference>
