@@ -44,7 +44,17 @@ void iterator_test()
     vector<string> tokens;
     vector< vector<int> > vtokens;
 
-    ifind_all(
+    // find_all tests
+    find_all(
+        tokens,
+        pch1,
+        "xx" );
+
+    BOOST_REQUIRE( tokens.size()==2 );
+    BOOST_CHECK( tokens[0]==string("xx") );
+    BOOST_CHECK( tokens[1]==string("xx") );
+
+	ifind_all(
         tokens,
         str2,
         "xx" );
@@ -53,7 +63,6 @@ void iterator_test()
     BOOST_CHECK( tokens[0]==string("Xx") );
     BOOST_CHECK( tokens[1]==string("xX") );
 
-    // find_all tests
     find_all(
         tokens,
         str1,
@@ -62,7 +71,6 @@ void iterator_test()
     BOOST_REQUIRE( tokens.size()==2 );
     BOOST_CHECK( tokens[0]==string("xx") );
     BOOST_CHECK( tokens[1]==string("xx") );
-
 
     find_all(
         vtokens,
