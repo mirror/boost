@@ -79,7 +79,7 @@ private:
         >::type backward_pred_;
 
 // cwpro8 doesn't like 'cut-off' type here (use typedef instead)
-#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
+#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) && !BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))
     struct result_ :
 #else
     typedef
@@ -92,7 +92,7 @@ private:
         , backward_op_
         , backward_pred_
         >
-#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
+#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) && !BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))
     { };
 #else
     result_;
