@@ -155,7 +155,7 @@ for file in $boost_base/libs/config/test/boost_no*.cxx; do
    else
       AC_MSG_CHECKING($title )
    fi
-   AC_TRY_LINK(
+   AC_TRY_RUN(
    [
 #include <boost/config.hpp>
 #include "test.hpp"
@@ -166,9 +166,7 @@ for file in $boost_base/libs/config/test/boost_no*.cxx; do
 namespace ${namespace} = empty_boost;
 #endif
 
-   ]
-   ,
-   [ return ${namespace}::test(); ]
+int main(){ return ${namespace}::test(); } ]
    ,
    [AC_MSG_RESULT(OK)]
    ,
@@ -180,7 +178,7 @@ namespace ${namespace} = empty_boost;
    
    ac_ext=$use_ac_ext
    AC_MSG_CHECKING($title (fail expected) )
-   AC_TRY_LINK(
+   AC_TRY_RUN(
    [
 #include <boost/config.hpp>
 #include "test.hpp"
@@ -191,9 +189,7 @@ namespace ${namespace} = empty_boost;
 #error "this file should not compile"
 #endif
 
-   ]
-   ,
-   [return ${namespace}::test();]
+int main() { return ${namespace}::test(); }]
    ,
    [AC_MSG_RESULT(failed)
    required_undefs="$macroname $required_undefs"]
@@ -223,7 +219,7 @@ for file in $boost_base/libs/config/test/boost_has*.cxx; do
    ac_ext=$use_ac_ext
    if test $enable_test = 'yes'; then
    AC_MSG_CHECKING($title (pass expected) )
-   AC_TRY_LINK(
+   AC_TRY_RUN(
    [
 #include <boost/config.hpp>
 #include "test.hpp"
@@ -234,9 +230,7 @@ for file in $boost_base/libs/config/test/boost_has*.cxx; do
 namespace ${namespace} = empty_boost;
 #endif
 
-   ]
-   ,
-   [return ${namespace}::test();]
+int main(){ return ${namespace}::test(); }]
    ,
    [AC_MSG_RESULT(OK)]
    ,
@@ -245,7 +239,7 @@ namespace ${namespace} = empty_boost;
    )
    
    AC_MSG_CHECKING($title (fail expected) )
-   AC_TRY_LINK(
+   AC_TRY_RUN(
    [
 #include <boost/config.hpp>
 #include "test.hpp"
@@ -256,9 +250,7 @@ namespace ${namespace} = empty_boost;
 #error "this file should not compile"
 #endif
 
-   ]
-   ,
-   [return ${namespace}::test();]
+int main(){ return ${namespace}::test(); }]
    ,
    [
    AC_MSG_RESULT(failed)
@@ -274,16 +266,14 @@ namespace ${namespace} = empty_boost;
 
    ac_ext=$use_ac_ext
    AC_MSG_CHECKING($title)
-   AC_TRY_LINK(
+   AC_TRY_RUN(
    [
 #include <boost/config.hpp>
 #include "test.hpp"
 
 #include "boost_$basename.cxx"
 
-   ]
-   ,
-   [return ${namespace}::test();]
+int main(){ return ${namespace}::test(); }]
    ,
    [
       AC_MSG_RESULT(Yes)
@@ -397,6 +387,7 @@ cat_conts="$cat_conts"
 )
 
 fi
+
 
 
 

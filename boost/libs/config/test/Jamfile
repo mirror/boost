@@ -1,6 +1,6 @@
 #
 # Regression test Jamfile for boost configuration setup.
-# This file was automatically generated on Fri Sep 13 12:04:55  2002,
+# This file was automatically generated on Tue Nov 12 11:07:30  2002,
 # do not edit by hand...
 #
 subproject libs/config/test ;
@@ -36,6 +36,9 @@ test-suite "BOOST_NO_CWCHAR" :
 test-suite "BOOST_NO_CWCTYPE" : 
 [ run no_cwctype_pass.cpp <lib>../../test/build/prg_exec_monitor ]
 [ link-fail no_cwctype_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;
+test-suite "BOOST_DEDUCED_TYPENAME" : 
+[ run no_ded_typename_pass.cpp <lib>../../test/build/prg_exec_monitor ]
+[ link-fail no_ded_typename_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;
 test-suite "BOOST_NO_DEPENDENT_NESTED_DERIVATIONS" : 
 [ run no_dep_nested_class_pass.cpp <lib>../../test/build/prg_exec_monitor ]
 [ link-fail no_dep_nested_class_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;
@@ -189,6 +192,9 @@ test-suite "BOOST_HAS_NANOSLEEP" :
 test-suite "BOOST_HAS_NL_TYPES_H" : 
 [ run has_nl_types_h_pass.cpp <lib>../../test/build/prg_exec_monitor ]
 [ link-fail has_nl_types_h_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;
+test-suite "BOOST_HAS_NRVO" : 
+[ run has_nrvo_pass.cpp <lib>../../test/build/prg_exec_monitor ]
+[ link-fail has_nrvo_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;
 test-suite "BOOST_HAS_PARTIAL_STD_ALLOCATOR" : 
 [ run has_part_alloc_pass.cpp <lib>../../test/build/prg_exec_monitor ]
 [ link-fail has_part_alloc_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;
