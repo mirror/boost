@@ -12,6 +12,8 @@
 //
 // Revision History:
 
+// 08 Mar 2001   Jeremy Siek
+//      Added support for optional named template parameters.
 // 19 Feb 2001   David Abrahams
 //      Rolled back reverse_iterator_pair_generator again, as it doesn't
 //      save typing on a conforming compiler.
@@ -104,6 +106,7 @@
 # include <boost/type_traits.hpp>
 # include <boost/detail/iterator.hpp>
 # include <boost/detail/select_type.hpp>
+# include <boost/detail/named_template_params.hpp>
 
 // I was having some problems with VC6. I couldn't tell whether our hack for
 // stock GCC was causing problems so I needed an easy way to turn it on and
@@ -220,6 +223,9 @@ struct default_iterator_policies
     void initialize(Base&)
         { }
 
+    // The "type<Reference>" parameter is a portable mechanism for
+    // the iterator_adaptor class to tell this member function what
+    // the Reference type is, which is needed for the return type.
     template <class Reference, class Base>
     Reference dereference(type<Reference>, const Base& x) const
         { return *x; }
@@ -429,7 +435,110 @@ namespace detail {
        
    };
 # endif
+
+  //===========================================================================
+  // Specify the defaults for iterator_adaptor's template parameters
+  
+  struct default_value_type {
+    template <class Base, class Traits>
+    struct bind {
+      typedef typename boost::detail::iterator_traits<Base>::value_type type;
+    };
+  };
+  struct default_difference_type {
+    template <class Base, class Traits>
+    struct bind {
+      typedef typename boost::detail::iterator_traits<Base>::difference_type type;
+    };
+  };
+  struct default_iterator_category {
+    template <class Base, class Traits>
+    struct bind {
+      typedef typename boost::detail::iterator_traits<Base>::iterator_category type;
+    };
+  };
+  struct default_pointer {
+    template <class Base, class Traits>
+    struct bind {
+      typedef typename Traits::value_type Value;
+      typedef typename boost::detail::iterator_defaults<Base,Value>::pointer 
+	type;
+    };
+  };
+  struct default_reference {
+    template <class Base, class Traits>
+    struct bind {
+      typedef typename Traits::value_type Value;
+      typedef typename boost::detail::iterator_defaults<Base,Value>::reference 
+	type;
+    };
+  };
+
+  //===========================================================================
+  // Support for named template parameters
+
+#if !defined(__BORLANDC__)
+  // Borland C++ thinks the nested recursive inheritance here is illegal.
+
+  template <class V = default_argument, 
+            class R = default_argument, 
+            class P = default_argument,
+            class C = default_argument,
+            class D = default_argument>
+  struct iter_traits_gen : public named_template_param_base {
+    template <class T>
+    struct value_type : public iter_traits_gen<T,R,P,C,D> { };
+    template <class T>
+    struct reference : public iter_traits_gen<V,T,P,C,D> { };
+    template <class T>
+    struct pointer : public iter_traits_gen<V,R,T,C,D> { };
+    template <class T>
+    struct iterator_category : public iter_traits_gen<V,R,P,T,D>{};
+    template <class T>
+    struct difference_type : public iter_traits_gen<V,R,P,C,T> { };
+
+    typedef boost::iterator<C, V, D, P, R> traits;
+  };
+#endif
+
+  BOOST_NAMED_TEMPLATE_PARAM(value_type);
+  BOOST_NAMED_TEMPLATE_PARAM(reference);
+  BOOST_NAMED_TEMPLATE_PARAM(pointer);
+  BOOST_NAMED_TEMPLATE_PARAM(iterator_category);
+  BOOST_NAMED_TEMPLATE_PARAM(difference_type);
+
+  template <class Base, class Value, class Reference, class Pointer,
+            class Category, class Distance>
+  class iterator_adaptor_traits_gen
+  {
+    typedef boost::iterator<Category, Value, Distance, Pointer, Reference>
+      Traits0;
+
+    typedef typename get_value_type<Base, 
+        typename boost::remove_const<Value>::type, Traits0
+        >::type value_type;
+    typedef typename get_difference_type<Base, Distance, Traits0>::type
+      difference_type;
+    typedef typename get_iterator_category<Base, Category, Traits0>::type
+      iterator_category;
+
+    typedef boost::iterator<iterator_category, value_type, difference_type,
+      Pointer, Reference> Traits1;
+    
+    typedef typename get_pointer<Base, Pointer, Traits1>::type pointer;
+    typedef typename get_reference<Base, Reference, Traits1>::type reference;
+  public:
+    typedef boost::iterator<iterator_category, value_type, difference_type,
+      pointer, reference> type;
+  };
+  
 } // namespace detail
+
+
+#if !defined(__BORLANDC__)
+struct iterator_traits_generator
+  : public detail::iter_traits_gen<> { };
+#endif
 
 // This macro definition is only temporary in this file
 # if !defined(BOOST_MSVC)
@@ -469,29 +578,40 @@ template <class T> struct undefined;
 //   Distance - the difference_type of the resulting iterator. If not
 //      supplied, iterator_traits<Base>::difference_type is used.
 template <class Base, class Policies, 
+#if 0
     class Value = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Base>::value_type,
     class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Base,Value>::reference,
     class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Base,Value>::pointer,
     class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Base>::iterator_category,
     class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Base>::difference_type
+#else
+    class Value = detail::default_argument,
+    class Reference = detail::default_argument,
+    class Pointer = detail::default_argument,
+    class Category = detail::default_argument,
+    class Distance = detail::default_argument
+#endif
          >
 struct iterator_adaptor :
 #ifdef BOOST_RELOPS_AMBIGUITY_BUG
     iterator_comparisons<
           iterator_adaptor<Base,Policies,Value,Reference,Pointer,Category,Distance>,
-#endif
-    boost::iterator<Category,Value,Distance,Pointer,Reference>
-#ifdef BOOST_RELOPS_AMBIGUITY_BUG
->
+    typename detail::iterator_adaptor_traits_gen<Base,Value,Reference,Pointer,Category, Distance>::type
+ >
+#else
+    detail::iterator_adaptor_traits_gen<Base,Value,Reference,Pointer,Category,Distance>::type
 #endif
 {
     typedef iterator_adaptor<Base,Policies,Value,Reference,Pointer,Category,Distance> self;
  public:
-    typedef Distance difference_type;
-    typedef typename boost::remove_const<Value>::type value_type;
-    typedef Pointer pointer;
-    typedef Reference reference;
-    typedef Category iterator_category;
+    typedef typename detail::iterator_adaptor_traits_gen<Base,Value,Reference,Pointer,Category,Distance>::type Traits;
+
+    typedef typename Traits::difference_type difference_type;
+    typedef typename Traits::value_type value_type;
+    typedef typename Traits::pointer pointer;
+    typedef typename Traits::reference reference;
+    typedef typename Traits::iterator_category iterator_category;
+
     typedef Base base_type;
     typedef Policies policies_type;
 
@@ -501,16 +621,19 @@ struct iterator_adaptor :
              || boost::is_convertible<iterator_category*,std::output_iterator_tag*>::value));
 
     // Iterators should satisfy one of the known categories
+#if 0
     BOOST_STATIC_ASSERT(is_input_or_output_iter);
+#endif
 
     // Iterators >= ForwardIterator must produce real references.
+#if 0
     BOOST_STATIC_CONSTANT(bool, forward_iter_with_real_reference =
            (!boost::is_convertible<iterator_category*,std::forward_iterator_tag*>::value
            || boost::is_same<reference,value_type&>::value
            || boost::is_same<reference,const value_type&>::value));
     
     BOOST_STATIC_ASSERT(forward_iter_with_real_reference);
-    
+#endif    
  public:
     iterator_adaptor() { }
 
@@ -545,9 +668,9 @@ struct iterator_adaptor :
 # pragma warning( disable : 4284 )
 #endif
 
-    typename boost::detail::operator_arrow_result_generator<Category,value_type,Pointer>::type
+    typename boost::detail::operator_arrow_result_generator<iterator_category,value_type,pointer>::type
     operator->() const
-        { return detail::operator_arrow(*this, Category()); }
+        { return detail::operator_arrow(*this, iterator_category()); }
 
 #ifdef _MSC_VER
 # pragma warning(pop)
@@ -590,7 +713,7 @@ struct iterator_adaptor :
 
     // Moved from global scope to avoid ambiguity with the operator-() which
     // subtracts iterators from one another.
-    self operator-(Distance x) const
+    self operator-(difference_type x) const
         { self result(*this); return result -= x; }
 private:
     compressed_pair<Base,Policies> m_iter_p;
@@ -626,11 +749,14 @@ operator+(
 template <class Iterator1, class Iterator2, class Policies, class Value1, class Value2,
     class Reference1, class Reference2, class Pointer1, class Pointer2, class Category,
     class Distance>
-Distance operator-(
+typename iterator_adaptor<Iterator1,Policies,Value1,Reference1,Pointer1,Category,Distance>::difference_type
+operator-(
     const iterator_adaptor<Iterator1,Policies,Value1,Reference1,Pointer1,Category,Distance>& x,
     const iterator_adaptor<Iterator2,Policies,Value2,Reference2,Pointer2,Category,Distance>& y)
 {
-    return x.policies().distance(type<Distance>(), y.iter(), x.iter());
+  typedef typename iterator_adaptor<Iterator1,Policies,Value1,Reference1,
+    Pointer1,Category,Distance>::difference_type difference_type;
+  return x.policies().distance(type<difference_type>(), y.iter(), x.iter());
 }
 
 #ifndef BOOST_RELOPS_AMBIGUITY_BUG
@@ -967,14 +1093,19 @@ public:
         { return x == y; }
 
  private:
-    void satisfy_predicate(Iterator& iter)
-    {
-        while (m_end != iter && !m_predicate(*iter))
-            ++iter;
-    }
+    void satisfy_predicate(Iterator& iter);
     Predicate m_predicate;
     Iterator m_end;
 };
+template <class Predicate, class Iterator>
+void filter_iterator_policies<Predicate,Iterator>
+::satisfy_predicate(Iterator& iter)
+{
+    while (m_end != iter && !m_predicate(*iter))
+        ++iter;
+}
+
+
 
 namespace detail {
   // A type generator returning Base if T is derived from Base, and T otherwise.
