@@ -74,7 +74,7 @@ struct rebind_allocator
 } // namespace detail
 } // namespace boost
 
-#elif !defined(BOOST_NO_MEMBER_TEMPLATES)
+#elif !defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(__SUNPRO_CC)
 
 // no std::allocator, but the compiler supports the necessary syntax,
 // write our own allocator instead:
