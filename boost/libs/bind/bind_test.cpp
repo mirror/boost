@@ -190,8 +190,12 @@ void function_object_test()
     BOOST_TEST( bind<int>(Y(), i, _1)(k) == 38 );
     BOOST_TEST( bind<long>(Y(), i, _1, 9)(k) == 938 );
 
+#if !defined(__MWERKS__) || (__MWERKS__ > 0x2406)     // Fails for this version of the compiler.
+
     bind<void>(Y(), i, _1, 9, 4)(k);
     BOOST_TEST( global_result == 4938 );
+
+#endif
 }
 
 //
