@@ -350,7 +350,7 @@
 #     // full dinkumware 3.06 and above
 #     define BOOST_NO_HASH
 #     define BOOST_NO_STD_ITERATOR_TRAITS
-#     if _GLOBAL_USING   // can be defined in yvals.h
+#     if !_GLOBAL_USING   // can be defined in yvals.h
 #       define BOOST_NO_STDC_NAMESPACE
 #     endif
 #   else // assume using dinkumware's STL that comes with VC++ 6.0
