@@ -63,13 +63,25 @@ template<
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Last)
     >
 struct distance
-{
-    // agurt, 29/sep/02: Borland doesn't like inheritance here
-    typedef typename aux::distance_impl<
+// Aleksey claims borland doesn't like inheritance here, but it passes
+// all the same tests; the workaround can easily be enabled again if
+// verified.  -- dwa 2003/5/8
+# if 1 || !defined(__BORLANDC__)  
+    : aux::distance_impl<
           typename BOOST_MPL_AUX_ITERATOR_CATEGORY(First)
         , First
         , Last
-        >::type type;
+      >
+# endif 
+{
+# if 0 && defined(__BORLANDC__)
+    typedef typename aux::distance_impl<
+        typename BOOST_MPL_AUX_ITERATOR_CATEGORY(First)
+      , First
+      , Last
+    >::type type;
+    BOOST_STATIC_CONSTANT(typename type::value_type, value = type::value);
+# endif 
 };
 
 BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END

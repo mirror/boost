@@ -54,8 +54,8 @@ struct vector_iterator
 
     template< typename Other >
     struct BOOST_MPL_AUX_ITERATOR_DISTANCE
+        : minus<typename Other::pos,Pos>
     {
-        typedef typename minus<typename Other::pos,Pos>::type type;
     };
 };
 
