@@ -71,7 +71,7 @@
 
 // MSVC extensions seem to disable abs () overloads in <cmath>.
 #ifdef _MSC_EXTENSIONS
-#define BOOST_UBLAS_NO_CMATH
+#define BOOST_UBLAS_CMATH_BAD_STD
 #endif
 
 // We must disable element proxies as they require template partial specialisation
@@ -166,7 +166,17 @@ namespace std {
 #if defined (__COMO__) && ! defined (BOOST_STRICT_CONFIG)
 
 // Without this we don't get abs overloads for float types in <cmath>
-// This should should be library version specific, but to find this out we need to include a header!
+// This should should be library version specific.
+#include <cstdlib>
+
+#endif
+
+
+
+#if defined (__sgi) && ! defined (BOOST_STRICT_CONFIG)
+
+// Without this we don't get abs overloads for float types in <cmath>
+// This should should be library version specific.
 #include <cstdlib>
 
 #endif

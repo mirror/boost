@@ -123,7 +123,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         real_type abs (const_reference t) {
-#if defined (BOOST_NO_STDC_NAMESPACE) || defined (BOOST_UBLAS_NO_CMATH)
+#if defined (BOOST_NO_STDC_NAMESPACE) || defined (BOOST_UBLAS_CMATH_BAD_STD)
             return ::fabsf (t);
 #else
             return std::abs (t);
@@ -132,7 +132,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         value_type sqrt (const_reference t) {
-#if defined (BOOST_NO_STDC_NAMESPACE) || defined (BOOST_UBLAS_NO_CMATH)
+#if defined (BOOST_NO_STDC_NAMESPACE) || defined (BOOST_UBLAS_CMATH_BAD_STD)
             return ::sqrtf (t);
 #else
             return std::sqrt (t);
@@ -199,7 +199,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         real_type abs (const_reference t) {
-#if defined (BOOST_NO_STDC_NAMESPACE) || defined (BOOST_UBLAS_NO_CMATH)
+#if defined (BOOST_NO_STDC_NAMESPACE) || defined (BOOST_UBLAS_CMATH_BAD_STD)
             return ::fabs (t);
 #else
             return std::abs (t);
@@ -208,7 +208,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         value_type sqrt (const_reference t) {
-#if defined (BOOST_NO_STDC_NAMESPACE) || defined (BOOST_UBLAS_NO_CMATH)
+#if defined (BOOST_NO_STDC_NAMESPACE) || defined (BOOST_UBLAS_CMATH_BAD_STD)
             return ::sqrt (t);
 #else
             return std::sqrt (t);
@@ -272,7 +272,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         real_type abs (const_reference t) {
-#if defined (BOOST_NO_STDC_NAMESPACE) || defined (BOOST_UBLAS_NO_CMATH)
+#if defined (BOOST_NO_STDC_NAMESPACE) || defined (BOOST_UBLAS_CMATH_BAD_STD)
             return ::fabsl (t);
 #else
             return std::abs (t);
@@ -281,7 +281,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         value_type sqrt (const_reference t) {
-#if defined (BOOST_NO_STDC_NAMESPACE) || defined (BOOST_UBLAS_NO_CMATH)
+#if defined (BOOST_NO_STDC_NAMESPACE) || defined (BOOST_UBLAS_CMATH_BAD_STD)
             return ::sqrtl (t);
 #else
             return std::sqrt (t);
