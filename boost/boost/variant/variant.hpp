@@ -499,7 +499,7 @@ private: // representation
 
     const void* active_storage() const
     {
-        return const_cast<variant * const>(this)->active_storage();
+        return const_cast<variant *>(this)->active_storage();
     }
 
     void* inactive_storage()
@@ -694,7 +694,7 @@ private: // helpers, for structors, cont. (below)
 
     };
 
-private: // helpers for structors, cont. (below)
+    friend class convert_copy_into;
 
     template <typename T>
     void copy_construct(
