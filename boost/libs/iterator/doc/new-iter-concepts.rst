@@ -65,9 +65,10 @@ categorized. For example, ``vector<bool>::iterator`` is almost a
 random access iterator, but the return type is not ``bool&`` (see
 `issue 96`_ and Herb Sutter's paper J16/99-0008 = WG21
 N1185). Therefore, the iterators of ``vector<bool>`` only meet the
-requirements of input iterator and output iterator. This is so
-nonintuitive that at least one implementation erroneously assigns
-``random_access_iterator_tag`` as its ``iterator_category``. 
+requirements of input iterator and output iterator.  This is so
+nonintuitive that the C++ standard contradicts itself on this point.
+In paragraph 23.2.4/1 it says that a ``vector`` is a sequence that
+supports random access iterators.
 
 .. _issue 96: http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/lwg-active.html#96
 
@@ -188,12 +189,12 @@ Bidirectional Iterator -> Bidirectional Traversal Iterator and Readable Iterator
 Bidirectional Iterator -> Bidirectional Traversal Iterator and Readable Iterator
   ``reverse_copy``
 
-Random Access Iterator -> Random Access Traversal Iterator and Readable and Swappable Iterator
+Random Access Iterator -> Random Access Traversal Iterator and Readable and Writable Iterator
   ``random_shuffle, sort, stable_sort, partial_sort, nth_element, push_heap, pop_heap
   make_heap, sort_heap``
 
 Input Iterator (2) -> Incrementable Iterator and Readable Iterator
-  ``equal``
+  ``equal, mismatch``
 
 Input Iterator (2) -> Incrementable Iterator and Readable Iterator
   ``transform``
@@ -247,11 +248,18 @@ given in the following diagram.
 
 Like the old iterator requirements, we provide tags for purposes of
 dispatching. There are two hierarchies of tags, one for the access
-concepts and one for the traversal concepts. We provide an access
-mechanism for mapping iterator types to these new tags. Our design
-reuses ``iterator_traits<Iter>::iterator_category`` as the access
-mechanism. To enable this, a pair of access and traversal tags are
-combined into a single type using the following `iterator_tag` class.
+concepts and one for the traversal concepts. The tags are related via
+inheritance so that a tag is convertible to another tag if the concept
+associated with the first tag is a refinement of the second tag.  We
+use virtual inheritance of the diamonds in the current hierarchy, and
+because of possible diamonds that could be created when programmers
+define new iterator concepts and the corresponding tags.  
+
+We provide an access mechanism for mapping iterator types to the new
+tags. Our design reuses ``iterator_traits<Iter>::iterator_category``
+as the access mechanism. To enable this, a pair of access and
+traversal tags are combined into a single type using the following
+`iterator_tag` class.
 
 ::
 
@@ -684,8 +692,7 @@ If the argument for the template parameter ``AccessTag`` is not
 convertible to one or more of: ``readable_iterator_tag``,
 ``writable_iterator_tag``, ``swappable_iterator_tag``, or if the
 argument for ``TraversalTag`` is not convertible to
-``incrementable_iterator_tag`` then the behavior of ``iterator_tag``
-is not defined.
+``incrementable_iterator_tag`` then the programm is ill-formed.
 
 The ``access_category`` and ``traversal_category`` class templates are
 traits classes. For iterators whose

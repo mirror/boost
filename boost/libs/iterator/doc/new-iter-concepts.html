@@ -3,11 +3,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.2.8: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
 <title>New Iterator Concepts</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
-<meta name="date" content="2003-09-14" />
+<meta name="date" content="2003-09-20" />
 <meta name="copyright" content="Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved" />
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
@@ -25,7 +25,7 @@
 <tr><th class="docinfo-name">Organization:</th>
 <td><a class="first reference" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="reference" href="http://www.osl.iu.edu">Open Systems Lab</a>, University of Hanover <a class="last reference" href="http://www.ive.uni-hannover.de">Institute for Transport Railway Operation and Construction</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2003-09-14</td></tr>
+<td>2003-09-20</td></tr>
 <tr class="field"><th class="docinfo-name">Number:</th><td class="field-body"><strong>This document is a revised version of the official</strong> N1477=03-0060</td>
 </tr>
 <tr><th class="docinfo-name">Copyright:</th>
@@ -92,7 +92,7 @@ geared towards iterator traversal (hence the category names), while
 requirements that address value access sneak in at various places. The
 following table gives a summary of the current value access
 requirements in the iterator categories.</p>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="31%" />
 <col width="69%" />
@@ -121,9 +121,10 @@ categorized. For example, <tt class="literal"><span class="pre">vector&lt;bool&g
 random access iterator, but the return type is not <tt class="literal"><span class="pre">bool&amp;</span></tt> (see
 <a class="reference" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/lwg-active.html#96">issue 96</a> and Herb Sutter's paper J16/99-0008 = WG21
 N1185). Therefore, the iterators of <tt class="literal"><span class="pre">vector&lt;bool&gt;</span></tt> only meet the
-requirements of input iterator and output iterator. This is so
-nonintuitive that at least one implementation erroneously assigns
-<tt class="literal"><span class="pre">random_access_iterator_tag</span></tt> as its <tt class="literal"><span class="pre">iterator_category</span></tt>.</p>
+requirements of input iterator and output iterator.  This is so
+nonintuitive that the C++ standard contradicts itself on this point.
+In paragraph 23.2.4/1 it says that a <tt class="literal"><span class="pre">vector</span></tt> is a sequence that
+supports random access iterators.</p>
 <p>Another difficult-to-categorize iterator is the transform iterator, an
 adaptor which applies a unary function object to the dereferenced
 value of the some underlying iterator (see <a class="reference" href="http://www.boost.org/libs/utility/transform_iterator.htm">transform_iterator</a>).
@@ -218,11 +219,11 @@ Bidirectional Iterator (2) -&gt; Bidirectional Traversal Iterator and Writable I
 <dd><tt class="literal"><span class="pre">stable_partition,</span> <span class="pre">inplace_merge</span></tt></dd>
 <dt>Bidirectional Iterator -&gt; Bidirectional Traversal Iterator and Readable Iterator</dt>
 <dd><tt class="literal"><span class="pre">reverse_copy</span></tt></dd>
-<dt>Random Access Iterator -&gt; Random Access Traversal Iterator and Readable and Swappable Iterator</dt>
+<dt>Random Access Iterator -&gt; Random Access Traversal Iterator and Readable and Writable Iterator</dt>
 <dd><tt class="literal"><span class="pre">random_shuffle,</span> <span class="pre">sort,</span> <span class="pre">stable_sort,</span> <span class="pre">partial_sort,</span> <span class="pre">nth_element,</span> <span class="pre">push_heap,</span> <span class="pre">pop_heap</span>
 <span class="pre">make_heap,</span> <span class="pre">sort_heap</span></tt></dd>
 <dt>Input Iterator (2) -&gt; Incrementable Iterator and Readable Iterator</dt>
-<dd><tt class="literal"><span class="pre">equal</span></tt></dd>
+<dd><tt class="literal"><span class="pre">equal,</span> <span class="pre">mismatch</span></tt></dd>
 <dt>Input Iterator (2) -&gt; Incrementable Iterator and Readable Iterator</dt>
 <dd><tt class="literal"><span class="pre">transform</span></tt></dd>
 </dl>
@@ -266,11 +267,17 @@ given in the following diagram.</p>
 <p><img alt="oldeqnew.png" src="oldeqnew.png" /></p>
 <p>Like the old iterator requirements, we provide tags for purposes of
 dispatching. There are two hierarchies of tags, one for the access
-concepts and one for the traversal concepts. We provide an access
-mechanism for mapping iterator types to these new tags. Our design
-reuses <tt class="literal"><span class="pre">iterator_traits&lt;Iter&gt;::iterator_category</span></tt> as the access
-mechanism. To enable this, a pair of access and traversal tags are
-combined into a single type using the following <cite>iterator_tag</cite> class.</p>
+concepts and one for the traversal concepts. The tags are related via
+inheritance so that a tag is convertible to another tag if the concept
+associated with the first tag is a refinement of the second tag.  We
+use virtual inheritance of the diamonds in the current hierarchy, and
+because of possible diamonds that could be created when programmers
+define new iterator concepts and the corresponding tags.</p>
+<p>We provide an access mechanism for mapping iterator types to the new
+tags. Our design reuses <tt class="literal"><span class="pre">iterator_traits&lt;Iter&gt;::iterator_category</span></tt>
+as the access mechanism. To enable this, a pair of access and
+traversal tags are combined into a single type using the following
+<cite>iterator_tag</cite> class.</p>
 <pre class="literal-block">
 template &lt;class AccessTag, class TraversalTag&gt;
 struct iterator_tag : /* appropriate old category or categories */
@@ -326,7 +333,7 @@ for the value type <tt class="literal"><span class="pre">T</span></tt> if the fo
 respect the stated semantics. <tt class="literal"><span class="pre">U</span></tt> is the type of any specified
 member of type <tt class="literal"><span class="pre">T</span></tt>.</p>
 <blockquote>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="34%" />
 <col width="30%" />
@@ -377,7 +384,7 @@ semantics.  In addition, a model of <em>Writable Iterator</em> must include
 in its documentation the <em>set of value types</em> that it allows for
 output.</p>
 <blockquote>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="42%" />
 <col width="27%" />
@@ -413,7 +420,7 @@ value types of <tt class="literal"><span class="pre">X</span></tt></td>
 if the following expressions are valid and respect the stated
 semantics.</p>
 <blockquote>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="38%" />
 <col width="14%" />
@@ -445,7 +452,7 @@ semantics.</p>
 <p>The <em>Readable Lvalue Iterator</em> concept adds the requirement that the
 <tt class="literal"><span class="pre">reference</span></tt> type be a reference to the value type of the iterator.</p>
 <blockquote>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="35%" />
 <col width="32%" />
@@ -482,7 +489,7 @@ cv-qualification</td>
 <tt class="literal"><span class="pre">reference</span></tt> type be a non-const reference to the value type of the
 iterator.</p>
 <blockquote>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="45%" />
 <col width="55%" />
@@ -518,7 +525,7 @@ type <tt class="literal"><span class="pre">X</span></tt>, <tt class="literal"><s
 concept if the following expressions are valid and respect the stated
 semantics.</p>
 <blockquote>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="27%" />
 <col width="38%" />
@@ -555,7 +562,7 @@ semantics.</p>
 concept if the following expressions are valid and respect the stated
 semantics.</p>
 <blockquote>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="33%" />
 <col width="27%" />
@@ -600,7 +607,7 @@ its domain</td>
 concept if the following expressions are valid and respect the stated
 semantics.</p>
 <blockquote>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="39%" />
 <col width="37%" />
@@ -646,7 +653,7 @@ the distance between iterators</td>
 Iterator</em> concept if the following expressions are valid and respect
 the stated semantics.</p>
 <blockquote>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="28%" />
 <col width="36%" />
@@ -690,7 +697,7 @@ the stated semantics.  In the table below, <tt class="literal"><span class="pre"
 <tt class="literal"><span class="pre">iterator_traits&lt;X&gt;::difference_type</span></tt> and <tt class="literal"><span class="pre">n</span></tt> represents a
 constant object of type <tt class="literal"><span class="pre">Distance</span></tt>.</p>
 <blockquote>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="26%" />
 <col width="33%" />
@@ -874,8 +881,7 @@ inherit-category(access-tag, traversal-tag) =
 convertible to one or more of: <tt class="literal"><span class="pre">readable_iterator_tag</span></tt>,
 <tt class="literal"><span class="pre">writable_iterator_tag</span></tt>, <tt class="literal"><span class="pre">swappable_iterator_tag</span></tt>, or if the
 argument for <tt class="literal"><span class="pre">TraversalTag</span></tt> is not convertible to
-<tt class="literal"><span class="pre">incrementable_iterator_tag</span></tt> then the behavior of <tt class="literal"><span class="pre">iterator_tag</span></tt>
-is not defined.</p>
+<tt class="literal"><span class="pre">incrementable_iterator_tag</span></tt> then the programm is ill-formed.</p>
 <p>The <tt class="literal"><span class="pre">access_category</span></tt> and <tt class="literal"><span class="pre">traversal_category</span></tt> class templates are
 traits classes. For iterators whose
 <tt class="literal"><span class="pre">iterator_traits&lt;Iter&gt;::iterator_category</span></tt> type is <tt class="literal"><span class="pre">iterator_tag</span></tt>,
