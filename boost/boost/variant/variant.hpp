@@ -174,14 +174,18 @@ const void* null_storage::address() const
 // Provides an aligned storage type capable of holding any of the types
 // specified in the given type-sequence.
 //
-template <typename Types>
+template <typename Types, typename NeverUsesBackupFlag>
 struct make_storage
 {
 private: // helpers, for metafunction result (below)
 
-    typedef typename mpl::push_front<
-          Types
-        , backup_holder<void*>
+    typedef typename mpl::apply_if<
+          NeverUsesBackupFlag
+        , mpl::identity< Types >
+        , mpl::push_front<
+              Types
+            , backup_holder<void*>
+            >
         >::type types;
     typedef typename max_value<
           types, mpl::sizeof_<mpl::_1>
@@ -967,8 +971,12 @@ private: // helpers, for representation (below)
     {
     };
 
-    typedef typename detail::variant::make_storage<internal_types>::type
-        storage_t;
+    typedef T0_has_nothrow_constructor_
+        never_uses_backup_flag;
+
+    typedef typename detail::variant::make_storage<
+          internal_types, never_uses_backup_flag
+        >::type storage_t;
 
 private: // helpers, for representation (below)
 
@@ -1424,8 +1432,10 @@ private: // helpers, for modifiers (below)
         {
             typedef typename has_nothrow_copy<RhsT>::type
                 nothrow_copy;
-            typedef typename detail::variant::has_nothrow_move_constructor<RhsT>::type
-                nothrow_move_constructor;
+            typedef typename mpl::or_< // reduces compile-time
+                  nothrow_copy
+                , detail::variant::has_nothrow_move_constructor<RhsT>
+                >::type nothrow_move_constructor;
 
             assign_impl(
                   rhs_content
@@ -1633,6 +1643,7 @@ public:
         return detail::variant::visitation_impl(
               which_, which()
             , visitor, storage_.address(), mpl::false_()
+            , never_uses_backup_flag()
             , static_cast<first_which*>(0), static_cast<first_step*>(0)
             );
     }
@@ -1653,6 +1664,7 @@ public:
         return detail::variant::visitation_impl(
               which_, which()
             , visitor, storage_.address(), mpl::false_()
+            , never_uses_backup_flag()
             , static_cast<first_which*>(0), static_cast<first_step*>(0)
             );
     }

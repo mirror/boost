@@ -31,10 +31,13 @@
 #include "boost/mpl/identity.hpp"
 #include "boost/mpl/int.hpp"
 #include "boost/mpl/next.hpp"
+#include "boost/mpl/or.hpp"
 #include "boost/preprocessor/cat.hpp"
 #include "boost/preprocessor/inc.hpp"
 #include "boost/preprocessor/repeat.hpp"
-#include "boost/type_traits.hpp"
+#include "boost/type_traits/is_same.hpp"
+#include "boost/type_traits/has_nothrow_copy.hpp"
+#include "boost/variant/detail/has_nothrow_move.hpp"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -117,10 +120,22 @@ struct visitation_impl_step
 template <typename Visitor, typename VoidPtrCV, typename T>
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-visitation_impl_invoke(
-      int internal_which
-    , Visitor& visitor, VoidPtrCV storage, T*
-    , int
+visitation_impl_invoke_impl(
+      int, Visitor& visitor, VoidPtrCV storage, T*
+    , mpl::true_// never_uses_backup
+    )
+{
+    return visitor.internal_visit(
+          cast_storage<T>(storage), 1L
+        );
+}
+
+template <typename Visitor, typename VoidPtrCV, typename T>
+inline
+    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
+visitation_impl_invoke_impl(
+      int internal_which, Visitor& visitor, VoidPtrCV storage, T*
+    , mpl::false_// never_uses_backup
     )
 {
     if (internal_which >= 0)
@@ -137,10 +152,31 @@ visitation_impl_invoke(
     }
 }
 
-template <typename Visitor, typename VoidPtrCV>
+template <typename Visitor, typename VoidPtrCV, typename T, typename NoBackupFlag>
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-visitation_impl_invoke(int, Visitor&, VoidPtrCV, apply_visitor_unrolled*, long)
+visitation_impl_invoke(
+      int internal_which, Visitor& visitor, VoidPtrCV storage, T* t
+    , NoBackupFlag
+    , int
+    )
+{
+    typedef typename mpl::or_<
+          NoBackupFlag
+        , has_nothrow_move_constructor<T>
+        , has_nothrow_copy<T>
+        >::type never_uses_backup;
+
+    return visitation_impl_invoke_impl(
+          internal_which, visitor, storage, t
+        , never_uses_backup()
+        );
+}
+
+template <typename Visitor, typename VoidPtrCV, typename NBF>
+inline
+    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
+visitation_impl_invoke(int, Visitor&, VoidPtrCV, apply_visitor_unrolled*, NBF, long)
 {
     // should never be here at runtime:
     BOOST_ASSERT(false);
@@ -157,13 +193,14 @@ visitation_impl_invoke(int, Visitor&, VoidPtrCV, apply_visitor_unrolled*, long)
 template <
       typename W, typename S
     , typename Visitor, typename VPCV
+    , typename NBF
     >
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
 visitation_impl(
       int, int, Visitor&, VPCV
     , mpl::true_ // is_apply_visitor_unrolled
-    , W* = 0, S* = 0
+    , NBF, W* = 0, S* = 0
     )
 {
     // should never be here at runtime:
@@ -175,6 +212,7 @@ visitation_impl(
 template <
       typename Which, typename step0
     , typename Visitor, typename VoidPtrCV
+    , typename NoBackupFlag
     >
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
@@ -182,6 +220,7 @@ visitation_impl(
       const int internal_which, const int logical_which
     , Visitor& visitor, VoidPtrCV storage
     , mpl::false_ // is_apply_visitor_unrolled
+    , NoBackupFlag no_backup_flag
     , Which* = 0, step0* = 0
     )
 {
@@ -209,7 +248,8 @@ visitation_impl(
     case (Which::value + (N)): \
         return visitation_impl_invoke( \
               internal_which, visitor, storage \
-            , static_cast<BOOST_PP_CAT(T,N)*>(0), 1L \
+            , static_cast<BOOST_PP_CAT(T,N)*>(0) \
+            , no_backup_flag, 1L \
             ); \
     /**/
 
@@ -239,6 +279,7 @@ visitation_impl(
           internal_which, logical_which
         , visitor, storage
         , is_apply_visitor_unrolled()
+        , no_backup_flag
         , static_cast<next_which*>(0), static_cast<next_step*>(0)
         );
 }
