@@ -339,7 +339,7 @@
             <xsl:when test="$highlight">
               <xsl:apply-templates 
                 select="$parameter/default/*|$parameter/default/text()" 
-                mode="annotation"/>
+                mode="highlight"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="string($parameter/default)"/>
@@ -389,24 +389,20 @@
     </xsl:call-template>
 
     <xsl:variable name="def">
-      <xsl:if test="$parameter/default">
-        <xsl:choose>
-          <xsl:when test="$highlight">
-            <xsl:apply-templates 
-              select="$parameter/default/*|$parameter/default/text()" 
-              mode="annotation"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="string($parameter/default)"/>
-          </xsl:otherwise>
-        </xsl:choose>        
-      </xsl:if>
+      <xsl:value-of select="string($parameter/default)"/>
     </xsl:variable>
 
     <xsl:if test="not($def='')">
       <xsl:text> = </xsl:text>
 
-      <xsl:copy-of select="$def"/>
+      <xsl:choose>
+        <xsl:when test="$highlight">
+          <xsl:apply-templates select="$parameter/default/*" mode="highlight"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$def"/>
+        </xsl:otherwise>
+      </xsl:choose>
 
       <!-- If this is the last parameter, add an extra space to
            avoid printing >> -->
@@ -422,8 +418,11 @@
   </xsl:template>
 
   <xsl:template match="specialization">
+    <xsl:param name="highlight" select="true()"/>
     <xsl:text>&lt;</xsl:text>
-    <xsl:apply-templates select="template-arg"/>
+    <xsl:apply-templates select="template-arg">
+      <xsl:with-param name="highlight" select="$highlight"/>
+    </xsl:apply-templates>
     <xsl:text>&gt;</xsl:text>
   </xsl:template>
 
@@ -431,7 +430,7 @@
     <xsl:if test="position() &gt; 1">
       <xsl:text>, </xsl:text>
     </xsl:if>
-    <xsl:apply-templates mode="annotation"/>
+    <xsl:apply-templates mode="highlight"/>
   </xsl:template>
 </xsl:stylesheet>
 
