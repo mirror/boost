@@ -82,6 +82,6 @@
   <xi:include href="howto.xml"/>
   <xi:include href="design.xml"/>
   <xi:include href="acknowledgements.xml"/>    
-  
+   
   <xi:include href="autodoc.boostbook"/> 
 </library>

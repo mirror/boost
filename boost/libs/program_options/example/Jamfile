@@ -11,6 +11,13 @@ program-options-example first ;
 program-options-example options_description ;
 program-options-example multiple_sources ;
 program-options-example custom_syntax ;
+program-options-example response_file ;
+program-options-example option_groups ;
+program-options-example real ;
+program-options-example regex <lib>../../regex/build/boost_regex ;
 
-#program-options-example real ;
-#program-options-example regex <lib>../../regex/build/boost_regex ;
+
+#program-options-example prefix ;
+
+
+

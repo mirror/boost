@@ -20,7 +20,7 @@ void conflicting_options(const variables_map& vm,
     if (vm.count(opt1) && !vm[opt1].defaulted() 
         && vm.count(opt2) && !vm[opt2].defaulted())
         throw logic_error(string("Conflicting options '") 
-                          + opt1 + "' and '" + opt2 + "'");
+                          + opt1 + "' and '" + opt2 + "'.");
 }
 
 /* Function used to check that of 'for_what' is specified, then
@@ -31,33 +31,7 @@ void option_dependency(const variables_map& vm,
     if (vm.count(for_what) && !vm[for_what].defaulted())
         if (vm.count(required_option) == 0 || vm[required_option].defaulted())
             throw logic_error(string("Option '") + for_what 
-                              + "' requires option '" + required_option + "'");
-}
-
-/* Custom class for describing option. Allows to specify that the option is
-  'internal'.
-*/
-class custom_description : public option_description_easy_init<custom_description> {
-public:
-    custom_description() : m_internal(false) {}
-    void internal() { m_internal = true ; }
-    bool is_internal() const { return m_internal; }
-    
-private:
-    bool m_internal;            
-};
-
-
-/* Custom function for formatting one option. Does not print description for
-   internal options, and prints description on a separate line for all others. */
-void format_option(ostream& os, const option_description& desc)
-{
-    os << "  " << desc.format_name() << " " << desc.format_parameter();
-    const custom_description* d;
-    if ((d = dynamic_cast<const custom_description*>(&desc)) && d->is_internal()) 
-        os <<  "  (internal)\n";
-    else    
-        os << "\n      " << desc.description() << "\n";
+                              + "' requires option '" + required_option + "'.");
 }
 
 int main(int argc, char* argv[])
@@ -73,30 +47,30 @@ int main(int argc, char* argv[])
         string root = ".";
 
         options_description desc("Allowed options");
-        desc.add_options<custom_description>()
+        desc.add_options()
         // First parameter describes option name/short name
         // The second is parameter to option
         // The third is description
-        ("help,h", "", "print usage message")
-        ("output,o", value("<pathname>", &ofile), "pathname for output")
-        ("macrofile,m", value("<macrofile>", &macrofile), "full pathname of macro.h")
-        ("two,t", value("", &t_given), "preprocess both header and body")
-        ("body,b", value("", &b_given), "preprocess body in the header context")
-        ("libmakfile,l", value("<pathname>", &libmakfile), "write include makefile for library")
-        ("mainpackage,p", value("<name>", &mainpackage), "output dependency information")
-        ("depends,d", value("<pathname>", &depends), "write dependendies to <pathname>")
-        ("sources,s", value("<pathname>", &sources), "write source package list to <pathname>")
-        ("root,r", value("<pathname>", &root), "treat <dirname> as project root directory")
-        ("foo", "", "").default_value("10").internal()
+        ("help,h", "print usage message")
+        ("output,o", value(&ofile), "pathname for output")
+        ("macrofile,m", value(&macrofile), "full pathname of macro.h")
+        ("two,t", bool_switch(&t_given), "preprocess both header and body")
+        ("body,b", bool_switch(&b_given), "preprocess body in the header context")
+        ("libmakfile,l", value(&libmakfile), 
+             "write include makefile for library")
+        ("mainpackage,p", value(&mainpackage), 
+             "output dependency information")
+        ("depends,d", value(&depends), 
+         "write dependendies to <pathname>")
+        ("sources,s", value(&sources), "write source package list to <pathname>")
+        ("root,r", value(&root), "treat <dirname> as project root directory")
         ;
     
-        options_and_arguments oa = parse_command_line(argc, argv, desc);
         variables_map vm;
-        store(oa, vm, desc);
+        store(parse_command_line(argc, argv, desc), vm);
 
-        if (vm.count("help")) {
-            desc.output(cout, format_option);
-            cout << "\n";
+        if (vm.count("help")) {  
+            cout << desc << "\n";
             return 0;
         }
 
