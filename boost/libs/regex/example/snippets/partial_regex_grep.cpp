@@ -20,7 +20,12 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <cstring>
 #include <boost/regex.hpp>
+
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std{ using ::memmove; }
+#endif
 
 // match some kind of html tag:
 boost::regex e("<[^>]*>");
@@ -53,7 +58,7 @@ void search(std::istream& is)
       // and how much is left to fill:
       unsigned size = next_pos - buf;
       // copy forward whatever we have left:
-      memmove(buf, next_pos, leftover);
+      std::memmove(buf, next_pos, leftover);
       // fill the rest from the stream:
       is.read(buf + leftover, size);
       unsigned read = is.gcount();

@@ -127,8 +127,8 @@ int main(int argc, char * argv[])
       p.add("input-file", -1);
 
       po::variables_map vm;
-      store(po::command_line_parser(argc, argv).options(cmdline_options)/*.options(hidden)*/.positional(p).run(), vm);
-      notify(vm);
+      po::store(po::command_line_parser(argc, argv).options(cmdline_options)/*.options(hidden)*/.positional(p).run(), vm);
+      po::notify(vm);
 
       if (vm.count("help")) 
       {
