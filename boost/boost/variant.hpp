@@ -25,6 +25,7 @@
 // common applications
 #include "boost/variant/get.hpp"
 #include "boost/variant/apply_visitor.hpp"
+#include "boost/variant/variant_before.hpp"
 #include "boost/variant/static_visitor.hpp"
 #include "boost/variant/visitor_ptr.hpp"
 
