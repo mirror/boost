@@ -159,7 +159,7 @@ static void scan_and_count(void const * area, size_t size, map_type const & m, s
     {
         shared_ptr_layout const * q = reinterpret_cast<shared_ptr_layout const *>(p);
 
-        if(q->pn.id == boost::detail::shared_count_id && m.count(q->pn.pi) != 0)
+        if(q->pn.id == boost::detail::shared_count_id && q->pn.pi != 0 && m.count(q->pn.pi) != 0)
         {
             ++m2[q->pn.pi];
         }
@@ -175,7 +175,7 @@ static bool scan_and_mark(void const * area, size_t size, map_type const & m, st
     {
         shared_ptr_layout const * q = reinterpret_cast<shared_ptr_layout const *>(p);
 
-        if(q->pn.id == boost::detail::shared_count_id && m.count(q->pn.pi) != 0)
+        if(q->pn.id == boost::detail::shared_count_id && q->pn.pi != 0 && m.count(q->pn.pi) != 0)
         {
             // mark as reachable
 
