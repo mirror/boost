@@ -114,10 +114,14 @@ namespace date_time {
     typedef typename time_rep_type::date_type date_type;
     typedef typename time_rep_type::date_duration_type date_duration_type;
 
+
+    template<class T> static void unused_var(const T&) {}
+
     static time_rep_type get_time_rep(const date_type& day,
                                       const time_duration_type& tod,
                                       date_time::dst_flags dst=not_dst)
     {
+      unused_var(dst);
       return time_rep_type(day, tod);
     }
     static date_type get_date(const time_rep_type& val)
