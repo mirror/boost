@@ -93,12 +93,25 @@ struct bitset_test {
   // PRE: std::equal(first1, last1, first2) == true
   static void from_block_range(std::vector<Block> blocks)
   {
-    Bitset bset(blocks.begin(), blocks.end());
-    std::size_t n = blocks.size();
-    for (std::size_t b = 0; b < n; ++b) {
-      for (std::size_t i = 0; i < sizeof(Block) * CHAR_BIT; ++i) {
-        std::size_t bit = b * sizeof(Block) * CHAR_BIT + i;
-        BOOST_CHECK(bset[bit] == nth_bit(blocks[b], i));
+    {
+      Bitset bset(blocks.begin(), blocks.end());
+      std::size_t n = blocks.size();
+      for (std::size_t b = 0; b < n; ++b) {
+	for (std::size_t i = 0; i < sizeof(Block) * CHAR_BIT; ++i) {
+	  std::size_t bit = b * sizeof(Block) * CHAR_BIT + i;
+	  BOOST_CHECK(bset[bit] == nth_bit(blocks[b], i));
+	}
+      }
+    }
+    {
+      Bitset bset(blocks.size() * sizeof(Block) * CHAR_BIT);
+      boost::from_block_range(blocks.begin(), blocks.end(), bset);
+      std::size_t n = blocks.size();
+      for (std::size_t b = 0; b < n; ++b) {
+	for (std::size_t i = 0; i < sizeof(Block) * CHAR_BIT; ++i) {
+	  std::size_t bit = b * sizeof(Block) * CHAR_BIT + i;
+	  BOOST_CHECK(bset[bit] == nth_bit(blocks[b], i));
+	}
       }
     }
   }
