@@ -24,7 +24,9 @@
 # define BOOST_PP_CONFIG_EDG() 0x0020
 #
 # ifndef BOOST_PP_CONFIG_FLAGS
-#    if defined(__EDG__) || defined(__EDG_VERSION__)
+#    if defined(__SPIRIT_PP__)
+#        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_STRICT())
+#    elif defined(__EDG__) || defined(__EDG_VERSION__)
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_EDG() | BOOST_PP_CONFIG_STRICT())
 #    elif defined(__MWERKS__)
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_MWCC())
