@@ -65,6 +65,7 @@ int main() {
   for ( i = loops; i--; )
     { time_waster = loop_timer.elapsed() < time; ++pd; }
 
+  if ( time_waster ) cout << ' ';  // using time_waster quiets compiler warnings
   progress_display pd2( 50, cout, "\nLead string 1 ", "Lead string 2 ", "Lead string 3 " );
   for ( ; pd2.count() < 50; ++pd2 ) {}
 
