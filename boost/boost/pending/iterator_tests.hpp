@@ -201,6 +201,8 @@ void bidirectional_iterator_test(Iterator i, T v1, T v2)
 
 // mutable_bidirectional_iterator_test
 
+template <class U> struct undefined;
+
 // Preconditions: [i,i+N) is a valid range
 template <class Iterator, class TrueVals>
 void random_access_iterator_test(Iterator i, int N, TrueVals vals)
