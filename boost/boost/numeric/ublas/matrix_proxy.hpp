@@ -520,18 +520,18 @@ namespace boost { namespace numeric { namespace ublas {
     // Projections
     template<class M>
     BOOST_UBLAS_INLINE
-    matrix_row<M> row (M &data, std::size_t i) {
+    matrix_row<M> row (M &data, typename M::size_type i) {
         return matrix_row<M> (data, i);
     }
     template<class M>
     BOOST_UBLAS_INLINE
-    matrix_row<const M> row_const (const M &data, std::size_t i) {
+    matrix_row<const M> row_const (const M &data, typename M::size_type i) {
         return matrix_row<const M> (data, i);
     }
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class M>
     BOOST_UBLAS_INLINE
-    matrix_row<M> row (const M &data, std::size_t i) {
+    matrix_row<M> row (const M &data, typename M::size_type i) {
         return matrix_row<M> (const_cast<M &> (data), i);
     }
 #endif
@@ -1031,18 +1031,18 @@ namespace boost { namespace numeric { namespace ublas {
     // Projections
     template<class M>
     BOOST_UBLAS_INLINE
-    matrix_column<M> column (M &data, std::size_t j) {
+    matrix_column<M> column (M &data, typename M::size_type j) {
         return matrix_column<M> (data, j);
     }
     template<class M>
     BOOST_UBLAS_INLINE
-    matrix_column<const M> column_const (const M &data, std::size_t j) {
+    matrix_column<const M> column_const (const M &data, typename M::size_type j) {
         return matrix_column<const M> (data, j);
     }
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class M>
     BOOST_UBLAS_INLINE
-    matrix_column<M> column (const M &data, std::size_t j) {
+    matrix_column<M> column (const M &data, typename M::size_type j) {
         return matrix_column<M> (const_cast<M &> (data), j);
     }
 #endif
