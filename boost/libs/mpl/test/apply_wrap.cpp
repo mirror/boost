@@ -62,11 +62,15 @@
 /**/
 
 namespace { namespace test {
+
 BOOST_PP_REPEAT(
       BOOST_MPL_LIMIT_METAFUNCTION_ARITY
     , APPLY_FUNC_DEF
     , unused
     )
+
+struct g0 { struct apply { typedef char type; }; };
+
 }}
 
 #define APPLY_0_TEST(i, apply_) \
@@ -107,4 +111,11 @@ MPL_TEST_CASE()
         , APPLY_TEST
         , unused
         )
+
+#if !defined(BOOST_MPL_CFG_NO_HAS_APPLY)
+    {
+        typedef apply_wrap0<test::g0>::type t;
+        MPL_ASSERT(( boost::is_same<t, char> ));
+    }
+#endif
 }

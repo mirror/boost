@@ -21,6 +21,7 @@ struct a1 {};
 struct a2 { void xxx(); };
 struct a3 { int xxx; };
 struct a4 { static int xxx(); };
+struct a5 { template< typename T > struct xxx {}; };
 
 struct b1 { typedef int xxx; };
 struct b2 { struct xxx; };
@@ -50,6 +51,7 @@ MPL_TEST_CASE()
     MPL_ASSERT_NOT(( has_xxx<a2> ));
     MPL_ASSERT_NOT(( has_xxx<a3> ));
     MPL_ASSERT_NOT(( has_xxx<a4> ));
+    MPL_ASSERT_NOT(( has_xxx<a5> ));
     MPL_ASSERT_NOT(( has_xxx< enum_ > ));
 #endif
     MPL_ASSERT_NOT(( has_xxx<a1> ));
@@ -58,13 +60,13 @@ MPL_TEST_CASE()
     MPL_ASSERT_NOT(( has_xxx< abstract > ));
     MPL_ASSERT_NOT(( has_xxx< noncopyable > ));
 
-    MPL_ASSERT(( has_xxx<b1,true> ));
-    MPL_ASSERT(( has_xxx<b2,true> ));
-    MPL_ASSERT(( has_xxx<b3,true> ));
-    MPL_ASSERT(( has_xxx<b4,true> ));
-    MPL_ASSERT(( has_xxx<b5,true> ));
-    MPL_ASSERT(( has_xxx<b6,true> ));
-    MPL_ASSERT(( has_xxx<b7,true> ));
+    MPL_ASSERT(( has_xxx<b1,true_> ));
+    MPL_ASSERT(( has_xxx<b2,true_> ));
+    MPL_ASSERT(( has_xxx<b3,true_> ));
+    MPL_ASSERT(( has_xxx<b4,true_> ));
+    MPL_ASSERT(( has_xxx<b5,true_> ));
+    MPL_ASSERT(( has_xxx<b6,true_> ));
+    MPL_ASSERT(( has_xxx<b7,true_> ));
 
 #if !defined(HAS_XXX_ASSERT)
 #   define HAS_XXX_ASSERT(x) MPL_ASSERT(x)
