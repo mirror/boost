@@ -20,15 +20,15 @@ implements a simple C-like array using allocation via
 <code>new/delete</code>.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/storage.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    unbounded_array&lt;double&gt; a (3);<br />
-    for (unsigned i = 0; i &lt; a.size (); ++ i) {<br />
-        a [i] = i;<br />
-        std::cout &lt;&lt; a [i] &lt;&lt; std::endl;<br />
-    }<br />
+#include &lt;boost/numeric/ublas/storage.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    unbounded_array&lt;double&gt; a (3);
+    for (unsigned i = 0; i &lt; a.size (); ++ i) {
+        a [i] = i;
+        std::cout &lt;&lt; a [i] &lt;&lt; std::endl;
+    }
 }
 </pre>
 <h4>Definition</h4>
@@ -178,16 +178,16 @@ Array</h2>
 implements a simple C-like array.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/storage.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    bounded_array&lt;double, 3&gt; a (3);<br />
-    for (unsigned i = 0; i &lt; a.size (); ++ i) {<br />
-        a [i] = i;<br />
-        std::cout &lt;&lt; a [i] &lt;&lt; std::endl;<br />
-    }<br />
-}<br />
+#include &lt;boost/numeric/ublas/storage.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    bounded_array&lt;double, 3&gt; a (3);
+    for (unsigned i = 0; i &lt; a.size (); ++ i) {
+        a [i] = i;
+        std::cout &lt;&lt; a [i] &lt;&lt; std::endl;
+    }
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header storage.hpp.</p>
@@ -338,15 +338,15 @@ the reversed <code>bounded_array</code>.</td>
 needed to address ranges of vectors and matrices.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/storage.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    range r (0, 3);<br />
-    for (unsigned i = 0; i &lt; r.size (); ++ i) {<br />
-        std::cout &lt;&lt; r (i) &lt;&lt; std::endl;<br />
-    }<br />
-}<br />
+#include &lt;boost/numeric/ublas/storage.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    range r (0, 3);
+    for (unsigned i = 0; i &lt; r.size (); ++ i) {
+        std::cout &lt;&lt; r (i) &lt;&lt; std::endl;
+    }
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header storage.hpp.</p>
@@ -428,15 +428,15 @@ end of the reversed <code>range</code>.</td>
 needed to address slices of vectors and matrices.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/storage.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    slice s (0, 1, 3);<br />
-    for (unsigned i = 0; i &lt; s.size (); ++ i) {<br />
-        std::cout &lt;&lt; s (i) &lt;&lt; std::endl;<br />
-    }<br />
-}<br />
+#include &lt;boost/numeric/ublas/storage.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    slice s (0, 1, 3);
+    for (unsigned i = 0; i &lt; s.size (); ++ i) {
+        std::cout &lt;&lt; s (i) &lt;&lt; std::endl;
+    }
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header storage.hpp.</p>

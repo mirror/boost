@@ -23,21 +23,21 @@ For a <em>(n x n</em> )-dimensional symmetric matrix and <em>0
 i</em></sub>. The storage of symmetric matrices is packed.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/symmetric.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    symmetric_matrix&lt;double, lower&gt; ml (3, 3);<br />
-    for (unsigned i = 0; i &lt; ml.size1 (); ++ i)<br />
-        for (unsigned j = 0; j &lt;= i; ++ j)<br />
-            ml (i, j) = 3 * i + j;<br />
-    std::cout &lt;&lt; ml &lt;&lt; std::endl;<br />
-    symmetric_matrix&lt;double, upper&gt; mu (3, 3);<br />
-    for (unsigned i = 0; i &lt; mu.size1 (); ++ i)<br />
-        for (unsigned j = i; j &lt; mu.size2 (); ++ j)<br />
-            mu (i, j) = 3 * i + j;<br />
-    std::cout &lt;&lt; mu &lt;&lt; std::endl;<br />
+#include &lt;boost/numeric/ublas/symmetric.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    symmetric_matrix&lt;double, lower&gt; ml (3, 3);
+    for (unsigned i = 0; i &lt; ml.size1 (); ++ i)
+        for (unsigned j = 0; j &lt;= i; ++ j)
+            ml (i, j) = 3 * i + j;
+    std::cout &lt;&lt; ml &lt;&lt; std::endl;
+    symmetric_matrix&lt;double, upper&gt; mu (3, 3);
+    for (unsigned i = 0; i &lt; mu.size1 (); ++ i)
+        for (unsigned j = i; j &lt; mu.size2 (); ++ j)
+            mu (i, j) = 3 * i + j;
+    std::cout &lt;&lt; mu &lt;&lt; std::endl;
 }
 </pre>
 <h4>Definition</h4>
@@ -323,22 +323,22 @@ Symmetric Adaptor</h2>
 is a symmetric matrix adaptor for other matrices.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/symmetric.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    matrix&lt;double&gt; m (3, 3);<br />
-    symmetric_adaptor&lt;matrix&lt;double&gt;, lower&gt; sal (m);<br />
-    for (unsigned i = 0; i &lt; sal.size1 (); ++ i)<br />
-        for (unsigned j = 0; j &lt;= i; ++ j)<br />
-            sal (i, j) = 3 * i + j;<br />
-    std::cout &lt;&lt; sal &lt;&lt; std::endl;<br />
-    symmetric_adaptor&lt;matrix&lt;double&gt;, upper&gt; sau (m);<br />
-    for (unsigned i = 0; i &lt; sau.size1 (); ++ i)<br />
-        for (unsigned j = i; j &lt; sau.size2 (); ++ j)<br />
-            sau (i, j) = 3 * i + j;<br />
-    std::cout &lt;&lt; sau &lt;&lt; std::endl;<br />
+#include &lt;boost/numeric/ublas/symmetric.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    matrix&lt;double&gt; m (3, 3);
+    symmetric_adaptor&lt;matrix&lt;double&gt;, lower&gt; sal (m);
+    for (unsigned i = 0; i &lt; sal.size1 (); ++ i)
+        for (unsigned j = 0; j &lt;= i; ++ j)
+            sal (i, j) = 3 * i + j;
+    std::cout &lt;&lt; sal &lt;&lt; std::endl;
+    symmetric_adaptor&lt;matrix&lt;double&gt;, upper&gt; sau (m);
+    for (unsigned i = 0; i &lt; sau.size1 (); ++ i)
+        for (unsigned j = i; j &lt; sau.size2 (); ++ j)
+            sau (i, j) = 3 * i + j;
+    std::cout &lt;&lt; sau &lt;&lt; std::endl;
 }
 </pre>
 <h4>Definition</h4>

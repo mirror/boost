@@ -24,26 +24,26 @@ i</em></sub><sup><em>-</em></sup>. The storage of hermitian
 matrices is packed.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/hermitian.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    hermitian_matrix&lt;std::complex&lt;double&gt;, lower&gt; ml (3, 3);<br />
-    for (unsigned i = 0; i &lt; ml.size1 (); ++ i) {<br />
-        for (unsigned j = 0; j &lt; i; ++ j)<br />
-            ml (i, j) = std::complex&lt;double&gt; (3 * i + j, 3 * i + j);<br />
-        ml (i, i) = std::complex&lt;double&gt; (4 * i, 0);<br />
-    }<br />
-    std::cout &lt;&lt; ml &lt;&lt; std::endl;<br />
-    hermitian_matrix&lt;std::complex&lt;double&gt;, upper&gt; mu (3, 3);<br />
-    for (unsigned i = 0; i &lt; mu.size1 (); ++ i) {<br />
-        mu (i, i) = std::complex&lt;double&gt; (4 * i, 0);<br />
-        for (unsigned j = i + 1; j &lt; mu.size2 (); ++ j)<br />
-            mu (i, j) = std::complex&lt;double&gt; (3 * i + j, 3 * i + j);<br />
-    }<br />
-    std::cout &lt;&lt; mu &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/hermitian.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    hermitian_matrix&lt;std::complex&lt;double&gt;, lower&gt; ml (3, 3);
+    for (unsigned i = 0; i &lt; ml.size1 (); ++ i) {
+        for (unsigned j = 0; j &lt; i; ++ j)
+            ml (i, j) = std::complex&lt;double&gt; (3 * i + j, 3 * i + j);
+        ml (i, i) = std::complex&lt;double&gt; (4 * i, 0);
+    }
+    std::cout &lt;&lt; ml &lt;&lt; std::endl;
+    hermitian_matrix&lt;std::complex&lt;double&gt;, upper&gt; mu (3, 3);
+    for (unsigned i = 0; i &lt; mu.size1 (); ++ i) {
+        mu (i, i) = std::complex&lt;double&gt; (4 * i, 0);
+        for (unsigned j = i + 1; j &lt; mu.size2 (); ++ j)
+            mu (i, j) = std::complex&lt;double&gt; (3 * i + j, 3 * i + j);
+    }
+    std::cout &lt;&lt; mu &lt;&lt; std::endl;
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header hermitian.hpp.</p>
@@ -328,26 +328,26 @@ Hermitian Adaptor</h2>
 is a hermitian matrix adaptor for other matrices.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/hermitian.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    matrix&lt;std::complex&lt;double&gt; &gt; m (3, 3);<br />
-    hermitian_adaptor&lt;matrix&lt;std::complex&lt;double&gt; &gt;, lower&gt; hal (m);<br />
-    for (unsigned i = 0; i &lt; hal.size1 (); ++ i) {<br />
-        for (unsigned j = 0; j &lt; i; ++ j)<br />
-            hal (i, j) = std::complex&lt;double&gt; (3 * i + j, 3 * i + j);<br />
-        hal (i, i) = std::complex&lt;double&gt; (4 * i, 0);<br />
-    }<br />
-    std::cout &lt;&lt; hal &lt;&lt; std::endl;<br />
-    hermitian_adaptor&lt;matrix&lt;std::complex&lt;double&gt; &gt;, upper&gt; hau (m);<br />
-    for (unsigned i = 0; i &lt; hau.size1 (); ++ i) {<br />
-        hau (i, i) = std::complex&lt;double&gt; (4 * i, 0);<br />
-        for (unsigned j = i + 1; j &lt; hau.size2 (); ++ j)<br />
-            hau (i, j) = std::complex&lt;double&gt; (3 * i + j, 3 * i + j);<br />
-    }<br />
-    std::cout &lt;&lt; hau &lt;&lt; std::endl;<br />
+#include &lt;boost/numeric/ublas/hermitian.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    matrix&lt;std::complex&lt;double&gt; &gt; m (3, 3);
+    hermitian_adaptor&lt;matrix&lt;std::complex&lt;double&gt; &gt;, lower&gt; hal (m);
+    for (unsigned i = 0; i &lt; hal.size1 (); ++ i) {
+        for (unsigned j = 0; j &lt; i; ++ j)
+            hal (i, j) = std::complex&lt;double&gt; (3 * i + j, 3 * i + j);
+        hal (i, i) = std::complex&lt;double&gt; (4 * i, 0);
+    }
+    std::cout &lt;&lt; hal &lt;&lt; std::endl;
+    hermitian_adaptor&lt;matrix&lt;std::complex&lt;double&gt; &gt;, upper&gt; hau (m);
+    for (unsigned i = 0; i &lt; hau.size1 (); ++ i) {
+        hau (i, i) = std::complex&lt;double&gt; (4 * i, 0);
+        for (unsigned j = i + 1; j &lt; hau.size2 (); ++ j)
+            hau (i, j) = std::complex&lt;double&gt; (3 * i + j, 3 * i + j);
+    }
+    std::cout &lt;&lt; hau &lt;&lt; std::endl;
 }
 </pre>
 <h4>Definition</h4>

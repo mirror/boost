@@ -21,16 +21,16 @@ vector and <em>0 &lt;= i &lt; n</em> every element
 element of the container.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    vector&lt;double&gt; v (3);<br />
-    for (unsigned i = 0; i &lt; v.size (); ++ i)<br />
-        v (i) = i;<br />
-    std::cout &lt;&lt; v &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v (3);
+    for (unsigned i = 0; i &lt; v.size (); ++ i)
+        v (i) = i;
+    std::cout &lt;&lt; v &lt;&lt; std::endl;
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header vector.hpp.</p>
@@ -254,16 +254,16 @@ n</em> holds <em>u</em><sup><em>k</em></sup><sub><em>i</em></sub>
 1</em>.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    for (int i = 0; i &lt; 3; ++ i) {<br />
-        unit_vector&lt;double&gt; v (3, i);<br />
-        std::cout &lt;&lt; v &lt;&lt; std::endl;<br />
-    }<br />
-}<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    for (int i = 0; i &lt; 3; ++ i) {
+        unit_vector&lt;double&gt; v (3, i);
+        std::cout &lt;&lt; v &lt;&lt; std::endl;
+    }
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header vector.hpp.</p>
@@ -381,14 +381,14 @@ zero vectors. For a <em>n</em>-dimensional zero vector and <em>0
 0</em>.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    zero_vector&lt;double&gt; v (3);<br />
-    std::cout &lt;&lt; v &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    zero_vector&lt;double&gt; v (3);
+    std::cout &lt;&lt; v &lt;&lt; std::endl;
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header vector.hpp.</p>
@@ -503,14 +503,14 @@ vector and <em>0 &lt;= i &lt; n</em> holds
 <em>z</em><sub><em>i</em></sub> <em>= s</em>.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    scalar_vector&lt;double&gt; v (3);<br />
-    std::cout &lt;&lt; v &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    scalar_vector&lt;double&gt; v (3);
+    std::cout &lt;&lt; v &lt;&lt; std::endl;
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header vector.hpp.</p>

@@ -317,40 +317,40 @@ end of the reversed expression.</td>
 <h3>Unary Operations</h3>
 <h4>Prototypes</h4>
 <pre>
-<code>template&lt;class E, class F&gt;<br />
-    struct vector_unary_traits {<br />
-        typedef vector_unary&lt;typename E::const_closure_type, F&gt; expression_type;<br />
-        typedef expression_type result_type;<br />
-     };<br />
-<br />
-    // (- v) [i] = - v [i]<br />
-    template&lt;class E&gt;<br />
-     typename vector_unary_traits&lt;E, scalar_negate&lt;typename E::value_type&gt; &gt;::result_type<br />
-    operator - (const vector_expression&lt;E&gt; &amp;e);<br />
-<br />
-    // (conj v) [i] = conj (v [i])<br />
-    template&lt;class E&gt;<br />
-     typename vector_unary_traits&lt;E, scalar_conj&lt;typename E::value_type&gt; &gt;::result_type<br />
-    conj (const vector_expression&lt;E&gt; &amp;e);<br />
-<br />
-    // (real v) [i] = real (v [i])<br />
-    template&lt;class E&gt;<br />
-     typename vector_unary_traits&lt;E, scalar_real&lt;typename E::value_type&gt; &gt;::result_type<br />
-    real (const vector_expression&lt;E&gt; &amp;e);<br />
-<br />
-    // (imag v) [i] = imag (v [i])<br />
-    template&lt;class E&gt;<br />
-     typename vector_unary_traits&lt;E, scalar_imag&lt;typename E::value_type&gt; &gt;::result_type<br />
-    imag (const vector_expression&lt;E&gt; &amp;e);<br />
-<br />
-    // (trans v) [i] = v [i]<br />
-    template&lt;class E&gt;<br />
-     typename vector_unary_traits&lt;E, scalar_identity&lt;typename E::value_type&gt; &gt;::result_type<br />
-    trans (const vector_expression&lt;E&gt; &amp;e);<br />
-<br />
-    // (herm v) [i] = conj (v [i])<br />
-    template&lt;class E&gt;<br />
-     typename vector_unary_traits&lt;E, scalar_conj&lt;typename E::value_type&gt; &gt;::result_type<br />
+<code>template&lt;class E, class F&gt;
+    struct vector_unary_traits {
+        typedef vector_unary&lt;typename E::const_closure_type, F&gt; expression_type;
+        typedef expression_type result_type;
+     };
+
+    // (- v) [i] = - v [i]
+    template&lt;class E&gt;
+     typename vector_unary_traits&lt;E, scalar_negate&lt;typename E::value_type&gt; &gt;::result_type
+    operator - (const vector_expression&lt;E&gt; &amp;e);
+
+    // (conj v) [i] = conj (v [i])
+    template&lt;class E&gt;
+     typename vector_unary_traits&lt;E, scalar_conj&lt;typename E::value_type&gt; &gt;::result_type
+    conj (const vector_expression&lt;E&gt; &amp;e);
+
+    // (real v) [i] = real (v [i])
+    template&lt;class E&gt;
+     typename vector_unary_traits&lt;E, scalar_real&lt;typename E::value_type&gt; &gt;::result_type
+    real (const vector_expression&lt;E&gt; &amp;e);
+
+    // (imag v) [i] = imag (v [i])
+    template&lt;class E&gt;
+     typename vector_unary_traits&lt;E, scalar_imag&lt;typename E::value_type&gt; &gt;::result_type
+    imag (const vector_expression&lt;E&gt; &amp;e);
+
+    // (trans v) [i] = v [i]
+    template&lt;class E&gt;
+     typename vector_unary_traits&lt;E, scalar_identity&lt;typename E::value_type&gt; &gt;::result_type
+    trans (const vector_expression&lt;E&gt; &amp;e);
+
+    // (herm v) [i] = conj (v [i])
+    template&lt;class E&gt;
+     typename vector_unary_traits&lt;E, scalar_conj&lt;typename E::value_type&gt; &gt;::result_type
     herm (const vector_expression&lt;E&gt; &amp;e);</code>
 </pre>
 <h4>Description</h4>
@@ -374,21 +374,21 @@ conjugate of the transpose of a vector expression.</p>
 <p>Linear depending from the size of the vector expression.</p>
 <h4>Examples</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    vector&lt;std::complex&lt;double&gt; &gt; v (3);<br />
-    for (unsigned i = 0; i &lt; v.size (); ++ i)<br />
-        v (i) = std::complex&lt;double&gt; (i, i);<br />
-<br />
-    std::cout &lt;&lt; - v &lt;&lt; std::endl;<br />
-    std::cout &lt;&lt; conj (v) &lt;&lt; std::endl;<br />
-    std::cout &lt;&lt; real (v) &lt;&lt; std::endl;<br />
-    std::cout &lt;&lt; imag (v) &lt;&lt; std::endl;<br />
-    std::cout &lt;&lt; trans (v) &lt;&lt; std::endl;<br />
-    std::cout &lt;&lt; herm (v) &lt;&lt; std::endl;<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;std::complex&lt;double&gt; &gt; v (3);
+    for (unsigned i = 0; i &lt; v.size (); ++ i)
+        v (i) = std::complex&lt;double&gt; (i, i);
+
+    std::cout &lt;&lt; - v &lt;&lt; std::endl;
+    std::cout &lt;&lt; conj (v) &lt;&lt; std::endl;
+    std::cout &lt;&lt; real (v) &lt;&lt; std::endl;
+    std::cout &lt;&lt; imag (v) &lt;&lt; std::endl;
+    std::cout &lt;&lt; trans (v) &lt;&lt; std::endl;
+    std::cout &lt;&lt; herm (v) &lt;&lt; std::endl;
 }
 </pre>
 <h3>Binary Operation Description</h3>
@@ -477,25 +477,25 @@ end of the reversed expression.</td>
 <h3>Binary Operations</h3>
 <h4>Prototypes</h4>
 <pre>
-<code>template&lt;class E1, class E2, class F&gt;<br />
-    struct vector_binary_traits {<br />
-        typedef vector_binary&lt;typename E1::const_closure_type,<br />
-                               typename E2::const_closure_type, F&gt; expression_type;<br />
-        typedef expression_type result_type;<br />
-     };<br />
-<br />
-    // (v1 + v2) [i] = v1 [i] + v2 [i]<br />
-    template&lt;class E1, class E2&gt;<br />
-    typename vector_binary_traits&lt;E1, E2, scalar_plus&lt;typename E1::value_type,<br />
-                                                       typename E2::value_type&gt; &gt;::result_type<br />
-    operator + (const vector_expression&lt;E1&gt; &amp;e1,<br />
-                 const vector_expression&lt;E2&gt; &amp;e2);<br />
-<br />
-    // (v1 - v2) [i] = v1 [i] - v2 [i]<br />
-    template&lt;class E1, class E2&gt;<br />
-    typename vector_binary_traits&lt;E1, E2, scalar_minus&lt;typename E1::value_type,<br />
-                                                        typename E2::value_type&gt; &gt;::result_type<br />
-    operator - (const vector_expression&lt;E1&gt; &amp;e1,<br />
+<code>template&lt;class E1, class E2, class F&gt;
+    struct vector_binary_traits {
+        typedef vector_binary&lt;typename E1::const_closure_type,
+                               typename E2::const_closure_type, F&gt; expression_type;
+        typedef expression_type result_type;
+     };
+
+    // (v1 + v2) [i] = v1 [i] + v2 [i]
+    template&lt;class E1, class E2&gt;
+    typename vector_binary_traits&lt;E1, E2, scalar_plus&lt;typename E1::value_type,
+                                                       typename E2::value_type&gt; &gt;::result_type
+    operator + (const vector_expression&lt;E1&gt; &amp;e1,
+                 const vector_expression&lt;E2&gt; &amp;e2);
+
+    // (v1 - v2) [i] = v1 [i] - v2 [i]
+    template&lt;class E1, class E2&gt;
+    typename vector_binary_traits&lt;E1, E2, scalar_minus&lt;typename E1::value_type,
+                                                        typename E2::value_type&gt; &gt;::result_type
+    operator - (const vector_expression&lt;E1&gt; &amp;e1,
                  const vector_expression&lt;E2&gt; &amp;e2);</code>
 </pre>
 <h4>Description</h4>
@@ -519,17 +519,17 @@ vector expressions.</p>
 <p>Linear depending from the size of the vector expressions.</p>
 <h4>Examples</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    vector&lt;double&gt; v1 (3), v2 (3);<br />
-    for (unsigned i = 0; i &lt; std::min (v1.size (), v2.size ()); ++ i)<br />
-        v1 (i) = v2 (i) = i;<br />
-<br />
-    std::cout &lt;&lt; v1 + v2 &lt;&lt; std::endl;<br />
-    std::cout &lt;&lt; v1 - v2 &lt;&lt; std::endl;<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v1 (3), v2 (3);
+    for (unsigned i = 0; i &lt; std::min (v1.size (), v2.size ()); ++ i)
+        v1 (i) = v2 (i) = i;
+
+    std::cout &lt;&lt; v1 + v2 &lt;&lt; std::endl;
+    std::cout &lt;&lt; v1 - v2 &lt;&lt; std::endl;
 }
 </pre>
 <h3>Binary Outer Operation Description</h3>
@@ -643,17 +643,17 @@ end of the reversed expression.</td>
 <h3>Binary Outer Operations</h3>
 <h4>Prototypes</h4>
 <pre>
-<code>template&lt;class E1, class E2, class F&gt;<br />
-    struct vector_matrix_binary_traits {<br />
-        typedef vector_matrix_binary&lt;typename E1::const_closure_type,<br />
-                                      typename E2::const_closure_type, F&gt; expression_type;<br />
-        typedef expression_type result_type;<br />
-     };<br />
-<br />
-    // (outer_prod (v1, v2)) [i] [j] = v1 [i] * v2 [j]<br />
-    template&lt;class E1, class E2&gt;<br />
-    typename vector_matrix_binary_traits&lt;E1, E2, scalar_multiplies&lt;typename E1::value_type, typename E2::value_type&gt; &gt;::result_type<br />
-    outer_prod (const vector_expression&lt;E1&gt; &amp;e1,<br />
+<code>template&lt;class E1, class E2, class F&gt;
+    struct vector_matrix_binary_traits {
+        typedef vector_matrix_binary&lt;typename E1::const_closure_type,
+                                      typename E2::const_closure_type, F&gt; expression_type;
+        typedef expression_type result_type;
+     };
+
+    // (outer_prod (v1, v2)) [i] [j] = v1 [i] * v2 [j]
+    template&lt;class E1, class E2&gt;
+    typename vector_matrix_binary_traits&lt;E1, E2, scalar_multiplies&lt;typename E1::value_type, typename E2::value_type&gt; &gt;::result_type
+    outer_prod (const vector_expression&lt;E1&gt; &amp;e1,
                  const vector_expression&lt;E2&gt; &amp;e2);</code>
 </pre>
 <h4>Description</h4>
@@ -674,17 +674,17 @@ expressions.</p>
 <p>Quadratic depending from the size of the vector expressions.</p>
 <h4>Examples</h4>
 <pre>
-#include &lt;boost/numeric/ublas/matrix.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    vector&lt;double&gt; v1 (3), v2 (3);<br />
-    for (unsigned i = 0; i &lt; std::min (v1.size (), v2.size ()); ++ i)<br />
-        v1 (i) = v2 (i) = i;<br />
-<br />
-    std::cout &lt;&lt; outer_prod (v1, v2) &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/matrix.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v1 (3), v2 (3);
+    for (unsigned i = 0; i &lt; std::min (v1.size (), v2.size ()); ++ i)
+        v1 (i) = v2 (i) = i;
+
+    std::cout &lt;&lt; outer_prod (v1, v2) &lt;&lt; std::endl;
+}
 </pre>
 <h3>Scalar Vector Operation Description</h3>
 <h4>Description</h4>
@@ -781,36 +781,36 @@ end of the reversed expression.</td>
 <h3>Scalar Vector Operations</h3>
 <h4>Prototypes</h4>
 <pre>
-<code>template&lt;class T1, class E2, class F&gt;<br />
-    struct vector_binary_scalar1_traits {<br />
-        typedef vector_binary_scalar1&lt;scalar_const_reference&lt;T1&gt;,<br />
-                                      typename E2::const_closure_type, F&gt; expression_type;<br />
-        typedef expression_type result_type;<br />
-    };<br />
-<br />
-    // (t * v) [i] = t * v [i]<br />
-    template&lt;class T1, class E2&gt;<br />
-    typename vector_binary_scalar1_traits&lt;T1, E2, scalar_multiplies&lt;T1, typename E2::value_type&gt; &gt;::result_type<br />
-    operator * (const T1 &amp;e1,<br />
-                const vector_expression&lt;E2&gt; &amp;e2);<br />
-<br />
-    template&lt;class E1, class T2, class F&gt;<br />
-    struct vector_binary_scalar2_traits {<br />
-        typedef vector_binary_scalar2&lt;typename E1::const_closure_type,<br />
-                                      scalar_const_reference&lt;T2&gt;, F&gt; expression_type;<br />
-        typedef expression_type result_type;<br />
-    };<br />
-<br />
-    // (v * t) [i] = v [i] * t<br />
-    template&lt;class E1, class T2&gt;<br />
-    typename vector_binary_scalar2_traits&lt;E1, T2, scalar_multiplies&lt;typename E1::value_type, T2&gt; &gt;::result_type<br />
-    operator * (const vector_expression&lt;E1&gt; &amp;e1,<br />
-                const T2 &amp;e2);<br />
-<br />
-    // (v / t) [i] = v [i] / t<br />
-    template&lt;class E1, class T2&gt;<br />
-    typename vector_binary_scalar2_traits&lt;E1, T2, scalar_divides&lt;typename E1::value_type, T2&gt; &gt;::result_type<br />
-    operator / (const vector_expression&lt;E1&gt; &amp;e1,<br />
+<code>template&lt;class T1, class E2, class F&gt;
+    struct vector_binary_scalar1_traits {
+        typedef vector_binary_scalar1&lt;scalar_const_reference&lt;T1&gt;,
+                                      typename E2::const_closure_type, F&gt; expression_type;
+        typedef expression_type result_type;
+    };
+
+    // (t * v) [i] = t * v [i]
+    template&lt;class T1, class E2&gt;
+    typename vector_binary_scalar1_traits&lt;T1, E2, scalar_multiplies&lt;T1, typename E2::value_type&gt; &gt;::result_type
+    operator * (const T1 &amp;e1,
+                const vector_expression&lt;E2&gt; &amp;e2);
+
+    template&lt;class E1, class T2, class F&gt;
+    struct vector_binary_scalar2_traits {
+        typedef vector_binary_scalar2&lt;typename E1::const_closure_type,
+                                      scalar_const_reference&lt;T2&gt;, F&gt; expression_type;
+        typedef expression_type result_type;
+    };
+
+    // (v * t) [i] = v [i] * t
+    template&lt;class E1, class T2&gt;
+    typename vector_binary_scalar2_traits&lt;E1, T2, scalar_multiplies&lt;typename E1::value_type, T2&gt; &gt;::result_type
+    operator * (const vector_expression&lt;E1&gt; &amp;e1,
+                const T2 &amp;e2);
+
+    // (v / t) [i] = v [i] / t
+    template&lt;class E1, class T2&gt;
+    typename vector_binary_scalar2_traits&lt;E1, T2, scalar_divides&lt;typename E1::value_type, T2&gt; &gt;::result_type
+    operator / (const vector_expression&lt;E1&gt; &amp;e1,
                 const T2 &amp;e2);</code>
 </pre>
 <h4>Description</h4>
@@ -832,52 +832,52 @@ with the reciprocal of the scalar.</p>
 <p>Linear depending from the size of the vector expression.</p>
 <h4>Examples</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    vector&lt;double&gt; v (3);<br />
-    for (unsigned i = 0; i &lt; v.size (); ++ i)<br />
-        v (i) = i;<br />
-<br />
-    std::cout &lt;&lt; 2.0 * v &lt;&lt; std::endl;<br />
-    std::cout &lt;&lt; v * 2.0 &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v (3);
+    for (unsigned i = 0; i &lt; v.size (); ++ i)
+        v (i) = i;
+
+    std::cout &lt;&lt; 2.0 * v &lt;&lt; std::endl;
+    std::cout &lt;&lt; v * 2.0 &lt;&lt; std::endl;
+}
 </pre>
 <h2><a name="vector_reductions" id="vector_reductions"></a> Vector
 Reductions</h2>
 <h3>Unary Reductions</h3>
 <h4>Prototypes</h4>
 <pre>
-<code>template&lt;class E, class F&gt;<br />
-    struct vector_scalar_unary_traits {<br />
-         typedef typename F::result_type result_type;<br />
-    };<br />
-<br />
-    // sum v = sum (v [i])<br />
-    template&lt;class E&gt;<br />
-    typename vector_scalar_unary_traits&lt;E, vector_sum&lt;typename E::value_type&gt; &gt;::result_type<br />
-    sum (const vector_expression&lt;E&gt; &amp;e);<br />
-<br />
-    // norm_1 v = sum (abs (v [i]))<br />
-    template&lt;class E&gt;<br />
-    typename vector_scalar_unary_traits&lt;E, vector_norm_1&lt;typename E::value_type&gt; &gt;::result_type<br />
-    norm_1 (const vector_expression&lt;E&gt; &amp;e);<br />
-<br />
-    // norm_2 v = sqrt (sum (v [i] * v [i]))<br />
-    template&lt;class E&gt;<br />
-    typename vector_scalar_unary_traits&lt;E, vector_norm_2&lt;typename E::value_type&gt; &gt;::result_type<br />
-    norm_2 (const vector_expression&lt;E&gt; &amp;e);<br />
-<br />
-    // norm_inf v = max (abs (v [i]))<br />
-    template&lt;class E&gt;<br />
-    typename vector_scalar_unary_traits&lt;E, vector_norm_inf&lt;typename E::value_type&gt; &gt;::result_type<br />
-    norm_inf (const vector_expression&lt;E&gt; &amp;e);<br />
-<br />
-    // index_norm_inf v = min (i: abs (v [i]) == max (abs (v [i])))<br />
-    template&lt;class E&gt;<br />
-    typename vector_scalar_unary_traits&lt;E, vector_index_norm_inf&lt;typename E::value_type&gt; &gt;::result_type<br />
+<code>template&lt;class E, class F&gt;
+    struct vector_scalar_unary_traits {
+         typedef typename F::result_type result_type;
+    };
+
+    // sum v = sum (v [i])
+    template&lt;class E&gt;
+    typename vector_scalar_unary_traits&lt;E, vector_sum&lt;typename E::value_type&gt; &gt;::result_type
+    sum (const vector_expression&lt;E&gt; &amp;e);
+
+    // norm_1 v = sum (abs (v [i]))
+    template&lt;class E&gt;
+    typename vector_scalar_unary_traits&lt;E, vector_norm_1&lt;typename E::value_type&gt; &gt;::result_type
+    norm_1 (const vector_expression&lt;E&gt; &amp;e);
+
+    // norm_2 v = sqrt (sum (v [i] * v [i]))
+    template&lt;class E&gt;
+    typename vector_scalar_unary_traits&lt;E, vector_norm_2&lt;typename E::value_type&gt; &gt;::result_type
+    norm_2 (const vector_expression&lt;E&gt; &amp;e);
+
+    // norm_inf v = max (abs (v [i]))
+    template&lt;class E&gt;
+    typename vector_scalar_unary_traits&lt;E, vector_norm_inf&lt;typename E::value_type&gt; &gt;::result_type
+    norm_inf (const vector_expression&lt;E&gt; &amp;e);
+
+    // index_norm_inf v = min (i: abs (v [i]) == max (abs (v [i])))
+    template&lt;class E&gt;
+    typename vector_scalar_unary_traits&lt;E, vector_index_norm_inf&lt;typename E::value_type&gt; &gt;::result_type
     index_norm_inf (const vector_expression&lt;E&gt; &amp;e);</code>
 </pre>
 <h4>Description</h4>
@@ -902,44 +902,44 @@ expression's first element having maximal absolute value.</p>
 <p>Linear depending from the size of the vector expression.</p>
 <h4>Examples</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    vector&lt;double&gt; v (3);<br />
-    for (unsigned i = 0; i &lt; v.size (); ++ i)<br />
-        v (i) = i;<br />
-<br />
-    std::cout &lt;&lt; sum (v) &lt;&lt; std::endl;<br />
-    std::cout &lt;&lt; norm_1 (v) &lt;&lt; std::endl;<br />
-    std::cout &lt;&lt; norm_2 (v) &lt;&lt; std::endl;<br />
-    std::cout &lt;&lt; norm_inf (v) &lt;&lt; std::endl;<br />
-    std::cout &lt;&lt; index_norm_inf (v) &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v (3);
+    for (unsigned i = 0; i &lt; v.size (); ++ i)
+        v (i) = i;
+
+    std::cout &lt;&lt; sum (v) &lt;&lt; std::endl;
+    std::cout &lt;&lt; norm_1 (v) &lt;&lt; std::endl;
+    std::cout &lt;&lt; norm_2 (v) &lt;&lt; std::endl;
+    std::cout &lt;&lt; norm_inf (v) &lt;&lt; std::endl;
+    std::cout &lt;&lt; index_norm_inf (v) &lt;&lt; std::endl;
+}
 </pre>
 <h3>Binary Reductions</h3>
 <h4>Prototypes</h4>
 <pre>
-<code>template&lt;class E1, class E2, class F&gt;<br />
-    struct vector_scalar_binary_traits {<br />
-        typedef typename F::result_type result_type;<br />
-    };<br />
-<br />
-    // inner_prod (v1, v2) = sum (v1 [i] * v2 [i])<br />
-    template&lt;class E1, class E2&gt;<br />
-    typename vector_scalar_binary_traits&lt;E1, E2, vector_inner_prod&lt;typename E1::value_type,<br />
-                                                                   typename E2::value_type,<br />
-                                                                   typename promote_traits&lt;typename E1::value_type,<br />
-                                                                                           typename E2::value_type&gt;::promote_type&gt; &gt;::result_type<br />
-    inner_prod (const vector_expression&lt;E1&gt; &amp;e1,<br />
-                const vector_expression&lt;E2&gt; &amp;e2);<br />
-<br />
-    template&lt;class E1, class E2&gt;<br />
-    typename vector_scalar_binary_traits&lt;E1, E2, vector_inner_prod&lt;typename E1::value_type,<br />
-                                                                   typename E2::value_type,<br />
-                                                                   typename type_traits&lt;typename promote_traits&lt;typename E1::value_type,<br />
-                                                                                                                typename E2::value_type&gt;::promote_type&gt;::precision_type&gt; &gt;::result_type<br />
-    prec_inner_prod (const vector_expression&lt;E1&gt; &amp;e1,<br />
+<code>template&lt;class E1, class E2, class F&gt;
+    struct vector_scalar_binary_traits {
+        typedef typename F::result_type result_type;
+    };
+
+    // inner_prod (v1, v2) = sum (v1 [i] * v2 [i])
+    template&lt;class E1, class E2&gt;
+    typename vector_scalar_binary_traits&lt;E1, E2, vector_inner_prod&lt;typename E1::value_type,
+                                                                   typename E2::value_type,
+                                                                   typename promote_traits&lt;typename E1::value_type,
+                                                                                           typename E2::value_type&gt;::promote_type&gt; &gt;::result_type
+    inner_prod (const vector_expression&lt;E1&gt; &amp;e1,
+                const vector_expression&lt;E2&gt; &amp;e2);
+
+    template&lt;class E1, class E2&gt;
+    typename vector_scalar_binary_traits&lt;E1, E2, vector_inner_prod&lt;typename E1::value_type,
+                                                                   typename E2::value_type,
+                                                                   typename type_traits&lt;typename promote_traits&lt;typename E1::value_type,
+                                                                                                                typename E2::value_type&gt;::promote_type&gt;::precision_type&gt; &gt;::result_type
+    prec_inner_prod (const vector_expression&lt;E1&gt; &amp;e1,
                      const vector_expression&lt;E2&gt; &amp;e2);</code>
 </pre>
 <h4>Description</h4>
@@ -963,16 +963,16 @@ precision inner product of the vector expressions<code>.</code></p>
 <p>Linear depending from the size of the vector expressions.</p>
 <h4>Examples</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    vector&lt;double&gt; v1 (3), v2 (3);<br />
-    for (unsigned i = 0; i &lt; std::min (v1.size (), v2.size ()); ++ i)<br />
-        v1 (i) = v2 (i) = i;<br />
-<br />
-    std::cout &lt;&lt; inner_prod (v1, v2) &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v1 (3), v2 (3);
+    for (unsigned i = 0; i &lt; std::min (v1.size (), v2.size ()); ++ i)
+        v1 (i) = v2 (i) = i;
+
+    std::cout &lt;&lt; inner_prod (v1, v2) &lt;&lt; std::endl;
+}
 </pre>
 <hr />
 <p>Copyright (&copy;) 2000-2002 Joerg Walter, Mathias Koch<br />

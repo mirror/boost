@@ -332,23 +332,23 @@ Triangular Adaptor</h2>
 is a triangular matrix adaptor for other matrices.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/triangular.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    matrix&lt;double&gt; m (3, 3);<br />
-    triangular_adaptor&lt;matrix&lt;double&gt;, lower&gt; tal (m);<br />
-    for (unsigned i = 0; i &lt; tal.size1 (); ++ i)<br />
-        for (unsigned j = 0; j &lt;= i; ++ j)<br />
-            tal (i, j) = 3 * i + j;<br />
-    std::cout &lt;&lt; tal &lt;&lt; std::endl;<br />
-    triangular_adaptor&lt;matrix&lt;double&gt;, upper&gt; tau (m);<br />
-    for (unsigned i = 0; i &lt; tau.size1 (); ++ i)<br />
-        for (unsigned j = i; j &lt; tau.size2 (); ++ j)<br />
-            tau (i, j) = 3 * i + j;<br />
-    std::cout &lt;&lt; tau &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/triangular.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    matrix&lt;double&gt; m (3, 3);
+    triangular_adaptor&lt;matrix&lt;double&gt;, lower&gt; tal (m);
+    for (unsigned i = 0; i &lt; tal.size1 (); ++ i)
+        for (unsigned j = 0; j &lt;= i; ++ j)
+            tal (i, j) = 3 * i + j;
+    std::cout &lt;&lt; tal &lt;&lt; std::endl;
+    triangular_adaptor&lt;matrix&lt;double&gt;, upper&gt; tau (m);
+    for (unsigned i = 0; i &lt; tau.size1 (); ++ i)
+        for (unsigned j = i; j &lt; tau.size2 (); ++ j)
+            tau (i, j) = 3 * i + j;
+    std::cout &lt;&lt; tau &lt;&lt; std::endl;
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header triangular.hpp.</p>

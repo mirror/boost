@@ -18,17 +18,17 @@ Vector Proxies</h1>
 addressing a sub-range of a vector's element.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    vector&lt;double&gt; v (3);<br />
-    vector_range&lt;vector&lt;double&gt; &gt; vr (v, range (0, 3));<br />
-    for (unsigned i = 0; i &lt; vr.size (); ++ i)<br />
-        vr (i) = i;<br />
-    std::cout &lt;&lt; vr &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v (3);
+    vector_range&lt;vector&lt;double&gt; &gt; vr (v, range (0, 3));
+    for (unsigned i = 0; i &lt; vr.size (); ++ i)
+        vr (i) = i;
+    std::cout &lt;&lt; vr &lt;&lt; std::endl;
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header vector_proxy.hpp.</p>
@@ -210,11 +210,11 @@ the reversed <code>vector_range</code>.</td>
 <h3>Projections</h3>
 <h4>Prototypes</h4>
 <pre>
-<code>template&lt;class V&gt;<br />
-    vector_range&lt;V&gt; project (V &amp;data, const range &amp;r);<br />
-    template&lt;class V&gt;<br />
-    const vector_range&lt;const V&gt; project (const V &amp;data, const range &amp;r);<br />
-    template&lt;class V&gt;<br />
+<code>template&lt;class V&gt;
+    vector_range&lt;V&gt; project (V &amp;data, const range &amp;r);
+    template&lt;class V&gt;
+    const vector_range&lt;const V&gt; project (const V &amp;data, const range &amp;r);
+    template&lt;class V&gt;
     vector_range&lt;V&gt; project (const vector_range&lt;V&gt; &amp;data, const range &amp;r);</code>
 </pre>
 <h4>Description</h4>
@@ -231,15 +231,15 @@ of vector ranges.</p>
 <p>Linear depending from the size of the range.</p>
 <h4>Examples</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    vector&lt;double&gt; v (3);<br />
-    for (int i = 0; i &lt; 3; ++ i)<br />
-        project (v, range (0, 3)) (i) = i;<br />
-    std::cout &lt;&lt; project (v, range (0, 3)) &lt;&lt; std::endl;<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v (3);
+    for (int i = 0; i &lt; 3; ++ i)
+        project (v, range (0, 3)) (i) = i;
+    std::cout &lt;&lt; project (v, range (0, 3)) &lt;&lt; std::endl;
 }
 </pre>
 <h2><a name="vector_slice" id="vector_slice"></a> Vector Slice</h2>
@@ -248,17 +248,17 @@ int main () {<br />
 addressing a slice of a vector.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    vector&lt;double&gt; v (3);<br />
-    vector_slice&lt;vector&lt;double&gt; &gt; vs (v, slice (0, 1, 3));<br />
-    for (unsigned i = 0; i &lt; vs.size (); ++ i)<br />
-        vs (i) = i;<br />
-    std::cout &lt;&lt; vs &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v (3);
+    vector_slice&lt;vector&lt;double&gt; &gt; vs (v, slice (0, 1, 3));
+    for (unsigned i = 0; i &lt; vs.size (); ++ i)
+        vs (i) = i;
+    std::cout &lt;&lt; vs &lt;&lt; std::endl;
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header vector_proxy.hpp.</p>
@@ -436,13 +436,13 @@ the reversed <code>vector_slice</code>.</td>
 <h3>Projections</h3>
 <h4>Prototypes</h4>
 <pre>
-<code>template&lt;class V&gt;<br />
-    vector_slice&lt;V&gt; project (const vector_slice&lt;V&gt; &amp;data, const range &amp;r);<br />
-    template&lt;class V&gt;<br />
-    vector_slice&lt;V&gt; project (V &amp;data, const slice &amp;s);<br />
-    template&lt;class V&gt;<br />
-    const vector_slice&lt;const V&gt; project (const V &amp;data, const slice &amp;s);<br />
-    template&lt;class V&gt;<br />
+<code>template&lt;class V&gt;
+    vector_slice&lt;V&gt; project (const vector_slice&lt;V&gt; &amp;data, const range &amp;r);
+    template&lt;class V&gt;
+    vector_slice&lt;V&gt; project (V &amp;data, const slice &amp;s);
+    template&lt;class V&gt;
+    const vector_slice&lt;const V&gt; project (const V &amp;data, const slice &amp;s);
+    template&lt;class V&gt;
     vector_slice&lt;V&gt; project (const vector_slice&lt;V&gt; &amp;data, const slice &amp;s);</code>
 </pre>
 <h4>Description</h4>
@@ -459,16 +459,16 @@ of vector slices.</p>
 <p>Linear depending from the size of the slice.</p>
 <h4>Examples</h4>
 <pre>
-#include &lt;boost/numeric/ublas/vector.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    vector&lt;double&gt; v (3);<br />
-    for (int i = 0; i &lt; 3; ++ i)<br />
-        project (v, slice (0, 1, 3)) (i) = i;<br />
-    std::cout &lt;&lt; project (v, slice (0, 1, 3)) &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v (3);
+    for (int i = 0; i &lt; 3; ++ i)
+        project (v, slice (0, 1, 3)) (i) = i;
+    std::cout &lt;&lt; project (v, slice (0, 1, 3)) &lt;&lt; std::endl;
+}
 </pre>
 <hr />
 <p>Copyright (&copy;) 2000-2002 Joerg Walter, Mathias Koch<br />

@@ -24,17 +24,17 @@ n</em>)-dimensional banded matrix with <em>l</em> lower and
 storage of banded matrices is packed.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/banded.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    banded_matrix&lt;double&gt; m (3, 3, 1, 1);<br />
-    for (signed i = 0; i &lt; signed (m.size1 ()); ++ i)<br />
-        for (signed j = std::max (i - 1, 0); j &lt; std::min (i + 2, signed (m.size2 ())); ++ j)<br />
-            m (i, j) = 3 * i + j;<br />
-    std::cout &lt;&lt; m &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/banded.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    banded_matrix&lt;double&gt; m (3, 3, 1, 1);
+    for (signed i = 0; i &lt; signed (m.size1 ()); ++ i)
+        for (signed j = std::max (i - 1, 0); j &lt; std::min (i + 2, signed (m.size2 ())); ++ j)
+            m (i, j) = 3 * i + j;
+    std::cout &lt;&lt; m &lt;&lt; std::endl;
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header banded.hpp.</p>
@@ -321,18 +321,18 @@ Adaptor</h2>
 banded matrix adaptor for other matrices.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/banded.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    matrix&lt;double&gt; m (3, 3);<br />
-    banded_adaptor&lt;matrix&lt;double&gt; &gt; ba (m, 1, 1);<br />
-    for (signed i = 0; i &lt; signed (ba.size1 ()); ++ i)<br />
-        for (signed j = std::max (i - 1, 0); j &lt; std::min (i + 2, signed (ba.size2 ())); ++ j)<br />
-            ba (i, j) = 3 * i + j;<br />
-    std::cout &lt;&lt; ba &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/banded.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    matrix&lt;double&gt; m (3, 3);
+    banded_adaptor&lt;matrix&lt;double&gt; &gt; ba (m, 1, 1);
+    for (signed i = 0; i &lt; signed (ba.size1 ()); ++ i)
+        for (signed j = std::max (i - 1, 0); j &lt; std::min (i + 2, signed (ba.size2 ())); ++ j)
+            ba (i, j) = 3 * i + j;
+    std::cout &lt;&lt; ba &lt;&lt; std::endl;
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header banded.hpp.</p>
