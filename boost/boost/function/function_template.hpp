@@ -339,9 +339,9 @@ namespace boost {
     }
 
     // Assignment from another BOOST_FUNCTION_FUNCTION
-    void set(const BOOST_FUNCTION_FUNCTION& f,
-             int deprecated = 0)
+    void set(const BOOST_FUNCTION_FUNCTION& f)
     {
+      int deprecated;
       if (&f == this)
         return;
 
