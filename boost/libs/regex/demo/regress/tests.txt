@@ -42,6 +42,9 @@ a b -1 -1
 \(a\) (a) 0 3
 \() !
 (\) !
+p(a)rameter ABCparameterXYZ 3 12 4 5
+[pq](a)rameter ABCparameterXYZ 3 12 4 5
+
 ; now try escaped brackets:
 - match_default bk_parens REG_BASIC
 \(a\) zzzaazz 3 4 3 4
@@ -846,6 +849,7 @@ abc|\w+? abcd 0 3
 (?:(a+)b+) xaaabbba 1 7 1 4
 (?:a+(b+)) xaaabbba 1 7 4 7
 a+(?#b+)b+ xaaabbba 1 7
+
 
 
 
