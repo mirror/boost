@@ -145,7 +145,8 @@ typename resolve_traits<Mode, Ch, T>::type
 resolve(const T& t BOOST_IOSTREAMS_DISABLE_IF_STREAM(T))
 { return resolve<Mode, Ch>(t, is_std_io<T>()); }
 
-# if !BOOST_WORKAROUND(__BORLANDC__, < 0x600) // -----------------------------//
+# if !BOOST_WORKAROUND(__BORLANDC__, < 0x600) && \
+     !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) // -------------------------------//
 
 template<typename Mode, typename Ch, typename T>
 typename resolve_traits<Mode, Ch, T>::type 
@@ -168,7 +169,7 @@ typename resolve_traits<Mode, Ch, T>::type
 resolve(T& t BOOST_IOSTREAMS_ENABLE_IF_STREAM(T))
 { return resolve<Mode, Ch>(t, is_std_io<T>()); }
 
-# endif // # if !BOOST_WORKAROUND(__BORLANDC__, < 0x600) // ------------------//
+# endif // Borland 5.x or VC6-7.0 // -----------------------------------------//
 
 #endif // #ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //---------------//
 
