@@ -152,11 +152,13 @@ int const m = 16; // threads
 
 int main()
 {
-    std::printf("%s: %s, %d threads, %d iterations: ", title, implementation, m, n);
+    using namespace std; // printf, clock_t, clock
+
+    printf("%s: %s, %d threads, %d iterations: ", title, implementation, m, n);
 
     boost::shared_ptr<int> pi(new int(42));
 
-    std::clock_t t = std::clock();
+    clock_t t = clock();
 
     pthread_t a[m];
 
@@ -165,14 +167,14 @@ int main()
         a[i] = createThread( boost::bind(test, pi) );
     }
 
-    for(int i = 0; i < m; ++i)
+    for(int j = 0; j < m; ++j)
     {
-        pthread_join(a[i], 0);
+        pthread_join(a[j], 0);
     }
 
-    t = std::clock() - t;
+    t = clock() - t;
 
-    std::printf("\n\n%.3f seconds.\n", static_cast<double>(t) / CLOCKS_PER_SEC);
+    printf("\n\n%.3f seconds.\n", static_cast<double>(t) / CLOCKS_PER_SEC);
 
     return 0;
 }

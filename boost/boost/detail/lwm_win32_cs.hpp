@@ -8,7 +8,7 @@
 //
 //  boost/detail/lwm_win32_cs.hpp
 //
-//  Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2002, 2003 Peter Dimov
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -16,7 +16,9 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 //
 
-#include <boost/detail/winapi.hpp>
+#ifdef BOOST_USE_WINDOWS_H
+#  include <windows.h>
+#endif
 
 namespace boost
 {
@@ -24,11 +26,34 @@ namespace boost
 namespace detail
 {
 
+#ifndef BOOST_USE_WINDOWS_H
+
+struct CRITICAL_SECTION
+{
+    struct critical_section_debug * DebugInfo;
+    long LockCount;
+    long RecursionCount;
+    void * OwningThread;
+    void * LockSemaphore;
+#if defined(_WIN64)
+    unsigned __int64 SpinCount;
+#else
+    unsigned long SpinCount;
+#endif
+};
+
+extern "C" __declspec(dllimport) void __stdcall InitializeCriticalSection(CRITICAL_SECTION *);
+extern "C" __declspec(dllimport) void __stdcall EnterCriticalSection(CRITICAL_SECTION *);
+extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(CRITICAL_SECTION *);
+extern "C" __declspec(dllimport) void __stdcall DeleteCriticalSection(CRITICAL_SECTION *);
+
+#endif // #ifndef BOOST_USE_WINDOWS_H
+
 class lightweight_mutex
 {
 private:
 
-    winapi::critical_section cs_;
+    CRITICAL_SECTION cs_;
 
     lightweight_mutex(lightweight_mutex const &);
     lightweight_mutex & operator=(lightweight_mutex const &);
@@ -37,12 +62,12 @@ public:
 
     lightweight_mutex()
     {
-        winapi::InitializeCriticalSection(&cs_);
+        InitializeCriticalSection(&cs_);
     }
 
     ~lightweight_mutex()
     {
-        winapi::DeleteCriticalSection(&cs_);
+        DeleteCriticalSection(&cs_);
     }
 
     class scoped_lock;
@@ -61,12 +86,12 @@ public:
 
         explicit scoped_lock(lightweight_mutex & m): m_(m)
         {
-            winapi::EnterCriticalSection(&m_.cs_);
+            EnterCriticalSection(&m_.cs_);
         }
 
         ~scoped_lock()
         {
-            winapi::LeaveCriticalSection(&m_.cs_);
+            LeaveCriticalSection(&m_.cs_);
         }
     };
 };

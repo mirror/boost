@@ -25,17 +25,21 @@ int const n = 8 * 1024 * 1024;
 
 int main()
 {
+    using namespace std;
+
     std::vector< boost::shared_ptr<int> > v;
     boost::shared_ptr<int> pi(new int);
 
-    std::clock_t t = std::clock();
+    clock_t t = clock();
 
     for(int i = 0; i < n; ++i)
     {
         v.push_back(pi);
     }
 
-    t = std::clock() - t;
+    t = clock() - t;
 
     std::cout << static_cast<double>(t) / CLOCKS_PER_SEC << '\n';
+
+    return 0;
 }

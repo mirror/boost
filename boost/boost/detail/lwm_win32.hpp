@@ -8,7 +8,7 @@
 //
 //  boost/detail/lwm_win32.hpp
 //
-//  Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2002, 2003 Peter Dimov
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -16,7 +16,9 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 //
 
-#include <boost/detail/winapi.hpp>
+#ifdef BOOST_USE_WINDOWS_H
+#  include <windows.h>
+#endif
 
 #ifdef __BORLANDC__
 # pragma warn -8027     // Functions containing while are not expanded inline
@@ -27,6 +29,31 @@ namespace boost
 
 namespace detail
 {
+
+#ifndef BOOST_USE_WINDOWS_H
+
+#ifdef _WIN64
+
+// Intel 6.0 on Win64 version, posted by Tim Fenders to [boost-users]
+
+extern "C" long_type __cdecl _InterlockedExchange(long volatile *, long);
+
+#pragma intrinsic(_InterlockedExchange)
+
+inline long InterlockedExchange(long volatile* lp, long l)
+{
+    return _InterlockedExchange(lp, l);
+}
+
+#else  // _WIN64
+
+extern "C" __declspec(dllimport) long __stdcall InterlockedExchange(long volatile *, long);
+
+#endif // _WIN64
+
+extern "C" __declspec(dllimport) void __stdcall Sleep(unsigned long);
+
+#endif // #ifndef BOOST_USE_WINDOWS_H
 
 class lightweight_mutex
 {
@@ -59,20 +86,20 @@ public:
 
         explicit scoped_lock(lightweight_mutex & m): m_(m)
         {
-            while( winapi::InterlockedExchange(&m_.l_, 1) )
+            while( InterlockedExchange(&m_.l_, 1) )
             {
                 // Note: changed to Sleep(1) from Sleep(0).
                 // According to MSDN, Sleep(0) will never yield
                 // to a lower-priority thread, whereas Sleep(1)
                 // will. Performance seems not to be affected.
 
-                winapi::Sleep(1);
+                Sleep(1);
             }
         }
 
         ~scoped_lock()
         {
-            winapi::InterlockedExchange(&m_.l_, 0);
+            InterlockedExchange(&m_.l_, 0);
 
             // Note: adding a yield here will make
             // the spinlock more fair and will increase the overall
