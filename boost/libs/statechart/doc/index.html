@@ -21,7 +21,7 @@
     <h1 align="center">The boost::fsm library</h1>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2004/04/10<!--webbot bot="Timestamp" endspan i-checksum="12531" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2004/04/22<!--webbot bot="Timestamp" endspan i-checksum="12536" --></font></td>
   </tr>
 </table>
 <hr>
@@ -59,7 +59,6 @@ distribution 1.31.0:</p>
 <p>The library is functionally complete. However, the following is still in 
 the making:</p>
 <ol>
-  <li>Borland C++BuilderX port</li>
   <li>Implement regression tests</li>
   <li>Design a facility allowing to specially handle events that did not 
   trigger a reaction</li>
@@ -93,6 +92,16 @@ the making:</p>
 </dl>
 <hr>
 <h2>Change history</h2>
+<p>22 April, 2004</p>
+<ul>
+  <li>Removed the previously added BCC5.6.4 fixes (the BCC port was postponed 
+  due to lack of knowledge how to work around certain bugs)</li>
+  <li>Replaced all uses of <code>BOOST_STATIC_CONSTANT</code> with their mpl 
+  counterparts (<code>bool_</code>, <code>integral_c</code>). As a result, 
+  ports to buggy compilers should become easier</li>
+  <li>Clarified some bits in the tutorial and added StopWatch2.cpp, which 
+  details an alternative way of retrieving state machine state</li>
+</ul>
 <p>10 April, 2004</p>
 <ul>
   <li>Added two BCC5.6.4 fixes contributed by Pavel Vozenilek; boost::fsm does 
@@ -201,7 +210,7 @@ the making:</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 April, 2004<!--webbot bot="Timestamp" endspan i-checksum="29901" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->22 April, 2004<!--webbot bot="Timestamp" endspan i-checksum="29906" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file
