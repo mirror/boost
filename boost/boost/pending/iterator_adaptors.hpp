@@ -174,10 +174,11 @@ public:
     typedef typename Traits::pointer pointer;
     typedef typename Traits::reference reference;
     typedef typename Traits::iterator_category iterator_category;
+    typedef Iterator iterator_type;
 
     iterator_adaptor() { }
 
-    iterator_adaptor(const Iterator& iter, const Policies& p = Policies())
+    iterator_adaptor(const iterator_type& iter, const Policies& p = Policies())
         : m_iter_p(iter, p) {}
 
 #ifdef BOOST_MSVC6_MEMBER_TEMPLATES
@@ -248,6 +249,8 @@ public:
         policies().advance(iter(), -n);
         return *this;
     }
+
+    iterator_type base() const { return m_iter_p.first(); }
 
 private:
     typedef Policies policies_type;
