@@ -10,14 +10,33 @@
 #ifndef BOOST_TYPE_TRAITS_HPP
 #define BOOST_TYPE_TRAITS_HPP
 
-#ifndef BOOST_CONFIG_HPP
-#include <boost/config.hpp>
-#endif
+#include <boost/type_traits/fwd.hpp>
+#include <boost/type_traits/ice.hpp>
+#include <boost/type_traits/conversion_traits.hpp>
+#include <boost/type_traits/arithmetic_traits.hpp>
+#include <boost/type_traits/cv_traits.hpp>
+#include <boost/type_traits/composite_traits.hpp>
+#include <boost/type_traits/alignment_traits.hpp>
+#include <boost/type_traits/object_traits.hpp>
+#include <boost/type_traits/transform_traits.hpp>
+#include <boost/type_traits/same_traits.hpp>
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#include <boost/detail/ob_type_traits.hpp>
-#else
-#include <boost/detail/type_traits.hpp>
-#endif
+/**************************************************************************/
+
+//
+// undefine helper macro's:
+//
+#undef BOOST_IS_CLASS
+#undef BOOST_IS_ENUM
+#undef BOOST_IS_UNION
+#undef BOOST_IS_POD
+#undef BOOST_IS_EMPTY
+#undef BOOST_HAS_TRIVIAL_CONSTRUCTOR
+#undef BOOST_HAS_TRIVIAL_COPY
+#undef BOOST_HAS_TRIVIAL_ASSIGN
+#undef BOOST_HAS_TRIVIAL_DESTRUCTOR
 
 #endif // BOOST_TYPE_TRAITS_HPP
+
+
+

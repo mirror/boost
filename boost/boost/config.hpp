@@ -11,6 +11,8 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   17 Feb 01  BOOST_NO_CV_SPECIALIZATIONS
+//              BOOST_NO_CV_VOID_SPECIALIZATIONS (John Maddock)
 //   11 Feb 01  Added BOOST_STATIC_CONSTANT (Dave Abrahams)
 //   20 Jan 01  BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS moved here from
 //              cast.hpp. Added missing BOOST_NO_STRINGSTREAM which some
@@ -59,6 +61,12 @@
 //  compilers do not require a lot of configuration flag macros.  It places the
 //  burden where it should be, on non-conforming compilers.  In the future,
 //  hopefully, less rather than more conformance flags will have to be defined.
+
+//  BOOST_NO_CV_SPECIALIZATIONS: if template specialisations for cv-qualified types
+//  conflict with a specialistaion for unqualififed type.
+
+//  BOOST_NO_CV_VOID_SPECIALIZATIONS: if template specialisations for cv-void types
+//  conflict with a specialistaion for void.
 
 //  BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP: Compiler does not implement
 //  argument-dependent lookup (also named Koenig lookup); see std::3.4.2
@@ -299,6 +307,8 @@
 // std::DBL_MAX, as a fix we'll just include float.h and have done with:
 #include <float.h>
 #endif
+#   define BOOST_NO_CV_SPECIALIZATIONS
+#   define BOOST_NO_CV_VOID_SPECIALIZATIONS
 
 //  Intel  -------------------------------------------------------------------//
 
@@ -412,6 +422,7 @@
 #       endif
 #     endif
 #     define BOOST_NO_STD_ITERATOR_TRAITS
+#     define BOOST_NO_CV_VOID_SPECIALIZATIONS
 
 
 // Make sure at least one standard library header is included so that library
@@ -516,5 +527,6 @@ namespace std {
 #endif
 
 #endif  // BOOST_CONFIG_HPP
+
 
 
