@@ -86,12 +86,12 @@ namespace boost {
             //! Constructor from a Range
             template< class Range >
             iterator_range( const Range& r ) : 
-                m_Begin( begin( r ) ), m_End( end( r ) ) {}
+                m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ) {}
 
             //! Constructor from a Range
             template< class Range >
             iterator_range( Range& r ) : 
-            m_Begin( begin( r ) ), m_End( end( r ) ) {}
+            m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ) {}
 
             //! Copy constructor -- default OK
 
