@@ -130,15 +130,13 @@ things happen:
  Impact on the Standard
 ========================
 
-Proposed Changes for TR1
-========================
-
-The new iterator concepts are backward-compatible with the old
-iterator requirements, and old iterators are forward-compatible with
-the new iterator concepts. That is to say, iterators that satisfy the
-old requirements also satisfy appropriate concepts in the new system,
-and iterators modeling the new concepts will automatically satisfy the
-appropriate old requirements.
+This proposal for TR1 is a pure extension. Further, the new iterator
+concepts are backward-compatible with the old iterator requirements,
+and old iterators are forward-compatible with the new iterator
+concepts. That is to say, iterators that satisfy the old requirements
+also satisfy appropriate concepts in the new system, and iterators
+modeling the new concepts will automatically satisfy the appropriate
+old requirements.
 
 .. I think we need to say something about the resolution to allow
    convertibility to any of the old-style tags as a TR issue (hope it
@@ -148,11 +146,6 @@ appropriate old requirements.
    standards conforming input iterator is allowed to have
    a tag that is not input_iterator_tag but that
    is convertible to input_iterator_tag? -JGS
-
-The algorithms in the standard library benefit from the new iterator
-concepts because the new concepts provide a more accurate way to
-express their type requirements. The result is algorithms that are
-usable in more situations and have fewer type requirements.
 
 Note that as currently specified, ``istreambuf_iterator`` doesn't
 meet the Readable Iterator requirements because its ``value_type``
@@ -169,6 +162,11 @@ a formal part of this proposal for TR1.
 
 Changes to Algorithm Requirements
 +++++++++++++++++++++++++++++++++
+
+The algorithms in the standard library could benefit from the new
+iterator concepts because the new concepts provide a more accurate way
+to express their type requirements. The result is algorithms that are
+usable in more situations and have fewer type requirements.
 
 For the next working paper (but not for TR1), the committee should
 consider the following changes to the type requirements of
