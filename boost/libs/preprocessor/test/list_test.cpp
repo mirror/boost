@@ -49,16 +49,9 @@ TEST_B BOOST_PP_LIST_CAT(BOOST_PP_LIST_FILTER(BOOST_PP_LESS_D,3,TEST_LIST)) == 4
 TEST_B BOOST_PP_LIST_FOR_EACH_PRODUCT(F,2,(BOOST_PP_TUPLE_TO_LIST(2,(1,0)),BOOST_PP_TUPLE_TO_LIST(2,(2,3)))) == 0 TEST_E
 #undef F
 
-TEST_B BOOST_PP_LIST_CAT
-       ( BOOST_PP_LIST_FOLD_RIGHT
-         ( BOOST_PP_LIST_APPEND_D
-         , BOOST_PP_TUPLE_TO_LIST
-           ( 3
-           , ( BOOST_PP_TUPLE_TO_LIST(2,(0,x))
-             , BOOST_PP_TUPLE_TO_LIST(4,(A,1,B,2))
-             , BOOST_PP_TUPLE_TO_LIST(3,(C,3,D))
-             )
-           )
-	 , BOOST_PP_LIST_NIL
-         )
-       ) == 0xA1B2C3D TEST_E
+TEST_B BOOST_PP_LIST_CAT(BOOST_PP_LIST_FOLD_RIGHT(BOOST_PP_LIST_APPEND_D,
+                                                  BOOST_PP_TUPLE_TO_LIST(3,
+                                                                         (BOOST_PP_TUPLE_TO_LIST(2,(0,x)),
+                                                                          BOOST_PP_TUPLE_TO_LIST(4,(A,1,B,2)),
+                                                                          BOOST_PP_TUPLE_TO_LIST(3,(C,3,D)))),
+                                                  BOOST_PP_LIST_NIL)) == 0xA1B2C3D TEST_E
