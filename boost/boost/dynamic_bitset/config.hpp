@@ -25,7 +25,7 @@
 
 // this should be in the config system some day
 // see http://lists.boost.org/MailArchives/boost/msg62291.php
-#define BOOST_DYNAMIC_BITSET_GNUC_VERSION  (  __GNUC__       * 100 * 100  \
+#define BOOST_DYNAMIC_BITSET_GNUC_VERSION  (  __GNUC__       * 100 * 100     \
                                             + __GNUC_MINOR__ * 100)
 
 // workaround for gcc bug c++/8419 - gps
