@@ -13,8 +13,7 @@
 // Revision History:
 
 // 07 Feb 2001   Jeremy Siek
-//      Removed all pair generator's except for projection and
-//      some const adaptor generators.
+//      Removed some const iterator adaptor generators.
 //
 //      Added make_xxx_iterator() helper functions for remaining
 //      iterator adaptors.
@@ -335,7 +334,7 @@ namespace detail {
       typedef operator_arrow_proxy<typename Traits::value_type> proxy;
       typedef typename Traits::pointer pointer;
       enum { is_input_iter = boost::is_convertible<category,std::input_iterator_tag>::value
-	     & !boost::is_convertible<category,std::forward_iterator_tag>::value };
+             & !boost::is_convertible<category,std::forward_iterator_tag>::value };
       typedef typename boost::detail::if_true<(is_input_iter)>::template
       then<
         proxy,
@@ -648,6 +647,20 @@ public:
     typedef iterator_adaptor<OuterIterator, indirect_iterator_policies, indirect_traits> type;
 };
 
+template <class OuterIterator,      // Mutable or Immutable, does not matter
+          class ConstInnerIterator, // Immutable
+          class ConstInnerTraits = boost::detail::iterator_traits<ConstInnerIterator>,
+          class InnerIterator = typename boost::detail::iterator_traits<OuterIterator>::value_type,
+          class InnerTraits = boost::detail::iterator_traits<InnerIterator>
+           >
+struct indirect_iterator_pair_generator
+{
+  typedef typename indirect_iterator_generator<OuterIterator,
+    InnerIterator, InnerTraits>::type iterator;
+  typedef typename indirect_iterator_generator<OuterIterator,
+    ConstInnerIterator, ConstInnerTraits>::type const_iterator;
+};
+
 template <class OuterIterator, class InnerIterator, class InnerTraits>
 inline typename indirect_iterator_generator<OuterIterator, InnerIterator, InnerTraits>::type
 make_indirect_iterator(OuterIterator outer, InnerIterator, InnerTraits)
@@ -830,8 +843,8 @@ private:
 };
 
 template <class Predicate, class Iterator, 
-	  class Traits = boost::detail::iterator_traits<Iterator>
-	 >
+          class Traits = boost::detail::iterator_traits<Iterator>
+         >
 class filter_iterator_generator {
     typedef filter_iterator_policies<Predicate, Iterator> Policies;
 public:
