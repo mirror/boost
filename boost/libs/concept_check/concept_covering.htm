@@ -35,46 +35,41 @@ component. If the program compiles then one can be sure that the
 concepts cover the component.
 
 The following code shows the archetype class for the <a
-href="http://www.sgi.com/tech/stl/trivial.html">TrivialIterator</a>
-concept. Some care must be taken to ensure that the archetype is an
-exact match to the concept. For example, the concept states that the
-return type of <tt>operator*()</tt> must be convertible to the value
-type. It does not state the more stringent requirement that the return
-type be <tt>T&amp;</tt> or <tt>const T&amp;</tt>. That means it would be a
-mistake to use <tt>T&amp;</tt> or <tt>const T&amp;</tt> for the return type
-of the archetype class. The correct approach is to create an
-artificial return type that is convertible to <tt>T</tt>, as we have
-done here with <tt>input_proxy</tt>. The validity of the archetype
-class test is completely dependent on it being an exact match with the
-concept, which must be verified by careful (manual) inspection.
+href="http://www.sgi.com/tech/stl/InputIterator.html">Input
+Iterator</a> concept. Some care must be taken to ensure that the
+archetype is an exact match to the concept. For example, the concept
+states that the return type of <tt>operator*()</tt> must be
+convertible to the value type. It does not state the more stringent
+requirement that the return type be <tt>T&amp;</tt> or <tt>const
+T&amp;</tt>. That means it would be a mistake to use <tt>T&amp;</tt>
+or <tt>const T&amp;</tt> for the return type of the archetype
+class. The correct approach is to create an artificial return type
+that is convertible to <tt>T</tt>, as we have done here with
+<tt>reference</tt>. The validity of the archetype class test is
+completely dependent on it being an exact match with the concept,
+which must be verified by careful (manual) inspection.
 
 <pre>
   template &lt;class T&gt;
-  struct input_proxy {
-    operator const T&() {
-      return static_object&lt;T&gt;::get(); // Get a reference without constructing
-    }
-  };
-  template &lt;class T&gt;
-  class trivial_iterator_archetype
+  class input_iterator_archetype
   {
-    typedef trivial_iterator_archetype self;
+  private:
+    typedef input_iterator_archetype self;
   public:
-    trivial_iterator_archetype() { }
-    trivial_iterator_archetype(const self&) { }
-    self& operator=(const self&) { return *this;  }
-    friend bool operator==(const self&, const self&) { return true; }
-    friend bool operator!=(const self&, const self&) { return true; }
-    input_proxy&lt;T&gt; operator*() { return input_proxy&lt;T&gt;(); }
-  };
-
-  namespace std {
-    template &lt;class T&gt;
-    struct iterator_traits&lt; trivial_iterator_archetype&lt;T&gt; &gt;
-    {
-      typedef T value_type;
+    typedef std::input_iterator_tag iterator_category;
+    typedef T value_type;
+    struct reference {
+      operator const value_type&amp;() const { return static_object&lt;T&gt;::get(); }
     };
-  }
+    typedef const T* pointer;
+    typedef std::ptrdiff_t difference_type;
+    self&amp; operator=(const self&amp;) { return *this;  }
+    bool operator==(const self&amp;) const { return true; }
+    bool operator!=(const self&amp;) const { return true; }
+    reference operator*() const { return reference(); }
+    self&amp; operator++() { return *this; }
+    self operator++(int) { return *this; }
+  };
 </pre>
 
 Generic algorithms are often tested by being instantiated with a
