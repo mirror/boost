@@ -49,6 +49,8 @@
 // See http://www.boost.org for most recent version including documentation.
 
 // Revision History
+// 10 Feb 2001 - Rolled in supposed Borland fixes from John Maddock, but
+//               not seeing any improvement yet (David Abrahams)
 // 06 Feb 2001 - Factored if_true out into boost/detail/select_type.hpp
 //               (David Abrahams)
 // 23 Jan 2001 - Fixed logic of difference_type selection, which was
@@ -114,13 +116,42 @@ namespace boost { namespace detail {
   // here's the "usable" template
   template <class T> struct digit_traits
   {
+      typedef digit_traits_select<
+                ::std::numeric_limits<T>::is_specialized> selector;
+      typedef typename selector::template traits<T> traits;
       enum {
-          digits = digit_traits_select<(
-                std::numeric_limits<T>::is_specialized
-              )>::template traits<T>::digits
+          digits = traits::digits
       };
   };
-#endif  
+#endif
+
+#ifdef __BORLANDC__ // // This code from John Maddock, but doesn't seem to make any difference
+template <class T, bool is_signed, bool is_big, bool is_ptr_diff>
+struct select_diff
+{
+   typedef std::ptrdiff_t difference_type;
+};
+template <class T, bool is_ptr_diff>
+struct select_diff<T, true, true, is_ptr_diff>
+{
+   typedef T difference_type;
+};
+template <class T, bool is_ptr_diff>
+struct select_diff<T, false, true, is_ptr_diff>
+{
+   typedef intmax_t difference_type;
+};
+template <class T, bool is_signed>
+struct select_diff<T, is_signed, false, true>
+{
+   typedef std::ptrdiff_t difference_type;
+};
+template <class T, bool is_signed>
+struct select_diff<T, is_signed, false, false>
+{
+   typedef intmax_t difference_type;
+};
+#endif
 
   // Template class integer_traits<Integer> -- traits of various integer types
   // This should probably be rolled into boost::integer_traits one day, but I
@@ -159,9 +190,17 @@ namespace boost { namespace detail {
    // else
         intmax_t
       >::type>::type>::type difference_type;
-# else
+# elif defined(__BORLANDC__) // This code from John Maddock, but doesn't seem to make any difference
       BOOST_STATIC_ASSERT(boost::is_integral<Integer>::value);
-      
+      typedef select_diff<Integer,
+         (::boost::detail::is_signed<Integer>::value),
+         (sizeof(Integer) >= sizeof(intmax_t)),
+         (sizeof(Integer) < sizeof(std::ptrdiff_t))> t;
+      typedef typename t::difference_type difference_type;
+
+#else
+      BOOST_STATIC_ASSERT(boost::is_integral<Integer>::value);
+
       typedef typename
       if_true<(sizeof(Integer) >= sizeof(intmax_t))>::template then<
                
