@@ -32,8 +32,20 @@ namespace gregorian {
   /*!\ingroup date_basics
    */
   typedef date_time::period<date, date_duration> date_period;  
+
   //! A date generation object type
   typedef date_time::partial_date<date> partial_date;
+
+  typedef date_time::nth_kday_of_month<date> nth_kday_of_month;
+
+  typedef date_time::first_kday_of_month<date> first_kday_of_month;
+
+  typedef date_time::last_kday_of_month<date> last_kday_of_month;
+
+  typedef date_time::first_kday_after<date> first_kday_after;
+
+  typedef date_time::first_kday_before<date> first_kday_before;
+
   //! A clock to get the current day from the local computer
   /*!\ingroup date_basics
    */
