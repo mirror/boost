@@ -569,9 +569,6 @@ namespace boost { namespace numeric { namespace ublas {
     class bounded_vector:
         public vector<T, bounded_array<T, N> > {
     public:
-#ifndef BOOST_UBLAS_NO_DERIVED_HELPERS
-        BOOST_UBLAS_USING vector<T, bounded_array<T, N> >::operator =;
-#endif
         BOOST_STATIC_CONSTANT (std::size_t,  max_size = N);
         typedef vector<T, bounded_array<T, N> > vector_type;
 
@@ -593,6 +590,19 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         bounded_vector &operator = (const bounded_vector &v) {
             vector_type::operator = (v);
+            return *this;
+        }
+        /* FIXME This overload would be useful but is never chosen
+        template<std::size_t N2>
+        BOOST_UBLAS_INLINE
+        bounded_vector &operator = (const vector<bounded_array<T,N2> > &v) {
+            vector_type::operator = (v);
+            return *this;
+        }*/
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        bounded_vector &operator = (const vector_expression<AE> &ae) {
+            vector_type::operator = (ae);
             return *this;
         }
     };

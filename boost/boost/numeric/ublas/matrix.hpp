@@ -948,9 +948,6 @@ namespace boost { namespace numeric { namespace ublas {
     class bounded_matrix:
         public matrix<T, F, bounded_array<T, M * N> > {
     public:
-#ifndef BOOST_UBLAS_NO_DERIVED_HELPERS
-        BOOST_UBLAS_USING matrix<T, F, bounded_array<T, M * N> >::operator =;
-#endif
         BOOST_STATIC_CONSTANT (std::size_t, max_size1 = M);
         BOOST_STATIC_CONSTANT (std::size_t, max_size2 = N);
         typedef matrix<T, F, bounded_array<T, M * N> > matrix_type;
@@ -973,6 +970,19 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         bounded_matrix &operator = (const bounded_matrix &m) {
             matrix_type::operator = (m);
+            return *this;
+        }
+        /* FIXME This overload would be useful but is never chosen
+        template<std::size_t MN2>
+        BOOST_UBLAS_INLINE
+        bounded_matrix &operator = (const matrix<T, F, bounded_array<T, MN2> > &m) {
+            matrix_type::operator = (m);
+            return *this;
+        }*/
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        bounded_matrix &operator = (const matrix_expression<AE> &ae) {
+            matrix_type::operator = (ae);
             return *this;
         }
     };

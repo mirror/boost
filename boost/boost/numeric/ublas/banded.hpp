@@ -1012,9 +1012,6 @@ namespace boost { namespace numeric { namespace ublas {
     class diagonal_matrix:
         public banded_matrix<T, F, A> {
     public:
-#ifndef BOOST_UBLAS_NO_DERIVED_HELPERS
-        BOOST_UBLAS_USING banded_matrix<T, F, A>::operator =;
-#endif
         typedef std::size_t size_type;
         typedef banded_matrix<T, F, A> matrix_type;
 
@@ -1039,6 +1036,12 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         diagonal_matrix &operator = (const diagonal_matrix &m) {
             matrix_type::operator = (m);
+            return *this;
+        }
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        diagonal_matrix &operator = (const matrix_expression<AE> &ae) {
+            matrix_type::operator = (ae);
             return *this;
         }
     };
@@ -2039,9 +2042,6 @@ namespace boost { namespace numeric { namespace ublas {
     class diagonal_adaptor:
         public banded_adaptor<M> {
     public:
-#ifndef BOOST_UBLAS_NO_DERIVED_HELPERS
-        BOOST_UBLAS_USING banded_adaptor<M>::operator =;
-#endif
         typedef M matrix_type;
         typedef banded_adaptor<M> adaptor_type;
 
@@ -2059,6 +2059,12 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         diagonal_adaptor &operator = (const diagonal_adaptor &m) {
             adaptor_type::operator = (m);
+            return *this;
+        }
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        diagonal_adaptor &operator = (const matrix_expression<AE> &ae) {
+            adaptor_type::operator = (ae);
             return *this;
         }
     };
