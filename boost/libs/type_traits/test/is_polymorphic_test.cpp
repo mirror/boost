@@ -8,6 +8,13 @@
 #include "check_integral_constant.hpp"
 #include TYPE_TRAITS(is_polymorphic)
 
+#include <exception>
+#include <stdexcept>
+
+#if defined(_WINDOWS) || defined(_WIN32) || defined(_WIN64)
+#include <windows.h> // more things to test
+#endif
+
 TT_TEST_BEGIN(is_polymorphic)
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<int>::value, false);
@@ -35,11 +42,27 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<VB>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<VD>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<test_abc1>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<test_abc2>::value, true);
+#ifndef BOOST_NO_STD_LOCALE
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::iostream>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::ios_base>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::basic_streambuf<char> >::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::basic_ios<char> >::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::basic_istream<char> >::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::basic_streambuf<char> >::value, true);
+#endif
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::exception>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::bad_alloc>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::runtime_error>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::out_of_range>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::range_error>::value, true);
+
+#if defined(_WINDOWS) || defined(_WIN32) || defined(_WIN64)
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<IUnknown>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<ITypeInfo>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<ITypeComp>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<ICreateTypeInfo>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<IDispatch>::value, true);
+#endif
 
 TT_TEST_END
 

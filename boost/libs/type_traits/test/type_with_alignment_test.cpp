@@ -8,7 +8,7 @@
 #include "check_integral_constant.hpp"
 #include TYPE_TRAITS(alignment_of)
 #include TYPE_TRAITS(type_with_alignment)
-#include TYPE_TRAITS(is_pod)
+#include TYPE_TRAITS(is_POD)
 
 
 TT_TEST_BEGIN(type_with_alignment)

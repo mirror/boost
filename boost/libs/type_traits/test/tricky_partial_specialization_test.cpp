@@ -17,7 +17,7 @@
 #include TYPE_TRAITS(has_trivial_destructor)
 #include TYPE_TRAITS(is_base_and_derived)
 #include TYPE_TRAITS(is_object)
-#include TYPE_TRAITS(is_pod)
+#include TYPE_TRAITS(is_POD)
 #include TYPE_TRAITS(is_scalar)
 #include TYPE_COMPARE(is_same)
 #include TYPE_COMPARE(is_convertible)
