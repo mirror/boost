@@ -227,6 +227,22 @@ predicates minus one. The functionality of index #0 can be accessed directly fro
 <code>es.begin()</code> is equivalent to <code>es.get&lt;0>().begin()</code>.
 </p>
 
+<p>
+Note that <code>get</code> returns a <i>reference</i> to the index, and not
+an index object. Indices cannot be constructed as separate objects from the
+container they belong to, so the following
+</p>
+
+<blockquote><pre>
+<span class=comment>// Wrong: we forgot the &amp; after employee_set::nth_index&lt;1&gt;::type</span>
+<span class=keyword>const</span> <span class=identifier>employee_set</span><span class=special>::</span><span class=identifier>nth_index</span><span class=special>&lt;</span><span class=number>1</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>name_index</span><span class=special>=</span><span class=identifier>es</span><span class=special>.</span><span class=identifier>get</span><span class=special>&lt;</span><span class=number>1</span><span class=special>&gt;();</span>
+</pre></blockquote>
+
+<p>
+does not compile, since it is trying to construct the index object
+<code>name_index</code>. This is a common source of errors in user code.
+</p>
+
 <h3><a name="list_fast_lookup">A bidirectional list with fast lookup</a></h3>
 
 <p>
@@ -1256,7 +1272,7 @@ Advanced topics
 
 <br>
 
-<p>Revised July 12th 2004</p>
+<p>Revised July 15th 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
