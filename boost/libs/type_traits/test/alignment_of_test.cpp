@@ -31,7 +31,7 @@ struct align_calc
    }
 };
 
-#define ALIGNOF(x) align_calc<x>::get()
+#define ALIGNOF(x) align_calc< x>::get()
 
 TT_TEST_BEGIN(alignment_of)
 
