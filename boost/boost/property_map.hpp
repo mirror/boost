@@ -397,10 +397,11 @@ namespace boost {
     typedef boost::lvalue_property_map_tag category;
 
     inline safe_iterator_property_map(
-      RandomAccessIterator first = RandomAccessIterator(), 
+      RandomAccessIterator first, 
       std::size_t n = 0, 
       const IndexMap& _id = IndexMap() ) 
       : iter(first), n(n), index(_id) { }
+    inline safe_iterator_property_map() { }
     inline R operator[](key_type v) const {
       assert(get(index, v) < n);
       return *(iter + get(index, v)) ;
