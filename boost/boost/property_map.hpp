@@ -51,94 +51,6 @@ namespace boost {
   // The user will just have to create their own specializations for
   // other pointers types if the compiler does not have partial
   // specializations. Sorry!
-<<<<<<< property_map.hpp
-  template <>
-  struct property_traits<long*> {
-    typedef long value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<unsigned long*> {
-    typedef unsigned long value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<int*> {
-    typedef int value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<unsigned int*> {
-    typedef unsigned int value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<short*> {
-    typedef short value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<unsigned short*> {
-    typedef unsigned short value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<char*> {
-    typedef char value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<unsigned char*> {
-    typedef unsigned char value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<signed char*> {
-    typedef signed char value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<bool*> {
-    typedef bool value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<float*> {
-    typedef float value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-=======
->>>>>>> 1.31
-
-<<<<<<< property_map.hpp
-  template <>
-  struct property_traits<double*> {
-    typedef double value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-=======
 #define BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(TYPE) \
   template <> \
   struct property_traits<TYPE*> { \
@@ -154,7 +66,6 @@ namespace boost {
     typedef std::ptrdiff_t key_type; \
     typedef lvalue_property_map_tag   category; \
   }
->>>>>>> 1.31
 
   BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(long);
   BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(unsigned long);
