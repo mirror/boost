@@ -63,9 +63,9 @@ void mapfile::open(const char* file)
 #if defined(__CYGWIN__)||defined(__CYGWIN32__)
    char win32file[ MAX_PATH ];
    cygwin_conv_to_win32_path( file, win32file );
-   hfile = CreateFile(win32file, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+   hfile = CreateFileA(win32file, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 #else
-   hfile = CreateFile(file, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+   hfile = CreateFileA(file, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 #endif
    if(hfile != INVALID_HANDLE_VALUE)
    {
@@ -393,7 +393,7 @@ file_iterator::file_iterator(const char* wild)
    #endif
 
    ref = new file_iterator_ref();
-   ref->hf = FindFirstFile(wild, &(ref->_data));
+   ref->hf = FindFirstFileA(wild, &(ref->_data));
    ref->count = 1;
 
    if(ref->hf == _fi_invalid_handle)
@@ -487,7 +487,7 @@ void file_iterator::next()
       bool cont = true;
       while(cont)
       {
-         cont = FindNextFile(ref->hf, &(ref->_data));
+         cont = FindNextFileA(ref->hf, &(ref->_data));
          if(cont && ((ref->_data.dwFileAttributes & _fi_dir) == 0))
             break;
       }
@@ -568,7 +568,7 @@ directory_iterator::directory_iterator(const char* wild)
    #endif
    ref = new file_iterator_ref();
    ref->count = 1;
-   ref->hf = FindFirstFile(wild, &(ref->_data));
+   ref->hf = FindFirstFileA(wild, &(ref->_data));
    if(ref->hf == _fi_invalid_handle)
    {
       *_path = 0;
@@ -658,7 +658,7 @@ void directory_iterator::next()
       bool cont = true;
       while(cont)
       {
-         cont = FindNextFile(ref->hf, &(ref->_data));
+         cont = FindNextFileA(ref->hf, &(ref->_data));
          if(cont && (ref->_data.dwFileAttributes & _fi_dir))
          {
             if(std::strcmp(ref->_data.cFileName, ".") && std::strcmp(ref->_data.cFileName, ".."))
