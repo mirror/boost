@@ -40,22 +40,22 @@ void check_array()
 
  
 // BOOST_RANGE_NO_STATIC_ASSERT 
-#if !defined( __BORLANDC__ ) || !( _MSC_VER <= 1300 )
-    BOOST_STATIC_ASSERT(( is_same< value_type_of<array_t>::type, int >::value ));
-    BOOST_STATIC_ASSERT(( is_same< iterator_of<array_t>::type, int* >::value ));
-    BOOST_STATIC_ASSERT(( is_same< const_iterator_of<array_t>::type, const int* >::value ));
-    BOOST_STATIC_ASSERT(( is_same< difference_type_of<array_t>::type, std::ptrdiff_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same< size_type_of<array_t>::type, std::size_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same< result_iterator_of<array_t>::type, int* >::value ));
-    BOOST_STATIC_ASSERT(( is_same< result_iterator_of<const array_t>::type, const int* >::value ));
+#if !defined( __BORLANDC__ )
+    BOOST_STATIC_ASSERT(( is_same< value_type_of<int[10]>::type, int >::value ));
+    BOOST_STATIC_ASSERT(( is_same< iterator_of<int[10]>::type, int* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< const_iterator_of<int[10]>::type, const int* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< difference_type_of<int[10]>::type, std::ptrdiff_t >::value ));
+    BOOST_STATIC_ASSERT(( is_same< size_type_of<int[10]>::type, std::size_t >::value ));
+    BOOST_STATIC_ASSERT(( is_same< result_iterator_of<int[10]>::type, int* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< result_iterator_of<const int[10]>::type, const int* >::value ));
     
-    BOOST_STATIC_ASSERT(( is_same< value_type_of<const array_t>::type, const int >::value ));
-    BOOST_STATIC_ASSERT(( is_same< iterator_of<const array_t>::type, const int* >::value ));
-    BOOST_STATIC_ASSERT(( is_same< const_iterator_of<const array_t>::type, const int* >::value ));
-    BOOST_STATIC_ASSERT(( is_same< difference_type_of<const array_t>::type, std::ptrdiff_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same< size_type_of<const array_t>::type, std::size_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same< result_iterator_of<const array_t>::type, const int* >::value ));
-    BOOST_STATIC_ASSERT(( is_same< result_iterator_of<const array_t>::type, const int* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< value_type_of<const int[10]>::type, const int >::value ));
+    BOOST_STATIC_ASSERT(( is_same< iterator_of<const int[10]>::type, const int* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< const_iterator_of<const int[10]>::type, const int* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< difference_type_of<const int[10]>::type, std::ptrdiff_t >::value ));
+    BOOST_STATIC_ASSERT(( is_same< size_type_of<const int[10]>::type, std::size_t >::value ));
+    BOOST_STATIC_ASSERT(( is_same< result_iterator_of<const int[10]>::type, const int* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< result_iterator_of<const int[10]>::type, const int* >::value ));
 #endif
     
     BOOST_CHECK_EQUAL( begin( my_array ), my_array );

@@ -74,13 +74,13 @@ void check_char()
     
     BOOST_STATIC_ASSERT(( is_same<  value_type_of<char_array_t>::type, 
                                     char>::value ));
-    BOOST_STATIC_ASSERT(( is_same<  iterator_of<char_array_t>::type, char* >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  const_iterator_of<char_array_t>::type, const char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same<  iterator_of<char[10]>::type, char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same<  const_iterator_of<char[10]>::type, const char* >::value ));
     BOOST_STATIC_ASSERT(( is_same<  difference_type_of<char_array_t>::type,                           
                                     ::std::ptrdiff_t >::value ));
     BOOST_STATIC_ASSERT(( is_same<  size_type_of<char_array_t>::type, std::size_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<char_array_t>::type, char* >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<const char_array_t>::type, const char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<char[10]>::type, char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<const char[10]>::type, const char* >::value ));
 
     BOOST_CHECK_EQUAL( begin( char_s ), char_s );
     std::size_t sz = size( char_s );
@@ -90,8 +90,8 @@ void check_char()
     BOOST_CHECK_EQUAL( sz, std::char_traits<char>::length( char_s ) );
     
     BOOST_CHECK_EQUAL( begin( my_string ), my_string );
-    const char* end2 = begin( my_string ) + size( my_string );
-    const char* end3 = end( my_string );
+    iterator_of<char[15]>::type end2 = begin( my_string ) + size( my_string );
+    iterator_of<char[15]>::type end3 = end( my_string );
     BOOST_CHECK_EQUAL( end3, end2 );
     BOOST_CHECK_EQUAL( empty( my_string ), (my_string == 0 || my_string[0] == char()) );
     BOOST_CHECK_EQUAL( size( my_string ), my_string_length );
