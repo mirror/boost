@@ -57,40 +57,17 @@ rule toolset::require-wide-char-io-support ( toolset variant : subvariant-path p
 # certain tool sets are known apriori not to support creation of DLLS
 rule toolset::require-shared-libraries-support ( toolset variant : subvariant-path properties * )
 {
-    local requirements = ;
-
+    local requirements ;
     switch $(toolset) {
     case "como*" :
         echo **** DLLs cannot be built with this compiler **** ;
-        requirements = <build>no ;
+        properties = [ impose-requirements $(properties) : <build>no ] ;
     case "cw-8*" :
         local runtime-link = [ get-values <runtime-link> : $(properties) ] ;
         if static in $(runtime-link) {
             echo **** DLLS cannot be built with static runtime linking **** ;
-            requirements = <build>no ;
+            properties = [ impose-requirements $(properties) : <build>no ] ;
         }
     }
-    return $(subvariant-path) [ impose-requirements $(properties) : $(requirements) ] ;
+    return $(subvariant-path) $(properties) ;
 }
-
-template boost_serialization_base
-    : ## sources ##
-    : ## requirements ##
-        <sysinclude>$(BOOST_ROOT)
-        std::locale-support
-        toolset::require-boost-spirit-support
-        # the common names rule ensures that the library will
-        # be named according to the rules used by the install
-        # and auto-link features:
-        common-variant-tag
-        # set include path for Boost headers:
-        <stlport-iostream>on 
-        <borland-5_5_1><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062"
-        <borland-5_6_4><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062"
-        <msvc><*><cxxflags>-Gy
-        <vc-7><*><cxxflags>-Gy
-        <vc-7_1><*><cxxflags>-Gy
-        <define>BOOST_LIB_DIAGNOSTIC=1
-    : ## default build 
-        debug release
-;
