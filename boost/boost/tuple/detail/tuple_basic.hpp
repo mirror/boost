@@ -207,9 +207,9 @@ inline typename access_traits<
                 >::non_const_type
 get(cons<HT, TT>& c BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int, N)) {
 #if BOOST_WORKAROUND(__IBMCPP__,==600 )
-  return get_class<N>::
+  return detail::get_class<N>::
 #else
-  return get_class<N>::BOOST_NESTED_TEMPLATE
+  return detail::get_class<N>::BOOST_NESTED_TEMPLATE
 #endif
          get<
            typename access_traits<
