@@ -442,7 +442,6 @@ private:
 #ifdef BOOST_REGEX_RECURSIVE
 #include <boost/regex/v4/perl_matcher_recursive.hpp>
 #else
-#include <boost/regex/v4/mem_block_cache.hpp>
 #include <boost/regex/v4/perl_matcher_non_recursive.hpp>
 #endif
 // this one has to be last:

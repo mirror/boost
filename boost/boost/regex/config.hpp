@@ -232,13 +232,13 @@ using std::distance;
  *
  ****************************************************************************/
 
-#if defined(BOOST_MSVC) || defined(__ICL)
+#if defined(_MSC_VER) && (_MSC_VER >= 1200) && defined(_MSC_EXTENSIONS)
 #  if defined(_DEBUG)
 #     define BOOST_REGEX_CALL __cdecl
 #  else
 #     define BOOST_REGEX_CALL __fastcall
 #  endif
-#  define BOOST_REGEX_CCALL __stdcall
+#  define BOOST_REGEX_CCALL __cdecl
 #endif
 
 #if defined(__BORLANDC__)
@@ -556,5 +556,19 @@ inline void pointer_construct(T* p, const T& t)
 }} // namespaces
 #endif
 
+/*****************************************************************************
+ *
+ *  helper memory allocation functions:
+ *
+ ****************************************************************************/
+
+#if defined(__cplusplus) && defined(BOOST_REGEX_NON_RECURSIVE)
+namespace boost{ namespace re_detail{
+
+BOOST_REGEX_DECL void* BOOST_REGEX_CALL get_mem_block();
+BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block(void*);
+
+}} // namespaces
+#endif
 #endif
 

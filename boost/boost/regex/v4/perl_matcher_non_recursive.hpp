@@ -91,7 +91,7 @@ struct save_state_init
    save_state_init(saved_state** base, saved_state** end)
       : stack(base)
    {
-      *base = static_cast<saved_state*>(block_cache.get());
+      *base = static_cast<saved_state*>(get_mem_block());
       *end = reinterpret_cast<saved_state*>(reinterpret_cast<char*>(*base)+BOOST_REGEX_BLOCKSIZE);
       --(*end);
       new (*end)saved_state(0);
@@ -99,7 +99,7 @@ struct save_state_init
    }
    ~save_state_init()
    {
-      block_cache.put(*stack);
+      put_mem_block(*stack);
       *stack = 0;
    }
 };
@@ -145,7 +145,7 @@ void perl_matcher<BidiIterator, Allocator, traits, Allocator2>::extend_stack()
       --used_block_count;
       saved_state* stack_base;
       saved_state* backup_state;
-      stack_base = static_cast<saved_state*>(block_cache.get());
+      stack_base = static_cast<saved_state*>(get_mem_block());
       backup_state = reinterpret_cast<saved_state*>(reinterpret_cast<char*>(stack_base)+BOOST_REGEX_BLOCKSIZE);
       saved_extra_block* block = static_cast<saved_extra_block*>(backup_state);
       --block;
@@ -799,7 +799,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_extra_blo
    m_stack_base = pmp->base;
    m_backup_state = pmp->end;
    boost::re_detail::inplace_destroy(pmp);
-   block_cache.put(condemmed);
+   put_mem_block(condemmed);
    return true; // keep looking
 }
 

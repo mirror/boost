@@ -31,6 +31,15 @@
 #  include <malloc.h>
 #endif
 
+#if defined(BOOST_REGEX_NON_RECURSIVE) && !defined(BOOST_REGEX_V3)
+#if BOOST_REGEX_MAX_CACHE_BLOCKS == 0
+#include <new>
+#else
+#include <boost/regex/v4/mem_block_cache.hpp>
+#endif
+#endif
+
+
 namespace boost{
 
 //
@@ -104,7 +113,33 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL raise_regex_exception(const std::string& 
 
 #if defined(BOOST_REGEX_NON_RECURSIVE) && !defined(BOOST_REGEX_V3)
 
+#if BOOST_REGEX_MAX_CACHE_BLOCKS == 0
+
+BOOST_REGEX_DECL void* BOOST_REGEX_CALL get_mem_block()
+{
+   return ::operator new(BOOST_REGEX_BLOCKSIZE);
+}
+
+BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block(void* p)
+{
+   ::operator delete(p);
+}
+
+#else
+
 mem_block_cache block_cache = { 0, };
+
+BOOST_REGEX_DECL void* BOOST_REGEX_CALL get_mem_block()
+{
+   return block_cache.get();
+}
+
+BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block(void* p)
+{
+   block_cache.put(p);
+}
+
+#endif
 
 #endif
 
