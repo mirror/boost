@@ -11,7 +11,6 @@
 #include <boost/fsm/simple_state.hpp>
 #include <boost/fsm/state.hpp>
 #include <boost/fsm/transition.hpp>
-#include <boost/fsm/deferral.hpp>
 #include <boost/fsm/custom_reaction.hpp>
 
 #include <boost/mpl/list.hpp>
