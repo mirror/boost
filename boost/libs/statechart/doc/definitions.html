@@ -58,9 +58,8 @@ Common Ancestor (UML).</p>
 <h3><a name="Innermost state">Innermost state</a></h3>
 <p>An innermost state is a state that does not itself have inner states. Also 
 known as leaf state or simple state (UML). Note that <code>
-<a href="reference.html#Class template simple_state">
-boost::fsm::simple_state&lt;&gt;</a></code> is <b>not</b> a model of the UML simple 
-state.</p>
+<a href="reference.html#Class template simple_state">boost::fsm::simple_state&lt;&gt;</a></code> 
+is <b>not</b> a model of the UML simple state.</p>
 <h3><a name="In-state reaction">In-state reaction</a></h3>
 <p>An in-state reaction is a <a href="#Reaction">reaction</a> that neither 
 exits nor enters any states. Also known as inner transition or internal 
@@ -103,8 +102,14 @@ to mix a reaction of type 2-4 with anything else but type 1.</p>
 event type.</p>
 <h3><a name="Unstable state">Unstable state</a></h3>
 <p>A state is unstable from the moment when it has been entered until just 
-before its last <b>direct</b> inner state is entered. By definition, an 
-innermost state is never unstable.</p>
+before its last <b>direct</b> inner state is entered. Once a state is stable 
+it can only become unstable again by being the
+<a href="#Innermost common outer state">innermost common outer state</a> in a 
+transition.<br>
+<b>Note</b>: A termination never leaves any states unstable. For example, 
+consider the active state A with two orthogonal regions in which the inner 
+states B and C are each active. Terminating either B or C does not make A 
+unstable. Neither does terminating both, as that inevitably also terminates A.</p>
 <h3><a name="Unstable state machine">Unstable state machine</a></h3>
 <p>A state machine is unstable if at least one of its currently active states 
 is unstable. This is the case during the following three operations:</p>
@@ -115,7 +120,9 @@ is unstable. This is the case during the following three operations:</p>
   configuration has been exited until right before the last state of the 
   destination state configuration is entered</li>
   <li>Termination: From the moment after the first state has been exited until 
-  right before the last state of the current state configuration is exited</li>
+  right before the last terminated state is exited. However, a termination 
+  will never leave a state machine in an unstable state since state-exit 
+  actions cannot fail</li>
 </ul>
 <p>Under normal circumstances a state machine has Run-To-Completion semantics, 
 that is, processing of an event is fully completed before the machine returns 
@@ -124,13 +131,13 @@ is usually only unstable when it is busy processing an event and becomes
 stable again right before it has finished processing the event. However, this 
 can not be guaranteed when either transition actions or entry actions fail 
 (exit actions cannot fail). Such a failure is reported by an event, which must 
-be processed while the state machine is unstable. However, exception event 
-processing rules ensure that a state machine cannot be unstable when it 
-returns to the client (see <code><a href="reference.html#process_event">
-state_machine&lt;&gt;::process_event()</a></code> for details).</p>
+be processed while the state machine is unstable. Exception event processing 
+rules ensure that a state machine is never be unstable when it returns to the 
+client (see <code><a href="reference.html#process_event">state_machine&lt;&gt;::process_event()</a></code> 
+for details).</p>
 <hr>
 <p>Revised 
-      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->10 April, 2004<!--webbot bot="Timestamp" endspan i-checksum="29901" -->
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->29 April, 2004<!--webbot bot="Timestamp" endspan i-checksum="29920" -->
 </p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
