@@ -377,6 +377,7 @@ namespace boost {
   public:
     typedef void key_type; 
     typedef T value_type;
+    typedef R reference;
     typedef boost::lvalue_property_map_tag category;
 
     inline iterator_property_map(
@@ -427,8 +428,9 @@ namespace boost {
   public:
     typedef typename C::key_type key_type;
     typedef typename C::data_type value_type;
+    typedef value_type& reference;
     associative_property_map(C& c) : m_c(c) { }
-    value_type& operator[](const key_type& k) const {
+    reference operator[](const key_type& k) const {
       return (*m_c.find(k)).second;
     }
   private:
@@ -445,8 +447,9 @@ namespace boost {
   public:
     typedef typename C::key_type key_type;
     typedef typename C::data_type value_type;
+    typedef const value_type& reference;
     const_associative_property_map(const C& c) : m_c(c) { }
-    const value_type& operator[](const key_type& k) const {
+    reference operator[](const key_type& k) const {
       return (*m_c.find(k)).second;
     }
   private:
@@ -462,6 +465,7 @@ namespace boost {
   {
     typedef void key_type;
     typedef std::size_t value_type; // ? -JGS
+    typedef void reference;
     typedef boost::readable_property_map_tag category;
 
     template <class Vertex>
@@ -475,8 +479,9 @@ namespace boost {
     : public boost::put_get_at_helper< int, dummy_property_map  > 
   {
   public:
-    typedef void          key_type; 
-    typedef int    value_type;
+    typedef void key_type; 
+    typedef int value_type;
+    typedef const int& reference; 
     typedef boost::lvalue_property_map_tag category;
     inline dummy_property_map() : c(0) { }
     inline dummy_property_map(value_type cc) : c(cc) { }
