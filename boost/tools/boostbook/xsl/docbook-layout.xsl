@@ -27,7 +27,7 @@
   <xsl:template match = "table|informaltable">
      <xsl:choose>
         <xsl:when test = "self::table and tgroup|mediaobject|graphic">
-           <xsl:call-template name = "calsTable"/>
+           <xsl:apply-imports/>
         </xsl:when><xsl:when test = "self::informaltable and tgroup|mediaobject|graphic">
            <xsl:call-template name = "informal.object">
               <xsl:with-param name = "class"><xsl:choose>
