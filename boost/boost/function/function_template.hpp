@@ -533,6 +533,11 @@ class function<BOOST_FUNCTION_PARTIAL_SPEC, Allocator>
                                   BOOST_FUNCTION_COMMA Allocator> base_type;
   typedef function self_type;
 
+  struct clear_type {};
+
+  class holder;
+  friend class holder;
+
 public:
   typedef typename base_type::allocator_type allocator_type;
 
@@ -543,25 +548,43 @@ public:
 
   function(const self_type& f) : base_type(static_cast<const base_type&>(f)){}
 
-  template<typename Functor>
-  self_type& operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
+  self_type& operator=(self_type& f)
   {
     self_type(f).swap(*this);
     return *this;
   }
 
-  self_type& operator=(const base_type& f)
-  {
-    self_type(f).swap(*this);
-    return *this;
-  }
+  inline self_type& operator=(holder h);
 
-  self_type& operator=(const self_type& f)
+  self_type& operator=(clear_type*)
   {
-    self_type(f).swap(*this);
+    this->clear();
     return *this;
   }
 };
+
+template<typename R BOOST_FUNCTION_COMMA
+         BOOST_FUNCTION_TEMPLATE_PARMS,
+         typename Allocator>
+class function<BOOST_FUNCTION_PARTIAL_SPEC, Allocator>::holder
+{
+public:
+  template<typename F> holder(F f) : func(f) {}
+  holder(const base_type& f) : func(f) {}
+  holder(const self_type& f) : func(f) {}
+
+  self_type func;
+};
+
+template<typename R BOOST_FUNCTION_COMMA
+         BOOST_FUNCTION_TEMPLATE_PARMS,
+         typename Allocator>
+function<BOOST_FUNCTION_PARTIAL_SPEC, Allocator>&
+function<BOOST_FUNCTION_PARTIAL_SPEC, Allocator>::operator=(holder h)
+{
+  h.func.swap(*this);
+  return *this;
+}
 
 #undef BOOST_FUNCTION_PARTIAL_SPEC
 #endif // have partial specialization

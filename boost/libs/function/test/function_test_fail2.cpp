@@ -25,7 +25,7 @@ static int bad_fn(float f) { return static_cast<int>(f); }
 int
 test_main(int, char*[])
 {
-  function<int> f1;
+  function0<int> f1;
   f1 = bad_fn;
 
   BOOST_CRITICAL_ERROR("This should not have compiled.");
