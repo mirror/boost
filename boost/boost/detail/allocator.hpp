@@ -262,7 +262,7 @@ public:
    void construct(pointer p, const T& val) const
    { allocator_construct(p, val); }
 
-   void destroy(pointer __p) const
+   void destroy(pointer p) const
    { allocator_destroy(p); }
 };
 
