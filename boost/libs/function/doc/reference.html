@@ -69,8 +69,8 @@
            <b>typename</b> Policy,
            <b>typename</b> Mixin,
            <b>typename</b> Allocator&gt;
-  <b>void</b> <a href="#swap_functionN">swap</a>(<b>const</b> function<em>N</em>&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>,
-            <b>const</b> function<em>N</em>&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>);
+  <b>void</b> <a href="#swap_functionN">swap</a>(function<em>N</em>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>,
+            function<em>N</em>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>);
 
   // For any <i>N</i> in [0, <i>MAX_ARGS</i>]
   <b>template</b>&lt;<b>typename</b> ResultType,
@@ -82,20 +82,20 @@
            <b>typename</b> Arg<i>N+2</i> = <i>implementation-defined</i>,
 	   <i>...</i>
 	   <b>typename</b> Arg<i>MAX_ARGS</i> = <i>implementation-defined</i>&gt;
-  <b>class</b> <a href="#function">function</a> : <b>public</b> <a href="#functionN">function<i>N</i></a>&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>&gt;
+  <b>class</b> <a href="#function">function</a> : <b>public</b> <a href="#functionN">function<i>N</i></a>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>&gt;
   {
     <i>// Construction</i>
     function();
     function(<b>const</b> function<b>&amp;</b>);
-    function(<b>const</b> function<i>N</i>&lt;Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
+    function(<b>const</b> function<i>N</i>&lt;ResultType, Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
     <b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(F);
     
     <i>// Assignment</i>
     function<b>&amp;</b> <b>operator</b>=(<b>const</b> function<b>&amp;</b>);
-    function<b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i>&lt;Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
+    function<b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i>&lt;ResultType, Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
     <b>template</b>&lt;<b>typename</b> F&gt; function<b>&amp;</b> <b>operator</b>=(F);
     <b>void</b> set(<b>const</b> function<b>&amp;</b>);
-    <b>void</b> set(<b>const</b> function<i>N</i>&lt;Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
+    <b>void</b> set(<b>const</b> function<i>N</i>&lt;ResultType, Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
     <b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(F);
   };
 
@@ -104,8 +104,8 @@
 	   <b>typename</b> Arg2,
            <i>...</i>
 	   <b>typename</b> Arg<i>MAX_ARGS</i>&gt;
-  <b>void</b> <a href="#swap_function">swap</a>(<b>const</b> function&lt;Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b>,
-            <b>const</b> function&lt;Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b>);
+  <b>void</b> <a href="#swap_function">swap</a>(function&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b>,
+            function&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b>);
 }	   
 </pre>
 
@@ -263,8 +263,8 @@
          <b>typename</b> Policy,
          <b>typename</b> Mixin,
          <b>typename</b> Allocator&gt;
-<b>void</b> <a name="swap_functionN">swap</a>(<b>const</b> function<i>N</i>&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b> f,
-          <b>const</b> function<i>N</i>&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b> g);
+<b>void</b> <a name="swap_functionN">swap</a>(function<i>N</i>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b> f,
+          function<i>N</i>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b> g);
 </pre>
 <ul>
   <li><b>Effects</b>: <code>f.<a href="#functionN_swap">swap</a>(g);</code></li>
@@ -277,8 +277,8 @@
 	 <b>typename</b> Arg2,
          <i>...</i>
 	 <b>typename</b> Arg<i>MAX_ARGS</i>&gt;
-<b>void</b> <a name="swap_function">swap</a>(<b>const</b> function&lt;Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b> f,
-          <b>const</b> function&lt;Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b> g);
+<b>void</b> <a name="swap_function">swap</a>(function&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b> f,
+          function&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b> g);
 </pre>
 <ul>
   <li><b>Effects</b>: <code>f.<a href="#functionN_swap">swap</a>(g);</code></li>
@@ -288,7 +288,7 @@
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Wed Dec  5 18:14:37 EST 2001
+Last modified: Fri Jan 25 10:00:28 EST 2002
 <!-- hhmts end -->
   </body>
 </html>
