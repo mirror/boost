@@ -187,11 +187,9 @@
 <!ELEMENT type ANY>
 <!ATTLIST type %boost.common.attrib;>
 
-<!ELEMENT typedef (type?, purpose?, description?)>
+<!ELEMENT typedef (type, purpose?, description?)>
 <!ATTLIST typedef
-    type     CDATA  #IMPLIED
     name     CDATA  #REQUIRED
-    comment  CDATA  #IMPLIED
     %boost.common.attrib;>
 
 <!ELEMENT enum (enumvalue*, purpose?, description?)>
@@ -204,11 +202,9 @@
     name     CDATA  #REQUIRED
     %boost.common.attrib;>
 
-<!ELEMENT static-constant EMPTY>
+<!ELEMENT static-constant (type, default, purpose?, description?)>
 <!ATTLIST static-constant
-    type   CDATA  #REQUIRED
     name   CDATA  #REQUIRED
-    value  CDATA  #REQUIRED
     %boost.common.attrib;>
 
 <!ELEMENT data-member (type)>
