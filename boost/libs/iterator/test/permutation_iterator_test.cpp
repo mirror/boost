@@ -52,21 +52,22 @@ void permutation_test()
   }
 
   it = begin;
-  for( int i1 = 0; i1 < index_size - 1 ; i1+=2, it+=2 ) 
+  for( int i1 = 0; i1 < index_size - 1 ; ++++i1, ++++it ) 
   {
     index_type::iterator i_it2 = indices.begin();
     std::advance( i_it2, i1 );
     BOOST_CHECK( *it == elements[ *i_it2 ] );
   }
 
-
-  it = begin + (index_size);
+  it = begin;
+  std::advance(it, index_size);
   for( index_type::iterator i_it3 = indices.end(); it != begin; ) 
   {
     BOOST_CHECK( *--it == elements[ *--i_it3 ] );
   }
   
-  it = begin + index_size;
+  it = begin;
+  std::advance(it, index_size);
   for( int i2 = 0; i2 < index_size - 1; i2+=2, --it ) 
   {
     index_type::iterator i_it4 = --indices.end();
