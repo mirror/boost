@@ -642,20 +642,21 @@ public: // visitor interface
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class swap_with
 //
-// Internal visitor that swaps visited value with given storage.
+// Visitor that swaps visited value with content of given variant.
 //
-// Precondition: Given storage MUST have same content type as visited value.
+// Precondition: Given variant MUST have same logical type as visited value.
 //
+template <typename Variant>
 struct swap_with
     : public static_visitor<>
 {
 private: // representation
 
-    void* toswap_;
+    Variant& toswap_;
 
 public: // structors
 
-    explicit swap_with(void* toswap)
+    explicit swap_with(Variant& toswap)
         : toswap_(toswap)
     {
     }
@@ -663,27 +664,14 @@ public: // structors
 public: // internal visitor interfaces
 
     template <typename T>
-        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-    internal_visit(backup_holder<T>& operand, long) const
+    void operator()(T& operand) const
     {
-        operand.swap( *static_cast< backup_holder<T>* >(toswap_) );
-        BOOST_VARIANT_AUX_RETURN_VOID;
-    }
+        // Since the precondition ensures types are same, get T...
+        known_get<T> getter;
+        T& other = toswap_.apply_visitor(getter);
 
-    template <typename T>
-        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-    internal_visit(boost::recursive_wrapper<T>& operand, long) const
-    {
-        operand.swap( *static_cast< boost::recursive_wrapper<T>* >(toswap_) );
-        BOOST_VARIANT_AUX_RETURN_VOID;
-    }
-
-    template <typename T>
-        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-    internal_visit(T& operand, int) const
-    {
-        ::boost::detail::variant::move_swap(operand, *static_cast<T*>(toswap_));
-        BOOST_VARIANT_AUX_RETURN_VOID;
+        // ...and swap:
+        ::boost::detail::variant::move_swap( operand, other );
     }
 
 };
@@ -1606,12 +1594,12 @@ public: // modifiers
 
     void swap(variant& rhs)
     {
-        // If the contained internal types are EXACTLY the same...
-        if (which_ == rhs.which_)
+        // If the contained types are the same...
+        if (which() == rhs.which())
         {
             // ...then swap the values directly:
-            detail::variant::swap_with visitor(storage_.address());
-            rhs.internal_apply_visitor(visitor);
+            detail::variant::swap_with<variant> visitor(rhs);
+            this->apply_visitor(visitor);
         }
         else
         {
