@@ -38,14 +38,15 @@
 
 /* GCC does not correctly support in-class using declarations for template
  * functions. See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=9810
- * MSVC 7.1 seems to have a similar problem, though the conditions in which
- * the error happens are not that simple. I have yet to isolate this
+ * MSVC 7.1/8.0 seem to have a similar problem, though the conditions in
+ * which the error happens are not that simple. I have yet to isolate this
  * into a snippet suitable for bug reporting.
  */
 
 #if BOOST_WORKAROUND(__GNUC__, <3)||\
     BOOST_WORKAROUND(__GNUC__,==3)&&(__GNUC_MINOR__<4)||\
-    BOOST_WORKAROUND(BOOST_MSVC,==1310)
+    BOOST_WORKAROUND(BOOST_MSVC,==1310)||\
+    BOOST_WORKAROUND(BOOST_MSVC,==1400)
 #define BOOST_MULTI_INDEX_PRIVATE_IF_USING_DECL_FOR_TEMPL_FUNCTIONS public
 #else
 #define BOOST_MULTI_INDEX_PRIVATE_IF_USING_DECL_FOR_TEMPL_FUNCTIONS private
