@@ -298,8 +298,8 @@ namespace boost {
                 typedef BOOST_STRING_TYPENAME
                     ::boost::mpl::fold<
                         array_base_types,
-                        ::boost::string_algo::detail::array_traits_void,
-                        ::boost::string_algo::detail::array_traits_select<T> >::type type;
+                        ::boost::algorithm::detail::array_traits_void,
+                        ::boost::algorithm::detail::array_traits_select<T> >::type type;
             };
 
             template< typename T >
