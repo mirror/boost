@@ -107,6 +107,11 @@ void print_cpp_char(charT c)
    std::basic_string<charT> result = col.transform(&c, &c+1);
    std::cout << result.size() << "   ";
    print_string(result);
+   std::size_t n = result.find(charT(0));
+   if(n != std::basic_string<charT>::npos)
+   {
+      std::cerr << "(Error in location of null, found: " << n << ")";
+   }
 #endif
 }
 
