@@ -1149,6 +1149,35 @@ template<class R, class F, class L>
     return bind_t<bool, logical_not, list_type> ( logical_not(), list_type(f) );
 }
 
+// relational operators
+
+#define BOOST_BIND_OPERATOR( op, name ) \
+\
+struct name \
+{ \
+    template<class V, class W> bool operator()(V const & v, W const & w) const { return v op w; } \
+}; \
+ \
+template<class R, class F, class L, class A2> \
+    bind_t< bool, name, list2< bind_t<R, F, L>, typename add_value<A2>::type > > \
+    operator op (bind_t<R, F, L> const & f, A2 a2) \
+{ \
+    typedef typename add_value<A2>::type B2; \
+    typedef list2< bind_t<R, F, L>, B2> list_type; \
+    return bind_t<bool, name, list_type> ( name(), list_type(f, a2) ); \
+}
+
+BOOST_BIND_OPERATOR( ==, equal )
+BOOST_BIND_OPERATOR( !=, not_equal )
+
+BOOST_BIND_OPERATOR( <, less )
+BOOST_BIND_OPERATOR( <=, less_equal )
+
+BOOST_BIND_OPERATOR( >, greater )
+BOOST_BIND_OPERATOR( >=, greater_equal )
+
+#undef BOOST_BIND_OPERATOR
+
 } // namespace _bi
 
 // visit_each
