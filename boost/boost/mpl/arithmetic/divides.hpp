@@ -60,11 +60,11 @@ struct divides
           BOOST_MPL_AUX_TYPEOF(T1,
              T1::value / T2::value / T3::value / T4::value / T5::value
             )
-        , BOOST_MPL_AUX_VALUE_WKND(T1)::value
-        , BOOST_MPL_AUX_VALUE_WKND(T2)::value
-        , BOOST_MPL_AUX_VALUE_WKND(T3)::value
-        , BOOST_MPL_AUX_VALUE_WKND(T4)::value
-        , BOOST_MPL_AUX_VALUE_WKND(T5)::value
+        , BOOST_MPL_AUX_MSVC_VALUE_WKND(T1)::value
+        , BOOST_MPL_AUX_MSVC_VALUE_WKND(T2)::value
+        , BOOST_MPL_AUX_MSVC_VALUE_WKND(T3)::value
+        , BOOST_MPL_AUX_MSVC_VALUE_WKND(T4)::value
+        , BOOST_MPL_AUX_MSVC_VALUE_WKND(T5)::value
         >
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(5, divides, (T1,T2,T3,T4,T5))

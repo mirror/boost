@@ -57,8 +57,8 @@ struct modulus
           BOOST_MPL_AUX_TYPEOF(T1,
              T1::value % T2::value
             )
-        , BOOST_MPL_AUX_VALUE_WKND(T1)::value
-        , BOOST_MPL_AUX_VALUE_WKND(T2)::value
+        , BOOST_MPL_AUX_MSVC_VALUE_WKND(T1)::value
+        , BOOST_MPL_AUX_MSVC_VALUE_WKND(T2)::value
         >
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(2, modulus, (T1,T2))
