@@ -17,9 +17,9 @@
 				Function templates <a href="#checked_delete">checked_delete() and 
 					checked_array_delete()</a></li>
 			<li>
-				Function templates <a href="#functions next">next() and prior()</a></li>
+				Function templates <a href="#functions_next_prior">next() and prior()</a></li>
 			<li>
-				Class <a href="#Class noncopyable">noncopyable</a></li>
+				Class <a href="#Class_noncopyable">noncopyable</a></li>
 			<li>
 				Function template <a href="#addressof">addressof()</a></li>
 			<li>
@@ -30,7 +30,7 @@
 			checked_array_delete()</h2>
 		<p>See <a href="checked_delete.html">separate documentation</a>.</p>
 		<h2>
-			<a name="functions next">Function</a> templates next() and prior()</h2>
+			<a name="functions_next_prior">Function</a> templates next() and prior()</h2>
 		<p>Certain data types, such as the C++ Standard Library's forward and bidirectional 
 			iterators, do not provide addition and subtraction via operator+() or 
 			operator-().&nbsp; This means that non-modifying computation of the next or 
@@ -51,7 +51,7 @@ T prior(T x) { return --x; }</pre>
 const std::list&lt;T&gt;::iterator prev = boost::prior(p);</pre>
 		</blockquote>
 		<p>Contributed by <a href="../../people/dave_abrahams.htm">Dave Abrahams</a>.</p>
-		<h2><a name="Class noncopyable">Class noncopyable</a></h2>
+		<h2><a name="Class_noncopyable">Class noncopyable</a></h2>
 		<p>Class <strong>noncopyable</strong> is a base class.&nbsp; Derive your own class 
 			from <strong>noncopyable</strong> when you want to prohibit copy construction 
 			and copy assignment.</p>
@@ -90,8 +90,7 @@ class ResourceLadenFileSystem : boost::noncopyable {
 		<h2><a name="addressof">Function template addressof()</a></h2>
 		<p>Function <strong>addressof()</strong> returns the address of an object.</p>
 		<blockquote>
-			<pre>
-template &lt;typename T&gt; inline T*                addressof(T& v);
+			<pre>template &lt;typename T&gt; inline T*                addressof(T& v);
 template &lt;typename T&gt; inline const T*          addressof(const T& v);
 template &lt;typename T&gt; inline volatile T*       addressof(volatile T& v);
 template &lt;typename T&gt; inline const volatile T* addressof(const volatile T& v);
@@ -127,8 +126,7 @@ void f() {
 		<p>See <a href="tie.html">separate documentation</a>.</p>
 		<hr>
 		<p>Revised&nbsp; <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan
---> 
-			10 September, 2001<!--webbot bot="Timestamp" endspan i-checksum="39328"
+-->09 January, 2003<!--webbot bot="Timestamp" endspan i-checksum="38582"
 -->
 		</p>
 		<p>© Copyright boost.org 1999-2002. Permission to copy, use, modify, sell and distribute 
