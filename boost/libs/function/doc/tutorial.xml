@@ -248,17 +248,17 @@ f(&amp;x, 5);</programlisting>
         <row>
           <entry>
 <programlisting name="function.tutorial.std_bind.cxx98">  <classname>boost::function</classname>&lt;int (int)&gt; f;
-  X x;
-  f = std::bind1st(
-        std::mem_fun(&amp;X::foo), &amp;x);
-  f(5); // Call x.foo(5)</programlisting>
+X x;
+f = std::bind1st(
+      std::mem_fun(&amp;X::foo), &amp;x);
+f(5); // Call x.foo(5)</programlisting>
 </entry>
 <entry>
 <programlisting name="function.tutorial.std_bind.portable">  <classname alt="functionN">boost::function1</classname>&lt;int, int&gt; f;
-  X x;
-  f = std::bind1st(
-        std::mem_fun(&amp;X::foo), &amp;x);
-  f(5); // Call x.foo(5)</programlisting>
+X x;
+f = std::bind1st(
+      std::mem_fun(&amp;X::foo), &amp;x);
+f(5); // Call x.foo(5)</programlisting>
 </entry>
           </row>
         </tbody>
@@ -293,18 +293,18 @@ f(&amp;x, 5);</programlisting>
       <tbody>
         <row>
           <entry>
-<programlisting name="function.tutorial.ref.cxx98">  stateful_type a_function_object;
-  <classname>boost::function</classname>&lt;int (int)&gt; f;
-  f = <functionname>boost::ref</functionname>(a_function_object);
+<programlisting name="function.tutorial.ref.cxx98">stateful_type a_function_object;
+<classname>boost::function</classname>&lt;int (int)&gt; f;
+f = <functionname>boost::ref</functionname>(a_function_object);
 
-  <classname>boost::function</classname>&lt;int (int)&gt; f2(f);</programlisting>
+<classname>boost::function</classname>&lt;int (int)&gt; f2(f);</programlisting>
 </entry>
 <entry>
-<programlisting name="function.tutorial.ref.portable">  stateful_type a_function_object;
-  <classname alt="functionN">boost::function1</classname>&lt;int, int&gt; f;
-  f = <functionname>boost::ref</functionname>(a_function_object);
+<programlisting name="function.tutorial.ref.portable">stateful_type a_function_object;
+<classname alt="functionN">boost::function1</classname>&lt;int, int&gt; f;
+f = <functionname>boost::ref</functionname>(a_function_object);
 
-  <classname alt="functionN">boost::function1</classname>&lt;int, int&gt; f2(f);</programlisting>
+<classname alt="functionN">boost::function1</classname>&lt;int, int&gt; f2(f);</programlisting>
 </entry>
           </row>
         </tbody>
