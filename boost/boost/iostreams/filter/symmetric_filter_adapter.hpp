@@ -63,8 +63,7 @@ public:
           multichar_tag,
           closable_tag
         { };
-    symmetric_filter_adapter_impl( SymmetricFilter* filter,  
-                                   std::streamsize buffer_size );
+    symmetric_filter_adapter_impl(SymmetricFilter* filter, int buffer_size);
     ~symmetric_filter_adapter_impl() { delete filter_; }
 
     template<typename Source>
@@ -189,7 +188,7 @@ public:
     typedef typename impl_type::char_type           char_type;
     typedef typename impl_type::category            io_category;
     symmetric_filter_adapter( SymmetricFilter* filter,     // Takes ownership.
-                              std::streamsize buffer_size =
+                              int buffer_size =
                                   default_buffer_size )    // Use large buffer.
         : pimpl_(new impl_type(filter, buffer_size)) { }
 
@@ -219,8 +218,7 @@ namespace detail {
 
 template<typename SymmetricFilter, typename Alloc>
 symmetric_filter_adapter_impl<SymmetricFilter, Alloc>::
-    symmetric_filter_adapter_impl
-        (SymmetricFilter* filter, std::streamsize buffer_size)
+    symmetric_filter_adapter_impl(SymmetricFilter* filter, int buffer_size)
     : filter_(filter), buf_(buffer_size), state_(0) 
     { }
 

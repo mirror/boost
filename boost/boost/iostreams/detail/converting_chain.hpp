@@ -101,9 +101,7 @@ protected:
     void notify();
 private:
     template<typename T>
-    void push_impl( const T& t,
-                    std::streamsize buffer_size = -1,
-                    std::streamsize pback_size = -1 )
+    void push_impl(const T& t, int buffer_size = -1, int pback_size = -1 )
         {
             
         }

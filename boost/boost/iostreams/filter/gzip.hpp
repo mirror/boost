@@ -177,7 +177,7 @@ public:
           closable_tag
         { };
     basic_gzip_compressor( const gzip_params& = gzip::default_compression,
-                           std::streamsize buffer_size = default_buffer_size );
+                           int buffer_size = default_buffer_size );
 
     template<typename Source>
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
@@ -317,8 +317,7 @@ public:
           closable_tag
         { };
     basic_gzip_decompressor( int window_bits = gzip::default_window_bits,
-                             std::streamsize buffer_size =
-                                  default_buffer_size );
+                             int buffer_size = default_buffer_size );
     template<typename Source>
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
         {
@@ -481,7 +480,7 @@ typedef basic_gzip_decompressor<> gzip_decompressor;
 
 template<typename Alloc>
 basic_gzip_compressor<Alloc>::basic_gzip_compressor
-    (const gzip_params& p, std::streamsize buffer_size)
+    (const gzip_params& p, int buffer_size)
     : base_type(normalize_params(p), buffer_size),
       offset_(0), flags_(0)
 {
@@ -538,7 +537,7 @@ gzip_params basic_gzip_compressor<Alloc>::normalize_params(gzip_params p)
 
 template<typename Alloc>
 basic_gzip_decompressor<Alloc>::basic_gzip_decompressor
-    (int window_bits, std::streamsize buffer_size)
+    (int window_bits, int buffer_size)
     : base_type(make_params(window_bits), buffer_size),
       os_(gzip::os_unknown), mtime_(0), flags_(0)
     { }

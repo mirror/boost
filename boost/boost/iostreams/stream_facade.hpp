@@ -144,8 +144,6 @@ public:
     //                         BOOST_IOSTREAMS_PUSH_ARGS() )
     bool is_open() const { return this->member.is_open(); }
     void close() { this->member.close(); }
-    void set_buffer_size(std::streamsize size)
-    { this->member.set_buffer_size(size); }
     Device& operator*() { return *this->member; }
     Device* operator->() { return &*this->member; }
 private:

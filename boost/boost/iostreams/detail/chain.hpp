@@ -106,19 +106,17 @@ public:
     // Sets the size of the buffer created for the devices to be added to this
     // chain. Does not affect the size of the buffer for devices already
     // added.
-    void set_buffer_size(std::streamsize n)
-        { pimpl_->device_buffer_size_ = n; }
+    void set_buffer_size(int n) { pimpl_->device_buffer_size_ = n; }
 
     // Sets the size of the buffer created for the filters to be added
     // to this chain. Does not affect the size of the buffer for filters already
     // added.
-    void set_filter_buffer_size(std::streamsize n)
-        { pimpl_->filter_buffer_size_ = n; }
+    void set_filter_buffer_size(int n) { pimpl_->filter_buffer_size_ = n; }
 
     // Sets the size of the putback buffer for filters and devices to be added
     // to this chain. Does not affect the size of the buffer for filters or
     // devices already added.
-    void set_pback_size(std::streamsize n) { pimpl_->pback_size_ = n; }
+    void set_pback_size(int n) { pimpl_->pback_size_ = n; }
 
     //----------Device interface----------------------------------------------//
 
@@ -146,9 +144,7 @@ public:
     bool is_complete() const { return pimpl_->complete_; }
 private:
     template<typename T>
-    void push_impl( const T& t,
-                    std::streamsize buffer_size = -1,
-                    std::streamsize pback_size = -1 )
+    void push_impl(const T& t, int buffer_size = -1, int pback_size = -1)
         {
             typedef typename iostreams::io_category<T>::type  category;
             typedef typename unwrap_ios<T>::type              policy_type;
@@ -229,12 +225,12 @@ private:
                     std::for_each( links_.begin(), links_.end(), 
                                    closer(BOOST_IOS::out) );
             }
-        list_type        links_;
-        client_type*     client_;
-        std::streamsize  device_buffer_size_,
-                         filter_buffer_size_,
-                         pback_size_;
-        bool             complete_;
+        list_type     links_;
+        client_type*  client_;
+        int           device_buffer_size_,
+                      filter_buffer_size_,
+                      pback_size_;
+        bool          complete_;
     };
     friend struct chain_impl;
 

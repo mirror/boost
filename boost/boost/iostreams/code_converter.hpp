@@ -189,7 +189,7 @@ struct code_converter_impl {
 
 //--------------Definition of converter---------------------------------------//
 
-#define BOOST_IOSTREAMS_CONVERTER_PARAMS() , std::streamsize buffer_size = -1
+#define BOOST_IOSTREAMS_CONVERTER_PARAMS() , int buffer_size = -1
 #define BOOST_IOSTREAMS_CONVERTER_ARGS() , buffer_size
 
 template<typename Device, typename Codecvt, typename Alloc>
@@ -232,22 +232,22 @@ public:
     code_converter() { }
     // BEGIN DEBUG
     code_converter( typename detail::param_type<Device>::type t, 
-                    std::streamsize buffer_size = -1 ) 
+                    int buffer_size = -1 ) 
     {
         this->open_impl(detail::wrap(t), buffer_size);
     }
     code_converter( const reference_wrapper<Device>& ref, 
-                    std::streamsize buffer_size = -1 ) 
+                    int buffer_size = -1 ) 
     {
         this->open_impl(ref , buffer_size);
     }
     void open( typename detail::param_type<Device>::type t, 
-               std::streamsize buffer_size = -1 ) 
+               int buffer_size = -1 ) 
     {
         this->open_impl(detail::wrap(t), buffer_size);
     }
     void open( const reference_wrapper<Device>& ref, 
-               std::streamsize buffer_size = -1 ) 
+               int buffer_size = -1 ) 
     {
         this->open_impl(ref, buffer_size);
     }
