@@ -950,7 +950,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         range (size_type start, size_type stop):
             start_ (start), size_ (stop - start) {
-            BOOST_UBLAS_CHECK (start <= stop, bad_size ());
         }
 
         BOOST_UBLAS_INLINE
