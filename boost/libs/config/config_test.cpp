@@ -67,6 +67,10 @@ int main()
         cout << "__GNUC__ defined as " << __GNUC__ << "\n";
 #   endif
 
+#   ifdef __EDG_VERSION__
+        cout << "__EDG_VERSION__ defined as " << __EDG_VERSION__ << "\n";
+#   endif
+
 #   ifdef __BORLANDC__
         cout << "__BORLANDC__ defined as " << __BORLANDC__ << "\n";
 #   endif
