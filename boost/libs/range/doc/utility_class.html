@@ -54,7 +54,7 @@ corresponding <code>const_iterator</code> is. </p>
     The intention of the <code>iterator_range</code> class is to encapsulate two 
     iterators so they fulfill the <a
       href="range.html#forward_range">Forward Range</a> concept. A few other 
-functions are also provided for convenience.
+    functions are also provided for convenience.
     </p>
     <p>
     If the template argument is not a model of Forward Traversal Iterator, one can 
@@ -63,6 +63,16 @@ functions are also provided for convenience.
     Pass Iterators.
     </p>
 
+    <p>
+    Recall that many default constructed iterators 
+    are <i>singular</i> and hence can only be assigned, but not compared or 
+    incremented or anything. However, if one creates a default constructed 
+    <code>iterator_range</code>, then one
+    can still call all its member functions. This means that the 
+    <code>iterator_range</code> will still be usable in many contexts even 
+    though the iterators underneath are not. 
+    </p>
+    
     <h3>Synopsis</h3>
 
     <pre>

@@ -30,11 +30,15 @@
         </p>
         <p>
         Note that an <a href="utility_class.html#iter_range">iterator_range</a> 
-is somewhat more convenient than a <code>pair</code>. </p>
+        is somewhat more convenient than a <code>pair</code> and that a <a 
+        href="utility_class.html#sub_range"><code>sub_range</code></a> do 
+       propagate const-ness. </p>
+        
         <li  >
             <i>Why is there not supplied more types or more functions?</i>
             <p  >
-            The library have been kept small because its current interface will serve most 
+            The library has been kept small because its current interface will 
+            serve most
             purposes. If and when a genuine need arises for more functionality, it can be 
             implemented.
             </p>
@@ -55,9 +59,14 @@ is somewhat more convenient than a <code>pair</code>. </p>
             Even though we speak of incrementable iterators, it would not make
             much sense for ranges; for example, we cannot determine the size and 
             emptiness of a range since we cannot even compare 
-            its iterators.
+            its iterators. 
             </p>
+            <p>
+            Note also that incrementable iterators are derived from output 
+            iterators and so there exist no output range.
+             </p>
         </li>   
+        <!--
         <li>
             <i>Should I use qualified syntax, for example
 <blockquote><pre>
@@ -100,7 +109,7 @@ is somewhat more convenient than a <code>pair</code>. </p>
 </blockquote>            
 Cool indeed!            
 </p>
-            
+     -->       
 
     </ol>
 

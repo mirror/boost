@@ -18,17 +18,30 @@
 
     <h2>Introduction</h2>
     <p>
-    When writing generic code that works with standard library containers, one 
-often finds it desirable to extend that code to work with other types that offer 
-    enough functionality to satisfy the needs of the generic code, but in an altered 
-    form.  For example, raw arrays are often suitable for use with generic code that 
+    Generic algorithms have so far been specified in terms of two or more 
+    iterators. Two iterators would together form a range of values that the 
+    algorithm could work on. This leads to a very general interface, but also
+    to a somewhat clumsy use of the algorithms with redundant specification
+    of container names. Therefore we would like to raise the abstraction level
+    for algorithms so they specify their interface in terms of <a 
+    href=range.html>Ranges</a> as much as possible.
+    </p>
+    
+    <p>
+    The most common form of ranges we are used to work with is standard library 
+    containers. However, one
+    often finds it desirable to extend that code to work with other types that 
+    offer
+    enough functionality to satisfy the needs of the generic code 
+    <i>if a suitable layer of indirection is applied </i>.  For 
+    example, raw arrays are often suitable for use with generic code that
     works with containers, provided a suitable adapter is used. Likewise, null 
     terminated strings can be treated as containers of characters, if suitably 
     adapted. 
     </p> 
     
     <p>
-     This library provides the means to adapt standard library 
+     This library therefore provides the means to adapt standard-like 
      containers,
     null terminated strings, <code>std::pairs</code> of iterators, and raw 
     arrays (and more), such that the same generic code can work with them all. 
@@ -51,17 +64,17 @@ free-standing functions so syntactic and/or semantic differences can be removed.
     The main advantages are
     <ul  >
         <li  >
-            simpler implementation of generic range algorithms
+            simpler implementation and specification of generic range algorithms
         </li>
         <li  >
-            more flexible client code
+            more flexible, compact and maintainable client code
         </li>
         <li  >
             correct handling of null-terminated strings
         </li>
         <li  >
         safe use of built-in arrays (for legacy code; why else would you use 
-arrays?) </li>
+        built-in arrays?) </li>
 
     </ul>
     </p>
@@ -112,9 +125,9 @@ class=identifier>ForwardReadableRange </span><span class=special>&gt;::</span><s
     </span>
     <span class=identifier>my_vector</span><span class=special>.</span><span 
 class=identifier>assign</span><span class=special>( </span><span class=identifier>values</span><span class=special>, </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>end</span><span class=special>( </span><span class=identifier>values </span><span class=special>) </span><span class=special>);</span>
-    </span><span class=keyword>typedef </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>vector</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt;::</span><span class=identifier>range_iterator </span><span class=identifier>range_iterator</span><span class=special>;
-    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>range_iterator</span><span class=special>,</span><span class=identifier>range_iterator</span><span class=special>&gt;       </span><span class=identifier>my_view</span><span class=special>( </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>my_vector </span><span class=special>),
-                                                            </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>my_vector </span><span class=special>) </span><span class=special>+ </span><span class=identifier>N </span><span class=special>);
+    </span><span class=keyword>typedef </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>vector</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt;::</span><span class=identifier>iterator </span><span class=identifier>iterator</span><span class=special>;
+    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>iterator</span><span class=special>,</span><span class=identifier>iterator</span><span class=special>&gt;       </span><span class=identifier>my_view</span><span class=special>( </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>my_vector </span><span class=special>),
+                                                </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>my_vector </span><span class=special>) </span><span class=special>+ </span><span class=identifier>N </span><span class=special>);
     </span><span class=keyword>char  </span><span class=identifier>str_val</span><span class=special>[] </span><span class=special>= </span><span class=string>&quot;a string&quot;</span><span class=special>;
     </span><span class=keyword>char</span><span class=special>* </span><span class=identifier>str       </span><span class=special>= </span><span class=identifier>str_val</span><span class=special>;
     
