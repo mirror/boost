@@ -348,9 +348,10 @@ struct BOOST_RE_IX_DECL w32_traits_base : public regex_traits_base
    char_class_upper = C1_UPPER,
    char_class_xdigit = C1_XDIGIT,
    char_class_blank = C1_BLANK,
-   char_class_underscore = 0x0200,
+   char_class_underscore = 0x0400,
    char_class_word = C1_ALPHA | C1_DIGIT | char_class_underscore,
-   char_class_unicode = 0x0400
+   char_class_unicode = 0x0800,
+   char_class_win = C1_ALPHA | C1_CNTRL | C1_UPPER | C1_LOWER | C1_DIGIT | C1_PUNCT | C1_BLANK | C1_SPACE | C1_XDIGIT | C1_BLANK
    };
 public:
    static std::string BOOST_RE_CALL set_message_catalogue(const std::string& s);
