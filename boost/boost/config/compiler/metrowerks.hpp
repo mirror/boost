@@ -7,7 +7,10 @@
 
 //  Metrowerks C++ compiler setup:
 
-#   define BOOST_NO_STD_LOCALE  // missing ctype_base
+// locale support is disabled when linking with the dynamic runtime
+#   ifdef _MSL_NO_LOCALE
+#     define BOOST_NO_STD_LOCALE
+#   endif 
 
 #   if __MWERKS__ <= 0x2301  // 5.3
 #     define BOOST_NO_FUNCTION_TEMPLATE_ORDERING
