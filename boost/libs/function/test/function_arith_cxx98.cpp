@@ -7,20 +7,22 @@
 
   float mul_ints(int x, int y) { return ((float)x) * y; }
 
+
+struct int_div { 
+  float operator()(int x, int y) const { return ((float)x)/y; }; 
+};
+
+
 int main()
 {
     
 boost::function<float (int x, int y)> f;
 
     
-struct int_div { 
-  float operator()(int x, int y) const { return ((float)x)/y; }; 
-};
-
 f = int_div();
 
     
-std::cout << f(5, 3) >> std::endl;
+std::cout << f(5, 3) << std::endl;
 
     
 if (f)
@@ -34,5 +36,4 @@ f = 0;
     
   f = &mul_ints;
 
-    }
-    
+}

@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-struct stateful_type { int operator(int) const { return 0; } };
+struct stateful_type { int operator()(int) const { return 0; } };
 
 int main()
 {
@@ -16,4 +16,3 @@ int main()
   boost::function<int (int)> f2(f);
 
 }
-    

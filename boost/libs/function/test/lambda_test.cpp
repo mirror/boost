@@ -22,7 +22,7 @@ int test_main(int, char*[])
   function <unsigned(double)>       f2 = bind(f1, false, _1);
   function <unsigned()>             f3 = bind(f2, 4.0);
 
-  unsigned result = f3();
+  f3();
 
   return 0;
 }

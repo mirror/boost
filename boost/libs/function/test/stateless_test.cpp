@@ -21,7 +21,7 @@
 struct stateless_integer_add {
   int operator()(int x, int y) const { return x+y; }
 
-  void* operator new(std::size_t, stateless_integer_add*)
+  void* operator new(std::size_t, stateless_integer_add*) throw()
   {
     throw std::runtime_error("Cannot allocate a stateless_integer_add");
     return 0; // suppress warnings

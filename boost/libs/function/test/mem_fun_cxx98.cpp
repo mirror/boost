@@ -9,6 +9,8 @@ struct X {
   int foo(int);
 };
 
+int X::foo(int x) { return -x; }
+
 int main()
 {
     
@@ -20,4 +22,3 @@ X x;
 f(&x, 5);
 
 }
-    

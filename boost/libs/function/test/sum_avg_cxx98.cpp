@@ -21,4 +21,3 @@ boost::function<void (int values[], int n, int& sum, float& avg)> sum_avg;
 sum_avg = &do_sum_avg;
 
 }
-    
