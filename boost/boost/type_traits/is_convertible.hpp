@@ -264,6 +264,7 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convert
     /**/
 
 #   define TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_CV_SPEC(F) \
+    TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_SPEC(F) \
     TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_SPEC(F const) \
     TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_SPEC(F volatile) \
     TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_SPEC(F const volatile) \
