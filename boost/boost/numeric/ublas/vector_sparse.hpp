@@ -389,7 +389,7 @@ namespace boost { namespace numeric { namespace ublas {
         true_reference ref (size_type i) {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
             std::pair<subiterator_type, bool> ii (data ().insert (typename array_type::value_type (i, value_type/*zero*/())));
-            BOOST_UBLAS_CHECK ((ii->first).first == i, internal_logic ());   // broken map
+            BOOST_UBLAS_CHECK ((ii.first)->first == i, internal_logic ());   // broken map
             return (ii.first)->second;
         }
         BOOST_UBLAS_INLINE
