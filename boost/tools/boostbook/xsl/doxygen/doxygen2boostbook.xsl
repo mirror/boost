@@ -933,6 +933,9 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="computeroutput" mode="passthrough">
+    <computeroutput><xsl:apply-templates mode="passthrough"/></computeroutput>
+  </xsl:template>
   <xsl:template match="parameterlist" mode="passthrough"/>
 
   <xsl:template match="bold" mode="passthrough">
@@ -1034,4 +1037,62 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+  <!-- Convert HTML tables into DocBook format -->
+  <xsl:template match="table" mode="passthrough">
+    <informaltable>
+      <tgroup>
+        <xsl:attribute name="cols">
+          <xsl:value-of select="@cols"/>
+        </xsl:attribute>
+
+        <tbody>
+          <xsl:apply-templates mode="table"/>
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </xsl:template>
+
+  <xsl:template match="row" mode="table">
+    <row>
+      <xsl:apply-templates mode="table"/>
+    </row>
+  </xsl:template>
+  
+  <xsl:template match="entry" mode="table">
+    <entry>
+      <xsl:if test="para/center">
+        <xsl:attribute name="valign">
+          <xsl:value-of select="'middle'"/>
+        </xsl:attribute>
+        <xsl:attribute name="align">
+          <xsl:value-of select="'center'"/>
+        </xsl:attribute>
+      </xsl:if>
+
+      <xsl:choose>
+        <xsl:when test="@thead='yes'">
+          <emphasis role="bold">
+            <xsl:call-template name="table-entry"/>
+          </emphasis>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="table-entry"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </entry>
+  </xsl:template>
+
+  <xsl:template name="table-entry">
+    <xsl:choose>
+      <xsl:when test="para/center">
+        <xsl:apply-templates select="para/center/*|para/center/text()"
+          mode="passthrough"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="para/*|para/text()" mode="passthrough"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
  </xsl:stylesheet>
