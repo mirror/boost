@@ -561,9 +561,7 @@ namespace boost {
     f1.swap(f2);
   }
 
-#if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)                         \
- && !defined(BOOST_BCB_PARTIAL_SPECIALIZATION_BUG)                              \
- && (BOOST_STRICT_CONFIG || !defined(__SUNPRO_CC) || __SUNPRO_CC > 0x540)
+#if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
 
 #if BOOST_FUNCTION_NUM_ARGS == 0
 #define BOOST_FUNCTION_PARTIAL_SPEC R (void)

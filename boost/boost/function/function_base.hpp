@@ -73,7 +73,13 @@ namespace boost { namespace python { namespace objects {
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)                    \
+ || defined(BOOST_BCB_PARTIAL_SPECIALIZATION_BUG)                         \
+ || !(BOOST_STRICT_CONFIG || !defined(__SUNPRO_CC) || __SUNPRO_CC > 0x540)
+#  define BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
+#endif
+
+#if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
 namespace boost {
 
 #if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_STRICT_CONFIG)
