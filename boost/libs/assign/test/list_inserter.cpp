@@ -18,7 +18,6 @@
 
 #include <boost/assign/list_inserter.hpp>
 #include <boost/assign/list_of.hpp>
-#include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/array.hpp>
 #include <boost/function.hpp>
@@ -149,9 +148,8 @@ void check_list_inserter()
 
 
 
-#include <boost/test/included/unit_test_framework.hpp> 
-
-using boost::unit_test_framework::test_suite;
+#include <boost/test/unit_test.hpp>
+using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )
 {

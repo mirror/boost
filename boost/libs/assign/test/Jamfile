@@ -1,46 +1,36 @@
+# Boost.Assign library
+#
+#  Copyright Thorsten Ottosen 2003-2005. Use, modification and
+#  distribution is subject to the Boost Software License, Version
+#  1.0. (See accompanying file LICENSE_1_0.txt or copy at
+#  http://www.boost.org/LICENSE_1_0.txt)
+#
+# For more information, see http://www.boost.org/libs/assign/
+#
+
 subproject libs/assign/test ;
 
-SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
-include testing.jam ;
+import testing ;
 
-test-suite "assign"
-    : [ run
-            basic.cpp
-        : basic_usage
-       ]         
-    : [ run
-            array.cpp
-        : array
-       ]         
-    : [ run
-            std.cpp
-        : std
-       ]         
-    : [ run
-            list_of.cpp
-        : list_of
-       ]         
-    : [ run
-            list_inserter.cpp
-        : list_inserter
-       ]         
-    : [ run
-            list_of_workaround.cpp
-        : list_of_workaround
-       ] 
-    : [ run
-            email_example.cpp
-        : email
-       ] 
-     : [ run
-            my_vector_example.cpp
-        : my_vector
-       ] 
-    : [ run 
-            multi_index_container.cpp
-        : multi_index_container
-      ]
-             
-       ;
+rule assign-test ( name )
+{
+    return [
+        run $(name).cpp
+        <lib>../../test/build/boost_unit_test_framework
+        : : : <include>$(BOOST_ROOT)
+        ] ;
+}
+
+test-suite assign :
+    [ assign-test basic ]
+    [ assign-test std ]
+    [ assign-test list_of ]
+    [ assign-test static_list_of ]
+    [ assign-test list_inserter ]
+    [ assign-test list_of_workaround ]
+    [ assign-test email_example ]
+    [ assign-test my_vector_example ]
+    [ assign-test multi_index_container ]      
+    ;
 
 
