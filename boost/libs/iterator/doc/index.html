@@ -53,21 +53,21 @@ older Boost Iterator Adaptor Library.</td>
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title"><a name="table-of-contents"><strong>Table of Contents</strong></a></p>
 <ul class="simple">
-<li><a class="reference" href="#new-style-iterators" id="id22" name="id22">New-Style Iterators</a></li>
-<li><a class="reference" href="#iterator-facade-and-adaptor" id="id23" name="id23">Iterator Facade and Adaptor</a></li>
-<li><a class="reference" href="#specialized-adaptors" id="id24" name="id24">Specialized Adaptors</a></li>
-<li><a class="reference" href="#iterator-utilities" id="id25" name="id25">Iterator Utilities</a><ul>
-<li><a class="reference" href="#traits" id="id26" name="id26">Traits</a></li>
-<li><a class="reference" href="#testing-and-concept-checking" id="id27" name="id27">Testing and Concept Checking</a></li>
+<li><a class="reference" href="#new-style-iterators" id="id21" name="id21">New-Style Iterators</a></li>
+<li><a class="reference" href="#iterator-facade-and-adaptor" id="id22" name="id22">Iterator Facade and Adaptor</a></li>
+<li><a class="reference" href="#specialized-adaptors" id="id23" name="id23">Specialized Adaptors</a></li>
+<li><a class="reference" href="#iterator-utilities" id="id24" name="id24">Iterator Utilities</a><ul>
+<li><a class="reference" href="#traits" id="id25" name="id25">Traits</a></li>
+<li><a class="reference" href="#testing-and-concept-checking" id="id26" name="id26">Testing and Concept Checking</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#upgrading-from-the-old-boost-iterator-adaptor-library" id="id28" name="id28">Upgrading from the old Boost Iterator Adaptor Library</a></li>
-<li><a class="reference" href="#history" id="id29" name="id29">History</a></li>
+<li><a class="reference" href="#upgrading-from-the-old-boost-iterator-adaptor-library" id="id27" name="id27">Upgrading from the old Boost Iterator Adaptor Library</a></li>
+<li><a class="reference" href="#history" id="id28" name="id28">History</a></li>
 </ul>
 </div>
 <hr />
 <div class="section" id="new-style-iterators">
-<h1><a class="toc-backref" href="#id22" name="new-style-iterators">New-Style Iterators</a></h1>
+<h1><a class="toc-backref" href="#id21" name="new-style-iterators">New-Style Iterators</a></h1>
 <p>The iterator categories defined in C++98 are extremely limiting
 because they bind together two orthogonal concepts: traversal and
 element access.  For example, because a random access iterator is
@@ -86,7 +86,7 @@ concepts, see our</p>
 <a class="reference" href="new-iter-concepts.html">Standard Proposal For New-Style Iterators</a> (<a class="reference" href="new-iter-concepts.pdf">PDF</a>)</blockquote>
 </div>
 <div class="section" id="iterator-facade-and-adaptor">
-<h1><a class="toc-backref" href="#id23" name="iterator-facade-and-adaptor">Iterator Facade and Adaptor</a></h1>
+<h1><a class="toc-backref" href="#id22" name="iterator-facade-and-adaptor">Iterator Facade and Adaptor</a></h1>
 <p>Writing standard-conforming iterators is tricky, but the need comes
 up often.  In order to ease the implementation of new iterators,
 the Boost.Iterator library provides the <tt class="literal"><span class="pre">iterator_facade</span></tt> class template,
@@ -113,7 +113,7 @@ and accepted into the first C++ technical report; see our</p>
 <p>for more details.</p>
 </div>
 <div class="section" id="specialized-adaptors">
-<h1><a class="toc-backref" href="#id24" name="specialized-adaptors">Specialized Adaptors</a></h1>
+<h1><a class="toc-backref" href="#id23" name="specialized-adaptors">Specialized Adaptors</a></h1>
 <p>The iterator library supplies a useful suite of standard-conforming
 iterator templates based on the Boost <a class="reference" href="#iterator-facade-and-adaptor">iterator facade and adaptor</a>.</p>
 <ul class="simple">
@@ -137,9 +137,9 @@ positions of heterogeneous underlying iterators.</li>
 </ul>
 </div>
 <div class="section" id="iterator-utilities">
-<h1><a class="toc-backref" href="#id25" name="iterator-utilities">Iterator Utilities</a></h1>
+<h1><a class="toc-backref" href="#id24" name="iterator-utilities">Iterator Utilities</a></h1>
 <div class="section" id="traits">
-<h2><a class="toc-backref" href="#id26" name="traits">Traits</a></h2>
+<h2><a class="toc-backref" href="#id25" name="traits">Traits</a></h2>
 <ul class="simple">
 <li><a class="reference" href="pointee.html"><tt class="literal"><span class="pre">pointee.hpp</span></tt></a> (<a class="reference" href="pointee.pdf">PDF</a>): Provides the capability to deduce the referent types
 of pointers, smart pointers and iterators in generic code.  Used
@@ -147,12 +147,13 @@ in <tt class="literal"><span class="pre">indirect_iterator</span></tt>.</li>
 <li><a class="reference" href="iterator_traits.html"><tt class="literal"><span class="pre">iterator_traits.hpp</span></tt></a> (<a class="reference" href="iterator_traits.pdf">PDF</a>): Provides <a class="reference" href="../../mpl/doc/index.html">MPL</a>-compatible metafunctions which
 retrieve an iterator's traits.  Also corrects for the deficiencies
 of broken implementations of <tt class="literal"><span class="pre">std::iterator_traits</span></tt>.</li>
-<li><a class="reference" href="interoperable.html"><tt class="literal"><span class="pre">interoperable.hpp</span></tt></a> (<a class="reference" href="interoperable.pdf">PDF</a>): Provides an <a class="reference" href="../../mpl/doc/index.html">MPL</a>-compatible metafunction for
-testing iterator interoperability</li>
 </ul>
+<!-- * |interoperable|_ (PDF__): Provides an MPL_\ -compatible metafunction for
+testing iterator interoperability -->
+<!-- comment! __ interoperable.pdf -->
 </div>
 <div class="section" id="testing-and-concept-checking">
-<h2><a class="toc-backref" href="#id27" name="testing-and-concept-checking">Testing and Concept Checking</a></h2>
+<h2><a class="toc-backref" href="#id26" name="testing-and-concept-checking">Testing and Concept Checking</a></h2>
 <ul class="simple">
 <li><a class="reference" href="iterator_concepts.html"><tt class="literal"><span class="pre">iterator_concepts.hpp</span></tt></a> (<a class="reference" href="iterator_concepts.pdf">PDF</a>): Concept checking classes for the new iterator concepts.</li>
 <li><a class="reference" href="iterator_archetypes.html"><tt class="literal"><span class="pre">iterator_archetypes.hpp</span></tt></a> (<a class="reference" href="iterator_archetypes.pdf">PDF</a>): Concept archetype classes for the new iterators concepts.</li>
@@ -160,7 +161,7 @@ testing iterator interoperability</li>
 </div>
 </div>
 <div class="section" id="upgrading-from-the-old-boost-iterator-adaptor-library">
-<h1><a class="toc-backref" href="#id28" name="upgrading-from-the-old-boost-iterator-adaptor-library">Upgrading from the old Boost Iterator Adaptor Library</a></h1>
+<h1><a class="toc-backref" href="#id27" name="upgrading-from-the-old-boost-iterator-adaptor-library">Upgrading from the old Boost Iterator Adaptor Library</a></h1>
 <a class="target" id="upgrading" name="upgrading"></a><p>If you have been using the old Boost Iterator Adaptor library to
 implement iterators, you probably wrote a <tt class="literal"><span class="pre">Policies</span></tt> class which
 captures the core operations of your iterator.  In the new library
@@ -170,7 +171,7 @@ you probably wrote a <a class="reference" href="../../../more/generic_programmin
 <tt class="literal"><span class="pre">iterator_adaptor</span></tt> specialization you needed; in the new library
 design you don't need a type generator (though may want to keep it
 around as a compatibility aid for older code) because, due to the
-use of the Curiously Recurring Template Pattern (CRTP) <a class="citation-reference" href="#cop95" id="id21" name="id21">[Cop95]</a>,
+use of the Curiously Recurring Template Pattern (CRTP) <a class="citation-reference" href="#cop95" id="id20" name="id20">[Cop95]</a>,
 you can now define the iterator class yourself and acquire
 functionality through inheritance from <tt class="literal"><span class="pre">iterator_facade</span></tt> or
 <tt class="literal"><span class="pre">iterator_adaptor</span></tt>.  As a result, you also get much finer control
@@ -185,7 +186,7 @@ type, <tt class="literal"><span class="pre">transform_iterator</span></tt> will 
 <tt class="literal"><span class="pre">projection_iterator</span></tt> used to.</p>
 </div>
 <div class="section" id="history">
-<h1><a class="toc-backref" href="#id29" name="history">History</a></h1>
+<h1><a class="toc-backref" href="#id28" name="history">History</a></h1>
 <p>In 2000 Dave Abrahams was writing an iterator for a container of
 pointers, which would access the pointed-to elements when
 dereferenced.  Naturally, being a library writer, he decided to
@@ -214,7 +215,7 @@ library you see today.</p>
 <colgroup><col class="label" /><col /></colgroup>
 <col />
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id21" name="cop95">[Cop95]</a></td><td>[Coplien, 1995] Coplien, J., Curiously Recurring Template
+<tr><td class="label"><a class="fn-backref" href="#id20" name="cop95">[Cop95]</a></td><td>[Coplien, 1995] Coplien, J., Curiously Recurring Template
 Patterns, C++ Report, February 1995, pp. 24-27.</td></tr>
 </tbody>
 </table>

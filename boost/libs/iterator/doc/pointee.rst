@@ -1,9 +1,9 @@
 ++++++++++++++++++++++++++++++++++++++++
- ``pointee`` and ``indirect_reference``
+ ``pointee`` and ``indirect_reference`` 
 ++++++++++++++++++++++++++++++++++++++++
 
 :Author: David Abrahams
-:Contact: dave@boost-consulting.com, jsiek@osl.iu.edu, witt@ive.uni-hannover.de
+:Contact: dave@boost-consulting.com
 :organization: `Boost Consulting`_
 :date: $Date$
 :copyright: Copyright David Abrahams 2004. All rights reserved

@@ -1,6 +1,6 @@
-# This is where we list the ReStructuredText source files that form
-# the book.  When you're ready to expose a new chapter, add the
-# filename here and put links in index.rst
+# Copyright David Abrahams 2004. Use, modification and distribution is
+# subject to the Boost Software License, Version 1.0. (See accompanying
+# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 sources = [
 'counting_iterator.rst',
@@ -17,6 +17,8 @@ sources = [
 'reverse_iterator.rst',
 'transform_iterator.rst',
 'zip_iterator.rst',
-'iterator_archetypes.rst'
+'iterator_archetypes.rst',
+'iterator_concepts.rst',
+'iterator_traits.rst'
       ]
 

@@ -195,8 +195,8 @@ Traits
   retrieve an iterator's traits.  Also corrects for the deficiencies
   of broken implementations of ``std::iterator_traits``.
 
-* |interoperable|_ (PDF__): Provides an MPL_\ -compatible metafunction for
-  testing iterator interoperability
+.. * |interoperable|_ (PDF__): Provides an MPL_\ -compatible metafunction for
+     testing iterator interoperability
 
 .. |pointee| replace:: ``pointee.hpp``
 .. _pointee: pointee.html
@@ -208,7 +208,7 @@ __ iterator_traits.pdf
 
 .. |interoperable| replace:: ``interoperable.hpp``
 .. _interoperable: interoperable.html
-__ interoperable.pdf
+.. comment! __ interoperable.pdf
 
 .. _MPL: ../../mpl/doc/index.html
 

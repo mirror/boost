@@ -1,4 +1,7 @@
 #!/usr/bin/python
+# Copyright David Abrahams 2004. Use, modification and distribution is
+# subject to the Boost Software License, Version 1.0. (See accompanying
+# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #
 # Generate html, TeX, and PDF versions of all the source files
@@ -13,7 +16,7 @@ if 0:
     for s in sources:
         syscmd('boosthtml %s' % s)
 else:        
-    extensions = ('html', 'tex', 'pdf')
+    extensions = ('html', 'pdf')
 
     if len(sys.argv) > 1:
         extensions = sys.argv[1:]
@@ -23,7 +26,7 @@ else:
           for s in sources 
         ]
 
-    print 'make -k %s' % ' '.join(all)
-    syscmd('make -k %s' % ' '.join(all))
+    print 'make %s' % ' '.join(all)
+    syscmd('make %s' % ' '.join(all))
 
 
