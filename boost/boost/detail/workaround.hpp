@@ -62,7 +62,7 @@
 #   define BOOST_OPEN_PAREN (
 #   define BOOST_TESTED_AT(value)  > value) ?(-1): BOOST_OPEN_PAREN 1
 #  else
-#   define BOOST_TESTED_AT(value) != 0
+#   define BOOST_TESTED_AT(value) != ((value)-(value))
 #  endif
 
 # else
