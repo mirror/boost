@@ -25,9 +25,9 @@
                         <entry><code>to_upper</code></entry>
                         <entry>Convert a string to upper case</entry>
                         <entry>
-                            <functionname>to_upper_copy()()</functionname>
+                            <functionname>to_upper_copy()</functionname>
                             <sbr/>
-                            <functionname>to_upper()()</functionname>
+                            <functionname>to_upper()</functionname>
                         </entry>
                     </row>
                     <row>
@@ -136,7 +136,7 @@
                     </row>
                     <row>
                         <entry><code>equals</code></entry>
-                        <entry>Check if a two strings are equal</entry>
+                        <entry>Check if two strings are equal</entry>
                         <entry>
                             <functionname>equals()</functionname>
                             <sbr/>
@@ -200,7 +200,7 @@
                     </row>                  
                     <row>
                         <entry>find_tail</entry>
-                        <entry>Retrieve the fail of a string</entry>
+						<entry>Retrieve the tail of a string</entry>
                         <entry>
                             <functionname>find_tail()</functionname>
                         </entry>
@@ -326,7 +326,7 @@
                     </row>
                     <row>
                         <entry>replace/erase_head</entry>
-                        <entry>Replace/Erase the head of a input</entry>
+                        <entry>Replace/Erase the head of the input</entry>
                         <entry>
                             <functionname>replace_head()</functionname>
                             <sbr/>
@@ -340,7 +340,7 @@
                     </row>
                     <row>
                         <entry>replace/erase_tail</entry>
-                        <entry>Replace/Erase the tail of a input</entry>
+						<entry>Replace/Erase the tail of the input</entry>
                         <entry>
                             <functionname>replace_tail()</functionname>
                             <sbr/>
@@ -354,7 +354,7 @@
                     </row>
                     <row>
                         <entry>replace/erase_regex</entry>
-                        <entry>Replace/Erase a substring matching the the given regular expression</entry>
+                        <entry>Replace/Erase a substring matching the given regular expression</entry>
                         <entry>
                             <functionname>replace_regex()</functionname>
                             <sbr/>
@@ -368,7 +368,7 @@
                     </row>
                     <row>
                         <entry>replace/erase_regex_all</entry>
-                        <entry>Replace/Erase all substrings matching the the given regular expression</entry>
+                        <entry>Replace/Erase all substrings matching the given regular expression</entry>
                         <entry>
                             <functionname>replace_all_regex()</functionname>
                             <sbr/>
@@ -571,7 +571,7 @@
                     </row>
                     <row>
                         <entry>split_iterator</entry>
-                        <entry>Iterates through gasp between matching substrings in the input</entry>
+                        <entry>Iterates through gaps between matching substrings in the input</entry>
                         <entry>
                             <classname>split_iterator</classname>
                         </entry>
@@ -611,7 +611,7 @@
                     </row>
                     <row>
                         <entry>is_alnum</entry>
-                        <entry>Recognize Classify alphanumeric characters</entry>
+                        <entry>Recognize alphanumeric characters</entry>
                         <entry>
                             <functionname>is_alnum()</functionname>
                         </entry>
@@ -650,7 +650,7 @@
                         <entry>
                             <functionname>is_lower()</functionname>
                         </entry>
-                    </row>
+					</row>
                     <row>
                         <entry>is_print</entry>
                         <entry>Recognize printable characters</entry>

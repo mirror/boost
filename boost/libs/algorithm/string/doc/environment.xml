@@ -9,7 +9,7 @@
             The whole library is provided in headers. Regex variants of some algorithms, 
             however, are dependent on the <libraryname>Boost.Regex</libraryname> library. All such algorithms are
             separated in <headername>boost/algorithm/string_regex.hpp</headername>. 
-            If this header is used, an application must be linked with the <libraryname>Boost.Regex</libraryname> 
+            If this header is used, the application must be linked with the <libraryname>Boost.Regex</libraryname> 
             library. 
         </para>
     </section>

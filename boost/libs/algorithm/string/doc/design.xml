@@ -25,24 +25,24 @@
             First requirement of string-type is that it must accessible using 
             <link linkend="string_algo.collection_traits">collection traits</link>. This facility allows to access
             the elements inside the string in a uniform iterator-based fashion. 
-            This facility actually requires lessen requirements then collection concept. It implements 
-            <ulink url="../../libs/algorithm/string/doc/external_concepts.html">external</ulink> collection interface.
+            This requirement is actually less stringent than that of collection concept. It implements 
+            an <ulink url="../../libs/algorithm/string/doc/external_concepts.html">external</ulink> collection interface.
             This is sufficient for our library
         </para>
         <para>            
-            Second requirement defines the way in which are the characters stored in the string. Algorithms in 
-            this library work with an assumption, that copying a character is cheaper then allocating an extra 
-            storage to cache results. This is natural assumption for common character types. Algorithms will 
-            work even if this requirement will not be satisfied, however at the cost of performance degradation.
+            Second requirement defines the way in which the characters are stored in the string. Algorithms in 
+            this library work with an assumption that copying a character is cheaper then allocating extra 
+            storage to cache results. This is a natural assumption for common character types. Algorithms will 
+            work even if this requirement is not satisfied, however at the cost of performance degradation.
         <para>
         </para>
-            In addition some algorithms have additional requirements on the string-type. Particularly, it is required,
-            that an algorithm can create a new string of the given type. In this case, it is required, that
+            In addition some algorithms have additional requirements on the string-type. Particularly, it is required
+            that an algorithm can create a new string of the given type. In this case, it is required that
             the type satisfies the sequence (Std &sect;23.1.1) requirements.
         </para>
         <para>
             In the reference and also in the code, requirement on the string type is designated by the name of
-            template argument. <code>CollectionT</code> means that the basic collection requirements must be held.
+			template argument. <code>CollectionT</code> means that the basic collection requirements must hold.
             <code>SequenceT</code> designates extended sequence requirements.
         </para>
     </section>
@@ -61,29 +61,29 @@
         </para> 
         <para>
             It is possible to encapsulate a range in <code>std::pair&lt;&gt;</code>, but
-            the <code>std::pair&lt;&gt;</code> is a too generic encapsulation, so it is not best match for a range.
-            For instance, it does not enforce that begin and end iterators are of the same type.
+			<code>std::pair&lt;&gt;</code> is an overly generic encapsulation, so it is not best match for a range.
+			For instance, it does not enforce that begin and end iterators be of the same type.
         </para>
         <para>
             Naturally the range concept is heavily used also in this library. During the development of
-            the library, it was discovered, that there is a need for a reasonable encapsulation for it.
-            A core part of the library deals with substring searching algorithms. Any such an algorithm,
-            returns a range delimiting the result of the search. <code>std::pair&lt;&gt;</code> was considered as 
+			the library, it was discovered, that there is a need for a reasonable encapsulation for it, since
+			core part of the library deals with substring searching algorithms and any such algorithm
+            returns a range delimiting the result of the search. <code>std::pair&lt;&gt;</code> was deemed as 
             unsuitable. Therefore the <code>iterator_range</code> was defined.
         </para>
         <para>
             The intention of the <code>iterator_range</code> class is to manage a range as a single value and provide 
-            a basic interface for common operations. Its interface is similar to that of collection. 
-            In addition of <code>begin()</code>
-            and <code>end()</code> accessors, it has member functions for checking if the range is empty,
-            or to determine the size of the range. It has also a set of member typedefs that extract
+            a basic interface for common operations. Its interface is similar to that of a collection. 
+            In addition to <code>begin()</code>
+            and <code>end()</code> accessors, it has member functions for checking whether the range is empty,
+			or to determine the size of the range. It also has a set of member typedefs that extract
             type information from the encapsulated iterators. As such, the interface is compatible with 
             the <link linkend="string_algo.collection_traits">collection traits</link> requirements so
             it is possible to use this class as a parameter to many algorithms in this library.
         </para>
         <para>
             <classname>iterator_range</classname> will be moved to Boost.Range library in the future
-            releases. Internal version will be deprecated then.
+            releases. The internal version will be deprecated then.
         </para>
     </section>
         
@@ -96,7 +96,7 @@
             This functionality allows to write generic algorithms which work with several 
             different kinds of collections. For this library it means, that, for instance,
             many algorithms work with <code>std::string</code> as well as with <code>char[]</code>.
-            This facility implements
+            This facility implements the
             <ulink url="../../libs/algorithm/string/doc/external_concepts.html">external</ulink> collection
             concept.
         </para>
@@ -118,8 +118,8 @@
             </itemizedlist>
         </para>
         <para>
-            Collection traits support a subset of container concept (Std &sect;23.1). This subset 
-            can be described as an input container concept, e.g. a container with an immutable content. 
+            Collection traits support a subset of the container concept (Std &sect;23.1). This subset 
+            can be described as an input container concept, e.g. a container with immutable content. 
             Its definition can be found in the header <headername>boost/algorithm/string/collection_traits.hpp</headername>.
         </para>
         <para>
@@ -206,15 +206,15 @@
         <title>Sequence Traits</title>
 
         <para>
-            Major difference between <code>std::list</code> and <code>std::vector</code> is not in the interfaces
-            they provide, rather in the inner details of the class and the way how it performs 
-            various operation. The problem is that it is not possible to infer this difference from the 
+			The major difference between <code>std::list</code> and <code>std::vector</code> is not in the interfaces
+			they provide, but rather in the inner details of the class and the way how it performs 
+            various operations. The problem is that it is not possible to infer this difference from the 
             definitions of classes without some special mechanism.
-            However some algorithms can run significantly faster with the knowledge of the properties
+            However, some algorithms can run significantly faster with the knowledge of the properties
             of a particular container.
         </para>
         <para>
-            Sequence traits allows one to specify additional properties of a sequence container (see Std.&sect;32.2).
+			Sequence traits allow one to specify additional properties of a sequence container (see Std.&sect;32.2).
             These properties are then used by algorithms to select optimized handling for some operations.
             The sequence traits are declared in the header 
             <headername>boost/algorithm/string/sequence_traits.hpp</headername>.
@@ -311,7 +311,7 @@
         </para>
         <para>
             As usual, the implementation of the lower layer is designed to work with a generic sequence while
-            taking an advantage of specific features if possible 
+			taking advantage of specific features if possible 
             (by using <link linkend="string_algo.sequence_traits">Sequence traits</link>)
         </para>         
     </section>
@@ -319,10 +319,10 @@
         <title>Find Iterators &amp; Split Algorithms</title>
 
         <para>
-               Find iterators are a logical extension of <link linkend="string_algo.find">find facility</link>.
+            Find iterators are a logical extension of the <link linkend="string_algo.find">find facility</link>.
             Instead of searching for one match, the whole input can be iteratively searched for multiple matches.
             The result of the search is then used to partition the input. It depends on the algorithms which parts 
-            are returned as the result. It can be the matching parts (<classname>find_iterator</classname>) of the parts in
+			are returned as the result. They can be the matching parts (<classname>find_iterator</classname>) of the parts in
             between (<classname>split_iterator</classname>). 
         </para>
         <para>
@@ -334,26 +334,40 @@
     <section id="string_algo.exception">
         <title>Exception Safety</title>
 
-        <para>
-            The library provides some exceptions safety guaranties under following assumptions:
-		 	<orderedlist numeration="arabic">
-                <listitem>
-                    <para>        
-                        All types that are used as a template arguments or passed as arguments to the 
-                        facilities in this library provide <emphasis>basic exception guarantee</emphasis>.
-                    </para>
-                </listitem>
-                <listitem>
-                    <para>
-                        If the types mentioned in the first assumption can provide 
-                        <emphasis>strong exception guarantee</emphasis> for their const operations, some algorithm
-                        can provide stronger guaranties.
-                    </para>
-                </listitem>
-            </orderedlist>
-        </para>        
-        <para>
-            Unless stated otherwise, all facilities and algorithms in this library have <emphasis>basic exception guarantee</emphasis>.
-        </para>
-    </section>
+		<para>
+			The library requires that all operations on types used as template
+			or function arguments provide the <emphasis>basic exception-safety guarantee</emphasis>. 
+			In turn, all functions and algorithms in this library, except where stated
+			otherwise, will provide the <emphasis>basic exception-safety guarantee</emphasis>.
+			In other words:
+			The library maintains its invariants and does not leak resources in
+			the face of exceptions.  Some library operations give stronger
+			guarantees, which are documented on an individual basis.
+		</para>
+		
+		<para>
+			Some functions can provide the <emphasis>strong exception-safety guarantee</emphasis>.
+			That means that following statements are true:	
+			<itemizedlist>
+				<listitem>
+					If an exception is thrown, there are no effects other than those
+					of the function 
+				</listitem>
+				<listitem>
+					If an exception is thrown other than by the function, there are no effects
+				</listitem>
+			</itemizedlist>
+			This guarantee can be provided under the condition that the operations 
+			on the types used for arguments for these functions either
+			provide the strong exception guarantee or do not alter the global state .
+ 		</para>
+		<para>
+			In the reference, under the term <emphasis>strong exception-safety guarantee</emphasis>, we mean the
+			guarantee as defined above.			
+		</para>
+		<para>
+			For more information about the exception safety topics, follow this 
+			<ulink url="../../more/generic_exception_safety.html">link</ulink>
+		</para>		
+	</section>
 </section>

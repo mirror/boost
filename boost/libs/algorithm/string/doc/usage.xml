@@ -23,7 +23,7 @@
 
     string str1(" hello world! ");
     to_upper(str1);  // str1 == " HELLO WORLD! "
-    trim(str1);      // str1 == "HELLOW WORLD!"
+    trim(str1);      // str1 == "HELLO WORLD!"
 
     string str2=
        to_lower_copy(
@@ -38,19 +38,19 @@
         <itemizedlist>
             <listitem>
                 <para><emphasis role="bold">Container parameters:</emphasis>
-                    Unlike the STL algorithms, parameters are not specified only in form
+                    Unlike in the STL algorithms, parameters are not specified only in the form
                     of iterators. The STL convention allows for great flexibility,
-                    but it has several limitation. It is not possible to <emphasis>stack</emphasis> algorithms together, 
-                    because a container is passed in two parameters, so it is not possible to use 
+                    but it has several limitations. It is not possible to <emphasis>stack</emphasis> algorithms together, 
+					because a container is passed in two parameters. Therefore it is not possible to use 
                     a return value from another algorithm. It is considerably easier to write
-                    <code>to_lower(str1)</code>, then <code>to_lower(str1.begin(), str1.end())</code>.
+					<code>to_lower(str1)</code>, than <code>to_lower(str1.begin(), str1.end())</code>.
                 </para>
                 <para>
                     The magic of <link linkend="string_algo.collection_traits">collection_traits</link> 
                     provides a uniform way of handling different string types. 
                     If there is a need to pass a pair of iterators, 
                     <link linkend="string_algo.iterator_range"><code>iterator_range</code></link>
-                    can be used to package iterators into a structure with the compatible interface.
+					can be used to package iterators into a structure with a compatible interface.
                 </para>
             </listitem>
             <listitem>
@@ -72,9 +72,9 @@
             <listitem>
                 <para><emphasis role="bold">Naming:</emphasis>
                     Naming follows the conventions from the Standard C++ Library. If there is a 
-                    copy and mutable version of the same algorithm, the mutable version has no suffix 
-                    and the copy version has suffix <emphasis>_copy</emphasis>. 
-                    Some algorithms have prefix <emphasis>i</emphasis> 
+					copy and a mutable version of the same algorithm, the mutable version has no suffix 
+                    and the copy version has the suffix <emphasis>_copy</emphasis>. 
+                    Some algorithms have the prefix <emphasis>i</emphasis> 
                     (e.g. <functionname>ifind_first()</functionname>).
                     This prefix identifies that the algorithm works in a case-insensitive manner.
                 </para>
@@ -131,12 +131,12 @@
     cout 
         &lt;&lt; text1 
         &lt;&lt; all( text1, is_lower() )? "is": "is not"
-        &lt;&lt; "written in the lower case" 
+        &lt;&lt; " written in the lower case" 
         &lt;&lt; endl; // prints "hello world! is written in the lower case"
         </programlisting>
         <para>
-            The predicates are resolving if a substring is contained in the input string
-            under various conditions. The conditions are if a string starts with the substring, 
+			The predicates determine whether if a substring is contained in the input string
+            under various conditions. The conditions are: a string starts with the substring, 
             ends with the substring, 
             simply contains the substring or if both strings are equal. See the reference for 
             <headername>boost/algorithm/string/predicate.hpp</headername> for more details. 
@@ -147,15 +147,15 @@
             This predicate can be any unary predicate, but the library provides a bunch of 
             useful string-related predicates and combinators ready for use.
             These are located in the <headername>boost/algorithm/string/classification.hpp</headername> header.
-            Classification predicates can be combined using logical combinators for form
-            a more complicated expressions. For example: <code>is_from_range('a','z') || is_digit()</code>
+            Classification predicates can be combined using logical combinators to form
+			a more complex expressions. For example: <code>is_from_range('a','z') || is_digit()</code>
         </para>
     </section>
     <section>
         <title>Trimming</title>
         
         <para>
-            When parsing the input of a user, strings usually have unwanted leading or trailing 
+            When parsing the input from a user, strings usually have unwanted leading or trailing 
             characters. To get rid of them, we need trim functions:
         </para>
         <programlisting>
@@ -169,7 +169,7 @@
     trim_left_if(phone,is_any_of("0")); // phone == "423333444"
         </programlisting>
         <para>
-            It is possible to trim the spaces on the right, on the left or on the both sides of a string.
+            It is possible to trim the spaces on the right, on the left or on both sides of a string.
             And for those cases when there is a need to remove something else than blank space, there
             are <emphasis>_if</emphasis> variants. Using these, a user can specify a functor which will 
             select the <emphasis>space</emphasis> to be removed. It is possible to use classification 
@@ -190,7 +190,13 @@
     transform( result.begin(), result.end(), result.begin(), bind2nd(plus&lt;char&gt;(), 1) );
     // text = "hello dommy!"            
 
-    to_upper(result); // text == "hello doMMy!"
+	to_upper(result); // text == "hello doMMy!"
+
+	// iterator_range is convertible to bool
+	if(find_first(text, "dolly"))
+	{
+		cout &lt;&lt; "Dolly is there" &lt;&lt; endl;
+	}
         </programlisting>
         <para>
             We have used <functionname>find_last()</functionname> to search the <code>text</code> for "ll".
@@ -202,9 +208,10 @@
             char[] because this type is supported by 
             <link linkend="string_algo.collection_traits">collection_traits</link>.
 
-            Following lines transform the result. Notice, that 
-            <link linkend="string_algo.iterator_range"><code>iterator_range</code></link> have familiar 
-            <code>begin()</code> and <code>end()</code> methods, so it can be used like any other STL container.
+			The following lines transform the result. Notice that 
+			<link linkend="string_algo.iterator_range"><code>iterator_range</code></link> has familiar 
+			<code>begin()</code> and <code>end()</code> methods, so it can be used like any other STL container.
+			Also it is convertible to bool therefore it is easy to use find algorithms for a simple containment checking.
         </para>
         <para>
             Find algorithms are located in <headername>boost/algorithm/string/find.hpp</headername>.
@@ -215,7 +222,7 @@
         <para>
             Find algorithms can be used for searching for a specific part of string. Replace goes one step
             further. After a matching part is found, it is substituted with something else. The substitution is computed
-            from an original, using some transformation. 
+            from the original, using some transformation. 
         </para>
         <programlisting>
     string str1="Hello  Dolly,   Hello World!"
@@ -254,8 +261,8 @@
         </para>
         <para>
             There are two iterators provided <classname>find_iterator</classname> and 
-            <classname>split_iterator</classname>. First one iterates over substrings that are found using the specified
-            Finder. The second one iterates over the gasps between these substrings.
+			<classname>split_iterator</classname>. The former iterates over substrings that are found using the specified
+			Finder. The latter iterates over the gaps between these substrings.
         </para>
         <programlisting>
     string str1("abc-*-ABC-*-aBc");
@@ -290,9 +297,9 @@
     // aBC
         </programlisting>
         <para>
-            Note that find iterators have only one template parameter. It is the base iterator type.
-            Finder is specified at runtime. This allows us to typedef a find iterator for
-            a common string types and reuse it. Additionally make_*_iterator functions helps
+            Note that the find iterators have only one template parameter. It is the base iterator type.
+            The Finder is specified at runtime. This allows us to typedef a find iterator for
+            common string types and reuse it. Additionally make_*_iterator functions help
             to construct a find iterator for a particular collection.
         </para>
         <para>
@@ -305,8 +312,8 @@
         <para>
             Split algorithms are an extension to the find iterator for one common usage scenario.
             These algorithms use a find iterator and store all matches into the provided
-            container. This container must be able to hold copies (f.e std::string) or 
-            references (f.e. iterator_range) of the extracted substrings.
+			container. This container must be able to hold copies (e.g. <code>std::string</code>) or 
+			references (e.g. <code>iterator_range</code>) of the extracted substrings.
         </para>
         <para>
             Two algorithms are provided. <functionname>find_all()</functionname> finds all copies
@@ -321,7 +328,7 @@
     find_vector_type FindVec; // #1: Search for separators
     ifind_all( FindVec, str1, "abc" ); // FindVec == { [abc],[ABC],[aBc] }
 
-    typdef vector&lt; string &gt; split_vector_type;
+	typedef vector&lt; string &gt; split_vector_type;
     
     split_vector_type SplitVec; // #2: Search for tokens
     split( SplitVec, str1, is_any_of&lt;char&gt;("-*") ); // SplitVec == { "hello abc","ABC","aBc goodbye" }
