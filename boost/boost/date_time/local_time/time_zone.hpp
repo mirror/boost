@@ -32,7 +32,6 @@ namespace local_time {
               const dst_adjustment_offsets& dst_offset,
               boost::shared_ptr<dst_calc_rule> calc_rule) :
       zone_names_(zone_names),
-      has_dst_(calc_rule != 0),
       base_utc_offset_(base_utc_offset),
       dst_offsets_(dst_offset),
       dst_calc_rules_(calc_rule)
@@ -57,7 +56,7 @@ namespace local_time {
     //! True if zone uses daylight savings adjustments
     virtual bool has_dst() const
     {
-      return has_dst_;
+      return (dst_calc_rules_); //if calc_rule is set the tz has dst
     }
     //! Local time that DST starts -- undefined if has_dst is false
     virtual posix_time::ptime dst_local_start_time(gregorian::greg_year y) const
