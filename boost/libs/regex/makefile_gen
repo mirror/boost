@@ -218,6 +218,10 @@ NULL=
 NULL=nul
 !ENDIF 
 
+!IF "\$(MSVCDIR)" == ""
+!ERROR Variable MSVCDIR not set.
+!ENDIF
+
 EOF
 	echo "" >> $out
 	echo "ALL_HEADER=$header" >> $out
@@ -1025,6 +1029,7 @@ sun_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
 
 
 

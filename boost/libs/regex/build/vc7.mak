@@ -31,6 +31,10 @@ NULL=
 NULL=nul
 !ENDIF 
 
+!IF "$(MSVCDIR)" == ""
+!ERROR Variable MSVCDIR not set.
+!ENDIF
+
 
 ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/detail/fileiter.hpp ../../../boost/regex/detail/regex_compile.hpp ../../../boost/regex/detail/regex_cstring.hpp ../../../boost/regex/detail/regex_format.hpp ../../../boost/regex/detail/regex_kmp.hpp ../../../boost/regex/detail/regex_library_include.hpp ../../../boost/regex/detail/regex_match.hpp ../../../boost/regex/detail/regex_raw_buffer.hpp ../../../boost/regex/detail/regex_split.hpp ../../../boost/regex/detail/regex_stack.hpp ../../../boost/regex/detail/regex_synch.hpp
 
@@ -407,5 +411,4 @@ vc7-re300ls_clean :
 
 ./vc7/vc7-re300ls.lib : vc7/vc7-re300ls/c_regex_traits.obj vc7/vc7-re300ls/c_regex_traits_common.obj vc7/vc7-re300ls/cpp_regex_traits.obj vc7/vc7-re300ls/cregex.obj vc7/vc7-re300ls/fileiter.obj vc7/vc7-re300ls/posix_api.obj vc7/vc7-re300ls/regex.obj vc7/vc7-re300ls/regex_debug.obj vc7/vc7-re300ls/regex_synch.obj vc7/vc7-re300ls/w32_regex_traits.obj vc7/vc7-re300ls/wide_posix_api.obj
 	link -lib /nologo /out:vc7/vc7-re300ls.lib $(XSFLAGS)  vc7/vc7-re300ls/c_regex_traits.obj vc7/vc7-re300ls/c_regex_traits_common.obj vc7/vc7-re300ls/cpp_regex_traits.obj vc7/vc7-re300ls/cregex.obj vc7/vc7-re300ls/fileiter.obj vc7/vc7-re300ls/posix_api.obj vc7/vc7-re300ls/regex.obj vc7/vc7-re300ls/regex_debug.obj vc7/vc7-re300ls/regex_synch.obj vc7/vc7-re300ls/w32_regex_traits.obj vc7/vc7-re300ls/wide_posix_api.obj
-
 
