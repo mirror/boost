@@ -43,7 +43,7 @@
 //   However, optional's ctor is _explicit_ and the assignemt shouldn't compile.
 //   Therefore, for VC6.0 templated assignment is disabled.
 //
-#define BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
+#define BOOST_OPTIONAL_NO_CONVERTING_ASSIGNMENT
 #endif
 
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
@@ -53,7 +53,23 @@
 //   given to the non-templated version, making the class non-implicitely-copyable.
 //
 #define BOOST_OPTIONAL_NO_CONVERTING_COPY_CTOR
+#endif
+
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+// AFAICT only VC7.1 correctly resolves the overload set
+// that includes the in-place factory taking functions,
+// so for the other VC versions, in-place factory support
+// is disabled
 #define BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
+#endif
+
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x564)
+// VC7.0 has the following bug:
+//   When both a non-template and a template copy-ctor exist
+//   and the templated version is made 'explicit', the explicit is also
+//   given to the non-templated version, making the class non-implicitely-copyable.
+//
+#define BOOST_OPTIONAL_WEAK_OVERLOAD_RESOLUTION
 #endif
 
 namespace boost {
@@ -65,7 +81,7 @@ namespace optional_detail {
 
 // This local class is used instead of that in "aligned_storage.hpp"
 // because I've found the 'official' class to ICE BCB5.5 
-// when some types are used with optional<> 
+// when some types are used with optional<>
 // (due to sizeof() passed down as a non-type template parameter)
 template <class T>
 class aligned_storage
@@ -105,8 +121,10 @@ struct types_when_is_ref
   typedef raw_type& argument_type ;
 } ;
 
+struct optional_tag {} ;
+
 template<class T>
-class optional_base
+class optional_base : public optional_tag
 {
   private :
 
@@ -138,7 +156,7 @@ class optional_base
 
     // Creates an optional<T> uninitialized.
     // No-throw
-    optional_base ()
+    optional_base()
       :
       m_initialized(false) {}
 
@@ -168,7 +186,7 @@ class optional_base
     }
 
     // This is used for both converting and in-place constructions.
-    // Derived classes use the 'tag' to select the appropriate 
+    // Derived classes use the 'tag' to select the appropriate
     // implementation (the correct 'construct()' overload)
     template<class Expr>
     explicit optional_base ( Expr const& expr, Expr const* tag )
@@ -177,74 +195,36 @@ class optional_base
     {
       construct(expr,tag);
     }
-    
+
     // No-throw (assuming T::~T() doesn't)
     ~optional_base() { destroy() ; }
 
     // Assigns from another optional<T> (deep-copies the rhs value)
     // Basic Guarantee: If T::T( T const& ) throws, this is left UNINITIALIZED
-    optional_base& operator= ( optional_base const& rhs )
-      {
-        destroy(); // no-throw
-
-        if ( rhs.is_initialized() )
-        {
-          // An exception can be thrown here.
-          // If it happens, THIS will be left uninitialized.
-          construct(rhs.get_impl());
-        }
-        return *this ;
-      }
+    void assign ( optional_base const& rhs ) { assign_impl(rhs,is_reference_predicate()); }
 
     // Assigns from a T (deep-copies the rhs value)
     // Basic Guarantee: If T::( T const& ) throws, this is left UNINITIALIZED
-    optional_base& operator= ( argument_type val )
-      {
-        destroy(); // no-throw
-
-        // An exception can be thrown here.
-        // If it happens, THIS will be left uninitialized.
-        construct(val);
-
-        return *this ;
-      }
+    void assign ( argument_type val ) { assign_impl(val,is_reference_predicate()); }
 
     // Assigns from "none", destroying the current value, if any, leaving this UNINITIALIZED
     // No-throw (assuming T::~T() doesn't)
-    optional_base& operator= ( detail::none_t const& )
-      {
-        reset();
-        return *this ;
-      }
+    void assign ( detail::none_t const& ) { destroy(); }
 
 #ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
     template<class Expr>
-    void assign_expr ( Expr const& expr, Expr const* tag )
-    {
-      destroy(); // no-throw
-
-      // An exception can be thrown here.
-      // If it happens, THIS will be left uninitialized.
-      construct(expr,tag);
-    }
+    void assign_expr ( Expr const& expr, Expr const* tag ) { assign_expr_impl(expr,tag,is_reference_predicate()) ; }
 #endif
-    
+
   public :
 
     // Destroys the current value, if any, leaving this UNINITIALIZED
     // No-throw (assuming T::~T() doesn't)
-    void reset()
-      {
-        destroy();
-      }
+    void reset() { destroy(); }
 
     // Replaces the current value -if any- with 'val'
     // Basic Guarantee: If T::T( T const& ) throws this is left UNINITIALIZED.
-    void reset ( argument_type val )
-      {
-        destroy();
-        construct(val);
-      }
+    void reset ( argument_type val ) { assign_impl(val,is_reference_predicate()); }
 
     // Returns a pointer to the value if this is initialized, otherwise,
     // returns NULL.
@@ -253,7 +233,7 @@ class optional_base
     pointer_type       get_ptr()       { return m_initialized ? get_ptr_impl() : 0 ; }
 
     bool is_initialized() const { return m_initialized ; }
-    
+
   protected :
 
     void construct ( argument_type val )
@@ -261,7 +241,7 @@ class optional_base
        new (m_storage.address()) internal_type(val) ;
        m_initialized = true ;
      }
-     
+
 #ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
     // Constructs in-place using the given factory
     template<class Expr>
@@ -281,11 +261,11 @@ class optional_base
        m_initialized = true ;
      }
 #endif
-    
+
     // Constructs using any expression implicitely convertible to the single argument
-    // of a one-argument T constructor. 
+    // of a one-argument T constructor.
     // Converting constructions of optional<T> from optional<U> uses this function with
-    // 'Expr' being of type 'U' and relying on a converting constructor of T from U.  
+    // 'Expr' being of type 'U' and relying on a converting constructor of T from U.
     template<class Expr>
     void construct ( Expr const& expr, void const* )
      {
@@ -293,14 +273,125 @@ class optional_base
        m_initialized = true ;
      }
 
-    void destroy() 
-    {
-      if ( m_initialized )
-        destroy_impl(is_reference_predicate()) ; 
-    }
+    template<class Expr>
+    void assign_expr_to_ref ( Expr const& expr, void const* )
+     {
+       get_impl() = expr ;
+       m_initialized = true ;
+     }
+
+#ifdef BOOST_OPTIONAL_WEAK_OVERLOAD_RESOLUTION
+    // BCB5.64 (and probably lower versions) workaround.
+    //   The in-place factories are supported by means of catch-all constructors
+    //   and assignment operators (the functions are parameterized in terms of
+    //   an arbitrary 'Expr' type)
+    //   This compiler incorrectly resolves the overload set and sinks optional<T> and optional<U>
+    //   to the 'Expr'-taking functions even though explicit overloads are present for them.
+    //   Thus, the following overload is needed to properly handle the case when the 'lhs'
+    //   is another optional.
+    //
+    // For VC<=70 compilers this workaround dosen't work becasue the comnpiler issues and error
+    // instead of choosing the wrong overload
+    //
+    // Notice that 'Expr' will be optional<T> or optional<U> (but not optional_base<..>)
+    template<class Expr>
+    void construct ( Expr const& expr, optional_tag const* )
+     {
+       if ( expr.is_initialized() )
+       {
+         // An exception can be thrown here.
+         // It it happens, THIS will be left uninitialized.
+         new (m_storage.address()) internal_type(expr.get()) ;
+         m_initialized = true ;
+       }
+     }
+    template<class Expr>
+    void assign_expr_to_ref ( Expr const& expr, optional_tag const* )
+     {
+       if ( expr.is_initialized() )
+       {
+         // An exception can be thrown here.
+         // It it happens, THIS will be left uninitialized.
+         get_impl() = expr.get() ;
+         m_initialized = true ;
+       }
+     }
+#endif
+
+    void assign_impl ( optional_base const& rhs, is_not_reference_tag tag )
+      {
+        destroy();
+        if ( rhs.is_initialized() )
+          construct(rhs.get_impl());
+      }
+
+    void assign_impl ( optional_base const& rhs, is_reference_tag )
+      {
+        if ( is_initialized() )
+        {
+          destroy();
+          if ( rhs.is_initialized() )
+            assign_to_referenced(rhs.get_impl());
+        }
+        else
+        {
+          if ( rhs.is_initialized() )
+            construct(rhs.get_impl());
+        }
+      }
+
+    void assign_impl ( argument_type val, is_not_reference_tag )
+      {
+        destroy();
+        construct(val);
+      }
+
+    void assign_impl ( argument_type val, is_reference_tag )
+      {
+        if ( is_initialized() )
+        {
+          destroy();
+          assign_to_referenced(val);
+        }
+        else
+          construct(val);
+      }
+
+#ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
+    template<class Expr>
+    void assign_expr_impl ( Expr const& expr, Expr const* expr_tag, is_not_reference_tag )
+      {
+        destroy();
+        construct(expr,expr_tag);
+      }
+
+    template<class Expr>
+    void assign_expr_impl ( Expr const& expr, Expr const* expr_tag, is_reference_tag )
+      {
+        if ( is_initialized() )
+        {
+          destroy();
+          assign_expr_to_ref(expr,expr_tag);
+        }
+        else
+          construct(expr,expr_tag);
+      }
+#endif
+
+    void assign_to_referenced ( argument_type val )
+      {
+        get_impl() = val ;
+        m_initialized = true ;
+      }
+
+    void destroy()
+      {
+        if ( m_initialized )
+          destroy_impl(is_reference_predicate()) ;
+      }
 
     unspecified_bool_type safe_bool() const { return m_initialized ? &this_type::is_initialized : 0 ; }
-    
+
     reference_const_type get_impl() const { return dereference(get_object(), is_reference_predicate() ) ; }
     reference_type       get_impl()       { return dereference(get_object(), is_reference_predicate() ) ; }
 
@@ -319,7 +410,6 @@ class optional_base
     reference_const_type dereference( internal_type const* p, is_reference_tag     ) const { return p->get() ; }
     reference_type       dereference( internal_type*       p, is_reference_tag     )       { return p->get() ; }
 
-    // BCC564 complains about get_object()->~internal_type(), so the following dispatch is neccesary.
     void destroy_impl ( is_not_reference_tag ) { get_impl().~T() ; m_initialized = false ; }
     void destroy_impl ( is_reference_tag     ) { m_initialized = false ; }
 
@@ -378,16 +468,18 @@ class optional : public optional_detail::optional_base<T>
       base()
     {
       if ( rhs.is_initialized() )
-        construct(rhs.get());
+        this->construct(rhs.get());
     }
 #endif
-    
+
 #ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
     // Creates an optional<T> with an expression which can be either
     //  (a) An instance of InPlaceFactory (i.e. in_place(a,b,...,n);
     //  (b) An instance of TypedInPlaceFactory ( i.e. in_place<T>(a,b,...,n);
     //  (c) Any expression implicitely convertible to the single type
     //      of a one-argument T's constructor.
+    //  (d*) Weak compilers (BCB) might also resolved Expr as optional<T> and optional<U>
+    //       even though explicit overloads are present for these.
     // Depending on the above some T ctor is called.
     // Can throw is the resolved T ctor throws.
     template<class Expr>
@@ -401,28 +493,42 @@ class optional : public optional_detail::optional_base<T>
     // No-throw (assuming T::~T() doesn't)
     ~optional() {}
 
+#ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
+    // Assigns from an expression. See corresponding constructor.
+    // Basic Guarantee: If the resolved T ctor throws, this is left UNINITIALIZED
+    template<class Expr>
+    optional& operator= ( Expr expr )
+      {
+        this->assign_expr(expr,&expr);
+        return *this ;
+      }
+#endif
+
+#ifndef BOOST_OPTIONAL_NO_CONVERTING_ASSIGNMENT
     // Assigns from another convertible optional<U> (converts && deep-copies the rhs value)
     // Requires a valid conversion from U to T.
     // Basic Guarantee: If T::T( U const& ) throws, this is left UNINITIALIZED
     template<class U>
     optional& operator= ( optional<U> const& rhs )
       {
-        destroy(); // no-throw
+        this->destroy(); // no-throw
 
         if ( rhs.is_initialized() )
         {
           // An exception can be thrown here.
           // It it happens, THIS will be left uninitialized.
-          construct(rhs.get());
+          this->assign_val(rhs.get());
         }
         return *this ;
       }
+#endif
 
     // Assigns from another optional<T> (deep-copies the rhs value)
     // Basic Guarantee: If T::T( T const& ) throws, this is left UNINITIALIZED
+    //  (NOTE: On BCB, this operator is not actually called and left is left UNMODIFIED in case of a throw)
     optional& operator= ( optional const& rhs )
       {
-        this->base::operator= ( rhs ) ;
+        this->assign( rhs ) ;
         return *this ;
       }
 
@@ -430,7 +536,7 @@ class optional : public optional_detail::optional_base<T>
     // Basic Guarantee: If T::( T const& ) throws, this is left UNINITIALIZED
     optional& operator= ( argument_type val )
       {
-        this->base::operator= ( val ) ;
+        this->assign( val ) ;
         return *this ;
       }
 
@@ -439,27 +545,16 @@ class optional : public optional_detail::optional_base<T>
     // No-throw (assuming T::~T() doesn't)
     optional& operator= ( detail::none_t const& none_ )
       {
-        this->base::operator= ( none_ ) ;
+        this->assign( none_ ) ;
         return *this ;
       }
 
-#ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
-    // Assigns from an expression. See corresponding constructor.
-    // Basic Guarantee: If the resolved T ctor throws, this is left UNINITIALIZED
-    template<class Expr>
-    optional& operator= ( Expr expr )
-      {
-        this->base::assign_expr(expr,&expr);
-        return *this ;
-      }
-#endif
-      
     // Returns a reference to the value if this is initialized, otherwise,
     // the behaviour is UNDEFINED
     // No-throw
     reference_const_type get() const { BOOST_ASSERT(this->is_initialized()) ; return this->get_impl(); }
     reference_type       get()       { BOOST_ASSERT(this->is_initialized()) ; return this->get_impl(); }
-    
+
     // Returns a pointer to the value if this is initialized, otherwise,
     // the behaviour is UNDEFINED
     // No-throw
