@@ -6,8 +6,8 @@
  * See Boost website at http://www.boost.org/
  */
 
-#ifndef BOOST_DETAIL_ALLOCATOR_HPP
-#define BOOST_DETAIL_ALLOCATOR_HPP
+#ifndef BOOST_DETAIL_ALLOCATOR_JMLM_HPP
+#define BOOST_DETAIL_ALLOCATOR_JMLM_HPP
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/detail/workaround.hpp>
