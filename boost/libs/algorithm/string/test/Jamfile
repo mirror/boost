@@ -21,42 +21,56 @@ DEPENDS all : test ;
                 container_test.cpp
               : :
                 :
+                <cwpro8><*><runtime-link>static
+              	<cwpro9><*><runtime-link>static
                 : container
             ]
           [ run 
                 trim_test.cpp
               : :
                 :
+                <cwpro8><*><runtime-link>static
+              	<cwpro9><*><runtime-link>static
                 : trim
             ]
           [ run 
                 conv_test.cpp
               : :
                 :
+                <cwpro8><*><runtime-link>static
+              	<cwpro9><*><runtime-link>static
                 : conv
             ]
           [ run 
                 predicate_test.cpp
               : :
                 :
+                <cwpro8><*><runtime-link>static
+              	<cwpro9><*><runtime-link>static
                 : predicate
             ]
           [ run 
                 find_test.cpp
               : :
                 :
+                <cwpro8><*><runtime-link>static
+              	<cwpro9><*><runtime-link>static
                 : find
             ]
           [ run
                 split_test.cpp
               : :
                 :
+                <cwpro8><*><runtime-link>static
+              	<cwpro9><*><runtime-link>static
                 : split
             ]
           [ run 
                 replace_test.cpp
               : :
                 :
+                <cwpro8><*><runtime-link>static
+              	<cwpro9><*><runtime-link>static
                 : replace
             ]
           [ run 
