@@ -21,6 +21,10 @@
 #  define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 #endif
 
+#if (BOOST_INTEL_CXX_VERSION < 600) || !defined(BOOST_STRICT_CONFIG)
+#  define BOOST_NO_TEMPLATE_TEMPLATE_PARAMETERS
+#endif 
+
 #if (BOOST_INTEL_CXX_VERSION <= 600) || !defined(BOOST_STRICT_CONFIG)
 
 #  if defined(_MSC_VER) && (_MSC_VER <= 1300) // added check for <= VC 7 (Peter Dimov)
@@ -32,6 +36,8 @@
       // variable scoping. (reported by Thomas Witt)
       // Intel C++ 6.0 (currently in Beta test) doesn't have any front-end
       // changes at all.  (reported by Kirk Klobe)
+      // That can't be right, since it supports template template
+      // arguments (reported by Dave Abrahams)
 #     ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #        define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #     endif
