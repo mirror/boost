@@ -111,7 +111,7 @@ main()
     boost::transform_iterator<mult_functor, int*,
       boost::iterator<std::random_access_iterator_tag,int> >::type
       i(y, mult_functor(2));
-    boost::random_access_iterator_test(i, N, x);
+    boost::input_iterator_test(i, x[0], x[1]);
   }
   // Test indirect_iterators
   {
