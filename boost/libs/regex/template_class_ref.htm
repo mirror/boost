@@ -400,7 +400,7 @@ very closely on class basic_string, and fulfils the requirements
 for a container of <i>charT</i>. </p>
 
 <pre><b>namespace</b> boost{
-<b>template</b> &lt;<b>class</b> charT, <b>class</b> traits = char_regex_traits&lt;charT&gt;, <b>class</b> Allocator = std::allocator&lt;charT&gt;&nbsp; &gt;
+<b>template</b> &lt;<b>class</b> charT, <b>class</b> traits = regex_traits&lt;charT&gt;, <b>class</b> Allocator = std::allocator&lt;charT&gt;&nbsp; &gt;
 <b>class</b> reg_expression : <b>public</b> regbase
 {
 <b>public</b>: 
@@ -679,7 +679,9 @@ for a container of <i>charT</i>. </p>
         locale_type&amp; l);</td>
         <td valign="top" width="45%">Imbues the expression with
         the specified locale, and invalidates the current
-        expression.</td>
+        expression. May throw std::runtime_error if the call
+        results in an attempt to open a non-existent message
+        catalogue.</td>
         <td width="5%">&nbsp;</td>
     </tr>
     <tr>

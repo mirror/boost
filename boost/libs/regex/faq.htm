@@ -190,10 +190,12 @@ others support them but with reduced efficiency. Throw
 specifications may be added at a later date as compilers begin to
 handle this better. The library should throw only three types of
 exception: boost::bad_expression can be thrown by reg_expression
-when compiling a regular expression; boost::bad_pattern can be
-thrown by the class sub_match's conversion operators; finally std::bad_alloc
-can be thrown by just about any of the functions in this library.
-</p>
+when compiling a regular expression, std::runtime_error can be
+thrown when a call to reg_expression::imbue tries to open a
+message catalogue that doesn't exist or when a call to RegEx::GrepFiles
+or RegEx::FindFiles tries to open a file that cannot be opened,
+finally std::bad_alloc can be thrown by just about any of the
+functions in this library. </p>
 
 <hr>
 
