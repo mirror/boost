@@ -240,7 +240,7 @@ int main()
    type_test(const int&, boost::call_traits<cr_type>::const_reference)
    type_test(int&, boost::call_traits<cr_type>::param_type)
 #else
-   std::cout << "GNU C++ cannot instantiate call_traits<cr_type>, skipping four tests (4 errors)" << std::endl;
+   std::cout << "Your compiler cannot instantiate call_traits<int&const>, skipping four tests (4 errors)" << std::endl;
    failures += 4;
    test_count += 4;
 #endif
@@ -342,7 +342,6 @@ void call_traits_test<T, true>::assert_construct(boost::call_traits<T>::param_ty
    param_type p4(p);
 }
 #endif //BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
 //
 // now check call_traits assertions by instantiating call_traits_test:
 template struct call_traits_test<int>;
@@ -353,5 +352,4 @@ template struct call_traits_test<int&>;
 template struct call_traits_test<const int&>;
 template struct call_traits_test<int[2], true>;
 #endif
-
 

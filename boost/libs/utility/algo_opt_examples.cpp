@@ -53,7 +53,7 @@ using std::cin;
 namespace opt{
 
 //
-// algorithm destroy_arry:
+// algorithm destroy_array:
 // The reverse of std::unitialized_copy, takes a block of
 // unitialized memory and calls destructors on all objects therein.
 //

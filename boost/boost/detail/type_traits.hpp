@@ -334,7 +334,7 @@ template <typename T> struct is_pointer<T*> { static const bool value = true; };
 //* is a type T a reference type - is_reference<T>
 template <typename T> struct is_reference { static const bool value = false; };
 template <typename T> struct is_reference<T&> { static const bool value = true; };
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x550)
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
 // these are illegal specialisations; cv-qualifies applied to
 // references have no effect according to [8.3.2p1],
 // C++ Builder requires them though as it treats cv-qualified
