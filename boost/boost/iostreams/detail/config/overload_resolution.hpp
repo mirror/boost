@@ -17,7 +17,8 @@
 #include <boost/detail/workaround.hpp>
 
 #if !defined(BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION)
-# if BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
+# if BOOST_WORKAROUND(__MWERKS__, <= 0x3003) ||
+     BOOST_WORKAROUND(__BORLANDC__, <= 0x600)
 #  define BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION
 # endif
 #endif
