@@ -39,6 +39,11 @@ struct employee
     return id<x.id;
   }
 
+  bool operator!=(const employee& x)const{return !(*this==x);}
+  bool operator> (const employee& x)const{return x<*this;}
+  bool operator>=(const employee& x)const{return !(*this<x);}
+  bool operator<=(const employee& x)const{return !(x<*this);}
+
   struct comp_id
   {
     bool operator()(int x,const employee& e2)const{return x<e2.id;}
