@@ -34,8 +34,16 @@ main()
   check("copy constructor    ", t_2 == t_3);
   time_duration t_4 = t_3;
   check("assignment operator ", t_2 == t_4);
+
+  time_duration t_5(1,30,20,10); // 1hr, 30min, 20sec, 10 frac sec
+  t_5 /= 2;
+  check("Division operations ", (t_5.hours() == 0 &&
+	                         t_5.minutes() == 45 &&
+				 t_5.seconds() == 10 &&
+				 t_5.fractional_seconds() == 5));
+
   
-  time_duration t_5 = t_2 + t_1;
+  t_5 = t_2 + t_1;
   //VC6 goes ambiguous on the next line...
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
   //sorry ticks() doesn't work on VC6

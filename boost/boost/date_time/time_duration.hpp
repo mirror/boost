@@ -1,8 +1,8 @@
 #ifndef DATE_TIME_TIME_DURATION_HPP___
 #define DATE_TIME_TIME_DURATION_HPP___
-/* Copyright (c) 2000 CrystalClear Software, Inc.
+/* Copyright (c) 2000, 2003 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/operators.hpp"
@@ -33,7 +33,10 @@ namespace date_time {
   class time_duration : private
       boost::less_than_comparable<T 
     , boost::equality_comparable<T
-    > > 
+    , boost::addable<T
+    , boost::subtractable<T
+    , boost::dividable<time_duration<T, rep_type>, int
+    > > > > >
   {
   public:
     typedef T duration_type;  //the subclass
@@ -52,6 +55,10 @@ namespace date_time {
                   fractional_seconds_type frac_sec = 0) :
       ticks_(rep_type::to_tick_count(hours,minutes,seconds,frac_sec)) 
     {}
+    // copy constructor required for dividable<>
+    //! Construct from another time_duration (Copy constructor)
+    time_duration(const time_duration<T, rep_type>& other)
+      : ticks_(other.ticks_){}
     
     //! Returns smallest representable duration
     static duration_type unit()
@@ -104,14 +111,22 @@ namespace date_time {
     {
       return ticks_ ==  rhs.ticks_;
     }
-    duration_type operator-(const duration_type& d) const
+    time_duration operator-=(const duration_type& d)
     {
-      return duration_type(ticks_ - d.ticks_);
+      ticks_ -= d.ticks_;
+      return *this;
     }
-    duration_type operator+(const duration_type& d) const
+    time_duration operator+=(const duration_type& d)
     {
-      return duration_type(ticks_ + d.ticks_);
+      ticks_ += d.ticks_;
+      return *this;
     }
+    //! Division operations on a duration with an integer.
+    time_duration operator/=(int divisor) {
+      ticks_ /= divisor;
+      return *this;
+    }
+    
     tick_type ticks() const 
     { 
       return ticks_;
