@@ -284,7 +284,7 @@ namespace boost {
         }
         
         
-                
+        /*     
         namespace range_detail
         {
              template< class Range >
@@ -323,7 +323,7 @@ namespace boost {
                 return make_iterator_range( new_begin, new_end );
             }
 
-        }
+        }*/
 
       
 #ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
@@ -337,7 +337,7 @@ namespace boost {
         }
         
 
-        
+        /*
         template< class Range >
         inline iterator_range< BOOST_DEDUCED_TYPENAME range_result_iterator<Range>::type >
         make_sub_range( Range& r, 
@@ -356,7 +356,7 @@ namespace boost {
                           BOOST_DEDUCED_TYPENAME range_difference<Range>::type advance_end = 0 )
         {
             return range_detail::make_super_range_impl( r, advance_begin, advance_end );
-        }
+        }*/
 
 #else
         //! iterator_range construct helper
@@ -381,7 +381,7 @@ namespace boost {
         }
         
         
-        
+        /*
         template< class Range >
         inline iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<Range>::type >
         make_sub_range( Range& r, 
@@ -419,7 +419,7 @@ namespace boost {
                           BOOST_DEDUCED_TYPENAME range_difference<Range>::type advance_end = 0 )
         {
             return range_detail::make_super_range_impl( r, advance_begin, advance_end );
-        }
+        }*/
 
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
