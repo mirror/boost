@@ -32,7 +32,7 @@ function object, and then returns the result. The following
 </pre>
 
 All of the other operators of the transform iterator behave in the
-same fashion as the base iterator.
+same fashion as those of the base iterator.
 
 
 <h2>Synopsis</h2>
@@ -51,7 +51,7 @@ namespace boost {
 <h2><a name="transform_iterator_generator">The Transform Iterator Type
 Generator</a></h2>
 
-The class <tt>transform_iterator_generator</tt> is a helper class who's
+The class <tt>transform_iterator_generator</tt> is a helper class whose
 purpose is to construct a transform iterator type.  The template
 parameters for this class are the <tt>AdaptableUnaryFunction</tt> function object
 type and the <tt>BaseIterator</tt> type that is being wrapped.
@@ -143,7 +143,7 @@ so <tt>operator*()</tt> returns by-value. In addition it has the following const
 <p>
 
 
-<h2><a name="make_transform_iterator">The Make Transform Iterator Function</a></h2>
+<h2><a name="make_transform_iterator">The Transform Iterator Object Generator</a></h2>
 
 <pre>
 template &lt;class AdaptableUnaryFunction, class BaseIterator&gt;
