@@ -50,23 +50,116 @@ namespace boost {
   // other pointers types if the compiler does not have partial
   // specializations. Sorry!
   template <>
+  struct property_traits<long*> {
+    typedef long value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+
+  template <>
+  struct property_traits<unsigned long*> {
+    typedef unsigned long value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+
+  template <>
   struct property_traits<int*> {
     typedef int value_type;
     typedef std::ptrdiff_t key_type;
     typedef lvalue_property_map_tag   category;
   };
+
+  template <>
+  struct property_traits<unsigned int*> {
+    typedef unsigned int value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+
+  template <>
+  struct property_traits<short*> {
+    typedef short value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+
+  template <>
+  struct property_traits<unsigned short*> {
+    typedef unsigned short value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+
+  template <>
+  struct property_traits<char*> {
+    typedef char value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+
+  template <>
+  struct property_traits<unsigned char*> {
+    typedef unsigned char value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+
+  template <>
+  struct property_traits<signed char*> {
+    typedef signed char value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+
+#if 0 // std::size_t is a typedef for one of the other integral types.
   template <>
   struct property_traits<std::size_t*> {
     typedef std::size_t value_type;
     typedef std::ptrdiff_t key_type;
     typedef lvalue_property_map_tag   category;
   };
+#endif
+
   template <>
-  struct property_traits<short*> {
-    typedef std::size_t value_type;
+  struct property_traits<bool*> {
+    typedef bool value_type;
     typedef std::ptrdiff_t key_type;
     typedef lvalue_property_map_tag   category;
   };
+
+  template <>
+  struct property_traits<float*> {
+    typedef float value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+
+  template <>
+  struct property_traits<double*> {
+    typedef double value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+
+  template <>
+  struct property_traits<long double*> {
+    typedef long double value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+
+  // This may need to be turned off for some older compilers that don't have
+  // wchar_t intrinsically.
+# ifndef BOOST_NO_INTRINSIC_WCHAR_T
+  template <>
+  struct property_traits<wchar_t*> {
+    typedef wchar_t value_type;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+# endif
+
 #else
   template <class T>
   struct property_traits<T*> {
