@@ -23,6 +23,9 @@
 #ifndef BOOST_PREPROCESSOR_ARITHMETIC_DIV_HPP
 #  include <boost/preprocessor/arithmetic/div.hpp>
 #endif
+#ifndef BOOST_PREPROCESSOR_ARITHMETIC_MOD_HPP
+#  include <boost/preprocessor/arithmetic/mod.hpp>
+#endif
 #ifndef BOOST_PREPROCESSOR_ARITHMETIC_MUL_HPP
 #  include <boost/preprocessor/arithmetic/mul.hpp>
 #endif
