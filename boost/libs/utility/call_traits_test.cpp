@@ -116,7 +116,7 @@ void checker<T>::operator()(param_type p)
    assert(t == c.get());
    assert(t == c.const_get());
 
-   cout << "typeof contained<" << typeid(T).name() << ">::v_ is:           " << typeid(&contained<T>::v_).name() << endl;
+   //cout << "typeof contained<" << typeid(T).name() << ">::v_ is:           " << typeid(&contained<T>::v_).name() << endl;
    cout << "typeof contained<" << typeid(T).name() << ">::value() is:      " << typeid(&contained<T>::value).name() << endl;
    cout << "typeof contained<" << typeid(T).name() << ">::get() is:        " << typeid(&contained<T>::get).name() << endl;
    cout << "typeof contained<" << typeid(T).name() << ">::const_get() is:  " << typeid(&contained<T>::const_get).name() << endl;
@@ -190,17 +190,18 @@ int main()
    int i = 2;
    c2(i);
    int* pi = &i;
+#if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
    checker<int*> c3;
    c3(pi);
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    checker<int&> c4;
    c4(i);
    checker<const int&> c5;
    c5(i);
-
+#if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
    int a[2] = {1,2};
    checker<int[2]> c6;
    c6(a);
+#endif
 #endif
 
    check_wrap(wrap(2), 2);
@@ -229,7 +230,7 @@ int main()
    type_test(int*&, boost::call_traits<int*>::reference)
    type_test(int*const&, boost::call_traits<int*>::const_reference)
    type_test(int*const, boost::call_traits<int*>::param_type)
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
    type_test(int&, boost::call_traits<int&>::value_type)
    type_test(int&, boost::call_traits<int&>::reference)
    type_test(const int&, boost::call_traits<int&>::const_reference)
@@ -248,6 +249,7 @@ int main()
    type_test(const int&, boost::call_traits<const int&>::reference)
    type_test(const int&, boost::call_traits<const int&>::const_reference)
    type_test(const int&, boost::call_traits<const int&>::param_type)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    type_test(const int*, boost::call_traits<int[3]>::value_type)
    type_test(int(&)[3], boost::call_traits<int[3]>::reference)
    type_test(const int(&)[3], boost::call_traits<int[3]>::const_reference)
@@ -256,6 +258,11 @@ int main()
    type_test(const int(&)[3], boost::call_traits<const int[3]>::reference)
    type_test(const int(&)[3], boost::call_traits<const int[3]>::const_reference)
    type_test(const int*const, boost::call_traits<const int[3]>::param_type)
+#else
+   std::cout << "You're compiler does not support partial template instantiation, skipping 8 tests (8 errors)" << std::endl;
+   failures += 8;
+   test_count += 8;
+#endif
 #else
    std::cout << "You're compiler does not support partial template instantiation, skipping 20 tests (20 errors)" << std::endl;
    failures += 20;
@@ -347,9 +354,11 @@ void call_traits_test<T, true>::assert_construct(boost::call_traits<T>::param_ty
 template struct call_traits_test<int>;
 template struct call_traits_test<const int>;
 template struct call_traits_test<int*>;
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
 template struct call_traits_test<int&>;
 template struct call_traits_test<const int&>;
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template struct call_traits_test<int[2], true>;
+#endif
 #endif
 

@@ -30,13 +30,17 @@ struct ct_checker
 };
 
 #define BOOST_DO_JOIN( X, Y ) BOOST_DO_JOIN2(X,Y)
-#define BOOST_DO_JOIN2(X, Y) X ## Y
+#define BOOST_DO_JOIN2(X, Y) X##Y
 #define BOOST_JOIN( X, Y ) BOOST_DO_JOIN( X, Y )
 
-
+#ifdef BOOST_MSVC
+#define value_test(v, x) ++test_count;\
+                         if(!do_compare((int)v,(int)x)){++failures; std::cout << "checking value of " << #x << "...failed" << std::endl;}
+#else
 #define value_test(v, x) ++test_count;\
                          typedef ct_checker<(x)> BOOST_JOIN(this_is_a_compile_time_check_, __LINE__);\
                          if(!do_compare((int)v,(int)x)){++failures; std::cout << "checking value of " << #x << "...failed" << std::endl;}
+#endif
 #define value_fail(v, x) ++test_count; ++failures; std::cout << "checking value of " << #x << "...failed" << std::endl;
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION

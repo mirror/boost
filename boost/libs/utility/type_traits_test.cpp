@@ -169,6 +169,7 @@ struct VD : VB
 //  not considering cv-qual's as a part of the type -- they are considered
 //  compiler hints only.  These failures should be fixed before long.
 
+
 int main()
 {
    std::cout << "Checking type operations..." << std::endl << std::endl;
