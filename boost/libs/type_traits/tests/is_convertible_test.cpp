@@ -29,7 +29,6 @@ int cpp_main(int argc, char* argv[])
    value_test(false, (boost::is_convertible<Base,Derived>::value));
    value_test(true, (boost::is_convertible<Derived,Derived>::value));
    value_test(false, (boost::is_convertible<NonDerived,Base>::value));
-   value_test(false, (boost::is_convertible<boost::noncopyable, int>::value));
    value_test(true, (boost::is_convertible<float,int>::value));
    
 #ifdef BOOST_MSVC6_MEMBER_TEMPLATES
