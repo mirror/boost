@@ -33,7 +33,7 @@ int main(int, char*[])
 
   std::string s = "";
   std::copy(x.begin(), x.end(), 
-	    boost::make_function_output_iterator(string_appender(s)));
+            boost::make_function_output_iterator(string_appender(s)));
   
   std::cout << s << std::endl;
 
