@@ -7,6 +7,9 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  19 Feb 2001 Take advantage of improved iterator_traits to do more tests
+//              on MSVC. Reordered some #ifdefs for coherency.
+//              (David Abrahams)
 //  13 Feb 2001 Test new VC6 workarounds (David Abrahams)
 //  11 Feb 2001 Final fixes for Borland (David Abrahams)
 //  11 Feb 2001 Some fixes for Borland get it closer on that compiler
@@ -128,9 +131,7 @@ template <class Iterator,
     class value_type, class difference_type, class pointer, class reference, class category>
 struct non_pointer_test
     : input_iterator_test<Iterator,value_type,difference_type,pointer,reference,category>
-#if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
       , non_portable_tests<Iterator,value_type,difference_type,pointer,reference,category>
-#endif
 {
 };
 
@@ -152,13 +153,13 @@ input_iterator_test<std::istream_iterator<int>, int, std::ptrdiff_t, int*, int&,
 typedef ::std::char_traits<char>::off_type distance;
 non_pointer_test<std::ostream_iterator<int>,int,
     distance,int*,int&,std::output_iterator_tag> ostream_iterator_test;
-#elif !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
+#elif defined(BOOST_MSVC) && !defined(__SGI_STL_PORT)
 non_pointer_test<std::ostream_iterator<int>,
-    void, void, void, void, std::output_iterator_tag>
+    int, void, void, void, std::output_iterator_tag>
         ostream_iterator_test;
 #else
 non_pointer_test<std::ostream_iterator<int>,
-    int, void, void, void, std::output_iterator_tag>
+    void, void, void, void, std::output_iterator_tag>
         ostream_iterator_test;
 #endif
 
