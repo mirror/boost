@@ -840,7 +840,7 @@ private: // helpers, for modifiers (below)
         {
             assign_impl(
                   operand
-                , mpl::bool_< has_nothrow_move_constructor<T>::value >()
+                , mpl::bool_< detail::variant::has_nothrow_move_constructor<T>::value >()
                 );
         }
 
@@ -984,7 +984,7 @@ private: // helpers, for modifiers, cont. (below)
         {
             swap_impl(
                   rhs_content
-                , mpl::bool_< has_nothrow_move_constructor<T>::value >()
+                , mpl::bool_< detail::variant::has_nothrow_move_constructor<T>::value >()
                 );
         }
 
