@@ -25,8 +25,7 @@
 
 #if !defined(BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION) && (!defined(__GNUC__) || __GNUC__ == 3)
 
-#   if (!defined(BOOST_MSVC) || BOOST_MSVC > 1300) \
-    && (!defined(BOOST_INTEL_CXX_VERSION) || BOOST_INTEL_CXX_VERSION > 500)
+#   if (!defined(BOOST_MSVC) || BOOST_MSVC > 1300)
 
 // the implementation below is based on a USENET newsgroup's posting by  
 // Rani Sharoni (comp.lang.c++.moderated, 2002-03-17 07:45:09 PST)
