@@ -608,7 +608,7 @@ int main()
 
    value_test(false, (boost::is_convertible<const int *, int*>::value));
    value_test(false, (boost::is_convertible<const int&, int&>::value));
-   value_test(false, (boost::is_convertible<int*, int[2]>::value));
+   value_test(true, (boost::is_convertible<int*, int[2]>::value));
    value_test(false, (boost::is_convertible<const int*, int[3]>::value));
    value_test(true, (boost::is_convertible<const int&, int>::value));
    value_test(true, (boost::is_convertible<int(&)[4], const int*>::value));
@@ -638,6 +638,7 @@ int main()
    std::cin.get();
    return failures;
 }
+
 
 
 

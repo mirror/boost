@@ -357,6 +357,7 @@ void BOOST_RE_CALL w32_traits_base::do_free()
    BOOST_RE_GUARD_STACK
    delete[] pclasses;
    delete pcoll_names;
+   delete syntax;
    if(hresmod)
    {
       FreeLibrary(hresmod);
