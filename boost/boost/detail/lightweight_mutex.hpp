@@ -8,7 +8,7 @@
 //
 //  boost/detail/lightweight_mutex.hpp - lightweight mutex
 //
-//  Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2002, 2003 Peter Dimov and Multi Media Ltd.
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -64,15 +64,23 @@
 //  shared_ptr_timing_test.cpp will compile succesfully with a stub do-nothing
 //  pthreads library, since it doesn't create any threads.
 
-#ifndef BOOST_HAS_THREADS
-#  include <boost/detail/lwm_nop.hpp>
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__)) && !defined(BOOST_LWM_USE_CRITICAL_SECTION) && !defined(BOOST_LWM_USE_PTHREADS)
+# define BOOST_LWM_WIN32
+#endif
+
+#if !defined(BOOST_HAS_THREADS)
+#  if defined(BOOST_LWM_WIN32)
+#    include <boost/detail/lwm_win32_nt.hpp>
+#  else
+#    include <boost/detail/lwm_nop.hpp>
+#  endif
 #elif defined(BOOST_LWM_USE_SPINLOCK) && defined(BOOST_USE_ASM_ATOMIC_H)
 #  include <boost/detail/lwm_linux.hpp>
 #elif defined(BOOST_LWM_USE_CRITICAL_SECTION)
 #  include <boost/detail/lwm_win32_cs.hpp>
 #elif defined(BOOST_LWM_USE_PTHREADS)
 #  include <boost/detail/lwm_pthreads.hpp>
-#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+#elif defined(BOOST_LWM_WIN32)
 #  include <boost/detail/lwm_win32.hpp>
 #elif defined(BOOST_LWM_USE_SPINLOCK) && defined(__sgi)
 #  include <boost/detail/lwm_irix.hpp>

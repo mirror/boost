@@ -187,7 +187,7 @@ private:
     long use_count_;
     long weak_count_;
 
-#if defined(BOOST_HAS_THREADS)
+#if defined(BOOST_HAS_THREADS) || defined(BOOST_LWM_WIN32)
     mutable mutex_type mtx_;
 #endif
 };
