@@ -10,7 +10,6 @@ lib libboost_regex$(SUFLIB) : ../src/$(SOURCES).cpp
         <define>BOOST_RE_NO_LIB=1
     : 
         debug release
-      <runtime-link>dynamic
     ;
 
 
@@ -20,7 +19,6 @@ dll libboost_regex$(SUFDLL[1]) : ../src/$(SOURCES).cpp
         <define>BOOST_RE_BUILD_DLL=1
     : 
         debug release
-      <runtime-link>dynamic
     ;
 
 
