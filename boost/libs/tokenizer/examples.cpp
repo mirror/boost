@@ -19,27 +19,27 @@
 #define BOOST_INCLUDE_MAIN
 #include <boost/test/test_tools.hpp>
 
-int test_main(int, char*[])
+int test_main( int argc, char* argv[] )
 {
   using namespace std;
   using namespace boost;
   
   // Use tokenizer
   {
-                const string test_string = ";;Hello|world||-foo--bar;yow;baz|";
-                string answer[] = { "Hello", "world",  "foo", "bar", "yow",  "baz" };
-                typedef tokenizer<char_separator<char> > Tok;
-                char_separator<char> sep("-;|");
-                Tok t(test_string, sep);
-    BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));               
+        const string test_string = ";;Hello|world||-foo--bar;yow;baz|";
+        string answer[] = { "Hello", "world",  "foo", "bar", "yow",  "baz" };
+        typedef tokenizer<char_separator<char> > Tok;
+        char_separator<char> sep("-;|");
+        Tok t(test_string, sep);
+    BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));       
   }
   {
-                const string test_string = ";;Hello|world||-foo--bar;yow;baz|";
-                string answer[] = { "", "", "Hello", "|", "world", "|", "", "|", "",
-                                                                                                "foo", "", "bar", "yow", "baz", "|", "" };
-                typedef tokenizer<char_separator<char> > Tok;
-                char_separator<char> sep("-;", "|", boost::keep_empty_tokens);
-                Tok t(test_string, sep);
+        const string test_string = ";;Hello|world||-foo--bar;yow;baz|";
+        string answer[] = { "", "", "Hello", "|", "world", "|", "", "|", "",
+                                                "foo", "", "bar", "yow", "baz", "|", "" };
+        typedef tokenizer<char_separator<char> > Tok;
+        char_separator<char> sep("-;", "|", boost::keep_empty_tokens);
+        Tok t(test_string, sep);
     BOOST_CRITICAL_TEST(equal(t.begin(), t.end(), answer));
   }
   {
@@ -119,11 +119,11 @@ int test_main(int, char*[])
   
   // Test copying
   {
-    string s = "abcdef";
+    const string test_string = "abcdef";
     token_iterator_generator<offset_separator>::type beg, end, other;
     boost::array<int,3> ar = {{1,2,3}};
     offset_separator f(ar.begin(),ar.end());
-    beg = make_token_iterator<string>(s.begin(),s.end(),f);
+    beg = make_token_iterator<string>(test_string.begin(),test_string.end(),f);
     
     ++beg;
     other = beg;
@@ -132,7 +132,8 @@ int test_main(int, char*[])
     BOOST_CRITICAL_TEST(*beg=="bc");
     BOOST_CRITICAL_TEST(*other=="def");
     
-    other =  make_token_iterator<string>(s.begin(),s.end(),f);
+    other = make_token_iterator<string>(test_string.begin(),
+        test_string.end(),f);
 
     BOOST_CRITICAL_TEST(*other=="a");
   }
