@@ -108,12 +108,12 @@ struct get_class {
   template<class RET, class HT, class TT >
   inline static RET get(const cons<HT, TT>& t)
   {
-    return get_class<N-1>::template get<RET>(t.tail);
+    return get_class<N-1>::BOOST_NESTED_TEMPLATE get<RET>(t.tail);
   }
   template<class RET, class HT, class TT >
   inline static RET get(cons<HT, TT>& t)
   {
-    return get_class<N-1>::template get<RET>(t.tail);
+    return get_class<N-1>::BOOST_NESTED_TEMPLATE get<RET>(t.tail);
   }
 };
 
@@ -190,7 +190,7 @@ inline typename access_traits<
                   typename element<N, cons<HT, TT> >::type
                 >::non_const_type
 get(cons<HT, TT>& c BOOST_TUPLE_DUMMY_PARM) { 
-  return detail::get_class<N>::template 
+  return detail::get_class<N>::BOOST_NESTED_TEMPLATE 
          get<
            typename access_traits<
              typename element<N, cons<HT, TT> >::type
@@ -205,7 +205,7 @@ inline typename access_traits<
                   typename element<N, cons<HT, TT> >::type
                 >::const_type
 get(const cons<HT, TT>& c BOOST_TUPLE_DUMMY_PARM) { 
-  return detail::get_class<N>::template 
+  return detail::get_class<N>::BOOST_NESTED_TEMPLATE 
          get<
            typename access_traits<
              typename element<N, cons<HT, TT> >::type
@@ -332,6 +332,7 @@ struct cons<HT, null_type> {
 
   typedef HT head_type;
   typedef null_type tail_type;
+  typedef cons<HT, null_type> self_type;
 
   typedef typename 
     detail::wrap_non_storeable_type<head_type>::type stored_head_type;
@@ -379,7 +380,7 @@ struct cons<HT, null_type> {
 
   template <int N>
   typename access_traits<
-             typename element<N, cons>::type
+             typename element<N, self_type>::type
             >::non_const_type
   get(BOOST_TUPLE_SINGLE_DUMMY_PARM) {
     return boost::tuples::get<N>(*this);
@@ -387,7 +388,7 @@ struct cons<HT, null_type> {
 
   template <int N>
   typename access_traits<
-             typename element<N, cons>::type
+             typename element<N, self_type>::type
            >::const_type
   get(BOOST_TUPLE_SINGLE_DUMMY_PARM) const {
     return boost::tuples::get<N>(*this);
