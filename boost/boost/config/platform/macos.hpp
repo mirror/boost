@@ -27,12 +27,13 @@
 #  endif
 
 //
-// BSD runtime has pthreads, sched_yield and gettimeofday,
+// BSD runtime has pthreads, sigaction, sched_yield and gettimeofday,
 // of these only pthreads are advertised in <unistd.h>, so set the 
 // other options explicitly:
 //
 #  define BOOST_HAS_SCHED_YIELD
 #  define BOOST_HAS_GETTIMEOFDAY
+#  define BOOST_HAS_SIGACTION
 
 #  ifndef __APPLE_CC__
 

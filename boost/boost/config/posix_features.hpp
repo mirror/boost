@@ -31,6 +31,10 @@
 #        define BOOST_HAS_DIRENT_H
 #     endif
 
+      // POSIX version 3 requires <signal.h> to have sigaction:
+#     if defined(_POSIX_VERSION) && (_POSIX_VERSION >= 199506L)
+#        define BOOST_HAS_SIGACTION
+#     endif
       // POSIX defines _POSIX_THREADS > 0 for pthread support,
       // however some platforms define _POSIX_THREADS without
       // a value, hence the (_POSIX_THREADS+0 >= 0) check.

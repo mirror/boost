@@ -54,4 +54,7 @@
 #ifndef BOOST_HAS_CLOCK_GETTIME
 #    define BOOST_HAS_CLOCK_GETTIME
 #endif
+#ifndef BOOST_HAS_SIGACTION
+#  define BOOST_HAS_SIGACTION
+#endif
 
