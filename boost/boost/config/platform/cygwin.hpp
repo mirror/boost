@@ -24,11 +24,14 @@
 #  define BOOST_HAS_GETTIMEOFDAY
 #  define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
 #else
-#  define BOOST_HAS_WINTHREADS
+#  if !defined(BOOST_HAS_WINTHREADS)
+#     define BOOST_HAS_WINTHREADS
+#  endif
 #  define BOOST_HAS_FTIME
 #endif
 
 // boilerplate code:
 #include <boost/config/posix_features.hpp>
  
+
 
