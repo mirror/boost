@@ -57,7 +57,7 @@ int test()
 {
    foo<int> fi;
    foo<double> fd(fi);
-   (void) &fd;           // avoid "unused variable" warning
+   must_be_friend_proc(fd);
    foobar<long> fb(fi);
    (void) &fb;           // avoid "unused variable" warning
    return 0;
