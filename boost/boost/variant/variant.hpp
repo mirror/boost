@@ -65,6 +65,8 @@
 #include "boost/mpl/list.hpp"
 #include "boost/mpl/logical.hpp"
 #include "boost/mpl/max_element.hpp"
+#include "boost/mpl/next.hpp"
+#include "boost/mpl/pair.hpp"
 #include "boost/mpl/remove_if.hpp"
 #include "boost/mpl/sizeof.hpp"
 #include "boost/mpl/size_t.hpp"
@@ -718,13 +720,18 @@ private: // helpers, for structors (below)
 
     struct make_initializer_node
     {
-        template <typename Base, typename Iterator>
+        template <typename BaseIndexPair, typename Iterator>
         struct apply
         {
         private: // helpers, for metafunction result (below)
 
+            typedef typename BaseIndexPair::first
+                base;
+            typedef typename BaseIndexPair::second
+                index;
+
             struct initializer_node
-                : Base
+                : base
             {
             private: // helpers, for static functions (below)
 
@@ -733,40 +740,34 @@ private: // helpers, for structors (below)
 
             public: // static functions
 
-                using Base::initialize;
+                using base::initialize;
 
                 static int initialize(void* dest, const T& operand)
                 {
                     new(dest) T(operand);
-
-                    BOOST_STATIC_CONSTANT(
-                          std::size_t
-                        , idx = (
-                              ::boost::mpl::distance<
-                                  typename mpl::begin<types>::type
-                                , Iterator
-                                >::type::value
-                            )
-                        );
-
-                    return idx;
+                    return BOOST_MPL_AUX_VALUE_WKND(index)::value;
                 }
 
             };
 
         public: // metafunction result
 
-            typedef initializer_node
-                type;
+            typedef mpl::pair<
+                  initializer_node
+                , typename mpl::next< index >::type
+                > type;
 
         };
     };
 
     typedef typename mpl::iter_fold<
           types
-        , initializer_root
+        , mpl::pair< initializer_root, mpl::int_<0> >
         , mpl::protect< make_initializer_node >
-        >::type initializer;
+        >::type initializer_pair;
+
+    typedef typename initializer_pair::first
+        initializer;
 
 #else // defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
