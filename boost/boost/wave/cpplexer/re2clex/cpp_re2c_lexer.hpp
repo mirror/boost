@@ -96,6 +96,7 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
         boost::wave::language_support language) 
 :   filename(pos.get_file()), at_eof(false), language(language)
 {
+    using namespace std;        // some systems have memset in std
     memset(&scanner, '\0', sizeof(Scanner));
     scanner.fd = -1;
     scanner.eol_offsets = aq_create();

@@ -53,6 +53,7 @@ namespace time_conversion {
     public:
         time_conversion_grammar() : fYearIsCorrected(false)
         {
+            using namespace std;        // some systems have memset in std
             memset (&time_stamp, 0, sizeof(tm));
             BOOST_SPIRIT_DEBUG_TRACE_RULE_NAME(*this, "time_conversion_grammar",
                 TRACE_CPP_TIME_CONVERSION);

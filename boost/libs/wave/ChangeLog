@@ -63,7 +63,9 @@ CHANGELOG
   for this compiler.
 - Renamed files to comply with the Boost rules.
 - Added the first part of the MCPP validation suite to the Wave unit tests.
-
+- Added even more missing "using namespace std;" staements for functions from
+  the C runtime library.
+  
 Tue Mar 22 14:52:45 WEST 2005
 Version 1.1.15
 - Fixed a bug where the complete set of C99 predefined macros were pre-defined

@@ -24,6 +24,7 @@ namespace re2clex {
 
 int aq_grow(aq_queue q)
 {
+    using namespace std;        // some systems have memcpy/realloc in std
     std::size_t new_size = q->max_size << 1;
     aq_stdelement* new_queue = (aq_stdelement*)realloc(q->queue,
             new_size * sizeof(aq_stdelement));
@@ -169,6 +170,7 @@ aq_queue aq_create(void)
 {
     aq_queue q;
 
+    using namespace std;        // some systems have malloc in std
     q = (aq_queue)malloc(sizeof(aq_queuetype));
     if (!q)
     {
@@ -199,6 +201,7 @@ aq_queue aq_create(void)
 
 void aq_terminate(aq_queue q)
 {
+    using namespace std;        // some systems have free in std
 
     BOOST_ASSERT(q);
     BOOST_ASSERT(q->size <= q->max_size);
