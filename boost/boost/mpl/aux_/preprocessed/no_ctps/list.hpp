@@ -222,13 +222,13 @@ namespace aux {
 template< typename T >
 struct is_list_arg
 {
-    static bool const value = true;
+    BOOST_STATIC_CONSTANT(bool, value = true);
 };
 
 template<>
 struct is_list_arg<void_>
 {
-    static bool const value = false;
+    BOOST_STATIC_CONSTANT(bool, value = false);
 };
 
 template<
@@ -237,13 +237,7 @@ template<
     >
 struct list_count_args
 {
-    static int const value =
-          is_list_arg<T1>::value + is_list_arg<T2>::value 
-        + is_list_arg<T3>::value + is_list_arg<T4>::value 
-        + is_list_arg<T5>::value + is_list_arg<T6>::value 
-        + is_list_arg<T7>::value + is_list_arg<T8>::value 
-        + is_list_arg<T9>::value + is_list_arg<T10>::value
-        ;
+    BOOST_STATIC_CONSTANT(int, value = is_list_arg<T1>::value + is_list_arg<T2>::value + is_list_arg<T3>::value + is_list_arg<T4>::value + is_list_arg<T5>::value + is_list_arg<T6>::value + is_list_arg<T7>::value + is_list_arg<T8>::value + is_list_arg<T9>::value + is_list_arg<T10>::value);
 };
 
 template<

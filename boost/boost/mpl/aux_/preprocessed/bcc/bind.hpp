@@ -46,7 +46,7 @@ template<
     >
 struct resolve_bind_arg< arg<N>,U1,U2,U3,U4,U5 >
 {
-    typedef typename apply5< arg<N>,U1,U2,U3,U4,U5 >::type type;
+    typedef typename apply5<mpl::arg< N>,U1,U2,U3,U4,U5 >::type type;
 };
 
 template<
@@ -85,7 +85,7 @@ struct bind0
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F, mpl::arg< 1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -124,7 +124,7 @@ struct bind1
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F, mpl::arg< 1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -168,7 +168,7 @@ struct bind2
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F, mpl::arg< 1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -217,7 +217,7 @@ struct bind3
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F, mpl::arg< 1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -271,7 +271,7 @@ struct bind4
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F, mpl::arg< 1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -331,7 +331,7 @@ struct bind5
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F, mpl::arg< 1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;

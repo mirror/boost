@@ -263,13 +263,13 @@ namespace aux {
 template< typename T >
 struct is_apply_arg
 {
-    enum { value = true };
+    BOOST_STATIC_CONSTANT(bool, value = true);
 };
 
 template<>
 struct is_apply_arg<void_>
 {
-    enum { value = false };
+    BOOST_STATIC_CONSTANT(bool, value = false);
 };
 
 template<
@@ -277,11 +277,7 @@ template<
     >
 struct apply_count_args
 {
-    enum { value =
-          is_apply_arg<T1>::value + is_apply_arg<T2>::value 
-        + is_apply_arg<T3>::value + is_apply_arg<T4>::value 
-        + is_apply_arg<T5>::value
-        };
+    BOOST_STATIC_CONSTANT(int, value = is_apply_arg<T1>::value + is_apply_arg<T2>::value + is_apply_arg<T3>::value + is_apply_arg<T4>::value + is_apply_arg<T5>::value);
 };
 
 } // namespace aux

@@ -233,13 +233,13 @@ namespace aux {
 template< long T >
 struct is_list_c_arg
 {
-    enum { value = true };
+    BOOST_STATIC_CONSTANT(bool, value = true);
 };
 
 template<>
 struct is_list_c_arg<LONG_MAX>
 {
-    enum { value = false };
+    BOOST_STATIC_CONSTANT(bool, value = false);
 };
 
 template<
@@ -248,13 +248,7 @@ template<
     >
 struct list_c_count_args
 {
-    enum { value =
-          is_list_c_arg<T1>::value + is_list_c_arg<T2>::value 
-        + is_list_c_arg<T3>::value + is_list_c_arg<T4>::value 
-        + is_list_c_arg<T5>::value + is_list_c_arg<T6>::value 
-        + is_list_c_arg<T7>::value + is_list_c_arg<T8>::value 
-        + is_list_c_arg<T9>::value + is_list_c_arg<T10>::value
-        };
+    BOOST_STATIC_CONSTANT(int, value = is_list_c_arg<T1>::value + is_list_c_arg<T2>::value + is_list_c_arg<T3>::value + is_list_c_arg<T4>::value + is_list_c_arg<T5>::value + is_list_c_arg<T6>::value + is_list_c_arg<T7>::value + is_list_c_arg<T8>::value + is_list_c_arg<T9>::value + is_list_c_arg<T10>::value);
 };
 
 template<

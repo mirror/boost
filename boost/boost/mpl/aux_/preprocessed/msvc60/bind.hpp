@@ -90,10 +90,9 @@ template< typename F, typename T > aux::yes_tag is_bind_helper(bind2nd< F,T >*);
 
 template< typename T > struct is_bind_template
 {
-    enum { value =
-         sizeof(aux::is_bind_helper(static_cast<T*>(0))) ==
-         sizeof(aux::yes_tag)
-        };
+    BOOST_STATIC_CONSTANT(bool, value =         sizeof(aux::is_bind_helper(static_cast<T*>(0)))
+ == sizeof(aux::yes_tag)
+        );
 };
 
 } // namespace aux
@@ -113,7 +112,7 @@ struct bind0
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F, mpl::arg< 1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -147,7 +146,7 @@ struct bind1
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F, mpl::arg< 1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -186,7 +185,7 @@ struct bind2
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F, mpl::arg< 1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -230,7 +229,7 @@ struct bind3
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F, mpl::arg< 1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -279,7 +278,7 @@ struct bind4
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F, mpl::arg< 1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -334,7 +333,7 @@ struct bind5
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F, mpl::arg< 1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;

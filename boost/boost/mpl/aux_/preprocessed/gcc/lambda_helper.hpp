@@ -12,7 +12,7 @@ struct lambda_helper1
 {
     struct rebind
     {
-        static int const arity = 1;
+        BOOST_STATIC_CONSTANT(int, arity = 1);
         typedef T1 arg1;
 
         template< typename U1 > struct apply
@@ -30,7 +30,7 @@ struct lambda_helper2
 {
     struct rebind
     {
-        static int const arity = 2;
+        BOOST_STATIC_CONSTANT(int, arity = 2);
         typedef T1 arg1;
         typedef T2 arg2;
         
@@ -49,7 +49,7 @@ struct lambda_helper3
 {
     struct rebind
     {
-        static int const arity = 3;
+        BOOST_STATIC_CONSTANT(int, arity = 3);
         typedef T1 arg1;
         typedef T2 arg2;
         typedef T3 arg3;
@@ -69,7 +69,7 @@ struct lambda_helper4
 {
     struct rebind
     {
-        static int const arity = 4;
+        BOOST_STATIC_CONSTANT(int, arity = 4);
         typedef T1 arg1;
         typedef T2 arg2;
         typedef T3 arg3;
@@ -97,7 +97,7 @@ struct lambda_helper5
 {
     struct rebind
     {
-        static int const arity = 5;
+        BOOST_STATIC_CONSTANT(int, arity = 5);
         typedef T1 arg1;
         typedef T2 arg2;
         typedef T3 arg3;

@@ -64,10 +64,9 @@ template< typename F, typename T > aux::yes_tag is_bind_helper(bind2nd< F,T >*);
 
 template< typename T > struct is_bind_template
 {
-    enum { value =
-         sizeof(aux::is_bind_helper(static_cast<T*>(0))) ==
-         sizeof(aux::yes_tag)
-        };
+    BOOST_STATIC_CONSTANT(bool, value =         sizeof(aux::is_bind_helper(static_cast<T*>(0)))
+ == sizeof(aux::yes_tag)
+        );
 };
 
 } // namespace aux

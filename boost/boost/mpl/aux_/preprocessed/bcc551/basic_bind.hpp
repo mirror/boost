@@ -27,7 +27,7 @@ template<
     >
 struct resolve_bind_arg< arg<N>,U1,U2,U3,U4,U5 >
 {
-    typedef typename apply5< arg<N>,U1,U2,U3,U4,U5 >::type type;
+    typedef typename apply5<mpl::arg< N>,U1,U2,U3,U4,U5 >::type type;
 };
 
 template<

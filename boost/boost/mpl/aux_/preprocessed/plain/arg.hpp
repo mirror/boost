@@ -6,7 +6,8 @@ namespace mpl {
 
 template<> struct arg<-1>
 {
-    static int const value = -1;
+    BOOST_STATIC_CONSTANT(int, value = -1);
+    BOOST_MPL_AUX_ARG_TYPEDEF(void_, tag)
 
     template<
           typename U1 = void_, typename U2 = void_, typename U3 = void_
@@ -15,16 +16,19 @@ template<> struct arg<-1>
     struct apply
     {
         typedef U1 type;
+
      private:
         BOOST_STATIC_CONSTANT(bool, nv = !is_void_<type>::value);
         BOOST_STATIC_ASSERT(nv);
+
     };
 };
 
 template<> struct arg<1>
 {
-    static int const value = 1;
+    BOOST_STATIC_CONSTANT(int, value = 1);
     typedef arg<2> next;
+    BOOST_MPL_AUX_ARG_TYPEDEF(void_, tag)
 
     template<
           typename U1 = void_, typename U2 = void_, typename U3 = void_
@@ -33,16 +37,19 @@ template<> struct arg<1>
     struct apply
     {
         typedef U1 type;
+
      private:
         BOOST_STATIC_CONSTANT(bool, nv = !is_void_<type>::value);
         BOOST_STATIC_ASSERT(nv);
+
     };
 };
 
 template<> struct arg<2>
 {
-    static int const value = 2;
+    BOOST_STATIC_CONSTANT(int, value = 2);
     typedef arg<3> next;
+    BOOST_MPL_AUX_ARG_TYPEDEF(void_, tag)
 
     template<
           typename U1 = void_, typename U2 = void_, typename U3 = void_
@@ -51,16 +58,19 @@ template<> struct arg<2>
     struct apply
     {
         typedef U2 type;
+
      private:
         BOOST_STATIC_CONSTANT(bool, nv = !is_void_<type>::value);
         BOOST_STATIC_ASSERT(nv);
+
     };
 };
 
 template<> struct arg<3>
 {
-    static int const value = 3;
+    BOOST_STATIC_CONSTANT(int, value = 3);
     typedef arg<4> next;
+    BOOST_MPL_AUX_ARG_TYPEDEF(void_, tag)
 
     template<
           typename U1 = void_, typename U2 = void_, typename U3 = void_
@@ -69,16 +79,19 @@ template<> struct arg<3>
     struct apply
     {
         typedef U3 type;
+
      private:
         BOOST_STATIC_CONSTANT(bool, nv = !is_void_<type>::value);
         BOOST_STATIC_ASSERT(nv);
+
     };
 };
 
 template<> struct arg<4>
 {
-    static int const value = 4;
+    BOOST_STATIC_CONSTANT(int, value = 4);
     typedef arg<5> next;
+    BOOST_MPL_AUX_ARG_TYPEDEF(void_, tag)
 
     template<
           typename U1 = void_, typename U2 = void_, typename U3 = void_
@@ -87,16 +100,19 @@ template<> struct arg<4>
     struct apply
     {
         typedef U4 type;
+
      private:
         BOOST_STATIC_CONSTANT(bool, nv = !is_void_<type>::value);
         BOOST_STATIC_ASSERT(nv);
+
     };
 };
 
 template<> struct arg<5>
 {
-    static int const value = 5;
+    BOOST_STATIC_CONSTANT(int, value = 5);
     typedef arg<6> next;
+    BOOST_MPL_AUX_ARG_TYPEDEF(void_, tag)
 
     template<
           typename U1 = void_, typename U2 = void_, typename U3 = void_
@@ -105,9 +121,11 @@ template<> struct arg<5>
     struct apply
     {
         typedef U5 type;
+
      private:
         BOOST_STATIC_CONSTANT(bool, nv = !is_void_<type>::value);
         BOOST_STATIC_ASSERT(nv);
+
     };
 };
 
