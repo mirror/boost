@@ -107,13 +107,8 @@ struct iterator_facade_default_category
                 // check for readability
               , is_convertible<Reference, ValueParam>
             >
-          , mpl::if_<
-                iterator_writability_disabled<ValueParam,Reference>
-              , std::input_iterator_tag
-              , input_output_iterator_tag
-            >
-            
-          , mpl::identity<std::output_iterator_tag>
+          , mpl::identity<std::input_iterator_tag>
+          , mpl::identity<Traversal>
         >
     >
 {
