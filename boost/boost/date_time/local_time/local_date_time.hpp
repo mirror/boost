@@ -480,29 +480,26 @@ namespace local_time {
       return t;
     }
 
+    /*! Simple formatting code -- todo remove this?
+     */
     std::string zone_as_offset(const time_duration_type& td, 
                                const std::string& separator) const
     {
-      // time_duration op<< uses the ptime facet. If we want to change 
-      // its format we must use a time_facet<ptime, ...>
-      typedef boost::date_time::time_facet<utc_time_, char> timefacet;
-      timefacet* facet_ptr = new timefacet();
       std::stringstream ss;
-      // build the format first
-      ss << "%H" << separator << "%M";
-      facet_ptr->time_duration_format(ss.str().c_str());
-      ss.str("");
-      std::locale loc(std::locale::classic(), facet_ptr);
-      ss.imbue(loc);
       if(td.is_negative()) {
         // a negative duration is represented as "-[h]h:mm"
         // we require two digits for the hour. A positive duration 
         // with the %H flag will always give two digits
-        ss << "-" << td.invert_sign();
+        ss << "-";
       }
       else {
-        ss << "+" << td;
+        ss << "+";
       }
+      ss  << std::setw(2) << std::setfill('0') 
+          << date_time::absolute_value(td.hours()) 
+          << separator
+          << std::setw(2) << std::setfill('0')
+          << date_time::absolute_value(td.minutes());
       return ss.str();
     }
   };
