@@ -39,36 +39,47 @@
       }
   };
 
+  template <class Dereferenceable>
+  struct referent {
+    typedef /* see below */ type;
+  };
+
+
+If ``Value`` is not ``use_default`` then the the argument for the
+``iterator_adaptor`` base class' ``Value`` parameter is ``Value`` with
+cv-qualifiers removed. If ``Value`` is ``use_default``, then the
+argument for the ``iterator_adaptor`` base class' ``Value`` parameter
+is computed as follows. We use the abbreviation
+``V=iterator_traits<Iterator>::value_type`` and ``v`` is an object of
+type ``V``.::
+
+    if (*v returns a constant lvalue or an rvalue) then
+        referent<V>::type
+    else
+        add_const<referent<V>::type>::type
+
+The algorithm for the ``type`` member of ``referent`` traits class is
+as follows::
+
+    if (Dereferenceable is a class and has member element_type)
+        Dereferenceable::element_type
+    else
+        iterator_traits<Dereferenceable>::value_type
+
+
 ``indirect_iterator`` requirements
 ..................................
 
-The following requirements are placed on the type
+The ``Iterator`` type must meet the requirements of Readable
+Iterator. Also, the following requirements are placed on
 ``iterator_traits<Iterator>::value_type``. Let ``i`` be an object of
 type ``iterator_traits<Iterator>::value_type``.  Then ``*i`` must be a
 valid expression, and the type of ``*i`` must be the same as the
-``Reference`` template parameter.
+``iterator_adaptor::reference``. Also, there are further requirements
+on the ``iterator_traits<Iterator>::value_type`` if the ``Value``
+parameter is not ``use_default``, as implied by the algorithm for deducing
+the default.
 
-The ``Value`` template parameter will be the ``value_type`` for the
-``indirect_iterator``, unless ``Value`` is cv-qualified. If ``Value``
-is cv-qualified then ``value_type`` will be non-qualified version of
-the type.  The default for ``Value`` is
-
-::
-
-  iterator_traits< iterator_traits<Iterator>::value_type >::value_type
-
-If the default is used for ``Value``, then there must be a valid
-specialization of ``iterator_traits`` for the value type of the base
-iterator.
-
-.. THE ABOVE IS NO LONGER IN SYNC WITH THE CODE. -Jeremy
-
-
-The indirect iterator will model the most refined standard traversal
-concept that is modeled by the ``Iterator`` type and that refines the
-traversal category specified in the ``CategoryOrTraversal`` parameter.
-The indirect iterator will model the most refined standard access
-concept that is modeled by the value type of ``Iterator``.
 
 
 ``indirect_iterator`` operations
