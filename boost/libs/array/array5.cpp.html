@@ -71,11 +71,12 @@ int&nbsp;main()<BR>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;&nbsp;std::endl;<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;}<BR>
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//typedef&nbsp;boost::array&lt;double,6&gt;&nbsp;DArray;</FONT></I><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//typedef&nbsp;boost::array&lt;int,6&gt;&nbsp;IArray;</FONT></I><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//IArray&nbsp;ia&nbsp;=&nbsp;{&nbsp;{&nbsp;1,&nbsp;2,&nbsp;3,&nbsp;4,&nbsp;5,&nbsp;6&nbsp;}&nbsp;};</FONT></I><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//DArray&nbsp;da;</FONT></I><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//da.assign(ia);</FONT></I><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;boost::array&lt;double,6&gt;&nbsp;DArray;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;boost::array&lt;int,6&gt;&nbsp;IArray;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;IArray&nbsp;ia&nbsp;=&nbsp;{&nbsp;1,&nbsp;2,&nbsp;3,&nbsp;4,&nbsp;5,&nbsp;6&nbsp;};<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;DArray&nbsp;da;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;da&nbsp;=&nbsp;ia;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;da.assign(42);<BR>
 }<BR>
 <BR>
 </SPAN>
