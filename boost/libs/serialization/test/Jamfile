@@ -39,8 +39,9 @@ local test-dir = "$(BOOST_ROOT)$(SLASH)libs$(SLASH)serialization$(SLASH)test$(SL
 rule run-invoke ( test-name : sources * : defn * )
 {    
     Echo $(test-name) ;
+    local tests ;
     # debug
-    return [ 
+    tests += [ 
         run 
             $(sources)
             <lib>../../test/build/boost_test_exec_monitor
@@ -67,7 +68,7 @@ rule run-invoke ( test-name : sources * : defn * )
     # test.  This permits them to appear in the same table built by
     # compiler_status
     if $(BOOST_SERIALIZATION_TEST_RELEASE) {
-        return [ 
+        tests += [ 
             run 
                 $(sources)
                 <lib>../../test/build/boost_test_exec_monitor
@@ -90,54 +91,67 @@ rule run-invoke ( test-name : sources * : defn * )
                 release
         ] ;
     }
+    return $(tests) ;
 }
 
 rule test-bsl-run ( test-name : sources * )
 {
-    return [ 
+    local tests ;
+    tests +=  [ 
         run-invoke $(test-name) 
         : 
             $(test-name).cpp $(sources).cpp
             <lib>../../serialization/build/boost_serialization
     ] ;
+    return $(tests) ;
 }
 
 rule test-bsl-run_archive ( test-name : archive-name : sources * ) {
+    local tests ;
     switch $(archive-name) {
     case "*_warchive" :
-        return [
+        tests +=  [
             run-invoke $(test-name)_$(archive-name)
             : 
-                $(test-name).cpp $(sources).cpp
+                $(sources).cpp
                 <lib>../../serialization/build/boost_serialization
                 <lib>../../serialization/build/boost_wserialization
             :
                 BOOST_ARCHIVE_TEST=$(archive-name).hpp
         ] ;
     case "*" :
-        return [
+        tests +=  [
             run-invoke $(test-name)_$(archive-name)
             : 
-                $(test-name).cpp $(sources).cpp
+                $(sources).cpp
                 <lib>../../serialization/build/boost_serialization
             : 
                 BOOST_ARCHIVE_TEST=$(archive-name).hpp
         ] ;
     }
+    return $(tests) ;
 }
 
 rule test-bsl-run_polymorphic_archive ( test-name : sources * ) {
+    local tests ;
     for local defn in $(BOOST_ARCHIVE_LIST) {
-        test-bsl-run_archive $(test-name) : polymorphic_$(defn:LB) 
-        : 
-            $(sources) ;
+        tests += [ 
+            test-bsl-run_archive test
+                : polymorphic_$(defn:LB)  
+                : $(test-name) $(sources)
+        ] ;
     }
+    return $(tests) ;
 }
 
-rule test-bsl-run_files ( test-name ) {
+rule test-bsl-run_files ( test-name : sources * ) {
+    local tests ;
     for local defn in $(BOOST_ARCHIVE_LIST) {
-        test-bsl-run_archive $(test-name) : $(defn:LB) ;
+        tests += [ 
+            test-bsl-run_archive $(test-name) : $(defn:LB) : $(test-name) $(sources)
+        ] ;
     }
+    return $(tests) ;
 }
     
 test-suite "serialization" : 
@@ -148,13 +162,14 @@ test-suite "serialization" :
     [ test-bsl-run_files test_delete_pointer ]
     [ test-bsl-run_files test_deque ]
     [ test-bsl-run_files test_derived ]
+    [ test-bsl-run_files test_derived_class ]
     [ test-bsl-run_files test_derived_class_ptr ]
     [ test-bsl-run_files test_diamond ]
     [ test-bsl-run_files test_exported ]
-    [ test-bsl-run_files test_level_class_info_save ]
-    [ test-bsl-run_files test_level_class_info_load ]
-    [ test-bsl-run_files test_level_object ]
-    [ test-bsl-run_files test_level_primitive ]
+    [ test-bsl-run_files test_class_info_save ]
+    [ test-bsl-run_files test_class_info_load ]
+    [ test-bsl-run_files test_object ]
+    [ test-bsl-run_files test_primitive ]
     [ test-bsl-run_files test_list ]
     [ test-bsl-run_files test_list_ptrs ]
     [ test-bsl-run_files test_map ]
@@ -171,15 +186,20 @@ test-suite "serialization" :
     [ test-bsl-run_files test_set ]
     [ test-bsl-run_files test_simple_class ]
     [ test-bsl-run_files test_simple_class_ptr ]
-    [ test-bsl-run_files test_simple_derived_class ]
     [ test-bsl-run_files test_split ]
     [ test-bsl-run_files test_tracking ]
     [ test-bsl-run_files test_unregistered ]
     [ test-bsl-run_files test_vector ]
     [ test-bsl-run_files test_optional ]
     [ test-bsl-run_files test_shared_ptr ]
-    [ test-bsl-run_polymorphic_archive test_polymorphic_archive : test_polymorphic_archive_data ]
+    [ test-bsl-run_polymorphic_archive test_polymorphic : test_polymorphic_A ]
 ;
+
+DEPENDS test_class_info_load_text_archive : test_class_info_save_text_archive ;
+DEPENDS test_class_info_load_text_warchive : test_class_info_save_text_warchive ;
+DEPENDS test_class_info_load_binary_archive : test_class_info_save_binary_archive ;
+DEPENDS test_class_info_load_xml_archive : test_class_info_save_xml_archive ;
+DEPENDS test_class_info_load_xml_warchive : test_class_info_save_xml_warchive ;
 
 if $(BOOST_SERIALIZATION_TEST) {
     test-suite "serialization" : 
@@ -202,18 +222,19 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ test-bsl-run test_demo_xml ]
         [ test-bsl-run test_demo_xml_load ]
         [ test-bsl-run test_demo_xml_save ]
-        [ test-bsl-run test_demo_portable_binary_archive ]
-        [ test-bsl-run test_demo_fast_binary_archive ]
+        [ test-bsl-run test_demo_portable_archive ]
+        [ test-bsl-run test_demo_fast_archive ]
         [ test-bsl-run test_demo_xml_save ]
         [ test-bsl-run test_demo_pimpl : ../example/demo_pimpl_A ]
         [ test-bsl-run test_demo_polymorphic : ../example/demo_polymorphic_A ]
 
         # should fail compilation
         [ compile-fail test_traits_fail.cpp ]
-        [ compile-fail test_level_not_serializable.cpp ]
+        [ compile-fail test_not_serializable.cpp ]
         
         # should compile
         [ compile test_const.cpp : std::locale-support ]
     ;
 }
+DEPENDS test_demo_xml_load : test_demo_xml_save ;
 
