@@ -48,11 +48,13 @@
 #pragma warning (disable: 4503)
 #pragma warning (disable: 4786)
 
+// Member friend syntax works but lookup sometime fails on VC7
+#define BOOST_UBLAS_NO_MEMBER_FRIENDS
 // Base traits templates syntax not supported
 #define BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
-// MSVC doesn't always accept the 'typename' keyword.
+// MSVC doesn't always accept the 'typename' keyword
 #define BOOST_UBLAS_TYPENAME
-// MSVC doesn't accept the 'using' keyword (at least for importing base members).
+// MSVC doesn't accept the 'using' keyword (at least for importing base members)
 #define BOOST_UBLAS_USING
 // MSVC doesn't support long double
 #define BOOST_UBLAS_NO_LONG_DOUBLE
