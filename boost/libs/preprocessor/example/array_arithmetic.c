@@ -26,16 +26,15 @@
 #include <boost/preprocessor/tuple/eat.hpp>
 #include <boost/preprocessor/comparison/less.hpp>
 #include <boost/preprocessor/logical/or.hpp>
-#include <stddef.h>
 
 /* Information about C operators. */
 
 /* Accessors for the operator datatype. */
-#define OP_SYMBOL(O)      BOOST_PP_TUPLE5_ELEM0 O
-#define OP_NAME(O)        BOOST_PP_TUPLE5_ELEM1 O
-#define OP_IS_FLOATING(O) BOOST_PP_TUPLE5_ELEM2 O
-#define OP_IS_LOGICAL(O)  BOOST_PP_TUPLE5_ELEM3 O
-#define OP_IS_SHIFT(O)    BOOST_PP_TUPLE5_ELEM4 O
+#define OP_SYMBOL(O)      BOOST_PP_TUPLE_ELEM(5,0,O)
+#define OP_NAME(O)        BOOST_PP_TUPLE_ELEM(5,1,O)
+#define OP_IS_FLOATING(O) BOOST_PP_TUPLE_ELEM(5,2,O)
+#define OP_IS_LOGICAL(O)  BOOST_PP_TUPLE_ELEM(5,3,O)
+#define OP_IS_SHIFT(O)    BOOST_PP_TUPLE_ELEM(5,4,O)
 
 /* List of applicative unary operators. */
 #define APPLICATIVE_UNARY_OPS\
@@ -81,10 +80,10 @@
 /* Information about C built-in types. */
 
 /* Accessors for the type datatype. */
-#define TYPE_NAME(T)         BOOST_PP_TUPLE4_ELEM0 T
-#define TYPE_ABBREVIATION(T) BOOST_PP_TUPLE4_ELEM1 T
-#define TYPE_IS_FLOATING(T)  BOOST_PP_TUPLE4_ELEM2 T
-#define TYPE_RANK(T)         BOOST_PP_TUPLE4_ELEM3 T
+#define TYPE_NAME(T)         BOOST_PP_TUPLE_ELEM(4,0,T)
+#define TYPE_ABBREVIATION(T) BOOST_PP_TUPLE_ELEM(4,1,T)
+#define TYPE_IS_FLOATING(T)  BOOST_PP_TUPLE_ELEM(4,2,T)
+#define TYPE_RANK(T)         BOOST_PP_TUPLE_ELEM(4,3,T)
 
 /* List of C built-in types. */
 #define BUILTIN_TYPES\
@@ -121,8 +120,14 @@
 #define UNARY_ARRAY_OP2(O,T) BOOST_PP_IF(IS_VALID_UNARY_OP_AND_TYPE_COMBINATION(O,T),UNARY_ARRAY_OP3,BOOST_PP_TUPLE2_EAT)(O,T)
 #define UNARY_ARRAY_OP3(O,T)\
   void BOOST_PP_CAT4(array_,OP_NAME(O),_,TYPE_ABBREVIATION(T))\
-    (const TYPE_NAME(T)* in, TYPE_NAME(TYPE_OF_UNARY_OP(O,T))* out, size_t n)\
-  { do { *out++ = OP_SYMBOL(O) *in++; } while (--n); }
+    ( const TYPE_NAME(T)* in\
+    , TYPE_NAME(TYPE_OF_UNARY_OP(O,T))* out\
+    , unsigned n\
+    )\
+  { do\
+    { *out++ = OP_SYMBOL(O) *in++;\
+    } while (--n);\
+  }
 
 BOOST_PP_LIST_FOR_EACH_PRODUCT(UNARY_ARRAY_OP,_,BOOST_PP_TUPLE_TO_LIST(2,(APPLICATIVE_UNARY_OPS,BUILTIN_TYPES)))
 
@@ -131,7 +136,16 @@ BOOST_PP_LIST_FOR_EACH_PRODUCT(UNARY_ARRAY_OP,_,BOOST_PP_TUPLE_TO_LIST(2,(APPLIC
 #define BINARY_ARRAY_OP2(O,L,R) BOOST_PP_IF(IS_VALID_BINARY_OP_AND_TYPE_COMBINATION(O,L,R),BINARY_ARRAY_OP3,BOOST_PP_TUPLE3_EAT)(O,L,R)
 #define BINARY_ARRAY_OP3(O,L,R)\
   void BOOST_PP_CAT6(array_,OP_NAME(O),_,TYPE_ABBREVIATION(L),_,TYPE_ABBREVIATION(R))\
-  (const TYPE_NAME(L)* lhs_in, const TYPE_NAME(R)* rhs_in, TYPE_NAME(TYPE_OF_BINARY_OP(O,L,R))* out, size_t n)\
-  { do { *out++ = *lhs_in++ OP_SYMBOL(O) *rhs_in++; } while (--n); }
+    ( const TYPE_NAME(L)* lhs_in\
+    , const TYPE_NAME(R)* rhs_in\
+    , TYPE_NAME(TYPE_OF_BINARY_OP(O,L,R))* out\
+    , unsigned n\
+    )\
+  { do\
+    { *out++ = *lhs_in OP_SYMBOL(O) *rhs_in;\
+      ++lhs_in;\
+      ++rhs_in;\
+    } while (--n);\
+  }
 
 BOOST_PP_LIST_FOR_EACH_PRODUCT(BINARY_ARRAY_OP,_,BOOST_PP_TUPLE_TO_LIST(3,(APPLICATIVE_BINARY_OPS,BUILTIN_TYPES,BUILTIN_TYPES)))
