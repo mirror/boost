@@ -27,6 +27,7 @@ DEPENDS all : smart_ptr ;
           [ run intrusive_ptr_test.cpp ]
           [ run intrusive_ptr_test.cpp ]
           [ run atomic_count_test.cpp ]
+          [ run lw_mutex_test.cpp ]
           [ compile-fail shared_ptr_assign_fail.cpp ]
           [ compile-fail shared_ptr_delete_fail.cpp ]
         ;

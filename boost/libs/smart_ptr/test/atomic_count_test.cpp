@@ -1,5 +1,5 @@
 //
-// astomic_count_test.cpp
+// atomic_count_test.cpp
 //
 // Copyright 2005 Peter Dimov
 //
