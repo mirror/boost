@@ -182,14 +182,14 @@ class optional
     // Returns a pointer to the value if this is initialized, otherwise,
     // the behaviour is UNDEFINED
     // No-throw
-    T const* operator->() const { BOOST_ASSERT(m_initialized) ; return get() ; }
-    T*       operator->()       { BOOST_ASSERT(m_initialized) ; return get() ; }
+    T const* operator->() const { BOOST_ASSERT(m_initialized) ; return static_cast<T const*>(m_storage.address()) ; }
+    T*       operator->()       { BOOST_ASSERT(m_initialized) ; return static_cast<T*>      (m_storage.address()) ; }
 
     // Returns a reference to the value if this is initialized, otherwise,
     // the behaviour is UNDEFINED
     // No-throw
-    T const& operator *() const { BOOST_ASSERT(m_initialized) ; return *get() ; }
-    T&       operator *()       { BOOST_ASSERT(m_initialized) ; return *get() ; }
+    T const& operator *() const { BOOST_ASSERT(m_initialized) ; return *static_cast<T const*>(m_storage.address()) ; }
+    T&       operator *()       { BOOST_ASSERT(m_initialized) ; return *static_cast<T*>      (m_storage.address()) ; }
 
     // implicit conversion to "bool"
     // No-throw
