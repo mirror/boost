@@ -42,6 +42,13 @@
 #endif
 
 //
+// Original native SGI streams have non-standard std::messages facet:
+//
+#if defined(__sgi) && !defined(__SGI_STL_OWN_IOSTREAMS)
+#  define BOOST_NO_STD_LOCALE
+#endif
+
+//
 // No template iterator constructors, or std::allocator
 // without member templates:
 //
