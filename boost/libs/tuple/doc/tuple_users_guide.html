@@ -264,10 +264,10 @@ A tuple can be copy constructed from another tuple, provided that the element ty
 Analogously, a tuple can be assigned to another tuple, provided that the element types are element-wise assignable.
 For example:
 
-<pre><code>class A;
+<pre><code>class A {};
 class B : public A {};
-struct C { C(); C(const B&amp;); }
-struct D { operator C() const; }
+struct C { C(); C(const B&amp;); };
+struct D { operator C() const; };
 tuple&lt;char, B*, B, D&gt; t;
   ...
 tuple&lt;int, A*, C, C&gt; a(t); // ok 
