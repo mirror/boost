@@ -10,7 +10,7 @@
 //
 // This software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
- 
+
 // For more information, see http://www.boost.org
 
 #define BOOST_INCLUDE_MAIN
@@ -54,6 +54,8 @@ struct make_increasing_int {
   mutable int n;
 };
 
+int get_37() { return 37; }
+
 static void
 test_zero_args()
 {
@@ -69,6 +71,7 @@ test_zero_args()
     boost::signals::connection c72 = s0.connect("72", i72);
     boost::signals::connection c62 = s0.connect("6x", i62);
     boost::signals::connection c42 = s0.connect(i42);
+    boost::signals::connection c37 = s0.connect(get_37);
 
     BOOST_TEST(s0() == 72);
 
@@ -90,11 +93,14 @@ test_zero_args()
     BOOST_TEST(s0() == 42);
 
     c42.disconnect();
+    BOOST_TEST(s0() == 37);
+
+    c37.disconnect();
     BOOST_TEST(s0() == 2);
 
     c2.disconnect();
     BOOST_TEST(s0() == 0);
-  }  
+  }
 
   {
     boost::signal0<int, max_or_default<int> > s0;
@@ -105,7 +111,7 @@ test_zero_args()
 
     const boost::signal0<int, max_or_default<int> >& cs0 = s0;
     BOOST_TEST(cs0() == 72);
-  }  
+  }
 
   {
     make_increasing_int<7> i7;
@@ -117,7 +123,7 @@ test_zero_args()
 
     BOOST_TEST(s0() == 10);
     BOOST_TEST(s0() == 11);
-  }  
+  }
 }
 
 static void
@@ -137,7 +143,7 @@ test_signal_signal_connect()
 {
   boost::signal1<int, int, max_or_default<int> > s1;
 
-  s1.connect(std::negate<int>()); 
+  s1.connect(std::negate<int>());
 
   BOOST_TEST(s1(3) == -3);
 
