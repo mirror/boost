@@ -69,11 +69,11 @@ namespace boost {
         if (m_bits)
           this->m_alloc.deallocate(m_bits, m_num_blocks);
       }
-      //protected: 
+    protected: 
       // This should be protected, but I was getting errors from g++
-      // 2.95.2 from operator== trying to access m_num_bits. I'm not
-      // sure whether it is a compiler bug or a problem with the
-      // code. -JGS
+      // 2.95.2 from operator== trying to access m_bits and
+      // m_num_bits. I'm not sure whether it is a compiler bug or a
+      // problem with the code. -JGS
       Block* m_bits;
       size_type m_num_bits;
       size_type m_num_blocks;
