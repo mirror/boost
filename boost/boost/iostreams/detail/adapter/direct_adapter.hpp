@@ -149,10 +149,10 @@ inline wrap_direct(Device dev)
 }
 
 template<typename Device>
-static Device& unwrap_direct(Device& d) { return d; }  
+inline Device& unwrap_direct(Device& d) { return d; }  
 
 template<typename Device>
-static Device& unwrap_direct(direct_adapter<Device>& d) { return *d; }  
+inline Device& unwrap_direct(direct_adapter<Device>& d) { return *d; }  
 
 //--------------Implementation of direct_adapter_base-------------------------//
 
