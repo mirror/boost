@@ -98,10 +98,6 @@ typedef std::vector<int> storage;
 typedef std::deque<int*> pointer_deque;
 typedef std::set<storage::iterator> iterator_set;
 
-void indirect_deque_tests(const storage& , pointer_deque& )
-{
-}
-
 void more_indirect_iterator_tests()
 {
 // For some reason all heck breaks loose in the compiler under these conditions.
