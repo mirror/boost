@@ -55,9 +55,9 @@ DEPENDS all : test ;
    [ run posix_time/testclock.cpp
      <lib>../build/boost_date_time
     : : : <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
-#   [ run posix_time/testdst_rules.cpp
-#     <lib>../build/boost_date_time
-#    : : : <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
+   [ run posix_time/testdst_rules.cpp
+     <lib>../build/boost_date_time
+    : : : <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
    [ run posix_time/testduration.cpp
      <lib>../build/boost_date_time
     : : : <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
