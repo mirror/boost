@@ -22,7 +22,6 @@
 #include <boost/mpl/aux_/static_cast.hpp>
 #include <boost/mpl/aux_/yes_no.hpp>
 #include <boost/mpl/aux_/type_wrapper.hpp>
-#include <boost/mpl/aux_/ptr_to_ref.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 #include <boost/mpl/aux_/config/static_constant.hpp>
 
@@ -36,8 +35,8 @@ struct has_key_impl< aux::set_tag >
     || BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
     {
         BOOST_STATIC_CONSTANT(bool, value = 
-              ( sizeof( BOOST_MPL_AUX_OVERLOAD_IS_MASKED(
-                   *BOOST_MPL_AUX_STATIC_CAST(Set*, 0)
+              ( sizeof( BOOST_MPL_AUX_OVERLOAD_CALL_IS_MASKED(
+                    Set
                   , BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<T>*, 0)
                   ) ) == sizeof(aux::no_tag) )
             );
@@ -46,8 +45,8 @@ struct has_key_impl< aux::set_tag >
 
 #else // ISO98 C++
         : bool_< 
-              ( sizeof( BOOST_MPL_AUX_OVERLOAD_IS_MASKED(
-                    aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Set*, 0))
+              ( sizeof( BOOST_MPL_AUX_OVERLOAD_CALL_IS_MASKED(
+                    Set
                   , BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<T>*, 0)
                   ) ) == sizeof(aux::no_tag) )
             >

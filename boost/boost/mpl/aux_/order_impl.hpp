@@ -22,7 +22,6 @@
 #include <boost/mpl/aux_/overload_names.hpp>
 #include <boost/mpl/aux_/static_cast.hpp>
 #include <boost/mpl/aux_/type_wrapper.hpp>
-#include <boost/mpl/aux_/ptr_to_ref.hpp>
 #include <boost/mpl/aux_/traits_lambda_spec.hpp>
 #include <boost/mpl/aux_/config/msvc.hpp>
 #include <boost/mpl/aux_/config/static_constant.hpp>
@@ -39,7 +38,7 @@ template< typename Seq, typename Key > struct x_order_impl
 {
     BOOST_STATIC_CONSTANT(long, value = 
           sizeof( BOOST_MPL_AUX_OVERLOAD_CALL_ORDER_BY_KEY(
-              *BOOST_MPL_AUX_STATIC_CAST(Seq*, 0)
+              Seq
             , BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<Key>*, 0)
             ) )
         );
@@ -48,8 +47,8 @@ template< typename Seq, typename Key > struct x_order_impl
 
 #else // ISO98 C++
     : long_< 
-          sizeof( BOOST_MPL_AUX_OVERLOAD_ORDER_BY_KEY(
-              aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Seq*, 0))
+          sizeof( BOOST_MPL_AUX_OVERLOAD_CALL_ORDER_BY_KEY(
+              Seq
             , BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<Key>*, 0)
             ) )
         >

@@ -41,7 +41,7 @@ struct m_at
 {
     typedef aux::type_wrapper<Key> key_;
     typedef __typeof__( BOOST_MPL_AUX_OVERLOAD_CALL_VALUE_BY_KEY(
-          aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Map*, 0))
+          Map
         , BOOST_MPL_AUX_STATIC_CAST(key_*, 0)
         ) ) type;
 };
@@ -63,7 +63,7 @@ template< typename Map, long order >
 struct item_by_order_impl
 {
     typedef __typeof__( BOOST_MPL_AUX_OVERLOAD_CALL_ITEM_BY_ORDER(
-          aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Map*, 0)) 
+          Map 
         , BOOST_MPL_AUX_STATIC_CAST(long_<order>*, 0)
         ) ) type;
 };
@@ -101,7 +101,7 @@ template< typename Map, long order > struct is_item_masked
 {
     BOOST_STATIC_CONSTANT(bool, value = 
           sizeof( BOOST_MPL_AUX_OVERLOAD_CALL_IS_MASKED(
-              aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Map*, 0))
+              Map
             , BOOST_MPL_AUX_STATIC_CAST(long_<order>*, 0)
             ) ) == sizeof(aux::yes_tag)
         );

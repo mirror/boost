@@ -15,16 +15,17 @@
 // $Revision$
 
 #include <boost/mpl/aux_/config/gcc.hpp>
+#include <boost/mpl/aux_/config/msvc.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 
-// agurt, 03/may/03: when defining 'friend' operators, use specialization
-// in place of conventional overloading to supress a warning on GCC 3.x;
-// breaks 2.95.x!
-#if !defined(BOOST_MPL_CFG_USE_OPERATORS_SPECIALIZATION) \
-    && BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, > 0x0295) \
-    && BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0302))
+#if !defined(BOOST_MPL_CFG_USE_OPERATORS_OVERLOADING) \
+    && ( BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
+        || BOOST_WORKAROUND(__BORLANDC__, <= 0x600) \
+        || BOOST_WORKAROUND(__EDG_VERSION__, <= 245) \
+        || BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, <= 0x0295) \
+        )
 
-#   define BOOST_MPL_CFG_USE_OPERATORS_SPECIALIZATION
+#   define BOOST_MPL_CFG_USE_OPERATORS_OVERLOADING
 
 #endif
 
