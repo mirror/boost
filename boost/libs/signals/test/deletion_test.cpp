@@ -27,7 +27,7 @@ struct remove_connection {
     //return value;
     std::cout << value << " ";
 
-    test_output.push_back(static_cast<char>(value + '0'));
+    test_output += static_cast<char>(value + '0');
   }
 
   int value;
