@@ -52,6 +52,8 @@ lib boost_serialization
         std::locale-support
         <msvc><*><include>$(SPIRIT_ROOT) 
         <msvc-stlport><*><include>$(SPIRIT_ROOT) 
+        <mingw><*><include>$(SPIRIT_ROOT) 
+        <mingw-stlport><*><include>$(SPIRIT_ROOT) 
         <vc7><*><include>$(SPIRIT_ROOT) 
         <borland><*><include>$(SPIRIT_ROOT) 
         <borland-5.5.1><*><include>$(SPIRIT_ROOT) 
@@ -73,6 +75,8 @@ lib boost_wserialization
         std::locale-support
         <msvc><*><include>$(SPIRIT_ROOT) 
         <msvc-stlport><*><include>$(SPIRIT_ROOT) 
+        <mingw><*><include>$(SPIRIT_ROOT) 
+        <mingw-stlport><*><include>$(SPIRIT_ROOT) 
         <vc7><*><include>$(SPIRIT_ROOT) 
         <borland><*><include>$(SPIRIT_ROOT) 
         <borland-5.5.1><*><include>$(SPIRIT_ROOT) 
