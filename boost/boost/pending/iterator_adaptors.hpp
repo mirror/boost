@@ -230,7 +230,8 @@ inline bool operator<=(const iterator_comparisons<D1,Base1>& xb,
 
 namespace detail {
 
-  // Dummy versions for iterators that don't support member access
+#if defined(__sgi) && !defined(__GNUC__)
+  // Dummy versions for iterators that don't support various operators
   template <class Iter>
   inline typename Iter::pointer
   operator_arrow(const Iter&, std::input_iterator_tag) {
@@ -242,33 +243,30 @@ namespace detail {
     return typename Iter::pointer();
   }
 
-  // Real version
+  template <class Iter, class Diff>
+  inline void advance_impl(Iter&, Diff, std::input_iterator_tag) { }
+  template <class Iter, class Diff>
+  inline void advance_impl(Iter&, Diff, std::output_iterator_tag) { }
+
+  template <class Iter>
+  inline void decrement_impl(Iter&, std::input_iterator_tag) { }
+  template <class Iter>
+  inline void decrement_impl(Iter&, std::output_iterator_tag) { }
+#endif
+
+  // Real versions
   template <class Iter>
   inline typename Iter::pointer
   operator_arrow(const Iter& i, std::forward_iterator_tag) {
     return &(*i);
   }
 
-  // Dummy version for non-random access iterators 
-  template <class Iter, class Diff>
-  inline void advance_impl(Iter&, Diff, std::input_iterator_tag) { }
-  template <class Iter, class Diff>
-  inline void advance_impl(Iter&, Diff, std::output_iterator_tag) { }
-
-  // Real version
   template <class Iter, class Diff>
   inline void
   advance_impl(Iter& i, Diff n, std::random_access_iterator_tag) {
         i.policies().advance(i.iter(), n);
   }
 
-  // Dummy versions for non-bidirectional iterators 
-  template <class Iter>
-  inline void decrement_impl(Iter&, std::input_iterator_tag) { }
-  template <class Iter>
-  inline void decrement_impl(Iter&, std::output_iterator_tag) { }
-
-  // Real version
   template <class Iter>
   inline void
   decrement_impl(Iter& i, std::bidirectional_iterator_tag) {
