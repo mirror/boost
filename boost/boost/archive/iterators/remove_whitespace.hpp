@@ -19,6 +19,7 @@
 #include <cassert>
 
 #include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME
+
 #include <boost/pfto.hpp>
 
 #include <boost/iterator/iterator_adaptor.hpp>
@@ -26,6 +27,11 @@
 
 #include <boost/detail/workaround.hpp>
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+// here is the default standard implementation of the functor used
+// by the filter iterator to remove spaces.  Unfortunately usage
+// of this implementation in combination with spirit trips a bug
+// VC 6.5.  The only way I can find to work around it is to 
+// implement a special non-standard version for this platform
 
 namespace { // anonymous
 
@@ -40,7 +46,7 @@ struct remove_whitespace_predicate<char>
     }
 };
 
-#ifndef BOOST_NO_CWCHAR
+#ifndef BOOST_NO_CWCHAR 
 template<>
 struct remove_whitespace_predicate<wchar_t>
 {
@@ -52,19 +58,15 @@ struct remove_whitespace_predicate<wchar_t>
 
 } // namespace anonymous
 
-#else
-// here is the default standard implementation of the functor used
-// by the filter iterator to remove spaces.  Unfortunately usage
-// of this implementation in combination with spirit trips a bug
-// VC 6.5.  The only way I can find to work around it is to 
-// implement a special non-standard version for this platform
+#else // BOOST_WORKAROUND
 
-#ifndef BOOST_NO_CWCHAR
+#ifndef BOOST_NO_CWCTYPE
 #include <cwctype> // iswspace
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ using ::iswspace; }
 #endif
 #endif
+
 #include <cctype> // isspace
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ using ::isspace; }

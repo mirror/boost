@@ -73,6 +73,7 @@ namespace std{
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/nvp.hpp>
+#include <boost/serialization/force_include.hpp>
 
 #include <boost/archive/archive_exception.hpp>
 
@@ -106,7 +107,7 @@ public:
             * boost::serialization::type_info_implementation<T>::type::get_instance()
         )
     {}
-    virtual void load_object_data(
+    virtual void BOOST_FORCE_INCLUDE load_object_data(
         basic_iarchive & ar,
         void *x, 
         const unsigned int file_version
@@ -175,7 +176,7 @@ public:
         basic_iserializer & bis = iserializer<Archive, T>::instantiate();
         bis.set_bpis(this);
     }
-    BOOST_FORCE_INCLUDE static const pointer_iserializer & instantiate(){
+    static const BOOST_FORCE_INCLUDE pointer_iserializer & instantiate(){
         return instance;
     }
     virtual ~pointer_iserializer(){};

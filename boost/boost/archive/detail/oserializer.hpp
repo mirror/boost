@@ -66,6 +66,7 @@
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/void_cast.hpp>
+#include <boost/serialization/force_include.hpp>
 
 #include <boost/archive/archive_exception.hpp>
 
@@ -104,7 +105,8 @@ public:
             * boost::serialization::type_info_implementation<T>::type::get_instance()
         )
     {}
-    virtual void save_object_data(
+    // metrowerks needs the BOOST_FORCE_INCLUDE
+    virtual void BOOST_FORCE_INCLUDE save_object_data(
         basic_oarchive & ar,    
         const void *x
     ) const {
@@ -174,7 +176,7 @@ public:
         basic_oserializer & bos = oserializer<Archive, T>::instantiate();
         bos.set_bpos(this);
     }
-     BOOST_FORCE_INCLUDE static const pointer_oserializer & instantiate(){
+    static const pointer_oserializer & instantiate() {
         return instance;
     }
     virtual ~pointer_oserializer(){}

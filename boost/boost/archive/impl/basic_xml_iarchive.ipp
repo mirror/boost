@@ -13,7 +13,6 @@
 #include <algorithm>
 
 #include <boost/throw_exception.hpp>
-#include <boost/utf8_codecvt_facet.hpp>
 
 #include <boost/serialization/tracking.hpp>
 #include <boost/archive/basic_xml_iarchive.hpp>
