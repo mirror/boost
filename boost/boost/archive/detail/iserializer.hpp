@@ -160,7 +160,7 @@ private:
         void * & x,
         const unsigned int file_version
     ) const {
-        boost::serialization::load_ptr(
+        boost::serialization::load_ptr_adl(
             boost::smart_cast_reference<Archive &>(ar),
             reinterpret_cast<T * &>(x),
             file_version
@@ -204,7 +204,7 @@ struct load_non_pointer_type {
             // short cut to user's serializer
             // make sure call is routed through the higest interface that might
             // be specialized by the user.
-            boost::serialization::serialize(
+            boost::serialization::serialize_adl(
                 ar, t, boost::serialization::version<T>::value
             );
         }

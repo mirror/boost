@@ -159,7 +159,7 @@ private:
         T * t = static_cast<T *>(const_cast<void *>(x));
         const unsigned int file_version =
             boost::serialization::version<T>::value;
-        boost::serialization::save_ptr(
+        boost::serialization::save_ptr_adl(
             boost::smart_cast_reference<Archive &>(ar), 
             t, 
             file_version
@@ -201,7 +201,7 @@ struct save_non_pointer_type {
         static void invokex(Archive & ar, const T & t){
             // make sure call is routed through the highest interface that might
             // be specialized by the user.
-            boost::serialization::serialize(
+            boost::serialization::serialize_adl(
                 ar, const_cast<T &>(t), ::boost::serialization::version<T>::value
             );
         }

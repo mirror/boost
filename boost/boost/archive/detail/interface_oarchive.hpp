@@ -103,24 +103,12 @@ public:
             // BOOST_STATIC_WARNING(
             //     serialization::tracking_level == serialization::track_never
             // );
-            // BCB has problems with arrays degrading to pointers
-            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-                const T* aux = (const T*)&t;
-                return *this << *aux;
-            #else
-                return *this << const_cast<const T &>(t);
-            #endif 
+            return *this << const_cast<const T &>(t);
         }
         // the & operator
         template<class T>
         Archive & operator&(T & t){
-            // BCB has problems with arrays degrading to pointers
-            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-                const T* aux = (const T*)&t;
-                return *this << *aux;
-            #else
-                return *this << const_cast<const T &>(t);
-            #endif
+            return *this << const_cast<const T &>(t);
         }
     #endif
 };
