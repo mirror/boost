@@ -100,9 +100,9 @@ struct lower_alignment_helper
 
 template <std::size_t target, class TestType>
 struct lower_alignment_helper<false,target,TestType>
-  : mpl::if_c<(alignment_of<TestType>::value == target), TestType, char>
 {
     enum { value = (alignment_of<TestType>::value == target) };
+    typedef typename mpl::if_c<value, TestType, char>::type type;
 };
 #endif
 
