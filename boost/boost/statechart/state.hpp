@@ -75,7 +75,7 @@ class state : public simple_state<
     {
       const inner_context_ptr_type pInnerContext(
         shallow_construct( pContext ) );
-      base_type::deep_construct_inner< inner_initial_list >(
+      base_type::template deep_construct_inner< inner_initial_list >(
         pInnerContext, outermostContext );
     }
 
