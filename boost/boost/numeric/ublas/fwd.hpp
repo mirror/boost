@@ -52,7 +52,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class I, class T, class ALLOC = std::allocator<std::pair<const I, T> > >
     class map_std;
-    template<class I, class T, class ALLOC = std::allocator<std::pair<const I, T> > >
+    template<class I, class T, class ALLOC = std::allocator<std::pair<I, T> > >
     class map_array;
 
     struct vector_tag {};
