@@ -13,11 +13,12 @@
 // more flexible, IO system. This new system is not compatible with
 // old compilers. The original date_time IO system remains for those 
 // compilers. They must define this macro to use the legacy IO.
-#if (defined(__GNUC__) && (__GNUC__ < 3))                    || \
-    defined(__MINGW32__)                                     || \
-    (defined(_MSC_VER) && (_MSC_VER <= 1300) )               || \
-    (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0564) )     || \
-    defined(__MWERKS__)
+#if ((defined(__GNUC__) && (__GNUC__ < 3))                    || \
+     defined(__MINGW32__)                                     || \
+     (defined(_MSC_VER) && (_MSC_VER <= 1300) )               || \
+     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0564) )     || \
+     defined(__MWERKS__) )                                    && \
+    !defined(USE_DATE_TIME_PRE_1_33_FACET_IO)
 #define USE_DATE_TIME_PRE_1_33_FACET_IO
 #endif
 
