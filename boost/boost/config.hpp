@@ -145,6 +145,11 @@
 
 //  BOOST_NO_LIMITS: The C++ implementation does not provide the <limits> header.
 
+//  BOOST_NO_INTRINSIC_WCHAR_T: The C++ implementation does not provide wchar_t,
+//  or it is really a synonym for another integral type. Use this symbol to
+//  decide whether it is appropriate to explicitly specialize a template on
+//  wchar_t if there is already a specialization for other integer types.
+
 
 //  Compilers are listed in alphabetic order (except VC++ last - see below)---//
 
@@ -240,6 +245,8 @@
 #   if _MSC_VER <= 1200  // 1200 == VC++ 6.0
 #     define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #     define BOOST_NO_PRIVATE_IN_AGGREGATE
+
+#     define BOOST_NO_INTRINSIC_WCHAR_T
 
 //    VC++ 6.0 has member templates but they have numerous problems including
 //    cases of silent failure, so for safety we define:
