@@ -26,16 +26,16 @@ http://www.boost.org/LICENSE_1_0.txt)
 </table>
 <hr>
 <dl class="page-index">
-  <dt><a target="detail" href="#portable_binary_archives">Portable Binary Archives</a>
-  <dt><a target="detail" href="#fast_binary_archives">Fast Binary Archives</a>
+  <dt><a target="detail" href="#portable_archives">Portable Binary Archives</a>
+  <dt><a target="detail" href="#fast_archives">Fast Binary Archives</a>
 </dl>
 
-<a name=portable_binary_archives>
+<a name=portable_archives>
 <h3>Portable Binary Archives</h3>
 It may happen that one wants to create a new archive class by derivation from one
 of the included ones. Included is a sample program that shows how to derive a 
 new archive from one of the ones included with the library.  The first example is
-<a href="../example/demo_portable_binary_archive.cpp" target="demo_portable_binary_archive_cpp">demo_portable_binary_archive.cpp</a>.
+<a href="../example/demo_portable_archive.cpp" target="demo_portable_archive_cpp">demo_portable_archive.cpp</a>.
 This binary archive save/loads integers in a portable format.  To this end
 it is derived from the native binary archive and the save/load functions for
 integers are overridden with special versions which convert to big endian
@@ -135,10 +135,10 @@ public:
 
 </ol>  
 
-<a name=fast_binary_archives>
+<a name=fast_archives>
 <h3>Fast Binary Archives</h3>
 The second example 
-<a href="../example/demo_fast_binary_archive.cpp" target="demo_fast_binary_archive_cpp">demo_fast_binary_archive.cpp</a>.
+<a href="../example/demo_fast_archive.cpp" target="demo_fast_archive_cpp">demo_fast_archive.cpp</a>.
 is similar to the first one.  The difference is that it intercepts the serialization before
 the default serialization is invoked.  In this case we want to replace the default
 serialization of C arrays of integers with a faster one.  The default version
