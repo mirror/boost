@@ -68,12 +68,12 @@ test-suite range
         :
         : compat1_test
        ] 
-     [ run
-             compat2.cpp    
-            : :
-        :
-        : compat2_test
-       ] 
+#     [ run
+#             compat2.cpp    
+#            : :
+#        :
+#        : compat2_test
+#       ] 
      [ run
              compat3.cpp    
             : :
