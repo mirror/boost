@@ -9,6 +9,9 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  25 Jun 01 output_iterator_helper changes: removed default template 
+//            parameters, added support for self-proxying, additional 
+//            documentation and tests (Aleksey Gurtovoy)
 //  29 May 01 Added operator classes for << and >>.  Added input and output
 //            iterator helper classes.  Added classes to connect equality and
 //            relational operators.  Added classes for groups of related
@@ -701,17 +704,17 @@ struct input_iterator_helper
   , dereferenceable<T, P
   , boost::iterator<std::input_iterator_tag, V, D, P, R
     > > > > {};
-#ifndef BOOST_MSVC
-template <class T,
-          class V = void,
-          class D = void,
-          class P = void,
-          class R = void>
+
+template<class Derived>
 struct output_iterator_helper
-  : incrementable<T
-  , boost::iterator<std::output_iterator_tag, V, D, P, R
-    > > {};
-#endif
+  : boost::incrementable<Derived
+  , boost::iterator<std::output_iterator_tag, void, void, void, void
+  > >
+{
+  Derived& operator*()  { return static_cast<Derived&>(*this); }
+  Derived& operator++() { return static_cast<Derived&>(*this); }
+};
+
 template <class T,
           class V,
           class D = std::ptrdiff_t,
