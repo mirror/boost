@@ -477,7 +477,7 @@ unsigned int expected_failures = 1; // cv-qualified references
 #if __GNUC__==3 && __GNUC_MINOR__>=1
 unsigned int expected_failures = 0;
 #else
-unsigned int expected_failures = 1 // cv-qualified references
+unsigned int expected_failures = 1; // cv-qualified references
 #endif
 #elif defined(__HP_aCC)
 unsigned int expected_failures = 272; // remove_const/remove_volatile/remove_cv don't work
@@ -486,13 +486,4 @@ unsigned int expected_failures = 1;
 #else
 unsigned int expected_failures = 0;
 #endif
-
-
-
-
-
-
-
-
-
 
