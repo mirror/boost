@@ -1730,8 +1730,13 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::set_express
                return error_code();
             }
          // extend:
-         /*dat = */add_simple(dat, re_detail::syntax_element_jump, re_detail::re_jump_size);
+         dat = add_simple(dat, re_detail::syntax_element_jump, re_detail::re_jump_size);
          data.align();
+         //
+         // we don't know what value to put here yet,
+         // use an arbitrarily large value for now
+         // and check it later (TODO!)
+         ((re_detail::re_jump*)dat)->alt.i = INT_MAX/2;
 
          // now work out where to insert:
          unsigned int offset = 0;
