@@ -28,6 +28,7 @@
             A set of generic string-related algorithms and utilities.
         </librarypurpose> 
         <librarycategory name="category:algoritms"/>
+        <librarycategory name="category:string-text"/>
     </libraryinfo>
 
     <title>Boost String Algorithms Library</title>  
