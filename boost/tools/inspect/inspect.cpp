@@ -187,6 +187,17 @@ namespace
     }
   }
 
+//  display_summary_helper  --------------------------------------------------//
+
+  void display_summary_helper( const string & current_library, int err_count )
+  {
+    std::cout << "  <tr><td><a href=\"#" 
+              << current_library
+              << "\">" << current_library
+              << "</a></td><td align=\"center\">"
+              << err_count << "</td></tr>\n";
+  }
+  
 //  display_summary  ---------------------------------------------------------//
 
   void display_summary()
@@ -198,16 +209,13 @@ namespace
     {
       if ( current_library != itr->library )
       {
-        std::cout << "  <tr><td><a href=\"#" 
-                  << current_library
-                  << "\">" << current_library
-                  << "</a></td><td align=\"center\">"
-                  << err_count << "</td></tr>\n";
+        display_summary_helper( current_library, err_count );
         current_library = itr->library;
         err_count = 0;
       }
       ++err_count;
     }
+    display_summary_helper( current_library, err_count );
   }
 
 
@@ -232,7 +240,8 @@ namespace
       if ( current.library != itr->library
         || current.rel_path != itr->rel_path )
       {
-        std::cout << "\n<br>" << itr->rel_path;
+        std::cout << "\n";
+        std::cout << itr->rel_path;
         sep = ": ";
       }
       if ( current.library != itr->library
@@ -247,6 +256,7 @@ namespace
       current.msg = itr->msg;
       first = false;
    }
+   std::cout << "</pre>\n";
   }
 
 } // unnamed namespace
