@@ -23,7 +23,7 @@
    //
 #endif
 
-#if (_MSC_VER <= 1300)
+#if (_MSC_VER <= 1300)  // 1200 == VC++ 7.0
 
 #if !defined(_MSC_EXTENSIONS) && !defined(BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS)      // VC7 bug with /Za
 #  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
@@ -53,8 +53,12 @@
 
 #endif
 
-#if _MSC_VER < 1310
+#if _MSC_VER < 1310 // 1310 == VC++ 7.1
 #  define BOOST_NO_SWPRINTF
+#endif
+
+#if _MSC_VER <= 1310
+#  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #endif
 
 #ifndef _NATIVE_WCHAR_T_DEFINED
