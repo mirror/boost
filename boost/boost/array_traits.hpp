@@ -1,4 +1,4 @@
-// -*-C++-*- array.hpp
+// -*-C++-*- array_traits.hpp
 // <!!----------------------------------------------------------------------> 
 // <!! Copyright (C) 1998 Dietmar Kuehl, Claas Solutions GmbH > 
 // <!!> 
@@ -20,8 +20,8 @@
 
 // -------------------------------------------------------------------------- 
 
-#if !defined(BOOST_ARRAY_HPP)
-#define BOOST_ARRAY_HPP 1
+#if !defined(BOOST_ARRAY_TRAITS_HPP)
+#define BOOST_ARRAY_TRAITS_HPP 1
 
 // -------------------------------------------------------------------------- 
 
@@ -160,4 +160,4 @@ namespace boost
 
 // -----------------------------------------------------------------------------
 
-#endif /* BOOST_ARRAY_HPP */
+#endif /* BOOST_ARRAY_TRAITS_HPP */
