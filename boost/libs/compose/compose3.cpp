@@ -13,7 +13,7 @@
 #include <functional>
 #include <string>
 #include <cctype>
-#include "compose.hpp"
+#include <boost/compose.hpp>
 using namespace std;
 using namespace boost;
 
