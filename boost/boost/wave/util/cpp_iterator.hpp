@@ -945,7 +945,7 @@ typename string_type::size_type pos_begin =
         BOOST_WAVE_THROW(preprocess_exception, bad_include_statement, s, act_pos);
     }
 
-std::string file_token(s.substr(pos_begin, pos_end-pos_begin).c_str());
+std::string file_token(s.substr(pos_begin, pos_end-pos_begin+1).c_str());
 std::string file_path(s.substr(pos_begin+1, pos_end-pos_begin-1).c_str());
 
 // finally include the file
