@@ -28,6 +28,10 @@
 
 #include <boost/regex.hpp>
 
+#ifdef BOOST_RE_NO_WCSTRING
+#error The regex library is not configured for wide character support
+#endif
+
 //
 // instantiate templates used:
 //
@@ -192,5 +196,6 @@ template test_string_type regex_merge(const test_string_type&,
 #include "libs/regex/src/regex_debug.cpp"
 #include "libs/regex/src/regex_synch.cpp"
 #include "libs/regex/src/wide_posix_api.cpp"
+
 
 
