@@ -209,13 +209,7 @@ set of concepts handles the syntax and semantics of value access:
 - Readable Iterator
 - Writable Iterator
 - Swappable Iterator
-- Readable Lvalue Iterator
-- Writable Lvalue Iterator
-
-The refinement relationships among these iterator concepts are given
-in the following diagram.
-
-.. image:: access.png
+- Lvalue Iterator
 
 The access concepts describe requirements related to ``operator*`` and
 ``operator->``, including the ``value_type``, ``reference``, and
@@ -250,10 +244,11 @@ Like the old iterator requirements, we provide tags for purposes of
 dispatching. There are two hierarchies of tags, one for the access
 concepts and one for the traversal concepts. The tags are related via
 inheritance so that a tag is convertible to another tag if the concept
-associated with the first tag is a refinement of the second tag.  We
-use virtual inheritance of the diamonds in the current hierarchy, and
-because of possible diamonds that could be created when programmers
-define new iterator concepts and the corresponding tags.  
+associated with the first tag is a refinement of the second tag.
+There is not a tag for Lvalue Iterator because one can easily deduce
+whether an iterator is an Lvalue Iterator by checking whether
+``iterator_traits<Iterator>::reference`` is a real reference.
+
 
 We provide an access mechanism for mapping iterator types to the new
 tags. Our design reuses ``iterator_traits<Iter>::iterator_category``
@@ -263,7 +258,7 @@ traversal tags are combined into a single type using the following
 
 ::
 
-  template <class AccessTag, class TraversalTag>
+  template <class AccessTag, class Reference, class TraversalTag>
   struct iterator_tag : /* appropriate old category or categories */
   {
     typedef AccessTag access;
@@ -340,8 +335,7 @@ member of type ``T``.
  |``iterator_traits<X>::reference``     |Convertible to                    |                                         |
  |                                      |``iterator_traits<X>::value_type``|                                         |
  +--------------------------------------+----------------------------------+-----------------------------------------+
- |``access_category<X>::type``          |Convertible to                    |                                         |
- |                                      |``readable_iterator_tag``         |                                         |
+ |``is_readable<X>::type``              |``truetype``                      |                                         |
  +--------------------------------------+----------------------------------+-----------------------------------------+
  |``*a``                                |``iterator_traits<X>::reference`` |pre: ``a`` is dereferenceable. If ``a == |
  |                                      |                                  |b`` then ``*a`` is equivalent to ``*b``  |
@@ -367,8 +361,7 @@ output.
  +--------------------------------------+-------------------------+----------------------------+
  |Expression                            |Return Type              |Precondition                |
  +======================================+=========================+============================+
- |``access_category<X>::type``          |Convertible to           |                            |
- |                                      |``writable_iterator_tag``|                            |
+ |``is_writable<X>::type``              |``true_type``            |                            |
  +--------------------------------------+-------------------------+----------------------------+
  |``*a = o``                            |                         | pre: The type of ``o``     |
  |                                      |                         | is in the set of           |
@@ -389,6 +382,8 @@ semantics.
  +------------------------------------+-------------+---------------------------------------------+
  |Expression                          |Return Type  |Postcondition                                |
  +====================================+=============+=============================================+
+ |``is_swappable<X>::type``           |``true_type``|                                             |
+ +------------------------------------+-------------+---------------------------------------------+
  |``iter_swap(a, b)``                 |``void``     |post: the pointed to values are exchanged    |
  +------------------------------------+-------------+---------------------------------------------+
 
@@ -396,14 +391,14 @@ semantics.
   is also a model of *Swappable Iterator*.  *--end note*]
 
 
-Readable Lvalue Iterators [lib.readable.lvalue.iterators]
----------------------------------------------------------
+Lvalue Iterators [lib.lvalue.iterators]
+---------------------------------------
 
-The *Readable Lvalue Iterator* concept adds the requirement that the
+The *Lvalue Iterator* concept adds the requirement that the
 ``reference`` type be a reference to the value type of the iterator.
 
  +----------------------------------------------------------------------------------------------------------+
- |Readable Lvalue Iterator Requirements (in addition to Readable Iterator)                                  |
+ | Lvalue Iterator Requirements                                                                             |
  +------------------------------------+---------------------------------+-----------------------------------+
  |Expression                          |Return Type                      |Assertion                          |
  +====================================+=================================+===================================+
@@ -412,29 +407,6 @@ The *Readable Lvalue Iterator* concept adds the requirement that the
  |                                    |                                 |where *cv* is an optional          |
  |                                    |                                 |cv-qualification                   |
  +------------------------------------+---------------------------------+-----------------------------------+
- |``access_category<X>::type``        |Convertible to                   |                                   |
- |                                    |``readable_lvalue_iterator_tag`` |                                   |
- +------------------------------------+---------------------------------+-----------------------------------+
-
-
-Writable Lvalue Iterators [lib.writable.lvalue.iterators]
----------------------------------------------------------
-
-The *Writable Lvalue Iterator* concept adds the requirement that the
-``reference`` type be a non-const reference to the value type of the
-iterator.
-
-
- +--------------------------------------------------------------------------------------+                                             
- |   Writable Lvalue Iterator Requirements (in addition to Readable Lvalue Iterator)    |                                             
- +--------------------------------------+-----------------------------------------------+
- | Expression                           | Return Type                                   |
- +======================================+===============================================+
- |``iterator_traits<X>::reference``     |``iterator_traits<X>::value_type&``            |
- +--------------------------------------+-----------------------------------------------+
- |``access_category<X>::type``          |Convertible to ``writable_lvalue_iterator_tag``|
- |                                      |                                               |
- +--------------------------------------+-----------------------------------------------+
 
 
 Iterator Traversal Concepts [lib.iterator.traversal]
@@ -614,30 +586,23 @@ constant object of type ``Distance``.
 Addition to [lib.iterator.synopsis]
 ===================================
 
+
 ::
 
   // lib.iterator.traits, traits and tags
-  template <class Iterator> struct access_category;
+  template <class Iterator> struct is_readable;
+  template <class Iterator> struct is_writable;
+  template <class Iterator> struct is_swappable;
   template <class Iterator> struct traversal_category;
 
-  template <class AccessTag, class TraversalTag>
+  enum iterator_access { readable_iterator = 1, writable_iterator = 2, 
+      swappable_iterator = 4, lvalue_iterator = 8 };
+
+  template <iterator_access x, class TraversalTag>
   struct iterator_tag : /* appropriate old category or categories */ {
-    typedef AccessTag access;
+    static const iterator_access access = x;
     typedef TraversalTag traversal;
   };
-
-  struct readable_iterator_tag { };
-  struct writable_iterator_tag { };
-  struct swappable_iterator_tag { };
-  struct readable_writable_iterator_tag
-    : virtual readable_iterator_tag
-    , virtual writable_iterator_tag
-    , virtual swappable_iterator_tag { };
-  struct readable_lvalue_iterator_tag 
-    : virtual readable_iterator_tag { };
-  struct writable_lvalue_iterator_tag
-    : virtual public readable_writable_iterator_tag
-    , virtual public readable_lvalue_iterator_tag { };
 
   struct incrementable_iterator_tag { };
   struct single_pass_iterator_tag : incrementable_iterator_tag { };
@@ -652,15 +617,15 @@ Addition to [lib.iterator.traits]
 =================================
 
 The ``iterator_tag`` class template is an iterator category tag that
-encodes the access and traversal tags in addition to being compatible
+encodes the access enum and traversal tag in addition to being compatible
 with the original iterator tags.  The ``iterator_tag`` class inherits
 from one of the original iterator tags according to the following
 pseudo-code.
 
 ::
 
-    inherit-category(access-tag, traversal-tag) =
-         if (access-tag is convertible to readable_lvalue_iterator_tag) {
+    inherit-category(access, traversal-tag) =
+         if (access & lvalue_iterator) {
              if (traversal-tag is convertible to random_access_traversal_tag)
                  return random_access_iterator_tag;
              else if (traversal-tag is convertible to bidirectional_traversal_tag)
@@ -672,55 +637,67 @@ pseudo-code.
                      return input_output_iterator_tag;
                  else
                      return input_iterator_tag;
-             else if (access-tag is convertible to writable_iterator_tag)
+             else if (access & writable_iterator)
                  return output_iterator_tag;
              else
                  return null_category_tag;
-         } else if (access-tag is convertible to readable_writable_iterator_tag
+         } else if ((access & readable_iterator) and (access & writable_iterator)
                     and traversal-tag is convertible to single_pass_iterator_tag)
              return input_output_iterator_tag;
-         else if (access-tag is convertible to readable_iterator_tag
+         else if (access & readable_iterator
                   and traversal-tag is convertible to single_pass_iterator_tag)
              return input_iterator_tag;
-         else if (access-tag is convertible to writable_iterator_tag
+         else if (access & writable_iterator
                   and traversal-tag is convertible to incrementable_iterator_tag)
              return output_iterator_tag;
          else
              return null_category_tag;
      
-If the argument for the template parameter ``AccessTag`` is not
-convertible to one or more of: ``readable_iterator_tag``,
-``writable_iterator_tag``, ``swappable_iterator_tag``, or if the
-argument for ``TraversalTag`` is not convertible to
+If the argument for ``TraversalTag`` is not convertible to
 ``incrementable_iterator_tag`` then the programm is ill-formed.
 
-The ``access_category`` and ``traversal_category`` class templates are
-traits classes. For iterators whose
-``iterator_traits<Iter>::iterator_category`` type is ``iterator_tag``,
-the ``access_category`` and ``traversal_category`` traits access the
-``access`` and ``traversal`` member types within ``iterator_tag``.
-For iterators whose ``iterator_traits<Iter>::iterator_category`` type
-is not ``iterator_tag`` and instead is a tag convertible to one of the
-original tags, the appropriate traversal and access tags are deduced.
-The following pseudo-code describes the algorithm.
+The ``is_readable``, ``is_writable``, ``is_swappable``, and
+``traversal_category`` class templates are traits classes. For
+iterators whose ``iterator_traits<Iter>::iterator_category`` type is
+``iterator_tag``, these traits obtain the ``access`` enum and
+``traversal`` member type from within ``iterator_tag``.  For iterators
+whose ``iterator_traits<Iter>::iterator_category`` type is not
+``iterator_tag`` and instead is a tag convertible to one of the
+original tags, the appropriate traversal tag and access bits are
+deduced.  The following pseudo-code describes the algorithm.
 
 ::
 
-  access-category(Iterator) =
+  is-readable(Iterator) = 
       cat = iterator_traits<Iterator>::iterator_category;
       if (cat == iterator_tag<Access,Traversal>)
-          return Access;
+          return Access % readable_iterator;
+      else if (cat is convertible to input_iterator_tag)
+          return true;
+      else
+          return false;
+
+  is-writable(Iterator) =
+      cat = iterator_traits<Iterator>::iterator_category;
+      if (cat == iterator_tag<Access,Traversal>)
+          return Access % writable_iterator;
+      else if (cat is convertible to forward_iterator_tag
+               or output_iterator_tag)
+          return true;
+      else
+          return false;
+
+  is-swappable(Iterator) =
+      cat = iterator_traits<Iterator>::iterator_category;
+      if (cat == iterator_tag<Access,Traversal>)
+          return Access % swappable_iterator;
       else if (cat is convertible to forward_iterator_tag) {
           if (iterator_traits<Iterator>::reference is a const reference)
-              return readable_lvalue_iterator_tag;
+              return false;
           else
-              return writable_lvalue_iterator_tag;
-      } else if (cat is convertible to input_iterator_tag)
-          return readable_iterator_tag;
-      else if (cat is convertible to output_iterator_tag)
-          return writable_iterator_tag;
-      else
-          return null_category_tag;
+              return true;
+      } else 
+          return false;
 
   traversal-category(Iterator) =
       cat = iterator_traits<Iterator>::iterator_category;
@@ -746,15 +723,18 @@ category tags for pointer types.
 ::
 
   template <typename T>
-  struct access_category<const T*>
-  {
-    typedef readable_lvalue_iterator_tag type;
-  };
+  struct is_readable<const T*> { typedef true_type type; };
   template <typename T>
-  struct access_category<T*>
-  {
-    typedef writable_lvalue_iterator_tag type;
-  };
+  struct is_writable<const T*> { typedef false_type type; };
+  template <typename T>
+  struct is_swappable<const T*> { typedef false_type type; };
+
+  template <typename T>
+  struct is_readable<T*> { typedef true_type type; };
+  template <typename T>
+  struct is_writable<T*> { typedef true_type type; };
+  template <typename T>
+  struct is_swappable<T*> { typedef true_type type; };
 
   template <typename T>
   struct traversal_category<T*>
@@ -763,7 +743,6 @@ category tags for pointer types.
   };
 
 
-.. We need to document the requirements for the type parameters of iterator_tag.
 
 ..
  LocalWords:  Abrahams Siek Witt const bool Sutter's WG int UL LI href Lvalue
