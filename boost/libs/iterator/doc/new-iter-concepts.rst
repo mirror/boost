@@ -299,17 +299,27 @@ given in the following diagram.
 Like the old iterator requirements, we provide tags for purposes of
 dispatching based on the traversal concepts.  The tags are related via
 inheritance so that a tag is convertible to another tag if the concept
-associated with the first tag is a refinement of the second tag.  Our
-design reuses ``iterator_traits<Iter>::iterator_category`` as the
-access mechanism for the traversal tag. If an iterator wishes to meet
-the requirements of both a new iterator concept and an old iterator
-concept, it can use an iterator category type that inherits from both
-the the old iterator tag and the new traversal tag.
+associated with the first tag is a refinement of the second tag.
+
+Our design reuses ``iterator_traits<Iter>::iterator_category`` to
+indicate an iterator's traversal capability.  To specify
+capabilities not captured by any old-style iterator category, an
+iterator designer can use an ``iterator_category`` type that is
+convertible to both the the most-derived old iterator category tag
+which fits, and the appropriate new iterator traversal tag.
+
+.. dwa2003/1/2: Note that we are not *requiring* convertibility to
+   a new-style traversal tag in order to meet new concepts.
+   Old-style iterators still fit, after all.
 
 We do not provide tags for the purposes of dispatching based on the
-access concepts. There are two reasons: we could not find a way to
-automatically infer the right access tags for old-style iterators and
-the need for dispatching based on the access concepts is not as great.
+access concepts, in part because we could not find a way to
+automatically infer the right access tags for old-style iterators.
+An iterator's writability may be dependent on the assignability of
+its ``value_type`` and there's no known way to detect whether an
+arbitrary type is assignable.  Fortunately, the need for
+dispatching based on access capability is not as great as the need
+for dispatching based on traversal capability.
 
 A difficult design decision concerned the ``operator[]``. The direct
 approach for specifying ``operator[]`` would have a return type of
@@ -373,6 +383,10 @@ member of type ``T``.
 |                                   |                        |to ``(*a).m``            |
 +-----------------------------------+------------------------+-------------------------+
 
+.. TR1: the originally-proposed requirement that typeof(*a) == R
+   was too restrictive.  Now we just require that it's
+   convertible to R and that accessing a T through that conversion
+   is equivalent to accessing a T directly.
 
 .. _Writable Iterator:
 
@@ -394,8 +408,6 @@ output.
 |                         |              | is in the set of           |
 |                         |              | value types of ``X``       |
 +-------------------------+--------------+----------------------------+
-
-   
 
 Swappable Iterators [lib.swappable.iterators]
 ---------------------------------------------
@@ -472,6 +484,8 @@ semantics.
 |                                |``incrementable_traversal_tag``|                    |
 +--------------------------------+-------------------------------+--------------------+
 
+.. TR1: incrementable_iterator_tag changed to
+   incrementable_traversal_tag for consistency.
 
 Single Pass Iterators [lib.single.pass.iterators]
 -------------------------------------------------
@@ -501,6 +515,9 @@ semantics.
 |``traversal_category<X>::type`` |Convertible to               |                           |
 |                                |``single_pass_traversal_tag``|                           |
 +--------------------------------+-----------------------------+---------------------------+
+
+.. TR1: single_pass_iterator_tag changed to
+   single_pass_traversal_tag for consistency
 
 
 Forward Traversal Iterators [lib.forward.traversal.iterators]
@@ -532,6 +549,9 @@ semantics.
 |``traversal_category<X>::type``        |Convertible to                     |               |
 |                                       |``forward_traversal_tag``          |               |
 +---------------------------------------+-----------------------------------+---------------+
+
+.. TR1: forward_traversal_iterator_tag changed to
+   forward_traversal_tag for consistency
 
 
 Bidirectional Traversal Iterators [lib.bidirectional.traversal.iterators]
@@ -570,6 +590,8 @@ the stated semantics.
 |                                    |                                             |                     |
 +------------------------------------+---------------------------------------------+---------------------+
 
+.. TR1: bidirectional_traversal_iterator_tag changed to
+   bidirectional_traversal_tag for consistency
 
 Random Access Traversal Iterators [lib.random.access.traversal.iterators]
 -------------------------------------------------------------------------
@@ -635,6 +657,8 @@ constant object of type ``Distance``.
 |                                           |``random_access_traversal_tag``                  |                         |                      |
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
 
+.. TR1: random_access_traversal_iterator_tag changed to
+   random_access_traversal_tag for consistency
 
 
 Addition to [lib.iterator.synopsis]
