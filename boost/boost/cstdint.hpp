@@ -8,7 +8,8 @@
 
 //  See http://www.boost.org for most recent version including documentation.
 
-//  Revision History
+//  Revision Historyä
+//   31 Oct 01  use BOOST_HAS_LONG_LONG to check for "long long" (Jens M.)
 //   16 Apr 01  check LONGLONG_MAX when looking for "long long" (Jens Maurer)
 //   23 Jan 01  prefer "long" over "int" for int32_t and intmax_t (Jens Maurer)
 //   12 Nov 00  Merged <boost/stdint.h> (Jens Maurer)
@@ -144,8 +145,8 @@ namespace boost
 
 //  64-bit types + intmax_t and uintmax_t  ----------------------------------//
 
-# if !defined(BOOST_MSVC) && !defined(__BORLANDC__) && \
-   (!defined(__GLIBCPP__) || defined(_GLIBCPP_USE_LONG_LONG)) && \
+# if defined(BOOST_HAS_LONG_LONG) && \
+   !defined(BOOST_MSVC) && !defined(__BORLANDC__) && \
    (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
 #    if defined(__hpux)
      // HP-UX's value of ULONG_LONG_MAX is unusable in preprocessor expressions
@@ -271,7 +272,9 @@ BOOST_HAS_STDINT_H is defined (John Maddock).
 
 //  64-bit types + intmax_t and uintmax_t  ----------------------------------//
 
-#  if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX)
+#  if defined(BOOST_HAS_LONG_LONG) && \
+    (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
+
 #    if defined(__hpux)
      // HP-UX's value of ULONG_LONG_MAX is unusable in preprocessor expressions
 #    elif (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615U) ||  \
