@@ -15,7 +15,7 @@
   <link linkend="variant.concepts.bounded-type"><emphasis>BoundedType</emphasis></link>
   concept. Any number of bounded types may be specified, up to some
   implementation-defined limit (see 
-  <code><link linkend="variant.macro.BOOST_VARIANT_LIMIT_TYPES">BOOST_VARIANT_LIMIT_TYPES</link></code>).</para>
+  <code><macroname>BOOST_VARIANT_LIMIT_TYPES</macroname></code>).</para>
 
 <para>For example, the following declares a discriminated union container on
   <code>int</code> and <code>std::string</code>:

@@ -28,10 +28,10 @@
     in the C++98 standard, the preprocessor is needed. While the
     <libraryname>Preprocessor</libraryname> library provides a general and
     powerful solution, the need to repeat
-    <code><link linkend="variant.macro.BOOST_VARIANT_LIMIT_TYPES">BOOST_VARIANT_LIMIT_TYPES</link></code>
+    <code><macroname>BOOST_VARIANT_LIMIT_TYPES</macroname></code>
     unnecessarily clutters otherwise simple code. Therefore, for common
     use-cases, this library provides its own macro
-    <code><link linkend="variant.macro.BOOST_VARIANT_ENUM_PARAMS">BOOST_VARIANT_ENUM_PARAMS</link></code>.</para>
+    <code><macroname>BOOST_VARIANT_ENUM_PARAMS</macroname></code>.</para>
 
   <para>This macro simplifies for the user the process of declaring 
     <code>variant</code> types in function templates or explicit partial
@@ -62,7 +62,7 @@ class some_class&lt; <classname>boost::variant</classname>&lt;<emphasis role="bo
     dimensions. First, due to the lack of support for true variadic template 
     parameter lists in C++, the number of parameters must be limited to some
     implementation-defined maximum (namely,
-    <code><link linkend="variant.macro.BOOST_VARIANT_LIMIT_TYPES">BOOST_VARIANT_LIMIT_TYPES</link></code>).
+    <code><macroname>BOOST_VARIANT_LIMIT_TYPES</macroname></code>).
     Second, the nature of parameter lists in general makes compile-time
     manipulation of the lists (metaprogramming) excessively difficult.</para>
 
@@ -90,7 +90,7 @@ typedef mpl::push_front&lt; types_initial, int &gt;::type types;
     declaration syntax described above is not universally available. On these
     compilers the library indicates its lack of support for the syntax via the
     definition of the preprocessor symbol
-    <code><link linkend="variant.macro.BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT">BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT</link></code>.</para>
+    <code><macroname>BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT</macroname></code>.</para>
 
 </section>
 
@@ -164,7 +164,7 @@ int_tree_t var(result);</programlisting>
     <code>recursive_variant</code> is not universally supported. On these
     compilers the library indicates its lack of support for via the definition
     of the preprocessor symbol
-    <code><link linkend="variant.macro.BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT">BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT</link></code>.</para>
+    <code><macroname>BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT</macroname></code>.</para>
 
   <!-- TODO: mention boost::incomplete workaround -->
 

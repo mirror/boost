@@ -39,7 +39,7 @@
           <listitem>Conforming implementations of <code>variant</code> must
             allow at least ten types as template arguments. The exact number
             of allowed arguments is exposed by the preprocessor macro
-            <code><link linkend="variant.macro.BOOST_VARIANT_LIMIT_TYPES">BOOST_VARIANT_LIMIT_TYPES</link></code>.</listitem>
+            <code><macroname>BOOST_VARIANT_LIMIT_TYPES</macroname></code>.</listitem>
           <listitem>The following syntax is also supported:
             <code>variant&lt; <emphasis>type-sequence</emphasis> &gt;</code>,
             where <emphasis>type-sequence</emphasis> must meet the requirements
@@ -50,7 +50,7 @@
             <code>variant&lt; int, std::string &gt;</code>. (Due to standard
             conformance problems in several compilers, however, this syntax may
             not be supported on your compiler. See
-            <code><link linkend="variant.macro.BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT">BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT</link></code>
+            <code><macroname>BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT</macroname></code>
             for more information.)</listitem>
         </itemizedlist>
       </description>

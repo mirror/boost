@@ -1,65 +1,81 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <header name="boost/variant/variant_fwd.hpp">
-  <section id="variant.header.variant_fwd">
-    <para>Provides a forward declaration of the
-      <code><classname>boost::variant</classname></code> and
-      <code><classname>boost::recursive_variant</classname></code> class
-      templates and the
-      <code><classname>boost::recursive_variant_</classname></code> tag type.
-      Also defines the following preprocessor symbols:</para>
+  <para>Provides a forward declaration of the
+  <code><classname>boost::variant</classname></code> and
+  <code><classname>boost::recursive_variant</classname></code> class
+  templates and the
+  <code><classname>boost::recursive_variant_</classname></code> tag
+  type.  Also defines several preprocessor symbols.</para>
 
-    <section id="variant.macro.BOOST_VARIANT_LIMIT_TYPES">
-      <title>BOOST_VARIANT_LIMIT_TYPES</title>
+  <macro name="BOOST_VARIANT_LIMIT_TYPES">
+    <purpose><simpara>Expands to the length of the
+    template parameter list for <code><classname
+    alt="boost::variant">variant</classname></code>.</simpara></purpose>
 
-      <para>Preprocessor macro. Expands to the length of the template
-      parameter list for
-      <code><classname alt="boost::variant">variant</classname></code>.</para>
+    <description>
+        <para><emphasis role="bold">Note</emphasis>: Conforming implementations
+        of <code>variant</code> must allow at least ten bounded types. That is,
+        <code>BOOST_VARIANT_LIMIT_TYPES &gt;= 10</code> must be
+        <code>true</code>.</para>
+    </description>
+  </macro>
 
-      <para><emphasis role="bold">Note</emphasis>: Conforming implementations
-      of <code>variant</code> must allow at least ten bounded types. That is,
-      <code>BOOST_VARIANT_LIMIT_TYPES &gt;= 10</code> must be
-      <code>true</code>.</para>
-    </section>
+  <macro name="BOOST_VARIANT_ENUM_PARAMS" kind="functionlike">
+    <macro-parameter name="param"/>
 
-    <section id="variant.macro.BOOST_VARIANT_ENUM_PARAMS">
-      <title>BOOST_VARIANT_ENUM_PARAMS(<emphasis>param</emphasis>)</title>
+    <purpose><simpara>Enumerate parameters for use with <code><classname>boost:
+ ariant</classname></code></simpara></purpose>
 
-      <para>Preprocessor macro. Expands to a comma-separated sequence of length
-      <code><link linkend="variant.macro.BOOST_VARIANT_LIMIT_TYPES">BOOST_VARIANT_LIMIT_TYPES</link></code>,
-      where each element in the sequence consists of the concatenation of
-      <emphasis>param</emphasis> with its zero-based index into the
-      sequence. That is, <code>param ## 0, param ## 1, ..., param ## BOOST_VARIANT_LIMIT_TYPES - 1</code>.</para>
+    <description>
+      <para>Expands to a comma-separated sequence of length
+      <code><macroname>BOOST_VARIANT_LIMIT_TYPES</macroname></code>,
+      where each element in the sequence consists of the concatenation
+      of <emphasis>param</emphasis> with its zero-based index into the
+      sequence. That is, <code>param ## 0, param ## 1, ..., param ##
+      BOOST_VARIANT_LIMIT_TYPES - 1</code>.</para>
 
-      <para><emphasis role="bold">Rationale</emphasis>: This macro greatly
-      simplifies for the user the process of declaring
-      <code><classname alt="boost::variant">variant</classname></code> types
-      in function templates or explicit partial specializations of class
-      templates, as shown in the
-      <link linkend="variant.tutorial.preprocessor">tutorial section</link>.</para>
-    </section>
+      <para><emphasis role="bold">Rationale</emphasis>: This macro
+      greatly simplifies for the user the process of declaring
+      <code><classname alt="boost::variant">variant</classname></code>
+      types in function templates or explicit partial specializations
+      of class templates, as shown in the <link
+      linkend="variant.tutorial.preprocessor">tutorial
+      section</link>.</para>
+    </description>
+  </macro>
 
-    <section id="variant.macro.BOOST_VARIANT_ENUM_SHIFTED_PARAMS">
-      <title>BOOST_VARIANT_ENUM_SHIFTED_PARAMS(<emphasis>param</emphasis>)</title>
+  <macro name="BOOST_VARIANT_ENUM_SHIFTED_PARAMS" kind="functionlike">
+    <macro-parameter name="param"/>
 
-      <para>Preprocessor macro. Expands to a comma-separated sequence of length
-      <code><link linkend="variant.macro.BOOST_VARIANT_LIMIT_TYPES">BOOST_VARIANT_LIMIT_TYPES</link> - 1</code>,
-      where each element in the sequence consists of the concatenation of
-      <emphasis>param</emphasis> with its one-based index into the
-      sequence. That is, <code>param ## 1, ..., param ## BOOST_VARIANT_LIMIT_TYPES - 1</code>.</para>
+    <purpose><simpara>Enumerate all but the first parameter for use
+    with
+    <code><classname>boost::variant</classname></code></simpara></purpose>
 
-      <para><emphasis role="bold">Note</emphasis>: This macro results in the
-      same expansion as <code>BOOST_VARIANT_ENUM_PARAMS</code> -- but without
-      the first term.</para>
-    </section>
+    <description>
+      <para>Expands to a comma-separated sequence of length
+      <code><macroname>BOOST_VARIANT_LIMIT_TYPES</macroname> -
+      1</code>, where each element in the sequence consists of the
+      concatenation of <emphasis>param</emphasis> with its one-based
+      index into the sequence. That is, <code>param ## 1, ..., param
+      ## BOOST_VARIANT_LIMIT_TYPES - 1</code>.</para>
 
+      <para><emphasis role="bold">Note</emphasis>: This macro results
+      in the same expansion as
+      <code><macroname>BOOST_VARIANT_ENUM_PARAMS</macroname></code> --
+      but without the first term.</para>
+    </description>
+  </macro>
 
-    <section id="variant.macro.BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT">
-      <title>BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT</title>
+  <macro name="BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT">
+    <purpose><simpara>Indicates absence of type sequence support in
+    <code><classname>boost::variant</classname></code>.</simpara></purpose>
 
-      <para>Configuration preprocessor symbol. Defined only if the
+    <description>
+      <para>Defined only if the
       <code><classname>boost::variant</classname>&lt;
-      <emphasis>type-sequence</emphasis> &gt;</code> syntax is not supported
-      for some reason on the current platform or compiler.</para>
-    </section>
-  </section>
+      <emphasis>type-sequence</emphasis> &gt;</code> syntax is not
+      supported for some reason on the current platform or
+      compiler.</para>
+    </description>
+  </macro>
 </header>
