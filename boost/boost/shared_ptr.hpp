@@ -97,6 +97,10 @@ public:
 
 //  generated copy constructor, assignment, destructor are fine
 
+    explicit shared_ptr(weak_ptr<T> const & r): px(r.px), pn(r.pn) // may throw
+    {
+    }
+
     template<typename Y>
     shared_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
     {
@@ -189,6 +193,20 @@ public:
     long use_count() const // never throws
     {
         return pn.use_count();
+    }
+
+    // implicit conversion to "bool"
+
+    typedef long (this_type::*bool_type)() const;
+
+    operator bool_type() const // never throws
+    {
+        return px == 0? 0: &this_type::use_count;
+    }
+
+    bool operator! () const // never throws
+    {
+        return px == 0;
     }
 
     void swap(shared_ptr<T> & other) // never throws

@@ -30,6 +30,7 @@ private:
 
     // Borland 5.5.1 specific workarounds
     typedef weak_ptr<T> this_type;
+    typedef shared_ptr<T> shared_type;
 
 public:
 
@@ -95,23 +96,32 @@ public:
         this_type().swap(*this);
     }
 
-    T * get() const // never throws
+    shared_type get() const // never throws
     {
-        return use_count() == 0? 0: px;
+        // optimization: avoid throw overhead
+        if(use_count() == 0)
+        {
+            return shared_type();
+        }
+
+        try
+        {
+            return shared_type(*this);
+        }
+        catch(boost::detail::bad_weak_to_shared_cast const &)
+        {
+            return shared_type();
+        }
     }
 
-    typename detail::shared_ptr_traits<T>::reference operator* () const // never throws
-    {
-        element_type * p = get();
-        BOOST_ASSERT(p != 0);
-        return *p;
-    }
+    // operator* has been removed; it's unsafe.
 
-    T * operator-> () const // never throws
+    // operator-> retained for convenience, since it's safe
+    // in its current form.
+
+    shared_type operator-> () const // may throw
     {
-        element_type * p = get();
-        BOOST_ASSERT(p != 0);
-        return p;
+        return shared_type(*this);
     }
     
     long use_count() const // never throws
@@ -119,7 +129,21 @@ public:
         return pn.use_count();
     }
 
-    void swap(weak_ptr<T> & other) // never throws
+    // implicit conversion to "bool"
+
+    typedef long (this_type::*bool_type)() const;
+
+    operator bool_type() const // never throws
+    {
+        return use_count() == 0? 0: &this_type::use_count;
+    }
+
+    bool operator! () const // never throws
+    {
+        return use_count() == 0;
+    }
+
+    void swap(this_type & other) // never throws
     {
         std::swap(px, other.px);
         pn.swap(other.pn);
@@ -138,6 +162,7 @@ public:
 private:
 
     template<typename Y> friend class weak_ptr;
+    template<typename Y> friend class shared_ptr;
 
 #endif
 
@@ -196,13 +221,6 @@ template<typename T, typename U> weak_ptr<T> shared_polymorphic_downcast(weak_pt
 {
     BOOST_ASSERT(dynamic_cast<T *>(r.get()) == r.get());
     return shared_static_cast<T>(r);
-}
-
-// get_pointer() enables boost::mem_fn to recognize weak_ptr
-
-template<class T> inline T * get_pointer(weak_ptr<T> const & p)
-{
-    return p.get();
 }
 
 } // namespace boost

@@ -23,9 +23,10 @@
 #endif
 
 #include <boost/checked_delete.hpp>
-#include <boost/detail/atomic_count.hpp>
+#include <boost/detail/lightweight_mutex.hpp>
 
-#include <functional>         // for std::less
+#include <functional>       // for std::less
+#include <exception>        // for std::exception
 
 namespace boost
 {
@@ -33,11 +34,19 @@ namespace boost
 namespace detail
 {
 
-class counted_base
+class bad_weak_to_shared_cast: public std::exception
 {
 public:
 
-    typedef atomic_count count_type;
+    virtual char const * what() const throw()
+    {
+        return "bad_weak_to_shared_cast";
+    }
+};
+
+class counted_base
+{
+public:
 
     // pre: initial_use_count <= initial_weak_count
 
@@ -63,20 +72,31 @@ public:
     {
     }
 
-    void add_ref() // nothrow
+    void add_ref()
     {
+        lightweight_mutex::scoped_lock lock(mtx_);
+        if(use_count_ == 0) throw bad_weak_to_shared_cast();
         ++use_count_;
         ++weak_count_;
     }
 
     void release() // nothrow
     {
-        if(--use_count_ == 0)
+        long new_use_count;
+        long new_weak_count;
+
+        {
+            lightweight_mutex::scoped_lock lock(mtx_);
+            new_use_count = --use_count_;
+            new_weak_count = --weak_count_;
+        }
+
+        if(new_use_count == 0)
         {
             dispose();
         }
 
-        if(--weak_count_ == 0)
+        if(new_weak_count == 0)
         {
             // not a direct 'delete this', because the inlined
             // release() may use a different heap manager
@@ -86,12 +106,20 @@ public:
 
     void weak_add_ref() // nothrow
     {
+        lightweight_mutex::scoped_lock lock(mtx_);
         ++weak_count_;
     }
 
     void weak_release() // nothrow
     {
-        if(--weak_count_ == 0)
+        long new_weak_count;
+
+        {
+            lightweight_mutex::scoped_lock lock(mtx_);
+            new_weak_count = --weak_count_;
+        }
+
+        if(new_weak_count == 0)
         {
             self_deleter_(this);
         }
@@ -99,6 +127,7 @@ public:
 
     long use_count() const // nothrow
     {
+        lightweight_mutex::scoped_lock lock(mtx_);
         return use_count_;
     }
 
@@ -114,9 +143,9 @@ private:
 
     // inv: use_count_ <= weak_count_
 
-    count_type use_count_;
-    count_type weak_count_;
-
+    long use_count_;
+    long weak_count_;
+    mutable lightweight_mutex mtx_;
     void (*self_deleter_) (counted_base *);
 };
 
@@ -191,6 +220,8 @@ public:
         pi_->add_ref();
     }
 
+    explicit shared_count(weak_count const & r); // throws bad_weak_to_shared_cast when r.use_count() == 0
+
     shared_count & operator= (shared_count const & r) // nothrow
     {
         counted_base * tmp = r.pi_;
@@ -234,6 +265,8 @@ class weak_count
 private:
 
     counted_base * pi_;
+
+    friend class shared_count;
 
 public:
 
@@ -298,6 +331,11 @@ public:
         return std::less<counted_base *>()(a.pi_, b.pi_);
     }
 };
+
+inline shared_count::shared_count(weak_count const & r): pi_(r.pi_)
+{
+    pi_->add_ref();
+}
 
 } // namespace detail
 
