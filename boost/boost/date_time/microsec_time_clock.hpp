@@ -57,8 +57,8 @@ namespace date_time {
       ::std::time(&t); 
       tm* curr = localtime(&t);
       date_type d(curr->tm_year + 1900, 
-		  curr->tm_mon + 1, 
-		  curr->tm_mday);
+                  curr->tm_mon + 1, 
+                  curr->tm_mday);
       //The following line will adjusts the fractional second tick in terms
       //of the current time system.  For example, if the time system
       //doesn't support fractional seconds then res_adjust returns 0
@@ -66,9 +66,9 @@ namespace date_time {
       int adjust = resolution_traits_type::res_adjust()/1000000;
 
       time_duration_type td(curr->tm_hour,
-			    curr->tm_min,
+                            curr->tm_min,
                             curr->tm_sec,
-			    fs*adjust);
+                            fs*adjust);
       return time_type(d,td);
       
     }

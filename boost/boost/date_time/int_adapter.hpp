@@ -210,7 +210,7 @@ public:
         return int_adapter::not_a_number();
       }
       if((is_pos_inf(value_) && rhs.is_neg_inf(rhs.as_number())) ||
-	  (is_neg_inf(value_) && rhs.is_pos_inf(rhs.as_number())) )
+      (is_neg_inf(value_) && rhs.is_pos_inf(rhs.as_number())) )
       {
         return int_adapter::not_a_number();
       }
@@ -321,7 +321,7 @@ public:
     {
       if(is_infinity() && rhs.is_infinity())
       {
-	return int_adapter<int_type>(not_a_number());
+        return int_adapter<int_type>(not_a_number());
       }
       if(rhs != 0)
       {
@@ -351,7 +351,7 @@ public:
     {
       if(is_infinity() && rhs.is_infinity())
       {
-	return int_adapter<int_type>(not_a_number());
+        return int_adapter<int_type>(not_a_number());
       }
       if(rhs != 0)
       {
@@ -381,24 +381,22 @@ private:
   {
     if(this->is_special() || rhs.is_special())
     {
-      if(this->is_nan() || rhs.is_nan())
-      {
-	if(this->is_nan() && rhs.is_nan()){
-	  return 0; // equal
-	}
-	else {
-	  return 2; // nan
-	}
+      if(this->is_nan() || rhs.is_nan()) {
+        if(this->is_nan() && rhs.is_nan()) {
+          return 0; // equal
+        }
+        else {
+          return 2; // nan
+        }
       }
       if((is_neg_inf(value_) && !is_neg_inf(rhs.value_)) ||
-	  (is_pos_inf(rhs.value_) && !is_pos_inf(value_)) )
-      {
-	return -1; // less than
-      }
+         (is_pos_inf(rhs.value_) && !is_pos_inf(value_)) )
+        {
+          return -1; // less than
+        }
       if((is_pos_inf(value_) && !is_pos_inf(rhs.value_)) ||
-	  (is_neg_inf(rhs.value_) && !is_neg_inf(value_)) )
-      {
-	return 1; // greater than
+         (is_neg_inf(rhs.value_) && !is_neg_inf(value_)) ) {
+        return 1; // greater than
       }
     }
     if(value_ < rhs.value_) return -1;
@@ -416,23 +414,19 @@ private:
     int min; 
     // quiets compiler warnings
     bool is_signed = std::numeric_limits<int_type>::is_signed;
-    if(is_signed)
-    {
+    if(is_signed) {
       min = 0;
     }
     else {
       min = 1;// there is no zero with unsigned
     }
-    if(this->is_nan() || rhs.is_nan())
-    {
+    if(this->is_nan() || rhs.is_nan()) {
       return int_adapter<int_type>(not_a_number());
     }
-    if((*this > 0 && rhs > 0) || (*this < min && rhs < min))
-    {
+    if((*this > 0 && rhs > 0) || (*this < min && rhs < min)) {
         return int_adapter<int_type>(pos_infinity());
     }
-    if((*this > 0 && rhs < min) || (*this < min && rhs > 0))
-    {
+    if((*this > 0 && rhs < min) || (*this < min && rhs > 0)) {
         return int_adapter<int_type>(neg_infinity());
     }
     //implied -> if(this->value_ == 0 || rhs.value_ == 0)
@@ -444,28 +438,24 @@ private:
    * It would produce incorrect results since 'unsigned'
    * wraps around when initialized with a negative value */
   //! Assumes 'this' is a special value
-  int_adapter mult_div_specials(const int& rhs)const
+  int_adapter mult_div_specials(const int& rhs) const
   {
     int min; 
     // quiets compiler warnings
     bool is_signed = std::numeric_limits<int_type>::is_signed;
-    if(is_signed)
-    {
+    if(is_signed) {
       min = 0;
     }
     else {
       min = 1;// there is no zero with unsigned
     }
-    if(this->is_nan())
-    {
+    if(this->is_nan()) {
       return int_adapter<int_type>(not_a_number());
     }
-    if((*this > 0 && rhs > 0) || (*this < min && rhs < 0))
-    {
+    if((*this > 0 && rhs > 0) || (*this < min && rhs < 0)) {
         return int_adapter<int_type>(pos_infinity());
     }
-    if((*this > 0 && rhs < 0) || (*this < min && rhs > 0))
-    {
+    if((*this > 0 && rhs < 0) || (*this < min && rhs > 0)) {
         return int_adapter<int_type>(neg_infinity());
     }
     //implied -> if(this->value_ == 0 || rhs.value_ == 0)
@@ -484,22 +474,21 @@ private:
   std::basic_ostream<charT, traits>& 
   operator<<(std::basic_ostream<charT, traits>& os, const int_adapter<int_type>& ia)
   {
-    if(ia.is_special())
-    {
+    if(ia.is_special()) {
       // switch copied from date_names_put.hpp
       switch(ia.as_special())
-      {
-	case not_a_date_time:
-	  os << "not-a-number";
-	  break;
-	case pos_infin:
-	  os << "+infinity";
-	  break;
-	case neg_infin:
-	  os << "-infinity";
-	  break;
-	default:
-	  os << "";
+        {
+      case not_a_date_time:
+        os << "not-a-number";
+        break;
+      case pos_infin:
+        os << "+infinity";
+        break;
+      case neg_infin:
+        os << "-infinity";
+        break;
+      default:
+        os << "";
       }
     }
     else {
