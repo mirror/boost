@@ -65,17 +65,7 @@ s {
 span {
 	display:  block;
 	margin:  0px;
-}
-/*.uc {
-	font-family:  "Courier New";
-	background:  #eeeeee;
-	font-weight:  normal;
-	text-align:  center;
-	color:  red;
-	border:  1px solid;
-	border-color:  red;
-	padding:  5px;
-}*/	
+}	
 ul {
 	margin-top:  10px; margin-bottom:  10px; margin-left:  20px;
 	padding-left:  17px;
