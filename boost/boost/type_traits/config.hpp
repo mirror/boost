@@ -28,6 +28,31 @@
 #   define BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION
 #endif
 
+//
+// Define BOOST_TT_NO_ELLIPSIS_IN_FUNC_TESTING 
+// when we can't test for function types with elipsis:
+//
+#if defined(__GNUC__) && (__GNUC__ < 3)
+#  define BOOST_TT_NO_ELLIPSIS_IN_FUNC_TESTING
+#endif
+
+//
+// define BOOST_TT_TEST_MS_FUNC_SIGS
+// when we want to test __stdcall etc function types with is_function etc:
+//
+#if defined(_MSC_VER) || defined(__BORLANDC__)
+#  define BOOST_TT_TEST_MS_FUNC_SIGS
+#endif
+
+//
+// define BOOST_TT_NO_CV_FUNC_TEST
+// if tests for cv-qualified member functions don't 
+// work in is_member_function_pointer
+//
+#if !((defined(__MWERKS__) && __MWERKS__ < 0x3000) || (defined(__IBMCPP__) && __IBMCPP__ <= 600))
+#  define BOOST_TT_NO_CV_FUNC_TEST
+#endif
+
 #endif // BOOST_TT_CONFIG_HPP_INCLUDED
 
 

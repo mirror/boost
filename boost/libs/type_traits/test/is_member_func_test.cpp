@@ -28,7 +28,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<void>::value, fal
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<test_abc1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<foo0_t>::value, false);
 
-#ifdef _MSC_VER
+#ifdef BOOST_TT_TEST_MS_FUNC_SIGS
 typedef void (__stdcall test_abc1::*scall_proc)();
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<scall_proc>::value, true);
 typedef void (__fastcall test_abc1::*fcall_proc)(int);

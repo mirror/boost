@@ -33,7 +33,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int[]>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<test_abc1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int (*)(int)>::value, false);
 
-#ifdef _MSC_VER
+#ifdef BOOST_TT_TEST_MS_FUNC_SIGS
 typedef void __stdcall sfoo0_t();
 typedef void __stdcall sfoo1_t(int);
 typedef void __stdcall sfoo2_t(int&, double);

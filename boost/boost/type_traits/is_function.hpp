@@ -15,7 +15,7 @@
 #include "boost/type_traits/detail/false_result.hpp"
 #include "boost/config.hpp"
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(_MSC_VER)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_TT_TEST_MS_FUNC_SIGS)
 #   include "boost/type_traits/detail/is_function_ptr_helper.hpp"
 #else
 #   include "boost/type_traits/detail/is_function_ptr_tester.hpp"
@@ -34,7 +34,7 @@
 namespace boost {
 namespace detail {
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(_MSC_VER)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_TT_TEST_MS_FUNC_SIGS)
 template<bool is_ref = true>
 struct is_function_chooser
     : ::boost::type_traits::false_result
