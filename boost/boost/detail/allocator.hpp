@@ -13,6 +13,9 @@
  *
  */
 
+#ifndef BOOST_DETAIL_ALLOCATOR_HPP
+#define BOOST_DETAIL_ALLOCATOR_HPP
+
 #include <boost/config.hpp>
 #include <cstdlib>
 #if defined(BOOST_NO_STDC_NAMESPACE)
@@ -274,3 +277,4 @@ struct rebind_allocator
 
 #endif
 
+#endif // include guard
