@@ -16,7 +16,7 @@
 
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/int.hpp>
-#include <boost/mpl/aux_/config/msvc.hpp>
+#include <boost/mpl/aux_/config/integral.hpp>
 #include <boost/config.hpp>
 
 namespace boost { namespace mpl { namespace aux {
@@ -38,8 +38,7 @@ template<> struct integral_rank<long>           : int_<10> {};
 template<> struct integral_rank<unsigned long>  : int_<11> {};
 
 template< typename T1, typename T2 > struct largest_int
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
-    && !BOOST_WORKAROUND(__EDG_VERSION__, <= 238)
+#if !defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC)
     : if_c< 
           ( integral_rank<T1>::value >= integral_rank<T2>::value )
         , T1

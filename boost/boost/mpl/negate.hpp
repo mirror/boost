@@ -16,11 +16,11 @@
 
 #include <boost/mpl/integral_c.hpp>
 #include <boost/mpl/aux_/msvc_eti_base.hpp>
-#include <boost/mpl/aux_/config/eti.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
-#include <boost/mpl/aux_/config/msvc.hpp>
-#include <boost/mpl/aux_/config/workaround.hpp>
+#include <boost/mpl/aux_/config/eti.hpp>
+#include <boost/mpl/aux_/config/integral.hpp>
+#include <boost/mpl/aux_/config/static_constant.hpp>
 
 namespace boost { namespace mpl {
 
@@ -52,11 +52,11 @@ struct negate
 BOOST_MPL_AUX_NA_SPEC(1, negate)
 
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC)
 namespace aux {
-template< typename T, T n > struct msvc_negate_impl
+template< typename T, T n > struct negate_wknd
 {
-    enum msvc_wknd { value = -n };
+    BOOST_STATIC_CONSTANT(T, value = -n);
     typedef integral_c<T,value> type;
 };
 }
@@ -65,9 +65,9 @@ template< typename T, T n > struct msvc_negate_impl
 template<>
 struct negate_impl<integral_c_tag>
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC)
     template< typename N > struct apply
-        : aux::msvc_negate_impl< typename N::value_type, N::value >
+        : aux::negate_wknd< typename N::value_type, N::value >
 #else
     template< typename N > struct apply
         : integral_c< typename N::value_type, (-N::value) >
