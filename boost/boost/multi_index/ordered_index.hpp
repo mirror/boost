@@ -36,6 +36,10 @@
 #ifndef BOOST_MULTI_INDEX_ORDERED_INDEX_HPP
 #define BOOST_MULTI_INDEX_ORDERED_INDEX_HPP
 
+#if defined(_MSC_VER)&&(_MSC_VER>=1200)
+#pragma once
+#endif
+
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <algorithm>
 #include <boost/call_traits.hpp>
@@ -48,7 +52,6 @@
 #include <boost/multi_index/detail/modify_key_adaptor.hpp>
 #include <boost/multi_index/detail/ord_index_node.hpp>
 #include <boost/multi_index/detail/ord_index_ops.hpp>
-#include <boost/multi_index/detail/prevent_eti.hpp>
 #include <boost/multi_index/detail/safe_mode.hpp>
 #include <boost/multi_index/detail/scope_guard.hpp>
 #include <boost/multi_index/detail/unbounded.hpp>
@@ -91,23 +94,23 @@ struct ordered_non_unique_tag{};
 
 template<
   typename KeyFromValue,typename Compare,
-  typename Super,typename TagList,typename Category
+  typename SuperMeta,typename TagList,typename Category
 >
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
 #if BOOST_WORKAROUND(BOOST_MSVC,<1300)
 class ordered_index:
-  BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS Super,
-  public index_proxy<ordered_index_node<typename Super::node_type> >
+  BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS SuperMeta::type,
+  public index_proxy<ordered_index_node<SuperMeta::type::node_type> >
 #else
 class ordered_index:
-  BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS Super,
+  BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS SuperMeta::type,
   public safe_container<
-    ordered_index<KeyFromValue,Compare,Super,TagList,Category> >
+    ordered_index<KeyFromValue,Compare,SuperMeta,TagList,Category> >
 #endif
 #else
 class ordered_index:
-  BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS Super
+  BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS SuperMeta::type
 #endif
 
 { 
@@ -121,9 +124,11 @@ class ordered_index:
 #pragma parse_mfunc_templ off
 #endif
 
+  typedef typename SuperMeta::type                   super;
+
 protected:
   typedef ordered_index_node<
-      typename Super::node_type>                     node_type;
+    typename super::node_type>                       node_type;
 
 public:
   /* types */
@@ -135,7 +140,7 @@ public:
   typedef value_comparison<
     value_type,KeyFromValue,Compare>                 value_compare;
   typedef tuple<key_from_value,key_compare>          ctor_args;
-  typedef typename Super::final_allocator_type       allocator_type;
+  typedef typename super::final_allocator_type       allocator_type;
   typedef typename allocator_type::reference         reference;
   typedef typename allocator_type::const_reference   const_reference;
 
@@ -163,24 +168,24 @@ public:
   typedef TagList                                    tag_list;
 
 protected:
-  typedef typename Super::final_node_type            final_node_type;
+  typedef typename super::final_node_type            final_node_type;
   typedef tuples::cons<
     ctor_args, 
-    typename Super::ctor_args_list>                  ctor_args_list;
+    typename super::ctor_args_list>                  ctor_args_list;
   typedef typename mpl::push_front<
-    typename Super::index_type_list,
+    typename super::index_type_list,
     ordered_index>::type                             index_type_list;
   typedef typename mpl::push_front<
-    typename Super::iterator_type_list,
+    typename super::iterator_type_list,
     iterator>::type    iterator_type_list;
   typedef typename mpl::push_front<
-    typename Super::const_iterator_type_list,
+    typename super::const_iterator_type_list,
     const_iterator>::type                            const_iterator_type_list;
-  typedef typename Super::copy_map_type              copy_map_type;
+  typedef typename super::copy_map_type              copy_map_type;
 
 #if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
-  typedef typename Super::index_saver_type           index_saver_type;
-  typedef typename Super::index_loader_type          index_loader_type;
+  typedef typename super::index_saver_type           index_saver_type;
+  typedef typename super::index_loader_type          index_loader_type;
 #endif
 
 private:
@@ -188,7 +193,7 @@ private:
 #if BOOST_WORKAROUND(BOOST_MSVC,<1300)
   typedef index_proxy<
       ordered_index_node<
-        typename Super::node_type> >                 safe_super;
+        typename super::node_type> >                 safe_super;
 #else
   typedef safe_container<ordered_index>              safe_super;
 #endif
@@ -206,10 +211,9 @@ public:
    * not supposed to be created on their own. No range ctor either.
    */
 
-  ordered_index<KeyFromValue,Compare,Super,TagList,Category>& operator=(
-    const ordered_index<KeyFromValue,Compare,Super,TagList,Category>& x)
+  ordered_index<KeyFromValue,Compare,SuperMeta,TagList,Category>& operator=(
+    const ordered_index<KeyFromValue,Compare,SuperMeta,TagList,Category>& x)
   {
-    BOOST_MULTI_INDEX_ORD_INDEX_CHECK_INVARIANT;
     this->final()=x.final();
     return *this;
   }
@@ -349,7 +353,7 @@ public:
       position,modify_key_adaptor<Modifier,value_type,KeyFromValue>(mod,key));
   }
 
-  void swap(ordered_index<KeyFromValue,Compare,Super,TagList,Category>& x)
+  void swap(ordered_index<KeyFromValue,Compare,SuperMeta,TagList,Category>& x)
   {
     BOOST_MULTI_INDEX_ORD_INDEX_CHECK_INVARIANT;
     this->final_swap_(x.final());
@@ -358,7 +362,7 @@ public:
   void clear()
   {
     BOOST_MULTI_INDEX_ORD_INDEX_CHECK_INVARIANT;
-    erase(begin(),end());
+    this->final_clear_();
   }
 
   /* observers */
@@ -457,7 +461,7 @@ public:
 
 BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   ordered_index(const ctor_args_list& args_list,const allocator_type& al):
-    Super(args_list.get_tail(),al),
+    super(args_list.get_tail(),al),
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)&&\
     BOOST_WORKAROUND(BOOST_MSVC,<1300)
@@ -471,8 +475,8 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   }
 
   ordered_index(
-    const ordered_index<KeyFromValue,Compare,Super,TagList,Category>& x):
-    Super(x),
+    const ordered_index<KeyFromValue,Compare,SuperMeta,TagList,Category>& x):
+    super(x),
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)&&\
     BOOST_WORKAROUND(BOOST_MSVC,<1300)
@@ -503,7 +507,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 #endif
 
   void copy_(
-    const ordered_index<KeyFromValue,Compare,Super,TagList,Category>& x,
+    const ordered_index<KeyFromValue,Compare,SuperMeta,TagList,Category>& x,
     const copy_map_type& map)
   {
     if(!x.root()){
@@ -550,7 +554,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
       }
     }
     
-    Super::copy_(x,map);
+    super::copy_(x,map);
   }
 
   node_type* insert_(value_param_type v,node_type* x)
@@ -559,7 +563,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     if(res!=x)return res;
     else{
       BOOST_TRY{
-        res=static_cast<node_type*>(Super::insert_(v,x));
+        res=static_cast<node_type*>(super::insert_(v,x));
         if(res!=x){
           ordered_index_node_impl::rebalance_for_erase(
             x->impl(),header()->parent(),header()->left(),header()->right());
@@ -581,7 +585,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     if(res!=x)return res;
     else{
       BOOST_TRY{
-        res=static_cast<node_type*>(Super::insert_(v,position,x));
+        res=static_cast<node_type*>(super::insert_(v,position,x));
         if(res!=x){
           ordered_index_node_impl::rebalance_for_erase(
             x->impl(),header()->parent(),header()->left(),header()->right());
@@ -599,7 +603,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 
   void erase_(node_type* x)
   {
-    Super::erase_(x);
+    super::erase_(x);
     ordered_index_node_impl::rebalance_for_erase(
       x->impl(),header()->parent(),header()->left(),header()->right());
 
@@ -608,7 +612,22 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 #endif
   }
 
-  void swap_(ordered_index<KeyFromValue,Compare,Super,TagList,Category>& x)
+  void delete_all_nodes_()
+  {
+    delete_all_nodes(root());
+  }
+
+  void clear_()
+  {
+    super::clear_();
+    empty_initialize();
+
+#if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
+    safe_super::detach_all_iterators();
+#endif
+  }
+
+  void swap_(ordered_index<KeyFromValue,Compare,SuperMeta,TagList,Category>& x)
   {
     std::swap(key,x.key);
     std::swap(comp,x.comp);
@@ -617,13 +636,13 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     safe_super::swap(x);
 #endif
 
-    Super::swap_(x);
+    super::swap_(x);
   }
 
   bool replace_(value_param_type v,node_type* x)
   {
     if(in_place(v,x,Category())){
-      return Super::replace_(v,x);
+      return super::replace_(v,x);
     }
 
     node_type* prior=x;
@@ -642,7 +661,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
       }
 
       BOOST_TRY{
-        if(!Super::replace_(v,x)){
+        if(!super::replace_(v,x)){
           ordered_index_node_impl::rebalance_for_erase(
             x->impl(),header()->parent(),header()->left(),header()->right());
           ordered_index_node_impl::restore(
@@ -682,7 +701,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
         x->impl(),header()->parent(),header()->left(),header()->right());
       BOOST_TRY{
         if(link2(key(x->value),x,Category())!=x){
-          Super::erase_(x);
+          super::erase_(x);
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
           detach_iterators(x);
@@ -691,7 +710,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
         }
       }
       BOOST_CATCH(...){
-        Super::erase_(x);
+        super::erase_(x);
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
         detach_iterators(x);
@@ -703,7 +722,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     }
 
     BOOST_TRY{
-      if(!Super::modify_(x)){
+      if(!super::modify_(x)){
         ordered_index_node_impl::rebalance_for_erase(
           x->impl(),header()->parent(),header()->left(),header()->right());
 
@@ -785,7 +804,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
         return false;
     }
 
-    return Super::invariant_();
+    return super::invariant_();
   }
 
   
@@ -923,6 +942,15 @@ private:
     }
   }
 
+  void delete_all_nodes(node_type* x)
+  {
+    if(!x)return;
+
+    if(x!=leftmost())delete_all_nodes(node_type::from_impl(x->left()));
+    if(x!=rightmost())delete_all_nodes(node_type::from_impl(x->right()));
+    this->final_delete_node_(static_cast<final_node_type*>(x));
+  }
+
   bool in_place(value_param_type v,node_type* x,ordered_unique_tag)
   {
     node_type* y;
@@ -1009,7 +1037,7 @@ private:
     Archive& ar,const unsigned int version,const index_saver_type& sm,
     ordered_unique_tag)const
   {
-    Super::save_(ar,version,sm);
+    super::save_(ar,version,sm);
   }
 
   template<typename Archive>
@@ -1017,7 +1045,7 @@ private:
     Archive& ar,const unsigned int version,const index_loader_type& lm,
     ordered_unique_tag)
   {
-    Super::load_(ar,version,lm);
+    super::load_(ar,version,lm);
   }
 
   template<typename Archive>
@@ -1031,7 +1059,7 @@ private:
       dup_iterator(begin().get_node(),end().get_node(),value_comp()),
       dup_iterator(end().get_node(),value_comp()),
       ar,version);
-    Super::save_(ar,version,sm);
+    super::save_(ar,version,sm);
   }
 
   template<typename Archive>
@@ -1042,7 +1070,7 @@ private:
     lm.load(
       ::boost::bind(&ordered_index::rearranger,this,_1,_2),
       ar,version);
-    Super::load_(ar,version,lm);
+    super::load_(ar,version,lm);
   }
 
   void rearranger(node_type* position,node_type *x)
@@ -1085,78 +1113,78 @@ private:
 
 template<
   typename KeyFromValue1,typename Compare1,
-  typename Super1,typename TagList1,typename Category1,
+  typename SuperMeta1,typename TagList1,typename Category1,
   typename KeyFromValue2,typename Compare2,
-  typename Super2,typename TagList2,typename Category2
+  typename SuperMeta2,typename TagList2,typename Category2
 >
 bool operator==(
-  const ordered_index<KeyFromValue1,Compare1,Super1,TagList1,Category1>& x,
-  const ordered_index<KeyFromValue2,Compare2,Super2,TagList2,Category2>& y)
+  const ordered_index<KeyFromValue1,Compare1,SuperMeta1,TagList1,Category1>& x,
+  const ordered_index<KeyFromValue2,Compare2,SuperMeta2,TagList2,Category2>& y)
 {
   return x.size()==y.size()&&std::equal(x.begin(),x.end(),y.begin());
 }
 
 template<
   typename KeyFromValue1,typename Compare1,
-  typename Super1,typename TagList1,typename Category1,
+  typename SuperMeta1,typename TagList1,typename Category1,
   typename KeyFromValue2,typename Compare2,
-  typename Super2,typename TagList2,typename Category2
+  typename SuperMeta2,typename TagList2,typename Category2
 >
 bool operator<(
-  const ordered_index<KeyFromValue1,Compare1,Super1,TagList1,Category1>& x,
-  const ordered_index<KeyFromValue2,Compare2,Super2,TagList2,Category2>& y)
+  const ordered_index<KeyFromValue1,Compare1,SuperMeta1,TagList1,Category1>& x,
+  const ordered_index<KeyFromValue2,Compare2,SuperMeta2,TagList2,Category2>& y)
 {
   return std::lexicographical_compare(x.begin(),x.end(),y.begin(),y.end());
 }
 
 template<
   typename KeyFromValue1,typename Compare1,
-  typename Super1,typename TagList1,typename Category1,
+  typename SuperMeta1,typename TagList1,typename Category1,
   typename KeyFromValue2,typename Compare2,
-  typename Super2,typename TagList2,typename Category2
+  typename SuperMeta2,typename TagList2,typename Category2
 >
 bool operator!=(
-  const ordered_index<KeyFromValue1,Compare1,Super1,TagList1,Category1>& x,
-  const ordered_index<KeyFromValue2,Compare2,Super2,TagList2,Category2>& y)
+  const ordered_index<KeyFromValue1,Compare1,SuperMeta1,TagList1,Category1>& x,
+  const ordered_index<KeyFromValue2,Compare2,SuperMeta2,TagList2,Category2>& y)
 {
   return !(x==y);
 }
 
 template<
   typename KeyFromValue1,typename Compare1,
-  typename Super1,typename TagList1,typename Category1,
+  typename SuperMeta1,typename TagList1,typename Category1,
   typename KeyFromValue2,typename Compare2,
-  typename Super2,typename TagList2,typename Category2
+  typename SuperMeta2,typename TagList2,typename Category2
 >
 bool operator>(
-  const ordered_index<KeyFromValue1,Compare1,Super1,TagList1,Category1>& x,
-  const ordered_index<KeyFromValue2,Compare2,Super2,TagList2,Category2>& y)
+  const ordered_index<KeyFromValue1,Compare1,SuperMeta1,TagList1,Category1>& x,
+  const ordered_index<KeyFromValue2,Compare2,SuperMeta2,TagList2,Category2>& y)
 {
   return y<x;
 }
 
 template<
   typename KeyFromValue1,typename Compare1,
-  typename Super1,typename TagList1,typename Category1,
+  typename SuperMeta1,typename TagList1,typename Category1,
   typename KeyFromValue2,typename Compare2,
-  typename Super2,typename TagList2,typename Category2
+  typename SuperMeta2,typename TagList2,typename Category2
 >
 bool operator>=(
-  const ordered_index<KeyFromValue1,Compare1,Super1,TagList1,Category1>& x,
-  const ordered_index<KeyFromValue2,Compare2,Super2,TagList2,Category2>& y)
+  const ordered_index<KeyFromValue1,Compare1,SuperMeta1,TagList1,Category1>& x,
+  const ordered_index<KeyFromValue2,Compare2,SuperMeta2,TagList2,Category2>& y)
 {
   return !(x<y);
 }
 
 template<
   typename KeyFromValue1,typename Compare1,
-  typename Super1,typename TagList1,typename Category1,
+  typename SuperMeta1,typename TagList1,typename Category1,
   typename KeyFromValue2,typename Compare2,
-  typename Super2,typename TagList2,typename Category2
+  typename SuperMeta2,typename TagList2,typename Category2
 >
 bool operator<=(
-  const ordered_index<KeyFromValue1,Compare1,Super1,TagList1,Category1>& x,
-  const ordered_index<KeyFromValue2,Compare2,Super2,TagList2,Category2>& y)
+  const ordered_index<KeyFromValue1,Compare1,SuperMeta1,TagList1,Category1>& x,
+  const ordered_index<KeyFromValue2,Compare2,SuperMeta2,TagList2,Category2>& y)
 {
   return !(x>y);
 }
@@ -1165,11 +1193,11 @@ bool operator<=(
 
 template<
   typename KeyFromValue,typename Compare,
-  typename Super,typename TagList,typename Category
+  typename SuperMeta,typename TagList,typename Category
 >
 void swap(
-  ordered_index<KeyFromValue,Compare,Super,TagList,Category>& x,
-  ordered_index<KeyFromValue,Compare,Super,TagList,Category>& y)
+  ordered_index<KeyFromValue,Compare,SuperMeta,TagList,Category>& x,
+  ordered_index<KeyFromValue,Compare,SuperMeta,TagList,Category>& y)
 {
   x.swap(y);
 }
@@ -1193,12 +1221,12 @@ struct ordered_unique
     typedef detail::ordered_index_node<Super> type;
   };
 
-  template<typename Super>
+  template<typename SuperMeta>
   struct index_class
   {
     typedef detail::ordered_index<
       key_from_value_type,compare_type,
-      Super,tag_list_type,detail::ordered_unique_tag> type;
+      SuperMeta,tag_list_type,detail::ordered_unique_tag> type;
   };
 };
 
@@ -1217,12 +1245,12 @@ struct ordered_non_unique
     typedef detail::ordered_index_node<Super> type;
   };
 
-  template<typename Super>
+  template<typename SuperMeta>
   struct index_class
   {
     typedef detail::ordered_index<
       key_from_value_type,compare_type,
-      Super,tag_list_type,detail::ordered_non_unique_tag> type;
+      SuperMeta,tag_list_type,detail::ordered_non_unique_tag> type;
   };
 };
 
