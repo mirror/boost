@@ -388,7 +388,7 @@ just as you can with ``std::list<int>``\ 's ``iterator`` and
 compare them for equality.
 
 This expected ability to use two different iterator types together
-is known as **interoperability**.  Achieving interoperability in
+is known as |interoperability|_.  Achieving interoperability in
 our case is as simple as templatizing the ``equal`` function and
 adding a templatized converting constructor [#broken]_ [#random]_::
 
@@ -431,6 +431,9 @@ adding a templatized converting constructor [#broken]_ [#random]_::
   };
   typedef impl::node_iterator<node_base> node_iterator;
   typedef impl::node_iterator<node_base const> node_const_iterator;
+
+.. |interoperability| replace:: **interoperability**
+.. _interoperability: new-iter-concepts.html#interoperable-iterators-lib-interoperable-iterators
 
 .. [#broken] If you're using an older compiler and it can't handle
    this example, see the `example code`__ for workarounds.

@@ -693,28 +693,53 @@ template &lt;class Derived, class V, class TC, class R, class D&gt;
 Derived operator+ (iterator_facade&lt;Derived, V, TC, R, D&gt; const&amp;,
                    typename Derived::difference_type n)
 </pre>
-<a class="target" id="iterator-category" name="iterator-category"></a><p>The <tt class="literal"><span class="pre">iterator_category</span></tt> member of <tt class="literal"><span class="pre">iterator_facade</span></tt> is 
-<tt class="literal"><span class="pre">facade_iterator_category(CategoryOrTraversal,</span> <span class="pre">value_type,</span>
-<span class="pre">reference)</span></tt>, as specified by the following pseudo-code:</p>
+<a class="target" id="iterator-category" name="iterator-category"></a><p>The <tt class="literal"><span class="pre">iterator_category</span></tt> member of <tt class="literal"><span class="pre">iterator_facade</span></tt> is</p>
 <pre class="literal-block">
-facade_iterator_category(C, V, R) =
-    if (C is convertible to input_iterator_tag or output_iterator_tag) then
-        return C
-    else if (C is convertible to incrementable_traversal_tag) then
-        if (R is a reference type
-            and C is convertible to forward_traversal_tag) then
-            if (C is convertible to random_access_traversal_tag)
-                return a type convertible to random_access_iterator_tag
-            else if (C is convertible to bidirectional_traversal_tag)
-                return a type convertible to bidirectional_iterator_tag
-            else
-                return a type convertible to forward_iterator_tag
-        else if (C is convertible to single_pass_traversal_tag
-                 and R is convertible to V)
-            return a type convertible to input_iterator_tag
-        else
-            return C
+<em>iterator-category</em>(CategoryOrTraversal, value_type, reference)
 </pre>
+<p>where <em>iterator-category</em> is defined as follows:</p>
+<pre class="literal-block">
+<em>iterator-category</em>(C,R,V) :=
+   if (C is convertible to std::input_iterator_tag
+       || C is convertible to std::output_iterator_tag
+   )
+       return C
+
+   else if (C is not convertible to incrementable_traversal_tag)
+       <em>the program is ill-formed</em>
+
+   else return a type X satisfying the following two constraints:
+
+      1. X is convertible to X1, and not to any more-derived
+         type, where X1 is defined by:
+
+           if (R is a reference type
+               &amp;&amp; C is convertible to forward_traversal_tag)
+           {
+               if (C is convertible to random_access_traversal_tag)
+                   X1 = random_access_iterator_tag
+               else if (C is convertible to bidirectional_traversal_tag)
+                   X1 = bidirectional_iterator_tag
+               else
+                   X1 = forward_iterator_tag
+           }
+           else
+           {
+               if (C is convertible to single_pass_traversal_tag
+                   &amp;&amp; R is convertible to V)
+                   X1 = input_iterator_tag
+               else
+                   X1 = C
+           }
+
+      2. <a class="reference" href="new-iter-concepts.html#category-to-traversal"><em>category-to-traversal</em></a>(X) is convertible to the most
+         derived traversal tag type to which X is also
+         convertible, and not to any more-derived traversal tag
+         type.
+</pre>
+<p>[Note: the intention is to allow <tt class="literal"><span class="pre">iterator_category</span></tt> to be one of
+the five original category tags when convertibility to one of the
+traversal tags would add no information]</p>
 <!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
 <!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->

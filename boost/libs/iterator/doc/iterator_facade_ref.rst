@@ -97,9 +97,13 @@ __ brackets_
 
 .. _`iterator category`:
 
-The ``iterator_category`` member of ``iterator_facade`` is 
-``facade_iterator_category(CategoryOrTraversal, value_type,
-reference)``, as specified by the following pseudo-code:
+The ``iterator_category`` member of ``iterator_facade`` is
+
+.. parsed-literal::
+
+  *iterator-category*\ (CategoryOrTraversal, value_type, reference)
+
+where *iterator-category* is defined as follows:
 
 .. include:: facade_iterator_category.rst
 
