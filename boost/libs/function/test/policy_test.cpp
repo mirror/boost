@@ -27,8 +27,8 @@ struct counting_policy
 {
   static int count;
 
-  void precall(function_base*) { count++; }
-  void postcall(function_base*) { count+=2; }
+  void precall(const function_base*) { count++; }
+  void postcall(const function_base*) { count+=2; }
 };
 
 int counting_policy::count = 0;

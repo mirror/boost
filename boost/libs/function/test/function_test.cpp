@@ -476,7 +476,7 @@ test_zero_args()
 
   global_int = 0;
   v7();
-  BOOST_TEST(global_int == 1);
+  BOOST_TEST(global_int == 2);
   
   global_int = 0;
   v8();
