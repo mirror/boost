@@ -1,3 +1,5 @@
+.. Version 1.3 of this document was accepted for TR1
+
 ::
 
   template <class UnaryFunction,
@@ -12,10 +14,11 @@
     transform_iterator();
     transform_iterator(Iterator const& x, UnaryFunction f);
 
-    template<class OtherIterator, class R2, class V2>
+    template<class F2, class I2, class R2, class V2>
     transform_iterator(
-          transform_iterator<UnaryFunction, OtherIterator, R2, V2> const& t
-        , typename enable_if_convertible<OtherIterator, Iterator>::type* = 0 // exposition
+          transform_iterator<F2, I2, R2, V2> const& t
+        , typename enable_if_convertible<I2, Iterator>::type* = 0      // exposition
+        , typename enable_if_convertible<F2, UnaryFunction>::type* = 0 // exposition
     );
 
     UnaryFunction functor() const;
