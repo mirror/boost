@@ -13,9 +13,8 @@
 #ifndef BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_
 #define BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_
 
-#include <iterator>
+#include <boost/iterator.hpp>
 #include <boost/utility.hpp>
-#include <boost/operators.hpp>
 #include <boost/compressed_pair.hpp>
 
 // I was having some problems with VC6. I couldn't tell whether our hack for
@@ -144,22 +143,17 @@ inline bool operator<=(const iterator_comparisons<D1,Base1>& xb,
 //   Traits - a class satisfying the same requirements as a specialization of
 //      std::iterator_traits for the resulting iterator.
 //
-//   NonconstIterator - the corresponding non-const iterator type for
-//      Iterator, if any. You don't need to supply this if you are not make a
-//      const/non-const iterator pair.
-//
 template <class Iterator, class Policies, 
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
-          class Traits,
+          class Traits
 #else
-          class Traits = std::iterator_traits<Iterator>,
+          class Traits = std::iterator_traits<Iterator>
 #endif
-          class NonconstIterator = Iterator
          >
 struct iterator_adaptor :
 #ifdef BOOST_RELOPS_AMBIGUITY_BUG
     iterator_comparisons<
-          iterator_adaptor<Iterator,Policies,Traits,NonconstIterator>,
+          iterator_adaptor<Iterator,Policies,Traits>,
 #endif
           boost::iterator<typename Traits::iterator_category, 
               typename Traits::value_type, typename Traits::difference_type,
@@ -168,7 +162,7 @@ struct iterator_adaptor :
 >
 #endif
 {
-    typedef iterator_adaptor<Iterator, Policies,Traits,NonconstIterator> Self;
+    typedef iterator_adaptor<Iterator, Policies, Traits> Self;
 public:
     typedef typename Traits::difference_type difference_type;
     typedef typename Traits::value_type value_type;
@@ -179,35 +173,15 @@ public:
 
     iterator_adaptor() { }
 
-    iterator_adaptor(const iterator_type& iter, const Policies& p =Policies())
+    iterator_adaptor(const Iterator& iter, const Policies& p = Policies())
         : m_iter_p(iter, p) {}
 
-#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
-    template <class MutableIterator, class OtherTraits>
-    iterator_adaptor(const iterator_adaptor<MutableIterator, Policies, OtherTraits, NonconstIterator>& rhs)
-        : m_iter_p(rhs.iter(), rhs.policies()) {}
-    
-    template <class MutableIterator, class OtherTraits>
-    Self& operator=(const iterator_adaptor<MutableIterator, Policies, OtherTraits, NonconstIterator>& rhs)
-    { 
-      iter() = rhs.iter(); 
-      policies() = rhs.policies();
-      return *this; 
+    template <class OtherIter, class OtherTraits>
+    iterator_adaptor (const iterator_adaptor<OtherIter, Policies,
+            OtherTraits>& src)
+            : m_iter_p(src.iter(), src.policies()) {
     }
-#else
-    template <class OtherTraits>
-    iterator_adaptor(const iterator_adaptor<NonconstIterator, Policies, OtherTraits, NonconstIterator>& rhs)
-        : m_iter_p(rhs.iter(), rhs.policies()) {}
-    
-    template <class OtherTraits>
-    Self& operator=(const iterator_adaptor<NonconstIterator, Policies, OtherTraits, NonconstIterator>& rhs)
-    { 
-      iter() = rhs.iter(); 
-      policies() = rhs.policies();
-      return *this; 
-    }
-#endif
-    
+
     reference operator*() const {
         return policies().dereference(type<reference>(), iter());
     }
@@ -281,73 +255,73 @@ public: // too many compilers have trouble when these are private.
     const Iterator& iter() const { return m_iter_p.first(); }
 };
 
-template <class Iterator, class Policies, class Traits, class NonconstIterator>
-iterator_adaptor<Iterator,Policies,Traits,NonconstIterator>
-operator-(iterator_adaptor<Iterator,Policies,Traits,NonconstIterator> p, const typename Traits::difference_type x)
+template <class Iterator, class Policies, class Traits>
+iterator_adaptor<Iterator,Policies,Traits>
+operator-(iterator_adaptor<Iterator,Policies,Traits> p, const typename Traits::difference_type x)
 {
     return p -= x;
 }
 
-template <class Iterator, class Policies, class Traits, class NonconstIterator>
-iterator_adaptor<Iterator,Policies,Traits,NonconstIterator>
-operator+(iterator_adaptor<Iterator,Policies,Traits,NonconstIterator> p, const typename Traits::difference_type x)
+template <class Iterator, class Policies, class Traits>
+iterator_adaptor<Iterator,Policies,Traits>
+operator+(iterator_adaptor<Iterator,Policies,Traits> p, typename Traits::difference_type x)
 {
     return p += x;
 }
 
-template <class Iterator, class Policies, class Traits, class NonconstIterator>
-iterator_adaptor<Iterator,Policies,Traits,NonconstIterator>
-operator+(const typename Traits::difference_type x, iterator_adaptor<Iterator,Policies,Traits,NonconstIterator> p)
+template <class Iterator, class Policies, class Traits>
+iterator_adaptor<Iterator,Policies,Traits>
+operator+(typename Traits::difference_type x, iterator_adaptor<Iterator,Policies,Traits> p)
 {
     return p += x;
 }
 
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2, class NonconstIterator>
+template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
 typename Traits1::difference_type operator-(
-    const iterator_adaptor<Iterator1,Policies,Traits1,NonconstIterator>& x,
-    const iterator_adaptor<Iterator2,Policies,Traits2,NonconstIterator>& y )
+    const iterator_adaptor<Iterator1,Policies,Traits1>& x,
+    const iterator_adaptor<Iterator2,Policies,Traits2>& y )
 {
     typedef typename Traits1::difference_type difference_type;
     return x.policies().distance(type<difference_type>(), y.iter(), x.iter());
 }
 
 #ifndef BOOST_RELOPS_AMBIGUITY_BUG
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2, class NonconstIterator>
+template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
 inline bool 
-operator==(const iterator_adaptor<Iterator1,Policies,Traits1,NonconstIterator>& x, const iterator_adaptor<Iterator2,Policies,Traits2,NonconstIterator>& y) {
+operator==(const iterator_adaptor<Iterator1,Policies,Traits1>& x, const iterator_adaptor<Iterator2,Policies,Traits2>& y) {
     return x.policies().equal(x.iter(), y.iter());
 }
 
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2, class NonconstIterator>
+template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
 inline bool 
-operator<(const iterator_adaptor<Iterator1,Policies,Traits1,NonconstIterator>& x, const iterator_adaptor<Iterator2,Policies,Traits2,NonconstIterator>& y) {
+operator<(const iterator_adaptor<Iterator1,Policies,Traits1>& x, const iterator_adaptor<Iterator2,Policies,Traits2>& y) {
     return x.policies().less(x.iter(), y.iter());
 }
 
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2, class NonconstIterator>
+template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
 inline bool 
-operator>(const iterator_adaptor<Iterator1,Policies,Traits1,NonconstIterator>& x,
-          const iterator_adaptor<Iterator2,Policies,Traits2,NonconstIterator>& y) { 
+operator>(const iterator_adaptor<Iterator1,Policies,Traits1>& x,
+          const iterator_adaptor<Iterator2,Policies,Traits2>& y) { 
     return x.policies().less(y.iter(), x.iter());
 }
 
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2, class NonconstIterator>
+template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
 inline bool 
-operator>=(const iterator_adaptor<Iterator1,Policies,Traits1,NonconstIterator>& x, const iterator_adaptor<Iterator2,Policies,Traits2,NonconstIterator>& y) {
+operator>=(const iterator_adaptor<Iterator1,Policies,Traits1>& x, const iterator_adaptor<Iterator2,Policies,Traits2>& y) {
     return !x.policies().less(x.iter(), y.iter());
 }
 
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2, class NonconstIterator>
+template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
 inline bool 
-operator<=(const iterator_adaptor<Iterator1,Policies,Traits1,NonconstIterator>& x,
-           const iterator_adaptor<Iterator2,Policies,Traits2,NonconstIterator>& y) {
+operator<=(const iterator_adaptor<Iterator1,Policies,Traits1>& x,
+           const iterator_adaptor<Iterator2,Policies,Traits2>& y) {
     return !x.policies().less(y.iter(), x.iter());
 }
 
-template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2, class NonconstIterator>
+template <class Iterator1, class Iterator2, class Policies, class Traits1, class Traits2>
 inline bool 
-operator!=(const iterator_adaptor<Iterator1,Policies,Traits1,NonconstIterator>& x, 
-           const iterator_adaptor<Iterator2,Policies,Traits2,NonconstIterator>& y) {
+operator!=(const iterator_adaptor<Iterator1,Policies,Traits1>& x, 
+           const iterator_adaptor<Iterator2,Policies,Traits2>& y) {
     return !x.policies().equal(x.iter(), y.iter());
 }
 #endif
@@ -359,17 +333,17 @@ operator!=(const iterator_adaptor<Iterator1,Policies,Traits1,NonconstIterator>& 
 template <class Iterator, class ConstIterator, 
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
           class Traits, 
-          class ConstTraits, 
+          class ConstTraits,
 #else
           class Traits = std::iterator_traits<Iterator>, 
-          class ConstTraits = std::iterator_traits<ConstIterator>, 
+          class ConstTraits = std::iterator_traits<ConstIterator>,
 #endif
           class Policies = default_iterator_policies>
 class iterator_adaptors
 {
 public:
-    typedef iterator_adaptor<Iterator, Policies, Traits, Iterator> iterator;
-    typedef iterator_adaptor<ConstIterator, Policies, ConstTraits, Iterator> 
+    typedef iterator_adaptor<Iterator, Policies, Traits> iterator;
+    typedef iterator_adaptor<ConstIterator, Policies, ConstTraits> 
       const_iterator;
 };
 
@@ -412,8 +386,8 @@ struct transform_iterator
     typedef transform_iterator_traits<AdaptableUnaryFunction,Traits>
       TransTraits;
     typedef iterator_adaptor<Iterator, 
-      transform_iterator_policies<AdaptableUnaryFunction>, TransTraits, 
-      Iterator> type;
+      transform_iterator_policies<AdaptableUnaryFunction>, TransTraits>
+      type;
 };
 
 
@@ -449,27 +423,62 @@ struct indirect_traits
     typedef typename IndirectTraits::iterator_category iterator_category;
 };
 
-template <class IndirectIterator, class ConstIndirectIterator,
+template <class IndirectIterator, class Iterator,
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
           class IndirectTraits,
-          class ConstIndirectTraits,
           class Traits
 #else
           class IndirectTraits = 
               std::iterator_traits<IndirectIterator>,
-          class ConstIndirectTraits = 
-              std::iterator_traits<ConstIndirectIterator>,
-          class Traits =
-              std::iterator_traits<typename IndirectTraits::value_type>
+          class Traits = std::iterator_traits<Iterator>
+#endif
+           >
+struct indirect_iterator
+{
+    typedef typename Traits::value_type ValueType;
+    typedef iterator_adaptor<IndirectIterator,
+        indirect_iterator_policies,
+        indirect_traits<IndirectIterator, IndirectTraits, Traits>
+    > type;
+};
+
+template <class IndirectIterator, class ConstIterator,
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
+          class IndirectTraits,
+          class ConstTraits
+#else
+          class IndirectTraits = 
+              std::iterator_traits<IndirectIterator>,
+          class ConstTraits = std::iterator_traits<ConstIterator>
+#endif
+           >
+struct const_indirect_iterator
+{
+    typedef iterator_adaptor<IndirectIterator,
+        indirect_iterator_policies,
+        indirect_traits<IndirectIterator, IndirectTraits, ConstTraits>
+    > type;
+};
+
+template <class IndirectIterator,
+          class Iterator,      // Mutable
+          class ConstIterator, // Immutable
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
+          class IndirectTraits,
+          class Traits,
+          class ConstTraits
+#else
+          class IndirectTraits = std::iterator_traits<IndirectIterator>,
+          class Traits = std::iterator_traits<Iterator>,
+          class ConstTraits = std::iterator_traits<ConstIterator>
 #endif
            >
 struct indirect_iterators
 {
-    typedef typename IndirectTraits::value_type Iterator;
     typedef typename Traits::value_type ValueType;
-    typedef iterator_adaptors<IndirectIterator, ConstIndirectIterator,
+    typedef iterator_adaptors<IndirectIterator, IndirectIterator,
         indirect_traits<IndirectIterator, IndirectTraits, Traits>,
-        indirect_traits<ConstIndirectIterator, ConstIndirectTraits, Traits>,
+        indirect_traits<IndirectIterator, IndirectTraits, ConstTraits>,
         indirect_iterator_policies
         > Adaptors;
     typedef typename Adaptors::iterator iterator;
@@ -512,6 +521,32 @@ struct reverse_iterator_policies
         { return y < x; }
 };
   
+template <class Iterator,
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
+          class Traits = std::iterator_traits<Iterator>
+#else
+          class Traits
+#endif
+         >
+struct reverse_iterator
+{
+    typedef iterator_adaptor<Iterator, reverse_iterator_policies,
+        Traits> type;
+};
+
+template <class ConstIterator,
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
+          class ConstTraits = std::iterator_traits<ConstIterator>
+#else
+          class ConstTraits
+#endif
+         >
+struct const_reverse_iterator
+{
+    typedef iterator_adaptor<ConstIterator, reverse_iterator_policies,
+        ConstTraits> type;
+};
+
 template <class Iterator, class ConstIterator,
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
           class Traits = std::iterator_traits<Iterator>, 
@@ -529,7 +564,82 @@ struct reverse_iterators
     typedef typename Adaptor::const_iterator const_iterator;
 };
 
+template <class AdaptableUnaryFunction>
+struct projection_iterator_policies :
+        public default_iterator_policies {
+    template <class Reference, class Iterator>
+    Reference dereference (type<Reference>, Iterator const& it) const {
+        return AdaptableUnaryFunction()(*it);
+    }
+};
+template <class AdaptableUnaryFunction, class Traits>
+struct projection_iterator_traits {
+    typedef typename AdaptableUnaryFunction::result_type value_type;
+    typedef value_type& reference;
+    typedef value_type* pointer;
+    typedef typename Traits::difference_type difference_type;
+    typedef typename Traits::iterator_category iterator_category;
+};
+template <class AdaptableUnaryFunction, class Traits>
+struct const_projection_iterator_traits {
+    typedef typename AdaptableUnaryFunction::result_type value_type;
+    typedef value_type const& reference;
+    typedef value_type const* pointer;
+    typedef typename Traits::difference_type difference_type;
+    typedef typename Traits::iterator_category iterator_category;
+};
+template <class AdaptableUnaryFunction, class Iterator,
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
+        class Traits = std::iterator_traits<Iterator>
+#else
+        class Traits
+#endif
+        >
+struct projection_iterator {
+    typedef projection_iterator_traits<AdaptableUnaryFunction, Traits>
+            Projection_Traits;
+    typedef iterator_adaptor<Iterator,
+            projection_iterator_policies<AdaptableUnaryFunction>,
+            Projection_Traits> type;
+};
+template <class AdaptableUnaryFunction, class Iterator,
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
+        class Traits = std::iterator_traits<Iterator>
+#else
+        class Traits
+#endif
+        >
+struct const_projection_iterator {
+    typedef const_projection_iterator_traits<AdaptableUnaryFunction,
+            Traits> Projection_Traits;
+    typedef iterator_adaptor<Iterator,
+            projection_iterator_policies<AdaptableUnaryFunction>,
+            Projection_Traits> type;
+};
+template <class AdaptableUnaryFunction, class Iterator, class ConstIterator,
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
+        class Traits = std::iterator_traits<Iterator>,
+        class ConstTraits = std::iterator_traits<ConstIterator>
+#else
+        class Traits,
+        class ConstTraits
+#endif
+        >
+struct projection_iterators {
+    typedef projection_iterator_traits<AdaptableUnaryFunction, Traits>
+            Projection_Traits;
+    typedef const_projection_iterator_traits<AdaptableUnaryFunction,
+            ConstTraits> Const_Projection_Traits;
+    typedef iterator_adaptors<Iterator, ConstIterator,
+            Projection_Traits, Const_Projection_Traits,
+            projection_iterator_policies<AdaptableUnaryFunction> > Adaptors;
+    typedef typename Adaptors::iterator iterator;
+    typedef typename Adaptors::const_iterator const_iterator;
+};
+
 } // namespace boost
 
 #endif
+
+
 

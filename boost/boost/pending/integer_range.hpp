@@ -54,7 +54,7 @@ struct integer_range {
 #ifdef BOOST_USE_ITERATOR_ADAPTORS
     typedef iterator_adaptor<IntegerType,
       counting_iterator_policies<IntegerType>,
-      counting_iterator_traits<IntegerType>, IntegerType> iterator;
+      counting_iterator_traits<IntegerType> > iterator;
 #else
     typedef int_iterator<IntegerType> iterator;
 #endif

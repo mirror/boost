@@ -97,12 +97,10 @@ main()
     dummyT* ptr[N];
     for (int k = 0; k < N; ++k)
       ptr[k] = array + k;
-    
-    typedef dummyT* DummyPtr;
-    typedef boost::indirect_iterators<DummyPtr*, const DummyPtr*,
-      boost::iterator<std::random_access_iterator_tag, DummyPtr>,
-      boost::iterator<std::random_access_iterator_tag, const DummyPtr>,
-      boost::iterator<std::random_access_iterator_tag, dummyT>
+    typedef boost::indirect_iterators<dummyT**, dummyT*, const dummyT*,
+      boost::iterator<std::random_access_iterator_tag, dummyT*>,
+      boost::iterator<std::random_access_iterator_tag, dummyT>,
+      boost::iterator<std::random_access_iterator_tag, const dummyT>
       > Indirect;
     Indirect::iterator i = ptr;
     boost::random_access_iterator_test(i, N, array);
