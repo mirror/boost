@@ -2,26 +2,26 @@
 <HTML>
 <HEAD>
     <TITLE>Function Template reverse</TITLE>
-    <LINK REL='stylesheet' HREF='../../../../boost.css'>
-    <LINK REL='stylesheet' HREF='../theme/iostreams.css'>
+    <LINK REL="stylesheet" HREF="../../../../boost.css">
+    <LINK REL="stylesheet" HREF="../theme/iostreams.css">
 </HEAD>
 <BODY>
 
 <!-- Begin Banner -->
 
-    <H1 CLASS='title'>Function Template <CODE>reverse</CODE></H1>
-    <HR CLASS='banner'>
+    <H1 CLASS="title">Function Template <CODE>reverse</CODE></H1>
+    <HR CLASS="banner">
 
 <!-- End Banner -->
 
-<DL class='page-index'>
-  <DT><A href='#description'>Description</A></DT>
-  <DT><A href='#headers'>Headers</A></DT>
-  <DT><A href='#synopsis'>Synopsis</A></DT>
-  <DT><A href='#synopsis'>Example</A></DT>
+<DL class="page-index">
+  <DT><A href="#description">Description</A></DT>
+  <DT><A href="#headers">Headers</A></DT>
+  <DT><A href="#synopsis">Synopsis</A></DT>
+  <DT><A href="#synopsis">Example</A></DT>
 </DL>
 
-<A NAME='description'>
+<A NAME="description">
 <H2>Description</H2>
 
 <P>
@@ -32,38 +32,38 @@
     The implementation of <CODE>reverse</CODE> makes use of the class template <A HREF="../classes/one_step_filter.html"><CODE>one_step_filter</CODE></A>, which filters an entire sequence of data at once. Therefore, a Filter returned by <CODE>reverse</CODE> may have higher memory use than the original Filter and is unsuitable for use with streams of data which have no definite endpoint.
 </P>
 
-<A NAME='headers'>
+<A NAME="headers">
 <H2>Headers</H2>
 
 <DL>
-  <DT><A CLASS='header' HREF='../../../../boost/iostreams/reverse.hpp'><CODE>&lt;boost/iostreams/reverse.hpp&gt;</CODE></A></DT>
+  <DT><A CLASS="header" HREF="../../../../boost/iostreams/reverse.hpp"><CODE>&lt;boost/iostreams/reverse.hpp&gt;</CODE></A></DT>
 </DL>
 
-<A NAME='synopsis'>
+<A NAME="synopsis">
 <H2>Synopsis</H2>
 
-<PRE CLASS='broken_ie'><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
+<PRE CLASS="broken_ie"><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
                     
 <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Filter&gt;
-<SPAN CLASS='omitted'>implementation-defined</SPAN> <SPAN CLASS="defined">reverse</SPAN>(<SPAN CLASS="keyword">const</SPAN> Filter& filter);
+<SPAN CLASS="omitted">implementation-defined</SPAN> <SPAN CLASS="defined">reverse</SPAN>(<SPAN CLASS="keyword">const</SPAN> Filter& filter);
 
-} } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
+} } <SPAN CLASS="comment">// End namespace boost::io</SPAN></PRE>
 
-<A NAME='example'>
+<A NAME="example">
 <H2>Example</H2>
 
 The following example defines an <A HREF="../concepts/output_filter.html">OutputFilter</A> and uses it to filter standard input.
 
-<PRE CLASS='broken_ie'><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;cctype&gt;</SPAN>                        <SPAN CLASS='comment'>// toupper</SPAN>
-<SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;iostream&gt;</SPAN>
-<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS='header' HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>         <SPAN CLASS='comment'>// output_filter</SPAN>
-<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS='header' HREF="../../../../boost/iostreams/filtering_stream.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/filtering_stream.hpp&gt;</SPAN></A>
-<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS='header' HREF="../../../../boost/iostreams/reverse.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/reverse.hpp&gt;</SPAN></A>
+<PRE CLASS="broken_ie"><SPAN CLASS="preprocessor">#include</SPAN> <SPAN CLASS="literal">&lt;cctype&gt;</SPAN>                        <SPAN CLASS="comment">// toupper</SPAN>
+<SPAN CLASS="preprocessor">#include</SPAN> <SPAN CLASS="literal">&lt;iostream&gt;</SPAN>
+<SPAN CLASS="preprocessor">#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/concepts.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/concepts.hpp&gt;</SPAN></A>         <SPAN CLASS="comment">// output_filter</SPAN>
+<SPAN CLASS="preprocessor">#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/filtering_stream.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/filtering_stream.hpp&gt;</SPAN></A>
+<SPAN CLASS="preprocessor">#include</SPAN> <A CLASS="header" HREF="../../../../boost/iostreams/reverse.hpp"><SPAN CLASS="literal">&lt;boost/iostreams/reverse.hpp&gt;</SPAN></A>
 
 <SPAN CLASS="keyword">using</SPAN> <SPAN CLASS="keyword">namespace</SPAN> std;
 <SPAN CLASS="keyword">using</SPAN> <SPAN CLASS="keyword">namespace</SPAN> boost::io;
 
-<SPAN CLASS='comment'>// Converts characters to uppercase</SPAN>
+<SPAN CLASS="comment">// Converts characters to uppercase</SPAN>
 <SPAN CLASS="keyword">struct</SPAN> toupper_filter : output_filter {
     <SPAN CLASS="keyword">void</SPAN> put(<SPAN CLASS="keyword">char</SPAN> c, std::streambuf& dest)
     {
@@ -76,21 +76,21 @@ The following example defines an <A HREF="../concepts/output_filter.html">Output
     filtering_stream&lt;input&gt; in;
     in.push(reverse(toupper_filter()));
     in.push(cin);
-    <SPAN CLASS='omitted'>...</SPAN>
+    <SPAN CLASS="omitted">...</SPAN>
 }</PRE>
 
 <!-- Begin Footer -->
 
 <HR>
-<P CLASS='copyright'>Revised
+<P CLASS="copyright">Revised
 <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->
 20 May, 2004
 <!--webbot bot="Timestamp" endspan i-checksum="38504" -->
 </P>
 
-<P CLASS='copyright'>&copy; Copyright Jonathan Turkanis, 2004</P>
-<P CLASS='copyright'> 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF='http://www.boost.org/LICENSE_1_0.txt'>http://www.boost.org/LICENSE_1_0.txt</A>)
+<P CLASS="copyright">&copy; Copyright Jonathan Turkanis, 2004</P>
+<P CLASS="copyright"> 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>
 
 <!-- End Footer -->
