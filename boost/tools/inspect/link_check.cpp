@@ -78,6 +78,7 @@ namespace boost
       if ( url[0] == '#'
         || url.find( "mailto:" ) == 0
         || url.find( "http:" ) == 0
+        || url.find( "https:" ) == 0
         || url.find( "ftp:" ) == 0
         || url.find( "news:" ) == 0
         ) return;
