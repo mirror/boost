@@ -77,7 +77,7 @@ For example, the following is a valid lambda expression:
 <pre class="programlisting">cout &lt;&lt; _1, _2[_3] = _1 &amp;&amp; false</pre>
 </p><p>
 However, there are some restrictions that originate from the C++ operator overloading rules, and some special cases.
-</p><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id2759856"></a>5.2.1. Operators that cannot be overloaded</h4></div></div><p>
+</p><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id2740648"></a>5.2.1. Operators that cannot be overloaded</h4></div></div><p>
 Some operators cannot be overloaded at all (<tt>::</tt>, <tt>.</tt>, <tt>.*</tt>).
 For some operators, the requirements on return types prevent them to be overloaded to create lambda functors.
 These operators are <tt>-&gt;.</tt>, <tt>-&gt;</tt>, <tt>new</tt>, <tt>new[]</tt>, <tt>delete</tt>, <tt>delete[]</tt> and <tt>?:</tt> (the conditional operator).
@@ -105,7 +105,7 @@ bool flag = true; int i = 0;
 (_1 || ++_2)(flag, i);
 </pre>
 </p></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="sect:comma_operator"></a>5.2.4. Comma operator</h4></div></div><p>
-Comma operator is the &#8220;statement separator&#8221; in lambda expressions. 
+Comma operator is the &#8216;statement separator&#8217; in lambda expressions. 
 Since comma is also the separator between arguments in a function call, extra parenthesis are sometimes needed:
 
 <pre class="programlisting">
@@ -308,12 +308,32 @@ operator defined, can be used as target functions.
 
 In general, BLL cannot deduce the return type of an arbitrary function object. 
 
-However, there is a method for giving BLL this capability for a certain 
+However, there are two methods for giving BLL this capability for a certain 
 function object class.
 
-</p><div class="simplesect"><div class="titlepage"><div><h5 class="title"><a name="id2822731"></a>The sig template</h5></div></div><p>
-To make BLL aware of the return type(s) of a function object one needs to 
-provide a member template struct 
+</p><div class="simplesect"><div class="titlepage"><div><h5 class="title"><a name="id2803250"></a>The result_type typedef</h5></div></div><p>
+
+The BLL supports the standard library convention of declaring the return type
+of a function object with a member typedef named <tt>result_type</tt> in the
+function object class.
+
+Here is a simple example:
+<pre class="programlisting">
+struct A {
+  typedef B result_type;
+  B operator()(X, Y, Z); 
+};
+</pre>
+
+If a function object does not define a <tt>result_type</tt> typedef, 
+the method described below (<tt>sig</tt> template) 
+is attempted to resolve the return type of the
+function object. If a function object defines both <tt>result_type</tt>
+and <tt>sig</tt>, <tt>result_type</tt> takes precedence.
+
+</p></div><div class="simplesect"><div class="titlepage"><div><h5 class="title"><a name="id2803321"></a>The sig template</h5></div></div><p>
+Another mechanism that make BLL aware of the return type(s) of a function object is defining
+member template struct 
 <tt>sig&lt;Args&gt;</tt> with a typedef 
 <tt>type</tt> that specifies the return type.
 
@@ -332,9 +352,7 @@ is the function
 object type itself, and the remaining elements are the types of 
 the arguments, with which the function object is being called.
 
-This may seem overly complex compared to the Standard Library 
-convention for defining the return type of a function
-object with  the <tt>return_type</tt> typedef.
+This may seem overly complex compared to defining the <tt>result_type</tt> typedef.
 Howver, there are two significant restrictions with using just a simple
 typedef to express the return type:
 <div class="orderedlist"><ol type="1"><li><p>
@@ -395,26 +413,8 @@ Tuple [<a href="bi01.html#cit:boost::type_traits" title="[type_traits]">type_tra
 for tools that can aid in these tasks.
 The <tt>sig</tt> templates are a refined version of a similar
 mechanism first introduced in the FC++ library  
-[<a href="bi01.html#cit:fc%2B%2B" title="[fc++]">fc++</a>].
-</p></div><p>
-Earlier versions of the library supported the Standard Library convention
-as the default, and required special actions to make the library recognize
-the <tt>sig</tt> template. 
-Now the BLL has that reversed.
-
-If one needs to use a functor that adheres to the Standard Library
-convention in a bind expression, we provide the <tt>std_functor</tt>
-wrapper, that gives the function object a <tt>sig</tt>
-template based on the <tt>result_type</tt> typedef.
-For example:
-
-<pre class="programlisting">
-int i = 1;
-bind(plus&lt;int&gt;(), _1, 1)(i);              // error, no sig template
-bind(std_functor(plus&lt;int&gt;()), _1, 1)(i); // ok
-</pre>
-
-</p></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="sect:overriding_deduced_return_type"></a>5.4. Overriding the deduced return type</h3></div></div><p>
+[<a href="bi01.html#cit:fc++" title="[fc++]">fc++</a>].
+</p></div></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="sect:overriding_deduced_return_type"></a>5.4. Overriding the deduced return type</h3></div></div><p>
 The return type deduction system may not be able to deduce the return types of some user defined operators or bind expressions with class objects.
 
 A special lambda expression type is provided for stating the return type explicitly and overriding the deduction system. 
@@ -533,7 +533,7 @@ By using <tt>var</tt> to make <tt>index</tt> a lambda expression, we get the des
 In sum, <tt>var(x)</tt> creates a nullary lambda functor, 
 which stores a reference to the variable <tt>x</tt>. 
 When the lambda functor is invoked, a reference to <tt>x</tt> is returned.
-</p><div class="simplesect"><div class="titlepage"><div><h4 class="title"><a name="id2823567"></a>Naming delayed constants and variables</h4></div></div><p>
+</p><div class="simplesect"><div class="titlepage"><div><h4 class="title"><a name="id2804115"></a>Naming delayed constants and variables</h4></div></div><p>
 It is possible to predefine and name a delayed variable or constant outside a lambda expression. 
 The templates <tt>var_type</tt>, <tt>constant_type</tt> 
 and <tt>constant_ref_type</tt> serve for this purpose. 
@@ -562,7 +562,7 @@ Here is an example of naming a delayed constant:
 constant_type&lt;char&gt;::type space(constant(' '));
 for_each(a.begin(),a.end(), cout &lt;&lt; space &lt;&lt; _1);
 </pre>
-</p></div><div class="simplesect"><div class="titlepage"><div><h4 class="title"><a name="id2823690"></a>About assignment and subscript operators</h4></div></div><p>
+</p></div><div class="simplesect"><div class="titlepage"><div><h4 class="title"><a name="id2804238"></a>About assignment and subscript operators</h4></div></div><p>
 As described in <a href="ar01s05.html#sect:assignment_and_subscript" title="5.2.2. Assignment and subscript operators">Section 5.2.2</a>, assignment and subscripting operators are always defined as member functions.
 This means, that for expressions of the form
 <tt>x = y</tt> or <tt>x[y]</tt> to be interpreted as lambda expressions, the left-hand operand <tt>x</tt> must be a lambda expression. 
@@ -850,7 +850,7 @@ objects related to creating and destroying objects,
  showing the expression to create and call the function object, 
 and the effect of evaluating that expression.
 
-</p><div class="table"><p><a name="table:constructor_destructor_fos"></a><b>Table 1. Construction and destruction related function objects.</b></p><table summary="Construction and destruction related function objects." border="1"><colgroup><col><col></colgroup><thead><tr><th>Function object call</th><th>Wrapped expression</th></tr></thead><tbody><tr><td><tt>constructor&lt;T&gt;()(<i><tt>arg_list</tt></i>)</tt></td><td>T(<i><tt>arg_list</tt></i>)</td></tr><tr><td><tt>destructor()(a)</tt></td><td><tt>a.~A()</tt>, where <tt>a</tt> is of type <tt>A</tt></td></tr><tr><td><tt>destructor()(pa)</tt></td><td><tt>pa-&gt;~A()</tt>, where <tt>pa</tt> is of type <tt>A*</tt></td></tr><tr><td><tt>new_ptr&lt;T&gt;()(<i><tt>arg_list</tt></i>)</tt></td><td><tt>new T(<i><tt>arg_list</tt></i>)</tt></td></tr><tr><td><tt>new_array&lt;T&gt;()(sz)</tt></td><td><tt>new T[sz]</tt></td></tr><tr><td><tt>delete_ptr()(p)</tt></td><td><tt>delete p</tt></td></tr><tr><td><tt>delete_array()(p)</tt></td><td><tt>delete p[]</tt></td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id2824949"></a>5.9. Special lambda expressions</h3></div></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id2824956"></a>5.9.1. Preventing argument substitution</h4></div></div><p>
+</p><div class="table"><p><a name="table:constructor_destructor_fos"></a><b>Table 1. Construction and destruction related function objects.</b></p><table summary="Construction and destruction related function objects." border="1"><colgroup><col><col></colgroup><thead><tr><th>Function object call</th><th>Wrapped expression</th></tr></thead><tbody><tr><td><tt>constructor&lt;T&gt;()(<i><tt>arg_list</tt></i>)</tt></td><td>T(<i><tt>arg_list</tt></i>)</td></tr><tr><td><tt>destructor()(a)</tt></td><td><tt>a.~A()</tt>, where <tt>a</tt> is of type <tt>A</tt></td></tr><tr><td><tt>destructor()(pa)</tt></td><td><tt>pa-&gt;~A()</tt>, where <tt>pa</tt> is of type <tt>A*</tt></td></tr><tr><td><tt>new_ptr&lt;T&gt;()(<i><tt>arg_list</tt></i>)</tt></td><td><tt>new T(<i><tt>arg_list</tt></i>)</tt></td></tr><tr><td><tt>new_array&lt;T&gt;()(sz)</tt></td><td><tt>new T[sz]</tt></td></tr><tr><td><tt>delete_ptr()(p)</tt></td><td><tt>delete p</tt></td></tr><tr><td><tt>delete_array()(p)</tt></td><td><tt>delete p[]</tt></td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id2805507"></a>5.9. Special lambda expressions</h3></div></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id2805514"></a>5.9.1. Preventing argument substitution</h4></div></div><p>
 When a lambda functor is called, the default behavior is to substitute 
 the actual arguments for the placeholders within all subexpressions.
 
@@ -976,7 +976,7 @@ int nested(const F&amp; f) {
 }
 </pre>
 
-</p></div><div class="section"><div class="titlepage"><div><h5 class="title"><a name="id2825213"></a>5.9.1.2. Protect</h5></div></div><p>
+</p></div><div class="section"><div class="titlepage"><div><h5 class="title"><a name="id2805774"></a>5.9.1.2. Protect</h5></div></div><p>
 The <tt>protect</tt> function is related to unlambda. 
 
 It is also used to prevent the argument substitution taking place, 
@@ -1081,7 +1081,7 @@ since calls to sub lambda functors are made inside the BLL,
 and are not affected by the non-const rvalue problem.
 </p></li></ol></div>
 
-</p></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id2825516"></a>5.10. Casts, sizeof and typeid</h3></div></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="sect:cast_expressions"></a>5.10.1. 
+</p></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id2806080"></a>5.10. Casts, sizeof and typeid</h3></div></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="sect:cast_expressions"></a>5.10.1. 
 Cast expressions
 </h4></div></div><p>
 The BLL defines its counterparts for the four cast expressions 
@@ -1110,7 +1110,7 @@ int count = 0;
 for_each(a.begin(), a.end(), 
          if_then(ll_dynamic_cast&lt;derived*&gt;(_1), ++var(count)));
 </pre>
-</p></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id2825617"></a>5.10.2. Sizeof and typeid</h4></div></div><p>
+</p></div><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id2806181"></a>5.10.2. Sizeof and typeid</h4></div></div><p>
 The BLL counterparts for these expressions are named 
 <tt>ll_sizeof</tt> and <tt>ll_typeid</tt>.
 

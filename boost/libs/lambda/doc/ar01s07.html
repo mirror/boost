@@ -5,7 +5,7 @@
       The Boost Lambda Library"><link rel="up" href="index.html" title="
       C++ BOOST
 
-      The Boost Lambda Library"><link rel="previous" href="ar01s06.html" title="6. Extending return type deduction system"><link rel="next" href="ar01s08.html" title="8. Relation to other Boost libraries"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7. Practical considerations</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s06.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ar01s08.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="id2827018"></a>7. Practical considerations</h2></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id2827024"></a>7.1. Performance</h3></div></div><p>In theory, all overhead of using STL algorithms and lambda functors 
+      The Boost Lambda Library"><link rel="previous" href="ar01s06.html" title="6. Extending return type deduction system"><link rel="next" href="ar01s08.html" title="8. Relation to other Boost libraries"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7. Practical considerations</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s06.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ar01s08.html">Next</a></td></tr></table><hr></div><div class="section"><div class="titlepage"><div><h2 class="title" style="clear: both"><a name="id2807588"></a>7. Practical considerations</h2></div></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id2807595"></a>7.1. Performance</h3></div></div><p>In theory, all overhead of using STL algorithms and lambda functors 
 compared to hand written loops can be optimized away, just as the overhead 
 from standard STL function objects and binders can.
 
@@ -97,7 +97,7 @@ The running times are expressed in arbitrary units." border="1"><colgroup><col><
 </p><p>Some additional performance testing with an earlier version of the
 library is described
 [<a href="bi01.html#cit:jarvi:00" title="[Jär00]">Jär00</a>].
-</p></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id2827515"></a>7.2. About compiling</h3></div></div><p>The BLL uses templates rather heavily, performing numerous recursive instantiations of the same templates. 
+</p></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id2808087"></a>7.2. About compiling</h3></div></div><p>The BLL uses templates rather heavily, performing numerous recursive instantiations of the same templates. 
 This has (at least) three implications:
 <div class="itemizedlist"><ul type="disc"><li><p>
 While it is possible to write incredibly complex lambda expressions, it probably isn't a good idea. 
@@ -111,7 +111,7 @@ This can make the error messages very long and difficult to interpret, particula
 The C++ Standard suggests a template nesting level of 17 to help detect infinite recursion. 
 Complex lambda templates can easily exceed this limit. 
 Most compilers allow a greater number of nested templates, but commonly require the limit explicitly increased with a command line argument.
-</p></li></ul></div></p></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id2827576"></a>7.3. Portability</h3></div></div><p>
+</p></li></ul></div></p></div><div class="section"><div class="titlepage"><div><h3 class="title"><a name="id2808149"></a>7.3. Portability</h3></div></div><p>
 The BLL works with the following compilers, that is, the compilers are capable of compiling the test cases that are included with the BLL:
 
       <div class="itemizedlist"><ul type="disc"><li>GCC 3.0.4
@@ -120,7 +120,7 @@ The BLL works with the following compilers, that is, the compilers are capable o
 )
 
 	</li></ul></div>
-</p><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id2827614"></a>7.3.1. Test coverage</h4></div></div><p>The following list describes the test files included and the features that each file covers:
+</p><div class="section"><div class="titlepage"><div><h4 class="title"><a name="id2808188"></a>7.3.1. Test coverage</h4></div></div><p>The following list describes the test files included and the features that each file covers:
 
 <div class="itemizedlist"><ul type="disc"><li><p>
 <tt>bind_tests_simple.cpp</tt> : Bind expressions of different arities and types of target functions: function pointers, function objects and member functions.

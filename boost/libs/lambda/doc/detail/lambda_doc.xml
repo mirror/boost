@@ -1156,18 +1156,46 @@ operator defined, can be used as target functions.
 
 In general, BLL cannot deduce the return type of an arbitrary function object. 
 
-However, there is a method for giving BLL this capability for a certain 
+However, there are two methods for giving BLL this capability for a certain 
 function object class.
 
 </para>
 
 <simplesect>
 
+<title>The result_type typedef</title>
+
+<para>
+
+The BLL supports the standard library convention of declaring the return type
+of a function object with a member typedef named <literal>result_type</literal> in the
+function object class.
+
+Here is a simple example:
+<programlisting>
+<![CDATA[struct A {
+  typedef B result_type;
+  B operator()(X, Y, Z); 
+};]]>
+</programlisting>
+
+If a function object does not define a <literal>result_type</literal> typedef, 
+the method described below (<literal>sig</literal> template) 
+is attempted to resolve the return type of the
+function object. If a function object defines both <literal>result_type</literal>
+and <literal>sig</literal>, <literal>result_type</literal> takes precedence.
+
+</para>
+
+</simplesect>
+
+<simplesect>
+
 <title>The sig template</title>
 
 <para>
-To make BLL aware of the return type(s) of a function object one needs to 
-provide a member template struct 
+Another mechanism that make BLL aware of the return type(s) of a function object is defining
+member template struct 
 <literal><![CDATA[sig<Args>]]></literal> with a typedef 
 <literal>type</literal> that specifies the return type.
 
@@ -1186,9 +1214,7 @@ is the function
 object type itself, and the remaining elements are the types of 
 the arguments, with which the function object is being called.
 
-This may seem overly complex compared to the Standard Library 
-convention for defining the return type of a function
-object with  the <literal>return_type</literal> typedef.
+This may seem overly complex compared to defining the <literal>result_type</literal> typedef.
 Howver, there are two significant restrictions with using just a simple
 typedef to express the return type:
 <orderedlist>
@@ -1262,27 +1288,6 @@ mechanism first introduced in the FC++ library
 </para>
 
 </simplesect>
-
-<para>
-Earlier versions of the library supported the Standard Library convention
-as the default, and required special actions to make the library recognize
-the <literal>sig</literal> template. 
-Now the BLL has that reversed.
-
-If one needs to use a functor that adheres to the Standard Library
-convention in a bind expression, we provide the <literal>std_functor</literal>
-wrapper, that gives the function object a <literal>sig</literal>
-template based on the <literal>result_type</literal> typedef.
-For example:
-
-<programlisting>
-<![CDATA[int i = 1;
-bind(plus<int>(), _1, 1)(i);              // error, no sig template
-bind(std_functor(plus<int>()), _1, 1)(i); // ok]]>
-</programlisting>
-
-</para>
-
 
 </section>
 

@@ -20,7 +20,7 @@ There are quite a lot of exceptions and special cases, but discussion of them is
 list&lt;int&gt; v(10);
 for_each(v.begin(), v.end(), _1 = 1);</pre>
 
-	The expression <tt>_1 = 1</tt> creates a lambda functor which assigns the value <tt>1</tt> to every element in <tt>v</tt>.<sup>[<a name="id2758769" href="#ftn.id2758769">1</a>]</sup>
+	The expression <tt>_1 = 1</tt> creates a lambda functor which assigns the value <tt>1</tt> to every element in <tt>v</tt>.<sup>[<a name="id2739596" href="#ftn.id2739596">1</a>]</sup>
       </p><p>
 	Next, we create a container of pointers and make them point to the elements in the first container <tt>v</tt>:
 
@@ -205,7 +205,7 @@ This is to prevent pointer arithmetic making non-const arrays const.
 </p></li></ul></div>
 
 </p></li></ul></div>
-</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.id2758769" href="#id2758769">1</a>] </sup>
+</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.id2739596" href="#id2739596">1</a>] </sup>
 Strictly taken, the C++ standard defines <tt>for_each</tt> as a <span class="emphasis"><i>non-modifying sequence operation</i></span>, and the function object passed to <tt>for_each</tt> should not modify its argument. 
 The requirements for the arguments of <tt>for_each</tt> are unnecessary strict, since as long as the iterators are <span class="emphasis"><i>mutable</i></span>, <tt>for_each</tt> accepts a function object that can have side-effects on their argument.
 Nevertheless, it is straightforward to provide another function template with the functionality of<tt>std::for_each</tt> but more fine-grained requirements for its arguments.
