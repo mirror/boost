@@ -8,17 +8,14 @@
     , class Difference = use_default
   >
   class indirect_iterator
-    : public iterator_adaptor<
-                 indirect_iterator<Iterator, Value, Access, Traversal, 
-                                   Reference, Difference>,
-                 Iterator,
-                 /* Value = see below */,
-                 CategoryOrTraversal,
-                 Reference,
-                 Difference>
   {
-      friend class iterator_core_access;
    public:
+      typedef /* see below */ value_type;
+      typedef /* see below */ reference;
+      typedef /* see below */ pointer;
+      typedef /* see below */ difference_type;
+      typedef /* see below */ iterator_category;
+
       indirect_iterator();
       indirect_iterator(Iterator x);
 
@@ -32,39 +29,62 @@
           > const& y
         , typename enable_if_convertible<Iterator2, Iterator>::type* = 0 // exposition
       );
-  private: // as-if specification
-      typename indirect_iterator::reference dereference() const
-      {
-          return **this->base();
-      }
   };
 
   template <class Dereferenceable>
   struct referent {
-    typedef /* see below */ type;
+    /* see below */
   };
 
 
-If ``Value`` is not ``use_default`` then the the argument for the
-``iterator_adaptor`` base class' ``Value`` parameter is ``Value`` with
-cv-qualifiers removed. If ``Value`` is ``use_default``, then the
-argument for the ``iterator_adaptor`` base class' ``Value`` parameter
-is computed as follows. We use the abbreviation
+The member types of ``indirect_iterator`` are defined according to the
+following pseudo-code.  We use the abbreviation
 ``V=iterator_traits<Iterator>::value_type`` and ``v`` is an object of
 type ``V``.::
 
-    if (*v returns a constant lvalue or an rvalue) then
-        referent<V>::type
-    else
-        add_const<referent<V>::type>::type
+  if (Value is use_default) then
+      if (referent<V> has member type) then
+          typedef remove_const<referent<V>::type> value_type;
+      else
+          typedef iterator_traits<V>::value_type value_type;
+  else
+      typedef remove_const<Value>::type value_type;
 
-The algorithm for the ``type`` member of ``referent`` traits class is
-as follows::
+  if (Reference is use_default) then
+      if (Value is use_default) then
+         if (referent<V> has member type) then
+            typedef referent<V>::type& reference;
+         else
+            typedef iterator_traits<V>::value_type& reference;
+      else
+          typedef Value& reference;
+  else
+      typedef Reference reference;
 
-    if (Dereferenceable is a class and has member element_type)
-        Dereferenceable::element_type
-    else
-        iterator_traits<Dereferenceable>::value_type
+  if (Value is use_default) then
+     if (referent<V> has member type) then
+	typedef referent<V>::type* pointer;
+     else
+	typedef iterator_traits<V>::value_type* pointer;
+  else
+      typedef Value* pointer;
+
+  if (Difference is use_default)
+      typedef iterator_traits<Iterator>::difference_type difference_type;
+  else
+      typedef Difference difference_type;
+
+
+The member ``indirect_iterator::iterator_category`` is a type that
+satisfies the requirements of the concepts modeled by the indirect
+iterator as specified in the following requirements section.
+(Should replace this with detailed description. -JGS)
+
+If the ``Dereferenceable`` template argument to ``referent`` is a
+class and has member ``element_type`` then ``referent`` 
+contains the following typedef::
+
+    typedef Dereferenceable::element_type type;
 
 
 ``indirect_iterator`` requirements
@@ -72,23 +92,23 @@ as follows::
 
 The ``CategoryOrTraversal`` argument shall be one of the standard
 iterator tags or ``use_default``. If ``CategoryOrTraversal`` is an
-iterator tag, ``indirect_iterator`` satisfies the requirements
-corresponding to the iterator tag.  The template parameter
-``Iterator`` argument shall meet the traversal requirements
-corresponding to the iterator tag and the requirements of Readable
-Iterator.  If ``CategoryOrTraversal`` is ``use_default`` then
+iterator tag, the template parameter ``Iterator`` argument shall meet
+the traversal requirements corresponding to the iterator tag and the
+requirements of Readable Iterator and ``indirect_iterator`` satisfies
+the requirements corresponding to the iterator tag.  If
+``CategoryOrTraversal`` is ``use_default`` then the ``Iterator``
+argument shall meet the requirements of Readable Iterator and
 ``indirect_iterator`` satisfies the requirements of the most refined
 standard traversal concept that is satisfied by the ``Iterator``
-argument. In this case the ``Iterator`` argument shall meet the
-requirements of Readable Iterator.
+argument. In this case
 
 The expression ``*v``, where ``v`` is an object of type
 ``iterator_traits<Iterator>::value_type``, must be a valid expression
-and must be convertible to ``iterator_adaptor::reference`` Also, there
-are further requirements on the
+and must be convertible to ``iterator_adaptor::reference``. Also,
+there are further requirements on the
 ``iterator_traits<Iterator>::value_type`` if the ``Value`` parameter
 is not ``use_default``, as implied by the algorithm for deducing the
-default.
+default for the ``value_type`` member.
 
 
 
