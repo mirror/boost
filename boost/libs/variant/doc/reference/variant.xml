@@ -93,7 +93,7 @@
         
         <requires>
           <simpara>The first bounded type of the <code>variant</code> (i.e.,
-            <code>T1</code> must fulfill the requirements of the
+            <code>T1</code>) must fulfill the requirements of the
             <link linkend="variant.concepts.default-constructible"><emphasis>DefaultConstructible</emphasis></link>
             concept.</simpara>
         </requires>
@@ -106,7 +106,7 @@
 
       <constructor>
         <parameter name="other">
-          <paramtype>const <classname>variant</classname> &amp;</paramtype>
+          <paramtype>const variant &amp;</paramtype>
         </parameter>
       
         <purpose>Copy constructor.</purpose>
@@ -161,7 +161,7 @@
         </template>
 
         <parameter name="operand">
-          <paramtype>const <classname>variant</classname>&lt;U1, U2, ..., UN&gt; &amp;</paramtype>
+          <paramtype>const variant&lt;U1, U2, ..., UN&gt; &amp;</paramtype>
         </parameter>
 
         <purpose>Templated conversion constructor.</purpose>
@@ -196,7 +196,7 @@
           <type>void</type>
 
           <parameter name="other">
-            <paramtype><classname>variant</classname> &amp;</paramtype>
+            <paramtype>variant &amp;</paramtype>
           </parameter>
 
           <description>
@@ -220,10 +220,10 @@
         </method>
         
         <method name="operator=">
-          <type><classname>variant</classname> &amp;</type>
+          <type>variant &amp;</type>
           
           <parameter name="rhs">
-            <paramtype>const <classname>variant</classname> &amp;</paramtype>
+            <paramtype>const variant &amp;</paramtype>
           </parameter>
 
           <purpose>Copy assignment operator.</purpose>
@@ -251,7 +251,7 @@
         </method>
 
         <method name="operator=">
-          <type><classname>variant</classname> &amp;</type>
+          <type>variant &amp;</type>
           
           <template>
             <template-type-parameter name="T"/>
@@ -263,10 +263,11 @@
 
           <purpose>Templated assignment operator.</purpose>
           <description>
-            <simpara>Converts <code>rhs</code> into a <code>variant</code>, 
-            then if the contained type of the converted <code>rhs</code> is
-            the same as the contained type of <code>*this</code>, then assigns
-            the contained value of the converted <code>rhs</code> into the
+            <simpara>First, converts <code>rhs</code> into a
+            <code>variant</code> (see above conversion constructors). Next,
+            if the contained type of the converted <code>rhs</code> is the
+            same as the contained type of <code>*this</code>, then assigns the
+            contained value of the converted <code>rhs</code> into the
             contained value of <code>*this</code>. Otherwise, copies the
             contained value of the converted <code>rhs</code> into
             <code>*this</code> (destroying the previously contained value of
@@ -319,17 +320,17 @@
 
         <method name="type" cv="const">
           <type>const <classname>std::type_info</classname> &amp;</type>
-          
+
           <returns>
-            <simpara>Returns the <code>typeid()</code>
-            of the contained value.</simpara>
+            <simpara>Returns the <code>typeid()</code> of the contained
+            value.</simpara>
           </returns>
-          
+
           <throws>Will not throw.</throws>
         </method>
       </method-group>
     </class>
-    
+
     <function name="swap">
       <template>
         <template-type-parameter name="T1"/>
@@ -339,11 +340,11 @@
       </template>
 
       <type>void</type>
-      
+
       <parameter name="lhs">
         <paramtype><classname>variant</classname>&lt;T1, T2, ..., TN&gt; &amp;</paramtype>
       </parameter>
-      
+
       <parameter name="rhs">
         <paramtype><classname>variant</classname>&lt;T1, T2, ..., TN&gt; &amp;</paramtype>
       </parameter>
