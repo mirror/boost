@@ -126,6 +126,21 @@ or
 	<td>date_period dp1(date(2002,Jan,1), date(2002,Jan,10));<br>
 	    date_period dp2(date(2002,Jan,2), date(2002,Jan,3));<br>
             dp2.intersection(dp1) --> dp2</td></tr>
+<tr><td>date_period <font class="func">is_adjacent</font>(date_period) const</td>
+        <td>Check if two periods are adjacent, but not overlapping.</td>
+	<td>date_period dp1(date(2002,Jan,1), date(2002,Jan,3));<br>
+	    date_period dp2(date(2002,Jan,3), date(2002,Jan,10));<br>
+            dp2.is_adjacent(dp1) --> true</td></tr>
+<tr><td>date_period <font class="func">is_after</font>(date) const</td>
+        <td>Determine the period is after a given date.</td>
+	<td>date_period dp1(date(2002,Jan,10), date(2002,Jan,30));<br>
+	    date d(2002,Jan,3);<br>
+            dp1.is_after(d) --> true</td></tr>
+<tr><td>date_period <font class="func">is_before</font>(date) const</td>
+        <td>Determine the period is before a given date.</td>
+	<td>date_period dp1(date(2002,Jan,1), date(2002,Jan,3));<br>
+	    date d(2002,Jan,10);<br>
+            dp1.is_before(d) --> true</td></tr>
 <tr><td>date_period <font class="func">merge</font>(date_period) const</td>
         <td>Returns union of two periods. Null if no intersection.</td>
 	<td>date_period dp1(date(2002,Jan,1), date(2002,Jan,10));<br>
@@ -159,7 +174,7 @@ or
 <tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
 <tr><td>operator&lt;&lt;</td> 
         <td>ostream operator for date_period.  Uses facet to format time points.  Typical output: [2002-Jan-01/2002-Jan-31].</td>
-	<td>std::cout &lt;&lt; std::endl;</td></tr>
+	<td>std::cout &lt;&lt; dp &lt;&lt; std::endl;</td></tr>
 <tr><td>operator==, operator!=,<br> operator&gt;, operator&lt; 
         <td>A full complement of comparison operators</td>
 	<td>dp1 == dp2, etc</td></tr>
@@ -177,7 +192,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sat Nov  2 16:51:11 MST 2002
+Last modified: Tue May 27 07:52:08 MST 2003
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
