@@ -31,12 +31,12 @@ struct integral_c
 
     // have to #ifdef here: some compilers don't like the 'N + 1' form (MSVC),
     // while some other don't like 'value + 1' (Borland)
-#if !defined(__BORLANDC__)
-    typedef integral_c<T, value + 1> next;
-    typedef integral_c<T, value - 1> prior;
-#else
+#if defined(__BORLANDC__) || defined(__IBMCPP__)
     typedef integral_c<T, N + 1> next;
     typedef integral_c<T, N - 1> prior;
+#else
+    typedef integral_c<T, value + 1> next;
+    typedef integral_c<T, value - 1> prior;
 #endif
 
     // enables uniform function call syntax for families of overloaded 
