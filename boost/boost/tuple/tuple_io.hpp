@@ -42,9 +42,16 @@
 // use the one-arg one, which one should get with <cctype> but there seem
 // to be exceptions to this.
 
+#if !defined (BOOST_NO_STD_LOCALE)
+
 #include <locale> // for two-arg isspace
+
+#else 
+
 #include <cctype> // for one-arg (old) isspace 
 #include <ctype.h> // Metrowerks does not find one-arg isspace from cctype
+
+#endif
 
 namespace boost {
 namespace tuples {
