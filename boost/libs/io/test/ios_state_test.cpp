@@ -1,24 +1,25 @@
 //  Boost ios_state_test.cpp test file  --------------------------------------//
 
-//  (C) Copyright Daryle Walker 2002.  Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears 
-//  in all copies.  This software is provided "as is" without express or implied 
-//  warranty, and with no claim as to its suitability for any purpose. 
+//  (C) Copyright Daryle Walker 2002, 2003.  Permission to copy, use, modify,
+//  sell and distribute this software is granted provided this copyright notice
+//  appears in all copies.  This software is provided "as is" without express or
+//  implied warranty, and with no claim as to its suitability for any purpose.
 
 //  Revision History
+//   15 Jun 2003  Adjust to changes in Boost.Test (Daryle Walker)
 //   26 Feb 2002  Initial version (Daryle Walker)
 
-#define  BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>  // main, BOOST_TEST, etc.
+#include <boost/test/minimal.hpp>  // main, BOOST_CHECK, etc.
 
 #include <boost/cstdlib.hpp>       // for boost::exit_success
 #include <boost/io/ios_state.hpp>  // for boost::io::ios_flags_saver, etc.
 
+#include <cstddef>    // for std::size_t
 #include <iomanip>    // for std::setw
 #include <ios>        // for std::ios_base, std::streamsize, etc.
 #include <iostream>   // for std::cout, etc.
 #include <istream>    // for std::istream
-#include <locale>     // for std::numpunct_byname, std::locale
+#include <locale>     // for std::numpunct, std::locale
 #include <ostream>    // for std::endl, std::ostream
 #include <streambuf>  // for std::streambuf
 #include <string>     // for std::string
@@ -26,16 +27,18 @@
 
 // Facet with the bool names spelled backwards
 class backward_bool_names
-    : public std::numpunct_byname<char>
+    : public std::numpunct<char>
 {
-    typedef std::numpunct_byname<char>  base_type;
+    typedef std::numpunct<char>  base_type;
 
 public:
-    explicit  backward_bool_names( char const *name )
-        : base_type( name )
+    explicit  backward_bool_names( std::size_t refs = 0 )
+        : base_type( refs )
         {}
 
 protected:
+    virtual ~backward_bool_names() {}
+
     virtual  base_type::string_type  do_truename() const
         { return "eurt"; }
     virtual  base_type::string_type  do_falsename() const
@@ -97,33 +100,33 @@ test_main
     saver_tests_1( cin, cout, std::cerr );
 
     // Check if states are back to normal
-    BOOST_TEST( &cin == cout.pword(my_index) );
-    BOOST_TEST( 42L == cout.iword(my_index) );
-    BOOST_TEST( cout_locale == cout.getloc() );
-    BOOST_TEST( cout_fill == cout.fill() );
-    BOOST_TEST( cout_sb == cout.rdbuf() );
-    BOOST_TEST( cin_tie == cin.tie() );
-    BOOST_TEST( cout_exceptions == cout.exceptions() );
-    BOOST_TEST( cout_iostate == cout.rdstate() );
-    BOOST_TEST( cout_width == cout.width() );
-    BOOST_TEST( cout_precision == cout.precision() );
-    BOOST_TEST( cout_flags == cout.flags() );
+    BOOST_CHECK( &cin == cout.pword(my_index) );
+    BOOST_CHECK( 42L == cout.iword(my_index) );
+    BOOST_CHECK( cout_locale == cout.getloc() );
+    BOOST_CHECK( cout_fill == cout.fill() );
+    BOOST_CHECK( cout_sb == cout.rdbuf() );
+    BOOST_CHECK( cin_tie == cin.tie() );
+    BOOST_CHECK( cout_exceptions == cout.exceptions() );
+    BOOST_CHECK( cout_iostate == cout.rdstate() );
+    BOOST_CHECK( cout_width == cout.width() );
+    BOOST_CHECK( cout_precision == cout.precision() );
+    BOOST_CHECK( cout_flags == cout.flags() );
 
     // Run saver tests with combined saving and changing
     saver_tests_2( cin, cout, std::cerr );
 
     // Check if states are back to normal
-    BOOST_TEST( &cin == cout.pword(my_index) );
-    BOOST_TEST( 42L == cout.iword(my_index) );
-    BOOST_TEST( cout_locale == cout.getloc() );
-    BOOST_TEST( cout_fill == cout.fill() );
-    BOOST_TEST( cout_sb == cout.rdbuf() );
-    BOOST_TEST( cin_tie == cin.tie() );
-    BOOST_TEST( cout_exceptions == cout.exceptions() );
-    BOOST_TEST( cout_iostate == cout.rdstate() );
-    BOOST_TEST( cout_width == cout.width() );
-    BOOST_TEST( cout_precision == cout.precision() );
-    BOOST_TEST( cout_flags == cout.flags() );
+    BOOST_CHECK( &cin == cout.pword(my_index) );
+    BOOST_CHECK( 42L == cout.iword(my_index) );
+    BOOST_CHECK( cout_locale == cout.getloc() );
+    BOOST_CHECK( cout_fill == cout.fill() );
+    BOOST_CHECK( cout_sb == cout.rdbuf() );
+    BOOST_CHECK( cin_tie == cin.tie() );
+    BOOST_CHECK( cout_exceptions == cout.exceptions() );
+    BOOST_CHECK( cout_iostate == cout.rdstate() );
+    BOOST_CHECK( cout_width == cout.width() );
+    BOOST_CHECK( cout_precision == cout.precision() );
+    BOOST_CHECK( cout_flags == cout.flags() );
 
     return boost::exit_success;
 }
@@ -151,7 +154,7 @@ saver_tests_1
     boost::io::ios_iword_saver const      iis( output, my_index );
     boost::io::ios_pword_saver const      ipws( output, my_index );
 
-    locale  loc( locale::classic(), new backward_bool_names("") );
+    locale  loc( locale::classic(), new backward_bool_names );
 
     input.tie( &err );
     output.rdbuf( err.rdbuf() );
@@ -169,8 +172,8 @@ saver_tests_1
     output.imbue( loc );
     output << '\t' << test_bool << '\n';
 
-    BOOST_TEST( &err == output.pword(my_index) );
-    BOOST_TEST( 69L == output.iword(my_index) );
+    BOOST_CHECK( &err == output.pword(my_index) );
+    BOOST_CHECK( 69L == output.iword(my_index) );
 
     try
     {
@@ -184,7 +187,7 @@ saver_tests_1
     catch ( ios_base::failure &f )
     {
         err << "Got the expected I/O failure: \"" << f.what() << "\".\n";
-        BOOST_TEST( output.exceptions() == ios_base::goodbit );
+        BOOST_CHECK( output.exceptions() == ios_base::goodbit );
     }
     catch ( ... )
     {
@@ -224,12 +227,12 @@ saver_tests_2
     output.put( '\n' );
 
     locale                             loc( locale::classic(),
-     new backward_bool_names("") );
+     new backward_bool_names );
     boost::io::ios_locale_saver const  ils( output, loc );
     output << '\t' << test_bool << '\n';
 
-    BOOST_TEST( &err == output.pword(my_index) );
-    BOOST_TEST( 69L == output.iword(my_index) );
+    BOOST_CHECK( &err == output.pword(my_index) );
+    BOOST_CHECK( 69L == output.iword(my_index) );
 
     try
     {
@@ -242,7 +245,7 @@ saver_tests_2
     catch ( ios_base::failure &f )
     {
         err << "Got the expected I/O failure: \"" << f.what() << "\".\n";
-        BOOST_TEST( output.exceptions() == ios_base::goodbit );
+        BOOST_CHECK( output.exceptions() == ios_base::goodbit );
     }
     catch ( ... )
     {
