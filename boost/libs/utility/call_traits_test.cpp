@@ -193,14 +193,14 @@ int main(int argc, char *argv[ ])
    int i = 2;
    c2(i);
    int* pi = &i;
-#if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
+#if (defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)) && !defined(__ICL)
    call_traits_checker<int*> c3;
    c3(pi);
    call_traits_checker<int&> c4;
    c4(i);
    call_traits_checker<const int&> c5;
    c5(i);
-#if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__MWERKS__)
    int a[2] = {1,2};
    call_traits_checker<int[2]> c6;
    c6(a);
@@ -238,7 +238,7 @@ int main(int argc, char *argv[ ])
    type_test(int&, boost::call_traits<int&>::reference)
    type_test(const int&, boost::call_traits<int&>::const_reference)
    type_test(int&, boost::call_traits<int&>::param_type)
-#if !(defined(__GNUC__) && (__GNUC__ < 3))
+#if !(defined(__GNUC__) && (__GNUC__ < 4))
    type_test(int&, boost::call_traits<cr_type>::value_type)
    type_test(int&, boost::call_traits<cr_type>::reference)
    type_test(const int&, boost::call_traits<cr_type>::const_reference)
