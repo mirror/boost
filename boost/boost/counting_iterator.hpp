@@ -135,7 +135,15 @@ namespace detail {
     // For a while, this wasn't true, but we rely on it below. This is a regression assert.
     BOOST_STATIC_ASSERT(::boost::is_integral<char>::value);
 # ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    BOOST_STATIC_CONSTANT(bool, value = std::numeric_limits<T>::is_specialized);
+#  if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX)
+    BOOST_STATIC_CONSTANT(bool,
+                          value = (
+                              std::numeric_limits<T>::is_specialized
+                              | boost::is_same<T,long long>::value
+                              | boost::is_same<T,unsigned long long>::value));
+#  else
+     BOOST_STATIC_CONSTANT(bool, value = std::numeric_limits<T>::is_specialized);
+#  endif
 # else
 #  if !defined(__BORLANDC__)
     BOOST_STATIC_CONSTANT(bool, value = (
@@ -173,14 +181,17 @@ struct counting_iterator_traits {
 template <class Incrementable>
 struct counting_iterator_policies : public default_iterator_policies
 {
-    const Incrementable& dereference(type<const Incrementable&>, const Incrementable& i) const
-        { return i; }
-
-    template <class Difference, class Iterator1, class Iterator2>
-    Difference distance(type<Difference>, const Iterator1& x,
-                        const Iterator2& y) const
+    template <class IteratorAdaptor>
+    typename IteratorAdaptor::reference dereference(const IteratorAdaptor& i) const
+        { return i.base(); }
+    
+    template <class Iterator1, class Iterator2>
+    typename Iterator1::difference_type distance(
+        const Iterator1& x, const Iterator2& y) const
     {
-        return boost::detail::any_distance<Difference>(x, y);//,(Difference*)());
+        typedef typename Iterator1::difference_type difference_type;
+        return boost::detail::any_distance<difference_type>(
+            x.base(), y.base());
     }
 };
 

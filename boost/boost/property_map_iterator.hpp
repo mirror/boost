@@ -23,10 +23,11 @@ namespace boost {
       lvalue_pmap_iter_policies() { }
       lvalue_pmap_iter_policies(LvaluePropertyMap m) : m_map(m) {}
 
-      template <class Ref, class Iter>
-      Ref dereference(type<Ref>, const Iter& i) const 
+      template <class Iter>
+      typename Iter::reference
+      dereference(const Iter& i) const 
       {
-        return m_map[*i];
+        return m_map[*i.base()];
       }
     private:
       LvaluePropertyMap m_map;
@@ -38,10 +39,11 @@ namespace boost {
       readable_pmap_iter_policies() { }
       readable_pmap_iter_policies(ReadablePropertyMap m) : m_map(m) {}
 
-      template <class Ref, class Iter>
-      Ref dereference(type<Ref>, const Iter& i) const 
+      template <class Iter>
+      typename Iter::reference
+      dereference(const Iter& i) const 
       {
-        return get(m_map, *i);
+        return get(m_map, *i.base());
       }
     private:
       ReadablePropertyMap m_map;
