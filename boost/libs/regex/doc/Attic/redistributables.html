@@ -25,25 +25,27 @@
       <HR>
       <p></p>
       <P>If you are using Microsoft or Borland C++ and link to a dll version of the run 
-         time library, then you will also link to one of the dll versions of boost.regex. 
-         While these dll's are redistributable, there are no "standard" versions, so 
-         when installing on the users PC, you should place these in a directory private 
-         to your application, and not in the PC's directory path. Note that if you link 
-         to a static version of your run time library, then you will also link to a 
-         static version of boost.regex and no dll's will need to be distributed. The 
-         possible boost.regex dll and library names are computed according to the following 
-         formula:<BR>
+         time library, then you will also link to one of the dll versions of 
+         boost.regex. While these dll's are redistributable, there are no "standard" 
+         versions, so when installing on the users PC, you should place these in a 
+         directory private to your application, and not in the PC's directory path. Note 
+         that if you link to a static version of your run time library, then you will 
+         also link to a static version of boost.regex and no dll's will need to be 
+         distributed. The possible boost.regex dll and library names are computed 
+         according to the following formula:<BR>
       </P>
       <P></P>
-      <P>"boost_regex_"<BR>
+      <P>BOOST_LIB_PREFIX<BR>
+         + "boost_regex_"<BR>
          + BOOST_LIB_TOOLSET<BR>
          + "_"<BR>
          + BOOST_LIB_THREAD_OPT<BR>
          + BOOST_LIB_RT_OPT<BR>
-         + BOOST_LIB_LINK_OPT<BR>
          + BOOST_LIB_DEBUG_OPT<BR>
          <BR>
-         These are defined as:<BR>
+         These are defined as:</P>
+      <P>BOOST_LIB_PREFIX: Either "lib" if this is a static link library, 
+         or&nbsp;nothing for dynamic / shared&nbsp;libraries.<BR>
          <BR>
          BOOST_LIB_TOOLSET: The compiler toolset name (vc6, vc7, bcb5 etc).<BR>
          <BR>
@@ -72,7 +74,7 @@
          17 May 2003 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" -->
       </p>
-      <P><I>© Copyright <a href="mailto:jm@regex.fsnet.co.uk">John Maddock</a>&nbsp;1998-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></I></P>
+      <P><I>© Copyright <a href="mailto:jm@regex.fsnet.co.uk">John Maddock</a>&nbsp;1998-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></I></P>
       <P align="left"><I>Permission to use, copy, modify, distribute and sell this software 
             and its documentation for any purpose is hereby granted without fee, provided 
             that the above copyright notice appear in all copies and that both that 
@@ -81,4 +83,3 @@
             for any purpose. It is provided "as is" without express or implied warranty.</I></P>
    </body>
 </html>
-

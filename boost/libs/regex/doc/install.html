@@ -128,11 +128,11 @@
          project; the headers will automatically select the correct .lib file for your 
          build mode and tell the linker to include it.
       </P>
-      <P>Note that if you want to statically link to the regex library when using the 
-         dynamic C++ runtime, define BOOST_REGEX_STATIC_LINK when building your project 
-         (this only has an effect for release builds). If you want to add the source 
-         directly to your project then define BOOST_REGEX_NO_LIB to disable automatic 
-         library selection.</P>
+      <P>
+         Note that if you want to dynamically link to the regex library when using the 
+         dynamic C++ runtime, define BOOST_REGEX_DYN_LINK when building your project. If 
+         you want to add the source directly to your project then define 
+         BOOST_REGEX_NO_LIB to disable automatic library selection.</P>
       <P><STRONG><I>Important</I></STRONG><EM>: there have been some reports of 
             compiler-optimization bugs affecting this library, (particularly with VC6 
             versions prior to service patch 5) the workaround is to build the library using 
@@ -152,11 +152,12 @@
       <P>If you are building with the full STLPort v4.x, then use the vc6-stlport.mak 
          file provided and set the environment variable STLPORT_PATH to point to the 
          location of your STLport installation (Note that the full STLPort libraries 
-         appear not to support single-thread static builds).
+         appear not to support single-thread static builds).&nbsp;
          <BR>
-         &nbsp;
+         &nbsp;&nbsp;
          <BR>
-         &nbsp;
+         If you are building your application with /Zc:wchar_t then you will need to 
+         modify the makefile to add /Zc:wchar_t before building the library.
       </P>
       <P><B><A name="gcc"></A>GCC(2.95 and 3.x)</B>
       </P>
@@ -225,7 +226,7 @@
          17 May 2003 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" -->
       </p>
-      <P><I>© Copyright <a href="mailto:jm@regex.fsnet.co.uk">John Maddock</a>&nbsp;1998-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></I></P>
+      <P><I>© Copyright <a href="mailto:jm@regex.fsnet.co.uk">John Maddock</a>&nbsp;1998-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></I></P>
       <P align="left"><I>Permission to use, copy, modify, distribute and sell this software 
             and its documentation for any purpose is hereby granted without fee, provided 
             that the above copyright notice appear in all copies and that both that 
@@ -234,4 +235,3 @@
             for any purpose. It is provided "as is" without express or implied warranty.</I></P>
    </body>
 </html>
-
