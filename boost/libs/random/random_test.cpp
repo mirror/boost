@@ -290,5 +290,9 @@ int test_main(int, char*[])
   r2();
   r2();
 
+  // bug report from Fernando Cacciola
+  boost::minstd_rand rnd;
+  boost::uniform_int<boost::minstd_rand> x(rnd,0,8361);  // --> This CTOR loops forever.
+
   return 0;
 }
