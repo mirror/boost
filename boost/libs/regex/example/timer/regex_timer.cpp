@@ -117,9 +117,9 @@ int main()
       std::copy(s1.begin(), s1.end(), string_out_iterator<std::wstring>(ws1));
 #endif
       try{
-         ex.assign(s1.begin(), s1.end());
+         ex.assign(s1);
 #ifndef BOOST_RE_NO_WCSTRING
-         wex.assign(ws1.begin(), ws1.end());
+         wex.assign(ws1);
 #endif
       }
       catch(std::exception& e)
