@@ -24,7 +24,7 @@
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/detail/access_control.hpp>
-#include <boost/iostreams/detail/character.hpp>
+#include <boost/iostreams/detail/translate_int_type.hpp>
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/traits.hpp>           // is_filter.

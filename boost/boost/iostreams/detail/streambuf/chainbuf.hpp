@@ -15,7 +15,7 @@
 #include <boost/config.hpp>                    // BOOST_MSVC, template friends.
 #include <boost/iostreams/detail/access_control.hpp>
 #include <boost/iostreams/detail/chain.hpp>
-#include <boost/iostreams/detail/character.hpp>
+#include <boost/iostreams/detail/translate_int_type.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/noncopyable.hpp>
@@ -80,7 +80,7 @@ private:
     typedef typename Chain::traits_type                      chain_traits;
     typename chain_traits::int_type 
     static translate(typename std_traits::int_type c)
-    { return translate_char<std_traits, chain_traits>(c); }
+    { return translate_int_type<std_traits, chain_traits>(c); }
 
     delegate_type& delegate() { return static_cast<delegate_type&>(*chain_); }
     void get_pointers()
