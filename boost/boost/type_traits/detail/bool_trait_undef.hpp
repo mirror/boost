@@ -16,6 +16,8 @@
 
 // no include guards, the header is intended for multiple inclusion!
 
+#undef BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL
+#undef BOOST_TT_AUX_BOOL_C_BASE
 #undef BOOST_TT_AUX_BOOL_TRAIT_DEF1
 #undef BOOST_TT_AUX_BOOL_TRAIT_DEF2
 #undef BOOST_TT_AUX_BOOL_TRAIT_SPEC1
