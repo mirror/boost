@@ -33,6 +33,12 @@ struct test_class
   test_class(int i=0):int_member(i),int_cmember(i){}
   test_class(int i,int j):int_member(i),int_cmember(j){}
 
+  test_class& operator=(const test_class& x)
+  {
+    int_member=x.int_member;
+    return *this;
+  }
+
   bool operator<(const test_class& x)const
   {
     if(int_member<x.int_member)return true;
