@@ -24,7 +24,7 @@
 #include <exception>          // for exception, bad_exception
 #include <stdexcept>          // for std exception hierarchy
 #include <boost/cstdlib.hpp>  // for exit codes
-# if __GNUC__ != 2 || __GNUC_MINOR__ > 95
+# if __GNUC__ != 2 || __GNUC_MINOR__ > 96
 #   include <ostream>         // for ostream
 # else
 #   include <iostream> // workaround GNU missing ostream header
