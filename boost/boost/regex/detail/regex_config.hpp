@@ -76,7 +76,7 @@ full list of macros and their usage.
    #define BOOST_RE_PLATFORM_W32
 #endif
 
-#if defined(__MWERKS__) || defined(__DECCXX)
+#if (defined(__MSL_CPP__) && __MSL_CPP__ < 0x6209) || defined(__DECCXX)
 // no std::messages facet
 #define BOOST_RE_NO_MESSAGES
 #define BOOST_RE_NO_CAT
@@ -295,10 +295,6 @@ full list of macros and their usage.
    	#define BOOST_RE_NO_WCSTRING
    #endif
 
-#endif
-
-#ifdef __MWERKS__
-   #define BOOST_RE_NO_CAT
 #endif
 
 #ifdef __SUNPRO_CC

@@ -183,7 +183,7 @@ public:
    typedef std::string string_type;
    typedef int locale_type;
 
-   static size_t BOOST_RE_CALL length(const char_type* p)
+   static std::size_t BOOST_RE_CALL length(const char_type* p)
    {
       return std::strlen(p);
    }
@@ -267,7 +267,7 @@ public:
    typedef unsigned int size_type;
    typedef std::basic_string<wchar_t> string_type;
    typedef int locale_type; 
-   static size_t BOOST_RE_CALL length(const char_type* p)
+   static std::size_t BOOST_RE_CALL length(const char_type* p)
    {
       return std::wcslen(p);
    }
@@ -390,7 +390,7 @@ public:
    typedef std::string string_type;
    typedef int locale_type;
 
-   static size_t BOOST_RE_CALL length(const char_type* p)
+   static std::size_t BOOST_RE_CALL length(const char_type* p)
    {
       return std::strlen(p);
    }
@@ -464,7 +464,7 @@ public:
    typedef unsigned int size_type;
    typedef std::basic_string<wchar_t> string_type;
    typedef int locale_type; 
-   static size_t BOOST_RE_CALL length(const char_type* p)
+   static std::size_t BOOST_RE_CALL length(const char_type* p)
    {
       return std::wcslen(p);
    }
@@ -607,7 +607,7 @@ public:
    cpp_regex_traits();
    ~cpp_regex_traits();
 
-   static size_t BOOST_RE_CALL length(const char_type* p)
+   static std::size_t BOOST_RE_CALL length(const char_type* p)
    {
       return std::strlen(p);
    }
@@ -693,7 +693,7 @@ private:
 
 public:
 
-   static size_t BOOST_RE_CALL length(const char_type* p)
+   static std::size_t BOOST_RE_CALL length(const char_type* p)
    {
       return std::wcslen(p);
    }
