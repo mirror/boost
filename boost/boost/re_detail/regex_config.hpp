@@ -269,6 +269,10 @@ Do not change this file unless you really really have to, add options to
 
 #endif
 
+#ifdef __MWERKS__
+   #define BOOST_RE_NO_CAT
+#endif
+
 #ifdef __SUNPRO_CC
    #if (__SUNPRO_CC < 0x500)
       #define BOOST_RE_NO_NAMESPACES
@@ -605,8 +609,9 @@ typedef unsigned long jm_uintfast32_t;
 
       /* unknown STL version
        try the defaults: */
-
-      #define BOOST_RE_DISTANCE(i, j, n) std::distance(i, j, n)do { n = 0; std::distance(i, j, n); } while(false)
+    
+      // dwa 10/05/00 Why were we assuming a broken distance in this case?
+      #define BOOST_RE_DISTANCE(i, j, n)  (n = std::distance(i, j))
       /* these may be suspect for older libraries */
       #define BOOST_RE_OUTPUT_ITERATOR(T, D) std::iterator<std::output_iterator_tag, T, D, T*, T&>
       #define BOOST_RE_INPUT_ITERATOR(T, D) std::iterator<std::input_iterator_tag, T, D, T*, T&>
@@ -770,15 +775,15 @@ public:
    typedef const T*  const_pointer;
    typedef T&        reference;
    typedef const T&  const_reference;
-   typedef size_t    size_type;
+   typedef std::size_t    size_type;
    typedef std::ptrdiff_t difference_type;
 
    re_alloc_binder(const Allocator& i);
    re_alloc_binder(const re_alloc_binder& o) : Allocator(o) {}
 
-   T* BOOST_RE_CALL allocate(size_t n, size_t /* hint */ = 0)
+   T* BOOST_RE_CALL allocate(std::size_t n, std::size_t /* hint */ = 0)
       { return 0 == n ? 0 : (T*) this->Allocator::allocate(n * sizeof(T)); }
-   void BOOST_RE_CALL deallocate(T *p, size_t n)
+   void BOOST_RE_CALL deallocate(T *p, std::size_t n)
              { if (0 != n) this->Allocator::deallocate((char*)p, n * sizeof (T)); }
 
    pointer BOOST_RE_CALL address(reference x) const { return &x; }
@@ -825,7 +830,7 @@ public:
    typedef const char*  const_pointer;
    typedef char&        reference;
    typedef const char&  const_reference;
-   typedef size_t    size_type;
+   typedef std::size_t    size_type;
    typedef std::ptrdiff_t difference_type;
 
    pointer BOOST_RE_CALL address(reference x) const { return &x; }
@@ -833,11 +838,11 @@ public:
    static size_type BOOST_RE_CALL max_size() { return (size_type)-1; }
    static void BOOST_RE_CALL construct(pointer , const char& ) {  }
    void BOOST_RE_CALL destroy(pointer ) {  }
-   static void * BOOST_RE_CALL allocate(size_t n, size_t /* hint */ = 0)
+   static void * BOOST_RE_CALL allocate(std::size_t n, std::size_t /* hint */ = 0)
    {
       return ::operator new(n);
    }
-   static void BOOST_RE_CALL deallocate(void *p, size_t /*n*/ )
+   static void BOOST_RE_CALL deallocate(void *p, std::size_t /*n*/ )
    {
       ::operator delete(p);
    }
