@@ -118,6 +118,8 @@ namespace export_impl
 
 } // namespace export_impl
 
+#if defined(BOOST_MSVC) || defined(__COMO__)
+// work around for less conforming compilers
 template<class T, class ASeq>
 struct export_generator {
     export_generator(){
@@ -130,6 +132,21 @@ template<class T, class ASeq>
 const export_generator<T, ASeq> 
     export_generator<T, ASeq>::instance;
 
+#else
+// strictly conforming
+template<class T, class ASeq>
+struct export_generator {
+    export_generator(int){
+        export_impl::for_each_archive<ASeq, T>::instantiate();
+    }
+    static const export_generator instance;
+};
+
+template<class T, class ASeq>
+const export_generator<T, ASeq> 
+    export_generator<T, ASeq>::instance(0);
+#endif
+
 // instantiation of this template creates a static object.
 template<class T, class ASeq>
 struct guid_initializer {
@@ -138,21 +155,24 @@ struct guid_initializer {
     };
     struct non_empty {
         typedef BOOST_DEDUCED_TYPENAME boost::serialization::type_info_implementation<T>::type eti_type;
-        static void BOOST_FORCE_INCLUDE(key_register(const char *key)){
+        static void key_register(const char *key){
             boost::serialization::extended_type_info * eti = eti_type::get_instance();
             eti->key_register(key);
         }
     };
     static const guid_initializer instance;
-    guid_initializer(const char *key){
-        typedef BOOST_DEDUCED_TYPENAME mpl::apply_if<
-            mpl::empty<ASeq>,
-            mpl::identity<empty>,
-            mpl::identity<non_empty>
-        >::type typex;
-        typex::key_register(key);
-    }
+    /* BOOST_DLLEXPORT */  guid_initializer(const char *key) BOOST_USED ;
 };
+
+template<class T, class ASeq>
+/* BOOST_DLLEXPORT */ guid_initializer<T, ASeq>::guid_initializer(const char *key){
+    typedef BOOST_DEDUCED_TYPENAME mpl::apply_if<
+        mpl::empty<ASeq>,
+        mpl::identity<empty>,
+        mpl::identity<non_empty>
+    >::type typex;
+    typex::key_register(key);
+}
 
 template<class T, class ASeq>
 const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
@@ -171,29 +191,22 @@ const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
 #if ! defined(BOOST_ARCHIVE_EXPORT)
     #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)
 
-// gcc needs special treatment
-#elif defined(__GNUC__) && (__GNUC__ * 10 +  __GNUC_MINOR__) < 34 
-    #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
-        namespace boost { namespace archive { namespace detail {     \
-        template                                                     \
-        const export_generator<T, ASEQ >                             \
-            export_generator<T, ASEQ >::instance;                    \
-        template                                                     \
-        const guid_initializer<T, ASEQ >                             \
-        BOOST_FORCE_INCLUDE((guid_initializer<T, ASEQ >::instance(K))) ;\
-        } } }                                                        \
-        /**/
-#else
+// these compilers need special treatment
+#elif defined(BOOST_MSVC) || defined(__COMO__) || defined(__MWERKS__)
+// work around for less conforming compilers
     namespace boost { namespace archive { namespace detail {
     template<class T, class ASeq>
-    const guid_initializer<T, ASeq> & 
-    BOOST_FORCE_INCLUDE(boost_template_instantiate(T &, ASeq &)){
+    BOOST_DLLEXPORT const guid_initializer<T, ASeq> &
+    boost_template_instantiate(T &, ASeq &) BOOST_USED;
+    template<class T, class ASeq>
+    BOOST_DLLEXPORT const guid_initializer<T, ASeq> &
+    boost_template_instantiate(T &, ASeq &){
         return guid_initializer<T, ASeq>::instance;
     }
     } } }
     #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
         namespace boost { namespace archive { namespace detail {     \
-        template<>                                                   \
+        template                                                     \
         const export_generator<T, ASEQ >                             \
             export_generator<T, ASEQ >::instance;                    \
         template<>                                                   \
@@ -202,6 +215,18 @@ const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
         template<>                                                   \
         const guid_initializer<T, ASEQ> &                            \
         boost_template_instantiate(T &, ASEQ &);                     \
+        } } }                                                        \
+        /**/
+#else
+// strictly conforming
+    #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
+        namespace boost { namespace archive { namespace detail {     \
+        template                                                     \
+        const export_generator<T, ASEQ >                             \
+            export_generator<T, ASEQ >::instance(0);                 \
+        template                                                     \
+        const guid_initializer<T, ASEQ >                             \
+            guid_initializer<T, ASEQ >::instance(K);                 \
         } } }                                                        \
         /**/
 #endif

@@ -104,35 +104,17 @@ template<class Archive, class T>
 class oserializer : public basic_oserializer
 {
 private:
-    static void BOOST_FORCE_INCLUDE(static_save_object_data(
-        basic_oarchive & ar,    
-        const void *x,
-        unsigned int version
-    )){
-        // make sure call is routed through the highest interface that might
-        // be specialized by the user.
-        boost::serialization::serialize_adl(
-            boost::smart_cast_reference<Archive &>(ar),
-            * static_cast<T *>(const_cast<void *>(x)),
-            version
-        );
-    }
-    // make sure appropriate member function is instantiated
-    void (*f)(basic_oarchive &, const void *, unsigned int);
+    static oserializer instance;
 public:
     explicit oserializer() :
         basic_oserializer(
             * boost::serialization::type_info_implementation<T>::type::get_instance()
         )
-    {
-        f = static_save_object_data;
-    }
-    virtual void save_object_data(
+    {}
+    virtual BOOST_DLLEXPORT void save_object_data(
         basic_oarchive & ar,    
         const void *x
-    ) const {
-        static_save_object_data(ar, x, static_cast<unsigned int>(version()));
-    }
+    ) const BOOST_USED ;
     virtual bool class_info() const {
         return boost::serialization::implementation_level<T>::value 
             >= boost::serialization::object_class_info;
@@ -155,6 +137,20 @@ public:
     virtual ~oserializer(){}
 };
 
+template<class Archive, class T>
+inline BOOST_DLLEXPORT void oserializer<Archive, T>::save_object_data(
+    basic_oarchive & ar,    
+    const void *x
+) const {
+    // make sure call is routed through the highest interface that might
+    // be specialized by the user.
+    boost::serialization::serialize_adl(
+        boost::smart_cast_reference<Archive &>(ar),
+        * static_cast<T *>(const_cast<void *>(x)),
+        version()
+    );
+}
+
 // instantiation of this template creates a static object.  Note inversion of
 // normal argument order to workaround bizarre error in MSVC 6.0 which only
 // manifests iftself during compiler time.
@@ -162,35 +158,14 @@ template<class T, class Archive>
 class pointer_oserializer : public archive_pointer_oserializer<Archive> 
 {
 private:
-    static void BOOST_FORCE_INCLUDE(static_save_object_ptr(
-        basic_oarchive & ar,
-        const void * x
-    )){
-        assert(NULL != x);
-        // make sure call is routed through the highest interface that might
-        // be specialized by the user.
-        T * t = static_cast<T *>(const_cast<void *>(x));
-        const unsigned int file_version =
-            boost::serialization::version<T>::value;
-        boost::serialization::save_ptr_adl(
-            boost::smart_cast_reference<Archive &>(ar), 
-            t, 
-            file_version
-        );
-    }
-    void (*f)(basic_oarchive &, const void *);
-
     static const pointer_oserializer instance;
     virtual const basic_oserializer & get_basic_serializer() const {
         return oserializer<Archive, T>::instantiate();
     }
-    virtual void save_object_ptr(
+    virtual BOOST_DLLEXPORT void save_object_ptr(
         basic_oarchive & ar,
         const void * x
-    ) const {
-        assert(NULL != x);
-        static_save_object_ptr(ar, x);
-    }
+    ) const BOOST_USED ;
 public:
     explicit pointer_oserializer() :
         archive_pointer_oserializer<Archive>(
@@ -198,15 +173,31 @@ public:
         )
     {
         // make sure appropriate member function is instantiated
-        f = static_save_object_ptr;
         basic_oserializer & bos = oserializer<Archive, T>::instantiate();
         bos.set_bpos(this);
     }
-    static const pointer_oserializer & instantiate() {
-        return instance;
-    }
+    //static const pointer_oserializer BOOST_FORCE_INCLUDE_DECL(& instantiate());
+    static BOOST_DLLEXPORT const pointer_oserializer & instantiate() BOOST_USED;
     virtual ~pointer_oserializer(){}
 };
+
+template<class T, class Archive>
+BOOST_DLLEXPORT void pointer_oserializer<T, Archive>::save_object_ptr(
+    basic_oarchive & ar,
+    const void * x
+) const {
+    assert(NULL != x);
+    // make sure call is routed through the highest interface that might
+    // be specialized by the user.
+    T * t = static_cast<T *>(const_cast<void *>(x));
+    const unsigned int file_version =
+        boost::serialization::version<T>::value;
+    boost::serialization::save_ptr_adl(
+        boost::smart_cast_reference<Archive &>(ar), 
+        t, 
+        file_version
+    );
+}
 
 // note: instances of this template to be constructed before the main
 // is called in order for things to be initialized properly.  For this
@@ -214,6 +205,12 @@ public:
 // won't work here so we created a free instance here.
 template<class T, class Archive>
 const pointer_oserializer<T, Archive> pointer_oserializer<T, Archive>::instance;
+
+template<class T, class Archive>
+BOOST_DLLEXPORT const pointer_oserializer <T, Archive> & 
+pointer_oserializer<T, Archive>::instantiate(){
+    return instance;
+}
 
 template<class Archive, class T>
 struct save_non_pointer_type {

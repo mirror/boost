@@ -35,28 +35,25 @@
 // release mode.
 
 // Intel compiler
-#if defined(__INTEL_COMPILER)
-//   Intel C++ 7.0+ on Windows
-#    if (__INTEL_COMPILER >= 700)
-#       if defined(_WIN32)
-#           define BOOST_FORCE_INCLUDE(f) __declspec(dllexport) f
-#       else
-//#           define BOOST_FORCE_INCLUDE(f) f __attribute__ ((used))
-#           define BOOST_FORCE_INCLUDE(f) f
-#       endif
-#    endif
+#if defined(__INTEL_COMPILER) || defined(__MWERKS__)
+#   if defined(_WIN32) || defined(_WIN64)
+#       define BOOST_DLLEXPORT __declspec(dllexport)
+#   else
+#       define BOOST_USED __attribute__ ((used))
+#   endif
 // MSVC
-#elif defined(BOOST_MSVC)
-#    define BOOST_FORCE_INCLUDE(f) __declspec(dllexport) f 
-// Code Warrior - question does this work for non-windows platforms?
-#elif defined(__MWERKS__) 
-#    define BOOST_FORCE_INCLUDE(f) __declspec(dllexport) f
-#elif defined(__GCC__)
-#    define BOOST_FORCE_INCLUDE(f) f __attribute__ ((used))
+#elif defined(BOOST_MSVC) || defined(__BORLANDC__)
+#       define BOOST_DLLEXPORT __declspec(dllexport)
+#elif defined(__GNUC__)
+#       define BOOST_USED __attribute__ ((used))
 #endif
 
-#ifndef BOOST_FORCE_INCLUDE
-#    define BOOST_FORCE_INCLUDE(x) x
+#ifndef BOOST_USED
+#    define BOOST_USED
+#endif
+
+#ifndef BOOST_DLLEXPORT
+#    define BOOST_DLLEXPORT
 #endif
 
 #endif // BOOST_SERIALIZATION_FORCE_INCLUDE_HPP
