@@ -156,6 +156,29 @@ public:
    void foo(); // avoid warning about all members being private
 };
 
+// Declare specializations of is_convertible for all of the floating
+// types to all of the integral types. This suppresses some nasty
+// warnings
+
+# define BOOST_IS_CONVERTIBLE(T1,T2) template<>struct is_convertible<T1,T2>{static const bool value=true;};
+# define BOOST_IS_CONVERTIBLE2(T1,T2)        \
+        BOOST_IS_CONVERTIBLE(T1,signed T2)   \
+        BOOST_IS_CONVERTIBLE(T1,unsigned T2)
+            
+# define BOOST_FLOAT_IS_CONVERTIBLE(F)  \
+   BOOST_IS_CONVERTIBLE(F,char)         \
+   BOOST_IS_CONVERTIBLE2(F,char)        \
+   BOOST_IS_CONVERTIBLE2(F,short)       \
+   BOOST_IS_CONVERTIBLE2(F,int)         \
+   BOOST_IS_CONVERTIBLE2(F,long)        \
+   BOOST_IS_CONVERTIBLE2(F,long long)
+
+BOOST_FLOAT_IS_CONVERTIBLE(float)
+BOOST_FLOAT_IS_CONVERTIBLE(double)
+BOOST_FLOAT_IS_CONVERTIBLE(long double)
+# undef BOOST_FLOAT_IS_CONVERTIBLE
+# undef BOOST_IS_CONVERTIBLE2
+# undef BOOST_IS_CONVERTIBLE
 #else
 
 template <class From, class To>

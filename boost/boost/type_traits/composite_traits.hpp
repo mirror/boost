@@ -343,6 +343,26 @@ public:
          ::boost::is_convertible<r_type, detail::int_convertible>::value
       >::value));
 };
+
+// Specializations suppress some nasty warnings with GCC
+template<>
+struct is_enum<float>
+{
+    BOOST_STATIC_CONSTANT(bool, value = false);
+};
+
+template<>
+struct is_enum<double>
+{
+    BOOST_STATIC_CONSTANT(bool, value = false);
+};
+
+template<>
+struct is_enum<long double>
+{
+    BOOST_STATIC_CONSTANT(bool, value = false);
+};
+
 #else // __BORLANDC__
 //
 // buggy is_convertible prevents working 
