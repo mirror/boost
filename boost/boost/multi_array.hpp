@@ -45,6 +45,12 @@ namespace boost {
           return multi_array_types::index_range(base,base+extent);
         }
       };
+      template <typename T, std::size_t N>
+      boost::array<T,N> make_default_array() {
+        boost::array<T,N> A;
+        A.assign(T());
+        return A;
+      }
     } //namespace multi_array
   } // namespace detail
 
@@ -79,9 +85,13 @@ public:
     typedef boost::detail::multi_array::multi_array_view<T,NDims> type;
   };
 
+
   explicit multi_array() :
-    super_type((T*)initial_base_) {
-    allocate_space();
+    super_type((T*)initial_base_,
+               c_storage_order(),
+               detail::multi_array::make_default_array<index,NumDims>(),
+               detail::multi_array::make_default_array<size_type,NumDims>()) {
+    allocate_space(); 
   }
     
   template <class ExtentList>
@@ -156,20 +166,35 @@ public:
   // (Q: Should these be 'explicit'?)
   //
 
+
+#if 0
   template <typename OPtr>
-  multi_array(const 
-              const_multi_array_ref<T,NumDims,OPtr>& rhs) :
-    super_type(rhs) {
+  multi_array(const const_multi_array_ref<T,NumDims,OPtr>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order()) :
+    super_type(rhs,so) {
     allocate_space();
     // RG: This can be done more efficiently using data,num_elements
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
+#else
+  template <typename OPtr>
+  multi_array(const const_multi_array_ref<T,NumDims,OPtr>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_base_list_,rhs.extent_list_) 
+  {
+    init_multi_array_ref(rhs.shape());
+    allocate_space();
+    // RG: This can be done more efficiently using data,num_elements
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+#endif // 0
 
   // See note for the constructor from sub_array<T,NumDims>&.
   // I am assuming that the following constructor is required as well
   multi_array(const 
-              multi_array_ref<T,NumDims>& rhs) :
-    super_type(rhs) {
+              multi_array_ref<T,NumDims>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order()) :
+    super_type(rhs,so) {
     allocate_space();
     // RG: This can be done more efficiently using data,num_elements
     std::copy(rhs.begin(),rhs.end(),this->begin());
@@ -178,8 +203,9 @@ public:
 
   template <typename OPtr>
   multi_array(const detail::multi_array::
-              const_sub_array<T,NumDims,OPtr>& rhs) :
-    super_type(rhs) {
+              const_sub_array<T,NumDims,OPtr>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order()) :
+    super_type(rhs,so) {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
@@ -188,8 +214,9 @@ public:
   // member function when passed a subarray, so i was forced to
   // duplicate the functionality here...
   multi_array(const detail::multi_array::
-              sub_array<T,NumDims>& rhs) :
-    super_type(rhs) {
+              sub_array<T,NumDims>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order()) :
+    super_type(rhs,so) {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
@@ -199,8 +226,9 @@ public:
   // for subarrays.
   template <typename OPtr>
   multi_array(const detail::multi_array::
-              const_multi_array_view<T,NumDims,OPtr>& rhs) :
-    super_type(rhs) {
+              const_multi_array_view<T,NumDims,OPtr>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order()) :
+    super_type(rhs,so) {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
@@ -208,8 +236,9 @@ public:
   // I'm guessing that gcc 2.95.2 would share the same problem with array_view
   // as it does for subarray, hence the following constructor:
   multi_array(const detail::multi_array::
-              multi_array_view<T,NumDims>& rhs) :
-    super_type(rhs) {
+              multi_array_view<T,NumDims>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order()) :
+    super_type(rhs,so) {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
