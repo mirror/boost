@@ -7,7 +7,7 @@
 	<title>Boost: mem_fn.hpp documentation</title>
 </head>
 
-<body bgcolor="White">
+<body bgcolor="White" style="margin-left: 5%; margin-right: 5%;">
 
 <table border="0" width="100%">
 <tr>
@@ -23,15 +23,27 @@
 </tr>
 </table>
 
-<h2>Files</h2>
-<ul>
-<li><a href="../../boost/mem_fn.hpp">mem_fn.hpp</a> (implementation)
-<li><a href="mem_fn_test.cpp">mem_fn_test.cpp</a> (test)
-<li><a href="mem_fn_stdcall_test.cpp">mem_fn_stdcall_test.cpp</a> (test for __stdcall)
-<li><a href="mem_fn_void_test.cpp">mem_fn_void_test.cpp</a> (test for void returns)
-</ul>
+<h2>Contents</h2>
 
-<h2>Purpose</h2>
+<h3 style="margin-left: 20pt;"><a href="#Purpose">Purpose</a></h3>
+<h3 style="margin-left: 20pt;"><a href="#FAQ">Frequently Asked Questions</a></h3>
+<h4 style="margin-left: 40pt;"><a href="#Q1">Can <b>mem_fn</b> be used instead of the standard
+<b>std::mem_fun[_ref]</b> adaptors?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q2">Should I replace every occurence of <b>std::mem_fun[_ref]</b>
+with <b>mem_fn</b> in my existing code?</a></h4>
+<h3 style="margin-left: 20pt;"><a href="#Interface">Interface</a></h3>
+<h4 style="margin-left: 40pt;"><a href="#Synopsis">Synopsis</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#CommonRequirements">Common requirements</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#get_pointer">get_pointer</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#mem_fn">mem_fn</a></h4>
+<h3 style="margin-left: 20pt;"><a href="#Implementation">Implementation</a></h3>
+<h4 style="margin-left: 40pt;"><a href="#Files">Files</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Dependencies">Dependencies</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#NumberOfArguments">Number of Arguments</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#stdcall">__stdcall Support</a></h4>
+<h3 style="margin-left: 20pt;"><a href="#Acknowledgements">Acknowledgements</a></h3>
+
+<h2><a name="Purpose">Purpose</a></h2>
 
 <p>
 <b>boost::mem_fn</b> is a generalization of the standard functions
@@ -39,6 +51,55 @@
 function pointers with more than one argument, and the returned function
 object can take a pointer, a reference, or a smart pointer to an object
 instance as its first argument.
+</p>
+
+<p>
+The purpose of <b>mem_fn</b> is twofold. First, it allows users to invoke a
+member function on a container with the familiar
+</p>
+
+<pre>
+    std::for_each(v.begin(), v.end(), boost::mem_fn(&amp;Shape::draw));
+</pre>
+
+<p>
+syntax, even when the container stores smart pointers.
+</p>
+
+<p>
+Second, it can be used as a building block by library developers that want
+to treat a pointer to member function as a function object. A library might
+define an enhanced <b>for_each</b> algorithm with an overload of the form:
+</p>
+
+<pre>
+template&lt;class It, class R&gt; void for_each(It first, It last, R (*pmf) ())
+{
+    std::for_each(first, last, boost::mem_fn(pmf));
+}
+</pre>
+
+<p>
+that will allow the convenient syntax:
+</p>
+
+<pre>
+    for_each(v.begin(), v.end(), &amp;Shape::draw);
+</pre>
+
+<p>
+When documenting the feature, the library author will simply state:
+</p>
+
+<h4 style="margin-left: 20pt;">template&lt;class It, class R&gt; void for_each(It first, It last, R (*pmf) ());</h4>
+
+<p style="margin-left: 20pt;">
+<b>Effects:</b> equivalent to std::for_each(first, last, boost::mem_fn(pmf));</tt>
+</p>
+
+<p>
+where <b>boost::mem_fn</b> can be a link to this page. See
+<a href="bind.html">the documentation of <b>bind</b></a> for an example.
 </p>
 
 <p>
@@ -105,9 +166,37 @@ All function objects returned by <b>mem_fn</b> expose a <b>result_type</b>
 typedef that represents the return type of the member function.
 </p>
 
-<h2>Interface</h2>
+<h2><a name="FAQ">Frequently Asked Questions</a></h2>
 
-<h3>Synopsis</h3>
+<h3><a name="Q1">Can <b>mem_fn</b> be used instead of the standard
+<b>std::mem_fun[_ref]</b> adaptors?</a></h3>
+
+<p>
+Yes. For simple uses, <b>mem_fn</b> provides additional functionality that
+the standard adaptors do not. Complicated expressions that use <b>std::bind1st</b>,
+<b>std::bind2nd</b> or <a href="../compose/index.htm"><b>Boost.Compose</b></a>
+along with the standard adaptors can be rewritten using
+<a href="bind.html"><b>boost::bind</b></a> that automatically takes advantage of
+<b>mem_fn</b>.
+</p>
+
+<h3><a name="Q2">Should I replace every occurence of <b>std::mem_fun[_ref]</b>
+with <b>mem_fn</b> in my existing code?</a></h3>
+
+<p>
+No, unless you have good reasons to do so. <b>mem_fn</b> is not 100% compatible
+with the standard adaptors, although it comes pretty close. In particular,
+<b>mem_fn</b> does not return objects of type
+<b>std::[const_]mem_fun[1][_ref]_t</b>, as the standard adaptors do, and it is
+not possible to fully describe the type of the first argument using the standard
+<b>argument_type</b> and <b>first_argument_type</b> nested typedefs. Libraries
+that need adaptable function objects in order to function might not like
+<b>mem_fn</b>.
+</p>
+
+<h2><a name="Interface">Interface</a></h2>
+
+<h3><a name="Synopsis">Synopsis</a></h3>
 
 <pre>
 namespace boost
@@ -134,7 +223,7 @@ template&lt;class R, class T, class A1, class A2&gt; <i>implementation-defined-6
 }
 </pre>
 
-<h3>Common requirements</h3>
+<h3><a name="CommonRequirements">Common requirements</a></h3>
 
 <p>
 All <tt><i>implementation-defined-N</i></tt> types mentioned in the Synopsis are
@@ -145,7 +234,7 @@ the return type of the member function pointer passed as an argument to <b>mem_f
 (<b>R</b> in the Synopsis.)
 </p>
 
-<h3>get_pointer</h3>
+<h3><a name="get_pointer">get_pointer</a></h3>
 
 <h4><a name="get_pointer_1">template&lt;class T&gt; T * get_pointer(T * p)</a></h4>
 
@@ -165,7 +254,7 @@ the return type of the member function pointer passed as an argument to <b>mem_f
 <b>Throws:</b> Nothing.
 </p>
 
-<h3>mem_fn</h3>
+<a name="mem_fn"><h3>mem_fn</h3></a>
 
 <h4><a name="mem_fn_1">template&lt;class R, class T&gt; <i>implementation-defined-1</i> mem_fn(R (T::*pmf) ())</a></h4>
 
@@ -233,7 +322,25 @@ is of type <b>T <i>[</i>const<i>]</i></b>, <tt>(get_pointer(t)->*pmf)(a1, a2)</t
 <b>Throws:</b> Nothing.
 </p>
 
-<h2>Implementation</h2>
+<h2><a name="Implementation">Implementation</a></h2>
+
+<h3><a name="Files">Files</a></h3>
+<ul>
+<li><a href="../../boost/mem_fn.hpp">boost/mem_fn.hpp</a> (main header)
+<li><a href="../../boost/bind/mem_fn_cc.hpp">boost/bind/mem_fn_cc.hpp</a> (used by mem_fn.hpp, do not include directly)
+<li><a href="../../boost/bind/mem_fn_vw.hpp">boost/bind/mem_fn_vw.hpp</a> (used by mem_fn.hpp, do not include directly)
+<li><a href="../../boost/bind/mem_fn_template.hpp">boost/bind/mem_fn_template.hpp</a> (used by mem_fn.hpp, do not include directly)
+<li><a href="mem_fn_test.cpp">libs/bind/mem_fn_test.cpp</a> (test)
+<li><a href="mem_fn_stdcall_test.cpp">libs/bind/mem_fn_stdcall_test.cpp</a> (test for __stdcall)
+<li><a href="mem_fn_void_test.cpp">libs/bind/mem_fn_void_test.cpp</a> (test for void returns)
+</ul>
+
+<h3><a name="Dependencies">Dependencies</a></h2>
+<ul>
+<li><a href="../config/config.htm">Boost.Config</a>
+</ul>
+
+<h3><a name="NumberOfArguments">Number of Arguments</a></h3>
 
 <p>
 This implementation supports member functions with up to eight arguments.
@@ -241,7 +348,7 @@ This is not an inherent limitation of the design, but an implementation
 detail.
 </p>
 
-<h3>__stdcall support</h3>
+<h3><a name="stdcall">__stdcall Support</a></h3>
 
 <p>
 Some platforms allow several types of member functions that differ by their
@@ -270,7 +377,7 @@ indirectly, <b>&lt;boost/mem_fn.hpp&gt;</b>.
 </p>
 
 
-<h2>Acknowledgements</h2>
+<h2><a name="Acknowledgements">Acknowledgements</a></h2>
 
 <p>
 Rene Jager's initial suggestion of using traits classes to make
