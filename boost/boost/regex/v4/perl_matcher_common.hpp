@@ -205,7 +205,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_imp()
    else
    {
       // start again:
-      search_base = position = (*m_presult)[0].second;
+      search_base = position = m_result[0].second;
       // If last match was null and match_not_null was not set then increment
       // our start position, otherwise we go into an infinite loop:
       if(((m_match_flags & match_not_null) == 0) && (m_presult->length() == 0))
