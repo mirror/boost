@@ -148,7 +148,7 @@ desc.add_options()
     </para>
 
     <section>
-      <title>Syntactic information</title>
+      <title>Syntactic Information</title>
       <para>The syntactic information is provided by the
         <classname>boost::program_options::options_description</classname> class
         and some methods of the
@@ -186,7 +186,7 @@ desc.add_options()
     </section>
       
     <section>
-      <title>Semantic information</title>
+      <title>Semantic Information</title>
       
       <para>The semantic information is completely provided by the 
         <classname>boost::program_options::value_semantic</classname> class. For
@@ -208,7 +208,7 @@ desc.add_options()
     </section>
     
     <section>
-      <title>Positional options</title>
+      <title>Positional Options</title>
       
       <para>Our definition of option as (name, value) pairs is simple and
         useful, but in one special case of the command line, there's a
