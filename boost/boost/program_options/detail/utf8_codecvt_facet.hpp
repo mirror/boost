@@ -146,7 +146,11 @@ protected:
         const char * from,
         const char * from_end, 
         std::size_t max_limit
-    ) const;
+#if BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))
+        ) const throw();
+#else
+        ) const;
+#endif
 
     // Largest possible value do_length(state,from,from_end,1) could return.
     virtual int do_max_length() const throw () {

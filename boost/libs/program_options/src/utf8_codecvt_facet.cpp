@@ -172,7 +172,11 @@ int utf8_codecvt_facet_wchar_t::do_length(
     const char * from,
     const char * from_end, 
     std::size_t max_limit
+#if BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))
+) const throw()
+#else
 ) const
+#endif
 { 
     // RG - this code is confusing!  I need a better way to express it.
     // and test cases.
