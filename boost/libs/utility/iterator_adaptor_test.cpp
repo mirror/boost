@@ -12,6 +12,7 @@
 //  13 Jun 00 Added const version of the iterator tests (Jeremy Siek)
 //  12 Dec 99 Initial version with iterator operators (Jeremy Siek)
 
+#include <boost/config.hpp>
 #include <iostream>
 
 #include <algorithm>
