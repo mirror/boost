@@ -26,11 +26,11 @@
 #ifndef BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #include "boost_no_using_breaks_adl.cxx"
 #else
-namespace  = empty_boost;
+namespace boost_function_scope_using_declaration_breaks_adl = empty_boost;
 #endif
 
 int cpp_main( int, char *[] )
 {
-   return ::test();
+   return boost_function_scope_using_declaration_breaks_adl::test();
 }  
    
