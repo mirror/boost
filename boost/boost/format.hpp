@@ -18,11 +18,12 @@
 #include <string>
 #include <boost/detail/workaround.hpp>
 
-// ***   Compatibility framework
-#include <boost/format/detail/compat_workarounds.hpp>
 #ifndef BOOST_NO_STD_LOCALE
 #include <locale>
 #endif
+
+// ***   Compatibility framework
+#include <boost/format/detail/compat_workarounds.hpp>
 
 #ifdef BOOST_NO_LOCALE_ISIDIGIT
 #include <cctype>  // we'll use the non-locale  <cctype>'s std::isdigit(int)
