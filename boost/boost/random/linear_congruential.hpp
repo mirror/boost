@@ -70,13 +70,19 @@ public:
   linear_congruential(It& first, It last) { seed(first, last); }
 
   // compiler-generated copy constructor and assignment operator are fine
-  void seed(IntType x0 = 1) { assert(c || x0); _x = (m ? (x0 % m) : x0); }
+  void seed(IntType x0 = 1)
+  {
+    assert(c || x0);
+    _x = (_modulus ? (x0 % _modulus) : x0);
+  }
+
   template<class It>
   void seed(It& first, It last)
   {
     if(first == last)
       throw std::invalid_argument("linear_congruential::seed");
-    _x = *first++;
+    IntType value = *first++;
+    _x = (_modulus ? (value % _modulus) : value);
   }
 
   result_type min() const { return c == 0 ? 1 : 0; }
