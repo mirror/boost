@@ -221,7 +221,7 @@ namespace detail
 
           BOOST_STATIC_CONSTANT(
               bool, value =
-              sizeof(is_POD_array(help()).instance()) > 1);
+              sizeof(is_POD_array(help()).instance()) == sizeof(::boost::type_traits::yes_type));
       };
   };
 }
