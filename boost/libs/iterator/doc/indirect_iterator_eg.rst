@@ -62,3 +62,8 @@ The output is::
     b,c,d,e,f,g,h,
     a,b,c,d,e,f,g,
 
+
+The source code for this example can be found `here`__.
+
+__ ../example/indirect_iterator_example.cpp
+

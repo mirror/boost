@@ -35,3 +35,8 @@ The output is::
     2 4 6 8 10 12 14 16 
     adding 4 to each element in the array:
     5 6 7 8 9 10 11 12
+
+
+The source code for this example can be found `here`__.
+
+__ ../example/transform_iterator_example.cpp

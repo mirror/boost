@@ -33,3 +33,8 @@ The output is::
 
     indirectly printing out the numbers from 0 to 7
     0 1 2 3 4 5 6 
+
+The source code for this example can be found `here`__.
+
+__ ../example/counting_iterator_example.cpp
+

@@ -45,15 +45,15 @@ adding an <tt class="literal"><span class="pre">operator*</span></tt> that retur
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
-<li><a class="reference" href="#counting-iterator-synopsis" id="id1" name="id1"><tt class="literal"><span class="pre">counting_iterator</span></tt> synopsis</a></li>
-<li><a class="reference" href="#counting-iterator-requirements" id="id2" name="id2"><tt class="literal"><span class="pre">counting_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#counting-iterator-models" id="id3" name="id3"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</a></li>
-<li><a class="reference" href="#counting-iterator-operations" id="id4" name="id4"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></li>
-<li><a class="reference" href="#example" id="id5" name="id5">Example</a></li>
+<li><a class="reference" href="#counting-iterator-synopsis" id="id2" name="id2"><tt class="literal"><span class="pre">counting_iterator</span></tt> synopsis</a></li>
+<li><a class="reference" href="#counting-iterator-requirements" id="id3" name="id3"><tt class="literal"><span class="pre">counting_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#counting-iterator-models" id="id4" name="id4"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#counting-iterator-operations" id="id5" name="id5"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#example" id="id6" name="id6">Example</a></li>
 </ul>
 </div>
 <div class="section" id="counting-iterator-synopsis">
-<h1><a class="toc-backref" href="#id1" name="counting-iterator-synopsis"><tt class="literal"><span class="pre">counting_iterator</span></tt> synopsis</a></h1>
+<h1><a class="toc-backref" href="#id2" name="counting-iterator-synopsis"><tt class="literal"><span class="pre">counting_iterator</span></tt> synopsis</a></h1>
 <pre class="literal-block">
 template &lt;
     class Incrementable
@@ -81,13 +81,13 @@ the cases when the <tt class="literal"><span class="pre">Incrementable</span></t
 </dl>
 </div>
 <div class="section" id="counting-iterator-requirements">
-<h1><a class="toc-backref" href="#id2" name="counting-iterator-requirements"><tt class="literal"><span class="pre">counting_iterator</span></tt> requirements</a></h1>
+<h1><a class="toc-backref" href="#id3" name="counting-iterator-requirements"><tt class="literal"><span class="pre">counting_iterator</span></tt> requirements</a></h1>
 <p>The <tt class="literal"><span class="pre">Incrementable</span></tt> type must be Default Constructible, Copy
 Constructible, and Assignable.  The default distance is
 an implementation defined signed integral type.</p>
 </div>
 <div class="section" id="counting-iterator-models">
-<h1><a class="toc-backref" href="#id3" name="counting-iterator-models"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</a></h1>
+<h1><a class="toc-backref" href="#id4" name="counting-iterator-models"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</a></h1>
 <p><tt class="literal"><span class="pre">counting_iterator</span></tt> models Readable Lvalue Iterator.</p>
 <p>Furthermore, if you wish to create a counting iterator that is a Forward
 Traversal Iterator, then the following expressions must be valid:</p>
@@ -112,7 +112,7 @@ i &lt; j
 </pre>
 </div>
 <div class="section" id="counting-iterator-operations">
-<h1><a class="toc-backref" href="#id4" name="counting-iterator-operations"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></h1>
+<h1><a class="toc-backref" href="#id5" name="counting-iterator-operations"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></h1>
 <p>In addition to the operations required by the concepts modeled by
 <tt class="literal"><span class="pre">counting_iterator</span></tt>, <tt class="literal"><span class="pre">counting_iterator</span></tt> provides the following
 operations.</p>
@@ -199,7 +199,7 @@ with <tt class="literal"><span class="pre">current</span></tt> constructed from 
 </table>
 </div>
 <div class="section" id="example">
-<h1><a class="toc-backref" href="#id5" name="example">Example</a></h1>
+<h1><a class="toc-backref" href="#id6" name="example">Example</a></h1>
 <p>This example fills an array with numbers and a second array with
 pointers into the first array, using <tt class="literal"><span class="pre">counting_iterator</span></tt> for both
 tasks. Finally <tt class="literal"><span class="pre">indirect_iterator</span></tt> is used to print out the numbers
@@ -229,12 +229,13 @@ std::cout &lt;&lt; std::endl;
 indirectly printing out the numbers from 0 to 7
 0 1 2 3 4 5 6 
 </pre>
+<p>The source code for this example can be found <a class="reference" href="../example/counting_iterator_example.cpp">here</a>.</p>
 </div>
 </div>
 <hr class="footer"/>
 <div class="footer">
 <a class="reference" href="counting_iterator.rst">View document source</a>.
-Generated on: 2004-01-12 15:46 UTC.
+Generated on: 2004-01-12 16:05 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

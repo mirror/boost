@@ -35,3 +35,8 @@ The output is::
     original sequence of letters:                   hello world!
     sequence in reverse order:                      !dlrow olleh
     sequence in double-reversed (normal) order:     hello world!
+
+
+The source code for this example can be found `here`__.
+
+__ ../example/reverse_iterator_example.cpp

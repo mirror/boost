@@ -63,3 +63,7 @@ The output is::
     4 5 8 
     0 -1 4 5 8 
 
+
+The source code for this example can be found `here`__.
+
+__ ../example/filter_iterator_example.cpp

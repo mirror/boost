@@ -60,3 +60,8 @@ The output is::
     Elements at even indices in the permutation : 9 7 
     Permutation backwards : 6 7 8 9 
     Iterate backward with stride 2 : 6 8 
+
+
+The source code for this example can be found `here`__.
+
+__ ../example/permutation_iterator_example.cpp
