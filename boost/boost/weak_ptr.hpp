@@ -168,6 +168,19 @@ template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r) // never thro
     }
 }
 
+// mem_fn support
+
+template<class T> T * get_pointer(weak_ptr<T> const & p)
+{
+    return p.get();
+}
+
+namespace detail {
+  // is_pointerlike_helper enables Signals library to recognize intrusive_ptr
+  template<typename T>
+  type_traits::yes_type is_pointerlike_helper(const weak_ptr<T>&, int);
+} // end namespace detail
+
 } // namespace boost
 
 #ifdef BOOST_MSVC

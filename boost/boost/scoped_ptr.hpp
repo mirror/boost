@@ -119,6 +119,12 @@ template<typename T> inline T * get_pointer(scoped_ptr<T> const & p)
     return p.get();
 }
 
+namespace detail {
+  // is_pointerlike_helper enables Signals library to recognize scoped_ptr
+  template<typename T>
+  type_traits::yes_type is_pointerlike_helper(const scoped_ptr<T>&, int);
+} // end namespace detail
+
 } // namespace boost
 
 #endif // #ifndef BOOST_SCOPED_PTR_HPP_INCLUDED
