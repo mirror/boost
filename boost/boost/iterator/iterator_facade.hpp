@@ -31,6 +31,10 @@
 #include <boost/mpl/always.hpp>
 #include <boost/mpl/apply.hpp>
 
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+# include <boost/mpl/if.hpp>
+#endif
+
 #include <boost/iterator/detail/config_def.hpp> // this goes last
 
 namespace boost
@@ -223,16 +227,20 @@ namespace boost
     {
         template <class I1, class I2>
         struct apply
-          : mpl::apply_if<
-                is_convertible<I2,I1>
+          :
 # if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
-              , typename I1::difference_type
-              , typename I2::difference_type
+          mpl::if_<
+              is_convertible<I2,I1>
+            , typename I1::difference_type
+            , typename I2::difference_type
+          >
 # else 
-              , iterator_difference<I1>
-              , iterator_difference<I2>
+          mpl::apply_if<
+              is_convertible<I2,I1>
+            , iterator_difference<I1>
+            , iterator_difference<I2>
+          >
 # endif 
-            >
         {};
 
     };

@@ -159,12 +159,15 @@ namespace detail
           typename traversal_archetype_impl<TraversalCategory>::template archetype<Derived,Value>
       >::type
   {
-    traversal_archetype_() {}
-    traversal_archetype_(ctor_arg arg)
-      : mpl::aux::msvc_eti_base<
-            typename traversal_archetype_impl<TraversalCategory>::template archetype<Derived,Value>
-        >::type(arg) 
-    {}
+      typedef typename
+        traversal_archetype_impl<TraversalCategory>::template archetype<Derived,Value>
+      base;
+      
+      traversal_archetype_() {}
+
+      traversal_archetype_(ctor_arg arg)
+        : base(arg) 
+      {}
   };
 
   template <>
@@ -471,12 +474,25 @@ struct iterator_archetype
 
     iterator_archetype() { }
     iterator_archetype(iterator_archetype const& x)
-      : detail::iterator_archetype_base<Value, AccessCategory, TraversalCategory>(x) { }
+      : detail::iterator_archetype_base<
+            Value
+          , AccessCategory
+          , TraversalCategory
+        >(x)
+    {}
 
-    iterator_archetype& operator=(iterator_archetype const&) { return *this; }
+    iterator_archetype& operator=(iterator_archetype const&)
+        { return *this; }
 
+# if 0
     // Optional conversion from mutable
-    // iterator_archetype(iterator_archetype<typename detail::convertible_type<Value>::type, AccessCategory, TraversalCategory> const&);
+    iterator_archetype(
+        iterator_archetype<
+        typename detail::convertible_type<Value>::type
+      , AccessCategory
+      , TraversalCategory> const&
+    );
+# endif
 };
 
 } // namespace boost
