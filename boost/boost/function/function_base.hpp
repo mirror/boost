@@ -295,15 +295,21 @@ namespace boost {
       };
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    
+#  if BOOST_WORKAROUND(__HP_aCC, <= 33900)
+    template<bool cond, typename T> struct enable_if;
+#  else
     template<bool, typename> struct enable_if;
+#  endif 
 
     template<typename T> struct enable_if<true, T>  { typedef T type; };
     template<typename T> struct enable_if<false, T> {};
 #else
-#  if defined(BOOST_STRICT_CONFIG) || !defined(__HP_aCC) || __HP_aCC > 33900
-      template<bool>
-#  else
+    
+#  if BOOST_WORKAROUND(__HP_aCC, <= 33900)
       template<bool x>
+#  else
+      template<bool>
 #  endif
       struct enabled
       {
