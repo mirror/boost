@@ -160,7 +160,7 @@ int main(int, char* [] )
 <p>Let's assume we need to write a program that manipulates instances of <code>
  star</code> and <code>space_ship</code>, where each of these two classes
  inherits from <code>space_object</code>. The program maintains a <code>vector</code>
- of pointers to these objects, which is used to calculate the total weight of
+ of pointers to these objects, which is used to calculate the total mass of
  all <code>star</code> objects: </p>
 <pre>   //
    //  'classic' inheritance-based implementation
@@ -171,35 +171,35 @@ int main(int, char* [] )
 
    struct space_object
    {
-      virtual int weight() const = 0;
+      virtual int mass() const = 0;
       virtual ~space_object() { }
    };
 
    struct space_ship : space_object
    {
-      space_ship(int w = 0) : w_(w) { }
-      int weight() const { return w_; }
+      space_ship(int m = 0) : m_(m) { }
+      int mass() const { return m_; }
       int get_speed() const { return 15; }
 
-      int w_;
+      int m_;
    };
 
    struct star : space_object
    {
-      star(int w = 0) : w_(w) { }
-      int weight() const { return w_; }
+      star(int m = 0) : m_(m) { }
+      int mass() const { return m_; }
 
-      int w_;
+      int m_;
    };
 
-   struct total_weight
+   struct total_mass
    {
-      total_weight() : total_(0) { }
+      total_mass() : total_(0) { }
 
       void operator()(space_object* so_p)
       {
          if(dynamic_cast&lt;star*&gt;(so_p))
-            total_ += so_p-&gt;weight();
+            total_ += so_p-&gt;mass();
       }
 
       int total_;
@@ -213,11 +213,11 @@ int main(int, char* [] )
       //fill space_objects
       // ...
 
-      total_weight tw_job;
+      total_mass tm_job;
       int total = std::for_each(space_objects.begin(), space_objects.end(),
-         tw_job).total_;
+         tm_job).total_;
 
-      std::cout &lt;&lt; &quot;Total weight of all stars = &quot; &lt;&lt; total
+      std::cout &lt;&lt; &quot;Total mass of all stars = &quot; &lt;&lt; total
          &lt;&lt; std::endl;
 
       //Apply delete to all pointers stored in space_objects
@@ -233,14 +233,14 @@ int main(int, char* [] )
   <li>The code is bound to define a vector of pointers, rather than objects.
   This incurs considerable time overhead and could cause memory leaks if
   destruction is not handled properly. </li>
-  <li>the dynamic_cast&lt;&gt; used by <code>total_weight::operator()</code> is a
+  <li>the dynamic_cast&lt;&gt; used by <code>total_mass::operator()</code> is a
   costly operation. Alternatively, one can define an <code>enum</code> type
   which will be used to correctly identify the concrete object, but this is an
   error prone technique: the author must manually set the correct value for each
   new concrete class. </li>
-  <li><code>total_weight</code> is unsafe when new classes are introduced.
+  <li><code>total_mass</code> is unsafe when new classes are introduced.
   Suppose a new class, <code>black_hole</code> - inherits directly from <code>
-  space_object</code> - is added to the code. <code>total_weight</code> will
+  space_object</code> - is added to the code. <code>total_mass</code> will
   silently ignore this class, possibly creating a havoc of run-time problems.
   This is a major flaw from software engineering standpoint. </li>
 </ul>
@@ -257,28 +257,28 @@ int main(int, char* [] )
 
    struct space_ship
    {
-      space_ship(int w = 0) : w_(w) { }
-      int weight() const { return w_; }
+      space_ship(int m = 0) : m_(m) { }
+      int mass() const { return m_; }
       int get_speed() const { return 15; }
 
-      int w_;
+      int m_;
    };
 
    struct star
    {
-      star(int w = 0) : w_(w) { }
-      int weight() const { return w_; }
+      star(int m = 0) : m_(m) { }
+      int mass() const { return m_; }
 
-      int w_;
+      int m_;
    };
 
-   struct total_weight : boost::static_visitor&lt;void&gt;
+   struct total_mass : boost::static_visitor&lt;void&gt;
    {
-      total_weight() : total_(0) { }
+      total_mass() : total_(0) { }
 
       void operator()(const star&amp; a_star)
       {
-         total_ += a_star.weight();
+         total_ += a_star.mass();
       }
 
       //space_ship objects are ignored:
@@ -296,11 +296,11 @@ int main(int, char* [] )
       //fill space_objects
       // ...
 
-      total_weight tw_job;
+      total_mass tm_job;
       std::for_each(space_objects.begin(), space_objects.end(),
-         boost::apply_visitor(tw_job));
+         boost::apply_visitor(tm_job));
 
-      std::cout &lt;&lt; &quot;Total weight of all stars = &quot; &lt;&lt; tw_job.total_
+      std::cout &lt;&lt; &quot;Total mass of all stars = &quot; &lt;&lt; tm_job.total_
          &lt;&lt; std::endl;
 
       return 0;
@@ -311,7 +311,7 @@ int main(int, char* [] )
  non-variant implementation: (1) The <code>space_objects</code> vector now holds
  <b>objects</b> (rather than pointers), (2) <code>dynamic_cast&lt;&gt;</code>s are <b>
  not needed</b> at all, and - most importantly - (3) the compiler <b>will
- produce an error</b> if <code>total_weight</code> is not changed, when a new
+ produce an error</b> if <code>total_mass</code> is not changed, when a new
  class is introduced. </p>
 <hr>
 <p>Revised 14 February 2003</p>

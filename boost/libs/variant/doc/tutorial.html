@@ -37,52 +37,51 @@
  Additional sample programs may be found <a href="sample.html">here</a>.<br>
 </p>
 <h2><a name="FirstVariantProgram">First <code>variant</code> program</a></h2>
-<p>Let's suppose you need to implement an object factory function, <code>create</code>. 
- Based on an integer argument to the function, <code>create</code> must 
+<p>Let's suppose you need to implement an object factory function, <code>create</code>.
+ Based on an integer argument to the function, <code>create</code> must
  construct and return an object of one of the following types: <code>std::string</code>,
- <code>char*</code>, and <code>int</code>. The relationship between the integer 
- argument, <code>i</code>, and the returned type is specified as follows:<br>
+ <code>char*</code>, and <code>int</code>. The relationship between the integer
+ argument, <code>index</code>, and the returned type is specified as follows:<br>
 </p>
-<pre>    2000 &lt; i          -&gt;  char*
-    1000 &lt; i &lt;= 2000  -&gt;  std::string
-      <i>else  </i>          -&gt;  int
+<pre>    2000 &lt; index          -&gt;  char*
+    1000 &lt; index &lt;= 2000  -&gt;  std::string
+      <i>else  </i>              -&gt;  int
 </pre>
-<p>Typical implementations would probably designate of a virtual base class, 
- returning objects of the derived types through a pointer to the base class. 
- However, since none of the desired types may derive from the base class, the 
- programmer would need to write &quot;adapter&quot; classes derived from the common base 
+<p>Typical implementations would probably designate of a virtual base class,
+ returning objects of the derived types through a pointer to the base class.
+ However, since none of the desired types may derive from the base class, the
+ programmer would need to write &quot;adapter&quot; classes derived from the common base
  to supply the semantics of the various concrete types (i.e, <code>std::string</code>,
- <code>int</code>, and <code>char*</code>). Clients of the factory function 
- would then check the result using <code>dynamic_cast</code> to determine which 
+ <code>int</code>, and <code>char*</code>). Clients of the factory function
+ would then check the result using <code>dynamic_cast</code> to determine which
  concrete type had in fact been created.</p>
 <p>Other implementations might leverage the Boost <code>
- <a href="../../any/index.html">any</a></code> class, thus avoiding the hassle 
- of defining and implementing the virtual base class and the derived adapter 
- classes. However, this solution still does not avoid the problem of needing to 
+ <a href="../../any/index.html">any</a></code> class, thus avoiding the hassle
+ of defining and implementing the virtual base class and the derived adapter
+ classes. However, this solution still does not avoid the problem of needing to
  manually check the result using <code>any_cast</code>.</p>
-<p>On the other hand, by returning an object of type <code>variant&lt; std::string, 
- char*, int &gt;</code> from the factory function, the resultant code is clear and 
+<p>On the other hand, by returning an object of type <code>variant&lt; std::string,
+ char*, int &gt;</code> from the factory function, the resultant code is clear and
  straight-forward: </p>
 <pre>#include &lt;iostream&gt;
 #include &lt;string&gt;
 #include &quot;boost/variant.hpp&quot;
-#include &quot;boost/apply_visitor.hpp&quot;
 
 using std::string;
 using boost::variant;
 
-typedef variant&lt;string, char*, int&gt; create_result;
+typedef variant&lt;string,char*,int&gt; create_result;
 
 //
 // <i>create</i>, our factory function
 //
-create_result create(int i)
+create_result create(int index)
 {
-   // Return char* if (i &gt; 2000):
-   if (which &gt; 2000) return &quot;JKLM&quot;;
+   // Return char* if (index &gt; 2000):
+   if (index &gt; 2000) return &quot;JKLM&quot;;
 
-   // Return std::string if (1000 &lt; i &lt;= 2000):
-   if (which &gt; 1000) return string(&quot;QRST&quot;);
+   // Return std::string if (1000 &lt; index &lt;= 2000):
+   if (index &gt; 1000) return string(&quot;QRST&quot;);
 
    // Otherwise, return int:
    return 15;
@@ -103,22 +102,22 @@ struct printer : boost::static_visitor&lt;&gt;
 
 int main(int , char* [] )
 {
-   printer print;
+   printer a_printer;
    create_result result;
 
    // First, create a char*...
    result = create(2500);
 
    // ...and print result by applying print visitor to it:
-   boost::apply_visitor(a_printer, inst); // Output: &quot;operand: JKLM&quot;
+   boost::apply_visitor(a_printer, result); // Output: &quot;operand: JKLM&quot;
 
    // Now, create a std::string and print it:
    result = create(1500);
-   boost::apply_visitor(a_printer, inst); // Output: &quot;operand: QRST&quot;
+   boost::apply_visitor(a_printer, result); // Output: &quot;operand: QRST&quot;
 
    // Finally, create an int and print it:
    result = create(5);
-   boost::apply_visitor(a_printer, inst);  // Output: &quot;15&quot;
+   boost::apply_visitor(a_printer, result);  // Output: &quot;15&quot;
 
    return 0;
 }
@@ -299,19 +298,18 @@ int main(int , char* [] )
  accept one, or more, of the types in <code>a_variant</code>'s set of types) a 
  compiler error is triggered.</p>
 <p>The 'visit' begins when <code>apply_visitor()</code> is called: <code>
- apply_visitor(visitor, a_variant)</code> passes <code>a_variant</code>'s 
- currently held value to <code>visitor</code>. From <code>visitor</code>'s 
+ apply_visitor(visitor, a_variant)</code> passes <code>a_variant</code>'s
+ currently held value to <code>visitor</code>. From <code>visitor</code>'s
  standpoint, its function-call operator is called with whatever value <code>
- a_variant</code> is holding. This gives <code>visitor</code> a chacne to 
+ a_variant</code> is holding. This gives <code>visitor</code> a chance to
  inspect/modify <code>a_variant</code>'s value.</p>
-<p>The following snip demonstrates the visitation facility using a concrete 
- visitor class, <code>print_int_char_visitor</code>. The code will print &quot;Char 
+<p>The following snip demonstrates the visitation facility using a concrete
+ visitor class, <code>print_int_float_visitor</code>. The code will print &quot;Char
  value: 'x'&quot; and &quot;Int value: 77&quot; to <code>std::cout</code>:</p>
 <pre>   struct print_int_float_visitor
+       :    boost::static_visitor&lt;void&gt; // Return type is void,
+                                        // so derive from static_visitor&lt;void&gt;
    {
-      //result_type specifies the return type of operator()
-      typedef void result_type;
-
       // Handle int values
       void operator()(int x) const
       {
@@ -326,25 +324,23 @@ int main(int , char* [] )
    };
    .
    .
-   variant&lt;int, float&gt; var = 53.22f;
+   variant&lt;int,float&gt; var = 53.22f;
 
-   //Apply print_int_char_visitor to var.
+   //Apply print_int_float_visitor to var.
    apply_visitor(print_int_float_visitor(), var); // Output: &quot;Float value: 53.22&quot;
 
    var = 77;
    apply_visitor(print_int_float_visitor(), var); // Output: &quot;Int value: 77&quot;
 </pre>
-<p>Note how <code>print_int_char_visitor</code> specifies the type of its return 
- value thru a nested type - <code>result_type</code>. This return value is also 
- the value that is returned by <code>boost::apply_visitor()</code> to its 
- caller.</p>
-<p>The next code snip, demonstrate how <code>boost::static_visitor&lt;T&gt;</code> can 
- be used as a base class to supply <code>result_type</code>'s definition. The 
- visitor in this snip, <code>multiply_by_two</code> multiplies its operand by 
- two and returns the result as an <code>int</code> value. </p>
+<p>Note how <code>print_int_char_visitor</code> specifies its return type
+ by publicly deriving from <code>boost::static_visitor&lt;void&gt;</code>.<Br>
+<br>
+The visitor class in the following snip, <code>multiply_by_two</code>, returns
+an <code>int</code> value, which is twice its operand.<br>
+This value is retuned to the caller of <code>boost::apply_visitor()</code>:</p>
 <pre>   struct multiply_by_two
        :    boost::static_visitor&lt;int&gt; // Return type is int,
-                                        // so derive from static_visitor&lt;int&gt;
+                                       // so derive from static_visitor&lt;int&gt;
    {
       template&lt;typename T&gt;
       int operator()(T t) const
@@ -358,7 +354,7 @@ int main(int , char* [] )
    int result = apply_visitor(multiply_by_two(), a);
    std::cout &lt;&lt; &quot;Result = &quot; &lt;&lt; result &lt;&lt; std::endl; //Output: &quot;Result = 18&quot;
 </pre>
-<p>If a visitor offers several overloads of <code>operator()</code>, overload 
+<p>If a visitor offers several overloads of <code>operator()</code>, overload
  resolution rules are applied to choose the correct form. If a visitor cannot 
  accept one of the types a variant may hold (due to ambiguity/lack of 
  conversion), a comiler error is generated. <br>
