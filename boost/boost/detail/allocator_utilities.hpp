@@ -130,8 +130,10 @@ template<typename Allocator>
 struct rebinder
 {
   template<typename Type>
-  struct result:Allocator::BOOST_NESTED_TEMPLATE rebind<Type>
+  struct result
   {
+      typedef typename Allocator::BOOST_NESTED_TEMPLATE 
+          rebind<Type>::other other;
   };
 };
 #endif
