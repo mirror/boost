@@ -23,9 +23,11 @@
 #define BOOST_FUNCTION_ARGS a0, a1, a2, a3, a4, a5
 #define BOOST_FUNCTION_NOT_0_PARMS T1 a1, T2 a2, T3 a3, T4 a4, T5 a5
 #define BOOST_FUNCTION_NOT_0_ARGS a1, a2, a3, a4, a5
+#define BOOST_FUNCTION_ARG_TYPES typedef T0 arg1_type; typedef T1 arg2_type; typedef T2 arg3_type; typedef T3 arg4_type; typedef T4 arg5_type; typedef T5 arg6_type;
 
 #include <boost/function/function_template.hpp>
 
+#undef BOOST_FUNCTION_ARG_TYPES
 #undef BOOST_FUNCTION_NOT_0_ARGS
 #undef BOOST_FUNCTION_NOT_0_PARMS
 #undef BOOST_FUNCTION_ARGS

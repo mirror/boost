@@ -23,9 +23,11 @@
 #define BOOST_FUNCTION_ARGS 
 #define BOOST_FUNCTION_NOT_0_PARMS 
 #define BOOST_FUNCTION_NOT_0_ARGS 
+#define BOOST_FUNCTION_ARG_TYPES 
 
 #include <boost/function/function_template.hpp>
 
+#undef BOOST_FUNCTION_ARG_TYPES
 #undef BOOST_FUNCTION_NOT_0_ARGS
 #undef BOOST_FUNCTION_NOT_0_PARMS
 #undef BOOST_FUNCTION_ARGS

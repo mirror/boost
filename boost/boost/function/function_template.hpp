@@ -253,6 +253,9 @@ namespace boost {
     typedef T1 second_argument_type;
 #endif
 
+    BOOST_STATIC_CONSTANT(int, arity = BOOST_FUNCTION_NUM_ARGS);
+    BOOST_FUNCTION_ARG_TYPES
+
 #ifndef BOOST_NO_VOID_RETURNS
     typedef R         result_type;
 #else
