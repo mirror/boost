@@ -177,12 +177,31 @@ public: // queries
 };
 
 //////////////////////////////////////////////////////////////////////////
+// (detail) typedef visitor_void_result
+//
+// Visitor result type to be used by detail visitors in event of 
+// BOOST_NO_VOID_RETURNS configuration.
+//
+// Rationale: variant::raw_apply_visitor does not provide the workaround.
+//
+
+#if !defined(BOOST_NO_VOID_RETURNS)
+
+typedef void visitor_void_result;
+
+#else // defined(BOOST_NO_VOID_RETURNS)
+
+typedef mpl::void_ visitor_void_result;
+
+#endif // BOOST_NO_VOID_RETURNS workaround
+
+//////////////////////////////////////////////////////////////////////////
 // (detail) class destroyer
 //
 // Generic static visitor that destroys the value it visits.
 //
 struct destroyer
-    : public static_visitor<>
+    : public static_visitor<visitor_void_result>
 {
 public: // visitor interfaces
 
@@ -204,7 +223,7 @@ public: // visitor interfaces
 // Generic static visitor that copies the value it visits into the given buffer.
 //
 class copy_into
-    : public static_visitor<>
+    : public static_visitor<visitor_void_result>
 {
 private: // representation
 
@@ -233,7 +252,7 @@ public: // visitor interfaces
 // Generic static visitor that swaps the value it visits with the given value.
 //
 struct swap_with
-    : public static_visitor<>
+    : public static_visitor<visitor_void_result>
 {
 private: // representation
 
@@ -284,16 +303,34 @@ public: // visitor interfaces
 //
 template <typename Visitor>
 class invoke_visitor
-    : public static_visitor< typename Visitor::result_type >
 {
 private: // representation
 
     Visitor& visitor_;
 
-public: // typedefs
+public: // visitor typedefs
+
+#if !defined(BOOST_NO_VOID_RETURNS)
 
     typedef typename Visitor::result_type
         result_type;
+
+#else // defined(BOOST_NO_VOID_RETURNS)
+
+private: // helpers, for visitor typedefs (below)
+
+    typedef typename is_void< typename Visitor::result_type >::type
+        has_void_result_type;
+
+public: // visitor typedefs
+
+    typedef typename mpl::if_<
+          has_void_result_type
+        , mpl::void_
+        , typename Visitor::result_type
+        > result_type;
+
+#endif // BOOST_NO_VOID_RETURNS workaround
 
 public: // structors
 
@@ -302,26 +339,59 @@ public: // structors
     {
     }
 
-#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+private: // helpers, for visitor interfaces (below)
+
+#if !defined(BOOST_NO_VOID_RETURNS)
+
+    template <typename T>
+    result_type visit(T& operand)
+    {
+        return visitor_(operand);
+    }
+
+#else // defined(BOOST_NO_VOID_RETURNS)
+
+    template <typename T>
+    result_type visit_impl(T& operand, mpl::false_)
+    {
+        return visitor_(operand);
+    }
+
+    template <typename T>
+    mpl::void_ visit_impl(T& operand, mpl::true_)
+    {
+        visitor_(operand);
+        return mpl::void_();
+    }
+
+    template <typename T>
+    result_type visit(T& operand)
+    {
+        return visit_impl(operand, has_void_result_type());
+    }
+
+#endif // BOOST_NO_VOID_RETURNS) workaround
 
 public: // visitor interfaces
+
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 
     template <typename T>
     result_type operator()(incomplete<T>& operand)
     {
-        return visitor_(operand.get());
+        return visit(operand.get());
     }
 
     template <typename T>
     result_type operator()(const incomplete<T>& operand)
     {
-        return visitor_(operand.get());
+        return visit(operand.get());
     }
 
     template <typename T>
     result_type operator()(T& operand)
     {
-        return visitor_(operand);
+        return visit(operand);
     }
 
 #else// defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
@@ -331,19 +401,19 @@ private: // helpers, for visitor interfaces (below)
     template <typename T>
     result_type execute_impl(incomplete<T>& operand, long)
     {
-        return visitor_(operand.get());
+        return visit(operand.get());
     }
 
     template <typename T>
     result_type execute_impl(const incomplete<T>& operand, long)
     {
-        return visitor_(operand.get());
+        return visit(operand.get());
     }
 
     template <typename T>
     result_type execute_impl(T& operand, int)
     {
-        return visitor_(operand);
+        return visit(operand);
     }
 
 public: // visitor interfaces
@@ -837,7 +907,7 @@ private: // helpers, for modifiers (below)
     //
 
     class assign_into
-        : public static_visitor<>
+        : public static_visitor<detail::variant::visitor_void_result>
     {
     private: // representation
 
@@ -923,7 +993,10 @@ public: // modifiers
 
     variant& operator=(const variant& rhs)
     {
-        assign(rhs);
+        //assign(rhs);
+        assign_into visitor(*this, operand.which());
+        operand.raw_apply_visitor(visitor);  
+
         return *this;
     }
 
@@ -934,7 +1007,7 @@ public: // modifiers
         // construction of a variant allows T as any type convertible
         // to a bounded type (i.e., opposed to an exact match).
 
-        assign(rhs);
+        assign(rhs);  // rhs implicitly constructed as variant
         return *this;
     }
 
@@ -948,7 +1021,7 @@ private: // helpers, for modifiers, cont. (below)
     //
 
     class swap_variants
-        : public static_visitor<>
+        : public static_visitor<detail::variant::visitor_void_result>
     {
     private: // representation
 
@@ -1111,7 +1184,7 @@ private: // helpers, for visitation support (below)
     template <typename T, typename Visitor>
     static
         typename Visitor::result_type
-    apply_visitor_impl(Visitor& visitor, void* storage)
+    apply_visitor_impl(Visitor& visitor, void* storage, T* = 0)
     {
         return visitor(
               *static_cast< T* >( storage )
@@ -1121,7 +1194,7 @@ private: // helpers, for visitation support (below)
     template <typename T, typename Visitor>
     static
         typename Visitor::result_type
-    apply_visitor_impl(Visitor& visitor, const void* storage)
+    apply_visitor_impl(Visitor& visitor, const void* storage, T* = 0)
     {
         return visitor(
               *static_cast< const T* >( storage )
@@ -1140,22 +1213,27 @@ private: // helpers, for visitation support (below)
         , Visitor& visitor
         , VoidPtrCV storage
         , mpl::false_// next_is_last
+        , Which* = 0, T* type = 0, NextIt* = 0, LastIt* last_it = 0
         )
     {
-        typedef typename mpl::next<Which>::type next_which;
-        typedef typename NextIt::type next_type;
-        typedef typename mpl::next<NextIt>::type next_next_it;
-        typedef typename is_same<next_next_it, LastIt>::type next_next_is_last;
-
+        // If current iteration matches variant content...
         if (var_which == Which::value)
         {
-            return apply_visitor_impl<T>(visitor, storage);
+            // ...then apply visitor to the variant content:
+            return apply_visitor_impl(visitor, storage, type);
         }
 
-        return apply_visitor_impl<
-              next_which, next_type
-            , next_next_it, LastIt
-            >(var_which, visitor, storage, next_next_is_last());
+        // Otherwise, tail recurse, checking next iteration:
+        typename mpl::next<Which>::type* next_which = 0;
+        typename NextIt::type* next_type = 0;
+        typedef typename mpl::next<NextIt>::type next_next_it_t;
+        next_next_it_t* next_next_it = 0;
+        typedef typename is_same<next_next_it_t, LastIt>::type next_next_is_last;
+
+        return apply_visitor_impl(
+              var_which, visitor, storage, next_next_is_last()
+            , next_which, next_type, next_next_it, last_it
+            );
     }
 
     template <
@@ -1170,10 +1248,12 @@ private: // helpers, for visitation support (below)
         , Visitor& visitor
         , VoidPtrCV storage
         , mpl::true_// next_is_last
+        , Which* = 0, T* type = 0, NI* = 0, LI* = 0
         )
     {
+        // No prior iterations matched, so variant content is last type:
         BOOST_ASSERT(var_which == Which::value);
-        return apply_visitor_impl<T>(visitor, storage);
+        return apply_visitor_impl(visitor, storage, type);
     }
 
 // helpers, for visitation support (below) -- private when possible
@@ -1194,38 +1274,38 @@ public:
         typename Visitor::result_type
     raw_apply_visitor(Visitor& visitor)
     {
-        typedef mpl::int_<0> first_which;
+        mpl::int_<0>* first_which = 0;
         typedef typename mpl::begin<types>::type first_it;
-        typedef typename first_it::type first_type;
-        typedef typename mpl::next<first_it>::type next_it;
-        typedef typename mpl::end<types>::type last_it;
+        typename first_it::type* first_type = 0;
+        typename mpl::next<first_it>::type* next_it = 0;
+        typename mpl::end<types>::type* last_it = 0;
 
-        return apply_visitor_impl<
-              first_which, first_type
-            , next_it, last_it
-            >(which(), visitor, active_storage(), mpl::false_());
+        return apply_visitor_impl(
+              which(), visitor, active_storage(), mpl::false_()
+            , first_which, first_type, next_it, last_it
+            );
     }
 
     template <typename Visitor>
         typename Visitor::result_type
     raw_apply_visitor(Visitor& visitor) const
     {
-        typedef mpl::int_<0> first_which;
+        mpl::int_<0>* first_which = 0;
         typedef typename mpl::begin<types>::type first_it;
-        typedef typename first_it::type first_type;
-        typedef typename mpl::next<first_it>::type next_it;
-        typedef typename mpl::end<types>::type last_it;
+        typename first_it::type* first_type = 0;
+        typename mpl::next<first_it>::type* next_it = 0;
+        typename mpl::end<types>::type* last_it = 0;
 
-        return apply_visitor_impl<
-              first_which, first_type
-            , next_it, last_it
-            >(which(), visitor, active_storage(), mpl::false_());
+        return apply_visitor_impl(
+              which(), visitor, active_storage(), mpl::false_()
+            , first_which, first_type, next_it, last_it
+            );
     }
 
 public: // visitation support
 
     template <typename Visitor>
-        typename Visitor::result_type
+        typename detail::variant::invoke_visitor<Visitor>::result_type
     apply_visitor(Visitor& visitor)
     {
         detail::variant::invoke_visitor<Visitor> invoker(visitor);
@@ -1233,7 +1313,7 @@ public: // visitation support
     }
 
     template <typename Visitor>
-        typename Visitor::result_type
+        typename detail::variant::invoke_visitor<Visitor>::result_type
     apply_visitor(Visitor& visitor) const
     {
         detail::variant::invoke_visitor<Visitor> invoker(visitor);
