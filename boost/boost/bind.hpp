@@ -8,7 +8,7 @@
 //
 //  bind.hpp - binds function objects to arguments
 //
-//  Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2001, 2002 Peter Dimov and Multi Media Ltd.
 //  Copyright (c) 2001 David Abrahams
 //
 //  Permission to copy, use, modify, sell and distribute this software
@@ -22,6 +22,7 @@
 #include <boost/config.hpp>
 #include <boost/ref.hpp>
 #include <boost/mem_fn.hpp>
+#include <boost/bind/arg.hpp>
 
 // Borland-specific bug, visit_each() silently fails to produce code
 
@@ -79,10 +80,6 @@ private:
 
     T t_;
 };
-
-// arg
-
-template<int I> class arg {};
 
 // type
 
@@ -1300,18 +1297,11 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 
 } // namespace boost
 
-namespace
-{
-    boost::_bi::arg<1> _1;
-    boost::_bi::arg<2> _2;
-    boost::_bi::arg<3> _3;
-    boost::_bi::arg<4> _4;
-    boost::_bi::arg<5> _5;
-    boost::_bi::arg<6> _6;
-    boost::_bi::arg<7> _7;
-    boost::_bi::arg<8> _8;
-    boost::_bi::arg<9> _9;
-}
+#ifndef BOOST_BIND_NO_PLACEHOLDERS
+
+# include <boost/bind/placeholders.hpp>
+
+#endif
 
 #ifdef BOOST_MSVC
 # pragma warning(default: 4512) // assignment operator could not be generated
