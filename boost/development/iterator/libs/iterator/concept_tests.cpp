@@ -45,9 +45,13 @@ struct old_iterator
 };
 old_iterator operator+(std::ptrdiff_t, old_iterator x) { return x; }
 
+struct bar { };
+void foo(bar) { }
+
 int
 main()
 {
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   boost::function_requires<
     boost_concepts::MutableLvalueIteratorConcept<int*> >();
   boost::function_requires<
@@ -57,6 +61,7 @@ main()
     boost_concepts::ConstantLvalueIteratorConcept<const int*> >();
   boost::function_requires<
     boost_concepts::RandomAccessIteratorConcept<const int*> >();
+#endif
 
   boost::function_requires<
     boost_concepts::MutableLvalueIteratorConcept<new_iterator> >();
