@@ -35,6 +35,15 @@ void function_requires()
 // The BOOST_CLASS_REQUIRES macros use function pointers as
 // template parameters, which VC++ does not support.
 
+#if defined(BOOST_NO_FUNCTION_PTR_TEMPLATE_PARAMETERS)
+
+#define BOOST_CLASS_REQUIRES(type_var, concept)
+#define BOOST_CLASS_REQUIRES2(type_var1, type_var2, concept)
+#define BOOST_CLASS_REQUIRES3(type_var1, type_var2, type_var3, concept)
+#define BOOST_CLASS_REQUIRES4(type_var1, type_var2, type_var3, type_var4, concept)
+
+#else
+
 #define BOOST_CLASS_REQUIRES(type_var, concept) \
   typedef void (concept <type_var>::* func##type_var##concept)(); \
   template <func##type_var##concept _Tp1> \
@@ -68,6 +77,7 @@ void function_requires()
     concept_checking_typedef_##type_var1##type_var2##type_var3##type_var4##concept
 
 
+#endif
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T, class U>
@@ -135,14 +145,13 @@ struct require_same { typedef T type; };
   //===========================================================================
   // Basic Concepts
 
-  template <class X, class Y>
-  struct ConvertibleConcept
+  template <class TT>
+  struct DefaultConstructibleConcept
   {
     void constraints() {
-      Y y = x;
-      ignore_unused_variable_warning(y);
+      TT a;               // require default constructor
+      ignore_unused_variable_warning(a);
     }
-    X x;
   };
 
   template <class TT>
@@ -163,32 +172,6 @@ struct require_same { typedef T type; };
   };
 
   template <class TT>
-  struct AssignableSGIConcept
-  {
-    void constraints() {
-#if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
-      a = a;              // require assignment operator
-#endif
-      const_constraints(a);
-    }
-    void const_constraints(const TT& b) {
-#if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
-      a = b;              // const required for argument to assignment
-#endif
-    }
-    TT a;
-  };
-
-  template <class TT>
-  struct DefaultConstructibleConcept
-  {
-    void constraints() {
-      TT a;               // require default constructor
-      ignore_unused_variable_warning(a);
-    }
-  };
-
-  template <class TT>
   struct CopyConstructibleConcept
   {
     void constraints() {
@@ -204,6 +187,36 @@ struct require_same { typedef T type; };
       ignore_unused_variable_warning(ptr);
     }
     TT b;
+  };
+
+  // The SGI STL version of Assignable requires copy constructor and operator=
+  template <class TT>
+  struct SGIAssignableConcept
+  {
+    void constraints() {
+      TT b(a);
+#if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
+      a = a;              // require assignment operator
+#endif
+      const_constraints(a);
+    }
+    void const_constraints(const TT& b) {
+      TT c(b);
+#if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
+      a = b;              // const required for argument to assignment
+#endif
+    }
+    TT a;
+  };
+
+  template <class X, class Y>
+  struct ConvertibleConcept
+  {
+    void constraints() {
+      Y y = x;
+      ignore_unused_variable_warning(y);
+    }
+    X x;
   };
 
   // The C++ standard requirements for many concepts talk about return
@@ -231,19 +244,6 @@ struct require_same { typedef T type; };
     TT a, b;
   };
 
-  template <class AA, class BB>
-  struct EqualityComparable2Concept
-  {
-    void constraints() {
-      require_boolean_expr(a == b);
-      require_boolean_expr(b == a);
-      require_boolean_expr(a != b);
-      require_boolean_expr(b != a);
-    }
-    AA a;
-    BB b;
-  };
-
   template <class TT>
   struct LessThanComparableConcept
   {
@@ -253,25 +253,11 @@ struct require_same { typedef T type; };
     TT a, b;
   };
 
-  template <class AA, class BB>
-  struct LessThanComparable2Concept
-  {
-    void constraints() {
-      function_requires< LessThanComparableConcept<AA> >();
-      function_requires< LessThanComparableConcept<BB> >();
-      require_boolean_expr(a < b);
-      require_boolean_expr(b < a);
-    }
-    AA a;
-    BB b;
-  };
-
   // This is equivalent to SGI STL's LessThanComparable.
   template <class TT>
   struct ComparableConcept
   {
     void constraints() {
-      function_requires< EqualityComparableConcept<TT> >();
       require_boolean_expr(a < b);
       require_boolean_expr(a > b);
       require_boolean_expr(a <= b);
@@ -280,26 +266,146 @@ struct require_same { typedef T type; };
     TT a, b;
   };
 
-  // This is a generalization of SGI STL's LessThanComparable
-  // concept to 2 types.
-  template <class AA, class BB>
-  struct Comparable2Concept
+#define BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(OP,NAME) \
+  template <class First, class Second> \
+  struct NAME { \
+    void constraints() { (void)constraints_(); } \
+    bool constraints_() {  \
+      return  a OP b; \
+    } \
+    First a; \
+    Second b; \
+  }
+
+#define BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(OP,NAME) \
+  template <class Ret, class First, class Second> \
+  struct NAME { \
+    void constraints() { (void)constraints_(); } \
+    Ret constraints_() {  \
+      return a OP b; \
+    } \
+    First a; \
+    Second b; \
+  }
+
+  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(==, EqualOpConcept);
+  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(!=, NotEqualOpConcept);
+  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(<, LessThanOpConcept);
+  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(<=, LessEqualOpConcept);
+  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(>, GreaterThanOpConcept);
+  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(>=, GreaterEqualOpConcept);
+
+  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(+, PlusOpConcept);
+  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(*, TimesOpConcept);
+  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(/, DivideOpConcept);
+  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(-, SubtractOpConcept);
+  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(%, ModOpConcept);
+
+  //===========================================================================
+  // Function Object Concepts
+
+  template <class Func, class Return>
+  struct GeneratorConcept
   {
     void constraints() {
-      function_requires< EqualityComparable2Concept<AA,BB> >();
-      function_requires< ComparableConcept<AA> >();
-      function_requires< ComparableConcept<BB> >();
-      require_boolean_expr(a < b);
-      require_boolean_expr(b < a);
-      require_boolean_expr(a > b);
-      require_boolean_expr(b > a);
-      require_boolean_expr(a <= b);
-      require_boolean_expr(b <= a);
-      require_boolean_expr(a >= b);
-      require_boolean_expr(b >= a);
+      const Return& r = f();   // require operator() member function
     }
-    AA a;
-    BB b;
+    Func f;
+  };
+
+
+#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+  template <class Func>
+  struct GeneratorConcept<Func,void>
+  {
+    void constraints() {
+      f();              // require operator() member function
+    }
+    Func f;
+  };
+#endif
+
+  template <class Func, class Return, class Arg>
+  struct UnaryFunctionConcept
+  {
+    void constraints() {
+      r = f(arg); // require operator()
+    }
+    Func f;
+    Arg arg;
+    Return r;
+  };
+
+#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+  template <class Func, class Arg>
+  struct UnaryFunctionConcept<Func, void, Arg> {
+    void constraints() { 
+      f(arg);                 // require operator()
+    }
+    Func f;
+  };
+#endif
+
+  template <class Func, class Return, class First, class Second>
+  struct BinaryFunctionConcept
+  {
+    void constraints() { 
+      r = f(first, second); // require operator()
+    }
+    Func f;
+    First first;
+    Second second;
+    Return r;
+  };
+
+#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+  template <class Func, class First, class Second>
+  struct BinaryFunctionConcept<Func, void, First, Second>
+  {
+    void constraints() {
+      f(first, second); // require operator()
+    }
+    Func f;
+    First first;
+    Second second;
+  };
+#endif
+
+  template <class Func, class Arg>
+  struct UnaryPredicateConcept
+  {
+    void constraints() {
+      require_boolean_expr(f(arg)); // require operator() returning bool
+    }
+    Func f;
+    Arg arg;
+  };
+
+  template <class Func, class First, class Second>
+  struct BinaryPredicateConcept
+  {
+    void constraints() {
+      require_boolean_expr(f(a, b)); // require operator() returning bool
+    }
+    Func f;
+    First a;
+    Second b;
+  };
+
+  // use this when functor is used inside a container class like std::set
+  template <class Func, class First, class Second>
+  struct Const_BinaryPredicateConcept {
+    void constraints() { 
+      const_constraints(f);
+    }
+    void const_constraints(const Func& fun) {
+      function_requires<BinaryPredicateConcept<Func, First, Second> >();
+      // operator() must be a const member function
+      require_boolean_expr(fun(a, b));
+    }
+    Func f;
+    First a;
+    Second b;
   };
 
   //===========================================================================
@@ -464,149 +570,6 @@ struct require_same { typedef T type; };
     std::ptrdiff_t n;
 #endif
   };
-
-  //===========================================================================
-  // Function Object Concepts
-
-  template <class Func, class Return>
-  struct GeneratorConcept
-  {
-    void constraints() {
-      r = f();   // require operator() member function
-    }
-    Func f;
-    Return r;
-  };
-
-
-#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  template <class Func>
-  struct GeneratorConcept<Func,void>
-  {
-    void constraints() {
-      f();              // require operator() member function
-    }
-    Func f;
-  };
-#endif
-
-  template <class Func, class Return, class Arg>
-  struct UnaryFunctionConcept
-  {
-    void constraints() {
-      r = f(arg); // require operator()
-    }
-    Func f;
-    Arg arg;
-    Return r;
-  };
-
-#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  template <class Func, class Arg>
-  struct UnaryFunctionConcept<Func, void, Arg> {
-    void constraints() { 
-      f(arg);                 // require operator()
-    }
-    Func f;
-  };
-#endif
-
-  template <class Func, class Return, class First, class Second>
-  struct BinaryFunctionConcept
-  {
-    void constraints() { 
-      r = f(first, second); // require operator()
-    }
-    Func f;
-    First first;
-    Second second;
-    Return r;
-  };
-
-#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  template <class Func, class First, class Second>
-  struct BinaryFunctionConcept<Func, void, First, Second>
-  {
-    void constraints() {
-      f(first, second); // require operator()
-    }
-    Func f;
-    First first;
-    Second second;
-  };
-#endif
-
-  template <class Func, class Arg>
-  struct UnaryPredicateConcept
-  {
-    void constraints() {
-      require_boolean_expr(f(arg)); // require operator() returning bool
-    }
-    Func f;
-    Arg arg;
-  };
-
-  template <class Func, class First, class Second>
-  struct BinaryPredicateConcept
-  {
-    void constraints() {
-      require_boolean_expr(f(a, b)); // require operator() returning bool
-    }
-    Func f;
-    First a;
-    Second b;
-  };
-
-  // use this when functor is used inside a container class like std::set
-  template <class Func, class First, class Second>
-  struct Const_BinaryPredicateConcept {
-    void constraints() { 
-      const_constraints(f);
-    }
-    void const_constraints(const Func& fun) {
-      function_requires<BinaryPredicateConcept<Func, First, Second> >();
-      // operator() must be a const member function
-      require_boolean_expr(fun(a, b));
-    }
-    Func f;
-    First a;
-    Second b;
-  };
-
-#define BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(OP,NAME) \
-  template <class First, class Second> \
-  struct NAME { \
-    void constraints() { (void)constraints_(); } \
-    bool constraints_() {  \
-      return  a OP b; \
-    } \
-    First a; \
-    Second b; \
-  }
-
-#define BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(OP,NAME) \
-  template <class Ret, class First, class Second> \
-  struct NAME { \
-    void constraints() { (void)constraints_(); } \
-    Ret constraints_() {  \
-      return a OP b; \
-    } \
-    First a; \
-    Second b; \
-  }
-
-  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(==, EqualOpConcept);
-  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(!=, NotEqualOpConcept);
-  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(<, LessThanOpConcept);
-  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(<=, LessEqualOpConcept);
-  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(>, GreaterThanOpConcept);
-  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(>=, GreaterEqualOpConcept);
-
-  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(+, PlusOpConcept);
-  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(*, TimesOpConcept);
-  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(/, DivideOpConcept);
-  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(-, SubtractOpConcept);
-  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(%, ModOpConcept);
 
   //===========================================================================
   // Container Concepts
