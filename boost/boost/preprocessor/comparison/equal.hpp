@@ -24,11 +24,6 @@ in the range [0, BOOST_PP_LIMIT_MAG].</p>
 
 <p>For example, <code>BOOST_PP_EQUAL(4,4)</code> expands to <code>1</code>.</p>
 
-<h3>Uses</h3>
-<ul>
-  <li>BOOST_PP_WHILE()</li>
-</ul>
-
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/arithmetic_test.cpp">arithmetic_test.cpp</a></li>
@@ -36,9 +31,6 @@ in the range [0, BOOST_PP_LIMIT_MAG].</p>
 */
 #define BOOST_PP_EQUAL(X,Y) BOOST_PP_EQUAL_D(0,X,Y)
 
-/** <p>Can be used inside BOOST_PP_WHILE().</p> */
+/** <p>Can be used inside BOOST_PP_WHILE() (see for an explanation of the D parameter).</p> */
 #define BOOST_PP_EQUAL_D(D,X,Y) BOOST_PP_NOT(BOOST_PP_NOT_EQUAL_D(D,X,Y))
-
-/* <p>Obsolete. Use BOOST_PP_EQUAL().</p> */
-#define BOOST_PREPROCESSOR_EQUAL(X,Y) BOOST_PP_EQUAL(X,Y)
 #endif

@@ -34,7 +34,4 @@ BOOST_PP_IF(0,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
 </ul>
 */
 #define BOOST_PP_EMPTY()
-
-/* <p>Obsolete. Use BOOST_PP_EMPTY().</p> */
-#define BOOST_PREPROCESSOR_EMPTY()
 #endif

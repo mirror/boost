@@ -25,11 +25,6 @@ in the range [0, BOOST_PP_LIMIT_MAG].</p>
 <p>For example, <code>BOOST_PP_SUB(4,3)</code> expands to <code>1</code> (a
 single token).</p>
 
-<h3>Uses</h3>
-<ul>
-  <li>BOOST_PP_WHILE()</li>
-</ul>
-
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/arithmetic_test.cpp">arithmetic_test.cpp</a></li>
@@ -37,16 +32,13 @@ single token).</p>
 */
 #define BOOST_PP_SUB(X,Y) BOOST_PP_SUB_D(0,X,Y)
 
-/** <p>Can be used inside BOOST_PP_WHILE().</p> */
+/** <p>Can be used inside BOOST_PP_WHILE() (see for an explanation of the D parameter).</p> */
 #define BOOST_PP_SUB_D(D,X,Y) BOOST_PP_TUPLE_ELEM(2,0,BOOST_PP_WHILE##D(BOOST_PP_SUB_C,BOOST_PP_SUB_F,(X,Y)))
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
-#  define BOOST_PP_SUB_C(D,P) BOOST_PP_TUPLE_ELEM(2,1,P)
-#  define BOOST_PP_SUB_F(D,P) (BOOST_PP_DEC(BOOST_PP_TUPLE_ELEM(2,0,P)),BOOST_PP_DEC(BOOST_PP_TUPLE_ELEM(2,1,P)))
+#  define BOOST_PP_SUB_C(D,RC) BOOST_PP_TUPLE_ELEM(2,1,RC)
+#  define BOOST_PP_SUB_F(D,RC) (BOOST_PP_DEC(BOOST_PP_TUPLE_ELEM(2,0,RC)),BOOST_PP_DEC(BOOST_PP_TUPLE_ELEM(2,1,RC)))
 #else
-#  define BOOST_PP_SUB_C(D,P) BOOST_PP_TUPLE2_ELEM1 P
-#  define BOOST_PP_SUB_F(D,P) (BOOST_PP_DEC(BOOST_PP_TUPLE2_ELEM0 P),BOOST_PP_DEC(BOOST_PP_TUPLE2_ELEM1 P))
+#  define BOOST_PP_SUB_C(D,RC) BOOST_PP_TUPLE2_ELEM1 RC
+#  define BOOST_PP_SUB_F(D,RC) (BOOST_PP_DEC(BOOST_PP_TUPLE2_ELEM0 RC),BOOST_PP_DEC(BOOST_PP_TUPLE2_ELEM1 RC))
 #endif
-
-/* <p>Obsolete. Use BOOST_PP_SUB(X,Y).</p> */
-#define BOOST_PREPROCESSOR_SUB(X,Y) BOOST_PP_SUB(X,Y)
 #endif

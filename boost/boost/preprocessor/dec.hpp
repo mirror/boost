@@ -155,7 +155,4 @@ supported.</p>
 #define BOOST_PP_DEC126 125
 #define BOOST_PP_DEC127 126
 #define BOOST_PP_DEC128 127
-
-/* <p>Obsolete. Use BOOST_PP_DEC().</p> */
-#define BOOST_PREPROCESSOR_DEC(X) BOOST_PP_DEC(X)
 #endif

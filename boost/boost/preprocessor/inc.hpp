@@ -156,7 +156,4 @@ supported.</p>
 #define BOOST_PP_INC126 127
 #define BOOST_PP_INC127 128
 #define BOOST_PP_INC128 128
-
-/* <p>Obsolete. Use BOOST_PP_INC().</p> */
-#define BOOST_PREPROCESSOR_INC(X) BOOST_PP_INC(X)
 #endif

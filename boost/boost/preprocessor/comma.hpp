@@ -32,7 +32,4 @@ BOOST_PP_IF(1,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
 </ul>
 */
 #define BOOST_PP_COMMA() ,
-
-/* <p>Obsolete. Use BOOST_PP_COMMA().</p> */
-#define BOOST_PREPROCESSOR_COMMA() ,
 #endif

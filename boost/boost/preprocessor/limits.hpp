@@ -16,16 +16,16 @@
 /** <p>Expands to the number of dimensions of repeat supported by the
 library.</p>
 
-<p>The repeat macros are named BOOST_PP_REPEAT(), BOOST_PP_REPEAT_2ND(),
-BOOST_PP_REPEAT_3RD(), ...</p>
+<p>This concerns the repetition primitives (BOOST_PP_ENUM(),
+BOOST_PP_REPEAT() and BOOST_PP_REPEAT_FROM_TO()).</p>
 */
 #define BOOST_PP_LIMIT_DIM 3
 
 /** <p>Expands to the maximum straight numeric literal supported by the
 library.</p>
 
-<p>This is also the limit of the repetition primitives (BOOST_PP_ENUM family
-and BOOST_PP_REPEAT family).</p>
+<p>This is also the limit of the repetition primitives (BOOST_PP_ENUM(),
+BOOST_PP_REPEAT() and BOOST_PP_REPEAT_FROM_TO()).</p>
 
 <h3>Note</h3>
 <ul>
@@ -41,13 +41,4 @@ and BOOST_PP_REPEAT family).</p>
 
 /** <p>Expands to the maximum tuple size supported by the library.</p> */
 #define BOOST_PP_LIMIT_TUPLE 16
-
-/* <p>Obsolete. Use BOOST_PP_LIMIT_DIM.</p> */
-#define BOOST_PREPROCESSOR_LIMIT_DIM BOOST_PP_LIMIT_DIM
-
-/* <p>Obsolete. Use BOOST_PP_LIMIT_MAG.</p> */
-#define BOOST_PREPROCESSOR_LIMIT_MAG BOOST_PP_LIMIT_MAG
-
-/* <p>Obsolete. Use BOOST_PP_LIMIT_TUPLE.</p> */
-#define BOOST_PREPROCESSOR_LIMIT_TUPLE BOOST_PP_LIMIT_TUPLE
 #endif

@@ -24,7 +24,4 @@
 <p>For example, <code>BOOST_PP_ASSERT_MSG(1,A BUG!)</code> expands to <code>A BUG!</code>.</p>
 */
 #define BOOST_PP_ASSERT_MSG(COND,MSG) BOOST_PP_EXPR_IF(BOOST_PP_NOT(COND),MSG)
-
-/* <p>Obsolete. Use BOOST_PP_ASSERT_MSG().</p> */
-#define BOOST_PREPROCESSOR_ASSERT_MSG(C,MSG) BOOST_PP_ASSERT_MSG(C,MSG)
 #endif
