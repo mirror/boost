@@ -56,7 +56,7 @@ MPL_TEST_CASE()
     typedef begin<m>::type first;
     typedef end<m>::type last;
 
-    MPL_ASSERT(( is_same< first::type,mpl::pair<int,unsigned> > ));
+    MPL_ASSERT(( is_same< deref<first>::type,mpl::pair<int,unsigned> > ));
     MPL_ASSERT(( is_same< next<first>::type,last > ));
 
     typedef insert<m,mpl::pair<char,long> >::type m2;
@@ -81,9 +81,9 @@ MPL_TEST_CASE()
     typedef begin<m2>::type first2;
     typedef end<m2>::type last2;
 
-    MPL_ASSERT(( is_same<first2::type,mpl::pair<int,unsigned> > ));
+    MPL_ASSERT(( is_same<deref<first2>::type,mpl::pair<int,unsigned> > ));
     typedef next<first2>::type iter;
-    MPL_ASSERT(( is_same<iter::type,mpl::pair<char,long> > ));
+    MPL_ASSERT(( is_same<deref<iter>::type,mpl::pair<char,long> > ));
     MPL_ASSERT(( is_same< next<iter>::type,last2 > ));
 
     typedef insert<m2,mpl::pair<int,unsigned> >::type s2_1;

@@ -11,7 +11,7 @@
 <body text="#000000" bgcolor="#FFFFFF" link="#0000EE" vlink="#551A8B" alink="#FF0000">
 
 <h2><img src="../../../boost.png" WIDTH="276" HEIGHT="86">Header &lt;<A
-HREF="../../../../boost/minmax.hpp">boost/algorithm/minmax.hpp</A>&gt; </H2>
+HREF="../../../boost/algorithm/minmax.hpp">boost/algorithm/minmax.hpp</A>&gt; </H2>
 
 <quote>
 <b>
@@ -71,7 +71,7 @@ but I ruled against that (see <a href="#no-policy">rationale</a>).
 </p>
 
 <p>If you are interested about
-<a href="minmax_benchs.html">performance</a>,
+<a href="doc/minmax_benchs.html">performance</a>,
 you will see that <tt>minmax_element</tt> is just slightly less efficient
 than a single <tt>min_element</tt> or <tt>max_element</tt>, and thus
 twice as efficient as two separate calls to <tt>min_element</tt> and
@@ -301,8 +301,8 @@ the library under
 <a name="notes">
 <h3>
 Notes</h3>
-<a NAME="Note1"></a><a href="#Note1">[1]</a>We do not support
-idioms such as <tt><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html#tiers">tie</a>(a,b)=minmax(a,b)</tt>
+<a NAME="Note1"></a><a href="#Note1">[1]</a> We do not support
+idioms such as <tt><a href="../../tuple/doc/tuple_users_guide.html#tiers">tie</a>(a,b)=minmax(a,b)</tt>
 to order two elements <tt>a</tt>, <tt>b</tt>, although this would have
 the desired effect if we returned a reference instead of a constant
 reference. The reason is that two unnecessary assignments are

@@ -65,7 +65,7 @@ In explaining what the library is about, a line of code says more than a thousan
     </para>
   </section>
 
-  <section id="lambda_sect_getting_started">
+  <section id="lambda.getting_started">
     <title>Getting Started</title>
 
     <section>
@@ -83,41 +83,41 @@ In explaining what the library is about, a line of code says more than a thousan
 
 	  <listitem><para>
 	      <filename>lambda/lambda.hpp</filename> defines lambda expressions for different C++
-	      operators, see <xref linkend="lambda_sect_operator_expressions"/>.
+	      operators, see <xref linkend="lambda.operator_expressions"/>.
 	    </para></listitem>
 
 	  <listitem><para>
-	      <filename>lambda/bind.hpp</filename> defines <literal>bind</literal> functions for up to 9 arguments, see <xref linkend="lambda_sect_bind_expressions"/>.</para></listitem>
+	      <filename>lambda/bind.hpp</filename> defines <literal>bind</literal> functions for up to 9 arguments, see <xref linkend="lambda.bind_expressions"/>.</para></listitem>
 
 
 	  <listitem><para>
-	      <filename>lambda/if.hpp</filename> defines lambda function equivalents for if statements and the conditional operator, see <xref linkend="lambda_sect_lambda_expressions_for_control_structures"/> (includes <filename>lambda.hpp</filename>).
+	      <filename>lambda/if.hpp</filename> defines lambda function equivalents for if statements and the conditional operator, see <xref linkend="lambda.lambda_expressions_for_control_structures"/> (includes <filename>lambda.hpp</filename>).
 	    </para></listitem>
 
 	  <listitem><para>
-	      <filename>lambda/loops.hpp</filename> defines lambda function equivalent for looping constructs, see <xref linkend="lambda_sect_lambda_expressions_for_control_structures"/>.
+	      <filename>lambda/loops.hpp</filename> defines lambda function equivalent for looping constructs, see <xref linkend="lambda.lambda_expressions_for_control_structures"/>.
 	    </para></listitem>
 
 	  <listitem><para>
-	      <filename>lambda/switch.hpp</filename> defines lambda function equivalent for the switch statement, see <xref linkend="lambda_sect_lambda_expressions_for_control_structures"/>.
+	      <filename>lambda/switch.hpp</filename> defines lambda function equivalent for the switch statement, see <xref linkend="lambda.lambda_expressions_for_control_structures"/>.
 	    </para></listitem>
 
 	  <listitem><para>
-	      <filename>lambda/construct.hpp</filename> provides tools for writing lambda expressions with constructor, destructor, new and delete invocations, see <xref linkend="lambda_sect_construction_and_destruction"/> (includes <filename>lambda.hpp</filename>).
+	      <filename>lambda/construct.hpp</filename> provides tools for writing lambda expressions with constructor, destructor, new and delete invocations, see <xref linkend="lambda.construction_and_destruction"/> (includes <filename>lambda.hpp</filename>).
 	    </para></listitem>
 
 	  <listitem><para>
-	      <filename>lambda/casts.hpp</filename> provides lambda versions of different casts, as well as <literal>sizeof</literal> and <literal>typeid</literal>, see <xref linkend="lambda_sect_cast_expressions"/>.
+	      <filename>lambda/casts.hpp</filename> provides lambda versions of different casts, as well as <literal>sizeof</literal> and <literal>typeid</literal>, see <xref linkend="lambda.cast_expressions"/>.
 	    </para></listitem>
 
 	  <listitem><para>
 	      <filename>lambda/exceptions.hpp</filename> gives tools for throwing and catching
-	      exceptions within lambda functions, <xref linkend="lambda_sect_exceptions"/> (includes
+	      exceptions within lambda functions, <xref linkend="lambda.exceptions"/> (includes
 	      <filename>lambda.hpp</filename>).
 	    </para></listitem>
 
 	  <listitem><para>
-	      <filename>lambda/algorithm.hpp</filename> and <filename>lambda/numeric.hpp</filename> (cf. standard <filename>algortihm</filename> and <filename>numeric</filename> headers) allow nested STL algorithm invocations, see <xref linkend="lambda_sect_nested_stl_algorithms"/>.
+	      <filename>lambda/algorithm.hpp</filename> and <filename>lambda/numeric.hpp</filename> (cf. standard <filename>algortihm</filename> and <filename>numeric</filename> headers) allow nested STL algorithm invocations, see <xref linkend="lambda.nested_stl_algorithms"/>.
 	    </para></listitem>
 
 	</itemizedlist>
@@ -362,7 +362,7 @@ Hence, there is no syntactic keyword for C++ lambda expressions.
 
 
 
-<section id="lambda_sect_partial_function_application"> 
+<section id="lambda.partial_function_application"> 
 <title>Partial function application</title>
 
 <para>
@@ -382,7 +382,7 @@ In partial function application, some of the arguments of a function are bound t
 
 
 
-      <section id="lambda_sect_terminology">
+      <section id="lambda.terminology">
 	<title>Terminology</title>
 
 	<para>
@@ -398,7 +398,7 @@ In partial function application, some of the arguments of a function are bound t
 
   </section>
 
-  <section id = "lambda_sect_using_library">
+  <section id = "lambda.using_library">
     <title>Using the library</title>
 
     <para>
@@ -408,7 +408,7 @@ There are quite a lot of exceptions and special cases, but discussion of them is
 
     </para>
 
-    <section id = "lambda_sect_introductory_examples">
+    <section id = "lambda.introductory_examples">
       <title>Introductory Examples</title>
 
       <para>
@@ -480,7 +480,7 @@ The BLL provides functions <literal>constant</literal> and <literal>var</literal
 <programlisting>
 <![CDATA[for_each(vp.begin(), vp.end(), cout << constant('\n') << *_1);]]>
 </programlisting>
-These functions are described more thoroughly in <xref linkend="lambda_sect_delaying_constants_and_variables"/>
+These functions are described more thoroughly in <xref linkend="lambda.delaying_constants_and_variables"/>
 
 </para>
 
@@ -491,7 +491,7 @@ These functions are described more thoroughly in <xref linkend="lambda_sect_dela
     </section>
 
 
-    <section id="lambda_sect_parameter_and_return_types">
+    <section id="lambda.parameter_and_return_types">
       <title>Parameter and return types of lambda functors</title>
 
       <para>
@@ -524,8 +524,8 @@ These functions are described more thoroughly in <xref linkend="lambda_sect_dela
 
       <para>
 	There are two alternative solutions to this. 
-	The first is to extend the BLL type deduction system to cover your own types (see <xref linkend="lambda_sect_extending_return_type_system"/>). 
-	The second is to use a special lambda expression (<literal>ret</literal>) which defines the return type in place (see <xref linkend = "lambda_sect_overriding_deduced_return_type"/>):
+	The first is to extend the BLL type deduction system to cover your own types (see <xref linkend="lambda.extending"/>). 
+	The second is to use a special lambda expression (<literal>ret</literal>) which defines the return type in place (see <xref linkend = "lambda.overriding_deduced_return_type"/>):
 
 	<programlisting><![CDATA[A a; B b; ret<C>(_1 + _2)(a, b);]]></programlisting>
       </para>
@@ -536,18 +536,18 @@ These functions are described more thoroughly in <xref linkend="lambda_sect_dela
 
 <!--
 	A rare case, where the <literal><![CDATA[ret<type>(bind(...))]]></literal> syntax does not work, but
-	<literal><![CDATA[bind<type>(...)]]></literal> does, is explained in <xref linkend="lambda_sect_nullary_functors_and_ret"/>.
+	<literal><![CDATA[bind<type>(...)]]></literal> does, is explained in <xref linkend="lambda.nullary_functors_and_ret"/>.
 -->
       </para>
     </section>
 
-    <section id="lambda_sect_actual_arguments_to_lambda_functors">
+    <section id="lambda.actual_arguments_to_lambda_functors">
       <title>About actual arguments to lambda functors</title>
 
-      <para><emphasis>This section is no longer (or currently) relevant;
+<!--      <para><emphasis>This section is no longer (or currently) relevant;
        acual arguments can be non-const rvalues.
        The section can, however, become relevant again, if in the future BLL will support
-       lambda functors with higher arities than 3.</emphasis></para>
+       lambda functors with higher arities than 3.</emphasis></para> -->
 
       <para>A general restriction for the actual arguments is that they cannot be non-const rvalues. 
 	For example:
@@ -562,7 +562,7 @@ int i = 1; int j = 2;
 	Since the lambda functors are most often called inside STL-algorithms, 
 	the arguments originate from dereferencing iterators and the dereferencing operators seldom return rvalues.
 	And for the cases where they do, there are workarounds discussed in 
-<xref linkend="lambda_sect_rvalues_as_actual_arguments"/>.
+<xref linkend="lambda.rvalues_as_actual_arguments"/>.
 
 
       </para>
@@ -570,7 +570,7 @@ int i = 1; int j = 2;
     </section>
 
 
-<section id="lambda_sect_storing_bound_arguments">
+<section id="lambda.storing_bound_arguments">
 
 <title>Storing bound arguments in lambda functions</title>
       
@@ -642,7 +642,7 @@ exist for historical reasons,
 and <literal>ref</literal> can always
 be replaced with <literal>var</literal>, and <literal>cref</literal> with
 <literal>constant_ref</literal>. 
-See <xref linkend="lambda_sect_delaying_constants_and_variables"/> for details.
+See <xref linkend="lambda.delaying_constants_and_variables"/> for details.
 The <literal>ref</literal> and <literal>cref</literal> functions are
 general purpose utility functions in Boost, and hence defined directly
 in the <literal moreinfo="none">boost</literal> namespace.
@@ -702,7 +702,7 @@ This is to prevent pointer arithmetic making non-const arrays const.
 
 </section>
 
-<section id="lambda_sect_lambda_expressions_in_details">
+<section id="lambda.le_in_details">
 <title>Lambda expressions in details</title>
 
 <para>
@@ -712,7 +712,7 @@ We devote a separate section for each of the possible forms of a lambda expressi
 
 </para>
 
-<section id="lambda_sect_placeholders">
+<section id="lambda.placeholders">
 <title>Placeholders</title>
 
 <para>
@@ -758,14 +758,14 @@ _1(i, j, k)        // returns i, discards j and k
 </programlisting>
 
 See
-<xref linkend="lambda_sect_why_weak_arity"/> for the design rationale behind this
+<xref linkend="lambda.why_weak_arity"/> for the design rationale behind this
 functionality.
 
 </para>
 
 <para>
 In addition to these three placeholder types, there is also a fourth placeholder type <literal>placeholderE_type</literal>.
-The use of this placeholder is defined in <xref linkend="lambda_sect_exceptions"/> describing exception handling in lambda expressions. 
+The use of this placeholder is defined in <xref linkend="lambda.exceptions"/> describing exception handling in lambda expressions. 
 </para>
 
 <para>When an actual argument is supplied for a placeholder, the parameter passing mode is always by reference. 
@@ -782,7 +782,7 @@ For example:
 
 </section>
 
-<section id="lambda_sect_operator_expressions">
+<section id="lambda.operator_expressions">
 <title>Operator expressions</title>
 
 <para>
@@ -809,7 +809,7 @@ These operators are <literal>->.</literal>, <literal>-></literal>, <literal>new<
 
 </section>
 
-<section id="lambda_sect_assignment_and_subscript">
+<section id="lambda.assignment_and_subscript">
 <title>Assignment and subscript operators</title>
 
 <para>
@@ -822,7 +822,7 @@ _1 = i;      // ok
 i = _1;      // not ok. i is not a lambda expression
 </programlisting>
 
-There is a simple solution around this limitation, described in <xref linkend="lambda_sect_delaying_constants_and_variables"/>.
+There is a simple solution around this limitation, described in <xref linkend="lambda.delaying_constants_and_variables"/>.
 In short, 
 the left hand argument can be explicitly turned into a lambda functor by wrapping it with a special <literal>var</literal> function:
 <programlisting>
@@ -832,7 +832,7 @@ var(i) = _1; // ok
 </para>
 </section>
 
-<section id="lambda_sect_logical_operators">
+<section id="lambda.logical_operators">
 <title>Logical operators</title>
 
 <para>
@@ -844,7 +844,7 @@ bool flag = true; int i = 0;
 </para>
 </section>
 
-<section id="lambda_sect_comma_operator">
+<section id="lambda.comma_operator">
 <title>Comma operator</title>
 
 <para>
@@ -863,7 +863,7 @@ In the above example, each element of <literal>a</literal> is first incremented,
 </para>
 </section>
 
-<section id="lambda_sect_function_call_operator">
+<section id="lambda.function_call_operator">
 <title>Function call operator</title>
 
 <para>
@@ -873,7 +873,7 @@ Calls with too few arguments lead to a compile time error.
 </para>
 </section>
 
-<section id="lambda_sect_member_pointer_operator">
+<section id="lambda.member_pointer_operator">
 <title>Member pointer operator</title>
 
 <para>
@@ -925,7 +925,7 @@ B* b = new B();
 
 </section>
 
-<section id="lambda_sect_bind_expressions">
+<section id="lambda.bind_expressions">
 <title>Bind expressions</title>
 
 <para>
@@ -946,7 +946,7 @@ Basically, the
 <emphasis><literal>bind-argument-list</literal></emphasis> must be a valid argument list for the target function, except that any argument can be replaced with a placeholder, or more generally, with a lambda expression. 
 Note that also the target function can be a lambda expression.
 
-The result of a bind expression is either a nullary, unary, binary or 3-ary function object depending on the use of placeholders in the <emphasis><literal>bind-argument-list</literal></emphasis> (see <xref linkend="lambda_sect_placeholders"/>).
+The result of a bind expression is either a nullary, unary, binary or 3-ary function object depending on the use of placeholders in the <emphasis><literal>bind-argument-list</literal></emphasis> (see <xref linkend="lambda.placeholders"/>).
 </para>
 
 <para>
@@ -961,7 +961,7 @@ This is only necessary if the return type of the target function cannot be deduc
 The following sections describe the different types of bind expressions.
 </para>
 
-<section id="lambda_sect_function_pointers_as_targets">
+<section id="lambda.function_pointers_as_targets">
 <title>Function pointers or references as targets</title>
 
 <para>The target function can be a pointer or a reference to a function and it can be either bound or unbound. For example:
@@ -1062,7 +1062,7 @@ find_if(pointers.begin(), pointers.end(), bind(&A::foo, _1, 1));]]>
 <para>
 Even though the interfaces are the same, there are important semantic differences between using a pointer or a reference as the object argument.
 The differences stem from the way <literal>bind</literal>-functions take their parameters, and how the bound parameters are stored within the lambda functor.
-The object argument has the same parameter passing and storing mechanism as any other bind argument slot (see <xref linkend="lambda_sect_storing_bound_arguments"/>); it is passed as a const reference and stored as a const copy in the lambda functor.
+The object argument has the same parameter passing and storing mechanism as any other bind argument slot (see <xref linkend="lambda.storing_bound_arguments"/>); it is passed as a const reference and stored as a const copy in the lambda functor.
 This creates some asymmetry between the lambda functor and the original member function, and between seemingly similar lambda functors. For example:
 <programlisting>
 class A {
@@ -1114,7 +1114,7 @@ bind(&A::set_j, _1, 1)(a); // a.j == 1]]>
 </para>
 </section>
 
-<section id="lambda_sect_members_variables_as_targets">
+<section id="lambda.members_variables_as_targets">
 <title>Member variables as targets</title>
 
 <para>
@@ -1140,7 +1140,7 @@ bind(&A::data, _1)(ca) = 1;     // error]]>
 </para>
 </section>
 
-<section id="lambda_sect_function_objects_as_targets">
+<section id="lambda.function_objects_as_targets">
 <title>Function objects as targets</title>
 
 <para>
@@ -1235,8 +1235,8 @@ of one of the arguments, and how that dependency can be expressed with the
 <![CDATA[struct A {
 
   // the return type equals the third argument type:
-  template<class T1, T2, T3>
-  T3 operator()(const T1& t1, const T2& t2, const T3& t3);
+  template<class T1, class T2, class T3>
+  T3 operator()(const T1& t1, const T2& t2, const T3& t3) const;
 
   template <class Args> 
   class sig {
@@ -1246,7 +1246,7 @@ of one of the arguments, and how that dependency can be expressed with the
   public:
     typedef typename 
       boost::remove_cv<T3>::type type;
-  }
+  };
 };]]>
 </programlisting>
 
@@ -1289,12 +1289,12 @@ mechanism first introduced in the FC++ library
 
 </section>
 
-<section id="lambda_sect_overriding_deduced_return_type">
+<section id="lambda.overriding_deduced_return_type">
 <title>Overriding the deduced return type</title>
 
 <para>
 The return type deduction system may not be able to deduce the return types of some user defined operators or bind expressions with class objects.
-<!-- (see the example in <xref linkend="lambda_sect_parameter_and_return_types"/>).-->
+<!-- (see the example in <xref linkend="lambda.parameter_and_return_types"/>).-->
 A special lambda expression type is provided for stating the return type explicitly and overriding the deduction system. 
 To state that the return type of the lambda functor defined by the lambda expression <literal>e</literal> is <literal>T</literal>, you can write:
 
@@ -1342,10 +1342,10 @@ ret<D>( - ret<C>(_1 + _2))(a, b); // ok]]>
 </programlisting>
 </para>
 
-<para>If you find yourself using  <literal>ret</literal> repeatedly with the same types, it is worth while extending the return type deduction (see <xref linkend="lambda_sect_extending_return_type_system"/>).
+<para>If you find yourself using  <literal>ret</literal> repeatedly with the same types, it is worth while extending the return type deduction (see <xref linkend="lambda.extending"/>).
 </para>
 
-<section id="lambda_sect_nullary_functors_and_ret">
+<section id="lambda.nullary_functors_and_ret">
 <title>Nullary lambda functors and ret</title>
 
 <para>
@@ -1383,7 +1383,7 @@ apart from the fact that for some nullary lambda functors the former does not wo
 </section>
 
 
-<section id="lambda_sect_delaying_constants_and_variables">
+<section id="lambda.delaying_constants_and_variables">
 <title>Delaying constants and variables</title>
 
 <para>
@@ -1478,11 +1478,11 @@ for_each(a.begin(),a.end(), cout << space << _1);]]>
 <title>About assignment and subscript operators</title>
 
 <para>
-As described in <xref linkend="lambda_sect_assignment_and_subscript"/>, assignment and subscripting operators are always defined as member functions.
+As described in <xref linkend="lambda.assignment_and_subscript"/>, assignment and subscripting operators are always defined as member functions.
 This means, that for expressions of the form
 <literal>x = y</literal> or <literal>x[y]</literal> to be interpreted as lambda expressions, the left-hand operand <literal>x</literal> must be a lambda expression. 
 Consequently, it is sometimes necessary to use <literal>var</literal> for this purpose.
-We repeat the example from <xref linkend="lambda_sect_assignment_and_subscript"/>:
+We repeat the example from <xref linkend="lambda.assignment_and_subscript"/>:
 
 <programlisting>
 int i; 
@@ -1501,7 +1501,7 @@ For example, <literal>i += _1</literal> is equivalent to <literal>var(i) += _1</
 
 </section>
 
-<section id="lambda_sect_lambda_expressions_for_control_structures">
+<section id="lambda.lambda_expressions_for_control_structures">
 <title>Lambda expressions for control structures</title>
 
 <para>
@@ -1561,7 +1561,7 @@ for_each(a, a+5,
 </programlisting>
 
 <!--
-As explained in <xref linkend="lambda_sect_delaying_constants_and_variables"/>, we can avoid the repeated use of wrapping of <literal>var</literal> if we define it beforehand:
+As explained in <xref linkend="lambda.delaying_constants_and_variables"/>, we can avoid the repeated use of wrapping of <literal>var</literal> if we define it beforehand:
 
 <programlisting>
 <![CDATA[int i;
@@ -1601,7 +1601,7 @@ of these syntaces.
 
 
 
-<section id="lambda_sect_switch_statement">
+<section id="lambda.switch_statement">
 <title>Switch statement</title>
 </section>
 
@@ -1654,7 +1654,7 @@ Note that another lambda expression is sequenced after the <literal>switch_state
 
 </section>
 
-<section id="lambda_sect_exceptions">
+<section id="lambda.exceptions">
 <title>Exceptions</title>
 
 <para>
@@ -1734,7 +1734,7 @@ The last line of the second handler constructs a new exception object and
 throws that with <literal>throw exception</literal>. 
 
 Constructing and destructing objects within lambda expressions is 
-explained in <xref linkend="lambda_sect_construction_and_destruction"/>
+explained in <xref linkend="lambda.construction_and_destruction"/>
 </para>
 
 <para>
@@ -1768,7 +1768,7 @@ rethrowing exceptions.
 
 </section>
 
-<section id="lambda_sect_construction_and_destruction">
+<section id="lambda.construction_and_destruction">
 <title>Construction and destruction</title>
 
 
@@ -1940,7 +1940,7 @@ bind(bind(&amp;add_or_mul, _1), _2, _3)(condition, i, j);
 
 
 
-<section id="lambda_sect_unlambda">
+<section id="lambda.unlambda">
 <title>Unlambda</title>
 
 <para>A nested bind expression may occur inadvertently, 
@@ -2063,22 +2063,22 @@ and thus finally 13.
 <para>
 Primary motivation for including <literal>protect</literal> into the library, 
 was to allow nested STL algorithm invocations 
-(<xref linkend="lambda_sect_nested_stl_algorithms"/>).
+(<xref linkend="lambda.nested_stl_algorithms"/>).
 </para>
 
 </section>
 
 </section>
 
-<section id="lambda_sect_rvalues_as_actual_arguments">
+<section id="lambda.rvalues_as_actual_arguments">
 <title>Rvalues as actual arguments to lambda functors</title>
 
-      <para><emphasis>This section and all of its subsections
+<!--      <para><emphasis>This section and all of its subsections
        are no longer (or currently) relevant;
        acual arguments can be non-const rvalues and these workarounds are thus
        not needed.
        The section can, however, become relevant again, if in the future BLL will support
-       lambda functors with higher arities than 3.</emphasis></para>
+       lambda functors with higher arities than 3.</emphasis></para> -->
 
 <para>
 Actual arguments to the lambda functors cannot be non-const rvalues.
@@ -2088,7 +2088,7 @@ or there can be no side-effects to the actual arguments.
 There are ways around this limitation.
 
 We repeat the example from section 
-<xref linkend="lambda_sect_actual_arguments_to_lambda_functors"/> and list the 
+<xref linkend="lambda.actual_arguments_to_lambda_functors"/> and list the 
 different solutions:
 
 <programlisting>
@@ -2188,7 +2188,7 @@ and are not affected by the non-const rvalue problem.
 <section>
 <title>Casts, sizeof and typeid</title>
 
-<section id="lambda_sect_cast_expressions">
+<section id="lambda.cast_expressions">
 <title>
 Cast expressions
 </title>
@@ -2257,7 +2257,7 @@ function of that class.
 
 </section>
 
-<section id="lambda_sect_nested_stl_algorithms">
+<section id="lambda.nested_stl_algorithms">
 <title>Nesting STL algorithm invocations</title>
 
 <para>
@@ -2351,11 +2351,11 @@ calling templated functions ...
 
 -->
 
-<section id="lambda_sect_extending_return_type_system">
+<section id="lambda.extending">
 <title>Extending return type deduction system</title>
 
 <para>
-<!--The <xref linkend = "lambda_sect_overriding_deduced_return_type"/> showed how to make BLL aware of the return type of a function object in bind expressions.-->
+<!--The <xref linkend = "lambda.overriding_deduced_return_type"/> showed how to make BLL aware of the return type of a function object in bind expressions.-->
 
 In this section, we explain  how to extend the return type deduction system 
 to cover user defined operators. 
@@ -3147,7 +3147,7 @@ To get this functionality in BLL, the bind expression inside the <literal morein
 <programlisting>
 bind(unlambda(f), _1)(x);
 </programlisting>
-as explained in <xref linkend = "lambda_sect_unlambda"/>. 
+as explained in <xref linkend = "lambda.unlambda"/>. 
 
 </section>
 
@@ -3193,7 +3193,7 @@ to extend the library with new features.
 <appendix>
 <title>Rationale for some of the design decisions</title>
 
-<section id="lambda_sect_why_weak_arity">
+<section id="lambda.why_weak_arity">
 <title>
 Lambda functor arity
 </title>
@@ -3445,16 +3445,7 @@ was dropped.
 </biblioentry>
 
 
-
-
 </bibliography>
 
 
-
 </library>
-
-
-
-
-
-

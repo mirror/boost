@@ -80,10 +80,10 @@
   <para>
     The library depends on 
     <itemizedlist mark="bullet">
-      <listitem><ulink url="../../tokenizer/index.htm">boost.tokenizer</ulink> </listitem>
-      <listitem><ulink url="../../integer/cstdint.htm">boost.integer(cstdint)</ulink> </listitem>
-      <listitem><ulink url="../../utility/operators.htm">boost.operators</ulink> </listitem>
-      <listitem><ulink url="../../conversion/lexical_cast.htm">boost::lexical_cast </ulink> </listitem>
+      <listitem><ulink url="../../libs/tokenizer/index.html">boost.tokenizer</ulink> </listitem>
+      <listitem><ulink url="../../libs/integer/cstdint.htm">boost.integer(cstdint)</ulink> </listitem>
+      <listitem><ulink url="../../libs/utility/operators.htm">boost.operators</ulink> </listitem>
+      <listitem><ulink url="../../libs/conversion/lexical_cast.htm">boost::lexical_cast </ulink> </listitem>
     </itemizedlist>
     so at least these libraries need to be installed. 
   </para>

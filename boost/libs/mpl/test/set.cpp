@@ -46,7 +46,7 @@ MPL_TEST_CASE()
     typedef begin<s>::type first;
     typedef end<s>::type last;
 
-    MPL_ASSERT(( is_same< first::type, int > ));
+    MPL_ASSERT(( is_same< deref<first>::type, int > ));
     MPL_ASSERT(( is_same< next<first>::type, last > ));
 
     typedef s_unmask<char,s> s2;
