@@ -19,18 +19,25 @@
 
 // including this here to work around an ICC in intel 7.0
 // normally this would be part of basic_oarchive.hpp below.
+#define BOOST_ARCHIVE
 #include <boost/archive/basic_archive.hpp>
 
 #include <boost/archive/detail/basic_oserializer.hpp>
 #include <boost/archive/detail/basic_pointer_oserializer.hpp>
 #include <boost/archive/detail/basic_oarchive.hpp>
-
-#include <boost/serialization/extended_type_info.hpp>
 #include <boost/archive/archive_exception.hpp>
+
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4251 4231 4660 4275)
+#endif
 
 using namespace boost::serialization;
 
 namespace boost {
+namespace serialization {
+    class extended_type_info;
+}
 namespace archive {
 namespace detail {
 
@@ -378,33 +385,56 @@ basic_oarchive_impl::save_pointer(
 //////////////////////////////////////////////////////////////////////
 // implementation of basic_oarchive functions
 
+BOOST_DECL_ARCHIVE 
 basic_oarchive::basic_oarchive()
     : pimpl(new basic_oarchive_impl)
 {}
 
+BOOST_DECL_ARCHIVE 
 basic_oarchive::~basic_oarchive()
 {
     delete pimpl;
 }
 
-void basic_oarchive::save_object(
+void 
+BOOST_DECL_ARCHIVE 
+basic_oarchive::save_object(
     const void *x, 
     const basic_oserializer & bos
 ){
     pimpl->save_object(*this, x, bos);
 }
 
-void basic_oarchive::save_pointer(
+void 
+BOOST_DECL_ARCHIVE 
+basic_oarchive::save_pointer(
     const void * t, 
     const basic_pointer_oserializer * bpos_ptr
 ){
     pimpl->save_pointer(*this, t, bpos_ptr);
 }
 
-void basic_oarchive::register_basic_serializer(const basic_oserializer & bos){
+void 
+BOOST_DECL_ARCHIVE 
+basic_oarchive::register_basic_serializer(const basic_oserializer & bos){
     pimpl->register_type(bos);
+}
+
+unsigned int
+BOOST_DECL_ARCHIVE 
+basic_oarchive::library_version() const{
+    return ARCHIVE_VERSION();
+}
+
+void 
+BOOST_DECL_ARCHIVE 
+basic_oarchive::end_preamble(){
 }
 
 } // namespace detail
 } // namespace archive
 } // namespace boost
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif

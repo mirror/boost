@@ -23,6 +23,9 @@ namespace std{
 } // namespace std
 #endif
 
+#define BOOST_ARCHIVE
+#include <boost/archive/detail/auto_link_archive.hpp>
+
 #include <boost/limits.hpp>
 #include <boost/state_saver.hpp>
 #include <boost/throw_exception.hpp>
@@ -30,15 +33,17 @@ namespace std{
 #include <boost/archive/detail/basic_iserializer.hpp>
 #include <boost/archive/detail/basic_pointer_iserializer.hpp>
 #include <boost/archive/detail/basic_iarchive.hpp>
+#include <boost/archive/archive_exception.hpp>
 
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/extended_type_info.hpp>
 
-#include <boost/archive/archive_exception.hpp>
-
 using namespace boost::serialization;
 
 namespace boost {
+namespace serialization {
+    class extended_type_info;
+}
 namespace archive {
 namespace detail {
 
@@ -339,7 +344,7 @@ basic_iarchive_impl::load_pointer(
     class_id_type cid;
     load(ar, cid);
 
-    if(null_pointer_tag == cid){
+    if(NULL_POINTER_TAG == cid){
         t = NULL;
         return bpis_ptr;
     }
@@ -426,22 +431,33 @@ basic_iarchive_impl::load_pointer(
 //////////////////////////////////////////////////////////////////////
 // implementation of basic_iarchive functions
 
-void
+void 
+BOOST_DECL_ARCHIVE 
 basic_iarchive::next_object_pointer(void *t){
     pimpl->next_object_pointer(t);
 }
 
+BOOST_DECL_ARCHIVE
 basic_iarchive::basic_iarchive() : 
     pimpl(new basic_iarchive_impl),
-    archive_library_version(ARCHIVE_VERSION)
+    archive_library_version(ARCHIVE_VERSION())
 {}
 
+void 
+BOOST_DECL_ARCHIVE
+basic_iarchive::init(unsigned int archive_library_version_){
+    archive_library_version = archive_library_version_;
+}
+
+BOOST_DECL_ARCHIVE
 basic_iarchive::~basic_iarchive()
 {
     delete pimpl;
 }
 
-void basic_iarchive::load_object(
+void
+BOOST_DECL_ARCHIVE 
+basic_iarchive::load_object(
     void *t, 
     const basic_iserializer & bis
 ){
@@ -449,6 +465,7 @@ void basic_iarchive::load_object(
 }
 
 // load a pointer object
+BOOST_DECL_ARCHIVE 
 const basic_pointer_iserializer * 
 basic_iarchive::load_pointer(
     void * &t, 
@@ -460,13 +477,23 @@ basic_iarchive::load_pointer(
     return pimpl->load_pointer(*this, t, bpis_ptr, finder);
 }
 
-void basic_iarchive::register_basic_serializer(const basic_iserializer & bis){
+void
+BOOST_DECL_ARCHIVE 
+basic_iarchive::register_basic_serializer(const basic_iserializer & bis){
     pimpl->register_type(bis);
 }
 
-void basic_iarchive::delete_created_pointers()
+void
+BOOST_DECL_ARCHIVE 
+basic_iarchive::delete_created_pointers()
 {
     pimpl->delete_created_pointers();
+}
+
+unsigned int 
+BOOST_DECL_ARCHIVE 
+basic_iarchive::library_version() const{
+    return archive_library_version;
 }
 
 } // namespace detail

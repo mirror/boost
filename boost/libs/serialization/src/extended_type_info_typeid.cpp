@@ -9,14 +9,71 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#define BOOST_SERIALIZATION_SOURCE
 #include <boost/serialization/extended_type_info_typeid.hpp>
 
 namespace boost { 
 namespace serialization { 
 namespace detail {
 
-const char * extended_type_info_typeid_0::type_info_key
-    = "extended_type_info_typeid";
+BOOST_SERIALIZATION_DECL bool
+extended_type_info_typeid_0::less_than(const extended_type_info &rhs) const
+{
+    return 0 != get_type().before(
+        static_cast<const extended_type_info_typeid_0 &>(rhs).get_type()
+    );
+}
+BOOST_SERIALIZATION_DECL bool
+extended_type_info_typeid_0::equal_to(const extended_type_info &rhs) const
+{
+    return 0 != get_type().operator==(
+        static_cast<const extended_type_info_typeid_0 &>(rhs).get_type()
+    );
+}
+BOOST_SERIALIZATION_DECL bool
+extended_type_info_typeid_0::not_equal_to(const extended_type_info &rhs) const
+{
+    return 0 != get_type().operator!=(
+        static_cast<const extended_type_info_typeid_0 &>(rhs).get_type()
+    );
+}
+
+BOOST_SERIALIZATION_DECL 
+extended_type_info_typeid_0::extended_type_info_typeid_0() :
+    extended_type_info("extended_type_info_typeid")
+{}
+
+BOOST_SERIALIZATION_DECL 
+extended_type_info_typeid_0::~extended_type_info_typeid_0()
+{}
+
+// this derivation is used for creating search arguments
+class extended_type_info_typeid_arg : 
+    public extended_type_info_typeid_0
+{
+private:
+    const std::type_info & ti;
+    virtual const std::type_info &get_type() const
+    {
+        return ti;
+    }
+public:
+    extended_type_info_typeid_arg(const std::type_info & ti_)
+        : ti(ti_)
+    { 
+        // note absense of self register and key as this is used only as
+        // search argument given a type_info reference and is not to 
+        // be added to the map.
+    }
+};
+
+BOOST_SERIALIZATION_DECL const extended_type_info *
+extended_type_info_typeid_0::get_derived_extended_type_info(
+    const std::type_info & ti
+){
+    detail::extended_type_info_typeid_arg etia(ti);
+    return extended_type_info::find(& etia);
+}
 
 } // namespace detail
 } // namespace serialization

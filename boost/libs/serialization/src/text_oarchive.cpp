@@ -12,15 +12,19 @@
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
+#define BOOST_ARCHIVE
 #include <boost/archive/text_oarchive.hpp>
 
 // explicitly instantiate for this type of text stream
+#include <boost/archive/impl/basic_text_oarchive.ipp>
 #include <boost/archive/impl/text_oarchive_impl.ipp>
 #include <boost/archive/impl/archive_pointer_oserializer.ipp>
 
 namespace boost {
 namespace archive {
 
+//template class basic_text_oprimitive<std::ostream> ;
+template class basic_text_oarchive<text_oarchive> ;
 template class text_oarchive_impl<text_oarchive> ;
 template class detail::archive_pointer_oserializer<text_oarchive> ;
 

@@ -14,9 +14,11 @@
 #error "wide char i/o not supported on this platform"
 #else
 
+#define BOOST_WARCHIVE
 #include <boost/archive/binary_woarchive.hpp>
 
 #include <boost/archive/impl/basic_binary_oprimitive.ipp>
+#include <boost/archive/impl/basic_binary_oarchive.ipp>
 #include <boost/archive/impl/archive_pointer_oserializer.ipp>
 
 namespace boost {

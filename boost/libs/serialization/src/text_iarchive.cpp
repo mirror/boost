@@ -8,6 +8,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#define BOOST_ARCHIVE
 #include <boost/archive/text_iarchive.hpp>
 
 // explicitly instantiate for this type of text stream

@@ -19,12 +19,14 @@
 #endif
 
 #include <ostream>
+
+#define BOOST_WARCHIVE
+#include <boost/archive/detail/auto_link_warchive.hpp>
 #include <boost/archive/impl/basic_text_oprimitive.ipp>
 
 namespace boost {
 namespace archive {
 
-// explicitly instantiate for this type of xml stream
 template class basic_text_oprimitive<std::wostream> ;
 
 } // namespace archive

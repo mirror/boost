@@ -8,17 +8,36 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#define BOOST_ARCHIVE
+#include <boost/archive/basic_xml_archive.hpp>
+
 namespace boost {
 namespace archive {
 
-const char * OBJECT_ID = "object_id";
-const char * OBJECT_REFERENCE = "object_id_reference";
-const char * CLASS_ID = "class_id";
-const char * CLASS_ID_REFERENCE = "class_id_reference";
-const char * CLASS_NAME = "class_name";
-const char * TRACKING = "tracking_level";
-const char * VERSION = "version";
-const char * SIGNATURE = "signature";
+BOOST_DECL_ARCHIVE const char * OBJECT_ID(){
+    return "object_id";
+}
+BOOST_DECL_ARCHIVE const char * OBJECT_REFERENCE(){
+    return "object_id_reference";
+}
+BOOST_DECL_ARCHIVE const char * CLASS_ID(){
+    return "class_id";
+}
+BOOST_DECL_ARCHIVE const char * CLASS_ID_REFERENCE(){
+    return "class_id_reference";
+}
+BOOST_DECL_ARCHIVE const char * CLASS_NAME(){
+    return "class_name";
+}
+BOOST_DECL_ARCHIVE const char * TRACKING(){
+    return "tracking_level";
+}
+BOOST_DECL_ARCHIVE const char * VERSION(){
+    return "version";
+}
+BOOST_DECL_ARCHIVE const char * SIGNATURE(){
+    return "signature";
+}
 
 }// namespace archive
 }// namespace boost

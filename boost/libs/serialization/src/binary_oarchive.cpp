@@ -9,9 +9,12 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <ostream>
+
+#define BOOST_ARCHIVE
 #include <boost/archive/binary_oarchive.hpp>
 
 #include <boost/archive/impl/basic_binary_oprimitive.ipp>
+#include <boost/archive/impl/basic_binary_oarchive.ipp>
 #include <boost/archive/impl/archive_pointer_oserializer.ipp>
 
 namespace boost {
@@ -19,6 +22,7 @@ namespace archive {
 
 // explicitly instantiate for this type of binary stream
 template class basic_binary_oprimitive<binary_oarchive, std::ostream> ;
+template class basic_binary_oarchive<binary_oarchive> ;
 template class binary_oarchive_impl<binary_oarchive> ;
 template class detail::archive_pointer_oserializer<binary_oarchive> ;
 

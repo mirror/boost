@@ -13,6 +13,7 @@
 #error "wide char i/o not supported on this platform"
 #else
 
+#define BOOST_WARCHIVE
 #include <boost/archive/xml_woarchive.hpp>
 
 #include <boost/archive/impl/basic_xml_oarchive.ipp>
@@ -22,7 +23,6 @@
 namespace boost {
 namespace archive {
 
-// explicitly instantiate for this type of xml stream
 template class basic_xml_oarchive<xml_woarchive> ;
 template class xml_woarchive_impl<xml_woarchive> ;
 template class detail::archive_pointer_oserializer<xml_woarchive> ;

@@ -14,6 +14,8 @@
 
 #include <ostream>
 
+#define BOOST_ARCHIVE
+#include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/impl/basic_text_oprimitive.ipp>
 
 namespace boost {

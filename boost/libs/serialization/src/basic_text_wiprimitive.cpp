@@ -9,6 +9,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
+
 #ifdef BOOST_NO_STD_WSTREAMBUF
 #error "wide char i/o not supported on this platform"
 #else
@@ -19,6 +20,8 @@
 
 #include <istream>
 
+#define BOOST_WARCHIVE
+#include <boost/archive/detail/auto_link_warchive.hpp>
 #include <boost/archive/impl/basic_text_iprimitive.ipp>
 
 namespace boost {

@@ -1,5 +1,5 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// polymorphic_text_oarchive.cpp:
+// basic_pointer_oserializer.cpp:
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
 // Use, modification and distribution is subject to the Boost Software
@@ -8,22 +8,23 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#if (defined _MSC_VER) && (_MSC_VER == 1200)
-#  pragma warning (disable : 4786) // too long name, harmless warning
-#endif
-
-#include <ostream>
-
 #define BOOST_ARCHIVE
-#include <boost/archive/polymorphic_oarchive.hpp>
-
-// explicitly instantiate for this type of text stream
-#include <boost/archive/impl/archive_pointer_oserializer.ipp>
+#include <boost/archive/detail/basic_pointer_oserializer.hpp>
 
 namespace boost {
 namespace archive {
+namespace detail {
 
-template class detail::archive_pointer_oserializer<polymorphic_oarchive> ;
+BOOST_DECL_ARCHIVE 
+basic_pointer_oserializer::basic_pointer_oserializer(
+    const boost::serialization::extended_type_info & type_
+) :
+    basic_serializer(type_)
+{}
 
+BOOST_DECL_ARCHIVE 
+basic_pointer_oserializer::~basic_pointer_oserializer() {}
+
+} // namespace detail
 } // namespace archive
 } // namespace boost
