@@ -14,8 +14,9 @@
 // $Date$
 // $Revision$
 
-#include "boost/mpl/bool.hpp"
-#include "boost/mpl/aux_/config/msvc.hpp"
+#include <boost/mpl/bool.hpp>
+#include <boost/mpl/aux_/adl_barrier.hpp>
+#include <boost/mpl/aux_/config/msvc.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
