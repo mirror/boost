@@ -48,11 +48,13 @@ namespace posix_time {
   /*! \ingroup time_basics
    */
   typedef date_time::subsecond_duration<time_duration,1000> millisec;
+  typedef date_time::subsecond_duration<time_duration,1000> milliseconds;
 
   //! Allows expression of durations as micro seconds
   /*! \ingroup time_basics
    */
   typedef date_time::subsecond_duration<time_duration,1000000> microsec;
+  typedef date_time::subsecond_duration<time_duration,1000000> microseconds;
 
   //This is probably not needed anymore...
 #if defined(BOOST_DATE_TIME_HAS_NANOSECONDS)
@@ -61,6 +63,7 @@ namespace posix_time {
   /*! \ingroup time_basics
    */
   typedef date_time::subsecond_duration<time_duration,1000000000> nanosec;
+  typedef date_time::subsecond_duration<time_duration,1000000000> nanoseconds;
 
 
 #endif
