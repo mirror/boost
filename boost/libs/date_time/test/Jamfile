@@ -26,6 +26,7 @@ DEPENDS all : test ;
      : 
    [ run gregorian/testdate.cpp <lib>../build/boost_date_time ]
    [ run gregorian/testdate_duration.cpp <lib>../build/boost_date_time ]
+   [ run gregorian/testperiod.cpp <lib>../build/boost_date_time ]
    [ run gregorian/testdate_iterator.cpp <lib>../build/boost_date_time ]
    [ run gregorian/testfacet.cpp <lib>../build/boost_date_time ]
    [ run gregorian/testformatters.cpp <lib>../build/boost_date_time ]
