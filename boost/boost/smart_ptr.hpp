@@ -250,7 +250,7 @@ template<typename T> class shared_ptr {
    void dispose() { if (--*pn == 0) { delete px; delete pn; } }
 
    void share(T* rpx, long* rpn) {
-      if (pn != rpn) {
+      if (pn != rpn) { // assert ((pn==rpn) == (px==rpx))
          dispose();
          px = rpx;
          ++*(pn = rpn);
@@ -287,7 +287,7 @@ template<typename T> class shared_array {
    ~shared_array() { dispose(); }
 
    shared_array& operator=(const shared_array& r) {
-      if (pn != r.pn) {
+      if (pn != r.pn) { //assert ((pn==r.pn) == (px==r.px))
          dispose();
          px = r.px;
          ++*(pn = r.pn);
