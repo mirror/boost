@@ -58,21 +58,21 @@ template<int x> struct static_assert_test{};
 #ifndef BOOST_MSVC
 #define BOOST_STATIC_ASSERT( B ) \
    typedef ::boost::static_assert_test<\
-      sizeof(::boost::STATIC_ASSERTION_FAILURE< ( B ) >)>\
+      sizeof(::boost::STATIC_ASSERTION_FAILURE< (bool)( B ) >)>\
          BOOST_ASSERT_JOIN(boost_static_assert_typedef_, __LINE__)
 #else
 // __LINE__ macro broken when -ZI is used see Q199057
 // fortunately MSVC ignores duplicate typedef's.
 #define BOOST_STATIC_ASSERT( B ) \
    typedef ::boost::static_assert_test<\
-      sizeof(::boost::STATIC_ASSERTION_FAILURE< ( B ) >)\
+      sizeof(::boost::STATIC_ASSERTION_FAILURE< (bool)( B ) >)\
       > boost_static_assert_typedef_
 #endif
 #else
 // alternative enum based implementation:
 #define BOOST_STATIC_ASSERT( B ) \
    enum { BOOST_ASSERT_JOIN(boost_static_assert_enum_, __LINE__) \
-      = sizeof(::boost::STATIC_ASSERTION_FAILURE< ( B ) >) }
+      = sizeof(::boost::STATIC_ASSERTION_FAILURE< (bool)( B ) >) }
 #endif
 
 //
