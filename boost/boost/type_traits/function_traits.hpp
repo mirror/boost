@@ -291,6 +291,7 @@ struct function_traits_helper<R (*)(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>
   typedef T9 arg9_type;
   typedef T10 arg10_type;
 };
+
 } // end namespace detail
 
 template<typename Function>
