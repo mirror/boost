@@ -9,8 +9,9 @@
 
 #define BOOST_PLATFORM "Mac OS"
 
-// If __MACH__, we're using the BSD standard C library, not the MSL:
-#if __MACH__
+#if __MACH__ && !defined(_MSL_USING_MSL_C)
+
+// Using the Mac OS X system BSD-style C library.
 
 #  define BOOST_NO_CTYPE_FUNCTIONS
 #  define BOOST_NO_CWCHAR
@@ -40,6 +41,8 @@
 #  endif
 
 #else
+
+// Using the MSL C library.
 
 // We will eventually support threads in non-Carbon builds, but we do
 // not support this yet.
