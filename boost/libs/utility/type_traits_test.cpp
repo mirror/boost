@@ -9,7 +9,10 @@
 /* Release notes:
    31 Jan 2001:
       Added test case for is_convertible with UDT that brings out the
-      warning message bug with g++. (Jeremy Siek)
+      warning message bug with g++. Added a test for is_array
+      using a const array, and a test for is_convertible with
+      a user-defined implicit conversion. Changed signature
+      of main() so that this program will link under MSVC. (Jeremy Siek)
    20 Jan 2001:
       Suppress an expected warning for MSVC
       Added a test to prove that we can use void with is_same<>
@@ -191,12 +194,18 @@ struct non_empty : boost::noncopyable
    int i;
 };
 
+
+struct implicitly_convertible_to_int {
+  operator int() { return 0; }
+};
+
+
 // Steve: All comments that I (Steve Cleary) have added below are prefixed with
 //  "Steve:"  The failures that BCB4 has on the tests are due to Borland's
 //  not considering cv-qual's as a part of the type -- they are considered
 //  compiler hints only.  These failures should be fixed before long.
 
-int main()
+int main(int, char*[])
 {
    std::cout << "Checking type operations..." << std::endl << std::endl;
 
@@ -410,6 +419,7 @@ int main()
    value_test(true, is_array<int[2][3]>::value)
    value_test(true, is_array<UDT[2]>::value)
    value_test(false, is_array<int(&)[2]>::value)
+   value_test(true, is_array<const int[2]>::value)
 
    typedef void(*f1)();
    typedef int(*f2)(int);
@@ -602,6 +612,8 @@ int main()
    value_test(false, is_POD<empty_UDT>::value)
    value_test(true, is_POD<enum_UDT>::value)
 
+   value_test(true, (boost::is_convertible<implicitly_convertible_to_int, 
+                                          int>::value));
    value_test(true, (boost::is_convertible<Derived,Base>::value));
    value_test(true, (boost::is_convertible<Derived,Derived>::value));
    value_test(true, (boost::is_convertible<Base,Base>::value));
