@@ -728,23 +728,24 @@ struct reverse_iterator_generator
         Traits> type;
 };
 
-template <class Iterator, class Traits>
-inline typename reverse_iterator_generator<Iterator, Traits>::type
-make_reverse_iterator(Iterator iter, Traits)
-{
-    typedef typename reverse_iterator_generator<Iterator, Traits>::type result_t;
-    return result_t(iter);
-}
-
-#if !defined(BOOST_NO_STD_ITERATOR_TRAITS)
 template <class Iterator>
 inline typename reverse_iterator_generator<Iterator>::type
-make_reverse_iterator(Iterator iter)
+make_reverse_iterator(Iterator base)
 {
     typedef typename reverse_iterator_generator<Iterator>::type result_t;
-    return result_t(iter);
+    return result_t(base);
 }
-#endif
+
+// Specify Traits type with an explicit argument,
+// i.e., make_reverse_iterator<Traits>(base)
+
+template <class Traits, class Iterator>
+inline typename reverse_iterator_generator<Iterator, Traits>::type
+make_reverse_iterator(Iterator base, Traits* = 0)
+{
+    typedef typename reverse_iterator_generator<Iterator, Traits>::type result_t;
+    return result_t(base);
+}
 
 //=============================================================================
 // Projection Iterators Adaptor
