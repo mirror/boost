@@ -10,7 +10,7 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 
 // ------------------------------------------------------------------------------
-// sample_formats.cc :  example of basic usage of format
+// sample_formats.cpp :  example of basic usage of format
 // ------------------------------------------------------------------------------
 
 #include <iostream>
@@ -18,12 +18,32 @@
 
 #include "boost/format.hpp"
 
+// 2 custom namespaces, to bring in a few useful names :
+
+namespace MyNS_ForOutput {
+  using std::cout; using std::cerr;
+  using std::string;
+  using std::endl; using std::flush;
+
+  using boost::format; using boost::io::str;
+  using boost::io::group;
+}
+
+namespace MyNS_Manips {
+  using std::setfill;
+  using std::setw;
+  using std::hex ;
+  using std::dec ;
+  using std::showbase ;
+  using std::left ;
+  using std::right ;
+  using std::internal ;
+}
+
 int main(){
-    using namespace std;
-    using boost::format;
-    using boost::io::group;
-    using boost::io::str;
-    stringstream oss;
+    using namespace MyNS_ForOutput;
+    using namespace MyNS_Manips;
+    std::stringstream oss;
 
     
     // Reordering :
