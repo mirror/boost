@@ -51,11 +51,6 @@ rule run-invoke ( test-name : sources * : defn * )
             std::locale-support
             # <threading>single
             # <runtime-link>static
-            <cwpro-9.2><*><runtime-link>static
-            <cwpro-8.3><*><runtime-link>static
-            <cw-9.2><*><runtime-link>static
-            <cw-8.3><*><runtime-link>static
-            <cw><*><runtime-link>static
             <stlport-iostream>on 
             <borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
             <borland-5.5.1><*><cxxflags>"-w-8080 -w-8071 -w-8057"
@@ -80,13 +75,9 @@ rule run-invoke ( test-name : sources * : defn * )
             : # args
             : # input files
             : # requirements
+                std::locale-support
                 # <threading>single
                 # <runtime-link>static
-                <cwpro-9.2><*><runtime-link>static
-                <cwpro-8.3><*><runtime-link>static
-                <cw-9.2><*><runtime-link>static
-                <cw-8.3><*><runtime-link>static
-                <cw><*><runtime-link>static
                 <stlport-iostream>on 
                 <borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
                 <borland-5.5.1><*><cxxflags>"-w-8080 -w-8071 -w-8057"
@@ -172,6 +163,7 @@ test-suite "serialization" :
     [ test-bsl-run_files test_no_rtti ]
     [ test-bsl-run_files test_non_intrusive ]
     [ test-bsl-run_files test_non_default_ctor ]
+    [ test-bsl-run_files test_non_default_ctor2 ]
     [ test-bsl-run_files test_null_ptr ]
     [ test-bsl-run_files test_nvp ]
     [ test-bsl-run_files test_recursion ]
