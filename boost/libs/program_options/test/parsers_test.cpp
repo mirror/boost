@@ -143,6 +143,7 @@ void test_command_line()
     check_value(a3[6], "plug3", "10");
 
     // Check Unicode, 
+#ifndef BOOST_NO_STD_WSTRING
     wchar_t* cmdline4_[] = { L"--foo=1\u0FF52", L"-f4", L"--bar=11", L"--bar", 
                              L"-b4", L"-b", L"--plug3=10"};
     vector<wstring> cmdline4 = sv(cmdline4_,
@@ -155,6 +156,7 @@ void test_command_line()
     check_value(a4[0], "foo", L"1\u0FF52");
     check_value(a4[1], "foo", L"4");
     check_value(a4[2], "bar", L"11");
+#endif
 }
 
 void test_config_file()
