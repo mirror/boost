@@ -11,8 +11,9 @@
 #define BOOST_STRING_FORMATTER_HPP
 
 #include <boost/detail/iterator.hpp>
-#include <boost/algorithm/string/collection_traits.hpp>
-#include <boost/algorithm/string/iterator_range.hpp>
+#include <boost/range/value_type.hpp>
+#include <boost/range/iterator_range.hpp>
+
 #include <boost/algorithm/string/detail/formatter.hpp>
 
 /*! \file
@@ -29,7 +30,7 @@
 namespace boost {
     namespace algorithm {
 
-// generic formaters  ---------------------------------------------------------------//
+// generic formatters  ---------------------------------------------------------------//
 
         //! Constant formatter
         /*!
@@ -62,7 +63,7 @@ namespace boost {
 
         //! Empty formatter
         /*!
-            Construct the \c empty_formatter. Empty formater always returns an empty
+            Construct the \c empty_formatter. Empty formatter always returns an empty
             sequence. 
 
             \param Input container used to select a correct value_type for the
@@ -71,11 +72,11 @@ namespace boost {
         */
         template<typename CollectionT>
         inline detail::empty_formatF< 
-            BOOST_STRING_TYPENAME value_type_of<CollectionT>::type>
+            BOOST_STRING_TYPENAME range_value<CollectionT>::type>
         empty_formatter(const CollectionT&)
         {
             return detail::empty_formatF<
-                BOOST_STRING_TYPENAME value_type_of<CollectionT>::type>();
+                BOOST_STRING_TYPENAME range_value<CollectionT>::type>();
         }
 
 

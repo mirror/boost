@@ -11,8 +11,13 @@
 #define BOOST_STRING_REPLACE_HPP
 
 #include <boost/algorithm/string/config.hpp>
-#include <boost/algorithm/string/collection_traits.hpp>
-#include <boost/algorithm/string/iterator_range.hpp>
+
+#include <boost/range/iterator_range.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+#include <boost/range/iterator.hpp>
+#include <boost/range/const_iterator.hpp>
+
 #include <boost/algorithm/string/find_format.hpp>
 #include <boost/algorithm/string/finder.hpp>
 #include <boost/algorithm/string/formatter.hpp>
@@ -52,7 +57,7 @@ namespace boost {
             const Collection1T& Input,
             const iterator_range<
                 BOOST_STRING_TYPENAME 
-                    const_iterator_of<Collection1T>::type>& SearchRange,
+                    range_const_iterator<Collection1T>::type>& SearchRange,
             const Collection2T& Format)
         {
             return find_format_copy(
@@ -71,7 +76,7 @@ namespace boost {
             const SequenceT& Input,
             const iterator_range<
                 BOOST_STRING_TYPENAME 
-                    const_iterator_of<SequenceT>::type>& SearchRange,
+                    range_const_iterator<SequenceT>::type>& SearchRange,
             const CollectionT& Format)
         {
             return find_format_copy(
@@ -94,7 +99,7 @@ namespace boost {
             SequenceT& Input,
             const iterator_range<
                 BOOST_STRING_TYPENAME 
-                    iterator_of<SequenceT>::type>& SearchRange,
+                    range_iterator<SequenceT>::type>& SearchRange,
             const CollectionT& Format)
         {
             find_format(

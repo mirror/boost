@@ -9,13 +9,16 @@
 #ifndef BOOST_STRING_FIND_ITERATOR_HPP
 #define BOOST_STRING_FIND_ITERATOR_HPP
 
-
 #include <boost/algorithm/string/config.hpp>
-#include <boost/algorithm/string/collection_traits.hpp>
-#include <boost/algorithm/string/iterator_range.hpp>
-#include <boost/algorithm/string/detail/find_iterator.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/iterator/iterator_categories.hpp>
+
+#include <boost/range/iterator_range.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+#include <boost/range/result_iterator.hpp>
+
+#include <boost/algorithm/string/detail/find_iterator.hpp>
 
 /*! \file
     Defines find iterator classes. Find iterator repeatly applies a Finder
@@ -177,12 +180,12 @@ namespace boost {
          */
         template<typename CollectionT, typename FinderT>
         inline find_iterator< 
-            BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type>
         make_find_iterator(
             CollectionT& Collection,
             FinderT Finder)
         {
-            return find_iterator<BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>(
+            return find_iterator<BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type>(
                 begin(Collection), end(Collection), Finder);
         }
 
@@ -343,12 +346,12 @@ namespace boost {
          */
         template<typename CollectionT, typename FinderT>
         inline split_iterator< 
-            BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type>
         make_split_iterator(
             CollectionT& Collection,
             FinderT Finder)
         {
-            return split_iterator<BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>(
+            return split_iterator<BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type>(
                 begin(Collection), end(Collection), Finder);
         }
 

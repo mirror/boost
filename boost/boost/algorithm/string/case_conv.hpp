@@ -14,7 +14,11 @@
 #include <algorithm>
 #include <locale>
 #include <boost/iterator/transform_iterator.hpp>
-#include <boost/algorithm/string/collection_traits.hpp>
+
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+#include <boost/range/value_type.hpp>
+
 #include <boost/algorithm/string/detail/case_conv.hpp>
 
 /*! \file
@@ -56,7 +60,7 @@ namespace boost {
                 end(Input), 
                 Output,
                 detail::to_lowerF<
-                    typename value_type_of<CollectionT>::type >(Loc));
+                    typename range_value<CollectionT>::type >(Loc));
         }
 
         //! Convert to lower case
@@ -72,11 +76,11 @@ namespace boost {
                 make_transform_iterator(
                     begin(Input),
                     detail::to_lowerF<
-                        typename value_type_of<SequenceT>::type >(Loc)),
+                        typename range_value<SequenceT>::type >(Loc)),
                 make_transform_iterator(
                     end(Input), 
                     detail::to_lowerF<
-                        typename value_type_of<SequenceT>::type >(Loc)));
+                        typename range_value<SequenceT>::type >(Loc)));
         }
 
         //! Convert to lower case
@@ -97,7 +101,7 @@ namespace boost {
                 end(Input), 
                 begin(Input), 
                 detail::to_lowerF<
-                    typename value_type_of<MutableCollectionT>::type >(Loc));
+                    typename range_value<MutableCollectionT>::type >(Loc));
         }
         
 //  to_upper  -----------------------------------------------//
@@ -129,7 +133,7 @@ namespace boost {
                 end(Input), 
                 Output,
                 detail::to_upperF<
-                    typename value_type_of<CollectionT>::type >(Loc));
+                    typename range_value<CollectionT>::type >(Loc));
         }
 
         //! Convert to upper case
@@ -145,11 +149,11 @@ namespace boost {
                 make_transform_iterator(
                     begin(Input),
                     detail::to_upperF<
-                        typename value_type_of<SequenceT>::type >(Loc)),
+                        typename range_value<SequenceT>::type >(Loc)),
                 make_transform_iterator(
                     end(Input), 
                     detail::to_upperF<
-                        typename value_type_of<SequenceT>::type >(Loc)));
+                        typename range_value<SequenceT>::type >(Loc)));
 
         }
 
@@ -171,7 +175,7 @@ namespace boost {
                 end(Input), 
                 begin(Input), 
                 detail::to_upperF<
-                    typename value_type_of<MutableCollectionT>::type >(Loc));
+                    typename range_value<MutableCollectionT>::type >(Loc));
         }
 
     } // namespace algorithm

@@ -15,7 +15,10 @@
 #include <functional>
 #include <locale>
 #include <set>
-#include <boost/algorithm/string/collection_traits.hpp>
+
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+
 #include <boost/algorithm/string/predicate_facade.hpp>
 #include <boost/type_traits/remove_const.hpp>
 

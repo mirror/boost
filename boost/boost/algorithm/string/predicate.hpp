@@ -11,8 +11,12 @@
 #define BOOST_STRING_PREDICATE_HPP
 
 #include <boost/algorithm/string/config.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+#include <boost/range/iterator.hpp>
+#include <boost/range/const_iterator.hpp>
+
 #include <boost/algorithm/string/compare.hpp>
-#include <boost/algorithm/string/collection_traits.hpp>
 #include <boost/algorithm/string/find.hpp>
 #include <boost/algorithm/string/detail/predicate.hpp>
 
@@ -53,9 +57,9 @@ namespace boost {
             PredicateT Comp)
         {
             typedef BOOST_STRING_TYPENAME 
-                const_iterator_of<Collection1T>::type Iterator1T;
+                range_const_iterator<Collection1T>::type Iterator1T;
             typedef BOOST_STRING_TYPENAME 
-                const_iterator_of<Collection2T>::type Iterator2T;
+                range_const_iterator<Collection2T>::type Iterator2T;
 
             Iterator1T InputEnd=end(Input);
             Iterator2T TestEnd=end(Test);
@@ -132,7 +136,7 @@ namespace boost {
             PredicateT Comp)
         {
             typedef BOOST_STRING_TYPENAME 
-                const_iterator_of<Collection1T>::type Iterator1T;
+                range_const_iterator<Collection1T>::type Iterator1T;
             typedef BOOST_STRING_TYPENAME boost::detail::
                 iterator_traits<Iterator1T>::iterator_category category;
 
@@ -271,9 +275,9 @@ namespace boost {
             PredicateT Comp)
         {
             typedef BOOST_STRING_TYPENAME 
-                const_iterator_of<Collection1T>::type Iterator1T;
+                range_const_iterator<Collection1T>::type Iterator1T;
             typedef BOOST_STRING_TYPENAME 
-                const_iterator_of<Collection2T>::type Iterator2T;
+                range_const_iterator<Collection2T>::type Iterator2T;
                 
             Iterator1T InputEnd=end(Input);
             Iterator2T TestEnd=end(Test);
@@ -346,7 +350,7 @@ namespace boost {
             PredicateT Pred)
         {
             typedef BOOST_STRING_TYPENAME 
-                const_iterator_of<CollectionT>::type Iterator1T;
+                range_const_iterator<CollectionT>::type Iterator1T;
 
             Iterator1T InputEnd=end(Input);
             for( Iterator1T It=begin(Input); It!=InputEnd; ++It)

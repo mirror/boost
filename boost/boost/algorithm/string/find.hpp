@@ -11,8 +11,14 @@
 #define BOOST_STRING_FIND_HPP
 
 #include <boost/algorithm/string/config.hpp>
-#include <boost/algorithm/string/collection_traits.hpp>
-#include <boost/algorithm/string/iterator_range.hpp>
+
+#include <boost/range/iterator_range.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+#include <boost/range/iterator.hpp>
+#include <boost/range/const_iterator.hpp>
+#include <boost/range/result_iterator.hpp>
+
 #include <boost/algorithm/string/finder.hpp>
 #include <boost/algorithm/string/compare.hpp>
 #include <boost/algorithm/string/constants.hpp>
@@ -42,7 +48,7 @@ namespace boost {
         */
         template<typename CollectionT, typename FinderT>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type>
         find( 
             CollectionT& Input, 
             FinderT Finder)
@@ -68,7 +74,7 @@ namespace boost {
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME result_iterator_of<Collection1T>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<Collection1T>::type>
         find_first( 
             Collection1T& Input, 
             const Collection2T& Search)
@@ -95,7 +101,7 @@ namespace boost {
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME result_iterator_of<Collection1T>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<Collection1T>::type>
         ifind_first( 
             Collection1T& Input, 
             const Collection2T& Search,
@@ -123,7 +129,7 @@ namespace boost {
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME result_iterator_of<Collection1T>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<Collection1T>::type>
         find_last( 
             Collection1T& Input, 
             const Collection2T& Search)
@@ -150,7 +156,7 @@ namespace boost {
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME result_iterator_of<Collection1T>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<Collection1T>::type>
         ifind_last( 
             Collection1T& Input, 
             const Collection2T& Search,
@@ -178,7 +184,7 @@ namespace boost {
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME result_iterator_of<Collection1T>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<Collection1T>::type>
         find_nth( 
             Collection1T& Input, 
             const Collection2T& Search,
@@ -208,7 +214,7 @@ namespace boost {
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME result_iterator_of<Collection1T>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<Collection1T>::type>
         ifind_nth( 
             Collection1T& Input, 
             const Collection2T& Search,
@@ -239,7 +245,7 @@ namespace boost {
         */
         template<typename CollectionT>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type>
         find_head( 
             CollectionT& Input, 
             unsigned int N)
@@ -269,7 +275,7 @@ namespace boost {
         */
         template<typename CollectionT>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type>
         find_tail( 
             CollectionT& Input, 
             unsigned int N)
@@ -299,7 +305,7 @@ namespace boost {
         */
         template<typename CollectionT, typename PredicateT>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>
+            BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type>
         find_token( 
             CollectionT& Input,
             PredicateT Pred,

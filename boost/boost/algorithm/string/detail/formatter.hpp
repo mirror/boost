@@ -10,8 +10,12 @@
 #ifndef BOOST_STRING_FORMATTER_DETAIL_HPP
 #define BOOST_STRING_FORMATTER_DETAIL_HPP
 
-#include <boost/algorithm/string/collection_traits.hpp>
-#include <boost/algorithm/string/iterator_range.hpp>
+
+#include <boost/range/iterator_range.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+#include <boost/range/const_iterator.hpp>
+
 #include <boost/algorithm/string/detail/util.hpp>
 
 //  generic replace functors -----------------------------------------------//
@@ -28,7 +32,7 @@ namespace boost {
             {
             private:
                 typedef BOOST_STRING_TYPENAME
-                    const_iterator_of<CollectionT>::type format_iterator;
+                    range_const_iterator<CollectionT>::type format_iterator;
                 typedef iterator_range<format_iterator> result_type;
             
             public:

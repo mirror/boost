@@ -11,8 +11,7 @@
 #define BOOST_STRING_FIND_FORMAT_STORE_DETAIL_HPP
 
 #include <boost/algorithm/string/config.hpp>
-#include <boost/algorithm/string/collection_traits.hpp>
-#include <boost/algorithm/string/iterator_range.hpp>
+#include <boost/range/iterator_range.hpp>
 
 namespace boost {
     namespace algorithm {

@@ -13,8 +13,11 @@
 #include <boost/algorithm/string/config.hpp>
 #include <boost/algorithm/string/constants.hpp>
 #include <boost/detail/iterator.hpp>
-#include <boost/algorithm/string/collection_traits.hpp>
-#include <boost/algorithm/string/iterator_range.hpp>
+
+#include <boost/range/iterator_range.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+#include <boost/range/empty.hpp>
 
 namespace boost {
     namespace algorithm {
@@ -59,7 +62,7 @@ namespace boost {
                         ++OuterIt)
                     {
                         // Sanity check 
-                        if( empty(m_Search) )  
+                        if( boost::empty(m_Search) )  
                             return result_type( End, End );
 
                         input_iterator_type InnerIt=OuterIt;
@@ -119,7 +122,7 @@ namespace boost {
                 {
                     typedef iterator_range<ForwardIteratorT> result_type;
 
-                    if( empty(m_Search) )
+                    if( boost::empty(m_Search) )
                         return result_type( End, End );
 
                     typedef BOOST_STRING_TYPENAME boost::detail::
@@ -239,7 +242,7 @@ namespace boost {
                     typedef iterator_range<ForwardIteratorT> result_type;
 
                     // Sanity check 
-                    if( empty(m_Search) )  
+                    if( boost::empty(m_Search) )  
                         return result_type( End, End );
 
                     // Instantiate find funtor 

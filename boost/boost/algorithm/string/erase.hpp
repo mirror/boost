@@ -11,8 +11,13 @@
 #define BOOST_STRING_ERASE_HPP
 
 #include <boost/algorithm/string/config.hpp>
-#include <boost/algorithm/string/collection_traits.hpp>
-#include <boost/algorithm/string/iterator_range.hpp>
+
+#include <boost/range/iterator_range.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+#include <boost/range/iterator.hpp>
+#include <boost/range/const_iterator.hpp>
+
 #include <boost/algorithm/string/find_format.hpp>
 #include <boost/algorithm/string/finder.hpp>
 #include <boost/algorithm/string/formatter.hpp>
@@ -46,7 +51,7 @@ namespace boost {
             const CollectionT& Input,
             const iterator_range<
                 BOOST_STRING_TYPENAME 
-                    const_iterator_of<CollectionT>::type>& SearchRange )
+                    range_const_iterator<CollectionT>::type>& SearchRange )
         {
             return find_format_copy(
                 Output,
@@ -64,7 +69,7 @@ namespace boost {
             const SequenceT& Input,
             const iterator_range<
                 BOOST_STRING_TYPENAME 
-                    const_iterator_of<SequenceT>::type>& SearchRange )
+                    range_const_iterator<SequenceT>::type>& SearchRange )
         {
             return find_format_copy( 
                 Input,
@@ -85,7 +90,7 @@ namespace boost {
             SequenceT& Input,
             const iterator_range<
                 BOOST_STRING_TYPENAME 
-                    iterator_of<SequenceT>::type>& SearchRange )
+                    range_iterator<SequenceT>::type>& SearchRange )
         {
             find_format( 
                 Input, 
@@ -97,7 +102,7 @@ namespace boost {
 
         //! Erase first algorithm
         /*!
-            Remove the first occurence of the substring from the input.
+            Remove the first occurrence of the substring from the input.
             The result is a modified copy of the input. It is returned as a sequence 
             or copied to the output iterator.
 
@@ -142,7 +147,7 @@ namespace boost {
 
         //! Erase first algorithm
         /*!
-            Remove the first occurence of the substring from the input. 
+            Remove the first occurrence of the substring from the input. 
             The input sequence is modified in-place.
 
             \param Input An input string
@@ -163,7 +168,7 @@ namespace boost {
 
         //! Erase first algorithm ( case insensitive )
         /*!
-            Remove the first occurence of the substring from the input. 
+            Remove the first occurrence of the substring from the input. 
             The result is a modified copy of the input. It is returned as a sequence 
             or copied to the output iterator.
             Searching is case insensitive.
@@ -212,7 +217,7 @@ namespace boost {
 
         //! Erase first algorithm ( case insensitive )
         /*!
-            Remove the first occurence of the substring from the input. 
+            Remove the first occurrence of the substring from the input. 
             The input sequence is modified in-place. Searching is case insensitive.
 
             \param Input An input string
@@ -235,7 +240,7 @@ namespace boost {
 
         //! Erase last algorithm
         /*!
-            Remove the last occurence of the substring from the input. 
+            Remove the last occurrence of the substring from the input. 
             The result is a modified copy of the input. It is returned as a sequence 
             or copied to the output iterator.
 
@@ -280,7 +285,7 @@ namespace boost {
 
         //! Erase last algorithm
         /*!
-            Remove the last occurence of the substring from the input. 
+            Remove the last occurrence of the substring from the input. 
             The input sequence is modified in-place.
 
             \param Input An input string
@@ -301,7 +306,7 @@ namespace boost {
 
         //! Erase last algorithm ( case insensitive )
         /*!
-            Remove the last occurence of the substring from the input. 
+            Remove the last occurrence of the substring from the input. 
             The result is a modified copy of the input. It is returned as a sequence 
             or copied to the output iterator.
             Searching is case insensitive.
@@ -350,7 +355,7 @@ namespace boost {
 
         //! Erase last algorithm ( case insensitive )
         /*!
-            Remove the last occurence of the substring from the input. 
+            Remove the last occurrence of the substring from the input. 
             The input sequence is modified in-place. Searching is case insensitive.
 
             \param Input An input string
@@ -373,7 +378,7 @@ namespace boost {
 
         //! Erase nth algorithm
         /*!
-            Remove the Nth occurence of the substring in the input.
+            Remove the Nth occurrence of the substring in the input.
             The result is a modified copy of the input. It is returned as a sequence 
             or copied to the output iterator.
             
@@ -422,7 +427,7 @@ namespace boost {
 
         //! Erase nth algorithm
         /*!
-            Remove the Nth occurence of the substring in the input.
+            Remove the Nth occurrence of the substring in the input.
             The input sequence is modified in-place.
 
             \param Input An input string
@@ -445,7 +450,7 @@ namespace boost {
 
         //! Erase nth algorithm ( case insensitive )
         /*!
-            Remove the Nth occurence of the substring in the input.
+            Remove the Nth occurrence of the substring in the input.
             The result is a modified copy of the input. It is returned as a sequence 
             or copied to the output iterator. 
             Searching is case insensitive.
@@ -497,7 +502,7 @@ namespace boost {
 
         //! Erase nth algorithm
         /*!
-            Remove the Nth occurence of the substring in the input.
+            Remove the Nth occurrence of the substring in the input.
             The input sequence is modified in-place. Searching is case insensitive.
 
             \param Input An input string
@@ -662,7 +667,7 @@ namespace boost {
 
         //! Erase head algorithm
         /*!
-            Remove the head from the input. The head is a prefix of a seqence of given size. 
+            Remove the head from the input. The head is a prefix of a sequence of given size. 
             If the sequence is shorter then required, the whole string is 
             considered to be the head. The result is a modified copy of the input. 
             It is returned as a sequence or copied to the output iterator.
@@ -708,7 +713,7 @@ namespace boost {
 
         //! Erase head algorithm
         /*!
-            Remove the head from the input. The head is a prefix of a seqence of given size. 
+            Remove the head from the input. The head is a prefix of a sequence of given size. 
             If the sequence is shorter then required, the whole string is 
             considered to be the head. The input sequence is modified in-place.
 
@@ -730,7 +735,7 @@ namespace boost {
 
         //! Erase tail algorithm
         /*!
-            Remove the tail from the input. The tail is a suffix of a seqence of given size. 
+            Remove the tail from the input. The tail is a suffix of a sequence of given size. 
             If the sequence is shorter then required, the whole string is 
             considered to be the tail. 
             The result is a modified copy of the input. It is returned as a sequence 
@@ -776,7 +781,7 @@ namespace boost {
 
         //! Erase tail algorithm
         /*!
-            Remove the tail from the input. The tail is a suffix of a seqence of given size. 
+            Remove the tail from the input. The tail is a suffix of a sequence of given size. 
             If the sequence is shorter then required, the whole string is
             considered to be the tail. The input sequence is modified in-place.
 

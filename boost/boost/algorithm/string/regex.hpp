@@ -12,8 +12,12 @@
 
 #include <boost/algorithm/string/config.hpp>
 #include <boost/regex.hpp>
-#include <boost/algorithm/string/collection_traits.hpp>
-#include <boost/algorithm/string/iterator_range.hpp>
+
+#include <boost/range/iterator_range.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+#include <boost/range/result_iterator.hpp>
+
 #include <boost/algorithm/string/find_format.hpp>
 #include <boost/algorithm/string/regex_find_format.hpp>
 #include <boost/algorithm/string/formatter.hpp>
@@ -48,7 +52,7 @@ namespace boost {
             typename CharT, 
             typename RegexTraitsT>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type >
+            BOOST_STRING_TYPENAME range_result_iterator<CollectionT>::type >
         find_regex( 
             CollectionT& Input, 
             const basic_regex<CharT, RegexTraitsT>& Rx,

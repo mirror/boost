@@ -11,7 +11,11 @@
 #define BOOST_STRING_TRIM_HPP
 
 #include <boost/algorithm/string/config.hpp>
-#include <boost/algorithm/string/collection_traits.hpp>
+
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+#include <boost/range/const_iterator.hpp>
+
 #include <boost/algorithm/string/detail/trim.hpp>
 #include <boost/algorithm/string/classification.hpp>
 #include <locale>
@@ -273,7 +277,7 @@ namespace boost {
             PredicateT IsSpace)
         {
             BOOST_STRING_TYPENAME 
-                const_iterator_of<CollectionT>::type TrimEnd=
+                range_const_iterator<CollectionT>::type TrimEnd=
                 detail::trim_end( 
                     begin(Input), 
                     end(Input), 
@@ -297,7 +301,7 @@ namespace boost {
         inline SequenceT trim_copy_if(const SequenceT& Input, PredicateT IsSpace)
         {
             BOOST_STRING_TYPENAME 
-                const_iterator_of<SequenceT>::type TrimEnd=
+                range_const_iterator<SequenceT>::type TrimEnd=
                     detail::trim_end( 
                         begin(Input), 
                         end(Input), 

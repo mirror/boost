@@ -12,6 +12,7 @@
 
 #include <algorithm>
 #include <locale>
+#include <boost/range/value_type.hpp>
 #include <boost/algorithm/string/detail/classification.hpp>
 #include <boost/algorithm/string/predicate_facade.hpp>
 
@@ -195,11 +196,11 @@ namespace boost {
         */
         template<typename ContainerT>
         inline detail::is_any_ofF<
-            BOOST_STRING_TYPENAME value_type_of<ContainerT>::type> 
+            BOOST_STRING_TYPENAME range_value<ContainerT>::type> 
         is_any_of( const ContainerT& Set )
         {
             return detail::is_any_ofF<
-                BOOST_STRING_TYPENAME value_type_of<ContainerT>::type>(Set); 
+                BOOST_STRING_TYPENAME range_value<ContainerT>::type>(Set); 
         }
 
         //! is_from_range predicate
