@@ -16,6 +16,7 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <boost/regex.hpp>
 #ifdef JM_OLD_IOSTREAM
 #include <iostream.h>

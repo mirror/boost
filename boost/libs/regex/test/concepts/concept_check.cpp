@@ -18,6 +18,7 @@
 #endif
 #include <boost/concept_check.hpp>
 #include <boost/detail/workaround.hpp>
+#include <cstdlib>
 
 
 int main()
