@@ -28,9 +28,6 @@
 #     define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
 #   endif
 
-#   if(__MWERKS__ <= 0x300) || !defined(BOOST_STRICT_CONFIG)  // 8.0
-#   endif
-
 #if !__option(wchar_type)
 #   define BOOST_NO_INTRINSIC_WCHAR_T
 #endif
