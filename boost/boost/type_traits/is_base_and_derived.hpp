@@ -64,7 +64,7 @@ For "static no_type check(B const volatile *, int)" we have the conversion
 sequences:
 
 C -> C const (SC - Qualification Adjustment) -> B const volatile* (UDC)
-C -> D const volatile* (UDC) -> B1 const volatile*/B2 const volatile* ->
+C -> D const volatile* (UDC) -> B1 const volatile* / B2 const volatile* ->
      B const volatile* (SC - Conversion)
 
 For "static yes_type check(D const volatile *, T)" we have the conversion
@@ -79,7 +79,7 @@ first function this means choosing between C -> C const and C -> C, and it
 chooses the latter, because it's a proper subset (13.3.3.2/3/2) of the
 former. Therefore, we have:
 
-C -> D const volatile* (UDC) -> B1 const volatile*/B2 const volatile* ->
+C -> D const volatile* (UDC) -> B1 const volatile* / B2 const volatile* ->
      B const volatile* (SC - Conversion)
 C -> D const volatile* (UDC)
 
