@@ -11,6 +11,7 @@
 #include <locale>
 #include <stdexcept>
 
+#include <boost/program_options/detail/convert.hpp>
 #include <boost/program_options/detail/utf8_codecvt_facet.hpp>
 #include <boost/bind.hpp>
 

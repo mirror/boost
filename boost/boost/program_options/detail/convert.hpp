@@ -6,6 +6,8 @@
 #ifndef BOOST_CONVERT_HPP_VP_2004_04_28
 #define BOOST_CONVERT_HPP_VP_2004_04_28
 
+#include <boost/detail/workaround.hpp>
+
 #include <string>
 #include <locale>
 // for mbstate_t
