@@ -952,8 +952,17 @@ instead of ``(*a).m`` ?
 :Proposed resolution: NAD.  
 
 :Rationale: We think you're misreading "pre:".
-  Also requiring proxy iterators to support ``->`` would make old
-  iterators not conform to new iterator requirements.
+  If ``(*a).m`` is not well defined, then the iterator is not
+  required to provide ``a->m``. So a proxy iterator is not
+  required to provide ``a->m``.
+
+  As an aside, it is possible for proxy iterators to
+  support ``->``, so changing the requirements to
+  read ``static_cast<T>(*a).m`` is interesting.
+  However, such a change to Readable Iterator would
+  mean that it no longer corresponds to the
+  input iterator requirements. So old iterators would not necessarily
+  conform to new iterator requirements.
 
 
 counting_iterator Traversal argument unspecified
