@@ -393,7 +393,8 @@ struct is_stateless
        ::boost::has_trivial_constructor<T>::value,
        ::boost::has_trivial_copy<T>::value,
        ::boost::has_trivial_destructor<T>::value,
-       ::boost::is_class<T>::value
+       ::boost::is_class<T>::value,
+       ::boost::is_empty<T>::value
      >::value));
 };
 
