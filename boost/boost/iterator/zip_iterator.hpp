@@ -26,6 +26,7 @@
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/iterator/iterator_adaptor.hpp> // for enable_if_convertible
 #include <boost/iterator/iterator_categories.hpp>
+#include <boost/detail/iterator_traits.hpp>
 
 #include <boost/tuple/tuple.hpp>
 
@@ -64,18 +65,6 @@ namespace boost {
   //
   // If the tuple implementation changes, all that needs to be
   // replaced is the implementation of these four (meta-)algorithms.
-  //
-  // Unfortunately, some compilers, including Metrowerks Codewarrior
-  // 4.2.5.766 and gcc 3.3, were unable to handle the template
-  // code involved (Metrowerks: internal compiler error, gcc 3.3: 
-  // segmentation fault). Therefore, rather regrettably, for those
-  // compilers, the encapsulation of the tuple implementation-
-  // specific code is not nearly as nice  and clean as it should be.
-  // In order to emphasize this point, I have provided the entire
-  // namespace detail in this file twice: the first version is the
-  // clean one with the nice encapsulation, the second one is the
-  // dirty one.
-  //
 
   namespace detail
   {
@@ -117,13 +106,13 @@ namespace boost {
       { 
 #if BOOST_WORKAROUND(__GNUC__, == 2) || BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
         typedef typename
-        std::iterator_traits<
+        iterator_traits<
             typename boost::remove_cv<Iterator>::type
         >::reference
         type;
 #else 
         typedef typename
-        std::iterator_traits<Iterator>::reference
+        iterator_traits<Iterator>::reference
         type;
 #endif
       };
