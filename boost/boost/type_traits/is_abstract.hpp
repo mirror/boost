@@ -44,12 +44,17 @@
 //  - Nov 2004: Christoph Ludwig found that the implementation did not work with
 //              template types and gcc-3.4 or VC7.1, fix due to Christoph Ludwig
 //              and John Maddock.
+//  - Dec 2004: Added new config macro BOOST_NO_IS_ABSTRACT which causes the template
+//              to degrade gracefully, rather than trash the compiler (John Maddock).
 //
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
 #include <boost/type_traits/is_class.hpp>
 #include "boost/type_traits/detail/ice_and.hpp"
+#ifdef BOOST_NO_IS_ABSTRACT
+#include <boost/type_traits/is_polymorphic.hpp>
+#endif
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
 
@@ -57,6 +62,7 @@
 namespace boost {
 namespace detail{
 
+#ifndef BOOST_NO_IS_ABSTRACT
 template<class T>
 struct is_abstract_imp
 {
@@ -88,10 +94,14 @@ struct is_abstract_imp
          (s1 == sizeof(type_traits::yes_type))
       >::value));
 };
-
+#endif
 }
 
+#ifndef BOOST_NO_IS_ABSTRACT
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_abstract,T,::boost::detail::is_abstract_imp<T>::value)
+#else
+BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_abstract,T,::boost::detail::is_polymorphic_imp<T>::value)
+#endif
 
 } // namespace boost
 
