@@ -74,7 +74,7 @@
 
       <destructor>
         <purpose>Destructor.</purpose>
-        
+
         <description>
           <simpara>Destroys <code>*this</code>, also destroying its currently
           contained value.</simpara>
@@ -89,14 +89,14 @@
           <simpara>Initializes <code>*this</code> with the default value of 
           the first bounded type (i.e, <code>T1</code>).</simpara>
         </description>
-        
+
         <requires>
           <simpara>The first bounded type of the <code>variant</code> (i.e.,
             <code>T1</code>) must fulfill the requirements of the
-            <link linkend="variant.concepts.default-constructible"><emphasis>DefaultConstructible</emphasis></link>
+            <emphasis>DefaultConstructible</emphasis> [20.1.4]
             concept.</simpara>
         </requires>
-        
+
         <throws>
           <simpara>May fail with any exceptions arising from the default
           constructor of <code>T1</code>.</simpara>
@@ -107,7 +107,7 @@
         <parameter name="other">
           <paramtype>const variant &amp;</paramtype>
         </parameter>
-      
+
         <purpose>Copy constructor.</purpose>
         <description>
           <simpara>Copies the content of <code>other</code> into
@@ -123,11 +123,11 @@
         <template>
           <template-type-parameter name="T"/>
         </template>
-        
+
         <parameter name="operand">
           <paramtype>const T &amp;</paramtype>
         </parameter>
-        
+
         <purpose>Templated constructor.</purpose>
         <description>
           <simpara>If <code>T</code> is one of the bounded types of the 
@@ -217,10 +217,10 @@
             from the <code>swap</code> primitive for the type.</simpara>
           </throws>
         </method>
-        
+
         <method name="operator=">
           <type>variant &amp;</type>
-          
+
           <parameter name="rhs">
             <paramtype>const variant &amp;</paramtype>
           </parameter>
@@ -251,7 +251,7 @@
 
         <method name="operator=">
           <type>variant &amp;</type>
-          
+
           <template>
             <template-type-parameter name="T"/>
           </template>
@@ -289,7 +289,7 @@
           </throws>
         </method>
       </method-group>
-      
+
       <method-group name="queries">
         <method name="which" cv="const">
           <type>int</type>
@@ -379,11 +379,11 @@
       <parameter name="out">
         <paramtype><classname>std::basic_ostream</classname>&lt;ElemType,Traits&gt; &amp;</paramtype>
       </parameter>
-      
+
       <parameter name="rhs">
         <paramtype>const <classname>variant</classname>&lt;T1, T2, ..., TN&gt; &amp;</paramtype>
       </parameter>
-      
+
       <purpose>Streaming output operator for <classname>variant</classname>.</purpose>
       <description>
         <simpara>Outputs the content of <code>rhs</code> to
