@@ -24,7 +24,7 @@
 #include <boost/random/uniform_01.hpp>
 
 // Sun CC doesn't handle boost::iterator_adaptor yet
-#if !defined(__SUNPRO_CC) || (__SUNPRO_CC <= 0x530)
+#if !defined(__SUNPRO_CC) || (__SUNPRO_CC > 0x530)
 #include <boost/generator_iterator.hpp>
 #endif
 
@@ -43,7 +43,7 @@ void experiment(base_generator_type & generator)
   typedef boost::uniform_smallint<base_generator_type> generator_type;
   generator_type die_gen(generator, 1, 6);
 
-#if !defined(__SUNPRO_CC) || (__SUNPRO_CC <= 0x530)
+#if !defined(__SUNPRO_CC) || (__SUNPRO_CC > 0x530)
   // For an STL iterator interface, use iterator_adaptors.hpp
   boost::generator_iterator_generator<generator_type>::type
     die = boost::make_generator_iterator(die_gen);
