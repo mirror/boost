@@ -26,14 +26,12 @@ namespace detail
 
 template <class P>
 struct indirect_reference
+  : mpl::apply_if<
+        detail::is_incrementable<P>
+      , iterator_reference<P>
+      , detail::smart_ptr_reference<P>
+    >
 {
-    typedef typename remove_cv<P>::type stripped;
-    
-    typedef typename mpl::apply_if<
-        detail::is_incrementable<stripped>
-      , iterator_reference<stripped>
-      , detail::smart_ptr_reference<stripped>
-    >::type type;
 };
   
 } // namespace boost

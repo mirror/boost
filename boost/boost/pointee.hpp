@@ -55,14 +55,12 @@ namespace detail
 
 template <class P>
 struct pointee
+  : mpl::apply_if<
+        detail::is_incrementable<P>
+      , detail::iterator_pointee<P>
+      , detail::smart_ptr_pointee<P>
+    >
 {
-    typedef typename remove_cv<P>::type stripped;
-
-    typedef typename mpl::apply_if<
-        detail::is_incrementable<stripped>
-      , detail::iterator_pointee<stripped>
-      , detail::smart_ptr_pointee<stripped>
-    >::type type;
 };
   
 } // namespace boost
