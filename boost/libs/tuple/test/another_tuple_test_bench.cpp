@@ -94,7 +94,7 @@ void foo4()
   A a;
   tuple<int, double&, const A&> t(1, d, a);
   const tuple<int, double&, const A> ct = t;
-
+  (void)ct;
 #ifdef E8
   get<0>(ct) = 5; // can't assign to const
 #endif
@@ -119,9 +119,10 @@ void foo4()
 
   void foo5() {
     tuple<char, BB*, BB, DD> t;
-
+    (void)t;
     tuple<char, char> aaa;
     tuple<int, int> bbb(aaa);
+    (void)bbb;
     //    tuple<int, AA*, CC, CC> a = t;
     //    a = t;
   }
