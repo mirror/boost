@@ -41,7 +41,8 @@ struct free_saver {
     ){
         // use function overload (version_type) to workaround
         // two-phase lookup issue
-        save(ar, t, version_type(file_version));
+        const version_type v(file_version);
+        save(ar, t, v);
     }
 };
 template<class Archive, class T>
@@ -53,7 +54,8 @@ struct free_loader {
     ){
         // use function overload (version_type) to workaround
         // two-phase lookup issue
-        load(ar, t, version_type(file_version));
+        const version_type v(file_version);
+        load(ar, t, v);
     }
 };
 //} // namespace detail
@@ -64,11 +66,12 @@ inline void split_free(
     T & t, 
     const unsigned int file_version
 ){
-    mpl::eval_if<
+    typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
         BOOST_DEDUCED_TYPENAME Archive::is_saving,
         mpl::identity</* detail:: */ free_saver<Archive, T> >, 
         mpl::identity</* detail:: */ free_loader<Archive, T> >
-    >::type::invoke(ar, t, file_version);
+    >::type typex;
+    typex::invoke(ar, t, file_version);
 }
 
 } // namespace serialization
