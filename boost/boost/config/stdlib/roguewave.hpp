@@ -39,6 +39,10 @@
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #endif
 
+#if BOOST_RWSTD_VER <= 0x020101
+#  define BOOST_NO_LONG_LONG_NUMERIC_LIMITS
+# endif
+
 //
 // Borland version of numeric_limits lacks __int64 specialisation:
 //
