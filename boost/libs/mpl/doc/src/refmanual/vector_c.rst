@@ -68,11 +68,11 @@ Example
 
 .. parsed-literal::
     
-    typedef vector_c<int,1,2,3,5,7,12,19,31> fibonacci;
-    typedef push_back<fibonacci,int_<50> >::type fibonacci2;
-    
+    typedef vector_c<int,1,1,2,3,5,8,13,21,34> fibonacci;
+    typedef push_back<fibonacci,int_<55> >::type fibonacci2;
+
     BOOST_MPL_ASSERT_RELATION( front<fibonacci2>::type::value, ==, 1 );
-    BOOST_MPL_ASSERT_RELATION( back<fibonacci2>::type::value, ==, 50 );
+    BOOST_MPL_ASSERT_RELATION( back<fibonacci2>::type::value, ==, 55 );
 
 
 See also
