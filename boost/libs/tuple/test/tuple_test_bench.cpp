@@ -24,7 +24,7 @@ class C {};
 // classes with different kinds of conversions
 class AA {};
 class BB : public AA {}; 
-struct CC { CC() {} CC(const BB& b) {} };
+struct CC { CC() {} CC(const BB&) {} };
 struct DD { operator CC() const { return CC(); }; };
 
 // something to prevent warnings for unused variables
