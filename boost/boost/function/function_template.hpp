@@ -276,12 +276,12 @@ namespace boost {
     // one with a default parameter.
     template<typename Functor>
     BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f
-#ifndef BOOST_FUNCTION_NO_ENABLE_IF
-                            ,typename detail::function::enable_if<
+#ifndef BOOST_NO_SFINAE
+                            ,typename enable_if_c<
                             (::boost::type_traits::ice_not<
                              (is_integral<Functor>::value)>::value),
                                         int>::type = 0
-#endif // BOOST_FUNCTION_NO_ENABLE_IF
+#endif // BOOST_NO_SFINAE
                             ) :
       function_base(),
       invoker(0)
@@ -289,7 +289,7 @@ namespace boost {
       this->assign_to(f);
     }
 
-#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+#ifndef BOOST_NO_SFINAE
     BOOST_FUNCTION_FUNCTION(clear_type*) : function_base(), invoker(0) {}
 #else
     BOOST_FUNCTION_FUNCTION(int zero) : function_base(), invoker(0)
@@ -329,8 +329,8 @@ namespace boost {
     // handle BOOST_FUNCTION_FUNCTION as the type of the temporary to
     // construct.
     template<typename Functor>
-#ifndef BOOST_FUNCTION_NO_ENABLE_IF
-    typename detail::function::enable_if<
+#ifndef BOOST_NO_SFINAE
+    typename enable_if_c<
                (::boost::type_traits::ice_not<
                  (is_integral<Functor>::value)>::value),
                BOOST_FUNCTION_FUNCTION&>::type
@@ -343,7 +343,7 @@ namespace boost {
       return *this;
     }
 
-#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+#ifndef BOOST_NO_SFINAE
     BOOST_FUNCTION_FUNCTION& operator=(clear_type*)
     {
       this->clear();
@@ -584,8 +584,8 @@ public:
 
   template<typename Functor>
   function(Functor f
-#ifndef BOOST_FUNCTION_NO_ENABLE_IF
-           ,typename detail::function::enable_if<
+#ifndef BOOST_NO_SFINAE
+           ,typename enable_if_c<
                             (::boost::type_traits::ice_not<
                           (is_integral<Functor>::value)>::value),
                        int>::type = 0
@@ -595,7 +595,7 @@ public:
   {
   }
 
-#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+#ifndef BOOST_NO_SFINAE
   function(clear_type*) : base_type() {}
 #endif
 
@@ -610,8 +610,8 @@ public:
   }
 
   template<typename Functor>
-#ifndef BOOST_FUNCTION_NO_ENABLE_IF
-  typename detail::function::enable_if<
+#ifndef BOOST_NO_SFINAE
+  typename enable_if_c<
                             (::boost::type_traits::ice_not<
                          (is_integral<Functor>::value)>::value),
                       self_type&>::type
@@ -624,7 +624,7 @@ public:
     return *this;
   }
 
-#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+#ifndef BOOST_NO_SFINAE
   self_type& operator=(clear_type*)
   {
     this->clear();
