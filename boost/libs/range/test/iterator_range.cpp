@@ -9,7 +9,7 @@
 //
 
 #include <boost/range/iterator_range.hpp>
-#include <boost/range/sub_range.hpp>
+#include <boost/range/functions.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
 #include <iostream>
@@ -34,6 +34,7 @@ struct add_one
 
 void check_iterator_range()
 {
+	
     typedef string::iterator               iterator;
     typedef string::const_iterator         const_iterator;
     typedef iterator_range<iterator>       irange;
@@ -45,40 +46,25 @@ void check_iterator_range()
     cirange r2  = make_iterator_range( cstr );
     r2          = make_iterator_range( cstr.begin(), cstr.end() );
     r2          = make_iterator_range( str );
-    
-    typedef sub_range<string>       srange;
-    typedef sub_range<const string> csrange;
-    srange s     = r;
-    BOOST_CHECK( r == s );
-    s            = make_iterator_range( str );
-    csrange s2   = r;
-    s2           = r2;
-    s2           = make_iterator_range( cstr );
-    BOOST_CHECK( r != s2 );
-    s2           = make_iterator_range( str );
-    
-    BOOST_CHECK( r.begin() == s.begin() );
-    BOOST_CHECK( r2.begin()== s2.begin() );
-    BOOST_CHECK( r.end()   == s.end() );
-    BOOST_CHECK( r2.end()  == s2.end() );
-    BOOST_CHECK_EQUAL( r.size(), s.size() );
-    BOOST_CHECK_EQUAL( r2.size(), s2.size() );
+ 
+    BOOST_CHECK( !r.empty() );
+    BOOST_CHECK( !r2.empty() );
     
     if( !r )
         BOOST_CHECK( false );
     if( !r2 )
         BOOST_CHECK( false );
-    if( !s )
-        BOOST_CHECK( false );
-    if( !s2 )
-        BOOST_CHECK( false );
 
-    cout << r << r2 << s << s2;
+    BOOST_CHECK_EQUAL( r.size(), size( r ) );
+    BOOST_CHECK_EQUAL( r2.size(), size( r2 ) );
+    
+    BOOST_CHECK_EQUAL( distance( r.begin(), r.end() ), 
+                       distance( begin( r2 ), end( r2 ) ) );
+    cout << r << r2;
     
     string res  = copy_range<string>( r );
     BOOST_CHECK( equal( res.begin(), res.end(), r.begin() ) );
-    string res2 = transform_range<string>( s2, add_one() );
-    BOOST_CHECK( !equal( s2.begin(), s2.end(), res2.begin() ) );
+
 }
 
 

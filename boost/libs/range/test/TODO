@@ -84,3 +84,5 @@ Yes.
 
 15. More concepts: random-access range: which have constant
 time size(); Cpm matthews latest article.  
+
+16. use typetraits for broken compilers...will probably make array work for buitins!

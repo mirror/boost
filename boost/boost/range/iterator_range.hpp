@@ -58,11 +58,11 @@ namespace boost {
             //BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(value_type);
 
             //! Encapsulated value type
-            typedef BOOST_DEDUCED_TYPENAME boost::
+            typedef BOOST_DEDUCED_TYPENAME 
                 iterator_value<IteratorT>::type value_type;
 
             //! Difference type
-            typedef BOOST_DEDUCED_TYPENAME boost::
+            typedef BOOST_DEDUCED_TYPENAME 
                 iterator_difference<IteratorT>::type difference_type;
             //! Size type
             typedef std::size_t size_type; // note: must be unsigned
@@ -86,12 +86,12 @@ namespace boost {
             //! Constructor from a Range
             template< class Range >
             iterator_range( const Range& r ) : 
-                m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ) {}
+                m_Begin( begin( r ) ), m_End( end( r ) ) {}
 
             //! Constructor from a Range
             template< class Range >
             iterator_range( Range& r ) : 
-            m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ) {}
+            m_Begin( begin( r ) ), m_End( end( r ) ) {}
 
             //! Copy constructor -- default OK
 
@@ -241,6 +241,17 @@ namespace boost {
             return iterator_range<IteratorT>( Begin, End );
         }
       
+#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
+        template< typename Range >
+        inline iterator_range< BOOST_DEDUCED_TYPENAME result_iterator_of<Range>::type >
+        make_iterator_range( Range& r ) 
+        {   
+            return iterator_range< BOOST_DEDUCED_TYPENAME result_iterator_of<Range>::type >
+                ( begin( r ), end( r ) );
+        }
+
+#else
         //! iterator_range construct helper
         /*!
             Construct an \c iterator_range from a \c Range containing the begin
@@ -261,6 +272,7 @@ namespace boost {
             return iterator_range< BOOST_DEDUCED_TYPENAME const_iterator_of<Range>::type >
                 ( r );
         }
+#endif
 
         //! copy a range into a sequence
         /*!

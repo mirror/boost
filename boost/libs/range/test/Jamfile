@@ -36,6 +36,12 @@ test-suite range
         :
         : iterator_range
        ]         
+     [ run            
+        sub_range.cpp
+            : :
+        :
+        : sub_range
+       ]         
 
      [ run
             partial_workaround.cpp    
