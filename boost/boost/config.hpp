@@ -198,6 +198,8 @@
 //  Borland ------------------------------------------------------------------//
 
 #elif defined __BORLANDC__
+#   define BOOST_NO_SLIST
+#   define BOOST_NO_HASH
 #   if __BORLANDC__ <= 0x0551
 #     define BOOST_NO_INTEGRAL_INT64_T
 #     define BOOST_NO_PRIVATE_IN_AGGREGATE
