@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  19 Nov 01 Added generator_iterator.  (Jens Maurer)
 //  04 Nov 01 Updated with respect to change in named parameters.
 //            (Jeremy Siek)
 //  08 Mar 01 Moved indirect and transform tests to separate files.
@@ -51,6 +52,7 @@
 #include <functional>
 
 #include <boost/iterator_adaptors.hpp>
+#include <boost/generator_iterator.hpp>
 #include <boost/pending/iterator_tests.hpp>
 #include <boost/pending/integer_range.hpp>
 #include <boost/concept_archetype.hpp>
@@ -104,6 +106,14 @@ typedef std::set<storage::iterator> iterator_set;
 template <class T> struct foo;
 
 void blah(int) { }
+
+struct my_gen
+{
+  typedef int result_type;
+  my_gen() : n(0) { }
+  int operator()() { return ++n; }
+  int n;
+};
 
 int
 main()
@@ -382,6 +392,18 @@ main()
     if (zero) // don't do this, just make sure it compiles
       assert((*i).m_x == i->foo());      
   }
+
+  {
+    // check generator_iterator
+    my_gen g1;
+    boost::generator_iterator_generator<my_gen>::type gen =
+      boost::make_generator_iterator(g1);
+    assert(*gen == 1);
+    ++gen;
+    gen++;
+    assert(*gen == 3);
+  }
+
   std::cout << "test successful " << std::endl;
   return 0;
 }
