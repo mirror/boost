@@ -26,7 +26,7 @@ void symmetric_filter_test()
     typedef toupper_symmetric_filter             impl_type;
     typedef symmetric_filter_adapter<impl_type>  filter_type;
 
-    uppercase_file upper; 
+    uppercase_file upper;
 
     {
         test_file          src;
