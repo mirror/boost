@@ -588,19 +588,18 @@ in the lambda functor.
 This means that the value of a bound argument is fixed at the time of the 
 creation of the lambda function and remains constant during the lifetime 
 of the lambda function object.
-
 For example:
-
 <programlisting>
 int i = 1;
-(_1 + i)(i = 2);
+(_1 = 2, _1 + i)(i);
 </programlisting>
-
+The comma operator is overloaded to combine lambda expressions into a sequence;
+the resulting unary lambda functor first assigns 2 to its argument, 
+then adds the value of <literal>i</literal> to it.
 The value of the expression in the last line is 3, not 4. 
-
-In other words, the lambda expression <literal>_1 + i</literal> creates 
-a lambda function <literal>lambda x.x+1</literal> rather than 
-<literal>lambda x.x+i</literal>.
+In other words, the lambda expression that is created is
+<literal>lambda x.(x = 2, x + 1)</literal> rather than
+<literal>lambda x.(x = 2, x + i)</literal>.
       
 </para>
 
@@ -624,12 +623,12 @@ or as a reference to const respectively.
 
 For example, if we rewrite the previous example and wrap the variable 
 <literal>i</literal> with <literal>ref</literal>, 
-we are creating the lambda expression <literal>lambda x.x+i</literal> 
+we are creating the lambda expression <literal>lambda x.(x = 2, x + i)</literal> 
 and the value of the expression in the last line will be 4:
 
 <programlisting>
 i = 1;
-(_1 + ref(i))(i = 2);
+(_1 = 2, _1 + ref(i))(i);
 </programlisting>
 
 Note that <literal>ref</literal> and <literal>cref</literal> are different
