@@ -225,26 +225,37 @@ main()
     }
   }
 
-  {
+  { // running a span of 5 years to verify snap to end doesn't occur at next leap year
     const date MonthAnswers[] = {
-      date(2000,Feb,28),date(2000,Mar,28),date(2000,Apr,28),
-      date(2000,May,28),date(2000,Jun,28),date(2000,Jul,28),date(2000,Aug,28),
-      date(2000,Sep,28),date(2000,Oct,28),date(2000,Nov,28),date(2000,Dec,28),
-      date(2001,Jan,28)
+      date(2000,Feb,28),date(2000,Mar,28),date(2000,Apr,28),date(2000,May,28),
+      date(2000,Jun,28),date(2000,Jul,28),date(2000,Aug,28),date(2000,Sep,28),
+      date(2000,Oct,28),date(2000,Nov,28),date(2000,Dec,28),date(2001,Jan,28),
+      date(2001,Feb,28),date(2001,Mar,28),date(2001,Apr,28),date(2001,May,28),
+      date(2001,Jun,28),date(2001,Jul,28),date(2001,Aug,28),date(2001,Sep,28),
+      date(2001,Oct,28),date(2001,Nov,28),date(2001,Dec,28),date(2002,Jan,28),
+      date(2002,Feb,28),date(2002,Mar,28),date(2002,Apr,28),date(2002,May,28),
+      date(2002,Jun,28),date(2002,Jul,28),date(2002,Aug,28),date(2002,Sep,28),
+      date(2002,Oct,28),date(2002,Nov,28),date(2002,Dec,28),date(2003,Jan,28),
+      date(2003,Feb,28),date(2003,Mar,28),date(2003,Apr,28),date(2003,May,28),
+      date(2003,Jun,28),date(2003,Jul,28),date(2003,Aug,28),date(2003,Sep,28),
+      date(2003,Oct,28),date(2003,Nov,28),date(2003,Dec,28),date(2004,Jan,28),
+      date(2004,Feb,28),date(2004,Mar,28),date(2004,Apr,28),date(2004,May,28),
+      date(2004,Jun,28),date(2004,Jul,28),date(2004,Aug,28),date(2004,Sep,28),
+      date(2004,Oct,28),date(2004,Nov,28),date(2004,Dec,28),date(2005,Jan,28),
     };
-    test_month_decrement_iterator(MonthAnswers, 12);
+    test_month_decrement_iterator(MonthAnswers, 60);
     
     boost::date_time::date_itr<mfg, date> ditr(date(2000,Feb,28));
     int i = 0;
     try { 
-      for (; ditr < date(2001,Feb,1); ++ditr) {
+      for (; ditr < date(2005,Feb,1); ++ditr) {
         //      std::cout << *ditr << " ";
         check("last day of month iterator3: " + to_iso_string(*ditr), 
               MonthAnswers[i] == *ditr);
         //check("last day of month iterator", MonthAnswers[i] == *ditr);
         i++;
       }
-      check("last day of month iterator3", i == 12);
+      check("last day of month iterator3", i == 60);
     }
     catch(std::exception& e) 
     {
@@ -277,7 +288,30 @@ main()
       i--;
     }
  }
-  {
+  { // WON'T snap top end of month
+    const date YearAnswers[] = {
+      date(2000,Feb,28),date(2001,Feb,28),date(2002,Feb,28),date(2003,Feb,28),
+      date(2004,Feb,28),date(2005,Feb,28),date(2006,Feb,28),date(2007,Feb,28),
+      date(2008,Feb,28),date(2009,Feb,28),date(2010,Feb,28)
+    };
+    
+    boost::date_time::date_itr<yfg, date> d3(date(2000,Feb,28));
+    int i = 0;
+    for (; d3 < date(2010,Mar,1); ++d3) {
+      //std::cout << *d3 << " ";
+      check("year iterator: " + to_iso_string(*d3), YearAnswers[i] == *d3);
+      i++;
+    }
+    std::cout << "Decrementing...." << std::endl;
+    i = 10;
+    --d3;
+    for (; d3 > date(2000,Feb,27); --d3) {
+      //std::cout << *d3 << " ";
+      check("year iterator: " + to_iso_string(*d3), YearAnswers[i] == *d3);
+      i--;
+    }
+ }
+  {// WILL snap top end of month
     const date YearAnswers[] = {
       date(2000,Feb,29),date(2001,Feb,28),date(2002,Feb,28),date(2003,Feb,28),
       date(2004,Feb,29),date(2005,Feb,28),date(2006,Feb,28),date(2007,Feb,28),

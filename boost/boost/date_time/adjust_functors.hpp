@@ -155,21 +155,19 @@ namespace date_time {
   class year_functor 
   {
   public:
-    typedef typename date_type::year_type year_type;
+    //typedef typename date_type::year_type year_type;
     typedef typename date_type::duration_type duration_type;
-    year_functor(int f) : f_(f) {}
+    year_functor(int f) : _mf(f * 12) {}
     duration_type get_offset(const date_type& d) const 
     {
-      month_functor<date_type> mf(f_ * 12);
-      return mf.get_offset(d);
+      return _mf.get_offset(d);
     }
     duration_type get_neg_offset(const date_type& d) const 
     {
-      month_functor<date_type> mf(f_ * 12);
-      return mf.get_neg_offset(d);
+      return _mf.get_neg_offset(d);
     }
   private:
-    int f_;
+    month_functor<date_type> _mf;
   };
 
   
