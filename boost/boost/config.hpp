@@ -596,6 +596,10 @@
 # define BOOST_SYSTEM_HAS_STDINT_H
 #endif
 
+#ifdef __APPLE_CC__
+#define BOOST_NO_INTRINSIC_WCHAR_T
+#endif
+
 #ifndef BOOST_STD_EXTENSION_NAMESPACE
 # define BOOST_STD_EXTENSION_NAMESPACE std
 #endif
