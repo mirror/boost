@@ -339,6 +339,14 @@ private: // helpers, for visitor interfaces (below)
         return visitor_(operand);
     }
 
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x0551)
+    template <typename T>
+    result_type visit(const T& operand)
+    {
+        return visitor_(operand);
+    }
+#endif
+
 #else // defined(BOOST_NO_VOID_RETURNS)
 
     template <typename T>
