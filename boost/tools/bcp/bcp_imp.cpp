@@ -55,6 +55,11 @@ void bcp_implementation::enable_bsl_convert_mode()
    m_bsl_convert_mode = true;
 }
 
+void bcp_implementation::enable_bsl_summary_mode()
+{
+   m_bsl_summary_mode = true;
+}
+
 void bcp_implementation::enable_unix_lines()
 {
    m_unix_lines = true;

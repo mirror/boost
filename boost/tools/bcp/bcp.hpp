@@ -23,6 +23,7 @@ public:
    virtual void enable_scan_mode() = 0;
    virtual void enable_licence_mode() = 0;
    virtual void enable_bsl_convert_mode() = 0;
+   virtual void enable_bsl_summary_mode() = 0;
    virtual void set_boost_path(const char* p) = 0;
    virtual void set_destination(const char* p) = 0;
    virtual void add_module(const char* p) = 0;

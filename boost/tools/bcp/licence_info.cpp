@@ -22,7 +22,7 @@ std::pair<const licence_info*, int> get_licences()
          "\\d[^[:alpha:]]+"
             "([[:alpha:]]"
                "(?:"
-               "(?!Use\\b|Permission\\b|All\\b|<P|(?:-\\s*)\\w+(?:://|@)"
+               "(?!Use\\b|Permission\\b|All\\b|<P|(?:-\\s*)\\w+(?:://|@)|\\\\"
                ")[^\\n\\d]"
             ")+"
          ")"
@@ -72,7 +72,7 @@ std::pair<const licence_info*, int> get_licences()
          "LICENSE_1_0.txt or copy at <a href=\"http://www.boost.org/LICENSE_1_0.txt\">http://www.boost.org/LICENSE_1_0.txt)</a></P>"
        )
       ,
-      licence_info( boost::regex("\\W+subject\\W+to"
+      licence_info( boost::regex("(?!is)\\w\\w\\W+subject\\W+to"
          "(\\W+the)?[^\"[:word:]]+Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
          ,
          boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
@@ -599,11 +599,12 @@ std::pair<const licence_info*, int> get_licences()
             "are\\W+clearly\\W+marked\\W+"
             "ALL\\W+WARRANTIES\\W+ARE\\W+HEREBY\\W+DISCLAIMED"
             "|"
-            "This\\W+file\\W+is\\W+part\\W+of\\W+Jam\\W+see\\W+jam\\.c\\W+for\\W+Copyright\\W+information", boost::regex::perl | boost::regex::icase)
+            "This\\W+file\\W+is\\W+part\\W+of\\W+Jam\\W+see\\W+jam\\.c\\W+for\\W+Copyright\\W+information"
+            "|This file has been donated to Jam", boost::regex::perl | boost::regex::icase)
          ,
-         boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
+         boost::regex(generic_author_sig + std::string("|(Craig\\W+W\\W+McPheeters\\W+Alias\\W+Wavefront)"), boost::regex::perl | boost::regex::icase)
          ,
-         generic_author_format
+         generic_author_format + std::string("(?4Craig W. McPheeters, Alias|Wavefront)")
          ,
          "Perforce Jam License"
          ,
@@ -613,6 +614,39 @@ std::pair<const licence_info*, int> get_licences()
          "freely, as long as this copyright notice is retained and modifications "
          " are clearly marked.</P>"
          "<P>ALL WARRANTIES ARE HEREBY DISCLAIMED</P>"
+       )
+      ,
+      licence_info( boost::regex(
+            "Permission\\W+is\\W+granted\\W+to\\W+anyone\\W+to\\W+use\\W+this\\W+software\\W+for\\W+any\\W+"
+            "purpose\\W+on\\W+any\\W+computer\\W+system\\W+and\\W+to\\W+redistribute\\W+it\\W+freely\\W+"
+            "subject\\W+to\\W+the\\W+following\\W+restrictions\\W+"
+            "1\\W+The\\W+author\\W+is\\W+not\\W+responsible\\W+for\\W+the\\W+consequences\\W+of\\W+use\\W+of\\W+"
+            "this\\W+software\\W+no\\W+matter\\W+how\\W+awful\\W+even\\W+if\\W+they\\W+arise\\W+"
+            "from\\W+defects\\W+in\\W+it\\W+"
+            "2\\W+The\\W+origin\\W+of\\W+this\\W+software\\W+must\\W+not\\W+be\\W+misrepresented\\W+either\\W+"
+            "by\\W+explicit\\W+claim\\W+or\\W+by\\W+omission\\W+"
+            "3\\W+Altered\\W+versions\\W+must\\W+be\\W+plainly\\W+marked\\W+as\\W+such\\W+and\\W+must\\W+not\\W+"
+            "be\\W+misrepresented\\W+as\\W+being\\W+the\\W+original\\W+software"
+            "|Definitions\\W+etc\\W+for\\W+regexp\\W+3\\W+routines", boost::regex::perl | boost::regex::icase)
+         ,
+         boost::regex(generic_author_sig + std::string("|(Definitions\\W+etc\\W+for\\W+regexp\\W+3\\W+routines)"), boost::regex::perl | boost::regex::icase)
+         ,
+         generic_author_format + std::string("(?4University of Toronto)")
+         ,
+         "BSD Regex License"
+         ,
+         "<P>Copyright (c) 1986 by University of Toronto.</P>"
+         "<P>Written by Henry Spencer.  Not derived from licensed software.</P>"
+         "<P>Permission is granted to anyone to use this software for any"
+         "purpose on any computer system, and to redistribute it freely,"
+         "subject to the following restrictions:</P>"
+         "<P>The author is not responsible for the consequences of use of"
+         "this software, no matter how awful, even if they arise"
+         "from defects in it.</P>"
+         "<p>The origin of this software must not be misrepresented, either"
+         "by explicit claim or by omission.</p>"
+         "<p>Altered versions must be plainly marked as such, and must not"
+         "be misrepresented as being the original software.</P>"
        )
       ,
    };

@@ -54,6 +54,7 @@ private:
    void enable_scan_mode();
    void enable_licence_mode();
    void enable_bsl_convert_mode();
+   void enable_bsl_summary_mode();
    void set_boost_path(const char* p);
    void set_destination(const char* p);
    void add_module(const char* p);
@@ -83,6 +84,7 @@ private:
    bool m_unix_lines;                    // fix line endings
    bool m_scan_mode;                     // scan non-boost files.
    bool m_bsl_convert_mode;              // try to convert to the BSL
+   bool m_bsl_summary_mode;              // summarise BSL issues only
    fs::path m_boost_path;                // the path to the boost root
    fs::path m_dest_path;                 // the path to copy to
    std::map<fs::path, bool, path_less> m_cvs_paths;    // valid files under cvs control

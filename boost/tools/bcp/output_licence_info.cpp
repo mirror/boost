@@ -90,10 +90,10 @@ void bcp_implementation::output_licence_info()
    os << "<a href=\"#files\">Files with no recognised licence</a>\n"
       "<a href=\"#authors\">Files with no recognised copyright holder</a>\n"
       "Moving to the Boost Software License...\n"
-      "  <a href=\"#bsl-converted\">Files that have been converted to the Boost Software License</a>\n"
-      "  <a href=\"#to-bsl\">Files that can be moved to the BSL</a>\n"
-      "  <a href=\"#not-to-bsl\">Files that can <b>NOT</b> be moved to the BSL</a>\n"
-      "  <a href=\"#need-bsl-authors\">Authors we need to move to the BSL</a>\n"
+      "  <a href=\"#bsl-converted\">Files that can be automatically converted to the Boost Software License</a>\n"
+      "  <a href=\"#to-bsl\">Files that can be manually converted to the Boost Software License</a>\n"
+      "  <a href=\"#not-to-bsl\">Files that can <b>NOT</b> be moved to the Boost Software License</a>\n"
+      "  <a href=\"#need-bsl-authors\">Authors we need to move to the Boost Software License</a>\n"
       "<a href=\"#copyright\">Copyright Holder Information</a>\n"
       "<a href=\"#depend\">File Dependency Information</a>\n"
       "</pre>";
@@ -158,6 +158,7 @@ void bcp_implementation::output_licence_info()
    //
    i = m_licence_data.begin();
    j = m_licence_data.end();
+   int license_index = 0;
    os << "<a name=\"details\"></a><h2>Licence Details</h2>\n";
    while(i != j)
    {
@@ -167,28 +168,36 @@ void bcp_implementation::output_licence_info()
          << "\"></a>" << licences.first[i->first].licence_name << "</H3>\n";
       // licence text:
       os << "<BLOCKQUOTE>" << licences.first[i->first].licence_text << "</BLOCKQUOTE>";
-      // Copyright holders:
-      os << "<P>This licence is used by the following " << i->second.authors.size() << " copyright holders:</P>\n<BLOCKQUOTE><P>";
-      std::set<std::string>::const_iterator x, y;
-      x = i->second.authors.begin();
-      y = i->second.authors.end();
-      while(x != y)
+      if(!m_bsl_summary_mode || (license_index >= 3))
       {
-         os << *x << "<BR>\n";
-         ++x;
+         // Copyright holders:
+         os << "<P>This licence is used by the following " << i->second.authors.size() << " copyright holders:</P>\n<BLOCKQUOTE><P>";
+         std::set<std::string>::const_iterator x, y;
+         x = i->second.authors.begin();
+         y = i->second.authors.end();
+         while(x != y)
+         {
+            os << *x << "<BR>\n";
+            ++x;
+         }
+         os << "</P></BLOCKQUOTE>\n";
+         // Files using this licence:
+         os << "<P>This licence applies to the following " << i->second.files.size() << " files:</P>\n<BLOCKQUOTE><P>";
+         std::set<fs::path, path_less>::const_iterator m, n;
+         m = i->second.files.begin();
+         n = i->second.files.end();
+         while(m != n)
+         {
+            os << split_path(m_boost_path, *m) << "<br>\n";
+            ++m;
+         }
+         os << "</P></BLOCKQUOTE>\n";
       }
-      os << "</P></BLOCKQUOTE>\n";
-     // Files using this licence:
-      os << "<P>This licence applies to the following " << i->second.files.size() << " files:</P>\n<BLOCKQUOTE><P>";
-      std::set<fs::path, path_less>::const_iterator m, n;
-      m = i->second.files.begin();
-      n = i->second.files.end();
-      while(m != n)
+      else
       {
-         os << split_path(m_boost_path, *m) << "<br>\n";
-         ++m;
+         os << "<P>File list and Authors omitted for brevity</P>" << std::endl;
       }
-      os << "</P></BLOCKQUOTE>\n";
+      ++license_index;
       ++i;
    }
    //
@@ -223,28 +232,33 @@ void bcp_implementation::output_licence_info()
    // Software License, along with enough information for human
    // verification.
    //
-   os << "<h2><a name=\"bsl-converted\"></a>Files that have been converted to the Boost Software License</h2>\n"
-      << "<P>The following " << m_converted_to_bsl.size() << " files have been automatically converted to the Boost Software License, but require manual verification before they can be committed to CVS:</P>\n";
-   if (!m_converted_to_bsl.empty()) {
-     typedef std::map<fs::path, std::pair<std::string, std::string>, path_less>
-       ::const_iterator conv_iterator;
-     conv_iterator i = m_converted_to_bsl.begin(), 
-                   ie = m_converted_to_bsl.end();
-     int file_num = 1;
-     while (i != ie) {
-       os << "<P>[" << file_num << "] File: <tt>" << split_path(m_boost_path, i->first) 
-          << "</tt><br>\n<table border=\"1\">\n  <tr>\n    <td><pre>" 
-          << i->second.first << "</pre></td>\n    <td><pre>"
-          << i->second.second << "</pre></td>\n  </tr>\n</table>\n";
-       ++i;
-       ++file_num;
-     }
+   os << "<h2><a name=\"bsl-converted\"></a>Files that can be automatically converted to the Boost Software License</h2>\n"
+      << "<P>The following " << m_converted_to_bsl.size() << " files can be automatically converted to the Boost Software License, but require manual verification before they can be committed to CVS:</P>\n";
+   if(!m_bsl_summary_mode)
+   {
+      if (!m_converted_to_bsl.empty()) 
+      {
+         typedef std::map<fs::path, std::pair<std::string, std::string>, path_less>
+            ::const_iterator conv_iterator;
+         conv_iterator i = m_converted_to_bsl.begin(), 
+                        ie = m_converted_to_bsl.end();
+         int file_num = 1;
+         while (i != ie) 
+         {
+            os << "<P>[" << file_num << "] File: <tt>" << split_path(m_boost_path, i->first) 
+               << "</tt><br>\n<table border=\"1\">\n  <tr>\n    <td><pre>" 
+               << i->second.first << "</pre></td>\n    <td><pre>"
+               << i->second.second << "</pre></td>\n  </tr>\n</table>\n";
+            ++i;
+            ++file_num;
+         }
+      }
    }
    //
    // Output list of files that could be moved over to the Boost Software License
    //
    os << "<h2><a name=\"to-bsl\"></a>Files that could be converted to the Boost Software License</h2>\n"
-     "<P>The following " << m_can_migrate_to_bsl.size() << " files could be converted to the Boost Software License, but have not yet been:</P>\n<BLOCKQUOTE><P>";
+     "<P>The following " << m_can_migrate_to_bsl.size() << " files could be manually converted to the Boost Software License, but have not yet been:</P>\n<BLOCKQUOTE><P>";
    i2 = m_can_migrate_to_bsl.begin();
    j2 = m_can_migrate_to_bsl.end();
    while(i2 != j2)

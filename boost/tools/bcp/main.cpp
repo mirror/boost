@@ -101,6 +101,10 @@ int cpp_main(int argc, char* argv[])
       {
          papp->enable_bsl_convert_mode();
       }
+      else if(0 == std::strcmp("--bsl-summary", argv[i]))
+      {
+         papp->enable_bsl_summary_mode();
+      }
       else if(0 == std::strcmp("--unix-lines", argv[i]))
       {
          papp->enable_unix_lines();
