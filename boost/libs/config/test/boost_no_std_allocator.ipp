@@ -17,7 +17,7 @@
 namespace boost_no_std_allocator{
 
 template <class T>
-int foo(const T& i)
+int test_allocator(const T& i)
 {
    typedef std::allocator<int> alloc1_t;
    typedef typename alloc1_t::size_type           size_type;
@@ -57,7 +57,7 @@ int foo(const T& i)
 
 int test()
 {
-   return foo(0);
+   return test_allocator(0);
 }
 
 }
