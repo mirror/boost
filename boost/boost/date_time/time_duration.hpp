@@ -30,6 +30,7 @@ namespace date_time {
   {
   public:
     typedef T duration_type;  //the subclass
+    typedef rep_type traits_type;
     typedef typename rep_type::day_type  day_type;
     typedef typename rep_type::hour_type hour_type;
     typedef typename rep_type::min_type  min_type;
@@ -115,14 +116,53 @@ namespace date_time {
   };
 
   //! Template for instantiating derived adjusting durations
-  template<class base_duration, int adjustment>
+  /* These templates are designed to work with multiples of
+   * 10 for frac_of_second and resoultion adjustment 
+   */
+  template<class base_duration, int frac_of_second>
   class subsecond_duration : public base_duration
   {
   public:
+    typedef typename base_duration::traits_type traits_type;
     explicit subsecond_duration(long ss) :
-      base_duration(0,0,0,ss*adjustment)
+      base_duration(0,0,0,ss*traits_type::res_adjust()/frac_of_second)
     {}
   };
+
+  //The following types are supplied to allow simple typedefs later on
+  template <class base_duration>
+  class millisec_duration : public base_duration
+  {
+  public:
+    typedef typename base_duration::traits_type traits_type;
+    explicit millisec_duration(long ss) :
+      base_duration(0,0,0,ss*traits_type::res_adjust()/1000)
+    {}
+
+  };
+
+  template <class base_duration>
+  class microsec_duration : public base_duration
+  {
+  public:
+    typedef typename base_duration::traits_type traits_type;
+    explicit microsec_duration(long ss) :
+      base_duration(0,0,0,ss*traits_type::res_adjust()/1000000)
+    {}
+
+  };
+
+  template <class base_duration>
+  class nanosec_duration : public base_duration
+  {
+  public:
+    typedef typename base_duration::traits_type traits_type;
+    explicit nanosec_duration(long ss) :
+      base_duration(0,0,0,ss*traits_type::res_adjust()/1000000000)
+    {}
+
+  };
+
   
   
 } } //namespace date_time
