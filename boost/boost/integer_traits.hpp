@@ -88,8 +88,8 @@ class integer_traits<wchar_t>
 #if defined(__BORLANDC__)
     // Borland C++ does not have WCHAR_MIN and WCHAR_MAX
     public detail::integer_traits_base<wchar_t, 0, 0xffff>
-#elif defined(__sgi)
-    // SGI MIPSpro doesn't have them, either
+#elif defined(__sgi) && (!defined(__SGI_STL_PORT) || __SGI_STL_PORT < 0x400)
+    // SGI MIPSpro with native library doesn't have them, either
     public detail::integer_traits_base<wchar_t, INT_MIN, INT_MAX>
 #else
     public detail::integer_traits_base<wchar_t, WCHAR_MIN, WCHAR_MAX>
