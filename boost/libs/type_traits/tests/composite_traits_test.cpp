@@ -131,8 +131,10 @@ int cpp_main(int argc, char* argv[])
 
 //
 // define the number of failures expected for given compilers:
-#ifdef __BORLANDC__
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
 unsigned int expected_failures = 2;
+#elif defined(__BORLANDC__)
+unsigned int expected_failures = 1;
 #elif defined(__SUNPRO_CC)
 #if (__SUNPRO_CC <= 0x520)
 unsigned int expected_failures = 11;

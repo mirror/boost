@@ -15,10 +15,10 @@ struct convertible_from
     convertible_from(T);
 };
 
-#ifndef __BORLANDC__
-#  define maybe_value_test value_test
-#else
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
 #  define maybe_value_test value_fail
+#else
+#  define maybe_value_test value_test 
 #endif
 
 int cpp_main(int argc, char* argv[])
@@ -95,8 +95,10 @@ int cpp_main(int argc, char* argv[])
 
 //
 // define the number of failures expected for given compilers:
-#ifdef __BORLANDC__
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
 unsigned int expected_failures = 1;
+#elif defined(__BORLANDC__)
+unsigned int expected_failures = 3;
 #elif defined(__MWERKS__) && __MWERKS__ < 0x3000
 unsigned int expected_failures = 35;
 #else 

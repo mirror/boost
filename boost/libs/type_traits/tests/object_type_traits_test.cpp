@@ -292,7 +292,7 @@ int cpp_main(int argc, char* argv[])
 
 //
 // define the number of failures expected for given compilers:
-#ifdef __BORLANDC__
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
 // can't handle enum's or classes that are POD's
 unsigned int expected_failures = 9;
 #elif defined(__SUNPRO_CC)

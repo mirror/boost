@@ -85,15 +85,17 @@ template <class Iterator,
 struct non_portable_tests
 {
     // Unfortunately, the VC6 standard library doesn't supply these :(
+    typedef typename boost::detail::iterator_traits<Iterator>::pointer test_pt;
+    typedef typename boost::detail::iterator_traits<Iterator>::reference test_rt;
     BOOST_STATIC_ASSERT((
-        boost::is_same<
-        typename boost::detail::iterator_traits<Iterator>::pointer,
+        ::boost::is_same<
+        test_pt,
         pointer
         >::value));
-    
+
     BOOST_STATIC_ASSERT((
-        boost::is_same<
-        typename boost::detail::iterator_traits<Iterator>::reference,
+        ::boost::is_same<
+        test_rt,
         reference
         >::value));
 };
@@ -102,15 +104,17 @@ template <class Iterator,
     class value_type, class difference_type, class pointer, class reference, class category>
 struct portable_tests
 {
+    typedef typename boost::detail::iterator_traits<Iterator>::difference_type test_dt;
+    typedef typename boost::detail::iterator_traits<Iterator>::iterator_category test_cat;
     BOOST_STATIC_ASSERT((
-        boost::is_same<
-        typename boost::detail::iterator_traits<Iterator>::difference_type,
+        ::boost::is_same<
+        test_dt,
         difference_type
         >::value));
-    
+
     BOOST_STATIC_ASSERT((
-        boost::is_same<
-        typename boost::detail::iterator_traits<Iterator>::iterator_category,
+        ::boost::is_same<
+        test_cat,
         category
         >::value));
 };
@@ -121,9 +125,10 @@ template <class Iterator,
 struct input_iterator_test
     : portable_tests<Iterator,value_type,difference_type,pointer,reference,category>
 {
+    typedef typename boost::detail::iterator_traits<Iterator>::value_type test_vt;
     BOOST_STATIC_ASSERT((
-        boost::is_same<
-        typename boost::detail::iterator_traits<Iterator>::value_type,
+        ::boost::is_same<
+        test_vt,
         value_type
         >::value));
 };

@@ -269,11 +269,12 @@ namespace detail
       };
   };
 } // namespace detail
-#ifndef __BORLANDC__
+#if !(defined(__BORLANDC__) && (__BORLANDC__ <= 0x551))
 template <typename T> struct is_enum
 {
 private:
-   typedef typename ::boost::add_reference<T>::type r_type;
+   typedef ::boost::add_reference<T> ar_t;
+   typedef typename ar_t::type r_type;
        
 # if (defined(__MWERKS__) && __MWERKS__ >= 0x3000) || BOOST_MSVC > 1301 || defined(BOOST_NO_COMPILER_CONFIG)
    BOOST_STATIC_CONSTANT(bool, selector =
@@ -294,7 +295,12 @@ private:
        // a dependency recursion.
       >::value));
 # endif
-    typedef typename ::boost::detail::is_enum_helper<selector>::template type<r_type> helper;
+#ifdef __BORLANDC__
+    typedef ::boost::detail::is_enum_helper< ::boost::is_enum<T>::selector> se_t;
+#else
+    typedef ::boost::detail::is_enum_helper<selector> se_t;
+#endif
+    typedef typename se_t::template type<r_type> helper;
 public:
     BOOST_STATIC_CONSTANT(bool, value = helper::value);
 };
