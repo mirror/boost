@@ -29,12 +29,12 @@ TT_TEST_BEGIN(is_class)
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<empty_POD_union_UDT>::value, false);
 #else
    std::cout <<
-   "<warn>\n"
+   "\n<note>\n"
    "This compiler version does not provide support for is_class on\n"
    "union types. Such support is not currently required by the\n"
    "C++ Standard. It will be required to support the upcoming\n"
    "Standard Library Technical Report.\n"
-   "</warn>\n";
+   "</note>\n";
 #endif
 
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<UDT>::value, true);
