@@ -1,3 +1,5 @@
+// Boost.Function library
+
 // Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted

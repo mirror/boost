@@ -33,6 +33,7 @@
   <li><a href="#performance">Performance</a></li>
   <li><a href="#portability">Portability</a></li>
   <li><a href="#design">Design rationale</a></li>
+  <li><a href="#acknowledgements">Acknowledgements</a></li>
   <li><a href="faq.html">Frequently Asked Questions</a></li>
 </ul>
 
@@ -324,6 +325,9 @@ And, of course, function pointers have several advantages over Boost.Function:
 
 <p> A compiler with strong interprocedural analysis could significantly reduce the overhead associated with virtual function calls such that the alternative used by Boost.Function is less efficient. No compiler has yet been found where this is true, but when it does occur the BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS macro can be defined to revert to the simpler implementation based on virtual functions.
 
+<h2>Acknowledgements</h2>
+<a name="acknowledgements"></a>
+<p> Many people were involved in the construction of this library. William Kempf, Jesse Jones and Karl Nelson were all extremely helpful in isolating an interface and scope for the library. John Maddock managed the formal review, and many reviewers gave excellent comments on interface, implementation, and documentation. 
 
     <hr>
     <address><a href="mailto:gregod@cs.rpi.edu">Doug Gregor</a></address>

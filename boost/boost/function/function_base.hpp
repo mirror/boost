@@ -1,3 +1,5 @@
+// Boost.Function library
+
 // Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
@@ -135,7 +137,7 @@ namespace boost {
         typedef Functor functor_type;
 #  ifndef BOOST_NO_STD_ALLOCATOR
         typedef typename Allocator::template rebind<functor_type>::other 
-        allocator_type;
+          allocator_type;
         typedef typename allocator_type::pointer pointer_type;
 #  else
         typedef functor_type* pointer_type;
