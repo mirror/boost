@@ -44,7 +44,13 @@ public:
     assert(sigma >= 0);
     this->iterator_init();
   }
-  // compiler-generated copy constructor is fine
+
+  // compiler-generated copy constructor is NOT fine, need to purge cache
+  normal_distribution(const normal_distribution& other)
+    : _rng(other._rng), _mean(other._mean), _sigma(other._sigma), _valid(false)
+  {
+    this->iterator_init();
+  }
   // uniform_01 cannot be assigned, neither can this class
 
   result_type operator()()
