@@ -1,5 +1,4 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// demo_portable_binary_archive.cpp
 
 // (C) Copyright 2002-4 Pavel Vozenilek . 
 // Use, modification and distribution is subject to the Boost Software
