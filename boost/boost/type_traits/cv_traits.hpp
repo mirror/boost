@@ -252,7 +252,17 @@ struct is_volatile<const volatile void>
 template <typename T>
 struct add_const
 {
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1200
+    // This bogus warning will appear when add_const is applied to a
+    // const volatile reference because we can't detect const volatile
+    // references with MSVC6.
+# pragma warning(push)
+# pragma warning(disable:4181) // warning C4181: qualifier applied to reference type ignored
+#endif 
    typedef T const type;
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1200
+# pragma warning(pop)
+#endif 
 };
 // * convert a type T to volatile type - add_volatile<T>
 // this is not required since the result is always
@@ -261,7 +271,17 @@ struct add_const
 template <typename T>
 struct add_volatile
 {
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1200
+    // This bogus warning will appear when add_const is applied to a
+    // const volatile reference because we can't detect const volatile
+    // references with MSVC6.
+# pragma warning(push)
+# pragma warning(disable:4181) // warning C4181: qualifier applied to reference type ignored
+#endif 
    typedef T volatile type;
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1200
+# pragma warning(pop)
+#endif 
 };
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T>
