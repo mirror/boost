@@ -133,7 +133,7 @@ namespace
 
     if ( !find_signature( file_path, content_signatures ) ) return;
 
-    fs::ifstream fin( file_path );
+    fs::ifstream fin( file_path, std::ios_base::in|std::ios_base::binary );
     if ( !fin )
       throw string( "could not open input file: " ) + file_path.string();
     std::getline( fin, target, '\0' ); // read the whole file
