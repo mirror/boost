@@ -105,6 +105,62 @@ void run_test_cases()
     Tests::none(b);
   }
   //=====================================================================
+  // Test a.is_subset_of(b)
+  {
+    boost::dynamic_bitset<Block> a, b;
+    Tests::subset(a, b);
+  }
+  {
+    boost::dynamic_bitset<Block> a(std::string("0")), b(std::string("0"));
+    Tests::subset(a, b);
+  }
+  {
+    boost::dynamic_bitset<Block> a(std::string("1")), b(std::string("1"));
+    Tests::subset(a, b);
+  }
+  {
+    boost::dynamic_bitset<Block> a(long_string), b(long_string);
+    Tests::subset(a, b);
+  }
+  {
+    boost::dynamic_bitset<Block> a(long_string), b(long_string);
+    a[long_string.size()/2].flip();
+    Tests::subset(a, b);
+  }
+  {
+    boost::dynamic_bitset<Block> a(long_string), b(long_string);
+    b[long_string.size()/2].flip();
+    Tests::subset(a, b);
+  }
+  //=====================================================================
+  // Test a.is_proper_subset_of(b)
+  {
+    boost::dynamic_bitset<Block> a, b;
+    Tests::proper_subset(a, b);
+  }
+  {
+    boost::dynamic_bitset<Block> a(std::string("0")), b(std::string("0"));
+    Tests::proper_subset(a, b);
+  }
+  {
+    boost::dynamic_bitset<Block> a(std::string("1")), b(std::string("1"));
+    Tests::proper_subset(a, b);
+  }
+  {
+    boost::dynamic_bitset<Block> a(long_string), b(long_string);
+    Tests::proper_subset(a, b);
+  }
+  {
+    boost::dynamic_bitset<Block> a(long_string), b(long_string);
+    a[long_string.size()/2].flip();
+    Tests::proper_subset(a, b);
+  }
+  {
+    boost::dynamic_bitset<Block> a(long_string), b(long_string);
+    b[long_string.size()/2].flip();
+    Tests::proper_subset(a, b);
+  }
+  //=====================================================================
   // Test operator==
   {
     boost::dynamic_bitset<Block> a, b;
@@ -425,6 +481,24 @@ void run_test_cases()
   {
     boost::dynamic_bitset<Block> lhs(long_string.size(), 1), rhs(long_string);
     Tests::operator_xor(lhs, rhs);
+  }
+  //=====================================================================
+  // Test a-b
+  {
+    boost::dynamic_bitset<Block> lhs, rhs;
+    Tests::operator_sub(lhs, rhs);
+  }
+  {
+    boost::dynamic_bitset<Block> lhs(std::string("1")), rhs(std::string("0"));
+    Tests::operator_sub(lhs, rhs);
+  }
+  {
+    boost::dynamic_bitset<Block> lhs(long_string.size(), 0), rhs(long_string);
+    Tests::operator_sub(lhs, rhs);
+  }
+  {
+    boost::dynamic_bitset<Block> lhs(long_string.size(), 1), rhs(long_string);
+    Tests::operator_sub(lhs, rhs);
   }
   //=====================================================================
   // Test stream operator<< and operator>>

@@ -323,6 +323,21 @@ struct bitset_test {
         BOOST_TEST(lhs[I] == prev[I]);
   }
 
+  // PRE: b.size() == rhs.size()
+  static void sub_assignment(const Bitset& b, const Bitset& rhs)
+  {
+    Bitset lhs(b);    
+    Bitset prev(lhs);
+    lhs -= rhs;
+    // Resets each bit in lhs for which the corresponding bit in rhs is set,
+    // and leaves all other bits unchanged.
+    for (std::size_t I = 0; I < lhs.size(); ++I)
+      if (rhs[I] == 1)
+        BOOST_TEST(lhs[I] == 0);
+      else
+        BOOST_TEST(lhs[I] == prev[I]);
+  }
+
   static void shift_left_assignment(const Bitset& b, std::size_t pos)
   {
     Bitset lhs(b);    
@@ -538,6 +553,41 @@ struct bitset_test {
     BOOST_TEST(b.none() == (b.count() == 0));
   }
 
+  static void subset(const Bitset& a, const Bitset& b)
+  {
+    if (a.is_subset_of(b)) {
+      for (std::size_t I = 0; I < a.size(); ++I)
+	if (a[I])
+	  BOOST_TEST(b[I]);
+    } else {
+      bool is_subset = true;
+      for (std::size_t I = 0; I < a.size(); ++I)
+	if (a[I] && !b[I]) {
+	  is_subset = false;
+	  break;
+	}
+      BOOST_TEST(is_subset == false);
+    }
+  }
+
+  static void proper_subset(const Bitset& a, const Bitset& b)
+  {
+    if (a.is_proper_subset_of(b)) {
+      for (std::size_t I = 0; I < a.size(); ++I)
+	if (a[I])
+	  BOOST_TEST(b[I]);
+      BOOST_TEST(a.count() < b.count());
+    } else {
+      bool is_subset = true;
+      for (std::size_t I = 0; I < a.size(); ++I)
+	if (a[I] && !b[I]) {
+	  is_subset = false;
+	  break;
+	}
+      BOOST_TEST(is_subset == false || a.count() >= b.count());
+    }
+  }
+
   static void operator_equal(const Bitset& a, const Bitset& b)
   {
     if (a == b) {
@@ -679,6 +729,14 @@ struct bitset_test {
   {
     Bitset x(lhs);
     BOOST_TEST((lhs ^ rhs) == (x ^= rhs));
+  }
+
+  // operator-
+  static
+  void operator_sub(const Bitset& lhs, const Bitset& rhs)
+  {
+    Bitset x(lhs);
+    BOOST_TEST((lhs - rhs) == (x -= rhs));
   }
 
   // operator<<(ostream,
