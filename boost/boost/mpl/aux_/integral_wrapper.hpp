@@ -36,12 +36,18 @@ template< AUX_WRAPPER_PARAMS(N) >
 struct AUX_WRAPPER_NAME
 {
     BOOST_STATIC_CONSTANT(AUX_WRAPPER_VALUE_TYPE, value = N);
+// agurt, 08/mar/03: SGI MIPSpro C++ workaround, have to #ifdef because some 
+// other compilers (e.g. MSVC) are not particulary happy about it
+#if BOOST_WORKAROUND(__EDG_VERSION__, <= 238)
     typedef struct AUX_WRAPPER_NAME type;
+#else
+    typedef AUX_WRAPPER_NAME type;
+#endif
     typedef AUX_WRAPPER_VALUE_TYPE value_type;
 
-    // have to #ifdef here: some compilers don't like the 'N + 1' form (MSVC),
-    // while some other don't like 'value + 1' (Borland), and some don't like
-    // either
+// have to #ifdef here: some compilers don't like the 'N + 1' form (MSVC),
+// while some other don't like 'value + 1' (Borland), and some don't like
+// either
 #if BOOST_WORKAROUND(__EDG_VERSION__, <= 243)
  private:
     BOOST_STATIC_CONSTANT(AUX_WRAPPER_VALUE_TYPE, next_value = BOOST_MPL_AUX_ICE_CAST(AUX_WRAPPER_VALUE_TYPE, (N + 1)));
