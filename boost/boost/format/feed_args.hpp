@@ -237,7 +237,7 @@ namespace detail {
     template<class Ch, class Tr, class Alloc, class T> 
     basic_format<Ch, Tr, Alloc>&  
     feed (basic_format<Ch,Tr, Alloc>& self, T x) {
-        if(self.dumped_) self.clear_notbound();
+        if(self.dumped_) self.clear();
         distribute<Ch, Tr, Alloc, T> (self, x);
         ++self.cur_arg_;
         if(self.bound_.size() != 0) {

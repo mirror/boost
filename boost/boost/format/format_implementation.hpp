@@ -126,7 +126,7 @@ namespace boost {
 
     template< class Ch, class Tr, class Alloc>
     basic_format<Ch,Tr, Alloc>& basic_format<Ch,Tr, Alloc>:: 
-    clear_notbound () {
+    clear () {
         // empty the string buffers (except bound arguments)
         // and make the format object ready for formatting a new set of arguments
 
@@ -148,10 +148,10 @@ namespace boost {
 
     template< class Ch, class Tr, class Alloc>
     basic_format<Ch,Tr, Alloc>& basic_format<Ch,Tr, Alloc>:: 
-    clear () {
-        // remove all binds, then clear_notbound()
+    clear_binds () {
+        // remove all binds, then clear()
         bound_.resize(0);
-        clear_notbound();
+        clear();
         return *this;
     }
 
@@ -165,7 +165,7 @@ namespace boost {
             else return *this;
         }
         bound_[argN-1]=false;
-        clear_notbound();
+        clear();
         return *this;
     }
 
@@ -220,9 +220,9 @@ namespace detail {
     basic_format<Ch, Tr, Alloc>&  
     bind_arg_body (basic_format<Ch, Tr, Alloc>& self, int argN, const T& val) {
         // bind one argument to a fixed value
-        // this is persistent over clear_notbound() calls, thus also over str() and <<
+        // this is persistent over clear() calls, thus also over str() and <<
         if(self.dumped_) 
-            self.clear_notbound(); // needed because we will modify cur_arg_
+            self.clear(); // needed because we will modify cur_arg_
         if(argN<1 || argN > self.num_args_) {
             if( self.exceptions() & io::out_of_range_bit )
                 boost::throw_exception(io::out_of_range(argN, 1, self.num_args_+1 ) );

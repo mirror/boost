@@ -56,8 +56,8 @@ namespace boost {
                     size() const;            // sum of the current string pieces sizes
         string_type str()  const;            // final string 
 
-        basic_format& clear();               // empty all converted string buffers
-        basic_format& clear_notbound();      // same, except the ones marked bound are left
+        basic_format& clear();       // empty all converted string buffers (except bound items)
+        basic_format& clear_binds(); // unbind all bound items, and call clear()
         basic_format& parse(const string_type&); // resets buffers and parse a new format string
 
         // ** arguments passing ** //
