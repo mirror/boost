@@ -268,6 +268,7 @@ struct re_repeat : public re_jump
    int id;
    bool leading;
    bool greedy;
+   bool singleton;
 };
 
 
