@@ -15,7 +15,7 @@ void test_base_iterator(boost::gregorian::date end,
   for (; di < end; ++di) {
     data += to_iso_string(*di) + " ";
   }
-};
+}
  
 
 int

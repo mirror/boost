@@ -54,14 +54,14 @@ test_month()
   check("month traits min", greg_month::min() == 1);
   check("month traits max", greg_month::max() == 12);
 
-};
+}
 
 int
 main() 
 {
   test_month();
   return printTestStats();
-};
+}
 
 /*
  * Copyright (c) 2001

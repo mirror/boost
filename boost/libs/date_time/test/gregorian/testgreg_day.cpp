@@ -78,14 +78,14 @@ test_day()
      check("Bad day of year", true); //good
   }
   
-};
+}
 
 int
 main() 
 {
   test_day();
   return printTestStats();
-};
+}
 
 /*
  * Copyright (c) 2001

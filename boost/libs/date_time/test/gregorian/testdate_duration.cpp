@@ -39,7 +39,7 @@ int main() {
   test_date_duration();
   return printTestStats();
 
-};
+}
 
 /*
  * Copyright (c) 2001

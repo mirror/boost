@@ -129,7 +129,7 @@ main()
 {
   test_greg_calendar();
   return printTestStats();
-};
+}
 
 /*
  * Copyright (c) 2001

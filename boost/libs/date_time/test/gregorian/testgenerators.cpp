@@ -67,7 +67,7 @@ main()
   
   return printTestStats();
 
-};
+}
 
 /*
  * Copyright (c) 2001
