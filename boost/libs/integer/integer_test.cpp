@@ -9,313 +9,247 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//   04 Oct 01  Added tests for new templates; rewrote code (Daryle Walker)
 //   10 Mar 01  Boost Test Library now used for tests (Beman Dawes)
 //   31 Aug 99  Initial version
 
-#include <iostream>
-#include <boost/integer.hpp>
+#define  BOOST_INCLUDE_MAIN
+#include <boost/test/test_tools.hpp>  // for main, BOOST_TEST
 
-#define BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>
+#include <boost/config.hpp>   // for BOOST_NO_USING_TEMPLATE
+#include <boost/cstdlib.hpp>  // for boost::exit_success
+#include <boost/integer.hpp>  // for boost::int_t, boost::uint_t
 
-namespace
-{
-    void test( long ) { std::cout << "long\n"; }
-    void test( int ) { std::cout << "int\n"; }
-    void test( short ) { std::cout << "short\n"; }
-    void test( signed char ) { std::cout << "signed char\n"; }
-    void test( unsigned long ) { std::cout << "unsigned long\n"; }
-    void test( unsigned int ) { std::cout << "unsigned int\n"; }
-    void test( unsigned short ) { std::cout << "unsigned short\n"; }
-    void test( unsigned char ) { std::cout << "unsigned char\n"; }
-} // unnamed namespace
+#include <climits>   // for ULONG_MAX, LONG_MAX, LONG_MIN
+#include <iostream>  // for std::cout (std::endl indirectly)
+#include <typeinfo>  // for std::type_info
 
-// just to prove it works, specialize int_fast_t<short> to yield long
+
+// Control if the names of the types for each version
+// of the integer templates will be printed.
+#ifndef CONTROL_SHOW_TYPES
+#define CONTROL_SHOW_TYPES  0
+#endif
+
+
+// If specializations have not already been done, then we can confirm
+// the effects of the "fast" types by making a specialization.
 namespace boost
 {
-    template<> struct int_fast_t<short> { typedef long fast; };
+    template < >
+    struct int_fast_t< short >
+    {
+        typedef long  fast;
+    };
 }
 
-int test_main(int,char**)
-{
-#ifndef BOOST_NO_USING_TEMPLATE
-     using boost::int_t;
-     using boost::uint_t;
+
+// Show the types of an integer template version
+#if CONTROL_SHOW_TYPES
+#define SHOW_TYPE(Template, Number, Type)  ::std::cout << "Type \"" \
+ #Template "<" #Number ">::" #Type "\" is \"" << typeid(Template <  \
+ Number > :: Type).name() << ".\"\n"
 #else
-     using namespace boost;
+#define SHOW_TYPE(Template, Number, Type)
 #endif
 
-#ifdef BOOST_SHOW_TYPES
-     std::cout << 32 << ' '; test( int_t<32>::least() ); 
-     std::cout << 31 << ' '; test( int_t<31>::least() ); 
-     std::cout << 30 << ' '; test( int_t<30>::least() ); 
-     std::cout << 29 << ' '; test( int_t<29>::least() ); 
-     std::cout << 28 << ' '; test( int_t<28>::least() ); 
-     std::cout << 27 << ' '; test( int_t<27>::least() ); 
-     std::cout << 26 << ' '; test( int_t<26>::least() ); 
-     std::cout << 25 << ' '; test( int_t<25>::least() ); 
-     std::cout << 24 << ' '; test( int_t<24>::least() ); 
-     std::cout << 23 << ' '; test( int_t<23>::least() ); 
-     std::cout << 22 << ' '; test( int_t<22>::least() ); 
-     std::cout << 21 << ' '; test( int_t<21>::least() ); 
-     std::cout << 20 << ' '; test( int_t<20>::least() ); 
-     std::cout << 19 << ' '; test( int_t<19>::least() ); 
-     std::cout << 18 << ' '; test( int_t<18>::least() ); 
-     std::cout << 17 << ' '; test( int_t<17>::least() ); 
-     std::cout << 16 << ' '; test( int_t<16>::least() ); 
-     std::cout << 15 << ' '; test( int_t<15>::least() ); 
-     std::cout << 14 << ' '; test( int_t<14>::least() ); 
-     std::cout << 13 << ' '; test( int_t<13>::least() ); 
-     std::cout << 12 << ' '; test( int_t<12>::least() ); 
-     std::cout << 11 << ' '; test( int_t<11>::least() ); 
-     std::cout << 10 << ' '; test( int_t<10>::least() ); 
-     std::cout << 9 << ' '; test( int_t<9>::least() ); 
-     std::cout << 8 << ' '; test( int_t<8>::least() ); 
-     std::cout << 7 << ' '; test( int_t<7>::least() ); 
-     std::cout << 6 << ' '; test( int_t<6>::least() ); 
-     std::cout << 5 << ' '; test( int_t<5>::least() ); 
-     std::cout << 4 << ' '; test( int_t<4>::least() ); 
-     std::cout << 3 << ' '; test( int_t<3>::least() ); 
-     std::cout << 2 << ' '; test( int_t<2>::least() ); 
-     std::cout << 1 << ' '; test( int_t<1>::least() ); 
-     std::cout << 0 << ' '; test( int_t<0>::least() ); 
-     std::cout << 32 << ' '; test( int_t<32>::fast() ); 
-     std::cout << 31 << ' '; test( int_t<31>::fast() ); 
-     std::cout << 30 << ' '; test( int_t<30>::fast() ); 
-     std::cout << 29 << ' '; test( int_t<29>::fast() ); 
-     std::cout << 28 << ' '; test( int_t<28>::fast() ); 
-     std::cout << 27 << ' '; test( int_t<27>::fast() ); 
-     std::cout << 26 << ' '; test( int_t<26>::fast() ); 
-     std::cout << 25 << ' '; test( int_t<25>::fast() ); 
-     std::cout << 24 << ' '; test( int_t<24>::fast() ); 
-     std::cout << 23 << ' '; test( int_t<23>::fast() ); 
-     std::cout << 22 << ' '; test( int_t<22>::fast() ); 
-     std::cout << 21 << ' '; test( int_t<21>::fast() ); 
-     std::cout << 20 << ' '; test( int_t<20>::fast() ); 
-     std::cout << 19 << ' '; test( int_t<19>::fast() ); 
-     std::cout << 18 << ' '; test( int_t<18>::fast() ); 
-     std::cout << 17 << ' '; test( int_t<17>::fast() ); 
-     std::cout << 16 << ' '; test( int_t<16>::fast() ); 
-     std::cout << 15 << ' '; test( int_t<15>::fast() ); 
-     std::cout << 14 << ' '; test( int_t<14>::fast() ); 
-     std::cout << 13 << ' '; test( int_t<13>::fast() ); 
-     std::cout << 12 << ' '; test( int_t<12>::fast() ); 
-     std::cout << 11 << ' '; test( int_t<11>::fast() ); 
-     std::cout << 10 << ' '; test( int_t<10>::fast() ); 
-     std::cout << 9 << ' '; test( int_t<9>::fast() ); 
-     std::cout << 8 << ' '; test( int_t<8>::fast() ); 
-     std::cout << 7 << ' '; test( int_t<7>::fast() ); 
-     std::cout << 6 << ' '; test( int_t<6>::fast() ); 
-     std::cout << 5 << ' '; test( int_t<5>::fast() ); 
-     std::cout << 4 << ' '; test( int_t<4>::fast() ); 
-     std::cout << 3 << ' '; test( int_t<3>::fast() ); 
-     std::cout << 2 << ' '; test( int_t<2>::fast() ); 
-     std::cout << 1 << ' '; test( int_t<1>::fast() ); 
-     std::cout << 0 << ' '; test( int_t<0>::fast() ); 
-     std::cout << 32 << ' '; test( uint_t<32>::least() ); 
-     std::cout << 31 << ' '; test( uint_t<31>::least() ); 
-     std::cout << 30 << ' '; test( uint_t<30>::least() ); 
-     std::cout << 29 << ' '; test( uint_t<29>::least() ); 
-     std::cout << 28 << ' '; test( uint_t<28>::least() ); 
-     std::cout << 27 << ' '; test( uint_t<27>::least() ); 
-     std::cout << 26 << ' '; test( uint_t<26>::least() ); 
-     std::cout << 25 << ' '; test( uint_t<25>::least() ); 
-     std::cout << 24 << ' '; test( uint_t<24>::least() ); 
-     std::cout << 23 << ' '; test( uint_t<23>::least() ); 
-     std::cout << 22 << ' '; test( uint_t<22>::least() ); 
-     std::cout << 21 << ' '; test( uint_t<21>::least() ); 
-     std::cout << 20 << ' '; test( uint_t<20>::least() ); 
-     std::cout << 19 << ' '; test( uint_t<19>::least() ); 
-     std::cout << 18 << ' '; test( uint_t<18>::least() ); 
-     std::cout << 17 << ' '; test( uint_t<17>::least() ); 
-     std::cout << 16 << ' '; test( uint_t<16>::least() ); 
-     std::cout << 15 << ' '; test( uint_t<15>::least() ); 
-     std::cout << 14 << ' '; test( uint_t<14>::least() ); 
-     std::cout << 13 << ' '; test( uint_t<13>::least() ); 
-     std::cout << 12 << ' '; test( uint_t<12>::least() ); 
-     std::cout << 11 << ' '; test( uint_t<11>::least() ); 
-     std::cout << 10 << ' '; test( uint_t<10>::least() ); 
-     std::cout << 9 << ' '; test( uint_t<9>::least() ); 
-     std::cout << 8 << ' '; test( uint_t<8>::least() ); 
-     std::cout << 7 << ' '; test( uint_t<7>::least() ); 
-     std::cout << 6 << ' '; test( uint_t<6>::least() ); 
-     std::cout << 5 << ' '; test( uint_t<5>::least() ); 
-     std::cout << 4 << ' '; test( uint_t<4>::least() ); 
-     std::cout << 3 << ' '; test( uint_t<3>::least() ); 
-     std::cout << 2 << ' '; test( uint_t<2>::least() ); 
-     std::cout << 1 << ' '; test( uint_t<1>::least() ); 
-     std::cout << 0 << ' '; test( uint_t<0>::least() ); 
-     std::cout << 32 << ' '; test( uint_t<32>::fast() ); 
-     std::cout << 31 << ' '; test( uint_t<31>::fast() ); 
-     std::cout << 30 << ' '; test( uint_t<30>::fast() ); 
-     std::cout << 29 << ' '; test( uint_t<29>::fast() ); 
-     std::cout << 28 << ' '; test( uint_t<28>::fast() ); 
-     std::cout << 27 << ' '; test( uint_t<27>::fast() ); 
-     std::cout << 26 << ' '; test( uint_t<26>::fast() ); 
-     std::cout << 25 << ' '; test( uint_t<25>::fast() ); 
-     std::cout << 24 << ' '; test( uint_t<24>::fast() ); 
-     std::cout << 23 << ' '; test( uint_t<23>::fast() ); 
-     std::cout << 22 << ' '; test( uint_t<22>::fast() ); 
-     std::cout << 21 << ' '; test( uint_t<21>::fast() ); 
-     std::cout << 20 << ' '; test( uint_t<20>::fast() ); 
-     std::cout << 19 << ' '; test( uint_t<19>::fast() ); 
-     std::cout << 18 << ' '; test( uint_t<18>::fast() ); 
-     std::cout << 17 << ' '; test( uint_t<17>::fast() ); 
-     std::cout << 16 << ' '; test( uint_t<16>::fast() ); 
-     std::cout << 15 << ' '; test( uint_t<15>::fast() ); 
-     std::cout << 14 << ' '; test( uint_t<14>::fast() ); 
-     std::cout << 13 << ' '; test( uint_t<13>::fast() ); 
-     std::cout << 12 << ' '; test( uint_t<12>::fast() ); 
-     std::cout << 11 << ' '; test( uint_t<11>::fast() ); 
-     std::cout << 10 << ' '; test( uint_t<10>::fast() ); 
-     std::cout << 9 << ' '; test( uint_t<9>::fast() ); 
-     std::cout << 8 << ' '; test( uint_t<8>::fast() ); 
-     std::cout << 7 << ' '; test( uint_t<7>::fast() ); 
-     std::cout << 6 << ' '; test( uint_t<6>::fast() ); 
-     std::cout << 5 << ' '; test( uint_t<5>::fast() ); 
-     std::cout << 4 << ' '; test( uint_t<4>::fast() ); 
-     std::cout << 3 << ' '; test( uint_t<3>::fast() ); 
-     std::cout << 2 << ' '; test( uint_t<2>::fast() ); 
-     std::cout << 1 << ' '; test( uint_t<1>::fast() ); 
-     std::cout << 0 << ' '; test( uint_t<0>::fast() );
+#define SHOW_TYPES(Template, Type)  SHOW_TYPE(Template, 32, Type); \
+ SHOW_TYPE(Template, 31, Type); SHOW_TYPE(Template, 30, Type); \
+ SHOW_TYPE(Template, 29, Type); SHOW_TYPE(Template, 28, Type); \
+ SHOW_TYPE(Template, 27, Type); SHOW_TYPE(Template, 26, Type); \
+ SHOW_TYPE(Template, 25, Type); SHOW_TYPE(Template, 24, Type); \
+ SHOW_TYPE(Template, 23, Type); SHOW_TYPE(Template, 22, Type); \
+ SHOW_TYPE(Template, 21, Type); SHOW_TYPE(Template, 20, Type); \
+ SHOW_TYPE(Template, 19, Type); SHOW_TYPE(Template, 18, Type); \
+ SHOW_TYPE(Template, 17, Type); SHOW_TYPE(Template, 16, Type); \
+ SHOW_TYPE(Template, 15, Type); SHOW_TYPE(Template, 14, Type); \
+ SHOW_TYPE(Template, 13, Type); SHOW_TYPE(Template, 12, Type); \
+ SHOW_TYPE(Template, 11, Type); SHOW_TYPE(Template, 10, Type); \
+ SHOW_TYPE(Template, 9, Type); SHOW_TYPE(Template, 8, Type); \
+ SHOW_TYPE(Template, 7, Type); SHOW_TYPE(Template, 6, Type); \
+ SHOW_TYPE(Template, 5, Type); SHOW_TYPE(Template, 4, Type); \
+ SHOW_TYPE(Template, 3, Type); SHOW_TYPE(Template, 2, Type); \
+ SHOW_TYPE(Template, 1, Type); SHOW_TYPE(Template, 0, Type)
+
+#define SHOW_SHIFTED_TYPE(Template, Number, Type)  SHOW_TYPE(Template, (1UL << Number), Type)
+
+#define SHOW_SHIFTED_TYPES(Template, Type)  SHOW_SHIFTED_TYPE(Template, 30, Type); \
+ SHOW_SHIFTED_TYPE(Template, 29, Type); SHOW_SHIFTED_TYPE(Template, 28, Type); \
+ SHOW_SHIFTED_TYPE(Template, 27, Type); SHOW_SHIFTED_TYPE(Template, 26, Type); \
+ SHOW_SHIFTED_TYPE(Template, 25, Type); SHOW_SHIFTED_TYPE(Template, 24, Type); \
+ SHOW_SHIFTED_TYPE(Template, 23, Type); SHOW_SHIFTED_TYPE(Template, 22, Type); \
+ SHOW_SHIFTED_TYPE(Template, 21, Type); SHOW_SHIFTED_TYPE(Template, 20, Type); \
+ SHOW_SHIFTED_TYPE(Template, 19, Type); SHOW_SHIFTED_TYPE(Template, 18, Type); \
+ SHOW_SHIFTED_TYPE(Template, 17, Type); SHOW_SHIFTED_TYPE(Template, 16, Type); \
+ SHOW_SHIFTED_TYPE(Template, 15, Type); SHOW_SHIFTED_TYPE(Template, 14, Type); \
+ SHOW_SHIFTED_TYPE(Template, 13, Type); SHOW_SHIFTED_TYPE(Template, 12, Type); \
+ SHOW_SHIFTED_TYPE(Template, 11, Type); SHOW_SHIFTED_TYPE(Template, 10, Type); \
+ SHOW_SHIFTED_TYPE(Template, 9, Type); SHOW_SHIFTED_TYPE(Template, 8, Type); \
+ SHOW_SHIFTED_TYPE(Template, 7, Type); SHOW_SHIFTED_TYPE(Template, 6, Type); \
+ SHOW_SHIFTED_TYPE(Template, 5, Type); SHOW_SHIFTED_TYPE(Template, 4, Type); \
+ SHOW_SHIFTED_TYPE(Template, 3, Type); SHOW_SHIFTED_TYPE(Template, 2, Type); \
+ SHOW_SHIFTED_TYPE(Template, 1, Type); SHOW_SHIFTED_TYPE(Template, 0, Type)
+
+#define SHOW_POS_SHIFTED_TYPE(Template, Number, Type)  SHOW_TYPE(Template, +(1L << Number), Type)
+
+#define SHOW_POS_SHIFTED_TYPES(Template, Type)  SHOW_POS_SHIFTED_TYPE(Template, 30, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 29, Type); SHOW_POS_SHIFTED_TYPE(Template, 28, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 27, Type); SHOW_POS_SHIFTED_TYPE(Template, 26, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 25, Type); SHOW_POS_SHIFTED_TYPE(Template, 24, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 23, Type); SHOW_POS_SHIFTED_TYPE(Template, 22, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 21, Type); SHOW_POS_SHIFTED_TYPE(Template, 20, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 19, Type); SHOW_POS_SHIFTED_TYPE(Template, 18, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 17, Type); SHOW_POS_SHIFTED_TYPE(Template, 16, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 15, Type); SHOW_POS_SHIFTED_TYPE(Template, 14, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 13, Type); SHOW_POS_SHIFTED_TYPE(Template, 12, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 11, Type); SHOW_POS_SHIFTED_TYPE(Template, 10, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 9, Type); SHOW_POS_SHIFTED_TYPE(Template, 8, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 7, Type); SHOW_POS_SHIFTED_TYPE(Template, 6, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 5, Type); SHOW_POS_SHIFTED_TYPE(Template, 4, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 3, Type); SHOW_POS_SHIFTED_TYPE(Template, 2, Type); \
+ SHOW_POS_SHIFTED_TYPE(Template, 1, Type); SHOW_POS_SHIFTED_TYPE(Template, 0, Type)
+
+#define SHOW_NEG_SHIFTED_TYPE(Template, Number, Type)  SHOW_TYPE(Template, -(1L << Number), Type)
+
+#define SHOW_NEG_SHIFTED_TYPES(Template, Type)  SHOW_NEG_SHIFTED_TYPE(Template, 30, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 29, Type); SHOW_NEG_SHIFTED_TYPE(Template, 28, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 27, Type); SHOW_NEG_SHIFTED_TYPE(Template, 26, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 25, Type); SHOW_NEG_SHIFTED_TYPE(Template, 24, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 23, Type); SHOW_NEG_SHIFTED_TYPE(Template, 22, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 21, Type); SHOW_NEG_SHIFTED_TYPE(Template, 20, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 19, Type); SHOW_NEG_SHIFTED_TYPE(Template, 18, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 17, Type); SHOW_NEG_SHIFTED_TYPE(Template, 16, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 15, Type); SHOW_NEG_SHIFTED_TYPE(Template, 14, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 13, Type); SHOW_NEG_SHIFTED_TYPE(Template, 12, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 11, Type); SHOW_NEG_SHIFTED_TYPE(Template, 10, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 9, Type); SHOW_NEG_SHIFTED_TYPE(Template, 8, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 7, Type); SHOW_NEG_SHIFTED_TYPE(Template, 6, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 5, Type); SHOW_NEG_SHIFTED_TYPE(Template, 4, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 3, Type); SHOW_NEG_SHIFTED_TYPE(Template, 2, Type); \
+ SHOW_NEG_SHIFTED_TYPE(Template, 1, Type); SHOW_NEG_SHIFTED_TYPE(Template, 0, Type)
+
+
+// Test if a constant can fit within a certain type
+#define PRIVATE_FIT_TEST(Template, Number, Type, Value)  BOOST_TEST( Template < Number > :: Type ( Value ) == Value )
+
+#define PRIVATE_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; PRIVATE_FIT_TEST(Template, 32, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 31, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 30, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 29, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 28, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 27, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 26, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 25, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 24, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 23, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 22, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 21, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 20, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 19, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 18, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 17, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 16, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 15, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 14, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 13, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 12, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 11, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 10, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 9, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 8, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 7, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 6, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 5, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 4, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 3, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 2, Type, v); v >>= 1; \
+ PRIVATE_FIT_TEST(Template, 1, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 0, Type, v); } while ( false )
+
+#define PRIVATE_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_TEST( Template < (ULONG_MAX >> Number) > :: Type ( Value ) == Value )
+
+#define PRIVATE_SHIFTED_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 0, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 1, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 2, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 3, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 4, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 5, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 6, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 7, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 8, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 9, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 10, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 11, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 12, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 13, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 14, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 15, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 16, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 17, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 18, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 19, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 20, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 21, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 22, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 23, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 24, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 25, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 26, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 27, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 28, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 29, Type, v); v >>= 1; \
+ PRIVATE_SHIFTED_FIT_TEST(Template, 30, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 31, Type, v); } while ( false )
+
+#define PRIVATE_POS_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_TEST( Template < (LONG_MAX >> Number) > :: Type ( Value ) == Value )
+
+#define PRIVATE_POS_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 0, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 1, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 2, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 3, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 4, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 5, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 6, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 7, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 8, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 9, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 10, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 11, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 12, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 13, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 14, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 15, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 16, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 17, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 18, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 19, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 20, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 21, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 22, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 23, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 24, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 25, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 26, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 27, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 28, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 29, Type, v); v >>= 1; \
+ PRIVATE_POS_SHIFTED_FIT_TEST(Template, 30, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 31, Type, v); } while ( false )
+
+#define PRIVATE_NEG_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_TEST( Template < (LONG_MIN >> Number) > :: Type ( Value ) == Value )
+
+#define PRIVATE_NEG_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 0, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 1, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 2, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 3, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 4, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 5, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 6, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 7, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 8, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 9, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 10, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 11, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 12, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 13, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 14, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 15, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 16, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 17, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 18, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 19, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 20, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 21, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 22, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 23, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 24, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 25, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 26, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 27, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 28, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 29, Type, v); v >>= 1; \
+ PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 30, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 31, Type, v); } while ( false )
+
+
+// Test program
+int
+test_main
+(
+    int,
+    char*[]
+)
+{
+#ifndef BOOST_NO_USING_TEMPLATE
+    using boost::int_t;
+    using boost::uint_t;
+    using boost::int_max_value_t;
+    using boost::int_min_value_t;
+    using boost::uint_value_t;
+#else
+    using namespace boost;
 #endif
+
+    SHOW_TYPES( int_t, least );
+    SHOW_TYPES( int_t, fast );
+    SHOW_TYPES( uint_t, least );
+    SHOW_TYPES( uint_t, fast );
+    SHOW_POS_SHIFTED_TYPES( int_max_value_t, least );
+    SHOW_POS_SHIFTED_TYPES( int_max_value_t, fast );
+    SHOW_NEG_SHIFTED_TYPES( int_min_value_t, least );
+    SHOW_NEG_SHIFTED_TYPES( int_min_value_t, fast );
+    SHOW_SHIFTED_TYPES( uint_value_t, least );
+    SHOW_SHIFTED_TYPES( uint_value_t, fast );
      
-    long v = 0x7FFFFFFF;
-    BOOST_TEST( int_t<32>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<31>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<30>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<29>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<28>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<27>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<26>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<25>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<24>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<23>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<22>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<21>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<20>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<19>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<18>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<17>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<16>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<15>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<14>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<13>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<12>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<11>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<10>::least(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<9>::least(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<8>::least(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<7>::least(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<6>::least(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<5>::least(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<4>::least(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<3>::least(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<2>::least(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<1>::least(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<0>::least(v) == v );
-    v = 0x7FFFFFFF;
-    BOOST_TEST( int_t<32>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<31>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<30>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<29>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<28>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<27>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<26>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<25>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<24>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<23>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<22>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<21>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<20>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<19>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<18>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<17>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<16>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<15>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<14>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<13>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<12>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<11>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<10>::fast(v) == v );    v >>= 1;
-    BOOST_TEST( int_t<9>::fast(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<8>::fast(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<7>::fast(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<6>::fast(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<5>::fast(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<4>::fast(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<3>::fast(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<2>::fast(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<1>::fast(v) == v );     v >>= 1;
-    BOOST_TEST( int_t<0>::fast(v) == v );
-    unsigned long u = 0xFFFFFFFF;
-    BOOST_TEST( uint_t<32>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<31>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<30>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<29>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<28>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<27>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<26>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<25>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<24>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<23>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<22>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<21>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<20>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<19>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<18>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<17>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<16>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<15>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<14>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<13>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<11>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<12>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<10>::least(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<9>::least(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<8>::least(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<7>::least(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<6>::least(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<5>::least(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<4>::least(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<3>::least(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<2>::least(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<1>::least(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<0>::least(u) == u );
-    u = 0xFFFFFFFF;
-    BOOST_TEST( uint_t<32>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<31>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<30>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<29>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<28>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<27>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<26>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<25>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<24>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<23>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<22>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<21>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<20>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<19>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<18>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<17>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<16>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<15>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<14>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<13>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<12>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<11>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<10>::fast(u) == u );    u >>= 1;
-    BOOST_TEST( uint_t<9>::fast(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<8>::fast(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<7>::fast(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<6>::fast(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<5>::fast(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<4>::fast(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<3>::fast(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<2>::fast(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<1>::fast(u) == u );     u >>= 1;
-    BOOST_TEST( uint_t<0>::fast(u) == u );
+    PRIVATE_FIT_TESTS( int_t, least, long, LONG_MAX );
+    PRIVATE_FIT_TESTS( int_t, fast, long, LONG_MAX );
+    PRIVATE_FIT_TESTS( uint_t, least, unsigned long, ULONG_MAX );
+    PRIVATE_FIT_TESTS( uint_t, fast, unsigned long, ULONG_MAX );
+    PRIVATE_POS_FIT_TESTS( int_max_value_t, least, long, LONG_MAX );
+    PRIVATE_POS_FIT_TESTS( int_max_value_t, fast, long, LONG_MAX );
+    PRIVATE_NEG_FIT_TESTS( int_min_value_t, least, long, LONG_MIN );
+    PRIVATE_NEG_FIT_TESTS( int_min_value_t, fast, long, LONG_MIN );
+    PRIVATE_SHIFTED_FIT_TESTS( uint_value_t, least, unsigned long, ULONG_MAX );
+    PRIVATE_SHIFTED_FIT_TESTS( uint_value_t, fast, unsigned long, ULONG_MAX );
         
-    return 0;
+    return boost::exit_success;
 }
