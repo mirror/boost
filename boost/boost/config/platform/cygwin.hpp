@@ -11,6 +11,7 @@
 #define BOOST_NO_CWCTYPE
 #define BOOST_NO_CWCHAR
 #define BOOST_NO_SWPRINTF
+#define BOOST_HAS_DIRENT_H
 
 //
 // Threading API:
