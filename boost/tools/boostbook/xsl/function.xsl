@@ -68,11 +68,16 @@
     <!-- True if we should suppress the template header -->
     <xsl:param name="suppress-template" select="false()"/>
 
-    <!-- Calculate the type -->
-    <xsl:variable name="type">
+    <!-- Calculate the specifiers -->
+    <xsl:variable name="specifiers">
       <xsl:if test="@specifiers">
         <xsl:value-of select="concat(@specifiers, ' ')"/>
       </xsl:if>
+    </xsl:variable>
+
+    <!-- Calculate the type -->
+    <xsl:variable name="type">
+      <xsl:value-of select="$specifiers"/>
 
       <xsl:choose>
         <!-- Conversion operators have an empty type, because the return
@@ -91,9 +96,7 @@
 
         <xsl:otherwise>
           <xsl:apply-templates select="type" mode="annotation"/>
-          <xsl:if test="type">
-            <xsl:text> </xsl:text>
-          </xsl:if>
+          <xsl:text> </xsl:text>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -197,6 +200,7 @@
       <!-- Check if we can put the entire declaration on a single
            line. -->
       <xsl:when test="not($end-column &gt; $max-columns)">
+        <!-- Emit template header, if not suppressed -->
         <xsl:if test="not($suppress-template)">
           <xsl:apply-templates select="template" mode="synopsis">
             <xsl:with-param name="indentation" select="$indentation"/>
@@ -205,15 +209,38 @@
           </xsl:apply-templates>
         </xsl:if>
 
+        <!-- Emit specifiers -->
         <xsl:call-template name="source-highlight">
-          <xsl:with-param name="text" select="$type"/>
+          <xsl:with-param name="text" select="$specifiers"/>
         </xsl:call-template>
+
+        <!-- Emit type, if any -->
+        <xsl:choose>
+          <!-- Conversion operators have an empty type, because the return
+               type is part of the name -->
+          <xsl:when test="$name='conversion-operator'"/>
+
+          <!-- Constructors and destructors have no return type -->
+          <xsl:when test="$constructor-for or $destructor-for"/>
+
+          <!-- Copy assignment operators return a reference to the class
+               they are in, unless another type has been explicitly
+               provided in the element. -->
+          <xsl:when test="$copy-assign-for and not(type) and type">
+            <xsl:value-of select="concat($copy-assign-for, '&amp; ')"/>
+          </xsl:when>
+
+          <xsl:otherwise>
+            <xsl:apply-templates select="type" mode="highlight"/>
+            <xsl:text> </xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
 
         <xsl:call-template name="link-or-anchor">
           <xsl:with-param name="to" select="$link-to"/>
           <xsl:with-param name="text" select="$function-name"/>
           <xsl:with-param name="link-type" select="$link-type"/>
-          <xsl:with-param name="highlight" select="true()"/>
+          <xsl:with-param name="highlight" select="false()"/>
         </xsl:call-template>
 
         <xsl:text>(</xsl:text>
@@ -234,9 +261,33 @@
 
       <!-- This declaration will take multiple lines -->
       <xsl:otherwise>
+        <!-- Emit specifiers -->
         <xsl:call-template name="source-highlight">
-          <xsl:with-param name="text" select="$type"/>
+          <xsl:with-param name="text" select="$specifiers"/>
         </xsl:call-template>
+
+        <!-- Emit type, if any -->
+        <xsl:choose>
+          <!-- Conversion operators have an empty type, because the return
+               type is part of the name -->
+          <xsl:when test="$name='conversion-operator'"/>
+
+          <!-- Constructors and destructors have no return type -->
+          <xsl:when test="$constructor-for or $destructor-for"/>
+
+          <!-- Copy assignment operators return a reference to the class
+               they are in, unless another type has been explicitly
+               provided in the element. -->
+          <xsl:when test="$copy-assign-for and not(type) and type">
+            <xsl:value-of select="concat($copy-assign-for, '&amp; ')"/>
+          </xsl:when>
+
+          <xsl:otherwise>
+            <xsl:apply-templates select="type" mode="highlight"/>
+            <xsl:text> </xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+
         <xsl:if test="string-length($type) &gt; $boost.short.result.type">
           <xsl:text>&#10;</xsl:text>
           <xsl:call-template name="indent">
