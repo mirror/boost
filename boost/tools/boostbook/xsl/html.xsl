@@ -153,11 +153,11 @@
 
   <xsl:template match="variablelist">
     <xsl:choose>
-      <xsl:when test="title">
-        <xsl:apply-imports />
+      <xsl:when test="@spacing='boost'">
+        <p><xsl:apply-templates mode="boost.variablelist"/></p>
       </xsl:when>
       <xsl:otherwise>
-        <p><xsl:apply-templates mode="boost.variablelist"/></p>
+        <xsl:apply-imports />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
