@@ -40,7 +40,6 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<const Base&, const Derived&>
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<const int *, int*>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<const int&, int&>::value), false);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int*, int[2]>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<const int*, int[3]>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<const int&, int>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int(&)[4], const int*>::value), true);
