@@ -13,12 +13,30 @@
  *  extended, by Paul Moore, with permission.
  */
 
+// Revision History
+// 04 Mar 01  Patches for Intel C++ and GCC (David Abrahams)
+
 #include "boost/rational.hpp"
 #include "boost/operators.hpp"
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
+#include <cstring>
+
+#ifndef BOOST_NO_STRINGSTREAM
+# include <sstream>
+#else
+# include <strstream>
+namespace {
+  class unfreezer {
+   public:
+      unfreezer(std::ostrstream& s) : m_stream(s) {}
+      ~unfreezer() { m_stream.freeze(false); }
+   private:
+      std::ostrstream& m_stream;
+  };
+}
+#endif
 
 // We can override this on the compile, as -DINT_TYPE=short or whatever.
 // The default test is against rational<long>.
@@ -264,58 +282,68 @@ using boost::abs;
     CHECK(( r0 == rat(4,15) ));
 
     /* operator<< and operator>> tests */
+#ifndef BOOST_NO_STRINGSTREAM
     std::ostringstream oss;
+    
     oss << rat(44,14);
     CHECK(( oss.str() == "22/7" ));
+    typedef std::istringstream input_string_stream;
+#else
+    std::ostrstream oss;
+    oss << rat(44,14) << char();
+    auto unfreezer unfreeze(oss);
+    CHECK(( !std::strcmp(oss.str(), "22/7") ));
+    typedef std::istrstream input_string_stream;
+#endif
     {
-        std::istringstream iss;
+        input_string_stream iss("");
         iss >> r0;
         CHECK(( !iss ));
     }
     {
-        std::istringstream iss("42");
+        input_string_stream iss("42");
         iss >> r0;
         CHECK(( !iss ));
     }
     {
-        std::istringstream iss("57A");
+        input_string_stream iss("57A");
         iss >> r0;
         CHECK(( !iss ));
     }
     {
-        std::istringstream iss("20-20");
+        input_string_stream iss("20-20");
         iss >> r0;
         CHECK(( !iss ));
     }
     {
-        std::istringstream iss("1/");
+        input_string_stream iss("1/");
         iss >> r0;
         CHECK(( !iss ));
     }
     {
-        std::istringstream iss("1/ 2");
+        input_string_stream iss("1/ 2");
         iss >> r0;
         CHECK(( !iss ));
     }
     {
-        std::istringstream iss("1 /2");
+        input_string_stream iss("1 /2");
         iss >> r0;
         CHECK(( !iss ));
     }
     {
         int n;
-        std::istringstream iss("1/2 12");
+        input_string_stream iss("1/2 12");
         CHECK(( iss >> r0 >> n ));
         CHECK(( r0 == rat(1,2) ));
         CHECK(( n == 12 ));
     }
     {
-        std::istringstream iss("34/67");
+        input_string_stream iss("34/67");
         CHECK(( iss >> r0 ));
         CHECK(( r0 == rat(34,67) ));
     }
     {
-        std::istringstream iss("-3/-6");
+        input_string_stream iss("-3/-6");
         CHECK(( iss >> r0 ));
         CHECK(( r0 == rat(1,2) ));
     }
