@@ -389,7 +389,7 @@ basic_iarchive_impl::load_pointer(
         return bpis_ptr;
     }
 
-	if(! bis_ptr->tracking()){
+    if(! bis_ptr->tracking()){
         bpis_ptr->load_object_ptr(ar, t, co.file_version);
         return bpis_ptr;
     }
