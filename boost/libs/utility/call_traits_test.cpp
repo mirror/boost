@@ -392,7 +392,7 @@ template struct call_traits_test<int*>;
 #if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
 template struct call_traits_test<int&>;
 template struct call_traits_test<const int&>;
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__SUNPRO_CC)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__SUNPRO_CC)
 template struct call_traits_test<int[2], true>;
 #endif
 #endif
@@ -412,6 +412,7 @@ unsigned int expected_failures = 4;
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
 
 
