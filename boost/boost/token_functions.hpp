@@ -38,7 +38,7 @@ namespace boost{
 
 // The out of the box GCC 2.95 on cygwin does not have a char_traits class.
   template <class Char, 
-	  class Traits = std::basic_string<Char>::traits_type >
+	  class Traits = typename std::basic_string<Char>::traits_type >
   class escaped_list_separator{
 
   private:
@@ -195,7 +195,7 @@ namespace boost{
 
 // The out of the box GCC 2.95 on cygwin does not have a char_traits class.
   template <class Char, 
-	  class Traits = std::basic_string<Char>::traits_type >
+	  class Traits = typename std::basic_string<Char>::traits_type >
   class char_delimiters_separator{
 
 
