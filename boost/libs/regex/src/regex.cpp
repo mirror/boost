@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        regex.cpp
-  *   VERSION:     3.00
+  *   VERSION:     3.02
   *   DESCRIPTION: Misc boost::regbase member funnctions.
   */
 

@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         c_regex_traits.cpp
-  *   VERSION      3.01
+  *   VERSION      3.02
   *   DESCRIPTION: Implements the c_regex_traits<charT> traits class
   */
 
@@ -35,14 +35,6 @@
 
 #ifndef BOOST_RE_NO_CAT
 #include <nl_types.h>
-#endif
-
-#if defined(BOOST_MSVC)
-namespace std{
-   using ::setlocale;
-   using ::wcstombs;
-   using ::mbstowcs;
-}
 #endif
 
 namespace{

@@ -15,7 +15,7 @@
  
  /*
   *   FILE     jgrep.cpp
-  *   VERSION  3.01
+  *   VERSION  3.02
   */
 
 #include <stdio.h>

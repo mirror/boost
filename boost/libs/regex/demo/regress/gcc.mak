@@ -3,13 +3,16 @@
 #
 # g++ 2.95 and greater
 #
-CXX= g++ -O2 -pedantic -Wall -I../../../../ -I./ -L../../lib/gcc
+CXX= g++ -pedantic -Wall -I../../../../ -I./ -L../../lib/gcc
 
 total : r2
 	./r2 tests.txt
 
 r2 : tests.cpp parse.cpp regress.cpp
-	$(CXX) -o r2 tests.cpp parse.cpp regress.cpp -lregex++
+	$(CXX) -O2 -o r2 tests.cpp parse.cpp regress.cpp -lregex++
+
+debug : tests.cpp parse.cpp regress.cpp
+	$(CXX) -g -o r2 tests.cpp parse.cpp regress.cpp -lregex++debug
 
 
 

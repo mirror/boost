@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        w32_regex_traits.cpp
-  *   VERSION:     3.00
+  *   VERSION:     3.02
   *   DESCRIPTION: Implements the w32_regex_traits<charT> traits class
   */
 

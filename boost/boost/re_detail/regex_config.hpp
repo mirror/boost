@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_config.hpp
-  *   VERSION      3.01
+  *   VERSION      3.02
   *   DESCRIPTION: auto-configure options for regular expression code.
   */
 
@@ -46,6 +46,7 @@ Do not change this file unless you really really have to, add options to
 #include <cstring>
 #include <cctype>
 #include <cstdio>
+#include <clocale>
 #include <string>
 #include <boost/smart_ptr.hpp>
 #else
@@ -280,10 +281,16 @@ Do not change this file unless you really really have to, add options to
       #define BOOST_RE_NO_TEMPLATE_SWITCH_MERGE
    #endif
    #define BOOST_RE_NO_CAT
-   #define BOOST_RE_OLD_IOSTREAM
    #define BOOST_RE_NESTED_TEMPLATE_DECL
-   #define BOOST_RE_NO_WCSTRING
    #define BOOST_RE_NO_SWPRINTF
+   #include <string>
+   #ifdef __BASTRING__
+   	#define BOOST_RE_NO_WCSTRING
+   #endif
+   #if defined(__BEOS__)
+   	#define BOOST_RE_NO_WCTYPE_H
+   	#define BOOST_RE_NO_WCSTRING
+   #endif
 
 #endif
 
@@ -412,7 +419,7 @@ typedef unsigned long jm_uintfast32_t;
        some of these (std)
        may be guesswork: */
 
-      # if !defined (__SGI_STL_OWN_IOSTREAMS) || defined (__STL_HAS_NO_NEW_IOSTREAMS) || defined (__STL_USE_NO_IOSTREAMS)
+      # if !defined (__SGI_STL_OWN_IOSTREAMS) || defined (__STL_HAS_NO_NEW_IOSTREAMS) || defined (__STL_USE_NO_IOSTREAMS) || defined(__STL_NO_MBSTATE_T)
          // Old IO streams:
          #define BOOST_RE_NO_LOCALE_H
          #define BOOST_RE_OLD_IOSTREAM
@@ -420,6 +427,9 @@ typedef unsigned long jm_uintfast32_t;
          #ifdef __STL_NO_EXPLICIT_FUNCTION_TMPL_ARGS
             #define BOOST_RE_USE_FACET(l, m) (*std::_Use_facet<m >(l))
          #endif
+      #endif
+      #ifdef __BASTRING__
+      	#define BOOST_RE_NO_WCSTRING
       #endif
       #if !defined(__STL_MEMBER_TEMPLATE_CLASSES) ||  !defined(__STL_MEMBER_TEMPLATES)
          #define BOOST_RE_NO_MEMBER_TEMPLATES
@@ -1144,10 +1154,6 @@ namespace std{
    using ::strcmp;
    using ::strcpy;
    using ::strlen;
-   using ::swprintf;
-   using ::wcslen;
-   using ::wcscpy;
-   using ::wcscmp;
    using ::isalpha;
    using ::iscntrl;
    using ::isdigit;
@@ -1157,6 +1163,15 @@ namespace std{
    using ::isspace;
    using ::isxdigit;
    using ::tolower;
+   using ::abs;
+   using ::setlocale;
+#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_RE_NO_SWPRINTF
+   using ::swprintf;
+#endif
+   using ::wcslen;
+   using ::wcscpy;
+   using ::wcscmp;
    using ::iswalpha;
    using ::iswcntrl;
    using ::iswdigit;
@@ -1167,7 +1182,12 @@ namespace std{
    using ::iswxdigit;
    using ::towlower;
    using ::wcsxfrm;
+   using ::wcstombs;
+   using ::mbstowcs;
+#ifndef BOOST_RE_NO_LOCALE_H
    using ::mbstate_t;
+#endif
+#endif // BOOST_RE_NO_WCSTRING
 }
 
 #endif

@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_split.hpp
-  *   VERSION      3.01
+  *   VERSION      3.02
   *   DESCRIPTION: Implements regex_split and associated functions.
   *                Note this is an internal header file included
   *                by regex.hpp, do not include on its own.

@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     regress.cpp
-  *   VERSION  3.01
+  *   VERSION  3.02
   *
   * main() and associated code for regress.
   *

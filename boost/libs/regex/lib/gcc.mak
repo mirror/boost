@@ -9,17 +9,16 @@
 #
 
 #
-# Add additional compiler options here:
+# compiler options for release build:
 #
-XCFLAGS=
+C1=-c -O2 -I../../../
 #
-# add additional linker flags here:
+# compiler options for debug build:
 #
-XLFLAGS=
+C2=-c -g -I../../../
 #
-# add additional static-library creation flags here:
-#
-XSFLAGS=
+# compiler options for link:
+LINK=
 
 
 
@@ -42,37 +41,37 @@ install : all
 #
 ########################################################
 gcc/regex++/c_regex_traits.o: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/c_regex_traits.o -c -O2 -I../../../ $(XCFLAGS) ../src/c_regex_traits.cpp
+	g++ -o gcc/regex++/c_regex_traits.o $(C1) $(XCFLAGS) ../src/c_regex_traits.cpp
 
 gcc/regex++/c_regex_traits_common.o: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/c_regex_traits_common.o -c -O2 -I../../../ $(XCFLAGS) ../src/c_regex_traits_common.cpp
+	g++ -o gcc/regex++/c_regex_traits_common.o $(C1) $(XCFLAGS) ../src/c_regex_traits_common.cpp
 
 gcc/regex++/cpp_regex_traits.o: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/cpp_regex_traits.o -c -O2 -I../../../ $(XCFLAGS) ../src/cpp_regex_traits.cpp
+	g++ -o gcc/regex++/cpp_regex_traits.o $(C1) $(XCFLAGS) ../src/cpp_regex_traits.cpp
 
 gcc/regex++/cregex.o: ../src/cregex.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/cregex.o -c -O2 -I../../../ $(XCFLAGS) ../src/cregex.cpp
+	g++ -o gcc/regex++/cregex.o $(C1) $(XCFLAGS) ../src/cregex.cpp
 
 gcc/regex++/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/fileiter.o -c -O2 -I../../../ $(XCFLAGS) ../src/fileiter.cpp
+	g++ -o gcc/regex++/fileiter.o $(C1) $(XCFLAGS) ../src/fileiter.cpp
 
 gcc/regex++/posix_api.o: ../src/posix_api.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/posix_api.o -c -O2 -I../../../ $(XCFLAGS) ../src/posix_api.cpp
+	g++ -o gcc/regex++/posix_api.o $(C1) $(XCFLAGS) ../src/posix_api.cpp
 
 gcc/regex++/regex.o: ../src/regex.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/regex.o -c -O2 -I../../../ $(XCFLAGS) ../src/regex.cpp
+	g++ -o gcc/regex++/regex.o $(C1) $(XCFLAGS) ../src/regex.cpp
 
 gcc/regex++/regex_debug.o: ../src/regex_debug.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/regex_debug.o -c -O2 -I../../../ $(XCFLAGS) ../src/regex_debug.cpp
+	g++ -o gcc/regex++/regex_debug.o $(C1) $(XCFLAGS) ../src/regex_debug.cpp
 
 gcc/regex++/regex_synch.o: ../src/regex_synch.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/regex_synch.o -c -O2 -I../../../ $(XCFLAGS) ../src/regex_synch.cpp
+	g++ -o gcc/regex++/regex_synch.o $(C1) $(XCFLAGS) ../src/regex_synch.cpp
 
 gcc/regex++/w32_regex_traits.o: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/w32_regex_traits.o -c -O2 -I../../../ $(XCFLAGS) ../src/w32_regex_traits.cpp
+	g++ -o gcc/regex++/w32_regex_traits.o $(C1) $(XCFLAGS) ../src/w32_regex_traits.cpp
 
 gcc/regex++/wide_posix_api.o: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/wide_posix_api.o -c -O2 -I../../../ $(XCFLAGS) ../src/wide_posix_api.cpp
+	g++ -o gcc/regex++/wide_posix_api.o $(C1) $(XCFLAGS) ../src/wide_posix_api.cpp
 
 gcc/regex++ : 
 	mkdir -p gcc/regex++
@@ -81,7 +80,7 @@ regex++_clean :
 	rm -f gcc/regex++/*.o
 
 ./gcc/libregex++.a : gcc/regex++/c_regex_traits.o gcc/regex++/c_regex_traits_common.o gcc/regex++/cpp_regex_traits.o gcc/regex++/cregex.o gcc/regex++/fileiter.o gcc/regex++/posix_api.o gcc/regex++/regex.o gcc/regex++/regex_debug.o gcc/regex++/regex_synch.o gcc/regex++/w32_regex_traits.o gcc/regex++/wide_posix_api.o
-	ar -r $(XSFLAGS) gcc/libregex++.a  gcc/regex++/c_regex_traits.o gcc/regex++/c_regex_traits_common.o gcc/regex++/cpp_regex_traits.o gcc/regex++/cregex.o gcc/regex++/fileiter.o gcc/regex++/posix_api.o gcc/regex++/regex.o gcc/regex++/regex_debug.o gcc/regex++/regex_synch.o gcc/regex++/w32_regex_traits.o gcc/regex++/wide_posix_api.o
+	ar -r $(LINK) gcc/libregex++.a  gcc/regex++/c_regex_traits.o gcc/regex++/c_regex_traits_common.o gcc/regex++/cpp_regex_traits.o gcc/regex++/cregex.o gcc/regex++/fileiter.o gcc/regex++/posix_api.o gcc/regex++/regex.o gcc/regex++/regex_debug.o gcc/regex++/regex_synch.o gcc/regex++/w32_regex_traits.o gcc/regex++/wide_posix_api.o
 
 ########################################################
 #
@@ -89,37 +88,37 @@ regex++_clean :
 #
 ########################################################
 gcc/regex++debug/c_regex_traits.o: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/c_regex_traits.o -c -I../../../ -g $(XCFLAGS) ../src/c_regex_traits.cpp
+	g++ -o gcc/regex++debug/c_regex_traits.o $(C2) $(XCFLAGS) ../src/c_regex_traits.cpp
 
 gcc/regex++debug/c_regex_traits_common.o: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/c_regex_traits_common.o -c -I../../../ -g $(XCFLAGS) ../src/c_regex_traits_common.cpp
+	g++ -o gcc/regex++debug/c_regex_traits_common.o $(C2) $(XCFLAGS) ../src/c_regex_traits_common.cpp
 
 gcc/regex++debug/cpp_regex_traits.o: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/cpp_regex_traits.o -c -I../../../ -g $(XCFLAGS) ../src/cpp_regex_traits.cpp
+	g++ -o gcc/regex++debug/cpp_regex_traits.o $(C2) $(XCFLAGS) ../src/cpp_regex_traits.cpp
 
 gcc/regex++debug/cregex.o: ../src/cregex.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/cregex.o -c -I../../../ -g $(XCFLAGS) ../src/cregex.cpp
+	g++ -o gcc/regex++debug/cregex.o $(C2) $(XCFLAGS) ../src/cregex.cpp
 
 gcc/regex++debug/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/fileiter.o -c -I../../../ -g $(XCFLAGS) ../src/fileiter.cpp
+	g++ -o gcc/regex++debug/fileiter.o $(C2) $(XCFLAGS) ../src/fileiter.cpp
 
 gcc/regex++debug/posix_api.o: ../src/posix_api.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/posix_api.o -c -I../../../ -g $(XCFLAGS) ../src/posix_api.cpp
+	g++ -o gcc/regex++debug/posix_api.o $(C2) $(XCFLAGS) ../src/posix_api.cpp
 
 gcc/regex++debug/regex.o: ../src/regex.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/regex.o -c -I../../../ -g $(XCFLAGS) ../src/regex.cpp
+	g++ -o gcc/regex++debug/regex.o $(C2) $(XCFLAGS) ../src/regex.cpp
 
 gcc/regex++debug/regex_debug.o: ../src/regex_debug.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/regex_debug.o -c -I../../../ -g $(XCFLAGS) ../src/regex_debug.cpp
+	g++ -o gcc/regex++debug/regex_debug.o $(C2) $(XCFLAGS) ../src/regex_debug.cpp
 
 gcc/regex++debug/regex_synch.o: ../src/regex_synch.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/regex_synch.o -c -I../../../ -g $(XCFLAGS) ../src/regex_synch.cpp
+	g++ -o gcc/regex++debug/regex_synch.o $(C2) $(XCFLAGS) ../src/regex_synch.cpp
 
 gcc/regex++debug/w32_regex_traits.o: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/w32_regex_traits.o -c -I../../../ -g $(XCFLAGS) ../src/w32_regex_traits.cpp
+	g++ -o gcc/regex++debug/w32_regex_traits.o $(C2) $(XCFLAGS) ../src/w32_regex_traits.cpp
 
 gcc/regex++debug/wide_posix_api.o: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/wide_posix_api.o -c -I../../../ -g $(XCFLAGS) ../src/wide_posix_api.cpp
+	g++ -o gcc/regex++debug/wide_posix_api.o $(C2) $(XCFLAGS) ../src/wide_posix_api.cpp
 
 gcc/regex++debug : 
 	mkdir -p gcc/regex++debug
@@ -128,5 +127,7 @@ regex++debug_clean :
 	rm -f gcc/regex++debug/*.o
 
 ./gcc/libregex++debug.a : gcc/regex++debug/c_regex_traits.o gcc/regex++debug/c_regex_traits_common.o gcc/regex++debug/cpp_regex_traits.o gcc/regex++debug/cregex.o gcc/regex++debug/fileiter.o gcc/regex++debug/posix_api.o gcc/regex++debug/regex.o gcc/regex++debug/regex_debug.o gcc/regex++debug/regex_synch.o gcc/regex++debug/w32_regex_traits.o gcc/regex++debug/wide_posix_api.o
-	ar -r $(XSFLAGS) gcc/libregex++debug.a  gcc/regex++debug/c_regex_traits.o gcc/regex++debug/c_regex_traits_common.o gcc/regex++debug/cpp_regex_traits.o gcc/regex++debug/cregex.o gcc/regex++debug/fileiter.o gcc/regex++debug/posix_api.o gcc/regex++debug/regex.o gcc/regex++debug/regex_debug.o gcc/regex++debug/regex_synch.o gcc/regex++debug/w32_regex_traits.o gcc/regex++debug/wide_posix_api.o
+	ar -r $(LINK) gcc/libregex++debug.a  gcc/regex++debug/c_regex_traits.o gcc/regex++debug/c_regex_traits_common.o gcc/regex++debug/cpp_regex_traits.o gcc/regex++debug/cregex.o gcc/regex++debug/fileiter.o gcc/regex++debug/posix_api.o gcc/regex++debug/regex.o gcc/regex++debug/regex_debug.o gcc/regex++debug/regex_synch.o gcc/regex++debug/w32_regex_traits.o gcc/regex++debug/wide_posix_api.o
+
+
 

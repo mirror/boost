@@ -345,4 +345,3 @@ bcb5\bcb5re300l.lib : bcb5\bcb5re300l\c_regex_traits.obj bcb5\bcb5re300l\c_regex
 |
 	implib -c bcb5\bcb5re300l.lib bcb5\bcb5re300l.dll
 
-

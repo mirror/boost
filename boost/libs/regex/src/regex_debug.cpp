@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        regex_debug.cpp
-  *   VERSION:     3.00
+  *   VERSION:     3.02
   *   DESCRIPTION: Misc. debugging helpers.
   */
 
@@ -30,7 +30,11 @@
 #endif
 
 #ifdef BOOST_RE_DEBUG
+#ifndef BOOST_RE_OLD_IOSTREAM
 #include <ostream>
+#else 
+#include <ostream.h>
+#endif
 
 namespace boost { namespace re_detail {
 std::ostream& operator<<(std::ostream& s, syntax_element_type x)

@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        posix_api.cpp
-  *   VERSION:     3.00
+  *   VERSION:     3.02
   *   DESCRIPTION: Implements the Posix API wrappers.
   */
 

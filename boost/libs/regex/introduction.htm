@@ -14,7 +14,7 @@
 <H3><IMG SRC="../../c++boost.gif" WIDTH=276 HEIGHT=86 ALT="C++ Boost"></H3></TD>
 <TD WIDTH="50%" VALIGN="TOP">
 <H3 ALIGN="CENTER">Regex++, Introduction.</H3>
-<I><P>(version 3.01, 18 April 2000)</I> </P>
+<I><P>(version 3.02, 18 April 2000)</I> </P>
 <I><PRE>Copyright (c) 1998-2000
 Dr John Maddock
 
@@ -82,7 +82,7 @@ std::string human_readable_card_number(<B>const</B> std::string s)
 <P>The <A HREF="posix_ref.htm#posix">POSIX API</A> functions: regcomp, regexec, regfree and regerror, are available in both narrow character and Unicode versions, and are provided for those who need compatibility with these API's. </P>
 <P>Finally, note that the library now has run-time <A HREF="appendix.htm#localisation">localization</A> support, and recognizes the full POSIX regular expression syntax - including advanced features like multi-character collating elements and equivalence classes - as well as providing compatibility with other regular expression libraries including GNU and BSD4 regex packages, and to a more limited extent perl 5. </P>
 <I><H3><A NAME="Installation"></A>Installation and Configuration Options</I> </H3>
-<EM><P>[ </EM><I><STRONG>Important</I></STRONG><EM>: If you are upgrading from version 2.x of this library then you will find a number of changes to the documented header names and library interfaces, existing code should still compile unchanged however - see </EM><A HREF="appendix.htm#upgrade"><FONT COLOR="#0000ff"><EM>Note for Upgraders</FONT></EM></A><EM>. ]</P>
+<EM><P>[ </EM><I><STRONG>Important</I></STRONG><EM>: If you are upgrading from version 3.02x of this library then you will find a number of changes to the documented header names and library interfaces, existing code should still compile unchanged however - see </EM><A HREF="appendix.htm#upgrade"><FONT COLOR="#0000ff"><EM>Note for Upgraders</FONT></EM></A><EM>. ]</P>
 </EM><P>When you extract the library from its zip file, you must preserve its internal directory structure (for example by using the -d option when extracting). If you didn't do that when extracting, then you'd better stop reading this, delete the files you just extracted, and try again! </P>
 <P>Currently the library will automatically detect and configure itself for Borland, Microsoft and gcc compilers only. The library will also detect the HP, SGI, Rogue Wave, or Microsoft STL implementations. If the STL type is detected, then the library will attempt to extract suitable compiler configuration options from the STL used. Otherwise the library will assume that the compiler is fully compliant with the C++ standard: unless various options are defined to depreciate features not implemented by your compiler. These options are documented in &lt;boost/re_detail/regex_options.hpp&gt;, if you want to add permanent configuration options add them to &lt;boost/re_detail/regex_options.hpp&gt; which is provided for this purpose - this will allow you to keep your configuration options between library versions by retaining &lt;boost/re_detail/regex_options.hpp&gt;. </P>
 <P>The library will encase all code inside namespace boost. </P>

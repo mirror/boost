@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_format.hpp
-  *   VERSION      3.01
+  *   VERSION      3.02
   *   DESCRIPTION: Provides formatting output routines for search and replace
   *                operations.  Note this is an internal header file included
   *                by regex.hpp, do not include on its own.
@@ -42,7 +42,7 @@ namespace re_detail{
    #if __BORLANDC__ == 0x530
     #pragma option push -a4 -b -Ve
    #elif __BORLANDC__ > 0x530
-    #pragma option push -a8 -b -Ve
+    #pragma option push -a8 -b -Ve -w-8037
    #endif
 #endif
 

@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_test.cpp
-  *   VERSION      3.01
+  *   VERSION      3.02
   *   DESCRIPTION: Builds regression test program with default
   *                locale and narrow character tests.  Also
   *                instantiates all the templates in the library
@@ -54,7 +54,7 @@ regbase::flag_type f = regbase::escape_in_lists | regbase::char_classes | regbas
                        | regbase::bk_parens | regbase::bk_refs | regbase::bk_vbar | regbase::use_except
                        | regbase::failbit | regbase::literal | regbase::icase | regbase::nocollate | regbase::basic
                        | regbase::extended | regbase::normal | regbase::emacs | regbase::awk | regbase::grep | regbase::egrep | regbase::sed;
-
+#if 0
 template class reg_expression<test_char_type>;
 template class sub_match<ra_it>;
 template class match_results<ra_it>;
@@ -163,7 +163,7 @@ template test_string_type regex_merge(const test_string_type&,
                                      unsigned int flags);
 
 #endif
-
+#endif
 
 } // namespace boost
 

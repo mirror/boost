@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_match.hpp
-  *   VERSION      3.01
+  *   VERSION      3.02
   *   DESCRIPTION: Regular expression matching algorithms.
   *                Note this is an internal header file included
   *                by regex.hpp, do not include on its own.
@@ -141,7 +141,6 @@ iterator BOOST_RE_CALL re_is_set_member(iterator next,
          }
       }
    }
-
    if(traits_inst.is_class(col, set_->cclasses) == true)
       return set_->isnot ? next : ++next;
    return set_->isnot ? ++next : next;
@@ -1807,6 +1806,7 @@ inline unsigned int regex_grep(bool (*foo)(const match_results<std::basic_string
 } // namespace boost
 
 #endif   // BOOST_REGEX_MATCH_HPP
+
 
 
 

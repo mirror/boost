@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        c_regex_traits.cpp
-  *   VERSION:     3.00
+  *   VERSION:     3.02
   *   DESCRIPTION: Implements the cpp_regex_traits<charT> traits class
   */
 #include <clocale>
@@ -33,11 +33,6 @@
 
 # ifdef BOOST_MSVC
 #  pragma warning(disable:4786)
-namespace std
-{ 
-   using ::abs; 
-   using ::mbstate_t;
-}
 #  endif
 
 namespace{

@@ -223,9 +223,15 @@ EOF
 #
 ###############################################################
 
+gcc_shared="no"
+
 function gcc_gen_lib()
 {
-	all_dep="$all_dep $subdir $subdir/$libname ./$subdir/lib$libname.a"
+          if test "$gcc_shared" == "yes"; then
+		all_dep="$all_dep $subdir $subdir/$libname ./$subdir/lib$libname.so"
+	else
+		all_dep="$all_dep $subdir $subdir/$libname ./$subdir/lib$libname.a"
+	fi
 #
 # set up section comments:
 	cat >> $tout << EOF
@@ -260,8 +266,13 @@ EOF
 	echo "" >> $tout
 #
 #	 now for the main target for this library:
-	echo ./$subdir/lib$libname.a : $all_obj >> $tout
-	echo "	ar -r \$(XSFLAGS) $subdir/lib$libname.a $all_obj" >> $tout
+          if test "$gcc_shared" == "yes"; then
+		echo ./$subdir/lib$libname.so : $all_obj >> $tout
+		echo "	\$(LINKER) \$(LINK) -o $subdir/lib$libname.so $all_obj" >> $tout
+	else
+		echo ./$subdir/lib$libname.a : $all_obj >> $tout
+		echo "	ar -r \$(LINK) $subdir/lib$libname.a $all_obj" >> $tout
+	fi
 	echo "" >> $tout
 }
 
@@ -278,10 +289,10 @@ function gcc_gen()
 	echo > $iout
 
 	libname="regex++"
-	opts="-c -O2 -I../../../"
+	opts="\$(C1)"
 	gcc_gen_lib
 	libname="regex++debug"
-	opts="-c -I../../../ -g"
+	opts="\$(C2)"
 	gcc_gen_lib
 	
 	
@@ -297,17 +308,80 @@ function gcc_gen()
 #
 
 #
-# Add additional compiler options here:
+# compiler options for release build:
 #
-XCFLAGS=
+C1=-c -O2 -I../../../
 #
-# add additional linker flags here:
+# compiler options for debug build:
 #
-XLFLAGS=
+C2=-c -g -I../../../
 #
-# add additional static-library creation flags here:
+# compiler options for link:
+LINK=
+
+
+EOF
+	echo "" >> $out
+	echo "ALL_HEADER=$header" >> $out
+	echo "" >> $out
+	echo "all : $subdir $all_dep" >> $out
+	echo >> $out
+	echo "$subdir :" >> $out
+	echo "	mkdir -p $subdir" >> $out
+	echo >> $out
+	echo "clean : $all_clean" >> $out
+	echo >> $out
+	echo "install : all" >> $out
+	cat $iout >> $out
+	echo >> $out
+	cat $tout >> $out
+}
+
+function gcc_gen_shared()
+{
+	out="lib/gcc-shared.mak"
+	tout="temp"
+	iout="temp_install"
+	subdir="gcc"
+	all_dep=""
+	all_clean=""
+	echo > $out
+	echo > $tout
+	echo > $iout
+
+	libname="regex++"
+	opts="\$(C1)"
+	gcc_gen_lib
+	libname="regex++debug"
+	opts="\$(C2)"
+	gcc_gen_lib
+	
+	
+	cat > $out << EOF
 #
-XSFLAGS=
+# auto generated makefile for gcc compiler
+#
+# usage:
+# make
+#   brings libraries up to date
+# make clean
+#   deletes temporary object files (but not archives).
+#
+
+#
+# compiler options for release build:
+#
+C1=-c -O2 -I../../../ -fPIC
+#
+# compiler options for debug build:
+#
+C2=-c -g -I../../../ -fPIC
+#
+# compiler options for link:
+LINK=-shared
+#
+# Linker to use:
+LINKER=ld
 
 
 EOF
@@ -577,6 +651,8 @@ vc6_gen
 #
 # generate gcc makefile:
 gcc_gen
+gcc_shared="yes"
+gcc_gen_shared
 #
 # generate C++ Builder 4 files:
 out="lib/bcb4.mak"
@@ -598,6 +674,9 @@ bcb_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
+
+
 
 
 
