@@ -5,7 +5,7 @@
   <title>History &amp; Compatibility Notes</title>
 
 <itemizedlist spacing="compact">
-  <listitem><para><emphasis role="bold">Version 1.30.0</emphasis>: </para> 
+  <listitem><para><bold>Version 1.30.0</bold>: </para> 
     <itemizedlist spacing="compact">
       <listitem><para>All features deprecated in version 1.29.0 have
       been removed from Boost.Function.</para></listitem>
@@ -32,7 +32,7 @@
       </itemizedlist>
   </listitem>
 
-  <listitem><para><emphasis role="bold">Version 1.29.0</emphasis>:
+  <listitem><para><bold>Version 1.29.0</bold>:
   Boost.Function has been partially redesigned to minimize the
   interface and make it cleaner. Several seldom- or never-used
   features of the older Boost.Function have been deprecated and will
