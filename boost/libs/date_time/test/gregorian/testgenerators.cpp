@@ -81,6 +81,41 @@ main()
   check("nth_kday fifth mon jan 2003 (actaully 4th) 2003-Jan-27", 
         date(2003, Jan, 27) == nkd4.get_date(2003));
 
+  // greg date_generator functions tests
+  {
+    date sunday(2003,Feb,2),tuesday(2003,Feb,4);
+    date friday(2003,Feb,7),saturday(2003,Feb,8);
+    greg_weekday sat(Saturday), tue(Tuesday), fri(Friday), sun(Sunday);
+    
+    check("Days until weekday" , days_until_weekday(saturday, sun) == days(1));
+    check("Days until weekday" , days_until_weekday(friday, tue) == days(4));
+    check("Days until weekday" , days_until_weekday(tuesday, fri) == days(3));
+    check("Days until weekday" , days_until_weekday(sunday, sat) == days(6));
+    check("Days until weekday" , days_until_weekday(sunday, sun) == days(0));
+    check("Days until weekday" , days_until_weekday(tuesday, tue) == days(0));
+    
+    check("Days before weekday" , days_before_weekday(saturday, sun) == days(6));
+    check("Days before weekday" , days_before_weekday(friday, tue) == days(3));
+    check("Days before weekday" , days_before_weekday(tuesday, fri) == days(4));
+    check("Days before weekday" , days_before_weekday(sunday, sat) == days(1));
+    check("Days before weekday" , days_before_weekday(sunday, sun) == days(0));
+    check("Days before weekday" , days_before_weekday(tuesday, tue) == days(0));
+
+    check("Date of next weekday", next_weekday(saturday, sun)== date(2003,Feb,9));
+    check("Date of next weekday", next_weekday(friday, tue) == date(2003,Feb,11));
+    check("Date of next weekday", next_weekday(tuesday, fri) == date(2003,Feb,7));
+    check("Date of next weekday", next_weekday(sunday, sat) == date(2003,Feb,8));
+    check("Date of next weekday", next_weekday(sunday, sun) == sunday);
+    check("Date of next weekday", next_weekday(tuesday, tue) == tuesday);
+    
+    check("Date of previous weekday", previous_weekday(saturday, sun)== date(2003,Feb,2));
+    check("Date of previous weekday", previous_weekday(friday, tue) == date(2003,Feb,4));
+    check("Date of previous weekday", previous_weekday(tuesday, fri) == date(2003,Jan,31));
+    check("Date of previous weekday", previous_weekday(sunday, sat) == date(2003,Feb,1));
+    check("Date of previous weekday", previous_weekday(sunday, sun) == sunday);
+    check("Date of previous weekday", previous_weekday(tuesday, tue) == tuesday);
+  
+  }
 #ifndef BOOST_DATE_TIME_NO_LOCALE
 
   // streaming tests...
