@@ -50,7 +50,7 @@ TEST_B BOOST_PP_CAT(BOOST_PP_IF(1,tru,fals), e) TEST_E
 
 /* *** */
 
-char stringize_test[2] = BOOST_PP_STRINGIZE(__LINE__);
+char stringize_test[3] = BOOST_PP_STRINGIZE(__LINE__);
 
 /* *** */
 
