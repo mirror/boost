@@ -17,8 +17,6 @@
 #include <iostream>
 #include <boost/integer.hpp>
 
-using namespace boost;  // not the best practice, but useful for testing
-
 namespace
 {
     void test( long ) { std::cout << "long\n"; }
@@ -39,6 +37,8 @@ namespace boost
 
 int main()
 {
+     using boost::int_t;
+     using boost::uint_t;
      std::cout << 32 << ' '; test( int_t<32>::least() ); 
      std::cout << 31 << ' '; test( int_t<31>::least() ); 
      std::cout << 30 << ' '; test( int_t<30>::least() ); 
