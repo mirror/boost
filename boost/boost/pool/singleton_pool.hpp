@@ -38,8 +38,8 @@ struct singleton_pool
     typedef typename pool<UserAllocator>::size_type size_type;
     typedef typename pool<UserAllocator>::difference_type difference_type;
 
-    static const unsigned requested_size = RequestedSize;
-    static const unsigned next_size = NextSize;
+    BOOST_STATIC_CONSTANT(unsigned, requested_size = RequestedSize);
+    BOOST_STATIC_CONSTANT(unsigned, next_size = NextSize);
 
   private:
     struct pool_type: Mutex
