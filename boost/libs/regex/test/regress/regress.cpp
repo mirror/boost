@@ -294,7 +294,13 @@ int cpp_main(int argc, char * argv[])
 {
    std::cout <<
    "\n<note>\n"
+#if defined(BOOST_NO_WREGEX) && defined(TEST_UNICODE)
    "This platform does not provide the needed wide character support for this test.\n"
+#elif defined(BOOST_REGEX_DYN_LINK)
+   "Dynamic linking with this compiler is known not to work in this case - please complain to your compiler vendor.\n"
+#else
+   "This test has been disabled due to a compiler bug - please complain to your compiler vendor.\n"
+#endif
    "</note>\n";
    return 0;
 }

@@ -31,6 +31,16 @@
 #  define BOOST_REGEX_NO_TEST
 #endif
 
+#if defined(__CYGWIN__) && defined(BOOST_REGEX_DYN_LINK)
+// dll tests don't work under cygwin (linking fails, looks like a compiler bug)
+#  define BOOST_REGEX_NO_TEST
+#endif
+
+#if defined(__GNUC__) && (__GNUC__ < 3) && defined(_STLP_VERSION) && defined(BOOST_REGEX_DYN_LINK)
+// gcc2.95 + STLport runs out of memory trying to link, looks like a compiler bug...
+#  define BOOST_REGEX_NO_TEST
+#endif
+
 #ifndef BOOST_REGEX_NO_TEST
 
 #ifdef BOOST_RE_OLD_IOSTREAM
