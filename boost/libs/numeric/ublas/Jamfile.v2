@@ -32,9 +32,11 @@ UBLAS_TESTSET_SPARSE ?=
             <define>USE_SPARSE_MATRIX <define>USE_COMPRESSED_MATRIX <define>USE_COORDINATE_MATRIX ;
 
 
+# Settings propogated to individual project targets, but not test-suite
 project
     : requirements 
     ;
+
 
 test-suite numeric/uBLAS
     : [ run test1/test1.cpp
