@@ -85,7 +85,6 @@ template<typename T> class scoped_ptr : noncopyable {
   ~scoped_ptr()                 { checked_delete(ptr); }
   void reset( T* p=0 )          { if ( ptr != p ) { checked_delete(ptr); ptr = p; } }
   T& operator*() const          { return *ptr; }  // never throws
-#ifdef BOOST_MSVC
   T* operator->() const         { return ptr; }  // never throws
   T* get() const                { return ptr; }  // never throws
 #ifdef BOOST_SMART_PTR_CONVERSION
