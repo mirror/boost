@@ -414,6 +414,7 @@
 #    define BOOST_NO_HASH
 #    define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
 #    define BOOST_NO_OPERATORS_IN_NAMESPACE
+     // (support for HP aCC is not complete, see the regression test results)
 
 //  Microsoft Visual C++ (excluding Intel/EDG front end)  --------------------
 //
