@@ -108,7 +108,13 @@ public:
 };
 </pre></blockquote>
 
-<p>Other projects can use similar custom base classes.  The technique is basic enough to make a template, with a sample template class in this library.  The main template parameter is the type of the enclosed member.  The template class has several (explicit) constructor member templates, which implicitly type the constructor arguments and pass them to the member.  The template class uses implicit copy construction and assignment, cancelling them if the enclosed member is non-copyable.</p>
+<p>Other projects can use similar custom base classes.  The technique
+is basic enough to make a template, with a sample template class in
+this library.  The main template parameter is the type of the enclosed
+member.  The template class has several (explicit) constructor member
+templates, which implicitly type the constructor arguments and pass them
+to the member.  The template class uses implicit copy construction and
+assignment, cancelling them if the enclosed member is non-copyable.</p>
 
 <p>Manually coding a base class may be better if the construction
 and/or copying needs are too complex for the supplied template class,
@@ -129,15 +135,21 @@ class boost::base_from_member
 protected:
     MemberType  member;
 
-    explicit  base_from_member();
+    base_from_member();
 
     template&lt; typename T1 &gt;
     explicit  base_from_member( T1 x1 );
 
+    template&lt; typename T1, typename T2 &gt;
+    base_from_member( T1 x1, T2 x2 );
+
     //...
 
-    template&lt; typename T1, typename T2, typename T3 &gt;
-    explicit  base_from_member( T1 x1, T2 x2, T3 x3 );
+    template&lt; typename T1, typename T2, typename T3, typename T4,
+     typename T5, typename T6, typename T7, typename T8, typename T9,
+     typename T10 &gt;
+    base_from_member( T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7,
+     T8 x8, T9 x9, T10 x10 );
 };
 </pre></blockquote>
 
@@ -152,7 +164,7 @@ for later base classes (or itself).</p>
 
 <p>There is a default constructor and several constructor member
 templates.  These constructor templates can take as many arguments
-(currently up to three) as possible and pass them to a constructor of
+(currently up to ten) as possible and pass them to a constructor of
 the data member.  Since C++ does not allow any way to explicitly state
 the template parameters of a templated constructor, make sure that
 the arguments are already close as possible to the actual type used in
@@ -329,10 +341,10 @@ with the exact pointer type used in <code>switcher</code>'s constructor.</p>
 
 <hr>
 
-<p>Revised: 22 August 2001</p>
+<p>Revised: 14 June 2003</p>
 
-<p>Copyright &copy; boost.org 2001.  Permission to copy, use, modify,
-sell and distribute this document is granted provided this copyright
+<p>Copyright &copy; Daryle Walker 2001, 2003.  Permission to copy, use,
+modify, sell and distribute this document is granted provided this copyright
 notice appears in all copies.  This document is provided &quot;as
 is&quot; without express or implied warranty, and with no claim as to
 its suitability for any purpose.</p>

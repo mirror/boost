@@ -1,6 +1,6 @@
 //  Boost utility_fwd.hpp header file  ---------------------------------------//
 
-//  (C) Copyright boost.org 2001.  Permission to copy, use, modify, sell
+//  (C) Copyright boost.org 2001, 2003.  Permission to copy, use, modify, sell
 //  and distribute this software is granted provided this copyright
 //  notice appears in all copies.  This software is provided "as is" without
 //  express or implied warranty, and with no claim as to its suitability for
@@ -22,11 +22,12 @@ template < typename MemberType, int UniqueID = 0 >
     class base_from_member;
 
 
-//  From <boost/utility.hpp>  ------------------------------------------------//
+//  From <boost/noncopyable.hpp>  --------------------------------------------//
 
 class noncopyable;
 
 // Also has a few function templates
+
 
 }  // namespace boost
 

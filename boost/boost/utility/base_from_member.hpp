@@ -1,7 +1,7 @@
 //  boost utility/base_from_member.hpp header file  --------------------------//
 
-//  (C) Copyright Daryle Walker 2001.  Permission to copy, use, modify, sell
-//  and distribute this software is granted provided this copyright
+//  (C) Copyright Daryle Walker 2001, 2003.  Permission to copy, use, modify,
+//  sell and distribute this software is granted provided this copyright
 //  notice appears in all copies.  This software is provided "as is" without
 //  express or implied warranty, and with no claim as to its suitability for
 //  any purpose.
@@ -32,7 +32,7 @@ class base_from_member
 protected:
     MemberType  member;
 
-    explicit  base_from_member()
+    base_from_member()
         : member()
         {}
 
@@ -49,6 +49,48 @@ protected:
     template< typename T1, typename T2, typename T3 >
     base_from_member( T1 x1, T2 x2, T3 x3 )
         : member( x1, x2, x3 ) 
+        {}
+
+    template< typename T1, typename T2, typename T3, typename T4 >
+    base_from_member( T1 x1, T2 x2, T3 x3, T4 x4 )
+        : member( x1, x2, x3, x4 ) 
+        {}
+
+    template< typename T1, typename T2, typename T3, typename T4, typename T5 >
+    base_from_member( T1 x1, T2 x2, T3 x3, T4 x4, T5 x5 )
+        : member( x1, x2, x3, x4, x5 ) 
+        {}
+
+    template< typename T1, typename T2, typename T3, typename T4, typename T5,
+     typename T6 >
+    base_from_member( T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6 )
+        : member( x1, x2, x3, x4, x5, x6 ) 
+        {}
+
+    template< typename T1, typename T2, typename T3, typename T4, typename T5,
+     typename T6, typename T7 >
+    base_from_member( T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7 )
+        : member( x1, x2, x3, x4, x5, x6, x7 ) 
+        {}
+
+    template< typename T1, typename T2, typename T3, typename T4, typename T5,
+     typename T6, typename T7, typename T8 >
+    base_from_member( T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7, T8 x8 )
+        : member( x1, x2, x3, x4, x5, x6, x7, x8 ) 
+        {}
+
+    template< typename T1, typename T2, typename T3, typename T4, typename T5,
+     typename T6, typename T7, typename T8, typename T9 >
+    base_from_member( T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7, T8 x8,
+     T9 x9 )
+        : member( x1, x2, x3, x4, x5, x6, x7, x8, x9 ) 
+        {}
+
+    template< typename T1, typename T2, typename T3, typename T4, typename T5,
+     typename T6, typename T7, typename T8, typename T9, typename T10 >
+    base_from_member( T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, T7 x7, T8 x8,
+     T9 x9, T10 x10 )
+        : member( x1, x2, x3, x4, x5, x6, x7, x8, x9, x10 ) 
         {}
 
 };  // boost::base_from_member
