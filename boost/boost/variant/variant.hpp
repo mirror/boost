@@ -46,7 +46,6 @@
 #include "boost/preprocessor/inc.hpp"
 #include "boost/preprocessor/repeat.hpp"
 #include "boost/type_traits/alignment_of.hpp"
-#include "boost/type_traits/is_const.hpp"
 #include "boost/type_traits/is_same.hpp"
 #include "boost/variant/static_visitor.hpp"
 
@@ -275,22 +274,22 @@ public: // visitor interfaces
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) class assign_to
+// (detail) class assigner
 //
-// Generic static visitor that assigns the value it visits to the given
-// storage (which must be a constructed value of the same type).
+// Generic static visitor that assigns the given storage (which must be a
+// constructed value of the same type) to the value it visits.
 //
-struct assign_to
+struct assigner
     : public static_visitor<>
 {
 private: // representation
 
-    void* storage_;
+    const void* rhs_storage_;
 
 public: // structors
 
-    explicit assign_to(void* storage)
-        : storage_(storage)
+    explicit assigner(const void* rhs_storage)
+        : rhs_storage_(rhs_storage)
     {
     }
 
@@ -298,9 +297,27 @@ public: // visitor interfaces
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(const T& operand) const
+    operator()(T& lhs_value) const
     {
-        *static_cast<T*>(storage_) = operand;
+        // NOTE TO USER :
+        // Compile error here indicates one of variant's bounded types does
+        // not meet the requirements of the Assignable concept. Thus,
+        // variant is not Assignable.
+        //
+        lhs_value = *static_cast<const T*>(rhs_storage_);
+        BOOST_VARIANT_AUX_RETURN_VOID;
+    }
+
+    template <typename T>
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(const T& lhs_value) const
+    {
+        // NOTE TO USER :
+        // Compile error here indicates one of variant's bounded types is top-
+        // level const, which does not meet the requirements of the Assignable
+        // concept. Thus, variant is not Assignable.
+        //
+        BOOST_STATIC_ASSERT(false);
         BOOST_VARIANT_AUX_RETURN_VOID;
     }
 
@@ -849,21 +866,6 @@ private: // static precondition assertions, cont.
         ));
     */
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-
-    // [Assert no top-level const-qualified types:]
-    BOOST_STATIC_ASSERT((
-          ::boost::mpl::equal_to<
-              typename mpl::count_if<
-                  types
-                , is_const<mpl::_>
-                >::type
-            , mpl::size_t<0>
-            >::type::value
-        ));
-
-#endif // avoid on MSVC7 and below
-
 private: // typedefs, for representation (below)
 
     typedef typename detail::variant::make_storage<types>::type
@@ -1315,8 +1317,8 @@ private: // helpers, for modifiers (below)
         if (which() == rhs.which())
         {
             // ...then assign the value directly:
-            detail::variant::assign_to visitor(active_storage());
-            rhs.raw_apply_visitor(visitor);
+            detail::variant::assigner visitor(rhs.active_storage());
+            raw_apply_visitor(visitor);
         }
         else
         {
