@@ -54,15 +54,15 @@ BOOST_CLASS_TYPE_INFO(
     extended_type_info_no_rtti<polymorphic_base>
 )
 
+namespace boost { namespace serialization {
+
 // note: this type information method required assignment of a static
 // key available at precompile time
-namespace boost {
-namespace serialization {
 template<>
 const char * extended_type_info_no_rtti<const polymorphic_base>::type_key 
     = "polymorphic_base";
-} // namespace serialization
-} // namespace boost
+
+}} // namespace boost::serialization
 
 class polymorphic_derived1;
 BOOST_CLASS_TYPE_INFO(
@@ -90,13 +90,16 @@ public:
 
 // note: this type information method required assignment of a static
 // key available at precompile time
-namespace boost {
-namespace serialization {
+
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+namespace boost { namespace serialization {
+
 template<>
 const char * extended_type_info_no_rtti<const polymorphic_derived1>::type_key
     = "polymorphic_derived1";
-} // namespace serialization
-} // namespace boost
+
+}} // namespace boost::serialization
 
 const char * polymorphic_derived1::get_key() const {
     const boost::serialization::extended_type_info *eti

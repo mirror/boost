@@ -89,9 +89,9 @@ bool A::operator<(const A &rhs) const
 
 // function specializations must be defined in the appropriate
 // namespace - boost::serialization
-// #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 namespace boost { namespace serialization {
-// #endif
+#endif
 
 // This first set of overrides should work with all compilers.
 
@@ -118,9 +118,9 @@ void serialize(
     ar & boost::serialization::make_nvp("x", a.x);
 }
 
-// #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 }} // namespace boost::serialization
-// #endif
+#endif
 
 void save(const char * testfile){
     test_ostream os(testfile, TEST_STREAM_FLAGS);

@@ -13,6 +13,7 @@
 // b) usage of a non-default constructor
 
 #include <fstream>
+#include <boost/config.hpp>
 
 #include <cstdlib> // for rand(), remove()
 #include <cmath> // for fabs()
@@ -121,8 +122,11 @@ bool A::operator<(const A &rhs) const
     return false;
 }
 
-namespace boost {
-namespace serialization {
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+namespace boost { namespace serialization {
+#endif
 
 template<class Archive>
 inline void save_construct_data(
@@ -145,8 +149,9 @@ inline void load_construct_data(
     ::new(a)A(i);
 }
 
-} // namespace serialization
-} // namespace boost
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+}} // namespace boost::serialization
+#endif
 
 void save(const char * testfile){
     test_ostream os(testfile, TEST_STREAM_FLAGS);

@@ -74,7 +74,11 @@ public:
     }
 };
 
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 namespace boost { namespace serialization {
+#endif
 
 template<class Archive>
 void serialize(
@@ -82,10 +86,12 @@ void serialize(
     B & b,
     const unsigned int file_version
 ){ 
-    split_member(ar, b, file_version);
+    boost::serialization::split_member(ar, b, file_version);
 } 
 
-}} // namespace serialization // boost
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+}} // namespace boost::serialization
+#endif
 
 class C
 {
@@ -97,7 +103,11 @@ public:
     }
 };
 
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 namespace boost { namespace serialization {
+#endif
 
 template<class Archive>
 void save(
@@ -117,8 +127,9 @@ void load(
     --c.count;
 }
 
-} // namespace serialization 
-} // namespace boost
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+}} // namespace boost::serialization
+#endif
 
 BOOST_SERIALIZATION_SPLIT_FREE(C)
 

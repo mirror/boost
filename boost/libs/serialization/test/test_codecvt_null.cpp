@@ -16,6 +16,7 @@
 #include <iterator>
 #include <locale>
 #include <vector>
+#include <cstddef>
 
 #include <cstdio> // remove
 #include <boost/config.hpp>
@@ -64,6 +65,8 @@ wchar_t test_data<4>::wchar_encoding[] = {
     0x04000000,
     0x7fffffff
 };
+
+#include <iostream>
 
 int test_main( int /* argc */, char* /* argv */[] ) {
     const char * testfile = boost::archive::tmpnam(NULL);
@@ -120,6 +123,8 @@ int test_main( int /* argc */, char* /* argv */[] ) {
         ifs.imbue(*null_locale);
         int i2;
         ifs >> i2;
+        std::cout << "i=" << i << std::endl;
+        std::cout << "i2=" << i2 << std::endl;
         BOOST_CHECK(i == i2);
         ifs.close();
     }
