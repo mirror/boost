@@ -70,7 +70,7 @@ struct utf8_codecvt_facet_wchar_t :
 	public std::codecvt<wchar_t, char, std::mbstate_t>  
 {
 public:
-    explicit utf8_codecvt_facet_wchar_t(size_t no_locale_manage = 0)
+    explicit utf8_codecvt_facet_wchar_t(std::size_t no_locale_manage = 0)
         : std::codecvt<wchar_t, char, std::mbstate_t>(no_locale_manage) 
     {}
 protected:
@@ -150,7 +150,7 @@ struct utf8_codecvt_facet_char : public utf8_codecvt_facet_wchar_t
 {
     typedef utf8_codecvt_facet_wchar_t base_class;
 public:
-    explicit utf8_codecvt_facet_char(size_t no_locale_manage=0)
+    explicit utf8_codecvt_facet_char(std::size_t no_locale_manage=0)
         : base_class(no_locale_manage)
     {}
 protected:
