@@ -73,7 +73,8 @@ invalid value or an input interval.</p>
 
 <h2>Synopsis</h2>
 <pre>namespace boost {
-  namespace interval_lib {
+namespace numeric {
+namespace interval_lib {
 
 template&lt;class T&gt;
 struct checking_base;
@@ -87,7 +88,8 @@ struct checking_catch_nan;
 template&lt;class T&gt; struct exception_create_empty { T operator()(); };
 template&lt;class T&gt; struct exception_invalid_number { void operator()(); };
 
-  } // namespace interval_lib
+} // namespace numeric
+} // namespace interval_lib
 } // namespace boost</pre>
 
 <h2>Predefined classes</h2>

@@ -101,7 +101,7 @@ std::vector<I2> newton_raphson(const I2& xs) {
     } else {
       bool x2_used;
       x1 = intersect(x, xx - division_part1(vf, vd, x2_used));
-      x2 = x2_used ? intersect(x, xx - division_part2(vf, vd)) : I2::empty();
+      x2 = intersect(x, xx - division_part2(vf, vd, x2_used));
     }
     if (width(x2) > width(x1)) std::swap(x1, x2);
     if (empty(x1) || !in_zero(f(x1)))

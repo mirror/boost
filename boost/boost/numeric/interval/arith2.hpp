@@ -91,8 +91,9 @@ interval<T, Policies> division_part1(const interval<T, Policies>& x,
 
 template<class T, class Policies> inline
 interval<T, Policies> division_part2(const interval<T, Policies>& x,
-                                     const interval<T, Policies>& y)
+                                     const interval<T, Policies>& y, bool b = true)
 {
+  if (!b) return interval<T, Policies>::empty();
   return detail::div_zero_part2(x, y);
 }
 
