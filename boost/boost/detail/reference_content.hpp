@@ -68,7 +68,7 @@ public: // structors
     {
     }
 
-public: // non-Assignable
+private: // non-Assignable
 
     reference_content& operator=(const reference_content&);
 
