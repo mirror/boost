@@ -130,6 +130,10 @@ struct default_iterator_policies
     // and thought they were non-const. Also, Sun C++ does not like static
     // function templates.
 
+    template <class Iterator>
+    void initialize(Iterator&)
+        { }
+
     template <class Reference, class Iterator>
     Reference dereference(type<Reference>, const Iterator& x) const
         { return *x; }
@@ -317,13 +321,16 @@ public:
 
     iterator_adaptor() { }
 
-    iterator_adaptor(const Iterator& iter, const Policies& p = Policies())
-        : m_iter_p(iter, p) {}
+    iterator_adaptor(const Iterator& it, const Policies& p = Policies())
+        : m_iter_p(it, p) {
+      policies().initialize(iter());
+    }
 
     template <class OtherIter, class OtherTraits>
     iterator_adaptor (const iterator_adaptor<OtherIter, Policies,
             OtherTraits>& src)
             : m_iter_p(src.iter(), src.policies()) {
+      policies().initialize(iter());
     }
 
     reference operator*() const {
@@ -617,7 +624,7 @@ struct indirect_iterators
 //=============================================================================
 // Reverse Iterators Adaptor
 
-struct reverse_iterator_policies
+struct reverse_iterator_policies : public default_iterator_policies
 {
     template <class Reference, class Iterator>
     Reference dereference(type<Reference>, const Iterator& x) const
@@ -777,6 +784,48 @@ struct projection_iterators {
     typedef typename Adaptors::iterator iterator;
     typedef typename Adaptors::const_iterator const_iterator;
 };
+
+//=============================================================================
+// Filter Iterator Adaptor
+
+  template <class Predicate, class Iterator>
+  class filter_iterator_policies : public default_iterator_policies {
+  public:
+    filter_iterator_policies() { }
+
+    filter_iterator_policies(const Predicate& p, const Iterator& end) 
+      : m_predicate(p), m_end(end) { }
+
+    void initialize(Iterator& x) {
+      advance(x);
+    }
+    void increment(Iterator& x) {
+      ++x;
+      advance(x);
+    }
+  private:
+    void advance(Iterator& iter)
+    {
+      while (m_end != iter && !m_predicate(*iter))
+	++iter;
+    }  
+    Predicate m_predicate;
+    Iterator m_end;
+  };
+  
+  template <class Predicate, class Iterator, 
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
+            class Traits = std::iterator_traits<Iterator>
+#else
+            class Traits
+#endif
+           >
+  class filter_iterator {
+    typedef filter_iterator_policies<Predicate, Iterator> Policies;
+  public:
+    typedef iterator_adaptor<Iterator, Policies, Traits> type;
+  };
+
 
 } // namespace boost
 
