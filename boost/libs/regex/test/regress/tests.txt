@@ -902,5 +902,28 @@ a+(?#b+)b+ xaaabbba 1 7
 ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$ abC3 0 4
 ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$ ABCD3 -1 -1
 
+; new bugs detected in spring 2003:
+- normal match_continuous REG_NO_POSIX_TEST
+b abc -1 -1
+
+- normal REG_PERL
+(?!foo)bar foobar 3 6
+(?!foo)bar "??bar" 2 5
+(?!foo)bar "barfoo" 0 3
+(?!foo)bar "bar??" 0 3
+(?!foo)bar bar 0 3
+
+a\Z a\nb -1 -1
+() abc 0 0 0 0
+^() abc 0 0 0 0
+^()+ abc 0 0 0 0
+^(){1} abc 0 0 0 0
+^(){2} abc 0 0 0 0
+^((){2}) abc 0 0 0 0 0 0
+() "" 0 0 0 0
+()\1 "" 0 0 0 0
+()\1 a 0 0 0 0
+a()\1b ab 0 2 1 1
+a()b\1 ab 0 2 1 1
 
 
