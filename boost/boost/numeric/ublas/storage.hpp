@@ -1604,7 +1604,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         size_type size_;
         array_type data_;
-        const static indirect_array all_;
+        static const indirect_array all_;
     };
 
     template<class A>

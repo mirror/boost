@@ -552,7 +552,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         // Provide destroy as a non member function
         BOOST_UBLAS_INLINE
-        void static static_destroy (reference p) {
+        static void static_destroy (reference p) {
             (&p) -> ~value_type ();
         }
         ALLOC alloc_;
