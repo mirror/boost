@@ -23,8 +23,9 @@ struct stateless_integer_add {
 
   void* operator new(std::size_t, stateless_integer_add*)
   {
+    static int foo = 5;
     throw std::runtime_error("Cannot allocate a stateless_integer_add");
-    return 0; // suppress warnings
+    return &foo; // suppress warnings
   }
 
   void operator delete(void*, stateless_integer_add*) throw()
