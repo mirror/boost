@@ -132,7 +132,7 @@ public:
       carry = 0;
     } else {
       // x(n) < 0
-      delta = modulus - (x[k] + carry) + x[short_index];
+      delta = modulus - x[k] - carry + x[short_index];
       carry = 1;
     }
     x[k] = delta;
@@ -279,7 +279,7 @@ public:
     using std::fmod;
 #endif
     random::linear_congruential<int32_t, 40014, 0, 2147483563, 0> gen(value);
-    unsigned long array[(w/32+1) * long_lag];
+    unsigned long array[(w+31)/32 * long_lag];
     for(unsigned int j = 0; j < sizeof(array)/sizeof(unsigned long); ++j)
       array[j] = gen();
     unsigned long * start = array;
@@ -301,8 +301,10 @@ public:
       x[j] = RealType(0);
       for(int i = 0; i < w/32 && first != last; ++i, ++first)
         x[j] += *first / pow(two32,i+1);
-      if(first != last && mask != 0)
+      if(first != last && mask != 0) {
         x[j] += fmod((*first & mask) / _modulus, RealType(1));
+        ++first;
+      }
     }
     if(first == last && j < long_lag)
       throw std::invalid_argument("subtract_with_carry::seed");
