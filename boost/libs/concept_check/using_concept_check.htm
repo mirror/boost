@@ -179,7 +179,7 @@ type for the map.
 </pre>
 
 
-As an example of using <tt>class_requires</tt> we look at a concept
+As an example of using <tt>BOOST_CLASS_REQUIRES</tt> we look at a concept
 check that could be added to <tt>std::vector</tt>. One requirement
 that is placed on the element type is that it must be <a
 href="http://www.sgi.com/Technology/STL/Assignable.html">Assignable</a>.
@@ -191,7 +191,7 @@ of the definition for <tt>std::vector</tt>.
   namespace std {
     template &lt;class T&gt;
     struct vector {
-      typedef typename class_requires&lt; AssignableConcept&lt;T&gt; &gt;::check req;
+      BOOST_CLASS_REQUIRES(T, AssignableConcept);
       ...
     };
   }
