@@ -9,6 +9,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  04 Nov 01 Updated with respect to change in named parameters.
+//            (Jeremy Siek)
 //  08 Mar 01 Moved indirect and transform tests to separate files.
 //            (Jeremy Siek)
 //  19 Feb 01 Take adavantage of improved iterator_traits to do more tests
@@ -110,7 +112,6 @@ main()
   // sanity check, if this doesn't pass the test is buggy
   boost::random_access_iterator_test(array, N, array);
 
-#if 0
   // Check that the policy concept checks and the default policy
   // implementation match up.
   boost::function_requires< 
@@ -370,7 +371,6 @@ main()
     if (zero) // don't do this, just make sure it compiles
       assert((*i).m_x == i->foo());      
   }
-#endif
   std::cout << "test successful " << std::endl;
   return 0;
 }
