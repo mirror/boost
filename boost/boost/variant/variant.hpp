@@ -100,15 +100,6 @@
 #   include "boost/mpl/O1_size.hpp"
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
-//
-// Defined if variant does not support variant<Types> syntax (see below). 
-//
-#if defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
-#   define BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
-#endif
-
 namespace boost {
 
 namespace detail { namespace variant {

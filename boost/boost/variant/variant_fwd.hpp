@@ -41,6 +41,15 @@
 #define BOOST_VARIANT_LIMIT_TYPES \
     BOOST_MPL_LIMIT_LIST_SIZE
 
+///////////////////////////////////////////////////////////////////////////////
+// BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
+//
+// Defined if variant does not support variant<Types> syntax (see below). 
+//
+#if defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
+#   define BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
+#endif
+
 //////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_ENUM_PARAMS
 //
