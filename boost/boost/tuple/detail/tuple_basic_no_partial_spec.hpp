@@ -246,6 +246,58 @@ namespace tuples {
 
     namespace detail {
 
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1300)
+      // special workaround for vc7:
+
+      template <bool x>
+      struct reference_adder
+      {
+         template <class T>
+         struct rebind
+         {
+            typedef T& type;
+         };
+      };
+
+      template <>
+      struct reference_adder<true>
+      {
+         template <class T>
+         struct rebind
+         {
+            typedef T type;
+         };
+      };
+
+
+      // Return a reference to the Nth type of the given Tuple
+      template<int N, typename Tuple>
+      struct element_ref
+      {
+      private:
+         typedef typename element<N, Tuple>::RET elt_type;
+         enum { is_ref = is_reference<elt_type>::value };
+
+      public:
+         typedef reference_adder<is_ref>::rebind<elt_type>::type RET;
+         typedef RET type;
+      };
+
+      // Return a const reference to the Nth type of the given Tuple
+      template<int N, typename Tuple>
+      struct element_const_ref
+      {
+      private:
+         typedef typename element<N, Tuple>::RET elt_type;
+         enum { is_ref = is_reference<elt_type>::value };
+
+      public:
+         typedef reference_adder<is_ref>::rebind<const elt_type>::type RET;
+         typedef RET type;
+      };
+
+#else // vc7
+
       // Return a reference to the Nth type of the given Tuple
       template<int N, typename Tuple>
       struct element_ref
@@ -269,6 +321,7 @@ namespace tuples {
         typedef typename add_reference<const elt_type>::type RET;
         typedef RET type;
       };
+#endif // vc7
 
     } // namespace detail
 
