@@ -17,11 +17,12 @@ namespace boost_has_two_arg_use_facet{
 int test()
 {
    std::locale l;
-   const std::ctype<char>& ct = std::use_facet(l, (const std::ctype<char>*)0);
+   const std::ctype<char>& ct = std::use_facet(l, (std::ctype<char>*)0);
    return 0;
 }
 
 }
+
 
 
 
