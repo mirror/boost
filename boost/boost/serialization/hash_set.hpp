@@ -33,7 +33,7 @@ namespace boost { namespace serialization {
 #elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
 namespace _STLP_STD {
 #else
-namespace BOOST_STD_EXTENSION_NAMESPACE
+namespace BOOST_STD_EXTENSION_NAMESPACE {
 #endif
 
 template<class Archive, class Key, class Compare, class Allocator >
