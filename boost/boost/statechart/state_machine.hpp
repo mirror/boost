@@ -35,7 +35,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/cast.hpp> // boost::polymorphic_downcast
 // BOOST_NO_STD_ALLOCATOR, BOOST_HAS_PARTIAL_STD_ALLOCATOR,
-// BOOST_MSVC, BOOST_MSVC_STD_ITERATOR
+// BOOST_NO_EXCEPTIONS, BOOST_MSVC, BOOST_MSVC_STD_ITERATOR
 #include <boost/config.hpp>
 
 #ifdef BOOST_MSVC
@@ -285,7 +285,9 @@ class state_machine : noncopyable
         {
           // The unnecessary try/catch overhead for pointer targets is
           // typically small compared to the cycles dynamic_cast needs
+          #ifndef BOOST_NO_EXCEPTIONS
           try
+          #endif
           {
             Target result = dynamic_cast< Target >(
               impl::deref_if_necessary( pCurrentState ) );
@@ -295,9 +297,9 @@ class state_machine : noncopyable
               return result;
             }
           }
-          catch ( const std::bad_cast & )
-          {
-          }
+          #ifndef BOOST_NO_EXCEPTIONS
+          catch ( const std::bad_cast & ) {}
+          #endif
 
           pCurrentState = pCurrentState->outer_state_ptr();
         }
