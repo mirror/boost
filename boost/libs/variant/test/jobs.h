@@ -212,7 +212,7 @@ struct spec
 };
 
 template<typename VariantType, typename S>
-void verify(const VariantType& vari, spec<S>, std::string str = "")
+inline void verify(const VariantType& vari, spec<S>, std::string str = "")
 {
    using namespace boost;
 
@@ -265,7 +265,7 @@ void verify(const VariantType& vari, spec<S>, std::string str = "")
 
 
 template<typename VariantType, typename S>
-void verify_not(const VariantType& vari, spec<S>)
+inline void verify_not(const VariantType& vari, spec<S>)
 {
    using namespace boost;
 
