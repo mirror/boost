@@ -197,7 +197,7 @@ private: // <i>representation</i>
 };</pre>
         <p>An instance of <code>variant</code> contains exactly one instance of one of its
             bounded types, which are specified as arguments to <code>variant</code>'s
-            template parameter list. The length of <code>variant</code>'s template 
+            template parameter list. The length of <code>variant</code>'s template
             parameter list is equal to the implementation defined value <a href="#BOOST_VARIANT_LIMIT_TYPES">
                 <code>BOOST_VARIANT_LIMIT_TYPES</code></a>.</p>
         <p>Each type specified as a bounded type must satisfy the <a href="#BoundedType"><i>BoundedType</i></a>
@@ -210,20 +210,20 @@ private: // <i>representation</i>
             <hr>
             <h3><a name="variant-structors">Structors</a></h3>
             <pre><a name="variant-default-ctor">variant</a>();</pre>
-            <p>Default constructor. Initializes <code>*this</code> with the default value of 
-                the first bounded type (i.e, <code>T1</code>). May fail with any exceptions 
+            <p>Default constructor. Initializes <code>*this</code> with the default value of
+                the first bounded type (i.e, <code>T1</code>). May fail with any exceptions
                 arising from the default constructor of <code>T1</code>.<br>
             </p>
             <pre><a name="variant-copy-ctor">variant</a>(const variant&amp; other);
 </pre>
-            <p>Copy constructor. Copies the content of <code>other</code> into <code>*this</code>. 
-                May fail with any exceptions arising from the copy constructor of <code>other</code>'s 
+            <p>Copy constructor. Copies the content of <code>other</code> into <code>*this</code>.
+                May fail with any exceptions arising from the copy constructor of <code>other</code>'s
                 contained type.<br>
             </p>
             <pre>template &lt;typename OperandType&gt;
   <a name="variant-template-ctor">variant</a>(const OperandType &amp; operand);
 </pre>
-            <p>Templated constructor. Initializes <code>*this</code> according to the following 
+            <p>Templated constructor. Initializes <code>*this</code> according to the following
                 logic:</p>
             <ol>
                 <li>
@@ -430,32 +430,68 @@ is <code>ToType</code>. Otherwise, throws a <code>bad_get</code> exception.<br>
 struct empty { };
 
 bool operator==(const empty&, const empty&); // Always true
-bool operator<(const empty&, const empty&);  // Always false
+bool operator&lt;(const empty&, const empty&);  // Always false
 
 BOOST_TEMPLATED_STREAM_TEMPLATE(E,T)
-BOOST_TEMPLATED_STREAM(ostream, E,T)& 
+BOOST_TEMPLATED_STREAM(ostream, E,T)&
 operator&lt;&lt;(BOOST_TEMPLATED_STREAM(ostream, E,T)&, const empty& );  // NOP
 </pre>
-<p><code>boost::empty</code> is a predefined type, used for representing an
-'empty' <code>variant</code>: a <code>variant</code> object holding a value of
+<p>
+A <code>variant</code> object holding a value of
 type <code>boost::empty</code> is considered to be empty.<br>
 This convention is acknowledged by <code>varinat::empty()</code> - Its
 return value is <code>true</code>, only if the held value is of type
 <code>boost::empty</code>.<br>
 <br>
-Comments:
+Public interface
+<ul>
+<li>Comparisons:<code>operator==(const empty&, const empty&)</code>
+always returns <code>true</code>, while
+<code>operator&lt;(const empty&, const empty&)</code> always returns
+<code>false</code>.</li>
+<li>Output: <code>operator&lt;&lt;</code> has a "Do-nothing" behavior when
+invoked with a <code>boost::empty</code> value.
+</li>
+</ul>
+<br>
+Comments
 <ul>
 <li>A <code>variant</code> object that does not have <code>boost::empty</code>
 as one of its <a href="#BoundedType">BoundedTypes</a>, can never be in an empty
-state. At any given point it will hold a valid value.
+state. At any given point it holds a valid value.
 </li>
 <li>Empty variants are visitable. Consequently, every visitor of a possibly
 empty variant, must be capable of accepting a <code>boost::empty</code> value.
 </li>
-<li><code>boost::empty</code> has no state. Thus, when two instances are
-compared for equality, the result is always <code>true</code>.</li>
-<li><code>operator&lt;&lt;</code> is also supported, with a "do-nothing" behavior.</li>
+<li><code>boost::empty</code> has no state. Thus, when two instances of
+<code>boost::empty</code> are tested for equality, the result is always
+<code>true</code>.</li>
 </ul>
+<h3><b>Example:</b></h3>
+<p>The following snip demonstrates an optional string value, using a variant
+whose bounded types are <code>boost::empty</code> and
+<code>std::string</code>:
+<pre>typedef boost::variant&lt;boost::empty,std::string&gt; string_or_nothing;
+
+void print(string_or_nothing a)
+{
+   if(a.empty())
+      cout << "No string is specified" << endl;
+   else
+      cout << boost::get&lt;std::string&gt;(a) << endl;
+}
+
+int main()
+{
+   string_or_nothing s;
+   print(s);  // Output: "No string is specified"
+
+   s = "Ford Prefect";
+   print(s);  // Output: "Ford Prefect"
+
+   return 0;
+}
+</pre>
 
 
 	<hr>
