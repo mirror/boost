@@ -164,11 +164,16 @@ class basic_iarchive_impl
 
     std::list<created_pointer_type> created_pointers;
 
-    bool is_object; // pass forward indicater that we're saving an object
-                    // directly rather than result of a pointer
+    // address of the most recent object serialized as a poiner
+    // whose data itself is now pending serialization
+    void * pending_object;
+    const basic_iserializer * pending_bis;
+    version_type pending_version;
 
-    basic_iarchive_impl()
-        : is_object(true)
+    basic_iarchive_impl() : 
+        pending_object(NULL),
+        pending_bis(NULL),
+        pending_version(0)
     {}
     bool
     track(
@@ -190,14 +195,18 @@ class basic_iarchive_impl
         ar.vload(t);
     }
 
-public:
+//public:
+    void
+    next_object_pointer(void * t){
+        pending_object = t;
+    }
     void delete_created_pointers();
     class_id_type register_type(
         const basic_pointer_iserializer & bpis
     );
     void load_object(
         basic_iarchive & ar,
-        void * & t,
+        void * t,
         const basic_iserializer & bis
     );
     const basic_pointer_iserializer * load_pointer(
@@ -279,7 +288,7 @@ basic_iarchive_impl::track(
     // if its a reference to a old object
     if(object_id_type(object_id_vector.size()) > oid){
         // we're done
-        t =  object_id_vector[oid].address;
+        t = object_id_vector[oid].address;
         return false;
     }
     return true;
@@ -288,29 +297,33 @@ basic_iarchive_impl::track(
 inline void
 basic_iarchive_impl::load_object(
     basic_iarchive & ar,
-    void * & t,
+    void * t,
     const basic_iserializer & bis
 ){
-    bool result = true;
-    const class_id_type cid = register_type(bis);
-    // note: extra line used to evand borland issue
-    const int id = cid;
-    cobject_id & co = cobject_id_vector[id];
-    if(is_object){
-        load_preamble(ar, co);
-        // note: extra line used to evand borland issue
-        const bool b = co.tracking_level;
-        if(b){ 
-            result = track(ar, t);
-            if(! result)
-                return;
-            object_id_vector.push_back(aobject(t, cid));
-        }
+    // if its been serialized through a pointer and the preamble's been done
+    if(t == pending_object && & bis == pending_bis){
+        // read data
+        (bis.load_object_data)(ar, t, pending_version);
+        return;
     }
 
-    // read data if required
-    state_saver<bool> x(is_object);
-    is_object = true;
+    bool result = true;
+    const class_id_type cid = register_type(bis);
+    // note: extra line used to evade borland issue
+    const int id = cid;
+    cobject_id & co = cobject_id_vector[id];
+
+    load_preamble(ar, co);
+    // note: extra line used to evade borland issue
+    const bool b = co.tracking_level;
+    if(b){ 
+        result = track(ar, t);
+        if(! result)
+            return;
+        object_id_vector.push_back(aobject(t, cid));
+    }
+
+    // read data
     (bis.load_object_data)(ar, t, co.file_version);
 }
 
@@ -364,45 +377,59 @@ basic_iarchive_impl::load_pointer(
 
     load_preamble(ar, co);
 
-    bool track_object = true;
+    // if we're not tracking
+    bool new_object = true;
     // extra line to evade borland issue
     const bool b = co.tracking_level;
     if(b)
-        track_object = track(ar, t);
+        new_object = track(ar, t);
 
-    // if required
-    if(track_object){
-        // read data 
-        state_saver<bool> x(is_object);
-        is_object = false;
-
-        if(bis_ptr->tracking()){
-            // predict next object id to be created
-            const unsigned int i = object_id_vector.size();
-
-            // because the following operation could move the items
-            // don't use co after this
-            object_id_vector.push_back(aobject(t, cid));
-            bpis_ptr->load_object_ptr(
-                ar, 
-                object_id_vector[i].address, 
-                co.file_version
-            );
-            t = object_id_vector[i].address;
-            // and add to list of created pointers
-            created_pointers.push_back(created_pointer_type(cid, t));
-        }
-        else{
-            bpis_ptr->load_object_ptr(ar, t, co.file_version);
-        }
-        assert(NULL != t);
+    if(! new_object){
+        // nothing to do
+        return bpis_ptr;
     }
 
+	if(! bis_ptr->tracking()){
+        bpis_ptr->load_object_ptr(ar, t, co.file_version);
+        return bpis_ptr;
+    }
+
+    // save state
+    state_saver<void *> x(pending_object);
+    state_saver<const basic_iserializer *> y(pending_bis);
+    state_saver<version_type> z(pending_version);
+
+    pending_bis = & bpis_ptr->get_basic_serializer();
+    pending_version = co.file_version;
+
+    // predict next object id to be created
+    const unsigned int ui = object_id_vector.size();
+
+    // because the following operation could move the items
+    // don't use co after this
+    // add to list of serialized objects so that we can properly handle
+    // cyclic strucures
+    object_id_vector.push_back(aobject(t, cid));
+    bpis_ptr->load_object_ptr(
+        ar, 
+        object_id_vector[ui].address, 
+        co.file_version
+    );
+    t = object_id_vector[ui].address;
+    assert(NULL != t);
+
+    // and add to list of created pointers
+    created_pointers.push_back(created_pointer_type(cid, t));
     return bpis_ptr;
 }
 
 //////////////////////////////////////////////////////////////////////
 // implementation of basic_iarchive functions
+
+void
+basic_iarchive::next_object_pointer(void *t){
+    pimpl->next_object_pointer(t);
+}
 
 basic_iarchive::basic_iarchive() : 
     pimpl(new basic_iarchive_impl),

@@ -124,30 +124,19 @@ class basic_oarchive_impl
     // keyed on object id
     std::set<object_id_type> stored_pointers;
 
-    bool is_object; // pass forward indicater that we're saving an object
-                    // directly rather than result of a pointer
-    basic_oarchive_impl()
-        : is_object(true)
+    // address of the most recent object serialized as a poiner
+    // whose data itself is now pending serialization
+    const void * pending_object;
+    const basic_oserializer * pending_bos;
+    basic_oarchive_impl() :
+        pending_object(NULL),
+        pending_bos(NULL)
     {}
 
     const cobject_type &
     find(const basic_oserializer & bos);
     const basic_oserializer *  
     find(const serialization::extended_type_info &ti) const;
-    void
-    save_preamble(
-        basic_oarchive & ar,
-        const unsigned int file_version,
-        bool tracking
-    );
-    bool
-    track(
-        basic_oarchive & ar,
-        const void *t,
-        const basic_oserializer & bos,
-        const class_id_type cid,
-        bool is_object
-    );
 public:
     const cobject_type &
     register_type(const basic_oserializer & bos);
@@ -234,79 +223,70 @@ basic_oarchive_impl::register_type(
     return *(result.first);
 }
 
-void
-basic_oarchive_impl::save_preamble(
-    basic_oarchive & ar,
-    const unsigned int file_version,
-    bool tracking
-){
-    ar.vsave(tracking_type(tracking));
-    ar.vsave(version_type(file_version));
-}
-
-// return true if this is a new object and should be serialized
-// false if it can be skipped.
-bool
-basic_oarchive_impl::track(
-    basic_oarchive & ar,
-    const void *t,
-    const basic_oserializer & bos,
-    const class_id_type cid,
-    bool is_object
-){
-    object_id_type oid(object_set.size());
-    // lookup to see if this object has already been written to the archive
-    basic_oarchive_impl::aobject ao(t, cid, oid);
-    std::pair<basic_oarchive_impl::object_set_type::const_iterator, bool>
-        aresult = object_set.insert(ao);
-    oid = aresult.first->object_id;
-    // if its aready there
-    if(! aresult.second){
-        ar.vsave(object_reference_type(oid));
-        // and its an object
-        if(is_object
-        // but it was originally stored through a pointer
-        && stored_pointers.end() != stored_pointers.find(oid)){
-            // this has to be a user error.  loading such an archive
-            // would create duplicate objects
-            boost::throw_exception(
-                archive_exception(archive_exception::pointer_conflict)
-            );
-        }
-        return false;
-    }
-    ar.vsave(oid);
-    if(! is_object)
-        // add to the set of object initially stored through pointers
-        stored_pointers.insert(oid);
-    return true;
-}
-
 inline void
 basic_oarchive_impl::save_object(
     basic_oarchive & ar,
     const void *t,
     const basic_oserializer & bos
 ){
-    bool new_object = true;
-    if(is_object){
-        const cobject_type & co = register_type(bos);
-        if(bos.class_info()){
-            if( ! co.initialized){
-                ar.vsave(class_id_optional_type(co.class_id));
-                save_preamble(ar, bos.version(), bos.tracking());
-                (const_cast<cobject_type &>(co)).initialized = true;
-            }
-        }
-        if(bos.tracking())
-            new_object = track(ar, t, bos, co.class_id, true);
+    // if its been serialized through a pointer and the preamble's been done
+    if(t == pending_object && pending_bos == & bos){
+        // just save the object data
         ar.end_preamble();
-    }
-    if(new_object){
-        state_saver<bool> x(is_object);
-        is_object = true;
         (bos.save_object_data)(ar, t);
+        return;
     }
+
+    // get class information for this object
+    const cobject_type & co = register_type(bos);
+    if(bos.class_info()){
+        if( ! co.initialized){
+            ar.vsave(class_id_optional_type(co.class_id));
+            ar.vsave(tracking_type(bos.tracking()));
+            ar.vsave(version_type(bos.version()));
+            (const_cast<cobject_type &>(co)).initialized = true;
+        }
+    }
+
+    // we're not tracking this type of object
+    if(! bos.tracking()){
+        // just windup the preamble - no object id to write
+        ar.end_preamble();
+        // and save the data
+        (bos.save_object_data)(ar, t);
+        return;
+    }
+
+    // look for an existing object id
+    object_id_type oid(object_set.size());
+    // lookup to see if this object has already been written to the archive
+    basic_oarchive_impl::aobject ao(t, co.class_id, oid);
+    std::pair<basic_oarchive_impl::object_set_type::const_iterator, bool>
+        aresult = object_set.insert(ao);
+    oid = aresult.first->object_id;
+
+    // if its a new object
+    if(aresult.second){
+        // write out the object id
+        ar.vsave(oid);
+        ar.end_preamble();
+        // and data
+        (bos.save_object_data)(ar, t);
+        return;
+    }
+
+    // check that it wasn't originally stored through a pointer
+    if(stored_pointers.end() != stored_pointers.find(oid)){
+        // this has to be a user error.  loading such an archive
+        // would create duplicate objects
+        boost::throw_exception(
+            archive_exception(archive_exception::pointer_conflict)
+        );
+    }
+    // just save the object id
+    ar.vsave(object_reference_type(oid));
+    ar.end_preamble();
+    return;
 }
 
 // save a pointer to an object instance
@@ -344,25 +324,55 @@ basic_oarchive_impl::save_pointer(
                     );
             }
         }
-        if(bos.class_info())
-            save_preamble(ar, bos.version(), bos.tracking());
+        if(bos.class_info()){
+            ar.vsave(tracking_type(bos.tracking()));
+            ar.vsave(version_type(bos.version()));
+        }
         (const_cast<cobject_type &>(co)).initialized = true;
     }
     else{
         ar.vsave(class_id_reference_type(co.class_id));
     }
 
-    bool result = true;
-    if(bos.tracking())
-        result = track(ar, t, bos, co.class_id, false);
+    // if we're not tracking
+    if(! bos.tracking()){
+        // just save the data itself
+        ar.end_preamble();
+        state_saver<const void *> x(pending_object);
+        state_saver<const basic_oserializer *> y(pending_bos);
+        pending_object = t;
+        pending_bos = & bpos_ptr->get_basic_serializer();
+        bpos_ptr->save_object_ptr(ar, t);
+        return;
+    }
 
+    object_id_type oid(object_set.size());
+    // lookup to see if this object has already been written to the archive
+    basic_oarchive_impl::aobject ao(t, co.class_id, oid);
+    std::pair<basic_oarchive_impl::object_set_type::const_iterator, bool>
+        aresult = object_set.insert(ao);
+    oid = aresult.first->object_id;
+    // if the saved object already exists
+    if(! aresult.second){
+        // append the object id to he preamble
+        ar.vsave(object_reference_type(oid));
+        // and windup.
+        ar.end_preamble();
+        return;
+    }
+
+    // append id of this object to preamble
+    ar.vsave(oid);
     ar.end_preamble();
 
-    if(result){
-        state_saver<bool> x(is_object);
-        is_object = false;
-        bpos_ptr->save_object_ptr(ar, t);
-    }
+    // and save the object itself
+    state_saver<const void *> x(pending_object);
+    state_saver<const basic_oserializer *> y(pending_bos);
+    pending_object = t;
+    pending_bos = & bpos_ptr->get_basic_serializer();
+    bpos_ptr->save_object_ptr(ar, t);
+    // add to the set of object initially stored through pointers
+    stored_pointers.insert(oid);
 }
 
 //////////////////////////////////////////////////////////////////////
