@@ -75,7 +75,11 @@ struct compressed_pair_tester
 template <class T1, class T2>
 void compressed_pair_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
 {
+#ifndef __GNUC__
+   // gcc 2.90 can't cope with function scope using
+   // declarations, and generates an internal compiler error...
    using std::swap;
+#endif
    // default construct:
    boost::compressed_pair<T1,T2> cp1;
    // first param construct:
@@ -143,7 +147,11 @@ struct compressed_pair_reference_tester
 template <class T1, class T2>
 void compressed_pair_reference_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
 {
+#ifndef __GNUC__
+   // gcc 2.90 can't cope with function scope using
+   // declarations, and generates an internal compiler error...
    using std::swap;
+#endif
    // both param construct:
    boost::compressed_pair<T1,T2> cp4(p1, p2);
    BOOST_TEST(cp4.first() == p1);
@@ -246,8 +254,7 @@ struct compressed_pair_array1_tester
 template <class T1, class T2>
 void compressed_pair_array1_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
 {
-   using std::swap;
-   // default construct:
+  // default construct:
    boost::compressed_pair<T1,T2> cp1;
    // second param construct:
    boost::compressed_pair<T1,T2> cp3(p2);
@@ -387,6 +394,7 @@ int test_main(int argc, char *argv[ ])
 
 
 unsigned int expected_failures = 0;
+
 
 
 
