@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex.cpp
-  *   VERSION      3.02
+  *   VERSION      3.03
   *   DESCRIPTION: Declares boost::reg_expression<> and associated
   *                functions and classes. This header is the main
   *                entry point for the template regex code.

@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_match.hpp
-  *   VERSION      3.02
+  *   VERSION      3.03
   *   DESCRIPTION: Regular expression matching algorithms.
   *                Note this is an internal header file included
   *                by regex.hpp, do not include on its own.

@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_raw_buffer.hpp
-  *   VERSION      3.02
+  *   VERSION      3.03
   *   DESCRIPTION: Raw character buffer for regex code.
   *                Note this is an internal header file included
   *                by regex.hpp, do not include on its own.

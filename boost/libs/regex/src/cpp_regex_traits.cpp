@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        c_regex_traits.cpp
-  *   VERSION:     3.02
+  *   VERSION:     3.03
   *   DESCRIPTION: Implements the cpp_regex_traits<charT> traits class
   */
 #include <clocale>

@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     parse.cpp
-  *   VERSION  3.02
+  *   VERSION  3.03
   *
   * Input parsing functions for regress.
   *

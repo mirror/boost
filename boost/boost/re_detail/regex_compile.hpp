@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_compile.hpp
-  *   VERSION      3.02
+  *   VERSION      3.03
   *   DESCRIPTION: Declares reg_expression<> member functions.  This is
   *                an internal header file, do not include directly.
   */

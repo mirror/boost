@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_libary_include.hpp
-  *   VERSION      3.02
+  *   VERSION      3.03
   *   DESCRIPTION: Automatic library inclusion for Borland/Microsoft compilers.
   *                Note this is an internal header file included
   *                by regex.hpp, do not include on its own.

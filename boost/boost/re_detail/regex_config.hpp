@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_config.hpp
-  *   VERSION      3.02
+  *   VERSION      3.03
   *   DESCRIPTION: auto-configure options for regular expression code.
   */
 
@@ -334,6 +334,10 @@ Do not change this file unless you really really have to, add options to
    #define BOOST_RE_NESTED_TEMPLATE_DECL
    #define BOOST_RE_NO_TEMPLATE_FRIEND
    #define BOOST_RE_NO_SWPRINTF
+#endif
+
+#ifdef __sgi // SGI IRIX C++
+#define BOOST_RE_NO_SWPRINTF
 #endif
 
 
@@ -1195,6 +1199,12 @@ namespace std{
 #ifndef BOOST_RE_NO_LOCALE_H
    using ::mbstate_t;
 #endif
+   using ::fseek;
+   using ::fread;
+   using ::ftell;
+   using ::fopen;
+   using ::fclose;
+   using ::FILE;
 #endif // BOOST_RE_NO_WCSTRING
 }
 

@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        wide_posix_api.cpp
-  *   VERSION:     3.02
+  *   VERSION:     3.03
   *   DESCRIPTION: Implements the wide character POSIX API wrappers.
   */
 

@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex.cpp
-  *   VERSION      3.02
+  *   VERSION      3.03
   *   DESCRIPTION: Declares regular expression traits classes.
   */
 
