@@ -89,6 +89,15 @@ main()
   // sanity check, if this doesn't pass the test is buggy
   boost::random_access_iterator_test(array,N,array);
 
+  // Check that the policy concept checks and the default policy
+  // implementation match up.
+  boost::function_requires< 
+     boost::RandomAccessIteratorPoliciesConcept<
+       boost::default_iterator_policies, int*,
+       boost::iterator<std::random_access_iterator_tag, int, std::ptrdiff_t,
+                      int*, int&>
+      > >();
+
   // Test the iterator_adaptors
   {
     My::iterator i = array;
