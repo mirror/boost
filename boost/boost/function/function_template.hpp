@@ -248,7 +248,12 @@ namespace boost {
     typedef T0 first_argument_type;
     typedef T1 second_argument_type;
 #endif
+
+#ifndef BOOST_NO_VOID_RETURNS
     typedef R         result_type;
+#else
+    typedef internal_result_type result_type;
+#endif // BOOST_NO_VOID_RETURNS
     typedef Policy    policy_type;
     typedef Mixin     mixin_type;
     typedef Allocator allocator_type;
@@ -297,7 +302,11 @@ namespace boost {
                                             BOOST_FUNCTION_ARGS);
 
       policy.postcall(this);
+#ifndef BOOST_NO_VOID_RETURNS
       return static_cast<result_type>(result);
+#else
+      return result;
+#endif // BOOST_NO_VOID_RETURNS
     }
 
     // The distinction between when to use BOOST_FUNCTION_FUNCTION and
