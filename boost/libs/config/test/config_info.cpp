@@ -241,6 +241,7 @@ void print_compiler_macros()
   // EDG
   PRINT_MACRO(__EDG__);
   PRINT_MACRO(__EDG_VERSION__);
+  PRINT_MACRO(c_plusplus);       // indication for strict mode
   PRINT_MACRO(_BOOL);
   PRINT_MACRO(_EXPLICIT);
   PRINT_MACRO(__SIGNED_CHARS__);
