@@ -19,13 +19,13 @@ struct is_polymorphic_imp1
    struct d1 : public T
    {
       d1();
-      ~d1();
+      ~d1()throw();
       char padding[256];
    };
    struct d2 : public T
    {
       d2();
-      virtual ~d2();
+      virtual ~d2()throw();
 #ifndef BOOST_MSVC
       // for some reason this messes up VC++ when T has virtual bases:
       virtual void foo();
@@ -79,5 +79,6 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_polymorphic,T,::boost::detail::is_polymorphic_im
 #include "boost/type_traits/detail/bool_trait_undef.hpp"
 
 #endif
+
 
 
