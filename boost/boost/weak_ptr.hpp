@@ -135,12 +135,12 @@ public:
 
     operator bool_type() const // never throws
     {
-        return use_count() == 0? 0: &this_type::use_count;
+        return px == 0 || use_count() == 0? 0: &this_type::use_count;
     }
 
     bool operator! () const // never throws
     {
-        return use_count() == 0;
+        return px == 0 || use_count() == 0;
     }
 
     void swap(this_type & other) // never throws

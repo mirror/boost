@@ -249,6 +249,8 @@ int test_main(int, char * [])
         test_eq(wp2, wp4);
 
         wp1 = p2;
+        test_is_zero(wp1);
+
         wp1 = p4;
         wp1 = wp3;
         wp1 = wp2;
