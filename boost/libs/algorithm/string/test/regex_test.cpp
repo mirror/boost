@@ -42,13 +42,13 @@ static void find_test()
     // basic tests
     nc_result=find_regex( str1, rx );
     BOOST_CHECK( 
-        (distance<string::const_iterator>( str1.begin(),nc_result.begin()) == 3) &&
-        (distance<string::const_iterator>( str1.begin(),nc_result.end()) == 6) );
+        (std::distance<string::const_iterator>( str1.begin(),nc_result.begin()) == 3) &&
+        (std::distance<string::const_iterator>( str1.begin(),nc_result.end()) == 6) );
 
     cv_result=find_regex( str1, rx );
     BOOST_CHECK( 
-        (distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 3) &&
-        (distance<string::const_iterator>( str1.begin(),cv_result.end()) == 6) );
+        (std::distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 3) &&
+        (std::distance<string::const_iterator>( str1.begin(),cv_result.end()) == 6) );
 
     ch_result=find_regex( pch1, rx );
     BOOST_CHECK(( (ch_result.begin() - pch1 ) == 3) && ( (ch_result.end() - pch1 ) == 6 ) );
@@ -56,13 +56,13 @@ static void find_test()
     // multi-type comparison test
     nc_vresult=find_regex( vec1, rx );
     BOOST_CHECK( 
-        (distance<vector<int>::const_iterator>( vec1.begin(),nc_vresult.begin()) == 3) &&
-        (distance<vector<int>::const_iterator>( vec1.begin(),nc_vresult.end()) == 6) );
+        (std::distance<vector<int>::const_iterator>( vec1.begin(),nc_vresult.begin()) == 3) &&
+        (std::distance<vector<int>::const_iterator>( vec1.begin(),nc_vresult.end()) == 6) );
 
     cv_vresult=find_regex( vec1, rx );
     BOOST_CHECK( 
-        (distance<vector<int>::const_iterator>( vec1.begin(),cv_vresult.begin()) == 3) &&
-        (distance<vector<int>::const_iterator>( vec1.begin(),cv_vresult.end()) == 6) );
+        (std::distance<vector<int>::const_iterator>( vec1.begin(),cv_vresult.begin()) == 3) &&
+        (std::distance<vector<int>::const_iterator>( vec1.begin(),cv_vresult.end()) == 6) );
 
     // find_all_regex test
     find_all_regex( tokens, str1, rx );
