@@ -35,7 +35,7 @@ using std::streambuf;
 #include <boost/config.hpp>
 #include <boost/regex.hpp>
 #include <boost/timer.hpp> 
-#include <boost/scoped_array.hpp>
+#include <boost/smart_ptr.hpp>
 
 #ifdef BOOST_MSVC
 // no Koenig lookup, use using declaration instead:
@@ -123,6 +123,7 @@ int main(int argc, char**argv)
    double tim;
    bool result;
    int iters = 100;
+   double wait_time = std::min(t.elapsed_min() * 1000, 1.0);
 
    while(true)
    {
@@ -188,7 +189,6 @@ int main(int argc, char**argv)
          regex_search(s2, sm, ex);
 
          // measure time interval for reg_expression<char>
-         int trials = 30;
          do{
             iters *= (tim > 0.001) ? (1.1/tim) : 100;
             t.restart();
@@ -197,7 +197,7 @@ int main(int argc, char**argv)
                result = regex_search(s2, sm, ex);
             }
             tim = t.elapsed();
-         }while(((tim < t.elapsed_min() * 1000) || (tim < 1)) && trials--);
+         }while(tim < wait_time);
 
          cout << "regex time: " << (tim * 1000000 / iters) << "us" << endl;
          if(result)
@@ -231,7 +231,7 @@ int main(int argc, char**argv)
                result = regex_search(ws2, wsm, wex);
             }
             tim = t.elapsed();
-         }while((tim < t.elapsed_min() * 1000) || (tim < 1));
+         }while(tim < wait_time);
          cout << "wregex time: " << (tim * 1000000 / iters) << "us" << endl;
          if(result)
          {
@@ -259,7 +259,6 @@ int main(int argc, char**argv)
          // measure time interval for reg_expression<char> using a deque
          iters = 10;
          tim = 1.1;
-         trials = 30;
          // cache load:
          regex_search(ds.begin(), ds.end(), dm, ex);
          do{
@@ -270,7 +269,7 @@ int main(int argc, char**argv)
                result = regex_search(ds.begin(), ds.end(), dm, ex);
             }
             tim = t.elapsed();
-         }while(((tim < t.elapsed_min() * 1000) || (tim < 1)) && trials--);
+         }while(tim < wait_time);
          cout << "regex time (search over std::deque<char>): " << (tim * 1000000 / iters) << "us" << endl;
 
          if(result)
@@ -297,7 +296,6 @@ int main(int argc, char**argv)
          // measure time interval for POSIX matcher:
          iters = 10;
          tim = 1.1;
-         trials = 30;
          // cache load:
          regexec(&r, s2.c_str(), nsubs, matches.get(), 0);
          do{
@@ -305,11 +303,10 @@ int main(int argc, char**argv)
             t.restart();
             for(i = 0; i < iters; ++i)
             {
-               std::cerr << "Iteration #" << i << "/" << iters << std::endl;
                result = regexec(&r, s2.c_str(), nsubs, matches.get(), 0);
             }
             tim = t.elapsed();
-         }while(((tim < t.elapsed_min() * 1000) || (tim < 1)) && trials--);
+         }while(tim < wait_time);
          cout << "POSIX regexec time: " << (tim * 1000000 / iters) << "us" << endl;
 
          if(result == 0)
