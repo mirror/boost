@@ -87,6 +87,7 @@ public:
    }
 };
 
+namespace boost{
 #if defined(BOOST_MSVC) || (defined(__BORLANDC__) && (__BORLANDC__ == 0x550)) || defined(__SGI_STL_PORT)
 //
 // problem with std::getline under MSVC6sp3
@@ -102,8 +103,7 @@ istream& getline(istream& is, std::string& s)
    }
    return is;
 }
-#endif
-#if defined(__GNUC__) && (__GNUC__ == 3)
+#elif defined(__CYGWIN__)
 istream& getline(istream& is, std::string& s)
 {
    std::getline(is, s);
@@ -111,7 +111,10 @@ istream& getline(istream& is, std::string& s)
       s.erase(s.size() - 1);
    return is;
 }
+#else
+using std::getline;
 #endif
+}
 
 
 int main(int argc, char**argv)
@@ -151,7 +154,7 @@ int main(int argc, char**argv)
    while(true)
    {
       cout << "Enter expression (or \"quit\" to exit): ";
-      getline(cin, s1);
+      boost::getline(cin, s1);
       if(argc == 2)
          cout << endl << s1 << endl;
       if(s1 == "quit")
@@ -185,7 +188,7 @@ int main(int argc, char**argv)
       while(true)
       {
          cout << "Enter string to search (or \"quit\" to exit): ";
-         getline(cin, s2);
+         boost::getline(cin, s2);
          if(argc == 2)
             cout << endl << s2 << endl;
          if(s2 == "quit")
@@ -364,6 +367,7 @@ int main(int argc, char**argv)
 
    return 0;
 }
+
 
 
 
