@@ -83,7 +83,8 @@ test-suite regex
             c_compiler_checks/posix_api_check.c
       ]
 
-      [ compile <template>test c_compiler_checks/wide_posix_api_check.c ]
+      [ compile <template>test c_compiler_checks/wide_posix_api_check.c 
+          : : wide_posix_api_check_c ]
 
       [ regex-test posix_api_check_cpp
           : <template>test                      # sources
