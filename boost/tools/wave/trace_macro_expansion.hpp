@@ -63,8 +63,10 @@ class trace_macro_expansion
 :   public boost::wave::context_policies::default_preprocessing_hooks
 {
 public:
-    trace_macro_expansion(std::ostream &outstrm_, trace_flags flags_)
-    :   outstrm(outstrm_), level(0), flags(flags_), logging_flags(trace_nothing)
+    trace_macro_expansion(std::ostream &tracestrm_, std::ostream &includestrm_, 
+            trace_flags flags_)
+    :   tracestrm(tracestrm_), includestrm(includestrm_), level(0), 
+        flags(flags_), logging_flags(trace_nothing)
     {
     }
     ~trace_macro_expansion()
@@ -321,6 +323,22 @@ public:
         return false;
     }
         
+    void 
+    opened_include_file(string const &filename, 
+        std::size_t include_depth, bool is_system_include) 
+    {
+        if (enabled_include_tracing()) {
+            // print indented filename
+            for (size_t i = 0; i < include_depth; ++i)
+                includestrm << " ";
+                
+            if (is_system_include)
+                includestrm << "<" << filename << ">" << std::endl;
+            else
+                includestrm << "\"" << filename << "\"" << std::endl;
+        }
+    }
+
 protected:
     //  Interpret the different Wave specific pragma directives/operators
     template <typename ContextT, typename ContainerT>
@@ -442,7 +460,7 @@ protected:
         if (get_level() > 0) {
             decrement_level();
             output("]\n");
-            outstrm << std::flush;      // flush the stream buffer
+            tracestrm << std::flush;      // flush the stream buffer
         }
     }
 
@@ -450,13 +468,13 @@ protected:
     void output(StringT const &outstr) const
     {
         indent(get_level());
-        outstrm << outstr;          // output the given string
+        tracestrm << outstr;          // output the given string
     }
 
     void indent(int level) const
     {
         for (int i = 0; i < level; ++i)
-            outstrm << "  ";        // indent
+            tracestrm << "  ";        // indent
     }
 
     int increment_level() { return ++level; }
@@ -469,7 +487,7 @@ protected:
     }
     bool enabled_include_tracing() const 
     { 
-        return (flags & trace_includes) && (logging_flags & trace_includes); 
+        return (flags & trace_includes); 
     }
     
     template <typename TokenT>
@@ -497,7 +515,8 @@ protected:
     }
 
 private:
-    std::ostream &outstrm;          // output stream
+    std::ostream &tracestrm;        // trace output stream
+    std::ostream &includestrm;      // included list output stream
     int level;                      // indentation level
     trace_flags flags;              // enabled globally
     trace_flags logging_flags;      // enabled by a #pragma

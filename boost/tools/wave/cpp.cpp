@@ -297,6 +297,7 @@ boost::wave::util::file_position_type current_position;
     // The preprocessing of the input stream is done on the fly behind the 
     // scenes during iteration over the context_type::iterator_type stream.
     std::ofstream traceout;
+    std::ofstream includelistout;
     trace_flags enable_trace = trace_nothing;
     
         if (vm.count("traceto")) {
@@ -313,19 +314,41 @@ boost::wave::util::file_position_type current_position;
             }
             enable_trace = trace_macros;
         }
-        if ((enable_trace & trace_macros) && !traceout.is_open()) 
-        {
+        if ((enable_trace & trace_macros) && !traceout.is_open()) {
         // by default trace to std::cerr
             traceout.copyfmt(cerr);
             traceout.clear(cerr.rdstate());
             static_cast<std::basic_ios<char> &>(traceout).rdbuf(cerr.rdbuf());
         }
 
+    // Open the stream where to output the list of included file names
+        if (vm.count("listincludes")) {
+        // try to open the file, where to put the include list 
+        string includes_file (vm["listincludes"].as<string>());
+        
+            if (includes_file != "-") {
+                includelistout.open(includes_file.c_str());
+                if (!includelistout.is_open()) {
+                    cerr << "wave: could not open include list file: " 
+                        << includes_file << endl;
+                    return -1;
+                }
+            }
+            enable_trace = trace_includes;
+        }
+        if ((enable_trace & trace_includes) && !includelistout.is_open()) {
+        // by default list included names to std::cout
+            includelistout.copyfmt(cout);
+            includelistout.clear(cout.rdstate());
+            static_cast<std::basic_ios<char> &>(includelistout).
+                rdbuf(cout.rdbuf());
+        }
+        
     // This this the central piece of the Wave library, it provides you with 
     // the iterators to get the preprocessed tokens and allows to configure
     // the preprocessing stage in advance.
     context_type ctx (instring.begin(), instring.end(), file_name.c_str(),
-        trace_macro_expansion(traceout, enable_trace));
+        trace_macro_expansion(traceout, includelistout, enable_trace));
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     // enable C99 mode, if appropriate (implies variadics)
@@ -563,12 +586,14 @@ main (int argc, char *argv[])
 
         desc_ext.add_options()
             ("traceto,t", po::value<string>(), 
-                "output trace info to a file [path] or to stderr [-]")
+                "output trace info to a file [arg] or to stderr [-]")
             ("timer", "output overall elapsed computing time to stderr")
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
             ("variadics", "enable certain C99 extensions in C++ mode")
             ("c99", "enable C99 mode (implies --variadics)")
 #endif 
+            ("listincludes,l", po::value<string>(), 
+                "list included file to a file [arg] or to stdout [-]")
         ;
     
     // combine the options for the different usage schemes
