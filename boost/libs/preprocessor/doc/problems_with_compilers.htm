@@ -1,9 +1,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
 <title>Boost.Preprocessor - Known problems with specific compilers</title>
 </head>
-<body bgcolor="#FFFFFF" link="#0000ff" vlink="#800080">
+<body link="#0000ff" vlink="#800080">
 <table border="0" cellpadding="7" cellspacing="0" width="100%" summary=
     "header">
   <tr> 
@@ -36,14 +37,14 @@
   specifically address this issue; for example, the above NUMBERED_EXPRESSION 
   example doesn't compile on CW 7.0. Below is a simple test case that reproduces 
   the bug:</p>
-<blockquote>
-  <pre>#define IDENTITY_MACRO(x) IDENTITY_MACRO_BODY(x)
+
+<pre>#define IDENTITY_MACRO(x) IDENTITY_MACRO_BODY(x)
 #define IDENTITY_MACRO_BODY(x) x
 #define COMMA_TOKEN() ,
 int a IDENTITY_MACRO(COMMA_TOKEN)() b; // this works
 int c IDENTITY_MACRO(IDENTITY_MACRO(COMMA_TOKEN))() d; // this doesn't
 </pre>
-</blockquote>
+
 <p>Basically, what's happening here is that function-like COMMA_TOKEN macro gets 
   expanded _inside_ of the nested IDENTITY_MACRO call - even although it's NOT 
   followed by a '(' as the next preprocessing token - which is a clearly an incorrect 
@@ -54,8 +55,7 @@ int c IDENTITY_MACRO(IDENTITY_MACRO(COMMA_TOKEN))() d; // this doesn't
   to be mentioned in the documentation, may be with some examples of how to workaround 
   the issue. Just to show one possible way around the problem, here is a NUMBERED_EXPRESSION 
   macro that does work on MWCW:</p>
-<blockquote>
-  <pre>#define NUMBERED_EXPRESSION(n, x) \
+<pre>#define NUMBERED_EXPRESSION(n, x) \
     BOOST_PP_CAT(BOOST_, \
     BOOST_PP_IF( \
       n \
@@ -63,7 +63,7 @@ int c IDENTITY_MACRO(IDENTITY_MACRO(COMMA_TOKEN))() d; // this doesn't
     , PREPROCESSOR_EMPTY \
     ))() \
 /**/
-</pre></blockquote>
+</pre>
 <p align="right"><i>Reported by Aleksey Gurtovoy</i></p>
 
 <h3><a name="Comeau C/C++ 4.2.45.2">Comeau C/C++ 4.2.45.2 for Windows</a></h3>
@@ -75,8 +75,7 @@ int c IDENTITY_MACRO(IDENTITY_MACRO(COMMA_TOKEN))() d; // this doesn't
   (see the timing data below). This behavior may or may not be problematic
   for you, depending on how intense is your usage of the library.
 
-<blockquote>
-  <pre>#ifndef IS_FUNCTION_HELPER_TEST_MAX
+<pre>#ifndef IS_FUNCTION_HELPER_TEST_MAX
 #define IS_FUNCTION_HELPER_TEST_MAX 40
 #endif
 
@@ -91,7 +90,7 @@ typedef char yes_type;
 BOOST_PP_REPEAT_2ND(BOOST_PP_INC(IS_FUNCTION_HELPER_TEST_MAX),IS_FUNCTION_HELPER,A)
 
 #undef IS_FUNCTION_HELPER
-</pre></blockquote>
+</pre>
 
 <h4>Timing data:</h4>
 <table border="1">
@@ -131,9 +130,9 @@ BOOST_PP_REPEAT_2ND(BOOST_PP_INC(IS_FUNCTION_HELPER_TEST_MAX),IS_FUNCTION_HELPER
 </p>
 <p><i>&copy; Copyright <a href="http://www.housemarque.com">Housemarque Oy</a> 2002</i></p>
 
-<p><i>Permission to copy, use, modify, sell and distribute this document is granted
+<p>Permission to copy, use, modify, sell and distribute this document is granted
 provided this copyright notice appears in all copies. This document is provided
 "as is" without express or implied warranty, and with no claim as to its suitability
-for any purpose.</i></p>
+for any purpose.</p>
 </body>
 </html>

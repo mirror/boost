@@ -1,9 +1,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
 <title>Boost.Preprocessor - Tutorial</title>
 </head>
-<body bgcolor="#FFFFFF" link="#0000ff" vlink="#800080">
+<body link="#0000ff" vlink="#800080">
 <table border="0" cellpadding="7" cellspacing="0" width="100%" summary=
     "header">
   <tr> 
@@ -19,10 +20,10 @@
 <hr>
 
 <h2>Contents</h2>
-<dl>
+<dl class="page-index">
   <dt><a href="#Motivation">Motivation</a></dt>
   <dt><a href="#Techniques">Preprocessor Metaprogramming Techniques</a>
-    <dl>
+    <dl class="page-index">
       <dt><a href="#Local Macro">Use a Local Macro to avoid small scale repetition</a></dt>
       <dt><a href="#UNUSED">Use BOOST_PP_EMPTY as an unused parameter in Local 
         Macro instantiations</a></dt>
@@ -53,8 +54,7 @@
   must be overloaded for every distinct number of parameters that is to be supported. 
   Example:</p>
 
-<blockquote> 
-  <pre>template &lt;class R&gt;
+<pre>template &lt;class R&gt;
 yes_type is_function_tester(R (*)());
 template &lt;class R, class A0&gt;
 yes_type is_function_tester(R (*)(A0));
@@ -65,7 +65,6 @@ yes_type is_function_tester(R (*)(A0, A1, A2));
 
 // ...
 </pre>
-</blockquote>
 
 <P>The need for this kind of repetition occurs particularly frequently while implementing 
   generic components or metaprogramming facilities, but the need also manifests 
@@ -108,15 +107,14 @@ yes_type is_function_tester(R (*)(A0, A1, A2));
 <p>Using the primitives of the PREPROCESSOR library, the is_function_tester()s 
   could be implemented like this:</p>
 
-<blockquote>
-  <pre>#define IS_FUNCTION_TESTER(N,_)\
+<pre>#define IS_FUNCTION_TESTER(N,_)\
   template&lt;class R BOOST_PP_COMMA_IF(N) BOOST_PP_ENUM_PARAMS(N, class A)&gt;\
   yes_type is_function_tester(R (*)(BOOST_PP_ENUM_PARAMS(N,A)));
 
 BOOST_PP_REPEAT_2ND(BOOST_PP_INC(MAX_IS_FUNCTION_TESTER_PARAMS),IS_FUNCTION_TESTER,_)
 #undef IS_FUNCTION_TESTER
 </pre>
-</blockquote>
+
 <p>In order to change the maximum number of function parameters supported, you 
   now simply change the MAX_IS_FUNCTION_TESTER_PARAMS definition and recompile.</p>
 <HR>
@@ -128,8 +126,7 @@ BOOST_PP_REPEAT_2ND(BOOST_PP_INC(MAX_IS_FUNCTION_TESTER_PARAMS),IS_FUNCTION_TEST
 <P><B><a name="Local Macro"></a><a href="examples_preprocessed.htm#Local Macro">EXAMPLE</a>:</B> 
   Use a Local Macro to avoid small scale repetition</P>
 
-<blockquote> 
-  <pre>#define BOOST_PP_DEF(OP)   \
+<pre>#define BOOST_PP_DEF(OP)   \
   template&lt;class T, int n&gt; \
   vec&lt;T,n&gt;&amp;                \
     operator OP##=         \
@@ -149,7 +146,6 @@ BOOST_PP_DEF(*)
 BOOST_PP_DEF(/)
 #undef BOOST_PP_DEF
 </pre>
-</blockquote>
 
 <P><B>TIP:</B> It is usually okay to use a standard macro name like BOOST_PP_DEF 
   for this kind of code, because the macro is both defined and undefined in the 
@@ -167,8 +163,7 @@ the line continuation operator when they are aligned.</P>
 <P><B><a name="UNUSED"></a><a href="examples_preprocessed.htm#UNUSED">EXAMPLE</a>:</B> 
   Use BOOST_PP_EMPTY as an unused parameter in Local Macro instantiations</P>
 
-<blockquote> 
-  <pre>#define BOOST_PP_DEF(CV)  \
+<pre>#define BOOST_PP_DEF(CV)  \
   template&lt;class base&gt;    \
   CV() typename implement_subscript_using_begin_subscript&lt;base&gt;::value_type&amp;\
     implement_subscript_using_begin_subscript&lt;base&gt;::operator[]\
@@ -182,7 +177,6 @@ BOOST_PP_DEF(BOOST_PP_EMPTY)
 BOOST_PP_DEF(const BOOST_PP_EMPTY)
 #undef BOOST_PP_DEF
 </pre>
-</blockquote>
 
 <P><B>HOW:</B> BOOST_PP_EMPTY() expands to nothing and can be used as 
   an unused parameter.</P>
@@ -206,8 +200,7 @@ of the line continuation operators without making the code too unreadable.</P>
 <HR>
 <P><a name="CAT"></a><a href="examples_preprocessed.htm#CAT"><B>EXAMPLE:</B></a> Use BOOST_PP_CAT instead of ## when necessary</P>
 
-<blockquote> 
-  <pre>#define STATIC_ASSERT(EXPR)\
+<pre>#define STATIC_ASSERT(EXPR)\
   enum\
   { BOOST_PP_CAT(static_check_,__LINE__) = (EXPR) ? 1 : -1\
   };\
@@ -220,22 +213,21 @@ of the line continuation operators without making the code too unreadable.</P>
 
 STATIC_ASSERT(sizeof(int) &lt;= sizeof(long));
 </pre>
-</blockquote>
 
 <P><B>WHY:</B> Macro expansion proceeds recursively in "layers". Token pasting 
   prevents the&nbsp;preprocessor from performing macro expansion, therefore it 
   is often necessary to delay token concatenation.</P>
 <hr>
 <p><a name="STRINGIZE"></a><a href="examples_preprocessed.htm#STRINGIZE"><B>EXAMPLE:</B></a> Use BOOST_PP_STRINGIZE instead of # whenever necessary</p>
-<blockquote> 
-  <pre>#define NOTE(STR)\
+
+<pre>#define NOTE(STR)\
   message(__FILE__ &quot;(&quot; BOOST_PP_STRINGIZE(__LINE__) &quot;) : &quot; STR)
 
 // ...
 
 #pragma NOTE("TBD!")
 </pre>
-</blockquote>
+
 <p><b>WHY:</b> Macro expansion proceeds recursively in &quot;layers&quot;. Stringization 
   prevents the preprocessor from performing macro expansion, therefore it is often 
   necessary to delay stringization.</p>
@@ -251,8 +243,8 @@ STATIC_ASSERT(sizeof(int) &lt;= sizeof(long));
   <li> BOOST_PP_COMMA_IF</li>
 </ul>
 <p>to avoid O(N) repetition on lists in general</p>
-<blockquote> 
-  <pre>struct make_type_list_end;
+
+<pre>struct make_type_list_end;
 
 template
 &lt; BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT
@@ -290,12 +282,10 @@ public:
     &gt;::type type;
 };
 </pre>
-</blockquote>
 
 <P><B>HOW:</B> BOOST_PP_REPEAT uses simulated recursion (pseudo code):</P>
 
-<blockquote> 
-  <pre>#define BOOST_PP_REPEAT(N,M,P) BOOST_PP_REPEAT##N(M,P)
+<pre>#define BOOST_PP_REPEAT(N,M,P) BOOST_PP_REPEAT##N(M,P)
 #define BOOST_PP_REPEAT0(M,P)
 #define BOOST_PP_REPEAT1(M,P) M(0,P)
 #define BOOST_PP_REPEAT2(M,P) M(0,P) M(1,P)
@@ -303,7 +293,6 @@ public:
 #define BOOST_PP_REPEAT4(M,P) BOOST_PP_REPEAT3(M,P) M(3,P)
 // ...
 </pre>
-</blockquote>
 
 <P>BOOST_PP_ENUM_PARAMS variations use BOOST_PP_REPEAT</P>
 
@@ -318,12 +307,10 @@ public:
 enable user configuration of code repetition based on need rather than some 
 "reasonable" upper limit</P>
 
-<blockquote>
-  <pre>#ifndef MAKE_TYPE_LIST_MAX_LENGTH
+<pre>#ifndef MAKE_TYPE_LIST_MAX_LENGTH
 #define MAKE_TYPE_LIST_MAX_LENGTH 8
 #endif
 </pre>
-</blockquote>
 
 <P>Now the user can configure the make_type_list primitive without modifying library 
   code.</P>
@@ -332,8 +319,7 @@ enable user configuration of code repetition based on need rather than some
   Use BOOST_PP_REPEAT and a Token Look-Up Function to eliminate categorical 
   repetition</P>
 
-<blockquote> 
-  <pre>// CAVEAT: My compiler is not standard on arithmetic types.
+<pre>// CAVEAT: My compiler is not standard on arithmetic types.
 #define ARITHMETIC_TYPE(I)  ARITHMETIC_TYPE##I
 #define ARITHMETIC_TYPE0    bool
 #define ARITHMETIC_TYPE1    char
@@ -366,7 +352,6 @@ BOOST_PP_REPEAT
 
 // ...
 </pre>
-</blockquote>
 
 <P><B>NOTE:</B> The repetition of the above 
 example can be eliminated using template metaprogramming <A href="bibliography.htm#[Czarnecki]">[Czarnecki]</A>&nbsp;as well. However 
@@ -376,8 +361,7 @@ using template metaprogramming.</P>
 <P><B><a name="2ND_REPEAT"></a><a href="examples_preprocessed.htm#2ND_REPEAT">EXAMPLE</a>:</B> 
   Use BOOST_PP_REPEAT_2ND to avoid O(N*N) repetition</P>
 
-<blockquote>
-  <pre>#ifndef MAX_VEC_ARG_CNT
+<pre>#ifndef MAX_VEC_ARG_CNT
 #define MAX_VEC_ARG_CNT 8
 #endif
 
@@ -403,8 +387,6 @@ BOOST_PP_REPEAT_2ND
 
 // ...
 </pre>
-</blockquote>
-
 
 <P><B>HOW:</B> BOOST_PP_REPEAT_2ND is implemented separately, so it 
   is possible to combine BOOST_PP_REPEAT and BOOST_PP_REPEAT_2ND.</P>
@@ -412,14 +394,12 @@ BOOST_PP_REPEAT_2ND
 
 <P><a name="IF"></a><a href="examples_preprocessed.htm#IF"><B>EXAMPLE:</B></a> Use BOOST_PP_IF to implement special case for the first element</P>
 
-<blockquote>
-  <pre>#define BOOST_PP_COMMA_IF(C)\
+<pre>#define BOOST_PP_COMMA_IF(C)\
   BOOST_PP_IF(C,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
 
 BOOST_PP_IF(0,true,false) == false;
 BOOST_PP_IF(1,true,false) == true;
 </pre>
-</blockquote>
 
 <P>BOOST_PP_IF enables convenient generation of lists using BOOST_PP_REPEAT.</P>
 
@@ -428,28 +408,27 @@ BOOST_PP_IF(1,true,false) == true;
   you have to make the other parameter a function-like macro, too. This can often 
   be done using BOOST_PP_IDENTITY. Consider the following example (by 
   Aleksey Gurtovoy):</P>
-<blockquote>
-  <pre>#define NUMBERED_EXPRESSION(I,X)\
+
+<pre>#define NUMBERED_EXPRESSION(I,X)\
   BOOST_PP_IF                   \
   ( I                           \
   , BOOST_PP_IDENTITY(X##I)     \
   , BOOST_PP_EMPTY              \
   )()</pre>
-</blockquote>
+
 <P><b>NOTE:</b> Like in the above implementation of COMMA_IF, the result of IF 
   is often invoked and not the THEN and ELSE parameters. If the parameters were 
   invoked, the code would not expand correctly, because the EMPTY parameter would 
   get expanded to nothing before the IF would be properly expanded.</P>
 <P><b>HOW:</b> BOOST_PP_IF is defined for the entire repeat range (pseudo 
   code):</P>
-<blockquote> 
-  <pre>#define BOOST_PP_IF(C,THEN,ELSE) BOOST_PP_IF##C(THEN,ELSE)
+
+<pre>#define BOOST_PP_IF(C,THEN,ELSE) BOOST_PP_IF##C(THEN,ELSE)
 #define BOOST_PP_IF0(THEN,ELSE) ELSE
 #define BOOST_PP_IF1(THEN,ELSE) THEN
 #define BOOST_PP_IF2(THEN,ELSE) THEN
 // ...
 </pre>
-</blockquote>
 
 <hr>
 
@@ -461,8 +440,7 @@ comparison operations on decimal integer literals in the range [0,BOOST_PP_LIMIT
 <p>Suppose that you want to generate a numbered lists with a special element inserted 
   at a desired position. For example: E0, E1, S, E2. Consider the following example:</p>
 
-<blockquote> 
-  <pre>#define SPECIAL_NUMBERED_LIST(N,I,ELEM,SPECIAL)\
+<pre>#define SPECIAL_NUMBERED_LIST(N,I,ELEM,SPECIAL)\
   BOOST_PP_ASSERT_MSG(BOOST_PP_LESS(I,N),BAD PARAMS FOR SPECIAL_NUMBERED_LIST!)\
   BOOST_PP_ENUM_PARAMS(I,ELEM)\
   BOOST_PP_COMMA_IF(I) SPECIAL\
@@ -483,7 +461,6 @@ SPECIAL_NUMBERED_LIST(3,1,E,S)
 SPECIAL_NUMBERED_LIST(3,2,E,S)
 SPECIAL_NUMBERED_LIST(3,3,E,S)
 </pre>
-</blockquote>
 
 <hr>
 <p>Revised 
@@ -492,9 +469,9 @@ SPECIAL_NUMBERED_LIST(3,3,E,S)
 </p>
 <p><i>&copy; Copyright <a href="http://www.housemarque.com">Housemarque Oy</a> 2002</i></p>
 
-<p><i>Permission to copy, use, modify, sell and distribute this document is granted
+<p>Permission to copy, use, modify, sell and distribute this document is granted
 provided this copyright notice appears in all copies. This document is provided
 "as is" without express or implied warranty, and with no claim as to its suitability
-for any purpose.</i></p>
+for any purpose.</p>
 </body>
 </html>

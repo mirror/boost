@@ -1,9 +1,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
 <title>Boost.Preprocessor - Widely known problems with the C preprocessor</title>
 </head>
-<body bgcolor="#FFFFFF" link="#0000ff" vlink="#800080">
+<body link="#0000ff" vlink="#800080">
 <table border="0" cellpadding="7" cellspacing="0" width="100%" summary=
     "header">
   <tr> 
@@ -40,10 +41,10 @@ macro might replace other kind of code accidentally.</p>
 <p><B>SOLUTION B:</B> Use the Local Macro 
 idiom:</p>
 
-<blockquote><pre>#define MACRO ...
+<pre>#define MACRO ...
 // Use MACRO
 #undef MACRO
-</pre></blockquote>
+</pre>
 
 <p>This makes sure that a macro can not accidentally 
 replace code outside of the scope of the local macro.</p>
@@ -52,9 +53,9 @@ forgotten. Experienced programmers generally write the #undef either immediately
 before (in time) or immediately after writing the macro definition.</P>
 <P><B>SOLUTION C:</B> Use the Unique Macro Prefix idiom:</P>
 
-<blockquote><pre>#define UMP_MACRO
+<pre>#define UMP_MACRO
 // Use UMP_MACRO
-</pre></blockquote>
+</pre>
 
 
 <P>This makes accidental substitution and collisions highly 
@@ -116,9 +117,9 @@ long time.</P>
 </p>
 <p><i>&copy; Copyright <a href="http://www.housemarque.com">Housemarque Oy</a> 2002</i></p>
 
-<p><i>Permission to copy, use, modify, sell and distribute this document is granted
+<p>Permission to copy, use, modify, sell and distribute this document is granted
 provided this copyright notice appears in all copies. This document is provided
 "as is" without express or implied warranty, and with no claim as to its suitability
-for any purpose.</i></p>
+for any purpose.</p>
 </body>
 </html>

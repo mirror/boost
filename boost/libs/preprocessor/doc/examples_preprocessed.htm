@@ -1,9 +1,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
 <title>Boost.Preprocessor - Tutorial examples preprocessed</title>
 </head>
-<body bgcolor="#FFFFFF" link="#0000ff" vlink="#800080">
+<body link="#0000ff" vlink="#800080">
 <table border="0" cellpadding="7" cellspacing="0" width="100%" summary=
     "header">
   <tr> 
@@ -25,8 +26,7 @@
 <p><strong><a name="Local Macro"></a><a href="tutorial.htm#Local Macro">EXAMPLE</a>:</strong> 
   Use a Local Macro to avoid small scale repetition</p>
 
-<blockquote>
-  <pre>template&lt;class T, int n&gt;
+<pre>template&lt;class T, int n&gt;
 vec&lt;T,n&gt;&
   operator +=
   ( vec&lt;T,n&gt;&
@@ -78,14 +78,12 @@ vec&lt;T,n&gt;&
   return lhs;
 }
 </pre>
-</blockquote>
 
 <hr>
 <p><strong><a name="UNUSED"></a><a href="tutorial.htm#UNUSED">EXAMPLE</a>:</strong> 
   Use BOOST_PP_EMPTY() as an unused parameter in Local Macro instantiations</p>
 
-<blockquote>
-  <pre>template&lt;class base&gt;
+<pre>template&lt;class base&gt;
 typename implement_subscript_using_begin_subscript&lt;base&gt;::value_type&
   implement_subscript_using_begin_subscript&lt;base&gt;::operator[]
   ( index_type
@@ -103,13 +101,11 @@ const typename implement_subscript_using_begin_subscript&lt;base&gt;::value_type
 { return base::begin()[i];
 }
 </pre>
-</blockquote>
 
 <hr>
 <p><b><a name="CAT"></a><a href="tutorial.htm#CAT">EXAMPLE:</a></b> Use BOOST_PP_CAT instead of ## when necessary</p>
 
-<blockquote>
-  <pre>enum
+<pre>enum
 { static_check_152 = (sizeof(int) &lt;= sizeof(long)) ? 1 : -1
 };
 typedef char
@@ -117,12 +113,9 @@ typedef char
   [ static_check_152
   ];
 </pre>
-</blockquote>
 <hr>
 <p><b><a name="STRINGIZE"></a><a href="tutorial.htm#STRINGIZE">EXAMPLE:</a></b> Use BOOST_PP_STRINGIZE instead of # whenever necessary</p>
-<blockquote>
-  <pre>#pragma message("examples.cpp" "(" "20" ") : " "TBD!")</pre>
-</blockquote>
+<pre>#pragma message("examples.cpp" "(" "20" ") : " "TBD!")</pre>
 <hr>
 <p><strong><a name="ENUM_PARAMS"></a><a href="tutorial.htm#ENUM_PARAMS">EXAMPLE</a>:</strong> 
   Use:</p>
@@ -135,8 +128,7 @@ typedef char
   <li> BOOST_PP_COMMA_IF</li>
 </ul>
 <p>to avoid O(N) repetition on lists in general</p>
-<blockquote>
-  <pre>struct make_type_list_end;
+<pre>struct make_type_list_end;
 
 template
 &lt; class T0=make_type_list_end
@@ -179,15 +171,13 @@ public:
     &gt;::type type;
 };
 </pre>
-</blockquote>
 
 <hr>
 <p><strong><a name="Token Look-Up"></a><a href="tutorial.htm#Token Look-Up">EXAMPLE</a>:</strong> 
   Use BOOST_PP_REPEAT and a Token Look-Up Function to eliminate categorical 
   repetition</p>
 
-<blockquote>
-  <pre>catch (bool t)
+<pre>catch (bool t)
 { report_typeid(t);
   report_value(t);
 }
@@ -240,14 +230,12 @@ catch (long double t)
   report_value(t);
 }
 </pre>
-</blockquote>
 
 <hr>
 <p><strong><a name="2ND_REPEAT"></a><a href="tutorial.htm#2ND_REPEAT">EXAMPLE</a>:</strong> 
   Use BOOST_PP_REPEAT_2ND to avoid O(N*N) repetition</p>
 
-<blockquote>
-  <pre>vec()
+<pre>vec()
 {
 }
 vec(T a0)
@@ -303,30 +291,25 @@ vec(T a0, T a1, T a2, T a3, T a4, T a5, T a6, T a7)
   (*this)[7] = a7;
 }
 </pre>
-</blockquote>
 
 <p> 
 <hr>
 <p><a name="IF"></a><a href="tutorial.htm#IF"><b>EXAMPLE:</b></a> 
   Use BOOST_PP_IF to implement special case for the first element</p>
 
-<blockquote> 
-  <pre>false == false;
+<pre>false == false;
 true == true;
 </pre>
-</blockquote>
 
 <p> 
 <hr>
 
 <p><a name="Arithmetic"></a><a href="tutorial.htm#Arithmetic"><B>EXAMPLE:</B></a> Use arithmetic, logical and comparison operations when necessary</p>
 
-<blockquote> 
-  <pre>S, E0, E1
+<pre>S, E0, E1
 E0, S, E1
 E0, E1, S
 BAD PARAMS FOR SPECIAL_NUMBERED_LIST! E0, E1, E2, S</pre>
-</blockquote>
 
 <hr>
 <p>Revised 
@@ -335,9 +318,9 @@ BAD PARAMS FOR SPECIAL_NUMBERED_LIST! E0, E1, E2, S</pre>
 </p>
 <p><i>&copy; Copyright <a href="http://www.housemarque.com">Housemarque Oy</a> 2002</i></p>
 
-<p><i>Permission to copy, use, modify, sell and distribute this document is granted
+<p>Permission to copy, use, modify, sell and distribute this document is granted
 provided this copyright notice appears in all copies. This document is provided
 "as is" without express or implied warranty, and with no claim as to its suitability
-for any purpose.</i></p>
+for any purpose.</p>
 </body>
 </html>
