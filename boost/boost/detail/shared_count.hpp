@@ -174,6 +174,7 @@ public:
     }
 };
 
+class weak_count;
 
 class shared_count
 {
