@@ -42,8 +42,8 @@ std::pair<const licence_info*, int> get_licences()
 
    static const licence_info licences[] = 
    {
-      licence_info( boost::regex("(subject\\W+to\\W+(the\\W+)?|distributed\\W+under\\W+(the\\W+)?)"
-         "Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
+      licence_info( boost::regex("(subject\\W+to|distributed\\W+under)"
+         "(\\W+the)?\\W+Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
          ,
          boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
          ,
