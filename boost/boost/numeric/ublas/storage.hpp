@@ -106,12 +106,16 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         unbounded_array (const unbounded_array &c):
             alloc (c.alloc), size_ (c.size_) {
-            data_ = alloc.allocate (c.size_);
-            const_iterator ci = c.begin();
-            for (iterator i = begin(); i != end(); ++i) {
-                alloc.construct (&(*i), *ci);
-                ++ci;
+            if (size_) {
+                data_ = alloc.allocate (c.size_);
+                const_iterator ci = c.begin();
+                for (iterator i = begin(); i != end(); ++i) {
+                    alloc.construct (&(*i), *ci);
+                    ++ci;
+                }
             }
+            else
+                data_ = 0;
         }
         BOOST_UBLAS_INLINE
         ~unbounded_array () {
@@ -965,7 +969,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         range ():
-            start_ (), size_ () {}
+            start_ (0), size_ (0) {}
         BOOST_UBLAS_INLINE
         range (size_type start, size_type stop):
             start_ (start), size_ (stop - start) {
@@ -1163,7 +1167,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         slice ():
-            start_ (), stride_ (), size_ () {}
+            start_ (0), stride_ (0), size_ (0) {}
         BOOST_UBLAS_INLINE
         slice (size_type start, difference_type stride, size_type size):
             start_ (start), stride_ (stride), size_ (size) {}
