@@ -1,6 +1,6 @@
 // Boost.Function library
 
-// Copyright (C) 2001, 2002 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001-2003 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -295,17 +295,17 @@ namespace boost {
       };
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    
+
 #  if BOOST_WORKAROUND(__HP_aCC, <= 33900)
     template<bool cond, typename T> struct enable_if;
 #  else
     template<bool, typename> struct enable_if;
-#  endif 
+#  endif
 
     template<typename T> struct enable_if<true, T>  { typedef T type; };
     template<typename T> struct enable_if<false, T> {};
 #else
-    
+
 #  if BOOST_WORKAROUND(__HP_aCC, <= 33900)
       template<bool x>
 #  else
