@@ -18,7 +18,7 @@ namespace boost_deduced_typename{
 template <class T>
 int f(T const volatile*, BOOST_DEDUCED_TYPENAME T::type* = 0)
 {
-	return 0;
+        return 0;
 }
 
 struct X { typedef int type; };
