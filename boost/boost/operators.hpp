@@ -69,6 +69,10 @@
 #pragma set woff 1234
 #endif
 
+#if defined(BOOST_MSVC)
+#   pragma warning( disable : 4284 ) // complaint about return type of 
+#endif                               // operator-> not begin a UDT
+
 namespace boost {
 namespace detail {
 
