@@ -85,7 +85,11 @@ namespace boost { namespace numeric { namespace ublas {
         unbounded_array (size_type size, const ALLOC &a = ALLOC()):
             alloc(a), size_ (size) {
             if (size_) {
+#ifdef BOOST_NO_STD_ALLOCATOR
+                data_ = alloc.allocate (size_, 0);
+#else
                 data_ = alloc.allocate (size_);
+#endif
                 const value_type v = value_type();
                 for (iterator i = begin(); i != end(); ++i) {
                     alloc.construct (&(*i), v); 
@@ -97,7 +101,11 @@ namespace boost { namespace numeric { namespace ublas {
         unbounded_array (size_type size, no_init, const ALLOC &a = ALLOC()):
             alloc (a), size_ (size) {
             if (size_) {
+#ifdef BOOST_NO_STD_ALLOCATOR
+                data_ = alloc.allocate (size_, 0);
+#else
                 data_ = alloc.allocate (size_);
+#endif
                 for (iterator i = begin(); i != end(); ++i) {
                     new (&(*i)) value_type; 
                 }
@@ -107,7 +115,11 @@ namespace boost { namespace numeric { namespace ublas {
         unbounded_array (const unbounded_array &c):
             alloc (c.alloc), size_ (c.size_) {
             if (size_) {
-                data_ = alloc.allocate (c.size_);
+#ifdef BOOST_NO_STD_ALLOCATOR
+                data_ = alloc.allocate (size_, 0);
+#else
+                data_ = alloc.allocate (size_);
+#endif
                 const_iterator ci = c.begin();
                 for (iterator i = begin(); i != end(); ++i) {
                     alloc.construct (&(*i), *ci);
@@ -133,7 +145,11 @@ namespace boost { namespace numeric { namespace ublas {
             if (size != size_) {
                 pointer data;
                 if  (size) {
+#ifdef BOOST_NO_STD_ALLOCATOR
+                    data = alloc.allocate (size, 0);
+#else
                     data = alloc.allocate (size);
+#endif
                     if (preserve) {
                         const_iterator si = begin();
                         pointer di = data;
