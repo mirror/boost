@@ -6,9 +6,10 @@
 :Contact: dave@boost-consulting.com, jsiek@osl.iu.edu, witt@acm.org
 :organization: `Boost Consulting`_, Indiana University `Open Systems Lab`_, University of Hanover `Institute for Transport Railway Operation and Construction`_
 :date: $Date$
-:Number: N1531=03-0114 
+:Number: revised from `N1531=03-0114`__
 :copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved
 
+.. __: n1531_
 .. _`Boost Consulting`: http://www.boost-consulting.com
 .. _`Open Systems Lab`: http://www.osl.iu.edu
 .. _`Institute for Transport Railway Operation and Construction`: http://www.ive.uni-hannover.de
@@ -18,12 +19,13 @@
            concepts to more closely match the requirements
            of algorithms and provides better categorizations
            of iterators that are used in practice. This proposal
-           is a revision of paper n1297_ and n1477_.
+           is a revision of paper n1297_, n1477_, and n1531_.
           
 .. contents:: Table of Contents
 
 .. _n1297: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2001/n1297.html
 .. _n1477: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1477.html
+.. _n1531: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1531.html
 
 ============
  Motivation
@@ -739,8 +741,12 @@ deduced.  The following pseudo-code describes the algorithm.
       cat = iterator_traits<Iterator>::iterator_category;
       if (cat == iterator_tag<Access,Traversal>)
           return Access & writable_iterator;
-      else if (cat is convertible to forward_iterator_tag
-               or output_iterator_tag)
+      else if (cat is convertible to output_iterator_tag)
+           return true;
+      else if (
+           cat is convertible to forward_iterator_tag
+           and iterator_traits<Iterator>::reference is a 
+               mutable reference)
           return true;
       else
           return false;
