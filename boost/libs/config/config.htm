@@ -1376,13 +1376,13 @@ int test()
 }
 
 }</pre>
-      <p>Once the test code is in place, run the shell script "generate" that you will 
-         find in the boost-root/libs/config/tools/ directory. This generates two .cpp 
-         test files from the new test code, and adds the tests to the regression test 
-         script, and the config_test.cpp test program. If you can't run shell scripts on 
-         your platform then post a message on the boost mailing list, and someone will 
-         run it for you. Finally add a new entry to config_info.cpp so that the new 
-         macro gets printed out when that program is run.</p>
+      <p>
+         Once the test code is in place, build and run the program "generate.cpp" that 
+         you will find in the boost-root/libs/config/tools/ directory. This generates 
+         two .cpp test files from the new test code, and adds the tests to the 
+         regression test Jamfile, and the config_test.cpp test program. Finally add a 
+         new entry to config_info.cpp so that the new macro gets printed out when that 
+         program is run.</p>
       <h4><a name="feature_guidelines"></a>Adding New Feature Test Macros</h4>
       <p>When you need to add a macro that describes a feature that the standard does 
          not require, follow the convention for adding a new defect macro (above), but 
