@@ -16,13 +16,13 @@ template<
     , typename Tag2
     >
 struct modulus_impl
-    : if_c<
+    : eval_if_c<
           ( BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag1)
               > BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag2)
             )
 
-        , aux::cast2nd_impl< modulus_impl< Tag1,Tag2 >,Tag1, Tag2 >
-        , aux::cast1st_impl< modulus_impl< Tag1,Tag2 >,Tag1, Tag2 >
+        , aux::cast2nd_impl< modulus_impl< Tag1,Tag1 >,Tag1, Tag2 >
+        , aux::cast1st_impl< modulus_impl< Tag2,Tag2 >,Tag1, Tag2 >
         >
 {
 };

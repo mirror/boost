@@ -20,7 +20,7 @@
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include <boost/mpl/numeric_cast.hpp>
 #   include <boost/mpl/apply_wrap.hpp>
-#   include <boost/mpl/if.hpp>
+#   include <boost/mpl/eval_if.hpp>
 #   include <boost/mpl/tag.hpp>
 #   include <boost/mpl/aux_/na.hpp>
 #   include <boost/mpl/aux_/na_spec.hpp>
@@ -80,18 +80,18 @@ template<
     , BOOST_MPL_AUX_NTTP_DECL(int, tag2_) = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag2)::value 
     >
 struct AUX778076_OP_IMPL_NAME
-    : if_c<
+    : eval_if_c<
           ( tag1_ > tag2_ )
 #else
     >
 struct AUX778076_OP_IMPL_NAME
-    : if_c<
+    : eval_if_c<
           ( BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag1)
               > BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag2)
             )
 #endif
-        , aux::cast2nd_impl< AUX778076_OP_IMPL_NAME<Tag1,Tag2>,Tag1,Tag2 >
-        , aux::cast1st_impl< AUX778076_OP_IMPL_NAME<Tag1,Tag2>,Tag1,Tag2 >
+        , aux::cast2nd_impl< AUX778076_OP_IMPL_NAME<Tag1,Tag1>,Tag1,Tag2 >
+        , aux::cast1st_impl< AUX778076_OP_IMPL_NAME<Tag2,Tag2>,Tag1,Tag2 >
         >
 {
 };

@@ -86,6 +86,7 @@ struct equal_to_impl< complex_tag,complex_tag >
 }}
 
 
+typedef int_<2> i;
 typedef complex< int_<5>, int_<-1> > c1;
 typedef complex< int_<-5>, int_<1> > c2;
 
@@ -102,6 +103,16 @@ MPL_TEST_CASE()
     typedef plus<c2,c2>::type r3;
     MPL_ASSERT_RELATION( real<r3>::value, ==, -10 );
     MPL_ASSERT_RELATION( imag<r3>::value, ==, 2 );
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+    typedef plus<c1,i>::type r4;
+    MPL_ASSERT_RELATION( real<r4>::value, ==, 7 );
+    MPL_ASSERT_RELATION( imag<r4>::value, ==, -1 );
+
+    typedef plus<i,c2>::type r5;
+    MPL_ASSERT_RELATION( real<r5>::value, ==, -3 );
+    MPL_ASSERT_RELATION( imag<r5>::value, ==, 1 );
+#endif
 }
 
 MPL_TEST_CASE()
@@ -117,6 +128,16 @@ MPL_TEST_CASE()
     typedef times<c2,c2>::type r3;
     MPL_ASSERT_RELATION( real<r3>::value, ==, 24 );
     MPL_ASSERT_RELATION( imag<r3>::value, ==, -10 );
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+    typedef times<c1,i>::type r4;
+    MPL_ASSERT_RELATION( real<r4>::value, ==, 10 );
+    MPL_ASSERT_RELATION( imag<r4>::value, ==, -2 );
+
+    typedef times<i,c2>::type r5;
+    MPL_ASSERT_RELATION( real<r5>::value, ==, -10 );
+    MPL_ASSERT_RELATION( imag<r5>::value, ==, 2 );
+#endif
 }
 
 MPL_TEST_CASE()
@@ -126,4 +147,9 @@ MPL_TEST_CASE()
     MPL_ASSERT_NOT(( equal_to<c1,c2> ));
 
     MPL_ASSERT(( equal_to<c1, complex< long_<5>, long_<-1> > > ));
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+    MPL_ASSERT_NOT(( equal_to<c1,i> ));
+    MPL_ASSERT_NOT(( equal_to<i,c2> ));
+#endif
 }

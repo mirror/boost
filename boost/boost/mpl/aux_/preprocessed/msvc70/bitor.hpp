@@ -20,10 +20,10 @@ template<
     , BOOST_MPL_AUX_NTTP_DECL(int, tag2_)  = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag2)::value
     >
 struct bitor_impl
-    : if_c<
+    : eval_if_c<
           ( tag1_ > tag2_ )
-        , aux::cast2nd_impl< bitor_impl< Tag1,Tag2 >,Tag1, Tag2 >
-        , aux::cast1st_impl< bitor_impl< Tag1,Tag2 >,Tag1, Tag2 >
+        , aux::cast2nd_impl< bitor_impl< Tag1,Tag1 >,Tag1, Tag2 >
+        , aux::cast1st_impl< bitor_impl< Tag2,Tag2 >,Tag1, Tag2 >
         >
 {
 };
