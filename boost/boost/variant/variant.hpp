@@ -111,21 +111,17 @@ public: // metafunction result
 template <typename Types>
 struct make_storage
 {
-private: // helpers, for metafunction result (below)
-
-    BOOST_STATIC_CONSTANT(
-          std::size_t
-        , max_size = (max_value< Types, mpl::sizeof_<mpl::_1> >::type::value)
-        );
-    BOOST_STATIC_CONSTANT(
-          std::size_t
-        , max_alignment = (max_value< Types, alignment_of<mpl::_1> >::type::value)
-        );
-
 public: // metafunction result
 
-    typedef aligned_storage<max_size, max_alignment>
-        type;
+    // aligned_storage<max_size, max_alignment>
+    typedef aligned_storage<
+          ::boost::detail::variant::max_value<
+              Types, mpl::sizeof_<mpl::_1>
+            >::type::value
+        , ::boost::detail::variant::max_value<
+              Types, alignment_of<mpl::_1>
+            >::type::value
+        > type;
 
 };
 
@@ -379,10 +375,31 @@ public: // metafunction result
 // See docs and boost/variant/variant_fwd.hpp for more information.
 //
 template <
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
+    BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T_)
+#else
     BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T)
+#endif
   >
 class variant
 {
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
+
+private:
+
+    #define BOOST_VARIANT_AUX_BORLAND_TYPEDEFS(z,N,_)  \
+        typedef BOOST_PP_CAT(T_,N) BOOST_PP_CAT(T,N);  \
+        /**/
+    BOOST_PP_REPEAT(
+          BOOST_VARIANT_LIMIT_TYPES
+        , BOOST_VARIANT_AUX_BORLAND_TYPEDEFS
+        , _
+        )
+    #undef BOOST_VARIANT_AUX_BORLAND_TYPEDEFS
+
+#endif // borland workaround
+
 private: // static precondition assertions
 
 #if defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
@@ -390,7 +407,7 @@ private: // static precondition assertions
     // Sequences are not supported for compilers that do not support
     // using declarations in templates (see below).
     BOOST_STATIC_ASSERT((
-          mpl::not_< // !is_sequence<T0>
+          ::boost::mpl::not_< // !is_sequence<T0>
               mpl::is_sequence<T0>
             >::type::value
         ));
@@ -412,7 +429,7 @@ private: // static precondition assertions, cont.
     // [Assert unique types: ommitted due to compile-time complexity.]
     /*
     BOOST_STATIC_ASSERT((
-          mpl::equal<
+          ::boost::mpl::equal<
               types
             , typename mpl::unique<types>::type
             >::type::value
@@ -423,7 +440,7 @@ private: // static precondition assertions, cont.
 
     // [Assert no top-level const-qualified types:]
     BOOST_STATIC_ASSERT((
-          mpl::equal_to<
+          ::boost::mpl::equal_to<
               typename mpl::count_if<
                   types
                 , is_const<mpl::_>
@@ -568,7 +585,7 @@ private: // helpers, for structors (below)
                     BOOST_STATIC_CONSTANT(
                           std::size_t
                         , idx = (
-                              mpl::distance<
+                              ::boost::mpl::distance<
                                   typename mpl::begin<types>::type
                                 , Iterator
                                 >::type::value
@@ -738,12 +755,12 @@ private: // workaround, for structors, cont. (below)
         , long)
     {
         // [Determine if operand is a bounded type, or if it needs to be converted (foreign):]
-        typedef mpl::bool_<
-              !mpl::contains<
+        typedef typename mpl::not_<
+              mpl::contains<
                   types
                 , boost::variant<BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES,U)>
-                >::type::value
-            > from_foreign_variant;
+                >
+            >::type from_foreign_variant;
 
         copy_construct(
               operand
@@ -837,9 +854,12 @@ private: // helpers, for modifiers (below)
         template <typename T>
         void operator()(const T& operand)
         {
+            typedef typename detail::variant::has_nothrow_move_constructor<T>::type
+                has_nothrow_move_constructor;
+
             assign_impl(
                   operand
-                , mpl::bool_< detail::variant::has_nothrow_move_constructor<T>::value >()
+                , has_nothrow_move_constructor()
                 );
         }
 
@@ -983,7 +1003,7 @@ private: // helpers, for modifiers, cont. (below)
         {
             swap_impl(
                   rhs_content
-                , mpl::bool_< detail::variant::has_nothrow_move_constructor<T>::value >()
+                , typename detail::variant::has_nothrow_move_constructor<T>::type()
                 );
         }
 
@@ -1039,34 +1059,37 @@ public: // queries
 
 private: // helpers, for visitation support (below)
 
-    template <typename Which, typename T, typename Variant, typename Visitor>
+    template <typename T, typename Visitor>
     static
         typename Visitor::result_type
-    apply_visitor_impl(const int var_which, Variant& var, Visitor& visitor)
+    apply_visitor_impl(Visitor& visitor, void* storage)
     {
-        typedef typename mpl::if_<
-              is_const<Variant>
-            , const T
-            , T
-            >::type cv_type;
-
-        BOOST_ASSERT(var_which == Which::value);
         return visitor(
-              *static_cast< cv_type* >( var.active_storage() )
+              *static_cast< T* >( storage )
+            );
+    }
+
+    template <typename T, typename Visitor>
+    static
+        typename Visitor::result_type
+    apply_visitor_impl(Visitor& visitor, const void* storage)
+    {
+        return visitor(
+              *static_cast< const T* >( storage )
             );
     }
 
     template <
           typename Which, typename T
         , typename NextIt, typename LastIt
-        , typename Variant, typename Visitor
+        , typename Visitor, typename VoidPtrCV
         >
     static
         typename Visitor::result_type
     apply_visitor_impl(
           const int var_which // [const-ness may aid in optimization by compiler]
-        , Variant& var
         , Visitor& visitor
+        , VoidPtrCV storage
         , mpl::false_// next_is_last
         )
     {
@@ -1077,31 +1100,31 @@ private: // helpers, for visitation support (below)
 
         if (var_which == Which::value)
         {
-            return apply_visitor_impl<Which, T>(var_which, var, visitor);
+            return apply_visitor_impl<T>(visitor, storage);
         }
 
         return apply_visitor_impl<
               next_which, next_type
             , next_next_it, LastIt
-            , Variant, Visitor  // explicitly specify for g++ 2.95 (and others?)
-            >(var_which, var, visitor, next_next_is_last());
+            >(var_which, visitor, storage, next_next_is_last());
     }
 
     template <
           typename Which, typename T
         , typename NI, typename LI
-        , typename Variant, typename Visitor
+        , typename Visitor, typename VoidPtrCV
         >
     static
         typename Visitor::result_type
     apply_visitor_impl(
           const int var_which
-        , Variant& var
         , Visitor& visitor
+        , VoidPtrCV storage
         , mpl::true_// next_is_last
         )
     {
-        return apply_visitor_impl<Which, T>(var_which, var, visitor);
+        BOOST_ASSERT(var_which == Which::value);
+        return apply_visitor_impl<T>(visitor, storage);
     }
 
 // helpers, for visitation support (below) -- private when possible
@@ -1131,8 +1154,7 @@ public:
         return apply_visitor_impl<
               first_which, first_type
             , next_it, last_it
-            , variant, Visitor
-            >(which(), *this, visitor, mpl::false_());
+            >(which(), visitor, active_storage(), mpl::false_());
     }
 
     template <typename Visitor>
@@ -1148,8 +1170,7 @@ public:
         return apply_visitor_impl<
               first_which, first_type
             , next_it, last_it
-            , const variant, Visitor
-            >(which(), *this, visitor, mpl::false_());
+            >(which(), visitor, active_storage(), mpl::false_());
     }
 
 public: // visitation support
