@@ -30,13 +30,13 @@ namespace boost
    }
 }
 
-namespace user
+namespace user_ns
 {
    template <class T>
    struct Y{};
 
    template <class T>
-   T* get_pointer(user::Y<T>)
+   T* get_pointer(user_ns::Y<T>)
    { return 0; }
 
    template <class T>
@@ -58,8 +58,8 @@ int test()
 {
    int i;
    typedef void* pv;
-   i = user::f(pv());
-   i = user::f(boost::inner2::X<int>());
+   i = user_ns::f(pv());
+   i = user_ns::f(boost::inner2::X<int>());
    return 0;
 }
 
