@@ -14,7 +14,7 @@
 
 #include "boost/config/compiler/common_edg.hpp"
 
-#if (__COMO_VERSION__ <= 4245) || !defined(BOOST_STRICT_CONFIG)
+#if (__COMO_VERSION__ <= 4245)
 
 #  ifdef _WIN32
 #     define BOOST_NO_SWPRINTF
@@ -26,6 +26,10 @@
 #        define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #     endif
 #  endif
+
+#if (__COMO_VERSION__ <= 4303) || !defined(BOOST_STRICT_CONFIG)
+#  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
+#endif
 
 // Void returns don't work when emulating VC 6 (Peter Dimov)
 
