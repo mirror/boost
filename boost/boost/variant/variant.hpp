@@ -73,13 +73,13 @@
 #include "boost/mpl/iter_fold_if.hpp"
 #include "boost/mpl/logical.hpp"
 #include "boost/mpl/max_element.hpp"
+#include "boost/mpl/next.hpp"
 #include "boost/mpl/pair.hpp"
 #include "boost/mpl/protect.hpp"
 #include "boost/mpl/push_front.hpp"
 #include "boost/mpl/same_as.hpp"
 #include "boost/mpl/sizeof.hpp"
 #include "boost/mpl/transform.hpp"
-#include "boost/mpl/void.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Implementation Macros:
