@@ -10,7 +10,19 @@ namespace boost { namespace iostreams {
 
 //--------------Fundamental i/o operations------------------------------------//
 
+template<typename T> struct operations;
+
 namespace detail {
+
+struct custom_tag { };
+
+template<typename T>
+struct is_custom 
+    : mpl::not_<
+          is_base_and_derived< custom_tag, operations<T> >
+      >
+    { };
+
 
 // Implementation templates for simulated tag dispatch.
 template<typename Category> struct read_impl;
@@ -31,20 +43,8 @@ template<> struct imbue_impl<int> { typedef int type; };
 
 } // End namespace detail.
 
-//template<typename T>
-//typename io_int<T>::type get(T& t)
-//{ 
-//    typedef typename detail::unwrapped_type<T>::type unwrapped;
-//    return detail::read_impl<T>::inner<unwrapped>::get(detail::unwrap(t)); 
-//}
-//
-//template<typename T>
-//inline std::streamsize
-//read(T& t, typename io_char<T>::type* s, std::streamsize n)
-//{ 
-//    typedef typename detail::unwrapped_type<T>::type unwrapped;
-//    return detail::read_impl<T>::inner<unwrapped>::read(detail::unwrap(t), s, n); 
-//}
+template<typename T> 
+struct operations : detail::custom_tag { };
 
 template<typename T>
 typename io_int<T>::type get(T& t)
@@ -126,14 +126,18 @@ namespace detail {
                     
 //------------------Definition of read_impl-----------------------------------//
 
-template< typename T>
+template<typename T>
 struct read_impl 
-    : read_impl<
-          BOOST_DEDUCED_TYPENAME 
-          detail::dispatch<
-              T, istream_tag, streambuf_tag, input
-          >::type
-      > 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          read_impl<
+              BOOST_DEDUCED_TYPENAME 
+              detail::dispatch<
+                  T, istream_tag, streambuf_tag, input
+              >::type
+          >
+      >::type
     { };
 
 template<>
@@ -194,74 +198,20 @@ struct read_impl<streambuf_tag> {
     { t.sputbackc(c); }
 };
 
-//template<>
-//struct read_impl<input> {
-//    template<typename T>
-//    struct inner {
-//        static io_int<T>::type get(T& t)
-//        {
-//            typedef std::char_traits<typename io_char<T>::type> traits_type;
-//            typename io_char<T>::type c;
-//            return t.read(&c, 1) == 1 ?
-//                traits_type::to_int_type(c) :
-//                traits_type::eof();
-//        }
-//
-//        static std::streamsize
-//        read(T& t, typename io_char<T>::type* s, std::streamsize n)
-//        { return t.read(s, n); }
-//
-//        static void putback(T& t, typename io_char<T>::type c)
-//        { 
-//            typedef typename io_category<T>::type category;
-//            BOOST_STATIC_ASSERT((is_convertible<category, peekable_tag>::value)); 
-//            t.putback(c);
-//        }
-//    };
-//};
-//
-//template<>
-//struct read_impl<istream_tag> {
-//    template<typename T>
-//    struct inner {
-//        static io_int<T>::type get(T& t)
-//        { return t.get(); }
-//
-//        static std::streamsize
-//        read(T& t, typename T::char_type* s, std::streamsize n)
-//        { t.read(s, n); return t.gcount(); }
-//
-//        static void putback(T& t, typename io_char<T>::type c)
-//        { t.putback(c); }
-//    };
-//};
-//
-//template<>
-//struct read_impl<streambuf_tag> {
-//    template<typename T>
-//    struct inner {
-//        static io_int<T>::type get(T& t)
-//        { return t.sbumpc(); }
-//
-//        static std::streamsize
-//        read(T& t, typename T::char_type* s, std::streamsize n)
-//        { return t.sgetn(s, n); }
-//
-//        static void putback(T& t, typename io_char<T>::type c)
-//        { t.sputbackc(c); }
-//    };
-//};
-
 //------------------Definition of write_impl----------------------------------//
 
 template<typename T>
 struct write_impl 
-    : write_impl<
-          BOOST_DEDUCED_TYPENAME 
-          detail::dispatch<
-              T, ostream_tag, streambuf_tag, output
-          >::type
-      > 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          write_impl<
+              BOOST_DEDUCED_TYPENAME 
+              detail::dispatch<
+                  T, ostream_tag, streambuf_tag, output
+              >::type
+          >
+      >::type
     { };
 
 template<>
@@ -302,12 +252,16 @@ struct write_impl<streambuf_tag> {
 
 template<typename T>
 struct filter_impl 
-    : filter_impl<
-          BOOST_DEDUCED_TYPENAME 
-          detail::dispatch<
-              T, multichar_tag, any_tag
-          >::type
-      > 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          filter_impl<
+              BOOST_DEDUCED_TYPENAME 
+              detail::dispatch<
+                  T, multichar_tag, any_tag
+              >::type
+          >
+      >::type
     { };
 
 template<>
@@ -355,7 +309,16 @@ struct filter_impl<any_tag> {
 //------------------Definition of direct_impl-------------------------------//
 
 template<typename T>
-struct direct_impl {
+struct direct_impl 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          direct_impl<direct_tag>
+      >::type
+    { };
+
+template<>
+struct direct_impl<direct_tag> {
     template<typename U>
     static std::pair<
         BOOST_DEDUCED_TYPENAME io_char<U>::type*, 
@@ -375,13 +338,17 @@ struct direct_impl {
 
 template<typename T>
 struct seek_impl 
-    : seek_impl<
-          BOOST_DEDUCED_TYPENAME 
-          detail::dispatch<
-              T, iostream_tag, istream_tag, ostream_tag,
-              streambuf_tag, detail::two_head, any_tag
-          >::type
-      > 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          seek_impl<
+              BOOST_DEDUCED_TYPENAME 
+              detail::dispatch<
+                  T, iostream_tag, istream_tag, ostream_tag,
+                  streambuf_tag, detail::two_head, any_tag
+              >::type
+          >
+      >::type
     { };
 
 template<>
@@ -449,7 +416,11 @@ struct close_tag {
 
 template<typename T>
 struct close_impl 
-    : close_impl<BOOST_DEDUCED_TYPENAME close_tag<T>::type>
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          close_impl<BOOST_DEDUCED_TYPENAME close_tag<T>::type>
+      >::type
     { };
 
 // VC6 has trouble deducing the first template argument in each of the 
@@ -510,12 +481,16 @@ struct close_impl<two_sequence> {
 
 template<typename T>
 struct imbue_impl 
-    : imbue_impl<
-          BOOST_DEDUCED_TYPENAME 
-          detail::dispatch<
-              T, streambuf_tag, localizable_tag, any_tag
-          >::type
-      > 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          imbue_impl<
+              BOOST_DEDUCED_TYPENAME 
+              detail::dispatch<
+                  T, streambuf_tag, localizable_tag, any_tag
+              >::type
+          >
+      >::type
     { };
 
 template<>

@@ -21,6 +21,7 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/not.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
@@ -32,18 +33,32 @@ namespace boost { namespace iostreams {
 
 //--------------Fundamental i/o operations------------------------------------//
 
+template<typename T> struct operations;
+
 namespace detail {
 
+struct custom_tag { };
+
+template<typename T>
+struct is_custom 
+    : mpl::not_<
+          is_base_and_derived< custom_tag, operations<T> >
+      >
+    { };
+
 // Implementation templates for simulated tag dispatch.
-template<typename Category> struct read_impl;
-template<typename Category> struct write_impl;
-template<typename Category> struct filter_impl;
-template<typename Category> struct direct_impl;
-template<typename Category> struct seek_impl;
-template<typename Category> struct close_impl;
-template<typename Category> struct imbue_impl;
+template<typename T> struct read_impl;
+template<typename T> struct write_impl;
+template<typename T> struct filter_impl;
+template<typename T> struct direct_impl;
+template<typename T> struct seek_impl;
+template<typename T> struct close_impl;
+template<typename T> struct imbue_impl;
 
 } // End namespace detail.
+
+template<typename T> 
+struct operations : detail::custom_tag { };
 
 template<typename T>
 typename io_int<T>::type get(T& t)
@@ -113,14 +128,18 @@ namespace detail {
                     
 //------------------Definition of read_impl-----------------------------------//
 
-template< typename T>
+template<typename T>
 struct read_impl 
-    : read_impl<
-          BOOST_DEDUCED_TYPENAME 
-          detail::dispatch<
-              T, istream_tag, streambuf_tag, input
-          >::type
-      > 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          read_impl<
+              BOOST_DEDUCED_TYPENAME 
+              detail::dispatch<
+                  T, istream_tag, streambuf_tag, input
+              >::type
+          >
+      >::type
     { };
 
 template<>
@@ -186,12 +205,16 @@ struct read_impl<streambuf_tag> {
 
 template<typename T>
 struct write_impl 
-    : write_impl<
-          BOOST_DEDUCED_TYPENAME 
-          detail::dispatch<
-              T, ostream_tag, streambuf_tag, output
-          >::type
-      > 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          write_impl<
+              BOOST_DEDUCED_TYPENAME 
+              detail::dispatch<
+                  T, ostream_tag, streambuf_tag, output
+              >::type
+          >
+      >::type
     { };
 
 template<>
@@ -234,12 +257,16 @@ struct write_impl<streambuf_tag> {
 
 template<typename T>
 struct filter_impl 
-    : filter_impl<
-          BOOST_DEDUCED_TYPENAME 
-          detail::dispatch<
-              T, multichar_tag, any_tag
-          >::type
-      > 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          filter_impl<
+              BOOST_DEDUCED_TYPENAME 
+              detail::dispatch<
+                  T, multichar_tag, any_tag
+              >::type
+          >
+      >::type
     { };
 
 template<>
@@ -281,7 +308,16 @@ struct filter_impl<any_tag> {
 //------------------Definition of direct_impl-------------------------------//
 
 template<typename T>
-struct direct_impl {
+struct direct_impl 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          direct_impl<direct_tag>
+      >::type
+    { };
+
+template<>
+struct direct_impl<direct_tag> {
     template<typename U>
     static std::pair<
         BOOST_DEDUCED_TYPENAME io_char<U>::type*, 
@@ -301,13 +337,17 @@ struct direct_impl {
 
 template<typename T>
 struct seek_impl 
-    : seek_impl<
-          BOOST_DEDUCED_TYPENAME 
-          detail::dispatch<
-              T, iostream_tag, istream_tag, ostream_tag,
-              streambuf_tag, detail::two_head, any_tag
-          >::type
-      > 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          seek_impl<
+              BOOST_DEDUCED_TYPENAME 
+              detail::dispatch<
+                  T, iostream_tag, istream_tag, ostream_tag,
+                  streambuf_tag, detail::two_head, any_tag
+              >::type
+          >
+      >::type
     { };
 
 template<>
@@ -376,17 +416,12 @@ struct close_tag {
 
 template<typename T>
 struct close_impl 
-    : close_impl<BOOST_DEDUCED_TYPENAME close_tag<T>::type>
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          close_impl<BOOST_DEDUCED_TYPENAME close_tag<T>::type>
+      >::type
     { };
-
-// VC6 has trouble deducing the first template argument in each of the 
-// following implementation functions, and yields an ICE when it is explicitly
-// specified. As a result, for VC6 we have made this template parameter a
-// parameter of an enclosing struct 'inner'; the implementation functions each
-// have one fewer template parameters than they do for other compilers.
-
-// A consequence is that with VC6 close() cannot be customized for user-defined 
-// classes by specializing close_impl in the usual way.
 
 template<>
 struct close_impl<any_tag> {
@@ -433,12 +468,16 @@ struct close_impl<two_sequence> {
 
 template<typename T>
 struct imbue_impl 
-    : imbue_impl<
-          BOOST_DEDUCED_TYPENAME 
-          detail::dispatch<
-              T, streambuf_tag, localizable_tag, any_tag
-          >::type
-      > 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          imbue_impl<
+              BOOST_DEDUCED_TYPENAME 
+              detail::dispatch<
+                  T, streambuf_tag, localizable_tag, any_tag
+              >::type
+          >
+      >::type
     { };
 
 template<>
