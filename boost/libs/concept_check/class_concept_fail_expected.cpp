@@ -3,6 +3,9 @@
 // copyright notice appears in all copies. This software is provided
 // "as is" without express or implied warranty, and with no claim as
 // to its suitability for any purpose.
+//
+// Change Log:
+// 20 Jan 2001 - Added warning suppression (David Abrahams)
 
 #include <boost/concept_check.hpp>
 
@@ -26,5 +29,6 @@ int
 main()
 {
   class_requires_test x;
+  (void)x; // suppress unused variable warning
   return 0;
 }
