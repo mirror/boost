@@ -64,6 +64,10 @@
 #  define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
 #  define BOOST_NO_STD_ALLOCATOR
 #endif
+//
+// however we always have at least a partial allocator:
+//
+#define BOOST_HAS_PARTIAL_STD_ALLOCATOR
 
 #if !defined(_STLP_MEMBER_TEMPLATE_CLASSES)
 #  define BOOST_NO_STD_ALLOCATOR
@@ -99,6 +103,7 @@
          || defined(_STLP_USE_OWN_NAMESPACE)) \
       && (defined(__STL_VENDOR_GLOBAL_CSTD) || defined (_STLP_VENDOR_GLOBAL_CSTD))
 #     define BOOST_NO_STDC_NAMESPACE
+#     define BOOST_NO_EXCEPTION_STD_NAMESPACE
 #  endif
 #elif __BORLANDC__ < 0x560
 // STLport doesn't import std::abs correctly:

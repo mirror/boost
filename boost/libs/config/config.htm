@@ -555,6 +555,12 @@ class X { ... };</pre>
         </td>
     </tr>
     <tr>
+        <td valign="top">BOOST_NO_EXCEPTION_STD_NAMESPACE</td>
+        <td valign="top">Standard Library</td>
+        <td>The standard library does not put some or all of the
+        contents of &lt;exception&gt; in namespace std.</td>
+    </tr>
+    <tr>
         <td valign="top">BOOST_NO_EXCEPTIONS</td>
         <td valign="top">Compiler</td>
         <td>The compiler does not support exception handling (this
@@ -893,6 +899,12 @@ present.</p>
         <td valign="top" width="15%">Platform</td>
         <td valign="top" width="37%">The platform has an
         &lt;nl_types.h&gt;.</td>
+    </tr>
+    <tr>
+        <td valign="top">BOOST_HAS_PARTIAL_STD_ALLOCATOR</td>
+        <td>Standard Library</td>
+        <td>The standard library has a partially conforming std::allocator
+        class, but without any of the member templates.</td>
     </tr>
     <tr>
         <td>BOOST_HAS_PTHREAD_DELAY_NP</td>

@@ -133,6 +133,13 @@
 #  endif
 
 //
+// If we have a standard allocator, then we have a partial one as well:
+//
+#if !defined(BOOST_NO_STD_ALLOCATOR)
+#  define BOOST_HAS_PARTIAL_STD_ALLOCATOR
+#endif
+
+//
 // We can't have a working std::use_facet if there is no std::locale:
 //
 #  if defined(BOOST_NO_STD_LOCALE) && !defined(BOOST_NO_STD_USE_FACET)
