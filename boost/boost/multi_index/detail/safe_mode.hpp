@@ -95,18 +95,10 @@ protected:
 
   const safe_container_base* owner()const{return cont;}
 
-#if BOOST_WORKAROUND(BOOST_MSVC,==1400)
-/* MSVC 8.0 seems to have problems with qualified member template friends */
-public:
-#else
 BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS:
-#endif
-
   friend class safe_container_base;
 
-#if BOOST_WORKAROUND(BOOST_MSVC,==1400)
-/* MSVC 8.0 seems to have problems with qualified member template friends */
-#elif !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<typename Iterator> friend
     void safe_mode::detach_equivalent_iterators(Iterator&);
 #endif
