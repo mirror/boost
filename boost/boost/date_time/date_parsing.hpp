@@ -13,8 +13,8 @@
 #include <iterator>
 #include <algorithm>
 
-#if defined(BOOST_NO_STD_LOCALE) || (__BORLANDC__ >= 0x0564)
-#include <cctype> // [std]::tolower(int)
+#if defined(BOOST_NO_STD_LOCALE)
+#include <cctype> // ::tolower(int)
 #else
 #include <locale> // std::tolower(char, locale)
 #endif
@@ -34,10 +34,15 @@ namespace date_time {
   {
     std::string tmp("");
     unsigned i = 0;
-#if defined(BOOST_NO_STD_LOCALE) || (__BORLANDC__ >= 0x0564)
+#if defined(BOOST_NO_STD_LOCALE)
     while(i < inp.length())
     {
       tmp += static_cast<char>(tolower(inp.at(i++)));
+#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x0564) 
+    std::locale loc("");
+    while(i < inp.length())
+    {
+      tmp += stlport::tolower(inp.at(i++), loc);
 #else
     std::locale loc("");
     while(i < inp.length())
