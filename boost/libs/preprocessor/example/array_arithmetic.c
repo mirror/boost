@@ -56,12 +56,12 @@
 /* List of applicative binary operators. */
 #define APPLICATIVE_BINARY_OPS\
   BOOST_PP_LIST_APPEND\
-  ( BOOST_PP_TUPLE_TO_LIST(\
+  ( BOOST_PP_TUPLE_TO_LIST\
     ( 2\
     , ( ( *  , mul           , 1 , 1 , 0 , 0 , 1 )\
       , ( /  , div           , 1 , 1 , 0 , 0 , 0 )\
       )\
-    ),\
+    )\
   , BOOST_PP_TUPLE_TO_LIST\
     ( 16\
     , ( ( %  , mod           , 1 , 0 , 0 , 0 , 0 )\
@@ -164,7 +164,7 @@
     (const TYPE_NAME(T)* in, TYPE_NAME(UNARY_OP_RESULT(O,T))* out, size_t n)\
   { do { *out++ = OP_SYMBOL(O) *in++; } while (--n); }
 
-BOOST_PP_LIST_FOR_EACH_PRODUCT(UNARY_ARRAY_OP,_,BOOST_PP_TUPLE_TO_LIST(2,(APPLICATIVE_UNARY_OPS,TYPES)))
+BOOST_PP_LIST_FOR_EACH_PRODUCT(UNARY_ARRAY_OP,_,BOOST_PP_TUPLE_TO_LIST(2,(APPLICATIVE_UNARY_OPS,BUILTIN_TYPES)))
 
 /* Generates code for all binary operators and integral type pairs. */
 #define BINARY_ARRAY_OP(_,L)\
@@ -180,4 +180,4 @@ BOOST_PP_LIST_FOR_EACH_PRODUCT(UNARY_ARRAY_OP,_,BOOST_PP_TUPLE_TO_LIST(2,(APPLIC
   (const TYPE_NAME(L)* lhs_in, const TYPE_NAME(R)* rhs_in, TYPE_NAME(BINARY_OP_RESULT(O,L,R))* out, size_t n)\
   { do { *out++ = *lhs_in++ OP_SYMBOL(O) *rhs_in++; } while (--n); }
 
-BOOST_PP_LIST_FOR_EACH_PRODUCT(BINARY_ARRAY_OP,_,BOOST_PP_TUPLE_TO_LIST(3,(APPLICATIVE_BINARY_OPS,TYPES,TYPES)))
+BOOST_PP_LIST_FOR_EACH_PRODUCT(BINARY_ARRAY_OP,_,BOOST_PP_TUPLE_TO_LIST(3,(APPLICATIVE_BINARY_OPS,BUILTIN_TYPES,BUILTIN_TYPES)))
