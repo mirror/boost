@@ -91,6 +91,7 @@ date_time-test testtimeperiod   : ../test/posix_time/testperiod.cpp ;
 date_time-test testtime         : ../test/posix_time/testtime.cpp ;
 date_time-test testtimeduration : ../test/posix_time/testduration.cpp ;
 date_time-test testtimeformat   : ../test/posix_time/testformatters.cpp ;
+date_time-test testtimestreams  : ../test/posix_time/teststreams.cpp ;
 date_time-test testlocal_adjustor : ../test/posix_time/testlocal_adjustor.cpp ;
 date_time-test testdst_rules      : ../test/posix_time/testdst_rules.cpp ;
 date_time-test testiterator      : ../test/posix_time/testiterator.cpp ;
