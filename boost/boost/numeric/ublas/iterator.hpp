@@ -937,7 +937,7 @@ namespace boost { namespace numeric { namespace ublas {
         reverse_iterator_base1 (const iterator_type &it):
             std::reverse_iterator<iterator_type> (it) {}
 
-#if BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS
+#ifndef BOOST_UBLAS_NO_REVERSE_ITERATOR_OVERLOADS
         // Arithmetic
         BOOST_UBLAS_INLINE
         reverse_iterator_base1 &operator ++ () {
@@ -1100,7 +1100,7 @@ namespace boost { namespace numeric { namespace ublas {
         reverse_iterator_base2 (const iterator_type &it):
             std::reverse_iterator<iterator_type> (it) {}
 
-#if BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS
+#ifndef BOOST_UBLAS_NO_REVERSE_ITERATOR_OVERLOADS
         // Arithmetic
         BOOST_UBLAS_INLINE
         reverse_iterator_base2 &operator ++ () {
