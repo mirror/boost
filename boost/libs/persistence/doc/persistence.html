@@ -1,0 +1,282 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<title>Boost Persistence Utilities</title>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<h1>
+<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)"
+align="center" WIDTH="277" HEIGHT="86">
+Header &lt;<a href="../../boost/persistent.hpp">boost/persistent.hpp</a>&gt;</h1>
+
+
+<h2>Introduction</h2>
+
+Often, it is necessary to store data for a longer duration than the
+current program execution.  C++ provides the I/O library (std::27
+[lib.input.output]) for that purpose.  It is extensible, because users
+can overload <code>operator&lt;&lt;</code> and
+<code>operator&gt;&gt;</code> for their own classes and thus store
+the values of previously unknown objects persistently.
+<p>
+
+Traditionally, these shift operators have been used to provide
+user-readable input and output.  However, it is not always ensured
+that the output of <code>operator&lt;&lt;</code> can be used by
+<code>operator&gt;&gt;</code> to produce an object which is equivalent
+to that written.  For example, writing a string with an embedded
+newline will produce two strings upon reading.
+<p>
+
+In contrast, the framework provided in this header file has been
+designed to allow storage and exact reproduction of objects. It tries
+to separate two orthogonal concepts as clearly as possible: First,
+iteration through some data structure, second, reversible encoding of
+individual data items for external storage.
+<p>
+
+Reversible encoding and output is handled by a Writer object, which
+must provide a <code>write(const T&)</code> member function for each
+data type <code>T</code> it wishes to handle.  Likewise, input and
+decoding is handled by a Reader object, which must provide a
+<code>read(T&)</code> member function for each data type
+<code>T</code> it wishes to handle.  Reader and Writer should agree on
+what data types they can handle.
+
+<p>
+Check out <a href="persistence_demo.cpp">persistence_demo.cpp</a> to
+get an impression of its features.
+
+
+<h2>Synopsis</h2>
+
+<pre>
+template&lt;class Desc, class T&gt;
+void describe(Desc & desc, T&amp; x);
+
+template&lt;class Writer, class ForwardIterator&gt;
+void save_sequence(Writer writer, ForwardIterator first, ForwardIterator last);
+template&lt;class Writer, class T&gt;
+void save(Writer writer, const T& x);
+template&lt;class Writer, class Container&gt;
+void save_file(const Container & cont, const std::string & filename);
+
+template&lt;class T, class Reader, class OutputIterator&gt;
+void load_sequence(Reader reader, OutputIterator out, std::size_t n);
+template&lt;class Reader, class T&gt;
+void load(Reader reader, T& x);
+template&lt;class Reader, class Container&gt;
+void load_file(Container & cont, const std::string & filename);
+
+class shift_writer;
+class shift_reader;
+class binary_writer;
+class binary_reader;
+</pre>
+
+
+<h2>Saving data</h2>
+
+The various <code>save</code> functions iterate through the provided
+data structure <code>x</code> of type <code>T</code>, leaving encoding
+and output of built-in types and types they have not been specialized
+for to the given <code>Writer</code>.
+<p>
+Overloaded <code>save</code> functions are provided for
+<code>std::vector</code>, <code>std::list</code>,
+<code>std::deque</code>, <code>std::map</code>,
+<code>std::multimap</code>, <code>std::set</code>,
+<code>std::multiset</code>, and <code>std::pair</code>.  There is also
+a function to store an iterator range.
+
+<p>
+The convenience function <code>save_file</code> has the effects as if:
+<pre>
+  ofstream file(filename.c_str());
+  file.exceptions(std::ios::failbit|std::ios::badbit);
+  // implementation-defined structure identifier for the container
+  file << /* ... */;
+  save(Writer(file), cont);
+</pre>
+
+
+<h2>Loading data</h2>
+
+The various <code>load</code> functions fill the provided data
+structure <code>x</code> of type <code>T</code>, leaving input and
+decoding of built-in types and types they have not been specialized
+for to the given <code>Reader</code>.
+<p>
+
+The <code>read</code> function overloads are for the same types than
+the <code>save</code> ones.
+<p>
+
+The convenience function <code>load_file</code> has the effects as if:
+<pre>
+  ifstream file(filename.c_str());
+  file.exceptions(std::ios::failbit|std::ios::badbit);
+  file >> /* ... */;
+  // implementation-defined structure identifier verification for the container
+  load(Reader(file), cont);
+</pre>
+
+
+<h2>Specifying Encoding/Decoding and Input/Ouput for Simple Types</h2>
+
+<h3>Synopsis</h3>
+
+<pre>
+class shift_writer
+{
+public:
+  explicit shift_writer(std::ostream & strm, char delim_chr = '"',
+	       char escape_chr = '\\');
+  template&lt;class T&gt; void write(const T& x);
+  void write(double d);
+  void write(const std::string & s);
+};
+
+class shift_reader
+{
+public:
+  explicit shift_reader(std::istream & strm, char delim_chr = '"',
+	       char escape_chr = '\\');
+  template&lt;class T&gt; void read(T & x);
+  void read(std::string & x);
+};
+
+class binary_writer
+{
+public:
+  explicit binary_writer(std::ostream & strm);
+  template&lt;class T&gt; void write(const T& x);
+  void write(const std::string& x);
+};
+
+class binary_reader
+{
+public:
+  explicit binary_reader(std::istream & strm);
+  template&lt;class T&gt; void read(T& x);
+  void read(std::string & x);
+};
+</pre>
+
+<h3>Description</h3>
+
+<code>shift_writer</code> and <code>shift_reader</code> use the
+traditional <code>operator&lt;&lt;</code> and
+<code>operator&gt;&gt;</code> for input/output and encoding/decoding.
+Data elements are separated by a single space on output; whitespace
+after each data element is ignored on input.
+<code>shift_writer::write(double)</code> ensures the full precision of
+the given floating-point number is output.  <code>std::string</code>
+is specially encoded: The string is enclosed in
+<code>delim_chr</code>, any occurrence of <code>delim_chr</code> or
+<code>escape_chr</code> within the string is prefixed (escaped) by
+<code>escape_chr</code>.
+<p>
+
+<code>binary_writer</code> and <code>binary_reader</code> use the
+binary in-memory representation of the data elements as the encoding,
+including compiler-dependent padding (if
+any). <code>std::string</code> is treated like
+<code>std::vector&lt;char&gt;</code>.
+
+<p>
+<em>Note:</em> The framework does not provide for comment removal or
+other features useful for configuration file parsing.
+
+
+<h2>Adapting the framework for user-defined types</h2>
+
+
+Adaptation for user-defined types can be provided at several stages of
+the encoding and decoding processes, depending on the requirements of
+the type to be coded.  The following exposition will use the following
+data structures:
+
+<pre>
+struct user_type {
+  int i;
+  template&lt;class Desc%gt;
+  void describe(Desc & d) { d & i; }
+};
+std::vector&lt;user_type&gt; v;
+</pre>
+
+Calling <code>save(writer, v)</code> calls the following functions
+(omitting the <code>Writer</code> template parameters):
+<ol>
+<li>save&lt;T, Alloc&gt;(writer, v) with T = std::vector&lt;user_type&gt
+<li>save_sequence&lt;fwd iter of vector&gt(writer, v.begin(), v.end(),
+v.size());
+<li>writer.start_sequence(v.size());
+<li>for each element in v: save&lt;T&gt;(writer, element) with T =
+user_type
+<li>T is not an arithmetic type, thus:
+<li>save_descriptor d(writer); describe&lt;T&gt;(d, element) with T =
+user_type
+<li>user_type::describe(save_descriptor)
+<li>save&lt;T&gt;(writer, i) with T = int
+<li>T is an arithmetic type, thus:
+<li>writer.write(i);
+<li>...
+<li>writer.end_sequence()
+</ol>
+
+All global functions are called without qualification, so Koenig
+lookup applies and thus you can overload them.  Overloading is
+possible at each level:
+<ul>
+<li>1: You can write a global save() function overloaded for vectors
+of user_type.
+<li>2: You can write a global save_sequence() function overloaded for
+linear sequences of user_type (this will also be called for deque and
+list)
+<li>4: You can write a global save() function overloaded for user_type
+(suitable for objects with complex logical state)
+<li>6: You can write a global describe() function overloaded for
+user_type (suitable for C-style structs; this will also be called for
+load())
+<li>7: You can write a describe() member function in user_type
+<li>3,10,12: You can substitute a different writer to provide a
+different external representation (for example, XDR or GIOP).
+</ul>
+
+Automatic deduction of user_type's layout is impossible in C++, so you
+have to provide at least one of the above functions.  Always choose
+the option with the highest number which fulfills your needs.
+<p>
+
+Loading works analogous, with <code>save()</code> replaced by
+<code>load()</code> and <code>writer</code> replaced by
+<code>reader</code>.
+
+
+<h3>Writing <code>describe()</code> functions</h3>
+
+<code>describe()</code> functions are useful for compound types such
+as struct's.  Writing a <code>describe()</code> functions for some
+type is similar to writing an iostream-based operator&lt;&lt; for that
+type, except that the passed-in descriptor is used on the leftmost
+side and operator&amp; is used instead of operator&lt;&lt;.
+
+
+<h2>History and Acknowledgements</h2>
+
+Thanks to Beman Dawes for the original idea and further suggestions
+for improvement. (This section needs updating!)
+
+<p>
+<hr>
+Jens Maurer, 2000-11-18
+
+</body>
+</html>
+
