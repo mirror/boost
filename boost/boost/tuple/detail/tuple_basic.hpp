@@ -45,8 +45,8 @@ namespace tuples {
 } // end detail
 
 // - cons forward declaration -----------------------------------------------
-template <class HT, class TT>
-struct cons;
+template <class HT, class TT> struct cons; 
+
 
 // - tuple forward declaration -----------------------------------------------
 template <
@@ -214,20 +214,32 @@ struct cons {
   head_type head;
   tail_type tail;
 
-  typename tuple_access_traits<head_type>::non_const_type get_head() { return head; }
-  typename tuple_access_traits<tail_type>::non_const_type get_tail() { return tail; }  
+  typename tuple_access_traits<head_type>::non_const_type 
+  get_head() { return head; }
 
-  typename tuple_access_traits<head_type>::const_type get_head() const { return head; }
-  typename tuple_access_traits<tail_type>::const_type get_tail() const { return tail; }  
-   
+  typename tuple_access_traits<tail_type>::non_const_type 
+  get_tail() { return tail; }  
+
+  typename tuple_access_traits<head_type>::const_type 
+  get_head() const { return head; }
+  
+  typename tuple_access_traits<tail_type>::const_type 
+  get_tail() const { return tail; }  
+
+  cons(typename tuple_access_traits<head_type>::parameter_type h,
+       const tail_type& t)
+    : head (h), tail(t) {}  
+
   template <class T1, class T2, class T3, class T4, class T5, 
             class T6, class T7, class T8, class T9, class T10>
   cons( T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, 
         T6& t6, T7& t7, T8& t8, T9& t9, T10& t10 ) 
-    : head (t1) , tail (t2, t3, t4, t5, t6, t7, t8, t9, t10, detail::tuples::cnull_type()) {}
+    : head (t1), 
+      tail (t2, t3, t4, t5, t6, t7, t8, t9, t10, detail::tuples::cnull_type())
+      {}
 
-   template <class HT2, class TT2>
-   cons( const cons<HT2, TT2>& u ) : head(u.head), tail(u.tail) {}
+  template <class HT2, class TT2>
+  cons( const cons<HT2, TT2>& u ) : head(u.head), tail(u.tail) {}
 
   template <class HT2, class TT2>
   cons& operator=( const cons<HT2, TT2>& u ) { 
@@ -272,22 +284,32 @@ struct cons<HT, null_type> {
 
   head_type head;
  
-  typename tuple_access_traits<head_type>::non_const_type get_head() { return head; }
+  typename tuple_access_traits<head_type>::non_const_type 
+  get_head() { return head; }
+  
   null_type get_tail() { return null_type(); }  
 
-  typename tuple_access_traits<head_type>::const_type get_head() const { return head; }
+  typename tuple_access_traits<head_type>::const_type 
+  get_head() const { return head; }
+  
   const null_type get_tail() const { return null_type(); }  
-   
+  
+  cons(typename tuple_access_traits<head_type>::parameter_type h,
+       const null_type& = null_type())
+    : head (h) {}  
+
   template<class T1>
-  cons( T1& t1, const null_type&, const null_type&, const null_type&, const null_type&, 
-        const null_type&, const null_type&, const null_type&, const null_type&, const null_type&)
+  cons(T1& t1, const null_type&, const null_type&, const null_type&, 
+       const null_type&, const null_type&, const null_type&, 
+       const null_type&, const null_type&, const null_type&)
   : head (t1) {}
 
   template <class HT2>
   cons( const cons<HT2, null_type>& u ) : head(u.head) {}
   
   template <class HT2>
-  cons& operator=(const cons<HT2, null_type>& u ) {  head = u.head; return *this; }
+  cons& operator=(const cons<HT2, null_type>& u ) 
+  { head = u.head; return *this; }
 
   // must define assignment operator explicitely, implicit version 
   // is illformed if HT is a reference
