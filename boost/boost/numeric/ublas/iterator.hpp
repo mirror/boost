@@ -429,12 +429,12 @@ namespace boost { namespace numeric { namespace ublas {
     class reverse_iterator_base:
         public std::reverse_bidirectional_iterator<I, T, R> {
     public:
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename I::container_type container_type;
+        typedef typename container_type::size_type size_type;
+        typedef typename I::difference_type difference_type;
         typedef I iterator_type;
         typedef T value_type;
         typedef R reference;
-        typedef typename I::container_type container_type;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -533,12 +533,12 @@ namespace boost { namespace numeric { namespace ublas {
     class reverse_iterator_base1:
         public std::reverse_bidirectional_iterator<I, T, R> {
     public:
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename I::container_type container_type;
+        typedef typename container_type::size_type size_type;
+        typedef typename I::difference_type difference_type;
         typedef I iterator_type;
         typedef T value_type;
         typedef R reference;
-        typedef typename I::container_type container_type;
         typedef typename I::dual_iterator_type dual_iterator_type;
         typedef typename I::dual_reverse_iterator_type dual_reverse_iterator_type;
 
@@ -668,12 +668,12 @@ namespace boost { namespace numeric { namespace ublas {
     class reverse_iterator_base2:
         public std::reverse_bidirectional_iterator<I, T, R> {
     public:
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename I::container_type container_type;
+        typedef typename container_type::size_type size_type;
+        typedef typename I::difference_type difference_type;
         typedef I iterator_type;
         typedef T value_type;
         typedef R reference;
-        typedef typename I::container_type container_type;
         typedef typename I::dual_iterator_type dual_iterator_type;
         typedef typename I::dual_reverse_iterator_type dual_reverse_iterator_type;
 
@@ -802,10 +802,10 @@ namespace boost { namespace numeric { namespace ublas {
     class reverse_iterator_base:
         public std::reverse_iterator<I> {
     public:
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
-        typedef I iterator_type;
         typedef typename I::container_type container_type;
+        typedef typename container_type::size_type size_type;
+        typedef typename I::difference_type difference_type;
+        typedef I iterator_type;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -933,10 +933,10 @@ namespace boost { namespace numeric { namespace ublas {
     class reverse_iterator_base1:
         public std::reverse_iterator<I> {
     public:
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
-        typedef I iterator_type;
         typedef typename I::container_type container_type;
+        typedef typename container_type::size_type size_type;
+        typedef typename I::difference_type difference_type;
+        typedef I iterator_type;
         typedef typename I::dual_iterator_type dual_iterator_type;
         typedef typename I::dual_reverse_iterator_type dual_reverse_iterator_type;
 
@@ -1096,10 +1096,10 @@ namespace boost { namespace numeric { namespace ublas {
     class reverse_iterator_base2:
         public std::reverse_iterator<I> {
     public:
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
-        typedef I iterator_type;
         typedef typename I::container_type container_type;
+        typedef typename container_type::size_type size_type;
+        typedef typename I::difference_type difference_type;
+        typedef I iterator_type;
         typedef typename I::dual_iterator_type dual_iterator_type;
         typedef typename I::dual_reverse_iterator_type dual_reverse_iterator_type;
 
