@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -13,7 +13,7 @@
 #include <boost/fsm/state_machine.hpp>
 
 #include <boost/fsm/transition.hpp>
-#include <boost/fsm/terminator.hpp>
+#include <boost/fsm/termination.hpp>
 
 #include <iostream>
 #include <iomanip>
@@ -38,40 +38,40 @@ class DummyMachine : public fsm::state_machine< DummyMachine, UnconnectedOuterSt
 
 
 class UnconnectedInnerState;
-class UnconnectedOuterState : public fsm::simple_state< UnconnectedOuterState, DummyMachine, fsm::no_transitions, mpl::list< UnconnectedInnerState > > {};
+class UnconnectedOuterState : public fsm::simple_state< UnconnectedOuterState, DummyMachine, fsm::no_reactions, mpl::list< UnconnectedInnerState > > {};
 class UnconnectedInnerState : public fsm::simple_state< UnconnectedInnerState, UnconnectedOuterState > {};
 
 class OneTransitionInnerState;
 class OneTransitionOuterState :
   public fsm::simple_state< OneTransitionOuterState, DummyMachine, 
-    fsm::terminator< DummyEvent1 >, OneTransitionInnerState > {};
+    fsm::termination< DummyEvent1 >, OneTransitionInnerState > {};
 class OneTransitionInnerState :
   public fsm::simple_state< OneTransitionInnerState, OneTransitionOuterState, 
-    fsm::terminator< DummyEvent1 > > {};
+    fsm::termination< DummyEvent1 > > {};
 
 class TwoTransitionInnerState;
 class TwoTransitionOuterState : public fsm::simple_state< TwoTransitionOuterState, DummyMachine,
   mpl::list<
-    fsm::terminator< DummyEvent1 >,
-    fsm::terminator< DummyEvent2 > >,
+    fsm::termination< DummyEvent1 >,
+    fsm::termination< DummyEvent2 > >,
   TwoTransitionInnerState > {};
 class TwoTransitionInnerState : public fsm::simple_state< TwoTransitionInnerState, TwoTransitionOuterState, 
   mpl::list<
-    fsm::terminator< DummyEvent1 >,
-    fsm::terminator< DummyEvent2 > > > {};
+    fsm::termination< DummyEvent1 >,
+    fsm::termination< DummyEvent2 > > > {};
 
 class ThreeTransitionInnerState;
 class ThreeTransitionOuterState : public fsm::simple_state< ThreeTransitionOuterState, DummyMachine, 
   mpl::list<
-    fsm::terminator< DummyEvent1 >,
-    fsm::terminator< DummyEvent2 >,
-    fsm::terminator< DummyEvent3 > >,
+    fsm::termination< DummyEvent1 >,
+    fsm::termination< DummyEvent2 >,
+    fsm::termination< DummyEvent3 > >,
   ThreeTransitionInnerState > {};
 class ThreeTransitionInnerState : public fsm::simple_state< ThreeTransitionInnerState, ThreeTransitionOuterState, 
   mpl::list<
-    fsm::terminator< DummyEvent1 >,
-    fsm::terminator< DummyEvent2 >,
-    fsm::terminator< DummyEvent3 > > > {};
+    fsm::termination< DummyEvent1 >,
+    fsm::termination< DummyEvent2 >,
+    fsm::termination< DummyEvent3 > > > {};
 
 
 int main( int argc, char * argv[] )
@@ -81,23 +81,25 @@ int main( int argc, char * argv[] )
 
   std::cout << std::left <<
     "boost::fsm::state sizes\n\n" <<
+    std::setw( 50 ) << "detail::counted_base< unsigned char, false >: " <<
+      sizeof( fsm::detail::counted_base< unsigned char, false > ) << "\n" <<
     std::setw( 50 ) << "detail::state_base: " <<
       sizeof( fsm::detail::state_base ) << "\n" <<
     std::setw( 50 ) << "detail::universal_state< std::list< _ > >: " <<
       sizeof( fsm::detail::universal_state< 
-        std::list< boost::shared_ptr< fsm::detail::state_base > > > ) << "\n" <<
+        std::list< boost::intrusive_ptr< fsm::detail::state_base > > > ) << "\n" <<
     std::setw( 50 ) << "detail::leaf_state< std::list< _ > >: " <<
       sizeof( fsm::detail::leaf_state< 
-        std::list< boost::shared_ptr< fsm::detail::state_base > > > ) << "\n" <<
+        std::list< boost::intrusive_ptr< fsm::detail::state_base > > > ) << "\n" <<
     std::setw( 50 ) << "detail::node_state< 1, std::list< _ > >: " <<
       sizeof( fsm::detail::node_state< 1,
-        std::list< boost::shared_ptr< fsm::detail::state_base > > > ) << "\n" <<
+        std::list< boost::intrusive_ptr< fsm::detail::state_base > > > ) << "\n" <<
     std::setw( 50 ) << "detail::node_state< 2, std::list< _ > >: " <<
       sizeof( fsm::detail::node_state< 2,
-        std::list< boost::shared_ptr< fsm::detail::state_base > > > ) << "\n" <<
+        std::list< boost::intrusive_ptr< fsm::detail::state_base > > > ) << "\n" <<
     std::setw( 50 ) << "detail::node_state< 3, std::list< _ > >: " <<
       sizeof( fsm::detail::node_state< 3,
-        std::list< boost::shared_ptr< fsm::detail::state_base > > > ) << "\n\n" <<
+        std::list< boost::intrusive_ptr< fsm::detail::state_base > > > ) << "\n\n" <<
 
     std::setw( 50 ) << "simple_state< _, _, no_transitions, _ >: " <<
       sizeof( UnconnectedOuterState ) << "\n" <<

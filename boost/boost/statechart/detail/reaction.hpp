@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_UNIVERSAL_STATE_HPP_INCLUDED
-#define BOOST_FSM_UNIVERSAL_STATE_HPP_INCLUDED
+#ifndef BOOST_FSM_EVENT_HANDLER_HPP_INCLUDED
+#define BOOST_FSM_EVENT_HANDLER_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
@@ -10,7 +10,7 @@
 
 
 
-#include <boost/fsm/detail/state_base.hpp>
+#include <boost/fsm/result.hpp>
 
 
 
@@ -18,34 +18,33 @@ namespace boost
 {
 namespace fsm
 {
+
+
+  
+template< class Derived >
+class event;
+
+
+
 namespace detail
 {
 
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class StateList >
-class universal_state : public state_base
+template< class Event >
+class reaction
 {
-    typedef state_base base_type;
   protected:
     //////////////////////////////////////////////////////////////////////////
-    universal_state() {}
+    reaction() {}
+    ~reaction() {}
 
-    template< class Context >
-    void set_context( orthogonal_position_type position, Context * pContext )
-    {
-      base_type::set_context( pContext );
-      pContext->add_inner_state( position, this );
-    }
+  private:
+    //////////////////////////////////////////////////////////////////////////
+    virtual result react( const Event & toEvent ) = 0;
 
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    // CAUTION: The following declarations should be private.
-    // They are only public because many compilers lack template friends.
-    //////////////////////////////////////////////////////////////////////////
-    virtual void remove_from_state_list(
-      StateList & states, typename StateList::iterator & pUnstableState ) = 0;
+    friend class event< Event >;
 };
 
 

@@ -1,7 +1,7 @@
 #ifndef BOOST_FSM_COUNTED_BASE_HPP_INCLUDED
 #define BOOST_FSM_COUNTED_BASE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -10,8 +10,11 @@
 
 
 
-#include <boost/assert.hpp>
-#include <boost/config.hpp>
+#include <boost/detail/lightweight_mutex.hpp>
+#include <boost/assert.hpp> // BOOST_ASSERT
+#include <boost/config.hpp> // BOOST_STATIC_CONSTANT
+
+#include <limits> // std::numeric_limits
 
 
 
@@ -23,14 +26,26 @@ namespace detail
 {
 
 
+  
+template< bool NeedsLocking >
+struct locked_base
+{
+  typedef ::boost::detail::lightweight_mutex::scoped_lock scoped_lock;
+  mutable ::boost::detail::lightweight_mutex mutex_;
+};
 
-typedef unsigned char orthogonal_position_type;
-
-
+template<>
+struct locked_base< false >
+{
+  typedef bool scoped_lock;
+  BOOST_STATIC_CONSTANT( bool, mutex_ = false );
+};
 
 //////////////////////////////////////////////////////////////////////////////
-class counted_base
+template< typename CountType, bool NeedsLocking = true >
+class counted_base : private locked_base< NeedsLocking >
 {
+  typedef locked_base< NeedsLocking > base_type;
   public:
     //////////////////////////////////////////////////////////////////////////
     virtual ~counted_base() {}
@@ -39,9 +54,44 @@ class counted_base
     //////////////////////////////////////////////////////////////////////////
     counted_base() : count_( 0 ) {}
 
+    counted_base( const counted_base & ) : count_( 0 ) {}
+    counted_base & operator=( const counted_base & ) {}
+
   public:
     //////////////////////////////////////////////////////////////////////////
-    mutable orthogonal_position_type count_;
+    // CAUTION: The following declarations should be private.
+    // They are only public because many compilers lack template friends.
+    //////////////////////////////////////////////////////////////////////////
+    void add_ref() const
+    {
+      base_type::scoped_lock lock( base_type::mutex_ );
+      lock;
+      BOOST_ASSERT( count_ < std::numeric_limits< CountType >::max() );
+      ++count_;
+    }
+
+    void release() const
+    {
+      bool shouldDelete = false;
+
+      {
+        // release the mutex in the base class before the base class object
+        // is destroyed
+        base_type::scoped_lock lock( base_type::mutex_ );
+        lock;
+        BOOST_ASSERT( count_ > 0 );
+        shouldDelete = ( --count_ == 0 );
+      }
+
+      if ( shouldDelete )
+      {
+        delete this;
+      }
+    }
+
+  private:
+    //////////////////////////////////////////////////////////////////////////
+    mutable CountType count_;
 };
 
 
@@ -54,22 +104,18 @@ class counted_base
 
 
 
+template< typename CountType, bool NeedsLocking >
 inline void intrusive_ptr_add_ref(
-  const ::boost::fsm::detail::counted_base * pBase )
+  const ::boost::fsm::detail::counted_base< CountType, NeedsLocking > * pBase )
 {
-  ++pBase->count_;
+  pBase->add_ref();
 }
 
+template< typename CountType, bool NeedsLocking >
 inline void intrusive_ptr_release(
-  const ::boost::fsm::detail::counted_base * pBase )
+  const ::boost::fsm::detail::counted_base< CountType, NeedsLocking > * pBase )
 {
-  BOOST_ASSERT( pBase->count_ > 0 );
-  --pBase->count_;
-
-  if ( pBase->count_ == 0 )
-  {
-    delete pBase;
-  }
+  pBase->release();
 }
 
 

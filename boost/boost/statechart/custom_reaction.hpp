@@ -1,5 +1,5 @@
-#ifndef PRECOMPILED_HPP
-#define PRECOMPILED_HPP
+#ifndef BOOST_FSM_CUSTOM_REACTION_HPP_INCLUDED
+#define BOOST_FSM_CUSTOM_REACTION_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
@@ -10,12 +10,31 @@
 
 
 
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/custom_reaction.hpp>
-#include <boost/mpl/list.hpp>
-#include <iostream>
+#include <boost/fsm/detail/reaction.hpp>
+
+
+
+namespace boost
+{
+namespace fsm
+{
+
+
+
+template< class Event >
+struct custom_reaction
+{
+  template< class Derived >
+  struct apply
+  {
+    typedef detail::reaction< Event > type;
+  };
+};
+
+
+
+} // namespace fsm
+} // namespace boost
 
 
 

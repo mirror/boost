@@ -1,7 +1,7 @@
 #ifndef SHOOTING_HPP
 #define SHOOTING_HPP
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -15,11 +15,10 @@
 #include <boost/fsm/simple_state.hpp>
 #include <boost/fsm/state.hpp>
 #include <boost/fsm/transition.hpp>
-#include <boost/fsm/custom_handler.hpp>
+#include <boost/fsm/custom_reaction.hpp>
 #include <boost/mpl/list.hpp>
 
 namespace fsm = boost::fsm;
-namespace mpl = boost::mpl;
 
 
 
@@ -38,10 +37,10 @@ struct Shooting : public fsm::simple_state< Shooting, Camera,
 };
 
 struct Focusing : public fsm::state< Focusing, Shooting,
-  fsm::custom_handler< EvInFocus > >
+  fsm::custom_reaction< EvInFocus > >
 {
   Focusing( my_context ctx );
-  virtual bool handle_event( const EvInFocus & );
+  virtual fsm::result react( const EvInFocus & );
 };
 
 

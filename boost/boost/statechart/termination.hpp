@@ -1,7 +1,7 @@
-#ifndef BOOST_FSM_TERMINATOR_HPP_INCLUDED
-#define BOOST_FSM_TERMINATOR_HPP_INCLUDED
+#ifndef BOOST_FSM_TERMINATION_HPP_INCLUDED
+#define BOOST_FSM_TERMINATION_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -10,9 +10,9 @@
 
 
 
-#include <boost/fsm/detail/event_handler.hpp>
+#include <boost/fsm/detail/reaction.hpp>
 
-#include <boost/cast.hpp>
+#include <boost/cast.hpp> // boost::polymorphic_downcast
 
 
 
@@ -26,10 +26,10 @@ namespace detail
 
 
 template< class Derived, class Event >
-class terminator_handler : public event_handler< Event >
+class termination_reaction : public reaction< Event >
 {
   private:
-    virtual bool handle_event( const Event & )
+    virtual result react( const Event & )
     {
       return polymorphic_downcast< Derived * >( this )->terminate();
     }
@@ -42,13 +42,13 @@ class terminator_handler : public event_handler< Event >
 
 
 template< class Event >
-struct terminator
+struct termination
 {
-    template< class Derived >
-    struct apply
-    {
-      typedef detail::terminator_handler< Derived, Event > type;
-    };
+  template< class Derived >
+  struct apply
+  {
+    typedef detail::termination_reaction< Derived, Event > type;
+  };
 };
 
 

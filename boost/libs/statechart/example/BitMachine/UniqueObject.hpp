@@ -1,7 +1,7 @@
-#ifndef BOOST_FSM_EVENT_HANDLER_HPP_INCLUDED
-#define BOOST_FSM_EVENT_HANDLER_HPP_INCLUDED
+#ifndef UNIQUE_OBJECT_HPP_INCLUDED
+#define UNIQUE_OBJECT_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -10,44 +10,31 @@
 
 
 
-namespace boost
-{
-namespace fsm
-{
-
-
-  
-template< class Derived >
-class event;
-
-
-
-namespace detail
-{
+#include "UniqueObjectAllocator.hpp"
 
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class Event >
-class event_handler
+template< class Derived >
+class UniqueObject
 {
+  public:
+    //////////////////////////////////////////////////////////////////////////
+    static void * operator new( size_t size )
+    {
+      return UniqueObjectAllocator< Derived >::allocate( size );
+    }
+
+    static void operator delete( void * p, size_t size )
+    {
+      UniqueObjectAllocator< Derived >::deallocate( p, size );
+    }
+
   protected:
     //////////////////////////////////////////////////////////////////////////
-    event_handler() {}
-    ~event_handler() {}
-
-  private:
-    //////////////////////////////////////////////////////////////////////////
-    virtual bool handle_event( const Event & evt ) = 0;
-
-    friend class event< Event >;
+    UniqueObject() {}
+    ~UniqueObject() {}
 };
-
-
-
-} // namespace detail
-} // namespace fsm
-} // namespace boost
 
 
 

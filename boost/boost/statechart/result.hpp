@@ -1,16 +1,12 @@
-#ifndef BOOST_FSM_CUSTOM_HANDLER_HPP_INCLUDED
-#define BOOST_FSM_CUSTOM_HANDLER_HPP_INCLUDED
+#ifndef BOOST_FSM_RESULT_HPP_INCLUDED
+#define BOOST_FSM_RESULT_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //////////////////////////////////////////////////////////////////////////////
-
-
-
-#include <boost/fsm/detail/event_handler.hpp>
 
 
 
@@ -21,14 +17,11 @@ namespace fsm
 
 
 
-template< class Event >
-struct custom_handler
+enum result
 {
-    template< class Derived >
-    struct apply
-    {
-      typedef detail::event_handler< Event > type;
-    };
+  do_forward_event,
+  do_discard_event,
+  do_defer_event
 };
 
 

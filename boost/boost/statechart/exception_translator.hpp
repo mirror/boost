@@ -1,7 +1,7 @@
-#ifndef BOOST_FSM_SIMPLE_EXCEPTION_TRANSLATOR_HPP_INCLUDED
-#define BOOST_FSM_SIMPLE_EXCEPTION_TRANSLATOR_HPP_INCLUDED
+#ifndef BOOST_FSM_EXCEPTION_TRANSLATOR_HPP_INCLUDED
+#define BOOST_FSM_EXCEPTION_TRANSLATOR_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -10,9 +10,8 @@
 
 
 
-#include <boost/fsm/detail/event_base.hpp>
 #include <boost/fsm/event.hpp>
-#include <boost/shared_ptr.hpp>
+#include <boost/fsm/result.hpp>
 
 
 
@@ -23,15 +22,17 @@ namespace fsm
 
 
 
-class simple_exception_event : public event< simple_exception_event > {};
+class exception_thrown : public event< exception_thrown > {};
 
 
 
-template< class ExceptionEvent = simple_exception_event >
-struct simple_exception_translator
+struct exception_translator
 {
   template< class Action, class ExceptionEventHandler >
-  bool operator()( Action action, ExceptionEventHandler eventHandler )
+  result operator()(
+    Action action,
+    ExceptionEventHandler eventHandler,
+    result handlerSuccessResult )
   {
     try
     {
@@ -39,12 +40,12 @@ struct simple_exception_translator
     }
     catch ( ... )
     {
-      if ( !eventHandler( ExceptionEvent() ) )
+      if ( !eventHandler( exception_thrown() ) )
       {
         throw;
       }
 
-      return true;
+      return handlerSuccessResult;
     }
   }
 };

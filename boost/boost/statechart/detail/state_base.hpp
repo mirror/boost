@@ -1,7 +1,7 @@
 #ifndef BOOST_FSM_STATE_BASE_HPP_INCLUDED
 #define BOOST_FSM_STATE_BASE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -9,15 +9,17 @@
 //////////////////////////////////////////////////////////////////////////////
 
 
+
 #include <boost/fsm/detail/counted_base.hpp>
 
-#include <boost/utility.hpp>
-#include <boost/assert.hpp>
+#include <boost/utility.hpp> // boost::noncopyable
+#include <boost/assert.hpp>  // BOOST_ASSERT
 
 
 
-#ifdef _MSC_VER
-// these appear with warning level 4 only
+#ifdef BOOST_MSVC
+// We permanently turn off the following level 4 warnings because users will
+// have to do so themselves anyway if we turn them back on
 #pragma warning( disable: 4511 ) // copy constructor could not be generated
 #pragma warning( disable: 4512 ) // assignment operator could not be generated
 #endif
@@ -28,13 +30,27 @@ namespace boost
 {
 namespace fsm
 {
+
+
+
+class event_base;
+
+
+
 namespace detail
 {
 
 
 
+typedef unsigned char orthogonal_position_type;
+
+
+
 //////////////////////////////////////////////////////////////////////////////
-class state_base : public counted_base, noncopyable
+class state_base : private noncopyable,
+  // Derived class objects will be created, handled and destroyed by one and
+  // the same thread --> locking is not necessary
+  public counted_base< orthogonal_position_type, false >
 {
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -47,8 +63,33 @@ class state_base : public counted_base, noncopyable
 
   protected:
     //////////////////////////////////////////////////////////////////////////
-    state_base() : pOuterState_( 0 )
+    state_base() :
+      reactionEnabled_( false ),
+      deferredEvents_( false ),
+      pOuterState_( 0 )
     {
+    }
+
+    void reaction_initiated()
+    {
+      // This assert fails when you try to call a reaction function outside
+      // an event handler or when you try to call two reaction functions
+      // inside an event handler.
+      // Every event handler must return the result of exactly one reaction
+      // function call (forward_event, discard_event, defer_event, transit,
+      // terminate)
+      BOOST_ASSERT( reactionEnabled_ );
+      reactionEnabled_ = false;
+    }
+
+    void defer_event()
+    {
+      deferredEvents_ = true;
+    }
+
+    bool deferred_events() const
+    {
+      return deferredEvents_;
     }
 
     void set_context( state_base * pOuterState )
@@ -67,6 +108,15 @@ class state_base : public counted_base, noncopyable
 
   private:
     //////////////////////////////////////////////////////////////////////////
+    friend class ::boost::fsm::event_base;
+
+    void enable_reaction()
+    {
+      reactionEnabled_ = true;
+    }
+
+    bool reactionEnabled_;
+    bool deferredEvents_;
     // Storing another pointer to our outer state looks like a bit of a waste
     // but the alternatives are not really appealing either. To begin with,
     // there is a tiny difference between the two pointers: The subclass
@@ -74,15 +124,6 @@ class state_base : public counted_base, noncopyable
     // or the state machine. This pointer however only points to our outer
     // state _if_ there is one. It is 0 if the outer context of this state
     // is the state machine itself.
-    // Doing away with the pointer in the subclass would mean the following:
-    // - Having a ref-counted smartpointer as a member of this class
-    // - The smart pointer would have to point either to a common base class
-    //   of state and state_machine or void. The former looks rather
-    //   artificial (how would you name the base class?) and the latter 
-    //   has a runtime overhead attached to it (deleting the referenced
-    //   object of a shared_ptr< void > involves an additional virtual call)
-    // - The smart pointer must be given a no-op deleter in case our context
-    //   is the state machine
     state_base * pOuterState_;
 };
 

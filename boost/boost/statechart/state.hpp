@@ -1,7 +1,7 @@
 #ifndef BOOST_FSM_STATE_HPP_INCLUDED
 #define BOOST_FSM_STATE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -23,12 +23,12 @@ namespace fsm
 
 template< class Derived,
           class Context, // either an outer state or a state_machine
-          class Transitions = no_transitions,
+          class Reactions = no_reactions,
           class InnerInitial = detail::empty_list > // initial inner state
 class state :
-  public simple_state< Derived, Context, Transitions, InnerInitial >
+  public simple_state< Derived, Context, Reactions, InnerInitial >
 {
-  typedef simple_state< Derived, Context, Transitions, InnerInitial >
+  typedef simple_state< Derived, Context, Reactions, InnerInitial >
     base_type;
 
   protected:

@@ -27,7 +27,7 @@
 				SmallerTypeCheck="TRUE"
 				RuntimeLibrary="1"
 				BufferSecurityCheck="TRUE"
-				DisableLanguageExtensions="TRUE"
+				DisableLanguageExtensions="FALSE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
@@ -87,7 +87,7 @@
 				SmallerTypeCheck="FALSE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
-				DisableLanguageExtensions="TRUE"
+				DisableLanguageExtensions="FALSE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
@@ -143,10 +143,16 @@
 			Name="fsm Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
-				RelativePath="..\..\..\..\boost\fsm\custom_handler.hpp">
+				RelativePath="..\..\..\..\boost\fsm\custom_reaction.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\event.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\fsm\event_base.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\fsm\result.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\simple_exception_translator.hpp">
@@ -161,7 +167,7 @@
 				RelativePath="..\..\..\..\boost\fsm\state_machine.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\terminator.hpp">
+				RelativePath="..\..\..\..\boost\fsm\termination.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\transition.hpp">

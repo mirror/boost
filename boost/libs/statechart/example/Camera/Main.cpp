@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -10,7 +10,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // This program shows how a state machine can be spread over several
-// translation units if necessary. A inner workings of a digital camera are
+// translation units if necessary. The inner workings of a digital camera are
 // modeled, the corresponding state chart looks as follows:
 //
 //  ---------------------------

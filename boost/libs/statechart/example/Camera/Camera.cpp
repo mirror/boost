@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -25,15 +25,15 @@ NotShooting::~NotShooting()
   std::cout << "Exiting NotShooting\n";
 }
 
-bool NotShooting::handle_event( const EvShutterHalf & )
+fsm::result NotShooting::react( const EvShutterHalf & )
 {
   if ( context< Camera >().IsBatteryLow() )
   {
-    return false;
+    return forward_event();
   }
   else
   {
-    return transit_to< Shooting >();
+    return transit< Shooting >();
   }
 }
 
@@ -48,7 +48,7 @@ Idle::~Idle()
   std::cout << "Exiting Idle\n";
 }
 
-bool Idle::handle_event( const EvConfig & )
+fsm::result Idle::react( const EvConfig & )
 {
-  return transit_to< Configuring >();
+  return transit< Configuring >();
 }

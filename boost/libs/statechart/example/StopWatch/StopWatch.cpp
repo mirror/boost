@@ -1,23 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //////////////////////////////////////////////////////////////////////////////
 
-
-
-#include <boost/fsm/event.hpp>
-#include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/simple_state.hpp>
-#include <boost/fsm/transition.hpp>
-
-#include <ctime>
-#include <iostream>
-
-
-namespace fsm = boost::fsm;
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -40,22 +28,41 @@ namespace fsm = boost::fsm;
 // |  ----------------------------  |
 //  --------------------------------                              
 
+
+
+#include <boost/fsm/event.hpp>
+#include <boost/fsm/state_machine.hpp>
+#include <boost/fsm/simple_state.hpp>
+#include <boost/fsm/transition.hpp>
+
+#include <boost/mpl/list.hpp>
+
+
+#include <ctime>
+#include <iostream>
+
+
+
+namespace fsm = boost::fsm;
+namespace mpl = boost::mpl;
+
+
+
 class EvStartStop : public fsm::event< EvStartStop > {};
 class EvReset : public fsm::event< EvReset > {};
 
-class IElapsedTime
+struct IElapsedTime
 {
-  public:
-    virtual std::clock_t ElapsedTime() const = 0;
+  virtual std::clock_t ElapsedTime() const = 0;
 };
 
 
-class Active;
-class StopWatch : public fsm::state_machine< StopWatch, Active > {};
+struct Active;
+struct StopWatch : public fsm::state_machine< StopWatch, Active > {};
 
 
-class Stopped;
-class Active :
+struct Stopped;
+struct Active :
   public fsm::simple_state< Active, StopWatch,
     fsm::transition< EvReset, Active >, Stopped >
 {
@@ -76,7 +83,7 @@ class Active :
     std::clock_t elapsedTime_;
 };
 
-class Running :
+struct Running :
   public IElapsedTime,
   public fsm::simple_state< Running, Active,
     fsm::transition< EvStartStop, Stopped > >
@@ -98,16 +105,15 @@ class Running :
     std::clock_t startTime_;
 };
 
-class Stopped :
+struct Stopped :
   public IElapsedTime,
   public fsm::simple_state< Stopped, Active,
     fsm::transition< EvStartStop, Running > >
 {
-  private:
-    virtual std::clock_t ElapsedTime() const
-    {
-      return context< Active >().ElapsedTime();
-    }
+  virtual std::clock_t ElapsedTime() const
+  {
+    return context< Active >().ElapsedTime();
+  }
 };
 
 
@@ -169,5 +175,5 @@ int main( int argc, char * argv[] )
     key = GetKey();
   }
 
-	return 0;
+  return 0;
 }

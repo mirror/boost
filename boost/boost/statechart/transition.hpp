@@ -1,7 +1,7 @@
 #ifndef BOOST_FSM_TRANSITION_HPP_INCLUDED
 #define BOOST_FSM_TRANSITION_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -10,7 +10,7 @@
 
 
 
-#include <boost/fsm/detail/event_handler.hpp>
+#include <boost/fsm/detail/reaction.hpp>
 
 #include <boost/cast.hpp>
 
@@ -36,26 +36,26 @@ struct no_context
 template< class Derived, class Event, class Destination,
           class TransitionContext,
           void ( TransitionContext::*pTransitionAction )( const Event & ) >
-class transition_handler : public event_handler< Event >
+class transition_reaction : public reaction< Event >
 {
   private:
-    virtual bool handle_event( const Event & evt )
+    virtual result react( const Event & toEvent )
     {
-      return handle_event_impl< TransitionContext >( evt );
+      return react_impl< TransitionContext >( toEvent );
     }
 
     template< class TransitionContext >
-    bool handle_event_impl( const Event & evt )
+    result react_impl( const Event & toEvent )
     {
       return polymorphic_downcast< Derived * >( this )->
-        transit_to< Destination >( pTransitionAction, evt );
+        transit< Destination >( pTransitionAction, toEvent );
     }
 
     template<>
-    bool handle_event_impl< no_context >( const Event & )
+    result react_impl< no_context >( const Event & )
     {
       return polymorphic_downcast< Derived * >( this )->
-        transit_to< Destination >();
+        transit< Destination >();
     }
 };
 
@@ -74,7 +74,7 @@ struct transition
   template< class Derived >
   struct apply
   {
-    typedef detail::transition_handler<
+    typedef detail::transition_reaction<
       Derived, Event, Destination,
       TransitionContext, pTransitionAction > type;
   };

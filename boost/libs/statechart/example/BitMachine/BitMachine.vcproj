@@ -26,9 +26,9 @@
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="TRUE"
-				RuntimeLibrary="1"
+				RuntimeLibrary="5"
 				BufferSecurityCheck="TRUE"
-				DisableLanguageExtensions="TRUE"
+				DisableLanguageExtensions="FALSE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
@@ -80,16 +80,16 @@
 				Optimization="3"
 				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
-				FavorSizeOrSpeed="2"
+				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
-				OptimizeForProcessor="2"
+				OptimizeForProcessor="0"
 				AdditionalIncludeDirectories="..\..\..\..\..\boost_1_30_0;&quot;..\..\..\..\..\boost-sandbox&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
 				SmallerTypeCheck="FALSE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="4"
 				EnableFunctionLevelLinking="TRUE"
-				DisableLanguageExtensions="TRUE"
+				DisableLanguageExtensions="FALSE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
@@ -145,13 +145,19 @@
 			Name="fsm Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
-				RelativePath="..\..\..\..\boost\fsm\custom_handler.hpp">
+				RelativePath="..\..\..\..\boost\fsm\custom_reaction.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\event.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\simple_exception_translator.hpp">
+				RelativePath="..\..\..\..\boost\fsm\event_base.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\fsm\exception_translator.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\fsm\result.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\simple_state.hpp">
@@ -163,10 +169,20 @@
 				RelativePath="..\..\..\..\boost\fsm\state_machine.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\terminator.hpp">
+				RelativePath="..\..\..\..\boost\fsm\termination.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\transition.hpp">
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="">
+			<File
+				RelativePath=".\UniqueObject.hpp">
+			</File>
+			<File
+				RelativePath=".\UniqueObjectAllocator.hpp">
 			</File>
 		</Filter>
 	</Files>

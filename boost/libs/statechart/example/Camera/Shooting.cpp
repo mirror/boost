@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -35,23 +35,21 @@ struct Storing : public fsm::simple_state< Storing, Shooting >
 
 
 struct Focused : public fsm::simple_state< Focused, Shooting,
-  fsm::custom_handler< EvShutterFull > >
+  fsm::custom_reaction< EvShutterFull > >
 {
-  virtual bool handle_event( const EvShutterFull & );
+  virtual fsm::result react( const EvShutterFull & );
 };
 
-bool Focused::handle_event( const EvShutterFull & )
+fsm::result Focused::react( const EvShutterFull & )
 {
   if ( context< Camera >().IsMemoryAvailable() )
   {
-    return transit_to< Storing >();
+    return transit< Storing >();
   }
   else
   {
     std::cout << "Cache memory full. Please wait...\n";
-    // Indicate that we have consumed the event. So, the 
-    // dispatch algorithm will stop looking for a handler.
-    return true;
+    return discard_event();
   }
 }
 
@@ -60,10 +58,10 @@ struct EvInFocus : public fsm::event< EvInFocus > {};
 
 Focusing::Focusing( my_context ctx ) : my_base( ctx )
 {
-  post_event( boost::shared_ptr< EvInFocus >( new EvInFocus() ) );
+  post_event( boost::intrusive_ptr< EvInFocus >( new EvInFocus() ) );
 }
 
-bool Focusing::handle_event( const EvInFocus & evt )
+fsm::result Focusing::react( const EvInFocus & evt )
 {
-  return transit_to< Focused >( &Shooting::DisplayFocused, evt );
+  return transit< Focused >( &Shooting::DisplayFocused, evt );
 }

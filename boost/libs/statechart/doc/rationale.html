@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
 <title>The boost::fsm library - Rationale</title>
@@ -24,7 +24,7 @@
   <dt><a href="#why">Why yet another state machine framework?</a></dt>
   <dt><a href="#statelocalstorage">State-local storage</a></dt>
   <dt><a href="#dynamicconfigurability">Dynamic configurability</a></dt>
-  <dt><a href="#speed">Speed</a></dt>
+  <dt><a href="#resourceusage">Resource usage</a></dt>
   <dt><a href="#determinism">Determinism</a></dt>
   <dt><a href="#exceptionhandling">Error handling</a></dt>
   <dt><a href="#useractions">User actions: Member functions vs. function objects</a></dt>
@@ -36,14 +36,14 @@
 <p>boost::fsm should ...</p>
 <ol>
   <li>be fully type-safe. Any type mismatches should be flagged with an error at compile-time.</li>
-  <li>not require the use of a code generator. A lot of the existing fsm solutions force the developer to design the statemachine either
+  <li>not require the use of a code generator. A lot of the existing FSM solutions force the developer to design the state machine either
     graphically or in a specialized language. All or part of the code is then generated.</li>
   <li>allow for easy transformation of a UML statechart (defined in <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">UML
-    specifications</a>) into a working statemachine. Vice versa, an existing C++ implementation of a state machine should be fairly trivial
+    specifications</a>) into a working state machine. Vice versa, an existing C++ implementation of a state machine should be fairly trivial
     to transform into a UML statechart. Specifically, the following state machine features should be supported:
     <ul>
       <li>Entry-, exit- and transition-actions</li>
-      <li>Guards depending on the current state and the incoming event</li>
+      <li>Guards</li>
       <li>Transitions between arbitrary states</li>
       <li>Hierarchical (composite, nested) states</li>
       <li>Orthogonal (concurrent) states</li>
@@ -51,7 +51,8 @@
     </ul>
   </li>
   <li>produce a customizable reaction when a C++ exception is propagated from user code.</li>
-  <li>work with any threading library</li>
+  <li>support sequential and concurrent state machines and leave it to the 
+  end-user which thread a concurrent state machine will run in.</li>
   <li>support the development of arbitrarily large and complex state machines. This means that multiple developers should be able to work on
     the same state machine simultaneously.</li>
   <li>allow the user to customize all resource management so that the library could be used for applications with hard real-time
@@ -69,17 +70,18 @@
     </a>Fails to satisfy at least the requirements 2, 4, 5, 6, 8 (there is quite a bit of error checking before code generation, though).</li>
   <li>The framework accompanying the article &quot;State Machine Design in C++&quot;<br>
     <a href="http://www.cuj.com/articles/2000/0005/0005f/0005f.htm?topic=articles">http://www.cuj.com/articles/2000/0005/0005f/0005f.htm?topic=articles<br>
-    </a>Fails to satisfy at least the requirements 1, 3, 4, 5 (there is no direct threading support), 6, 8.</li>
+    </a>Fails to satisfy at least the requirements 1, 3, 4, 5 (there is no direct threading support), 
+  6, 8.</li>
 </ul>
 <p>boost::fsm currently satisfies all requirements except for 3 (history not yet implemented) and 5 (support for threading not yet
 implemented).</p>
 <h2><a name="statelocalstorage"></a>State-local storage</h2>
 <p>This not yet widely known state machine feature is enabled by the fact that every state in boost::fsm is represented by a class. Upon
-state-enrty, an object of the class is constructed and the object is later destructed when the state machine exits the state. Any data that
+state-entry, an object of the class is constructed and the object is later destructed when the state machine exits the state. Any data that
 is useful only as long as the machine resides in the state can (and should) thus be a member of the state. This feature paired with the
 ability to spread a state machine over several translation units makes it possible to have multiple developers simultaneously working on the
 same state machine. Moreover, local changes to the machine layout no longer lead to recompilation of the whole machine.&nbsp;</p>
-<p>In most existing FSM frameworks the whole state machine runs in one global environment (context). That is, all resource handles and
+<p>In most existing FSM frameworks the whole state machine runs in one  environment (context). That is, all resource handles and
 variables local to the state machine are stored in one place (normally as members of the class that also derives from some state machine
 base class). For large state machines this often leads to the class having a huge number of data members most of which are needed only
 briefly in a tiny part of the machine. The state machine class therefore often becomes a change hotspot what leads to frequent
@@ -89,19 +91,18 @@ recompilations of the whole state machine.&nbsp;</p>
 <ul>
   <li>A state machine framework supports dynamic configurability if and only if the whole layout (only states and transitions, actions are
     still specified with normal C++ code) of a state machine can be defined at runtime. That is, data only available at runtime can be used
-    to build arbitrarily large and arbitrarily complex machines. For example, see &quot;A Multiple Substring Search Algorithm&quot; by
-    Moishe Halibard and Moshe Rubin in June 2002 issue of CUJ for a good example (unfortunately not available online). Such machines almost
+    to build arbitrarily large and arbitrarily complex machines. See &quot;A Multiple Substring Search Algorithm&quot; by Moishe Halibard and Moshe Rubin in June 2002 issue of CUJ for a good example (unfortunately not available online). Such machines almost
     always get away with a simple state model (no hierarchical states, no orthogonal states, no entry and exit actions, no history) because
     the state machine layout is <b>computed by an algorithm</b> rather than designed by a human.</li>
-  <li>On the other side are human-designed state machines, exploiting the <a href="#introduction">standard features</a> as necessary.
+  <li>On the other side are human-designed state machines, exploiting the standard features as necessary.
     Naturally, the layout of such machines is known at compile time.</li>
 </ul>
-<h3>Why not use a dynamically configurable fsm library for all state machines?</h3>
-<p>One might argue that a dynamically configurable fsm framework is all one ever needs because <b>any</b> state machine can be implemented
+<h3>Why not use a dynamically configurable FSM library for all state machines?</h3>
+<p>One might argue that a dynamically configurable FSM framework is all one ever needs because <b>any</b> state machine can be implemented
 with it. However, due to its nature such a framework has a number of disadvantages when used to implement static state machines:</p>
 <ul>
   <li>No compile-time optimizations and validations can be made. For example, boost::fsm determines the innermost common outer state (aka
-    LCA, least common ancestor) of the transition-source and target state at compile time. Moreover, compile time checks ensure that the
+    LCA, least common ancestor) of the transition-source and destination state at compile time. Moreover, compile time checks ensure that the
     state machine is valid (e.g. that there are no transitions between orthogonal states).</li>
   <li>Double dispatch must inevitably be implemented with some kind of a table. As argued <a href="#doubledispatch">below</a>, this scales
     badly.</li>
@@ -114,28 +115,82 @@ with it. However, due to its nature such a framework has a number of disadvantag
 It is for these reasons, that boost::fsm was built from ground up to <b>not</b> support dynamic configurability. However, this does not mean
 that it's impossible to dynamically shape a machine implemented with this library. For example, guards can be used to make different
 transitions depending on input only available at runtime. However, such layout changes will always be limited to what can be foreseen before
-compilation. A related library, the boost::spirit parser framework, allows for roughly the same runtime configurability.
-<h2><a name="speed"></a>Speed</h2>
-<p>The lack of a requirement about speed does not mean that programs using this library will be particularly slow. Although I have not yet
-had the chance to make speed comparisons with other libraries, I believe that a speed-customized boost::fsm (see <a href="#memorymanagement">Memory
-management</a>) should not be much slower than existing solutions with a comparable feature set. I even expect that it is a bit faster in
-some cases, because no existing library I'm aware of does as much at compile time as this library. For example, the whole sequence of exit-,
-transition- and entry-actions executed during a given transition is established and hard-coded at compile-time.</p>
+compilation. A somewhat related library, the boost::spirit parser framework, allows for roughly the same runtime configurability.
+<h2><a name="resourceusage"></a>Resource usage</h2>
+<p>Even a complex state machine should typically not use more than a few hundred 
+bytes of memory (assuming empty event queues). Benchmarks with the BitMachine 
+example compiled with MSVC7.1 (single threaded), running on a mobile AMD Athlon XP 1800, 
+produced the 
+following results:</p>
+<table border="2" cellspacing="1" width="100%" id="AutoNumber1">
+  <tr>
+    <td width="34%">Machine configuration</td>
+    <td width="33%">2. Event dispatch &amp; transition time [µs], customized memory 
+    management</td>
+    <td width="33%">3. Event dispatch &amp; transition time [µs], normal memory 
+    management</td>
+  </tr>
+  <tr>
+    <td width="34%">2 states, 2 transitions (1 bit)</td>
+    <td width="33%">1.0</td>
+    <td width="33%">1.8</td>
+  </tr>
+  <tr>
+    <td width="34%">4 states, 8 transitions (2 bits)</td>
+    <td width="33%">1.3</td>
+    <td width="33%">2.1</td>
+  </tr>
+  <tr>
+    <td width="34%">8 states, 24 transitions (3 bits)</td>
+    <td width="33%">1.5</td>
+    <td width="33%">2.3</td>
+  </tr>
+  <tr>
+    <td width="34%">16 states, 64 transitions (4 bits)</td>
+    <td width="33%">1.8</td>
+    <td width="33%">2.5</td>
+  </tr>
+  <tr>
+    <td width="34%">32 states, 160 transitions (5 bits)</td>
+    <td width="33%">2.0</td>
+    <td width="33%">2.8</td>
+  </tr>
+</table>
+<p>BitMachine is not a particularly typical state machine so these 
+numbers give only rough guidance.
+Interestingly, customization of memory management improved the times by only 
+30~45%. This might be different 
+on other platforms.</p>
 <h3>You don't pay for what you don't use</h3>
-<p>Almost. The C++ dictum was followed as much as possible while developing this library. There is a <b>very slight</b> overhead for having
-some features even if they are not used:</p>
+<p>Almost:</p>
 <ul>
-  <li>State-local storage: A few more function calls are made (most of which will probably be optimized away).</li>
-  <li>Orthogonal states: All non-leaf states (not only the orthogonal ones) need to store one more pointer, resulting in a maximum 25%
-    increase of state size. Bookkeeping is also slightly more complex.</li>
+  <li>The current <b>interface</b> inevitably (I believe) causes the following slight overheads for supporting some features <b>even if they are not used</b>:<ul>
+    <li>State-local storage: A few more function calls are made (most of which will probably be optimized away).</li>
+    <li>Orthogonal states: All non-leaf states (not only the orthogonal ones) need to store one more pointer and there is a very small increase in code size (one additional virtual function <b>per executable</b>). Bookkeeping is also slightly more complex.</li>
+  </ul>I think this will have a negligible effects on 
+runtime performance (memory acquisition speed is largely independent of the size 
+of the requested blocks as long as the blocks are so small) and memory footprint 
+(the size of the executable will grow much faster with increasing state machine 
+complexity than the memory allocated at runtime).
+  </li>
+  <li>Moreover, the current <b>implementation</b> has potential for optimization:<ul>
+    <li>To exit any state (no matter whether 
+  leaf or non-leaf) one virtual function call is  needed. A better 
+  implementation could make all of the non-leaf ones non-virtual. This overhead 
+  may become significant for highly hierarchical machines.</li>
+    <li>Several functions in the <code>state_machine</code> 
+    class template could be factored out into non-template base classes, 
+    reducing code size.</li>
+  </ul>
+  </li>
 </ul>
 <h3>Feature costs</h3>
 <ul>
-  <li>State-local storage: An empty state typically already has 4 pointers and an unsigned char as members. Every transition originating at
-    the state adds another pointer, the same is true for every orthogonal inner state. Whatever state-local members the user adds will
-    increase the final state size accordingly.</li>
+  <li>State-local storage: Obviously state size will be increased by whatever state-local members the user 
+  adds.</li>
   <li>Hierarchical states: During event dispatch, the framework first tries to send the event to the innermost current state, if the
-    innermost state cannot consume it (because of a guard or because there is no event handler), the framework tries to send it to the
+    innermost state cannot consume it (because of a guard or because there is no 
+  reaction for the event), the framework tries to send it to the
     innermost states' immediate outer state. If the outer state cannot consume it either, it is sent to the immediate outer states’ outer
     state and so on until an outermost state is reached. A chain of responsibility originating at the current innermost state is thus
     formed.<br>
@@ -160,15 +215,32 @@ some features even if they are not used:</p>
         d=3, g=1</li>
     </ul>
   </li>
-  <li>Orthogonal states:
-    <ul>
+  <li>Orthogonal states:<ul>
+      <li>Each orthogonal state object needs to store one additional pointer per 
+      orthogonal region. Code size is increased slightly (a few additional 
+      virtual functions <b>per executable</b>).</li>
       <li>As a state can now have an arbitrary number of orthogonal inner states, any number of innermost states can be current at a given
         time. A tree rather than a chain of responsibility is thus formed. Event processing always starts with some leaf and works its way
-        up to the root, before it continues with the next leaf. Each visited leaf and node increases d and maybe g. The total cost can be
+        up to the root, before it continues with the next leaf. Each visited leaf and node increases d and maybe g. The total 
+      dispatch cost can be
         calculated as outlined above.</li>
       <li>If there is more than one current leaf state before a transition, one additional virtual call for each exited state is made.</li>
     </ul>
   </li>
+  <li>Deferring and posting events: For performance reasons and because sequential state machines often 
+  do not need to queue events, it is possible to operate such machines entirely 
+  with stack-allocated events. However, as soon as events need to be 
+  deferred and/or posted there is no way around queuing and  allocation with <code>new</code>. The 
+  interface of <code>simple_state::post_event</code> enforces the use of 
+  <code>boost::intrusive_ptr</code> at compile time. There is no way to do the same for 
+  deferred events because allocation and deferral happen in completely unrelated 
+  places. Of course, a &quot;wrongly&quot; allocated event could easily be transformed 
+  into one allocated with <code>new</code> and pointed to by <code>boost::intrusive_ptr</code> with a virtual clone() function. However, in my experience, 
+  event deferral is needed only very rarely in sequential state machines. 
+  Moreover, <code>fsm::concurrent_state_machine</code> enforces the use of 
+  <code>boost::intrusive_ptr</code> at compile time so most users won't run into this 
+  limitation. I 
+  therefore rejected the idea because of the attached code size overhead.</li>
 </ul>
 <h2><a name="determinism"></a>Determinism</h2>
 <p>For applications with hard real-time requirements it is crucial that no operation will take an indeterminable amount of time. The
@@ -183,80 +255,103 @@ following operations are potentially non-deterministic:</p>
     real-time requirements then boost::fsm is definitely not for you.</font></b></li>
 </ul>
 <h2><a name="exceptionhandling"></a>Error handling</h2>
-<p>There is not a single word about error handling in the UML state machine semantics specifications. Moreover, most existing fsm solutions
+<p>There is not a single word about error handling in the UML state machine semantics specifications. Moreover, most existing 
+FSM solutions
 also seem to ignore the issue.&nbsp;</p>
-<h3>Why an fsm library should support error handling</h3>
+<h3>Why an FSM library should support error handling</h3>
 <p>Consider the following state configuration:</p>
 <p><img border="0" src="A.gif" width="230" height="170"></p>
-<p>Both states define entry actions (x() and y()). So, whenever a transition leads to state A becoming current, a call to x() will
-immediately be followed by a call to y(). y() could depend on the side-effects of x(). Therefore, executing y() does not make sense if x()
-fails. This is not an esoteric corner case but happens in every-day state machines all the time. For example, x() could acquire memory the
-contents of which is later modified by y(). This problem is very similar to failing base class constructors: First, the base class
-constructor is called and then the derived class constructor. If the base class constructor fails (by throwing an exception) the
-construction is aborted and the object never comes to life.</p>
-<p>If an fsm framework does not account for failing actions, the user is forced to adopt cumbersome workarounds. For example, a failing
-action could post an appropriate error event and set a global error variable to true. Every following action would then first check the
-error variable before doing anything. After all actions have completed (by doing nothing!), the previously posted error event would be
+<p>Both states define entry actions (x() and y()). Whenever state A becomes 
+current, a call to x() will immediately be followed by a call to y(). y() could 
+depend on the side-effects of x(). Therefore, executing y() does not make sense 
+if x() fails. This is not an esoteric corner case but happens in every-day state 
+machines all the time. For example, x() could acquire memory the contents of 
+which is later modified by y(). There is a different but in terms of error handling equally critical situation 
+in the <a href="tutorial.html#statequeries">tutorial</a> when <code>Running::~Running</code> accesses its outer state 
+<code>Active</code>. Had the entry action of <code>Active</code> failed and had <code>Running</code> been 
+entered anyway then <code>Running</code>'s exit action would have invoked undefined behavior.<br>
+The error handling situation with outer and inner states resembles the one with 
+base and derived classes:  If a base class constructor fails (by throwing an exception) the
+construction is aborted, the derived class constructor is not called and the object never comes to life.</p>
+<p>If an FSM framework does not account for failing actions, the user is forced to adopt cumbersome workarounds. For example, a failing
+action would have to post an appropriate error event and set a global error variable to true. Every following action would  first 
+have to check the
+error variable before doing anything. After all actions have completed (by doing nothing!), the previously posted error event would 
+have to be
 processed what would lead to the remedy action begin executed. Please note that it is not sufficient to simply push the error event into the
 end of the queue as other events could still be pending. Instead, the error event has absolute priority and would have to be dealt with
 immediately.</p>
 <p>So, to be safe, programmers would have to encapsulate the code of <b>every</b> action in <code>if ( !error ) { /* action */ }</code>
-blocks. Moreover, a <code>try { /* action */ } catch ( ... ) { /* post error event */ error = true; }</code> statement would have to be
-added because letting an exception propagate out of a user action would at best terminate the state machine immediately. Adding all this
+blocks. Moreover, a <code>try { /* action */ } catch ( ... ) { /* post error event */ error = true; }</code> statement would 
+often have to be
+added because called functions might throw and letting an exception propagate out of a user action would at best terminate the state machine immediately. 
+Writing all this
 boiler-plate code is simply boring and quite unnecessary.</p>
 <h3>Error handling support in boost::fsm</h3>
 <ul>
   <li>C++ exceptions are used for all error handling. Except from exit-actions (mapped to state-destructors and exceptions should never be
     propagated from destructors), exceptions can be propagated from all user functions.</li>
-  <li>A customizable per state machine policy specifies how to convert all exceptions propagated from user code. Out of the box, a <code>simple_exception_event</code>
+  <li>A customizable per state machine policy specifies how to convert all exceptions propagated from user code. Out of the box, a <code>
+  exception_thrown</code> event
     is generated.</li>
   <li>An exception event is always processed immediately and thus has absolute priority over any possibly pending events. The event queue
     stays as it was until the exception event has been processed.</li>
   <li>The processing logic is as follows:
     <ul>
-      <li>Exception events resulting from failed event handlers are sent to the current state.</li>
+      <li>Exception events resulting from failed <code>react</code> functions are sent to the current state.</li>
       <li>Exception events resulting from failed entry actions are sent to the immediate outer state.</li>
       <li>Exception events resulting from failed transition actions are sent to the innermost common outer state.</li>
     </ul>
+    In the last two cases the state-machine is not in a stable state when the 
+  exception event is generated and leaving it there (e.g. by ignoring the
+  exception event) would violate an invariant of state machines. So, the exception event 
+  reaction must either be a transition or a termination
+  to bring the machine back into a stable state. That’s why the framework checks that the state machine is stable after processing an
+  exception event. If this is not the case the state machine is terminated and the exception 
+  is rethrown.
   </li>
 </ul>
-<blockquote>
-  <p>In the last two cases the state-machine is not in a stable state during error handling and leaving it there (e.g. by ignoring the
-  exception event) would violate an invariant of state machines. So, the exception event handler must either make a transition or terminate
-  to bring the machine back into a stable state. That’s why the framework checks that the state machine is stable after processing an
-  exception event. If this is not the case the state machine is terminated and the exception rethrown.</p>
-</blockquote>
 <h2><a name="useractions"></a>User actions: Member functions vs. function objects</h2>
-With boost::fsm, all user-supplied functions (event handlers, entry-, exit- and transition-actions) must be class members. The reasons for
+With boost::fsm, all user-supplied functions (<code>react</code> functions, entry-, exit- and transition-actions) must be class members. The reasons for
 this are as follows:
 <ul>
   <li>The concept of state-local storage mandates that state-entry and state-exit actions (mapped to constructors and destructors) are
     implemented as members.</li>
-  <li>Event handlers and transition actions often access state-local data. So, it is most natural to implement these functions as members of
+  <li><code>react</code> functions and transition actions often access state-local data. So, it is most natural to implement these functions as members of
     the class the data of which the functions will operate on anyway.</li>
 </ul>
 <h2><a name="memorymanagement"></a>Memory management</h2>
-<p>Out of the box, boost::fsm employs a <code>std::queue</code> to store event pointers and uses a <code>std::list</code> for state storage.
-Moreover, state objects are allocated through normal <code>operator new</code>. Allocations and deallocations only take place during state
-transitions. The default memory management should be satisfactory for applications where all the following prerequisites are met:</p>
+<p>Out of the box, boost::fsm allocates all internal data on the normal 
+heap. This should be satisfactory for applications where all the following prerequisites are met:</p>
 <ul>
   <li>There are no deterministic reaction time (hard real-time) requirements.</li>
-  <li>The machine will typically not make more than a few transitions per second. Of course, this figure depends on your platform. A typical
-    desktop PC could easily cope with thousands of transitions per second.</li>
+  <li>The machine will typically not process more than a few events per second. Of course, this figure depends on your platform. A typical
+    desktop PC could easily cope with thousands of events per second.</li>
   <li>The application will never run long enough for heap fragmentation to become a problem. This is of course an issue for all long running
     programs not only the ones employing boost::fsm. However, it should be noted that with this library fragmentation problems could show up
     earlier than with traditional FSM frameworks.</li>
 </ul>
-<p>Note that the above prerequisites hold for almost all applications where all events are generated as a result of the interaction with one
-user. Should a system not meet any of these prerequisites customization of all memory management (not just boost::fsm's) should be
+<p>Should a system not meet any of these prerequisites customization of all memory management (not just boost::fsm's) should be
 considered. This library supports this as follows:</p>
 <ul>
-  <li>By passing as <code>state_machine</code> class template parameters classes providing the same interface as <code>std::queue</code> and
-    <code>std::list</code>.</li>
+  <li>By passing a class offering a <code>std::allocator</code> interface as the last <code>state_machine</code> class template parameter. The <code>rebind</code> 
+  allocator member template is used 
+  to customize memory allocation of the internal containers.</li>
   <li>By replacing the <code>simple_state</code>, <code>state</code> and <code>event</code> class templates with ones that have a customized
-    operator new/delete. This can be as easy as multiply-inheriting your customized class templates from the framework-supplied class
-    templates and your preferred small-object/deterministic/constant-time allocator base class.</li>
+    <code>operator new</code> and <code>operator delete</code>. This can be as easy as  inheriting your customized class templates from the framework-supplied class
+    templates <b>and</b> your preferred small-object/deterministic/constant-time allocator base class.</li>
 </ul>
+<p><code>simple_state</code> and <code>state</code> subclass objects are constructed and destructed only 
+by the state machine. It would therefore be possible to use the <code>state_machine</code> 
+allocator instead of forcing the user to overload <code>operator new</code> and <code>operator 
+delete</code>. However, a lot of 
+systems employ at most one instance of a particular state machine, which means 
+that a) there is at most one object of a particular state and b) this object is 
+always constructed, accessed and destructed by one and the same thread. We can 
+exploit these facts in a much simpler (and faster) <code>new</code>/<code>delete</code> 
+implementation (for example, see UniqueObject.hpp in the BitMachine example). 
+However, this is only possible as long as we have the freedom to overload memory management for 
+every single state class.</p>
 <h2><a name="doubledispatch"></a>Double dispatch</h2>
 <p>At the heart of every state machine lies an implementation of double dispatch. This is due to the fact that the incoming event <b>and</b>
 the current state define exactly which reaction the state machine will produce. <a
@@ -268,14 +363,14 @@ considered but rejected for their bad scalability:</p>
     machine.</li>
   <li>Two-dimensional array of function pointers: To satisfy requirement 6, it should be possible to spread a single boost::fsm state
     machine over several translation units. This however means, that the dispatch table must be filled at runtime and the different
-    translation units must somehow make themselves &quot;known&quot;, so that their part of the statemachine can be added to the table.
+    translation units must somehow make themselves &quot;known&quot;, so that their part of the state machine can be added to the table.
     There simply is no way to do this automatically <b>and</b> portably. So, the only portable way that a state machine distributed over
     several translation units could employ table-based double dispatch lies with the user. The programmer(s) would somehow have to <b>manually</b>
     tie together the various pieces of the state machine. Not only does this scale badly but is also quite error-prone.</li>
 </ul>
 <hr>
-<p>Revised <!--webbot bot="Timestamp" startspan s-type="EDITED" s-format="%d %B, %Y" -->07 April, 2003<!--webbot bot="Timestamp"
-i-checksum="29882" endspan --></p>
-<p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber</a> 2003. All Rights Reserved.</i></p>
+<p>Revised 
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 May, 2003<!--webbot bot="Timestamp" endspan i-checksum="13989" --></p>
+<p><i>Copyright © 2003 <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a>. All Rights Reserved.</i></p>
 </body>
 </html>

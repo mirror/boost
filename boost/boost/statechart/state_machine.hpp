@@ -1,7 +1,7 @@
 #ifndef BOOST_FSM_STATE_MACHINE_HPP_INCLUDED
 #define BOOST_FSM_STATE_MACHINE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -11,30 +11,42 @@
 
 
 #include <boost/fsm/detail/state_base.hpp>
-#include <boost/fsm/detail/event_base.hpp>
-#include <boost/fsm/simple_exception_translator.hpp>
+
+#include <boost/fsm/event_base.hpp>
+#include <boost/fsm/exception_translator.hpp>
+#include <boost/fsm/result.hpp>
 
 #include <boost/mpl/list.hpp>
-#include <boost/mpl/front.hpp>
 #include <boost/mpl/clear.hpp>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/cast.hpp>
-#include <boost/utility.hpp>
-#include <boost/assert.hpp>
+#include <boost/cast.hpp>    // boost::polymorphic_downcast
+#include <boost/utility.hpp> // boost::noncopyable
+#include <boost/assert.hpp>  // BOOST_ASSERT
+#include <boost/config.hpp>  // BOOST_STATIC_CONSTANT
 
-#include <stdexcept>
+#ifdef BOOST_MSVC
+#pragma warning( push )
+#pragma warning( disable: 4702 ) // unreachable code (in release mode only)
+#endif
 
-#ifdef _MSC_VER
-// these appear with warning level 4 only
-#pragma warning( disable: 4702 ) // unreachable code
+#include <list>
+
+#ifdef BOOST_MSVC
+#pragma warning( pop )
+#endif
+
+#include <memory>   // std::allocator
+#include <typeinfo> // std::bad_cast
+
+
+
+#ifdef BOOST_MSVC
+// We permanently turn off the following level 4 warnings because users will
+// have to do so themselves anyway if we turn them back on
 #pragma warning( disable: 4511 ) // copy constructor could not be generated
 #pragma warning( disable: 4512 ) // assignment operator could not be generated
 #endif
-
-#include <queue>
-#include <list>
 
 
 
@@ -49,33 +61,31 @@ namespace detail
   
 template< class StateList >
 class universal_state;
-template< orthogonal_position_type noOfOrthogonalStates, class StateList >
+template< orthogonal_position_type noOfOrthogonalRegions, class StateList >
 class node_state;
 template< class StateList >
 class leaf_state;
-
-class event_base;
 
 class send_function
 {
   public:
     //////////////////////////////////////////////////////////////////////////
     send_function(
-      const detail::event_base & evt, detail::state_base & toState
+      const event_base & evt, state_base & toState
     ) :
       evt_( evt ), toState_( toState )
     {
     }
 
-    bool operator()()
+    result operator()()
     {
-      return evt_.send_to( toState_ );
+      return evt_.send( toState_ );
     }
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    const detail::event_base & evt_;
-    detail::state_base & toState_;
+    const event_base & evt_;
+    state_base & toState_;
 };
 
 
@@ -89,22 +99,21 @@ class send_function
 // Some function names were derived from a state machine by Aleksey Gurtovoy.
 template< class Derived,
           class InitialState,
-          class ExceptionTranslator = simple_exception_translator<>, 
-          class EventQueue =
-            std::queue< shared_ptr< const detail::event_base > >,
-          class StateList = std::list< intrusive_ptr< detail::state_base > > >
-class state_machine : noncopyable
+          class ExceptionTranslator = exception_translator, 
+          class Allocator = std::allocator< void > >
+class state_machine : private noncopyable
 {
   public:
     //////////////////////////////////////////////////////////////////////////
-    typedef EventQueue event_queue_type;
+    typedef intrusive_ptr< event_base > event_ptr_type;
 
     void initiate()
     {
       terminate();
       translator_(
         initial_construct_function( *this ),
-        exception_event_handler( *this ) );
+        exception_event_handler( *this ),
+        do_discard_event );
       process_queued_events();
     }
 
@@ -114,7 +123,7 @@ class state_machine : noncopyable
     }
 
 
-    void process_event( const detail::event_base & evt )
+    void process_event( const event_base & evt )
     {
       send_event( evt );
       process_queued_events();
@@ -144,13 +153,13 @@ class state_machine : noncopyable
     {
       const State * pResult = 0;
 
-      for ( StateList::const_iterator pCurrentLeafState =
+      for ( state_list_type::const_iterator pCurrentLeafState =
               currentStates_.begin();
             ( pCurrentLeafState != currentStates_.end() ) && ( pResult == 0 );
             ++pCurrentLeafState )
       {
         const detail::state_base * pCurrentState(
-          ( *pCurrentLeafState ).get() );
+          get_pointer( *pCurrentLeafState ) );
 
         while ( ( pCurrentState != 0 ) && ( ( pResult =
                     dynamic_cast< const State * >( pCurrentState ) ) == 0 ) )
@@ -165,7 +174,7 @@ class state_machine : noncopyable
   protected:
     //////////////////////////////////////////////////////////////////////////
     state_machine() :
-      pIncompleteState_( currentStates_.end() )
+      pUnstableState_( currentStates_.end() )
     {
     }
 
@@ -185,7 +194,10 @@ class state_machine : noncopyable
 
     typedef Derived top_context_type;
     typedef Derived * inner_context_ptr_type;
-    typedef StateList state_list_type;
+    typedef intrusive_ptr< detail::state_base > state_ptr_type;
+    typedef std::list<
+      state_ptr_type,
+      typename Allocator::rebind< state_ptr_type >::other > state_list_type;
 
     typedef mpl::clear< mpl::list<> >::type context_type_list;
 
@@ -216,48 +228,45 @@ class state_machine : noncopyable
 
     void terminate( state_machine & )
     {
-      // there is no longer any use for possibly remaining events
-      eventQueue_ = EventQueue();
+      pUnstableState_ = currentStates_.end();
       currentStates_.clear();
-      pIncompleteState_ = currentStates_.end();
+      // there is no longer any use for possibly remaining events
+      eventQueue_.clear();
     }
 
-    void terminate( detail::universal_state< StateList > & theState )
+    void terminate( detail::universal_state< state_list_type > & theState )
     {
-      // If we receive a terminate request while the machine is not stable
-      // then this can only have happened as a result of an exception and we
-      // unconditionally terminate the incomplete state.
-      if ( !stable() )
-      {
-        currentStates_.erase( pIncompleteState_ );
-        pIncompleteState_ = currentStates_.end();
-      }
+		  if ( currentStates_.size() == 1 )
+		  {
+			  // The following optimization is only correct when there are no
+			  // orthogonal states.
+			  currentStates_.clear();
+		  }
+		  else
+		  {
+			  // This would work for all cases, but is unnecessarily inefficient
+			  // when there are no orthogonal states.
+			  theState.remove_from_state_list( currentStates_, pUnstableState_ );
+		  }
+    }
 
-      if ( currentStates_.size() == 1 )
-      {
-        // The following optimization is only correct when there are no
-        // orthogonal states.
-        currentStates_.clear();
-      }
-      else
-      {
-        // This would work for all cases, but is unnecessarily inefficient
-        // when there are no orthogonal states.
-        theState.remove_from_state_list( currentStates_ );
-      }
+    void post_event( const event_ptr_type & pEvent )
+    {
+      BOOST_ASSERT( get_pointer( pEvent ) != 0 );
+      eventQueue_.push_back( pEvent );
     }
 
     template< class State >
     void add( const intrusive_ptr< State > & pState )
     { 
-      if ( stable() )
+      if ( machine_status() == unstable )
       {
-        pIncompleteState_ =
-          currentStates_.insert( currentStates_.end(), pState );
+        *pUnstableState_ = pState;
       }
       else
       {
-        *pIncompleteState_ = pState;
+        pUnstableState_ =
+          currentStates_.insert( currentStates_.end(), pState );
       }
 
       add_impl( *pState );
@@ -265,18 +274,12 @@ class state_machine : noncopyable
 
     void add( state_machine * )
     {
-      BOOST_ASSERT( stable() && ( currentStates_.size() == 0 ) );
-    }
-
-    void post_event( const typename event_queue_type::value_type & pEvent )
-    {
-      BOOST_ASSERT( get_pointer( pEvent ) != 0 );
-      eventQueue_.push( pEvent );
+      BOOST_ASSERT( machine_status() == no_state );
     }
 
 
     void add_inner_state( detail::orthogonal_position_type position,
-                          detail::universal_state< StateList > * )
+                          detail::universal_state< state_list_type > * )
     {
       BOOST_ASSERT( position == 0 );
       position;
@@ -290,6 +293,10 @@ class state_machine : noncopyable
 
   private: // implementation
     //////////////////////////////////////////////////////////////////////////
+    typedef std::list<
+      event_ptr_type,
+      typename Allocator::rebind< event_ptr_type >::other > event_queue_type;
+
     void initial_construct()
     {
       InitialState::deep_construct(
@@ -307,10 +314,10 @@ class state_machine : noncopyable
         {
         }
 
-        bool operator()()
+        result operator()()
         {
           machine_.initial_construct();
-          return true; // there is nothing to be consumed
+          return do_discard_event; // there is nothing to be consumed
         }
 
       private:
@@ -325,25 +332,35 @@ class state_machine : noncopyable
       const ExceptionEvent & exceptionEvent,
       detail::state_base * pCurrentState )
     {
+      const machine_status_enum status = machine_status();
+
+      if ( status == no_state )
+      {
+        // there is not state that could handle the exception -> bail out
+        return false;
+      }
+
       // If we are stable, an event handler has thrown.
       // Otherwise, either a state constructor or a transition action
       // has thrown and the state machine is now in an invalid state.
       // This situation can be resolved by the exception event handler
       // function by orderly transiting to another state or terminating.
-      // As a result of this, pCurrentIncompleteState_ must point to
-      // currentStates_.end() after processing the exception event.
+      // As a result of this, the machine must not be unstable when this
+      // function is left.
       detail::state_base * const pHandlingState =
-        stable() ? pCurrentState : &incomplete_state();
+        status == stable ? pCurrentState : &unstable_state();
 
       BOOST_ASSERT( pHandlingState != 0 );
 
-      // Deliberately ignore whether the event was consumed or not. Important
-      // is whether we are stable or not.
-      translator_( 
+      const result reaction_result = translator_( 
         detail::send_function( exceptionEvent, *pHandlingState ),
-        exception_event_handler( *this, pCurrentState ) );
+        exception_event_handler( *this, pCurrentState ),
+        do_discard_event );
 
-      return stable();
+      // TODO: defer event here
+
+      return ( reaction_result != do_forward_event ) &&
+        ( machine_status() != unstable );
     }
 
     class exception_event_handler
@@ -373,22 +390,24 @@ class state_machine : noncopyable
 
     friend exception_event_handler;
 
-    bool send_event( const detail::event_base & evt )
+    void send_event( const event_base & evt )
     {
-      BOOST_ASSERT( stable() );
+      BOOST_ASSERT( machine_status() != unstable );
 
-      bool wasConsumed = false;
-      StateList::iterator pState = currentStates_.begin();
+      result reaction_result = do_forward_event;
+      state_list_type::iterator pState = currentStates_.begin();
 
-      while ( !wasConsumed && ( pState != currentStates_.end() ) )
+      while ( ( reaction_result == do_forward_event ) &&
+        ( pState != currentStates_.end() ) )
       {
         try
         {
           // CAUTION: The following statement could modify our state list!
           // We must not continue iterating, if the event was consumed
-          wasConsumed = translator_(
+          reaction_result = translator_(
             detail::send_function( evt, **pState ),
-            exception_event_handler( *this, get_pointer( *pState ) ) );
+            exception_event_handler( *this, get_pointer( *pState ) ),
+            do_discard_event );
         }
         catch ( ... )
         {
@@ -396,54 +415,71 @@ class state_machine : noncopyable
           throw;
         }
 
-        if ( !wasConsumed )
+        // TODO: defer event here
+
+        if ( reaction_result == do_forward_event )
         {
-          // we can only safely advance the iterator _if_ currentStates has
+          // we can only safely advance the iterator if currentStates has
           // not been modified!
           ++pState;
         }
       }
-
-      return wasConsumed;
     }
 
     void process_queued_events()
     {
       while ( !eventQueue_.empty() )
       {
-        const typename event_queue_type::value_type pCurrentEvent(
-          eventQueue_.front() );
-        eventQueue_.pop();
+        const event_ptr_type pCurrentEvent( eventQueue_.front() );
+        eventQueue_.pop_front();
         send_event( *pCurrentEvent );
       }
     }
 
 
-    bool stable() const
+    enum machine_status_enum
     {
-      return pIncompleteState_ == currentStates_.end();
+      no_state,
+      unstable,
+      stable
+    };
+
+    machine_status_enum machine_status() const
+    {
+      if ( currentStates_.empty() )
+      {
+        return no_state;
+      }
+      else if ( pUnstableState_ != currentStates_.end() )
+      {
+        return unstable;
+      }
+      else
+      {
+        return stable;
+      }
     }
 
-    detail::state_base & incomplete_state()
+    detail::state_base & unstable_state()
     {
-      BOOST_ASSERT( !stable() );
-      return **pIncompleteState_;
+      BOOST_ASSERT( machine_status() == unstable );
+      return **pUnstableState_;
     }
 
-    template< detail::orthogonal_position_type noOfOrthogonalStates, class StateList >
+    template< detail::orthogonal_position_type noOfOrthogonalRegions, class StateList >
     void add_impl(
-      const detail::node_state< noOfOrthogonalStates, StateList > & ) {}
+      const detail::node_state< noOfOrthogonalRegions, StateList > & ) {}
 
     template< class StateList >
     void add_impl( detail::leaf_state< StateList > & theState )
     {
-      theState.set_list_position( pIncompleteState_ );
-      pIncompleteState_ = currentStates_.end();
+      theState.set_list_position( pUnstableState_ );
+      pUnstableState_ = currentStates_.end();
     }
 
     event_queue_type eventQueue_;
     state_list_type currentStates_;
-    typename state_list_type::iterator pIncompleteState_;
+    typename state_list_type::iterator pUnstableState_;
     ExceptionTranslator translator_;
 };
 

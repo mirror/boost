@@ -1,7 +1,7 @@
 #ifndef BOOST_FSM_LEAF_STATE_HPP_INCLUDED
 #define BOOST_FSM_LEAF_STATE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) 2002 Andreas Huber, Zurich, Switzerland
+// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
 // is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
@@ -11,14 +11,6 @@
 
 
 #include <boost/fsm/detail/universal_state.hpp>
-
-
-
-#ifdef _MSC_VER
-// these appear with warning level 4 only
-#pragma warning( disable: 4511 ) // copy constructor could not be generated
-#pragma warning( disable: 4512 ) // assignment operator could not be generated
-#endif
 
 
 
@@ -52,7 +44,8 @@ class leaf_state : public universal_state< StateList >
       listPosition_ = listPosition;
     }
 
-    virtual void remove_from_state_list( StateList & states )
+    virtual void remove_from_state_list(
+      StateList & states, typename StateList::iterator & )
     {
       // Because the list owns the leaf_state, this leads to the immediate
       // termination of this state.
