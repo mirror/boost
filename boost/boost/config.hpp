@@ -267,6 +267,8 @@
 #elif defined __BORLANDC__
 #   define BOOST_NO_SLIST
 #   define BOOST_NO_HASH
+// pull in standard library version:
+#   include <memory>
 #   if __BORLANDC__ <= 0x0551
 #     define BOOST_NO_INTEGRAL_INT64_T
 #     define BOOST_NO_PRIVATE_IN_AGGREGATE
@@ -290,6 +292,12 @@
 #   else
 #     define BOOST_DECL
 #   endif
+#if (__BORLANDC__ == 0x550) || (__BORLANDC__ == 0x551)
+// <climits> is partly broken, some macos define symbols that are really in
+// namespace std, so you end up having to use illegal constructs like
+// std::DBL_MAX, as a fix we'll just include float.h and have done with:
+#include <float.h>
+#endif
 
 //  Intel  -------------------------------------------------------------------//
 
@@ -438,7 +446,7 @@
 //  end of compiler specific portion  ----------------------------------------//
 
 #if defined(BOOST_NO_LIMITS) || \
-  (defined(_RWSTD_VER) && _RWSTD_VER < 0x0203) || \
+  (defined(_RWSTD_VER) && _RWSTD_VER < 0x020300) || \
   (defined(__SGI_STL_PORT) && __SGI_STL_PORT <= 0x410 && __STL_STATIC_CONST_INIT_BUG)
 // STLPort 4.0 doesn't define the static constants in numeric_limits<> so that they
 // can be used at compile time if the compiler bug indicated by
@@ -498,4 +506,5 @@ namespace std {
 #endif
 
 #endif  // BOOST_CONFIG_HPP
+
 
