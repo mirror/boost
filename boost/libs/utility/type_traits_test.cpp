@@ -387,6 +387,7 @@ int main()
    value_test(true, is_array<int[2]>::value)
    value_test(true, is_array<int[2][3]>::value)
    value_test(true, is_array<UDT[2]>::value)
+   value_test(false, is_array<int(&)[2]>::value)
 
    typedef void(*f1)();
    typedef int(*f2)(int);
@@ -413,6 +414,8 @@ int main()
    value_test(false, is_pointer<int*const volatile>::value)
    // JM 02 Oct 2000:
    value_test(false, is_pointer<non_pointer>::value)
+   value_test(false, is_pointer<int*&>::value)
+   value_test(false, is_pointer<int(&)[2]>::value)
 
    value_test(true, is_pointer<f1>::value)
    value_test(true, is_pointer<f2>::value)

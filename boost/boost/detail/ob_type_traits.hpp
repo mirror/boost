@@ -278,7 +278,8 @@ private:
    static T t;
 public:
    enum{ value = (1 == sizeof(detail::is_pointer_helper(t))) 
-                 && (sizeof(T) != sizeof(void*)) }; 
+                 && (sizeof(T) != sizeof(void*))
+                 && !is_reference<T>::value }; 
 };
 
 //* is a type T a pointer type (including function pointers) - is_pointer<T>
@@ -293,7 +294,8 @@ public:
    enum{ value = (!is_const<T>::value 
                  && !is_volatile<T>::value 
                  && (sizeof(T) == sizeof(void*))
-                 && (1 == sizeof(detail::is_pointer_helper(t))))
+                 && (1 == sizeof(detail::is_pointer_helper(t)))
+                 && !is_reference<T>::value)
                  || (1 == sizeof(detail::is_pointer_helper3(t))) }; 
 };
 
