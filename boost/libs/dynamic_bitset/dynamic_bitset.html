@@ -46,6 +46,7 @@
 <h2>Contents</h2>
 <dl class="index">
   <dt><a href="#description">Description</a></dt>
+  <dt><a href="#synopsis">Synopsis</a></dt>
   <dt><a href="#definitions">Definitions</a></dt>
   <dt><a href="#examples">Examples</a></dt>
   <dt><a href="#rationale">Rationale</a></dt>
@@ -88,6 +89,170 @@ whether an element of the finite set is in the subset or not. As such
 the bitwise operations of <tt>dynamic_bitset</tt>, such as
 <tt>operator&amp;</tt> and <tt>operator|</tt>, correspond to set
 operations, such as intersection and union. </p>
+
+<h3><a name="synopsis">Synopsis</a></h3>
+
+<pre>
+namespace boost {
+
+template &lt;typename Block, typename Allocator&gt;
+class dynamic_bitset
+{
+public:
+    typedef Block block_type;
+    typedef <i>implementation-defined</i> size_type;
+    enum { block_size = CHAR_BIT * sizeof(Block) };
+
+    class reference
+    {
+    public:
+        // An automatically generated copy constructor.
+        reference&amp; operator=(bool value);
+        reference&amp; operator|=(bool value);
+        reference&amp; operator&amp;=(bool value);
+        reference&amp; operator^=(bool value);
+        reference&amp; operator-=(bool value);
+        reference&amp; operator=(const reference&amp; j);
+        reference&amp; operator|=(const reference&amp; j);
+        reference&amp; operator&amp;=(const reference&amp; j);
+        reference&amp; operator^=(const reference&amp; j);
+        reference&amp; operator-=(const reference&amp; j);
+        bool operator~() const;
+        operator bool() const;
+        reference&amp; flip();
+    };
+    typedef bool const_reference;
+
+    explicit dynamic_bitset(const Allocator&amp; alloc = Allocator());
+
+    explicit dynamic_bitset(size_type num_bits, unsigned long value = 0,
+                            const Allocator&amp; alloc = Allocator());
+
+    template &lt;typename CharT, typename Traits, typename Alloc&gt;
+    explicit dynamic_bitset(const std::basic_string&lt;CharT, Traits, Alloc&gt;&amp; s, 
+        typename std::basic_string&lt;CharT, Traits, Alloc&gt;::size_type pos = 0, 
+        typename std::basic_string&lt;CharT, Traits, Alloc&gt;::size_type n 
+            = std::basic_string&lt;CharT, Traits, Alloc&gt;::npos,
+        const Allocator&amp; alloc = Allocator());
+
+    template &lt;typename BlockInputIterator&gt;
+    dynamic_bitset(BlockInputIterator first, BlockInputIterator last,
+                   const Allocator&amp; alloc = Allocator());
+
+    dynamic_bitset(const dynamic_bitset&amp; b);
+
+    void swap(dynamic_bitset&amp; b);
+
+    dynamic_bitset&amp; operator=(const dynamic_bitset&amp; b);
+
+    void resize(size_type num_bits, bool value = false);
+    void clear();
+    void push_back(bool bit);
+    void append(Block block);
+    template &lt;typename BlockInputIterator&gt;
+    void append(BlockInputIterator first, BlockInputIterator last);
+
+    dynamic_bitset&amp; operator&amp;=(const dynamic_bitset&amp; b);
+    dynamic_bitset&amp; operator|=(const dynamic_bitset&amp; b);
+    dynamic_bitset&amp; operator^=(const dynamic_bitset&amp; b);
+    dynamic_bitset&amp; operator-=(const dynamic_bitset&amp; b);
+    dynamic_bitset&amp; operator&lt;&lt;=(size_type n);
+    dynamic_bitset&amp; operator&gt;&gt;=(size_type n);
+    dynamic_bitset operator&lt;&lt;(size_type n) const;
+    dynamic_bitset operator&gt;&gt;(size_type n) const;
+
+    dynamic_bitset&amp; set(size_type n, bool val = true);
+    dynamic_bitset&amp; set();
+    dynamic_bitset&amp; reset(size_type n);
+    dynamic_bitset&amp; reset();
+    dynamic_bitset&amp; flip(size_type n);
+    dynamic_bitset&amp; flip();
+    bool test(size_type n) const;
+    bool any() const;
+    bool none() const;
+    dynamic_bitset operator~() const;
+    size_type count() const;
+
+    reference operator[](size_type pos) { return reference(*this, pos); }
+    bool operator[](size_type pos) const { return test(pos); }
+
+    unsigned long to_ulong() const;
+  
+    size_type size() const;
+
+    template &lt;typename B, typename A&gt;
+    friend bool operator==(const dynamic_bitset&lt;B, A&gt;&amp; a, 
+                           const dynamic_bitset&lt;B, A&gt;&amp; b);
+    template &lt;typename B, typename A&gt;
+    friend bool operator&lt;(const dynamic_bitset&lt;B, A&gt;&amp; a, 
+                          const dynamic_bitset&lt;B, A&gt;&amp; b);
+    template &lt;typename B, typename A&gt;
+    friend bool operator&gt;(const dynamic_bitset&lt;B, A&gt;&amp; a, 
+                          const dynamic_bitset&lt;B, A&gt;&amp; b);
+
+    template &lt;typename B, typename A, typename BlockOutputIterator&gt;
+    friend void to_block_range(const dynamic_bitset&lt;B, A&gt;&amp; b, 
+                               BlockOutputIterator result);
+};
+
+template &lt;typename Block, typename Allocator&gt;
+bool operator!=(const dynamic_bitset&lt;Block, Allocator&gt;&amp; a, 
+                const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+
+template &lt;typename Block, typename Allocator&gt;
+bool operator&lt;=(const dynamic_bitset&lt;Block, Allocator&gt;&amp; a, 
+                const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+
+template &lt;typename Block, typename Allocator&gt;
+bool operator&gt;(const dynamic_bitset&lt;Block, Allocator&gt;&amp; a, 
+               const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+
+template &lt;typename Block, typename Allocator&gt;
+bool operator&gt;=(const dynamic_bitset&lt;Block, Allocator&gt;&amp; a, 
+                const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+
+template &lt;typename CharT, typename Traits, typename Block, typename Allocator&gt;
+std::basic_ostream&lt;CharT, Traits&gt;&amp;
+operator&lt;&lt;(std::basic_ostream&lt;CharT, Traits&gt;&amp; os, 
+           const dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+
+template &lt;typename CharT, typename Traits, typename Block, typename Allocator&gt;
+std::basic_istream&lt;CharT, Traits&gt;&amp;
+operator&gt;&gt;(std::basic_istream&lt;CharT, Traits&gt;&amp; is, 
+           dynamic_bitset&lt;Block, Allocator&gt;&amp; b);
+
+template &lt;typename Block, typename Allocator&gt;
+dynamic_bitset&lt;Block, Allocator&gt;
+operator&amp;(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b1, 
+          const dynamic_bitset&lt;Block, Allocator&gt;&amp; b2);
+
+template &lt;typename Block, typename Allocator&gt;
+dynamic_bitset&lt;Block, Allocator&gt;
+operator|(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b1, 
+          const dynamic_bitset&lt;Block, Allocator&gt;&amp; b2);
+
+template &lt;typename Block, typename Allocator&gt;
+dynamic_bitset&lt;Block, Allocator&gt;
+operator^(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b1,
+          const dynamic_bitset&lt;Block, Allocator&gt;&amp; b2);
+
+template &lt;typename Block, typename Allocator&gt;
+dynamic_bitset&lt;Block, Allocator&gt;
+operator-(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b1,
+          const dynamic_bitset&lt;Block, Allocator&gt;&amp; b2);
+
+template &lt;typename Block, typename Allocator, typename CharT, typename Alloc&gt;
+void 
+to_string(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b, 
+          std::basic_string&lt;CharT, Alloc&gt;&amp; s);
+
+template &lt;typename Block, typename Allocator, typename BlockOutputIterator&gt;
+void
+to_block_range(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b, 
+               BlockOutputIterator result);
+
+} // namespace boost
+</pre>
 
 <h3><a name="definitions">Definitions</a></h3>
 <p>
@@ -332,20 +497,33 @@ only as a helper class for <tt>dynamic_bitset</tt>'s
 <tt>operator[]</tt>.  The following table describes the valid
 operations on the <tt>reference</tt> type. Assume that <tt>b</tt> is
 an instance of <tt>dynamic_bitset</tt>, <tt>i, j</tt> are of
-<tt>size_type</tt> and in the range <tt>[0,b.size())</tt>. The
-variables <tt>bi, bj</tt> are of type <tt>reference</tt> and
-initialized with <tt> b[i]</tt> and <tt>b[j]</tt> respectively.  The
+<tt>size_type</tt> and in the range <tt>[0,b.size())</tt>.  Also, note
+that when we write <tt>b[i]</tt> we mean an object of type
+<tt>reference</tt> that was initalized from <tt>b[i]</tt>.  The
 variable <tt>x</tt> is a <tt>bool</tt>.
 
 <table border=1>
 <tr><th>Expression</th><th>Semantics</th></tr>
-<tr><td><tt>x = bi</tt></td>     <td>Assign the ith bit of <tt>b</tt> to <tt>x</tt>.</td></tr>
-<tr><td><tt>(bool)bi</tt></td>     <td>Return the ith bit of <tt>b</tt>.</td></tr>
-<tr><td><tt>bi = x</tt></td>     <td>Set the ith bit of <tt>b</tt> to the value of <tt>x</tt> and return <tt>bi</tt>.</td></tr>
-<tr><td><tt>bi = bj</tt></td>  <td>Set the ith bit of <tt>b</tt> to the value of the jth bit of <tt>b</tt> and return <tt>bi</tt>.</td></tr>     
+<tr><td><tt>x = b[i]</tt></td>     <td>Assign the ith bit of <tt>b</tt> to <tt>x</tt>.</td></tr>
+<tr><td><tt>(bool)b[i]</tt></td>     <td>Return the ith bit of <tt>b</tt>.</td></tr>
+
+<tr><td><tt>b[i] = x</tt></td>     <td>Set the ith bit of <tt>b</tt> to the value of <tt>x</tt> and return <tt>b[i]</tt>.</td></tr>
+<tr><td><tt>b[i] |= x</tt></td>     <td>Or the ith bit of <tt>b</tt> with the value of <tt>x</tt> and return <tt>b[i]</tt>.</td></tr>
+<tr><td><tt>b[i] &= x</tt></td>     <td>And the ith bit of <tt>b</tt> with the value of <tt>x</tt> and return <tt>b[i]</tt>.</td></tr>
+<tr><td><tt>b[i] ^= x</tt></td>     <td>Exclusive-Or the ith bit of <tt>b</tt> with the value of <tt>x</tt> and return <tt>b[i]</tt>.</td></tr>
+<tr><td><tt>b[i] -= x</tt></td>     <td>If <tt>x==true</tt>, clear the ith bit of <tt>b</tt>. Returns <tt>b[i]</tt>.</td></tr>
+
+<tr><td><tt>b[i] = b[j]</tt></td>  <td>Set the ith bit of <tt>b</tt> to the value of the jth bit of <tt>b</tt> and return <tt>b[i]</tt>.</td></tr>
+<tr><td><tt>b[i] |= b[j]</tt></td>     <td>Or the ith bit of <tt>b</tt> with the 
+ jth bit of <tt>b</tt> and return <tt>b[i]</tt>.</td></tr>
+<tr><td><tt>b[i] &= b[j]</tt></td>     <td>And the ith bit of <tt>b</tt> with the jth bit of <tt>b</tt> and return <tt>b[i]</tt>.</td></tr>
+<tr><td><tt>b[i] ^= b[j]</tt></td>     <td>Exclusive-Or the ith bit of <tt>b</tt> with the jth bit of <tt>b</tt> and return <tt>b[i]</tt>.</td></tr>
+<tr><td><tt>b[i] -= b[j]</tt></td>     <td>If the jth bit of <tt>b</tt> is set, clear the ith bit of <tt>b</tt>. Returns <tt>b[i]</tt>.</td></tr>
+
+
 <tr><td><tt>x = ~b[i]</tt></td>    <td>Assign the opposite of the ith bit of <tt>b</tt> to <tt>x</tt>.</td></tr>
 <tr><td><tt>(bool)~b[i]</tt></td>    <td>Return the opposite of the ith bit of <tt>b</tt>.</td></tr>
-<tr><td><tt>b[i].flip()</tt>       <td>Flip the ith bit of <tt>b</tt> and return <tt>bi</tt>.</td></tr>
+<tr><td><tt>b[i].flip()</tt>       <td>Flip the ith bit of <tt>b</tt> and return <tt>b[i]</tt>.</td></tr>
 </table>
 
 <hr>
