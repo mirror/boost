@@ -133,6 +133,18 @@
       <default>N</default>
     </static-constant>
 
+    <struct name="sig">
+      <template>
+        <template-type-parameter name="Args"/>
+      </template>
+
+      <purpose>
+        <simpara><libraryname>Lambda</libraryname> library support</simpara>
+      </purpose>
+
+      <typedef name="type"><type>result_type</type></typedef>
+    </struct>
+
     <constructor>
       <postconditions><simpara><code>this-><methodname>empty</methodname>()</code></simpara></postconditions>
       <throws><simpara>Will not throw.</simpara></throws>
@@ -329,6 +341,18 @@
       <type>int</type>
       <default>N</default>
     </static-constant>
+
+    <struct name="sig">
+      <template>
+        <template-type-parameter name="Args"/>
+      </template>
+
+      <purpose>
+        <simpara><libraryname>Lambda</libraryname> library support</simpara>
+      </purpose>
+
+      <typedef name="type"><type>result_type</type></typedef>
+    </struct>
 
     <constructor>
       <postconditions><simpara><code>this-><methodname>empty</methodname>()</code></simpara></postconditions>
