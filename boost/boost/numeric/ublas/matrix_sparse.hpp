@@ -2649,7 +2649,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         static size_type index_base () {
-            return index_base_;
+            return IB;
         }
         BOOST_UBLAS_INLINE
         const index_array_type &index1_data () const {
@@ -3844,7 +3844,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        BOOST_STATIC_CONSTANT (size_type, index_base_ = IB);
         size_type size1_;
         size_type size2_;
         size_type non_zeros_;
@@ -3857,11 +3856,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         static size_type zero_based (size_type k_based_index) {
-            return k_based_index - index_base_;
+            return k_based_index - IB;
         }
         BOOST_UBLAS_INLINE
         static size_type k_based (size_type zero_based_index) {
-            return zero_based_index + index_base_;
+            return zero_based_index + IB;
         }
 
         friend class iterator1;
@@ -3972,7 +3971,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         static size_type index_base () {
-            return index_base_;
+            return IB;
         }
         BOOST_UBLAS_INLINE
         const index_array_type &index1_data () const {
@@ -5156,7 +5155,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        BOOST_STATIC_CONSTANT (size_type, index_base_ = IB);
         size_type size1_;
         size_type size2_;
         size_type non_zeros_;
@@ -5169,11 +5167,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         static size_type zero_based (size_type k_based_index) {
-            return k_based_index - index_base_;
+            return k_based_index - IB;
         }
         BOOST_UBLAS_INLINE
         static size_type k_based (size_type zero_based_index) {
-            return zero_based_index + index_base_;
+            return zero_based_index + IB;
         }
 
         friend class iterator1;
