@@ -8,6 +8,8 @@
 //  DESCRIPTION:   The standard library lacks std::basic_streambuf<wchar_t>.
 
 #include <iostream>
+#include <streambuf>
+#include <string>
 
 namespace boost_no_std_wstreambuf{
 
