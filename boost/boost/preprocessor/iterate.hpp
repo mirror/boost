@@ -67,6 +67,8 @@
 #
 # define BOOST_PP_INCLUDE_SELF() <boost/preprocessor/detail/iterate/self.hpp>
 #
+# define BOOST_PP_SLOT_LIMIT 5
+#
 # define BOOST_PP_ASSIGN_SLOT(i) BOOST_PP_DETAIL_CAT4(<boost/preprocessor/detail/iterate/slot, i, ., hpp>)
 # define BOOST_PP_SLOT(i) BOOST_PP_DETAIL_CAT2(BOOST_PP_SLOT_, i)
 #
