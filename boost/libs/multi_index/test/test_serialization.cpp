@@ -71,21 +71,23 @@ void test_serialization(const MultiIndexContainer& m)
   std::ostringstream oss;
   {
     boost::archive::text_oarchive oa(oss);
-    oa<<boost::serialization::make_nvp("container",m);
+    oa<<m;
 
-    for(const_iterator it=m.begin(),it_end=m.end();it!=it_end;++it){
+    const_iterator it_end=m.end();
+    for(const_iterator it=m.begin();it!=it_end;++it){
       oa<<it;
     }
-    oa<<m.end();
+    oa<<it_end;
   }
 
   MultiIndexContainer m2;
   std::istringstream iss(oss.str());
   boost::archive::text_iarchive ia(iss);
-  ia>>boost::serialization::make_nvp("container",m2);
+  ia>>m2;
   BOOST_CHECK(all_indices_equal(m,m2));
 
-  for(iterator it=m2.begin(),it_end=m2.end();it!=it_end;++it){
+  iterator it_end=m2.end();
+  for(iterator it=m2.begin();it!=it_end;++it){
     iterator it2;
     ia>>it2;
     BOOST_CHECK(it==it2);
@@ -103,8 +105,8 @@ void test_serialization(const MultiIndexContainer& m)
   }
   iterator it2;
   ia>>it2;
-  BOOST_CHECK(m2.end()==it2);
-  BOOST_CHECK(m2.end()==project<0>(m2,it2));
+  BOOST_CHECK(it_end==it2);
+  BOOST_CHECK(it_end==project<0>(m2,it2));
 }
 
 struct container_holder
@@ -131,7 +133,7 @@ private:
   template<class Archive>
   void serialize(Archive& ar,const unsigned int)
   {
-    ar&boost::serialization::make_nvp("container",m);
+    ar&m;
   }
 };
 
