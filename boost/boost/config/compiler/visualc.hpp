@@ -33,6 +33,7 @@
 #  define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #  define BOOST_NO_INTEGRAL_INT64_T
 #  define BOOST_NO_DEDUCED_TYPENAME
+#  define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
 
 //    VC++ 6/7 has member templates but they have numerous problems including
 //    cases of silent failure, so for safety we define:

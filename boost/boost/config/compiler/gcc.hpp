@@ -28,6 +28,10 @@
 #     define BOOST_NO_OPERATORS_IN_NAMESPACE
 #   endif
 
+#   if __GNUC__ < 3
+#      define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
+#   endif
+
 #ifndef __EXCEPTIONS
 # define BOOST_NO_EXCEPTIONS
 #endif
