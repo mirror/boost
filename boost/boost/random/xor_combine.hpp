@@ -48,9 +48,11 @@ public:
   BOOST_STATIC_CONSTANT(int, shift1 = s1);
   BOOST_STATIC_CONSTANT(int, shfit2 = s2);
 
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
   BOOST_STATIC_ASSERT(std::numeric_limits<typename base1_type::result_type>::is_integer);
   BOOST_STATIC_ASSERT(std::numeric_limits<typename base2_type::result_type>::is_integer);
   BOOST_STATIC_ASSERT(std::numeric_limits<typename base1_type::result_type>::digits >= std::numeric_limits<typename base2_type::result_type>::digits);
+#endif
 
   xor_combine() : _rng1(), _rng2() { }
   xor_combine(const base1_type & rng1, const base2_type & rng2)

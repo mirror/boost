@@ -25,6 +25,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <boost/config.hpp>
+#include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/random/detail/const_mod.hpp>
 
@@ -52,7 +53,9 @@ public:
   // constant expressions.  Avoid the check for now.
   // BOOST_STATIC_ASSERT(m == 0 || a < m);
   // BOOST_STATIC_ASSERT(m == 0 || c < m);
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
   BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
+#endif
 
   explicit linear_congruential(IntType x0 = 1)
     : _modulus(modulus), _x(_modulus ? (x0 % _modulus) : x0)

@@ -51,14 +51,18 @@ public:
   result_type max() const { return (sizeof(int) == 4 && w == 32 ?
                                     (result_type)-1 : (1 << w) -1); }
 
-  // necessary conditions on the template parameters
-  BOOST_STATIC_ASSERT(w > 0);
-  BOOST_STATIC_ASSERT(q > 0);
-  BOOST_STATIC_ASSERT(k < w);
-  BOOST_STATIC_ASSERT(0 < 2*q && 2*q < k);
-  BOOST_STATIC_ASSERT(0 < s && s <= k-q);
+  // MSVC 6 and possibly others crash when encountering complicated integral
+  // constant expressions.  Avoid the checks for now.
+  // BOOST_STATIC_ASSERT(w > 0);
+  // BOOST_STATIC_ASSERT(q > 0);
+  // BOOST_STATIC_ASSERT(k < w);
+  // BOOST_STATIC_ASSERT(0 < 2*q && 2*q < k);
+  // BOOST_STATIC_ASSERT(0 < s && s <= k-q);
+
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
   BOOST_STATIC_ASSERT(std::numeric_limits<UIntType>::is_integer);
   BOOST_STATIC_ASSERT(!std::numeric_limits<UIntType>::is_signed);
+#endif
 
   explicit linear_feedback_shift(UIntType s0 = 341) { seed(s0); }
   template<class It> linear_feedback_shift(It& first, It last)

@@ -41,7 +41,9 @@ public:
   BOOST_STATIC_CONSTANT(unsigned int, total_block = p);
   BOOST_STATIC_CONSTANT(unsigned int, returned_block = r);
 
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
   BOOST_STATIC_ASSERT(total_block >= returned_block);
+#endif
 
   discard_block() : _rng(), _n(0) { }
   explicit discard_block(const base_type & rng) : _rng(rng), _n(0) { }
