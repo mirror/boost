@@ -21,7 +21,7 @@
     <h1 align="center">The boost::fsm library</h1>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2004/04/22<!--webbot bot="Timestamp" endspan i-checksum="12536" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2004/05/12<!--webbot bot="Timestamp" endspan i-checksum="12599" --></font></td>
   </tr>
 </table>
 <hr>
@@ -92,6 +92,28 @@ the making:</p>
 </dl>
 <hr>
 <h2>Change history</h2>
+<p>12 May, 2004</p>
+<ul>
+  <li>Fixed a bug that could have led to an <code>exception_thrown</code> 
+  event being sent to a state that is <b>not</b> the outermost unstable state 
+  in an unstable state machine (as documented in the reference). Instead, the 
+  event was sent to the state where the entry action of a direct inner state 
+  threw an exception, which is only correct for state machines without 
+  orthogonal regions. Also updated the
+  <a href="tutorial.html#Exception handling">Exception handling</a> section in 
+  the tutorial, which now explains this behavior in detail</li>
+  <li>Fixed bug that, under extremely rare circumstances, would have prevented 
+  the correct handling of out of memory situations</li>
+  <li>Fixed an inconsistency in the state entry sequence when a state in an 
+  orthogonal region is the target of a transition originating outside its 
+  direct outer state. Now the states are always entered according to the 
+  number of their orthogonal region, i.e. orthogonal region 0 first, then 
+  orthogonal region 1 and so on. Since the documentation did not define the 
+  sequence (it does now) users should not notice any difference</li>
+  <li>Changed the implementation of <code>state_machine::terminate()</code> so 
+  that orthogonal regions are now exited strictly from highest to lowest 
+  number instead of arbitrarily as before. Updated docs accordingly</li>
+</ul>
 <p>22 April, 2004</p>
 <ul>
   <li>Removed the previously added BCC5.6.4 fixes (the BCC port was postponed 
@@ -210,7 +232,7 @@ the making:</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->22 April, 2004<!--webbot bot="Timestamp" endspan i-checksum="29906" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13983" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file
