@@ -162,12 +162,23 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block(void* p)
 
 } // namespace boost
 
-#if defined(BOOST_RE_USE_VCL) && defined(BOOST_REGEX_BUILD_DLL)
+#if defined(BOOST_RE_USE_VCL) && defined(BOOST_REGEX_DYN_LINK)
 
 int WINAPI DllEntryPoint(HINSTANCE , unsigned long , void*)
 {
    return 1;
 }
+#endif
+
+#if defined(__IBMCPP__) && defined(BOOST_REGEX_DYN_LINK)
+//
+// Is this correct - linker complains without it ?
+//
+int main()
+{ 
+   return 0; 
+}
+
 #endif
 
 
