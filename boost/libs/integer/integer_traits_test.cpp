@@ -35,7 +35,7 @@
  * Therefore, avoid explicit function template instantiations.
  */
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1200)
+#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
 template<typename T> inline T make_char_numeric_for_streaming(T x) { return x; }
 namespace fix{
 inline int make_char_numeric_for_streaming(char c) { return c; }
