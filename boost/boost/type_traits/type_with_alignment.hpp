@@ -144,15 +144,6 @@ union max_align
         )
 };
 
-// All of the has_one_T types are POD types, so tell that to is_POD
-# define BOOST_TT_HAS_ONE_T_POD(R,P,I,T) BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,T,true)
-BOOST_PP_LIST_FOR_EACH_I(
-      BOOST_TT_HAS_ONE_T_POD
-      , ignored
-      , BOOST_TT_ALIGNMENT_STRUCT_TYPES
-      )
-
-#undef BOOST_TT_HAS_ONE_T_POD
 #undef BOOST_TT_ALIGNMENT_BASE_TYPES
 #undef BOOST_TT_HAS_ONE_T
 #undef BOOST_TT_ALIGNMENT_STRUCT_TYPES
@@ -168,7 +159,26 @@ struct is_aligned
         );
 };
 
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::max_align,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<1> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<2> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<4> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<8> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<10> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<16> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<32> ,true)
+#endif
+
 } // namespace detail
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+template<int Align>
+struct is_pod<::boost::detail::lower_alignment<Align> >
+{
+	BOOST_STATIC_CONSTANT(std::size_t, value = true);
+};
+#endif
 
 // This alignment method originally due to Brian Parker, implemented by David
 // Abrahams, and then ported here by Doug Gregor.
