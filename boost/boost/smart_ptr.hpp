@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  19 Oct 00  Make shared_ptr ctor from auto_ptr explicit. (Robert Vugts) 
 //  24 Jul 00  Change throw() to // never throws.  See lib guidelines
 //             Exception-specification rationale. (Beman Dawes)
 //  22 Jun 00  Remove #if continuations to fix GCC 2.95.2 problem (Beman Dawes)
@@ -140,7 +141,7 @@ template<typename T> class shared_ptr {
       }
 
    template<typename Y>
-      shared_ptr(std::auto_ptr<Y>& r) { 
+      explicit shared_ptr(std::auto_ptr<Y>& r) { 
          pn = new long(1); // may throw
          px = r.release(); // fix: moved here to stop leak if new throws
       } 
@@ -164,7 +165,7 @@ template<typename T> class shared_ptr {
          return *this;
       }
 #else
-      shared_ptr(std::auto_ptr<T>& r) { 
+      explicit shared_ptr(std::auto_ptr<T>& r) { 
          pn = new long(1); // may throw
          px = r.release(); // fix: moved here to stop leak if new throws
       } 
