@@ -17,7 +17,7 @@
 
 #include <boost/config.hpp>   // for broken compiler workarounds
 
-#ifndef BOOST_MSVC6_MEMBER_TEMPLATES
+#if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
 #include <boost/detail/shared_array_nmt.hpp>
 #else
 
@@ -151,6 +151,6 @@ template<typename T> void swap(shared_array<T> & a, shared_array<T> & b) // neve
 
 } // namespace boost
 
-#endif  // #ifndef BOOST_MSVC6_MEMBER_TEMPLATES
+#endif  // #if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
 
 #endif  // #ifndef BOOST_SHARED_ARRAY_HPP_INCLUDED

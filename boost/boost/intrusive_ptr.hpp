@@ -61,7 +61,7 @@ public:
         if(p_ != 0) intrusive_ptr_release(p_);
     }
 
-#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
+#if !defined(BOOST_NO_MEMBER_TEMPLATES) || defined(BOOST_MSVC6_MEMBER_TEMPLATES)
 
     template<class U> intrusive_ptr(intrusive_ptr<U> const & rhs): p_(rhs.get())
     {
@@ -75,7 +75,7 @@ public:
         if(p_ != 0) intrusive_ptr_add_ref(p_);
     }
 
-#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
+#if !defined(BOOST_NO_MEMBER_TEMPLATES) || defined(BOOST_MSVC6_MEMBER_TEMPLATES)
 
     template<class U> intrusive_ptr & operator=(intrusive_ptr<U> const & rhs)
     {
