@@ -7,7 +7,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 //
 //  defines object traits classes:
-//  is_object, is_scalar, is_class, is_compound, is_POD, 
+//  is_object, is_scalar, is_class, is_compound, is_pod, 
 //  has_trivial_constructor, has_trivial_copy, has_trivial_assign, 
 //  has_trivial_destructor, is_empty.
 //

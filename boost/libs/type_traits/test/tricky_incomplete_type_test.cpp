@@ -20,7 +20,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<incomplete_type>::val
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<incomplete_type>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<incomplete_type>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_enum<incomplete_type>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<incomplete_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<incomplete_type>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<incomplete_type>::value, false);
 
 TT_TEST_END

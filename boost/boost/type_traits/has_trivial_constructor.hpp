@@ -27,7 +27,7 @@ struct has_trivial_ctor_impl
 {
    BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_or<
-         ::boost::is_POD<T>::value,
+         ::boost::is_pod<T>::value,
          BOOST_HAS_TRIVIAL_CONSTRUCTOR(T)
       >::value));
 };

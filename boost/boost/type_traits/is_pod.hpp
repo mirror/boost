@@ -116,6 +116,7 @@ template <typename T> struct is_POD_impl
 } // namespace detail
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_POD,T,::boost::detail::is_POD_impl<T>::value)
+BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pod,T,::boost::is_POD<T>::value)
 
 // the following help compilers without partial specialization support:
 BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,void,true)

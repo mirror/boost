@@ -439,7 +439,7 @@ has.</p>
     </tr>
     <tr>
         <td valign="top" width="5%">&nbsp;</td>
-        <td valign="top" width="23%" bgcolor="#C0C0C0"><code>::boost::is_POD&lt;T&gt;::value</code></td>
+        <td valign="top" width="23%" bgcolor="#C0C0C0"><code>::boost::is_pod&lt;T&gt;::value</code></td>
         <td valign="top" width="28%" bgcolor="#C0C0C0">Evaluates
         to true only if T is a cv-qualified POD type.</td>
         <td valign="top" width="13%" bgcolor="#C0C0C0"><p
@@ -447,7 +447,7 @@ has.</p>
         <p align="center">9p4</p>
         </td>
         <td valign="top" width="25%" bgcolor="#C0C0C0">Without
-        some (as yet unspecified) help from the compiler, is_POD
+        some (as yet unspecified) help from the compiler, is_pod
         will never report that a class or struct is a POD; this
         is always safe, if possibly sub-optimal.<p>If the
         compiler does not support partial-specialization of class
