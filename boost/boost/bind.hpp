@@ -1134,6 +1134,21 @@ template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, c
     typedef list9<B1, B2, B3, B4, B5, B6, B7, B8, B9> type;
 };
 
+// operator!
+
+struct logical_not
+{
+    template<class V> bool operator()(V const & v) const { return !v; }
+};
+
+template<class R, class F, class L>
+    bind_t< bool, logical_not, list1< bind_t<R, F, L> > >
+    operator! (bind_t<R, F, L> const & f)
+{
+    typedef list1< bind_t<R, F, L> > list_type;
+    return bind_t<bool, logical_not, list_type> ( logical_not(), list_type(f) );
+}
+
 } // namespace _bi
 
 // visit_each
