@@ -1,4 +1,4 @@
-/* Copyright 2003-2004 Joaquín M López Muñoz.
+/* Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -41,6 +41,12 @@ public:
   {
     ar<<serialization::make_nvp("position",*node);
     alg.add(node);
+  }
+
+  template<class Archive>
+  void add_track(Node* node,Archive& ar,const unsigned int)
+  {
+    ar<<serialization::make_nvp("position",*node);
   }
 
   template<typename IndexIterator,class Archive>

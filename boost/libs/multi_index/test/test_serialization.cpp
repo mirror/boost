@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for serialization.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -65,20 +65,46 @@ bool all_indices_equal(
 template<class MultiIndexContainer>
 void test_serialization(const MultiIndexContainer& m)
 {
+  typedef typename MultiIndexContainer::iterator       iterator;
+  typedef typename MultiIndexContainer::const_iterator const_iterator;
+
   std::ostringstream oss;
   {
     boost::archive::text_oarchive oa(oss);
     oa<<boost::serialization::make_nvp("container",m);
+
+    for(const_iterator it=m.begin(),it_end=m.end();it!=it_end;++it){
+      oa<<it;
+    }
+    oa<<m.end();
   }
 
-  std::istringstream iss(oss.str());
   MultiIndexContainer m2;
-  {
-    boost::archive::text_iarchive ia(iss);
-    ia>>boost::serialization::make_nvp("container",m2);
-  }
-
+  std::istringstream iss(oss.str());
+  boost::archive::text_iarchive ia(iss);
+  ia>>boost::serialization::make_nvp("container",m2);
   BOOST_CHECK(all_indices_equal(m,m2));
+
+  for(iterator it=m2.begin(),it_end=m2.end();it!=it_end;++it){
+    iterator it2;
+    ia>>it2;
+    BOOST_CHECK(it==it2);
+
+    /* exercise safe mode with this (unchecked) iterator */
+    BOOST_CHECK(*it==*it2);
+    m2.erase(it,it2);
+    m2.erase(it2,it2);
+    m2.erase(it2,it);
+    iterator it3(++it2);
+    iterator it4;
+    it4=--it2;
+    BOOST_CHECK(it==it4);
+    BOOST_CHECK(it==project<0>(m2,it4));
+  }
+  iterator it2;
+  ia>>it2;
+  BOOST_CHECK(m2.end()==it2);
+  BOOST_CHECK(m2.end()==project<0>(m2,it2));
 }
 
 struct container_holder

@@ -41,7 +41,11 @@ Reference
   <li><a href="#serialization">Serialization</a></li>
   <li><a href="#debugging_support">Debugging support</a>
     <ul>
-      <li><a href="#safe_mode">Safe mode</a></li>
+      <li><a href="#safe_mode">Safe mode</a>
+        <ul>
+           <li><a href="#serialization_and_safe_mode">Serialization and safe mode</a></li>
+        </ul>
+      </li>
       <li><a href="#invariant_check">Invariant-checking mode</a></li>
     </ul>
   </li>
@@ -853,6 +857,12 @@ same way as their originals.
 </p>
 
 <p>
+Iterators to indices of a <code>multi_index_container</code> can also be
+serialized. Serialization of iterators must be done only after serializing
+its corresponding container.
+</p>
+
+<p>
 <a href="examples.html#example8">Example 8</a> in the examples section shows
 the serialization capabilities of Boost.MultiIndex.
 </p>
@@ -991,6 +1001,29 @@ and programs must not rely on it as part of their normal execution flow: in
 particular, no guarantee is made that all possible precondition errors are diagnosed,
 or that the checks remain stable across different versions of the library.
 </p>
+
+<h4><a name="serialization_and_safe_mode">Serialization and safe mode</a></h4>
+
+<p>
+Iterators restored from an archive are not subject to safe mode checks. This is
+so because it is not possible to automatically know the associated
+<code>multi_index_container</code> of an iterator from the serialization
+information alone. However, if desired, a restored iterator can be converted to a
+checked value by using the following workaround:
+</p>
+
+<blockquote><pre>
+<span class=identifier>employee_set</span> <span class=identifier>es</span><span class=special>;</span>
+<span class=identifier>employee_set</span><span class=special>::</span><span class=identifier>nth_index</span><span class=special>&lt;</span><span class=number>1</span><span class=special>&gt;::</span><span class=identifier>iterator</span> <span class=identifier>it</span><span class=special>;</span>
+
+<span class=comment>// restore es and it from an archive ar</span>
+<span class=identifier>ar</span><span class=special>&gt;&gt;</span><span class=identifier>es</span><span class=special>;</span>
+<span class=identifier>ar</span><span class=special>&gt;&gt;</span><span class=identifier>it</span><span class=special>;</span> <span class=comment>// it won't benefit from safe mode checks
+
+// turn it into a checked value by providing
+// Boost.MultiIndex with info about the associated container</span>
+<span class=identifier>it</span><span class=special>=</span><span class=identifier>es</span><span class=special>.</span><span class=identifier>project</span><span class=special>&lt;</span><span class=number>1</span><span class=special>&gt;(</span><span class=identifier>it</span><span class=special>);</span>
+</pre></blockquote>
 
 <h3><a name="invariant_check">Invariant-checking mode</a></h3>
 
@@ -1257,7 +1290,7 @@ definition of the <code>multi_index_container</code>:
 </ul>
 Each of these types is a <a href="../../../libs/mpl/doc/refmanual/forward-sequence.html">
 <code>MPL Forward Sequence</code></a> with as many elements as indices
-comprise the <code>multi_index_container</code>: for instance, the <code>n</code>-nth
+comprise the <code>multi_index_container</code>: for instance, the <code>n</code>-th
 element of <code>iterator_type_list</code> is the same as
 <code>nth_index_iterator&lt;n>::type</code>.
 </p>
@@ -1364,7 +1397,7 @@ Reference
 
 <br>
 
-<p>Revised January 10th 2005</p>
+<p>Revised January 12th 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 

@@ -1,4 +1,4 @@
-/* Copyright 2003-2004 Joaquín M López Muñoz.
+/* Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -29,8 +29,9 @@ namespace detail{
 template<typename Value>
 struct index_node_base
 {
-  typedef Value value_type;
-  value_type    value;
+  typedef index_node_base base_type; /* used for serialization purposes */
+  typedef Value           value_type;
+  value_type              value;
 
 private:
   index_node_base();

@@ -845,6 +845,25 @@ element in [<code>m.get&lt;i&gt;().begin()</code>, <code>m.get&lt;i&gt;().end()<
 where <code>i</code> is the position of the sequenced index in the container.
 </blockquote>
 
+Operation: saving of an <code>iterator</code> or <code>const_iterator</code>
+<code>it</code> to an output archive (XML archive) <code>ar</code>.
+
+<blockquote>
+<b>Requires:</b> <code>it</code> is a valid iterator of the index. The associated
+<code>multi_index_container</code> has been previously saved.
+</blockquote>
+
+Operation: loading of an <code>iterator</code> or <code>const_iterator</code>
+<code>it'</code> from an input archive (XML archive) <code>ar</code>.
+
+<blockquote>
+<b>Postconditions:</b> On succesful loading, if <code>it</code> was dereferenceable
+then <code>*it'</code> is the restored copy of <code>*it</code>, otherwise
+<code>it'==end()</code>.<br>
+<b>Note:</b> It is allowed that <code>it</code> be a <code>const_iterator</code>
+and the restored <code>it'</code> an <code>iterator</code>, or viceversa.
+</blockquote>
+
 <hr>
 
 <div class="prev_link"><a href="ord_indices.html"><img src="../prev.gif" alt="ordered indices" border="0"><br>
@@ -859,9 +878,9 @@ Key extraction
 
 <br>
 
-<p>Revised December 14th 2004</p>
+<p>Revised January 12th 2005</p>
 
-<p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
