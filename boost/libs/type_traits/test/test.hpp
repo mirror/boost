@@ -126,7 +126,7 @@ typedef int (UDT::*cmf)(int) const;
 # ifdef BOOST_MSVC
 #  pragma warning(push)
 #  pragma warning(disable: 4181)
-# elif defined(__ICL)
+# elif defined(__ICL) || defined(__ICC)
 #  pragma warning(push)
 #  pragma warning(disable: 21)
 # endif
@@ -141,7 +141,7 @@ typedef int& r_type;
 typedef const r_type cr_type;
 # ifdef BOOST_MSVC
 #  pragma warning(pop)
-# elif defined(__ICL)
+# elif defined(__ICL) || defined(__ICC)
 #  pragma warning(pop)
 #  pragma warning(disable: 985) // identifier truncated in debug information
 # endif
