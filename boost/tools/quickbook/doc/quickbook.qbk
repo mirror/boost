@@ -548,16 +548,16 @@ syntax highlighted according to the current [link syntax.source_mode source mode
 Macros that are already defined are expanded in source code. Example:
 
 [pre'''
-[def __syntax_highlight__ [@highlight.html syntax_highlight]]
-[def __quickbook__ [@../index.html quickbook]]
+[def __syntax_highlight__ [@quickbook/highlight.html syntax_highlight]]
+[def __quickbook__ [@index.html quickbook]]
 
     using __quickbook__::__syntax_highlight__;
 ''']
 
 Generates:
 
-[def __syntax_highlight__ [@highlight.html syntax_highlight]]
-[def __quickbook__ [@../index.html quickbook]]
+[def __syntax_highlight__ [@quickbook/highlight.html syntax_highlight]]
+[def __quickbook__ [@index.html quickbook]]
 
     using __quickbook__::__syntax_highlight__;
 
@@ -1576,7 +1576,8 @@ will recognize this as a "definition list".
 
      program
          =
-         *(  comment
+         *(  macro
+         |   comment
          |   keyword
          |   identifier
          |   special
@@ -1586,6 +1587,10 @@ will recognize this as a "definition list".
          |   anychar_p
          )
          ;
+
+    macro
+        =   *space_p >> self.macro
+        ;
 
      comment
          =   +(*space_p >> comment_p("#"))
@@ -1625,7 +1630,7 @@ will recognize this as a "definition list".
 
      short_string
          =   confix_p('"', * c_escape_ch_p, '"') |
-             confix_p("'", * c_escape_ch_p, "'")    
+             confix_p('\'', * c_escape_ch_p, '\'')    
          ;
             
      long_string

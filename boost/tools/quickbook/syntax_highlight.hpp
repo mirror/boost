@@ -153,7 +153,8 @@ namespace quickbook
             {
                 program
                     =
-                    *(  comment         [Process("comment", self.out)]
+                    *(  macro
+                    |   comment         [Process("comment", self.out)]
                     |   keyword         [Process("keyword", self.out)]
                     |   identifier      [Process("identifier", self.out)]
                     |   special         [Process("special", self.out)]
@@ -162,6 +163,12 @@ namespace quickbook
                     |   space_p
                     |   anychar_p       [Unexpected(self.out)]
                     )
+                    ;
+
+                macro
+                    =   eps_p(*space_p >> self.macro)
+                    >> (*space_p)       [Space(self.out)]
+                    >> self.macro       [self.do_macro]
                     ;
 
                 comment
@@ -206,8 +213,8 @@ namespace quickbook
                     ;
             
                 long_string
-                    // Note: the "str_p" on the next two lines are required for
-                    // to avoid an INTERNAL COMPILER ERROR when using VC7.1
+                    // Note: the "str_p" on the next two lines work around
+                    // an INTERNAL COMPILER ERROR when using VC7.1
                     =   confix_p(str_p("'''"), * lex_escape_ch_p, "'''") |
                         confix_p(str_p("\"\"\""), * lex_escape_ch_p, "\"\"\"")
                     ;
@@ -227,7 +234,7 @@ namespace quickbook
                     ;
             }
 
-            rule<Scanner>   program, comment, special,
+            rule<Scanner>   program, macro, comment, special,
                             string_, string_prefix, short_string, long_string,
                             number, identifier, keyword;
             symbols<>       keyword_;
@@ -243,4 +250,3 @@ namespace quickbook
 }
 
 #endif // BOOST_SPIRIT_QUICKBOOK_SYNTAX_HIGHLIGHT_HPP
-

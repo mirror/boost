@@ -27,7 +27,8 @@
 <p></p>
 <pre class="programlisting"><tt class="literal"><span class="identifier">program</span><span class="special">
     =</span><span class="special">
-    *(</span><span class="identifier">  comment</span><span class="special">
+    *(</span><span class="identifier">  macro</span><span class="special">
+    |</span><span class="identifier">   comment</span><span class="special">
     |</span><span class="identifier">   keyword</span><span class="special">
     |</span><span class="identifier">   identifier</span><span class="special">
     |</span><span class="identifier">   special</span><span class="special">
@@ -37,6 +38,10 @@
     |</span><span class="identifier">   anychar_p</span><span class="special">
     )</span><span class="special">
     ;</span><span class="identifier">
+
+acro</span><span class="special">
+   =</span><span class="special">   *</span><span class="identifier">space_p</span><span class="special"> &gt;&gt;</span><span class="identifier"> self</span><span class="special">.</span><span class="identifier">macro</span><span class="special">
+   ;</span><span class="identifier">
 
 comment</span><span class="special">
     =</span><span class="special">   +(*</span><span class="identifier">space_p</span><span class="special"> &gt;&gt;</span><span class="identifier"> comment_p</span><span class="special">(</span><span class="string">"#"</span><span class="special">))</span><span class="special">
@@ -76,7 +81,7 @@ string_</span><span class="special">
 
 short_string</span><span class="special">
     =</span><span class="identifier">   confix_p</span><span class="special">(</span><span class="char">'"'</span><span class="special">,</span><span class="special"> *</span><span class="identifier"> c_escape_ch_p</span><span class="special">,</span><span class="char"> '"'</span><span class="special">)</span><span class="special"> |</span><span class="identifier">
-        confix_p</span><span class="special">(</span><span class="string">"'"</span><span class="special">,</span><span class="special"> *</span><span class="identifier"> c_escape_ch_p</span><span class="special">,</span><span class="string"> "'"</span><span class="special">)</span><span class="special">    
+        confix_p</span><span class="special">(</span><span class="char">'\''</span><span class="special">,</span><span class="special"> *</span><span class="identifier"> c_escape_ch_p</span><span class="special">,</span><span class="char"> '\''</span><span class="special">)</span><span class="special">    
     ;</span><span class="identifier">
        
 long_string</span><span class="special">

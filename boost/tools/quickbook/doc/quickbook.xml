@@ -551,15 +551,15 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
 </programlisting>
 <para>
 Macros that are already defined are expanded in source code. Example:</para>
-<programlisting><literal>[def __syntax_highlight__ [@highlight.html syntax_highlight]]
-[def __quickbook__ [@../index.html quickbook]]
+<programlisting><literal>[def __syntax_highlight__ [@quickbook/highlight.html syntax_highlight]]
+[def __quickbook__ [@index.html quickbook]]
 
     using __quickbook__::__syntax_highlight__;
 </literal></programlisting><para>
 Generates:</para>
 <programlisting>
 <literal>
-<phrase role="identifier">using</phrase><phrase role="identifier"> __quickbook__</phrase><phrase role="special">::</phrase><phrase role="identifier">__syntax_highlight__</phrase><phrase role="special">;</phrase></literal>
+<phrase role="identifier">using</phrase>&nbsp;<ulink url="index.html">quickbook</ulink><phrase role="special">::</phrase><ulink url="quickbook/highlight.html">syntax_highlight</ulink><phrase role="special">;</phrase></literal>
 </programlisting>
 <anchor id="syntax.preformatted" /><bridgehead renderas="sect3">Preformatted</bridgehead><para>
 Sometimes, you don't want some preformatted text to be parsed as C++. In such
@@ -655,8 +655,8 @@ Quickbook has some predefined macros that you can already use.</para>
 <thead><row><entry>Macro</entry><entry>Meaning</entry><entry>Example</entry></row>
 </thead>
 <tbody>
-<row><entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Jan-30</entry></row>
-<row><entry>__TIME__</entry><entry>The current time</entry><entry>02:48:36 PM</entry></row>
+<row><entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Feb-04</entry></row>
+<row><entry>__TIME__</entry><entry>The current time</entry><entry>10:48:00 PM</entry></row>
 <row><entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>quickbook.qbk</entry></row>
 </tbody>
 </tgroup>
@@ -1567,7 +1567,8 @@ identifier</phrase><phrase role="special">
 <literal>
 <phrase role="identifier">program</phrase><phrase role="special">
     =</phrase><phrase role="special">
-    *(</phrase><phrase role="identifier">  comment</phrase><phrase role="special">
+    *(</phrase><phrase role="identifier">  macro</phrase><phrase role="special">
+    |</phrase><phrase role="identifier">   comment</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   keyword</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   identifier</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   special</phrase><phrase role="special">
@@ -1577,6 +1578,10 @@ identifier</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   anychar_p</phrase><phrase role="special">
     )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
+
+acro</phrase><phrase role="special">
+   =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> self</phrase><phrase role="special">.</phrase><phrase role="identifier">macro</phrase><phrase role="special">
+   ;</phrase><phrase role="identifier">
 
 comment</phrase><phrase role="special">
     =</phrase><phrase role="special">   +(*</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> comment_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;#&quot;</phrase><phrase role="special">))</phrase><phrase role="special">
@@ -1616,7 +1621,7 @@ string_</phrase><phrase role="special">
 
 short_string</phrase><phrase role="special">
     =</phrase><phrase role="identifier">   confix_p</phrase><phrase role="special">(</phrase><phrase role="char">'&quot;'</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier"> c_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="char"> '&quot;'</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="identifier">
-        confix_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;'&quot;</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier"> c_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;'&quot;</phrase><phrase role="special">)</phrase><phrase role="special">    
+        confix_p</phrase><phrase role="special">(</phrase><phrase role="char">'\''</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier"> c_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="char"> '\''</phrase><phrase role="special">)</phrase><phrase role="special">    
     ;</phrase><phrase role="identifier">
        
 long_string</phrase><phrase role="special">
