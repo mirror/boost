@@ -44,8 +44,34 @@
           </td>
         </tr>
         <tr class="content">
+           <td class="nowrap">Feature</td>
+           <td>Added from_time_t function to convert time_t to a ptime.
+          </td>
+        </tr>
+        <tr class="content">
+           <td class="nowrap">Feature</td>
+           <td>Added a merge_inclusive function to periods. See
+               <a href="class_date_period.html">date period</a> and
+               <a href="class_time_period.html">time period</a> docs.
+
+          </td>
+        </tr>
+        <tr class="content">
+           <td class="nowrap">Feature</td>
+           <td>Added a function to time_duration to get the total number
+               of seconds in a duration truncating any fractional seconds.
+          </td>
+        </tr>
+        <tr class="content">
+           <td class="nowrap">Feature</td>
+           <td>Added output streaming operators for the 
+               <a href="date_algorithms.html">date generator</a>
+                classes - partial_date, first_kday_after, first_kday_before, etc.  Thanks to Bart Garst for this work.
+          </td>
+        </tr>
+        <tr class="content">
            <td class="nowrap">Bug Fix</td>
-           <td>Various documenation fixes.  Thanks to Bart Garst for 
+           <td>Various documentation fixes.  Thanks to Bart Garst for 
                updates.
           </td>
         </tr>
@@ -138,7 +164,7 @@
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sat Aug  9 12:15:26 MST 2003
+Last modified: Sat Aug 16 07:33:39 MST 2003
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
