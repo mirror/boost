@@ -20,9 +20,9 @@
  * Compile with any C compiler with a standards conforming preprocessor.
  */
 
-#include <libs/preprocessor/example/array_arithmetic_helpers.hpp>
 #include <boost/preprocessor/list/for_each_product.hpp>
 #include <boost/preprocessor/list/at.hpp>
+#include <boost/preprocessor/list/cat.hpp>
 #include <boost/preprocessor/list/append.hpp>
 #include <boost/preprocessor/tuple/to_list.hpp>
 #include <boost/preprocessor/tuple/eat.hpp>
@@ -121,7 +121,7 @@
 #define UNARY_ARRAY_OP(R,_,L) UNARY_ARRAY_OP2(BOOST_PP_LIST_AT(L,1),BOOST_PP_LIST_FIRST(L))
 #define UNARY_ARRAY_OP2(O,T) BOOST_PP_IF(IS_VALID_UNARY_OP_AND_TYPE_COMBINATION(O,T),UNARY_ARRAY_OP3,BOOST_PP_TUPLE2_EAT)(O,T)
 #define UNARY_ARRAY_OP3(O,T)\
-  void BOOST_PP_CAT4(array_,OP_NAME(O),_,TYPE_ABBREVIATION(T))\
+  void BOOST_PP_LIST_CAT(BOOST_PP_TUPLE_TO_LIST(4,(array_,OP_NAME(O),_,TYPE_ABBREVIATION(T))))\
     ( const TYPE_NAME(T)* in\
     , TYPE_NAME(TYPE_OF_UNARY_OP(O,T))* out\
     , unsigned n\
@@ -137,7 +137,7 @@ BOOST_PP_LIST_FOR_EACH_PRODUCT(UNARY_ARRAY_OP,_,BOOST_PP_TUPLE_TO_LIST(2,(APPLIC
 #define BINARY_ARRAY_OP(R,_,L) BINARY_ARRAY_OP2(BOOST_PP_LIST_AT(L,2),BOOST_PP_LIST_AT(L,1),BOOST_PP_LIST_FIRST(L))
 #define BINARY_ARRAY_OP2(O,L,R) BOOST_PP_IF(IS_VALID_BINARY_OP_AND_TYPE_COMBINATION(O,L,R),BINARY_ARRAY_OP3,BOOST_PP_TUPLE3_EAT)(O,L,R)
 #define BINARY_ARRAY_OP3(O,L,R)\
-  void BOOST_PP_CAT6(array_,OP_NAME(O),_,TYPE_ABBREVIATION(L),_,TYPE_ABBREVIATION(R))\
+  void BOOST_PP_LIST_CAT(BOOST_PP_TUPLE_TO_LIST(6,(array_,OP_NAME(O),_,TYPE_ABBREVIATION(L),_,TYPE_ABBREVIATION(R))))\
     ( const TYPE_NAME(L)* lhs_in\
     , const TYPE_NAME(R)* rhs_in\
     , TYPE_NAME(TYPE_OF_BINARY_OP(O,L,R))* out\
