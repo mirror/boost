@@ -28,38 +28,42 @@
 
 // function specializations must be defined in the appropriate
 // namespace - boost::serialization
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#define STD _STLP_STD
+#else
+#define STD std
+#endif
+
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 namespace boost { namespace serialization {
-#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-namespace _STLP_STD {
 #else
-namespace std {
+namespace STD {
 #endif
 
 template<class Archive, class Type, class Key, class Compare, class Allocator >
 inline void save(
     Archive & ar,
-    const std::map<Key, Type, Compare, Allocator> &t,
+    const STD::map<Key, Type, Compare, Allocator> &t,
     const unsigned int /* file_version */
 ){
     boost::serialization::stl::save_collection<
         Archive, 
-        std::map<Key, Type, Compare, Allocator> 
+        STD::map<Key, Type, Compare, Allocator> 
     >(ar, t);
 }
 
 template<class Archive, class Type, class Key, class Compare, class Allocator >
 inline void load(
     Archive & ar,
-    std::map<Key, Type, Compare, Allocator> &t,
+    STD::map<Key, Type, Compare, Allocator> &t,
     const unsigned int /* file_version */
 ){
     boost::serialization::stl::load_collection<
         Archive,
-        std::map<Key, Type, Compare, Allocator>,
+        STD::map<Key, Type, Compare, Allocator>,
         boost::serialization::stl::archive_input_map<
-            Archive, std::map<Key, Type, Compare, Allocator> >,
-            boost::serialization::stl::no_reserve_imp<std::map<
+            Archive, STD::map<Key, Type, Compare, Allocator> >,
+            boost::serialization::stl::no_reserve_imp<STD::map<
                 Key, Type, Compare, Allocator
             >
         >
@@ -71,7 +75,7 @@ inline void load(
 template<class Archive, class Type, class Key, class Compare, class Allocator >
 inline void serialize(
     Archive & ar,
-    std::map<Key, Type, Compare, Allocator> &t,
+    STD::map<Key, Type, Compare, Allocator> &t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);
@@ -81,29 +85,29 @@ inline void serialize(
 template<class Archive, class Type, class Key, class Compare, class Allocator >
 inline void save(
     Archive & ar,
-    const std::multimap<Key, Type, Compare, Allocator> &t,
+    const STD::multimap<Key, Type, Compare, Allocator> &t,
     const unsigned int /* file_version */
 ){
     boost::serialization::stl::save_collection<
         Archive, 
-        std::multimap<Key, Type, Compare, Allocator> 
+        STD::multimap<Key, Type, Compare, Allocator> 
     >(ar, t);
 }
 
 template<class Archive, class Type, class Key, class Compare, class Allocator >
 inline void load(
     Archive & ar,
-    std::multimap<Key, Type, Compare, Allocator> &t,
+    STD::multimap<Key, Type, Compare, Allocator> &t,
     const unsigned int /* file_version */
 ){
     boost::serialization::stl::load_collection<
         Archive,
-        std::multimap<Key, Type, Compare, Allocator>,
+        STD::multimap<Key, Type, Compare, Allocator>,
         boost::serialization::stl::archive_input_map<
-            Archive, std::multimap<Key, Type, Compare, Allocator> 
+            Archive, STD::multimap<Key, Type, Compare, Allocator> 
         >,
         boost::serialization::stl::no_reserve_imp<
-            std::multimap<Key, Type, Compare, Allocator> 
+            STD::multimap<Key, Type, Compare, Allocator> 
         >
     >(ar, t);
 }
@@ -113,7 +117,7 @@ inline void load(
 template<class Archive, class Type, class Key, class Compare, class Allocator >
 inline void serialize(
     Archive & ar,
-    std::multimap<Key, Type, Compare, Allocator> &t,
+    STD::multimap<Key, Type, Compare, Allocator> &t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);
@@ -122,7 +126,8 @@ inline void serialize(
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 }} // namespace boost::serialization
 #else
-} // namespace std
+} // namespace STD
 #endif
+#undef STD
 
 #endif // BOOST_SERIALIZATION_MAP_HPP

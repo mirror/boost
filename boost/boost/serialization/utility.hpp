@@ -24,19 +24,23 @@
 
 // function specializations must be defined in the appropriate
 // namespace - boost::serialization
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#define STD _STLP_STD
+#else
+#define STD std
+#endif
+
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 namespace boost { namespace serialization {
-#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-namespace _STLP_STD {
 #else
-namespace std {
+namespace STD {
 #endif
 
 // pair
 template<class Archive, class F, class S>
 inline void serialize(
     Archive & ar,
-    std::pair<F, S> & p,
+    STD::pair<F, S> & p,
     const unsigned int /* file_version */
 ){
     ar & boost::serialization::make_nvp("first", p.first);
@@ -48,5 +52,6 @@ inline void serialize(
 #else
 } // namespace std
 #endif
+#undef STD
 
 #endif // BOOST_SERIALIZATION_UTILITY_HPP

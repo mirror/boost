@@ -26,38 +26,42 @@
 
 // function specializations must be defined in the appropriate
 // namespace - boost::serialization
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#define STD _STLP_STD
+#else
+#define STD std
+#endif
+
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 namespace boost { namespace serialization {
-#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-namespace _STLP_STD {
 #else
-namespace std {
+namespace STD {
 #endif
 
 template<class Archive, class U, class Allocator>
 inline void save(
     Archive & ar,
-    const std::deque<U, Allocator> &t,
+    const STD::deque<U, Allocator> &t,
     const unsigned int /* file_version */
 ){
     boost::serialization::stl::save_collection<
-        Archive, std::deque<U, Allocator> 
+        Archive, STD::deque<U, Allocator> 
     >(ar, t);
 }
 
 template<class Archive, class U, class Allocator>
 inline void load(
     Archive & ar,
-    std::deque<U, Allocator> &t,
+    STD::deque<U, Allocator> &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::load_collection<
         Archive,
-        std::deque<U, Allocator>,
+        STD::deque<U, Allocator>,
         boost::serialization::stl::archive_input_seq<
-            Archive, std::deque<U, Allocator> 
+            Archive, STD::deque<U, Allocator> 
         >,
-        boost::serialization::stl::no_reserve_imp<std::deque<U, Allocator> >
+        boost::serialization::stl::no_reserve_imp<STD::deque<U, Allocator> >
     >(ar, t);
 }
 
@@ -66,7 +70,7 @@ inline void load(
 template<class Archive, class U, class Allocator>
 inline void serialize(
     Archive & ar,
-    std::deque<U, Allocator> &t,
+    STD::deque<U, Allocator> &t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);
@@ -80,6 +84,8 @@ inline void serialize(
 
 #include <boost/serialization/collection_traits.hpp>
 
-BOOST_SERIALIZATION_COLLECTION_TRAITS(std::deque)
+BOOST_SERIALIZATION_COLLECTION_TRAITS(STD::deque)
+
+#undef STD
 
 #endif // BOOST_SERIALIZATION_DEQUE_HPP

@@ -29,41 +29,45 @@
 
 // function specializations must be defined in the appropriate
 // namespace - boost::serialization
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#define STD _STLP_STD
+#else
+#define STD BOOST_STD_EXTENSION_NAMESPACE
+#endif
+
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 namespace boost { namespace serialization {
-#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-namespace _STLP_STD {
 #else
-namespace BOOST_STD_EXTENSION_NAMESPACE {
+namespace STD {
 #endif
 
 template<class Archive, class Key, class Compare, class Allocator >
 inline void save(
     Archive & ar,
-    const BOOST_STD_EXTENSION_NAMESPACE::hash_map<Key, Compare, Allocator> &t,
+    const STD::hash_map<Key, Compare, Allocator> &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::save_collection<
         Archive, 
-        BOOST_STD_EXTENSION_NAMESPACE::hash_map<Key, Compare, Allocator> 
+        STD::hash_map<Key, Compare, Allocator> 
     >(ar, t);
 }
 
 template<class Archive, class Key, class Compare, class Allocator >
 inline void load(
     Archive & ar,
-    BOOST_STD_EXTENSION_NAMESPACE::hash_map<Key, Compare, Allocator> &t,
+    STD::hash_map<Key, Compare, Allocator> &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::load_collection<
         Archive,
-        BOOST_STD_EXTENSION_NAMESPACE::hash_map<Key, Compare, Allocator>,
+        STD::hash_map<Key, Compare, Allocator>,
         boost::serialization::stl::archive_input_map<
             Archive, 
-            BOOST_STD_EXTENSION_NAMESPACE::hash_map<Key, Compare, Allocator> 
+            STD::hash_map<Key, Compare, Allocator> 
         >,
         boost::serialization::stl::no_reserve_imp<
-            BOOST_STD_EXTENSION_NAMESPACE::hash_map<Key, Compare, Allocator> 
+            STD::hash_map<Key, Compare, Allocator> 
         >
     >(ar, t);
 }
@@ -73,7 +77,7 @@ inline void load(
 template<class Archive, class Key, class Compare, class Allocator >
 inline void serialize(
     Archive & ar,
-    BOOST_STD_EXTENSION_NAMESPACE::hash_map<Key, Compare, Allocator> &t,
+    STD::hash_map<Key, Compare, Allocator> &t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);
@@ -83,30 +87,30 @@ inline void serialize(
 template<class Archive, class Key, class Compare, class Allocator >
 inline void save(
     Archive & ar,
-    const BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<Key, Compare, Allocator> &t,
+    const STD::hash_multimap<Key, Compare, Allocator> &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::save_collection<
         Archive, 
-        BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<Key, Compare, Allocator> 
+        STD::hash_multimap<Key, Compare, Allocator> 
     >(ar, t);
 }
 
 template<class Archive, class Key, class Compare, class Allocator >
 inline void load(
     Archive & ar,
-    BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<Key, Compare, Allocator> &t,
+    STD::hash_multimap<Key, Compare, Allocator> &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::load_collection<
         Archive,
-        BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<Key, Compare, Allocator>,
+        STD::hash_multimap<Key, Compare, Allocator>,
         boost::serialization::stl::archive_input_map<
             Archive, 
-            BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<Key, Compare, Allocator> 
+            STD::hash_multimap<Key, Compare, Allocator> 
         >,
         boost::serialization::stl::no_reserve_imp<
-            BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<Key, Compare, Allocator> 
+            STD::hash_multimap<Key, Compare, Allocator> 
         >
     >(ar, t);
 }
@@ -116,7 +120,7 @@ inline void load(
 template<class Archive, class Key, class Compare, class Allocator >
 inline void serialize(
     Archive & ar,
-    BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<Key, Compare, Allocator> &t,
+    STD::hash_multimap<Key, Compare, Allocator> &t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);
@@ -125,8 +129,9 @@ inline void serialize(
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 }} // namespace boost::serialization
 #else
-} // BOOST_STD_EXTENSION_NAMESPACE
+} // STD
 #endif
+#undef STD
 
 #endif // BOOST_HAS_HASH
 #endif // BOOST_SERIALIZATION_HASH_MAP_HPP

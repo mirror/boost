@@ -23,39 +23,44 @@
 #include <boost/serialization/collections_save_imp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>
 #include <boost/serialization/split_free.hpp>
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#define STD _STLP_STD
+#else
+#define STD std
+#endif
 
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-namespace boost { namespace serialization
-#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-namespace _STLP_STD {
+namespace boost { namespace serialization {
 #else
-namespace std {
+namespace STD {
 #endif
 
 template<class Archive, class Key, class Compare, class Allocator >
 inline void save(
     Archive & ar,
-    const std::set<Key, Compare, Allocator> &t,
+    const STD::set<Key, Compare, Allocator> &t,
     const unsigned int /* file_version */
 ){
     boost::serialization::stl::save_collection<
-        Archive, std::set<Key, Compare, Allocator> 
+        Archive, STD::set<Key, Compare, Allocator> 
     >(ar, t);
 }
 
 template<class Archive, class Key, class Compare, class Allocator >
 inline void load(
     Archive & ar,
-    std::set<Key, Compare, Allocator> &t,
+    STD::set<Key, Compare, Allocator> &t,
     const unsigned int /* file_version */
 ){
     boost::serialization::stl::load_collection<
         Archive,
-        std::set<Key, Compare, Allocator>,
+        STD::set<Key, Compare, Allocator>,
         boost::serialization::stl::archive_input_assoc<
-            Archive, std::set<Key, Compare, Allocator> 
+            Archive, STD::set<Key, Compare, Allocator> 
         >,
-        boost::serialization::stl::no_reserve_imp<std::set<
+        boost::serialization::stl::no_reserve_imp<STD::set<
             Key, Compare, Allocator> 
         >
     >(ar, t);
@@ -66,7 +71,7 @@ inline void load(
 template<class Archive, class Key, class Compare, class Allocator >
 inline void serialize(
     Archive & ar,
-    std::set<Key, Compare, Allocator> & t,
+    STD::set<Key, Compare, Allocator> & t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);
@@ -76,29 +81,29 @@ inline void serialize(
 template<class Archive, class Key, class Compare, class Allocator >
 inline void save(
     Archive & ar,
-    const std::multiset<Key, Compare, Allocator> &t,
+    const STD::multiset<Key, Compare, Allocator> &t,
     const unsigned int /* file_version */
 ){
     boost::serialization::stl::save_collection<
         Archive, 
-        std::multiset<Key, Compare, Allocator> 
+        STD::multiset<Key, Compare, Allocator> 
     >(ar, t);
 }
 
 template<class Archive, class Key, class Compare, class Allocator >
 inline void load(
     Archive & ar,
-    std::multiset<Key, Compare, Allocator> &t,
+    STD::multiset<Key, Compare, Allocator> &t,
     const unsigned int /* file_version */
 ){
     boost::serialization::stl::load_collection<
         Archive,
-        std::multiset<Key, Compare, Allocator>,
+        STD::multiset<Key, Compare, Allocator>,
         boost::serialization::stl::archive_input_assoc<
-            Archive, std::multiset<Key, Compare, Allocator> 
+            Archive, STD::multiset<Key, Compare, Allocator> 
         >,
         boost::serialization::stl::no_reserve_imp<
-            std::multiset<Key, Compare, Allocator> 
+            STD::multiset<Key, Compare, Allocator> 
         >
     >(ar, t);
 }
@@ -108,7 +113,7 @@ inline void load(
 template<class Archive, class Key, class Compare, class Allocator >
 inline void serialize(
     Archive & ar,
-    std::multiset<Key, Compare, Allocator> & t,
+    STD::multiset<Key, Compare, Allocator> & t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);
@@ -122,7 +127,8 @@ inline void serialize(
 
 #include <boost/serialization/collection_traits.hpp>
 
-BOOST_SERIALIZATION_COLLECTION_TRAITS(std::set)
-BOOST_SERIALIZATION_COLLECTION_TRAITS(std::multiset)
+BOOST_SERIALIZATION_COLLECTION_TRAITS(STD::set)
+BOOST_SERIALIZATION_COLLECTION_TRAITS(STD::multiset)
+#undef STD
 
 #endif // BOOST_SERIALIZATION_SET_HPP

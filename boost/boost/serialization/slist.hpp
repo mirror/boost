@@ -28,29 +28,32 @@
 // function specializations must be defined in the appropriate
 // namespace - boost::serialization
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-namespace boost { namespace serialization {
-#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-namespace _STLP_STD {
+    namespace boost { namespace serialization {
 #else
-namespace BOOST_STD_EXTENSION_NAMESPACE {
+    #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+    #define STD _STLP_STD
+    #else
+    #define STD BOOST_STD_EXTENSION_NAMESPACE
+    #endif
+    namespace STD {
 #endif
 
 template<class Archive, class U, class Allocator>
 inline void save(
     Archive & ar,
-    const BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator> &t,
+    const STD::slist<U, Allocator> &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::save_collection<
         Archive,
-        BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator> 
+        STD::slist<U, Allocator> 
     >(ar, t);
 }
 
 template<class Archive, class U, class Allocator>
 inline void load(
     Archive & ar,
-    BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator> &t,
+    STD::slist<U, Allocator> &t,
     const unsigned int file_version
 ){
     // retrieve number of elements
@@ -78,7 +81,7 @@ inline void load(
 template<class Archive, class U, class Allocator>
 inline void serialize(
     Archive & ar,
-    BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator> &t,
+    STD::slist<U, Allocator> &t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);
@@ -92,7 +95,8 @@ inline void serialize(
 
 #include <boost/serialization/collection_traits.hpp>
 
-BOOST_SERIALIZATION_COLLECTION_TRAITS(BOOST_STD_EXTENSION_NAMESPACE::slist)
+BOOST_SERIALIZATION_COLLECTION_TRAITS(STD::slist)
+#undef STD
 
 #endif  // BOOST_HAS_SLIST
 #endif  // BOOST_SERIALIZATION_SLIST_HPP
