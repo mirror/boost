@@ -293,7 +293,7 @@ namespace boost { namespace program_options {
             // index of tab (if present) is used as additional indent relative
             // to first_column_width if paragrapth is spanned over multiple
             // lines if tab is not on first line it is ignored
-            unsigned par_indent = par.find('\t');
+            string::size_type par_indent = par.find('\t');
 
             if (par_indent == string::npos)
             {
