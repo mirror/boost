@@ -397,8 +397,15 @@ namespace boost {
     inline void postcall(const function_base*) {}
   };
 
-  // The default function mixin costs nothing
-  struct empty_function_mixin {};
+  // The default function mixin does nothing. The assignment and copy-construction operators
+  // are all defined because MSVC defines broken versions.
+  struct empty_function_mixin {
+    empty_function_mixin() {};
+    empty_function_mixin(const empty_function_mixin&) {};
+
+    empty_function_mixin& operator=(const empty_function_mixin&) 
+    {return *this; }
+  };
 }
 
 #endif // BOOST_FUNCTION_BASE_HEADER

@@ -474,6 +474,7 @@ namespace boost {
     typedef Policy    policy_type;
     typedef Mixin     mixin_type;
     typedef Allocator allocator_type;
+    typedef BOOST_FUNCTION_FUNCTION self_type;
 
   private:    
 #ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
@@ -490,8 +491,17 @@ namespace boost {
     {
     }
 
+    // MSVC chokes if the following two constructors are collapsed into
+    // one with a default parameter.
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(const Functor& f, const Mixin& m = Mixin()) :
+    BOOST_FUNCTION_FUNCTION(const Functor& f) :
+      function_base(), Mixin() BOOST_FUNCTION_INIT
+    {
+      this->assign_to(f);
+    }
+
+    template<typename Functor>
+    BOOST_FUNCTION_FUNCTION(const Functor& f, const Mixin& m) :
       function_base(), Mixin(m) BOOST_FUNCTION_INIT
     {
       this->assign_to(f);
@@ -556,10 +566,15 @@ namespace boost {
       return result;
     }
 
+    // The distinction between when to use BOOST_FUNCTION_FUNCTION and
+    // when to use self_type is obnoxious. MSVC cannot handle self_type as
+    // the return type of these assignment operators, but Borland C++ cannot
+    // handle BOOST_FUNCTION_FUNCTION as the type of the temporary to 
+    // construct.
     template<typename Functor>
     BOOST_FUNCTION_FUNCTION& operator=(const Functor& f)
     {
-      BOOST_FUNCTION_FUNCTION(f, static_cast<const Mixin&>(*this)).swap(*this);
+      self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
       return *this;
     }
 
@@ -567,7 +582,7 @@ namespace boost {
     template<typename Functor>
     BOOST_FUNCTION_FUNCTION& operator=(Functor* f)
     {
-      BOOST_FUNCTION_FUNCTION(f, static_cast<const Mixin&>(*this)).swap(*this);
+      self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
       return *this;
     }
 #endif // __BORLANDC__
@@ -575,14 +590,14 @@ namespace boost {
     template<typename Functor>
     void set(const Functor& f)
     {
-      BOOST_FUNCTION_FUNCTION(f, static_cast<const Mixin&>(*this)).swap(*this);
+      self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
     }
 
 #ifdef __BORLANDC__
     template<typename Functor>
     void set(Functor* f)
     {
-      BOOST_FUNCTION_FUNCTION(f, static_cast<const Mixin&>(*this)).swap(*this);
+      self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
     }
 #endif // __BORLANDC__
 
@@ -592,7 +607,7 @@ namespace boost {
       if (&f == this)
         return *this;
 
-      BOOST_FUNCTION_FUNCTION(f).swap(*this);
+      self_type(f).swap(*this);
       return *this;
     }
 
@@ -602,7 +617,7 @@ namespace boost {
       if (&f == this)
         return;
 
-      BOOST_FUNCTION_FUNCTION(f).swap(*this);
+      self_type(f).swap(*this);
     }
 
     void swap(BOOST_FUNCTION_FUNCTION& other)
