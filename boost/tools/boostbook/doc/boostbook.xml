@@ -227,8 +227,9 @@ Cannot find function named 'next'</programlisting>
         <listitem><para>The DocBook DTD, available as a ZIP archive at
         the <ulink
         url="http://www.oasis-open.org/docbook/xml/4.2/index.shtml">OASIS
-        DocBook site</ulink>. Extract the DocBook DTD to a directory
-        on your hard disk (which we'll refer to as the
+        DocBook site</ulink>. The package is called "DocBook XML
+        4.2". Extract the DocBook DTD to a directory on your hard disk
+        (which we'll refer to as the
         <code>DOCBOOK_DTD_DIR</code>).</para></listitem>
       </itemizedlist>
       </para>
@@ -260,7 +261,7 @@ using boostbook : DOCBOOK_XSL_DIR
       documents. To begin, you will need two pieces of software:
         <itemizedlist> 
           <listitem><simpara>A Java interpreter, available at <ulink url="http://java.sun.com"/>.</simpara></listitem>
-          <listitem><simpara>Apache FOP, available at <ulink url="http://xml.apache.org/fop/download.html"/>.</simpara></listitem>
+          <listitem><simpara>Apache FOP, available at <ulink url="http://xml.apache.org/fop/download.html"/>. Version 0.20.4 seems to be most stable.</simpara></listitem>
         </itemizedlist> 
       </para>
  
