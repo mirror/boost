@@ -97,19 +97,19 @@ constructor won't be considered as a possible overload when constructing from an
 the type of x isn't convertible to T. In addition, however, each of these constructors has a requires 
 clause that requires convertibility, so the behavior of a program that attempts such a construction 
 is undefined. Seems like the enable_if_convertible part is irrelevant, and should be removed. 
-There are two problems. First, enable_if_convertible is never specified, so we donÂ’t 
+There are two problems. First, enable_if_convertible is never specified, so we don’t 
 know what this is supposed to do. Second: we could reasonably say that this overload should be 
-disabled in certain cases or we could reasonably say that behavior is undefined, but we canÂ’t say 
+disabled in certain cases or we could reasonably say that behavior is undefined, but we can’t say 
 both. 
 Thomas Witt writes that the goal of putting in enable_if_convertible here is to make 
-sure that a specific overload doesnÂ’t interfere with the generic case except when that overload 
+sure that a specific overload doesn’t interfere with the generic case except when that overload 
 makes sense. He agrees that what we currently have is deficient. 
-Dave Abrahams writes that there is no conflict with the requires cause Â“because the requires 
+Dave Abrahams writes that there is no conflict with the requires cause because the requires 
 clause only takes effect when the function is actually called. The presence of the constructor 
 signature 
 can/will be detected by is_convertible without violating the requires clause, and thus it makes a 
 difference to disable those constructor instantiations that would be disabled by 
-enable_if_convertible even if calling them invokes undefined behavior.Â” 
+enable_if_convertible even if calling them invokes undefined behavior. 
 There was more discussion on the reflector: c++std-lib-12312, c++std-lib-12325, c++std-lib-
 12330, c++std-lib-12334, c++std-lib-12335, c++std-lib-12336, c++std-lib-12338, c++std-lib-
 12362. 
@@ -249,6 +249,7 @@ the base m_iterator, as per the inheritance from iterator_adaptor."
 
 9.14 Counting_iterator's difference type 
 ========================================
+
 :Submitter: Pete Becker 
 :Status: New 
 
@@ -291,12 +292,13 @@ readability seems to introduce needless complexity.
      that require their models to support these traits.
 
   2. Change the ``is_readable`` specification to be:
-     ``is_readable<X>::type`` is ``true_type`` if the
-     result type of ``X::operator*`` is convertible to
-     ``iterator_traits<X>::value_type`` and is ``false_type``
-     otherwise. Also, ``is_readable`` is required to satisfy
-     the requirements for the UnaryTypeTrait concept
-     (defined in the type traits proposal).
+
+       ``is_readable<X>::type`` is ``true_type`` if the
+       result type of ``X::operator*`` is convertible to
+       ``iterator_traits<X>::value_type`` and is ``false_type``
+       otherwise. Also, ``is_readable`` is required to satisfy
+       the requirements for the UnaryTypeTrait concept
+       (defined in the type traits proposal).
 
      Remove the requirement for support of the ``is_readable`` trait from
      the Readable Iterator concept.
@@ -375,56 +377,69 @@ readability seems to introduce needless complexity.
 is_writable_iterator returns false positives for forward iterators whose value_type has a private 
 assignment operator, or whose reference type is not a reference (currently legal). 
 
-Resolution:
-See the resolution to 9.15.
+:Proposed Resolution: See the resolution to 9.15.
 
 
 9.17 is_swappable_iterator returns false positives 
+==================================================
+
 :Submitter: Dave Abrahams 
 :Status: New 
+
 is_swappable_iterator has the same problems as is_writable_iterator. In addition, if we allow 
 users to write their own iter_swap functions it's easy to imagine old-style iterators for which 
 is_swappable returns false negatives. 
 
-Resolution:
-See the resolution to 9.15.
+:Proposed Resolution: See the resolution to 9.15.
 
 
 9.18 Are is_readable, is_writable, and is_swappable useful? 
+===========================================================
+
 :Submitter: Dave Abrahams 
 :Status: New 
+
 I am concerned that there is little use for any of is_readable, is_writable, or is_swappable, and 
 that not only do they unduly constrain iterator implementors but they add overhead to 
 iterator_facade and iterator_adaptor in the form of a template parameter which would otherwise 
 be unneeded. Since we can't implement two of them accurately for old-style iterators, I am 
 having a hard time justifying their impact on the rest of the proposal(s). 
 
-Resolution:
-See the resolution to 9.15.
+:Proposed Resolution: See the resolution to 9.15.
 
 
 9.19 Non-Uniformity of the "lvalue_iterator Bit" 
+================================================
+
 :Submitter: Dave Abrahams 
 :Status: New 
-The proposed iterator_tag class template accepts an "access bits" parameter which includes a bit 
-to indicate the iterator's lvalueness (whether its dereference operator returns a reference to its 
-value_type. The relevant part of N1550 says: 
-The purpose of the lvalue_iterator part of the iterator_access enum is to communicate to 
-iterator_tagwhether the reference type is an lvalue so that the appropriate old category can be 
-chosen for the base class. The lvalue_iterator bit is not recorded in the iterator_tag::access 
-data member. 
-The lvalue_iterator bit is not recorded because N1550 aims to improve orthogonality of the 
-iterator concepts, and a new-style iterator's lvalueness is detectable by examining its reference 
-type. This inside/outside difference is awkward and confusing. 
 
-Resolution:
-The iterator_tag class will be removed, so this is no longer an issue.
-See the resolution to 9.15.
+The proposed iterator_tag class template accepts an "access bits"
+parameter which includes a bit to indicate the iterator's
+lvalueness (whether its dereference operator returns a reference to
+its value_type. The relevant part of N1550 says:
+
+  The purpose of the lvalue_iterator part of the iterator_access
+  enum is to communicate to iterator_tagwhether the reference type
+  is an lvalue so that the appropriate old category can be chosen
+  for the base class. The lvalue_iterator bit is not recorded in
+  the iterator_tag::access data member.
+
+The lvalue_iterator bit is not recorded because N1550 aims to
+improve orthogonality of the iterator concepts, and a new-style
+iterator's lvalueness is detectable by examining its reference
+type. This inside/outside difference is awkward and confusing.
+
+:Proposed Resolution: The iterator_tag class will be removed, so this is no longer an issue.
+  See the resolution to 9.15.
 
 
 9.20 Traversal Concepts and Tags 
+================================
+
 :Submitter: Dave Abrahams 
 :Status: New 
+
 Howard Hinnant pointed out some inconsistencies with the naming of these tag types: 
 incrementable_iterator_tag // ++r, r++ 
 single_pass_iterator_tag // adds a == b, a != b 
@@ -450,8 +465,11 @@ be worth giving the names of these tags (and the associated concepts) some extra
 
 
 9.21 iterator_facade Derived template argument underspecified 
+=============================================================
+
 :Submitter: Pete Becker 
 :Status: New 
+
 The first template argument to iterator_facade is named Derived, and the proposal says: 
 The Derived template parameter must be a class derived from iterator_facade. 
 First, iterator_facade is a template, so cannot be derived from. Rather, the class must be derived 
@@ -473,19 +491,24 @@ Reword.
 
 
 9.22 return type of Iterator difference for iterator facade 
+===========================================================
+
 :Submitter: Pete Becker 
 :Status: New 
-N1541 53 
 
-The proposal says: 
-template <class Dr1, class V1, class AC1, class TC1, class R1, class D1, 
-class Dr2, class V2, class AC2, class TC2, class R2, class D2>
-typename enable_if_interoperable<Dr1, Dr2, bool>::type
-operator -(iterator_facade<Dr1, V1, AC1, TC1, R1, D1> const& lhs, 
-iterator_facade<Dr2, V2, AC2, TC2, R2, D2> const& rhs); 
-Shouldn't the return type be one of the two iterator types? Which one? The idea is that if one of 
-the iterator types can be converted to the other type, then the subtraction is okay. Seems like the 
-return type should then be the type that was converted to. Is that right? 
+The proposal says::
+
+  template <class Dr1, class V1, class AC1, class TC1, class R1, class D1, 
+  class Dr2, class V2, class AC2, class TC2, class R2, class D2>
+  typename enable_if_interoperable<Dr1, Dr2, bool>::type
+  operator -(iterator_facade<Dr1, V1, AC1, TC1, R1, D1> const& lhs, 
+  iterator_facade<Dr2, V2, AC2, TC2, R2, D2> const& rhs); 
+
+Shouldn't the return type be one of the two iterator types? Which
+one? The idea is that if one of the iterator types can be converted
+to the other type, then the subtraction is okay. Seems like the
+return type should then be the type that was converted to. Is that
+right?
 
 :Proposed resolution: 
   Change the return type from ::
@@ -498,13 +521,18 @@ return type should then be the type that was converted to. Is that right?
 
 
 9.23 Iterator_facade: minor wording Issue 
+=========================================
+
 :Submitter: Pete Becker 
 :Status: New 
+
 In the table that lists the required (sort of) member functions of iterator types that are based on 
 iterator_facade, the entry for c.equal(y) says: 
-true iff c and y refer to the same position. Implements c == y and c != y. 
-The second sentence is inside out. c.equal(y) does not implement either of these operations. It is 
-used to implement them. Same thing in the description of c.distance_to(z). 
+
+  true iff c and y refer to the same position. Implements c == y
+  and c != y.  The second sentence is inside out. c.equal(y) does
+  not implement either of these operations. It is used to implement
+  them. Same thing in the description of c.distance_to(z).
 
 :Proposed resolution:   **Needs work**
 
@@ -512,27 +540,34 @@ Reword.
 
 
 9.24 Use of undefined name in iterator_facade table 
+===================================================
+
 :Submitter: Pete Becker 
 :Status: New 
+
 Several of the descriptions use the name X without defining it. This seems to be a carryover from 
 the table immediately above this section, but the text preceding that table says "In the table 
 below, X is the derived iterator type." Looks like the X:: qualifiers aren't really needed; 
 X::reference can simply be reference, since that's defined by the iterator_facade specialization 
 itself. 
 
-:Proposed resolution:   **Needs work**
-
-Remove the use of X.
+:Proposed resolution:   **Needs work**  Remove the use of X.
 
 
 9.25 Iterator_facade: wrong return type 
+=======================================
+
 :Submitter: Pete Becker 
 :Status: New 
+
 Several of the member functions return a Derived object or a Derived&. Their Effects clauses 
-end with: 
-return *this;
-This should be 
-return *static_cast<Derived*>(this);
+end with::
+
+  return *this;
+
+This should be ::
+
+  return *static_cast<Derived*>(this);
 
 :Proposed resolution: 
   Change the returns clause to::
@@ -542,9 +577,9 @@ return *static_cast<Derived*>(this);
 
 
 9.26 Iterator_facade: unclear returns clause for operator[] 
-:Submitter: Pete Becker 
-N1541 54 
+===========================================================
 
+:Submitter: Pete Becker 
 :Status: New 
 
 The returns clause for ``operator[](difference_type n)`` const
@@ -565,23 +600,30 @@ says:
 
 :Proposed resolution:   **Needs work**
 
-Change *this to *static_cast<Derived*>(this). Also reword the stuff
-about X::reference(a[n] = v) is equivalent to p = v.
+Change ``*this`` to ``*static_cast<Derived*>(this)``. Also reword
+the stuff about ``X::reference(a[n] = v)`` is equivalent to ``p =
+v``.
 
 
 
 9.27 Iterator_facade: redundant clause 
+======================================
+
 :Submitter: Pete Becker 
 :Status: New 
-operator- has both an effects clause and a returns clause. Looks like the returns clause should be 
+
+``operator-`` has both an effects clause and a returns clause. Looks like the returns clause should be 
 removed. 
 
 :Proposed resolution: Remove the returns clause.
 
 
 9.28 indirect_iterator: incorrect specification of default constructor 
+======================================================================
+
 :Submitter: Pete Becker 
 :Status: New 
+
 The default constructor returns "An instance of indirect_iterator with a default constructed base 
 object", but the constructor that takes an Iterator object returns "An instance of indirect_iterator 
 with the iterator_adaptor subobject copy constructed from x." The latter is the correct form, since 
