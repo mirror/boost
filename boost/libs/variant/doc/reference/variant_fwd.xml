@@ -45,6 +45,21 @@ void f(const boost::variant&lt;BOOST_VARIANT_ENUM_PARAMS(T)&gt; &amp;);</program
 
     </section>
 
+    <section id="variant.macro.BOOST_VARIANT_ENUM_SHIFTED_PARAMS">
+      <title>BOOST_VARIANT_ENUM_SHIFTED_PARAMS(<emphasis>param</emphasis>)</title>
+
+      <para>Preprocessor macro. Expands to a comma-separated sequence of length
+      <code><link linkend="variant.macro.BOOST_VARIANT_LIMIT_TYPES">BOOST_VARIANT_LIMIT_TYPES</link> - 1</code>,
+      where each element in the sequence consists of the concatenation of
+      <emphasis>param</emphasis> with its one-based index into the
+      sequence. That is, <code>param ## 1, ..., param ## BOOST_VARIANT_LIMIT_TYPES - 1</code>.</para>
+
+      <para><emphasis role="bold">Note</emphasis>: This macro results in the
+      same expansion as <code>BOOST_VARIANT_ENUM_PARAMS</code> -- but without
+      the first term.</para>
+    </section>
+
+
     <section id="variant.macro.BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT">
       <title>BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT</title>
 
