@@ -185,7 +185,7 @@ int main(int, char*[])
     "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access
     Iterator</a> concept. In addition it has the following constructor: 
 <pre>
-indirect_iterator_generator::type(const BaseIterator&amp; it)
+explicit indirect_iterator_generator::type(const BaseIterator&amp; it)
 </pre>
     <br>
      <br>
@@ -342,8 +342,8 @@ b,c,d,e,f,g,h,
 
     <blockquote>
 <pre>
-indirect_iterator_pair_generator::iterator(const BaseIterator&amp; it)
-indirect_iterator_pair_generator::const_iterator(const BaseIterator&amp; it)
+explicit indirect_iterator_pair_generator::iterator(const BaseIterator&amp; it)
+explicit indirect_iterator_pair_generator::const_iterator(const BaseIterator&amp; it)
 </pre>
     </blockquote>
     <br>
@@ -403,7 +403,6 @@ a,b,c,d,e,f,g,
     specialization and the base iterator or its <tt>value_type</tt> is a
     builtin pointer type, you will not be able to use the default for
     <tt>Value</tt> and will need to specify this type explicitly.
-    <hr>
 
     <p><a name="3">[3]</a>There is a caveat to which concept the
     indirect iterator can model.  If the return type of the
@@ -420,6 +419,7 @@ a,b,c,d,e,f,g,
     "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
     Access Iterator</a>.
     
+    <hr>
 
     <p>Revised 
     <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->10
