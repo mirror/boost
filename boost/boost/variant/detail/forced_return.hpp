@@ -42,7 +42,7 @@ namespace detail { namespace variant {
 // "standard" implementation:
 
 template <typename T>
-T forced_return()
+inline T forced_return()
 {
     // logical error: should never be here! (see above)
     BOOST_ASSERT(false);
@@ -51,7 +51,7 @@ T forced_return()
 }
 
 template <>
-void forced_return<void>()
+inline void forced_return<void>()
 {
     // logical error: should never be here! (see above)
     BOOST_ASSERT(false);
