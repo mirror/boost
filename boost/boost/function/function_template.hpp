@@ -46,6 +46,8 @@ namespace boost {
         virtual R call(BOOST_FUNCTION_PARMS) const = 0;
         virtual BOOST_FUNCTION_INVOKER_BASE* clone() const = 0;
         virtual void destroy(BOOST_FUNCTION_INVOKER_BASE*) = 0;
+        virtual const std::type_info& type() const = 0;
+        virtual any_pointer pointer() const = 0;
       };
 #endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
 
@@ -113,8 +115,18 @@ namespace boost {
 #  endif // BOOST_NO_STD_ALLOCATOR
         }
 
+        virtual const std::type_info& type() const
+        {
+          return typeid(FunctionPtr);
+        }
+
+        virtual any_pointer pointer() const
+        {
+          return any_pointer(reinterpret_cast<void (*)()>(function_ptr));
+        }
+
       private:
-        FunctionPtr function_ptr;
+        mutable FunctionPtr function_ptr;
 #else
         static R invoke(any_pointer function_ptr BOOST_FUNCTION_COMMA
                         BOOST_FUNCTION_PARMS)
@@ -190,8 +202,18 @@ namespace boost {
 #    endif // BOOST_NO_STD_ALLOCATOR
         }
 
+        virtual const std::type_info& type() const
+        {
+          return typeid(FunctionPtr);
+        }
+
+        virtual any_pointer pointer() const
+        {
+          return any_pointer(reinterpret_cast<void (*)()>(function_ptr));
+        }
+
       private:
-        FunctionPtr function_ptr;
+        mutable FunctionPtr function_ptr;
 #  else
         static unusable invoke(any_pointer function_ptr BOOST_FUNCTION_COMMA
                                BOOST_FUNCTION_PARMS)
@@ -266,6 +288,16 @@ namespace boost {
           allocator.destroy(victim);
           allocator.deallocate(victim, 1);
 #endif // BOOST_NO_STD_ALLOCATOR
+        }
+
+        virtual const std::type_info& type() const
+        {
+          return typeid(FunctionObj);
+        }
+
+        virtual any_pointer pointer() const
+        {
+          return any_pointer(&function_obj);
         }
 
       private:
@@ -344,6 +376,16 @@ namespace boost {
           allocator.destroy(victim);
           allocator.deallocate(victim, 1);
 #  endif // BOOST_NO_STD_ALLOCATOR
+        }
+
+        virtual const std::type_info& type() const
+        {
+          return typeid(FunctionObj);
+        }
+
+        virtual any_pointer pointer() const
+        {
+          return any_pointer(&function_obj);
         }
 
       private:
@@ -601,7 +643,73 @@ namespace boost {
 #endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
     }
 
+    const std::type_info& target_type() const
+    {
+      if (this->empty())
+        return typeid(void);
+      else {
+#ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
+        impl_type* i = reinterpret_cast<impl_type*>(impl);
+        return i->type();
+#else
+        detail::function::any_pointer p = 
+          manager(functor, detail::function::retrieve_type_info);
+        return *static_cast<const std::type_info*>(p.const_obj_ptr);
+#endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
+      }
+    }
+
+    template<typename To>
+    To& cast(To* = 0)
+    {
+      assert(typeid(To) != typeid(void));
+      assert(typeid(To) == this->target_type());
+      typedef typename detail::function::IF<(is_pointer<To>::value),
+                         detail::function::function_ptr_tag,
+                         detail::function::function_obj_tag>::type tag;
+
+#ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
+      impl_type* i = reinterpret_cast<impl_type*>(impl);
+      return cast_helper<To>(i->pointer(), tag());
+#else
+      return cast_helper<To>(functor, tag());
+#endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
+    }
+
+    template<typename To>
+    const To& cast(To* = 0) const
+    {
+      assert(typeid(To) != typeid(void));
+      assert(typeid(To) == this->target_type());
+      typedef typename detail::function::IF<(is_pointer<To>::value),
+                         detail::function::function_ptr_tag,
+                         detail::function::function_obj_tag>::type tag;
+
+#ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
+      impl_type* i = reinterpret_cast<impl_type*>(impl);
+      return cast_helper<To>(i->pointer(), tag());
+#else
+      return cast_helper<To>(functor, tag());
+#endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
+    }
+
   private:
+    template<typename To>
+    To& cast_helper(detail::function::any_pointer p, 
+                    detail::function::function_ptr_tag,
+                    To* = 0) const
+    {
+      return reinterpret_cast<To>(p.func_ptr);
+    }
+
+    template<typename To>
+    To& cast_helper(detail::function::any_pointer p, 
+                    detail::function::function_obj_tag,
+                    To* = 0) const
+    {
+      return *static_cast<To*>(p.obj_ptr);
+    }
+
     void assign_to_own(const BOOST_FUNCTION_FUNCTION& f)
     {
       if (!f.empty()) {
@@ -731,6 +839,36 @@ namespace boost {
   {
     f1.swap(f2);
   }                   
+
+  template<typename To, typename R 
+           BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+           typename Policy, typename Mixin, typename Allocator>
+  inline To& function_cast(BOOST_FUNCTION_FUNCTION<
+                             R BOOST_FUNCTION_COMMA
+                             BOOST_FUNCTION_TEMPLATE_ARGS ,
+                             Policy,
+                             Mixin,
+                             Allocator
+                           >& f,
+                           To* = 0)
+  {
+    return f.template cast<To>();
+  }
+
+  template<typename To, typename R 
+           BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+           typename Policy, typename Mixin, typename Allocator>
+  inline const To& function_cast(const BOOST_FUNCTION_FUNCTION<
+                                         R BOOST_FUNCTION_COMMA
+                                         BOOST_FUNCTION_TEMPLATE_ARGS ,
+                                         Policy,
+                                         Mixin,
+                                         Allocator
+                                       >& f,
+                                 To* = 0)
+  {
+    return f.template cast<To>();
+  }
 }
 
 // Cleanup after ourselves...

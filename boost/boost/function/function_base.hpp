@@ -19,6 +19,8 @@
 #include <string>
 #include <stdexcept>
 #include <memory>
+#include <new>
+#include <typeinfo>
 #include <boost/config.hpp>
 #include <boost/type_traits.hpp>
 
@@ -78,9 +80,11 @@ namespace boost {
       union any_pointer 
       {
         void* obj_ptr;
+        const void* const_obj_ptr;
         void (*func_ptr)();
 
         explicit any_pointer(void* p) : obj_ptr(p) {}
+        explicit any_pointer(const void* p) : const_obj_ptr(p) {}
         explicit any_pointer(void (*p)()) : func_ptr(p) {}
       };
 
@@ -109,7 +113,11 @@ namespace boost {
       };
 
       // The operation type to perform on the given functor/function pointer
-      enum functor_manager_operation_type { clone_functor, destroy_functor };
+      enum functor_manager_operation_type { 
+        clone_functor, 
+        destroy_functor,
+        retrieve_type_info
+      };
 
       // Tags used to decide between function and function object pointers.
       struct function_ptr_tag {};
@@ -140,8 +148,10 @@ namespace boost {
         {
           if (op == clone_functor)
             return function_ptr;
-          else
+          else if (op == destroy_functor)
             return any_pointer(static_cast<void (*)()>(0));
+          else
+            return any_pointer(&typeid(Functor));
         }
 
         // For function object pointers, we clone the pointer to each 
@@ -171,7 +181,7 @@ namespace boost {
 #  endif // BOOST_NO_STD_ALLOCATOR
             return any_pointer(static_cast<void*>(new_f));
           }
-          else {
+          else if (op == destroy_functor) {
             /* Cast from the void pointer to the functor pointer type */
             functor_type* f = 
               reinterpret_cast<functor_type*>(function_obj_ptr.obj_ptr);
@@ -190,8 +200,10 @@ namespace boost {
 
             return any_pointer(static_cast<void*>(0));
           }
+          else {
+            return any_pointer(&typeid(Functor));
+          }
         }
-
       public:
         /* Dispatch to an appropriate manager based on whether we have a
            function pointer or a function object pointer. */
