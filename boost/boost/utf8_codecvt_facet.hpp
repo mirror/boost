@@ -131,7 +131,7 @@ protected:
     // How many char objects can I process to get <= max_limit
     // wchar_t objects?
     virtual int do_length(
-        const std::mbstate_t &,
+        std::mbstate_t &,
         const char * from,
         const char * from_end, 
         std::size_t max_limit
