@@ -101,7 +101,7 @@ protected:
 
   bool        final_empty_()const{return final().empty_();}
   std::size_t final_size_()const{return final().size_();}
-  std::size_t final_max_size_()const{return final.max_size_();}
+  std::size_t final_max_size_()const{return final().max_size_();}
 
   std::pair<final_node_type*,bool> final_insert_(value_param_type x)
     {return final().insert_(x);}

@@ -29,6 +29,7 @@ void test_capacity()
 
   BOOST_CHECK(!es.empty());
   BOOST_CHECK(es.size()==5);
+  BOOST_CHECK(es.size()<=es.max_size());
 
   es.erase(es.begin());
   BOOST_CHECK(get<name>(es).size()==4);
@@ -36,11 +37,13 @@ void test_capacity()
   es.erase(es.begin());
   BOOST_CHECK(!get<as_inserted>(es).empty());
   BOOST_CHECK(get<as_inserted>(es).size()==3);
+  BOOST_CHECK(get<as_inserted>(es).size()<=get<as_inserted>(es).max_size());
 
   multi_index_container<int,indexed_by<sequenced<> > > ss;
 
   ss.resize(10);
   BOOST_CHECK(ss.size()==10);
+  BOOST_CHECK(ss.size()<=ss.max_size());
 
   ss.resize(20);
   BOOST_CHECK(ss.size()==20);
