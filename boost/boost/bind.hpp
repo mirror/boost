@@ -774,7 +774,7 @@ private:
 template <class R> struct evaluator0
 {
     template<class L, class F, class A>
-    static R eval(L const&, F f, A &)
+    static R eval(L &, F f, A &)
     {
         return unwrap(f, 0)();
     }
@@ -783,7 +783,7 @@ template <class R> struct evaluator0
 template <> struct evaluator0<void>
 {
     template<class L, class F, class A>
-    static void eval(L const&, F f, A &)
+    static void eval(L &, F f, A &)
     {
         unwrap(f, 0)();
     }
@@ -792,7 +792,7 @@ template <> struct evaluator0<void>
 template <class R> struct evaluator1
 {
     template<class L, class F, class A>
-    static R eval(L const& l, F f, A & a)
+    static R eval(L & l, F f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_]);
     }
@@ -801,7 +801,7 @@ template <class R> struct evaluator1
 template <> struct evaluator1<void>
 {
     template<class L, class F, class A>
-    static void eval(L const& l, F f, A & a)
+    static void eval(L & l, F f, A & a)
     {
         unwrap(f, 0)(a[l.a1_]);
     }
@@ -810,7 +810,7 @@ template <> struct evaluator1<void>
 template <class R> struct evaluator2
 {
     template<class L, class F, class A>
-    static R eval(L const& l, F f, A & a)
+    static R eval(L & l, F f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_]);
     }
@@ -819,7 +819,7 @@ template <class R> struct evaluator2
 template <> struct evaluator2<void>
 {
     template<class L, class F, class A>
-    static void eval(L const& l, F f, A & a)
+    static void eval(L & l, F f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_]);
     }
@@ -828,7 +828,7 @@ template <> struct evaluator2<void>
 template <class R> struct evaluator3
 {
     template<class L, class F, class A>
-    static R eval(L const& l, F f, A & a)
+    static R eval(L & l, F f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_]);
     }
@@ -837,7 +837,7 @@ template <class R> struct evaluator3
 template <> struct evaluator3<void>
 {
     template<class L, class F, class A>
-    static void eval(L const& l, F f, A & a)
+    static void eval(L & l, F f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_]);
     }
@@ -846,7 +846,7 @@ template <> struct evaluator3<void>
 template <class R> struct evaluator4
 {
     template<class L, class F, class A>
-    static R eval(L const& l, F f, A & a)
+    static R eval(L & l, F f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_]);
     }
@@ -855,7 +855,7 @@ template <class R> struct evaluator4
 template <> struct evaluator4<void>
 {
     template<class L, class F, class A>
-    static void eval(L const& l, F f, A & a)
+    static void eval(L & l, F f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_]);
     }
@@ -864,7 +864,7 @@ template <> struct evaluator4<void>
 template <class R> struct evaluator5
 {
     template<class L, class F, class A>
-    static R eval(L const& l, F f, A & a)
+    static R eval(L & l, F f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_]);
     }
@@ -873,7 +873,7 @@ template <class R> struct evaluator5
 template <> struct evaluator5<void>
 {
     template<class L, class F, class A>
-    static void eval(L const& l, F f, A & a)
+    static void eval(L & l, F f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_]);
     }
@@ -882,7 +882,7 @@ template <> struct evaluator5<void>
 template <class R> struct evaluator6
 {
     template<class L, class F, class A>
-    static R eval(L const& l, F f, A & a)
+    static R eval(L & l, F f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_]);
     }
@@ -891,7 +891,7 @@ template <class R> struct evaluator6
 template <> struct evaluator6<void>
 {
     template<class L, class F, class A>
-    static void eval(L const& l, F f, A & a)
+    static void eval(L & l, F f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_]);
     }
@@ -900,7 +900,7 @@ template <> struct evaluator6<void>
 template <class R> struct evaluator7
 {
     template<class L, class F, class A>
-    static R eval(L const& l, F f, A & a)
+    static R eval(L & l, F f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_]);
     }
@@ -909,7 +909,7 @@ template <class R> struct evaluator7
 template <> struct evaluator7<void>
 {
     template<class L, class F, class A>
-    static void eval(L const& l, F f, A & a)
+    static void eval(L & l, F f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_]);
     }
@@ -918,7 +918,7 @@ template <> struct evaluator7<void>
 template <class R> struct evaluator8
 {
     template<class L, class F, class A>
-    static R eval(L const& l, F f, A & a)
+    static R eval(L & l, F f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_], a[l.a8_]);
     }
@@ -927,7 +927,7 @@ template <class R> struct evaluator8
 template <> struct evaluator8<void>
 {
     template<class L, class F, class A>
-    static void eval(L const& l, F f, A & a)
+    static void eval(L & l, F f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_], a[l.a8_]);
     }
@@ -936,7 +936,7 @@ template <> struct evaluator8<void>
 template <class R> struct evaluator9
 {
     template<class L, class F, class A>
-    static R eval(L const& l, F f, A & a)
+    static R eval(L & l, F f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_], a[l.a8_], a[l.a9_]);
     }
@@ -945,7 +945,7 @@ template <class R> struct evaluator9
 template <> struct evaluator9<void>
 {
     template<class L, class F, class A>
-    static void eval(L const& l, F f, A & a)
+    static void eval(L & l, F f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_], a[l.a8_], a[l.a9_]);
     }
