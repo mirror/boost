@@ -8,6 +8,8 @@
 #include <boost/program_options/value_semantic.hpp>
 #include <boost/program_options/detail/convert.hpp>
 
+#include <cctype>
+
 namespace boost { namespace program_options {
 
     using namespace std;

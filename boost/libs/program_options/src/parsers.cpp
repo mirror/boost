@@ -18,6 +18,7 @@
 
 #include <boost/bind.hpp>
 
+#include <cctype>
 
 #if !defined(__GNUC__) || __GNUC__ < 3
 #include <iostream>
