@@ -23,11 +23,12 @@ const char* const de_short_weekday_names[]={"Son", "Mon", "Die","Mit", "Don", "F
 
     const char* const de_long_weekday_names[]={"Sonntag", "Montag", "Dienstag","Mittwoch", "Donnerstag", "Freitag", "Samstag"};
 
+/** Not used for now
     const char* const es_short_month_names[]={"Ene","Feb","Mar","Abr","Pue","Jun","Jul","Ago","Sep","Oct","Nov","Dic", "NAM"};
 
     const char* const es_long_month_names[]={"Enero","Febrero","Marcha","Abril","Pueda","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre","NoAMes"};
     const char* const es_special_value_names[]={"NoUnRatoDeLaFacha","-infinito", "+infinito"};
-
+**/
 int
 main()
 {
