@@ -20,7 +20,7 @@ template<class R, class T> class BOOST_MEM_FN_NAME(mf0)
 public:
 
     typedef R result_type;
-    typedef T * first_argument_type;
+    typedef T * argument_type;
 
 private:
     
@@ -54,7 +54,7 @@ template<class R, class T> class BOOST_MEM_FN_NAME(cmf0)
 public:
 
     typedef R result_type;
-    typedef T const * first_argument_type;
+    typedef T const * argument_type;
 
 private:
     
