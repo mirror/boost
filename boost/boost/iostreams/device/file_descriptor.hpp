@@ -20,7 +20,7 @@
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 
-// Must be the last header.
+// Must come last.
 #include <boost/config/abi_prefix.hpp>     
 
 namespace boost { namespace iostreams {

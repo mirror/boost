@@ -44,7 +44,7 @@
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/shared_ptr.hpp>
 
-// Must be the last headers.
+// Must come last.
 #include <boost/iostreams/detail/disable_warnings.hpp>
 #include <boost/config/abi_prefix.hpp>        
 
