@@ -32,7 +32,7 @@
 	   <b>typename</b> Allocator = std::allocator&lt;function_base&gt; &gt;
   <b>class</b> <a href="#functionN">function<i>N</i></a> : <b>public</b> <a href="#function_base">function_base</a>, <b>public</b> Mixin
   {
-    <b>typedef</b> ResultType result_type;
+    <b>typedef</b> ResultType result_type; <em>// <a href="#novoid">[1]</a></em>
     <b>typedef</b> Policy     policy_type;
     <b>typedef</b> Mixin      mixin_type;
     <b>typedef</b> Allocator  allocator_type;
@@ -288,10 +288,12 @@
 </ul>
 
     <hr>
+<p><a name="novoid">[1]</a> On compilers not supporting void returns, when the <code>ReturnType</code> is <b>void</b>, the <code>result_type</code> of a Boost.Function object is implementation-defined.
+    <hr>
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Tue Jan 29 22:51:49 EST 2002
+Last modified: Thu Jan 31 21:55:35 EST 2002
 <!-- hhmts end -->
   </body>
 </html>
