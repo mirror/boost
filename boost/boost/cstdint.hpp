@@ -223,14 +223,14 @@ namespace boost
 #       error defaults not correct; you must hand modify boost/cstdint.hpp
 #    endif
 
-     typedef long long            intmax_t;
-     typedef unsigned long long   uintmax_t;
-     typedef long long            int64_t;
-     typedef long long            int_least64_t;
-     typedef long long            int_fast64_t;
-     typedef unsigned long long   uint64_t;
-     typedef unsigned long long   uint_least64_t;
-     typedef unsigned long long   uint_fast64_t;
+     typedef  ::boost::long_long_type            intmax_t;
+     typedef  ::boost::ulong_long_type   uintmax_t;
+     typedef  ::boost::long_long_type            int64_t;
+     typedef  ::boost::long_long_type            int_least64_t;
+     typedef  ::boost::long_long_type            int_fast64_t;
+     typedef  ::boost::ulong_long_type   uint64_t;
+     typedef  ::boost::ulong_long_type   uint_least64_t;
+     typedef  ::boost::ulong_long_type   uint_fast64_t;
 
 # elif ULONG_MAX != 0xffffffff
 

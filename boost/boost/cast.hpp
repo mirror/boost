@@ -156,11 +156,11 @@ namespace boost
       // long / unsigned long long. Not intended to be full
       // numeric_limits replacements, but good enough for numeric_cast<>
       template <>
-      struct fixed_numeric_limits_base<long long, false>
+      struct fixed_numeric_limits_base< ::boost::long_long_type, false>
       {
           BOOST_STATIC_CONSTANT(bool, is_specialized = true);
           BOOST_STATIC_CONSTANT(bool, is_signed = true);
-          static long long max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+          static  ::boost::long_long_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
           {
 #  ifdef LONGLONG_MAX
               return LONGLONG_MAX;
@@ -169,7 +169,7 @@ namespace boost
 #  endif 
           }
 
-          static long long min BOOST_PREVENT_MACRO_SUBSTITUTION ()
+          static  ::boost::long_long_type min BOOST_PREVENT_MACRO_SUBSTITUTION ()
           {
 #  ifdef LONGLONG_MIN
               return LONGLONG_MIN;
@@ -180,11 +180,11 @@ namespace boost
       };
 
       template <>
-      struct fixed_numeric_limits_base<unsigned long long, false>
+      struct fixed_numeric_limits_base< ::boost::ulong_long_type, false>
       {
           BOOST_STATIC_CONSTANT(bool, is_specialized = true);
           BOOST_STATIC_CONSTANT(bool, is_signed = false);
-          static unsigned long long max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+          static  ::boost::ulong_long_type max BOOST_PREVENT_MACRO_SUBSTITUTION ()
           {
 #  ifdef ULONGLONG_MAX
               return ULONGLONG_MAX;
@@ -193,7 +193,7 @@ namespace boost
 #  endif 
           }
 
-          static unsigned long long min BOOST_PREVENT_MACRO_SUBSTITUTION () { return 0; }
+          static  ::boost::ulong_long_type min BOOST_PREVENT_MACRO_SUBSTITUTION () { return 0; }
       };
 # endif 
     } // namespace detail

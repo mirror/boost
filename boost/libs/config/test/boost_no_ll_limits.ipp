@@ -16,8 +16,16 @@ namespace boost_no_long_long_numeric_limits{
 
 int test()
 {
-   if(0 == std::numeric_limits<long long>::is_specialized) return -1;
-   if(0 == std::numeric_limits<unsigned long long>::is_specialized) return -1;
+#ifdef __GNUC__
+__extension__
+#endif
+   typedef long long llt;
+#ifdef __GNUC__
+__extension__
+#endif
+   typedef unsigned long long ullt;
+   if(0 == std::numeric_limits<llt>::is_specialized) return -1;
+   if(0 == std::numeric_limits<ullt>::is_specialized) return -1;
    return 0;
 }
 

@@ -24,8 +24,10 @@
 // Add missing specializations for numeric_limits:
 #ifdef BOOST_HAS_MS_INT64
 #  define BOOST_LLT __int64
+#  define BOOST_ULLT unsigned __int64
 #else
-#  define BOOST_LLT long long
+#  define BOOST_LLT  ::boost::long_long_type
+#  define BOOST_ULLT  ::boost::ulong_long_type
 #endif
 
 namespace std
@@ -84,23 +86,23 @@ namespace std
   };
 
   template<>
-  class numeric_limits<unsigned BOOST_LLT> 
+  class numeric_limits<BOOST_ULLT> 
   {
    public:
 
       BOOST_STATIC_CONSTANT(bool, is_specialized = true);
 #ifdef BOOST_HAS_MS_INT64
-      static unsigned BOOST_LLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return 0ui64; }
-      static unsigned BOOST_LLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return 0xFFFFFFFFFFFFFFFFui64; }
+      static BOOST_ULLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return 0ui64; }
+      static BOOST_ULLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return 0xFFFFFFFFFFFFFFFFui64; }
 #elif defined(ULLONG_MAX) && defined(ULLONG_MIN)
-      static unsigned BOOST_LLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ULLONG_MIN; }
-      static unsigned BOOST_LLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ULLONG_MAX; }
+      static BOOST_ULLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ULLONG_MIN; }
+      static BOOST_ULLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ULLONG_MAX; }
 #elif defined(ULONGLONG_MAX) && defined(ULONGLONG_MIN)
-      static unsigned BOOST_LLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ULONGLONG_MIN; }
-      static unsigned BOOST_LLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ULONGLONG_MAX; }
+      static BOOST_ULLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ULONGLONG_MIN; }
+      static BOOST_ULLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ULONGLONG_MAX; }
 #else
-      static unsigned BOOST_LLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return 0uLL; }
-      static unsigned BOOST_LLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ~0uLL; }
+      static BOOST_ULLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return 0uLL; }
+      static BOOST_ULLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ~0uLL; }
 #endif
       BOOST_STATIC_CONSTANT(int, digits = sizeof(BOOST_LLT) * CHAR_BIT);
       BOOST_STATIC_CONSTANT(int, digits10 = (CHAR_BIT * sizeof (BOOST_LLT)) * 301L / 1000);
@@ -108,8 +110,8 @@ namespace std
       BOOST_STATIC_CONSTANT(bool, is_integer = true);
       BOOST_STATIC_CONSTANT(bool, is_exact = true);
       BOOST_STATIC_CONSTANT(int, radix = 2);
-      static unsigned BOOST_LLT epsilon() throw() { return 0; };
-      static unsigned BOOST_LLT round_error() throw() { return 0; };
+      static BOOST_ULLT epsilon() throw() { return 0; };
+      static BOOST_ULLT round_error() throw() { return 0; };
 
       BOOST_STATIC_CONSTANT(int, min_exponent = 0);
       BOOST_STATIC_CONSTANT(int, min_exponent10 = 0);
@@ -121,10 +123,10 @@ namespace std
       BOOST_STATIC_CONSTANT(bool, has_signaling_NaN = false);
       BOOST_STATIC_CONSTANT(bool, has_denorm = false);
       BOOST_STATIC_CONSTANT(bool, has_denorm_loss = false);
-      static unsigned BOOST_LLT infinity() throw() { return 0; };
-      static unsigned BOOST_LLT quiet_NaN() throw() { return 0; };
-      static unsigned BOOST_LLT signaling_NaN() throw() { return 0; };
-      static unsigned BOOST_LLT denorm_min() throw() { return 0; };
+      static BOOST_ULLT infinity() throw() { return 0; };
+      static BOOST_ULLT quiet_NaN() throw() { return 0; };
+      static BOOST_ULLT signaling_NaN() throw() { return 0; };
+      static BOOST_ULLT denorm_min() throw() { return 0; };
 
       BOOST_STATIC_CONSTANT(bool, is_iec559 = false);
       BOOST_STATIC_CONSTANT(bool, is_bounded = false);

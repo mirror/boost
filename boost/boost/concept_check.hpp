@@ -179,7 +179,7 @@ struct require_same { typedef T type; };
   template <> struct SignedIntegerConcept<int> { void constraints() {} };
   template <> struct SignedIntegerConcept<long> { void constraints() {} };
 # if defined(BOOST_HAS_LONG_LONG)
-  template <> struct SignedIntegerConcept<long long> { void constraints() {} };
+  template <> struct SignedIntegerConcept< ::boost::long_long_type> { void constraints() {} };
 # endif
   // etc.
 #endif      

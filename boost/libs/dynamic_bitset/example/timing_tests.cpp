@@ -129,7 +129,7 @@ int main()
     timing_test<unsigned int>();
     timing_test<unsigned long>();
 # ifdef BOOST_HAS_LONG_LONG
-    timing_test<unsigned long long>();
+    timing_test< ::boost::ulong_long_type>();
 # endif
 
     return boost::exit_success;

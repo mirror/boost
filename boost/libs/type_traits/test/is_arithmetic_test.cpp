@@ -61,14 +61,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<long const volatile>::value, t
 
 #ifdef BOOST_HAS_LONG_LONG
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<unsigned long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<unsigned long long const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<long long const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<unsigned long long volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<long long volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<unsigned long long const volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic<long long const volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic< ::boost::ulong_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic< ::boost::long_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic< ::boost::ulong_long_type const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic< ::boost::long_long_type const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic< ::boost::ulong_long_type volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic< ::boost::long_long_type volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic< ::boost::ulong_long_type const volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_arithmetic< ::boost::long_long_type const volatile>::value, true);
 
 #endif
 

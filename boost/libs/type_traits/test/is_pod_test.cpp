@@ -61,14 +61,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<long const volatile>::value, true);
 
 #ifdef BOOST_HAS_LONG_LONG
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<unsigned long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<unsigned long long const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<long long const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<unsigned long long volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<long long volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<unsigned long long const volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<long long const volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod< ::boost::ulong_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod< ::boost::long_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod< ::boost::ulong_long_type const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod< ::boost::long_long_type const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod< ::boost::ulong_long_type volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod< ::boost::long_long_type volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod< ::boost::ulong_long_type const volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod< ::boost::long_long_type const volatile>::value, true);
 
 #endif
 

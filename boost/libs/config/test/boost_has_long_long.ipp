@@ -16,8 +16,13 @@ namespace boost_has_long_long{
 
 int test()
 {
+#ifdef __GNUC__
+   __extension__ long long lli = 0LL;
+   __extension__ unsigned long long ulli = 0uLL;
+#else
    long long lli = 0LL;
    unsigned long long ulli = 0uLL;
+#endif
    (void)&lli;
    (void)&ulli;
    return 0;

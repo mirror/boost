@@ -270,8 +270,8 @@ int main()
     test_integer<long>();
     test_integer<unsigned long>();
 #if defined(BOOST_HAS_LONG_LONG)
-    test_integer<long long>();
-    test_integer<unsigned long long>();
+    test_integer< ::boost::long_long_type>();
+    test_integer< ::boost::ulong_long_type>();
 #endif
 
     // Test user-defined type.

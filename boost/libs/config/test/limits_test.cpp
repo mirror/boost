@@ -170,10 +170,8 @@ int test_main(int, char*[])
   typedef unsigned long unsigned_long;
   test_integral_limits(unsigned_long(), "unsigned long");
 #if defined(BOOST_HAS_LONG_LONG)
-  typedef long long long_long;
-  test_integral_limits(long_long(), "long long");
-  typedef unsigned long long unsigned_long_long;
-  test_integral_limits(unsigned_long_long(), "unsigned long long");
+  test_integral_limits(::boost::long_long_type(), "long long");
+  test_integral_limits(::boost::ulong_long_type(), "unsigned long long");
 #endif
 #ifdef BOOST_HAS_MS_INT64
   typedef __int64 long_long2;

@@ -61,14 +61,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<long const volatile>
 
 #ifdef BOOST_HAS_LONG_LONG
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<unsigned long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<unsigned long long const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<long long const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<unsigned long long volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<long long volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<unsigned long long const volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor<long long const volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor< ::boost::ulong_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor< ::boost::long_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor< ::boost::ulong_long_type const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor< ::boost::long_long_type const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor< ::boost::ulong_long_type volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor< ::boost::long_long_type volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor< ::boost::ulong_long_type const volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_constructor< ::boost::long_long_type const volatile>::value, true);
 
 #endif
 

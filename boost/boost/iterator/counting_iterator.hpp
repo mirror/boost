@@ -57,11 +57,11 @@ namespace detail
 
 #  if defined(BOOST_HAS_LONG_LONG)
   template <>
-  struct is_numeric<long long>
+  struct is_numeric< ::boost::long_long_type>
     : mpl::true_ {};
   
   template <>
-  struct is_numeric<unsigned long long>
+  struct is_numeric< ::boost::ulong_long_type>
     : mpl::true_ {};
 #  endif
 

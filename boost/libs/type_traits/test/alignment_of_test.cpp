@@ -44,7 +44,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of<float>::value, ALIGNOF(float));
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of<double>::value, ALIGNOF(double));
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of<long double>::value, ALIGNOF(long double));
 #ifdef BOOST_HAS_LONG_LONG
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of<long long>::value, ALIGNOF(long long));
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of< ::boost::long_long_type>::value, ALIGNOF(::boost::long_long_type));
 #endif
 #ifdef BOOST_HAS_MS_INT64
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of<__int64>::value, ALIGNOF(__int64));

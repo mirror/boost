@@ -399,6 +399,21 @@ namespace std {
 #  define BOOST_DEDUCED_TYPENAME
 #endif
 
+// long long workaround ------------------------------------------//
+// On gcc (and maybe other compilers?) long long is alway supported
+// but it's use may generate either warnings (with -ansi), or errors
+// (with -pedantic -ansi) unless it's use is prefixed by __extension__
+//
+namespace boost{
+#ifdef __GNUC__
+   __extension__ typedef long long long_long_type;
+   __extension__ typedef unsigned long long ulong_long_type;
+#else
+   typedef long long long_long_type;
+   typedef unsigned long long ulong_long_type;
+#endif
+}
+
 // BOOST_[APPEND_]EXPLICIT_TEMPLATE_[NON_]TYPE macros --------------------------//
 //
 // Some compilers have problems with function templates whose

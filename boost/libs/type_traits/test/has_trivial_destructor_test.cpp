@@ -61,14 +61,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<long const volatile>:
 
 #ifdef BOOST_HAS_LONG_LONG
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<unsigned long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<unsigned long long const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<long long const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<unsigned long long volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<long long volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<unsigned long long const volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<long long const volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor< ::boost::ulong_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor< ::boost::long_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor< ::boost::ulong_long_type const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor< ::boost::long_long_type const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor< ::boost::ulong_long_type volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor< ::boost::long_long_type volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor< ::boost::ulong_long_type const volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor< ::boost::long_long_type const volatile>::value, true);
 
 #endif
 

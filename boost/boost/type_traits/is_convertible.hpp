@@ -300,7 +300,8 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convert
     TT_AUX_IS_CONVERTIBLE_SPEC_2(F,short) \
     TT_AUX_IS_CONVERTIBLE_SPEC_2(F,int) \
     TT_AUX_IS_CONVERTIBLE_SPEC_2(F,long) \
-    TT_AUX_IS_CONVERTIBLE_SPEC_2(F,long long) \
+    TT_AUX_IS_CONVERTIBLE_SPEC(F,::boost::long_long_type)  \
+    TT_AUX_IS_CONVERTIBLE_SPEC(F,::boost::ulong_long_type) \
     /**/
 
 #   define TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_CV_SPEC(F) \

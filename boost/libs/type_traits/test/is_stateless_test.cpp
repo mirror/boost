@@ -61,14 +61,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<long const volatile>::value, fa
 
 #ifdef BOOST_HAS_LONG_LONG
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<unsigned long long>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<long long>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<unsigned long long const>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<long long const>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<unsigned long long volatile>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<long long volatile>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<unsigned long long const volatile>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<long long const volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless< ::boost::ulong_long_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless< ::boost::long_long_type>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless< ::boost::ulong_long_type const>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless< ::boost::long_long_type const>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless< ::boost::ulong_long_type volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless< ::boost::long_long_type volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless< ::boost::ulong_long_type const volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless< ::boost::long_long_type const volatile>::value, false);
 
 #endif
 

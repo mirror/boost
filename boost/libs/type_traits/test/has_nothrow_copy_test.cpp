@@ -61,14 +61,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy<long const volatile>::value
 
 #ifdef BOOST_HAS_LONG_LONG
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy<unsigned long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy<long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy<unsigned long long const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy<long long const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy<unsigned long long volatile>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy<long long volatile>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy<unsigned long long const volatile>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy<long long const volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy< ::boost::ulong_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy< ::boost::long_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy< ::boost::ulong_long_type const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy< ::boost::long_long_type const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy< ::boost::ulong_long_type volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy< ::boost::long_long_type volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy< ::boost::ulong_long_type const volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_nothrow_copy< ::boost::long_long_type const volatile>::value, false);
 
 #endif
 

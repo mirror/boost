@@ -61,14 +61,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<long const volatile>::value, true)
 
 #ifdef BOOST_HAS_LONG_LONG
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<unsigned long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<unsigned long long const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<long long const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<unsigned long long volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<long long volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<unsigned long long const volatile>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<long long const volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar< ::boost::ulong_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar< ::boost::long_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar< ::boost::ulong_long_type const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar< ::boost::long_long_type const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar< ::boost::ulong_long_type volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar< ::boost::long_long_type volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar< ::boost::ulong_long_type const volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar< ::boost::long_long_type const volatile>::value, true);
 
 #endif
 

@@ -67,10 +67,10 @@ template <  >
 
 #ifdef ULLONG_MAX
 template <  >
-    class integer_traits< long long >;
+    class integer_traits<  ::boost::long_long_type>;
 
 template <  >
-    class integer_traits< unsigned long long >;
+    class integer_traits<  ::boost::ulong_long_type >;
 #endif
 
 

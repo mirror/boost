@@ -374,8 +374,8 @@ int main()
     test<long>();
     test<unsigned long>();
 #if defined(BOOST_HAS_LONG_LONG) && !defined(BOOST_NO_INTEGRAL_INT64_T)
-    test<long long>();
-    test<unsigned long long>();
+    test< ::boost::long_long_type>();
+    test< ::boost::ulong_long_type>();
 #elif defined(BOOST_MSVC)
     // The problem of not having compile-time static class constants other than
     // enums prevents this from working, since values get truncated.

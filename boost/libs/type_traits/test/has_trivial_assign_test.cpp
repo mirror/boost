@@ -61,14 +61,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long const volatile>::val
 
 #ifdef BOOST_HAS_LONG_LONG
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long long>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned long long const>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long long const>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned long long volatile>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long long volatile>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned long long const volatile>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long long const volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::ulong_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::long_long_type>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::ulong_long_type const>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::long_long_type const>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::ulong_long_type volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::long_long_type volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::ulong_long_type const volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::long_long_type const volatile>::value, false);
 
 #endif
 

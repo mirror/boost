@@ -58,9 +58,9 @@ BOOST_CHECK(::tt::alignment_of<
 #ifdef BOOST_HAS_LONG_LONG
 BOOST_CHECK(::tt::alignment_of<
                ::tt::type_with_alignment<
-                  ::tt::alignment_of<long long>::value
+                  ::tt::alignment_of< ::boost::long_long_type>::value
                >::type
-            >::value == ::boost::alignment_of<long long>::value);
+            >::value == ::boost::alignment_of< ::boost::long_long_type>::value);
 #endif
 #ifdef BOOST_HAS_MS_INT64
 BOOST_CHECK(::tt::alignment_of<
@@ -152,7 +152,7 @@ BOOST_CHECK(::tt::is_pod<
 #ifdef BOOST_HAS_LONG_LONG
 BOOST_CHECK(::tt::is_pod<
                ::tt::type_with_alignment<
-                  ::tt::alignment_of<long long>::value>::type
+                  ::tt::alignment_of< ::boost::long_long_type>::value>::type
             >::value);
 #endif
 #ifdef BOOST_HAS_MS_INT64

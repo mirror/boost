@@ -23,11 +23,20 @@ struct llt
    enum{ value = m };
 };
 #else
+#ifdef __GNUC__
+__extension__
+#endif
 static const unsigned long long mask = 1uLL << 50;
 
+#ifdef __GNUC__
+__extension__
+#endif
 template <unsigned long long m>
 struct llt
 {
+#ifdef __GNUC__
+__extension__
+#endif
    static const unsigned long long value = m;
 };
 #endif
