@@ -56,7 +56,7 @@ private:
         const unsigned int /* file_version */
     ){
         ar & BOOST_SERIALIZATION_NVP(b);
-        #ifndef BOOST_NO_INT64
+        #ifndef BOOST_NO_INT64_T
         ar & BOOST_SERIALIZATION_NVP(f);
         ar & BOOST_SERIALIZATION_NVP(g);
         #endif
@@ -94,7 +94,7 @@ private:
         #endif
     }
     bool b;
-    #ifndef BOOST_NO_INT64
+    #ifndef BOOST_NO_INT64_T
     boost::int64_t f;
     boost::uint64_t g;
     #endif
@@ -154,7 +154,7 @@ void randomize(S &x)
 
 inline A::A() :
     b(true),
-    #ifndef BOOST_NO_INT64
+    #ifndef BOOST_NO_INT64_T
     f(std::rand() * std::rand()),
     g(std::rand() * std::rand()),
     #endif
@@ -185,7 +185,7 @@ inline bool A::operator==(const A &rhs) const
 {
     BOOST_CHECK(b == b);
     BOOST_CHECK(l == l);
-    #ifndef BOOST_NO_INT64
+    #ifndef BOOST_NO_INT64_T
     BOOST_CHECK(f == f);
     BOOST_CHECK(g == g);
     #endif
@@ -213,7 +213,7 @@ inline bool A::operator==(const A &rhs) const
         return false;
     if(l != rhs.l)
         return false;
-    #ifndef BOOST_NO_INT64
+    #ifndef BOOST_NO_INT64_T
     if(f != rhs.f)
         return false;
     if(g != rhs.g)
@@ -265,7 +265,7 @@ inline bool A::operator<(const A &rhs) const
 {
     if(b != rhs.b)
         return b < rhs.b;
-    #ifndef BOOST_NO_INT64
+    #ifndef BOOST_NO_INT64_T
     if(f != rhs.f)
         return f < rhs.f;
     if(g != rhs.g)

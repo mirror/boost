@@ -43,7 +43,16 @@ struct implementation_level<C<T> > {                                \
     /**/
 #endif
 
-#if ! defined(BOOST_NO_INT64)
+// determine if its necessary to handle (u)int64_t specifically
+// i.e. that its not a synonym for (unsigned) long
+// if there is no 64 bit int or if its the same as a long
+// we shouldn't define separate functions for int64 data types.
+#if defined(BOOST_NO_UINT64_T) \
+    && ULONG_MAX == 18446744073709551615 // 2**64 - 1
+#   define BOOST_NO_INTRINSIC_UINT64_T
+#endif
+
+#if !defined(BOOST_NO_INTRINSIC_UINT64_T)
     #define BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER_INT64(C)    \
     BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER(boost::int64_t, C)  \
     BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER(boost::uint64_t, C) \
@@ -70,9 +79,5 @@ struct implementation_level<C<T> > {                                \
     BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER_WCHAR(C)            \
     } }                                                              \
     /**/
-
-#if 0
-    /**/
-#endif
 
 #endif // BOOST_SERIALIZATION_COLLECTION_TRAITS
