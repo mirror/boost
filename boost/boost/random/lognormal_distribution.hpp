@@ -50,9 +50,9 @@ public:
   lognormal_distribution(base_type & rng, result_type mean, 
                          result_type sigma)
     : _rng(rng, std::log(mean*mean/std::sqrt(sigma*sigma + mean*mean)),
-           std::sqrt(std::log(sigma*sigma/mean/mean+1)))
+           std::sqrt(std::log(sigma*sigma/mean/mean+result_type(1.0))))
   { 
-    assert(mean > 0);
+    assert(mean > result_type(0.0));
   }
 
   // compiler-generated copy ctor and assignment operator are fine

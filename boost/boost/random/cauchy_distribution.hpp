@@ -40,8 +40,8 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
-  cauchy_distribution(base_type & rng, result_type median = 0, 
-                      result_type sigma = 1)
+  cauchy_distribution(base_type & rng, result_type median = result_type(0.0), 
+                      result_type sigma = result_type(1.0))
     : _rng(rng), _median(median), _sigma(sigma) { }
 
   // compiler-generated copy ctor and assignment operator are fine
@@ -53,11 +53,12 @@ public:
 
   result_type operator()()
   {
-    const double pi = 3.14159265358979323846;
+    // Can we have a boost::mathconst please?
+    const result_type pi = result_type(3.14159265358979323846);
 #ifndef BOOST_NO_STDC_NAMESPACE
     using std::tan;
 #endif
-    return _median + _sigma * tan(pi*(_rng()-0.5));
+    return _median + _sigma * tan(pi*(_rng()-result_type(0.5)));
   }
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const cauchy_distribution& x, 

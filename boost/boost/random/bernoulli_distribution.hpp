@@ -32,11 +32,11 @@ class bernoulli_distribution
 public:
   typedef UniformRandomNumberGenerator base_type;
   typedef bool result_type;
-  bernoulli_distribution(base_type & rng, const RealType& p) 
+  bernoulli_distribution(base_type & rng, const RealType& p = 0.5) 
     : _rng(&rng),
       _p(p),
       _threshold(static_cast<base_result>
-                 (p * (_rng->max() - _rng->min())) + _rng->min())
+                 (p * RealType(_rng->max() - _rng->min())) + _rng->min())
   {
     // for p == 0, we can only set _threshold = 0, which is not enough
     assert(p >= 0);
@@ -49,7 +49,8 @@ public:
   RealType p() const { return _p; }
   void reset() { }
 
-  result_type operator()() { return _p > 0 && (*_rng)() <= _threshold; }
+  result_type operator()()
+  { return _p > RealType(0) && (*_rng)() <= _threshold; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const bernoulli_distribution& x, 

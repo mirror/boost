@@ -94,11 +94,11 @@ inline IntType uniform_int_integer<UniformRandomNumberGenerator, IntType>::opera
       }
       // we consider "result" as expressed to base (_brange+1)
       // for every power of (_brange+1), we determine a random factor
-      result_type result = 0;
-      result_type mult = 1;
+      result_type result = result_type(0);
+      result_type mult = result_type(1);
       while(mult <= limit) {
         result += ((*_rng)() - _bmin) * mult;
-        mult *= static_cast<result_type>(_brange)+1;
+        mult *= result_type(_brange)+result_type(1);
       }
       if(mult == limit)
         // _range+1 is an integer power of _brange+1: no rejections required

@@ -35,11 +35,12 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
-  explicit normal_distribution(base_type & rng, const result_type& mean = 0,
-                               const result_type& sigma = 1)
+  explicit normal_distribution(base_type & rng,
+                               const result_type& mean = result_type(0.0),
+                               const result_type& sigma = result_type(1.0))
     : _rng(rng), _mean(mean), _sigma(sigma), _valid(false)
   {
-    assert(sigma >= 0);
+    assert(sigma >= result_type(0.0));
   }
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -69,16 +70,18 @@ public:
     if(!_valid) {
       _r1 = _rng();
       _r2 = _rng();
-      _cached_rho = sqrt(-2 * log(1.0-_r2));
+      _cached_rho = sqrt(-result_type(2.0) * log(result_type(1.0)-_r2));
       _valid = true;
     } else {
       _valid = false;
     }
     // Can we have a boost::mathconst please?
-    const double pi = 3.14159265358979323846;
+    const result_type pi = result_type(3.14159265358979323846);
     
-    return _cached_rho * (_valid ? cos(2*pi*_r1) : sin(2*pi*_r1)) * _sigma +
-      _mean;
+    return _cached_rho * (_valid ?
+                          cos(result_type(2.0)*pi*_r1) :
+                          sin(result_type(2.0)*pi*_r1))
+      * _sigma + _mean;
   }
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const normal_distribution& x, 

@@ -45,20 +45,20 @@ public:
 
   explicit uniform_01(base_type & rng)
     : _rng(&rng),
-      _factor(1.0 /
-              (static_cast<result_type>(_rng->max()-_rng->min()) +
-               (std::numeric_limits<base_result>::is_integer ? 1.0 : 0.0)))
+      _factor(result_type(1.0) /
+              (result_type(_rng->max()-_rng->min()) +
+               result_type(std::numeric_limits<base_result>::is_integer ? 1.0 : 0.0)))
   {
   }
   // compiler-generated copy ctor and copy assignment are fine
 
-  result_type min() const { return 0.0; }
-  result_type max() const { return 1.0; }
+  result_type min() const { return result_type(0.0); }
+  result_type max() const { return result_type(1.0); }
   base_type& base() const { return *_rng; }
   void reset() { }
 
   result_type operator()() {
-    return static_cast<result_type>((*_rng)() - _rng->min()) * _factor;
+    return result_type((*_rng)() - _rng->min()) * _factor;
   }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE

@@ -34,10 +34,11 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
-  explicit gamma_distribution(base_type & rng, const result_type& alpha)
-    : _rng(rng), _exp(rng, 1), _alpha(alpha)
+  explicit gamma_distribution(base_type & rng,
+                              const result_type& alpha = result_type(1.0))
+    : _rng(rng), _exp(rng, result_type(1.0)), _alpha(alpha)
   {
-    assert(alpha > 0);
+    assert(alpha > result_type(0.0));
  #ifndef BOOST_NO_STDC_NAMESPACE
     // allow for Koenig lookup
     using std::exp;
@@ -59,22 +60,26 @@ public:
     using std::tan; using std::sqrt; using std::exp; using std::log;
     using std::pow;
 #endif
-    if(_alpha == 1) {
+    if(_alpha == result_type(1.0)) {
       return _exp();
-    } else if(_alpha > 1) {
+    } else if(_alpha > result_type(1.0)) {
       // Can we have a boost::mathconst please?
-      const double pi = 3.14159265358979323846;
+      const result_type pi = result_type(3.14159265358979323846);
       for(;;) {
         result_type y = tan(pi * _rng());
-        result_type x = sqrt(2*_alpha-1)*y + _alpha-1;
-        if(x <= 0)
+        result_type x = sqrt(result_type(2.0)*_alpha-result_type(1.0))*y
+          + _alpha-result_type(1.0);
+        if(x <= result_type(0.0))
           continue;
-        if(_rng() > (1+y*y) * exp((_alpha-1)*log(x/(_alpha-1)) - 
-                                  sqrt(2*_alpha-1)*y))
+        if(_rng() >
+           (result_type(1.0)+y*y) * exp((_alpha-result_type(1.0))
+                                        *log(x/(_alpha-result_type(1.0)))
+                                        - sqrt(result_type(2.0)*_alpha
+                                               -result_type(1.0))*y))
           continue;
         return x;
       }
-    } else /* alpha < 1 */ {
+    } else /* alpha < 1.0 */ {
       for(;;) {
         result_type u = _rng();
         result_type y = _exp();
@@ -83,7 +88,7 @@ public:
           x = exp(-y/_alpha);
           q = _p*exp(-x);
         } else {
-          x = 1+y;
+          x = result_type(1.0)+y;
           q = _p + (result_type(1.0)-_p) * pow(x, _alpha-result_type(1.0));
         }
         if(u >= q)
