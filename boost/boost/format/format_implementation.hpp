@@ -109,7 +109,7 @@ namespace boost {
     void basic_format<Ch, Tr, Alloc>:: 
     make_or_reuse_data (std::size_t nbitems) {
 #if !defined(BOOST_NO_STD_LOCALE)
-        Ch fill = std::use_facet<std::ctype<Ch> > (getloc()). widen(' ');
+        Ch fill = ( BOOST_USE_FACET(std::ctype<Ch>, getloc()) ). widen(' ');
 #else
         Ch fill = ' ';
 #endif

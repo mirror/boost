@@ -15,7 +15,7 @@
 #define BOOST_MSVC_DISAMBIGUATER_HPP
 
 #if BOOST_WORKAROUND( BOOST_MSVC, <= 1300)
-   // this whole header is specifically for msvc
+   // this whole header is specifically for msvc up to 7.0
 
 #include <boost/format/group.hpp>
 #include <ostream>
