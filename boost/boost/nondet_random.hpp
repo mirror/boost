@@ -29,7 +29,7 @@
 namespace boost {
 
 // use some OS service to generate non-deterministic random numbers
-class random_device : noncopyable
+class random_device : private noncopyable
 {
 public:
   typedef unsigned int result_type;

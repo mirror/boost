@@ -57,7 +57,7 @@ struct object_id_compare
 // A singleton of this type coordinates the acknowledgements
 // of objects being created and used.
 class object_registrar
-    : boost::noncopyable
+    : private boost::noncopyable
 {
 public:
 

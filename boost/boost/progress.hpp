@@ -33,7 +33,7 @@ namespace boost {
 //  A progress_timer behaves like a timer except that the destructor displays
 //  an elapsed time message at an appropriate place in an appropriate form.
 
-class progress_timer : public timer, noncopyable
+class progress_timer : public timer, private noncopyable
 {
   
  public:
@@ -75,7 +75,7 @@ class progress_timer : public timer, noncopyable
 // found some compilers couldn't handle the required conversion to double.
 // Reverted to unsigned long until the compilers catch up. 
 
-class progress_display : noncopyable
+class progress_display : private noncopyable
 {
  public:
   explicit progress_display( unsigned long expected_count,

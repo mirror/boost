@@ -9,7 +9,7 @@
 //  is complete where it counts - in the inplementation translation unit where
 //  destruction is actually instantiated.
 
-class example : boost::noncopyable
+class example : private boost::noncopyable
 {
  public:
   example();

@@ -361,7 +361,7 @@ struct int_convertible
 // used to verify that is_empty does not emit
 // spurious warnings or errors.
 //
-struct non_empty : boost::noncopyable
+struct non_empty : private boost::noncopyable
 {
    int i;
 };
