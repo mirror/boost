@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <string>
+#include <valarray>
 
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/vector_sparse.hpp>
