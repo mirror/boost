@@ -37,7 +37,7 @@ private:
     long use_count_;        // #shared
     long weak_count_;       // #weak + (#shared != 0)
 
-    pthread_mutex_t m_;
+    mutable pthread_mutex_t m_;
 
 public:
 
