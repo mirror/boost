@@ -61,7 +61,6 @@ retrieve_macroname(ParseNodeT const &node, boost::spirit::parser_id id,
 {
 ParseNodeT const *name_node = 0;
 
-    typedef boost::wave::grammars::cpp_grammar_gen<TokenT> cpp_grammar_type;
     using boost::spirit::find_node;
     if (!find_node(node, id, &name_node)) 
     {
@@ -1510,7 +1509,6 @@ string_type file_name;
 //  on_error(): handle #error directives
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 template <typename ContextT> 
 inline void 
 pp_iterator_functor<ContextT>::on_error(

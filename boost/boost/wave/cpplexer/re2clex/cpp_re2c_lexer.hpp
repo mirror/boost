@@ -121,8 +121,9 @@ template <typename IteratorT, typename PositionT>
 inline
 lexer<IteratorT, PositionT>::~lexer() 
 {
+    using namespace std;        // some systems have memset in std
     aq_terminate(scanner.eol_offsets);
-    std::free(scanner.bot);
+    free(scanner.bot);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
