@@ -48,7 +48,7 @@ struct implementation_level<C<T> > {                                \
 // if there is no 64 bit int or if its the same as a long
 // we shouldn't define separate functions for int64 data types.
 #if defined(BOOST_NO_INT64_T) \
-    || (ULONG_MAX != 0xffffffff && ULONG_MAX == 18446744073709551615) // 2**64 - 1
+    || (ULONG_MAX != 0xffffffff && ULONG_MAX == 18446744073709551615u) // 2**64 - 1
 #   define BOOST_NO_INTRINSIC_INT64_T
 #endif
 
