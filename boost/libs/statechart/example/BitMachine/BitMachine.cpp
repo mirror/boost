@@ -8,7 +8,7 @@
 
 
 //////////////////////////////////////////////////////////////////////////////
-const unsigned int noOfBits = 6;
+const unsigned int noOfBits = 5;
 #define CUSTOMIZE_MEMORY_MANAGEMENT
 // #define BOOST_FSM_USE_NATIVE_RTTI
 //////////////////////////////////////////////////////////////////////////////
@@ -27,16 +27,22 @@ const unsigned int noOfBits = 6;
 // The maximum size of such a state machine depends on your compiler. The
 // following table gives upper limits for noOfBits. From this, rough
 // estimates for the maximum size of any "naively" implemented boost::fsm
-// (i.e. no attempt is made to hide inner state implementation in a .cpp file)
-// can be deduced.
+// machine (i.e. no attempt is made to hide inner state implementation in a
+// .cpp file) can be deduced.
 //
-// Compiler      | max. noOfBits b | max. states s  | max. transitions t
-// --------------|-----------------|----------------|-------------------
-// MSVC 7.1      |      b < 7      |  64 < s < 128  |  384 < t < 896
-//
-// CAUTION: Due to the fact that the amount of generated code more than
+// NOTE: Due to the fact that the amount of generated code more than
 // *doubles* each time noOfBits is *incremented*, build times soar when
 // noOfBits > 6.
+
+// Compiler      | max. noOfBits b | max. states s  | max. transitions t
+// --------------|-----------------|----------------|-------------------
+// MSVC 7.1      |      b < 6      |  32 < s <  64  |  160 < t <  384
+// GCC 3.2 *     |      b < 8      | 128 < s < 256  |  896 < t < 2048
+//
+// * These are practical rather than hard limits, caused by a compiler memory
+//   footprint that was substantially larger than the 1GB physical memory
+//   installed on the test machine. The resulting frequent swapping caused
+//   overly long build-times (hours rather than minutes).
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -193,6 +199,11 @@ struct BitState :
 
 
 //////////////////////////////////////////////////////////////////////////////
+void DisplayMachineState( const BitMachine & bitMachine )
+{
+  bitMachine.state_cast< const IDisplay & >().DisplayBits();
+}
+
 template< unsigned int msb, bool display >
 void VisitAllStates( BitMachine & bitMachine )
 {
@@ -206,7 +217,7 @@ void VisitAllStates( BitMachine & bitMachine )
 #endif
   if ( display )
   {
-    bitMachine.state_cast< const IDisplay & >().DisplayBits();
+    DisplayMachineState( bitMachine );
   }
 #ifdef BOOST_MSVC
 #pragma warning( pop )
@@ -227,7 +238,7 @@ void VisitAllStates< 0, true >( BitMachine & bitMachine )
 {
   bitMachine.process_event( *pFlipBitEvents[ 0 ] );
   ++eventsSentTotal;
-  bitMachine.state_cast< const IDisplay & >().DisplayBits();
+  DisplayMachineState( bitMachine );
 }
 
 
@@ -295,7 +306,7 @@ int main( int argc, char * argv[] )
     {
       bitMachine.process_event( *pFlipBitEvents[ key - '0' ] );
       ++eventsSentTotal;
-      bitMachine.state_cast< const IDisplay & >().DisplayBits();
+      DisplayMachineState( bitMachine );
     }
     else
     {
