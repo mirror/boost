@@ -37,7 +37,8 @@ namespace boost
     // verify that types are complete for increased safety
 
     template< typename T >
-# if !defined(BOOST_MSVC) || BOOST_MSVC > 1200
+# if (!defined(BOOST_MSVC) || BOOST_MSVC > 1200) && \
+     (!defined(__SUNPRO_CC) || __SUNPRO_CC > 0x520)
     inline void checked_delete(T const volatile * x)
 # else
     inline void checked_delete(T  /*const volatile*/ * x)
@@ -51,7 +52,8 @@ namespace boost
     }
 
     template< typename T >
-# if !defined(BOOST_MSVC) || BOOST_MSVC > 1200
+# if (!defined(BOOST_MSVC) || BOOST_MSVC > 1200) && \
+     (!defined(__SUNPRO_CC) || __SUNPRO_CC > 0x520)
     inline void checked_array_delete(T const volatile * x)
 # else
     inline void checked_array_delete(T  /*const volatile*/ * x)
