@@ -52,6 +52,11 @@ namespace date_time {
       typedef std::basic_string<charT> string_type;
 
       static std::locale::id id;
+
+#if defined (__SUNPRO_CC) && defined (_RWSTD_VER)
+      std::locale::id& __get_id (void) const { return id; }
+#endif
+
       void put_special_value(iter_type& oitr, special_value_enum sv) const
       {
         do_put_special_value(oitr, sv);
