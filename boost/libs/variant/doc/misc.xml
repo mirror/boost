@@ -22,8 +22,9 @@
       <listitem>Boost.Variant guarantees the type of its content is one of a
         finite, user-specified set of types.</listitem>
       <listitem>Boost.Variant provides <emphasis>compile-time</emphasis>
-        type-safe visitation of its content. (By contrast, the current version
-        of Boost.Any provides no visitation mechanism at all.)</listitem>
+        checked visitation of its content. (By contrast, the current version
+        of Boost.Any provides no visitation mechanism at all; but even if it
+        did, it would need to be checked at run-time.)</listitem>
       <listitem>Boost.Variant enables generic visitation of its content.
         (Even if Boost.Any did provide a visitation mechanism, it would enable
         visitation only of explicitly-specified types.)</listitem>
