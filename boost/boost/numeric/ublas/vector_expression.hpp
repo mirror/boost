@@ -220,11 +220,10 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename E::reference>::type reference;
 #endif
     private:
-        typedef const vector_reference<E> const_self_type;
         typedef vector_reference<E> self_type;
     public:
         typedef E refered_type;
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef const_closure_type closure_type;
         typedef typename E::storage_category storage_category;
         typedef typename E::simd_category simd_category;
@@ -473,10 +472,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename boost::mpl::if_<boost::is_const<expression_type>,
                                           typename E::const_closure_type,
                                           typename E::closure_type>::type expression_closure_type;
-        typedef const vector_unary<E, F> const_self_type;
         typedef vector_unary<E, F> self_type;
     public:
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef self_type closure_type;
         typedef unknown_storage_tag storage_category;
 
@@ -774,10 +772,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef F functor_type;
         typedef typename E1::const_closure_type expression1_closure_type;
         typedef typename E2::const_closure_type expression2_closure_type;
-        typedef const vector_binary<E1, E2, F> const_self_type;
         typedef vector_binary<E1, E2, F> self_type;
     public:
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef const_closure_type closure_type;
         typedef unknown_storage_tag storage_category;
 
@@ -1171,10 +1168,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef F functor_type;
         typedef E1 expression1_closure_type;
         typedef typename E2::const_closure_type expression2_closure_type;
-        typedef const vector_binary_scalar1<E1, E2, F> const_self_type;
         typedef vector_binary_scalar1<E1, E2, F> self_type;
     public:
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef const_closure_type closure_type;
         typedef unknown_storage_tag storage_category;
 
@@ -1422,10 +1418,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef F functor_type;
         typedef typename E1::const_closure_type expression1_closure_type;
         typedef E2 expression2_closure_type;
-        typedef const vector_binary_scalar2<E1, E2, F> const_self_type;
         typedef vector_binary_scalar2<E1, E2, F> self_type;
     public:
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef const_closure_type closure_type;
         typedef unknown_storage_tag storage_category;
 
