@@ -15,7 +15,7 @@
 // new, std::bad_alloc
 #include <new>
 
-#include <boost/pool/pool_alloc_fwd.hpp>
+#include <boost/pool/poolfwd.hpp>
 
 // boost::singleton_pool
 #include <boost/pool/singleton_pool.hpp>

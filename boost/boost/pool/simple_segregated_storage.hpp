@@ -13,7 +13,7 @@
 // std::greater
 #include <functional>
 
-#include <boost/pool/simple_segregated_storage_fwd.hpp>
+#include <boost/pool/poolfwd.hpp>
 
 namespace boost {
 

@@ -10,14 +10,7 @@
 #ifndef BOOST_SIMPLE_SEGREGATED_STORAGE_FWD_HPP
 #define BOOST_SIMPLE_SEGREGATED_STORAGE_FWD_HPP
 
-// std::size_t
-#include <cstddef>
-
-namespace boost {
-
-template <typename SizeType = std::size_t>
-class simple_segregated_storage;
-
-} // namespace boost
+// This header is DEPRECATED!  Include <boost/pool/poolfwd.hpp> instead.
+#include <boost/pool/poolfwd.hpp>
 
 #endif

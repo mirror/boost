@@ -10,7 +10,7 @@
 #ifndef BOOST_SINGLETON_POOL_HPP
 #define BOOST_SINGLETON_POOL_HPP
 
-#include <boost/pool/singleton_pool_fwd.hpp>
+#include <boost/pool/poolfwd.hpp>
 
 // boost::pool
 #include <boost/pool/pool.hpp>

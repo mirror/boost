@@ -10,14 +10,7 @@
 #ifndef BOOST_POOL_FWD_HPP
 #define BOOST_POOL_FWD_HPP
 
-namespace boost {
-
-struct default_user_allocator_new_delete;
-struct default_user_allocator_malloc_free;
-
-template <typename UserAllocator = default_user_allocator_new_delete>
-class pool;
-
-} // namespace boost
+// This header is DEPRECATED!  Include <boost/pool/poolfwd.hpp> instead.
+#include <boost/pool/poolfwd.hpp>
 
 #endif

@@ -10,19 +10,7 @@
 #ifndef BOOST_SINGLETON_POOL_FWD_HPP
 #define BOOST_SINGLETON_POOL_FWD_HPP
 
-// boost::details::pool::default_mutex
-#include <boost/pool/detail/mutex.hpp>
-// boost::default_user_allocator_new_delete fwd
-#include <boost/pool/pool_fwd.hpp>
-
-namespace boost {
-
-template <typename Tag, unsigned RequestedSize,
-    typename UserAllocator = default_user_allocator_new_delete,
-    typename Mutex = details::pool::default_mutex,
-    unsigned NextSize = 32>
-struct singleton_pool;
-
-} // namespace boost
+// This header is DEPRECATED!  Include <boost/pool/poolfwd.hpp> instead.
+#include <boost/pool/poolfwd.hpp>
 
 #endif

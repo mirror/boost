@@ -23,7 +23,7 @@
 // std::invalid_argument
 #include <exception>
 
-#include <boost/pool/pool_fwd.hpp>
+#include <boost/pool/poolfwd.hpp>
 
 // boost::details::pool::ct_lcm
 #include <boost/pool/detail/ct_gcd_lcm.hpp>

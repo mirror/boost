@@ -10,7 +10,7 @@
 #ifndef BOOST_OBJECT_POOL_HPP
 #define BOOST_OBJECT_POOL_HPP
 
-#include <boost/pool/object_pool_fwd.hpp>
+#include <boost/pool/poolfwd.hpp>
 
 // boost::pool
 #include <boost/pool/pool.hpp>
