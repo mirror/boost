@@ -333,6 +333,14 @@ public:
       policies().initialize(iter());
     }
 
+#ifdef BOOST_MSVC
+    // This is required to prevent a bug in how VC++ generates
+    // the assignment operator for compressed_pair.
+    iterator_adaptor& operator= (const iterator_adaptor& x) {
+        m_iter_p = x.m_iter_p;
+        return *this;
+    }
+#endif
     reference operator*() const {
         return policies().dereference(type<reference>(), iter());
     }
