@@ -1,10 +1,11 @@
 /* Copyright (c) 2001 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst 
  */
 
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include "boost/date_time/testfrmwk.hpp"
+#include "boost/lexical_cast.hpp"
 #include <iostream>
 #include <string>
  
@@ -33,6 +34,90 @@ main()
     std::cout << "Fail: " << e.what() << std::endl;
   }
 
+  {
+    using namespace boost::gregorian;
+    // date objects from strings & strings to date objects
+    date d(2000, 2, 29);
+    date d2 = from_string("2000-2-29");
+#if defined(BOOST_DATE_TIME_NO_STD_TRANSFORM)
+    // std::transform is responsible for case insensitivity
+    // if it's missing we need to be exact with case
+    date d3 = from_string("2000-Feb-29");
+    date d4 = from_string("2000-February-29");
+#else
+    date d3 = from_string("2000-FEB-29");
+    date d4 = from_string("2000-february-29");
+#endif //BOOST_DATE_TIME_NO_STD_TRANSFORM
+    date d5 = from_string(to_simple_string(d));
+    date d6 = from_string(to_iso_extended_string(d));
+    
+    check("2000-2-29", d2 == d);
+#if defined(BOOST_DATE_TIME_NO_STD_TRANSFORM)
+    check("2000-Feb-29", d3 == d);
+    check("2000-February-29", d4 == d);
+#else
+    check("2000-FEB-29 (uppercase)", d3 == d);
+    check("2000-february-29 (lowercase)", d4 == d);
+#endif //BOOST_DATE_TIME_NO_STD_TRANSFORM
+    check("date to string to date", d5 == d);
+    check("date to string to date", d6 == d);
+
+    // check proper range
+    d = date(2001, 1, 1);
+    d2 = from_string("2001-Jan-1");
+    d3 = from_string("2001-January-1");
+    check("January", d == d2);
+    check("January", d == d3);
+    d = date(2001, 12, 1);
+    d2 = from_string("2001-Dec-1");
+    d3 = from_string("2001-December-1");
+    check("December", d == d2);
+    check("December", d == d3);
+#if !(defined(BOOST_MSVC) && (_MSC_VER <= 1200))
+    // from stream
+    d = date(2000, 10, 31);
+    std::stringstream ss("");
+    ss << "2000-Oct-31 is Halloween 2k!";
+    std::istream_iterator<std::string> iter(ss), eos;
+    check("from stream - stringstream", d == from_stream(iter, eos));
+#if !(BOOST_NO_STD_WSTRING || BOOST_DATE_TIME_NO_WISTREAM_ITERATOR)
+    std::wstringstream ws;
+    ws << "2000-Oct-31 is Halloween 2k!";
+    std::istream_iterator<std::wstring, wchar_t> witer(ws), weos;
+    check("from stream - wstringstream", d == from_stream(witer, weos));
+#endif // BOOST_NO_WSTRING
+    char d2_string[] = {"2000-10-31 is Halloween 2k!"};
+    char* end = d2_string + sizeof(d2_string) - 1;
+    check("from stream - char[]", d == from_stream(d2_string, end));
+
+    std::string s1_string("2000-Oct-31 is Halloween 2k!");
+    std::string::iterator s1_start = s1_string.begin();
+    std::string::iterator s1_end = s1_string.end();
+    check("from stream - string", d == from_stream(s1_start, s1_end));
+#ifndef BOOST_NO_STD_WSTRING
+    std::wstring w1_string(boost::lexical_cast<std::wstring>("2000-Oct-31 is Halloween 2k!"));
+    std::wstring::iterator w1_start = w1_string.begin();
+    std::wstring::iterator w1_end = w1_string.end();
+    check("from stream - wstring", d == from_stream(w1_start, w1_end));
+#endif // BOOST_NO_STD_WSTRING 
+#endif // MSVC 6.0
+    /* date objects from strings & strings to date objects
+     * with misspelled months */
+    try {
+      date bd = from_string("2002-Jull-4");
+      std::cout << "Shouldn't be reached." << 
+        boost::gregorian::to_simple_string(bd) << std::endl;
+    }
+    catch(boost::gregorian::bad_month){
+      check("bad spelling 'Jull'", true);
+    }
+    catch(std::exception& e){
+      check("bad spelling", false);
+      std::cout << "Fail: " << e.what() << std::endl;
+    }
+  }
+
+  
   try {
     std::string s2("2001-12-41"); //oops should be 31
     boost::gregorian::date bad_day(boost::gregorian::from_string(s2)); //won't construct
@@ -91,12 +176,23 @@ main()
     std::cout << "Fail: " << e.what() << std::endl;
   }
 
+  using namespace boost::gregorian;
+  std::string s2("2003-07-28");
+  date d2(from_string(s2));
+  check("check date", d2.month() == 7 &&
+                      d2.year() == 2003 &&
+                      d2.day() == 28);
 //   std::string s1("2001-Oct-5");
 //   gregorian::date d1(parse_date<gregorian::date>(s1));
 //    check("check month", d1.month() == 10);
   
 
-
+  //Check that the from_string and to_string can be reversed
+  date d10(2003, 10, 19);
+  std::string d10s = to_simple_string(d10);
+  date d11 = from_simple_string(d10s);
+  check("to from string inversion", d10 == d11);
+  
 
 
 //Calendar Week + Day Number
