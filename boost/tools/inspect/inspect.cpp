@@ -27,9 +27,11 @@
 #include "inspector.hpp" // includes <string>, <boost/filesystem/path.hpp>,
                          // <iostream>, <set>
                          // and gives using for string and path.
-#include "tab_check.hpp"
-#include "long_name_check.hpp"
+#include "copyright_check.hpp"
+#include "crlf_check.hpp"
 #include "link_check.hpp"
+#include "long_name_check.hpp"
+#include "tab_check.hpp"
 
 namespace fs = boost::filesystem;
 
@@ -259,8 +261,9 @@ namespace boost
       path relative( relative_to( full_dir_path, fs::initial_path() ) );
       if ( relative.empty() ) return "boost-root";
       string first( *relative.begin() );
-      string second( ++relative.begin() == relative.end()
-        ? string() : *++relative.begin() );
+      string second =  // borland 5.61 requires op=  
+        ++relative.begin() == relative.end()
+          ? string() : *++relative.begin();
 
       if ( first == "boost" )
         return second.empty() ? string( "unknown" ) : second;
@@ -280,9 +283,11 @@ int cpp_main( int argc, char * argv[] )
 
   inspector_list inspectors;
 
-  inspectors.push_back( inspector_element( new boost::inspect::tab_check ) );
-  inspectors.push_back( inspector_element( new boost::inspect::long_name_check ) );
+  inspectors.push_back( inspector_element( new boost::inspect::copyright_check ) );
+  inspectors.push_back( inspector_element( new boost::inspect::crlf_check ) );
   inspectors.push_back( inspector_element( new boost::inspect::link_check ) );
+  inspectors.push_back( inspector_element( new boost::inspect::long_name_check ) );
+  inspectors.push_back( inspector_element( new boost::inspect::tab_check ) );
 
   visit_all( "boost-root", fs::initial_path(), inspectors );
 
