@@ -93,7 +93,7 @@ namespace boost
       typedef value_type* pointer;
       static iterator begin(T const (&array)[sz]) { return array; }
       static iterator end(T const (&array)[sz]) { return array + sz; }
-      static size_type size(T const (&array)[sz]) { return sz; }
+      static size_type size(T const (&)[sz]) { return sz; }
     };
 
   template <typename T, int sz>
