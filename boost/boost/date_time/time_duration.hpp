@@ -23,8 +23,8 @@ namespace date_time {
       @param rep_type The time resolution traits for this duration type.
   */
   template<class T, typename rep_type>
-  class time_duration 
-    : boost::less_than_comparable<T 
+  class time_duration : private
+      boost::less_than_comparable<T 
     , boost::equality_comparable<T
     > > 
   {

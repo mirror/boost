@@ -46,9 +46,9 @@ namespace date_time {
 
   
   template<class T, class calendar, class duration_type_> 
-  class date 
-    : boost::less_than_comparable<T 
-    , boost::equality_comparable<T 
+  class date : private 
+       boost::less_than_comparable<T 
+     , boost::equality_comparable<T 
     > >
   {
   public:

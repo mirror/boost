@@ -53,8 +53,8 @@ namespace date_time {
 
    */
   template<class point_rep, class duration_rep>
-  class period 
-    : boost::less_than_comparable<period<point_rep, duration_rep> 
+  class period : private
+      boost::less_than_comparable<period<point_rep, duration_rep> 
     , boost::equality_comparable< period<point_rep, duration_rep> 
     > >
   {

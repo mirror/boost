@@ -38,8 +38,8 @@ namespace date_time {
   */
 
   template <class T, class time_system>
-  class base_time 
-    : boost::less_than_comparable<T
+  class base_time : private
+      boost::less_than_comparable<T
     , boost::equality_comparable<T
       > >
   {
