@@ -245,7 +245,7 @@ change.</para>
 
 <formalpara><title><literal>SizeList</literal> Requirements</title>
 <para><literal>SizeList</literal> must model
-<ulink url="./Collection.html">Collection</ulink>.</para>
+<ulink url="../../utility/Collection.html">Collection</ulink>.</para>
 </formalpara>
 
 <formalpara><title>Preconditions</title>
@@ -281,7 +281,7 @@ correspond to the the values in <literal>values</literal>.</para>
 <formalpara>
 <title><literal>BaseList</literal> Requirements</title>
 <para><literal>BaseList</literal> must model
-<ulink url="./Collection.html">Collection</ulink>.</para>
+<ulink url="../../utility/Collection.html">Collection</ulink>.</para>
 </formalpara>
 
 <formalpara>

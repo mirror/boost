@@ -152,7 +152,7 @@ allocate the contained elements.
 
 <formalpara><title><literal>ExtentList</literal> Requirements</title>
 <para>
-<literal>ExtentList</literal> must model <ulink url="./Collection.html">Collection</ulink>.
+<literal>ExtentList</literal> must model <ulink url="../../utility/Collection.html">Collection</ulink>.
 </para>
 </formalpara>
 

@@ -146,7 +146,7 @@ to <literal>index_gen::operator[](index_range)</literal>.</entry>
 	    <row>
 	      <entry><literal>index_list</literal></entry>
 	      <entry>An object whose type models
-<ulink url="./Collection.html">Collection</ulink>
+<ulink url="../../utility/Collection.html">Collection</ulink>
 </entry>
 	    </row>
 	    <row>
@@ -633,7 +633,7 @@ Iteration through the range
 Calling <literal>a[a1][a2]...[aN]</literal> where <literal>N==NumDims</literal>
 yields the same result as calling 
 <literal>a(index_list)</literal>, where <literal>index_list</literal>
-is a <ulink url="./Collection.html">Collection</ulink> containing the values <literal>a1...aN</literal>.
+is a <ulink url="../../utility/Collection.html">Collection</ulink> containing the values <literal>a1...aN</literal>.
 </entry>
 	      </row>
 	</tbody>
