@@ -22,11 +22,10 @@
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/included/unit_test_framework.hpp>
 
-// If BOOST_NO_STRINGSTREAM is defined wide character support is unavailable,
-// and all wide character tests are disabled.
-
-#ifdef BOOST_NO_STRINGSTREAM
-#define NO_WIDE_CHAR_SUPPORT
+#if defined(BOOST_NO_STRINGSTREAM) || \
+    defined(BOOST_NO_STD_WSTRING) || \
+    defined(BOOST_NO_INTRINSIC_WCHAR_T)
+#define DISABLE_WIDE_CHAR_SUPPORT
 #endif
 
 using namespace boost;
@@ -52,7 +51,7 @@ unit_test_framework::test_suite *init_unit_test_suite(int, char **)
     suite->add(BOOST_TEST_CASE(test_conversion_to_bool));
     suite->add(BOOST_TEST_CASE(test_conversion_to_pointer));
     suite->add(BOOST_TEST_CASE(test_conversion_to_string));
-    #ifndef NO_WIDE_CHAR_SUPPORT
+    #ifndef DISABLE_WIDE_CHAR_SUPPORT
     suite->add(BOOST_TEST_CASE(test_conversion_from_wchar_t));
     suite->add(BOOST_TEST_CASE(test_conversion_to_wchar_t));
     suite->add(BOOST_TEST_CASE(test_conversion_from_wstring));
@@ -175,7 +174,6 @@ void test_conversion_to_bool()
 
 void test_conversion_to_string()
 {
-    // *** All the following gives compilation error (ambiguity) on MSVC 6
     BOOST_CHECK_EQUAL("A", lexical_cast<std::string>('A'));
     BOOST_CHECK_EQUAL(" ", lexical_cast<std::string>(' '));
     BOOST_CHECK_EQUAL("123", lexical_cast<std::string>(123));
@@ -197,14 +195,14 @@ void test_conversion_to_string()
 void test_conversion_to_pointer()
 {
     BOOST_CHECK_THROW(lexical_cast<char *>("Test"), boost::bad_lexical_cast);
-    #ifndef NO_WIDE_CHAR_SUPPORT
+    #ifndef DISABLE_WIDE_CHAR_SUPPORT
     BOOST_CHECK_THROW(lexical_cast<wchar_t *>("Test"), boost::bad_lexical_cast);
     #endif
 }
 
 void test_conversion_from_wchar_t()
 {
-    #ifndef NO_WIDE_CHAR_SUPPORT
+    #ifndef DISABLE_WIDE_CHAR_SUPPORT
     BOOST_CHECK_EQUAL(1, lexical_cast<int>(L'1'));
     BOOST_CHECK_THROW(lexical_cast<int>(L'A'), boost::bad_lexical_cast);
 
@@ -241,7 +239,7 @@ void test_conversion_from_wchar_t()
 
 void test_conversion_to_wchar_t()
 {
-    #ifndef NO_WIDE_CHAR_SUPPORT
+    #ifndef DISABLE_WIDE_CHAR_SUPPORT
     BOOST_CHECK_EQUAL(L'1', lexical_cast<wchar_t>(1));
     BOOST_CHECK_EQUAL(L'0', lexical_cast<wchar_t>(0));
     BOOST_CHECK_THROW(lexical_cast<wchar_t>(123), boost::bad_lexical_cast);
@@ -270,7 +268,7 @@ void test_conversion_to_wchar_t()
 
 void test_conversion_from_wstring()
 {
-    #ifndef NO_WIDE_CHAR_SUPPORT
+    #ifndef DISABLE_WIDE_CHAR_SUPPORT
     BOOST_CHECK_EQUAL(123, lexical_cast<int>(std::wstring(L"123")));
     BOOST_CHECK_THROW(
         lexical_cast<int>(std::wstring(L"")), boost::bad_lexical_cast);
@@ -294,7 +292,7 @@ void test_conversion_from_wstring()
 
 void test_conversion_to_wstring()
 {
-    #ifndef NO_WIDE_CHAR_SUPPORT
+    #ifndef DISABLE_WIDE_CHAR_SUPPORT
     BOOST_CHECK(L"123" == lexical_cast<std::wstring>(123));
     BOOST_CHECK(L"1.23" == lexical_cast<std::wstring>(1.23));
     BOOST_CHECK(L"1.111111111" == lexical_cast<std::wstring>(1.111111111));
