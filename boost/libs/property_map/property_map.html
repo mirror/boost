@@ -23,16 +23,49 @@
 Boost Property Map Library
 </H1>
 
-The Boost Property Map Library is a small library that addresses the
-need to provide a generic interface for mapping between objects.  Most
-of the library is the interface definition, captured as a <a
-href="#sec:property-map-concepts">set of concepts</a>. In addition
-there are supporting <a href="#sec:property-map-tags">category
-tags</a> and a <a href="#sec:property-map-traits">traits class</a>, as
-well as <a href="#sec:property-map-types">some types</a> that
-implement the property map interface. These classes are not meant to
-fulfill all mapping needs, but more to serve as an example of how to
-implement the interface as well as covering a few common cases.
+<p>The Boost Property Map Library consists mainly of interface
+specifications in the form of concepts (similar to the iterator
+concepts in the STL <a
+href="http://www.sgi.com/tech/stl/stl_introduction.html">[2]</a>).
+These interface specifications are intended for use by implementors of
+generic libraries in communicating requirements on template parameters
+to their users.  In particular, the Boost Property Map concepts define
+a general purpose interface for mapping key objects to corresponding
+value objects, thereby hiding the details of how the mapping is
+implemented from algorithms. The implementation of types fulfilling
+the property map interface is up to the client of the algorithm to
+provide. The property map requirements are purposefully vague on the
+type of the key and value objects to allow for the utmost genericity
+in the function templates of the generic library.
+</p>
+
+<p>
+The need for the property map interface came from the <a
+href="../graph/doc/index.html">Boost Graph Library</a> (BGL), which
+contains many examples of algorithms that use the property map
+concepts to specify their interface. For an example, note the
+<tt>ColorMap</tt> template parameter of the <a
+href="../graph/doc/breadth_first_search.html">
+<tt>breadth_first_search</tt></a>. In addition, the BGL contains many
+examples of concrete types that implement the property map interface.
+The <a href="../graph/doc/adjacency_list.html">
+<tt>adjacency_list</tt></a> class implements property maps for
+accessing objects (properties) that are attached to vertices and edges
+of the graph.
+</p>
+
+<p>
+The Boost Property Map Library also contains a <a
+href="#sec:property-map-types"> few adaptors</a> that convert commonly
+used data-structures that implement a mapping operation, such as
+builtin arrays (pointers), iterators, and <a
+href="http://www.sgi.com/tech/stl/Map.html"> <tt>std::map</tt></a>, to
+have the property map interface. These adaptors are not meant to
+fulfill all mapping needs, but are to serve as an example of how to
+implement the interface as well as covering a few common cases. See
+the header files for details.
+</p>
+
 
 <h2><A NAME="sec:property-map-concepts"></A>
 Property Map Concepts
@@ -41,25 +74,23 @@ Property Map Concepts
 The property map interface consists of a set of concepts (see
 definition of &quot;concept&quot; in <a
 href="../concept_check/concept_check.htm#introduction">[1]</a> and <a
-href="http://www.sgi.com/tech/stl/stl_introduction.html">[2]</a>)
-that define a general purpose mechanism for mapping key objects to
-corresponding value objects, thereby hiding the details of how the
-mapping is implemented from algorithms that use property maps.  The
-property map requirements are purposefully vague on the type of the
-key and value objects to allow for the utmost flexibility.  Since the
-property map operations are global functions, it is possible to
-overload the map functions such that nearly arbitrary property map
-types and key types can be used. The interface for property maps
-consists of three functions: <tt>get()</tt>, <tt>put()</tt>, and
-<tt>operator[]</tt>. The following concrete example from <a
-href="./example1.cpp">example1.cpp</a> shows how the three functions
-could be used to access the addresses associated with various people.
-We use a separate function template here to highlight the parts of the
-program that use the property map concept interface. In the
-<tt>main()</tt> function we use <tt>std::map</tt> and
-<tt>boost::associative_property_map</tt>, but it would have been OK to
-use any type (including a custom type that you create) that fulfills
-the property map requirements.
+href="http://www.sgi.com/tech/stl/stl_introduction.html">[2]</a>) that
+define a syntax for mapping key objects to corresponding value
+objects. Since the property map operations are global functions
+(actually they don't have to be global, but they are always called
+unqualified and may be found via argument dependent lookup), it is
+possible to overload the map functions such that nearly arbitrary
+property map types and key types can be used. The interface for
+property maps consists of three functions: <tt>get()</tt>,
+<tt>put()</tt>, and <tt>operator[]</tt>. The following concrete
+example from <a href="./example1.cpp">example1.cpp</a> shows how the
+three functions could be used to access the addresses associated with
+various people.  We use a separate function template here to highlight
+the parts of the program that use the property map concept
+interface. In the <tt>main()</tt> function we use <tt>std::map</tt>
+and <tt>boost::associative_property_map</tt>, but it would have been
+OK to use any type (including a custom type that you create) that
+fulfills the property map requirements.
 
 <pre>#include &lt;iostream&gt;
 #include &lt;map&gt;
@@ -68,7 +99,7 @@ the property map requirements.
 
 
 template &lt;typename AddressMap&gt;
-void foo(AddressMap address)
+void generic_foo_algorithm(AddressMap address)
 {
   typedef typename boost::property_traits&lt;AddressMap&gt;::value_type value_type;
   typedef typename boost::property_traits&lt;AddressMap&gt;::key_type key_type;
@@ -282,8 +313,18 @@ passed by value.
 <TABLE>
 <TR valign=top>
 <TD nowrap>Copyright &copy 2000-2002</TD><TD>
-<a HREF="../../people/jeremy_siek.htm">Jeremy Siek</a>, Indiana University (<A HREF="mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</A>)
+<a HREF="../../people/jeremy_siek.htm">Jeremy Siek</a>, Indiana University (<A HREF="mailto:jsiek@osl.iu.edu">jsiek@osl.iu.edu</A>)
 </TD></TR></TABLE>
 
 </BODY>
 </HTML> 
+<!--  LocalWords:  ALT STL html genericity BGL ColorMap htm cpp iostream hpp hl
+ -->
+<!--  LocalWords:  typename AddressMap foo fred joe joes int writeable lvalue
+ -->
+<!--  LocalWords:  ReadablePropertyMap WritablePropertyMap ReadWritePropertyMap
+ -->
+<!--  LocalWords:  LvaluePropertyMap struct namespace PropertyMap pmap const
+ -->
+<!--  LocalWords:  val Dietmar hl's GGCL Abrahams
+ -->
