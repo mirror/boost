@@ -58,7 +58,7 @@
 #if BOOST_INTEL_CXX_VERSION < 700
 #  define BOOST_NO_INTRINSIC_WCHAR_T
 #else
-#  ifndef _WCHAR_T_DEFINED
+#  if defined(_WCHAR_T_DEFINED) && !defined(_WCHAR_T)
 #    define BOOST_NO_INTRINSIC_WCHAR_T
 #  endif
 #endif
