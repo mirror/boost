@@ -1,6 +1,6 @@
 /* Copyright (c) 2001 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/gregorian/gregorian.hpp"
@@ -49,21 +49,21 @@ main()
   using namespace boost::gregorian;
   date d3(neg_infin);
   check("check negative infinity",     
-        (to_simple_string(d3) == std::string("-infinity  ")));
+        (to_simple_string(d3) == std::string("-infinity")));
   date d4(pos_infin);
   check("check positive infinity",     
-        (to_simple_string(d4) == std::string("+infinity  ")));
+        (to_simple_string(d4) == std::string("+infinity")));
   date d5(not_a_date_time);
   std::cout << to_simple_string(d5) << "|" << std::endl;
   check("check not a date",     
-        (to_simple_string(d5) == std::string("not-a-date")));
+        (to_simple_string(d5) == std::string("not-a-date-time")));
 
   date_period p1(date(2000,Jan,1), date(2001,Jan,1));
   check("check period format",     
         (to_simple_string(p1) == std::string("[2000-Jan-01/2000-Dec-31]")));
   date_period p2(date(2000,Jan,1), date(pos_infin));
   check("check period format",     
-        (to_simple_string(p2) == std::string("[2000-Jan-01/+infinity  ]")));
+        (to_simple_string(p2) == std::string("[2000-Jan-01/+infinity]")));
   std::cout << to_simple_string(p2) << std::endl;
 
   
