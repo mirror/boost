@@ -24,22 +24,33 @@
 #include <sstream>
 
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
+
+
+// make sure our local macros wont override something :
+#if defined(BOOST_NO_LOCALE_ISDIGIT) || defined(BOOST_OVERLOAD_FOR_NON_CONST) \
+  || defined(BOOST_IO_STD) || defined( BOOST_IO_NEEDS_USING_DECLARATION )
+#error
+#endif
+
 
 #include <boost/format/macros_stlport.hpp>  // stlport workarounds
 #include <boost/format/macros_default.hpp> 
 
-#ifndef BOOST_NO_STD_LOCALE
+#if defined(BOOST_NO_STD_LOCALE) || ( BOOST_WORKAROUND(__BORLANDC__, <= 0x561) \
+ && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT( 0x570 ) ) )
+#define BOOST_BAD_ISDIGIT
+#endif
+
+#ifndef BOOST_BAD_ISDIGIT
 #include <locale>
-#ifdef isdigit
-#undef isdigit
-#endif // many platforms have isdigit as a macro, mixes things up.
 #else
-#include <ctype.h>  // for isdigit
+#include <cctype>  // for isdigit(int)
 #endif //BOOST_NO_STD_LOCALE
 
 
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
-#define BOOST_OVERLOAD_FOR_NON_CONST
+#if  BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570) ) || BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1300))
+#define BOOST_NO_OVERLOAD_FOR_NON_CONST
 #endif
 
 
@@ -68,9 +79,19 @@
 // **** Implementation of the free functions ----------------------
 #include <boost/format/free_funcs.hpp>
 
-#ifdef BOOST_OVERLOAD_FOR_NON_CONST
-#undef BOOST_OVERLOAD_FOR_NON_CONST
-#endif
 
+// *** Undefine 'local' macros :
+#ifdef BOOST_NO_OVERLOAD_FOR_NON_CONST
+#undef BOOST_NO_OVERLOAD_FOR_NON_CONST
+#endif
+#ifdef BOOST_BAD_ISDIGIT
+#undef BOOST_BAD_ISDIGIT
+#endif
+#ifdef BOOST_IO_STD
+#undef BOOST_IO_STD
+#endif
+#ifdef BOOST_IO_NEEDS_USING_DECLARATION
+#undef BOOST_IO_NEEDS_USING_DECLARATION
+#endif
 
 #endif // BOOST_FORMAT_HPP
