@@ -58,7 +58,9 @@
 #if BOOST_INTEL_CXX_VERSION < 700
 #  define BOOST_NO_INTRINSIC_WCHAR_T
 #else
-#  if defined(_WCHAR_T_DEFINED) && !defined(_WCHAR_T)
+// _WCHAR_T_DEFINED is the Win32 spelling
+// _WCHAR_T is the Linux spelling
+#  if !defined(_WCHAR_T_DEFINED) && !defined(_WCHAR_T)
 #    define BOOST_NO_INTRINSIC_WCHAR_T
 #  endif
 #endif
@@ -87,7 +89,7 @@
 #endif
 //
 // last known and checked version:
-#if (BOOST_INTEL_CXX_VERSION > 700)
+#if (BOOST_INTEL_CXX_VERSION > 800)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  elif defined(_MSC_VER)
