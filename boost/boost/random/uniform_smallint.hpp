@@ -88,7 +88,7 @@ set(result_type min, result_type max)
   assert(min < max);
 
   _range = static_cast<base_result>(_max-_min)+1;
-  int _factor = 1;
+  base_result _factor = 1;
   
   // LCGs get bad when only taking the low bits.
   // (probably put this logic into a partial template specialization)
@@ -183,7 +183,7 @@ public:
   {
     typedef typename Engine::result_type base_result;
     base_result _range = static_cast<base_result>(_max-_min)+1;
-    int _factor = 1;
+    base_result _factor = 1;
     
     // LCGs get bad when only taking the low bits.
     // (probably put this logic into a partial template specialization)
