@@ -44,6 +44,11 @@ namespace gregorian {
     return date_time::parse_undelimited_date<date>(s);
   }
 
+  //! From iso type date string where with order year-month-day eg: 20020125
+  inline date date_from_iso_string(const std::string& s) {
+    return date_time::parse_undelimited_date<date>(s);
+  }
+
 #if !(defined(BOOST_NO_STD_ITERATOR_TRAITS))
   //! Stream should hold a date in the form of: 2002-1-25. Month number, abbrev, or name are accepted
   /* Arguments passed in by-value for convertability of char[] 
