@@ -521,7 +521,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class V>
     typename vector_range<V>::vector_type vector_range<V>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME vector_range<V>::vector_type()
+        = BOOST_UBLAS_TYPENAME vector_range<V>::vector_type ()
 #endif
     ;
 
@@ -1052,7 +1052,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class V>
     typename vector_slice<V>::vector_type vector_slice<V>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME vector_slice<V>::vector_type()
+        = BOOST_UBLAS_TYPENAME vector_slice<V>::vector_type ()
 #endif
     ;
     
@@ -1598,7 +1598,7 @@ return true;
     template<class V, class IA>
     typename vector_indirect<V, IA>::vector_type vector_indirect<V, IA>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME vector_indirect<V, IA>::vector_type()
+        = BOOST_UBLAS_TYPENAME vector_indirect<V, IA>::vector_type ()
 #endif
     ;
 

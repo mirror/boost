@@ -515,7 +515,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M>
     typename matrix_row<M>::matrix_type matrix_row<M>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME matrix_row<M>::matrix_type()
+        = BOOST_UBLAS_TYPENAME matrix_row<M>::matrix_type ()
 #endif
     ;
 
@@ -1030,7 +1030,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M>
     typename matrix_column<M>::matrix_type matrix_column<M>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME matrix_column<M>::matrix_type()
+        = BOOST_UBLAS_TYPENAME matrix_column<M>::matrix_type ()
 #endif
     ;
 
@@ -1550,7 +1550,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M>
     typename matrix_vector_range<M>::matrix_type matrix_vector_range<M>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME matrix_vector_range<M>::matrix_type()
+        = BOOST_UBLAS_TYPENAME matrix_vector_range<M>::matrix_type ()
 #endif
     ;
 
@@ -2060,7 +2060,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M>
     typename matrix_vector_slice<M>::matrix_type matrix_vector_slice<M>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME matrix_vector_slice<M>::matrix_type()
+        = BOOST_UBLAS_TYPENAME matrix_vector_slice<M>::matrix_type ()
 #endif
     ;
 
@@ -2571,7 +2571,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M, class IA>
     typename matrix_vector_indirect<M, IA>::matrix_type matrix_vector_indirect<M, IA>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME matrix_indirect<M, IA>::matrix_type()
+        = BOOST_UBLAS_TYPENAME matrix_indirect<M, IA>::matrix_type ()
 #endif
     ;
 
@@ -3470,7 +3470,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M>
     typename matrix_range<M>::matrix_type matrix_range<M>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME matrix_range<M>::matrix_type()
+        = BOOST_UBLAS_TYPENAME matrix_range<M>::matrix_type ()
 #endif
     ;
 
@@ -4409,7 +4409,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M>
     typename matrix_slice<M>::matrix_type matrix_slice<M>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME matrix_slice<M>::matrix_type()
+        = BOOST_UBLAS_TYPENAME matrix_slice<M>::matrix_type ()
 #endif
     ;
 
@@ -5357,7 +5357,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M, class IA>
     typename matrix_indirect<M, IA>::matrix_type matrix_indirect<M, IA>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME matrix_indirect<M, IA>::matrix_type()
+        = BOOST_UBLAS_TYPENAME matrix_indirect<M, IA>::matrix_type ()
 #endif
     ;
 

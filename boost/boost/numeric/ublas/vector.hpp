@@ -270,19 +270,19 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void insert (size_type i, const_reference t) {
             // FIXME: only works for EqualityComparable value types.
-            // BOOST_UBLAS_CHECK (data () [i] == value_type (), bad_index ());
+            // BOOST_UBLAS_CHECK (data () [i] == value_type (0), bad_index ());
             // Previously: data ().insert (data ().begin () + i, t);
             data () [i] = t;
         }
         BOOST_UBLAS_INLINE
         void erase (size_type i) {
             // Previously: data ().erase (data ().begin () + i);
-            data () [i] = value_type ();
+            data () [i] = value_type (0);
         }
         BOOST_UBLAS_INLINE
         void clear () {
             // Previously: data ().clear ();
-            std::fill (data ().begin (), data ().end (), value_type ());
+            std::fill (data ().begin (), data ().end (), value_type (0));
         }
 
         // Iterator types
@@ -1348,7 +1348,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_ (size) /* , data_ () */ {
             if (size_ > N)
                 bad_size ().raise ();
-            std::fill (data_, data_ + size_, value_type ());
+            std::fill (data_, data_ + size_, value_type (0));
         }
         BOOST_UBLAS_INLINE
         c_vector (const c_vector &v):
@@ -1385,7 +1385,7 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size, bool preserve = true) {
             if (size > N)
                 bad_size ().raise ();
-            std::fill (data_ + (std::min) (size, size_), data_ + size, value_type ());
+            std::fill (data_ + (std::min) (size, size_), data_ + size, value_type (0));
             size_ = size;
         }
 
@@ -1514,17 +1514,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void insert (size_type i, const_reference t) {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
-            BOOST_UBLAS_CHECK (data_ [i] == value_type (), bad_index ());
+            BOOST_UBLAS_CHECK (data_ [i] == value_type (0), bad_index ());
             data_ [i] = t;
         }
         BOOST_UBLAS_INLINE
         void erase (size_type i) {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
-            data_ [i] = value_type ();
+            data_ [i] = value_type (0);
         }
         BOOST_UBLAS_INLINE
         void clear () {
-            std::fill (data_, data_ + size_, value_type ());
+            std::fill (data_, data_ + size_, value_type (0));
         }
 
         // Iterator types

@@ -69,14 +69,14 @@ namespace boost { namespace numeric { namespace ublas {
                 ++ it2;
             }
             for (size_type j = jb; j < je + 1; ++ j) {
-                if (temporary (j) != value_type ()) {
+                if (temporary (j) != value_type (0)) {
                     // FIXME: we'll need to extend the container interface!
                     // m.push_back (it1.index1 (), j, temporary (j));
                     // FIXME: What to do with adaptors?
                     // m.insert (it1.index1 (), j, temporary (j));
                     if (f.other (it1.index1 (), j))
                         m (it1.index1 (), j) = temporary (j);
-                    temporary (j) = value_type ();
+                    temporary (j) = value_type (0);
                 }
             }
             ++ it1;
@@ -134,14 +134,14 @@ namespace boost { namespace numeric { namespace ublas {
                 ++ it1;
             }
             for (size_type i = ib; i < ie + 1; ++ i) {
-                if (temporary (i) != value_type ()) {
+                if (temporary (i) != value_type (0)) {
                     // FIXME: we'll need to extend the container interface!
                     // m.push_back (i, it2.index2 (), temporary (i));
                     // FIXME: What to do with adaptors?
                     // m.insert (i, it2.index2 (), temporary (i));
                     if (f.other (i, it2.index2 ()))
                         m (i, it2.index2 ()) = temporary (i);
-                    temporary (i) = value_type ();
+                    temporary (i) = value_type (0);
                 }
             }
             ++ it2;

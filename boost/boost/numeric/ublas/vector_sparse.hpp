@@ -861,7 +861,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
             iterator_type it (detail::lower_bound (index_data ().begin (), index_data ().begin () + filled_, k_based (i), std::less<size_type> ()));
             if (it == index_data ().begin () + filled_ || *it != k_based (i)) {
-                insert (i, value_type ());
+                insert (i, value_type (0));
                 it = detail::lower_bound (index_data ().begin (), index_data ().begin () + filled_, k_based (i), std::less<size_type> ());
             }
             return value_data () [it - index_data ().begin ()];
@@ -1430,7 +1430,7 @@ namespace boost { namespace numeric { namespace ublas {
             sort ();
             iterator_type it (detail::lower_bound (index_data ().begin (), index_data ().begin () + filled_, k_based (i), std::less<size_type> ()));
             if (it == index_data ().begin () + filled_ || *it != k_based (i)) {
-                insert (i, value_type ());
+                insert (i, value_type (0));
                 sort ();
                 it = detail::lower_bound (index_data ().begin (), index_data ().begin () + filled_, k_based (i), std::less<size_type> ());
             }

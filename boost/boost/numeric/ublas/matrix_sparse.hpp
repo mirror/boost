@@ -2714,13 +2714,13 @@ namespace boost { namespace numeric { namespace ublas {
             size_type element1 (functor_type::element1 (i, size1_, j, size2_));
             size_type element2 (functor_type::element2 (i, size1_, j, size2_));
             if (filled1_ <= element1 + 1)
-                insert (i, j, value_type ());
+                insert (i, j, value_type (0));
             vector_const_iterator_type itv (index1_data ().begin () + element1);
             const_iterator_type it_begin (index2_data ().begin () + zero_based (*itv));
             const_iterator_type it_end (index2_data ().begin () + zero_based (*(itv + 1)));
             const_iterator_type it (detail::lower_bound (it_begin, it_end, k_based (element2), std::less<size_type> ()));
             if (it == it_end || *it != k_based (element2)) {
-                insert (i, j, value_type ());
+                insert (i, j, value_type (0));
                 it_begin = index2_data ().begin () + zero_based (*itv);
                 it_end = index2_data ().begin () + zero_based (*(itv + 1));
                 it = detail::lower_bound (it_begin, it_end, k_based (element2), std::less<size_type> ());
@@ -4049,7 +4049,7 @@ namespace boost { namespace numeric { namespace ublas {
             vector_const_iterator_type itv_begin (detail::lower_bound (index1_data ().begin (), index1_data ().begin () + filled_, k_based (element1), std::less<size_type> ()));
             vector_const_iterator_type itv_end (detail::upper_bound (index1_data ().begin (), index1_data ().begin () + filled_, k_based (element1), std::less<size_type> ()));
             if (itv_begin == itv_end) {
-                insert (i, j, value_type ());
+                insert (i, j, value_type (0));
                 sort ();
                 itv_begin = detail::lower_bound (index1_data ().begin (), index1_data ().begin () + filled_, k_based (element1), std::less<size_type> ());
                 itv_end = detail::upper_bound (index1_data ().begin (), index1_data ().begin () + filled_, k_based (element1), std::less<size_type> ());
@@ -4058,7 +4058,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator_type it_end (index2_data ().begin () + (itv_end - index1_data ().begin ()));
             const_iterator_type it (detail::lower_bound (it_begin, it_end, k_based (element2), std::less<size_type> ()));
             if (it == it_end || *it != k_based (element2)) {
-                insert (i, j, value_type ());
+                insert (i, j, value_type (0));
                 sort ();
                 itv_begin = detail::lower_bound (index1_data ().begin (), index1_data ().begin () + filled_, k_based (element1), std::less<size_type> ());
                 itv_end = detail::upper_bound (index1_data ().begin (), index1_data ().begin () + filled_, k_based (element1), std::less<size_type> ());

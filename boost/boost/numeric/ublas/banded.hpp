@@ -284,7 +284,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_type k = (std::max) (i, j);
             size_type l = lower_ + j - i;
             BOOST_UBLAS_CHECK (type_traits<value_type>::equals (data () [functor_type::element (k, std::max (size1_, size2_),
-                                                                                                l, lower_ + 1 + upper_)], value_type ()), bad_index ());
+                                                                                                l, lower_ + 1 + upper_)], value_type (0)), bad_index ());
             // data ().insert (data ().begin () + functor_type::element (k, (std::max) (size1_, size2_),
             //                                                           l, lower_ + 1 + upper_), t);
             data () [functor_type::element (k, (std::max) (size1_, size2_),
@@ -293,7 +293,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_type k = j;
             size_type l = upper_ + i - j;
             BOOST_UBLAS_CHECK (type_traits<value_type>::equals (data () [functor_type::element (k, size2_,
-                                                                                                l, lower_ + 1 + upper_)], value_type ()), bad_index ());
+                                                                                                l, lower_ + 1 + upper_)], value_type (0)), bad_index ());
             // data ().insert (data ().begin () + functor_type::element (k, size2_,
             //                                                           l, lower_ + 1 + upper_), t);
             data () [functor_type::element (k, size2_,
@@ -310,20 +310,20 @@ namespace boost { namespace numeric { namespace ublas {
             // data ().erase (data ().begin () + functor_type::element (k, (std::max) (size1_, size2_),
             //                                                         l, lower_ + 1 + upper_));
             data () [functor_type::element (k, (std::max) (size1_, size2_),
-                                            l, lower_ + 1 + upper_)] = value_type ();
+                                            l, lower_ + 1 + upper_)] = value_type (0);
 #else
             size_type k = j;
             size_type l = upper_ + i - j;
             // data ().erase (data ().begin () + functor_type::element (k, size2_,
             //                                                          l, lower_ + 1 + upper_));
             data () [functor_type::element (k, size2_,
-                                            l, lower_ + 1 + upper_)] = value_type ();
+                                            l, lower_ + 1 + upper_)] = value_type (0);
 #endif
         }
         BOOST_UBLAS_INLINE
         void clear () {
             // data ().clear ();
-            std::fill (data ().begin (), data ().end (), value_type ());
+            std::fill (data ().begin (), data ().end (), value_type (0));
         }
 
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR

@@ -535,13 +535,13 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (j < size_, bad_index ());
             if (functor1_type::other (i, j)) {
                 size_type k = functor1_type::element (functor2_type (), i, size_, j, size_);
-                BOOST_UBLAS_CHECK (type_traits<value_type>::equals (data () [k], value_type ()) ||
+                BOOST_UBLAS_CHECK (type_traits<value_type>::equals (data () [k], value_type (0)) ||
                                    type_traits<value_type>::equals (data () [k], t), bad_index ());
                 // data ().insert (data ().begin () + k, t);
                 data () [k] = t;
             } else {
                 size_type k = functor1_type::element (functor2_type (), j, size_, i, size_);
-                BOOST_UBLAS_CHECK (type_traits<value_type>::equals (data () [k], value_type ()) ||
+                BOOST_UBLAS_CHECK (type_traits<value_type>::equals (data () [k], value_type (0)) ||
                                    type_traits<value_type>::equals (data () [k], type_traits<value_type>::conj (t)), bad_index ());
                 // data ().insert (data ().begin () + k, type_traits<value_type>::conj (t));
                 data () [k] = type_traits<value_type>::conj (t);
@@ -554,17 +554,17 @@ namespace boost { namespace numeric { namespace ublas {
             if (functor1_type::other (i, j)) {
                 size_type k = functor1_type::element (functor2_type (), i, size_, j, size_);
                 // data ().erase (data ().begin () + k);
-                data () [k] = value_type ();
+                data () [k] = value_type (0);
             } else {
                 size_type k = functor1_type::element (functor2_type (), j, size_, i, size_);
                 // data ().erase (data ().begin () + k);
-                data () [k] = value_type ();
+                data () [k] = value_type (0);
             }
         }
         BOOST_UBLAS_INLINE
         void clear () {
             // data ().clear ();
-            std::fill (data ().begin (), data ().end (), value_type ());
+            std::fill (data ().begin (), data ().end (), value_type (0));
         }
 
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -1221,7 +1221,11 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class F1, class F2, class A>
-    typename hermitian_matrix<T, F1, F2, A>::value_type hermitian_matrix<T, F1, F2, A>::conj_;
+    typename hermitian_matrix<T, F1, F2, A>::value_type hermitian_matrix<T, F1, F2, A>::conj_
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME hermitian_matrix<T, F1, F2, A>::value_type ()
+#endif
+    ;
 
     // Hermitian matrix adaptor class
     template<class M, class F>
@@ -2552,15 +2556,15 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class M, class F>
-    typename hermitian_adaptor<M, F>::matrix_type hermitian_adaptor<M, F>::nil_;
+    typename hermitian_adaptor<M, F>::matrix_type hermitian_adaptor<M, F>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME hermitian_adaptor<M, F>::matrix_type()
+        = BOOST_UBLAS_TYPENAME hermitian_adaptor<M, F>::matrix_type ()
 #endif
     ;
     template<class M, class F>
-    typename hermitian_adaptor<M, F>::value_type hermitian_adaptor<M, F>::conj_;
+    typename hermitian_adaptor<M, F>::value_type hermitian_adaptor<M, F>::conj_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME hermitian_adaptor<M, F>::value_type()
+        = BOOST_UBLAS_TYPENAME hermitian_adaptor<M, F>::value_type ()
 #endif
     ;
 

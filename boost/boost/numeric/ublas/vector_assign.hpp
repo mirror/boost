@@ -74,7 +74,7 @@ namespace boost { namespace numeric { namespace ublas {
                     else
                         break;
                 } else if (compare > 0) {
-                    if (*ite != value_type ())
+                    if (*ite != value_type (0))
                         index.push_back (ite.index ());
                     ++ ite;
                     if (ite != ite_end)
@@ -86,12 +86,12 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         while (ite != ite_end) {
-            if (*ite != value_type ())
+            if (*ite != value_type (0))
                 index.push_back (ite.index ());
             ++ ite;
         }
         for (size_type k = 0; k < index.size (); ++ k)
-            v (index [k]) = value_type ();
+            v (index [k]) = value_type (0);
     }
 
     // Iterating case
@@ -343,7 +343,7 @@ namespace boost { namespace numeric { namespace ublas {
                 it_size -= size;
                 if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
                     while (-- size >= 0)
-                        functor_type () (*it, value_type ()), ++ it;
+                        functor_type () (*it, value_type (0)), ++ it;
                 } else {
                     it += size;
                 }
@@ -357,7 +357,7 @@ namespace boost { namespace numeric { namespace ublas {
         size = it_size;
         if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
             while (-- size >= 0)
-                functor_type () (*it, value_type ()), ++ it;
+                functor_type () (*it, value_type (0)), ++ it;
         } else {
             it += size;
         }
@@ -389,7 +389,7 @@ namespace boost { namespace numeric { namespace ublas {
         typename E::const_iterator ite_end (e ().end ());
         while (ite != ite_end) {
             value_type t (*ite);
-            if (t != value_type ())
+            if (t != value_type (0))
                 v.insert (ite.index (), t);
             ++ ite;
         }
@@ -440,7 +440,7 @@ namespace boost { namespace numeric { namespace ublas {
                         break;
                 } else if (compare < 0) {
                     if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
-                        functor_type () (*it, value_type ());
+                        functor_type () (*it, value_type (0));
                         ++ it;
                     } else
                         increment (it, it_end, - compare);
@@ -460,7 +460,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
             while (it != it_end) {
-                functor_type () (*it, value_type ());
+                functor_type () (*it, value_type (0));
                 ++ it;
             }
         } else {

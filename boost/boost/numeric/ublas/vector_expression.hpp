@@ -906,11 +906,11 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             value_type dereference (packed_random_access_iterator_tag) const {
-                value_type t1 = value_type ();
+                value_type t1 = value_type (0);
                 if (it1_ != it1_end_)
                     if (it1_.index () == i_)
                         t1 = *it1_;
-                value_type t2 = value_type ();
+                value_type t2 = value_type (0);
                 if (it2_ != it2_end_)
                     if (it2_.index () == i_)
                         t2 = *it2_;
@@ -956,11 +956,11 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             value_type dereference (sparse_bidirectional_iterator_tag) const {
-                value_type t1 = value_type ();
+                value_type t1 = value_type (0);
                 if (it1_ != it1_end_)
                     if (it1_.index () == i_)
                         t1 = *it1_;
-                value_type t2 = value_type ();
+                value_type t2 = value_type (0);
                 if (it2_ != it2_end_)
                     if (it2_.index () == i_)
                         t2 = *it2_;
