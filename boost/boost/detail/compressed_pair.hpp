@@ -25,6 +25,7 @@
 #ifndef BOOST_CALL_TRAITS_HPP
 #include <boost/call_traits.hpp>
 #endif
+#include <boost/type_traits/same_traits.hpp>
 
 namespace boost
 {
