@@ -23,7 +23,6 @@
 
 #include <iostream>
 #include <algorithm>     // std::copy
-#include <iterator>      // std::ostream_iterator<>
 #include <cassert>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
@@ -35,8 +34,7 @@ namespace boost {
 namespace random {
 
 // Carter Bays and S.D. Durham 1979
-template<class UniformRandomNumberGenerator, int k, 
-  class IntType = typename UniformRandomNumberGenerator::result_type,
+template<class UniformRandomNumberGenerator, int k,
 #ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
   typename UniformRandomNumberGenerator::result_type 
 #else
@@ -61,14 +59,23 @@ public:
   template<class T>
   explicit shuffle_output(T seed) : _rng(seed) { init(); }
   explicit shuffle_output(const base_type & rng) : _rng(rng) { init(); }
+  template<class It> shuffle_output(It& first, It last)
+    : _rng(first, last) { init(); }
   template<class T>
   void seed(T s) { _rng.seed(s); init(); }
+  template<class It> void seed(It& first, It last)
+  {
+    _rng.seed(first, last);
+    init();
+  }
+
+  const base_type& base() const { return _rng; }
 
   result_type operator()() {
     // calculating the range every time may seem wasteful.  However, this
     // makes the information locally available for the optimizer.
     result_type range = max()-min()+1;
-    int j = k*IntType(y-min())/range;
+    int j = k*(y-min())/range;
     // assert(0 <= j && j < k);
     y = v[j];
     v[j] = _rng();
@@ -77,28 +84,39 @@ public:
 
   result_type min() const { return _rng.min(); }
   result_type max() const { return _rng.max(); }
-  bool validation(result_type x) const { return val == x; }
+  static bool validation(result_type x) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend std::ostream& operator<<(std::ostream& os, const shuffle_output& s)
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const shuffle_output& s)
   {
     os << s._rng << " " << s.y << " ";
-    std::copy(s.v, s.v+k, std::ostream_iterator<result_type>(os, " "));
+    for(int i = 0; i < s.buffer_size; ++i)
+      os << s.v[i] << " ";
     return os;
   }
-  friend std::istream& operator>>(std::istream& is, shuffle_output& s)
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, shuffle_output& s)
   {
     is >> s._rng >> std::ws >> s.y >> std::ws;
     for(int i = 0; i < s.buffer_size; ++i)
       is >> s.v[i] >> std::ws;
     return is;
   }
+
   friend bool operator==(const shuffle_output& x, const shuffle_output& y)
   { return x._rng == y._rng && x.y == y.y && std::equal(x.v, x.v+k, y.v); }
+  friend bool operator!=(const shuffle_output& x, const shuffle_output& y)
+  { return !(x == y); }
 #else
   // Use a member function; Streamable concept not supported.
   bool operator==(const shuffle_output& rhs) const
   { return _rng == rhs._rng && y == rhs.y && std::equal(v, v+k, rhs.v); }
+  bool operator!=(const shuffle_output& rhs) const
+  { return !(*this == rhs); }
 #endif
 private:
   void init()
@@ -108,7 +126,8 @@ private:
 #endif
     result_type range = max()-min();
     assert(range > 0);      // otherwise there would be little choice
-    if(IntType(k * range) < IntType(range))  // not a sufficient condition
+    if(static_cast<unsigned long>(k * range) < 
+       static_cast<unsigned long>(range))  // not a sufficient condition
       // likely overflow with bucket number computation
       assert(!"overflow will occur");
 
@@ -126,24 +145,22 @@ private:
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 //  A definition is required even for integral static constants
 template<class UniformRandomNumberGenerator, int k, 
-  class IntType,
 #ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
   typename UniformRandomNumberGenerator::result_type 
 #else
   uint32_t
 #endif
   val>
-const bool shuffle_output<UniformRandomNumberGenerator, k, IntType, val>::has_fixed_range;
+const bool shuffle_output<UniformRandomNumberGenerator, k, val>::has_fixed_range;
 
 template<class UniformRandomNumberGenerator, int k, 
-  class IntType,
 #ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
   typename UniformRandomNumberGenerator::result_type 
 #else
   uint32_t
 #endif
   val>
-const int shuffle_output<UniformRandomNumberGenerator, k, IntType, val>::buffer_size;
+const int shuffle_output<UniformRandomNumberGenerator, k, val>::buffer_size;
 #endif
 
 } // namespace random
@@ -151,7 +168,7 @@ const int shuffle_output<UniformRandomNumberGenerator, k, IntType, val>::buffer_
 // validation by experiment from Harry Erwin's generator.h (private e-mail)
 typedef random::shuffle_output<
     random::linear_congruential<uint32_t, 1366, 150889, 714025, 0>,
-  97, uint32_t, 139726> kreutzer1986;
+  97, 139726> kreutzer1986;
 
 
 } // namespace boost
