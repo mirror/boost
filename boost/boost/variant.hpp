@@ -18,9 +18,9 @@
 #define BOOST_VARIANT_HPP
 
 // variant "main"
-#include "boost/variant/variant_fwd.hpp"
 #include "boost/variant/variant.hpp"
 #include "boost/variant/recursive_variant.hpp"
+#include "boost/variant/recursive_wrapper.hpp"
 
 // common applications
 #include "boost/variant/get.hpp"

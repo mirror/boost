@@ -92,8 +92,9 @@ struct is_recursive_flag
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction enable_recursive
 //
-// Attempts recursive variant substitution and wraps with boost::incomplete
-// if substituion occurs *and* NoWrapper is false_.
+// Attempts recursive_variant_ tag substitution, wrapping with
+// boost::recursive_wrapper if substituion occurs w/ non-indirect result
+// (i.e., not a reference or pointer) *and* NoWrapper is false_.
 //
 template <
       typename T

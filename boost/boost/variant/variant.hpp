@@ -40,7 +40,6 @@
 #include "boost/aligned_storage.hpp"
 #include "boost/compressed_pair.hpp"
 #include "boost/empty.hpp"
-#include "boost/incomplete_fwd.hpp"
 #include "boost/utility/addressof.hpp"
 #include "boost/static_assert.hpp"
 #include "boost/preprocessor/cat.hpp"
@@ -53,6 +52,7 @@
 #include "boost/type_traits/has_nothrow_copy.hpp"
 #include "boost/type_traits/is_const.hpp"
 #include "boost/type_traits/is_same.hpp"
+#include "boost/variant/recursive_wrapper_fwd.hpp"
 #include "boost/variant/static_visitor.hpp"
 
 #include "boost/mpl/apply_if.hpp"
@@ -426,8 +426,7 @@ public: // visitor interfaces
 // (detail) class template invoke_visitor
 //
 // Generic static visitor that invokes the given visitor using:
-//  * for raw visits where the given value is a
-//    boost::incomplete, the given value's held value.
+//  * for 'internal' visits of a recursive_wrapper, the wrapper's held value.
 //  * for all other visits, the given value itself.
 //
 template <typename Visitor>
@@ -502,14 +501,14 @@ public: // visitor interfaces
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(boost::incomplete<T>& operand)
+    operator()(boost::recursive_wrapper<T>& operand)
     {
         return visit(operand.get());
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(const boost::incomplete<T>& operand)
+    operator()(const boost::recursive_wrapper<T>& operand)
     {
         return visit(operand.get());
     }
@@ -541,14 +540,14 @@ private: // helpers, for visitor interfaces (below)
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    execute_impl(boost::incomplete<T>& operand, long)
+    execute_impl(boost::recursive_wrapper<T>& operand, long)
     {
         return visit(operand.get());
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    execute_impl(const boost::incomplete<T>& operand, long)
+    execute_impl(const boost::recursive_wrapper<T>& operand, long)
     {
         return visit(operand.get());
     }

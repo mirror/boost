@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost-libs variant/test/test3.cpp header file
+// boost-libs variant/test/test3.cpp source file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -16,7 +16,6 @@
 
 #include "boost/test/minimal.hpp"
 #include "boost/variant.hpp"
-#include "boost/incomplete.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -25,7 +24,7 @@
 /////////////////////////////////////////////////////////////////////
 
 using boost::variant;
-using boost::incomplete;
+using boost::recursive_wrapper;
 using std::cout;
 using std::endl;
 
@@ -35,7 +34,7 @@ using std::endl;
 struct Add;
 struct Sub;
 
-typedef variant<int, incomplete<Add>, incomplete<Sub> > Expr;
+typedef variant<int, recursive_wrapper<Add>, recursive_wrapper<Sub> > Expr;
 
 struct Sub
 {

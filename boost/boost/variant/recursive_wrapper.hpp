@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost incomplete.hpp header file
+// boost variant/recursive_wrapper.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -14,21 +14,21 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_INCOMPLETE_HPP
-#define BOOST_INCOMPLETE_HPP
+#ifndef BOOST_VARIANT_RECURSIVE_WRAPPER_HPP
+#define BOOST_VARIANT_RECURSIVE_WRAPPER_HPP
 
-#include "boost/incomplete_fwd.hpp"
+#include "boost/variant/recursive_wrapper_fwd.hpp"
 #include "boost/checked_delete.hpp"
 
 namespace boost {
 
 //////////////////////////////////////////////////////////////////////////
-// class template incomplete
+// class template recursive_wrapper
 //
-// Treats an incomplete type as a value type.
+// See docs and recursive_wrapper_fwd.hpp for more information.
 //
 template <typename T>
-class incomplete
+class recursive_wrapper
 {
 public: // representation
 
@@ -36,31 +36,31 @@ public: // representation
 
 public: // structors
 
-    ~incomplete();
-    incomplete();
+    ~recursive_wrapper();
+    recursive_wrapper();
 
-    incomplete(const incomplete& operand);
-    incomplete(const T& operand);
+    recursive_wrapper(const recursive_wrapper& operand);
+    recursive_wrapper(const T& operand);
 
 public: // modifiers
 
-    incomplete& operator=(const incomplete& rhs)
+    recursive_wrapper& operator=(const recursive_wrapper& rhs)
     {
-        incomplete temp(rhs);
+        recursive_wrapper temp(rhs);
         swap(temp);
 
         return *this;
     }
 
-    incomplete& operator=(const T& rhs)
+    recursive_wrapper& operator=(const T& rhs)
     {
-        incomplete temp(rhs);
+        recursive_wrapper temp(rhs);
         swap(temp);
 
         return *this;
     }
 
-    void swap(incomplete& operand)
+    void swap(recursive_wrapper& operand)
     {
         T* temp = operand.p_;
         operand.p_ = p_;
@@ -78,39 +78,39 @@ public: // queries
 };
 
 template <typename T>
-incomplete<T>::~incomplete()
+recursive_wrapper<T>::~recursive_wrapper()
 {
     boost::checked_delete(p_);
 }
 
 template <typename T>
-incomplete<T>::incomplete()
+recursive_wrapper<T>::recursive_wrapper()
     : p_(new T)
 {
 }
 
 template <typename T>
-incomplete<T>::incomplete(const incomplete& operand)
+recursive_wrapper<T>::recursive_wrapper(const recursive_wrapper& operand)
     : p_(new T( operand.get() ))
 {
 }
 
 template <typename T>
-incomplete<T>::incomplete(const T& operand)
+recursive_wrapper<T>::recursive_wrapper(const T& operand)
     : p_(new T(operand))
 {
 }
 
 // function template swap
 //
-// Swaps two incomplete<T> objects of the same type T.
+// Swaps two recursive_wrapper<T> objects of the same type T.
 //
 template <typename T>
-inline void swap(incomplete<T>& lhs, incomplete<T>& rhs)
+inline void swap(recursive_wrapper<T>& lhs, recursive_wrapper<T>& rhs)
 {
     lhs.swap(rhs);
 }
 
 } // namespace boost
 
-#endif // BOOST_INCOMPLETE_HPP
+#endif // BOOST_VARIANT_RECURSIVE_WRAPPER_HPP

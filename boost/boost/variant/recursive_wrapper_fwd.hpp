@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost incomplete_fwd.hpp header file
+// boost variant/recursive_wrapper_fwd.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -14,18 +14,29 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_INCOMPLETE_FWD_HPP
-#define BOOST_INCOMPLETE_FWD_HPP
+#ifndef BOOST_VARIANT_RECURSIVE_WRAPPER_FWD_HPP
+#define BOOST_VARIANT_RECURSIVE_WRAPPER_FWD_HPP
 
 namespace boost {
 
 //////////////////////////////////////////////////////////////////////////
-// class template incomplete
+// class template recursive_wrapper
 //
-// Treats an incomplete type as a value type.
+// Enables recursive types in templates by breaking cyclic dependencies.
 //
-template <typename T> class incomplete;
+// For example:
+//
+//   class my;
+//
+//   typedef variant< int, recursive_wrapper<my> > var;
+//
+//   class my {
+//     var var_;
+//     ...
+//   };
+//
+template <typename T> class recursive_wrapper;
 
 } // namespace boost
 
-#endif // BOOST_INCOMPLETE_FWD_HPP
+#endif // BOOST_VARIANT_RECURSIVE_WRAPPER_FWD_HPP

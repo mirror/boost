@@ -224,7 +224,7 @@ template < BOOST_VARIANT_AUX_DECLARE_PARAMS > class variant;
 // metafunction recursive_variant
 //
 // Exposes a boost::variant with recursive_variant_ tags (below) substituted
-// with the variant itself (wrapped as needed with boost::incomplete).
+// with the variant itself (wrapped as needed with boost::recursive_wrapper).
 //
 template < BOOST_VARIANT_AUX_DECLARE_PARAMS > struct recursive_variant;
 

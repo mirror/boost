@@ -50,7 +50,7 @@
 #include "boost/type_traits/is_reference.hpp"
 #include "boost/type_traits/is_same.hpp"
 
-#include "boost/incomplete.hpp"
+#include "boost/variant/recursive_wrapper.hpp"
 
 namespace boost {
 namespace detail { namespace variant {
@@ -189,9 +189,7 @@ struct enable_recursive_impl
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction enable_recursive
 //
-// Attempts recursive variant substitution and wraps with boost::incomplete
-// if substituion occurs w/ non-indirect result (i.e., not a reference or
-// pointer) *and* NoWrapper is false_.
+// See boost/variant/detail/enable_recursive_fwd.hpp for more information.
 //
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -211,7 +209,7 @@ private: // helpers, for metafunction result (below)
 
 public: // metafunction result
 
-    // [Wrap with incomplete only if rebind really changed something:]
+    // [Wrap with recursive_wrapper only if rebind really changed something:]
     typedef typename mpl::if_<
           mpl::or_<
               is_same< t_,T >
@@ -219,7 +217,7 @@ public: // metafunction result
             , is_pointer<t_>
             >
         , t_
-        , boost::incomplete<t_>
+        , boost::recursive_wrapper<t_>
         >::type type;
 
 };
@@ -235,7 +233,7 @@ private: // helpers, for metafunction result (below)
 
 public: // metafunction result
 
-    // [Wrap with incomplete only if rebind really changed something:]
+    // [Wrap with recursive_wrapper only if rebind really changed something:]
     typedef typename mpl::if_<
           mpl::or_<
               NoWrapper
@@ -244,7 +242,7 @@ public: // metafunction result
             , is_pointer<t_>
             >
         , t_
-        , boost::incomplete<t_>
+        , boost::recursive_wrapper<t_>
         >::type type;
 
 };
