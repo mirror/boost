@@ -18,6 +18,22 @@
 namespace boost {
 namespace date_time {
 
+  //! Formats date_generators for output
+  /*! Formatting of date_generators follows specific orders for the 
+   * various types of date_generators.
+   * - partial_date                     => "dd Month"
+   * - nth_day_of_the_week_in_month     => "nth weekday of month"
+   * - first_day_of_the_week_in_month   => "first weekday of month"
+   * - last_day_of_the_week_in_month    => "last weekday of month"
+   * - first_day_of_the_week_after      => "weekday after"
+   * - first_day_of_the_week_before     => "weekday before"
+   * While the order of the elements in these phrases cannot be changed, 
+   * the elements themselves can be. Weekday and Month get their formats
+   * and names from the date_facet. The remaining elements are stored in 
+   * the date_generator_formatter and can be customized upon construction
+   * or via a member function. The default elements are those shown in the 
+   * examples above.
+   */
   template <class date_type, class CharT, class OutItrT = std::ostreambuf_iterator<CharT, std::char_traits<CharT> > >
   class date_generator_formatter {
     public:
@@ -44,6 +60,7 @@ namespace date_time {
       enum phrase_elements {first=0, second, third, fourth, fifth, last,
                          before, after, of, number_of_phrase_elements};
 
+      //! Default format elements used
       date_generator_formatter()
       {
         phrase_strings.push_back(string_type(first_string));
@@ -57,6 +74,41 @@ namespace date_time {
         phrase_strings.push_back(string_type(of_string));
       }
 
+      //! Constructor that allows for a custom set of phrase elements
+      date_generator_formatter(const string_type& first,
+                               const string_type& second,
+                               const string_type& third,
+                               const string_type& fourth,
+                               const string_type& fifth,
+                               const string_type& last,
+                               const string_type& before,
+                               const string_type& after,
+                               const string_type& of)
+      {
+        phrase_strings.push_back(string_type(first_string));
+        phrase_strings.push_back(string_type(second_string));
+        phrase_strings.push_back(string_type(third_string));
+        phrase_strings.push_back(string_type(fourth_string));
+        phrase_strings.push_back(string_type(fifth_string));
+        phrase_strings.push_back(string_type(last_string));
+        phrase_strings.push_back(string_type(before_string));
+        phrase_strings.push_back(string_type(after_string));
+        phrase_strings.push_back(string_type(of_string));
+      }
+
+      //! Replace the set of phrase elements with those contained in new_strings
+      /*! The order of the strings in the given collection is important.
+       * They must follow: 
+       *  - first, second, third, fourth, fifth, last, before, after, of. 
+       *
+       * It is not necessary to send in a complete set if only a few 
+       * elements are to be replaced as long as the correct beg_pos is used.
+       *
+       * Ex: To keep the default first through fifth elements, but replace 
+       * the rest with a collection of: 
+       *  - "final", "prior", "following", "in". 
+       * The beg_pos of date_generator_formatter::last would be used.
+       */
       void elements(const collection_type& new_strings,
                     phrase_elements beg_pos=first)
       {
@@ -69,6 +121,7 @@ namespace date_time {
         }
       }
 
+      //!Put a partial_date => "dd Month"
       template<class facet_type>
       OutItrT put_partial_date(OutItrT next, std::ios_base& a_ios,
                                CharT a_fill, const partial_date_type& pd,
@@ -80,6 +133,7 @@ namespace date_time {
         return next;
       }
 
+      //! Put an nth_day_of_the_week_in_month => "nth weekday of month"
       template<class facet_type>
       OutItrT put_nth_kday(OutItrT next, std::ios_base& a_ios,
                            CharT a_fill, const nth_kday_type& nkd,
@@ -94,7 +148,8 @@ namespace date_time {
         facet.put(next, a_ios, a_fill, nkd.month());
         return next;
       }
-      
+   
+      //! Put a first_day_of_the_week_in_month => "first weekday of month"
       template<class facet_type>
       OutItrT put_first_kday(OutItrT next, std::ios_base& a_ios,
                              CharT a_fill, const first_kday_type& fkd,
@@ -110,6 +165,7 @@ namespace date_time {
         return next;
       }
 
+      //! Put a last_day_of_the_week_in_month => "last weekday of month"
       template<class facet_type>
       OutItrT put_last_kday(OutItrT next, std::ios_base& a_ios,
                            CharT a_fill, const last_kday_type& lkd,
@@ -125,6 +181,7 @@ namespace date_time {
         return next;
       }
 
+      //! Put a first_day_of_the_week_before => "weekday before"
       template<class facet_type>
       OutItrT put_kday_before(OutItrT next, std::ios_base& a_ios,
                               CharT a_fill, const kday_before_type& fkb,
@@ -136,6 +193,7 @@ namespace date_time {
         return next;
       }
 
+      //! Put a first_day_of_the_week_after => "weekday after"
       template<class facet_type>
       OutItrT put_kday_after(OutItrT next, std::ios_base& a_ios,
                              CharT a_fill, const kday_after_type& fka,
