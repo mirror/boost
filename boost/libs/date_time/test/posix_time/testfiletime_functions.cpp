@@ -22,13 +22,7 @@ int main()
 
   // adjustor is used to truncate ptime's fractional seconds for 
   // comparison with SYSTEMTIME's milliseconds
-#if defined(BOOST_NO_STDC_NAMESPACE)
-  const int adjustor = 
-    static_cast<int>(pow(10.0, time_duration::num_fractional_digits() - 3));
-#else
-  const int adjustor = 
-    static_cast<int>(std::pow(10.0, time_duration::num_fractional_digits() - 3));
-#endif
+  const int adjustor = time_duration::ticks_per_second() / 1000;
   
   for(int i = 0; i < 5; ++i){
 
@@ -53,7 +47,7 @@ int main()
         st.wSecond == pt.time_of_day().seconds());
     check("truncated ptime fractional second matches systemtime millisecond", 
         st.wMilliseconds == (pt.time_of_day().fractional_seconds() / adjustor)
-         ); // check
+         );
 
     // burn up a little time
     for (int j=0; j<100000; j++)
