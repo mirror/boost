@@ -163,8 +163,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename type_traits<element_type>::real_type real_type;
         typedef typename type_traits<element_type>::precision_type precision_type;
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = type_traits<element_type>::plus_complexity);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = type_traits<element_type>::multiplies_complexity);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = type_traits<element_type>::plus_complexity);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = type_traits<element_type>::multiplies_complexity);
 
         static
         BOOST_UBLAS_INLINE
@@ -240,8 +240,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<hermitian_matrix<T, F1, F2, A> >::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename A::size_type size_type;
+        typedef typename A::difference_type difference_type;
         typedef T value_type;
         // FIXME: no better way to not return the address of a temporary?
         // typedef const T &const_reference;
