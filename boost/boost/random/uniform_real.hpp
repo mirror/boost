@@ -33,8 +33,6 @@ namespace boost {
 // uniform distribution on a real range
 template<class UniformRandomNumberGenerator, class RealType = double>
 class uniform_real
-  : public generator_iterator_mixin_adapter<
-        uniform_real<UniformRandomNumberGenerator, RealType>, RealType>
 {
 public:
   typedef UniformRandomNumberGenerator base_type;
@@ -48,7 +46,6 @@ public:
     BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
     assert(min < max);
-    this->iterator_init();
   }
   // compiler-generated copy ctor is fine
   // uniform_01 cannot be assigned, neither can this class

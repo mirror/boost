@@ -27,7 +27,6 @@
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/random/uniform_smallint.hpp>
-#include <boost/random/detail/iterator_mixin.hpp>
 #include <boost/random/detail/signed_unsigned_compare.hpp>
 
 namespace boost {
@@ -35,8 +34,6 @@ namespace boost {
 // uniform integer distribution on [min, max]
 template<class UniformRandomNumberGenerator, class IntType = int>
 class uniform_int
-  : public generator_iterator_mixin_adapter<
-        uniform_int<UniformRandomNumberGenerator, IntType>, IntType >
 {
 public:
   typedef UniformRandomNumberGenerator base_type;
@@ -51,7 +48,6 @@ public:
     BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
 #endif
     assert(min < max);
-    this->iterator_init();
   }
   result_type operator()();
   result_type min() const { return _min; }

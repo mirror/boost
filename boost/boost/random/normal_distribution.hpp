@@ -30,8 +30,6 @@ namespace boost {
 // deterministic polar method, uses trigonometric functions
 template<class UniformRandomNumberGenerator, class RealType = double>
 class normal_distribution
-  : public generator_iterator_mixin_adapter<
-      normal_distribution<UniformRandomNumberGenerator, RealType>, RealType>
 {
 public:
   typedef UniformRandomNumberGenerator base_type;
@@ -42,14 +40,11 @@ public:
     : _rng(rng), _mean(mean), _sigma(sigma), _valid(false)
   {
     assert(sigma >= 0);
-    this->iterator_init();
   }
 
   // compiler-generated copy constructor is NOT fine, need to purge cache
   normal_distribution(const normal_distribution& other)
-    : generator_iterator_mixin_adapter<
-      normal_distribution<UniformRandomNumberGenerator, RealType>, RealType>(other),
-    _rng(other._rng), _mean(other._mean), _sigma(other._sigma), _valid(false)
+    : _rng(other._rng), _mean(other._mean), _sigma(other._sigma), _valid(false)
   {
   }
   // uniform_01 cannot be assigned, neither can this class

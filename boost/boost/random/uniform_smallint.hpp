@@ -25,15 +25,12 @@
 #include <cassert>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
-#include <boost/random/detail/iterator_mixin.hpp>
 
 namespace boost {
 
 // uniform integer distribution on a small range [min, max]
 template<class UniformRandomNumberGenerator, class IntType = int>
 class uniform_smallint
-  : public generator_iterator_mixin_adapter<
-        uniform_smallint<UniformRandomNumberGenerator, IntType>, IntType >
 {
 public:
   typedef UniformRandomNumberGenerator base_type;
@@ -91,7 +88,6 @@ uniform_smallint(base_type & rng, IntType min, IntType max)
     for(; r_base >= r; _factor *= 2)
       r_base /= 2;
   }
-  this->iterator_init();  // initialize iterator interface
 }
 
 } // namespace boost

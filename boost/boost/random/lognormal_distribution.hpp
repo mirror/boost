@@ -43,8 +43,6 @@ namespace boost {
 
 template<class UniformRandomNumberGenerator, class RealType = double>
 class lognormal_distribution
-  : public generator_iterator_mixin_adapter<
-      lognormal_distribution<UniformRandomNumberGenerator, RealType>, RealType>
 {
 public:
   typedef UniformRandomNumberGenerator base_type;
@@ -55,7 +53,6 @@ public:
            std::sqrt(std::log(sigma*sigma/mean/mean+1)))
   { 
     assert(mean > 0);
-    this->iterator_init();
   }
   // compiler-generated copy constructor is fine
   // normal_distribution cannot be assigned, neither can this class

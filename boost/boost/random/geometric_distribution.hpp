@@ -36,8 +36,6 @@ namespace boost {
 // geometric distribution: p(i) = (1-p) * pow(p, i-1)   (integer)
 template<class UniformRandomNumberGenerator, class IntType = int>
 class geometric_distribution
-  : public generator_iterator_mixin_adapter<
-      geometric_distribution<UniformRandomNumberGenerator, IntType>, IntType>
 {
 public:
   typedef UniformRandomNumberGenerator base_type;
@@ -51,7 +49,6 @@ public:
     using std::log;
 #endif
     _log_p = log(p);
-    this->iterator_init();
   }
   // compiler-generated copy ctor is fine
   // uniform_01 cannot be assigned, neither can this class

@@ -30,15 +30,13 @@ namespace boost {
 // exponential distribution: p(x) = lambda * exp(-lambda * x)
 template<class UniformRandomNumberGenerator, class RealType = double>
 class exponential_distribution
-  : public generator_iterator_mixin_adapter<
-    exponential_distribution<UniformRandomNumberGenerator, RealType>, RealType>
 {
 public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
   exponential_distribution(base_type& rng, result_type lambda)
-    : _rng(rng), _lambda(lambda) { assert(lambda > 0); this->iterator_init(); }
+    : _rng(rng), _lambda(lambda) { assert(lambda > 0); }
   // compiler-generated copy ctor is fine
   // uniform_01 cannot be assigned, neither can this class
   result_type operator()()
