@@ -15,22 +15,29 @@
 
 namespace boost { namespace iostreams { namespace detail {
 
-inline failure cant_read() { return failure("no read access"); }
+inline BOOST_IOSTREAMS_FAILURE cant_read() 
+{ return BOOST_IOSTREAMS_FAILURE("no read access"); }
 
-inline failure cant_write() { return failure("no write access"); }
+inline BOOST_IOSTREAMS_FAILURE cant_write() 
+{ return BOOST_IOSTREAMS_FAILURE("no write access"); }
 
-inline failure cant_seek() { return failure("no random access"); }
+inline BOOST_IOSTREAMS_FAILURE cant_seek() 
+{ return BOOST_IOSTREAMS_FAILURE("no random access"); }
 
-inline failure bad_read() { return failure("bad read"); }
+inline BOOST_IOSTREAMS_FAILURE bad_read() 
+{ return BOOST_IOSTREAMS_FAILURE("bad read"); }
 
-inline failure bad_putback() { return failure("putback buffer full"); }
+inline BOOST_IOSTREAMS_FAILURE bad_putback() 
+{ return BOOST_IOSTREAMS_FAILURE("putback buffer full"); }
 
-inline failure bad_write() { return failure("bad write"); }
+inline BOOST_IOSTREAMS_FAILURE bad_write() 
+{ return BOOST_IOSTREAMS_FAILURE("bad write"); }
 
-inline failure write_area_exhausted() 
-{ return failure("write area exhausted"); }
+inline BOOST_IOSTREAMS_FAILURE write_area_exhausted() 
+{ return BOOST_IOSTREAMS_FAILURE("write area exhausted"); }
 
-inline failure bad_seek() { return failure("bad seek"); }
+inline BOOST_IOSTREAMS_FAILURE bad_seek() 
+{ return BOOST_IOSTREAMS_FAILURE("bad seek"); }
 
 } } } // End namespaces detail, iostreams, boost.
 

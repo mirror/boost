@@ -16,7 +16,6 @@
 #include <algorithm>                       // max.
 #include <cstring>                         // memcpy.
 #include <exception>
-#include <ios>                             // failure, openmode, int types.
 #include <string>
 #include <boost/config.hpp>                // DEDUCED_TYPENAME, MSVC.
 #include <boost/detail/workaround.hpp>     
@@ -28,6 +27,7 @@
 #include <boost/iostreams/detail/codecvt_helper.hpp>
 #include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/forward.hpp>
+#include <boost/iostreams/detail/ios.hpp> // failure, openmode, int types.
 #include <boost/iostreams/detail/select.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>
@@ -39,11 +39,9 @@
 
 namespace boost { namespace iostreams {
 
-// VC6 gets confused by the typedef detail::failure here.
-struct code_conversion_error : std::ios_base::failure 
-{
+struct code_conversion_error : BOOST_IOSTREAMS_FAILURE {
     code_conversion_error() 
-        : std::ios_base::failure("code conversion error")
+        : BOOST_IOSTREAMS_FAILURE("code conversion error")
         { }
 };
 
@@ -118,7 +116,7 @@ struct code_converter_impl {
     void open(const Device& dev, int buffer_size)
     {
         if (open_)
-            throw failure("already open");
+            throw BOOST_IOSTREAMS_FAILURE("already open");
         if (buffer_size == -1)
             buffer_size = default_filter_buffer_size;
         int max_length = cvt_.get().max_length();

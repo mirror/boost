@@ -50,7 +50,7 @@ std::streamsize copy_impl( Source& src, Sink& snk,
         std::copy(p1.first, p1.second, p2.first);
         return static_cast<streamsize>(p1.second - p1.first);
     } else {
-        throw failure("destination too small");
+        throw BOOST_IOSTREAMS_FAILURE("destination too small");
     }
 }
 

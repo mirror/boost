@@ -135,11 +135,11 @@ typename direct_streambuf<T, Tr>::int_type
 direct_streambuf<T, Tr>::overflow(int_type c)
 {
     using namespace std;
-    if (!obeg_) throw failure("no write access");
+    if (!obeg_) throw BOOST_IOSTREAMS_FAILURE("no write access");
     if (!pptr()) init_put_area();
     if (!traits_type::eq_int_type(c, traits_type::eof())) {
         if (pptr() == oend_)
-            throw failure("write area exhausted");
+            throw BOOST_IOSTREAMS_FAILURE("write area exhausted");
         *pptr() = traits_type::to_char_type(c);
         pbump(1);
         return c;

@@ -158,7 +158,7 @@ private:
     void check_open()
     {
         if (this->is_open()) 
-            throw detail::failure("already open");
+            throw BOOST_IOSTREAMS_FAILURE("already open");
     }
 };
 
