@@ -85,11 +85,14 @@ class integer_traits<unsigned char>
 template<>
 class integer_traits<wchar_t>
   : public std::numeric_limits<wchar_t>,
-#if !defined(__BORLANDC__)
-    public detail::integer_traits_base<wchar_t, WCHAR_MIN, WCHAR_MAX>
-#else
+#if defined(__BORLANDC__)
     // Borland C++ does not have WCHAR_MIN and WCHAR_MAX
     public detail::integer_traits_base<wchar_t, 0, 0xffff>
+#elif defined(__sgi)
+    // SGI MIPSpro doesn't have them, either
+    public detail::integer_traits_base<wchar_t, INT_MIN, INT_MAX>
+#else
+    public detail::integer_traits_base<wchar_t, WCHAR_MIN, WCHAR_MAX>
 #endif
 { };
 #endif // BOOST_NO_INTRINSIC_WCHAR_T
