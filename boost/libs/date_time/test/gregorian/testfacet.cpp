@@ -263,16 +263,16 @@ main()
     german.imbue(global2);
     greg_month m(3);
     ss1 >> m;
-    check("Stream in month", m = greg_month(Jan));
+    check("Stream in month", m == greg_month(Jan));
 #ifndef BOOST_NO_CWCHAR
     std::wstringstream ws1(L"Dec");
     ws1 >> m;
-    check("Wide Stream in month", m = greg_month(Dec));
+    check("Wide Stream in month", m == greg_month(Dec));
 #else
     check("Wide Stream in not supported by this compiler", false);
 #endif // BOOST_NO_CWCHAR
     german >> m;
-    check("Stream in German month", m = greg_month(Oct));
+    check("Stream in German month", m == greg_month(Oct));
     try{
       ss2 >> m; // misspelled
     }catch(bad_month){
