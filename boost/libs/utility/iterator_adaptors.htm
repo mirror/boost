@@ -1,11 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
+<html>
+<head>
     <meta name="generator" content="HTML Tidy, see www.w3.org">
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
     <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
     <meta name="ProgId" content="FrontPage.Editor.Document">
 
     <title>Boost Iterator Adaptor Library</title>
+</head>
+
 <body bgcolor="#FFFFFF" text="#000000">
 
     <img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align=
@@ -385,7 +389,7 @@ struct <a name="default_iterator_policies">default_iterator_policies</a>
     <p>To implement a transform iterator we will only change one of the base
     iterator's behaviors, so the <tt>transform_iterator_policies</tt> class can
     inherit the rest from <tt>default_iterator_policies</tt>. We will define
-    the <tt>dereference()</tt> member function, which is used implement
+    the <tt>dereference()</tt> member function, which is used to implement
     <tt>operator*()</tt> of the adapted iterator. The implementation will
     dereference the base iterator and apply the function object. The
     <tt>type&lt;Reference&gt;</tt> parameter is used to convey the appropriate
@@ -584,7 +588,7 @@ mixed in comparison and subtraction expressions.
 
     <h3><a name="challenge">Challenge</a></h3>
 
-    <p>There is an unlimited number of ways the the <tt>iterator_adaptors</tt>
+    <p>There is an unlimited number of ways the <tt>iterator_adaptors</tt>
     class can be used to create iterators. One interesting exercise would be to
     re-implement the iterators of <tt>std::list</tt> and <tt>std::slist</tt>
     using <tt>iterator_adaptors</tt>, where the adapted <tt>Iterator</tt> types
@@ -736,5 +740,6 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
     <!--  LocalWords:  iostream hpp sizeof InputIterator constness ConstIterator
          David Abrahams
          -->
-
+</body>
+</html>
 
