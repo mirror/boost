@@ -637,7 +637,8 @@ test_new_syntax()
 {
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   write_five_obj five;
-  function<void()> v2;
+  typedef void F2();
+  function<F2> v2;
 
   // Assignment
   v2 = five;
