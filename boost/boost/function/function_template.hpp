@@ -22,6 +22,7 @@
 #  include <algorithm>
 #  include <boost/config.hpp>
 #  include <boost/function/function_base.hpp>
+#  include <boost/mem_fn.hpp>
 #endif // BOOST_FUNCTION_FUNCTION_TEMPLATE_HPP
 
 // Type of the default allocator
@@ -143,7 +144,7 @@ namespace boost {
 	{
 	  MemFunctionPtr f = 
 	    reinterpret_cast<MemFunctionPtr>(mem_function_ptr.mem_func_ptr);
-	  return ((*a0).*f)(BOOST_FUNCTION_NOT_0_ARGS);
+          return mem_fn(f)(BOOST_FUNCTION_ARGS);
 	}
       };
 
@@ -160,8 +161,8 @@ namespace boost {
 	{
 	  MemFunctionPtr f = 
 	    reinterpret_cast<MemFunctionPtr>(mem_function_ptr.mem_func_ptr);
-	  (a0->*f)(BOOST_FUNCTION_NOT_0_ARGS);
-	  return unusable();
+          mem_fn(f)(BOOST_FUNCTION_ARGS);
+          return unusable();
 	}
       };
 #endif // BOOST_FUNCTION_NUM_ARGS > 0
