@@ -28,6 +28,8 @@
 //     Incrementable.
 // 
 // Revision History
+// 09 Feb 2001  Factored out is_numeric computation. Borland still
+//              unhappy :( (David Abrahams)
 // 08 Feb 2001  Beginning of a failed attempt to appease Borland
 //              (David Abrahams)
 // 07 Feb 2001  rename counting_iterator() -> make_counting_iterator()
@@ -117,20 +119,29 @@ namespace detail {
       };
   };
 
+  // Try to detect numeric types at compile time in ways compatible with the
+  // limitations of the compiler and library.
+  template <class T>
+  struct is_numeric {
+    enum { value = 
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+        std::numeric_limits<T>::is_specialized
+#elif defined(__BORLANDC__)
+        ::boost::is_integral<T>::value || ::boost::is_same<T,char>::value
+#else
+        boost::is_convertible<int,T>::value && boost::is_convertible<T,int>::value
+#endif
+    };
+  };
+
   // Compute the distance over arbitrary numeric and/or iterator types
   template <class Distance, class Incrementable>
   Distance any_distance(Incrementable start, Incrementable finish, Distance* = 0)
   {
-      return distance_policy_select<
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-         std::numeric_limits<Incrementable>::is_specialized
-#else
-          // Causes warnings with GCC, but how else can I detect numeric types
-          // at compile-time?
-          (boost::is_convertible<int,Incrementable>::value &&
-           boost::is_convertible<Incrementable,int>::value)
-#endif
-           >::template policy<Distance, Incrementable>::distance(start, finish);
+    
+      return distance_policy_select<(
+          is_numeric<Incrementable>::value)>::template
+          policy<Distance, Incrementable>::distance(start, finish);
   }
   
 } // namespace detail
@@ -138,19 +149,10 @@ namespace detail {
 template <class Incrementable>
 struct counting_iterator_traits {
  private:
-    enum {
-        is_numeric = 
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-        std::numeric_limits<Incrementable>::is_specialized
-#else
-        // Try to detect numeric types at compile time
-        boost::is_convertible<int,Incrementable>::value
-        && boost::is_convertible<Incrementable,int>::value
-#endif
-    };
-    
-    typedef typename detail::counting_iterator_traits_select<
-        is_numeric>::template traits<Incrementable> traits;
+    enum {numeric = detail::is_numeric<Incrementable>::value };
+    typedef typename detail::counting_iterator_traits_select<(
+        numeric
+        )>::template traits<Incrementable> traits;
  public:
     typedef Incrementable value_type;
     typedef const Incrementable& reference;
