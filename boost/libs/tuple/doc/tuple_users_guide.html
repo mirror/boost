@@ -75,13 +75,22 @@ Both <code>tuple_io.hpp</code> and <code>tuple_comparison.hpp</code> include <co
 The template parameters specify the types of the tuple elements.
 The current version supports tuples with 0-10 elements. 
 If necessary, the upper limit can be increased up to, say, a few dozen elements.
-The data element can be any C++ type, except for a type that cannot be copied, e.g.:
+The data element can be any C++ type, except for a non-reference type
+that is not copy constructible from a const qualified reference to that
+same type. In practice this means, that the element type must be <i>CopyConstructible</i> [C++ Standard 20.1.3]. (To be precise, CopyConstrucible is an unnecessary strong requirement for a valid element type, as the <code>operator&amp;</code> is not used by the library.)
+</p>
+
+<p>
+Examples of types that are not allowed as tuple elements:
 
 <ul>
 <li>classes that do not have a public copy constructor</li>
+<li>classes, where the copy constructor takes its argument as a non-const reference (cf. <code>auto_ptr</code>)
 <li>arrays</li>
 </ul>
-However, a reference to a non-copyable type is a valid element type.
+
+Note that a reference to any of these non-copyable types is a valid element
+type.
 
 <p>
 For example, the following definitions are valid tuple instantiations (<code>A</code>, <code>B</code> and <code>C</code> are some user defined classes):
