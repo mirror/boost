@@ -38,7 +38,7 @@
 #if defined(__COMO__)
 #  define BOOST_NUMERIC_INTERVAL_using_max(a) using std::a
 #elif defined(__MWERKS__)
-#  define BOOST_NUMERIC_INTERVAL_using_max(a) using ::a
+#  define BOOST_NUMERIC_INTERVAL_using_max(a)
 #elif defined(BOOST_NO_STDC_NAMESPACE)
 #  define BOOST_NUMERIC_INTERVAL_using_max(a) using ::a
 #else

@@ -21,9 +21,9 @@
 #  include <boost/numeric/interval/detail/x86gcc_rounding_control.hpp>
 #elif defined(__BORLANDC__)
 #  include <boost/numeric/interval/detail/bcc_rounding_control.hpp>
-#elif defined(_MSC_VER)
+#elif defined(BOOST_MSVC)
 #  include <boost/numeric/interval/detail/msvc_rounding_control.hpp>
-#elif defined(__MWERKS__) || defined(__ICC)
+#elif defined(__MWERKS__) || defined(BOOST_INTEL) || defined(__COMO__)
 #  define BOOST_NUMERIC_INTERVAL_USE_C99_SUBSYSTEM
 #  include <boost/numeric/interval/detail/c99sub_rounding_control.hpp>
 #else

@@ -121,6 +121,7 @@ private:
   struct number_holder {
     number_holder(const T& r) : val(r)
     {
+      typedef typename Policies::checking checking;
       if (checking::is_nan(r))
         throw interval_lib::comparison_error();
     }
