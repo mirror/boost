@@ -338,6 +338,23 @@ public:
  *
  ****************************************************************************/
 
+#ifdef __cplusplus
+
+#ifdef BOOST_NO_CTYPE_FUNCTIONS
+
+// Make functions out of the macros.
+// Use parentheses so the macros don't screw us up.
+inline int (isalpha)(int c) { return isalpha(c); }
+inline int (iscntrl)(int c) { return iscntrl(c); }
+inline int (isdigit)(int c) { return isdigit(c); }
+inline int (islower)(int c) { return islower(c); }
+inline int (ispunct)(int c) { return ispunct(c); }
+inline int (isspace)(int c) { return isspace(c); }
+inline int (isupper)(int c) { return isupper(c); }
+inline int (isxdigit)(int c) { return isxdigit(c); }
+
+#endif
+
 // the following may be defined as macros; this is
 // incompatable with std::something syntax, we have
 // no choice but to undef them?
@@ -437,6 +454,8 @@ public:
 #undef wcsxfrm
 #endif
 
+#endif
+
 /*****************************************************************************
  *
  *  Fix broken broken namespace support:
@@ -523,6 +542,3 @@ inline void construct(T* p, const T& t)
 #endif
 
 #endif
-
-
-
