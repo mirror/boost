@@ -13,8 +13,6 @@ rule toolset::require-boost-spirit-support ( toolset variant : subvariant-path p
     switch $(toolset) {
     case "borland*" :
         requires-spirit = true ;
-    case "msvc-stlport" :
-        requires-spirit = true ;
     case "msvc*" :
         requires-spirit = true ;
     case "iw*" :
@@ -23,6 +21,8 @@ rule toolset::require-boost-spirit-support ( toolset variant : subvariant-path p
         requires-spirit = true ;
     case "vc7-stlport" :
         requires-spirit = true ;
+    case "gcc-2*" :
+        requires-spirit = true;
     }
     if $(requires-spirit) {
         if  $(SPIRIT_ROOT) # && ( exist $(SPIRIT_ROOT) )
@@ -57,10 +57,12 @@ rule toolset::require-wide-char-io-support ( toolset variant : subvariant-path p
 # certain tool sets are known apriori not to support creation of DLLS
 rule toolset::require-shared-libraries-support ( toolset variant : subvariant-path properties * )
 {
-    local requirements ;
     switch $(toolset) {
     case "como*" :
         echo **** DLLs cannot be built with this compiler **** ;
+        properties = [ impose-requirements $(properties) : <build>no ] ;
+    case "msvc-stlport*" :
+        echo **** DLLs cannot be built with this compiler and stlport 4.x **** ;
         properties = [ impose-requirements $(properties) : <build>no ] ;
     case "cw-8*" :
         local runtime-link = [ get-values <runtime-link> : $(properties) ] ;
