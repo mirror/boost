@@ -264,8 +264,10 @@ Added 23rd September (John Maddock).
 //  64-bit types + intmax_t and uintmax_t  ----------------------------------//
 
 #  if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX)
+     // HP-UX's value of ULONG_LONG_MAX is unusable in preprocessor expressions
 #    if (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615U) ||  \
-        (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615U) || (defined(ULONGLONG_MAX) && ULONGLONG_MAX == 18446744073709551615U)
+        (defined(ULONG_LONG_MAX) && (defined(__hpux) || ULONG_LONG_MAX == 18446744073709551615U)) ||  \
+        (defined(ULONGLONG_MAX) && ULONGLONG_MAX == 18446744073709551615U)
 #       define INT64_C(value) value##LL
 #       define UINT64_C(value) value##uLL
 #    else
