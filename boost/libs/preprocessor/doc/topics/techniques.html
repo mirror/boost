@@ -55,6 +55,9 @@ BOOST_PP_DEF(/)
       return base::begin()[i];     \
    }                               \
    /**/
+
+   BOOST_PP_DEF(BOOST_PP_EMPTY)
+   BOOST_PP_DEF(BOOST_PP_IDENTITY(const))
 </pre></div>
 <div>
 	<b>How:</b>&nbsp; BOOST_PP_EMPTY() expands to nothing and can be used as an unused parameter.
