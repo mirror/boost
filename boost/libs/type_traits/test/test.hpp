@@ -180,6 +180,9 @@ union empty_POD_union_UDT{};
 class Base { };
 
 class Derived : public Base { };
+class Derived2 : public Base { };
+class MultiBase : public Derived, public Derived2 {};
+class PrivateBase : private Base {};
 
 class NonDerived { };
 

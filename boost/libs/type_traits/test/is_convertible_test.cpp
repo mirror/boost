@@ -49,6 +49,8 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int&, const int&>::value), t
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int[2], int*>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int[2], const int*>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<const int[2], int*>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int*, int[3]>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<test_abc3, const test_abc1&>::value), true);
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<non_pointer, void*>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<non_pointer, int*>::value), false);
@@ -60,7 +62,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int_constructible, test_abc1
 
 //
 // the following tests all involve user defined conversions which do
-// not compile with Borland C++ Builder:
+// not compile with Borland C++ Builder 5:
 //
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int, int_constructible>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,convertible_from<float> >::value), true);
