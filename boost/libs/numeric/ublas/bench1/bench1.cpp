@@ -14,14 +14,6 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#include <iostream>
-#include <string>
-
-#include <boost/numeric/ublas/vector.hpp>
-#include <boost/numeric/ublas/matrix.hpp>
-
-#include <boost/timer.hpp>
-
 #include "bench1.hpp"
 
 void header (std::string text) {

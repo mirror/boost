@@ -14,17 +14,6 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#include <iostream>
-#include <string>
-
-#include <boost/numeric/interval.hpp>
-#include <boost/numeric/interval/io.hpp>
-
-#include <boost/numeric/ublas/vector.hpp>
-#include <boost/numeric/ublas/matrix.hpp>
-
-#include <boost/timer.hpp>
-
 #include "bench4.hpp"
 
 template<class T, int N>

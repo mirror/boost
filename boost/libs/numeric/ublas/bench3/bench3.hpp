@@ -17,6 +17,17 @@
 #ifndef BENCH3_H
 #define BENCH3_H
 
+#include <iostream>
+#include <string>
+#include <valarray>
+
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/vector_proxy.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/matrix_proxy.hpp>
+
+#include <boost/timer.hpp>
+
 namespace ublas = boost::numeric::ublas;
 
 void header (std::string text);

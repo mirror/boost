@@ -17,6 +17,16 @@
 #ifndef BENCH1_H
 #define BENCH1_H
 
+#include <iostream>
+#include <string>
+#include <valarray>
+
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+
+#include <boost/timer.hpp>
+
+
 namespace ublas = boost::numeric::ublas;
 
 void header (std::string text);

@@ -17,6 +17,16 @@
 #ifndef BENCH2_H
 #define BENCH2_H
 
+#include <iostream>
+#include <string>
+
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/vector_sparse.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/matrix_sparse.hpp>
+
+#include <boost/timer.hpp>
+
 namespace ublas = boost::numeric::ublas;
 
 void header (std::string text);
@@ -123,7 +133,7 @@ void initialize_matrix (M &m, ublas::column_major_tag) {
 template<class M>
 BOOST_UBLAS_INLINE
 void initialize_matrix (M &m) {
-    typedef BOOST_UBLAS_TYPENAME M::orientation_category orientation_category;
+    typedef typename M::orientation_category orientation_category;
     initialize_matrix (m, orientation_category ());
 }
 
@@ -203,11 +213,11 @@ struct fast_tag {};
 // #define USE_STD_MAP
 // #define USE_STD_VALARRAY
 
-#define USE_SPARSE_VECTOR
+#define USE_MAPPED_VECTOR
 #define USE_COMPRESSED_VECTOR
 #define USE_COORDINATE_VECTOR
 
-#define USE_SPARSE_MATRIX
+#define USE_MAPPED_MATRIX
 // #define USE_SPARSE_VECTOR_OF_SPARSE_VECTOR
 #define USE_COMPRESSED_MATRIX
 #define USE_COORDINATE_MATRIX
