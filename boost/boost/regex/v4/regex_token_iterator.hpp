@@ -62,13 +62,14 @@ public:
 
    bool init(BidirectionalIterator first)
    {
+      N = 0;
       if(regex_search(first, end, what, *pre, flags) == true)
       {
          N = 0;
          result = ((subs[N] == -1) ? value_type(what.prefix().str()) : value_type(what[(int)subs[N]].str()));
          return true;
       }
-      else if((N == -1) && (first != end))
+      else if((subs[N] == -1) && (first != end))
       {
          result = value_type(first, end);
          return true;
