@@ -112,15 +112,15 @@ public:
         std::cout << "Z(" << this << ")::~Z()\n";
     }
 
-	boost::shared_ptr<Z> shared_this()
-	{
-		return boost::shared_from_this(this);
-	}
+    boost::shared_ptr<Z> shared_this()
+    {
+        return boost::shared_from_this(this);
+    }
 
-	boost::shared_ptr<Z const> shared_this() const
-	{
-		return boost::shared_from_this(this);
-	}
+    boost::shared_ptr<Z const> shared_this() const
+    {
+        return boost::shared_from_this(this);
+    }
 
 private:
 
@@ -342,23 +342,23 @@ int test_main(int, char * [])
         {
             // test intrusive counting
 
-			boost::shared_ptr<void> pv(new Z);
+            boost::shared_ptr<void> pv(new Z);
             boost::shared_ptr<Z> pz = boost::shared_static_cast<Z>(pv);
             BOOST_TEST(pz.use_count() == pz->use_count());
 
-			// test shared_from_this
+            // test shared_from_this
 
-			boost::shared_ptr<Z> pz2 = pz->shared_this();
+            boost::shared_ptr<Z> pz2 = pz->shared_this();
 
-			Z const & z = *pz2;
+            Z const & z = *pz2;
 
-			boost::shared_ptr<Z const> pz3 = z.shared_this();
+            boost::shared_ptr<Z const> pz3 = z.shared_this();
 
-			BOOST_TEST(pz.use_count() == pz->use_count());
-			BOOST_TEST(pz2.use_count() == pz2->use_count());
-			BOOST_TEST(pz3.use_count() == pz3->use_count());
-			BOOST_TEST(pz.use_count() == pz2.use_count());
-			BOOST_TEST(pz.use_count() == pz3.use_count());
+            BOOST_TEST(pz.use_count() == pz->use_count());
+            BOOST_TEST(pz2.use_count() == pz2->use_count());
+            BOOST_TEST(pz3.use_count() == pz3->use_count());
+            BOOST_TEST(pz.use_count() == pz2.use_count());
+            BOOST_TEST(pz.use_count() == pz3.use_count());
         }
     }
 
