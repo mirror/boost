@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<title>Smart pointer programming techniques</title>
+		<title>Smart Pointer Programming Techniques</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	</head>
 	<body text="#000000" bgColor="#ffffff">
 		<h1><IMG height="86" alt="c++boost.gif (8819 bytes)" src="../../c++boost.gif" width="277" align="middle">Smart 
-			pointer programming techniques</h1>
+			Pointer Programming Techniques</h1>
 		<p><A href="#incomplete">Using incomplete classes for implementation hiding</A><br>
 			<A href="#pimpl">The "Pimpl" idiom</A><br>
 			<A href="#abstract">Using abstract classes for implementation hiding</A><br>
@@ -615,7 +615,10 @@ public:
 		<p>Note that <code>shared_lock</code> is not templated on the mutex type, thanks to <code>
 				shared_ptr&lt;void&gt;</code>'s ability to hide type information.</p>
 		<h2><A name="wrapper">Using <code>shared_ptr</code> to wrap member function calls</A></h2>
-		<p>[http://www.research.att.com/~bs/wrapper.pdf]</p>
+		<p><code>shared_ptr</code> implements the ownership semantics required from the <code>Wrap</code>/<code>CallProxy</code>
+			scheme described in Bjarne Stroustrup's article "Wrapping C++ Member Function 
+			Calls" (available online at <A href="http://www.research.att.com/~bs/wrapper.pdf">http://www.research.att.com/~bs/wrapper.pdf</A>). 
+			An implementation is given below:</p>
 		<pre>template&lt;class T&gt; class pointer
 {
 private:
@@ -631,7 +634,7 @@ public:
     shared_ptr&lt;T&gt; operator-&gt;() const
     {
         p_-&gt;prefix();
-        return shared_ptr&lt;T&gt;(p_, mem_fn(&amp;T::suffix));
+        return shared_ptr&lt;T&gt;(p_, <A href="../bind/mem_fn.html" >mem_fn</A>(&amp;T::suffix));
     }
 };
 

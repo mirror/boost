@@ -16,7 +16,8 @@
 			<A href="#Handle/Body">Handle/Body Idiom</A><br>
 			<A href="#ThreadSafety">Thread Safety</A><br>
 			<A href="#FAQ">Frequently Asked Questions</A><br>
-			<A href="smarttests.htm">Smart Pointer Timings</A></p>
+			<A href="smarttests.htm">Smart Pointer Timings</A><br>
+			<A href="sp_techniques.html">Programming Techniques</A></p>
 		<h2><a name="Introduction">Introduction</a></h2>
 		<p>The <b>shared_ptr</b> class template stores a pointer to a dynamically allocated 
 			object, typically with a C++ <EM>new-expression</EM> . The object pointed to is 
@@ -390,8 +391,8 @@ q = p;
 				many of the implicit conversion pitfalls.</P>
 		</blockquote>
 		<P><EM>[The conversion to bool is not merely syntactic sugar. It allows <STRONG>shared_ptr</STRONG>s 
-				to be declared in conditions when using <A href="#dynamic_pointer_cast">dynamic_pointer_cast</A> or
-				<A href="weak_ptr.htm#lock">weak_ptr::lock</A>.]</EM></P>
+				to be declared in conditions when using <A href="#dynamic_pointer_cast">dynamic_pointer_cast</A>
+				or <A href="weak_ptr.htm#lock">weak_ptr::lock</A>.]</EM></P>
 		<h3><a name="swap">swap</a></h3>
 		<pre>void swap(shared_ptr &amp; b); // never throws</pre>
 		<blockquote>
