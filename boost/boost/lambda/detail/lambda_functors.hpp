@@ -152,48 +152,23 @@ public:
       typename inherited::template sig<tuple<A&> >::type
     >(a, cnull_type(), cnull_type(), cnull_type());
   }
-  template<class A>
-  typename inherited::template sig<tuple<const A&> >::type
-  operator()(const A& a) const { 
+
+  template<class A, class B>
+  typename inherited::template sig<tuple<A&, B&> >::type
+  operator()(A& a, B& b) const { 
     return inherited::template call<
-      typename inherited::template sig<tuple<const A&> >::type
-    >(a, cnull_type(), cnull_type(), cnull_type());
+      typename inherited::template sig<tuple<A&, B&> >::type
+    >(a, b, cnull_type(), cnull_type()); 
   }
 
-#define BOOST_LAMBDA_FCALLOPER2(TA, TB)				\
-  template<class A, class B>					\
-  typename inherited::template sig<tuple<TA&, TB&> >::type	\
-  operator()(TA& a, TB& b) const { 				\
-    return inherited::template call<				\
-      typename inherited::template sig<tuple<TA&, TB&> >::type	\
-    >(a, b, cnull_type(), cnull_type()); 			\
+  template<class A, class B, class C>
+  typename inherited::template sig<tuple<A&, B&, C&> >::type
+  operator()(A& a, B& b, C& c) const
+  { 
+    return inherited::template call<
+      typename inherited::template sig<tuple<A&, B&, C&> >::type
+    >(a, b, c, cnull_type()); 
   }
-
-BOOST_LAMBDA_FCALLOPER2(A, B)
-BOOST_LAMBDA_FCALLOPER2(A, const B)
-BOOST_LAMBDA_FCALLOPER2(const A, B)
-BOOST_LAMBDA_FCALLOPER2(const A, const B)
-
-#define BOOST_LAMBDA_FCALLOPER3(TA, TB, TC)				\
-  template<class A, class B, class C>					\
-  typename inherited::template sig<tuple<TA&, TB&, TC&> >::type		\
-  operator()(TA& a, TB& b, TC& c) const					\
-  {									\
-    return inherited::template call<					\
-      typename inherited::template sig<tuple<TA&, TB&, TC&> >::type	\
-    >(a, b, c, cnull_type()); 						\
-  }
-
-BOOST_LAMBDA_FCALLOPER3(A,B,C)
-BOOST_LAMBDA_FCALLOPER3(A, B, const C)
-BOOST_LAMBDA_FCALLOPER3(A, const B, C)
-BOOST_LAMBDA_FCALLOPER3(A, const B, const C)
-BOOST_LAMBDA_FCALLOPER3(const A, B, C)
-BOOST_LAMBDA_FCALLOPER3(const A, B, const C)
-BOOST_LAMBDA_FCALLOPER3(const A, const B, C)
-BOOST_LAMBDA_FCALLOPER3(const A, const B, const C)
-
-#undef BOOST_LAMBDA_FCALLOPER3
 
   // for internal calls with env
   template<CALL_TEMPLATE_ARGS>
