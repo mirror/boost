@@ -115,7 +115,7 @@ template<>
 struct size_traits< aux::vector_tag< 11> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,11 >
+        : integral_c< long,11 >
     {
     };
 };
@@ -249,7 +249,7 @@ template<>
 struct size_traits< aux::vector_tag< 12> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,12 >
+        : integral_c< long,12 >
     {
     };
 };
@@ -384,7 +384,7 @@ template<>
 struct size_traits< aux::vector_tag< 13> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,13 >
+        : integral_c< long,13 >
     {
     };
 };
@@ -522,7 +522,7 @@ template<>
 struct size_traits< aux::vector_tag< 14> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,14 >
+        : integral_c< long,14 >
     {
     };
 };
@@ -661,7 +661,7 @@ template<>
 struct size_traits< aux::vector_tag< 15> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,15 >
+        : integral_c< long,15 >
     {
     };
 };
@@ -804,7 +804,7 @@ template<>
 struct size_traits< aux::vector_tag< 16> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,16 >
+        : integral_c< long,16 >
     {
     };
 };
@@ -948,7 +948,7 @@ template<>
 struct size_traits< aux::vector_tag< 17> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,17 >
+        : integral_c< long,17 >
     {
     };
 };
@@ -1095,7 +1095,7 @@ template<>
 struct size_traits< aux::vector_tag< 18> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,18 >
+        : integral_c< long,18 >
     {
     };
 };
@@ -1243,7 +1243,7 @@ template<>
 struct size_traits< aux::vector_tag< 19> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,19 >
+        : integral_c< long,19 >
     {
     };
 };
@@ -1394,7 +1394,7 @@ template<>
 struct size_traits< aux::vector_tag< 20> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,20 >
+        : integral_c< long,20 >
     {
     };
 };

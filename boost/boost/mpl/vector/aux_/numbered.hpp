@@ -167,7 +167,7 @@ template<>
 struct size_traits< aux::vector_tag<i> >
 {
     template< typename Vector > struct algorithm
-        : integral_c<int,i>
+        : integral_c<long,i>
     {
     };
 };

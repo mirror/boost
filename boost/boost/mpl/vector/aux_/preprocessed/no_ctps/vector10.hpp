@@ -28,7 +28,7 @@ template<>
 struct size_traits< aux::vector_tag< 0> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,0 >
+        : integral_c< long,0 >
     {
     };
 };
@@ -135,7 +135,7 @@ template<>
 struct size_traits< aux::vector_tag< 1> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,1 >
+        : integral_c< long,1 >
     {
     };
 };
@@ -247,7 +247,7 @@ template<>
 struct size_traits< aux::vector_tag< 2> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,2 >
+        : integral_c< long,2 >
     {
     };
 };
@@ -360,7 +360,7 @@ template<>
 struct size_traits< aux::vector_tag< 3> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,3 >
+        : integral_c< long,3 >
     {
     };
 };
@@ -476,7 +476,7 @@ template<>
 struct size_traits< aux::vector_tag< 4> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,4 >
+        : integral_c< long,4 >
     {
     };
 };
@@ -593,7 +593,7 @@ template<>
 struct size_traits< aux::vector_tag< 5> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,5 >
+        : integral_c< long,5 >
     {
     };
 };
@@ -714,7 +714,7 @@ template<>
 struct size_traits< aux::vector_tag< 6> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,6 >
+        : integral_c< long,6 >
     {
     };
 };
@@ -836,7 +836,7 @@ template<>
 struct size_traits< aux::vector_tag< 7> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,7 >
+        : integral_c< long,7 >
     {
     };
 };
@@ -961,7 +961,7 @@ template<>
 struct size_traits< aux::vector_tag< 8> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,8 >
+        : integral_c< long,8 >
     {
     };
 };
@@ -1087,7 +1087,7 @@ template<>
 struct size_traits< aux::vector_tag< 9> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,9 >
+        : integral_c< long,9 >
     {
     };
 };
@@ -1216,7 +1216,7 @@ template<>
 struct size_traits< aux::vector_tag< 10> >
 {
     template< typename Vector > struct algorithm
-        : integral_c< int,10 >
+        : integral_c< long,10 >
     {
     };
 };
