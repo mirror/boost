@@ -30,7 +30,7 @@ namespace date_time {
   /*!Implements the rules associated with the iso 8601 week number.
     Basically the rule is that Week 1 of the year is the week that contains 
     January 4th or the week that contains the first Thursday in January.
-    Reference for this algorithm is the Calendar FAQ by Claus Todering, April 2000.
+    Reference for this algorithm is the Calendar FAQ by Claus Tondering, April 2000.
   */
   template<typename ymd_type_, typename date_int_type_>
   BOOST_DATE_TIME_INLINE
@@ -50,8 +50,8 @@ namespace date_time {
       if((day==6) ||(day == 5 && is_leap_year(ymd.year))) {
         return week; //under these circumstances week == 53.
       }
-      else if (day != 5) {
-        return 1; //monday - thursday is in week 1 of next year
+      else {
+        return 1; //monday - wednesday is in week 1 of next year
       }
     }
     //if the week is not in current year recalculate using the previous year as the beginning year
@@ -117,8 +117,8 @@ namespace date_time {
     date_int_type d = (4*c + 3)/1461;
     date_int_type e = c - (1461*d)/4;
     date_int_type m = (5*e + 2)/153;
-    unsigned short day = e - ((153*m + 2)/5) + 1;
-    unsigned short month = m + 3 - 12 * (m/10);
+    unsigned short day = static_cast<unsigned short>(e - ((153*m + 2)/5) + 1);
+    unsigned short month = static_cast<unsigned short>(m + 3 - 12 * (m/10));
     date_int_type year = 100*b + d - 4800 + (m/10);
     //std::cout << year << "-" << month << "-" << day << "\n";
 
