@@ -367,9 +367,11 @@
 //  Intel on Windows --------------------------------------------------------//
 
 # elif defined __ICL
-#   if __ICL <= 500
+#   if __ICL <= 600
       // Intel C++ 5.0.1 uses EDG 2.45, but fails to activate Koenig lookup
       // in the frontend even in "strict" mode.  (reported by Kirk Klobe)
+      // Intel C++ 6.0 (currently in Beta test) doesn't have any front-end
+      // changes at all.  (reported by Kirk Klobe)
 #     ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #       define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #     endif
