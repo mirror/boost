@@ -15,6 +15,9 @@
 #include "boost/type_traits/is_arithmetic.hpp"
 #include "boost/type_traits/is_reference.hpp"
 #include "boost/type_traits/is_convertible.hpp"
+#ifdef __GNUC__
+#include <boost/type_traits/is_function.hpp>
+#endif
 #include "boost/type_traits/config.hpp"
 
 #ifdef BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION
@@ -68,9 +71,19 @@ template <typename T> struct is_enum_impl
        // We MUST do this on conforming compilers in order to
        // correctly deduce that noncopyable types are not enums (dwa
        // 2002/04/15)...
+       // strictly speaking is_convertible should work with non-copyable
+       // types rendering this fix unnecessary - unfortunately this is not
+       // the case for all compilers yet (JM 2003/04/16)...
          , ::boost::is_class<T>::value
       >::value));
-#else 
+#elif defined __GNUC__ 
+   BOOST_STATIC_CONSTANT(bool, selector =
+      (::boost::type_traits::ice_or<
+           ::boost::is_arithmetic<T>::value
+         , ::boost::is_reference<T>::value
+         , ::boost::is_function<T>::value
+      >::value));
+#else
    BOOST_STATIC_CONSTANT(bool, selector =
       (::boost::type_traits::ice_or<
            ::boost::is_arithmetic<T>::value
@@ -91,10 +104,6 @@ template <typename T> struct is_enum_impl
     BOOST_STATIC_CONSTANT(bool, value = helper::value);
 };
 
-// Specializations suppress some nasty warnings with GCC
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_enum,float,false)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_enum,double,false)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_enum,long double,false)
 // these help on compilers with no partial specialization support:
 BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_enum,void,false)
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
