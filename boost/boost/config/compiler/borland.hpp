@@ -34,6 +34,12 @@
 #  define BOOST_NO_USING_TEMPLATE
 #endif
 
+//
+// check for exception handling support:
+#ifndef _CPPUNWIND
+#  define BOOST_NO_EXCEPTIONS
+#endif
+
 #define BOOST_COMPILER "Borland C++ version " BOOST_STRINGIZE(__BORLANDC__)
 
 //

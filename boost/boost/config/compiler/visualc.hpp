@@ -58,6 +58,13 @@
 #  define BOOST_NO_INTRINSIC_WCHAR_T
 #endif
 
+//
+// check for exception handling support:
+#ifndef _CPPUNWIND
+#  define BOOST_NO_EXCEPTIONS
+#endif
+
+
 #define BOOST_COMPILER "Microsoft Visual C++ version " BOOST_STRINGIZE(_MSC_VER)
 
 //
