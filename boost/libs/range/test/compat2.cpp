@@ -8,7 +8,6 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
-#include <boost/range.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/config.hpp>
