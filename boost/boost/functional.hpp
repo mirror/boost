@@ -1,6 +1,6 @@
 // ------------------------------------------------------------------------------
 // Boost functional.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
+// See http://www.boost.org/libs/functional for documentation.
 // ------------------------------------------------------------------------------
 // Copyright (c) 2000
 // Cadenza New Zealand Ltd

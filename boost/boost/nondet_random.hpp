@@ -16,6 +16,9 @@
  *  2000-02-18  Portability fixes (thanks to Beman Dawes)
  */
 
+//  See http://www.boost.org/libs/random for documentation.
+
+
 #ifndef BOOST_NONDET_RANDOM_HPP
 #define BOOST_NONDET_RANDOM_HPP
 

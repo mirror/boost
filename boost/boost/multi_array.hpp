@@ -10,6 +10,8 @@
 // and with no claim as to its suitability for any purpose.
 //
 
+//  See http://www.boost.org/libs/multi_array for documentation.
+
 #ifndef BOOST_MULTI_ARRAY_RG071801_HPP
 #define BOOST_MULTI_ARRAY_RG071801_HPP
 

@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //  Boost general library 'format'   ---------------------------
-//  See http://www.boost.org for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/format for documentation.
 
 //  (C) Samuel Krempp 2001
 //                  krempp@crans.ens-cachan.fr

@@ -10,7 +10,7 @@
 #
 # /* Revised by Paul Mensonides (2002) */
 #
-# /* See http://www.boost.org for most recent version. */
+# /* See http://www.boost.org/libs/preprocessor for documentation. */
 #
 # ifndef BOOST_PREPROCESSOR_HPP
 # define BOOST_PREPROCESSOR_HPP

@@ -1,6 +1,6 @@
 //  boost lexical_cast.hpp header  -------------------------------------------//
 
-//  See http://www.boost.org for most recent version including documentation.
+//  See http://www.boost.org/libs/conversion for documentation.
 
 #ifndef BOOST_LEXICAL_CAST_INCLUDED
 #define BOOST_LEXICAL_CAST_INCLUDED

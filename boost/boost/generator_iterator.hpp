@@ -9,6 +9,8 @@
 // 15 Nov 2001   Jens Maurer
 //      created.
 
+//  See http://www.boost.org/libs/utility/iterator_adaptors.htm for documentation.
+
 #ifndef BOOST_ITERATOR_ADAPTOR_GENERATOR_ITERATOR_HPP
 #define BOOST_ITERATOR_ADAPTOR_GENERATOR_ITERATOR_HPP
 

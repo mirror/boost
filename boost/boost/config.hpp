@@ -5,7 +5,7 @@
 //  in all copies. This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 
-//  See http://www.boost.org for most recent version.
+//  See http://www.boost.org/libs/config for most recent version.
 
 //  Boost config.hpp policy and rationale documentation has been moved to
 //  http://www.boost.org/libs/config

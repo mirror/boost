@@ -10,6 +10,8 @@
 //   17 July  2001: Added const to some member functions. (Jeremy Siek) 
 //   05 May   2001: Removed static dummy_cons object. (Jeremy Siek)
 
+// See http://www.boost.org/libs/concept_check for documentation.
+
 #ifndef BOOST_CONCEPT_ARCHETYPES_HPP
 #define BOOST_CONCEPT_ARCHETYPES_HPP
 

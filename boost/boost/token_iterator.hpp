@@ -7,7 +7,7 @@
 // implied warranty, and with no claim as to its suitability for any
 // purpose.
 
-// See http://www.boost.org for updates, documentation, and revision history.
+// See http://www.boost.org/libs/tokenizer for documentation.
 
 #ifndef BOOST_TOKENIZER_POLICY_JRB051801_HPP_
 #define BOOST_TOKENIZER_POLICY_JRB051801_HPP_

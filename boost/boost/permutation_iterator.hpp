@@ -5,6 +5,8 @@
 // to its suitability for any purpose.
 //
 
+//  See http://www.boost.org/libs/utility/permutation_iterator.htm for documentation.
+
 #ifndef boost_permutation_iterator_hpp
 #define boost_permutation_iterator_hpp
 

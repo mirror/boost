@@ -5,7 +5,7 @@
 //  in all copies.  This software is provided "as is" without express or
 //  implied warranty, and with no claim as to its suitability for any purpose. 
 
-//  See http://www.boost.org for updates, documentation, and revision history. 
+//  See http://www.boost.org/libs/crc for documentation. 
 
 #ifndef BOOST_CRC_HPP
 #define BOOST_CRC_HPP

@@ -14,7 +14,7 @@
  */
  
  /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   LOCATION:    see http://www.boost.org/libs/regex for most recent version.
   *   FILE         cregex.cpp
   *   VERSION      see <boost/version.hpp>
   *   DESCRIPTION: Declares POSIX API functions

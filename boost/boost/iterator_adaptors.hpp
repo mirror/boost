@@ -9,7 +9,9 @@
 // copyright notice appears in all copies. This software is provided
 // "as is" without express or implied warranty, and with no claim as
 // to its suitability for any purpose.
-//
+
+//  See http://www.boost.org/libs/utility/iterator_adaptors.htm for documentation.
+
 // Revision History:
 
 // 01 Feb 2002   Jeremy Siek

@@ -4,6 +4,8 @@
 // "as is" without express or implied warranty, and with no claim as
 // to its suitability for any purpose.
 
+//  See http://www.boost.org/libs/property_map for documentation.
+
 #ifndef BOOST_PROPERTY_MAP_ITERATOR_HPP
 #define BOOST_PROPERTY_MAP_ITERATOR_HPP
 

@@ -11,7 +11,7 @@
 // This software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
  
-// For more information, see http://www.boost.org
+// For more information, see http://www.boost.org/libs/function
  
 // William Kempf, Jesse Jones and Karl Nelson were all very helpful in the
 // design of this library.

@@ -6,6 +6,8 @@
 // implied warranty, and with no claim as to its suitability for any
 // purpose.
 
+// See http://www.boost.org/libs/dynamic_bitset for documentation.
+
 #ifndef BOOST_DYNAMIC_BITSET_FWD_HPP
 #define BOOST_DYNAMIC_BITSET_FWD_HPP
 

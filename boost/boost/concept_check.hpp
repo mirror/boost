@@ -10,6 +10,9 @@
 //   02 April 2001: Removed limits header altogether. (Jeremy Siek)
 //   01 April 2001: Modified to use new <boost/limits.hpp> header. (JMaddock)
 //
+
+// See http://www.boost.org/libs/concept_check for documentation.
+
 #ifndef BOOST_CONCEPT_CHECKS_HPP
 #define BOOST_CONCEPT_CHECKS_HPP
 

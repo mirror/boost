@@ -15,6 +15,9 @@
  * Idea by Beman Dawes, Ed Brey, Steve Cleary, and Nathan Myers
  */
 
+//  See http://www.boost.org/libs/integer for documentation.
+
+
 #ifndef BOOST_INTEGER_TRAITS_HPP
 #define BOOST_INTEGER_TRAITS_HPP
 

@@ -10,7 +10,7 @@
  * software for any purpose. It is provided "as is" without express or
  * implied warranty.
  *
- * See http://www.boost.org for most recent version including documentation.
+ * See http://www.boost.org/libs/random for documentation.
  *
  * $Id$
  *

@@ -14,7 +14,7 @@
  */
 
  /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   LOCATION:    see http://www.boost.org/libs/regex for documentation.
   *   FILE         regex.cpp
   *   VERSION      see <boost/version.hpp>
   *   DESCRIPTION: Declares boost::reg_expression<> and associated

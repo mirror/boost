@@ -5,7 +5,7 @@
 //  in all copies. This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 
-//  See http://www.boost.org for most recent version including documentation.
+//  See http://www.boost.org/libs/timer for documentation.
 
 //  Revision History
 //   1 Dec 01  Add leading progress display strings (suggested by Toon Knapen)
