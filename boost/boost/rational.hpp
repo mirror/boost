@@ -467,7 +467,7 @@ namespace detail {
         resetter(std::istream& is) : is_(is), f_(is.flags()) {}
         ~resetter() { is_.flags(f_); }
         std::istream& is_;
-        std::ios_base::fmtflags f_;
+        std::istream::fmtflags f_;      // old GNU c++ lib has no ios_base
     };
 
 }
@@ -484,7 +484,7 @@ std::istream& operator>> (std::istream& is, rational<IntType>& r)
     c = is.get();
 
     if (c != '/')
-        is.clear(std::ios_base::badbit);
+        is.clear(std::istream::badbit);  // old GNU c++ lib has no ios_base
 
     is >> std::noskipws >> d;
 
