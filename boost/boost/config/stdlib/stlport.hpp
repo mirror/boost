@@ -87,13 +87,34 @@
 // BOOST_NO_STDC_NAMESPACE
 //
 #if !defined(__BORLANDC__)
-#  if defined(__STL_IMPORT_VENDOR_CSTD) || defined(__STL_USE_OWN_NAMESPACE) || defined(_STLP_IMPORT_VENDOR_CSTD) || defined(_STLP_USE_OWN_NAMESPACE)
+//
+// If STLport is using it's own namespace, and the real names are in
+// the global namespace, then we duplicate STLport's using declarations
+// (by defining BOOST_NO_STDC_NAMESPACE), we do this because STLport doesn't
+// necessarily import all the names we need into namespace std::
+// 
+#  if (defined(__STL_IMPORT_VENDOR_CSTD) \
+         || defined(__STL_USE_OWN_NAMESPACE) \
+         || defined(_STLP_IMPORT_VENDOR_CSTD) \
+         || defined(_STLP_USE_OWN_NAMESPACE)) \
+      && (defined(__STL_VENDOR_GLOBAL_CSTD) || defined (_STLP_VENDOR_GLOBAL_CSTD))
 #     define BOOST_NO_STDC_NAMESPACE
 #  endif
 #elif __BORLANDC__ < 0x560
 // STLport doesn't import std::abs correctly:
 #include <stdlib.h>
 namespace std { using ::abs; }
+// and strcmp/strcpy don't get imported either ('cos they are macros)
+#include <string.h>
+#ifdef strcpy
+#  undef strcpy
+#endif
+#ifdef strcmp
+#  undef strcmp
+#endif
+#ifdef _STLP_VENDOR_CSTD
+namespace std{ using _STLP_VENDOR_CSTD::strcmp; using _STLP_VENDOR_CSTD::strcpy; }
+#endif
 #endif
 
 //
