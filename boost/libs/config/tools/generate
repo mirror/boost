@@ -1,4 +1,10 @@
 #!/bin/sh
+#  (C) Copyright John Maddock 2001 - 2003. 
+#  Use, modification and distribution are subject to the 
+#  Boost Software License, Version 1.0. (See accompanying file 
+#  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org/libs/config for the most recent version.
 
 #get date:
 date_string=`date`
@@ -25,9 +31,7 @@ cat > ../test/Jamfile << EOF
 #
 subproject libs/config/test ;
 # bring in the rules for testing
-SEARCH on testing.jam = \$(BOOST_BUILD_PATH) ;
-include testing.jam ;
-include \$(BOOST_ROOT)/libs/config/test/options.jam ;
+import testing ./options ;
 
 run config_info.cpp <template>config_options ;
 run config_test.cpp <lib>../../test/build/boost_test_exec_monitor <template>config_options ;
@@ -38,10 +42,11 @@ EOF
 
 # init main config test file:
 cat > ../test/config_test.cpp << EOF
-//  (C) Copyright Boost.org 1999. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org/libs/config for the most recent version.
 
 // Test file for config setup
 // This file should compile, if it does not then
@@ -84,10 +89,11 @@ for file in ../test/boost_no_*.cxx; do
       echo "generating file ../test/$basename""_pass.cpp"
    cat > "../test/$basename""_pass.cpp" << EOF
 
-//  (C) Copyright Boost.org 1999. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org/libs/config for the most recent version.
 
 // Test file for macro $macroname
 // This file should compile, if it does not then
@@ -129,10 +135,11 @@ EOF
       echo "generating file ../test/$basename""_fail.cpp"
    cat > "../test/$basename""_fail.cpp" << EOF
 
-//  (C) Copyright Boost.org 1999. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org/libs/config for the most recent version.
 
 // Test file for macro $macroname
 // This file should not compile, if it does then
@@ -209,10 +216,11 @@ for file in ../test/boost_has_*.cxx; do
       echo "generating file ../test/$basename""_pass.cpp"
    cat > "../test/$basename""_pass.cpp" << EOF
 
-//  (C) Copyright Boost.org 1999. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org/libs/config for the most recent version.
 
 // Test file for macro $macroname
 // This file should compile, if it does not then
@@ -253,10 +261,11 @@ EOF
       echo generating file "../test/$basename""_fail.cpp"
    cat > "../test/$basename""_fail.cpp" << EOF
 
-//  (C) Copyright Boost.org 1999. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org/libs/config for the most recent version.
 
 // Test file for macro $macroname
 // This file should not compile, if it does then
@@ -342,6 +351,7 @@ EOF
 echo "updating configure script..."
 autoconf ../tools/configure.in > ../configure
 echo
+
 
 
 

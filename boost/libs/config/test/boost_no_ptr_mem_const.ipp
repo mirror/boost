@@ -1,19 +1,13 @@
-// Copyright (c) 2000
-// Cadenza New Zealand Ltd
+//  Copyright (c) 2000
+//  Cadenza New Zealand Ltd
 //
-// Permission to use, copy, modify, distribute and sell this software
-// and its documentation for any purpose is hereby granted without
-// fee, provided that the above copyright notice appears in all copies
-// and that both the copyright notice and this permission notice
-// appear in supporting documentation.  Cadenza New Zealand Ltd makes
-// no representations about the suitability of this software for any
-// purpose.  It is provided "as is" without express or implied
-// warranty.
+//  (C) Copyright John Maddock 2001. 
+//
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-//  (C) Copyright John Maddock 2001. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  See http://www.boost.org/libs/config for the most recent version.
 
 //  MACRO:         BOOST_NO_POINTER_TO_MEMBER_CONST
 //  TITLE:         pointers to const member functions
@@ -86,6 +80,7 @@ int test()
 }
 
 }
+
 
 
 
