@@ -18,20 +18,20 @@
 // global to all files
 
 /** \namespace boost::numeric::ublas
-	\brief contains all important classes and functions of uBLAS
+        \brief contains all important classes and functions of uBLAS
 
-	all ublas definitions ...
-	\todo expand this section
+        all ublas definitions ...
+        \todo expand this section
  */
 
 /** \defgroup blas1 Level 1 BLAS 
-	\brief level 1 basic linear algebra subroutines
+        \brief level 1 basic linear algebra subroutines
 */
 
 /** \defgroup blas2 Level 2 BLAS
-	\brief level 2 basic linear algebra subroutines 
+        \brief level 2 basic linear algebra subroutines 
 */
 
 /** \defgroup blas3 Level 3 BLAS
-	\brief level 3 basic linear algebra subroutines 
+        \brief level 3 basic linear algebra subroutines 
 */

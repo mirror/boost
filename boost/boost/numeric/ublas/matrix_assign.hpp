@@ -934,8 +934,8 @@ namespace boost { namespace numeric { namespace ublas {
     template<class VT, class M, class E>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-	void matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME M::reference, VT>, full, M &m, const matrix_expression<E> &e, sparse_tag, row_major_tag) {
-    	BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
+    void matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME M::reference, VT>, full, M &m, const matrix_expression<E> &e, sparse_tag, row_major_tag) {
+        BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef typename M::value_type value_type;
 #if BOOST_UBLAS_TYPE_CHECK
@@ -965,8 +965,8 @@ namespace boost { namespace numeric { namespace ublas {
     template<class VT, class M, class E>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
-	void matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME M::reference, VT>, full, M &m, const matrix_expression<E> &e, sparse_tag, column_major_tag) {
-    	BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
+    void matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME M::reference, VT>, full, M &m, const matrix_expression<E> &e, sparse_tag, column_major_tag) {
+        BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef typename M::value_type value_type;
 #if BOOST_UBLAS_TYPE_CHECK

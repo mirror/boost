@@ -1408,7 +1408,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type storage_size (size_type size1, size_type size2) {
-        	return size1 * size2;
+            return size1 * size2;
         }
 
         // Indexing
@@ -1574,7 +1574,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type storage_size (size_type size1, size_type size2) {
-        	return size1 * size2;
+            return size1 * size2;
         }
 
         // Indexing

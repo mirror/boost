@@ -48,9 +48,9 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
   /** \brief Base class of all proxy classes that contain
-	  a reference to an immutable object.
+          a reference to an immutable object.
    
-	  \param C the type of the container referred to
+          \param C the type of the container referred to
   */
     template<class C>
     class container_const_reference {

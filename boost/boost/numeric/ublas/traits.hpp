@@ -36,9 +36,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T &const_reference;
         typedef T &reference;
 
-		/*
-		 * Don't define unknown properties
-		 * 
+        /*
+         * Don't define unknown properties
+         * 
         typedef T real_type;
         typedef T precision_type;
 
@@ -86,9 +86,9 @@ namespace boost { namespace numeric { namespace ublas {
         }
         */
         // Dummy definition for compilers that error if undefined even though it is never used
-#ifdef	BOOST_NO_SFINAE
-		typedef void real_type;
-		typedef void precision_type;
+#ifdef BOOST_NO_SFINAE
+        typedef void real_type;
+        typedef void precision_type;
 #endif
     };
 

@@ -99,7 +99,7 @@ test-suite uBLAS
         : # args
         : # input files
         : # requirements
-	        <define>BOOST_UBLAS_USE_INTERVAL
+            <define>BOOST_UBLAS_USE_INTERVAL
           # borland warns so often that successful compilation is prevented.
             <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
             <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"

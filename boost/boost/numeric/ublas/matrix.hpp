@@ -3379,7 +3379,7 @@ namespace boost { namespace numeric { namespace ublas {
                 const size_type size2_min = (std::min) (size2, size2_);
                 for (size_type i = 0; i != size1_min; ++i) {    // indexing copy over major
                     for (size_type j = 0; j != size1_min; ++j) {
-                    	temporary.data_[i][j] = data_[i][j];
+                        temporary.data_[i][j] = data_[i][j];
                     }
                 }
                 assign_temporary (temporary);

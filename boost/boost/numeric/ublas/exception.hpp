@@ -223,7 +223,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #else
      {
-	    explicit
+        explicit
         non_real (const char *s = 0)
             {}
         virtual void raise () {
