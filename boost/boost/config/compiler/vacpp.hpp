@@ -29,7 +29,7 @@
 #  define BOOST_HAS_THREADS
 #endif
 
-#define BOOST_COMPILER "IBM Visual Age" BOOST_STRINGIZE(__IBMCPP__)
+#define BOOST_COMPILER "IBM Visual Age version " BOOST_STRINGIZE(__IBMCPP__)
 
 //
 // versions check:
