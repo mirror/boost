@@ -27,8 +27,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Base class Matrix Expressions - see the Barton Nackman trick
     template<class E>
     class matrix_expression:
-        private nonassignable {
-        //FIXME        public expression_base<typename E::value_type> {
+        public ublas_expression<E> {
     public:
         BOOST_STATIC_CONSTANT (unsigned, complexity = 0);
         typedef E expression_type;

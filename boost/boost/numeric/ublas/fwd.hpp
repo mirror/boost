@@ -26,10 +26,10 @@ namespace boost { namespace numeric { namespace ublas {
     {
         class nonassignable {
         protected:
-            nonassignable(){}
-            ~nonassignable(){}
+            nonassignable () {}
+            ~nonassignable () {}
         private:  // emphasize the following members are private
-            const nonassignable& operator=( const nonassignable& );
+            const nonassignable& operator= (const nonassignable &);
         }; // nonassignable
     }
     typedef nonassignable_::nonassignable nonassignable;

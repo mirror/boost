@@ -27,20 +27,42 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
-    // Base class for linear algebra expression's numeric properties
-    template<class T>
-    class expression_base:
-        private nonassignable {
+    // Base class for uBLAS staticaly derived expressions - see the Barton Nackman trick
+    //  Provides numeric properties for linear algebra
+    template<class E>
+    class ublas_expression {
     public:
+        typedef E expression_type;
+        /* FIXME expression properties are undefined due to a template instantiation order problem
+        typedef typename E::type_category type_category;
+        typedef typename E::value_type value_type;
+        */
+        
+        // Directly implement nonassignable - simplifes debugging call trace!
+    protected:
+        ublas_expression () {}
+        ~ublas_expression () {}
+    private:
+        const ublas_expression& operator= (const ublas_expression &);
     };
 
 
     // Base class for Scalar Expressions - see the Barton Nackman trick
     template<class E>
     class scalar_expression:
-        public expression_base<E> {
+        public ublas_expression<E> {
     public:
+        typedef E expression_type;
         typedef scalar_tag type_category;
+
+        BOOST_UBLAS_INLINE
+        const expression_type &operator () () const {
+            return *static_cast<const expression_type *> (this);
+        }
+        BOOST_UBLAS_INLINE
+        expression_type &operator () () {
+            return *static_cast<expression_type *> (this);
+        }
     };
 
     template<class T>
@@ -110,8 +132,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Base class for Vector Expressions - see the Barton Nackman trick
     template<class E>
     class vector_expression:
-        private nonassignable {
-        //FIXME        public expression_base<typename E::value_type> {
+        public ublas_expression<E> {
     public:
         BOOST_STATIC_CONSTANT (unsigned, complexity = 0);
         typedef E expression_type;
