@@ -42,6 +42,12 @@ namespace std{
     #define chdir _chdir
 #endif
 
+#if defined(NDEBUG) && defined(__BORLANDC__)
+    #define STRCPY strcpy
+#else
+    #define STRCPY std::strcpy
+#endif
+
 namespace boost {
 namespace archive {
     char * tmpnam(char * buffer){
@@ -60,7 +66,7 @@ namespace archive {
         if(NULL == buffer)
             buffer = ibuffer;
 
-        std::strcpy(buffer, temp_dir);
+        STRCPY(buffer, temp_dir);
         std::strcat(buffer, temp_name);
         return buffer;
     }
