@@ -16,6 +16,7 @@ rule range-test ( name )
 {
     return [
         run $(name).cpp
+#        <include>$(VC71_ROOT)/atlmfc/include
         <lib>../../test/build/boost_unit_test_framework
         : : : <include>$(BOOST_ROOT)
         ] ;
@@ -32,6 +33,6 @@ test-suite range :
     [ range-test algorithm_example ]
     [ range-test reversible_range ]
     [ range-test const_ranges ]
-
+    [ range-test mfc ] 
     ;
 
