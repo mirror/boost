@@ -301,7 +301,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_reference operator [] (size_type i) const {
-                rn (*this) (i);
+            return (*this) (i);
         }
         BOOST_UBLAS_INLINE
         reference operator [] (size_type i) {
