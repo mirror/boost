@@ -54,6 +54,8 @@ struct find_if_pred
 
 } // namespace aux
 
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
+
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Predicate)
@@ -78,7 +80,9 @@ struct find_if
     BOOST_MPL_AUX_LAMBDA_SUPPORT(2,find_if,(Sequence,Predicate))
 };
 
-BOOST_MPL_AUX_VOID_SPEC(2,find_if)
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
+
+BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(2,find_if)
 
 } // namespace mpl
 } // namespace boost

@@ -52,6 +52,9 @@ struct select_max
 
 } // namespace aux 
 
+
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
+
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
     , typename Predicate = less<_,_>
@@ -69,7 +72,9 @@ struct max_element
         >::type type;
 };
 
-BOOST_MPL_AUX_VOID_SPEC(1, max_element)
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
+
+BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(1, max_element)
 
 } // namespace mpl
 } // namespace boost

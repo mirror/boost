@@ -44,6 +44,8 @@ struct replace_if_op
 
 } // namespace aux
 
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
+
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Predicate)
@@ -61,7 +63,9 @@ struct replace_if
         >::type type;
 };
 
-BOOST_MPL_AUX_VOID_SPEC(3, replace_if)
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
+
+BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(3, replace_if)
 
 } // namespace mpl
 } // namespace boost

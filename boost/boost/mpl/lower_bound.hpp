@@ -51,6 +51,8 @@ namespace mpl {
 
 #if defined(BOOST_MPL_CFG_STRIPPED_DOWN_LOWER_BOUND_IMPL)
 
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
+
 // agurt 23/oct/02: has a wrong complexity etc., but at least it works
 // feel free to contribute a better implementation!
 template<
@@ -63,6 +65,8 @@ struct lower_bound
     : find_if< Sequence, bind1< not_<>, bind2<pred_,_,T> > >
 {
 };
+
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
 
 #else
 
@@ -121,6 +125,8 @@ struct lower_bound_step_impl
 
 } // namespace aux
 
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
+
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T)
@@ -138,9 +144,11 @@ struct lower_bound
         >::type type;
 };
 
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
+
 #endif // BOOST_MPL_CFG_STRIPPED_DOWN_LOWER_BOUND_IMPL
 
-BOOST_MPL_AUX_VOID_SPEC(2, lower_bound)
+BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(2, lower_bound)
 
 } // namespace mpl
 } // namespace boost

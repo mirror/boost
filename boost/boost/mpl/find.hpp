@@ -25,6 +25,8 @@
 namespace boost {
 namespace mpl {
 
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
+
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T)
@@ -35,7 +37,9 @@ struct find
     BOOST_MPL_AUX_LAMBDA_SUPPORT(2,find,(Sequence,T))
 };
 
-BOOST_MPL_AUX_VOID_SPEC(2, find)
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
+
+BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(2, find)
 
 } // namespace mpl
 } // namespace boost

@@ -59,6 +59,8 @@ struct unique_op
 
 BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC(1,aux::unique_op)
 
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
+
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
     , typename Predicate = is_same<_,_>
@@ -85,7 +87,9 @@ struct unique
 #endif
 };
 
-BOOST_MPL_AUX_VOID_SPEC(1, unique)
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
+
+BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(1, unique)
 
 } // namespace mpl
 } // namespace boost

@@ -61,6 +61,8 @@ struct equal_pred
 
 } // namespace aux
 
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
+
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence1)
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence2)
@@ -97,7 +99,9 @@ struct equal
     BOOST_MPL_AUX_LAMBDA_SUPPORT(2,equal,(Sequence1,Sequence2))
 };
 
-BOOST_MPL_AUX_VOID_SPEC(2, equal)
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
+
+BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(2, equal)
 
 } // namespace mpl
 } // namespace boost

@@ -56,6 +56,8 @@ struct distance_impl<ra_iter_tag_,First,Last>
 
 } // namespace aux
 
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
+
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(First)
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Last)
@@ -69,6 +71,8 @@ struct distance
         , Last
         >::type type;
 };
+
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
 
 #else
 
@@ -99,6 +103,8 @@ struct distance_impl<ra_iter_tag_>
 
 } // namespace aux
 
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
+
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(First)
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Last)
@@ -113,9 +119,11 @@ struct distance
 {
 };
 
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
+
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-BOOST_MPL_AUX_VOID_SPEC(2, distance)
+BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(2, distance)
 
 } // namespace mpl
 } // namespace boost
