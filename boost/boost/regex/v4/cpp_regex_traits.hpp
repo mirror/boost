@@ -509,10 +509,8 @@ typename cpp_regex_traits_implementation<charT>::string_type
       case sort_delim:
             // get a regular sort key, and then truncate everything after the delim:
             result.assign(this->m_pcollate->transform(p1, p2));
-            if(result.size() && (result[0] == m_collate_delim))
-               break;
             std::size_t i;
-            for(i = 1; i < result.size(); ++i)
+            for(i = 0; i < result.size(); ++i)
             {
                if(result[i] == m_collate_delim)
                   break;
@@ -523,6 +521,11 @@ typename cpp_regex_traits_implementation<charT>::string_type
    }catch(...){}
    while(result.size() && (charT(0) == *result.rbegin()))
       result.erase(result.size() - 1);
+   if(result.empty())
+   {
+      // character is ignorable at the primary level:
+      result = string_type(1, charT(0));
+   }
    return result;
 }
 

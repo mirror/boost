@@ -372,6 +372,8 @@ typename w32_regex_traits_implementation<charT>::string_type
          result.erase(i);
          break;
    }
+   if(result.empty())
+      result = string_type(1, charT(0));
    return result;
 }
 

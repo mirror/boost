@@ -407,6 +407,10 @@ re_syntax_base* basic_regex_creator<charT, traits>::append_set(
          charT a2[3] = { c2.first, c2.second, charT(0), };
          s1 = this->m_traits.transform(a1, (a1[1] ? a1+2 : a1+1));
          s2 = this->m_traits.transform(a2, (a2[1] ? a2+2 : a2+1));
+         if(s1.size() == 0)
+            s1 = string_type(1, charT(0));
+         if(s2.size() == 0)
+            s2 = string_type(1, charT(0));
       }
       else
       {
@@ -546,7 +550,7 @@ re_syntax_base* basic_regex_creator<charT, traits>::append_set(
       }
       else
       {
-         if(!char_less<charT>(c1, c2))
+         if(char_less<charT>(c2, c1))
          {
             // Oops error:
             return 0;

@@ -68,11 +68,25 @@ inline bool can_start(wchar_t c, const unsigned char* map, unsigned char mask)
 #ifndef _RWSTD_VER
 template <class C, class T, class A>
 inline int string_compare(const std::basic_string<C,T,A>& s, const C* p)
-{ return s.compare(p); }
+{ 
+   if(0 == *p)
+   {
+      if(s.empty() || ((s.size() == 1) && (s[0] == 0)))
+         return 0;
+   }
+   return s.compare(p); 
+}
 #else
 template <class C, class T, class A>
 inline int string_compare(const std::basic_string<C,T,A>& s, const C* p)
-{ return s.compare(p); }
+{ 
+   if(0 == *p)
+   {
+      if(s.empty() || ((s.size() == 1) && (s[0] == 0)))
+         return 0;
+   }
+   return s.compare(p); 
+}
 inline int string_compare(const std::string& s, const char* p)
 { return std::strcmp(s.c_str(), p); }
 # ifndef BOOST_NO_WREGEX

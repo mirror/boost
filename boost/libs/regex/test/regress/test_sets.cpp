@@ -153,6 +153,12 @@ void test_sets2()
    TEST_REGEX_SEARCH("[[.right-curly-bracket.]]", perl, "}", match_default, make_array(0, 1, -2, -2));
    TEST_REGEX_SEARCH("[[.NUL.]]", perl, "\0", match_default, make_array(0, 1, -2, -2));
    TEST_REGEX_SEARCH("[[.NUL.][.ae.]]", perl, "\0", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("[[.NUL.]-a]", extended, "\0", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("[[.NUL.]-a]", perl, "\0", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("[[.NUL.]-a]", extended, "a", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("[[.NUL.]-a]", perl, "a", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("[[.NUL.]-[.NUL.]a]", extended, "a", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("[[.NUL.]-[.NUL.]a]", perl, "a", match_default, make_array(0, 1, -2, -2));
    TEST_INVALID_REGEX("[[..]]", perl);
    TEST_INVALID_REGEX("[[.not-a-collating-element.]]", perl);
    TEST_INVALID_REGEX("[[.", perl);
@@ -222,6 +228,8 @@ void test_sets2()
    TEST_REGEX_SEARCH("[[=a=]]", basic, "A", match_default, make_array(0, 1, -2, -2));
    TEST_REGEX_SEARCH("[[=ae=]]", basic, "ae", match_default, make_array(0, 2, -2, -2));
    TEST_REGEX_SEARCH("[[=right-curly-bracket=]]", basic, "}", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("[[=NUL=]]", basic, "\x0", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("[[=NUL=]]", perl, "\x0", match_default, make_array(0, 1, -2, -2));
    TEST_INVALID_REGEX("[[=", perl);
    TEST_INVALID_REGEX("[[=a", perl);
    TEST_INVALID_REGEX("[[=ae", perl);

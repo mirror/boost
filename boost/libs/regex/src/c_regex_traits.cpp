@@ -102,6 +102,8 @@ c_regex_traits<char>::string_type BOOST_REGEX_CALL c_regex_traits<char>::transfo
          result.erase(i);
          break;
    }
+   if(result.empty())
+      result = std::string(1, char(0));
    return result;
 }
 

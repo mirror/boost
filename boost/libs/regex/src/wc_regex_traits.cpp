@@ -94,6 +94,8 @@ c_regex_traits<wchar_t>::string_type BOOST_REGEX_CALL c_regex_traits<wchar_t>::t
          result.erase(i);
          break;
    }
+   if(result.empty())
+      result = std::wstring(1, char(0));
    return result;
 }
 
