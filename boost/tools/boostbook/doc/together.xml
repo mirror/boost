@@ -11,7 +11,7 @@
     <para>How one links to another element in BoostBook depends
     greatly on the nature of the element linked and how the link
     should appear. There are three general linking elements:
-    &lt;xref&gt;, &lt;link&gt;, and &gt;ulink&gt;. Additionally, there
+    &lt;xref&gt;, &lt;link&gt;, and &lt;ulink&gt;. Additionally, there
     are linking elements for referencing specific types of entities,
     such as classes (&lt;classname&gt;), functions
     (&lt;functionname&gt;), or libraries (&lt;libraryname&gt;).</para>
