@@ -83,6 +83,19 @@
 #endif
 
 //
+// If STLport thinks there is no wchar_t at all, then we have to disable
+// the support for the relevant specilazations of std:: templates.
+//
+#if !defined(_STLP_HAS_WCHAR_T) && !defined(_STLP_WCHAR_T_IS_USHORT)
+#  ifndef  BOOST_NO_STD_WSTRING
+#     define BOOST_NO_STD_WSTRING
+#  endif
+#  ifndef  BOOST_NO_STD_WSTREAMBUF
+#     define BOOST_NO_STD_WSTREAMBUF
+#  endif
+#endif
+
+//
 // We always have SGI style hash_set, hash_map, and slist:
 //
 #define BOOST_HAS_HASH
