@@ -46,18 +46,21 @@ namespace hack
       std::string contents;
       do
       {
-        std::getline( entries_file, contents );
-        if ( entries_file.eof() )
-        { 
-          entries_file.close(); 
-          value_path = "";
-          return *this;
-        }
-      } while ( contents == "D" );
-//std::cout << "contents: " << contents << std::endl;
-      if ( contents[0] == 'D' ) contents.erase( 0, 1 );
-      value_path = dir_path / contents.substr( 1, contents.find( '/', 1 ) );
-//std::cout << "value_path: " << value_path.string() << std::endl;
+        do
+        {
+          std::getline( entries_file, contents );
+          if ( entries_file.eof() )
+          { 
+            entries_file.close(); 
+            value_path = "";
+            return *this;
+          }
+        } while ( contents == "D" );
+        if ( contents[0] == 'D' ) contents.erase( 0, 1 );
+        value_path = dir_path / contents.substr( 1, contents.find( '/', 1 ) );
+
+      // in case entries file is mistaken, do until value_path actually found
+      } while ( !boost::filesystem::exists( value_path ) );  
       return *this;
     }
 
