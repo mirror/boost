@@ -83,8 +83,7 @@ template<class T> class shared_ptr
 {
 private:
 
-    // Borland 5.5.1 specific workarounds
-//  typedef checked_deleter<T> deleter;
+    // Borland 5.5.1 specific workaround
     typedef shared_ptr<T> this_type;
 
     // enable_shared_from_this support
@@ -126,7 +125,19 @@ public:
         sp_enable_shared_from_this(p);
     }
 
-//  generated copy constructor, assignment, destructor are fine
+//  generated copy constructor, assignment, destructor are fine...
+
+//  except on Borland C++ 5.5.1
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
+
+    shared_ptr & operator=(shared_ptr const & r) // never throws
+    {
+        px = r.px;
+        pn = r.pn; // shared_count::op= doesn't throw
+        return *this;
+    }
+
+#endif
 
     template<class Y>
     explicit shared_ptr(weak_ptr<Y> const & r): px(r.px), pn(r.pn) // may throw
