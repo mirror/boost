@@ -30,7 +30,7 @@
 <h2><a name="intro">Introduction</a></h2>
 
 <p>
-The class boost::gregorian::date is the primary interface for library users. In general, the date class is immutable once constructed although it does allow assignment.  
+The class boost::gregorian::date is the primary interface for date programming. In general, the date class is immutable once constructed although it does allow assignment.  
 
 <p>
 Other techniques for creating dates include <a href="date_iterators.html">date iterators</a> and <a href="date_algorithms.html">date algorithms or generators</a>.  
@@ -124,7 +124,7 @@ or
         <td>Get the day of the week (eg: Sunday, Monday, etc.</td>
 	<td>date d(2002,Jan,10); d.day() --> Thursday;</td></tr>
 <tr><td>bool <font class="func">is_infinity</font>() const</td>
-        <td>Returns true if date is either possitive or negative infinity</td>
+        <td>Returns true if date is either positive or negative infinity</td>
 	<td>date d(pos_infin); d.is_infinity() --> true;</td></tr>
 <tr><td>bool <font class="func">is_neg_infinity</font>() const</td>
         <td>Returns true if date is negative infinity</td>
@@ -135,6 +135,15 @@ or
 <tr><td>bool <font class="func">is_not_a_date</font>() const</td>
         <td>Returns true if value is not a date</td>
 	<td>date d(not_a_date_time); d.is_not_a_date() --> true;</td></tr>
+<tr><td>long <font class="func">modjulian_day</font>() const</td>
+        <td>Returns the modified julian day for the date.</td>
+	<td></td></tr>
+<tr><td>long <font class="func">julian_day</font>() const</td>
+        <td>Returns the julian day for the date.</td>
+	<td></td></tr>
+<tr><td>int <font class="func">week_number</font>() const</td>
+        <td>Returns the ISO 8601 week number for the date.</td>
+	<td></td></tr>
 
 </table>
 
@@ -193,7 +202,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sun Oct 13 10:59:44 MST 2002
+Last modified: Sun Jan 19 16:01:22 MST 2003
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
