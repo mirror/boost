@@ -12,7 +12,7 @@
 #define BOOST_RANGE_DETAIL_END_HPP
 
 #include <boost/range/detail/implementation_help.hpp>
-#include <boost/range/detail/result_iterator.hpp>
+#include <boost/range/result_iterator.hpp>
 #include <boost/range/detail/common.hpp>
 
 namespace boost 

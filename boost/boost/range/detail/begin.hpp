@@ -11,7 +11,7 @@
 #ifndef BOOST_RANGE_DETAIL_BEGIN_HPP
 #define BOOST_RANGE_DETAIL_BEGIN_HPP
 
-#include <boost/range/detail/result_iterator.hpp>
+#include <boost/range/result_iterator.hpp>
 #include <boost/range/detail/common.hpp>
 
 namespace boost 
