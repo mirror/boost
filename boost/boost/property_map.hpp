@@ -358,16 +358,17 @@ namespace boost {
   // Adapter to turn a RandomAccessIterator into a property map
 
   template <class RandomAccessIterator, 
+    class IDfunc = identity_property_map
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
-     class T, class R,
+    , class T, class R
 #else
-     class T = typename std::iterator_traits<RandomAccessIterator>::value_type,
-     class R = typename std::iterator_traits<RandomAccessIterator>::reference,
+    , class T = typename std::iterator_traits<RandomAccessIterator>::value_type
+    , class R = typename std::iterator_traits<RandomAccessIterator>::reference
 #endif
-     class IDfunc = identity_property_map>
-  class random_access_iterator_property_map 
+     >
+  class iterator_property_map
     : public boost::put_get_at_helper< T, 
-        random_access_iterator_property_map<RandomAccessIterator,
+        iterator_property_map<RandomAccessIterator,
         T, R, IDfunc> >
   {
   public:
@@ -375,7 +376,7 @@ namespace boost {
     typedef T value_type;
     typedef boost::lvalue_property_map_tag category;
 
-    inline random_access_iterator_property_map(
+    inline iterator_property_map(
       RandomAccessIterator cc = RandomAccessIterator(), 
       const IDfunc& _id = IDfunc() ) 
       : iter(cc), id(_id) { }
@@ -388,14 +389,14 @@ namespace boost {
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   template <class RAIter, class ID>
-  inline random_access_iterator_property_map<
+  inline iterator_property_map<
     RAIter,
     typename std::iterator_traits<RAIter>::value_type,
     typename std::iterator_traits<RAIter>::reference,
     ID >
   make_iterator_property_map(RAIter iter, ID id) {
     function_requires< RandomAccessIteratorConcept<RAIter> >();
-    typedef random_access_iterator_property_map<
+    typedef iterator_property_map<
     RAIter,
     typename std::iterator_traits<RAIter>::value_type,
     typename std::iterator_traits<RAIter>::reference,
@@ -404,15 +405,55 @@ namespace boost {
   }
 #endif
   template <class RAIter, class Value, class ID>
-  inline random_access_iterator_property_map<
+  inline iterator_property_map<
     RAIter, Value, Value&, ID>
   make_iterator_property_map(RAIter iter, ID id, Value) {
     function_requires< RandomAccessIteratorConcept<RAIter> >();
-    typedef random_access_iterator_property_map<
+    typedef iterator_property_map<
       RAIter, Value, Value&, ID> PMap;
     return PMap(iter, id);
   }
 
+  //=========================================================================
+  // An adaptor to turn a Unique Pair Associative Container like std::map or
+  // std::hash_map into an Lvalue Property Map.
+
+  template <typename UniquePairAssociativeContainer>
+  class associative_property_map
+    : public boost::put_get_at_helper<
+       typename UniquePairAssociativeContainer::data_type,
+       associative_property_map<UniquePairAssociativeContainer> >
+  {
+    typedef UniquePairAssociativeContainer C;
+  public:
+    typedef typename C::key_type key_type;
+    typedef typename C::data_type value_type;
+    associative_property_map(C& c) : m_c(c) { }
+    value_type& operator[](const key_type& k) const {
+      return (*c.find(k)).second;
+    }
+  private:
+    C& m_c;
+  };
+
+  template <typename UniquePairAssociativeContainer>
+  class const_associative_property_map
+    : public boost::put_get_at_helper<
+       typename UniquePairAssociativeContainer::data_type,
+       const_associative_property_map<UniquePairAssociativeContainer> >
+  {
+    typedef UniquePairAssociativeContainer C;
+  public:
+    typedef typename C::key_type key_type;
+    typedef typename C::data_type value_type;
+    const_associative_property_map(const C& c) : m_c(c) { }
+    const value_type& operator[](const key_type& k) const {
+      return (*c.find(k)).second;
+    }
+  private:
+    C& m_c;
+  };
+  
 
   //=========================================================================
   // A property map that applies the identity function
