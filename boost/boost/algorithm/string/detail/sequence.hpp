@@ -22,15 +22,6 @@ namespace boost {
 
 //  insert helpers  -------------------------------------------------//
         
-            template< typename InputT, typename InsertT >
-            inline void insert(
-                InputT& Input,
-                BOOST_STRING_TYPENAME InputT::iterator At,
-                const InsertT& Insert )
-            {
-                insert( Input, At, begin(Insert), end(Insert) );
-            }
-
             template< typename InputT, typename ForwardIteratorT >
             inline void insert(
                 InputT& Input,
@@ -40,7 +31,16 @@ namespace boost {
             {
                 Input.insert( At, Begin, End );
             }
-            
+
+            template< typename InputT, typename InsertT >
+            inline void insert(
+                InputT& Input,
+                BOOST_STRING_TYPENAME InputT::iterator At,
+                const InsertT& Insert )
+            {
+                insert( Input, At, begin(Insert), end(Insert) );
+            }
+           
 //  erase helper  ---------------------------------------------------//
 
             // Erase a range in the sequence
@@ -153,16 +153,6 @@ namespace boost {
 
 //  replace helper  -------------------------------------------------//
         
-            template< typename InputT, typename InsertT >
-            inline void replace(
-                InputT& Input,
-                BOOST_STRING_TYPENAME InputT::iterator From,
-                BOOST_STRING_TYPENAME InputT::iterator To,
-                const InsertT& Insert )
-            {
-                replace( Input, From, To, begin(Insert), end(Insert) );
-            }
-
             template< typename InputT, typename ForwardIteratorT >
             inline void replace(
                 InputT& Input,
@@ -174,6 +164,16 @@ namespace boost {
                 replace_native_helper< has_native_replace<InputT>::value >()(
                     Input, From, To, Begin, End );
             };
+
+            template< typename InputT, typename InsertT >
+            inline void replace(
+                InputT& Input,
+                BOOST_STRING_TYPENAME InputT::iterator From,
+                BOOST_STRING_TYPENAME InputT::iterator To,
+                const InsertT& Insert )
+            {
+                replace( Input, From, To, begin(Insert), end(Insert) );
+            }
 
         } // namespace detail
     } // namespace algorithm
