@@ -31,6 +31,59 @@ namespace detail {
 This version detects ambiguous base classes and private base classes
 correctly, and was devised by Rani Sharoni.
 
+The following explanation is by Terje Slettebo:
+
+Let's take the multiple base class below as an example, and the
+following will also show why there's not a problem with ambiguous base
+class:
+
+struct B {};
+struct B1 : B {};
+struct B2 : B {};
+struct D : B1, private B2 {};
+
+typedef char Test[is_base_and_derived<B, D>::result]; // improvement 1 -
+multiple base
+
+
+We have several possible conversion sequences:
+
+For "static no check(B const volatile *, int)" we have the conversion
+sequences:
+   C -> C const -> B*
+and
+   C -> D* -> B1*|B2* -> B*
+
+For "static yes check(D const volatile *, T)" we have the conversion
+sequence:
+   C -> D*
+
+Since, for the purpose of selecting the appropriate user-defined conversion
+for a given function, it only considers up to the user-defined conversion,
+for the first function this means choosing between C -> C const and C -> C,
+and it chooses the latter. Therefore, we have:
+
+C -> D* -> B1*|B2* -> B*
+C -> D*
+
+Here, the principle of the "shortest subsequence" applies, and it chooses
+C -> D*. This shows that it doesn't even need to consider the multiple paths
+to B, as that possibility is eliminated before it could possibly cause
+ambiguity. Nifty. :)
+
+As Daveed notes in the posting Rani gives a link to in the clc++m posting,
+if D is not derived from B, it has to choose between C -> C const -> B* for
+the first function, and C -> D* for the second function, which are just as
+good, _had it not been for the fact that "static no check(B const volatile
+&, int)" is not templated (as Rani points out in the posting)_, which makes
+C -> C const -> B* the best choice, resulting in "no".
+
+Also, if C::operator B* hadn't been const, the two conversion sequences for
+"static no check(B const volatile *, int)" would have been ambiguous.
+
+See also http://groups.google.com/groups?selm=df893da6.0301280859.522081f7%40posting.google.com
+and links therein.
+
 *************************************************************************/
 
 template <typename B, typename D>
