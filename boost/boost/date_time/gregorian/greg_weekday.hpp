@@ -1,8 +1,12 @@
 #ifndef GREG_WEEKDAY_HPP___
 #define GREG_WEEKDAY_HPP___
-/* Copyright (c) 2000 CrystalClear Software, Inc.
- * Disclaimer & Full Copyright at end of file
+
+/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+ * Use, modification and distribution is subject to the 
+ * Boost Software License, Version 1.0. (See accompanying
+ * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
+ * $Date$
  */
 
 #include "boost/date_time/constrained_value.hpp"
@@ -53,17 +57,6 @@ namespace gregorian {
 
 } } //namespace gregorian
 
-/* Copyright (c) 2000
- * CrystalClear Software, Inc.
- *
- * Permission to use, copy, modify, distribute and sell this software
- * and its documentation for any purpose is hereby granted without fee,
- * provided that the above copyright notice appear in all copies and
- * that both that copyright notice and this permission notice appear
- * in supporting documentation.  CrystalClear Software makes no
- * representations about the suitability of this software for any
- * purpose.  It is provided "as is" without express or implied warranty.
- */
 
 
 #endif
