@@ -24,6 +24,7 @@
 #  if !(defined(_HAS_MEMBER_TEMPLATES_REBIND) && (_HAS_MEMBER_TEMPLATES_REBIND+0 > 0)) && !(defined(_MSC_VER) && (_MSC_VER > 1300)) && defined(BOOST_MSVC)
 #     define BOOST_NO_STD_ALLOCATOR
 #  endif
+#  define BOOST_HAS_PARTIAL_STD_ALLOCATOR
 #  if defined(_MSC_VER) && (_MSC_VER < 1300)
       // if this lib version is set up for vc6 then there is no std::use_facet:
 #     define BOOST_NO_STD_USE_FACET
@@ -55,6 +56,7 @@
 #     define BOOST_NO_MS_INT64_NUMERIC_LIMITS
 #  endif
 #endif
+
 
 #if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || !defined(_CPPLIB_VER) || (_CPPLIB_VER < 306)
    // if we're using a dinkum lib that's
