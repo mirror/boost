@@ -83,7 +83,7 @@ template<class PRNG>
 void validate(const std::string & name, const PRNG &)
 {
   std::cout << "validating " << name << ": ";
-  PRNG rng;
+  PRNG rng;  // default ctor
   for(int i = 0; i < 9999; i++)
     rng();
   typename PRNG::result_type val = rng();
@@ -174,6 +174,12 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   // Streamable concept not supported for broken compilers
+
+  // advance a little so that state is relatively arbitrary
+  for(int i = 0; i < 9307; ++i)
+    urng();
+  urng2 = urng;
+
   {
     // narrow stream first
     std::ostringstream file;
@@ -185,6 +191,11 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
     input >> urng;
     // std::cout << file.str() << std::endl;
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // MSVC brokenness
+    // advance some more so that state is exercised
+    for(int i = 0; i < 10000; ++i) {
+      urng();
+      urng2();
+    }
     BOOST_TEST(urng == urng2);
 #endif // BOOST_MSVC
   }
