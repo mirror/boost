@@ -1,4 +1,7 @@
 Version 305:
+FIXED:    VC6.sp5 fix.
+ADDED:    Support for mixed static/dynamic linking with vc6.
+ADDED:    Sunpro makefiles
 FIXED:    SunPro 6.1 support
 FIXED:    Spurious extra matches at the end of input when grepping with .*
 
@@ -210,6 +213,7 @@ BUG:      POSIX API functions can propagate C++ exceptions if the
           default allocator can throw exceptions.
 BUG:      character sets don't function correctly when regbase::char_classes
           is not set.
+
 
 
 

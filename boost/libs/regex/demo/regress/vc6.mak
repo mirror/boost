@@ -3,11 +3,24 @@
 #
 # Visual C++ 6
 #
-CFLAGS= /Oityb1 /GF /Gy -GX -GR -I..\..\..\..\
+#
+# Add additional compiler options here:
+#
+CXXFLAGS=
+#
+# Add additional include directories here:
+#
+INCLUDES=
+#
+# add additional linker flags here:
+#
+XLFLAGS=
 
-LFLAGS= -link /LIBPATH:..\..\lib\vc6 user32.lib
+CFLAGS= $(INCLUDES) /Oityb1 /GF /Gy -GX -GR -I..\..\..\..\ $(CXXFLAGS)
 
-all :: r1.exe r2.exe r3.exe r4.exe r5.exe r6.exe r1m.exe r2m.exe r3m.exe r4m.exe r5m.exe r6m.exe r1l.exe r2l.exe r3l.exe r4l.exe r5l.exe r6l.exe r1d.exe r2d.exe r3d.exe r4d.exe r5d.exe r6d.exe r1md.exe r2md.exe r3md.exe r4md.exe r5md.exe r6md.exe r1lmd.exe r2lmd.exe r3lmd.exe r4lmd.exe r5lmd.exe r6lmd.exe
+LFLAGS= -link /LIBPATH:..\..\lib\vc6 user32.lib $(XLFLAGS)
+
+all :: r1.exe r2.exe r3.exe r4.exe r5.exe r6.exe r1m.exe r2m.exe r3m.exe r4m.exe r5m.exe r6m.exe r1l.exe r2l.exe r3l.exe r4l.exe r5l.exe r6l.exe r1ls.exe r2ls.exe r3ls.exe r4ls.exe r5ls.exe r6ls.exe r1d.exe r2d.exe r3d.exe r4d.exe r5d.exe r6d.exe r1md.exe r2md.exe r3md.exe r4md.exe r5md.exe r6md.exe r1lmd.exe r2lmd.exe r3lmd.exe r4lmd.exe r5lmd.exe r6lmd.exe
 	echo testing static single threaded version....
 	r1 tests.txt test1252.txt
 	r2 tests.txt
@@ -29,6 +42,13 @@ all :: r1.exe r2.exe r3.exe r4.exe r5.exe r6.exe r1m.exe r2m.exe r3m.exe r4m.exe
 	r4l tests.txt test1252.txt
 	r5l tests.txt
 	r6l tests.txt
+	echo testing static version with DLL runtime....
+	r1ls tests.txt test1252.txt
+	r2ls tests.txt
+	r3ls tests.txt
+	r4ls tests.txt test1252.txt
+	r5ls tests.txt
+	r6ls tests.txt
 	echo testing static single threaded debug version....
 	r1d tests.txt test1252.txt
 	r2d tests.txt
@@ -109,6 +129,24 @@ r6l.exe : tests.cpp parse.cpp regress.cpp
 	cl /MD /D_MT /D_DLL $(CFLAGS) -o r6l.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
 
+r1ls.exe : tests.cpp parse.cpp regress.cpp
+	cl /MD /D_MT /D_DLL $(CFLAGS) -o r1ls.exe -DBOOST_RE_STATIC_LIB -DBOOST_RE_TEST_LOCALE_W32 tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+r2ls.exe : tests.cpp parse.cpp regress.cpp
+	cl /MD /D_MT /D_DLL $(CFLAGS) -o r2ls.exe -DBOOST_RE_STATIC_LIB -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+r3ls.exe : tests.cpp parse.cpp regress.cpp
+	cl /MD /D_MT /D_DLL $(CFLAGS) -o r3ls.exe -DBOOST_RE_STATIC_LIB -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+r4ls.exe : tests.cpp parse.cpp regress.cpp
+	cl /MD /D_MT /D_DLL $(CFLAGS) -o r4ls.exe -DBOOST_RE_STATIC_LIB -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+r5ls.exe : tests.cpp parse.cpp regress.cpp
+	cl /MD /D_MT /D_DLL $(CFLAGS) -o r5ls.exe -DBOOST_RE_STATIC_LIB -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+r6ls.exe : tests.cpp parse.cpp regress.cpp
+	cl /MD /D_MT /D_DLL $(CFLAGS) -o r6ls.exe -DBOOST_RE_STATIC_LIB -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
 r1d.exe : tests.cpp parse.cpp regress.cpp
 	cl /MLd $(CFLAGS) -o r1d.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
@@ -164,6 +202,8 @@ r5lmd.exe : tests.cpp parse.cpp regress.cpp
 
 r6lmd.exe : tests.cpp parse.cpp regress.cpp
 	cl /MDd /D_MT /D_DLL $(CFLAGS) -o r6lmd.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+
 
 
 

@@ -28,7 +28,7 @@ C1=-c -O2 -I../../../
 
 ALL_HEADER=../../../boost/cregex.hpp ../../../boost/pattern_except.hpp ../../../boost/regex.hpp ../../../boost/regex_traits.hpp ../../../boost/re_detail/fileiter.hpp ../../../boost/re_detail/regex_compile.hpp ../../../boost/re_detail/regex_config.hpp ../../../boost/re_detail/regex_cstring.hpp ../../../boost/re_detail/regex_format.hpp ../../../boost/re_detail/regex_kmp.hpp ../../../boost/re_detail/regex_library_include.hpp ../../../boost/re_detail/regex_match.hpp ../../../boost/re_detail/regex_options.hpp ../../../boost/re_detail/regex_raw_buffer.hpp ../../../boost/re_detail/regex_split.hpp ../../../boost/re_detail/regex_stack.hpp ../../../boost/re_detail/regex_synch.hpp
 
-all : $(DIRNAME)  $(DIRNAME) $(DIRNAME)/boost_regex ./$(DIRNAME)/libboost_regex.a
+all : $(DIRNAME)  $(DIRNAME) $(DIRNAME)/boost_regex ./$(DIRNAME)/libboost_regex.so
 
 $(DIRNAME) :
 	mkdir -p $(DIRNAME)
@@ -41,7 +41,7 @@ install : all
 
 ########################################################
 #
-# section for libboost_regex.a
+# section for libboost_regex.so
 #
 ########################################################
 $(DIRNAME)/boost_regex/c_regex_traits.o: ../src/c_regex_traits.cpp $(ALL_HEADER)

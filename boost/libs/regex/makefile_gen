@@ -170,6 +170,11 @@ function vc6_gen()
 	libname="$prefix""re300l"
 	vc6_gen_dll
 	
+	debug="no"
+	opts="/nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_STATIC_LIB /YX /FD /c"
+	libname="$prefix""re300ls"
+	vc6_gen_lib
+	
 	if test "$is_stlport" == yes; then
 #  debug STLPort mode:
 	debug="yes"
@@ -556,31 +561,31 @@ function bcb_gen()
 	rm -f $iout
 
 	libname="$subdir""re300"
-	opts="-tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../;"
+	opts="-tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../"
 	bcb_gen_lib
 
 	libname="$subdir""re300m"
-	opts="-tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../;"
+	opts="-tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../"
 	bcb_gen_lib
 	
 	if test $use_vcl == "yes"; then
 
 	libname="$subdir""re300v"
-	opts="-tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../;"
+	opts="-tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../"
 	bcb_gen_lib
 
 	libname="$subdir""re300lv"
-	opts="-DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../; -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	opts="-DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_dll
 	
 	fi
 
 	libname="$subdir""re300lm"
-	opts="-DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../; -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	opts="-DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_dll
 
 	libname="$subdir""re300l"
-	opts="-DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../; -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	opts="-DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_dll
 	
 	
@@ -649,13 +654,13 @@ EOF
 
 function gen_gen_lib()
 {
-	all_dep="$all_dep $subdir $subdir/$libname ./$subdir/lib$libname.a"
+	all_dep="$all_dep $subdir $subdir/$libname ./$subdir/lib$libname.so"
 #
 # set up section comments:
 	cat >> $tout << EOF
 ########################################################
 #
-# section for lib$libname.a
+# section for lib$libname.so
 #
 ########################################################
 EOF
@@ -750,6 +755,184 @@ EOF
 	cat $tout >> $out
 }
 
+#######################################################################
+#
+# section for Sun Forte 6.1 (5.1 compiler)
+#
+#######################################################################
+
+function sun_gen_lib()
+{
+	all_dep="$all_dep $subdir/$libname $subdir/$libname.a"
+
+#
+# set up section comments:
+	cat >> $tout << EOF
+########################################################
+#
+# section for $libname.a
+#
+########################################################
+EOF
+#
+#	process source files:
+	all_obj=""
+	all_lib_obj=""
+	for file in $src
+	do
+		obj=`echo "$file" | sed 's/.*src\/\(.*\)cpp/\1o/g'`
+		obj="$subdir/$libname/$obj"
+		all_obj="$all_obj $obj"
+		all_lib_obj="$all_lib_obj $obj"
+		echo "$obj: $file \$(ALL_HEADER)" >> $tout
+		echo "	CC -c \$(INCLUDES) $opts \$(CXXFLAGS) -o $obj $file" >> $tout
+		echo "" >> $tout
+	done
+#
+#	 now for the directories for this library:
+	echo "$subdir/$libname : " >> $tout
+	echo "	mkdir -p $subdir/$libname" >> $tout
+	echo "" >> $tout
+#
+#	 now for the clean options for this library:
+	all_clean="$all_clean $libname""_clean"
+	echo "$libname"_clean : >> $tout
+	echo "	rm -f $subdir/$libname/"'*.o' >> $tout
+	echo "	rm -fr $subdir/$libname/\$(SUNWS_CACHE_NAME)" >> $tout
+	echo "" >> $tout
+#
+#	 now for the main target for this library:
+	echo $subdir/$libname.a : $all_obj >> $tout
+	echo "	CC -xar \$(CXXFLAGS) \$(LDFLAGS) -o $subdir/$libname.a $all_lib_obj" >> $tout
+	echo "" >> $tout
+}
+
+function sun_gen_dll()
+{
+	all_dep="$all_dep $subdir/shared_$libname $subdir/$libname.so"
+#
+# set up section comments:
+	cat >> $tout << EOF
+########################################################
+#
+# section for $libname.so
+#
+########################################################
+EOF
+#
+#	process source files:
+	all_obj=""
+	for file in $src
+	do
+		obj=`echo "$file" | sed 's/.*src\/\(.*\)cpp/\1o/g'`
+		obj="$subdir/shared_$libname/$obj"
+		all_obj="$all_obj $obj"
+		echo "$obj: $file \$(ALL_HEADER)" >> $tout
+		echo "	CC -c \$(INCLUDES) $opts \$(CXXFLAGS) -o $obj $file" >> $tout
+		echo "" >> $tout
+	done
+#
+#	 now for the directories for this library:
+	echo "$subdir/shared_$libname :" >> $tout
+	echo "	mkdir -p $subdir/shared_$libname" >> $tout
+	echo "" >> $tout
+#
+#	 now for the clean options for this library:
+	all_clean="$all_clean $libname""_clean_shared"
+	echo "$libname"_clean_shared : >> $tout
+	echo "	rm -f $subdir/shared_$libname/"'*.o' >> $tout
+	echo "	rm -fr $subdir/shared_$libname/\$(SUNWS_CACHE_NAME)" >> $tout
+	echo "" >> $tout
+#
+#	 now for the main target for this library:
+	echo $subdir/$libname.so : $all_obj >> $tout
+	echo "	CC $opts -G -o $subdir/$libname.so \$(LDFLAGS) $all_obj \$(LIBS)" >> $tout
+	echo "" >> $tout
+}
+
+
+
+function sun_gen()
+{
+	tout="temp"
+	iout="temp_install"
+	all_dep="$subdir"
+	all_clean=""
+	echo > $out
+	echo > $tout
+	rm -f $iout
+
+	libname="libboost_regex\$(LIBSUFFIX)"
+	opts="-O2 -I../../../"
+	sun_gen_lib
+
+	libname="libboost_regex_mt\$(LIBSUFFIX)"
+	opts="-O2 -mt -I../../../"
+	sun_gen_lib
+	
+	libname="libboost_regex\$(LIBSUFFIX)"
+	opts="-KPIC -O2 -I../../../"
+	sun_gen_dll
+
+	libname="libboost_regex_mt\$(LIBSUFFIX)"
+	opts="-KPIC -O2 -mt -I../../../"
+	sun_gen_dll
+	
+	
+	cat > $out << EOF
+#
+# auto generated makefile for Sun Forte 6.1
+#
+# usage:
+# make
+#   brings libraries up to date
+# make clean
+#   removes all temporary files.
+
+#
+# Add additional compiler options here:
+#
+CXXFLAGS=
+#
+# Add additional include directories here:
+#
+INCLUDES=
+#
+# add additional linker flags here:
+#
+LDFLAGS=
+#
+# add additional libraries to link to here:
+#
+LIBS=
+#
+# lib suffix string:
+#
+LIBSUFFIX=
+#
+# template cache path:
+#
+SUNWS_CACHE_NAME=SunWS_cache
+
+
+EOF
+	echo "" >> $out
+	echo "ALL_HEADER=$header" >> $out
+	echo "" >> $out
+	echo "all : $all_dep" >> $out
+	echo >> $out
+	echo "clean : $all_clean" >> $out
+	echo >> $out
+	echo "install : all" >> $out
+#	cat $iout >> $out
+	echo >> $out
+	echo $subdir : >> $out
+	echo "	mkdir -p $subdir" >> $out
+	echo "" >> $out
+
+	cat $tout >> $out
+}
+
 
 #
 # locate all the header dependencies:
@@ -820,11 +1003,25 @@ bcb_gen
 #
 # generate generic makefile:
 gen_gen
+#
+# generate Sun 6.1 makefile:
+out="lib/sunpro.mak"
+subdir="sunpro"
+sun_gen
 
 
 #
 # remove tmep files;
 rm -f $tout $iout
+
+
+
+
+
+
+
+
+
 
 
 
