@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  15 Jul 00  Suppress numeric_cast warnings for GCC, Borland and MSVC (Dave Abrahams)
 //  30 Jun 00  More MSVC6 wordarounds.  See comments below.  (Dave Abrahams)
 //  28 Jun 00  Removed implicit_cast<>.  See comment below. (Beman Dawes)
 //  27 Jun 00  More MSVC6 workarounds 
@@ -114,6 +115,79 @@ namespace boost
 
 //  numeric_cast  ------------------------------------------------------------//
 
+// Move to config.hpp?
+#if defined(__SGI_STL_PORT) && __SGI_STL_PORT <= 0x400 && __STL_STATIC_CONST_INIT_BUG
+// STLPort 4.0 doesn't define the static constants in numeric_limits<> so that they
+// can be used at compile time if the compiler bug indicated by
+// __STL_STATIC_CONST_INIT_BUG is present.
+# define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#endif
+
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+  // less_than_type_min -
+  //    x_is_signed should be numeric_limits<X>::is_signed
+  //    y_is_signed should be numeric_limits<Y>::is_signed
+  //    y_min should be numeric_limits<Y>::min()
+  //
+  //    check(x, y_min) returns true iff x < y_min without invoking comparisons
+  //    between signed and unsigned values.
+  //
+  //    "poor man's partial specialization" is in use here.
+    template <bool x_is_signed, bool y_is_signed>
+    struct less_than_type_min
+    {
+        template <class X, class Y>
+        static bool check(X x, Y y_min)
+            { return x < y_min; }
+    };
+
+    template <>
+    struct less_than_type_min<false, true>
+    {
+        template <class X, class Y>
+        static bool check(X, Y)
+            { return false; }
+    };
+    
+    template <>
+    struct less_than_type_min<true, false>
+    {
+        template <class X, class Y>
+        static bool check(X x, Y)
+            { return x < 0; }
+    };
+    
+  // greater_than_type_max -
+  //    same_sign should be:
+  //            numeric_limits<X>::is_signed == numeric_limits<Y>::is_signed
+  //    y_max should be numeric_limits<Y>::max()
+  //
+  //    check(x, y_max) returns true iff x > y_max without invoking comparisons
+  //    between signed and unsigned values.
+  //
+  //    "poor man's partial specialization" is in use here.
+    template <bool same_sign>
+    struct greater_than_type_max;
+
+    template<>
+    struct greater_than_type_max<true>
+    {
+        template <class X, class Y>
+        static bool check(X x, Y y_max)
+            { return x > y_max; }
+    };
+
+    template <>
+    struct greater_than_type_max<false>
+    {
+        // What does the standard say about this? I think it's right, and it
+        // will work with every compiler I know of.
+        template <class X, class Y>
+        static bool check(X x, Y)
+            { return x >= 0 && static_cast<X>(static_cast<Y>(x)) != x; }
+    };
+#endif
+  
     template<typename Target, typename Source>
     inline Target numeric_cast(Source arg BOOST_EXPLICIT_DEFAULT_TARGET)
     {
@@ -121,17 +195,38 @@ namespace boost
         typedef std::numeric_limits<Source> arg_traits;
         typedef std::numeric_limits<Target> result_traits;
 
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
         // typedefs that act as compile time assertions
         // (to be replaced by boost compile time assertions
         // as and when they become available and are stable)
         typedef bool argument_must_be_numeric[arg_traits::is_specialized];
         typedef bool result_must_be_numeric[result_traits::is_specialized];
 
-        if( (arg < 0 && !result_traits::is_signed) ||  // loss of negative range
+        const bool arg_is_signed = arg_traits::is_signed;
+        const bool result_is_signed = result_traits::is_signed;
+        const bool same_sign = arg_is_signed == result_is_signed;
+
+        if (less_than_type_min<arg_is_signed, result_is_signed>::check(arg, result_traits::min())
+            || greater_than_type_max<same_sign>::check(arg, result_traits::max())
+            )
+            
+#else // We need to use #pragma hacks if available
+            
+# if BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4018)
+# endif
+        if ( (arg < 0 && !result_traits::is_signed) ||  // loss of negative range
               (arg_traits::is_signed &&
                  arg < result_traits::min()) ||        // underflow
                arg > result_traits::max() )            // overflow
+# if BOOST_MSVC
+#  pragma warning(pop)
+# endif
+#endif
+        {
             throw bad_numeric_cast();
+        }
         return static_cast<Target>(arg);
     }
 
