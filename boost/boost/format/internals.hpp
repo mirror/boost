@@ -41,10 +41,10 @@ namespace detail {
     {
         typedef BOOST_IO_STD basic_ios<Ch, Tr>   basic_ios;
 
-        stream_format_state()                        { reset(); }
-        stream_format_state(basic_ios& os)     { set_by_stream(os); }
+        stream_format_state(Ch fill)                 { reset(fill); }
+        stream_format_state(const basic_ios& os)     { set_by_stream(os); }
 
-        void reset();                            //- sets to default state.
+        void reset(Ch fill);                     //- sets to default state.
         void set_by_stream(const basic_ios& os); //- sets to os's state.
         void apply_on(basic_ios & os) const;     //- applies format_state to the stream
         template<class T> 
@@ -56,6 +56,8 @@ namespace detail {
         std::streamsize precision_;
         Ch fill_; 
         std::ios_base::fmtflags flags_;
+        std::ios_base::iostate  rdstate_;
+        std::ios_base::iostate  exceptions_;
     };  
 
 
@@ -77,8 +79,14 @@ namespace detail {
         typedef detail::stream_format_state<Ch, Tr>         stream_format_state;
         typedef std::basic_string<Ch, Tr>                   string_t;
 
-        format_item() :argN_(argN_no_posit), truncate_(-1), pad_scheme_(0)  {}
+        format_item(Ch fill) :argN_(argN_no_posit), fmtstate_(fill), 
+                              truncate_(max_streamsize()), pad_scheme_(0)  {}
+        void reset(Ch fill);
         void compute_states(); // sets states  according to truncate and pad_scheme.
+
+        static std::streamsize max_streamsize() { 
+            return std::numeric_limits<std::streamsize>::max();
+        }
 
         // --- data ---
         int         argN_;  //- argument number (starts at 0,  eg : %1 => argN=0)
@@ -86,8 +94,7 @@ namespace detail {
         string_t    res_;      //- result of the formatting of this item
         string_t    appendix_; //- piece of string between this item and the next
 
-        stream_format_state ref_state_;// set by parsing, is only affected by modify_item
-        stream_format_state state_;    // set by parsing, is only affected by modify_item
+        stream_format_state fmtstate_;// set by parsing, is only affected by modify_item
 
         signed int truncate_;    //- is set for directives like %.5s that ask truncation
         unsigned int pad_scheme_;//- several possible padding schemes can mix. see pad_values
@@ -108,6 +115,8 @@ namespace detail {
         if(fill_ != 0)
             os.fill(fill_);
         os.flags(flags_);
+        os.clear(rdstate_);
+        os.exceptions(exceptions_);
     }
 
     template<class Ch, class Tr>
@@ -117,47 +126,66 @@ namespace detail {
         width_ = os.width();
         precision_ = os.precision();
         fill_ = os.fill();
+        rdstate_ = os.rdstate();
+        exceptions_ = os.exceptions();
     }
+
 
     template<class Ch, class Tr, class T>
     void apply_manip_body( stream_format_state<Ch, Tr>& self,
                            T manipulator) {
         // modify our params according to the manipulator
-        basic_outsstream<Ch, Tr>  ss; // fixme : use a nullstream
+        basic_outsstream<Ch, Tr>  ss;
         self.apply_on( ss );
         ss << manipulator;
         self.set_by_stream( ss );
     }
 
     template<class Ch, class Tr> inline
-    void stream_format_state<Ch,Tr>:: reset() {
-        // set our params to standard's default state.
-        width_=-1; precision_=-1; fill_=0; 
-        flags_ = std::ios_base::dec;
+    void stream_format_state<Ch,Tr>:: reset(Ch fill) {
+        // set our params to standard's default state.   cf § 27.4.4.1 of the C++ norm
+        width_=0; precision_=6; 
+        fill_=fill; // default is widen(' '), but we cant compute it without the locale
+        flags_ = std::ios_base::dec | std::ios_base::skipws; 
         // the adjust_field part is left equal to 0, which means right.
+        exceptions_ = std::ios_base::goodbit;
+        rdstate_ = std::ios_base::goodbit;
     }
+
 
 // ---   format_item:: --------------------------------------------------------
 
     template<class Ch, class Tr> 
+    void format_item<Ch, Tr>:: 
+    reset(Ch fill) { 
+        argN_=argN_no_posit; truncate_ = max_streamsize(); pad_scheme_ =0; 
+        res_.resize(0); appendix_.resize(0);
+        fmtstate_.reset(fill);
+    }
+
+    template<class Ch, class Tr> 
     void format_item<Ch, Tr>:: compute_states() {
-        // reflect pad_scheme_   on  ref_state_ and state_
+        // reflect pad_scheme_   on  fmt_state_
         //   because some pad_schemes has complex consequences on several state params.
         if(pad_scheme_ & zeropad) {
             // ignore zeropad in left alignment :
-            if(ref_state_.flags_ & std::ios_base::left) {
-              BOOST_ASSERT(!(ref_state_.flags_ &(std::ios_base::adjustfield ^std::ios_base::left)));
+            if(fmtstate_.flags_ & std::ios_base::left) {
+              BOOST_ASSERT(!(fmtstate_.flags_ &(std::ios_base::adjustfield ^std::ios_base::left)));
               // only left bit might be set. (not right, nor internal)
               pad_scheme_ = pad_scheme_ & (~zeropad); 
             }
             else { 
-                ref_state_.fill_='0'; 
-                ref_state_.flags_ = (ref_state_.flags_ & ~std::ios_base::adjustfield) 
+                pad_scheme_ &= ~spacepad; // printf ignores spacepad when zeropadding
+                fmtstate_.fill_='0'; 
+                fmtstate_.flags_ = (fmtstate_.flags_ & ~std::ios_base::adjustfield) 
                     | std::ios_base::internal;
                 // removes all adjustfield bits, and adds internal.
             }
         }
-        state_ = ref_state_;
+        if(pad_scheme_ & spacepad) {
+            if(fmtstate_.flags_ & std::ios_base::showpos)
+                pad_scheme_ &= ~spacepad;
+        }
     }
 
 

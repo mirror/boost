@@ -30,7 +30,6 @@ namespace io {
         return f.str();
     }
 
-
 }   // - namespace io
 
     template< class Ch, class Tr>

@@ -39,39 +39,37 @@ namespace boost {
         typedef std::basic_string<Ch, Tr>                string_t;
         typedef io::basic_outsstream<Ch, Tr>             internal_stream_t;
 
-        basic_format(const Ch* str);
-        basic_format(const string_t& s);
+        explicit basic_format(const Ch* str=NULL);
+        explicit basic_format(const string_t& s);
 #ifndef BOOST_NO_STD_LOCALE
-        basic_format(const Ch* str, const std::locale & loc);
-        basic_format(const string_t& s, const std::locale & loc);
-#endif 
+        explicit basic_format(const Ch* str, const std::locale & loc);
+        explicit basic_format(const string_t& s, const std::locale & loc);
+#endif
         basic_format(const basic_format& x);
         basic_format& operator= (const basic_format& x);
+        void swap(basic_format& x);
 
-        basic_format& clear(); //empty string buffers (except bound arguments, see clear_binds())
+        basic_format& clear(); // empty all converted string buffers
+        basic_format& clear_non_bound(); // same, except the ones marked bound are left
+        basic_format& parse(const string_t&); // resets buffers and parse a new format string
 
         // pass arguments through those operators :
-        template<class T>  basic_format&   operator%(const T& x) {
-            return io::detail::feed<CharT, Traits, const T&>(*this,x);
-        }
-#ifndef BOOST_NO_OVERLOAD_FOR_NON_CONST
-        template<class T>  basic_format&   operator%(T& x) {
-            return io::detail::feed<CharT, Traits, T&>(*this,x);
-        }
-#endif
-        // system for binding arguments :
-        template<class T>
-        basic_format&  bind_arg(int argN, const T& val) {
-            return io::detail::bind_arg_body(*this, argN, val); 
-        }
-        basic_format&  clear_bind(int argN);
-        basic_format&  clear_binds();
+        template<class T>  
+        basic_format&   operator%(const T& x)
+            { return io::detail::feed<CharT, Traits, const T&>(*this,x); }
 
-        // modify the params of a directive, by applying a manipulator :
+#ifndef BOOST_NO_OVERLOAD_FOR_NON_CONST
+        template<class T>  basic_format&   operator%(T& x) 
+            { return io::detail::feed<CharT, Traits, T&>(*this,x); }
+#endif
+        // modifying a format object
+        template<class T>
+        basic_format&  bind_arg(int argN, const T& val) 
+            { return io::detail::bind_arg_body(*this, argN, val); }
+        basic_format&  clear_bind(int argN);
         template<class T> 
-        basic_format&  modify_item(int itemN, const T& manipulator) {
-            return io::detail::modify_item_body(*this, itemN, manipulator) ;
-        }
+        basic_format&  modify_item(int itemN, T manipulator) 
+            { return io::detail::modify_item_body<Ch,Tr,T> (*this, itemN, manipulator);}
 
         // Choosing which errors will throw exceptions :
         unsigned char exceptions() const;
@@ -81,9 +79,9 @@ namespace boost {
         string_t str() const;
         friend BOOST_IO_STD basic_ostream<Ch, Tr>& 
 #if BOOST_WORKAROUND( BOOST_MSVC, <= 1300) 
-        operator<< ( BOOST_IO_STD basic_ostream<Ch, Tr>& , const basic_format& ); 
+        operator<< (BOOST_IO_STD basic_ostream<Ch, Tr>& , const basic_format& ); 
 #else
-        operator<< <Ch, Tr> ( BOOST_IO_STD basic_ostream<Ch, Tr>& , const basic_format& ); 
+        operator<< <Ch, Tr> (BOOST_IO_STD basic_ostream<Ch, Tr>&, const basic_format&); 
 #endif
                       
 #if !defined( BOOST_NO_MEMBER_TEMPLATE_FRIENDS )  \
@@ -95,7 +93,7 @@ namespace boost {
         template<class Ch2, class Tr2, class T>  friend   
         void io::detail::distribute(basic_format<Ch2,Tr2>&, T);
         template<class Ch2, class Tr2, class T>  friend
-        basic_format<Ch2, Tr2>& io::detail::modify_item_body(basic_format<Ch2, Tr2>&,int,const T&);
+        basic_format<Ch2, Tr2>& io::detail::modify_item_body(basic_format<Ch2, Tr2>&, int, T);
         template<class Ch2, class Tr2, class T> friend
         basic_format<Ch2, Tr2>&  io::detail::bind_arg_body(basic_format<Ch2, Tr2>&, int, const T&);
 
@@ -105,21 +103,20 @@ namespace boost {
         typedef io::detail::stream_format_state<Ch, Tr>  stream_format_state;
         typedef io::detail::format_item<Ch, Tr>          format_item_t;
         // flag bits, used for style_
-        enum style_values  { ordered = 1, // set only if all directives are  positional directives
+        enum style_values  { ordered = 1, // set only if all directives are  positional
                              special_needs = 4 };     
 
-        void parse(const string_t&);        // parse the format string 
+        void make_or_reuse_data(size_t nbitems);// used for (re-)initialisation
 
-        std::vector<format_item_t>  items_;    // vector of directives (aka items)
+        std::vector<format_item_t>  items_; // each '%..' directive leads to a format_item
         std::vector<bool> bound_; // stores which arguments were bound. size() == 0 || num_args
         int               style_; // style of format-string :  positional or not, etc
-        int             cur_arg_; // keep track of wich argument will come
+        int             cur_arg_; // keep track of wich argument is current
         int            num_args_; // number of expected arguments
         mutable bool     dumped_; // true only after call to str() or <<
         string_t         prefix_; // piece of string to insert before first item
         internal_stream_t   oss_; // the internal stream.
         unsigned char exceptions_;
-        stream_format_state state0_; // reference state for oss_
     }; // class basic_format
 
 } // namespace boost

@@ -40,7 +40,7 @@ namespace detail {
   // defined in format_implementation.hpp :
      template<class Ch, class Tr, class T> 
      basic_format<Ch, Tr>&  modify_item_body( basic_format<Ch, Tr>& self, 
-                                          int itemN, const T& manipulator);
+                                          int itemN, T manipulator);
 
      template<class Ch, class Tr, class T> 
      basic_format<Ch, Tr>&  bind_arg_body( basic_format<Ch, Tr>& self,

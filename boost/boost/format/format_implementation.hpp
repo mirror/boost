@@ -23,6 +23,7 @@
 #include <boost/throw_exception.hpp>
 #include <boost/assert.hpp>
 #include <boost/format/format_class.hpp>
+#include <algorithm> // std::swap
 
 namespace boost {
 
@@ -30,9 +31,8 @@ namespace boost {
     template< class Ch, class Tr>
     basic_format<Ch, Tr>:: basic_format(const Ch* str)
         : style_(0), cur_arg_(0), num_args_(0), dumped_(false),
-          exceptions_(io::all_error_bits) 
+          exceptions_(io::all_error_bits)
     {
-        state0_.set_by_stream(oss_);
         if( str)
             parse( str );
     }
@@ -44,7 +44,6 @@ namespace boost {
           exceptions_(io::all_error_bits)
     {
         oss_.imbue( loc );
-        state0_.set_by_stream(oss_);
         if(str) parse( str );
     }
 
@@ -64,39 +63,44 @@ namespace boost {
         : style_(0), cur_arg_(0), num_args_(0), dumped_(false),
           exceptions_(io::all_error_bits)
     {
-        state0_.set_by_stream(oss_);
         parse(s);  
     }
 
     template< class Ch, class Tr>
-    basic_format<Ch, Tr>::  basic_format(const basic_format& x)
+    basic_format<Ch, Tr>:: basic_format(const basic_format& x)
         : items_(x.items_), bound_(x.bound_), style_(x.style_), 
           cur_arg_(x.cur_arg_), num_args_(x.num_args_), dumped_(false), 
-          prefix_(x.prefix_), state0_(x.state0_), exceptions_(x.exceptions_)
+          prefix_(x.prefix_), exceptions_(x.exceptions_) 
     { 
-        state0_.apply_on(oss_);
     } 
 
     template< class Ch, class Tr>
-    basic_format<Ch, Tr>& basic_format<Ch, Tr>:: operator= (const basic_format& x)
-    {
-        if(this == &x)
-            return *this;
-        state0_ = x.state0_;
-        state0_.apply_on(oss_);
+    void  basic_format<Ch, Tr>:: swap (basic_format & x) {
+        std::swap(exceptions_, x.exceptions_);
+        std::swap(style_, x.style_); 
+        std::swap(cur_arg_, x.cur_arg_); 
+        std::swap(num_args_, x.num_args_);
+        std::swap(dumped_, x.dumped_);
 
-        // plus all the other (trivial) assignments :
-        exceptions_ = x.exceptions_;
-        items_ = x.items_;
-        prefix_ = x.prefix_;
-        bound_=x.bound_;
-        style_=x.style_; 
-        cur_arg_=x.cur_arg_; 
-        num_args_=x.num_args_;
-        dumped_=x.dumped_;
-        return *this;
+        items_.swap(x.items_);
+        prefix_.swap(x.prefix_);
+        bound_.swap(x.bound_);
     }
 
+    template< class Ch, class Tr>
+    basic_format<Ch, Tr>& basic_format<Ch, Tr>:: operator= (const basic_format& x) {
+        if(this == &x)
+            return *this;
+        items_ = x.items_;
+        prefix_ = x.prefix_;
+        bound_ = x.bound_;
+        exceptions_ =  x.exceptions_;
+        style_ =  x.style_; 
+        cur_arg_ =  x.cur_arg_; 
+        num_args_ =  x.num_args_;
+        dumped_ =  x.dumped_;
+        return *this;
+    }
 
     template< class Ch, class Tr>
     unsigned char basic_format<Ch,Tr>:: exceptions() const {
@@ -110,15 +114,27 @@ namespace boost {
         return swp; 
     }
 
+    template<class Ch, class Tr>
+    void basic_format<Ch, Tr>:: make_or_reuse_data(size_t nbitems) {
+        Ch fill = oss_.widen(' ');
+        if(items_.size() == 0)
+            items_.assign( nbitems, format_item_t(fill) );
+        else {
+            items_.resize(nbitems, format_item_t(fill));
+            bound_.resize(0);
+            for(size_t i=0; i < nbitems; ++i)
+                items_[i].reset(fill); //  strings are resized, instead of reallocated
+        }
+    }
 
     template< class Ch, class Tr>
-    basic_format<Ch,Tr>& basic_format<Ch,Tr>:: clear() {
-        // empty the string buffers (except bound arguments, see clear_binds() )
+    basic_format<Ch,Tr>& basic_format<Ch,Tr>:: clear_non_bound() {
+        // empty the string buffers (except bound arguments)
         // and make the format object ready for formatting a new set of arguments
+
         BOOST_ASSERT( bound_.size()==0 || num_args_ == static_cast<int>(bound_.size()) );
 
         for(unsigned long i=0; i<items_.size(); ++i) {
-            items_[i].state_ = items_[i].ref_state_;
             // clear converted strings only if the corresponding argument is not  bound :
             if( bound_.size()==0 || !bound_[ items_[i].argN_ ] )  items_[i].res_.resize(0);
         }
@@ -131,23 +147,24 @@ namespace boost {
     }
 
     template< class Ch, class Tr>
-    basic_format<Ch,Tr>& basic_format<Ch,Tr>:: clear_binds() {
-        // cancel all bindings, and clear()
+    basic_format<Ch,Tr>& basic_format<Ch,Tr>:: clear() {
+        // remove all binds, then clear_non_bound()
         bound_.resize(0);
-        clear();
+        clear_non_bound();
         return *this;
     }
 
     template< class Ch, class Tr>
     basic_format<Ch,Tr>& basic_format<Ch,Tr>:: clear_bind(int argN) {
-        // cancel the binding of ONE argument, and clear()
+        // remove the bind of ONE argument then clear_non_bound()
+
         if(argN<1 || argN > num_args_ || bound_.size()==0 || !bound_[argN-1] ) {
             if( exceptions() & io::out_of_range_bit )
                 boost::throw_exception(io::out_of_range()); // arg not in range.
             else return *this;
         }
         bound_[argN-1]=false;
-        clear();
+        clear_non_bound();
         return *this;
     }
 
@@ -175,9 +192,9 @@ namespace boost {
             res += item.res_;
             if( item.argN_ == format_item_t::argN_tabulation) { 
                 BOOST_ASSERT( item.pad_scheme_ & format_item_t::tabulation);
-                std::streamsize  n = item.state_.width_ - res.size();
+                std::streamsize  n = item.fmtstate_.width_ - res.size();
                 if( n > 0 )
-                    res.append( n, item.state_.fill_ );
+                    res.append( n, item.fmtstate_.fill_ );
             }
             res += item.appendix_;
         }
@@ -191,14 +208,14 @@ namespace detail {
     basic_format<Ch, Tr>&  bind_arg_body( basic_format<Ch, Tr>& self, 
                                           int argN, const T& val) {
         // bind one argument to a fixed value
-        // this is persistent over clear() calls, thus also over str() and <<
-        if(self.dumped_) self.clear(); // needed, because we will modify cur_arg_..
-        if(argN<1 || argN > self.num_args_) 
-            {
-                if( self.exceptions() & io::out_of_range_bit )
-                    boost::throw_exception(io::out_of_range()); // arg not in range.
-                else return self;
-            }
+        // this is persistent over clear_non_bound() calls, thus also over str() and <<
+        if(self.dumped_) 
+            self.clear_non_bound(); // needed because we will modify cur_arg_
+        if(argN<1 || argN > self.num_args_) {
+            if( self.exceptions() & io::out_of_range_bit )
+                boost::throw_exception(io::out_of_range()); // arg not in range.
+            else return self;
+        }
         if(self.bound_.size()==0) 
             self.bound_.assign(self.num_args_,false);
         else 
@@ -213,12 +230,11 @@ namespace detail {
         // Now re-position cur_arg before leaving :
         self.cur_arg_ = o_cur_arg; 
         self.bound_[argN-1]=true;
-        if(self.cur_arg_ == argN-1 )
+        if(self.cur_arg_ == argN-1 ) {
             // hum, now this arg is bound, so move to next free arg
-            {
-                while(self.cur_arg_ < self.num_args_ && self.bound_[self.cur_arg_])   
-                    ++self.cur_arg_;
-            }
+            while(self.cur_arg_ < self.num_args_ && self.bound_[self.cur_arg_])   
+                ++self.cur_arg_;
+        }
         // In any case, we either have all args, or are on a non-binded arg :
         BOOST_ASSERT( self.cur_arg_ >= self.num_args_ || ! self.bound_[self.cur_arg_]);
         return self;
@@ -226,17 +242,15 @@ namespace detail {
 
     template<class Ch, class Tr, class T> 
     basic_format<Ch, Tr>&  modify_item_body( basic_format<Ch, Tr>& self,
-                                             int itemN, const T& manipulator) {
+                                             int itemN, T manipulator) {
         // applies a manipulator to the format_item describing a given directive.
-        // this is a permanent change, clear or clear_binds won't cancel that.
-
-        if(itemN<1 || itemN >= static_cast<signed int>(self.items_.size() )) {
+        // this is a permanent change, clear or reset won't cancel that.
+        if(itemN<1 || itemN > static_cast<signed int>(self.items_.size() )) {
             if( self.exceptions() & io::out_of_range_bit ) 
                 boost::throw_exception(io::out_of_range()); // item not in range.
             else return self;
         }
-        self.items_[itemN-1].ref_state_.apply_manip( manipulator );
-        self.items_[itemN-1].state_ = self.items_[itemN-1].ref_state_;
+        self.items_[itemN-1].fmtstate_. template apply_manip<T> ( manipulator );
         return self;
     }
 

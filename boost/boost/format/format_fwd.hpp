@@ -25,39 +25,38 @@
 
 namespace boost {
 
-template <class Ch, 
-#if !  defined( __STL_CONFIG_H )  // typically gcc < 3
-          class Tr = std::char_traits<Ch> > 
+    template <class Ch, 
+#if !( BOOST_WORKAROUND(__GNUC__, <3) &&  defined(__STL_CONFIG_H) )
+        class Tr = std::char_traits<Ch> > 
 #else
-          class Tr = std::string_char_traits<Ch> > 
+    class Tr = std::string_char_traits<Ch> > 
 #endif
-class basic_format;
+    class basic_format;
 
-typedef basic_format<char >     format;
+    typedef basic_format<char >     format;
 
 
-#if !defined(BOOST_NO_STD_WSTRING)  \
-    && !defined(BOOST_NO_STD_WSTREAMBUF) \
-    && !defined(BOOST_NO_STRINGSTREAM)  // we repalce stringstream by strstream, so no wchar support.
-typedef basic_format<wchar_t >  wformat;
+#if !defined(BOOST_NO_STD_WSTRING)  && !defined(BOOST_NO_STD_WSTREAMBUF) \
+ && !defined(BOOST_NO_STRINGSTREAM)  
+    //we use either sstream or strstream, and strstream doesnt support wchar
+    typedef basic_format<wchar_t >  wformat;
 #endif
 
 namespace io {
-enum format_error_bits { bad_format_string_bit = 1, 
-                         too_few_args_bit = 2, too_many_args_bit = 4,
-                         out_of_range_bit = 8,
-                         all_error_bits = 255, no_error_bits=0 };
+    enum format_error_bits { bad_format_string_bit = 1, 
+                             too_few_args_bit = 2, too_many_args_bit = 4,
+                             out_of_range_bit = 8,
+                             all_error_bits = 255, no_error_bits=0 };
                   
-// Convertion:  format   to   string
-template<class Ch, class Tr> 
-std::basic_string<Ch, Tr>     str(const basic_format<Ch, Tr>& ) ;
+    template<class Ch, class Tr> 
+    std::basic_string<Ch, Tr>     str(const basic_format<Ch, Tr>& ) ;
 
 } // namespace io
 
 
-template< class Ch, class Tr> 
-BOOST_IO_STD basic_ostream<Ch, Tr>& 
-operator<<( BOOST_IO_STD basic_ostream<Ch, Tr>&, const basic_format<Ch, Tr>&);
+    template< class Ch, class Tr> 
+    BOOST_IO_STD basic_ostream<Ch, Tr>& 
+    operator<<( BOOST_IO_STD basic_ostream<Ch, Tr>&, const basic_format<Ch, Tr>&);
 
 
 } // namespace boost

@@ -17,11 +17,11 @@ namespace io {
 
 #if !defined( BOOST_NO_STRINGSTREAM)  & ! BOOST_WORKAROUND(__GNUC__, <3)
 
-template<class Ch, class Tr >
+template<class Ch, class Tr >  inline
 void
 basic_outsstream<Ch, Tr>:: clear_buffer() { 
-    const Ch * p = pptr();
-    const Ch * b = pbase();
+    const Ch * p = cur();
+    const Ch * b = begin();
     if(p != NULL && p != b) {
       typedef typename Tr::pos_type pos_type;
       pos_type pos = buff_t::seekpos(0, std::ios_base::out); 
@@ -34,7 +34,7 @@ basic_outsstream<Ch, Tr>:: clear_buffer() {
 #else // BOOST_NO_STRINGSTREAM
 
 
-template <class Tr>
+template <class Tr> inline
 basic_outsstream<char,Tr> ::basic_outsstream() : 
   buff_t(),  
   stream_t(this) 
@@ -44,19 +44,19 @@ basic_outsstream<char,Tr> ::basic_outsstream() :
   
 
 template <class Tr>
-basic_string<char, Tr> 
+std::basic_string<char, Tr> 
 basic_outsstream<char, Tr> ::str() {   // ! physically copy chars :
-    string_t s(buff_t::str(), pcount());
+    string_type s(buff_t::str(), pcount());
     freeze(false);
     return s;
 }
 
-template<class Tr >
+template<class Tr > inline
 void
 basic_outsstream<char, Tr>:: clear_buffer() { 
     freeze(false);
-    const Ch * p = buff_t::pptr();
-    const Ch * b = buff_t::pbase();
+    const Ch * p = cur();
+    const Ch * b = begin();
     if(p != NULL && p != b) {
       buff_t::seekpos(0, std::ios_base::out); 
     }
