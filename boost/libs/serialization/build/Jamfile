@@ -13,6 +13,8 @@ SOURCES =
     basic_iarchive
     basic_oarchive
     basic_serializer_map
+    basic_text_iprimitive
+    basic_text_oprimitive
     basic_xml_archive
     binary_iarchive
     binary_oarchive
@@ -31,6 +33,8 @@ SOURCES =
 ;
     
 WSOURCES = 
+    basic_text_wiprimitive
+    basic_text_woprimitive
     binary_wiarchive
     binary_woarchive
     text_wiarchive
@@ -74,6 +78,7 @@ lib boost_wserialization
         <vc7><*><cxxflags>-Gy
         <vc7.1><<*><cxxflags>-Gy
         <define>BOOST_TEST_NO_AUTO_LINK=1
+        <vacpp><*><define>BOOST_MPL_USE_APPLY_INTERNALLY
     : ## default-build
         <runtime-link>static <threading>single/multi
 ;
