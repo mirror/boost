@@ -82,6 +82,14 @@ class integer_traits<unsigned char>
 { };
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
+#if defined(__BORLANDC__)
+#ifndef WCHAR_MIN
+#define WCHAR_MIN 0
+#endif
+#ifndef WCHAR_MAX
+#define WCHAR_MAX 0xFFFF
+#endif
+#endif
 template<>
 class integer_traits<wchar_t>
   : public std::numeric_limits<wchar_t>,
