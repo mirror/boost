@@ -29,8 +29,8 @@ namespace boost {
 
   namespace detail {
     enum ePropertyMapID { READABLE_PA, WRITABLE_PA, 
-			       READ_WRITE_PA, LVALUE_PA, OP_BRACKET_PA, 
-			       RAND_ACCESS_ITER_PA, LAST_PA };
+                          READ_WRITE_PA, LVALUE_PA, OP_BRACKET_PA, 
+                          RAND_ACCESS_ITER_PA, LAST_PA };
   }
   struct readable_property_map_tag { enum { id = detail::READABLE_PA }; };
   struct writable_property_map_tag { enum { id = detail::WRITABLE_PA }; };
@@ -111,15 +111,6 @@ namespace boost {
     typedef std::ptrdiff_t key_type;
     typedef lvalue_property_map_tag   category;
   };
-
-#if 0 // std::size_t is a typedef for one of the other integral types.
-  template <>
-  struct property_traits<std::size_t*> {
-    typedef std::size_t value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-#endif
 
   template <>
   struct property_traits<bool*> {
@@ -346,6 +337,7 @@ namespace boost {
     typename std::iterator_traits<RAIter>::reference,
     ID >
   make_iterator_property_map(RAIter iter, ID id) {
+    REQUIRE(RAIter, RandomAccessIterator);
     typedef random_access_iterator_property_map<
     RAIter,
     typename std::iterator_traits<RAIter>::value_type,
@@ -358,6 +350,7 @@ namespace boost {
   inline random_access_iterator_property_map<
     RAIter, Value, Value&, ID>
   make_iterator_property_map(RAIter iter, ID id, Value) {
+    REQUIRE(RAIter, RandomAccessIterator);
     typedef random_access_iterator_property_map<
       RAIter, Value, Value&, ID> PMap;
     return PMap(iter, id);
