@@ -461,7 +461,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         size_type size_;
-        BOOST_UBLAS_ALIGN_16 value_type data_ [N];
+        BOOST_UBLAS_BOUNDED_ARRAY_ALIGN value_type data_ [N];
     };
 
 #ifdef BOOST_UBLAS_SIMPLE_ARRAY_ADAPTOR
