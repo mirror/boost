@@ -16,43 +16,39 @@
 
 #include <boost/preprocessor/repeat.hpp>
 
-/** Repeats the macro M(X,Y,P) for X = [0,W[ and Y = [0,H[.
+/** <p>Repeats the macro <code>M(X,Y,DATA)</code> for <code>X = [0,W)</code> and <code>Y = [0,H)</code>.</p>
 
-In other words, expands to the sequence:
+<p>In other words, expands to the sequence:</p>
 
-<PRE>\verbatim
-  M(  0,  0,  P) M(  1,  0,  P) ... M(W-1,  0,  P)
-  M(  0,  1,  P) M(  1,  1,  P) ... M(W-1,  1,  P)
-        ...            ...      ...       ...
-  M(  0,H-1,  P) M(  1,H-1,  P) ... M(W-1,H-1,  P)
-\endverbatim</PRE>
-
-Uses BOOST_PP_REPEAT().
+<pre>
+M(  0,  0,  DATA) M(  1,  0,  DATA) ... M(W-1,  0,  DATA)
+M(  0,  1,  DATA) M(  1,  1,  DATA) ... M(W-1,  1,  DATA)
+      ...            ...      ...       ...
+M(  0,H-1,  DATA) M(  1,H-1,  DATA) ... M(W-1,H-1,  DATA)
+</pre>
 */
-#define REPEAT_2D(W,H,M,P)\
+#define REPEAT_2D(W,H,M,DATA)\
   /* Here we can simply use BOOST_PP_REPEAT(), because\
    * it implements automatic recursion.\
    */\
   BOOST_PP_REPEAT\
   ( H\
   , REPEAT_2D_ROW\
-  , (W,M,P)\
+  , (W,M,DATA)\
   )
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define REPEAT_2D_ROW(Y,WMP)\
+#define REPEAT_2D_ROW(Y,WMD)\
   BOOST_PP_REPEAT\
-  ( BOOST_PP_TUPLE_ELEM(3,0,WMP)\
+  ( BOOST_PP_TUPLE_ELEM(3,0,WMD)\
   , REPEAT_2D_ELEM\
-  , (Y, BOOST_PP_TUPLE_ELEM(3,1,WMP), BOOST_PP_TUPLE_ELEM(3,2,WMP))\
+  , (Y, BOOST_PP_TUPLE_ELEM(3,1,WMD), BOOST_PP_TUPLE_ELEM(3,2,WMD))\
   )
-#define REPEAT_2D_ELEM(X,YMP)\
-  BOOST_PP_TUPLE_ELEM(3,1,YMP)\
+#define REPEAT_2D_ELEM(X,YMD)\
+  BOOST_PP_TUPLE_ELEM(3,1,YMD)\
   ( X\
-  , BOOST_PP_TUPLE_ELEM(3,0,YMP)\
-  , BOOST_PP_TUPLE_ELEM(3,2,YMP)\
+  , BOOST_PP_TUPLE_ELEM(3,0,YMD)\
+  , BOOST_PP_TUPLE_ELEM(3,2,YMD)\
   )
-#endif
 
 #include <boost/preprocessor/logical/or.hpp>
 #include <boost/preprocessor/comma_if.hpp>
