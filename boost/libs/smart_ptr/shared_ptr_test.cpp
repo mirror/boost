@@ -131,6 +131,11 @@ int test_main(int, char * [])
         BOOST_TEST(wp3.get() != 0);
         BOOST_TEST(wp2 == wp3);
 
+        weak_ptr<X> wp4(wp3);
+
+        wp1 = p2;
+        wp1 = p4;
+        wp1 = wp3;
         wp1 = wp2;
 
         BOOST_TEST(wp1.use_count() == 1);
