@@ -49,11 +49,13 @@
 // See http://www.boost.org for most recent version including documentation.
 
 // Revision History
+// 06 Feb 2001 - Factored if_true out into boost/detail/select_type.hpp
+//               (David Abrahams)
 // 23 Jan 2001 - Fixed logic of difference_type selection, which was
 //               completely wack. In the process, added digit_traits<>
 //               to compute the number of digits in intmax_t even when
-//               not supplied by numeric_limits<>.
-// 21 Jan 2001 - Created
+//               not supplied by numeric_limits<>. (David Abrahams)
+// 21 Jan 2001 - Created (David Abrahams)
 
 #ifndef BOOST_NUMERIC_TRAITS_HPP_DWA20001901
 # define BOOST_NUMERIC_TRAITS_HPP_DWA20001901
@@ -62,30 +64,12 @@
 # include <boost/cstdint.hpp>
 # include <boost/static_assert.hpp>
 # include <boost/type_traits.hpp>
+# include <boost/detail/select_type.hpp>
 # ifndef BOOST_NO_LIMITS
 #  include <limits>
 # endif
 
 namespace boost { namespace detail {
-
-  // Template class if_true -- select among 2 types based on a bool constant expression
-  // Usage:
-  //   typename if_true<(bool_const_expression)>::template then<true_type, false_type>::type
-  template <bool> struct if_true;
-
-  template <>
-  struct if_true<true>
-  {
-      template <class T1, class T2>
-      struct then { typedef T1 type; };
-  };
-
-  template <>
-  struct if_true<false>
-  {
-      template <class T1, class T2>
-      struct then { typedef T2 type; };
-  };
 
   // Template class is_signed -- determine whether a numeric type is signed
   // Requires that T is constructable from the literals -1 and 0.  Compile-time
