@@ -474,7 +474,7 @@ namespace boost {
     const_associative_property_map() : m_c(0) { }
     const_associative_property_map(const C& c) : m_c(&c) { }
     reference operator[](const key_type& k) const {
-      return (*m_c)[k];
+      return m_c->find(k)->second;
     }
   private:
     C const* m_c;
