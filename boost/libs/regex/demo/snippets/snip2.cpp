@@ -40,7 +40,7 @@ void IndexClasses(map_type& m, const std::string& file)
    end = file.end();   
    boost::match_results<std::string::const_iterator> what;
    unsigned int flags = boost::match_default;
-   while(regex_search(start, end, what, expression, flags))   
+   while(boost::regex_search(start, end, what, expression, flags))   
    {
       // what[0] contains the whole string
       // what[5] contains the class name.
@@ -97,6 +97,7 @@ int main(int argc, const char** argv)
    }
    return 0;
 }
+
 
 
 

@@ -69,7 +69,7 @@ void class_index::IndexClasses(const std::string& file)
    end = file.end();
    base = start;
    class_index::grep_callback_type cl = &(this->grep_callback);
-   regex_grep(cl,
+   boost::regex_grep(cl,
             start,
             end,
             expression);
@@ -116,5 +116,6 @@ int main(int argc, const char** argv)
    }
    return 0;
 }
+
 
 

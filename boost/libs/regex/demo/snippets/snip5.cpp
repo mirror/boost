@@ -53,7 +53,7 @@ void IndexClasses(const std::string& file)
    start = file.begin();
    end = file.end();
    base = start;
-   regex_grep(grep_callback, start, end, expression);
+   boost::regex_grep(grep_callback, start, end, expression);
 }
 
 #include <fstream>
@@ -96,3 +96,4 @@ int main(int argc, const char** argv)
    }
    return 0;
 }
+

@@ -56,7 +56,7 @@ void IndexClasses(map_type& m, const std::string& file)
    std::string::const_iterator start, end;
    start = file.begin();
    end = file.end();
-   regex_grep(IndexClassesPred(m, start), start, end, expression);
+   boost::regex_grep(IndexClassesPred(m, start), start, end, expression);
 }
 
 
@@ -100,6 +100,7 @@ int main(int argc, const char** argv)
    }
    return 0;
 }
+
 
 
 
