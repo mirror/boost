@@ -1,0 +1,10 @@
+subproject libs/mpl/test/aux_ ;
+
+# bring in rules for testing
+SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
+include testing.jam ;
+
+compile debug_print.cpp ;
+compile has_rebind.cpp ;
+compile has_distance.cpp ;
+compile typeof.cpp ;
