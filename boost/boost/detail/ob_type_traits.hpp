@@ -126,16 +126,16 @@ namespace detail{
    no_result is_same_helper(...);
 }
 
-template <typename T> struct is_reference; 
-template <typename T, typename U> struct is_same 
-{ 
+template <typename T> struct is_reference;
+template <typename T, typename U> struct is_same
+{
 private:
    static T t;
    static U u;
 public:
    enum{ value = (sizeof(detail::yes_result) == sizeof(detail::is_same_helper(&t,&u)))
                  & (is_reference<T>::value == is_reference<U>::value)
-                 & (sizeof(T) == sizeof(U)) }; 
+                 & (sizeof(T) == sizeof(U)) };
 };
 
 template <typename T> struct is_void{ enum{ value = false }; };
