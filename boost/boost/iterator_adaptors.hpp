@@ -869,11 +869,11 @@ struct reverse_iterator_pair_generator
 {
     typedef boost::detail::iterator_traits<BidirectionalIterator>::iterator_category category;
     typedef iterator_adaptor<BidirectionalIterator,reverse_iterator_policies,
-        Value, Value&, Value*
+        Value, Value&, Value*,
         typename boost::detail::iterator_traits<BidirectionalIterator>::iterator_category,
         typename boost::detail::iterator_traits<BidirectionalIterator>::difference_type> iterator;
     typedef iterator_adaptor<BidirectionalIterator,reverse_iterator_policies,
-        Value, const Value&, const Value*
+        Value, const Value&, const Value*,
         typename boost::detail::iterator_traits<BidirectionalIterator>::iterator_category,
         typename boost::detail::iterator_traits<BidirectionalIterator>::difference_type> const_iterator;
 };
