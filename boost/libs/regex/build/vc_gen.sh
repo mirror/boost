@@ -368,6 +368,8 @@ subdir="vc7"
 vc6_gen
 #
 # generate vc7-stlport makefile:
+debug_extra="/GX /RTC1"
+release_extra=""
 is_stlport="yes"
 out="vc7-stlport.mak"
 no_single="yes"
@@ -375,6 +377,8 @@ subdir="vc7"
 vc6_stlp_gen
 #
 # generate vc71 makefile:
+debug_extra="/GX /RTC1 /Zc:wchar_t"
+release_extra="/Zc:wchar_t"
 is_stlport="no"
 out="vc71.mak"
 no_single="no"
@@ -382,6 +386,8 @@ subdir="vc71"
 vc6_gen
 #
 # generate vc71-stlport makefile:
+debug_extra="/GX /RTC1"
+release_extra=""
 is_stlport="yes"
 out="vc71-stlport.mak"
 no_single="yes"
@@ -392,6 +398,7 @@ vc6_stlp_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
 
 
 

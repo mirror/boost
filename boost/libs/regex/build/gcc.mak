@@ -18,7 +18,6 @@
 # compiler:
 CXX=g++
 LINKER=g++ -shared
-AR=ar
 
 #
 # compiler options for release build:
@@ -31,7 +30,7 @@ C2=-c -g -I../../../
 
 
 
-ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/v3/cregex.hpp ../../../boost/regex/v3/fileiter.hpp ../../../boost/regex/v3/instances.hpp ../../../boost/regex/v3/regex.hpp ../../../boost/regex/v3/regex_compile.hpp ../../../boost/regex/v3/regex_cstring.hpp ../../../boost/regex/v3/regex_format.hpp ../../../boost/regex/v3/regex_fwd.hpp ../../../boost/regex/v3/regex_kmp.hpp ../../../boost/regex/v3/regex_library_include.hpp ../../../boost/regex/v3/regex_match.hpp ../../../boost/regex/v3/regex_raw_buffer.hpp ../../../boost/regex/v3/regex_split.hpp ../../../boost/regex/v3/regex_stack.hpp ../../../boost/regex/v3/regex_synch.hpp ../../../boost/regex/v3/regex_traits.hpp ../../../boost/regex/v4/basic_regex.hpp ../../../boost/regex/v4/char_regex_traits.hpp ../../../boost/regex/v4/cregex.hpp ../../../boost/regex/v4/fileiter.hpp ../../../boost/regex/v4/instances.hpp ../../../boost/regex/v4/iterator_category.hpp ../../../boost/regex/v4/iterator_traits.hpp ../../../boost/regex/v4/match_flags.hpp ../../../boost/regex/v4/match_results.hpp ../../../boost/regex/v4/mem_block_cache.hpp ../../../boost/regex/v4/perl_matcher.hpp ../../../boost/regex/v4/perl_matcher_common.hpp ../../../boost/regex/v4/perl_matcher_non_recursive.hpp ../../../boost/regex/v4/perl_matcher_recursive.hpp ../../../boost/regex/v4/regbase.hpp ../../../boost/regex/v4/regex.hpp ../../../boost/regex/v4/regex_compile.hpp ../../../boost/regex/v4/regex_cstring.hpp ../../../boost/regex/v4/regex_format.hpp ../../../boost/regex/v4/regex_fwd.hpp ../../../boost/regex/v4/regex_grep.hpp ../../../boost/regex/v4/regex_iterator.hpp ../../../boost/regex/v4/regex_kmp.hpp ../../../boost/regex/v4/regex_match.hpp ../../../boost/regex/v4/regex_merge.hpp ../../../boost/regex/v4/regex_raw_buffer.hpp ../../../boost/regex/v4/regex_replace.hpp ../../../boost/regex/v4/regex_search.hpp ../../../boost/regex/v4/regex_split.hpp ../../../boost/regex/v4/regex_stack.hpp ../../../boost/regex/v4/regex_synch.hpp ../../../boost/regex/v4/regex_token_iterator.hpp ../../../boost/regex/v4/regex_traits.hpp ../../../boost/regex/v4/states.hpp ../../../boost/regex/v4/sub_match.hpp ../../../boost/regex/config/borland.hpp ../../../boost/regex/config/cstring.hpp ../../../boost/regex/config/cwchar.hpp ../../../boost/regex/config/regex_library_include.hpp
+ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/v3/cregex.hpp ../../../boost/regex/v3/fileiter.hpp ../../../boost/regex/v3/instances.hpp ../../../boost/regex/v3/regex.hpp ../../../boost/regex/v3/regex_compile.hpp ../../../boost/regex/v3/regex_cstring.hpp ../../../boost/regex/v3/regex_format.hpp ../../../boost/regex/v3/regex_fwd.hpp ../../../boost/regex/v3/regex_kmp.hpp ../../../boost/regex/v3/regex_library_include.hpp ../../../boost/regex/v3/regex_match.hpp ../../../boost/regex/v3/regex_raw_buffer.hpp ../../../boost/regex/v3/regex_split.hpp ../../../boost/regex/v3/regex_stack.hpp ../../../boost/regex/v3/regex_synch.hpp ../../../boost/regex/v3/regex_traits.hpp ../../../boost/regex/v4/basic_regex.hpp ../../../boost/regex/v4/char_regex_traits.hpp ../../../boost/regex/v4/cregex.hpp ../../../boost/regex/v4/fileiter.hpp ../../../boost/regex/v4/instances.hpp ../../../boost/regex/v4/iterator_category.hpp ../../../boost/regex/v4/iterator_traits.hpp ../../../boost/regex/v4/match_flags.hpp ../../../boost/regex/v4/match_results.hpp ../../../boost/regex/v4/mem_block_cache.hpp ../../../boost/regex/v4/perl_matcher.hpp ../../../boost/regex/v4/perl_matcher_common.hpp ../../../boost/regex/v4/perl_matcher_non_recursive.hpp ../../../boost/regex/v4/perl_matcher_recursive.hpp ../../../boost/regex/v4/regbase.hpp ../../../boost/regex/v4/regex.hpp ../../../boost/regex/v4/regex_compile.hpp ../../../boost/regex/v4/regex_cstring.hpp ../../../boost/regex/v4/regex_format.hpp ../../../boost/regex/v4/regex_fwd.hpp ../../../boost/regex/v4/regex_grep.hpp ../../../boost/regex/v4/regex_iterator.hpp ../../../boost/regex/v4/regex_kmp.hpp ../../../boost/regex/v4/regex_match.hpp ../../../boost/regex/v4/regex_merge.hpp ../../../boost/regex/v4/regex_raw_buffer.hpp ../../../boost/regex/v4/regex_replace.hpp ../../../boost/regex/v4/regex_search.hpp ../../../boost/regex/v4/regex_split.hpp ../../../boost/regex/v4/regex_stack.hpp ../../../boost/regex/v4/regex_synch.hpp ../../../boost/regex/v4/regex_token_iterator.hpp ../../../boost/regex/v4/regex_traits.hpp ../../../boost/regex/v4/states.hpp ../../../boost/regex/v4/sub_match.hpp ../../../boost/regex/config/allocator.hpp ../../../boost/regex/config/borland.hpp ../../../boost/regex/config/cstring.hpp ../../../boost/regex/config/cwchar.hpp ../../../boost/regex/config/regex_library_include.hpp
 
 all : gcc  gcc gcc/boost_regex-gcc-1_31 ./gcc/libboost_regex-gcc-1_31.a gcc gcc/boost_regex-gcc-d-1_31 ./gcc/libboost_regex-gcc-d-1_31.a
 
@@ -60,6 +59,12 @@ gcc/boost_regex-gcc-1_31/cpp_regex_traits.o: ../src/cpp_regex_traits.cpp $(ALL_H
 
 gcc/boost_regex-gcc-1_31/cregex.o: ../src/cregex.cpp $(ALL_HEADER)
 	$(CXX) $(INCLUDES) -o gcc/boost_regex-gcc-1_31/cregex.o $(C1) $(CXXFLAGS) ../src/cregex.cpp
+
+gcc/boost_regex-gcc-1_31/default_escape_syntax_type.o: ../src/default_escape_syntax_type.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex-gcc-1_31/default_escape_syntax_type.o $(C1) $(CXXFLAGS) ../src/default_escape_syntax_type.cpp
+
+gcc/boost_regex-gcc-1_31/default_syntax_type.o: ../src/default_syntax_type.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex-gcc-1_31/default_syntax_type.o $(C1) $(CXXFLAGS) ../src/default_syntax_type.cpp
 
 gcc/boost_regex-gcc-1_31/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
 	$(CXX) $(INCLUDES) -o gcc/boost_regex-gcc-1_31/fileiter.o $(C1) $(CXXFLAGS) ../src/fileiter.cpp
@@ -94,9 +99,9 @@ gcc/boost_regex-gcc-1_31 :
 boost_regex-gcc-1_31_clean :
 	rm -f gcc/boost_regex-gcc-1_31/*.o
 
-./gcc/libboost_regex-gcc-1_31.a : gcc/boost_regex-gcc-1_31/c_regex_traits.o gcc/boost_regex-gcc-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-1_31/cregex.o gcc/boost_regex-gcc-1_31/fileiter.o gcc/boost_regex-gcc-1_31/instances.o gcc/boost_regex-gcc-1_31/posix_api.o gcc/boost_regex-gcc-1_31/regex.o gcc/boost_regex-gcc-1_31/regex_debug.o gcc/boost_regex-gcc-1_31/regex_synch.o gcc/boost_regex-gcc-1_31/w32_regex_traits.o gcc/boost_regex-gcc-1_31/wide_posix_api.o gcc/boost_regex-gcc-1_31/winstances.o
-	$(AR) -r gcc/libboost_regex-gcc-1_31.a  gcc/boost_regex-gcc-1_31/c_regex_traits.o gcc/boost_regex-gcc-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-1_31/cregex.o gcc/boost_regex-gcc-1_31/fileiter.o gcc/boost_regex-gcc-1_31/instances.o gcc/boost_regex-gcc-1_31/posix_api.o gcc/boost_regex-gcc-1_31/regex.o gcc/boost_regex-gcc-1_31/regex_debug.o gcc/boost_regex-gcc-1_31/regex_synch.o gcc/boost_regex-gcc-1_31/w32_regex_traits.o gcc/boost_regex-gcc-1_31/wide_posix_api.o gcc/boost_regex-gcc-1_31/winstances.o
-	-$(AR) -s gcc/libboost_regex-gcc-1_31.a
+./gcc/libboost_regex-gcc-1_31.a : gcc/boost_regex-gcc-1_31/c_regex_traits.o gcc/boost_regex-gcc-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-1_31/cregex.o gcc/boost_regex-gcc-1_31/default_escape_syntax_type.o gcc/boost_regex-gcc-1_31/default_syntax_type.o gcc/boost_regex-gcc-1_31/fileiter.o gcc/boost_regex-gcc-1_31/instances.o gcc/boost_regex-gcc-1_31/posix_api.o gcc/boost_regex-gcc-1_31/regex.o gcc/boost_regex-gcc-1_31/regex_debug.o gcc/boost_regex-gcc-1_31/regex_synch.o gcc/boost_regex-gcc-1_31/w32_regex_traits.o gcc/boost_regex-gcc-1_31/wide_posix_api.o gcc/boost_regex-gcc-1_31/winstances.o
+	ar -r gcc/libboost_regex-gcc-1_31.a  gcc/boost_regex-gcc-1_31/c_regex_traits.o gcc/boost_regex-gcc-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-1_31/cregex.o gcc/boost_regex-gcc-1_31/default_escape_syntax_type.o gcc/boost_regex-gcc-1_31/default_syntax_type.o gcc/boost_regex-gcc-1_31/fileiter.o gcc/boost_regex-gcc-1_31/instances.o gcc/boost_regex-gcc-1_31/posix_api.o gcc/boost_regex-gcc-1_31/regex.o gcc/boost_regex-gcc-1_31/regex_debug.o gcc/boost_regex-gcc-1_31/regex_synch.o gcc/boost_regex-gcc-1_31/w32_regex_traits.o gcc/boost_regex-gcc-1_31/wide_posix_api.o gcc/boost_regex-gcc-1_31/winstances.o
+	-ar -s gcc/libboost_regex-gcc-1_31.a
 
 ########################################################
 #
@@ -114,6 +119,12 @@ gcc/boost_regex-gcc-d-1_31/cpp_regex_traits.o: ../src/cpp_regex_traits.cpp $(ALL
 
 gcc/boost_regex-gcc-d-1_31/cregex.o: ../src/cregex.cpp $(ALL_HEADER)
 	$(CXX) $(INCLUDES) -o gcc/boost_regex-gcc-d-1_31/cregex.o $(C2) $(CXXFLAGS) ../src/cregex.cpp
+
+gcc/boost_regex-gcc-d-1_31/default_escape_syntax_type.o: ../src/default_escape_syntax_type.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex-gcc-d-1_31/default_escape_syntax_type.o $(C2) $(CXXFLAGS) ../src/default_escape_syntax_type.cpp
+
+gcc/boost_regex-gcc-d-1_31/default_syntax_type.o: ../src/default_syntax_type.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex-gcc-d-1_31/default_syntax_type.o $(C2) $(CXXFLAGS) ../src/default_syntax_type.cpp
 
 gcc/boost_regex-gcc-d-1_31/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
 	$(CXX) $(INCLUDES) -o gcc/boost_regex-gcc-d-1_31/fileiter.o $(C2) $(CXXFLAGS) ../src/fileiter.cpp
@@ -148,7 +159,7 @@ gcc/boost_regex-gcc-d-1_31 :
 boost_regex-gcc-d-1_31_clean :
 	rm -f gcc/boost_regex-gcc-d-1_31/*.o
 
-./gcc/libboost_regex-gcc-d-1_31.a : gcc/boost_regex-gcc-d-1_31/c_regex_traits.o gcc/boost_regex-gcc-d-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-d-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-d-1_31/cregex.o gcc/boost_regex-gcc-d-1_31/fileiter.o gcc/boost_regex-gcc-d-1_31/instances.o gcc/boost_regex-gcc-d-1_31/posix_api.o gcc/boost_regex-gcc-d-1_31/regex.o gcc/boost_regex-gcc-d-1_31/regex_debug.o gcc/boost_regex-gcc-d-1_31/regex_synch.o gcc/boost_regex-gcc-d-1_31/w32_regex_traits.o gcc/boost_regex-gcc-d-1_31/wide_posix_api.o gcc/boost_regex-gcc-d-1_31/winstances.o
-	$(AR) -r gcc/libboost_regex-gcc-d-1_31.a  gcc/boost_regex-gcc-d-1_31/c_regex_traits.o gcc/boost_regex-gcc-d-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-d-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-d-1_31/cregex.o gcc/boost_regex-gcc-d-1_31/fileiter.o gcc/boost_regex-gcc-d-1_31/instances.o gcc/boost_regex-gcc-d-1_31/posix_api.o gcc/boost_regex-gcc-d-1_31/regex.o gcc/boost_regex-gcc-d-1_31/regex_debug.o gcc/boost_regex-gcc-d-1_31/regex_synch.o gcc/boost_regex-gcc-d-1_31/w32_regex_traits.o gcc/boost_regex-gcc-d-1_31/wide_posix_api.o gcc/boost_regex-gcc-d-1_31/winstances.o
-	-$(AR) -s gcc/libboost_regex-gcc-d-1_31.a
+./gcc/libboost_regex-gcc-d-1_31.a : gcc/boost_regex-gcc-d-1_31/c_regex_traits.o gcc/boost_regex-gcc-d-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-d-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-d-1_31/cregex.o gcc/boost_regex-gcc-d-1_31/default_escape_syntax_type.o gcc/boost_regex-gcc-d-1_31/default_syntax_type.o gcc/boost_regex-gcc-d-1_31/fileiter.o gcc/boost_regex-gcc-d-1_31/instances.o gcc/boost_regex-gcc-d-1_31/posix_api.o gcc/boost_regex-gcc-d-1_31/regex.o gcc/boost_regex-gcc-d-1_31/regex_debug.o gcc/boost_regex-gcc-d-1_31/regex_synch.o gcc/boost_regex-gcc-d-1_31/w32_regex_traits.o gcc/boost_regex-gcc-d-1_31/wide_posix_api.o gcc/boost_regex-gcc-d-1_31/winstances.o
+	ar -r gcc/libboost_regex-gcc-d-1_31.a  gcc/boost_regex-gcc-d-1_31/c_regex_traits.o gcc/boost_regex-gcc-d-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-d-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-d-1_31/cregex.o gcc/boost_regex-gcc-d-1_31/default_escape_syntax_type.o gcc/boost_regex-gcc-d-1_31/default_syntax_type.o gcc/boost_regex-gcc-d-1_31/fileiter.o gcc/boost_regex-gcc-d-1_31/instances.o gcc/boost_regex-gcc-d-1_31/posix_api.o gcc/boost_regex-gcc-d-1_31/regex.o gcc/boost_regex-gcc-d-1_31/regex_debug.o gcc/boost_regex-gcc-d-1_31/regex_synch.o gcc/boost_regex-gcc-d-1_31/w32_regex_traits.o gcc/boost_regex-gcc-d-1_31/wide_posix_api.o gcc/boost_regex-gcc-d-1_31/winstances.o
+	-ar -s gcc/libboost_regex-gcc-d-1_31.a
 
