@@ -126,8 +126,10 @@ void save(Archive & ar,
           const posix_time::time_period& tp, 
           unsigned int version)
 {
-  ar & make_nvp("time_period: begin", tp.begin());
-  ar & make_nvp("time_period: end", tp.end());
+  typename posix_time::ptime beg(tp.begin().date(), tp.begin().time_of_day());
+  typename posix_time::ptime end(tp.end().date(), tp.end().time_of_day());
+  ar & make_nvp("time_period: begin", beg);
+  ar & make_nvp("time_period: end", end);
 }
 
 //! Function to load posix_time::time_period objects using serialization lib

@@ -264,8 +264,10 @@ template<class Archive>
 void save(Archive & ar, const gregorian::partial_date& pd, 
           unsigned int version)
 {
-  ar & make_nvp("partial_date: day", pd.day());
-  ar & make_nvp("partial_date: month", pd.month());
+  gregorian::greg_day gd(pd.day());
+  gregorian::greg_month gm(pd.month().as_number());
+  ar & make_nvp("partial_date: day", gd);
+  ar & make_nvp("partial_date: month", gm);
 }
 //! Function to load gregorian::partial_date objects using serialization lib
 /*! partial_date objects are broken down into 2 parts for serialization:
@@ -300,9 +302,12 @@ template<class Archive>
 void save(Archive & ar, const gregorian::nth_kday_of_month& nkd, 
           unsigned int version)
 {
-  ar & make_nvp("nth_kday_of_month: week_num", nkd.nth_week());
-  ar & make_nvp("nth_kday_of_month: day_of_week", nkd.day_of_week());
-  ar & make_nvp("nth_kday_of_month: month", nkd.month());
+  typename gregorian::nth_kday_of_month::week_num wn(nkd.nth_week());
+  typename gregorian::nth_kday_of_month::day_of_week_type d(nkd.day_of_week().as_number());
+  typename gregorian::nth_kday_of_month::month_type m(nkd.month().as_number());
+  ar & make_nvp("nth_kday_of_month: week_num", wn);
+  ar & make_nvp("nth_kday_of_month: day_of_week", d);
+  ar & make_nvp("nth_kday_of_month: month", m);
 }
 //! Function to load nth_day_of_the_week_in_month objects using serialization lib
 /*! nth_day_of_the_week_in_month  objects are broken down into 3 parts for 
@@ -341,8 +346,10 @@ template<class Archive>
 void save(Archive & ar, const gregorian::first_kday_of_month& fkd, 
           unsigned int version)
 {
-  ar & make_nvp("first_kday_of_month: day_of_week", fkd.day_of_week());
-  ar & make_nvp("first_kday_of_month: month", fkd.month());
+  typename gregorian::first_kday_of_month::day_of_week_type d(fkd.day_of_week().as_number());
+  typename gregorian::first_kday_of_month::month_type m(fkd.month().as_number());
+  ar & make_nvp("first_kday_of_month: day_of_week", d);
+  ar & make_nvp("first_kday_of_month: month", m);
 }
 //! Function to load first_day_of_the_week_in_month objects using serialization lib
 /*! first_day_of_the_week_in_month objects are broken down into 2 parts for 
@@ -378,8 +385,10 @@ template<class Archive>
 void save(Archive & ar, const gregorian::last_kday_of_month& lkd, 
           unsigned int version)
 {
-  ar & make_nvp("last_kday_of_month: day_of_week", lkd.day_of_week());
-  ar & make_nvp("last_kday_of_month: month", lkd.month());
+  typename gregorian::last_kday_of_month::day_of_week_type d(lkd.day_of_week().as_number());
+  typename gregorian::last_kday_of_month::month_type m(lkd.month().as_number());
+  ar & make_nvp("last_kday_of_month: day_of_week", d);
+  ar & make_nvp("last_kday_of_month: month", m);
 }
 //! Function to load last_day_of_the_week_in_month objects using serialization lib
 /*! last_day_of_the_week_in_month objects are broken down into 2 parts for 
@@ -412,7 +421,8 @@ template<class Archive>
 void save(Archive & ar, const gregorian::first_kday_before& fkdb, 
           unsigned int version)
 {
-  ar & make_nvp("first_kday_before: day_of_week", fkdb.day_of_week());
+  typename gregorian::first_kday_before::day_of_week_type d(fkdb.day_of_week().as_number());
+  ar & make_nvp("first_kday_before: day_of_week", d);
 }
 //! Function to load first_day_of_the_week_before objects using serialization lib
 template<class Archive>
@@ -440,7 +450,8 @@ template<class Archive>
 void save(Archive & ar, const gregorian::first_kday_after& fkda, 
           unsigned int version)
 {
-  ar & make_nvp("first_kday_after: day_of_week", fkda.day_of_week());
+  typename gregorian::first_kday_after::day_of_week_type d(fkda.day_of_week().as_number());
+  ar & make_nvp("first_kday_after: day_of_week", d);
 }
 //! Function to load first_day_of_the_week_after objects using serialization lib
 template<class Archive>
