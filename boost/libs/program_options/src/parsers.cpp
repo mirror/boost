@@ -82,11 +82,13 @@ namespace boost { namespace program_options {
         parse_command_line(cmdline& cmd, parsed_options& result);
     }
 
+    template<>
     basic_command_line_parser<char>::
     basic_command_line_parser(const std::vector<std::string>& args)
     : m_style(0), m_desc(0), m_positional(0), m_args(args)
     {}
 
+    template<>
     basic_command_line_parser<char>::
     basic_command_line_parser(int argc, char* argv[])
     :  m_style(0), m_desc(0), m_positional(0)
@@ -99,7 +101,8 @@ namespace boost { namespace program_options {
         copy(argv+1, argv+argc, inserter(m_args, m_args.end()));
 #endif
     }
-    
+
+    template<>    
     parsed_options 
     basic_command_line_parser<char>::run() const
     {
