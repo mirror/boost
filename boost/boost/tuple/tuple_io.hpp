@@ -36,6 +36,16 @@
 
 #include "boost/tuple/tuple.hpp"
 
+// This is ugly: one should be using twoargument isspace since whitspace can
+// be locale dependent, in theory at least.
+// not all libraries implement have the two-arg version, so we need to 
+// use the one-arg one, which one should get with <cctype> but there seem
+// to be exceptions to this.
+
+#include <locale> // for two-arg isspace
+#include <cctype> // for one-arg (old) isspace 
+#include <ctype.h> // Metrowerks does not find one-arg isspace from cctype
+
 namespace boost {
 namespace tuples {
 
@@ -328,7 +338,11 @@ extract_and_check_delimiter(
 {
   const char d = format_info::get_manipulator(is, del);
 
-  const bool is_delimiter = (!isspace(d) );      
+#if defined (BOOST_NO_STD_LOCALE)
+  const bool is_delimiter = !isspace(d);
+#else
+  const bool is_delimiter = (!std::isspace(d, is.getloc()) );            
+#endif
 
   char c;
   if (is_delimiter) { 
@@ -415,7 +429,11 @@ extract_and_check_delimiter(
 {
   const CharType d = format_info::get_manipulator(is, del);
 
-  const bool is_delimiter = (!isspace(d) );      
+#if defined (BOOST_NO_STD_LOCALE)
+  const bool is_delimiter = !isspace(d);
+#else
+  const bool is_delimiter = (!std::isspace(d, is.getloc()) );            
+#endif
 
   CharType c;
   if (is_delimiter) { 
