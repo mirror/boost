@@ -19,25 +19,179 @@ Defined in header
 
 
 <p>
-The filter iterator adaptor ...
+The filter iterator adaptor creates a view of an iterator range in
+which some elements of the range are skipped over. A <a
+href="http://www.sgi.com/tech/stl/Predicate.html">Predicate</a>
+function object controls which elements are skipped. When the
+predicate is applied to an element, if it returns <tt>true</tt> then
+the element is retained and if it returns <tt>false</tt> then the
+element is skipped over.
 
 
+<h2>Synopsis</h2>
+
+<pre>
+namespace boost {
+  template &lt;class Predicate, class Iterator, ...&gt;
+  class filter_iterator_generator;
+
+  template &lt;class Predicate, class Iterator&gt;
+  typename filter_iterator_generator&lt;Predicate, Iterator&gt;::type
+  make_filter_iterator(Iterator first, Iterator last, const Predicate& p = Predicate());
+}
+</pre>
+
+
+<h2><a name="filter_iterator_generator">The Filter Iterator Type
+Generator</a></h2>
+
+The class <tt>filter_iterator_generator</tt> is a helper class who's
+purpose is to construct a filter iterator adaptor type.  The template
+parameters for this class are the <tt>Predicate</tt> function object
+type and the <tt>Iterator</tt> type that is being wrapped.  In most
+cases the associated types for the wrapped iterator can be deduced
+from <tt>std::iterator_traits</tt>, but in some situations the user
+may want to override these types, so there are also template
+parameters for each of the iterator's associated types.
+
+<pre>
+template &lt;class Predicate, 
+          class Iterator,
+          class Value = std::iterator_traits&lt;Iterator&gt;::value_type,
+          class Pointer = std::iterator_traits&lt;Iterator&gt;::pointer,
+          class Reference = std::iterator_traits&lt;Iterator&gt;::reference,
+          class Category = std::iterator_traits&lt;Iterator&gt;::iterator_category,
+          class Distance = std::iterator_traits&lt;Iterator&gt;::difference_type,
+class filter_iterator_generator
+{
+public:
+  typedef ... type;          // the filter <a href="./iterator_adaptor.htm"><tt>iterator_adaptor</tt></a> type
+  typedef ... policies_type; // the filter policies type
+}
+</pre>
 
 <h3>Example</h3>
 
 The following example uses filter iterator to print out all the
-positive integers in an array.
+positive integers in an array. 
 
 <pre>
-#include &lt;boost/config.hpp&gt;
-#include &lt;algorithm&gt;
-#include &lt;iostream&gt;
-#include &lt;boost/iterator_adaptors.hpp&gt;
-
 struct is_positive_number {
   bool operator()(int x) { return 0 &lt; x; }
 };
+int main() {
+  int numbers[] = { 0, -1, 4, -3, 5, 8, -2 };
+  const int N = sizeof(numbers)/sizeof(int);
 
+  typedef boost::filter_iterator_generator&lt;is_positive_number, int*, int&gt; Gen;
+  is_positive_number predicate;
+  Gen::policies_type policies(numbers + N, predicate);
+  Gen::type filter_iter_first(numbers, policies);
+  Gen::type filter_iter_last(numbers + N, policies);
+
+  std::copy(filter_iter_first, filter_iter_last, std::ostream_iterator&lt;int&gt;(std::cout, " "));
+  std::cout &lt;&lt; std::endl;
+  return 0;
+}
+</pre>
+The output is:
+<pre>
+4 5 8
+</pre>
+
+
+<h3>Template Parameters</h3>
+
+<Table border>
+<TR>
+<TH>Parameter</TH><TH>Description</TH>
+</TR>
+
+<TR>
+<TD><a href="http://www.sgi.com/tech/stl/Predicate.html"><tt>Predicate</tt></a></TD>
+<TD>The function object that determines which elements are retained and which elements are skipped.
+</TR>
+
+<TR>
+<TD><tt>Iterator</tt></TD>
+<TD>The iterator type being wrapped. This type must be a model
+ of either the <a href="http://www.sgi.com/tech/stl/InputIterator">InputIterator</a> concept or the <a href="http://www.sgi.com/tech/stl/OutputIterator">OutputIterator</a> concept. </TD>
+</TR>
+
+<TR>
+<TD><tt>Value</tt></TD>
+<TD>The <tt>value_type</tt> for the iterator adaptor. Typically the default for
+this parameter is the appropriate type<a href="#1">[1]</a>.<br>
+<b>Default:</b> <tt>std::iterator_traits&lt;Iterator&gt;::value_type</TD>
+</TR>
+
+<TR>
+<TD><tt>Pointer</tt></TD>
+<TD>The <tt>pointer</tt> type for the iterator adaptor. Typically the default for
+this parameter is the appropriate type.<br>
+<b>Default:</b> <tt>std::iterator_traits&lt;Iterator&gt;::pointer</TD>
+</TR>
+
+<TR>
+<TD><tt>Reference</tt></TD>
+<TD>The <tt>reference</tt> type for the iterator adaptor. Typically the default for
+this parameter is the appropriate type.<br>
+<b>Default:</b> <tt>std::iterator_traits&lt;Iterator&gt;::reference</TD>
+</TR>
+
+<TR>
+<TD><tt>Category</tt></TD>
+
+<TD>The <tt>iterator_category</tt> type for the iterator adaptor.
+Typically the
+default for this parameter is the appropriate type. If you override
+this parameter, do not use <tt>bidirectional_iterator_tag</tt>
+because filter iterators can not go in reverse.<br>
+<b>Default:</b> <tt>std::iterator_traits&lt;Iterator&gt;::iterator_category</TD>
+</TR>
+
+<TR>
+<TD><tt>Distance</tt></TD>
+<TD>The <tt>difference_type</tt> for the iterator adaptor. Typically the default for
+this parameter is the appropriate type.<br>
+<b>Default:</b> <tt>std::iterator_traits&lt;Iterator&gt;::difference_type</TD>
+</TR>
+
+</table>
+
+
+<h3>Model of</h3>
+
+The filter iterator adaptor (the type
+<tt>filter_iterator_generator<...>::type</tt>) may be a model of <a
+href="www.sgi.com/tech/stl/InputIterator.html">InputIterator</a> or <a
+href="www.sgi.com/tech/stl/ForwardIterator.html">ForwardIterator</a>
+depending on the adapted iterator type.
+
+<p>
+
+<hr>
+<p>
+
+<h2><a name="make_filter_iterator">The Make Filter Iterator Function</a></h2>
+
+<pre>
+template &lt;class Predicate, class Iterator&gt;
+typename detail::filter_generator&lt;Predicate, Iterator&gt;::type
+make_filter_iterator(Iterator first, Iterator last, const Predicate& p = Predicate())
+</pre>
+
+This function provides a convenient way to create filter iterators.
+
+<h3>Example</h3>
+
+In this example we print the positive number again, this time using
+the <tt>make_filter_iterator()</tt> function.
+
+<pre>
+struct is_positive_number {
+  bool operator()(int x) { return 0 &lt; x; }
+};
 int main()
 {
   int numbers[] = { 0, -1, 4, -3, 5, 8, -2 };
@@ -56,39 +210,12 @@ The output is:
 </pre>
 
 
-The filter iterator adaptors 
-models <a href="www.sgi.com/tech/stl/ForwardIterator.html">ForwardIterator</a>
+<h3>Notes</h3>
 
-
-
-<h3>The Filter Iterator Type Generator</h3>
-
-<pre>
-template &lt;class Predicate, 
-          class Iterator,
-          class Value = <i>value default</i>,
-          class Pointer = <i>pointer default</i>,
-          class Reference = <i>reference default</i>,
-          class Category = <i>category default</i>,
-          class Distance = <i>difference type default</i>&gt;
-class filter_iterator_generator
-{
-  typedef ... type;
-  typedef ... policies_type;
-}
-</pre>
-
-<p>
-show another example and explain defaults...
-
-
-<h3>The Make Filter Iterator Helper Function</h3>
-
-<pre>
-template &lt;class Predicate, class Iterator&gt;
-inline typename detail::filter_generator&lt;Predicate, Iterator&gt;::type
-make_filter_iterator(Iterator first, Iterator last, const Predicate& p = Predicate())
-</pre>
+<a name="1">[1]</a> If the compiler does not support partial
+specialization and the wrapped iterator type is a builtin pointer then
+the <tt>Value</tt> type must be explicitly specified (don't use the
+default).
 
 
 <hr>
