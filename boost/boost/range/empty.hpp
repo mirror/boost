@@ -16,9 +16,9 @@
 #endif
 
 #include <boost/range/config.hpp>
-#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-#include <boost/range/detail/empty.hpp>
-#else
+//#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+//#include <boost/range/detail/empty.hpp>
+//#else
 
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
@@ -62,6 +62,6 @@ inline bool empty( const T& r )
 
 } // namepace 'boost'
 
-#endif //  BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+//#endif //  BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
 #endif
