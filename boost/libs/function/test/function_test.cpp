@@ -130,7 +130,7 @@ test_zero_args()
 
   // Construction from another function (that is empty)
   v1.clear();
-  func_void_type v2(v1);;
+  func_void_type v2(v1);
   BOOST_TEST(!v2);
 
   // Assignment to an empty function
@@ -227,10 +227,10 @@ test_zero_args()
   BOOST_TEST(global_int == 5);
   global_int = 0;
   v2();
-  BOOST_TEST(global_int == 5);;
+  BOOST_TEST(global_int == 5);
 
   // Construct a function given another function containing a function
-  func_void_type v3(v1);;
+  func_void_type v3(v1);
 
   // Invocation of a function
   global_int = 0;
@@ -552,7 +552,7 @@ test_emptiness()
   BOOST_TEST(f2.empty());
 
   function<double> f3;
-  f3 = f2;;
+  f3 = f2;
   BOOST_TEST(f3.empty());
 }
 
