@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost variant/detail/apply_visitor_impl.hpp header file
+// boost variant/detail/visitation_impl.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -14,8 +14,8 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_VARIANT_DETAIL_APPLY_VISITOR_IMPL_HPP
-#define BOOST_VARIANT_DETAIL_APPLY_VISITOR_IMPL_HPP
+#ifndef BOOST_VARIANT_DETAIL_VISITATION_IMPL_HPP
+#define BOOST_VARIANT_DETAIL_VISITATION_IMPL_HPP
 
 #include "boost/config.hpp"
 #include "boost/mpl/aux_/deref_wknd.hpp"
@@ -37,13 +37,13 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT
+// BOOST_VARIANT_VISITATION_UNROLLING_LIMIT
 //
 // Unrolls variant's visitation mechanism to reduce template instantiation
 // and potentially increase runtime performance. (TODO: Investigate further.)
 //
-#if !defined(BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT)
-#   define BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT   \
+#if !defined(BOOST_VARIANT_VISITATION_UNROLLING_LIMIT)
+#   define BOOST_VARIANT_VISITATION_UNROLLING_LIMIT   \
         BOOST_VARIANT_LIMIT_TYPES
 #endif
 
@@ -51,42 +51,42 @@ namespace boost {
 namespace detail { namespace variant {
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) class apply_visitor_impl
+// (detail) class visitation_impl
 //
-// Tag type indicates when apply_visitor_impl is unrolled.
+// Tag type indicates when visitation_impl is unrolled.
 //
 struct apply_visitor_unrolled {};
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) class template apply_visitor_impl_step
+// (detail) class template visitation_impl_step
 //
-// "Never ending" iterator range facilitates apply_visitor_impl unrolling.
+// "Never ending" iterator range facilitates visitation_impl unrolling.
 //
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template <typename Iter, typename LastIter>
-struct apply_visitor_impl_step
+struct visitation_impl_step
 {
     typedef typename BOOST_MPL_AUX_DEREF_WNKD(Iter) type;
 
     typedef typename mpl::next<Iter>::type next_iter;
-    typedef apply_visitor_impl_step<
+    typedef visitation_impl_step<
           next_iter, LastIter
         > next;
 };
 
 template <typename LastIter>
-struct apply_visitor_impl_step< LastIter,LastIter >
+struct visitation_impl_step< LastIter,LastIter >
 {
     typedef apply_visitor_unrolled type;
-    typedef apply_visitor_impl_step next;
+    typedef visitation_impl_step next;
 };
 
 #else // defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template <typename Iter, typename LastIter>
-struct apply_visitor_impl_step
+struct visitation_impl_step
 {
     typedef typename mpl::apply_if<
           is_same<Iter, LastIter>
@@ -100,7 +100,7 @@ struct apply_visitor_impl_step
         , mpl::next<Iter>
         >::type next_iter;
 
-    typedef apply_visitor_impl_step<
+    typedef visitation_impl_step<
           next_iter, LastIter
         > next;
 };
@@ -108,7 +108,7 @@ struct apply_visitor_impl_step
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION workaround
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) function template apply_visitor_impl_invoke
+// (detail) function template visitation_impl_invoke
 //
 // Invokes the given visitor on the specified type in the given storage.
 //
@@ -116,7 +116,7 @@ struct apply_visitor_impl_step
 template <typename Visitor, typename VoidPtrCV, typename T>
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-apply_visitor_impl_invoke(Visitor& visitor, VoidPtrCV operand, T*, int)
+visitation_impl_invoke(Visitor& visitor, VoidPtrCV operand, T*, int)
 {
     return visitor( cast_storage<T>(operand) );
 }
@@ -124,7 +124,7 @@ apply_visitor_impl_invoke(Visitor& visitor, VoidPtrCV operand, T*, int)
 template <typename Visitor, typename VoidPtrCV>
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-apply_visitor_impl_invoke(Visitor&, VoidPtrCV, apply_visitor_unrolled*, long)
+visitation_impl_invoke(Visitor&, VoidPtrCV, apply_visitor_unrolled*, long)
 {
     // should never be here at runtime:
     BOOST_ASSERT(false);
@@ -133,7 +133,7 @@ apply_visitor_impl_invoke(Visitor&, VoidPtrCV, apply_visitor_unrolled*, long)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) function template apply_visitor_impl
+// (detail) function template visitation_impl
 //
 // Invokes the given visitor on the type in the given variant storage.
 //
@@ -144,7 +144,7 @@ template <
     >
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-apply_visitor_impl(
+visitation_impl(
       const int, Visitor&, VPCV
     , mpl::true_ // is_apply_visitor_unrolled
     , W* = 0, S* = 0
@@ -162,7 +162,7 @@ template <
     >
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-apply_visitor_impl(
+visitation_impl(
       const int var_which, Visitor& visitor, VoidPtrCV storage
     , mpl::false_ // is_apply_visitor_unrolled
     , Which* = 0, step0* = 0
@@ -176,7 +176,7 @@ apply_visitor_impl(
     /**/
 
     BOOST_PP_REPEAT(
-          BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT
+          BOOST_VARIANT_VISITATION_UNROLLING_LIMIT
         , BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_TYPEDEF
         , _
         )
@@ -190,13 +190,13 @@ apply_visitor_impl(
     // ...applying the appropriate case:
 #   define BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_CASE(z, N, _)           \
     case (Which::value + (N)):                                          \
-        return apply_visitor_impl_invoke(                               \
+        return visitation_impl_invoke(                               \
               visitor, storage, static_cast<BOOST_PP_CAT(T,N)*>(0), 1L  \
             );                                                          \
     /**/
 
     BOOST_PP_REPEAT(
-          BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT
+          BOOST_VARIANT_VISITATION_UNROLLING_LIMIT
         , BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_CASE
         , _
         )
@@ -207,17 +207,17 @@ apply_visitor_impl(
 
     // If not handled in this iteration, continue unrolling:
     typedef mpl::int_<
-          Which::value + (BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT)
+          Which::value + (BOOST_VARIANT_VISITATION_UNROLLING_LIMIT)
         > next_which;
 
-    typedef BOOST_PP_CAT(step, BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT)
+    typedef BOOST_PP_CAT(step, BOOST_VARIANT_VISITATION_UNROLLING_LIMIT)
         next_step;
 
     typedef typename next_step::type next_type;
     typedef typename is_same< next_type,apply_visitor_unrolled >::type
         is_apply_visitor_unrolled;
 
-    return apply_visitor_impl(
+    return visitation_impl(
           var_which, visitor, storage
         , is_apply_visitor_unrolled()
         , static_cast<next_which*>(0), static_cast<next_step*>(0)
@@ -227,4 +227,4 @@ apply_visitor_impl(
 }} // namespace detail::variant
 } // namespace boost
 
-#endif // BOOST_VARIANT_DETAIL_APPLY_VISITOR_IMPL_HPP
+#endif // BOOST_VARIANT_DETAIL_VISITATION_IMPL_HPP

@@ -22,7 +22,9 @@
 #include <typeinfo> // for typeid, std::type_info
 
 #include "boost/variant/variant_fwd.hpp"
-#include "boost/variant/detail/apply_visitor_impl.hpp"
+#include "boost/variant/detail/visitation_impl.hpp"
+#include "boost/variant/detail/enable_recursive_stub.hpp"
+
 #include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/variant/detail/has_nothrow_move.hpp"
 #include "boost/variant/detail/move.hpp"
@@ -48,21 +50,17 @@
 #include "boost/type_traits/is_same.hpp"
 #include "boost/variant/static_visitor.hpp"
 
-#include "boost/mpl/apply.hpp"
 #include "boost/mpl/apply_if.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/bool.hpp"
 #include "boost/mpl/contains.hpp"
 #include "boost/mpl/distance.hpp"
 #include "boost/mpl/empty.hpp"
-#include "boost/mpl/equal_to.hpp"
 #include "boost/mpl/identity.hpp"
-#include "boost/mpl/if.hpp"
 #include "boost/mpl/int.hpp"
 #include "boost/mpl/is_sequence.hpp"
 #include "boost/mpl/iter_fold.hpp"
 #include "boost/mpl/front.hpp"
-#include "boost/mpl/lambda.hpp"
 #include "boost/mpl/list.hpp"
 #include "boost/mpl/logical.hpp"
 #include "boost/mpl/max_element.hpp"
@@ -77,8 +75,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Implementation Macros:
 //
-// BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT
-//   Defined in boost/variant/detail/apply_visitor_impl.hpp.
+// BOOST_VARIANT_VISITATION_UNROLLING_LIMIT
+//   Defined in boost/variant/detail/visitation_impl.hpp.
 //
 // BOOST_VARIANT_MINIMIZE_SIZE
 //   When #defined, implementation employs all known means to minimize the
@@ -88,6 +86,8 @@
 
 #if defined(BOOST_VARIANT_MINIMIZE_SIZE)
 #   include <climits> // for SCHAR_MAX
+#   include "boost/mpl/equal_to.hpp"
+#   include "boost/mpl/if.hpp"
 #   include "boost/mpl/less.hpp"
 #   include "boost/mpl/long.hpp"
 #   include "boost/mpl/O1_size.hpp"
@@ -594,56 +594,6 @@ public: // static functions
 };
 
 #endif // !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
-
-///////////////////////////////////////////////////////////////////////////////
-// (detail) metafunction enable_recursive
-//
-// Enables the boost::variant<..., boost::recursive_variant, ...> syntax.
-//
-
-template <typename T, typename U1>
-struct rebind1
-{
-private:
-    typedef typename mpl::lambda<
-          mpl::identity<T>
-        >::type le_;
-
-public:
-    typedef typename mpl::apply_if<
-          is_same< le_, mpl::identity<T> >
-        , le_ // identity<T>
-        , mpl::apply1<le_, U1>
-        >::type type;
-};
-
-template <typename T, typename Variant>
-struct enable_recursive
-{
-private: // helpers, for metafunction result (below)
-
-    typedef typename rebind1<T, Variant>::type t_;
-
-public: // metafunction result
-
-    // [Wrap with incomplete only if rebind really changed something:]
-    typedef typename mpl::if_<
-          is_same< t_, T >
-        , t_
-        , boost::incomplete<t_>
-        >::type type;
-
-};
-
-template <typename Variant>
-struct quoted_enable_recursive
-{
-    template <typename T>
-    struct apply
-        : enable_recursive<T, Variant>
-    {
-    };
-};
 
 }} // namespace detail::variant
 
@@ -1430,11 +1380,11 @@ public:
         typedef mpl::int_<0> first_which;
         typedef typename mpl::begin<types>::type first_it;
         typedef typename mpl::end<types>::type last_it;
-        typedef detail::variant::apply_visitor_impl_step<
+        typedef detail::variant::visitation_impl_step<
               first_it, last_it
             > first_step;
 
-        return detail::variant::apply_visitor_impl(
+        return detail::variant::visitation_impl(
               which(), visitor, active_storage(), mpl::false_()
             , static_cast<first_which*>(0), static_cast<first_step*>(0)
             );
@@ -1449,11 +1399,11 @@ public:
         typedef mpl::int_<0> first_which;
         typedef typename mpl::begin<types>::type first_it;
         typedef typename mpl::end<types>::type last_it;
-        typedef detail::variant::apply_visitor_impl_step<
+        typedef detail::variant::visitation_impl_step<
               first_it, last_it
             > first_step;
 
-        return detail::variant::apply_visitor_impl(
+        return detail::variant::visitation_impl(
               which(), visitor, active_storage(), mpl::false_()
             , static_cast<first_which*>(0), static_cast<first_step*>(0)
             );
