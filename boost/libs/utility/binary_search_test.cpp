@@ -98,7 +98,7 @@ template <class T>
 void sort_by_value(T& x);
 
 template <class T>
-void sort_by_value_(T& v, ...)
+void sort_by_value_(T& v, long)
 {
     std::sort(v.begin(), v.end(), cmp());
 }
