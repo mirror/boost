@@ -31,8 +31,6 @@ struct is_composite_key_result_helper
 
   template<typename CompositeKey>
   static yes test(composite_key_result<CompositeKey>*);
-
-  static T* make();
 };
 
 template<typename T>
@@ -42,7 +40,7 @@ struct is_composite_key_result
 
   BOOST_STATIC_CONSTANT(bool,
     value=(
-      sizeof(helper::test(helper::make()))==
+      sizeof(helper::test((T*)0))==
       sizeof(typename helper::yes)));
 };
 
