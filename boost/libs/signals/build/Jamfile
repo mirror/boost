@@ -19,6 +19,6 @@ dll boost_signals : ../src/$(CPP_SOURCES).cpp
     ;
 
 lib boost_signals : ../src/$(CPP_SOURCES).cpp
-    : <sysinclude>$(BOOST_ROOT)
+    : <sysinclude>$(BOOST_ROOT) <define>BOOST_SIGNALS_STATIC_LINK
     : debug release 
     ;
