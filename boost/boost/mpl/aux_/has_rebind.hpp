@@ -35,17 +35,17 @@ namespace aux {
 
 template< typename T >
 yes_tag
-has_rebind_helper(type_wrapper<T>, BOOST_MSVC_TYPENAME T::rebind*);
+has_rebind_helper(type_wrapper<T>*, BOOST_MSVC_TYPENAME T::rebind*);
 
 template< typename T >
 no_tag
-has_rebind_helper(type_wrapper<T>, ...);
+has_rebind_helper(type_wrapper<T>*, ...);
 
 template< typename T >
 struct has_rebind
 {
      BOOST_STATIC_CONSTANT(bool, value = 
-        sizeof(has_rebind_helper(type_wrapper<T>(), 0))
+        sizeof(has_rebind_helper((type_wrapper<T>*)0, 0))
             == sizeof(yes_tag)
         );
 };
