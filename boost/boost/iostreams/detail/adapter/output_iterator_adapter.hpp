@@ -11,8 +11,8 @@
 # pragma once
 #endif              
 
-#include <algorithm>               // copy.
-#include <iosfwd>                  // streamsize.
+#include <algorithm>                      // copy.
+#include <iosfwd>                         // streamsize.
 #include <boost/iostreams/categories.hpp> // tags.
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>

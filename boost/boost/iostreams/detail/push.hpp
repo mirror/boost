@@ -16,6 +16,7 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/adapter/range_adapter.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/enable_if_stream.hpp>   
 #include <boost/iostreams/pipable.hpp>   
 #include <boost/iostreams/detail/push_params.hpp>   
@@ -23,6 +24,7 @@
 #include <boost/mpl/bool.hpp>   
 #include <boost/preprocessor/cat.hpp> 
 #include <boost/preprocessor/control/expr_if.hpp> 
+#include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
 //
@@ -53,7 +55,8 @@
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) && \
     !BOOST_WORKAROUND(__BORLANDC__, < 0x600) \
     /**/
-# define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
+# ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
+#  define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
     template<typename CharType, typename TraitsType> \
     BOOST_PP_EXPR_IF(has_return, result) \
     name(::std::basic_streambuf<CharType, TraitsType>& sb BOOST_IOSTREAMS_PUSH_PARAMS()) \
@@ -90,7 +93,42 @@
     { this->helper( ::boost::iostreams::detail::resolve<mode, ch>(t) \
                     BOOST_IOSTREAMS_PUSH_ARGS() ); } \
     /**/
-#else // #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+# else    
+#  define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
+    BOOST_PP_EXPR_IF(has_return, result) \
+    name(::std::streambuf& sb BOOST_IOSTREAMS_PUSH_PARAMS()) \
+    { BOOST_IOSTREAMS_ADAPT_STREAM(mode, ch, sb, helper, has_return); } \
+    BOOST_PP_EXPR_IF(has_return, result) \
+    name(::std::istream<& is BOOST_IOSTREAMS_PUSH_PARAMS()) \
+    { BOOST_STATIC_ASSERT((!is_convertible<mode, output>::value)); \
+      BOOST_IOSTREAMS_ADAPT_STREAM(mode, ch, is, helper, has_return); } \
+    BOOST_PP_EXPR_IF(has_return, result) \
+    name(::std::ostream& os BOOST_IOSTREAMS_PUSH_PARAMS()) \
+    { BOOST_STATIC_ASSERT((!is_convertible<mode, input>::value)); \
+      BOOST_IOSTREAMS_ADAPT_STREAM(mode, ch, os, helper, has_return); } \
+    BOOST_PP_EXPR_IF(has_return, result) \
+    name(::std::iostream& io BOOST_IOSTREAMS_PUSH_PARAMS()) \
+    { BOOST_IOSTREAMS_ADAPT_STREAM(mode, ch, io, helper, has_return); } \
+    template<typename Iter> \
+    BOOST_PP_EXPR_IF(has_return, result) \
+    name(const iterator_range<Iter>& rng BOOST_IOSTREAMS_PUSH_PARAMS()) \
+    { BOOST_PP_EXPR_IF(has_return, return) \
+    this->helper( ::boost::iostreams::detail::range_adapter< \
+                      mode, iterator_range<Iter> \
+                  >(rng) \
+                  BOOST_IOSTREAMS_PUSH_ARGS() ); } \
+    template<typename Piper, typename Concept> \
+    BOOST_PP_EXPR_IF(has_return, result) \
+    name(const ::boost::iostreams::detail::piper<Piper, Concept>& p) \
+    { p.push(*this); } \
+    template<typename T> \
+    BOOST_PP_EXPR_IF(has_return, result) \
+    name(const T& t BOOST_IOSTREAMS_PUSH_PARAMS() BOOST_IOSTREAMS_DISABLE_IF_STREAM(T)) \
+    { this->helper( ::boost::iostreams::detail::resolve<mode, ch>(t) \
+                    BOOST_IOSTREAMS_PUSH_ARGS() ); } \
+    /**/
+# endif
+#else // #if VC6, VC7.0, Borland 5.x
 # define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
     template<typename T> \
     BOOST_PP_EXPR_IF(has_return, result) \
@@ -112,6 +150,6 @@
                 t BOOST_IOSTREAMS_PUSH_ARGS() ); \
     } \
     /**/
-#endif // #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#endif // #if VC6, VC7.0, Borland 5.x
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_PUSH_HPP_INCLUDED

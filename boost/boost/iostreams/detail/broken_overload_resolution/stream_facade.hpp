@@ -35,7 +35,7 @@ private:
     typedef typename
             detail::stream_facade_traits<
                 Device, Tr
-            >::stream_type                  stream_type;
+            >::type                         stream_type;
     typedef Device                          policy_type;
 public:
     stream_facade() { }

@@ -35,7 +35,6 @@
 
 #include <boost/config.hpp>                   // make sure size_t is in std.
 #include <cstddef>                            // size_t.
-#include <ios>                                // ios_base::openmode.
 #include <string>                             // pathnames.
 #include <utility>                            // pair.
 #include <boost/cstdint.hpp>                  // intmax_t.
@@ -44,6 +43,7 @@
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
+#include <boost/iostreams/detail/openmode.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/shared_ptr.hpp>
 

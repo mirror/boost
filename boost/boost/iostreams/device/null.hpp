@@ -13,8 +13,9 @@
 # pragma once
 #endif
 
-#include <ios>
+#include <iosfwd>                              // streamsize.
 #include <boost/iostreams/categories.hpp>
+#include <boost/iostreams/detail/openmode.hpp> // openmodes.
 
 namespace boost { namespace iostreams {
 

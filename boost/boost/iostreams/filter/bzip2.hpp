@@ -11,9 +11,9 @@
 # pragma once
 #endif
 
+#include <iosfwd>            // streamsize.                         
 #include <cassert>                            
 #include <memory>            // allocator.
-#include <ios>               // failure.
 #include <new>               // bad_alloc.
 #include <boost/config.hpp>  // MSVC, STATIC_CONSTANT, DEDUCED_TYPENAME, DINKUM.
 #include <boost/detail/workaround.hpp>
@@ -21,6 +21,7 @@
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/bzip2.hpp>
+#include <boost/iostreams/detail/failure.hpp>
 #include <boost/iostreams/filter/symmetric_filter_adapter.hpp>               
 #include <boost/iostreams/pipable.hpp>       
 #include <boost/type_traits/is_same.hpp>     
@@ -104,9 +105,9 @@ struct bzip2_params {
 // Description: Subclass of std::ios_base::failure thrown to indicate
 //     bzip2 errors other than out-of-memory conditions.
 //
-class BOOST_IOSTREAMS_DECL bzip2_error : public std::ios_base::failure {
+class BOOST_IOSTREAMS_DECL bzip2_error : public detail::failure {
 public:
-    bzip2_error(int error);
+    explicit bzip2_error(int error);
     int error() const { return error_; }
     static void check(int error);
 private:

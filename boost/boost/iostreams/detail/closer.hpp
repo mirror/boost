@@ -11,9 +11,9 @@
 # pragma once
 #endif              
 
-#include <ios>                             // openmode.
-#include <exception>                       // exception.
-#include <boost/iostreams/operations.hpp>  // close.
+#include <exception>                            // exception.
+#include <boost/iostreams/detail/openmode.hpp>
+#include <boost/iostreams/operations.hpp>       // close.
 
 namespace boost { namespace iostreams { namespace detail {
 

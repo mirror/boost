@@ -7,13 +7,7 @@
 // No include guards -- file included by boost/iostreams/streambuf_facade.hpp
 // within include guards.
 
-#include <memory>                       // allocator.       
-#include <boost/config.hpp>             // MSVC, DEDUCED_TYPENAME.
-#include <boost/detail/workaround.hpp>  
 #include <boost/iostreams/detail/broken_overload_resolution/forward.hpp>
-#include <boost/iostreams/detail/forward.hpp>
-#include <boost/iostreams/detail/param_type.hpp>
-#include <boost/iostreams/traits.hpp>
 
 namespace boost { namespace iostreams {
 
@@ -164,7 +158,7 @@ private:
     void check_open()
     {
         if (this->is_open()) 
-            throw std::ios_base::failure("already open");
+            throw detail::failure("already open");
     }
 };
 

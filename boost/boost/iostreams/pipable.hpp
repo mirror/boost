@@ -13,11 +13,9 @@
 
 #include <boost/config.hpp> // BOOST_MSVC.
 #include <boost/detail/workaround.hpp>
+#include <boost/iostreams/detail/template_params.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/mpl/bool.hpp>
-#include <boost/preprocessor/control/expr_if.hpp>
-#include <boost/preprocessor/control/if.hpp>
-#include <boost/preprocessor/logical/bool.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/static_assert.hpp>
@@ -26,29 +24,20 @@
 # include <boost/type_traits/is_base_and_derived.hpp>
 #endif
 
-#define BOOST_IOSTREAMS_PIPABLE_TEMPLATE_PARAMS(arity) \
-    BOOST_PP_ENUM_PARAMS(arity, typename T) BOOST_PP_COMMA_IF(arity) \
-    /**/
-
-#define BOOST_IOSTREAMS_PIPABLE_TEMPLATE_ARGS(arity) \
-    BOOST_PP_EXPR_IF(arity, <) \
-    BOOST_PP_ENUM_PARAMS(arity, T) \
-    BOOST_PP_EXPR_IF(arity, >) \
-    /**/
-
 #define BOOST_IOSTREAMS_PIPABLE(filter, arity) \
-    template<BOOST_IOSTREAMS_PIPABLE_TEMPLATE_PARAMS(arity) typename Concept> \
+    template< BOOST_PP_ENUM_PARAMS(arity, typename T) \
+              BOOST_PP_COMMA_IF(arity) typename Concept> \
     ::boost::iostreams::detail::piper< \
         ::boost::iostreams::detail::concept_piper< \
-            filter BOOST_IOSTREAMS_PIPABLE_TEMPLATE_ARGS(arity) \
+            filter BOOST_IOSTREAMS_TEMPLATE_ARGS(arity) \
         >, \
         Concept \
-    > operator|( const filter BOOST_IOSTREAMS_PIPABLE_TEMPLATE_ARGS(arity)& f, \
+    > operator|( const filter BOOST_IOSTREAMS_TEMPLATE_ARGS(arity)& f, \
         const Concept& c ) \
     { \
         return ::boost::iostreams::detail::piper< \
                    ::boost::iostreams::detail::concept_piper< \
-                       filter BOOST_IOSTREAMS_PIPABLE_TEMPLATE_ARGS(arity) \
+                       filter BOOST_IOSTREAMS_TEMPLATE_ARGS(arity) \
                    >, \
                    Concept \
                >(f, c); \

@@ -12,14 +12,15 @@
 #endif              
 
 #include <cassert>                            
-#include <ios>                // failure.
-#include <memory>             // allocator, bad_alloc.
+#include <iosfwd>            // streamsize.                 
+#include <memory>            // allocator, bad_alloc.
 #include <new>          
 #include <boost/config.hpp>  // MSVC, STATIC_CONSTANT, DEDUCED_TYPENAME, DINKUM.
 #include <boost/iostreams/constants.hpp>  // buffer size.
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/zlib.hpp>
+#include <boost/iostreams/detail/failure.hpp>
 #include <boost/iostreams/filter/symmetric_filter_adapter.hpp>                
 #include <boost/iostreams/pipable.hpp>                
 #include <boost/type_traits/is_same.hpp>      
@@ -124,9 +125,9 @@ struct zlib_params {
 // Description: Subclass of std::ios::failure thrown to indicate
 //     zlib errors other than out-of-memory conditions.
 //
-class BOOST_IOSTREAMS_DECL zlib_error : public std::ios_base::failure {
+class BOOST_IOSTREAMS_DECL zlib_error : public detail::failure {
 public:
-    zlib_error(int error);
+    explicit zlib_error(int error);
     int error() const { return error_; }
     static void check(int error);
 private:

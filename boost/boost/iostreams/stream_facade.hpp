@@ -11,8 +11,13 @@
 # pragma once
 #endif
 
-#include <istream>
-#include <ostream>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
+# include <istream>
+# include <ostream>
+#else
+# include <iostream.h>
+#endif
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/detail/config/overload_resolution.hpp>
 #include <boost/iostreams/detail/forward.hpp>
@@ -23,6 +28,7 @@
 
 namespace boost { namespace iostreams { namespace detail {
 
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //--------------------------------//
 template<typename Device, typename Tr>
 struct stream_facade_traits {
     typedef typename io_char<Device>::type                     char_type;
@@ -39,8 +45,28 @@ struct stream_facade_traits {
                 std::basic_istream<char_type, traits_type>,
                 mpl::true_,
                 std::basic_ostream<char_type, traits_type>
-            >::type                                            stream_type;
+            >::type                                            type;
 };
+#else // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //-----------------------//
+template<typename Device, typename Tr>
+struct stream_facade_traits {
+    typedef typename io_char<Device>::type                     char_type;
+    typedef typename io_category<Device>::type                 mode;
+    typedef typename
+            select<
+                mpl::and_<
+                    is_convertible<mode, input>,
+                    is_convertible<mode, output>
+                >,
+                std::iostream,
+                is_convertible<mode, input>,
+                std::istream,
+                mpl::true_,
+                std::ostream
+            >::type                                            type;
+    BOOST_STATIC_ASSERT((is_same<Ch, char>::value));
+};
+#endif // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //----------------------//
 
 // Hack to work around fact that streams don't have default constructors.
 // Simplifies the definition of the macro BOOST_IOSTREAMS_DEFINE_FORWARDING_FUNCTIONS.
@@ -55,14 +81,14 @@ template< typename Device,
               >,
           typename Base = // VC6 Workaround.
               BOOST_DEDUCED_TYPENAME
-              detail::stream_facade_traits<Device, Tr>::stream_type >
+              detail::stream_facade_traits<Device, Tr>::type >
 class stream_facade_base
     : protected base_from_member< streambuf_facade<Device, Tr, Alloc> >,
       public Base
 {
 private:
-    typedef base_from_member< streambuf_facade<Device, Tr, Alloc> >  pbase_type;
-    typedef typename stream_facade_traits<Device, Tr>::stream_type   stream_type;
+    typedef base_from_member< streambuf_facade<Device, Tr, Alloc> > pbase_type;
+    typedef typename stream_facade_traits<Device, Tr>::type         stream_type;
 protected:
     using pbase_type::member; // Avoid warning about 'this' in initializer list.
 public:
@@ -102,7 +128,7 @@ private:
     typedef typename
             detail::stream_facade_traits<
                 Device, Tr
-            >::stream_type                  stream_type;
+            >::type                         stream_type;
     typedef Device                          policy_type;
 public:
     stream_facade() { }

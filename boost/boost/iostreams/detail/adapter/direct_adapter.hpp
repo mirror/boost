@@ -27,6 +27,7 @@
 #include <boost/preprocessor/iteration/local.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
 namespace boost { namespace iostreams { namespace detail {

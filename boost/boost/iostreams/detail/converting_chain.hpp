@@ -46,10 +46,6 @@ public:
 
     converting_chain();
 
-    #if defined(BOOST_MSVC) && _MSC_VER == 1300
-        virtual ~converting_chain() { } 
-    #endif // If omitted, some tests fail on VC7.0. Why?
-
     //----------Buffer sizing-------------------------------------------------//
 
     void set_buffer_size(std::streamsize n)

@@ -11,33 +11,26 @@
 # pragma once
 #endif              
                  
-#include <ios> // failure.
+#include <boost/iostreams/detail/failure.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
 
-inline std::ios::failure cant_read() 
-{ return std::ios::failure("no read access"); }
+inline failure cant_read() { return failure("no read access"); }
 
-inline std::ios::failure cant_write() 
-{ return std::ios::failure("no write access"); }
+inline failure cant_write() { return failure("no write access"); }
 
-inline std::ios::failure cant_seek() 
-{ return std::ios::failure("no random access"); }
+inline failure cant_seek() { return failure("no random access"); }
 
-inline std::ios::failure bad_read() 
-{ return std::ios::failure("bad read"); }
+inline failure bad_read() { return failure("bad read"); }
 
-inline std::ios::failure bad_putback() 
-{ return std::ios::failure("putback buffer full"); }
+inline failure bad_putback() { return failure("putback buffer full"); }
 
-inline std::ios::failure bad_write() 
-{ return std::ios::failure("bad write"); }
+inline failure bad_write() { return failure("bad write"); }
 
-inline std::ios::failure write_area_exhausted() 
-{ return std::ios::failure("write area exhausted"); }
+inline failure write_area_exhausted() 
+{ return failure("write area exhausted"); }
 
-inline std::ios::failure bad_seek() 
-{ return std::ios::failure("bad seek"); }
+inline failure bad_seek() { return failure("bad seek"); }
 
 } } } // End namespaces detail, iostreams, boost.
 

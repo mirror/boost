@@ -11,13 +11,14 @@
 # pragma once
 #endif              
 
+#include <iosfwd>                                // streamsize.
 #include <algorithm>                             // copy, min.
 #include <cassert>
-#include <ios>                                   // openmode.
 #include <iterator>                              // back_inserter
 #include <vector>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/closer.hpp>
+#include <boost/iostreams/detail/openmode.hpp>
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 

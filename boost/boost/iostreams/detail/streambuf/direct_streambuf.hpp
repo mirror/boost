@@ -120,7 +120,7 @@ direct_streambuf<T, Tr>::pbackfail(int_type c)
             *gptr() = traits_type::to_char_type(c);
         return traits_type::not_eof(c);
     }
-    throw ios::failure("can't putback");
+    throw bad_putback();
 }
 
 template<typename T, typename Tr>
@@ -128,11 +128,11 @@ typename direct_streambuf<T, Tr>::int_type
 direct_streambuf<T, Tr>::overflow(int_type c)
 {
     using namespace std;
-    if (!obeg_) throw ios::failure("no write access");
+    if (!obeg_) throw failure("no write access");
     if (!pptr()) init_put_area();
     if (!traits_type::eq_int_type(c, traits_type::eof())) {
         if (pptr() == oend_)
-            throw ios::failure("write area exhausted");
+            throw failure("write area exhausted");
         *pptr() = traits_type::to_char_type(c);
         pbump(1);
         return c;
@@ -162,7 +162,7 @@ typename direct_streambuf<T, Tr>::pos_type direct_streambuf<T, Tr>::seek_impl
     using namespace std;
     ios::openmode both = ios::in | ios::out;
     if (two_head() && (which & both) == both)
-        throw ios::failure("bad seek");
+        throw bad_seek();
     off_type result = -1;
     bool one = one_head();
     if (one && (pptr() != 0 || gptr()== 0))
@@ -177,7 +177,7 @@ typename direct_streambuf<T, Tr>::pos_type direct_streambuf<T, Tr>::seek_impl
         default: assert(0);
         }
         if (next < 0 || next > (iend_ - ibeg_))
-            throw ios::failure("bad seek");
+            throw bad_seek();
         setg(ibeg_, ibeg_ + next, iend_);
         result = next;
     }
@@ -191,7 +191,7 @@ typename direct_streambuf<T, Tr>::pos_type direct_streambuf<T, Tr>::seek_impl
         default: assert(0);
         }
         if (next < 0 || next > (oend_ - obeg_))
-            throw ios::failure("bad seek");
+            throw bad_seek();
         pbump(static_cast<int>(next - (pptr() - obeg_)));
         result = next;
     }

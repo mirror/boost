@@ -16,7 +16,7 @@
 #include <algorithm>                       // max.
 #include <cstring>                         // memcpy.
 #include <exception>
-#include <ios>                             // failure, streamoff, openmode.
+#include <iosfwd>                          // streamsize, streamoff.
 #include <string>
 #include <boost/config.hpp>                // BOOST_DEDUCED_TYPENAME.
 #include <boost/iostreams/constants.hpp>   // default_buffer_size.
@@ -26,7 +26,9 @@
 #include <boost/iostreams/detail/codecvt_holder.hpp>
 #include <boost/iostreams/detail/codecvt_helper.hpp>
 #include <boost/iostreams/detail/double_object.hpp>
+#include <boost/iostreams/detail/failure.hpp>
 #include <boost/iostreams/detail/forward.hpp>
+#include <boost/iostreams/detail/openmode.hpp>
 #include <boost/iostreams/detail/select.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>
@@ -38,9 +40,9 @@
 
 namespace boost { namespace iostreams {
 
-struct code_conversion_error : public std::ios_base::failure {
+struct code_conversion_error : public detail::failure {
     code_conversion_error() 
-        : std::ios_base::failure("code conversion error")
+        : detail::failure("code conversion error")
         { }
 };
 
@@ -115,7 +117,7 @@ struct code_converter_impl {
     void open(const Device& dev, std::streamsize buffer_size)
     {
         if (open_)
-            throw std::ios::failure("already open");
+            throw failure("already open");
         if (buffer_size == -1)
             buffer_size = default_filter_buffer_size;
         int max_length = cvt_.get().max_length();

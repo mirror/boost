@@ -19,16 +19,17 @@
 #endif              
 
 #include <algorithm>                        // copy.
-#include <ios>                              // failure.
+#include <iosfwd>                           // streamsize.
 #include <utility>                          // pair.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/detail/buffer.hpp>       
 #include <boost/iostreams/detail/closer.hpp>    
-#include <boost/iostreams/detail/enable_if_stream.hpp>                      
+#include <boost/iostreams/detail/enable_if_stream.hpp>  
+#include <boost/iostreams/detail/failure.hpp>                        
 #include <boost/iostreams/detail/resolve.hpp>                   
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
-#include <boost/iostreams/operations.hpp>          // read, write, close.
+#include <boost/iostreams/operations.hpp>  // read, write, close.
 #include <boost/static_assert.hpp>  
 #include <boost/type_traits/is_same.hpp>  
 
@@ -50,7 +51,7 @@ std::streamsize copy_impl( Source& src, Sink& snk,
         std::copy(p1.first, p1.second, p2.first);
         return static_cast<streamsize>(p1.second - p1.first);
     } else {
-        throw ios::failure("destination too small");
+        throw failure("destination too small");
     }
 }
 

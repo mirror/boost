@@ -36,7 +36,7 @@
 #include <algorithm>         // min.
 #include <cstddef>           // size_t.
 #include <locale>            // locale, codecvt_base, codecvt.
-#include <boost/iostreams/detail/config/locale.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
 
 //------------------Definition of add_facet-----------------------------------//
 

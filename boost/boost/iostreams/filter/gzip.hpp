@@ -138,13 +138,13 @@ struct gzip_params : zlib_params {
 // Description: Subclass of std::ios_base::failure thrown to indicate
 //     zlib errors other than out-of-memory conditions.
 //
-class gzip_error : public std::ios_base::failure {
+class gzip_error : public detail::failure {
 public:
-    gzip_error(int error)
-        : std::ios_base::failure("gzip error"),
+    explicit gzip_error(int error)
+        : detail::failure("gzip error"),
           error_(error), zlib_error_code_(zlib::okay) { }
-    gzip_error(const zlib_error& e)
-        : std::ios_base::failure("gzip error"),
+    explicit gzip_error(const zlib_error& e)
+        : detail::failure("gzip error"),
           error_(gzip::zlib_error), zlib_error_code_(e.error())
         { }
     int error() const { return error_; }

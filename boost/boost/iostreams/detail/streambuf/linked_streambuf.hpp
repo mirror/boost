@@ -10,10 +10,10 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif              
-
-#include <ios>               // openmode.            
+ 
 #include <streambuf>                  
 #include <boost/config.hpp>  // member template friends.
+#include <boost/iostreams/detail/openmode.hpp>
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // MSVC.
 

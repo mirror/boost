@@ -8,6 +8,7 @@
 #define BOOST_IOSTREAMS_DETAIL_BOOL_TRAIT_DEF_HPP_INCLUDED     
 
 #include <boost/config.hpp> // BOOST_STATIC_CONSTANT.
+#include <boost/iostreams/detail/template_params.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -20,10 +21,10 @@
 //      etc.
 //
 #define BOOST_IOSTREAMS_BOOL_TRAIT_DEF(trait, type, arity) \
-    namespace BOOST_PP_CAT(trait, impl_) { \
-      template<BOOST_PP_ENUM_PARAMS(arity, typename T)> \
+    namespace BOOST_PP_CAT(trait, _impl_) { \
+      BOOST_IOSTREAMS_TEMPLATE_PARAMS(arity) \
       type_traits::yes_type helper \
-          (const volatile type<BOOST_PP_ENUM_PARAMS(arity, T)>*); \
+          (const volatile type BOOST_IOSTREAMS_TEMPLATE_ARGS(arity)*); \
       type_traits::no_type helper(...); \
       template<typename T> \
       struct impl { \
@@ -34,7 +35,7 @@
     } \
     template<typename T> \
     struct trait \
-        : mpl::bool_<BOOST_PP_CAT(trait, impl_)::impl<T>::value> \
+        : mpl::bool_<BOOST_PP_CAT(trait, _impl_)::impl<T>::value> \
     { BOOST_MPL_AUX_LAMBDA_SUPPORT(1, trait, (T)) }; \
     /**/
 

@@ -11,12 +11,18 @@
 # pragma once
 #endif              
 
-#include <istream>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
+# include <istream>
+# include <ostream>
+#else
+# include <iostream.h>
+#endif
 #include <memory>                                // allocator.
-#include <ostream>
 #include <boost/iostreams/detail/access_control.hpp>
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
@@ -27,6 +33,7 @@ namespace boost { namespace iostreams {
 
 namespace detail {
 
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //--------------------------------//
 template<typename Mode, typename Ch, typename Tr>
 struct filtering_stream_traits {
     typedef typename 
@@ -40,8 +47,26 @@ struct filtering_stream_traits {
                 std::basic_istream<Ch, Tr>,
                 mpl::true_,        
                 std::basic_ostream<Ch, Tr>
-            >::type                               type;
+            >::type type;
 };
+#else // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //-----------------------//
+template<typename Mode, typename Ch, typename Tr>
+struct filtering_stream_traits {
+    BOOST_STATIC_ASSERT((is_same<Ch, char>::value));
+    typedef typename 
+            select<                 
+                mpl::and_< 
+                    is_convertible<Mode, input>, 
+                    is_convertible<Mode, output> 
+                >,          
+                std::iostream,
+                is_convertible<Mode, input>, 
+                std::istream,
+                mpl::true_,        
+                std::ostream
+            >::type type;
+};
+#endif // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //----------------------//
 
 template<typename Chain, typename Access>
 class filtering_stream_base 

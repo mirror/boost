@@ -14,11 +14,12 @@
 # pragma once
 #endif              
 
-#include <ios>                                        // openmodes.
-#include <string>                                     // file pathnames.
-#include <boost/iostreams/categories.hpp>             // tags.
+#include <iosfwd>                                      // streamsize, streamoff.
+#include <string>                                      // file pathnames.
+#include <boost/iostreams/categories.hpp>              // tags.
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
+#include <boost/iostreams/detail/openmode.hpp>
 
 // Must come last.
 #include <boost/config/abi_prefix.hpp>     

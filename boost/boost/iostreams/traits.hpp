@@ -22,6 +22,7 @@
 #include <boost/config.hpp>  // partial spec, deduced typename.
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/bool_trait_def.hpp> 
+#include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/is_iterator_range.hpp>    
 #include <boost/iostreams/detail/select.hpp>        
 #include <boost/iostreams/detail/select_by_size.hpp>      
@@ -40,12 +41,25 @@ namespace boost { namespace iostreams {
 
 //------------------Definitions of predicates for streams and stream buffers--//
 
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //--------------------------------//
+
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_istream, std::basic_istream, 2)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_ostream, std::basic_ostream, 2)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_iostream, std::basic_iostream, 2)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_streambuf, std::basic_streambuf, 2)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_stringstream, std::basic_stringstream, 3)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_stringbuf, std::basic_stringbuf, 3)
+
+#else // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //-----------------------//
+
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_istream, std::istream, 0)
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_ostream, std::ostream, 0)
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_iostream, std::iostream, 0)
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_streambuf, std::streambuf, 0)
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_stringstream, std::stringstream, 0)
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_stringbuf, std::stringbuf, 0)
+
+#endif // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //----------------------//
 
 template<typename T>
 struct is_std_io

@@ -19,6 +19,7 @@
 #include <boost/iostreams/detail/adapter/output_iterator_adapter.hpp>
 #include <boost/iostreams/detail/adapter/range_adapter.hpp>
 #include <boost/iostreams/detail/config/overload_resolution.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/enable_if_stream.hpp>
 #include <boost/iostreams/detail/is_dereferenceable.hpp>
 #include <boost/iostreams/detail/is_iterator_range.hpp>
@@ -53,6 +54,8 @@ struct resolve_traits {
                 const T&
             >::type type;
 };
+
+# ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //-------------------------------//
 
 template<typename Mode, typename Ch, typename T>
 typename resolve_traits<Mode, Ch, T>::type
@@ -98,6 +101,46 @@ range_adapter< Mode, boost::iterator_range<Iter> >
 resolve(const boost::iterator_range<Iter>& rng)
 { return range_adapter< Mode, boost::iterator_range<Iter> >(rng); }
 
+# else // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //---------------------//
+
+template<typename Mode, typename Ch, typename T>
+typename resolve_traits<Mode, Ch, T>::type
+resolve(const T& t BOOST_IOSTREAMS_DISABLE_IF_STREAM(T))
+{
+    typedef typename resolve_traits<Mode, Ch, T>::type return_type;
+    return return_type(t);
+}
+
+template<typename Mode, typename Ch>
+mode_adapter<Mode, std::streambuf> 
+resolve(std::streambuf& sb) 
+{ return mode_adapter<Mode, std::streambuf>(wrap(sb)); }
+
+template<typename Mode, typename Ch>
+mode_adapter<Mode, std::istream> 
+resolve(std::istream& is)
+{ return mode_adapter<Mode, std::istream>(wrap(is)); }
+
+template<typename Mode, typename Ch>
+mode_adapter<Mode, std::ostream> 
+resolve(std::ostream& os)
+{ return mode_adapter<Mode, std::ostream>(wrap(os)); }
+
+template<typename Mode, typename Ch>
+mode_adapter<Mode, std::iostream> 
+resolve(std::iostream& io)
+{ return mode_adapter<Mode, std::iostream>(wrap(io)); }
+
+template<typename Mode, typename Ch, std::size_t N>
+array_adapter<Mode, Ch> resolve(Ch (&array)[N])
+{ return array_adapter<Mode, Ch>(array); }
+
+template<typename Mode, typename Ch, typename Iter>
+range_adapter< Mode, boost::iterator_range<Iter> > 
+resolve(const boost::iterator_range<Iter>& rng)
+{ return range_adapter< Mode, boost::iterator_range<Iter> >(rng); }
+
+# endif // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //--------------------//
 #else // #ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //----------------//
 
 template<typename Mode, typename Ch, typename T>
@@ -171,7 +214,6 @@ resolve(T& t BOOST_IOSTREAMS_ENABLE_IF_STREAM(T))
 { return resolve<Mode, Ch>(t, is_std_io<T>()); }
 
 # endif // Borland 5.x or VC6-7.0 // -----------------------------------------//
-
 #endif // #ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //---------------//
 
 } } } // End namespaces detail, iostreams, boost.

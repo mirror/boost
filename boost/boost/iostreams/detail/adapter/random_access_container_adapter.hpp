@@ -11,12 +11,13 @@
 # pragma once
 #endif              
 
+#include <iosfwd>                    // streamoff.
 #include <boost/config.hpp>          // make sure size_t is in std.
 #include <algorithm>                 // copy, min.
 #include <cstddef>                   // size_t.
-#include <ios>                       // ios_base.
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/error.hpp>
+#include <boost/iostreams/detail/openmode.hpp>  // openmode.
 #include <boost/mpl/if.hpp>
 #include <boost/ref.hpp>
 #include <boost/shared_ptr.hpp>

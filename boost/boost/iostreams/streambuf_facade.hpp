@@ -14,11 +14,13 @@
 #include <memory>            // allocator.
 #include <boost/config.hpp>  // BOOST_DEDUCED_TYPENAME.
 #include <boost/iostreams/detail/config/overload_resolution.hpp>
+#include <boost/iostreams/detail/failure.hpp>
 #include <boost/iostreams/detail/forward.hpp>
 #include <boost/iostreams/detail/param_type.hpp>
 #include <boost/iostreams/detail/streambuf/direct_streambuf.hpp>
 #include <boost/iostreams/detail/streambuf/indirect_streambuf.hpp>
 #include <boost/iostreams/traits.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
@@ -118,7 +120,7 @@ private:
     void open_impl(const T& t BOOST_IOSTREAMS_PUSH_PARAMS())
         {   // Used for forwarding.
             if (this->is_open()) 
-                throw std::ios_base::failure("already open");
+                throw detail::failure("already open");
             base_type::open(t BOOST_IOSTREAMS_PUSH_ARGS()); 
         } 
 };
