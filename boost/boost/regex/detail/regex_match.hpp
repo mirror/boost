@@ -254,7 +254,7 @@ struct access_t : public reg_expression<charT, traits, Allocator>
    { return base_type::first(b); }
    static const unsigned char* get_map(const base_type& b)
    { return base_type::get_map(b); }
-   static unsigned int leading_length(const base_type& b)
+   static std::size_t leading_length(const base_type& b)
    { return base_type::leading_length(b); }
    static const kmp_info<charT>* get_kmp(const base_type& b)
    { return base_type::get_kmp(b); }
@@ -1052,10 +1052,10 @@ void _skip_and_inc(unsigned int& clines, iterator& last_line, iterator& first, c
 }
 
 template <class iterator>
-void _skip_and_dec(unsigned int& clines, iterator& last_line, iterator& first, iterator base, unsigned int len)
+void _skip_and_dec(unsigned int& clines, iterator& last_line, iterator& first, iterator base, std::size_t len)
 {
    bool need_line = false;
-   for(unsigned int i = 0; i < len; ++i)
+   for(std::size_t i = 0; i < len; ++i)
    {
       --first;
       if(*first == '\n')
@@ -1257,9 +1257,9 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
    case regbase::restart_fixed_lit:
    {
       const kmp_info<charT>* info = access::get_kmp(e);
-      int len = info->len;
+     std::ptrdiff_t len = info->len;
       const charT* x = info->pstr;
-      int j = 0; 
+     std::ptrdiff_t j = 0; 
       bool icase = e.flags() & regbase::icase;
       while (first != last) 
       {

@@ -711,7 +711,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
          const charT* base = first;
          // this is only used for the switch(), but cannot be folded in
          // due to a bug in Comeau 4.2.44beta3
-	 unsigned int inner_set = parse_inner_set(first, last);
+    unsigned int inner_set = parse_inner_set(first, last);
          switch(inner_set)
          {
          case traits_type::syntax_colon:
@@ -758,7 +758,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
             //
             if(traits_inst.lookup_collatename(s, base+2, first-2))
             {
-               unsigned len = s.size();
+               std::size_t len = s.size();
                if(len)
                {
                   unsigned i = 0;
@@ -936,7 +936,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
          char_set_literal:
          unsigned i = 0;
          // get string length to stop us going past the end of string (DWA)
-         unsigned len = s.size();
+         std::size_t len = s.size();
          while(i < len)
          {
             s[i] = traits_inst.translate(s[i], (_flags & regbase::icase));
@@ -989,7 +989,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
    {
       ++csingles;
       const traits_string_type& s = singles.peek();
-      unsigned len = (s.size() + 1) * sizeof(charT);
+      std::size_t len = (s.size() + 1) * sizeof(charT);
       std::memcpy(reinterpret_cast<charT*>(data.extend(len)), s.c_str(), len);
       singles.pop();
    }
@@ -1023,7 +1023,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
          return 0;
       }
       ++cranges;
-      unsigned len = (re_detail::re_strlen(c1.c_str()) + 1) * sizeof(charT);
+      std::size_t len = (re_detail::re_strlen(c1.c_str()) + 1) * sizeof(charT);
       std::memcpy(data.extend(len), c1.c_str(), len);
       len = (re_detail::re_strlen(c2.c_str()) + 1) * sizeof(charT);
       std::memcpy(data.extend(len), c2.c_str(), len);
@@ -1037,7 +1037,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
    {
       ++cequivalents;
       const traits_string_type& s = equivalents.peek();
-      unsigned len = (re_detail::re_strlen(s.c_str()) + 1) * sizeof(charT);
+      std::size_t len = (re_detail::re_strlen(s.c_str()) + 1) * sizeof(charT);
       std::memcpy(reinterpret_cast<charT*>(data.extend(len)), s.c_str(), len);
       equivalents.pop();
    }
@@ -1272,9 +1272,9 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
 
    const charT* ptr = p;
    marks = 0;
-   re_detail::jstack<unsigned int, Allocator> mark(64, data.allocator());
+   re_detail::jstack<std::size_t, Allocator> mark(64, data.allocator());
    re_detail::jstack<int, Allocator> markid(64, data.allocator());
-   unsigned int last_mark_popped = 0;
+   std::size_t last_mark_popped = 0;
    register traits_size_type c;
    register re_detail::re_syntax_base* dat;
 
@@ -1635,7 +1635,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
 
          repeat_jump:
          {
-            unsigned offset;
+          std::ptrdiff_t offset;
             if(dat == 0)
             {
                fail(REG_BADRPT);
@@ -1776,7 +1776,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
          static_cast<re_detail::re_jump*>(dat)->alt.i = INT_MAX/2;
 
          // now work out where to insert:
-         unsigned int offset = 0;
+         std::size_t offset = 0;
          if(mark.empty() == false)
          {
             // we have a '(' or '|' to go back to:

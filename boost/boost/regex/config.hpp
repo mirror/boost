@@ -85,6 +85,7 @@
    // do C++ specific things in future...
    //
 #  include <stdlib.h>
+#  include <stddef.h>
 #  ifdef _MSC_VER
 #     define BOOST_MSVC _MSC_VER
 #  endif
@@ -276,6 +277,18 @@ using std::distance;
 #if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
 #  include <windows.h>
 #endif
+
+#ifdef MAXPATH
+#  define BOOST_REGEX_MAX_PATH MAXPATH
+#elif defined(MAX_PATH)
+#  define BOOST_REGEX_MAX_PATH MAX_PATH
+#elif defined(FILENAME_MAX)
+#  define BOOST_REGEX_MAX_PATH FILENAME_MAX
+#else
+#  define BOOST_REGEX_MAX_PATH 200
+#endif
+
+
 
 /*****************************************************************************
  *
@@ -568,7 +581,7 @@ namespace boost{ namespace re_detail{
 
 template <class T>
 inline void pointer_destroy(T* p)
-{ p->~T(); }
+{ p->~T(); (void)p; }
 
 template <class T>
 inline void pointer_construct(T* p, const T& t)

@@ -199,7 +199,7 @@ std::ostream& operator<<(std::ostream&, syntax_element_type);
 union offset_type
 {
    re_syntax_base* p;
-   unsigned i;
+   std::size_t i;
 };
 
 //
@@ -660,10 +660,10 @@ private:
    unsigned marks;
    int repeats;
    unsigned char* startmap;
-   unsigned _expression_len;
-   unsigned int _leading_len;
+   std::size_t _expression_len;
+   std::size_t _leading_len;
    const charT* _leading_string;
-   unsigned int _leading_string_len;
+   std::size_t _leading_string_len;
    re_detail::kmp_info<charT>* pkmp;
    unsigned error_code_;
    charT* _expression;
@@ -698,7 +698,7 @@ protected:
    { return (const re_detail::re_syntax_base*)e.data.data(); }
    static const unsigned char* BOOST_REGEX_CALL get_map(const reg_expression& e)
    { return e.startmap; }
-   static unsigned int BOOST_REGEX_CALL leading_length(const reg_expression& e)
+   static std::size_t BOOST_REGEX_CALL leading_length(const reg_expression& e)
    { return e._leading_len; }
    static const re_detail::kmp_info<charT>* get_kmp(const reg_expression& e)
    { return e.pkmp; }
@@ -744,7 +744,7 @@ struct sub_match
    operator std::basic_string<value_type> ()const
    {
       std::basic_string<value_type> result;
-      unsigned len = boost::re_detail::distance((iterator)first, (iterator)second);
+      std::size_t len = boost::re_detail::distance((iterator)first, (iterator)second);
       result.reserve(len);
       iterator i = first;
       while(i != second)
@@ -877,7 +877,7 @@ protected:
    
    struct c_reference : public c_alloc
    {
-      unsigned int cmatches;
+      std::size_t cmatches;
       unsigned count;
       sub_match<iterator> head, tail, null;
       unsigned int lines;
@@ -1298,11 +1298,11 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::maybe_assign(cons
    p1 = (sub_match<iterator>*)(ref+1);
    p2 = (sub_match<iterator>*)(m.ref+1);
    iterator base = (*this)[-1].first;
-   unsigned int len1 = 0;
-   unsigned int len2 = 0;
-   unsigned int base1 = 0;
-   unsigned int base2 = 0;
-   unsigned int i;
+   std::size_t len1 = 0;
+   std::size_t len2 = 0;
+   std::size_t base1 = 0;
+   std::size_t base2 = 0;
+   std::size_t i;
    for(i = 0; i < ref->cmatches; ++i)
    {
       //
