@@ -12,7 +12,7 @@
 <table border="0" width="100%">
 <tr>
 	<td width="277">
-		<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" WIDTH="277" HEIGHT="86">
+		<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" width="277" height="86">
 	</td>
 	<td align="center">
 		<h1>bind.hpp</h1>
@@ -23,17 +23,48 @@
 </tr>
 </table>
 
-<h2>Files</h2>
-<ul>
-<li><a href="../../boost/bind.hpp">bind.hpp</a> (implementation)</li>
-<li><a href="bind_test.cpp">bind_test.cpp</a> (test)</li>
-<li><a href="bind_as_compose.cpp">bind_as_compose.cpp</a> (function composition example)</li>
-<li><a href="bind_visitor.cpp">bind_visitor.cpp</a> (visitor example)</li>
-<li><a href="bind_stdcall_test.cpp">bind_stdcall_test.cpp</a> (test with __stdcall functions)</li>
-<li><a href="bind_stdcall_mf_test.cpp">bind_stdcall_mf_test.cpp</a> (test with __stdcall member functions)</li>
-</ul>
+<h2>Contents</h2>
 
-<h2>Purpose</h2>
+<h3 style="margin-left: 20pt;"><a href="#Purpose">Purpose</a></h3>
+<h4 style="margin-left: 40pt;"><a href="#with_functions">Using bind with functions and function pointers</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#with_function_objects">Using bind with function objects</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#with_member_functions">Using bind with member function pointers</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#nested_binds">Using nested binds for function composition</a></h4>
+
+<h3 style="margin-left: 20pt;"><a href="#Examples">Examples</a></h3>
+<h4 style="margin-left: 40pt;"><a href="#with_algorithms">Using bind with standard algorithms</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#with_boost_function">Using bind with Boost.Function</a></h4>
+
+<h3 style="margin-left: 20pt;"><a href="#Limitations">Limitations</a></h3>
+
+<h3 style="margin-left: 20pt;"><a href="#FAQ">Frequently Asked Questions</a></h3>
+<h4 style="margin-left: 40pt;"><a href="#Q1">Why doesn't this compile?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q2">Why does this compile? It should not.</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q3">What is the difference between bind(f, ...) and bind&lt;R&gt;(f, ...)?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q4">Does <b>bind</b> work with Windows API functions?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q5">Does <b>bind</b> work with COM methods?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q6">Does <b>bind</b> work with Mac toolbox functions?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q7">Why doesn't <b>bind</b> automatically recognize nonstandard functions?</a></h4>
+
+<h3 style="margin-left: 20pt;"><a href="#Troubleshooting">Troubleshooting</a></h3>
+
+<h3 style="margin-left: 20pt;"><a href="#Interface">Interface</a></h3>
+<h4 style="margin-left: 40pt;"><a href="#Synopsis">Synopsis</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#CommonRequirements">Common requirements</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#CommonDefinitions">Common definitions</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#bind">bind</a></h4>
+
+<h3 style="margin-left: 20pt;"><a href="#Implementation">Implementation</a></h3>
+<h4 style="margin-left: 40pt;"><a href="#Files">Files</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Dependencies">Dependencies</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#NumberOfArguments">Number of Arguments</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#stdcall">&quot;__stdcall&quot; and &quot;pascal&quot; Support</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#MSVC">MSVC specific problems and workarounds</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#visit_each"><b>visit_each</b> support</a></h4>
+
+<h3 style="margin-left: 20pt;"><a href="#Acknowledgements">Acknowledgements</a></h3>
+
+<h2><a name="Purpose">Purpose</a></h2>
 
 <p>
 <b>boost::bind</b> is a generalization of the standard functions
@@ -45,7 +76,7 @@ in particular, it does not need the <b>result_type</b>,
 <b>first_argument_type</b> and <b>second_argument_type</b> standard typedefs.
 </p>
 
-<h3>Using bind with functions and function pointers</h3>
+<h3><a name="with_functions">Using bind with functions and function pointers</a></h3>
 
 <p>
 Given these definitions:
@@ -139,7 +170,7 @@ int i = 5;
 bind(f, ref(i), _1);
 </pre>
 
-<h3>Using bind with function objects</h3>
+<h3><a name="with_function_objects">Using bind with function objects</a></h3>
 
 <p>
 <b>bind</b> is not limited to functions; it accepts arbitrary function objects.
@@ -177,7 +208,7 @@ bind(std::less&lt;int&gt;, _1, 9)(x);               // x < 9
 [Note: the ability to omit the return type is not available on all compilers.]
 </p>
 
-<h3>Using bind with member function pointers</h3>
+<h3><a name="with_member_functions">Using bind with member function pointers</a></h3>
 
 <p>
 Pointers to member functions are not function objects, because they do not
@@ -244,7 +275,7 @@ the function object retains a reference to its instance of <b>X</b> and will
 remain valid even when <b>p</b> goes out of scope or is <b>reset()</b>.
 </p>
 
-<h3>Using nested binds for function composition</h3>
+<h3><a name="nested_binds">Using nested binds for function composition</a></h3>
 
 <p>
 Some of the arguments passed to <b>bind</b> may be nested <b>bind</b> expressions
@@ -289,7 +320,9 @@ int main()
 }
 </pre>
 
-<h3>Example: using bind with standard algorithms</h3>
+<h2><a name="Examples">Examples</a></h2>
+
+<h3><a name="with_algorithms">Using bind with standard algorithms</a></h3>
 
 <pre>
 class image;
@@ -322,7 +355,7 @@ void render(image &amp; target)
 }
 </pre>
 
-<h3>Example: using bind with Boost.Function</h3>
+<h3><a name="with_boost_function">Using bind with Boost.Function</a></h3>
 
 <pre>
 class button
@@ -350,7 +383,7 @@ void connect()
 }
 </pre>
 
-<h3>Limitations</h3>
+<h3><a name="Limitations">Limitations</a></h3>
 
 <p>
 The function objects generated by <b>bind</b> take their arguments by
@@ -394,9 +427,95 @@ partially ordered.
 corresponding issue</a> has not been resolved yet.]
 </p>
 
-<h2>Interface</h2>
+<h2><a name="FAQ">Frequently Asked Questions</a></h2>
 
-<h3>Synopsis</h3>
+<h3><a name="Q1">Why doesn't this compile?</a></h3>
+
+<p>
+See the <a href="#Troubleshooting">dedicated Troubleshooting section</a>.
+</p>
+
+<h3><a name="Q2">Why does this compile? It should not.</a></h3>
+
+<p>
+Probably because you used the general bind&lt;R&gt;(f, ...) syntax, thereby
+instructing <b>bind</b> to not &quot;inspect&quot; <b>f</b> to detect arity
+and return type errors.
+</p>
+
+<h3><a name="Q3">What is the difference between bind(f, ...) and bind&lt;R&gt;(f, ...)?</a></h3>
+
+<p>
+The first form instructs <b>bind</b> to inspect the type of <b>f</b> in order
+to determine its arity (number of arguments) and return type. Arity errors
+will be detected at &quot;bind time&quot;. This syntax, of course, places some
+requirements on <b>f</b>. It must be a function, function pointer, member
+function pointer, or a function object that defines a nested type named
+<b>result_type</b>; in short, it must be something that <b>bind</b> can
+recognize.
+</p>
+
+<p>
+The second form instructs <b>bind</b> to <b>not</b> attempt to recognize the
+type of <b>f</b>. It is generally used with function objects that do not, or
+cannot, expose <b>result_type</b>, but it can also be used with nonstandard
+functions. For example, the current implementation does not automatically
+recognize variable-argument functions like <b>printf</b>, so you will have to
+use <tt>bind&lt;int&gt;(printf, ...)</tt>.
+</p>
+
+<p>
+Another important factor to consider is that compilers without partial template
+specialization or function template partial ordering support cannot handle the
+first form when <b>f</b> is a function object, and in most cases will not handle
+the second form when <b>f</b> is a function (pointer) or a member function pointer.
+</p>
+
+<h3><a name="Q4">Does <b>bind</b> work with Windows API functions?</a></h3>
+
+<p>
+Yes, if you <a href="#stdcall">#define BOOST_BIND_ENABLE_STDCALL</a>.
+An alternative is to treat the function as a
+<a href="#with_function_objects">generic function object</a> and use the
+bind&lt;R&gt;(f, ...) syntax.
+</p>
+
+<h3><a name="Q5">Does <b>bind</b> work with COM methods?</a></h3>
+
+<p>
+Yes, if you <a href="#stdcall">#define BOOST_MEM_FN_ENABLE_STDCALL</a>.
+</p>
+
+<h3><a name="Q6">Does <b>bind</b> work with Mac toolbox functions?</a></h3>
+
+<p>
+Yes, if you <a href="#stdcall">#define BOOST_BIND_ENABLE_PASCAL</a>.
+An alternative is to treat the function as a
+<a href="#with_function_objects">generic function object</a> and use the
+bind&lt;R&gt;(f, ...) syntax.
+</p>
+
+<h3><a name="Q7">Why doesn't <b>bind</b> automatically recognize nonstandard functions?</a></h3>
+
+<p>
+Non-portable extensions, in general, should default to off to prevent vendor
+lock-in. Had the <a href="#stdcall">appropriate macros</a> been defined
+automatically, you could
+have accidentally taken advantage of them without realizing that your code is,
+perhaps, no longer portable. In addition, some compilers have the option to
+make <b>__stdcall</b> their default calling convention, in which case no
+separate support would be necessary.
+</p>
+
+<h2><a name="Troubleshooting">Troubleshooting</a></h2>
+
+<p>
+This section is still under development.
+</p>
+
+<h2><a name="Interface">Interface</a></h2>
+
+<h3><a name="Synopsis">Synopsis</a></h3>
 
 <pre>
 namespace boost
@@ -452,7 +571,7 @@ namespace
 }
 </pre>
 
-<h3>Common requirements</h3>
+<h3><a name="CommonRequirements">Common requirements</a></h3>
 
 <p>
 All <tt><i>implementation-defined-N</i></tt> types returned by <b>bind</b> are
@@ -465,7 +584,7 @@ All <tt><i>implementation-defined-placeholder-N</i></tt> types are
 <b>CopyConstructible</b>. Their copy constructors do not throw exceptions.
 </p>
 
-<h3>Common definitions</h3>
+<h3><a name="CommonDefinitions">Common definitions</a></h3>
 
 <p>
 The function &micro;(x, v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>), where m is a nonnegative integer, is defined as:
@@ -481,7 +600,7 @@ when <tt>x</tt> is (a copy of) a function object returned by <b>bind</b>;</li>
 </ul>
 
 
-<h3>bind</h3>
+<h3><a name="bind">bind</a></h3>
 
 <h4><a name="bind_1">template&lt;class R, class F&gt; <i>implementation-defined-1</i> bind(F f)</a></h4>
 
@@ -592,7 +711,29 @@ implicitly converted to <b>R</b>.
 <b>Effects:</b> equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), a1, a2);</tt>
 </p>
 
-<h2>Implementation</h2>
+<h2><a name="Implementation">Implementation</a></h2>
+
+<h3><a name="Files">Files</a></h3>
+<ul>
+<li><a href="../../boost/bind.hpp">boost/bind.hpp</a> (main header)</li>
+<li><a href="../../boost/bind/bind_cc.hpp">boost/bind/bind_cc.hpp</a> (used by bind.hpp, do not include directly)
+<li><a href="../../boost/bind/bind_mf_cc.hpp">boost/bind/bind_mf_cc.hpp</a> (used by bind.hpp, do not include directly)
+<li><a href="../../boost/bind/bind_template.hpp">boost/bind/bind_template.hpp</a> (used by bind.hpp, do not include directly)
+<li><a href="bind_test.cpp">libs/bind/bind_test.cpp</a> (test)</li>
+<li><a href="bind_as_compose.cpp">libs/bind/bind_as_compose.cpp</a> (function composition example)</li>
+<li><a href="bind_visitor.cpp">libs/bind/bind_visitor.cpp</a> (visitor example)</li>
+<li><a href="bind_stdcall_test.cpp">libs/bind/bind_stdcall_test.cpp</a> (test with __stdcall functions)</li>
+<li><a href="bind_stdcall_mf_test.cpp">libs/bind/bind_stdcall_mf_test.cpp</a> (test with __stdcall member functions)</li>
+</ul>
+
+<h3><a name="Dependencies">Dependencies</a></h3>
+<ul>
+<li><a href="../config/config.htm">Boost.Config</a>
+<li><a href="ref.html">boost/ref.hpp</a>
+<li><a href="mem_fn.html">boost/mem_fn.hpp</a>
+</ul>
+
+<h3><a name="NumberOfArguments">Number of Arguments</a></h3>
 
 <p>
 This implementation supports function objects with up to nine arguments.
@@ -600,7 +741,7 @@ This is an implementation detail, not an inherent limitation of the
 design.
 </p>
 
-<h3>__stdcall support</h3>
+<h3><a name="stdcall">&quot;__stdcall&quot; and &quot;pascal&quot; Support</a></h3>
 
 <p>
 Some platforms allow several types of (member) functions that differ by their
@@ -611,7 +752,8 @@ stack - if any.)
 
 <p>
 For example, Windows API functions and COM interface member functions use a
-calling convention known as <b>__stdcall</b>.
+calling convention known as <b>__stdcall</b>. Mac toolbox functions use a
+<b>pascal</b> calling convention.
 </p>
 
 <p>
@@ -625,6 +767,11 @@ macro <b>BOOST_MEM_FN_ENABLE_STDCALL</b> before including <b>&lt;boost/bind.hpp&
 </p>
 
 <p>
+To use <b>bind</b> with <b>pascal</b> functions, <b>#define</b> the macro
+<b>BOOST_BIND_ENABLE_PASCAL</b> before including <b>&lt;boost/bind.hpp&gt;</b>.
+</p>
+
+<p>
 [Note: this is a non-portable extension. It is not part of the interface.]
 </p>
 
@@ -632,7 +779,7 @@ macro <b>BOOST_MEM_FN_ENABLE_STDCALL</b> before including <b>&lt;boost/bind.hpp&
 [Note: Some compilers provide only minimal support for the <b>__stdcall</b> keyword.]
 </p>
 
-<h3>MSVC specific problems and workarounds</h3>
+<h3><a name="MSVC">MSVC specific problems and workarounds</a></h3>
 
 <p>
 Microsoft Visual C++ (up to version 7.0) does not fully support the
@@ -673,33 +820,18 @@ interface, and is not guaranteed to work on other compilers, or persist between
 library versions. In short, don't use it unless you absolutely have to.]
 </p>
 
-<h3>Visitor support</h3>
-
-<p style="color: Red;">
-[Note: this is an experimental feature. It may evolve over time
-when other libraries start to exploit it; or it may be removed altogether if
-no other library needs it. It is not part of the interface.]
-</p>
+<h3><a name="visit_each"><b>visit_each</b> support</a></h3>
 
 <p>
-For better integration with other libraries, the function objects returned by
-<b>bind</b> define a member function
-</p>
-
-<pre>
-template&lt;class Visitor&gt; void accept(Visitor &amp; v);
-</pre>
-
-<p>
-that applies <b>v</b>, as a function object, to its internal state. Using
-<b>accept</b> is implementation-specific and not intended for end users.
+Function objects returned by <b>bind</b> support the experimental and
+undocumented, as of yet, <b>visit_each</b> enumeration interface.
 </p>
 
 <p>
 See <a href="bind_visitor.cpp">bind_visitor.cpp</a> for an example.
 </p>
 
-<h2>Acknowledgements</h2>
+<h2><a name="Acknowledgements">Acknowledgements</a></h2>
 
 <p>
 Earlier efforts that have influenced the library design:

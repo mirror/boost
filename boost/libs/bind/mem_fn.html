@@ -12,7 +12,7 @@
 <table border="0" width="100%">
 <tr>
 	<td width="277">
-		<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" WIDTH="277" HEIGHT="86">
+		<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" width="277" height="86">
 	</td>
 	<td align="center">
 		<h1>mem_fn.hpp</h1>
@@ -31,7 +31,7 @@
 <b>std::mem_fun[_ref]</b> adaptors?</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#Q2">Should I replace every occurence of <b>std::mem_fun[_ref]</b>
 with <b>mem_fn</b> in my existing code?</a></h4>
-<h4 style="margin-left: 40pt;"><a href="#Q3">Will <b>mem_fn</b> work with COM methods?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q3">Does <b>mem_fn</b> work with COM methods?</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#Q4">Why isn't BOOST_MEM_FN_ENABLE_STDCALL defined automatically?</a></h4>
 <h3 style="margin-left: 20pt;"><a href="#Interface">Interface</a></h3>
 <h4 style="margin-left: 40pt;"><a href="#Synopsis">Synopsis</a></h4>
@@ -42,7 +42,7 @@ with <b>mem_fn</b> in my existing code?</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#Files">Files</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#Dependencies">Dependencies</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#NumberOfArguments">Number of Arguments</a></h4>
-<h4 style="margin-left: 40pt;"><a href="#stdcall">__stdcall Support</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#stdcall">&quot;__stdcall&quot; Support</a></h4>
 <h3 style="margin-left: 20pt;"><a href="#Acknowledgements">Acknowledgements</a></h3>
 
 <h2><a name="Purpose">Purpose</a></h2>
@@ -196,7 +196,7 @@ that need adaptable function objects in order to function might not like
 <b>mem_fn</b>.
 </p>
 
-<h3><a name="Q3">Will <b>mem_fn</b> work with COM methods?</a></h3>
+<h3><a name="Q3">Does <b>mem_fn</b> work with COM methods?</a></h3>
 
 <p>
 Yes, if you <a href="#stdcall">#define BOOST_MEM_FN_ENABLE_STDCALL</a>.
@@ -352,7 +352,7 @@ is of type <b>T <i>[</i>const<i>]</i></b>, <tt>(get_pointer(t)->*pmf)(a1, a2)</t
 <li><a href="mem_fn_void_test.cpp">libs/bind/mem_fn_void_test.cpp</a> (test for void returns)
 </ul>
 
-<h3><a name="Dependencies">Dependencies</a></h2>
+<h3><a name="Dependencies">Dependencies</a></h3>
 <ul>
 <li><a href="../config/config.htm">Boost.Config</a>
 </ul>
@@ -365,7 +365,7 @@ This is not an inherent limitation of the design, but an implementation
 detail.
 </p>
 
-<h3><a name="stdcall">__stdcall Support</a></h3>
+<h3><a name="stdcall">&quot;__stdcall&quot; Support</a></h3>
 
 <p>
 Some platforms allow several types of member functions that differ by their
