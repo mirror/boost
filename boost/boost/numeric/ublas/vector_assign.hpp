@@ -42,6 +42,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
     }
 
+
     // Make sparse proxies conformant
     template<class V, class E>
     // This function seems to be big. So we do not let the compiler inline it.
@@ -118,13 +119,13 @@ namespace boost { namespace numeric { namespace ublas {
     // BOOST_UBLAS_INLINE
     void indexing_vector_assign_scalar (F, V &v, const T &t) {
         typedef F functor_type;
-        typedef typename V::difference_type difference_type;
-        difference_type size (v.size ());
+        typedef typename V::size_type size_type;
+        size_type size (v.size ());
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
-        for (difference_type i = 0; i < size; ++ i)
+        for (size_type i = 0; i < size; ++ i)
             functor_type () (v (i), t);
 #else
-        difference_type i (0);
+        size_type i (0);
         DD (size, 4, r, (functor_type () (v (i), t), ++ i));
 #endif
     }
@@ -140,8 +141,8 @@ namespace boost { namespace numeric { namespace ublas {
 #elif BOOST_UBLAS_USE_ITERATING
         iterating_vector_assign_scalar (functor_type (), v, t);
 #else
-        typedef typename V::difference_type difference_type;
-        difference_type size (v.size ());
+        typedef typename V::size_type size_type;
+        size_type size (v.size ());
         if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
             iterating_vector_assign_scalar (functor_type (), v, t);
         else
@@ -276,13 +277,13 @@ namespace boost { namespace numeric { namespace ublas {
     // BOOST_UBLAS_INLINE
     void indexing_vector_assign (F, V &v, const vector_expression<E> &e) {
         typedef F functor_type;
-        typedef typename V::difference_type difference_type;
-        difference_type size (BOOST_UBLAS_SAME (v.size (), e ().size ()));
+        typedef typename V::size_type size_type;
+        size_type size (BOOST_UBLAS_SAME (v.size (), e ().size ()));
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
-        for (difference_type i = 0; i < size; ++ i)
+        for (size_type i = 0; i < size; ++ i)
             functor_type () (v (i), e () (i));
 #else
-        difference_type i (0);
+        size_type i (0);
         DD (size, 2, r, (functor_type () (v (i), e () (i)), ++ i));
 #endif
     }
@@ -298,8 +299,8 @@ namespace boost { namespace numeric { namespace ublas {
 #elif BOOST_UBLAS_USE_ITERATING
         iterating_vector_assign (functor_type (), v, e);
 #else
-        typedef typename V::difference_type difference_type;
-        difference_type size (BOOST_UBLAS_SAME (v.size (), e ().size ()));
+        typedef typename V::size_type size_type;
+        size_type size (BOOST_UBLAS_SAME (v.size (), e ().size ()));
         if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
             iterating_vector_assign (functor_type (), v, e);
         else

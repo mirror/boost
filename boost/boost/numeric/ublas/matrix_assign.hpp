@@ -42,6 +42,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
     }
 
+
     template<class M, class E, class F>
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
@@ -312,15 +313,15 @@ namespace boost { namespace numeric { namespace ublas {
     // BOOST_UBLAS_INLINE
     void indexing_matrix_assign_scalar (F, M &m, const T &t, row_major_tag) {
         typedef F functor_type;
-        typedef typename M::difference_type difference_type;
-        difference_type size1 (m.size1 ());
-        difference_type size2 (m.size2 ());
-        for (difference_type i = 0; i < size1; ++ i) {
+        typedef typename M::size_type size_type;
+        size_type size1 (m.size1 ());
+        size_type size2 (m.size2 ());
+        for (size_type i = 0; i < size1; ++ i) {
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
-            for (difference_type j = 0; j < size2; ++ j)
+            for (size_type j = 0; j < size2; ++ j)
                 functor_type () (m (i, j), t);
 #else
-            difference_type j (0);
+            size_type j (0);
             DD (size2, 4, r, (functor_type () (m (i, j), t), ++ j));
 #endif
         }
@@ -331,15 +332,15 @@ namespace boost { namespace numeric { namespace ublas {
     // BOOST_UBLAS_INLINE
     void indexing_matrix_assign_scalar (F, M &m, const T &t, column_major_tag) {
         typedef F functor_type;
-        typedef typename M::difference_type difference_type;
-        difference_type size2 (m.size2 ());
-        difference_type size1 (m.size1 ());
-        for (difference_type j = 0; j < size2; ++ j)
+        typedef typename M::size_type size_type;
+        size_type size2 (m.size2 ());
+        size_type size1 (m.size1 ());
+        for (size_type j = 0; j < size2; ++ j) {
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
-            for (difference_type i = 0; i < size1; ++ i) {
+            for (size_type i = 0; i < size1; ++ i)
                 functor_type () (m (i, j), t);
 #else
-            difference_type i (0);
+            size_type i (0);
             DD (size1, 4, r, (functor_type () (m (i, j), t), ++ i));
 #endif
         }
@@ -357,9 +358,9 @@ namespace boost { namespace numeric { namespace ublas {
 #elif BOOST_UBLAS_USE_ITERATING
         iterating_matrix_assign_scalar (functor_type (), m, t, orientation_category ());
 #else
-        typedef typename M::difference_type difference_type;
-        difference_type size1 (m.size1 ());
-        difference_type size2 (m.size2 ());
+        typedef typename M::size_type size_type;
+        size_type size1 (m.size1 ());
+        size_type size2 (m.size2 ());
         if (size1 >= BOOST_UBLAS_ITERATOR_THRESHOLD &&
             size2 >= BOOST_UBLAS_ITERATOR_THRESHOLD)
             iterating_matrix_assign_scalar (functor_type (), m, t, orientation_category ());
@@ -606,15 +607,15 @@ namespace boost { namespace numeric { namespace ublas {
     // BOOST_UBLAS_INLINE
     void indexing_matrix_assign (F, M &m, const matrix_expression<E> &e, row_major_tag) {
         typedef F functor_type;
-        typedef typename M::difference_type difference_type;
-        difference_type size1 (BOOST_UBLAS_SAME (m.size1 (), e ().size1 ()));
-        difference_type size2 (BOOST_UBLAS_SAME (m.size2 (), e ().size2 ()));
-        for (difference_type i = 0; i < size1; ++ i) {
+        typedef typename M::size_type size_type;
+        size_type size1 (BOOST_UBLAS_SAME (m.size1 (), e ().size1 ()));
+        size_type size2 (BOOST_UBLAS_SAME (m.size2 (), e ().size2 ()));
+        for (size_type i = 0; i < size1; ++ i) {
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
-            for (difference_type j = 0; j < size2; ++ j)
+            for (size_type j = 0; j < size2; ++ j)
                 functor_type () (m (i, j), e () (i, j));
 #else
-            difference_type j (0);
+            size_type j (0);
             DD (size2, 2, r, (functor_type () (m (i, j), e () (i, j)), ++ j));
 #endif
         }
@@ -625,15 +626,15 @@ namespace boost { namespace numeric { namespace ublas {
     // BOOST_UBLAS_INLINE
     void indexing_matrix_assign (F, M &m, const matrix_expression<E> &e, column_major_tag) {
         typedef F functor_type;
-        typedef typename M::difference_type difference_type;
-        difference_type size2 (BOOST_UBLAS_SAME (m.size2 (), e ().size2 ()));
-        difference_type size1 (BOOST_UBLAS_SAME (m.size1 (), e ().size1 ()));
-        for (difference_type j = 0; j < size2; ++ j)
+        typedef typename M::size_type size_type;
+        size_type size2 (BOOST_UBLAS_SAME (m.size2 (), e ().size2 ()));
+        size_type size1 (BOOST_UBLAS_SAME (m.size1 (), e ().size1 ()));
+        for (size_type j = 0; j < size2; ++ j) {
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
-            for (difference_type i = 0; i < size1; ++ i) {
+            for (size_type i = 0; i < size1; ++ i)
                 functor_type () (m (i, j), e () (i, j));
 #else
-            difference_type i (0);
+            size_type i (0);
             DD (size1, 2, r, (functor_type () (m (i, j), e () (i, j)), ++ i));
 #endif
         }
@@ -652,8 +653,8 @@ namespace boost { namespace numeric { namespace ublas {
         iterating_matrix_assign (functor_type (), m, e, orientation_category ());
 #else
         typedef typename M::difference_type difference_type;
-        difference_type size1 (BOOST_UBLAS_SAME (m.size1 (), e ().size1 ()));
-        difference_type size2 (BOOST_UBLAS_SAME (m.size2 (), e ().size2 ()));
+        size_type size1 (BOOST_UBLAS_SAME (m.size1 (), e ().size1 ()));
+        size_type size2 (BOOST_UBLAS_SAME (m.size2 (), e ().size2 ()));
         if (size1 >= BOOST_UBLAS_ITERATOR_THRESHOLD &&
             size2 >= BOOST_UBLAS_ITERATOR_THRESHOLD)
             iterating_matrix_assign (functor_type (), m, e, orientation_category ());
