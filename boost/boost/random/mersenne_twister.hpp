@@ -61,12 +61,29 @@ public:
   result_type max() const { return std::numeric_limits<result_type>::max(); }
   
   mersenne_twister() { seed(); }
-  explicit mersenne_twister(DataType value) { seed(value); }
+
+#if defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x520)
+  // Work around overload resolution problem (Gennadiy E. Rozental)
+  explicit mersenne_twister(const DataType& value)
+#else
+  explicit mersenne_twister(DataType value)
+#endif
+  { seed(value); }
+
   template<class Generator>
   explicit mersenne_twister(Generator & gen) { seed(gen); }
+
   // compiler-generated copy ctor and assignment operator are fine
+
   void seed() { seed(DataType(4357)); }
-  void seed(DataType value) {
+
+#if defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x520)
+  // Work around overload resolution problem (Gennadiy E. Rozental)
+  void seed(const DataType& value)
+#else
+  void seed(DataType value)
+#endif
+  {
     random::linear_congruential<uint32_t, 69069, 0, 0, /* unknown */ 0> 
       gen(value);
     seed(gen);
