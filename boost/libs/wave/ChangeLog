@@ -40,6 +40,7 @@ CHANGELOG
 - Fixed several broken links in the Context Policy topic.
 - Fixed a bug in the handling of the #include_next directive inside of 
   non-evaluated #if blocks.
+- Fixed a bug in the #include_next handling code (thanks to Stefan Seefeld).
 
 Mon Feb 21 09:30:04 WEST 2005
 Version 1.1.14 (Fixes in response to the Boost review)

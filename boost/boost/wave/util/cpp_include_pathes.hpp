@@ -135,20 +135,29 @@ bool include_pathes::find_include_file (std::string &s,
 
     const_include_list_iter_t it = pathes.begin();
     const_include_list_iter_t include_pathes_end = pathes.end();
-    
+
+#if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0    
     if (0 != current_file) {
-    // re-locate the current file first (#include_next handling)
+    // re-locate the directory of the current file (#include_next handling)
+
+    // #include_next does not distinguish between <file> and "file"
+    // inclusion, nor does it check that the file you specify has the same
+    // name as the current file.  It simply looks for the file named, starting
+    // with the directory in the search path after the one where the current
+    // file was found.
+
         for (/**/; it != include_pathes_end; ++it) {
             fs::path currpath ((*it).string(), fs::native);
-            currpath /= fs::path(s, fs::native);  // append filename
-
-            if (currpath.native_file_string() == current_file) {
+            fs::path file_path (current_file, fs::native);
+	          if (std::equal(currpath.begin(), currpath.end(), file_path.begin())) 
+	          {
                 ++it;     // start searching with the next directory
                 break;
             }
         }
     }
-        
+#endif
+
     for (/**/; it != include_pathes_end; ++it) {
         fs::path currpath ((*it).string(), fs::native);
         currpath /= fs::path(s, fs::native);      // append filename
@@ -185,7 +194,11 @@ include_pathes::find_include_file (std::string &s, bool is_system,
             }   
 
         // iterate all user include file directories to find the file
-            return find_include_file(s, user_include_pathes, current_file);
+            if (0 == current_file)
+                return find_include_file(s, user_include_pathes, 0);
+
+        // #include_next doesn't distinguish between <file> and "file"
+        // ... fall through
         }
 
     // iterate all user include file directories to find the file
