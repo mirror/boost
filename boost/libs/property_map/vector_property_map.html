@@ -160,6 +160,27 @@ The operator bracket for property access.
 <hr>
 
 <pre>
+std::vector&lt;T&gt;::iterator storage_begin()
+std::vector&lt;T&gt;::iterator storage_end()
+std::vector&lt;T&gt;::const_iterator storage_begin()
+std::vector&lt;T&gt;::const_iterator storage_end()
+</pre>
+
+<p>This group of methods gives access to begin and end iterators of the
+underlying vector.</p>
+
+<p><b>Rationale:</b> The methods are handy, for example, when it's needed to
+specify a single value for all elements in a freshly created property map. The
+methods are not called simply &quot;begin&quot; and &quot;end&quot; since
+conceptually, <tt>vector_property_map</tt> is unbounded map, and has no end
+iterator. The direct access to the underlying method is not provided, since
+it would decrease encapsulation and make future performance tuning dangerous.
+
+<p><b>Acknolegements:</b> Matthias Troyer suggested adding those functions.
+
+<hr>
+
+<pre>
 void reserve(unsigned size)
 </pre>
 Reserve the space for storing elements with maximum index of 'size'. Unless

@@ -103,6 +103,15 @@ istream& getline(istream& is, std::string& s)
    return is;
 }
 #endif
+#if defined(__GNUC__) && (__GNUC__ == 3)
+istream& getline(istream& is, std::string& s)
+{
+   std::getline(is, s);
+   if(s.size() && (s[s.size() -1] == '\r'))
+      s.erase(s.size() - 1);
+   return is;
+}
+#endif
 
 
 int main(int argc, char**argv)
@@ -355,6 +364,7 @@ int main(int argc, char**argv)
 
    return 0;
 }
+
 
 
 
