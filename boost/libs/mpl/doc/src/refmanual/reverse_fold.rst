@@ -119,7 +119,7 @@ Linear. Exactly ``size<s>::value`` applications of ``backward_op`` and ``forward
 Example
 -------
 
-Remove negative elements from a sequence [#reverse_fold_note]_.
+Remove non-negative elements from a sequence [#reverse_fold_note]_.
 
 .. parsed-literal::
     
