@@ -51,6 +51,7 @@ DEPENDS all : test ;
             : # input files
             : # build requirements
                 <msvc-stlport><*><runtime-link>static
+                <cw-9_3-darwin><*><runtime-link>static
                 <define>BOOST_IOSTREAMS_NO_LIB
                 $(requirements)
         ] ;
