@@ -40,6 +40,7 @@ http://www.boost.org/LICENSE_1_0.txt)
     <dt><a href="#numerics">Numerics</a>
     <dt><a href="#traits">Traits</a>
   </dl>
+  <dt><a href="#xml_archives">XML Archives</a>
   <dt><a href="exceptions.html">Archive Exceptions</a>
   <dt><a href="exception_safety.html">Exception Safety</a>
 </dl>
@@ -441,7 +442,7 @@ in a catastrophic way.
 One remedy for this is to assign serialization traits to the template
 <code style="white-space: normal">my_template</code> such that class
 information for instantiations of this template is never serialized.  This 
-process is describe <a target="detail" href="traits.html#templates">above</a> and
+process is described <a target="detail" href="traits.html#templates">above</a> and
 has been used for <a target="detail" href="wrappers.html#nvp"><strong>Name-Value Pairs</strong></a>.
 Wrappers would typically be assigned such traits.
 <p>
@@ -449,6 +450,22 @@ Another way to avoid this problem is to assign serialization traits
 to all specializations of the template <code style="white-space: normal">my_wrapper</code>
 for all primitive types so that class information is never saved.  This is what has
 been done for our implementation of serializations for STL collections.
+
+<h3><a name="xml_archives">XML Archives</a></h3>
+XML archives present a somewhat special case. 
+XML format has a nested structure that maps well to the "recursive class member visitor" pattern 
+used by the serialization system. However, XML differs from other formats in that it 
+requires a name for each data member. Our goal is to add this information to the 
+class serialization specification while still permiting the the serialization code to be 
+used with any archive. This is achived by requiring that all data serialized to an XML archive
+be serialized as a <a target="detail" href="wrappers.html#nvp">name-value pair</a>.
+The first member is the name to be used as the XML tag for the
+data item while the second is a reference to the data item itself. Any attempt to serialize data
+not wrapped in a in a <a target="detail" href="wrappers.html#nvp">name-value pair</a> will
+be trapped at compile time. The system is implemented in such a way that for other archive classes,
+just the value portion of the data is serialized. The name portion is discarded during compilation.
+So by always using <a target="detail" href="wrappers.html#nvp">name-value pairs</a>, it will
+be guarenteed that all data can be serialized to all archive classes with maximum efficiency.
 
 <h3><a href="exceptions.html">Archive Exceptions</a></h3>
 <h3><a href="exception_safety.html">Exception Safety</a></h3>
