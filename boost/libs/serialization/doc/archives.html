@@ -258,6 +258,8 @@ public:
     template&lt;class T&gt;
     register_type(T * t = NULL);
 
+    reset_object_address(void * old_address, void * new_address);
+
     unsigned int library_version() const;
 
     struct is_saving {
@@ -331,6 +333,21 @@ function is called during the saving of data to the archive, it should be called
 loading of the data from the archive at the same point in the serialization process.
 This is explained in detail in
 <a href="special.html#derivedpointers">Special Considerations - Derived Pointers</a>
+</dd>
+
+<dt><h4><code>
+void reset_object_address(void * new_address, void * old_address);
+</code></h4></dt>
+<dd>
+In order to facilitate loading of objects through a pointer 
+and to elminate redundant loading of objects, this system implements object address tracking. 
+Normally this is done automatically with no action required on the part of the user.  However,
+there are cases when an object must be de-serialized to a temporary location then 
+moved to its final destination.  This is common in loading collections.  
+<p>
+In such cases, reset_object_address should be invoked to communicate the final address
+of the last item loaded.  This permits the internal tables to be correctly maintained
+in these special case.
 </dd>
 
 <dt><h4><code>

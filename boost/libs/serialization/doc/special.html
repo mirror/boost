@@ -275,8 +275,12 @@ main(){
 <h3><a name="objecttracking">Object Tracking</a></h3>
 Depending on how the class is used and other factors, serialized objects
 may be tracked by memory address.  This prevents the same object from being
-written to or read from an archive multiple times. This could cause problems in 
-progams where the copies of different objects are serialized from the same address.
+written to or read from an archive multiple times. These stored addresses
+can also be used to delete objects created during a loading process
+that has been interrupted by throwing of an exception.  
+<p>
+This could cause problems in 
+progams where the copies of different objects are saved from the same address.
 <pre><code>
 template&lt;class Archive&gt;
 void save(boost::basic_oarchive  &amp; ar, const unsigned int version) const
@@ -309,25 +313,54 @@ void save(boost::basic_oarchive &amp; ar, const unsigned int version) const
 }
 </code></pre>
 which will compile and run without problem.  
-<p>
 The usage of <code style="white-space: normal">const</code> by the output archive operators
 will ensure that the process of serialization doesn't
 change the state of the objects being serialized.  An attempt to do this
 would constitute augmentation of the concept of saving of state with
 some sort of non-obvious side effect. This would almost surely be a mistake 
-and a likely source of very subtle bugs.  As described 
-<a target="detail" href="traits.html#tracking">above</a>, 
-addresses of objects serialized as pointers are stored in memory to
-prevent saving/loading of duplicate objects.  These stored addresses
-can also be used to delete objects created during a loading process
-that has been interrupted by throwing of an exception.  By default, code 
-to implement this tracking is instantiated if and only if an object of the class
-is serialized through a pointer.  If it is known a priori that no pointer
+and a likely source of very subtle bugs.  
+<p>
+A similar problem can occur when different objects are loaded to and address
+which is different from the final location:
+<pre><code>
+template&lt;class Archive&gt;
+void save(boost::basic_oarchive  &amp; ar, const unsigned int version) const
+{
+    for(int i = 0; i &lt; 10; ++i){
+        A x;
+        ar &gt;&gt; x;
+        std::m_set.insert(x);
+    }
+}
+</code></pre>
+In this case, the address of <code>x</code> is the one that is tracked rather than
+the address of the new item added to the set.  Left unaddressed
+this will break the features that depend on tracking such as loading object through a pointer.
+Subtle bugs will be introduced into the program.  This can be
+addressed by altering the above code thusly:
+
+<pre><code>
+template&lt;class Archive&gt;
+void save(boost::basic_iarchive  &amp; ar, const unsigned int version) const
+{
+    for(int i = 0; i &lt; 10; ++i){
+        A x;
+        ar &gt;&gt; x;
+        std::pair&lt;std::set::const_iterator, bool&gt; result;
+        result = std::m_set.insert(x);
+        ar.reset_object_address(& (*result.first), &x);
+    }
+}
+</code></pre>
+This will adjust the tracking information to reflect the final resting place of 
+the moved variable and thereby rectify the above problem.
+<p>
+If it is known a priori that no pointer
 values are duplicated, overhead associated with object tracking can
 be eliminated by setting the object tracking class serialization trait
 appropriately.
 <p>
-By definition, data types designated primitive by 
+By default, data types designated primitive by 
 <a target="detail" href="traits.html#level">Implementation Level</a>
 class serialization trait are never tracked. If it is desired to
 track a shared primitive object through a pointer (e.g. a
@@ -337,6 +370,8 @@ The alternative of changing the implementation level of a <code style="white-spa
 would affect all <code style="white-space: normal">long</code>s serialized in the whole
 program - probably not what one would intend.
 <p>
+
+
 It is possible that we may want to track addresses even though
 the object is never serialized through a pointer.  For example,
 a virtual base class need be saved/loaded only once.  By setting

@@ -175,8 +175,14 @@ The default value for primitive types is <code style="white-space: normal">track
 <p>
 The default value for all other types is <code style="white-space: normal">track_selectivly</code>.
 That is addresses of serialized objects are tracked if and only if
-an object of the same type is anywhere in the program serialized
+one or more of the following is true:
+<ul>
+<li>an object of this type is anywhere in the program serialized
 through a pointer.
+<li>the class is explicitly "exported" - see below.
+<li>the class is explicitly "registered" in the archive
+</ul>
+
 <p>
 The default behavior is almost always the most convenient one.  However,
 there a few cases where it would be desirable to override the
