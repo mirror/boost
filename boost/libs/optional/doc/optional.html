@@ -191,15 +191,15 @@ bool operator != ( optional&lt;T&gt; const&amp; lhs, optional&lt;T&gt; const&amp
 <P>This meaning of the null pointer value allowed pointers to became a defacto standard
   for handling optional objects because all you have to do to refer to a value which you
   don't really have is to use a null pointer value of the appropriate type.
-  Pointers have been used for decades -from the days of C APIs to modern C++ libraries-
-  to <i>refer</i> to optional (that is, possibly inexistent) objects; particularly 
+  Pointers have been used for decades&mdash;from the days of C APIs to modern C++ libraries&mdash;to
+  <i>refer</i> to optional (that is, possibly inexistent) objects; particularly 
   as optional arguments to a function, but also quite often as optional data members.</P>
 <P>The possible presence of a null pointer value makes the operations that access the
   pointee's value possibly undefined, therefore, expressions which use dereference
   and access operators, such as: <code>( *p = 2 )</code> and <code>( p-&gt;foo())</code>,
   implicitly convey the notion of optionality, and this information is tied to
   the <i>syntax</i> of the expressions. That is, the presence of operators * and -&gt; tell by
-  themselves -without any additional context-, that the expression will be undefined unless
+  themselves&mdash;without any additional context&mdash;that the expression will be undefined unless
   the implied pointee actually exist.<br>
   Furthermore, the existence of the pointee can be tested by a comparison against
   the null pointer value or via a conversion to bool, which allows expressions of
@@ -228,7 +228,7 @@ them. The problem resides in the shallow-copy of pointer semantics: if you need 
   possible undefined value because of the idiomatic aid present in the OptionalPointee
   concept incarnated by pointers. <br>
   Therefore, the final solution which is presented in this library is to shape the
-  previously discussed optional -which is a value-based container- as a model
+  previously discussed optional&mdash;which is a value-based container&mdash;as a model
   of the OptionalPointee concept.
 </p>
 <h3>Optional&lt;T&gt; as a model of OptionalPointee</h3>
@@ -806,14 +806,13 @@ class Fred
 
 <H2><A NAME="bool">A note about optional&lt;bool&gt;</A></H2>
 <p><code>optional&lt;bool&gt;</code> should be used with special caution and consideration.</p>
-<p>First, it is functionally similar to a tristate boolean (false,maybe,true)
--such as <u>boost::tribool</u> (not yet formally in boost)-,
-except that in a tristate boolean, the <i>maybe</i> state
-<u>represents a valid value</u>, unlike the corresponding state
+<p>First, it is functionally similar to a tristate boolean (false,maybe,true) &mdash;such as
+<u>boost::tribool</u> (not yet formally in boost)&mdash;except that in a tristate boolean,
+the <i>maybe</i> state <u>represents a valid value</u>, unlike the corresponding state
 of an uninitialized optional&lt;bool&gt;.<br>
 It should be carefully considered if an optional bool instead of a tribool is really needed</p>
-<p>Second, optional&lt;&gt; provides and implicit conversion to bool. This conversion
-refers to the initialization state and not to the contained value.<br>
+<p>Second, optional&lt;&gt; provides an implicit conversion to bool. This conversion 
+  refers to the initialization state and not to the contained value.<br>
 Using optional&lt;bool&gt; can lead to subtle errors due to the implicit bool conversion:</p>
 <pre>
 void foo ( bool v ) ;
@@ -978,6 +977,6 @@ HREF="http://www.boost.org">www.boost.org</A>, and the boost discussion list at
 <A
  HREF="http://www.yahoogroups.com/list/boost">www.yahoogroups.com/list/boost</A>.
 </P>
-</u></BODY>
+</BODY>
 </HTML>
 
