@@ -150,7 +150,7 @@ main()
     function_requires< ForwardIteratorConcept<Iter> >();
   }
   {
-    typedef forward_iterator_archetype<assignable_archetype<> > Iter;
+    typedef mutable_forward_iterator_archetype<assignable_archetype<> > Iter;
     function_requires< Mutable_ForwardIteratorConcept<Iter> >();
   }
   {
@@ -158,7 +158,8 @@ main()
     function_requires< BidirectionalIteratorConcept<Iter> >();
   }
   {
-    typedef bidirectional_iterator_archetype<assignable_archetype<> > Iter;
+    typedef mutable_bidirectional_iterator_archetype<assignable_archetype<> > 
+      Iter;
     function_requires< Mutable_BidirectionalIteratorConcept<Iter> >();
   }
   {
@@ -166,13 +167,15 @@ main()
     function_requires< RandomAccessIteratorConcept<Iter> >();
   }
   {
-    typedef random_access_iterator_archetype<assignable_archetype<> > Iter;
+    typedef mutable_random_access_iterator_archetype<assignable_archetype<> > 
+      Iter;
     function_requires< Mutable_RandomAccessIteratorConcept<Iter> >();
   }
 
   //===========================================================================
   // Container Concepts
 
+  // UNDER CONSTRUCTION
 
   return 0;
 }
