@@ -333,7 +333,7 @@ int BOOST_REGEX_CALL cpp_regex_traits<char>::toi(char c)const
 
 int BOOST_REGEX_CALL cpp_regex_traits<char>::toi(const char*& first, const char* last, int radix)const
 {
-   pmd->sbuf.pubsetbuf((char*)first, last-first);
+   pmd->sbuf.pubsetbuf(const_cast<char*>(first), last-first);
    pmd->is.clear();
    if(std::abs(radix) == 16) pmd->is >> std::hex;
    else if(std::abs(radix) == 8) pmd->is >> std::oct;
@@ -706,7 +706,7 @@ int BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::toi(wchar_t c)const
 
 int BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::toi(const wchar_t*& first, const wchar_t* last, int radix)const
 {
-   pmd->sbuf.pubsetbuf((wchar_t*)first, last-first);
+   pmd->sbuf.pubsetbuf(const_cast<wchar_t*>(first), last-first);
    pmd->is.clear();
    if(std::abs(radix) == 16) pmd->is >> std::hex;
    else if(std::abs(radix) == 8) pmd->is >> std::oct;

@@ -79,9 +79,9 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA* expression, const char
 
    try{
       expression->re_magic = magic_value;
-      ((regex*)(expression->guts))->set_expression(ptr, p2, flags);
-      expression->re_nsub = ((regex*)(expression->guts))->mark_count() - 1;
-      result = ((regex*)(expression->guts))->error_code();
+      static_cast<regex*>(expression->guts)->set_expression(ptr, p2, flags);
+      expression->re_nsub = static_cast<regex*>(expression->guts)->mark_count() - 1;
+      result = static_cast<regex*>(expression->guts)->error_code();
    } catch(...)
    {
       result = REG_E_UNKNOWN;
@@ -132,7 +132,7 @@ BOOST_REGEX_DECL unsigned int BOOST_REGEX_CCALL regerrorA(int code, const regex_
    {
       std::string p;
       if((e) && (e->re_magic == magic_value))
-         p = ((regex*)(e->guts))->get_traits().error_string(code);
+         p = static_cast<regex*>(e->guts)->get_traits().error_string(code);
       else
       {
          boost::regex_traits<char> t;
@@ -177,7 +177,7 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecA(const regex_tA* expression, cons
    try{
    if(expression->re_magic == magic_value)
    {
-      result = regex_search(start, end, m, *(regex*)(expression->guts), flags);
+      result = regex_search(start, end, m, *static_cast<regex*>(expression->guts), flags);
    }
    else
       return result;
@@ -211,7 +211,7 @@ BOOST_REGEX_DECL void BOOST_REGEX_CCALL regfreeA(regex_tA* expression)
    BOOST_RE_GUARD_STACK
    if(expression->re_magic == magic_value)
    {
-      delete (regex*)(expression->guts);
+      delete static_cast<regex*>(expression->guts);
    }
    expression->re_magic = 0;
 }

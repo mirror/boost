@@ -365,7 +365,7 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
                }
             }
          }
-         if((false == recurse) && (matches[0] == 0) && (matches[1] == search_text.size()))
+         if((false == recurse) && (matches[0] == 0) && (matches[1] == static_cast<int>(search_text.size())))
          {
             //
             // match expected on whole string, so all versions

@@ -87,9 +87,9 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompW(regex_tW* expression, const wcha
 
    try{
       expression->re_magic = wmagic_value;
-      ((wregex*)(expression->guts))->set_expression(ptr, p2, flags);
-      expression->re_nsub = ((wregex*)(expression->guts))->mark_count() - 1;
-      result = ((wregex*)(expression->guts))->error_code();
+      static_cast<wregex*>(expression->guts)->set_expression(ptr, p2, flags);
+      expression->re_nsub = static_cast<wregex*>(expression->guts)->mark_count() - 1;
+      result = static_cast<wregex*>(expression->guts)->error_code();
    } catch(...)
    {
       result = REG_E_UNKNOWN;
@@ -143,10 +143,10 @@ BOOST_REGEX_DECL unsigned int BOOST_REGEX_CCALL regerrorW(int code, const regex_
       regex_traits<wchar_t> rt;
       const regex_traits<wchar_t>* pt = &rt;
       if(e && (e->re_magic == wmagic_value))
-         pt = &((wregex*)(e->guts))->get_traits();
+         pt = &static_cast<wregex*>(e->guts)->get_traits();
       (void)pt; // warning suppression
       std::string p = pt->error_string(code);
-      unsigned int len = pt->strwiden((wchar_t*)0, 0, p.c_str());
+      unsigned int len = pt->strwiden(static_cast<wchar_t*>(0), 0, p.c_str());
       if(len < buf_size)
       {
          pt->strwiden(buf, buf_size, p.c_str());
@@ -185,7 +185,7 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecW(const regex_tW* expression, cons
    try{
    if(expression->re_magic == wmagic_value)
    {
-      result = regex_search(start, end, m, *(wregex*)(expression->guts), flags);
+      result = regex_search(start, end, m, *static_cast<wregex*>(expression->guts), flags);
    }
    else
       return result;
@@ -219,7 +219,7 @@ BOOST_REGEX_DECL void BOOST_REGEX_CCALL regfreeW(regex_tW* expression)
    BOOST_RE_GUARD_STACK
    if(expression->re_magic == wmagic_value)
    {
-      delete (wregex*)(expression->guts);
+      delete static_cast<wregex*>(expression->guts);
    }
    expression->re_magic = 0;
 }

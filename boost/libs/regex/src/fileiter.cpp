@@ -83,7 +83,7 @@ void mapfile::open(const char* file)
          hfile = 0;
          throw std::runtime_error("Unable to create file mapping.");
       }
-      _first = (const char*)MapViewOfFile(hmap, FILE_MAP_READ, 0, 0, 0);
+      _first = static_cast<const char*>(MapViewOfFile(hmap, FILE_MAP_READ, 0, 0, 0));
       if(_first == 0)
       {
          CloseHandle(hmap);
@@ -227,7 +227,7 @@ void mapfile::lock(pointer* node)const
          if(condemed.empty())
          {
             *node = new char[sizeof(int) + buf_size];
-            *((int*)(*node)) = 1;
+            *(reinterpret_cast<int*>(*node)) = 1;
          }
          else
          {
@@ -235,7 +235,7 @@ void mapfile::lock(pointer* node)const
             condemed.pop_front();
             *node = *p;
             *p = 0;
-            *((int*)(*node)) = 1;
+            *(reinterpret_cast<int*>(*node)) = 1;
          }
          std::fseek(hfile, (node - _first) * buf_size, SEEK_SET);
          if(node == _last - 1)
@@ -245,13 +245,13 @@ void mapfile::lock(pointer* node)const
       }
       else
       {
-         if(*((int*)(*node)) == 0)
+         if(*reinterpret_cast<int*>(*node) == 0)
          {
-            *((int*)(*node)) = 1;
+            *reinterpret_cast<int*>(*node) = 1;
             condemed.remove(node);
          }
          else
-            ++(*((int*)(*node)));
+            ++(*reinterpret_cast<int*>(*node));
       }
    }
 }
@@ -263,7 +263,7 @@ void mapfile::unlock(pointer* node)const
    assert(node <= _last);
    if(node < _last)
    {
-      if(--(*((int*)(*node))) == 0)
+      if(--(*reinterpret_cast<int*>(*node)) == 0)
       {
          condemed.push_back(node);
       }
