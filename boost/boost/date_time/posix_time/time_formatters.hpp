@@ -332,11 +332,15 @@ namespace posix_time {
     std::stringstream out_ss;
     is >> inp_s;
     typename std::basic_string<charT>::iterator b = inp_s.begin();
-    while(*b != '\0'){
+    // need to use both iterators because there is no requirement
+    // for the data held by a std::basic_string<> be terminated with
+    // any marker (such as '\0').
+    typename std::basic_string<charT>::iterator e = inp_s.end();
+    while(b != e){
       out_ss << out_ss.narrow(*b, 0);
       ++b;
     }
-    
+
     td = date_time::parse_delimited_time_duration<time_duration>(out_ss.str());
     return is;
   }
