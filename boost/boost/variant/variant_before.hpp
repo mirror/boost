@@ -25,7 +25,7 @@
 
 #include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 #   include "boost/mpl/bool.hpp"
 #   include "boost/type_traits/is_same.hpp"
 #endif
@@ -49,7 +49,7 @@ class variant_before_impl
     : public boost::static_visitor<bool>
 {
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
 public: // binary visitor interface
 
@@ -67,7 +67,7 @@ public: // binary visitor interface
         return false;
     }
 
-#else // MSVC6
+#else // MSVC7 and below
 
 private: // helpers, for binary visitor interface (below)
 
@@ -90,14 +90,14 @@ public: // binary visitor interface
     template <typename T, typename U>
     bool operator()(const T& lhs, const U& rhs) const
     {
-        // MSVC6 finds normal implementation (above) ambiguous,
+        // MSVC7 finds normal implementation (above) ambiguous,
         // so we must explicitly disambiguate
 
         typedef typename is_same<U, T>::type U_is_T;
         return execute_impl(lhs, rhs, U_is_T());
     }
 
-#endif // MSVC6 workaround
+#endif // MSVC7 and below workaround
 
 };
 
