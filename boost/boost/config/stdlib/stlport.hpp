@@ -83,13 +83,17 @@
 //
 // Harold Howe says:
 // Borland switched to STLport in BCB6. Defining BOOST_NO_STDC_NAMESPACE with
-// BCB6 does cause problems. If we detect BCB6, then don't define 
+// BCB6 does cause problems. If we detect C++ Builder, then don't define 
 // BOOST_NO_STDC_NAMESPACE
 //
-#if !defined(__BORLANDC__) || (__BORLANDC__ < 0x560)
+#if !defined(__BORLANDC__)
 #  if defined(__STL_IMPORT_VENDOR_CSTD) || defined(__STL_USE_OWN_NAMESPACE) || defined(_STLP_IMPORT_VENDOR_CSTD) || defined(_STLP_USE_OWN_NAMESPACE)
 #     define BOOST_NO_STDC_NAMESPACE
 #  endif
+#elif __BORLANDC__ < 0x560
+// STLport doesn't import std::abs correctly:
+#include <stdlib.h>
+namespace std { using ::abs; }
 #endif
 
 //
@@ -120,6 +124,7 @@
 
 
 #define BOOST_STDLIB "STLPort standard library version " BOOST_STRINGIZE(__SGI_STL_PORT)
+
 
 
 
