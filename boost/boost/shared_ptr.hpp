@@ -26,10 +26,11 @@
 #include <boost/throw_exception.hpp>
 #include <boost/detail/shared_count.hpp>
 
-#include <memory>             // for std::auto_ptr
-#include <algorithm>          // for std::swap
-#include <functional>         // for std::less
-#include <typeinfo>           // for std::bad_cast
+#include <memory>               // for std::auto_ptr
+#include <algorithm>            // for std::swap
+#include <functional>           // for std::less
+#include <typeinfo>             // for std::bad_cast
+#include <iosfwd>               // for std::basic_ostream
 
 #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
 # pragma warning(push)
@@ -369,6 +370,14 @@ template<class T, class U> shared_ptr<T> shared_polymorphic_downcast(shared_ptr<
 template<class T> inline T * get_pointer(shared_ptr<T> const & p)
 {
     return p.get();
+}
+
+// operator<<
+
+template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::basic_ostream<E, T> & os, shared_ptr<Y> const & p)
+{
+    os << p.get();
+    return os;
 }
 
 // get_deleter (experimental)
