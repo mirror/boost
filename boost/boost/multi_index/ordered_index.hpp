@@ -615,8 +615,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 
   bool replace_(value_param_type v,node_type* x)
   {
-    if(!comp(key(v),key(x->value))&&
-       !comp(key(x->value),key(v))){
+    if(in_place(v,x,Category())){
       return Super::replace_(v,x);
     }
 
@@ -664,7 +663,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   {
     bool b;
     BOOST_TRY{
-      b=in_place(x,Category());
+      b=in_place(x->value,x,Category());
     }
     BOOST_CATCH(...){
       erase_(x);
@@ -900,26 +899,32 @@ private:
     }
   }
 
-  bool in_place(node_type* x,ordered_unique_tag)
+  bool in_place(value_param_type v,node_type* x,ordered_unique_tag)
   {
-    node_type* y=x;
-    node_type::decrement(y);
-    if(y!=header()&&!comp(key(y->value),key(x->value)))return false;
+    node_type* y;
+    if(x!=leftmost()){
+      y=x;
+      node_type::decrement(y);
+      if(!comp(key(y->value),key(v)))return false;
+    }
 
     y=x;
     node_type::increment(y);
-    return y==header()||comp(key(x->value),key(y->value));
+    return y==header()||comp(key(v),key(y->value));
   }
 
-  bool in_place(node_type* x,ordered_non_unique_tag)
+  bool in_place(value_param_type v,node_type* x,ordered_non_unique_tag)
   {
-    node_type* y=x;
-    node_type::decrement(y);
-    if(y!=header()&&comp(key(x->value),key(y->value)))return false;
+    node_type* y;
+    if(x!=leftmost()){
+      y=x;
+      node_type::decrement(y);
+      if(comp(key(v),key(y->value)))return false;
+    }
 
     y=x;
     node_type::increment(y);
-    return y==header()||!comp(key(y->value),key(x->value));
+    return y==header()||!comp(key(y->value),key(v));
   }
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
