@@ -38,7 +38,7 @@ private:
 #endif
 public: 
    typedef          sub_match<RandomAccessIterator>                         value_type;
-#ifndef BOOST_NO_STD_ALLOCATOR
+#if  !defined(BOOST_NO_STD_ALLOCATOR) && !(defined(BOOST_MSVC) && defined(_STLPORT_VERSION))
    typedef typename Allocator::const_reference                              const_reference;
 #else
    typedef          const value_type&                                       const_reference;

@@ -519,7 +519,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_dot_repeat
       return match_dot_repeat_slow();
 
    const re_repeat* rep = static_cast<const re_repeat*>(pstate);
-   unsigned count = std::min(static_cast<unsigned>(re_detail::distance(position, last)), (rep->greedy ? rep->max : rep->min));
+   unsigned count = std::min(static_cast<unsigned>(re_detail::distance(position, last)), static_cast<unsigned>(rep->greedy ? rep->max : rep->min));
    if(rep->min > count)
       return false;  // not enough text left to match
    std::advance(position, count);
