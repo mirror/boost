@@ -215,6 +215,8 @@ namespace std {
 #define BOOST_UBLAS_USE_STREAM
 // Base traits templates syntax untested
 #define BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
+// Compilation of some templates effected by lack of inline
+#define BOOST_UBLAS_INLINE inline
 #endif
 
 #endif
