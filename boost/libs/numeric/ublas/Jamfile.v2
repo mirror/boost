@@ -1,0 +1,32 @@
+# Copyright Michael Stevens 2004
+
+# Use, modification, and distribution is subject to the Boost Software
+# License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+# bring in rules for testing
+
+# Boost uBLAS library project and testing Jamfile
+
+import testing ;
+
+# Project requirements
+project ublastest
+    : requirements
+      <define>BOOST_UBLAS_SAFE
+      <define>USE_RANGE
+      <define>USE_ADAPTOR
+      <toolset>intel:<cxxflags>"-Xc"   # Strict mode
+      <toolset>borland:<cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+      <toolset>kylix:<cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+    ;
+
+test-suite "uBLAS"
+       : [ compile concepts.cpp ]
+         [ run test1 ]
+         [ run test2 ]
+         [ run test3 ]
+         [ run test4 ]
+         [ run test5 ]
+         [ run test6 ]
+         [ run test7 ]
+       ;
