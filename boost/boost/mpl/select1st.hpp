@@ -36,7 +36,7 @@ struct select1st
 #if defined(BOOST_MPL_MSVC_ETI_BUG)
 template<> struct select1st<int>
 {
-    typedef select1st<int> type;
+    typedef int type;
 };
 #endif
 

@@ -36,7 +36,7 @@ struct prior
 #if defined(BOOST_MPL_MSVC_70_ETI_BUG)
 template<> struct prior<int>
 {
-    typedef prior<int> type;
+    typedef int type;
 };
 #endif
 

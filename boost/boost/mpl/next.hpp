@@ -36,7 +36,7 @@ struct next
 #if defined(BOOST_MPL_MSVC_70_ETI_BUG)
 template<> struct next<int>
 {
-    typedef next<int> type;
+    typedef int type;
 };
 #endif
 

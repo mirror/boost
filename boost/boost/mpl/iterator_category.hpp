@@ -36,7 +36,7 @@ struct iterator_category
 #if defined(BOOST_MPL_MSVC_ETI_BUG)
 template<> struct iterator_category<int>
 {
-    typedef iterator_category<int> type;
+    typedef int type;
 };
 #endif
 
