@@ -429,9 +429,6 @@ struct require_same { typedef T type; };
       function_requires< AssignableConcept<TT> >();
       function_requires< DefaultConstructibleConcept<TT> >();
       function_requires< EqualityComparableConcept<TT> >();
-#ifndef BOOST_NO_STD_ITERATOR_TRAITS
-      typedef typename std::iterator_traits<TT>::value_type V;
-#endif
       (void)*i;           // require dereference operator
     }
     TT i;
