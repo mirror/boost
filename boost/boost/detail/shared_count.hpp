@@ -28,6 +28,11 @@
 #include <functional>       // for std::less
 #include <exception>        // for std::exception
 
+#ifdef __BORLANDC__
+# pragma warn -8026     // Functions with excep. spec. are not expanded inline
+# pragma warn -8027     // Functions containing try are not expanded inline
+#endif
+
 namespace boost
 {
 
@@ -388,5 +393,10 @@ inline shared_count::shared_count(weak_count const & r): pi_(r.pi_)
 } // namespace detail
 
 } // namespace boost
+
+#ifdef __BORLANDC__
+# pragma warn .8027     // Functions containing try are not expanded inline
+# pragma warn .8026     // Functions with excep. spec. are not expanded inline
+#endif
 
 #endif  // #ifndef BOOST_DETAIL_SHARED_COUNT_HPP_INCLUDED

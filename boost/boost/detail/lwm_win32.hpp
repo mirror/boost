@@ -18,6 +18,10 @@
 
 #include <boost/detail/winapi.hpp>
 
+#ifdef __BORLANDC__
+# pragma warn -8027     // Functions containing while are not expanded inline
+#endif
+
 namespace boost
 {
 
@@ -82,5 +86,9 @@ public:
 } // namespace detail
 
 } // namespace boost
+
+#ifdef __BORLANDC__
+# pragma warn .8027     // Functions containing while are not expanded inline
+#endif
 
 #endif // #ifndef BOOST_DETAIL_LWM_WIN32_HPP_INCLUDED
