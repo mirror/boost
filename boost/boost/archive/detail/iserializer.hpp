@@ -8,6 +8,10 @@
 #pragma inline_recursion(on)
 #endif
 
+#if defined(__MWERKS__)
+#pragma inline_depth(255)
+#endif
+
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // iserializer.hpp: interface for serialization system.
 

@@ -182,9 +182,7 @@ const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
     namespace boost { namespace archive { namespace detail {
     template<class T, class ASeq>
     const guid_initializer<T, ASeq> & 
-    #if defined(__MWERKS__)
     BOOST_FORCE_INCLUDE 
-    #endif
     boost_template_instantiate(T &, ASeq &){
         return guid_initializer<T, ASeq>::instance;
     }
