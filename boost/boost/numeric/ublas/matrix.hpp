@@ -43,10 +43,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
+        typedef A array_type;
     private:
         typedef F functor_type;
-        typedef A array_type;
-        typedef const A const_array_type;
         typedef const matrix<T, F, A> const_self_type;
         typedef matrix<T, F, A> self_type;
     public:
@@ -99,7 +98,7 @@ namespace boost { namespace numeric { namespace ublas {
             return size2_;
         }
         BOOST_UBLAS_INLINE
-        const_array_type &data () const {
+        const array_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
@@ -1002,10 +1001,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
+        typedef A array_type;
     private:
         typedef F functor_type;
-        typedef A array_type;
-        typedef const A const_array_type;
         typedef const vector_of_vector<T, F, A> const_self_type;
         typedef vector_of_vector<T, F, A> self_type;
     public:
@@ -1057,7 +1055,7 @@ namespace boost { namespace numeric { namespace ublas {
             return size2_;
         }
         BOOST_UBLAS_INLINE
-        const_array_type &data () const {
+        const array_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
