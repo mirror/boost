@@ -128,6 +128,47 @@ public: // metafunction result
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// (detail) metafunction find_fallback_type
+//
+// Provides a fallback (i.e., nothrow default-constructible) type from the
+// specified sequence, or no_fallback_type if not found.
+//
+
+class no_fallback_type;
+
+template <typename Types>
+struct find_fallback_type
+{
+private: // helpers, for metafunction result (below)
+
+    typedef typename mpl::end<Types>::type not_found;
+
+    typedef typename mpl::find_if<
+          Types, has_nothrow_constructor<mpl::_1>
+        >::type fallback_type_it_;
+
+public: // metafunction result
+
+    typedef typename mpl::apply_if<
+          is_same<fallback_type_it_, not_found>
+        , mpl::identity< no_fallback_type >
+        , fallback_type_it_ // dereference
+        >::type type;
+
+};
+
+#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
+
+template<>
+struct find_fallback_type<int>
+{
+    typedef mpl::pair< mpl::false_, no_fallback_type >
+        type;
+};
+
+#endif // BOOST_MPL_MSVC_60_ETI_BUG workaround
+
+///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction make_storage
 //
 // Provides an aligned storage type capable of holding any of the types
@@ -768,14 +809,6 @@ public: // internal visitor interfaces, cont.
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// (detail) no_fallback_type
-//
-// Incomplete type used to trigger helpful compiler error if fallback type
-// optimization is attempted when inappropriate.
-//
-class no_fallback_type;
-
 }} // namespace detail::variant
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -933,24 +966,16 @@ private: // static precondition assertions
 
 private: // helpers, for representation (below)
 
-    typedef typename mpl::end<internal_types>::type
-        internal_types_end;
-
-    typedef typename mpl::find_if<
+    typedef typename detail::variant::find_fallback_type<
           internal_types
-        , has_nothrow_constructor<mpl::_1>
-        >::type fallback_type_it_;
+        >::type fallback_type_;
 
     struct has_fallback_type_
-        : mpl::not_< is_same< fallback_type_it_,internal_types_end > >
+        : mpl::not_<
+              is_same< fallback_type_, detail::variant::no_fallback_type >
+            >
     {
     };
-
-    typedef typename mpl::apply_if<
-          has_fallback_type_
-        , fallback_type_it_ // dereference
-        , mpl::identity< detail::variant::no_fallback_type >
-        >::type fallback_type_;
 
     typedef has_fallback_type_
         never_uses_backup_flag;
