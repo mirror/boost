@@ -32,8 +32,8 @@ namespace boost{
 // that dll builds contain the Virtual table for these
 // types - this ensures that exceptions can be thrown
 // from the dll and caught in an exe.
-bad_pattern::~bad_pattern(){}
-bad_expression::~bad_expression(){}
+bad_pattern::~bad_pattern() throw() {}
+bad_expression::~bad_expression() throw() {}
 
 regbase::regbase()
    : _flags(regbase::failbit){}

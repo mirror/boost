@@ -39,14 +39,14 @@ class BOOST_RE_IX_DECL bad_pattern : public std::runtime_error
 {
 public:
    explicit bad_pattern(const std::string& s) : std::runtime_error(s){};
-   ~bad_pattern();
+   ~bad_pattern() throw();
 };
 
 class BOOST_RE_IX_DECL bad_expression : public bad_pattern
 {
 public:
    explicit bad_expression(const std::string& s) : bad_pattern(s) {}
-   ~bad_expression();
+   ~bad_expression() throw();
 };
 
 
