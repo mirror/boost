@@ -1248,6 +1248,7 @@ public:
     : _rng(rng), _a(a), _b(b), _c(c),
       d1(_b-_a), d2(_c-_a), d3(_c-_b), q1(d1/d2), p1(d1*d2)
   {
+    using std::sqrt;
     d3 = sqrt(d3);
     p1 = sqrt(p1);
     assert(_a <= _b && _b <= _c);
