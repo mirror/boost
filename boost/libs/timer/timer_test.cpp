@@ -39,7 +39,7 @@ int main() {
 
   cout << "\ndetermine " << time << " second iteration count" << endl;
   for ( loops = 0; loops < LONG_MAX
-	    && loop_timer.elapsed() < time; ++loops ) {}
+     && loop_timer.elapsed() < time; ++loops ) {}
   cout << loops << " iterations"<< endl;
     
   long i;
