@@ -8,6 +8,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  23 May 03 Added tests for "bool_testable". (Sam Partington/Daniel Frey)
 //  01 Oct 01 Added tests for "left" operators
 //            and new grouped operators. (Helmut Zeisel)
 //  20 May 01 Output progress messages.  Added tests for new operator
@@ -613,6 +614,18 @@ test_main( int , char * [] )
 
     cout << "Created MyInt objects.\n";
 
+    PRIVATE_BOOLEAN_EXPR_TEST( i, false );
+    PRIVATE_BOOLEAN_EXPR_TEST( i1, true );
+    PRIVATE_BOOLEAN_EXPR_TEST( i2, true );
+    PRIVATE_BOOLEAN_EXPR_TEST( !i, true );
+    PRIVATE_BOOLEAN_EXPR_TEST( !i1, false );
+    PRIVATE_BOOLEAN_EXPR_TEST( !i2, false );
+    PRIVATE_BOOLEAN_EXPR_TEST( PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i)  && PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), false );
+    PRIVATE_BOOLEAN_EXPR_TEST( PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i)  || PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), true );
+    PRIVATE_BOOLEAN_EXPR_TEST( PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i1) && PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), true );
+    PRIVATE_BOOLEAN_EXPR_TEST( !i                                    && PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), true );
+    PRIVATE_BOOLEAN_EXPR_TEST( PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i1) && !i, true );
+      
     PRIVATE_EXPR_TEST( (i = i2), (i.value() == 2) );
 
     BOOST_TEST( i2 == i );
@@ -640,18 +653,6 @@ test_main( int , char * [] )
     PRIVATE_EXPR_TEST( (i = i1 << i2), (i.value() == 4) );
     PRIVATE_EXPR_TEST( (i = i2 >> i1), (i.value() == 1) );
 
-    PRIVATE_BOOLEAN_EXPR_TEST( i, false);
-    PRIVATE_BOOLEAN_EXPR_TEST( i1, true);
-    PRIVATE_BOOLEAN_EXPR_TEST( i2, true);
-    PRIVATE_BOOLEAN_EXPR_TEST(!i, true);
-    PRIVATE_BOOLEAN_EXPR_TEST(!i1, false);
-    PRIVATE_BOOLEAN_EXPR_TEST(!i2, false);
-    PRIVATE_BOOLEAN_EXPR_TEST(PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i)  && PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), false);
-    PRIVATE_BOOLEAN_EXPR_TEST(PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i)  || PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), true);
-    PRIVATE_BOOLEAN_EXPR_TEST(PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i1) && PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), false);
-    PRIVATE_BOOLEAN_EXPR_TEST(!i                                    && PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), false);
-    PRIVATE_BOOLEAN_EXPR_TEST(PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i1) && !i, false);
-      
     cout << "Performed tests on MyInt objects.\n";
 
     MyLong j1(1);
