@@ -71,7 +71,7 @@ int A::count = 0;
 template<class OA, class IA>
 void test_save_and_load(A * first, A * second)
 {
-    const char * testfile = tmpnam(NULL);
+    const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
     // Save

@@ -67,7 +67,7 @@ int A::count = 0;
 
 void test_save_and_load(boost::shared_ptr<A>& spa)
 {
-    const char * testfile = tmpnam(NULL);
+    const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
     // trivial test
@@ -89,7 +89,7 @@ void test_save_and_load(boost::shared_ptr<A>& spa)
 // objects back from an archive.
 void test_save_and_load2(boost::shared_ptr<A>& first, boost::shared_ptr<A>& second)
 {
-    const char * testfile = tmpnam(NULL);
+    const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
     // Save

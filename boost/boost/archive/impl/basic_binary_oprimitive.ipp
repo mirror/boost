@@ -50,7 +50,7 @@ void basic_binary_oprimitive<Archive, OStream>::init()
 template<class Archive, class OStream>
 void basic_binary_oprimitive<Archive, OStream>::save(const char * s)
 {
-    size_t l = std::strlen(s);
+    std::size_t l = std::strlen(s);
     this->This()->save(l);
     save_binary(s, l);
 }
@@ -58,7 +58,7 @@ void basic_binary_oprimitive<Archive, OStream>::save(const char * s)
 template<class Archive, class OStream>
 void basic_binary_oprimitive<Archive, OStream>::save(const wchar_t * ws)
 {
-    size_t l = std::wcslen(ws);
+    std::size_t l = std::wcslen(ws);
     this->This()->save(l);
     save_binary(ws, l * sizeof(wchar_t) / sizeof(char));
 }
@@ -66,7 +66,7 @@ void basic_binary_oprimitive<Archive, OStream>::save(const wchar_t * ws)
 template<class Archive, class OStream>
 void basic_binary_oprimitive<Archive, OStream>::save(const std::string &s)
 {
-    size_t l = static_cast<unsigned int>(s.size());
+    std::size_t l = static_cast<unsigned int>(s.size());
     this->This()->save(l);
     save_binary(s.data(), l);
 }
@@ -75,7 +75,7 @@ void basic_binary_oprimitive<Archive, OStream>::save(const std::string &s)
 template<class Archive, class OStream>
 void basic_binary_oprimitive<Archive, OStream>::save(const std::wstring &ws)
 {
-    size_t l = ws.size();
+    std::size_t l = ws.size();
     this->This()->save(l);
     save_binary(ws.data(), l * sizeof(wchar_t) / sizeof(char));
 }

@@ -10,10 +10,18 @@
 
 #include <boost/config.hpp> // msvc 6.0 needs this to suppress warnings
 
+#include <cstddef> // size_t
 #include <cassert>
 #include <set>
 #include <list>
 #include <vector>
+
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
 
 #include <boost/limits.hpp>
 #include <boost/state_saver.hpp>
@@ -66,7 +74,7 @@ class basic_iarchive_impl
         const basic_iserializer * bis;
         const class_id_type class_id;
         cobject_type(
-            size_t class_id_,
+            std::size_t class_id_,
             const basic_iserializer & bis_
         ) : 
             bis(& bis_),

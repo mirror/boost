@@ -55,6 +55,34 @@
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
+// experiment to see if msvc-stlport at meta-com can be addressed
+#if 0
+isalnum
+isalpha
+iscntrl
+isdigit
+isgraph
+islower
+isprint
+ispunct
+isspace
+isupper
+isxdigit
+tolower
+iswalnum
+iswalpha
+iswcntrl
+iswdigit
+iswgraph
+iswlower
+iswprint
+iswpunct
+iswspace
+iswupper
+iswxdigit
+towlower
+#endif
+
 //#define BOOST_SPIRIT_DEBUG
 //#include <boost/spirit/core.hpp>
 #include <boost/spirit/core/non_terminal/rule.hpp>

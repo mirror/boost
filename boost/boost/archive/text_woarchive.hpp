@@ -16,9 +16,16 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <cstddef> // size_t
 #include <ostream>
 
 #include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
+
 #include <boost/archive/basic_text_oprimitive.hpp>
 #include <boost/archive/basic_text_oarchive.hpp>
 
@@ -55,7 +62,7 @@ public:
     void save(const std::wstring &ws);
     #endif
 public:
-    void save_binary(const void *address, size_t count){
+    void save_binary(const void *address, std::size_t count){
         put(L'\n');
         this->end_preamble();
         basic_text_oprimitive<std::wostream>::save_binary(

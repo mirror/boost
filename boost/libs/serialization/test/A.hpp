@@ -19,14 +19,17 @@
 #include <cassert>
 #include <cstdlib> // for rand()
 #include <cmath> // for fabs()
+#include <cstddef> // size_t
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{
     using ::rand; 
-    using ::fabs; 
+    using ::fabs;
+    using ::size_t;
 }
 #endif
+
 #include <boost/test/test_tools.hpp>
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
@@ -100,7 +103,7 @@ private:
         j,
         k
     } l;
-    size_t m;
+    std::size_t m;
     signed long n;
     unsigned long o;
     signed  short p;
@@ -125,8 +128,8 @@ public:
     bool operator!=(const A &rhs) const;
     bool operator<(const A &rhs) const; // used by less
     // hash function for class A
-    operator size_t () const {
-        size_t retval = 0;
+    operator std::size_t () const {
+        std::size_t retval = 0;
         //const char * tptr = static_cast<const A * const>(this);
         const void * v = this;
         const char * tptr = static_cast<const char *>(v);

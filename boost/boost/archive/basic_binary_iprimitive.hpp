@@ -25,16 +25,19 @@
 
 #include <iosfwd>
 #include <cassert>
+
 #include <cstddef> // std::size_t
+#include <cstring>
 
 #include <boost/config.hpp>
-#include <cstring>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::memcpy; 
     using ::strcpy;
+    using ::size_t;
 } // namespace std
 #endif
+
 #include <boost/throw_exception.hpp>
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>

@@ -22,10 +22,10 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for updates, documentation, and revision history.
-
-#include <boost/detail/workaround.hpp>
 #include <cstring>
+
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
     namespace std{ using ::memcpy; }
 #endif
@@ -47,7 +47,7 @@ namespace archive {
 template<class Archive>
 class basic_binary_iarchive : public detail::common_iarchive<Archive>
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 public:
 #elif defined(BOOST_MSVC)
     // for some inexplicable reason insertion of "class" generates compile erro

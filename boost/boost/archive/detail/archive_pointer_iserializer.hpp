@@ -17,6 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cassert>
+#include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
 #include <boost/archive/detail/basic_serializer.hpp>
@@ -39,7 +40,7 @@ public:
     virtual const basic_iserializer & get_basic_serializer() const 
     // mscvc 6.0 requires template functions to be implemented. For this
     // reason we can't make abstract.
-    #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+    #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     {
         assert(false);
         return *static_cast<const basic_iserializer *>(NULL);
@@ -52,7 +53,7 @@ public:
         void * & x,
         const unsigned int file_version
     ) const 
-    #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+    #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     {
         assert(false);
     }

@@ -25,10 +25,16 @@
 // use two template parameters
 
 #include <cassert>
-#include <cstddef> // size_t
 #include <locale>
+#include <cstddef> // size_t
 
 #include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
+
 #include <boost/detail/workaround.hpp>
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
 #include <boost/archive/dinkumware.hpp>

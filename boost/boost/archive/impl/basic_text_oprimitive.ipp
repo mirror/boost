@@ -26,7 +26,7 @@ namespace archive {
 template<class OStream>
 void basic_text_oprimitive<OStream>::save_binary(
     const void *address, 
-    size_t count
+    std::size_t count
 ){
     typedef BOOST_DEDUCED_TYPENAME OStream::char_type CharType;
     

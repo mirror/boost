@@ -10,8 +10,15 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cassert>
+#include <cstddef> // size_t
 
 #include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
+
 #include <boost/detail/workaround.hpp> // fixup for RogueWave
 
 #include <boost/throw_exception.hpp>
@@ -67,7 +74,7 @@ void basic_binary_iprimitive<Archive, IStream>::init()
 template<class Archive, class IStream>
 void basic_binary_iprimitive<Archive, IStream>::load(char * s)
 {
-    size_t l;
+    std::size_t l;
     this->This()->load(l);
     load_binary(s, l);
     s[l] = '\0';
@@ -76,7 +83,7 @@ void basic_binary_iprimitive<Archive, IStream>::load(char * s)
 template<class Archive, class IStream>
 void basic_binary_iprimitive<Archive, IStream>::load(wchar_t * ws)
 {
-    size_t l;
+    std::size_t l;
     this->This()->load(l);
     load_binary(ws, l);
     ws[l / sizeof(wchar_t)] = L'\0';
@@ -85,7 +92,7 @@ void basic_binary_iprimitive<Archive, IStream>::load(wchar_t * ws)
 template<class Archive, class IStream>
 void basic_binary_iprimitive<Archive, IStream>::load(std::string & s)
 {
-    size_t l;
+    std::size_t l;
     this->This()->load(l);
     // borland de-allocator fixup
     #if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))
@@ -100,7 +107,7 @@ void basic_binary_iprimitive<Archive, IStream>::load(std::string & s)
 template<class Archive, class IStream>
 void basic_binary_iprimitive<Archive, IStream>::load(std::wstring & ws)
 {
-    size_t l;
+    std::size_t l;
     this->This()->load(l);
     // borland de-allocator fixup
     #if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))

@@ -13,7 +13,14 @@
 // implementation of basic_text_iprimitive overrides for the combination
 // of template parameters used to implement a text_iprimitive
 
+#include <cstddef> // size_t
 #include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
+
 #include <boost/detail/workaround.hpp> // RogueWave
 
 #include <boost/archive/text_iarchive.hpp>
@@ -24,7 +31,7 @@ namespace archive {
 template<class Archive>
 void text_iarchive_impl<Archive>::load(char *s)
 {
-    size_t size;
+    std::size_t size;
     * this->This() >> size;
     // skip separating space
     is.get();
@@ -36,7 +43,7 @@ void text_iarchive_impl<Archive>::load(char *s)
 template<class Archive>
 void text_iarchive_impl<Archive>::load(std::string &s)
 {
-    size_t size;
+    std::size_t size;
     * this->This() >> size;
     // skip separating space
     is.get();
@@ -52,7 +59,7 @@ void text_iarchive_impl<Archive>::load(std::string &s)
 template<class Archive>
 void text_iarchive_impl<Archive>::load(wchar_t *ws)
 {
-    size_t size;
+    std::size_t size;
     * this->This() >> size;
     // skip separating space
     is.get();
@@ -65,7 +72,7 @@ void text_iarchive_impl<Archive>::load(wchar_t *ws)
 template<class Archive>
 void text_iarchive_impl<Archive>::load(std::wstring &ws)
 {
-    size_t size;
+    std::size_t size;
     * this->This() >> size;
     // borland de-allocator fixup
     #if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))

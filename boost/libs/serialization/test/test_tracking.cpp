@@ -115,7 +115,7 @@ void in(const char *testfile)
 int
 test_main( int /* argc */, char* /* argv */[] )
 {
-    const char * testfile = tmpnam(NULL);
+    const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
     out(testfile);

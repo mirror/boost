@@ -13,11 +13,15 @@
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
-
 #include <cstdlib>
+#include <cstddef> // size_t
+
 #include <boost/config.hpp>
 #ifdef BOOST_NO_STDC_NAMESPACE
-namespace std{ using ::rand; }
+namespace std{ 
+    using ::rand; 
+    using ::size_t;
+}
 #endif
 
 #include <boost/pfto.hpp>
@@ -35,7 +39,7 @@ namespace std{ using ::rand; }
 template<typename CharType>
 void test_base64(){
     CharType rawdata[150];
-    size_t size = sizeof(rawdata) / sizeof(CharType);
+    std::size_t size = sizeof(rawdata) / sizeof(CharType);
     CharType * rptr;
     for(rptr = rawdata + size; rptr-- > rawdata;)
         *rptr = std::rand();

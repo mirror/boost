@@ -17,32 +17,12 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
-#include <cstdio> // remove
+#include <cstdio> // remove, tmpnam
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::tmpnam;
     using ::remove;
 }
-#endif
-
-#if defined(BOOST_MSVC)
-
-// VC has a really nice free memory leak detector
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-
-struct leak_reporter {
-    static leak_reporter instance;
-    leak_reporter(){
-        _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
-    }
-    ~leak_reporter(){
-//        _CrtDumpMemoryLeaks(); // replaced by the above
-    }
-};
-leak_reporter leak_reporter::instance;
-
 #endif
 
 // these compilers have brain-dead tmpnam functions.
@@ -62,34 +42,60 @@ namespace {
     #if ! defined(NDEBUG)
     using std::strcpy;
     #endif
+    using std::_tempnam;
 }
 #endif
+
+#endif // BOOST_MSCV BORLAND
+
+namespace boost {
+namespace archive {
+
+#if defined(BOOST_MSVC) || defined(__BORLANDC__)
+    char * tmpnam(char * buffer){
+        static char ibuffer [256];
+        char * dname = boost::archive::tmpdir();
+        char * tfilename = _tempnam(dname, "ser");
+        if(NULL == buffer){
+            strcpy(ibuffer, tfilename);
+            delete tfilename;
+            return ibuffer;
+        }
+        else{
+            strcpy(buffer, tfilename);
+            delete tfilename;
+            return buffer;
+        }
+    }
+#else
+    using ::tmpnam;
+#endif
+
+} // archive
+} // boost
 
 #if defined(BOOST_MSVC)
-    namespace std{ 
-        using ::_tempnam;
-    } // namespace std
-#endif  
 
+/////////////////////////////////////////////////
+// VC has a really nice free memory leak detector
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 
-char * tmpnam(char * buffer){
-    static char ibuffer [256];
-    char * dname = boost::archive::tmpdir();
-    char * tfilename = std::_tempnam(dname, "ser");
-    if(NULL == buffer){
-        strcpy(ibuffer, tfilename);
-        delete tfilename;
-        return ibuffer;
+struct leak_reporter {
+    static leak_reporter instance;
+    leak_reporter(){
+        _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
     }
-    else{
-        strcpy(buffer, tfilename);
-        delete tfilename;
-        return buffer;
+    ~leak_reporter(){
+//        _CrtDumpMemoryLeaks(); // replaced by the above
     }
-}
+};
+leak_reporter leak_reporter::instance;
 
 #endif
 
+/////////////////////////////////////////////
 // invoke header for a custom archive test.
 #if ! defined(BOOST_ARCHIVE_TEST)
 #define BOOST_ARCHIVE_TEST text_archive.hpp

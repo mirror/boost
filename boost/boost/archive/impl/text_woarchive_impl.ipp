@@ -13,9 +13,11 @@
 #ifndef BOOST_NO_STD_WSTREAMBUF
 
 #include <cstring>
+#include <cstddef> // size_t
 #if defined(BOOST_NO_STDC_NAMESPACE) && ! defined(__LIBCOMO__)
 namespace std{ 
-    using ::strlen; 
+    using ::strlen;
+    using ::size_t; 
 } // namespace std
 #endif
 
@@ -36,7 +38,7 @@ template<class Archive>
 void text_woarchive_impl<Archive>::save(const char *s)
 {
     // note: superfluous local variable fixes borland warning
-    size_t size = strlen(s);
+    std::size_t size = strlen(s);
     * this->This() << size;
     this->This()->newtoken();
     while(*s != '\0')
@@ -46,7 +48,7 @@ void text_woarchive_impl<Archive>::save(const char *s)
 template<class Archive>
 void text_woarchive_impl<Archive>::save(const std::string &s)
 {
-    size_t size = s.size();
+    std::size_t size = s.size();
     * this->This() << size;
     this->This()->newtoken();
     const char * cptr = s.data();
@@ -58,7 +60,7 @@ void text_woarchive_impl<Archive>::save(const std::string &s)
 template<class Archive>
 void text_woarchive_impl<Archive>::save(const wchar_t *ws)
 {
-    size_t size = std::wostream::traits_type::length(ws);
+    std::size_t size = std::wostream::traits_type::length(ws);
     * this->This() << size;
     this->This()->newtoken();
     os.write(ws, size);
@@ -69,7 +71,7 @@ void text_woarchive_impl<Archive>::save(const wchar_t *ws)
 template<class Archive>
 void text_woarchive_impl<Archive>::save(const std::wstring &ws)
 {
-    size_t size = ws.length();
+    std::size_t size = ws.length();
     * this->This() << size;
     this->This()->newtoken();
     os.write(ws.data(), size);

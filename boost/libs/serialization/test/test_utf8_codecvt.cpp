@@ -97,7 +97,13 @@ test_main(int /* argc */, char * /* argv */[]) {
         ofs.open("test.dat", std::ios::binary);
         std::copy(
             td::utf8_encoding,
-            td::utf8_encoding + sizeof(td::utf8_encoding),
+			#if ! defined(__BORLANDC__)
+                // borland 5.60 complains about this
+				td::utf8_encoding + sizeof(td::utf8_encoding)/sizeof(wchar_t),
+			#else
+				// so use this instead
+				td::utf8_encoding + 12,
+			#endif
             boost::archive::iterators::ostream_iterator<utf8_t>(ofs)
         );
     }

@@ -53,7 +53,7 @@ struct array_equal_to : public std::binary_function<T, T, bool>
 
 int test_main( int /* argc */, char* /* argv */[] )
 {
-    const char * testfile = tmpnam(NULL);
+    const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
     // test array of objects

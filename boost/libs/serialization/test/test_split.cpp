@@ -101,7 +101,7 @@ namespace boost { namespace serialization {
 
 template<class Archive>
 void save(
-    Archive & ar /* ar */, 
+    Archive & /* ar */, 
     const C & c,
     const unsigned int file_version /* file_version */
 ){
@@ -143,7 +143,7 @@ void in(const char *testfile, A & a, B & b, C & c)
 int
 test_main( int /* argc */, char* /* argv */[] )
 {
-    const char * testfile = tmpnam(NULL);
+    const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
     A a;

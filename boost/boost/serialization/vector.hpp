@@ -66,7 +66,7 @@ inline void serialize(
     split_free(ar, t, file_version);
 }
 
-#if ! BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if ! BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // vector<bool>

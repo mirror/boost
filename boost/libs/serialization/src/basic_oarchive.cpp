@@ -90,7 +90,7 @@ class basic_oarchive_impl
         const class_id_type class_id;
         bool initialized;
         cobject_type(
-            size_t class_id_,
+            std::size_t class_id_,
             const basic_oserializer & bos_
         ) :
             bos_ptr(& bos_),

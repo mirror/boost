@@ -43,7 +43,7 @@ namespace archive {
 template<class Archive>
 class basic_xml_iarchive : public detail::common_iarchive<Archive>
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 public:
 #elif defined(BOOST_MSVC)
     // for some inexplicable reason insertion of "class" generates compile erro

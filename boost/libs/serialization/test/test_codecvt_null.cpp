@@ -66,7 +66,7 @@ wchar_t test_data<4>::wchar_encoding[] = {
 };
 
 int test_main( int /* argc */, char* /* argv */[] ) {
-    const char * testfile = tmpnam(NULL);
+    const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
     std::locale old_loc;
@@ -80,10 +80,13 @@ int test_main( int /* argc */, char* /* argv */[] ) {
         ofs.open(testfile, std::ios::binary);
         std::copy(
             td::wchar_encoding,
-            // borland 5.60 complains about this
-            // td::wchar_encoding + sizeof(td::wchar_encoding)/sizeof(wchar_t),
-            // so use this instead
-            td::wchar_encoding + 13,
+			#if ! defined(__BORLANDC__)
+                // borland 5.60 complains about this
+				td::wchar_encoding + sizeof(td::wchar_encoding)/sizeof(wchar_t),
+			#else
+				// so use this instead
+				td::wchar_encoding + 6,
+			#endif
             boost::archive::iterators::ostream_iterator<wchar_t>(ofs)
         );
     }
@@ -94,10 +97,13 @@ int test_main( int /* argc */, char* /* argv */[] ) {
         ifs.open(testfile, std::ios::binary);
         ok = std::equal(
             td::wchar_encoding,
-            // borland 5.60 complains about this
-            // td::wchar_encoding + sizeof(td::wchar_encoding)/sizeof(wchar_t),
-            // so use this instead
-            td::wchar_encoding + 13,
+			#if ! defined(__BORLANDC__)
+                // borland 5.60 complains about this
+				td::wchar_encoding + sizeof(td::wchar_encoding)/sizeof(wchar_t),
+			#else
+				// so use this instead
+				td::wchar_encoding + 6,
+			#endif
             boost::archive::iterators::istream_iterator<wchar_t>(ifs)
         );
     }

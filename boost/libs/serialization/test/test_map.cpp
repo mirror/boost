@@ -8,12 +8,16 @@
 
 // should pass compilation and execution
 
+#include <cstddef> // size_t
 #include <fstream>
 
 #include <boost/config.hpp>
 #include <cstdio>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ using ::rand; }
+namespace std{ 
+    using ::rand; 
+    using ::size_t;
+}
 #endif
 
 #include <boost/serialization/nvp.hpp>
@@ -46,14 +50,14 @@ struct random_key {
     bool operator==(const random_key &rhs) const {
         return m_i == rhs.m_i;
     }
-    operator size_t () const {    // required by hash_map
+    operator std::size_t () const {    // required by hash_map
         return m_i;
     }
 };  
 
 int test_main( int /* argc */, char* /* argv */[] )
 {
-    const char * testfile = tmpnam(NULL);
+    const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
     BOOST_CHECKPOINT("map");
