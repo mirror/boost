@@ -70,13 +70,8 @@ namespace numeric {
 # undef BOOST_NUMERIC_INTERVAL_using_math
 # define BOOST_NUMERIC_INTERVAL_using_max(a)
 # define BOOST_NUMERIC_INTERVAL_using_math(a)
-# ifdef BOOST_HAS_INV_HYPERBOLIC
-  using std::asinh;
-  using std::acosh;
-  using std::atanh;
 # undef BOOST_NUMERIC_INTERVAL_using_ahyp
 # define BOOST_NUMERIC_INTERVAL_using_ahyp(a)
-# endif
 } // namespace numeric
 } // namespace boost
 #endif
