@@ -60,7 +60,10 @@ int main(int argc, char* argv[])
 // define the number of failures expected for given compilers:
 #ifdef BOOST_MSVC
 unsigned int expected_failures = 3;
+#elif defined(__GNUC__)
+unsigned int expected_failures = 1; // cr_type doesn't compile
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
