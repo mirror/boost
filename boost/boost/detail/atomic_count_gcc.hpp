@@ -38,7 +38,7 @@ public:
 
     long operator--()
     {
-        return !__exchange_and_add(&value_, -1);
+        return __exchange_and_add(&value_, -1) - 1;
     }
 
     operator long() const
