@@ -91,6 +91,10 @@ class integer_traits<wchar_t>
 #elif defined(__sgi) && (!defined(__SGI_STL_PORT) || __SGI_STL_PORT < 0x400)
     // SGI MIPSpro with native library doesn't have them, either
     public detail::integer_traits_base<wchar_t, INT_MIN, INT_MAX>
+#elif defined(__hpux) && defined(__GNUC__) && !defined(__SGI_STL_PORT)
+    // GCC 2.95.2 doesn't have them on HP-UX, either
+    // (also, std::numeric_limits<wchar_t> appears to return the wrong values)
+    public detail::integer_traits_base<wchar_t, 0, UINT_MAX>
 #else
     public detail::integer_traits_base<wchar_t, WCHAR_MIN, WCHAR_MAX>
 #endif
