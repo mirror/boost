@@ -37,6 +37,7 @@
 #include <boost/fsm/transition.hpp>
 #include <boost/fsm/custom_reaction.hpp>
 #include <boost/fsm/fifo_scheduler.hpp>
+#include <boost/fsm/fifo_worker.hpp>
 
 #include <boost/mpl/list.hpp>
 
@@ -88,7 +89,8 @@ struct GameAborted : fsm::event< GameAborted > {};
 
 #ifdef CUSTOMIZE_MEMORY_MANAGEMENT
 typedef boost::fast_pool_allocator< int > MyAllocator;
-typedef fsm::fifo_scheduler< MyAllocator > MyScheduler;
+typedef fsm::fifo_scheduler< 
+  fsm::fifo_worker< MyAllocator >, MyAllocator > MyScheduler;
 #else
 typedef std::allocator< void > MyAllocator;
 typedef fsm::fifo_scheduler<> MyScheduler;

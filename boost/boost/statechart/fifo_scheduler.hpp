@@ -26,11 +26,13 @@ namespace fsm
 
 
 
-template< class Allocator = std::allocator< void > >
+template<
+  class FifoWorker = fifo_worker<>,
+  class Allocator = std::allocator< void > >
 class fifo_scheduler : noncopyable
 {
-  typedef processor_container< fifo_scheduler, Allocator > container;
-  typedef fifo_worker< Allocator > worker;
+  typedef processor_container<
+    fifo_scheduler, typename FifoWorker::work_item, Allocator > container;
   public:
     //////////////////////////////////////////////////////////////////////////
     #ifdef BOOST_HAS_THREADS
@@ -42,7 +44,6 @@ class fifo_scheduler : noncopyable
 
     typedef typename container::processor_handle processor_handle;
     typedef typename container::processor_context processor_context;
-    typedef typename container::work_item work_item;
 
     template< class Processor >
     processor_handle create_processor()
@@ -150,6 +151,8 @@ class fifo_scheduler : noncopyable
       worker_.queue_work_item( item );
     }
 
+    typedef typename FifoWorker::work_item work_item;
+
     // We take a non-const reference so that we can move (i.e. swap) the item
     // into the queue, what avoids copying the (possibly heap-allocated)
     // implementation object inside work_item.
@@ -187,7 +190,7 @@ class fifo_scheduler : noncopyable
   private:
     //////////////////////////////////////////////////////////////////////////
     container container_;
-    worker worker_;
+    FifoWorker worker_;
 };
 
 

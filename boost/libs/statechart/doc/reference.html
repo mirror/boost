@@ -29,7 +29,8 @@
   <dt><a href="#Concepts">Concepts</a></dt>
   <dd><a href="#ExceptionTranslator">ExceptionTranslator</a></dd>
   <dd><a href="#StateBase">StateBase</a></dd>
-  <dd><a href="#Worker">Scheduler</a></dd>
+  <dd><a href="#Scheduler">Scheduler</a></dd>
+  <dd><a href="#FifoWorker">FifoWorker</a></dd>
   <dt>&nbsp;</dt>
   <dt><a href="#state_machine.hpp">state_machine.hpp</a></dt>
   <dd><a href="#Class template state_machine">Class template <code>
@@ -40,8 +41,9 @@
   <dt><a href="#event_processor.hpp">event_processor.hpp</a></dt>
   <dd><a href="#Class template event_processor">Class template <code>
   event_processor</code></a></dd>
-  <dt><a href="#worker.hpp">fifo_scheduler.hpp</a></dt>
-  <dd><a href="#Class template worker">Class template <code>fifo_scheduler</code></a></dd>
+  <dt><a href="#fifo_scheduler.hpp">fifo_scheduler.hpp</a></dt>
+  <dd><a href="#Class template fifo_scheduler">Class template <code>
+  fifo_scheduler</code></a></dd>
   <dt>&nbsp;</dt>
   <dt><a href="#simple_state.hpp">simple_state.hpp</a></dt>
   <dd><a href="#Typedef no_reactions">Typedef <code>no_reactions</code></a></dd>
@@ -76,16 +78,14 @@
 <h1><a name="Concepts">Concepts</a></h1>
 <h2><a name="ExceptionTranslator">ExceptionTranslator</a> concept</h2>
 <p>An ExceptionTranslator type defines how C++ exceptions occurring during 
-state machine operation are translated to exception events. Every model of 
-this concept must provide an <code>operator()()</code> with the following 
-signature:</p>
-<pre>template&lt; class Action, class ExceptionEventHandler &gt;
-<a href="#Enum result">result</a> operator()(
-  Action action,
-  ExceptionEventHandler eventHandler,
-  <a href="#Enum result">result</a> handlerSuccessResult );</pre>
-<p>For an ExceptionTranslator object <code>e</code> the following expression 
-must be well-formed and have the indicated results:</p>
+state machine operation are translated to exception events.</p>
+<p>For an ExceptionTranslator object <code>et</code>, a parameterless function 
+object <code>a</code> of arbitrary type returning <code>
+<a href="#Enum result">result</a></code>, a function object <code>eh</code> of 
+arbitrary type taking a <code>const <a href="#Class event_base">event_base</a> 
+&amp;</code> parameter and returning <code>bool</code> and a <code>result</code> 
+value <code>hsr</code> the following expression must be well-formed and have 
+the indicated results:</p>
 <table border="3" width="100%" id="AutoNumber1" cellpadding="2">
   <tr>
     <td width="292"><b>Expression</b></td>
@@ -93,29 +93,19 @@ must be well-formed and have the indicated results:</p>
     <td width="783"><b>Effects/Result</b></td>
   </tr>
   <tr>
-    <td width="292"><code>result action();<br>
-    bool exceptEventHandler(<br>
-&nbsp; const event_base &amp; );<br>
-    result<br>
-&nbsp; handlerSuccessResult;<br>
-    <br>
-    e(<br>
-&nbsp; &amp;action, <br>
-&nbsp; &amp;exceptEventHandler, <br>
-&nbsp; handlerSuccessResult );</code></td>
+    <td width="292"><code>et( a, eh, hsr );</code></td>
     <td width="50"><code>result</code></td>
     <td width="783">
     <ol>
-      <li>Attempts to execute <code>action</code> and to return the result</li>
-      <li>Catches the exception propagated from <code>action</code>, if 
-      necessary</li>
+      <li>Attempts to call <code>operator()()</code> on <code>a</code> and to 
+      return the result</li>
+      <li>Catches the exception propagated from <code>a</code>, if necessary</li>
       <li>Translates the exception to a suitable <code>
       <a href="#Class template event">event&lt;&gt;</a></code> subclass and 
-      constructs an object of the event</li>
-      <li>Passes the event object to <code>exceptEventHandler</code></li>
-      <li>Rethrows the original exception if <code>exceptEventHandler</code> 
-      returns <code>false</code>, returns <code>handlerSuccessResult</code> 
-      otherwise</li>
+      constructs an object of the event <b>on the stack</b></li>
+      <li>Passes the <code>event&lt;&gt;</code> subclass object to <code>eh</code></li>
+      <li>Rethrows the original exception if <code>eh</code> returns <code>
+      false</code>, returns <code>hsr</code> otherwise</li>
     </ol>
     </td>
   </tr>
@@ -159,10 +149,11 @@ the indicated results:</p>
     BOOST_FSM_USE_NATIVE_RTTI</a> is not defined</td>
   </tr>
 </table>
-<h2><a name="Worker">Scheduler</a> concept</h2>
+<h2><a name="Scheduler">Scheduler</a> concept</h2>
 <p>A Scheduler type defines the following:</p>
 <ul>
-  <li>What is passed to the constructors of <code>event_processor&lt;&gt;</code> 
+  <li>What is passed to the constructors of <code>
+  <a href="#Class template event_processor">event_processor&lt;&gt;</a></code> 
   subclasses and how the lifetime of such objects is managed</li>
   <li>Whether or not multiple <code>event_processor&lt;&gt;</code> subclass objects 
   can share the same queue and scheduler thread</li>
@@ -200,6 +191,92 @@ must be well-formed and have the indicated results:</p>
 <p>To protect against abuse, all members of <code>S::processor_context</code> 
 should be declared private. As a result, <code>event_processor&lt;&gt;</code> must 
 be a friend of <code>S::processor_context</code>.</p>
+<h2><a name="FifoWorker">FifoWorker</a> concept</h2>
+<p>A FifoWorker type defines the following:</p>
+<ul>
+  <li>Whether and how to wait for new work items when the internal work queue 
+  runs empty</li>
+  <li>Whether and what type of locking is used to ensure thread-safety</li>
+</ul>
+<p>For a FifoWorker type <code>F</code>, an object <code>f</code> of that 
+type, a <code>const</code> object <code>cf</code> of that type, a 
+parameterless function object <code>w</code> of arbitrary type and an <code>
+unsigned long</code> value <code>n</code> the following expressions must be 
+well-formed and have the indicated results:</p>
+<table border="3" width="100%" id="AutoNumber17" cellpadding="2">
+  <tr>
+    <td width="26%"><b>Expression</b></td>
+    <td width="14%"><b>Type</b></td>
+    <td width="35%"><b>Effects/Result</b></td>
+  </tr>
+  <tr>
+    <td width="25%"><code>F::work_item</code></td>
+    <td width="14%"><code>boost::function0&lt; void &gt;</code></td>
+    <td width="35%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="25%"><code>F()</code> or <code>F( true )</code></td>
+    <td width="14%"><code>F</code></td>
+    <td width="35%">Constructs a <b>blocking</b> (see below) object of the 
+    FifoWorker type</td>
+  </tr>
+  <tr>
+    <td width="25%"><code>F( false )</code></td>
+    <td width="14%"><code>F</code></td>
+    <td width="35%">Constructs a <b>non-blocking</b> (see below) object of the 
+    FifoWorker type</td>
+  </tr>
+  <tr>
+    <td width="25%"><code>f.queue_work_item( w );</code></td>
+    <td width="14%">&nbsp;</td>
+    <td width="35%">Constructs and queues an object of type <code>F::work_item</code>, 
+    passing <code>w</code> as the only argument</td>
+  </tr>
+  <tr>
+    <td width="25%"><code>f.terminate();</code></td>
+    <td width="14%">&nbsp;</td>
+    <td width="35%">Creates and queues an object of type <code>F::work_item</code> 
+    that, when later executed in <code>operator()()</code>, leads to a 
+    modification of internal state so that <code>terminated()</code> 
+    henceforth returns <code>true</code></td>
+  </tr>
+  <tr>
+    <td width="25%"><code>cf.terminated();</code></td>
+    <td width="14%"><code>bool</code></td>
+    <td width="35%"><code>true</code> if <code>terminate()</code> has been 
+    called and the resulting work item has been executed in <code>operator()()</code>. 
+    Returns <code>false</code> otherwise<br>
+    <br>
+    <b>Must only be called from the thread that also calls <code>operator()()</code></b></td>
+  </tr>
+  <tr>
+    <td width="25%"><code>f( n );</code></td>
+    <td width="14%"><code>unsigned long</code></td>
+    <td width="35%">Enters a loop that, with each cycle, dequeues and calls
+    <code>operator()()</code> on the oldest work item in the queue.<p>The loop 
+    is left and the number of executed work items returned if either of the 
+    following conditions is met:</p>
+    <ul>
+      <li><code>f.terminated() == true</code></li>
+      <li>The application is single-threaded and the internal queue is empty</li>
+      <li>The application is multi-threaded and the internal queue is empty 
+      and <code>false</code> has been passed to the constructor</li>
+      <li><code>n != 0</code> and the number of work items that have been 
+      processed since <code>operator()()</code> was called equals <code>n</code></li>
+    </ul>
+    <p>If the queue is empty and none of the above conditions is met then the 
+    thread calling <code>operator()()</code> is put into a wait state until
+    <code>f.queue_work_item()</code> is called from another thread.<br>
+    <br>
+    <b>Must only be called from exactly one thread</b></td>
+  </tr>
+  <tr>
+    <td width="25%"><code>f();</code></td>
+    <td width="14%"><code>unsigned long</code></td>
+    <td width="35%">Has exactly the same semantics as <code>f( n );</code> 
+    with <code>n == 0</code> (see above)</td>
+  </tr>
+</table>
 <h1>Header &lt;boost/fsm/<a name="state_machine.hpp">state_machine.hpp</a>&gt;</h1>
 <h2><a name="Class template state_machine">Class template <code>state_machine</code></a></h2>
 <p>This is the base class template of all synchronous state machines.</p>
@@ -502,7 +579,7 @@ asynchronous_state_machine</code></a></h2>
   <tr>
     <td width="15%"><code>Scheduler</code></td>
     <td width="51%">A model of the Scheduler concept</td>
-    <td width="18%">see <a href="#Worker">Scheduler concept </a></td>
+    <td width="18%">see <a href="#Scheduler">Scheduler concept </a></td>
     <td width="19%"><code>fifo_scheduler&lt;&gt;</code></td>
   </tr>
   <tr>
@@ -570,7 +647,7 @@ implementation.</p>
   <tr>
     <td width="15%"><code>Scheduler</code></td>
     <td width="51%">A model of the Scheduler concept</td>
-    <td width="18%">see <a href="#Worker">Scheduler concept </a></td>
+    <td width="18%">see <a href="#Scheduler">Scheduler concept </a></td>
     <td width="19%">&nbsp;</td>
   </tr>
 </table>
@@ -585,7 +662,7 @@ namespace fsm
     public:
       virtual <a href="#~event_processor">~event_processor</a>();
 
-      Scheduler &amp; <a href="#my_worker">my_scheduler</a>() const
+      Scheduler &amp; <a href="#my_scheduler">my_scheduler</a>() const
 
       typedef typename Scheduler::processor_handle
         processor_handle;
@@ -637,15 +714,16 @@ Scheduler</code> class</p>
 called from destructors, <code>terminate_impl()</code> overrides should not 
 propagate any exceptions</p>
 <h3>Class template <code>event_processor</code> observer functions</h3>
-<pre>Scheduler &amp; <a name="my_worker">my_scheduler</a>() const;</pre>
+<pre>Scheduler &amp; <a name="my_scheduler">my_scheduler</a>() const;</pre>
 <p><b>Returns</b>: The <code>Scheduler</code> reference obtained in the 
 constructor</p>
 <pre>processor_handle <a name="my_handle">my_handle</a>() const;</pre>
 <p><b>Returns</b>: The <code>processor_handle</code> object obtained in the 
 constructor</p>
-<h1>Header &lt;boost/fsm/<a name="worker.hpp">fifo_scheduler.hpp</a>&gt;</h1>
-<h2><a name="Class template worker">Class template <code>fifo_scheduler</code></a></h2>
-<p>This class is a model of the <a href="#Worker">Scheduler concept</a>.</p>
+<h1>Header &lt;boost/fsm/<a name="fifo_scheduler.hpp">fifo_scheduler.hpp</a>&gt;</h1>
+<h2><a name="Class template fifo_scheduler">Class template <code>
+fifo_scheduler</code></a></h2>
+<p>This class is a model of the <a href="#Scheduler">Scheduler concept</a>.</p>
 <h3>Class template <code>fifo_scheduler</code> parameters</h3>
 <table border="3" cellpadding="2" width="100%" id="AutoNumber16">
   <tr>
@@ -653,6 +731,12 @@ constructor</p>
     <td width="51%"><b>Requirements</b></td>
     <td width="18%"><b>Semantics</b></td>
     <td width="19%"><b>Default</b></td>
+  </tr>
+  <tr>
+    <td width="15%"><code>FifoWorker</code></td>
+    <td width="51%">A model of the FifoWorker concept</td>
+    <td width="18%">see <a href="#FifoWorker">FifoWorker concept</a></td>
+    <td width="19%"><code>fifo_worker&lt;&gt;</code></td>
   </tr>
   <tr>
     <td width="15%"><code>Allocator</code></td>
@@ -666,11 +750,13 @@ constructor</p>
 {
 namespace fsm
 {
-  template&lt; class Allocator = std::allocator&lt; void &gt; &gt;
+  template&lt;
+    class FifoWorker = fifo_worker&lt;&gt;,
+    class Allocator = std::allocator&lt; void &gt; &gt;
   class fifo_scheduler : noncopyable
   {
     public:
-      <a href="#worker::worker">fifo_scheduler</a>( bool waitOnEmptyQueue = true );
+      <a href="#fifo_scheduler::fifo_scheduler">fifo_scheduler</a>( bool waitOnEmptyQueue = true );
 
       typedef <i>implementation-defined</i> processor_handle;
 
@@ -705,8 +791,8 @@ namespace fsm
         const processor_handle &amp; processor,
         const event_ptr_type &amp; pEvent );
 
-      void <a href="#worker::terminate">terminate</a>();
-      bool <a href="#worker::terminated">terminated</a>() const;
+      void <a href="#fifo_scheduler::terminate">terminate</a>();
+      bool <a href="#fifo_scheduler::terminated">terminated</a>() const;
 
       unsigned long <a href="#operator()">operator()</a>(
         unsigned long maxEventCount = 0 );
@@ -714,10 +800,10 @@ namespace fsm
 }
 }</pre>
 <h3>Class template <code>fifo_scheduler</code> constructor</h3>
-<pre><a name="worker::worker">fifo_scheduler</a>( bool waitOnEmptyQueue = true );</pre>
-<p><b>Effects</b>: Constructs a <code>fifo_scheduler&lt;&gt;</code> object. Based on 
-what is passed for <code>waitOnEmptyQueue</code>, <code>operator()()</code> 
-will later either block when the event queue is empty or return to the caller<br>
+<pre><a name="fifo_scheduler::fifo_scheduler">fifo_scheduler</a>( bool waitOnEmptyQueue = true );</pre>
+<p><b>Effects</b>: Constructs a <code>fifo_scheduler&lt;&gt;</code> object. <code>
+waitOnEmptyQueue</code> is forwarded to the constructor of a data member of 
+type <code>FifoWorker</code><br>
 <b>Note</b>: In single-threaded builds the <code>fifo_scheduler&lt;&gt;</code> 
 constructor does not accept any parameters and <code>operator()()</code> 
 always returns to the caller when the event queue is empty</p>
@@ -727,10 +813,11 @@ processor_handle <a name="create_processor()">create_processor</a>();</pre>
 <p><b>Requires</b>: The <code>Processor</code> type must be a direct or 
 indirect subclass of the <a href="#Class template event_processor"><code>
 event_processor</code></a> class template<br>
-<b>Effects</b>: Creates and queues an object that, when later processed in
-<code>operator()()</code>, leads to a call to the constructor of <code>
-Processor</code>, passing a <code>processor_context</code> object as the only 
-argument<br>
+<b>Effects</b>: Creates and passes to <code>FifoWorker::queue_work_item()</code> 
+an object of type <code>FifoWorker::work_item</code> that, when later executed 
+in <code>FifoWorker::operator()()</code>, leads to a call to the constructor 
+of <code>Processor</code>, passing an appropriate <code>processor_context</code> 
+object as the only argument<br>
 <b>Returns</b>: A <code>processor_handle</code> object that henceforth 
 identifies the created event processor object<br>
 <b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code><br>
@@ -745,10 +832,11 @@ processor_handle <a name="create_processor( Param1 param1 )">create_processor( P
 <p><b>Requires</b>: The <code>Processor</code> type must be a direct or 
 indirect subclass of the <a href="#Class template event_processor"><code>
 event_processor</code></a> class template<br>
-<b>Effects</b>: Creates and queues an object that, when later processed in
-<code>operator()()</code>, leads to a call to the constructor of <code>
-Processor</code>, passing a <code>processor_context</code> object and <code>
-param1</code> as arguments<br>
+<b>Effects</b>: Creates and passes to <code>FifoWorker::queue_work_item()</code> 
+an object of type <code>FifoWorker::work_item</code> that, when later executed 
+in <code>FifoWorker::operator()()</code>, leads to a call to the constructor 
+of <code>Processor</code>, passing an appropriate <code>processor_context</code> 
+object and <code>param1</code> as arguments<br>
 <b>Returns</b>: A <code>processor_handle</code> object that henceforth 
 identifies the created event processor object<br>
 <b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code><b><br>
@@ -764,10 +852,11 @@ overloads in applications with hard real-time requirements</p>
 <p><b>Requires</b>: <code>processor</code> was obtained from a call to one of 
 the <code>create_processor&lt;&gt;()</code> overloads on the same <code>
 fifo_scheduler&lt;&gt;</code> object<br>
-<b>Effects</b>: Creates and queues an object that, when later processed in
-<code>operator()()</code>, leads to a call to the destructor of the event 
-processor object associated with <code>processor</code>. The object is 
-silently discarded if the event processor object has been destructed before<br>
+<b>Effects</b>: Creates and passes to <code>FifoWorker::queue_work_item()</code> 
+an object of type <code>FifoWorker::work_item</code> that, when later executed 
+in <code>FifoWorker::operator()()</code>, leads to a call to the destructor of 
+the event processor object associated with <code>processor</code>. The object 
+is silently discarded if the event processor object has been destructed before<br>
 <b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code><br>
 <b>Caution</b>: The current implementation of this function leads to an 
 (indirect) call to global <code>operator delete()</code> (the call is made 
@@ -779,8 +868,9 @@ with hard real-time requirements</p>
 <p><b>Requires</b>: <code>processor</code> was obtained from a call to one of 
 the <code>create_processor()</code> overloads on the same <code>fifo_scheduler&lt;&gt;</code> 
 object<br>
-<b>Effects</b>: Creates and queues an object that, when later processed in
-<code>operator()()</code>, leads to a call to <code>
+<b>Effects</b>: Creates and passes to <code>FifoWorker::queue_work_item()</code> 
+an object of type <code>FifoWorker::work_item</code> that, when later executed 
+in <code>FifoWorker::operator()()</code>, leads to a call to <code>
 <a href="#event_processor::initiate">initiate</a>()</code> on the event 
 processor object associated with <code>processor</code>. The object is 
 silently discarded if the event processor object has been destructed before<br>
@@ -789,8 +879,9 @@ silently discarded if the event processor object has been destructed before<br>
 <p><b>Requires</b>: <code>processor</code> was obtained from a call to one of 
 the <code>create_processor&lt;&gt;()</code> overloads on the same <code>
 fifo_scheduler&lt;&gt;</code> object<br>
-<b>Effects</b>: Creates and queues an object that, when later processed in
-<code>operator()()</code>, leads to a call to <code>
+<b>Effects</b>: Creates and passes to <code>FifoWorker::queue_work_item()</code> 
+an object of type <code>FifoWorker::work_item</code> that, when later executed 
+in <code>FifoWorker::operator()()</code>, leads to a call to <code>
 <a href="#event_processor::terminate">terminate</a>()</code> on the event 
 processor object associated with <code>processor</code>. The object is 
 silently discarded if the event processor object has been destructed before<br>
@@ -801,48 +892,29 @@ silently discarded if the event processor object has been destructed before<br>
 <p><b>Requires</b>: <code>pEvent.get() != 0</code> and <code>processor</code> 
 was obtained from a call to one of the <code>create_processor&lt;&gt;()</code> 
 overloads on the same <code>fifo_scheduler&lt;&gt;</code> object<br>
-<b>Effects</b>: Creates and queues an object that, when later processed in
-<code>operator()()</code>, leads to a call to <code>
+<b>Effects</b>: Creates and passes to <code>FifoWorker::queue_work_item()</code> 
+an object of type <code>FifoWorker::work_item</code> that, when later executed 
+in <code>FifoWorker::operator()()</code>, leads to a call to <code>
 <a href="#event_processor::process_event">process_event</a>( *pEvent )</code> 
 on the event processor object associated with <code>processor</code>. The 
 object is silently discarded if the event processor object has been destructed 
 before<br>
 <b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
-<pre>void <a name="worker::terminate">terminate</a>();</pre>
-<p><b>Effects</b>: Creates and queues an object that, when later processed in
-<code>operator()()</code>, leads to a modification of internal state so that
-<code>terminated()</code> henceforth returns <code>true</code><br>
+<pre>void <a name="fifo_scheduler::terminate">terminate</a>();</pre>
+<p><b>Effects</b>: Calls <code>FifoWorker::terminate()</code><br>
 <b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
 <pre>unsigned long <a name="operator()">operator()</a>( unsigned long maxEventCount = 0 );</pre>
 <p><b>Requires</b>: Must only be called from exactly one thread<b><br>
-Effects</b>: Enters a loop that, with each cycle, dequeues and processes the 
-oldest object in the queue. The loop is left if either of the following 
-conditions is met:</p>
-<ul>
-  <li><code>terminated() == true</code></li>
-  <li>The application is single-threaded and the internal queue is empty</li>
-  <li>The application is multi-threaded and the internal queue is empty and
-  <code>false</code> has been passed to the <code>fifo_scheduler&lt;&gt;</code> 
-  constructor</li>
-  <li><code>maxEventCount != 0</code> and the number of objects that have been 
-  processed since <code>operator()()</code> was called equals <code>
-  maxEventCount</code></li>
-</ul>
-<p>If the queue is empty and none of the above conditions is met then the 
-thread calling <code>operator()()</code> is put into a wait state until new 
-events are queued<br>
-<b>Returns</b>: The number of processed objects<br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code>, 
-event processor constructors, <code>event_processor&lt;&gt;::initiate()</code>,
-<code>event_processor&lt;&gt;::process_event()</code> and&nbsp; <code>
-event_processor&lt;&gt;::terminate()</code></p>
+Effects</b>: Calls <code>FifoWorker::operator()( maxEventCount )</code><br>
+<b>Returns</b>: The return value of the above call<br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
+and <code>operator()()</code> of the queued <code>FifoWorker::work_item</code> 
+objects</p>
 <h3>Class template <code>fifo_scheduler</code> observer functions</h3>
-<pre>bool <a name="worker::terminated">terminated</a>() const;</pre>
+<pre>bool <a name="fifo_scheduler::terminated">terminated</a>() const;</pre>
 <p><b>Requires</b>: Must only be called from the thread that also calls <code>
 operator()()</code><br>
-<b>Returns</b>: <code>true</code> if <code>terminate()</code> has been called 
-and the resulting object has been processed in <code>operator()()</code>. 
-Returns <code>false</code> otherwise</p>
+<b>Returns</b>: <code>FifoWorker::terminated();</code></p>
 <h1>Header &lt;boost/fsm/<a name="simple_state.hpp">simple_state.hpp</a>&gt;</h1>
 <h2><a name="Typedef no_reactions">Typedef <code>no_reactions</code></a></h2>
 <p>This is the default value for the <code>Reactions</code> parameter of the
@@ -947,12 +1019,12 @@ must derive from the <code>state</code> class template.</p>
     or indirect subclasses of either the <code>simple_state</code> or the
     <code>state</code> class templates or instantiations of either the <code>
     shallow_history</code> or <code>deep_history</code> class templates. If 
-    there is only a single non-history inner initial state then it can also be 
-    passed directly, without wrapping it into an <code>mpl::list&lt;&gt;</code>. The 
-    type that each state in the list passes as <code>Context</code> to its 
-    base class template must correspond to the orthogonal region it belongs 
-    to. That is, the first state in the list must pass <code>
-    MostDerived::orthogonal&lt; 0 &gt;</code>, the second <code>
+    there is only a single inner initial state that is not a template 
+    instantiation then it can also be passed directly, without wrapping it 
+    into an <code>mpl::list&lt;&gt;</code>. The type that each state in the list 
+    passes as <code>Context</code> to its base class template must correspond 
+    to the orthogonal region it belongs to. That is, the first state in the 
+    list must pass <code>MostDerived::orthogonal&lt; 0 &gt;</code>, the second <code>
     MostDerived::orthogonal&lt; 1 &gt;</code> and so forth. <code>
     MostDerived::orthogonal&lt; 0 &gt;</code> and <code>MostDerived</code> are 
     synonymous</td>
@@ -1786,7 +1858,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->13 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28867" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->15 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28871" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

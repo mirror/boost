@@ -270,22 +270,31 @@ requirements:</p>
 <p>By default, <code>asynchronous_state_machine&lt;&gt;</code> subclass objects are 
 serviced by a <code>fifo_scheduler&lt;&gt;</code> object. <code>fifo_scheduler&lt;&gt;</code> 
 does not lock or wait in single-threaded applications and uses boost::thread 
-primitives in multi-threaded programs. Moreover, a <code>fifo_scheduler&lt;&gt;</code> 
-object can service an arbitrary number of <code>asynchronous_state_machine&lt;&gt;</code> 
-subclass objects. Under the hood, <code>fifo_scheduler&lt;&gt;</code> is just a thin 
-wrapper around <code>processor_container&lt;&gt;</code> (which manages the lifetime 
-of the state machines) and <code>fifo_worker&lt;&gt;</code> (which manages the queue 
-and ensures thread safety).</p>
+primitives to do so in multi-threaded programs. Moreover, a <code>
+fifo_scheduler&lt;&gt;</code> object can service an arbitrary number of <code>
+asynchronous_state_machine&lt;&gt;</code> subclass objects. Under the hood, <code>
+fifo_scheduler&lt;&gt;</code> is just a thin wrapper around an object of its <code>
+FifoWorker</code> template parameter (which manages the queue and ensures 
+thread safety) and a <code>processor_container&lt;&gt;</code> (which manages the 
+lifetime of the state machines).</p>
 <h3>Customization</h3>
-<p>If a user needs to customize this behavior she can do so by providing her 
-own class modeling the Scheduler concept. Custom scheduler implementations can 
-in most cases reuse <code>processor_container&lt;&gt;</code> and only need to 
-rewrite the worker, which is relatively little code. I considered a much more 
-generic design where locking and waiting is implemented in a policy but I have 
-so far failed to come up with a clean and simple interface for it. Especially 
-the waiting is difficult to model as some platforms have condition variables, 
-others have events and yet others don't have any notion of waiting whatsoever 
-(they instead loop until a new event arrives, presumably via an ISR).</p>
+<p>If a user needs to customize the scheduler behavior she can do so by 
+instantiating <code>fifo_scheduler&lt;&gt;</code> with her own class modeling the
+<code>FifoWorker</code> concept. I considered a much more generic design where 
+locking and waiting is implemented in a policy but I have so far failed to 
+come up with a clean and simple interface for it. Especially the waiting is a 
+bit difficult to model as some platforms have condition variables, others have 
+events and yet others don't have any notion of waiting whatsoever (they 
+instead loop until a new event arrives, presumably via an ISR). Given the 
+relatively few lines of code required to implement a custom <code>FifoWorker</code> 
+type and the fact that almost all applications will implement at most one such 
+class, it does not seem to be worthwhile anyway.</p>
+<p>Applications requiring a less or more sophisticated event processor 
+lifetime management can customize the behavior at a more coarse level, by 
+using a custom <code>Scheduler</code> type. This is currently also true for 
+applications requiring non-FIFO queuing schemes. However, boost::fsm will 
+probably provide a <code>priority_scheduler</code> in the future so that 
+custom schedulers need to be implemented only in rare cases.</p>
 <h2><a name="User actions: Member functions vs. function objects">User 
 actions: Member functions vs. function objects</a></h2>
 <p>All user-supplied functions (<code>react</code> member functions, entry-, 
@@ -703,7 +712,7 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28865" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28873" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

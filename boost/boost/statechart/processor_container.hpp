@@ -17,7 +17,6 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-#include <boost/function/function0.hpp>
 #include <boost/bind.hpp>
 
 #include <set>
@@ -32,7 +31,10 @@ namespace fsm
 
 
 
-template< class Scheduler, class Allocator = std::allocator< void > >
+template<
+  class Scheduler,
+  class WorkItem,
+  class Allocator = std::allocator< void > >
 class processor_container : noncopyable
 {
   typedef event_processor< Scheduler > processor_base_type;
@@ -41,7 +43,6 @@ class processor_container : noncopyable
   public:
     //////////////////////////////////////////////////////////////////////////
     typedef weak_ptr< processor_holder_type > processor_handle;
-    typedef function0< void, Allocator > work_item;
 
     class processor_context
     {
@@ -64,7 +65,7 @@ class processor_container : noncopyable
     };
 
     template< class Processor >
-    work_item create_processor( processor_handle & handle, Scheduler & scheduler )
+    WorkItem create_processor( processor_handle & handle, Scheduler & scheduler )
     {
       processor_holder_ptr_type pProcessor = make_processor_holder();
       handle = pProcessor;
@@ -77,7 +78,7 @@ class processor_container : noncopyable
     }
 
     template< class Processor, typename Arg1 >
-    work_item create_processor(
+    WorkItem create_processor(
       processor_handle & handle, Scheduler & scheduler, Arg1 arg1 )
     {
       processor_holder_ptr_type pProcessor = make_processor_holder();
@@ -91,7 +92,7 @@ class processor_container : noncopyable
     }
 
     template< class Processor, typename Arg1, typename Arg2 >
-    work_item create_processor(
+    WorkItem create_processor(
       processor_handle & handle, Scheduler & scheduler, Arg1 arg1, Arg2 arg2 )
     {
       processor_holder_ptr_type pProcessor = make_processor_holder();
@@ -107,7 +108,7 @@ class processor_container : noncopyable
     }
 
     template< class Processor, typename Arg1, typename Arg2, typename Arg3 >
-    work_item create_processor(
+    WorkItem create_processor(
       processor_handle & handle, Scheduler & scheduler,
       Arg1 arg1, Arg2 arg2, Arg3 arg3 )
     {
@@ -127,7 +128,7 @@ class processor_container : noncopyable
     template<
       class Processor, typename Arg1, typename Arg2,
       typename Arg3, typename Arg4 >
-    work_item create_processor(
+    WorkItem create_processor(
       processor_handle & handle, Scheduler & scheduler,
       Arg1 arg1, Arg2 arg2, Arg3 arg3, Arg4 arg4 )
     {
@@ -147,7 +148,7 @@ class processor_container : noncopyable
     template<
       class Processor, typename Arg1, typename Arg2,
       typename Arg3, typename Arg4, typename Arg5 >
-    work_item create_processor(
+    WorkItem create_processor(
       processor_handle & handle, Scheduler & scheduler,
       Arg1 arg1, Arg2 arg2, Arg3 arg3, Arg4 arg4, Arg5 arg5 )
     {
@@ -167,7 +168,7 @@ class processor_container : noncopyable
     template<
       class Processor, typename Arg1, typename Arg2,
       typename Arg3, typename Arg4, typename Arg5, typename Arg6 >
-    work_item create_processor(
+    WorkItem create_processor(
       processor_handle & handle, Scheduler & scheduler,
       Arg1 arg1, Arg2 arg2, Arg3 arg3, Arg4 arg4, Arg5 arg5, Arg6 arg6 )
     {
@@ -184,19 +185,19 @@ class processor_container : noncopyable
         arg1, arg2, arg3, arg4, arg5, arg6 );
     }
 
-    work_item destroy_processor( const processor_handle & processor )
+    WorkItem destroy_processor( const processor_handle & processor )
     {
       return bind(
         &processor_container::destroy_processor_impl, this, processor );
     }
 
-    work_item initiate_processor( const processor_handle & processor )
+    WorkItem initiate_processor( const processor_handle & processor )
     {
       return bind(
         &processor_container::initiate_processor_impl, this, processor );
     }
 
-    work_item terminate_processor( const processor_handle & processor )
+    WorkItem terminate_processor( const processor_handle & processor )
     {
       return bind(
         &processor_container::terminate_processor_impl, this, processor );
@@ -204,7 +205,7 @@ class processor_container : noncopyable
 
     typedef intrusive_ptr< const event_base > event_ptr_type;
 
-    work_item queue_event(
+    WorkItem queue_event(
       const processor_handle & processor, const event_ptr_type & pEvent )
     {
       BOOST_ASSERT( pEvent.get() != 0 );
