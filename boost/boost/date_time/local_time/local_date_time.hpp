@@ -46,11 +46,12 @@ namespace local_time {
   using date_time::ambiguous;
   using date_time::invalid_time_label;
  
-  template<class utc_time_type=posix_time::ptime, 
+  template<class utc_time_=posix_time::ptime, 
     class tz_type=date_time::time_zone_base<typename posix_time::ptime> >
   class local_date_time_base :  public date_time::base_time<boost::posix_time::ptime, 
                                                             boost::posix_time::posix_time_system> { 
   public:
+    typedef utc_time_ utc_time_type;
     typedef typename utc_time_type::time_duration_type time_duration_type;
     typedef typename utc_time_type::date_type date_type;
     typedef typename date_type::duration_type date_duration_type;
