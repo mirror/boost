@@ -49,7 +49,7 @@
 #include <boost/re_detail/regex_kmp.hpp>
 #include <boost/pattern_except.hpp>
 #include <boost/regex_traits.hpp>
-#include <boost/type_traits/transform_traits.hpp>
+#include <boost/type_traits/cv_traits.hpp>
 
 
 namespace boost{
