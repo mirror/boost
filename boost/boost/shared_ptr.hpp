@@ -272,7 +272,7 @@ public:
         pn.swap(other.pn);
     }
 
-    bool _internal_less(this_type const & rhs) const // implementation detail, never throws
+    template<class Y> bool _internal_less(shared_ptr<Y> const & rhs) const
     {
         return pn < rhs.pn;
     }
@@ -321,7 +321,7 @@ template<class T> inline bool operator!=(shared_ptr<T> const & a, shared_ptr<T> 
 
 #endif
 
-template<class T> inline bool operator<(shared_ptr<T> const & a, shared_ptr<T> const & b)
+template<class T, class U> inline bool operator<(shared_ptr<T> const & a, shared_ptr<U> const & b)
 {
     return a._internal_less(b);
 }

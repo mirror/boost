@@ -773,11 +773,6 @@ void weak_ptr_constructor()
     catch(boost::bad_weak_ptr)
     {
     }
-
-    {
-        boost::weak_ptr<Y> wp2(wp);
-        boost::weak_ptr<X> wp3(wp);
-    }
 }
 
 void auto_ptr_constructor()
@@ -2256,13 +2251,13 @@ template<class T> void test_ne(T const & a, T const & b)
     BOOST_TEST(!(a < b && b < a));
 }
 
-void test_shared(boost::weak_ptr<void> const & a, boost::weak_ptr<void> const & b)
+template<class T, class U> void test_shared(boost::weak_ptr<T> const & a, boost::weak_ptr<U> const & b)
 {
     BOOST_TEST(!(a < b));
     BOOST_TEST(!(b < a));
 }
 
-void test_nonshared(boost::weak_ptr<void> const & a, boost::weak_ptr<void> const & b)
+template<class T, class U> void test_nonshared(boost::weak_ptr<T> const & a, boost::weak_ptr<U> const & b)
 {
     BOOST_TEST(a < b || b < a);
     BOOST_TEST(!(a < b && b < a));
@@ -2381,7 +2376,7 @@ void test()
         BOOST_TEST(wp3.use_count() == 1);
         test_shared(wp2, wp3);
 
-        weak_ptr<X> wp4(wp3);
+		weak_ptr<X> wp4 = boost::make_shared(wp3);
 
         BOOST_TEST(wp4.use_count() == 1);
         test_shared(wp2, wp4);
@@ -2390,7 +2385,6 @@ void test()
         test_is_zero(boost::make_shared(wp1));
 
         wp1 = p4;
-        wp1 = wp3;
         wp1 = wp2;
 
         BOOST_TEST(wp1.use_count() == 1);

@@ -45,7 +45,7 @@ public:
 
 
 //
-//  The simple implementation of the converting constructor:
+//  The "obvious" converting constructor implementation:
 //
 //  template<class Y>
 //  weak_ptr(weak_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
@@ -60,23 +60,10 @@ public:
 //  It is not possible to avoid spurious access violations since
 //  in multithreaded programs r.px may be invalidated at any point.
 //
-//  A safe conversion between weak_ptr<T> and weak_ptr<Y> must involve
-//  a temporary shared_ptr.
+//  A weak_ptr<T> can safely be obtained from a weak_ptr<U> by using
 //
-//  It is not yet clear whether the converting constructor should be
-//  present at all, or it's better to require an explicit make_shared call.
+//  weak_ptr<T> wpt = make_shared(wpu);
 //
-//  The only case for the converting constructor is the weak_ptr<T> -> weak_ptr<cv void>
-//  conversion.
-//
-
-    template<class Y>
-    weak_ptr(weak_ptr<Y> const & r) // never throws
-    {
-        shared_ptr<Y> tmp = make_shared(r);
-        px = tmp.px;
-        pn = tmp.pn;
-    }
 
     template<class Y>
     weak_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
@@ -116,13 +103,13 @@ public:
         pn.swap(other.pn);
     }
 
-    void _internal_assign(T * px2, detail::shared_count const & pn2) // implementation detail
+    void _internal_assign(T * px2, detail::shared_count const & pn2)
     {
         px = px2;
         pn = pn2;
     }
 
-    bool _internal_less(this_type const & rhs) const // implementation detail, never throws
+    template<class Y> bool _internal_less(weak_ptr<Y> const & rhs) const
     {
         return pn < rhs.pn;
     }
@@ -144,7 +131,7 @@ private:
 
 };  // weak_ptr
 
-template<class T> inline bool operator<(weak_ptr<T> const & a, weak_ptr<T> const & b)
+template<class T, class U> inline bool operator<(weak_ptr<T> const & a, weak_ptr<U> const & b)
 {
     return a._internal_less(b);
 }
