@@ -23,9 +23,7 @@
 #include <algorithm>                       // max.
 #include <cstring>                         // memcpy.
 #include <exception>
-#include <string>
-#include <boost/config.hpp>                // DEDUCED_TYPENAME, MSVC.
-#include <boost/detail/workaround.hpp>     
+#include <boost/config.hpp>                // DEDUCED_TYPENAME.
 #include <boost/iostreams/constants.hpp>   // default_buffer_size.
 #include <boost/iostreams/detail/adapter/concept_adapter.hpp>
 #include <boost/iostreams/detail/adapter/direct_adapter.hpp>
@@ -110,19 +108,19 @@ struct code_converter_impl {
     typedef is_convertible<device_category, two_sequence>   is_double;
     typedef conversion_buffer<Codecvt, Alloc>               buffer_type;
 
-    code_converter_impl() : cvt_(), open_(false) { }
+    code_converter_impl() : cvt_(), flags_(0) { }
 
     ~code_converter_impl()
     { 
         try { 
-            if (open_) close(); 
+            if (flags_ & f_open) close(); 
         } catch (std::exception&) { /* */ } 
     }
 
-    #include <boost/iostreams/detail/config/disable_warnings.hpp> // Borland 5.x
+#include <boost/iostreams/detail/config/disable_warnings.hpp> // Borland 5.x
     void open(const Device& dev, int buffer_size)
     {
-        if (open_)
+        if (flags_ & f_open)
             throw BOOST_IOSTREAMS_FAILURE("already open");
         if (buffer_size == -1)
             buffer_size = default_filter_buffer_size;
@@ -137,22 +135,33 @@ struct code_converter_impl {
             buf_.second().set(0, buffer_size);
         }
         dev_ = dev;
-        open_ = true;
+        flags_ |= f_open;
     }
-    #include <boost/iostreams/detail/config/enable_warnings.hpp> // Borland 5.x
 
-    bool is_open() const { return open_ != 0;}
-
-    void close()
+    void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out)
     {
-        try { 
-            flush(); 
-        } catch (std::exception&) { /* */ }
-        dev_.reset();
-        buf_.first().reset();
-        buf_.second().reset();
-        open_ = false;
+        if (which & BOOST_IOS::in) {
+            iostreams::close(**dev_, BOOST_IOS::in);
+            flags_ |= f_input_closed;
+        }
+        if (which & BOOST_IOS::out) {
+            flush();
+            iostreams::close(**dev_, BOOST_IOS::out);
+            flags_ |= f_output_closed;
+        }
+        if ( !is_double::value || 
+             (flags_ & f_input_closed) != 0 && 
+             (flags_ & f_output_closed) != 0 )
+        {
+            dev_.reset();
+            buf_.first().reset();
+            buf_.second().reset();
+            flags_ = 0;
+        }
     }
+#include <boost/iostreams/detail/config/enable_warnings.hpp> // Borland 5.x
+
+    bool is_open() const { return (flags_ & f_open) != 0;}
 
     void flush() { flush(is_convertible<device_category, output>()); }
     void flush(mpl::false_) { }
@@ -183,13 +192,19 @@ struct code_converter_impl {
     policy_type& get() { return *dev_.get(); }
     const policy_type& get() const { return *dev_.get(); }
 
+    enum {
+        f_open             = 1,
+        f_input_closed     = f_open << 1,
+        f_output_closed    = f_input_closed << 1
+    };
+
     codecvt_holder<Codecvt>  cvt_;
     storage_type             dev_;
     double_object<
         buffer_type, 
         is_double
     >                        buf_;
-    bool                     open_;
+    int                      flags_;
 };
 
 } // End namespace detail.
@@ -296,7 +311,8 @@ public:
         // fstream-like interface.
 
     bool is_open() const { return impl().is_open(); }
-    void close(BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out );
+    void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
+    { impl().close(which); }
 
         // Device interface.
 
@@ -327,18 +343,6 @@ private:
 };
 
 //--------------Implementation of converter-----------------------------------//
-
-template<typename Device, typename Codevt, typename Alloc>
-void code_converter<Device, Codevt, Alloc>::close
-    (BOOST_IOS::openmode which)
-{
-    if (which & BOOST_IOS::in)
-        iostreams::close(dev(), BOOST_IOS::in);
-    if (which & BOOST_IOS::out) {
-        flush();
-        iostreams::close(dev(), BOOST_IOS::out);
-    }
-}
 
 // Implementation note: if end of stream contains a partial character,
 // it is ignored.
