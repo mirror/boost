@@ -31,6 +31,8 @@ DEPENDS all : test ;
 
     [ run libs/numeric/interval/test/cmp.cpp
         <lib>../../../test/build/boost_test_exec_monitor ]
+    [ run libs/numeric/interval/test/cmp_exn.cpp
+        <lib>../../../test/build/boost_test_exec_monitor ]
     [ run libs/numeric/interval/test/cmp_exp.cpp
         <lib>../../../test/build/boost_test_exec_monitor ]
     [ run libs/numeric/interval/test/cmp_lex.cpp

@@ -111,9 +111,10 @@ done by using symbolic expressions as a base type.</p>
 <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code> <code>==</code>
 <code>!=</code> behave correctly for the default, lexicographic, set, and
 tristate comparisons. <b>cmp_exp.cpp</b> tests the explicit comparison
-functions <code>cer..</code> and <code>pos..</code> behave correctly. All
-these tests use some simple intervals ([1,2] and [3,4], [1,3] and [2,4],
-[1,2] and [2,3], etc).</p>
+functions <code>cer..</code> and <code>pos..</code> behave correctly.
+<b>cmp_exn.cpp</b> tests if the various policies correctly detect exceptional
+cases. All these tests use some simple intervals ([1,2] and [3,4], [1,3] and
+[2,4], [1,2] and [2,3], etc).</p>
 
 <p><b>det.cpp</b> tests if the <code>_std</code> and <code>_opp</code>
 versions in protected and unprotected mode produce the same result when Gauss

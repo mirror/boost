@@ -82,28 +82,6 @@ static void test_12_23() {
 # endif
 }
 
-static void test_12_E() {
-  I a(1, 2), b(I::empty());
-  
-  BOOST_C_EXN(a < b);
-  BOOST_C_EXN(a <= b);
-  BOOST_C_EXN(a > b);
-  BOOST_C_EXN(a >= b);
-
-  BOOST_C_EXN(b < a);
-  BOOST_C_EXN(b <= a);
-  BOOST_C_EXN(b > a);
-  BOOST_C_EXN(b >= a);
-
-  BOOST_C_EXN(a == b);
-  BOOST_C_EXN(a != b);
-
-# ifdef __BORLANDC__
-  ::detail::ignore_unused_variable_warning(a);
-  ::detail::ignore_unused_variable_warning(b);
-# endif
-}
-
 // comparisons between [1,2] and 0
 
 static void test_12_0() {
@@ -184,6 +162,8 @@ static void test_12_3() {
 # endif
 }
 
+// comparisons between [1,2] and [1,2]
+
 static void test_12_12() {
   const I a(1,2), b(1,2);
   BOOST_C_EXN(a == b);
@@ -194,6 +174,8 @@ static void test_12_12() {
 # endif
 }
 
+// comparisons between [1,1] and [1,1]
+
 static void test_11_11() {
   const I a(1,1), b(1,1);
   BOOST_CHECK(a == b);
@@ -203,6 +185,8 @@ static void test_11_11() {
   ::detail::ignore_unused_variable_warning(b);
 # endif
 }
+
+// comparisons between [1,1] and 1
 
 static void test_11_1() {
   const I a(1,1);
@@ -219,7 +203,6 @@ int test_main(int, char *[]) {
   test_12_34();
   test_13_24();
   test_12_23();
-  test_12_E();
   test_12_0();
   test_12_1();
   test_12_2();

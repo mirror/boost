@@ -156,106 +156,6 @@ static void test_E_E() {
 # endif
 }
 
-// comparisons between empty set and 0
-
-static void test_E_0() {
-  I a(I::empty());
-  const int b = 0;
-  
-  BOOST_CHECK(a < b);
-  BOOST_CHECK(a <= b);
-  BOOST_CHECK(!(a > b));
-  BOOST_CHECK(!(a >= b));
-
-  BOOST_CHECK(!(a == b));
-  BOOST_CHECK(a != b);
-
-# ifdef __BORLANDC__
-  ::detail::ignore_unused_variable_warning(a);
-  ::detail::ignore_unused_variable_warning(b);
-# endif
-}
-
-// comparisons between [1,2] and 0
-
-static void test_12_0() {
-  const I a(1,2);
-  const int b = 0;
-
-  BOOST_CHECK(!(a < b));
-  BOOST_CHECK(!(a <= b));
-  BOOST_CHECK(!(a > b));
-  BOOST_CHECK(!(a >= b));
-
-  BOOST_CHECK(!(a == b));
-  BOOST_CHECK(a != b);
-
-# ifdef __BORLANDC__
-  ::detail::ignore_unused_variable_warning(a);
-  ::detail::ignore_unused_variable_warning(b);
-# endif
-}
-
-// comparisons between [1,2] and 1
-
-static void test_12_1() {
-  const I a(1,2);
-  const int b = 1;
-
-  BOOST_CHECK(!(a < b));
-  BOOST_CHECK(!(a <= b));
-  BOOST_CHECK(a > b);
-  BOOST_CHECK(a >= b);
-
-  BOOST_CHECK(!(a == b));
-  BOOST_CHECK(a != b);
-
-# ifdef __BORLANDC__
-  ::detail::ignore_unused_variable_warning(a);
-  ::detail::ignore_unused_variable_warning(b);
-# endif
-}
-
-// comparisons between [1,2] and 2
-
-static void test_12_2() {
-  const I a(1,2);
-  const int b = 2;
-
-  BOOST_CHECK(!(a < b));
-  BOOST_CHECK(!(a <= b));
-  BOOST_CHECK(a > b);
-  BOOST_CHECK(a >= b);
-
-  BOOST_CHECK(!(a == b));
-  BOOST_CHECK(a != b);
-
-# ifdef __BORLANDC__
-  ::detail::ignore_unused_variable_warning(a);
-  ::detail::ignore_unused_variable_warning(b);
-# endif
-}
-
-// comparisons between [1,2] and 3
-
-static void test_12_3() {
-  const I a(1,2);
-  const int b = 3;
-
-  BOOST_CHECK(!(a < b));
-  BOOST_CHECK(!(a <= b));
-  BOOST_CHECK(!(a > b));
-  BOOST_CHECK(!(a >= b));
-
-  BOOST_CHECK(!(a == b));
-  BOOST_CHECK(a != b);
-
-# ifdef __BORLANDC__
-  ::detail::ignore_unused_variable_warning(a);
-  ::detail::ignore_unused_variable_warning(b);
-# endif
-}
-
 // comparisons between [1,2] and [1,2]
 
 static void test_12_12() {
@@ -304,26 +204,6 @@ static void test_11_11() {
 # endif
 }
 
-// comparisons between [1,1] and 1
-
-static void test_11_1() {
-  const I a(1,1);
-  const int b = 1;
-
-  BOOST_CHECK(!(a < b));
-  BOOST_CHECK(a <= b);
-  BOOST_CHECK(!(a > b));
-  BOOST_CHECK(a >= b);
-
-  BOOST_CHECK(a == b);
-  BOOST_CHECK(!(a != b));
-
-# ifdef __BORLANDC__
-  ::detail::ignore_unused_variable_warning(a);
-  ::detail::ignore_unused_variable_warning(b);
-# endif
-}
-
 int test_main(int, char *[]) {
   test_12_34();
   test_13_24();
@@ -331,14 +211,8 @@ int test_main(int, char *[]) {
   test_12_23();
   test_12_E();
   test_E_E();
-  test_E_0();
-  test_12_0();
-  test_12_1();
-  test_12_2();
-  test_12_3();
   test_12_12();
   test_11_11();
-  test_11_1();
 
   return 0;
 }

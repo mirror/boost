@@ -27,6 +27,8 @@ import testing ;
 
     [ run libs/numeric/interval/test/cmp.cpp
         ../../../test/build//boost_test_exec_monitor ]
+    [ run libs/numeric/interval/test/cmp_exn.cpp
+        ../../../test/build//boost_test_exec_monitor ]
     [ run libs/numeric/interval/test/cmp_exp.cpp
         ../../../test/build//boost_test_exec_monitor ]
     [ run libs/numeric/interval/test/cmp_lex.cpp
