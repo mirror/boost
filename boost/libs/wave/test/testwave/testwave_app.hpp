@@ -15,7 +15,6 @@
 
 // include boost
 #include <boost/config.hpp>
-#include <boost/program_options.hpp>
 
 #include "cmd_line_utils.hpp"
 
