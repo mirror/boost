@@ -335,25 +335,25 @@ struct ordered_index_node_impl
     ordered_index_node_impl* x,ordered_index_node_impl* prior,
     ordered_index_node_impl* next,ordered_index_node_impl* header)
   {
-    if(next==header){
-      header->parent()=x;
-      header->left()=x;
-      header->right()=x;
-      x->parent()=header;
-    }
-    else if(next->left()==0){
+    if(next->left()==0){
       next->left()=x;
       x->parent()=next;
       if(next==header->left()){
         header->left()=x;         /* maintain leftmost pointing to min node */
       }
     }
-    else{                         /* prior->right() must be null */
+    else if(x!=prior){            /* prior->right() must be null */
       prior->right()=x;
       x->parent()=prior;
       if(prior==header->right()){
         header->right()=x;        /* maintain rightmost pointing to max node */
       }
+    }
+    else{
+      header->parent()=x;
+      header->left()=x;
+      header->right()=x;
+      x->parent()=header;
     }
     x->left()=0;
     x->right()=0;

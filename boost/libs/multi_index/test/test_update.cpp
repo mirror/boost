@@ -57,6 +57,10 @@ void test_update()
   BOOST_CHECK(!iii.replace(iii.begin(),pair_of_ints(0,5)));
   BOOST_CHECK(!iis.replace(iis.begin(),pair_of_ints(5,11)));
   BOOST_CHECK(!iis.replace(iis.begin(),pair_of_ints(11,5)));
+  BOOST_CHECK(!iis.replace(++iis.begin(),pair_of_ints(10,5)));
+  BOOST_CHECK(!iis.replace(++iis.begin(),pair_of_ints(5,10)));
+  BOOST_CHECK(!iis.replace(--iis.end(),pair_of_ints(5,10)));
+  BOOST_CHECK(!iii.replace(--iii.end(),pair_of_ints(10,5)));
 
   BOOST_CHECK(iis.modify(iis.begin(),increment_first));
   BOOST_CHECK(iii.modify(iii.begin(),increment_first));
