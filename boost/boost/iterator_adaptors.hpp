@@ -116,7 +116,6 @@
 # include <boost/type_traits.hpp>
 # include <boost/detail/iterator.hpp>
 # include <boost/detail/select_type.hpp>
-# include <boost/pending/ct_if.hpp>
 
 // I was having some problems with VC6. I couldn't tell whether our hack for
 // stock GCC was causing problems so I needed an easy way to turn it on and
@@ -554,7 +553,7 @@ namespace detail {
   // An associative list is a list of key-value pairs. The list is
   // built out of cons_type's and is terminated by end_of_list.
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(__BORLANDC__)
   template <class AssocList, class Key>
   struct find_param;
 
@@ -563,8 +562,8 @@ namespace detail {
       typedef typename AssocList::first_type Head;
       typedef typename Head::first_type Key1;
       typedef typename Head::second_type Value;
-      typedef typename ct_if<is_same<Key1, Key2>::value,
-        Value, 
+      typedef typename if_true<(is_same<Key1, Key2>::value)>::template
+      then<Value, 
         typename find_param<typename AssocList::second_type, Key2>::type
       >::type type;
     };
@@ -628,7 +627,8 @@ namespace detail {
   template <class Key, class Value>
   struct make_arg {
     enum { is_named = is_named_parameter<Value>::value };
-    typedef typename ct_if<is_named, make_named_arg, make_key_value>::type Make;
+    typedef typename if_true<(is_named)>::template
+      then<make_named_arg, make_key_value>::type Make;
     typedef typename Make::template select<Key, Value>::type type;
   };
 
