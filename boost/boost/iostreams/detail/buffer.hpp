@@ -34,11 +34,11 @@ template< typename Ch,
           typename Alloc = std::allocator<Ch> >
 class basic_buffer : private noncopyable {
 private:
-  typedef typename // Thanks to Joaquín Mª López Muñoz
-          boost::detail::allocator::rebind_to<
-              Alloc, 
-              Ch
-          >::type allocator_type;
+#ifndef BOOST_NO_STD_ALLOCATOR
+    typedef typename Alloc::template rebind<Ch>::other allocator_type;
+#else
+    typedef std::allocator<Ch> allocator_type;
+#endif
 public:
     basic_buffer();
     basic_buffer(std::streamsize buffer_size);
