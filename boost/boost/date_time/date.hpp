@@ -120,12 +120,12 @@ namespace date_time {
     //! check to see if date is greater than all possible dates
     bool is_pos_infinity()  const
     {
-      return traits_type::is_pos_infinity(days_);
+      return traits_type::is_pos_inf(days_);
     }
     //! check to see if date is greater than all possible dates
     bool is_neg_infinity()  const
     {
-      return traits_type::is_neg_infinity(days_);
+      return traits_type::is_neg_inf(days_);
     }
     //! return as a special value or a not_special if a normal date
     special_values as_special()  const

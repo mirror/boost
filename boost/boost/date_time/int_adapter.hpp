@@ -76,11 +76,11 @@ public:
     return (v == neg_infinity().as_number() ||
             v == pos_infinity().as_number());
   }
-  static bool is_neg_infinity(int_type v)
+  static bool is_neg_inf(int_type v)
   {
     return (v == neg_infinity().as_number());
   }
-  static bool is_pos_infinity(int_type v)
+  static bool is_pos_inf(int_type v)
   {
     return (v == pos_infinity().as_number());
   }
@@ -92,8 +92,8 @@ public:
   static special_values to_special(int_type v)
   {
     if (is_not_a_number(v)) return not_a_date_time;
-    if (is_neg_infinity(v)) return neg_infin;
-    if (is_pos_infinity(v)) return pos_infin;
+    if (is_neg_inf(v)) return neg_infin;
+    if (is_pos_inf(v)) return pos_infin;
     return not_special;
   }
 
@@ -133,7 +133,7 @@ public:
     bool is_signed = std::numeric_limits<int_type>::is_signed;
     if(!is_signed)
     {
-      if(is_neg_infinity(value_) && rhs == 0)
+      if(is_neg_inf(value_) && rhs == 0)
       {
         return false;
       }
@@ -150,7 +150,7 @@ public:
     bool is_signed = std::numeric_limits<int_type>::is_signed;
     if(!is_signed)
     {
-      if(is_neg_infinity(value_) && rhs == 0)
+      if(is_neg_inf(value_) && rhs == 0)
       {
         return true;
       }
@@ -167,7 +167,7 @@ public:
     bool is_signed = std::numeric_limits<int_type>::is_signed;
     if(!is_signed)
     {
-      if(is_neg_infinity(value_) && rhs == 0)
+      if(is_neg_inf(value_) && rhs == 0)
       {
         return true;
       }
@@ -205,8 +205,8 @@ public:
       {
         return int_adapter::not_a_number();
       }
-      if((is_pos_infinity(value_) && rhs.is_neg_infinity(rhs.as_number())) ||
-	  (is_neg_infinity(value_) && rhs.is_pos_infinity(rhs.as_number())) )
+      if((is_pos_inf(value_) && rhs.is_neg_inf(rhs.as_number())) ||
+	  (is_neg_inf(value_) && rhs.is_pos_inf(rhs.as_number())) )
       {
         return int_adapter::not_a_number();
       }
@@ -214,11 +214,11 @@ public:
       {
         return *this;
       }
-      if (rhs.is_pos_infinity(rhs.as_number())) 
+      if (rhs.is_pos_inf(rhs.as_number())) 
       {
         return int_adapter::pos_infinity();
       }
-      if (rhs.is_neg_infinity(rhs.as_number())) 
+      if (rhs.is_neg_inf(rhs.as_number())) 
       {
         return int_adapter::neg_infinity();
       }
@@ -254,8 +254,8 @@ public:
       {
         return int_adapter::not_a_number();
       }
-      if((is_pos_infinity(value_) && rhs.is_pos_infinity(rhs.as_number())) ||
-         (is_neg_infinity(value_) && rhs.is_neg_infinity(rhs.as_number())) )
+      if((is_pos_inf(value_) && rhs.is_pos_inf(rhs.as_number())) ||
+         (is_neg_inf(value_) && rhs.is_neg_inf(rhs.as_number())) )
       {
         return int_adapter::not_a_number();
       }
@@ -263,11 +263,11 @@ public:
       {
         return *this;
       }
-      if (rhs.is_pos_infinity(rhs.as_number())) 
+      if (rhs.is_pos_inf(rhs.as_number())) 
       {
         return int_adapter::neg_infinity();
       }
-      if (rhs.is_neg_infinity(rhs.as_number())) 
+      if (rhs.is_neg_inf(rhs.as_number())) 
       {
         return int_adapter::pos_infinity();
       }
@@ -386,13 +386,13 @@ private:
 	  return 2; // nan
 	}
       }
-      if((is_neg_infinity(value_) && !is_neg_infinity(rhs.value_)) ||
-	  (is_pos_infinity(rhs.value_) && !is_pos_infinity(value_)) )
+      if((is_neg_inf(value_) && !is_neg_inf(rhs.value_)) ||
+	  (is_pos_inf(rhs.value_) && !is_pos_inf(value_)) )
       {
 	return -1; // less than
       }
-      if((is_pos_infinity(value_) && !is_pos_infinity(rhs.value_)) ||
-	  (is_neg_infinity(rhs.value_) && !is_neg_infinity(value_)) )
+      if((is_pos_inf(value_) && !is_pos_inf(rhs.value_)) ||
+	  (is_neg_inf(rhs.value_) && !is_neg_inf(value_)) )
       {
 	return 1; // greater than
       }
