@@ -41,10 +41,12 @@ namespace boost {
   using std::exp;
 #endif
 
-template<class UniformRandomNumberGenerator, class RealType = double>
+template<class UniformRandomNumberGenerator, class RealType = double,
+        class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
 class lognormal_distribution
 {
 public:
+  typedef Adaptor adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
@@ -59,6 +61,7 @@ public:
 
   // compiler-generated copy ctor and assignment operator are fine
 
+  adaptor_type& adaptor() { return _rng.adaptor(); }
   base_type& base() const { return _rng.base(); }
   void reset() { _rng.reset(); }
 
@@ -81,7 +84,7 @@ public:
   { return _rng == rhs._rng;  }
 #endif
 private:
-  normal_distribution<base_type, result_type> _rng;
+  normal_distribution<base_type, result_type, adaptor_type> _rng;
 };
 
 } // namespace boost

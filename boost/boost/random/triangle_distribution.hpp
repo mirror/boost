@@ -29,10 +29,12 @@ namespace boost {
 
 // triangle distribution, with a smallest, b most probable, and c largest
 // value.
-template<class UniformRandomNumberGenerator, class RealType = double>
+template<class UniformRandomNumberGenerator, class RealType = double,
+        class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
 class triangle_distribution
 {
 public:
+  typedef Adaptor adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
@@ -53,6 +55,7 @@ public:
 
   // compiler-generated copy ctor and assignment operator are fine
 
+  adaptor_type& adaptor() { return _rng; }
   base_type& base() const { return _rng.base(); }
   void reset() { _rng.reset(); }
 
@@ -77,7 +80,7 @@ public:
   { return _a == rhs._a && _b == rhs._b && _c == rhs._c && _rng == rhs._rng;  }
 #endif
 private:
-  uniform_01<base_type, result_type> _rng;
+  adaptor_type _rng;
   result_type _a, _b, _c;
   result_type d1, d2, d3, q1, p1;
 };

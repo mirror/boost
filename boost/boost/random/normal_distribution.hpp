@@ -28,10 +28,12 @@
 namespace boost {
 
 // deterministic polar method, uses trigonometric functions
-template<class UniformRandomNumberGenerator, class RealType = double>
+template<class UniformRandomNumberGenerator, class RealType = double,
+        class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
 class normal_distribution
 {
 public:
+  typedef Adaptor adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
@@ -55,6 +57,7 @@ public:
 
   // compiler-generated copy ctor and assignment operator are fine
 
+  adaptor_type& adaptor() { return _rng; }
   base_type& base() const { return _rng.base(); }
   RealType mean() const { return _mean; }
   RealType sigma() const { return _sigma; }
@@ -99,7 +102,7 @@ public:
   }
 #endif
 private:
-  uniform_01<base_type, RealType> _rng;
+  adaptor_type _rng;
   result_type _mean, _sigma;
   result_type _r1, _r2, _cached_rho;
   bool _valid;

@@ -29,10 +29,12 @@
 namespace boost {
 
 template<class UniformRandomNumberGenerator, class RealType = double,
-   class Cont = std::vector<RealType> >
+         class Cont = std::vector<RealType>,
+         class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
 class uniform_on_sphere
 {
 public:
+  typedef Adaptor adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef Cont result_type;
 
@@ -41,6 +43,7 @@ public:
 
   // compiler-generated copy ctor and assignment operator are fine
 
+  adaptor_type& adaptor() { return _rng.adaptor(); }
   base_type& base() const { return _rng.base(); }
   void reset() { _rng.reset(); }
 
@@ -73,7 +76,7 @@ public:
   { return _dim == rhs._dim && _rng == rhs._rng; }
 #endif
 private:
-  normal_distribution<base_type, RealType> _rng;
+  normal_distribution<base_type, RealType, Adaptor> _rng;
   result_type _container;
   int _dim;
 };

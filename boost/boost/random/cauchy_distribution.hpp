@@ -33,10 +33,12 @@ namespace boost {
 #endif
 
 // Cauchy distribution: p(x) = sigma/(pi*(sigma**2 + (x-median)**2))
-template<class UniformRandomNumberGenerator, class RealType = double>
+template<class UniformRandomNumberGenerator, class RealType = double,
+         class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
 class cauchy_distribution
 {
 public:
+  typedef Adaptor adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
@@ -47,6 +49,7 @@ public:
 
   // compiler-generated copy ctor and assignment operator are fine
 
+  adaptor_type& adaptor() { return _rng; }
   base_type& base() const { return _rng.base(); }
   result_type median() const { return _median; }
   result_type sigma() const { return _sigma; }
@@ -75,7 +78,7 @@ public:
   }
 #endif
 private:
-  uniform_01<base_type, result_type> _rng;
+  adaptor_type _rng;
   result_type _median, _sigma;
 };
 

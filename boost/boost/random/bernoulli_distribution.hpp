@@ -30,6 +30,7 @@ template<class UniformRandomNumberGenerator, class RealType = double>
 class bernoulli_distribution
 {
 public:
+  typedef bernoulli_distribution<UniformRandomNumberGenerator, RealType> adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef bool result_type;
 
@@ -47,6 +48,7 @@ public:
 
   // compiler-generated copy ctor and assignment operator are fine
 
+  adaptor_type& adaptor() { return *this; }
   base_type& base() const { return *_rng; }
   RealType p() const { return _p; }
   void reset() { }

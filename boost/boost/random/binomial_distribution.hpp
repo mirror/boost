@@ -27,10 +27,12 @@ namespace boost {
 
 // Knuth
 template<class UniformRandomNumberGenerator, class IntType = int,
-         class RealType = double>
+         class RealType = double,
+         class Adaptor = bernoulli_distribution<UniformRandomNumberGenerator, RealType> >
 class binomial_distribution
 {
 public:
+  typedef Adaptor adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
 
@@ -44,6 +46,7 @@ public:
 
   // compiler-generated copy ctor and assignment operator are fine
 
+  adaptor_type& adaptor() { return _rng; }
   base_type& base() const { return _rng.base(); }
   IntType t() const { return _t; }
   RealType p() const { return _rng.p(); }
@@ -73,7 +76,7 @@ public:
   }
 #endif
 private:
-  bernoulli_distribution<base_type, RealType> _rng;
+  adaptor_type _rng;
   IntType _t;
 };
 

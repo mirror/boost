@@ -27,10 +27,12 @@ namespace boost {
 
 // Knuth
 // deterministic polar method, uses trigonometric functions
-template<class UniformRandomNumberGenerator, class RealType = double>
+template<class UniformRandomNumberGenerator, class RealType = double,
+         class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
 class gamma_distribution
 {
 public:
+  typedef Adaptor adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
@@ -48,6 +50,7 @@ public:
 
   // compiler-generated copy ctor and assignment operator are fine
 
+  adaptor_type& adaptor() { return _rng; }
   base_type& base() const { return _rng.base(); }
   RealType alpha() const { return _alpha; }
 
@@ -113,8 +116,8 @@ public:
   }
 #endif
 private:
-  uniform_01<base_type, RealType> _rng;
-  exponential_distribution<base_type, RealType> _exp;
+  adaptor_type _rng;
+  exponential_distribution<base_type, RealType, Adaptor> _exp;
   result_type _alpha;
   // some data precomputed from the parameters
   result_type _p;

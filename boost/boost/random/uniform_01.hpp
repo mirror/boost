@@ -34,6 +34,7 @@ template<class UniformRandomNumberGenerator, class RealType = double>
 class uniform_01
 {
 public:
+  typedef uniform_01<UniformRandomNumberGenerator, RealType> adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
@@ -54,6 +55,7 @@ public:
 
   result_type min() const { return result_type(0); }
   result_type max() const { return result_type(1); }
+  adaptor_type& adaptor() { return *this; }
   base_type& base() const { return *_rng; }
   void reset() { }
 

@@ -31,10 +31,12 @@
 namespace boost {
 
 // uniform distribution on a real range
-template<class UniformRandomNumberGenerator, class RealType = double>
+template<class UniformRandomNumberGenerator, class RealType = double,
+        class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
 class uniform_real
 {
 public:
+  typedef Adaptor adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
@@ -53,6 +55,7 @@ public:
 
   result_type min() const { return _min; }
   result_type max() const { return _max; }
+  adaptor_type& adaptor() { return _rng; }
   base_type& base() const { return _rng.base(); }
   void reset() { _rng.reset(); }
 
@@ -67,14 +70,14 @@ public:
   { return _min == rhs._min && _max == rhs._max && _rng == rhs._rng;  }
 #endif
 private:
-  uniform_01<base_type, result_type> _rng;
+  adaptor_type _rng;
   RealType _min, _max;
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 //  A definition is required even for integral static constants
-template<class UniformRandomNumberGenerator, class RealType>
-const bool uniform_real<UniformRandomNumberGenerator, RealType>::has_fixed_range;
+template<class UniformRandomNumberGenerator, class RealType, class Adaptor>
+const bool uniform_real<UniformRandomNumberGenerator, RealType, Adaptor>::has_fixed_range;
 #endif
 
 } // namespace boost

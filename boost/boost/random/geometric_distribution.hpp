@@ -35,10 +35,12 @@ namespace boost {
 
 // geometric distribution: p(i) = (1-p) * pow(p, i-1)   (integer)
 template<class UniformRandomNumberGenerator, class IntType = int,
-         class RealType = double>
+         class RealType = double,
+         class Adaptor = uniform_01<UniformRandomNumberGenerator, RealType> >
 class geometric_distribution
 {
 public:
+  typedef Adaptor adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
 
@@ -56,6 +58,7 @@ public:
   // compiler-generated copy ctor and assignment operator are fine
 
   RealType p() const { return _p; }
+  adaptor_type& adaptor() { return _rng; }
   base_type& base() const { return _rng.base(); }
   void reset() { _rng.reset(); }
 
@@ -78,7 +81,7 @@ public:
   { return _log_p == rhs._log_p && _rng == rhs._rng;  }
 #endif
 private:
-  uniform_01<base_type, RealType> _rng;
+  adaptor_type _rng;
   RealType _p;
   RealType _log_p;
 };

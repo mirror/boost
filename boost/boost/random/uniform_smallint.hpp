@@ -170,6 +170,7 @@ private:
 #endif
 
 public:
+  typedef uniform_smallint<UniformRandomNumberGenerator, IntType> adaptor_type;
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
@@ -184,6 +185,7 @@ public:
 
   result_type min() const { return _impl.min(); }
   result_type max() const { return _impl.max(); }
+  adaptor_type& adaptor() { return *this; }
   base_type& base() const { return _impl.base(); }
   void reset() { }
 
