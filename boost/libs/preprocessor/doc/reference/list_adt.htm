@@ -1,0 +1,111 @@
+<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE><BODY bgcolor="#FFFFFF">
+
+<a href="index.htm"><IMG height=86 alt="c++boost.gif (8819 bytes)" src="../../../../c++boost.gif" width=277 align=center></a>
+
+<hr>
+
+<H1>#include &lt;<a href="../../../../boost/preprocessor/list/adt.hpp">boost/preprocessor/list/adt.hpp</a>&gt;</H1>
+
+<hr>
+
+<H2><a name="BOOST_PP_LIST_CONS">#define BOOST_PP_LIST_CONS</a>(H,T)</H2>
+ <P>List constructor.</P>
+
+<P>Lists are build using list constructors <a href="list_adt.htm#BOOST_PP_LIST_NIL">BOOST_PP_LIST_NIL</a> and
+<a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(). For example,</P>
+
+<PRE>
+  <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(1,
+  <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(2,
+  <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(3,
+  <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(4,
+  <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(5,
+  <a href="list_adt.htm#BOOST_PP_LIST_NIL">BOOST_PP_LIST_NIL</a>)))))
+</PRE>
+
+<P>Short lists can also be build from tuples:</P>
+
+<PRE>
+  <a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(5,(1,2,3,4,5))
+</PRE>
+
+<P>Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.</P>
+
+<hr>
+
+<H2><a name="BOOST_PP_LIST_NIL">#define BOOST_PP_LIST_NIL</a></H2>
+ <P>List nil constructor.</P>
+
+<H3>See</H3>
+<UL>
+  <LI><a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>()
+</UL>
+
+<hr>
+
+<H2><a name="BOOST_PP_LIST_IS_CONS">#define BOOST_PP_LIST_IS_CONS</a>(L)</H2>
+ <P>Expands to 1 if the list is not nil and 0 otherwise.</P>
+
+<H3>See</H3>
+<UL>
+  <LI><a href="list_adt.htm#BOOST_PP_LIST_IS_NIL">BOOST_PP_LIST_IS_NIL</a>()
+</UL>
+
+<hr>
+
+<H2><a name="BOOST_PP_LIST_IS_NIL">#define BOOST_PP_LIST_IS_NIL</a>(L)</H2>
+ <P>Expands to 1 if the list is nil and 0 otherwise.</P>
+
+<H3>See</H3>
+<UL>
+  <LI><a href="list_adt.htm#BOOST_PP_LIST_IS_CONS">BOOST_PP_LIST_IS_CONS</a>()
+</UL>
+
+<hr>
+
+<H2><a name="BOOST_PP_LIST_FIRST">#define BOOST_PP_LIST_FIRST</a>(L)</H2>
+ <P>Expands to the first element of the list. The list must not be nil.</P>
+
+<P>For example,</P>
+
+<PRE>
+  <a href="list_adt.htm#BOOST_PP_LIST_FIRST">BOOST_PP_LIST_FIRST</a>(<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(5,(1,2,3,4,5)))
+</PRE>
+
+<P>expands to 1.</P>
+
+<H3>See</H3>
+<UL>
+  <LI><a href="list_adt.htm#BOOST_PP_LIST_REST">BOOST_PP_LIST_REST</a>()
+</UL>
+
+<hr>
+
+<H2><a name="BOOST_PP_LIST_REST">#define BOOST_PP_LIST_REST</a>(L)</H2>
+ <P>Expands to a list of all but the first element of the list. The list must not be nil.</P>
+
+<P>For example,</P>
+
+<PRE>
+  <a href="list_adt.htm#BOOST_PP_LIST_REST">BOOST_PP_LIST_REST</a>(<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(5,(1,2,3,4,5)))
+</PRE>
+
+<P>expands to a list containing 2, 3, 4 and 5.</P>
+
+<H3>See</H3>
+<UL>
+  <LI><a href="list_adt.htm#BOOST_PP_LIST_FIRST">BOOST_PP_LIST_FIRST</a>()
+</UL>
+
+<hr>
+
+<p>(C) Copyright Housemarque Oy 2002</p>
+
+<p>Permission to copy, use, modify, sell and distribute this document is granted
+provided this copyright notice appears in all copies. This document is provided
+"as is" without express or implied warranty, and with no claim as to its suitability
+for any purpose.</p>
+
+<p>Generated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+
+</BODY></HTML>

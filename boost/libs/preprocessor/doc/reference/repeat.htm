@@ -1,0 +1,51 @@
+<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE><BODY bgcolor="#FFFFFF">
+
+<a href="index.htm"><IMG height=86 alt="c++boost.gif (8819 bytes)" src="../../../../c++boost.gif" width=277 align=center></a>
+
+<hr>
+
+<H1>#include &lt;<a href="../../../../boost/preprocessor/repeat.hpp">boost/preprocessor/repeat.hpp</a>&gt;</H1>
+
+<hr>
+
+<H2><a name="BOOST_PP_REPEAT">#define BOOST_PP_REPEAT</a>(N,M,P)</H2>
+ <P>Repeats the macro M(I,P) for I = [0,N-1[.</P>
+
+<P>In other words, expands to the sequence:</P>
+
+<PRE>
+  M(0,P) M(1,P) ... M(N-1,P)
+</PRE>
+
+<H3>2D and 3D repetition</H3>
+
+<P>2D and 3D repetition are supported with the <a href="repeat_2nd.htm#BOOST_PP_REPEAT_2ND">BOOST_PP_REPEAT_2ND</a>() and
+<a href="repeat_3rd.htm#BOOST_PP_REPEAT_3RD">BOOST_PP_REPEAT_3RD</a>() macros.</P>
+
+<H3>Example</H3>
+<UL>
+  <LI><a href="../../example/repeat_2d.c">repeat_2d.c</a>
+</UL>
+
+<H3>See</H3>
+<UL>
+  <LI><a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>()
+  <LI><a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>
+</UL>
+
+<hr>
+
+<H2><a name="BOOST_PREPROCESSOR_REPEAT">#define BOOST_PREPROCESSOR_REPEAT</a>(N,M,P)</H2>
+ <P>Obsolete. Use <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>().</P> 
+<hr>
+
+<p>(C) Copyright Housemarque Oy 2002</p>
+
+<p>Permission to copy, use, modify, sell and distribute this document is granted
+provided this copyright notice appears in all copies. This document is provided
+"as is" without express or implied warranty, and with no claim as to its suitability
+for any purpose.</p>
+
+<p>Generated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+
+</BODY></HTML>

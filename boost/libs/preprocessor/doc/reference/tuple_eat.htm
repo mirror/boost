@@ -1,0 +1,36 @@
+<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE><BODY bgcolor="#FFFFFF">
+
+<a href="index.htm"><IMG height=86 alt="c++boost.gif (8819 bytes)" src="../../../../c++boost.gif" width=277 align=center></a>
+
+<hr>
+
+<H1>#include &lt;<a href="../../../../boost/preprocessor/tuple/eat.hpp">boost/preprocessor/tuple/eat.hpp</a>&gt;</H1>
+
+<hr>
+
+<H2><a name="BOOST_PP_TUPLE_EAT">#define BOOST_PP_TUPLE_EAT</a>(N)</H2>
+ <P>Expands to a macro that eats a tuple of the specified length.</P>
+
+<P><a href="tuple_eat.htm#BOOST_PP_TUPLE_EAT">BOOST_PP_TUPLE_EAT</a>() is designed to be used with <a href="if.htm#BOOST_PP_IF">BOOST_PP_IF</a>() like
+<a href="empty.htm#BOOST_PP_EMPTY">BOOST_PP_EMPTY</a>().</P>
+
+<P>For example,</P>
+
+<PRE>
+  <a href="if.htm#BOOST_PP_IF">BOOST_PP_IF</a>(0,<a href="enum_params.htm#BOOST_PP_ENUM_PARAMS">BOOST_PP_ENUM_PARAMS</a>,<a href="tuple_eat.htm#BOOST_PP_TUPLE_EAT">BOOST_PP_TUPLE_EAT</a>(2))(10,P)
+</PRE>
+
+<P>expands to nothing.</P>
+
+<hr>
+
+<p>(C) Copyright Housemarque Oy 2002</p>
+
+<p>Permission to copy, use, modify, sell and distribute this document is granted
+provided this copyright notice appears in all copies. This document is provided
+"as is" without express or implied warranty, and with no claim as to its suitability
+for any purpose.</p>
+
+<p>Generated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+
+</BODY></HTML>

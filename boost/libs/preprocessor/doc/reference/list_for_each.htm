@@ -1,0 +1,44 @@
+<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE><BODY bgcolor="#FFFFFF">
+
+<a href="index.htm"><IMG height=86 alt="c++boost.gif (8819 bytes)" src="../../../../c++boost.gif" width=277 align=center></a>
+
+<hr>
+
+<H1>#include &lt;<a href="../../../../boost/preprocessor/list/for_each.hpp">boost/preprocessor/list/for_each.hpp</a>&gt;</H1>
+
+<hr>
+
+<H2><a name="BOOST_PP_LIST_FOR_EACH">#define BOOST_PP_LIST_FOR_EACH</a>(F,P,L)</H2>
+ <P>Repeats F(R,P,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,I)) for each I = [0,<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(L)[.</P>
+
+<P>In other words, expands to the sequence:</P>
+
+<PRE>
+  F(R,P,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,0))
+  F(R,P,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,1))
+  ...
+  F(R,P,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(L))))
+</PRE>
+
+<H3>Example</H3>
+<UL>
+  <LI><a href="../../example/catch_builtin.cpp">catch_builtin.cpp</a>
+</UL>
+
+<H3>Uses</H3>
+<UL>
+  <LI><a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>()
+</UL>
+
+<hr>
+
+<p>(C) Copyright Housemarque Oy 2002</p>
+
+<p>Permission to copy, use, modify, sell and distribute this document is granted
+provided this copyright notice appears in all copies. This document is provided
+"as is" without express or implied warranty, and with no claim as to its suitability
+for any purpose.</p>
+
+<p>Generated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+
+</BODY></HTML>

@@ -1,0 +1,79 @@
+<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE><BODY bgcolor="#FFFFFF">
+
+<a href="index.htm"><IMG height=86 alt="c++boost.gif (8819 bytes)" src="../../../../c++boost.gif" width=277 align=center></a>
+
+<hr>
+
+<H1>#include &lt;<a href="../../../../boost/preprocessor/empty.hpp">boost/preprocessor/empty.hpp</a>&gt;</H1>
+
+<hr>
+
+<H2><a name="BOOST_PP_EMPTY">#define BOOST_PP_EMPTY</a>()</H2>
+ <P>Expands to nothing. Used with <a href="if.htm#BOOST_PP_IF">BOOST_PP_IF</a>() and as an unused parameter.</P>
+
+<P>Example usage as the implementation of <a href="comma_if.htm#BOOST_PP_COMMA_IF">BOOST_PP_COMMA_IF</a>(C):</P>
+
+<PRE>
+  #define <a href="comma_if.htm#BOOST_PP_COMMA_IF">BOOST_PP_COMMA_IF</a>(C)\
+    <a href="if.htm#BOOST_PP_IF">BOOST_PP_IF</a>(C,<a href="comma.htm#BOOST_PP_COMMA">BOOST_PP_COMMA</a>,<a href="empty.htm#BOOST_PP_EMPTY">BOOST_PP_EMPTY</a>)()
+</PRE>
+
+<P>Example usage as an unused macro parameter:</P>
+
+<PRE>
+  #define BOOST_PP_DEF(CV)\
+    template<class base>\
+    CV() typename implement_subscript_using_begin_subscript<base>::value_type&\
+      implement_subscript_using_begin_subscript<base>::operator[]\
+      ( index_type\
+          i\
+      ) CV()\
+    { return base::begin()[i];\
+    }
+
+  BOOST_PP_DEF(<a href="empty.htm#BOOST_PP_EMPTY">BOOST_PP_EMPTY</a>)
+  BOOST_PP_DEF(const <a href="empty.htm#BOOST_PP_EMPTY">BOOST_PP_EMPTY</a>)
+  #undef BOOST_PP_DEF
+</PRE>
+
+<P>The above expands to:</P>
+
+<PRE>
+  template<class base>
+  typename implement_subscript_using_begin_subscript<base>::value_type&
+    implement_subscript_using_begin_subscript<base>::operator[]
+    ( index_type
+        i
+    )
+  { return base::begin()[i];
+  }
+
+  template<class base>
+  const typename implement_subscript_using_begin_subscript<base>::value_type&
+    implement_subscript_using_begin_subscript<base>::operator[]
+    ( index_type
+        i
+    ) const
+  { return base::begin()[i];
+  }
+</PRE>
+
+<P>In case you wonder, the above code is part of a generalized layer for
+implementing the subscripting operators of a random access container.</P>
+
+<hr>
+
+<H2><a name="BOOST_PREPROCESSOR_EMPTY">#define BOOST_PREPROCESSOR_EMPTY</a>()</H2>
+ <P>Obsolete. Use <a href="empty.htm#BOOST_PP_EMPTY">BOOST_PP_EMPTY</a>().</P> 
+<hr>
+
+<p>(C) Copyright Housemarque Oy 2002</p>
+
+<p>Permission to copy, use, modify, sell and distribute this document is granted
+provided this copyright notice appears in all copies. This document is provided
+"as is" without express or implied warranty, and with no claim as to its suitability
+for any purpose.</p>
+
+<p>Generated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+
+</BODY></HTML>

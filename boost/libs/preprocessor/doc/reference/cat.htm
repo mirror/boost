@@ -1,0 +1,72 @@
+<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE><BODY bgcolor="#FFFFFF">
+
+<a href="index.htm"><IMG height=86 alt="c++boost.gif (8819 bytes)" src="../../../../c++boost.gif" width=277 align=center></a>
+
+<hr>
+
+<H1>#include &lt;<a href="../../../../boost/preprocessor/cat.hpp">boost/preprocessor/cat.hpp</a>&gt;</H1>
+
+<hr>
+
+<H2><a name="BOOST_PP_CAT">#define BOOST_PP_CAT</a>(X,Y)</H2>
+ <P>Delays the catenation of X and Y.</P>
+
+<P>For example,</P>
+
+<PRE>
+  #define STATIC_ASSERT(EXPR)\
+    enum\
+    { <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(static_check_,__LINE__) = (EXPR) ? 1 : -1\
+    };\
+    typedef char\
+      <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(static_assert_,__LINE__)\
+      [ <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(static_check_,__LINE__)\
+      ]
+
+  // ...
+
+  STATIC_ASSERT(sizeof(int) <= sizeof(long));
+</PRE>
+
+<P>expands to:</P>
+
+<PRE>
+  enum
+  { static_check_152 = (sizeof(int) <= sizeof(long)) ? 1 : -1
+  };
+  typedef char
+    static_assert_152
+    [ static_check_152
+    ];
+</PRE>
+
+<P>Using <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>() above lets the PP expand the __LINE__. If the above
+code would use the ## operator directly then __LINE__ would not be expanded and
+the above would expand to:</P>
+
+<PRE>
+  enum
+  { static_check___LINE__ = (sizeof(int) <= sizeof(long)) ? 1 : -1
+  };
+  typedef char
+    static_assert___LINE__
+    [ static_check___LINE__
+    ];
+</PRE>
+
+<hr>
+
+<H2><a name="BOOST_PREPROCESSOR_CAT">#define BOOST_PREPROCESSOR_CAT</a>(X,Y)</H2>
+ <P>Obsolete. Use <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>().</P> 
+<hr>
+
+<p>(C) Copyright Housemarque Oy 2002</p>
+
+<p>Permission to copy, use, modify, sell and distribute this document is granted
+provided this copyright notice appears in all copies. This document is provided
+"as is" without express or implied warranty, and with no claim as to its suitability
+for any purpose.</p>
+
+<p>Generated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+
+</BODY></HTML>

@@ -1,0 +1,48 @@
+<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE><BODY bgcolor="#FFFFFF">
+
+<a href="index.htm"><IMG height=86 alt="c++boost.gif (8819 bytes)" src="../../../../c++boost.gif" width=277 align=center></a>
+
+<hr>
+
+<H1>#include &lt;<a href="../../../../boost/preprocessor/list/transform.hpp">boost/preprocessor/list/transform.hpp</a>&gt;</H1>
+
+<hr>
+
+<H2><a name="BOOST_PP_LIST_TRANSFORM">#define BOOST_PP_LIST_TRANSFORM</a>(F,P,L)</H2>
+ <P>Applies the macro F(D,P,X) to each element X of the list producing a new list.</P>
+
+<P>In other words, <a href="list_transform.htm#BOOST_PP_LIST_TRANSFORM">BOOST_PP_LIST_TRANSFORM</a>(F,P,L) expands to same as:</P>
+
+<PRE>
+  <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(F(D,P,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,0)),
+  <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(F(D,P,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,1)),
+  ...
+  <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(F(D,P,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(L)))),
+  <a href="list_adt.htm#BOOST_PP_LIST_NIL">BOOST_PP_LIST_NIL</a>) ... ))
+</PRE>
+
+<P>For example,</P>
+
+<PRE>
+  <a href="list_transform.htm#BOOST_PP_LIST_TRANSFORM">BOOST_PP_LIST_TRANSFORM</a>(BOOST_PP_ADD_D,2,<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(2,(1,2)))
+</PRE>
+
+<P>expands to a list containing 3 and 4.</P>
+
+<H3>Uses</H3>
+<UL>
+  <LI><a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>()
+</UL>
+
+<hr>
+
+<p>(C) Copyright Housemarque Oy 2002</p>
+
+<p>Permission to copy, use, modify, sell and distribute this document is granted
+provided this copyright notice appears in all copies. This document is provided
+"as is" without express or implied warranty, and with no claim as to its suitability
+for any purpose.</p>
+
+<p>Generated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+
+</BODY></HTML>

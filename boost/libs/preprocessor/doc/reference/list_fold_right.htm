@@ -1,0 +1,59 @@
+<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE><BODY bgcolor="#FFFFFF">
+
+<a href="index.htm"><IMG height=86 alt="c++boost.gif (8819 bytes)" src="../../../../c++boost.gif" width=277 align=center></a>
+
+<hr>
+
+<H1>#include &lt;<a href="../../../../boost/preprocessor/list/fold_right.hpp">boost/preprocessor/list/fold_right.hpp</a>&gt;</H1>
+
+<hr>
+
+<H2><a name="BOOST_PP_LIST_FOLD_RIGHT">#define BOOST_PP_LIST_FOLD_RIGHT</a>(F,L,P)</H2>
+ <P>Iterates F(D,X,P) for each element X of the list L (from the right or the end of the list).</P>
+
+<P>In other words,</P>
+
+<PRE>
+  <a href="list_fold_right.htm#BOOST_PP_LIST_FOLD_RIGHT">BOOST_PP_LIST_FOLD_RIGHT</a>(F,L,P)
+</PRE>
+
+<P>expands to:</P>
+
+<PRE>
+  F
+  ( D
+  , <a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,0)
+  , ... F
+        ( D
+        , <a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,<a href="arithmetic_sub.htm#BOOST_PP_SUB">BOOST_PP_SUB</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(L),2))
+        , F
+          ( D
+          , <a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,<a href="arithmetic_sub.htm#BOOST_PP_SUB">BOOST_PP_SUB</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(L),1))
+          , P
+          )
+        ) ...
+  )
+</PRE>
+
+<H3>See</H3>
+<UL>
+  <LI><a href="list_fold_left.htm#BOOST_PP_LIST_FOLD_LEFT">BOOST_PP_LIST_FOLD_LEFT</a>()
+</UL>
+
+<H3>Uses</H3>
+<UL>
+  <LI><a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>()
+</UL>
+
+<hr>
+
+<p>(C) Copyright Housemarque Oy 2002</p>
+
+<p>Permission to copy, use, modify, sell and distribute this document is granted
+provided this copyright notice appears in all copies. This document is provided
+"as is" without express or implied warranty, and with no claim as to its suitability
+for any purpose.</p>
+
+<p>Generated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+
+</BODY></HTML>
