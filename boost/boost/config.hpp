@@ -257,6 +257,11 @@
 
 # elif defined _MSC_VER
 #   define BOOST_MSVC _MSC_VER
+
+    // turn off the warnings before we #include anything
+#   pragma warning( disable : 4786 ) // ident trunc to '255' chars in debug info
+#   pragma warning( disable : 4503 ) // warning: decorated name length exceeded
+
 #   if _MSC_VER <= 1200  // 1200 == VC++ 6.0
 #     define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #     define BOOST_NO_PRIVATE_IN_AGGREGATE
@@ -306,9 +311,6 @@
 #   else
 #     define BOOST_DECL __declspec(dllimport)
 #   endif
-
-#   pragma warning( disable : 4786 ) // ident trunc to '255' chars in debug info
-#   pragma warning( disable : 4503 ) // warning: decorated name length exceeded
 
 # endif // Microsoft (excluding Intel/EDG frontend) 
 

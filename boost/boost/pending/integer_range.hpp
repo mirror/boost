@@ -13,22 +13,13 @@
 #ifndef BOOST_INTEGER_RANGE_HPP_
 #define BOOST_INTEGER_RANGE_HPP_
 
-#if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
-#define BOOST_USE_ITERATOR_ADAPTORS
-#endif
-
-#ifdef BOOST_USE_ITERATOR_ADAPTORS
 #include <boost/pending/iterator_adaptors.hpp>
-#else
-#include <boost/pending/detail/int_iterator.hpp>
-#endif
 
 namespace boost {
 
 //=============================================================================
 // Counting Iterator and Integer Range Class
 
-#ifdef BOOST_USE_ITERATOR_ADAPTORS
 struct counting_iterator_policies : public default_iterator_policies
 {
     template <class IntegerType>
@@ -43,16 +34,12 @@ struct counting_iterator_traits {
     typedef std::ptrdiff_t difference_type;
     typedef std::random_access_iterator_tag iterator_category;
 };
-#endif
 
 template <class IntegerType>
 struct integer_range {
-#ifdef BOOST_USE_ITERATOR_ADAPTORS
     typedef iterator_adaptor<IntegerType, counting_iterator_policies,
       counting_iterator_traits<IntegerType>, IntegerType> iterator;
-#else
-    typedef int_iterator<IntegerType> iterator;
-#endif
+
     typedef iterator const_iterator;
     typedef IntegerType value_type;
     typedef std::ptrdiff_t difference_type;
@@ -78,9 +65,5 @@ protected:
 };
 
 } // namespace boost
-
-#ifndef BOOST_MSVC
-#undef BOOST_USE_ITERATOR_ADAPTORS
-#endif
 
 #endif // BOOST_INTEGER_RANGE_HPP_
