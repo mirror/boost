@@ -38,15 +38,30 @@
 namespace boost
 {
 
+// The standard library that comes with Borland C++ 5.5.1
+// defines std::exception and its members as having C calling
+// convention (-pc). When the definition of use_count_is_zero
+// is compiled with -ps, the compiler issues an error.
+// Hence, the temporary #pragma option -pc below. The version
+// check is deliberately conservative.
+
+#if defined(__BORLANDC__) && __BORLANDC__ == 0x551
+# pragma option push -pc
+#endif
+
 class use_count_is_zero: public std::exception
 {
 public:
 
     virtual char const * what() const throw()
     {
-        return "use_count_is_zero";
+		return "boost::use_count_is_zero";
     }
 };
+
+#if defined(__BORLANDC__) && __BORLANDC__ == 0x551
+# pragma option pop
+#endif
 
 class counted_base
 {
