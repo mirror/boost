@@ -10,15 +10,21 @@
  */
 
 
+#include <cstdlib> // for abort
 #include <boost/regex.hpp>
-#include <boost/concept_archetype.hpp>
+
 #if defined(BOOST_MSVC)
 // this lets us compile at warning level 4 without seeing concept-check related warnings
 #  pragma warning(disable:4100)
 #endif
+
+#include <boost/concept_archetype.hpp>
 #include <boost/concept_check.hpp>
 #include <boost/detail/workaround.hpp>
-#include <cstdlib>
+
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std{ using ::abort; }
+#endif
 
 
 int main()
@@ -71,7 +77,7 @@ int main()
    r = c_exp;
    r = r;
    r = s;
-   if((r.mark_count()) || (0 == r.max_size()) || (r.empty()) || (0 == r.size()) || (r.begin() == r.end())) abort();
+   if((r.mark_count()) || (0 == r.max_size()) || (r.empty()) || (0 == r.size()) || (r.begin() == r.end())) std::abort();
 
    r.assign(r);
    r.assign(c_exp);
