@@ -841,7 +841,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
 #ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
                 return functor_type () (*it1_, t2_);
 #else
@@ -1011,7 +1011,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
 #ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
                 return functor_type () (t1_, *it2_);
 #else
@@ -1316,7 +1316,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return functor_type () (*it_);
             }
 
@@ -1455,7 +1455,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return functor_type () (*it_);
             }
 
@@ -1789,7 +1789,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return functor_type () (*it_);
             }
 
@@ -1928,7 +1928,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return functor_type () (*it_);
             }
 
@@ -2368,7 +2368,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return dereference (iterator_category ());
             }
 
@@ -2634,7 +2634,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return dereference (iterator_category ());
             }
 
@@ -2983,7 +2983,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return functor_type () (it1_, *it2_);
             }
 
@@ -3130,7 +3130,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return functor_type () (it1_, *it2_);
             }
 
@@ -3432,7 +3432,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return functor_type () (*it1_, it2_);
             }
 
@@ -3579,7 +3579,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return functor_type () (*it1_, it2_);
             }
 
@@ -3935,7 +3935,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return dereference (iterator_category ());
             }
 
@@ -4330,7 +4330,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return dereference (iterator_category ());
             }
 
@@ -4769,7 +4769,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return dereference (iterator_category ());
             }
 
@@ -4998,7 +4998,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return dereference (iterator_category ());
             }
 

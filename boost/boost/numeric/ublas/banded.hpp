@@ -454,7 +454,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return (*this) () (it1_, it2_);
             }
 
@@ -735,7 +735,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 return (*this) () (it1_, it2_);
             }
 
@@ -1420,7 +1420,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 size_type i = index1 ();
                 size_type j = index2 ();
                 BOOST_UBLAS_CHECK (i < (*this) ().size1 (), bad_index ());
@@ -1732,7 +1732,7 @@ namespace boost { namespace numeric { namespace ublas {
 
             // Dereference
             BOOST_UBLAS_INLINE
-            reference operator * () const {
+            const_reference operator * () const {
                 size_type i = index1 ();
                 size_type j = index2 ();
                 BOOST_UBLAS_CHECK (i < (*this) ().size1 (), bad_index ());
