@@ -409,7 +409,7 @@ namespace boost {
   //===========================================================================
   // Iterator Archetype Classes
 
-  template <class T>
+  template <class T, int I = 0>
   class input_iterator_archetype
   {
   private:
@@ -418,7 +418,7 @@ namespace boost {
     typedef std::input_iterator_tag iterator_category;
     typedef T value_type;
     struct reference {
-      operator value_type() const { return static_object<T>::get(); }
+      operator const value_type&() const { return static_object<T>::get(); }
     };
     typedef const T* pointer;
     typedef std::ptrdiff_t difference_type;
