@@ -28,7 +28,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/random/uniform_smallint.hpp>
 #include <boost/random/detail/signed_unsigned_compare.hpp>
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #include <boost/type_traits/is_float.hpp>
 #endif
 
@@ -191,7 +191,8 @@ private:
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
   typedef typename detail::uniform_int<std::numeric_limits<typename UniformRandomNumberGenerator::result_type>::is_integer>::impl<UniformRandomNumberGenerator, IntType>::type impl_type;
 #else
-  typedef typename detail::uniform_int<boost::is_float<typename UniformRandomNumberGenerator::result_type>::value == false>::impl<UniformRandomNumberGenerator, IntType>::type impl_type;
+  BOOST_STATIC_CONSTANT(bool, base_float = (boost::is_float<typename UniformRandomNumberGenerator::result_type>::value == false));
+  typedef typename detail::uniform_int<base_float>::BOOST_NESTED_TEMPLATE impl<UniformRandomNumberGenerator, IntType>::type impl_type;
 #endif
 
 public:
