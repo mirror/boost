@@ -390,7 +390,50 @@ namespace detail {
         i.policies().decrement(i.iter());
   }
 
+# ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   template <bool is_pointer>
+   struct iterator_defaults_select
+   {
+       template <class Iterator,class Value>
+       struct traits
+       {
+           typedef typename boost::detail::iterator_traits<Iterator>::value_type value_type;
+           typedef typename boost::detail::iterator_traits<Iterator>::pointer pointer;
+           typedef typename boost::detail::iterator_traits<Iterator>::reference reference;
+       };
+   };
+
+   template <>
+   struct iterator_defaults_select<true>
+   {
+       template <class Iterator,class Value>
+       struct traits
+       {
+           typedef Value value_type;
+           typedef Value* pointer;
+           typedef Value& reference;
+       };
+   };
+
+   template <class Iterator,class Value>
+   struct iterator_defaults
+   {
+       enum { is_ptr = boost::is_pointer<Iterator>::value };
+       typedef iterator_defaults_select<is_ptr>::template traits<Iterator,Value> traits;
+       typedef typename traits::pointer pointer;
+       typedef typename traits::reference reference;
+   };
+# else
+   template <class Iterator,class Value>
+   struct iterator_defaults : iterator_traits<Iterator>
+   {
+       typedef typename iterator_traits<Iterator>::pointer pointer;
+       typedef typename iterator_traits<Iterator>::reference reference;
+   };
+
+# endif
 } // namespace detail
+
 
 //============================================================================
 //iterator_adaptor - Adapts a generic piece of data as an iterator. Adaptation
@@ -778,52 +821,10 @@ struct reverse_iterator_policies : public default_iterator_policies
         { return y < x; }
 };
   
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-namespace detail {
-   template <bool is_pointer>
-   struct iterator_defaults_select
-   {
-       template <class Iterator,class Value>
-       struct traits
-       {
-           typedef typename boost::detail::iterator_traits<Iterator>::value_type value_type;
-           typedef typename boost::detail::iterator_traits<Iterator>::pointer pointer;
-           typedef typename boost::detail::iterator_traits<Iterator>::reference reference;
-       };
-   };
-
-   template <>
-   struct iterator_defaults_select<true>
-   {
-       template <class Iterator,class Value>
-       struct traits
-       {
-           typedef Value value_type;
-           typedef Value* pointer;
-           typedef Value& reference;
-       };
-   };
-
-   template <class Iterator,class Value>
-   struct iterator_defaults
-   {
-       enum { is_ptr = boost::is_pointer<Iterator>::value };
-       typedef iterator_defaults_select<is_ptr>::template traits<Iterator,Value> traits;
-       typedef typename traits::pointer pointer;
-       typedef typename traits::reference reference;
-   };
-}
-#endif
-
 template <class Iterator,
     class Value = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::value_type,
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::pointer,
-    class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::reference,
-#else
     class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Iterator,Value>::pointer,
     class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Iterator,Value>::reference,
-#endif
     class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::iterator_category,
     class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::difference_type
          >
@@ -969,25 +970,32 @@ namespace detail {
   template <class Iterator>
   struct non_bidirectional_category
   {
+# if !defined(__MWERKS__) || __MWERKS__ > 0x4000
       typedef typename reduce_to_base_class<
               std::forward_iterator_tag,
                    typename iterator_traits<Iterator>::iterator_category
       >::type type;
-
+   private:
       // For some reason, putting this assertion in filter_iterator_generator fails inexplicably under MSVC
       BOOST_STATIC_ASSERT((!boost::is_convertible<type*, std::bidirectional_iterator_tag*>::value));
+# else
+      // is_convertible doesn't work with MWERKS
+      typedef typename iterator_traits<Iterator>::iterator_category input_category;
+      typedef typename if_true<(
+          boost::is_same<input_category,std::random_access_iterator_tag>::value
+          || boost::is_same<input_category,std::bidirectional_iterator_tag>::value
+        )>::template then<
+          std::forward_iterator_tag,
+          input_category
+      >::type type;
+# endif
   };
 }
 
 template <class Predicate, class Iterator, 
     class Value = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::value_type,
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::pointer,
-    class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::reference,
-#else
-    class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Iterator,Value>::pointer,
     class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Iterator,Value>::reference,
-#endif
+    class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Iterator,Value>::pointer,
     class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::non_bidirectional_category<Iterator>::type,
     class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::difference_type
          >
