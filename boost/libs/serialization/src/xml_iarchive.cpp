@@ -12,8 +12,6 @@
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
-#include <istream>
-
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
@@ -27,7 +25,6 @@
 #include <boost/archive/xml_iarchive.hpp>
 
 // explicitly instantiate for this type of xml stream
-#include <boost/archive/impl/basic_text_iprimitive.ipp>
 #include <boost/archive/impl/basic_xml_iarchive.ipp>
 #include <boost/archive/impl/xml_iarchive_impl.ipp>
 #include <boost/archive/impl/archive_pointer_iserializer.ipp>
@@ -35,7 +32,6 @@
 namespace boost {
 namespace archive {
 
-template class basic_text_iprimitive<std::istream> ;
 template class basic_xml_iarchive<xml_iarchive> ;
 template class xml_iarchive_impl<xml_iarchive> ;
 template class detail::archive_pointer_iserializer<xml_iarchive> ;

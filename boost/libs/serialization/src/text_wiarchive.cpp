@@ -15,11 +15,9 @@
 BOOST_STATIC_ASSERT(false);
 #else
 
-#include <istream>
 #include <boost/archive/text_wiarchive.hpp>
 
 // explicitly instantiate for this type of text stream
-#include <boost/archive/impl/basic_text_iprimitive.ipp>
 #include <boost/archive/impl/basic_text_iarchive.ipp>
 #include <boost/archive/impl/text_wiarchive_impl.ipp>
 #include <boost/archive/impl/archive_pointer_iserializer.ipp>
@@ -27,7 +25,6 @@ BOOST_STATIC_ASSERT(false);
 namespace boost {
 namespace archive {
 
-template class basic_text_iprimitive<std::wistream> ;
 template class basic_text_iarchive<text_wiarchive> ;
 template class text_wiarchive_impl<text_wiarchive> ;
 template class detail::archive_pointer_iserializer<text_wiarchive> ;

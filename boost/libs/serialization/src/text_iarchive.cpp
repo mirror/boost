@@ -8,12 +8,9 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <istream>
-
 #include <boost/archive/text_iarchive.hpp>
 
 // explicitly instantiate for this type of text stream
-#include <boost/archive/impl/basic_text_iprimitive.ipp>
 #include <boost/archive/impl/basic_text_iarchive.ipp>
 #include <boost/archive/impl/text_iarchive_impl.ipp>
 #include <boost/archive/impl/archive_pointer_iserializer.ipp>
@@ -21,7 +18,6 @@
 namespace boost {
 namespace archive {
 
-template class basic_text_iprimitive<std::istream> ;
 template class basic_text_iarchive<text_iarchive> ;
 template class text_iarchive_impl<text_iarchive> ;
 template class detail::archive_pointer_iserializer<text_iarchive> ;

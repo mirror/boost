@@ -12,11 +12,8 @@
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
-#include <ostream>
-
 #include <boost/archive/xml_oarchive.hpp>
 
-#include <boost/archive/impl/basic_text_oprimitive.ipp>
 #include <boost/archive/impl/basic_xml_oarchive.ipp>
 #include <boost/archive/impl/xml_oarchive_impl.ipp>
 #include <boost/archive/impl/archive_pointer_oserializer.ipp>
@@ -25,7 +22,6 @@ namespace boost {
 namespace archive {
 
 // explicitly instantiate for this type of xml stream
-template class basic_text_oprimitive<std::ostream> ;
 template class basic_xml_oarchive<xml_oarchive> ;
 template class xml_oarchive_impl<xml_oarchive> ;
 template class detail::archive_pointer_oserializer<xml_oarchive> ;

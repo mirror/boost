@@ -15,19 +15,15 @@
 BOOST_STATIC_ASSERT(false);
 #else
 
-#include <ostream>
-
 #include <boost/archive/text_woarchive.hpp>
 
 // explicitly instantiate for this type of text stream
-#include <boost/archive/impl/basic_text_oprimitive.ipp>
 #include <boost/archive/impl/text_woarchive_impl.ipp>
 #include <boost/archive/impl/archive_pointer_oserializer.ipp>
 
 namespace boost {
 namespace archive {
 
-template class basic_text_oprimitive<std::wostream> ;
 template class text_woarchive_impl<text_woarchive> ;
 template class detail::archive_pointer_oserializer<text_woarchive> ;
 

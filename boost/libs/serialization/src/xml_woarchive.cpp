@@ -13,10 +13,8 @@
 BOOST_STATIC_ASSERT(false);
 #else
 
-#include <ostream>
 #include <boost/archive/xml_woarchive.hpp>
 
-#include <boost/archive/impl/basic_text_oprimitive.ipp>
 #include <boost/archive/impl/basic_xml_oarchive.ipp>
 #include <boost/archive/impl/xml_woarchive_impl.ipp>
 #include <boost/archive/impl/archive_pointer_oserializer.ipp>
@@ -25,7 +23,6 @@ namespace boost {
 namespace archive {
 
 // explicitly instantiate for this type of xml stream
-template class basic_text_oprimitive<std::wostream> ;
 template class basic_xml_oarchive<xml_woarchive> ;
 template class xml_woarchive_impl<xml_woarchive> ;
 template class detail::archive_pointer_oserializer<xml_woarchive> ;

@@ -13,7 +13,6 @@
 BOOST_STATIC_ASSERT(false);
 #else
 
-#include <istream>
 #include <boost/detail/workaround.hpp>
 
 #if (defined _MSC_VER) && (_MSC_VER == 1200)
@@ -30,7 +29,6 @@ BOOST_STATIC_ASSERT(false);
 #include <boost/archive/xml_wiarchive.hpp>
 
 // explicitly instantiate for this type of xml stream
-#include <boost/archive/impl/basic_text_iprimitive.ipp>
 #include <boost/archive/impl/basic_xml_iarchive.ipp>
 #include <boost/archive/impl/xml_wiarchive_impl.ipp>
 #include <boost/archive/impl/archive_pointer_iserializer.ipp>
@@ -38,7 +36,6 @@ BOOST_STATIC_ASSERT(false);
 namespace boost {
 namespace archive {
 
-template class basic_text_iprimitive<std::wistream> ;
 template class basic_xml_iarchive<xml_wiarchive> ;
 template class xml_wiarchive_impl<xml_wiarchive> ;
 template class detail::archive_pointer_iserializer<xml_wiarchive> ;
