@@ -111,11 +111,15 @@ namespace boost { namespace program_options {
         */
         basic_command_line_parser(int argc, charT* argv[]);
 
+        /** Sets options descriptions to use. */
         basic_command_line_parser& options(const options_description& desc);
+        /** Sets positional options description to use. */
         basic_command_line_parser& positional(
             const positional_options_description& desc);
 
+        /** Sets the command line style. */
         basic_command_line_parser& style(int);
+        /** Sets the extra parsers. */
         basic_command_line_parser& extra_parser(ext_parser);
         
         basic_parsed_options<charT> run() const;
