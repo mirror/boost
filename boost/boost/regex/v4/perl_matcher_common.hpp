@@ -103,7 +103,9 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match()
 #ifdef BOOST_REGEX_NON_RECURSIVE
    save_state_init init(&m_stack_base, &m_backup_state);
    used_block_count = BOOST_REGEX_MAX_BLOCKS;
+#if !defined(BOOST_NO_EXCEPTIONS)
    try{
+#endif
 #endif
 
    // reset our state machine:
@@ -119,7 +121,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match()
       return false;
    return m_result[0].second == last;
 
-#ifdef BOOST_REGEX_NON_RECURSIVE
+#if defined(BOOST_REGEX_NON_RECURSIVE) && !defined(BOOST_NO_EXCEPTIONS)
    }
    catch(...)
    {
@@ -164,7 +166,9 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find()
 #ifdef BOOST_REGEX_NON_RECURSIVE
    save_state_init init(&m_stack_base, &m_backup_state);
    used_block_count = BOOST_REGEX_MAX_BLOCKS;
+#if !defined(BOOST_NO_EXCEPTIONS)
    try{
+#endif
 #endif
 
    state_count = 0;
@@ -211,7 +215,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find()
    matcher_proc_type proc = s_find_vtable[type];
    return (this->*proc)();
 
-#ifdef BOOST_REGEX_NON_RECURSIVE
+#if defined(BOOST_REGEX_NON_RECURSIVE) && !defined(BOOST_NO_EXCEPTIONS)
    }
    catch(...)
    {
