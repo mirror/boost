@@ -36,6 +36,7 @@ struct list1_c
         >
 {
     typedef list1_c type;
+    typedef T value_type;
 };
 
 #else
@@ -58,6 +59,7 @@ struct BOOST_PP_CAT(BOOST_PP_CAT(list,i),_c)
         >
 {
     typedef BOOST_PP_CAT(BOOST_PP_CAT(list,i),_c) type;
+    typedef T value_type;
 };
 
 #   undef MPL_AUX_LIST_C_TAIL

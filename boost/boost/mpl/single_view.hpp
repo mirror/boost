@@ -25,8 +25,8 @@ template<
     >
 struct single_view
     : iterator_range<
-          aux::single_element_iter<T,0>
-        , aux::single_element_iter<T,1>
+          aux::sel_iter<T,0>
+        , aux::sel_iter<T,1>
         >
 {
 };

@@ -18,24 +18,37 @@
 
 #include <boost/mpl/replace_if.hpp>
 #include <boost/mpl/same_as.hpp>
-#include <boost/mpl/aux_/common_name_wknd.hpp>
-#include <boost/mpl/aux_/na_spec.hpp>
+#include <boost/mpl/aux_/inserter_algorithm.hpp>
 
 namespace boost { namespace mpl {
 
-BOOST_MPL_AUX_COMMON_NAME_WKND(replace)
+namespace aux {
 
 template<
-      typename BOOST_MPL_AUX_NA_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_NA_PARAM(OldType)
-    , typename BOOST_MPL_AUX_NA_PARAM(NewType)
+      typename Sequence
+    , typename OldType
+    , typename NewType
+    , typename Inserter 
     >
-struct replace
-    : replace_if< Sequence, same_as<OldType>, NewType >
+struct replace_impl
+    : replace_if_impl< Sequence, same_as<OldType>, NewType, Inserter >
 {
 };
 
-BOOST_MPL_AUX_NA_SPEC(3, replace)
+template<
+      typename Sequence
+    , typename OldType
+    , typename NewType
+    , typename Inserter 
+    >
+struct reverse_replace_impl
+    : reverse_replace_if_impl< Sequence, same_as<OldType>, NewType, Inserter >
+{
+};
+
+} // namespace aux
+
+BOOST_MPL_AUX_INSERTER_ALGORITHM_DEF(4, replace)
 
 }}
 

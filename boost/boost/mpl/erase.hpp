@@ -25,14 +25,14 @@ namespace boost { namespace mpl {
 
 template<
       typename BOOST_MPL_AUX_NA_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_NA_PARAM(First_or_T)
+    , typename BOOST_MPL_AUX_NA_PARAM(First)
     , typename BOOST_MPL_AUX_NA_PARAM(Last)
     >
 struct erase
     : erase_impl< typename sequence_tag<Sequence>::type >
-        ::template apply< Sequence,First_or_T,Last >
+        ::template apply< Sequence,First,Last >
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,erase,(Sequence,First_or_T,Last))
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,erase,(Sequence,First,Last))
 };
 
 BOOST_MPL_AUX_NA_SPEC(3,erase)

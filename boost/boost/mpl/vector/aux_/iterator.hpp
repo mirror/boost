@@ -22,7 +22,6 @@
 #include <boost/mpl/distance_fwd.hpp>
 #include <boost/mpl/next.hpp>
 #include <boost/mpl/prior.hpp>
-#include <boost/mpl/aux_/iterator_names.hpp>
 #include <boost/mpl/aux_/nttp_decl.hpp>
 #include <boost/mpl/aux_/value_wknd.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
@@ -114,6 +113,15 @@ template<> struct advance_impl<aux::v_iter_tag>
     };
 };
 
+template<> struct distance_impl<aux::v_iter_tag>
+{
+    template< typename Iter1, typename Iter2 > struct apply
+    {
+        enum { pos1_ = Iter1::pos_, pos2_ = Iter2::pos_ };
+        typedef long_<( pos2_ - pos1_ )> type;
+        BOOST_STATIC_CONSTANT(long, value = ( pos2_ - pos1_ ));
+    };
+};
 
 #endif
 

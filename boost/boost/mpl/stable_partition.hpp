@@ -3,6 +3,7 @@
 #define BOOST_MPL_STABLE_PARTITION_HPP_INCLUDED
 
 // Copyright Eric Friedman 2002-2003
+// Copyright Aleksey Gurtovoy 2004
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -14,32 +15,60 @@
 // $Date$
 // $Revision$
 
+#include <boost/mpl/fold.hpp>
+#include <boost/mpl/reverse_fold.hpp>
+#include <boost/mpl/protect.hpp>
 #include <boost/mpl/aux_/partition_op.hpp>
-#include <boost/mpl/clear.hpp>
-#include <boost/mpl/reverse_iter_fold.hpp>
-#include <boost/mpl/pair.hpp>
-#include <boost/mpl/aux_/na_spec.hpp>
-#include <boost/mpl/aux_/lambda_support.hpp>
+#include <boost/mpl/aux_/inserter_algorithm.hpp>
+#include <boost/mpl/aux_/na.hpp>
 
 namespace boost { namespace mpl {
 
+namespace aux {
+ 
 template <
-      typename BOOST_MPL_AUX_NA_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_NA_PARAM(Predicate)
+      typename Sequence
+    , typename Pred
+    , typename In
+    , typename In2
+    , typename In1 = typename if_na<In,In2>::type
     >
-struct stable_partition
-{
-    typedef typename clear<Sequence>::type cleared_;
-    typedef typename reverse_iter_fold<
+struct stable_partition_impl
+    : fold<
           Sequence
-        , pair< cleared_,cleared_ >
-        , aux::partition_op<Predicate>
-        >::type type;
-
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(2,stable_partition,(Sequence,Predicate))
+        , pair< typename In1::state, typename In2::state >
+        , protect< partition_op< 
+              Pred
+            , typename In1::operation
+            , typename In2::operation
+            > >
+        >
+{
 };
 
-BOOST_MPL_AUX_NA_SPEC(2, stable_partition)
+template <
+      typename Sequence
+    , typename Pred
+    , typename In
+    , typename In2
+    , typename In1 = typename if_na<In,In2>::type
+    >
+struct reverse_stable_partition_impl
+    : reverse_fold<
+          Sequence
+        , pair< typename In1::state, typename In2::state >
+        , protect< partition_op< 
+              Pred
+            , typename In1::operation
+            , typename In2::operation
+            > >
+        >
+{
+};
+
+} // namespace aux
+
+BOOST_MPL_AUX_INSERTER_ALGORITHM_DEF(4, stable_partition)
 
 }}
 

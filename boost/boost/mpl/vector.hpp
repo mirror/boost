@@ -24,17 +24,17 @@
 #   include <boost/preprocessor/stringize.hpp>
 
 #if !defined(BOOST_NEEDS_TOKEN_PASTING_OP_FOR_TOKENS_JUXTAPOSING)
-#   define AUX778076_HEADER \
+#   define AUX778076_VECTOR_HEADER \
     BOOST_PP_CAT(vector, BOOST_MPL_LIMIT_VECTOR_SIZE).hpp \
     /**/
 #else
-#   define AUX778076_HEADER \
+#   define AUX778076_VECTOR_HEADER \
     BOOST_PP_CAT(vector, BOOST_MPL_LIMIT_VECTOR_SIZE)##.hpp \
     /**/
 #endif
 
-#   include BOOST_PP_STRINGIZE(boost/mpl/vector/AUX778076_HEADER)
-#   undef AUX778076_HEADER
+#   include BOOST_PP_STRINGIZE(boost/mpl/vector/AUX778076_VECTOR_HEADER)
+#   undef AUX778076_VECTOR_HEADER
 #endif
 
 #include <boost/mpl/aux_/config/use_preprocessed.hpp>

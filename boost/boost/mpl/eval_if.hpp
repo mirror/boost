@@ -18,6 +18,7 @@
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 #include <boost/mpl/aux_/config/msvc.hpp>
+#include <boost/mpl/aux_/config/gcc.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 
 namespace boost { namespace mpl {
@@ -28,13 +29,16 @@ template<
     , typename BOOST_MPL_AUX_NA_PARAM(F2)
     >
 struct eval_if
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-    : if_<C,F1,F2>::type
-{
-#else
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
+     || ( BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, >= 0x0300) \
+        && BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0304)) \
+        )
 {
     typedef typename if_<C,F1,F2>::type f_;
     typedef typename f_::type type;
+#else
+    : if_<C,F1,F2>::type
+{
 #endif
     BOOST_MPL_AUX_LAMBDA_SUPPORT(3,eval_if,(C,F1,F2))
 };
@@ -47,13 +51,16 @@ template<
     , typename F2
     >
 struct eval_if_c
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-    : if_c<C,F1,F2>::type
-{
-#else
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
+     || ( BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, >= 0x0300) \
+        && BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0304)) \
+        )
 {
     typedef typename if_c<C,F1,F2>::type f_;
     typedef typename f_::type type;
+#else
+    : if_c<C,F1,F2>::type
+{
 #endif
 };
 

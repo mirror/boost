@@ -19,13 +19,10 @@
 #include <boost/mpl/transform.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/if.hpp>
-#include <boost/mpl/aux_/common_name_wknd.hpp>
-#include <boost/mpl/aux_/na_spec.hpp>
+#include <boost/mpl/aux_/inserter_algorithm.hpp>
 #include <boost/mpl/aux_/config/forwarding.hpp>
 
 namespace boost { namespace mpl {
-
-BOOST_MPL_AUX_COMMON_NAME_WKND(replace_if)
 
 namespace aux {
 
@@ -51,16 +48,15 @@ struct replace_if_op
     };
 };
 
-} // namespace aux
 
 template<
-      typename BOOST_MPL_AUX_NA_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_NA_PARAM(Predicate)
-    , typename BOOST_MPL_AUX_NA_PARAM(T)
-    , typename BOOST_MPL_AUX_NA_PARAM(Inserter)
+      typename Sequence
+    , typename Predicate
+    , typename T
+    , typename Inserter
     >
-struct replace_if
-    : transform1<
+struct replace_if_impl
+    : transform1_impl<
           Sequence
         , protect< aux::replace_if_op<Predicate,T> >
         , Inserter
@@ -68,7 +64,24 @@ struct replace_if
 {
 };
 
-BOOST_MPL_AUX_NA_SPEC(3, replace_if)
+template<
+      typename Sequence
+    , typename Predicate
+    , typename T
+    , typename Inserter
+    >
+struct reverse_replace_if_impl
+    : reverse_transform1_impl<
+          Sequence
+        , protect< aux::replace_if_op<Predicate,T> >
+        , Inserter
+        >
+{
+};
+
+} // namespace aux
+
+BOOST_MPL_AUX_INSERTER_ALGORITHM_DEF(4, replace_if)
 
 }}
 

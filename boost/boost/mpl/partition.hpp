@@ -3,6 +3,7 @@
 #define BOOST_MPL_PARTITION_HPP_INCLUDED
 
 // Copyright Eric Friedman 2002-2003
+// Copyright Aleksey Gurtovoy 2004
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -14,32 +15,38 @@
 // $Date$
 // $Revision$
 
-#include <boost/mpl/aux_/partition_op.hpp>
-#include <boost/mpl/clear.hpp>
-#include <boost/mpl/iter_fold.hpp>
-#include <boost/mpl/pair.hpp>
-#include <boost/mpl/aux_/na_spec.hpp>
-#include <boost/mpl/aux_/lambda_support.hpp>
+#include <boost/mpl/stable_partition.hpp>
+#include <boost/mpl/aux_/inserter_algorithm.hpp>
 
 namespace boost { namespace mpl {
 
+namespace aux {
+ 
 template <
-      typename BOOST_MPL_AUX_NA_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_NA_PARAM(Predicate)
+      typename Sequence
+    , typename Pred
+    , typename In1
+    , typename In2
     >
-struct partition
+struct partition_impl
+    : stable_partition_impl<Sequence,Pred,In1,In2>
 {
-    typedef typename clear<Sequence>::type cleared_;
-    typedef typename iter_fold<
-          Sequence
-        , pair< cleared_,cleared_ >
-        , aux::partition_op<Predicate>
-        >::type type;
-
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(2,partition,(Sequence,Predicate))
 };
 
-BOOST_MPL_AUX_NA_SPEC(2, partition)
+template <
+      typename Sequence
+    , typename Pred
+    , typename In1
+    , typename In2
+    >
+struct reverse_partition_impl
+    : reverse_stable_partition_impl<Sequence,Pred,In1,In2>
+{
+};
+
+} // namespace aux
+
+BOOST_MPL_AUX_INSERTER_ALGORITHM_DEF(4, partition)
 
 }}
 

@@ -44,6 +44,7 @@ struct BOOST_PP_CAT(BOOST_PP_CAT(vector,i_),_c)
         >
 {
     typedef BOOST_PP_CAT(BOOST_PP_CAT(vector,i_),_c) type;
+    typedef T value_type;
 };
 #endif
 
@@ -63,6 +64,8 @@ template<
 struct BOOST_PP_CAT(BOOST_PP_CAT(vector,i_),_c)
     : BOOST_PP_CAT(vector,i_)< BOOST_PP_REPEAT(i_,AUX778076_VECTOR_C_PARAM_FUNC,C) >
 {
+    typedef BOOST_PP_CAT(BOOST_PP_CAT(vector,i_),_c) type;
+    typedef T value_type;
 };
 
 #   undef AUX778076_VECTOR_C_PARAM_FUNC

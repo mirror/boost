@@ -14,91 +14,108 @@
 // $Date$
 // $Revision$
 
-#include <boost/mpl/apply.hpp>
-#include <boost/mpl/eval_if.hpp>
-#include <boost/mpl/reverse_fold.hpp>
-#include <boost/mpl/empty.hpp>
-#include <boost/mpl/front.hpp>
-#include <boost/mpl/identity.hpp>
 #include <boost/mpl/partition.hpp>
-#include <boost/mpl/pop_front.hpp>
-#include <boost/mpl/push_front.hpp>
-#include <boost/mpl/protect.hpp>
-#include <boost/mpl/aux_/traits_lambda_spec.hpp>
+#include <boost/mpl/copy.hpp>
+#include <boost/mpl/vector.hpp>
+#include <boost/mpl/back_inserter.hpp>
+#include <boost/mpl/front_inserter.hpp>
+#include <boost/mpl/iterator_range.hpp>
+#include <boost/mpl/joint_view.hpp>
+#include <boost/mpl/single_view.hpp>
+#include <boost/mpl/begin_end.hpp>
+#include <boost/mpl/empty.hpp>
+#include <boost/mpl/deref.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/apply.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/mpl/less.hpp>
+#include <boost/mpl/aux_/na.hpp>
 
-namespace boost { namespace mpl {
+namespace boost { namespace mpl { namespace aux {
 
-namespace aux {
+template< typename Seq, typename Pred >
+struct quick_sort;
 
-template < typename Sequence, typename Predicate > struct quick_sort;
-
-template <typename Predicate, typename Pivot>
+// agurt, 10/nov/04: for the sake of deficeint compilers 
+template< typename Pred, typename Pivot >
 struct quick_sort_pred
 {
-    template <typename T>
-    struct apply
+    template< typename T > struct apply
     {
-        typedef typename apply2< Predicate, T, Pivot >::type
-            type;
+        typedef typename apply2<Pred,T,Pivot>::type type;
     };
 };
 
-template <typename Sequence, typename Predicate>
+template< 
+      typename Seq
+    , typename Pred
+    >
 struct quick_sort_impl
 {
-private:
-
-    typedef typename front<Sequence>::type pivot_;
-    typedef typename pop_front<Sequence>::type seq_;
-
+    typedef typename begin<Seq>::type pivot;
     typedef typename partition<
-          seq_
-        , protect< quick_sort_pred<Predicate,pivot_> >
+          iterator_range< 
+              typename next<pivot>::type
+            , typename end<Seq>::type
+            >
+        , protect< aux::quick_sort_pred< Pred, typename deref<pivot>::type > >
+        , back_inserter< vector<> >
+        , back_inserter< vector<> >
         >::type partitioned;
 
-    typedef typename quick_sort<
-          typename first<partitioned>::type, Predicate
-        >::type first_part;
-    typedef typename quick_sort<
-          typename second<partitioned>::type, Predicate
-        >::type second_part;
+    typedef typename quick_sort< typename partitioned::first, Pred >::type part1;
+    typedef typename quick_sort< typename partitioned::second, Pred >::type part2;
 
-public:
-
-    typedef typename reverse_fold<
-          first_part
-        , typename push_front< second_part,pivot_ >::type
-        , push_front<_,_>
-        >::type type;
-
+    typedef joint_view< 
+              joint_view< part1, single_view< typename deref<pivot>::type > >
+            , part2
+            > type;
 };
 
-template <typename Sequence, typename Predicate>
+template< 
+      typename Seq
+    , typename Pred
+    >
 struct quick_sort
     : eval_if<
-          empty<Sequence>
-        , identity< Sequence >
-        , quick_sort_impl< Sequence,Predicate >
+          empty<Seq>
+        , identity<Seq>
+        , quick_sort_impl<Seq,Pred>
         >
 {
 };
 
-} // namespace aux
 
-template< typename Tag >
+template <
+      typename Sequence
+    , typename Pred
+    , typename In
+    >
 struct sort_impl
 {
-    template< typename Sequence, typename Predicate >
-    struct apply
-    {
-        typedef typename aux::quick_sort<
-              Sequence, Predicate
-            >::type type;
-    };
+    typedef typename quick_sort< 
+          Sequence
+        , typename if_na<Pred,less<> >::type
+        >::type result_;
+        
+    typedef typename copy<result_,In>::type type;
 };
 
-BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(2,sort_impl)
+template <
+      typename Sequence
+    , typename Pred
+    , typename In
+    >
+struct reverse_sort_impl
+{
+    typedef typename quick_sort< 
+          Sequence
+        , typename if_na<Pred,less<> >::type
+        >::type result_;
+        
+    typedef typename reverse_copy<result_,In>::type type;
+};
 
-}}
+}}}
 
 #endif // BOOST_MPL_AUX_SORT_IMPL_HPP_INCLUDED

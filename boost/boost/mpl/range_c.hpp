@@ -2,7 +2,7 @@
 #ifndef BOOST_MPL_RANGE_C_HPP_INCLUDED
 #define BOOST_MPL_RANGE_C_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2000-2002
+// Copyright Aleksey Gurtovoy 2000-2004
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -13,7 +13,6 @@
 // $Source$
 // $Date$
 // $Revision$
-
 
 #include <boost/mpl/integral_c.hpp>
 #include <boost/mpl/aux_/range_c/front.hpp>
@@ -34,13 +33,14 @@ template<
 struct range_c
 {
     typedef aux::half_open_range_tag tag;
+    typedef T value_type;
     typedef range_c type;
 
     typedef integral_c<T,Start> start;
     typedef integral_c<T,Finish> finish;
 
-    typedef rc_iter<start> begin;
-    typedef rc_iter<finish> end;
+    typedef r_iter<start> begin;
+    typedef r_iter<finish> end;
 };
 
 }}
