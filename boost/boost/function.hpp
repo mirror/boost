@@ -511,6 +511,12 @@ namespace boost {
         typedef typename Traits::arg10_type type;
       };
 
+      template<int X, int Y> 
+      struct gte
+      {
+        BOOST_STATIC_CONSTANT(bool, value = (X >= Y));
+      };
+
       template<bool IsFunction,
                typename InR, 
                typename InT1, 
@@ -533,16 +539,27 @@ namespace boost {
         typedef function_traits<InR> traits;
 
         typedef typename traits::result_type R;
-        typedef typename get_arg1_type<(traits::arity >= 1), traits>::type T1;
-        typedef typename get_arg2_type<(traits::arity >= 2), traits>::type T2;
-        typedef typename get_arg3_type<(traits::arity >= 3), traits>::type T3;
-        typedef typename get_arg4_type<(traits::arity >= 4), traits>::type T4;
-        typedef typename get_arg5_type<(traits::arity >= 5), traits>::type T5;
-        typedef typename get_arg6_type<(traits::arity >= 6), traits>::type T6;
-        typedef typename get_arg7_type<(traits::arity >= 7), traits>::type T7;
-        typedef typename get_arg8_type<(traits::arity >= 8), traits>::type T8;
-        typedef typename get_arg9_type<(traits::arity >= 9), traits>::type T9;
-        typedef typename get_arg10_type<(traits::arity >= 10), traits>::type T10;
+        typedef typename get_arg1_type<(gte<traits::arity, 1>::value), 
+                                       traits>::type T1;
+        typedef typename get_arg2_type<(gte<traits::arity, 2>::value), 
+                                       traits>::type T2;
+        typedef typename get_arg3_type<(gte<traits::arity, 3>::value), 
+                                       traits>::type T3;
+        typedef typename get_arg4_type<(gte<traits::arity, 4>::value), 
+                                       traits>::type T4;
+        typedef typename get_arg5_type<(gte<traits::arity, 5>::value), 
+                                       traits>::type T5;
+        typedef typename get_arg6_type<(gte<traits::arity, 6>::value), 
+                                       traits>::type T6;
+        typedef typename get_arg7_type<(gte<traits::arity, 7>::value), 
+                                       traits>::type T7;
+        typedef typename get_arg8_type<(gte<traits::arity, 8>::value), 
+                                       traits>::type T8;
+        typedef typename get_arg9_type<(gte<traits::arity, 9>::value), 
+                                       traits>::type T9;
+        typedef typename get_arg10_type<(gte<traits::arity, 10>::value), 
+                                        traits>::type T10;
+
 #ifndef BOOST_FUNCTION_NO_DEPRECATED
         typedef typename ct_if<(is_same<InT1, unusable>::value),
                                empty_function_policy,
