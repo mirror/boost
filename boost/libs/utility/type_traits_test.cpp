@@ -30,6 +30,7 @@ unsigned test_count = 0;
 
 #define value_test(v, x) ++test_count;\
                          if(v != x){++failures; std::cout << "checking value of " << #x << "...failed" << std::endl;}
+#define value_fail(v, x) ++test_count; ++failures; std::cout << "checking value of " << #x << "...failed" << std::endl;
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 #define type_test(v, x)  ++test_count;\
                          if(is_same<v, x>::value == false){\
@@ -438,7 +439,12 @@ int main()
    value_test(false, is_empty<int>::value)
    value_test(false, is_empty<int*>::value)
    value_test(false, is_empty<int&>::value)
+#ifdef __MWERKS__
+   // apparent compiler bug causes this to fail to compile:
+   value_fail(false, is_empty<int[2]>::value)
+#else
    value_test(false, is_empty<int[2]>::value)
+#endif
    value_test(false, is_empty<f1>::value)
    value_test(false, is_empty<mf1>::value)
    value_test(false, is_empty<UDT>::value)

@@ -1,9 +1,3 @@
-// boost::compressed_pair test program
-
-//  (C) Copyright John Maddock 2000. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
 
 #include <iostream>
 #include <typeinfo>
@@ -24,6 +18,7 @@ unsigned test_count = 0;
 
 #define value_test(v, x) ++test_count;\
                          if(v != x){++failures; std::cout << "checking value of " << #x << "...failed" << std::endl;}
+#define value_fail(v, x) ++test_count; ++failures; std::cout << "checking value of " << #x << "...failed" << std::endl;
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 #define type_test(v, x)  ++test_count;\
@@ -110,12 +105,21 @@ int main()
 
 //
 // instanciate some compressed pairs:
+#ifdef __MWERKS__
+template class compressed_pair<int, double>;
+template class compressed_pair<int, int>;
+template class compressed_pair<empty_UDT, int>;
+template class compressed_pair<int, empty_UDT>;
+template class compressed_pair<empty_UDT, empty_UDT>;
+template class compressed_pair<empty_UDT, empty_POD_UDT>;
+#else
 template class boost::compressed_pair<int, double>;
 template class boost::compressed_pair<int, int>;
 template class boost::compressed_pair<empty_UDT, int>;
 template class boost::compressed_pair<int, empty_UDT>;
 template class boost::compressed_pair<empty_UDT, empty_UDT>;
 template class boost::compressed_pair<empty_UDT, empty_POD_UDT>;
+#endif
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 //
@@ -127,12 +131,14 @@ template compressed_pair<double, int&>::compressed_pair(int&);
 template compressed_pair<double, int&>::compressed_pair(call_traits<double>::param_type,int&);
 //
 // and then arrays:
+#ifndef __MWERKS__
 #ifndef __BORLANDC__
 template call_traits<int[2]>::reference compressed_pair<double, int[2]>::second();
 #endif
 template call_traits<double>::reference compressed_pair<double, int[2]>::first();
 template compressed_pair<double, int[2]>::compressed_pair(const double&);
 template compressed_pair<double, int[2]>::compressed_pair();
+#endif // __MWERKS__
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 

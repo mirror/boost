@@ -295,37 +295,47 @@ int main()
 template <typename T, bool isarray = false>
 struct call_traits_test
 {
-   static void assert_construct(boost::call_traits<T>::param_type val);
+   typedef ::boost::call_traits<T> ct;
+   typedef typename ct::param_type param_type;
+   typedef typename ct::reference reference;
+   typedef typename ct::const_reference const_reference;
+   typedef typename ct::value_type value_type;
+   static void assert_construct(param_type val);
 };
 
 template <typename T, bool isarray>
-void call_traits_test<T, isarray>::assert_construct(boost::call_traits<T>::param_type val)
+void call_traits_test<T, isarray>::assert_construct(typename call_traits_test<T, isarray>::param_type val)
 {
    //
    // this is to check that the call_traits assertions are valid:
    T t(val);
-   boost::call_traits<T>::value_type v(t);
-   boost::call_traits<T>::reference r(t);
-   boost::call_traits<T>::const_reference cr(t);
-   boost::call_traits<T>::param_type p(t);
-   boost::call_traits<T>::value_type v2(v);
-   boost::call_traits<T>::value_type v3(r);
-   boost::call_traits<T>::value_type v4(p);
-   boost::call_traits<T>::reference r2(v);
-   boost::call_traits<T>::reference r3(r);
-   boost::call_traits<T>::const_reference cr2(v);
-   boost::call_traits<T>::const_reference cr3(r);
-   boost::call_traits<T>::const_reference cr4(cr);
-   boost::call_traits<T>::const_reference cr5(p);
-   boost::call_traits<T>::param_type p2(v);
-   boost::call_traits<T>::param_type p3(r);
-   boost::call_traits<T>::param_type p4(p);
+   value_type v(t);
+   reference r(t);
+   const_reference cr(t);
+   param_type p(t);
+   value_type v2(v);
+   value_type v3(r);
+   value_type v4(p);
+   reference r2(v);
+   reference r3(r);
+   const_reference cr2(v);
+   const_reference cr3(r);
+   const_reference cr4(cr);
+   const_reference cr5(p);
+   param_type p2(v);
+   param_type p3(r);
+   param_type p4(p);
 }
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <typename T>
 struct call_traits_test<T, true>
 {
-   static void assert_construct(boost::call_traits<T>::param_type val);
+   typedef ::boost::call_traits<T> ct;
+   typedef typename ct::param_type param_type;
+   typedef typename ct::reference reference;
+   typedef typename ct::const_reference const_reference;
+   typedef typename ct::value_type value_type;
+   static void assert_construct(param_type val);
 };
 
 template <typename T>
@@ -334,23 +344,23 @@ void call_traits_test<T, true>::assert_construct(boost::call_traits<T>::param_ty
    //
    // this is to check that the call_traits assertions are valid:
    T t;
-   boost::call_traits<T>::value_type v(t);
-   boost::call_traits<T>::value_type v5(val);
-   boost::call_traits<T>::reference r = t;
-   boost::call_traits<T>::const_reference cr = t;
-   boost::call_traits<T>::reference r2 = r;
+   value_type v(t);
+   value_type v5(val);
+   reference r = t;
+   const_reference cr = t;
+   reference r2 = r;
    #ifndef __BORLANDC__
    // C++ Builder buglet:
-   boost::call_traits<T>::const_reference cr2 = r;
+   const_reference cr2 = r;
    #endif
-   boost::call_traits<T>::param_type p(t);
-   boost::call_traits<T>::value_type v2(v);
-   boost::call_traits<T>::const_reference cr3 = cr;
-   boost::call_traits<T>::value_type v3(r);
-   boost::call_traits<T>::value_type v4(p);
-   boost::call_traits<T>::param_type p2(v);
-   boost::call_traits<T>::param_type p3(r);
-   boost::call_traits<T>::param_type p4(p);
+   param_type p(t);
+   value_type v2(v);
+   const_reference cr3 = cr;
+   value_type v3(r);
+   value_type v4(p);
+   param_type p2(v);
+   param_type p3(r);
+   param_type p4(p);
 }
 #endif //BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
