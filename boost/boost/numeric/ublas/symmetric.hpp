@@ -60,15 +60,16 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T *pointer;
         typedef F1 functor1_type;
         typedef F2 functor2_type;
-        typedef const symmetric_matrix<T, F1, F2, A> const_self_type;
         typedef symmetric_matrix<T, F1, F2, A> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
+        typedef const matrix_const_reference<const self_type> const_closure_type;
 #else
-        typedef const matrix_reference<const_self_type> const_closure_type;
+        typedef const matrix_reference<const self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
+        typedef vector<T, A> vector_temporary_type;
+        typedef matrix<T, F2, A> matrix_temporary_type;  // general sub-matrix
         typedef packed_tag storage_category;
         typedef typename F1::packed_category packed_category;
         typedef typename F2::orientation_category orientation_category;
@@ -969,11 +970,12 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
     private:
-        typedef const symmetric_adaptor<M, F> const_self_type;
         typedef symmetric_adaptor<M, F> self_type;
     public:
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef self_type closure_type;
+        typedef typename M::vector_temporary_type vector_temporary_type;
+        typedef typename M::matrix_temporary_type matrix_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  packed_proxy_tag>::storage_category storage_category;
         typedef typename F::packed_category packed_category;

@@ -49,13 +49,12 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef T *pointer;
         typedef F functor_type;
-        typedef const generalized_vector_of_vector<T, F, A> const_self_type;
         typedef generalized_vector_of_vector<T, F, A> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
+        typedef const matrix_const_reference<const self_type> const_closure_type;
 #else
-        typedef const matrix_reference<const_self_type> const_closure_type;
+        typedef const matrix_reference<const self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
         typedef typename A::value_type vector_data_value_type;

@@ -71,15 +71,16 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef T *pointer;
         typedef F functor_type;
-        typedef const matrix<T, F, A> const_self_type;
         typedef matrix<T, F, A> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
+        typedef const matrix_const_reference<const self_type> const_closure_type;
 #else
-        typedef const matrix_reference<const_self_type> const_closure_type;
+        typedef const matrix_reference<const self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
+        typedef vector<T, A> vector_temporary_type;
+        typedef self_type matrix_temporary_type;
         typedef dense_tag storage_category;
         // This could be better for performance,
         // typedef typename unknown_orientation_tag orientation_category;
@@ -1029,15 +1030,16 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         typedef T *pointer;
         typedef F functor_type;
-        typedef const vector_of_vector<T, F, A> const_self_type;
         typedef vector_of_vector<T, F, A> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
+        typedef const matrix_const_reference<const self_type> const_closure_type;
 #else
-        typedef const matrix_reference<const_self_type> const_closure_type;
+        typedef const matrix_reference<const self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
+        typedef vector<T, typename A::value_type> vector_temporary_type;
+        typedef self_type matrix_temporary_type;
         typedef dense_tag storage_category;
         // This could be better for performance,
         // typedef typename unknown_orientation_tag orientation_category;
@@ -1978,13 +1980,12 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
     private:
         typedef const T *const_pointer;
-        typedef const identity_matrix<T> const_self_type;
         typedef identity_matrix<T> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
+        typedef const matrix_const_reference<const self_type> const_closure_type;
 #else
-        typedef const matrix_reference<const_self_type> const_closure_type;
+        typedef const matrix_reference<const self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
         typedef packed_tag storage_category;
@@ -2454,13 +2455,12 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
     private:
         typedef const T *const_pointer;
-        typedef const zero_matrix<T> const_self_type;
         typedef zero_matrix<T> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
+        typedef const matrix_const_reference<const self_type> const_closure_type;
 #else
-        typedef const matrix_reference<const_self_type> const_closure_type;
+        typedef const matrix_reference<const self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
         typedef sparse_tag storage_category;
@@ -2909,13 +2909,12 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
     private:
         typedef const T *const_pointer;
-        typedef const scalar_matrix<T> const_self_type;
         typedef scalar_matrix<T> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
+        typedef const matrix_const_reference<const self_type> const_closure_type;
 #else
-        typedef const matrix_reference<const_self_type> const_closure_type;
+        typedef const matrix_reference<const self_type> const_closure_type;
 #endif
         typedef dense_tag storage_category;
         typedef unknown_orientation_tag orientation_category;
@@ -3353,15 +3352,16 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T *const_pointer;
         typedef T *pointer;
     private:
-        typedef const c_matrix<T, N, M> const_self_type;
         typedef c_matrix<T, N, M> self_type;
     public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef const matrix_const_reference<const_self_type> const_closure_type;
+        typedef const matrix_const_reference<const self_type> const_closure_type;
 #else
-        typedef const matrix_reference<const_self_type> const_closure_type;
+        typedef const matrix_reference<const self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
+        typedef c_vector<T, N * M> vector_temporary_type;     // vector able to store all elements of c_matrix
+        typedef self_type matrix_temporary_type;
         typedef dense_tag storage_category;
         // This could be better for performance,
         // typedef typename unknown_orientation_tag orientation_category;
