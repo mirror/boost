@@ -4,7 +4,7 @@
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
- * Author: Jeff Garland
+ * Author: Jeff Garland, Bart Garst
  * $Date$
  */
 
@@ -13,84 +13,6 @@
 #include "boost/date_time/testfrmwk.hpp"
 #include <iostream>
 #include <sstream>
-
-//temporary output code in the test file.  This will eventually move into the core
-//of the library...
-namespace boost { namespace gregorian {
-
-  typedef boost::date_time::period_formatter<wchar_t> wperiod_formatter;
-  typedef boost::date_time::period_formatter<char>    period_formatter;
-  
-  typedef boost::date_time::date_facet<date,wchar_t> wdate_facet;
-  typedef boost::date_time::date_facet<date,char>    date_facet;
-
-
-  template <class CharT, class TraitsT>
-  inline std::basic_ostream<CharT, TraitsT>&
-  operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::date& d) {
-    typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
-    typedef std::time_put<CharT>                std_date_facet;
-    std::ostreambuf_iterator<CharT> oitr(os);
-    if (std::has_facet<custom_date_facet>(os.getloc()))
-      std::use_facet<custom_date_facet>(os.getloc()).put(oitr, os, os.fill(), d);
-    else {
-      //instantiate a custom facet for dealing with dates since the user
-      //has not put one in the stream so far.  This is for efficiency 
-      //since we would always need to reconstruct for every date
-      //if the locale did not already exist.  Of course this will be overridden
-      //if the user imbues at some later point.  With the default settings
-      //for the facet the resulting format will be the same as the
-      //std::time_facet settings.
-      std::ostreambuf_iterator<CharT> oitr(os);
-      custom_date_facet* f = new custom_date_facet();
-      std::locale l = std::locale(os.getloc(), f);
-      os.imbue(l);
-      f->put(oitr, os, os.fill(), d);
-    }
-    return os;
-  }
-
-
-  template <class charT, class traits>
-  inline
-  std::basic_ostream<charT, traits>&
-  operator<<(std::basic_ostream<charT, traits>& os, const date_duration& dd)
-  {
-    os << dd.get_rep();
-    return os;
-  }
-
-
-  template <class CharT, class TraitsT>
-  inline std::basic_ostream<CharT, TraitsT>&
-  operator<<(std::basic_ostream<CharT, TraitsT>& os, const boost::gregorian::date_period& dp) {
-    typedef boost::date_time::date_facet<date, CharT> custom_date_facet;
-    typedef std::time_put<CharT>                std_date_facet;
-    std::ostreambuf_iterator<CharT> oitr(os);
-    if (std::has_facet<custom_date_facet>(os.getloc()))
-      std::use_facet<custom_date_facet>(os.getloc()).put(oitr, os, os.fill(), dp);
-    else {
-      //instantiate a custom facet for dealing with date periods since the user
-      //has not put one in the stream so far.  This is for efficiency 
-      //since we would always need to reconstruct for every time period
-      //if the local did not already exist.  Of course this will be overridden
-      //if the user imbues at some later point.  With the default settings
-      //for the facet the resulting format will be the same as the
-      //std::time_facet settings.
-      std::ostreambuf_iterator<CharT> oitr(os);
-      custom_date_facet* f = new custom_date_facet();
-      std::locale l = std::locale(os.getloc(), f);
-      os.imbue(l);
-      f->put(oitr, os, os.fill(), dp);
-
-    }
-    return os;
-  }
-
-
-
-} } // gregorian
-
 
 
 template<class temporal_type, typename charT>
@@ -108,7 +30,7 @@ teststreaming(std::string testname,
 }
 
 
-
+// collections for adding to facet
 const char* const month_short_names[]={"*jan*","*feb*","*mar*",
                                        "*apr*","*may*","*jun*",
                                        "*jul*","*aug*","*sep*",
@@ -131,9 +53,29 @@ std::vector<std::basic_string<char> > long_weekday_names;
 std::vector<std::basic_string<char> > short_month_names;
 std::vector<std::basic_string<char> > long_month_names;
 
+// collections of test results
+const std::wstring full_months[]={L"January",L"February",L"March",
+                                  L"April",L"May",L"June",
+                                  L"July",L"August",L"September",
+                                  L"October",L"November",L"December"};
+const std::wstring short_months[]={L"Jan",L"Feb",L"Mar",
+                                   L"Apr",L"May",L"Jun",
+                                   L"Jul",L"Aug",L"Sep",
+                                   L"Oct",L"Nov",L"Dec"};
+
+const std::wstring full_weekdays[]= {L"Sunday", L"Monday",L"Tuesday", 
+                                     L"Wednesday", L"Thursday", 
+                                     L"Friday", L"Saturday"};
+const std::wstring short_weekdays[]= {L"Sun", L"Mon",L"Tue", 
+                                      L"Wed", L"Thu", 
+                                      L"Fri", L"Sat"};
+
+//const whcar_t const 
+
 
 int main() {
-
+  using namespace boost::gregorian;
+  
   std::copy(&month_short_names[0], 
             &month_short_names[12],
             std::back_inserter(short_month_names));
@@ -150,17 +92,49 @@ int main() {
             &weekday_long_names[7],
             std::back_inserter(long_weekday_names));
 
-  using namespace boost::gregorian;
+  {
+    std::stringstream ss;
+    date d(2004,Oct,31);
+    date_period dp(d, d + days(7));
+    ss << d;
+    check("to_string & default formats match",
+        to_simple_string(d) == ss.str());
+    ss.str("");
+    ss << dp;
+    check("to_string & default formats match",
+        to_simple_string(dp) == ss.str());
+  }
 
   {
     date d(2004,Oct, 13);
-    teststreaming("widestream default classic date", d, std::wstring(L"10/13/04"));
-    teststreaming("default classic date", d, std::string("10/13/04"));
     date_period dp(d, d + days(7));
-    teststreaming("widestream default classic date period", dp, 
-                  std::wstring(L"[10/13/04/10/19/04]"));
-    teststreaming("default classic date period", dp, 
-                  std::string("[10/13/04/10/19/04]"));
+    {
+      wdate_facet* wdatefacet = new wdate_facet();
+      wdatefacet->format(wdate_facet::standard_format_specifier);
+      teststreaming("widestream default classic date", d, 
+                    std::wstring(L"10/13/04"),
+                    std::locale(std::locale::classic(), wdatefacet));
+    }
+    {
+      date_facet* datefacet = new date_facet();
+      datefacet->format(date_facet::standard_format_specifier);
+      teststreaming("default classic date", d, std::string("10/13/04"),
+                    std::locale(std::locale::classic(), datefacet));
+    }
+    {
+      wdate_facet* wdatefacet = new wdate_facet();
+      wdatefacet->format(wdate_facet::standard_format_specifier);
+      teststreaming("widestream default classic date period", dp, 
+                    std::wstring(L"[10/13/04/10/19/04]"),
+                    std::locale(std::locale::classic(), wdatefacet));
+    }
+    {
+      date_facet* datefacet = new date_facet();
+      datefacet->format(date_facet::standard_format_specifier);
+      teststreaming("default classic date period", dp, 
+                    std::string("[10/13/04/10/19/04]"),
+                    std::locale(std::locale::classic(), datefacet));
+    }
     {
       wdate_facet* wdatefacet = new wdate_facet();
       wdatefacet->format(L"%Y-%d-%b %a");
@@ -283,5 +257,62 @@ int main() {
 
   }
 
+  
+  /************* small gregorian types tests *************/ 
+  wdate_facet* small_types_facet = new wdate_facet();
+  std::locale loc = std::locale(std::locale::classic(), small_types_facet);
+
+  // greg_year test
+  greg_year gy(2004);
+  teststreaming("greg_year", gy, std::string("2004"));
+
+  // greg_month tests
+  {
+    for(int i = 0; i < 12; ++i) {
+      greg_month m(i+1); // month numbers 1-12
+      teststreaming("greg_month short", m, short_months[i], loc);
+    }
+    small_types_facet->month_format(L"%B"); // full name
+    for(int i = 0; i < 12; ++i) {
+      greg_month m(i+1); // month numbers 1-12
+      teststreaming("greg_month full", m, full_months[i], loc);
+    }
+  }
+
+  // greg_weekday tests
+  {
+    for(int i = 0; i < 7; ++i) {
+      greg_weekday gw(i); // weekday numbers 0-6
+      teststreaming("greg_weekday short", gw, short_weekdays[i], loc);
+    }
+    small_types_facet->weekday_format(L"%A"); // full name
+    for(int i = 0; i < 7; ++i) {
+      greg_weekday gw(i); // weekday numbers 0-6
+      teststreaming("greg_weekday full", gw, full_weekdays[i], loc);
+    }
+  }
+
+  // date_generator tests
+  {
+    partial_date pd(31,Oct);
+    first_kday_of_month fkd(Tuesday, Sep);
+    teststreaming("first kday", fkd, std::string("first Tue of Sep"));
+    nth_kday_of_month nkd2(nth_kday_of_month::second, Tuesday, Sep);
+    teststreaming("nth kday", nkd2, std::string("second Tue of Sep"));
+    nth_kday_of_month nkd3(nth_kday_of_month::third, Tuesday, Sep);
+    teststreaming("nth kday", nkd3, std::string("third Tue of Sep"));
+    nth_kday_of_month nkd4(nth_kday_of_month::fourth, Tuesday, Sep);
+    teststreaming("nth kday", nkd4, std::string("fourth Tue of Sep"));
+    nth_kday_of_month nkd5(nth_kday_of_month::fifth, Tuesday, Sep);
+    teststreaming("nth kday", nkd5, std::string("fifth Tue of Sep"));
+    last_kday_of_month lkd(Tuesday, Sep);
+    teststreaming("last kday", lkd, std::string("last Tue of Sep"));
+    first_kday_before fkb(Wednesday);
+    teststreaming("First before", fkb, std::string("Wed before"));
+    first_kday_after fka(Thursday);
+    teststreaming("First after", fka, std::string("Thu after"));
+  }
+
   return printTestStats();
 }
+

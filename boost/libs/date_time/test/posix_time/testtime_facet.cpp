@@ -8,7 +8,7 @@
  */
 
 #include "boost/date_time/posix_time/posix_time.hpp"
-#include "boost/date_time/time_facet.hpp"
+//#include "boost/date_time/time_facet.hpp"
 #include "boost/date_time/testfrmwk.hpp"
 #include <fstream>
 #include <iostream>
@@ -40,91 +40,6 @@ static const wchar_t* short_month_names[]=
 std::vector<std::basic_string<wchar_t> > de_short_month_names;
 std::vector<std::basic_string<wchar_t> > de_long_month_names;
 
-namespace boost { namespace gregorian {
-
-  //temporary until these are in the library
-  typedef boost::date_time::period_formatter<wchar_t> wperiod_formatter;
-  typedef boost::date_time::period_formatter<char>    period_formatter;
-  
-}}
-
-namespace boost { namespace posix_time {
-
-  //temporary until these are in the library
-  typedef boost::date_time::time_facet<ptime, wchar_t> wptime_facet;
-  typedef boost::date_time::time_facet<ptime, char>     ptime_facet;
-
-  //temporary replacements until in library
-  /*--------------------- operators ----------------------------*/
-
-  template <class CharT, class TraitsT>
-  inline 
-  std::basic_ostream<CharT, TraitsT>&
-  operator<<(std::basic_ostream<CharT, TraitsT>& os, 
-             const ptime& p) {
-    typedef boost::date_time::time_facet<ptime, CharT> custom_ptime_facet;
-    typedef std::time_put<CharT>                  std_ptime_facet;
-    std::ostreambuf_iterator<CharT> oitr(os);
-    if (std::has_facet<custom_ptime_facet>(os.getloc()))
-      std::use_facet<custom_ptime_facet>(os.getloc()).put(oitr, os, os.fill(), p);
-    else {
-      //instantiate a custom facet for dealing with times since the user
-      //has not put one in the stream so far.  This is for efficiency 
-      //since we would always need to reconstruct for every time period
-      //if the locale did not already exist.  Of course this will be overridden
-      //if the user imbues as some later point.
-      std::ostreambuf_iterator<CharT> oitr(os);
-      custom_ptime_facet* f = new custom_ptime_facet();
-      std::locale l = std::locale(os.getloc(), f);
-      os.imbue(l);
-      f->put(oitr, os, os.fill(), p);
-    }
-    return os;
-  }
-
-  template <class CharT, class TraitsT>
-  inline 
-  std::basic_ostream<CharT, TraitsT>&
-  operator<<(std::basic_ostream<CharT, TraitsT>& os, 
-             const boost::posix_time::time_period& p) {
-    typedef boost::date_time::time_facet<ptime, CharT> custom_ptime_facet;
-    typedef std::time_put<CharT>                  std_time_facet;
-    std::ostreambuf_iterator<CharT> oitr(os);
-    if (std::has_facet<custom_ptime_facet>(os.getloc())) {
-      std::use_facet<custom_ptime_facet>(os.getloc()).put(oitr, os, os.fill(), p);
-    }
-    else {
-      //instantiate a custom facet for dealing with periods since the user
-      //has not put one in the stream so far.  This is for efficiency 
-      //since we would always need to reconstruct for every time period
-      //if the local did not already exist.  Of course this will be overridden
-      //if the user imbues as some later point.
-      std::ostreambuf_iterator<CharT> oitr(os);
-      custom_ptime_facet* f = new custom_ptime_facet();
-      std::locale l = std::locale(os.getloc(), f);
-      os.imbue(l);
-      f->put(oitr, os, os.fill(), p);
-    }
-    return os;
-  }
-
-
-  //! ostream operator for posix_time::time_duration 
-  //  todo fix to use facet --  place holder for now...
-  template <class charT, class traits>
-  inline
-  std::basic_ostream<charT, traits>&
-  operator<<(std::basic_ostream<charT, traits>& os, const time_duration& td)
-  {
-    typedef boost::date_time::ostream_time_duration_formatter<time_duration, charT> duration_formatter;
-    duration_formatter::duration_put(td, os);
-    return os;
-  }
-
-  
-}}
-
-
 int main() {
   using namespace boost::gregorian;
   using namespace boost::posix_time;
@@ -139,7 +54,27 @@ int main() {
     ptime tf = t + microseconds(3);
     time_period tp(t, tf + days(7) + time_duration(1,1,1));
     time_duration td = hours(3) + minutes(2) + seconds(1) + milliseconds(9);
-
+    {
+      std::stringstream ss;
+      ss << t;
+      check("Stream and to_string formats match (ptime)", 
+          to_simple_string(t) == ss.str());
+      std::cout << t << ' ' << td << std::endl;
+      ss.str("");
+      ss << tf;
+      check("Stream and to_string formats match (ptime w/ fracsec)", 
+          to_simple_string(tf) == ss.str());
+      ss.str("");
+      ss << tp;
+      check("Stream and to_string formats match (time_period)", 
+          to_simple_string(tp) == ss.str());
+      ss.str("");
+      ss << td;
+      check("Stream and to_string formats match (time_duration)", 
+          to_simple_string(td) == ss.str());
+      std::cout << ss.str() << std::endl;
+    }
+#if 1
     std::copy(&short_month_names[0], 
               &short_month_names[12],
               std::back_inserter(de_short_month_names));
@@ -147,21 +82,39 @@ int main() {
     std::copy(&long_month_names[0], 
               &long_month_names[12],
               std::back_inserter(de_long_month_names));
-
     
-    std::wofstream ss("testoutput.txt");
-    std::locale cloc(std::locale::classic());
-    
-    //
-    ss.imbue(cloc); 
 
+    {
+      wptime_facet *timefacet = new wptime_facet(wptime_facet::standard_format);
+      teststreaming("widestream default classic time", t, 
+                    std::wstring(L"Wed Oct 13 18:01:56 2004"),
+                    std::locale(std::locale::classic(), timefacet));
+    }
+    {
+      wptime_facet *timefacet = new wptime_facet(wptime_facet::standard_format);
+      teststreaming("widestream default classic time with fractional seconds truncated", t, 
+                    std::wstring(L"Wed Oct 13 18:01:56 2004"),
+                    std::locale(std::locale::classic(), timefacet));
+    }
+    {
+      wptime_facet *timefacet = new wptime_facet(wptime_facet::standard_format);
+      teststreaming("widestream default time period with fractional seconds truncated", tp, 
+                    std::wstring(L"[Wed Oct 13 18:01:56 2004/Wed Oct 20 19:02:57 2004]"),
+                    std::locale(std::locale::classic(), timefacet));
+    }
+    {
+      wptime_facet *timefacet = new wptime_facet(wptime_facet::standard_format);
+#ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
+      teststreaming("widestream time duration", td, 
+                    std::wstring(L"03:02:01.009000000"),
+                    std::locale(std::locale::classic(), timefacet));
+#else
+      teststreaming("widestream time duration", td, 
+                    std::wstring(L"03:02:01.009000"),
+                    std::locale(std::locale::classic(), timefacet));
+#endif // BOOST_DATE_TIME_HAS_NANOSECONDS
+    }
 
-    teststreaming("widestream default classic time", t, 
-                  std::wstring(L"Wed Oct 13 18:01:56 2004"));
-    teststreaming("widestream default classic time with fractional seconds truncated", t, 
-                  std::wstring(L"Wed Oct 13 18:01:56 2004"));
-    teststreaming("widestream default time period with fractional seconds truncated", tp, 
-                  std::wstring(L"[Wed Oct 13 18:01:56 2004/Wed Oct 20 19:02:57 2004]"));
 #ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
     teststreaming("widestream time duration", td, 
                   std::wstring(L"03:02:01.009000000"));
@@ -170,14 +123,14 @@ int main() {
                   std::wstring(L"03:02:01.009000"));
 #endif // BOOST_DATE_TIME_HAS_NANOSECONDS
 
-    wptime_facet *timefacet = new wptime_facet();
-    cloc = std::locale(cloc, timefacet);
-    ss.imbue(cloc);
+    //wptime_facet *timefacet = new wptime_facet();
+    //std::locale cloc = std::locale(std::locale::classic(), timefacet);
+    //ss.imbue(cloc);
 //     ss << L"classic date:               " << d << std::endl;
 //     ss << L"classic dateperiod:         " << dp << std::endl;
-    ss << L"classic time:               " << t << std::endl;
-    ss << L"classic timefrac:           " << tf << std::endl;
-    ss << L"classic timeperiod:         " << tp << std::endl;
+    //ss << L"classic time:               " << t << std::endl;
+    //ss << L"classic timefrac:           " << tf << std::endl;
+    //ss << L"classic timeperiod:         " << tp << std::endl;
 
     {
       wptime_facet* wtimefacet = new wptime_facet(L"day: %j date: %Y-%b-%d weekday: %A time: %H:%M:%s");
@@ -326,7 +279,7 @@ int main() {
 
 
 
-  
+#endif 
   }
   catch(std::exception& e) {
     std::cout << "Caught std::exception: " << e.what() << std::endl;

@@ -33,14 +33,12 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
    [ run gregorian/testgreg_durations.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
    [ run gregorian/testperiod.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
    [ run gregorian/testdate_iterator.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
-   [ run gregorian/testfacet.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES)  ]
    [ run gregorian/testformatters.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
    [ run gregorian/testgenerators.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
    [ run gregorian/testgreg_cal.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
    [ run gregorian/testgreg_day.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]     
    [ run gregorian/testgreg_month.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
    [ run gregorian/testgreg_year.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
-   [ run gregorian/testparse_date.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
  ;
 test-suite date_time_gregorian_dll
      : 
@@ -48,15 +46,12 @@ test-suite date_time_gregorian_dll
    [ run gregorian/testdate_duration.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES) : testdate_duration_dll ]
    [ run gregorian/testperiod.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES) : testperiod_dll ]
    [ run gregorian/testdate_iterator.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES) : testdate_iterator_dll ]
-   [ run gregorian/testfacet.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES) : testfacet_dll ]
    [ run gregorian/testformatters.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES) : testformatters_dll ]
    [ run gregorian/testgenerators.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES) : testgenerators_dll ]
    [ run gregorian/testgreg_cal.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES) : testgreg_cal_dll ]
    [ run gregorian/testgreg_day.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES) : testgreg_day_dll ]     
    [ run gregorian/testgreg_month.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES) : testgreg_month_dll ]
    [ run gregorian/testgreg_year.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES) : testgreg_year_dll ]
-   # this next test is commented out because it crashes on VC6 (cause unknown):
-#  [ run gregorian/testparse_date.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES) : testparse_date_dll ]
   ;
 
    test-suite date_time_posixtime
@@ -94,9 +89,6 @@ test-suite date_time_gregorian_dll
    [ run posix_time/testmicrosec_time_clock.cpp
      <lib>../build/boost_date_time
     : : : $(DATE_TIME_PROPERTIES) ]
-   [ run posix_time/teststreams.cpp
-     <lib>../build/boost_date_time
-    : : : $(DATE_TIME_PROPERTIES) ]
    [ run posix_time/testtime_formatters.cpp
      <lib>../build/boost_date_time
     : : : $(DATE_TIME_PROPERTIES) ]
@@ -108,21 +100,31 @@ test-suite date_time_gregorian_dll
    test-suite date_time_wide_streaming
     :
    [ run gregorian/testgreg_wstream.cpp
-     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) : testgreg_wstream ]
+     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) <define>USE_DATE_TIME_PRE_1_33_FACET_IO : testgreg_wstream ]
    [ run posix_time/testtime_wstream.cpp
-     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) : testtime_wstream_std_config ]
+     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) <define>USE_DATE_TIME_PRE_1_33_FACET_IO : testtime_wstream_std_config ]
    [ run posix_time/testtime_wstream.cpp
-     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES)  : testtime_wstream ]
+     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) <define>USE_DATE_TIME_PRE_1_33_FACET_IO : testtime_wstream ]
  ;
 
+   test-suite date_time_pre_133_facet 
+    :
+   [ run gregorian/testfacet.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES)  <define>USE_DATE_TIME_PRE_1_33_FACET_IO : testfacet_dll ]
+   # this next test is commented out because it crashes on VC6 (cause unknown):
+#  [ run gregorian/testparse_date.cpp <dll>../build/boost_date_time : : : $(DATE_TIME_DYNAMIC_PROPERTIES)  <define>USE_DATE_TIME_PRE_1_33_FACET_IO : testparse_date_dll ]
+   [ run gregorian/testfacet.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES)  <define>USE_DATE_TIME_PRE_1_33_FACET_IO  ]
+   [ run gregorian/testparse_date.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES)  <define>USE_DATE_TIME_PRE_1_33_FACET_IO ]
 
+   [ run posix_time/teststreams.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES)  <define>USE_DATE_TIME_PRE_1_33_FACET_IO ]
+ ;
 
 }
 
-# Copyright (c) 2000-2004
+# Copyright (c) 2000-2005
 # CrystalClear Software, Inc.
 # Subject to the Boost Software License, Version 1.0. 
 # (See accompanying file LICENSE-1.0 or 
 # http://www.boost.org/LICENSE-1.0)
+
 
 

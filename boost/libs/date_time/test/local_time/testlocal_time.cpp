@@ -129,7 +129,7 @@ main()
       try{
         local_date_time calcop(d, td, ny_tz, local_date_time::EXCEPTION_ON_ERROR);
         check("Did not catch expected exception", false);
-      }catch(InvalidTimeLabel& i){
+      }catch(time_label_invalid& i){
         check("Caught expected exception", true);
       }catch(...){
         check("Caught unexpected exception", false);
@@ -177,7 +177,7 @@ main()
     try{
       local_date_time blt(d, h, ny_tz, true);
       check("Did not catch expected exception (DSTNotValid)", false);
-    }catch(DSTNotValid& d){
+    }catch(dst_not_valid& d){
       check(std::string("Caught expected exception (DSTNotValid) ") + d.what(), true);
     }catch(std::exception& e){
       check(std::string("Caught unexpected exception ") + e.what(), false);
@@ -185,7 +185,7 @@ main()
     try{
       local_date_time blt(date(2004,Apr,4), time_duration(2,30,0), ny_tz, true);
       check("Did not catch expected exception (Invalid_Time_Label)", false);
-    }catch(InvalidTimeLabel& e){
+    }catch(time_label_invalid& e){
       check(std::string("Caught expected exception (Invalid_Time_Label) ") + e.what(), true);
     }catch(std::exception& e){
       check(std::string("Caught unexpected exception ") + e.what(), false);
