@@ -22,7 +22,14 @@
 namespace boost {
 namespace mpl {
 
-template< typename T, T N >
+template< typename T,
+// the type of non-type template arguments may not depend on template arguments
+#if defined(BOOST_STRICT_CONFIG) || !defined(__HP_aCC) || __HP_aCC > 33900
+          T
+#else 
+    long
+#endif 
+          N >
 struct integral_c
 {
     BOOST_STATIC_CONSTANT(T, value = N);
@@ -39,8 +46,10 @@ struct integral_c
  public:
     typedef integral_c<T, next_value> next;
     typedef integral_c<T, prior_value> prior;
-#elif defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
-   || defined(__IBMCPP__) && (__IBMCPP__ <= 502 || !defined(BOOST_STRICT_CONFIG))
+#elif !defined(BOOST_STRICT_CONFIG)                             \
+    && (defined(__BORLANDC__) && __BORLANDC__ <= 0x561          \
+        || defined(__IBMCPP__) && __IBMCPP__ <= 502             \
+        || defined(__HP_aCC) && __HP_aCC <= 33900)
     typedef integral_c<T, (N + 1)> next;
     typedef integral_c<T, (N - 1)> prior;
 #else
