@@ -214,11 +214,12 @@ enum { \
 #   if !defined(BOOST_MPL_CFG_ASSERT_BROKEN_POINTER_TO_POINTER_TO_MEMBER)
 #   define BOOST_MPL_ASSERT_RELATION(x, rel, y) \
 enum { \
-      BOOST_PP_CAT(mpl_assert_rel,__LINE__) = sizeof(boost::mpl::assert_::arg rel boost::mpl::assert_::arg) \
-    , BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
+      BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
         boost::mpl::assertion_failed<(x rel y)>( \
             (boost::mpl::failed ************ ( boost::mpl::assert_relation< \
-                  boost::mpl::assert_::relations(BOOST_PP_CAT(mpl_assert_rel,__LINE__)) \
+                  boost::mpl::assert_::relations( sizeof( \
+                      boost::mpl::assert_::arg rel boost::mpl::assert_::arg \
+                    ) ) \
                 , x \
                 , y \
                 >::************)) 0 ) \
