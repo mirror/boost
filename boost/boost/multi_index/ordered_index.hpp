@@ -1,4 +1,4 @@
-/* Copyright 2003-2004 Joaquín M López Muñoz.
+/* Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -369,18 +369,18 @@ public:
 
   /* set operations */
 
-  /* no need to provide non-const versions as
-   * ordered_index::iterator==ordered_index::const_iterator
+  /* Internally, these ops rely on const_iterator being the same
+   * type as iterator.
    */
 
   template<typename CompatibleKey>
-  const_iterator find(const CompatibleKey& x)const
+  iterator find(const CompatibleKey& x)const
   {
     return make_iterator(ordered_index_find(header(),key,x,comp));
   }
 
   template<typename CompatibleKey,typename CompatibleCompare>
-  const_iterator find(
+  iterator find(
     const CompatibleKey& x,const CompatibleCompare& comp)const
   {
     return make_iterator(ordered_index_find(header(),key,x,comp));
@@ -395,63 +395,59 @@ public:
   template<typename CompatibleKey,typename CompatibleCompare>
   size_type count(const CompatibleKey& x,const CompatibleCompare& comp)const
   {
-    std::pair<const_iterator, const_iterator> p=equal_range(x,comp);
+    std::pair<iterator,iterator> p=equal_range(x,comp);
     size_type n=std::distance(p.first,p.second);
     return n;
   }
 
   template<typename CompatibleKey>
-  const_iterator lower_bound(const CompatibleKey& x)const
+  iterator lower_bound(const CompatibleKey& x)const
   {
     return make_iterator(ordered_index_lower_bound(header(),key,x,comp));
   }
 
   template<typename CompatibleKey,typename CompatibleCompare>
-  const_iterator lower_bound(
+  iterator lower_bound(
     const CompatibleKey& x,const CompatibleCompare& comp)const
   {
     return make_iterator(ordered_index_lower_bound(header(),key,x,comp));
   }
 
   template<typename CompatibleKey>
-  const_iterator upper_bound(const CompatibleKey& x)const
+  iterator upper_bound(const CompatibleKey& x)const
   {
     return make_iterator(ordered_index_upper_bound(header(),key,x,comp));
   }
 
   template<typename CompatibleKey,typename CompatibleCompare>
-  const_iterator upper_bound(
+  iterator upper_bound(
     const CompatibleKey& x,const CompatibleCompare& comp)const
   {
     return make_iterator(ordered_index_upper_bound(header(),key,x,comp));
   }
 
   template<typename CompatibleKey>
-  std::pair<const_iterator,const_iterator> equal_range(
+  std::pair<iterator,iterator> equal_range(
     const CompatibleKey& x)const
   {
     return equal_range(x,comp);
   }
 
   template<typename CompatibleKey,typename CompatibleCompare>
-  std::pair<const_iterator,const_iterator> equal_range(
+  std::pair<iterator,iterator> equal_range(
     const CompatibleKey& x,const CompatibleCompare& comp)const
   {
-    return std::pair<const_iterator,const_iterator>(
+    return std::pair<iterator,iterator>(
       lower_bound(x,comp),upper_bound(x,comp));
   }
 
   /* range */
 
-  /* no need to provide non-const version as
-   * ordered_index::iterator==ordered_index::const_iterator
-   */
-
   template<typename LowerBounder,typename UpperBounder>
-  std::pair<const_iterator,const_iterator>
+  std::pair<iterator,iterator>
   range(LowerBounder lower,UpperBounder upper)const
   {
-    std::pair<const_iterator,const_iterator> p(
+    std::pair<iterator,iterator> p(
       lower_range(lower),upper_range(upper));
     if(p.second!=end()&&(p.first==end()||comp(key(*p.second),key(*p.first)))){
       p.second=p.first;
@@ -964,7 +960,7 @@ private:
 #endif
 
   template<typename LowerBounder>
-  const_iterator lower_range(LowerBounder lower)const
+  iterator lower_range(LowerBounder lower)const
   {
     node_type* y=header();
     node_type* z=root();
@@ -980,13 +976,13 @@ private:
     return make_iterator(y);
   }
 
-  const_iterator lower_range(unbounded_type)const
+  iterator lower_range(unbounded_type)const
   {
     return begin();
   }
 
   template<typename UpperBounder>
-  const_iterator upper_range(UpperBounder upper)const
+  iterator upper_range(UpperBounder upper)const
   {
     node_type* y=header();
     node_type* z=root();
@@ -1002,7 +998,7 @@ private:
     return make_iterator(y);
   }
 
-  const_iterator upper_range(unbounded_type)const
+  iterator upper_range(unbounded_type)const
   {
     return end();
   }

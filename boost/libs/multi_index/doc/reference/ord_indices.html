@@ -282,9 +282,9 @@ requirements for these types of containers.
   <span class=comment>// set operations:</span>
 
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>CompatibleKey</span><span class=special>&gt;</span>
-  <span class=identifier>const_iterator</span> <span class=identifier>find</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>CompatibleKey</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=identifier>iterator</span> <span class=identifier>find</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>CompatibleKey</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>CompatibleKey</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>CompatibleCompare</span><span class=special>&gt;</span>
-  <span class=identifier>const_iterator</span> <span class=identifier>find</span><span class=special>(</span>
+  <span class=identifier>iterator</span> <span class=identifier>find</span><span class=special>(</span>
     <span class=keyword>const</span> <span class=identifier>CompatibleKey</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>,</span><span class=keyword>const</span> <span class=identifier>CompatibleCompare</span><span class=special>&amp;</span> <span class=identifier>comp</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>CompatibleKey</span><span class=special>&gt;</span>
@@ -293,28 +293,28 @@ requirements for these types of containers.
   <span class=identifier>size_type</span> <span class=identifier>count</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>CompatibleKey</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>,</span><span class=keyword>const</span> <span class=identifier>CompatibleCompare</span><span class=special>&amp;</span> <span class=identifier>comp</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>CompatibleKey</span><span class=special>&gt;</span>
-  <span class=identifier>const_iterator</span> <span class=identifier>lower_bound</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>CompatibleKey</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=identifier>iterator</span> <span class=identifier>lower_bound</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>CompatibleKey</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>CompatibleKey</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>CompatibleCompare</span><span class=special>&gt;</span>
-  <span class=identifier>const_iterator</span> <span class=identifier>lower_bound</span><span class=special>(</span>
+  <span class=identifier>iterator</span> <span class=identifier>lower_bound</span><span class=special>(</span>
     <span class=keyword>const</span> <span class=identifier>CompatibleKey</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>,</span><span class=keyword>const</span> <span class=identifier>CompatibleCompare</span><span class=special>&amp;</span> <span class=identifier>comp</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>CompatibleKey</span><span class=special>&gt;</span>
-  <span class=identifier>const_iterator</span> <span class=identifier>upper_bound</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>CompatibleKey</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=identifier>iterator</span> <span class=identifier>upper_bound</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>CompatibleKey</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>CompatibleKey</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>CompatibleCompare</span><span class=special>&gt;</span>
-  <span class=identifier>const_iterator</span> <span class=identifier>upper_bound</span><span class=special>(</span>
+  <span class=identifier>iterator</span> <span class=identifier>upper_bound</span><span class=special>(</span>
     <span class=keyword>const</span> <span class=identifier>CompatibleKey</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>,</span><span class=keyword>const</span> <span class=identifier>CompatibleCompare</span><span class=special>&amp;</span> <span class=identifier>comp</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>CompatibleKey</span><span class=special>&gt;</span>
-  <span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>const_iterator</span><span class=special>,</span><span class=identifier>const_iterator</span><span class=special>&gt;</span> <span class=identifier>equal_range</span><span class=special>(</span>
+  <span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>iterator</span><span class=special>,</span><span class=identifier>iterator</span><span class=special>&gt;</span> <span class=identifier>equal_range</span><span class=special>(</span>
     <span class=keyword>const</span> <span class=identifier>CompatibleKey</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>CompatibleKey</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>CompatibleCompare</span><span class=special>&gt;</span>
-  <span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>const_iterator</span><span class=special>,</span><span class=identifier>const_iterator</span><span class=special>&gt;</span> <span class=identifier>equal_range</span><span class=special>(</span>
+  <span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>iterator</span><span class=special>,</span><span class=identifier>iterator</span><span class=special>&gt;</span> <span class=identifier>equal_range</span><span class=special>(</span>
     <span class=keyword>const</span> <span class=identifier>CompatibleKey</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>,</span><span class=keyword>const</span> <span class=identifier>CompatibleCompare</span><span class=special>&amp;</span> <span class=identifier>comp</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=comment>// range:</span>
 
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>LowerBounder</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>UpperBounder</span><span class=special>&gt;</span>
-  <span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>const_iterator</span><span class=special>,</span><span class=identifier>const_iterator</span><span class=special>&gt;</span> <span class=identifier>range</span><span class=special>(</span>
+  <span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>iterator</span><span class=special>,</span><span class=identifier>iterator</span><span class=special>&gt;</span> <span class=identifier>range</span><span class=special>(</span>
     <span class=identifier>LowerBounder</span> <span class=identifier>lower</span><span class=special>,</span><span class=identifier>UpperBounder</span> <span class=identifier>upper</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 <span class=special>};</span>
 
@@ -702,7 +702,7 @@ In the context of a compatible extension or a compatible key, the expressions
 interpretations.
 </p>
 
-<code>template&lt;typename CompatibleKey> const_iterator find(const CompatibleKey&amp; x)const;
+<code>template&lt;typename CompatibleKey> iterator find(const CompatibleKey&amp; x)const;
 </code>
 
 <blockquote>
@@ -714,7 +714,7 @@ interpretations.
 </blockquote>
 
 <code>template&lt;typename CompatibleKey,typename CompatibleCompare><br>
-const_iterator find(const CompatibleKey&amp; x,const CompatibleCompare&amp; comp)const;
+iterator find(const CompatibleKey&amp; x,const CompatibleCompare&amp; comp)const;
 </code>
 
 <blockquote>
@@ -748,7 +748,7 @@ is a compatible extension of <code>key_compare</code>.</br>
 </blockquote>
 
 <code>template&lt;typename CompatibleKey><br>
-const_iterator lower_bound(const CompatibleKey&amp; x)const;
+iterator lower_bound(const CompatibleKey&amp; x)const;
 </code>
 
 <blockquote>
@@ -761,7 +761,7 @@ not exist.<br>
 </blockquote>
 
 <code>template&lt;typename CompatibleKey,typename CompatibleCompare><br>
-const_iterator lower_bound(const CompatibleKey&amp; x,const CompatibleCompare&amp; comp)const;
+iterator lower_bound(const CompatibleKey&amp; x,const CompatibleCompare&amp; comp)const;
 </code>
 
 <blockquote>
@@ -774,7 +774,7 @@ not exist.<br>
 </blockquote>
 
 <code>template&lt;typename CompatibleKey><br>
-const_iterator upper_bound(const CompatibleKey&amp; x)const;
+iterator upper_bound(const CompatibleKey&amp; x)const;
 </code>
 
 <blockquote>
@@ -787,7 +787,7 @@ not exist.<br>
 </blockquote>
 
 <code>template&lt;typename CompatibleKey,typename CompatibleCompare><br>
-const_iterator upper_bound(const CompatibleKey&amp; x,const CompatibleCompare&amp; comp)const;
+iterator upper_bound(const CompatibleKey&amp; x,const CompatibleCompare&amp; comp)const;
 </code>
 
 <blockquote>
@@ -800,7 +800,7 @@ not exist.<br>
 </blockquote>
 
 <code>template&lt;typename CompatibleKey><br>
-std::pair&lt;const_iterator,const_iterator> equal_range(<br>
+std::pair&lt;iterator,iterator> equal_range(<br>
 &nbsp;&nbsp;const CompatibleKey&amp; x)const;
 </code>
 
@@ -812,7 +812,7 @@ std::pair&lt;const_iterator,const_iterator> equal_range(<br>
 </blockquote>
 
 <code>template&lt;typename CompatibleKey,typename CompatibleCompare><br>
-std::pair&lt;const_iterator,const_iterator> equal_range(</br>
+std::pair&lt;iterator,iterator> equal_range(</br>
 &nbsp;&nbsp;const CompatibleKey&amp; x,const CompatibleCompare&amp; comp)const;
 </code>
 
@@ -864,7 +864,7 @@ for every <code>upper</code> of type <code>UpperBounder</code>,
 </p>
 
 <code>template&lt;typename LowerBounder,typename UpperBounder><br>
-std::pair&lt;const_iterator,const_iterator> range(<br>
+std::pair&lt;iterator,iterator> range(<br>
 &nbsp;&nbsp;LowerBounder lower,UpperBounder upper)const;
 </code>
 
@@ -946,7 +946,7 @@ Sequenced indices
 
 <br>
 
-<p>Revised January 12th 2005</p>
+<p>Revised January 17th 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
