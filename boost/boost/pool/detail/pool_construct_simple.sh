@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (C) 2001 Stephen Cleary (shammah@voyager.net)
+# Copyright (C) 2001 Stephen Cleary
 #
 # This file can be redistributed and/or modified under the terms found
 #  in "copyright.html"

@@ -1,5 +1,5 @@
 m4_dnl
-m4_dnl Copyright (C) 2000 Stephen Cleary (shammah@voyager.net)
+m4_dnl Copyright (C) 2000 Stephen Cleary
 m4_dnl
 m4_dnl This file can be redistributed and/or modified under the terms found
 m4_dnl  in "copyright.html"
@@ -40,7 +40,7 @@ m4_include(`for.m4')`'m4_dnl
 m4_dnl
 m4_dnl Begin the generated file.
 m4_dnl
-// Copyright (C) 2000 Stephen Cleary (shammah@voyager.net)
+// Copyright (C) 2000 Stephen Cleary
 //
 // This file can be redistributed and/or modified under the terms found
 //  in "copyright.html"

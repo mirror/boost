@@ -1,4 +1,4 @@
-// Copyright (C) 2000 Stephen Cleary (shammah@voyager.net)
+// Copyright (C) 2000 Stephen Cleary
 //
 // Permission to copy, use, and distribute this software is granted, provided
 // that this copyright notice appears in all copies.
