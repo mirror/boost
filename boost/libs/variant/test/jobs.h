@@ -217,38 +217,40 @@ struct spec
 };
 
 template<typename VariantType, typename S>
-inline void verify(const VariantType& vari, spec<S>, std::string str = "")
+inline void verify(VariantType& var, spec<S>, std::string str = "")
 {
-   BOOST_CHECK(boost::apply_visitor(total_sizeof(), vari) == sizeof(S));
-   BOOST_CHECK(vari.type() == typeid(S));
+   const VariantType& cvar = var;
 
-   VariantType& mut_vari = const_cast<VariantType&>(vari);
+   BOOST_CHECK(boost::apply_visitor(total_sizeof(), cvar) == sizeof(S));
+   BOOST_CHECK(cvar.type() == typeid(S));
+
    //
    // Check get<>()
    //
-   BOOST_CHECK(boost::get<const S>(&vari));
-   BOOST_CHECK(boost::get<S>(&mut_vari));
+   BOOST_CHECK(boost::get<S>(&var));
+   BOOST_CHECK(!boost::get<S>(&cvar));
+   BOOST_CHECK(boost::get<const S>(&cvar));
 
    const S* ptr1 = 0;
    const S* ptr2 = 0;
    try
    {
-      const S& r = boost::get<const S>(vari);
+      S& r = boost::get<S>(var);
       ptr1 = &r;
    }
    catch(boost::bad_get& )
    {
-      BOOST_ERROR( "get<const S> failed unexpectedly" );
+      BOOST_ERROR( "get<S> failed unexpectedly" );
    }
 
    try
    {
-      S& mut_r = boost::get<S>(mut_vari);
-      ptr2 = &mut_r;
+      const S& cr = boost::get<const S>(cvar);
+      ptr2 = &cr;
    }
    catch(boost::bad_get& )
    {
-      BOOST_ERROR( "get<S> failed unexpectedly" );
+      BOOST_ERROR( "get<const S> failed unexpectedly" );
    }
 
    BOOST_CHECK(ptr1 != 0 && ptr2 == ptr1);
@@ -258,7 +260,7 @@ inline void verify(const VariantType& vari, spec<S>, std::string str = "")
    //
    if(str.length() > 0)
    {
-      std::string temp = boost::apply_visitor(to_text(), vari);
+      std::string temp = boost::apply_visitor(to_text(), cvar);
       std::cout << "temp = " << temp << ", str = " << str << std::endl;
       BOOST_CHECK(temp == str);         
    }
@@ -266,24 +268,24 @@ inline void verify(const VariantType& vari, spec<S>, std::string str = "")
 
 
 template<typename VariantType, typename S>
-inline void verify_not(const VariantType& vari, spec<S>)
+inline void verify_not(VariantType& var, spec<S>)
 {
-   BOOST_CHECK(vari.type() != typeid(S));
-   
+   const VariantType& cvar = var;
+
+   BOOST_CHECK(cvar.type() != typeid(S));
+
    //
    // Check get<>()
    //
-   BOOST_CHECK(!boost::get<const S>(&vari));
-
-   VariantType& mut_vari = const_cast<VariantType&>(vari);
-   BOOST_CHECK(!boost::get<S>(&mut_vari));
+   BOOST_CHECK(!boost::get<S>(&var));
+   BOOST_CHECK(!boost::get<const S>(&cvar));
 
    const S* ptr1 = 0;
    const S* ptr2 = 0;
    try
    {
-      const S& r = boost::get<const S>(vari); // should throw
-      BOOST_ERROR( "get<const S> passed unexpectedly" );
+      S& r = boost::get<S>(var); // should throw
+      BOOST_ERROR( "get<S> passed unexpectedly" );
 
       ptr1 = &r;
    }
@@ -294,10 +296,10 @@ inline void verify_not(const VariantType& vari, spec<S>)
 
    try
    {
-      S& mut_r = boost::get<S>(mut_vari); // should throw
-      BOOST_ERROR( "get<S> passed unexpectedly" );
+      const S& cr = boost::get<const S>(var); // should throw
+      BOOST_ERROR( "get<const S> passed unexpectedly" );
 
-      ptr2 = &mut_r;
+      ptr2 = &cr;
    }
    catch(boost::bad_get& )
    {
