@@ -43,7 +43,7 @@
       Base m_iterator;
   };
 
-__ :
+__ : THE LINK HERE IS MISSING!
 
 ``iterator_adaptor`` requirements
 ---------------------------------
