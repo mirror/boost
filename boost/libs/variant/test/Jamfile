@@ -1,0 +1,20 @@
+# bring in rules for testing
+SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
+include testing.jam ;
+
+# Make tests run by default.
+DEPENDS all : test ;
+
+{
+   test-suite variant
+     : 
+    [ run test1.cpp class_a.cpp ]
+    [ run test2.cpp ]
+    [ run test3.cpp ]
+    [ run test4.cpp class_a.cpp ]
+    [ run test5.cpp ]
+    [ run test6.cpp ]
+    [ run test7.cpp ]
+    [ run test8.cpp ]
+   ; 
+}
