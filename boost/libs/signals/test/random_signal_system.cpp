@@ -271,7 +271,7 @@ void random_bacon_test(minstd_rand& rand_gen)
       put(vertex_index, signal_graph, *v, num++);
     }
 
-    BOOST_TEST(num == num_vertices(signal_graph));
+    BOOST_CHECK(num == num_vertices(signal_graph));
   }
 
   // Perform a breadth-first search starting at kevin, and record the
@@ -305,7 +305,7 @@ void random_bacon_test(minstd_rand& rand_gen)
                   << bacon_distance_map[signal_to_descriptor[i->first]]
                   << std::endl;
       }
-      BOOST_TEST(i->second == bacon_distance_map[signal_to_descriptor[i->first]]);
+      BOOST_CHECK(i->second == bacon_distance_map[signal_to_descriptor[i->first]]);
     }
   }
 }
@@ -421,7 +421,7 @@ int test_main(int argc, char* argv[])
     delete get(signal_tag(), signal_graph, *v);
   }
 
-  BOOST_TEST(tracking_bridge::bridge_count == 0);
+  BOOST_CHECK(tracking_bridge::bridge_count == 0);
   if (tracking_bridge::bridge_count != 0) {
     std::cerr << tracking_bridge::bridge_count << " connections remain.\n";
   }
