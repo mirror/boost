@@ -961,7 +961,7 @@ uniform_smallint(base_type & rng, IntType min, IntType max)
     for(; r_base >= r; _factor *= 2)
       r_base /= 2;
   }
-  iterator_init();  // initialize iterator interface
+  this->iterator_init();  // initialize iterator interface
 }
 
 
@@ -984,7 +984,7 @@ public:
       _bmin(_rng.min()), _brange(_rng.max() - _bmin) {
     // TODO: should be a compile-time assert
     assert(std::numeric_limits<IntType>::is_integer);
-    iterator_init();
+    this->iterator_init();
   }
   result_type operator()();
   result_type min() const { return _min; }
@@ -1089,7 +1089,7 @@ public:
   explicit uniform_01(base_type & rng) : _rng(rng) { 
     // TODO: should be a compile-time assert
     assert(!std::numeric_limits<RealType>::is_integer);
-    iterator_init();
+    this->iterator_init();
   }
   // compiler-generated copy ctor is fine
   // assignment is disallowed because there is a reference member
@@ -1134,7 +1134,7 @@ public:
     : _rng(rng), _min(min), _max(max) { 
     // TODO: should be a compile-time assert
     assert(!std::numeric_limits<RealType>::is_integer);
-    iterator_init();
+    this->iterator_init();
   }
   // compiler-generated copy ctor is fine
   // uniform_01 cannot be assigned, neither can this class
@@ -1208,7 +1208,7 @@ public:
     assert(0.0 < p && p < 1.0);
     using std::log;
     _log_p = log(p);
-    iterator_init();
+    this->iterator_init();
   }
   // compiler-generated copy ctor is fine
   // uniform_01 cannot be assigned, neither can this class
@@ -1252,7 +1252,7 @@ public:
     d3 = sqrt(d3);
     p1 = sqrt(p1);
     assert(_a <= _b && _b <= _c);
-    iterator_init();
+    this->iterator_init();
   }
   // compiler-generated copy ctor is fine
   // uniform_01 cannot be assigned, neither can this class
@@ -1291,7 +1291,7 @@ public:
   typedef RealType result_type;
 
   exponential_distribution(base_type& rng, result_type lambda)
-    : _rng(rng), _lambda(lambda) { assert(lambda > 0); iterator_init(); }
+    : _rng(rng), _lambda(lambda) { assert(lambda > 0); this->iterator_init(); }
   // compiler-generated copy ctor is fine
   // uniform_01 cannot be assigned, neither can this class
   result_type operator()() { 
@@ -1326,7 +1326,7 @@ public:
 
   cauchy_distribution(base_type & rng, result_type median = 0, 
                       result_type sigma = 1)
-    : _rng(rng), _median(median), _sigma(sigma) { iterator_init(); }
+    : _rng(rng), _median(median), _sigma(sigma) { this->iterator_init(); }
   // compiler-generated copy constructor is fine
   // uniform_01 cannot be assigned, neither can this class
   result_type operator()()
@@ -1366,7 +1366,7 @@ public:
   explicit normal_distribution(base_type & rng, const result_type& mean = 0,
                                const result_type& sigma = 1)
     : _rng(rng), _mean(mean), _sigma(sigma), _valid(false)
-  { assert(sigma > 0); iterator_init(); }
+  { assert(sigma > 0); this->iterator_init(); }
   // compiler-generated copy constructor is fine
   // uniform_01 cannot be assigned, neither can this class
   result_type operator()()
@@ -1423,7 +1423,7 @@ public:
            std::sqrt(std::log(sigma*sigma/mean/mean+1)))
   { 
     assert(mean > 0);
-    iterator_init();
+    this->iterator_init();
   }
   // compiler-generated copy constructor is fine
   // normal_distribution cannot be assigned, neither can this class
@@ -1458,7 +1458,7 @@ public:
   typedef Cont result_type;
 
   explicit uniform_on_sphere(base_type & rng, int dim = 2)
-    : _rng(rng), _container(dim), _dim(dim) { iterator_init(); }
+    : _rng(rng), _container(dim), _dim(dim) { this->iterator_init(); }
   // compiler-generated copy ctor is fine
   // normal_distribution cannot be assigned, neither can this class
   const result_type & operator()()
