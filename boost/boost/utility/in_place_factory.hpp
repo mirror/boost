@@ -52,5 +52,7 @@ BOOST_PP_REPEAT( BOOST_MAX_INPLACE_FACTORY_ARITY, BOOST_DEFINE_INPLACE_FACTORY_C
 
 } // namespace boost
 
+#include <boost/utility/detail/in_place_factory_suffix.hpp>
+
 #endif
 
