@@ -105,6 +105,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         boost::checked_deleter<A>()
     );  
     #endif
+	std::remove(testfile);
     return boost::exit_success;
 }
 

@@ -114,6 +114,7 @@ test_main( int /* argc */, char* /* argv */[] )
 
     save_exported(testfile);
     load_exported(testfile);
+	std::remove(testfile);
     return boost::exit_success;
 }
 

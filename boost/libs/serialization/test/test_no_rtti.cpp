@@ -230,9 +230,10 @@ test_main( int /* argc */, char* /* argv */[] )
     
     BOOST_REQUIRE(NULL != testfile);
 
-    save_derived("testfile.txt");
-    load_derived("testfile.txt");
+    save_derived(testfile);
+    load_derived(testfile);
 
+	std::remove(testfile);
     return boost::exit_success;
 }
 

@@ -89,6 +89,7 @@ void test_save_and_load(A * first, A * second)
         ia >> BOOST_SERIALIZATION_NVP(second);
     }
     BOOST_CHECK(first == second);
+	std::remove(testfile);
 }
 
 using namespace boost::archive;

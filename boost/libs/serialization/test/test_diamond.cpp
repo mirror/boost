@@ -162,5 +162,6 @@ test_main( int /* argc */, char* /* argv */[] )
     BOOST_CHECK(1 == save_count);
     BOOST_CHECK(1 == load_count);
     BOOST_CHECK(b2 == b);
+	std::remove(testfile);
     return boost::exit_success;
 }

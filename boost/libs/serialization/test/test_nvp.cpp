@@ -56,6 +56,7 @@ int test_main( int argc, char* argv[] )
     }
     BOOST_CHECK(b == *bptr1);
 
+	std::remove(testfile);
     return boost::exit_success;
 }
 

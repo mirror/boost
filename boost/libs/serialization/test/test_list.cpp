@@ -59,6 +59,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_CHECK(aslist == aslist1);
     
     #endif
+	std::remove(testfile);
     return boost::exit_success;
 }
 

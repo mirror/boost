@@ -71,6 +71,7 @@ test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
     save(testfile);
     load(testfile);
+	std::remove(testfile);
     return boost::exit_success;
 }
 

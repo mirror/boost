@@ -126,6 +126,7 @@ test_main( int /* argc */, char* /* argv */[] )
 
     save_derived(testfile);
     load_derived(testfile);
+	std::remove(testfile);
     return boost::exit_success;
 }
 

@@ -44,6 +44,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_CHECK(aoptional1 == aoptional1a);
     BOOST_CHECK(aoptional2 == aoptional2a);
     
+	std::remove(testfile);
     return boost::exit_success;
 }
 
