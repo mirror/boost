@@ -1278,7 +1278,8 @@ token_sequence_type toexpand;
     {
         string_type outstr(boost::wave::util::impl::as_string(toexpand));
         outstr += "(" + boost::wave::util::impl::as_string(expanded) + ")";
-        WAVE_DUMP_CONDITIONAL_EXPRESSIONS_OUT << "#if " << outstr << std::endl;
+        BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS_OUT << "#if " << outstr 
+            << std::endl;
     }
 #endif
 
