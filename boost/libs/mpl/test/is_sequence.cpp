@@ -19,6 +19,7 @@
 #include "boost/mpl/range_c.hpp"
 #include "boost/mpl/is_sequence.hpp"
 #include "boost/static_assert.hpp"
+#include <vector>
 
 using namespace boost::mpl;
 
@@ -26,6 +27,7 @@ struct UDT {};
 
 int main()
 {
+    BOOST_STATIC_ASSERT(!is_sequence< std::vector<int> >::value);
     BOOST_STATIC_ASSERT(!is_sequence< int >::value);
     BOOST_STATIC_ASSERT(!is_sequence< int& >::value);
     BOOST_STATIC_ASSERT(!is_sequence< UDT >::value);
