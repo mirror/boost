@@ -31,7 +31,7 @@
 #error The expected results assume an eight-bit byte.
 #endif
 
-#ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+#if !(defined(BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS) || (defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)))
 #define CRC_PARM_TYPE  typename boost::uint_t<Bits>::fast
 #else
 #define CRC_PARM_TYPE  unsigned long
@@ -648,3 +648,4 @@ test_main
 
     return boost::exit_success;
 }
+
