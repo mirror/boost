@@ -1435,7 +1435,8 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
             {
             case traits_type::syntax_colon:
                static_cast<re_detail::re_brace*>(dat)->index = 0;
-               --marks;
+               if((_flags & nosubs) == 0)
+                  --marks;
                markid.pop();
                markid.push(0);
                ++ptr;
@@ -1445,7 +1446,8 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
                markid.pop();
                markid.push(-1);
                common_forward_assert:
-               --marks;
+               if((_flags & nosubs) == 0)
+                  --marks;
                ++ptr;
                // extend:
                dat = add_simple(dat, re_detail::syntax_element_jump, re_detail::re_jump_size);
@@ -1470,7 +1472,8 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
             case traits_type::syntax_hash:
                // comment just skip it:
                static_cast<re_detail::re_brace*>(dat)->index = 0;
-               --marks;
+               if((_flags & nosubs) == 0)
+                  --marks;
                markid.pop();
                mark.pop();
                do{
