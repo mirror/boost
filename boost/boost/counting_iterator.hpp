@@ -28,6 +28,8 @@
 //     Incrementable.
 // 
 // Revision History
+// 08 Feb 2001  Beginning of a failed attempt to appease Borland
+//              (David Abrahams)
 // 07 Feb 2001  rename counting_iterator() -> make_counting_iterator()
 //              (David Abrahams)        
 // 04 Feb 2001  Added counting_iterator_generator; updated comments
@@ -136,16 +138,19 @@ namespace detail {
 template <class Incrementable>
 struct counting_iterator_traits {
  private:
-    typedef typename detail::counting_iterator_traits_select<(
+    enum {
+        is_numeric = 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
         std::numeric_limits<Incrementable>::is_specialized
 #else
-        // Causes warnings with GCC, but how else can I detect numeric types at
-        // compile-time?
-        (boost::is_convertible<int,Incrementable>::value &&
-         boost::is_convertible<Incrementable,int>::value)
+        // Try to detect numeric types at compile time
+        boost::is_convertible<int,Incrementable>::value
+        && boost::is_convertible<Incrementable,int>::value
 #endif
-    )>::template traits<Incrementable> traits;
+    };
+    
+    typedef typename detail::counting_iterator_traits_select<
+        is_numeric>::template traits<Incrementable> traits;
  public:
     typedef Incrementable value_type;
     typedef const Incrementable& reference;
