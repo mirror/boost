@@ -49,7 +49,8 @@ int check_result(int argc, char** argv)
 // this one is to verify that a constant is indeed a
 // constant-integral-expression:
 //
-template <bool>
+// HP aCC cannot deal with missing names for template value parameters
+template <bool b>
 struct checker
 {
    static void check(bool, bool, const char*, bool){ ++test_count; }
