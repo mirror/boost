@@ -192,7 +192,11 @@ struct is_convertible_forwarder
 
 } // namespace detail
 
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
+BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convertible_impl<From,To>::value))
+#else
 BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convertible_forwarder<From,To>::value))
+#endif
 
 //
 // Now add the full and partial specialisations
@@ -283,4 +287,5 @@ TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_CV_SPEC(long double)
 #include "boost/type_traits/detail/bool_trait_undef.hpp"
 
 #endif // BOOST_TT_IS_CONVERTIBLE_HPP_INCLUDED
+
 
