@@ -56,6 +56,15 @@ template<> struct shared_ptr_traits<void>
     typedef void reference;
 };
 
+#if !defined(BOOST_NO_CV_VOID_SPECIALIZATIONS)
+
+template<> struct shared_ptr_traits<void const>
+{
+    typedef void reference;
+};
+
+#endif
+
 } // namespace detail
 
 
