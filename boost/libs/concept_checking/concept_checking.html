@@ -330,6 +330,69 @@ at the top of the definition for <tt>std::vector</tt>.
 </pre>
 
 
+Although the concept checks are designed for use by generic library
+implementors, they can also be useful to end users. Sometimes one may
+not be sure whether some type models a particular concept. This can
+easily be checked by creating a small program and using the
+<tt>REQUIRE</tt> macro with the type and concept in question.  The
+file <a href="./stl_concept_checks.cpp"><tt>stl_concept_checks.cpp</tt></a>
+gives and example of applying the concept checks to STL
+containers. The file is listed here:
+
+<pre>
+  #include &lt;boost/concept_checks.hpp&gt;
+
+  #include &lt;iterator&gt;
+  #include &lt;set&gt;
+  #include &lt;map&gt;
+  #include &lt;vector&gt;
+  #include &lt;list&gt;
+  #include &lt;deque&gt;
+
+  int
+  main()
+  {
+    typedef std::vector&lt;int&gt; Vector;
+    typedef std::deque&lt;int&gt; Deque;
+    typedef std::list&lt;int&gt; List;
+
+    REQUIRE(Vector, Mutable_RandomAccessContainer);
+    REQUIRE(Vector, BackInsertionSequence);
+
+    REQUIRE(Deque, Mutable_RandomAccessContainer);
+    REQUIRE(Deque, FrontInsertionSequence);
+    REQUIRE(Deque, BackInsertionSequence);
+
+    REQUIRE(List, Mutable_ReversibleContainer);
+    REQUIRE(List, FrontInsertionSequence);
+    REQUIRE(List, BackInsertionSequence);
+
+    typedef std::set&lt;int&gt; Set;
+    typedef std::multiset&lt;int&gt; MultiSet;
+    typedef std::map&lt;int,int&gt; Map;
+    typedef std::multimap&lt;int,int&gt; MultiMap;
+
+    REQUIRE(Set, SortedAssociativeContainer);
+    REQUIRE(Set, SimpleAssociativeContainer);
+    REQUIRE(Set, UniqueAssociativeContainer);
+
+    REQUIRE(MultiSet, SortedAssociativeContainer);
+    REQUIRE(MultiSet, SimpleAssociativeContainer);
+    REQUIRE(MultiSet, MultipleAssociativeContainer);
+
+    REQUIRE(Map, SortedAssociativeContainer);
+    REQUIRE(Map, UniqueAssociativeContainer);
+    REQUIRE(Map, PairAssociativeContainer);
+
+    REQUIRE(MultiMap, SortedAssociativeContainer);
+    REQUIRE(MultiMap, MultipleAssociativeContainer);
+    REQUIRE(MultiMap, PairAssociativeContainer);
+
+    return 0;
+  }
+</pre>
+
+
 <h2><a name="creating-concept-checks">Creating Concept Checking Classes</a></h2>
 
 As an example of how to create a concept checking class, we look
