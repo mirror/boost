@@ -45,11 +45,13 @@ struct is_double<double>
 
 int test_main(int, char*[])
 {
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   typedef int F2(float, double);
 
   typedef boost::function_traits<F2> traits;
 
+  BOOST_TEST(traits::arity == 2);
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   BOOST_TEST(is_int<traits::result_type>::value);
   BOOST_TEST(is_float<traits::arg1_type>::value);
   BOOST_TEST(is_double<traits::arg2_type>::value);

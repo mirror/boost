@@ -839,7 +839,7 @@ properties. </p>
         <td valign="top" width="23%" bgcolor="#C0C0C0"><code>::boost::function_traits&lt;F&gt;::arity</code></td>
         <td valign="top" width="28%" bgcolor="#C0C0C0">Determine the arity of the function type <code>F</code>. </td>
         <td valign="top" width="13%" bgcolor="#C0C0C0">&nbsp;</td>
-        <td width="25%" bgcolor="#C0C0C0">P</td>
+        <td width="25%" bgcolor="#C0C0C0">Without partial specialisation support, this template does not compile for reference types.</td>
         <td valign="top" width="5%">&nbsp;</td>
     </tr>
     <tr>
@@ -975,6 +975,13 @@ template.</p>
         <td valign="top" width="41%" bgcolor="#C0C0C0"><code>&lt;boost/type_traits/object_traits.hpp&gt;</code></td>
         <td valign="top" width="9%">&nbsp;</td>
     </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td valign="top" bgcolor="#C0C0C0"><code>function_traits</code></td>
+        <td valign="top" bgcolor="#C0C0C0"><code>&lt;boost/type_traits/function_traits.hpp&gt;</code></td>
+        <td>&nbsp;</td>
+    </tr>
+
     <tr>
         <td valign="top" width="7%">&nbsp;</td>
         <td valign="top" width="43%" bgcolor="#C0C0C0"><code>has_trivial_constructor</code></td>
