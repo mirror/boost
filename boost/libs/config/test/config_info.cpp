@@ -17,6 +17,8 @@
 #include <iomanip>
 #include <string.h>
 #include <limits.h>
+#include <stdlib.h>
+#include <stddef.h>
 
 #ifdef BOOST_HAS_UNISTD_H
 #include <unistd.h>
@@ -68,7 +70,7 @@ template <class T>
 void print_byte_order(const char* what, T /* t */ )
 {
    T val = 0;
-   unsigned i;
+   T i;
    for(i = 1; i < sizeof(T); ++i)
    {
       val |= (CHAR_BIT * i) << (CHAR_BIT * i);
@@ -725,6 +727,10 @@ void print_platform_macros()
    PRINT_EXPRESSION(sizeof(short));
    PRINT_EXPRESSION(sizeof(int));
    PRINT_EXPRESSION(sizeof(long));
+   PRINT_EXPRESSION(sizeof(size_t));
+   PRINT_EXPRESSION(sizeof(ptrdiff_t));
+   PRINT_EXPRESSION(sizeof(void*));
+   PRINT_EXPRESSION(sizeof(void(*)(void)));
    PRINT_EXPRESSION(sizeof(float));
    PRINT_EXPRESSION(sizeof(double));
    PRINT_EXPRESSION(sizeof(long double));
