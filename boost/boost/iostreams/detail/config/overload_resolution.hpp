@@ -16,12 +16,13 @@
 
 #include <boost/config.hpp> // BOOST_MSVC.
 #include <boost/detail/workaround.hpp>
+#include <boost/iostreams/detail/config/gcc.hpp>
 
 #if !defined(BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION)
 # if BOOST_WORKAROUND(__MWERKS__, <= 0x3003) || \
      BOOST_WORKAROUND(__BORLANDC__, < 0x600) || \
      BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || \
-     BOOST_WORKAROUND(__GNUC__, == 2) && (__GNUC_MINOR__ <= 95)
+     BOOST_WORKAROUND(BOOST_IOSTREAMS_GCC, <= 295) \
      /**/
 #  define BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION
 # endif

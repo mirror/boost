@@ -16,8 +16,8 @@
 
 #include <boost/config.hpp> // BOOST_INTEL.
 
-#if defined(_GNUC_) && !defined(BOOST_INTEL)
-# define BOOST_IOSTREAMS_GCC (_GNUC_ * 100 + __GNUC_MINOR__)
+#if defined(__GNUC__) && !defined(BOOST_INTEL)
+# define BOOST_IOSTREAMS_GCC (__GNUC__ * 100 + __GNUC_MINOR__)
 #endif
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_CONFIG_GCC_HPP_INCLUDED

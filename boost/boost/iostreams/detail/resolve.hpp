@@ -18,6 +18,7 @@
 #include <boost/iostreams/detail/adapter/mode_adapter.hpp>
 #include <boost/iostreams/detail/adapter/output_iterator_adapter.hpp>
 #include <boost/iostreams/detail/adapter/range_adapter.hpp>
+#include <boost/iostreams/detail/config/gcc.hpp>
 #include <boost/iostreams/detail/config/overload_resolution.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/enable_if_stream.hpp>
@@ -64,11 +65,9 @@ resolve( const T& t
 
          // I suspect that the compilers which require this workaround may
          // be correct, but I'm not sure why :(
-         #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, BOOST_TESTED_AT(810)) || \
+         #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, BOOST_TESTED_AT(810)) ||\
              BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205)) || \
-             !defined(BOOST_INTEL) && ( BOOST_WORKAROUND(__GNUC__, <= 3) || \
-             BOOST_WORKAROUND(__GNUC__, == 4) && \
-             BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(0)) ) \
+             BOOST_WORKAROUND(BOOST_IOSTREAMS_GCC, BOOST_TESTED_AT(400)) \
              /**/
          , typename disable_if< is_iterator_range<T> >::type* = 0
          #endif
