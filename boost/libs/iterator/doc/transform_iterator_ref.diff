@@ -49,7 +49,6 @@ Issue 9.43x
 Issues 9.37x and 9.12
 
 +    Iterator base() const;
-     UnaryFunction functor() const;
 +    reference operator*() const;
 +    transform_iterator& operator++();
 +    transform_iterator& operator--();
