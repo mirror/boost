@@ -38,7 +38,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         divide_by_zero (const char *s = "divide by zero") :
             std::runtime_error (s) {}
-        virtual void raise () {
+        void raise () {
             throw *this;
         }
 #else
@@ -46,7 +46,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         divide_by_zero (const char *s = 0)
             {}
-        virtual void raise () {
+        void raise () {
 #ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
@@ -63,7 +63,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         internal_logic (const char *s = "internal logic") :
             std::logic_error (s) {}
-        virtual void raise () {
+        void raise () {
             throw *this;
         }
 #else
@@ -71,7 +71,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         internal_logic (const char *s = 0)
             {}
-        virtual void raise () {
+        void raise () {
 #ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
@@ -91,7 +91,7 @@ namespace boost { namespace numeric { namespace ublas {
         // virtual const char *what () const throw () {
         //     return "exception: external logic";
         // }
-        virtual void raise () {
+        void raise () {
             throw *this;
         }
 #else
@@ -99,7 +99,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         external_logic (const char *s = 0)
             {}
-        virtual void raise () {
+        void raise () {
 #ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
@@ -116,7 +116,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         bad_argument (const char *s = "bad argument") :
             std::invalid_argument (s) {}
-        virtual void raise () {
+        void raise () {
             throw *this;
         }
 #else
@@ -124,7 +124,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         bad_argument (const char *s = 0)
             {}
-        virtual void raise () {
+        void raise () {
             throw *this;
 #ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
@@ -142,7 +142,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         bad_size (const char *s = "bad size") :
             std::domain_error (s) {}
-        virtual void raise () {
+        void raise () {
             throw *this;
         }
 #else
@@ -150,7 +150,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         bad_size (const char *s = 0)
             {}
-        virtual void raise () {
+        void raise () {
 #ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
@@ -167,7 +167,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         bad_index (const char *s = "bad index") :
             std::out_of_range (s) {}
-        virtual void raise () {
+        void raise () {
             throw *this;
         }
 #else
@@ -175,7 +175,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         bad_index (const char *s = 0)
             {}
-        virtual void raise () {
+        void raise () {
 #ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
@@ -192,7 +192,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         singular (const char *s = "singular") :
             std::runtime_error (s) {}
-        virtual void raise () {
+        void raise () {
             throw *this;
         }
 #else
@@ -200,7 +200,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         singular (const char *s = 0)
             {}
-        virtual void raise () {
+        void raise () {
             throw *this;
 #ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
@@ -218,7 +218,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         non_real (const char *s = "exception: non real") :
             std::domain_error (s) {}
-        virtual void raise () {
+        void raise () {
             throw *this;
         }
 #else
@@ -226,7 +226,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit
         non_real (const char *s = 0)
             {}
-        virtual void raise () {
+        void raise () {
 #ifdef BOOST_NO_STDC_NAMESPACE
             ::abort ();
 #else
