@@ -13,6 +13,9 @@
 //  The authors gratefully acknowledge the support of
 //  GeNeSys mbH & Co. KG in producing this work.
 //
+#ifndef BOOST_UBLAS_ENABLE_EXPERIMENTAL
+#error class generalized_vector_of_vector is experiment and currently does not work
+#endif
 
 #ifndef BOOST_UBLAS_VECTOR_OF_VECTOR_H
 #define BOOST_UBLAS_VECTOR_OF_VECTOR_H
@@ -37,16 +40,14 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
         typedef const T &const_reference;
-#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
+#ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
         typedef T &reference;
-#elif defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
+#else
         typedef sparse_vector_element<typename A::value_type> reference;
 #endif
-        typedef const T *const_pointer;
-        typedef T *pointer;
-    private:
         typedef A array_type;
-        typedef const A const_array_type;
+    private:
+        typedef T *pointer;
         typedef F functor_type;
         typedef const generalized_vector_of_vector<T, F, A> const_self_type;
         typedef generalized_vector_of_vector<T, F, A> self_type;
@@ -106,7 +107,7 @@ namespace boost { namespace numeric { namespace ublas {
             return non_zeros;
         }
         BOOST_UBLAS_INLINE
-        const_array_type &data () const {
+        const array_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
@@ -141,7 +142,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element access
         BOOST_UBLAS_INLINE
-        const_reference operator () (size_type i, size_type j) const {
+        const_reference at_element (size_type i, size_type j) const {
             vector_const_iterator_type itv (data ().find (functor_type::element1 (i, size1_, j, size2_)));
             if (itv == data ().end () || itv.index () != functor_type::element1 (i, size1_, j, size2_))
                 return zero_;
@@ -149,11 +150,18 @@ namespace boost { namespace numeric { namespace ublas {
             if (it == static_cast<const vector_data_value_type &> (*itv).end () || it.index () != functor_type::element2 (i, size1_, j, size2_))
                 return zero_;
             return static_cast<const value_type &> (*it);
+        BOOST_UBLAS_INLINE
+        true_reference at_element (size_type i, size_type j) {
+            return data () [functor_type::element1 (i, size1_, j, size2_)] [functor_type::element2 (i, size1_, j, size2_)];
+        }
+        BOOST_UBLAS_INLINE
+        const_reference operator () (size_type i, size_type j) const {
+            return at_element (i, j);
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) {
-#ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
-            return data () [functor_type::element1 (i, size1_, j, size2_)] [functor_type::element2 (i, size1_, j, size2_)];
+#ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
+            return at_element (i, j);
 #else
             return reference (this->data () [functor_type::element1 (i, size1_, j, size2_)], functor_type::element2 (i, size1_, j, size2_));
 #endif
@@ -489,7 +497,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename generalized_vector_of_vector::difference_type difference_type;
             typedef typename generalized_vector_of_vector::value_type value_type;
             typedef typename generalized_vector_of_vector::const_reference reference;
-            typedef typename generalized_vector_of_vector::const_pointer pointer;
+            typedef const typename generalized_vector_of_vector::pointer pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -549,7 +557,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     return static_cast<const value_type &> (*it_);
                 } else {
-                    return (*this) () (i_, j_);
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -658,7 +666,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_MSVC_STD_ITERATOR
             typedef typename generalized_vector_of_vector::difference_type difference_type;
             typedef typename generalized_vector_of_vector::value_type value_type;
-            typedef typename generalized_vector_of_vector::reference reference;
+            typedef typename generalized_vector_of_vector::true_reference reference;
             typedef typename generalized_vector_of_vector::pointer pointer;
 #endif
             typedef iterator2 dual_iterator_type;
@@ -714,13 +722,9 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
                     return static_cast<value_type &> (*it_);
-#elif defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
-                    return reference (static_cast<vector_data_value_type &> (*itv_), it_.index ());
-#endif
                 } else {
-                    return reference ((*this) () (i_, j_));
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -834,7 +838,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename generalized_vector_of_vector::difference_type difference_type;
             typedef typename generalized_vector_of_vector::value_type value_type;
             typedef typename generalized_vector_of_vector::const_reference reference;
-            typedef typename generalized_vector_of_vector::const_pointer pointer;
+            typedef const typename generalized_vector_of_vector::pointer pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -894,7 +898,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     return static_cast<const value_type &> (*it_);
                 } else {
-                    return (*this) () (i_, j_);
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -1003,7 +1007,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_MSVC_STD_ITERATOR
             typedef typename generalized_vector_of_vector::difference_type difference_type;
             typedef typename generalized_vector_of_vector::value_type value_type;
-            typedef typename generalized_vector_of_vector::reference reference;
+            typedef typename generalized_vector_of_vector::true_reference reference;
             typedef typename generalized_vector_of_vector::pointer pointer;
 #endif
             typedef iterator1 dual_iterator_type;
@@ -1059,13 +1063,9 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
                     return static_cast<value_type &> (*it_);
-#elif defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
-                    return reference (static_cast<vector_data_value_type &> (*itv_), it_.index ());
-#endif
                 } else {
-                    return reference ((*this) () (i_, j_));
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
