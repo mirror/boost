@@ -18,9 +18,9 @@
 
 namespace boost { namespace iostreams {
 
-BOOST_IOSTREAMS_DEFINE_FILTER_STREAMBUF( converting_streambuf, 
-                                  boost::iostreams::detail::converting_chain, 
-                                  wchar_t )
+BOOST_IOSTREAMS_DEFINE_FILTER_STREAMBUF( 
+    converting_streambuf, detail::converting_chain, wchar_t 
+)
 
 } } // End namespace iostreams, boost
 
