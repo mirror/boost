@@ -42,11 +42,13 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<test_abc1>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<test_abc2>::value, true);
 #ifndef BOOST_NO_STD_LOCALE
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::iostream>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::ios_base>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::basic_streambuf<char> >::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::basic_ios<char> >::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::basic_istream<char> >::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::basic_streambuf<char> >::value, true);
+// some libraries don't make this one a polymorphic class, since this is a library
+// rather than a type traits issue we won't test this for now...
+//BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::ios_base>::value, true);
 #endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::exception>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::bad_alloc>::value, true);
@@ -63,6 +65,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<IDispatch>::value, true);
 #endif
 
 TT_TEST_END
+
 
 
 
