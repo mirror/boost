@@ -109,7 +109,7 @@ namespace boost { namespace program_options {
 
                 shared_ptr<const value_semantic> vs = d.semantic();
                 char flags;
-                if (vs->zero_tokens())
+                if (vs->is_zero_tokens())
                     flags = '|';
                 else
                     if (vs->is_implicit()) 

@@ -34,7 +34,7 @@ namespace boost { namespace program_options {
             Other methods can still set the value somehow, but
             user can't affect it.
         */
-        virtual bool zero_tokens() const = 0;
+        virtual bool is_zero_tokens() const = 0;
 
         /** Returns true if values from different sources should be composed.
             Otherwise, value from the first source is used and values from
@@ -117,7 +117,7 @@ namespace boost { namespace program_options {
 
         std::string name() const;
 
-        bool zero_tokens() const { return m_zero_tokens; }
+        bool is_zero_tokens() const { return m_zero_tokens; }
         bool is_composing() const { return false; }
         bool is_implicit() const { return false; }
         bool is_multitoken() const { return false; }
@@ -147,7 +147,7 @@ namespace boost { namespace program_options {
             the value when it's known. The parameter can be NULL. */
         typed_value(T* store_to) 
         : m_store_to(store_to), m_composing(false),
-        m_implicit(false), m_multitoken(false)
+          m_implicit(false), m_multitoken(false), m_zero_tokens(false)
         {} 
 
         /** Specifies default value, which will be used
@@ -205,11 +205,18 @@ namespace boost { namespace program_options {
             return this;
         }
 
+        typed_value* zero_tokens() 
+        {
+            m_zero_tokens = true;
+            return this;
+        }
+            
+
     public: // value semantic overrides
 
         std::string name() const;
 
-        bool zero_tokens() const { return false; }
+        bool is_zero_tokens() const { return m_zero_tokens; }
         bool is_composing() const { return m_composing; }
         bool is_implicit() const { return m_implicit; }        
         bool is_multitoken() const { return m_multitoken; }
@@ -248,7 +255,7 @@ namespace boost { namespace program_options {
         // as boost::optional to avoid unnecessary instantiations.
         boost::any m_default_value;
         std::string m_default_value_as_text;
-        bool m_composing, m_implicit, m_multitoken;
+        bool m_composing, m_implicit, m_multitoken, m_zero_tokens;
         boost::function1<void, const T&> m_notifier;
     };
 

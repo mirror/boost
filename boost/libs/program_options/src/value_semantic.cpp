@@ -91,7 +91,7 @@ namespace boost { namespace program_options {
     {
         typed_value<bool>* r = new typed_value<bool>(v);
         r->default_value(0);
-        r->implicit();
+        r->zero_tokens();
 
         return r;
     }

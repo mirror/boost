@@ -102,7 +102,7 @@ namespace boost { namespace program_options {
     std::string 
     option_description::format_parameter() const
     {
-        if (!m_value_semantic->zero_tokens())
+        if (!m_value_semantic->is_zero_tokens())
             return m_value_semantic->name();
         else
             return "";

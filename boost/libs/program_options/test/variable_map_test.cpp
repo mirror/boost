@@ -67,11 +67,10 @@ void test_variable_map()
     int i;
     desc.add_options()
     ("zee", bool_switch(), "")
-    ("zoo", bool_switch(), "")
     ("zak", po::value<int>(&i), "")
     ("opt", bool_switch(), "");
 
-    char* cmdline4_[] = { "--zee=On", "--zoo", "--zak=13" };
+    char* cmdline4_[] = { "--zee", "--zak=13" };
     vector<string> cmdline4 = sv(cmdline4_,
                                  sizeof(cmdline4_)/sizeof(cmdline4_[0]));
     parsed_options a4 = command_line_parser(cmdline4).options(desc).run();
@@ -79,9 +78,8 @@ void test_variable_map()
     variables_map vm2;
     store(a4, vm2);
     notify(vm2);
-    BOOST_CRITICAL_TEST(vm2.size() == 4);
+    BOOST_CRITICAL_TEST(vm2.size() == 3);
     BOOST_TEST(vm2["zee"].as<bool>() == true);
-    BOOST_TEST(vm2["zoo"].as<bool>() == true);
     BOOST_TEST(vm2["zak"].as<int>() == 13);
     BOOST_TEST(vm2["opt"].as<bool>() == false);
     BOOST_TEST(i == 13);
