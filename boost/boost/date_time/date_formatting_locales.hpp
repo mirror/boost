@@ -2,10 +2,10 @@
 #define DATE_TIME_DATE_FORMATTING_LOCALES_HPP___
 
 /* Copyright (c) 2002,2003 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
- * Author: Jeff Garland 
+ * Author: Jeff Garland
  * $Date$
  */
 
@@ -40,33 +40,33 @@ namespace date_time {
                              const facet_type& f)
     {
 
-      switch (f.month_format()) 
+      switch (f.month_format())
       {
-        case month_as_short_string: 
-        { 
+        case month_as_short_string:
+        {
           std::ostreambuf_iterator<charT> oitr(os);
           f.put_month_short(oitr, month.as_enum());
           break;
         }
-        case month_as_long_string: 
-        { 
+        case month_as_long_string:
+        {
           std::ostreambuf_iterator<charT> oitr(os);
           f.put_month_long(oitr, month.as_enum());
           break;
         }
-        case month_as_integer: 
-        { 
+        case month_as_integer:
+        {
           os << std::setw(2) << std::setfill('0') << month.as_number();
           break;
         }
-     
+
       }
     } // format_month
 
   };
 
 
-  //! Formats a weekday 
+  //! Formats a weekday
   template<class weekday_type,
            class facet_type,
            class charT = char>
@@ -90,7 +90,7 @@ namespace date_time {
       else {
         f.put_weekday_short(oitr, wd.as_enum());
       }
-     
+
     } // format_weekday
 
   };
@@ -104,19 +104,19 @@ namespace date_time {
   {
   public:
     typedef typename ymd_type::month_type month_type;
-    typedef ostream_month_formatter<facet_type> month_formatter;
+    typedef ostream_month_formatter<facet_type> month_formatter_type;
     typedef std::basic_ostream<charT> ostream_type;
     typedef std::basic_string<charT> foo_type;
 
     //! Convert ymd to a standard string formatting policies
     /*! This is standard code for handling date formatting with
-     *  year-month-day based date information.  This function 
+     *  year-month-day based date information.  This function
      *  uses the format_type to control whether the string will
      *  contain separator characters, and if so what the character
      *  will be.  In addtion, it can format the month as either
-     *  an integer or a string as controled by the formatting 
+     *  an integer or a string as controled by the formatting
      *  policy
-     */ 
+     */
     //     static string_type ymd_to_string(ymd_type ymd)
 //     {
 //       std::ostringstream ss;
@@ -127,7 +127,7 @@ namespace date_time {
 
 
     // Put ymd to ostream -- part of ostream refactor
-    static void ymd_put(ymd_type ymd, 
+    static void ymd_put(ymd_type ymd,
                         ostream_type& os,
                         const facet_type& f)
     {
@@ -138,20 +138,20 @@ namespace date_time {
           if (f.has_date_sep_chars()) {
             f.month_sep_char(oitr);
           }
-          month_formatter::format_month(ymd.month, os, f);
+          month_formatter_type::format_month(ymd.month, os, f);
           if (f.has_date_sep_chars()) {
             f.day_sep_char(oitr);
           }
-          os  << std::setw(2) << std::setfill('0') 
+          os  << std::setw(2) << std::setfill('0')
               << ymd.day;
           break;
         }
         case ymd_order_us: {
-          month_formatter::format_month(ymd.month, os, f);
+          month_formatter_type::format_month(ymd.month, os, f);
           if (f.has_date_sep_chars()) {
           f.day_sep_char(oitr);
           }
-          os  << std::setw(2) << std::setfill('0') 
+          os  << std::setw(2) << std::setfill('0')
             << ymd.day;
           if (f.has_date_sep_chars()) {
             f.month_sep_char(oitr);
@@ -160,12 +160,12 @@ namespace date_time {
           break;
         }
         case ymd_order_dmy: {
-          os  << std::setw(2) << std::setfill('0') 
+          os  << std::setw(2) << std::setfill('0')
               << ymd.day;
           if (f.has_date_sep_chars()) {
             f.day_sep_char(oitr);
           }
-          month_formatter::format_month(ymd.month, os, f);
+          month_formatter_type::format_month(ymd.month, os, f);
           if (f.has_date_sep_chars()) {
             f.month_sep_char(oitr);
           }
@@ -187,8 +187,8 @@ namespace date_time {
     typedef std::basic_ostream<charT> ostream_type;
     typedef typename date_type::ymd_type ymd_type;
 
-    //! Put date into an ostream 
-    static void date_put(const date_type& d, 
+    //! Put date into an ostream
+    static void date_put(const date_type& d,
                          ostream_type& os,
                          const facet_type& f)
     {
@@ -201,11 +201,11 @@ namespace date_time {
         std::ostreambuf_iterator<charT> coi(os);
         f.put_special_value(coi, sv);
       }
-    }    
- 
+    }
 
-    //! Put date into an ostream 
-    static void date_put(const date_type& d, 
+
+    //! Put date into an ostream
+    static void date_put(const date_type& d,
                          ostream_type& os)
     {
       //retrieve the local from the ostream
@@ -219,10 +219,10 @@ namespace date_time {
         facet_type default_facet;
         date_put(d, os, default_facet);
       }
-    } // date_to_ostream    
+    } // date_to_ostream 
   }; //class date_formatter
 
-  
+
 } } //namespace date_time
 
 #endif
