@@ -1,5 +1,5 @@
 
-// Copyright (C) 2000 John Maddock (john_maddock@compuserve.com)
+// Copyright (C) 2000 John Maddock (john@johnmaddock.co.uk)
 // Copyright (C) 2002 Aleksey Gurtovoy (agurtovoy@meta-comm.com)
 //
 // Permission to copy and use this software is granted, 

@@ -1,5 +1,5 @@
 
-// Copyright (C) 2000 John Maddock (john_maddock@compuserve.com)
+// Copyright (C) 2000 John Maddock (john@johnmaddock.co.uk)
 // Copyright (C) 2000 Jeremy Siek (jsiek@lsc.nd.edu)
 // Copyright (C) 1999, 2000 Jaakko J„rvi (jaakko.jarvi@cs.utu.fi)
 //

@@ -1,5 +1,5 @@
 
-// Copyright (C) 2000 John Maddock (john_maddock@compuserve.com)
+// Copyright (C) 2000 John Maddock (john@johnmaddock.co.uk)
 //
 // Permission to copy and use this software is granted, 
 // provided this copyright notice appears in all copies. 
