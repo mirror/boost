@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_TRAITS(has_nothrow_assign)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/has_nothrow_assign.hpp>
+#endif
 
 TT_TEST_BEGIN(has_nothrow_assign)
 

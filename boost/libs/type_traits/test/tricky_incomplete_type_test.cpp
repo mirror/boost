@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include <boost/type_traits.hpp>
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits.hpp>
+#endif
 
 TT_TEST_BEGIN(tricky_incomplete_type_test)
 

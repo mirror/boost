@@ -16,17 +16,17 @@
 
 #define tt std
 
-#define TYPE_TRAITS(x) <type_traits>
-#define TYPE_COMPARE(x) <type_compare>
-#define TYPE_TRANSFORM(x) <type_transform>
+//#define TYPE_TRAITS(x) <type_traits>
+//#define TYPE_COMPARE(x) <type_compare>
+//#define TYPE_TRANSFORM(x) <type_transform>
 
 #else
 
 #define tt boost
 
-#define TYPE_TRAITS(x) BOOST_STRINGIZE(boost/type_traits/x.hpp)
-#define TYPE_COMPARE(x) BOOST_STRINGIZE(boost/type_traits/x.hpp)
-#define TYPE_TRANSFORM(x) BOOST_STRINGIZE(boost/type_traits/x.hpp)
+//#define TYPE_TRAITS(x) BOOST_STRINGIZE(boost/type_traits/x.hpp)
+//#define TYPE_COMPARE(x) BOOST_STRINGIZE(boost/type_traits/x.hpp)
+//#define TYPE_TRANSFORM(x) BOOST_STRINGIZE(boost/type_traits/x.hpp)
 
 #endif
 

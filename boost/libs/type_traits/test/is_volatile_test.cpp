@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_TRAITS(is_volatile)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/is_volatile.hpp>
+#endif
 
 TT_TEST_BEGIN(is_volatile)
 

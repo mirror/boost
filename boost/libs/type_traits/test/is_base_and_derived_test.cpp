@@ -7,7 +7,11 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_TRAITS(is_base_and_derived)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/is_base_and_derived.hpp>
+#endif
 
 
 

@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_TRAITS(is_empty)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/is_empty.hpp>
+#endif
 
 struct non_default_constructable_UDT
 {

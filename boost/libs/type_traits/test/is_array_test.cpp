@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_TRAITS(is_array)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/is_array.hpp>
+#endif
 
 struct convertible_to_pointer
 {

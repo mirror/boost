@@ -6,14 +6,18 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_TRAITS(alignment_of)
-#include TYPE_TRAITS(has_nothrow_assign)
-#include TYPE_TRAITS(has_nothrow_constructor)
-#include TYPE_TRAITS(has_nothrow_copy)
-#include TYPE_TRAITS(is_base_and_derived)
-#include TYPE_COMPARE(is_same)
-#include TYPE_COMPARE(is_convertible)
-#include TYPE_TRAITS(is_polymorphic)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#include <boost/type_traits/alignment_of.hpp>
+#include <boost/type_traits/has_nothrow_assign.hpp>
+#include <boost/type_traits/has_nothrow_constructor.hpp>
+#include <boost/type_traits/has_nothrow_copy.hpp>
+#include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_convertible.hpp>
+#include <boost/type_traits/is_polymorphic.hpp>
+#endif
 
 //
 // VC++ emits an awful lot of warnings unless we define these:

@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_type.hpp"
-#include TYPE_TRANSFORM(remove_volatile)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/remove_volatile.hpp>
+#endif
 
 BOOST_DECL_TRANSFORM_TEST(remove_volatile_test_1, ::boost::remove_volatile, const, const)
 BOOST_DECL_TRANSFORM_TEST3(remove_volatile_test_2, ::boost::remove_volatile, volatile)

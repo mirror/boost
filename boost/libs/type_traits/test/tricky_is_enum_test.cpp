@@ -5,7 +5,11 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_TRAITS(is_enum)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/is_enum.hpp>
+#endif
 
 struct convertible_to_anything
 {

@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_type.hpp"
-#include TYPE_TRANSFORM(remove_bounds)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/remove_bounds.hpp>
+#endif
 
 BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_1, ::boost::remove_bounds, const, const)
 BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_2, ::boost::remove_bounds, volatile, volatile)

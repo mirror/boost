@@ -6,10 +6,13 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_TRAITS(alignment_of)
-#include TYPE_TRAITS(type_with_alignment)
-#include TYPE_TRAITS(is_pod)
-
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/alignment_of.hpp>
+#  include <boost/type_traits/type_with_alignment.hpp>
+#  include <boost/type_traits/is_pod.hpp>
+#endif
 
 TT_TEST_BEGIN(type_with_alignment)
 

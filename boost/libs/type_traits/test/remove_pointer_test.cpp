@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_type.hpp"
-#include TYPE_TRANSFORM(remove_pointer)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/remove_pointer.hpp>
+#endif
 
 BOOST_DECL_TRANSFORM_TEST(remove_pointer_test_1, ::boost::remove_pointer, const, const)
 BOOST_DECL_TRANSFORM_TEST(remove_pointer_test_2, ::boost::remove_pointer, volatile, volatile)

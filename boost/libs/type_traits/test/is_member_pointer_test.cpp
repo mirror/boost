@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_TRAITS(is_member_pointer)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/is_member_pointer.hpp>
+#endif
 
 TT_TEST_BEGIN(is_member_pointer)
 

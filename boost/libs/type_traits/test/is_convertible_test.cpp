@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_COMPARE(is_convertible)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/is_convertible.hpp>
+#endif
 
 template <class T>
 struct convertible_from

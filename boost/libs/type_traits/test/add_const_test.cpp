@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_type.hpp"
-#include TYPE_TRANSFORM(add_const)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/add_const.hpp>
+#endif
 
 BOOST_DECL_TRANSFORM_TEST(add_const_test_1, ::boost::add_const, const, const)
 BOOST_DECL_TRANSFORM_TEST(add_const_test_2, ::boost::add_const, volatile, volatile const)

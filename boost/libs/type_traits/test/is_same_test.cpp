@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_COMPARE(is_same)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/is_same.hpp>
+#endif
 
 TT_TEST_BEGIN(is_same)
 

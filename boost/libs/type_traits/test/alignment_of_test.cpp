@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_integral_constant.hpp"
-#include TYPE_TRAITS(alignment_of)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/alignment_of.hpp>
+#endif
 
 //
 // VC++ emits an awful lot of warnings unless we define these:

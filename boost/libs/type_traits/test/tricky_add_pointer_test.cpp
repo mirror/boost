@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_type.hpp"
-#include TYPE_TRANSFORM(add_pointer)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/add_pointer.hpp>
+#endif
 
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_5, ::boost::add_pointer, const &, const*)
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_6, ::boost::add_pointer, &, *)

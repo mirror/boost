@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_type.hpp"
-#include TYPE_TRANSFORM(remove_cv)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/remove_cv.hpp>
+#endif
 
 BOOST_DECL_TRANSFORM_TEST3(remove_cv_test_1, ::boost::remove_cv, const)
 BOOST_DECL_TRANSFORM_TEST3(remove_cv_test_2, ::boost::remove_cv, volatile)

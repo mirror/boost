@@ -6,7 +6,11 @@
 
 #include "test.hpp"
 #include "check_type.hpp"
-#include TYPE_TRANSFORM(remove_reference)
+#ifdef TEST_STD
+#  include <type_traits>
+#else
+#  include <boost/type_traits/remove_reference.hpp>
+#endif
 
 BOOST_DECL_TRANSFORM_TEST(remove_reference_test_1, ::boost::remove_reference, const, const)
 BOOST_DECL_TRANSFORM_TEST(remove_reference_test_2, ::boost::remove_reference, volatile, volatile)
