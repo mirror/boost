@@ -36,6 +36,8 @@
 
 namespace boost { namespace iostreams {
 
+//--------------Definition of chain and wchain--------------------------------//
+
 namespace detail {
 
 template<typename Chain> class chain_client;
@@ -247,6 +249,8 @@ private:
     shared_ptr<chain_impl> pimpl_;
 };
 
+} // End namespace detail.
+
 //
 // Macro: BOOST_IOSTREAMS_DECL_CHAIN(name, category)
 // Description: Defines a template derived from chain_base appropriate for a
@@ -291,6 +295,8 @@ BOOST_IOSTREAMS_DECL_CHAIN(wchain, wchar_t)
 #undef BOOST_IOSTREAMS_DECL_CHAIN
 
 //--------------Definition of chain_client------------------------------------//
+
+namespace detail {
 
 //
 // Template name: chain_client

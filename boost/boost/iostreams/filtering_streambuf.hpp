@@ -13,8 +13,8 @@
 
 #include <exception>
 #include <memory>                               // allocator.
+#include <boost/iostreams/chain.hpp>
 #include <boost/iostreams/detail/access_control.hpp>
-#include <boost/iostreams/detail/chain.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/streambuf.hpp> // pubsync.
@@ -51,8 +51,8 @@ namespace boost { namespace iostreams {
         ~name_() { if (this->is_complete()) this->BOOST_IOSTREAMS_PUBSYNC(); } \
     }; \
     /**/ 
-BOOST_IOSTREAMS_DEFINE_FILTER_STREAMBUF(filtering_streambuf, boost::iostreams::detail::chain, char)
-BOOST_IOSTREAMS_DEFINE_FILTER_STREAMBUF(filtering_wstreambuf, boost::iostreams::detail::chain, wchar_t)
+BOOST_IOSTREAMS_DEFINE_FILTER_STREAMBUF(filtering_streambuf, boost::iostreams::chain, char)
+BOOST_IOSTREAMS_DEFINE_FILTER_STREAMBUF(filtering_wstreambuf, boost::iostreams::chain, wchar_t)
 
 typedef filtering_streambuf<input>    filtering_istreambuf;
 typedef filtering_streambuf<output>   filtering_ostreambuf;

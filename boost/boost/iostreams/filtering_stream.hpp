@@ -130,8 +130,8 @@ private:
         { client_type::push(t BOOST_IOSTREAMS_PUSH_ARGS()); } \
     }; \
     /**/    
-BOOST_IOSTREAMS_DEFINE_FILTER_STREAM(filtering_stream, boost::iostreams::detail::chain, char)
-BOOST_IOSTREAMS_DEFINE_FILTER_STREAM(wfiltering_stream, boost::iostreams::detail::chain, wchar_t)  
+BOOST_IOSTREAMS_DEFINE_FILTER_STREAM(filtering_stream, boost::iostreams::chain, char)
+BOOST_IOSTREAMS_DEFINE_FILTER_STREAM(wfiltering_stream, boost::iostreams::chain, wchar_t)  
 
 typedef filtering_stream<input>    filtering_istream;
 typedef filtering_stream<output>   filtering_ostream;

@@ -13,8 +13,8 @@
 
 #include <boost/config.hpp>                    // BOOST_MSVC, template friends.
 #include <boost/detail/workaround.hpp>
+#include <boost/iostreams/chain.hpp>
 #include <boost/iostreams/detail/access_control.hpp>
-#include <boost/iostreams/detail/chain.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>

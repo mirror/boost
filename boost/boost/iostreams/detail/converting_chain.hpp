@@ -15,7 +15,7 @@
 
 #include <memory>                                // allocator.
 #include <boost/iostreams/converter.hpp>
-#include <boost/iostreams/detail/chain.hpp>
+#include <boost/iostreams/chain.hpp>
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/ios.hpp>        // seekdir, streamsize.
 #include <boost/iostreams/detail/streambuf.hpp>  // pubsync.
