@@ -27,10 +27,9 @@ at how to create the corresponding checks for the
 <a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
 RandomAccessIterator</a> concept. First, as a convention we name the
 concept checking class after the concept, and add the suffix
-``<tt>_concept</tt>''. Note that the <tt>REQUIRE</tt> macro expects
-the suffix to be there. Next we must define a member function named
+``<tt>Concept</tt>''. Next we must define a member function named
 <tt>constraints()</tt> in which we will exercise the valid expressions
-of the concept. The <tt>REQUIRE</tt> macro expects this function's
+of the concept. <tt>function_requires()</tt> expects this function's
 signature to appear exactly as it is appears below: a <tt>void</tt>
 non-const member function with no parameters.
 
@@ -43,8 +42,8 @@ RandomAccessIterator</a> and the concepts which it builds upon:
 BidirectionalIterator</a> and
 <a href="http://www.sgi.com/Technology/STL/LessThanComparable.html">
 LessThanComparable</a>. We could have instead used
-<tt>CLASS_REQUIRES</tt> and placed these requirements in the class
-body, however <tt>CLASS_REQUIRES</tt> uses C++ language features that
+<tt>BOOST_CLASS_REQUIRES</tt> and placed these requirements in the class
+body, however <tt>BOOST_CLASS_REQUIRES</tt> uses C++ language features that
 are less portable.
 
 <p>
