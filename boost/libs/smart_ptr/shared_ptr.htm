@@ -31,12 +31,19 @@
 			work correctly with cyclic data structures. For example, if <b>main()</b> holds 
 			a <b>shared_ptr</b> to <b>A</b>, which directly or indirectly holds a <b>shared_ptr</b>
 			back to <b>A</b>, <b>A</b>'s use count will be 2. Destruction of the original <b>shared_ptr</b>
-			will leave <b>A</b> dangling with a use count of 1.</p>
+			will leave <b>A</b> dangling with a use count of 1. Use <A href="weak_ptr.htm">weak_ptr</A>
+			to "break cycles."</p>
 		<p>The class template is parameterized on <b>T</b>, the type of the object pointed 
-			to. <b>T</b> must meet the smart pointer <A href="smart_ptr.htm#Common requirements">
-				common requirements</A>. <b>T</b> may be <b>void</b>, but in that case, 
-			either an explicit delete function must be passed in, or the pointed-to object 
-			must have a trivial destructor.</p>
+			to. <STRONG>shared_ptr</STRONG> and most of its member functions place no 
+			requirements on <STRONG>T</STRONG>; it is allowed to be an incomplete type, or <STRONG>
+				void</STRONG>. Member functions that do place additional requirements (<A href="#constructors">constructors</A>,
+			<A href="#reset">reset</A>) are explicitly documented below.</p>
+		<P><STRONG>shared_ptr&lt;T&gt;</STRONG> can be implicitly converted to <STRONG>shared_ptr&lt;U&gt;</STRONG>
+			whenever <STRONG>T*</STRONG> can be implicitly converted to <STRONG>U*</STRONG>. 
+			In particular, <STRONG>shared_ptr&lt;T&gt;</STRONG> is implicitly convertible 
+			to <STRONG>shared_ptr&lt;T const&gt;</STRONG>, to <STRONG>shared_ptr&lt;U&gt;</STRONG>
+			where <STRONG>U</STRONG> is an accessible base of <STRONG>T</STRONG>, and to <STRONG>
+				shared_ptr&lt;void&gt;</STRONG>.</P>
 		<h2><a name="Synopsis">Synopsis</a></h2>
 		<pre>namespace boost {
 
@@ -47,11 +54,12 @@
   template&lt;typename T&gt; class shared_ptr {
 
     public:
+
       typedef T <A href="#element_type" >element_type</A>;
 
       <A href="#constructors" >shared_ptr</A> ();
-      explicit <A href="#constructors" >shared_ptr</A> (T * p); // requires complete type
-      template&lt;typename D&gt; <A href="#constructors" >shared_ptr</A>(T * p, D d);
+      template&lt;typename Y&gt; explicit <A href="#constructors" >shared_ptr</A> (Y * p);
+      template&lt;typename Y, typename D&gt; <A href="#constructors" >shared_ptr</A>(Y * p, D d);
       <A href="#destructor" >~shared_ptr</A>(); // never throws
 
       <A href="#constructors" >shared_ptr</A>(shared_ptr const &amp; r); // never throws
@@ -64,8 +72,8 @@
       template&lt;typename Y&gt; shared_ptr &amp; <A href="#assignment" >operator=</A>(std::auto_ptr&lt;Y&gt; &amp; r);
 
       void <A href="#reset" >reset</A> ();
-      void <A href="#reset" >reset</A> (T * p); // requires complete type
-      template&lt;typename D&gt; void <A href="#reset" >reset</A>(T * p, D d);
+      template&lt;typename Y&gt; void <A href="#reset" >reset</A> (Y * p);
+      template&lt;typename Y&gt; template&lt;typename D&gt; void <A href="#reset" >reset</A>(Y * p, D d);
 
       T &amp; <A href="#indirection" >operator*</A>() const; // never throws
       T * <A href="#indirection" >operator-&gt;</A>() const; // never throws
@@ -113,13 +121,12 @@
 			<p><b>Throws:</b> <b>std::bad_alloc</b>.</p>
 			<p><b>Exception safety:</b> If an exception is thrown, the constructor has no 
 				effect.</p>
-			<P><B>Notes:</B> <B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
-					common requirements</A>.</P>
 		</blockquote>
-		<pre>explicit shared_ptr(T * p);</pre>
+		<pre>template&lt;typename Y&gt; explicit shared_ptr(Y * p);</pre>
 		<blockquote>
-			<p><b>Requirements:</b> The expression <code>delete p</code> must be well-formed 
-				and must not invoke undefined behavior.
+			<p><b>Requirements:</b> <b>p</b> must be convertible to <b>T *</b>. <STRONG>Y</STRONG>
+				must be a complete type. The expression <code>delete p</code> must be 
+				well-formed, must not invoke undefined behavior, and must not throw exceptions.
 			</p>
 			<p><b>Effects:</b> Constructs a <b>shared_ptr</b>, storing a copy of <b>p</b>.</p>
 			<p><b>Postconditions:</b> <A href="#use_count">use count</A> is 1.</p>
@@ -131,11 +138,12 @@
 					use count</A> is 1 holds even if <b>p</b> is 0; invoking <STRONG>delete</STRONG>
 				on a pointer that has a value of 0 is harmless.</P>
 		</blockquote>
-		<pre>template&lt;typename D&gt; shared_ptr(T * p, D d);</pre>
+		<pre>template&lt;typename Y, typename D&gt; shared_ptr(Y * p, D d);</pre>
 		<blockquote>
-			<p><b>Requirements:</b> The copy constructor and destructor of <b>D</b> must not 
-				throw. The expression <code>d(p)</code> must be well-formed, must not invoke 
-				undefined behavior, and must not throw exceptions.
+			<p><b>Requirements:</b> <B>p</B> must be convertible to <B>T *</B>. The copy 
+				constructor and destructor of <b>D</b> must not throw. The expression <code>d(p)</code>
+				must be well-formed, must not invoke undefined behavior, and must not throw 
+				exceptions.
 			</p>
 			<p><b>Effects:</b> Constructs a <b>shared_ptr</b>, storing a copy of <b>p</b> and <b>d</b>.</p>
 			<p><b>Postconditions:</b> <A href="#use_count">use count</A> is 1.</p>
@@ -180,10 +188,6 @@ template&lt;typename Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // nev
 			<P><B>Postconditions:</B> <A href="#use_count">use count</A> for all remaining 
 				copies is decreased by one.</P>
 			<P><B>Throws:</B> nothing.</P>
-			<P><B>Notes:</B> <B>T</B> need not be a complete type. The guarantee that the 
-				destructor does not throw exceptions depends on the requirement that the 
-				deleted object's destructor does not throw exceptions. See the smart pointer <A href="smart_ptr.htm#Common requirements">
-					common requirements</A>.</P>
 		</BLOCKQUOTE>
 		<H3><a name="assignment">assignment</a></H3>
 		<pre>shared_ptr &amp; operator=(shared_ptr const &amp; r); // never throws
@@ -207,12 +211,11 @@ q = p;
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Equivalent to <code>shared_ptr().swap(*this)</code>.</P>
 		</BLOCKQUOTE>
-		<pre>void reset(T * p);</pre>
+		<pre>template&lt;typename Y&gt; void reset(Y * p);</pre>
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Equivalent to <code>shared_ptr(p).swap(*this)</code>.</P>
-			<P><B>Notes:</B> Note the implied requirement that <b>T</b> is a complete type.</P>
 		</BLOCKQUOTE>
-		<pre>template&lt;typename D&gt; void reset(T * p, D d);</pre>
+		<pre>template&lt;typename Y, typename D&gt; void reset(Y * p, D d);</pre>
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Equivalent to <code>shared_ptr(p, d).swap(*this)</code>.</P>
 		</BLOCKQUOTE>
@@ -234,17 +237,13 @@ q = p;
 		<blockquote>
 			<p><b>Returns:</b> the stored pointer.</p>
 			<p><b>Throws:</b> nothing.</p>
-			<P><B>Notes:</B> <B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
-					common requirements</A>.</P>
 		</blockquote>
 		<h3><a name="unique">unique</a></h3>
 		<pre>bool unique() const; // never throws</pre>
 		<blockquote>
 			<p><b>Returns:</b> <code>use_count() == 1</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
-			<P><B>Notes:</B> <code>unique()</code> may be faster than <code>use_count()</code>. <B>T</B>
-				need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
-					common requirements</A>.</P>
+			<P><B>Notes:</B> <code>unique()</code> may be faster than <code>use_count()</code>.</P>
 		</blockquote>
 		<h3><a name="use_count">use_count</a></h3>
 		<pre>long use_count() const; // never throws</pre>
@@ -253,9 +252,7 @@ q = p;
 				stored pointer.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> <code>use_count()</code> is not necessarily efficient. Use only 
-				for debugging and testing purposes, not for production code. <B>T</B> need not 
-				be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
-					common requirements</A>.</P>
+				for debugging and testing purposes, not for production code.</P>
 		</blockquote>
 		<h3><a name="conversions">conversions</a></h3>
 		<pre>operator <i>implementation-defined-type</i> () const; // never throws</pre>
@@ -264,17 +261,15 @@ q = p;
 				contexts, is equivalent to <code>get() != 0</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> This conversion operator allows <b>shared_ptr</b> objects to be 
-				used in boolean contexts, like <code>if (p && p-&gt;valid()) {}</code>. The 
-				actual target type is typically a pointer to a member function, avloiding many 
-				of the implicit conversion pitfalls.</P>
+				used in boolean contexts, like <code>if (p &amp;&amp; p-&gt;valid()) {}</code>. 
+				The actual target type is typically a pointer to a member function, avloiding 
+				many of the implicit conversion pitfalls.</P>
 		</blockquote>
 		<h3><a name="swap">swap</a></h3>
 		<pre>void swap(shared_ptr &amp; b); // never throws</pre>
 		<blockquote>
 			<p><b>Effects:</b> Exchanges the contents of the two smart pointers.</p>
 			<p><b>Throws:</b> nothing.</p>
-			<P><B>Notes:</B> <B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
-					common requirements</A>.</P>
 		</blockquote>
 		<h2><a name="functions">Free Functions</a></h2>
 		<h3><a name="comparison">comparison</a></h3>
@@ -283,27 +278,22 @@ q = p;
 		<blockquote>
 			<p><b>Returns:</b> <code>a.get() == b.get()</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
-			<P><B>Notes:</B> <B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
-					common requirements</A>.</P>
 		</blockquote>
 		<pre>template&lt;typename T, typename U&gt;
   bool operator!=(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws</pre>
 		<blockquote>
 			<p><b>Returns:</b> <code>a.get() != b.get()</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
-			<P><B>Notes:</B> <B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
-					common requirements</A>.</P>
 		</blockquote>
 		<pre>template&lt;typename T&gt;
   bool operator&lt;(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;T&gt; const &amp; b); // never throws</pre>
 		<blockquote>
-			<p><b>Returns:</b> an implementation-defined value such that <b>operator&lt;</b>
-				is a strict weak ordering as described in section 25.3 <code>[lib.alg.sorting]</code>
+			<p><b>Returns:</b> an implementation-defined value such that <b>operator&lt;</b> is 
+				a strict weak ordering as described in section 25.3 <code>[lib.alg.sorting]</code>
 				of the C++ standard.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> Allows <STRONG>shared_ptr</STRONG> objects to be used as keys in 
-				associative containers. <B>T</B> need not be a complete type. See the smart 
-				pointer <A href="smart_ptr.htm#Common requirements">common requirements</A>.</P>
+				associative containers.</P>
 		</blockquote>
 		<h3><a name="free-swap">swap</a></h3>
 		<pre>template&lt;typename T&gt;
@@ -337,14 +327,13 @@ q = p;
 			<P><B>Returns:</B></P>
 			<UL>
 				<LI>
-					When <CODE>dynamic_cast&lt;T*&gt;(r.get())</CODE> returns a nonzero 
-					value,&nbsp;a <STRONG>shared_ptr&lt;T&gt;</STRONG> object that stores a copy of 
-					it and shares ownership with <STRONG>r</STRONG>;
+					When <CODE>dynamic_cast&lt;T*&gt;(r.get())</CODE> returns a nonzero value, a <STRONG>
+						shared_ptr&lt;T&gt;</STRONG> object that stores a copy of it and shares 
+					ownership with <STRONG>r</STRONG>;
 				<LI>
 					Otherwise, a default-constructed <STRONG>shared_ptr&lt;T&gt;</STRONG> object.</LI></UL>
 			<P><B>Throws:</B> <STRONG>std::bad_alloc</STRONG>.</P>
-			<P><B>Exception safety:</B> If an exception is thrown, the function has no 
-				effect.</P>
+			<P><B>Exception safety:</B> If an exception is thrown, the function has no effect.</P>
 			<P><B>Notes:</B> the seemingly equivalent expression</P>
 			<P><CODE>shared_ptr&lt;T&gt;(dynamic_cast&lt;T*&gt;(r.get()))</CODE></P>
 			<P>will eventually result in undefined behavior, attempting to delete the same 
@@ -456,8 +445,8 @@ int * p = a.release();
 			implementation or a linked list implementation, or some other specific 
 			implementation. This is not the intent.</p>
 		<hr>
-		<p>Revised&nbsp; <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->
-			14 February 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
+		<p>Revised&nbsp; <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan --> 
+			04&nbsp;May 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
 			Copyright 2002 Peter Dimov. Permission to copy, use, modify, sell and 
 			distribute this document is granted provided this copyright notice appears in 
