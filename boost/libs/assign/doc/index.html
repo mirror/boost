@@ -321,11 +321,11 @@ where <code>repeat()</code> can be handy:
     
     </span><span class=identifier>v </span><span class=special>= </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>1</span><span class=special>).</span><span class=identifier>repeat</span><span class=special>(</span><span class=number>5</span><span class=special>,</span><span class=number>2</span><span class=special>)(</span><span class=number>3</span><span class=special>);
     </span><span class=comment>// v = [1,2,2,2,2,2,3]
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>v</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>1 </span><span class=special>+ </span><span class=number>5 </span><span class=special>+ </span><span class=number>3 </span><span class=special>);
+    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>v</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>1 </span><span class=special>+ </span><span class=number>5 </span><span class=special>+ </span><span class=number>1 </span><span class=special>);
     
     </span><span class=identifier>push_back</span><span class=special>( </span><span class=identifier>v </span><span class=special>)(</span><span class=number>1</span><span class=special>).</span><span class=identifier>repeat</span><span class=special>(</span><span class=number>1</span><span class=special>,</span><span class=number>2</span><span class=special>)(</span><span class=number>3</span><span class=special>);
     </span><span class=comment>// v = old v + [1,2,3]
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>v</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>12 </span><span class=special>);</span>
+    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>v</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>10 </span><span class=special>);</span>
 <span class=special>}</span></pre>
 </blockquote>
 As we can see, then the first argument to <code>repeat()</code> is the number
