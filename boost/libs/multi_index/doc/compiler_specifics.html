@@ -39,7 +39,8 @@ indication of which compilers are actually supported.
 
 <ul>
   <li><a href="#bcb_64">Borland C++ Builder 6.4</a></li>
-  <li><a href="#comeau_433_win_vc7">Comeau C/C++ 4.3.3 for Windows (VC++ 7.0 backend)</a></li>
+  <li><a href="#comeau_433_win_vc7_71">Comeau C/C++ 4.3.3 for Windows (VC++ 7.0/7.1 backend)</a></li>
+  <li><a href="#compaq_65">Compaq C++ 6.5-041 for Tru64 UNIX</a></li>
   <li><a href="#gcc_32">GNU GCC 3.2 and later</a></li>
   <li><a href="#va_60">IBM VisualAge C++ V6.0 for AIX</a></li>
   <li><a href="#intel_7_8_lin">Intel C++ Compiler for Linux 7.1/8.0</a></li>
@@ -63,7 +64,14 @@ future versions of the library can be made to work under
 this compiler.
 </p>
 
-<h2><a name="comeau_433_win_vc7">Comeau C/C++ 4.3.3 for Windows (VC++ 7.0 backend)</a></h2>
+<h2><a name="comeau_433_win_vc7_71">Comeau C/C++ 4.3.3 for Windows (VC++ 7.0/7.1 backend)</a></h2>
+
+<p>
+No problems have been detected with this compiler. The library fails to compile,
+however, when Microsoft Visual C++ 6.0 is used as the backend.
+</p>
+
+<h2><a name="compaq_65">Compaq C++ 6.5-041 for Tru64 UNIX</a></h2>
 
 <p>
 No problems have been detected with this compiler.
@@ -85,6 +93,7 @@ starting from 3.2. The following versions have been explicitly tested:
   <li>GCC 3.4.0 under Solaris,</li>
   <li>GCC 3.4.1 under Linux.</li>
 </ul>
+Boost.MultiIndex do not work with versions 3.1 and prior of GCC.
 </p>
 
 <h2><a name="va_60">IBM VisualAge C++ V6.0 for AIX</a></h2>
@@ -416,7 +425,7 @@ Performance
 
 <br>
 
-<p>Revised July 30th 2004</p>
+<p>Revised August 24th 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
