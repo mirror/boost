@@ -119,7 +119,8 @@ operations.
 
 ``filter_iterator(Iterator x, Iterator end = Iterator());``
 
-:Requires: ``Predicate`` must be Default Constructible.
+:Requires: ``Predicate`` must be Default Constructible and
+  ``Predicate`` is a class type (not a function pointer).
 :Returns: A ``filter_iterator`` where ``m_iter`` is either
     the first position in the range ``[x,end)`` such that ``m_pred(*m_iter) == true`` 
     or else``m_iter == end``. The member ``m_pred`` is default constructed.
