@@ -10,6 +10,8 @@
 // See http://www.boost.org/libs/tokenizer for documentation.
 
 // Revision History:
+// 16 Jul 2003   John Bandela
+//      Allowed conversions from convertible base iterators
 // 03 Jul 2003   John Bandela
 //      Converted to new iterator adapter
 
@@ -95,7 +97,22 @@ namespace boost {
       token_iterator(Iterator begin, Iterator end = Iterator())
             : f_(),begin_(begin),end_(end),valid_(false),tok_() {initialize();}
 
-      Iterator base(){return begin_;}
+      template<class OtherIter>
+      token_iterator(
+            token_iterator<TokenizerFunc, OtherIter,Type> const& t
+            , typename enable_if_convertible<OtherIter, Iterator>::type* = 0)
+            : f_(t.tokenizer_function()),begin_(t.base())
+            ,end_(t.end()),valid_(t.at_end()),tok_(t.current_token()) {}
+
+      Iterator base()const{return begin_;}
+
+      Iterator end()const{return end_;};
+
+      TokenizerFunc tokenizer_function()const{return f_;}
+
+      Type current_token()const{return tok_;}
+
+      bool at_end()const{return valid_;}
 
 
 
