@@ -11,7 +11,7 @@
 #ifndef BOOST_UTILITY_BASE_FROM_MEMBER_HPP
 #define BOOST_UTILITY_BASE_FROM_MEMBER_HPP
 
-#include <boost/utility_fwd.hpp>  // self include
+#include <boost/utility_fwd.hpp>  // required for parameter defaults
 
 
 namespace boost
