@@ -138,6 +138,11 @@ main()
     function_requires< OutputIteratorConcept<Iter, int> >();
   }
   {
+    typedef input_output_iterator_archetype<int> Iter;
+    function_requires< InputIteratorConcept<Iter> >();
+    function_requires< OutputIteratorConcept<Iter, int> >();
+  }
+  {
     typedef forward_iterator_archetype<null_archetype<> > Iter;
     function_requires< ForwardIteratorConcept<Iter> >();
   }

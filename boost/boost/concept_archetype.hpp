@@ -406,19 +406,21 @@ namespace boost {
   template <class T>
   class input_iterator_archetype
   {
-  public:
+  private:
     typedef input_iterator_archetype self;
   public:
     typedef std::input_iterator_tag iterator_category;
     typedef T value_type;
-    typedef const T& reference;
+    struct reference {
+      operator value_type() { return static_object<T>::get(); }
+    };
     typedef const T* pointer;
     typedef std::ptrdiff_t difference_type;
     input_iterator_archetype() { }
     self& operator=(const self&) { return *this;  }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
-    reference operator*() const { return static_object<T>::get(); }
+    reference operator*() const { return reference(); }
     self& operator++() { return *this; }
     self operator++(int) { return *this; }
   };
@@ -449,6 +451,30 @@ namespace boost {
     self operator++(int) { return *this; }
   private:
     output_iterator_archetype() { }
+  };
+
+  template <class T>
+  class input_output_iterator_archetype
+  {
+  private:
+    typedef input_output_iterator_archetype self;
+    struct in_out_tag : public std::input_iterator_tag, public std::output_iterator_tag { };
+  public:
+    typedef in_out_tag iterator_category;
+    typedef T value_type;
+    struct reference {
+      reference& operator=(const T&) { return *this; }
+      operator value_type() { return static_object<T>::get(); }
+    };
+    typedef const T* pointer;
+    typedef std::ptrdiff_t difference_type;
+    input_output_iterator_archetype() { }
+    self& operator=(const self&) { return *this;  }
+    bool operator==(const self&) const { return true; }
+    bool operator!=(const self&) const { return true; }
+    reference operator*() const { return reference(); }
+    self& operator++() { return *this; }
+    self operator++(int) { return *this; }
   };
 
   template <class T>
