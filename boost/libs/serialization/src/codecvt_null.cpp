@@ -1,7 +1,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // codecvt_null.cpp
 
-// Copyright © 2001 Ronald Garcia, Indiana University (garcia@osl.iu.edu)
+// Copyright © 2004 Robert Ramey, Indiana University (garcia@osl.iu.edu)
 // Andrew Lumsdaine, Indiana University (lums@osl.iu.edu). 
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -26,7 +26,7 @@ codecvt_null<wchar_t>::do_out(
     char * last2, 
     char * & next2
 ) const {
-    for(;first1 != last1; ++first1){
+    while(first1 != last1){
         // Per std::22.2.1.5.2/2, we can store no more that
         // last2-first2 characters. If we need to more encode
         // next internal char type, return 'partial'.
@@ -35,9 +35,9 @@ codecvt_null<wchar_t>::do_out(
             next2 = first2;
             return std::codecvt_base::partial;
         }
-        unsigned int i;
-        for(i = sizeof(wchar_t); i > 0;)
-            *first2++ = (* first1 >> (8 * --i)) & 0xff;
+		* reinterpret_cast<wchar_t *>(first2) = * first1++;
+		first2 += sizeof(wchar_t);
+
     }
     next1 = first1;
     next2 = first2;
@@ -70,13 +70,8 @@ codecvt_null<wchar_t>::do_in(
             next2 = first2;
             return std::codecvt_base::partial; 
         }
-        *first2 = static_cast<unsigned char>(*first1++);
-        int i = sizeof(wchar_t) - 1;
-        do{
-            *first2 <<= 8;
-            *first2 |= static_cast<unsigned char>(*first1++);
-        }while(--i > 0);
-        ++first2;
+		*first2++ = * reinterpret_cast<const wchar_t *>(first1);
+		first1 += sizeof(wchar_t);
     }
     next1 = first1;
     next2 = first2;
