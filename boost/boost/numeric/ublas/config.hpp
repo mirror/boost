@@ -32,26 +32,15 @@
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
-// Compiler specific problems: default configuration
-#if defined (BOOST_STRICT_CONFIG) || ! (\
-        defined (BOOST_MSVC) || \
-        defined (__GNUC__) || \
-        defined (__BORLANDC__) || \
-        defined (_ICL) || \
-        defined (_ICC) || \
-        defined (__COMO__) || \
-        defined (__MWERKS__))
-
-#define BOOST_UBLAS_TYPENAME typename
-#define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_USE_STREAM
-
-#endif
-
-
 
 // Microsoft Visual C++
 #if defined (BOOST_MSVC) && ! defined (BOOST_STRICT_CONFIG)
+
+// Version 6.0
+#if BOOST_MSVC < 1300
+// Cannot access private members from member class
+#define BOOST_UBLAS_NESTED_CLASS_DR45
+#endif
 
 // Version 6.0 & 7.0
 #if BOOST_MSVC <= 1300
@@ -95,12 +84,10 @@
 #define BOOST_MSVC_STD_ITERATOR
 #endif
 
-// Version 7.1
-#else
+#endif
 
-#define BOOST_UBLAS_TYPENAME typename
-#define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_USE_STREAM
+// Version 7.1
+#if BOOST == 1310
 
 // One of these workarounds is needed for MSVC 7.1 AFAIK
 // (thanks to John Maddock and Martin Lauer).
@@ -110,16 +97,13 @@
 #endif
 
 #endif
+
 #endif
 
 
 
 // GNU Compiler Collection
 #if defined (__GNUC__) && ! defined (BOOST_STRICT_CONFIG)
-
-#define BOOST_UBLAS_TYPENAME typename
-#define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_USE_STREAM
 
 // GCC allows to use iterator_base_traits.
 #define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
@@ -129,6 +113,8 @@
 #define BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS
 #define BOOST_UBLAS_NO_MEMBER_FRIENDS
 #define BOOST_UBLAS_NO_PROXY_SHORTCUTS
+// Cannot access private members from member class
+#define BOOST_UBLAS_NESTED_CLASS_DR45
 #endif
 
 #endif
@@ -137,10 +123,6 @@
 
 // Intel Compiler
 #if defined (BOOST_INTEL) && ! defined (BOOST_STRICT_CONFIG)
-
-#define BOOST_UBLAS_TYPENAME typename
-#define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_USE_STREAM
 
 //TODO When is this true?
 // ICC sometimes needs qualified type names.
@@ -190,10 +172,6 @@ namespace std {
 // Thanks to Kresimir Fresl for porting to Comeau.
 #if defined (__COMO__) && ! defined (BOOST_STRICT_CONFIG)
 
-#define BOOST_UBLAS_TYPENAME typename
-#define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_USE_STREAM
-
 // Comeau allows to use iterator_base_traits.
 #define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
 
@@ -204,12 +182,20 @@ namespace std {
 // Metrowerks Codewarrior
 #if defined (__MWERKS__) && ! defined (BOOST_STRICT_CONFIG)
 
-#define BOOST_UBLAS_TYPENAME typename
-#define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_USE_STREAM
-
 #define BOOST_UBLAS_NO_MEMBER_FRIENDS
 
+#endif
+
+
+// Default configuration without compiler problems
+#ifndef BOOST_UBLAS_TYPENAME
+#define BOOST_UBLAS_TYPENAME typename
+#endif
+#ifndef BOOST_UBLAS_USING
+#define BOOST_UBLAS_USING using
+#endif
+#ifndef BOOST_UBLAS_USE_STREAM
+#define BOOST_UBLAS_USE_STREAM
 #endif
 
 
