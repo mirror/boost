@@ -111,16 +111,22 @@ public: // metafunction result
 template <typename Types>
 struct make_storage
 {
+private: // helpers, for metafunction result (below)
+
+    typedef typename max_value<
+          Types, mpl::sizeof_<mpl::_1>
+        >::type max_size;
+
+    typedef typename max_value<
+          Types, alignment_of<mpl::_1>
+        >::type max_align;
+
+
 public: // metafunction result
 
-    // aligned_storage<max_size, max_alignment>
     typedef aligned_storage<
-          ::boost::detail::variant::max_value<
-              Types, mpl::sizeof_<mpl::_1>
-            >::type::value
-        , ::boost::detail::variant::max_value<
-              Types, alignment_of<mpl::_1>
-            >::type::value
+          ::boost::detail::variant::make_storage<Types>::max_size::value
+        , ::boost::detail::variant::make_storage<Types>::max_align::value
         > type;
 
 };
