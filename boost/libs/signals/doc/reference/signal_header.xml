@@ -3,6 +3,12 @@
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <header name="boost/signal.hpp" last-revision="$Date$">
   <namespace name="boost">
+    <namespace name="signals">
+      <enum name="connect_position">
+        <enumvalue name="at_front"/>
+        <enumvalue name="at_back"/>
+      </enum>
+    </namespace>
     <class name="signalN">
       <template>
         <template-type-parameter name="R"/>
@@ -105,6 +111,10 @@
             <parameter name="slot">
               <paramtype>const slot_type&amp;</paramtype>
             </parameter>
+            <parameter name="at">
+              <paramtype>signals::connect_position</paramtype>
+              <default>signals::at_back</default>
+            </parameter>
           </signature>
 
           <signature>
@@ -115,14 +125,24 @@
             <parameter name="slot">
               <paramtype>const slot_type&amp;</paramtype>
             </parameter>
+            <parameter name="at">
+              <paramtype>signals::connect_position</paramtype>
+              <default>signals::at_back</default>
+            </parameter>
           </signature>
 
-          <effects><simpara>Connects the signal this to the incoming slot. If
-          the slot is inactive, i.e., any of the trackable objects
-          bound by the slot call have been destroyed, then the call to
-          connect is a no-op. If the second version of
+          <effects><simpara>Connects the signal this to the incoming
+          slot. If the slot is inactive, i.e., any of the trackable
+          objects bound by the slot call have been destroyed, then the
+          call to connect is a no-op. If the second version of
           <computeroutput>connect</computeroutput> is invoked, the
-          slot is associated with the given group.</simpara></effects>
+          slot is associated with the given group. The <code>at</code>
+          parameter specifies where the slot should be connected:
+          <code>at_front</code> indicates that the slot will be
+          connected at the front of the list or group of slots and
+          <code>at_back</code> indicates that the slot will be
+          connected at the back of the list or group of
+          slots.</simpara></effects>
 
           <returns><simpara>A
           <computeroutput><classname>signals::connection</classname></computeroutput>
@@ -134,8 +154,10 @@
           where any exception thrown will cause the slot to not be
           connected to the signal.</simpara></throws> 
 
-          <complexity><simpara>O(lg n) where n is the number of
-          slots known to the signal.</simpara></complexity>
+          <complexity><simpara>Constant time when connecting a slot
+          without a group name or logarithmic in the number of groups
+          when connecting to a particular
+          group.</simpara></complexity>
 
           <notes><simpara>It is unspecified whether connecting a slot while the
           signal is calling will result in the slot being called
@@ -168,8 +190,8 @@
           equality operator <code>==</code> throws. If either throws,
           not all slots may be disconnected.</simpara></throws>
 
-          <complexity><simpara>If a group is given, O(lg n) + k where
-          n is the number of slots known to the signal and k is the
+          <complexity><simpara>If a group is given, O(lg g) + k where
+          g is the number of groups in the signal and k is the
           number of slots in the group. Otherwise, linear in the
           number of slots connected to the
           signal.</simpara></complexity>
@@ -273,10 +295,6 @@
           non-<computeroutput>const</computeroutput> version will
           invoke the combiner as
           non-<computeroutput>const</computeroutput>.</simpara>
-
-          <simpara>Ordering between members of a given group or between
-          ungrouped slots is unspecified.</simpara>
-          
 
           <simpara>Calling the function call operator may invoke undefined
           behavior if no slots are connected to the signal, depending

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<section last-revision="$Date$">
+<section last-revision="$Date$" id="signals.tutorial">
   <title>Tutorial</title>
 
   <using-namespace name="boost"/>
@@ -217,24 +217,16 @@ sig();
           </tbody>
         </tgroup>
       </informaltable>
-<para>Now, if you compile and run this program, you might see
-something strange. It is possible that the output will look like
-this:</para>
+<para>By default, slots are called in first-in first-out (FIFO) order,
+so the output of this program will be as expected:</para>
 <programlisting>
-  , World!
-Hello
+Hello, World!
 </programlisting>
-<para>The underlying reason is that the ordering of signals isn't
-guaranteed. The signal is free to call either the
-<code>Hello</code> slot or the <code>World</code> slot first, but
-every slot will be called unless something bad (e.g., an exception)
-occurs. Read on to learn how to control the ordering so that
-"Hello, World!" always prints as expected.</para>
 </section>
 
 <section><title>Ordering slot call groups (Intermediate)</title>
 <para>Slots are free to have side effects, and that can mean that some
-slots will have to be called before others. The Boost.Signals
+slots will have to be called before others even if they are not connected in that order. The Boost.Signals
 library allows slots to be placed into groups that are ordered in
 some way. For our Hello, World program, we want "Hello" to be
 printed before ", World!", so we put "Hello" into a group that must
@@ -256,16 +248,16 @@ are, by default, <code>int</code>s, and are ordered by the integer
           <entry>
 <programlisting>
 <classname>boost::signal</classname>&lt;void ()&gt; sig;
-sig.<methodname>connect</methodname>(0, Hello());
 sig.<methodname>connect</methodname>(1, World());
+sig.<methodname>connect</methodname>(0, Hello());
 sig();
 </programlisting>
 </entry>
             <entry>
 <programlisting>
 <classname alt="boost::signalN">boost::signal0</classname>&lt;void&gt; sig;
-sig.<methodname>connect</methodname>(0, Hello());
 sig.<methodname>connect</methodname>(1, World());
+sig.<methodname>connect</methodname>(0, Hello());
 sig();
 </programlisting>
 </entry>
@@ -275,16 +267,20 @@ sig();
       </informaltable>
 
 <para>This program will correctly print "Hello, World!", because the
-<code>Hello</code> object is in group 0, which precedes group 1
-where the <code>World</code> object resides.</para>
-<para>The group parameter is, in fact, optional. We omitted it in the
-first Hello, World example because it was unnecessary when all of
-the slots are independent. So what happens if we mix calls to
-connect that use the group parameter and those that don't? The
-"unnamed" slots (i.e., those that have been connected without
-specifying a group name) go into a separate group that is special
-in that it follows all other groups. So if we add a new slot to our
-example like this:</para>
+<code>Hello</code> object is in group 0, which precedes group 1 where
+the <code>World</code> object resides. The group
+parameter is, in fact, optional. We omitted it in the first Hello,
+World example because it was unnecessary when all of the slots are
+independent. So what happens if we mix calls to connect that use the
+group parameter and those that don't? The "unnamed" slots (i.e., those
+that have been connected without specifying a group name) can be
+placed at the front or back of the slot list (by passing
+<code>boost::signals::at_front</code> or <code>boost::signals::at_back</code>
+as the last parameter to <code><methodname
+alt="boost::signalN::connect">connect</methodname></code>, respectively), and defaults to the end of the list. When
+a group is specified, the final parameter describes where the slot
+will be placed within the group ordering. If we add a new slot
+to our example like this:</para>
 <programlisting>
 struct GoodMorning
 {
@@ -301,14 +297,6 @@ sig.<methodname>connect</methodname>(GoodMorning());
 Hello, World!
 ... and good morning!
 </programlisting>
-<para>The last interesting point with groups of slots is the behavior
-when multiple slots are connected in the same group. Within groups,
-calls to slots are unordered: if we connect slots <code>A</code>
-and <code>B</code> to the same signal with the same group name,
-either <code>A</code> or <code>B</code> will be called first (but
-both will be called). This is the same behavior we saw before with
-the second version of Hello, World, where the slots could be called
-in the wrong order, mangling the output.</para>
 </section>
 </section>
 
@@ -383,8 +371,7 @@ sig(5, 3);
           </tgroup>
         </informaltable>
 
-<para>This program will print out something like the following,
-although the ordering of the lines may differ:</para>
+<para>This program will print out the following:</para>
 <programlisting>
 The sum is 8
 The difference is 2
@@ -465,16 +452,13 @@ std::cout &lt;&lt; sig(5, 3) &lt;&lt; std::endl;
         </tgroup>
       </informaltable>
 
-<para>This example program will output either <code>8</code>,
-<code>1.6667</code>, <code>15</code>, or <code>2</code>, depending
-on the order that the signals are called. This is because the
+<para>This example program will output <code>2</code>. This is because the
 default behavior of a signal that has a return type
 (<code>float</code>, the first template argument given to the
 <code><classname>boost::signal</classname></code> class template) is to call all slots and
 then return the result returned by the last slot called. This
 behavior is admittedly silly for this example, because slots have
-no side effects and the result is essentially randomly chosen from
-the slots.</para>
+no side effects and the result is the last slot connect.</para>
 <para>A more interesting signal result would be the maximum of the
 values returned by any slot. To do this, we create a custom
 combiner that looks like this:</para>
@@ -554,7 +538,7 @@ sig.<methodname>connect</methodname>(&amp;compute_difference);
 std::cout &lt;&lt; sig(5, 3) &lt;&lt; std::endl;
 </programlisting>
 <para>The output of this program will be <code>15</code>, because
-regardless of the order in which the slots are called, the product
+regardless of the order in which the slots are connected, the product
 of 5 and 3 will be larger than the quotient, sum, or
 difference.</para>
 <para>In other cases we might want to return all of the values
@@ -621,8 +605,8 @@ std::copy(results.begin(), results.end(),
         </tgroup>
       </informaltable>
 
-<para>The output of this program will contain 15, 8, 1.6667, and 2
-(but not necessarily in that order). It is interesting here that
+<para>The output of this program will contain 15, 8, 1.6667, and 2. It
+is interesting here that
 the first template argument for the <code>signal</code> class,
 <code>float</code>, is not actually the return type of the signal.
 Instead, it is the return type used by the connected slots and will

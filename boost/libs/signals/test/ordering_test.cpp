@@ -1,6 +1,6 @@
 // Boost.Signals library
 
-// Copyright Doug Gregor 2002-2003. Use, modification and
+// Copyright Doug Gregor 2002-2004. Use, modification and
 // distribution is subject to the Boost Software License, Version
 // 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -26,7 +26,7 @@ struct emit_int {
 
   void operator()() const
   {
-    BOOST_TEST(!ungrouped1 && !ungrouped2 && !ungrouped3);
+    BOOST_TEST(value == 42 || (!ungrouped1 && !ungrouped2 && !ungrouped3));
     valuesOutput.push_back(value);
     std::cout << value << ' ';
   }
@@ -84,6 +84,12 @@ int test_main(int, char* [])
   sig.connect(write_ungrouped3());
 
   std::sort(sortedValues.begin(), sortedValues.end());
+
+  // 17 at beginning, 42 at end
+  sortedValues.insert(sortedValues.begin(), 17);
+  sig.connect(emit_int(17), boost::signals::at_front);
+  sortedValues.push_back(42);
+  sig.connect(emit_int(42));
 
   sig();
   std::cout << std::endl;

@@ -1,6 +1,6 @@
 // Boost.Signals library
 
-// Copyright Doug Gregor 2001-2003. Use, modification and
+// Copyright Doug Gregor 2001-2004. Use, modification and
 // distribution is subject to the Boost Software License, Version
 // 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -51,8 +51,8 @@ namespace boost {
           // reach zero, the call list will be cleared.
           flags.delayed_disconnect = true;
           temporarily_set_clearing set_clearing(this);
-          for (slot_iterator i = slots_.begin(); i != slots_.end(); ++i) {
-            i->second.first.disconnect();
+          for (iterator i = slots_.begin(); i != slots_.end(); ++i) {
+            i->first.disconnect();
           }
         }
       }
@@ -61,7 +61,8 @@ namespace boost {
       signal_base_impl::
         connect_slot(const any& slot,
                      const any& name,
-                     const std::vector<const trackable*>& bound_objects)
+                     const std::vector<const trackable*>& bound_objects,
+                     connect_position at)
       {
         // Allocate storage for a new basic_connection object to represent the
         // connection
@@ -76,18 +77,14 @@ namespace boost {
         // Allocate storage for an iterator that will hold the point of
         // insertion of the slot into the list. This is used to later remove
         // the slot when it is disconnected.
-        std::auto_ptr<slot_iterator> saved_iter(new slot_iterator());
+        std::auto_ptr<iterator> saved_iter(new iterator());
 
         // Add the slot to the list.
-
-        slot_iterator pos =
-          slots_.insert(stored_slot_type(name,
-                                        connection_slot_pair(slot_connection,
-                                                             slot)));
+        iterator pos = slots_.insert(name, slot_connection, slot, at);
 
         // Make the copy of the connection in the list disconnect when it is
         // destroyed
-        pos->second.first.set_controlling();
+        pos->first.set_controlling();
 
         // The assignment operation here absolutely must not throw, which
         // intuitively makes sense (because any container's insert method
@@ -143,8 +140,8 @@ namespace boost {
         // Disconnected slots may still be in the list of slots if
         //   a) this is called while slots are being invoked (call_depth > 0)
         //   b) an exception was thrown in remove_disconnected_slots
-        for (slot_iterator i = slots_.begin(); i != slots_.end(); ++i) {
-          if (i->second.first.connected())
+        for (iterator i = slots_.begin(); i != slots_.end(); ++i) {
+          if (i->first.connected())
             return false;
         }
 
@@ -157,33 +154,22 @@ namespace boost {
         //   a) this is called while slots are being invoked (call_depth > 0)
         //   b) an exception was thrown in remove_disconnected_slots
         std::size_t count = 0;
-        for (slot_iterator i = slots_.begin(); i != slots_.end(); ++i) {
-          if (i->second.first.connected())
+        for (iterator i = slots_.begin(); i != slots_.end(); ++i) {
+          if (i->first.connected())
             ++count;
         }
         return count;
       }
 
       void signal_base_impl::disconnect(const any& group)
-      {
-        std::pair<slot_iterator, slot_iterator> group_slots =
-          slots_.equal_range(group);
-        while (group_slots.first != group_slots.second) {
-          slot_iterator next = group_slots.first;
-          ++next;
-
-          group_slots.first->second.first.disconnect();
-          group_slots.first = next;
-        }
-      }
+      { slots_.disconnect(group); }
 
       void signal_base_impl::slot_disconnected(void* obj, void* data)
       {
         signal_base_impl* self = reinterpret_cast<signal_base_impl*>(obj);
 
         // We won't need the slot iterator after this
-        std::auto_ptr<slot_iterator> slot(
-                                      reinterpret_cast<slot_iterator*>(data));
+        std::auto_ptr<iterator> slot(reinterpret_cast<iterator*>(data));
 
         // If we're flags.clearing, we don't bother updating the list of slots
         if (!self->flags.clearing) {
@@ -200,15 +186,7 @@ namespace boost {
       }
 
       void signal_base_impl::remove_disconnected_slots() const
-      {
-        // Remove any disconnected slots
-        for (slot_iterator i = slots_.begin(); i != slots_.end(); /* none */) {
-          if (!i->second.first.connected())
-            slots_.erase(i++);
-          else
-            ++i;
-        }
-      }
+      { slots_.remove_disconnected_slots(); }
 
       call_notification::
         call_notification(const shared_ptr<signal_base_impl>& b) :
@@ -245,10 +223,3 @@ namespace boost {
   } // namespace BOOST_SIGNALS_NAMESPACE
 } // namespace boost
 
-#ifndef BOOST_MSVC
-// Explicit instantiations to keep in the library
-template class boost::function2<bool, boost::any, boost::any>;
-template class std::multimap<boost::any,
-                             boost::BOOST_SIGNALS_NAMESPACE::detail::connection_slot_pair,
-                             boost::function2<bool, boost::any, boost::any> >;
-#endif

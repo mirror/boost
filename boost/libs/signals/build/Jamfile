@@ -32,7 +32,7 @@ template signals-dll-options
      <runtime-link>dynamic
    ;
 
-SOURCES = trackable connection signal_base slot ;
+SOURCES = trackable connection named_slot_map signal_base slot ;
        
 lib boost_signals : ../src/$(SOURCES).cpp <template>signals-options
     :

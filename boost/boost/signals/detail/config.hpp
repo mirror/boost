@@ -3,7 +3,7 @@
  * Copyright (c) 1998-2002
  * Dr John Maddock
  *
- * Copyright (c) 2003
+ * Copyright (c) 2003-2004
  * Doug Gregor
  *
  * Permission to use, copy, modify, distribute and sell this software

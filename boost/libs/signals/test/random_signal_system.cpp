@@ -1,6 +1,6 @@
 // Boost.Signals library
 
-// Copyright Doug Gregor 2001-2003. Use, modification and
+// Copyright Doug Gregor 2001-2004. Use, modification and
 // distribution is subject to the Boost Software License, Version
 // 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -190,8 +190,8 @@ bool signal_connection_exists(signal_type* sig1, signal_type* sig2)
 std::map<signal_type*, vertex_descriptor>::iterator
 choose_random_signal(minstd_rand& rand_gen)
 {
-  int signal_idx = uniform_int<minstd_rand>(rand_gen,
-                                        0, signal_to_descriptor.size() - 1)();
+  int signal_idx
+    = uniform_int<>(0, signal_to_descriptor.size() - 1)(rand_gen);
   std::map<signal_type*, vertex_descriptor>::iterator result =
     signal_to_descriptor.begin();
   for(; signal_idx; --signal_idx)
@@ -223,7 +223,7 @@ void random_add_connection(minstd_rand& rand_gen)
 void random_remove_connection(minstd_rand& rand_gen)
 {
   int victim_idx =
-    uniform_int<minstd_rand>(rand_gen, 0, num_edges(signal_graph)-1)();
+    uniform_int<>(0, num_edges(signal_graph)-1)(rand_gen);
   signal_graph_type::edge_iterator e = edges(signal_graph).first;
   while (victim_idx--) {
     ++e;
@@ -370,8 +370,8 @@ int main(int argc, char* argv[])
 
     std::cerr << "Iteration #" << (iter+1) << std::endl;
 
-    uniform_int<minstd_rand> random_action(rand_gen, 0, 7);
-    switch (random_action()) {
+    uniform_int<> random_action(0, 7);
+    switch (random_action(rand_gen)) {
     case 0:
       std::cout << "  Adding new signal: " << add_signal() << std::endl;
       break;

@@ -1,6 +1,6 @@
 // Boost.Signals library
 
-// Copyright Doug Gregor 2001-2003. Use, modification and
+// Copyright Doug Gregor 2001-2004. Use, modification and
 // distribution is subject to the Boost Software License, Version
 // 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -12,6 +12,7 @@
 
 #include <boost/signals/detail/config.hpp>
 #include <boost/signals/detail/signals_common.hpp>
+#include <boost/signals/detail/named_slot_map.hpp>
 #include <boost/signals/connection.hpp>
 #include <boost/signals/trackable.hpp>
 #include <boost/smart_ptr.hpp>
@@ -20,8 +21,7 @@
 #include <boost/function/function2.hpp>
 #include <utility>
 #include <vector>
-#include <list>
-#include <map>
+
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
@@ -29,41 +29,6 @@
 namespace boost {
   namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
-      // Forward declaration for the mapping from slot names to connections
-      class named_slot_map;
-
-      // This function object bridges from a pair of any objects that hold
-      // values of type Key to the underlying function object that compares
-      // values of type Key.
-      template<typename Compare, typename Key>
-      class any_bridge_compare {
-      public:
-        typedef bool result_type;
-        typedef const any& first_argument_type;
-        typedef const any& second_argument_type;
-
-        any_bridge_compare(const Compare& c) : comp(c) {}
-
-        bool operator()(const any& k1, const any& k2) const
-        {
-          // if k1 is empty, then it precedes nothing
-          if (k1.empty())
-            return false;
-
-          // if k2 is empty, then k1 must precede it
-          if (k2.empty())
-            return true;
-
-          // Neither is empty, so compare their values to order them
-          // The strange */& is so that we will get a reference to the
-          // value stored in the any object instead of a copy
-          return comp(*any_cast<Key>(&k1), *any_cast<Key>(&k2));
-        }
-
-      private:
-        Compare comp;
-      };
-
       // Must be constructed before calling the slots, because it safely
       // manages call depth
       class BOOST_SIGNALS_DECL call_notification {
@@ -122,7 +87,8 @@ namespace boost {
 
         connection connect_slot(const any& slot,
                                 const any& name,
-                                const std::vector<const trackable*>&);
+                                const std::vector<const trackable*>&,
+                                connect_position at);
 
       private:
         // Remove all of the slots that have been marked "disconnected"
@@ -143,12 +109,11 @@ namespace boost {
         } flags;
 
         // Slots
-        typedef std::multimap<any, connection_slot_pair, compare_type>
-          slot_container_type;
-        typedef slot_container_type::iterator slot_iterator;
-        typedef slot_container_type::value_type stored_slot_type;
-        mutable slot_container_type slots_;
+        mutable named_slot_map slots_;
         any combiner_;
+
+        // Types
+        typedef named_slot_map::iterator iterator;
       };
 
       class BOOST_SIGNALS_DECL signal_base : public noncopyable {
@@ -173,14 +138,13 @@ namespace boost {
       protected:
         connection connect_slot(const any& slot,
                                 const any& name,
-                                const std::vector<const trackable*>& bound)
+                                const std::vector<const trackable*>& bound,
+                                connect_position at)
         {
-          return impl->connect_slot(slot, name, bound);
+          return impl->connect_slot(slot, name, bound, at);
         }
 
-        typedef signal_base_impl::slot_iterator slot_iterator;
-        typedef signal_base_impl::stored_slot_type stored_slot_type;
-        typedef signal_base_impl::slot_container_type::iterator iterator;
+        typedef named_slot_map::iterator iterator;
 
         shared_ptr<signal_base_impl> impl;
       };

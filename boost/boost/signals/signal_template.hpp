@@ -1,6 +1,6 @@
 // Boost.Signals library
 
-// Copyright Doug Gregor 2001-2003. Use, modification and
+// Copyright Doug Gregor 2001-2004. Use, modification and
 // distribution is subject to the Boost Software License, Version
 // 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -91,7 +91,7 @@ namespace boost {
           template<typename Pair>
           R operator()(const Pair& slot) const
           {
-            F* target = const_cast<F*>(any_cast<F>(&slot.second.second));
+            F* target = const_cast<F*>(any_cast<F>(&slot.second));
             return (*target)(BOOST_SIGNALS_BOUND_ARGS);
           }
         };
@@ -115,7 +115,7 @@ namespace boost {
           template<typename Pair>
           unusable operator()(const Pair& slot) const
           {
-            F* target = const_cast<F*>(any_cast<F>(&slot.second.second));
+            F* target = const_cast<F*>(any_cast<F>(&slot.second));
             (*target)(BOOST_SIGNALS_BOUND_ARGS);
             return unusable();
           }
@@ -188,7 +188,7 @@ namespace boost {
     typedef GroupCompare group_compare_type;
 
     typedef BOOST_SIGNALS_NAMESPACE::detail::slot_call_iterator<
-              call_bound_slot, slot_iterator> slot_call_iterator;
+              call_bound_slot, iterator> slot_call_iterator;
 
     explicit
     BOOST_SIGNALS_SIGNAL(const Combiner& c = Combiner(),
@@ -199,8 +199,16 @@ namespace boost {
     }
 
     // Connect a slot to this signal
-    BOOST_SIGNALS_NAMESPACE::connection connect(const slot_type&);
-    BOOST_SIGNALS_NAMESPACE::connection connect(const group_type&, const slot_type&);
+    BOOST_SIGNALS_NAMESPACE::connection
+    connect(const slot_type&,
+            BOOST_SIGNALS_NAMESPACE::connect_position at
+              = BOOST_SIGNALS_NAMESPACE::at_back);
+
+
+    BOOST_SIGNALS_NAMESPACE::connection
+    connect(const group_type&, const slot_type&,
+            BOOST_SIGNALS_NAMESPACE::connect_position at
+              = BOOST_SIGNALS_NAMESPACE::at_back);
 
     template<typename T>
     void disconnect(const T& t)
@@ -223,9 +231,8 @@ namespace boost {
       BOOST_SIGNALS_NAMESPACE::detail::call_notification notification(this->impl);
 
       for (iterator i = impl->slots_.begin(); i != impl->slots_.end(); ++i) {
-        slot_function_type& s =
-          *any_cast<slot_function_type>(&i->second.second);
-        if (s == f) i->second.first.disconnect();
+        slot_function_type& s = *any_cast<slot_function_type>(&i->second);
+        if (s == f) i->first.disconnect();
       }
     }
 
@@ -256,7 +263,8 @@ namespace boost {
     R, BOOST_SIGNALS_TEMPLATE_ARGS
     BOOST_SIGNALS_COMMA_IF_NONZERO_ARGS
     Combiner, Group, GroupCompare, SlotFunction
-  >::connect(const slot_type& in_slot)
+  >::connect(const slot_type& in_slot,
+             BOOST_SIGNALS_NAMESPACE::connect_position at)
   {
     // If the slot has been disconnected, just return a disconnected
     // connection
@@ -266,7 +274,8 @@ namespace boost {
 
     return impl->connect_slot(in_slot.get_slot_function(),
                               any(),
-                              in_slot.get_bound_objects());
+                              in_slot.get_bound_objects(),
+                              at);
   }
 
   template<
@@ -284,11 +293,13 @@ namespace boost {
     BOOST_SIGNALS_COMMA_IF_NONZERO_ARGS
     Combiner, Group, GroupCompare, SlotFunction
   >::connect(const group_type& group,
-             const slot_type& in_slot)
+             const slot_type& in_slot,
+             BOOST_SIGNALS_NAMESPACE::connect_position at)
   {
     return impl->connect_slot(in_slot.get_slot_function(),
                               group,
-                              in_slot.get_bound_objects());
+                              in_slot.get_bound_objects(),
+                              at);
   }
 
   template<
