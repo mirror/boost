@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  10 Feb 01 Use new filter_ interface. (David Abrahams)
 //  09 Feb 01 Use new reverse_ and indirect_ interfaces. Replace
 //            BOOST_NO_STD_ITERATOR_TRAITS with
 //            BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION to prove we've
@@ -276,7 +277,7 @@ main()
     boost::random_access_iterator_test(j, N, array);
 
     boost::random_access_iterator_test(boost::make_const_projection_iterator(pair_array, select1st_<Pair>()), N, array);
-    boost::random_access_iterator_test(boost::make_const_projection_iterator< select1st_<Pair> >(pair_array), N, array);
+    boost::random_access_iterator_test(boost::make_const_projection_iterator<select1st_<Pair> >(pair_array), N, array);
 
     boost::const_nonconst_iterator_test(i, ++j);
   }
@@ -355,30 +356,54 @@ main()
 
   // Test filter iterator
   {
-    typedef boost::filter_iterator_generator<one_or_four, dummyT*,
-      boost::iterator<std::forward_iterator_tag, dummyT, std::ptrdiff_t,
-      dummyT*, dummyT&> > FilterGen;
+    typedef boost::filter_iterator_generator<one_or_four, dummyT*
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        , dummyT
+#endif
+        > FilterGen;
     typedef FilterGen::type FilterIter;
     typedef FilterGen::policies_type FilterPolicies;
     FilterIter i(array, FilterPolicies(one_or_four(), array + N));
     boost::forward_iterator_test(i, dummyT(1), dummyT(4));
 
-    typedef boost::iterator<std::forward_iterator_tag, dummyT, std::ptrdiff_t, dummyT*, dummyT&> FilterTraits;
-    boost::forward_iterator_test(boost::make_filter_iterator<FilterTraits>
-       (array, array + N, one_or_four() ), dummyT(1), dummyT(4));
+    BOOST_STATIC_ASSERT((boost::is_same<
+                          boost::detail::iterator_traits<FilterIter>::iterator_category,
+                        std::forward_iterator_tag>::value));
 
-    boost::forward_iterator_test(boost::make_filter_iterator<FilterTraits, one_or_four>
-        (array, array + N), dummyT(1), dummyT(4));
+    // On compilers not supporting partial specialization, we can do more type
+    // deduction with deque iterators than with pointers... unless the library
+    // is broken ;-(
+#if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
+    std::deque<dummyT> array2;
+    std::copy(array+0, array+N, std::back_inserter(array2));
+    boost::forward_iterator_test(
+        boost::make_filter_iterator(array2.begin(), array2.end(), one_or_four()),
+        dummyT(1), dummyT(4));
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    boost::forward_iterator_test(boost::make_filter_iterator(
-        array, array + N, one_or_four()), dummyT(1), dummyT(4));
+    boost::forward_iterator_test(
+        boost::make_filter_iterator<one_or_four>(array2.begin(), array2.end()),
+        dummyT(1), dummyT(4));
+#endif
 
-    boost::forward_iterator_test(boost::make_filter_iterator<one_or_four>(
-        array, array + N), dummyT(1), dummyT(4));
+#if !defined(BOOST_MSVC) // This just freaks MSVC out completely
+    boost::forward_iterator_test(
+        boost::make_filter_iterator<one_or_four>(
+            boost::make_reverse_iterator(array2.end()),
+            boost::make_reverse_iterator(array2.begin())
+            ),
+        dummyT(4), dummyT(1));
 #endif
     
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    boost::forward_iterator_test(
+        boost::make_filter_iterator(array+0, array+N, one_or_four()),
+        dummyT(1), dummyT(4));
 
+    boost::forward_iterator_test(
+        boost::make_filter_iterator<one_or_four>(array, array + N),
+        dummyT(1), dummyT(4));
+
+#endif
   }
   std::cout << "test successful " << std::endl;
   return 0;
