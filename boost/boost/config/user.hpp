@@ -1,9 +1,9 @@
 //  boost/config/user.hpp  ---------------------------------------------------//
 
-//  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  (C) Copyright John Maddock 2001. 
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  Do not check in modified versions of this file,
 //  This file may be customized by the end user, but not by boost.
@@ -64,5 +64,6 @@
 // define when you want to disable Win32 specific features
 // even when available:
 // #define BOOST_DISABLE_WIN32
+
 
 

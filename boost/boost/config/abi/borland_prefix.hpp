@@ -1,7 +1,7 @@
-//  (C) Copyright John Maddock 2003. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  (C) Copyright John Maddock 2003. 
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  for C++ Builder the following options effect the ABI:
 //
@@ -22,5 +22,6 @@
 
 #pragma nopushoptwarn
 #  pragma option push -Vx -Ve -a8 -b -pc -Vmv -VC- -Vl- -w-8027 -w-8026
+
 
 

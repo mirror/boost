@@ -1,7 +1,11 @@
-//  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  (C) Copyright John Maddock 2001 - 2003. 
+//  (C) Copyright Toon Knapen 2001 - 2003. 
+//  (C) Copyright Lie-Quan Lee 2001. 
+//  (C) Copyright Markus Schöpflin 2002 - 2003. 
+//  (C) Copyright Beman Dawes 2002 - 2003. 
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
 
@@ -46,6 +50,7 @@
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
 #endif
+
 
 
 
