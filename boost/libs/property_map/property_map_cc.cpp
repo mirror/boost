@@ -61,7 +61,11 @@ main()
     typedef sgi_assignable_archetype<> Value;
     typedef random_access_iterator_archetype<Value> Iterator;
     typedef readable_property_map_archetype<Key, std::ptrdiff_t> IndexMap;
-    typedef iterator_property_map<Iterator, IndexMap> PMap;
+    typedef iterator_property_map<Iterator, IndexMap
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
+      , Value, const Value&
+#endif
+      > PMap;
     function_requires<LvaluePropertyMapConcept<PMap, Key> >();
   }
   {
@@ -69,7 +73,11 @@ main()
     typedef sgi_assignable_archetype<> Value;
     typedef mutable_random_access_iterator_archetype<Value> Iterator;
     typedef readable_property_map_archetype<Key, std::ptrdiff_t> IndexMap;
-    typedef iterator_property_map<Iterator, IndexMap> PMap;
+    typedef iterator_property_map<Iterator, IndexMap
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
+      , Value, Value&
+#endif
+      > PMap;
     function_requires<Mutable_LvaluePropertyMapConcept<PMap, Key> >();
   }
   {
