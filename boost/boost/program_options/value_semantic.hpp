@@ -290,9 +290,9 @@ namespace boost { namespace program_options {
     typed_value<T, wchar_t>*
     wvalue(T* v);
 
-    /** Works the same way as the 'value' function, but also makes the created
-        value_semantic implicit, i.e. the value can be omitted. The omitted
-        value is considered to be 'true'.
+    /** Works the same way as the 'value<bool>' function, but the created
+        value_semantic won't accept any explicit value. So, if the option 
+        is present on the command line, the value will be 'true'.
     */
     BOOST_PROGRAM_OPTIONS_DECL typed_value<bool>*
     bool_switch();
