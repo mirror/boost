@@ -29,7 +29,7 @@ template<class charT, class Traits = BOOST_IO_STD char_traits<charT> > class bas
 
 typedef basic_format<char >     format;
 
-#if !defined(BOOST_NO_STD_WSTRING) && !defined(BOOST_NO_STD_WSTREAM)
+#if !defined(BOOST_NO_STD_WSTRING) && !defined(BOOST_NO_STD_WSTREAMBUF)
 typedef basic_format<wchar_t >  wformat;
 #endif
 
