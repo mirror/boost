@@ -49,7 +49,7 @@ template< int N, typename Tag, typename Protect >
 struct lambda_impl< arg<N>,Tag,Protect >
 {
     typedef true_ is_le;
-    typedef arg<N> type;
+    typedef mpl::arg<N> type;
 };
 
 template<
