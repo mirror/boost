@@ -8,6 +8,7 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/testfrmwk.hpp"
 #include "boost/date_time/filetime_functions.hpp"
+#include <cmath>
 
 #if defined(BOOST_HAS_FTIME)
 #include <windows.h>
@@ -19,6 +20,11 @@ int main()
 
   using namespace boost::posix_time;
 
+  // adjustor is used to truncate ptime's fractional seconds for 
+  // comparison with SYSTEMTIME's milliseconds
+  const int adjustor = 
+    static_cast<int>(pow(10, time_duration::num_fractional_digits() - 3));
+  
   for(int i = 0; i < 5; ++i){
 
     FILETIME ft;
@@ -41,11 +47,7 @@ int main()
     check("ptime second matches systemtime second", 
         st.wSecond == pt.time_of_day().seconds());
     check("truncated ptime fractional second matches systemtime millisecond", 
-#if defined(BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
-        st.wMilliseconds == (pt.time_of_day().fractional_seconds() / 1000000)
-#else
-        st.wMilliseconds == (pt.time_of_day().fractional_seconds() / 1000)
-#endif
+        st.wMilliseconds == (pt.time_of_day().fractional_seconds() / adjustor)
          ); // check
 
     // burn up a little time
@@ -56,7 +58,6 @@ int main()
     }
 
   } // for loop
-
 
 #else // BOOST_HAS_FTIME
   // we don't want a forced failure here, not a shortcoming
