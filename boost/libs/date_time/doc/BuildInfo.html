@@ -26,7 +26,12 @@
 The library has several functions that require the creation of a library file.
 The Jamfile in the build directory will produce a library 
 (<font class="bold">libboost_date_time</font>) that contains these functions.
-
+<p>
+The variable <b>DATE_TIME_INLINE</b> is used to control the inlining of
+certain core functions.  By default this variable is defined by
+in the compilation of the library.  All <b>compiles using the 
+library must also include this define or linking errors will
+result</b>.
 <p>
 <H2><a name="options">Compilation Options</a></H2>
 <p>
@@ -40,7 +45,6 @@ for many applications that do not require nano-second resolutions.
 The variable BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG, as defined in 
 build/Jamfile, selects between these options.  To select the 64 bit
 integer implementation simply remove this define from the Jamfile.
-
 <p>
 <H2><a name="portability">Compiler/Portability Notes</a></H2>
 <p>
@@ -105,7 +109,7 @@ The library depends on
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Wed Aug 21 15:08:31 MST 2002
+Last modified: Sun Oct  6 15:55:53 MST 2002
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
