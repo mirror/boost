@@ -23,7 +23,7 @@ namespace boost {
 
         //! Finder concept
         /*!
-            Defines finder concept. Finder is a functor which selects
+            Defines the Finder concept. Finder is a functor which selects
             an arbitrary part of a string. Search is performed on
             the range specified by starting and ending iterators.
 
@@ -49,7 +49,7 @@ namespace boost {
         
         //! Formatter concept
         /*!
-            Defines formatter concept. Formatter is a functor, which
+            Defines the Formatter concept. Formatter is a functor, which
             takes a result from a finder operation and transforms it
             in a specific way.
 

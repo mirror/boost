@@ -46,7 +46,7 @@ namespace boost {
         
         //! collection_traits class
         /*!
-            Collection traits provides uniform access to different types of 
+            Collection traits provide uniform access to different types of 
             collections. This functionality allows to write generic algorithms
             which work with several different kinds of collections.
 
@@ -60,10 +60,10 @@ namespace boost {
                 - std::pair of iterators 
                     ( i.e \c std::pair<vector<int>::iterator,vector<int>::iterator> )
 
-            Collection traits provide a external collection interface operations.
+            Collection traits provide an external collection interface operations.
             All are accessible using free-standing functions.
 
-            Following operations are supported:
+            The following operations are supported:
                 - \c size()
                 - \c empty()
                 - \c begin()
@@ -182,7 +182,7 @@ namespace boost {
 
         //! Free-standing empty() function
         /*!
-            Check whenever the container is empty. Uses container traits.
+            Check whether the container is empty. Uses container traits.
         */
         template< typename C >
         inline bool empty( const C& c )

@@ -19,7 +19,7 @@
 
 /*! \file
     Defines a set of find algorithms. The algorithms are searching
-    for a substring if the input. The result is given as an \c iterator_range
+    for a substring of the input. The result is given as an \c iterator_range
     delimiting the substring.
 */
 
@@ -54,19 +54,17 @@ namespace boost {
 
         //! Find first algorithm
         /*!
-            Search for the first match of the string in the input. 
+            Search for the first occurence of the substring in the input. 
             
             \param Input A string which will be searched.
-            \param Search A string to be searched for.
+            \param Search A substring to be searched for.
             \return 
                 An \c iterator_range delimiting the match. 
                 Returned iterator is either \c CollectionT::iterator or 
                 \c CollectionT::const_iterator, depending on the constness of 
                 the input parameter.
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+      		\note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -81,21 +79,19 @@ namespace boost {
 
         //! Find first algorithm ( case insensitive )
         /*!
-            Search for the first match of the string in the input. 
+            Search for the first occurence of the substring in the input. 
             Searching is case insensitive.
             
             \param Input A string which will be searched.
-            \param Search A string to be searched for.
-            \param Loc a locale used for case insensitive comparison
+            \param Search A substring to be searched for.
+            \param Loc A locale used for case insensitive comparison
             \return 
                 An \c iterator_range delimiting the match. 
                 Returned iterator is either \c Collection1T::iterator or 
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+			\note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -113,19 +109,17 @@ namespace boost {
 
         //! Find last algorithm
         /*!
-            Search for the last match of the string in the input. 
+            Search for the last occurence of the substring in the input. 
             
             \param Input A string which will be searched.
-            \param Search A string to be searched for.
+            \param Search A substring to be searched for.
             \return 
                 An \c iterator_range delimiting the match. 
                 Returned iterator is either \c Collection1T::iterator or 
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+			\note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -144,18 +138,16 @@ namespace boost {
             Searching is case insensitive.
             
             \param Input A string which will be searched.
-            \param Search A string to be searched for.
-            \param Loc a locale used for case insensitive comparison
+            \param Search A substring to be searched for.
+            \param Loc A locale used for case insensitive comparison
             \return 
                 An \c iterator_range delimiting the match. 
                 Returned iterator is either \c Collection1T::iterator or 
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
-
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
-        */
+		
+			\note This function provides the strong exception-safety guarantee	
+		*/
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
             BOOST_STRING_TYPENAME result_iterator_of<Collection1T>::type>
@@ -172,11 +164,11 @@ namespace boost {
 
         //! Find n-th algorithm 
         /*!
-            Search for the n-th (zero-indexed) match of the string in the 
+            Search for the n-th (zero-indexed) occurence of the substring in the 
             input.         
             
             \param Input A string which will be searched.
-            \param Search A string to be searched for.
+            \param Search A substring to be searched for.
             \param Nth An index (zero-indexed) of the match to be found.
             \return 
                 An \c iterator_range delimiting the match. 
@@ -198,13 +190,13 @@ namespace boost {
 
         //! Find n-th algorithm ( case insensitive ).
         /*!
-            Search for the n-th (zero-indexed) match of the string in the 
+            Search for the n-th (zero-indexed) occurence of the substring in the 
             input. Searching is case insensitive.
             
             \param Input A string which will be searched.
-            \param Search A string to be searched for.
+            \param Search A substring to be searched for.
             \param Nth An index (zero-indexed) of the match to be found.
-            \param Loc a locale used for case insensitive comparison
+            \param Loc A locale used for case insensitive comparison
             \return 
                 An \c iterator_range delimiting the match. 
                 Returned iterator is either \c Collection1T::iterator or 
@@ -212,9 +204,7 @@ namespace boost {
                 the input parameter.
 
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+			\note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -238,16 +228,14 @@ namespace boost {
             to be the head.
 
             \param Input An input string
-            \param N A length of the head
+            \param N Length of the head
             \return 
                 An \c iterator_range delimiting the match. 
                 Returned iterator is either \c Collection1T::iterator or 
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+			\note This function provides the strong exception-safety guarantee
         */
         template<typename CollectionT>
         inline iterator_range< 
@@ -269,7 +257,7 @@ namespace boost {
             to be the tail.
 
             \param Input An input string
-            \param N A length of the tail
+            \param N Length of the tail
             \return 
                 An \c iterator_range delimiting the match. 
                 Returned iterator is either \c CollectionT::iterator or 
@@ -277,10 +265,8 @@ namespace boost {
                 the input parameter.
 
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
-        */
+			\note This function provides the strong exception-safety guarantee
+		*/
         template<typename CollectionT>
         inline iterator_range< 
             BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>
@@ -308,11 +294,9 @@ namespace boost {
                 Returned iterator is either \c CollectionT::iterator or 
                 \c CollectionT::const_iterator, depending on the constness of 
                 the input parameter.
-
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
-        */
+		
+			\note This function provides the strong exception-safety guarantee	
+		*/
         template<typename CollectionT, typename PredicateT>
         inline iterator_range< 
             BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>

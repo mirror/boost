@@ -34,9 +34,9 @@ namespace boost {
         /*!
             Construct the \c first_finder. The finder searches for the first
             occurrence of the string in a given input.
-            The result is given as a \c iterator_range delimiting the match.
+            The result is given as an \c iterator_range delimiting the match.
 
-            \param Search A string to be searched for.
+            \param Search A substring to be searched for.
             \param Comp An element comparison predicate
             \return An instance of the \c first_finder object
         */
@@ -75,9 +75,9 @@ namespace boost {
         /*!
             Construct the \c last_finder. The finder searches for the last
             occurrence of the string in a given input.
-            The result is given as a \c iterator_range delimiting the match.
+            The result is given as an \c iterator_range delimiting the match.
 
-            \param Search A string to be searched for.
+            \param Search A substring to be searched for.
             \param Comp An element comparison predicate
             \return An instance of the \c last_finder object
         */
@@ -114,9 +114,9 @@ namespace boost {
         /*!
             Construct the \c nth_finder. The finder searches for the n-th (zero-indexed)
             occurrence of the string in a given input.
-            The result is given as a \c iterator_range delimiting the match.
+            The result is given as an \c iterator_range delimiting the match.
 
-            \param Search A string to be searched for.
+            \param Search A substring to be searched for.
             \param Nth An index of the match to be find
             \param Comp An element comparison predicate
             \return An instance of the \c nth_finder object
@@ -158,10 +158,10 @@ namespace boost {
         //! "Head" finder
         /*!
             Construct the \c head_finder. The finder returns a head of a given
-            input. Head is a prefix of a string up to n elements in
+            input. The head is a prefix of a string up to n elements in
             size. If an input has less then n elements, whole input is 
             considered a head.
-            The result is given as a \c iterator_range delimiting the match.
+            The result is given as an \c iterator_range delimiting the match.
 
             \param N The size of the head
             \return An instance of the \c head_finder object
@@ -175,10 +175,10 @@ namespace boost {
         //! "Tail" finder
         /*!
             Construct the \c tail_finder. The finder returns a tail of a given
-            input. Tail is a suffix of a string up to n elements in
+            input. The tail is a suffix of a string up to n elements in
             size. If an input has less then n elements, whole input is 
             considered a head.
-            The result is given as a \c iterator_range delimiting the match.
+            The result is given as an \c iterator_range delimiting the match.
 
             \param N The size of the head
             \return An instance of the \c tail_finder object
@@ -201,7 +201,7 @@ namespace boost {
             search for continuous segments of characters satisfying the 
             given predicate.
 
-            The result is given as a \c iterator_range delimiting the match.
+            The result is given as an \c iterator_range delimiting the match.
 
             \param Pred An element selection predicate
             \param eCompress Compress flag

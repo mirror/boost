@@ -20,7 +20,7 @@
 #include <boost/algorithm/string/iter_find.hpp>
 
 /*! \file
-    Defines regex variant of the algorithms. 
+    Defines regex variants of the algorithms. 
 */
 
 namespace boost {
@@ -41,9 +41,7 @@ namespace boost {
                 \c InputContainerT::const_iterator, depending on the constness of 
                 the input parameter.
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+          	\note This function provides the strong exception-safety guarantee
         */
         template< 
             typename CollectionT, 
@@ -67,19 +65,17 @@ namespace boost {
             Search for a substring matching given regex and format it with 
             the specified format.             
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
             \param Rx A regular expression
             \param Format Regex format definition
             \param Flags Regex options
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input   
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+         	\note The second variant of this function provides the strong exception-safety guarantee
         */
         template< 
             typename OutputIteratorT,
@@ -155,19 +151,17 @@ namespace boost {
         /*!
             Format all substrings, matching given regex, with the specified format. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
             \param Rx A regular expression
             \param Format Regex format definition
             \param Flags Regex options
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input     
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+          	\note The second variant of this function provides the strong exception-safety guarantee
         */
         template< 
             typename OutputIteratorT,
@@ -243,18 +237,16 @@ namespace boost {
         /*!
             Remove a substring matching given regex from the input.
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.                        
+            or copied to the output iterator.                        
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
             \param Rx A regular expression
             \param Flags Regex options
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                        a modified copy of the input    
 
-           \note If the input parameters satisfy the second assumption
-               about exception safety, second variant of this function provides strong
-               exception guarantee.
+         	\note The second variant of this function provides the strong exception-safety guarantee
        */
         template< 
             typename OutputIteratorT,
@@ -323,19 +315,17 @@ namespace boost {
         /*!
             Erase all substrings, matching given regex, from the input.
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
             
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
             \param Rx A regular expression
             \param Flags Regex options
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input                        
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+         	\note The second variant of this function provides the strong exception-safety guarantee
         */
         template< 
             typename OutputIteratorT,
@@ -408,7 +398,7 @@ namespace boost {
             Each part is copied and added as a new element to the output container.
             Thus the result container must be able to hold copies
             of the matches (in a compatible structure like std::string) or
-            a reference to it (f.e. using the iterator range class).
+            a reference to it (e.g. using the iterator range class).
             Examples of such a container are \c std::vector<std::string>
             or \c std::list<boost::iterator_range<std::string::iterator>>
 
@@ -418,12 +408,10 @@ namespace boost {
             \param Flags Regex options
             \return A reference to the result
 
-            \note Prior content of the result will be overridden.
+            \note Prior content of the result will be overwritten.
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety and result's container swap() method have strong exception guarantee, 
-                this function provides strong exception guarantee.
-        */
+         	\note This function provides the strong exception-safety guarantee
+		*/
         template< 
             typename SequenceSequenceT, 
             typename CollectionT,         
@@ -445,13 +433,13 @@ namespace boost {
 
         //! Split regex algorithm
         /*! 
-            Tokenize expression. This function is equivalent of C strtok. Input
+            Tokenize expression. This function is equivalent to C strtok. Input
             sequence is split into tokens, separated  by separators. Separator
             is an every match of the given regex.
             Each part is copied and added as a new element to the output container.
             Thus the result container must be able to hold copies
             of the matches (in a compatible structure like std::string) or
-            a reference to it (f.e. using the iterator range class).
+            a reference to it (e.g. using the iterator range class).
             Examples of such a container are \c std::vector<std::string>
             or \c std::list<boost::iterator_range<std::string::iterator>>
     
@@ -461,11 +449,9 @@ namespace boost {
             \param Flags Regex options
             \return A reference to the result
 
-            \note Prior content of the result will be overridden.
+            \note Prior content of the result will be overwritten.
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety and result's container swap() method have strong exception guarantee, 
-                this function provides strong exception guarantee.
+           	\note This function provides the strong exception-safety guarantee
         */
         template< 
             typename SequenceSequenceT, 

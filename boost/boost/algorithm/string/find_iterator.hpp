@@ -19,8 +19,8 @@
 
 /*! \file
     Defines find iterator classes. Find iterator repeatly applies a Finder
-    on a specified input string to search for matches. Dereferencing
-    the iterator yields the current match or a range between last and current
+    to the specified input string to search for matches. Dereferencing
+    the iterator yields the current match or a range between the last and the current
     match depending on the iterator used.
 */
 
@@ -32,10 +32,10 @@ namespace boost {
         //! find_iterator
         /*!    
             Find iterator encapsulates a Finder and allows
-            an incremental searching in a string.
+            for incremental searching in a string.
             Each increment moves the iterator to the next match.
 
-            Find iterator is readable forward traversal iterator.
+            Find iterator is a readable forward traversal iterator.
 
             Dereferencing the iterator yields an iterator_range delimiting
             the current match.
@@ -152,7 +152,7 @@ namespace boost {
 
             //! Eof check
             /*!
-                Check the eof condition. Eof condition means, that
+                Check the eof condition. Eof condition means that
                 there is nothing more to be searched i.e. find_iterator
                 is after the last match.
             */
@@ -192,11 +192,11 @@ namespace boost {
         //! split_iterator
         /*!    
             Split iterator encapsulates a Finder and allows
-            an incremental searching in a string.
+            for incremental searching in a string.
             Unlike the find iterator, split iterator iterates
-            through gasps between matches.
+            through gaps between matches.
 
-            Find iterator is readable forward traversal iterator.
+            Find iterator is a readable forward traversal iterator.
 
             Dereferencing the iterator yields an iterator_range delimiting
             the current match.
@@ -318,7 +318,7 @@ namespace boost {
 
             //! Eof check
             /*!
-                Check the eof condition. Eof condition means, that
+                Check the eof condition. Eof condition means that
                 there is nothing more to be searched i.e. find_iterator
                 is after the last match.
             */

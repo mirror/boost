@@ -27,8 +27,8 @@ namespace boost {
 
         //! is_equal functor
         /*!
-            Standard STL equal_to does handle only comparison between arguments
-            of the same type. This is less restrictive version which wraps == operator.
+            Standard STL equal_to only handle comparison between arguments
+            of the same type. This is a less restrictive version which wraps operator ==.
         */
         struct is_equal
         {

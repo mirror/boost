@@ -16,13 +16,13 @@
 #include <boost/algorithm/string/detail/formatter.hpp>
 
 /*! \file
-    Defines formatter generators. Formatter is a functor which formats
-    a string according to give parameters. A Formatter works
+    Defines Formatter generators. Formatter is a functor which formats
+    a string according to given parameters. A Formatter works
     in conjunction with a Finder. A Finder can provide additional information
-    for a specific Formatter. An example of such a cooperation is reger_finder
+    for a specific Formatter. An example of such a cooperation is regex_finder
     and regex_formatter.
 
-    Formatters are used by as a pluggable components for replace facilities. 
+    Formatters are used as pluggable components for replace facilities. 
     This header contains generator functions for the Formatters provided in this library.
 */
 

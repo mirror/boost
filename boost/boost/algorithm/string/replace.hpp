@@ -20,7 +20,7 @@
 
 /*! \file
     Defines various replace algorithms. Each algorithm replaces
-    a part(s) of the input according to a searching and a replace criteria.
+    part(s) of the input according to set of searching and replace criteria.
 */
 
 namespace boost {
@@ -32,18 +32,16 @@ namespace boost {
         /*!
             Replace the given range in the input string.
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
             
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
             \param SearchRange A range in the input to be substituted
             \param Format A substitute string
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+  			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -109,21 +107,19 @@ namespace boost {
 
         //! Replace first algorithm
         /*!
-            Replace the first match of the search string in the input 
+            Replace the first match of the search substring in the input 
             with the format string. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
             
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Format A substitute string
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+  			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -161,11 +157,11 @@ namespace boost {
 
         //! Replace first algorithm
         /*!
-            replace the first match of the search string in the input 
+            replace the first match of the search substring in the input 
             with the format string. The input sequence is modified in-place.
 
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Format A substitute string
         */
         template<typename SequenceT, typename Collection1T, typename Collection2T>
@@ -184,24 +180,21 @@ namespace boost {
 
         //! Replace first algorithm ( case insensitive )
         /*!
-            Replace the first match of the search string in the input 
+            Replace the first match of the search substring in the input 
             with the format string. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
             Searching is case insensitive.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Format A substitute string
-            \param Loc a locale used for case insensitive comparison
-            \return An output iterator pointing just after last inserted character or
+            \param Loc A locale used for case insensitive comparison
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
-
+ 			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -241,14 +234,14 @@ namespace boost {
 
         //! Replace first algorithm ( case insensitive )
         /*!
-            Replace the first match of the search string in the input 
+            Replace the first match of the search substring in the input 
             with the format string. Input sequence is modified in-place.
             Searching is case insensitive.
 
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Format A substitute string
-            \param Loc a locale used for case insensitive comparison
+            \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename Collection1T, typename Collection2T>
         inline void ireplace_first( 
@@ -270,18 +263,16 @@ namespace boost {
             Replace the last match of the search string in the input 
             with the format string. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for
+            \param Search A substring to be searched for
             \param Format A substitute string
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input            
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+  			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -323,7 +314,7 @@ namespace boost {
             with the format string. Input sequence is modified in-place.
 
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Format A substitute string
         */
         template<typename SequenceT, typename Collection1T, typename Collection2T>
@@ -345,20 +336,18 @@ namespace boost {
             Replace the last match of the search string in the input 
             with the format string. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
             Searching is case insensitive.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Format A substitute string
-            \param Loc a locale used for case insensitive comparison
-            \return An output iterator pointing just after last inserted character or
+            \param Loc A locale used for case insensitive comparison
+            \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input  
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+    		\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -403,9 +392,9 @@ namespace boost {
             Searching is case insensitive.
 
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Format A substitute string
-            \param Loc a locale used for case insensitive comparison
+            \param Loc A locale used for case insensitive comparison
             \return A reference to the modified input
         */
         template<typename SequenceT, typename Collection1T, typename Collection2T>
@@ -428,19 +417,17 @@ namespace boost {
             Replace an Nth (zero-indexed) match of the search string in the input 
             with the format string. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Nth An index of the match to be replaced. The index is 0-based.
             \param Format A substitute string
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -484,7 +471,7 @@ namespace boost {
             with the format string. Input sequence is modified in-place.
 
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Nth An index of the match to be replaced. The index is 0-based.
             \param Format A substitute string
         */
@@ -508,21 +495,19 @@ namespace boost {
             Replace an Nth (zero-indexed) match of the search string in the input 
             with the format string. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
             Searching is case insensitive.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Nth An index of the match to be replaced. The index is 0-based.
             \param Format A substitute string
-            \param Loc a locale used for case insensitive comparison
-            \return An output iterator pointing just after last inserted character or
+            \param Loc A locale used for case insensitive comparison
+            \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input            
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+			\note The second variant of this function provides the strong exception-safety guarantee
        */
         template<
             typename OutputIteratorT,
@@ -569,10 +554,10 @@ namespace boost {
             Searching is case insensitive.
 
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Nth An index of the match to be replaced. The index is 0-based.
             \param Format A substitute string
-            \param Loc a locale used for case insensitive comparison
+            \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename Collection1T, typename Collection2T>
         inline void ireplace_nth( 
@@ -595,18 +580,16 @@ namespace boost {
             Replace all occurrences of the search string in the input 
             with the format string. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Format A substitute string
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input 
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+ 			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -648,7 +631,7 @@ namespace boost {
             with the format string. The input sequence is modified in-place.
 
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Format A substitute string
             \return A reference to the modified input
         */
@@ -671,20 +654,18 @@ namespace boost {
             Replace all occurrences of the search string in the input 
             with the format string. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
             Searching is case insensitive.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Format A substitute string
-            \param Loc a locale used for case insensitive comparison
-            \return An output iterator pointing just after last inserted character or
+            \param Loc A locale used for case insensitive comparison
+            \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input 
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+    		\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -729,9 +710,9 @@ namespace boost {
             Searching is case insensitive.
 
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
             \param Format A substitute string
-            \param Loc a locale used for case insensitive comparison
+            \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename Collection1T, typename Collection2T>
         inline void ireplace_all( 
@@ -751,22 +732,20 @@ namespace boost {
         //! Replace head algorithm
         /*!
             Replace the head of the input with the given format string. 
-            Head is a prefix of a string of given size. 
+            The head is a prefix of a string of given size. 
             If the sequence is shorter then required, whole string if 
             considered to be the head. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
             
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param N A length of the head
+            \param N Length of the head
             \param Format A substitute string
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input  
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -804,12 +783,12 @@ namespace boost {
         //! Replace head algorithm
         /*!
             Replace the head of the input with the given format string. 
-            Head is a prefix of a string of given size. 
-            If the sequence is shorter then required, whole sequence if 
+            The head is a prefix of a string of given size. 
+            If the sequence is shorter then required, the whole string is 
             considered to be the head. The input sequence is modified in-place.
 
             \param Input An input string
-            \param N A length of the head
+            \param N Length of the head
             \param Format A substitute string
         */
         template<typename SequenceT, typename CollectionT>
@@ -829,22 +808,20 @@ namespace boost {
         //! Replace tail algorithm
         /*!
             Replace the tail of the input with the given format string. 
-            Tail is a suffix of a string of given size. 
-            If the sequence is shorter then required, whole string if 
+            The tail is a suffix of a string of given size. 
+            If the sequence is shorter then required, whole string is 
             considered to be the tail. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param N A length of the head
+            \param N Length of the tail
             \param Format A substitute string
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input   
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+  			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -882,12 +859,12 @@ namespace boost {
         //! Replace tail algorithm
         /*!
             Replace the tail of the input with the given format sequence. 
-            Tail is a suffix of a string of given size. 
-            If the sequence is shorter then required, whole string is 
+            The tail is a suffix of a string of given size. 
+            If the sequence is shorter then required, the whole string is 
             considered to be the tail. The input sequence is modified in-place.
 
             \param Input An input string
-            \param N A length of the head
+            \param N Length of the tail
             \param Format A substitute string
         */
         template<typename SequenceT, typename CollectionT>

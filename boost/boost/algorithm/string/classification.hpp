@@ -29,7 +29,7 @@ namespace boost {
 
         //! is_classified predicate
         /*!
-            Construct the \c is_classified predicate. This predicate holds, if an input is
+            Construct the \c is_classified predicate. This predicate holds if the input is
             of specified \c std::ctype category.
 
             \param Type A \c std::ctype category
@@ -44,7 +44,7 @@ namespace boost {
 
         //! is_space predicate
         /*!
-            Construct the \c is_classified predicate for \c ctype_base::space category.   
+            Construct the \c is_classified predicate for the \c ctype_base::space category.   
 
             \param Loc A locale used for classification
             \return An instance of the \c is_classified predicate
@@ -187,7 +187,7 @@ namespace boost {
 
         //! is_any_of predicate
         /*!
-            Construct the \c is_any_of predicate. The predicate holds, if an input
+            Construct the \c is_any_of predicate. The predicate holds if the input
             is included in the specified set of characters.
 
             \param Set A set of characters to be recognized
@@ -204,7 +204,7 @@ namespace boost {
 
         //! is_from_range predicate
         /*!
-            Construct the \c is_from_range predicate. The predicate holds, if an input
+            Construct the \c is_from_range predicate. The predicate holds if the input
             is included in the specified range. (i.e. From <= Ch <= To )
 
             \param From The start of the range
@@ -264,7 +264,7 @@ namespace boost {
         //! predicate negation operator
         /*!
             Construct the \c class_not predicate. This predicate represents a negation. 
-            \c class_or holds, if of the predicates return false.
+            \c class_or holds if of the predicates return false.
 
             \param Pred The predicate to be negated
             \return An instance of the \c class_not predicate     

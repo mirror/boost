@@ -19,7 +19,7 @@
 
 /*! \file
     Defines various erase algorithms. Each algorithm removes
-    a part(s) of the input according to a searching criteria.
+    part(s) of the input according to a searching criteria.
 */
 
 namespace boost {
@@ -30,18 +30,16 @@ namespace boost {
         //! Erase range algorithm
         /*!
             Remove the given range from the input. The result is a modified copy of 
-            the input. It is returned as a sequence or copied to an output iterator.
+            the input. It is returned as a sequence or copied to the output iterator.
     
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input sequence
             \param SearchRange A range in the input to be removed
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
-        */
+			\note The second variant of this function provides the strong exception-safety guarantee
+		*/
         template<typename OutputIteratorT, typename CollectionT>
         inline OutputIteratorT erase_range_copy(
             OutputIteratorT Output,
@@ -99,20 +97,17 @@ namespace boost {
 
         //! Erase first algorithm
         /*!
-            Remove the first match of the string from the input.
+            Remove the first occurence of the substring from the input.
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for 
-            \return An output iterator pointing just after last inserted character or
+            \param Search A substring to be searched for 
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
-
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
-
+			
+			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -147,11 +142,11 @@ namespace boost {
 
         //! Erase first algorithm
         /*!
-            Remove the first match of the string from the input. 
+            Remove the first occurence of the substring from the input. 
             The input sequence is modified in-place.
 
             \param Input An input string
-            \param Search A string to be searched for. 
+            \param Search A substring to be searched for. 
         */
         template<typename SequenceT, typename CollectionT>
         inline void erase_first( 
@@ -168,22 +163,20 @@ namespace boost {
 
         //! Erase first algorithm ( case insensitive )
         /*!
-            Remove the first match of the string from the input. 
+            Remove the first occurence of the substring from the input. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
             Searching is case insensitive.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for 
-            \param Loc a locale used for case insensitive comparison
-            \return An output iterator pointing just after last inserted character or
+            \param Search A substring to be searched for 
+            \param Loc A locale used for case insensitive comparison
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
-        */
+			\note The second variant of this function provides the strong exception-safety guarantee
+		*/
         template<
             typename OutputIteratorT,
             typename Collection1T, 
@@ -219,12 +212,12 @@ namespace boost {
 
         //! Erase first algorithm ( case insensitive )
         /*!
-            Remove the first match of the string from the input. 
+            Remove the first occurence of the substring from the input. 
             The input sequence is modified in-place. Searching is case insensitive.
 
             \param Input An input string
-            \param Search A string to be searched for
-            \param Loc a locale used for case insensitive comparison
+            \param Search A substring to be searched for
+            \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename CollectionT>
         inline void ierase_first( 
@@ -242,20 +235,17 @@ namespace boost {
 
         //! Erase last algorithm
         /*!
-            Remove the last match of the string from the input. 
+            Remove the last occurence of the substring from the input. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for.
-            \return An output iterator pointing just after last inserted character or
+            \param Search A substring to be searched for.
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
-
+ 			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -290,11 +280,11 @@ namespace boost {
 
         //! Erase last algorithm
         /*!
-            Remove the last match of the string from the input. 
+            Remove the last occurence of the substring from the input. 
             The input sequence is modified in-place.
 
             \param Input An input string
-            \param Search A string to be searched for 
+            \param Search A substring to be searched for 
         */
         template<typename SequenceT, typename CollectionT>
         inline void erase_last( 
@@ -311,22 +301,19 @@ namespace boost {
 
         //! Erase last algorithm ( case insensitive )
         /*!
-            Remove the last match of the string from the input. 
+            Remove the last occurence of the substring from the input. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
             Searching is case insensitive.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for
-            \param Loc a locale used for case insensitive comparison
-            \return An output iterator pointing just after last inserted character or
+            \param Search A substring to be searched for
+            \param Loc A locale used for case insensitive comparison
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
-
+ 			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -363,12 +350,12 @@ namespace boost {
 
         //! Erase last algorithm ( case insensitive )
         /*!
-            Remove the last match of the string from the input. 
+            Remove the last occurence of the substring from the input. 
             The input sequence is modified in-place. Searching is case insensitive.
 
             \param Input An input string
-            \param Search A string to be searched for
-            \param Loc a locale used for case insensitive comparison
+            \param Search A substring to be searched for
+            \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename CollectionT>
         inline void ierase_last( 
@@ -386,21 +373,19 @@ namespace boost {
 
         //! Erase nth algorithm
         /*!
-            Remove the Nth match of the string in the input.
+            Remove the Nth occurence of the substring in the input.
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
             
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for
+            \param Search A substring to be searched for
             \param Nth An index of the match to be replaced. The index is 0-based.
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+ 			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -437,11 +422,11 @@ namespace boost {
 
         //! Erase nth algorithm
         /*!
-            Remove the Nth match of the string in the input.
+            Remove the Nth occurence of the substring in the input.
             The input sequence is modified in-place.
 
             \param Input An input string
-            \param Search A string to be searched for. 
+            \param Search A substring to be searched for. 
             \param Nth An index of the match to be replaced. The index is 0-based.
         */
         template<typename SequenceT, typename CollectionT>
@@ -460,22 +445,20 @@ namespace boost {
 
         //! Erase nth algorithm ( case insensitive )
         /*!
-            Remove the Nth match of the string in the input.
+            Remove the Nth occurence of the substring in the input.
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator. 
+            or copied to the output iterator. 
             Searching is case insensitive.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for.
+            \param Search A substring to be searched for.
             \param Nth An index of the match to be replaced. The index is 0-based.
-            \param Loc a locale used for case insensitive comparison
-            \return An output iterator pointing just after last inserted character or
+            \param Loc A locale used for case insensitive comparison
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+    		\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -514,13 +497,13 @@ namespace boost {
 
         //! Erase nth algorithm
         /*!
-            Remove the Nth match of the string in the input.
+            Remove the Nth occurence of the substring in the input.
             The input sequence is modified in-place. Searching is case insensitive.
 
             \param Input An input string
-            \param Search A string to be searched for. 
+            \param Search A substring to be searched for. 
             \param Nth An index of the match to be replaced. The index is 0-based.
-            \param Loc a locale used for case insensitive comparison
+            \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename CollectionT>
         inline void ierase_nth( 
@@ -542,18 +525,16 @@ namespace boost {
         /*!
             Remove all the occurrences of the string from the input. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
                         
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input sequence
-            \param Search A string to be searched for. 
-            \return An output iterator pointing just after last inserted character or
+            \param Search A substring to be searched for. 
+            \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.            
+			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -592,7 +573,7 @@ namespace boost {
             The input sequence is modified in-place.
 
             \param Input An input string
-            \param Search A string to be searched for. 
+            \param Search A substring to be searched for. 
         */
         template<typename SequenceT, typename CollectionT>
         inline void erase_all( 
@@ -611,19 +592,17 @@ namespace boost {
         /*!
             Remove all the occurrences of the string from the input. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator. 
+            or copied to the output iterator. 
             Searching is case insensitive.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param Search A string to be searched for
-            \param Loc a locale used for case insensitive comparison
-            \return An output iterator pointing just after last inserted character or
+            \param Search A substring to be searched for
+            \param Loc A locale used for case insensitive comparison
+            \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+  			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -664,8 +643,8 @@ namespace boost {
             The input sequence is modified in-place. Searching is case insensitive.
 
             \param Input An input string
-            \param Search A string to be searched for. 
-            \param Loc a locale used for case insensitive comparison
+            \param Search A substring to be searched for. 
+            \param Loc A locale used for case insensitive comparison
         */
         template<typename SequenceT, typename CollectionT>
         inline void ierase_all( 
@@ -683,21 +662,19 @@ namespace boost {
 
         //! Erase head algorithm
         /*!
-            Remove the head from the input. Head is a prefix of a seqence of given size. 
-            If the sequence is shorter then required, whole sequence if 
+            Remove the head from the input. The head is a prefix of a seqence of given size. 
+            If the sequence is shorter then required, the whole string is 
             considered to be the head. The result is a modified copy of the input. 
-            It is returned as a sequence or copied to an output iterator.
+            It is returned as a sequence or copied to the output iterator.
             
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param N A length of the head
-            \return An output iterator pointing just after last inserted character or
+            \param N Length of the head
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+ 			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -731,12 +708,12 @@ namespace boost {
 
         //! Erase head algorithm
         /*!
-            Remove the head from the input. Head is a prefix of a seqence of given size. 
-            If the sequence is shorter then required, whole sequence if 
+            Remove the head from the input. The head is a prefix of a seqence of given size. 
+            If the sequence is shorter then required, the whole string is 
             considered to be the head. The input sequence is modified in-place.
 
             \param Input An input string
-            \param N A length of the head
+            \param N Length of the head
         */
         template<typename SequenceT>
         inline void erase_head( 
@@ -753,21 +730,19 @@ namespace boost {
 
         //! Erase tail algorithm
         /*!
-            Remove the tail from the input. Tail is a suffix of a seqence of given size. 
-            If the sequence is shorter then required, whole sequence if 
+            Remove the tail from the input. The tail is a suffix of a seqence of given size. 
+            If the sequence is shorter then required, the whole string is 
             considered to be the tail. 
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param N A length of the head
-            \return An output iterator pointing just after last inserted character or
+            \param N Length of the head
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
             
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+ 			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<
             typename OutputIteratorT,
@@ -801,12 +776,12 @@ namespace boost {
 
         //! Erase tail algorithm
         /*!
-            Remove the tail from the input. Tail is a suffix of a seqence of given size. 
-            If the sequence is shorter then required, whole sequence is
+            Remove the tail from the input. The tail is a suffix of a seqence of given size. 
+            If the sequence is shorter then required, the whole string is
             considered to be the tail. The input sequence is modified in-place.
 
             \param Input An input string
-            \param N A length of the head
+            \param N Length of the head
         */
         template<typename SequenceT>
         inline void erase_tail( 

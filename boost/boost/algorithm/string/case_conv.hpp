@@ -32,18 +32,17 @@ namespace boost {
         /*!
             Each element of the input sequence is converted to lower
             case. The result is a copy of the input converted to lower case.
-            It is returned as a sequence or copied to an output iterator.
+            It is returned as a sequence or copied to the output iterator.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input collection
             \param Loc A locale used for conversion
             \return 
-                An output iterator pointing just after last inserted character or
+                An output iterator pointing just after the last inserted character or
                 a copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+            \note The second variant of this function provides the strong exception-safety guarantee
+                
         */
         template<typename OutputIteratorT, typename CollectionT>
         inline OutputIteratorT 
@@ -107,18 +106,16 @@ namespace boost {
         /*!
             Each element of the input sequence is converted to upper
             case. The result is a copy of the input converted to upper case.
-            It is returned as a sequence or copied to an output iterator
+            It is returned as a sequence or copied to the output iterator
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input collection
             \param Loc A locale used for conversion
             \return 
-                An output iterator pointing just after last inserted character or
+                An output iterator pointing just after the last inserted character or
                 a copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template<typename OutputIteratorT, typename CollectionT>
         inline OutputIteratorT 

@@ -18,14 +18,13 @@
 
 /*! \file boost/algorithm/string/predicate.hpp
     Defines string-related predicates. 
-    The predicates are resolving if a substring is contained in the input string 
-    under various conditions. If a string starts with the substring, ends with the 
+    The predicates determine whether a substring is contained in the input string 
+    under various conditions: a string starts with the substring, ends with the 
     substring, simply contains the substring or if both strings are equal.
-    In addition the algorithm \c all() checks all elements of a container to satisfy a 
+    Additionaly the algorithm \c all() checks all elements of a container to satisfy a 
     condition.
 
-    All predicates provide strong exception guarantee if input parameters satisfy
-    second assumption about exception safety.
+    All predicates provide the strong exception guarantee.
 */
 
 namespace boost {
@@ -36,19 +35,17 @@ namespace boost {
         //! 'Starts with' predicate
         /*!
             This predicate holds when the test collection is a prefix of the Input.
-            In other word, if the input starts with the test.
-            When optional predicate is specified, it is used for character-wise
+            In other words, if the input starts with the test.
+            When the optional predicate is specified, it is used for character-wise
             comparison.
 
             \param Input An input sequence
             \param Test A test sequence
             \param Comp An element comparison predicate
-            \return A result of the test
+            \return The result of the test
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
-        */
+  			\note This function provides the strong exception-safety guarantee
+		*/
         template<typename Collection1T, typename Collection2T, typename PredicateT>
             inline bool starts_with( 
             const Collection1T& Input, 
@@ -91,17 +88,15 @@ namespace boost {
         //! 'Starts with' predicate ( case insensitive )
         /*!
             This predicate holds when the test container is a prefix of the Input.
-            In other word, if the input starts with the test.
+            In other words, if the input starts with the test.
             Elements are compared case insensitively.
 
             \param Input An input sequence
             \param Test A test sequence
-            \param Loc a locale used for case insensitive comparison
-            \return A result of the test
+            \param Loc A locale used for case insensitive comparison
+            \return The result of the test
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+			\note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline bool istarts_with( 
@@ -118,19 +113,17 @@ namespace boost {
         //! 'Ends with' predicate
         /*!
             This predicate holds when the test container is a suffix of the Input.
-            In other word, if the input ends with the test.
-            When optional predicate is specified, it is used for character-wise
+            In other words, if the input ends with the test.
+            When the optional predicate is specified, it is used for character-wise
             comparison.
 
 
             \param Input An input sequence
             \param Test A test sequence
             \param Comp An element comparison predicate
-            \return A result of the test
+            \return The result of the test
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+  			\note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T, typename PredicateT>
         inline bool ends_with( 
@@ -169,17 +162,15 @@ namespace boost {
         //! 'Ends with' predicate ( case insensitive )
         /*!
             This predicate holds when the test container is a suffix of the Input.
-            In other word, if the input ends with the test.
+            In other words, if the input ends with the test.
             Elements are compared case insensitively.
 
             \param Input An input sequence
             \param Test A test sequence
-            \param Loc a locale used for case insensitive comparison
-            \return A result of the test
+            \param Loc A locale used for case insensitive comparison
+            \return The result of the test
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+			\note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline bool iends_with( 
@@ -195,17 +186,15 @@ namespace boost {
         //! 'Contains' predicate
         /*!
             This predicate holds when the test container is contained in the Input.
-            When optional predicate is specified, it is used for character-wise
+            When the optional predicate is specified, it is used for character-wise
             comparison.
 
             \param Input An input sequence
             \param Test A test sequence
             \param Comp An element comparison predicate
-            \return A result of the test
+            \return The result of the test
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+           	\note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T, typename PredicateT>
         inline bool contains( 
@@ -241,12 +230,10 @@ namespace boost {
 
             \param Input An input sequence
             \param Test A test sequence
-            \param Loc a locale used for case insensitive comparison
-            \return A result of the test
+            \param Loc A locale used for case insensitive comparison
+            \return The result of the test
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+        	\note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline bool icontains( 
@@ -263,19 +250,17 @@ namespace boost {
         /*!
             This predicate holds when the test container is equal to the
             input container i.e. all elements in both containers are same.
-            When optional predicate is specified, it is used for character-wise
+            When the optional predicate is specified, it is used for character-wise
             comparison.
 
             \param Input An input sequence
             \param Test A test sequence
             \param Comp An element comparison predicate
-            \return A result of the test
+            \return The result of the test
 
-            \note This is two-way version of \c std::equal algorithm
+            \note This is a two-way version of \c std::equal algorithm
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T, typename PredicateT>
         inline bool equals( 
@@ -324,14 +309,12 @@ namespace boost {
 
             \param Input An input sequence
             \param Test A test sequence
-            \param Loc a locale used for case insensitive comparison
-            \return A result of the test
+            \param Loc A locale used for case insensitive comparison
+            \return The result of the test
 
-            \note This is two-way version of \c std::equal algorithm
+            \note This is a two-way version of \c std::equal algorithm
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline bool iequals( 
@@ -351,11 +334,9 @@ namespace boost {
             
             \param Input An input sequence
             \param Pred A predicate
-            \return A result of the test
+            \return The result of the test
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, this function provides strong
-                exception guarantee.
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename CollectionT, typename PredicateT>
         inline bool all( 

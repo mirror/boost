@@ -22,12 +22,12 @@
     For lacking compilers, it is possible of define an override for a specific tester
     function.
 
-    Due to language restriction, it is not currently possible to define specialization for
+    Due to a language restriction, it is not currently possible to define specializations for
     stl containers without including the corresponding header. To decrease the overhead
-    needed by this inclusion, user can selectively include specialization 
+    needed by this inclusion, user can selectively include a specialization 
     header for a specific container. They are located in boost/algorithm/string/stl
     directory. Alternatively she can include boost/algorithm/string/std_collection_traits.hpp
-    header which contains specialization for all stl containers.
+    header which contains specializations for all stl containers.
 */
 
 namespace boost {
@@ -107,7 +107,7 @@ namespace boost {
 
         //! Stable iterators trait
         /*!
-            This trait specifies that the sequence has stable iterators. It means,
+            This trait specifies that the sequence has stable iterators. It means
             that operations like insert/erase/replace do not invalidate iterators.
         */
         template< typename T >

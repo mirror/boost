@@ -16,9 +16,9 @@
 #include <boost/algorithm/string/detail/formatter_regex.hpp>
 
 /*! \file
-    Defines the \c refex_finder and \c regex_formatter generators. These two functors
+    Defines the \c regex_finder and \c regex_formatter generators. These two functors
     are designed to work together. \c regex_formatter uses additional information
-    about a match contained in the reger_finder search result.
+    about a match contained in the regex_finder search result.
 */
 
 namespace boost {
@@ -28,7 +28,7 @@ namespace boost {
 
         //! "Regex" finder 
         /*!
-            Construct the \c regex_finder. Finder uses regex engine to search
+            Construct the \c regex_finder. Finder uses the regex engine to search
             for a match.
             Result is given in \c regex_search_result. This is an extension
             of the iterator_range. In addition it containes match results 
@@ -55,7 +55,7 @@ namespace boost {
 
         //! Regex formatter
         /*!
-            Construct the \c regex_formatter. Regex formatter uses regex engine to
+            Construct the \c regex_formatter. Regex formatter uses the regex engine to
             format a match found by the \c regex_finder. 
             This formatted it designed to closely cooperate with \c regex_finder.
 

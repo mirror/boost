@@ -28,7 +28,7 @@
     to extracted parts.
 
     There are two algorithms provided. One iterates over matching
-    substrings, the other one over the gasps between these matches.
+    substrings, the other one over the gaps between these matches.
 */
 
 namespace boost {
@@ -55,7 +55,7 @@ namespace boost {
             \param Finder A Finder object used for searching
             \return A reference the result
 
-            \note Prior content of the result will be overridden.
+            \note Prior content of the result will be overwritten.
         */
         template< 
             typename SequenceSequenceT,
@@ -122,7 +122,7 @@ namespace boost {
             \param Finder A finder object used for searching
             \return A reference the result
 
-            \note Prior content of the result will be overridden.
+            \note Prior content of the result will be overwritten.
         */
         template< 
             typename SequenceSequenceT,

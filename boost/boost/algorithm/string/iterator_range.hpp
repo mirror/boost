@@ -19,8 +19,8 @@
 
 /*! \file
     Defines the \c iterator_class and related functions. 
-    \c iterator_range is a simple wrapper of iterator pair idiom. It provides
-    a rich subset of Container interface.
+    \c iterator_range is a simple wrapper of the iterator pair idiom. It provides
+    a rich subset of the Container interface.
 */
 
 namespace boost {
@@ -32,7 +32,7 @@ namespace boost {
         /*!
             An \c iterator_range delimits a range in a sequence by beginning and ending iterators. 
             An iterator_range can be passed to an algorithm which requires a sequence as an input. 
-            For example, the \c toupper() function may be used most frequently on strings, 
+            For example, the \c toupper() function may most frequently be used on strings, 
             but can also be used on iterator_ranges: 
             
             \code
@@ -40,7 +40,7 @@ namespace boost {
             \endcode
 
             Many algorithms working with sequences take a pair of iterators, 
-            delimiting a working range, as an arguments. The \c iterator_range class is an 
+            delimiting a working range, as arguments. The \c iterator_range class is an 
             encapsulation of a range identified by a pair of iterators. 
             It provides a collection interface, 
             so it is possible to pass an instance to an algorithm requiring a collection as an input. 
@@ -149,7 +149,7 @@ namespace boost {
 
             //! Empty container test
             /*!
-                Test whenever the range is empty
+                Test whether the range is empty
             */
             bool empty() const 
             { 
@@ -177,7 +177,7 @@ namespace boost {
             
             //! Safe bool conversion
             /*!
-                Check whenever the range is empty.
+                Check whether the range is empty.
                 Allows to use construction like this:
                 \code
                     iterator_range r;

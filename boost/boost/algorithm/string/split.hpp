@@ -20,13 +20,13 @@
 /*! \file
     Defines basic split algorithms. 
     Split algorithms can be used to divide a string
-    into several parts according to a given criteria.
+    into several parts according to given criteria.
     
     Each part is copied and added as a new element to the
     output container.
     Thus the result container must be able to hold copies
     of the matches (in a compatible structure like std::string) or
-    a reference to it (f.e. using the iterator range class).
+    a reference to it (e.g. using the iterator range class).
     Examples of such a container are \c std::vector<std::string>
     or \c std::list<boost::iterator_range<std::string::iterator>>
 */
@@ -45,20 +45,18 @@ namespace boost {
             output container.
             Thus the result container must be able to hold copies
             of the matches (in a compatible structure like std::string) or
-            a reference to it (f.e. using the iterator range class).
+            a reference to it (e.g. using the iterator range class).
             Examples of such a container are \c std::vector<std::string>
             or \c std::list<boost::iterator_range<std::string::iterator>>
 
             \param Result A container that can hold copies of references to the substrings
             \param Input A container which will be searched.
-            \param Search A string to be searched for.
+            \param Search A substring to be searched for.
             \return A reference the result
 
-            \note Prior content of the result will be overridden.
+            \note Prior content of the result will be overwritten.
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety and result's container swap method have strong exception guarantee, 
-                this function provides strong exception guarantee.
+           	\note This function provides the strong exception-safety guarantee
         */
         template< typename SequenceSequenceT, typename Collection1T, typename Collection2T >
         inline SequenceSequenceT& find_all(
@@ -74,12 +72,12 @@ namespace boost {
 
         //! Find all algorithm ( case insensitive ) 
         /*!
-            This algorithm finds all occurrences of the search sequence
+            This algorithm finds all occurrences of the search string
             in the input. 
             Each part is copied and added as a new element to the
             output container. Thus the result container must be able to hold copies
             of the matches (in a compatible structure like std::string) or
-            a reference to it (f.e. using the iterator range class).
+            a reference to it (e.g. using the iterator range class).
             Examples of such a container are \c std::vector<std::string>
             or \c std::list<boost::iterator_range<std::string::iterator>>
 
@@ -87,15 +85,13 @@ namespace boost {
 
             \param Result A container that can hold copies of references to the substrings
             \param Input A container which will be searched.
-            \param Search A string to be searched for.
-            \param Loc a locale used for case insensitive comparison
+            \param Search A substring to be searched for.
+            \param Loc A locale used for case insensitive comparison
             \return A reference the result
 
-            \note Prior content of the result will be overridden.
+            \note Prior content of the result will be overwritten.
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety and result's container swap method have strong exception guarantee, 
-                this function provides strong exception guarantee.
+          	\note This function provides the strong exception-safety guarantee
         */
         template< typename SequenceSequenceT, typename Collection1T, typename Collection2T >
         inline SequenceSequenceT& ifind_all(
@@ -115,15 +111,15 @@ namespace boost {
 
         //! Split algorithm
         /*! 
-            Tokenize expression. This function is equivalent of C strtok. Input
+            Tokenize expression. This function is equivalent to C strtok. Input
             sequence is split into tokens, separated by separators. Separators 
-            are given in the mean of predicate.
+            are given by means of the predicate.
 
             Each part is copied and added as a new element to the
             output container.
             Thus the result container must be able to hold copies
             of the matches (in a compatible structure like std::string) or
-            a reference to it (f.e. using the iterator range class).
+            a reference to it (e.g. using the iterator range class).
             Examples of such a container are \c std::vector<std::string>
             or \c std::list<boost::iterator_range<std::string::iterator>>
     
@@ -136,11 +132,9 @@ namespace boost {
                 delimit a token.
             \return A reference the result
 
-            \note Prior content of the result will be overridden.
+            \note Prior content of the result will be overwritten.
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety and result's container swap() method have strong exception guarantee, 
-                this function provides strong exception guarantee.
+			\note This function provides the strong exception-safety guarantee
         */
         template< typename SequenceSequenceT, typename CollectionT, typename PredicateT >
         inline SequenceSequenceT& split(

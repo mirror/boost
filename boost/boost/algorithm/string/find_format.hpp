@@ -20,7 +20,7 @@
 
 /*! \file
     Defines generic replace algorithms. Each algorithm replaces
-    a part(s) of the input. The part to be replaced is looked up using a Finder object.
+    part(s) of the input. The part to be replaced is looked up using a Finder object.
     Result of finding is then used by a Formatter object to generate the replacement.
 */
 
@@ -34,18 +34,16 @@ namespace boost {
             Use the Finder to search for a substring. Use the Formatter to format
             this substring and replace it in the input.
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
     
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input sequence
             \param Finder A Finder object used to search for a match to be replaced
             \param Formatter A Formatter object used to format a match
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template< 
             typename OutputIteratorT,
@@ -147,18 +145,16 @@ namespace boost {
             this substring and replace it in the input. Repeat this for all matching
             substrings.
             The result is a modified copy of the input. It is returned as a sequence 
-            or copied to an output iterator.
+            or copied to the output iterator.
 
-            \param Output A output iterator to which the result will be copied
+            \param Output An output iterator to which the result will be copied
             \param Input An input sequence
             \param Finder A Finder object used to search for a match to be replaced
             \param Formatter A Formatter object used to format a match
-            \return An output iterator pointing just after last inserted character or
+            \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-            \note If the input parameters satisfy the second assumption
-                about exception safety, second variant of this function provides strong
-                exception guarantee.
+ 			\note The second variant of this function provides the strong exception-safety guarantee
         */
         template< 
             typename OutputIteratorT,
