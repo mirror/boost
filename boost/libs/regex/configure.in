@@ -1422,22 +1422,10 @@ AC_SUBST(ac_all_h)
 AC_SUBST(ac_all_cpp)
 AC_SUBST(ac_all_dep)
 
-if test "$enable_ms_windows" != "no"; then
-ac_regress="r1$ac_exe_ext"
-fi
-ac_regress="$ac_regress r2$ac_exe_ext"
-if test "$ac_have_locale" != "no"; then
-ac_regress="$ac_regress r3$ac_exe_ext"
-fi
+ac_regress="$ac_regress r1$ac_exe_ext"
 
 if test "$enable_wstring" != "no"; then
-if test "$enable_ms_windows" != "no"; then
-ac_regress="$ac_regress r4$ac_exe_ext"
-fi
-ac_regress="$ac_regress r5$ac_exe_ext"
-if test "$ac_have_locale" != "no"; then
-ac_regress="$ac_regress r6$ac_exe_ext"
-fi
+ac_regress="$ac_regress r2$ac_exe_ext"
 fi
 
 AC_SUBST(ac_regress)
@@ -1695,6 +1683,7 @@ cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
 sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/re_detail/regex_options.hpp > jm_opt.out
 cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
 rm -f jm_opt.out
+
 
 
 

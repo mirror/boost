@@ -3444,22 +3444,10 @@ echo "$ac_rules" >> ./lib/makefile.in
 
 
 
-if test "$enable_ms_windows" != "no"; then
-ac_regress="r1$ac_exe_ext"
-fi
-ac_regress="$ac_regress r2$ac_exe_ext"
-if test "$ac_have_locale" != "no"; then
-ac_regress="$ac_regress r3$ac_exe_ext"
-fi
+ac_regress="$ac_regress r1$ac_exe_ext"
 
 if test "$enable_wstring" != "no"; then
-if test "$enable_ms_windows" != "no"; then
-ac_regress="$ac_regress r4$ac_exe_ext"
-fi
-ac_regress="$ac_regress r5$ac_exe_ext"
-if test "$ac_have_locale" != "no"; then
-ac_regress="$ac_regress r6$ac_exe_ext"
-fi
+ac_regress="$ac_regress r2$ac_exe_ext"
 fi
 
 
@@ -3526,9 +3514,9 @@ old_libs="$LIBS"
 LIBS="conf2.cpp $old_libs"
 
 echo $ac_n "checking for link time template merging""... $ac_c" 1>&6
-echo "configure:3530: checking for link time template merging" >&5
+echo "configure:3518: checking for link time template merging" >&5
 cat > conftest.$ac_ext <<EOF
-#line 3532 "configure"
+#line 3520 "configure"
 #include "confdefs.h"
 
 #include "conf2.h"
@@ -3541,7 +3529,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3545: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:3533: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 else
@@ -3565,9 +3553,9 @@ if eval "$CXX $CXXFLAGS -c conf2.cpp" && eval "ar -rc libconf2.a conf2$ac_obj_ex
 LIBS="-L./ -lconf2 $old_libs"
 
 echo $ac_n "checking for link time template merging from archive files""... $ac_c" 1>&6
-echo "configure:3569: checking for link time template merging from archive files" >&5
+echo "configure:3557: checking for link time template merging from archive files" >&5
 cat > conftest.$ac_ext <<EOF
-#line 3571 "configure"
+#line 3559 "configure"
 #include "confdefs.h"
 
 #include "conf2.h"
@@ -3580,7 +3568,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3584: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:3572: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 else
@@ -3709,9 +3697,9 @@ old_libs="$LIBS"
 LIBS="conf2.cpp $old_libs"
 
 echo $ac_n "checking for link time template merging of switch statements""... $ac_c" 1>&6
-echo "configure:3713: checking for link time template merging of switch statements" >&5
+echo "configure:3701: checking for link time template merging of switch statements" >&5
 cat > conftest.$ac_ext <<EOF
-#line 3715 "configure"
+#line 3703 "configure"
 #include "confdefs.h"
 
 #include "conf2.h"
@@ -3724,7 +3712,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3728: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:3716: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 else
@@ -4079,6 +4067,7 @@ cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
 sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/re_detail/regex_options.hpp > jm_opt.out
 cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
 rm -f jm_opt.out
+
 
 
 
