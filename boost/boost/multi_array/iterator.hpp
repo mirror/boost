@@ -20,7 +20,6 @@
 
 #include "boost/multi_array/base.hpp"
 #include "boost/iterator/iterator_facade.hpp"
-#include "boost/iterator/reverse_iterator.hpp"
 #include <cstddef>
 #include <iterator>
 
@@ -94,9 +93,9 @@ public:
     idx_(idx), base_(base), extents_(extents),
     strides_(strides), index_base_(index_base) { }
 
-  template <typename OPtr, typename ORef>
+  template <typename OPtr, typename Cat, typename ORef>
   array_iterator(const
-                 array_iterator<T,OPtr,NumDims,AccessCategory,ORef>& rhs)
+                 array_iterator<T,OPtr,NumDims,Cat,ORef>& rhs)
     : idx_(rhs.idx_), base_(rhs.base_), extents_(rhs.extents_),
     strides_(rhs.strides_), index_base_(rhs.index_base_) { }
 
@@ -149,37 +148,13 @@ public:
 template <typename T, std::size_t NumDims, typename value_type,
   typename reference_type, typename tag, typename difference_type>
 struct iterator_generator {
-  // RG: readable_writeable is temporary until later dim-based fixes
-  typedef  array_iterator<T,T*,NumDims,
-             ::boost::readable_iterator_tag,reference_type> type;
+  typedef  array_iterator<T,T*,NumDims,tag,reference_type> type;
 };
 
 template <typename T,  std::size_t NumDims, typename value_type,
   typename reference_type, typename tag, typename difference_type>
 struct const_iterator_generator {
-  // RG: readable is temporary until later dim-based fixes
-  typedef array_iterator<T,const T*,NumDims,
-            readable_iterator_tag,reference_type> type;
-};
-
-template <typename T, std::size_t NumDims, typename value_type,
-  typename reference_type, typename tag, typename difference_type>
-struct reverse_iterator_generator {
-private:
-  typedef typename iterator_generator<T,NumDims,value_type,reference_type,
-    tag,difference_type>::type iterator_type;
-public:
-  typedef ::boost::reverse_iterator<iterator_type> type;
-};
-
-template <typename T,  std::size_t NumDims, typename value_type,
-  typename reference_type, typename tag, typename difference_type>
-struct const_reverse_iterator_generator {
-private:
-  typedef typename const_iterator_generator<T,NumDims,value_type,
-    reference_type,tag,difference_type>::type iterator_type;
-public:
-  typedef ::boost::reverse_iterator<iterator_type> type;
+  typedef array_iterator<T,const T*,NumDims,tag,reference_type> type;
 };
 
 

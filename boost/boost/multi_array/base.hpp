@@ -25,7 +25,8 @@
 #include "boost/multi_array/storage_order.hpp"
 #include "boost/multi_array/types.hpp"
 #include "boost/config.hpp"
-#include "boost/multi_array/iterator_adaptors.hpp"
+#include "boost/mpl/if.hpp"
+#include "boost/iterator/reverse_iterator.hpp"
 #include "boost/static_assert.hpp"
 #include "boost/type.hpp"
 #include <cassert>
@@ -76,27 +77,9 @@ class sub_array;
 template <typename T, std::size_t NumDims, typename TPtr = const T*>
 class const_sub_array;
 
-template <typename T, std::size_t NumDims, typename value_type,
-  typename reference_type, typename tag, typename difference_type>
-struct iterator_generator;
-
-template <typename T, std::size_t NumDims, typename value_type,
-  typename reference_type, typename tag, typename difference_type>
-struct const_iterator_generator;
-
-template <typename T, std::size_t NumDims, typename value_type,
-  typename reference_type, typename tag, typename difference_type>
-struct reverse_iterator_generator;
-
-template <typename T, std::size_t NumDims, typename value_type,
-  typename reference_type, typename tag, typename difference_type>
-struct const_reverse_iterator_generator;
-
-template <typename T,typename TPtr>
-struct iterator_base;
-
-template <typename T, std::size_t NumDims>
-struct iterator_policies;
+template <typename T, typename TPtr, std::size_t NumDims,
+          typename AccessCategory, typename Reference>
+class array_iterator;
 
 template <typename T, std::size_t NumDims, typename TPtr = const T*>
 class const_multi_array_view;
@@ -233,19 +216,6 @@ public:
 /////////////////////////////////////////////////////////////////////////
 
 
-/////////////////////////////////////////////////////////////////////////
-// multi_array/sub_array base stuffs
-/////////////////////////////////////////////////////////////////////////
-template <std::size_t NumDims>
-struct iterator_tag_selector {
-  typedef std::input_iterator_tag type;
-};
-
-template <>
-struct iterator_tag_selector<1> {
-  typedef std::random_access_iterator_tag type;
-};
-
 
 ////////////////////////////////////////////////////////////////////////
 // multi_array_base
@@ -288,28 +258,25 @@ public:
   // iterator support
   //
 
-  typedef typename iterator_tag_selector<NumDims>::type iterator_tag;
-
   typedef typename
-    iterator_generator<T,NumDims,value_type,
-    reference,iterator_tag,index>::type iterator;
+  mpl::if_c<(NumDims == 1), 
+    writable_lvalue_iterator_tag,
+    readable_writable_iterator_tag>::type  iterator_tag;
 
-  typedef typename
-    const_iterator_generator<T,NumDims,value_type,
-    const_reference,iterator_tag,index>::type const_iterator;
+  typedef typename 
+  mpl::if_c<(NumDims == 1),
+    readable_lvalue_iterator_tag,
+    readable_iterator_tag>::type const_iterator_tag;
 
-  typedef typename
-    reverse_iterator_generator<T,NumDims,value_type,
-    reference,iterator_tag,index>::type reverse_iterator;
+  typedef array_iterator<T,T*,NumDims,iterator_tag,reference> iterator;
+  typedef array_iterator<T,
+    T const*,NumDims,const_iterator_tag,const_reference> const_iterator;
 
-  typedef typename
-    const_reverse_iterator_generator<T,NumDims,value_type,
-    const_reference,iterator_tag,index>::type const_reverse_iterator;
+  typedef ::boost::reverse_iterator<iterator> reverse_iterator;
+  typedef ::boost::reverse_iterator<const_iterator> const_reverse_iterator;
 
   BOOST_STATIC_CONSTANT(std::size_t, dimensionality = NumDims);
 protected:
-  typedef iterator_base<T,T*> iter_base;
-  typedef iterator_base<T,const T*> const_iter_base;
 
   multi_array_impl_base() { }
   ~multi_array_impl_base() { }
