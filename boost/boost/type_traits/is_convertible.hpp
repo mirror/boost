@@ -125,7 +125,7 @@ struct is_convertible_basic_impl
 };
 
 #elif (defined(__EDG_VERSION__) && (__EDG_VERSION__ >= 245) && !defined(__ICL)) \
-      || defined(__IBMCPP__)
+      || defined(__IBMCPP__) || defined(__HP_aCC)
 //
 // This is *almost* an ideal world implementation as it doesn't rely
 // on undefined behaviour by passing UDT's through (...).
