@@ -12,7 +12,7 @@
 
 using namespace std;
 
-unsigned count = 30;
+unsigned specializations = 30;
 
 int main()
 {
@@ -21,7 +21,7 @@ int main()
 
    //
    // generate is_function tester prototypes:
-   for(i = 0; i <= count; ++i)
+   for(i = 0; i <= specializations; ++i)
    {
       os << "template <class R";
       for(j = 0; j < i; ++j)
@@ -45,7 +45,7 @@ int main()
    //
    // generate is_function_helper partial specialisations:
    //
-   for(i = 0; i < count; ++i)
+   for(i = 0; i < specializations; ++i)
    {
       os << "template <class R";
       for(j = 0; j < i; ++j)
@@ -70,7 +70,7 @@ int main()
 
    //
    // generate is_member_pointer_helper tester prototypes:
-   for(i = 0; i <= count; ++i)
+   for(i = 0; i <= specializations; ++i)
    {
       os << "template <class R, class T";
       for(j = 0; j < i; ++j)
@@ -94,7 +94,7 @@ int main()
    //
    // generate is_member_pointer partial specialisations:
    //
-   for(i = 0; i < count; ++i)
+   for(i = 0; i < specializations; ++i)
    {
       os << "template <class R, class T";
       for(j = 0; j < i; ++j)
