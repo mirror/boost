@@ -71,8 +71,8 @@ public:
     }
   }
 
-  const_iterator begin()const{return &spc.data()[0];}
-  const_iterator end()const{return &spc.data()[n];}
+  const_iterator begin()const{return spc.data();}
+  const_iterator end()const{return spc.data()+n;}
 
   void clone(Node* node)
   {
@@ -89,15 +89,15 @@ public:
     BOOST_CATCH_END
     ++n;
 
-    if(n==size_)std::sort(&spc.data()[0],&spc.data()[size_]);
+    if(n==size_)std::sort(spc.data(),spc.data()+size_);
   }
 
   Node* find(Node* node)const
   {
     if(node==header_org_)return header_cpy_;
     return std::lower_bound(
-      &spc.data()[0],&spc.data()[n],copy_map_entry<Node>(node,0))->second;
-  };
+      begin(),end(),copy_map_entry<Node>(node,0))->second;
+  }
 
   void release()
   {
