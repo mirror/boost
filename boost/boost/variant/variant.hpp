@@ -29,6 +29,7 @@
 #include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/variant/detail/has_nothrow_move.hpp"
 #include "boost/variant/detail/move.hpp"
+#include "boost/variant/detail/reference_content.hpp"
 
 #include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
@@ -48,7 +49,10 @@
 #include "boost/preprocessor/inc.hpp"
 #include "boost/preprocessor/repeat.hpp"
 #include "boost/type_traits/alignment_of.hpp"
+#include "boost/type_traits/add_const.hpp"
+#include "boost/type_traits/is_const.hpp"
 #include "boost/type_traits/is_same.hpp"
+#include "boost/type_traits/is_reference.hpp"
 #include "boost/variant/static_visitor.hpp"
 
 #include "boost/mpl/apply_if.hpp"
@@ -57,6 +61,9 @@
 #include "boost/mpl/contains.hpp"
 #include "boost/mpl/distance.hpp"
 #include "boost/mpl/empty.hpp"
+#include "boost/mpl/find.hpp"
+#include "boost/mpl/find_if.hpp"
+#include "boost/mpl/front.hpp"
 #include "boost/mpl/identity.hpp"
 #include "boost/mpl/int.hpp"
 #include "boost/mpl/is_sequence.hpp"
@@ -222,7 +229,7 @@ struct destroyer
 public: // visitor interfaces
 
     template <typename T>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
     operator()(T& operand) const
     {
         operand.~T();
@@ -258,7 +265,7 @@ public: // structors
 public: // visitor interfaces
 
     template <typename T>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
     operator()(const T& operand) const
     {
         new(storage_) T(operand);
@@ -290,7 +297,7 @@ public: // structors
 public: // visitor interfaces
 
     template <typename T>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
     operator()(T& lhs_value) const
     {
         // NOTE TO USER :
@@ -298,7 +305,7 @@ public: // visitor interfaces
         // not meet the requirements of the Assignable concept. Thus,
         // variant is not Assignable.
         //
-        // Hint: Are any of the bounded types const-qualified?
+        // Hint: Are any of the bounded types const-qualified or references?
         //
         lhs_value = *static_cast<const T*>(rhs_storage_);
         BOOST_VARIANT_AUX_RETURN_VOID;
@@ -328,7 +335,7 @@ public: // structors
 public: // visitor interfaces
 
     template <typename T>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
     operator()(T& operand) const
     {
         ::boost::detail::variant::move_swap(operand, *static_cast<T*>(toswap_));
@@ -392,13 +399,13 @@ private: // helpers, for visitor interfaces (below)
         return visitor_(operand);
     }
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0564))
+#   if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0564))
     template <typename T>
     result_type visit(const T& operand)
     {
         return visitor_(operand);
     }
-#endif
+#   endif
 
 #else // defined(BOOST_NO_VOID_RETURNS)
 
@@ -410,7 +417,7 @@ private: // helpers, for visitor interfaces (below)
     }
 
     template <typename T>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
     visit_impl(T& operand, mpl::true_)
     {
         visitor_(operand);
@@ -449,6 +456,20 @@ public: // visitor interfaces
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(reference_content<T>& operand)
+    {
+        return visit(operand.get());
+    }
+
+    template <typename T>
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(const reference_content<T>& operand)
+    {
+        return visit(operand.get());
+    }
+
+    template <typename T>
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
     operator()(T& operand)
     {
         return visit(operand);
@@ -468,6 +489,20 @@ private: // helpers, for visitor interfaces (below)
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
     execute_impl(const incomplete<T>& operand, long)
+    {
+        return visit(operand.get());
+    }
+
+    template <typename T>
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    execute_impl(reference_content<T>& operand, long)
+    {
+        return visit(operand.get());
+    }
+
+    template <typename T>
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    execute_impl(const reference_content<T>& operand, long)
     {
         return visit(operand.get());
     }
@@ -571,6 +606,77 @@ public: // static functions
 
 #endif // !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
+///////////////////////////////////////////////////////////////////////////////
+// (detail) metafunction handle_reference
+//
+// Wraps with reference_content if specified type is reference.
+//
+
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+
+template <typename T>
+struct handle_reference
+{
+    typedef T type;
+};
+
+template <typename T>
+struct handle_reference< T& >
+{
+    typedef reference_content<T&> type;
+};
+
+#else // defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+
+template <typename T>
+struct handle_reference
+    : mpl::if_<
+          is_reference<T>
+        , reference_content<T>
+        , T
+        >
+{
+};
+
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION workaround
+
+///////////////////////////////////////////////////////////////////////////////
+// (detail) metafunction class quoted_handle_reference
+//
+// Same behavior as handle_reference metafunction (see above).
+//
+struct quoted_handle_reference
+{
+    template <typename T>
+    struct apply
+        : handle_reference<T>
+    {
+    };
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// (detail) metafunction class quoted_handle_reference_recursive
+//
+// Applies handle_reference to result of enable_recursive.
+//
+template <typename RecursiveVariant>
+struct quoted_handle_reference_recursive
+{
+    template <typename T>
+    struct apply
+    {
+    private:
+        typedef typename enable_recursive<
+              T,RecursiveVariant
+            >::type recursive_enabled_;
+
+    public:
+        typedef typename handle_reference<
+              recursive_enabled_
+            >::type type;
+    };
+};
+
 }} // namespace detail::variant
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -590,65 +696,70 @@ template <
     >
 class variant
 {
-private: // private typedefs
+private: // helpers, for typedefs (below)
 
-    typedef variant wknd_self_t;
-
-    struct is_recursive
+    struct is_recursive_
         : detail::variant::is_recursive_flag<T0_>
     {
     };
 
-#if !defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
+    typedef variant wknd_self_t;
 
-private: // helpers, for typedefs (below)
+    typedef typename mpl::if_<
+          is_recursive_
+        , detail::variant::quoted_handle_reference_recursive<wknd_self_t>
+        , detail::variant::quoted_handle_reference
+        >::type transform_op_;
 
     typedef typename mpl::apply_if<
-          is_recursive
+          is_recursive_
         , T0_
         , mpl::identity< T0_ >
-        >::type T0;
+        >::type unwrapped_T0_;
 
-    typedef typename mpl::apply_if<
-          mpl::is_sequence<T0>
-        , mpl::identity<T0>
-        , detail::variant::make_variant_list<
-              BOOST_VARIANT_ENUM_PARAMS(T)
-            >
-        >::type initial_types;
+#if !defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
 
 public: // typedefs
 
     typedef typename mpl::apply_if<
-          is_recursive
-        , mpl::transform<
-              initial_types
-            , mpl::protect<
-                  detail::variant::quoted_enable_recursive<wknd_self_t>
-                >
+          mpl::is_sequence<unwrapped_T0_>
+        , mpl::identity<unwrapped_T0_>
+        , detail::variant::make_variant_list<
+              unwrapped_T0_
+            , BOOST_VARIANT_ENUM_SHIFTED_PARAMS(T)
             >
-        , mpl::identity< initial_types >
         >::type types;
+
+private: // internal typedefs
+
+    typedef typename mpl::transform<
+          types
+        , mpl::protect< transform_op_ >
+        >::type internal_types;
+
+    typedef typename mpl::front<
+          internal_types
+        >::type T0;
 
 #elif !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
 private: // helpers, for typedefs (below)
 
-    typedef typename mpl::apply_if<
-          is_recursive
-        , T0_
-        , mpl::identity< T0_ >
-        >::type wknd_T0;
+    typedef unwrapped_T0_ wknd_T0;
+
+public: // typedefs
+
+    typedef typename detail::variant::make_variant_list<
+          BOOST_VARIANT_ENUM_PARAMS(wknd_T)
+        >::type types;
+
+private: // helpers, for internal typedefs (below)
 
     #define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEFS(z,N,_) \
-        typedef typename mpl::apply_if<                \
-              is_recursive                             \
-            , detail::variant::enable_recursive<       \
-                  BOOST_PP_CAT(wknd_T,N)               \
-                , wknd_self_t                          \
-                >                                      \
-            , mpl::identity< BOOST_PP_CAT(wknd_T,N) >  \
-            >::type BOOST_PP_CAT(T,N);                 \
+        typedef typename mpl::apply1<       \
+              transform_op_                 \
+            , BOOST_PP_CAT(wknd_T,N)        \
+            >::type BOOST_PP_CAT(T,N);      \
         /**/
 
     BOOST_PP_REPEAT(
@@ -659,11 +770,11 @@ private: // helpers, for typedefs (below)
 
     #undef BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEFS
 
-public: // typedefs
+private: // internal typedefs
 
     typedef typename detail::variant::make_variant_list<
           BOOST_VARIANT_ENUM_PARAMS(T)
-        >::type types;
+        >::type internal_types;
 
 private: // static precondition assertions
 
@@ -676,19 +787,36 @@ private: // static precondition assertions
 
 #else // MSVC7 and below
 
-public: // typedefs
+    // Workaround rationale:
+    //
+    // If we tranform the bounded types so as to support recursive_variant and
+    // references, MSVC versions 6 and 7.0 incorrectly complain that the
+    // 'initialize' methods of preprocessor_list_initializer (see below) are
+    // multiply defined.
+    //
+    // Accordingly, recursive_variant and references are unsupported on these
+    // compilers until a workaround is found.
+    //
+
+private: // helpers, for typedefs (below)
 
     typedef T0_ T0;
+
+public: // typedefs
 
     typedef typename detail::variant::make_variant_list<
           BOOST_VARIANT_ENUM_PARAMS(T)
         >::type types;
 
+private: // internal typedefs
+
+    typedef types internal_types;
+
 private: // static precondition assertions
 
-    // for some reason, msvc needs following all on one line:
-    BOOST_STATIC_CONSTANT(bool, msvc_not_is_recursive = mpl::not_< is_recursive >::value);
-    BOOST_STATIC_CONSTANT(bool, msvc_not_is_sequence_T0 = mpl::not_< mpl::is_sequence<T0> >::value);
+    // [For some reason, MSVC6 needs following all on one line:]
+    BOOST_STATIC_CONSTANT(bool, msvc_not_is_recursive = (mpl::not_< is_recursive_ >::value));
+    BOOST_STATIC_CONSTANT(bool, msvc_not_is_sequence_T0 = (mpl::not_< mpl::is_sequence<T0> >::value));
 
     // NOTE TO USER :
     // recursive_variant is not supported on MSVC7 and below!
@@ -716,26 +844,26 @@ private: // static precondition assertions, cont.
 
 private: // typedefs, for representation (below)
 
-    typedef typename detail::variant::make_storage<types>::type
+    typedef typename detail::variant::make_storage<internal_types>::type
         storage1_t;
 
     typedef typename mpl::remove_if<
-          types
+          internal_types
         , detail::variant::has_nothrow_move_constructor<mpl::_1>
-        >::type throwing_types;
+        >::type throwing_internal_types;
 
     // [storage2_t = empty(throwing_types) ? null_storage : make_storage<throwing_types>]
     typedef typename mpl::apply_if<
-          mpl::empty<throwing_types>
+          mpl::empty<throwing_internal_types>
         , mpl::identity<detail::variant::null_storage>
-        , detail::variant::make_storage<throwing_types>
+        , detail::variant::make_storage<throwing_internal_types>
         >::type storage2_t;
 
 private: // representation (int which_)
 
     // which_ on:
-    // * [0,  size<types>) indicates storage1
-    // * [-size<types>, 0) indicates storage2
+    // * [0,  size<internal_types>) indicates storage1
+    // * [-size<internal_types>, 0) indicates storage2
     // if which_ >= 0:
     // * then which() -> which_
     // * else which() -> -(which_ + 1)
@@ -749,10 +877,10 @@ private: // representation (int which_)
     // [if O1_size available, then attempt which_t size optimization...]
     // [select signed char if fewer than SCHAR_MAX types, else signed int:]
     typedef typename mpl::apply_if<
-          mpl::equal_to< mpl::O1_size<types>, mpl::long_<-1> >
+          mpl::equal_to< mpl::O1_size<internal_types>, mpl::long_<-1> >
         , mpl::identity< int >
         , mpl::if_<
-              mpl::less< mpl::O1_size<types>, mpl::int_<SCHAR_MAX> >
+              mpl::less< mpl::O1_size<internal_types>, mpl::int_<SCHAR_MAX> >
             , signed char
             , int
             >
@@ -861,7 +989,7 @@ private: // helpers, for structors (below)
     // [...use an optimal converting initializer based on the variant typelist:]
 
     typedef typename mpl::iter_fold<
-          types
+          internal_types
         , mpl::pair< detail::variant::initializer_root, mpl::int_<0> >
         , mpl::protect< detail::variant::make_initializer_node >
         >::type initializer_pair;
@@ -891,6 +1019,10 @@ private: // helpers, for structors (below)
             }                                              \
             /**/
 
+        // NOTE TO USER :
+        // 'Reference to reference' compiler error here indicates that your
+        // compiler does not support references as bounded types.
+        //
         BOOST_PP_REPEAT(
               BOOST_VARIANT_LIMIT_TYPES
             , BOOST_VARIANT_INITIALIZE_FUNCTION
@@ -910,7 +1042,7 @@ private: // helpers, for structors (below)
     void destroy_content()
     {
         detail::variant::destroyer visitor;
-        raw_apply_visitor(visitor);
+        this->internal_apply_visitor(visitor);
     }
 
 public: // structors
@@ -947,10 +1079,10 @@ private: // helpers, for structors, cont. (below)
         {
         }
 
-    public: // visitor interfaces
+    public: // helpers, for visitor interfaces (below)
 
         template <typename T>
-        int operator()(const T& operand) const
+        int execute(const T& operand) const
         {
             // NOTE TO USER :
             // Compile error here indicates one of the source variant's types 
@@ -958,6 +1090,26 @@ private: // helpers, for structors, cont. (below)
             // types (or that no conversion exists).
             //
             return initializer::initialize(storage_, operand);
+        }
+
+    public: // visitor interfaces
+
+        template <typename T>
+        int operator()(detail::variant::reference_content<T>& operand) const
+        {
+            return execute( operand.get() );
+        }
+
+        template <typename T>
+        int operator()(const detail::variant::reference_content<T>& operand) const
+        {
+            return execute( operand.get() );
+        }
+
+        template <typename T>
+        int operator()(const T& operand) const
+        {
+            return execute(operand);
         }
 
     };
@@ -991,7 +1143,7 @@ private: // helpers, for structors, cont. (below)
     {
         convert_copy_into visitor(storage1());
         activate_storage1(
-              operand.raw_apply_visitor(visitor)
+              operand.internal_apply_visitor(visitor)
             );
     }
 
@@ -1000,10 +1152,23 @@ private: // helpers, for structors, cont. (below)
     {
         // [Determine if operand is a bounded type, or if it needs to be
         //  converted (foreign):]
-        typedef typename mpl::not_<
-              mpl::contains<types, Variant>
+        //
+
+        typedef typename mpl::find_if<
+              types
+            , is_same<
+                  add_const<mpl::_1>
+                , const Variant
+                >
+            >::type found_it;
+
+        typedef typename mpl::end<types>::type not_found;
+        typedef typename is_same<
+              found_it
+            , not_found
             >::type from_foreign_variant;
 
+        // Convert construct from operand:
         convert_construct(
               operand
             , from_foreign_variant()
@@ -1062,13 +1227,70 @@ public: // structors, cont.
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING workaround
 
+#if !defined(BOOST_VARIANT_NO_REFERENCE_SUPPORT)
+
+private: // helpers, for structors, cont. (below)
+
+    template <BOOST_VARIANT_ENUM_PARAMS(typename U)>
+    void reference_construct(
+          boost::variant<BOOST_VARIANT_ENUM_PARAMS(U)>& operand
+        , mpl::false_// ref_is_bounded
+        , long
+        )
+    {
+        convert_construct_variant(operand);
+    }
+
+    template <typename T>
+    void reference_construct(
+          T& operand
+        , mpl::false_// ref_is_bounded
+        , int
+        )
+    {
+        convert_construct(operand);
+    }
+
+    template <typename T>
+    void reference_construct(
+          T& operand
+        , mpl::true_// ref_is_bounded
+        , int
+        )
+    {
+        detail::variant::reference_content<T&> r(operand);
+        convert_construct(r);
+    }
+
 public: // structors, cont.
 
+    template <typename T>
+    variant(T& operand)
+    {
+        typedef typename mpl::contains<
+              internal_types
+            , detail::variant::reference_content<T&>
+            >::type ref_is_bounded;
+
+        reference_construct(operand, ref_is_bounded(), 1L);
+    }
+
+#else // defined(BOOST_VARIANT_NO_REFERENCE_SUPPORT)
+
+    //
+    // references not supported as bounded types on these compilers
+    //
+
+#endif // BOOST_VARIANT_NO_REFERENCE_SUPPORT workaround
+
+public: // structors, cont.
+
+    // [MSVC6 requires copy constructor appear after template constructors]
     variant(const variant& operand)
     {
         // Copy the value of operand into *this...
         detail::variant::copy_into visitor( storage1() );
-        operand.raw_apply_visitor(visitor);
+        operand.internal_apply_visitor(visitor);
 
         // ...and activate the *this's primary storage on success:
         activate_storage1(operand.which());
@@ -1144,7 +1366,7 @@ private: // helpers, for modifiers (below)
     public: // visitor interfaces
 
         template <typename T>
-            BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+            BOOST_VARIANT_AUX_RETURN_VOID_TYPE
         operator()(const T& operand)
         {
             typedef typename detail::variant::has_nothrow_move_constructor<T>::type
@@ -1169,13 +1391,13 @@ private: // helpers, for modifiers (below)
         {
             // ...then assign the value directly:
             detail::variant::assigner visitor(rhs.active_storage());
-            raw_apply_visitor(visitor);
+            this->internal_apply_visitor(visitor);
         }
         else
         {
             // Otherwise, perform general variant assignment:
             assign_into visitor(*this, rhs.which());
-            rhs.raw_apply_visitor(visitor); 
+            rhs.internal_apply_visitor(visitor); 
         }
     }
 
@@ -1305,7 +1527,7 @@ private: // helpers, for modifiers, cont. (below)
     public: // visitor interfaces
 
         template <typename T>
-            BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+            BOOST_VARIANT_AUX_RETURN_VOID_TYPE
         operator()(T& rhs_content)
         {
             typedef typename detail::variant::has_nothrow_move_constructor<T>::type
@@ -1332,13 +1554,13 @@ public: // modifiers, cont.
         {
             // ...then swap the values directly:
             detail::variant::swap_with visitor(active_storage());
-            rhs.raw_apply_visitor(visitor);
+            rhs.internal_apply_visitor(visitor);
         }
         else
         {
             // Otherwise, perform general variant swap:
             swap_variants visitor(*this, rhs);
-            rhs.raw_apply_visitor(visitor);
+            rhs.internal_apply_visitor(visitor);
         }
     }
 
@@ -1350,11 +1572,11 @@ public: // queries
 
     bool empty() const
     {
-        typedef typename mpl::begin<types>::type
+        typedef typename mpl::begin<internal_types>::type
             begin_it;
 
         typedef typename mpl::find<
-              types, boost::empty
+              internal_types, boost::empty
             >::type empty_it;
 
         typedef typename mpl::distance<
@@ -1388,11 +1610,11 @@ public:
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
               typename Visitor::result_type
             )
-    raw_apply_visitor(Visitor& visitor)
+    internal_apply_visitor(Visitor& visitor)
     {
         typedef mpl::int_<0> first_which;
-        typedef typename mpl::begin<types>::type first_it;
-        typedef typename mpl::end<types>::type last_it;
+        typedef typename mpl::begin<internal_types>::type first_it;
+        typedef typename mpl::end<internal_types>::type last_it;
         typedef detail::variant::visitation_impl_step<
               first_it, last_it
             > first_step;
@@ -1407,11 +1629,11 @@ public:
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
               typename Visitor::result_type
             )
-    raw_apply_visitor(Visitor& visitor) const
+    internal_apply_visitor(Visitor& visitor) const
     {
         typedef mpl::int_<0> first_which;
-        typedef typename mpl::begin<types>::type first_it;
-        typedef typename mpl::end<types>::type last_it;
+        typedef typename mpl::begin<internal_types>::type first_it;
+        typedef typename mpl::end<internal_types>::type last_it;
         typedef detail::variant::visitation_impl_step<
               first_it, last_it
             > first_step;
@@ -1431,7 +1653,7 @@ public: // visitation support
     apply_visitor(Visitor& visitor)
     {
         detail::variant::invoke_visitor<Visitor> invoker(visitor);
-        return raw_apply_visitor(invoker);
+        return this->internal_apply_visitor(invoker);
     }
 
     template <typename Visitor>
@@ -1441,7 +1663,7 @@ public: // visitation support
     apply_visitor(Visitor& visitor) const
     {
         detail::variant::invoke_visitor<Visitor> invoker(visitor);
-        return raw_apply_visitor(invoker);
+        return this->internal_apply_visitor(invoker);
     }
 
 }; // class variant
