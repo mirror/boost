@@ -18,7 +18,7 @@ doxygen reference
     ../../../../boost/algorithm/string/iterator_range.hpp         
     ../../../../boost/algorithm/string/sequence_traits.hpp
     ../../../../boost/algorithm/string/std_containers_traits.hpp
-    ../../../../boost/algorithm/string/container_traits.hpp
+    ../../../../boost/algorithm/string/collection_traits.hpp
     ../../../../boost/algorithm/string/concept.hpp
     ../../../../boost/algorithm/string/compare.hpp
     ../../../../boost/algorithm/string/constants.hpp
