@@ -306,7 +306,7 @@
 // Comeau C++ ----------------------------------------------------------------//
 
 # elif defined __COMO__
-#   if __COMO_VERSION__ <= 4244
+#   if __COMO_VERSION__ <= 4245
 #     define BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
 #   endif
 
