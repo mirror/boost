@@ -100,8 +100,8 @@ namespace std
       static unsigned BOOST_LLT min(){ return 0uLL; }
       static unsigned BOOST_LLT max(){ return ~0uLL; }
 #endif
-      BOOST_STATIC_CONSTANT(int, digits = sizeof(BOOST_LLT) * CHAR_BIT -1);
-      BOOST_STATIC_CONSTANT(int, digits10 = (CHAR_BIT * sizeof (BOOST_LLT) - 1) * 301L / 1000);
+      BOOST_STATIC_CONSTANT(int, digits = sizeof(BOOST_LLT) * CHAR_BIT);
+      BOOST_STATIC_CONSTANT(int, digits10 = (CHAR_BIT * sizeof (BOOST_LLT)) * 301L / 1000);
       BOOST_STATIC_CONSTANT(bool, is_signed = false);
       BOOST_STATIC_CONSTANT(bool, is_integer = true);
       BOOST_STATIC_CONSTANT(bool, is_exact = true);
