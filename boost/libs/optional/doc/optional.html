@@ -921,9 +921,9 @@ assert ( optX != optZ ) ;
 
 <pre>bool operator &lt; ( optional&lt;T&gt; const&amp x, optional&lt;T&gt const&amp y );</pre>
 <blockquote>
-<p><b>Returns:</b> If both <b>x</b> and <b>y</b> are initialied, <code>(*x &lt; *y)</code>.
-If only x or y is initialized, <code>false</code>. If both are uninitialized,
-<code>false</code>.
+<p><b>Returns:</b> If <b>y</b> is not initialized, <code>false</code>. 
+If <b>y</b> is initialized and <b>x</b> is not initialized, <code>true</code>.
+If both <b>x</b> and <b>y</b> are initialized, <code>(*x &lt; *y)</code>.
 </p>
 <p><b>Throws:</b> Nothing.</p>
 <p><b>Notes:</b> Pointers have shallow relational operators while <b>optional</b> has
