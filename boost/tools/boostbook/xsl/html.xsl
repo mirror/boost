@@ -23,6 +23,8 @@
   <xsl:param name="generate.section.toc.level" select="3"/>
   <xsl:param name="doc.standalone">false</xsl:param>
 
+  <xsl:param name="toc.max.depth">3</xsl:param>
+
   <xsl:template name="format.cvs.revision">
     <xsl:param name="text"/>
 
