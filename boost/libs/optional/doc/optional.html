@@ -1407,37 +1407,39 @@ T <u>is not</u> required to be <a href="http://www.sgi.com/tech/stl/DefaultConst
   Henney, David Abrahams, and others I can't recall. </p>
 </blockquote>
 <p>Post-formal review:</p>
-<blockquote>
-<p>William Kempf carefully considered the originally proposed interface
-and suggested the new interface which is currently used. He also started
-and fueled the discussion about the analogy optional&lt;&gt;/smart pointer
-and about relational operators.<br>
-Peter Dimov, Joel de Guzman, David Abrahams, Tanton Gibbs and Ian Hanson
-focused on the relational semantics of optional (originally undefined);
-concluding with the fact that the pointer-like interface doesn't make it
-a pointer so it shall have deep relational operators.<br>
-Augustus Saunders also explored the different relational
-semantics between optional&lt;&gt; and a pointer and developed the
-OptionalPointee concept as an aid against potential conflicts on generic code.<br>
-Joel de Guzman noticed that optional&lt;&gt; can be seen as an
-API on top of variant&lt;T,nil_t&gt;.<br>
-Dave Gomboc explained the meaning and usage of the Haskell analog to optional&lt;&gt;:
-the Maybe type constructor (analogy originally pointed out by David Sankel).<br>
-Other comments were posted by Vincent Finn, Anthony Williams, Ed Brey, Rob Stewart,
-and others.<br>
-Joel de Guzman made the case for the support of references and helped with the 
-proper semantics.</p>
+<blockquote> 
+  <p>William Kempf carefully considered the originally proposed interface and 
+    suggested the new interface which is currently used. He also started and fueled 
+    the discussion about the analogy optional&lt;&gt;/smart pointer and about 
+    relational operators.<br>
+    Peter Dimov, Joel de Guzman, David Abrahams, Tanton Gibbs and Ian Hanson focused 
+    on the relational semantics of optional (originally undefined); concluding 
+    with the fact that the pointer-like interface doesn't make it a pointer so 
+    it shall have deep relational operators.<br>
+    Augustus Saunders also explored the different relational semantics between 
+    optional&lt;&gt; and a pointer and developed the OptionalPointee concept as 
+    an aid against potential conflicts on generic code.<br>
+    Joel de Guzman noticed that optional&lt;&gt; can be seen as an API on top 
+    of variant&lt;T,nil_t&gt;.<br>
+    Dave Gomboc explained the meaning and usage of the Haskell analog to optional&lt;&gt;: 
+    the Maybe type constructor (analogy originally pointed out by David Sankel).<br>
+    Other comments were posted by Vincent Finn, Anthony Williams, Ed Brey, Rob 
+    Stewart, and others.<br>
+    Joel de Guzman made the case for the support of references and helped with 
+    the proper semantics.<br>
+    Mat Marcus shown the virtues of a value-oriented interface, influencing the 
+    current design, and contributed the idea of &quot;none&quot;.</p>
 </blockquote>
 <HR>
 
-<P>Revised December 3, 2003</P>
-<P>&copy; Copyright boost.org 2003. Permission to copy, use, modify, sell and
-distribute this document is granted provided this copyright notice appears in
-all copies. This document is provided &quot;as is&quot; without express or
-implied warranty, and with no claim as to its suitability for any purpose.</P>
+<P>Revised Jannuary 30, 2004</P>
+<P>&copy; Copyright boost.org 2003. Permission to copy, use, modify, sell and 
+  distribute this document is granted provided this copyright notice appears in 
+  all copies. This document is provided &quot;as is&quot; without express or implied 
+  warranty, and with no claim as to its suitability for any purpose.</P>
 <P>Developed by <A HREF="mailto:fernando_cacciola@hotmail.com">Fernando Cacciola</A>,
 the latest version of this file can be found at <A
-HREF="http://www.boost.org">www.boost.org</A>, and the boost discussion list at <A
- HREF="http://www.yahoogroups.com/list/boost">www.yahoogroups.com/list/boost</A>. </P>
+HREF="http://www.boost.org">www.boost.org</A>, and the boost 
+<A HREF="http://www.boost.org/more/mailing_lists.htm#main">discussion lists</A></P>
 </BODY>
 </HTML>
