@@ -40,8 +40,8 @@
 #include <boost/format/macros_stlport.hpp>  // stlport workarounds
 #include <boost/format/macros_default.hpp> 
 
-#if defined(BOOST_NO_STD_LOCALE) || ( BOOST_WORKAROUND(__BORLANDC__, <= 0x561) \
- && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT( 0x570 ) ) )
+#if defined(BOOST_NO_STD_LOCALE) || ( BOOST_WORKAROUND(__BORLANDC__, <= 0x564) \
+ || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT( 0x570 ) ) )
 #define BOOST_BAD_ISDIGIT
 #endif
 
