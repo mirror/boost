@@ -40,11 +40,15 @@ namespace gregorian {
       for(unsigned short i = 1; i <= 12; ++i) {
         greg_month m(static_cast<month_enum>(i));
         s = m.as_long_string();
+#if !defined(__MWERKS__)
 	s = date_time::convert_to_lower(s);
+#endif
         month_map_ptr->insert(std::make_pair(s, i));
         
         s = m.as_short_string();
+#if !defined(__MWERKS__)
 	s = date_time::convert_to_lower(s);
+#endif
         month_map_ptr->insert(std::make_pair(s, i));
       }
     }

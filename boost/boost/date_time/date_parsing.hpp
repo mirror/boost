@@ -67,7 +67,9 @@ namespace date_time {
     }
     else
     {
+#if !defined(__MWERKS__)
       s = convert_to_lower(s);
+#endif
       typename month_type::month_map_ptr_type ptr = month_type::get_month_map_ptr();
       typename month_type::month_map_type::iterator iter = ptr->find(s);
       if(iter != ptr->end()) // required for STLport
