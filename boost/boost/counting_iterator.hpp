@@ -28,6 +28,8 @@
 //     Incrementable.
 // 
 // Revision History
+// 14 Feb 2001  Removed unnecessary typedefs from counting_iterator_traits
+//              (Jeremy Siek)
 // 11 Feb 2001  Use BOOST_STATIC_CONSTANT (Dave Abrahams)
 // 11 Feb 2001  Clean up after John Maddocks's (finally effective!) Borland
 //              fixes (David Abrahams).
@@ -164,9 +166,6 @@ struct counting_iterator_traits {
         )> binder;
     typedef typename binder::template traits<Incrementable> traits;
  public:
-    typedef Incrementable value_type;
-    typedef const Incrementable& reference;
-    typedef const value_type* pointer;
     typedef typename traits::difference_type difference_type;
     typedef typename traits::iterator_category iterator_category;
 };
@@ -193,9 +192,9 @@ struct counting_iterator_generator
     
     typedef iterator_adaptor<Incrementable,
         counting_iterator_policies<Incrementable>,
-        typename traits::value_type,
-        typename traits::reference,
-        typename traits::pointer,
+        Incrementable,
+        const Incrementable&,
+        const Incrementable*,
         typename traits::iterator_category,
         typename traits::difference_type
     > type;
@@ -206,19 +205,8 @@ template <class Incrementable>
 inline typename counting_iterator_generator<Incrementable>::type
 make_counting_iterator(Incrementable x)
 {
-    typedef counting_iterator_traits<Incrementable> traits;
-    
-    // These typedefs appease MSVC
-    typedef typename traits::value_type value_type;
-    typedef typename traits::reference reference;
-    typedef typename traits::pointer pointer;
-    typedef typename traits::iterator_category iterator_category;
-    typedef typename traits::difference_type difference_type;
-    
-    return iterator_adaptor<Incrementable,
-        counting_iterator_policies<Incrementable>,
-        value_type, reference, pointer, iterator_category,difference_type
-        >(x);
+  typedef typename counting_iterator_generator<Incrementable>::type result_t;
+  return result_t(x);
 }
 
 
