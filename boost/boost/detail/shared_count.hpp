@@ -395,9 +395,13 @@ public:
     shared_count & operator= (shared_count const & r) // nothrow
     {
         sp_counted_base * tmp = r.pi_;
-        if(tmp != 0) tmp->add_ref_copy();
-        if(pi_ != 0) pi_->release();
-        pi_ = tmp;
+
+        if(tmp != pi_)
+        {
+            if(tmp != 0) tmp->add_ref_copy();
+            if(pi_ != 0) pi_->release();
+            pi_ = tmp;
+        }
 
         return *this;
     }
