@@ -17,7 +17,9 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <string>
 
+#include <boost/archive/tmpdir.hpp>
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/split_member.hpp>
 
@@ -195,14 +197,14 @@ void init(School *school){
     // carol has no courses
 }
 
-void save(School *school){
-    std::ofstream ofile("testfile.txt");
+void save(School *school, const char *filename){
+    std::ofstream ofile(filename);
     boost::archive::text_oarchive ar(ofile);
     ar << school;
 }
 
-void load(School * & school){
-    std::ifstream ifile("testfile.txt");
+void load(School * & school, const char *filename){
+    std::ifstream ifile(filename);
     boost::archive::text_iarchive ar(ifile);
     try{
         ar >> school;
@@ -214,22 +216,26 @@ void load(School * & school){
 }
 
 int main(int argc, char *argv[]){
-    School *school = new School();
+	std::string filename(boost::archive::tmpdir());
+	filename += "/demofile.txt";
+
+	School *school = new School();
     std::cout << "1. student count = " << Student::count << std::endl;
     std::cout << "2. class count = " << Course::count << std::endl;
     init(school);
     std::cout << "3. student count = " << Student::count << std::endl;
     std::cout << "4. class count = " << Course::count << std::endl;
-    save(school);
+    save(school, filename.c_str());
     delete school;
     school = NULL;
     std::cout << "5. student count = " << Student::count << std::endl;
     std::cout << "6. class count = " << Course::count << std::endl;
-    load(school);
+    load(school, filename.c_str());
     std::cout << "7. student count = " << Student::count << std::endl;
     std::cout << "8. class count = " << Course::count << std::endl;
     delete school;
     std::cout << "9. student count = " << Student::count << std::endl;
     std::cout << "10. class count = " << Course::count << std::endl;
+	std::remove(filename.c_str());
     return Student::count + Course::count;
 }

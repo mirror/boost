@@ -8,16 +8,18 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <iostream>
+#include <string>
+#include <boost/archive/tmpdir.hpp>
 
 #include <boost/archive/xml_iarchive.hpp>
 
 #include "demo_xml.hpp"
 
 void
-restore_schedule(bus_schedule &s)
+restore_schedule(bus_schedule &s, const char * filename)
 {
     // open the archive
-    std::ifstream ifs("../example/demofile.xml");
+    std::ifstream ifs(filename);
     assert(ifs.good());
     boost::archive::xml_iarchive ia(ifs);
 
@@ -27,10 +29,13 @@ restore_schedule(bus_schedule &s)
 
 int main(int argc, char *argv[])
 {   
-    // make  a new schedule
+	std::string filename(boost::archive::tmpdir());
+	filename += "/demo_save.xml";
+
+	// make  a new schedule
     bus_schedule new_schedule;
 
-    restore_schedule(new_schedule);
+    restore_schedule(new_schedule, filename.c_str());
 
     // and display
     std::cout << "\nrestored schedule";

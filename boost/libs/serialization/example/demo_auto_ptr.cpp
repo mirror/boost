@@ -10,9 +10,11 @@
 #include <list>
 #include <memory>
 #include <fstream>
+#include <string>
 
 #include <boost/config.hpp> // std::autoptr inteface wrong in dinkumware
 #include <boost/detail/workaround.hpp>
+#include <boost/archive/tmpdir.hpp>
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -85,9 +87,9 @@ public:
     ~A(){}   // default destructor
 };
 
-void save(std::auto_ptr<A> &spa)
+void save(std::auto_ptr<A> &spa, const char *filename)
 {
-    std::ofstream ofs("testfile");
+    std::ofstream ofs(filename);
     boost::archive::text_oarchive oa(ofs);
     oa << spa;
 }
@@ -95,7 +97,7 @@ void save(std::auto_ptr<A> &spa)
 void load(std::auto_ptr<A> &spa)
 {
     // open the archive
-    std::ifstream ifs("testfile");
+    std::ifstream ifs(filename);
     boost::archive::text_iarchive ia(ifs);
 
     // restore the schedule from the archive
@@ -104,10 +106,13 @@ void load(std::auto_ptr<A> &spa)
 
 int main(int argc, char *argv[])
 {
+	const char filename = boost::archive::tmpdir();
+	filename += "/testfile";
+
     // create  a new auto pointer to ta new object of type A
     std::auto_ptr<A> spa(new A);
     // serialize it
-    save(spa);
+    save(spa, filename.c_str());
     // reset the auto pointer to NULL
     // thereby destroying the object of type A
     // note that the reset automagically maintains the reference count
@@ -118,8 +123,9 @@ int main(int argc, char *argv[])
     #endif
     // restore state to one equivalent to the original
     // creating a new type A object
-    load(spa);
+    load(spa, filename.c_str());
     // obj of type A gets destroyed
     // as auto_ptr goes out of scope
+	std::remove(filename);
     return 0;
 }

@@ -6,11 +6,12 @@
 //
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <string>
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <string>
 
+#include <boost/archive/tmpdir.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>
 
@@ -275,15 +276,15 @@ std::ostream & operator<<(std::ostream &os, const bus_schedule &bs)
     return os;
 }
 
-void save_schedule(const bus_schedule &s){
+void save_schedule(const bus_schedule &s, const char * filename){
     // make an archive
-    std::ofstream ofs("../example/demofile.txt");
+    std::ofstream ofs(filename);
     boost::archive::text_oarchive oa(ofs);
     oa << s;
 }
 
 void
-restore_schedule(bus_schedule &s)
+restore_schedule(bus_schedule &s, const char * filename)
 {
     // open the archive
     std::ifstream ifs("../example/demofile.txt");
@@ -295,6 +296,9 @@ restore_schedule(bus_schedule &s)
 
 int main(int argc, char *argv[])
 {   
+	std::string filename(boost::archive::tmpdir());
+	filename += "/demofile.txt";
+
     // make the schedule
     bus_schedule original_schedule;
 
@@ -348,13 +352,13 @@ int main(int argc, char *argv[])
     std::cout << original_schedule;
     
     // save the schedule
-    save_schedule(original_schedule);
+    save_schedule(original_schedule, filename.c_str());
 
     // ... some time later
     // make  a new schedule
     bus_schedule new_schedule;
 
-    restore_schedule(new_schedule);
+    restore_schedule(new_schedule, filename.c_str());
 
     // and display
     std::cout << "\nrestored schedule";

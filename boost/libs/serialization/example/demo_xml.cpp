@@ -9,13 +9,15 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <string>
 
+#include <boost/archive/tmpdir.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 
 #include "demo_xml.hpp"
 
-void save_schedule(const bus_schedule &s){
+void save_schedule(const bus_schedule &s, const char * filename){
     // make an archive
     std::ofstream ofs("../example/demofile.xml");
     assert(ofs.good());
@@ -24,7 +26,7 @@ void save_schedule(const bus_schedule &s){
 }
 
 void
-restore_schedule(bus_schedule &s)
+restore_schedule(bus_schedule &s, const char * filename)
 {
     // open the archive
     std::ifstream ifs("../example/demofile.xml");
@@ -37,7 +39,10 @@ restore_schedule(bus_schedule &s)
 
 int main(int argc, char *argv[])
 {   
-    // make the schedule
+	std::string filename(boost::archive::tmpdir());
+	filename += "/demo.xml";
+
+	// make the schedule
     bus_schedule original_schedule;
 
     // fill in the data
@@ -90,18 +95,20 @@ int main(int argc, char *argv[])
     std::cout << original_schedule;
     
     // save the schedule
-    save_schedule(original_schedule);
+    save_schedule(original_schedule, filename.c_str());
 
     // ... some time later
     // make  a new schedule
     bus_schedule new_schedule;
 
-    restore_schedule(new_schedule);
+    restore_schedule(new_schedule, filename.c_str());
 
     // and display
     std::cout << "\nrestored schedule";
     std::cout << new_schedule;
     // should be the same as the old one. (except for the pointer values)
+
+	std::remove(filename.c_str());
 
     delete bs0;
     delete bs1;

@@ -8,14 +8,16 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <iostream>
+#include <string>
+#include <boost/archive/tmpdir.hpp>
 
 #include <boost/archive/xml_oarchive.hpp>
 
 #include "demo_xml.hpp"
 
-void save_schedule(const bus_schedule &s){
+void save_schedule(const bus_schedule &s, const char * filename){
     // make an archive
-    std::ofstream ofs("../example/demofile.xml");
+    std::ofstream ofs(filename);
     assert(ofs.good());
     boost::archive::xml_oarchive oa(ofs);
     oa << BOOST_SERIALIZATION_NVP(s);
@@ -23,7 +25,10 @@ void save_schedule(const bus_schedule &s){
 
 int main(int argc, char *argv[])
 {   
-    // make the schedule
+	std::string filename(boost::archive::tmpdir());
+	filename += "/demo_save.xml";
+
+	// make the schedule
     bus_schedule original_schedule;
 
     // fill in the data
@@ -76,7 +81,7 @@ int main(int argc, char *argv[])
     std::cout << original_schedule;
     
     // save the schedule
-    save_schedule(original_schedule);
+    save_schedule(original_schedule, filename.c_str());
 
     delete bs0;
     delete bs1;

@@ -12,8 +12,10 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <string>
 
 #include <boost/serialization/shared_ptr.hpp>
+#include <boost/archive/tmpdir.hpp>
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -69,6 +71,9 @@ void display(boost::shared_ptr<A> &spa, boost::shared_ptr<A> &spa1)
 
 int main(int argc, char *argv[])
 {
+	std::string filename(boost::archive::tmpdir());
+	filename += "/testfile";
+
     // create  a new shared pointer to ta new object of type A
     boost::shared_ptr<A> spa(new A);
     boost::shared_ptr<A> spa1;
@@ -76,7 +81,7 @@ int main(int argc, char *argv[])
     display(spa, spa1);
     // serialize it
     {
-        std::ofstream ofs("testfile");
+        std::ofstream ofs(filename.c_str());
         boost::archive::text_oarchive oa(ofs);
         oa << spa;
         oa << spa1;
@@ -90,7 +95,7 @@ int main(int argc, char *argv[])
     // creating a new type A object
     {
         // open the archive
-        std::ifstream ifs("testfile");
+        std::ifstream ifs(filename.c_str());
         boost::archive::text_iarchive ia(ifs);
 
         // restore the schedule from the archive
@@ -113,7 +118,7 @@ int main(int argc, char *argv[])
     display(spa, spa1);
     // serialize it
     {
-        std::ofstream ofs("testfile");
+        std::ofstream ofs(filename.c_str());
         boost::archive::text_oarchive oa(ofs);
         oa.register_type(static_cast<B *>(NULL));
         oa.register_type(
@@ -135,7 +140,7 @@ int main(int argc, char *argv[])
     // creating a new type B object
     {
         // open the archive
-        std::ifstream ifs("testfile");
+        std::ifstream ifs(filename.c_str());
         boost::archive::text_iarchive ia(ifs);
 
         // restore the schedule from the archive
@@ -152,6 +157,7 @@ int main(int argc, char *argv[])
     }
     display(spa, spa1);
     ///////////////
+	std::remove(filename.c_str());
 
     // obj of type A gets destroyed
     // as smart_ptr goes out of scope
