@@ -122,7 +122,7 @@ inline
 lexer<IteratorT, PositionT>::~lexer() 
 {
     aq_terminate(scanner.eol_offsets);
-    free(scanner.bot);
+    std::free(scanner.bot);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

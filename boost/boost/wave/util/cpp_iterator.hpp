@@ -1044,6 +1044,23 @@ fs::path native_path(file_path, fs::native);
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+namespace {
+
+    // trim all whitespace from the beginning and the end of the given string
+    template <typename StringT>
+    inline StringT 
+    trim_whitespace(StringT const &s)
+    {
+        typedef typename StringT::size_type size_type;
+        
+        size_type first = s.find_first_not_of(" \t\v\f");
+        if (StringT::npos == first)
+            return StringT();
+        size_type last = s.find_last_not_of(" \t\v\f");
+        return s.substr(first, last-first+1);
+    }
+}
+
 template <typename ContextT> 
 inline void  
 pp_iterator_functor<ContextT>::on_include(
@@ -1493,22 +1510,6 @@ string_type file_name;
 //  on_error(): handle #error directives
 //
 ///////////////////////////////////////////////////////////////////////////////
-namespace {
-
-    // trim all whitespace from the beginning and the end of the given string
-    template <typename StringT>
-    inline StringT 
-    trim_whitespace(StringT const &s)
-    {
-        typedef typename StringT::size_type size_type;
-        
-        size_type first = s.find_first_not_of(" \t\v\f");
-        if (StringT::npos == first)
-            return StringT();
-        size_type last = s.find_last_not_of(" \t\v\f");
-        return s.substr(first, last-first+1);
-    }
-}
 
 template <typename ContextT> 
 inline void 
