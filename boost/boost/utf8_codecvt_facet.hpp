@@ -51,17 +51,26 @@
 #include <cstddef> // size_t
 
 namespace std{ 
-    #if defined(__COMO__)
+    #if defined(__LIBCOMO__)
         using ::mbstate_t;
-    #elif defined(BOOST_MSVC)
-        using ::mbstate_t;
-    #elif defined(BOOST_INTEL)
+    #elif defined(BOOST_DINKUMWARE_STDLIB)
         using ::mbstate_t;
     #elif defined(BOOST_NO_STDC_NAMESPACE)
         using ::codecvt;
         using ::mbstate_t;
     #endif
 } // namespace std
+
+
+#if !defined(__MSL_CPP__)  \
+&& !defined(__LIBCOMO__)
+    #define BOOST_CODECVT_DO_LENGTH_CONST const
+#else
+    #define BOOST_CODECVT_DO_LENGTH_CONST
+#endif
+
+#include <boost/integer_traits.hpp>
+
 
 // maximum lenght of a multibyte string
 #define MB_LENGTH_MAX 8
@@ -131,7 +140,7 @@ protected:
     // How many char objects can I process to get <= max_limit
     // wchar_t objects?
     virtual int do_length(
-        const std::mbstate_t &,
+        BOOST_CODECVT_DO_LENGTH_CONST std::mbstate_t &,
         const char * from,
         const char * from_end, 
         std::size_t max_limit
@@ -202,3 +211,4 @@ struct utf8_codecvt_facet<char, char>
 #endif
 
 #endif // BOOST_UTF8_CODECVT_FACET_HPP
+
