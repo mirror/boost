@@ -507,13 +507,15 @@ namespace boost {
     typedef output_proxy<T> reference;
     typedef void pointer;
     typedef void difference_type;
-    output_iterator_archetype() { }
-    self& operator=(const self&) { return *this;  }
+    output_iterator_archetype(const self&) { }
+    self& operator=(const self&) { return *this; }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
     reference operator*() const { return output_proxy<T>(); }
     self& operator++() { return *this; }
     self operator++(int) { return *this; }
+  private:
+    output_iterator_archetype() { }
   };
 
   template <class T>
