@@ -34,7 +34,7 @@
 		<h2>Synopsis</h2>
 		<pre>namespace boost {
 
-  template&lt;typename T&gt; class scoped_array : <a href="../utility/utility.htm#noncopyable">noncopyable</a> {
+  template&lt;class T&gt; class scoped_array : <a href="../utility/utility.htm#noncopyable">noncopyable</a> {
 
     public:
       typedef T <a href="#element_type">element_type</a>;
@@ -50,7 +50,7 @@
       void <a href="#swap">swap</a>(scoped_array &amp; b); // never throws
   };
 
-  template&lt;typename T&gt; void <a href="#free-swap">swap</a>(scoped_array&lt;T&gt; &amp; a, scoped_array&lt;T&gt; &amp; b); // never throws
+  template&lt;class T&gt; void <a href="#free-swap">swap</a>(scoped_array&lt;T&gt; &amp; a, scoped_array&lt;T&gt; &amp; b); // never throws
 
 }</pre>
 		<h2>Members</h2>
@@ -96,7 +96,7 @@
 				requirements</a>.</p>
 		<h2><a name="functions">Free Functions</a></h2>
 		<h3><a name="free-swap">swap</a></h3>
-		<pre>template&lt;typename T&gt; void swap(scoped_array&lt;T&gt; &amp; a, scoped_array&lt;T&gt; &amp; b); // never throws</pre>
+		<pre>template&lt;class T&gt; void swap(scoped_array&lt;T&gt; &amp; a, scoped_array&lt;T&gt; &amp; b); // never throws</pre>
 		<p>Equivalent to <b>a.swap(b)</b>. Matches the interface of <b>std::swap</b>. 
 			Provided as an aid to generic programming.</p>
 		<hr>

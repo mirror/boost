@@ -309,7 +309,7 @@ public:
 
     // auto_ptr<Y> is special cased to provide the strong guarantee
 
-    template<typename Y>
+    template<class Y>
     explicit shared_count(std::auto_ptr<Y> & r): pi_(new counted_base_impl< Y *, checked_deleter<Y> >(r.get(), checked_deleter<Y>(), 1, 1))
     {
         r.release();

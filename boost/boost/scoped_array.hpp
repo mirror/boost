@@ -24,7 +24,7 @@ namespace boost
 //  is guaranteed, either on destruction of the scoped_array or via an explicit
 //  reset(). Use shared_array or std::vector if your needs are more complex.
 
-template<typename T> class scoped_array // noncopyable
+template<class T> class scoped_array // noncopyable
 {
 private:
 

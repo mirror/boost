@@ -31,13 +31,13 @@
 		<h2>Synopsis</h2>
 		<pre>namespace boost {
 
-  template&lt;typename T&gt; class shared_array {
+  template&lt;class T&gt; class shared_array {
 
     public:
       typedef T <a href="#element_type">element_type</a>;
 
       explicit <a href="#constructors">shared_array</a>(T * p = 0);
-      template&lt;typename D&gt; <a href="#constructors">shared_array</a>(T * p, D d);
+      template&lt;class D&gt; <a href="#constructors">shared_array</a>(T * p, D d);
       <a href="#destructor">~shared_array</a>(); // never throws
 
       <a href="#constructors">shared_array</a>(shared_array const &amp; r); // never throws
@@ -45,7 +45,7 @@
       shared_array &amp; <a href="#assignment">operator=</a>(shared_array const &amp; r); // never throws
 
       void <a href="#reset">reset</a>(T * p = 0);
-      template&lt;typename D&gt; void <a href="#reset">reset</a>(T * p, D d);
+      template&lt;class D&gt; void <a href="#reset">reset</a>(T * p, D d);
 
       T &amp; <a href="#indexing">operator[]</a>(std::ptrdiff_t i) const() const; // never throws
       T * <a href="#get">get</a>() const; // never throws
@@ -56,14 +56,14 @@
       void <a href="#swap">swap</a>(shared_array&lt;T&gt; &amp; b); // never throws
   };
 
-  template&lt;typename T&gt;
+  template&lt;class T&gt;
     bool <a href="#comparison">operator==</a>(shared_array&lt;T&gt; const &amp; a, shared_array&lt;T&gt; const &amp; b); // never throws
-  template&lt;typename T&gt;
+  template&lt;class T&gt;
     bool <a href="#comparison">operator!=</a>(shared_array&lt;T&gt; const &amp; a, shared_array&lt;T&gt; const &amp; b); // never throws
-  template&lt;typename T&gt;
+  template&lt;class T&gt;
     bool <a href="#comparison">operator&lt;</a>(shared_array&lt;T&gt; const &amp; a, shared_array&lt;T&gt; const &amp; b); // never throws
 
-  template&lt;typename T&gt; void <a href="#free-swap">swap</a>(shared_array&lt;T&gt; &amp; a, shared_array&lt;T&gt; &amp; b); // never throws
+  template&lt;class T&gt; void <a href="#free-swap">swap</a>(shared_array&lt;T&gt; &amp; a, shared_array&lt;T&gt; &amp; b); // never throws
 
 }</pre>
 		<h2>Members</h2>
@@ -78,7 +78,7 @@
 				~shared_array</a>). The only exception which may be thrown by this 
 			constructor is <b>std::bad_alloc</b>. If an exception is thrown, <b>delete[] p</b>
 			is called.</p>
-		<pre>template&lt;typename D&gt; shared_array(T * p, D d);</pre>
+		<pre>template&lt;class D&gt; shared_array(T * p, D d);</pre>
 		<p>Constructs a <b>shared_array</b>, storing a copy of <b>p</b> and of <b>d</b>. 
 			Afterwards, the <a href="#use_count">use count</a> is 1. <b>D</b>'s copy 
 			constructor and destructor must not throw. When the the time comes to delete 
@@ -109,7 +109,7 @@
 			then replaces this <b>shared_array</b> with the new one, destroying the 
 			replaced object. The only exception which may be thrown is <b>std::bad_alloc</b>. 
 			If an exception is thrown, <b>delete[] p</b> is called.</p>
-		<pre>template&lt;typename D&gt; void reset(T * p, D d);</pre>
+		<pre>template&lt;class D&gt; void reset(T * p, D d);</pre>
 		<p>Constructs a new <b>shared_array</b> as described <a href="#constructors">above</a>, 
 			then replaces this <b>shared_array</b> with the new one, destroying the 
 			replaced object. <b>D</b>'s copy constructor must not throw. The only exception 
@@ -146,11 +146,11 @@
 				requirements</a>.</p>
 		<h2><a name="functions">Free Functions</a></h2>
 		<h3><a name="comparison">comparison</a></h3>
-		<pre>template&lt;typename T&gt;
+		<pre>template&lt;class T&gt;
   bool operator==(shared_array&lt;T&gt; const &amp; a, shared_array&lt;T&gt; const &amp; b); // never throws
-template&lt;typename T&gt;
+template&lt;class T&gt;
   bool operator!=(shared_array&lt;T&gt; const &amp; a, shared_array&lt;T&gt; const &amp; b); // never throws
-template&lt;typename T&gt;
+template&lt;class T&gt;
   bool operator&lt;(shared_array&lt;T&gt; const &amp; a, shared_array&lt;T&gt; const &amp; b); // never throws</pre>
 		<p>Compares the stored pointers of the two smart pointers. <b>T</b> need not be a 
 			complete type. See the smart pointer <a href="smart_ptr.htm#Common requirements">common 
@@ -163,7 +163,7 @@ template&lt;typename T&gt;
 			paragraph 2) but <b>std::less&lt;&gt;</b> on pointers is well-defined (20.3.3 
 			[lib.comparisons] paragraph 8).</p>
 		<h3><a name="free-swap">swap</a></h3>
-		<pre>template&lt;typename T&gt;
+		<pre>template&lt;class T&gt;
   void swap(shared_array&lt;T&gt; &amp; a, shared_array&lt;T&gt; &amp; b) // never throws</pre>
 		<p>Equivalent to <b>a.swap(b)</b>. Matches the interface of <b>std::swap</b>. 
 			Provided as an aid to generic programming.</p>

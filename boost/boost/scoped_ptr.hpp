@@ -27,7 +27,7 @@ namespace boost
 //  an explicit reset(). scoped_ptr is a simple solution for simple needs;
 //  use shared_ptr or std::auto_ptr if your needs are more complex.
 
-template<typename T> class scoped_ptr // noncopyable
+template<class T> class scoped_ptr // noncopyable
 {
 private:
 
@@ -106,14 +106,14 @@ public:
     }
 };
 
-template<typename T> inline void swap(scoped_ptr<T> & a, scoped_ptr<T> & b) // never throws
+template<class T> inline void swap(scoped_ptr<T> & a, scoped_ptr<T> & b) // never throws
 {
     a.swap(b);
 }
 
 // get_pointer(p) is a generic way to say p.get()
 
-template<typename T> inline T * get_pointer(scoped_ptr<T> const & p)
+template<class T> inline T * get_pointer(scoped_ptr<T> const & p)
 {
     return p.get();
 }

@@ -46,7 +46,7 @@ struct static_cast_tag {};
 struct dynamic_cast_tag {};
 struct polymorphic_cast_tag {};
 
-template<typename T> struct shared_ptr_traits
+template<class T> struct shared_ptr_traits
 {
     typedef T & reference;
 };
@@ -76,10 +76,10 @@ template<> struct shared_ptr_traits<void const>
 //  is destroyed or reset.
 //
 
-template<typename T> class weak_ptr;
-template<typename T> class intrusive_ptr;
+template<class T> class weak_ptr;
+template<class T> class intrusive_ptr;
 
-template<typename T> class shared_ptr
+template<class T> class shared_ptr
 {
 private:
 
@@ -96,7 +96,7 @@ public:
     {
     }
 
-    template<typename Y>
+    template<class Y>
     explicit shared_ptr(Y * p): px(p), pn(p, checked_deleter<Y>(), p) // Y must be complete
     {
     }
@@ -107,33 +107,33 @@ public:
     // shared_ptr will release p by calling d(p)
     //
 
-    template<typename Y, typename D> shared_ptr(Y * p, D d): px(p), pn(p, d)
+    template<class Y, class D> shared_ptr(Y * p, D d): px(p), pn(p, d)
     {
     }
 
 //  generated copy constructor, assignment, destructor are fine
 
-    template<typename Y>
+    template<class Y>
     explicit shared_ptr(weak_ptr<Y> const & r): px(r.px), pn(r.pn) // may throw
     {
     }
 
-    template<typename Y>
+    template<class Y>
     shared_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
     {
     }
 
-    template<typename Y>
+    template<class Y>
     shared_ptr(intrusive_ptr<Y> const & r): px(r.get()), pn(r.get()) // never throws
     {
     }
 
-    template<typename Y>
+    template<class Y>
     shared_ptr(shared_ptr<Y> const & r, detail::static_cast_tag): px(static_cast<element_type *>(r.px)), pn(r.pn)
     {
     }
 
-    template<typename Y>
+    template<class Y>
     shared_ptr(shared_ptr<Y> const & r, detail::dynamic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
     {
         if (px == 0) // need to allocate new counter -- the cast failed
@@ -142,7 +142,7 @@ public:
         }
     }
 
-    template<typename Y>
+    template<class Y>
     shared_ptr(shared_ptr<Y> const & r, detail::polymorphic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
     {
         if (px == 0)
@@ -153,7 +153,7 @@ public:
 
 #ifndef BOOST_NO_AUTO_PTR
 
-    template<typename Y>
+    template<class Y>
     explicit shared_ptr(std::auto_ptr<Y> & r): px(r.get()), pn(r)
     {
     }
@@ -162,7 +162,7 @@ public:
 
 #if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
 
-    template<typename Y>
+    template<class Y>
     shared_ptr & operator=(shared_ptr<Y> const & r) // never throws
     {
         px = r.px;
@@ -174,7 +174,7 @@ public:
 
 #ifndef BOOST_NO_AUTO_PTR
 
-    template<typename Y>
+    template<class Y>
     shared_ptr & operator=(std::auto_ptr<Y> & r)
     {
         this_type(r).swap(*this);
@@ -188,13 +188,13 @@ public:
         this_type().swap(*this);
     }
 
-    template<typename Y> void reset(Y * p) // Y must be complete
+    template<class Y> void reset(Y * p) // Y must be complete
     {
         BOOST_ASSERT(p == 0 || p != px); // catch self-reset errors
         this_type(p).swap(*this);
     }
 
-    template<typename Y, typename D> void reset(Y * p, D d)
+    template<class Y, class D> void reset(Y * p, D d)
     {
         this_type(p, d).swap(*this);
     }
@@ -253,8 +253,8 @@ public:
 
 private:
 
-    template<typename Y> friend class shared_ptr;
-    template<typename Y> friend class weak_ptr;
+    template<class Y> friend class shared_ptr;
+    template<class Y> friend class weak_ptr;
 
 
 #endif
@@ -264,12 +264,12 @@ private:
 
 };  // shared_ptr
 
-template<typename T, typename U> inline bool operator==(shared_ptr<T> const & a, shared_ptr<U> const & b)
+template<class T, class U> inline bool operator==(shared_ptr<T> const & a, shared_ptr<U> const & b)
 {
     return a.get() == b.get();
 }
 
-template<typename T, typename U> inline bool operator!=(shared_ptr<T> const & a, shared_ptr<U> const & b)
+template<class T, class U> inline bool operator!=(shared_ptr<T> const & a, shared_ptr<U> const & b)
 {
     return a.get() != b.get();
 }
@@ -278,39 +278,39 @@ template<typename T, typename U> inline bool operator!=(shared_ptr<T> const & a,
 
 // Resolve the ambiguity between our op!= and the one in rel_ops
 
-template<typename T> inline bool operator!=(shared_ptr<T> const & a, shared_ptr<T> const & b)
+template<class T> inline bool operator!=(shared_ptr<T> const & a, shared_ptr<T> const & b)
 {
     return a.get() != b.get();
 }
 
 #endif
 
-template<typename T> inline bool operator<(shared_ptr<T> const & a, shared_ptr<T> const & b)
+template<class T> inline bool operator<(shared_ptr<T> const & a, shared_ptr<T> const & b)
 {
     return std::less<T*>()(a.get(), b.get());
 }
 
-template<typename T> inline void swap(shared_ptr<T> & a, shared_ptr<T> & b)
+template<class T> inline void swap(shared_ptr<T> & a, shared_ptr<T> & b)
 {
     a.swap(b);
 }
 
-template<typename T, typename U> shared_ptr<T> shared_static_cast(shared_ptr<U> const & r)
+template<class T, class U> shared_ptr<T> shared_static_cast(shared_ptr<U> const & r)
 {
     return shared_ptr<T>(r, detail::static_cast_tag());
 }
 
-template<typename T, typename U> shared_ptr<T> shared_dynamic_cast(shared_ptr<U> const & r)
+template<class T, class U> shared_ptr<T> shared_dynamic_cast(shared_ptr<U> const & r)
 {
     return shared_ptr<T>(r, detail::dynamic_cast_tag());
 }
 
-template<typename T, typename U> shared_ptr<T> shared_polymorphic_cast(shared_ptr<U> const & r)
+template<class T, class U> shared_ptr<T> shared_polymorphic_cast(shared_ptr<U> const & r)
 {
     return shared_ptr<T>(r, detail::polymorphic_cast_tag());
 }
 
-template<typename T, typename U> shared_ptr<T> shared_polymorphic_downcast(shared_ptr<U> const & r)
+template<class T, class U> shared_ptr<T> shared_polymorphic_downcast(shared_ptr<U> const & r)
 {
     BOOST_ASSERT(dynamic_cast<T *>(r.get()) == r.get());
     return shared_static_cast<T>(r);
@@ -318,7 +318,7 @@ template<typename T, typename U> shared_ptr<T> shared_polymorphic_downcast(share
 
 // get_pointer() enables boost::mem_fn to recognize shared_ptr
 
-template<typename T> inline T * get_pointer(shared_ptr<T> const & p)
+template<class T> inline T * get_pointer(shared_ptr<T> const & p)
 {
     return p.get();
 }

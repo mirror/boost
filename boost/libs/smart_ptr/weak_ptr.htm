@@ -61,21 +61,21 @@ if(shared_ptr&lt;int&gt; r = <a href="#make_shared">make_shared</a>(q))
 		<h2><a name="Synopsis">Synopsis</a></h2>
 		<pre>namespace boost {
 
-  template&lt;typename T&gt; class weak_ptr {
+  template&lt;class T&gt; class weak_ptr {
 
     public:
       typedef T <a href="#element_type">element_type</a>;
 
       <a href="#constructors">weak_ptr</a>();
-      template&lt;typename Y&gt; <a href="#constructors">weak_ptr</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
+      template&lt;class Y&gt; <a href="#constructors">weak_ptr</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
       <a href="#destructor">~weak_ptr</a>(); // never throws
 
       <a href="#constructors">weak_ptr</a>(weak_ptr const &amp; r); // never throws
-      template&lt;typename Y&gt; <a href="#constructors">weak_ptr</a>(weak_ptr&lt;Y&gt; const &amp; r); // never throws
+      template&lt;class Y&gt; <a href="#constructors">weak_ptr</a>(weak_ptr&lt;Y&gt; const &amp; r); // never throws
 
       weak_ptr &amp; <a href="#assignment">operator=</a>(weak_ptr const &amp; r); // never throws  
-      template&lt;typename Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(weak_ptr&lt;Y&gt; const &amp; r); // never throws
-      template&lt;typename Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
+      template&lt;class Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(weak_ptr&lt;Y&gt; const &amp; r); // never throws
+      template&lt;class Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
 
       void <a href="#reset">reset</a>();
       T * <a href="#get">get</a>() const; // never throws; deprecated, will disappear
@@ -86,16 +86,16 @@ if(shared_ptr&lt;int&gt; r = <a href="#make_shared">make_shared</a>(q))
       void <a href="#swap">swap</a>(weak_ptr&lt;T&gt; &amp; b); // never throws
   };
 
-  template&lt;typename T, typename U&gt;
+  template&lt;class T, class U&gt;
     bool <a href="#comparison">operator==</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
-  template&lt;typename T, typename U&gt;
+  template&lt;class T, class U&gt;
     bool <a href="#comparison">operator!=</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
-  template&lt;typename T&gt;
+  template&lt;class T&gt;
     bool <a href="#comparison">operator&lt;</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;T&gt; const &amp; b); // never throws
 
-  template&lt;typename T&gt; void <a href="#free-swap">swap</a>(weak_ptr&lt;T&gt; &amp; a, weak_ptr&lt;T&gt; &amp; b); // never throws
+  template&lt;class T&gt; void <a href="#free-swap">swap</a>(weak_ptr&lt;T&gt; &amp; a, weak_ptr&lt;T&gt; &amp; b); // never throws
 
-  template&lt;typename T&gt;
+  template&lt;class T&gt;
     shared_ptr&lt;T&gt; <a href="#make_shared">make_shared</a>(weak_ptr&lt;T&gt; const &amp; r); // never throws
 
 }
@@ -118,7 +118,7 @@ if(shared_ptr&lt;int&gt; r = <a href="#make_shared">make_shared</a>(q))
 			<P><B>Notes:</B> <B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
 					common requirements</A>.</P>
 		</blockquote>
-		<pre>template&lt;typename Y&gt; weak_ptr</A>(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
+		<pre>template&lt;class Y&gt; weak_ptr</A>(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
 		<blockquote>
 			<p><b>Effects:</b> Constructs a <b>weak_ptr</b>, as if by storing a copy of the 
 				pointer stored in <b>r</b>.</p>
@@ -128,7 +128,7 @@ if(shared_ptr&lt;int&gt; r = <a href="#make_shared">make_shared</a>(q))
 				stored pointer become 0.</P>
 		</blockquote>
 		<pre>weak_ptr(weak_ptr const &amp; r); // never throws
-template&lt;typename Y&gt; weak_ptr(weak_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
+template&lt;class Y&gt; weak_ptr(weak_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
 		<blockquote>
 			<p><b>Effects:</b> Constructs a <b>weak_ptr</b>, as if by storing a copy of the 
 				pointer stored in <b>r</b>.</p>
@@ -147,8 +147,8 @@ template&lt;typename Y&gt; weak_ptr(weak_ptr&lt;Y&gt; const &amp; r); // never t
 		</BLOCKQUOTE>
 		<h3><a name="assignment">assignment</a></h3>
 		<pre>weak_ptr &amp; <a href="#assignment">operator=</a>(weak_ptr const &amp; r); // never throws
-template&lt;typename Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(weak_ptr&lt;Y&gt; const &amp; r); // never throws
-template&lt;typename Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
+template&lt;class Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(weak_ptr&lt;Y&gt; const &amp; r); // never throws
+template&lt;class Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Equivalent to <code>weak_ptr(r).swap(*this)</code>.</P>
 			<P><B>Throws:</B> nothing.</P>
@@ -205,9 +205,9 @@ template&lt;typename Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(sh
 		</blockquote>
 		<h2><a name="functions">Free Functions</a></h2>
 		<h3><a name="comparison">comparison</a></h3>
-		<pre>template&lt;typename T, typename U&gt;
+		<pre>template&lt;class T, class U&gt;
   bool operator==(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
-template&lt;typename T, typename U&gt;
+template&lt;class T, class U&gt;
   bool operator!=(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws</pre>
 		<blockquote>
 			<p><b>Returns:</b> <code>a.get() == b.get()</code>.</p>
@@ -215,7 +215,7 @@ template&lt;typename T, typename U&gt;
 			<P><B>Notes:</B> <B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
 					common requirements</A>.</P>
 		</blockquote>
-		<pre>template&lt;typename T&gt;
+		<pre>template&lt;class T&gt;
   bool operator&lt;(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;T&gt; const &amp; b); // never throws</pre>
 		<blockquote>
 			<p><b>Returns:</b> an implementation-defined value such that <b>operator&lt;</b> is 
@@ -227,7 +227,7 @@ template&lt;typename T, typename U&gt;
 				pointer <A href="smart_ptr.htm#Common requirements">common requirements</A>.</P>
 		</blockquote>
 		<h3><a name="free-swap">swap</a></h3>
-		<pre>template&lt;typename T&gt;
+		<pre>template&lt;class T&gt;
   void swap(weak_ptr&lt;T&gt; &amp; a, weak_ptr&lt;T&gt; &amp; b) // never throws</pre>
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Equivalent to <code>a.swap(b)</code>.</P>
@@ -236,7 +236,7 @@ template&lt;typename T, typename U&gt;
 				generic programming.</P>
 		</BLOCKQUOTE>
 		<h3><a name="make_shared">make_shared</a></h3>
-		<pre>template&lt;typename T&gt;
+		<pre>template&lt;class T&gt;
   shared_ptr&lt;T&gt; make_shared(weak_ptr&lt;T&gt; &amp; const r) // never throws</pre>
 		<BLOCKQUOTE>
 			<P><B>Returns:</B> <code>r.expired()? shared_ptr&lt;T&gt;(): shared_ptr&lt;T&gt;(r)</code>.</P>

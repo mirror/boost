@@ -42,7 +42,7 @@ using boost::scoped_array;
 using boost::shared_ptr;
 using boost::shared_array;
 
-template<typename T>
+template<class T>
 void ck( const T* v1, T v2 ) { BOOST_TEST( *v1 == v2 ); }
 
 namespace {

@@ -24,7 +24,7 @@
 namespace boost
 {
 
-template<typename T> class weak_ptr
+template<class T> class weak_ptr
 {
 private:
 
@@ -41,19 +41,19 @@ public:
 
 //  generated copy constructor, assignment, destructor are fine
 
-    template<typename Y>
+    template<class Y>
     weak_ptr(weak_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
     {
     }
 
-    template<typename Y>
+    template<class Y>
     weak_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
     {
     }
 
 #if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
 
-    template<typename Y>
+    template<class Y>
     weak_ptr & operator=(weak_ptr<Y> const & r) // never throws
     {
         px = r.px;
@@ -61,7 +61,7 @@ public:
         return *this;
     }
 
-    template<typename Y>
+    template<class Y>
     weak_ptr & operator=(shared_ptr<Y> const & r) // never throws
     {
         px = r.px;
@@ -109,8 +109,8 @@ public:
 
 private:
 
-    template<typename Y> friend class weak_ptr;
-    template<typename Y> friend class shared_ptr;
+    template<class Y> friend class weak_ptr;
+    template<class Y> friend class shared_ptr;
 
 #endif
 
@@ -133,7 +133,7 @@ template<class T, class U> inline bool operator!=(weak_ptr<T> const & a, weak_pt
 
 // Resolve the ambiguity between our op!= and the one in rel_ops
 
-template<typename T> inline bool operator!=(weak_ptr<T> const & a, weak_ptr<T> const & b)
+template<class T> inline bool operator!=(weak_ptr<T> const & a, weak_ptr<T> const & b)
 {
     return a.get() != b.get();
 }

@@ -41,7 +41,7 @@ namespace boost
 //  is destroyed or reset.
 //
 
-template<typename T> class shared_array
+template<class T> class shared_array
 {
 private:
 
@@ -63,7 +63,7 @@ public:
     // shared_array will release p by calling d(p)
     //
 
-    template<typename D> shared_array(T * p, D d): px(p), pn(p, d)
+    template<class D> shared_array(T * p, D d): px(p), pn(p, d)
     {
     }
 
@@ -75,7 +75,7 @@ public:
         this_type(p).swap(*this);
     }
 
-    template <typename D> void reset(T * p, D d)
+    template <class D> void reset(T * p, D d)
     {
         this_type(p, d).swap(*this);
     }
@@ -129,22 +129,22 @@ private:
 
 };  // shared_array
 
-template<typename T> inline bool operator==(shared_array<T> const & a, shared_array<T> const & b) // never throws
+template<class T> inline bool operator==(shared_array<T> const & a, shared_array<T> const & b) // never throws
 {
     return a.get() == b.get();
 }
 
-template<typename T> inline bool operator!=(shared_array<T> const & a, shared_array<T> const & b) // never throws
+template<class T> inline bool operator!=(shared_array<T> const & a, shared_array<T> const & b) // never throws
 {
     return a.get() != b.get();
 }
 
-template<typename T> inline bool operator<(shared_array<T> const & a, shared_array<T> const & b) // never throws
+template<class T> inline bool operator<(shared_array<T> const & a, shared_array<T> const & b) // never throws
 {
     return std::less<T*>()(a.get(), b.get());
 }
 
-template<typename T> void swap(shared_array<T> & a, shared_array<T> & b) // never throws
+template<class T> void swap(shared_array<T> & a, shared_array<T> & b) // never throws
 {
     a.swap(b);
 }
