@@ -558,10 +558,10 @@ for (int i = start(1); i <= finish(1); ++i) {
 		<div>
 			The library also provides macros to access values in dimensions <i>relative</i> 
 			to the current dimension (e.g. the <i>previous</i> dimension).&nbsp; These 
-			macros take an argument that is interpreted as an offseq from the current 
+			macros take an argument that is interpreted as an offset from the current 
 			frame.&nbsp; For example, <b>BOOST_PP_RELATIVE_ITERATION</b>(<i>1</i>) always 
 			refers to the outer dimension immediately previous to the current 
-			dimension.&nbsp; An argument of <i>0</i> is interpreted as an offseq of <i>0</i>
+			dimension.&nbsp; An argument of <i>0</i> is interpreted as an offset of <i>0</i>
 			which causes <b>BOOST_PP_RELATIVE_ITERATION</b>(<i>0</i>) to be equivalent to <b>BOOST_PP_ITERATION</b>().&nbsp;
 			<b>BOOST_PP_RELATIVE_ITERATION</b>(<i>2</i>) refers to the iteration value of 
 			the dimension immediately preceding the dimension that precedes the current 
