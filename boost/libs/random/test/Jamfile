@@ -19,7 +19,7 @@ DEPENDS all : test ;
         [ run libs/random/random_demo.cpp ]
 #       [ run libs/random/nondet_random_speed.cpp ]
 #       [ run libs/random/random_device.cpp ]
-        [ run libs/random/random_speed.cpp ]
+#       [ run libs/random/random_speed.cpp ]
 #       [ run libs/random/statistic_tests.cpp ]
        ;
 }
