@@ -23,7 +23,7 @@ struct dummyT {
 // TrivialIterator. 
 // Preconditions: i != j, *i == val
 template <class Iterator, class T>
-void trivial_iterator_test(Iterator i, Iterator j, T val)
+void trivial_iterator_test(const Iterator i, const Iterator j, T val)
 {
   Iterator k;
   assert(i == i);
@@ -52,7 +52,7 @@ void trivial_iterator_test(Iterator i, Iterator j, T val)
 
 // Preconditions: i != j
 template <class Iterator, class T>
-void mutable_trivial_iterator_test(Iterator i, Iterator j, T val)
+void mutable_trivial_iterator_test(const Iterator i, const Iterator j, T val)
 {
   *i = val;
   trivial_iterator_test(i, j, val);
@@ -121,7 +121,7 @@ template <class Iterator, class TrueVals>
 void random_access_iterator_test(Iterator i, int N, TrueVals vals)
 {
   bidirectional_iterator_test(i, vals[0], vals[1]);
-  Iterator j = i;
+  const Iterator j = i;
   int c;
 
   for (c = 0; c < N-1; ++c) {
