@@ -43,14 +43,14 @@
           <listitem>The following syntax is also supported:
             <code>variant&lt; <emphasis>type-sequence</emphasis> &gt;</code>,
             where <emphasis>type-sequence</emphasis> must meet the requirements
-            of the <libraryname>MPL</libraryname> <emphasis>Sequence</emphasis>
-            concept. For instance,
+            of the <libraryname>MPL</libraryname>'s
+            <emphasis>Sequence</emphasis> concept. For instance,
             <code>variant&lt; mpl::list&lt;int, std::string&gt; &gt;</code> is
             functionally equivalent to
             <code>variant&lt; int, std::string &gt;</code>. (Due to standard
             conformance problems in several compilers, however, this syntax may
             not be supported on your compiler. See
-            <link linkend="variant.macro.BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT">BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT</link>
+            <code><link linkend="variant.macro.BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT">BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT</link></code>
             for more information.)</listitem>
         </itemizedlist>
       </description>
@@ -291,7 +291,7 @@
       </method-group>
       
       <method-group name="queries">
-        <method name="which">
+        <method name="which" cv="const">
           <type>int</type>
 
           <returns>
@@ -305,7 +305,7 @@
           <throws>Will not throw.</throws>
         </method>
 
-        <method name="empty">
+        <method name="empty" cv="const">
           <type>bool</type>
 
           <returns>
@@ -317,7 +317,7 @@
           <throws>Will not throw.</throws>
         </method>
 
-        <method name="type">
+        <method name="type" cv="const">
           <type>const <classname>std::type_info</classname> &amp;</type>
           
           <returns>
