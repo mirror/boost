@@ -40,6 +40,8 @@ namespace test // failure exception used to indicate checked test failures
         {
         }
 
+	~failure() throw() {}
+
     public: // usage
 
         virtual const char * what() const throw()
