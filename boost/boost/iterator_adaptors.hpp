@@ -12,6 +12,19 @@
 //
 // Revision History:
 
+// 10 Feb 2001   David Abrahams
+//      Rolled in supposed Borland fixes from John Maddock, but not seeing any
+//      improvement yet
+//
+//      Changed argument order to indirect_ generator, for convenience in the
+//      case of input iterators (where Reference must be a value type).
+//
+//      Removed derivation of filter_iterator_policies from
+//      default_iterator_policies, since the iterator category is likely to be
+//      reduced (we don't want to allow illegal operations like decrement).
+//
+//      Support for a simpler filter iterator interface.
+//
 // 09 Feb 2001   David Abrahams
 //      Improved interface to indirect_ and reverse_ iterators
 //
@@ -424,7 +437,7 @@ public:
 
     // Iterators >= ForwardIterator must produce real references.
     enum { forward_iter_with_real_reference =
-           (!boost::is_convertible<iterator_category,std::forward_iterator_tag>::value
+           (!boost::is_convertible<iterator_category*,std::forward_iterator_tag*>::value
            || boost::is_same<reference,value_type&>::value
            || boost::is_same<reference,const value_type&>::value) };
     BOOST_STATIC_ASSERT(forward_iter_with_real_reference);
@@ -657,8 +670,6 @@ struct indirect_iterator_policies : public default_iterator_policies
 #  define BOOST_ARG_DEPENDENT_TYPENAME
 # endif
 
-} template <class T> struct undefined; namespace boost {
-
 namespace detail {
 # if !defined(BOOST_MSVC) // stragely instantiated even when unused! Maybe try a recursive template someday ;-)
   template <class T>
@@ -674,8 +685,8 @@ template <class OuterIterator,      // Mutable or Immutable, does not matter
 #if !defined(BOOST_MSVC)
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::value_type_of_value_type<OuterIterator>::type
 #endif
-          , class Pointer = Value*
           , class Reference = Value&
+          , class Pointer = Value*
          >
 class indirect_iterator_generator
 {
@@ -704,9 +715,9 @@ template <class OuterIterator,      // Mutable or Immutable, does not matter
 struct indirect_iterator_pair_generator
 {
   typedef typename indirect_iterator_generator<OuterIterator,
-    Value, Pointer, Reference>::type iterator;
+    Value, Reference, Pointer>::type iterator;
   typedef typename indirect_iterator_generator<OuterIterator,
-    Value, ConstPointer, ConstReference>::type const_iterator;
+    Value, ConstReference, ConstPointer>::type const_iterator;
 };
 
 // Tried to allow InnerTraits to be provided by explicit template
@@ -905,7 +916,8 @@ make_const_projection_iterator(
 // Filter Iterator Adaptor
 
 template <class Predicate, class Iterator>
-class filter_iterator_policies : public default_iterator_policies {
+class filter_iterator_policies
+{
 public:
     filter_iterator_policies() { }
 
@@ -913,70 +925,105 @@ public:
         : m_predicate(p), m_end(end) { }
 
     void initialize(Iterator& x) {
-        advance(x);
+        satisfy_predicate(x);
     }
 
-    // dwa 2/4/01 - The Iter template argument neccessary for compatibility with
-    // a MWCW bug workaround
+    // The Iter template argument is neccessary for compatibility with a MWCW
+    // bug workaround
     template <class Iter>
     void increment(Iter& x) {
         ++x;
-        advance(x);
+        satisfy_predicate(x);
     }
-private:
-    void advance(Iterator& iter)
+
+    template <class Reference, class Iter>
+    Reference dereference(type<Reference>, const Iter& x) const
+        { return *x; }
+
+    template <class Iterator1, class Iterator2>
+    bool equal(const Iterator1& x, const Iterator2& y) const
+        { return x == y; }
+
+ private:
+    void satisfy_predicate(Iterator& iter)
     {
         while (m_end != iter && !m_predicate(*iter))
             ++iter;
-    }  
+    }
     Predicate m_predicate;
     Iterator m_end;
 };
 
+namespace detail {
+  // A type generator returning Base if T is derived from Base, and T otherwise.
+  template <class Base, class T>
+  struct reduce_to_base_class
+  {
+      typedef typename if_true<(
+            ::boost::is_convertible<T*,Base*>::value
+          )>::template then<Base,T>::type type;
+  };
+
+  // "Steps down" the category of iterators below bidirectional so the category
+  // can be used with filter iterators.
+  template <class Iterator>
+  struct non_bidirectional_category
+  {
+      typedef typename reduce_to_base_class<
+              std::forward_iterator_tag,
+                   typename iterator_traits<Iterator>::iterator_category
+      >::type type;
+
+      // For some reason, putting this assertion in filter_iterator_generator fails inexplicably under MSVC
+      BOOST_STATIC_ASSERT((!boost::is_convertible<type*, std::bidirectional_iterator_tag*>::value));
+  };
+}
+
 template <class Predicate, class Iterator, 
-          class Traits = boost::detail::iterator_traits<Iterator>
+    class Value = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::value_type,
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::pointer,
+    class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::reference,
+#else
+    class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Iterator,Value>::pointer,
+    class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Iterator,Value>::reference,
+#endif
+    class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::non_bidirectional_category<Iterator>::type,
+    class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::difference_type
          >
 class filter_iterator_generator {
-    typedef filter_iterator_policies<Predicate, Iterator> Policies;
-public:
-    typedef filter_iterator_policies<Predicate, Iterator> policies_type;
-    typedef iterator_adaptor<Iterator, Policies, Traits> type;
+    typedef typename boost::remove_const<Value>::type value_type;
+    typedef boost::iterator<Category,value_type,Distance,Pointer,Reference> traits;
+    enum {
+        is_bidirectional
+           = boost::is_convertible<Category*, std::bidirectional_iterator_tag*>::value
+    };
+#ifndef BOOST_MSVC // I don't have any idea why this occurs, but it doesn't seem to hurt too badly.
+    BOOST_STATIC_ASSERT(!is_bidirectional);
+#endif
+ public:
+    typedef filter_iterator_policies<Predicate,Iterator> policies_type;
+    typedef iterator_adaptor<Iterator, policies_type, traits> type;
 };
 
+// This keeps MSVC happy; it doesn't like to deduce default template arguments
+// for template function return types
+namespace detail {
+  template <class Predicate, class Iterator>
+  struct filter_generator {
+    typedef typename boost::filter_iterator_generator<Predicate,Iterator>::type type;
+  };
+}
 
-// WARNING: Do not use this three argument version of
-// make_filter_iterator() if the iterator is a builtin pointer type
-// and if your compiler does not support partial specialization.
-
-// If the Predicate argument "p" is left out, an explicit template
-// argument for the Predicate is required, i.e.,
-// make_filter_iterator<Predicate>(f, l).
 template <class Predicate, class Iterator>
-inline typename filter_iterator_generator<Predicate, Iterator>::type
+inline typename detail::filter_generator<Predicate, Iterator>::type
 make_filter_iterator(Iterator first, Iterator last, const Predicate& p = Predicate())
 {
   typedef filter_iterator_generator<Predicate, Iterator> Gen;
-  typedef typename Gen::policies_type policies_t;
+  typedef filter_iterator_policies<Predicate,Iterator> policies_t;
   typedef typename Gen::type result_t;
   return result_t(first, policies_t(p, last));
 }
-
-// Supply the Traits type via an exaplicit template argument, i.e.,
-// make_filter_iterator<Traits>(f, l).
-//
-// If the Predicate argument "p" is left out, an explicit template
-// argument for the Predicate is also required, i.e.,
-// make_filter_iterator<Traits, Predicate>(f, l).
-template <class Traits, class Predicate, class Iterator>
-inline typename filter_iterator_generator<Predicate, Iterator, Traits>::type
-make_filter_iterator(Iterator first, Iterator last, const Predicate& p = Predicate(), Traits* = 0)
-{
-  typedef filter_iterator_generator<Predicate, Iterator, Traits> Gen;
-  typedef typename Gen::policies_type policies_t;
-  typedef typename Gen::type result_t;
-  return result_t(first, policies_t(p, last));
-}
-
 
 } // namespace boost
 # undef BOOST_ARG_DEPENDENT_TYPENAME
