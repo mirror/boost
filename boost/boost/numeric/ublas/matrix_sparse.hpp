@@ -1308,7 +1308,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class F, class A>
     typename sparse_matrix<T, F, A>::value_type sparse_matrix<T, F, A>::zero_ =
-        BOOST_UBLAS_TYPENAME sparse_matrix<T, F, A>::value_type ();
+        BOOST_UBLAS_TYPENAME sparse_matrix<T, F, A>::value_type (0);
 
     // Array based sparse matrix class
     template<class T, class F, class A>
@@ -2491,7 +2491,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class F, class A>
     typename sparse_vector_of_sparse_vector<T, F, A>::value_type sparse_vector_of_sparse_vector<T, F, A>::zero_ =
-        BOOST_UBLAS_TYPENAME sparse_vector_of_sparse_vector<T, F, A>::value_type ();
+        BOOST_UBLAS_TYPENAME sparse_vector_of_sparse_vector<T, F, A>::value_type (0);
 
     // Array based sparse matrix class
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
@@ -3822,7 +3822,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class F, std::size_t IB, class IA, class TA>
     typename compressed_matrix<T, F, IB, IA, TA>::value_type compressed_matrix<T, F, IB, IA, TA>::zero_ =
-        BOOST_UBLAS_TYPENAME compressed_matrix<T, F, IB, IA, TA>::value_type ();
+        BOOST_UBLAS_TYPENAME compressed_matrix<T, F, IB, IA, TA>::value_type (0);
 
     // Array based sparse matrix class
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
@@ -5128,7 +5128,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class F, std::size_t IB, class IA, class TA>
     typename coordinate_matrix<T, F, IB, IA, TA>::value_type coordinate_matrix<T, F, IB, IA, TA>::zero_ =
-        BOOST_UBLAS_TYPENAME coordinate_matrix<T, F, IB, IA, TA>::value_type ();
+        BOOST_UBLAS_TYPENAME coordinate_matrix<T, F, IB, IA, TA>::value_type (0);
 
 }}}
 

@@ -1005,7 +1005,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class F, class A>
     typename banded_matrix<T, F, A>::value_type banded_matrix<T, F, A>::zero_ =
-        BOOST_UBLAS_TYPENAME banded_matrix<T, F, A>::value_type ();
+        BOOST_UBLAS_TYPENAME banded_matrix<T, F, A>::value_type (0);
 
     // Diagonal matrix class
     template<class T, class F, class A>
@@ -2032,7 +2032,7 @@ namespace boost { namespace numeric { namespace ublas {
     typename banded_adaptor<M>::matrix_type banded_adaptor<M>::nil_;
     template<class M>
     typename banded_adaptor<M>::value_type banded_adaptor<M>::zero_ =
-        BOOST_UBLAS_TYPENAME banded_adaptor<M>::value_type ();
+        BOOST_UBLAS_TYPENAME banded_adaptor<M>::value_type (0);
 
     // Diagonal matrix adaptor class
     template<class M>
