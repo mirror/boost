@@ -34,8 +34,6 @@
 namespace boost {
   namespace detail {
     namespace function {
-      template<bool> struct truth {};
-
       /*
        * The ct_if implementation is temporary code. When a Boost metaprogramming
        * library is introduced, Boost.Function will use it instead. 
