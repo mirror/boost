@@ -206,7 +206,7 @@ namespace boost{ typedef wchar_t regex_wchar_type; }
  *
  ****************************************************************************/
 
-#if defined(BOOST_HAS_DECLSPEC) && defined(BOOST_REGEX_DYN_LINK) && !defined(BOOST_REGEX_STATIC_LINK)
+#if defined(BOOST_HAS_DECLSPEC) && (defined(BOOST_REGEX_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)) && !defined(BOOST_REGEX_STATIC_LINK)
 #  if defined(BOOST_REGEX_SOURCE)
 #     define BOOST_REGEX_DECL __declspec(dllexport)
 #     define BOOST_REGEX_BUILD_DLL
@@ -219,9 +219,9 @@ namespace boost{ typedef wchar_t regex_wchar_type; }
 #  define BOOST_REGEX_DECL
 #endif
  
-#if (defined(BOOST_MSVC) || defined(__BORLANDC__)) && !defined(BOOST_REGEX_NO_LIB) && !defined(BOOST_REGEX_SOURCE)
+#if (defined(BOOST_MSVC) || defined(__BORLANDC__)) && !defined(BOOST_REGEX_NO_LIB) && !defined(BOOST_REGEX_SOURCE) && !defined(BOOST_ALL_NO_LIB)
 #  define BOOST_LIB_NAME boost_regex
-#  ifdef BOOST_REGEX_DYN_LINK
+#  if defined(BOOST_REGEX_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)
 #     define BOOST_DYN_LINK
 #  endif
 #ifdef BOOST_REGEX_DIAG
