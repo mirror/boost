@@ -159,7 +159,7 @@ class integer_traits<unsigned long long>
   : public std::numeric_limits<unsigned long long>,
     public detail::integer_traits_base<unsigned long long, 0, ULONG_LONG_MAX>
 { };
-#elif defined(ULONGLONG_MAX)
+#elif defined(ULONGLONG_MAX) && !defined(BOOST_MSVC) && !defined(__BORLANDC__)
 template<>
 class integer_traits<long long>
   : public std::numeric_limits<long long>,
