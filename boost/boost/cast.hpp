@@ -257,7 +257,7 @@ namespace boost
            static inline T min()
            {
                return std::numeric_limits<T>::is_signed && std::numeric_limits<T>::min() >= 0
-                   ? -std::numeric_limits<T>::max() : std::numeric_limits<T>::min();
+                   ? T(-std::numeric_limits<T>::max()) : std::numeric_limits<T>::min();
            }
        };
 # if BOOST_MSVC
