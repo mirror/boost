@@ -94,9 +94,7 @@ int cpp_main(int argc, char* argv[])
    value_test(true, boost::is_reference<cr_type>::value)
    value_test(true, boost::is_reference<const UDT&>::value)
    value_test(false, boost::is_reference<void>::value)
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC)
    value_test(false, boost::is_reference<test_abc1>::value)
-#endif
 
    value_test(false, boost::is_member_pointer<f1>::value)
    value_test(false, boost::is_member_pointer<f2>::value)
@@ -133,9 +131,7 @@ int cpp_main(int argc, char* argv[])
    value_test(false, boost::is_enum<int_convertible>::value)
    //value_test(false, boost::is_enum<int&>::value)
    value_test(false, boost::is_enum<void>::value)
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC)
    value_test(false, boost::is_enum<test_abc1>::value)
-#endif
 
    return check_result(argc, argv);
 }

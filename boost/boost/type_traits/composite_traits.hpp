@@ -280,7 +280,6 @@ template <typename T> struct is_reference<T&const volatile>
 #  pragma warning(disable: 4181)
 #endif // BOOST_MSVC
 
-
 namespace detail
 {
   template <typename T> struct is_reference_or_const_volatile
@@ -298,42 +297,22 @@ namespace detail
                              >::value));
   };
   
-  no_type non_array_is_reference_helper(...);
-  template <typename T>
-  yes_type non_array_is_reference_helper(T&(*)());
+  template <class T> struct wrap {};
+  template <class T> T&(* is_reference_helper1(wrap<T>) )(wrap<T>);
+  char is_reference_helper1(...);
 
-  template <bool isarray_>
-  struct is_reference_helper
-  {
-      template <class T>
-      struct apply
-      {
-          typedef T (*pf_t)();
-          static pf_t pf;
-    
-          BOOST_STATIC_CONSTANT(
-              bool, value = (1 == sizeof(::boost::detail::non_array_is_reference_helper(pf))));
-      };
-  };
-
-  template <>
-  struct is_reference_helper<true>
-  {
-      template <class T>
-      struct apply
-      {
-          BOOST_STATIC_CONSTANT(bool, value = false);
-      };
-  };
+  template <class T> no_type is_reference_helper2(T&(*)(wrap<T>));
+  yes_type is_reference_helper2(...);
 }
 
 template <typename T>
 struct is_reference
 {
     BOOST_STATIC_CONSTANT(
-        bool, value = ::boost::detail::is_reference_helper<
-            is_array<T>::value
-        >::template apply<T>::value);
+        bool, value = sizeof(
+            ::boost::detail::is_reference_helper2(
+                ::boost::detail::is_reference_helper1(::boost::detail::wrap<T>()))) == 1
+        );
 };
     
 template <> struct is_reference<void>
