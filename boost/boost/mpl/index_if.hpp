@@ -17,7 +17,6 @@
 #ifndef BOOST_MPL_INDEX_IF_HPP_INCLUDED
 #define BOOST_MPL_INDEX_IF_HPP_INCLUDED
 
-#include "boost/mpl/aux_/config/workaround.hpp"
 #include "boost/mpl/aux_/find_if_pred.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/if.hpp"
@@ -34,19 +33,6 @@
 namespace boost {
 namespace mpl {
 
-namespace aux {
-
-struct index_if_op
-{
-    template < typename Index, typename Iterator >
-    struct apply
-        : next< Index >
-    {
-    };
-};
-
-} // namespace aux
-
 BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
 
 template<
@@ -62,7 +48,7 @@ private:
     typedef typename iter_fold_if<
           Sequence
         , int_<0>
-        , protect< aux::index_if_op >
+        , protect< next<> >
         , protect< aux::find_if_pred<pred_> >
         >::type result_;
 
