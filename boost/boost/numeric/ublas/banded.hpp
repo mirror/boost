@@ -18,6 +18,7 @@
 #define BOOST_UBLAS_BANDED_H
 
 #include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/detail/temporary.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 
