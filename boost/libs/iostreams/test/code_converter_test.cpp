@@ -24,8 +24,8 @@ using boost::unit_test_framework::test_suite;
 # include <boost/config.hpp> // BOOST_DEDUCED_TYPENAME.
 # include <boost/iostreams/code_converter.hpp>
 # include <boost/iostreams/copy.hpp>
+# include <boost/iostreams/detail/add_facet.hpp>
 # include <boost/iostreams/device/back_inserter.hpp>
-# include <boost/iostreams/detail/codecvt_helper.hpp>
 # include <boost/iostreams/device/file.hpp>
 # include <boost/iostreams/device/file_descriptor.hpp>
 # include <boost/iostreams/stream_facade.hpp>
