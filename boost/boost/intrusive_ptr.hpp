@@ -47,6 +47,8 @@ private:
 
 public:
 
+    typedef T element_type;
+
     intrusive_ptr(): p_(0)
     {
     }
