@@ -235,9 +235,15 @@ namespace boost {
         }
       }
 
-      signal_base::~signal_base()
-      {
-      }
+    signal_base::signal_base(const compare_type& comp) : impl()
+    {
+      impl.reset(new signal_base_impl(comp));
+    }
+
+    signal_base::~signal_base()
+    {
+    }
+
     } // namespace detail
   } // namespace BOOST_SIGNALS_NAMESPACE
 } // namespace boost

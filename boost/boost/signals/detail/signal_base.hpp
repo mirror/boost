@@ -161,11 +161,7 @@ namespace boost {
 
         friend class call_notification;
 
-        signal_base(const compare_type& comp) : impl()
-        {
-          impl.reset(new signal_base_impl(comp));
-        }
-
+        signal_base(const compare_type& comp);
         ~signal_base();
 
       public:

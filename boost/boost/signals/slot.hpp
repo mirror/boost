@@ -88,7 +88,9 @@ namespace boost {
     typename BOOST_SIGNALS_NAMESPACE::detail::get_slot_tag<F>::type
     tag_type(const F&)
     {
-      typename BOOST_SIGNALS_NAMESPACE::detail::get_slot_tag<F>::type tag;
+      typedef typename BOOST_SIGNALS_NAMESPACE::detail::get_slot_tag<F>::type
+        the_tag_type;
+      the_tag_type tag = the_tag_type();
       return tag;
     }
 

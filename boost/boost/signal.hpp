@@ -1,6 +1,6 @@
 // Boost.Signals library
 //
-// Copyright (C) 2001-2002 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001-2003 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -10,7 +10,7 @@
 //
 // This software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
- 
+
 // For more information, see http://www.boost.org/libs/signals
 
 #ifndef BOOST_SIGNAL_HPP
@@ -37,13 +37,13 @@ namespace boost {
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
-      template<int Arity, 
-               typename Signature, 
+      template<int Arity,
+               typename Signature,
                typename Combiner,
                typename Group,
                typename GroupCompare,
                typename SlotFunction>
-      struct real_get_signal_impl;
+      class real_get_signal_impl;
 
       template<typename Signature,
                typename Combiner,
@@ -303,7 +303,7 @@ namespace boost {
                typename Group,
                typename GroupCompare,
                typename SlotFunction>
-      struct get_signal_impl : 
+      struct get_signal_impl :
         public real_get_signal_impl<(function_traits<Signature>::arity),
                                     Signature,
                                     Combiner,
