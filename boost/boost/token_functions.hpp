@@ -252,8 +252,8 @@ namespace boost{
 		 const Char * returnable = 0,const Char * nonreturnable = 0)
 		 :returnable_(returnable?returnable:string_type().c_str()),
 		 nonreturnable_(nonreturnable?nonreturnable:string_type().c_str()),
-		 return_delims_(return_delims),no_ispunct_(returnable),
-		 no_isspace_(nonreturnable){}
+		 return_delims_(return_delims),no_ispunct_(returnable!=0),
+		 no_isspace_(nonreturnable!=0){}
 
      void reset(){}
 
@@ -294,3 +294,8 @@ namespace boost{
 
 
 #endif 
+
+
+
+
+
