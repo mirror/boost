@@ -20,6 +20,8 @@ namespace boost
      register_signature( ".cxx" );
      register_signature( ".h" );
      register_signature( ".hpp" );
+     register_signature( ".htm" );
+     register_signature( ".html" );
      register_signature( ".hxx" );
      register_signature( ".ipp" );
      register_signature( "Jamfile" );
