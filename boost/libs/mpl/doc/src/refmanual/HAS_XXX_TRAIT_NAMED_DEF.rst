@@ -24,7 +24,7 @@ On the deficient compilers not capabale of performing the detection,
 ``trait<x>::value`` always returns a fallback value ``default_``. 
 A boolean configuraion macro, |BOOST_MPL_CFG_NO_HAS_XXX|, is provided 
 to signal or override the "deficient" status of a particular compiler.
-|Note:| The fallback value call also be provided at the point of the 
+|Note:| The fallback value can also be provided at the point of the 
 metafunction invocation; see the `Expression semantics` section for 
 details |-- end note|
 
