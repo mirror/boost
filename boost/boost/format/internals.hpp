@@ -92,7 +92,7 @@ namespace detail {
 
         stream_format_state fmtstate_;// set by parsing, is only affected by modify_item
 
-        signed int truncate_;    //- is set for directives like %.5s that ask truncation
+        std::streamsize truncate_;//- is set for directives like %.5s that ask truncation
         unsigned int pad_scheme_;//- several possible padding schemes can mix. see pad_values
     }; 
 
