@@ -50,6 +50,8 @@
 #pragma warning (disable: 4503)
 #pragma warning (disable: 4786)
 
+// Base traits templates syntax not supported
+#define BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
 // MSVC doesn't always accept the 'typename' keyword.
 #define BOOST_UBLAS_TYPENAME
 // MSVC doesn't accept the 'using' keyword (at least for importing base members).
@@ -105,9 +107,6 @@
 // GNU Compiler Collection
 #if defined (__GNUC__) && ! defined (BOOST_STRICT_CONFIG)
 
-// GCC allows to use iterator_base_traits.
-#define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
-
 #if __GNUC__ <= 2 && __GNUC_MINOR__ <= 95
 // GCC 2.95.3 needs BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS (this seems to be arguable).
 #define BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS
@@ -124,12 +123,10 @@
 // Intel Compiler
 #if defined (BOOST_INTEL) && ! defined (BOOST_STRICT_CONFIG)
 
-//TODO When is this true?
-// ICC sometimes needs qualified type names.
-//#define BOOST_UBLAS_QUALIFIED_TYPENAME
-
-// ICC memory usage and time grows with this enabled
-//#define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#if (BOOST_INTEL < 800)
+// Base traits templates syntax untested
+#define BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
+#endif
 
 // Define swap for index_pair and triple.
 #if (BOOST_INTEL <= 800)
@@ -171,10 +168,7 @@ namespace std {
 
 // Thanks to Kresimir Fresl for porting to Comeau.
 #if defined (__COMO__) && ! defined (BOOST_STRICT_CONFIG)
-
-// Comeau allows to use iterator_base_traits.
-#define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
-
+// Comeau should not have any problems
 #endif
 
 
@@ -185,6 +179,8 @@ namespace std {
 // 8.x
 #if __MWERKS__ <= 0x3003
 #define BOOST_UBLAS_NO_MEMBER_FRIENDS
+// Base traits templates syntax untested
+#define BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
 #endif
 
 #endif

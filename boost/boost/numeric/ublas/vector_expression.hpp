@@ -634,7 +634,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
             public container_const_reference<vector_unary>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename E::const_iterator::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
 #else
@@ -925,7 +925,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
             public container_const_reference<vector_binary>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename iterator_restrict_traits<typename E1::const_iterator::iterator_category,
                                                                           typename E2::const_iterator::iterator_category>::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
@@ -1307,7 +1307,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
             public container_const_reference<vector_binary_scalar1>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename E2::const_iterator::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
 #else
@@ -1548,7 +1548,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
             public container_const_reference<vector_binary_scalar2>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename E1::const_iterator::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
 #else

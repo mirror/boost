@@ -277,17 +277,12 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
             public container_const_reference<vector_range>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename const_iterator_type::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
 #else
-#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
-            public random_access_iterator_base<typename const_iterator_type::iterator_category,
-                                               const_iterator, value_type> {
-#else
             public random_access_iterator_base<typename V::const_iterator::iterator_category,
                                                const_iterator, value_type> {
-#endif
 #endif
         public:
             typedef typename const_iterator_type::iterator_category iterator_category;
@@ -390,17 +385,12 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class iterator:
             public container_reference<vector_range>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename iterator_type::iterator_category>::template
                         iterator_base<iterator, value_type>::type {
 #else
-#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
-            public random_access_iterator_base<typename iterator_type::iterator_category,
-                                               iterator, value_type> {
-#else
             public random_access_iterator_base<typename V::iterator::iterator_category,
                                                iterator, value_type> {
-#endif
 #endif
         public:
             typedef typename iterator_type::iterator_category iterator_category;
@@ -815,7 +805,7 @@ return true;
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
             public container_const_reference<vector_slice>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename V::const_iterator::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
 #else
@@ -923,7 +913,7 @@ return true;
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class iterator:
             public container_reference<vector_slice>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename V::iterator::iterator_category>::template
                         iterator_base<iterator, value_type>::type {
 #else
@@ -1359,7 +1349,7 @@ return true;
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
             public container_const_reference<vector_indirect>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename V::const_iterator::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
 #else
@@ -1467,7 +1457,7 @@ return true;
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class iterator:
             public container_reference<vector_indirect>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename V::iterator::iterator_category>::template
                         iterator_base<iterator, value_type>::type {
 #else

@@ -265,7 +265,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
             public container_const_reference<matrix_row>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename const_iterator_type::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
 #else
@@ -373,7 +373,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class iterator:
             public container_reference<matrix_row>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename iterator_type::iterator_category>::template
                         iterator_base<iterator, value_type>::type {
 #else
@@ -771,7 +771,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
             public container_const_reference<matrix_column>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename const_iterator_type::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
 #else
@@ -879,7 +879,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class iterator:
             public container_reference<matrix_column>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename iterator_type::iterator_category>::template
                         iterator_base<iterator, value_type>::type {
 #else
@@ -1262,7 +1262,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         class const_iterator:
             public container_const_reference<matrix_vector_range>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename iterator_restrict_traits<typename M::const_iterator1::iterator_category,
                                                                           typename M::const_iterator2::iterator_category>::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
@@ -1380,7 +1380,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         class iterator:
             public container_reference<matrix_vector_range>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename iterator_restrict_traits<typename M::iterator1::iterator_category,
                                                                           typename M::iterator2::iterator_category>::iterator_category>::template
                         iterator_base<iterator, value_type>::type {
@@ -1763,7 +1763,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         class const_iterator:
             public container_const_reference<matrix_vector_slice>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename iterator_restrict_traits<typename M::const_iterator1::iterator_category,
                                                                           typename M::const_iterator2::iterator_category>::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
@@ -1881,7 +1881,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         class iterator:
             public container_reference<matrix_vector_slice>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename iterator_restrict_traits<typename M::iterator1::iterator_category,
                                                                           typename M::iterator2::iterator_category>::iterator_category>::template
                         iterator_base<iterator, value_type>::type {
@@ -2265,7 +2265,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         class const_iterator:
             public container_const_reference<matrix_vector_indirect>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename iterator_restrict_traits<typename M::const_iterator1::iterator_category,
                                                                           typename M::const_iterator2::iterator_category>::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
@@ -2383,7 +2383,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         class iterator:
             public container_reference<matrix_vector_indirect>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename iterator_restrict_traits<typename M::iterator1::iterator_category,
                                                                           typename M::iterator2::iterator_category>::iterator_category>::template
                         iterator_base<iterator, value_type>::type {
@@ -2821,17 +2821,12 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator1:
             public container_const_reference<matrix_range>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename const_iterator1_type::iterator_category>::template
                         iterator_base<const_iterator1, value_type>::type {
 #else
-#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
-            public random_access_iterator_base<typename const_iterator1_type::iterator_category,
-                                               const_iterator1, value_type> {
-#else
             public random_access_iterator_base<typename M::const_iterator1::iterator_category,
                                                const_iterator1, value_type> {
-#endif
 #endif
         public:
             typedef typename const_iterator1_type::iterator_category iterator_category;
@@ -2966,17 +2961,12 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class iterator1:
             public container_reference<matrix_range>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename iterator1_type::iterator_category>::template
                         iterator_base<iterator1, value_type>::type {
 #else
-#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
-            public random_access_iterator_base<typename iterator1_type::iterator_category,
-                                               iterator1, value_type> {
-#else
             public random_access_iterator_base<typename M::iterator1::iterator_category,
                                                iterator1, value_type> {
-#endif
 #endif
         public:
             typedef typename iterator1_type::iterator_category iterator_category;
@@ -3110,17 +3100,12 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator2:
             public container_const_reference<matrix_range>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename const_iterator2_type::iterator_category>::template
                         iterator_base<const_iterator2, value_type>::type {
 #else
-#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
-            public random_access_iterator_base<typename const_iterator2_type::iterator_category,
-                                               const_iterator2, value_type> {
-#else
             public random_access_iterator_base<typename M::const_iterator2::iterator_category,
                                                const_iterator2, value_type> {
-#endif
 #endif
         public:
             typedef typename const_iterator2_type::iterator_category iterator_category;
@@ -3255,17 +3240,12 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class iterator2:
             public container_reference<matrix_range>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename iterator2_type::iterator_category>::template
                         iterator_base<iterator2, value_type>::type {
 #else
-#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
-            public random_access_iterator_base<typename iterator2_type::iterator_category,
-                                               iterator2, value_type> {
-#else
             public random_access_iterator_base<typename M::iterator2::iterator_category,
                                                iterator2, value_type> {
-#endif
 #endif
         public:
             typedef typename iterator2_type::iterator_category iterator_category;
@@ -3757,7 +3737,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator1:
             public container_const_reference<matrix_slice>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename M::const_iterator1::iterator_category>::template
                         iterator_base<const_iterator1, value_type>::type {
 #else
@@ -3900,7 +3880,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class iterator1:
             public container_reference<matrix_slice>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename M::iterator1::iterator_category>::template
                         iterator_base<iterator1, value_type>::type {
 #else
@@ -4042,7 +4022,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator2:
             public container_const_reference<matrix_slice>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename M::const_iterator2::iterator_category>::template
                         iterator_base<const_iterator2, value_type>::type {
 #else
@@ -4185,7 +4165,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class iterator2:
             public container_reference<matrix_slice>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename M::iterator2::iterator_category>::template
                         iterator_base<iterator2, value_type>::type {
 #else
@@ -4697,7 +4677,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator1:
             public container_const_reference<matrix_indirect>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename M::const_iterator1::iterator_category>::template
                         iterator_base<const_iterator1, value_type>::type {
 #else
@@ -4840,7 +4820,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class iterator1:
             public container_reference<matrix_indirect>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename M::iterator1::iterator_category>::template
                         iterator_base<iterator1, value_type>::type {
 #else
@@ -4982,7 +4962,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator2:
             public container_const_reference<matrix_indirect>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename M::const_iterator2::iterator_category>::template
                         iterator_base<const_iterator2, value_type>::type {
 #else
@@ -5125,7 +5105,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class iterator2:
             public container_reference<matrix_indirect>,
-#ifdef BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+#ifndef BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
             public iterator_base_traits<typename M::iterator2::iterator_category>::template
                         iterator_base<iterator2, value_type>::type {
 #else
