@@ -66,12 +66,13 @@ void test_conv_base( Instance const& conv )
 {
   typedef typename Instance::argument_type argument_type ;
   typedef typename Instance::result_type   result_type   ;
-
+  typedef typename Instance::converter     converter ;
+  
   argument_type source = conv.source ;
 
   try
   {
-    result_type result = Instance::converter::convert(source);
+    result_type result = converter::convert(source);
 
     if ( conv.post == c_converted )
     {
