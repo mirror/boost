@@ -78,6 +78,24 @@
 #  endif
 #endif
 
+//
+// Verify that we have actually got BOOST_NO_INTRINSIC_WCHAR_T
+// set correctly:
+//
+#if defined(BOOST_NO_INTRINSIC_WCHAR_T)
+#include <cwchar>
+template< typename T > struct assert_no_intrinsic_wchar_t;
+template<> struct assert_no_intrinsic_wchar_t<wchar_t> { typedef void type; };
+// if you see an error here then you need to unset BOOST_NO_INTRINSIC_WCHAR_T:
+typedef assert_no_intrinsic_wchar_t<unsigned short>::type assert_no_intrinsic_wchar_t_;
+#else
+template< typename T > struct assert_intrinsic_wchar_t;
+template<> struct assert_intrinsic_wchar_t<wchar_t> {};
+// if you see an error here then define BOOST_NO_INTRINSIC_WCHAR_T on the command line:
+template<> struct assert_intrinsic_wchar_t<unsigned short> {};
+#endif
+
+
 #if (BOOST_INTEL_CXX_VERSION <= 800) || !defined(BOOST_STRICT_CONFIG)
 #  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #endif
