@@ -1,6 +1,6 @@
 //  Boost utility_fwd.hpp header file  ---------------------------------------//
 
-//  Copyright 2001, 2003 Boost.org.  Use, modification, and distribution are
+//  Copyright 2001, 2003 Beman Dawes.  Use, modification, and distribution are
 //  subject to the Boost Software License, Version 1.0.  (See accompanying file
 //  LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
 
