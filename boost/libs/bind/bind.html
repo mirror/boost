@@ -1,0 +1,721 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Boost: bind.hpp documentation</title>
+</head>
+
+<body bgcolor="White">
+
+<table border="0" width="100%">
+<tr>
+<td align="center">
+
+<table border="0" width="90%">
+<tr>
+	<td width="277">
+		<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" WIDTH="277" HEIGHT="86">
+	</td>
+	<td align="center">
+		<table border="0">
+			<tr><td nowrap><h1>bind.hpp</h1></td></tr>
+			<tr><td align="right" nowrap><small>&nbsp;1.01.0001 (2001-09-02)</small></td></tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<td height="64">&nbsp;</td>
+</tr>
+</table>
+<table border="0" width="90%">
+<tr>
+<td>
+
+<h2>Files</h2>
+<ul>
+<li><a href="../../boost/bind.hpp">bind.hpp</a> (implementation)</li>
+<li><a href="bind_test.cpp">bind_test.cpp</a> (monolithic test)</li>
+<li><a href="bind_test_1.cpp">bind_test_1.cpp</a> (test with function pointers)</li>
+<li><a href="bind_test_2.cpp">bind_test_2.cpp</a> (test with function objects)</li>
+<li><a href="bind_test_3.cpp">bind_test_3.cpp</a> (test with member function pointers)</li>
+<li><a href="bind_test_4.cpp">bind_test_4.cpp</a> (test with a visitor)</li>
+<li><a href="bind_as_compose.cpp">bind_as_compose.cpp</a> (function composition example)</li>
+</ul>
+
+<h2>Purpose</h2>
+
+<p>
+<b>boost::bind</b> is a generalization of the standard functions
+<b>std::bind1st</b> and <b>std::bind2nd</b>. It supports arbitrary function
+objects, functions, function pointers, and member function pointers, and is able
+to bind any argument to a specific value or route input arguments into arbitrary
+positions. <b>bind</b> does not place any requirements on the function object;
+in particular, it does not need the <b>result_type</b>,
+<b>first_argument_type</b> and <b>second_argument_type</b> standard typedefs.
+</p>
+
+<h3>Using bind with functions and function pointers</h3>
+
+<p>
+Given these definitions:
+</p>
+
+<pre>
+int f(int a, int b)
+{
+    return a + b;
+}
+
+int g(int a, int b, int c)
+{
+    return a + b + c;
+}
+</pre>
+
+<p>
+<tt>bind(f, 1, 2)</tt> will produce a "nullary" function object that
+takes no arguments and returns <tt>f(1, 2)</tt>. Similarly,
+<tt>bind(g, 1, 2, 3)()</tt> is equivalent to <tt>g(1, 2, 3)</tt>.
+</p>
+
+<p>
+It is possible to selectively bind only some of the arguments.
+<tt>bind(f, _1, 5)(x)</tt> is equivalent to <tt>f(x, 5)</tt>; here
+<b>_1</b> is a placeholder argument that means "substitute with the first
+input argument."
+<p>
+For comparison, here is the same operation expressed with the standard
+library primitives:
+</p>
+
+<pre>
+std::bind1st(std::ptr_fun(f), 5)(x);
+</pre>
+
+<p>
+<b>bind</b> covers the functionality of <b>std::bind2nd</b> as well:
+</p>
+
+<pre>
+std::bind2nd(std::ptr_fun(f), 5)(x);   // f(5, x)
+bind(f, 5, _1)(x);                     // f(5, x)
+</pre>
+
+<p>
+<b>bind</b> can handle functions with more than two arguments, and its
+argument substitution mechanism is more general:
+</p>
+
+<pre>
+bind(f, _2, _1)(x, y);                 // f(y, x)
+
+bind(g, _1, 9, _1)(x);                 // g(x, 9, x)
+
+bind(g, _3, _3, _3)(x, y, z);          // g(z, z, z)
+
+bind(g, _1, _1, _1)(x, y, z);          // g(x, x, x)
+</pre>
+
+<p>
+The arguments that <b>bind</b> takes are copied and held internally by
+the returned function object. For example, in the following code:
+</p>
+
+<pre>
+int i = 5;
+
+bind(f, i, _1);
+</pre>
+
+<p>
+a copy of the value of <b>i</b> is stored into the function object.
+<a href="ref.html">boost::ref</a> and <a href="ref.html">boost::cref</a>
+can be used to make the function object store a reference to an object,
+rather than a copy:
+</p>
+
+<pre>
+int i = 5;
+
+bind(f, ref(i), _1);
+</pre>
+
+<h3>Using bind with function objects</h3>
+
+<p>
+Any function object can be passed as a first argument to <b>bind</b>, but the
+syntax is a bit different. The return type of the generated function object's
+<b>operator()</b> has to be specified explicitly (without a <b>typeof</b>
+operator the return type cannot be inferred in the general case):
+</p>
+
+<pre>
+struct F
+{
+    int operator()(int a, int b) { return a - b; }
+    bool operator()(long a, long b) { return a == b; }
+};
+
+F f;
+
+int x = 104;
+
+bind&lt;int&gt;(f, _1, _1)(x);               // f(x, x), i.e. zero
+</pre>
+
+<p>
+[Note: when, hopefully,
+<a href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/cwg_active.html#226">
+function template default arguments</a> become part of C++,
+<b>bind</b> will no longer require the explicit specification of the return type
+when the function object defines <b>result_type</b>.]
+</p>
+
+<h3>Using bind with member function pointers</h3>
+
+<p>
+Pointers to member functions are not function objects, because they do not
+support <tt>operator()</tt>. For convenience, <b>bind</b> accepts member function
+pointers as its first argument, and the behavior is as if
+<a href="mem_fn.html">boost::mem_fn</a> has been used to convert the member
+function pointer into a function object. In other words, the expression
+</p>
+
+<pre>
+bind(&amp;X::f, <i>args</i>)
+</pre>
+
+<p>
+is equivalent to
+</p>
+
+<pre>
+bind&lt;R&gt;(<a href="mem_fn.html">mem_fn</a>(&amp;X::f), <i>args</i>)
+</pre>
+
+<p>
+where <b>R</b> is the return type of <b>X::f</b>.
+</p>
+<p>
+[Note: <b>mem_fn</b> creates
+function objects that are able to accept a pointer, a reference, or a smart
+pointer to an object as its first argument; for additional information, see
+the <b>mem_fn</b> <a href="mem_fn.html">documentation</a>.]
+</p>
+
+<p>
+Example:
+</p>
+
+<pre>
+struct X
+{
+    bool f(int a);
+};
+
+X x;
+
+shared_ptr&lt;X&gt; p(new X);
+
+int i = 5;
+
+bind(&amp;X::f, ref(x), _1)(i);            // x.f(i)
+
+bind(&amp;X::f, &x, _1)(i);                // (&x)->f(i)
+
+bind(&amp;X::f, x, _1)(i);                 // (<i>internal copy of x</i>).f(i)
+
+bind(&amp;X::f, p, _1)(i);                 // (<i>internal copy of p</i>)->f(i)
+</pre>
+
+<p>
+The last two examples are interesting in that they produce "self-contained"
+function objects. <tt>bind(&amp;X::f, x, _1)</tt> stores a copy of <b>x</b>.
+<tt>bind(&amp;X::f, p, _1)</tt> stores a copy of <b>p</b>, and since <b>p</b>
+is a
+<a href="../smart_ptr/shared_ptr.htm">boost::shared_ptr</a>,
+the function object retains a reference to its instance of <b>X</b> and will
+remain valid even when <b>p</b> goes out of scope or is <b>reset()</b>.
+</p>
+
+<h3>Using nested binds for function composition</h3>
+
+<p>
+Some of the arguments passed to <b>bind</b> may be nested <b>bind</b> expressions
+themselves:
+</p>
+
+<pre>
+bind(f, bind(g, _1))(x);               // f(g(x))
+</pre>
+
+<p>
+The nested subexpressions are evaluated when the function object is called. This
+feature of <b>bind</b> can be used to perform function composition.
+</p>
+
+<p>
+See <a href="bind_as_compose.cpp">bind_as_compose.cpp</a> for an example that
+demonstrates how to use <b>bind</b> to achieve similar functionality to
+<a href="../compose/index.htm">Boost.Compose</a>.
+</p>
+
+<p>
+Note that the <b>first</b> argument - the bound function object - is an
+exception to the nesting rules. A nested <b>bind</b> expression passed
+to <b>bind</b> as a first argument is <b>not</b> treated differently from
+any other function object:
+</p>
+
+<pre>
+int x = 4;
+
+template&lt;class F&gt; void test(F f)
+{
+    bind(f, 5)(x);
+}
+
+int g(int, int);
+
+int main()
+{
+    test(bind(g, _1, 8));              // g(5, 8) and not g(x, 8)(5)
+}
+</pre>
+
+<h3>Example: using bind with standard algorithms</h3>
+
+<pre>
+class image;
+
+class animation
+{
+public:
+
+    void advance(int ms);
+    bool inactive() const;
+    void render(image &amp; target) const;
+};
+
+std::vector&lt;animation&gt; anims;
+
+template&lt;class C, class P&gt; void erase_if(C &amp; c, P pred)
+{
+    c.erase(std::remove_if(c.begin(), c.end(), pred), c.end());
+}
+
+void update(int ms)
+{
+    std::for_each(anims.begin(), anims.end(), boost::bind(&amp;animation::advance, _1, ms));
+    erase_if(anims, boost::mem_fn(&amp;animation::inactive));
+}
+
+void render(image &amp; target)
+{
+    std::for_each(anims.begin(), anims.end(), boost::bind(&amp;animation::render, _1, boost::ref(target)));
+}
+</pre>
+
+<h3>Example: using bind with Boost.Function</h3>
+
+<pre>
+class button
+{
+public:
+
+    <a href="../function/index.html">boost::function</a>&lt;void&gt; onClick;
+};
+
+class player
+{
+public:
+
+    void play();
+    void stop();
+};
+
+button playButton, stopButton;
+player thePlayer;
+
+void connect()
+{
+    playButton.onClick = boost::bind(&amp;player::play, &amp;thePlayer);
+    stopButton.onClick = boost::bind(&amp;player::stop, &amp;thePlayer);
+}
+</pre>
+
+<h3>Limitations</h3>
+
+<p>
+The function objects generated by <b>bind</b> take their arguments by
+reference and cannot, therefore, accept non-const temporaries or literal
+constants. This is an inherent limitation of the C++ language, known as the
+"forwarding function problem."
+</p>
+
+<p>
+The library uses signatures of the form
+</p>
+
+<pre>
+template&lt;class T&gt; void f(T &amp; t);
+</pre>
+
+<p>
+to accept arguments of arbitrary types and pass them on unmodified. As noted,
+this does not work with non-const r-values.
+</p>
+
+<p>
+An oft-proposed "solution" to this problem is to add an overload:
+</p>
+
+<pre>
+template&lt;class T&gt; void f(T &amp; t);
+template&lt;class T&gt; void f(T const &amp; t);
+</pre>
+
+<p>
+Unfortunately, this (a) requires providing 512 overloads for nine arguments
+and (b) does not actually work for const arguments, both l- and r-values,
+since the two templates produce the exact same signature and cannot be
+partially ordered.
+</p>
+
+<p>
+[Note: this is a dark corner of the language, and the
+<a href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/cwg_active.html#214">
+corresponding issue</a> has not been resolved yet.]
+</p>
+
+<h2>Interface</h2>
+
+<h3>Synopsis</h3>
+
+<pre>
+namespace boost
+{
+
+// no arguments
+
+template&lt;class R, class F&gt; <i>implementation-defined-1</i> <a href="#bind_1">bind</a>(F f);
+
+template&lt;class R&gt; <i>implementation-defined-2</i> <a href="#bind_2">bind</a>(R (*f) ());
+
+// one argument
+
+template&lt;class R, class F, class A1&gt; <i>implementation-defined-3</i> <a href="#bind_3">bind</a>(F f, A1 a1);
+
+template&lt;class R, class B1, class A1&gt; <i>implementation-defined-4</i> <a href="#bind_4">bind</a>(R (*f) (B1), A1 a1);
+
+template&lt;class R, class T, class A1&gt; <i>implementation-defined-5</i> <a href="#bind_5">bind</a>(R (T::*f) (), A1 a1);
+
+template&lt;class R, class T, class A1&gt; <i>implementation-defined-6</i> <a href="#bind_6">bind</a>(R (T::*f) () const, A1 a1);
+
+// two arguments
+
+template&lt;class R, class F, class A1, class A2&gt; <i>implementation-defined-7</i> <a href="#bind_7">bind</a>(F f, A1 a1, A2 a2);
+
+template&lt;class R, class B1, class B2, class A1, class A2&gt; <i>implementation-defined-8</i> <a href="#bind_8">bind</a>(R (*f) (B1, B2), A1 a1, A2 a2);
+
+template&lt;class R, class T, class B1, class A1, class A2&gt; <i>implementation-defined-9</i> <a href="#bind_9">bind</a>(R (T::*f) (B1), A1 a1, A2 a2);
+
+template&lt;class R, class T, class B1, class A1, class A2&gt; <i>implementation-defined-10</i> <a href="#bind_10">bind</a>(R (T::*f) (B1) const, A1 a1, A2 a2);
+
+// implementation defined number of additional overloads for more arguments
+
+}
+
+namespace
+{
+
+<i>implementation-defined-placeholder-type-1</i> _1;
+
+<i>implementation-defined-placeholder-type-2</i> _2;
+
+<i>implementation-defined-placeholder-type-3</i> _3;
+
+// implementation defined number of additional placeholder definitions
+
+}
+</pre>
+
+<h3>Common requirements</h3>
+
+<p>
+All <tt><i>implementation-defined-N</i></tt> types returned by <b>bind</b> are
+<b>CopyConstructible</b>. <tt><i>implementation-defined-N</i>::result_type</tt> is defined as
+the return type of <tt><i>implementation-defined-N</i>::operator()</tt>.
+</p>
+
+<p>
+All <tt><i>implementation-defined-placeholder-N</i></tt> types are
+<b>CopyConstructible</b>. Their copy constructors do not throw exceptions.
+</p>
+
+<h3>Common definitions</h3>
+
+<p>
+The function &micro;(x, v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>), where m is a nonnegative integer, is defined as:
+</p>
+
+<ul>
+<li><tt>x.get()</tt>, when <tt>x</tt> is of type
+<tt><a href="ref.html">boost::reference_wrapper</a>&lt;T&gt;</tt> for some type <tt>T</tt>;</li>
+<li>v<sub>k</sub>, when <tt>x</tt> is (a copy of) the placeholder _k for some positive integer k;</li>
+<li><tt>x(v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>)</tt>
+when <tt>x</tt> is (a copy of) a function object returned by <b>bind</b>;</li>
+<li><tt>x</tt> otherwise.</li>
+</ul>
+
+
+<h3>bind</h3>
+
+<h4><a name="bind_1">template&lt;class R, class F&gt; <i>implementation-defined-1</i> bind(F f)</a></h4>
+
+<p>
+<b>Returns:</b> a function object <i>&lambda;</i> such that the expression
+<tt>&lambda;(v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>)</tt> is equivalent to <tt><b>f</b>()</tt>,
+implicitly converted to <b>R</b>.
+</p>
+<p>
+<b>Throws:</b> Nothing unless the copy constructor of <b>F</b> throws an exception.
+</p>
+
+<h4><a name="bind_2">template&lt;class R&gt; <i>implementation-defined-2</i> bind(R (*f) ())</a></h4>
+
+<p>
+<b>Returns:</b> a function object <i>&lambda;</i> such that the expression
+<tt>&lambda;(v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>)</tt> is equivalent to <tt><b>f</b>()</tt>.
+</p>
+<p>
+<b>Throws:</b> Nothing.
+</p>
+
+<h4><a name="bind_3">template&lt;class R, class F, class A1&gt; <i>implementation-defined-3</i> bind(F f, A1 a1)</a></h4>
+
+<p>
+<b>Returns:</b> a function object <i>&lambda;</i> such that the expression
+<tt>&lambda;(v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>)</tt> is equivalent to
+<tt><b>f</b>(&micro;(<b>a1</b>, v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>))</tt>,
+implicitly converted to <b>R</b>.
+</p>
+<p>
+<b>Throws:</b> Nothing unless the copy constructors of <b>F</b> and <b>A1</b> throw an exception.
+</p>
+
+<h4><a name="bind_4">template&lt;class R, class B1, class A1&gt; <i>implementation-defined-4</i> bind(R (*f) (B1), A1 a1)</a></h4>
+
+<p>
+<b>Returns:</b> a function object <i>&lambda;</i> such that the expression
+<tt>&lambda;(v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>)</tt> is equivalent to
+<tt><b>f</b>(&micro;(<b>a1</b>, v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>))</tt>.
+</p>
+<p>
+<b>Throws:</b> Nothing unless the copy constructor of <b>A1</b> throws an exception.
+</p>
+
+<h4><a name="bind_5">template&lt;class R, class T, class A1&gt; <i>implementation-defined-5</i> bind(R (T::*f) (), A1 a1)</a></h4>
+
+<p>
+<b>Effects:</b> equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), a1);</tt>
+</p>
+
+<h4><a name="bind_6">template&lt;class R, class T, class A1&gt; <i>implementation-defined-6</i> bind(R (T::*f) () const, A1 a1)</a></h4>
+
+<p>
+<b>Effects:</b> equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), a1);</tt>
+</p>
+
+<h4><a name="bind_7">template&lt;class R, class F, class A1, class A2&gt; <i>implementation-defined-7</i> bind(F f, A1 a1, A2 a2)</a></h4>
+
+<p>
+<b>Returns:</b> a function object <i>&lambda;</i> such that the expression
+<tt>&lambda;(v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>)</tt> is equivalent to
+<tt><b>f</b>(&micro;(<b>a1</b>, v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>), &micro;(<b>a2</b>, v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>))</tt>,
+implicitly converted to <b>R</b>.
+</p>
+<p>
+<b>Throws:</b> Nothing unless the copy constructors of <b>F</b>, <b>A1</b> and <b>A2</b> throw an exception.
+</p>
+
+<h4><a name="bind_8">template&lt;class R, class B1, class B2, class A1, class A2&gt; <i>implementation-defined-8</i> bind(R (*f) (B1, B2), A1 a1, A2 a2)</a></h4>
+
+<p>
+<b>Returns:</b> a function object <i>&lambda;</i> such that the expression
+<tt>&lambda;(v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>)</tt> is equivalent to
+<tt><b>f</b>(&micro;(<b>a1</b>, v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>), &micro;(<b>a2</b>, v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>))</tt>.
+</p>
+<p>
+<b>Throws:</b> Nothing unless the copy constructors of <b>A1</b> and <b>A2</b> throw an exception.
+</p>
+
+<h4><a name="bind_9">template&lt;class R, class T, class B1, class A1, class A2&gt; <i>implementation-defined-9</i> bind(R (T::*f) (B1), A1 a1, A2 a2)</a></h4>
+
+<p>
+<b>Effects:</b> equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), a1, a2);</tt>
+</p>
+
+<h4><a name="bind_10">template&lt;class R, class T, class B1, class A1, class A2&gt; <i>implementation-defined-10</i> bind(R (T::*f) (B1) const, A1 a1, A2 a2)</a></h4>
+
+<p>
+<b>Effects:</b> equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), a1, a2);</tt>
+</p>
+
+<h2>Implementation</h2>
+
+<p>
+This implementation supports function objects with up to nine arguments.
+This is an implementation detail, not an inherent limitation of the
+design.
+</p>
+
+<h3>Void returns</h3>
+
+<p>
+The following C++ code:
+</p>
+
+<pre>
+void f();
+
+void g()
+{
+    return f();
+}
+</pre>
+
+<p>
+is legal; in fact it was deliberately made legal in order to support
+forwarding functions that return <b>void</b>.
+</p>
+
+<p>
+Unfortunately, some compilers have not caught up with the C++ Standard yet
+and do not allow void returns. This implementation of <b>bind</b> will not
+work for function pointers, member function pointers or function objects that
+return <b>void</b> if the compiler does not support the feature. A possible
+workaround is to change the return type of the function object in question
+from <b>void</b> to <b>int</b> and return a dummy value of 0.
+</p>
+
+<h3>MSVC specific problems and workarounds</h3>
+
+<p>
+Microsoft Visual C++ (up to version 7.0) does not fully support the
+<b>bind&lt;R&gt;(...)</b>
+syntax required by the library when arbitrary function objects are bound.
+The first problem is that when <b>boost::bind</b> is brought into scope
+with an <b>using declaration</b>:
+</p>
+
+<pre>
+using boost::bind;
+</pre>
+
+<p>
+the syntax above does not work. Workaround: either use the qualified name,
+<b>boost::bind</b>, or use an <b>using directive</b> instead:
+</p>
+
+<pre>
+using namespace boost;
+</pre>
+
+<p>
+The second problem is that some libraries contain nested class templates
+named <b>bind</b> (ironically, such code is often an MSVC specific
+workaround.) Due to some quirks with the parser, such a class template
+breaks the <b>bind&lt;R&gt;(...)</b> syntax, even when the name <b>bind</b>
+is fully qualified. You may try to patch the library in question or contact
+its author/maintainer. The other option is to define the macro
+<b>BOOST_BIND</b> to something other than <b>bind</b> (before the inclusion of
+<b>&lt;boost/bind.hpp&gt;</b>) and use this identifier throughout your code
+wherever you'd normally use <b>bind</b>.
+</p>
+
+<p style="color: Red;">
+[Note: BOOST_BIND is not a general renaming mechanism. It is not part of the
+interface, and is not guaranteed to work on other compilers, or persist between
+library versions. In short, don't use it unless you absolutely have to.]
+</p>
+
+<h3>Visitor support</h3>
+
+<p style="color: Red;">
+[Note: this is an experimental feature. It may evolve over time
+when other libraries start to exploit it; or it may be removed altogether if
+no other library needs it. It is not part of the interface.]
+</p>
+
+<p>
+For better integration with other libraries, the function objects returned by
+<b>bind</b> define a member function
+</p>
+
+<pre>
+template&lt;class Visitor&gt; void accept(Visitor &amp; v);
+</pre>
+
+<p>
+that applies <b>v</b>, as a function object, to its internal state. Using
+<b>accept</b> is implementation-specific and not intended for end users.
+</p>
+
+<p>
+See <a href="bind_test_4.cpp">bind_test_4.cpp</a> for an example.
+</p>
+
+<h2>Acknowledgements</h2>
+
+<p>
+Earlier efforts that have influenced the library design:
+</p>
+
+<ul>
+<li>The <a href="http://staff.cs.utu.fi/BL/">Binder Library</a>
+by Jaakko J&auml;rvi;
+<li>The <a href="http://lambda.cs.utu.fi/">Lambda Library</a>
+by Jaakko J&auml;rvi and Gary Powell (the successor to the Binder Library);
+<li><a href="http://matfys.lth.se/~petter/src/more/stlext/index.html">
+Extensions to the STL</a> by Petter Urkedal.
+</ul>
+
+<p>
+Doug Gregor suggested that a visitor mechanism would allow <b>bind</b> to
+interoperate with a signal/slot library.
+</p>
+
+<p>
+John Maddock fixed a MSVC-specific conflict between <b>bind</b> and the
+<a href="../type_traits/index.htm">type traits library</a>.
+</p>
+
+<p>
+Numerous improvements were suggested during the formal review period by
+Ross Smith, Richard Crossley, Jens Maurer, Ed Brey, and others. Review manager
+was Darin Adler.
+</p>
+
+<p>
+The precise semantics of <b>bind</b> were refined in discussions with Jaakko J&auml;rvi.
+</p>
+
+<p><br><br><br><small>Copyright &copy; 2001 by Peter Dimov and Multi Media
+Ltd. Permission to copy, use, modify, sell and distribute this document is
+granted provided this copyright notice appears in all copies. This document
+is provided &quot;as is&quot; without express or implied warranty, and with
+no claim as to its suitability for any purpose.</small></p>
+
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

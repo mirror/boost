@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Boost: mem_fn.hpp documentation</title>
+</head>
+
+<body bgcolor="White">
+
+<table border="0" width="100%">
+<tr>
+<td align="center">
+
+<table border="0" width="90%">
+<tr>
+	<td width="277">
+		<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" WIDTH="277" HEIGHT="86">
+	</td>
+	<td align="center">
+		<table border="0">
+			<tr><td nowrap><h1>mem_fn.hpp</h1></td></tr>
+			<tr><td align="right" nowrap><small>&nbsp;1.02.0001 (2001-08-30)</small></td></tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<td height="64">&nbsp;</td>
+</tr>
+</table>
+<table border="0" width="90%">
+<tr>
+<td>
+
+<h2>Files</h2>
+<ul>
+<li><a href="../../boost/mem_fn.hpp">mem_fn.hpp</a> (implementation)
+<li><a href="mem_fn_test.cpp">mem_fn_test.cpp</a> (test)
+</ul>
+
+<h2>Purpose</h2>
+
+<p>
+<b>boost::mem_fn</b> is a generalization of the standard functions
+<b>std::mem_fun</b> and <b>std::mem_fun_ref</b>. It supports member
+function pointers with more than one argument, and the returned function
+object can take a pointer, a reference, or a smart pointer to an object
+instance as its first argument.
+</p>
+
+<p>
+<b>mem_fn</b> takes one argument, a pointer to a member function, and
+returns a function object suitable for use with standard or user-defined
+algorithms:
+</p>
+
+<pre>
+struct X
+{
+    void f();
+};
+
+void g(std::vector&lt;X&gt; &amp; v)
+{
+    std::for_each(v.begin(), v.end(), boost::mem_fn(&amp;X::f));
+};
+
+void h(std::vector&lt;X *&gt; const &amp; v)
+{
+    std::for_each(v.begin(), v.end(), boost::mem_fn(&amp;X::f));
+};
+
+void k(std::vector&lt;boost::shared_ptr&lt;X&gt; &gt; const &amp; v)
+{
+    std::for_each(v.begin(), v.end(), boost::mem_fn(&amp;X::f));
+};
+</pre>
+
+<p>
+The returned function object takes the same arguments as the input member
+function plus a "flexible" first argument that represents the object instance.
+</p>
+
+<p>
+When the function object is invoked with a first argument <b>x</b> that is
+neither a pointer nor a reference to the appropriate class (<b>X</b> in the
+example above), it uses <tt>get_pointer(x)</tt> to obtain a pointer from
+<b>x</b>. Library authors can "register" their smart pointer classes by
+supplying an appropriate <b>get_pointer</b> overload, allowing <b>mem_fn</b>
+to recognize and support them.
+</p>
+
+<p>
+A <b>get_pointer</b> overload for <b>boost::shared_ptr</b> is supplied.
+</p>
+
+<p>
+[Note: <b>get_pointer</b> is not restricted to return a pointer. Any object
+that can be used in a member function call expression <tt>(x->*pmf)(...)</tt>
+will work.]
+</p>
+
+<p>
+[Note: the library uses an unqualified call to <b>get_pointer</b>. Therefore,
+it will find, through argument-dependent lookup, <b>get_pointer</b> overloads
+that are defined in the same namespace as the corresponding smart pointer
+class, in addition to any <b>boost::get_pointer</b> overloads.]
+</p>
+
+<p>
+All function objects returned by <b>mem_fn</b> expose a <b>result_type</b>
+typedef that represents the return type of the member function.
+</p>
+
+<h2>Interface</h2>
+
+<h3>Synopsis</h3>
+
+<pre>
+namespace boost
+{
+
+template&lt;class T&gt; T * <a href="#get_pointer_1">get_pointer</a>(T * p);
+
+template&lt;class T&gt; T * <a href="#get_pointer_2">get_pointer</a>(shared_ptr&lt;T&gt; const &amp; p);
+
+template&lt;class R, class T&gt; <i>implementation-defined-1</i> <a href="#mem_fn_1">mem_fn</a>(R (T::*pmf) ());
+
+template&lt;class R, class T&gt; <i>implementation-defined-2</i> <a href="#mem_fn_2">mem_fn</a>(R (T::*pmf) () const);
+
+template&lt;class R, class T, class A1&gt; <i>implementation-defined-3</i> <a href="#mem_fn_3">mem_fn</a>(R (T::*pmf) (A1));
+
+template&lt;class R, class T, class A1&gt; <i>implementation-defined-4</i> <a href="#mem_fn_4">mem_fn</a>(R (T::*pmf) (A1) const);
+
+template&lt;class R, class T, class A1, class A2&gt; <i>implementation-defined-5</i> <a href="#mem_fn_5">mem_fn</a>(R (T::*pmf) (A1, A2));
+
+template&lt;class R, class T, class A1, class A2&gt; <i>implementation-defined-6</i> <a href="#mem_fn_6">mem_fn</a>(R (T::*pmf) (A1, A2) const);
+
+// implementation defined number of additional overloads for more arguments
+
+}
+</pre>
+
+<h3>Common requirements</h3>
+
+<p>
+All <tt><i>implementation-defined-N</i></tt> types mentioned in the Synopsis are
+<b>CopyConstructible</b> and <b>Assignable</b>.
+Their copy constructors and assignment operators do not throw exceptions.
+<tt><i>implementation-defined-N</i>::result_type</tt> is defined as
+the return type of the member function pointer passed as an argument to <b>mem_fn</b>
+(<b>R</b> in the Synopsis.)
+</p>
+
+<h3>get_pointer</h3>
+
+<h4><a name="get_pointer_1">template&lt;class T&gt; T * get_pointer(T * p)</a></h4>
+
+<p>
+<b>Returns:</b> <tt>p</tt>.
+</p>
+<p>
+<b>Throws:</b> Nothing.
+</p>
+
+<h4><a name="get_pointer_2">template&lt;class T&gt; T * get_pointer(shared_ptr&lt;T&gt; const &amp; p)</a></h4>
+
+<p>
+<b>Returns:</b> <tt>p.get()</tt>.
+</p>
+<p>
+<b>Throws:</b> Nothing.
+</p>
+
+<h3>mem_fn</h3>
+
+<h4><a name="mem_fn_1">template&lt;class R, class T&gt; <i>implementation-defined-1</i> mem_fn(R (T::*pmf) ())</a></h4>
+
+<p>
+<b>Returns:</b> a function object <i>f</i> such that the expression
+<tt><i>f(t)</i></tt> is equivalent to <tt>(t.*pmf)()</tt> when <i>t</i>
+is an l-value of type <b>T</b>, <tt>(get_pointer(t)->*pmf)()</tt> otherwise.
+</p>
+<p>
+<b>Throws:</b> Nothing.
+</p>
+
+<h4><a name="mem_fn_2">template&lt;class R, class T&gt; <i>implementation-defined-2</i> mem_fn(R (T::*pmf) () const)</a></h4>
+
+<p>
+<b>Returns:</b> a function object <i>f</i> such that the expression
+<tt><i>f(t)</i></tt> is equivalent to <tt>(t.*pmf)()</tt> when <i>t</i>
+is of type <b>T <i>[</i>const<i>]</i></b>, <tt>(get_pointer(t)->*pmf)()</tt> otherwise.
+</p>
+<p>
+<b>Throws:</b> Nothing.
+</p>
+
+<h4><a name="mem_fn_3">template&lt;class R, class T, class A1&gt; <i>implementation-defined-3</i> mem_fn(R (T::*pmf) (A1))</a></h4>
+
+<p>
+<b>Returns:</b> a function object <i>f</i> such that the expression
+<tt><i>f(t, a1)</i></tt> is equivalent to <tt>(t.*pmf)(a1)</tt> when <i>t</i>
+is an l-value of type <b>T</b>, <tt>(get_pointer(t)->*pmf)(a1)</tt> otherwise.
+</p>
+<p>
+<b>Throws:</b> Nothing.
+</p>
+
+<h4><a name="mem_fn_4">template&lt;class R, class T, class A1&gt; <i>implementation-defined-4</i> mem_fn(R (T::*pmf) (A1) const)</a></h4>
+
+<p>
+<b>Returns:</b> a function object <i>f</i> such that the expression
+<tt><i>f(t, a1)</i></tt> is equivalent to <tt>(t.*pmf)(a1)</tt> when <i>t</i>
+is of type <b>T <i>[</i>const<i>]</i></b>, <tt>(get_pointer(t)->*pmf)(a1)</tt> otherwise.
+</p>
+<p>
+<b>Throws:</b> Nothing.
+</p>
+
+<h4><a name="mem_fn_5">template&lt;class R, class T, class A1, class A2&gt; <i>implementation-defined-5</i> mem_fn(R (T::*pmf) (A1, A2))</a></h4>
+
+<p>
+<b>Returns:</b> a function object <i>f</i> such that the expression
+<tt><i>f(t, a1, a2)</i></tt> is equivalent to <tt>(t.*pmf)(a1, a2)</tt> when <i>t</i>
+is an l-value of type <b>T</b>, <tt>(get_pointer(t)->*pmf)(a1, a2)</tt> otherwise.
+</p>
+<p>
+<b>Throws:</b> Nothing.
+</p>
+
+<h4><a name="mem_fn_6">template&lt;class R, class T, class A1, class A2&gt; <i>implementation-defined-6</i> mem_fn(R (T::*pmf) (A1, A2) const)</a></h4>
+
+<p>
+<b>Returns:</b> a function object <i>f</i> such that the expression
+<tt><i>f(t, a1, a2)</i></tt> is equivalent to <tt>(t.*pmf)(a1, a2)</tt> when <i>t</i>
+is of type <b>T <i>[</i>const<i>]</i></b>, <tt>(get_pointer(t)->*pmf)(a1, a2)</tt> otherwise.
+</p>
+<p>
+<b>Throws:</b> Nothing.
+</p>
+
+<h2>Implementation</h2>
+
+<p>
+This implementation supports member functions with up to eight arguments.
+This is not an inherent limitation of the design, but an implementation
+detail.
+</p>
+
+<h2>Acknowledgements</h2>
+
+<p>
+Rene Jager's initial suggestion of using traits classes to make
+<b>mem_fn</b> adapt to user-defined smart pointers inspired the
+<b>get_pointer</b>-based design.
+</p>
+
+<p>
+Numerous improvements were suggested during the formal review period by
+Richard Crossley, Jens Maurer, Ed Brey, and others. Review manager
+was Darin Adler.
+</p>
+
+
+<p><br><br><br><small>Copyright &copy; 2001 by Peter Dimov and Multi Media
+Ltd. Permission to copy, use, modify, sell and distribute this document is
+granted provided this copyright notice appears in all copies. This document
+is provided &quot;as is&quot; without express or implied warranty, and with
+no claim as to its suitability for any purpose.</small></p>
+
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
