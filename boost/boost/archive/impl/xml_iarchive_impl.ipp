@@ -164,6 +164,8 @@ xml_iarchive_impl<Archive>::xml_iarchive_impl(
 {
     if(0 == (flags & no_header))
         init();
+    if(0 != (flags & no_xml_tag_checking))
+        this->no_checking = true;
 }
 
 template<class Archive>

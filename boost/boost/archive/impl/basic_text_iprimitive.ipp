@@ -51,7 +51,7 @@ void basic_text_iprimitive<IStream>::load_binary(
     if(is.fail())
         boost::throw_exception(archive_exception(archive_exception::stream_error));
     // convert from base64 to binary
-    typedef typename
+    typedef BOOST_DEDUCED_TYPENAME
         iterators::transform_width<
             iterators::binary_from_base64<
                 iterators::remove_whitespace<
