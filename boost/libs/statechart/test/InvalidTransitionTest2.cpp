@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2004
+// (c) Copyright Andreas Huber Doenni 2004-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -47,6 +47,7 @@ struct Active : fsm::simple_state< Active, InvalidTransitionTest,
   {
   };
 
+    // Invalid transition between different orthogonal regions.
     struct Idle10 : fsm::simple_state< Idle10, Idle1,
       fsm::transition< EvX, Idle00 > >
     {

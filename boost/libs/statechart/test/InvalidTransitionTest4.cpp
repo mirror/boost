@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2004
+// (c) Copyright Andreas Huber Doenni 2004-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -32,6 +32,8 @@ struct Active : fsm::simple_state< Active, InvalidTransitionTest,
 
   struct Running0 : fsm::simple_state< Running0, Active > {};
 
+  // Invalid transition to deep history from a state residing on the same
+  // level as the history connector.
   struct Idle0 : fsm::simple_state< Idle0, Active,
     fsm::transition< EvX, fsm::deep_history< Running0 > > >
   {
