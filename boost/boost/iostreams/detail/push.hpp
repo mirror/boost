@@ -19,7 +19,9 @@
 #include <boost/iostreams/detail/enable_if_stream.hpp>   
 #include <boost/iostreams/pipable.hpp>   
 #include <boost/iostreams/detail/push_params.hpp>   
-#include <boost/iostreams/detail/resolve.hpp>   
+#include <boost/iostreams/detail/resolve.hpp>
+#include <boost/mpl/bool.hpp>   
+#include <boost/preprocessor/cat.hpp> 
 #include <boost/preprocessor/control/expr_if.hpp> 
 #include <boost/type_traits/is_convertible.hpp>
 
@@ -78,8 +80,7 @@
                   BOOST_IOSTREAMS_PUSH_ARGS() ); } \
     template<typename Piper, typename Concept> \
     BOOST_PP_EXPR_IF(has_return, result) \
-    name( const ::boost::iostreams::detail::piper<Piper, Concept>& p \
-          BOOST_IOSTREAMS_PUSH_PARAMS() ) \
+    name(const ::boost::iostreams::detail::piper<Piper, Concept>& p) \
     { p.push(*this); } \
     template<typename T> \
     BOOST_PP_EXPR_IF(has_return, result) \
@@ -89,16 +90,25 @@
     /**/
 #else // #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 # define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
-    template<typename Piper, typename Concept> \
+    template<typename T> \
     BOOST_PP_EXPR_IF(has_return, result) \
-    name( const ::boost::iostreams::detail::piper<Piper, Concept>& p \
-          BOOST_IOSTREAMS_PUSH_PARAMS() ) \
-    { p.push(*this); } \
+    BOOST_PP_CAT(name, _msvc_impl) \
+    ( ::boost::mpl::true_, const T& t BOOST_IOSTREAMS_PUSH_PARAMS() ) \
+    { t.push(*this); } \
+    template<typename T> \
+    BOOST_PP_EXPR_IF(has_return, result) \
+    BOOST_PP_CAT(name, _msvc_impl) \
+    ( ::boost::mpl::false_, const T& t BOOST_IOSTREAMS_PUSH_PARAMS() ) \
+    { this->helper( ::boost::iostreams::detail::resolve<mode, ch>(t) \
+                    BOOST_IOSTREAMS_PUSH_ARGS() ); } \
     template<typename T> \
     BOOST_PP_EXPR_IF(has_return, result) \
     name(const T& t BOOST_IOSTREAMS_PUSH_PARAMS()) \
-    { this->helper( ::boost::iostreams::detail::resolve<mode, ch>(t) \
-                    BOOST_IOSTREAMS_PUSH_ARGS() ); } \
+    { \
+        this->BOOST_PP_CAT(name, _msvc_impl) \
+              ( ::boost::iostreams::detail::is_piper<T>(), \
+                t BOOST_IOSTREAMS_PUSH_ARGS() ); \
+    } \
     /**/
 #endif // #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
