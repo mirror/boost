@@ -150,6 +150,16 @@ namespace std{ using _STLP_VENDOR_CSTD::strcmp; using _STLP_VENDOR_CSTD::strcpy;
 #endif
 
 //
+// If STLport for some reason was configured so that it thinks that wchar_t
+// is not an intrinsic type, then we have to disable the support for it as
+// well (we would be missing required specializations otherwise).
+//
+#if !defined( _STLP_HAS_WCHAR_T) || defined(_STLP_WCHAR_T_IS_USHORT)
+#  undef  BOOST_NO_INTRINSIC_WCHAR_T
+#  define BOOST_NO_INTRINSIC_WCHAR_T
+#endif
+
+//
 // Borland ships a version of STLport with C++ Builder 6 that lacks
 // hashtables and the like:
 //
