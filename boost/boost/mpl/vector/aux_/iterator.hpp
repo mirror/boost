@@ -1,9 +1,11 @@
-//-----------------------------------------------------------------------------
-// boost mpl/aux_/vector/iterator.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
+
+#ifndef BOOST_MPL_AUX_VECTOR_ITERATOR_HPP_INCLUDED
+#define BOOST_MPL_AUX_VECTOR_ITERATOR_HPP_INCLUDED
+
+// + file: boost/mpl/aux_/vector/iterator.hpp
+// + last modified: 30/may/03
+
+// Copyright (c) 2000-03
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -13,16 +15,16 @@
 // supporting documentation. No representations are made about the 
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
-
-#ifndef BOOST_MPL_AUX_VECTOR_ITERATOR_HPP_INCLUDED
-#define BOOST_MPL_AUX_VECTOR_ITERATOR_HPP_INCLUDED
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
 #include "boost/mpl/iterator_tag.hpp"
 #include "boost/mpl/plus.hpp"
 #include "boost/mpl/minus.hpp"
+#include "boost/mpl/vector/aux_/item.hpp"
 #include "boost/mpl/aux_/iterator_names.hpp"
 #include "boost/mpl/aux_/value_wknd.hpp"
-#include "boost/mpl/vector/aux_/item.hpp"
+#include "boost/mpl/aux_/config/workaround.hpp"
 
 namespace boost {
 namespace mpl {
@@ -54,8 +56,15 @@ struct vector_iterator
 
     template< typename Other >
     struct BOOST_MPL_AUX_ITERATOR_DISTANCE
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
         : minus<typename Other::pos,Pos>
     {
+#else
+    {
+        typedef typename minus<typename Other::pos,Pos>::type type;
+        BOOST_STATIC_CONSTANT(typename Pos::value_type
+            , value = (minus<typename Other::pos,Pos>::value));
+#endif
     };
 };
 
