@@ -80,48 +80,6 @@ struct if_
     BOOST_MPL_AUX_LAMBDA_SUPPORT(3,if_,(C,T1,T2))
 };
 
-#elif defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
-
-// MSVC6.5-specific version
-
-template<
-      bool C_
-    , typename T1
-    , typename T2
-    >
-struct if_c
-{
- private:
-    template<bool> struct answer        { typedef T1 type; };
-    template<>     struct answer<false> { typedef T2 type; };
- 
- public:
-    typedef typename answer< C_ >::type type;
-};
-
-// (almost) copy & paste in order to save one more 
-// recursively nested template instantiation to user
-template<
-      typename C_
-    , typename T1
-    , typename T2
-    >
-struct if_
-{
- private:
-    template<bool> struct answer        { typedef T1 type; };
-    template<>     struct answer<false> { typedef T2 type; };
-
-    // agurt, 17/sep/02: in some situations MSVC 7.0 doesn't 
-    // handle 'answer<C::value>' expression very well
-    enum { c_ = C_::value };
-
- public:
-    typedef typename answer< BOOST_MPL_AUX_STATIC_CAST(bool, c_) >::type type;
-
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,if_,(C_,T1,T2))
-};
-
 #else
 
 // no partial class template specialization
@@ -149,29 +107,31 @@ struct if_impl<false>
 } // namespace aux
 
 template<
-      bool C
+      bool C_
     , typename T1
     , typename T2
     >
 struct if_c
 {
-    typedef typename aux::if_impl< C >
+    typedef typename aux::if_impl< C_ >
         ::template result_<T1,T2>::type type;
 };
 
 // (almost) copy & paste in order to save one more 
 // recursively nested template instantiation to user
 template<
-      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(C)
+      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(C_)
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T1)
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T2)
     >
 struct if_
 {
-    typedef typename aux::if_impl< BOOST_MPL_AUX_STATIC_CAST(bool, C::value) >
+    enum { msvc70_wknd_ = C_::value };
+
+    typedef typename aux::if_impl< BOOST_MPL_AUX_STATIC_CAST(bool, msvc70_wknd_) >
         ::template result_<T1,T2>::type type;
 
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,if_,(C,T1,T2))
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,if_,(C_,T1,T2))
 };
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
