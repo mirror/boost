@@ -299,7 +299,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     template< class DestinationState >
     result transit()
     {
-      return transit_impl< DestinationState, MostDerived >(
+      return transit_impl< DestinationState, outermost_context_type >(
         detail::no_transition_function() );
     }
 
@@ -768,8 +768,8 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       }
       else
       {
-        intrusive_ptr< real_transition_context_type > pTransitionContext =
-          &context< real_transition_context_type >();
+        typename real_transition_context_type::inner_context_ptr_type
+          pTransitionContext = context_ptr< real_transition_context_type >();
         outermostContextBase.terminate_as_part_of_transit(
           *pTransitionContext );
         transitionAction( *pTransitionContext );

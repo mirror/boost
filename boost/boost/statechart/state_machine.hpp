@@ -515,6 +515,11 @@ class state_machine : noncopyable
       isInnermostCommonOuter_ = true;
     }
 
+    void terminate_as_part_of_transit( state_machine & )
+    {
+      terminate_impl( *pOutermostState_, !isExceptionPending_ );
+    }
+
     void post_event( const event_base_ptr_type & pEvent )
     {
       BOOST_ASSERT( get_pointer( pEvent ) != 0 );
