@@ -220,6 +220,11 @@ template<class T, class U> intrusive_ptr<T> static_pointer_cast(intrusive_ptr<U>
     return static_cast<T *>(p.get());
 }
 
+template<class T, class U> intrusive_ptr<T> const_pointer_cast(intrusive_ptr<U> const & p)
+{
+    return const_cast<T *>(p.get());
+}
+
 template<class T, class U> intrusive_ptr<T> dynamic_pointer_cast(intrusive_ptr<U> const & p)
 {
     return dynamic_cast<T *>(p.get());

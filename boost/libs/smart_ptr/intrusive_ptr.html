@@ -101,6 +101,9 @@
     intrusive_ptr&lt;T&gt; <A href="#static_pointer_cast" >static_pointer_cast</A>(intrusive_ptr&lt;U&gt; const &amp; r); // never throws
 
   template&lt;class T, class U&gt;
+    intrusive_ptr&lt;T&gt; <A href="#const_pointer_cast" >const_pointer_cast</A>(intrusive_ptr&lt;U&gt; const &amp; r); // never throws
+
+  template&lt;class T, class U&gt;
     intrusive_ptr&lt;T&gt; <A href="#dynamic_pointer_cast" >dynamic_pointer_cast</A>(intrusive_ptr&lt;U&gt; const &amp; r); // never throws
 
   template&lt;class E, class T, class Y&gt;
@@ -248,6 +251,13 @@ intrusive_ptr &amp; operator=(T * r);</pre>
   intrusive_ptr&lt;T&gt; static_pointer_cast(intrusive_ptr&lt;U&gt; const &amp; r); // never throws</pre>
 		<BLOCKQUOTE>
 			<P><B>Returns:</B> <code>intrusive_ptr&lt;T&gt;(static_cast&lt;T*&gt;(r.get()))</code>.</P>
+			<P><B>Throws:</B> nothing.</P>
+		</BLOCKQUOTE>
+		<h3><a name="const_pointer_cast">const_pointer_cast</a></h3>
+		<pre>template&lt;class T, class U&gt;
+  intrusive_ptr&lt;T&gt; const_pointer_cast(intrusive_ptr&lt;U&gt; const &amp; r); // never throws</pre>
+		<BLOCKQUOTE>
+			<P><B>Returns:</B> <code>intrusive_ptr&lt;T&gt;(const_cast&lt;T*&gt;(r.get()))</code>.</P>
 			<P><B>Throws:</B> nothing.</P>
 		</BLOCKQUOTE>
 		<h3><a name="dynamic_pointer_cast">dynamic_pointer_cast</a></h3>

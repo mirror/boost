@@ -48,6 +48,7 @@ namespace detail
 {
 
 struct static_cast_tag {};
+struct const_cast_tag {};
 struct dynamic_cast_tag {};
 struct polymorphic_cast_tag {};
 
@@ -64,6 +65,16 @@ template<> struct shared_ptr_traits<void>
 #if !defined(BOOST_NO_CV_VOID_SPECIALIZATIONS)
 
 template<> struct shared_ptr_traits<void const>
+{
+    typedef void reference;
+};
+
+template<> struct shared_ptr_traits<void volatile>
+{
+    typedef void reference;
+};
+
+template<> struct shared_ptr_traits<void const volatile>
 {
     typedef void reference;
 };
@@ -155,6 +166,11 @@ public:
 
     template<class Y>
     shared_ptr(shared_ptr<Y> const & r, detail::static_cast_tag): px(static_cast<element_type *>(r.px)), pn(r.pn)
+    {
+    }
+
+    template<class Y>
+    shared_ptr(shared_ptr<Y> const & r, detail::const_cast_tag): px(const_cast<element_type *>(r.px)), pn(r.pn)
     {
     }
 
@@ -349,6 +365,11 @@ template<class T> inline void swap(shared_ptr<T> & a, shared_ptr<T> & b)
 template<class T, class U> shared_ptr<T> static_pointer_cast(shared_ptr<U> const & r)
 {
     return shared_ptr<T>(r, detail::static_cast_tag());
+}
+
+template<class T, class U> shared_ptr<T> const_pointer_cast(shared_ptr<U> const & r)
+{
+    return shared_ptr<T>(r, detail::const_cast_tag());
 }
 
 template<class T, class U> shared_ptr<T> dynamic_pointer_cast(shared_ptr<U> const & r)

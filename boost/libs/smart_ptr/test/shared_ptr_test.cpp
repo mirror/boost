@@ -2375,6 +2375,57 @@ void test()
 
 } // namespace n_static_cast
 
+namespace n_const_cast
+{
+
+struct X;
+
+void test()
+{
+    {
+        boost::shared_ptr<void const volatile> px;
+
+        boost::shared_ptr<void> px2 = boost::const_pointer_cast<void>(px);
+        BOOST_TEST(px2.get() == 0);
+    }
+
+    {
+        boost::shared_ptr<int const volatile> px;
+
+        boost::shared_ptr<int> px2 = boost::const_pointer_cast<int>(px);
+        BOOST_TEST(px2.get() == 0);
+    }
+
+    {
+        boost::shared_ptr<X const volatile> px;
+
+        boost::shared_ptr<X> px2 = boost::const_pointer_cast<X>(px);
+        BOOST_TEST(px2.get() == 0);
+    }
+
+    {
+        boost::shared_ptr<void const volatile> px(new int);
+
+        boost::shared_ptr<void> px2 = boost::const_pointer_cast<void>(px);
+        BOOST_TEST(px.get() == px2.get());
+        BOOST_TEST(!(px < px2 || px2 < px));
+        BOOST_TEST(px.use_count() == 2);
+        BOOST_TEST(px2.use_count() == 2);
+    }
+
+    {
+        boost::shared_ptr<int const volatile> px(new int);
+
+        boost::shared_ptr<int> px2 = boost::const_pointer_cast<int>(px);
+        BOOST_TEST(px.get() == px2.get());
+        BOOST_TEST(!(px < px2 || px2 < px));
+        BOOST_TEST(px.use_count() == 2);
+        BOOST_TEST(px2.use_count() == 2);
+    }
+}
+
+} // namespace n_const_cast
+
 namespace n_dynamic_cast
 {
 
@@ -3141,6 +3192,7 @@ int main()
     n_swap::test();
     n_comparison::test();
     n_static_cast::test();
+    n_const_cast::test();
     n_dynamic_cast::test();
 
     n_map::test();
