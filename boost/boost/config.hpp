@@ -218,6 +218,16 @@
 #   if __GNUC__ == 2 && __GNUC_MINOR__ <= 8
 #     define BOOST_NO_MEMBER_TEMPLATES
 #   endif
+#   if (__GNUC__ == 2 && __GNUC_MINOR__ > 95) || __GNUC__ > 2
+      // upcoming gcc 3.0
+#     include <iterator>
+#     if defined(__GLIBCPP__)
+        // The new GNU C++ library has slist, hash_map, hash_set headers
+        // in <ext/*>, but client code assumes they're in <*> --- Jens M. 
+#       define BOOST_NO_SLIST
+#       define BOOST_NO_HASH
+#     endif
+#   endif
 
 //  Kai C++ ------------------------------------------------------------------//
 
