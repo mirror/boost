@@ -55,35 +55,45 @@ struct TrivialIteratorPoliciesConcept
   void const_constraints() const {
     Reference r = p.dereference(type<Reference>(), x);
     b = p.equal(x, x);
+    ignore_unused_variable_warning(r);
   }
   Policies p;
   Adapted x;
   mutable bool b;
 };
 
+// Add InputIteratorPoliciesConcept?
+
 template <class Policies, class Adapted, class Traits>
 struct ForwardIteratorPoliciesConcept
 {
+  typedef typename Traits::iterator_category iterator_category;
   void constraints() {
     function_requires< 
       TrivialIteratorPoliciesConcept<Policies, Adapted, Traits>
       >();
 
     p.increment(x);
+    std::forward_iterator_tag t = iterator_category();
+    ignore_unused_variable_warning(t);
   }
   Policies p;
   Adapted x;
+  iterator_category category;
 };
 
 template <class Policies, class Adapted, class Traits>
 struct BidirectionalIteratorPoliciesConcept
 {
+  typedef typename Traits::iterator_category iterator_category;
   void constraints() {
     function_requires< 
       ForwardIteratorPoliciesConcept<Policies, Adapted, Traits>
       >();
 
     p.decrement(x);
+    std::bidirectional_iterator_tag t = iterator_category();
+    ignore_unused_variable_warning(t);
   }
   Policies p;
   Adapted x;
@@ -93,13 +103,16 @@ template <class Policies, class Adapted, class Traits>
 struct RandomAccessIteratorPoliciesConcept
 {
   typedef typename Traits::difference_type DifferenceType;
+  typedef typename Traits::iterator_category iterator_category;
   void constraints() {
     function_requires< 
       BidirectionalIteratorPoliciesConcept<Policies, Adapted, Traits>
       >();
 
     p.advance(x, n);
+    std::random_access_iterator_tag t = iterator_category();
     const_constraints();
+    ignore_unused_variable_warning(t);
   }
   void const_constraints() const {
     n = p.distance(type<DifferenceType>(), x, x);
@@ -248,7 +261,7 @@ namespace detail {
 
   // Real version
   template <class Iter, class Diff>
-  inline typename Iter::pointer
+  inline void
   advance_impl(Iter& i, Diff n, std::random_access_iterator_tag) {
 #ifdef __MWERKS__
         i.policies().advance<Iter>(i.iter(), n);
@@ -265,7 +278,7 @@ namespace detail {
 
   // Real version
   template <class Iter>
-  inline typename Iter::pointer
+  inline void
   decrement_impl(Iter& i, std::bidirectional_iterator_tag) {
 #ifdef __MWERKS__
         i.policies().decrement<Iter>(i.iter());
