@@ -26,7 +26,9 @@ namespace boost {
     typedef void                pointer;
     typedef void                reference;
 
-    explicit function_output_iterator(const UnaryFunction& f = UnaryFunction())
+    explicit function_output_iterator() {}
+
+    explicit function_output_iterator(const UnaryFunction& f)
       : m_f(f) {}
 
     struct output_proxy {
