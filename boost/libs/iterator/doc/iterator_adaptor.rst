@@ -14,5 +14,19 @@
 .. _`Open Systems Lab`: http://www.osl.iu.edu
 .. _`Institute for Transport Railway Operation and Construction`: http://www.ive.uni-hannover.de
 
+:abstract:
+
+.. include:: iterator_adaptor_abstract.rst
+
+.. contents:: Table of Contents
+
+Introduction
+============
+
 .. include:: iterator_adaptor_body.rst
 
+
+Reference
+=========
+
+.. include:: iterator_adaptor_ref.rst

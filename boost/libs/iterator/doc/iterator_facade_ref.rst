@@ -106,7 +106,7 @@ out of the overload set when the types are not interoperable.]
 .. _iterator facade requirements:
 
 ``iterator_facade`` requirements
-================================
+................................
 
 The ``Derived`` template parameter must be a class derived from
 ``iterator_facade``.
@@ -164,7 +164,7 @@ interoperable with ``X``.
 
 
 ``iterator_facade`` operations
-==============================
+..............................
 
 The operations in this section are described in terms of operations on
 the core interface of ``Derived`` which may be inaccessible
