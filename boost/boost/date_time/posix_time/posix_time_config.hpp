@@ -11,21 +11,13 @@
 #include "boost/date_time/wrapping_int.hpp"
 #include "boost/limits.hpp"
 #include "boost/date_time/compiler_config.hpp"
-
-//force the definition of INT64_C macro used in posix_time_system
-#ifndef __STDC_CONSTANT_MACROS
-#define __STDC_CONSTANT_MACROS
-#   if __GNUC__ >=  2
-#   undef BOOST_HAS_STDINT_H
-#   endif
-#endif
 #include "boost/cstdint.hpp"
 #include <cmath>
 #include <cstdlib> //for MCW 7.2 std::abs(long long)
 
 namespace boost {
 namespace posix_time {
-  
+
 //Remove the following line if you want 64 bit millisecond resolution time
 //#define BOOST_GDTL_POSIX_TIME_STD_CONFIG
 
