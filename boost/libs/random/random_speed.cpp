@@ -208,6 +208,12 @@ int main(int argc, char*argv[])
   run(iter, "mt11213b", boost::mt11213b());
   run(iter, "mt19937", boost::mt19937());
 
+  run(iter, "subtract_with_carry", boost::random::ranlux_base());
+  run(iter, "ranlux3", boost::ranlux3());
+  run(iter, "ranlux4", boost::ranlux4());
+  run(iter, "ranlux3_01", boost::ranlux3_01());
+  run(iter, "ranlux4_01", boost::ranlux4_01());
+
 #ifdef HAVE_MT19937INT_C
   // requires the original mt19937int.c
   run<float>(iter, "mt19937 original");   // coded for sgenrand()/genrand()
