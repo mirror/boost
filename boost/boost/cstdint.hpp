@@ -30,6 +30,10 @@
 # ifdef __hpux
 // HP-UX has a nice <stdint.h> in a non-standard location
 #   include <sys/_inttypes.h>
+#   ifdef __STDC_32_MODE__
+      // this is triggered with GCC, because it defines __cplusplus < 199707L
+#     define BOOST_NO_INT64_T
+#   endif 
 # else
 #   include <stdint.h>
 # endif
