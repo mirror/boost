@@ -819,7 +819,9 @@ enum iterator_access { readable_iterator = 1, writable_iterator = 2,
 
 template &lt;unsigned int access_bits, class TraversalTag&gt;
 struct iterator_tag : /* appropriate old category or categories */ {
-  static const iterator_access access = (iterator_access)access_bits;
+  static const iterator_access access =
+    (iterator_access)access_bits &amp; 
+      (readable_iterator | writable_iterator | swappable_iterator);
   typedef TraversalTag traversal;
 };
 
@@ -842,7 +844,7 @@ from one of the original iterator tags according to the following
 pseudo-code.</p>
 <pre class="literal-block">
 inherit-category(access, traversal-tag) =
-     if (access &amp; lvalue_iterator) {
+     if ((access &amp; readable_iterator) &amp;&amp; (access &amp; lvalue_iterator)) {
          if (traversal-tag is convertible to random_access_traversal_tag)
              return random_access_iterator_tag;
          else if (traversal-tag is convertible to bidirectional_traversal_tag)
@@ -885,7 +887,7 @@ deduced.  The following pseudo-code describes the algorithm.</p>
 is-readable(Iterator) = 
     cat = iterator_traits&lt;Iterator&gt;::iterator_category;
     if (cat == iterator_tag&lt;Access,Traversal&gt;)
-        return Access % readable_iterator;
+        return Access &amp; readable_iterator;
     else if (cat is convertible to input_iterator_tag)
         return true;
     else
@@ -894,7 +896,7 @@ is-readable(Iterator) =
 is-writable(Iterator) =
     cat = iterator_traits&lt;Iterator&gt;::iterator_category;
     if (cat == iterator_tag&lt;Access,Traversal&gt;)
-        return Access % writable_iterator;
+        return Access &amp; writable_iterator;
     else if (cat is convertible to forward_iterator_tag
              or output_iterator_tag)
         return true;
@@ -904,7 +906,7 @@ is-writable(Iterator) =
 is-swappable(Iterator) =
     cat = iterator_traits&lt;Iterator&gt;::iterator_category;
     if (cat == iterator_tag&lt;Access,Traversal&gt;)
-        return Access % swappable_iterator;
+        return Access &amp; swappable_iterator;
     else if (cat is convertible to forward_iterator_tag) {
         if (iterator_traits&lt;Iterator&gt;::reference is a const reference)
             return false;
