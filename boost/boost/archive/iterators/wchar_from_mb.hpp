@@ -18,6 +18,7 @@
 
 #include <cassert>
 #include <cctype>
+#include <cstddef> // size_t
 #include <cstdlib> // mblen
 
 #include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME
@@ -104,7 +105,7 @@ wchar_t wchar_from_mb<Base>::drain(){
     char buffer[9];
     char * bptr = buffer;
     char val;
-    for(int i = 0; i++ < MB_CUR_MAX;){
+    for(std::size_t i = 0; i++ < MB_CUR_MAX;){
         val = * this->base_reference();
         *bptr++ = val;
         int result = std::mblen(buffer, i);
