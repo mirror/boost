@@ -870,7 +870,7 @@ For instance, the following code retrieves the elements of an
 <span class=comment>// note: default template parameters resolve to
 // multi_index_container&lt;double,indexed_by&lt;unique&lt;identity&lt;double&gt; &gt; &gt; &gt;.</span>
 
-<span class=keyword>typedef</span> <span class=identifier>double_set</span> <span class=identifier>s</span><span class=special>;</span>
+<span class=identifier>double_set</span> <span class=identifier>s</span><span class=special>;</span>
 <span class=special>...</span>
 <span class=identifier>double_set</span><span class=special>::</span><span class=identifier>iterator</span> <span class=identifier>it0</span><span class=special>=</span><span class=identifier>s</span><span class=special>.</span><span class=identifier>lower_bound</span><span class=special>(</span><span class=number>100.0</span><span class=special>);</span>
 <span class=identifier>double_set</span><span class=special>::</span><span class=identifier>iterator</span> <span class=identifier>it1</span><span class=special>=</span><span class=identifier>s</span><span class=special>.</span><span class=identifier>upper_bound</span><span class=special>(</span><span class=number>200.0</span><span class=special>);</span>
@@ -910,7 +910,7 @@ greatly help alleviate this situation:
 <span class=keyword>using</span> <span class=keyword>namespace</span> <span class=identifier>boost</span><span class=special>::</span><span class=identifier>lambda</span><span class=special>;</span>
 
 <span class=keyword>typedef</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span><span class=keyword>double</span><span class=special>&gt;</span> <span class=identifier>double_set</span><span class=special>;</span>
-<span class=keyword>typedef</span> <span class=identifier>double_set</span> <span class=identifier>s</span><span class=special>;</span>
+<span class=identifier>double_set</span> <span class=identifier>s</span><span class=special>;</span>
 <span class=special>...</span>
 <span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>double_set</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>,</span><span class=identifier>double_set</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>&gt;</span> <span class=identifier>p</span><span class=special>=</span>
   <span class=identifier>s</span><span class=special>.</span><span class=identifier>range</span><span class=special>(</span><span class=number>100.0</span><span class=special>&lt;=</span><span class=identifier>_1</span><span class=special>,</span><span class=identifier>_1</span><span class=special>&lt;=</span><span class=number>200</span><span class=special>);</span> <span class=comment>// 100&lt;= x &lt;=200</span>
@@ -1256,7 +1256,7 @@ Advanced topics
 
 <br>
 
-<p>Revised June 23rd 2004</p>
+<p>Revised July 12th 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
