@@ -22,7 +22,7 @@ std::ostream& operator<<(std::ostream& out, const jac& )
 {
    out << "jac ";
    return out;
-}; 
+}
 
 
 void run()
