@@ -1054,7 +1054,9 @@
     <xsl:call-template name="member-documentation">
       <xsl:with-param name="name">
         <xsl:call-template name="anchor">
-          <xsl:with-param name="to" select="generate-id(.)"/>
+          <xsl:with-param name="to">
+            <xsl:call-template name="generate.id"/>
+          </xsl:with-param>
           <xsl:with-param name="text" select="''"/>
         </xsl:call-template>
         <xsl:call-template name="monospaced">
