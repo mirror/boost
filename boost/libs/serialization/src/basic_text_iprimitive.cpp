@@ -14,12 +14,12 @@
 
 #include <istream>
 
-// explicitly instantiate for this type of xml stream
 #include <boost/archive/impl/basic_text_iprimitive.ipp>
 
 namespace boost {
 namespace archive {
 
+// explicitly instantiate for this type of text stream
 template class basic_text_iprimitive<std::istream> ;
 
 } // namespace archive

@@ -19,7 +19,7 @@
 namespace boost {
 namespace archive {
 
-// explicitly instantiate for this type of xml stream
+// explicitly instantiate for this type of text stream
 template class basic_text_oprimitive<std::ostream> ;
 
 } // namespace archive
