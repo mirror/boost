@@ -27,6 +27,10 @@
 
 #ifndef BOOST_NO_STD_LOCALE
 
+# ifdef BOOST_MSVC
+#  pragma warning(disable:4786 4702 4127 4244)
+#  endif
+
 #include <clocale>
 #include <locale>
 #include <cstdio>
@@ -39,9 +43,8 @@
 #include <boost/scoped_array.hpp>
 #include "primary_transform.hpp"
 
-
 # ifdef BOOST_MSVC
-#  pragma warning(disable:4786)
+#  pragma warning(disable:4786 4702 4127 4244)
 #  endif
 
 namespace{
