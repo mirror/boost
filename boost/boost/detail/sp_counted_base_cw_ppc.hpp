@@ -121,7 +121,7 @@ public:
 
     void release() // nothrow
     {
-        if( atomic_decrement( &use_count_, -1 ) == 0 )
+        if( atomic_decrement( &use_count_ ) == 0 )
         {
             dispose();
             weak_release();
@@ -135,7 +135,7 @@ public:
 
     void weak_release() // nothrow
     {
-        if( atomic_decrement( &weak_count_, -1 ) == 0 )
+        if( atomic_decrement( &weak_count_ ) == 0 )
         {
             destroy();
         }
