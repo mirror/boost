@@ -496,7 +496,7 @@ resize(size_type num_bits, bool value)
 {
   if (num_bits == size())
     return;
-  size_type new_nblocks = this->num_blocks(num_bits);
+  size_type new_nblocks = this->calc_num_blocks(num_bits);
 #if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || !defined(_CPPLIB_VER) || (_CPPLIB_VER < 306) // Dinkumware for VC6/7
   Block* d = this->m_alloc.allocate(new_nblocks, 0);
 #else
@@ -518,7 +518,7 @@ resize(size_type num_bits, bool value)
       this->m_alloc.deallocate(d, this->m_num_blocks);
   }
   this->m_num_bits = num_bits;
-  this->m_num_blocks = this->num_blocks(num_bits);
+  this->m_num_blocks = this->calc_num_blocks(num_bits);
   m_zero_unused_bits();
 }
 
@@ -1383,7 +1383,7 @@ bool dynamic_bitset<Block, Allocator>::set_(size_type n, bool value)
 template <typename Block, typename Allocator>
 inline void dynamic_bitset<Block, Allocator>::m_zero_unused_bits()
 {
-    assert (m_num_blocks == this->num_blocks(m_num_bits));
+    assert (m_num_blocks == this->calc_num_blocks(m_num_bits));
 
     // if != 0 this is the number of bits used in the last block
     const size_type used_bits = m_num_bits % bits_per_block;
