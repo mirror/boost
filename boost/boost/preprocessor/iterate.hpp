@@ -42,7 +42,13 @@
 # define BOOST_PP_SET_ITERATION_START() BOOST_PP_DETAIL_CAT4(<boost/preprocessor/detail/iterate/lower, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()), ., hpp>)
 # define BOOST_PP_SET_ITERATION_FINISH() BOOST_PP_DETAIL_CAT4(<boost/preprocessor/detail/iterate/upper, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()), ., hpp>)
 #
-# define BOOST_PP_LINE(line, file) line BOOST_PP_STRINGIZE(BOOST_PP_DETAIL_CAT2(file, BOOST_PP_DETAIL_CAT2(BOOST_PP_LINE_, BOOST_PP_ITERATION_DEPTH())()))
+# if !defined(__MWERKS__) || __MWERKS__ > 0x3000
+#   define BOOST_PP_LINE(line, file) line BOOST_PP_STRINGIZE(BOOST_PP_DETAIL_CAT2(file, BOOST_PP_DETAIL_CAT2(BOOST_PP_LINE_, BOOST_PP_ITERATION_DEPTH())()))
+#   define BOOST_PP_DETAIL_LINE() 1 ""
+# else
+#   define BOOST_PP_LINE(line, file) __LINE__ __FILE__
+#   define BOOST_PP_DETAIL_LINE() __LINE__
+# endif
 #
 # define BOOST_PP_LINE_0() (!BOOST_PP_ERROR_NO_ACTIVE_ITERATION)
 # define BOOST_PP_LINE_1() BOOST_PP_DETAIL_CAT3([, BOOST_PP_ITERATION(), ])
