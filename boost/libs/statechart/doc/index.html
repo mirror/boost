@@ -23,18 +23,24 @@
 <p>Welcome to boost::fsm, a C++ library for finite state machines. Features include:</p>
 <ul>
   <li>Straightforward transformation from UML state chart to executable C++ code and vice versa (no code generator required)</li>
-  <li>Comprehensive <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">UML semantics</a> support (history not yet implemented)
-    <ul>
+  <li>Comprehensive <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">UML semantics</a> 
+  support<ul>
       <li>Hierarchical (composite, nested) states</li>
       <li>Orthogonal (concurrent) states</li>
       <li>Entry-, exit- and transition-actions</li>
       <li>Guards</li>
+      <li>Event deferral</li>
     </ul>
   </li>
   <li>Error handling support</li>
   <li>Full type-safety</li>
   <li>State-local storage</li>
   <li>Customizable resource acquisition</li>
+</ul>
+<p>All code has been tested on the following platforms:</p>
+<ul>
+  <li>MSVC7.1 (the compiler coming with Visual Studio.NET 2003) with boost 
+  distribution 1.30.0.</li>
 </ul>
 <p>The library is not yet complete. Here is the current to-do list:</p>
 <ol>
@@ -45,7 +51,7 @@
   <li>Add a <code>concurrent_state_machine</code> class template to model a state machine 
   running in its own thread.</li>
   <li>Add regression tests.</li>
-  <li>Port to gcc.</li>
+  <li>gcc-port.</li>
   <li>Add reference documentation.</li>
   <li>Add support for shallow/deep history.</li>
 </ol>

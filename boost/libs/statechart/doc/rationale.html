@@ -293,7 +293,7 @@ heap. This should be satisfactory for applications where all the following prere
 <ul>
   <li>There are no deterministic reaction time (hard real-time) requirements.</li>
   <li>The application will typically not process more than a few events per second. Of course, this figure depends on your platform. A typical
-    desktop PC could easily cope with more than 50000 events per second.</li>
+    desktop PC could easily cope with more than 100000 events per second.</li>
   <li>The application will never run long enough for heap fragmentation to become a problem. This is of course an issue for all long running
     programs not only the ones employing boost::fsm. However, it should be noted that with this library fragmentation problems could show up
     earlier than with traditional FSM frameworks.</li>
@@ -328,8 +328,7 @@ different class as the <code>RttiPolicy</code> parameter to the <code>state_mach
 templates (see the BitMachine example, where RTTI is implemented with integers). 
 This makes event dispatch slightly faster and allows users to turn off C++ RTTI 
 to cut down on executable size (turning off C++ RTTI precludes usage of 
-<code>state_cast&lt;&gt;()</code>). By the way, I'm not particularly happy with the 
-interface of <code>rtti_policy</code> so suggestions for improvements are <b>very</b> welcome.</p>
+<code>state_cast&lt;&gt;()</code>).</p>
 <h2><a name="doubledispatch"></a>Double dispatch</h2>
 <p>At the heart of every state machine lies an implementation of double dispatch. This is due to the fact that the incoming event <b>and</b>
 the current state define exactly which reaction the state machine will produce. 
@@ -353,8 +352,8 @@ href="http://www.objectmentor.com/resources/articles/acv.pdf">Acyclic visitor</a
   <li>Two-dimensional array of function pointers: To satisfy requirement 6, it should be possible to spread a single boost::fsm state
     machine over several translation units. This however means, that the dispatch table must be filled at runtime and the different
     translation units must somehow make themselves &quot;known&quot;, so that their part of the state machine can be added to the table.
-    There simply is no way to do this automatically <b>and</b> portably. So, the only portable way that a state machine distributed over
-    several translation units could employ table-based double dispatch lies with the user. The programmer(s) would somehow have to <b>manually</b>
+    There simply is no way to do this automatically <b>and</b> portably. The only portable way that a state machine distributed over
+    several translation units could employ table-based double dispatch relies on the user. The programmer(s) would somehow have to <b>manually</b>
     tie together the various pieces of the state machine. Not only does this scale badly but is also quite error-prone.</li>
 </ul>
 <h2><a name="resourceusage"></a>Resource usage</h2>
