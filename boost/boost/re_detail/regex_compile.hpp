@@ -1924,6 +1924,7 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_leadi
             const charT* p2 = _leading_string + _leading_string_len;
             pkmp = re_detail::kmp_compile(p1, p2, charT(), re_detail::kmp_translator<traits>(_flags&regbase::icase, &traits_inst), data.allocator());
          }
+         leading_lit = false;
          break;
       case re_detail::syntax_element_wild:
          ++len;

@@ -30,13 +30,13 @@
 
 #include <boost/cregex.hpp>
 
-#ifdef BOOST_RE_DEBUG
-# include <iosfwd>
-#endif
-
 #ifdef __cplusplus
 
 // what follows is all C++ don't include in C builds!!
+
+#ifdef BOOST_RE_DEBUG
+# include <iosfwd>
+#endif
 
 #include <new>
 #include <boost/re_detail/regex_config.hpp>
@@ -363,9 +363,15 @@ struct regex_iterator_traits
 {
   typedef typename T::iterator_category iterator_category;
   typedef typename T::value_type        value_type;
+#ifndef BOOST_MSVC
   typedef typename T::difference_type   difference_type;
   typedef typename T::pointer           pointer;
   typedef typename T::reference         reference;
+#else
+  typedef std::ptrdiff_t                difference_type;
+  typedef value_type*                   pointer;
+  typedef value_type&                   reference;
+#endif
 };
 
 template <class T>
@@ -1447,6 +1453,7 @@ typedef match_results<const wchar_t*> wcmatch;
 #endif  // __cplusplus
 
 #endif  // include
+
 
 
 
