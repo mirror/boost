@@ -416,10 +416,24 @@ main()
     static const int index_size = 4;
     
     element_range_type elements( element_range_size );
-    for(element_range_type::iterator el_it = elements.begin(); el_it != elements.end(); ++el_it ) *el_it = std::distance( elements.begin(), el_it );
+    
+    for(element_range_type::iterator el_it = elements.begin();
+        el_it != elements.end();
+        ++el_it)
+    {
+        *el_it = std::distance( elements.begin(), el_it );
+    }
     
     index_type indices( index_size );
-    for(index_type::iterator i_it = indices.begin() ; i_it != indices.end() ; ++i_it ) *i_it = element_range_size - index_size + std::distance(indices.begin(), i_it ); 
+    
+    for(index_type::iterator i_it = indices.begin();
+        i_it != indices.end();
+        ++i_it)
+    {
+        *i_it = element_range_size - index_size
+            + std::distance(indices.begin(), i_it );
+    }
+    
     std::reverse( indices.begin(), indices.end() );
     
     typedef boost::permutation_iterator_generator< element_range_type::iterator, index_type::iterator >::type permutation_type;
