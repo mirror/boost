@@ -25,13 +25,34 @@ template fsm-common-options
 
 local test_monitor = <lib>../../../libs/test/build/boost_test_exec_monitor ;
 
-rule fsm-run-st ( sources + )
+rule fsm-run ( source : name : additional-options * )
 {
-  return [ run $(sources) $(test_monitor) <template>fsm-common-options : : : <threading>single ] ;
+  return [ run $(source).cpp $(test_monitor) <template>fsm-common-options : : 
+    : $(additional-options) : $(name) ] ;
+}
+
+rule fsm-st-run ( source : name : additional-options * )
+{
+  return [ fsm-run $(source) : $(name)
+    : $(additional-options) <threading>single ] ;
+}
+
+rule fsm-st-run-variants ( source )
+{
+  local result ;
+  result += [ fsm-st-run $(source) : $(source)Normal : ] ;
+  result += [ fsm-st-run $(source) : $(source)Native
+    : <define>BOOST_FSM_USE_NATIVE_RTTI ] ;
+  result += [ fsm-st-run $(source) : $(source)Relaxed
+    : <define>BOOST_FSM_RELAX_TRANSITION_CONTEXT ] ;
+  result += [ fsm-st-run $(source) : $(source)Both
+    : <define>BOOST_FSM_USE_NATIVE_RTTI
+      <define>BOOST_FSM_RELAX_TRANSITION_CONTEXT ] ;
+  return result ;
 }
 
 test-suite fsm :
-  [ fsm-run-st TransitionTest.cpp ]
-  [ fsm-run-st DeferralTest.cpp ]
+  [ fsm-st-run-variants TransitionTest ]
+  [ fsm-st-run-variants DeferralTest ]
 ;
       
