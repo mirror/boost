@@ -55,22 +55,45 @@ public:
   impl() {}
 
   impl(group_iterator group, group_iterator last_group)
-    : group(group), last_group(last_group)
+    : group(group), last_group(last_group), slot_assigned(false)
   { init_next_group(); }
 
   impl(group_iterator group, group_iterator last_group,
        slot_pair_iterator slot_)
-    : group(group), last_group(last_group), slot_(slot_) { }
+    : group(group), last_group(last_group), slot_(slot_), slot_assigned(true)
+  { }
+
+  impl(const impl& other) 
+    : group(other.group), last_group(other.last_group), 
+      slot_assigned(other.slot_assigned)
+  {
+    if (slot_assigned) slot_ = other.slot_;
+  }
+
+  impl& operator=(const impl& other)
+  {
+    group = other.group;
+    last_group = other.last_group;
+    slot_assigned = other.slot_assigned;
+    if (slot_assigned) slot_ = other.slot_;
+    return *this;
+  }
 
   void init_next_group()
   {
     while (group != last_group && group->second.empty()) ++group;
-    if (group != last_group) slot_ = group->second.begin();
+    if (group != last_group) {
+      slot_ = group->second.begin();
+      slot_assigned = true;
+    }
   }
 
   group_iterator group;
   group_iterator last_group;
   slot_pair_iterator slot_;
+
+private:
+  bool slot_assigned;
 };
 
 named_slot_map_iterator::named_slot_map_iterator() {}
@@ -81,8 +104,7 @@ named_slot_map_iterator::named_slot_map_iterator(std::auto_ptr<impl> impl_)
 named_slot_map_iterator
   ::named_slot_map_iterator(const named_slot_map_iterator& other)
 {
-  impl_.reset(new impl(other.impl_->group, other.impl_->last_group,
-                       other.impl_->slot_));
+  impl_.reset(new impl(*other.impl_));
 }
 
 named_slot_map_iterator::~named_slot_map_iterator() {}
@@ -90,14 +112,8 @@ named_slot_map_iterator::~named_slot_map_iterator() {}
 named_slot_map_iterator&
 named_slot_map_iterator::operator=(const named_slot_map_iterator& other)
 {
-  if (impl_) {
-    impl_->group = other.impl_->group;
-    impl_->last_group = other.impl_->last_group;
-    impl_->slot_ = other.impl_->slot_;
-  } else {
-    impl_.reset(new impl(other.impl_->group, other.impl_->last_group,
-                         other.impl_->slot_));
-  }
+  if (impl_) *impl_ = *other.impl_;
+  else impl_.reset(new impl(*other.impl_));
   return *this;
 }
 
