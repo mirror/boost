@@ -55,7 +55,6 @@ struct does_conversion_exist
 {
     template< typename To > struct result_
     {
-        template <class V> 
         static no_type BOOST_TT_DECL _m_check(...);
         static yes_type BOOST_TT_DECL _m_check(To);
         static From _m_from;
