@@ -133,7 +133,7 @@ namespace boost
          template <class T>
          struct limits : std::numeric_limits<T>
          {
-         static inline T min()
+             static inline T min()
 # ifndef __GNUC__ // bug workaround courtesy Jens Maurer
              {
                  return std::numeric_limits<T>::min() >= 0
@@ -142,7 +142,7 @@ namespace boost
                      : std::numeric_limits<T>::min();
              }
 # else
-                 ;
+             ;
 # endif
          };
        };
@@ -166,13 +166,63 @@ namespace boost
       };
       
       // Move to namespace boost in utility.hpp?
-      template <class T>
-      struct fixed_numeric_limits
+      template <class T, bool specialized>
+      struct fixed_numeric_limits_base
           : public numeric_min_select<
                        std::numeric_limits<T>::is_signed 
                    >::template limits<T>
+      {};
+      
+      template <class T>
+      struct fixed_numeric_limits
+          : fixed_numeric_limits_base<T,(std::numeric_limits<T>::is_specialized)>
+      {};
+
+# ifdef BOOST_HAS_LONG_LONG
+      // cover implementations which supply no specialization for long
+      // long / unsigned long long. Not intended to be full
+      // numeric_limits replacements, but good enough for numeric_cast<>
+      template <>
+      struct fixed_numeric_limits_base<long long, false>
       {
+          BOOST_STATIC_CONSTANT(bool, is_specialized = true);
+          BOOST_STATIC_CONSTANT(bool, is_signed = true);
+          static long long max()
+          {
+#  ifdef LONGLONG_MAX
+              return LONGLONG_MAX;
+#  else
+              return 9223372036854775807LL; // hope this is portable
+#  endif 
+          }
+
+          static long long min()
+          {
+#  ifdef LONGLONG_MIN
+              return LONGLONG_MIN;
+#  else  
+              return -9223372036854775808LL; // hope this is portable
+#  endif 
+          }
       };
+
+      template <>
+      struct fixed_numeric_limits_base<unsigned long long, false>
+      {
+          BOOST_STATIC_CONSTANT(bool, is_specialized = true);
+          BOOST_STATIC_CONSTANT(bool, is_signed = false);
+          static unsigned long long max()
+          {
+#  ifdef ULONGLONG_MAX
+              return ULONGLONG_MAX;
+#  else
+              return 0xffffffffffffffffULL; // hope this is portable
+#  endif 
+          }
+
+          static unsigned long long min() { return 0; }
+      };
+# endif 
     } // namespace detail
   
 // less_than_type_min -
@@ -310,7 +360,7 @@ namespace boost
     inline Target numeric_cast(Source arg BOOST_EXPLICIT_DEFAULT_TARGET)
     {
         // typedefs abbreviating respective trait classes
-        typedef std::numeric_limits<Source> arg_traits;
+        typedef detail::fixed_numeric_limits<Source> arg_traits;
         typedef detail::fixed_numeric_limits<Target> result_traits;
         
 #if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) || defined(BOOST_SGI_CPP_LIMITS)
