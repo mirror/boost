@@ -41,6 +41,16 @@ main()
   time_duration td5b= boost::date_time::parse_delimited_time_duration<time_duration>(s5b);
   check("parse time duration: " + s5b, 
         td5b == time_duration(-23,59,59)-nanosec(999999999));
+  
+  std::string s6b("1:00:00.1"); // we want 1/10th
+  time_duration td6b= boost::date_time::parse_delimited_time_duration<time_duration>(s6b);
+  check("parse time duration: " + s6b, 
+        td6b == time_duration(1,0,0)+nanosec(100000000)); // we want 1/10th
+  
+  std::string s7b("-1:00:00.0010"); // we want 1/1000th
+  time_duration td7b= boost::date_time::parse_delimited_time_duration<time_duration>(s7b);
+  check("parse time duration: " + s7b, 
+        td7b == time_duration(-1,0,0)-nanosec(1000000)); // we want 1/1000th
 #endif
 
 #if defined(BOOST_DATE_TIME_HAS_MICROSECONDS) && (!defined(BOOST_DATE_TIME_HAS_NANOSECONDS))
@@ -69,6 +79,16 @@ main()
     time_duration td5b= boost::date_time::parse_delimited_time_duration<time_duration>(s5b);
     check("parse time duration: " + s5b, 
           td5b == time_duration(-23,59,59)-microsec(999999));
+  
+    std::string s6b("1:00:00.1"); // we want 1/10th
+    time_duration td6b= boost::date_time::parse_delimited_time_duration<time_duration>(s6b);
+    check("parse time duration: " + s6b,
+          td6b == time_duration(1,0,0)+microsec(100000)); // we want 1/10th
+    
+    std::string s7b("-1:00:00.0010"); // we want 1/1000th
+    time_duration td7b= boost::date_time::parse_delimited_time_duration<time_duration>(s7b);
+    check("parse time duration: " + s7b, 
+          td7b == time_duration(-1,0,0)-microsec(1000)); // we want 1/1000th
   }
 #endif
 

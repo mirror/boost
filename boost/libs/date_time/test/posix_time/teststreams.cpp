@@ -89,7 +89,11 @@ main()
   {
     std::istringstream iss("01:02:03.000004 garbage");
     iss >> td;
+#ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
+    check("Stream in time_duration", td == time_duration(1,2,3,4000));
+#else
     check("Stream in time_duration", td == time_duration(1,2,3,4));
+#endif
   }
 #if !defined(BOOST_NO_STD_ITERATOR_TRAITS) // vc6 & vc7
   {
@@ -116,7 +120,12 @@ main()
   }
   {
     date d1(2001,Aug,1), d2(2003,May,13);
+#ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
+    time_duration td1(15,32,18,20304000), td2(1,2,3);
+#else
     time_duration td1(15,32,18,20304), td2(1,2,3);
+#endif
+
     time_period result(ptime(d1,td1), ptime(d2,td2));
     std::istringstream iss("[2001-Aug-01 15:32:18.020304/2003-May-13 01:02:03]");
     iss >> tp;
