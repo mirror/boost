@@ -219,6 +219,13 @@ namespace boost
         >
         type;
     };
+  
+    // workaround for aC++ CR JAGaf33512
+    template <class Tr1, class Tr2>
+    inline void iterator_adaptor_assert_traversal ()
+    {
+      BOOST_STATIC_ASSERT((is_convertible<Tr1, Tr2>::value));
+    }
   }
   
   //
@@ -316,7 +323,7 @@ namespace boost
       >::type my_traversal;
 
 # define BOOST_ITERATOR_ADAPTOR_ASSERT_TRAVERSAL(cat) \
-      BOOST_STATIC_ASSERT((is_convertible<my_traversal,cat>::value));
+      detail::iterator_adaptor_assert_traversal<my_traversal, cat>();
 
       void advance(typename super_t::difference_type n)
       {
