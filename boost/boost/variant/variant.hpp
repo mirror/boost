@@ -22,7 +22,9 @@
 #include <typeinfo> // for typeid, std::type_info
 
 #include "boost/variant/variant_fwd.hpp"
+#include "boost/variant/detail/backup_holder.hpp"
 #include "boost/variant/detail/enable_recursive_fwd.hpp"
+#include "boost/variant/detail/forced_return.hpp"
 #include "boost/variant/detail/initializer.hpp"
 #include "boost/variant/detail/make_variant_list.hpp"
 #include "boost/variant/detail/visitation_impl.hpp"
@@ -60,9 +62,7 @@
 #include "boost/mpl/apply_if.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/bool.hpp"
-#include "boost/mpl/contains.hpp"
 #include "boost/mpl/distance.hpp"
-#include "boost/mpl/empty.hpp"
 #include "boost/mpl/find.hpp"
 #include "boost/mpl/find_if.hpp"
 #include "boost/mpl/front.hpp"
@@ -72,9 +72,8 @@
 #include "boost/mpl/logical.hpp"
 #include "boost/mpl/max_element.hpp"
 #include "boost/mpl/protect.hpp"
-#include "boost/mpl/remove_if.hpp"
+#include "boost/mpl/push_front.hpp"
 #include "boost/mpl/sizeof.hpp"
-#include "boost/mpl/size_t.hpp"
 #include "boost/mpl/transform.hpp"
 #include "boost/mpl/void.hpp"
 
@@ -180,11 +179,15 @@ struct make_storage
 {
 private: // helpers, for metafunction result (below)
 
+    typedef typename mpl::push_front<
+          Types
+        , backup_holder<void*>
+        >::type types;
     typedef typename max_value<
-          Types, mpl::sizeof_<mpl::_1>
+          types, mpl::sizeof_<mpl::_1>
         >::type max_size;
     typedef typename max_value<
-          Types, alignment_of<mpl::_1>
+          types, alignment_of<mpl::_1>
         >::type max_alignment;
 
 public: // metafunction result
@@ -221,46 +224,9 @@ struct make_storage<int>
 #endif // BOOST_MPL_MSVC_60_ETI_BUG workaround
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) metafunction make_storage2
-//
-// Provides an aligned storage type capable of holding any of the types
-// specified in the given type-sequence that have throwing move constructors.
-//
-template <typename Types>
-struct make_storage2
-{
-private: // helpers, for metafunction result (below)
-
-    typedef typename mpl::remove_if<
-          Types
-        , has_nothrow_move_constructor<mpl::_1>
-        >::type throwing_types_;
-
-public: // metafunction result
-
-    // [empty(throwing_types) ? null_storage : make_storage<throwing_types>]
-    typedef typename mpl::apply_if<
-          mpl::empty<throwing_types_>
-        , mpl::identity<null_storage>
-        , make_storage<throwing_types_>
-        >::type type;
-
-};
-
-#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
-
-template<>
-struct make_storage2<int>
-{
-    typedef int type;
-};
-
-#endif // BOOST_MPL_MSVC_60_ETI_BUG workaround
-
-///////////////////////////////////////////////////////////////////////////////
 // (detail) class destroyer
 //
-// Generic static visitor that destroys the value it visits.
+// Internal visitor that destroys the value it visits.
 //
 struct destroyer
     : public static_visitor<>
@@ -269,7 +235,7 @@ public: // visitor interfaces
 
     template <typename T>
         BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-    operator()(T& operand) const
+    internal_visit(T& operand, int) const
     {
         operand.~T();
 
@@ -285,7 +251,7 @@ public: // visitor interfaces
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class copy_into
 //
-// Generic static visitor that copies the value it visits into the given buffer.
+// Internal visitor that copies the value it visits into the given buffer.
 //
 class copy_into
     : public static_visitor<>
@@ -301,11 +267,27 @@ public: // structors
     {
     }
 
-public: // visitor interfaces
+public: // internal visitor interface
 
     template <typename T>
         BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-    operator()(const T& operand) const
+    internal_visit(boost::detail::variant::backup_holder<T>& operand, long) const
+    {
+        new(storage_) T( operand.get() );
+        BOOST_VARIANT_AUX_RETURN_VOID;
+    }
+
+    template <typename T>
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
+    internal_visit(const boost::detail::variant::backup_holder<T>& operand, long) const
+    {
+        new(storage_) T( operand.get() );
+        BOOST_VARIANT_AUX_RETURN_VOID;
+    }
+
+    template <typename T>
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
+    internal_visit(const T& operand, int) const
     {
         new(storage_) T(operand);
         BOOST_VARIANT_AUX_RETURN_VOID;
@@ -314,12 +296,12 @@ public: // visitor interfaces
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) class assigner
+// (detail) class assign_storage
 //
-// Generic static visitor that assigns the given storage (which must be a
+// Internal visitor that assigns the given storage (which must be a
 // constructed value of the same type) to the value it visits.
 //
-struct assigner
+struct assign_storage
     : public static_visitor<>
 {
 private: // representation
@@ -328,16 +310,34 @@ private: // representation
 
 public: // structors
 
-    explicit assigner(const void* rhs_storage)
+    explicit assign_storage(const void* rhs_storage)
         : rhs_storage_(rhs_storage)
     {
     }
 
-public: // visitor interfaces
+public: // internal visitor interfaces
 
     template <typename T>
         BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-    operator()(T& lhs_value) const
+    internal_visit(backup_holder<T>& lhs_content, long) const
+    {
+        lhs_content.get()
+            = static_cast< const backup_holder<T>* >(rhs_storage_)->get();
+        BOOST_VARIANT_AUX_RETURN_VOID;
+    }
+
+    template <typename T>
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
+    internal_visit(const backup_holder<T>& lhs_content, long) const
+    {
+        lhs_content.get()
+            = static_cast< const backup_holder<T>* >(rhs_storage_)->get();
+        BOOST_VARIANT_AUX_RETURN_VOID;
+    }
+
+    template <typename T>
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
+    internal_visit(T& lhs_content, int) const
     {
         // NOTE TO USER :
         // Compile error here indicates one of variant's bounded types does
@@ -346,16 +346,85 @@ public: // visitor interfaces
         //
         // Hint: Are any of the bounded types const-qualified or references?
         //
-        lhs_value = *static_cast<const T*>(rhs_storage_);
+        lhs_content = *static_cast< const T* >(rhs_storage_);
         BOOST_VARIANT_AUX_RETURN_VOID;
     }
 
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// (detail) class direct_assigner
+//
+// Generic static visitor that: if and only if the visited value is of the
+// specified type, assigns the given value to the visited value and returns
+// true; else returns false.
+//
+template <typename T>
+class direct_assigner
+    : public static_visitor<bool>
+{
+private: // representation
+
+    T& rhs_;
+
+public: // structors
+
+    explicit direct_assigner(T& rhs)
+        : rhs_(rhs)
+    {
+    }
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
+public: // visitor interface
+
+    bool operator()(T& lhs)
+    {
+        lhs = rhs_;
+        return true;
+    }
+
+    template <typename U>
+    bool operator()(U&)
+    {
+        return false;
+    }
+
+#else // MSVC6
+
+private: // helpers, for visitor interface (below)
+
+    bool execute(T& lhs, mpl::true_)
+    {
+        lhs = rhs_;
+        return true;
+    }
+
+    template <typename U>
+    bool execute(U&, mpl::false_)
+    {
+        return false;
+    }
+
+public: // visitor interface
+
+    template <typename U>
+    bool operator()(U& lhs)
+    {
+        typedef typename is_same<U,T>::type U_is_T;
+        return execute(lhs, U_is_T());
+    }
+
+#endif // MSVC6 workaround
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
 // (detail) class swap_with
 //
-// Generic static visitor that swaps the value it visits with the given value.
+// Internal visitor that swaps visited value with given storage.
+//
+// Precondition: Given storage MUST have same content type as visited value.
 //
 struct swap_with
     : public static_visitor<>
@@ -371,13 +440,19 @@ public: // structors
     {
     }
 
-#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-
-public: // visitor interfaces
+public: // internal visitor interfaces
 
     template <typename T>
         BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-    operator()(boost::recursive_wrapper<T>& operand) const
+    internal_visit(backup_holder<T>& operand, long) const
+    {
+        operand.swap( *static_cast< backup_holder<T>* >(toswap_) );
+        BOOST_VARIANT_AUX_RETURN_VOID;
+    }
+
+    template <typename T>
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
+    internal_visit(boost::recursive_wrapper<T>& operand, long) const
     {
         operand.swap( *static_cast< boost::recursive_wrapper<T>* >(toswap_) );
         BOOST_VARIANT_AUX_RETURN_VOID;
@@ -385,39 +460,11 @@ public: // visitor interfaces
 
     template <typename T>
         BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-    operator()(T& operand) const
+    internal_visit(T& operand, int) const
     {
         ::boost::detail::variant::move_swap(operand, *static_cast<T*>(toswap_));
         BOOST_VARIANT_AUX_RETURN_VOID;
     }
-
-#else // defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-
-private: // helpers, for visitor interfaces
-
-    template <typename T>
-    void execute(boost::recursive_wrapper<T>& operand, long) const
-    {
-        operand.swap( *static_cast< boost::recursive_wrapper<T>* >(toswap_) );
-    }
-
-    template <typename T>
-    void execute(T& operand, int) const
-    {
-        ::boost::detail::variant::move_swap(operand, *static_cast<T*>(toswap_));
-    }
-
-public: // visitor interfaces
-
-    template <typename T>
-        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-    operator()(T& operand) const
-    {
-        execute(operand, 1L);
-        BOOST_VARIANT_AUX_RETURN_VOID;
-    }
-
-#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING workaround
 
 };
 
@@ -426,7 +473,7 @@ public: // visitor interfaces
 //
 // Generic static visitor that performs a typeid on the value it visits.
 //
-struct reflect
+class reflect
     : public static_visitor<const std::type_info&>
 {
 public: // visitor interfaces
@@ -440,71 +487,100 @@ public: // visitor interfaces
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) class compare_equal
+// (detail) class equal_comp
 //
-// Generic static visitor that compares the given lhs storage with the visited
-// rhs content using operator==.
+// Generic function object compares lhs with rhs using operator==.
 //
-struct compare_equal
-    : public static_visitor<bool>
+struct equal_comp
 {
-private: // representation
-
-    const void* lhs_;
-
-public: // structors
-
-    explicit compare_equal(const void* lhs)
-        : lhs_(lhs)
-    {
-    }
-
-public: // visitor interfaces
-
     template <typename T>
-    bool operator()(const T& rhs) const
+    bool operator()(const T& lhs, const T& rhs) const
     {
-        return *static_cast<const T*>(lhs_) == rhs;
+        return lhs == rhs;
     }
-
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) class compare_less
+// (detail) class less_comp
 //
-// Generic static visitor that compares the given lhs storage with the visited
-// rhs content using operator<.
+// Generic function object compares lhs with rhs using operator<.
 //
-struct compare_less
-    : public static_visitor<bool>
+struct less_comp
 {
-private: // representation
-
-    const void* lhs_;
-
-public: // structors
-
-    explicit compare_less(const void* lhs)
-        : lhs_(lhs)
-    {
-    }
-
-public: // visitor interfaces
-
     template <typename T>
-    bool operator()(const T& rhs) const
+    bool operator()(const T& lhs, const T& rhs) const
     {
-        return *static_cast<const T*>(lhs_) < rhs;
+        return lhs < rhs;
     }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// (detail) class template known_get
+//
+// Visitor that returns a reference to content of the specified type.
+//
+// Precondition: visited variant MUST contain logical content of type T.
+//
+template <typename T>
+class known_get
+    : public static_visitor<T&>
+{
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
+public: // visitor interface
+
+    T& operator()(T& operand) const
+    {
+        return operand;
+    }
+
+    template <typename U>
+    T& operator()(U&) const
+    {
+        // logical error to be here: see precondition above
+        BOOST_ASSERT(false);
+        return ::boost::detail::variant::forced_return< T& >();
+    }
+
+#else // MSVC6
+
+private: // helpers, for visitor interface (below)
+
+    T& execute(T& operand, mpl::true_) const
+    {
+        return operand;
+    }
+
+    template <typename U>
+    T& execute(U& operand, mpl::false_) const
+    {
+        // logical error to be here: see precondition above
+        BOOST_ASSERT(false);
+        return ::boost::detail::variant::forced_return< T& >();
+    }
+
+public: // visitor interface
+
+    template <typename U>
+    T& operator()(U& operand) const
+    {
+        typedef typename is_same< U,T >::type
+            U_is_T;
+
+        return execute(operand, U_is_T());
+    }
+
+#endif // MSVC6 workaround
 
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class template invoke_visitor
 //
-// Generic static visitor that invokes the given visitor using:
-//  * for 'internal' visits of a recursive_wrapper, the wrapper's held value.
-//  * for all other visits, the given value itself.
+// Internal visitor that invokes the given visitor using:
+//  * for wrappers (e.g., recursive_wrapper), the wrapper's held value.
+//  * for all other values, the value itself.
 //
 template <typename Visitor>
 class invoke_visitor
@@ -525,25 +601,27 @@ public: // structors
     {
     }
 
-private: // helpers, for visitor interfaces (below)
-
 #if !defined(BOOST_NO_VOID_RETURNS)
 
+public: // internal visitor interfaces
+
     template <typename T>
-    result_type visit(T& operand)
+    result_type internal_visit(T& operand, int)
     {
         return visitor_(operand);
     }
 
 #   if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0564))
     template <typename T>
-    result_type visit(const T& operand)
+    result_type internal_visit(const T& operand, int)
     {
         return visitor_(operand);
     }
 #   endif
 
 #else // defined(BOOST_NO_VOID_RETURNS)
+
+private: // helpers, for internal visitor interfaces (below)
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
@@ -560,9 +638,11 @@ private: // helpers, for visitor interfaces (below)
         BOOST_VARIANT_AUX_RETURN_VOID;
     }
 
+public: // internal visitor interfaces
+
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    visit(T& operand)
+    internal_visit(T& operand, int)
     {
         typedef typename is_same<result_type, void>::type
             has_void_result_type;
@@ -572,94 +652,49 @@ private: // helpers, for visitor interfaces (below)
 
 #endif // BOOST_NO_VOID_RETURNS) workaround
 
-public: // visitor interfaces
-
-#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+public: // internal visitor interfaces, cont.
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(boost::recursive_wrapper<T>& operand)
+    internal_visit(boost::recursive_wrapper<T>& operand, long)
     {
-        return visit(operand.get());
+        return internal_visit( operand.get(), 1L );
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(const boost::recursive_wrapper<T>& operand)
+    internal_visit(const boost::recursive_wrapper<T>& operand, long)
     {
-        return visit(operand.get());
+        return internal_visit( operand.get(), 1L );
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(boost::detail::reference_content<T>& operand)
+    internal_visit(boost::detail::reference_content<T>& operand, long)
     {
-        return visit(operand.get());
+        return internal_visit( operand.get(), 1L );
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(const boost::detail::reference_content<T>& operand)
+    internal_visit(const boost::detail::reference_content<T>& operand, long)
     {
-        return visit(operand.get());
+        return internal_visit( operand.get(), 1L );
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(T& operand)
+    internal_visit(boost::detail::variant::backup_holder<T>& operand, long)
     {
-        return visit(operand);
-    }
-
-#else// defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-
-private: // helpers, for visitor interfaces (below)
-
-    template <typename T>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    execute_impl(boost::recursive_wrapper<T>& operand, long)
-    {
-        return visit(operand.get());
+        return internal_visit( operand.get(), 1L );
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    execute_impl(const boost::recursive_wrapper<T>& operand, long)
+    internal_visit(const boost::detail::variant::backup_holder<T>& operand, long)
     {
-        return visit(operand.get());
+        return internal_visit( operand.get(), 1L );
     }
-
-    template <typename T>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    execute_impl(boost::detail::reference_content<T>& operand, long)
-    {
-        return visit(operand.get());
-    }
-
-    template <typename T>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    execute_impl(const boost::detail::reference_content<T>& operand, long)
-    {
-        return visit(operand.get());
-    }
-
-    template <typename T>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    execute_impl(T& operand, int)
-    {
-        return visit(operand);
-    }
-
-public: // visitor interfaces
-
-    template <typename T>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(T& operand)
-    {
-        return execute_impl(operand, 1L);
-    }
-
-#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING workaround
 
 };
 
@@ -826,19 +861,13 @@ private: // helpers, for representation (below)
     };
 
     typedef typename detail::variant::make_storage<internal_types>::type
-        storage1_t;
+        storage_t;
 
-    typedef typename mpl::apply_if<
-          T0_has_nothrow_constructor_
-        , mpl::identity< detail::variant::null_storage >
-        , detail::variant::make_storage2<internal_types>
-        >::type storage2_t;
-
-private: // representation (int which_)
+private: // helpers, for representation (below)
 
     // which_ on:
-    // * [0,  size<internal_types>) indicates storage1
-    // * [-size<internal_types>, 0) indicates storage2
+    // * [0,  size<internal_types>) indicates stack content
+    // * [-size<internal_types>, 0) indicates pointer to heap backup
     // if which_ >= 0:
     // * then which() -> which_
     // * else which() -> -(which_ + 1)
@@ -863,95 +892,42 @@ private: // representation (int which_)
 
 #endif // BOOST_VARIANT_MINIMIZE_SIZE switch
 
+// representation -- private when possible
+#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+    private:
+#else
+    public:
+#endif
+
     which_t which_;
+    storage_t storage_;
 
-    static bool using_storage1_impl(mpl::true_)
-    {
-        // Since there is no storage2, we know storage1 is in use:
-        return true;
-    }
-
-    bool using_storage1_impl(mpl::false_) const
-    {
-        // Since a true second storage is in use (i.e. NOT null_storage), we must check:
-        return which_ >= 0;
-    }
-
-    bool using_storage1() const
-    {
-        typedef typename is_same<storage2_t, detail::variant::null_storage>::type
-            has_single_storage;
-
-        return using_storage1_impl(has_single_storage());
-    }
-
-    void activate_storage1(int which)
+    void indicate_which(int which)
     {
         which_ = static_cast<which_t>( which );
     }
 
-    void activate_storage2(int which)
+    void indicate_backup_which(int which)
     {
         which_ = static_cast<which_t>( -(which + 1) );
     }
 
-private: // representation (aligned double-storage)
+private: // helpers, for queries (below)
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-
-    compressed_pair< storage1_t,storage2_t > storage_;
-
-    void* storage1() { return storage_.first().address(); }
-    void* storage2() { return storage_.second().address(); }
-
-    const void* storage1() const { return storage_.first().address(); }
-    const void* storage2() const { return storage_.second().address(); }
-
-#else // MSVC6
-
-    storage1_t msvc_storage1_;
-    storage2_t msvc_storage2_;
-
-    void* storage1() { return msvc_storage1_.address(); }
-    void* storage2() { return msvc_storage2_.address(); }
-
-    const void* storage1() const;
-    const void* storage2() const;
-
-#endif // MSVC6 workaround
-
-    void* active_storage()
+    bool using_backup() const
     {
-        return using_storage1() ? storage1() : storage2();
-    }
-
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-
-    const void* active_storage() const
-    {
-        return using_storage1() ? storage1() : storage2();
-    }
-
-#else // MSVC6
-
-    const void* active_storage() const;
-
-#endif // MSVC6 workaround
-
-    void* inactive_storage()
-    {
-        return using_storage1() ? storage2() : storage1();
+        return which_ < 0;
     }
 
 public: // queries
 
     int which() const
     {
-        // If NOT using storage1...
-        if (using_storage1() == false)
+        // If using heap backup...
+        if (using_backup())
             // ...then return adjusted which_:
             return -(which_ + 1);
-        
+
         // Otherwise, return which_ directly:
         return which_;
     }
@@ -985,8 +961,8 @@ public: // structors
         // type is not default-constructible, and so variant cannot
         // support its own default-construction.
         //
-        new( storage1() ) internal_T0();
-        activate_storage1(0); // zero is the index of the first bounded type
+        new( storage_.address() ) internal_T0();
+        indicate_which(0); // zero is the index of the first bounded type
     }
 
 private: // helpers, for structors, cont. (below)
@@ -1005,10 +981,10 @@ private: // helpers, for structors, cont. (below)
         {
         }
 
-    public: // helpers, for visitor interfaces (below)
+    public: // internal visitor interfaces (below)
 
         template <typename T>
-        int execute(T& operand, int = 0) const
+        int internal_visit(T& operand, int) const
         {
             // NOTE TO USER :
             // Compile error here indicates one of the source variant's types 
@@ -1018,48 +994,48 @@ private: // helpers, for structors, cont. (below)
             return initializer::initialize(storage_, operand);
         }
 
+#   if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0564))
         template <typename T>
-        int execute(
-              boost::detail::reference_content<T>& operand
-            , long
-            ) const
+        result_type internal_visit(const T& operand, int) const
         {
-            return execute( operand.get() );
+            return initializer::initialize(storage_, operand);
+        }
+#   endif
+
+        template <typename T>
+        int internal_visit(boost::detail::reference_content<T>& operand, long) const
+        {
+            return internal_visit( operand.get(), 1L );
         }
 
         template <typename T>
-        int execute(
-              const boost::detail::reference_content<T>& operand
-            , long
-            ) const
+        int internal_visit(const boost::detail::reference_content<T>& operand, long) const
         {
-            return execute( operand.get() );
+            return internal_visit( operand.get(), 1L );
         }
 
         template <typename T>
-        int execute(
-              boost::recursive_wrapper<T>& operand
-            , long
-            ) const
+        int internal_visit(boost::detail::variant::backup_holder<T>& operand, long) const
         {
-            return execute( operand.get() );
+            return internal_visit( operand.get(), 1L );
         }
 
         template <typename T>
-        int execute(
-              const boost::recursive_wrapper<T>& operand
-            , long
-            ) const
+        int internal_visit(const boost::detail::variant::backup_holder<T>& operand, long) const
         {
-            return execute( operand.get() );
+            return internal_visit( operand.get(), 1L );
         }
 
-    public: // visitor interfaces
+        template <typename T>
+        int internal_visit(boost::recursive_wrapper<T>& operand, long) const
+        {
+            return internal_visit( operand.get(), 1L );
+        }
 
         template <typename T>
-        int operator()(T& operand) const
+        int internal_visit(const boost::recursive_wrapper<T>& operand, long) const
         {
-            return execute(operand, 1L);
+            return internal_visit( operand.get(), 1L );
         }
 
     };
@@ -1080,9 +1056,9 @@ private: // helpers, for structors, below
         // unambiguously convertible to one of the variant's types
         // (or that no conversion exists).
         //
-        activate_storage1(
+        indicate_which(
               initializer::initialize(
-                  storage1()
+                  storage_.address()
                 , operand
                 )
             );
@@ -1095,8 +1071,8 @@ private: // helpers, for structors, below
         , mpl::true_// is_foreign_variant
         )
     {
-        convert_copy_into visitor(storage1());
-        activate_storage1(
+        convert_copy_into visitor(storage_.address());
+        indicate_which(
               operand.internal_apply_visitor(visitor)
             );
     }
@@ -1164,7 +1140,8 @@ public: // structors, cont.
         convert_construct(operand, 1L);
     }
 
-#elif !defined(BOOST_VARIANT_AUX_NO_SFINAE)
+#elif !defined(BOOST_VARIANT_AUX_NO_SFINAE) \
+   && !BOOST_WORKAROUND(BOOST_INTEL, BOOST_TESTED_AT(700))
 
     // For compilers that cannot distinguish between T& and const T& in
     // template constructors, but do support SFINAE, we can workaround:
@@ -1206,151 +1183,209 @@ public: // structors, cont.
     variant(const variant& operand)
     {
         // Copy the value of operand into *this...
-        detail::variant::copy_into visitor( storage1() );
+        detail::variant::copy_into visitor( storage_.address() );
         operand.internal_apply_visitor(visitor);
 
         // ...and activate the *this's primary storage on success:
-        activate_storage1(operand.which());
+        indicate_which(operand.which());
     }
 
 private: // helpers, for modifiers (below)
 
-    // class assign_into
+    // class backup_assigner
     //
-    // Generic visitor that assigns the value it visits to the variant it is
-    // given, maintaining the strong guarantee of exception safety.
+    // Internal visitor that "assigns" the given value to the visited value,
+    // using backup to recover if the destroy-copy sequence fails.
     //
 
-    class assign_into
+    template <typename RhsT>
+    class backup_assigner
         : public static_visitor<>
     {
     private: // representation
 
-        variant& target_;
-        int source_which_;
+        variant& lhs_;
+        int rhs_which_;
+        const RhsT& rhs_content_;
 
     public: // structors
 
-        assign_into(variant& target, int source_which)
-            : target_(target)
-            , source_which_(source_which)
+        backup_assigner(variant& lhs, int rhs_which, const RhsT& rhs_content)
+            : lhs_(lhs)
+            , rhs_which_(rhs_which)
+            , rhs_content_(rhs_content)
         {
         }
 
-    private: // helpers, for visitor interfaces (below)
+    public: // visitor interface
 
-        template <typename T, typename B1, typename B2>
+        template <typename LhsT>
+            BOOST_VARIANT_AUX_RETURN_VOID_TYPE
+        internal_visit(LhsT& lhs_content, int)
+        {
+            // Backup lhs content...
+            LhsT* backup_lhs_ptr = new LhsT(lhs_content);
+
+            // ...destroy lhs content...
+            lhs_content.~LhsT(); // nothrow
+
+            try
+            {
+                // ...and attempt to copy rhs content into lhs storage:
+                new(lhs_.storage_.address()) RhsT(rhs_content_);
+            }
+            catch (...)
+            {
+                // In case of failure, copy backup pointer to lhs storage...
+                new(lhs_.storage_.address())
+                    detail::variant::backup_holder<LhsT>( backup_lhs_ptr ); // nothrow
+
+                // ...indicate now using backup...
+                lhs_.indicate_backup_which( lhs_.which() ); // nothrow
+
+                // ...and rethrow:
+                throw;
+            }
+
+            // In case of success, indicate success...
+            lhs_.indicate_which(rhs_which_); // nothrow
+
+            // ...and delete backup:
+            delete backup_lhs_ptr; // nothrow
+
+            BOOST_VARIANT_AUX_RETURN_VOID;
+        }
+
+    };
+
+#   if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+    template <typename RhsT> friend class backup_assigner;
+#   endif
+
+    // class assigner
+    //
+    // Internal visitor that "assigns" the visited value to the given variant
+    // by appropriate destruction and copy-construction.
+    //
+
+    class assigner
+        : public static_visitor<>
+    {
+    private: // representation
+
+        variant& lhs_;
+        int rhs_which_;
+
+    public: // structors
+
+        assigner(variant& lhs, int rhs_which)
+            : lhs_(lhs)
+            , rhs_which_(rhs_which)
+        {
+        }
+
+    private: // helpers, for internal visitor interface (below)
+
+        template <typename RhsT, typename B1, typename B2>
         void assign_impl(
-              const T& operand
+              const RhsT& rhs_content
             , mpl::true_// has_nothrow_copy
             , B1// has_nothrow_move_constructor
             , B2// T0_has_nothrow_constructor
             )
         {
-            // Destroy the target's active storage...
-            target_.destroy_content(); // nothrow
+            // Destroy lhs's content...
+            lhs_.destroy_content(); // nothrow
 
-            // ...copy the source content into the target's storage1...
-            new(target_.storage1())
-                T( operand ); // nothrow
+            // ...copy rhs content into lhs's storage...
+            new(lhs_.storage_.address())
+                RhsT( rhs_content ); // nothrow
 
-            // ...and activate the target's storage1:
-            target_.activate_storage1(source_which_); // nothrow
+            // ...and indicate success:
+            lhs_.indicate_which(rhs_which_); // nothrow
         }
 
-        template <typename T, typename B>
+        template <typename RhsT, typename B>
         void assign_impl(
-              const T& operand
+              const RhsT& rhs_content
             , mpl::false_// has_nothrow_copy
             , mpl::true_// has_nothrow_move_constructor
             , B// T0_has_nothrow_constructor
             )
         {
             // Attempt to make a temporary copy (so as to move it below)...
-            T temp(operand);
+            RhsT temp(operand);
 
-            // ...and upon success destroy the target's active storage...
-            target_.destroy_content(); // nothrow
+            // ...and upon success destroy lhs's content...
+            lhs_.destroy_content(); // nothrow
 
-            // ...move the temporary copy into the target's storage1...
-            new(target_.storage1())
-                T( detail::variant::move(temp) ); // nothrow
+            // ...move the temporary copy into lhs's storage...
+            new(lhs_.storage_.address())
+                RhsT( detail::variant::move(temp) ); // nothrow
 
-            // ...and activate the target's storage1:
-            target_.activate_storage1(source_which_); // nothrow
+            // ...and indicate success:
+            lhs_.indicate_which(rhs_which_); // nothrow
         }
 
-        template <typename T>
+        template <typename RhsT>
         void assign_impl(
-              const T& operand
+              const RhsT& rhs_content
             , mpl::false_// has_nothrow_copy
             , mpl::false_// has_nothrow_move_constructor
             , mpl::true_// T0_has_nothrow_constructor
             )
         {
-            // Destroy the target's active storage...
-            target_.destroy_content(); // nothrow
+            // Destroy lhs's content...
+            lhs_.destroy_content(); // nothrow
 
             try
             {
-                // ...and attempt to copy the source content into the
-                //      target's storage1:
-                new(target_.storage1())
-                    T( operand );
+                // ...and attempt to copy rhs's content into lhs's storage:
+                new(lhs_.storage_.address())
+                    RhsT( rhs_content );
             }
             catch (...)
             {
-                // In case of failure, default-construct T0...
-                new (target_.storage1())
+                // In case of failure, default-construct T0 in lhs's storage...
+                new (lhs_.storage_.address())
                     internal_T0; // nothrow
 
                 // ...indicate the construction...
-                target_.activate_storage1(0);
+                lhs_.indicate_which(0);
 
                 // ...and rethrow:
                 throw;
             }
 
-            // In the event of success, activate the target's storage1:
-            target_.activate_storage1(source_which_); // nothrow
+            // In the event of success, indicate success:
+            lhs_.indicate_which(rhs_which_); // nothrow
         }
 
-        template <typename T>
+        template <typename RhsT>
         void assign_impl(
-              const T& operand
+              const RhsT& rhs_content
             , mpl::false_// has_nothrow_copy
             , mpl::false_// has_nothrow_move_constructor
             , mpl::false_// T0_has_nothrow_constructor
             )
         {
-            // Attempt a copy into target's inactive storage...
-            new(target_.inactive_storage()) T(operand);
-
-            // ...and upon success destroy the target's active storage...
-            target_.destroy_content(); // nothrow
-
-            // ...and if the target _was_ using storage1...
-            if (target_.using_storage1())
-                // ...then activate storage2:
-                target_.activate_storage2(source_which_); // nothrow
-            else
-                // ...otherwise, activate storage1:
-                target_.activate_storage1(source_which_); // nothrow
+            backup_assigner<RhsT> visitor(lhs_, rhs_which_, rhs_content);
+            lhs_.internal_apply_visitor(visitor);
         }
 
-    public: // visitor interfaces
+    public: // internal visitor interfaces
 
-        template <typename T>
+        template <typename RhsT>
             BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-        operator()(const T& operand)
+        internal_visit(const RhsT& rhs_content, int)
         {
-            typedef typename has_nothrow_copy<T>::type
+            typedef typename has_nothrow_copy<RhsT>::type
                 nothrow_copy;
-            typedef typename detail::variant::has_nothrow_move_constructor<T>::type
+            typedef typename detail::variant::has_nothrow_move_constructor<RhsT>::type
                 nothrow_move_constructor;
 
             assign_impl(
-                  operand
+                  rhs_content
                 , nothrow_copy()
                 , nothrow_move_constructor()
                 , T0_has_nothrow_constructor_()
@@ -1361,22 +1396,42 @@ private: // helpers, for modifiers (below)
 
     };
 
-    friend class assign_into;
+    friend class assigner;
 
-    void assign(const variant& rhs)
+    void variant_assign(const variant& rhs)
     {
-        // If the types are the same...
-        if (which() == rhs.which())
+        // If the contained types are EXACTLY the same...
+        if (which_ == rhs.which_)
         {
-            // ...then assign the value directly:
-            detail::variant::assigner visitor(rhs.active_storage());
+            // ...then assign rhs's storage to lhs's content:
+            detail::variant::assign_storage visitor(rhs.storage_.address());
             this->internal_apply_visitor(visitor);
         }
         else
         {
-            // Otherwise, perform general variant assignment:
-            assign_into visitor(*this, rhs.which());
+            // Otherwise, perform general (copy-based) variant assignment:
+            assigner visitor(*this, rhs.which());
             rhs.internal_apply_visitor(visitor); 
+        }
+    }
+
+private: // helpers, for modifiers (below)
+
+    template <typename T>
+    void assign(const T& rhs)
+    {
+        // If direct assignment is not possible...
+        detail::variant::direct_assigner<const T> direct_assign(rhs);
+        if (this->apply_visitor(direct_assign) == false)
+        {
+            // ...then convert rhs to variant and assign:
+            //
+            // While potentially inefficient, the following construction of a
+            // variant allows T as any type convertible to one of the bounded
+            // types without excessive code redundancy.
+            //
+            variant temp(rhs);
+            variant_assign( detail::variant::move(temp) );
         }
     }
 
@@ -1385,202 +1440,32 @@ public: // modifiers
     template <typename T>
     variant& operator=(const T& rhs)
     {
-        // While potentially inefficient, the following construction of a
-        // variant allows T as any type convertible to a bounded type (i.e.,
-        // opposed to an exact match) without excessive code redundancy.
-        //
-        variant temp(rhs);
-        assign( detail::variant::move(temp) );
-        return *this;
-    }
-
-    variant& operator=(const variant& rhs)
-    {
         assign(rhs);
         return *this;
     }
 
-private: // helpers, for modifiers, cont. (below)
-
-    // class swap_variants
-    //
-    // Generic static visitor that swaps given lhs and rhs variants.
-    //
-    // NOTE: Must be applied to the rhs variant.
-    //
-    class swap_variants
-        : public static_visitor<>
+    // [MSVC6 requires copy assign appear after templated operator=]
+    variant& operator=(const variant& rhs)
     {
-    private: // representation
-
-        variant& lhs_;
-        variant& rhs_;
-
-    public: // structors
-
-        swap_variants(variant& lhs, variant& rhs)
-            : lhs_(lhs)
-            , rhs_(rhs)
-        {
-        }
-
-    private: // helpers, for visitor interfaces (below)
-
-        template <typename rhs_T, typename B>
-        void swap_impl(
-              rhs_T& rhs_content
-            , mpl::true_// rhs_T_has_nothrow_move_constructor
-            , B// T0_has_nothrow_constructor (lhs)
-            )
-        {
-            // Cache rhs's which-index (because it will be overwritten)...
-            int rhs_old_which = rhs_.which(); // nothrow
-
-            // ...move rhs_content to the side...
-            rhs_T rhs_old_content(
-                  detail::variant::move(rhs_content)
-                ); // nothrow
-
-            // ...attempt to move-assign lhs to (now-moved) rhs:
-            rhs_ = detail::variant::move(lhs_);
-
-            // In case of success, destroy lhs's active storage...
-            lhs_.destroy_content(); // nothrow
-
-            // ...move rhs's old contents to lhs's storage1...
-            new(lhs_.storage1())
-                rhs_T( detail::variant::move(rhs_old_content) ); // nothrow
-
-            // ...and activate lhs's storage1:
-            lhs_.activate_storage1(rhs_old_which); // nothrow
-        }
-
-        template <typename rhs_T>
-        void swap_impl(
-              rhs_T& rhs_content
-            , mpl::false_// rhs_T_has_nothrow_move_constructor
-            , mpl::true_// T0_has_nothrow_constructor (lhs)
-            )
-        {
-            // Cache rhs's which-index (because it will be overwritten)...
-            int rhs_old_which = rhs_.which(); // nothrow
-
-            // ...move rhs_content to the side...
-            rhs_T rhs_old_content( detail::variant::move(rhs_content) );
-
-            // ...attempt to move-assign lhs to (now-moved) rhs:
-            rhs_ = detail::variant::move(lhs_);
-
-            // In case of success, destroy lhs's active storage...
-            lhs_.destroy_content(); // nothrow
-
-            try
-            {
-                // ...attempt to move rhs's old contents to lhs's storage1...
-                new(lhs_.storage1())
-                    rhs_T( detail::variant::move(rhs_old_content) );
-            }
-            catch (...)
-            {
-                // In case of failure, default-construct lhs's T0...
-                new(lhs_.storage1())
-                    internal_T0; // nothrow
-
-                // ...indicate the construction...
-                lhs_.activate_storage1(0); // nothrow
-
-                // ...and rethrow:
-                throw;
-            }
-
-            // In case of success, activate lhs's storage1:
-            lhs_.activate_storage1(rhs_old_which); // nothrow
-        }
-
-        template <typename rhs_T>
-        void swap_impl(
-              rhs_T& rhs_content
-            , mpl::false_// rhs_T_has_nothrow_move_constructor
-            , mpl::false_// T0_has_nothrow_constructor (lhs)
-            )
-        {
-            // Cache rhs's which-index (because it will be overwritten)...
-            int rhs_old_which = rhs_.which(); // nothrow
-
-            // ...move rhs's content into lhs's inactive storage...
-            new(lhs_.inactive_storage())
-                rhs_T( detail::variant::move(rhs_content) );
-
-            try
-            {
-                // ...attempt to move-assign lhs to (now-copied) rhs:
-                rhs_ = detail::variant::move(lhs_);
-            }
-            catch(...)
-            {
-                // In case of failure, destroy copied value (restoring lhs)...
-                static_cast<rhs_T*>(
-                      lhs_.inactive_storage()
-                    )->~rhs_T(); // nothrow
-
-                // ...and rethrow:
-                throw;
-            }
-
-            // In case of success, destroy lhs's active storage...
-            lhs_.destroy_content(); // nothrow
-
-            // ...and if lhs _was_ using storage1...
-            if (lhs_.using_storage1()) // nothrow
-            {
-                // ...then activate storage2:
-                lhs_.activate_storage2(rhs_old_which); // nothrow
-            }
-            else
-            {
-                // ...otherwise, activate storage1:
-                lhs_.activate_storage1(rhs_old_which); // nothrow
-            }
-        }
-
-    public: // visitor interfaces
-
-        template <typename T>
-            BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-        operator()(T& rhs_content)
-        {
-            typedef typename detail::variant::has_nothrow_move_constructor<T>::type
-                T_has_nothrow_move_constructor;
-
-            swap_impl(
-                  rhs_content
-                , T_has_nothrow_move_constructor()
-                , T0_has_nothrow_constructor_() // lhs
-                );
-
-            BOOST_VARIANT_AUX_RETURN_VOID;
-        }
-
-    };
-
-    friend class swap_variants;
-
-public: // modifiers, cont.
+        variant_assign(rhs);
+        return *this;
+    }
 
     void swap(variant& rhs)
     {
-        // If the types are the same...
-        if (which() == rhs.which())
+        // If the contained internal types are EXACTLY the same...
+        if (which_ == rhs.which_)
         {
             // ...then swap the values directly:
-            detail::variant::swap_with visitor(active_storage());
+            detail::variant::swap_with visitor(storage_.address());
             rhs.internal_apply_visitor(visitor);
         }
         else
         {
-            // Otherwise, perform general variant swap:
-            swap_variants visitor(*this, rhs);
-            rhs.internal_apply_visitor(visitor);
+            // ...otherwise, perform general variant swap:
+            variant tmp( detail::variant::move(rhs) );
+            rhs = detail::variant::move(*this);
+            *this = detail::variant::move(tmp);
         }
     }
 
@@ -1612,14 +1497,88 @@ public: // queries
         return this->apply_visitor(visitor);
     }
 
+private: // helpers, for comparison operators (below)
+
+    // (detail) class compare
+    //
+    // Generic static visitor that compares the content of the given lhs variant
+    // with the visited rhs content using Comp.
+    //
+    // Precondition: lhs.which() == rhs.which()
+    //
+    template <typename Comp>
+    struct compare
+        : public static_visitor<bool>
+    {
+    private: // representation
+
+        const variant& lhs_;
+
+    public: // structors
+
+        explicit compare(const variant& lhs)
+            : lhs_(lhs)
+        {
+        }
+
+    public: // visitor interfaces
+
+        template <typename T>
+        bool operator()(const T& rhs_content) const
+        {
+            // Since the precondition ensures lhs and rhs types are same, get T...
+            detail::variant::known_get<const T> getter;
+            const T& lhs_content = lhs_.apply_visitor(getter);
+
+            // ...and compare lhs and rhs contents:
+            return Comp()(lhs_content, rhs_content);
+        }
+
+    };
+
+public: // prevent comparison with foreign types
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+
+#   define BOOST_VARIANT_AUX_FAIL_COMPARISON_RETURN_TYPE \
+    void
+
+#else // MSVC7
+
+    //
+    // MSVC7 gives error about return types for above being different than
+    // the true comparison operator overloads:
+    //
+
+#   define BOOST_VARIANT_AUX_FAIL_COMPARISON_RETURN_TYPE \
+    bool
+
+#endif // MSVC7 workaround
+
+    template <typename U>
+        BOOST_VARIANT_AUX_FAIL_COMPARISON_RETURN_TYPE
+    operator==(const U&) const
+    {
+        BOOST_STATIC_ASSERT( false && sizeof(U) );
+    }
+
+    template <typename U>
+        BOOST_VARIANT_AUX_FAIL_COMPARISON_RETURN_TYPE
+    operator<(const U&) const
+    {
+        BOOST_STATIC_ASSERT( false && sizeof(U) );
+    }
+
 public: // comparison operators
+
+    // [MSVC6 requires these operators appear after template operators]
 
     bool operator==(const variant& rhs) const
     {
         if (this->which() != rhs.which())
             return false;
 
-        detail::variant::compare_equal visitor( active_storage() );
+        compare< detail::variant::equal_comp > visitor(*this);
         return rhs.apply_visitor(visitor);
     }
 
@@ -1632,48 +1591,9 @@ public: // comparison operators
         if (this->which() != rhs.which())
             return this->which() < rhs.which();
 
-        detail::variant::compare_less visitor( active_storage() );
+        compare< detail::variant::less_comp > visitor(*this);
         return rhs.apply_visitor(visitor);
     }
-
-public: // prevent comparison with foreign types
-
-#if !BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-
-    template <typename U>
-    void operator==(const U&) const
-    {
-        BOOST_STATIC_ASSERT( false && sizeof(U) );
-    }
-
-    template <typename U>
-    void operator<(const U&) const
-    {
-        BOOST_STATIC_ASSERT( false && sizeof(U) );
-    }
-
-#else // MSVC7
-
-    //
-    // MSVC7 gives error about return types for above being different than
-    // the true comparison operator overloads:
-    //
-
-    template <typename U>
-    bool operator==(const U&) const
-    {
-        BOOST_STATIC_ASSERT( false && sizeof(U) );
-        return false;
-    }
-
-    template <typename U>
-    bool operator<(const U&) const
-    {
-        BOOST_STATIC_ASSERT( false && sizeof(U) );
-        return false;
-    }
-
-#endif // MSVC7 workaround
 
 // helpers, for visitation support (below) -- private when possible
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
@@ -1703,7 +1623,8 @@ public:
             > first_step;
 
         return detail::variant::visitation_impl(
-              which(), visitor, active_storage(), mpl::false_()
+              which_, which()
+            , visitor, storage_.address(), mpl::false_()
             , static_cast<first_which*>(0), static_cast<first_step*>(0)
             );
     }
@@ -1722,7 +1643,8 @@ public:
             > first_step;
 
         return detail::variant::visitation_impl(
-              which(), visitor, active_storage(), mpl::false_()
+              which_, which()
+            , visitor, storage_.address(), mpl::false_()
             , static_cast<first_which*>(0), static_cast<first_step*>(0)
             );
     }
@@ -1750,40 +1672,6 @@ public: // visitation support
     }
 
 }; // class variant
-
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-
-// MSVC6 seems not to like inline functions with const void* returns, so we
-// declare the following here:
-
-template < BOOST_VARIANT_ENUM_PARAMS(typename T) >
-const void*
-variant<
-      BOOST_VARIANT_ENUM_PARAMS(T)
-    >::storage1() const
-{
-    return msvc_storage1_.address();
-}
-
-template < BOOST_VARIANT_ENUM_PARAMS(typename T) >
-const void*
-variant<
-      BOOST_VARIANT_ENUM_PARAMS(T)
-    >::storage2() const
-{
-    return msvc_storage2_.address();
-}
-
-template < BOOST_VARIANT_ENUM_PARAMS(typename T) >
-const void*
-variant<
-      BOOST_VARIANT_ENUM_PARAMS(T)
-    >::active_storage() const
-{
-    return const_cast<variant*>(this)->active_storage();
-}
-
-#endif // MSVC6 workaround
 
 ///////////////////////////////////////////////////////////////////////////////
 // function template swap

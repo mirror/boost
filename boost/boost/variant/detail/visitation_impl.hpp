@@ -20,6 +20,7 @@
 #include "boost/config.hpp"
 #include "boost/mpl/aux_/deref_wknd.hpp"
 
+#include "boost/variant/detail/backup_holder.hpp"
 #include "boost/variant/detail/cast_storage.hpp"
 #include "boost/variant/detail/forced_return.hpp"
 #include "boost/variant/detail/generic_result_type.hpp"
@@ -51,7 +52,7 @@ namespace boost {
 namespace detail { namespace variant {
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) class visitation_impl
+// (detail) class apply_visitor_unrolled
 //
 // Tag type indicates when visitation_impl is unrolled.
 //
@@ -116,15 +117,30 @@ struct visitation_impl_step
 template <typename Visitor, typename VoidPtrCV, typename T>
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-visitation_impl_invoke(Visitor& visitor, VoidPtrCV operand, T*, int)
+visitation_impl_invoke(
+      int internal_which
+    , Visitor& visitor, VoidPtrCV storage, T*
+    , int
+    )
 {
-    return visitor( cast_storage<T>(operand) );
+    if (internal_which >= 0)
+    {
+        return visitor.internal_visit(
+              cast_storage<T>(storage), 1L
+            );
+    }
+    else
+    {
+        return visitor.internal_visit(
+              cast_storage< backup_holder<T> >(storage), 1L
+            );
+    }
 }
 
 template <typename Visitor, typename VoidPtrCV>
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-visitation_impl_invoke(Visitor&, VoidPtrCV, apply_visitor_unrolled*, long)
+visitation_impl_invoke(int, Visitor&, VoidPtrCV, apply_visitor_unrolled*, long)
 {
     // should never be here at runtime:
     BOOST_ASSERT(false);
@@ -145,7 +161,7 @@ template <
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
 visitation_impl(
-      const int, Visitor&, VPCV
+      int, int, Visitor&, VPCV
     , mpl::true_ // is_apply_visitor_unrolled
     , W* = 0, S* = 0
     )
@@ -163,16 +179,17 @@ template <
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
 visitation_impl(
-      const int var_which, Visitor& visitor, VoidPtrCV storage
+      const int internal_which, const int logical_which
+    , Visitor& visitor, VoidPtrCV storage
     , mpl::false_ // is_apply_visitor_unrolled
     , Which* = 0, step0* = 0
     )
 {
     // Typedef apply_visitor_unrolled steps and associated types...
-#   define BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_TYPEDEF(z, N, _)    \
-    typedef typename BOOST_PP_CAT(step,N)::type BOOST_PP_CAT(T,N);  \
-    typedef typename BOOST_PP_CAT(step,N)::next                     \
-        BOOST_PP_CAT(step, BOOST_PP_INC(N));                        \
+#   define BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_TYPEDEF(z, N, _) \
+    typedef typename BOOST_PP_CAT(step,N)::type BOOST_PP_CAT(T,N); \
+    typedef typename BOOST_PP_CAT(step,N)::next \
+        BOOST_PP_CAT(step, BOOST_PP_INC(N)); \
     /**/
 
     BOOST_PP_REPEAT(
@@ -184,15 +201,16 @@ visitation_impl(
 #   undef BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_TYPEDEF
 
     // ...switch on the target which-index value...
-    switch (var_which)
+    switch (logical_which)
     {
 
     // ...applying the appropriate case:
-#   define BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_CASE(z, N, _)           \
-    case (Which::value + (N)):                                          \
-        return visitation_impl_invoke(                               \
-              visitor, storage, static_cast<BOOST_PP_CAT(T,N)*>(0), 1L  \
-            );                                                          \
+#   define BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_CASE(z, N, _) \
+    case (Which::value + (N)): \
+        return visitation_impl_invoke( \
+              internal_which, visitor, storage \
+            , static_cast<BOOST_PP_CAT(T,N)*>(0), 1L \
+            ); \
     /**/
 
     BOOST_PP_REPEAT(
@@ -218,7 +236,8 @@ visitation_impl(
         is_apply_visitor_unrolled;
 
     return visitation_impl(
-          var_which, visitor, storage
+          internal_which, logical_which
+        , visitor, storage
         , is_apply_visitor_unrolled()
         , static_cast<next_which*>(0), static_cast<next_step*>(0)
         );
