@@ -18,7 +18,7 @@
 #include <algorithm> // min, max.
 #include <exception>
 #include <boost/iostreams/detail/error.hpp>
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/streambuf/streambuf_base.hpp>
 
 namespace boost { namespace iostreams { namespace detail {

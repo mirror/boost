@@ -117,24 +117,24 @@
 <PRE CLASS='broken_ie'><SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T&gt;     
 <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close_device">close</A>(T& t, std::ios_base::openmode which);</PRE>
 
-<P>The semantics of <CODE>close</CODE> for a Device type <CODE>T</CODE> depends on its <A HREF="../io_traits.html#category">category</A> as follows:</P>
+<P>The semantics of <CODE>close</CODE> for a Device type <CODE>T</CODE> depends on its <A HREF="../traits.html#category">category</A> as follows:</P>
 
 <TABLE STYLE='margin-left:2em' BORDER=1 CELLPADDING=4>
     <TR><TH><CODE>category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
-        <TD VALIGN='top'>not convertible to <A HREF="../io_traits.html#category_tags"><CODE>closable_tag</CODE></A></TD>
+        <TD VALIGN='top'>not convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A></TD>
         <TD>no-op</TD>
     </TR>
     <TR>
-        <TD VALIGN='top'>convertible to <A HREF="../io_traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../modes.html#bidirectional"><CODE>bidirectional</CODE></A></A></TD>
+        <TD VALIGN='top'>convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../modes.html#bidirectional"><CODE>bidirectional</CODE></A></A></TD>
         <TD>calls <CODE>t.close(which)</CODE></TD>
     </TR>
     <TR>
-        <TD VALIGN='top'>convertible to <A HREF="../io_traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../modes.html#input"><CODE>input</CODE></A> but not to <A HREF="../modes.html#output"><CODE>output</CODE></A></TD>
+        <TD VALIGN='top'>convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../modes.html#input"><CODE>input</CODE></A> but not to <A HREF="../modes.html#output"><CODE>output</CODE></A></TD>
         <TD>calls <CODE>t.close()</CODE> if <CODE>(which & ios_base::in) != 0</CODE></TD>
     </TR>
     <TR>
-        <TD VALIGN='top'>convertible to <A HREF="../io_traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../modes.html#input"><CODE>output</CODE></A> but not to <A HREF="../modes.html#bidirectional"><CODE>bidirectional</CODE></A></TD>
+        <TD VALIGN='top'>convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../modes.html#input"><CODE>output</CODE></A> but not to <A HREF="../modes.html#bidirectional"><CODE>bidirectional</CODE></A></TD>
         <TD>calls <CODE>t.close()</CODE> if <CODE>(which & ios_base::out) != 0</CODE></TD>
     </TR>
 </TABLE>
@@ -162,7 +162,7 @@
     </TR>
     <TR>
         <TD VALIGN='top'><I>Device</I></TD><TD WIDTH='2em' VALIGN='top'>-</TD>
-        <TD>A model of one of <A HREF='../concepts/device.html'>Device</A> whose <A HREF='../modes.html'>mode</A> refines that of <CODE>T</CODE>.</TD>
+        <TD>A model of one of <A HREF='../concepts/device.html'>Device</A> whose <A HREF='../modes.html'>i/o mode</A> refines that of <CODE>T</CODE>.</TD>
     </TR>
 </TABLE>
 
@@ -171,24 +171,24 @@
 <PRE CLASS='broken_ie'><SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T, <SPAN CLASS="keyword">typename</SPAN> Device&gt;
 <SPAN CLASS="keyword">void</SPAN> close(T& t, Device& next, std::ios_base::openmode which);</PRE>
 
-<P>The semantics of <CODE>close</CODE> for a Filter type <CODE>T</CODE> depends on its <A HREF="../io_traits.html#category">category</A> as follows:</P>
+<P>The semantics of <CODE>close</CODE> for a Filter type <CODE>T</CODE> depends on its <A HREF="../traits.html#category">category</A> as follows:</P>
 
 <TABLE STYLE='margin-left:2em' BORDER=1 CELLPADDING=4>
     <TR><TH><CODE>category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
-        <TD VALIGN='top'>not convertible to <A HREF="../io_traits.html#category_tags"><CODE>closable_tag</CODE></A></TD>
+        <TD VALIGN='top'>not convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A></TD>
         <TD>no-op</TD>
     </TR>
     <TR>
-        <TD VALIGN='top'>convertible to <A HREF="../io_traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../modes.html#bidirectional"><CODE>bidirectional</CODE></A></A></TD>
+        <TD VALIGN='top'>convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../modes.html#bidirectional"><CODE>bidirectional</CODE></A></A></TD>
         <TD>calls <CODE>t.close(next, which)</CODE></TD>
     </TR>
     <TR>
-        <TD VALIGN='top'>convertible to <A HREF="../io_traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../modes.html#input"><CODE>input</CODE></A> but not to <A HREF="../modes.html#output"><CODE>output</CODE></A></TD>
+        <TD VALIGN='top'>convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../modes.html#input"><CODE>input</CODE></A> but not to <A HREF="../modes.html#output"><CODE>output</CODE></A></TD>
         <TD>calls <CODE>t.close(next)</CODE> if <CODE>(which & ios_base::in) != 0</CODE></TD>
     </TR>
     <TR>
-        <TD VALIGN='top'>convertible to <A HREF="../io_traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../modes.html#input"><CODE>output</CODE></A> but not to <A HREF="../modes.html#bidirectional"><CODE>bidirectional</CODE></A></TD>
+        <TD VALIGN='top'>convertible to <A HREF="../traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../modes.html#input"><CODE>output</CODE></A> but not to <A HREF="../modes.html#bidirectional"><CODE>bidirectional</CODE></A></TD>
         <TD>calls <CODE>t.close(next)</CODE> if <CODE>(which & ios_base::out) != 0</CODE></TD>
     </TR>
 </TABLE>
@@ -197,7 +197,7 @@
 <UL>
     <LI CLASS='square'>If <CODE>T</CODE> is not <A HREF="../concepts/closable.html">Closable</A>, <CODE>close</CODE> does nothing.
     <LI CLASS='square'>If <CODE>T</CODE> is <A HREF="../concepts/closable.html">Closable</A> and controls two separate sequences, <CODE>close</CODE> delegates to a member function <CODE>close</CODE> taking <CODE>openmode</CODE> and stream buffer parameters.
-    <LI CLASS='square'>Otherwise, <CODE>close</CODE> delegates to a member function <CODE>close</CODE> taking a single stream buffer parameter, but only if its <CODE>openmode</CODE> parameter is consistent with the mode of <CODE>T</CODE>. 
+    <LI CLASS='square'>Otherwise, <CODE>close</CODE> delegates to a member function <CODE>close</CODE> taking a single stream buffer parameter, but only if its <CODE>openmode</CODE> parameter is consistent with the i/o mode of <CODE>T</CODE>. 
 </UL>
 
 <P>The last condition prevents a Filter controlling a single sequence from being closed twice in succession.</P>

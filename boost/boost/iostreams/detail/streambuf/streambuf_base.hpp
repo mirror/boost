@@ -25,7 +25,7 @@
 #include <boost/iostreams/detail/scope_guard.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
 #include <boost/iostreams/detail/workaround.hpp>
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/is_device.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/if.hpp>
@@ -58,7 +58,7 @@ public:
     typedef BOOST_IOSTREAMS_CHAR_TYPE(T)                      char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS( Tr)
 private:
-    typedef BOOST_IOSTREAMS_CATEGORY(T)                       category;
+    typedef BOOST_IOSTREAMS_CATEGORY(T)                       io_category;
     typedef concept_adapter<T>                                wrapper;
 protected:
     typedef basic_buffer<char_type, Alloc>                    buffer_type;
@@ -150,14 +150,14 @@ void streambuf_base<T, Tr, Alloc, Mode>::open
 
     // Construct input buffer.
     if (can_read()) {
-        in().realloc(buffer_size);
+        in().resize(buffer_size);
         if (!shared_buffer())
             init_get_area();
     }
 
     // Construct output buffer.
     if (can_write() && !shared_buffer()) {
-        out().realloc(buffer_size);
+        out().resize(buffer_size);
         init_put_area();
     }
 

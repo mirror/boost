@@ -16,9 +16,9 @@
 #include <boost/iostreams/detail/adapter/output_iterator_adapter.hpp>
 #include <boost/iostreams/detail/config/smart_adapter_support.hpp>
 #include <boost/iostreams/detail/select.hpp>
-#include <boost/iostreams/detail/ios_traits.hpp>         // is_std_io.
+#include <boost/iostreams/detail/ios_traits.hpp>        // is_std_io.
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
-#include <boost/iostreams/io_traits.hpp>                 // is_smart.
+#include <boost/iostreams/traits.hpp>                   // is_smart.
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/static_assert.hpp>
@@ -62,7 +62,7 @@ struct unary_adapter {
                 mpl::true_,                
                 smart_tag // Output iterator
             >::type                                        char_type;
-    typedef smart_tag                                      category;
+    typedef smart_tag                                      io_category;
 
         // Return type of resolve.
 

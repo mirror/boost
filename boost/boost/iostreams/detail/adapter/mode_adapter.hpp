@@ -12,12 +12,12 @@
 #endif              
 
 // Contains the definition of the class template mode_adapter, which allows
-// a filter or device to function as if it has a different mode than that
-// deduced by the metafunction mode.
+// a filter or device to function as if it has a different i/o mode than that
+// deduced by the metafunction io_mode.
 
 #include <ios>                             // streamsize, streamoff, openmodes.
 #include <boost/iostreams/categories.hpp>  // tags.
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/is_filter.hpp>
 #include <boost/iostreams/operations.hpp> 
 #include <boost/mpl/if.hpp> 
@@ -32,7 +32,7 @@ private:
     typedef BOOST_IOSTREAMS_CATEGORY(T)                         base_category;
 public:
     typedef BOOST_IOSTREAMS_CHAR_TYPE(T)                        char_type;
-    struct category 
+    struct io_category 
         : Mode, 
           device_tag,
           mpl::if_<is_filter<T>, filter_tag, device_tag>,

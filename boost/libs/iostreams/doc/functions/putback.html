@@ -82,7 +82,7 @@
 <PRE CLASS='broken_ie'><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
               
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">Peekable</A>&gt;     
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#semantics">putback</A>(Peekable& peekable, <SPAN CLASS="keyword">typename</SPAN> <A CLASS='documented' HREF='../io_traits.html#char_type_ref'>char_type</A>&lt;Peekable&gt;::type c);
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#semantics">putback</A>(Peekable& peekable, <SPAN CLASS="keyword">typename</SPAN> <A CLASS='documented' HREF='../traits.html#char_type_ref'>io_char</A>&lt;Peekable&gt;::type c);
 
 } } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
 
@@ -100,20 +100,20 @@
 <A NAME='semantics'></A>
 <H4>Semantics</H4>
 
-<P>The semantics of <CODE>putback</CODE> depends on the <A HREF="../io_traits.html#category">category</A> of <CODE>Peekable</CODE> as follows:</P>
+<P>The semantics of <CODE>putback</CODE> depends on the <A HREF="../traits.html#category">category</A> of <CODE>Peekable</CODE> as follows:</P>
 
 <TABLE STYLE='margin:0,0,2em,2em' BORDER=1 CELLPADDING=4>
-    <TR><TH><CODE>category&lt;Peekable&gt;::type</CODE></TH><TH>semantics</TH></TR>
+    <TR><TH><CODE>io_category&lt;Peekable&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
-        <TD VALIGN='top'>convertible to <A HREF='../io_traits.html#category_tags'><CODE>istream_tag</CODE></A></TD>
+        <TD VALIGN='top'>convertible to <A HREF='../traits.html#category_tags'><CODE>istream_tag</CODE></A></TD>
         <TD>invokes <CODE>peekable.putback(c)</CODE></TD>
     </TR>
     <TR>
-        <TD VALIGN='top'>convertible to <A HREF='../io_traits.html#category_tags'><CODE>streambuf_tag</CODE></A> but not to <A HREF='../io_traits.html#category_tags'><CODE>istream_tag</CODE></A></TD>
+        <TD VALIGN='top'>convertible to <A HREF='../traits.html#category_tags'><CODE>streambuf_tag</CODE></A> but not to <A HREF='../traits.html#category_tags'><CODE>istream_tag</CODE></A></TD>
         <TD>invokes <CODE>peekable.sputbackc(c)</CODE></TD>
     </TR>
     <TR>
-        <TD VALIGN='top'>convertible to <A HREF='../io_traits.html#category_tags'><CODE>peekable_tag</CODE></A> but not to <A HREF='../io_traits.html#category_tags'><CODE>streambuf_tag</CODE></A> or <A HREF='../io_traits.html#category_tags'><CODE>istream_tag</CODE></A></TD>
+        <TD VALIGN='top'>convertible to <A HREF='../traits.html#category_tags'><CODE>peekable_tag</CODE></A> but not to <A HREF='../traits.html#category_tags'><CODE>streambuf_tag</CODE></A> or <A HREF='../traits.html#category_tags'><CODE>istream_tag</CODE></A></TD>
         <TD>invokes <CODE>peekable.putback(c)</CODE></TD>
     </TR>
     <TR>

@@ -17,7 +17,7 @@
 #include <boost/iostreams/detail/chain.hpp>
 #include <boost/iostreams/detail/character.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/noncopyable.hpp>
 
 namespace boost { namespace iostreams { namespace detail {

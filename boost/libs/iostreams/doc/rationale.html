@@ -131,8 +131,8 @@ The Boost Iostreams Library was designed with the following criteria in mind:
 
 <P>The following changes are planned, but are on hold pending review:
 <OL>
-    <LI>The mode <A HREF='modes.html#dual_seekable'>dual_seekable</A> will be made to refine <A HREF='modes.html#seekable'>seekable</A>
-    <LI>On conformant compilers, the need for the function <A HREF='functions/adapt.html'><CODE>adapt</CODE></A> will be eliminated as follows. The concept of a <SPAN CLASS='term'>smart Devices</SPAN>, which already exists internally, will be made public. Smart Devices adjust their character type and mode as they are added to a stream or stream buffer. This allows, e.g., output iterators to be treated as sinks even though their character type is not known in advance. Iterator ranges from Boost.Range, output iterators (identified using <CODE>boost::detail::is_incrementable</CODE>) and standard streams and stream buffers will then be recognized as smart Devices, with no need for explicit adaptation.
+    <LI>The i/o mode <A HREF='modes.html#dual_seekable'>dual_seekable</A> will be made to refine <A HREF='modes.html#seekable'>seekable</A>
+    <LI>On conformant compilers, the need for the function <A HREF='functions/adapt.html'><CODE>adapt</CODE></A> will be eliminated as follows. The concept of a <SPAN CLASS='term'>smart Devices</SPAN>, which already exists internally, will be made public. Smart Devices adjust their character type and i/o mode as they are added to a stream or stream buffer. This allows, e.g., output iterators to be treated as sinks even though their character type is not known in advance. Iterator ranges from Boost.Range, output iterators (identified using <CODE>boost::detail::is_incrementable</CODE>) and standard streams and stream buffers will then be recognized as smart Devices, with no need for explicit adaptation.
     <LI>Filters will be given some means to indicate that the number of characters written or read was fewer than requested, although end-of-sequence has not been reached and no error has occurred. This is necessary to accommodate i/o models just as non-blocking, asynchronous and multiplexed.
 </OL>
 

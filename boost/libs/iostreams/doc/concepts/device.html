@@ -24,7 +24,7 @@
     Typically, Devices are class types which define one or more member functions <CODE>read</CODE>, <CODE>write</CODE> and <CODE>seek</CODE> having interfaces resembling the member functions <CODE>sgetn</CODE>, <CODE>sputn</CODE> and <CODE>pubseekoff</CODE> of <CODE>std::basic_streambuf</CODE>.<A CLASS='footnote_ref' NAME='note_1_ref' HREF='#note_1'><SUP>[1]</SUP></A> The concept Device is defined a bit more broadly, however, so that pre-existing types, such as standard streams and stream buffers, can be treated as models of Device, and so that Devices managing in-memory sequences can be optimized.
 </P> 
 <P>
-    Each Device type has an associated character type and category. The <A HREF='../io_traits.html#char_type'>character type</A> is the type of the characters in the sequence or sequences controlled by instances of <CODE>D</CODE>. The <A HREF='../io_traits.html#category'>category</A> is a tag structure which the Iostreams Library relies on to determine which operations <CODE>D</CODE> supports. Its function is similar to the <CODE>iterator_category</CODE> member of <CODE>std::iterator_traits</CODE>.<A CLASS='footnote_ref' NAME='note_2_ref' HREF='#note_2'><SUP>[2]</SUP></A>
+    Each Device type has an associated character type and category. The <A HREF='../traits.html#char_type'>character type</A> is the type of the characters in the sequence or sequences controlled by instances of <CODE>D</CODE>. The <A HREF='../traits.html#category'>category</A> is a tag structure which the Iostreams Library relies on to determine which operations <CODE>D</CODE> supports. Its function is similar to the <CODE>iterator_category</CODE> member of <CODE>std::iterator_traits</CODE>.<A CLASS='footnote_ref' NAME='note_2_ref' HREF='#note_2'><SUP>[2]</SUP></A>
 </P>
 <P>
     There is one refinement of Device for each of the eight <A HREF='../modes.html'>modes</A>, and for each such refinement there is a corresponding refinement of <A HREF='filter.html'>Filter</A>. In order to express this corresponce cleanly, it is helpful to include the requirements of the various refinements of Device in the definition of Device itself, qualified by category. The various refinements of Device can then be characterized exactly by the following definitions. For convenience, the requirements of the four most common Device refinements are also documented individually.
@@ -34,49 +34,42 @@
     <TR><TH>Concept</TH><TH>Definition</TH></TR>
     <TR>
         <TD><A href='source.html'>Source</A></TD>
-        <TD>Refinement of Device with mode convertible to <A HREF='../modes.html#input'><CODE>input</CODE></A></TD>
+        <TD>Refinement of Device with io_mode convertible to <A HREF='../modes.html#input'><CODE>input</CODE></A></TD>
     </TR>
     <TR>
         <TD><A href='sink.html'>Sink</A></TD>
-        <TD>Refinement of Device with mode convertible to <A HREF='../modes.html#output'><CODE>output</CODE></A></TD>
+        <TD>Refinement of Device with io_mode convertible to <A HREF='../modes.html#output'><CODE>output</CODE></A></TD>
     </TR>
     <TR>
         <TD><A href='bidirectional_device.html'>BidirectionalDevice</A></TD>
-        <TD>Refinement of Device with mode convertible to <A HREF='../modes.html#bidirectional'><CODE>bidirectional</CODE></A></TD>
+        <TD>Refinement of Device with io_mode convertible to <A HREF='../modes.html#bidirectional'><CODE>bidirectional</CODE></A></TD>
     </TR>
     <TR>
         <TD><A href='seekable_device.html'>SeekableDevice</A></TD>
-        <TD>Refinement of Device with mode convertible to <A HREF='../modes.html#seekable'><CODE>seekable</CODE></A></TD>
+        <TD>Refinement of Device with io_mode convertible to <A HREF='../modes.html#seekable'><CODE>seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>SeekableSource</TD>
-        <TD>Refinement of Device with mode convertible to <A HREF='../modes.html#input_seekable'><CODE>input_seekable</CODE></A></TD>
+        <TD>Refinement of Device with io_mode convertible to <A HREF='../modes.html#input_seekable'><CODE>input_seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>SeekableSink</TD>
-        <TD>Refinement of Device with mode convertible to <A HREF='../modes.html#output_seekable'><CODE>output_seekable</CODE></A></TD>
+        <TD>Refinement of Device with io_mode convertible to <A HREF='../modes.html#output_seekable'><CODE>output_seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>BidirectionalSeekableDevice</TD>
-        <TD>Refinement of Device with mode convertible to <A HREF='../modes.html#bidirectional_seekable'><CODE>bidirectional_seekable</CODE></A></TD>
+        <TD>Refinement of Device with io_mode convertible to <A HREF='../modes.html#bidirectional_seekable'><CODE>bidirectional_seekable</CODE></A></TD>
     </TR>
     <TR>
         <TD>DualSeekableDevice</TD>
-        <TD>Refinement of Device with mode convertible to <A HREF='../modes.html#dual_seekable'><CODE>dual_seekable</CODE></A></TD>
+        <TD>Refinement of Device with io_mode convertible to <A HREF='../modes.html#dual_seekable'><CODE>dual_seekable</CODE></A></TD>
     </TR>
 </TABLE>
-
-<!-- <UL>
-    <LI><A HREF='concepts/device.html'>SeekableSource:</A> Refinement of Device with mode convertible to <A HREF='../modes.html#input_seekable'><CODE>input_seekable</CODE></A>.
-    <LI><A HREF='concepts/source.html'>SeekableSink:</A> Refinement of Device with mode convertible to <A HREF='../modes.html#output_seekable'><CODE>output_seekable</CODE></A>.
-    <LI><A HREF='concepts/sink.html'>BidirectionalSeekableDevice:</A> Refinement of Device with mode convertible to <A HREF='../modes.html#bidirectional_seekable'><CODE>bidirectional_seekable</CODE></A>.
-    <LI><A HREF='concepts/bidirectional_device.html'>DualSeekableDevice:</A> Refinement of Device with mode convertible to <A HREF='../modes.html#dual_seekable'><CODE>dual_seekable</CODE></A>.
-</UL> -->
 
 <H2>Standard Streams and Stream Buffers</H2>
 
 <P>
-    Standard streams and stream buffer types are model of Device. It is not possible to tell the exact <A HREF='../modes.html'>mode</A> of an arbitrary stream or stream buffer, so the Iostreams Library has to guess. (<I>See</I> <A HREF='../classes/mode.html#mode_type'>Class Template <CODE>mode</CODE>.</A>) If the mode selected by default does not accurately reflect a particular implementation, the function template <A HREF='../functions/adapt.html'><CODE>adapt</CODE></A> may be used.
+    Standard streams and stream buffer types are model of Device. It is not possible to tell the exact <A HREF='../modes.html'>i/o mode</A> of an arbitrary stream or stream buffer, so the Iostreams Library has to guess. (<I>See</I> <A HREF='../classes/mode.html#mode_type'>Class Template <CODE>io_mode</CODE>.</A>) If the i/o mode selected by default does not accurately reflect a particular implementation, the function template <A HREF='../functions/adapt.html'><CODE>adapt</CODE></A> may be used.
 </P>
 
 <H2>Refinement of</H2>
@@ -89,7 +82,7 @@
     <TR>
         <TD>Category</TD>
         <TD>
-            A type convertible to <A HREF="../io_traits.html#category_tags">device_tag</A> and to a unique <I>most-derived</I> <A HREF="../modes.html#mode_tags">mode tag</A>
+            A type convertible to <A HREF="../traits.html#category_tags">device_tag</A> and to a unique <I>most-derived</I> <A HREF="../modes.html#mode_tags">mode tag</A>
         </TD>
     </TR>
     <TR>
@@ -121,11 +114,11 @@
 <TABLE CELLPADDING='5' BORDER='1'>
     <TR><TH>Expression</TH><TH>Expression Type</TH></TR>
     <TR>
-        <TD><CODE>typename <A HREF='../io_traits.html'>char_type</A>&lt;D&gt;::type</CODE></TD>
+        <TD><CODE>typename <A HREF='../traits.html'>io_char</A>&lt;D&gt;::type</CODE></TD>
         <TD><CODE>typename</CODE> of the character type</TD>
     </TR>
     <TR>
-        <TD><CODE>typename <A HREF='../io_traits.html'>category</A>&lt;D&gt;::type</CODE></TD>
+        <TD><CODE>typename <A HREF='../traits.html'>io_category</A>&lt;D&gt;::type</CODE></TD>
         <TD><CODE>typename</CODE> of the category</TD>
     </TR>
 </TABLE>
@@ -138,7 +131,7 @@
         <TD><PRE CLASS='plain_code'><CODE><A HREF='../functions/read.html'>boost::iostreams::read</A>(dev, s1, n)</CODE></PRE></TD>
         <TD><CODE>std::streamsize</CODE></TD>
         <TD>
-            Convertible to <A HREF="../modes.html#mode_tags"><CODE>input</CODE></A> but not to <A HREF="../io_traits.html#category_tags"><CODE>direct_tag</CODE></A>
+            Convertible to <A HREF="../modes.html#mode_tags"><CODE>input</CODE></A> but not to <A HREF="../traits.html#category_tags"><CODE>direct_tag</CODE></A>
         </TD>
         <TD>
             Reads up to <CODE>n</CODE> characters from the sequence controlled by <CODE>dev</CODE> into <CODE>s1</CODE>, returning the number of characters read; returning a value less than n indicates end-of-sequence
@@ -148,7 +141,7 @@
         <TD><PRE CLASS='plain_code'><CODE>dev.input_sequence()</CODE></PRE></TD>
         <TD><PRE CLASS='plain_code'><CODE>std::pair&lt;Ch*,Ch*&gt;</CODE></PRE></TD>
         <TD>
-            Convertible to <A HREF="../modes.html#mode_tags"><CODE>input</CODE></A> and to <A HREF="../io_traits.html#category_tags"><CODE>direct_tag</CODE></A>
+            Convertible to <A HREF="../modes.html#mode_tags"><CODE>input</CODE></A> and to <A HREF="../traits.html#category_tags"><CODE>direct_tag</CODE></A>
         </TD>
         <TD>Returns a pair of pointers delimiting the sequence controlled by <CODE>dev</CODE></TD>
     </TR>
@@ -162,7 +155,7 @@
         <TD><PRE CLASS='plain_code'><CODE><A HREF='../functions/write.html'>boost::iostreams::write</A>(dev, s2, n)</CODE></PRE></TD>
         <TD><CODE>void</CODE></TD>
         <TD>
-            Convertible to <A HREF="../modes.html#mode_tags"><CODE>output</CODE></A> but not to <A HREF="../io_traits.html#category_tags"><CODE>direct_tag</CODE></A>
+            Convertible to <A HREF="../modes.html#mode_tags"><CODE>output</CODE></A> but not to <A HREF="../traits.html#category_tags"><CODE>direct_tag</CODE></A>
         </TD>
         <TD>
             Writes <CODE>n</CODE> characters from the sequence beginning at <CODE>s2</CODE> to the sequence controlled by <CODE>dev</CODE>
@@ -172,7 +165,7 @@
         <TD><PRE CLASS='plain_code'><CODE>dev.output_sequence()</CODE></PRE></TD>
         <TD><PRE CLASS='plain_code'><CODE>std::pair&lt;Ch*,Ch*&gt;</CODE></PRE></TD>
         <TD>
-            Convertible to <A HREF="../modes.html#mode_tags"><CODE>output</CODE></A> and to <A HREF="../io_traits.html#category_tags"><CODE>direct_tag</CODE></A>
+            Convertible to <A HREF="../modes.html#mode_tags"><CODE>output</CODE></A> and to <A HREF="../traits.html#category_tags"><CODE>direct_tag</CODE></A>
         </TD>
         <TD>Returns a pair of pointers delimiting the sequence controlled by <CODE>dev</CODE></TD>
     </TR>
@@ -186,7 +179,7 @@
         <TD><PRE CLASS='plain_code'><CODE><A HREF='../functions/seek.html'>boost::iostreams::seek</A>(dev, off, way)</CODE></PRE></TD>
         <TD><CODE>std::streamoff</CODE></TD>
         <TD>
-            Convertible to <A HREF="../modes.html#mode_tags"><CODE>seekable</CODE></A> but not to <A HREF="../io_traits.html#category_tags"><CODE>direct_tag</CODE></A>
+            Convertible to <A HREF="../modes.html#mode_tags"><CODE>seekable</CODE></A> but not to <A HREF="../traits.html#category_tags"><CODE>direct_tag</CODE></A>
         </TD>
         <TD>
             <P CLASS='concept'>
@@ -210,7 +203,7 @@
         <TD><PRE CLASS='plain_code'><CODE><A HREF='../functions/seek.html'>boost::iostreams::seek</A>(dev, off, way, which)</CODE></PRE></TD>
         <TD><CODE>std::streamoff</CODE></TD>
         <TD>
-            Convertible to <A HREF="../modes.html#mode_tags"><CODE>dual_seekable</CODE></A> or <A HREF="../modes.html#mode_tags"><CODE>bidirectional_seekable</CODE></A> but not to <A HREF="../io_traits.html#category_tags"><CODE>direct_tag</CODE></A>
+            Convertible to <A HREF="../modes.html#mode_tags"><CODE>dual_seekable</CODE></A> or <A HREF="../modes.html#mode_tags"><CODE>bidirectional_seekable</CODE></A> but not to <A HREF="../traits.html#category_tags"><CODE>direct_tag</CODE></A>
         </TD>
         <TD>
              <P CLASS='concept'>

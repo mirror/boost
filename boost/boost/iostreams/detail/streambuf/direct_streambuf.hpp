@@ -19,7 +19,7 @@
 #include <boost/config.hpp>                     // BOOST_DEDUCED_TYPENAME.
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
 #include <boost/iostreams/detail/error.hpp>
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/optional.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
@@ -35,7 +35,7 @@ public:
 private:
     typedef linked_streambuf<char_type, traits_type>      base_type;
     typedef std::basic_streambuf<char_type, traits_type>  streambuf_type;
-    typedef BOOST_IOSTREAMS_CATEGORY(T)                   category;
+    typedef BOOST_IOSTREAMS_CATEGORY(T)                   io_category;
 public: // stream_facade needs access.
     void open( const T& t,
                std::streamsize,   // buffer size -- not used.
@@ -80,8 +80,8 @@ template<typename T, typename Tr>
 void direct_streambuf<T, Tr>::open(const T& t, std::streamsize, std::streamsize)
 {
     storage_ = t;
-    init_input(category());
-    init_output(category());
+    init_input(io_category());
+    init_output(io_category());
     setg(0, 0, 0);
     setp(0, 0);
 }

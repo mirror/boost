@@ -17,7 +17,7 @@
 <H2>Definition</H2>
 
 <P>
-    A SeekableDevice is a <A HREF='device.html'>Device</A> whose <A HREF='../modes.html'>mode</A> refines <A HREF='../modes.html#seekable'>seekable</A>.
+    A SeekableDevice is a <A HREF='device.html'>Device</A> whose <A HREF='../modes.html'><CODE>io_mode</CODE></A> refines <A HREF='../modes.html#seekable'>seekable</A>.
 </P>
 
 <H2>Description</H2>
@@ -36,7 +36,7 @@
         </LI>
     </OL>
 </P>
-<P>A SeekableDevice has mode <A HREF='../modes.html#seekable'>seekable</A>.</P>
+<P>A SeekableDevice has i/o mode <A HREF='../modes.html#seekable'>seekable</A>.</P>
 
 <H2>Example</H2>
 
@@ -44,7 +44,7 @@
 
 <PRE CLASS='broken_ie'><SPAN CLASS="keyword">struct</SPAN> SeekableDevice {
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>                 char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> seekable_device_tag  category;
+    <SPAN CLASS="keyword">typedef</SPAN> seekable_device_tag  io_category;
     std::streamsize read(<SPAN CLASS="keyword">char</SPAN>* s, std::streamsize n) 
         {
             <SPAN CLASS='comment'>// Reads up to n characters from the controlled 
@@ -69,7 +69,7 @@
 };</PRE>
 
 <P>
-    Here <CODE>seekable_device_tag</CODE> is a <A HREF='../io_traits.html#category_tags'>category tag</A> identifying the containing type as a model of SeekableDevice. When defining a new SeekableDevice, it suffices to use the tag <CODE>seekable_device_tag</CODE>. One can also derive from the helper classes <A HREF='../classes/device.html'><CODE>device&lt;seekable&gt;</CODE></A> or <A HREF='../classes/device.html#wdevice'><CODE>wdevice&lt;seekable&gt;</CODE></A>.
+    Here <CODE>seekable_device_tag</CODE> is a <A HREF='../traits.html#category_tags'>category tag</A> identifying the containing type as a model of SeekableDevice. When defining a new SeekableDevice, it suffices to use the tag <CODE>seekable_device_tag</CODE>. One can also derive from the helper classes <A HREF='../classes/device.html'><CODE>device&lt;seekable&gt;</CODE></A> or <A HREF='../classes/device.html#wdevice'><CODE>wdevice&lt;seekable&gt;</CODE></A>.
 </P>
 
 <H2>Refinement of</H2>
@@ -81,7 +81,7 @@
 <P>Same as <A HREF='device.html#types'>Device</A>, with the following additional requirements:</P>
 
 <TABLE CELLPADDING='5' BORDER='1'>
-    <TR><TD>Category</TD><TD>A type convertible to <A HREF="../io_traits.html#category_tags"><CODE>device_tag</CODE></A> and to <A HREF="../modes.html#mode_tags"><CODE>seekable</CODE></A></TD></TR>
+    <TR><TD>Category</TD><TD>A type convertible to <A HREF="../traits.html#category_tags"><CODE>device_tag</CODE></A> and to <A HREF="../modes.html#mode_tags"><CODE>seekable</CODE></A></TD></TR>
 </TABLE>
 
 <H2>Notation</H2>

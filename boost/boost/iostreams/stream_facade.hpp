@@ -48,11 +48,11 @@ struct stream_facade_traits {
 template< typename Device,
           typename Tr =
               std::char_traits<
-                  BOOST_DEDUCED_TYPENAME char_type<Device>::type
+                  BOOST_DEDUCED_TYPENAME io_char<Device>::type
               >,
           typename Alloc =
               std::allocator<
-                  BOOST_DEDUCED_TYPENAME char_type<Device>::type
+                  BOOST_DEDUCED_TYPENAME io_char<Device>::type
               >,
           typename Base = // VC6 Workaround.
               BOOST_DEDUCED_TYPENAME
@@ -83,11 +83,11 @@ public:
 template< typename Device,
           typename Tr =
               std::char_traits<
-                  BOOST_DEDUCED_TYPENAME char_type<Device>::type
+                  BOOST_DEDUCED_TYPENAME io_char<Device>::type
               >,
           typename Alloc =
               std::allocator<
-                  BOOST_DEDUCED_TYPENAME char_type<Device>::type
+                  BOOST_DEDUCED_TYPENAME io_char<Device>::type
               > >
 struct stream_facade : detail::stream_facade_base<Device, Tr, Alloc> {
 public:

@@ -25,10 +25,10 @@
 <H2>Overview</H2>
 
 <P>
-    The overloaded function template <CODE>adapt</CODE> takes an <A HREF='http://www.sgi.com/tech/stl/OutputIterator.html'>OutputIterator</A>, a pair of <A HREF='http://www.sgi.com/tech/stl/ForwardIterator.html'>ForwardIterators</A> or a standard i/o stream or stream buffer and returns a Device.<SUP><A CLASS='footnote_ref' NAME='note_1_ref' HREF='#note_1'>[1]</A></SUP> Certain properties of the returned Device, including its <A HREF='../modes.html'>mode</A>, are left indeterminate until the Device is added to a <CODE>filtering_streambuf</CODE> or <CODE>filtering_stream</CODE>. This is for two reasons:
+    The overloaded function template <CODE>adapt</CODE> takes an <A HREF='http://www.sgi.com/tech/stl/OutputIterator.html'>OutputIterator</A>, a pair of <A HREF='http://www.sgi.com/tech/stl/ForwardIterator.html'>ForwardIterators</A> or a standard i/o stream or stream buffer and returns a Device.<SUP><A CLASS='footnote_ref' NAME='note_1_ref' HREF='#note_1'>[1]</A></SUP> Certain properties of the returned Device, including its <A HREF='../modes.html'>i/o mode</A>, are left indeterminate until the Device is added to a <CODE>filtering_streambuf</CODE> or <CODE>filtering_stream</CODE>. This is for two reasons:
     <UL>
         <LI>Certain information &#8212; such as the character type associated with an OutputIterator and the readability/writability of an iterator range &#8212; is not available at the type <CODE>adapt</CODE> is invoked. 
-        <LI>The <A HREF='../modes.html'>mode</A> assigned by default to a standard i/o stream or stream buffer may not be what the library user desires. For instance, stream buffers by default are assumed to have mode <A HREF='../modes.html#seekable'>Seekable</A>; a particular stream buffer, however, might actually have mode <A HREF='../modes.html#bidirectional'>Bidirectional</A>, <A HREF='../modes.html#bidirectional_seekable'>Bidirectional-Seekable</A> or <A HREF='../modes.html#dual_seekable'>Dual-Seekable</A>. Using <CODE>adapt</CODE> allows a standard i/o stream or stream buffer to be added to a <CODE>filtering_streambuf</CODE> or <CODE>filtering_stream</CODE> regardless of the latter's mode.
+        <LI>The <A HREF='../modes.html'>i/o mode</A> assigned by default to a standard i/o stream or stream buffer may not be what the library user desires. For instance, stream buffers by default are assumed to have mode <A HREF='../modes.html#seekable'>Seekable</A>; a particular stream buffer, however, might actually have mode <A HREF='../modes.html#bidirectional'>Bidirectional</A>, <A HREF='../modes.html#bidirectional_seekable'>Bidirectional-Seekable</A> or <A HREF='../modes.html#dual_seekable'>Dual-Seekable</A>. Using <CODE>adapt</CODE> allows a standard i/o stream or stream buffer to be added to a <CODE>filtering_streambuf</CODE> or <CODE>filtering_stream</CODE> regardless of the latter's mode.
     </UL>
 </P>
 <P>See <A HREF='../adapters.html'>STL Sequence Adapters</A> for usage examples.</P>
@@ -104,7 +104,7 @@
 <A NAME='iterator_ranges_return_value'></A>
 <H4>Return Value</H4>
 
-<P>Returns a <A HREF='../concepts/sink.html'>Device</A> for accessing the sequence delimited by <CODE>first</CODE> and <CODE>last</CODE>.<SUP><A CLASS='footnote_ref' NAME='note_1_ref' HREF='#note_1'>[1]</A></SUP> The <A HREF='../modes.html'>mode</A> of the Device is determined at the time it is added to a <CODE>filtering_streambuf</CODE> or <CODE>filtering_stream</CODE>.</P>
+<P>Returns a <A HREF='../concepts/sink.html'>Device</A> for accessing the sequence delimited by <CODE>first</CODE> and <CODE>last</CODE>.<SUP><A CLASS='footnote_ref' NAME='note_1_ref' HREF='#note_1'>[1]</A></SUP> The <A HREF='../modes.html'>i/o mode</A> of the Device is determined at the time it is added to a <CODE>filtering_streambuf</CODE> or <CODE>filtering_stream</CODE>.</P>
 
 <A NAME='streams'>
 <H3><CODE>adapt</CODE> &#8212; Standard I/O Streams and Stream Buffers</H3>
@@ -133,14 +133,14 @@
 <A NAME='streams_return_value'></A>
 <H4>Return Value</H4>
 
-<P>Returns a <A HREF='../concepts/device.html'>Device</A> for accessing the sequence or sequences controlled by the given i/o stream or stream buffer.<SUP><A CLASS='footnote_ref' NAME='note_1_ref' HREF='#note_1'>[1]</A></SUP> The <A HREF='../modes.html'>mode</A> of the Device is determined at the time it is added to a <CODE>filtering_streambuf</CODE> or <CODE>filtering_stream</CODE>.</P>
+<P>Returns a <A HREF='../concepts/device.html'>Device</A> for accessing the sequence or sequences controlled by the given i/o stream or stream buffer.<SUP><A CLASS='footnote_ref' NAME='note_1_ref' HREF='#note_1'>[1]</A></SUP> The <A HREF='../modes.html'>i/o mode</A> of the Device is determined at the time it is added to a <CODE>filtering_streambuf</CODE> or <CODE>filtering_stream</CODE>.</P>
 
 <!-- Begin Footnotes -->
 
 <HR>
 
 <P>
-    <A CLASS='footnote_ref' NAME='note_1' HREF='#note_1_ref'><SUP>[1]</SUP></A>Striclty speaking, the object returned is not a true Device, since its mode and possibly its character type are indeterminate. It is better termed a <SPAN CLASS='term'>pseudo Device</SPAN>.
+    <A CLASS='footnote_ref' NAME='note_1' HREF='#note_1_ref'><SUP>[1]</SUP></A>Striclty speaking, the object returned is not a true Device, since its i/o mode and possibly its character type are indeterminate. It is better termed a <SPAN CLASS='term'>pseudo Device</SPAN>.
 </P>
 
 <!-- End Footnotes -->

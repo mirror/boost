@@ -25,7 +25,7 @@
 <H2>Definition</H2>
 
 <P>
-    An InputFilter is a <A HREF='filter.html'>Filter</A> whose <A HREF='../modes.html'>mode</A> refines <A HREF='../modes.html#input'>input</A>. 
+    An InputFilter is a <A HREF='filter.html'>Filter</A> whose <A HREF='../modes.html'><CODE>io_mode</CODE></A> refines <A HREF='../modes.html#input'>input</A>. 
 </P>
 
 <A NAME='description'></A>
@@ -62,7 +62,7 @@
 
     <SPAN CLASS="keyword">struct</SPAN> alphabetic_input_filter {
         <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>              char_type;
-        <SPAN CLASS="keyword">typedef</SPAN> input_filter_tag  category;
+        <SPAN CLASS="keyword">typedef</SPAN> input_filter_tag  io_category;
 
         <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Source&gt;
         <SPAN CLASS="keyword">int</SPAN> get(Source& src)
@@ -75,11 +75,11 @@
     };</PRE>
 
 <P>
-    Here <CODE>char_type</CODE> is the <A HREF='../io_traits.html#char_type'>character type</A> of the Filter, <CODE>input_filter_tag</CODE> is a <A HREF='../io_traits.html#category'>category tag</A> identifying the Filter as a model of InputFilter, and the function <A HREF='../functions/get.html'><CODE>boost::iostreams::get</CODE></A> reads a character from an arbitrary Source.<A CLASS='footnote_ref' NAME='note_2_ref' HREF='#note_2'><SUP>[2]</SUP></A>
+    Here <CODE>char_type</CODE> is the <A HREF='../traits.html#char_type'>character type</A> of the Filter, <CODE>input_filter_tag</CODE> is a <A HREF='../traits.html#category'>category tag</A> identifying the Filter as a model of InputFilter, and the function <A HREF='../functions/get.html'><CODE>boost::iostreams::get</CODE></A> reads a character from an arbitrary Source.<A CLASS='footnote_ref' NAME='note_2_ref' HREF='#note_2'><SUP>[2]</SUP></A>
 </P>
 
 <P>
-    The Iostreams Library defines two convenience classes, <A HREF='../classes/filter.html#synopsis'><CODE>input_filter</CODE></A> and <A HREF='../classes/filter.html#synopsis'><CODE>input_wfilter</CODE></A>, which provide member <CODE>typedef</CODE>s <CODE>char_type</CODE> and <CODE>category</CODE> as well as default implementations of several member functions.<A CLASS='footnote_ref' NAME='note_3_ref' HREF='#note_3'><SUP>[3]</SUP></A> When defining a new model of InputFilter, it is often sufficient to derive from <CODE>input_filter</CODE> or <CODE>input_wfilter</CODE> and to define a member function <CODE>get</CODE>.
+    The Iostreams Library defines two convenience classes, <A HREF='../classes/filter.html#synopsis'><CODE>input_filter</CODE></A> and <A HREF='../classes/filter.html#synopsis'><CODE>input_wfilter</CODE></A>, which provide member <CODE>typedef</CODE>s <CODE>char_type</CODE> and <CODE>io_category</CODE> as well as default implementations of several member functions.<A CLASS='footnote_ref' NAME='note_3_ref' HREF='#note_3'><SUP>[3]</SUP></A> When defining a new model of InputFilter, it is often sufficient to derive from <CODE>input_filter</CODE> or <CODE>input_wfilter</CODE> and to define a member function <CODE>get</CODE>.
 </P>
 
 <H4>II. Multi-Character InputFilter</H4>
@@ -98,7 +98,7 @@
 
     <SPAN CLASS="keyword">struct</SPAN> alphabetic_input_filter {
         <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>                       char_type;
-        <SPAN CLASS="keyword">typedef</SPAN> multichar_input_filter_tag  category;
+        <SPAN CLASS="keyword">typedef</SPAN> multichar_input_filter_tag  io_category;
 
         <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Source&gt;
         streamsize read(Source& src, <SPAN CLASS="keyword">char</SPAN>* s, streamsize n)
@@ -117,10 +117,10 @@
     };</PRE>
 
 <P>
-    Here <CODE>multichar_input_filter_tag</CODE> is a <A HREF='../io_traits.html#category'>category tag</A> identifying the Filter as a Multi-Character InputFilter.
+    Here <CODE>multichar_input_filter_tag</CODE> is a <A HREF='../traits.html#category'>category tag</A> identifying the Filter as a Multi-Character InputFilter.
 </P>
 <P>
-    The Iostreams Library defines two convenience classes, <A HREF='../classes/filter.html#synopsis'><CODE>multichar_input_filter</CODE></A> and <A HREF='../classes/filter.html#synopsis'><CODE>multichar_input_wfilter</CODE></A>, which provide the member <CODE>typedef</CODE>s <CODE>char_type</CODE> and <CODE>category</CODE> as well as default implementations of several member functions.<A CLASS='footnote_ref' NAME='note_3_ref' HREF='#note_3'><SUP>[3]</SUP></A> When defining a new Multi-Character InputFilter, it is often sufficient to derive from <CODE>multichar_input_filter</CODE> or <CODE>multichar_input_wfilter</CODE> and to define a member function <CODE>read</CODE>.
+    The Iostreams Library defines two convenience classes, <A HREF='../classes/filter.html#synopsis'><CODE>multichar_input_filter</CODE></A> and <A HREF='../classes/filter.html#synopsis'><CODE>multichar_input_wfilter</CODE></A>, which provide the member <CODE>typedef</CODE>s <CODE>char_type</CODE> and <CODE>io_category</CODE> as well as default implementations of several member functions.<A CLASS='footnote_ref' NAME='note_3_ref' HREF='#note_3'><SUP>[3]</SUP></A> When defining a new Multi-Character InputFilter, it is often sufficient to derive from <CODE>multichar_input_filter</CODE> or <CODE>multichar_input_wfilter</CODE> and to define a member function <CODE>read</CODE>.
 </P>
 
 <A NAME='detailed_specification'></A>
@@ -135,7 +135,7 @@
     <TR>
         <TD>Category</TD>
         <TD>
-            A type convertible to <A HREF="../io_traits.html#category_tags">filter_tag</A> and to <A HREF="../modes.html#input"><CODE>input</CODE></A>
+            A type convertible to <A HREF="../traits.html#category_tags">filter_tag</A> and to <A HREF="../modes.html#input"><CODE>input</CODE></A>
         </TD>
     </TR>
     <TR>
@@ -150,7 +150,7 @@
 
 <TABLE CELLPADDING='2'>
     <TR><TD><CODE>F</CODE></TD><TD>- A type which is a model of InputFilter</TD></TR>
-    <TR><TD><CODE>D</CODE></TD><TD>- A type which is a model of <A HREF='device.html'>Device</A>, with the same character type as <CODE>F</CODE> and with mode convertible to the mode of <CODE>F</CODE></TD></TR>
+    <TR><TD><CODE>D</CODE></TD><TD>- A type which is a model of <A HREF='device.html'>Device</A>, with the same character type as <CODE>F</CODE> and with i/o mode refining the mode of <CODE>F</CODE></TD></TR>
     <TR><TD><CODE>Ch</CODE></TD><TD>- The character type of <CODE>F</CODE></TD></TR>
     <TR><TD><CODE>Tr</CODE></TD><TD>- <CODE>std::char_traits&lt;Ch&gt;</CODE></TD></TR>
     <TR><TD><CODE>f</CODE></TD><TD>- Object of type <CODE>F</CODE></TD></TR>
@@ -166,14 +166,14 @@
     <TR><TH>Expression</TH><TH>Expression Type</TH><TH>Category Precondition</TH><TH>Semantics</TH></TR>
     <TR>
         <TD>
-            <PRE CLASS='plain_code'><CODE>typename <A HREF='../io_traits.html'>char_type</A>&lt;F&gt;::type</CODE></PRE>
+            <PRE CLASS='plain_code'><CODE>typename <A HREF='../traits.html'>io_char</A>&lt;F&gt;::type</CODE></PRE>
         </TD>
         <TD><CODE>typename</CODE> of the character type</TD>
         <TD ALIGN='center'>-</TD><TD ALIGN='center'>-</TD>
     </TR>
     <TR>
         <TD>
-            <PRE CLASS='plain_code'><CODE>typename <A HREF='../io_traits.html'>category</A>&lt;F&gt;::type</CODE></PRE>
+            <PRE CLASS='plain_code'><CODE>typename <A HREF='../traits.html'>io_category</A>&lt;F&gt;::type</CODE></PRE>
         </TD>
         <TD><CODE>typename</CODE> of the category</TD>
         <TD ALIGN='center'>-</TD><TD ALIGN='center'>-</TD>
@@ -182,7 +182,7 @@
         <TD><PRE CLASS='plain_code'><CODE>f.get(d)</CODE></PRE></TD>
         <TD><CODE>Tr::int_type</CODE></TD>
         <TD>
-            Convertible to <A HREF="../modes.html#mode_tags"><CODE>input</CODE></A> but not to <A HREF="../io_traits.html#category_tags"><CODE>multichar_tag</CODE></A>
+            Convertible to <A HREF="../modes.html#mode_tags"><CODE>input</CODE></A> but not to <A HREF="../traits.html#category_tags"><CODE>multichar_tag</CODE></A>
         </TD>
         <TD>
             Returns the next character in the sequence controlled by <CODE>f</CODE>, or <CODE>Tr::eof()</CODE> if the end of the sequence has been reached. The sequence controlled by <CODE>d</CODE> may be accessed using <A HREF='../functions/read.html'><CODE>boost::iostreams::read</CODE></A> and <A HREF='../functions/putback.html'><CODE>boost::iostreams::putback</CODE></A>.
@@ -194,7 +194,7 @@
         <TD><PRE CLASS='plain_code'><CODE>f.read(d, s, n)</CODE></PRE></TD>
         <TD><PRE CLASS='plain_code'><CODE>std::streamsize</CODE></PRE></TD>
         <TD>
-            Convertible to <A HREF="../modes.html#mode_tags"><CODE>input</CODE></A> and to <A HREF="../io_traits.html#category_tags"><CODE>multichar_tag</CODE></A>
+            Convertible to <A HREF="../modes.html#mode_tags"><CODE>input</CODE></A> and to <A HREF="../traits.html#category_tags"><CODE>multichar_tag</CODE></A>
         </TD>
         <TD>
             Reads up to <CODE></CODE> characters from the sequence controlled by <CODE>f</CODE> into the buffer <CODE>s</CODE>, returning the number of characters read. Returning a value less than <CODE>n</CODE> indicates end-of-sequence. The sequence controlled by <CODE>d</CODE> may be accessed using <A HREF='../functions/read.html'><CODE>boost::iostreams::read</CODE></A> and <A HREF='../functions/putback.html'><CODE>boost::iostreams::putback</CODE></A>.

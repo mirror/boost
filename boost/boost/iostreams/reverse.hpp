@@ -47,7 +47,7 @@ private:
     typedef one_step_filter<BOOST_IOSTREAMS_CHAR_TYPE(OutputFilter)>   base_type;
 public:
     typedef typename base_type::char_type                       char_type;
-    typedef typename base_type::category                        category;
+    typedef typename base_type::io_category                     io_category;
     explicit reversing_input_filter(const OutputFilter& filter)
         : filter_(filter) { }
 protected:
@@ -81,7 +81,7 @@ private:
     typedef one_step_filter<BOOST_IOSTREAMS_CHAR_TYPE(InputFilter)>    base_type;
 public:
     typedef typename base_type::char_type                       char_type;
-    typedef typename base_type::category                        category;
+    typedef typename base_type::io_category                     io_category;
     explicit reversing_output_filter(const InputFilter& filter)
         : filter_(filter) { }
 protected:

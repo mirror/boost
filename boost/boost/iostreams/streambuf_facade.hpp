@@ -18,7 +18,7 @@
 #include <boost/iostreams/detail/param_type.hpp>
 #include <boost/iostreams/detail/streambuf/direct_streambuf.hpp>
 #include <boost/iostreams/detail/streambuf/indirect_streambuf.hpp>
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
 namespace boost { namespace iostreams {
@@ -40,10 +40,10 @@ struct streambuf_facade_traits {
 template< typename T, 
           typename Tr = 
               std::char_traits<
-                  BOOST_DEDUCED_TYPENAME char_type<T>::type 
+                  BOOST_DEDUCED_TYPENAME io_char<T>::type 
               >,
           typename Alloc = std::allocator<BOOST_IOSTREAMS_CHAR_TYPE(T)>,
-          typename Mode = BOOST_DEDUCED_TYPENAME mode<T>::type >
+          typename Mode = BOOST_DEDUCED_TYPENAME io_mode<T>::type >
 class streambuf_facade
     : public detail::streambuf_facade_traits<T, Tr, Alloc, Mode>::type
 {

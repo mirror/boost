@@ -20,7 +20,7 @@
 #include <boost/iostreams/detail/config/limits.hpp>       // forwarding.
 #include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/error.hpp>
-#include <boost/iostreams/io_traits.hpp>                  // mode.
+#include <boost/iostreams/traits.hpp>                     // io_mode.
 #include <boost/iostreams/is_direct.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/preprocessor/iteration/local.hpp>
@@ -38,15 +38,15 @@ template<typename Direct>
 class direct_adapter_base {
 public:
     typedef BOOST_IOSTREAMS_CHAR_TYPE(Direct) char_type;
-    struct category 
-        : mode<Direct>::type,
+    struct io_category 
+        : io_mode<Direct>::type,
           device_tag,
           closable_tag,
           localizable_tag
         { };
 protected:
     direct_adapter_base(const Direct& d);
-    typedef is_convertible<category, two_sequence> is_double;
+    typedef is_convertible<io_category, two_sequence> is_double;
     struct pointers {
         char_type *beg, *ptr, *end;
     };
@@ -61,14 +61,14 @@ protected:
 template<typename Direct>
 class direct_adapter : private direct_adapter_base<Direct> {
 private:
-    typedef direct_adapter_base<Direct>    base_type;
-    typedef typename base_type::pointers   pointers;
-    typedef typename base_type::is_double  is_double;
+    typedef direct_adapter_base<Direct>      base_type;
+    typedef typename base_type::pointers     pointers;
+    typedef typename base_type::is_double    is_double;
     using base_type::ptrs_;
     using base_type::d_;
 public:
-    typedef typename base_type::char_type  char_type;
-    typedef typename base_type::category   category;
+    typedef typename base_type::char_type    char_type;
+    typedef typename base_type::io_category  io_category;
     direct_adapter(const Direct& d) : base_type(d) { }                                          
     direct_adapter(const direct_adapter& d) : base_type(d) { }
 
@@ -127,8 +127,8 @@ static Device& unwrap_direct(direct_adapter<Device>& d) { return *d; }
 template<typename Direct>
 direct_adapter_base<Direct>::direct_adapter_base(const Direct& d) : d_(d)
 {
-    init_input(is_convertible<category, input>());
-    init_output(is_convertible<category, output>());
+    init_input(is_convertible<io_category, input>());
+    init_output(is_convertible<io_category, output>());
 }
 
 template<typename Direct>
@@ -219,14 +219,14 @@ inline std::streamoff direct_adapter<Direct>::seek
 template<typename Direct>
 void direct_adapter<Direct>::close() 
 { 
-    BOOST_IOSTREAMS_ASSERT_NOT_CONVERTIBLE(category, two_sequence); 
+    BOOST_IOSTREAMS_ASSERT_NOT_CONVERTIBLE(io_category, two_sequence); 
     boost::iostreams::close(d_, std::ios::in | std::ios::out);
 }
 
 template<typename Direct>
 void direct_adapter<Direct>::close(std::ios_base::openmode which) 
 { 
-    BOOST_IOSTREAMS_ASSERT_CONVERTIBLE(category, two_sequence); 
+    BOOST_IOSTREAMS_ASSERT_CONVERTIBLE(io_category, two_sequence); 
     boost::iostreams::close(d_, which);
 }
 

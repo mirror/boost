@@ -17,7 +17,7 @@
 <H2>Definition</H2>
 
 <P>
-    A Source is a <A HREF='device.html'>Device</A> whose <A HREF='../modes.html'>mode</A> refines <A HREF='../modes.html#input'>input</A>. 
+    A Source is a <A HREF='device.html'>Device</A> whose <A HREF='../modes.html'>i/o mode</A> refines <A HREF='../modes.html#input'>input</A>. 
 </P>
 
 <H2>Description</H2>
@@ -37,7 +37,7 @@
     </OL>
 </P>
 
-<P>The mode of a Source is <A HREF='../modes.html#input'>input</A> or one of its refinements.</P>
+<P>The i/o mode of a Source is <A HREF='../modes.html#input'>input</A> or one of its refinements.</P>
 
 <H2>Example</H2>
 
@@ -47,7 +47,7 @@
 
 <PRE CLASS='broken_ie'><SPAN CLASS="keyword">struct</SPAN> Source {
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>        char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> source_tag  category;
+    <SPAN CLASS="keyword">typedef</SPAN> source_tag  io_category;
     std::streamsize read(<SPAN CLASS="keyword">char</SPAN>* s, std::streamsize n) 
         {
             <SPAN CLASS='comment'>// Reads up to n characters from the controlled 
@@ -58,7 +58,7 @@
 };</PRE>
 
 <P>
-    Here <CODE>source_tag</CODE> is a <A HREF='../io_traits.html#category_tags'>category tag</A> identifying the type as a model of Source. Typically a Source can be defined by deriving from the helper classes <A HREF='../classes/device.html#source'><CODE>source</CODE></A> or <A HREF='../classes/device.html#wsource'><CODE>wsource</CODE></A> and defining a member function <CODE>read</CODE>.
+    Here <CODE>source_tag</CODE> is a <A HREF='../traits.html#category_tags'>category tag</A> identifying the type as a model of Source. Typically a Source can be defined by deriving from the helper classes <A HREF='../classes/device.html#source'><CODE>source</CODE></A> or <A HREF='../classes/device.html#wsource'><CODE>wsource</CODE></A> and defining a member function <CODE>read</CODE>.
 
 <H2>Refinement of</H2>
 
@@ -70,7 +70,7 @@
 <P>Same as <A HREF='device.html#types'>Device</A>, with the following additional requirements:</P>
 
 <TABLE CELLPADDING='5' BORDER='1'>
-    <TR><TD>Category</TD><TD>A type convertible to <A HREF="../io_traits.html#category_tags"><CODE>device_tag</CODE></A> and to <A HREF="../modes.html#mode_tags"><CODE>input</CODE></A></TD></TR>
+    <TR><TD>Category</TD><TD>A type convertible to <A HREF="../traits.html#category_tags"><CODE>device_tag</CODE></A> and to <A HREF="../modes.html#mode_tags"><CODE>input</CODE></A></TD></TR>
 </TABLE>
 
 <A NAME='notation'></A>
@@ -91,14 +91,14 @@
     <TR><TH>Expression</TH><TH>Expression Type</TH><TH>Category Precondition</TH><TH>Semantics</TH></TR>
     <TR>
         <TD>
-            <PRE CLASS='plain_code'><CODE>typename <A HREF='../io_traits.html'>char_type</A>&lt;S&gt;::type</CODE></PRE>
+            <PRE CLASS='plain_code'><CODE>typename <A HREF='../traits.html'>io_char</A>&lt;S&gt;::type</CODE></PRE>
         </TD>
         <TD><CODE>typename</CODE> of the character type</TD>
         <TD ALIGN='center'>-</TD><TD ALIGN='center'>-</TD>
     </TR>
     <TR>
         <TD>
-            <PRE CLASS='plain_code'><CODE>typename <A HREF='../io_traits.html'>category</A>&lt;S&gt;::type</CODE></PRE>
+            <PRE CLASS='plain_code'><CODE>typename <A HREF='../traits.html'>io_category</A>&lt;S&gt;::type</CODE></PRE>
         </TD>
         <TD><CODE>typename</CODE> of the category</TD>
         <TD ALIGN='center'>-</TD><TD ALIGN='center'>-</TD>

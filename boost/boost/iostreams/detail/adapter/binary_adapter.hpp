@@ -41,10 +41,10 @@ struct binary_adapter_traits {
 template<typename Iter>
 struct binary_adapter {
 
-        // char_type and category.
+        // char_type and io_category.
 
     typedef typename iter_val<Iter>::type  char_type;
-    typedef smart_tag                      category;
+    typedef smart_tag                      io_category;
 
         // Return type of resolve.
 

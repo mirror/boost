@@ -4,7 +4,6 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-// 
 // Contains category and mode tags for classifying filters, devices and 
 // standard stream and stream buffers types.
 

@@ -37,7 +37,7 @@
 </P>
 
 <P>
-    The class template <CODE>stream_facade</CODE> is a policy-based stream template which derives from one of <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> and <CODE>std::basic_iostream</CODE> depending on the <A HREF='modes.html'>mode</A> of the policy class. As with <CODE>streambuf_facade</CODE>, instances of the policy class can by associated and disassociated with an instance of <CODE>stream_facade</CODE> using its member functions <CODE><A HREF="#stream_facade_open">open</A></CODE> and <CODE><A HREF="#stream_facade_close">close</A></CODE>.
+    The class template <CODE>stream_facade</CODE> is a policy-based stream template which derives from one of <CODE>std::basic_istream</CODE>, <CODE>std::basic_ostream</CODE> and <CODE>std::basic_iostream</CODE> depending on the <A HREF='modes.html'>i/o mode</A> of the policy class. As with <CODE>streambuf_facade</CODE>, instances of the policy class can by associated and disassociated with an instance of <CODE>stream_facade</CODE> using its member functions <CODE><A HREF="#stream_facade_open">open</A></CODE> and <CODE><A HREF="#stream_facade_close">close</A></CODE>.
 </P>
 
 
@@ -70,7 +70,7 @@
 <SPAN CLASS="keyword">class</SPAN> <A CLASS="documented" HREF="#streambuf_facade_params">streambuf_facade</A> : <SPAN CLASS="keyword">public</SPAN> std::basic_streambuf&lt;<SPAN CLASS="omitted">...</SPAN>&gt; {
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS="keyword">typedef</SPAN> T                            policy_type;
-    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">typename</SPAN> char_type&lt;T&gt;::type  char_type;
+    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">typename</SPAN> io_char&lt;T&gt;::type    char_type;
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">typename</SPAN> Tr                  traits_type;
 
     [<SPAN CLASS="omitted">Standard stream buffer typedefs: int_type, off_type, etc.</SPAN>]
@@ -127,15 +127,15 @@
     </TR>
     <TR>
         <TD VALIGN='top'><A NAME='level'></A><I>Tr</I></TD><TD WIDTH='2em' VALIGN='top'>-</TD>
-        <TD>A C++ standard library charatcer traits type (<A CLASS='bib_ref' HREF='bibliography.html#iso'>[ISO]</A>, 21.1.1) with <CODE>char_type</CODE> equal to the <A HREF="io_traits.html#char_type">character type</A> <CODE>Ch</CODE> of T. Defaults to <CODE>std::char_traits&lt;Ch&gt;</CODE>.</TD>
+        <TD>A C++ standard library charatcer traits type (<A CLASS='bib_ref' HREF='bibliography.html#iso'>[ISO]</A>, 21.1.1) with <CODE>char_type</CODE> equal to the <A HREF="traits.html#char_type">character type</A> <CODE>Ch</CODE> of T. Defaults to <CODE>std::char_traits&lt;Ch&gt;</CODE>.</TD>
     </TR>
     <TR>
         <TD VALIGN='top'><A NAME='level'></A><I>Alloc</I></TD><TD WIDTH='2em' VALIGN='top'>-</TD>
-        <TD>A C++ standard library allocator type (<A CLASS='bib_ref' HREF='bibliography.html#iso'>[ISO]</A>, 20.1.5), used to allocate any required character buffers. Defaults to <CODE>std::allocator&lt;Ch&gt;</CODE>, where <CODE>Ch</CODE> is the <A HREF="io_traits.html#char_type">character type</A> of T.</TD>
+        <TD>A C++ standard library allocator type (<A CLASS='bib_ref' HREF='bibliography.html#iso'>[ISO]</A>, 20.1.5), used to allocate any required character buffers. Defaults to <CODE>std::allocator&lt;Ch&gt;</CODE>, where <CODE>Ch</CODE> is the <A HREF="traits.html#char_type">character type</A> of T.</TD>
     </TR>
     <TR>
         <TD VALIGN='top'><A NAME='level'></A><I>Mode</I></TD><TD WIDTH='2em' VALIGN='top'>-</TD>
-        <TD>A mode tag <I>refined by the mode of T</I>. This parameter is principally for internal use. Specifying a <A HREF="modes.html#mode_tags">mode tag</A> properly refined by the mode of T can prevent an unneeded buffer from being allocated in some cases. Defaults to the mode of T.</TD>
+        <TD>A mode tag <I>convertible to the <CODE>io_mode</CODE> of T</I>. This parameter is principally for internal use. Specifying a <A HREF="modes.html#mode_tags">mode tag</A> properly refined by the mode of T can prevent an unneeded buffer from being allocated in some cases. Defaults to the mode of T.</TD>
     </TR>
 </TABLE>
 

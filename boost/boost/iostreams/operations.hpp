@@ -18,7 +18,7 @@
 #include <boost/iostreams/detail/iterator_traits.hpp>
 #include <boost/iostreams/detail/ios_traits.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
@@ -441,7 +441,7 @@ void close_filter( T& t, Sink& snk, std::ios::openmode which,
                    closable_tag )
 {
 #if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
-    typedef category<T>::type category;
+    typedef io_category<T>::type category;
     close_filter(t, snk, which, closable_tag(), category());
 #else
     close_filter(t, snk, which, closable_tag(), get_category(t));

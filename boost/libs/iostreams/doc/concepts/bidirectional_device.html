@@ -17,7 +17,7 @@
 <H2>Definition</H2>
 
 <P>
-    An BidirectionalDevice is a <A HREF='device.html'>Device</A> whose <A HREF='../modes.html'>mode</A> refines <A HREF='../modes.html#bidirectional'>bidirectional</A>.
+    An BidirectionalDevice is a <A HREF='device.html'>Device</A> whose <A HREF='../modes.html'>i/o mode</A> refines <A HREF='../modes.html#bidirectional'>bidirectional</A>.
 </P>
 
 <H2>Description</H2>
@@ -38,7 +38,7 @@
     </OL>
 </P>
 
-<P>The mode of an BidirectionalDevice is <A HREF='../modes.html#bidirectional'>bidirectional</A> or <A HREF='../modes.html#bidirectional_seekable'>bidirectional-seekable</A>.</P>
+<P>The i/o mode of a BidirectionalDevice is <A HREF='../modes.html#bidirectional'>bidirectional</A> or <A HREF='../modes.html#bidirectional_seekable'>bidirectional-seekable</A>.</P>
 
 <H2>Example</H2>
 
@@ -46,7 +46,7 @@
 
 <PRE CLASS='broken_ie'><SPAN CLASS="keyword">struct</SPAN> BidirectionalDevice {
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">char</SPAN>                char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> bidirectional_device_tag    category;
+    <SPAN CLASS="keyword">typedef</SPAN> bidirectional_device_tag    io_category;
     std::streamsize read(<SPAN CLASS="keyword">char</SPAN>* s, std::streamsize n) 
         {
             <SPAN CLASS='comment'>// Reads up to n characters from the input 
@@ -62,7 +62,7 @@
 };</PRE>
 
 <P>
-    Here <CODE>category</CODE> is a tag <CODE>struct</CODE> identifying the containing type as a model of BidirectionalDevice. When defining a new BidirectionalDevice, it suffices to use the tag <CODE>bidirectional_device_tag</CODE>. One can also derive from the helper classes <A HREF='../classes/device.html'><CODE>device&lt;bidirectional&gt;</CODE></A> or <A HREF='../classes/device.html#wdevice'><CODE>wdevice&lt;bidirectional&gt;</CODE></A>.
+    Here <CODE>io_category</CODE> is a tag <CODE>struct</CODE> identifying the containing type as a model of BidirectionalDevice. When defining a new BidirectionalDevice, it suffices to use the tag <CODE>bidirectional_device_tag</CODE>. One can also derive from the helper classes <A HREF='../classes/device.html'><CODE>device&lt;bidirectional&gt;</CODE></A> or <A HREF='../classes/device.html#wdevice'><CODE>wdevice&lt;bidirectional&gt;</CODE></A>.
 </P>
 
 <H2>Refinement of</H2>
@@ -74,7 +74,7 @@
 <P>Same as <A HREF='device.html#types'>Device</A>, with the following additional requirements:</P>
 
 <TABLE CELLPADDING='5' BORDER='1'>
-    <TR><TD>Category</TD><TD>A type convertible to <A HREF="../io_traits.html#category_tags">device_tag</A> and to <A HREF="../modes.html#mode_tags"><CODE>bidirectional</CODE></A></TD></TR>
+    <TR><TD>Category</TD><TD>A type convertible to <A HREF="../traits.html#category_tags">device_tag</A> and to <A HREF="../modes.html#mode_tags"><CODE>bidirectional</CODE></A></TD></TR>
 </TABLE>
 
 <H2>Notation</H2>

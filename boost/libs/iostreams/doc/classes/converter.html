@@ -26,7 +26,7 @@
 <H2>Description</H2>
 
 <P>
-    The class templates <CODE>converter</CODE> is a <SPAN CLASS='term'>Device adapter</SPAN> which takes a Device with a narrow <A HREF="../io_traits.html#char_type">character type</A> — typically <CODE>char</CODE> — and produces a Device with wide character type — typically <CODE>wchar_t</CODE> — by introducing a layer of <A HREF='../code_conversion.html'>code conversion</A>. The code conversion is performed using a <CODE>std::codecvt</CODE> facet fetched from a contained <CODE>std::locale</CODE> object. 
+    The class templates <CODE>converter</CODE> is a <SPAN CLASS='term'>Device adapter</SPAN> which takes a Device with a narrow <A HREF="../traits.html#char_type">character type</A> — typically <CODE>char</CODE> — and produces a Device with wide character type — typically <CODE>wchar_t</CODE> — by introducing a layer of <A HREF='../code_conversion.html'>code conversion</A>. The code conversion is performed using a <CODE>std::codecvt</CODE> facet fetched from a contained <CODE>std::locale</CODE> object. 
 </P>
 <P>
     For example, we can define a wide-character Device for reading from a memory-mapped file as follows:
@@ -41,7 +41,7 @@
     <SPAN CLASS="keyword">typedef</SPAN> converter&lt;array_sink&gt; my_sink;</PRE>
 </P>
 <P>
-    The <A HREF='../modes.html'>mode</A> of a specialization of <CODE>converter</CODE> is determined as follows. If a narrow character Device is read-only, the resulting specialization of <CODE>converter</CODE> has mode <A HREF='../modes.html#input'>input</A>. If a narrow character Device is write-only, the resulting specialization of <CODE>converter</CODE> has mode <A HREF='../modes.html#output'>output</A>. If a narrow character Device performs input and output using two distinct sequences (<I>see</I> <A HREF='../modes.html'>Modes</A>), the resulting specialization of <CODE>converter</CODE> has mode <A HREF='../modes.html#bidirectional'>bidirectional</A>. Otherwise, attempting to spcialize <CODE>converter</CODE> results in a compile-time error.
+    The <A HREF='../modes.html'>i/o mode</A> of a specialization of <CODE>converter</CODE> is determined as follows. If a narrow character Device is read-only, the resulting specialization of <CODE>converter</CODE> has mode <A HREF='../modes.html#input'>input</A>. If a narrow character Device is write-only, the resulting specialization of <CODE>converter</CODE> has mode <A HREF='../modes.html#output'>output</A>. If a narrow character Device performs input and output using two distinct sequences (<I>see</I> <A HREF='../modes.html'>Modes</A>), the resulting specialization of <CODE>converter</CODE> has mode <A HREF='../modes.html#bidirectional'>bidirectional</A>. Otherwise, attempting to spcialize <CODE>converter</CODE> results in a compile-time error.
 </P>
 
 <P>
@@ -69,7 +69,7 @@
 <SPAN CLASS="keyword">class</SPAN> <A CLASS='documented' HREF='#template_params'>converter</A> {
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS="keyword">typedef</SPAN> Int                     char_type;
-    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS='omitted'>implementation-defined</SPAN>  category 
+    <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS='omitted'>implementation-defined</SPAN>  io_category 
     <A CLASS='documented' HREF='#constructors'>converter</A>();
     <A CLASS='documented' HREF='#constructors'>converter</A>( <SPAN CLASS="keyword">const</SPAN> Device& dev, 
                <SPAN CLASS="keyword">const</SPAN> std::locale& loc = <SPAN CLASS='omitted'>classic locale</SPAN>,
@@ -90,7 +90,7 @@
     Device* operator-&gt;();
 
         <SPAN CLASS='comment'>// Appropriate member functions for i/o, depending on</SPAN>
-        <SPAN CLASS='comment'>// the mode of Device</SPAN>
+        <SPAN CLASS='comment'>// the i/o mode of Device</SPAN>
 };
 
 } } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
@@ -102,7 +102,7 @@
 <TR>
     <TR>
         <TD VALIGN='top'><I>Device</I></TD><TD WIDTH='2em' VALIGN='top'>-</TD>
-        <TD>A model of one of the <A HREF="../concepts.html#device_concepts">Device</A> concepts; typically has <A HREF="../io_traits.html#char_type">character type</A> <CODE>char</CODE>.</TD>
+        <TD>A model of one of the <A HREF="../concepts.html#device_concepts">Device</A> concepts; typically has <A HREF="../traits.html#char_type">character type</A> <CODE>char</CODE>.</TD>
     </TR>
     <TR>
         <TD VALIGN='top'><I>Alloc</I></TD><TD WIDTH='2em' VALIGN='top'>-</TD>

@@ -54,7 +54,7 @@ class random_access_container_adapter {
 public:
     typedef Container                       container_type;
     typedef typename Container::value_type  char_type;
-    struct category 
+    struct io_category 
         : device_tag,
           Mode
         { };

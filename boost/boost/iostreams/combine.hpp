@@ -18,7 +18,7 @@
 # include <locale>
 #endif
 #include <boost/iostreams/detail/wrap_unwrap.hpp>       
-#include <boost/iostreams/io_traits.hpp>         
+#include <boost/iostreams/traits.hpp>         
 #include <boost/iostreams/is_device.hpp>     
 #include <boost/iostreams/operations.hpp>        
 #include <boost/mpl/if.hpp>    
@@ -43,7 +43,7 @@ template<typename Source, typename Sink>
 class combined_device {
 public:
     typedef BOOST_IOSTREAMS_CHAR_TYPE(Source) char_type;
-    struct category
+    struct io_category
         : bidirectional, 
           device_tag, 
           closable_tag, 
@@ -79,7 +79,7 @@ private:
     typedef BOOST_IOSTREAMS_CATEGORY(OutputFilter)  out_category;
 public:
     typedef BOOST_IOSTREAMS_CHAR_TYPE(InputFilter)  char_type;
-    struct category 
+    struct io_category 
         : multichar_bidirectional_filter_tag,
           closable_tag, 
           localizable_tag

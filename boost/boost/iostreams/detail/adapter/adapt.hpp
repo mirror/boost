@@ -15,7 +15,7 @@
 #include <boost/iostreams/detail/assert_convertible.hpp>    
 #include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/error.hpp>
-#include <boost/iostreams/io_traits.hpp>            // mode.
+#include <boost/iostreams/traits.hpp>       // io_mode.
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/type_trats/is_convertible.hpp>    
@@ -26,8 +26,8 @@ template<typename Direct>
 class direct_adapter {
 public:
     typedef typename Direct::value_type char_type;
-    struct category 
-        : mode<Direct>::Type,
+    struct io_category 
+        : io_mode<Direct>::type,
           device_tag,
           closable_tag,
           localizable_tag
@@ -41,7 +41,7 @@ public:
     void close(std::ios_base::openmode which);
     void imbue(const std::locale&);
 private:
-    typedef is_convertible<category, two_sequence> is_double;
+    typedef is_convertible<io_category, two_sequence> is_double;
     struct pointers {
         char_type *beg, *ptr, *end;
     };
@@ -58,8 +58,8 @@ private:
 template<typename Direct>
 direct_adapter<Direct>::direct_adapter(const Direct& d) : d_(d)
 {
-    init_input(is_convertible<category, input>());
-    init_output(is_convertible<category, output>());
+    init_input(is_convertible<io_category, input>());
+    init_output(is_convertible<io_category, output>());
 }
 
 template<typename Direct>
@@ -141,14 +141,14 @@ inline std::streamoff direct_adapter<Direct>::seek
 template<typename Direct>
 void direct_adapter<Direct>::close() 
 { 
-    BOOST_IOSTREAMS_ASSERT_NOT_CONVERTIBLE(category, two_sequence); 
+    BOOST_IOSTREAMS_ASSERT_NOT_CONVERTIBLE(io_category, two_sequence); 
     boost::iostreams::close(*d_, std::ios::in | std::ios::out);
 }
 
 template<typename Direct>
 void direct_adapter<Direct>::close(std::ios_base::openmode which) 
 { 
-    BOOST_IOSTREAMS_ASSERT_CONVERTIBLE(category, two_sequence); 
+    BOOST_IOSTREAMS_ASSERT_CONVERTIBLE(io_category, two_sequence); 
     boost::iostreams::close(*d_, which);
 }
 

@@ -19,7 +19,7 @@ template<typename Device>
 struct offset_filter {
 public:
     typedef typename Device::value_type char_type;
-    struct category : mode<Device>::Type,
+    struct io_category : io_mode<Device>::Type,
           device_tag,
           closable_tag,
           localizable_tag

@@ -16,7 +16,7 @@
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iostreams/detail/ios_traits.hpp>
 #include <boost/iostreams/device/null.hpp>
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/is_device.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/if.hpp>
@@ -56,7 +56,7 @@ private:
             >::type                                    any_impl;
 public:
     typedef BOOST_IOSTREAMS_CHAR_TYPE(T)               char_type;
-    typedef BOOST_IOSTREAMS_CATEGORY(T)                category;
+    typedef BOOST_IOSTREAMS_CATEGORY(T)                io_category;
 
     concept_adapter(const reference_wrapper<T>& ref) : t_(ref.get())
     { BOOST_STATIC_ASSERT(is_std_io<T>::value); }
@@ -117,8 +117,8 @@ struct device_wrapper_impl<any_tag> {
     seek( Device& dev, Dummy*, std::streamoff off, 
           std::ios::seekdir way, std::ios::openmode which )
     { 
-        typedef BOOST_IOSTREAMS_CATEGORY(Device) category;
-        return seek(dev, off, way, which, category()); 
+        typedef BOOST_IOSTREAMS_CATEGORY(Device) io_category;
+        return seek(dev, off, way, which, io_category()); 
     }
 
     template<typename Device>
@@ -181,8 +181,8 @@ struct flt_wrapper_impl<any_tag> {
     seek( Filter& f, Device* dev, std::streamoff off,
           std::ios::seekdir way, std::ios::openmode which )
     {
-        typedef BOOST_IOSTREAMS_CATEGORY(Filter) category;
-        return seek(f, dev, off, way, which, category());
+        typedef BOOST_IOSTREAMS_CATEGORY(Filter) io_category;
+        return seek(f, dev, off, way, which, io_category());
     }
 
     template<typename Filter, typename Device>
@@ -197,8 +197,8 @@ struct flt_wrapper_impl<any_tag> {
           std::ios::seekdir way, std::ios::openmode which,
           random_access tag )
     {
-        typedef BOOST_IOSTREAMS_CATEGORY(Filter) category;
-        return seek(f, dev, off, way, which, tag, category());
+        typedef BOOST_IOSTREAMS_CATEGORY(Filter) io_category;
+        return seek(f, dev, off, way, which, tag, io_category());
     }
 
     template<typename Filter, typename Device>

@@ -20,8 +20,8 @@
 #include "../test/detail/verification.hpp"
 
 struct string_sink {
-    typedef char                             char_type;
-    typedef boost::iostreams::sink_tag              category;
+    typedef char                                    char_type;
+    typedef boost::iostreams::sink_tag              io_category;
     typedef boost::iostreams::detail::buffer<char>  buffer_type;
     string_sink() : buf_(new buffer_type(0)) { }
     void write(const char* s, std::streamsize n)

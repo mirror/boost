@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
-    <TITLE>Class Template mode</TITLE>
+    <TITLE>Class Template io_mode</TITLE>
     <LINK REL='stylesheet' HREF='../../../../boost.css'>
     <LINK REL='stylesheet' HREF='../theme/iostreams.css'>
 </HEAD>
@@ -9,7 +9,7 @@
 
 <!-- Begin Banner -->
 
-    <H1 CLASS='title'>Class Template <CODE>mode</CODE></H1>
+    <H1 CLASS='title'>Class Template <CODE>io_mode</CODE></H1>
     <HR CLASS='banner'>
 
 <!-- End Banner -->
@@ -25,13 +25,13 @@
 <A NAME='description'>
 <H2>Description</H2>
 
-<P><A HREF="http://www.boost.org/libs/mpl/doc/refmanual/metafunction.html" TARGET='_top'>Metafunction</A> returning a <A HREF="../modes.html#mode_tags">mode tag</A> corresponding the the <A HREF="../modes.html">mode</A> of a model of one of the <A HREF="../concepts.html#filter_concepts">Filter</A> or <A HREF="../concepts.html#device_concepts">Device</A> concepts or of a standard stream or stream buffer.</P>
+<P><A HREF="http://www.boost.org/libs/mpl/doc/refmanual/metafunction.html" TARGET='_top'>Metafunction</A> returning a <A HREF="../modes.html#mode_tags">mode tag</A> corresponding the the <A HREF="../modes.html">i/o mode</A> of a model of one of the <A HREF="../concepts.html#filter_concepts">Filter</A> or <A HREF="../concepts.html#device_concepts">Device</A> concepts or of a standard stream or stream buffer.</P>
 
 <A NAME='headers'>
 <H2>Headers</H2>
 
 <DL class='page-index'>
-  <DT><A CLASS='header' HREF='../../../../boost/iostreams/io_traits.hpp'><CODE>&lt;boost/iostreams/io_traits.hpp&gt;</CODE></A></DT>
+  <DT><A CLASS='header' HREF='../../../../boost/iostreams/traits.hpp'><CODE>&lt;boost/iostreams/traits.hpp&gt;</CODE></A></DT>
 </DL>
 
 <A NAME='reference'>
@@ -42,8 +42,8 @@
 <PRE CLASS='broken_ie'><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
 
 <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A HREF='#template_params' CLASS='documented'>T</A>&gt;
-<SPAN CLASS="keyword">struct</SPAN> <A CLASS="documented" HREF="mode.html">mode</A> {
-    <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='omitted'>implementation-defined</SPAN> <A HREF='#type' CLASS='documented'>type</A>;
+<SPAN CLASS="keyword">struct</SPAN> <A CLASS="documented" HREF="io_mode.html">io_mode</A> {
+    <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='omitted'>see below</SPAN> <A HREF='#type' CLASS='documented'>type</A>;
 };
 
 } } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
@@ -63,9 +63,9 @@
 
 <PRE CLASS='broken_ie'>    <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='omitted'>implementation-defined</SPAN> <A HREF='#type' CLASS='documented'>type</A>;</PRE>
 
-<P>The most-derived <A HREF="../modes.html#mode_tags">mode tag</A> to which <A HREF="../io_traits.html#category"><CODE>category&lt;T&gt;::type</CODE></A> is convertible. If there is no such most-derived tag, a compile-time error occurs.</P>
+<P>The most-derived <A HREF="../modes.html#mode_tags">mode tag</A> to which <A HREF="../traits.html#category"><CODE>io_category&lt;T&gt;::type</CODE></A> is convertible. If there is no such most-derived tag, a compile-time error occurs.</P>
 
-<P>Modes assigned to standard library types are displayed in the following table. For standard streams and stream buffers, if the mode shown below does not acurately reflect a particular implementation, the function template <A HREF='../functions/adapt.html'><CODE>adapt</CODE></A> may be used.</P>
+<P>Modes assigned to standard library types are displayed in the following table. For standard streams and stream buffers, if the i/o mode shown below does not acurately reflect a particular implementation, the function template <A HREF='../functions/adapt.html'><CODE>adapt</CODE></A> may be used.</P>
 
 <TABLE STYLE='margin-bottom:2em' BORDER=1 CELLPADDING=4>
     <TR><TH><CODE>T</CODE></TH><TH><CODE>category</CODE></TH></TR>

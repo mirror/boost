@@ -34,7 +34,7 @@ class range_adapter {
 public:
     typedef typename iterator_value<Iter>::type      char_type;
     typedef typename iterator_traversal<Iter>::type  traversal;
-    struct category : Mode, device_tag { };
+    struct io_category : Mode, device_tag { };
     typedef typename
             mpl::if_<
                 is_convertible<

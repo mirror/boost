@@ -26,7 +26,7 @@
 #include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/forward.hpp>
 #include <boost/iostreams/detail/select.hpp>
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
@@ -113,11 +113,11 @@ struct code_converter_impl {
             std::max( buffer_size,
                       static_cast<std::streamsize>(2 * max_length) );
         if (can_read::value) {
-            buf_.first().realloc(buffer_size);
+            buf_.first().resize(buffer_size);
             buf_.first().set(0, 0);
         }
         if (can_write::value && !is_double::value) {
-            buf_.second().realloc(buffer_size);
+            buf_.second().resize(buffer_size);
             buf_.second().set(0, buffer_size);
         }
         dev_ = dev;
@@ -210,7 +210,7 @@ private:
     typedef typename Codecvt::state_type                            state_type;
 public:
     typedef intern_type                                             char_type;    
-    struct category 
+    struct io_category 
         : impl_type::mode, device_tag, closable_tag, localizable_tag
         { };
     BOOST_STATIC_ASSERT((

@@ -26,7 +26,7 @@
 #include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/is_filter.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/if.hpp>
@@ -46,7 +46,7 @@ public:
     typedef BOOST_IOSTREAMS_CHAR_TYPE(T)                      char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 private:
-    typedef BOOST_IOSTREAMS_CATEGORY(T)                       category;
+    typedef BOOST_IOSTREAMS_CATEGORY(T)                       io_category;
     typedef concept_adapter<T>                                wrapper;
     typedef detail::basic_buffer<char_type, Alloc>            buffer_type;
     typedef indirect_streambuf<T, Tr, Alloc, Mode>            my_type;
@@ -164,7 +164,7 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::open
         streamsize size =
             pback_size_ +
             ( buffer_size ? buffer_size: 1 );
-        in().realloc(size);
+        in().resize(size);
         if (!shared_buffer())
             init_get_area();
     }
@@ -172,7 +172,7 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::open
     // Construct output buffer.
     if (can_write() && !shared_buffer()) {
         if (buffer_size != 0)
-            out().realloc(buffer_size);
+            out().resize(buffer_size);
         init_put_area();
     }
 

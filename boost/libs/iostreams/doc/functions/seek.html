@@ -96,10 +96,10 @@ std::streamoff <A CLASS="documented" HREF="#semantics">seek</A>( T&, std::stream
 <A NAME='semantics'></A>
 <H4>Semantics</H4>
 
-<P>The semantics of <CODE>seek</CODE> depends on the <A HREF="../io_traits.html#category">category</A> of <CODE>T</CODE> as follows:</P>
+<P>The semantics of <CODE>seek</CODE> depends on the <A HREF="../traits.html#category">category</A> of <CODE>T</CODE> as follows:</P>
 
 <TABLE STYLE='margin-left:2em' BORDER=1 CELLPADDING=4>
-    <TR><TH><CODE>category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
+    <TR><TH><CODE>io_category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
         <TD VALIGN='top'>convertible to <CODE>istream_tag</CODE> or <CODE>ostream_tag</CODE></TD>
         <TD>returns <CODE>t.rdbuf()->pubseekoff(off, way)</CODE></TD>
@@ -133,9 +133,9 @@ std::streamoff <A CLASS="documented" HREF="#semantics">seek</A>( T&, std::stream
 <P>In short:
 <UL>
     <LI CLASS='square'>If <CODE>T</CODE> is a standard stream or stream buffer type, delegates to <CODE>std::basic_streambuf::pubseekoff</CODE>.
-    <LI CLASS='square'>Otherwise, if the <A HREF='../modes.html'>mode</A> of <CODE>T</CODE> allows only one reading head, delegates to a member function <CODE>seek</CODE> which takes a <CODE>streamoff</CODE> and a <CODE>seekdir</CODE> but no <CODE>openmode</CODE>.
-    <LI CLASS='square'>Otherwise, if the <A HREF='../modes.html'>mode</A> of <CODE>T</CODE> allows random access with two reading heads, delegates to a member function <CODE>seek</CODE> which takes a <CODE>streamoff</CODE>, a <CODE>seekdir</CODE> and an <CODE>openmode</CODE>.
-    <LI CLASS='square'>If the <A HREF='../modes.html'>mode</A> of T does not permit random access, attempting to invoke <CODE>seek</CODE> is a compile-time error.
+    <LI CLASS='square'>Otherwise, if the <A HREF='../modes.html'>i/o mode</A> of <CODE>T</CODE> allows only one reading head, delegates to a member function <CODE>seek</CODE> which takes a <CODE>streamoff</CODE> and a <CODE>seekdir</CODE> but no <CODE>openmode</CODE>.
+    <LI CLASS='square'>Otherwise, if the <A HREF='../modes.html'>i/o mode</A> of <CODE>T</CODE> allows random access with two reading heads, delegates to a member function <CODE>seek</CODE> which takes a <CODE>streamoff</CODE>, a <CODE>seekdir</CODE> and an <CODE>openmode</CODE>.
+    <LI CLASS='square'>If the <A HREF='../modes.html'>i/o mode</A> of T does not permit random access, attempting to invoke <CODE>seek</CODE> is a compile-time error.
 </UL>
 
 <!-- Begin Footer -->
