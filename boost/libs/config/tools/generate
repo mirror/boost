@@ -17,6 +17,8 @@ cat > ../test/regression.cfg << EOF
 run libs/config/test/config_info.cpp
 run libs/config/test/config_test.cpp
 run libs/config/test/limits_test.cpp
+compile-fail threads/test_thread_fail1.cpp ;
+compile-fail threads/test_thread_fail2.cpp ;
 
 EOF
 cat > ../test/Jamfile << EOF
@@ -351,6 +353,7 @@ EOF
 echo "updating configure script..."
 autoconf ../tools/configure.in > ../configure
 echo
+
 
 
 

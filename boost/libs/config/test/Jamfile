@@ -15,6 +15,8 @@ run config_info.cpp <template>config_options ;
 run config_test.cpp <lib>../../test/build/boost_test_exec_monitor <template>config_options ;
 run limits_test.cpp <template>config_test_options ;
 run abi/abi_test.cpp abi/main.cpp <template>config_options ;
+compile-fail threads/test_thread_fail1.cpp ;
+compile-fail threads/test_thread_fail2.cpp ;
 
 test-suite "BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP" : 
 [ run no_arg_dep_lookup_pass.cpp <template>config_test_options ]
@@ -259,3 +261,4 @@ test-suite "BOOST_MSVC_STD_ITERATOR" :
 test-suite "BOOST_HAS_WINTHREADS" : 
 [ run has_winthreads_pass.cpp <template>config_test_options ]
 [ compile-fail has_winthreads_fail.cpp <template>config_test_options ] ;
+
