@@ -12,6 +12,7 @@
 #define BOOST_TT_IS_MEMBER_FUNCTION_POINTER_HPP_INCLUDED
 
 #include "boost/type_traits/config.hpp"
+#include "boost/detail/workaround.hpp"
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !BOOST_WORKAROUND(__BORLANDC__, < 0x600)
 #   include "boost/type_traits/detail/is_mem_fun_pointer_impl.hpp"
