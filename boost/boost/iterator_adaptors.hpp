@@ -13,6 +13,8 @@
 // Revision History:
 
 // 09 Feb 2001   David Abrahams
+//      Improved interface to indirect_ and reverse_ iterators
+//
 //      Rolled back Jeremy's new constructor for now; it was causing
 //      problems with counting_iterator_test
 //
@@ -658,39 +660,77 @@ struct indirect_iterator_policies : public default_iterator_policies
         { return **x; }
 };
 
+// This macro definition is only temporary in this file
+# if !defined(BOOST_MSVC)
+#  define BOOST_ARG_DEPENDENT_TYPENAME typename
+# else
+#  define BOOST_ARG_DEPENDENT_TYPENAME
+# endif
+
+} template <class T> struct undefined; namespace boost {
+
+namespace detail {
+# if !defined(BOOST_MSVC) // stragely instantiated even when unused! Maybe try a recursive template someday ;-)
+  template <class T>
+  struct value_type_of_value_type {
+      typedef typename boost::detail::iterator_traits<T>::value_type outer_value;
+      typedef typename boost::detail::iterator_traits<outer_value>::value_type type;
+  };
+# endif
+}
+
 template <class OuterIterator,      // Mutable or Immutable, does not matter
-          // Mutable reference and pointer type in traits class -> mutable indirect iterator;  
-          // Immutable reference and pointer type in traits class -> immutable indirect iterator
-          class InnerTraits = boost::detail::iterator_traits<typename boost::detail::iterator_traits<OuterIterator>::value_type>
+          class Value
+#if !defined(BOOST_MSVC)
+                = BOOST_ARG_DEPENDENT_TYPENAME detail::value_type_of_value_type<OuterIterator>::type
+#endif
+          , class Pointer = Value*
+          , class Reference = Value&
          >
 class indirect_iterator_generator
 {
-    typedef boost::detail::iterator_traits<OuterIterator> OuterTraits;
-    typedef typename OuterTraits::difference_type difference_type;
-    typedef typename OuterTraits::iterator_category iterator_category;
+    typedef boost::detail::iterator_traits<OuterIterator> outer_traits;
+    typedef typename outer_traits::difference_type difference_type;
+    typedef typename outer_traits::iterator_category iterator_category;
 
-    typedef typename InnerTraits::value_type value_type;
-    typedef typename InnerTraits::pointer pointer;
-    typedef typename InnerTraits::reference reference;
+    typedef typename boost::remove_const<Value>::type value_type;
+    typedef Pointer pointer;
+    typedef Reference reference;
 public:
     typedef boost::iterator<iterator_category, value_type, difference_type, pointer, reference> indirect_traits;
     typedef iterator_adaptor<OuterIterator, indirect_iterator_policies, indirect_traits> type;
 };
 
 template <class OuterIterator,      // Mutable or Immutable, does not matter
-          class ConstInnerIterator, // Immutable
-          class ConstInnerTraits = boost::detail::iterator_traits<ConstInnerIterator>,
-          class InnerTraits = boost::detail::iterator_traits<typename boost::detail::iterator_traits<OuterIterator>::value_type>
+          class Value
+#if !defined(BOOST_MSVC)
+                = BOOST_ARG_DEPENDENT_TYPENAME detail::value_type_of_value_type<OuterIterator>::type
+#endif
+          , class Pointer = Value*
+          , class Reference = Value&
+          , class ConstPointer = const Value*
+          , class ConstReference = const Value&
            >
 struct indirect_iterator_pair_generator
 {
   typedef typename indirect_iterator_generator<OuterIterator,
-    InnerTraits>::type iterator;
+    Value, Pointer, Reference>::type iterator;
   typedef typename indirect_iterator_generator<OuterIterator,
-    ConstInnerTraits>::type const_iterator;
+    Value, ConstPointer, ConstReference>::type const_iterator;
 };
 
-#ifndef BOOST_NO_STD_ITERATOR_TRAITS
+// Tried to allow InnerTraits to be provided by explicit template
+// argument to the function, but could not get it to work. -Jeremy Siek
+template <class Value, class OuterIterator>
+inline typename indirect_iterator_generator<OuterIterator,Value>::type
+make_indirect_iterator(OuterIterator base, Value* = 0)
+{
+    typedef typename indirect_iterator_generator
+        <OuterIterator, Value>::type result_t;
+    return result_t(base);
+}
+
+# if 0 // This just doesn't seem to work under any circumstances!
 template <class OuterIterator>
 inline typename indirect_iterator_generator<OuterIterator>::type
 make_indirect_iterator(OuterIterator base)
@@ -699,18 +739,7 @@ make_indirect_iterator(OuterIterator base)
         <OuterIterator>::type result_t;
     return result_t(base);
 }
-#endif
-
-// Tried to allow InnerTraits to be provided by explicit template
-// argument to the function, but could not get it to work. -Jeremy Siek
-template <class InnerTraits, class OuterIterator>
-inline typename indirect_iterator_generator<OuterIterator, InnerTraits>::type
-make_indirect_iterator(OuterIterator base, InnerTraits)
-{
-    typedef typename indirect_iterator_generator
-        <OuterIterator, InnerTraits>::type result_t;
-    return result_t(base);
-}
+# endif
 
 
 //=============================================================================
@@ -757,10 +786,6 @@ struct reverse_iterator_generator
         Traits> type;
 };
 
-// WARNING: Do not use the one template parameter version of
-// make_reverse_iterator() if the iterator is a builtin pointer type
-// and if your compiler does not support partial specialization.
-
 template <class Iterator>
 inline typename reverse_iterator_generator<Iterator>::type
 make_reverse_iterator(Iterator base)
@@ -769,17 +794,73 @@ make_reverse_iterator(Iterator base)
     return result_t(base);
 }
 
-// Specify Traits type with an explicit argument,
-// i.e., make_reverse_iterator<Traits>(base)
+template <class T> struct undefined;
 
-template <class Traits, class Iterator>
-inline typename reverse_iterator_generator<Iterator, Traits>::type
-make_reverse_iterator(Iterator base, Traits* = 0)
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+namespace detail {
+   template <bool is_pointer>
+   struct iterator_defaults_select
+   {
+       template <class Iterator,class Value>
+       struct traits
+       {
+           typedef typename boost::detail::iterator_traits<Iterator>::value_type value_type;
+           typedef typename boost::detail::iterator_traits<Iterator>::pointer pointer;
+           typedef typename boost::detail::iterator_traits<Iterator>::reference reference;
+       };
+   };
+
+   template <>
+   struct iterator_defaults_select<true>
+   {
+       template <class Iterator,class Value>
+       struct traits
+       {
+           typedef Value value_type;
+           typedef Value* pointer;
+           typedef Value& reference;
+       };
+   };
+
+   template <class Iterator,class Value>
+   struct iterator_defaults
+   {
+       enum { is_ptr = boost::is_pointer<Iterator>::value };
+       typedef iterator_defaults_select<is_ptr>::template traits<Iterator,Value> traits;
+       typedef typename traits::pointer pointer;
+       typedef typename traits::reference reference;
+   };
+}
+#endif
+
+template <class Iterator,
+    class Value = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::value_type,
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::pointer,
+    class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::reference,
+#else
+    class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Iterator,Value>::pointer,
+    class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Iterator,Value>::reference,
+#endif
+    class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::iterator_category,
+    class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::difference_type
+         >
+struct reverse_iterator_generator2
 {
-    typedef typename reverse_iterator_generator<Iterator, Traits>::type result_t;
+    typedef typename boost::remove_const<Value>::type value_type;
+    typedef typename boost::iterator<Category,value_type,Distance,Pointer,Reference> traits;
+    typedef iterator_adaptor<Iterator,reverse_iterator_policies,traits> type;
+};
+
+//#ifndef BOOST_MSVC
+template <class Iterator>
+inline typename reverse_iterator_generator2<Iterator>::type
+make_reverse_iterator2(Iterator base)
+{
+    typedef typename reverse_iterator_generator2<Iterator>::type result_t;
     return result_t(base);
 }
-
+//#endif
 
 //=============================================================================
 // Projection Iterators Adaptor
@@ -929,6 +1010,8 @@ make_filter_iterator(Iterator first, Iterator last, const Predicate& p = Predica
 
 
 } // namespace boost
+# undef BOOST_ARG_DEPENDENT_TYPENAME
+
 
 #endif
 
