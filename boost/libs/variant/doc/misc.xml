@@ -89,13 +89,6 @@
         </thead>
         <tbody>
           <row>
-            <entry>Borland C++ 5.5.1 and 5.6.4</entry>
-            <entry>X</entry>
-            <entry>X</entry>
-            <entry></entry>
-            <entry></entry>
-          </row>
-          <row>
             <entry>Comeau C++ 4.3.0</entry>
             <entry>X</entry>
             <entry>X</entry>
@@ -149,6 +142,11 @@
     </informaltable>
 
   </para>
+
+  <para>Additionally, the library's basic functionality is generally available
+    on Borland C++ 5.5.1 and 5.6.4. However, library testing has uncovered an
+    unidentified problem in these compilers. For this reason, use of the
+    library with these compilers is not recommended at this time.</para>
 
   <para>Finally, the current state of the testsuite in CVS may be found on the
     <ulink url="http://boost.sourceforge.net/regression-logs">Test Summary</ulink>
