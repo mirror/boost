@@ -51,7 +51,9 @@ void float_tests(T* = 0)
         // My hash fails this one, I guess it's not that bad.
         BOOST_WARN(x1(infinity) != x1(minus_infinity));
 
-        if(std::numeric_limits<T>::has_denorm == denorm_present) {
+        // This should really be 'has_denorm == denorm_present' but some
+        // compilers don't have 'denorm_present'. See also a leter use.
+        if(std::numeric_limits<T>::has_denorm) {
             BOOST_CHECK(x1(std::numeric_limits<T>::denorm_min()) != x1(infinity));
             BOOST_CHECK(x1(std::numeric_limits<T>::denorm_min()) != x1(minus_infinity));
         }
@@ -85,7 +87,8 @@ void float_tests(T* = 0)
 
     BOOST_CHECK(x1(std::numeric_limits<T>::epsilon()) != x1((T) 0));
 
-    if(std::numeric_limits<T>::has_denorm == denorm_present) {
+    // As before.
+    if(std::numeric_limits<T>::has_denorm) {
         BOOST_CHECK(x1(std::numeric_limits<T>::denorm_min()) != x1(zero));
     }
 
