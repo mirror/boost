@@ -17,10 +17,12 @@ namespace fsm = boost::fsm;
 
 struct A;
 struct InvalidChartTest : fsm::state_machine< InvalidChartTest, A > {};
+
 struct A : fsm::simple_state< A, InvalidChartTest > {};
 
-// A does not have inner states
-struct B : fsm::simple_state< B, A > {};
+  // A does not have inner states
+  struct B : fsm::simple_state< B, A > {};
+
 
 int main()
 {

@@ -22,11 +22,14 @@ namespace mpl = boost::mpl;
 struct A;
 struct InconsistentHistoryTest : fsm::state_machine<
   InconsistentHistoryTest, A > {};
+
 struct B;
 // A does not have history
 struct A : fsm::simple_state< A, InconsistentHistoryTest,
   fsm::no_reactions, mpl::list< fsm::deep_history< B > > > {};
-struct B : fsm::simple_state< B, A > {};
+
+  struct B : fsm::simple_state< B, A > {};
+
 
 int main()
 {

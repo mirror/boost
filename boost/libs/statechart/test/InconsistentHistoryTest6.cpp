@@ -22,6 +22,7 @@ struct EvX : fsm::event< EvX > {};
 struct A;
 struct InconsistentHistoryTest : fsm::state_machine<
   InconsistentHistoryTest, A > {};
+
 struct B;
 // A only has deep history
 struct A : fsm::simple_state< A, InconsistentHistoryTest,
@@ -35,7 +36,8 @@ struct A : fsm::simple_state< A, InconsistentHistoryTest,
   }
 };
 
-struct B : fsm::simple_state< B, A > {};
+  struct B : fsm::simple_state< B, A > {};
+
 
 int main()
 {

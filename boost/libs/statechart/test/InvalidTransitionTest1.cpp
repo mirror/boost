@@ -33,10 +33,11 @@ struct Active : fsm::simple_state< Active, InvalidTransitionTest,
 {
 };
 
-// Invalid transition between different orthogonal regions.
-struct Idle0 : fsm::simple_state< Idle0, Active::orthogonal< 0 >,
-  fsm::transition< EvX, Idle1 > > {};
-struct Idle1 : fsm::simple_state< Idle1, Active::orthogonal< 1 > > {};
+  // Invalid transition between different orthogonal regions.
+  struct Idle0 : fsm::simple_state< Idle0, Active::orthogonal< 0 >,
+    fsm::transition< EvX, Idle1 > > {};
+  struct Idle1 : fsm::simple_state< Idle1, Active::orthogonal< 1 > > {};
+
 
 int main()
 {

@@ -17,12 +17,15 @@ namespace fsm = boost::fsm;
 
 struct A;
 struct InvalidChartTest : fsm::state_machine< InvalidChartTest, A > {};
+
 struct B;
 struct A : fsm::simple_state< A, InvalidChartTest, fsm::no_reactions, B > {};
-struct B : fsm::simple_state< B, A > {};
 
-// A does not have an orthogonal region with the number 1
-struct C : fsm::simple_state< C, A::orthogonal< 1 > > {};
+  struct B : fsm::simple_state< B, A > {};
+
+  // A does not have an orthogonal region with the number 1
+  struct C : fsm::simple_state< C, A::orthogonal< 1 > > {};
+
 
 int main()
 {

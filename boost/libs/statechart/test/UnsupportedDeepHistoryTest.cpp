@@ -22,14 +22,18 @@ namespace mpl = boost::mpl;
 struct A;
 struct UnsupportedDeepHistoryTest : fsm::state_machine<
   UnsupportedDeepHistoryTest, A > {};
+
 struct B;
 struct A : fsm::simple_state< A, UnsupportedDeepHistoryTest,
   fsm::no_reactions, B, fsm::has_deep_history > {};
-struct C;
-struct D;
-struct B : fsm::simple_state< B, A, fsm::no_reactions, mpl::list< C, D > > {};
-struct C : fsm::simple_state< C, B > {};
-struct D : fsm::simple_state< D, B > {};
+
+  struct C;
+  struct D;
+  struct B : fsm::simple_state< B, A, fsm::no_reactions, mpl::list< C, D > > {};
+
+    struct C : fsm::simple_state< C, B::orthogonal< 0 > > {};
+    struct D : fsm::simple_state< D, B::orthogonal< 1 > > {};
+
 
 int main()
 {

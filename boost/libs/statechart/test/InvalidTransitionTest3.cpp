@@ -37,6 +37,7 @@ struct Active : fsm::simple_state< Active, InvalidTransitionTest,
   {
   };
 
+
 int main()
 {
   InvalidTransitionTest machine;

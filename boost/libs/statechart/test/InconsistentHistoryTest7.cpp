@@ -19,10 +19,13 @@ namespace mpl = boost::mpl;
 struct A;
 struct InconsistentHistoryTest : fsm::state_machine<
   InconsistentHistoryTest, A > {};
+
 struct B;
 struct A : fsm::simple_state<
   A, InconsistentHistoryTest, fsm::no_reactions, B > {};
-struct B : fsm::simple_state< B, A > {};
+
+  struct B : fsm::simple_state< B, A > {};
+
 
 int main()
 {
