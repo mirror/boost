@@ -38,8 +38,6 @@ test-suite iterator
     [ compile iterator_archetype_cc.cpp ]
     [ compile-fail iter_archetype_default_ctor.cpp ]
     [ compile-fail lvalue_concept_fail.cpp ]
-    [ compile constant_iterator_arrow.cpp ]
-    [ compile-fail constant_iterator_arrow_fail.cpp ]
     [ run transform_iterator_test.cpp ]
     [ run indirect_iterator_test.cpp ]
     [ compile indirect_iter_member_types.cpp ]
@@ -48,17 +46,8 @@ test-suite iterator
     [ run reverse_iterator_test.cpp ]
     [ run counting_iterator_test.cpp ]
     [ run interoperable.cpp ]
+    [ run iterator_traits_test.cpp ]
     [ run permutation_iterator_test.cpp : : : # <stlport-iostream>on 
     ]
       
-    [ run ../../utility/iterator_adaptor_examples.cpp ]
-    [ run ../../utility/counting_iterator_example.cpp ]
-    [ run ../../utility/filter_iterator_example.cpp ]
-    [ run ../../utility/fun_out_iter_example.cpp ]
-    [ run ../../utility/indirect_iterator_example.cpp ]
-    [ run ../../utility/projection_iterator_example.cpp ]
-    [ run ../../utility/reverse_iterator_example.cpp ]
-    [ run ../../utility/transform_iterator_example.cpp ]
-    [ run ../../utility/iterator_traits_test.cpp ]
-    [ run ../../utility/shared_iterator_test.cpp ]
 ;
