@@ -16,9 +16,7 @@
 
 #if (__COMO_VERSION__ <= 4245)
 
-#  ifdef _WIN32
-#     define BOOST_NO_SWPRINTF
-#  endif
+#  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 
 #  if defined(_MSC_VER) && _MSC_VER <= 1300
 #     if _MSC_VER > 100
@@ -41,7 +39,6 @@
 #  define BOOST_NO_SWPRINTF
 #endif
 
-#  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #endif // Version 4303
 
 //
