@@ -27,6 +27,8 @@
 #include <stdexcept>
 #include <boost/regex/detail/fileiter.hpp>
 
+#ifndef BOOST_REGEX_NO_FILEITER
+
 #if defined(__CYGWIN__) || defined(__CYGWIN32__)
 #include <sys/cygwin.h>
 #endif
@@ -76,7 +78,7 @@ void mapfile::open(const char* file)
    if(hfile != INVALID_HANDLE_VALUE)
    {
       hmap = CreateFileMapping(hfile, 0, PAGE_READONLY, 0, 0, 0);
-      if(hmap == INVALID_HANDLE_VALUE)
+      if((hmap == INVALID_HANDLE_VALUE) || (hmap == NULL))
       {
          CloseHandle(hfile);
          hmap = 0;
@@ -888,6 +890,7 @@ bool _fi_FindClose(_fi_find_handle dat)
 } // namespace re_detail
 } // namspace boost
 
+#endif    // BOOST_REGEX_NO_FILEITER
 
 
 

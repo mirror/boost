@@ -239,9 +239,11 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
    //
    // for some reason Borland C++ Builder 6 won't let us use
    // std::isspace(char, std::locale) unless we call it
-   // unqualifed - weird.
+   // unqualifed - weird.  This seems to be affecting other
+   // STLport users as well (gcc3.1+STLport5), so enable the
+   // workaround for all STLport users...
    //
-#if defined(__BORLANDC__) && (__BORLANDC__ == 0x560)
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
    using namespace std;
 #  define BOOST_REGEX_STD
 #else
