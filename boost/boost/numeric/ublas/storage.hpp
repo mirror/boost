@@ -183,7 +183,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     public:
         BOOST_UBLAS_INLINE
-        void resize_new (size_type size) {
+        void resize (size_type size) {
             resize_internal (size, value_type (), false);
         }
         BOOST_UBLAS_INLINE
@@ -212,7 +212,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         unbounded_array &operator = (const unbounded_array &a) {
             if (this != &a) {
-                resize_new (a.size_);
+                resize (a.size_);
                 std::copy (a.data_, a.data_ + a.size_, data_);
             }
             return *this;
@@ -350,7 +350,7 @@ namespace boost { namespace numeric { namespace ublas {
         
         // Resizing
         BOOST_UBLAS_INLINE
-        void resize_new (size_type size) {
+        void resize (size_type size) {
             if (size > N)
                 bad_size ().raise ();
             size_ = size;
@@ -385,7 +385,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         bounded_array &operator = (const bounded_array &a) {
             if (this != &a) {
-                resize_new (a.size_);
+                resize (a.size_);
                 std::copy (a.data_, a.data_ + a.size_, data_);
             }
             return *this;
@@ -545,7 +545,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     public:
         BOOST_UBLAS_INLINE
-        void resize_new (size_type size) {
+        void resize (size_type size) {
             resize_internal (size, value_type (), false);
         }
         BOOST_UBLAS_INLINE
@@ -553,7 +553,7 @@ namespace boost { namespace numeric { namespace ublas {
             resize_internal (size, init, true);
         }
         BOOST_UBLAS_INLINE
-        void resize_new (size_type size, pointer data) {
+        void resize (size_type size, pointer data) {
             resize_internal (size, data, value_type (), false);
         }
         BOOST_UBLAS_INLINE
@@ -582,7 +582,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         array_adaptor &operator = (const array_adaptor &a) {
             if (this != &a) {
-                resize_new (a.size_);
+                resize (a.size_);
                 std::copy (a.data_, a.data_ + a.size_, data_);
             }
             return *this;
@@ -751,7 +751,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     public:
         BOOST_UBLAS_INLINE
-        void resize_new (size_type size) {
+        void resize (size_type size) {
             resize_internal (size, value_type (), false);
         }
         BOOST_UBLAS_INLINE
@@ -759,7 +759,7 @@ namespace boost { namespace numeric { namespace ublas {
             resize_internal (size, init, true);
         }
         BOOST_UBLAS_INLINE
-        void resize_new (size_type size, pointer data) {
+        void resize (size_type size, pointer data) {
             resize_internal (size, data, value_type (), false);
         }
         BOOST_UBLAS_INLINE
@@ -788,7 +788,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         shallow_array_adaptor &operator = (const shallow_array_adaptor &a) {
             if (this != &a) {
-                resize_new (a.size_);
+                resize (a.size_);
                 std::copy (a.data_.get (), a.data_.get () + a.size_, data_.get ());
             }
             return *this;

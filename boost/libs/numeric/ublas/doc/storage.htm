@@ -103,7 +103,7 @@ The <code>unbounded_array</code> is reallocated only if the size changes.
 Element values are preserved, additional elements are assigned the value of init.</td>
 </tr>
 <tr>
-<td><code>void resize_new (size_type size)</code></td>
+<td><code>void resize (size_type size)</code></td>
 <td>Resizes an <code>unbounded_array</code> to hold at most
 <code>size</code> elements.<br />
 The <code>unbounded_array</code> is reallocated only if the size changes.
@@ -270,7 +270,7 @@ elements are assigned the value of init. Throws a <code>bad_size</code> exceptio
 if the size exeeds the bound.</td>
 </tr>
 <tr>
-<td><code>void resize_new (size_type size)</code></td>
+<td><code>void resize (size_type size)</code></td>
 <td>Resizes a <code>bounded_array</code> to hold at most
 <code>size</code> elements. The elements values are undefined. Throws a <code>bad_size</code> exception
 if the size exeeds the bound.</td>
