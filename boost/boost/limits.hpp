@@ -37,17 +37,17 @@ namespace std
 
       BOOST_STATIC_CONSTANT(bool, is_specialized = true);
 #ifdef BOOST_HAS_MS_INT64
-      static BOOST_LLT min(){ return 0x8000000000000000i64; }
-      static BOOST_LLT max(){ return 0x7FFFFFFFFFFFFFFFi64; }
+      static BOOST_LLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return 0x8000000000000000i64; }
+      static BOOST_LLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return 0x7FFFFFFFFFFFFFFFi64; }
 #elif defined(LLONG_MAX)
-      static BOOST_LLT min(){ return LLONG_MIN; }
-      static BOOST_LLT max(){ return LLONG_MAX; }
+      static BOOST_LLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return LLONG_MIN; }
+      static BOOST_LLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return LLONG_MAX; }
 #elif defined(LONGLONG_MAX)
-      static BOOST_LLT min(){ return LONGLONG_MIN; }
-      static BOOST_LLT max(){ return LONGLONG_MAX; }
+      static BOOST_LLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return LONGLONG_MIN; }
+      static BOOST_LLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return LONGLONG_MAX; }
 #else
-      static BOOST_LLT min(){ return 1LL << (sizeof(BOOST_LLT) * CHAR_BIT - 1); }
-      static BOOST_LLT max(){ return ~min(); }
+      static BOOST_LLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return 1LL << (sizeof(BOOST_LLT) * CHAR_BIT - 1); }
+      static BOOST_LLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ~(min)(); }
 #endif
       BOOST_STATIC_CONSTANT(int, digits = sizeof(BOOST_LLT) * CHAR_BIT -1);
       BOOST_STATIC_CONSTANT(int, digits10 = (CHAR_BIT * sizeof (BOOST_LLT) - 1) * 301L / 1000);
@@ -90,17 +90,17 @@ namespace std
 
       BOOST_STATIC_CONSTANT(bool, is_specialized = true);
 #ifdef BOOST_HAS_MS_INT64
-      static unsigned BOOST_LLT min(){ return 0ui64; }
-      static unsigned BOOST_LLT max(){ return 0xFFFFFFFFFFFFFFFFui64; }
+      static unsigned BOOST_LLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return 0ui64; }
+      static unsigned BOOST_LLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return 0xFFFFFFFFFFFFFFFFui64; }
 #elif defined(ULLONG_MAX) && defined(ULLONG_MIN)
-      static unsigned BOOST_LLT min(){ return ULLONG_MIN; }
-      static unsigned BOOST_LLT max(){ return ULLONG_MAX; }
+      static unsigned BOOST_LLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ULLONG_MIN; }
+      static unsigned BOOST_LLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ULLONG_MAX; }
 #elif defined(ULONGLONG_MAX) && defined(ULONGLONG_MIN)
-      static unsigned BOOST_LLT min(){ return ULONGLONG_MIN; }
-      static unsigned BOOST_LLT max(){ return ULONGLONG_MAX; }
+      static unsigned BOOST_LLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ULONGLONG_MIN; }
+      static unsigned BOOST_LLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ULONGLONG_MAX; }
 #else
-      static unsigned BOOST_LLT min(){ return 0uLL; }
-      static unsigned BOOST_LLT max(){ return ~0uLL; }
+      static unsigned BOOST_LLT min BOOST_PREVENT_MACRO_SUBSTITUTION (){ return 0uLL; }
+      static unsigned BOOST_LLT max BOOST_PREVENT_MACRO_SUBSTITUTION (){ return ~0uLL; }
 #endif
       BOOST_STATIC_CONSTANT(int, digits = sizeof(BOOST_LLT) * CHAR_BIT);
       BOOST_STATIC_CONSTANT(int, digits10 = (CHAR_BIT * sizeof (BOOST_LLT)) * 301L / 1000);
