@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html><head><!-- saved from url=(0022)http://internet.e-mail --><title>Improved Iterator Categories and Requirements</title>
 <meta content="text/html; charset=windows-1252" http-equiv="Content-Type">
-<meta content="MSHTML 5.00.2919.6307" name="GENERATOR"></head>
+<meta content="Microsoft FrontPage 5.0" name="GENERATOR"></head>
 <body bgcolor="#ffffff">
 <p align="right">
 <table border="0">
@@ -105,23 +105,23 @@ standard iterator categories. As a result, the following bad things happen:
 requirements should be separated into two hierarchies. One set of concepts 
 handles the return type semantics: 
 <ul>
-  <li><a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_ReadableIterator">Readable 
-  Iterator</a> 
-  </li><li><a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_WritableIterator">Writable 
-  Iterator</a> 
-  </li><li><a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_SwappableIterator">Swappable 
-  Iterator</a> 
-  </li><li><a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_ConstantLvalueIterator">Constant 
-  Lvalue Iterator</a> 
-  </li><li><a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_MutableLvalueIterator">Mutable 
+  <li><a href="#concept_ReadableIterator">Readable 
+  Iterator</a>  
+  </li><li><a href="#concept_WritableIterator">Writable 
+  Iterator</a>  
+  </li><li><a href="#concept_SwappableIterator">Swappable 
+  Iterator</a>  
+  </li><li><a href="#concept_ConstantLvalueIterator">Constant 
+  Lvalue Iterator</a>  
+  </li><li><a href="#concept_MutableLvalueIterator">Mutable 
   Lvalue Iterator</a> </li></ul>The other set of concepts handles iterator 
 traversal: 
 <ul>
-  <li><a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_ForwardTraversalIterator">Forward 
-  Traversal Iterator</a> 
-  </li><li><a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_BidirectionalTraversalIterator">Bidirectional 
-  Traversal Iterator</a> 
-  </li><li><a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_RandomAccessTraversalIterator">Random 
+  <li><a href="#concept_ForwardTraversalIterator">Forward 
+  Traversal Iterator</a>  
+  </li><li><a href="#concept_BidirectionalTraversalIterator">Bidirectional 
+  Traversal Iterator</a>  
+  </li><li><a href="#concept_RandomAccessTraversalIterator">Random 
   Access Traversal Iterator</a> </li></ul>The current Input Iterator and Output 
 Iterator requirements will continue to be used as is. Note that Input Iterator 
 implies Readable Iterator and Output Iterator implies Writable Iterator. 
@@ -487,7 +487,7 @@ reference to the pointed-to object, i.e., the associated <tt>reference</tt> type
 is <tt>const T&amp;</tt>. Changing the value of or destroying an iterator that 
 models Constant Lvalue Iterator does not invalidate pointers and references 
 previously obtained from that iterator. 
-<h3>Refinement of</h3><a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_ReadableIterator">Readable 
+<h3>Refinement of</h3><a href="#concept_ReadableIterator">Readable 
 Iterator</a> 
 <h3>Associated Types</h3>
 <table border="1">
@@ -497,38 +497,67 @@ Iterator</a>
     <td><tt>std::iterator_traits&lt;X&gt;::reference</tt></td>
     <td>The return type of dereferencing the iterator, which must be <tt>const 
       T&amp;</tt>. </td></tr><!--  I don't think this is needed
+
   <tr>
+
     <td>Pointer type</td>
+
     <td><tt>std::iterator_traits&lt;X&gt;::pointer</tt></td>
+
     <td>
+
      The pointer to the value type, which must be <tt>const T*</tt>.
+
     </td>
+
   </tr>
+
 -->
   <tr>
     <td>Return Category</td>
     <td><tt>std::return_category&lt;X&gt;::type</tt></td>
     <td>A type convertible to <tt>std::constant_lvalue_iterator_tag</tt> 
   </td></tr></tbody></table><!-- these are not necessary now that we use reference as operator* return type
+
 <h3>Valid expressions</h3>
 
+
+
 <Table border>
+
 <tr><TH>Name</TH><TH>Expression</TH><TH>Type requirements</TH><TH>Return type</TH></tr>
+
 <tr>
+
  <td>Dereference</td>
+
  <td><tt>*x</tt></td>
+
  <td>&nbsp;</td>
+
  <td><tt>std::iterator_traits&lt;X&gt;::reference</tt></td>
+
 </tr>
+
 <tr>
+
  <td>Member access</td>
+
  <td><tt>x-&gt;m</tt></td>
+
  <td><tt>T</tt> is a type with a member named <tt>m</tt>.</td>
+
  <td>
+
  &nbsp;
+
  </td>
+
 </tr>
+
 </table>
+
+
 
 -->
 <p>
@@ -540,9 +569,9 @@ to the pointed-to object. The associated <tt>reference</tt> type is
 <tt>T&amp;</tt>. Changing the value of or destroying an iterator that models 
 Mutable Lvalue Iterator does not invalidate pointers and references previously 
 obtained from that iterator. 
-<h3>Refinement of</h3><a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_ReadableIterator">Readable 
-Iterator</a>, <a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_WritableIterator">Writable 
-Iterator</a>, and <a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_SwappableIterator">Swappable 
+<h3>Refinement of</h3><a href="#concept_ReadableIterator">Readable 
+Iterator</a>, <a href="#concept_WritableIterator">Writable 
+Iterator</a>, and <a href="#concept_SwappableIterator">Swappable 
 Iterator</a>. 
 <h3>Associated Types</h3>
 <table border="1">
@@ -552,38 +581,67 @@ Iterator</a>.
     <td><tt>std::iterator_traits&lt;X&gt;::reference</tt></td>
     <td>The return type of dereferencing the iterator, which must be 
       <tt>T&amp;</tt>.</td></tr><!-- I don't think this is necessary
+
   <tr>
+
     <td>Pointer type</td>
+
     <td><tt>std::iterator_traits&lt;X&gt;::pointer</tt></td>
+
     <td>
+
      The pointer to the value type, which is <tt>T*</tt>.
+
     </td>
+
   </tr>
+
 -->
   <tr>
     <td>Return Category</td>
     <td><tt>std::return_category&lt;X&gt;::type</tt></td>
     <td>A type convertible to <tt>std::mutable_lvalue_iterator_tag</tt> 
   </td></tr></tbody></table><!-- no longer needed since the return type is specified as reference in the readable iterator
+
 <h3>Valid expressions</h3>
 
+
+
 <Table border>
+
 <tr><TH>Name</TH><TH>Expression</TH><TH>Type requirements</TH><TH>Return type</TH></tr>
+
 <tr>
+
  <td>Dereference</td>
+
  <td><tt>*x</tt></td>
+
  <td>&nbsp;</td>
+
  <td><tt>std::iterator_traits&lt;X&gt;::reference</tt></td>
+
 </tr>
+
 <tr>
+
  <td>Member access</td>
+
  <td><tt>x-&gt;m</tt></td>
+
  <td><tt>T</tt> is a type with a member named <tt>m</tt>.</td>
+
  <td>
+
  &nbsp;
+
  </td>
+
 </tr>
+
 </table>
+
+
 
 -->
 <p>
@@ -632,7 +690,7 @@ Comparable</a>
 <!--------------------------------------------------------------------------->
 <h3><a name="concept_BidirectionalTraversalIterator"></a>Bidirectional Traversal 
 Iterator </h3>An iterator that can be incremented and decremented. 
-<h3>Refinement of</h3><a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_ForwardTraversalIterator">Forward 
+<h3>Refinement of</h3><a href="#concept_ForwardTraversalIterator">Forward 
 Traversal Iterator</a> 
 <h3>Associated types</h3>
 <table border="1">
@@ -666,7 +724,7 @@ Traversal Iterator</a>
 <h3><a name="concept_RandomAccessTraversalIterator"></a>Random Access Traversal 
 Iterator </h3>An iterator that provides constant-time methods for moving forward 
 and backward in arbitrary-sized steps. 
-<h3>Refinement of</h3><a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_BidirectionalTraversalIterator">Bidirectional 
+<h3>Refinement of</h3><a href="#concept_BidirectionalTraversalIterator">Bidirectional 
 Traversal Iterator</a> and <a href="http://www.sgi.com/tech/stl/LessThanComparable.html">Less Than 
 Comparable</a> where <tt>&lt;</tt> is a total ordering 
 <h3>Associated types</h3>
@@ -713,21 +771,27 @@ Comparable</a> where <tt>&lt;</tt> is a total ordering
   <tr>
     <td>Element operator</td>
     <td><tt>i[n]</tt></td>
-    <td><tt>X</tt> must also be a model of <a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_ReadableIterator">Readable 
+    <td><tt>X</tt> must also be a model of <a href="#concept_ReadableIterator">Readable 
       Iterator</a>. </td>
     <td><tt>std::iterator_traits&lt;X&gt;::reference</tt></td></tr>
   <tr>
     <td>Element assignment</td>
     <td><tt>i[n] = t</tt></td>
-    <td><tt>X</tt> must also be a model of <a href="file:///C:/WINDOWS/TEMP/iterator-categories.html#concept_WritableIterator">Writable 
+    <td><tt>X</tt> must also be a model of <a href="#concept_WritableIterator">Writable 
       Iterator</a>.</td>
     <td>unspecified</td></tr></tbody></table>
 <p>
 </p><hr>
 <!--  LocalWords:  HTML BGCOLOR FFFFFF TR TD Siek HREF mailto jsiek
+
  --><!--  LocalWords:  lsc edu tt const href http anubis dkuug dk JTC SC WG docs lt
+
  --><!--  LocalWords:  lwg html bool gt Sutter's htm Lvalue namespace std struct
+
  --><!--  LocalWords:  lvalue typename OldTraits reusability min iter prev inplace
+
  --><!--  LocalWords:  rvalue templated Preincrement Postincrement Predecrement
+
  --><!--  LocalWords:  Postdecrement
+
  --></body></html>
