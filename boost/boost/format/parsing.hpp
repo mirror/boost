@@ -31,21 +31,36 @@ namespace boost {
 namespace io {
 namespace detail {
 
-  template<class Ch, class Stream> inline
-  bool wrap_isdigit(Ch c, Stream &os) 
+template<class Ch, class Stream> inline
+bool wrap_isdigit(Ch c, Stream &os) 
   {
-#ifndef BOOST_NO_LOCALE_ISIDIGIT
+#if ! defined( BOOST_NO_LOCALE_ISIDIGIT )
     return std::isdigit(c, os.rdbuf()->getloc() );
 # else
     using namespace std;
     return isdigit(c); 
 #endif 
   } //end- wrap_isdigit(..)
+ 
 
-  template<class Res, class Ch, class Tr> inline
+template<class Ch, class Stream> inline
+char wrap_narrow(Ch c, char def, Stream &os) 
+  {
+    return os.narrow(c, def);
+  } //end- wrap_narrow(..)
+
+
+template<class Ch, class Stream> inline
+Ch wrap_widen(char c, Stream &os) 
+  {
+    return os.widen(c);
+  } //end- wrap_narrow(..)
+
+
+  template<class Res, class Ch, class Tr, class Stream> inline
   Res str2int(const std::basic_string<Ch, Tr>& s, 
               typename std::basic_string<Ch, Tr>::size_type start, 
-              BOOST_IO_STD basic_ios<Ch,Tr> &os,
+              Stream &os,
               const Res = Res(0)  ) 
     // Input : char string, with starting index
     //         a basic_ios& merely to call its widen/narrow member function in the desired locale.
@@ -54,7 +69,8 @@ namespace detail {
   {
     Res n = 0;
     while(start<s.size() && wrap_isdigit(s[start], os) ) {
-      char cur_ch = os.narrow( s[start], 0);
+
+      char cur_ch = wrap_narrow( s[start], 0, os);
       BOOST_ASSERT(cur_ch != 0 ); // since we called isdigit, this should not happen.
       n *= 10;
       n += cur_ch - '0'; // 22.2.1.1.2 of the C++ standard
@@ -63,10 +79,10 @@ namespace detail {
     return n;
   }
 
-  template<class Ch, class Tr>
+  template<class Ch, class Tr, class Stream>
   void skip_asterisk(const std::basic_string<Ch,Tr> & buf, 
                      typename std::basic_string<Ch,Tr>::size_type * pos_p,
-                     BOOST_IO_STD basic_ios<Ch, Tr> &os)
+                     Stream &os)
     // skip printf's "asterisk-fields" directives in the format-string buf
     // Input : char string, with starting index *pos_p
     //         a basic_ios& merely to call its widen/narrow member function in the desired locale.
@@ -76,10 +92,10 @@ namespace detail {
     using namespace std;
     BOOST_ASSERT( pos_p != 0);
     if(*pos_p >= buf.size() ) return;
-    if(buf[ *pos_p]==os.widen('*')) {
+    if(buf[ *pos_p]==wrap_widen<Ch>('*', os) ) {
       ++ (*pos_p);
       while (*pos_p < buf.size() && wrap_isdigit(buf[*pos_p],os)) ++(*pos_p);
-      if(buf[*pos_p]==os.widen('$')) ++(*pos_p);
+      if(buf[*pos_p]==wrap_widen<Ch>('$', os) )   ++(*pos_p);
     }
   }
 
@@ -95,11 +111,11 @@ namespace detail {
     
 
 
-  template<class Ch, class Tr>
+  template<class Ch, class Tr, class Stream>
   bool parse_printf_directive(const std::basic_string<Ch, Tr> & buf,
                               typename std::basic_string<Ch, Tr>::size_type * pos_p,
                               detail::format_item<Ch, Tr> * fpar,
-                              BOOST_IO_STD basic_ios<Ch,Tr> &os,
+                              Stream &os,
                               unsigned char exceptions)
     // Input   : a 'printf-directive' in the format-string, starting at buf[ *pos_p ]
     //           a basic_ios& merely to call its widen/narrow member function in the desired locale.
@@ -116,7 +132,7 @@ namespace detail {
     fpar->argN_ = format_item_t::argN_no_posit;  // if no positional-directive
 
     bool in_brackets=false;
-    if(buf[i1]==os.widen('|'))
+    if(buf[i1]==wrap_widen<Ch>('|', os))
       {
         in_brackets=true;
         if( ++i1 >= buf.size() ) {
@@ -126,7 +142,7 @@ namespace detail {
       }
 
     // the flag '0' would be picked as a digit for argument order, but here it's a flag :
-    if(buf[i1]==os.widen('0')) 
+    if(buf[i1]==wrap_widen<Ch>('0', os)) 
       goto parse_flags;
 
     // handle argument order (%2$d)  or possibly width specification: %2d
@@ -142,7 +158,7 @@ namespace detail {
         int n=str2int(buf,i0, os, int(0) );
         
         // %N% case : this is already the end of the directive
-        if( buf[i1] == os.widen('%') ) 
+        if( buf[i1] == wrap_widen<Ch>('%', os) ) 
           {
             fpar->argN_ = n-1;
             ++i1;
@@ -152,7 +168,7 @@ namespace detail {
             else return true;
           }
 
-        if ( buf[i1]==os.widen('$') ) 
+        if ( buf[i1]==wrap_widen<Ch>('$', os) ) 
           {
             fpar->argN_ = n-1;
             ++i1;
@@ -171,7 +187,7 @@ namespace detail {
     while ( i1 <buf.size()) // as long as char is one of + - = # 0 l h   or ' '
       {  
         // misc switches
-        switch (os.narrow(buf[i1], 0)) 
+        switch (wrap_narrow(buf[i1], 0, os)) 
           {
           case '\'' : break; // no effect yet. (painful to implement)
           case 'l':
@@ -223,7 +239,7 @@ namespace detail {
       return true;
     }
     // handle precision spec
-    if (buf[i1]==os.widen('.'))  
+    if (buf[i1]==wrap_widen<Ch>('.', os))  
       {
         ++i1;
         skip_asterisk(buf, &i1, os);
@@ -239,19 +255,20 @@ namespace detail {
     
     // handle  formatting-type flags :
     while( i1<buf.size() && 
-           ( buf[i1]==os.widen('l') || buf[i1]==os.widen('L') || buf[i1]==os.widen('h')) )
+           ( buf[i1]==wrap_widen<Ch>('l', os) || buf[i1]==wrap_widen<Ch>('L', os) 
+             || buf[i1]==wrap_widen<Ch>('h', os)) )
       ++i1;
     if( i1>=buf.size()) {
       maybe_throw_exception(exceptions);
       return true;
     }
     
-    if( in_brackets && buf[i1]==os.widen('|') ) 
+    if( in_brackets && buf[i1]==wrap_widen<Ch>('|', os) ) 
       {
         ++i1;
         return true;
       }
-    switch (os.narrow(buf[i1], 0) )  
+    switch (wrap_narrow(buf[i1], 0, os) )  
       {
       case 'X':
         fpar->ref_state_.flags_ |= std::ios_base::uppercase;
@@ -296,7 +313,7 @@ namespace detail {
         fpar->argN_ = format_item_t::argN_tabulation; 
         break;
       case 't': 
-        fpar->ref_state_.fill_ = os.widen(' ');
+        fpar->ref_state_.fill_ = wrap_widen<Ch>(' ', os);
         fpar->pad_scheme_ |= format_item_t::tabulation;
         fpar->argN_ = format_item_t::argN_tabulation; 
         break;
@@ -331,7 +348,7 @@ namespace detail {
 
     if( in_brackets )
       {
-        if( i1<buf.size() && buf[i1]==os.widen('|') ) 
+        if( i1<buf.size() && buf[i1]==wrap_widen<Ch>('|', os) ) 
           {
             ++i1;
             return true;
@@ -353,7 +370,9 @@ void basic_format<Ch, Traits> ::parse(const string_t & buf)
   // parse the format-string
 {
     using namespace std;
-    const Ch arg_mark = oss_.widen('%');
+
+
+    const Ch arg_mark = io::detail::wrap_widen<Ch>('%', oss_);
     bool ordered_args=true; 
     int max_argN=-1;
     typename string_t::size_type i1=0;

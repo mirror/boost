@@ -21,52 +21,60 @@
 #ifndef BOOST_FORMAT_FEED_ARGS_HPP
 #define BOOST_FORMAT_FEED_ARGS_HPP
 
-#include "boost/format/format_class.hpp"
-#include "boost/format/group.hpp"
+#include <boost/format/format_class.hpp>
+#include <boost/format/group.hpp>
 
-#include "boost/format/msvc_disambiguater.hpp"
-#include "boost/throw_exception.hpp"
+#include <boost/format/msvc_disambiguater.hpp>
+#include <boost/throw_exception.hpp>
 
 namespace boost {
 namespace io {
 namespace detail {
 namespace  { 
 
-  template<class Tr, class Ch> inline
-  void empty_buf(BOOST_IO_STD basic_ostringstream<Ch,Tr> & os) { 
-    os.str( std::basic_string<Ch, Tr>() );
+  template<class Ch, class Tr> inline
+  void clear_buffer(io::basic_outsstream<Ch,Tr> & os) { 
+    os.clear_buffer();
   }
 
   template<class Ch, class Tr>
-  void do_pad( std::basic_string<Ch,Tr> & s, 
-                std::streamsize w, 
-                const Ch c, 
-                std::ios_base::fmtflags f, 
-                bool center) 
-    // applies centered / left / right  padding  to the string s.
-    // Effects : string s is padded.
+  void mk_str( std::basic_string<Ch,Tr> & res, 
+               const Ch * beg,
+               std::streamsize size,
+               std::streamsize w, 
+               const Ch c, 
+               std::ios_base::fmtflags f, 
+               int prefix_space, // 0 or 1
+               bool center) 
+    // applies centered / left / right  padding  to the string  [beg, beg+size[
+    // Effects : the result is placed in res.
   {
-    std::streamsize n=w-s.size();
-    if(n<=0) {
-      return;
+    res.resize(0);
+    std::streamsize n=w-size - prefix_space;
+    std::streamsize n_after = 0, n_before = 0; 
+
+    if(n<=0) { // no need to pad.
+      res.reserve(size + prefix_space);
     }
-    if(center) 
-      {
-        s.reserve(w); // allocate once for the 2 inserts
-        const std::streamsize n1 = n /2, n0 = n - n1; 
-        s.insert(s.begin(), n0, c);
-        s.append(n1, c);
-      } 
-    else 
-      {
-        if(f & std::ios_base::left) {
-          s.append(n, c);
-        }
-        else {
-          s.insert(s.begin(), n, c);
-        }
-      }
-  } // -do_pad(..) 
+    else { 
+      res.reserve(w); // allocate once for the 2 inserts
+      if(center) 
+          n_after = n/2, n_before = n - n_after; 
+      else 
+        if(f & std::ios_base::left)
+            n_after = n;
+        else
+            n_before = n;
+    }
+    
+    // now make the res string :
+    if(n_before) res.append(n_before, c);
+    if(prefix_space) 
+      res.append(1,' ');
+    res.append(beg, size);
+    if(n_after) res.append(n_after, c);
+
+  } // -mk_str(..) 
 
 
 #if BOOST_WORKAROUND( BOOST_MSVC, <= 1300) 
@@ -122,7 +130,7 @@ template< class Ch, class Tr, class T>
 void put( T x, 
           const format_item<Ch, Tr>& specs, 
           std::basic_string<Ch, Tr> & res, 
-          BOOST_IO_STD basic_ostringstream<Ch, Tr>& oss_ )
+          io::basic_outsstream<Ch, Tr>& oss_ )
 {
   // does the actual conversion of x, with given params, into a string
   // using the *supplied* strinstream. (the stream state is important)
@@ -137,84 +145,96 @@ void put( T x,
   // in case x is a group, apply the manip part of it, 
   // in order to find width
   put_head( oss_, x );
-  empty_buf( oss_);
+  // clear_buffer( oss_); // fixme. is it necessary ?
 
-  const std::streamsize w=oss_.width();
   const std::ios_base::fmtflags fl=oss_.flags();
   const bool internal = (fl & std::ios_base::internal) != 0;
-  const bool two_stepped_padding = internal
-    &&  ! ( specs.pad_scheme_ & format_item_t::spacepad ) 
-    && specs.truncate_ < 0 ;
+  // internal can be implied by zeropad, or user-set.
+  // left, right, and centered alignment overrule internal,
+  // but spacepad & internal ??  fixme
+
+  const std::streamsize w = oss_.width();
+  const bool two_stepped_padding = internal && (w != 0)  && specs.truncate_ < 0 ;
       
 
+  res.resize(0);
   if(! two_stepped_padding) 
     {
-      if(w>0) // handle simple padding via do_pad, not natively in stream 
+      if(w>0) // handle simple padding via mk_str, not natively in stream 
         oss_.width(0);
       put_last( oss_, x);
-      res = oss_.str();
-
-      if (specs.truncate_ >= 0 && static_cast<unsigned int>(specs.truncate_) < res.size() )
-        res.erase(specs.truncate_);
+      const Ch * res_beg = oss_.begin();
+      std::streamsize res_size = oss_.pcount();
+      if (specs.truncate_ >= 0 && specs.truncate_ < res_size )
+        res_size =  specs.truncate_;
 
       // complex pads :
+      int prefix_space = 0;
       if(specs.pad_scheme_ & format_item_t::spacepad)
-        {
-          if( res.size()==0 ||   ( res[0]!='+' && res[0]!='-'  ))
-            {
-              res.insert(res.begin(), 1, ' '); // insert 1 space at  pos 0
-            }
-        }
-      if(w > 0) // need do_pad
-        {
-          do_pad(res,w,oss_.fill(), fl, (specs.pad_scheme_ & format_item_t::centered) !=0 );
-        }
+        if( res_size == 0 ||   ( res_beg[0] !='+' && res_beg[0] !='-'  ))
+          prefix_space = 1;
+
+      mk_str(res, res_beg, res_size,
+             w, oss_.fill(), fl, 
+             prefix_space,
+             (specs.pad_scheme_ & format_item_t::centered) !=0 );
     } 
   else  // 2-stepped padding
     {
+      using std::hex;
+      using std::dec;
       put_last( oss_, x); // oss_.width() may result in padding.
-      res = oss_.str();
-      
-      if (specs.truncate_ >= 0)
-        res.erase(specs.truncate_);
+      const Ch * res_beg = oss_.begin();
+      std::streamsize res_size = oss_.pcount();
 
-      if( res.size() - w > 0)
+      if (specs.truncate_ >= 0 && specs.truncate_ < res_size )
+        res_size =  specs.truncate_;
+
+      if( res_size  == w)
+        { // okay, only one thing was printed and padded, so res is fine.
+          res.assign(res_beg, res_size);
+        }
+      else 
         { //   length w exceeded
+          BOOST_ASSERT(res_size > w);
           // either it was multi-output with first output padding up all width..
           // either it was one big arg and we are fine.
-          empty_buf( oss_);
+          res.assign(res_beg, res_size);
+          res_beg=NULL;  // invalidate pointers.
+          clear_buffer( oss_);
           oss_.width(0);
           put_last(oss_, x );
-          string_t tmp = oss_.str();  // minimal-length output
+          // minimal-length output
+          const Ch * tmp_beg = oss_.begin();
+          std::streamsize tmp_size = oss_.pcount();
+          BOOST_ASSERT( static_cast<size_t>(tmp_size) <= res.size() );
+          
           std::streamsize d;
-          if( (d=w - tmp.size()) <=0 ) 
-            {
-              // minimal length is already >= w, so no padding  (cool!)
-              res.swap(tmp);
+          if( (d=w - tmp_size) <=0 ) 
+            { // minimal length is already >= w, so no padding (cool!)
+              if(static_cast<size_t>(tmp_size)==res.size()) ; // res==tmp, so res is good.
+              else 
+                res.assign(tmp_beg, tmp_size);
             }
           else
             { // hum..  we need to pad (it was necessarily multi-output)
               typedef typename string_t::size_type size_type;
-              size_type i = 0;
-              while( i<tmp.size() && tmp[i] == res[i] ) // find where we should pad.
+              std::streamsize i = 0;
+              while( i<tmp_size && tmp_beg[i] == res[i] ) // find where we should pad.
                 ++i;
-              tmp.insert(i, static_cast<size_type>( d ), oss_.fill());
-              res.swap( tmp );
+              res.assign(tmp_beg, i);
+              res.append(static_cast<size_type>( d ), oss_.fill());
+              res.append(tmp_beg+i, tmp_size-i );
             }
         }
-      else 
-        { // okay, only one thing was printed and padded, so res is fine.
-        }
     }
-
   prev_state.apply_on(oss_);
-  empty_buf( oss_);
+  clear_buffer( oss_);
   oss_.clear();
 } // end- put(..)
 
 
 }  // local namespace
-
 
 
 

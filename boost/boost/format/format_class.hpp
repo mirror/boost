@@ -16,9 +16,9 @@
 // format_class.hpp :  class interface
 // ------------------------------------------------------------------------------
 
-
 #ifndef BOOST_FORMAT_CLASS_HPP
 #define BOOST_FORMAT_CLASS_HPP
+
 
 #include <vector>
 #include <string>
@@ -28,18 +28,20 @@
 
 #include <boost/format/internals.hpp>
 
+#include <boost/format/outsstream.hpp>
+
 namespace boost {
 
 template<class Ch, class Tr>
 class basic_format 
 {
 public:
-  typedef Ch  CharT;   // those 2 are necessary for borland compatibilty,
+  typedef Ch  CharT;   // borland fails if we use Ch and Tr directly
   typedef Tr  Traits;  // in the body of the operator% template.
 
 
   typedef std::basic_string<Ch, Tr>                string_t;
-  typedef BOOST_IO_STD basic_ostringstream<Ch, Tr> internal_stream_t;
+  typedef io::basic_outsstream<Ch, Tr>             internal_stream_t;
 private:
   typedef BOOST_IO_STD basic_ostream<Ch, Tr>       stream_t;
   typedef io::detail::stream_format_state<Ch, Tr>  stream_format_state;

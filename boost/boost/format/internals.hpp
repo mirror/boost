@@ -23,7 +23,9 @@
 
 
 #include <string>
-#include <sstream>
+
+#include <boost/assert.hpp>
+#include <boost/format/outsstream.hpp>
 
 namespace boost {
 namespace io {
@@ -62,6 +64,9 @@ template<class Ch, class Tr>
 struct format_item 
 {     
   enum pad_values { zeropad = 1, spacepad =2, centered=4, tabulation = 8 };
+  // 1. if zeropad is set, all other bits are not, 
+  // 2. if tabulation is set, all others are not.
+  // centered and spacepad can be mixed freely.
 
   enum arg_values { argN_no_posit   = -1, // non-positional directive. argN will be set later.
                     argN_tabulation = -2, // tabulation directive. (no argument read) 
@@ -70,8 +75,6 @@ struct format_item
   typedef BOOST_IO_STD basic_ios<Ch, Tr>              basic_ios;
   typedef detail::stream_format_state<Ch, Tr>         stream_format_state;
   typedef std::basic_string<Ch, Tr>           string_t;
-  typedef BOOST_IO_STD basic_ostringstream<Ch, Tr>    internal_stream_t;
-
 
   int         argN_;           //- argument number (starts at 0,  eg : %1 => argN=0)
                                //  negative values are used for items that don't process
@@ -126,7 +129,7 @@ void apply_manip_body( stream_format_state<Ch, Tr>& self,
                        T manipulator) 
   // modify our params according to the manipulator
 {
-      BOOST_IO_STD basic_stringstream<Ch, Tr>  ss;
+      basic_outsstream<Ch, Tr>  ss; // fixme : use a nullstream
       self.apply_on( ss );
       ss << manipulator;
       self.set_by_stream( ss );
@@ -138,6 +141,7 @@ void stream_format_state<Ch,Tr> ::reset()
 {
       width_=-1; precision_=-1; fill_=0; 
       flags_ = std::ios_base::dec; 
+      // the adjust_field part is left 0, which means right.
 }
 
 
@@ -149,14 +153,19 @@ void format_item<Ch, Tr> ::compute_states()
 {
   if(pad_scheme_ & zeropad) 
   {
-    if(ref_state_.flags_ & std::ios_base::left) 
+    // ignore zeropad in left alignment :
+    if(ref_state_.flags_ & std::ios_base::left)
     {
-      pad_scheme_ = pad_scheme_ & (~zeropad); // ignore zeropad in left alignment
+      BOOST_ASSERT( !(ref_state_.flags_ & (std::ios_base::adjustfield ^ std::ios_base::left)) );
+      // only left bit might be set. (not right, nor internal)
+      pad_scheme_ = pad_scheme_ & (~zeropad); 
     }
     else 
     { 
       ref_state_.fill_='0'; 
-      ref_state_.flags_ |= std::ios_base::internal;
+      ref_state_.flags_ = (ref_state_.flags_ & ~std::ios_base::adjustfield) 
+                           | std::ios_base::internal;
+      // removes all adjustfield bits, and adds internal.
     }
   }
   state_ = ref_state_;

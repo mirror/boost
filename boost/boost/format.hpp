@@ -21,7 +21,6 @@
 
 #include <vector>
 #include <string>
-#include <sstream>
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
@@ -29,33 +28,15 @@
 #include <locale>
 #endif
 
-
-// make sure our local macros wont override something :
-#if defined(BOOST_NO_LOCALE_ISDIGIT) || defined(BOOST_OVERLOAD_FOR_NON_CONST) \
-  || defined(BOOST_IO_STD) || defined( BOOST_IO_NEEDS_USING_DECLARATION )
-#error "a local macro would overwrite a previously defined macro"
-#endif
-
-
+#include <boost/format/workarounds_gcc-2.95.hpp>
 #include <boost/format/macros_stlport.hpp>  // stlport workarounds
 #include <boost/format/macros_default.hpp> 
 
-#if defined(BOOST_NO_STD_LOCALE) || \
- ( BOOST_WORKAROUND(__BORLANDC__, <= 0x564) \
-   || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT( 0x570 ) )  )
-// some future __BORLANDC__ >0x564  versions might not need this
-// 0x570 is Borland's kylix branch
-#define BOOST_NO_LOCALE_ISIDIGIT
-#endif
 
 #ifdef BOOST_NO_LOCALE_ISIDIGIT
 #include <cctype>  // we'll use the non-locale  <cctype>'s std::isdigit(int)
 #endif
 
-
-#if  BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570) ) || BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1300))
-#define BOOST_NO_OVERLOAD_FOR_NON_CONST
-#endif
 
 
 // ****  Forward declarations ----------------------------------

@@ -20,13 +20,34 @@
 #ifndef BOOST_FORMAT_MACROS_DEFAULT_HPP
 #define BOOST_FORMAT_MACROS_DEFAULT_HPP
 
-#include <boost/config.hpp>
-
 // *** This should go to "boost/config/suffix.hpp".
+
+// make sure our local macros wont override something :
+#if defined(BOOST_NO_LOCALE_ISDIGIT) || defined(BOOST_OVERLOAD_FOR_NON_CONST) \
+  || defined(BOOST_IO_STD) || defined( BOOST_IO_NEEDS_USING_DECLARATION )
+#error "a local macro would overwrite a previously defined macro"
+#endif
+
 
 #ifndef BOOST_IO_STD
 #  define BOOST_IO_STD std::
 #endif
+
+
+
+#if defined(BOOST_NO_STD_LOCALE) || \
+ ( BOOST_WORKAROUND(__BORLANDC__, <= 0x564) \
+   || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT( 0x570 ) )  )
+// some future __BORLANDC__ >0x564  versions might not need this
+// 0x570 is Borland's kylix branch
+#define BOOST_NO_LOCALE_ISIDIGIT
+#endif
+
+
+#if  BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570) ) || BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1300))
+#define BOOST_NO_OVERLOAD_FOR_NON_CONST
+#endif
+
 
 // **** Workaround for io streams, stlport and msvc.
 #ifdef BOOST_IO_NEEDS_USING_DECLARATION

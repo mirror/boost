@@ -23,12 +23,20 @@
 #include <iosfwd>
 
 #include <boost/config.hpp>
+#include <boost/format/macros_default.hpp> 
 
 namespace boost {
 
-template<class charT, class Traits = BOOST_IO_STD char_traits<charT> > class basic_format;
+template <class Ch, 
+#if !  defined( __STL_CONFIG_H )  // typically gcc < 3
+          class Tr = std::char_traits<Ch> > 
+#else
+          class Tr = std::string_char_traits<Ch> > 
+#endif
+class basic_format;
 
 typedef basic_format<char >     format;
+
 
 #if !defined(BOOST_NO_STD_WSTRING) && !defined(BOOST_NO_STD_WSTREAMBUF)
 typedef basic_format<wchar_t >  wformat;
