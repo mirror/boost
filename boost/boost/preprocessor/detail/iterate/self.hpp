@@ -10,9 +10,9 @@
 #
 # line BOOST_PP_DETAIL_LINE()
 #
-# if !defined(BOOST_PP_INDIRECT_FILE)
+# if !defined(BOOST_PP_INDIRECT_SELF)
 #   error BOOST_PP:  no file to indirect file to include defined
 # else
-#   include BOOST_PP_INDIRECT_FILE
-#   undef BOOST_PP_INDIRECT_FILE
+#   include BOOST_PP_INDIRECT_SELF
+#   undef BOOST_PP_INDIRECT_SELF
 # endif
