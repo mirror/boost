@@ -50,9 +50,7 @@ int cpp_main(int argc, char* argv[])
    value_test(false, boost::is_array<int(&)[2]>::value)
    value_test(false, boost::is_array<f1>::value)
    value_test(false, boost::is_array<void>::value)
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    value_test(false, boost::is_array<test_abc1>::value)
-#endif
    value_test(false, boost::is_array<convertible_to_pointer>::value)
 
    value_test(false, boost::is_pointer<int>::value)

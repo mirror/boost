@@ -66,9 +66,6 @@ template <typename T, std::size_t N> struct is_array<const volatile T[N]>
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 namespace detail{
 
-   template <typename T>
-   struct is_reference_or_const_volatile;
-
    struct pointer_helper
    {
       pointer_helper(const volatile void*);
@@ -139,29 +136,31 @@ template <class R, class A0, class A1, class A2, class A3, class A4, class A5, c
 ::boost::type_traits::yes_type is_function_tester(R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28));
 template <class R, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28, class A29>
 ::boost::type_traits::yes_type is_function_tester(R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29));
-
-
-   template <class T>
-   yes_type is_array_helper(const volatile void*, const volatile void*, void (*)(T x[]));
-   template <class T>
-   no_type is_array_helper(T*const volatile*, const volatile void*, void (*)(T x[]));
-   no_type BOOST_TT_DECL is_array_helper(...);
 } // namespace detail
+
+namespace detail
+{
+  template <class T> struct wrap {};
+  
+  template <class T> T(* is_array_helper1(wrap<T>) )(wrap<T>);
+  char is_array_helper1(...);
+
+  template <class T> no_type is_array_helper2(T(*)(wrap<T>));
+  yes_type is_array_helper2(...);
+}
+
 template <typename T> 
 struct is_array
 { 
-private:
-    static T t;
 public:
-   BOOST_STATIC_CONSTANT(bool, value = 
-      (::boost::type_traits::ice_and<
-         (1 == sizeof(detail::is_array_helper(&t, t, (void(*)(T))0))),
-         ::boost::type_traits::ice_not<
-            ::boost::detail::is_reference_or_const_volatile<T>::value>::value,
-         ::boost::type_traits::ice_not<
-            (1 == sizeof(detail::is_function_tester(t)))>::value
-      >::value));
+   BOOST_STATIC_CONSTANT(
+       bool, value = sizeof(
+           ::boost::detail::is_array_helper2(
+               ::boost::detail::is_array_helper1(
+                   ::boost::detail::wrap<T>()))) == 1
+       );
 };
+
 template <> 
 struct is_array<void>
 { 
@@ -281,23 +280,7 @@ template <typename T> struct is_reference<T&const volatile>
 #endif // BOOST_MSVC
 
 namespace detail
-{
-  template <typename T> struct is_reference_or_const_volatile
-  { 
-   private:
-      typedef T const volatile cv_t;
-   public:
-      BOOST_STATIC_CONSTANT(bool, value = 
-                            (::boost::type_traits::ice_or<
-                             ::boost::type_traits::ice_not<
-                             ::boost::is_const<cv_t>::value
-                             >::value, 
-                             ::boost::type_traits::ice_not<
-                             ::boost::is_volatile<cv_t>::value>::value
-                             >::value));
-  };
-  
-  template <class T> struct wrap {};
+{  
   template <class T> T&(* is_reference_helper1(wrap<T>) )(wrap<T>);
   char is_reference_helper1(...);
 
