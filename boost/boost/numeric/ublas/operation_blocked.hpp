@@ -34,7 +34,7 @@ namespace boost { namespace numeric { namespace ublas {
         V v (e1 ().size1 ());
 #if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
-        typedef type_traits<value_type>::real_type real_type;
+        typedef typename type_traits<value_type>::real_type real_type;
         real_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
@@ -89,7 +89,7 @@ namespace boost { namespace numeric { namespace ublas {
         V v (e2 ().size2 ());
 #if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
-        typedef type_traits<value_type>::real_type real_type;
+        typedef typename type_traits<value_type>::real_type real_type;
         real_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
@@ -144,7 +144,7 @@ namespace boost { namespace numeric { namespace ublas {
         M m (e1 ().size1 (), e2 ().size2 ());
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        typedef type_traits<value_type>::real_type real_type;
+        typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
         disable_type_check<bool>::value = true;
@@ -205,7 +205,7 @@ namespace boost { namespace numeric { namespace ublas {
         M m (e1 ().size1 (), e2 ().size2 ());
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-        typedef type_traits<value_type>::real_type real_type;
+        typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
         disable_type_check<bool>::value = true;
