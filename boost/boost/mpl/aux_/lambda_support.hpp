@@ -39,8 +39,9 @@
     struct rebind \
     { \
         BOOST_STATIC_CONSTANT(int, arity = i); \
-        BOOST_PP_LIST_FOR_EACH_I( \
-              BOOST_MPL_AUX_LAMBDA_SUPPORT_ARG_TYPEDEF_FUNC \
+        BOOST_PP_LIST_FOR_EACH_I_R( \
+              1 \
+            , BOOST_MPL_AUX_LAMBDA_SUPPORT_ARG_TYPEDEF_FUNC \
             , typedef \
             , BOOST_PP_TUPLE_TO_LIST(i,params) \
             ) \
