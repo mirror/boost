@@ -49,25 +49,6 @@ namespace assign_detail
         { }
     };
     
-    /*
-    template< class T >
-    struct from_to_repeater
-    {
-        T from, to;
-        from_to_repeater( T from, T to ) : from( from ), to( to )
-        { }
-    };
-    
-    template< class T >
-    struct from_to_increment_repeater
-    {
-        T from, to, incr;
-        from_to_increment_repeater( T from, T to, T incr )
-         : from( from ), to( to ), incr( incr )
-        { }
-    };
-    */
-
     template< class C >
     class call_push_back
     {
@@ -147,24 +128,6 @@ namespace assign
         return assign_detail::fun_repeater<Function>( sz, r );
     }
     
-    /*
-    template< class T >
-    inline detail::from_to_repeater<T>
-    repeat_from_to( T from, T to )
-    {
-        return detail::from_to_repeater<T>( from, to );
-    }
-
-    template< class T >
-    inline detail::from_to_increment_repeater<T>
-    repeat_from_to( T from, T to, T increment )
-    {
-        return detail::from_to_increment_repeater<T>( from, to, increment );
-    }
-    */
-    
-    
-    
     template< class Function, class Argument = void > 
     class list_inserter
     {
@@ -223,20 +186,6 @@ namespace assign
             return repeat_fun( r.sz, r.val ); 
         }
 
-        /*
-        template< class T >
-        list_inserter& operator,( detail::from_to_repeater<T> r )
-        {
-            return repeat_from_to( r.from, r.to ); 
-        }
-
-        template< class T >
-        list_inserter& operator,( detail::from_to_increment_repeater<T> r )
-        {
-            return repeat_from_to( r.from, r.to, r.incr ); 
-        }
-        */
-
         template< class T >
         list_inserter& repeat( std::size_t sz, T r )
         {
@@ -254,30 +203,6 @@ namespace assign
                 insert_( fun() );
             return *this;
         }
-        
-        /*
-        template< class T >
-        list_inserter& repeat_from_to( T from, T to )
-        {
-            while( from < to )
-            {
-                insert_( from );
-                ++from;
-            }
-            return *this;
-        }
-        
-        template< class T >
-        list_inserter& repeat_from_to( T from, T to, T increment )
-        {
-            while( from < to )
-            {
-                insert_( from );
-                from += increment;
-            }
-            return *this;
-        }
-        */
         
         template< class T >
         list_inserter& operator()( T t )

@@ -154,30 +154,6 @@ namespace assign_detail
             return *this;
         }
         
-        /*
-        template< class U >
-        generic_list& repeat_from_to( U from, U to )
-        {
-            while( from < to )
-            {
-                this->push_back( from );
-                ++from;
-            }
-            return *this;
-        }
-        
-        template< class U >
-        generic_list& repeat_from_to( U from, U to, U increment )
-        {
-            while( from < to )
-            {
-                this->push_back( from );
-                from += increment;
-            }
-            return *this;
-        }
-        */
-
         template< class Container >
         operator Container() const
         {

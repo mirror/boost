@@ -47,8 +47,10 @@
         <li><a href="#headers">Headers</a> </li>
         <li><a href="#std">Standard containers</a> </li>
         <li>Functions <a href="#list_of_ref"><code>list_of()</code> and <code>map_list_of()</code></a></li>
+        <li>Functions <a href="#repeat_ref"><code>repeat()</code> and <code>repeat_fun()</code> </a>  
         <li>Class <a href="#list_inserter"><code>list_inserter</code></a></li>
         <li>Function <a href="#make_list_inserter"><code>make_list_inserter()</code></a></li>
+        <li><a href="#limit"> Customizing</a> argument list sizes</li>   
      </ul>
     <li> <a href="#exceptions">Exceptions and exceptions-safety </a></li>
     <li> <a href="#extensions">Extending the library</a>            
@@ -102,8 +104,8 @@ values instead of its normal arguments. </p>
    <hr>
    <h2>Tutorial</h2>
    <p>
-   Within two minutes you should be able to use this library. There are four
-   main components of the library:
+   Within two minutes you should be able to use this library. The main 
+components are:
    <ul>
         <li>Function <a href="#operator+="><code>operator+=()</code></a>
         <li>Function <a href="#operator()"><code>operator()()</code></a>
@@ -125,7 +127,7 @@ values instead of its normal arguments. </p>
 </span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assert</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;; 
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>; </span><span class=comment>// bring 'operator+=()' into scope
-</span><span class=special>...
+</span><span class=special>
 </span><span class=special>{
     </span><span class=identifier>vector</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt; </span><span class=identifier>values</span><span class=special>;  
     </span><span class=identifier>values </span><span class=special>+= </span><span class=number>1</span><span class=special>,</span><span class=number>2</span><span class=special>,</span><span class=number>3</span><span class=special>,</span><span class=number>4</span><span class=special>,</span><span class=number>5</span><span class=special>,</span><span class=number>6</span><span class=special>,</span><span class=number>7</span><span class=special>,</span><span class=number>8</span><span class=special>,</span><span class=number>9</span><span class=special>; </span><span class=comment>// insert values at the end of the container
@@ -135,15 +137,15 @@ values instead of its normal arguments. </p>
 </span><span class=special>}</span></pre></blockquote>
 
     Here we only stuffed constants into the container, but the list can
-    consists of arbitrary expressions as long as the result of the expression
-    is convertible to the <code>value_type</code> of the container.
+    consists of arbitrary expressions as long as the result of each  
+expression is convertible to the <code>value_type</code> of the container.
    </p> 
    <h3>Function <code>operator()()</code> <a name="operator()"></h3>
    <p>
    We do not call <code>operator()()</code> directly, but instead we call a 
    function that returns a proxy-object that defines <code>operator()()</code>.
    The function that returns the proxy object is always named after the member
-   function that isused to copy the values in the list into the container.
+   function that is used to copy the values in the list into the container.
    So to fill a map with pairs of values you write 
    <blockquote><pre>
 <span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>std</span><span class=special>/</span><span class=identifier>map</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt; </span><span class=comment>// for 'insert()'
@@ -151,7 +153,7 @@ values instead of its normal arguments. </p>
 </span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>string</span><span class=special>&gt;
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>; </span><span class=comment>// bring 'insert()' into scope
-</span><span class=special>...
+</span><span class=special> 
 </span><span class=special>{
     </span><span class=identifier>map</span><span class=special>&lt;</span><span class=identifier>string</span><span class=special>,</span><span class=keyword>int</span><span class=special>&gt; </span><span class=identifier>months</span><span class=special>;  
     </span><span class=identifier>insert</span><span class=special>( </span><span class=identifier>months </span><span class=special>)
@@ -166,8 +168,8 @@ values instead of its normal arguments. </p>
 </span><span class=special>}</span> </pre></blockquote>
    Note that <code>operator()()</code> is much more handy when
    we need to construct objects using several arguments
-   (up to five arguments are supported). This is
-   also true for sequences:
+   (up to five arguments are supported by default, but the limit can be <a href="#limit">customized</a>).
+    This is also true for sequences:
    <blockquote><pre>
 <span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>std</span><span class=special>/</span><span class=identifier>deque</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt; </span><span class=comment>// for 'push_front()'
 </span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assert</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt; 
@@ -175,7 +177,7 @@ values instead of its normal arguments. </p>
 </span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>utility</span><span class=special>&gt;
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>; </span><span class=comment>// bring 'push_front()' into scope
-</span><span class=special>...
+</span><span class=special> 
 </span><span class=special>{
     </span><span class=keyword>typedef </span><span class=identifier>pair</span><span class=special>&lt; </span><span class=identifier>string</span><span class=special>,</span><span class=identifier>string </span><span class=special>&gt; </span><span class=identifier>str_pair</span><span class=special>;
     </span><span class=identifier>deque</span><span class=special>&lt;</span><span class=identifier>str_pair</span><span class=special>&gt; </span><span class=identifier>deq</span><span class=special>;
@@ -207,11 +209,11 @@ objects, for example,
 <p>
 Just to make it perfectly clear, the code above is not restricted to the 
 standard containers, but will work with all <i>standard compliant</i> containers 
-with the right member function. It is only <code>operator+=()</code> that is 
-only defined for the standard containers. </p>
+with the right member function. It is only <code>operator+=()</code> that has been restricted to 
+the standard containers. </p>
   
   <h3>Function <code>list_of()</code> <a name="list_of"></h3>
-  But what if we need to initialize a container? This is where 
+  But what if we need to <i>initialize</i> a container? This is where 
   <code>list_of()</code> comes into play. With <code>list_of()</code>
   we can create anonymous lists that automatically converts to
   any container:
@@ -223,7 +225,7 @@ only defined for the standard containers. </p>
 </span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>string</span><span class=special>&gt;
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>; </span><span class=comment>// bring 'list_of()' into scope
-</span><span class=special>...
+</span><span class=special> 
 </span><span class=special>{
     </span><span class=keyword>const </span><span class=identifier>list</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt; </span><span class=identifier>primes </span><span class=special>= </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>1</span><span class=special>)(</span><span class=number>2</span><span class=special>)(</span><span class=number>3</span><span class=special>)(</span><span class=number>5</span><span class=special>)(</span><span class=number>7</span><span class=special>)(</span><span class=number>11</span><span class=special>);
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>primes</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>6 </span><span class=special>);
@@ -271,7 +273,7 @@ href="../../array/index.html">array</a>&lt;T,std::size_t></code>.
 </span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>map</span><span class=special>&gt;
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>; </span><span class=comment>// bring 'map_list_of()' into scope
-</span><span class=special>...
+</span><span class=special> 
 </span><span class=special>{
     </span><span class=identifier>map</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>,</span><span class=keyword>int</span><span class=special>&gt; </span><span class=identifier>next </span><span class=special>= </span><span class=identifier>map_list_of</span><span class=special>(</span><span class=number>1</span><span class=special>,</span><span class=number>2</span><span class=special>)(</span><span class=number>2</span><span class=special>,</span><span class=number>3</span><span class=special>)(</span><span class=number>3</span><span class=special>,</span><span class=number>4</span><span class=special>)(</span><span class=number>4</span><span class=special>,</span><span class=number>5</span><span class=special>)(</span><span class=number>5</span><span class=special>,</span><span class=number>6</span><span class=special>);
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>next</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>5 </span><span class=special>);
@@ -298,7 +300,7 @@ where <code>repeat()</code> can be handy:
 </span>
 <span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;</span>
 <span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>;</span>
-<span class=special>...</span>
+<span class=special> </span>
 <span class=special>{
     </span><span class=identifier>vector</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt; </span><span class=identifier>v</span><span class=special>;
     </span><span class=identifier>v </span><span class=special>+= </span><span class=number>1</span><span class=special>,</span><span class=number>2</span><span class=special>,</span><span class=number>3</span><span class=special>,</span><span class=identifier>repeat</span><span class=special>(</span><span class=number>10</span><span class=special>,</span><span class=number>4</span><span class=special>),</span><span class=number>5</span><span class=special>,</span><span class=number>6</span><span class=special>,</span><span class=number>7</span><span class=special>,</span><span class=number>8</span><span class=special>,</span><span class=number>9</span><span class=special>;
@@ -328,7 +330,7 @@ A more general list can be constructed with <code>repeat_fun()</code>:
 </span>
 <span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;</span>
 <span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>;</span>
-<span class=special>...</span>
+<span class=special> </span>
 <span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;</span>
 <span class=keyword>struct </span><span class=identifier>next    </span>
 <span class=special>{
@@ -341,7 +343,7 @@ A more general list can be constructed with <code>repeat_fun()</code>:
         </span><span class=keyword>return </span><span class=identifier>seed</span><span class=special>++;
     </span><span class=special>}</span>
 <span class=special>};</span>
-<span class=special>...    </span>
+<span class=special>     </span>
 <span class=special>{
     </span><span class=identifier>vector</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt; </span><span class=identifier>v</span><span class=special>;
     </span><span class=identifier>v </span><span class=special>+= </span><span class=number>1</span><span class=special>,</span><span class=number>2</span><span class=special>,</span><span class=identifier>repeat_fun</span><span class=special>(</span><span class=number>4</span><span class=special>,&amp;</span><span class=identifier>rand</span><span class=special>),</span><span class=number>4</span><span class=special>;
@@ -360,7 +362,7 @@ it is a nullary function. </p>
 <p> 
 As a last example, let us assume that we need to keep track of the
 result of soccer matches. A team will get one point if it wins 
-and zero otherwise. If there has been played three games, the code might look
+and zero otherwise. If there has been played three games in each group, the code might look
 like this:
 
 <blockquote>
@@ -372,26 +374,21 @@ like this:
 <span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>vector</span><span class=special>&gt;
 </span>
 <span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;</span>
-<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>;</span>
-<span class=special>...</span>
+<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>;
+ </span>
 <span class=special>{
     </span><span class=keyword>typedef </span><span class=identifier>vector</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt;                   </span><span class=identifier>score_type</span><span class=special>;
     </span><span class=keyword>typedef </span><span class=identifier>map</span><span class=special>&lt;</span><span class=identifier>string</span><span class=special>,</span><span class=identifier>score_type</span><span class=special>&gt;        </span><span class=identifier>team_score_map</span><span class=special>;
-    </span><span class=keyword>typedef </span><span 
-class=identifier></span><span class=special></span><span 
-class=identifier>pair</span><span class=special>&lt;</span><span 
-class=identifier>string</span><span class=special>,</span><span 
-class=identifier>score_type</span><span class=special>&gt;       </span><span 
-class=identifier>score_pair</span><span class=special>;
+    </span><span class=keyword>typedef </span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>string</span><span class=special>,</span><span class=identifier>score_type</span><span class=special>&gt;       </span><span class=identifier>score_pair</span><span class=special>;
 
     </span><span class=identifier>team_score_map </span><span class=identifier>group1</span><span class=special>, </span><span class=identifier>group2</span><span class=special>;
     
     </span><span class=comment>//
     // method 1: using 'insert()'
     //
-    </span><span class=identifier>insert</span><span class=special>( </span><span class=identifier>group1 </span><span class=special>)( </span><span class=string>&quot;Denmark&quot;</span><span class=special>, </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>1</span><span class=special>)(</span><span class=number>1</span><span class=special>)(</span><span class=number>0</span><span class=special>) </span><span class=special>)
-                    </span><span class=special>( </span><span class=string>&quot;Germany&quot;</span><span class=special>, </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>0</span><span class=special>)(</span><span class=number>0</span><span class=special>)(</span><span class=number>0</span><span class=special>) </span><span class=special>)
-                    </span><span class=special>( </span><span class=string>&quot;England&quot;</span><span class=special>, </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>0</span><span class=special>)(</span><span class=number>0</span><span class=special>)(</span><span class=number>1</span><span class=special>) </span><span class=special>);
+    </span><span class=identifier>insert</span><span class=special>( </span><span class=identifier>group1 </span><span class=special>)( </span><span class=string>&quot;Denmark&quot;</span><span class=special>, </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>1</span><span class=special>)(</span><span class=number>1</span><span class=special>) </span><span class=special>)
+                    </span><span class=special>( </span><span class=string>&quot;Germany&quot;</span><span class=special>, </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>0</span><span class=special>)(</span><span class=number>0</span><span class=special>) </span><span class=special>)
+                    </span><span class=special>( </span><span class=string>&quot;England&quot;</span><span class=special>, </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>0</span><span class=special>)(</span><span class=number>1</span><span class=special>) </span><span class=special>);
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>group1</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>3 </span><span class=special>);
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>group1</span><span class=special>[ </span><span class=string>&quot;Denmark&quot; </span><span class=special>][</span><span class=number>1</span><span class=special>] </span><span class=special>== </span><span class=number>1 </span><span class=special>);
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>group1</span><span class=special>[ </span><span class=string>&quot;Germany&quot; </span><span class=special>][</span><span class=number>0</span><span class=special>] </span><span class=special>== </span><span class=number>0 </span><span class=special>);
@@ -400,14 +397,14 @@ class=identifier>score_pair</span><span class=special>;
     // method 2: using 'list_of()'
     //
     </span><span class=identifier>group2 </span><span class=special>= </span><span class=identifier>list_of</span><span class=special>&lt; </span><span class=identifier>score_pair </span><span class=special>&gt;
-                        </span><span class=special>( </span><span 
-class=string>&quot;Norway&quot;</span><span class=special>,  </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>1</span><span class=special>)(</span><span class=number>0</span><span class=special>)(</span><span class=number>0</span><span class=special>) </span><span class=special>)
-                        </span><span class=special>( </span><span class=string>&quot;USA&quot;</span><span class=special>,     </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>0</span><span class=special>)(</span><span class=number>0</span><span class=special>)(</span><span class=number>0</span><span class=special>) </span><span class=special>)
-                        </span><span class=special>( </span><span class=string>&quot;Andorra&quot;</span><span class=special>, </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>0</span><span class=special>)(</span><span class=number>1</span><span class=special>)(</span><span class=number>1</span><span class=special>) </span><span class=special>);
+                        </span><span class=special>( </span><span class=string>&quot;Norway&quot;</span><span class=special>,  </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>1</span><span class=special>)(</span><span class=number>0</span><span class=special>) </span><span class=special>)
+                        </span><span class=special>( </span><span class=string>&quot;USA&quot;</span><span class=special>,     </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>0</span><span class=special>)(</span><span class=number>0</span><span class=special>) </span><span class=special>)
+                        </span><span class=special>( </span><span class=string>&quot;Andorra&quot;</span><span class=special>, </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>1</span><span class=special>)(</span><span class=number>1</span><span class=special>) </span><span class=special>);
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>group2</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>3 </span><span class=special>);
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>group2</span><span class=special>[ </span><span class=string>&quot;Norway&quot; </span><span class=special>][</span><span class=number>0</span><span class=special>] </span><span class=special>== </span><span class=number>1 </span><span class=special>);
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>group2</span><span class=special>[ </span><span class=string>&quot;USA&quot; </span><span class=special>][</span><span class=number>0</span><span class=special>] </span><span class=special>== </span><span class=number>0 </span><span class=special>);</span>
 <span class=special>}</span>
+    </pre>
 </blockquote>
 
 In the first example, notice how the result of <code>list_of()</code>
@@ -426,13 +423,13 @@ That is all; now you are ready to use this library.
   <h2><a name="reference">Reference</a></h2>
     <p>
   It is worth noticing the way the library is implemented.
-  A free-standing function (eg. <code>push_back())</code>
-  or <code>operator+=()</code> returns a proxy
+  A free-standing function (eg. <code>push_back()</code>
+  or <code>operator+=()</code>) returns a proxy
   object which is responsible for the insertion or the assignment. The proxy 
 object does the insertion or assignment by overloading <code>operator,()</code>
   and <code>operator()()</code> and by calling the "insert" function from within 
   those operators. The "insert" function is typically stored in the proxy object 
-  by using <code>boost::<a href="../../function/doc/index.html">function<></a></code>. </p>
+  by using <code>boost::<a href="../../function/index.html">function<></a></code>. </p>
   
   <p>
   Often overloading
@@ -455,7 +452,7 @@ object does the insertion or assignment by overloading <code>operator,()</code>
   All forwarding is done by passing objects by value. Originally
   <code>const</code> references was used, but it lead to many problems
   with string-literals. One thing to remember is that references 
-  can be passed by using <code>boost::ref<></code>.
+  can be passed by using <code>boost::<a href=../../utility/index.html>ref<></a></code>.
   </p>
   
   <p>
@@ -468,9 +465,10 @@ object does the insertion or assignment by overloading <code>operator,()</code>
         <li><a href="#headers">Headers</a> </li>
         <li><a href="#std">Standard containers</a> </li>
         <li>Functions <a href="#list_of_ref"><code>list_of()</code> and <code>map_list_of()</code></a></li>
+        <li>Functions <a href="#repeat_ref"><code>repeat()</code> and <code>repeat_fun()</code></a></li>
         <li>Class <a href="#list_inserter"><code>list_inserter</code></a></li>
         <li>Function <a href="#make_list_inserter"><code>make_list_inserter()</code></a></li>
-
+        <li><a href="#limit">Cutomizing</a> argument list sizes </li>
      </ul>
   <h3>Headers <a name="headers"></h3>      
   
@@ -519,8 +517,8 @@ below)</td> <tr> <td>  &lt;boost/assign/std/deque.hpp> </td>
         <td>  <code>operator+=()</code> for 
               <code>std::vector</code>, <code>&lt;vector></code>  
     <tr> 
-        <td>  &lt;boost/assign/list_exception.hpp> </td>
-        <td>  Class <code>list_exception</code> which might be thrown by
+        <td>  &lt;boost/assign/assignment_exception.hpp> </td>
+        <td>  Class <code>assignment_exception</code> which might be thrown by
               the proxy returned by <code>list_of()</code>
     <tr> 
         <td>  &lt;boost/assign/list_inserter.hpp> </td>
@@ -585,15 +583,14 @@ class <code>list_inserter</code> which is the back-bone of this entire library.
 <span class=special>} </span><span class=comment>// namespace 'assign'</span>
 <span class=special>} </span><span class=comment>// namespace 'boost'</span>  </pre></blockquote>
     Note that the extra template argument <code>V2</code> etc. is 
-    necessary for function template argument deduction to work 
-    properly.   
+    necessary to allow for types convertible to <code>V</code>.   
      
   <h3>Functions <code>list_of()</code> and 
       <code>map_list_of()</code> <a name="#list_of_ref"> </h3>
     <p>  
   These two functions are used to construct anonymous    
   list which can be converted to any standard container
-  and <code>boost::array<>.</code> The object returned by the two
+  and <code>boost::<a href=../../array/index.html>array&ltT,sz></a>.</code> The object returned by the two
   functions is guaranteed to have the interface described below. 
   </p>
   <b>Synopsis</b>
@@ -606,8 +603,8 @@ class <code>list_inserter</code> which is the back-bone of this entire library.
     </span><span class=keyword>class </span><span class=identifier>Implementation</span><span class=special>-</span><span class=identifier>defined</span>
     </span><span class=special>{
     </span><span class=keyword>public</span><span class=special>:
-        </span><span class=identifier>iterator  </span><span class=identifier>begin</span><span class=special>();
-        </span><span class=identifier>iterator  </span><span class=identifier>end</span><span class=special>();
+        </span><span class=identifier>const_iterator  </span><span class=identifier>begin</span><span class=special>() <span class=keyword>const</span>;
+        </span><span class=identifier>const_iterator  </span><span class=identifier>end</span><span class=special>() <span class=keyword>const</span>;
         
         </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>U </span><span class=special>&gt;
         </span><span class=identifier>Implementation</span><span class=special>-</span><span class=identifier>defined</span>&amp; </span><span class=keyword>operator</span><span class=special>,( </span><span class=identifier>U </span><span class=identifier>u </span><span class=special>);
@@ -641,7 +638,7 @@ class <code>list_inserter</code> which is the back-bone of this entire library.
         //
         // Convert to eg. 'boost::array&lt;T,std::size_t&gt;'. If the  
         // assigned variable is too small, 
-        // a '&lt;a href=&quot;#list_exception&quot;&gt;list_exception&lt;/a&gt;' is thrown.
+        // a '&lt;a href=&quot;#assignment_exception&quot;&gt;assignment_exception&lt;/a&gt;' is thrown.
         // If the assigned variable it is too big, the rest of the 
         // values are  default-constructed.
         //
@@ -672,6 +669,21 @@ class <code>list_inserter</code> which is the back-bone of this entire library.
 <span class=special>} </span><span class=comment>// namespace 'assign'</span>
 <span class=special>} </span><span class=comment>// namespace 'boost'</span>  </pre></blockquote>
 
+  <h3>Functions <code>repeat()</code> and 
+     <code>repeat_fun()</code> <a name="#repeat_ref"> </h3>
+  <p>
+      These two function exist both as free-standing functions and as member functions of the object returned by 
+      <code>list_of()</code> and of <code>list_inserter<></code>. The free-standing versions are used to create a
+      hook for <code>operator,()</code> so we can call the functions in the middle of a comma-list. The member functions
+      are used when we need to call the functions in the middle of a parenthesis-list. In both cases we have that
+      <ul>
+          <li> the return type is always implementation defined for both functions, 
+          <li> the argument list of <code>repeat()</code> is <code>(std::size_t,T)</code>, and  
+          <li> the argument list of <code>repeat_fun()</code> is <code>(std::size_t,Nullary_function)</code>    
+      </ul>
+      
+  </p>
+      
   <h3><a name="list_inserter">Class <code>list_inserter<></code></a></h3> 
   
   This class is responsible for inserting elements into containers and 
@@ -791,11 +803,12 @@ class=keyword>class </span><span class=identifier>C </span><span class=special>&
   </p>
   <p>
   The functions may throw standard exceptions
-  like <code>bad_alloc</code>.
+  like <code>std::bad_alloc</code>. Note however that, unfortunately, the standard does not guarantee allocation-failures
+  in standard containers to be reported by <code>std::bad_alloc</code> or exceptions derived from <code>std::exception</code>.
  </p>
   
-  <h3><a name="list_exception">Class 
-  <code>list_exception</code></a></h3>
+  <h3><a name="assignment_exception">Class 
+  <code>assignment_exception</code></a></h3>
   <p>
    The exception is thrown by the conversion operator in the proxy object
    returned from <code>list_of()</code>.
@@ -806,10 +819,10 @@ class=keyword>class </span><span class=identifier>C </span><span class=special>&
 <span class=special>{</span>
 <span class=keyword>namespace </span><span class=identifier>assign</span>
 <span class=special>{
-    </span><span class=keyword>class </span><span class=identifier>list_exception </span><span class=special>: </span><span class=keyword>public </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>exception
+    </span><span class=keyword>class </span><span class=identifier>assignment_exception </span><span class=special>: </span><span class=keyword>public </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>exception
     </span><span class=special>{
     </span><span class=keyword>public</span><span class=special>:
-        </span><span class=keyword>explicit </span><span class=identifier>list_exception</span><span class=special>( </span><span class=keyword>const </span><span class=keyword>char</span><span class=special>* </span><span class=identifier>what </span><span class=special>); 
+        </span><span class=keyword>explicit </span><span class=identifier>assignment_exception</span><span class=special>( </span><span class=keyword>const </span><span class=keyword>char</span><span class=special>* </span><span class=identifier>what </span><span class=special>); 
         </span><span class=keyword>virtual </span><span class=keyword>const </span><span class=keyword>char</span><span class=special>* </span><span class=identifier>what</span><span class=special>() </span><span class=keyword>const </span><span class=keyword>throw</span><span class=special>();
     </span><span class=special>};</span>
 <span class=special>}   </span>
@@ -998,7 +1011,7 @@ support better initialization (see <a href="#initializer">[4]</a>).
   Special thanks goes to 
   <ul>
   <li> Leor Zolman for our many discussion that eventually led to this library.
-  <li> Tom Brinkman for acting as review manager.
+  <li> Tom Brinkman for being review manager.
   <li> Pavel Vozenilek for his countless suggestions, improvements and 
        portability fixes. </ul>
   </p>
