@@ -23,6 +23,10 @@
 
 # include <boost/detail/sp_counted_base_nt.hpp>
 
+#elif defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
+
+# include <boost/detail/sp_counted_base_gcc_x86.hpp>
+
 #elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ )
 
 # include <boost/detail/sp_counted_base_w32.hpp>

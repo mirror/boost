@@ -85,9 +85,9 @@ inline long atomic_conditional_increment( long * pw )
         "cmpxchgl %%ebx, %0\n\t"
         "jne 0b\n\t"
         "1:":
-        "=m"( *pw ), "=&eax"( r ): // outputs (%0, %1)
+        "=m"( *pw ), "=&%eax"( r ): // outputs (%0, %1)
         "m"( *pw ): // input (%2)
-        "ebx", "memory", "cc" // clobbers
+        "%ebx", "memory", "cc" // clobbers
     );
 
     return r;
