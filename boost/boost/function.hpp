@@ -1,6 +1,6 @@
 // Boost.Function library
 
-// Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001, 2002 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -539,25 +539,25 @@ namespace boost {
         typedef function_traits<InR> traits;
 
         typedef typename traits::result_type R;
-        typedef typename get_arg1_type<(gte<traits::arity, 1>::value), 
+        typedef typename get_arg1_type<(gte<(traits::arity), 1>::value), 
                                        traits>::type T1;
-        typedef typename get_arg2_type<(gte<traits::arity, 2>::value), 
+        typedef typename get_arg2_type<(gte<(traits::arity), 2>::value), 
                                        traits>::type T2;
-        typedef typename get_arg3_type<(gte<traits::arity, 3>::value), 
+        typedef typename get_arg3_type<(gte<(traits::arity), 3>::value), 
                                        traits>::type T3;
-        typedef typename get_arg4_type<(gte<traits::arity, 4>::value), 
+        typedef typename get_arg4_type<(gte<(traits::arity), 4>::value), 
                                        traits>::type T4;
-        typedef typename get_arg5_type<(gte<traits::arity, 5>::value), 
+        typedef typename get_arg5_type<(gte<(traits::arity), 5>::value), 
                                        traits>::type T5;
-        typedef typename get_arg6_type<(gte<traits::arity, 6>::value), 
+        typedef typename get_arg6_type<(gte<(traits::arity), 6>::value), 
                                        traits>::type T6;
-        typedef typename get_arg7_type<(gte<traits::arity, 7>::value), 
+        typedef typename get_arg7_type<(gte<(traits::arity), 7>::value), 
                                        traits>::type T7;
-        typedef typename get_arg8_type<(gte<traits::arity, 8>::value), 
+        typedef typename get_arg8_type<(gte<(traits::arity), 8>::value), 
                                        traits>::type T8;
-        typedef typename get_arg9_type<(gte<traits::arity, 9>::value), 
+        typedef typename get_arg9_type<(gte<(traits::arity), 9>::value), 
                                        traits>::type T9;
-        typedef typename get_arg10_type<(gte<traits::arity, 10>::value), 
+        typedef typename get_arg10_type<(gte<(traits::arity), 10>::value), 
                                         traits>::type T10;
 
 #ifndef BOOST_FUNCTION_NO_DEPRECATED
