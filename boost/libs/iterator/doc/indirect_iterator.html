@@ -98,9 +98,9 @@ private:
    Iterator m_iterator; // exposition
 };
 </pre>
-<p>The member types of <tt class="literal"><span class="pre">indirect_iterator</span></tt> are defined according to the
-following pseudo-code.  We use the abbreviation
-<tt class="literal"><span class="pre">V=iterator_traits&lt;Iterator&gt;::value_type</span></tt>.:</p>
+<p>The member types of <tt class="literal"><span class="pre">indirect_iterator</span></tt> are defined according to
+the following pseudo-code, where <tt class="literal"><span class="pre">V</span></tt> is
+<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt></p>
 <pre class="literal-block">
 if (Value is use_default) then
     typedef remove_const&lt;pointee&lt;V&gt;::type&gt;::type value_type;
@@ -124,11 +124,16 @@ if (Difference is use_default)
     typedef iterator_traits&lt;Iterator&gt;::difference_type difference_type;
 else
     typedef Difference difference_type;
+
+if (CategoryOrTraversal is use_default)
+    typedef <a class="reference" href="iterator_facade.html#iterator-category"><em>iterator-category</em></a>(
+        iterator_traversal&lt;Iterator&gt;::type,``reference``,``value_type``
+    ) iterator_category;
+else
+    typedef <a class="reference" href="iterator_facade.html#iterator-category"><em>iterator-category</em></a>(
+        CategoryOrTraversal,``reference``,``value_type``
+    ) iterator_category;
 </pre>
-<p>The <tt class="literal"><span class="pre">iterator_category</span></tt> member is <tt class="literal"><span class="pre">facade_iterator_category(C,</span>
-<span class="pre">value_type,</span> <span class="pre">reference)</span></tt> where if <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is
-<tt class="literal"><span class="pre">use_default</span></tt>, <tt class="literal"><span class="pre">C</span></tt> is <tt class="literal"><span class="pre">iterator_traversal&lt;Iterator&gt;::type</span></tt> and
-otherwise <tt class="literal"><span class="pre">C</span></tt> is <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>.</p>
 </div>
 <div class="section" id="indirect-iterator-requirements">
 <h1><a class="toc-backref" href="#id3" name="indirect-iterator-requirements"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></h1>
@@ -162,8 +167,8 @@ expression (where <tt class="literal"><span class="pre">t</span></tt> is an obje
 </ul>
 </blockquote>
 <p><tt class="literal"><span class="pre">indirect_iterator&lt;X,V1,C1,R1,D1&gt;</span></tt> is interoperable with
-<tt class="literal"><span class="pre">indirect_iterator&lt;Y,V2,C2,R2,D2&gt;</span></tt> if and only if iterator <tt class="literal"><span class="pre">X</span></tt> is
-interoperable with iterator <tt class="literal"><span class="pre">Y</span></tt>.</p>
+<tt class="literal"><span class="pre">indirect_iterator&lt;Y,V2,C2,R2,D2&gt;</span></tt> if and only if <tt class="literal"><span class="pre">X</span></tt> is
+interoperable with <tt class="literal"><span class="pre">Y</span></tt>.</p>
 </div>
 <div class="section" id="indirect-iterator-operations">
 <h1><a class="toc-backref" href="#id5" name="indirect-iterator-operations"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></h1>

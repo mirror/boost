@@ -1,3 +1,6 @@
+.. |iterator-category| replace:: *iterator-category*
+.. _iterator-category:
+
 .. parsed-literal::
   
   *iterator-category*\ (C,R,V) :=

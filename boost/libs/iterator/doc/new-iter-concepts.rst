@@ -784,9 +784,9 @@ where *category-to-traversal* is defined as follows
 
 .. _UnaryTypeTrait: n1519_
 
-The UnaryTypeTrait concept is defined in n1519_; the LWG added the
-requirement that specializations are derived from their nested
-``::type``.
+The UnaryTypeTrait concept is defined in n1519_; the LWG is
+considering adding the requirement that specializations are derived
+from their nested ``::type``.
 
 .. _n1519: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1519.htm
 

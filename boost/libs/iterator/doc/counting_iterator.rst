@@ -34,3 +34,6 @@
 .. include:: make_counting_iterator.rst
 
 .. include:: counting_iterator_eg.rst
+
+.. _iterator-category: iterator_facade.html#iterator-category
+.. |iterator-category| replace:: *iterator-category*

@@ -26,22 +26,28 @@
     };
 
 
-If the ``Difference`` argument is ``use_default`` then the
-``difference_type`` member is an unspecified signed integral
+If the ``Difference`` argument is ``use_default`` then
+``difference_type`` is an unspecified signed integral
 type. Otherwise ``difference_type`` is ``Difference``.
 
-If ``CategoryOrTraversal`` is not ``use_default`` then the member
-``iterator_category`` is ``CategoryOrTraversal``.  Otherwise, if
-``numeric_limits<Incrementable>::is_specialized``, then
-``iterator_category`` is a 
-``facade_iterator_category(random_access_traversal_tag, Incrementable, const Incrementable&)``.
-Otherwise, ``iterator_category`` is
-``facade_iterator_category(iterator_traversal<Incrementable>::type, Incrementable, const Incrementable&)``.
+``iterator_category`` is determined according to the following
+algorithm:
 
+.. parsed-literal::
 
-[*Note:* implementers are encouraged to provide an implementation of
-  ``operator-`` and the default ``difference_type`` that avoids overflows in
-  the cases when the ``Incrementable`` type is a numeric type.]
+   if (CategoryOrTraversal is not use_default)
+       return CategoryOrTraversal
+   else if (numeric_limits<Incrementable>::is_specialized)
+       return |iterator-category|_\ (
+           random_access_traversal_tag, Incrementable, const Incrementable&)
+   else
+       return |iterator-category|_\ (
+            iterator_traversal<Incrementable>::type, 
+            Incrementable, const Incrementable&)
+        
+[*Note:* implementers are encouraged to provide an implementation
+of ``operator-`` and a default ``difference_type`` that avoid
+overflows when ``Incrementable`` is a numeric type.]
 
 ``counting_iterator`` requirements
 ..................................

@@ -39,9 +39,11 @@
   };
 
 
-The member types of ``indirect_iterator`` are defined according to the
-following pseudo-code.  We use the abbreviation
-``V=iterator_traits<Iterator>::value_type``.::
+The member types of ``indirect_iterator`` are defined according to
+the following pseudo-code, where ``V`` is
+``iterator_traits<Iterator>::value_type``
+
+.. parsed-literal::
 
   if (Value is use_default) then
       typedef remove_const<pointee<V>::type>::type value_type;
@@ -57,21 +59,23 @@ following pseudo-code.  We use the abbreviation
       typedef Reference reference;
 
   if (Value is use_default) then 
-      typedef pointee<V>::type* pointer;
+      typedef pointee<V>::type\* pointer;
   else 
-      typedef Value* pointer;
+      typedef Value\* pointer;
 
   if (Difference is use_default)
       typedef iterator_traits<Iterator>::difference_type difference_type;
   else
       typedef Difference difference_type;
 
-
-
-The ``iterator_category`` member is ``facade_iterator_category(C,
-value_type, reference)`` where if ``CategoryOrTraversal`` is
-``use_default``, ``C`` is ``iterator_traversal<Iterator>::type`` and
-otherwise ``C`` is ``CategoryOrTraversal``.
+  if (CategoryOrTraversal is use_default)
+      typedef |iterator-category|_\ (
+          iterator_traversal<Iterator>::type,``reference``,``value_type``
+      ) iterator_category;
+  else
+      typedef |iterator-category|_\ (
+          CategoryOrTraversal,``reference``,``value_type``
+      ) iterator_category;
 
 
 ``indirect_iterator`` requirements
@@ -109,8 +113,8 @@ concepts, Where ``v`` is an object of
   * Lvalue Iterator if ``reference`` is a reference type.
 
 ``indirect_iterator<X,V1,C1,R1,D1>`` is interoperable with
-``indirect_iterator<Y,V2,C2,R2,D2>`` if and only if iterator ``X`` is
-interoperable with iterator ``Y``.
+``indirect_iterator<Y,V2,C2,R2,D2>`` if and only if ``X`` is
+interoperable with ``Y``.
 
 
 ``indirect_iterator`` operations
