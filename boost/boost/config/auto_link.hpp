@@ -17,12 +17,14 @@ USAGE:
 
 Before including this header you must define one or more of define the following macros:
 
-BOOST_LIB_NAME:       Required: A string containing the basename of the library,
-                      for example boost_regex.
-BOOST_LIB_TOOLSET:    Optional: the base name of the toolset.
-BOOST_DYN_LINK:       Optional: when set link to dll rather than static library.
-BOOST_LIB_DIAGNOSTIC: Optional: when set the header will print out the name
-                      of the library selected (useful for debugging).
+BOOST_LIB_NAME:           Required: A string containing the basename of the library,
+                          for example boost_regex.
+BOOST_LIB_TOOLSET:        Optional: the base name of the toolset.
+BOOST_DYN_LINK:           Optional: when set link to dll rather than static library.
+BOOST_LIB_DIAGNOSTIC:     Optional: when set the header will print out the name
+                          of the library selected (useful for debugging).
+BOOST_AUTO_LINK_NOMANGLE: Specifies that we should link to BOOST_LIB_NAME.lib,
+                          rather than a mangled-name version.
 
 These macros will be undef'ed at the end of the header, further this header
 has no include guards - so be sure to include it only once from your library!
@@ -289,9 +291,16 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
       && defined(BOOST_LIB_RT_OPT) \
       && defined(BOOST_LIB_VERSION)
 
+#ifndef BOOST_AUTO_LINK_NOMANGLE
 #  pragma comment(lib, BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) "-" BOOST_LIB_TOOLSET BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT "-" BOOST_LIB_VERSION ".lib")
-#ifdef BOOST_LIB_DIAGNOSTIC
-#  pragma message ("Linking to lib file: " BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) "-" BOOST_LIB_TOOLSET BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT "-" BOOST_LIB_VERSION ".lib")
+#  ifdef BOOST_LIB_DIAGNOSTIC
+#     pragma message ("Linking to lib file: " BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) "-" BOOST_LIB_TOOLSET BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT "-" BOOST_LIB_VERSION ".lib")
+#  endif
+#else
+#  pragma comment(lib, BOOST_STRINGIZE(BOOST_LIB_NAME) ".lib")
+#  ifdef BOOST_LIB_DIAGNOSTIC
+#     pragma message ("Linking to lib file: " BOOST_STRINGIZE(BOOST_LIB_NAME) ".lib")
+#  endif
 #endif
 
 #else
@@ -328,6 +337,10 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 #if defined(BOOST_DYN_LINK)
 #  undef BOOST_DYN_LINK
 #endif
+#if defined(BOOST_AUTO_LINK_NOMANGLE)
+#  undef BOOST_AUTO_LINK_NOMANGLE
+#endif
+
 
 
 
