@@ -1,0 +1,181 @@
+<h2><a name="using-concept-checks">Using Concept Checks</a></h2>
+
+For each concept there is a concept checking class which can be used
+to make sure that a given type (or set of types) models the concept.
+The Boost Concept Checking Library includes concept checking classes
+for all of the concepts used in the C++ standard library and a few
+more. The <a href="#reference">Reference</a> section below lists these
+concept checking classes. In addition, other boost libraries come with
+concept checking classes for the concepts that are particular to those
+libraries.  An example of one of these classes is the
+<tt>EqualityComparableConcept</tt> class.
+
+<pre>
+  template &lt;class T&gt; struct EqualityComparableConcept;
+</pre>
+
+Each concept checking class has a member function named
+<tt>constraints()</tt> which contains the valid expressions for the
+concept. To check whether some type, say <tt>foo</tt>, is
+EqualityComparable, we need to instantiate the concept checking class
+with foo: <tt>EqualityComparableConcept&lt;foo&gt;</tt> and then find
+a way to get the compiler to compile the <tt>constraints()</tt>
+function without actually calling it. The Boost Concept Checking
+Library defines two utilities that make this easy:
+<tt>function_requires()</tt> and <tt>BOOST_CLASS_REQUIRES</tt>.
+<tt>function_requires()</tt> function can be used in function bodies
+and the <tt>BOOST_CLASS_REQUIRES</tt> macro can be used inside class
+bodies. The <tt>function_requires()</tt> function takes no arguments,
+but has a template parameter for the concept checking class. This
+means that the instantiated concept checking class must be given as an
+explicit template argument, as shown below.
+
+<pre>
+  void some_function_using_foo() {
+    function_requires&lt; EqualityComparableConcept&lt;foo&gt; &gt;();
+    // ...
+  };
+</pre>
+
+The <tt>BOOST_CLASS_REQUIRES</tt> macro can be used inside a class
+definition to check whether some type models a concept. 
+
+<pre>
+  struct some_class_using_foo {
+    BOOST_CLASS_REQUIRES(foo, EqualityComparableConcept);
+  };
+</pre>
+
+To add concept checks to the <tt>std::stable_sort()</tt> function the
+library implementor would simply insert <tt>function_requires()</tt>
+at the top of <tt>std::stable_sort()</tt> to make sure the template
+parameter type models <a
+href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
+RandomAccessIterator</a>. In addition, <tt>std::stable_sort()</tt>
+requires that the <tt>value_type</tt> of the iterators be
+<a href="http://www.sgi.com/Technology/STL/LessThanComparable.html">
+LessThanComparable</a>, so we also use <tt>function_requires()</tt> to
+check this.
+
+<pre>
+  template &lt;class RandomAccessIter&gt;
+  void stable_sort(RandomAccessIter first, RandomAccessIter last)
+  {
+    function_requires&lt; RandomAccessIteratorConcept&lt;RandomAccessIter&gt; &gt;();
+    typedef typename std::iterator_traits&lt;RandomAccessIter&gt;::value_type value_type;
+    function_requires&lt; LessThanComparableConcept&lt;value_type&gt; &gt;();
+    ...
+  }
+</pre>
+
+
+
+<!-- There are a few places where the SGI STL documentation differs
+from the corresponding requirements described in the C++ Standard. In
+these cases we use the definition from the C++ Standard.  -->
+
+<p>
+Some concepts deal with more than one type. In this case the
+corresponding concept checking class will have multiple template
+parameters.  The following example shows how
+<tt>function_requires()</tt> is used with the <a
+href="../property_map/ReadWritePropertyMap.html">ReadWritePropertyMap</a>
+concept which takes two type parameters: a property map and the key
+type for the map.
+
+<pre>
+  template &lt;class IncidenceGraph, class Buffer, class BFSVisitor, 
+            class ColorMap&gt;
+  void breadth_first_search(IncidenceGraph& g, 
+    typename graph_traits&lt;IncidenceGraph&gt;::vertex_descriptor s, 
+    Buffer& Q, BFSVisitor vis, ColorMap color)
+  {
+    typedef typename graph_traits&lt;IncidenceGraph&gt;::vertex_descriptor Vertex;
+    function_requires&lt; ReadWritePropertyMap&lt;ColorMap, Vertex&gt; &gt;();
+    ...
+  }
+</pre>
+
+
+As an example of using <tt>class_requires</tt> we look at a concept
+check that could be added to <tt>std::vector</tt>. One requirement
+that is placed on the element type is that it must be <a
+href="http://www.sgi.com/Technology/STL/Assignable.html">Assignable</a>.
+We can check this by inserting
+<tt>class_requires&lt;AssignableConcept&lt;T&gt; &gt;</tt> at the top
+of the definition for <tt>std::vector</tt>.
+
+<pre>
+  namespace std {
+    template &lt;class T&gt;
+    struct vector {
+      typedef typename class_requires&lt; AssignableConcept&lt;T&gt; &gt;::check req;
+      ...
+    };
+  }
+</pre>
+
+
+Although the concept checks are designed for use by generic library
+implementors, they can also be useful to end users. Sometimes one may
+not be sure whether some type models a particular concept. This can
+easily be checked by creating a small program and using
+<tt>function_requires()</tt> with the type and concept in question.
+The file <a
+href="./stl_concept_checks.cpp"><tt>stl_concept_checks.cpp</tt></a>
+gives and example of applying the concept checks to STL
+containers. The file is listed here:
+
+<pre>
+  #include &lt;boost/concept_checks.hpp&gt;
+
+  #include &lt;iterator&gt;
+  #include &lt;set&gt;
+  #include &lt;map&gt;
+  #include &lt;vector&gt;
+  #include &lt;list&gt;
+  #include &lt;deque&gt;
+
+  int
+  main()
+  {
+    typedef std::vector&lt;int&gt; Vector;
+    typedef std::deque&lt;int&gt; Deque;
+    typedef std::list&lt;int&gt; List;
+
+    function_requires&lt; Mutable_RandomAccessContainer&lt;Vector&gt; &gt;();
+    function_requires&lt; BackInsertionSequence&lt;Vector&gt; &gt;();
+
+    function_requires&lt; Mutable_RandomAccessContainer&lt;Deque&gt; &gt;();
+    function_requires&lt; FrontInsertionSequence&lt;Deque&gt; &gt;();
+    function_requires&lt; BackInsertionSequence&lt;Deque&gt; &gt;();
+
+    function_requires&lt; Mutable_ReversibleContainer&lt;List&gt; &gt;();
+    function_requires&lt; FrontInsertionSequence&lt;List&gt; &gt;();
+    function_requires&lt; BackInsertionSequence&lt;List&gt; &gt;();
+
+    typedef std::set&lt;int&gt; Set;
+    typedef std::multiset&lt;int&gt; MultiSet;
+    typedef std::map&lt;int,int&gt; Map;
+    typedef std::multimap&lt;int,int&gt; MultiMap;
+
+    function_requires&lt; SortedAssociativeContainer&lt;Set&gt; &gt;();
+    function_requires&lt; SimpleAssociativeContainer&lt;Set&gt; &gt;();
+    function_requires&lt; UniqueAssociativeContainer&lt;Set&gt; &gt;();
+
+    function_requires&lt; SortedAssociativeContainer&lt;MultiSet&gt; &gt;();
+    function_requires&lt; SimpleAssociativeContainer&lt;MultiSet&gt; &gt;();
+    function_requires&lt; MultipleAssociativeContainer&lt;MultiSet&gt; &gt;();
+
+    function_requires&lt; SortedAssociativeContainer&lt;Map&gt; &gt;();
+    function_requires&lt; UniqueAssociativeContainer&lt;Map&gt; &gt;();
+    function_requires&lt; PairAssociativeContainer&lt;Map&gt; &gt;();
+
+    function_requires&lt; SortedAssociativeContainer&lt;MultiMap&gt; &gt;();
+    function_requires&lt; MultipleAssociativeContainer&lt;MultiMap&gt; &gt;();
+    function_requires&lt; PairAssociativeContainer&lt;MultiMap&gt; &gt;();
+
+    return 0;
+  }
+</pre>
+

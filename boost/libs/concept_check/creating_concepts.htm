@@ -1,0 +1,72 @@
+<h2><a name="creating-concept-checks">Creating Concept Checking Classes</a></h2>
+
+As an example of how to create a concept checking class, we look
+at how to create the corresponding checks for the
+<a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
+RandomAccessIterator</a> concept. First, as a convention we name the
+concept checking class after the concept, and add the suffix
+``<tt>_concept</tt>''. Note that the <tt>REQUIRE</tt> macro expects
+the suffix to be there. Next we must define a member function named
+<tt>constraints()</tt> in which we will exercise the valid expressions
+of the concept. The <tt>REQUIRE</tt> macro expects this function's
+signature to appear exactly as it is appears below: a <tt>void</tt>
+non-const member function with no parameters.
+
+<p>
+The first part of the <tt>constraints()</tt> function includes
+the requirements that correspond to the <i>refinement</i> relationship
+between <a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
+RandomAccessIterator</a> and the concepts which it builds upon:
+<a href="http://www.sgi.com/Technology/STL/BidirectionalIterator.html">
+BidirectionalIterator</a> and
+<a href="http://www.sgi.com/Technology/STL/LessThanComparable.html">
+LessThanComparable</a>. We could have instead used
+<tt>CLASS_REQUIRES</tt> and placed these requirements in the class
+body, however <tt>CLASS_REQUIRES</tt> uses C++ language features that
+are less portable.
+
+<p>
+Next we check that the <tt>iterator_category</tt> of the iterator is
+either <tt>std::random_access_iterator_tag</tt> or a derived class.
+After that we write out some code that corresponds to the valid
+expressions of the <a
+href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
+RandomAccessIterator</a> concept. Typedefs can also be added to
+enforce the associated types of the concept.
+
+<pre>
+  template &lt;class Iter&gt;
+  struct RandomAccessIterator_concept
+  {
+    void constraints() {
+      function_requires&lt; BidirectionalIteratorConcept&lt;Iter&gt; &gt;();
+      function_requires&lt; LessThanComparableConcept&lt;Iter&gt; &gt;();
+      function_requires&lt; ConvertibleConcept&lt;
+        typename std::iterator_traits&lt;Iter&gt;::iterator_category,
+        std::random_access_iterator_tag&gt; &gt;();
+
+      i += n;
+      i = i + n; i = n + i;
+      i -= n;
+      i = i - n;
+      n = i - j;
+      i[n];
+    }
+    Iter a, b;
+    Iter i, j;
+    typename std::iterator_traits&lt;Iter&gt;::difference_type n;
+  };
+}
+</pre>
+
+One potential pitfall in designing concept checking classes is using
+more expressions in the constraint function than necessary. For
+example, it is easy to accidentally use the default constructor to
+create the objects that will be needed in the expressions (and not all
+concepts require a default constructor). This is the reason we write
+the constraint function as a member function of a class. The objects
+involved in the expressions are declared as data members of the class.
+Since objects of the constraints class template are never
+instantiated, the default constructor for the concept checking class
+is never instantiated. Hence the data member's default constructors
+are never instantiated (C++ Standard Section 14.7.1 9).
