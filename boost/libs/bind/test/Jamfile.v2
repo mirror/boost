@@ -15,6 +15,7 @@ test-suite "bind"
       [ run bind_eq_test.cpp ]
       [ run bind_const_test.cpp ]
       [ run bind_cv_test.cpp ]
+      [ run bind_stateful_test.cpp ]
       [ run mem_fn_test.cpp ]
       [ run mem_fn_void_test.cpp ]
       [ run mem_fn_derived_test.cpp ]
