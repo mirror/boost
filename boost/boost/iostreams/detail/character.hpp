@@ -18,6 +18,9 @@
 
 namespace boost { namespace iostreams { namespace detail {
 
+template<bool IsSame>
+struct translate_char_impl;
+
 //
 // Template name: translate_char.
 // Description: Translates a character or an end-of-file indicator from the 
@@ -25,7 +28,11 @@ namespace boost { namespace iostreams { namespace detail {
 //
 template<typename SourceTr, typename TargetTr>
 typename TargetTr::int_type 
-translate_char(typename SourceTr::int_type c);
+translate_char(typename SourceTr::int_type c) 
+{ 
+    typedef translate_char_impl<is_same<SourceTr, TargetTr>::value> impl;
+    return impl::template inner<SourceTr, TargetTr>::translate_char(c);
+}
 
 //----------------------------------------------------------------------------//
 
@@ -55,14 +62,6 @@ struct translate_char_impl<false> {
             }
     };
 };
-
-template<typename SourceTr, typename TargetTr>
-typename TargetTr::int_type 
-translate_char(typename SourceTr::int_type c) 
-{ 
-    typedef translate_char_impl<is_same<SourceTr, TargetTr>::value> impl;
-    return impl::template inner<SourceTr, TargetTr>::translate_char(c);
-}
 
 } } } // End namespaces detail, iostreams, boost.
 
