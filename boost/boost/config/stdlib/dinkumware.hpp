@@ -33,6 +33,10 @@
       // and nor is <exception>
 #     define BOOST_NO_EXCEPTION_STD_NAMESPACE
 #  endif
+// There's no numeric_limits<long long> support unless _LONGLONG is defined:
+#  if !defined(_LONGLONG) && (_CPPLIB_VER <= 310)
+#     define BOOST_NO_MS_INT64_NUMERIC_LIMITS
+#  endif
 // 3.06 appears to have (non-sgi versions of) <hash_set> & <hash_map>, 
 // and no <slist> at all
 #else
