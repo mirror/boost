@@ -8,9 +8,9 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
-# ifdef BOOST_PP_LOCAL_LIMITS
-#   define BOOST_PP_LOCAL_START BOOST_PP_TUPLE_ELEM(2, 0, BOOST_PP_LOCAL_LIMITS)
-#   define BOOST_PP_LOCAL_FINISH BOOST_PP_TUPLE_ELEM(2, 1, BOOST_PP_LOCAL_LIMITS)
+# ifdef BOOST_PP_LOCAL_ITERATION_LIMITS
+#   define BOOST_PP_LOCAL_START BOOST_PP_TUPLE_ELEM(2, 0, BOOST_PP_LOCAL_ITERATION_LIMITS)
+#   define BOOST_PP_LOCAL_FINISH BOOST_PP_TUPLE_ELEM(2, 1, BOOST_PP_LOCAL_ITERATION_LIMITS)
 # else
 #   error BOOST_PP:  local iteration boundaries are not defined
 # endif
@@ -786,6 +786,8 @@
 # if (BOOST_PP_LOCAL_START) <= 256 && (BOOST_PP_LOCAL_FINISH) >= 256
     BOOST_PP_LOCAL_MACRO(256)
 # endif
+#
+# undef BOOST_PP_LOCAL_ITERATION_LIMITS
 #
 # undef BOOST_PP_LOCAL_START
 # undef BOOST_PP_LOCAL_FINISH
