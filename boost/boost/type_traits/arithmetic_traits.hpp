@@ -31,7 +31,9 @@ namespace boost{
 template <typename T> struct is_void{ BOOST_STATIC_CONSTANT(bool, value = false); };
 template <> struct is_void<void>{ BOOST_STATIC_CONSTANT(bool, value = true); };
 
-//* is a type T an integral type described in the standard (3.9.1p3)
+//* is a type T an [cv-qualified-] integral type described in the standard (3.9.1p3)
+// as an extention we include long long, as this is likely to be added to the 
+// standard at a later date
 template <typename T> struct is_integral
 { BOOST_STATIC_CONSTANT(bool, value = false); };
 template <> struct is_integral<unsigned char>
@@ -259,6 +261,7 @@ struct is_fundamental
 } // namespace boost
 
 #endif
+
 
 
 

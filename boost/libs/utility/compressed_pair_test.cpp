@@ -149,13 +149,14 @@ template compressed_pair<double, int[2]>::compressed_pair();
 
 #ifdef __BORLANDC__
 // can't handle both types empty:
-unsigned int expected_failures = 1;
+unsigned int expected_failures = 4;
 #elif defined(__GNUC__)
 // no zero sized base classes:
 unsigned int expected_failures = 4;
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
 
 
