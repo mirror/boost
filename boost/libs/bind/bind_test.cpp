@@ -261,6 +261,8 @@ void member_function_test()
     BOOST_TEST( x.hash == 23558 );
 }
 
+//
+
 void nested_bind_test()
 {
     using namespace boost;
@@ -275,6 +277,136 @@ void nested_bind_test()
     BOOST_TEST( bind(f_1, bind(f_0))() == 17041L );
 }
 
+//
+
+//
+
+struct V
+{
+    mutable unsigned int hash;
+
+    V(): hash(0) {}
+
+    void f0() { f1(17); }
+    void g0() const { g1(17); }
+
+    void f1(int a1) { hash = (hash * 17041 + a1) % 32768; }
+    void g1(int a1) const { hash = (hash * 17041 + a1 * 2) % 32768; }
+
+    void f2(int a1, int a2) { f1(a1); f1(a2); }
+    void g2(int a1, int a2) const { g1(a1); g1(a2); }
+
+    void f3(int a1, int a2, int a3) { f2(a1, a2); f1(a3); }
+    void g3(int a1, int a2, int a3) const { g2(a1, a2); g1(a3); }
+
+    void f4(int a1, int a2, int a3, int a4) { f3(a1, a2, a3); f1(a4); }
+    void g4(int a1, int a2, int a3, int a4) const { g3(a1, a2, a3); g1(a4); }
+
+    void f5(int a1, int a2, int a3, int a4, int a5) { f4(a1, a2, a3, a4); f1(a5); }
+    void g5(int a1, int a2, int a3, int a4, int a5) const { g4(a1, a2, a3, a4); g1(a5); }
+
+    void f6(int a1, int a2, int a3, int a4, int a5, int a6) { f5(a1, a2, a3, a4, a5); f1(a6); }
+    void g6(int a1, int a2, int a3, int a4, int a5, int a6) const { g5(a1, a2, a3, a4, a5); g1(a6); }
+
+    void f7(int a1, int a2, int a3, int a4, int a5, int a6, int a7) { f6(a1, a2, a3, a4, a5, a6); f1(a7); }
+    void g7(int a1, int a2, int a3, int a4, int a5, int a6, int a7) const { g6(a1, a2, a3, a4, a5, a6); g1(a7); }
+
+    void f8(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8) { f7(a1, a2, a3, a4, a5, a6, a7); f1(a8); }
+    void g8(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8) const { g7(a1, a2, a3, a4, a5, a6, a7); g1(a8); }
+};
+
+void void_returns_test()
+{
+    using namespace boost;
+
+    V v;
+
+    // 0
+
+    bind(&V::f0, &v)();
+    bind(&V::f0, ref(v))();
+
+    bind(&V::g0, &v)();
+    bind(&V::g0, v)();
+    bind(&V::g0, ref(v))();
+
+    // 1
+
+    bind(&V::f1, &v, 1)();
+    bind(&V::f1, ref(v), 1)();
+
+    bind(&V::g1, &v, 1)();
+    bind(&V::g1, v, 1)();
+    bind(&V::g1, ref(v), 1)();
+
+    // 2
+
+    bind(&V::f2, &v, 1, 2)();
+    bind(&V::f2, ref(v), 1, 2)();
+
+    bind(&V::g2, &v, 1, 2)();
+    bind(&V::g2, v, 1, 2)();
+    bind(&V::g2, ref(v), 1, 2)();
+
+    // 3
+
+    bind(&V::f3, &v, 1, 2, 3)();
+    bind(&V::f3, ref(v), 1, 2, 3)();
+
+    bind(&V::g3, &v, 1, 2, 3)();
+    bind(&V::g3, v, 1, 2, 3)();
+    bind(&V::g3, ref(v), 1, 2, 3)();
+
+    // 4
+
+    bind(&V::f4, &v, 1, 2, 3, 4)();
+    bind(&V::f4, ref(v), 1, 2, 3, 4)();
+
+    bind(&V::g4, &v, 1, 2, 3, 4)();
+    bind(&V::g4, v, 1, 2, 3, 4)();
+    bind(&V::g4, ref(v), 1, 2, 3, 4)();
+
+    // 5
+
+    bind(&V::f5, &v, 1, 2, 3, 4, 5)();
+    bind(&V::f5, ref(v), 1, 2, 3, 4, 5)();
+
+    bind(&V::g5, &v, 1, 2, 3, 4, 5)();
+    bind(&V::g5, v, 1, 2, 3, 4, 5)();
+    bind(&V::g5, ref(v), 1, 2, 3, 4, 5)();
+
+    // 6
+
+    bind(&V::f6, &v, 1, 2, 3, 4, 5, 6)();
+    bind(&V::f6, ref(v), 1, 2, 3, 4, 5, 6)();
+
+    bind(&V::g6, &v, 1, 2, 3, 4, 5, 6)();
+    bind(&V::g6, v, 1, 2, 3, 4, 5, 6)();
+    bind(&V::g6, ref(v), 1, 2, 3, 4, 5, 6)();
+
+    // 7
+
+    bind(&V::f7, &v, 1, 2, 3, 4, 5, 6, 7)();
+    bind(&V::f7, ref(v), 1, 2, 3, 4, 5, 6, 7)();
+
+    bind(&V::g7, &v, 1, 2, 3, 4, 5, 6, 7)();
+    bind(&V::g7, v, 1, 2, 3, 4, 5, 6, 7)();
+    bind(&V::g7, ref(v), 1, 2, 3, 4, 5, 6, 7)();
+
+    // 8
+
+    bind(&V::f8, &v, 1, 2, 3, 4, 5, 6, 7, 8)();
+    bind(&V::f8, ref(v), 1, 2, 3, 4, 5, 6, 7, 8)();
+
+    bind(&V::g8, &v, 1, 2, 3, 4, 5, 6, 7, 8)();
+    bind(&V::g8, v, 1, 2, 3, 4, 5, 6, 7, 8)();
+    bind(&V::g8, ref(v), 1, 2, 3, 4, 5, 6, 7, 8)();
+
+    BOOST_TEST( v.hash == 23558 );
+}
+
+//
+
 int test_main(int, char * [])
 {
     function_test();
@@ -284,6 +416,7 @@ int test_main(int, char * [])
 #endif
     member_function_test();
     nested_bind_test();
+    void_returns_test();
 
     return 0;
 }
