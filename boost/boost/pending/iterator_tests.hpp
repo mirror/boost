@@ -5,7 +5,9 @@
 // test suite for STL concepts such as iterators and containers.
 //
 // Revision History:
-// 04 Feb 2001  Added lvalue test (David Abrahams)
+// 04 Feb 2001  Added lvalue test, corrected preconditions
+//              (David Abrahams)
+
 #include <iterator>
 #include <assert.h>
 
@@ -95,7 +97,7 @@ void forward_iterator_test(Iterator i, T v1, T v2)
   (void)p;
 }
 
-// Preconditions: *i == v1, *++i == v2
+// Preconditions: *i == v1, *++i == v2, --i
 template <class Iterator, class T>
 void bidirectional_iterator_test(Iterator i, T v1, T v2)
 {
@@ -122,7 +124,7 @@ void bidirectional_iterator_test(Iterator i, T v1, T v2)
 
 // mutable_bidirectional_iterator_test
 
-// Preconditions: [i,i+N) is a valid range
+// Preconditions: [i-1,i+N) is a valid range
 template <class Iterator, class TrueVals>
 void random_access_iterator_test(Iterator i, int N, TrueVals vals)
 {
