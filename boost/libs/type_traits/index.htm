@@ -32,6 +32,7 @@ first. </p>
 <a href="#relationships">Relationships Between Types</a>
 <a href="#transformations">Transformations Between Types</a>
 <a href="#synthesized">Synthesizing Types</a>
+<a href="#function_traits">Function Traits</a>
 <a href="#compiler">Compiler Support Information</a>
 <a href="#headers">Type traits headers</a>
 <a href="#example">Example Code</a></pre>
@@ -808,6 +809,53 @@ properties. </p>
         a multiple of Align. </td>
         <td valign="top" width="13%" bgcolor="#C0C0C0">&nbsp;</td>
         <td width="25%" bgcolor="#C0C0C0">&nbsp;</td>
+        <td valign="top" width="5%">&nbsp;</td>
+    </tr>
+</table>
+
+<h2><a name="function_traits"></a>Function Traits</h2>
+
+<p> The <code>::boost::function_traits</code> class template extracts information from function types.
+
+<table border="0" cellpadding="7" cellspacing="1" width="100%">
+    <tr>
+        <td valign="top" width="5%">&nbsp;</td>
+        <td valign="top" width="23%" bgcolor="#008080"><p
+        align="center">Expression</p>
+        </td>
+        <td valign="top" width="28%" bgcolor="#008080"><p
+        align="center">Description</p>
+        </td>
+        <td valign="top" width="13%" bgcolor="#008080"><p
+        align="center">Reference</p>
+        </td>
+        <td valign="top" width="25%" bgcolor="#008080"><p
+        align="center">Compiler requirements</p>
+        </td>
+        <td valign="top" width="5%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="5%">&nbsp;</td>
+        <td valign="top" width="23%" bgcolor="#C0C0C0"><code>::boost::function_traits&lt;F&gt;::arity</code></td>
+        <td valign="top" width="28%" bgcolor="#C0C0C0">Determine the arity of the function type <code>F</code>. </td>
+        <td valign="top" width="13%" bgcolor="#C0C0C0">&nbsp;</td>
+        <td width="25%" bgcolor="#C0C0C0">P</td>
+        <td valign="top" width="5%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="5%">&nbsp;</td>
+        <td valign="top" width="23%" bgcolor="#C0C0C0"><code>::boost::function_traits&lt;F&gt;::result_type</code></td>
+        <td valign="top" width="28%" bgcolor="#C0C0C0">The type returned by function type <code>F</code>. </td>
+        <td valign="top" width="13%" bgcolor="#C0C0C0">&nbsp;</td>
+        <td width="25%" bgcolor="#C0C0C0">P</td>
+        <td valign="top" width="5%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="5%">&nbsp;</td>
+        <td valign="top" width="23%" bgcolor="#C0C0C0"><code>::boost::function_traits&lt;F&gt;::arg<em>N</em>_type</code></td>
+        <td valign="top" width="28%" bgcolor="#C0C0C0">The <code><em>N</em></code>th argument type of function type <code>F</code>, where <code>1&lt;=<em>N</em>&lt;=</code>arity of <code>F</code>.</td>
+        <td valign="top" width="13%" bgcolor="#C0C0C0">&nbsp;</td>
+        <td width="25%" bgcolor="#C0C0C0">P</td>
         <td valign="top" width="5%">&nbsp;</td>
     </tr>
 </table>
