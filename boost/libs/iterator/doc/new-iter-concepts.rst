@@ -8,7 +8,7 @@
                Systems Lab`_, University of Hanover `Institute for
                Transport Railway Operation and Construction`_
 :date: $Date$
-:Number: N1530=03-0133
+:Number: N1550=03-0133
 :copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
@@ -157,7 +157,7 @@ Changes to Algorithm Requirements
 
 For the next working paper (but not for TR1), the committee should
 consider the following changes to the type requirements of
-algorithms.  These changes are phrased as textual
+algorithms.  These changes are phrased as phrased as textual
 substitutions, listing the algorithms to which each textual
 substitution applies.
 
