@@ -36,11 +36,11 @@
 #define MACRO(a, b, c) (a)(b)(c)
 #define ARGS() (1, 2, 3)
 
-<a href="expand.html">BOOST_PP_EXPAND</a>(MACRO ARGS) // expands to (1)(2)(3)
+<a href="expand.html">BOOST_PP_EXPAND</a>(MACRO ARGS()) // expands to (1)(2)(3)
 
 #define SAMPLE(n) \
    <a href="expand.html">BOOST_PP_EXPAND</a>( \
-      MACRO, \
+      MACRO \
       <a href="if.html">BOOST_PP_IF</a>( \
          n, \
          (x, y, z), \
