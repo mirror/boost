@@ -270,7 +270,7 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
 #endif
 }
 
-std::string cpp_regex_traits_base::set_message_catalogue(const std::string& l)
+std::string BOOST_RE_CALL cpp_regex_traits_base::set_message_catalogue(const std::string& l)
 {
    if(sizeof(regex_message_cat) <= l.size())
       return l;

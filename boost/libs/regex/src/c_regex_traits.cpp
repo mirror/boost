@@ -597,7 +597,7 @@ void c_regex_traits<char>::init()
    ++entry_count;
 }
 
-void c_regex_traits<char>::update()
+void BOOST_RE_CALL c_regex_traits<char>::update()
 {
    BOOST_RE_GUARD_STACK
    #ifdef BOOST_RE_THREADS
@@ -617,7 +617,7 @@ void c_regex_traits<char>::update()
    sort_type = re_detail::find_sort_syntax(&i, &sort_delim);
 }
 
-void c_regex_traits<char>::free()
+void BOOST_RE_CALL c_regex_traits<char>::free()
 {
    BOOST_RE_GUARD_STACK
    #ifdef BOOST_RE_THREADS

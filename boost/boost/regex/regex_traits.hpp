@@ -147,7 +147,7 @@ public:
       char_class_print = char_class_alpha | char_class_digit | char_class_punct | char_class_underscore | char_class_blank,
       char_class_word = char_class_alpha | char_class_digit | char_class_underscore
    };
-   static std::string set_message_catalogue(const std::string& s);
+   static std::string BOOST_RE_CALL set_message_catalogue(const std::string& s);
 protected:
 #if defined(__MWERKS__) && __MWERKS__ <= 0x6000
    friend class c_regex_traits<char>;
@@ -169,8 +169,8 @@ protected:
    static void BOOST_RE_CALL do_update_ctype();
    static void BOOST_RE_CALL do_update_collate();
 public:
-   static std::string error_string(unsigned id);
-   static char* get_catalogue() { return regex_message_catalogue; }
+   static std::string BOOST_RE_CALL error_string(unsigned id);
+   static char* BOOST_RE_CALL get_catalogue() { return regex_message_catalogue; }
 };
 
 } // namespace re_detail
@@ -233,7 +233,7 @@ public:
       return do_lookup_collate(buf, s.c_str());
    }
 
-   static locale_type imbue(locale_type l){ return l; }
+   static locale_type BOOST_RE_CALL imbue(locale_type l){ return l; }
    locale_type BOOST_RE_CALL getloc()const{ return locale_type(); }
 
    c_regex_traits()
@@ -250,10 +250,10 @@ public:
       { c_regex_traits<char>::update(); }
       operator void*() { return this; }
    };
-   static void update();
+   static void BOOST_RE_CALL update();
 private:
-   static void init();
-   static void free();
+   static void BOOST_RE_CALL init();
+   static void BOOST_RE_CALL free();
    static c_regex_traits<char> i;
 
    static unsigned sort_type;
@@ -305,7 +305,7 @@ public:
 
    static bool BOOST_RE_CALL lookup_collatename(std::basic_string<wchar_t>& s, const wchar_t* first, const wchar_t* last);
 
-   static locale_type imbue(locale_type l){ return l; }
+   static locale_type BOOST_RE_CALL imbue(locale_type l){ return l; }
    locale_type BOOST_RE_CALL getloc()const{ return locale_type(); }
    c_regex_traits<wchar_t>()
    { init(); }
@@ -374,8 +374,8 @@ protected:
    static void BOOST_RE_CALL do_free();
    static void BOOST_RE_CALL do_init();
 public:
-   static std::string error_string(unsigned id);
-   static char* get_catalogue() { return regex_message_catalogue; }
+   static std::string BOOST_RE_CALL error_string(unsigned id);
+   static char* BOOST_RE_CALL get_catalogue() { return regex_message_catalogue; }
 };
 
 } // namespace re_detail
@@ -440,7 +440,7 @@ public:
       return do_lookup_collate(buf, s.c_str());
    }
 
-   static locale_type imbue(locale_type l){ return l; }
+   static locale_type BOOST_RE_CALL imbue(locale_type l){ return l; }
    locale_type BOOST_RE_CALL getloc()const{ return locale_type(); }
 
    struct sentry
@@ -450,7 +450,7 @@ public:
       ~sentry(){}
       operator void*() { return this; }
    };
-   static void update();
+   static void BOOST_RE_CALL update();
    w32_regex_traits();
    ~w32_regex_traits();
 private:
@@ -502,7 +502,7 @@ public:
 
    static bool BOOST_RE_CALL lookup_collatename(std::basic_string<wchar_t>& s, const wchar_t* first, const wchar_t* last);
 
-   static locale_type imbue(locale_type l){ return l; }
+   static locale_type BOOST_RE_CALL imbue(locale_type l){ return l; }
    locale_type BOOST_RE_CALL getloc()const{ return locale_type(); }
 
    struct sentry
@@ -574,7 +574,7 @@ struct BOOST_RE_IX_DECL cpp_regex_traits_base : public regex_traits_base
                          | char_class_upper | char_class_xdigit
    };
 
-   static std::string set_message_catalogue(const std::string& s);
+   static std::string BOOST_RE_CALL set_message_catalogue(const std::string& s);
 protected:
    static char regex_message_cat[200];
 };
@@ -747,7 +747,7 @@ public:
    cpp_regex_traits();
    ~cpp_regex_traits();
    locale_type BOOST_RE_CALL imbue(locale_type l);
-   locale_type BOOST_RE_CALL BOOST_RE_CALL getloc()const{ return locale_inst; }
+   locale_type BOOST_RE_CALL getloc()const{ return locale_inst; }
    unsigned int BOOST_RE_CALL strwiden(wchar_t *s1, unsigned int len, const char *s2)const;
 
    struct sentry

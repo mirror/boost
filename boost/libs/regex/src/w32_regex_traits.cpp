@@ -373,7 +373,7 @@ void BOOST_RE_CALL w32_traits_base::do_free()
    }
 }
 
-std::string w32_traits_base::error_string(unsigned id)
+std::string BOOST_RE_CALL w32_traits_base::error_string(unsigned id)
 {
    return re_get_error_str(id);
 }
@@ -424,7 +424,7 @@ bool BOOST_RE_CALL w32_traits_base::do_lookup_collate(std::string& buf, const ch
    return result;
 }
 
-std::string w32_traits_base::set_message_catalogue(const std::string& l)
+std::string BOOST_RE_CALL w32_traits_base::set_message_catalogue(const std::string& l)
 {
    BOOST_RE_GUARD_STACK
    #ifdef BOOST_RE_THREADS
@@ -445,7 +445,7 @@ char w32_traits_base::lower_case_map[map_size];
 
 w32_regex_traits<char> w32_regex_traits<char>::i;
 
-void w32_regex_traits<char>::update()
+void BOOST_RE_CALL w32_regex_traits<char>::update()
 {
    BOOST_RE_GUARD_STACK
    #ifdef BOOST_RE_THREADS
