@@ -32,19 +32,25 @@ inline void increment_int(int& x)
   ++x;
 }
 
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 namespace boost{
-
 namespace serialization{
+#else
+namespace std{
+#endif
 
 template<class Archive>
-void serialize(Archive& ar,pair_of_ints& p,unsigned int)
+void serialize(Archive& ar,pair_of_ints& p,const unsigned int)
 {
   ar&boost::serialization::make_nvp("first",p.first);
   ar&boost::serialization::make_nvp("second",p.second);
 }
 
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 } /* namespace serialization */
-
 } /* namespace boost*/
+#else
+} /* namespace std */
+#endif
 
 #endif

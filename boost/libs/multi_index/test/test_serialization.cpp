@@ -109,19 +109,22 @@ private:
   }
 };
 
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 namespace boost{
-
 namespace serialization{
+#endif
 
 template<class Archive>
-inline void load_construct_data(Archive& ar,container_holder* p,unsigned int)
+inline void load_construct_data(
+ Archive& ar,container_holder* p,const unsigned int)
 {
   ::new(p)container_holder(container_holder::multi_index_t());
 }
 
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 } /* namespace serialization */
-
-} /* namespace boost*/
+} /* namespace boost */
+#endif
 
 void test_serialization()
 {

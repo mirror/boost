@@ -13,8 +13,7 @@
 #include <boost/aligned_storage.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/serialization/access.hpp>
-#include <boost/serialization/nvp.hpp>
+#include <boost/serialization/serialization.hpp>
 
 namespace boost{
 
@@ -30,7 +29,7 @@ struct archive_constructed:private noncopyable
   template<class Archive>
   archive_constructed(Archive& ar,const unsigned int version)
   {
-    serialization::load_construct_data(ar,&get(),version);
+    serialization::load_construct_data_adl(ar,&get(),version);
     BOOST_TRY{
       ar>>get();
     }
@@ -44,7 +43,7 @@ struct archive_constructed:private noncopyable
   template<class Archive>
   archive_constructed(const char* name,Archive& ar,const unsigned int version)
   {
-    serialization::load_construct_data(ar,&get(),version);
+    serialization::load_construct_data_adl(ar,&get(),version);
     BOOST_TRY{
       ar>>serialization::make_nvp(name,get());
     }

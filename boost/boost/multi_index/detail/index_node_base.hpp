@@ -10,6 +10,7 @@
 #define BOOST_MULTI_INDEX_DETAIL_INDEX_NODE_BASE_HPP
 
 #if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+#include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/archive/archive_exception.hpp>
 #include <boost/serialization/access.hpp>
 #include <boost/throw_exception.hpp> 
@@ -62,18 +63,29 @@ private:
  * somehow invalid archive.
  */
 
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 namespace serialization{
+#else
+namespace multi_index{
+namespace detail{
+#endif
 
 template<class Archive,typename Value>
 inline void load_construct_data(
-  Archive&,multi_index::detail::index_node_base<Value>*,
-  unsigned int)
+  Archive&,boost::multi_index::detail::index_node_base<Value>*,
+  const unsigned int)
 {
   throw_exception(
     archive::archive_exception(archive::archive_exception::other_exception));
 }
 
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 } /* namespace serialization */
+#else
+} /* namespace multi_index::detail */
+} /* namespace multi_index */
+#endif
+
 #endif
 
 } /* namespace boost */
