@@ -48,60 +48,30 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
-#include <boost/mpl/bool.hpp>
 #include <boost/mpl/void.hpp>
 
 namespace boost { namespace iostreams { 
 
-namespace detail { 
-    struct lazy_base { }; 
-
-    // Returns the given type, unless is is of the form eval<U>, in which case
-    // returns the result of applying U.
-    template<typename T>
-    struct lazy_eval {
-        template<typename U> struct apply_base_type {
-            typedef typename U::base::type type;
-        };
-        typedef typename mpl::eval_if<
-                             is_base_and_derived<detail::lazy_base, T>,
-                             apply_base_type<T>,
-                             mpl::identity<T>
-                         >::type type;
-    };
-
-    template<>
-    struct lazy_eval<mpl::void_> { typedef mpl::void_ type; };
-} // End namespace detail.
-
-template<typename T>
-struct lazy : public detail::lazy_base { typedef T base; };
-
-namespace detail { 
-    // Unspecified types default to void (VC6 requires this circumlocution.)
-    typedef lazy< mpl::identity<void> > select_default; 
-}
-
 template< typename Case1 = mpl::true_,
-          typename Type1 = detail::select_default,
+          typename Type1 = mpl::void_,
           typename Case2 = mpl::true_,
-          typename Type2 = detail::select_default,
+          typename Type2 = mpl::void_,
           typename Case3 = mpl::true_,
-          typename Type3 = detail::select_default,
+          typename Type3 = mpl::void_,
           typename Case4 = mpl::true_,
-          typename Type4 = detail::select_default,
+          typename Type4 = mpl::void_,
           typename Case5 = mpl::true_,
-          typename Type5 = detail::select_default,
+          typename Type5 = mpl::void_,
           typename Case6 = mpl::true_,
-          typename Type6 = detail::select_default,
+          typename Type6 = mpl::void_,
           typename Case7 = mpl::true_,
-          typename Type7 = detail::select_default,
+          typename Type7 = mpl::void_,
           typename Case8 = mpl::true_,
-          typename Type8 = detail::select_default,
+          typename Type8 = mpl::void_,
           typename Case9 = mpl::true_,
-          typename Type9 = detail::select_default,
+          typename Type9 = mpl::void_,
           typename Case10 = mpl::true_,
-          typename Type10 = detail::select_default >
+          typename Type10 = mpl::void_ >
 struct select {
     typedef typename
             mpl::eval_if<
@@ -115,44 +85,7 @@ struct select {
                 Case8, mpl::identity<Type8>, mpl::eval_if<
                 Case9, mpl::identity<Type9>, mpl::if_<
                 Case10, Type10, mpl::void_ > > > > > > > > >
-            >::type                                 temp;
-    typedef typename detail::lazy_eval<temp>::type  type;
-};
-
-template< typename Case1 = mpl::true_,
-          typename Type1 = detail::select_default,
-          typename Case2 = mpl::true_,
-          typename Type2 = detail::select_default,
-          typename Case3 = mpl::true_,
-          typename Type3 = detail::select_default,
-          typename Case4 = mpl::true_,
-          typename Type4 = detail::select_default,
-          typename Case5 = mpl::true_,
-          typename Type5 = detail::select_default,
-          typename Case6 = mpl::true_,
-          typename Type6 = detail::select_default,
-          typename Case7 = mpl::true_,
-          typename Type7 = detail::select_default,
-          typename Case8 = mpl::true_,
-          typename Type8 = detail::select_default,
-          typename Case9 = mpl::true_,
-          typename Type9 = detail::select_default,
-          typename Case10 = mpl::true_,
-          typename Type10 = detail::select_default >
-struct do_select {
-    typedef typename
-            mpl::eval_if<
-                Case1, mpl::identity<Type1>, mpl::eval_if<
-                Case2, mpl::identity<Type2>, mpl::eval_if<
-                Case3, mpl::identity<Type3>, mpl::eval_if<
-                Case4, mpl::identity<Type4>, mpl::eval_if<
-                Case5, mpl::identity<Type5>, mpl::eval_if<
-                Case6, mpl::identity<Type6>, mpl::eval_if<
-                Case7, mpl::identity<Type7>, mpl::eval_if<
-                Case8, mpl::identity<Type8>, mpl::eval_if<
-                Case9, mpl::identity<Type9>, mpl::if_<
-                Case10, Type10, mpl::void_ > > > > > > > > >
-            >::type                                 type;
+            >::type type;
 };
 
 } } // End namespaces iostreams, boost.
