@@ -1,8 +1,10 @@
-// (C) Copyright Chuck Allison and Jeremy Siek 2001. Permission to
-// copy, use, modify, sell and distribute this software is granted
-// provided this copyright notice appears in all copies. This software
-// is provided "as is" without express or implied warranty, and with
-// no claim as to its suitability for any purpose.
+// (C) Copyright Chuck Allison and Jeremy Siek 2001, 2002. 
+//
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all
+// copies. This software is provided "as is" without express or
+// implied warranty, and with no claim as to its suitability for any
+// purpose.
 
 #ifndef BOOST_DYNAMIC_BITSET_HPP
 #define BOOST_DYNAMIC_BITSET_HPP
@@ -315,7 +317,10 @@ public:
   
     size_type size() const;
 
-    // comparison
+    bool is_subset_of(const dynamic_bitset& a) const;
+    bool is_proper_subset_of(const dynamic_bitset& a) const;
+
+    // lexicographical comparison
     template <typename B, typename A>
     friend bool operator==(const dynamic_bitset<B, A>& a, 
                            const dynamic_bitset<B, A>& b);
@@ -639,7 +644,7 @@ dynamic_bitset<Block, Allocator>::operator-=(const dynamic_bitset& rhs)
 {
     assert(size() == rhs.size());
     for (size_type i = 0; i < this->m_num_blocks; ++i)
-        this->m_bits[i] = this->m_bits[i] && !rhs.m_bits[i];
+        this->m_bits[i] = this->m_bits[i] & ~rhs.m_bits[i];
     cleanup();
     return *this;
 }
@@ -896,6 +901,34 @@ dynamic_bitset<Block, Allocator>::size() const
     return this->m_num_bits;
 }
 
+
+template <typename Block, typename Allocator>
+bool dynamic_bitset<Block, Allocator>::
+is_subset_of(const dynamic_bitset<Block, Allocator>& a) const
+{
+    assert(this->size() == a.size());
+    for (size_type i = 0; i < this->m_num_blocks; ++i)
+        if (this->m_bits[i] & ~a.m_bits[i])
+            return false;
+    return true;
+}
+
+template <typename Block, typename Allocator>
+bool dynamic_bitset<Block, Allocator>::
+is_proper_subset_of(const dynamic_bitset<Block, Allocator>& a) const
+{
+    assert(this->size() == a.size());
+    bool proper = false;
+    for (size_type i = 0; i < this->m_num_blocks; ++i) {
+        Block bt = this->m_bits[i], ba = a.m_bits[i];
+        if (ba & ~bt)
+            proper = true;
+        if (bt & ~ba)
+            return false;
+    }
+    return proper;
+}
+
 //-----------------------------------------------------------------------------
 // comparison
 
@@ -1127,8 +1160,8 @@ dynamic_bitset<Block, Allocator>
 operator^(const dynamic_bitset<Block, Allocator>& x,
           const dynamic_bitset<Block, Allocator>& y)
 {
-    dynamic_bitset<Block, Allocator> b(y);
-    return b ^= x;
+    dynamic_bitset<Block, Allocator> b(x);
+    return b ^= y;
 }
 
 template <typename Block, typename Allocator>
@@ -1136,8 +1169,8 @@ dynamic_bitset<Block, Allocator>
 operator-(const dynamic_bitset<Block, Allocator>& x,
           const dynamic_bitset<Block, Allocator>& y)
 {
-    dynamic_bitset<Block, Allocator> b(y);
-    return b -= x;
+    dynamic_bitset<Block, Allocator> b(x);
+    return b -= y;
 }
 
 
