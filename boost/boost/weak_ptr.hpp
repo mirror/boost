@@ -60,10 +60,12 @@ public:
 //  It is not possible to avoid spurious access violations since
 //  in multithreaded programs r.px may be invalidated at any point.
 //
-//  A weak_ptr<T> can safely be obtained from a weak_ptr<U> by using
-//
-//  weak_ptr<T> wpt = make_shared(wpu);
-//
+
+    template<class Y>
+    weak_ptr(weak_ptr<Y> const & r): pn(r.pn) // never throws
+    {
+        px = boost::make_shared(r).get();
+    }
 
     template<class Y>
     weak_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
@@ -71,6 +73,14 @@ public:
     }
 
 #if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
+
+    template<class Y>
+    weak_ptr & operator=(weak_ptr<Y> const & r) // never throws
+    {
+        px = boost::make_shared(r).get();
+        pn = r.pn;
+        return *this;
+    }
 
     template<class Y>
     weak_ptr & operator=(shared_ptr<Y> const & r) // never throws
