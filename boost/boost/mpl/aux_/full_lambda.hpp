@@ -128,7 +128,7 @@ template< int N, typename Tag, typename Protect >
 struct lambda_impl< arg<N>,Tag,Protect AUX_ARITY_PARAM(int_<-1>) >
 {
     BOOST_MPL_AUX_IS_LAMBDA_EXPR(true_)
-    typedef arg<N> type;
+    typedef mpl::arg<N> type; // qualified for the sake of MIPSpro 7.41
 };
 
 #endif // BOOST_MPL_NO_LAMBDA_HEURISTIC
