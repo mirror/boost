@@ -303,10 +303,6 @@ namespace test // tester is the driver class for a sequence of tests
 
 // Copyright Kevlin Henney, 2000. All rights reserved.
 //
-// Permission to use, copy, modify, and distribute this software for any
-// purpose is hereby granted without fee, provided that this copyright and
-// permissions notice appear in all copies and derivatives, and that no
-// charge may be made for the software and its documentation except to cover
-// cost of distribution.
-//
-// This software is provided "as is" without express or implied warranty.
+// Distributed under the Boost Software License, Version 1.0. (See
+// accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
