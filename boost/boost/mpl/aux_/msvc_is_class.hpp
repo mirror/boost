@@ -18,14 +18,10 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/aux_/type_wrapper.hpp>
 #include <boost/mpl/aux_/yes_no.hpp>
-#include <boost/mpl/aux_/adl_barrier.hpp>
 
 #include <boost/type_traits/is_reference.hpp>
 
-
-BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
-
-namespace aux {
+namespace boost { namespace mpl { namespace aux {
 
 template< typename T > struct is_class_helper
 {
@@ -57,8 +53,6 @@ struct msvc_is_class
 {
 };
 
-} // namespace aux
-
-BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+}}}
 
 #endif // BOOST_MPL_AUX_MSVC_IS_CLASS_HPP_INCLUDED

@@ -19,7 +19,6 @@
 #include <boost/mpl/aux_/config/msvc.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
 
-
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 
 // n.a. == not available
@@ -28,6 +27,11 @@ struct na
     typedef na type;
     enum { value = 0 };
 };
+
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+BOOST_MPL_AUX_ADL_BARRIER_DECL(na)
+
+namespace boost { namespace mpl {
 
 template< typename T >
 struct is_na
@@ -98,6 +102,6 @@ template< typename T, typename U > struct if_na
 };
 #endif
 
-BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+}}
 
 #endif // BOOST_MPL_AUX_NA_HPP_INCLUDED

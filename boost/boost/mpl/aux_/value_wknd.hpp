@@ -23,10 +23,8 @@
     || defined(BOOST_MPL_CFG_MSVC_60_ETI_BUG)
 
 #   include <boost/mpl/int.hpp>
-#   include <boost/mpl/aux_/adl_barrier.hpp> 
 
-BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
-namespace aux {
+namespace boost { namespace mpl { namespace aux {
 template< typename C_ > struct value_wknd
     : C_
 {
@@ -39,8 +37,7 @@ template<> struct value_wknd<int>
     using int_<1>::value;
 };
 #endif
-} // namespace aux
-BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+}}}
 
 
 #if !defined(BOOST_MPL_CFG_MSVC_60_ETI_BUG)
@@ -51,7 +48,7 @@ BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
 #else
 #   define BOOST_MPL_AUX_VALUE_WKND(C) C
 #   define BOOST_MPL_AUX_MSVC_VALUE_WKND(C) \
-    ::BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::aux::value_wknd< C > \
+    ::boost::mpl::aux::value_wknd< C > \
 /**/
 #endif
 

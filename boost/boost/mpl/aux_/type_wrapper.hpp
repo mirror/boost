@@ -15,12 +15,9 @@
 // $Date$
 // $Revision$
 
-#include <boost/mpl/aux_/adl_barrier.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
 
-BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
-
-namespace aux {
+namespace boost { namespace mpl { namespace aux {
 
 template< typename T > struct type_wrapper
 {
@@ -45,8 +42,6 @@ template< typename W > struct wrapped_type
 };
 #endif
 
-} // namespace aux
-
-BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+}}}
 
 #endif // BOOST_MPL_AUX_TYPE_WRAPPER_HPP_INCLUDED

@@ -27,5 +27,6 @@ template< typename T, T N > struct integral_c;
 #endif
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+BOOST_MPL_AUX_ADL_BARRIER_DECL(integral_c)
 
 #endif // BOOST_MPL_INTEGRAL_C_FWD_HPP_INCLUDED

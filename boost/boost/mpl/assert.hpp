@@ -103,12 +103,12 @@ struct assert_relation {};
 
 #else // BOOST_MPL_CFG_ASSERT_USE_RELATION_NAMES
 
-aux::weighted_tag<1>::type operator==( assert_, assert_ );
-aux::weighted_tag<2>::type operator!=( assert_, assert_ );
-aux::weighted_tag<3>::type operator>(  assert_, assert_ );
-aux::weighted_tag<4>::type operator>=( assert_, assert_ );
-aux::weighted_tag<5>::type operator<( assert_, assert_ );
-aux::weighted_tag<6>::type operator<=( assert_, assert_ );
+boost::mpl::aux::weighted_tag<1>::type operator==( assert_, assert_ );
+boost::mpl::aux::weighted_tag<2>::type operator!=( assert_, assert_ );
+boost::mpl::aux::weighted_tag<3>::type operator>(  assert_, assert_ );
+boost::mpl::aux::weighted_tag<4>::type operator>=( assert_, assert_ );
+boost::mpl::aux::weighted_tag<5>::type operator<( assert_, assert_ );
+boost::mpl::aux::weighted_tag<6>::type operator<=( assert_, assert_ );
 
 template< assert_::relations r, long x, long y > struct assert_relation {};
 

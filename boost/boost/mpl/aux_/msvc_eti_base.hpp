@@ -49,14 +49,14 @@ template< typename T > struct msvc_eti_base
 {
 };
 
-#else // BOOST_MPL_CFG_MSVC_70_ETI_BUG
+#else // !BOOST_MPL_CFG_MSVC_70_ETI_BUG
 
 template< typename T > struct msvc_eti_base
     : T
 {
 #if BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, > 0x0300) \
     && BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0304))
-    template< typename U > msvc_eti_base( U& x ) : T(x) {}
+    msvc_eti_base();
 #endif
     typedef T type;
 };
