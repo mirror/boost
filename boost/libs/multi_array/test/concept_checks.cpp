@@ -19,6 +19,7 @@
 #include "boost/multi_array/concept_checks.hpp"
 #include "boost/multi_array.hpp"
 
+#include "boost/cstdlib.hpp"
 #define BOOST_INCLUDE_MAIN
 #include "boost/test/test_tools.hpp"
 
