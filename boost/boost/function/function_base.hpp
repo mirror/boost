@@ -82,13 +82,13 @@ namespace boost {
       template<typename T>
       struct is_ref
       {
-	BOOST_STATIC_CONSTANT(bool, value = false); 
+        BOOST_STATIC_CONSTANT(bool, value = false); 
       };
 
       template<typename T>
       struct is_ref<reference_wrapper<T> >
       {
-	BOOST_STATIC_CONSTANT(bool, value = true);
+        BOOST_STATIC_CONSTANT(bool, value = true);
       };
 #else // no partial specialization
       typedef char yes_type;
@@ -102,9 +102,9 @@ namespace boost {
       template<typename T>
       struct is_ref
       {
-	static T* t;
-	BOOST_STATIC_CONSTANT(bool, 
-	  value = (sizeof(is_ref_tester(t)) == sizeof(yes_type)));
+        static T* t;
+        BOOST_STATIC_CONSTANT(bool, 
+          value = (sizeof(is_ref_tester(t)) == sizeof(yes_type)));
       };
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
@@ -165,28 +165,28 @@ namespace boost {
       template<typename F>
       class get_function_tag
       {
-	typedef typename IF<(is_pointer<F>::value),
+        typedef typename IF<(is_pointer<F>::value),
                             function_ptr_tag,
                             function_obj_tag>::type ptr_or_obj_tag;
 
-	typedef typename IF<(is_member_pointer<F>::value),
-			    member_ptr_tag,
-			    ptr_or_obj_tag>::type ptr_or_obj_or_mem_tag;
+        typedef typename IF<(is_member_pointer<F>::value),
+                            member_ptr_tag,
+                            ptr_or_obj_tag>::type ptr_or_obj_or_mem_tag;
       public:
-	typedef typename IF<(is_ref<F>::value),
-			     function_obj_ref_tag,
-			     ptr_or_obj_or_mem_tag>::type type;
+        typedef typename IF<(is_ref<F>::value),
+                             function_obj_ref_tag,
+                             ptr_or_obj_or_mem_tag>::type type;
       };
 
       // The trivial manager does nothing but return the same pointer (if we
       // are cloning) or return the null pointer (if we are deleting).
       inline any_pointer trivial_manager(any_pointer f, 
-				  functor_manager_operation_type op)
+                                  functor_manager_operation_type op)
       {
-	if (op == clone_functor_tag)
-	  return f;
-	else
-	  return any_pointer(reinterpret_cast<void*>(0));
+        if (op == clone_functor_tag)
+          return f;
+        else
+          return any_pointer(reinterpret_cast<void*>(0));
       }
 
       /**

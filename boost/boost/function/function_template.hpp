@@ -331,8 +331,8 @@ namespace boost {
         function_base::manager = &detail::function::functor_manager<FunctionPtr, 
                                                      Allocator>::manage;
         function_base::functor = function_base::manager(detail::function::any_pointer(
-			    // should be a reinterpret cast, but some compilers
-			    // insist on giving cv-qualifiers to free functions
+                            // should be a reinterpret cast, but some compilers
+                            // insist on giving cv-qualifiers to free functions
                             (void (*)())(f)
                           ),
                           detail::function::clone_functor_tag);
@@ -370,7 +370,7 @@ namespace boost {
     
     template<typename FunctionObj>
     void assign_to(const reference_wrapper<FunctionObj>& f, 
-		   detail::function::function_obj_ref_tag)
+                   detail::function::function_obj_ref_tag)
     {
       if (!detail::function::has_empty_target(&f.get())) {
         typedef 
@@ -385,7 +385,7 @@ namespace boost {
         function_base::manager = &detail::function::trivial_manager;
         function_base::functor = 
           function_base::manager(detail::function::any_pointer(
-		    const_cast<FunctionObj*>(&f.get())),
+                    const_cast<FunctionObj*>(&f.get())),
                   detail::function::clone_functor_tag);
       }
     }
