@@ -1,0 +1,2 @@
+
+.. |Configuration| replace:: `Configuration`_
