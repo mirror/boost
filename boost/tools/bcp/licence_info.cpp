@@ -592,6 +592,29 @@ std::pair<const licence_info*, int> get_licences()
          "It is provided \"as is\" without express or implied warranty.</P>"
        )
       ,
+      licence_info( boost::regex(
+            "This\\W+file\\W+is\\W+part\\W+of\\W+jam\\W+"
+            "License\\W+is\\W+hereby\\W+granted\\W+to\\W+use\\W+this\\W+software\\W+and\\W+distribute\\W+it\\W+"
+            "freely\\W+as\\W+long\\W+as\\W+this\\W+copyright\\W+notice\\W+is\\W+retained\\W+and\\W+modifications\\W+"
+            "are\\W+clearly\\W+marked\\W+"
+            "ALL\\W+WARRANTIES\\W+ARE\\W+HEREBY\\W+DISCLAIMED"
+            "|"
+            "This\\W+file\\W+is\\W+part\\W+of\\W+Jam\\W+see\\W+jam\\.c\\W+for\\W+Copyright\\W+information", boost::regex::perl | boost::regex::icase)
+         ,
+         boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
+         ,
+         generic_author_format
+         ,
+         "Perforce Jam License"
+         ,
+         "<P>Copyright 1993-2002 Christopher Seiwald and Perforce Software, Inc.</P>"
+         "<P>This file is part of jam.</P>"
+         "<P>License is hereby granted to use this software and distribute it "
+         "freely, as long as this copyright notice is retained and modifications "
+         " are clearly marked.</P>"
+         "<P>ALL WARRANTIES ARE HEREBY DISCLAIMED</P>"
+       )
+      ,
    };
    return std::pair<const licence_info*, int>(licences, sizeof(licences)/sizeof(licences[0]));
 }

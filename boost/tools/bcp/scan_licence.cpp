@@ -11,6 +11,7 @@
 #include "bcp_imp.hpp"
 #include "fileview.hpp"
 #include <fstream>
+#include <iostream>
 
 
 const int boost_license_lines = 3;
@@ -237,26 +238,32 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
 
        // Perform the actual conversion
        if (m_bsl_convert_mode) {
-         std::ofstream out(p.native_file_string().c_str());
-         if (!out) {
-           std::string msg("Cannot open file for license conversion: ");
-           msg += p.native_file_string();
-           std::runtime_error e(msg);
-           boost::throw_exception(e);
-         }
-         
-         out << std::string(v.begin(), start_of_license);
-         if (start_in_middle_of_line)
-           out << std::endl;
+          try{
+            std::ofstream out((m_boost_path / p).native_file_string().c_str());
+            if (!out) {
+               std::string msg("Cannot open file for license conversion: ");
+               msg += p.native_file_string();
+               std::runtime_error e(msg);
+               boost::throw_exception(e);
+            }
 
-         for (int j = 0; j < boost_license_lines; ++j) {
-           if (j > 0) out << std::endl;
-           out << prefix << boost_license_text[j];
-         }
-         out << std::string(end_of_license, v.end());
+            out << std::string(v.begin(), start_of_license);
+            if (start_in_middle_of_line)
+               out << std::endl;
+
+            for (int j = 0; j < boost_license_lines; ++j) {
+               if (j > 0) out << std::endl;
+               out << prefix << boost_license_text[j];
+            }
+            out << std::string(end_of_license, v.end());
+
+            converted = true;
        }
-
-       converted = true;
+       catch(const std::exception& e)
+       {
+          std::cerr << e.what() << std::endl;
+       }
+      }
      }
 
      if (!converted) {
