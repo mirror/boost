@@ -12,10 +12,11 @@
 #include <string>
 #include <iterator>
 #include <algorithm>
-#include <cctype>
 
-#if !defined(BOOST_NO_STD_LOCALE)
-#include <locale>
+#if defined(BOOST_NO_STD_LOCALE) || (__BORLANDC__ >= 0x0564)
+#include <cctype> // [std]::tolower(int)
+#else
+#include <locale> // std::tolower(char, locale)
 #endif
 
 namespace boost {
@@ -33,7 +34,7 @@ namespace date_time {
   {
     std::string tmp("");
     unsigned i = 0;
-#if defined(BOOST_NO_STD_LOCALE)
+#if defined(BOOST_NO_STD_LOCALE) || (__BORLANDC__ >= 0x0564)
     while(i < inp.length())
     {
       tmp += static_cast<char>(tolower(inp.at(i++)));
