@@ -18,19 +18,17 @@ namespace boost
 {
 
 template< class ElementIterator
-        , class IndexIterator
-        , class ValueT        = use_default
-        , class CategoryT     = use_default
-        , class ReferenceT    = use_default
-        , class DifferenceT   = use_default >
+        , class IndexIterator>
 class permutation_iterator
   : public iterator_adaptor< 
-             permutation_iterator<ElementIterator, IndexIterator, ValueT, CategoryT, ReferenceT, DifferenceT>
-           , IndexIterator, ValueT, CategoryT, ReferenceT, DifferenceT >
+             permutation_iterator<ElementIterator, IndexIterator>
+           , IndexIterator, typename detail::iterator_traits<ElementIterator>::value_type
+           , use_default, typename detail::iterator_traits<ElementIterator>::reference>
 {
   typedef iterator_adaptor< 
-            permutation_iterator<ElementIterator, IndexIterator, ValueT, CategoryT, ReferenceT, DifferenceT>
-          , IndexIterator, ValueT, CategoryT, ReferenceT, DifferenceT > super_t;
+            permutation_iterator<ElementIterator, IndexIterator>
+          , IndexIterator, typename detail::iterator_traits<ElementIterator>::value_type
+          , use_default, typename detail::iterator_traits<ElementIterator>::reference> super_t;
 
   friend class iterator_core_access;
 
@@ -40,9 +38,9 @@ public:
   explicit permutation_iterator(ElementIterator x, IndexIterator y) 
       : super_t(y), m_elt_iter(x) {}
 
-  template<class OtherElementIterator, class OtherIndexIterator, class V, class C, class R, class D >
+  template<class OtherElementIterator, class OtherIndexIterator>
   permutation_iterator(
-      permutation_iterator<OtherElementIterator, OtherIndexIterator, V, C, R, D> const& r
+      permutation_iterator<OtherElementIterator, OtherIndexIterator> const& r
       , typename enable_if_convertible<OtherElementIterator, ElementIterator>::type* = 0
       , typename enable_if_convertible<OtherIndexIterator, IndexIterator>::type* = 0
       )
