@@ -32,6 +32,7 @@ using std::streambuf;
 #include <algorithm>
 #include <string>
 #include <deque>
+#include <iterator>
 #include <boost/config.hpp>
 #include <boost/regex.hpp>
 #include <boost/timer.hpp> 
@@ -58,7 +59,8 @@ ostream& operator << (ostream& os, const std::wstring& s)
 #endif
 
 template <class S>
-class string_out_iterator
+class string_out_iterator : 
+  public std::iterator<std::output_iterator_tag, void, void, void, void>
 {
    S* out;
 public:
