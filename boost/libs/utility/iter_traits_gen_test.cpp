@@ -9,6 +9,10 @@
 
 #include <boost/iterator_adaptors.hpp>
 #include <boost/pending/iterator_tests.hpp>
+#include <boost/static_assert.hpp>
+
+class bar { };
+void foo(bar) { }
 
 int
 main()
@@ -16,7 +20,6 @@ main()
   using boost::dummyT;
   dummyT array[] = { dummyT(0), dummyT(1), dummyT(2), 
 		     dummyT(3), dummyT(4), dummyT(5) };
-  const int N = sizeof(array)/sizeof(dummyT);
   typedef boost::iterator_adaptor<dummyT*, 
     boost::default_iterator_policies, dummyT> my_iter;
   my_iter mi(array);
@@ -26,6 +29,8 @@ main()
       boost::iterator_traits_generator
       ::reference<dummyT>
       ::iterator_category<std::input_iterator_tag> > iter_type;
+    
+    BOOST_STATIC_ASSERT((boost::is_same<iter_type::reference, dummyT>::value));
     
     iter_type i(mi);
     boost::input_iterator_test(i, dummyT(0), dummyT(1));
@@ -40,7 +45,7 @@ main()
         ::iterator_category<std::forward_iterator_tag>
         ::difference_type<std::ptrdiff_t> > adaptor_type;
 
-    adaptor_type i(mi);
+    adaptor_type i(array);
 
     boost::input_iterator_test(i, dummyT(0), dummyT(1));
     int zero = 0;
