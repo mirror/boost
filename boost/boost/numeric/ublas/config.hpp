@@ -106,7 +106,7 @@
 // GNU Compiler Collection
 #if defined (__GNUC__) && ! defined (BOOST_STRICT_CONFIG)
 
-#if __GNUC__ >= 3 && __GNUC_MINOR__ >= 4
+#if (__GNUC__ >= 4) || (__GNUC__ >= 3 && __GNUC_MINOR__ >= 4)
 // By ABI definition see GCC bug id 9982
 #define BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
 #endif
