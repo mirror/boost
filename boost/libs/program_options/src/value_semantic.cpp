@@ -177,6 +177,37 @@ namespace boost { namespace program_options {
         }
     }
 
+
+    namespace
+    {
+        std::string convert_value(const std::wstring& s)
+        {
+            try {
+                return to_local_8_bit(s);
+            }
+            catch(const std::exception&) {
+                return "<unrepresentable unicode string>";
+            }
+        }
+    }
+
+
+    invalid_option_value::
+    invalid_option_value(const std::string& bad_value)
+    : validation_error(string("invalid option value '")
+                       .append(bad_value).append("'"))
+    {}
+
+    invalid_option_value::
+    invalid_option_value(const std::wstring& bad_value)
+    : validation_error(string("invalid option value '")
+                       .append(convert_value(bad_value))
+                       .append("'"))
+    {}
+                       
+
+
+
     void validation_error::set_option_name(const std::string& option_name)
     {
         m_option_name = option_name;

@@ -89,6 +89,14 @@ namespace boost { namespace program_options {
         const char* what() const throw();  
     };
 
+    class BOOST_PROGRAM_OPTIONS_DECL invalid_option_value 
+        : public validation_error
+    {
+    public:
+        invalid_option_value(const std::string& value);
+        invalid_option_value(const std::wstring& value);
+    };
+
     /** Class thrown when there are too many positional options. */
     class BOOST_PROGRAM_OPTIONS_DECL too_many_positional_options_error : public error {
     public:
