@@ -152,7 +152,7 @@
 
 // We don't make our templates external if the compiler
 // can't handle it:
-#if defined(BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS) || defined(__ICL) || defined(__ICC)\
+#if (defined(BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS) || defined(__MWERKS__) || defined(__COMO__) || defined(__ICL) || defined(__ICC))\
    && !defined(BOOST_MSVC) && !defined(__BORLANDC__)
 #  define BOOST_REGEX_NO_EXTERNAL_TEMPLATES
 #endif
