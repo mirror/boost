@@ -42,6 +42,10 @@ namespace boost
 // have one template single-argument constructor
 // in place of two specific constructors:
 //
+
+template <class T1, class T2>
+class compressed_pair;
+
 namespace detail{
 
 template <class A, class T1, class T2>
@@ -104,7 +108,7 @@ public:
    {
       init_one<best_convertion_traits<A, T1, T2>::value>::init(val, &_first, &_second);
    }
-   compressed_pair_0(const compressed_pair_0<T1,T2>& x)
+   compressed_pair_0(const ::boost::compressed_pair<T1,T2>& x)
       : _first(x._first), _second(x._second) {}
 
    first_reference       first()       { return _first; }
@@ -144,7 +148,7 @@ public:
    {
       init_one<best_convertion_traits<A, T1, T2>::value>::init(val, &_first, static_cast<T2*>(this));
    }
-   compressed_pair_1(const compressed_pair_1<T1,T2>& x)
+   compressed_pair_1(const ::boost::compressed_pair<T1,T2>& x)
       : T2(x), _first(x._first) {}
 
    first_reference       first()       { return _first; }
@@ -184,7 +188,7 @@ public:
    {
       init_one<best_convertion_traits<A, T1, T2>::value>::init(val, static_cast<T1*>(this), &_second);
    }
-   compressed_pair_2(const compressed_pair_2<T1,T2>& x)
+   compressed_pair_2(const ::boost::compressed_pair<T1,T2>& x)
       : T1(x), _second(x._second) {}
 
    first_reference       first()       { return *this; }
@@ -222,7 +226,7 @@ public:
    {
       init_one<best_convertion_traits<A, T1, T2>::value>::init(val, static_cast<T1*>(this), static_cast<T2*>(this));
    }
-   compressed_pair_3(const compressed_pair_3<T1,T2>& x)
+   compressed_pair_3(const ::boost::compressed_pair<T1,T2>& x)
       : T1(x), T2(x) {}
 
    first_reference       first()       { return *this; }
@@ -255,7 +259,7 @@ public:
             compressed_pair_4(first_param_type x, second_param_type) : T1(x) {}
    // only one single argument constructor since T1 == T2
    explicit compressed_pair_4(first_param_type x) : T1(x) {}
-   compressed_pair_4(const compressed_pair_4& x)
+   compressed_pair_4(const ::boost::compressed_pair& x)
       : T1(x){}
 
    first_reference       first()       { return *this; }
@@ -290,7 +294,9 @@ public:
             compressed_pair_5() : _first(), _second() {}
             compressed_pair_5(first_param_type x, second_param_type y) : _first(x), _second(y) {}
    // only one single argument constructor since T1 == T2
-   explicit compressed_pair_5(first_param_type x) : _first(x), _second() {}
+   explicit compressed_pair_5(first_param_type x) : _first(x), _second(x) {}
+   compressed_pair_5(const ::boost::compressed_pair<T1,T2>& c) 
+      : _first(c.first()), _second(c.second()) {}
 
    first_reference       first()       { return _first; }
    first_const_reference first() const { return _first; }

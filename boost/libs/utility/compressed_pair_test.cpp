@@ -78,6 +78,9 @@ int main()
    compressed_pair<non_empty1, non_empty2> cp1d(non_empty2(9));
    assert(cp1d.second() == non_empty2(9));
    assert(cp1d.first() == non_empty1());
+
+   compressed_pair<int, double> cp1e(cp1);
+
    compressed_pair<empty_UDT, int> cp2(2);
    assert(cp2.second() == 2);
    compressed_pair<int, empty_UDT> cp3(1);
