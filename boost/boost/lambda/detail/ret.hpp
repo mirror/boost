@@ -257,7 +257,7 @@ const_parameters(const lambda_functor<Arg>& lf)
 // the wrapped lambda functor is evaluated, but we just don't do anything
 // with the result.
 struct voidifier_action {
-  template<class Ret, class A> static Ret apply(A&) {}
+  template<class Ret, class A> static void apply(A&) {}
 };
 
 template<class Args> struct return_type_N<voidifier_action, Args> {

@@ -315,7 +315,7 @@ public:
 
 
   template<class RET, CALL_TEMPLATE_ARGS> RET call(CALL_FORMAL_ARGS) const {
-    CALL_USE_ARGS;
+    return CALL_USE_ARGS;
   }
 
   template<class SigArgs> struct sig { typedef void type; };
