@@ -54,9 +54,6 @@ main()
   check("kday before",date(2002,Jan,31) == fkbf2.get_date(date(2002,Feb,1)));
   check("kday before",date(2002,Feb,7)== fkbf2.get_date(date(2002,Feb,14)));
   
+  return printTestStats();
 
-
-
-  printTestStats();
-  return 0;
 };

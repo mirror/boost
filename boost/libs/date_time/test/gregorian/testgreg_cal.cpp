@@ -124,6 +124,5 @@ int
 main() 
 {
   test_greg_calendar();
-  printTestStats();
-  return 0;
+  return printTestStats();
 };

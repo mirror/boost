@@ -80,6 +80,5 @@ int
 main() 
 {
   test_day();
-  printTestStats();
-  return 0;
+  return printTestStats();
 };
