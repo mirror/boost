@@ -50,6 +50,7 @@ namespace
     class Wrapped1
         : boost::operators<Wrapped1<T> >
         , boost::shiftable<Wrapped1<T> >
+        , boost::bool_testable<Wrapped1<T> >
     {
     public:
         explicit Wrapped1( T v = T() ) : _value(v) {}
@@ -80,6 +81,7 @@ namespace
           { _value >>= x._value; return *this; }
         Wrapped1& operator++()               { ++_value; return *this; }
         Wrapped1& operator--()               { --_value; return *this; }
+        operator bool() const { return _value != 0; }
         
     private:
         T _value;
@@ -555,6 +557,12 @@ template Wrapped6<unsigned int, unsigned char>;
 
 #define PRIVATE_EXPR_TEST(e, t)  BOOST_TEST( ((e), (t)) )
 
+#define PRIVATE_BOOLEAN_EXPR_TEST(t, res)    BOOST_TEST(static_cast<bool>((t)) == (res))
+#if defined(BOOST_MSVC)
+    #define PRIVATE_MSVC_BOOL_TEST_WORKAROUND(x) (!!x)
+#else
+    #define PRIVATE_MSVC_BOOL_TEST_WORKAROUND(x) (x)
+#endif
 
 int
 test_main( int , char * [] )
@@ -631,7 +639,19 @@ test_main( int , char * [] )
 
     PRIVATE_EXPR_TEST( (i = i1 << i2), (i.value() == 4) );
     PRIVATE_EXPR_TEST( (i = i2 >> i1), (i.value() == 1) );
-    
+
+    PRIVATE_BOOLEAN_EXPR_TEST( i, false);
+    PRIVATE_BOOLEAN_EXPR_TEST( i1, true);
+    PRIVATE_BOOLEAN_EXPR_TEST( i2, true);
+    PRIVATE_BOOLEAN_EXPR_TEST(!i, true);
+    PRIVATE_BOOLEAN_EXPR_TEST(!i1, false);
+    PRIVATE_BOOLEAN_EXPR_TEST(!i2, false);
+    PRIVATE_BOOLEAN_EXPR_TEST(PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i)  && PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), false);
+    PRIVATE_BOOLEAN_EXPR_TEST(PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i)  || PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), true);
+    PRIVATE_BOOLEAN_EXPR_TEST(PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i1) && PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), false);
+    PRIVATE_BOOLEAN_EXPR_TEST(!i                                    && PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), false);
+    PRIVATE_BOOLEAN_EXPR_TEST(PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i1) && !i, false);
+      
     cout << "Performed tests on MyInt objects.\n";
 
     MyLong j1(1);
