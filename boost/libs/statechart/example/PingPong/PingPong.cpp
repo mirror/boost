@@ -222,11 +222,15 @@ int main()
     {
       case 'p':
       {
+        #ifdef BOOST_HAS_THREADS
+        MyScheduler scheduler1( true );
+        #else
         MyScheduler scheduler1;
+        #endif
 
         #ifdef USE_TWO_THREADS
         #ifdef BOOST_HAS_THREADS
-        MyScheduler scheduler2;
+        MyScheduler scheduler2( true );
         #else
         MyScheduler & scheduler2 = scheduler1;
         #endif

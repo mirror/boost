@@ -36,7 +36,7 @@ class fifo_scheduler : noncopyable
   public:
     //////////////////////////////////////////////////////////////////////////
     #ifdef BOOST_HAS_THREADS
-    fifo_scheduler( bool waitOnEmptyQueue = true ) :
+    fifo_scheduler( bool waitOnEmptyQueue = false ) :
       worker_( waitOnEmptyQueue )
     {
     }

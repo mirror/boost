@@ -79,8 +79,13 @@ http://www.omg.org/cgi-bin/doc?formal/03-03-01</a> (see chapters 2.12 and
 distribution 1.31.0:</p>
 <ul>
   <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003)</li>
-  <li>GCC3.2 (MinGW)</li>
+  <li>GCC3.2 (MinGW, Red Hat Linux)</li>
 </ul>
+<p><b><font color="#FF0000">Caution: Bugs in atomic_count_gcc.hpp break 
+boost::fsm on Linux! Please see readme.txt in </font>
+<a href="http://boost-sandbox.sf.net/fsm.zip"><font color="#FF0000">
+http://boost-sandbox.sf.net/fsm.zip</font></a><font color="#FF0000"> on how to 
+fix this.</font></b></p>
 <h3><a name="How to read this tutorial">How to read this tutorial</a></h3>
 <p>This tutorial was designed to be read linearly. First time users should 
 start reading right at the beginning and stop as soon as they know enough for 
@@ -1224,20 +1229,22 @@ associated with. All these <code>Worker</code> member functions only push an
 appropriate item into the schedulers' queue and then return immediately. A 
 dedicated thread will later pop the items out of the queue to have them 
 processed.</p>
-<p>Applications will usually first create a <code>scheduler&lt;&gt;</code> object 
-and then call <code>scheduler&lt;&gt;::create_processor()</code> to create one or 
-more <code>asynchronous_state_machine&lt;&gt;</code> subclass objects. Finally,
-<code>scheduler&lt;&gt;::operator()()</code> is either called directly to let the 
+<p>Applications will usually first create a <code>fifo_scheduler&lt;&gt;</code> object 
+and then call <code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and <code>
+fifo_scheduler&lt;&gt;::initiate_processor()</code> to schedule the creation and 
+initiation of one or 
+more <code>asynchronous_state_machine&lt;&gt;</code> subclass objects. Finally, <code>
+fifo_scheduler&lt;&gt;::operator()()</code> is either called directly to let the 
 machine(s) run in the current thread, or, a <code>boost::function&lt;&gt;</code> 
 object referencing <code>operator()()</code> is passed to a new <code>
-boost::thread</code>. In the following code, we are running one state machine 
-in a new boost::thread and the other in the main thread (see the PingPong 
+boost::thread</code>. Alternatively, the latter could also be done right after 
+constructing the <code>fifo_scheduler&lt;&gt;</code> object. In the following code, we are running one state machine 
+in a new <code>
+boost::thread</code> and the other in the main thread (see the PingPong 
 example for the full source code):</p>
-<pre>// ...
-
-struct Waiting;
-struct Player : 
-  <b>fsm::asynchronous_state_machine</b>&lt; Player, Waiting &gt;
+<pre>struct Waiting;
+struct Player :
+fsm::asynchronous_state_machine&lt; Player, Waiting &gt;
 {
   // ...
 };
@@ -1246,14 +1253,16 @@ struct Player :
 
 int main()
 {
-  fsm::scheduler&lt;&gt; scheduler1;
-  fsm::scheduler&lt;&gt; scheduler2;
+  // Create two schedulers that will wait for new events
+  // when their event queue runs empty
+  fsm::fifo_scheduler&lt;&gt; scheduler1( true );
+  fsm::fifo_scheduler&lt;&gt; scheduler2( true );
 
-  // each player runs in its own thread
-  fsm::scheduler&lt;&gt;::processor_handle player1 = 
+  // Each player is serviced by its own scheduler
+  fsm::fifo_scheduler&lt;&gt;::processor_handle player1 = 
     scheduler1.create_processor&lt; Player &gt;( /* ... */ );
   scheduler1.initiate_processor( player1 );
-  fsm::scheduler&lt;&gt;::processor_handle player2 = 
+  fsm::fifo_scheduler&lt;&gt;::processor_handle player2 = 
     scheduler2.create_processor&lt; Player &gt;( /* ... */ );
   scheduler2.initiate_processor( player2 );
 
@@ -1265,11 +1274,15 @@ int main()
 
   scheduler2.queue_event( player2, pInitialBall );
 
-  // run first scheduler in a new thread
-  boost::thread otherThread(
-    boost::bind( &amp;fsm::scheduler&lt;&gt;::operator(), &amp;scheduler1, 0 ) );
+  // ...
 
-  scheduler2(); // run second scheduler in this thread 
+  // Up until here no state machines exist yet. They
+  // will be created when operator()() is called
+
+  // Run first scheduler in a new thread
+  boost::thread otherThread( boost::bind(
+    &amp;fsm::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler1, 0 ) );
+  scheduler2(); // Run second scheduler in this thread
   otherThread.join();
 
   return 0;
@@ -1280,9 +1293,9 @@ int main()
   // ...
 
   boost::thread thread1(
-    boost::bind( &amp;fsm::scheduler&lt;&gt;::operator(), &amp;scheduler1, 0 ) );
+    boost::bind( &amp;fsm::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler1, 0 ) );
   boost::thread thread2(
-    boost::bind( &amp;fsm::scheduler&lt;&gt;::operator(), &amp;scheduler2, 0 ) );
+    boost::bind( &amp;fsm::fifo_scheduler&lt;&gt;::operator(), &amp;scheduler2, 0 ) );
 
   // do something else ...
 
@@ -1294,11 +1307,11 @@ int main()
 <p>Or, run both machines in the same thread:</p>
 <pre>int main()
 {
-  fsm::scheduler&lt;&gt; scheduler1;
+  fsm::fifo_scheduler&lt;&gt; scheduler1( true );
 
-  fsm::scheduler&lt;&gt;::processor_handle player1 = 
+  fsm::fifo_scheduler&lt;&gt;::processor_handle player1 = 
     scheduler1.create_processor&lt; Player &gt;( /* ... */ );
-  fsm::scheduler&lt;&gt;::processor_handle player2 = 
+  fsm::fifo_scheduler&lt;&gt;::processor_handle player2 = 
     scheduler1.create_processor&lt; Player &gt;( /* ... */ );
 
   // ...
@@ -1307,13 +1320,13 @@ int main()
 
   return 0;
 }</pre>
-<p>By default <code>scheduler&lt;&gt;::operator()()</code> waits on an empty event 
-queue and will only return after a call to <code>scheduler&lt;&gt;::terminate()</code>. 
-In the example, each of the two <code>Player</code> state machines calls this 
-function on its <code>scheduler&lt;&gt;</code> object right before terminating.</p>
+<p>In all the examples above, <code>fifo_scheduler&lt;&gt;::operator()()</code> waits on an empty event 
+queue and will only return after a call to <code>fifo_scheduler&lt;&gt;::terminate()</code>. 
+The <code>Player</code> state machine calls this 
+function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->13 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28867" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28879" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

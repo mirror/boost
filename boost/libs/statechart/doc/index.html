@@ -52,14 +52,23 @@ include:</p>
 distribution 1.31.0:</p>
 <ul>
   <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003)</li>
-  <li>GCC3.2 (MinGW)</li>
+  <li>GCC3.2 (MinGW, Red Hat Linux)</li>
 </ul>
 <p>The library is functionally complete. However, the following is still in 
 the making:</p>
 <ol>
-  <li>Regression tests</li>
+  <li>Implement regression tests</li>
+  <li>Design a facility allowing to specially handle events that did not 
+  trigger a reaction</li>
+  <li>Implement <code>priority_scheduler&lt;&gt;</code></li>
+  <li>Reimplement <code>fifo_scheduler&lt;&gt;::processor_handle</code> so that
+  <code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and <code>fifo_scheduler&lt;&gt;::destroy_processor()</code> 
+  no longer make (indirect) calls to global <code>operator new()</code> and
+  <code>operator delete()</code></li>
+  <li>Investigate whether <code>fifo_worker&lt;&gt;</code> should accept a policy 
+  parameter defining how to lock and wait</li>
   <li>Refactor the <code>state_machine</code> class template to reduce code 
-  size in projects with many different state machines</li>
+  size in applications with many different state machines</li>
 </ol>
 <p><b>This is a preliminary submission. All comments are most welcome!</b></p>
 <hr>
@@ -80,6 +89,16 @@ the making:</p>
 </dl>
 <hr>
 <h2>Change history</h2>
+<p>21 March 2004:</p>
+<ul>
+  <li><b>Breaking change</b>: <code>fifo_scheduler&lt;&gt;</code> and <code>
+  fifo_worker&lt;&gt;</code> now always work non-blocking by default </li>
+  <li>Added gcc makefiles, contributed by Mitsuo Fukasawa</li>
+  <li>Added a fixed version of atomic_count_gcc.hpp to fsm.zip, see
+  <a href="http://lists.boost.org/MailArchives/boost/msg57537.php">
+  http://lists.boost.org/MailArchives/boost/msg57537.php</a> for more 
+  information</li>
+</ul>
 <p>16 March 2004:</p>
 <ul>
   <li><b>Breaking change</b>: Added the <code>FifoWorker</code> template 
@@ -101,7 +120,8 @@ the making:</p>
   documentation accordingly. Event processors can now be added and removed 
   while a worker is running. Moreover, the new design allows for custom 
   workers with non-FIFO queueing schemes</li>
-  <li>The StopWatch example now uses std::time() instead of std::clock()</li>
+  <li>The StopWatch example now uses <code>std::time()</code> instead of <code>
+  std::clock()</code></li>
 </ul>
 <p>09 February 2004:</p>
 <ul>
@@ -161,7 +181,7 @@ the making:</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->15 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28871" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28879" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

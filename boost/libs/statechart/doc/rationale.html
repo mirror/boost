@@ -165,7 +165,7 @@ used to implement static machines:</p>
   an integer. To keep the table as small as possible, the numbering should be 
   continuous, e.g. if there are ten states, it's best to use the ids 0-9. To 
   ensure continuity of ids, all states are best defined in the same header 
-  file. The same applies for the events. Again, this does not scale.</li>
+  file. The same applies to events. Again, this does not scale.</li>
   <li>Because events carrying parameters are not represented by a type, some 
   sort of a generic event with a property map must be used and type-safety is 
   enforced at runtime rather than at compile time.</li>
@@ -277,6 +277,20 @@ fifo_scheduler&lt;&gt;</code> is just a thin wrapper around an object of its <co
 FifoWorker</code> template parameter (which manages the queue and ensures 
 thread safety) and a <code>processor_container&lt;&gt;</code> (which manages the 
 lifetime of the state machines).</p>
+<p>The UML standard mandates that an event not triggering a reaction in a 
+state machine should be silently discarded. Since a <code>fifo_scheduler&lt;&gt;</code> 
+object is itself also a state machine, events destined to no longer existing
+<code>asynchronous_state_machine&lt;&gt;</code> subclass objects are also silently 
+discarded. This is enabled by the fact that <code>asynchronous_state_machine&lt;&gt;</code> 
+subclass objects cannot be constructed or destructed directly. Instead, this 
+must be done through <code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and
+<code>fifo_scheduler&lt;&gt;::destroy_processor()</code> (<code>processor</code> 
+refers to the fact that <code>fifo_scheduler&lt;&gt;</code> can only host <code>
+event_processor&lt;&gt;</code> subclass objects; <code>asynchronous_state_machine&lt;&gt;</code> 
+is just one way to implement such a processor). Moreover, <code>
+create_processor&lt;&gt;()</code> only returns a <code>processor_handle</code> 
+object. This must henceforth be used to initiate, queue events for, terminate 
+and destroy the state machine through the scheduler.</p>
 <h3>Customization</h3>
 <p>If a user needs to customize the scheduler behavior she can do so by 
 instantiating <code>fifo_scheduler&lt;&gt;</code> with her own class modeling the
@@ -288,13 +302,17 @@ events and yet others don't have any notion of waiting whatsoever (they
 instead loop until a new event arrives, presumably via an ISR). Given the 
 relatively few lines of code required to implement a custom <code>FifoWorker</code> 
 type and the fact that almost all applications will implement at most one such 
-class, it does not seem to be worthwhile anyway.</p>
-<p>Applications requiring a less or more sophisticated event processor 
-lifetime management can customize the behavior at a more coarse level, by 
-using a custom <code>Scheduler</code> type. This is currently also true for 
-applications requiring non-FIFO queuing schemes. However, boost::fsm will 
-probably provide a <code>priority_scheduler</code> in the future so that 
-custom schedulers need to be implemented only in rare cases.</p>
+class, it does not seem to be worthwhile anyway. Applications requiring a less 
+or more sophisticated event processor lifetime management can customize the 
+behavior at a more coarse level, by using a custom <code>Scheduler</code> 
+type. This is currently also true for applications requiring non-FIFO queuing 
+schemes. However, boost::fsm will probably provide a <code>priority_scheduler</code> 
+in the future so that custom schedulers need to be implemented only in rare 
+cases.</p>
+<p>It is currently not possible to specially handle events that have not 
+triggered a reaction (and would thus be silently discarded). However, a 
+facility allowing this on a per-event basis will probably be added in the 
+not-too-distant future.</p>
 <h2><a name="User actions: Member functions vs. function objects">User 
 actions: Member functions vs. function objects</a></h2>
 <p>All user-supplied functions (<code>react</code> member functions, entry-, 
@@ -426,14 +444,14 @@ optimization:</p>
   </tr>
 </table>
 <h3>Possible optimizations</h3>
-<p>Currently, <code>std::list&lt;&gt;</code>s are used for event and state storage. 
-These could be replaced with an intrusive linked list container what would 
-eliminate 50% of the <code>operator new()</code> and <code>operator delete()</code> 
-calls made during an event dispatch &amp; transition cycle of the smallest 
-BitMachine. I would guess that this could speed it up by 25%-50%. However, 
-dispatch time is not affected and can quickly consume considerable time, as 
-the 6-bit-BitMachine shows. Moreover, most states of real-world machines are 
-quite deeply nested and the average transition involves the deallocation and 
+<p>Currently, a <code>std::list&lt;&gt;</code> is used for state storage. This could 
+be replaced with an intrusive linked list container what would eliminate 50% 
+of the <code>operator new()</code> and <code>operator delete()</code> calls 
+made during an event dispatch &amp; transition cycle of the smallest BitMachine. I 
+would guess that this could speed it up by 25%-50%. However, event dispatch is 
+not affected and can quickly consume considerable time, as the 
+6-bit-BitMachine shows. Moreover, most states of real-world machines are quite 
+deeply nested and the average transition involves the deallocation and 
 allocation of 2 states. Since <code>std::list&lt;&gt;</code> allocations occur only 
 once per transition and orthogonal region, the relative performance gain of 
 this optimization becomes much smaller for typical machines and does not seem 
@@ -443,30 +461,29 @@ to be worth the effort of hand-crafting an intrusive linked list.</p>
 should be satisfactory for applications where all the following prerequisites 
 are met:</p>
 <ul>
-  <li>There are no deterministic reaction time (hard real-time) requirements.</li>
+  <li>There are no deterministic reaction time (hard real-time) requirements</li>
   <li>The application will typically not process more than a handful of events 
   per second. This is just a general guideline, some platforms can easily cope 
-  with more than 100000 events per second (see timings above).</li>
+  with more than 100000 events per second (see timings above)</li>
   <li>The application will never run long enough for heap fragmentation to 
   become a problem. This is of course an issue for all long running programs 
   not only the ones employing this library. However, it should be noted that 
   fragmentation problems could show up earlier than with traditional FSM 
-  frameworks.</li>
+  frameworks</li>
 </ul>
-<p>Should a system not meet any of these prerequisites customization of all 
-memory management (not just boost::fsm's) should be considered, which is 
+<p>Should an application not meet any of these prerequisites customization of 
+all memory management (not just boost::fsm's) should be considered, which is 
 supported as follows:</p>
 <ul>
   <li>By passing a class offering a <code>std::allocator&lt;&gt;</code> interface 
   for the <code>Allocator</code> parameter of the <code>state_machine</code> 
-  class template. The <code>rebind</code> member template is used to customize 
-  memory allocation of the internal containers.</li>
+  class template</li>
   <li>By replacing the <code>simple_state</code>, <code>state</code> and <code>
   event</code> class templates with ones that have a customized <code>operator 
   new()</code> and <code>operator delete()</code>. This can be as easy as 
   inheriting your customized class templates from the framework-supplied class 
   templates <b>and</b> your preferred small-object/deterministic/constant-time 
-  allocator base class.</li>
+  allocator base class</li>
 </ul>
 <p><code>simple_state&lt;&gt;</code> and <code>state&lt;&gt;</code> subclass objects are 
 constructed and destructed only by the state machine. It would therefore be 
@@ -491,10 +508,12 @@ Currently, there are exactly two options:</p>
 </ol>
 <p>Just about the only reason to favor 2 is the fact that state and event 
 objects need to store one pointer less, meaning that in the best case the 
-memory footprint of a state machine object could shrink by 15%. However, on 
-most platforms executable size grows when C++ RTTI is turned on. So, given the 
-small per machine object savings, option 2 only makes sense in applications 
-where both of the following conditions hold:</p>
+memory footprint of a state machine object could shrink by 15% (an empty event 
+is typically 30% smaller, what can be an advantage when there are bursts of 
+events rather than a steady flow). However, on most platforms executable size 
+grows when C++ RTTI is turned on. So, given the small per machine object 
+savings, option 2 only makes sense in applications where both of the following 
+conditions hold:</p>
 <ul>
   <li>So few events are processed that event dispatch will never become a 
   bottleneck</li>
@@ -712,7 +731,7 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28873" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->21 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28864" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

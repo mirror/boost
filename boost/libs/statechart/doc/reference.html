@@ -215,16 +215,17 @@ well-formed and have the indicated results:</p>
     <td width="35%">&nbsp;</td>
   </tr>
   <tr>
-    <td width="25%"><code>F()</code> or <code>F( true )</code></td>
-    <td width="14%"><code>F</code></td>
-    <td width="35%">Constructs a <b>blocking</b> (see below) object of the 
-    FifoWorker type</td>
-  </tr>
-  <tr>
-    <td width="25%"><code>F( false )</code></td>
+    <td width="25%"><code>F()</code> or <code>F( false )</code></td>
     <td width="14%"><code>F</code></td>
     <td width="35%">Constructs a <b>non-blocking</b> (see below) object of the 
-    FifoWorker type</td>
+    FifoWorker type. In single-threaded builds the second expression is not 
+    well-formed</td>
+  </tr>
+  <tr>
+    <td width="25%"><code>F( true )</code></td>
+    <td width="14%"><code>F</code></td>
+    <td width="35%">Constructs a <b>blocking</b> (see below) object of the 
+    FifoWorker type. Not well-formed in single-threaded builds</td>
   </tr>
   <tr>
     <td width="25%"><code>f.queue_work_item( w );</code></td>
@@ -260,7 +261,7 @@ well-formed and have the indicated results:</p>
       <li><code>f.terminated() == true</code></li>
       <li>The application is single-threaded and the internal queue is empty</li>
       <li>The application is multi-threaded and the internal queue is empty 
-      and <code>false</code> has been passed to the constructor</li>
+      and the scheduler was created as non-blocking</li>
       <li><code>n != 0</code> and the number of work items that have been 
       processed since <code>operator()()</code> was called equals <code>n</code></li>
     </ul>
@@ -611,6 +612,8 @@ namespace fsm
     public event_processor&lt; Scheduler &gt;
   {
     protected:
+      typedef asynchronous_state_machine my_base;
+
       asynchronous_state_machine(
         const processor_context &amp; myContext );
       ~asynchronous_state_machine();  
@@ -756,7 +759,7 @@ namespace fsm
   class fifo_scheduler : noncopyable
   {
     public:
-      <a href="#fifo_scheduler::fifo_scheduler">fifo_scheduler</a>( bool waitOnEmptyQueue = true );
+      <a href="#fifo_scheduler::fifo_scheduler">fifo_scheduler</a>( bool waitOnEmptyQueue = false );
 
       typedef <i>implementation-defined</i> processor_handle;
 
@@ -800,12 +803,14 @@ namespace fsm
 }
 }</pre>
 <h3>Class template <code>fifo_scheduler</code> constructor</h3>
-<pre><a name="fifo_scheduler::fifo_scheduler">fifo_scheduler</a>( bool waitOnEmptyQueue = true );</pre>
-<p><b>Effects</b>: Constructs a <code>fifo_scheduler&lt;&gt;</code> object. <code>
-waitOnEmptyQueue</code> is forwarded to the constructor of a data member of 
-type <code>FifoWorker</code><br>
+<pre><a name="fifo_scheduler::fifo_scheduler">fifo_scheduler</a>( bool waitOnEmptyQueue = false );</pre>
+<p><b>Effects</b>: Constructs a <code>fifo_scheduler&lt;&gt;</code> object. In 
+multi-threaded builds, <code>waitOnEmptyQueue</code> is forwarded to the 
+constructor of a data member of type <code>FifoWorker</code>. In 
+single-threaded builds, the <code>FifoWorker</code> data member is 
+default-constructed<br>
 <b>Note</b>: In single-threaded builds the <code>fifo_scheduler&lt;&gt;</code> 
-constructor does not accept any parameters and <code>operator()()</code> 
+constructor does not accept any parameters and <code>operator()()</code> thus 
 always returns to the caller when the event queue is empty</p>
 <h3>Class template <code>fifo_scheduler</code> modifier functions</h3>
 <pre>template&lt; class Processor &gt;
@@ -1858,7 +1863,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->15 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28871" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->20 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28862" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file
