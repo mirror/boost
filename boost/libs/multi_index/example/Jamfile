@@ -1,6 +1,6 @@
 # Boost.MultiIndex examples Jamfile
 #
-# Copyright 2003-2004 Joaquín M López Muñoz.
+# Copyright 2003-2005 Joaquín M López Muñoz.
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
@@ -29,6 +29,11 @@ exe composite_keys
     : <include>$(BOOST_ROOT)
     ;
 
+exe hashed
+    : hashed.cpp
+    : <include>$(BOOST_ROOT)
+    ;
+
 exe memfun_key
     : memfun_key.cpp
     : <include>$(BOOST_ROOT)
@@ -46,7 +51,7 @@ exe sequenced
 
 exe serialization
     : serialization.cpp
-	  <lib>../../serialization/build/boost_serialization
+      <lib>../../serialization/build/boost_serialization
     : <include>$(BOOST_ROOT)
-	  std::locale-support
+      std::locale-support
     ;
