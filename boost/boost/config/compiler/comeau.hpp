@@ -27,14 +27,6 @@
 #     endif
 #  endif
 
-#if (__COMO_VERSION__ <= 4303) || !defined(BOOST_STRICT_CONFIG)
-#  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
-#endif
-
-#ifdef _WIN32
-#  define BOOST_NO_SWPRINTF
-#endif
-
 // Void returns don't work when emulating VC 6 (Peter Dimov)
 
 #  if defined(_MSC_VER) && (_MSC_VER == 1200)
@@ -42,6 +34,15 @@
 #  endif
 
 #endif  // version 4245
+
+#if (__COMO_VERSION__ <= 4303) || !defined(BOOST_STRICT_CONFIG)
+
+#ifdef _WIN32
+#  define BOOST_NO_SWPRINTF
+#endif
+
+#  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
+#endif // Version 4303
 
 //
 // enable __int64 support in VC emulation mode
