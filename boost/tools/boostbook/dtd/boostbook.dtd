@@ -60,8 +60,8 @@
               (%boost.class.mix;)*">
 
 <!ENTITY % boost.function.semantics
-        "para*, requires?, effects?, postconditions?, returns?, throws?,
-         complexity?, notes?, rationale?">
+        "purpose?, description?, requires?, effects?, postconditions?, 
+         returns?, throws?, complexity?, notes?, rationale?">
 
 <!ENTITY % library.content
         "libraryinfo, (title, ((section|library-reference|testsuite))+)?">
@@ -232,7 +232,7 @@
     name  CDATA  #REQUIRED
     %boost.common.attrib;>
 
-<!ELEMENT overloaded-method (signature*, purpose?, %boost.function.semantics;)>
+<!ELEMENT overloaded-method (signature*, %boost.function.semantics;)>
 <!ATTLIST overloaded-method 
     name  CDATA  #REQUIRED
     %boost.common.attrib;>
@@ -266,13 +266,13 @@
     %boost.common.attrib;>
 
 <!ELEMENT function 
-         (template?, type?, parameter*, purpose?, %boost.function.semantics;)>
+         (template?, type?, parameter*, %boost.function.semantics;)>
 <!ATTLIST function
     name         CDATA  #REQUIRED
     return-type  CDATA  #IMPLIED
     %boost.common.attrib;>
 
-<!ELEMENT overloaded-function (signature*, purpose?, %boost.function.semantics;)>
+<!ELEMENT overloaded-function (signature*, %boost.function.semantics;)>
 <!ATTLIST overloaded-function 
     name  CDATA  #REQUIRED
     %boost.common.attrib;>
