@@ -117,7 +117,7 @@ public:
 #ifndef BOOST_NO_AUTO_PTR
 
     template<typename Y>
-    explicit shared_ptr(std::auto_ptr<Y> & r): px(r.get()), pn(r.release(), checked_deleter<Y>())
+    explicit shared_ptr(std::auto_ptr<Y> & r): px(r.get()), pn(r)
     {
     }
 
