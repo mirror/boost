@@ -16,6 +16,7 @@
 
 #include <boost/numeric/interval.hpp>
 #include <boost/test/test_tools.hpp>
+#include <boost/config.hpp>
 
 /* All the following tests should be BOOST_CHECK; however, if a test fails,
    the probability is high that hundreds of other tests will fail, so it is
@@ -72,8 +73,10 @@ void test_binary() {
     static bool validate(const I& a) { return val; } \
   }
 
+#ifndef BOOST_NO_STDC_NAMESPACE
 using std::abs;
 using std::sqrt;
+#endif
 
 new_unary_bunch(bunch_pos, +, true);
 new_unary_bunch(bunch_neg, -, true);

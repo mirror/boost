@@ -35,7 +35,7 @@
 #  endif
 #endif
 
-#if defined(__COMO__)
+#if defined(__COMO__) || defined(BOOST_INTEL)
 #  define BOOST_NUMERIC_INTERVAL_using_max(a) using std::a
 #elif defined(BOOST_NO_STDC_NAMESPACE)
 #  define BOOST_NUMERIC_INTERVAL_using_max(a) using ::a
