@@ -11,7 +11,30 @@
 #include "boost/date_time/local_time/local_time.hpp"
 // #include "boost/date_time/local_time/posix_time_zone.hpp"
 #include "boost/date_time/testfrmwk.hpp"
+//#include "boost/date_time/c_time.hpp"
 #include <iostream>
+
+#include <sstream>
+// function eases testing
+std::string tm_out(const tm& ptr){
+  std::stringstream ss;
+
+  ss 
+    << ptr.tm_wday << ' ' << ptr.tm_yday << ' '
+    << std::setw(2) << std::setfill('0') << ptr.tm_mon + 1 << '/'
+    << std::setw(2) << std::setfill('0') << ptr.tm_mday << '/'
+    << std::setw(2) << std::setfill('0') << ptr.tm_year + 1900 << ' '
+    << std::setw(2) << std::setfill('0') << ptr.tm_hour << ':'
+    << std::setw(2) << std::setfill('0') << ptr.tm_min << ':'
+    << std::setw(2) << std::setfill('0') << ptr.tm_sec << ' ';
+  if(ptr.tm_isdst >= 0){
+    ss << (ptr.tm_isdst ? "DST" : "STD");
+  }
+  else{
+    ss << "DST/STD unknown";
+  }
+  return ss.str();
+}
 
 int
 main()
@@ -249,6 +272,23 @@ main()
       local_date_time az_lt(d, hours(5), az_tz, false);  // 5am local std
       local_date_time ny_lt(d, hours(8), ny_tz, true);   // 8am local dst
       local_date_time au_lt(d, hours(22), sydney, false);// 10pm local std
+
+      check("local_date_time to tm",
+          std::string("4 239 08/28/2003 05:00:00 STD") == tm_out(to_tm(az_lt)));
+      check("local_date_time to tm",
+          std::string("4 239 08/28/2003 08:00:00 DST") == tm_out(to_tm(ny_lt)));
+      check("local_date_time to tm",
+          std::string("4 239 08/28/2003 22:00:00 STD") == tm_out(to_tm(au_lt)));
+
+      try{
+        local_date_time ldt(not_a_date_time);
+        tm ldt_tm = to_tm(ldt);
+        check("Exception not thrown (special_value to_tm)", false);
+      }catch(std::out_of_range e){
+        check("Caught expected exception (special_value to_tm)", true);
+      }catch(...){
+        check("Caught un-expected exception (special_value to_tm)", false);
+      }
       // check that all are equal to sv_pt
       check("local == utc", az_lt == utc_lt); 
       check("local == utc", ny_lt == utc_lt); 

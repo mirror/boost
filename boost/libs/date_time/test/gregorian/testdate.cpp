@@ -277,6 +277,16 @@ main()
   check("tm conversion functions min date 1400-1-1 ", date_from_tm(to_tm(d14)) == d14);
   check("tm conversion functions max date 9999-12-31", date_from_tm(to_tm(d13)) == d13);
 
+  try{
+    date d(neg_infin);
+    tm d_tm = to_tm(d);
+    check("Exception not thrown (special_value to_tm)", false);
+  }catch(std::out_of_range e){
+    check("Caught expected exception (special_value to_tm)", true);
+  }catch(...){
+    check("Caught un-expected exception (special_value to_tm)", false);
+  }
+  
   return printTestStats();
 
 }

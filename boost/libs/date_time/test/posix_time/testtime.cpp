@@ -290,6 +290,28 @@ main()
   //this conversion will drop fractional seconds
   check("tm conversion functions max date 9999-12-31 23:59:59.9999 - truncated frac seconds", 
         ptime_from_tm(to_tm(max_ptime)) == ptime(date(max_date_time), time_duration(23,59,59)));
+  
+  try{
+    ptime pt(pos_infin);
+    tm pt_tm = to_tm(pt);
+    check("Exception not thrown (special_value to_tm)", false);
+  }catch(std::out_of_range e){
+    check("Caught expected exception (special_value to_tm)", true);
+  }catch(...){
+    check("Caught un-expected exception (special_value to_tm)", false);
+  }
+  try{
+    // exception is only thrown from gregorian::to_tm. Needed to
+    // be sure it always gets thrown.
+    ptime pt(date(2002,Oct,31), hours(1));
+    pt += time_duration(pos_infin);
+    tm pt_tm = to_tm(pt);
+    check("Exception not thrown (special_value to_tm)", false);
+  }catch(std::out_of_range e){
+    check("Caught expected exception (special_value to_tm)", true);
+  }catch(...){
+    check("Caught un-expected exception (special_value to_tm)", false);
+  }
 
   
   return printTestStats();
