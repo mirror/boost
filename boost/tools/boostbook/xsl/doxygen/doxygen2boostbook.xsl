@@ -121,21 +121,56 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
 
     <xsl:if test="contains(string(location/attribute::file), 
                            concat('/', $in-file)) and
-                  not (contains(string(compoundname), '&lt;')) and
                   not (key('inner-classes', @id))">
       <!-- The short name of this class -->
-      <xsl:variable name="name">
+      <xsl:variable name="name-with-spec">
         <xsl:call-template name="strip-qualifiers">
           <xsl:with-param name="name" select="compoundname"/>
         </xsl:call-template>
       </xsl:variable>
       
-      <xsl:element name="{$class-key}">
+      <xsl:variable name="name">
+        <xsl:choose>
+          <xsl:when test="contains($name-with-spec, '&lt;')">
+            <xsl:value-of select="substring-before($name-with-spec, '&lt;')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$name-with-spec"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+
+      <xsl:variable name="specialization">
+        <xsl:if test="contains($name-with-spec, '&lt;')">
+          <xsl:variable name="spec-with-gt" 
+            select="substring-after($name-with-spec, '&lt;')"/>
+          <xsl:value-of select="substring($spec-with-gt, 1, 
+                                          string-length($spec-with-gt)-1)"/>
+        </xsl:if>
+      </xsl:variable>
+
+      <xsl:variable name="actual-class-key">
+        <xsl:value-of select="$class-key"/>
+        <xsl:if test="string-length($specialization) &gt; 0">
+          <xsl:text>-specialization</xsl:text>
+        </xsl:if>
+      </xsl:variable>
+
+      <xsl:element name="{$actual-class-key}">
         <xsl:attribute name="name">
           <xsl:value-of select="$name"/>
         </xsl:attribute>
         
         <xsl:apply-templates select="templateparamlist" mode="template"/>
+
+        <xsl:if test="string-length($specialization) &gt; 0">
+          <specialization>
+            <xsl:call-template name="specialization">
+              <xsl:with-param name="specialization" select="$specialization"/>
+            </xsl:call-template>
+          </specialization>
+        </xsl:if>
+
         <xsl:apply-templates select="basecompoundref" mode="inherit"/>
 
         <xsl:apply-templates select="briefdescription" mode="passthrough"/>
@@ -308,14 +343,49 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
         </template-type-parameter>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:message>
-Cannot handle template parameter with type <xsl:value-of select="string(type)"/>          
-        </xsl:message>
+        <template-nontype-parameter>
+          <xsl:attribute name="name">
+            <xsl:value-of select="string(declname)"/>
+          </xsl:attribute>
+          <type>
+            <xsl:apply-templates select="type/*|type/text()" 
+              mode="passthrough"/>
+          </type>
+          <xsl:if test="defval">
+            <default>
+              <xsl:apply-templates select="defval/*|defval/text()" 
+                mode="passthrough"/>
+            </default>
+          </xsl:if>
+        </template-nontype-parameter>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
   <xsl:template match="templateparamlist"/>
+
+  <!-- "Parse" a specialization from part of a name -->
+  <xsl:template name="specialization">
+    <xsl:param name="specialization"/>
+
+    <xsl:choose>
+      <xsl:when test="contains($specialization, ',')">
+        <template-arg>
+          <xsl:value-of 
+            select="normalize-space(substring-before($specialization, ','))"/>
+        </template-arg>
+        <xsl:call-template name="specialization">
+          <xsl:with-param name="specialization" 
+            select="substring-after($specialization, ',')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <template-arg>
+          <xsl:value-of select="normalize-space($specialization)"/>
+        </template-arg>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <!-- Inheritance -->
   <xsl:template match="basecompoundref" mode="inherit">
