@@ -50,9 +50,10 @@ template&lt;class T&gt; inline bool is_pos (T const &amp;v) { return v &gt;  sta
 
 <p>Another remark about the checking policy. It normally is powerful enough
 to handle the exceptional behavior that the basic type could induce; in
-particular infinite and invalid numbers (thanks to the three functions
-<code>inf</code>, <code>nan</code> and <code>is_nan</code>). However, if you
-use <code>interval_lib::checking_base</code> (and the default checking policy
+particular infinite and invalid numbers (thanks to the four functions
+<code>pos_inf</code>, <code>neg_inf</code>, <code>nan</code> and
+<code>is_nan</code>). However, if you use
+<code>interval_lib::checking_base</code> (and the default checking policy
 uses it), your base type should have a correctly specialized
 <code>std::numeric_limits&lt;T&gt;</code>. In particular, the values
 <code>has_infinity</code> and <code>has_quiet_NaN</code>, and the functions

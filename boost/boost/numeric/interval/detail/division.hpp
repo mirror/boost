@@ -80,13 +80,12 @@ interval<T, Policies> div_positive(const interval<T, Policies>& x, const T& yu)
   const T& xl = x.lower();
   const T& xu = x.upper();
   typedef typename Policies::checking checking;
-  const T& inf = checking::inf();
   if (::boost::numeric::interval_lib::user::is_neg(xu))
-    return I(-inf, rnd.div_up(xu, yu), true);
+    return I(checking::neg_inf(), rnd.div_up(xu, yu), true);
   else if (::boost::numeric::interval_lib::user::is_neg(xl))
-    return I(-inf, inf, true);
+    return I(checking::neg_inf(), checking::pos_inf(), true);
   else
-    return I(rnd.div_down(xl, yu), inf, true);
+    return I(rnd.div_down(xl, yu), checking::pos_inf(), true);
 }
 
 template<class T, class Policies> inline
@@ -98,11 +97,10 @@ interval<T, Policies> div_positive(const T& x, const T& yu)
     return I(static_cast<T>(0), static_cast<T>(0), true);
   typename Policies::rounding rnd;
   typedef typename Policies::checking checking;
-  const T& inf = checking::inf();
   if (::boost::numeric::interval_lib::user::is_neg(x))
-    return I(-inf, rnd.div_up(x, yu), true);
+    return I(checking::neg_inf(), rnd.div_up(x, yu), true);
   else
-    return I(rnd.div_down(x, yu), inf, true);
+    return I(rnd.div_down(x, yu), checking::pos_inf(), true);
 }
 
 template<class T, class Policies> inline
@@ -117,13 +115,12 @@ interval<T, Policies> div_negative(const interval<T, Policies>& x, const T& yl)
   const T& xl = x.lower();
   const T& xu = x.upper();
   typedef typename Policies::checking checking;
-  const T& inf = checking::inf();
   if (::boost::numeric::interval_lib::user::is_neg(xu))
-    return I(rnd.div_down(xu, yl), inf, true);
+    return I(rnd.div_down(xu, yl), checking::pos_inf(), true);
   else if (::boost::numeric::interval_lib::user::is_neg(xl))
-    return I(-inf, inf, true);
+    return I(checking::neg_inf(), checking::pos_inf(), true);
   else
-    return I(-inf, rnd.div_up(xl, yl), true);
+    return I(checking::neg_inf(), rnd.div_up(xl, yl), true);
 }
 
 template<class T, class Policies> inline
@@ -135,11 +132,10 @@ interval<T, Policies> div_negative(const T& x, const T& yl)
     return I(static_cast<T>(0), static_cast<T>(0), true);
   typename Policies::rounding rnd;
   typedef typename Policies::checking checking;
-  const T& inf = checking::inf();
   if (::boost::numeric::interval_lib::user::is_neg(x))
-    return I(rnd.div_down(x, yl), inf, true);
+    return I(rnd.div_down(x, yl), checking::pos_inf(), true);
   else
-    return I(-inf, rnd.div_up(x, yl), true);
+    return I(checking::neg_inf(), rnd.div_up(x, yl), true);
 }
 
 template<class T, class Policies> inline
@@ -173,13 +169,12 @@ interval<T, Policies> div_zero_part1(const interval<T, Policies>& x,
   const T& yl = y.lower();
   const T& yu = y.upper();
   typedef typename Policies::checking checking;
-  const T& inf = checking::inf();
   if (::boost::numeric::interval_lib::user::is_neg(xu))
-    { b = true;  return I(-inf, rnd.div_up(xu, yu), true); }
+    { b = true;  return I(checking::neg_inf(), rnd.div_up(xu, yu), true); }
   else if (::boost::numeric::interval_lib::user::is_neg(xl))
-    { b = false; return I(-inf, inf, true); }
+    { b = false; return I(checking::neg_inf(), checking::pos_inf(), true); }
   else
-    { b = true;  return I(-inf, rnd.div_up(xl, yl), true); }
+    { b = true;  return I(checking::neg_inf(), rnd.div_up(xl, yl), true); }
 }
 
 template<class T, class Policies> inline
@@ -190,11 +185,10 @@ interval<T, Policies> div_zero_part2(const interval<T, Policies>& x,
   typename Policies::rounding rnd;
   typedef interval<T, Policies> I;
   typedef typename Policies::checking checking;
-  const T& inf = checking::inf();
   if (::boost::numeric::interval_lib::user::is_neg(x.upper()))
-    return I(rnd.div_down(x.upper(), y.lower()), inf, true);
+    return I(rnd.div_down(x.upper(), y.lower()), checking::pos_inf(), true);
   else
-    return I(rnd.div_down(x.lower(), y.upper()), inf, true);
+    return I(rnd.div_down(x.lower(), y.upper()), checking::pos_inf(), true);
 }
 
 } // namespace detail

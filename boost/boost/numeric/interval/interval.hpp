@@ -182,9 +182,8 @@ void interval<T, Policies>::set_empty()
 template<class T, class Policies> inline
 void interval<T, Policies>::set_whole()
 {
-  const T& inf = checking::inf();
-  low = -inf;
-  up  =  inf;
+  low = checking::neg_inf();
+  up  = checking::pos_inf();
 }
 
 template<class T, class Policies> inline
@@ -211,8 +210,7 @@ interval<T, Policies> interval<T, Policies>::empty()
 template<class T, class Policies> inline
 interval<T, Policies> interval<T, Policies>::whole()
 {
-  const T& inf = checking::inf();
-  return interval<T, Policies>(-inf, inf, true);
+  return interval<T, Policies>(checking::neg_inf(), checking::pos_inf(), true);
 }
 
 template<class T, class Policies> inline

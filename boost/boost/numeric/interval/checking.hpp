@@ -43,10 +43,15 @@ struct exception_invalid_number
 template<class T>
 struct checking_base
 {
-  static T inf()
+  static T pos_inf()
   {
     assert(std::numeric_limits<T>::has_infinity);
     return std::numeric_limits<T>::infinity();
+  }
+  static T neg_inf()
+  {
+    assert(std::numeric_limits<T>::has_infinity);
+    return -std::numeric_limits<T>::infinity();
   }
   static T nan()
   {

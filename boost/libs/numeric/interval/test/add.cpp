@@ -202,7 +202,8 @@ bool test_subeq1() {
 
 struct my_checking
 {
-  static pexpr inf() { throw; }
+  static pexpr pos_inf() { throw; }
+  static pexpr neg_inf() { throw; }
   static pexpr nan() { throw; }
   static bool is_nan(const pexpr&) { return false; }
   static pexpr empty_lower() { throw; }

@@ -111,10 +111,10 @@ interval<T, Policies> multiplicative_inverse(const interval<T, Policies>& x)
       if (!user::is_zero(x.upper()))
         return I::whole();
       else
-        return I(-checking::inf(), rnd.div_up(one, x.lower()), true);
+        return I(checking::neg_inf(), rnd.div_up(one, x.lower()), true);
     else
       if (!user::is_zero(x.upper()))
-        return I(rnd.div_down(one, x.upper()), checking::inf(), true);
+        return I(rnd.div_down(one, x.upper()), checking::pos_inf(), true);
       else
         return I::empty();
   } else 

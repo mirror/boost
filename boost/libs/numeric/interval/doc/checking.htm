@@ -32,7 +32,8 @@ of an interface):</p>
 <pre>/* requirements for checking policy */
 struct checking
 {
-  static T inf();
+  static T pos_inf();
+  static T neg_inf();
   static T nan();
   static bool is_nan(const T&amp;);
   static T empty_lower();
@@ -40,12 +41,12 @@ struct checking
   static bool is_empty(const T&amp;, const T&amp;);
 };</pre>
 
-<p>The first function, <code>inf</code> is invoked each time the library need
-to create the infinite bound of an interval. For example,
-<code>interval::whole</code> computes <code>interval(-checking::inf(),
-checking::inf())</code>. If infinite values are allowed and
-<code>std::numeric_limits&lt;T&gt;::infinity()</code> returns a correct
-value, such a value can be used.</p>
+<p>The first two functions, <code>pos_inf</code> and <code>neg_inf</code>,
+are invoked each time the library has to create the infinite bound of an
+interval. For example, <code>interval::whole</code> computes
+<code>interval(checking::neg_inf(), checking::pos_inf())</code>. If infinite
+values are allowed and <code>std::numeric_limits&lt;T&gt;::infinity()</code>
+returns a correct value, such a value can be used.</p>
 
 <p>Next comes <code>nan</code>. This function is used each time a function
 need to return a value of type <code>T</code> but is unable to compute it. It
@@ -106,10 +107,11 @@ used for <code>nan</code>, <code>empty_lower</code>,
 (it is <code>x!=x</code>). If <code>T</code> does not have quiet NaNs, then
 <code>nan</code> is an <code>assert(false)</code>, the empty interval is
 [1,0], and <code>is_nan</code> always return <code>false</code>. As for
-<code>nan</code>, <code>inf</code> returns
+<code>nan</code>, <code>pos_inf</code> returns
 <code>numeric_limits::infinity()</code> if possible, or is an
-<code>assert(false</code>) otherwise. Finally, <code>is_empty(T l,T u)</code>
-is always defined by <code>!(l&lt;=u)</code>.</p>
+<code>assert(false</code>) otherwise. <code>neg_inf</code> returns the
+opposite. Finally, <code>is_empty(T l,T u)</code> is always defined by
+<code>!(l&lt;=u)</code>.</p>
 
 <p>Next comes <code>checking_no_empty</code>. Using it means that each time
 an empty interval should be produced (by <code>empty_lower</code> and
@@ -178,9 +180,10 @@ constructors. So you can put an assert inside if you do not trust the
 library. :-)</p>
 
 <p>And finally, you need to decide what to do with <code>nan</code> if it has
-not already been decided at the beginning, and with <code>inf</code>. These
-functions should return a value or start an exceptional behavior (especially
-if the base type does not have corresponding values).</p>
+not already been decided at the beginning, and with <code>pos_inf</code> and
+<code>neg_inf</code>. These functions should return a value or start an
+exceptional behavior (especially if the base type does not have corresponding
+values).</p>
 
 <h2>Some examples</h2>
 <ul>
@@ -196,7 +199,7 @@ if the base type does not have corresponding values).</p>
     Please note that if <code>T</code> does not have a way to represent
     invalid numbers, then this policy will behave the same way as
     <code>checking_no_empty&lt;T&gt;</code>. This is the default policy and
-    it is also called interval_lib::checking_strict.</li>
+    it is also called <code>interval_lib::checking_strict</code>.</li>
   <li>If all numerical data are valid but the algorithm can produce and
     manipulate empty intervals, then <code>checking_no_nan&lt;T&gt;</code>
     should be used.</li>
@@ -212,9 +215,9 @@ if the base type does not have corresponding values).</p>
 </ul>
 <hr>
 
-<p>Revised: 2003-04-24<br>
+<p>Revised: 2004-02-16<br>
 Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
 Polytechnic University.<br>
-Copyright (c) Guillaume Melquiond, 2003.</p>
+Copyright (c) Guillaume Melquiond, 2003-2004.</p>
 </body>
 </html>

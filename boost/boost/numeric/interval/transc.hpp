@@ -48,7 +48,7 @@ interval<T, Policies> log(const interval<T, Policies>& x)
   typename Policies::rounding rnd;
   typedef typename Policies::checking checking;
   T l = !interval_lib::user::is_pos(x.lower())
-             ? -checking::inf() : rnd.log_down(x.lower());
+             ? checking::neg_inf() : rnd.log_down(x.lower());
   return I(l, rnd.log_up(x.upper()), true);
 }
 
@@ -225,9 +225,9 @@ interval<T, Policies> atanh(const interval<T, Policies>& x)
   typename Policies::rounding rnd;
   typedef typename Policies::checking checking;
   T l = (x.lower() <= static_cast<T>(-1))
-             ? -checking::inf() : rnd.atanh_down(x.lower());
+             ? checking::neg_inf() : rnd.atanh_down(x.lower());
   T u = (x.upper() >= static_cast<T>(1) )
-             ?  checking::inf() : rnd.atanh_up  (x.upper());
+             ? checking::pos_inf() : rnd.atanh_up  (x.upper());
   return I(l, u, true);
 }
 
