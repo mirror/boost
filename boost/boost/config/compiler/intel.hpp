@@ -55,10 +55,16 @@
 
 #endif
 
-#if _MSC_VER+0 >= 1000
-#  if !defined(_NATIVE_WCHAR_T_DEFINED) && !defined(_WCHAR_T_DEFINED)
-#     define BOOST_NO_INTRINSIC_WCHAR_T
+// See http://aspn.activestate.com/ASPN/Mail/Message/boost/1614864
+#if BOOST_INTEL_CXX_VERSION < 700
+#  define BOOST_NO_INTRINSIC_WCHAR_T
+#else
+#  ifndef _WCHAR_T_DEFINED
+#    define BOOST_NO_INTRINSIC_WCHAR_T
 #  endif
+#endif
+
+#if _MSC_VER+0 >= 1000
 #  if _MSC_VER >= 1200
 #     define BOOST_HAS_MS_INT64
 #  endif
