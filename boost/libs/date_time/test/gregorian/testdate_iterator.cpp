@@ -1,11 +1,15 @@
+/* Copyright (c) 2001 CrystalClear Software, Inc.
+ * Disclaimer & Full Copyright at end of file
+ * Author: Jeff Garland 
+ */
 
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include "boost/date_time/testfrmwk.hpp"
 #include <iostream>
 
 void test_base_iterator(boost::gregorian::date end,
-			boost::gregorian::date_iterator& di,
-			std::string& data)
+                        boost::gregorian::date_iterator& di,
+                        std::string& data)
 {
   using namespace boost::gregorian;
   for (; di < end; ++di) {
@@ -93,8 +97,8 @@ main()
     int i = 0;
     try { 
       for (; ditr < date(2001,Jan,2); ++ditr) {
-	check("month iterator: " + to_iso_string(*ditr), MonthAnswers[i] == *ditr);
-	i++;
+        check("month iterator: " + to_iso_string(*ditr), MonthAnswers[i] == *ditr);
+        i++;
       }
       check("month iterator iteration count", i == 13);
     }
@@ -117,11 +121,11 @@ main()
     int i = 0;
     try { 
       for (; ditr < date(2001,Feb,1); ++ditr) {
-	//      std::cout << *ditr << " ";
-	check("last day of month iterator: " + to_iso_string(*ditr), 
-	      MonthAnswers[i] == *ditr);
-	//check("last day of month iterator", MonthAnswers[i] == *ditr);
-	i++;
+        //      std::cout << *ditr << " ";
+        check("last day of month iterator: " + to_iso_string(*ditr), 
+              MonthAnswers[i] == *ditr);
+        //check("last day of month iterator", MonthAnswers[i] == *ditr);
+        i++;
       }
       check("last day of month iterator", i == 13);
     }
@@ -144,11 +148,11 @@ main()
     int i = 0;
     try { 
       for (; ditr < date(2001,Feb,1); ++ditr) {
-	//      std::cout << *ditr << " ";
-	check("last day of month iterator2: " + to_iso_string(*ditr), 
-	      MonthAnswers[i] == *ditr);
-	//check("last day of month iterator", MonthAnswers[i] == *ditr);
-	i++;
+        //      std::cout << *ditr << " ";
+        check("last day of month iterator2: " + to_iso_string(*ditr), 
+              MonthAnswers[i] == *ditr);
+        //check("last day of month iterator", MonthAnswers[i] == *ditr);
+        i++;
       }
       check("last day of month iterator2", i == 12);
     }
@@ -171,11 +175,11 @@ main()
     int i = 0;
     try { 
       for (; ditr < date(2001,Feb,1); ++ditr) {
-	//      std::cout << *ditr << " ";
-	check("last day of month iterator3: " + to_iso_string(*ditr), 
-	      MonthAnswers[i] == *ditr);
-	//check("last day of month iterator", MonthAnswers[i] == *ditr);
-	i++;
+        //      std::cout << *ditr << " ";
+        check("last day of month iterator3: " + to_iso_string(*ditr), 
+              MonthAnswers[i] == *ditr);
+        //check("last day of month iterator", MonthAnswers[i] == *ditr);
+        i++;
       }
       check("last day of month iterator3", i == 12);
     }
@@ -221,3 +225,20 @@ main()
 
   return printTestStats();
 }
+
+/*
+ * Copyright (c) 2001
+ * CrystalClear Software, Inc.
+ *
+ * Permission to use, copy, modify, distribute and sell this software
+ * and its documentation for any purpose is hereby granted without fee,
+ * provided that the above copyright notice appear in all copies and
+ * that both that copyright notice and this permission notice appear
+ * in supporting documentation.  CrystalClear Software makes no
+ * representations about the suitability of this software for any
+ * purpose.  It is provided as is without express or implied warranty.
+ *
+ *
+ * Author:  Jeff Garland (jeff@CrystalClearSoftware.com)
+ *
+ */
