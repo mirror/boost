@@ -1,8 +1,8 @@
 
-#ifndef BOOST_MPL_BOOL_HPP_INCLUDED
-#define BOOST_MPL_BOOL_HPP_INCLUDED
+#ifndef BOOST_MPL_INTEGRAL_C_FWD_HPP_INCLUDED
+#define BOOST_MPL_INTEGRAL_C_FWD_HPP_INCLUDED
 
-// + file: boost/mpl/bool.hpp
+// + file: boost/mpl/integral_c_fwd.hpp
 // + last modified: 08/mar/03
 
 // Copyright (c) 2000-03
@@ -18,19 +18,15 @@
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/bool_fwd.hpp"
-#include "boost/mpl/aux_/config/static_constant.hpp"
+#include "boost/mpl/aux_/config/workaround.hpp"
 
 namespace boost { namespace mpl {
+#if BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(53800))
+// the type of non-type template arguments may not depend on template arguments
+template< typename T, long N > struct integral_c;
+#else
+template< typename T, T N > struct integral_c;
+#endif
+}}
 
-template< bool C_ > struct bool_
-{
-    BOOST_STATIC_CONSTANT(bool, value = C_);
-    typedef bool_ type;
-    typedef bool value_type;
-    operator bool() const { return this->value; }
-};
-
-}} // namespace boost::mpl
-
-#endif // BOOST_MPL_BOOL_HPP_INCLUDED
+#endif // BOOST_MPL_INTEGRAL_C_FWD_HPP_INCLUDED

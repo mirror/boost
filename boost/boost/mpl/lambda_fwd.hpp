@@ -24,7 +24,7 @@ namespace boost {
 namespace mpl {
 
 #if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
-template< typename T BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity) >
+template< typename T BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(typename Arity) >
 struct lambda;
 #else
 template< typename T, bool Protect > struct lambda;

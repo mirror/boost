@@ -19,6 +19,7 @@
 
 #include "boost/mpl/lambda_fwd.hpp"
 #include "boost/mpl/void.hpp"
+#include "boost/mpl/int_fwd.hpp"
 #include "boost/mpl/aux_/preprocessor/params.hpp"
 #include "boost/mpl/aux_/preprocessor/enum.hpp"
 #include "boost/mpl/aux_/preprocessor/def_params_tail.hpp"
@@ -88,7 +89,7 @@ struct lambda< \
 template<> \
 struct lambda< \
       name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
-    BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1) \
+    BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(int_<-1>) \
     > \
 { \
     typedef name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > type; \

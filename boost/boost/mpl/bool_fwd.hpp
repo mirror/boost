@@ -1,8 +1,8 @@
 
-#ifndef BOOST_MPL_BOOL_HPP_INCLUDED
-#define BOOST_MPL_BOOL_HPP_INCLUDED
+#ifndef BOOST_MPL_BOOL_FWD_HPP_INCLUDED
+#define BOOST_MPL_BOOL_FWD_HPP_INCLUDED
 
-// + file: boost/mpl/bool.hpp
+// + file: boost/mpl/bool_fwd.hpp
 // + last modified: 08/mar/03
 
 // Copyright (c) 2000-03
@@ -18,19 +18,14 @@
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/bool_fwd.hpp"
-#include "boost/mpl/aux_/config/static_constant.hpp"
-
 namespace boost { namespace mpl {
 
-template< bool C_ > struct bool_
-{
-    BOOST_STATIC_CONSTANT(bool, value = C_);
-    typedef bool_ type;
-    typedef bool value_type;
-    operator bool() const { return this->value; }
-};
+template< bool C_ > struct bool_;
 
-}} // namespace boost::mpl
+// shorcuts
+typedef bool_<true> true_;
+typedef bool_<false> false_;
 
-#endif // BOOST_MPL_BOOL_HPP_INCLUDED
+}}
+
+#endif // BOOST_MPL_BOOL_FWD_HPP_INCLUDED

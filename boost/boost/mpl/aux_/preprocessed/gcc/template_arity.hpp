@@ -26,28 +26,28 @@ template<
     , typename T1
     >
 typename arity_tag<1>::type
-arity_helper(type_wrapper< F<T1> >,arity_tag<1 >);
+arity_helper(type_wrapper< F<T1>>,arity_tag<1 >);
 
 template<
       template< typename P1, typename P2 > class F
     , typename T1, typename T2
     >
 typename arity_tag<2>::type
-arity_helper(type_wrapper< F<T1,T2> >,arity_tag<2 >);
+arity_helper(type_wrapper< F<T1,T2>>,arity_tag<2 >);
 
 template<
       template< typename P1, typename P2, typename P3 > class F
     , typename T1, typename T2, typename T3
     >
 typename arity_tag<3>::type
-arity_helper(type_wrapper< F<T1,T2,T3> >,arity_tag<3 >);
+arity_helper(type_wrapper< F<T1,T2,T3>>,arity_tag<3 >);
 
 template<
       template< typename P1, typename P2, typename P3, typename P4 > class F
     , typename T1, typename T2, typename T3, typename T4
     >
 typename arity_tag<4>::type
-arity_helper(type_wrapper< F<T1,T2,T3,T4> >,arity_tag<4 >);
+arity_helper(type_wrapper< F<T1,T2,T3,T4>>,arity_tag<4 >);
 
 template<
       template<
@@ -58,7 +58,7 @@ template<
     , typename T1, typename T2, typename T3, typename T4, typename T5
     >
 typename arity_tag<5>::type
-arity_helper(type_wrapper< F<T1,T2,T3,T4,T5> >,arity_tag<5 >);
+arity_helper(type_wrapper< F<T1,T2,T3,T4,T5>>,arity_tag<5 >);
 
 template< typename F, int N >
 struct template_arity_impl

@@ -27,6 +27,7 @@
 #   include "boost/mpl/protect.hpp"
 #   include "boost/mpl/quote.hpp"
 #   include "boost/mpl/bool.hpp"
+#   include "boost/mpl/int_fwd.hpp"
 #   include "boost/mpl/aux_/template_arity.hpp"
 #   include "boost/mpl/aux_/config/ttp.hpp"
 #endif
@@ -80,8 +81,8 @@ namespace mpl {
 
 template<
       typename T
-    , bool Protect = false
-    AUX_ARITY_PARAM(long Arity = aux::template_arity<T>::value)
+    , typename Protect = false_
+    AUX_ARITY_PARAM(typename Arity = int_< aux::template_arity<T>::value >)
     >
 struct lambda_impl
 {
@@ -91,10 +92,10 @@ struct lambda_impl
 
 template<
       typename T
-    AUX_ARITY_PARAM(long Arity = aux::template_arity<T>::value)
+    AUX_ARITY_PARAM(typename Arity = int_< aux::template_arity<T>::value >)
     >
 struct lambda
-    : lambda_impl<T,false AUX_ARITY_PARAM(Arity)>
+    : lambda_impl<T,false_ AUX_ARITY_PARAM(Arity)>
 {
 };
 
@@ -120,8 +121,8 @@ struct lambda_or< BOOST_MPL_PP_ENUM(n,false) >
 } // namespace aux
 #undef n
 
-template< int N, bool Protect >
-struct lambda_impl< arg<N>, Protect AUX_ARITY_PARAM(-1) >
+template< int N, typename Protect >
+struct lambda_impl< arg<N>, Protect AUX_ARITY_PARAM(int_<-1>) >
 {
     BOOST_MPL_AUX_IS_LAMBDA_EXPR(true_)
     typedef arg<N> type;
@@ -134,8 +135,8 @@ struct lambda_impl< arg<N>, Protect AUX_ARITY_PARAM(-1) >
 #include BOOST_PP_ITERATE()
 
 //: special case for 'protect'
-template< typename T, bool Protect >
-struct lambda_impl< protect<T>, Protect AUX_ARITY_PARAM(1) >
+template< typename T, typename Protect >
+struct lambda_impl< protect<T>, Protect AUX_ARITY_PARAM(int_<1>) >
 {
     BOOST_MPL_AUX_IS_LAMBDA_EXPR(false_)
     typedef protect<T> type;
@@ -144,11 +145,12 @@ struct lambda_impl< protect<T>, Protect AUX_ARITY_PARAM(1) >
 //: specializations for main 'bind', 'bind1st' and 'bind2nd' forms
 template<
       typename F, AUX_LAMBDA_BIND_PARAMS(typename T)
-    , bool Protect
+    , typename Protect
     >
 struct lambda_impl<
       bind<F,AUX_LAMBDA_BIND_PARAMS(T)>
-    , Protect AUX_ARITY_PARAM(BOOST_PP_INC(BOOST_MPL_METAFUNCTION_MAX_ARITY))
+    , Protect 
+    AUX_ARITY_PARAM(int_<BOOST_PP_INC(BOOST_MPL_METAFUNCTION_MAX_ARITY)>)
     >
 {
     BOOST_MPL_AUX_IS_LAMBDA_EXPR(false_)
@@ -157,9 +159,9 @@ struct lambda_impl<
 
 template<
       typename F, typename T
-    , bool Protect
+    , typename Protect
     >
-struct lambda_impl< bind1st<F,T>, Protect AUX_ARITY_PARAM(2) >
+struct lambda_impl< bind1st<F,T>, Protect AUX_ARITY_PARAM(int_<2>) >
 {
     BOOST_MPL_AUX_IS_LAMBDA_EXPR(false_)
     typedef bind1st<F,T> type;
@@ -167,9 +169,9 @@ struct lambda_impl< bind1st<F,T>, Protect AUX_ARITY_PARAM(2) >
 
 template<
       typename F, typename T
-    , bool Protect
+    , typename Protect
     >
-struct lambda_impl< bind2nd<F,T>, Protect AUX_ARITY_PARAM(2) >
+struct lambda_impl< bind2nd<F,T>, Protect AUX_ARITY_PARAM(int_<2>) >
 {
     BOOST_MPL_AUX_IS_LAMBDA_EXPR(false_)
     typedef bind2nd<F,T> type;
@@ -197,8 +199,8 @@ template<
       template< AUX_LAMBDA_PARAMS(i, typename P) > class F
     , AUX_LAMBDA_PARAMS(i, typename T)
     >
-struct lambda< F<AUX_LAMBDA_PARAMS(i, T)> AUX_ARITY_PARAM(i) >
-    : lambda_impl< F<AUX_LAMBDA_PARAMS(i, T)>, true AUX_ARITY_PARAM(i) >
+struct lambda< F<AUX_LAMBDA_PARAMS(i, T)> AUX_ARITY_PARAM(int_<i>) >
+    : lambda_impl< F<AUX_LAMBDA_PARAMS(i, T)>, true_ AUX_ARITY_PARAM(int_<i>) >
 {
 };
 
@@ -207,9 +209,11 @@ struct lambda< F<AUX_LAMBDA_PARAMS(i, T)> AUX_ARITY_PARAM(i) >
 template<
       template< AUX_LAMBDA_PARAMS(i, typename P) > class F
     , AUX_LAMBDA_PARAMS(i, typename T)
-    , bool Protect
+    , typename Protect
     >
-struct lambda_impl< F<AUX_LAMBDA_PARAMS(i, T)>, Protect AUX_ARITY_PARAM(i) >
+struct lambda_impl< 
+      F<AUX_LAMBDA_PARAMS(i, T)>, Protect AUX_ARITY_PARAM(int_<i>)
+    >
 {
 #   define AUX_LAMBDA_INVOCATION(unused, i, T) \
     BOOST_PP_COMMA_IF(i) \
@@ -234,8 +238,7 @@ struct lambda_impl< F<AUX_LAMBDA_PARAMS(i, T)>, Protect AUX_ARITY_PARAM(i) >
 namespace aux {
 
 template<
-      bool IsLE
-    , bool Protect
+      typename IsLE, typename Protect
     , template< AUX_LAMBDA_PARAMS(i, typename P) > class F
     , AUX_LAMBDA_PARAMS(i, typename L)
     >
@@ -250,7 +253,7 @@ template<
       template< AUX_LAMBDA_PARAMS(i, typename P) > class F
     , AUX_LAMBDA_PARAMS(i, typename L)
     >
-struct BOOST_PP_CAT(le_result,i)< true,false,F,AUX_LAMBDA_PARAMS(i, L) >
+struct BOOST_PP_CAT(le_result,i)< true_,false_,F,AUX_LAMBDA_PARAMS(i, L) >
 {
     typedef BOOST_PP_CAT(bind,i)<
           BOOST_PP_CAT(quote,i)<F>
@@ -262,7 +265,7 @@ template<
       template< AUX_LAMBDA_PARAMS(i, typename P) > class F
     , AUX_LAMBDA_PARAMS(i, typename L)
     >
-struct BOOST_PP_CAT(le_result,i)< true,true,F,AUX_LAMBDA_PARAMS(i, L) >
+struct BOOST_PP_CAT(le_result,i)< true_,true_,F,AUX_LAMBDA_PARAMS(i, L) >
 {
     typedef protect< BOOST_PP_CAT(bind,i)<
           BOOST_PP_CAT(quote,i)<F>
@@ -285,9 +288,11 @@ struct BOOST_PP_CAT(le_result,i)< true,true,F,AUX_LAMBDA_PARAMS(i, L) >
 template<
       template< AUX_LAMBDA_PARAMS(i, typename P) > class F
     , AUX_LAMBDA_PARAMS(i, typename T)
-    , bool Protect
+    , typename Protect
     >
-struct lambda_impl< F<AUX_LAMBDA_PARAMS(i, T)>, Protect AUX_ARITY_PARAM(i) >
+struct lambda_impl< 
+      F<AUX_LAMBDA_PARAMS(i, T)>, Protect AUX_ARITY_PARAM(int_<i>)
+    >
 {
     BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_INVOCATION, T)
     typedef aux::lambda_or<
@@ -295,7 +300,7 @@ struct lambda_impl< F<AUX_LAMBDA_PARAMS(i, T)>, Protect AUX_ARITY_PARAM(i) >
         > is_le;
 
     typedef typename aux::BOOST_PP_CAT(le_result,i)<
-          is_le::value
+          typename is_le::type
         , Protect
         , F
         , AUX_LAMBDA_PARAMS(i, l)
@@ -311,11 +316,11 @@ struct lambda_impl< F<AUX_LAMBDA_PARAMS(i, T)>, Protect AUX_ARITY_PARAM(i) >
 
 template<
       typename F AUX_LAMBDA_BIND_N_PARAMS(i, typename T)
-    , bool Protect
+    , typename Protect
     >
 struct lambda_impl<
       BOOST_PP_CAT(bind,i)<F AUX_LAMBDA_BIND_N_PARAMS(i, T)>
-    , Protect AUX_ARITY_PARAM(BOOST_PP_INC(i))
+    , Protect AUX_ARITY_PARAM(int_<BOOST_PP_INC(i)>)
     >
 {
     BOOST_MPL_AUX_IS_LAMBDA_EXPR(false_)
