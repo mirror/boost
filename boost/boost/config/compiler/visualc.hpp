@@ -17,7 +17,7 @@
 // turn off the warnings before we #include anything
 #pragma warning( disable : 4503 ) // warning: decorated name length exceeded
 
-#if _MSC_VER <= 1200  // 1200 == VC++ 6.0
+#if _MSC_VER < 1300  // 1200 == VC++ 6.0, 1201 == EVC4.2
 #pragma warning( disable : 4786 ) // ident trunc to '255' chars in debug info
 #  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
 #  define BOOST_NO_VOID_RETURNS
@@ -71,6 +71,11 @@
 
 #ifndef _NATIVE_WCHAR_T_DEFINED
 #  define BOOST_NO_INTRINSIC_WCHAR_T
+#endif
+
+#ifdef _WIN32_WCE
+#  define BOOST_NO_THREADEX
+#  define BOOST_NO_GETSYSTEMTIMEASFILETIME
 #endif
 
 //   
