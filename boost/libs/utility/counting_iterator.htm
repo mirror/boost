@@ -282,7 +282,7 @@ template &lt;class Incrementable&gt;
 struct counting_iterator_traits
 {
   if (numeric_limits&lt;Incrementable&gt::is_specialized) {
-    if (!numeric_limits&lt;Incrementable&gt::is_integral)
+    if (!numeric_limits&lt;Incrementable&gt::is_integer)
        COMPILE_TIME_ERROR;
 
     if (!numeric_limits&lt;Incrementable&gt::is_bounded
