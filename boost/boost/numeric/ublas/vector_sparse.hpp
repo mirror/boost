@@ -323,7 +323,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Proxy support
 #ifdef BOOST_UBLAS_STRICT_VECTOR_SPARSE
         pointer find_element (size_type i) {
-            iterator_base it (data ().find (i));
+            iterator_type it (data ().find (i));
             if (it == data ().end () || (*it).first != i)
                 return 0;
             return &(*it).second;
@@ -334,7 +334,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
-            const_iterator_base it (data ().find (i));
+            const_iterator_type it (data ().find (i));
             if (it == data ().end () || (*it).first != i)
                 return zero_;
             return (*it).second;
@@ -461,8 +461,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         void erase (size_type i) {
-            // FIXME: shouldn't we use const_iterator_base here?
-            iterator_base it = data ().find (i);
+            // FIXME: shouldn't we use const_iterator_type here?
+            iterator_type it = data ().find (i);
             if (it == data ().end ())
                 return;
             data ().erase (it);
@@ -475,8 +475,8 @@ namespace boost { namespace numeric { namespace ublas {
         // Iterator types
     private:
         // Use storage iterator
-        typedef typename A::const_iterator const_iterator_base;
-        typedef typename A::iterator iterator_base;
+        typedef typename A::const_iterator const_iterator_type;
+        typedef typename A::iterator iterator_type;
 
     public:
         class const_iterator;
@@ -515,7 +515,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator ():
                 container_const_reference<self_type> (), it_ () {}
             BOOST_UBLAS_INLINE
-            const_iterator (const self_type &v, const const_iterator_base &it):
+            const_iterator (const self_type &v, const const_iterator_type &it):
                 container_const_reference<self_type> (v), it_ (it) {}
 #ifndef BOOST_UBLAS_QUALIFIED_TYPENAME
             BOOST_UBLAS_INLINE
@@ -569,7 +569,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
 
         private:
-            const_iterator_base it_;
+            const_iterator_type it_;
         };
 
         BOOST_UBLAS_INLINE
@@ -599,7 +599,7 @@ namespace boost { namespace numeric { namespace ublas {
             iterator ():
                 container_reference<self_type> (), it_ () {}
             BOOST_UBLAS_INLINE
-            iterator (self_type &v, const iterator_base &it):
+            iterator (self_type &v, const iterator_type &it):
                 container_reference<self_type> (v), it_ (it) {}
 
             // Arithmetic
@@ -645,7 +645,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
 
         private:
-            iterator_base it_;
+            iterator_type it_;
 
             friend class const_iterator;
         };
