@@ -14,7 +14,10 @@ namespace fs = boost::filesystem;
 
 namespace
 {
-  boost::regex url_regex("<\\s*A\\s+[^>]*href\\s*=\\s*\"([^\"]*)\"",
+  boost::regex url_regex(
+    "<\\s*"
+    "(?:A\\s+[^>]*HREF|FRAME\\s+SRC)" // A HREF or FRAME SRC
+    "\\s*=\\s*\"([^\"]*)\"",
     boost::regbase::normal | boost::regbase::icase);
 
 } // unnamed namespace
