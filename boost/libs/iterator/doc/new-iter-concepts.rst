@@ -521,7 +521,12 @@ Forward Traversal Iterators [lib.forward.traversal.iterators]
 A class or built-in type ``X`` models the *Forward Traversal Iterator*
 concept if, in addition to ``X`` meeting the requirements of Default
 Constructible and Single Pass Iterator, the following expressions are
-valid and respect the stated semantics.
+valid and respect the stated semantics. Also, if ``X`` is a *Readable
+Iterator* with ``a`` and ``b`` dereferenceable, then ``a == b`` if and
+only if ``*a`` and ``*b`` are the same object.  If ``X`` is a
+*Writable Iterator*, then ``a == b`` if and only if ``*a = o`` and
+``*b = o`` write ``o`` to the same location.
+
 
 +--------------------------------------------------------------------------------------------------------+
 |Forward Traversal Iterator Requirements (in addition to Default Constructible and Single Pass Iterator) |
@@ -542,6 +547,8 @@ valid and respect the stated semantics.
 |``iterator_traversal<X>::type``        |Convertible to                     |                            |
 |                                       |``forward_traversal_tag``          |                            |
 +---------------------------------------+-----------------------------------+----------------------------+
+
+
 
 .. TR1: forward_traversal_iterator_tag changed to
    forward_traversal_tag for consistency
