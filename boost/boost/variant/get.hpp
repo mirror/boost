@@ -24,6 +24,9 @@
 #include "boost/utility/addressof.hpp"
 #include "boost/variant/variant_fwd.hpp"
 
+#include "boost/type_traits/add_reference.hpp"
+#include "boost/type_traits/add_pointer.hpp"
+
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 #   include "boost/mpl/bool.hpp"
 #   include "boost/mpl/or.hpp"
@@ -67,44 +70,49 @@ namespace detail { namespace variant {
 template <typename T>
 struct get_visitor
 {
+private: // private typedefs
+
+    typedef typename add_pointer<T>::type pointer;
+    typedef typename add_reference<T>::type reference;
+
 public: // visitor typedefs
 
-    typedef T* result_type;
+    typedef pointer result_type;
 
 public: // visitor interfaces
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
-    T* operator()(T& operand) const
+    pointer operator()(reference operand) const
     {
         return boost::addressof(operand);
     }
 
     template <typename U>
-    T* operator()(const U&) const
+    pointer operator()(const U&) const
     {
-        return static_cast<T*>(0);
+        return static_cast<pointer>(0);
     }
 
 #else // MSVC6
 
 private: // helpers, for visitor interfaces (below)
 
-    T* execute_impl(T& operand, mpl::true_) const
+    pointer execute_impl(reference operand, mpl::true_) const
     {
         return boost::addressof(operand);
     }
 
     template <typename U>
-    T* execute_impl(const U& operand, mpl::false_) const
+    pointer execute_impl(const U& operand, mpl::false_) const
     {
-        return static_cast<T*>(0);
+        return static_cast<pointer>(0);
     }
 
 public: // visitor interfaces
 
     template <typename U>
-    T* operator()(U& operand) const
+    pointer operator()(U& operand) const
     {
         // MSVC6 finds normal implementation (above) ambiguous,
         // so we must explicitly disambiguate
@@ -132,48 +140,62 @@ public: // visitor interfaces
 #endif
 
 template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
-inline U* get(
+inline
+    typename add_pointer<U>::type
+get(
       boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
       BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
     )
 {
-    if (!operand) return static_cast<U*>(0);
+    typedef typename add_pointer<U>::type U_ptr;
+    if (!operand) return static_cast<U_ptr>(0);
 
     detail::variant::get_visitor<U> v;
     return operand->apply_visitor(v);
 }
 
 template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
-inline U* get(
+inline
+    typename add_pointer<U>::type
+get(
       const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
       BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
     )
 {
-    if (!operand) return static_cast<U*>(0);
+    typedef typename add_pointer<U>::type U_ptr;
+    if (!operand) return static_cast<U_ptr>(0);
 
     detail::variant::get_visitor<U> v;
     return operand->apply_visitor(v);
 }
 
 template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
-inline U& get(
+inline
+    typename add_reference<U>::type
+get(
       boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >& operand
       BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
     )
 {
-    U* result = get<U>(&operand);
+    typedef typename add_pointer<U>::type U_ptr;
+    U_ptr result = get<U>(&operand);
+
     if (!result)
         throw bad_get();
     return *result;
 }
 
 template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
-inline U& get(
+inline
+    typename add_reference<U>::type
+get(
       const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >& operand
       BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
     )
 {
-    U* result = get<U>(&operand);
+    typedef typename add_pointer<U>::type U_ptr;
+    U_ptr result = get<U>(&operand);
+
     if (!result)
         throw bad_get();
     return *result;
