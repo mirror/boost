@@ -64,8 +64,8 @@ namespace boost { namespace numeric { namespace ublas {
             a.resize (size, preserve);
         }
         /* ISSUE Specialise for std::vector
-         * however compilers without template partial specialization (MSVC-6/7)
-         * also think this is bjam uBLAS_test ambiguous when std::vector is used!
+         * however some (MSVC-6/7) compilers without template partial specialization
+         * also think this is ambiguous when std::vector is used!
          */
         template<class T, class ALLOC>
         BOOST_UBLAS_INLINE
