@@ -17,6 +17,8 @@
 
 #include <boost/range/functions.hpp >
 #include <boost/range/metafunctions.hpp>
+#include <boost/test/unit_test.hpp>
+#include <boost/test/test_tools.hpp>
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -24,7 +26,6 @@
 
 namespace
 {
-    
     //
     // example: extrating bounds in a generic algorithm
     //
@@ -58,12 +59,12 @@ namespace
 }
 
 
-int main()
+void check_algorithm()
 {
     //
     // usage
     //
-    const int N = 5;                     
+    const unsigned N = 5;                     
     std::vector<int> my_vector;
     int values[] = { 1,2,3,4,5,6,7,8,9 };
     my_vector.assign( values, values + 9 );
@@ -73,8 +74,24 @@ int main()
     char  str_val[] = "a string";
     char* str       = str_val;
     
-    std::cout << my_generic_replace( my_vector, 4, 2 )
-              << my_generic_replace( my_view, 4, 2 )
-              << my_generic_replace( str, 'a', 'b' );
-    return 0;
+    BOOST_CHECK_EQUAL( my_generic_replace( my_vector, 4, 2 ), 3u );
+    BOOST_CHECK_EQUAL( my_generic_replace( my_view, 4, 2 ), N );
+    BOOST_CHECK_EQUAL( my_generic_replace( str, 'a', 'b' ), 0u );
+
 }
+
+#include <boost/test/included/unit_test_framework.hpp> 
+
+using boost::unit_test_framework::test_suite;
+
+test_suite* init_unit_test_suite( int argc, char* argv[] )
+{
+    test_suite* test = BOOST_TEST_SUITE( "Range Test Suite" );
+
+    test->add( BOOST_TEST_CASE( &check_algorithm ) );
+
+    return test;
+}
+
+
+

@@ -51,8 +51,6 @@ namespace boost {
         template<typename IteratorT> 
         class iterator_range
         {
-            iterator_range(); // not implemented
-            
         public:
             //! this type
             typedef iterator_range<IteratorT> type;
@@ -185,9 +183,9 @@ namespace boost {
         /*! 
             Compare operands for equality
         */
-        template< class IteratorT > 
+        template< class IteratorT, class IteratorT2 > 
         inline bool operator==( const iterator_range<IteratorT>& l,
-                         const iterator_range<IteratorT>& r )
+                                const iterator_range<IteratorT2>& r )
         {
             return ! (l != r);
         }
@@ -196,9 +194,9 @@ namespace boost {
         /*! 
             Compare operands for non-equality
         */
-        template< class IteratorT > 
+        template< class IteratorT, class IteratorT2 > 
         inline bool operator!=( const iterator_range<IteratorT>& l,
-                         const iterator_range<IteratorT>& r )
+                                const iterator_range<IteratorT2>& r )
         {
             return l.begin() !=  r.begin() || l.end() != r.end();
         }

@@ -29,7 +29,7 @@
         <li>
             Class <a href=#iter_range><code>iterator_range</code></a>
         <li>
-            Class <a href=#sub_range><code>sub_range</code></a> 
+            Class <a href=#sub_range><code>sub_range</code></a>
     </ul>
     </ul>
 
@@ -37,133 +37,157 @@
     Traversal Iterator</a> and should be used whenever fairly general code is needed. 
     The <code>sub_range</code> class is templated on an <a href="range.htm#forward_range">Forward 
     Range</a> and it is less general, but a bit easier to use since its template 
-    argument is easier to specify.
+    argument is easier to specify. The biggest difference is, however, that a 
+    <code>sub_range</code> can propagate constness because it knows what a 
+corresponding <code>const_iterator</code> is. </p>
+    
+    <p>
+    Both classes can be used as ranges since they implement the <a 
+    href="boost_range.html#minimal_interface">minimal interface</a>
+    required for this to work automatically.
     </p>
 
     <hr>
     <a name=iter_range></a> <h1>Class <code>iterator_range</code></h1>
-   <p>
+    <p>
     The intention of the <code>iterator_range</code> class is to encapsulate two 
     iterators so they fulfill the <a
-   href="range.htm#forward_range">Forward Range</a> concept. A few other functions 
-   are also provided for convenience.
-   </p>
-   <p>
-   If the template argument is not a model of Forward Traversal Iterator, one 
-   can still use a subset of the interface. In particular, <code>size()</code>
-   requires Forward Traversal Iterators whereas <code>empty()</code> only 
-requires Single Pass Iterators.
-   </p>
+      href="range.htm#forward_range">Forward Range</a> concept. A few other functions 
+      are also provided for convenience.
+    </p>
+    <p>
+    If the template argument is not a model of Forward Traversal Iterator, one can 
+    still use a subset of the interface. In particular, <code>size()</code> requires 
+    Forward Traversal Iterators whereas <code>empty()</code> only requires Single 
+    Pass Iterators.
+    </p>
 
     <h3>Synopsis</h3>
 
     <pre>
-namespace boost
-{
-    template< class ForwardTraversalIterator >
-    class iterator_range
-    {
-        iterator_range(); // not implemented
-        
-    public: // Forward Range types
-        typedef ...                        value_type;
-        typedef ...                        difference_type;
-        typedef ...                        size_type;
-        typedef ForwardTraversalIterator   iterator;
-        typedef ForwardTraversalIterator   const_iterator;
+<span class=keyword>namespace </span><span class=identifier>boost</span>
+<span class=special>{
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator </span><span class=special>&gt;
+    </span><span class=keyword>class </span><span class=identifier>iterator_range
+    </span><span class=special>{
+    </span><span class=keyword>public</span><span class=special>: </span><span class=comment>// Forward Range types
+        </span><span class=keyword>typedef </span><span class=special>...                        </span><span class=identifier>value_type</span><span class=special>;
+        </span><span class=keyword>typedef </span><span class=special>...                        </span><span class=identifier>difference_type</span><span class=special>;
+        </span><span class=keyword>typedef </span><span class=special>...                        </span><span class=identifier>size_type</span><span class=special>;
+        </span><span class=keyword>typedef </span><span class=identifier>ForwardTraversalIterator   </span><span class=identifier>iterator</span><span class=special>;
+        </span><span class=keyword>typedef </span><span class=identifier>ForwardTraversalIterator   </span><span class=identifier>const_iterator</span><span class=special>;
 
-    public: // construction, assignment
-        template< class ForwardTraversalIterator2 >
-        iterator_range( ForwardTraversalIterator2 Begin, ForwardTraversalIterator2 End );
+    </span><span class=keyword>public</span><span class=special>: </span><span class=comment>// construction, assignment
+        </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator2 </span><span class=special>&gt;
+        </span><span class=identifier>iterator_range</span><span class=special>( </span><span class=identifier>ForwardTraversalIterator2 </span><span class=identifier>Begin</span><span class=special>, </span><span class=identifier>ForwardTraversalIterator2 </span><span class=identifier>End </span><span class=special>);
                     
-        template< class ForwardRange >
-        iterator_range( ForwardRange& r );
+        </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
+        </span><span class=identifier>iterator_range</span><span class=special>( </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
   
-        template< class ForwardRange >
-        iterator_range( const ForwardRange& r );
+        </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
+        </span><span class=identifier>iterator_range</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
         
-        template< class ForwardRange >
-        iterator_range& operator=( ForwardRange& r );
+        </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
+        </span><span class=identifier>iterator_range</span><span class=special>&amp; </span><span class=keyword>operator</span><span class=special>=( </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
 
-        template< class ForwardRange >
-        iterator_range& operator=( const ForwardRange& r );
+        </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
+        </span><span class=identifier>iterator_range</span><span class=special>&amp; </span><span class=keyword>operator</span><span class=special>=( </span><span class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
     
-    public: // Forward Range functions
-        iterator  begin() const;
-        iterator  end() const;
-        size_type size() const;
-        bool      empty() const;
+    </span><span class=keyword>public</span><span class=special>: </span><span class=comment>// Forward Range functions
+        </span><span class=identifier>iterator  </span><span class=identifier>begin</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
+        </span><span class=identifier>iterator  </span><span class=identifier>end</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
+        </span><span class=identifier>size_type </span><span class=identifier>size</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
+        </span><span class=keyword>bool      </span><span class=identifier>empty</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
         
-    public: // convenience
-        operator  unspecified_bool_type() const; 
-    };
+    </span><span class=keyword>public</span><span class=special>: </span><span class=comment>// convenience
+        </span><span class=keyword>operator  </span><a 
+href="#unspecified_bool"><span class=identifier>unspecified_bool_type</span></a><span class=special>() </span><span class=keyword>const</span><span class=special>;
+    </span><span class=special>};
     
-    // stream output
-    template< class ForwardTraversalIterator, class T, class Traits >
-    std::basic_ostream&lt;T,Traits>& operator<<( std::basic_ostream&lt;T,Traits>& Os,
-                                              const iterator_range&lt;ForwardTraversalIterator>& r );
+    </span><span class=comment>// stream output
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>T</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>Traits </span><span class=special>&gt;
+    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>basic_ostream</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>,</span><span class=identifier>Traits</span><span class=special>&gt;&amp; 
+    </span><span class=keyword>operator</span><span class=special>&lt;&lt;( </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>basic_ostream</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>,</span><span class=identifier>Traits</span><span class=special>&gt;&amp; </span><span class=identifier>Os</span><span class=special>,
+               </span><span class=keyword>const </span><span class=identifier>iterator_range</span><span class=special>&lt;</span><span class=identifier>ForwardTraversalIterator</span><span class=special>&gt;&amp; </span><span class=identifier>r </span><span class=special>);
 
-    // comparison
-    template< class ForwardTraversalIterator >
-    bool operator==( const iterator_range&lt;ForwardTraversalIterator>& l, const iterator_range&lt;ForwardTraversalIterator>& r );
+    </span><span class=comment>// comparison
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator2 </span><span class=special>&gt;
+    </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>==( </span><span class=keyword>const </span><span class=identifier>iterator_range</span><span class=special>&lt;</span><span class=identifier>ForwardTraversalIterator</span><span class=special>&gt;&amp; </span><span class=identifier>l</span><span class=special>, 
+                     </span><span class=keyword>const </span><span class=identifier>iterator_range</span><span class=special>&lt;</span><span class=identifier>ForwardTraversalIterator2</span><span class=special>&gt;&amp; </span><span class=identifier>r </span><span class=special>);
     
-    template< class ForwardTraversalIterator >
-    bool operator!=( const iterator_range&lt;ForwardTraversalIterator>& l, const iterator_range&lt;ForwardTraversalIterator>& r );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator2 </span><span class=special>&gt;
+    </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>!=( </span><span class=keyword>const </span><span class=identifier>iterator_range</span><span class=special>&lt;</span><span class=identifier>ForwardTraversalIterator</span><span class=special>&gt;&amp; </span><span class=identifier>l</span><span class=special>, 
+                     </span><span class=keyword>const </span><span class=identifier>iterator_range</span><span class=special>&lt;</span><span class=identifier>ForwardTraversalIterator2</span><span class=special>&gt;&amp; </span><span class=identifier>r </span><span class=special>);
 
-    // external construction
-    template< class ForwardTraversalIterator >
-    iterator_range< ForwardTraversalIterator >
-    make_iterator_range( ForwardTraversalIterator Begin, ForwardTraversalIterator End );
+    </span><span class=comment>// external construction
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator </span><span class=special>&gt;
+    </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=identifier>ForwardTraversalIterator </span><span class=special>&gt;
+    </span><span class=identifier>make_iterator_range</span><span class=special>( </span><span class=identifier>ForwardTraversalIterator </span><span class=identifier>Begin</span><span class=special>, 
+                         </span><span class=identifier>ForwardTraversalIterator </span><span class=identifier>End </span><span class=special>);
        
-    template< class ForwardRange >
-    iterator_range< typename iterator_of&lt;ForwardRange>::type >
-    make_iterator_range( ForwardRange& r );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
+    </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>iterator_of</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;
+    </span><span class=identifier>make_iterator_range</span><span class=special>( </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
 
-    template< class ForwardRange >
-    iterator_range< typename const_iterator_of&lt;ForwardRange>::type >
-    make_iterator_range( const ForwardRange& r );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
+    </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>const_iterator_of</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;
+    </span><span class=identifier>make_iterator_range</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
 
-    // convenience
-    template< class Sequence, class ForwardRange >
-    Sequence copy_range( const ForwardRange& r );
+    </span><span class=comment>// convenience
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>Sequence</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
+    </span><span class=identifier>Sequence </span><a href="#copy_range"><span 
+class=identifier>copy_range</span></a><span class=special>( </span><span 
+class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
 
-    template< class Sequence, class ForwardRange, class Func >
-    Sequence transform_range( const ForwardRange& r, Func func );
-
-} // namespace 'boost'
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>Sequence</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>ForwardRange</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>Func </span><span class=special>&gt;
+    </span><span class=identifier>Sequence </span><a 
+href="#transform_range"><span
+class=identifier>transform_range</span></a><span class=special>( </span><span 
+class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r</span><span class=special>, </span><span class=identifier>Func </span><span class=identifier>func </span><span class=special>);
+</span>
+<span class=special>} </span><span class=comment>// namespace 'boost'</span>
     </pre>
 
 <p>
-It is worth noticing that the templated constructors and assignment operators
-allow conversion from <code>iterator_range&lt;iterator></code> to
-<code>iterator_range&lt;const_iterator></code>. If an instance of
+ If an instance of
 <code>iterator_range</code> is constructed by a client with two iterators, the
 client must ensure that the two iterators delimit a valid closed-open range
 <code>[begin,end)</code>.
  </p>
+
+<p>
+It is worth noticing that the templated constructors and assignment operators
+allow conversion from <code>iterator_range&lt;iterator></code> to
+<code>iterator_range&lt;const_iterator></code>. Similarly, since the comparison
+operators have two template arguments, we can compare ranges whenever the 
+iterators are comparable; for example when we are dealing with const and 
+non-const iterators from the same container. </p>
  
  <h3>Details member functions</h3>
  
-<code>operator  unspecified_bool_type() const; </code> 
+<a name="unspecified_bool"></a> 
+<code>operator  unspecified_bool_type() const; </code>
  <blockquote>
-Returns <code>!empty().</code>     
+Returns <code>!empty().</code>
 
-     <!--
-     <b>Example</b> <code> iterator_range<const char*> r( "a string" ); if( r ) 
-do_something();</code>-->
+     
+        <!--
+        <b>Example</b> <code> iterator_range<const char*> r( "a string" ); if( r ) 
+   do_something();</code>-->
       </blockquote>
      
  <h3>Details functions</h3>
 
+<a name="copy_range"></a> 
 <code>Sequence copy_range( const ForwardRange& r );</code>
 <blockquote>
             Constructs a new sequence of the specified type from the elements
             in the given range.
 </blockquote>
-
+<a name="transform_range"></a>
 <code>Sequence transform_range( const ForwardRange& r, Func func );</code>
 <blockquote>
-            Constructs a new sequence from the elements in the range, 
+            Constructs a new sequence from the elements in the range,
 transformed by a function.
 
 </blockquote>
@@ -175,48 +199,67 @@ The <code>sub_range</code> class inherits all its functionality
 from the <a href="#iter_range"><code>iterator_range</code></a> class.
 The <code>sub_range</code> class is often easier to use because
 one must specify the <a href="range.html#forward_range">Forward Range</a>
-template argument instead of an iterator.
- 
+template argument instead of an iterator. Moreover, the <code>sub_range</code>
+class can propagate constness since it knows what a corresponding 
+<code>const_iterator</code> is.
+
 <h3>Synopsis</h3>
 
 <pre>
-namespace boost
-{
+<span class=keyword>namespace </span><span class=identifier>boost</span>
+<span class=special>{
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
+    </span><span class=keyword>class </span><span class=identifier>sub_range </span><span class=special>: </span><span class=keyword>public </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>result_iterator_of</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;
+    </span><span class=special>{
+    </span><span class=keyword>public</span><span class=special>: </span>
+        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>iterator_of</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span 
+class=special>&gt;::</span><span class=identifier>type       </span><span class=identifier>iterator</span><span class=special>;</span>
+        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>const_iterator_of</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>const_iterator</span><span class=special>;</span>
     
-    template< class ForwardRange >
-    class sub_range : public iterator_range< typename result_iterator_of&lt;ForwardRange>::type >
-    {
-    public: // construction, assignment
-        template< class ForwardTraversalIterator >
-        sub_range( ForwardTraversalIterator Begin, ForwardTraversalIterator End );
+    <span class=keyword>public</span><span class=special>: </span><span class=comment>// construction, assignment
+        </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator </span><span class=special>&gt;
+        </span><span class=identifier>sub_range</span><span class=special>( </span><span class=identifier>ForwardTraversalIterator </span><span class=identifier>Begin</span><span class=special>, </span><span class=identifier>ForwardTraversalIterator </span><span class=identifier>End </span><span class=special>);
 
-        template< class ForwardRange2 >
-        sub_range( ForwardRange2& r );
+        </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange2 </span><span class=special>&gt;
+        </span><span class=identifier>sub_range</span><span class=special>( </span><span class=identifier>ForwardRange2</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
          
-        template< class ForwardRange2 >
-        sub_range( const Range2& r );
+        </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange2 </span><span class=special>&gt;
+        </span><span class=identifier>sub_range</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>Range2</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
          
-        template< class ForwardRange2 >
-        sub_range& operator=( ForwardRange2& r );
+        </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange2 </span><span class=special>&gt;
+        </span><span class=identifier>sub_range</span><span class=special>&amp; </span><span class=keyword>operator</span><span class=special>=( </span><span class=identifier>ForwardRange2</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
 
-        template< class ForwardRange2 >
-        sub_range& operator=( const ForwardRange2& r );
+        </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange2 </span><span class=special>&gt;
+        </span><span class=identifier>sub_range</span><span class=special>&amp; </span><span class=keyword>operator</span><span class=special>=( </span><span class=keyword>const </span><span class=identifier>ForwardRange2</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);    
+    </span>
+    <span class=keyword>public</span><span class=special>:
+        </span><span class=identifier>iterator        </span><span 
+class=identifier>begin</span><span class=special>();
+        </span><span class=identifier>const_iterator  </span><span class=identifier>begin</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
+        </span><span class=identifier>iterator        </span><span class=identifier>end</span><span class=special>();
+        </span><span class=identifier>const_iterator  </span><span class=identifier>end</span><span class=special>() </span><span class=keyword>const</span><span class=special>;</span>    
         
-    public:
-        // rest of interface inherited from iterator_range
-    };
-    
-} // namespace 'boost'
-    </pre>
+    <span class=keyword>public</span><span class=special>:
+        </span><span class=comment>// rest of interface inherited from iterator_range
+    </span><span class=special>};
+    </span>
+<span class=special>} </span><span class=comment>// namespace 'boost'</span>
+</pre>
     
     <p>
-    The class should be trivial to use, an example with strings is shown below.
+    The class should be trivial to use as seen below.
+   Imagine that we have an algorithm that searches for a sub-string in a string.
+    The
+    result is an <code>iterator_range</code>, that delimits the match. We need to
+store the result
+    from this algorithm. Here is an example of how we can do it with and without
+<code>sub_range</code>
     <pre>
-    typedef sub_range<std::string> sub_string;
-    std::string s = "something";
-    sub_string  ss( s ); 
-    sub_string  ss2( begin( s ), begin( s ) + 2 );</pre>
-    
+    <span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>str</span><span class=special>(</span><span class=string>&quot;hello&quot;</span><span class=special>);
+    </span><span class=identifier>iterator_range</span><span class=special>&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>&gt; </span><span class=identifier>ir </span><span class=special>= </span><span class=identifier>find_first</span><span class=special>( </span><span class=identifier>str</span><span class=special>, </span><span class=string>&quot;ll&quot; </span><span class=special>);
+    </span><span class=identifier>sub_range</span><span class=special>&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>&gt;               </span><span class=identifier>sub </span><span class=special>= </span><span class=identifier>find_first</span><span class=special>( </span><span class=identifier>str</span><span class=special>, </span><span class=string>&quot;ll&quot; </span><span class=special>);</span>
+</pre>
+ </p>
 
 <hr>
   <p>
@@ -236,6 +279,7 @@ namespace boost
   <br>
   <br>
   
+    
     </body>
 </html>
 

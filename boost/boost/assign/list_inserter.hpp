@@ -223,19 +223,20 @@ namespace assign
             return *this;
         }
 
-#ifndef BOOST_ASSIGNMENT_MAX_PARAMS // use user's value
-#define BOOST_ASSIGNMENT_MAX_PARAMS 4        
+#ifndef BOOST_ASSIGN_MAX_PARAMS // use user's value
+#define BOOST_ASSIGN_MAX_PARAMS 5        
 #endif
-#define BOOST_ASSIGNMENT_PARAMS1(n) BOOST_PP_ENUM_PARAMS(n, class T)
-#define BOOST_ASSIGNMENT_PARAMS2(n) BOOST_PP_ENUM_BINARY_PARAMS(n, T, t)
-#define BOOST_ASSIGNMENT_PARAMS3(n) BOOST_PP_ENUM_PARAMS(n, t)
+#define BOOST_ASSIGN_MAX_PARAMETERS (BOOST_ASSIGN_MAX_PARAMS - 1)
+#define BOOST_ASSIGN_PARAMS1(n) BOOST_PP_ENUM_PARAMS(n, class T)
+#define BOOST_ASSIGN_PARAMS2(n) BOOST_PP_ENUM_BINARY_PARAMS(n, T, t)
+#define BOOST_ASSIGN_PARAMS3(n) BOOST_PP_ENUM_PARAMS(n, t)
         
-#define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGNMENT_MAX_PARAMS)
+#define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
 #define BOOST_PP_LOCAL_MACRO(n) \
-    template< class T, BOOST_ASSIGNMENT_PARAMS1(n) > \
-    list_inserter& operator()(T t, BOOST_ASSIGNMENT_PARAMS2(n) ) \
+    template< class T, BOOST_ASSIGN_PARAMS1(n) > \
+    list_inserter& operator()(T t, BOOST_ASSIGN_PARAMS2(n) ) \
         { \
-            BOOST_PP_CAT(insert, BOOST_PP_INC(n))(t, BOOST_ASSIGNMENT_PARAMS3(n), arg_type()); \
+            BOOST_PP_CAT(insert, BOOST_PP_INC(n))(t, BOOST_ASSIGN_PARAMS3(n), arg_type()); \
             return *this; \
         } \
         /**/
@@ -243,23 +244,23 @@ namespace assign
 #include BOOST_PP_LOCAL_ITERATE()
         
 
-#define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGNMENT_MAX_PARAMS)
+#define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
 #define BOOST_PP_LOCAL_MACRO(n) \
-    template< class T, BOOST_ASSIGNMENT_PARAMS1(n) > \
-    void BOOST_PP_CAT(insert, BOOST_PP_INC(n))(T t, BOOST_ASSIGNMENT_PARAMS2(n), single_arg_type) \
+    template< class T, BOOST_ASSIGN_PARAMS1(n) > \
+    void BOOST_PP_CAT(insert, BOOST_PP_INC(n))(T t, BOOST_ASSIGN_PARAMS2(n), single_arg_type) \
     { \
-        insert_( Argument(t, BOOST_ASSIGNMENT_PARAMS3(n) )); \
+        insert_( Argument(t, BOOST_ASSIGN_PARAMS3(n) )); \
     } \
     /**/
         
 #include BOOST_PP_LOCAL_ITERATE()
 
-#define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGNMENT_MAX_PARAMS)
+#define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
 #define BOOST_PP_LOCAL_MACRO(n) \
-    template< class T, BOOST_ASSIGNMENT_PARAMS1(n) > \
-    void BOOST_PP_CAT(insert, BOOST_PP_INC(n))(T t, BOOST_ASSIGNMENT_PARAMS2(n), n_arg_type) \
+    template< class T, BOOST_ASSIGN_PARAMS1(n) > \
+    void BOOST_PP_CAT(insert, BOOST_PP_INC(n))(T t, BOOST_ASSIGN_PARAMS2(n), n_arg_type) \
     { \
-        insert_(t, BOOST_ASSIGNMENT_PARAMS3(n) ); \
+        insert_(t, BOOST_ASSIGN_PARAMS3(n) ); \
     } \
     /**/
         
@@ -334,9 +335,9 @@ namespace assign
 } // namespace 'assign'
 } // namespace 'boost'
 
-#undef BOOST_ASSIGNMENT_PARAMS1
-#undef BOOST_ASSIGNMENT_PARAMS2
-#undef BOOST_ASSIGNMENT_PARAMS3
-#undef BOOST_ASSIGNMENT_MAX_PARAMS
+#undef BOOST_ASSIGN_PARAMS1
+#undef BOOST_ASSIGN_PARAMS2
+#undef BOOST_ASSIGN_PARAMS3
+#undef BOOST_ASSIGN_MAX_PARAMETERS
 
 #endif

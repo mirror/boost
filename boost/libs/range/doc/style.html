@@ -56,7 +56,7 @@
             </ul>
     </ul>
     Notice how we have used the categories from the <a href=../../iterator/doc/new-iter-concepts.html>new 
-    style iterators</a>. 
+    style iterators</a>.
 
     <p>
     Notice that an iterator (and therefore an range) has one <i>traversal</i> 
@@ -74,24 +74,35 @@
     </p>
 
     <p>
-    As an example, consider how we specify the interface of <code>std::sort()</code>. 
-    The iterator-based version looks like this:
+    It might, however, be reasonable to specify only one category if the other 
+    category does not matter. For example, the <a
+   href="utility_class.html#iter_range">iterator_range</a> can be constructed from 
+   a Forward Range. This means that we do not care about what <i>value access</i> 
+   properties the Range has. Similarly, a Readable Range will be one that has the 
+   lowest possible <i>traversal</i> property (Single Pass).
+    </p>
+
+    <p>
+    As another example, consider how we specify the interface of <code>std::sort()</code>. 
+    Algorithms are usually more cumbersome to specify the interface of since both <i>traversal</i> 
+    and <i>value access</i> properties must be exactly defined. The iterator-based 
+        version looks like this:
 
     <pre>
-   template< class RandomAccessTraversalReadableWritableIterator >
-   void sort( RandomAccessTraversalReadableWritableIterator first,
-              RandomAccessTraversalReadableWritableIterator last );
+   <span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>RandomAccessTraversalReadableWritableIterator </span><span class=special>&gt;
+   </span><span class=keyword>void </span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>RandomAccessTraversalReadableWritableIterator </span><span class=identifier>first</span><span class=special>,
+              </span><span class=identifier>RandomAccessTraversalReadableWritableIterator </span><span class=identifier>last </span><span class=special>);</span>
    </pre>
     For ranges the interface becomes
 
     <pre>
-   template< class RandomAccessReadableWritableRange >
-   void sort( RandomAccessReadableWritableRange& r );
+   <span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>RandomAccessReadableWritableRange </span><span class=special>&gt;
+   </span><span class=keyword>void </span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>RandomAccessReadableWritableRange</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);</span>
    </pre>
-
+    </p>
+    <p>
 
     </p>
-
 
     <hr>
     <p>

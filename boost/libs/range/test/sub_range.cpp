@@ -60,11 +60,13 @@ void check_iterator_range()
     typedef sub_range<const string> csrange;
     srange s     = r;
     BOOST_CHECK( r == r );
+    BOOST_CHECK( s == r );
     s            = make_iterator_range( str );
     csrange s2   = r;
     s2           = r2;
     s2           = make_iterator_range( cstr );
     BOOST_CHECK( r2 == r2 );
+    BOOST_CHECK( s2 != r2 );
     s2           = make_iterator_range( str );
     BOOST_CHECK( !(s != s) );
     
@@ -88,7 +90,10 @@ void check_iterator_range()
     
     string res  = copy_range<string>( r );
     BOOST_CHECK( equal( res.begin(), res.end(), r.begin() ) );
-   
+    res         = transform_range<string>( r, add_one() );
+    BOOST_CHECK( res[0] == 'i' );
+    BOOST_CHECK( *res.rbegin() == 'e' );
+     
     r.empty();
     s.empty();
     r.size();

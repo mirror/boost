@@ -52,7 +52,7 @@
         <li>Function <a href="#make_list_inserter"><code>make_list_inserter()</code></a></li>
         <li><a href="#limit"> Customizing</a> argument list sizes</li>   
      </ul>
-    <li> <a href="#exceptions">Exceptions and exceptions-safety </a></li>
+    <li> <a href="#exceptions">Exceptions and exception-safety </a></li>
     <li> <a href="#extensions">Extending the library</a>            
     <li> <a href="#examples">Examples</a></li> <ul></ul>
     <li><a href="#portability">Portability</a></li>
@@ -262,7 +262,7 @@ list with <code>list_of()</code> if we add parenthesis around the
  <p>
  Please notice that <code>list_of()</code> can even convert to a 
  <code>boost::<a 
-href="../../array/index.html">array</a>&lt;T,std::size_t></code>.
+href="../../array/index.html">array</a>&lt;T,sz></code>.
  
  <h3>Function <code>map_list_of()</code> <a name="map_list_of"></h3>
  This function is defined for pure convenience when working with
@@ -429,7 +429,7 @@ That is all; now you are ready to use this library.
 object does the insertion or assignment by overloading <code>operator,()</code>
   and <code>operator()()</code> and by calling the "insert" function from within 
   those operators. The "insert" function is typically stored in the proxy object 
-  by using <code>boost::<a href="../../function/index.html">function<></a></code>. </p>
+  by using <code>boost::<a href="../../function/index.html">function</a></code>. </p>
   
   <p>
   Often overloading
@@ -452,7 +452,7 @@ object does the insertion or assignment by overloading <code>operator,()</code>
   All forwarding is done by passing objects by value. Originally
   <code>const</code> references was used, but it lead to many problems
   with string-literals. One thing to remember is that references 
-  can be passed by using <code>boost::<a href=../../utility/index.html>ref<></a></code>.
+  can be passed by using <code>boost::<a href=../../utility/index.html>ref</a></code>.
   </p>
   
   <p>
@@ -481,11 +481,12 @@ object does the insertion or assignment by overloading <code>operator,()</code>
          <td>     everything  </td>
      <tr>
          <td> &lt;boost/assign/list_of.hpp>       </td>
-         <td> <code>list_of(), map_list_of()</code> </td>
-    <tr>
+         <td> <a href="#list_of"><code>list_of()</a>, <a 
+href="#map_list_of">map_list_of()</code></a> </td> <tr>
          <td> &lt;boost/assign/std.hpp>       </td>
-         <td> <code>operator+=()</code> for all standard containers (see 
-below)</td> <tr> <td>  &lt;boost/assign/std/deque.hpp> </td>
+         <td> <a href="#operator+="><code>operator+=()</code></a> for all 
+standard
+containers (see below)</td> <tr> <td>  &lt;boost/assign/std/deque.hpp> </td>
         <td>  <code>operator+=()</code> for 
               <code>std::deque</code>, <code>&lt;deque></code> 
     <tr> 
@@ -518,15 +519,18 @@ below)</td> <tr> <td>  &lt;boost/assign/std/deque.hpp> </td>
               <code>std::vector</code>, <code>&lt;vector></code>  
     <tr> 
         <td>  &lt;boost/assign/assignment_exception.hpp> </td>
-        <td>  Class <code>assignment_exception</code> which might be thrown by
-              the proxy returned by <code>list_of()</code>
+        <td>  Class <a 
+href="#assignment_exception"><code>assignment_exception</code></a> which might 
+be thrown by the proxy returned by <code>list_of()</code>
     <tr> 
         <td>  &lt;boost/assign/list_inserter.hpp> </td>
-        <td>  Functions <code>make_list_inserter()</code>, 
-<code>push_back()</code>,<code>push_front()</code>,<code>insert()</code>,<code>
-        push()</code> and 
-class <code>list_inserter</code> which is the back-bone of this entire library.
-    
+            <td>Functions <a
+               href="#make_list_inserter"><code>make_list_inserter()</code></a>, <code>push_back()</code>,
+                <code>push_front()</code>,<code>insert()</code>,
+                <code>
+                push()</code> and class <a href="#list_inserter"><code>list_inserter</code></a> 
+                which is the back-bone of this entire library.
+
     </table>
   
   <h3>Standard containers <a name="std"> </h3>
@@ -590,7 +594,8 @@ class <code>list_inserter</code> which is the back-bone of this entire library.
     <p>  
   These two functions are used to construct anonymous    
   list which can be converted to any standard container
-  and <code>boost::<a href=../../array/index.html>array&ltT,sz></a>.</code> The object returned by the two
+  and <code>boost::<a href=../../array/index.html>array</a>&ltT,sz>.</code> 
+The object returned by the two
   functions is guaranteed to have the interface described below. 
   </p>
   <b>Synopsis</b>
@@ -673,7 +678,7 @@ class <code>list_inserter</code> which is the back-bone of this entire library.
      <code>repeat_fun()</code> <a name="#repeat_ref"> </h3>
   <p>
       These two function exist both as free-standing functions and as member functions of the object returned by 
-      <code>list_of()</code> and of <code>list_inserter<></code>. The free-standing versions are used to create a
+      <code>list_of()</code> and of <code>list_inserter</code>. The free-standing versions are used to create a
       hook for <code>operator,()</code> so we can call the functions in the middle of a comma-list. The member functions
       are used when we need to call the functions in the middle of a parenthesis-list. In both cases we have that
       <ul>
@@ -684,7 +689,7 @@ class <code>list_inserter</code> which is the back-bone of this entire library.
       
   </p>
       
-  <h3><a name="list_inserter">Class <code>list_inserter<></code></a></h3> 
+  <h3><a name="list_inserter">Class <code>list_inserter</code></a></h3> 
   
   This class is responsible for inserting elements into containers and 
   it is the key to extending the library to support your favourite class.
@@ -791,6 +796,20 @@ class=keyword>class </span><span class=identifier>C </span><span class=special>&
 <span class=special>}</span>
 <span class=special>}  </span>  </pre></blockquote>
 
+   <a name="limit"></a>   
+   <h3>Customizing argument list sizes</h3>   
+      <p>
+    This library uses the boost Preprocessor Library to implement overloaded 
+    versions of <code>operator()()</code> and <code>list_of()</code>. By default you 
+    can call these functions with five arguments, but you can also customize this 
+    number by defining a macros before including a header from this library:
+       <blockquote>
+       <pre>
+<span class=preprocessor>#define </span><span class=identifier>BOOST_ASSIGN_MAX_PARAMS </span><span class=number>10
+</span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+</pre>
+       </blockquote>      
+       </p>
   <hr>    
   <h2><a name="exceptions">Exceptions and exception-safety</a></h2>
   <p>

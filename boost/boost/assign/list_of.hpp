@@ -122,19 +122,20 @@ namespace assign_detail
         }
         
        
-#ifndef BOOST_ASSIGNMENT_MAX_PARAMS // use user's value
-#define BOOST_ASSIGNMENT_MAX_PARAMS 4
+#ifndef BOOST_ASSIGN_MAX_PARAMS // use user's value
+#define BOOST_ASSIGN_MAX_PARAMS 5
 #endif        
-#define BOOST_ASSIGNMENT_PARAMS1(n) BOOST_PP_ENUM_PARAMS(n, class U)
-#define BOOST_ASSIGNMENT_PARAMS2(n) BOOST_PP_ENUM_BINARY_PARAMS(n, U, u)
-#define BOOST_ASSIGNMENT_PARAMS3(n) BOOST_PP_ENUM_PARAMS(n, u)
+#define BOOST_ASSIGN_MAX_PARAMETERS (BOOST_ASSIGN_MAX_PARAMS - 1) 
+#define BOOST_ASSIGN_PARAMS1(n) BOOST_PP_ENUM_PARAMS(n, class U)
+#define BOOST_ASSIGN_PARAMS2(n) BOOST_PP_ENUM_BINARY_PARAMS(n, U, u)
+#define BOOST_ASSIGN_PARAMS3(n) BOOST_PP_ENUM_PARAMS(n, u)
 
-#define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGNMENT_MAX_PARAMS)
+#define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
 #define BOOST_PP_LOCAL_MACRO(n) \
-    template< class U, BOOST_ASSIGNMENT_PARAMS1(n) > \
-    generic_list& operator()(U u, BOOST_ASSIGNMENT_PARAMS2(n) ) \
+    template< class U, BOOST_ASSIGN_PARAMS1(n) > \
+    generic_list& operator()(U u, BOOST_ASSIGN_PARAMS2(n) ) \
     { \
-        this->push_back(T(u, BOOST_ASSIGNMENT_PARAMS3(n))); \
+        this->push_back(T(u, BOOST_ASSIGN_PARAMS3(n))); \
         return *this; \
     } \
     /**/
@@ -294,13 +295,13 @@ namespace assign
     }
     
     
-#define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGNMENT_MAX_PARAMS)
+#define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
 #define BOOST_PP_LOCAL_MACRO(n) \
-    template< class T, class U, BOOST_ASSIGNMENT_PARAMS1(n) > \
+    template< class T, class U, BOOST_ASSIGN_PARAMS1(n) > \
     inline assign_detail::generic_list<T> \
-    list_of(U u, BOOST_ASSIGNMENT_PARAMS2(n) ) \
+    list_of(U u, BOOST_ASSIGN_PARAMS2(n) ) \
     { \
-        return assign_detail::generic_list<T>()(u, BOOST_ASSIGNMENT_PARAMS3(n)); \
+        return assign_detail::generic_list<T>()(u, BOOST_ASSIGN_PARAMS3(n)); \
     } \
     /**/
     
@@ -319,10 +320,11 @@ namespace assign
 } // namespace 'boost'
 
 
-#undef BOOST_ASSIGNMENT_MAX_PARAMS         
-#undef BOOST_ASSIGNMENT_PARAMS1
-#undef BOOST_ASSIGNMENT_PARAMS2
-#undef BOOST_ASSIGNMENT_PARAMS3
+#undef BOOST_ASSIGN_MAX_PARAMS         
+#undef BOOST_ASSIGN_MAX_PARAMETERS         
+#undef BOOST_ASSIGN_PARAMS1
+#undef BOOST_ASSIGN_PARAMS2
+#undef BOOST_ASSIGN_PARAMS3
 
 
 #endif

@@ -29,6 +29,9 @@
         When it is possible to come up with one, the client might choose to construct a <code  >std::pair&lt;const_iterator,const_iterator&gt;</code> 
         object.
         </p>
+        <p>
+        Note that an <a href="utility_class.html#iter_range">iterator_range</a> 
+is somewhat more convenient than a <code>pair</code>. </p>
         <li  >
             <i>Why is there not supplied more types or more functions?</i>
             <p  >
@@ -58,11 +61,13 @@
         </li>   
         <li>
             <i>Should I use qualified syntax, for example
-<blockquote><pre>boost::begin( r ); </pre></blockquote>
+<blockquote><pre>
+<span class=identifier>boost</span><span class=special>::</span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>r </span><span class=special>); </span>
+</pre></blockquote>
             instead of 
             <blockquote>
-<pre>using namespace boost;
-begin( r )</pre></blockquote>
+<pre><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>;</span>
+<span class=identifier>begin</span><span class=special>( </span><span class=identifier>r </span><span class=special>)</span></pre></blockquote>
             when calling functions in this library? If so, can I still rely on argument 
             dependent lookup (ADL) to kick in?</i>
             <p>
@@ -73,27 +78,30 @@ begin( r )</pre></blockquote>
             Daniel Frey on comp.lang.std.c++ in the thread "Whence Swap" and 
             it is best explained by some code: <blockquote>
     <pre>
-namespace boost
-{
-    namespace range_detail                
-    {
-        template< class T >            
-        typename iterator_of&lt;T>:type begin( T& r )
-        { /* normal implementation */ }
-    }   
+<span class=keyword>namespace </span><span class=identifier>boost</span>
+<span class=special>{
+    </span><span class=keyword>namespace </span><span class=identifier>range_detail                
+    </span><span class=special>{
+        </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;            
+        </span><span class=keyword>typename </span><span class=identifier>iterator_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;:</span><span class=identifier>type </span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>)
+        </span><span class=special>{ </span><span class=comment>/* normal implementation */ </span><span class=special>}
+    </span><span class=special>}   
                 
-    template< class T >                
-    typename iterator_of&lt;T>::type begin( T& r )
-    {
-        //        
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;                
+    </span><span class=keyword>typename </span><span class=identifier>iterator_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>)
+    </span><span class=special>{
+        </span><span class=comment>//        
         // Create ADL hook
         //        
-        using range_detail::begin;                    
-        return begin( r );                
-    }
-}    </pre>
+        </span><span class=keyword>using </span><span class=identifier>range_detail</span><span class=special>::</span><span class=identifier>begin</span><span class=special>;                    
+        </span><span class=keyword>return </span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>r </span><span class=special>);                
+    </span><span class=special>}</span>
+<span class=special>}    </span>                
+</pre>
 </blockquote>            
+Cool indeed!            
 </p>
+            
 
     </ol>
 

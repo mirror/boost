@@ -27,6 +27,8 @@
         <li  >
             <a href="#Semantics" >Semantics</a>
         </li>
+        <li>
+            <a href="#minimal_interface">Extending the library</a>
     </ul>
     <hr size="1" >
 
@@ -35,7 +37,7 @@
     Four types of objects are currently supported by the library:
     <ul  >
         <li  >
-            standard containers
+            standard-like containers
         </li>
         <li  >
             <code  >std::pair&lt;iterator,iterator&gt;</code>
@@ -48,126 +50,139 @@
             built-in arrays
         </li>
     </ul>
-    
-    Even though the behavior of the primary templates are exactly such 
-    that standard containers will be supported by default, the requirements
-    are much lower than the standard container requirements. For example, 
-    the utility class <a href="utility_class#iterator_range"><code>iterator_range</code></a> implements the minimal interface required to make the class
-    a <a href="range.htm#forward_range">Forward Range</a>.
+
+    Even though the behavior of the primary templates are exactly such that standard 
+    containers will be supported by default, the requirements are much lower than 
+    the standard container requirements. For example, the utility class <a
+      href="utility_class.html#iter_range"><code>iterator_range</code></a> implements 
+      the <a href="#minimal_interface">minimal interface</a> required to make the 
+      class a <a href="range.htm#forward_range">Forward Range</a>.
     </p>
-    
+
     <p>
-    Please also see <a href="range.htm">Range concepts</a> for more details. 
+    Please also see <a href="range.htm">Range concepts</a> for more details.
     </p>
-    
-    <a name="Synopsis" ></a>
-    <h3  >Synopsis</h3>
+
+    <a name="Synopsis" ></a> <h3  >Synopsis</h3>
 
     <p  >
 
     <pre>
-namespace boost
-{
-    //
+<span class=keyword>namespace </span><span class=identifier>boost</span>
+<span class=special>{
+    </span><span class=comment>//
     // Single Pass Range metafunctions
     //
     
-    template< class T >
-    struct <a href="#value_type_of" >value_type_of</a>;
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>struct </span><a href="#value_type_of"><span 
+class=identifier>value_type_of</span></a><span class=special>;
                  
-    template< class T >
-    struct <a href="#iterator_of" >iterator_of</a>;
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>struct </span><a href="#iterator_of"><span 
+class=identifier>iterator_of</span></a><span class=special>;
     
-    template< class T >
-    struct <a href="#const_iterator_of" >const_iterator_of</a>;
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>struct </span><a href="#const_iterator_of"><span 
+class=identifier>const_iterator_of</span></a><span class=special>;
     
-    //
+    </span><span class=comment>//
     // Forward Range metafunctions
     //
     
-    template< class T >
-    struct <a href="#difference_type_of" >difference_type_of</a>;
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>struct </span><a href="#difference_type_of"><span 
+class=identifier>difference_type_of</span></a><span class=special>;
     
-    template< class T >
-    struct <a href="#size_type_of" >size_type_of</a>;
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>struct </span><a href="#size_type_of"><span 
+class=identifier>size_type_of</span></a><span class=special>;
     
-    //
+    </span><span class=comment>//
     // Bidirectional Range metafunctions
     //
     
-    template< class T >
-    struct <a href="#reverse_iterator_of" >reverse_iterator_of</a>;
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>struct </span><a 
+href="#reverse_iterator_of"><span
+class=identifier>reverse_iterator_of</span></a><span class=special>;
 
-    template< class T >
-    struct <a href="#const_reverse_iterator_of" >const_reverse_iterator_of</a>;
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>struct </span><a 
+href="#const_reverse_iterator_of"><span
+class=identifier>const_reverse_iterator_of</span></a><span class=special>;
     
-    //
+    </span><span class=comment>//
     // Special metafunctions
     //
     
-    template< class T >
-    struct <a href="#result_iterator_of" >result_iterator_of</a>;
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>struct </span><a href="#result_iterator_of"><span 
+class=identifier>result_iterator_of</span></a><span class=special>;
                  
-    template< class T >
-    struct <a href="#reverse_result_iterator_of" >reverse_result_iterator_of</a>;
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>struct </span><a 
+href="#reverse_result_iterator_of"><span
+class=identifier>reverse_result_iterator_of</span></a><span class=special>;
 
-    //
+    </span><span class=comment>//
     // Single Pass Range functions
     //
     
-    template< class T >
-    inline typename iterator_of&lt;T>::type
-    <a href="#begin" >begin</a>( T& c );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword></span><span class=keyword>typename </span><span class=identifier>iterator_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type
+    </span><a href="#begin"><span class=identifier>begin</span></a><span class=special>( </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>c </span><span class=special>);
     
-    template< class T >
-    inline typename const_iterator_of&lt;T>::type
-    <a href="#begin" >begin</a>( const T& c );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword></span><span class=keyword>typename </span><span class=identifier>const_iterator_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type
+    </span><a href="#begin"><span class=identifier>begin</span></a><span class=special>( </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>c </span><span class=special>);
         
-    template< class T >
-    inline typename iterator_of&lt;T>::type
-    <a href="#end" >end</a>( T& c );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword></span><span class=keyword>typename </span><span class=identifier>iterator_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type
+    </span><a href="#end"><span class=identifier>end</span></a><span class=special>( </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>c </span><span class=special>);
                       
-    template< class T >
-    inline typename const_iterator_of&lt;T>::type
-    <a href="#end" >end</a>( const T& c );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword></span><span class=keyword>typename </span><span class=identifier>const_iterator_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type
+    </span><a href="#end"><span class=identifier>end</span></a><span class=special>( </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>c </span><span class=special>);
     
-    template< class T >
-    inline bool
-    <a href="#empty" >empty</a>( const T& c );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword></span><span class=keyword>bool
+    </span><a href="#empty"><span class=identifier>empty</span></a><span class=special>( </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>c </span><span class=special>);
                
-    //
+    </span><span class=comment>//
     // Forward Range functions
     //
     
-    template< class T >
-    inline typename size_type_of&lt;T>::type
-    <a href="#size" >size</a>( const T& c );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword></span><span class=keyword>typename </span><span class=identifier>size_type_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type
+    </span><a href="#size"><span class=identifier>size</span></a><span class=special>( </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>c </span><span class=special>);
                             
-    //
+    </span><span class=comment>//
     // Bidirectional Range functions
     //
                      
-    template< class T >
-    inline typename reverse_iterator_of&lt;T>::type
-    <a href="#rbegin" >rbegin</a>( T& c );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword></span><span class=keyword>typename </span><span class=identifier>reverse_iterator_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type
+    </span><a href="#rbegin"><span class=identifier>rbegin</span></a><span class=special>( </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>c </span><span class=special>);
     
-    template< class T >
-    inline typename const_reverse_iterator_of&lt;T>::type
-    <a href="#rbegin" >rbegin</a>( const T& c );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword></span><span class=keyword>typename </span><span class=identifier>const_reverse_iterator_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type
+    </span><a href="#rbegin"><span class=identifier>rbegin</span></a><span class=special>( </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>c </span><span class=special>);
         
-    template< class T >
-    inline typename reverse_iterator_of&lt;T>::type
-    <a href="#rend" >rend</a>( T& c );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword></span><span class=keyword>typename </span><span class=identifier>reverse_iterator_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type
+    </span><a href="#rend"><span class=identifier>rend</span></a><span class=special>( </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>c </span><span class=special>);
                       
-    template< class T >
-    inline typename const_reverse_iterator_of&lt;T>::type
-    <a href="#rend" >rend</a>( const T& c );
-    
-} // namespace 'boost' </pre>
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword></span><span class=keyword>typename </span><span class=identifier>const_reverse_iterator_of</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type
+    </span><a href="#rend"><span class=identifier>rend</span></a><span class=special>( </span><span class=keyword>const </span><span 
+class=identifier>T</span><span class=special>&amp; </span><span class=identifier>c </span><span class=special>);
+    </span>
+<span class=special>} </span><span class=comment>// namespace 'boost' 
+</span></pre>
     </p>
 
-<a name="Semantics" ></a>
-    <h3  >Semantics</h3>
+    <a name="Semantics" ></a> <h3  >Semantics</h3>
 
     <h4>notation</h4>
     <p>
@@ -179,7 +194,7 @@ namespace boost
         </tr>
         <tr>
             <td><code>X</code>
-            <td> <code>x</code> 
+            <td><code>x</code>
             <td>any type
         </tr>
         <tr>
@@ -206,10 +221,9 @@ namespace boost
     </p>
 
     <p>
-    Please notice in tables below that when four lines appear in a  
-    cell, the first line will describe the primary template, the second
-    line pairs of iterators, the third line arrays and the last line
-    null-terminated strings.
+    Please notice in tables below that when four lines appear in a cell, the first 
+    line will describe the primary template, the second line pairs of iterators, the 
+    third line arrays and the last line null-terminated strings.
     </p>
     <h4>Metafunctions</h4>
     <p>
@@ -232,16 +246,16 @@ namespace boost
             <a name="iterator_of" ></a>
             <td  ><code  >iterator_of&lt;X&gt;::type</code></td>
             <td  ><code  >T::iterator</code><br>
-                  <code  >P::first_type</code><br>
-                  <code  >A*</code><br>
-                  <code>Char*</code> 
+                <code  >P::first_type</code><br>
+                <code  >A*</code><br>
+                <code>Char*</code>
             <td  >compile time</td>
         </tr>
         <tr  >
             <a name="const_iterator_of" ></a>
             <td  ><code  >const_iterator_of&lt;X&gt;::type</code></td>
             <td  ><code  >T::const_iterator</code><br>
-                  <code  >P::first_type</code><br>
+                <code  >P::first_type</code><br>
                 <code  >const A*</code><br>
                 <code>const Char*</code>
             <td  >compile time</td>
@@ -250,10 +264,10 @@ namespace boost
             <a name="difference_type_of" ></a>
             <td  ><code  >difference_type_of&lt;X&gt;::type</code></td>
             <td  ><code  >T::difference_type</code><br>
-                  <code  
+                <code
 >boost_iterator_difference&lt;P::first_type&gt;::type</code><br>
-                 <code  >std::ptrdiff_t</code><br>
-                 <code  >std::ptrdiff_t</code><br>
+                <code  >std::ptrdiff_t</code><br>
+                <code  >std::ptrdiff_t</code><br>
             <td  >compile time</td>
         </tr>
         <tr  >
@@ -268,8 +282,8 @@ namespace boost
         <tr  >
             <a name="result_iterator_of" ></a>
             <td  ><code  >result_iterator_of&lt;X&gt;::type</code></td>
-            <td  ><code  >const_iterator_of&lt;X&gt;::type</code> if <code  
->X</code> is <code  >const</code> <br>
+            <td  ><code  >const_iterator_of&lt;X&gt;::type</code> if <code
+                              >X</code> is <code  >const</code> <br>
                 <code  >iterator_of&lt;X&gt;::type</code> otherwise </td>
             <td  >compile time</td>
         </tr>
@@ -289,7 +303,8 @@ namespace boost
         <tr  >
             <a name="reverse_result_iterator_of" ></a>
             <td  ><code  >reverse_result_iterator_of&lt;X&gt;::type</code></td>
-            <td  ><code  >boost::reverse_iterator< typename result_iterator_of&lt;T&gt;::type ></code>
+            <td  ><code  >boost::reverse_iterator< typename result_iterator_of&lt;T&gt;::type 
+            ></code>
             <td  >compile time</td>
         </tr>
 
@@ -297,12 +312,11 @@ namespace boost
     </table>
     </p>
     <p>
-    The special metafunctions <code>result_iterator_of</code> and
-     <code>reverse_result_iterator_of</code> are not part 
-of any Range concept, but they are very useful when implementing certain
-    Range classes like <a 
-href="utility_class.html#sub_range"><code>sub_range</code></a> because of 
-their ability to select iterators based on constness.
+    The special metafunctions <code>result_iterator_of</code> and <code>reverse_result_iterator_of</code> 
+    are not part of any Range concept, but they are very useful when implementing 
+    certain Range classes like <a
+      href="utility_class.html#sub_range"><code>sub_range</code></a> because of their 
+      ability to select iterators based on constness.
     </p>
 
     <h4>Functions</h4>
@@ -319,7 +333,7 @@ their ability to select iterators based on constness.
             <td  ><code  >begin(x)</code></td>
             <td  ><code  >result_iterator_of&lt;X&gt;::type</code></td>
             <td  ><code  >t.begin()</code><br>
-                  <code  >p.first</code><br>
+                <code  >p.first</code><br>
                 <code  >a</code><br>
                 <code>s</code>
             <td  >constant time</td>
@@ -329,13 +343,13 @@ their ability to select iterators based on constness.
             <td  ><code  >end(x)</code></td>
             <td  ><code  >result_iterator_of&lt;X&gt;::type</code></td>
             <td  ><code  >t.end()</code><br>
-                  <code  >p.second</code><br>
-                  <code  >a + sz</code> <br>
-                <code  >s + std::char_traits&lt;X&gt;::length( s )</code> if 
-<code  >X</code> is <code  >Char*</code><br>
+                <code  >p.second</code><br>
+                <code  >a + sz</code> <br>
+                <code  >s + std::char_traits&lt;X&gt;::length( s )</code> if <code  >X</code> is <code  >Char*</code>
+                <br>
                 <code  >s + sz - 1</code> if <code  >X</code> is <code  >Char[sz]</code> <br>
 
-               
+
             <td  >linear if <code  >X</code> is <code  >Char*</code> <br>
                 constant time otherwise</td>
         </tr>
@@ -353,9 +367,9 @@ their ability to select iterators based on constness.
             <td  ><code  >size(x)</code></td>
             <td  ><code  >size_type_of&lt;X&gt;::type</code></td>
             <td  ><code  >t.size()</code><br>
-                  <code>std::distance(p.first,p.second)</code><br>
-                  <code  >sz</code><br>
-                  <code>end(s) - s</code>
+                <code>std::distance(p.first,p.second)</code><br>
+                <code  >sz</code><br>
+                <code>end(s) - s</code>
 
             <td  >linear if <code  >X</code> is <code  >Char*</code> <br>
                 or if <code  >std::distance()</code> is linear <br>
@@ -365,22 +379,91 @@ their ability to select iterators based on constness.
             <a name="rbegin" ></a>
             <td  ><code  >rbegin(x)</code></td>
             <td  ><code  >reverse_result_iterator_of&lt;X&gt;::type</code></td>
-            <td  ><code  >reverse_result_iterator_of&lt;X&gt;::type( end(x) 
-)</code> <br> <td  >same as <code>end(x)</code> </td>
+            <td  ><code  >reverse_result_iterator_of&lt;X&gt;::type( end(x) )</code> <br>
+            <td  >same as <code>end(x)</code> </td>
         </tr>
         <tr  >
             <a name="rend" ></a>
             <td  ><code  >rend(x)</code></td>
             <td  ><code  >reverse_result_iterator_of&lt;X&gt;::type</code></td>
-            <td  ><code  >reverse_result_iterator_of&lt;X&gt;::type( begin(x) 
-)</code> <td  >same as <code>begin(x)</code></td>
+            <td  ><code  >reverse_result_iterator_of&lt;X&gt;::type( begin(x) )</code>
+            <td  >same as <code>begin(x)</code></td>
         </tr>
 
     </table>
     </p>
 
-
     <hr>
+    <a name=minimal_interface></a> <h3>Extending the library</h3>
+    <p>
+    The primary templates in this library are implemented such that standard 
+    containers will work automatically and so will <code>boost::<a
+        href=../../array/index.html>array</a></code>. Below is given an overview of 
+        which member functions and member types a class must specify to 
+be useable as a certain Range concept.
+    </p>
+    <p>
+    <table cellpadding="5" border="1">
+        <tr>
+            <th>Member function</th>
+            <th>Related concept</th>
+        <tr>
+            <td><code>begin()</code></td>
+            <td><a href="range.htm#single_pass_range">Single Pass Range</a></td>
+        </tr>
+        <tr>
+            <td><code>end()</code> </td>
+            <td><a href="range.htm#single_pass_range">Single Pass Range</a></td>
+        </tr>
+        <tr>
+            <td><code>size()</code></td>
+            <td><a href="range.htm#forward_range">Forward Range</a></td>
+        </tr>
+
+    </table>
+    </p>
+    <p>
+    Notice that <code>rbegin()</code> and <code>rend()</code> member functions 
+    are not needed even though the container can support bidirectional iteration.
+    </p>
+    <p>
+    The required member types are:
+    </p>
+    <p>
+    <table cellpadding="5" border="1">
+        <tr>
+            <th>Member type</th>
+            <th>Related concept</th>
+        <tr>
+        <tr>
+            <td><code>value_type</code></td>
+            <td><a href="range.htm#single_pass_range">Single Pass Range</a></td>
+        </tr>
+        <tr>
+            <td><code>iterator</code></td>
+            <td><a href="range.htm#single_pass_range">Single Pass Range</a></td>
+        </tr>
+        <tr>
+            <td><code>const_iterator</code></td>
+            <td><a href="range.htm#single_pass_range">Single Pass Range</a></td>
+        </tr>
+        <tr>
+            <td><code>difference_type</code></td>
+            <td><a href="range.htm#forward_range">Forward Range</a></td>
+        </tr>
+        <tr>
+            <td><code>size_type</code></td>
+            <td><a href="range.htm#forward_range">Forward Range</a></td>
+        </tr>
+        
+    </table>        
+        </p>
+        <p>
+    Again one should notice that member types <code>reverse_iterator</code> and
+    <code>const_reverse_iterator</code> are not needed.
+</p>
+ 
+ <hr>
     <p>
     (C) Copyright Thorsten Ottosen 2003-2004
     </p>

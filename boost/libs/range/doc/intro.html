@@ -18,16 +18,24 @@
 
     <h2>Introduction</h2>
     <p>
-    When writing generic code that works with Standard Library containers, one often 
-    finds it desirable to extend that code to work with other types that offer 
+    When writing generic code that works with standard library containers, one 
+often finds it desirable to extend that code to work with other types that offer 
     enough functionality to satisfy the needs of the generic code, but in an altered 
     form.  For example, raw arrays are often suitable for use with generic code that 
     works with containers, provided a suitable adapter is used. Likewise, null 
     terminated strings can be treated as containers of characters, if suitably 
-    adapted.  This library provides the means to adapt Standard Library containers, 
+    adapted. 
+    </p> 
+    
+    <p>
+     This library provides the means to adapt standard library 
+     containers,
     null terminated strings, <code>std::pairs</code> of iterators, and raw 
-arrays, such that the same generic code can work with them all.
-    </p>
+    arrays (and more), such that the same generic code can work with them all. 
+The basic idea is to add another layer of indirection using <a 
+href="../../mpl/doc/index.html#metafunctions">metafunctions</a> and 
+free-standing functions so syntactic and/or semantic differences can be removed. 
+</p>
 
     <!--    <p>
     This library makes it possible to treat different types as if they have 
@@ -62,59 +70,67 @@ arrays?) </li>
     ):
     <blockquote>
         <pre  >
+<span class=comment>
     //
     // example: extracting bounds in a generic algorithm
     //
-    template< typename ForwardRange, typename T >
-    inline typename boost::iterator_of< ForwardRange >::type
-    find( ForwardRange& c, const T& value )
-    {
-       return std::find( boost::begin( c ), boost::end( c ), value );
-    }
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardReadableRange</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>inline </span><span class=keyword>typename </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>iterator_of</span><span class=special>&lt; </span><span class=identifier>ForwardReadableRange </span><span class=special>&gt;::</span><span class=identifier>type
+    </span><span class=identifier>find</span><span class=special>( </span><span class=identifier>ForwardReadableRange</span><span class=special>&amp; </span><span class=identifier>c</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>value </span><span class=special>)
+    </span><span class=special>{
+       </span><span class=keyword>return </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>find</span><span class=special>( </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>c </span><span class=special>), </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>end</span><span class=special>( </span><span class=identifier>c </span><span class=special>), </span><span class=identifier>value </span><span class=special>);
+    </span><span class=special>}
     
-    template< typename ForwardRange, typename T >
-    inline typename boost::const_iterator_of< ForwardRange >::type
-    find( const ForwardRange& c, const T& value )
-    {
-       return std::find( boost::begin( c ), boost::end( c ), value );
-    }
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardReadableRange</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>inline </span><span class=keyword>typename </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>const_iterator_of</span><span class=special>&lt; </span><span class=identifier>ForwardReadableRange </span><span class=special>&gt;::</span><span class=identifier>type
+    </span><span class=identifier>find</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>ForwardReadableRange</span><span class=special>&amp; </span><span class=identifier>c</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>value </span><span class=special>)
+    </span><span class=special>{
+       </span><span class=keyword>return </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>find</span><span class=special>( </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>c </span><span class=special>), </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>end</span><span class=special>( </span><span class=identifier>c </span><span class=special>), </span><span class=identifier>value </span><span class=special>);
+    </span><span class=special>}
                    
-    //
+    </span><span class=comment>//
     // replace first value and return its index
     //
-    template< class ForwardRange, class T >
-    inline typename boost::size_type_of< ForwardRange >::type
-    my_generic_replace( ForwardRange& c, const T& value, const T& replacement )
-    {
-       typename boost::iterator_of< ForwardRange >::type found = find( c, value );
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardReadableWriteableRange</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>inline </span><span class=keyword>typename </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>size_type_of</span><span class=special>&lt; </span><span class=identifier>ForwardReadableWriteableRange </span><span class=special>&gt;::</span><span class=identifier>type
+    </span><span class=identifier>my_generic_replace</span><span class=special>( </span><span class=identifier>ForwardReadableWriteableRange</span><span class=special>&amp; </span><span class=identifier>c</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>value</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>replacement </span><span class=special>)
+    </span><span class=special>{
+       </span><span class=keyword>typename </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>iterator_of</span><span class=special>&lt; </span><span class=identifier>ForwardReadableWriteableRange </span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>found </span><span class=special>= </span><span class=identifier>find</span><span class=special>( </span><span class=identifier>c</span><span class=special>, </span><span class=identifier>value </span><span class=special>);
        
-       if( found != boost::end( c ) )
-           *found = replacement;
-       return std::distance( boost::begin( c ), found );
-    }
+       </span><span class=keyword>if</span><span class=special>( </span><span class=identifier>found </span><span class=special>!= </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>end</span><span class=special>( </span><span class=identifier>c </span><span class=special>) </span><span class=special>)
+           </span><span class=special>*</span><span class=identifier>found </span><span class=special>= </span><span class=identifier>replacement</span><span class=special>;
+       </span><span class=keyword>return </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>distance</span><span class=special>( </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>c </span><span class=special>), </span><span class=identifier>found </span><span class=special>);
+    </span><span class=special>}
 
-    //
+    </span><span class=comment>//
     // usage
     //
-    const int N = 5;
-    std::vector<int> my_vector;
-    int values[] = { 1,2,3,4,5,6,7,8,9 };
-    my_vector.assign( values, values + 9 );
-    typedef std::vector<int>::iterator iterator;
-    std::pair<iterator,iterator>       my_view( boost::begin( my_vector ),
-                             boost::begin( my_vector ) + N );
-    char  str_val[] = "a string";
-    char* str       = str_val;
+    </span><span class=keyword>const </span><span class=keyword>int </span><span class=identifier>N </span><span class=special>= </span><span class=number>5</span><span class=special>;
+    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>vector</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt; </span><span class=identifier>my_vector</span><span class=special>;
+    </span><span class=keyword>int </span><span class=identifier>values</span><span class=special>[] </span><span class=special>= </span><span class=special>{ </span><span class=number>1</span><span class=special>,</span><span class=number>2</span><span class=special>,</span><span class=number>3</span><span class=special>,</span><span class=number>4</span><span class=special>,</span><span class=number>5</span><span class=special>,</span><span class=number>6</span><span class=special>,</span><span class=number>7</span><span class=special>,</span><span class=number>8</span><span class=special>,</span><span class=number>9 </span><span class=special>};       
+    </span>
+    <span class=identifier>my_vector</span><span class=special>.</span><span 
+class=identifier>assign</span><span class=special>( </span><span class=identifier>values</span><span class=special>, </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>end</span><span class=special>( </span><span class=identifier>values </span><span class=special>) </span><span class=special>);</span>
+    </span><span class=keyword>typedef </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>vector</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt;::</span><span class=identifier>iterator </span><span class=identifier>iterator</span><span class=special>;
+    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>iterator</span><span class=special>,</span><span class=identifier>iterator</span><span class=special>&gt;       </span><span class=identifier>my_view</span><span class=special>( </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>my_vector </span><span class=special>),
+                                                </span><span 
+class=identifier>boost</span><span
+class=special>::</span><span class=identifier>begin</span><span class=special>( </span><span class=identifier>my_vector </span><span class=special>) </span><span class=special>+ </span><span class=identifier>N </span><span class=special>);
+    </span><span class=keyword>char  </span><span class=identifier>str_val</span><span class=special>[] </span><span class=special>= </span><span class=string>&quot;a string&quot;</span><span class=special>;
+    </span><span class=keyword>char</span><span class=special>* </span><span class=identifier>str       </span><span class=special>= </span><span class=identifier>str_val</span><span class=special>;
     
-    std::cout << my_generic_replace( my_vector, 4, 2 )
-              << my_generic_replace( my_view, 4, 2 )
-              << my_generic_replace( str, 'a', 'b' );
-
+    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>cout </span><span class=special>&lt;&lt; </span><span class=identifier>my_generic_replace</span><span class=special>( </span><span class=identifier>my_vector</span><span class=special>, </span><span class=number>4</span><span class=special>, </span><span class=number>2 </span><span class=special>)
+              </span><span class=special>&lt;&lt; </span><span class=identifier>my_generic_replace</span><span class=special>( </span><span class=identifier>my_view</span><span class=special>, </span><span class=number>4</span><span class=special>, </span><span class=number>2 </span><span class=special>)
+              </span><span class=special>&lt;&lt; </span><span class=identifier>my_generic_replace</span><span class=special>( </span><span class=identifier>str</span><span class=special>, </span><span class=literal>'a'</span><span class=special>, </span><span class=literal>'b' </span><span class=special>);
+</span>
+    <span class=comment>// prints '3', '5' and '0'     </span>
     </pre>
     </blockquote>
 
-    By using the free-standing functions and metafunctions, the code automatically 
-    works for all the types supported by this library. Notice that we have to 
+    By using the free-standing functions and <a 
+href="../../mpl/doc/index.html#metafunctions">metafunctions</a>, the code automatically 
+    works for all the types supported by this library; now and in the future. 
+Notice that we have to
     provide two version of <code  >find()</code> since we cannot forward a non-const 
     rvalue with reference arguments (see this article about  <a href="http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2002/n1385.htm" target="_self" >The 
     Forwarding Problem</a> ).

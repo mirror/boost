@@ -23,17 +23,15 @@ namespace boost
     template< class ForwardRange > 
     class sub_range : public iterator_range< BOOST_DEDUCED_TYPENAME result_iterator_of<ForwardRange>::type > 
     {
-        sub_range(); // not implemented
-        
         typedef BOOST_DEDUCED_TYPENAME result_iterator_of<ForwardRange>::type iterator_t;
         typedef iterator_range< iterator_t  > base;
         
     public:
-        using base::iterator;
-        using base::const_iterator;
-        using base::value_type;
-        typedef BOOST_DEDUCED_TYPENAME difference_type_of<ForwardRange>::type difference_type;
-        typedef BOOST_DEDUCED_TYPENAME size_type_of<ForwardRange>::type size_type;
+        using BOOST_DEDUCED_TYPENAME base::value_type;
+        using BOOST_DEDUCED_TYPENAME base::iterator;
+        typedef BOOST_DEDUCED_TYPENAME const_iterator_of<ForwardRange>::type     const_iterator;
+        typedef BOOST_DEDUCED_TYPENAME difference_type_of<ForwardRange>::type  difference_type;
+        typedef BOOST_DEDUCED_TYPENAME size_type_of<ForwardRange>::type        size_type;
 
     public:
         template< class ForwardRange2 >
@@ -63,10 +61,13 @@ namespace boost
             return *this;
         }
         
-        size_type size() const
-        {
-            return base::size();
-        }   
+    public:
+        
+        iterator        begin()          { return base::begin(); }
+        const_iterator  begin() const    { return base::begin(); }
+        iterator        end()            { return base::end();   }
+        const_iterator  end() const      { return base::end();   }
+        size_type       size() const     { return std::distance( begin(), end() ); }   
 
     };
         
