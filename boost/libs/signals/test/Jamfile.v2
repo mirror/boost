@@ -1,0 +1,37 @@
+# Signals library
+
+# Copyright (C) 2001-2003 Douglas Gregor
+
+# Permission to copy, use, sell and distribute this software is granted 
+# provided this copyright notice appears in all copies. Permission to modify 
+# the code and to distribute modified code is granted provided this copyright 
+# notice appears in all copies, and a notice that the code was modified is 
+# included with the copyright notice. This software is provided "as is" 
+# without express or implied warranty, and with no claim as to its suitability 
+# for any purpose. 
+
+# For more information, see http://www.boost.org/
+
+# bring in rules for testing
+import testing ;
+
+project
+    : source-location $(BOOST_ROOT) ;
+
+{
+  test-suite signals
+    : 
+  [ run libs/signals/test/dead_slot_test.cpp ../../../libs/test/build//boost_test_exec_monitor ../../../libs/signals/build//boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+
+  [ run libs/signals/test/deletion_test.cpp ../../../libs/test/build//boost_test_exec_monitor ../../../libs/signals/build//boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+
+  [ run libs/signals/test/ordering_test.cpp ../../../libs/test/build//boost_test_exec_monitor ../../../libs/signals/build//boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+
+  [ run libs/signals/test/signal_n_test.cpp ../../../libs/test/build//boost_test_exec_monitor ../../../libs/signals/build//boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+
+  [ run libs/signals/test/signal_test.cpp ../../../libs/test/build//boost_test_exec_monitor ../../../libs/signals/build//boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+
+  [ run libs/signals/test/trackable_test.cpp ../../../libs/test/build//boost_test_exec_monitor ../../../libs/signals/build//boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+ ;
+}
+      
