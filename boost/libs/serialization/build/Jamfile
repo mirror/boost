@@ -146,7 +146,14 @@ rule shared-libraries-support ( toolset variant : properties * )
     case "como*" :
         echo DLLs cannot be built with this compiler ;
         properties += <build>no ;
+    case "cw*" :
+        echo DLLs cannot be built with this compiler ;
+        properties += <build>no ;
     }
+    # if static = [ get-values runtime-link : $(properties) ] {
+    #     echo DLLS cannot be built with static runtime linking ;
+    #     properties += <build>no ;
+    # }
     return $(properties) ;
 }
 
