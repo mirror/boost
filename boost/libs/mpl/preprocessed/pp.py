@@ -159,7 +159,7 @@ class pretty:
 
         self.re_empty_line = re.compile(r'^\s*$')
         self.re_comma = re.compile(r'(\S+)\s*,\s*')
-        self.re_assign = re.compile(r'([^<|^!|^>])\s*(=+)\s*')
+        self.re_assign = re.compile(r'(\S+[^<|^!|^>])\s*(=+)\s*(\S+)')
         self.re_marked_empty_comment = re.compile(r'^\s*//\s*$')
         self.re_typedef = re.compile(r'^\s+typedef\s+.*?;$')
         self.re_nsl = re.compile(r'^(\s+typedef\s+.*?;|\s*(private|public):\s*|\s*{\s*|\s*(\w|\d|,)+\s*)$')
@@ -172,7 +172,7 @@ class pretty:
             )
 
         self.re_simple_list = re.compile(r'(\w+)\s*<((\w|,| |-)+)>')
-        self.re_static_const = re.compile(r'(\s*)((static\s+.*?|enum\s*\w*\s*{\s*)value\s*=)(.*?)(}?;)$')
+        self.re_static_const = re.compile(r'(\s*)((BOOST_STATIC_CONSTANT\(\s*\w+,\s*|enum\s*\w*\s*{\s*)value\s*=)(.*?)([}|\)];)$')
         self.re_typedefs = re.compile(r'(\s*)((\s*typedef\s*.*?;)+)\s*$')
         self.re_fix_angle_brackets = re.compile( r'(>(\s*>)+)(,|\n$)' )
         self.re_closing_curly_brace = re.compile(r'^(}|struct\s+\w+);\s*$')
@@ -232,9 +232,8 @@ class pretty:
                 return
 
         # formatting
-
         line = self.re_comma.sub( r'\1, ', line )
-        line = self.re_assign.sub( r'\1 \2 ', line )
+        line = self.re_assign.sub( r'\1 \2 \3', line )
         line = self.re_marked_empty_comment.sub( r'\n', line )
         line = self.re_type_const.sub( r'\2 \1', line )
         line = self.re_templ_args.sub( handle_args, line )

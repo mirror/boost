@@ -24,6 +24,7 @@
 #include <boost/mpl/aux_/type_wrapper.hpp>
 #include <boost/mpl/aux_/ptr_to_ref.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
+#include <boost/mpl/aux_/config/static_constant.hpp>
 
 namespace boost { namespace mpl {
 

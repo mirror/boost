@@ -33,7 +33,7 @@ template<> struct modulus_impl< na,na >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        static int const value = 0;
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -42,7 +42,7 @@ template< typename Tag > struct modulus_impl< na,Tag >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        static int const value = 0;
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -51,7 +51,7 @@ template< typename Tag > struct modulus_impl< Tag,na >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        static int const value = 0;
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -79,20 +79,30 @@ BOOST_MPL_AUX_NA_SPEC2(2, 2, modulus)
 }}
 
 namespace boost { namespace mpl {
+
+namespace aux {
+template< typename T, T n1, T n2 >
+struct modulus_wknd
+{
+    BOOST_STATIC_CONSTANT(T, value  = (n1 % n2));
+    typedef integral_c< T,value > type;
+};
+
+}
+
 template<>
 struct modulus_impl< integral_c_tag,integral_c_tag >
 {
     template< typename N1, typename N2 > struct apply
-
-        : integral_c<
+        : aux::modulus_wknd<
               typename aux::largest_int<
                   typename N1::value_type
                 , typename N2::value_type
                 >::type
-            , ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N1::value_type, N1)
-                  % BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N2::value_type, N2)
-                )
-            >
+            , N1::value
+            , N2::value
+            >::type
+
     {
     };
 };

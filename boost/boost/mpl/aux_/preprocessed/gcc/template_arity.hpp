@@ -21,11 +21,10 @@ template<
     >
 struct max_arity
 {
-    static int const value =
-         ( C6 > 0 ? C6 : ( C5 > 0 ? C5 : ( C4 > 0 ? C4 : ( C3 > 0 ? C3 : ( C2
-         > 0 ? C2 : ( C1 > 0 ? C1 : -1 ) ) ) ) ) )
-        ;
+    BOOST_STATIC_CONSTANT(int, value =
+          ( C6 > 0 ? C6 : ( C5 > 0 ? C5 : ( C4 > 0 ? C4 : ( C3 > 0 ? C3 : ( C2 > 0 ? C2 : ( C1 > 0 ? C1 : -1 ) ) ) ) ) )
 
+        );
 };
 
 arity_tag<0>::type arity_helper(...);
@@ -83,21 +82,18 @@ arity_helper(type_wrapper< F< T1,T2,T3,T4,T5,T6 > >, arity_tag<6>);
 template< typename F, int N >
 struct template_arity_impl
 {
-    static int const value =
-         sizeof(arity_helper(type_wrapper<F>(), arity_tag<N>())) - 1
-        ;
-
+    BOOST_STATIC_CONSTANT(int, value =
+          sizeof(arity_helper(type_wrapper<F>(), arity_tag<N>())) - 1
+        );
 };
 
 template< typename F >
 struct template_arity
 {
-    static int const value =
-         ( max_arity< template_arity_impl< F,1 >::value, template_arity_impl<
-         F,2 >::value, template_arity_impl< F,3 >::value, template_arity_impl<
-         F,4 >::value, template_arity_impl< F,5 >::value, template_arity_impl<
-         F,6 >::value >::value )
-        ;
+    BOOST_STATIC_CONSTANT(int, value  = (
+          max_arity< template_arity_impl< F,1 >::value, template_arity_impl< F,2 >::value, template_arity_impl< F,3 >::value, template_arity_impl< F,4 >::value, template_arity_impl< F,5 >::value, template_arity_impl< F,6 >::value >::value
+
+        ));
 
     typedef int_<value> type;
 };

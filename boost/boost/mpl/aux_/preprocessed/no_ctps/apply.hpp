@@ -233,13 +233,13 @@ namespace aux {
 template< typename T >
 struct is_apply_arg
 {
-    static bool const value = true;
+    static bool const value  = true;
 };
 
 template<>
 struct is_apply_arg<na>
 {
-    static bool const value = false;
+    static bool const value  = false;
 };
 
 template<
@@ -247,11 +247,7 @@ template<
     >
 struct apply_count_args
 {
-    static int const value =
-          is_apply_arg<T1>::value + is_apply_arg<T2>::value 
-        + is_apply_arg<T3>::value + is_apply_arg<T4>::value 
-        + is_apply_arg<T5>::value
-        ;
+    static int const value  = is_apply_arg<T1>::value + is_apply_arg<T2>::value + is_apply_arg<T3>::value + is_apply_arg<T4>::value + is_apply_arg<T5>::value;
 
 };
 

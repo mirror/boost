@@ -1,6 +1,6 @@
 
-#ifndef BOOST_MPL_AUX_CONFIG_BCC_INTEGRAL_CONSTANTS_HPP_INCLUDED
-#define BOOST_MPL_AUX_CONFIG_BCC_INTEGRAL_CONSTANTS_HPP_INCLUDED
+#ifndef BOOST_MPL_AUX_CONFIG_INTEGRAL_HPP_INCLUDED
+#define BOOST_MPL_AUX_CONFIG_INTEGRAL_HPP_INCLUDED
 
 // Copyright Aleksey Gurtovoy 2004
 //
@@ -14,6 +14,7 @@
 // $Date$
 // $Revision$
 
+#include <boost/mpl/aux_/config/msvc.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 
 #if    !defined(BOOST_MPL_CFG_BCC_INTEGRAL_CONSTANTS) \
@@ -24,4 +25,14 @@
 
 #endif
 
-#endif // BOOST_MPL_AUX_CONFIG_BCC_INTEGRAL_CONSTANTS_HPP_INCLUDED
+#if    !defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC) \
+    && !defined(BOOST_MPL_PREPROCESSING_MODE) \
+    && ( BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
+        || BOOST_WORKAROUND(__EDG_VERSION__, <= 238) \
+        )
+
+#   define BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC
+
+#endif
+
+#endif // BOOST_MPL_AUX_CONFIG_INTEGRAL_HPP_INCLUDED

@@ -29,6 +29,7 @@
 #   include <boost/mpl/eval_if.hpp>
 #   include <boost/mpl/pair.hpp>
 #   include <boost/mpl/void.hpp>
+#   include <boost/mpl/aux_/config/static_constant.hpp>
 #endif
 
 namespace boost { namespace mpl {

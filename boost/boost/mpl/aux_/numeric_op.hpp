@@ -29,8 +29,9 @@
 #   include <boost/mpl/aux_/value_wknd.hpp>
 #   include <boost/mpl/aux_/config/eti.hpp>
 #   include <boost/mpl/aux_/nttp_decl.hpp>
-#   include <boost/mpl/aux_/config/static_constant.hpp>
 #endif
+
+#include <boost/mpl/aux_/config/static_constant.hpp>
 
 #if defined(BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS) \
     || defined(BOOST_MPL_PREPROCESSING_MODE)

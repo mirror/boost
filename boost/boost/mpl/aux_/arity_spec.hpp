@@ -18,7 +18,7 @@
 #include <boost/mpl/aux_/preprocessor/params.hpp>
 #include <boost/mpl/aux_/arity.hpp>
 #include <boost/mpl/limits/arity.hpp>
-#include <boost/config.hpp>
+#include <boost/mpl/aux_/config/static_constant.hpp>
 
 #if defined(BOOST_MPL_CFG_BROKEN_DEFAULT_PARAMETERS_IN_NESTED_TEMPLATES)
 #   define BOOST_MPL_AUX_NONTYPE_ARITY_SPEC(i,type,name) \

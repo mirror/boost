@@ -34,7 +34,7 @@ template<> struct shift_right_impl< na,na >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        static int const value = 0;
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -43,7 +43,7 @@ template<> struct shift_right_impl< na,integral_c_tag >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        static int const value = 0;
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -52,7 +52,7 @@ template<> struct shift_right_impl< integral_c_tag,na >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        static int const value = 0;
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -87,8 +87,8 @@ struct shift_right_impl< integral_c_tag,integral_c_tag >
 
         : integral_c<
               typename N::value_type
-            , ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N::value_type, N)
-                  >> BOOST_MPL_AUX_NESTED_VALUE_WKND(typename S::value_type, S)
+            , ( BOOST_MPL_AUX_VALUE_WKND(N)::value
+                  >> BOOST_MPL_AUX_VALUE_WKND(S)::value
                 )
             >
     {

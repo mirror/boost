@@ -33,6 +33,7 @@
 #   endif
 #endif
 
+#include <boost/mpl/aux_/config/static_constant.hpp>
 #include <boost/mpl/aux_/config/use_preprocessed.hpp>
 
 #if !defined(BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS) \

@@ -16,8 +16,8 @@ template<
       typename Tag1
     , typename Tag2
 
-    , BOOST_MPL_AUX_NTTP_DECL(int, tag1_) = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag1)::value
-    , BOOST_MPL_AUX_NTTP_DECL(int, tag2_) = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag2)::value
+    , BOOST_MPL_AUX_NTTP_DECL(int, tag1_)  = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag1)::value
+    , BOOST_MPL_AUX_NTTP_DECL(int, tag2_)  = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag2)::value
     >
 struct shift_left_impl
     : if_c<
@@ -34,7 +34,7 @@ template<> struct shift_left_impl< na,na >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        enum { value = 0 };
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -43,7 +43,7 @@ template<> struct shift_left_impl< na,integral_c_tag >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        enum { value = 0 };
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -52,7 +52,7 @@ template<> struct shift_left_impl< integral_c_tag,na >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        enum { value = 0 };
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -88,9 +88,9 @@ namespace boost { namespace mpl {
 
 namespace aux {
 template< typename T, typename Shift, T n, Shift s >
-struct msvc_shift_left_impl
+struct shift_left_wknd
 {
-  enum msvc_wknd { value = (n << s) };
+    BOOST_STATIC_CONSTANT(T, value  = (n << s));
     typedef integral_c< T,value > type;
 };
 
@@ -100,7 +100,7 @@ template<>
 struct shift_left_impl< integral_c_tag,integral_c_tag >
 {
     template< typename N, typename S > struct apply
-        : aux::msvc_shift_left_impl<
+        : aux::shift_left_wknd<
               typename N::value_type
             , typename S::value_type
             , N::value

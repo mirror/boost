@@ -62,12 +62,12 @@ template< typename T > aux::no_tag is_bind_helper(protect<T>*);
 template< int N >
 aux::yes_tag is_bind_helper(arg<N>*);
 
-template< bool is_ref_ = true >
+template< bool is_ref_  = true >
 struct is_bind_template_impl
 {
     template< typename T > struct result_
     {
-        enum { value = false };
+        BOOST_STATIC_CONSTANT(bool, value  = false);
     };
 };
 
@@ -76,11 +76,10 @@ struct is_bind_template_impl<false>
 {
     template< typename T > struct result_
     {
-        enum { value =
-             sizeof(aux::is_bind_helper(static_cast<T*>(0))) ==
-             sizeof(aux::yes_tag)
-            };
-
+        BOOST_STATIC_CONSTANT(bool, value =
+              sizeof(aux::is_bind_helper(static_cast<T*>(0)))
+                == sizeof(aux::yes_tag)
+            );
     };
 };
 

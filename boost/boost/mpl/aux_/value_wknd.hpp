@@ -15,7 +15,7 @@
 // $Revision$
 
 #include <boost/mpl/aux_/static_cast.hpp>
-#include <boost/mpl/aux_/config/bcc_integral_constants.hpp>
+#include <boost/mpl/aux_/config/integral.hpp>
 #include <boost/mpl/aux_/config/eti.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 

@@ -1,5 +1,5 @@
 
-// NO INCLUDE GUARDS, THE HEADER IS INTENDED FOR MULTIPLE INCLUSION!
+// NO INCLUDE GUARDS, THE HEADER IS INTENDED FOR MULTIPLE INCLUSION
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
@@ -25,6 +25,7 @@
 #define AUX778076_OP_ARITY 2
 
 #include <boost/mpl/aux_/numeric_op.hpp>
+#include <boost/mpl/aux_/config/static_constant.hpp>
 #include <boost/mpl/aux_/config/use_preprocessed.hpp>
 
 #if !defined(BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS) \
@@ -35,18 +36,17 @@
 
 #else
 
-#   include <boost/mpl/aux_/config/workaround.hpp>
+#   include <boost/mpl/aux_/config/integral.hpp>
 #   include <boost/preprocessor/cat.hpp>
-
 
 namespace boost { namespace mpl {
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC)
 namespace aux {
 template< typename T, typename Shift, T n, Shift s >
-struct BOOST_PP_CAT(BOOST_PP_CAT(msvc_,AUX778076_OP_PREFIX),_impl)
+struct BOOST_PP_CAT(AUX778076_OP_PREFIX,_wknd)
 {
-    enum msvc_wknd { value = (n AUX778076_OP_TOKEN s) };
+    BOOST_STATIC_CONSTANT(T, value = (n AUX778076_OP_TOKEN s));
     typedef integral_c<T,value> type;
 };
 }
@@ -56,15 +56,15 @@ template<>
 struct AUX778076_OP_IMPL_NAME<integral_c_tag,integral_c_tag>
 {
     template< typename N, typename S > struct apply
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if !defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC)
         : integral_c<
               typename N::value_type
-            , ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N::value_type, N)
-                  AUX778076_OP_TOKEN BOOST_MPL_AUX_NESTED_VALUE_WKND(typename S::value_type, S)
+            , ( BOOST_MPL_AUX_VALUE_WKND(N)::value
+                  AUX778076_OP_TOKEN BOOST_MPL_AUX_VALUE_WKND(S)::value
                 )
             >
 #else
-        : aux::BOOST_PP_CAT(BOOST_PP_CAT(msvc_,AUX778076_OP_NAME),_impl)<
+        : aux::BOOST_PP_CAT(AUX778076_OP_PREFIX,_wknd)<
               typename N::value_type
             , typename S::value_type
             , N::value

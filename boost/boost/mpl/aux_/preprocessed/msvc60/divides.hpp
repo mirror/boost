@@ -15,8 +15,8 @@ template<
       typename Tag1
     , typename Tag2
 
-    , BOOST_MPL_AUX_NTTP_DECL(int, tag1_) = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag1)::value
-    , BOOST_MPL_AUX_NTTP_DECL(int, tag2_) = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag2)::value
+    , BOOST_MPL_AUX_NTTP_DECL(int, tag1_)  = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag1)::value
+    , BOOST_MPL_AUX_NTTP_DECL(int, tag2_)  = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag2)::value
     >
 struct divides_impl
     : if_c<
@@ -33,7 +33,7 @@ template<> struct divides_impl< na,na >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        enum { value = 0 };
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -42,7 +42,7 @@ template<> struct divides_impl< na,integral_c_tag >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        enum { value = 0 };
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -51,7 +51,7 @@ template<> struct divides_impl< integral_c_tag,na >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        enum { value = 0 };
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -87,9 +87,9 @@ namespace boost { namespace mpl {
 
 namespace aux {
 template< typename T, T n1, T n2 >
-struct msvc_divides_impl
+struct divides_wknd
 {
-  enum msvc_wknd { value = (n1 / n2) };
+    BOOST_STATIC_CONSTANT(T, value  = (n1 / n2));
     typedef integral_c< T,value > type;
 };
 
@@ -99,7 +99,7 @@ template<>
 struct divides_impl< integral_c_tag,integral_c_tag >
 {
     template< typename N1, typename N2 > struct apply
-        : aux::msvc_divides_impl<
+        : aux::divides_wknd<
               typename aux::largest_int<
                   typename N1::value_type
                 , typename N2::value_type

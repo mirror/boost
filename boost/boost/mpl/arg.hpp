@@ -19,8 +19,6 @@
 // $Date$
 // $Revision$
 
-#include <boost/mpl/aux_/config/static_constant.hpp>
-
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include <boost/mpl/arg_fwd.hpp>
 #   include <boost/mpl/assert.hpp>
@@ -29,6 +27,7 @@
 #   include <boost/mpl/aux_/arg_typedef.hpp>
 #endif
 
+#include <boost/mpl/aux_/config/static_constant.hpp>
 #include <boost/mpl/aux_/config/use_preprocessed.hpp>
 
 #if !defined(BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS) \

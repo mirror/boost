@@ -15,8 +15,8 @@ template<
       typename Tag1
     , typename Tag2
 
-    , BOOST_MPL_AUX_NTTP_DECL(int, tag1_) = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag1)::value
-    , BOOST_MPL_AUX_NTTP_DECL(int, tag2_) = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag2)::value
+    , BOOST_MPL_AUX_NTTP_DECL(int, tag1_)  = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag1)::value
+    , BOOST_MPL_AUX_NTTP_DECL(int, tag2_)  = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag2)::value
     >
 struct equal_to_impl
     : if_c<
@@ -33,7 +33,7 @@ template<> struct equal_to_impl< na,na >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        enum { value = 0 };
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -42,7 +42,7 @@ template<> struct equal_to_impl< na,integral_c_tag >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        enum { value = 0 };
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -51,7 +51,7 @@ template<> struct equal_to_impl< integral_c_tag,na >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        enum { value = 0 };
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -91,10 +91,10 @@ struct equal_to_impl< integral_c_tag,integral_c_tag >
     template< typename N1, typename N2 > struct apply
 
     {
-        enum { value =
-             ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N1::value_type, N1) ==
-             BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N2::value_type, N2) )
-            };
+        BOOST_STATIC_CONSTANT(bool, value =
+             ( BOOST_MPL_AUX_VALUE_WKND(N1)::value ==
+             BOOST_MPL_AUX_VALUE_WKND(N2)::value )
+            );
         typedef bool_<value> type;
     };
 };

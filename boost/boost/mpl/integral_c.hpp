@@ -16,6 +16,7 @@
 
 #include <boost/mpl/integral_c_fwd.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
+#include <boost/mpl/aux_/config/static_constant.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 
 #if BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(53800))

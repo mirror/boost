@@ -34,7 +34,7 @@ template<> struct bitor_impl< na,na >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        static int const value = 0;
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -43,7 +43,7 @@ template< typename Tag > struct bitor_impl< na,Tag >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        static int const value = 0;
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -52,7 +52,7 @@ template< typename Tag > struct bitor_impl< Tag,na >
     template< typename U1, typename U2 > struct apply
     {
         typedef apply type;
-        static int const value = 0;
+        BOOST_STATIC_CONSTANT(int, value  = 0);
     };
 };
 
@@ -131,8 +131,8 @@ struct bitor_impl< integral_c_tag,integral_c_tag >
                   typename N1::value_type
                 , typename N2::value_type
                 >::type
-            , ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N1::value_type, N1)
-                  | BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N2::value_type, N2)
+            , ( BOOST_MPL_AUX_VALUE_WKND(N1)::value
+                  | BOOST_MPL_AUX_VALUE_WKND(N2)::value
                 )
             >
     {

@@ -18,7 +18,7 @@
 #include <boost/mpl/aux_/static_cast.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
-#include <boost/mpl/aux_/config/bcc_integral_constants.hpp>
+#include <boost/mpl/aux_/config/integral.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 

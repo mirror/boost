@@ -25,6 +25,7 @@
 #define AUX778076_OP_ARITY 2
 
 #include <boost/mpl/aux_/numeric_op.hpp>
+#include <boost/mpl/aux_/config/static_constant.hpp>
 #include <boost/mpl/aux_/config/use_preprocessed.hpp>
 
 #if !defined(BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS) \
@@ -35,7 +36,7 @@
 
 #else
 
-#   include <boost/mpl/aux_/config/workaround.hpp>
+#   include <boost/mpl/aux_/config/integral.hpp>
 #   include <boost/preprocessor/cat.hpp>
 
 namespace boost { namespace mpl {
@@ -43,14 +44,12 @@ namespace boost { namespace mpl {
 // MSVC workaround: implement less in terms of greater
 #if 0 AUX778076_OP_TOKEN 1 && !(1 AUX778076_OP_TOKEN 0) && !(0 AUX778076_OP_TOKEN 0)
 #   define AUX778076_OP(N1, N2) \
-    ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N2::value_type, N2) \
-          > BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N1::value_type, N1) \
-        ) \
+    ( BOOST_MPL_AUX_VALUE_WKND(N2)::value > BOOST_MPL_AUX_VALUE_WKND(N1)::value ) \
 /**/
 #else
 #   define AUX778076_OP(N1, N2) \
-    ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N1::value_type, N1) \
-          AUX778076_OP_TOKEN BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N2::value_type, N2) \
+    ( BOOST_MPL_AUX_VALUE_WKND(N1)::value \
+          AUX778076_OP_TOKEN BOOST_MPL_AUX_VALUE_WKND(N2)::value \
         ) \
 /**/
 #endif
@@ -59,7 +58,7 @@ template<>
 struct AUX778076_OP_IMPL_NAME<integral_c_tag,integral_c_tag>
 {
     template< typename N1, typename N2 > struct apply
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if !defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC)
         : bool_< AUX778076_OP(N1, N2) >
     {
 #else

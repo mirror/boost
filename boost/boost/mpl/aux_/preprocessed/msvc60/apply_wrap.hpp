@@ -17,13 +17,13 @@ struct msvc_apply0
     template< bool > struct f_ : F {};
     template<> struct f_<true>
     {
-        template< typename P = int > struct apply
+        template< typename P  = int > struct apply
         {
             typedef int type;
         };
     };
 
-    template< typename T = int > struct result_
+    template< typename T  = int > struct result_
         : f_< aux::msvc_never_true<F>::value >
             ::template apply<>
     {

@@ -94,12 +94,12 @@ aux::yes_tag is_bind_helper(bind< F,T1,T2,T3,T4,T5 >*);
 template< int N >
 aux::yes_tag is_bind_helper(arg<N>*);
 
-template< bool is_ref_ = true >
+template< bool is_ref_  = true >
 struct is_bind_template_impl
 {
     template< typename T > struct result_
     {
-        static bool const value = false;
+        BOOST_STATIC_CONSTANT(bool, value  = false);
     };
 };
 
@@ -108,11 +108,10 @@ struct is_bind_template_impl<false>
 {
     template< typename T > struct result_
     {
-        static bool const value =
-             sizeof(aux::is_bind_helper(static_cast<T*>(0))) ==
-             sizeof(aux::yes_tag)
-            ;
-
+        BOOST_STATIC_CONSTANT(bool, value =
+              sizeof(aux::is_bind_helper(static_cast<T*>(0)))
+                == sizeof(aux::yes_tag)
+            );
     };
 };
 
@@ -537,13 +536,13 @@ namespace aux {
 template< typename T >
 struct is_bind_arg
 {
-    static bool const value = true;
+    BOOST_STATIC_CONSTANT(bool, value  = true);
 };
 
 template<>
 struct is_bind_arg<na>
 {
-    static bool const value = false;
+    BOOST_STATIC_CONSTANT(bool, value  = false);
 };
 
 template<
@@ -551,11 +550,11 @@ template<
     >
 struct bind_count_args
 {
-    static int const value =
+    BOOST_STATIC_CONSTANT(int, value =
           is_bind_arg<T1>::value + is_bind_arg<T2>::value 
         + is_bind_arg<T3>::value + is_bind_arg<T4>::value 
         + is_bind_arg<T5>::value
-        ;
+        );
 
 };
 

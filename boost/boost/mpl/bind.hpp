@@ -30,13 +30,13 @@
 #   include <boost/mpl/aux_/arity_spec.hpp>
 #   include <boost/mpl/aux_/type_wrapper.hpp>
 #   include <boost/mpl/aux_/yes_no.hpp>
-#   include <boost/mpl/aux_/config/static_constant.hpp>
 #   if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 #       include <boost/type_traits/is_reference.hpp>
 #   endif 
 #endif
 
 #include <boost/mpl/aux_/config/bind.hpp>
+#include <boost/mpl/aux_/config/static_constant.hpp>
 #include <boost/mpl/aux_/config/use_preprocessed.hpp>
 
 #if !defined(BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS) \
