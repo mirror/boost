@@ -115,7 +115,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   (void) &x2;           // avoid "unused" warning
 
 #ifndef BOOST_MSVC   // MSVC brokenness
-  URNG urng2(urng);          // copy constructor
+  URNG urng2 = urng;         // copy constructor
   assert(urng == urng2);     // operator==
   urng();
   urng2 = urng;              // assignment
