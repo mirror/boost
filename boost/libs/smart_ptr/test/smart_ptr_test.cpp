@@ -1,3 +1,14 @@
+#if defined(_MSC_VER) && !defined(__ICL) && !defined(__COMO__)
+# pragma warning(disable: 4786)  // identifier truncated in debug info
+# pragma warning(disable: 4710)  // function not inlined
+# pragma warning(disable: 4711)  // function selected for automatic inline expansion
+# pragma warning(disable: 4514)  // unreferenced inline removed
+#endif
+
+#ifdef __BORLANDC__
+# pragma warn -8092 // template argument passed to 'find' is not an iterator
+#endif
+
 //  smart pointer test program  ----------------------------------------------//
 
 //  (C) Copyright Beman Dawes 1998, 1999. Permission to copy, use, modify, sell
