@@ -201,6 +201,8 @@ namespace std {
 // 8.x
 #if __MWERKS__ <= 0x3003
 #define BOOST_UBLAS_NO_MEMBER_FRIENDS
+// Problems with basic_stream imbue
+#define BOOST_UBLAS_USE_STREAM
 // Base traits templates syntax untested
 #define BOOST_UBLAS_NO_ITERATOR_BASE_TRAITS
 #endif
