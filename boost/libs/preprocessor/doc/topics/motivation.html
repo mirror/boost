@@ -76,6 +76,14 @@ yes_type is_function_tester(R (*)(A0, A1, A2));
 	Using the primitives of the preprocessor library, the <code>is_function_tester()</code>'s could be implemented like this:
 </div>
 <div class="code"><pre>
+#include &lt;boost/preprocessor/arithmetic/inc.hpp&gt;
+#include &lt;boost/preprocessor/punctuation/comma_if.hpp&gt;
+#include &lt;boost/preprocessor/repetition.hpp&gt;
+
+#ifndef MAX_IS_FUNCTION_TESTER_PARAMS
+#define MAX_IS_FUNCTION_TESTER_PARAMS 15
+#endif
+
 #define IS_FUNCTION_TESTER(Z, N, _) \
    template&lt;class R BOOST_PP_COMMA_IF(N) BOOST_PP_ENUM_PARAMS(N, class A)&gt; \
    yes_type is_function_tester(R (*)(BOOST_PP_ENUM_PARAMS(N, A))); \
