@@ -29,7 +29,11 @@ namespace date_time {
     static unsigned short day_of_week(const ymd_type& ymd);
     //static unsigned short day_of_year(date_rep_type);
     static date_int_type day_number(const ymd_type& ymd);
+    static date_int_type julian_day_number(const ymd_type& ymd);
+    static long modjulian_day_number(const ymd_type& ymd);
     static ymd_type from_day_number(date_int_type);
+    static ymd_type from_julian_day_number(date_int_type);
+    static ymd_type from_modjulian_day_number(long);
     static bool is_leap_year(year_type);
     static unsigned short end_of_month_day(year_type y, month_type m);
     static ymd_type epoch();
@@ -61,3 +65,4 @@ namespace date_time {
 
 #endif
   
+
