@@ -55,7 +55,7 @@ public:
     if(_p == RealType(0))
       return false;
     else
-      return RealType(eng() - (eng.min)()) <= _p * RealType(eng.max()-eng.min());
+      return RealType(eng() - (eng.min)()) <= _p * RealType((eng.max)()-(eng.min)());
   }
 
 #if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)

@@ -291,11 +291,11 @@
 
 namespace std {
   template <class _Tp>
-  inline const _Tp& min(const _Tp& __a, const _Tp& __b) {
+  inline const _Tp& min BOOST_PREVENT_MACRO_SUBSTITUTION (const _Tp& __a, const _Tp& __b) {
     return __b < __a ? __b : __a;
   }
   template <class _Tp>
-  inline const _Tp& max(const _Tp& __a, const _Tp& __b) {
+  inline const _Tp& max BOOST_PREVENT_MACRO_SUBSTITUTION (const _Tp& __a, const _Tp& __b) {
     return  __a < __b ? __b : __a;
   }
 }
