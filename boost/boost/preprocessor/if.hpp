@@ -21,6 +21,11 @@
 
 <p>For example, <code>BOOST_PP_IF(0,1,2)</code> expands to <code>2</code>.</p>
 
+<h3>See</h3>
+<ul>
+  <li>BOOST_PP_EXPR_IF()</li>
+</ul>
+
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/preprocessor_test.cpp">preprocessor_test.cpp</a></li>

@@ -13,6 +13,7 @@
 #include <boost/preprocessor/empty.hpp>
 #include <boost/preprocessor/identity.hpp>
 #include <boost/preprocessor/if.hpp>
+#include <boost/preprocessor/expr_if.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/stringize.hpp>
 
@@ -37,6 +38,10 @@ struct Container
 
 TEST_B BOOST_PP_IF(BOOST_PP_IF(1,1,1),true,false) &&
   BOOST_PP_IF(BOOST_PP_IF(0,0,0),false,true) TEST_E
+
+/* *** */
+
+TEST_B BOOST_PP_EXPR_IF(1,1) TEST_E
 
 /* *** */
 
