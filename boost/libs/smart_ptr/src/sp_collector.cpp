@@ -195,25 +195,27 @@ static void scan_and_free(void * area, size_t size, map2_type const & m2, free_l
 
 void free_unreachable_objects()
 {
-    map2_type m2;
+    free_list_type free;
+
+    {
+        map2_type m2;
 
 #ifdef BOOST_HAS_THREADS
 
-    mutex_type::scoped_lock lock(get_mutex());
+        mutex_type::scoped_lock lock(get_mutex());
 
 #endif
 
-    map_type const & m = get_map();
+        map_type const & m = get_map();
 
-    find_unreachable_objects_impl(m, m2);
+        find_unreachable_objects_impl(m, m2);
 
-    free_list_type free;
-
-    for(map2_type::iterator j = m2.begin(); j != m2.end(); ++j)
-    {
-        map_type::const_iterator i = m.find(j->first);
-        BOOST_ASSERT(i != m.end());
-        scan_and_free(i->second.first, i->second.second, m2, free);
+        for(map2_type::iterator j = m2.begin(); j != m2.end(); ++j)
+        {
+            map_type::const_iterator i = m.find(j->first);
+            BOOST_ASSERT(i != m.end());
+            scan_and_free(i->second.first, i->second.second, m2, free);
+        }
     }
 
     std::cout << "... about to free " << free.size() << " objects.\n";
