@@ -21,6 +21,6 @@
 #
 # /* BOOST_PP_RPAREN */
 #
-# define BOOST_PP_RPAREN() (
+# define BOOST_PP_RPAREN() )
 #
 # endif
