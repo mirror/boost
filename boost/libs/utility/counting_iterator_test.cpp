@@ -6,7 +6,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 //
 // Revision History
-// 04 Jan 2001  Added use of iterator_tests.hpp (David Abrahams)
+// 04 Feb 2001  Added use of iterator_tests.hpp (David Abrahams)
 // 28 Jan 2001  Removed not_an_iterator detritus (David Abrahams)
 // 24 Jan 2001  Initial revision (David Abrahams)
 
@@ -73,20 +73,31 @@ void category_test(
     // Show that values outside the range can't be found
     assert(!std::binary_search(start, boost::prior(finish), *finish));
 
-    // Do generic random_access_iterator_test
+    // Do the generic random_access_iterator_test
     typedef typename CountingIterator::value_type value_type;
     std::vector<value_type> v;
     for (value_type z = *start; z != *finish; ++z)
         v.push_back(z);
-    boost::random_access_iterator_test(start, v.size(), v.begin());
+    if (v.size() >= 2)
+    {
+        // Note that this test requires a that the first argument is
+        // dereferenceable /and/ a valid iterator prior to the first argument
+        boost::random_access_iterator_test(start + 1, v.size() - 1, v.begin() + 1);
+    }
 }
 
 // Special tests for bidirectional CountingIterators
 template <class CountingIterator>
 void category_test(CountingIterator start, CountingIterator finish, std::bidirectional_iterator_tag)
 {
-    if (finish != start && finish != boost::next(start))
-        boost::bidirectional_iterator_test(start, *start, boost::next(*start));
+    if (finish != start
+        && finish != boost::next(start)
+        && finish != boost::next(boost::next(start)))
+    {
+        // Note that this test requires a that the first argument is
+        // dereferenceable /and/ a valid iterator prior to the first argument
+        boost::bidirectional_iterator_test(boost::next(start), boost::next(*start), boost::next(boost::next(*start)));
+    }
 }
 
 template <class CountingIterator>
