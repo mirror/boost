@@ -50,6 +50,11 @@ public:
 //  generated copy constructor, assignment, destructor are fine
 
     template<typename Y>
+    weak_ptr(weak_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
+    {
+    }
+
+    template<typename Y>
     weak_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
     {
     }
