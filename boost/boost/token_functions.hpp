@@ -217,7 +217,8 @@ namespace boost{
     defined(_STLP_DEBUG) &&\
     (defined(_STLP_USE_DYNAMIC_LIB) || defined(_DLL))
     // Problem with string::assign for msvc-stlport in debug mode: the
-    // linker is not able to import the templatized version of this memfun.
+    // linker tries to import the templatized version of this memfun,
+    // which is obviously not exported.
     // See http://www.stlport.com/dcforum/DCForumID6/1763.html for details.
 
       t = Token();
