@@ -252,7 +252,7 @@ Added 23rd September (John Maddock).
 
 //  64-bit types + intmax_t and uintmax_t  ----------------------------------//
 
-#  if (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX)) && !(defined(_WIN32) && defined(__GNUC__))
+#  if (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX)) && !(defined(__CYGWIN__) || defined(__CYGWIN32__))
 #    if(defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615) ||  \
         (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615)
 #       define INT64_C(value) value##LL
