@@ -46,10 +46,12 @@
     <a href="#functionN_default"><b>explicit</b> function<i>N</i>(<b>const</b> Mixin<b>&amp;</b> = Mixin())</a>;
     <a href="#functionN_copy">function<i>N</i>(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
     <a href="#functionN_target"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<b>const</b> F<b>&amp;</b>, <b>const</b> Mixin<b>&amp;</b> = Mixin())</a>;
+    <a href="#functionN_target_ref"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(reference_wrapper&lt;F&gt;)</a>;
     
     <i>// Assignment</i>
     <a href="#functionN_copy_assn">function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
     <a href="#functionN_target_assn"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> F<b>&amp;</b>)</a>;
+    <a href="#functionN_target_ref_assn"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(reference_wrapper&lt;F&gt;)</a>;
     <a href="#functionN_copy_set"><b>void</b> set(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
     <a href="#functionN_target_set"><b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(<b>const</b> F<b>&amp;</b>)</a>;
     <a href="#functionN_swap"><b>void</b> swap(function<i>N</i><b>&amp;</b>)</a>;
@@ -126,16 +128,6 @@
 </pre>
         <p> A special provision is made for pointers to member functions. Though they are not function objects, Boost.Function will adapt them internally to function objects. This requires that a pointer to member function of the form <code>R (X::*mf)(Arg1, Arg2, ..., Arg<em>N</em>) <em>cv-quals</em></code> be adapted to a function object with the following function call operator overloads:
 <pre>
-  R <b>operator</b>()(<em>cv-quals</em> X&amp; x, Arg1 arg1, Arg2 arg2, ..., Arg<em>N</em> arg<em>N</em>) <b>const</b>
-  {
-    <b>return</b> x.*mf(arg1, arg2, ..., arg<em>N</em>);
-  }
-
-  R <b>operator</b>()(<em>cv-quals</em> X* x, Arg1 arg1, Arg2 arg2, ..., Arg<em>N</em> arg<em>N</em>) <b>const</b>
-  {
-    <b>return</b> x->*mf(arg1, arg2, ..., arg<em>N</em>);
-  }
-  
   <b>template</b>&lt;<b>typename P</b>&gt;
   R <b>operator</b>()(<em>cv-quals</em> P&amp; x, Arg1 arg1, Arg2 arg2, ..., Arg<em>N</em> arg<em>N</em>) <b>const</b>
   {
@@ -190,6 +182,14 @@
   <li><b>Rationale</b>: <code>g</code> is a reference-to-<code><b>const</b></code> because it is a portable, efficient, and concise way to accept any function object or function pointer. In the case of a function pointer, the type of <code>g</code> is reference-to-<code><b>const</b></code> pointer-to-function.</li>
 </ul>
 
+<p> <a name="functionN_target_ref"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<a href="../../bind/ref.html">reference_wrapper</a>&lt;F&gt; g);</code></a>
+<ul>
+  <li><b>Requires</b>: <code>g.get()</code> is a <a href="#compatible">compatible</a> function object.</li>
+  <li><b>Effects</b>: Constructs the <code>Mixin</code> subobject from the given mixin.</li>
+  <li><b>Postconditions</b>: <code>this</code> object targets <code>g</code> (<em>not</em> a copy of <code>g.get()</code>) if <code>g.get()</code> is nonempty, or <code>this-&gt;empty()</code> if <code>g.get()</code> is empty.</li>
+  <li><b>Throws</b>: will not throw.</li>
+</ul>
+
 <p> <a name="functionN_copy_assn"><code>function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i><b>&amp;</b> g);</code></a>
 <ul>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code>'s target, if it has one, or is empty if <code>g.<a href="#empty">empty</a>()</code>. The mixin for <code>f</code> is assigned the value of the mixin for <code>g</code>.</li>
@@ -202,6 +202,14 @@
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code> if <code>g</code> is nonempty, or <code>f.<a href="#empty">empty</a>()</code> if <code>g</code> is empty.</li>
   <li><b>Returns</b>: <code>*this</code>.</li>
   <li><b>Rationale</b>: <code>g</code> is a reference-to-<code><b>const</b></code> because it is a portable, efficient, and concise way to accept any function object or function pointer. In the case of a function pointer, the type of <code>g</code> is reference-to-<code><b>const</b></code> pointer-to-function.</li>
+</ul>
+
+<p> <a name="functionN_target_ref_assn"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(<a href="../../bind/ref.html">reference_wrapper</a>&lt;F&gt; g);</code></a>
+<ul>
+  <li><b>Requires</b>: <code>g.get()</code> is a <a href="#compatible">compatible</a> function object.</li>
+  <li><b>Postconditions</b>: <code>f</code> targets <code>g.get()</code> (not a copy of <code>g.get()</code>) if <code>g.get()</code> is nonempty, or <code>f.<a href="#empty">empty</a>()</code> if <code>g.get()</code> is empty.</li>
+  <li><b>Returns</b>: <code>*this</code>.</li>
+  <li><b>Throws</b>: will throw only if the destruction or deallocation of the target of <code>this</code> throws.</li>
 </ul>
 
 <p> <a name="functionN_copy_set"><code><b>void</b> set(<b>const</b> function<i>N</i><b>&amp;</b> g);</code></a>

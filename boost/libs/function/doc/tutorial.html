@@ -97,6 +97,29 @@ object. This is often referred to as "argument binding", and is beyond the scope
   <li><a href="http://lambda.cs.utu.fi/">The Lambda library</a>. This library provides a powerful composition mechanism to construct function objects that uses very natural C++ syntax. Lambda requires a compiler that is reasonably conformant to the C++ standard. Note that it is not a Boost library.</li>
 </ul>
 
+<h3>References to Functions</h3>
+<p> In some cases it is expensive (or semantically incorrect) to have
+Boost.Function clone a function object. In such cases, it is possible
+to request that Boost.Function keep only a reference to the actual
+function object. This is done using the <a
+href="../../bind/ref.html"><code>ref</code></a> and <a
+href="../../bind/ref.html"><code>cref</code></a> functions to wrap a
+reference to a function object:
+
+<pre>
+  stateful_type a_function_object;
+  boost::function&lt;int, int&gt; f;
+  f = ref(a_function_object);
+
+  boost::function&lt;int, int&gt; f2(f);
+</pre>
+
+Here, <code>f</code> will not make a copy of
+<code>a_function_object</code>, nor will <code>f2</code> when it is
+targeted to <code>f</code>'s reference to
+<code>a_function_object</code>. Additionally, when using references to
+function objects, Boost.Function will not throw exceptions during assignment.
+ 
 <h2><a name="family">The <code>function</code> family</a></h2>
 <p> The header &lt;<a href="../../../boost/function.hpp">boost/function.hpp</a>&gt; defines the primary entry point to the function object wrappers, the class template <code>boost::function</code>. This class template is essentially a thin wrapper around a set of similar numbered function object wrappers, <code>boost::function0</code>, <code>boost::function1</code>, etc., where the number indicates the number of arguments passed to the function object target. The declaration of <code>f</code> above could also be written as:
 <pre>
