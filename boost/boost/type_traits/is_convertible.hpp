@@ -107,8 +107,8 @@ struct is_convertible_impl
 
 struct any_conversion
 {
-    template <typename T> any_conversion(const T&);
-    template <typename T> any_conversion(T&);
+    template <typename T> any_conversion(const volatile T&);
+    //template <typename T> any_conversion(T&);
 };
 
 template <typename T> struct checker
@@ -129,8 +129,8 @@ struct is_convertible_impl
 
 struct any_conversion
 {
-    template <typename T> any_conversion(const T&);
-    template <typename T> any_conversion(T&);
+    template <typename T> any_conversion(const volatile T&);
+    //template <typename T> any_conversion(T&);
 };
 
 template <typename From, typename To>
