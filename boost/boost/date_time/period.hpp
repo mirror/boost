@@ -67,6 +67,7 @@ namespace date_time {
     point_rep begin() const;
     point_rep end() const;
     point_rep last() const;
+    duration_rep length() const;
     bool is_null() const;
     bool operator==(const period& rhs) const;
     bool operator<(const period& rhs) const;
@@ -133,6 +134,14 @@ namespace date_time {
   bool period<point_rep,duration_rep>::is_null() const 
   {
     return last_ <= begin_;
+  }
+
+  //! Return the length of the period
+  template<class point_rep, class duration_rep>
+  inline
+  duration_rep period<point_rep,duration_rep>::length() const
+  {
+    return end() - begin_;
   }
 
   //! Equality operator
