@@ -83,6 +83,17 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float&,convertible_from<floa
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float const&,convertible_from<float const&> >::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float&,convertible_from<float const&> >::value), true);
 
+//
+// the following all generate warnings unless we can find a way to
+// suppress them:
+//
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,int>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<double,int>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<double,float>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<long,int>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int,char>::value), true);
+
+
 TT_TEST_END
 
 
