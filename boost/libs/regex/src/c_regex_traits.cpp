@@ -375,15 +375,12 @@ void BOOST_REGEX_CALL re_message_update()
       if(*boost::re_detail::c_traits_base::get_catalogue())
       {
          message_cat = catopen(boost::re_detail::c_traits_base::get_catalogue(), 0);
-#ifndef BOOST_NO_EXCEPTIONS
          if(message_cat == (nl_catd)-1)
          {
             std::string m("Unable to open message catalog: ");
-            throw std::runtime_error(m + boost::re_detail::c_traits_base::get_catalogue());
+            std::runtime_error err(m + boost::re_detail::c_traits_base::get_catalogue());
+            boost::throw_exception(err);
          }
-#else
-         BOOST_REGEX_NOEH_ASSERT(message_cat != (nl_catd)-1);
-#endif
       }
 #endif
       for(int i = 0; i < boost::REG_E_UNKNOWN; ++i)

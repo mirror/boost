@@ -83,11 +83,8 @@ void mapfile::open(const char* file)
          CloseHandle(hfile);
          hmap = 0;
          hfile = 0;
-#ifndef BOOST_NO_EXCEPTIONS
-         throw std::runtime_error("Unable to create file mapping.");
-#else
-         BOOST_REGEX_NOEH_ASSERT(hmap != INVALID_HANDLE_VALUE);
-#endif
+         std::runtime_error err("Unable to create file mapping.");
+         boost::throw_exception(err);
       }
       _first = static_cast<const char*>(MapViewOfFile(hmap, FILE_MAP_READ, 0, 0, 0));
       if(_first == 0)
@@ -96,11 +93,7 @@ void mapfile::open(const char* file)
          CloseHandle(hfile);
          hmap = 0;
          hfile = 0;
-#ifndef BOOST_NO_EXCEPTIONS
-         throw std::runtime_error("Unable to create file mapping.");
-#else
-         BOOST_REGEX_NOEH_ASSERT(_first != 0);
-#endif
+         std::runtime_error err("Unable to create file mapping.");
       }
       _last = _first + GetFileSize(hfile, 0);
    }
@@ -322,11 +315,7 @@ void mapfile::open(const char* file)
    }
    else
    {
-#ifndef BOOST_NO_EXCEPTIONS
-       throw std::runtime_error("Unable to open file.");
-#else
-       BOOST_REGEX_NOEH_ASSERT(hfile != 0);
-#endif
+       std::runtime_error err("Unable to open file.");
    }
 #ifndef BOOST_NO_EXCEPTIONS
    }catch(...)

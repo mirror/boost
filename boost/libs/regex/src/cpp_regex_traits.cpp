@@ -205,15 +205,12 @@ message_data<char>::message_data(const std::locale& l, std::string regex_message
    {
       pm = &BOOST_USE_FACET(std::messages<char>, l);
       cat = pm->open(regex_message_catalogue, l);
-#ifndef BOOST_NO_EXCEPTIONS
       if(cat < 0)
       {
          std::string m("Unable to open message catalog: ");
-         throw std::runtime_error(m + regex_message_catalogue);
+         std::runtime_error err(m + regex_message_catalogue);
+         boost::throw_exception(err);
       }
-#else
-      BOOST_REGEX_NOEH_ASSERT(cat >= 0);
-#endif
    } 
 #endif
    std::memset(syntax_map, cpp_regex_traits<char>::syntax_char, 256);
@@ -613,15 +610,12 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
    if(regex_message_catalogue.size())
    {
       cat = msgs.open(regex_message_catalogue, l);
-#ifndef BOOST_NO_EXCEPTIONS
       if(cat < 0)
       {
          std::string m("Unable to open message catalog: ");
-         throw std::runtime_error(m + regex_message_catalogue);
+         std::runtime_error err(m + regex_message_catalogue);
+         boost::throw_exception(err);
       }
-#else
-      BOOST_REGEX_NOEH_ASSERT(cat >= 0);
-#endif
    }
 #endif
    scoped_array<char> a;
