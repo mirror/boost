@@ -20,7 +20,7 @@ int test_main(int, char* [])
 {
 
   using boost::format;
-  using boost::io::str;
+  using boost::str;
 
 #if !defined(BOOST_NO_STD_WSTRING) && !defined(BOOST_NO_STD_WSTREAMBUF)
   using boost::wformat;
