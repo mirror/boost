@@ -13,6 +13,8 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/assert.hpp>  // BOOST_ASSERT
 
+#include <algorithm> // std::find_if
+
 
 
 namespace boost
@@ -96,30 +98,37 @@ class node_state : public node_state_base< Allocator, RttiPolicy >
         pOutermostUnstableState,
       bool callExitActions )
     {
-      bool hasInnerStates = false;
+      state_base_type ** const pPastEnd =
+        &pInnerStates[ OrthogonalRegionCount::value ];
+      // We must not iterate past the last inner state because *this* state
+      // will no longer exist when the last inner state has been removed
+      state_base_type ** const pFirstNonNull = std::find_if(
+        &pInnerStates[ 0 ], pPastEnd, &node_state::is_not_null );
 
-      // Destroy inner states in the reverse order of construction
-      for ( state_base_type ** pState =
-              &pInnerStates[ OrthogonalRegionCount::value ]; 
-            pState != &pInnerStates[ 0 ]; )
+      if ( pFirstNonNull == pPastEnd )
       {
-        --pState;
-        // An inner orthogonal state might have been terminated long before,
-        // that's why we have to check for 0 pointers
-        if ( *pState != 0 )
-        {
-          hasInnerStates = true;
-          ( *pState )->remove_from_state_list(
-            statesEnd, pOutermostUnstableState, callExitActions );
-        }
-      }
-
-      if ( !hasInnerStates )
-      {
+        // The state does not have inner states but is still alive, this must
+        // be the outermost unstable state then.
         BOOST_ASSERT( get_pointer( pOutermostUnstableState ) == this );
         typename state_base_type::node_state_base_ptr_type pSelf =
           pOutermostUnstableState;
         pSelf->exit_impl( pSelf, pOutermostUnstableState, callExitActions );
+      }
+      else
+      {
+        // Destroy inner states in the reverse order of construction
+        for ( state_base_type ** pState = pPastEnd; pState != pFirstNonNull; )
+        {
+          --pState;
+
+          // An inner orthogonal state might have been terminated long before,
+          // that's why we have to check for 0 pointers
+          if ( *pState != 0 )
+          {
+            ( *pState )->remove_from_state_list(
+              statesEnd, pOutermostUnstableState, callExitActions );
+          }
+        }
       }
     }
 
@@ -128,6 +137,11 @@ class node_state : public node_state_base< Allocator, RttiPolicy >
 
   private:
     //////////////////////////////////////////////////////////////////////////
+    static bool is_not_null( const state_base_type * pInner )
+    {
+      return pInner != 0;
+    }
+
     state_base_type * pInnerStates[ OrthogonalRegionCount::value ];
 };
 
