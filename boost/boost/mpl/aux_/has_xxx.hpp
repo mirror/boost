@@ -30,28 +30,26 @@
 // the implementation below is based on a USENET newsgroup's posting by  
 // Rani Sharoni (comp.lang.c++.moderated, 2002-03-17 07:45:09 PST)
 
-#   define BOOST_MPL_HAS_XXX_TRAIT_DEF(name) \
-template< typename T > \
-boost::mpl::aux::yes_tag \
-has_##name##_helper( \
-      boost::mpl::aux::type_wrapper<T>* \
-    , BOOST_MSVC_TYPENAME T::name* \
-    ); \
-\
-template< typename T > \
-boost::mpl::aux::no_tag has_##name##_helper( \
-      boost::mpl::aux::type_wrapper<T>* \
-    , ... \
-    ); \
-\
-template< typename T > \
-struct has_##name \
-{ \
-     BOOST_STATIC_CONSTANT(bool, value =  \
-        sizeof(has_##name##_helper((boost::mpl::aux::type_wrapper<T>*)0, 0)) \
-            == sizeof(boost::mpl::aux::yes_tag) \
-        ); \
-}; \
+#   define BOOST_MPL_HAS_XXX_TRAIT_DEF(name)                                    \
+template< typename T >                                                          \
+boost::mpl::aux::yes_tag                                                        \
+has_##name##_helper(                                                            \
+      boost::mpl::aux::type_wrapper<T>*                                         \
+    , void (*)(BOOST_MSVC_TYPENAME T::name) = 0                                 \
+    );                                                                          \
+                                                                                \
+boost::mpl::aux::no_tag has_##name##_helper(                                    \
+    ...                                                                         \
+    );                                                                          \
+                                                                                \
+template< typename T >                                                          \
+struct has_##name                                                               \
+{                                                                               \
+     BOOST_STATIC_CONSTANT(bool, value =                                        \
+        sizeof((has_##name##_helper)((boost::mpl::aux::type_wrapper<T>*)0))     \
+            == sizeof(boost::mpl::aux::yes_tag)                                 \
+        );                                                                      \
+};                                                                              \
 /**/
 
 #   else
