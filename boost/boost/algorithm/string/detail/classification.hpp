@@ -16,6 +16,7 @@
 #include <locale>
 #include <set>
 #include <boost/algorithm/string/collection_traits.hpp>
+#include <boost/type_traits/remove_const.hpp>
 
 namespace boost {
     namespace algorithm {
@@ -81,7 +82,9 @@ namespace boost {
                 }
             
             private:
-                std::set<CharT> m_Set;                
+                // set cannot operate on const value-type
+                typedef typename remove_const<CharT>::type set_value_type;
+                std::set<set_value_type> m_Set;                
             };
 
             // is_from_range functor 
