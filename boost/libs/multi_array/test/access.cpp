@@ -18,7 +18,7 @@ void access(Array& A, const mutable_array_tag&) {
 template <typename Array>
 void access(Array& A, const const_array_tag&) {
   const int ndims = 3;
-  BOOST_TEST((Array::dimensionality == ndims));
+  BOOST_STATIC_ASSERT((Array::dimensionality == ndims));
   typedef typename Array::index index;
   const index idx0 = A.index_bases()[0];
   const index idx1 = A.index_bases()[1];
