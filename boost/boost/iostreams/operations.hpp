@@ -265,10 +265,10 @@ struct filter_impl<any_tag> {
         typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
         std::streamsize result;
         for (result = 0; result < n; ++result) {
-            char_type c = t.get(src);
+            typename io_int<T>::type c = t.get(src);
             if (traits_type::eq_int_type(c, traits_type::eof()))
                 break;
-            s[result] = traits_type::to_int_type(c);
+            s[result] = traits_type::to_char_type(c);
         }
         return result;
     }
