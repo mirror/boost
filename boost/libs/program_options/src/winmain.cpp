@@ -43,7 +43,7 @@ namespace boost { namespace program_options {
                         // (n-1)/2 backslashes and is literal quote.
                     } else {
                         current.append(backslash_count / 2, '\\');                
-                        current.push_back('"');                
+                        current += '"';                
                     }
                     backslash_count = 0;
                 } else if (*i == '\\') {
@@ -63,7 +63,7 @@ namespace boost { namespace program_options {
                             ;
                         --i;
                     } else {                  
-                        current.push_back(*i);
+                        current += *i;
                     }
                 }
             }
