@@ -187,7 +187,7 @@ namespace boost
         Target result;
 
         if(!(interpreter << arg && interpreter >> result))
-            throw_exception(detail::no_lexical_conversion<Target, Source>());
+            throw_exception(bad_lexical_cast(typeid(Target), typeid(Source)));
         return result;
     }
 }
