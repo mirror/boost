@@ -17,11 +17,8 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
-#include <boost/detail/workaround.hpp>
-
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
-
 #include <boost/serialization/serialization.hpp>
 
 namespace boost {
@@ -42,7 +39,9 @@ struct free_saver {
         const  T & t, 
         const unsigned int file_version
     ){
-        save(ar, t, file_version);
+        // use function overload (version_type) to workaround
+        // two-phase lookup issue
+        save(ar, t, version_type(file_version));
     }
 };
 template<class Archive, class T>
@@ -52,7 +51,9 @@ struct free_loader {
         T & t, 
         const unsigned int file_version
     ){
-        load(ar, t, file_version);
+        // use function overload (version_type) to workaround
+        // two-phase lookup issue
+        load(ar, t, version_type(file_version));
     }
 };
 //} // namespace detail

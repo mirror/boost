@@ -23,19 +23,15 @@
 #include <boost/serialization/collections_save_imp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>
 #include <boost/serialization/split_free.hpp>
-// function specializations must be defined in the appropriate
-// namespace - boost::serialization
+
 #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
 #define STD _STLP_STD
 #else
 #define STD std
 #endif
 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-namespace boost { namespace serialization {
-#else
-namespace STD {
-#endif
+namespace boost { 
+namespace serialization {
 
 template<class Archive, class Key, class Compare, class Allocator >
 inline void save(
@@ -119,11 +115,8 @@ inline void serialize(
     boost::serialization::split_free(ar, t, file_version);
 }
 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-}} // namespace boost::serialization
-#else
-} // std
-#endif
+} // namespace serialization
+} // namespace boost
 
 #include <boost/serialization/collection_traits.hpp>
 

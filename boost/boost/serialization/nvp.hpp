@@ -19,6 +19,12 @@
 #include <utility>
 
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
+// supress noise
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+# pragma warning (disable : 4786) // too long name, harmless warning
+#endif
+
 #include <boost/serialization/traits.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/tracking.hpp>

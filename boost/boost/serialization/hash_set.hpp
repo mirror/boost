@@ -37,11 +37,8 @@
 #define STD BOOST_STD_EXTENSION_NAMESPACE
 #endif
 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-namespace boost { namespace serialization {
-#else
-namespace STD {
-#endif
+namespace boost { 
+namespace serialization {
 
 template<class Archive, class Key, class Compare, class Allocator >
 inline void save(
@@ -131,11 +128,8 @@ inline void serialize(
     boost::serialization::split_free(ar, t, file_version);
 }
 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-}} // namespace boost::serialization
-#else
-} // STD
-#endif
+} // namespace serialization
+} // namespace boost
 
 #include <boost/serialization/collection_traits.hpp>
 

@@ -67,7 +67,7 @@ struct stack_construct : public stack_allocate<T>
 {
     stack_construct(Archive & ar){
         // note borland emits a no-op without the explicit namespace
-        boost::serialization::load_construct_data(ar, this->address(), 0U);
+        boost::serialization::load_construct_data_adl(ar, this->address(), 0U);
     }
     ~stack_construct(){
         this->address()->~T(); // undo load_construct_data above

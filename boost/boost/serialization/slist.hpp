@@ -25,18 +25,14 @@
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/nvp.hpp>
 
-// function specializations must be defined in the appropriate
-// namespace - boost::serialization
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-    namespace boost { namespace serialization {
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#define STD _STLP_STD
 #else
-    #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-    #define STD _STLP_STD
-    #else
-    #define STD BOOST_STD_EXTENSION_NAMESPACE
-    #endif
-    namespace STD {
+#define STD BOOST_STD_EXTENSION_NAMESPACE
 #endif
+
+namespace boost { 
+namespace serialization {
 
 template<class Archive, class U, class Allocator>
 inline void save(
@@ -87,11 +83,8 @@ inline void serialize(
     boost::serialization::split_free(ar, t, file_version);
 }
 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-}} // namespace boost::serialization
-#else
-} // BOOST_STD_EXTENSION_NAMESPACE
-#endif
+} // serialization
+} // namespace boost
 
 #include <boost/serialization/collection_traits.hpp>
 

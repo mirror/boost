@@ -39,14 +39,8 @@
 // mark base class as an (uncreatable) base class
 BOOST_IS_ABSTRACT(boost::detail::sp_counted_base)
 
-// function specializations must be defined in the appropriate
-// namespace - boost::serialization
 namespace boost { 
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 namespace serialization {
-#else
-namespace detail {
-#endif
 
 /////////////////////////////////////////////////////////////
 // sp_counted_base_impl serialization
@@ -126,10 +120,6 @@ inline void serialize(
     boost::serialization::split_free(ar, t, file_version);
 }
 
-#if ! defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-} // detail
-#endif
-
 /////////////////////////////////////////////////////////////
 // implement serialization for shared_ptr<T>
 
@@ -154,9 +144,7 @@ inline void serialize(
     ar & boost::serialization::make_nvp("pn", t.pn);
 }
 
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 } // serialization
-#endif
 } // namespace boost
 
 // This macro is used to export GUIDS for shared pointers to allow

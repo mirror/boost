@@ -25,10 +25,7 @@
 // function specializations must be defined in the appropriate
 // namespace - boost::serialization
 namespace boost { 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-namespace serialization {
-#endif
-    
+namespace serialization {    
     template<class Archive, class T>
     void save(
         Archive & ar, 
@@ -99,8 +96,7 @@ namespace serialization {
 
     #endif
 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 } // serialization
-#endif
 } // namespace boost
-#endif
+
+#endif // BOOST_SERIALIZATION_OPTIONAL_HPP_

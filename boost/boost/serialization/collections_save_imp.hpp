@@ -18,7 +18,6 @@
 
 // helper function templates for serialization of collections
 
-#include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
 
 namespace boost{
@@ -38,7 +37,7 @@ inline void save_collection(Archive & ar, const Container &s)
     BOOST_DEDUCED_TYPENAME Container::const_iterator it = s.begin();
     while(count-- > 0){
         // note borland emits a no-op without the explicit namespace
-        boost::serialization::save_construct_data(ar, &(*it), 0U);
+        boost::serialization::save_construct_data_adl(ar, &(*it), 0U);
         ar << boost::serialization::make_nvp("item", *it++);
     }
 }
