@@ -63,6 +63,32 @@ int main()
       boost::function_requires< boost_concepts::WritableIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ForwardTraversalConcept<Iter> >();
     }
+    {
+      typedef boost::filter_iterator<one_or_four, boost::bidirectional_iterator_archetype<dummyT> > Iter;
+      boost::function_requires< boost::BidirectionalIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+    }
+    {
+      typedef boost::filter_iterator<one_or_four, boost::mutable_bidirectional_iterator_archetype<dummyT> > Iter;
+      boost::function_requires< boost::Mutable_BidirectionalIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::WritableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+    }
+    {
+      typedef boost::filter_iterator<one_or_four, boost::random_access_iterator_archetype<dummyT> > Iter;
+      boost::function_requires< boost::BidirectionalIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+    }
+    {
+      typedef boost::filter_iterator<one_or_four, boost::mutable_random_access_iterator_archetype<dummyT> > Iter;
+      boost::function_requires< boost::Mutable_BidirectionalIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::WritableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+    }
     // Adapting new-style iterators
     {
       typedef boost::iterator_archetype<
@@ -138,6 +164,56 @@ int main()
       boost::function_requires< boost_concepts::WritableIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::LvalueIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ForwardTraversalConcept<Iter> >();
+    }
+#endif 
+
+    {
+      typedef boost::iterator_archetype<
+          const dummyT
+        , boost::iterator_archetypes::readable_iterator_t
+        , boost::random_access_traversal_tag
+      > BaseIter;
+      typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
+      boost::function_requires< boost::InputIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+    }
+    
+#if !BOOST_WORKAROUND(BOOST_MSVC, == 1200)  // Causes Internal Error in linker.
+    {
+      typedef boost::iterator_archetype<
+          dummyT
+        , boost::iterator_archetypes::readable_writable_iterator_t
+        , boost::random_access_traversal_tag
+      > BaseIter;
+      typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
+      boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::WritableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+    }
+    {
+      typedef boost::iterator_archetype<
+          const dummyT
+        , boost::iterator_archetypes::readable_lvalue_iterator_t
+        , boost::random_access_traversal_tag
+      > BaseIter;
+      typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
+      boost::function_requires< boost::BidirectionalIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::LvalueIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+    }
+    {
+      typedef boost::iterator_archetype<
+          dummyT
+        , boost::iterator_archetypes::writable_lvalue_iterator_t
+        , boost::random_access_traversal_tag
+      > BaseIter;
+      typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
+      boost::function_requires< boost::Mutable_BidirectionalIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::WritableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::LvalueIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
     }
 #endif 
 

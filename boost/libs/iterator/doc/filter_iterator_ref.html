@@ -43,12 +43,16 @@ private:
     Iterator m_end;   // exposition only
 };
 </pre>
-<p>If <tt class="literal"><span class="pre">Iterator</span></tt> models Readable Lvalue Iterator and Forward Traversal
+<p>If <tt class="literal"><span class="pre">Iterator</span></tt> models Readable Lvalue Iterator and Bidirectional Traversal
 Iterator then <tt class="literal"><span class="pre">iterator_category</span></tt> is convertible to
-<tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt>. Otherwise <tt class="literal"><span class="pre">iterator_category</span></tt> is
+<tt class="literal"><span class="pre">std::bidirectional_iterator_tag</span></tt>. 
+Otherwise, if <tt class="literal"><span class="pre">Iterator</span></tt> models Readable Lvalue Iterator and Forward Traversal
+Iterator then <tt class="literal"><span class="pre">iterator_category</span></tt> is convertible to
+<tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt>. 
+Otherwise <tt class="literal"><span class="pre">iterator_category</span></tt> is
 convertible to <tt class="literal"><span class="pre">std::input_iterator_tag</span></tt>.</p>
-<div class="section" id="filter-iterator-requirements">
-<h1><a name="filter-iterator-requirements"><tt class="literal"><span class="pre">filter_iterator</span></tt> requirements</a></h1>
+<div class="section" id="filter-iterator">
+<h1><a name="filter-iterator"><tt class="literal"><span class="pre">filter_iterator</span></tt> requirements</a></h1>
 <p>The <tt class="literal"><span class="pre">Iterator</span></tt> argument shall meet the requirements of Readable
 Iterator and Single Pass Iterator or it shall meet the requirements of
 Input Iterator.</p>
@@ -65,8 +69,8 @@ concepts the <tt class="literal"><span class="pre">Iterator</span></tt> argument
 following tables.</p>
 <table border="1" class="table">
 <colgroup>
-<col width="33%" />
-<col width="67%" />
+<col width="44%" />
+<col width="56%" />
 </colgroup>
 <thead valign="bottom">
 <tr><th>If <tt class="literal"><span class="pre">Iterator</span></tt> models</th>
@@ -79,6 +83,9 @@ following tables.</p>
 </tr>
 <tr><td>Forward Traversal Iterator</td>
 <td>Forward Traversal Iterator</td>
+</tr>
+<tr><td>Bidirectional Traversal Iterator</td>
+<td>Bidirectional Traversal Iterator</td>
 </tr>
 </tbody>
 </table>
@@ -124,13 +131,16 @@ following tables.</p>
 <tr><td>Writable Lvalue Iterator, Forward Traversal Iterator</td>
 <td>Mutable Forward Iterator</td>
 </tr>
+<tr><td>Writable Lvalue Iterator, Bidirectional Iterator</td>
+<td>Mutable Bidirectional Iterator</td>
+</tr>
 </tbody>
 </table>
 <p><tt class="literal"><span class="pre">filter_iterator&lt;P1,</span> <span class="pre">X&gt;</span></tt> is interoperable with <tt class="literal"><span class="pre">filter_iterator&lt;P2,</span> <span class="pre">Y&gt;</span></tt> 
 if and only if <tt class="literal"><span class="pre">X</span></tt> is interoperable with <tt class="literal"><span class="pre">Y</span></tt>.</p>
 </div>
-<div class="section" id="filter-iterator-operations">
-<h1><a name="filter-iterator-operations"><tt class="literal"><span class="pre">filter_iterator</span></tt> operations</a></h1>
+<div class="section" id="id1">
+<h1><a name="id1"><tt class="literal"><span class="pre">filter_iterator</span></tt> operations</a></h1>
 <p>In addition to those operations required by the concepts that
 <tt class="literal"><span class="pre">filter_iterator</span></tt> models, <tt class="literal"><span class="pre">filter_iterator</span></tt> provides the following
 operations.</p>

@@ -35,9 +35,13 @@
   };
 
 
-If ``Iterator`` models Readable Lvalue Iterator and Forward Traversal
+If ``Iterator`` models Readable Lvalue Iterator and Bidirectional Traversal
 Iterator then ``iterator_category`` is convertible to
-``std::forward_iterator_tag``. Otherwise ``iterator_category`` is
+``std::bidirectional_iterator_tag``. 
+Otherwise, if ``Iterator`` models Readable Lvalue Iterator and Forward Traversal
+Iterator then ``iterator_category`` is convertible to
+``std::forward_iterator_tag``. 
+Otherwise ``iterator_category`` is
 convertible to ``std::input_iterator_tag``.
 
 
@@ -62,13 +66,15 @@ The concepts that ``filter_iterator`` models are dependent on which
 concepts the ``Iterator`` argument models, as specified in the
 following tables.
 
-+-----------------------------+----------------------------------------------------------+
-| If ``Iterator`` models      | then ``filter_iterator`` models                          |
-+=============================+==========================================================+
-| Single Pass Iterator        | Single Pass Iterator                                     |
-+-----------------------------+----------------------------------------------------------+
-| Forward Traversal Iterator  | Forward Traversal Iterator                               |
-+-----------------------------+----------------------------------------------------------+
++---------------------------------+------------------------------------------+
+|If ``Iterator`` models           |then ``filter_iterator`` models           |
++=================================+==========================================+
+|Single Pass Iterator             |Single Pass Iterator                      |
++---------------------------------+------------------------------------------+
+|Forward Traversal Iterator       |Forward Traversal Iterator                |
++---------------------------------+------------------------------------------+
+|Bidirectional Traversal Iterator |Bidirectional Traversal Iterator          |
++---------------------------------+------------------------------------------+
 
 +--------------------------------+----------------------------------------------+
 | If ``Iterator`` models         | then ``filter_iterator`` models              |
@@ -81,13 +87,15 @@ following tables.
 +--------------------------------+----------------------------------------------+
 
 +-------------------------------------------------------+---------------------------------+
-| If ``Iterator`` models                                | then ``filter_iterator`` models |
+|If ``Iterator`` models                                 | then ``filter_iterator`` models |
 +=======================================================+=================================+
-| Readable Iterator, Single Pass Iterator               | Input Iterator                  |
+|Readable Iterator, Single Pass Iterator                | Input Iterator                  |
 +-------------------------------------------------------+---------------------------------+
-| Readable Lvalue Iterator, Forward Traversal Iterator  | Forward Iterator                |
+|Readable Lvalue Iterator, Forward Traversal Iterator   | Forward Iterator                |
 +-------------------------------------------------------+---------------------------------+
-| Writable Lvalue Iterator, Forward Traversal Iterator  | Mutable Forward Iterator        |
+|Writable Lvalue Iterator, Forward Traversal Iterator   | Mutable Forward Iterator        |
++-------------------------------------------------------+---------------------------------+
+|Writable Lvalue Iterator, Bidirectional Iterator       | Mutable Bidirectional Iterator  |
 +-------------------------------------------------------+---------------------------------+
 
 
