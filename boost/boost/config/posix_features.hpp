@@ -5,23 +5,29 @@
 
 //  See http://www.boost.org for most recent version.
 
-// All POSIX feature tests go in this file:
+// All POSIX feature tests go in this file,
+// Note that we test _POSIX_C_SOURCE and _XOPEN_SOURCE as well
+// _POSIX_VERSION and _XOPEN_VERSION: on some systems POSIX API's
+// may be present but none-functional unless _POSIX_C_SOURCE and
+// _XOPEN_SOURCE have been defined to the right value (it's up
+// to the user to do this *before* including any header, although
+// in most cases the compiler will do this for you).
 
-#  ifdef BOOST_HAS_UNISTD_H
+#  if defined(BOOST_HAS_UNISTD_H) && defined(_POSIX_C_SOURCE)
 #     include <unistd.h>
 
       // XOpen has <nl_types.h>, but is this the correct version check?
-#     if defined(_XOPEN_VERSION) && (_XOPEN_VERSION >= 3)
+#     if defined(_XOPEN_VERSION) && (_XOPEN_VERSION >= 3) && defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE >= 3)
 #        define BOOST_HAS_NL_TYPES_H
 #     endif
 
       // POSIX version 6 requires <stdint.h>
-#     if defined(_POSIX_VERSION) && (_POSIX_VERSION >= 200100)
+#     if defined(_POSIX_VERSION) && (_POSIX_VERSION >= 200100) && (_POSIX_C_SOURCE >= 200100)
 #        define BOOST_HAS_STDINT_H
 #     endif
 
       // POSIX version 2 requires <dirent.h>
-#     if defined(_POSIX_VERSION) && (_POSIX_VERSION >= 199009L)
+#     if defined(_POSIX_VERSION) && (_POSIX_VERSION >= 199009L) && (_POSIX_C_SOURCE >= 199009L)
 #        define BOOST_HAS_DIRENT_H
 #     endif
 
@@ -63,7 +69,7 @@
       // BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE:
       // These are predicated on _XOPEN_VERSION, and appears to be first released
       // in issue 4, version 2 (_XOPEN_VERSION > 500).
-#     if defined(_XOPEN_VERSION) && (_XOPEN_VERSION+0 >= 500)
+#     if defined(_XOPEN_VERSION) && (_XOPEN_VERSION+0 >= 500)  && defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE >= 500)
 #        define BOOST_HAS_GETTIMEOFDAY
 #        define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
 #     endif
