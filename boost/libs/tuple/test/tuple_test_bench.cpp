@@ -270,6 +270,9 @@ void foo8()
   int i = 3;
   cons<int&, cons<const int, cons<volatile float, null_type> > > c(i, b);
   BOOST_TEST(make_tuple(3,2,1)==c);
+
+  cons<char, cons<int, cons<float, null_type> > > x;
+
 #endif
 }
 
@@ -280,7 +283,6 @@ void foo9()
   BOOST_TEST(get<0>(t1) == 5);
   BOOST_TEST(get<1>(t1) == 3.3f);
 }
-
 
 // --------------------------------
 // ----------------------------
