@@ -57,49 +57,6 @@ namespace boost {
     }
   };
 
-  template <class Left, class Base = null_archetype>
-  class left_equality_comparable_archetype : public Base {
-  public:
-    left_equality_comparable_archetype(detail::dummy_constructor x) 
-      : Base(x) { }
-  };
-  template <class Left>
-  bool operator==(const Left&, const left_equality_comparable_archetype<Left>&) 
-    { return true; }
-  template <class Left>
-  bool operator!=(const Left&, const left_equality_comparable_archetype<Left>&)
-    { return true; }
-
-  template <class Base = null_archetype>
-  class equality_comparable_archetype : public Base {
-  public:
-    equality_comparable_archetype(detail::dummy_constructor x) : Base(x) { }
-  };
-  template <class Base>
-  bool operator==(const equality_comparable_archetype<Base>&,
-		  const equality_comparable_archetype<Base>&) { return true; }
-  template <class Base>
-  bool operator!=(const equality_comparable_archetype<Base>&,
-		  const equality_comparable_archetype<Base>&) { return true; }
-
-  template <class Base = null_archetype>
-  class less_than_comparable_archetype : public Base {
-  public:
-    less_than_comparable_archetype(detail::dummy_constructor x) : Base(x) { }
-  };
-  template <class Base>
-  bool operator<(const less_than_comparable_archetype<Base>&,
-		  const less_than_comparable_archetype<Base>&) { return true; }
-  template <class Base>
-  bool operator<=(const less_than_comparable_archetype<Base>&,
-		  const less_than_comparable_archetype<Base>&) { return true; }
-  template <class Base>
-  bool operator>(const less_than_comparable_archetype<Base>&,
-		  const less_than_comparable_archetype<Base>&) { return true; }
-  template <class Base>
-  bool operator>=(const less_than_comparable_archetype<Base>&,
-		  const less_than_comparable_archetype<Base>&) { return true; }
-  
   template <class T, class Base = null_archetype>
   class convertible_to_archetype : public Base {
   public:
@@ -107,6 +64,73 @@ namespace boost {
     operator const T&() const { return static_object<T>::get(); }
   };
 
+  class boolean_archetype {
+  public:
+    boolean_archetype(const boolean_archetype&) { }
+    operator bool() const { return true; }
+    boolean_archetype(detail::dummy_constructor x) { }
+  private:
+    boolean_archetype() { }
+    boolean_archetype& operator=(const boolean_archetype&) { return *this; }
+  };
+  
+  template <class Left, class Base = null_archetype>
+  class left_equality_comparable_archetype : public Base {
+  public:
+    left_equality_comparable_archetype(detail::dummy_constructor x) 
+      : Base(x) { }
+  };
+  template <class Left>
+  boolean_archetype
+  operator==(const Left&, const left_equality_comparable_archetype<Left>&) 
+    { return boolean_archetype(dummy_cons); }
+  template <class Left>
+  boolean_archetype
+  operator!=(const Left&, const left_equality_comparable_archetype<Left>&)
+    { return boolean_archetype(dummy_cons); }
+
+  template <class Base = null_archetype>
+  class equality_comparable_archetype : public Base {
+  public:
+    equality_comparable_archetype(detail::dummy_constructor x) : Base(x) { }
+  };
+  template <class Base>
+  boolean_archetype
+  operator==(const equality_comparable_archetype<Base>&,
+	     const equality_comparable_archetype<Base>&) 
+    { return boolean_archetype(dummy_cons);; }
+  template <class Base>
+  boolean_archetype
+  operator!=(const equality_comparable_archetype<Base>&,
+	     const equality_comparable_archetype<Base>&)
+    { return boolean_archetype(dummy_cons);; }
+
+  template <class Base = null_archetype>
+  class less_than_comparable_archetype : public Base {
+  public:
+    less_than_comparable_archetype(detail::dummy_constructor x) : Base(x) { }
+  };
+  template <class Base>
+  boolean_archetype
+  operator<(const less_than_comparable_archetype<Base>&,
+	    const less_than_comparable_archetype<Base>&)
+    { return boolean_archetype(dummy_cons);; }
+  template <class Base>
+  boolean_archetype
+  operator<=(const less_than_comparable_archetype<Base>&,
+	     const less_than_comparable_archetype<Base>&)
+    { return boolean_archetype(dummy_cons);; }
+  template <class Base>
+  boolean_archetype
+  operator>(const less_than_comparable_archetype<Base>&,
+	    const less_than_comparable_archetype<Base>&)
+    { return boolean_archetype(dummy_cons);; }
+  template <class Base>
+  boolean_archetype
+  operator>=(const less_than_comparable_archetype<Base>&,
+	     const less_than_comparable_archetype<Base>&)
+    { return boolean_archetype(dummy_cons);; }
+  
   template <class Base = null_archetype>
   class default_constructible_archetype : public Base {
   public:
@@ -139,7 +163,7 @@ namespace boost {
   template <class Arg, class Return>
   class unary_function_archetype {
   public:
-    const Return& operator()(const Arg&) { 
+    const Return& operator()(const Arg&) {
       return static_object<Return>::get(); 
     }
   };
@@ -147,25 +171,34 @@ namespace boost {
   template <class Arg1, class Arg2, class Return>
   class binary_function_archetype {
   public:
-    const Return& operator()(const Arg1&, const Arg2&) { 
+    const Return& operator()(const Arg1&, const Arg2&) {
       return static_object<Return>::get(); 
     }
   };
 
   template <class Arg>
   class unary_predicate_archetype {
-    typedef convertible_to_archetype<bool> Return;
+    typedef boolean_archetype Return;
   public:
-    const Return& operator()(const Arg&) { 
+    const Return& operator()(const Arg&) {
       return static_object<Return>::get(); 
     }
   };
 
   template <class Arg1, class Arg2>
   class binary_predicate_archetype {
-    typedef convertible_to_archetype<bool> Return;
+    typedef boolean_archetype Return;
   public:
-    const Return& operator()(const Arg1&, const Arg2&) { 
+    const Return& operator()(const Arg1&, const Arg2&) {
+      return static_object<Return>::get(); 
+    }
+  };
+
+  template <class Arg1, class Arg2>
+  class const_binary_predicate_archetype {
+    typedef boolean_archetype Return;
+  public:
+    const Return& operator()(const Arg1&, const Arg2&) const {
       return static_object<Return>::get(); 
     }
   };

@@ -186,27 +186,29 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
     T b;
   };
 
-  template <class TT>
-  struct Boolean_concept {
-    void constraints() {
-      b = x;
-      b = x || x;
-      b = x && x;
-    }
-    TT x;
-    bool b;
-  };
+  // The C++ standard requirements for many concepts talk about return
+  // types that must be "convertible to bool".  The problem with this
+  // requirement is that it leaves the door open for evil proxies that
+  // define things like operator|| with strange return types.  Two
+  // possible solutions are:
+  // 1) require the return type to be exactly bool
+  // 2) stay with convertible to bool, and also
+  //    specify stuff about all the logical operators.
+  // For now we just test for convertible to bool.
+  template <class T>
+  void require_boolean_expr(const T& t) {
+    bool x = t;
+    ignore_unused_variable_warning(x);
+  }
 
   template <class TT>
   struct EqualityComparable_concept
   {
     void constraints() {
-      require_boolean_return(a == b);
-      require_boolean_return(a != b);
+      require_boolean_expr(a == b);
+      require_boolean_expr(a != b);
     }
-    // Can't move the following outside, because it changes when
-    // the error message appears.
-    template <class B> void require_boolean_return(B) { REQUIRE(B, Boolean); }
+    bool boolean;
     TT a, b;
   };
 
@@ -214,10 +216,9 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct LeftEqualityComparable_concept
   {
     void constraints() {
-      require_boolean_return(b == a);
-      require_boolean_return(b != a);
+      require_boolean_expr(b == a);
+      require_boolean_expr(b != a);
     }
-    template <class B> void require_boolean_return(B) { REQUIRE(B, Boolean); }
     XX a;
     YY b;
   };
@@ -226,14 +227,12 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct LessThanComparable_concept
   {
     void constraints() {
-      require_boolean_return(a < b);
-      require_boolean_return(a > b);
-      require_boolean_return(a <= b);
-      require_boolean_return(a >= b);
+      require_boolean_expr(a < b);
+      require_boolean_expr(a > b);
+      require_boolean_expr(a <= b);
+      require_boolean_expr(a >= b);
     }
-    // Can't move the following outside, because it changes when
-    // the error message appears.
-    template <class B> void require_boolean_return(B) { REQUIRE(B, Boolean); }
+    bool boolean;
     TT a, b;
   };
 
@@ -467,39 +466,37 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   };
 #endif
 
-  template <class _Func, class _Arg>
+  template <class Func, class Arg>
   struct UnaryPredicate_concept
   {
     void constraints() {
-      __r = __f(__arg); // require operator() returning bool
+      require_boolean_expr(f(arg)); // require operator() returning bool
     }
-    _Func __f;
-    _Arg __arg;
-    bool __r;
+    Func f;
+    Arg arg;
   };
 
-  template <class _Func, class _First, class _Second>
+  template <class Func, class First, class Second>
   struct BinaryPredicate_concept
   {
     void constraints() {
-      __r =  __f(__a, __b); // require operator() returning bool
+      require_boolean_expr(f(a, b)); // require operator() returning bool
     }
-    _Func __f;
-    _First __a;
-    _Second __b;
-    bool __r;
+    Func f;
+    First a;
+    Second b;
   };
 
   // use this when functor is used inside a container class like std::set
-  template <class _Func, class _First, class _Second>
+  template <class Func, class First, class Second>
   struct Const_BinaryPredicate_concept {
     void constraints() { 
-      REQUIRE3(_Func,_First,_Second, BinaryPredicate);
-      bool __r =  __f(__a,__b); // operator() must be a const member function
+      REQUIRE3(Func, First, Second, BinaryPredicate);
+      require_boolean_expr(f(a, b)); // operator() must be a const member function
     }
-    _Func __f;
-    _First __a;
-    _Second __b;
+    const Func f;
+    First a;
+    Second b;
   };
 
 #define __STL_DEFINE_BINARY_OPERATOR_CONSTRAINT(_OP,_NAME) \
@@ -828,7 +825,7 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
       REQUIRE(SimpleAssociativeContainer, AssociativeContainer);
       typedef typename SimpleAssociativeContainer::key_type key_type;
       typedef typename SimpleAssociativeContainer::value_type value_type;
-      CLASS_REQUIRES_SAME_TYPE(key_type, value_type);
+      REQUIRE_SAME_TYPE(key_type, value_type);
     }
   };
 
@@ -841,7 +838,7 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
       typedef typename SimpleAssociativeContainer::value_type value_type;
       typedef typename SimpleAssociativeContainer::mapped_type mapped_type;
       typedef std::pair<const key_type, mapped_type> required_value_type;
-      CLASS_REQUIRES_SAME_TYPE(value_type, required_value_type);
+      REQUIRE_SAME_TYPE(value_type, required_value_type);
     }
   };
 

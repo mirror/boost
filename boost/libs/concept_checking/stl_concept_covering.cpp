@@ -24,7 +24,9 @@ main()
   //===========================================================================
   // First verify that the archetype classes model the concepts they
   // are suppose to.
-
+  {
+    REQUIRE2(boolean_archetype, bool, Convertible);
+  }
   {
     typedef unary_function_archetype<int, int> F;
     REQUIRE3(F, int, int, UnaryFunction);
@@ -40,6 +42,8 @@ main()
   {
     typedef binary_predicate_archetype<int, int> F;
     REQUIRE3(F, int, int, BinaryPredicate);
+    typedef const_binary_predicate_archetype<int, int> const_F;
+    REQUIRE3(const_F, int, int, Const_BinaryPredicate);
   }
   {
     typedef input_iterator_archetype<null_archetype> Iter;
