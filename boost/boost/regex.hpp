@@ -436,9 +436,10 @@ struct def_alloc_param_traits<const wchar_t*>
 
 template <class iterator, class Allocator =
 #ifndef BOOST_MSVC
-typename
-#endif
+BOOST_DEFAULT_ALLOCATOR(typename re_detail::def_alloc_param_traits<iterator>::type) >
+#else
 BOOST_DEFAULT_ALLOCATOR(re_detail::def_alloc_param_traits<iterator>::type) >
+#endif
 class match_results;
 
 //
