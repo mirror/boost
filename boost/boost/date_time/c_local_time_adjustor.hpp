@@ -39,7 +39,7 @@ namespace date_time {
       time_duration_type td = t.time_of_day();
       std::time_t t2 = dd.days()*86400 + td.hours()*3600 + td.minutes()*60 + td.seconds();
       std::tm* tms = std::localtime(&t2);
-      date_type d(tms->tm_year + 1900,
+      date_type d(static_cast<unsigned short>(tms->tm_year + 1900),
                   static_cast<unsigned short>(tms->tm_mon + 1), 
                   static_cast<unsigned short>(tms->tm_mday));
       time_duration_type td2(tms->tm_hour,

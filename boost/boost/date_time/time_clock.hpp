@@ -46,7 +46,7 @@ namespace date_time {
   private:
     static time_type create_time(::std::tm* current)
     {
-      date_type d(current->tm_year + 1900, 
+      date_type d(static_cast<unsigned short>(current->tm_year + 1900), 
                   static_cast<unsigned short>(current->tm_mon + 1), 
                   static_cast<unsigned short>(current->tm_mday));
       time_duration_type td(current->tm_hour,
