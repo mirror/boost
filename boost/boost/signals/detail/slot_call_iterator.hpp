@@ -35,12 +35,15 @@ namespace boost {
         : public iterator_facade<slot_call_iterator<Function, Iterator>,
                                  typename Function::result_type,
                                  readable_lvalue_iterator_tag,
-                                 single_pass_traversal_tag>
+                                 single_pass_traversal_tag,
+                                 typename Function::result_type const&>
       {
         typedef iterator_facade<slot_call_iterator<Function, Iterator>,
                                 typename Function::result_type,
                                 readable_lvalue_iterator_tag,
-                                single_pass_traversal_tag> inherited;
+                                single_pass_traversal_tag,
+                                typename Function::result_type const&>
+          inherited;
 
         typedef typename Function::result_type result_type;
 
