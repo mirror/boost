@@ -68,8 +68,10 @@ if (vm.count(&quot;compression&quot;)) {
 
   <para>And now, finally, we can use the options as we like. The
     <code>variables_map</code> class can be used just like
-    <code>std::map</code>, except that values stored there must be converted to
-    the desired type with the <code>as</code> method shown above.
+    <code>std::map</code>, except that values stored there must be retrieved
+    with the <code>as</code> method shown above. (If the type specified in the
+    call to the <code>as</code> method is different from the actually stored
+    type, an exception is thrown.)
   </para>
 
   <para>It's now a good time to try compiling the code yourself, but if
