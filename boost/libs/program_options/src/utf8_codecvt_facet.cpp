@@ -13,6 +13,8 @@
 #define BOOST_PROGRAM_OPTIONS_SOURCE
 #include <boost/program_options/detail/utf8_codecvt_facet.hpp>
 
+#include <boost/limits.hpp>
+
 namespace boost { namespace program_options { namespace detail {
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // implementation for wchar_t
@@ -110,10 +112,11 @@ std::codecvt_base::result utf8_codecvt_facet_wchar_t::do_out(
         0x00, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc
     };
 
+    wchar_t max_wchar = std::numeric_limits<wchar_t>::max();
     while (from != from_end && to != to_end) {
 
         // Check for invalid UCS-4 character
-        if (*from  > WCHAR_MAX) {
+        if (*from  > max_wchar) {
             from_next = from;
             to_next = to;
             return std::codecvt_base::error;
