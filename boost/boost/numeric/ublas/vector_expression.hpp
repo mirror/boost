@@ -91,6 +91,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit scalar_reference (reference t):
             t_ (t) {}
 
+        // Conversion
         BOOST_UBLAS_INLINE
         operator value_type () const {
             return t_;
@@ -802,8 +803,8 @@ namespace boost { namespace numeric { namespace ublas {
             return BOOST_UBLAS_SAME (e1_.size (), e2_.size ()); 
         }
 
-    public:
-        // Expression accesors
+    private:
+        // Accessors
         BOOST_UBLAS_INLINE
         const expression1_closure_type &expression1 () const {
             return e1_;
@@ -1147,21 +1148,21 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
 
-    template<class E1, class E2, class F, class C1>
+    template<class E1, class E2, class F>
     class vector_binary_scalar1:
-        public vector_expression<vector_binary_scalar1<E1, E2, F, C1> > {
+        public vector_expression<vector_binary_scalar1<E1, E2, F> > {
 
         typedef F functor_type;
         typedef E1 expression1_type;
         typedef E2 expression2_type;
     public:
-        typedef C1 expression1_closure_type;
+        typedef const E1& expression1_closure_type;
         typedef typename E2::const_closure_type expression2_closure_type;
     private:
-        typedef vector_binary_scalar1<E1, E2, F, C1> self_type;
+        typedef vector_binary_scalar1<E1, E2, F> self_type;
     public:
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
-        using vector_expression<vector_binary_scalar1<E1, E2, F, C1> >::operator ();
+        using vector_expression<vector_binary_scalar1<E1, E2, F> >::operator ();
 #endif
         typedef typename E2::size_type size_type;
         typedef typename E2::difference_type difference_type;
@@ -1187,25 +1188,21 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     public:
-        expression1_closure_type const& expression1() const { return e1_ ; }
-        expression2_closure_type const& expression2() const { return e2_ ; }
-
-    public:
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
-            return functor_type::apply (expression1_type (e1_), e2_ (i));
+            return functor_type::apply (e1_, e2_ (i));
         }
 
         BOOST_UBLAS_INLINE
         const_reference operator [] (size_type i) const {
-            return functor_type::apply (expression1_type (e1_), e2_ [i]);
+            return functor_type::apply (e1_, e2_ [i]);
         }
 
         // Closure comparison
         BOOST_UBLAS_INLINE
         bool same_closure (const vector_binary_scalar1 &vbs1) const {
-            return (*this).e1_.same_closure (vbs1.e1_) &&
+            return &e1_ == &(vbs1.e1_) &&
                    (*this).e2_.same_closure (vbs1.e2_);
         }
 
@@ -1356,9 +1353,9 @@ namespace boost { namespace numeric { namespace ublas {
         expression2_closure_type e2_;
     };
 
-    template<class E1, class E2, class F, class C1 = typename E1::const_closure_type>
+    template<class E1, class E2, class F>
     struct vector_binary_scalar1_traits {
-        typedef vector_binary_scalar1<E1, E2, F, C1> expression_type;   // allow E1 to be builtin type
+        typedef vector_binary_scalar1<E1, E2, F> expression_type;   // allow E1 to be builtin type
 #ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 #else
@@ -1366,42 +1363,30 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
     };
 
-#ifdef BOOST_UBLAS_USE_SCALAR_ET
-    // (s * v) [i] = scalar_expression * v [i]
-    template<class E1, class E2>
-    BOOST_UBLAS_INLINE
-    typename vector_binary_scalar1_traits<E1, E2, scalar_multiplies<typename E1::value_type, typename E2::value_type> >::result_type
-    operator * (const scalar_expression<E1> &e1,
-                const vector_expression<E2> &e2) {
-        typedef typename vector_binary_scalar1_traits<E1, E2, scalar_multiplies<typename E1::value_type, typename E2::value_type> >::expression_type expression_type;
-        return expression_type (e1 (), e2 ());
-    }
-#endif
-
     // (t * v) [i] = t * v [i]
     template<class T1, class E2>
     BOOST_UBLAS_INLINE
-    typename vector_binary_scalar1_traits<const T1, E2, scalar_multiplies<T1, typename E2::value_type>, scalar_reference<const T1> >::result_type
+    typename vector_binary_scalar1_traits<const T1, E2, scalar_multiplies<T1, typename E2::value_type> >::result_type
     operator * (const T1 &e1,
                 const vector_expression<E2> &e2) {
-        typedef typename vector_binary_scalar1_traits<const T1, E2, scalar_multiplies<T1, typename E2::value_type>, scalar_reference<const T1> >::expression_type expression_type;
+        typedef typename vector_binary_scalar1_traits<const T1, E2, scalar_multiplies<T1, typename E2::value_type> >::expression_type expression_type;
         return expression_type (e1, e2 ());
     }
 
 
-    template<class E1, class E2, class F, class C2>
+    template<class E1, class E2, class F>
     class vector_binary_scalar2:
-        public vector_expression<vector_binary_scalar2<E1, E2, F, C2> > {
+        public vector_expression<vector_binary_scalar2<E1, E2, F> > {
 
         typedef F functor_type;
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef typename E1::const_closure_type expression1_closure_type;
-        typedef C2 expression2_closure_type;
-        typedef vector_binary_scalar2<E1, E2, F, C2> self_type;
+        typedef const E2& expression2_closure_type;
+        typedef vector_binary_scalar2<E1, E2, F> self_type;
     public:
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
-        using vector_expression<vector_binary_scalar2<E1, E2, F, C2> >::operator ();
+        using vector_expression<vector_binary_scalar2<E1, E2, F> >::operator ();
 #endif
         typedef typename E1::size_type size_type;
         typedef typename E1::difference_type difference_type;
@@ -1430,19 +1415,19 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
-            return functor_type::apply (e1_ (i), expression2_type (e2_));
+            return functor_type::apply (e1_ (i), e2_);
         }
 
         BOOST_UBLAS_INLINE
         const_reference operator [] (size_type i) const {
-            return functor_type::apply (e1_ [i], expression2_type (e2_));
+            return functor_type::apply (e1_ [i], e2_);
         }
 
         // Closure comparison
         BOOST_UBLAS_INLINE
         bool same_closure (const vector_binary_scalar2 &vbs2) const {
             return (*this).e1_.same_closure (vbs2.e1_) &&
-                   (*this).e2_.same_closure (vbs2.e2_);
+                   &e2_ == &(vbs2.e2_);
         }
 
         // Iterator types
@@ -1592,9 +1577,9 @@ namespace boost { namespace numeric { namespace ublas {
         expression2_closure_type e2_;
     };
 
-    template<class E1, class E2, class F, class C2 = typename E2::const_closure_type>
+    template<class E1, class E2, class F>
     struct vector_binary_scalar2_traits {
-        typedef vector_binary_scalar2<E1, E2, F, C2> expression_type;   // allow E2 to be builtin type
+        typedef vector_binary_scalar2<E1, E2, F> expression_type;   // allow E2 to be builtin type
 #ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 #else
@@ -1602,45 +1587,23 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
     };
 
-#ifdef BOOST_UBLAS_USE_SCALAR_ET
-    // (v * s) [i] = v [i] * scalar_expression
-    template<class E1, class E2>
-    BOOST_UBLAS_INLINE
-    typename vector_binary_scalar2_traits<E1, E2, scalar_multiplies<typename E1::value_type, typename E2::value_type> >::result_type
-    operator * (const vector_expression<E1> &e1,
-                const scalar_expression<E2> &e2) {
-        typedef typename vector_binary_scalar2_traits<E1, E2, scalar_multiplies<typename E1::value_type, typename E2::value_type> >::expression_type expression_type;
-        return expression_type (e1 (), e2 ());
-    }
-
-    // (v / s) [i] = v [i] / scalar_expression
-    template<class E1, class E2>
-    BOOST_UBLAS_INLINE
-    typename vector_binary_scalar2_traits<E1, E2, scalar_divides<typename E1::value_type, typename E2::value_type> >::result_type
-    operator / (const vector_expression<E1> &e1,
-                const scalar_expression<E2> &e2) {
-        typedef typename vector_binary_scalar2_traits<E1, E2, scalar_divides<typename E1::value_type, typename E2::value_type> >::expression_type expression_type;
-        return expression_type (e1 (), e2 ());
-    }
-#endif
-
     // (v * t) [i] = v [i] * t
     template<class E1, class T2>
     BOOST_UBLAS_INLINE
-    typename vector_binary_scalar2_traits<E1, const T2, scalar_multiplies<typename E1::value_type, T2>, scalar_reference<const T2> >::result_type
+    typename vector_binary_scalar2_traits<E1, const T2, scalar_multiplies<typename E1::value_type, T2> >::result_type
     operator * (const vector_expression<E1> &e1,
                 const T2 &e2) {
-        typedef typename vector_binary_scalar2_traits<E1, const T2, scalar_multiplies<typename E1::value_type, T2>, scalar_reference<const T2> >::expression_type expression_type;
+        typedef typename vector_binary_scalar2_traits<E1, const T2, scalar_multiplies<typename E1::value_type, T2> >::expression_type expression_type;
         return expression_type (e1 (), e2);
     }
 
     // (v / t) [i] = v [i] / t
     template<class E1, class T2>
     BOOST_UBLAS_INLINE
-    typename vector_binary_scalar2_traits<E1, const T2, scalar_divides<typename E1::value_type, T2>, scalar_reference<const T2> >::result_type
+    typename vector_binary_scalar2_traits<E1, const T2, scalar_divides<typename E1::value_type, T2> >::result_type
     operator / (const vector_expression<E1> &e1,
                 const T2 &e2) {
-        typedef typename vector_binary_scalar2_traits<E1, const T2, scalar_divides<typename E1::value_type, T2>, scalar_reference<const T2> >::expression_type expression_type;
+        typedef typename vector_binary_scalar2_traits<E1, const T2, scalar_divides<typename E1::value_type, T2> >::expression_type expression_type;
         return expression_type (e1 (), e2);
     }
 

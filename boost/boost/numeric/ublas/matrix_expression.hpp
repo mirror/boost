@@ -2571,16 +2571,16 @@ namespace boost { namespace numeric { namespace ublas {
         return expression_type (e1 (), e2 ());
     }
 
-    template<class E1, class E2, class F, class C1>
+    template<class E1, class E2, class F>
     class matrix_binary_scalar1:
-        public matrix_expression<matrix_binary_scalar1<E1, E2, F, C1> > {
+        public matrix_expression<matrix_binary_scalar1<E1, E2, F> > {
 
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef F functor_type;
-        typedef C1 expression1_closure_type;
+        typedef const E1& expression1_closure_type;
         typedef typename E2::const_closure_type expression2_closure_type;
-        typedef matrix_binary_scalar1<E1, E2, F, C1> self_type;
+        typedef matrix_binary_scalar1<E1, E2, F> self_type;
     public:
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
@@ -2614,10 +2614,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     public:
-       expression1_closure_type const& expression1() const { return e1_ ; }
-       expression2_closure_type const& expression2() const { return e2_ ; }
-
-    public:
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i, size_type j) const {
@@ -2627,7 +2623,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Closure comparison
         BOOST_UBLAS_INLINE
         bool same_closure (const matrix_binary_scalar1 &mbs1) const {
-            return (*this).e1_.same_closure (mbs1.e1_) &&
+            return &e1_ == &(mbs1.e1_) &&
                    (*this).e2_.same_closure (mbs1.e2_);
         }
 
@@ -2979,9 +2975,9 @@ namespace boost { namespace numeric { namespace ublas {
         expression2_closure_type e2_;
     };
 
-    template<class E1, class E2, class F, class C1 = typename E1::const_closure_type>
+    template<class E1, class E2, class F>
     struct matrix_binary_scalar1_traits {
-        typedef matrix_binary_scalar1<E1, E2, F, C1> expression_type;   // allow E1 to be builtin type
+        typedef matrix_binary_scalar1<E1, E2, F> expression_type;   // allow E1 to be builtin type
 #ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 #else
@@ -2989,41 +2985,29 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
     };
 
-#ifdef BOOST_UBLAS_USE_SCALAR_ET
-    // (s * m) [i] = scalar_expression * m [i]
-    template<class E1, class E2>
-    BOOST_UBLAS_INLINE
-    typename matrix_binary_scalar1_traits<E1, E2, scalar_multiplies<typename E1::value_type, typename E2::value_type> >::result_type
-    operator * (const scalar_expression<E1> &e1,
-                const matrix_expression<E2> &e2) {
-        typedef typename matrix_binary_scalar1_traits<E1, E2, scalar_multiplies<typename E1::value_type, typename E2::value_type> >::expression_type expression_type;
-        return expression_type (e1 (), e2 ());
-    }
-#endif
-
     // (t * m) [i] [j] = t * m [i] [j]
     template<class T1, class E2>
     BOOST_UBLAS_INLINE
-    typename matrix_binary_scalar1_traits<const T1, E2, scalar_multiplies<T1, typename E2::value_type>, scalar_reference<const T1> >::result_type
+    typename matrix_binary_scalar1_traits<const T1, E2, scalar_multiplies<T1, typename E2::value_type> >::result_type
     operator * (const T1 &e1,
                 const matrix_expression<E2> &e2) {
-        typedef typename matrix_binary_scalar1_traits<const T1, E2, scalar_multiplies<T1, typename E2::value_type>, scalar_reference<const T1> >::expression_type expression_type;
+        typedef typename matrix_binary_scalar1_traits<const T1, E2, scalar_multiplies<T1, typename E2::value_type> >::expression_type expression_type;
         return expression_type (e1, e2 ());
     }
 
 
-    template<class E1, class E2, class F, class C2>
+    template<class E1, class E2, class F>
     class matrix_binary_scalar2:
-        public matrix_expression<matrix_binary_scalar2<E1, E2, F, C2> > {
+        public matrix_expression<matrix_binary_scalar2<E1, E2, F> > {
 
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef F functor_type;
     public:
         typedef typename E1::const_closure_type expression1_closure_type;
-        typedef C2 expression2_closure_type;
+        typedef const E2& expression2_closure_type;
     private:
-        typedef matrix_binary_scalar2<E1, E2, F, C2> self_type;
+        typedef matrix_binary_scalar2<E1, E2, F> self_type;
     public:
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
@@ -3058,10 +3042,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     public:
-        expression1_closure_type const& expression1() const { return e1_ ; }
-        expression2_closure_type const& expression2() const { return e2_ ; }
-
-    public:
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i, size_type j) const {
@@ -3072,7 +3052,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         bool same_closure (const matrix_binary_scalar2 &mbs2) const {
             return (*this).e1_.same_closure (mbs2.e1_) &&
-                   (*this).e2_.same_closure (mbs2.e2_);
+                   &e2_ == &(mbs2.e2_);
         }
 
         // Iterator types
@@ -3423,9 +3403,9 @@ namespace boost { namespace numeric { namespace ublas {
         expression2_closure_type e2_;
     };
 
-    template<class E1, class E2, class F, class C2 = typename E2::const_closure_type>
+    template<class E1, class E2, class F>
     struct matrix_binary_scalar2_traits {
-        typedef matrix_binary_scalar2<E1, E2, F, C2> expression_type;   // allow E2 to be builtin type
+        typedef matrix_binary_scalar2<E1, E2, F> expression_type;   // allow E2 to be builtin type
 #ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type; 
 #else
@@ -3433,45 +3413,23 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
     };
 
-#ifdef BOOST_UBLAS_USE_SCALAR_ET
-    // (m * s) [i] = m [i] * scalar_expression
-    template<class E1, class E2>
-    BOOST_UBLAS_INLINE
-    typename matrix_binary_scalar2_traits<E1, E2, scalar_multiplies<typename E1::value_type, typename E2::value_type> >::result_type
-    operator * (const matrix_expression<E1> &e1,
-                const scalar_expression<E2> &e2) {
-        typedef typename matrix_binary_scalar2_traits<E1, E2, scalar_multiplies<typename E1::value_type, typename E2::value_type> >::expression_type expression_type;
-        return expression_type (e1 (), e2 ());
-    }
-
-    // (m / s) [i] = m [i] / scalar_expression
-    template<class E1, class E2>
-    BOOST_UBLAS_INLINE
-    typename matrix_binary_scalar2_traits<E1, E2, scalar_divides<typename E1::value_type, typename E2::value_type> >::result_type
-    operator / (const matrix_expression<E1> &e1,
-                const scalar_expression<E2> &e2) {
-        typedef typename matrix_binary_scalar2_traits<E1, E2, scalar_divides<typename E1::value_type, typename E2::value_type> >::expression_type expression_type;
-        return expression_type (e1 (), e2 ());
-    }
-#endif
-
     // (m * t) [i] [j] = m [i] [j] * t
     template<class E1, class T2>
     BOOST_UBLAS_INLINE
-    typename matrix_binary_scalar2_traits<E1, const T2, scalar_multiplies<typename E1::value_type, T2>, scalar_reference<const T2> >::result_type
+    typename matrix_binary_scalar2_traits<E1, const T2, scalar_multiplies<typename E1::value_type, T2> >::result_type
     operator * (const matrix_expression<E1> &e1,
                 const T2 &e2) {
-        typedef typename matrix_binary_scalar2_traits<E1, const T2, scalar_multiplies<typename E1::value_type, T2>, scalar_reference<const T2> >::expression_type expression_type;
+        typedef typename matrix_binary_scalar2_traits<E1, const T2, scalar_multiplies<typename E1::value_type, T2> >::expression_type expression_type;
         return expression_type (e1 (), e2);
     }
 
     // (m / t) [i] [j] = m [i] [j] / t
     template<class E1, class T2>
     BOOST_UBLAS_INLINE
-    typename matrix_binary_scalar2_traits<E1, const T2, scalar_divides<typename E1::value_type, T2>, scalar_reference<const T2> >::result_type
+    typename matrix_binary_scalar2_traits<E1, const T2, scalar_divides<typename E1::value_type, T2> >::result_type
     operator / (const matrix_expression<E1> &e1,
                 const T2 &e2) {
-        typedef typename matrix_binary_scalar2_traits<E1, const T2, scalar_divides<typename E1::value_type, T2>, scalar_reference<const T2> >::expression_type expression_type;
+        typedef typename matrix_binary_scalar2_traits<E1, const T2, scalar_divides<typename E1::value_type, T2> >::expression_type expression_type;
         return expression_type (e1 (), e2);
     }
 
