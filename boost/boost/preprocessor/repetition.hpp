@@ -23,6 +23,7 @@
 # include <boost/preprocessor/repetition/enum_shifted.hpp>
 # include <boost/preprocessor/repetition/enum_shifted_params.hpp>
 # include <boost/preprocessor/repetition/enum_trailing.hpp>
+# include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
 # include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 # include <boost/preprocessor/repetition/for.hpp>
 # include <boost/preprocessor/repetition/repeat.hpp>
