@@ -41,7 +41,9 @@
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #endif
 
-#if BOOST_RWSTD_VER <= 0x020101
+// Sun CC 5.6 adds long long specialization, but does not change the
+// library version number
+#if BOOST_RWSTD_VER <= 0x020101 && (!defined(__SUNPRO_CC) || (__SUNPRO_CC < 0x560))
 #  define BOOST_NO_LONG_LONG_NUMERIC_LIMITS
 # endif
 
