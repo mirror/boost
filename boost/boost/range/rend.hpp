@@ -16,12 +16,24 @@
 #endif
 
 #include <boost/range/begin.hpp>
+#include <boost/range/reverse_result_iterator.hpp>
 #include <boost/range/reverse_iterator.hpp>
 #include <boost/range/const_reverse_iterator.hpp>
 
 namespace boost
 {
+    
+#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
+template< class C >
+inline BOOST_DEDUCED_TYPENAME reverse_result_iterator_of<C>::type 
+rend( C& c )
+{
+    return BOOST_DEDUCED_TYPENAME reverse_result_iterator_of<C>::type( begin( c ) );
+}
+
+#else
+    
 template< class C >
 inline BOOST_DEDUCED_TYPENAME reverse_iterator_of<C>::type 
 rend( C& c )
@@ -35,6 +47,8 @@ rend( const C& c )
 {
     return BOOST_DEDUCED_TYPENAME const_reverse_iterator_of<C>::type( begin( c ) );
 }
+
+#endif
 
 } // namespace 'boost'
 
