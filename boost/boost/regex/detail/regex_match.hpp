@@ -236,7 +236,7 @@ _priv_match_data<iterator, Allocator>::_priv_match_data(const match_results_base
   caccumulators = 0;
   loop_starts = 0;
   state_count = 0;
-  estimate_max_state_count(a, b, states, static_cast<regex_iterator_traits<iterator>::iterator_category*>(0));
+  estimate_max_state_count(a, b, states, static_cast<typename regex_iterator_traits<iterator>::iterator_category*>(0));
 }
 
 template <class iterator, class Allocator>
