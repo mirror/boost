@@ -12,13 +12,15 @@ subproject libs/range/test ;
 
 import testing ;
 
-rule range-test ( name )
+rule range-test ( name : includes * )
 {
     return [
         run $(name).cpp
-#        <include>$(VC71_ROOT)/atlmfc/include
         <lib>../../test/build/boost_unit_test_framework
-        : : : <include>$(BOOST_ROOT)
+        : 
+        : 
+        : <include>$(BOOST_ROOT)
+          $(includes)
         ] ;
 }
 
@@ -33,6 +35,6 @@ test-suite range :
     [ range-test algorithm_example ]
     [ range-test reversible_range ]
     [ range-test const_ranges ]
-    [ range-test mfc ] 
+    [ range-test mfc : <include>$(VC71_ROOT)/atlmfc/include ] 
     ;
 
