@@ -73,6 +73,7 @@ public:
         )
     );
     void register_basic_serializer(const basic_iserializer & bis);
+    void reset_object_address(const void * new_address, const void * old_address);
     void delete_created_pointers();
 };
 
