@@ -118,10 +118,12 @@ struct rtti_policy
 
     protected:
       ////////////////////////////////////////////////////////////////////////
-      ~rtti_base_type() {}
-
     #ifdef BOOST_FSM_USE_NATIVE_RTTI
       rtti_base_type( id_provider_type ) {}
+      // For typeid( *this ) to return a value that corresponds to the most-
+      // derived type, we need to have a vptr. Since this type does not
+      // contain any virtual functions we need to artificially declare one so.
+      virtual ~rtti_base_type() {}
     #else
       rtti_base_type(
         id_provider_type idProvider
@@ -129,6 +131,8 @@ struct rtti_policy
         idProvider_( idProvider )
       {
       }
+
+      ~rtti_base_type() {}
 
     private:
       ////////////////////////////////////////////////////////////////////////
