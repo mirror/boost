@@ -18,10 +18,6 @@
 #include <boost/operators.hpp>
 #include <boost/compressed_pair.hpp>
 
-#ifdef BOOST_MSVC
-#include <boost/int_iterator.hpp>
-#endif
-
 // I was having some problems with VC6. I couldn't tell whether our hack for
 // stock GCC was causing problems so I needed an easy way to turn it on and
 // off. Now we can test the hack with various compilers and still have an "out"
@@ -31,8 +27,6 @@
 #endif
 
 namespace boost {
-
-#ifndef BOOST_MSVC
 
 // Just a "type envelope"; works around some MSVC deficiencies.
 template <class T>
@@ -509,59 +503,6 @@ struct reverse_iterators
     typedef typename Adaptor::iterator iterator;
     typedef typename Adaptor::const_iterator const_iterator;
 };
-
-//=============================================================================
-// Counting Iterator and Integer Range Class
-
-struct counting_iterator_policies : public default_iterator_policies
-{
-    template <class IntegerType>
-    IntegerType dereference(type<IntegerType>, const IntegerType& i) const
-        { return i; }
-};
-template <class IntegerType>
-struct counting_iterator_traits {
-    typedef IntegerType value_type;
-    typedef IntegerType reference;
-    typedef value_type* pointer;
-    typedef std::ptrdiff_t difference_type;
-    typedef std::random_access_iterator_tag iterator_category;
-};
-
-#endif //#ifndef BOOST_MSVC
-
-template <class IntegerType>
-struct integer_range {
-#ifdef BOOST_MSVC
-    typedef int_iterator<IntegerType> iterator;
-#else
-    typedef iterator_adaptor<IntegerType, counting_iterator_policies,
-      counting_iterator_traits<IntegerType>, IntegerType> iterator;
-#endif
-    typedef iterator const_iterator;
-    typedef IntegerType value_type;
-    typedef std::ptrdiff_t difference_type;
-    typedef IntegerType reference;
-    typedef IntegerType const_reference;
-    typedef const IntegerType* pointer;
-    typedef const IntegerType* const_pointer;
-    typedef IntegerType size_type;
-
-    integer_range(IntegerType start, IntegerType finish)
-        : m_start(start), m_finish(finish) { }
-
-    iterator begin() const { return iterator(m_start); }
-    iterator end() const { return iterator(m_finish); }
-    size_type size() const { return m_finish - m_start; }
-    bool empty() const { return m_finish == m_start; }
-    void swap(integer_range& x) {
-        std::swap(m_start, x.m_start);
-        std::swap(m_finish, x.m_finish);
-    }
-protected:
-    IntegerType m_start, m_finish;
-};
-
 
 } // namespace boost
 
