@@ -11,14 +11,12 @@
 </head>
 <body>
 <h1><img src="c++boost.gif" alt="c++boost.gif" align="middle" />
-Sparse Matrix</h1>
-<h2><a name="sparse_matrix" id="sparse_matrix"></a> Sparse
-Matrix</h2>
+Sparse Matricies</h1>
+<h2><a name="mapped_matrix" id="mapped_matrix"></a>Mapped Matrix</h2>
 <h4>Description</h4>
-<!---->
-<p>The templated class <code>sparse_matrix&lt;T, F, A&gt;</code> is
-the base container adaptor for sparse matrices. For a <em>(m x
-n</em>)-dimensional sparse matrix and <em>0 &lt;= i &lt; m</em>,
+<p>The templated class <code>mapped_matrix&lt;T, F, A&gt;</code> is
+the base container adaptor for sparse matricies using element maps.
+For a <em>(m xn</em>)-dimensional sparse matrix and <em>0 &lt;= i &lt; m</em>,
 <em>0 &lt;= j &lt; n</em> the non-zero elements
 <em>m</em><sub><em>i, j</em></sub> are mapped via <em>(i x n +
 j)</em> for row major orientation or via <em>(i + j x m)</em> for
@@ -46,7 +44,7 @@ orientation.</p>
 
 int main () {
     using namespace boost::numeric::ublas;
-    sparse_matrix&lt;double&gt; m (3, 3, 3 * 3);
+    mapped_matrix&lt;double&gt; m (3, 3, 3 * 3);
     for (unsigned i = 0; i &lt; m.size1 (); ++ i)
         for (unsigned j = 0; j &lt; m.size2 (); ++ j)
             m (i, j) = 3 * i + j;
@@ -65,19 +63,19 @@ int main () {
 </tr>
 <tr>
 <td><code>T</code></td>
-<td>The type of object stored in the sparse matrix.</td>
+<td>The type of object stored in the mapped matrix.</td>
 <td></td>
 </tr>
 <tr>
 <td><code>F</code></td>
 <td>Functor describing the storage organization. <a href=
-"#sparse_matrix_1">[1]</a></td>
+"#mapped_matrix_1">[1]</a></td>
 <td><code>row_major</code></td>
 </tr>
 <tr>
 <td><code>A</code></td>
 <td>The type of the adapted array. <a href=
-"#sparse_matrix_2">[2]</a></td>
+"#mapped_matrix_2">[2]</a></td>
 <td><code>map_std&lt;std::size_t, T&gt;</code></td>
 </tr>
 </tbody>
@@ -88,7 +86,7 @@ int main () {
 <p>None, except for those imposed by the requirements of <a href=
 "container.htm#matrix">Matrix</a> .</p>
 <h4>Public base classes</h4>
-<p><code>matrix_expression&lt;sparse_matrix&lt;T, F, A&gt;
+<p><code>matrix_expression&lt;mapped_matrix&lt;T, F, A&gt;
 &gt;</code></p>
 <h4>Members</h4>
 <table border="1" summary="members">
@@ -98,30 +96,30 @@ int main () {
 <th>Description</th>
 </tr>
 <tr>
-<td><code>sparse_matrix ()</code></td>
-<td>Allocates a <code>sparse_matrix</code> that holds at most zero
+<td><code>mapped_matrix ()</code></td>
+<td>Allocates a <code>mapped_matrix</code> that holds at most zero
 rows of zero elements.</td>
 </tr>
 <tr>
-<td><code>sparse_matrix (size_type size1, size_type2, size_type non_zeros = 0)</code></td>
-<td>Allocates a <code>sparse_matrix</code> that holds at most
+<td><code>mapped_matrix (size_type size1, size_type2, size_type non_zeros = 0)</code></td>
+<td>Allocates a <code>mapped_matrix</code> that holds at most
 <code>size1</code> rows of <code>size2</code> elements.</td>
 </tr>
 <tr>
-<td><code>sparse_matrix (const sparse_matrix &amp;m)</code></td>
+<td><code>mapped_matrix (const mapped_matrix &amp;m)</code></td>
 <td>The copy constructor.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_matrix (size_type non_zeros, const
+mapped_matrix (size_type non_zeros, const
 matrix_expression&lt;AE&gt; &amp;ae)</code></td>
 <td>The extended copy constructor.</td>
 </tr>
 <tr>
 <td><code>void resize (size_type size1, size_type size2, bool preserve = true)</code></td>
-<td>Reallocates a <code>sparse_matrix</code> to hold at most
+<td>Reallocates a <code>mapped_matrix</code> to hold at most
 <code>size1</code> rows of <code>size2</code> elements. The
-existing elements of the <code>sparse_matrix</code> are preseved
+existing elements of the <code>mapped_matrix</code> are preseved
 when specified.</td>
 </tr>
 <tr>
@@ -145,72 +143,72 @@ j)</code></td>
 <code>i</code>-th row.</td>
 </tr>
 <tr>
-<td><code>sparse_matrix &amp;operator = (const sparse_matrix
+<td><code>mapped_matrix &amp;operator = (const mapped_matrix
 &amp;m)</code></td>
 <td>The assignment operator.</td>
 </tr>
 <tr>
-<td><code>sparse_matrix &amp;assign_temporary (sparse_matrix
+<td><code>mapped_matrix &amp;assign_temporary (mapped_matrix
 &amp;m)</code></td>
-<td>Assigns a temporary. May change the sparse matrix
+<td>Assigns a temporary. May change the mapped matrix
 <code>m</code> .</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_matrix &amp;operator = (const matrix_expression&lt;AE&gt;
+mapped_matrix &amp;operator = (const matrix_expression&lt;AE&gt;
 &amp;ae)</code></td>
 <td>The extended assignment operator.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_matrix &amp;assign (const matrix_expression&lt;AE&gt;
+mapped_matrix &amp;assign (const matrix_expression&lt;AE&gt;
 &amp;ae)</code></td>
-<td>Assigns a matrix expression to the sparse matrix. Left and
+<td>Assigns a matrix expression to the mapped matrix. Left and
 right hand side of the assignment should be independent.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_matrix &amp;operator += (const matrix_expression&lt;AE&gt;
+mapped_matrix &amp;operator += (const matrix_expression&lt;AE&gt;
 &amp;ae)</code></td>
 <td>A computed assignment operator. Adds the matrix expression to
-the sparse matrix.</td>
+the mapped matrix.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_matrix &amp;plus_assign (const matrix_expression&lt;AE&gt;
+mapped_matrix &amp;plus_assign (const matrix_expression&lt;AE&gt;
 &amp;ae)</code></td>
-<td>Adds a matrix expression to the sparse matrix. Left and right
+<td>Adds a matrix expression to the mapped matrix. Left and right
 hand side of the assignment should be independent.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_matrix &amp;operator -= (const matrix_expression&lt;AE&gt;
+mapped_matrix &amp;operator -= (const matrix_expression&lt;AE&gt;
 &amp;ae)</code></td>
 <td>A computed assignment operator. Subtracts the matrix expression
-from the sparse matrix.</td>
+from the mapped matrix.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_matrix &amp;minus_assign (const matrix_expression&lt;AE&gt;
+mapped_matrix &amp;minus_assign (const matrix_expression&lt;AE&gt;
 &amp;ae)</code></td>
-<td>Subtracts a matrix expression from the sparse matrix. Left and
+<td>Subtracts a matrix expression from the mapped matrix. Left and
 right hand side of the assignment should be independent.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AT&gt;<br />
-sparse_matrix &amp;operator *= (const AT &amp;at)</code></td>
-<td>A computed assignment operator. Multiplies the sparse matrix
+mapped_matrix &amp;operator *= (const AT &amp;at)</code></td>
+<td>A computed assignment operator. Multiplies the mapped matrix
 with a scalar.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AT&gt;<br />
-sparse_matrix &amp;operator /= (const AT &amp;at)</code></td>
-<td>A computed assignment operator. Divides the sparse matrix
+mapped_matrix &amp;operator /= (const AT &amp;at)</code></td>
+<td>A computed assignment operator. Divides the mapped matrix
 through a scalar.</td>
 </tr>
 <tr>
-<td><code>void swap (sparse_matrix &amp;m)</code></td>
-<td>Swaps the contents of the sparse matrices.</td>
+<td><code>void swap (mapped_matrix &amp;m)</code></td>
+<td>Swaps the contents of the mapped matrices.</td>
 </tr>
 <tr>
 <td><code>true_refrence insert_element (size_type i, size_type j, const_reference
@@ -225,95 +223,95 @@ element of the <code>i</code>-th row. Duplicates elements are not allowed.</td>
 </tr>
 <tr>
 <td><code>void clear ()</code></td>
-<td>Clears the sparse matrix.</td>
+<td>Clears the mapped matrix.</td>
 </tr>
 <tr>
 <td><code>const_iterator1 begin1 () const</code></td>
 <td>Returns a <code>const_iterator1</code> pointing to the
-beginning of the <code>sparse_matrix</code>.</td>
+beginning of the <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>const_iterator1 end1 () const</code></td>
 <td>Returns a <code>const_iterator1</code> pointing to the end of
-the <code>sparse_matrix</code>.</td>
+the <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>iterator1 begin1 ()</code></td>
 <td>Returns a <code>iterator1</code> pointing to the beginning of
-the <code>sparse_matrix</code>.</td>
+the <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>iterator1 end1 ()</code></td>
 <td>Returns a <code>iterator1</code> pointing to the end of the
-<code>sparse_matrix</code>.</td>
+<code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>const_iterator2 begin2 () const</code></td>
 <td>Returns a <code>const_iterator2</code> pointing to the
-beginning of the <code>sparse_matrix</code>.</td>
+beginning of the <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>const_iterator2 end2 () const</code></td>
 <td>Returns a <code>const_iterator2</code> pointing to the end of
-the <code>sparse_matrix</code>.</td>
+the <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>iterator2 begin2 ()</code></td>
 <td>Returns a <code>iterator2</code> pointing to the beginning of
-the <code>sparse_matrix</code>.</td>
+the <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>iterator2 end2 ()</code></td>
 <td>Returns a <code>iterator2</code> pointing to the end of the
-<code>sparse_matrix</code>.</td>
+<code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>const_reverse_iterator1 rbegin1 () const</code></td>
 <td>Returns a <code>const_reverse_iterator1</code> pointing to the
-beginning of the reversed <code>sparse_matrix</code>.</td>
+beginning of the reversed <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>const_reverse_iterator1 rend1 () const</code></td>
 <td>Returns a <code>const_reverse_iterator1</code> pointing to the
-end of the reversed <code>sparse_matrix</code>.</td>
+end of the reversed <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>reverse_iterator1 rbegin1 ()</code></td>
 <td>Returns a <code>reverse_iterator1</code> pointing to the
-beginning of the reversed <code>sparse_matrix</code>.</td>
+beginning of the reversed <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>reverse_iterator1 rend1 ()</code></td>
 <td>Returns a <code>reverse_iterator1</code> pointing to the end of
-the reversed <code>sparse_matrix</code>.</td>
+the reversed <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>const_reverse_iterator2 rbegin2 () const</code></td>
 <td>Returns a <code>const_reverse_iterator2</code> pointing to the
-beginning of the reversed <code>sparse_matrix</code>.</td>
+beginning of the reversed <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>const_reverse_iterator2 rend2 () const</code></td>
 <td>Returns a <code>const_reverse_iterator2</code> pointing to the
-end of the reversed <code>sparse_matrix</code>.</td>
+end of the reversed <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>reverse_iterator2 rbegin2 ()</code></td>
 <td>Returns a <code>reverse_iterator2</code> pointing to the
-beginning of the reversed <code>sparse_matrix</code>.</td>
+beginning of the reversed <code>mapped_matrix</code>.</td>
 </tr>
 <tr>
 <td><code>reverse_iterator2 rend2 ()</code></td>
 <td>Returns a <code>reverse_iterator2</code> pointing to the end of
-the reversed <code>sparse_matrix</code>.</td>
+the reversed <code>mapped_matrix</code>.</td>
 </tr>
 </tbody>
 </table>
 <h4>Notes</h4>
-<p><a name="sparse_matrix_1" id="sparse_matrix_1">[1]</a> Supported
+<p><a name="mapped_matrix_1" id="mapped_matrix_1">[1]</a> Supported
 parameters for the storage organization are <code>row_major</code>
 and <code>column_major</code>.</p>
-<p><a name="sparse_matrix_2" id="sparse_matrix_2">[1]</a> Supported
+<p><a name="mapped_matrix_2" id="mapped_matrix_2">[2]</a> Supported
 parameters for the adapted array are
 <code>map_array&lt;std::size_t, T&gt;</code> and
 <code>map_std&lt;std::size_t, T&gt;</code>. The latter is

@@ -93,7 +93,7 @@ vector is zero other then a single specified element.
 <br/><code>index</code> should be less than <code>size</code>.</td>
 </tr>
 <tr>
-<td><code>sparse_vector&lt;T [, S]&gt;<br />&nbsp;&nbsp; v(size);</code></td>
+<td><code>mapped_vector&lt;T [, S]&gt;<br />&nbsp;&nbsp; v(size);</code></td>
 <td>a sparse vector of values of type <code>T</code> of variable
 size. The sparse storage type <code>S</code> can be <code>std::map&lt;size_t,
 T&gt;</code> or <code>map_array&lt;size_t, T&gt;</code>.</td>
@@ -242,7 +242,7 @@ variable size. Only the given triangular matrix is stored using
 the order <code>F</code>.</td>
 </tr>
 <tr>
-<td><code>sparse_matrix&lt;T, [F, S]&gt;<br />&nbsp;&nbsp; m(size1, size2 [,
+<td><code>mapped_matrix&lt;T, [F, S]&gt;<br />&nbsp;&nbsp; m(size1, size2 [,
 non_zeros]);</code></td>
 <td>a sparse matrix of values of type <code>T</code> of variable
 size. The sparse storage type <code>S</code> can be either <code>std::map&lt;size_t,
@@ -369,14 +369,14 @@ array.<br />
 The storage layout usually is BLAS compliant.</td>
 </tr>
 <tr>
-<td><code>sparse_vector&lt;T,<br />
+<td><code>mapped_vector&lt;T,<br />
 &nbsp;std::map&lt;std::size_t, T&gt; &gt;<br />
 &nbsp;&nbsp;v (size, non_zeros)</code></td>
 <td>a sparse vector, storage is provided by a standard
 map.</td>
 </tr>
 <tr>
-<td><code>sparse_vector&lt;T,<br />
+<td><code>mapped_vector&lt;T,<br />
 &nbsp;map_array&lt;std::size_t, T&gt; &gt;<br />
 &nbsp;&nbsp;v (size, non_zeros)</code></td>
 <td>a sparse vector, storage is provided by a map
@@ -494,7 +494,7 @@ major.<br />
 The storage layout usually is BLAS compliant.</td>
 </tr>
 <tr>
-<td><code>sparse_matrix&lt;T,<br />
+<td><code>mapped_matrix&lt;T,<br />
 &nbsp;row_major,<br />
 &nbsp;std::map&lt;std::size_t, T&gt; &gt;<br />
 &nbsp;&nbsp;m (size1, size2, non_zeros)</code></td>
@@ -502,7 +502,7 @@ The storage layout usually is BLAS compliant.</td>
 is provided by a standard map.</td>
 </tr>
 <tr>
-<td><code>sparse_matrix&lt;T,<br />
+<td><code>mapped_matrix&lt;T,<br />
 &nbsp;column_major,<br />
 &nbsp;std::map&lt;std::size_t, T&gt; &gt;<br />
 &nbsp;&nbsp;m (size1, size2, non_zeros)</code></td>
@@ -510,7 +510,7 @@ is provided by a standard map.</td>
 storage is provided by a standard map.</td>
 </tr>
 <tr>
-<td><code>sparse_matrix&lt;T,<br />
+<td><code>mapped_matrix&lt;T,<br />
 &nbsp;row_major,<br />
 &nbsp;map_array&lt;std::size_t, T&gt; &gt;<br />
 &nbsp;&nbsp;m (size1, size2, non_zeros)</code></td>
@@ -518,7 +518,7 @@ storage is provided by a standard map.</td>
 is provided by a map array.</td>
 </tr>
 <tr>
-<td><code>sparse_matrix&lt;T,<br />
+<td><code>mapped_matrix&lt;T,<br />
 &nbsp;column_major,<br />
 &nbsp;map_array&lt;std::size_t, T&gt; &gt;<br />
 &nbsp;&nbsp;m (size1, size2, non_zeros)</code></td>

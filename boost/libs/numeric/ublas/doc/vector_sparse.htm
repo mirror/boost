@@ -12,12 +12,10 @@
 <body>
 <h1><img src="c++boost.gif" alt="c++boost.gif" align="middle" />
 Sparse Vector</h1>
-<h2><a name="sparse_vector" id="sparse_vector"></a> Sparse
-Vector</h2>
+<h2><a name="mapped_vector" id="mapped_vector"></a>Mapped Vector</h2>
 <h4>Description</h4>
-<!---->
-<p>The templated class <code>sparse_vector&lt;T, A&gt;</code> is
-the base container adaptor for sparse vectors. For a
+<p>The templated class <code>mapped_vector&lt;T, A&gt;</code> is
+the base container adaptor for sparse vectors using element maps. For a
 <em>n</em>-dimensional sparse vector and <em>0 &lt;= i &lt; n</em>
 the non-zero elements <em>v</em><sub><em>i</em></sub> are mapped to
 consecutive elements of the associative container, i.e. for
@@ -34,7 +32,7 @@ i</em><sub><em>2</em></sub>.</p>
 
 int main () {
     using namespace boost::numeric::ublas;
-    sparse_vector&lt;double&gt; v (3, 3);
+    mapped_vector&lt;double&gt; v (3, 3);
     for (unsigned i = 0; i &lt; v.size (); ++ i)
         v (i) = i;
     std::cout &lt;&lt; v &lt;&lt; std::endl;
@@ -52,13 +50,13 @@ int main () {
 </tr>
 <tr>
 <td><code>T</code></td>
-<td>The type of object stored in the sparse vector.</td>
+<td>The type of object stored in the mapped vector.</td>
 <td></td>
 </tr>
 <tr>
 <td><code>A</code></td>
 <td>The type of the adapted array. <a href=
-"#sparse_vector_1">[1]</a></td>
+"#mapped_vector_1">[1]</a></td>
 <td><code>map_std&lt;std::size_t, T&gt;</code></td>
 </tr>
 </tbody>
@@ -69,7 +67,7 @@ int main () {
 <p>None, except for those imposed by the requirements of <a href=
 "container.htm#vector">Vector</a> .</p>
 <h4>Public base classes</h4>
-<p><code>vector_expression&lt;sparse_vector&lt;T, A&gt;
+<p><code>vector_expression&lt;mapped_vector&lt;T, A&gt;
 &gt;</code></p>
 <h4>Members</h4>
 <table border="1" summary="members">
@@ -79,36 +77,36 @@ int main () {
 <th>Description</th>
 </tr>
 <tr>
-<td><code>sparse_vector ()</code></td>
-<td>Allocates a <code>sparse_vector</code> that holds zero
+<td><code>mapped_vector ()</code></td>
+<td>Allocates a <code>mapped_vector</code> that holds zero
 elements.</td>
 </tr>
 <tr>
-<td><code>sparse_vector (size_type size, size_type
+<td><code>mapped_vector (size_type size, size_type
 non_zeros = 0)</code></td>
-<td>Allocates a <code>sparse_vector</code> that holds at most
+<td>Allocates a <code>mapped_vector</code> that holds at most
 <code>size</code> elements.</td>
 </tr>
 <tr>
-<td><code>sparse_vector (const sparse_vector &amp;v)</code></td>
+<td><code>mapped_vector (const mapped_vector &amp;v)</code></td>
 <td>The copy constructor.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_vector (size_type non_zeros, const
+mapped_vector (size_type non_zeros, const
 vector_expression&lt;AE&gt; &amp;ae)</code></td>
 <td>The extended copy constructor.</td>
 </tr>
 <tr>
 <td><code>void resize (size_type size, bool
 preserve = true)</code></td>
-<td>Reallocates a <code>sparse_vector</code> to hold at most
+<td>Reallocates a <code>mapped_vector</code> to hold at most
 <code>size</code> elements. The existing elements of the
-<code>sparse_vector</code> are preseved when specified.</td>
+<code>mapped_vector</code> are preseved when specified.</td>
 </tr>
 <tr>
 <td><code>size_type size () const</code></td>
-<td>Returns the size of the <code>sparse_vector</code>.</td>
+<td>Returns the size of the <code>mapped_vector</code>.</td>
 </tr>
 <tr>
 <td><code>const_reference operator () (size_type i)
@@ -129,72 +127,72 @@ const</code></td>
 <td>Returns a reference of the <code>i</code>-th element.</td>
 </tr>
 <tr>
-<td><code>sparse_vector &amp;operator = (const sparse_vector
+<td><code>mapped_vector &amp;operator = (const mapped_vector
 &amp;v)</code></td>
 <td>The assignment operator.</td>
 </tr>
 <tr>
-<td><code>sparse_vector &amp;assign_temporary (sparse_vector
+<td><code>mapped_vector &amp;assign_temporary (mapped_vector
 &amp;v)</code></td>
-<td>Assigns a temporary. May change the sparse vector
+<td>Assigns a temporary. May change the mapped vector
 <code>v</code> .</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_vector &amp;operator = (const vector_expression&lt;AE&gt;
+mapped_vector &amp;operator = (const vector_expression&lt;AE&gt;
 &amp;ae)</code></td>
 <td>The extended assignment operator.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_vector &amp;assign (const vector_expression&lt;AE&gt;
+mapped_vector &amp;assign (const vector_expression&lt;AE&gt;
 &amp;ae)</code></td>
-<td>Assigns a vector expression to the sparse vector. Left and
+<td>Assigns a vector expression to the mapped vector. Left and
 right hand side of the assignment should be independent.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_vector &amp;operator += (const vector_expression&lt;AE&gt;
+mapped_vector &amp;operator += (const vector_expression&lt;AE&gt;
 &amp;ae)</code></td>
 <td>A computed assignment operator. Adds the vector expression to
-the sparse vector.</td>
+the mapped vector.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_vector &amp;plus_assign (const vector_expression&lt;AE&gt;
+mapped_vector &amp;plus_assign (const vector_expression&lt;AE&gt;
 &amp;ae)</code></td>
-<td>Adds a vector expression to the sparse vector. Left and right
+<td>Adds a vector expression to the mapped vector. Left and right
 hand side of the assignment should be independent.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_vector &amp;operator -= (const vector_expression&lt;AE&gt;
+mapped_vector &amp;operator -= (const vector_expression&lt;AE&gt;
 &amp;ae)</code></td>
 <td>A computed assignment operator. Subtracts the vector expression
-from the sparse vector.</td>
+from the mapped vector.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AE&gt;<br />
-sparse_vector &amp;minus_assign (const vector_expression&lt;AE&gt;
+mapped_vector &amp;minus_assign (const vector_expression&lt;AE&gt;
 &amp;ae)</code></td>
-<td>Subtracts a vector expression from the sparse vector. Left and
+<td>Subtracts a vector expression from the mapped vector. Left and
 right hand side of the assignment should be independent.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AT&gt;<br />
-sparse_vector &amp;operator *= (const AT &amp;at)</code></td>
-<td>A computed assignment operator. Multiplies the sparse vector
+mapped_vector &amp;operator *= (const AT &amp;at)</code></td>
+<td>A computed assignment operator. Multiplies the mapped vector
 with a scalar.</td>
 </tr>
 <tr>
 <td><code>template&lt;class AT&gt;<br />
-sparse_vector &amp;operator /= (const AT &amp;at)</code></td>
-<td>A computed assignment operator. Divides the sparse vector
+mapped_vector &amp;operator /= (const AT &amp;at)</code></td>
+<td>A computed assignment operator. Divides the mapped vector
 through a scalar.</td>
 </tr>
 <tr>
-<td><code>void swap (sparse_vector &amp;v)</code></td>
-<td>Swaps the contents of the sparse vectors.</td>
+<td><code>void swap (mapped_vector &amp;v)</code></td>
+<td>Swaps the contents of the mapped vectors.</td>
 </tr>
 <tr>
 <td><code>true_reference insert_element (size_type i, const_reference t)</code></td>
@@ -207,52 +205,52 @@ element. Duplicates elements are not allowed.</td>
 </tr>
 <tr>
 <td><code>void clear ()</code></td>
-<td>Clears the sparse vector.</td>
+<td>Clears the mapped vector.</td>
 </tr>
 <tr>
 <td><code>const_iterator begin () const</code></td>
 <td>Returns a <code>const_iterator</code> pointing to the beginning
-of the <code>sparse_vector</code>.</td>
+of the <code>mapped_vector</code>.</td>
 </tr>
 <tr>
 <td><code>const_iterator end () const</code></td>
 <td>Returns a <code>const_iterator</code> pointing to the end of
-the <code>sparse_vector</code>.</td>
+the <code>mapped_vector</code>.</td>
 </tr>
 <tr>
 <td><code>iterator begin ()</code></td>
 <td>Returns a <code>iterator</code> pointing to the beginning of
-the <code>sparse_vector</code>.</td>
+the <code>mapped_vector</code>.</td>
 </tr>
 <tr>
 <td><code>iterator end ()</code></td>
 <td>Returns a <code>iterator</code> pointing to the end of the
-<code>sparse_vector</code>.</td>
+<code>mapped_vector</code>.</td>
 </tr>
 <tr>
 <td><code>const_reverse_iterator rbegin () const</code></td>
 <td>Returns a <code>const_reverse_iterator</code> pointing to the
-beginning of the reversed <code>sparse_vector</code>.</td>
+beginning of the reversed <code>mapped_vector</code>.</td>
 </tr>
 <tr>
 <td><code>const_reverse_iterator rend () const</code></td>
 <td>Returns a <code>const_reverse_iterator</code> pointing to the
-end of the reversed <code>sparse_vector</code>.</td>
+end of the reversed <code>mapped_vector</code>.</td>
 </tr>
 <tr>
 <td><code>reverse_iterator rbegin ()</code></td>
 <td>Returns a <code>reverse_iterator</code> pointing to the
-beginning of the reversed <code>sparse_vector</code>.</td>
+beginning of the reversed <code>mapped_vector</code>.</td>
 </tr>
 <tr>
 <td><code>reverse_iterator rend ()</code></td>
 <td>Returns a <code>reverse_iterator</code> pointing to the end of
-the reversed <code>sparse_vector</code>.</td>
+the reversed <code>mapped_vector</code>.</td>
 </tr>
 </tbody>
 </table>
 <h4>Notes</h4>
-<p><a name="sparse_vector_1" id="sparse_vector_1">[1]</a> Supported
+<p><a name="mapped_vector_1" id="mapped_vector_1">[1]</a> Supported
 parameters for the adapted array are
 <code>map_array&lt;std::size_t, T&gt;</code> and
 <code>map_std&lt;std::size_t, T&gt;</code>. The latter is
