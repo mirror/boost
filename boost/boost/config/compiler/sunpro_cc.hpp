@@ -62,6 +62,7 @@
        // see http://lists.boost.org/MailArchives/boost/msg47184.php
        // and http://lists.boost.org/MailArchives/boost/msg47220.php
 #      define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+#      define BOOST_NO_SFINAE
 #    endif
 
 #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)

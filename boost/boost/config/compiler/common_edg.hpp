@@ -19,6 +19,7 @@
 
 #if (__EDG_VERSION__ <= 238)
 #   define BOOST_NO_INTEGRAL_INT64_T
+#   define BOOST_NO_SFINAE
 #endif
 
 #if (__EDG_VERSION__ <= 240)
