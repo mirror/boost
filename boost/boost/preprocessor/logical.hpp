@@ -15,24 +15,10 @@
 /*! \file
 
 <a href="../../../../boost/preprocessor/logical.hpp">Click here to see the header.</a>
+
+Includes all logical headers.
 */
 
-#ifndef BOOST_PREPROCESSOR_LOGICAL_AND_HPP
-#  include <boost/preprocessor/logical/and.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_LOGICAL_BOOL_HPP
-#  include <boost/preprocessor/logical/bool.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_LOGICAL_NOR_HPP
-#  include <boost/preprocessor/logical/nor.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_LOGICAL_NOT_HPP
-#  include <boost/preprocessor/logical/not.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_LOGICAL_OR_HPP
-#  include <boost/preprocessor/logical/or.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_LOGICAL_XOR_HPP
-#  include <boost/preprocessor/logical/xor.hpp>
-#endif
+#include <boost/preprocessor/logical/or.hpp>
+#include <boost/preprocessor/logical/xor.hpp>
 #endif

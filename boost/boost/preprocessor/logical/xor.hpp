@@ -17,13 +17,14 @@
 <a href="../../../../boost/preprocessor/logical/xor.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_LOGICAL_AND_HPP
-#  include <boost/preprocessor/logical/and.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_LOGICAL_NOR_HPP
-#  include <boost/preprocessor/logical/nor.hpp>
-#endif
+#include <boost/preprocessor/logical/and.hpp>
 
-//! Expands to the logical EXCLUSIVE OR of the operands. 
-#define BOOST_PREPROCESSOR_XOR(X,Y) BOOST_PREPROCESSOR_NOR(BOOST_PREPROCESSOR_NOR(X,Y),BOOST_PREPROCESSOR_AND(X,Y))
+//! Expands to the logical EXCLUSIVE OR of the operands.
+/*!
+For example, BOOST_PP_XOR(1,2) expands to 0 (a single token).
+*/
+#define BOOST_PP_XOR(X,Y) BOOST_PP_NOR(BOOST_PP_NOR(X,Y),BOOST_PP_AND(X,Y))
+
+//! Obsolete. Use BOOST_PP_XOR().
+#define BOOST_PREPROCESSOR_XOR(X,Y) BOOST_PP_XOR(X,Y)
 #endif

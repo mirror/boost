@@ -17,19 +17,17 @@
 <a href="../../../../boost/preprocessor/identity.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_EMPTY_HPP
-#  include <boost/preprocessor/empty.hpp>
-#endif
+#include <boost/preprocessor/empty.hpp>
 
 //! Expands to X once invoked.
 /*!
-Designed to be used with BOOST_PREPROCESSOR_IF(), when one of the clauses need to be invoked.
+Designed to be used with BOOST_PP_IF(), when one of the clauses need to be invoked.
 
 Example:
 
 <PRE>\verbatim
-  BOOST_PREPROCESSOR_IDENTITY(X)()
-  //                            ^^ NOTE!
+  BOOST_PP_IDENTITY(X)()
+  //                  ^^ NOTE!
 \endverbatim</PRE>
 
 The above expands to:
@@ -38,7 +36,10 @@ The above expands to:
   X
 \endverbatim</PRE>
 
-NOTE: If BOOST_PREPROCESSOR_IDENTITY() is not invoked, the expansion will not be usable.
+NOTE: If BOOST_PP_IDENTITY() is not invoked, the expansion will not be usable.
 */
-#define BOOST_PREPROCESSOR_IDENTITY(X) X BOOST_PREPROCESSOR_EMPTY
+#define BOOST_PP_IDENTITY(X) X BOOST_PP_EMPTY
+
+//! Obsolete. Use BOOST_PP_IDENTITY().
+#define BOOST_PREPROCESSOR_IDENTITY(X) BOOST_PP_IDENTITY(X)
 #endif

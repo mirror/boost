@@ -17,16 +17,12 @@
 <a href="../../../../boost/preprocessor/assert_msg.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_EMPTY_HPP
-#  include <boost/preprocessor/empty.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_IDENTITY_HPP
-#  include <boost/preprocessor/identity.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_IF_HPP
-#  include <boost/preprocessor/if.hpp>
-#endif
+#include <boost/preprocessor/identity.hpp>
+#include <boost/preprocessor/if.hpp>
 
 //! Expands to nothing if C != 0 and to MSG if C == 0.
-#define BOOST_PREPROCESSOR_ASSERT_MSG(C,MSG) BOOST_PREPROCESSOR_IF(C,BOOST_PREPROCESSOR_EMPTY,BOOST_PREPROCESSOR_IDENTITY(MSG))()
+#define BOOST_PP_ASSERT_MSG(C,MSG) BOOST_PP_IF(C,BOOST_PP_EMPTY,BOOST_PP_IDENTITY(MSG))()
+
+//! Obsolete. Use BOOST_PP_ASSERT_MSG().
+#define BOOST_PREPROCESSOR_ASSERT_MSG(C,MSG) BOOST_PP_ASSERT_MSG(C,MSG)
 #endif

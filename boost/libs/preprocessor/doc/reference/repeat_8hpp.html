@@ -8,20 +8,22 @@
 <a class="qindex" href="index.html">Main Page</a> &nbsp; <a class="qindex" href="files.html">File List</a> &nbsp; <a class="qindex" href="globals.html">File Members</a> &nbsp; </center>
 <hr><h1>repeat.hpp File Reference</h1><table border=0 cellpadding=0 cellspacing=0>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="repeat_8hpp.html#a0">BOOST_PREPROCESSOR_REPEAT</a>(N, M, P)</td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="repeat_8hpp.html#a0">BOOST_PP_REPEAT</a>(N, M, P)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Repeats the macro M(I,P) for I = 0 to N-1.</em> <a href="#a0">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="repeat_8hpp.html#a1">BOOST_PREPROCESSOR_REPEAT</a>(N, M, P)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Obsolete. Use <a class="el" href="repeat_8hpp.html#a0">BOOST_PP_REPEAT</a>().</em> <a href="#a1">More...</a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
  <a href="../../../../boost/preprocessor/repeat.hpp">Click here to see the header.</a>
 <p>
 <hr><h2>Define Documentation</h2>
-<a name="a0" doxytag="repeat.hpp::BOOST_PREPROCESSOR_REPEAT"></a><p>
+<a name="a0" doxytag="repeat.hpp::BOOST_PP_REPEAT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> #define BOOST_PREPROCESSOR_REPEAT</td>
+          <td class="md" nowrap valign="top"> #define BOOST_PP_REPEAT</td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">N,         <tr>
           <td></td>
@@ -53,7 +55,42 @@ In other words, expands to the sequence:
   M(0,P) M(1,P) ... M(N-1,P)
 </pre></div></pre>
 <p>
-See BOOST_PREPROCESSOR_LIMIT_MAG.     </td>
+See BOOST_PP_LIMIT_MAG.     </td>
+  </tr>
+</table>
+<a name="a1" doxytag="repeat.hpp::BOOST_PREPROCESSOR_REPEAT"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define BOOST_PREPROCESSOR_REPEAT</td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">N,         <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>M,         <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>P&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
+          <td class="md" valign="top">)&nbsp;</td>
+          <td class="md" nowrap>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Obsolete. Use <a class="el" href="repeat_8hpp.html#a0">BOOST_PP_REPEAT</a>().
+<p>
+    </td>
   </tr>
 </table>
 <hr>

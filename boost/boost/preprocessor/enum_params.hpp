@@ -17,12 +17,8 @@
 <a href="../../../../boost/preprocessor/enum_params.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_COMMA_IF_HPP
-#  include <boost/preprocessor/comma_if.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_REPEAT_HPP
-#  include <boost/preprocessor/repeat.hpp>
-#endif
+#include <boost/preprocessor/comma_if.hpp>
+#include <boost/preprocessor/repeat.hpp>
 
 //! Generates a comma separated list of parameters.
 /*!
@@ -32,11 +28,14 @@ In other words, expands to the sequence:
   P##0, P##1, ..., P##N-1
 \endverbatim</PRE>
 
-NOTE: The implementation uses BOOST_PREPROCESSOR_REPEAT().
+NOTE: The implementation uses BOOST_PP_REPEAT().
 */
-#define BOOST_PREPROCESSOR_ENUM_PARAMS(N,P) BOOST_PREPROCESSOR_REPEAT(N,BOOST_PREPROCESSOR_PARAM,P)
+#define BOOST_PP_ENUM_PARAMS(N,P) BOOST_PP_REPEAT(N,BOOST_PP_ENUM_PARAMS_F,P)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PREPROCESSOR_PARAM(I,P) BOOST_PREPROCESSOR_COMMA_IF(I) P##I
-#endif /* DOXYGEN_SHOULD_SKIP_THIS */
+#define BOOST_PP_ENUM_PARAMS_F(I,P) BOOST_PP_COMMA_IF(I) P##I
+#endif
+
+//! Obsolete. Use BOOST_PP_ENUM_PARAMS().
+#define BOOST_PREPROCESSOR_ENUM_PARAMS(N,P) BOOST_PP_ENUM_PARAMS(N,P)
 #endif

@@ -17,22 +17,22 @@
 <a href="../../../../boost/preprocessor/arithmetic/sub.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_DEC_HPP
-#  include <boost/preprocessor/dec.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_TUPLE_HPP
-#  include <boost/preprocessor/tuple.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_WHILE_HPP
-#  include <boost/preprocessor/while.hpp>
-#endif
+#include <boost/preprocessor/dec.hpp>
+#include <boost/preprocessor/tuple.hpp>
+#include <boost/preprocessor/while.hpp>
 
 //! Expands to the difference of X and Y.
-#define BOOST_PREPROCESSOR_SUB(X,Y) BOOST_PREPROCESSOR_SUB_I(0,X,Y)
+/*!
+For example, BOOST_PP_SUB(4,3) expands to 1 (a single token).
+*/
+#define BOOST_PP_SUB(X,Y) BOOST_PP_SUB_D(0,X,Y)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PREPROCESSOR_SUB_I(I,X,Y) BOOST_PREPROCESSOR_TUPLE_ELEM(2,0,BOOST_PREPROCESSOR_WHILE##I(BOOST_PREPROCESSOR_SUB_C,BOOST_PREPROCESSOR_SUB_F,(X,Y)))
-#define BOOST_PREPROCESSOR_SUB_C(I,P) BOOST_PREPROCESSOR_TUPLE_ELEM(2,1,P)
-#define BOOST_PREPROCESSOR_SUB_F(I,P) (BOOST_PREPROCESSOR_DEC(BOOST_PREPROCESSOR_TUPLE_ELEM(2,0,P)),BOOST_PREPROCESSOR_DEC(BOOST_PREPROCESSOR_TUPLE_ELEM(2,1,P)))
-#endif /* DOXYGEN_SHOULD_SKIP_THIS */
+#define BOOST_PP_SUB_D(D,X,Y) BOOST_PP_TUPLE_ELEM(2,0,BOOST_PP_WHILE##D(BOOST_PP_SUB_C,BOOST_PP_SUB_F,(X,Y)))
+#define BOOST_PP_SUB_C(D,P) BOOST_PP_TUPLE_ELEM(2,1,P)
+#define BOOST_PP_SUB_F(D,P) (BOOST_PP_DEC(BOOST_PP_TUPLE_ELEM(2,0,P)),BOOST_PP_DEC(BOOST_PP_TUPLE_ELEM(2,1,P)))
+#endif
+
+//! Obsolete. Use BOOST_PP_SUB(X,Y).
+#define BOOST_PREPROCESSOR_SUB(X,Y) BOOST_PP_SUB(X,Y)
 #endif

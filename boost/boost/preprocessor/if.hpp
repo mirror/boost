@@ -17,21 +17,22 @@
 <a href="../../../../boost/preprocessor/if.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_LOGICAL_BOOL_HPP
-#  include <boost/preprocessor/logical/bool.hpp>
-#endif
+#include <boost/preprocessor/logical/bool.hpp>
 
 //! Expands to T if C != 0 and E if C == 0.
 /*!
-BOOST_PREPROCESSOR_IF() enables convenient generation of lists using
-BOOST_PREPROCESSOR_REPEAT().
+BOOST_PP_IF() enables convenient generation of lists using
+BOOST_PP_REPEAT().
 */
-#define BOOST_PREPROCESSOR_IF(C,T,E) BOOST_PREPROCESSOR_IF_BOOL(BOOST_PREPROCESSOR_BOOL(C),T,E)
+#define BOOST_PP_IF(C,T,E) BOOST_PP_IF_BOOL(BOOST_PP_BOOL(C),T,E)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PREPROCESSOR_IF_BOOL(C,T,E) BOOST_PREPROCESSOR_IF_BOOL_DELAY(C,T,E)
-#define BOOST_PREPROCESSOR_IF_BOOL_DELAY(C,T,E) BOOST_PREPROCESSOR_IF_BOOL##C(T,E)
-#define BOOST_PREPROCESSOR_IF_BOOL0(T,E) E
-#define BOOST_PREPROCESSOR_IF_BOOL1(T,E) T
-#endif /* DOXYGEN_SHOULD_SKIP_THIS */
+#define BOOST_PP_IF_BOOL(C,T,E) BOOST_PP_IF_BOOL_DELAY(C,T,E)
+#define BOOST_PP_IF_BOOL_DELAY(C,T,E) BOOST_PP_IF_BOOL##C(T,E)
+#define BOOST_PP_IF_BOOL0(T,E) E
+#define BOOST_PP_IF_BOOL1(T,E) T
+#endif
+
+//! Obsolete. Use BOOST_PP_IF().
+#define BOOST_PREPROCESSOR_IF(C,T,E) BOOST_PP_IF(C,T,E)
 #endif

@@ -17,13 +17,14 @@
 <a href="../../../../boost/preprocessor/logical/or.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_LOGICAL_NOR_HPP
-#  include <boost/preprocessor/logical/nor.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_LOGICAL_NOT_HPP
-#  include <boost/preprocessor/logical/not.hpp>
-#endif
+#include <boost/preprocessor/logical/not.hpp>
 
-//! Expands to the logical OR of the operands. 
-#define BOOST_PREPROCESSOR_OR(X,Y) BOOST_PREPROCESSOR_NOT(BOOST_PREPROCESSOR_NOR(X,Y))
+//! Expands to the logical OR of the operands.
+/*!
+For example, BOOST_PP_OR(0,2) expands to 1 (a single token).
+*/
+#define BOOST_PP_OR(X,Y) BOOST_PP_NOT(BOOST_PP_NOR(X,Y))
+
+//! Obsolete. Use BOOST_PP_OR().
+#define BOOST_PREPROCESSOR_OR(X,Y) BOOST_PP_OR(X,Y)
 #endif

@@ -15,21 +15,11 @@
 /*! \file
 
 <a href="../../../../boost/preprocessor/arithmetic.hpp">Click here to see the header.</a>
+
+Includes all arithmetic headers.
 */
 
-#ifndef BOOST_PREPROCESSOR_ARITHMETIC_ADD_HPP
-#  include <boost/preprocessor/arithmetic/add.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_ARITHMETIC_DIV_HPP
-#  include <boost/preprocessor/arithmetic/div.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_ARITHMETIC_MOD_HPP
-#  include <boost/preprocessor/arithmetic/mod.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_ARITHMETIC_MUL_HPP
-#  include <boost/preprocessor/arithmetic/mul.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_ARITHMETIC_SUB_HPP
-#  include <boost/preprocessor/arithmetic/sub.hpp>
-#endif
+#include <boost/preprocessor/arithmetic/div.hpp>
+#include <boost/preprocessor/arithmetic/mod.hpp>
+#include <boost/preprocessor/arithmetic/mul.hpp>
 #endif

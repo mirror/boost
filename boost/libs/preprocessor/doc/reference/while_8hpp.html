@@ -8,20 +8,20 @@
 <a class="qindex" href="index.html">Main Page</a> &nbsp; <a class="qindex" href="files.html">File List</a> &nbsp; <a class="qindex" href="globals.html">File Members</a> &nbsp; </center>
 <hr><h1>while.hpp File Reference</h1><table border=0 cellpadding=0 cellspacing=0>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="while_8hpp.html#a0">BOOST_PREPROCESSOR_WHILE</a>(C, F, X)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>CURRENTLY THIS FEATURE IS FOR INTERNAL USE ONLY!</em> <a href="#a0">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>(C, F, X)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Iterates F(D,X) while C(D,X) is true.</em> <a href="#a0">More...</a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
  <a href="../../../../boost/preprocessor/while.hpp">Click here to see the header.</a>
 <p>
 <hr><h2>Define Documentation</h2>
-<a name="a0" doxytag="while.hpp::BOOST_PREPROCESSOR_WHILE"></a><p>
+<a name="a0" doxytag="while.hpp::BOOST_PP_WHILE"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> #define BOOST_PREPROCESSOR_WHILE</td>
+          <td class="md" nowrap valign="top"> #define BOOST_PP_WHILE</td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">C,         <tr>
           <td></td>
@@ -45,10 +45,84 @@
     <td>
 
 <p>
-CURRENTLY THIS FEATURE IS FOR INTERNAL USE ONLY!
+Iterates F(D,X) while C(D,X) is true.
+<p>
+<h3>Legend</h3>
+
+<p>
+<b>X</b> is the current state of iteration. The state is usually a tuple.
+<p>
+<b>C</b> is the condition for iteration. It must expand to a decimal integer literal.
+<p>
+<b>F</b> is the iterated function. Note that if the state is a tuple, then F(D,X) usually expands to a tuple of the same number of elements.
+<p>
+<b>D</b> is the recursion depth and should only be used as a parameter to other functions implemented using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>(). Such functions include <a class="el" href="add_8hpp.html#a0">BOOST_PP_ADD</a>() and other arithmetic operations. For each function implemented using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>(), there is a version of the function, distinguished by the _D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion depth as the first parameter. This technique is necessary to avoid recursively expanding the same macro again, which is not permitted by the C/C++ preprocessor.
+<p>
+NOTE: The value of the D parameter may exceed BOOST_PP_LIMIT_MAG.
+<p>
+<h3>Usage</h3>
+
+<p>
+Using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>() is a bit tricky. This is due to the C/C++ preprocessor limitations. It is recommended to take a look at the implementations of the various PREPROCESSOR library primitives such as <a class="el" href="add_8hpp.html#a0">BOOST_PP_ADD</a>() for additional examples.
+<p>
+Here is a trivial example that simply counts down from N to 0 ultimately expanding to a 0:
+<p>
+<pre><div class="fragment"><pre>
+  #define COUNT_DOWN(N) BOOST_PP_WHILE(COUNT_DOWN_C,COUNT_DOWN_F,N)
+  // Above is the function we are implementing using BOOST_PP_WHILE().
+
+  #define COUNT_DOWN_C(D,N) N
+  // Above is the Condition. It expands to the current N.
+
+  #define COUNT_DOWN_F(D,N) BOOST_PP_DEC(N)
+  // Above is the iteration Function. It decrements N.
+
+  COUNT_DOWN(50)
+  // The above expands to 0.
+</pre></div></pre>
+<p>
+For a more complex example, let's take a look at an implementation of <a class="el" href="mul_8hpp.html#a0">BOOST_PP_MUL</a>().
+<p>
+<pre><div class="fragment"><pre>
+  #define BOOST_PP_MUL(X,Y) BOOST_PP_MUL_D(0,X,Y)
+  // Since the function is implemented using WHILE, the actual implementation
+  // takes a depth as a parameter so that it can be called inside a WHILE.
+  // The above easy-to-use version simply uses 0 as the depth and can not be
+  // called inside a WHILE.
+
+  #define BOOST_PP_MUL_D(D,X,Y)\
+    BOOST_PP_TUPLE_ELEM(3,0,BOOST_PP_WHILE##D(BOOST_PP_MUL_C,BOOST_PP_MUL_F,(0,X,Y)))
+  //                    ^^^               ^^^             ^^             ^^ ^^^^^^^
+  //                    #1                #2              #3             #3 #1
+  //
+  // #1) The state is a 3-tuple. After the iteration is finished, the first
+  // element of the tuple is the result.
+  //
+  // #2) The WHILE primitive is "invoked" directly. BOOST_PP_WHILE(D,...) can't
+  // be used because it would not be expanded by the C/C++ preprocessor.
+  //
+  // #3) ???_C is the condition and ???_F is the iteration function.
+
+  #define BOOST_PP_MUL_C(D,P)\
+    BOOST_PP_TUPLE_ELEM(3,2,P)
+  // Iteration is finished when the counter reaches 0.
+
+  #define BOOST_PP_MUL_F(D,P)\
+    ( BOOST_PP_ADD_D(D,BOOST_PP_TUPLE_ELEM(3,0,P),BOOST_PP_TUPLE_ELEM(3,1,P))\
+    , BOOST_PP_TUPLE_ELEM(3,1,P)\
+    , BOOST_PP_DEC(BOOST_PP_TUPLE_ELEM(3,2,P))\
+    )
+  // ( The result is increased by the multiplier.
+  // , The multiplier is retained without change.
+  // , The counter is decreased.
+  // )
+</pre></div></pre>
+<p>
+<h3>Implementation</h3>
+
 <p>
 RATIONALE:<ul>
-<li>The maximum iteration depth is 2*BOOST_PREPROCESSOR_LIMIT_MAG+1 to make it theoretically possible to compute BOOST_PREPROCESSOR_LIMIT_MAG^2. </ul>
+<li>The maximum iteration depth is greater than 2*BOOST_PP_LIMIT_MAG to make it possible to compute N*N functions. </ul>
     </td>
   </tr>
 </table>

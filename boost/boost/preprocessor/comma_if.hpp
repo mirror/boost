@@ -17,16 +17,13 @@
 <a href="../../../../boost/preprocessor/comma_if.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_COMMA_HPP
-#  include <boost/preprocessor/comma.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_EMPTY_HPP
-#  include <boost/preprocessor/empty.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_IF_HPP
-#  include <boost/preprocessor/if.hpp>
-#endif
+#include <boost/preprocessor/comma.hpp>
+#include <boost/preprocessor/empty.hpp>
+#include <boost/preprocessor/if.hpp>
 
 //! Expands to a comma if C != 0 and nothing if C == 0.
-#define BOOST_PREPROCESSOR_COMMA_IF(C) BOOST_PREPROCESSOR_IF(C,BOOST_PREPROCESSOR_COMMA,BOOST_PREPROCESSOR_EMPTY)()
+#define BOOST_PP_COMMA_IF(C) BOOST_PP_IF(C,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
+
+//! Obsolete. Use BOOST_PP_COMMA_IF().
+#define BOOST_PREPROCESSOR_COMMA_IF(C) BOOST_PP_COMMA_IF(C)
 #endif

@@ -23,7 +23,7 @@ Example:
 
 <PRE>\verbatim
 #define NOTE(STR)\
-  message(__FILE__ "(" BOOST_PREPROCESSOR_STRINGIZE(__LINE__) ") : " STR)
+  message(__FILE__ "(" BOOST_PP_STRINGIZE(__LINE__) ") : " STR)
 
 // ...
 
@@ -36,17 +36,20 @@ The above expands to:
   #pragma message("examples.cpp" "(" "20" ") : " "TBD!")
 \endverbatim</PRE>
 
-The use of BOOST_PREPROCESSOR_STRINGIZE() above lets the preprocessor expand
-the __LINE__ before stringizing it. If # would be used directly, the code
-would expand to:
+The use of BOOST_PP_STRINGIZE() above lets the PP expand the __LINE__
+before stringizing it. If # would be used directly, the code would
+expand to:
 
 <PRE>\verbatim
   #pragma message("examples.cpp" "(" "__LINE__" ") : " "TBD!")
 \endverbatim</PRE>
 */
-#define BOOST_PREPROCESSOR_STRINGIZE(E) BOOST_PREPROCESSOR_STRINGIZE_DELAY(E)
+#define BOOST_PP_STRINGIZE(E) BOOST_PP_STRINGIZE_DELAY(E)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PREPROCESSOR_STRINGIZE_DELAY(E) #E
-#endif /* DOXYGEN_SHOULD_SKIP_THIS */
+#define BOOST_PP_STRINGIZE_DELAY(E) #E
+#endif
+
+//! Obsolete. Use BOOST_PP_STRINGIZE().
+#define BOOST_PREPROCESSOR_STRINGIZE(E) BOOST_PP_STRINGIZE(E)
 #endif

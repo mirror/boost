@@ -17,16 +17,17 @@
 <a href="../../../../boost/preprocessor/comparison/not_equal.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_ARITHMETIC_ADD_HPP
-#  include <boost/preprocessor/arithmetic/add.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_ARITHMETIC_SUB_HPP
-#  include <boost/preprocessor/arithmetic/sub.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_LOGICAL_BOOL_HPP
-#  include <boost/preprocessor/logical/bool.hpp>
-#endif
+#include <boost/preprocessor/arithmetic/add.hpp>
+#include <boost/preprocessor/arithmetic/sub.hpp>
+#include <boost/preprocessor/logical/bool.hpp>
 
 //! Expands to 1 if X!=Y and 0 otherwise.
-#define BOOST_PREPROCESSOR_NOT_EQUAL(X,Y) BOOST_PREPROCESSOR_BOOL(BOOST_PREPROCESSOR_ADD(BOOST_PREPROCESSOR_SUB(X,Y),BOOST_PREPROCESSOR_SUB(Y,X)))
+#define BOOST_PP_NOT_EQUAL(X,Y) BOOST_PP_NOT_EQUAL_D(0,X,Y)
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#define BOOST_PP_NOT_EQUAL_D(D,X,Y) BOOST_PP_BOOL(BOOST_PP_ADD_D(D,BOOST_PP_SUB_D(D,X,Y),BOOST_PP_SUB_D(D,Y,X)))
+#endif
+
+//! Obsolete. Use BOOST_PP_NOT_EQUAL().
+#define BOOST_PREPROCESSOR_NOT_EQUAL(X,Y) BOOST_PP_NOT_EQUAL(X,Y)
 #endif

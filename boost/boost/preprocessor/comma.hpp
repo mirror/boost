@@ -17,9 +17,12 @@
 <a href="../../../../boost/preprocessor/comma.hpp">Click here to see the header.</a>
 */
 
-//! Expands to a comma. Can be used with BOOST_PREPROCESSOR_IF().
+//! Expands to a comma. Can be used with BOOST_PP_IF().
 /*!
-See BOOST_PREPROCESSOR_COMMA_IF().
+See BOOST_PP_COMMA_IF().
 */
+#define BOOST_PP_COMMA() ,
+
+//! Obsolete. Use BOOST_PP_COMMA().
 #define BOOST_PREPROCESSOR_COMMA() ,
 #endif

@@ -17,13 +17,14 @@
 <a href="../../../../boost/preprocessor/logical/and.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_LOGICAL_NOR_HPP
-#  include <boost/preprocessor/logical/nor.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_LOGICAL_NOT_HPP
-#  include <boost/preprocessor/logical/not.hpp>
-#endif
+#include <boost/preprocessor/logical/not.hpp>
 
 //! Expands to the logical AND of the operands.
-#define BOOST_PREPROCESSOR_AND(X,Y) BOOST_PREPROCESSOR_NOR(BOOST_PREPROCESSOR_NOT(X),BOOST_PREPROCESSOR_NOT(Y))
+/*!
+For example, BOOST_PP_AND(0,5) expands to 0 (a single token).
+*/
+#define BOOST_PP_AND(X,Y) BOOST_PP_NOR(BOOST_PP_NOT(X),BOOST_PP_NOT(Y))
+
+//! Obsolete. Use BOOST_PP_AND().
+#define BOOST_PREPROCESSOR_AND(X,Y) BOOST_PP_AND(X,Y)
 #endif

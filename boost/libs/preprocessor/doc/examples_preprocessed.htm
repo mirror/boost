@@ -76,7 +76,7 @@ vec&lt;T,n&gt;&
 
 <hr>
 <p><strong><a name="UNUSED"></a><a href="tutorial.htm#UNUSED">EXAMPLE</a>:</strong> 
-  Use BOOST_PREPROCESSOR_EMPTY() as an unused parameter in Local Macro instantiations</p>
+  Use BOOST_PP_EMPTY() as an unused parameter in Local Macro instantiations</p>
 
 <blockquote>
   <pre>template&lt;class base&gt;
@@ -100,7 +100,7 @@ const typename implement_subscript_using_begin_subscript&lt;base&gt;::value_type
 </blockquote>
 
 <hr>
-<p><b><a name="CAT"></a><a href="tutorial.htm#CAT">EXAMPLE:</a></b> Use BOOST_PREPROCESSOR_CAT instead of ## when necessary</p>
+<p><b><a name="CAT"></a><a href="tutorial.htm#CAT">EXAMPLE:</a></b> Use BOOST_PP_CAT instead of ## when necessary</p>
 
 <blockquote>
   <pre>enum
@@ -113,7 +113,7 @@ typedef char
 </pre>
 </blockquote>
 <hr>
-<p><b><a name="STRINGIZE"></a><a href="tutorial.htm#STRINGIZE">EXAMPLE:</a></b> Use BOOST_PREPROCESSOR_STRINGIZE instead of # whenever necessary</p>
+<p><b><a name="STRINGIZE"></a><a href="tutorial.htm#STRINGIZE">EXAMPLE:</a></b> Use BOOST_PP_STRINGIZE instead of # whenever necessary</p>
 <blockquote>
   <pre>#pragma message("examples.cpp" "(" "20" ") : " "TBD!")</pre>
 </blockquote>
@@ -121,12 +121,12 @@ typedef char
 <p><strong><a name="ENUM_PARAMS"></a><a href="tutorial.htm#ENUM_PARAMS">EXAMPLE</a>:</strong> 
   Use:</p>
 <ul>
-  <li> BOOST_PREPROCESSOR_ENUM_PARAMS,</li>
-  <li> BOOST_PREPROCESSOR_ENUM_PARAMS_WITH_A_DEFAULT,</li>
-  <li> BOOST_PREPROCESSOR_ENUM_PARAMS_WITH_DEFAULTS,</li>
-  <li> BOOST_PREPROCESSOR_ENUM_SHIFTED_PARAMS, or</li>
-  <li>BOOST_PREPROCESSOR_REPEAT, and</li>
-  <li> BOOST_PREPROCESSOR_COMMA_IF</li>
+  <li> BOOST_PP_ENUM_PARAMS,</li>
+  <li> BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT,</li>
+  <li> BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS,</li>
+  <li> BOOST_PP_ENUM_SHIFTED_PARAMS, or</li>
+  <li>BOOST_PP_REPEAT, and</li>
+  <li> BOOST_PP_COMMA_IF</li>
 </ul>
 <p>to avoid O(N) repetition on lists in general</p>
 <blockquote>
@@ -177,7 +177,7 @@ public:
 
 <hr>
 <p><strong><a name="Token Look-Up"></a><a href="tutorial.htm#Token Look-Up">EXAMPLE</a>:</strong> 
-  Use BOOST_PREPROCESSOR_REPEAT and a Token Look-Up Function to eliminate categorical 
+  Use BOOST_PP_REPEAT and a Token Look-Up Function to eliminate categorical 
   repetition</p>
 
 <blockquote>
@@ -238,7 +238,7 @@ catch (long double t)
 
 <hr>
 <p><strong><a name="2ND_REPEAT"></a><a href="tutorial.htm#2ND_REPEAT">EXAMPLE</a>:</strong> 
-  Use BOOST_PREPROCESSOR_REPEAT_2ND to avoid O(N*N) repetition</p>
+  Use BOOST_PP_REPEAT_2ND to avoid O(N*N) repetition</p>
 
 <blockquote>
   <pre>vec()
@@ -302,7 +302,7 @@ vec(T a0, T a1, T a2, T a3, T a4, T a5, T a6, T a7)
 <p> 
 <hr>
 <p><a name="IF"></a><a href="tutorial.htm#IF"><b>EXAMPLE:</b></a> 
-  Use BOOST_PREPROCESSOR_IF to implement special case for the first element</p>
+  Use BOOST_PP_IF to implement special case for the first element</p>
 
 <blockquote> 
   <pre>false == false;

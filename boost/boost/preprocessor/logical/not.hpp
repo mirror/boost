@@ -17,10 +17,14 @@
 <a href="../../../../boost/preprocessor/logical/not.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_LOGICAL_NOR_HPP
-#  include <boost/preprocessor/logical/nor.hpp>
-#endif
+#include <boost/preprocessor/logical/nor.hpp>
 
 //! Expands to the logical NOT of the operand.
-#define BOOST_PREPROCESSOR_NOT(X) BOOST_PREPROCESSOR_NOR(X,X)
+/*!
+For example, BOOST_PP_NOT(0) expands to 1 (a single token).
+*/
+#define BOOST_PP_NOT(X) BOOST_PP_NOR(X,X)
+
+//! Obsolete. Use BOOST_PP_NOT().
+#define BOOST_PREPROCESSOR_NOT(X) BOOST_PP_NOT(X)
 #endif

@@ -24,11 +24,11 @@ Example:
 <PRE>\verbatim
   #define STATIC_ASSERT(EXPR)\
     enum\
-    { BOOST_PREPROCESSOR_CAT(static_check_,__LINE__) = (EXPR) ? 1 : -1\
+    { BOOST_PP_CAT(static_check_,__LINE__) = (EXPR) ? 1 : -1\
     };\
     typedef char\
-      BOOST_PREPROCESSOR_CAT(static_assert_,__LINE__)\
-      [ BOOST_PREPROCESSOR_CAT(static_check_,__LINE__)\
+      BOOST_PP_CAT(static_assert_,__LINE__)\
+      [ BOOST_PP_CAT(static_check_,__LINE__)\
       ]
 
   // ...
@@ -48,7 +48,7 @@ The above expands to:
     ];
 \endverbatim</PRE>
 
-Using BOOST_PREPROCESSOR_CAT() above lets the preprocessor expand the __LINE__.
+Using BOOST_PP_CAT() above lets the PP expand the __LINE__.
 If the above code would use the ## operator directly then __LINE__ would not be
 expanded and the above would expand to:
 
@@ -62,9 +62,12 @@ expanded and the above would expand to:
     ];
 \endverbatim</PRE>
 */
-#define BOOST_PREPROCESSOR_CAT(L,R) BOOST_PREPROCESSOR_CAT_DELAY(L,R)
+#define BOOST_PP_CAT(L,R) BOOST_PP_CAT_DELAY(L,R)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PREPROCESSOR_CAT_DELAY(L,R) L##R
-#endif /* DOXYGEN_SHOULD_SKIP_THIS */
+#define BOOST_PP_CAT_DELAY(L,R) L##R
+#endif
+
+//! Obsolete. Use BOOST_PP_CAT().
+#define BOOST_PREPROCESSOR_CAT(L,R) BOOST_PP_CAT(L,R)
 #endif

@@ -17,16 +17,17 @@
 <a href="../../../../boost/preprocessor/comparison/less.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_COMPARISON_EQUAL_HPP
-#  include <boost/preprocessor/comparison/equal.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_COMPARISON_LESS_EQUAL_HPP
-#  include <boost/preprocessor/comparison/less_equal.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_IF_HPP
-#  include <boost/preprocessor/if.hpp>
-#endif
+#include <boost/preprocessor/comparison/less_equal.hpp>
+#include <boost/preprocessor/comparison/not_equal.hpp>
+#include <boost/preprocessor/logical/and.hpp>
 
 //! Expands to 1 if X<Y and 0 otherwise.
-#define BOOST_PREPROCESSOR_LESS(X,Y) BOOST_PREPROCESSOR_IF(BOOST_PREPROCESSOR_EQUAL(X,Y),0,BOOST_PREPROCESSOR_LESS_EQUAL(X,Y))
+#define BOOST_PP_LESS(X,Y) BOOST_PP_LESS_D(0,X,Y)
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#define BOOST_PP_LESS_D(D,X,Y) BOOST_PP_AND(BOOST_PP_NOT_EQUAL_D(D,X,Y),BOOST_PP_LESS_EQUAL_D(D,X,Y))
+#endif
+
+//! Obsolete. Use BOOST_PP_LESS().
+#define BOOST_PREPROCESSOR_LESS(X,Y) BOOST_PP_LESS(X,Y)
 #endif

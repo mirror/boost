@@ -15,24 +15,11 @@
 /*! \file
 
 <a href="../../../../boost/preprocessor/comparison.hpp">Click here to see the header.</a>
+
+Includes all comparison headers.
 */
 
-#ifndef BOOST_PREPROCESSOR_COMPARISON_EQUAL_HPP
-#  include <boost/preprocessor/comparison/equal.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_COMPARISON_GREATER_HPP
-#  include <boost/preprocessor/comparison/greater.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_COMPARISON_GREATER_EQUAL_HPP
-#  include <boost/preprocessor/comparison/greater_equal.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_COMPARISON_LESS_HPP
-#  include <boost/preprocessor/comparison/less.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_COMPARISON_LESS_EQUAL_HPP
-#  include <boost/preprocessor/comparison/less_equal.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_COMPARISON_NOT_EQUAL_HPP
-#  include <boost/preprocessor/comparison/not_equal.hpp>
-#endif
+#include <boost/preprocessor/comparison/equal.hpp>
+#include <boost/preprocessor/comparison/greater.hpp>
+#include <boost/preprocessor/comparison/greater_equal.hpp>
 #endif

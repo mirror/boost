@@ -8,18 +8,100 @@
 <a class="qindex" href="index.html">Main Page</a> &nbsp; <a class="qindex" href="files.html">File List</a> &nbsp; <a class="qindex" href="globals.html">File Members</a> &nbsp; </center>
 <hr><h1>limits.hpp File Reference</h1><table border=0 cellpadding=0 cellspacing=0>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="limits_8hpp.html#a0">BOOST_PREPROCESSOR_LIMIT_DIM</a></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="limits_8hpp.html#a0">BOOST_PP_LIMIT_DIM</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Expands to the number of dimensions of repeat supported by the library.</em> <a href="#a0">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="limits_8hpp.html#a1">BOOST_PREPROCESSOR_LIMIT_MAG</a></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="limits_8hpp.html#a1">BOOST_PP_LIMIT_MAG</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Expands to the maximum straight numeric literal supported by the library.</em> <a href="#a1">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="limits_8hpp.html#a2">BOOST_PREPROCESSOR_LIMIT_TUPLE</a></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="limits_8hpp.html#a2">BOOST_PP_LIMIT_TUPLE</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Expands to the maximum tuple length supported by the library.</em> <a href="#a2">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="limits_8hpp.html#a3">BOOST_PREPROCESSOR_LIMIT_DIM</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Obsolete. Use BOOST_PP_LIMIT_DIM.</em> <a href="#a3">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="limits_8hpp.html#a4">BOOST_PREPROCESSOR_LIMIT_MAG</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Obsolete. Use BOOST_PP_LIMIT_MAG.</em> <a href="#a4">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="limits_8hpp.html#a5">BOOST_PREPROCESSOR_LIMIT_TUPLE</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Obsolete. Use BOOST_PP_LIMIT_TUPLE.</em> <a href="#a5">More...</a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
  <a href="../../../../boost/preprocessor/limits.hpp">Click here to see the header.</a>
 <p>
 <hr><h2>Define Documentation</h2>
-<a name="a0" doxytag="limits.hpp::BOOST_PREPROCESSOR_LIMIT_DIM"></a><p>
+<a name="a0" doxytag="limits.hpp::BOOST_PP_LIMIT_DIM"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define BOOST_PP_LIMIT_DIM
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Expands to the number of dimensions of repeat supported by the library.
+<p>
+The repeat macros are named <a class="el" href="repeat_8hpp.html#a0">BOOST_PP_REPEAT</a>(), <a class="el" href="repeat__2nd_8hpp.html#a0">BOOST_PP_REPEAT_2ND</a>(), <a class="el" href="repeat__3rd_8hpp.html#a0">BOOST_PP_REPEAT_3RD</a>(), ...     </td>
+  </tr>
+</table>
+<a name="a1" doxytag="limits.hpp::BOOST_PP_LIMIT_MAG"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define BOOST_PP_LIMIT_MAG
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Expands to the maximum straight numeric literal supported by the library.
+<p>
+This is also the limit of the repetition primitives (BOOST_PP_ENUM family and BOOST_PP_REPEAT family).
+<p>
+NOTES:<ul>
+<li>Only decimal integer literals in the range [0,BOOST_PP_LIMIT_MAG] are supported.<li>All arithmetic operations (ADD,SUB,MUL,DIV) use saturation arithmetic.<li>The maximum repetition count supported by the library may not be reached due to compiler limitations. </ul>
+    </td>
+  </tr>
+</table>
+<a name="a2" doxytag="limits.hpp::BOOST_PP_LIMIT_TUPLE"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define BOOST_PP_LIMIT_TUPLE
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Expands to the maximum tuple length supported by the library.
+<p>
+    </td>
+  </tr>
+</table>
+<a name="a3" doxytag="limits.hpp::BOOST_PREPROCESSOR_LIMIT_DIM"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -38,12 +120,12 @@
     <td>
 
 <p>
-Expands to the number of dimensions of repeat supported by the library.
+Obsolete. Use BOOST_PP_LIMIT_DIM.
 <p>
     </td>
   </tr>
 </table>
-<a name="a1" doxytag="limits.hpp::BOOST_PREPROCESSOR_LIMIT_MAG"></a><p>
+<a name="a4" doxytag="limits.hpp::BOOST_PREPROCESSOR_LIMIT_MAG"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -62,14 +144,12 @@ Expands to the number of dimensions of repeat supported by the library.
     <td>
 
 <p>
-Expands to the maximum straight numeric literal supported by the library.
+Obsolete. Use BOOST_PP_LIMIT_MAG.
 <p>
-NOTES:<ul>
-<li>Only decimal integer literals in the range [0,BOOST_PREPROCESSOR_LIMIT_MAG] are supported.<li>All arithmetic operations (ADD,SUB,MUL,DIV) use saturation arithmetic.<li>The maximum repetition count supported by the library may not be reached due to compiler limitations. </ul>
     </td>
   </tr>
 </table>
-<a name="a2" doxytag="limits.hpp::BOOST_PREPROCESSOR_LIMIT_TUPLE"></a><p>
+<a name="a5" doxytag="limits.hpp::BOOST_PREPROCESSOR_LIMIT_TUPLE"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -88,7 +168,7 @@ NOTES:<ul>
     <td>
 
 <p>
-Expands to the maximum tuple length supported by the library.
+Obsolete. Use BOOST_PP_LIMIT_TUPLE.
 <p>
     </td>
   </tr>

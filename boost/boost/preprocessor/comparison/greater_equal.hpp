@@ -17,10 +17,15 @@
 <a href="../../../../boost/preprocessor/comparison/greater_equal.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_COMPARISON_LESS_EQUAL_HPP
-#  include <boost/preprocessor/comparison/less_equal.hpp>
-#endif
+#include <boost/preprocessor/comparison/less_equal.hpp>
 
 //! Expands to 1 if X>=Y and 0 otherwise.
-#define BOOST_PREPROCESSOR_GREATER_EQUAL(X,Y) BOOST_PREPROCESSOR_LESS_EQUAL(Y,X)
+#define BOOST_PP_GREATER_EQUAL(X,Y) BOOST_PP_GREATER_EQUAL_D(0,X,Y)
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#define BOOST_PP_GREATER_EQUAL_D(D,X,Y) BOOST_PP_LESS_EQUAL_D(D,Y,X)
+#endif
+
+//! Obsolete. Use BOOST_PP_GREATER_EQUAL().
+#define BOOST_PREPROCESSOR_GREATER_EQUAL(X,Y) BOOST_PP_GREATER_EQUAL(X,Y)
 #endif

@@ -17,19 +17,23 @@
 <a href="../../../../boost/preprocessor/logical/nor.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_LOGICAL_BOOL_HPP
-#  include <boost/preprocessor/logical/bool.hpp>
-#endif
+#include <boost/preprocessor/logical/bool.hpp>
 
-//! Expands to the logical NEITHER OR of the operands. 
-#define BOOST_PREPROCESSOR_NOR(X,Y) BOOST_PREPROCESSOR_NOR_BOOL(BOOST_PREPROCESSOR_BOOL(X),BOOST_PREPROCESSOR_BOOL(Y))
+//! Expands to the logical NEITHER OR of the operands.
+/*!
+For example, BOOST_PP_NOR(0,5) expands to 0 (a single token).
+*/
+#define BOOST_PP_NOR(X,Y) BOOST_PP_NOR_BOOL(BOOST_PP_BOOL(X),BOOST_PP_BOOL(Y))
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PREPROCESSOR_NOR_BOOL(X,Y) BOOST_PREPROCESSOR_NOR_BOOL_DELAY(X,Y)
-#define BOOST_PREPROCESSOR_NOR_BOOL_DELAY(X,Y) BOOST_PREPROCESSOR_NOR_BOOL##X##Y
-#define BOOST_PREPROCESSOR_NOR_BOOL00 1
-#define BOOST_PREPROCESSOR_NOR_BOOL01 0
-#define BOOST_PREPROCESSOR_NOR_BOOL10 0
-#define BOOST_PREPROCESSOR_NOR_BOOL11 0
-#endif /* DOXYGEN_SHOULD_SKIP_THIS */
+#define BOOST_PP_NOR_BOOL(X,Y) BOOST_PP_NOR_BOOL_DELAY(X,Y)
+#define BOOST_PP_NOR_BOOL_DELAY(X,Y) BOOST_PP_NOR_BOOL##X##Y
+#define BOOST_PP_NOR_BOOL00 1
+#define BOOST_PP_NOR_BOOL01 0
+#define BOOST_PP_NOR_BOOL10 0
+#define BOOST_PP_NOR_BOOL11 0
+#endif
+
+//! Obsolete. Use BOOST_PP_NOR().
+#define BOOST_PREPROCESSOR_NOR(X,Y) BOOST_PP_NOR(X,Y)
 #endif

@@ -17,13 +17,19 @@
 <a href="../../../../boost/preprocessor/min.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_COMPARISON_LESS_HPP
-#  include <boost/preprocessor/comparison/less.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_IF_HPP
-#  include <boost/preprocessor/if.hpp>
-#endif
+#include <boost/preprocessor/comparison/less_equal.hpp>
+#include <boost/preprocessor/if.hpp>
 
 //! Expands to the minimum of X and Y.
-#define BOOST_PREPROCESSOR_MIN(X,Y) BOOST_PREPROCESSOR_IF(BOOST_PREPROCESSOR_LESS(Y,X),Y,X)
+/*!
+For example, BOOST_PP_MIN(5,7) expands to 5 (a single token).
+*/
+#define BOOST_PP_MIN(X,Y) BOOST_PP_MIN_D(0,X,Y)
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#define BOOST_PP_MIN_D(D,X,Y) BOOST_PP_IF(BOOST_PP_LESS_EQUAL_D(D,Y,X),Y,X)
+#endif
+
+//! Obsolete. Use BOOST_PP_MIN().
+#define BOOST_PREPROCESSOR_MIN(X,Y) BOOST_PP_MIN(X,Y)
 #endif

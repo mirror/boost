@@ -8,20 +8,22 @@
 <a class="qindex" href="index.html">Main Page</a> &nbsp; <a class="qindex" href="files.html">File List</a> &nbsp; <a class="qindex" href="globals.html">File Members</a> &nbsp; </center>
 <hr><h1>empty.hpp File Reference</h1><table border=0 cellpadding=0 cellspacing=0>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="empty_8hpp.html#a0">BOOST_PREPROCESSOR_EMPTY</a>()</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Expands to nothing. Used with <a class="el" href="if_8hpp.html#a0">BOOST_PREPROCESSOR_IF</a>() and as an unused parameter.</em> <a href="#a0">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="empty_8hpp.html#a0">BOOST_PP_EMPTY</a>()</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Expands to nothing. Used with <a class="el" href="if_8hpp.html#a0">BOOST_PP_IF</a>() and as an unused parameter.</em> <a href="#a0">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="empty_8hpp.html#a1">BOOST_PREPROCESSOR_EMPTY</a>()</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Obsolete. Use <a class="el" href="empty_8hpp.html#a0">BOOST_PP_EMPTY</a>().</em> <a href="#a1">More...</a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
  <a href="../../../../boost/preprocessor/empty.hpp">Click here to see the header.</a>
 <p>
 <hr><h2>Define Documentation</h2>
-<a name="a0" doxytag="empty.hpp::BOOST_PREPROCESSOR_EMPTY"></a><p>
+<a name="a0" doxytag="empty.hpp::BOOST_PP_EMPTY"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> #define BOOST_PREPROCESSOR_EMPTY</td>
+          <td class="md" nowrap valign="top"> #define BOOST_PP_EMPTY</td>
           <td class="md" valign="top">(&nbsp;</td>
 &nbsp;</td>
           <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
@@ -39,19 +41,19 @@
     <td>
 
 <p>
-Expands to nothing. Used with <a class="el" href="if_8hpp.html#a0">BOOST_PREPROCESSOR_IF</a>() and as an unused parameter.
+Expands to nothing. Used with <a class="el" href="if_8hpp.html#a0">BOOST_PP_IF</a>() and as an unused parameter.
 <p>
-Example usage as the implementation of <a class="el" href="comma__if_8hpp.html#a0">BOOST_PREPROCESSOR_COMMA_IF</a>(C):
+Example usage as the implementation of <a class="el" href="comma__if_8hpp.html#a0">BOOST_PP_COMMA_IF</a>(C):
 <p>
 <pre><div class="fragment"><pre>
-  #define BOOST_PREPROCESSOR_COMMA_IF(C)\
-    BOOST_PREPROCESSOR_IF(C,BOOST_PREPROCESSOR_COMMA,BOOST_PREPROCESSOR_EMPTY)()
+  #define BOOST_PP_COMMA_IF(C)\
+    BOOST_PP_IF(C,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
 </pre></div></pre>
 <p>
 Example usage as an unused macro parameter:
 <p>
 <pre><div class="fragment"><pre>
-  #define BOOST_PREPROCESSOR_DEF(CV)\
+  #define BOOST_PP_DEF(CV)\
     template&lt;class base&gt;            \
     CV typename implement_subscript_using_begin_subscript&lt;base&gt;::value_type&amp;\
       implement_subscript_using_begin_subscript&lt;base&gt;::operator[]\
@@ -61,9 +63,9 @@ Example usage as an unused macro parameter:
     { return base::begin()[i];      \
     }
 
-  BOOST_PREPROCESSOR_DEF(BOOST_PREPROCESSOR_EMPTY())
-  BOOST_PREPROCESSOR_DEF(const)
-  #undef BOOST_PREPROCESSOR_DEF
+  BOOST_PP_DEF(BOOST_PP_EMPTY())
+  BOOST_PP_DEF(const)
+  #undef BOOST_PP_DEF
 </pre></div></pre>
 <p>
 The above expands to:
@@ -89,6 +91,35 @@ The above expands to:
 </pre></div></pre>
 <p>
 In case you wonder, the above code is part of a generalized layer for implementing the subscripting operators of a random access container.     </td>
+  </tr>
+</table>
+<a name="a1" doxytag="empty.hpp::BOOST_PREPROCESSOR_EMPTY"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define BOOST_PREPROCESSOR_EMPTY</td>
+          <td class="md" valign="top">(&nbsp;</td>
+&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
+          <td class="md" valign="top">)&nbsp;</td>
+          <td class="md" nowrap>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Obsolete. Use <a class="el" href="empty_8hpp.html#a0">BOOST_PP_EMPTY</a>().
+<p>
+    </td>
   </tr>
 </table>
 <hr>

@@ -17,13 +17,19 @@
 <a href="../../../../boost/preprocessor/max.hpp">Click here to see the header.</a>
 */
 
-#ifndef BOOST_PREPROCESSOR_COMPARISON_LESS_HPP
-#  include <boost/preprocessor/comparison/less.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_IF_HPP
-#  include <boost/preprocessor/if.hpp>
-#endif
+#include <boost/preprocessor/comparison/less_equal.hpp>
+#include <boost/preprocessor/if.hpp>
 
 //! Expands to the maximum of X and Y.
-#define BOOST_PREPROCESSOR_MAX(X,Y) BOOST_PREPROCESSOR_IF(BOOST_PREPROCESSOR_LESS(X,Y),Y,X)
+/*!
+For example, BOOST_PP_MAX(5,7) expands to 7 (a single token).
+*/
+#define BOOST_PP_MAX(X,Y) BOOST_PP_MAX_D(0,X,Y)
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#define BOOST_PP_MAX_D(D,X,Y) BOOST_PP_IF(BOOST_PP_LESS_EQUAL_D(D,X,Y),Y,X)
+#endif
+
+//! Obsolete. Use BOOST_PP_MAX().
+#define BOOST_PREPROCESSOR_MAX(X,Y) BOOST_PP_MAX(X,Y)
 #endif
