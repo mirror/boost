@@ -1,10 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
     <meta name="generator" content="HTML Tidy, see www.w3.org">
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
     <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
     <meta name="ProgId" content="FrontPage.Editor.Document">
-
-    <body bgcolor="#FFFFFF" text="#000000">
 
     <title>Boost Iterator Adaptor Library</title>
 
@@ -15,13 +14,12 @@
 
     <h2>Introduction</h2>
 
-    <p>The Iterator Adaptor library allows you transform an arbitrary
-    ``base'' type into a standard-conforming iterator with the
-    behaviors you choose.  Doing so is especially easy if the
-    ``base'' type is itself an iterator. The library also
-    supplies several example <a href=
-    "../../more/generic_programming.html#adaptors">adaptors</a> which
-    apply specific useful behaviors to arbitrary base iterators.
+    <p>The Iterator Adaptor library allows you transform an arbitrary ``base''
+    type into a standard-conforming iterator with the behaviors you choose.
+    Doing so is especially easy if the ``base'' type is itself an iterator. The
+    library also supplies several example <a href=
+    "../../more/generic_programming.html#adaptors">adaptors</a> which apply
+    specific useful behaviors to arbitrary base iterators.
 
     <h2>Table of Contents</h2>
 
@@ -32,35 +30,49 @@
         
 
         <ul>
-        <li>Generalized Iterator Adaptor
-        
+          <li>
+            Generalized Iterator Adaptor 
+
             <ul>
-          <li>Class template <tt><a href=
-          "#iterator_adaptor">iterator_adaptor</a></tt>
-            <li><a href="#template_parameters">Template Parameters</a>
-            <li><a href="#policies">The Policies Class</a>
-            <li><a href="#additional_members">Additional Class Members</a>
-            <li><a href="#example">Example</a>
-            <li>(<tt>const</tt>/non-<tt>const</tt>) <a
-            href="#iterator_interactions">Iterator Interactions</a>
-            <li><a href="#challenge">Challenge</a>
-            <li><a href="#model_of">Model of</a>
-            <li><a href="#declaration_synopsis">Declaration Synopsis</a>
-            <li><a href="#notes">Notes</a>
+              <li>Class template <tt><a href=
+              "#iterator_adaptor">iterator_adaptor</a></tt>
+
+              <li><a href="#template_parameters">Template Parameters</a>
+
+              <li><a href="#policies">The Policies Class</a>
+
+              <li><a href="#additional_members">Additional Class Members</a>
+
+              <li><a href="#example">Example</a>
+
+              <li>(<tt>const</tt>/non-<tt>const</tt>) <a href=
+              "#iterator_interactions">Iterator Interactions</a>
+
+              <li><a href="#challenge">Challenge</a>
+
+              <li><a href="#concept_model">Concept Model</a>
+
+              <li><a href="#declaration_synopsis">Declaration Synopsis</a>
+
+              <li><a href="#notes">Notes</a>
             </ul>
 
-        <li>Specialized Iterator Adaptors
-        <ul>
-          <li><a href="indirect_iterator.htm">Indirect Iterator Adaptor</a>
+          <li>
+            Specialized Iterator Adaptors 
 
-          <li><a href="reverse_iterator.htm">Reverse Iterator Adaptor</a>
+            <ul>
+              <li><a href="indirect_iterator.htm">Indirect Iterator Adaptor</a>
 
-          <li><a href="transform_iterator.htm">Transform Iterator Adaptor</a>
+              <li><a href="reverse_iterator.htm">Reverse Iterator Adaptor</a>
 
-          <li><a href="projection_iterator.htm">Projection Iterator Adaptor</a>
+              <li><a href="transform_iterator.htm">Transform Iterator
+              Adaptor</a>
 
-          <li><a href="filter_iterator.htm">Filter Iterator Adaptor</a>
-          </ul>
+              <li><a href="projection_iterator.htm">Projection Iterator
+              Adaptor</a>
+
+              <li><a href="filter_iterator.htm">Filter Iterator Adaptor</a>
+            </ul>
         </ul>
 
       <li>Header <tt><a href=
@@ -71,8 +83,8 @@
 
     <p><b><a href="http://www.boost.org/people/dave_abrahams.htm">Dave
     Abrahams</a></b> started the library, applying <a href=
-    "../../more/generic_programming.html#policy">policy class</a> technique
-    and handling const/non-const iterator interactions. He also contributed the
+    "../../more/generic_programming.html#policy">policy class</a> technique and
+    handling const/non-const iterator interactions. He also contributed the
     <tt><a href="indirect_iterator.htm">indirect_</a></tt> and <tt><a href=
     "reverse_iterator.htm">reverse_</a></tt> iterator generators, and expanded
     <tt><a href="counting_iterator.htm">counting_iterator_generator</a></tt> to
@@ -91,7 +103,8 @@
     "#iterator_adaptor">iterator_adaptor</a></tt> template.<br>
 
 
-    <h2><a name="iterator_adaptor">Class template</a> <tt>iterator_adaptor</tt></h2>
+    <h2><a name="iterator_adaptor">Class template</a>
+    <tt>iterator_adaptor</tt></h2>
     Implementing standard conforming iterators is a non-trivial task. There are
     some fine points such as the interactions between an iterator and its
     corresponding const_iterator, and there are myriad operators that should be
@@ -116,46 +129,48 @@ struct iterator_adaptor;
     <h3><a name="template_parameters">Template Parameters</a></h3>
 
     <p>Although <tt>iterator_adaptor</tt> takes seven template parameters,
-    defaults have been carefully chosen to minimize the number of parameters you
-    must supply in most cases, especially if <tt>BaseType</tt> is an iterator.
+    defaults have been carefully chosen to minimize the number of parameters
+    you must supply in most cases, especially if <tt>BaseType</tt> is an
+    iterator.
 
-    <table border>
+    <table border="1" summary="iterator_adaptor template parameters">
       <tr>
         <th>Parameter
 
         <th>Description
 
       <tr>
-        <td><tt>BaseType</tt>
+        <td><tt>BaseType</tt> 
 
         <td>The type being wrapped.
 
       <tr>
-        <td><tt>Policies</tt>
+        <td><tt>Policies</tt> 
 
-        <td>A <a href= "../../more/generic_programming.html#policy">policy class</a>
-        that supplies core functionality to the resulting iterator. A
+        <td>A <a href="../../more/generic_programming.html#policy">policy
+        class</a> that supplies core functionality to the resulting iterator. A
         detailed description can be found <a href="#policies">below</a>.
 
       <tr>
-        <td><tt>Value</tt>
+        <td><tt>Value</tt> 
 
-        <td>The <tt>value_type</tt> of the resulting iterator, unless const. If Value is
-        <tt>const X</tt>, a conforming compiler makes the
-        <tt>value_type</tt> <tt><i>non-</i>const X</tt><a href="#1">[1]</a>.<br>
+        <td>The <tt>value_type</tt> of the resulting iterator, unless const. If
+        Value is <tt>const X</tt>, a conforming compiler makes the
+        <tt>value_type</tt> <tt><i>non-</i>const X</tt><a href=
+        "#1">[1]</a>.<br>
          <b>Default:</b>
-        <tt>std::iterator_traits&lt;BaseType&gt;::value_type</tt>
+        <tt>std::iterator_traits&lt;BaseType&gt;::value_type</tt> 
 
       <tr>
-        <td><tt>Pointer</tt>
+        <td><tt>Pointer</tt> 
 
         <td>The <tt>pointer</tt> type of the resulting iterator, and in
         particular, the result type of operator-&gt;().<br>
-        <b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>,
+         <b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>,
         otherwise <tt>std::iterator_traits&lt;BaseType&gt;::pointer</tt>.
 
       <tr>
-        <td><tt>Reference</tt>
+        <td><tt>Reference</tt> 
 
         <td>The <tt>reference</tt> type of the resulting iterator, and in
         particular, the result type of operator*().<br>
@@ -164,84 +179,113 @@ struct iterator_adaptor;
         <tt>std::iterator_traits&lt;BaseType&gt;::reference</tt> is used.
 
       <tr>
-        <td><tt>Category</tt>
+        <td><tt>Category</tt> 
 
         <td>The <tt>iterator_category</tt> type for the resulting iterator.<br>
-        <b>Default:</b>
-        <tt>std::iterator_traits&lt;BaseType&gt;::iterator_category</tt>
+         <b>Default:</b>
+        <tt>std::iterator_traits&lt;BaseType&gt;::iterator_category</tt> 
 
       <tr>
-        <td><tt>Distance</tt>
+        <td><tt>Distance</tt> 
 
         <td>The <tt>difference_type</tt> for the resulting iterator.<br>
-        <b>Default:</b>
-        <tt>std::iterator_traits&lt;BaseType&gt;::difference_type</tt>
+         <b>Default:</b>
+        <tt>std::iterator_traits&lt;BaseType&gt;::difference_type</tt> 
     </table>
 
     <h3><a name="policies">The Policies Class</a></h3>
 
     <p>The main task in using <tt>iterator_adaptor</tt> is creating an
-    appropriate <tt>Policies</tt> class.
+    appropriate <tt>Policies</tt> class. The <tt>Policies</tt> class will
+    become the functional heart of the iterator adaptor, supplying the core
+    iterator operations that will determine how your new adaptor class will
+    behave. The <tt>iterator_adaptor</tt> template defines all of the operators
+    required of a <a href=
+    "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access
+    Iterator</a>. Your <tt>Policies</tt> class must implement three, four, or
+    seven of the core iterator operations below depending on the iterator
+    categories you want it to support.
 
-    The <tt>Policies</tt> class will become the functional heart of the iterator
-    adaptor, supplying the core iterator operations that will determine how your
-    new adaptor class will behave. The <tt>iterator_adaptor</tt> template
-    defines all of the operators required of a
-    <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">
-    Random Access Iterator</a>. 
-    Your <tt>Policies</tt> class must implement three, four, or seven of the core
-    iterator operations below depending on the iterator categories you want it to support.
+    <table border="1" summary="iterator_adaptor Policies operations">
+      <caption>
+        <b>Core Iterator Operations</b>
+      </caption>
 
-
-
-    <table border>
-    <caption><b>Core Iterator Operations</b></caption>
-     <tr><th>Operation <th>Effects <th>Required for Iterator Categories
       <tr>
-        <td><tt>dereference</tt> <td>returns an element of the iterator's
-        <tt>reference</tt> type <td rowspan="3"><a
-        href="http://www.sgi.com/tech/stl/InputIterator.html">Input</a>/ <a
-        href="http://www.sgi.com/tech/stl/OutputIterator.html">Output</a>/ <a
-        href="http://www.sgi.com/tech/stl/ForwardIterator.html">Forward</a>/ <a
-        href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional</a>/ <a
-        href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access</a>
+        <th>Operation
 
-      <tr><td><tt>equal</tt> <td>tests the iterator for equality
+        <th>Effects
 
-      <tr><td><tt>increment</tt> <td>increments the iterator
+        <th>Required for Iterator Categories
 
-      <tr><td><tt>decrement</tt> <td>decrements the iterator <td><a
-        href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional</a>/ <a
-        href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access</a>
+      <tr>
+        <td><tt>dereference</tt> 
 
-      <tr><td><tt>less</tt> <td>imposes a <a
-      href="http://www.sgi.com/tech/stl/StrictWeakOrdering.html">Strict Weak
-      Ordering</a> relation on the iterator's <tt>reference</tt> type
-       <td
-      rowspan="3"><a
-      href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
-      Access</a>
+        <td>returns an element of the iterator's <tt>reference</tt> type
 
-      <tr><td><tt>distance</tt> <td>measures the distance between iterators
+        <td rowspan="3"><a href=
+        "http://www.sgi.com/tech/stl/InputIterator.html">Input</a>/ <a href=
+        "http://www.sgi.com/tech/stl/OutputIterator.html">Output</a>/ <a href=
+        "http://www.sgi.com/tech/stl/ForwardIterator.html">Forward</a>/ <a
+        href=
+        "http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional</a>/
+        <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+        Access</a> 
 
-      <tr><td><tt>advance</tt> <td>adds an integer offset to iterators
-     
+      <tr>
+        <td><tt>equal</tt> 
+
+        <td>tests the iterator for equality
+
+      <tr>
+        <td><tt>increment</tt> 
+
+        <td>increments the iterator
+
+      <tr>
+        <td><tt>decrement</tt> 
+
+        <td>decrements the iterator
+
+        <td><a href=
+        "http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional</a>/
+        <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+        Access</a> 
+
+      <tr>
+        <td><tt>less</tt> 
+
+        <td>imposes a <a href=
+        "http://www.sgi.com/tech/stl/StrictWeakOrdering.html">Strict Weak
+        Ordering</a> relation on the iterator's <tt>reference</tt> type
+
+        <td rowspan="3"><a href=
+        "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+        Access</a> 
+
+      <tr>
+        <td><tt>distance</tt> 
+
+        <td>measures the distance between iterators
+
+      <tr>
+        <td><tt>advance</tt> 
+
+        <td>adds an integer offset to iterators
     </table>
 
-    <p>
-
-    The library also supplies a &quot;trivial&quot; policy class,
+    <p>The library also supplies a "trivial" policy class,
     <tt>default_iterator_policies</tt>, which implements all seven of the core
     operations in the usual way. If you wish to create an iterator adaptor that
-    only changes a few of the base type's behaviors, then you can derive your new
-    policy class from <tt>default_iterator_policies</tt> to avoid
-    retyping the usual behaviors. You should also look at
+    only changes a few of the base type's behaviors, then you can derive your
+    new policy class from <tt>default_iterator_policies</tt> to avoid retyping
+    the usual behaviors. You should also look at
     <tt>default_iterator_policies</tt> as the ``boilerplate'' for your own
-    policy classes, defining functions with the same interface. This is the definition of
-    <tt>default_iterator_policies</tt>:
+    policy classes, defining functions with the same interface. This is the
+    definition of <tt>default_iterator_policies</tt>:<br>
+    <br>
 
-    <p>
-<blockquote>
+    <blockquote>
 <pre>
 struct default_iterator_policies
 {
@@ -274,82 +318,79 @@ struct default_iterator_policies
     { return x &lt; y; }
 };
 </pre>
-</blockquote>
+    </blockquote>
 
-<p>Template member functions are used throughout
-<tt>default_iterator_policies</tt> so that it can be employed with a wide range
-of iterators. If we had used concrete types above, we'd have tied the usefulness
-of <tt>default_iterator_policies</tt> to a particular range of adapted
-iterators. If you follow the same pattern with your <tt>Policies</tt> classes,
-you may achieve the same sort of reusability.
+    <p>Template member functions are used throughout
+    <tt>default_iterator_policies</tt> so that it can be employed with a wide
+    range of iterators. If we had used concrete types above, we'd have tied the
+    usefulness of <tt>default_iterator_policies</tt> to a particular range of
+    adapted iterators. If you follow the same pattern with your
+    <tt>Policies</tt> classes, you may achieve the same sort of reusability.
 
     <h3><a name="additional_members">Additional Members</a></h3>
+    In addition to all of the member functions required of a <a href=
+    "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access
+    Iterator</a>, the <tt>iterator_adaptor</tt> class template defines the
+    following members. <br>
+     <br>
+     
 
-    In addition to all of the member functions required of a <a
-    href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">
-    Random Access Iterator</a>, the <tt>iterator_adaptor</tt> class
-    template defines the following members.
+    <table border="1" summary="additional iterator_adaptor members">
+      <tr>
+        <td><tt>iterator_adaptor(const Base&amp;, const Policies&amp; =
+        Policies())</tt> <br>
+         Construct an adapted iterator from a base object and a policies
+        object.
 
-<p>
-<table border>
-<tr><td><tt>
-iterator_adaptor(const Base&amp;, const Policies&amp; = Policies())
-</tt><br>
-Construct an adapted iterator from a base object and a policies object.
-</td></tr>
+      <tr>
+        <td><tt>template &lt;class B, class V, class R, class P&gt;<br>
+         iterator_adaptor(const
+        iterator_adaptor&lt;B,Policies,V,R,P,Category,Distance&gt;&amp;)</tt>
+        <br>
+         <br>
+         This constructor allows for conversion from non-<tt>const</tt> to
+        constant adapted iterators. See <a href=
+        "#iterator_interactions">below</a> for more details.<br>
+         Requires: <tt>B</tt> is convertible to <tt>Base</tt>.
 
-<tr><td><tt>
-template &lt;class B, class V, class R, class P&gt;<br>
-iterator_adaptor(const iterator_adaptor&lt;B,Policies,V,R,P,Category,Distance&gt;&amp;)
-</tt><br><br>
-This constructor allows for conversion from non-<tt>const</tt> to constant
-adapted iterators. See <a href="#iterator_interactions">below</a> for more details.<br>
-Requires: <tt>B</tt> is convertible to <tt>Base</tt>.
-</td></tr>
-
-<tr><td><tt>
-base_type base() const;
-</tt><br><br>
-Return a copy of the base object.
-</td></tr>
-
-</table>
-    
+      <tr>
+        <td><tt>base_type base() const;</tt> <br>
+         <br>
+         Return a copy of the base object.
+    </table>
 
     <h3><a name="example">Example</a></h3>
 
-    <p>It is often useful to automatically apply some function to the
-    value returned by dereferencing an
-    iterator. The <a href="./transform_iterator.htm">transform
-    iterator</a> makes it easy to create an iterator adaptor which does
-    just that. Here we will show how easy it is to implement the
-    transform iterator using the <tt>iterator_adaptor</tt> template.</p>
+    <p>It is often useful to automatically apply some function to the value
+    returned by dereferencing an iterator. The <a href=
+    "./transform_iterator.htm">transform iterator</a> makes it easy to create
+    an iterator adaptor which does just that. Here we will show how easy it is
+    to implement the transform iterator using the <tt>iterator_adaptor</tt>
+    template.
 
     <p>We want to be able to adapt a range of iterators and functions, so the
     policies class will have a template parameter for the function type and it
-    will have a data member of that type. We know that the function takes
-    one argument and that we'll need to be able to deduce the
-    <tt>result_type</tt> of the function so we can use it for the adapted
-    iterator's <tt>value_type</tt>.
-    <a href="http://www.sgi.com/Technology/STL/AdaptableUnaryFunction.html">
-    AdaptableUnaryFunction</a> is the
-    <a href="../../more/generic_programming.html#concept">
-    Concept</a> that fulfills those requirements.
+    will have a data member of that type. We know that the function takes one
+    argument and that we'll need to be able to deduce the <tt>result_type</tt>
+    of the function so we can use it for the adapted iterator's
+    <tt>value_type</tt>. <a href=
+    "http://www.sgi.com/Technology/STL/AdaptableUnaryFunction.html">AdaptableUnaryFunction</a>
+    is the <a href="../../more/generic_programming.html#concept">Concept</a>
+    that fulfills those requirements.
 
-    <p>
+    <p>To implement a transform iterator we will only change one of the base
+    iterator's behaviors, so the <tt>transform_iterator_policies</tt> class can
+    inherit the rest from <tt>default_iterator_policies</tt>. We will define
+    the <tt>dereference()</tt> member function, which is used implement
+    <tt>operator*()</tt> of the adapted iterator. The implementation will
+    dereference the base iterator and apply the function object. The
+    <tt>type&lt;Reference&gt;</tt> parameter is used to convey the appropriate
+    return type. The complete code for <tt>transform_iterator_policies</tt>
+    is:<br>
+    <br>
 
-    To implement a transform iterator we will only change one of the
-    base iterator's behaviors, so the
-    <tt>transform_iterator_policies</tt> class can inherit the rest
-    from <tt>default_iterator_policies</tt>. We will define the
-<tt>dereference()</tt> member function, which is used implement
-<tt>operator*()</tt> of the adapted iterator. The implementation will
-dereference the base iterator and apply the function object. The
-<tt>type&lt;Reference&gt;</tt> parameter is used to convey the appropriate return
-type.  The complete code for <tt>transform_iterator_policies</tt> is:
 
-    <p>
-<blockquote>
+    <blockquote>
 <pre>
   template &lt;class AdaptableUnaryFunction&gt;
   struct transform_iterator_policies : public default_iterator_policies
@@ -366,26 +407,26 @@ type.  The complete code for <tt>transform_iterator_policies</tt> is:
     AdaptableUnaryFunction m_f;
   };
 </pre>
-</blockquote>
+    </blockquote>
 
-    <p>
-    The next step is to use the <tt>iterator_adaptor</tt> template to construct
-    the transform iterator type.  The nicest way to package the construction of
-    the transform iterator is to create a <a
-    href="../../more/generic_programming.html#type_generator">type
-    generator</a>. The first template parameter to the generator will be the
-    type of the function object and the second will be the base iterator
-    type. We use
+    <p>The next step is to use the <tt>iterator_adaptor</tt> template to
+    construct the transform iterator type. The nicest way to package the
+    construction of the transform iterator is to create a <a href=
+    "../../more/generic_programming.html#type_generator">type generator</a>.
+    The first template parameter to the generator will be the type of the
+    function object and the second will be the base iterator type. We use
     <tt>iterator_adaptor</tt> to define the transform iterator type as a nested
-    <tt>typedef</tt> inside the <tt>transform_iterator_generator</tt> class. Because the function may return by-value, we must limit the
-    <tt>iterator_category</tt> to <a
-    href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>,
-    and the iterator's <tt>reference</tt> type cannot be a true reference (the
-    standard allows this for input iterators), so in this case we can use few of
-    <tt>iterator_adaptor</tt>'s default template arguments.
+    <tt>typedef</tt> inside the <tt>transform_iterator_generator</tt> class.
+    Because the function may return by-value, we must limit the
+    <tt>iterator_category</tt> to <a href=
+    "http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>, and
+    the iterator's <tt>reference</tt> type cannot be a true reference (the
+    standard allows this for input iterators), so in this case we can use few
+    of <tt>iterator_adaptor</tt>'s default template arguments.<br>
+    <br>
 
-    <p>
-<blockquote>
+
+    <blockquote>
 <pre>
 template &lt;class AdaptableUnaryFunction, class Iterator&gt;
 struct transform_iterator_generator
@@ -398,14 +439,16 @@ public:
       type;
 };
 </pre>
-</blockquote>
+    </blockquote>
 
-    <p>As a finishing touch, we will create an <a
-    href="../../more/generic_programming.html#object_generator">object
-    generator</a> for the transform iterator. This is a function that
-    makes it more convenient to create a transform iterator. 
-    <p>
-<blockquote>
+    <p>As a finishing touch, we will create an <a href=
+    "../../more/generic_programming.html#object_generator">object generator</a>
+    for the transform iterator. This is a function that makes it more
+    convenient to create a transform iterator.<br>
+    <br>
+
+
+    <blockquote>
 <pre>
 template &lt;class AdaptableUnaryFunction, class Iterator&gt;
 typename transform_iterator_generator&lt;AdaptableUnaryFunction,Iterator&gt;::type
@@ -417,15 +460,15 @@ make_transform_iterator(Iterator base,
     return result_t(base, f);
 }
 </pre>
-</blockquote>
+    </blockquote>
 
-    <p>Here is an example that shows how to use a transform iterator
-    to iterate through a range of numbers, multiplying each of them by
-    2 and printing the result to standard
-    output.
+    <p>Here is an example that shows how to use a transform iterator to iterate
+    through a range of numbers, multiplying each of them by 2 and printing the
+    result to standard output.<br>
+    <br>
 
-    <p>
-<blockquote>
+
+    <blockquote>
 <pre>
 #include &lt;functional&gt;
 #include &lt;algorithm&gt;
@@ -438,78 +481,75 @@ int main(int, char*[])
   const int N = sizeof(x)/sizeof(int);
   std::cout &lt;&lt; "multiplying the array by 2:" &lt;&lt; std::endl;
   std::copy(boost::make_transform_iterator(x, std::bind1st(std::multiplies&lt;int&gt;(), 2)),
-	    boost::make_transform_iterator(x + N, std::bind1st(std::multiplies&lt;int&gt;(), 2)),
-	    std::ostream_iterator&lt;int&gt;(std::cout, " "));
+      boost::make_transform_iterator(x + N, std::bind1st(std::multiplies&lt;int&gt;(), 2)),
+      std::ostream_iterator&lt;int&gt;(std::cout, " "));
   std::cout &lt;&lt; std::endl;
   return 0;
 }
 </pre>
-This output is:
+      This output is: 
 <pre>
 2 4 6 8 10 12 14 16
 </pre>
-</blockquote>
+    </blockquote>
 
     <h3><a name="iterator_interactions">Iterator Interactions</a></h3>
 
-    <p>C++ allows <tt>const</tt> and
-    non-<tt>const</tt> pointers to interact in the following intuitive ways:
+    <p>C++ allows <tt>const</tt> and non-<tt>const</tt> pointers to interact in
+    the following intuitive ways:
+
     <ul>
-    <li>a non-<tt>const</tt> pointer to <tt>T</tt> can be implicitly converted
-    to a <tt>const</tt> pointer to <tt>T</tt>.
-    <li><tt>const</tt> and non-<tt>const</tt> pointers to <tt>T</tt> can be
-    freely mixed in comparison expressions.
-    <li><tt>const</tt> and non-<tt>const</tt> pointers to <tt>T</tt> can be
-    freely subtracted, in any order.
+      <li>a non-<tt>const</tt> pointer to <tt>T</tt> can be implicitly
+      converted to a <tt>const</tt> pointer to <tt>T</tt>.
+
+      <li><tt>const</tt> and non-<tt>const</tt> pointers to <tt>T</tt> can be
+      freely mixed in comparison expressions.
+
+      <li><tt>const</tt> and non-<tt>const</tt> pointers to <tt>T</tt> can be
+      freely subtracted, in any order.
     </ul>
-
     Getting user-defined iterators to work together that way is nontrivial, but
-    <tt>iterator_adaptor</tt> can make it easy. The rules are as follows:
-    
+    <tt>iterator_adaptor</tt> can make it easy. The rules are as follows: 
+
     <ul>
-    <li>Adapted iterators that share the same <tt>Policies</tt>, <tt>Category</tt>, and <tt>Distance</tt>
-    parameters are called <i>interoperable</i>.
+      <li>Adapted iterators that share the same <tt>Policies</tt>,
+      <tt>Category</tt>, and <tt>Distance</tt> parameters are called
+      <i>interoperable</i>.
 
-    <li>An adapted iterator can be implicitly converted to any other adapted
-    iterator with which it is interoperable, so long as the <tt>Base</tt> type
-    of the source iterator can be converted to the <tt>Base</tt> type of the
-    target iterator.
+      <li>An adapted iterator can be implicitly converted to any other adapted
+      iterator with which it is interoperable, so long as the <tt>Base</tt>
+      type of the source iterator can be converted to the <tt>Base</tt> type of
+      the target iterator.
 
-    <li>Interoperable iterators can be freely mixed in comparison expressions so long
-    as  the <tt>Policies</tt> class has <tt>equal</tt> (and, for
-    random access iterators,
-    <tt>less</tt>) members that can accept both <tt>Base</tt> types in either
-    order.
+      <li>Interoperable iterators can be freely mixed in comparison expressions
+      so long as the <tt>Policies</tt> class has <tt>equal</tt> (and, for
+      random access iterators, <tt>less</tt>) members that can accept both
+      <tt>Base</tt> types in either order.
 
-    <li>Interoperable iterators can be freely mixed in subtraction expressions so long
-    as  the <tt>Policies</tt> class has a <tt>distance</tt> member that can
-    accept both <tt>Base</tt> types in either order.
-
+      <li>Interoperable iterators can be freely mixed in subtraction
+      expressions so long as the <tt>Policies</tt> class has a
+      <tt>distance</tt> member that can accept both <tt>Base</tt> types in
+      either order.
     </ul>
 
     <h3><a name="challenge">Challenge</a></h3>
 
-    <p>There is an unlimited number of ways the the
-    <tt>iterator_adaptors</tt> class can be used to create
-    iterators. One interesting exercise would be to re-implement the
-    iterators of <tt>std::list</tt> and <tt>std::slist</tt> using
-    <tt>iterator_adaptors</tt>, where the adapted <tt>Iterator</tt>
-    types would be node pointers.
+    <p>There is an unlimited number of ways the the <tt>iterator_adaptors</tt>
+    class can be used to create iterators. One interesting exercise would be to
+    re-implement the iterators of <tt>std::list</tt> and <tt>std::slist</tt>
+    using <tt>iterator_adaptors</tt>, where the adapted <tt>Iterator</tt> types
+    would be node pointers.
 
-
-    <h3><a name="model_of">Model of</a></h3>
-
-    Depending on the <tt>Base</tt> and <tt>Policies</tt> template
-    parameters, an <tt>iterator_adaptor</tt> can be a <a
-    href="http://www.sgi.com/tech/stl/InputIterator.html"> Input
-    Iterator</a>, <a
-    href="http://www.sgi.com/tech/stl/ForwardIterator.html"> Forward
-    Iterator</a>, <a
-    href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">
-    Bidirectional Iterator</a>, or <a
-    href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">
-    Random Access Iterator</a>.
-
+    <h3><a name="concept_model">Concept Model</a></h3>
+    Depending on the <tt>Base</tt> and <tt>Policies</tt> template parameters,
+    an <tt>iterator_adaptor</tt> can be a <a href=
+    "http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>, <a
+    href="http://www.sgi.com/tech/stl/ForwardIterator.html">Forward
+    Iterator</a>, <a href=
+    "http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional
+    Iterator</a>, or <a href=
+    "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access
+    Iterator</a>. 
 
     <h3><a name="declaration_synopsis">Declaration Synopsis</a></h3>
 <pre>
@@ -540,7 +580,8 @@ struct iterator_adaptor
         const iterator_adaptor&lt;B,Policies,V,R,P,Category,Distance&gt;&amp;);
 
     reference operator*() const;
-    <i>operator_arrow_result_type</i> operator-&gt;() const; <a href="#3">[3]</a>
+    <i>operator_arrow_result_type</i> operator-&gt;() const; <a href=
+"#3">[3]</a>
     <i>value_type</i> operator[](difference_type n) const; <a href="#3">[4]</a>
 
     iterator_adaptor&amp; operator++();
@@ -574,68 +615,72 @@ template &lt;class B1, class B2, class P, class V1, class V2,
 bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
                 const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
 
-// and similarly for operators !=, <, <=, >=, >
+// and similarly for operators !=, &lt;, &lt;=, &gt;=, &gt;
 </pre>
 
     <h3><a name="notes">Notes</a></h3>
 
     <p><a name="1">[1]</a> If your compiler does not support partial
-    specialization and the base iterator is a builtin pointer type,
-    then you will not be able to use the default for <tt>Value</tt>
-    and will need to explicitly specify this type.
+    specialization and the base iterator is a builtin pointer type, then you
+    will not be able to use the default for <tt>Value</tt> and will need to
+    explicitly specify this type.
 
     <p><a name="2">[2]</a> The standard specifies that the <tt>value_type</tt>
     of <tt>const</tt> iterators to <tt>T</tt> (e.g. <tt>const T*</tt>) is
     <tt><i>non-</i>const T</tt>, while the <tt>pointer</tt> and
-    <tt>reference</tt> types for all <a
-    href="http://www.sgi.com/tech/stl/ForwardIterator.html">Forward
-    Iterators</a> are <tt>const T*</tt> and <tt>const T&amp;</tt>,
-    respectively. Stripping the <tt>const</tt>-ness of <tt>Value</tt> is
-    designed to allow you to easily make a <tt>const</tt> iterator adaptor by
-    supplying a <tt>const</tt> type for <tt>Value</tt>, and allowing the
-    defaults for the <tt>Pointer</tt> and <tt>Reference</tt> parameters to take
-    effect. Although compilers that don't support partial specialization won't
-    do this for you, having a <tt>const value_type</tt> is often harmless in
-    practice.
+    <tt>reference</tt> types for all <a href=
+    "http://www.sgi.com/tech/stl/ForwardIterator.html">Forward Iterators</a>
+    are <tt>const T*</tt> and <tt>const T&amp;</tt>, respectively. Stripping
+    the <tt>const</tt>-ness of <tt>Value</tt> is designed to allow you to
+    easily make a <tt>const</tt> iterator adaptor by supplying a <tt>const</tt>
+    type for <tt>Value</tt>, and allowing the defaults for the <tt>Pointer</tt>
+    and <tt>Reference</tt> parameters to take effect. Although compilers that
+    don't support partial specialization won't do this for you, having a
+    <tt>const value_type</tt> is often harmless in practice.
 
-    <p><a name="3">[3]</a> The result type for the <tt>operator->()</tt>
-     depends on the category and value type of the iterator and
-     is somewhat complicated to describe. But be assured, it works
-     in a stardard conforming fashion, providing access to members
-     of the objects pointed to by the iterator.
+    <p><a name="3">[3]</a> The result type for the <tt>operator-&gt;()</tt>
+    depends on the category and value type of the iterator and is somewhat
+    complicated to describe. But be assured, it works in a stardard conforming
+    fashion, providing access to members of the objects pointed to by the
+    iterator.
 
-     <p><a name="4">[4]</a> The result type of <tt>operator[]()</tt> is <tt>value_type</tt>
-        instead of <tt>reference</tt> as might be expected. There are two
-        reasons for this choice. First, the C++ standard only requires that the return
-        type of an arbitrary 
-        <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">
-    Random Access Iterator</a>'s <tt>operator[]</tt>be ``convertible to T''
-    (Table 76), so when adapting an arbitrary base iterator we may not have a
-    reference to return. Second, and more importantly, for certain kinds of
-    iterators, returning a reference could cause serious memory problems due to
-    the reference being bound to a temporary object whose lifetime ends inside
-    of the <tt>operator[]</tt>.
-
-
+    <p><a name="4">[4]</a> The result type of <tt>operator[]()</tt> is
+    <tt>value_type</tt> instead of <tt>reference</tt> as might be expected.
+    There are two reasons for this choice. First, the C++ standard only
+    requires that the return type of an arbitrary <a href=
+    "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access
+    Iterator</a>'s <tt>operator[]</tt>be ``convertible to T'' (Table 76), so
+    when adapting an arbitrary base iterator we may not have a reference to
+    return. Second, and more importantly, for certain kinds of iterators,
+    returning a reference could cause serious memory problems due to the
+    reference being bound to a temporary object whose lifetime ends inside of
+    the <tt>operator[]</tt>.
     <hr>
 
     <p>Revised 
     <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->15
     Feb 2001<!--webbot bot="Timestamp" endspan i-checksum="14373" -->
 
-    <p>&copy; Copyright Dave Abrahams and Jeremy Siek 2001. Permission to copy, use, modify, sell
-    and distribute this document is granted provided this copyright notice
-    appears in all copies. This document is provided "as is" without express or
-    implied warranty, and with no claim as to its suitability for any purpose.
 
-    </body>
-<!--  LocalWords:  HTML html charset alt gif abrahams htm const incrementable
- -->
-<!--  LocalWords:  siek mishandled interoperable typename struct Iter iter src
- -->
-<!--  LocalWords:  int bool ForwardIterator BidirectionalIterator BaseIterator
- -->
-<!--  LocalWords:  RandomAccessIterator DifferenceType AdaptableUnaryFunction
- -->
-<!--  LocalWords:  iostream hpp sizeof InputIterator constness ConstIterator
- -->
+    <p>&copy; Copyright Dave Abrahams and Jeremy Siek 2001. Permission to copy,
+    use, modify, sell and distribute this document is granted provided this
+    copyright notice appears in all copies. This document is provided "as is"
+    without express or implied warranty, and with no claim as to its
+    suitability for any purpose. 
+    <!--  LocalWords:  HTML html charset alt gif abrahams htm const
+        incrementable david abrahams
+         -->
+     
+    <!--  LocalWords:  jeremy siek mishandled interoperable typename struct Iter iter src
+         -->
+     
+    <!--  LocalWords:  int bool ForwardIterator BidirectionalIterator BaseIterator
+         -->
+     
+    <!--  LocalWords:  RandomAccessIterator DifferenceType AdaptableUnaryFunction
+         -->
+     
+    <!--  LocalWords:  iostream hpp sizeof InputIterator constness ConstIterator
+         -->
+
+
