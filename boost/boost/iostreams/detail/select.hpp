@@ -119,6 +119,42 @@ struct select {
     typedef typename detail::lazy_eval<temp>::type  type;
 };
 
+template< typename Case1 = mpl::true_,
+          typename Type1 = detail::select_default,
+          typename Case2 = mpl::true_,
+          typename Type2 = detail::select_default,
+          typename Case3 = mpl::true_,
+          typename Type3 = detail::select_default,
+          typename Case4 = mpl::true_,
+          typename Type4 = detail::select_default,
+          typename Case5 = mpl::true_,
+          typename Type5 = detail::select_default,
+          typename Case6 = mpl::true_,
+          typename Type6 = detail::select_default,
+          typename Case7 = mpl::true_,
+          typename Type7 = detail::select_default,
+          typename Case8 = mpl::true_,
+          typename Type8 = detail::select_default,
+          typename Case9 = mpl::true_,
+          typename Type9 = detail::select_default,
+          typename Case10 = mpl::true_,
+          typename Type10 = detail::select_default >
+struct do_select {
+    typedef typename
+            mpl::eval_if<
+                Case1, mpl::identity<Type1>, mpl::eval_if<
+                Case2, mpl::identity<Type2>, mpl::eval_if<
+                Case3, mpl::identity<Type3>, mpl::eval_if<
+                Case4, mpl::identity<Type4>, mpl::eval_if<
+                Case5, mpl::identity<Type5>, mpl::eval_if<
+                Case6, mpl::identity<Type6>, mpl::eval_if<
+                Case7, mpl::identity<Type7>, mpl::eval_if<
+                Case8, mpl::identity<Type8>, mpl::eval_if<
+                Case9, mpl::identity<Type9>, mpl::if_<
+                Case10, Type10, mpl::void_ > > > > > > > > >
+            >::type                                 type;
+};
+
 } } // End namespaces iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_SELECT_HPP_INCLUDED
