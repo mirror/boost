@@ -26,7 +26,7 @@ namespace date_time {
     typedef typename duration_rep_traits::impl_type duration_rep;
 
     //! Construct from a day count
-    explicit date_duration(duration_rep days) : days_(days) {};
+    explicit date_duration(duration_rep day_count) : days_(day_count) {};
 
     /*! construct from special_values - only works when 
      * instantiated with duration_traits_adapted */
