@@ -772,6 +772,9 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
       
     <xsl:apply-templates 
+      select="detaileddescription/para/simplesect[@kind='pre']"
+      mode="function-clauses"/>
+    <xsl:apply-templates 
       select="detaileddescription/para/simplesect[@kind='post']"
       mode="function-clauses"/>
     <xsl:apply-templates 
@@ -784,9 +787,12 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
           mode="function-clauses"/>
       </throws>
     </xsl:if>
-    <xsl:apply-templates 
-      select="detaileddescription/para/simplesect[@kind='note']"
-      mode="function-clauses"/>
+    <xsl:variable name="notes" select="detaileddescription/para/simplesect[@kind='note' or @kind='attention']"/>
+    <xsl:if test="count($notes) &gt; 0"> 
+      <notes>
+        <xsl:apply-templates select="$notes" mode="function-clauses"/>
+      </notes>
+    </xsl:if>
   </xsl:template>
 
   <!-- Handle free functions -->
@@ -1000,8 +1006,10 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
   </xsl:template>
 
   <xsl:template match="para/simplesect" mode="passthrough">
-    <xsl:if test="not (@kind='return') and 
+    <xsl:if test="not (@kind='pre') and
+                  not (@kind='return') and 
                   not (@kind='post') and
+                  not (@kind='attention') and
                   not (@kind='note')">
       <xsl:apply-templates mode="passthrough"/>
     </xsl:if>
@@ -1039,6 +1047,11 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
 
   <!-- Handle function clauses -->
   <xsl:template match="simplesect" mode="function-clauses">
+    <xsl:if test="@kind='pre'">
+      <requires>
+        <xsl:apply-templates mode="passthrough"/>
+      </requires>
+    </xsl:if>
     <xsl:if test="@kind='return'">
       <returns>
         <xsl:apply-templates mode="passthrough"/>
@@ -1049,10 +1062,8 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
         <xsl:apply-templates mode="passthrough"/>
       </postconditions>
     </xsl:if>
-    <xsl:if test="@kind='note'">
-      <notes>
-        <xsl:apply-templates mode="passthrough"/>
-      </notes>
+    <xsl:if test="@kind='note' or @kind='attention'">
+      <xsl:apply-templates mode="passthrough"/>
     </xsl:if>
   </xsl:template>
 
