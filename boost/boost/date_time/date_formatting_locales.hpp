@@ -33,11 +33,10 @@ namespace date_time {
     //! Formats a month as as string into an output iterator
     static void format_month(const month_type& month,
                              ostream_type& os,
-                             const facet_type& f,
-                             month_format_spec fs)
+                             const facet_type& f)
     {
 
-      switch (fs) 
+      switch (f.month_format()) 
       {
         case month_as_short_string: 
         { 
@@ -122,27 +121,55 @@ namespace date_time {
 //       return ss.str();
 //       }
 
+
     // Put ymd to ostream -- part of ostream refactor
     static void ymd_put(ymd_type ymd, 
                         ostream_type& os,
                         const facet_type& f)
     {
-      os << ymd.year;
       std::ostreambuf_iterator<charT> oitr(os);
-      if (f.has_date_sep_chars()) {
-        f.month_sep_char(oitr);
+      switch (f.date_order()) {
+        case ymd_order_iso: {
+          os << ymd.year;
+          if (f.has_date_sep_chars()) {
+            f.month_sep_char(oitr);
+          }
+          month_formatter::format_month(ymd.month, os, f);
+          if (f.has_date_sep_chars()) {
+            f.day_sep_char(oitr);
+          }
+          os  << std::setw(2) << std::setfill('0') 
+              << ymd.day;
+          break;
+        }
+        case ymd_order_us: {
+          month_formatter::format_month(ymd.month, os, f);
+          if (f.has_date_sep_chars()) {
+          f.day_sep_char(oitr);
+          }
+          os  << std::setw(2) << std::setfill('0') 
+            << ymd.day;
+          if (f.has_date_sep_chars()) {
+            f.month_sep_char(oitr);
+          }
+          os << ymd.year;
+          break;
+        }
+        case ymd_order_dmy: {
+          os  << std::setw(2) << std::setfill('0') 
+              << ymd.day;
+          if (f.has_date_sep_chars()) {
+            f.day_sep_char(oitr);
+          }
+          month_formatter::format_month(ymd.month, os, f);
+          if (f.has_date_sep_chars()) {
+            f.month_sep_char(oitr);
+          }
+          os << ymd.year;
+          break;
+        }
       }
-      month_formatter::format_month(ymd.month, os, 
-                                    f, month_as_short_string);
-
-
-      if (f.has_date_sep_chars()) {
-        f.day_sep_char(oitr);
-      }
-      os  << std::setw(2) << std::setfill('0') 
-          << ymd.day;
     }
-
   };
 
 

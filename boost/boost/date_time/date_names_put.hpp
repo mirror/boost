@@ -12,6 +12,7 @@
 
 #include "boost/date_time/special_defs.hpp"
 #include "boost/date_time/date_defs.hpp"
+#include "boost/date_time/parse_format_base.hpp"
 #include <locale>
 
 
@@ -84,6 +85,16 @@ namespace date_time {
       {
         do_day_sep_char(oitr);
       }
+      //! Determines the order to put the date elements
+      ymd_order_spec date_order() const
+      {
+        return do_date_order();
+      }
+      //! Determines if month is displayed as integer, short or long string
+      month_format_spec month_format() const
+      {
+        return do_month_format();
+      }
 
     protected:
       //! Default facet implementation uses month_type defaults
@@ -145,7 +156,16 @@ namespace date_time {
       {
         put_string(oitr, "-");
       }
-
+      //! Default for date order 
+      virtual ymd_order_spec do_date_order() const
+      {
+        return ymd_order_iso;
+      }
+      //! Default month format
+      virtual month_format_spec do_month_format() const
+      {
+        return month_as_short_string;
+      }
       void put_string(iter_type& oi, const char* const s) const
       {
         string_type s1(s);
@@ -169,12 +189,16 @@ namespace date_time {
                          const char* const special_value_names[],
                          const char* const weekday_short_names[],
                          const char* const weekday_long_names[],
-                         char separator_char = '-') :
+                         char separator_char = '-',
+                         ymd_order_spec order_spec = ymd_order_iso,
+                         month_format_spec month_format = month_as_short_string) :
         month_short_names_(month_short_names),
         month_long_names_(month_long_names),
         special_value_names_(special_value_names),
         weekday_short_names_(weekday_short_names),
-        weekday_long_names_(weekday_long_names)
+        weekday_long_names_(weekday_long_names),
+        order_spec_(order_spec),
+        month_format_spec_(month_format)
       {
         separator_char_[0] = separator_char;
         separator_char_[1] = '\0';
@@ -219,6 +243,16 @@ namespace date_time {
       {
         put_string(oitr, separator_char_);
       }
+      //! Set the date ordering
+      virtual ymd_order_spec do_date_order() const
+      {
+        return order_spec_;
+      }
+      //! Set the date ordering
+      virtual month_format_spec do_month_format() const
+      {
+        return month_format_spec_;
+      }
 
     private:
       const char* const* month_short_names_;
@@ -227,7 +261,8 @@ namespace date_time {
       const char* const* weekday_short_names_;
       const char* const* weekday_long_names_;
       char separator_char_[2];
-      
+      ymd_order_spec order_spec_;
+      month_format_spec month_format_spec_;      
     };
 
 } } //namespace boost::date_time

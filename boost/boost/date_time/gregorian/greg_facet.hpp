@@ -45,7 +45,7 @@ namespace gregorian {
     std::locale locale = os.getloc();
     if (std::has_facet<greg_base_facet>(locale)) {
       const greg_base_facet& f = std::use_facet<greg_base_facet>(locale);
-      greg_month_formatter::format_month(m, os, f, date_time::month_as_long_string);
+      greg_month_formatter::format_month(m, os, f);
 
     }
     else { //default to numeric
