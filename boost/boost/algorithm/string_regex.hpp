@@ -12,7 +12,7 @@
 
 /*! \file
     Cumulative include for string_algo library.
-    In addtion to string_algo.hpp, it contains also regex-related stuff.
+    In addtion to string.hpp contains also regex-related stuff.
 */
 
 #include <boost/regex.hpp>
