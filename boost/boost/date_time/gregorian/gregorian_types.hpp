@@ -37,14 +37,19 @@ namespace gregorian {
   typedef date_time::partial_date<date> partial_date;
 
   typedef date_time::nth_kday_of_month<date> nth_kday_of_month;
+  typedef date_time::nth_kday_of_month<date> nth_day_of_the_week_in_month;
 
   typedef date_time::first_kday_of_month<date> first_kday_of_month;
+  typedef date_time::first_kday_of_month<date> first_day_of_the_week_in_month;
 
   typedef date_time::last_kday_of_month<date> last_kday_of_month;
+  typedef date_time::last_kday_of_month<date> last_day_of_the_week_in_month;
 
   typedef date_time::first_kday_after<date> first_kday_after;
+  typedef date_time::first_kday_after<date> first_day_of_the_week_after;
 
   typedef date_time::first_kday_before<date> first_kday_before;
+  typedef date_time::first_kday_before<date> first_day_of_the_week_before;
 
   //! A clock to get the current day from the local computer
   /*!\ingroup date_basics
