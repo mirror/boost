@@ -81,7 +81,7 @@ __ new-iter-concepts.html
 
 Writing standard-conforming iterators is tricky, but the need comes
 up often.  In order to ease the implementation of new iterators,
-the Boost.Iterator library provides the |facade|_ class template,
+the Boost.Iterator library provides the |facade| class template,
 which implements many useful defaults and compile-time checks
 designed to help the author iterator ensure that his iterator is
 correct.  
@@ -89,16 +89,24 @@ correct.
 It is also common to define a new iterator that is similar to some
 underlying iterator or iterator-like type, but that modifies some
 aspect of the underlying type's behavior.  For that purpose, the
-library supplies the |adaptor|_ class template, which is specially
+library supplies the |adaptor| class template, which is specially
 designed to take advantage of as much of the underlying type's
 behavior as possible.
+
+The documentation for these two classes can be found at the following
+web pages:
+
+* |facade|_
+
+* |adaptor|_
+
 
 .. |facade| replace:: ``iterator_facade``
 .. _facade: iterator_facade.html
 .. |adaptor| replace:: ``iterator_adaptor``
 .. _adaptor: iterator_adaptor.html
 
-Both |facade|_ and |adaptor|_ as well as many of the `specialized
+Both |facade| and |adaptor| as well as many of the `specialized
 adaptors`_ mentioned below have been proposed for standardization,
 and accepted into the first C++ technical report; see our
 
