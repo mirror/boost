@@ -41,9 +41,9 @@
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #endif
 
-// Sun CC 5.6 adds long long specialization, but does not change the
-// library version number
-#if BOOST_RWSTD_VER <= 0x020101 && (!defined(__SUNPRO_CC) || (__SUNPRO_CC < 0x560))
+// Sun CC 5.5 patch 113817-07 adds long long specialization, but does not change the
+// library version number (http://sunsolve6.sun.com/search/document.do?assetkey=1-21-113817):
+#if BOOST_RWSTD_VER <= 0x020101 && (!defined(__SUNPRO_CC) || (__SUNPRO_CC < 0x550))
 #  define BOOST_NO_LONG_LONG_NUMERIC_LIMITS
 # endif
 
