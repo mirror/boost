@@ -15,7 +15,8 @@
  * $Id$
  */
 
-// Borland compiler complains about unused variables a bit easily
+// Borland compiler complains about unused variables a bit easily and
+// incorrectly
 
 #ifdef __BORLANDC__
 namespace detail {
@@ -37,7 +38,7 @@ namespace detail {
 
 // Some compilers are broken with respect to name resolution
 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP || defined( __BORLANDC__)
 
 using namespace boost;
 using namespace numeric;
