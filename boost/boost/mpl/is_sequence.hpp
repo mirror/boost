@@ -18,7 +18,7 @@
 #define BOOST_MPL_IS_SEQUENCE_HPP_INCLUDED
 
 #include "boost/mpl/not.hpp"
-#include "boost/mpl/or.hpp"
+#include "boost/mpl/and.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/if.hpp"
 #include "boost/mpl/bool.hpp"
@@ -41,8 +41,13 @@ namespace boost { namespace mpl {
 
 namespace aux {
 
+// agurt, 11/jun/03: 
+// MSVC 6.5/7.0 fails if 'has_begin' is instantiated on a class type that has a
+// 'begin' member that doesn't name a type; e.g. 'has_begin< std::vector<int> >'
+// would fail; requiring 'T' to have _both_ 'tag' and 'begin' members workarounds
+// the issue for most real-world cases
 template< typename T > struct is_sequence_impl
-    : or_<
+    : and_<
           identity< aux::has_tag<T> >
         , identity< aux::has_begin<T> >
         >
