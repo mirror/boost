@@ -6,6 +6,7 @@
     <meta name="ProgId" content="FrontPage.Editor.Document">
 
     <title>Boost Iterator Adaptor Library</title>
+<body bgcolor="#FFFFFF" text="#000000">
 
     <img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align=
     "center" width="277" height="86"> 
@@ -339,7 +340,8 @@ struct <a name="default_iterator_policies">default_iterator_policies</a>
     <table border="1" summary="additional iterator_adaptor members">
       <tr>
         <td><tt>iterator_adaptor(const Base&amp;, const Policies&amp; =
-        Policies())</tt> <br>
+        Policies())</tt>
+         <br><br>
          Construct an adapted iterator from a base object and a policies
         object.
 
@@ -347,16 +349,15 @@ struct <a name="default_iterator_policies">default_iterator_policies</a>
         <td><tt>template &lt;class B, class V, class R, class P&gt;<br>
          iterator_adaptor(const
         iterator_adaptor&lt;B,Policies,V,R,P,Category,Distance&gt;&amp;)</tt>
-        <br>
-         <br>
+        <br><br>
          This constructor allows for conversion from non-<tt>const</tt> to
         constant adapted iterators. See <a href=
         "#iterator_interactions">below</a> for more details.<br>
          Requires: <tt>B</tt> is convertible to <tt>Base</tt>.
 
       <tr>
-        <td><tt>base_type base() const;</tt> <br>
-         <br>
+        <td><tt>base_type base() const;</tt>
+         <br><br>
          Return a copy of the base object.
     </table>
 
@@ -714,6 +715,9 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
     copyright notice appears in all copies. This document is provided "as is"
     without express or implied warranty, and with no claim as to its
     suitability for any purpose. 
+
+</body>
+
     <!--  LocalWords:  HTML html charset alt gif abrahams htm const
         incrementable david abrahams
          -->
