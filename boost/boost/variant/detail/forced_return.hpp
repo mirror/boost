@@ -46,8 +46,10 @@ inline T forced_return()
 {
     // logical error: should never be here! (see above)
     BOOST_ASSERT(false);
+
     typedef typename boost::remove_reference<T>::type basic_type;
-    return *static_cast< basic_type* >(0);
+    basic_type* dummy = 0;
+    return *static_cast< basic_type* >(dummy);
 }
 
 template <>
@@ -65,18 +67,16 @@ inline void forced_return<void>()
 // throwing? by recursive call to forced_return itself? etc.
 //
 
-namespace {
-
 template <typename T>
+inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T)
 forced_return()
 {
     // logical error: should never be here! (see above)
     BOOST_ASSERT(false);
+
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T) (*dummy)() = 0;
     return dummy();
-}
-
 }
 
 #else // defined(BOOST_MSVC)
@@ -96,6 +96,7 @@ forced_return()
 {
     // logical error: should never be here! (see above)
     BOOST_ASSERT(false);
+
     forced_return_no_return();
 }
 
