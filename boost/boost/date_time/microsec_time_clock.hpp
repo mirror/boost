@@ -85,24 +85,24 @@ namespace date_time {
       gettimeofday(&tv, 0); //gettimeofday does not support TZ adjust on Linux.
       time_t t = tv.tv_sec;
       boost::uint32_t fs = tv.tv_usec;
-      tm* curr = 0;
+      std::tm curr, *curr_ptr = 0;
       if (tz == LOCAL) {
-        curr = localtime(&t);
+        curr_ptr = c_time::localtime(&t, &curr);
       } else {
-        curr = gmtime(&t);
+        curr_ptr = c_time::gmtime(&t, &curr);
       }
-      date_type d(curr->tm_year + 1900,
-                  curr->tm_mon + 1,
-                  curr->tm_mday);
+      date_type d(curr_ptr->tm_year + 1900,
+                  curr_ptr->tm_mon + 1,
+                  curr_ptr->tm_mday);
       //The following line will adjusts the fractional second tick in terms
       //of the current time system.  For example, if the time system
       //doesn't support fractional seconds then res_adjust returns 0
       //and all the fractional seconds return 0.
       int adjust = resolution_traits_type::res_adjust()/1000000;
 
-      time_duration_type td(curr->tm_hour,
-                            curr->tm_min,
-                            curr->tm_sec,
+      time_duration_type td(curr_ptr->tm_hour,
+                            curr_ptr->tm_min,
+                            curr_ptr->tm_sec,
                             fs*adjust);
       return time_type(d,td);
 
@@ -142,16 +142,16 @@ namespace date_time {
 
       time_t t;
       ::std::time(&t);
-      tm* curr = 0;
+      std::tm curr, *curr_ptr = 0;
       if (tz == LOCAL) {
-        curr = localtime(&t);
+        curr_ptr = c_time::localtime(&t, &curr);
       }
       else {
-        curr = gmtime(&t);
+        curr_ptr = c_time::gmtime(&t, &curr);
       }
-      date_type d(curr->tm_year + 1900,
-                  curr->tm_mon + 1,
-                  curr->tm_mday);
+      date_type d(curr_ptr->tm_year + 1900,
+                  curr_ptr->tm_mon + 1,
+                  curr_ptr->tm_mday);
 
       //The following line will adjusts the fractional second tick in terms
       //of the current time system.  For example, if the time system
@@ -159,9 +159,9 @@ namespace date_time {
       //and all the fractional seconds return 0.
       int adjust = resolution_traits_type::res_adjust()/1000000;
 
-      time_duration_type td(curr->tm_hour,
-                            curr->tm_min,
-                            curr->tm_sec,
+      time_duration_type td(curr_ptr->tm_hour,
+                            curr_ptr->tm_min,
+                            curr_ptr->tm_sec,
                             sub_sec * adjust);
                             //st.wMilliseconds * adjust);
       return time_type(d,td);

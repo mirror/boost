@@ -1,7 +1,7 @@
 #ifndef DATE_TIME_TIME_CLOCK_HPP___
 #define DATE_TIME_TIME_CLOCK_HPP___
 
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -34,8 +34,10 @@ namespace date_time {
     {
       ::std::time_t t;
       ::std::time(&t);
-      ::std::tm* curr = ::std::localtime(&t);
-      return create_time(curr);
+      ::std::tm curr, *curr_ptr;
+      //curr_ptr = ::std::localtime(&t);
+      curr_ptr = c_time::localtime(&t, &curr);
+      return create_time(curr_ptr);
     }
 
 
@@ -45,8 +47,10 @@ namespace date_time {
 
       ::std::time_t t;
       ::std::time(&t);
-      ::std::tm* curr= ::std::gmtime(&t);
-      return create_time(curr);
+      ::std::tm curr, *curr_ptr;
+      //curr_ptr = ::std::gmtime(&t);
+      curr_ptr = c_time::gmtime(&t, &curr);
+      return create_time(curr_ptr);
     }
 
     template<class time_zone_type>
