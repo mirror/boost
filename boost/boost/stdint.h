@@ -1,4 +1,4 @@
-//  boost stdint.h header file  ----------------------------------------------//
+//  boost stdint.h header file  ---------------------------------------------//
 
 //  (C) Copyright boost.org 1999. Permission to copy, use, modify, sell
 //  and distribute this software is granted provided this copyright
@@ -12,7 +12,25 @@
 //  header.  C++ programs are advised to use <boost/cstdint.hpp> rather than
 //  this header.
 
+//  NOTE OF OBSOLESCENCE: In general, this header file cannot detect
+//  whether the current translation unit somewhere includes ISO C99
+//  <stdint.h> or not.  For example, in case BOOST_SYSTEM_HAS_STDINT_H
+//  is not defined and ISO C99 <stdint.h> has been included before,
+//  this file will re-define ISO C99 reserved file-scope identifiers
+//  such as int8_t (see ISO C99 7.1.3 and 7.18).  Defining the macro
+//  BOOST_SYSTEM_HAS_STDINT_H is not sufficient in general, in
+//  particular if a partly conformant <stdint.h> header is available
+//  on the platform, e.g. Comeau C++ with GNU glibc 2.1.2.
+//
+//  In order to avoid incompatibilities with ISO C99, this header
+//  should not be used at all, and it may be deleted in the future.
+//  C++ programs which require ISO C99 <stdint.h> functionality are
+//  strongly advised to use <boost/cstdint.hpp> instead, which
+//  provides <stdint.h> names in namespace boost, e.g. boost::int8_t.
+
+
 //  Revision History
+//   12 Nov 00  obsoleted (Jens Maurer)
 //   23 Sep 00  INTXX_C support added (John Maddock)
 //   22 Sep 00  64-bit support for Borland & Microsoft compilers (John Maddock)
 //    8 Aug 99  Initial version (Beman Dawes)
