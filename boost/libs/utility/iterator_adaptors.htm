@@ -160,7 +160,9 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
     transform iterator using the <tt>iterator_adaptor</tt> class.</p>
 
     <p>The main task in using <tt>iterator_adaptor</tt> is creating an
-    appropriate <tt>Policies</tt> class.
+    appropriate <tt>Policies</tt> class (a general description of the
+    policy class technique can be found <a href=
+    "../../more/generic_programming.html#policies">here</a>).
 
     The <tt>Policies</tt> class that you pass in will become the heart of
     the iterator adaptor, supplying the core iterator operations that will
