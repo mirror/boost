@@ -448,7 +448,13 @@ namespace detail
 
         typedef mask_uint_t<Bits>            masking_type;
         typedef typename masking_type::fast  value_type;
+#if defined(__BORLANDC__) && defined(_M_IX86) && (__BORLANDC__ == 0x560)
+        // for some reason Borland's command line compiler (version 0x560)
+        // chokes over this unless we do the calculation for it: 
+        typedef value_type                   table_type[ 0x100 ];
+#else
         typedef value_type                   table_type[ byte_combos ];
+#endif
 
         static  void  init_table();
 
