@@ -48,15 +48,15 @@ or
 <p>
 <table border=1 cellspacing=3 cellpadding=3>
 <tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
-<tr><td class="nowrap">time_period(ptime begin, ptime last)</td>
+<tr><td class="nowrap">time_period(ptime begin, ptime end)</td>
         <td>
-	  Create a period as [begin, last).  If last is <= begin then
+	  Create a period as [begin, end).  If last is <= begin then
           the period will be defined as null.
         </td>
 	<td>date d(2002,Jan,01);<br>
             ptime t(d, seconds(10)); //10 sec after midnight<br>
 	    time_period tp(t, hours(3));</td></tr>
-<tr><td class="nowrap">time_period(ptime start, ptime end)</td>
+<tr><td class="nowrap">time_period(ptime start, time_duration len)</td>
         <td>
 	  Create a period as [begin, begin+len).  If len is <= zero then
           the period will be defined as null.
@@ -134,7 +134,7 @@ or
 <tr><td>time_period <font class="func">merge</font>(time_period) const</td>
         <td>Returns union of two periods. Null if no intersection.</td>
 	<td></td></tr>
-<tr><td>time_period <font class="func">hull</font>(time_period) const</td>
+<tr><td>time_period <font class="func">span</font>(time_period) const</td>
         <td>Combines two periods and any gap between them such that start = min(p1.start, p2.start) and end   = max(p1.end  , p2.end).
         </td>
 	<td></td></tr>
@@ -191,7 +191,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sun Aug 17 09:18:18 MST 2003
+Last modified: Tue Aug 19 06:49:19 MST 2003
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2003
 </small></address>

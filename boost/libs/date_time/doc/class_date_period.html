@@ -59,9 +59,9 @@ or
 <p>
 <table border=1 cellspacing=3 cellpadding=3>
 <tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
-<tr><td class="nowrap">date_period(date begin, date last)</td>
+<tr><td class="nowrap">date_period(date begin, date end)</td>
         <td>
-	  Create a period as [begin, last).  If last is <= begin then
+	  Create a period as [begin, end).  If last is <= begin then
           the period will be defined as null.
         </td>
 	<td>date_period dp(date(2002,Jan,10), date(2002,Jan,12));</td></tr>
@@ -146,7 +146,7 @@ or
 	<td>date_period dp1(date(2002,Jan,1), date(2002,Jan,10));<br>
 	    date_period dp2(date(2002,Jan,9), date(2002,Jan,31));<br>
             dp2.merge(dp1) --> 2002-Jan-01/2002-Jan-31</td></tr>
-<tr><td>date_period <font class="func">hull</font>(date_period) const</td>
+<tr><td>date_period <font class="func">span</font>(date_period) const</td>
         <td>Combines two periods and any gap between them such that start = min(p1.start, p2.start) and end   = max(p1.end  , p2.end)
          </td>
 	<td class="nowrap">date_period dp1(date(2002,Jan,1), date(2002,Jan,5));<br>
@@ -198,7 +198,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sun Aug 17 09:17:24 MST 2003
+Last modified: Tue Aug 19 06:46:09 MST 2003
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2003
 </small></address>
