@@ -28,7 +28,7 @@ namespace multi_array {
 template <int NumRanges, int NumDims>
 struct index_gen {
 private:
-  typedef index Index;
+  typedef ::boost::detail::multi_array::index Index;
   typedef std::size_t SizeType;
   typedef index_range<Index,SizeType> range;
 public:
