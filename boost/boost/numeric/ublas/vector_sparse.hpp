@@ -34,8 +34,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef V vector_type;
         typedef typename V::size_type size_type;
         typedef typename V::value_type value_type;
-        // typedef const value_type &const_reference;
-        typedef typename type_traits<value_type>::const_reference const_reference;
+        typedef const value_type &const_reference;
         typedef value_type &reference;
         typedef value_type *pointer;
 
@@ -246,8 +245,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const value_type &const_reference;
 #if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
         typedef T &reference;
 #elif defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
@@ -732,8 +730,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const T &const_reference;
 #ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
         typedef T &reference;
 #else
@@ -1296,8 +1293,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const T &const_reference;
 #ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
         typedef T &reference;
 #else

@@ -40,8 +40,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const T &const_reference;
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
@@ -984,8 +983,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const T &const_reference;
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
@@ -1945,8 +1943,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const T &const_reference;
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
@@ -2408,8 +2405,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const T &const_reference;
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
@@ -2857,8 +2853,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const T &const_reference;
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
@@ -3297,8 +3292,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const T &const_reference;
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;

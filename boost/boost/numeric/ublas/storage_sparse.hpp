@@ -602,10 +602,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::ptrdiff_t difference_type;
         typedef I index_type;
         typedef I value_type;
-        typedef const value_type &const_reference;
-        typedef value_type &reference;
-        typedef const value_type *const_pointer;
-        typedef value_type *pointer;
+        typedef const I &const_reference;
+        typedef I &reference;
+        typedef const I *const_pointer;
+        typedef I *pointer;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
