@@ -285,6 +285,7 @@ enum { \
 
 // BOOST_MPL_ASSERT_MSG( (pred<x,...>::value), USER_PROVIDED_MESSAGE, (types<x,...>) ) 
 
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202))
 #   define BOOST_MPL_ASSERT_MSG( c, msg, types_ ) \
     struct msg; \
     typedef struct BOOST_PP_CAT(msg,__LINE__) : boost::mpl::assert_ \
@@ -296,9 +297,24 @@ enum { \
     } BOOST_PP_CAT(mpl_assert_arg,__LINE__); \
     enum { \
         BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
-            boost::mpl::assertion<(c)>::failed( BOOST_PP_CAT(mpl_assert_arg,__LINE__)::assert_arg() )    \
+            boost::mpl::assertion<(c)>::failed( BOOST_PP_CAT(mpl_assert_arg,__LINE__)::assert_arg() ) \
             ) \
     }\
 /**/
+#else
+#   define BOOST_MPL_ASSERT_MSG( c, msg, types_ ) \
+    struct msg; \
+    typedef struct BOOST_PP_CAT(msg,__LINE__) : boost::mpl::assert_ \
+    { \
+        static boost::mpl::failed ************ (msg::************ assert_arg()) types_ \
+        { return 0; } \
+    } BOOST_PP_CAT(mpl_assert_arg,__LINE__); \
+    enum { \
+        BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
+            boost::mpl::assertion_failed<(c)>( BOOST_PP_CAT(mpl_assert_arg,__LINE__)::assert_arg() ) \
+            ) \
+    }\
+/**/
+#endif
 
 #endif // BOOST_MPL_ASSERT_HPP_INCLUDED
