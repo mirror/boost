@@ -12,17 +12,6 @@
 // This software is provided "as is" without express or implied warranty, 
 // and with no claim as to its suitability for any purpose.
 //
-//
-// Partial copyright for partial specialization workarounds
-//
-// based on work in PartialSpecialization.cpp
-// Authors: Mat Marcus and Jesse Jones
-// Copyright 2000 Adobe Systems Incorporated and others. All rights reserved.
-// The original version of PartialSpecialization.cpp may be found at 
-// http://opensource.adobe.com.
-// The contents of PartialSpecialization.cpp are subject to the Adobe Open Source
-// License Version 1.0.
-//
 
 #ifndef BOOST_CONVERSION_TYPE_TRAITS_HPP
 #define BOOST_CONVERSION_TYPE_TRAITS_HPP
@@ -234,3 +223,4 @@ struct is_convertible<void, void>
 } // namespace boost
 
 #endif  // include guard
+
