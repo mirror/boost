@@ -364,6 +364,7 @@ namespace tuples {
       typedef typename mapped_tuple::cons1 cons1;
 
     public:
+      typedef cons1 inherited;
       typedef tuple self_type;
 
       explicit tuple(const T1& t1 = T1(), 
