@@ -23,15 +23,21 @@
 #include <boost/mpl/empty.hpp>
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/front.hpp>
+#include <boost/mpl/at.hpp>
+#include <boost/mpl/find_if.hpp>
+#include <boost/mpl/contains.hpp>
+#include <boost/mpl/distance.hpp>
+#include <boost/mpl/deref.hpp>
 #include <boost/mpl/pop_front.hpp>
 #include <boost/mpl/push_front.hpp>
-#include <boost/mpl/at.hpp>
-#include <boost/mpl/contains.hpp>
-#include <boost/mpl/find_if.hpp>
-#include <boost/mpl/deref.hpp>
 #include <boost/mpl/clear.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/integral_c.hpp>
+#include <boost/mpl/less.hpp>
+#include <boost/mpl/equal_to.hpp>
+#include <boost/mpl/not.hpp>
+#include <boost/mpl/or.hpp>
 
 #include <boost/get_pointer.hpp>
 #include <boost/intrusive_ptr.hpp>
@@ -72,14 +78,8 @@ struct simple_state_base_type
       rtti_policy_type;
     typedef typename detail::make_list< InnerInitial >::type
       inner_initial_list;
-
-    #if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x564 ) )
-    enum { inner_initial_list_size =
-      mpl::size< inner_initial_list >::type::value };
-    #else
-    BOOST_STATIC_CONSTANT( long, inner_initial_list_size =
-      mpl::size< inner_initial_list >::type::value );
-    #endif
+    typedef typename mpl::size< inner_initial_list >::type
+      inner_initial_list_size;
 
   public:
     typedef typename mpl::apply_if<
@@ -198,9 +198,9 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     template< detail::orthogonal_position_type innerOrthogonalPosition >
     struct orthogonal
     {
-      BOOST_STATIC_CONSTANT(
+      typedef mpl::integral_c<
         detail::orthogonal_position_type,
-        inner_orthogonal_position = innerOrthogonalPosition );
+        innerOrthogonalPosition > inner_orthogonal_position;
       typedef MostDerived inner_context_type;
     };
 
@@ -353,7 +353,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         check_store_shallow_history< stores_shallow_history >();
         check_store_deep_history< stores_deep_history >();
 
-        pContext_->remove_inner_state( orthogonal_position );
+        pContext_->remove_inner_state( orthogonal_position::value );
       }
     }
 
@@ -362,21 +362,19 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
-    BOOST_STATIC_CONSTANT(
-      detail::orthogonal_position_type,
-      orthogonal_position = Context::inner_orthogonal_position );
+    typedef typename Context::inner_orthogonal_position orthogonal_position;
 
     // If you receive a
     // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or similar
     // compiler error here then this state resides in a non-existent
     // orthogonal region of the outer state.
-    BOOST_STATIC_ASSERT(
-      orthogonal_position < context_type::no_of_orthogonal_regions );
+    BOOST_STATIC_ASSERT( ( mpl::less<
+      orthogonal_position,
+      typename context_type::no_of_orthogonal_regions >::value ) );
 
     typedef MostDerived inner_context_type;
-    BOOST_STATIC_CONSTANT(
-      detail::orthogonal_position_type,
-      inner_orthogonal_position = 0 );
+    typedef mpl::integral_c< detail::orthogonal_position_type, 0 >
+      inner_orthogonal_position;
 
     typedef typename context_type::state_base_type state_base_type;
     typedef typename context_type::event_base_type event_base_type;
@@ -389,9 +387,11 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     typedef intrusive_ptr< inner_context_type > inner_context_ptr_type;
     typedef typename detail::make_list< InnerInitial >::type
       inner_initial_list;
-    BOOST_STATIC_CONSTANT(
+    typedef typename mpl::size< inner_initial_list >::type
+      inner_initial_list_size;
+    typedef mpl::integral_c<
       detail::orthogonal_position_type,
-      no_of_orthogonal_regions = mpl::size< inner_initial_list >::value );
+      inner_initial_list_size::value > no_of_orthogonal_regions;
     typedef typename mpl::push_front<
       typename context_type::context_type_list,
       context_type >::type context_type_list;
@@ -404,7 +404,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     // direct or indirect inner states have two or more orthogonal regions.
     // Please consult the documentation on how to work around this limitation.
     BOOST_STATIC_ASSERT(
-      ( mpl::size< inner_initial_list >::value <= 1 ) ||
+      ( no_of_orthogonal_regions::value <= 1 ) ||
       ( !context_type::inherited_deep_history ) );
 
     BOOST_STATIC_CONSTANT( bool, shallow_history =
@@ -418,7 +418,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     BOOST_STATIC_CONSTANT( bool, stores_deep_history =
       inherited_deep_history && mpl::empty< inner_initial_list >::value );
 
-    BOOST_STATIC_CONSTANT( bool, history_destination = false );
+    typedef mpl::bool_< false > history_destination;
 
     virtual result react_impl(
       const event_base_type & evt,
@@ -492,7 +492,8 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     {
       BOOST_ASSERT( get_pointer( pContext ) != 0 );
       pContext_ = pContext;
-      base_type::set_context( orthogonal_position, get_pointer( pContext ) );
+      base_type::set_context(
+        orthogonal_position::value, get_pointer( pContext ) );
     }
 
     template< class InnerList >
@@ -626,10 +627,11 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       // connector (or from a direct or indirect inner state). Since the
       // outer state has never been left no history has ever been saved.
       BOOST_STATIC_ASSERT( (
-        !DestinationState::history_destination ||
-        !is_same<
-          typename DestinationState::context_type,
-          common_context_type >::value ) );
+        mpl::or_<
+          mpl::not_< typename DestinationState::history_destination >,
+          mpl::not_< is_same<
+            typename DestinationState::context_type,
+            common_context_type > > >::value ) );
 
       termination_state_type & terminationState(
         context< termination_state_type >() );
@@ -650,9 +652,10 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or
       // similar compiler error here then you tried to make an invalid
       // transition between different orthogonal regions.
-      BOOST_STATIC_ASSERT(
-        termination_state_type::orthogonal_position ==
-        mpl::front< context_list_type >::type::orthogonal_position );
+      BOOST_STATIC_ASSERT( ( mpl::equal_to<
+        typename termination_state_type::orthogonal_position,
+        typename mpl::front< context_list_type >::type::orthogonal_position
+      >::value ) );
 
       detail::constructor<
         context_list_type, outermost_context_type >::construct(
@@ -742,9 +745,9 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         // list of its outer state.
         BOOST_STATIC_ASSERT( ( is_same<
           current_inner,
-          typename mpl::at_c<
+          typename mpl::at<
             typename current_inner::context_type::inner_initial_list,
-            current_inner::orthogonal_position >::type >::value ) );
+            typename current_inner::orthogonal_position >::type >::value ) );
 
         current_inner::reserve_history_slot( outermostContext );
         current_inner::deep_construct( pInnerContext, outermostContext );

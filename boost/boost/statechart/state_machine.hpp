@@ -10,10 +10,10 @@
 
 
 #include <boost/fsm/event.hpp>
-#include <boost/fsm/detail/rtti_policy.hpp>
 #include <boost/fsm/exception_translator.hpp>
 #include <boost/fsm/result.hpp>
 
+#include <boost/fsm/detail/rtti_policy.hpp>
 #include <boost/fsm/detail/state_base.hpp>
 #include <boost/fsm/detail/constructor.hpp>
 #include <boost/fsm/detail/avoid_unused_warning.hpp>
@@ -22,6 +22,7 @@
 #include <boost/mpl/clear.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/at.hpp>
+#include <boost/mpl/integral_c.hpp>
 
 #include <boost/intrusive_ptr.hpp>
 #include <boost/type_traits/is_pointer.hpp>
@@ -66,8 +67,7 @@ namespace detail
 
 
 
-template< orthogonal_position_type noOfOrthogonalRegions,
-  class Allocator, class RttiPolicy >
+template< class NoOfOrthogonalRegions, class Allocator, class RttiPolicy >
 class node_state;
 template< class Allocator, class RttiPolicy >
 class leaf_state;
@@ -187,7 +187,7 @@ class history_key
     {
       return history_key(
         HistorizedState::context_type::static_type(),
-        HistorizedState::orthogonal_position );
+        HistorizedState::orthogonal_position::value );
     }
 
     typename RttiPolicy::id_type history_context_type() const
@@ -402,12 +402,10 @@ class state_machine : noncopyable
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     typedef MostDerived inner_context_type;
-    BOOST_STATIC_CONSTANT(
-      detail::orthogonal_position_type,
-      inner_orthogonal_position = 0 );
-    BOOST_STATIC_CONSTANT(
-      detail::orthogonal_position_type,
-      no_of_orthogonal_regions = 1 );
+    typedef mpl::integral_c< detail::orthogonal_position_type, 0 >
+      inner_orthogonal_position;
+    typedef mpl::integral_c< detail::orthogonal_position_type, 1 >
+      no_of_orthogonal_regions;
 
     typedef MostDerived outermost_context_type;
     typedef MostDerived * inner_context_ptr_type;
@@ -584,7 +582,7 @@ class state_machine : noncopyable
       store_history_impl(
         shallowHistoryMap_,
         history_key_type::make_history_key< historized_state >(),
-        reinterpret_cast< void (*)() >( 0 ) );
+        0 );
     }
 
     template< class DefaultState >
@@ -641,7 +639,7 @@ class state_machine : noncopyable
       store_history_impl(
         deepHistoryMap_,
         history_key_type::make_history_key< historized_state >(),
-        reinterpret_cast< void (*)() >( 0 ) );
+        0 );
     }
 
     template< class DefaultState >
@@ -852,9 +850,9 @@ class state_machine : noncopyable
       return **pUnstableState_;
     }
 
-    template< detail::orthogonal_position_type noOfOrthogonalRegions >
+    template< class NoOfOrthogonalRegions >
     void add_impl( const detail::node_state<
-      noOfOrthogonalRegions, allocator_type, rtti_policy_type > & ) {}
+      NoOfOrthogonalRegions, allocator_type, rtti_policy_type > & ) {}
 
     void add_impl(
       detail::leaf_state< allocator_type, rtti_policy_type > & theState )

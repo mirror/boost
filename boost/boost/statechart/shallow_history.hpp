@@ -9,8 +9,7 @@
 
 
 
-#include <boost/fsm/detail/state_base.hpp> // orthogonal_position_type
-
+#include <boost/mpl/bool.hpp>
 #include <boost/static_assert.hpp>
 
 
@@ -42,11 +41,9 @@ class shallow_history
     typedef typename DefaultState::context_type context_type;
     typedef typename DefaultState::context_ptr_type context_ptr_type;
     typedef typename DefaultState::context_type_list context_type_list;
-    BOOST_STATIC_CONSTANT(
-      detail::orthogonal_position_type,
-      orthogonal_position = DefaultState::orthogonal_position );
+    typedef typename DefaultState::orthogonal_position orthogonal_position;
 
-    BOOST_STATIC_CONSTANT( bool, history_destination = true );
+    typedef mpl::bool_< true > history_destination;
 
     static void deep_construct(
       const context_ptr_type & pContext,

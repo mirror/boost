@@ -25,8 +25,7 @@ namespace detail
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< orthogonal_position_type noOfOrthogonalRegions,
-  class Allocator, class RttiPolicy >
+template< class NoOfOrthogonalRegions, class Allocator, class RttiPolicy >
 class node_state : public state_base< Allocator, RttiPolicy >
 {
   typedef state_base< Allocator, RttiPolicy > base_type;
@@ -38,7 +37,7 @@ class node_state : public state_base< Allocator, RttiPolicy >
       base_type( idProvider )
     {
       for ( orthogonal_position_type pos = 0; 
-            pos < noOfOrthogonalRegions; ++pos )
+            pos < NoOfOrthogonalRegions::value; ++pos )
       {
         pInnerStates[ pos ] = 0;
       }
@@ -54,14 +53,14 @@ class node_state : public state_base< Allocator, RttiPolicy >
     void add_inner_state( orthogonal_position_type position,
                           base_type * pInnerState )
     {
-      BOOST_ASSERT( ( position < noOfOrthogonalRegions ) &&
+      BOOST_ASSERT( ( position < NoOfOrthogonalRegions::value ) &&
                     ( pInnerStates[ position ] == 0 ) );
       pInnerStates[ position ] = pInnerState;
     }
 
     void remove_inner_state( orthogonal_position_type position )
     {
-      BOOST_ASSERT( position < noOfOrthogonalRegions );
+      BOOST_ASSERT( position < NoOfOrthogonalRegions::value );
       pInnerStates[ position ] = 0;
     }
 
@@ -75,7 +74,7 @@ class node_state : public state_base< Allocator, RttiPolicy >
            ( get_pointer( *pUnstableState ) == this ) )
       {
         for ( base_type ** pState = &pInnerStates[ 0 ]; 
-              pState != &pInnerStates[ noOfOrthogonalRegions ]; ++pState )
+              pState != &pInnerStates[ NoOfOrthogonalRegions::value ]; ++pState )
         {
           BOOST_ASSERT( *pState == 0 );
         }
@@ -86,7 +85,7 @@ class node_state : public state_base< Allocator, RttiPolicy >
       else
       {
         // Destroy inner states in the reverse order of construction
-        for ( base_type ** pState = &pInnerStates[ noOfOrthogonalRegions ]; 
+        for ( base_type ** pState = &pInnerStates[ NoOfOrthogonalRegions::value ]; 
               pState != &pInnerStates[ 0 ]; )
         {
           --pState;
@@ -102,7 +101,7 @@ class node_state : public state_base< Allocator, RttiPolicy >
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    base_type * pInnerStates[ noOfOrthogonalRegions ];
+    base_type * pInnerStates[ NoOfOrthogonalRegions::value ];
 };
 
 

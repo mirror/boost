@@ -9,18 +9,18 @@
 
 
 
-#include <boost/config.hpp>
-
 #include <boost/mpl/apply_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/front.hpp>
-#include <boost/mpl/pop_front.hpp>
-#include <boost/mpl/advance.hpp>
-#include <boost/mpl/erase.hpp>
-#include <boost/mpl/find.hpp>
-#include <boost/mpl/reverse.hpp>
 #include <boost/mpl/size.hpp>
+#include <boost/mpl/front.hpp>
+#include <boost/mpl/advance.hpp>
+#include <boost/mpl/find.hpp>
+#include <boost/mpl/push_front.hpp>
+#include <boost/mpl/pop_front.hpp>
+#include <boost/mpl/erase.hpp>
+#include <boost/mpl/reverse.hpp>
+#include <boost/mpl/long.hpp>
 
 
 
@@ -47,14 +47,7 @@ struct outer_constructor
 
   typedef typename to_construct::inner_initial_list inner_initial_list;
   typedef typename mpl::pop_front< ContextList >::type inner_context_list;
-  #if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x564 ) )
-  enum { inner_orthogonal_position_c =
-    mpl::front< inner_context_list >::type::orthogonal_position };
-  #else
-  BOOST_STATIC_CONSTANT( long, inner_orthogonal_position_c =
-    mpl::front< inner_context_list >::type::orthogonal_position );
-  #endif
-  typedef mpl::integral_c< long, inner_orthogonal_position_c >
+  typedef typename mpl::front< inner_context_list >::type::orthogonal_position
     inner_orthogonal_position;
 
   typedef typename mpl::erase<
@@ -95,7 +88,7 @@ struct inner_constructor
 //////////////////////////////////////////////////////////////////////////////
 template< class ContextList, class OutermostContext >
 struct constructor_impl : public mpl::apply_if<
-  mpl::equal_to< mpl::size< ContextList >, mpl::integral_c< long, 1 > >,
+  mpl::equal_to< mpl::size< ContextList >, mpl::long_< 1 > >,
   mpl::identity< inner_constructor< ContextList, OutermostContext > >,
   mpl::identity< outer_constructor< ContextList, OutermostContext > > > {};
 
