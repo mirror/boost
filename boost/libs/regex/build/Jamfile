@@ -2,7 +2,7 @@
 
 subproject libs/regex/build ;
 
-include $(BOOST_ROOT)/libs/regex/base.jam ;
+import ../base ;
 
 SOURCES = c_regex_traits c_regex_traits_common cpp_regex_traits
        cregex fileiter posix_api regex regex_debug

@@ -8,10 +8,9 @@
 # the template defined in options.jam.
 #
 subproject libs/config/test ;
+
 # bring in the rules for testing
-SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
-include testing.jam ;
-include $(BOOST_ROOT)/libs/config/test/options.jam ;
+import testing ./options ;
 
 run config_info.cpp <template>config_options ;
 run config_test.cpp <lib>../../test/build/boost_test_exec_monitor <template>config_options ;

@@ -1,7 +1,6 @@
 subproject libs/concept_check ;
 
-SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
-include testing.jam ;
+import testing ;
 
 compile stl_concept_covering.cpp ;
 compile concept_check_test.cpp ;

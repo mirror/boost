@@ -3,10 +3,7 @@
 subproject libs/regex/test ;
 
 # bring in the rules for testing
-SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
-include testing.jam ;
-
-include $(BOOST_ROOT)/libs/regex/base.jam ;
+import testing ../base ;
 
 #
 # this template defines the options common to

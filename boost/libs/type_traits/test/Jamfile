@@ -2,8 +2,7 @@
 subproject libs/type_traits/test ;
 
 # bring in the rules for testing
-SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
-include testing.jam ;
+import testing ;
     			
 rule type-traits-run ( sources + )
 {

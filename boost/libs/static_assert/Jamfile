@@ -2,8 +2,7 @@
 
 subproject libs/static_assert ;
 # bring in the rules for testing
-SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
-include testing.jam ;
+import testing ;
 
 test-suite static_assert :
 	[ run static_assert_test.cpp ]
