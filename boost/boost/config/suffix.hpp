@@ -108,9 +108,8 @@
 #     define BOOST_NO_SWPRINTF
 #  endif
 
-
 //
-// if the platform claims to be Unix, then it had better behave like Unix!
+// If the platform claims to be Unix, then it had better behave like Unix!
 //
 #  if defined(unix) \
       || defined(__unix) \
@@ -123,13 +122,14 @@
 #  endif
 
 //
-// If we have a <unistd.h> then some optins can be deduced from it:
+// If we have a <unistd.h> then some options can be deduced from it:
 //
 #  ifdef BOOST_HAS_UNISTD_H
 #     include <boost/config/posix_features.hpp>
 #  endif
+
 //
-// Turn on threading support if the compiler thinks that its in
+// Turn on threading support if the compiler thinks that it's in
 // multithreaded mode.  We put this here because there are only a
 // limited number of macros that identify this (if there's any missing
 // from here then add to the appropriate compiler section):
@@ -138,8 +138,10 @@
     || defined(_PTHREADS)) && !defined(BOOST_DISABLE_THREADS)
 #  define BOOST_HAS_THREADS
 #endif
+
 //
-// turn threading support off if BOOST_DISABLE_THREADS is defined:
+// Turn threading support off if BOOST_DISABLE_THREADS is defined:
+//
 #if defined(BOOST_DISABLE_THREADS) && defined(BOOST_HAS_THREADS)
 #  undef BOOST_HAS_THREADS
 #endif
@@ -152,8 +154,10 @@
 #     define BOOST_HAS_STDINT_H
 #  endif
 
+//
 // Define BOOST_NO_SLIST and BOOST_NO_HASH if required.
-// Note that this is for backwards compatiblity only.
+// Note that this is for backwards compatibility only.
+//
 #  ifndef BOOST_HAS_SLIST
 #     define BOOST_NO_SLIST
 #  endif
@@ -163,7 +167,6 @@
 #  endif
 
 //  BOOST_NO_STDC_NAMESPACE workaround  --------------------------------------//
-//
 //  Because std::size_t usage is so common, even in boost headers which do not
 //  otherwise use the C library, the <cstddef> workaround is included here so
 //  that ugly workaround code need not appear in many other boost headers.
@@ -176,6 +179,8 @@
 #   include <cstddef>
     namespace std { using ::ptrdiff_t; using ::size_t; }
 # endif
+
+//  BOOST_NO_STD_MIN_MAX workaround  -----------------------------------------//
 
 #  ifdef BOOST_NO_STD_MIN_MAX
 
@@ -197,6 +202,7 @@ namespace std {
   }
 #     endif
 }
+
 #  endif
 
 // BOOST_STATIC_CONSTANT workaround --------------------------------------- //
@@ -204,15 +210,15 @@ namespace std {
 // constant members, we must use enums as a workaround if we want the constants
 // to be available at compile-time. This macro gives us a convenient way to
 // declare such constants.
+
 #  ifdef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #       define BOOST_STATIC_CONSTANT(type, assignment) enum { assignment }
 #  else
 #     define BOOST_STATIC_CONSTANT(type, assignment) static const type assignment
 #  endif
 
-
 // BOOST_USE_FACET workaround ----------------------------------------------//
-// When the standard library does not have a comforming std::use_facet there
+// When the standard library does not have a conforming std::use_facet there
 // are various workarounds available, but they differ from library to library.
 // This macro provides a consistent way to access a locale's facets.
 // Usage:
@@ -221,7 +227,7 @@ namespace std {
 //    with
 //       BOOST_USE_FACET(Type, loc);
 //    Note do not add a std:: prefix to the front of BOOST_USE_FACET!
-//
+
 #if defined(BOOST_NO_STD_USE_FACET)
 #  ifdef BOOST_HAS_TWO_ARG_USE_FACET
 #     define BOOST_USE_FACET(Type, loc) std::use_facet(loc, static_cast<Type const*>(0))
@@ -243,12 +249,14 @@ namespace std {
 // with:
 //
 // typedef typename A::BOOST_NESTED_TEMPLATE rebind<U> binder;
-//
+
 #ifndef BOOST_NO_MEMBER_TEMPLATE_KEYWORD
 #  define BOOST_NESTED_TEMPLATE template
 #else
 #  define BOOST_NESTED_TEMPLATE
 #endif
+
+// ---------------------------------------------------------------------------//
 
 //
 // Helper macro BOOST_STRINGIZE:
@@ -265,14 +273,14 @@ namespace std {
 // itself a macro (see 16.3.1 in C++ standard).  The key
 // is that macro expansion of macro arguments does not
 // occur in BOOST_DO_JOIN2 but does in BOOST_DO_JOIN.
+//
 #define BOOST_JOIN( X, Y ) BOOST_DO_JOIN( X, Y )
 #define BOOST_DO_JOIN( X, Y ) BOOST_DO_JOIN2(X,Y)
 #define BOOST_DO_JOIN2( X, Y ) X##Y
 
-
 //
-// set some default values for compiler/library/platform names
-// these are for debugging config setup only:
+// Set some default values for compiler/library/platform names.
+// These are for debugging config setup only:
 //
 #  ifndef BOOST_COMPILER
 #     define BOOST_COMPILER "Unknown ISO C++ Compiler"
