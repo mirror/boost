@@ -78,6 +78,11 @@ namespace boost {
         }
 
     } // namespace algorithm
+
+    // pull the names to the boost namespace
+    using algorithm::regex_finder;
+    using algorithm::regex_formatter;
+
 } // namespace boost
 
 
