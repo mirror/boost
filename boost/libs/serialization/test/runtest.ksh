@@ -20,5 +20,5 @@ else
     echo Running tests for $1 on $BOOST_ROOT to $ALL_LOCATE_TARGET
     bjam --dump-test -sTOOLS=$1 test >bjam.log 2>&1
     process_jam_log <bjam.log $ALL_LOCATE_TARGET
-    compiler_status --locate-root $ALL_LOCATE_TARGET $BOOST_ROOT compiler_status.html links.html
+    compiler_status2 --locate-root $ALL_LOCATE_TARGET $BOOST_ROOT compiler_status.html links.html
 fi
