@@ -11,6 +11,9 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   20 Jan 01  BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS moved here from
+//              cast.hpp. Added missing BOOST_NO_STRINGSTREAM which some
+//              boost code seemed to depend on. (Dave Abrahams)
 //   13 Jan 01  SGI MIPSpro and Compaq Tru64 Unix compiler support added
 //              (Jens Maurer)
 //   13 Jan 01  BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP (Jens Maurer)
@@ -71,6 +74,9 @@
 
 //  BOOST_NO_INTEGRAL_INT64_T: int64_t as defined by <boost/cstdint.hpp> is
 //  not an integral type.
+
+//  BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS: constants such as
+//  numeric_limits<T>::is_signed are not available for use at compile-time.
 
 //  BOOST_NO_MEMBER_TEMPLATES: Member template functions not fully supported.
 //  Also see BOOST_MSVC6_MEMBER_TEMPLATES in the Compiler Control section below.
@@ -164,6 +170,8 @@
 
 //  BOOST_NO_SLIST: The C++ implementation does not provide the slist class.
 
+//  BOOST_NO_STRINGSTREAM: The C++ implementation does not provide the <sstream> header.
+
 //  BOOST_NO_HASH: The C++ implementation does not provide the hash_set
 //  or hash_map classes.
 
@@ -200,6 +208,9 @@
 #     if !defined(_CXXRT_STD) && !defined(__SGI_STL) // need to ask Dietmar about this -JGS
 #       define BOOST_NO_STD_ITERATOR
 #       define BOOST_NO_LIMITS
+#     endif
+#     if !defined(_CXXRT_STD) && !defined(__SGI_STL_OWN_IOSTREAMS)
+#       define BOOST_NO_STRINGSTREAM
 #     endif
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #     define BOOST_NO_OPERATORS_IN_NAMESPACE
@@ -405,6 +416,16 @@
 # endif
 
 //  end of compiler specific portion  ----------------------------------------//
+
+#if defined(BOOST_NO_LIMITS) || defined(_RWSTD_VER) || (defined(__SGI_STL_PORT) && __SGI_STL_PORT <= 0x410 && __STL_STATIC_CONST_INIT_BUG)
+// STLPort 4.0 doesn't define the static constants in numeric_limits<> so that they
+// can be used at compile time if the compiler bug indicated by
+// __STL_STATIC_CONST_INIT_BUG is present.
+
+// Rogue wave STL (C++ Builder) also has broken numeric_limits
+// with default template defining members out of line.
+#   define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#endif
 
 #ifndef BOOST_STD_EXTENSION_NAMESPACE
 # define BOOST_STD_EXTENSION_NAMESPACE std
