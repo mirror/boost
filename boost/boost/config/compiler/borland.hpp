@@ -40,6 +40,7 @@
 #  define BOOST_BCB_PARTIAL_SPECIALIZATION_BUG
 #  define BOOST_NO_TEMPLATE_TEMPLATES
 #  define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
+#  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
    // we shouldn't really need this - but too many things choke
    // without it, this needs more investigation:
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
