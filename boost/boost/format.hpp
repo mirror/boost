@@ -22,15 +22,18 @@
 #include <vector>
 #include <string>
 #include <sstream>
-
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
+
+#ifndef BOOST_NO_STD_LOCALE
+#include <locale>
+#endif
 
 
 // make sure our local macros wont override something :
 #if defined(BOOST_NO_LOCALE_ISDIGIT) || defined(BOOST_OVERLOAD_FOR_NON_CONST) \
   || defined(BOOST_IO_STD) || defined( BOOST_IO_NEEDS_USING_DECLARATION )
-#error
+#error "a local macro would overwrite a previously defined macro"
 #endif
 
 
@@ -42,11 +45,9 @@
 #define BOOST_BAD_ISDIGIT
 #endif
 
-#ifndef BOOST_BAD_ISDIGIT
-#include <locale>
-#else
-#include <cctype>  // for isdigit(int)
-#endif //BOOST_NO_STD_LOCALE
+#ifdef BOOST_BAD_ISDIGIT
+#include <cctype>  // we'll use the non-locale  <cctype>'s std::isdigit(int)
+#endif
 
 
 #if  BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570) ) || BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1300))
