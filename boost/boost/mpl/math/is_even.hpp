@@ -21,16 +21,32 @@
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/mpl/aux_/config/eti.hpp"
+#include "boost/detail/workaround.hpp"
 
 namespace boost { namespace mpl {
 
 namespace math {
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+namespace aux
+{
+  template <class N>
+  struct is_even_base
+  {
+      enum { value = (N::value % 2) == 0 };
+      typedef bool_<value> type;
+  };
+}
+#endif 
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(N)
     >
 struct is_even
-    : bool_<((N::value % 2) == 0)>
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+  : aux::is_even_base<N>::type
+#else
+  : bool_<((N::value % 2) == 0)>
+#endif 
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_even,(N))
 };

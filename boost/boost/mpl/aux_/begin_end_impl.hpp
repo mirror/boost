@@ -71,11 +71,6 @@ AUX_AGLORITM_TRAIT_SPEC(end, nested_begin_end_tag, typename Sequence::end)
 AUX_AGLORITM_TRAIT_SPEC(begin, non_sequence_tag, void_)
 AUX_AGLORITM_TRAIT_SPEC(end, non_sequence_tag, void_)
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
-AUX_AGLORITM_TRAIT_SPEC(begin, int, int)
-AUX_AGLORITM_TRAIT_SPEC(end, int, int)
-#endif
-
 #   undef AUX_AGLORITM_TRAIT_SPEC
 
 
