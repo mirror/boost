@@ -170,6 +170,10 @@
 //  GNU CC (also known as GCC and G++)  --------------------------------------//
 
 # if defined __GNUC__
+#   if __GNUC__ == 2 && __GNUC_MINOR__ == 91
+       // egcs 1.1 won't parse smart_ptr.hpp without this:
+#      define BOOST_NO_AUTO_PTR
+#   endif
 #   if __GNUC__ == 2 && __GNUC_MINOR__ <= 95
 #     include <iterator>  // not sure this is the right way to do this -JGS
 #     if !defined(_CXXRT_STD) && !defined(__SGI_STL) // need to ask Dietmar about this -JGS
@@ -394,5 +398,6 @@ namespace std {
 #endif
 
 #endif  // BOOST_CONFIG_HPP
+
 
 
