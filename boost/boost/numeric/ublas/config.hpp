@@ -337,7 +337,9 @@ namespace std {
 #define BOOST_UBLAS_USE_FAST_SAME
 
 // Use expression templates.
+#ifndef BOOST_UBLAS_USE_ET
 #define BOOST_UBLAS_USE_ET
+#endif
 
 // Disable performance options in debug mode
 #else
@@ -352,7 +354,9 @@ namespace std {
 
 #ifdef BOOST_MSVC
 // Use expression templates (otherwise we get many ICE's)
+#ifndef BOOST_UBLAS_USE_ET
 #define BOOST_UBLAS_USE_ET
+#endif
 #endif
 
 // Bounds check
