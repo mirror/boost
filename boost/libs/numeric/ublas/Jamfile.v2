@@ -1,41 +1,66 @@
-# Copyright Michael Stevens 2004
+#
+#   Copyright (c) 2000-2002
+#   Joerg Walter, Mathias Koch
+#
+#   Permission to use, copy, modify, distribute and sell this software
+#   and its documentation for any purpose is hereby granted without fee,
+#   provided that the above copyright notice appear in all copies and
+#   that both that copyright notice and this permission notice appear
+#   in supporting documentation.  The authors make no representations
+#   about the suitability of this software for any purpose.
+#   It is provided "as is" without express or implied warranty.
+#
+#   The authors gratefully acknowledge the support of
+#   GeNeSys mbH & Co. KG in producing this work.
+#
 
-# Use, modification, and distribution is subject to the Boost Software
-# License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
-# http://www.boost.org/LICENSE_1_0.txt)
-# bring in rules for testing
-
-# Boost uBLAS library project and testing Jamfile
-
-import testing ;
-
-# Project requirements
-project ublastest
-    : requirements
-      <define>BOOST_UBLAS_SAFE
-      <define>USE_RANGE
-      <define>USE_ADAPTOR
-      <toolset>intel:<cxxflags>"-Xc"   # Strict mode
+project
+    : requirements 
       <toolset>borland:<cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
       <toolset>kylix:<cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
     ;
 
-build-project test1 ;
-build-project test2 ;
-build-project test3 ;
-build-project test4 ;
-build-project test5 ;
-build-project test6 ;
-build-project test7 ;
+test-suite uBLAS
+    : [ run test1/test1.cpp
+            test1/test11.cpp
+            test1/test12.cpp
+            test1/test13.cpp
+      ]
+      [ run test2/test2.cpp
+            test2/test21.cpp
+            test2/test22.cpp
+            test2/test23.cpp
+      ]
+      [ run test3/test3.cpp
+            test3/test31.cpp
+            test3/test32.cpp
+            test3/test33.cpp
+      ]
+      [ run test4/test4.cpp
+            test4/test41.cpp
+            test4/test42.cpp
+            test4/test43.cpp
+      ]
+      [ run test5/test5.cpp
+            test5/test51.cpp
+            test5/test52.cpp
+            test5/test53.cpp
+      ]
+      [ run test6/test6.cpp
+            test6/test61.cpp
+            test6/test62.cpp
+            test6/test63.cpp
+      ]
+      [ run test7/test7.cpp
+            test7/test71.cpp
+            test7/test72.cpp
+            test7/test73.cpp
+        : # args
+        : # input files
+        : # requirements
 
-
-test-suite "uBLAS"
-       : [ compile concepts.cpp ]
-         [ run test1 ]
-         [ run test2 ]
-         [ run test3 ]
-         [ run test4 ]
-         [ run test5 ]
-         [ run test6 ]
-         [ run test7 ]
-       ;
+	    <define>BOOST_UBLAS_USE_INTERVAL
+      ]
+      [ run concepts.cpp
+      ]
+    ;
