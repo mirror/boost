@@ -25,9 +25,6 @@
 #ifndef BOOST_ARITHMETIC_TYPE_TRAITS_HPP
 #include <boost/type_traits/arithmetic_traits.hpp>
 #endif
-#ifndef BOOST_SAME_TRAITS_HPP
-#include <boost/type_traits/same_traits.hpp>
-#endif
 //
 // is one type convertable to another?
 //
@@ -129,22 +126,6 @@ public:
    static const bool value = is_convertible_helper<From, To>::value;
 };
 
-template <class From>
-struct is_convertible<From, void>
-{
-   static const bool value = false;
-};
-template <class To>
-struct is_convertible<void, To>
-{
-   static const bool value = false;
-};
-template <>
-struct is_convertible<void, void>
-{
-   static const bool value = true;
-};
-
 #elif defined(__GNUC__)
 //
 // special version for gcc compiler
@@ -175,22 +156,6 @@ public:
    void foo(); // avoid warning about all members being private
 };
 
-template <class From>
-struct is_convertible<From, void>
-{
-   static const bool value = false;
-};
-template <class To>
-struct is_convertible<void, To>
-{
-   static const bool value = false;
-};
-template <>
-struct is_convertible<void, void>
-{
-   static const bool value = true;
-};
-
 #else
 
 template <class From, class To>
@@ -211,28 +176,129 @@ template <class From, class To>
 const bool is_convertible<From, To>::value;
 #endif
 
+
+#endif // is_convertible
+
+//
+// Now add the full and partial specialisations
+// for void types, these are common to all the
+// implementation above:
+//
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class From>
 struct is_convertible<From, void>
 {
    BOOST_STATIC_CONSTANT(bool, value = false);
 };
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+template <class From>
+struct is_convertible<From, const void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+template <class From>
+struct is_convertible<From, volatile void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+template <class From>
+struct is_convertible<From, const volatile void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+#endif // BOOST_NO_CV_VOID_SPECIALIZATIONS
 
 template <class To>
 struct is_convertible<void, To>
 {
    BOOST_STATIC_CONSTANT(bool, value = false);
 };
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+template <class To>
+struct is_convertible<const void, To>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+template <class To>
+struct is_convertible<volatile void, To>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+template <class To>
+struct is_convertible<const volatile void, To>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+#endif
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 template <>
 struct is_convertible<void, void>
 {
    BOOST_STATIC_CONSTANT(bool, value = true);
 };
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-#endif // is_convertible
-
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+template <>
+struct is_convertible<void, const void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = true);
+};
+template <>
+struct is_convertible<void, volatile void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = true);
+};
+template <>
+struct is_convertible<void, const volatile void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = true);
+};
+template <>
+struct is_convertible<const void, const void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = true);
+};
+template <>
+struct is_convertible<const void, volatile void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = true);
+};
+template <>
+struct is_convertible<const void, const volatile void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = true);
+};
+template <>
+struct is_convertible<volatile void, const void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = true);
+};
+template <>
+struct is_convertible<volatile void, volatile void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = true);
+};
+template <>
+struct is_convertible<volatile void, const volatile void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = true);
+};
+template <>
+struct is_convertible<const volatile void, const void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = true);
+};
+template <>
+struct is_convertible<const volatile void, volatile void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = true);
+};
+template <>
+struct is_convertible<const volatile void, const volatile void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = true);
+};
+#endif
 
 } // namespace boost
 
