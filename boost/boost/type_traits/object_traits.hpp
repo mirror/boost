@@ -223,9 +223,9 @@ namespace detail{
 template <typename T>
 struct empty_helper_t1 : public T
 {
-#ifdef __MWERKS__
+//#ifdef __MWERKS__
    empty_helper_t1();  // hh compiler bug workaround
-#endif
+//#endif
    int i[256];
 };
 struct empty_helper_t2 { int i[256]; };
@@ -342,6 +342,7 @@ template <typename T> struct is_empty
 } // namespace boost
 
 #endif // BOOST_OBJECT_TYPE_TRAITS_HPP
+
 
 
 
