@@ -98,7 +98,7 @@ namespace boost
   // of is_convertible in a few cases.
   template<typename From, typename To>
   struct enable_if_convertible
-    : detail::enable_if<
+    : iterators::enable_if<
         mpl::or_<
             is_same<From,To>
           , is_convertible<From, To>
@@ -111,7 +111,7 @@ namespace boost
   
   template<typename From, typename To>
   struct enable_if_convertible
-    : detail::enable_if<
+    : iterators::enable_if<
           is_convertible<From, To>
         , detail::enable_type
       >

@@ -59,7 +59,7 @@ namespace boost
       // don't provide this constructor if UnaryFunction is a
       // function pointer type.  Too dangerous.
       filter_iterator(
-          typename detail::enable_if<
+          typename iterators::enable_if<
               is_class<Predicate>
             , Iterator
           >::type x
@@ -114,7 +114,7 @@ namespace boost
   template <class Predicate, class Iterator>
   filter_iterator<Predicate,Iterator>
   make_filter_iterator(
-      typename detail::enable_if<
+      typename iterators::enable_if<
           is_class<Predicate>
         , Iterator
       >::type x

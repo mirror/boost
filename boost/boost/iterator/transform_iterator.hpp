@@ -124,7 +124,7 @@ namespace boost
      && BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(2))
         Iterator const& x
 #else 
-      typename detail::enable_if<
+      typename iterators::enable_if<
           is_class<UnaryFunction>
         , Iterator const&
       >::type x
@@ -163,7 +163,7 @@ namespace boost
   // don't provide this generator if UnaryFunction is a
   // function pointer type.  Too dangerous.  We should probably
   // find a cheaper test than is_class<>
-  typename detail::enable_if<
+  typename iterators::enable_if<
       is_class<UnaryFunction>
     , transform_iterator<UnaryFunction, Iterator>
   >::type

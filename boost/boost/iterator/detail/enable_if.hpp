@@ -23,7 +23,7 @@
 namespace boost
 {
 
-  namespace detail
+  namespace iterators
   {
     //
     // Base machinery for all kinds of enable if
@@ -79,7 +79,7 @@ namespace boost
 # endif 
     };
 
-  } // namespace detail
+  } // namespace iterators
 
 } // namespace boost
 
