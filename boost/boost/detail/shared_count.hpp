@@ -121,7 +121,6 @@ public:
         mutex_type::scoped_lock lock(mtx_);
 #endif
         ++use_count_;
-        ++weak_count_;
     }
 
     void add_ref_lock()
@@ -129,9 +128,8 @@ public:
 #if defined(BOOST_HAS_THREADS)
         mutex_type::scoped_lock lock(mtx_);
 #endif
-        if(use_count_ == 0 && weak_count_ != 0) boost::throw_exception(boost::bad_weak_ptr());
+        if(use_count_ == 0) boost::throw_exception(boost::bad_weak_ptr());
         ++use_count_;
-        ++weak_count_;
     }
 
     void release() // nothrow
@@ -142,11 +140,7 @@ public:
 #endif
             long new_use_count = --use_count_;
 
-            if(new_use_count != 0)
-            {
-                --weak_count_;
-                return;
-            }
+            if(new_use_count != 0) return;
         }
 
         dispose();
@@ -191,10 +185,8 @@ private:
     sp_counted_base(sp_counted_base const &);
     sp_counted_base & operator= (sp_counted_base const &);
 
-    // inv: use_count_ <= weak_count_
-
-    long use_count_;
-    long weak_count_;
+    long use_count_;        // #shared
+    long weak_count_;       // #weak + (#shared != 0)
 
 #if defined(BOOST_HAS_THREADS) || defined(BOOST_LWM_WIN32)
     mutable mutex_type mtx_;
