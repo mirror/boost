@@ -1070,17 +1070,17 @@ int main()
 actions (mapped to destructors and destructors should virtually never throw in 
 C++). Out of the box, <code>state_machine&lt;&gt;</code> does the following:</p>
 <ol>
-  <li>The exception is caught.</li>
+  <li>The exception is caught</li>
   <li>In the catch block, an <code>exception_thrown</code> event is allocated 
-  on the stack.</li>
+  on the stack</li>
   <li>Also in the catch block, an <b>immediate</b> dispatch of the <code>
   exception_thrown</code> event is attempted. That is, possibly remaining 
   events in the queue are dispatched only after the exception has been handled 
-  successfully.</li>
+  successfully</li>
   <li>If the exception was handled successfully, the state machine returns to 
   the client normally. If the exception could not be handled successfully, the 
   original exception is rethrown so that the client of the state machine can 
-  handle the exception.</li>
+  handle the exception</li>
 </ol>
 <p>This behavior is implemented in the <code>exception_translator</code> class 
 template, which is the default for the <code>ExceptionTranslator</code> 
@@ -1093,24 +1093,60 @@ handling turned off but doing so means losing <b>all</b> error handling
 support, making proper error handling much more cumbersome (see
 <a href="rationale.html#Error handling">Error handling</a> in the Rationale).</p>
 <h4>Which states can react to an <code>exception_thrown</code> event?</h4>
-<p>This depends on where the exception occurred. There are three scenarios:</p>
+<p>Short answer: If the state machine is stable when the exception is thrown, 
+the state that caused the exception is first tried for a reaction. Otherwise 
+the outermost <a href="definitions.html#Unstable state">unstable state</a> is 
+first tried for a reaction.</p>
+<p>Longer answer: There are three scenarios:</p>
 <ol>
   <li>A <code>react</code> member function propagates an exception <b>before</b> 
-  calling any of the reaction functions. The state that caused the exception 
-  is first tried for a reaction, so the following machine will transit to 
-  Defective after receiving an EvStart event:<br>
+  calling any of the reaction functions (that is, an in-state reaction 
+  propagates an exception). The state that caused the exception is first tried 
+  for a reaction, so the following machine will transit to Defective after 
+  receiving an EvStart event:<br>
   <br>
   <img border="0" src="ThrowingInStateReaction.gif" width="362" height="182"><br>
   <br>
   </li>
-  <li>A state entry action (constructor) propagates an exception. The outer 
-  state of the state that caused the exception is first tried for a reaction, 
-  so the following machine will transit to Defective after trying to enter 
-  Stopped:<br>
-  <br>
-  <img border="0" src="ThrowingEntryAction.gif" width="438" height="241"><br>
+  <li>A state entry action (constructor) propagates an exception:<br>
+&nbsp;<ul>
+    <li>If there are no orthogonal regions, the direct outer state of the 
+    state that caused the exception is first tried for a reaction, so the 
+    following machine will transit to Defective after trying to enter Stopped:<br>
+    <br>
+    <img border="0" src="ThrowingEntryAction.gif" width="438" height="241"><br>
 &nbsp;</li>
-  <li>A transition action propagates an exception. The innermost common outer 
+    <li>If there are orthogonal regions, the outermost
+    <a href="definitions.html#Unstable state">unstable state</a> is first 
+    tried for a reaction. The outermost unstable state is found by first 
+    selecting the direct outer state of the state that caused the exception 
+    and then moving outward until a state is found that is unstable but has no 
+    direct or indirect outer states that are unstable. This more complex rule 
+    is necessary because only reactions associated with the outermost unstable 
+    state (or any of its direct or indirect outer states) are able to bring 
+    the machine back into a stable state. Consider the following state chart:<br>
+    <br>
+    <img border="0" src="OutermostUnstableState.gif" width="467" height="572"><br>
+    <br>
+    Whether this state machine will ultimately transition to E or F after 
+    initiation depends on which of the two orthogonal regions is initiated 
+    first. If the upper orthogonal region is initiated first, the entry 
+    sequence is as follows: A, D, B, (exception is thrown). Both D and B were 
+    successfully entered, so B is the outermost unstable state when the 
+    exception is thrown and the machine will therefore transition to F. 
+    However, if the lower orthogonal region is initiated first, the sequence 
+    is as follows: A, B, (exception is thrown). D was never entered so A is 
+    the outermost unstable state when the exception is thrown and the machine 
+    will therefore transition to E.<br>
+    In practice these differences rarely matter as top-level error recovery is 
+    adequate for most state machines. However, since the sequence of 
+    initiation is clearly defined (orthogonal region 0 is always initiated 
+    first, then region 1 and so forth), users <b>can</b> accurately control 
+    when and where they want to handle exceptions<br>
+&nbsp;</li>
+  </ul>
+  </li>
+  <li>A transition action propagates an exception: The innermost common outer 
   state of the source and the target state is first tried for a reaction, so 
   the following machine will transit to Defective after receiving an 
   EvStartStop event:<br>
@@ -1355,7 +1391,7 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->21 April, 2004<!--webbot bot="Timestamp" endspan i-checksum="29904" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->11 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13981" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file
