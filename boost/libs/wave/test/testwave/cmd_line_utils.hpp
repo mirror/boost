@@ -56,7 +56,7 @@ namespace cmd_line_utils {
             BOOST_ASSERT(p);
 
         // Assume only one path per '-I' occurrence.
-            std::string t = tokens[0];
+            std::string const& t = po::validators::get_single_string(tokens);
             if (t == "-") {
             // found -I- option, so switch behaviour
                 p->seen_separator = true;
@@ -117,7 +117,8 @@ namespace cmd_line_utils {
                 << std::endl;
             return false;
         }
-        
+
+    // parse the file and extract all given arguments and options
         std::vector<std::string> options;
         std::string line;
 

@@ -58,11 +58,16 @@ namespace impl {
                 if ('\\' == value[pos1+1] || '\"' == value[pos1+1] || 
                     '?' == value[pos1+1])
                 {
-                    result += value.substr(pos, pos1-pos);
+                    result = result + value.substr(pos, pos1-pos);
+                    pos1 = value.find_first_of ("\\", (pos = pos1+1)+1);
                 }
-                pos1 = value.find_first_of ("\\", (pos = pos1)+1);
+                else {
+                    result = result + value.substr(pos, pos1-pos+1);
+                    pos1 = value.find_first_of ("\\", pos = pos1+1);
+                }
+                
             } while (pos1 != StringT::npos);
-            result += value.substr(pos);
+            result = result + value.substr(pos);
         }
         else {
         // the string doesn't contain any escaped character sequences

@@ -38,7 +38,7 @@ namespace fs = boost::filesystem;
 ///////////////////////////////////////////////////////////////////////////////
 // testwave version definitions
 #define TESTWAVE_VERSION_MAJOR           0
-#define TESTWAVE_VERSION_MINOR           2
+#define TESTWAVE_VERSION_MINOR           3
 #define TESTWAVE_VERSION_SUBMINOR        0
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -126,6 +126,49 @@ namespace {
         return true;
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  This function compares the real result and the expected one but first 
+    //  replaces all occurences of $F in the expected result to the passed
+    //  full filepath.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    inline bool 
+    got_expected_result(std::string const& filename, 
+        std::string const& result, std::string& expected)
+    {
+        using boost::wave::util::impl::escape_lit;
+        
+        std::string full_result;
+        std::string::size_type pos = 0;
+        std::string::size_type pos1 = expected.find_first_of("$");
+        
+        if (pos1 != std::string::npos) {
+            do {
+                switch(expected[pos1+1]) {
+                case 'F':
+                    full_result = full_result + 
+                        expected.substr(pos, pos1-pos) + escape_lit(filename);
+                    pos1 = expected.find_first_of ("$", pos = pos1 + 2);
+                    break;
+
+                default:
+                    full_result = full_result +
+                        expected.substr(pos, pos1-pos);
+                    pos1 = expected.find_first_of ("$", (pos = pos1) + 1);
+                    break;
+                }
+
+            } while(pos1 != std::string::npos);
+            full_result += expected.substr(pos);
+        }
+        else {
+            full_result = expected;
+        }
+        
+        expected = full_result;
+        return full_result == result;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -176,7 +219,7 @@ testwave_app::test_a_file(std::string filename)
         bool pp_result = preprocess_file(filename, instr, result, error);
         if (pp_result || !result.empty()) {
         //  no preprocessing error encountered
-            if (result != expected) {
+            if (!got_expected_result(filename, result, expected)) {
                 if (debuglevel > 3) {
                     std::cerr 
                         << filename << ": failed" << std::endl
@@ -204,7 +247,7 @@ testwave_app::test_a_file(std::string filename)
             if (!extract_special_information(filename, instr, 'E', expected_error))
                 return false;
                 
-            if (error != expected_error) {
+            if (!got_expected_result(filename, error, expected_error)) {
             // the error was unexpected
                 if (debuglevel > 3) {
                     std::cerr 

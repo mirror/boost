@@ -17,19 +17,19 @@ __STDC_VERSION__            //R __STDC_VERSION__
 __cplusplus                 //R 199711L 
 __STDC_HOSTED__             //R __STDC_HOSTED__ 
 __LINE__                    //R 19 
-__FILE__                    //R "003_003.cpp" 
-__BASE_FILE__               //R "003_003.cpp" 
+__FILE__                    //R "$F" 
+__BASE_FILE__               //R "$F" 
 __WAVE_HAS_VARIADICS__      //R 1 
 __INCLUDE_LEVEL__           //R 0 
 //R #line 50 "test.cpp"
 #line 50 "test.cpp"
 __LINE__                    //R 50 
 __FILE__                    //R "test.cpp" 
-__BASE_FILE__               //R "003_003.cpp" 
+__BASE_FILE__               //R "$F" 
 
 
 //R #line 56 "test.cpp"
 __LINE__                    //R 56 
 __FILE__                    //R "test.cpp" 
-__BASE_FILE__               //R "003_003.cpp" 
+__BASE_FILE__               //R "$F" 
 

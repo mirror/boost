@@ -1618,13 +1618,21 @@ position_type pos;
 
 // predefine the __BASE_FILE__ macro which contains the main file name  
     if (string_type(fname) != "<Unknown>") {
+    fs::path filename(fname, fs::native);
+    
+        using boost::wave::util::impl::escape_lit;
         predefine_macro(current_scope, "__BASE_FILE__",
-            token_type(T_STRINGLIT, string_type("\"") + fname + "\"", pos));
+            token_type(T_STRINGLIT, string_type("\"") + 
+                escape_lit(filename.native_file_string()).c_str() + "\"", pos));
         base_name = fname;
     }
     else if (!base_name.empty()) {
+    fs::path filename(base_name.c_str(), fs::native);
+    
+        using boost::wave::util::impl::escape_lit;
         predefine_macro(current_scope, "__BASE_FILE__",
-            token_type(T_STRINGLIT, string_type("\"") + base_name + "\"", pos));
+            token_type(T_STRINGLIT, string_type("\"") + 
+                escape_lit(filename.native_file_string()).c_str() + "\"", pos));
     }
     
 // now add the dynamic macros

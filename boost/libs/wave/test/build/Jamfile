@@ -25,34 +25,12 @@ SOURCES = testwave testwave_app
 #
 # This are the arguments for the testwave executable
 #
-TESTWAVE_ARGUMENTS = -d2 -S../testwave/testfiles/ ;
+TESTWAVE_ARGUMENTS = -d2 -S../testwave/testfiles ;
 
 #
 # These are the names of the different unit tests to run
 #
-TESTWAVE_FILES_001 =
-        001_001.cpp 001_002.cpp 001_003.cpp 001_004.cpp 001_005.cpp
-        001_006.cpp 001_007.cpp 001_008.cpp 001_009.cpp 001_010.cpp
-        001_011.cpp 001_012.cpp 001_013.cpp 001_014.cpp 001_015.cpp
-        001_016.cpp 001_017.cpp 001_018.cpp 001_019.cpp 001_020.cpp
-        001_021.cpp 001_022.cpp 001_023.cpp 001_024.cpp 001_025.cpp
-        001_026.cpp 001_027.cpp 001_028.cpp 001_029.cpp 001_030.cpp
-        001_031.cpp 001_032.cpp 001_033.cpp 
-    ;
-
-TESTWAVE_FILES_002 =
-        002_001.cpp 002_002.cpp 002_003.cpp 002_004.cpp 002_005.cpp
-        002_006.cpp 002_007.cpp 002_008.cpp 002_009.cpp 002_010.cpp
-        002_011.cpp 002_012.cpp 002_013.cpp 
-    ;
-
-TESTWAVE_FILES_003 =
-        003_001.cpp 003_002.cpp 003_003.cpp 003_004.cpp 
-    ;
-
-TESTWAVE_FILES_999 =
-        999_001.cpp 999_002.cpp 999_003.cpp 999_004.cpp 999_005.cpp
-        999_006.cpp 999_007.cpp 999_008.cpp 999_009.cpp 
+TESTWAVE_FILES = test.cfg
     ;
 
 #
@@ -80,37 +58,11 @@ test-suite wave
     : 
         [   
             run
-                <template>wave-test                          # sources
-                ../testwave/$(SOURCES).cpp
-            :   $(TESTWAVE_ARGUMENTS)                        # arguments
-            :   ../testwave/testfiles/$(TESTWAVE_FILES_001)  # input files
-            :                                                # requirements
-            :   testwave                                     # name
-        ]
-        [   
-            run
-                <template>wave-test                          # sources
-                ../testwave/$(SOURCES).cpp
-            :   $(TESTWAVE_ARGUMENTS)                        # arguments
-            :   ../testwave/testfiles/$(TESTWAVE_FILES_002)  # input files
-            :                                                # requirements
-            :   testwave                                     # name
-        ]
-        [   
-            run
-                <template>wave-test                          # sources
-                ../testwave/$(SOURCES).cpp
-            :   $(TESTWAVE_ARGUMENTS)                        # arguments
-            :   ../testwave/testfiles/$(TESTWAVE_FILES_003)  # input files
-            :                                                # requirements
-            :   testwave                                     # name
-        ]
-        [   
-            run
-                <template>wave-test                          # sources
-                ../testwave/$(SOURCES).cpp
-            :   $(TESTWAVE_ARGUMENTS)                        # arguments
-            :   ../testwave/testfiles/$(TESTWAVE_FILES_999)  # input files
+                <template>wave-test 
+                ../testwave/$(SOURCES).cpp                   # sources
+            :   $(TESTWAVE_ARGUMENTS) 
+                @../testwave/testfiles/$(TESTWAVE_FILES)     # arguments
+            :                                                # input files
             :                                                # requirements
             :   testwave                                     # name
         ]

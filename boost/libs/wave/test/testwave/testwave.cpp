@@ -15,12 +15,15 @@
 // include boost
 #include <boost/config.hpp>
 #include <boost/program_options.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
 
 //  test application related headers
 #include "cmd_line_utils.hpp"
 #include "testwave_app.hpp"
 
 namespace po = boost::program_options;
+namespace fs = boost::filesystem;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -73,29 +76,12 @@ main(int argc, char *argv[])
         po::options_description cmdline_options;
         cmdline_options.add(desc_cmdline).add(app.common_options());
 
-        po::options_description cfgfile_options;
-        cfgfile_options.add(desc_cmdline).add(desc_hidden);
-
     // parse command line
         po::parsed_options opts(po::parse_command_line(argc, argv, 
             cmdline_options, 0, cmd_line_utils::at_option_parser));
         
         po::store(opts, vm);
         po::notify(vm);
-
-    // if there is specified at least one config file, parse it and add the 
-    // options to the main variables_map
-        if (vm.count("config-file")) {
-            std::vector<std::string> const &cfg_files = 
-                vm["config-file"].as<std::vector<std::string> >();
-            std::vector<std::string>::const_iterator end = cfg_files.end();
-            for (std::vector<std::string>::const_iterator cit = cfg_files.begin(); 
-                 cit != end; ++cit)
-            {
-            // parse a single config file and store the results
-                cmd_line_utils::read_config_file(*cit, cfgfile_options, vm);
-            }
-        }
 
     // ... act as required 
         if (vm.count("help")) {
@@ -128,18 +114,45 @@ main(int argc, char *argv[])
             return app.print_copyright();
         }
         
-    // iterate over all given input files 
+    // If there is specified at least one config file, parse it and add the 
+    // options to the main variables_map
+    // Each of the config files is parsed into a separate variables_map to 
+    // allow correct paths handling.
         int input_count = 0;
-        if (vm.count("input")) {
-            std::vector<std::string> const &inputs = 
-                vm["input"].as<std::vector<std::string> >();
-            std::vector<std::string>::const_iterator end = inputs.end();
-            for (std::vector<std::string>::const_iterator cit = inputs.begin(); 
+        if (vm.count("config-file")) {
+            std::vector<std::string> const &cfg_files = 
+                vm["config-file"].as<std::vector<std::string> >();
+                
+            std::vector<std::string>::const_iterator end = cfg_files.end();
+            for (std::vector<std::string>::const_iterator cit = cfg_files.begin(); 
                  cit != end; ++cit)
             {
-                if (!app.test_a_file((*cit)))
-                    ++error_count;
-                ++input_count;
+            // parse a single config file and store the results, config files
+            // may only contain --input and positional arguments 
+                po::variables_map cvm;
+                cmd_line_utils::read_config_file(*cit, desc_hidden, cvm);
+
+            // correct the paths parsed into this variables_map
+                if (cvm.count("input")) {
+                    std::vector<std::string> const &infiles = 
+                        cvm["input"].as<std::vector<std::string> >();
+                    
+                    std::vector<std::string>::const_iterator iend = infiles.end();
+                    for (std::vector<std::string>::const_iterator iit = infiles.begin(); 
+                         iit != iend; ++iit)
+                    {
+                    // correct the file name (prepend the cfg file path)
+                        fs::path cfgpath = fs::complete(
+                            fs::path(*cit, fs::native), fs::current_path());
+                        fs::path filepath = 
+                            cfgpath.branch_path() / fs::path(*iit, fs::native);
+                        
+                    // execute this unit test case
+                        if (!app.test_a_file(filepath.native_file_string()))
+                            ++error_count;
+                        ++input_count;
+                    }
+                }
             }
         }
 
@@ -153,7 +166,8 @@ main(int argc, char *argv[])
         for (std::vector<po::option>::const_iterator arg = arguments.begin();
              arg != arg_end; ++arg)
         {
-            if (!app.test_a_file((*arg).value[0]))
+            fs::path filepath((*arg).value[0], fs::native);
+            if (!app.test_a_file(filepath.native_file_string()))
                 ++error_count;
             ++input_count;
         }

@@ -143,7 +143,7 @@ namespace cmd_line_util {
 
             BOOST_SPIRIT_ASSERT(p);
             // Assume only one path per '-I' occurrence.
-            string t = tokens[0];
+            string const& t = po::validators::get_single_string(tokens);
             if (t == "-") {
             // found -I- option, so switch behaviour
                 p->seen_separator = true;
