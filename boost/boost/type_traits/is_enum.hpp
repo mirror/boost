@@ -81,7 +81,9 @@ template <typename T> struct is_enum_impl
 #endif
 
 #ifdef __BORLANDC__
-    typedef ::boost::detail::is_enum_helper< ::boost::is_enum<T>::selector> se_t;
+    typedef ::boost::detail::is_enum_helper<
+          ::boost::detail::is_enum_impl<T>::selector
+        > se_t;
 #else
     typedef ::boost::detail::is_enum_helper<selector> se_t;
 #endif
