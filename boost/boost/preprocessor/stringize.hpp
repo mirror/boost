@@ -19,13 +19,13 @@
 #
 # /* BOOST_PP_STRINGIZE */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#    define BOOST_PP_STRINGIZE(text) BOOST_PP_STRINGIZE_D(text)
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
+#    define BOOST_PP_STRINGIZE(text) BOOST_PP_STRINGIZE_I(text)
 # else
-#    define BOOST_PP_STRINGIZE(text) BOOST_PP_EVIL_STRINGIZE_D((text))
-#    define BOOST_PP_EVIL_STRINGIZE_D(par) BOOST_PP_STRINGIZE_D ## par
+#    define BOOST_PP_STRINGIZE(text) BOOST_PP_STRINGIZE_OO((text))
+#    define BOOST_PP_STRINGIZE_OO(par) BOOST_PP_STRINGIZE_I ## par
 # endif
 #
-# define BOOST_PP_STRINGIZE_D(text) #text
+# define BOOST_PP_STRINGIZE_I(text) #text
 #
 # endif

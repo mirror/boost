@@ -19,13 +19,18 @@
 #
 # /* BOOST_PP_CAT */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#    define BOOST_PP_CAT(a, b) BOOST_PP_CAT_D(a, b)
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
+#    define BOOST_PP_CAT(a, b) BOOST_PP_CAT_I(a, b)
 # else
-#    define BOOST_PP_CAT(a, b) BOOST_PP_EVIL_CAT_D((a, b))
-#    define BOOST_PP_EVIL_CAT_D(par) BOOST_PP_CAT_D ## par
+#    define BOOST_PP_CAT(a, b) BOOST_PP_CAT_OO((a, b))
+#    define BOOST_PP_CAT_OO(par) BOOST_PP_CAT_I ## par
 # endif
 #
-# define BOOST_PP_CAT_D(a, b) a ## b
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
+#    define BOOST_PP_CAT_I(a, b) a ## b
+# else
+#    define BOOST_PP_CAT_I(a, b) BOOST_PP_CAT_II(a ## b)
+#    define BOOST_PP_CAT_II(res) res
+# endif
 #
 # endif
