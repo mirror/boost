@@ -124,6 +124,8 @@ template <class T>
 struct remove_bounds;
 template <class T>
 struct remove_pointer;
+template <class T>
+struct add_pointer;
 
 // same_traits.hpp:
 template <class T, class U>

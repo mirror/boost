@@ -119,6 +119,25 @@ struct type_checker<T,T>
 
 #define type_test(v, x) type_checker<v,x>::check(#v, #x, #x);
 #define type_test3(v, x, z) type_checker<v,x,z>::check(#v, #x "," #z, #x "," #z);
+#define transform_check(name, from_suffix, to_suffix)\
+   type_test(bool to_suffix, name<bool from_suffix>::type);\
+   type_test(char to_suffix, name<char from_suffix>::type);\
+   type_test(wchar_t to_suffix, name<wchar_t from_suffix>::type);\
+   type_test(signed char to_suffix, name<signed char from_suffix>::type);\
+   type_test(unsigned char to_suffix, name<unsigned char from_suffix>::type);\
+   type_test(short to_suffix, name<short from_suffix>::type);\
+   type_test(unsigned short to_suffix, name<unsigned short from_suffix>::type);\
+   type_test(int to_suffix, name<int from_suffix>::type);\
+   type_test(unsigned int to_suffix, name<unsigned int from_suffix>::type);\
+   type_test(long to_suffix, name<long from_suffix>::type);\
+   type_test(unsigned long to_suffix, name<unsigned long from_suffix>::type);\
+   type_test(float to_suffix, name<float from_suffix>::type);\
+   type_test(long double to_suffix, name<long double from_suffix>::type);\
+   type_test(double to_suffix, name<double from_suffix>::type);\
+   type_test(UDT to_suffix, name<UDT from_suffix>::type);\
+   type_test(enum1 to_suffix, name<enum1 from_suffix>::type);
+
+#define boost_dummy_macro_param
 
 template <class T>
 struct test_align
@@ -211,8 +230,8 @@ struct BOOST_TT_JOIN(nested_tester_,what){\
 enum enum_UDT{ one, two, three };
 struct UDT
 {
-   UDT();
-   ~UDT();
+   UDT(){};
+   ~UDT(){};
    UDT(const UDT&);
    UDT& operator=(const UDT&);
    int i;

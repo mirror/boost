@@ -118,6 +118,15 @@ struct remove_bounds
 template <typename T, std::size_t N>
 struct remove_bounds<T[N]>
 { typedef T type; };
+template <typename T, std::size_t N>
+struct remove_bounds<const T[N]>
+{ typedef const T type; };
+template <typename T, std::size_t N>
+struct remove_bounds<volatile T[N]>
+{ typedef volatile T type; };
+template <typename T, std::size_t N>
+struct remove_bounds<const volatile T[N]>
+{ typedef const volatile T type; };
 #endif
 
 /**********************************************
@@ -143,6 +152,42 @@ struct remove_pointer<T*const volatile>
 { typedef T type; };
 #endif
 
+/**********************************************
+ *
+ * add_pointer
+ *
+ **********************************************/
+template <typename T>
+struct add_pointer
+{
+private:
+   typedef typename remove_reference<T>::type no_ref_type;
+   typedef typename remove_bounds<no_ref_type>::type no_b_type;
+public:
+   typedef no_b_type* type;
+};
+#ifdef __BORLANDC__
+template <typename T, std::size_t N>
+struct add_pointer<T (&)[N]>
+{
+   typedef T* type;
+};
+template <typename T, std::size_t N>
+struct add_pointer<T const (&)[N]>
+{
+   typedef const T* type;
+};
+template <typename T, std::size_t N>
+struct add_pointer<T volatile (&)[N]>
+{
+   typedef volatile T* type;
+};
+template <typename T, std::size_t N>
+struct add_pointer<T const volatile (&)[N]>
+{
+   typedef const volatile T* type;
+};
+#endif
 
 } // namespace boost
 

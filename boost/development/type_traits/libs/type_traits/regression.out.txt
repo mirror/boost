@@ -2,15 +2,15 @@
 
 ** GCC 2.95.2
 g++ -o boosttmp.exe -ftemplate-depth-30 -I../.. ../../libs/type_traits/alignment_test.cpp
-boosttmp.exe
-13 tests completed, 0 failures found, 0 failures expected from this compiler.
+./boosttmp.exe 
+14 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
 ** Borland C++ 5.5.1
 bcc32 -eboosttmp.exe -I../.. -j10 -q ../../libs/type_traits/alignment_test.cpp
 ../../libs/type_traits/alignment_test.cpp:
-boosttmp.exe
-13 tests completed, 0 failures found, 0 failures expected from this compiler.
+./boosttmp.exe 
+14 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
 ** Microsoft Visual C++
@@ -19,8 +19,8 @@ alignment_test.cpp
 ../../libs/type_traits/alignment_test.cpp(15) : warning C4305: 'argument' : truncation from 'enum ' to 'bool'
         ../../libs/type_traits/alignment_test.cpp(15) : while compiling class-template member function '__thiscall nested_tester_alignment_of<int>::nested_tester_alignment_of<int>(const char *)'
 LINK : LNK6004: boosttmp.exe not found or not built by the last incremental link; performing full link
-boosttmp.exe
-10 tests completed, 0 failures found, 0 failures expected from this compiler.
+./boosttmp.exe 
+11 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
 ** Microsoft Visual C++ with STLport
@@ -28,22 +28,22 @@ cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "e:/stlport//s
 alignment_test.cpp
 ../../libs/type_traits/alignment_test.cpp(15) : warning C4305: 'argument' : truncation from 'enum ' to 'bool'
         ../../libs/type_traits/alignment_test.cpp(15) : while compiling class-template member function '__thiscall nested_tester_alignment_of<int>::nested_tester_alignment_of<int>(const char *)'
-boosttmp.exe
-10 tests completed, 0 failures found, 0 failures expected from this compiler.
+./boosttmp.exe 
+11 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
 *** libs/type_traits/arithmetic_traits_test.cpp ***
 
 ** GCC 2.95.2
 g++ -o boosttmp.exe -ftemplate-depth-30 -I../.. ../../libs/type_traits/arithmetic_traits_test.cpp
-boosttmp.exe
+./boosttmp.exe 
 111 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
 ** Borland C++ 5.5.1
 bcc32 -eboosttmp.exe -I../.. -j10 -q ../../libs/type_traits/arithmetic_traits_test.cpp
 ../../libs/type_traits/arithmetic_traits_test.cpp:
-boosttmp.exe
+./boosttmp.exe 
 123 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
@@ -51,14 +51,14 @@ Pass
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/arithmetic_traits_test.cpp /link user32.lib
 arithmetic_traits_test.cpp
 LINK : LNK6004: boosttmp.exe not found or not built by the last incremental link; performing full link
-boosttmp.exe
+./boosttmp.exe 
 123 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
 ** Microsoft Visual C++ with STLport
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "e:/stlport//stlport" /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/arithmetic_traits_test.cpp /link /libpath:e:/stlport/lib user32.lib
 arithmetic_traits_test.cpp
-boosttmp.exe
+./boosttmp.exe 
 123 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
@@ -66,54 +66,54 @@ Pass
 
 ** GCC 2.95.2
 g++ -o boosttmp.exe -ftemplate-depth-30 -I../.. ../../libs/type_traits/composite_traits_test.cpp
-boosttmp.exe
+./boosttmp.exe 
 checking value of boost::is_reference<cr_type>::value...failed
 	found: 0 expected 1
-65 tests completed, 1 failures found, 1 failures expected from this compiler.
+70 tests completed, 1 failures found, 1 failures expected from this compiler.
 Pass
 
 ** Borland C++ 5.5.1
 bcc32 -eboosttmp.exe -I../.. -j10 -q ../../libs/type_traits/composite_traits_test.cpp
 ../../libs/type_traits/composite_traits_test.cpp:
-boosttmp.exe
+./boosttmp.exe 
 checking value of boost::is_pointer<int(&)[2]>::value...failed
 	found: 1 expected 0
 checking value of boost::is_enum<enum_UDT>::value...failed
 	found: 0 expected 1
-65 tests completed, 2 failures found, 2 failures expected from this compiler.
+70 tests completed, 2 failures found, 2 failures expected from this compiler.
 Pass
 
 ** Microsoft Visual C++
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/composite_traits_test.cpp /link user32.lib
 composite_traits_test.cpp
 LINK : LNK6004: boosttmp.exe not found or not built by the last incremental link; performing full link
-boosttmp.exe
+./boosttmp.exe 
 checking value of boost::is_reference<const volatile int &>::value...failed
 	found: 0 expected 1
-65 tests completed, 1 failures found, 1 failures expected from this compiler.
+70 tests completed, 1 failures found, 1 failures expected from this compiler.
 Pass
 
 ** Microsoft Visual C++ with STLport
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "e:/stlport//stlport" /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/composite_traits_test.cpp /link /libpath:e:/stlport/lib user32.lib
 composite_traits_test.cpp
-boosttmp.exe
+./boosttmp.exe 
 checking value of boost::is_reference<const volatile int &>::value...failed
 	found: 0 expected 1
-65 tests completed, 1 failures found, 1 failures expected from this compiler.
+70 tests completed, 1 failures found, 1 failures expected from this compiler.
 Pass
 
 *** libs/type_traits/cv_traits_test.cpp ***
 
 ** GCC 2.95.2
 g++ -o boosttmp.exe -ftemplate-depth-30 -I../.. ../../libs/type_traits/cv_traits_test.cpp
-boosttmp.exe
+./boosttmp.exe 
 18 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
 ** Borland C++ 5.5.1
 bcc32 -eboosttmp.exe -I../.. -j10 -q ../../libs/type_traits/cv_traits_test.cpp
 ../../libs/type_traits/cv_traits_test.cpp:
-boosttmp.exe
+./boosttmp.exe 
 18 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
@@ -121,7 +121,7 @@ Pass
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/cv_traits_test.cpp /link user32.lib
 cv_traits_test.cpp
 LINK : LNK6004: boosttmp.exe not found or not built by the last incremental link; performing full link
-boosttmp.exe
+./boosttmp.exe 
 checking value of boost::is_const<const void>::value...failed
 	found: 0 expected 1
 checking value of boost::is_volatile<volatile void>::value...failed
@@ -132,7 +132,7 @@ Pass
 ** Microsoft Visual C++ with STLport
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "e:/stlport//stlport" /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/cv_traits_test.cpp /link /libpath:e:/stlport/lib user32.lib
 cv_traits_test.cpp
-boosttmp.exe
+./boosttmp.exe 
 checking value of boost::is_const<const void>::value...failed
 	found: 0 expected 1
 checking value of boost::is_volatile<volatile void>::value...failed
@@ -144,7 +144,7 @@ Pass
 
 ** GCC 2.95.2
 g++ -o boosttmp.exe -ftemplate-depth-30 -I../.. ../../libs/type_traits/is_convertible_test.cpp
-boosttmp.exe
+./boosttmp.exe 
 37 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
@@ -161,7 +161,7 @@ Fail
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/is_convertible_test.cpp /link user32.lib
 is_convertible_test.cpp
 LINK : LNK6004: boosttmp.exe not found or not built by the last incremental link; performing full link
-boosttmp.exe
+./boosttmp.exe 
 37 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
@@ -171,7 +171,7 @@ is_convertible_test.cpp
 ../..\boost/type_traits/conversion_traits.hpp(57) : warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
         ../..\boost/type_traits/conversion_traits.hpp(83) : see reference to class template instantiation 'boost::detail::from_not_void_conversion::bind<float,int>' being compiled
         ../../libs/type_traits/is_convertible_test.cpp(21) : see reference to class template instantiation 'boost::is_convertible<float,int>' being compiled
-boosttmp.exe
+./boosttmp.exe 
 37 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
@@ -179,37 +179,41 @@ Pass
 
 ** GCC 2.95.2
 g++ -o boosttmp.exe -ftemplate-depth-30 -I../.. ../../libs/type_traits/is_same_test.cpp
-boosttmp.exe
-10 tests completed, 0 failures found, 0 failures expected from this compiler.
+./boosttmp.exe 
+13 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
 ** Borland C++ 5.5.1
 bcc32 -eboosttmp.exe -I../.. -j10 -q ../../libs/type_traits/is_same_test.cpp
 ../../libs/type_traits/is_same_test.cpp:
-boosttmp.exe
-10 tests completed, 0 failures found, 0 failures expected from this compiler.
+./boosttmp.exe 
+13 tests completed, 0 failures found, 0 failures expected from this compiler.
 Pass
 
 ** Microsoft Visual C++
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/is_same_test.cpp /link user32.lib
 is_same_test.cpp
 LINK : LNK6004: boosttmp.exe not found or not built by the last incremental link; performing full link
-boosttmp.exe
-10 tests completed, 0 failures found, 0 failures expected from this compiler.
+./boosttmp.exe 
+checking value of (::boost::is_same<void, const void>::value)...failed
+	found: 1 expected 0
+13 tests completed, 1 failures found, 1 failures expected from this compiler.
 Pass
 
 ** Microsoft Visual C++ with STLport
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "e:/stlport//stlport" /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/is_same_test.cpp /link /libpath:e:/stlport/lib user32.lib
 is_same_test.cpp
-boosttmp.exe
-10 tests completed, 0 failures found, 0 failures expected from this compiler.
+./boosttmp.exe 
+checking value of (::boost::is_same<void, const void>::value)...failed
+	found: 1 expected 0
+13 tests completed, 1 failures found, 1 failures expected from this compiler.
 Pass
 
 *** libs/type_traits/object_type_traits_test.cpp ***
 
 ** GCC 2.95.2
 g++ -o boosttmp.exe -ftemplate-depth-30 -I../.. ../../libs/type_traits/object_type_traits_test.cpp
-boosttmp.exe
+./boosttmp.exe 
 checking value of boost::has_trivial_constructor<empty_UDT>::value...failed
 	found: 0 expected 1
 checking value of boost::has_trivial_copy<empty_UDT>::value...failed
@@ -224,13 +228,13 @@ checking value of boost::is_empty<empty_union_UDT>::value...failed
    boost::is_empty<empty_union_UDT>::value does not compile on this compiler
 checking value of boost::is_empty<boost::noncopyable>::value...failed
 	found: 0 expected 1
-122 tests completed, 7 failures found, 7 failures expected from this compiler.
+129 tests completed, 7 failures found, 7 failures expected from this compiler.
 Pass
 
 ** Borland C++ 5.5.1
 bcc32 -eboosttmp.exe -I../.. -j10 -q ../../libs/type_traits/object_type_traits_test.cpp
 ../../libs/type_traits/object_type_traits_test.cpp:
-boosttmp.exe
+./boosttmp.exe 
 checking value of boost::is_class<enum_UDT>::value...failed
 	found: 1 expected 0
 checking value of boost::is_POD<enum_UDT>::value...failed
@@ -257,14 +261,14 @@ checking value of boost::is_empty<empty_union_UDT>::value...failed
    boost::is_empty<empty_union_UDT>::value does not compile on this compiler
 checking value of boost::is_empty<boost::noncopyable>::value...failed
 	found: 0 expected 1
-122 tests completed, 13 failures found, 13 failures expected from this compiler.
+129 tests completed, 13 failures found, 13 failures expected from this compiler.
 Pass
 
 ** Microsoft Visual C++
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/object_type_traits_test.cpp /link user32.lib
 object_type_traits_test.cpp
 LINK : LNK6004: boosttmp.exe not found or not built by the last incremental link; performing full link
-boosttmp.exe
+./boosttmp.exe 
 checking value of boost::is_POD<int[2]>::value...failed
 	found: 0 expected 1
 checking value of boost::is_POD<int[3][2]>::value...failed
@@ -303,13 +307,13 @@ checking value of boost::has_trivial_destructor<int[2][4][5][6][3]>::value...fai
 	found: 0 expected 1
 checking value of boost::is_empty<empty_union_UDT>::value...failed
    boost::is_empty<empty_union_UDT>::value does not compile on this compiler
-122 tests completed, 19 failures found, 19 failures expected from this compiler.
+129 tests completed, 19 failures found, 19 failures expected from this compiler.
 Pass
 
 ** Microsoft Visual C++ with STLport
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "e:/stlport//stlport" /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/object_type_traits_test.cpp /link /libpath:e:/stlport/lib user32.lib
 object_type_traits_test.cpp
-boosttmp.exe
+./boosttmp.exe 
 checking value of boost::is_POD<int[2]>::value...failed
 	found: 0 expected 1
 checking value of boost::is_POD<int[3][2]>::value...failed
@@ -348,292 +352,2327 @@ checking value of boost::has_trivial_destructor<int[2][4][5][6][3]>::value...fai
 	found: 0 expected 1
 checking value of boost::is_empty<empty_union_UDT>::value...failed
    boost::is_empty<empty_union_UDT>::value does not compile on this compiler
-122 tests completed, 19 failures found, 19 failures expected from this compiler.
+129 tests completed, 19 failures found, 19 failures expected from this compiler.
 Pass
 
 *** libs/type_traits/transform_traits_test.cpp ***
 
 ** GCC 2.95.2
 g++ -o boosttmp.exe -ftemplate-depth-30 -I../.. ../../libs/type_traits/transform_traits_test.cpp
-boosttmp.exe
+./boosttmp.exe 
 checking type of boost::remove_reference<cr_type>::type...failed
    expected type was int
    typeid(int) was: i
    typeid(boost::remove_reference<cr_type>::type) was: i
    In template class t12type_checker2ZiZCRi
-39 tests completed, 1 failures found, 1 failures expected from this compiler.
+1799 tests completed, 1 failures found, 1 failures expected from this compiler.
 Pass
 
 ** Borland C++ 5.5.1
 bcc32 -eboosttmp.exe -I../.. -j10 -q ../../libs/type_traits/transform_traits_test.cpp
 ../../libs/type_traits/transform_traits_test.cpp:
-boosttmp.exe
-checking type of boost::remove_const<volatile int>::type...failed
-   expected type was volatile int
-   typeid(volatile int) was: int
-   typeid(boost::remove_const<volatile int>::type) was: int
+./boosttmp.exe 
+checking type of ::boost::remove_const<bool volatile>::type...failed
+   expected type was bool volatile
+   typeid(bool volatile) was: bool
+   typeid(::boost::remove_const<bool volatile>::type) was: bool
+   In template class type_checker<volatile bool,bool>
+checking type of ::boost::remove_const<char volatile>::type...failed
+   expected type was char volatile
+   typeid(char volatile) was: char
+   typeid(::boost::remove_const<char volatile>::type) was: char
+   In template class type_checker<volatile char,char>
+checking type of ::boost::remove_const<wchar_t volatile>::type...failed
+   expected type was wchar_t volatile
+   typeid(wchar_t volatile) was: wchar_t
+   typeid(::boost::remove_const<wchar_t volatile>::type) was: wchar_t
+   In template class type_checker<volatile wchar_t,wchar_t>
+checking type of ::boost::remove_const<signed char volatile>::type...failed
+   expected type was signed char volatile
+   typeid(signed char volatile) was: signed char
+   typeid(::boost::remove_const<signed char volatile>::type) was: signed char
+   In template class type_checker<volatile signed char,signed char>
+checking type of ::boost::remove_const<unsigned char volatile>::type...failed
+   expected type was unsigned char volatile
+   typeid(unsigned char volatile) was: unsigned char
+   typeid(::boost::remove_const<unsigned char volatile>::type) was: unsigned char
+   In template class type_checker<volatile unsigned char,unsigned char>
+checking type of ::boost::remove_const<short volatile>::type...failed
+   expected type was short volatile
+   typeid(short volatile) was: short
+   typeid(::boost::remove_const<short volatile>::type) was: short
+   In template class type_checker<volatile short,short>
+checking type of ::boost::remove_const<unsigned short volatile>::type...failed
+   expected type was unsigned short volatile
+   typeid(unsigned short volatile) was: unsigned short
+   typeid(::boost::remove_const<unsigned short volatile>::type) was: unsigned short
+   In template class type_checker<volatile unsigned short,unsigned short>
+checking type of ::boost::remove_const<int volatile>::type...failed
+   expected type was int volatile
+   typeid(int volatile) was: int
+   typeid(::boost::remove_const<int volatile>::type) was: int
    In template class type_checker<volatile int,int>
-checking type of boost::remove_const<const volatile int>::type...failed
-   expected type was volatile int
-   typeid(volatile int) was: int
-   typeid(boost::remove_const<const volatile int>::type) was: int
+checking type of ::boost::remove_const<unsigned int volatile>::type...failed
+   expected type was unsigned int volatile
+   typeid(unsigned int volatile) was: unsigned int
+   typeid(::boost::remove_const<unsigned int volatile>::type) was: unsigned int
+   In template class type_checker<volatile unsigned int,unsigned int>
+checking type of ::boost::remove_const<long volatile>::type...failed
+   expected type was long volatile
+   typeid(long volatile) was: long
+   typeid(::boost::remove_const<long volatile>::type) was: long
+   In template class type_checker<volatile long,long>
+checking type of ::boost::remove_const<unsigned long volatile>::type...failed
+   expected type was unsigned long volatile
+   typeid(unsigned long volatile) was: unsigned long
+   typeid(::boost::remove_const<unsigned long volatile>::type) was: unsigned long
+   In template class type_checker<volatile unsigned long,unsigned long>
+checking type of ::boost::remove_const<float volatile>::type...failed
+   expected type was float volatile
+   typeid(float volatile) was: float
+   typeid(::boost::remove_const<float volatile>::type) was: float
+   In template class type_checker<volatile float,float>
+checking type of ::boost::remove_const<long double volatile>::type...failed
+   expected type was long double volatile
+   typeid(long double volatile) was: long double
+   typeid(::boost::remove_const<long double volatile>::type) was: long double
+   In template class type_checker<volatile long double,long double>
+checking type of ::boost::remove_const<double volatile>::type...failed
+   expected type was double volatile
+   typeid(double volatile) was: double
+   typeid(::boost::remove_const<double volatile>::type) was: double
+   In template class type_checker<volatile double,double>
+checking type of ::boost::remove_const<UDT volatile>::type...failed
+   expected type was UDT volatile
+   typeid(UDT volatile) was: UDT
+   typeid(::boost::remove_const<UDT volatile>::type) was: UDT
+   In template class type_checker<volatile UDT,UDT>
+checking type of ::boost::remove_const<enum1 volatile>::type...failed
+   expected type was enum1 volatile
+   typeid(enum1 volatile) was: enum1
+   typeid(::boost::remove_const<enum1 volatile>::type) was: enum1
+   In template class type_checker<volatile enum1,enum1>
+checking type of ::boost::remove_const<bool const volatile>::type...failed
+   expected type was bool volatile
+   typeid(bool volatile) was: bool
+   typeid(::boost::remove_const<bool const volatile>::type) was: bool
+   In template class type_checker<volatile bool,bool>
+checking type of ::boost::remove_const<char const volatile>::type...failed
+   expected type was char volatile
+   typeid(char volatile) was: char
+   typeid(::boost::remove_const<char const volatile>::type) was: char
+   In template class type_checker<volatile char,char>
+checking type of ::boost::remove_const<wchar_t const volatile>::type...failed
+   expected type was wchar_t volatile
+   typeid(wchar_t volatile) was: wchar_t
+   typeid(::boost::remove_const<wchar_t const volatile>::type) was: wchar_t
+   In template class type_checker<volatile wchar_t,wchar_t>
+checking type of ::boost::remove_const<signed char const volatile>::type...failed
+   expected type was signed char volatile
+   typeid(signed char volatile) was: signed char
+   typeid(::boost::remove_const<signed char const volatile>::type) was: signed char
+   In template class type_checker<volatile signed char,signed char>
+checking type of ::boost::remove_const<unsigned char const volatile>::type...failed
+   expected type was unsigned char volatile
+   typeid(unsigned char volatile) was: unsigned char
+   typeid(::boost::remove_const<unsigned char const volatile>::type) was: unsigned char
+   In template class type_checker<volatile unsigned char,unsigned char>
+checking type of ::boost::remove_const<short const volatile>::type...failed
+   expected type was short volatile
+   typeid(short volatile) was: short
+   typeid(::boost::remove_const<short const volatile>::type) was: short
+   In template class type_checker<volatile short,short>
+checking type of ::boost::remove_const<unsigned short const volatile>::type...failed
+   expected type was unsigned short volatile
+   typeid(unsigned short volatile) was: unsigned short
+   typeid(::boost::remove_const<unsigned short const volatile>::type) was: unsigned short
+   In template class type_checker<volatile unsigned short,unsigned short>
+checking type of ::boost::remove_const<int const volatile>::type...failed
+   expected type was int volatile
+   typeid(int volatile) was: int
+   typeid(::boost::remove_const<int const volatile>::type) was: int
    In template class type_checker<volatile int,int>
-checking type of boost::remove_volatile<const int>::type...failed
-   expected type was const int
-   typeid(const int) was: int
-   typeid(boost::remove_volatile<const int>::type) was: int
+checking type of ::boost::remove_const<unsigned int const volatile>::type...failed
+   expected type was unsigned int volatile
+   typeid(unsigned int volatile) was: unsigned int
+   typeid(::boost::remove_const<unsigned int const volatile>::type) was: unsigned int
+   In template class type_checker<volatile unsigned int,unsigned int>
+checking type of ::boost::remove_const<long const volatile>::type...failed
+   expected type was long volatile
+   typeid(long volatile) was: long
+   typeid(::boost::remove_const<long const volatile>::type) was: long
+   In template class type_checker<volatile long,long>
+checking type of ::boost::remove_const<unsigned long const volatile>::type...failed
+   expected type was unsigned long volatile
+   typeid(unsigned long volatile) was: unsigned long
+   typeid(::boost::remove_const<unsigned long const volatile>::type) was: unsigned long
+   In template class type_checker<volatile unsigned long,unsigned long>
+checking type of ::boost::remove_const<float const volatile>::type...failed
+   expected type was float volatile
+   typeid(float volatile) was: float
+   typeid(::boost::remove_const<float const volatile>::type) was: float
+   In template class type_checker<volatile float,float>
+checking type of ::boost::remove_const<long double const volatile>::type...failed
+   expected type was long double volatile
+   typeid(long double volatile) was: long double
+   typeid(::boost::remove_const<long double const volatile>::type) was: long double
+   In template class type_checker<volatile long double,long double>
+checking type of ::boost::remove_const<double const volatile>::type...failed
+   expected type was double volatile
+   typeid(double volatile) was: double
+   typeid(::boost::remove_const<double const volatile>::type) was: double
+   In template class type_checker<volatile double,double>
+checking type of ::boost::remove_const<UDT const volatile>::type...failed
+   expected type was UDT volatile
+   typeid(UDT volatile) was: UDT
+   typeid(::boost::remove_const<UDT const volatile>::type) was: UDT
+   In template class type_checker<volatile UDT,UDT>
+checking type of ::boost::remove_const<enum1 const volatile>::type...failed
+   expected type was enum1 volatile
+   typeid(enum1 volatile) was: enum1
+   typeid(::boost::remove_const<enum1 const volatile>::type) was: enum1
+   In template class type_checker<volatile enum1,enum1>
+checking type of ::boost::remove_const<bool *volatile>::type...failed
+   expected type was bool *volatile
+   typeid(bool *volatile) was: bool *
+   typeid(::boost::remove_const<bool *volatile>::type) was: bool *
+   In template class type_checker<bool * volatile,bool *>
+checking type of ::boost::remove_const<char *volatile>::type...failed
+   expected type was char *volatile
+   typeid(char *volatile) was: char *
+   typeid(::boost::remove_const<char *volatile>::type) was: char *
+   In template class type_checker<char * volatile,char *>
+checking type of ::boost::remove_const<wchar_t *volatile>::type...failed
+   expected type was wchar_t *volatile
+   typeid(wchar_t *volatile) was: wchar_t *
+   typeid(::boost::remove_const<wchar_t *volatile>::type) was: wchar_t *
+   In template class type_checker<wchar_t * volatile,wchar_t *>
+checking type of ::boost::remove_const<signed char *volatile>::type...failed
+   expected type was signed char *volatile
+   typeid(signed char *volatile) was: signed char *
+   typeid(::boost::remove_const<signed char *volatile>::type) was: signed char *
+   In template class type_checker<signed char * volatile,signed char *>
+checking type of ::boost::remove_const<unsigned char *volatile>::type...failed
+   expected type was unsigned char *volatile
+   typeid(unsigned char *volatile) was: unsigned char *
+   typeid(::boost::remove_const<unsigned char *volatile>::type) was: unsigned char *
+   In template class type_checker<unsigned char * volatile,unsigned char *>
+checking type of ::boost::remove_const<short *volatile>::type...failed
+   expected type was short *volatile
+   typeid(short *volatile) was: short *
+   typeid(::boost::remove_const<short *volatile>::type) was: short *
+   In template class type_checker<short * volatile,short *>
+checking type of ::boost::remove_const<unsigned short *volatile>::type...failed
+   expected type was unsigned short *volatile
+   typeid(unsigned short *volatile) was: unsigned short *
+   typeid(::boost::remove_const<unsigned short *volatile>::type) was: unsigned short *
+   In template class type_checker<unsigned short * volatile,unsigned short *>
+checking type of ::boost::remove_const<int *volatile>::type...failed
+   expected type was int *volatile
+   typeid(int *volatile) was: int *
+   typeid(::boost::remove_const<int *volatile>::type) was: int *
+   In template class type_checker<int * volatile,int *>
+checking type of ::boost::remove_const<unsigned int *volatile>::type...failed
+   expected type was unsigned int *volatile
+   typeid(unsigned int *volatile) was: unsigned int *
+   typeid(::boost::remove_const<unsigned int *volatile>::type) was: unsigned int *
+   In template class type_checker<unsigned int * volatile,unsigned int *>
+checking type of ::boost::remove_const<long *volatile>::type...failed
+   expected type was long *volatile
+   typeid(long *volatile) was: long *
+   typeid(::boost::remove_const<long *volatile>::type) was: long *
+   In template class type_checker<long * volatile,long *>
+checking type of ::boost::remove_const<unsigned long *volatile>::type...failed
+   expected type was unsigned long *volatile
+   typeid(unsigned long *volatile) was: unsigned long *
+   typeid(::boost::remove_const<unsigned long *volatile>::type) was: unsigned long *
+   In template class type_checker<unsigned long * volatile,unsigned long *>
+checking type of ::boost::remove_const<float *volatile>::type...failed
+   expected type was float *volatile
+   typeid(float *volatile) was: float *
+   typeid(::boost::remove_const<float *volatile>::type) was: float *
+   In template class type_checker<float * volatile,float *>
+checking type of ::boost::remove_const<long double *volatile>::type...failed
+   expected type was long double *volatile
+   typeid(long double *volatile) was: long double *
+   typeid(::boost::remove_const<long double *volatile>::type) was: long double *
+   In template class type_checker<long double * volatile,long double *>
+checking type of ::boost::remove_const<double *volatile>::type...failed
+   expected type was double *volatile
+   typeid(double *volatile) was: double *
+   typeid(::boost::remove_const<double *volatile>::type) was: double *
+   In template class type_checker<double * volatile,double *>
+checking type of ::boost::remove_const<UDT *volatile>::type...failed
+   expected type was UDT *volatile
+   typeid(UDT *volatile) was: UDT *
+   typeid(::boost::remove_const<UDT *volatile>::type) was: UDT *
+   In template class type_checker<UDT * volatile,UDT *>
+checking type of ::boost::remove_const<enum1 *volatile>::type...failed
+   expected type was enum1 *volatile
+   typeid(enum1 *volatile) was: enum1 *
+   typeid(::boost::remove_const<enum1 *volatile>::type) was: enum1 *
+   In template class type_checker<enum1 * volatile,enum1 *>
+checking type of ::boost::remove_const<bool *const volatile>::type...failed
+   expected type was bool *volatile
+   typeid(bool *volatile) was: bool *
+   typeid(::boost::remove_const<bool *const volatile>::type) was: bool *
+   In template class type_checker<bool * volatile,bool *>
+checking type of ::boost::remove_const<char *const volatile>::type...failed
+   expected type was char *volatile
+   typeid(char *volatile) was: char *
+   typeid(::boost::remove_const<char *const volatile>::type) was: char *
+   In template class type_checker<char * volatile,char *>
+checking type of ::boost::remove_const<wchar_t *const volatile>::type...failed
+   expected type was wchar_t *volatile
+   typeid(wchar_t *volatile) was: wchar_t *
+   typeid(::boost::remove_const<wchar_t *const volatile>::type) was: wchar_t *
+   In template class type_checker<wchar_t * volatile,wchar_t *>
+checking type of ::boost::remove_const<signed char *const volatile>::type...failed
+   expected type was signed char *volatile
+   typeid(signed char *volatile) was: signed char *
+   typeid(::boost::remove_const<signed char *const volatile>::type) was: signed char *
+   In template class type_checker<signed char * volatile,signed char *>
+checking type of ::boost::remove_const<unsigned char *const volatile>::type...failed
+   expected type was unsigned char *volatile
+   typeid(unsigned char *volatile) was: unsigned char *
+   typeid(::boost::remove_const<unsigned char *const volatile>::type) was: unsigned char *
+   In template class type_checker<unsigned char * volatile,unsigned char *>
+checking type of ::boost::remove_const<short *const volatile>::type...failed
+   expected type was short *volatile
+   typeid(short *volatile) was: short *
+   typeid(::boost::remove_const<short *const volatile>::type) was: short *
+   In template class type_checker<short * volatile,short *>
+checking type of ::boost::remove_const<unsigned short *const volatile>::type...failed
+   expected type was unsigned short *volatile
+   typeid(unsigned short *volatile) was: unsigned short *
+   typeid(::boost::remove_const<unsigned short *const volatile>::type) was: unsigned short *
+   In template class type_checker<unsigned short * volatile,unsigned short *>
+checking type of ::boost::remove_const<int *const volatile>::type...failed
+   expected type was int *volatile
+   typeid(int *volatile) was: int *
+   typeid(::boost::remove_const<int *const volatile>::type) was: int *
+   In template class type_checker<int * volatile,int *>
+checking type of ::boost::remove_const<unsigned int *const volatile>::type...failed
+   expected type was unsigned int *volatile
+   typeid(unsigned int *volatile) was: unsigned int *
+   typeid(::boost::remove_const<unsigned int *const volatile>::type) was: unsigned int *
+   In template class type_checker<unsigned int * volatile,unsigned int *>
+checking type of ::boost::remove_const<long *const volatile>::type...failed
+   expected type was long *volatile
+   typeid(long *volatile) was: long *
+   typeid(::boost::remove_const<long *const volatile>::type) was: long *
+   In template class type_checker<long * volatile,long *>
+checking type of ::boost::remove_const<unsigned long *const volatile>::type...failed
+   expected type was unsigned long *volatile
+   typeid(unsigned long *volatile) was: unsigned long *
+   typeid(::boost::remove_const<unsigned long *const volatile>::type) was: unsigned long *
+   In template class type_checker<unsigned long * volatile,unsigned long *>
+checking type of ::boost::remove_const<float *const volatile>::type...failed
+   expected type was float *volatile
+   typeid(float *volatile) was: float *
+   typeid(::boost::remove_const<float *const volatile>::type) was: float *
+   In template class type_checker<float * volatile,float *>
+checking type of ::boost::remove_const<long double *const volatile>::type...failed
+   expected type was long double *volatile
+   typeid(long double *volatile) was: long double *
+   typeid(::boost::remove_const<long double *const volatile>::type) was: long double *
+   In template class type_checker<long double * volatile,long double *>
+checking type of ::boost::remove_const<double *const volatile>::type...failed
+   expected type was double *volatile
+   typeid(double *volatile) was: double *
+   typeid(::boost::remove_const<double *const volatile>::type) was: double *
+   In template class type_checker<double * volatile,double *>
+checking type of ::boost::remove_const<UDT *const volatile>::type...failed
+   expected type was UDT *volatile
+   typeid(UDT *volatile) was: UDT *
+   typeid(::boost::remove_const<UDT *const volatile>::type) was: UDT *
+   In template class type_checker<UDT * volatile,UDT *>
+checking type of ::boost::remove_const<enum1 *const volatile>::type...failed
+   expected type was enum1 *volatile
+   typeid(enum1 *volatile) was: enum1 *
+   typeid(::boost::remove_const<enum1 *const volatile>::type) was: enum1 *
+   In template class type_checker<enum1 * volatile,enum1 *>
+checking type of ::boost::remove_const<bool volatile[2]>::type...failed
+   expected type was bool volatile[2]
+   typeid(bool volatile[2]) was: bool[2]
+   typeid(::boost::remove_const<bool volatile[2]>::type) was: bool[2]
+   In template class type_checker<bool volatile[2],bool[2]>
+checking type of ::boost::remove_const<char volatile[2]>::type...failed
+   expected type was char volatile[2]
+   typeid(char volatile[2]) was: char[2]
+   typeid(::boost::remove_const<char volatile[2]>::type) was: char[2]
+   In template class type_checker<char volatile[2],char[2]>
+checking type of ::boost::remove_const<wchar_t volatile[2]>::type...failed
+   expected type was wchar_t volatile[2]
+   typeid(wchar_t volatile[2]) was: wchar_t[2]
+   typeid(::boost::remove_const<wchar_t volatile[2]>::type) was: wchar_t[2]
+   In template class type_checker<wchar_t volatile[2],wchar_t[2]>
+checking type of ::boost::remove_const<signed char volatile[2]>::type...failed
+   expected type was signed char volatile[2]
+   typeid(signed char volatile[2]) was: signed char[2]
+   typeid(::boost::remove_const<signed char volatile[2]>::type) was: signed char[2]
+   In template class type_checker<signed char volatile[2],signed char[2]>
+checking type of ::boost::remove_const<unsigned char volatile[2]>::type...failed
+   expected type was unsigned char volatile[2]
+   typeid(unsigned char volatile[2]) was: unsigned char[2]
+   typeid(::boost::remove_const<unsigned char volatile[2]>::type) was: unsigned char[2]
+   In template class type_checker<unsigned char volatile[2],unsigned char[2]>
+checking type of ::boost::remove_const<short volatile[2]>::type...failed
+   expected type was short volatile[2]
+   typeid(short volatile[2]) was: short[2]
+   typeid(::boost::remove_const<short volatile[2]>::type) was: short[2]
+   In template class type_checker<short volatile[2],short[2]>
+checking type of ::boost::remove_const<unsigned short volatile[2]>::type...failed
+   expected type was unsigned short volatile[2]
+   typeid(unsigned short volatile[2]) was: unsigned short[2]
+   typeid(::boost::remove_const<unsigned short volatile[2]>::type) was: unsigned short[2]
+   In template class type_checker<unsigned short volatile[2],unsigned short[2]>
+checking type of ::boost::remove_const<int volatile[2]>::type...failed
+   expected type was int volatile[2]
+   typeid(int volatile[2]) was: int[2]
+   typeid(::boost::remove_const<int volatile[2]>::type) was: int[2]
+   In template class type_checker<int volatile[2],int[2]>
+checking type of ::boost::remove_const<unsigned int volatile[2]>::type...failed
+   expected type was unsigned int volatile[2]
+   typeid(unsigned int volatile[2]) was: unsigned int[2]
+   typeid(::boost::remove_const<unsigned int volatile[2]>::type) was: unsigned int[2]
+   In template class type_checker<unsigned int volatile[2],unsigned int[2]>
+checking type of ::boost::remove_const<long volatile[2]>::type...failed
+   expected type was long volatile[2]
+   typeid(long volatile[2]) was: long[2]
+   typeid(::boost::remove_const<long volatile[2]>::type) was: long[2]
+   In template class type_checker<long volatile[2],long[2]>
+checking type of ::boost::remove_const<unsigned long volatile[2]>::type...failed
+   expected type was unsigned long volatile[2]
+   typeid(unsigned long volatile[2]) was: unsigned long[2]
+   typeid(::boost::remove_const<unsigned long volatile[2]>::type) was: unsigned long[2]
+   In template class type_checker<unsigned long volatile[2],unsigned long[2]>
+checking type of ::boost::remove_const<float volatile[2]>::type...failed
+   expected type was float volatile[2]
+   typeid(float volatile[2]) was: float[2]
+   typeid(::boost::remove_const<float volatile[2]>::type) was: float[2]
+   In template class type_checker<float volatile[2],float[2]>
+checking type of ::boost::remove_const<long double volatile[2]>::type...failed
+   expected type was long double volatile[2]
+   typeid(long double volatile[2]) was: long double[2]
+   typeid(::boost::remove_const<long double volatile[2]>::type) was: long double[2]
+   In template class type_checker<long double volatile[2],long double[2]>
+checking type of ::boost::remove_const<double volatile[2]>::type...failed
+   expected type was double volatile[2]
+   typeid(double volatile[2]) was: double[2]
+   typeid(::boost::remove_const<double volatile[2]>::type) was: double[2]
+   In template class type_checker<double volatile[2],double[2]>
+checking type of ::boost::remove_const<UDT volatile[2]>::type...failed
+   expected type was UDT volatile[2]
+   typeid(UDT volatile[2]) was: UDT[2]
+   typeid(::boost::remove_const<UDT volatile[2]>::type) was: UDT[2]
+   In template class type_checker<UDT volatile[2],UDT[2]>
+checking type of ::boost::remove_const<enum1 volatile[2]>::type...failed
+   expected type was enum1 volatile[2]
+   typeid(enum1 volatile[2]) was: enum1[2]
+   typeid(::boost::remove_const<enum1 volatile[2]>::type) was: enum1[2]
+   In template class type_checker<enum1 volatile[2],enum1[2]>
+checking type of ::boost::remove_const<bool const volatile[2]>::type...failed
+   expected type was bool volatile[2]
+   typeid(bool volatile[2]) was: bool[2]
+   typeid(::boost::remove_const<bool const volatile[2]>::type) was: bool[2]
+   In template class type_checker<bool volatile[2],bool[2]>
+checking type of ::boost::remove_const<char const volatile[2]>::type...failed
+   expected type was char volatile[2]
+   typeid(char volatile[2]) was: char[2]
+   typeid(::boost::remove_const<char const volatile[2]>::type) was: char[2]
+   In template class type_checker<char volatile[2],char[2]>
+checking type of ::boost::remove_const<wchar_t const volatile[2]>::type...failed
+   expected type was wchar_t volatile[2]
+   typeid(wchar_t volatile[2]) was: wchar_t[2]
+   typeid(::boost::remove_const<wchar_t const volatile[2]>::type) was: wchar_t[2]
+   In template class type_checker<wchar_t volatile[2],wchar_t[2]>
+checking type of ::boost::remove_const<signed char const volatile[2]>::type...failed
+   expected type was signed char volatile[2]
+   typeid(signed char volatile[2]) was: signed char[2]
+   typeid(::boost::remove_const<signed char const volatile[2]>::type) was: signed char[2]
+   In template class type_checker<signed char volatile[2],signed char[2]>
+checking type of ::boost::remove_const<unsigned char const volatile[2]>::type...failed
+   expected type was unsigned char volatile[2]
+   typeid(unsigned char volatile[2]) was: unsigned char[2]
+   typeid(::boost::remove_const<unsigned char const volatile[2]>::type) was: unsigned char[2]
+   In template class type_checker<unsigned char volatile[2],unsigned char[2]>
+checking type of ::boost::remove_const<short const volatile[2]>::type...failed
+   expected type was short volatile[2]
+   typeid(short volatile[2]) was: short[2]
+   typeid(::boost::remove_const<short const volatile[2]>::type) was: short[2]
+   In template class type_checker<short volatile[2],short[2]>
+checking type of ::boost::remove_const<unsigned short const volatile[2]>::type...failed
+   expected type was unsigned short volatile[2]
+   typeid(unsigned short volatile[2]) was: unsigned short[2]
+   typeid(::boost::remove_const<unsigned short const volatile[2]>::type) was: unsigned short[2]
+   In template class type_checker<unsigned short volatile[2],unsigned short[2]>
+checking type of ::boost::remove_const<int const volatile[2]>::type...failed
+   expected type was int volatile[2]
+   typeid(int volatile[2]) was: int[2]
+   typeid(::boost::remove_const<int const volatile[2]>::type) was: int[2]
+   In template class type_checker<int volatile[2],int[2]>
+checking type of ::boost::remove_const<unsigned int const volatile[2]>::type...failed
+   expected type was unsigned int volatile[2]
+   typeid(unsigned int volatile[2]) was: unsigned int[2]
+   typeid(::boost::remove_const<unsigned int const volatile[2]>::type) was: unsigned int[2]
+   In template class type_checker<unsigned int volatile[2],unsigned int[2]>
+checking type of ::boost::remove_const<long const volatile[2]>::type...failed
+   expected type was long volatile[2]
+   typeid(long volatile[2]) was: long[2]
+   typeid(::boost::remove_const<long const volatile[2]>::type) was: long[2]
+   In template class type_checker<long volatile[2],long[2]>
+checking type of ::boost::remove_const<unsigned long const volatile[2]>::type...failed
+   expected type was unsigned long volatile[2]
+   typeid(unsigned long volatile[2]) was: unsigned long[2]
+   typeid(::boost::remove_const<unsigned long const volatile[2]>::type) was: unsigned long[2]
+   In template class type_checker<unsigned long volatile[2],unsigned long[2]>
+checking type of ::boost::remove_const<float const volatile[2]>::type...failed
+   expected type was float volatile[2]
+   typeid(float volatile[2]) was: float[2]
+   typeid(::boost::remove_const<float const volatile[2]>::type) was: float[2]
+   In template class type_checker<float volatile[2],float[2]>
+checking type of ::boost::remove_const<long double const volatile[2]>::type...failed
+   expected type was long double volatile[2]
+   typeid(long double volatile[2]) was: long double[2]
+   typeid(::boost::remove_const<long double const volatile[2]>::type) was: long double[2]
+   In template class type_checker<long double volatile[2],long double[2]>
+checking type of ::boost::remove_const<double const volatile[2]>::type...failed
+   expected type was double volatile[2]
+   typeid(double volatile[2]) was: double[2]
+   typeid(::boost::remove_const<double const volatile[2]>::type) was: double[2]
+   In template class type_checker<double volatile[2],double[2]>
+checking type of ::boost::remove_const<UDT const volatile[2]>::type...failed
+   expected type was UDT volatile[2]
+   typeid(UDT volatile[2]) was: UDT[2]
+   typeid(::boost::remove_const<UDT const volatile[2]>::type) was: UDT[2]
+   In template class type_checker<UDT volatile[2],UDT[2]>
+checking type of ::boost::remove_const<enum1 const volatile[2]>::type...failed
+   expected type was enum1 volatile[2]
+   typeid(enum1 volatile[2]) was: enum1[2]
+   typeid(::boost::remove_const<enum1 const volatile[2]>::type) was: enum1[2]
+   In template class type_checker<enum1 volatile[2],enum1[2]>
+checking type of ::boost::remove_volatile<bool const>::type...failed
+   expected type was bool const
+   typeid(bool const) was: bool
+   typeid(::boost::remove_volatile<bool const>::type) was: bool
+   In template class type_checker<const bool,bool>
+checking type of ::boost::remove_volatile<char const>::type...failed
+   expected type was char const
+   typeid(char const) was: char
+   typeid(::boost::remove_volatile<char const>::type) was: char
+   In template class type_checker<const char,char>
+checking type of ::boost::remove_volatile<wchar_t const>::type...failed
+   expected type was wchar_t const
+   typeid(wchar_t const) was: wchar_t
+   typeid(::boost::remove_volatile<wchar_t const>::type) was: wchar_t
+   In template class type_checker<const wchar_t,wchar_t>
+checking type of ::boost::remove_volatile<signed char const>::type...failed
+   expected type was signed char const
+   typeid(signed char const) was: signed char
+   typeid(::boost::remove_volatile<signed char const>::type) was: signed char
+   In template class type_checker<const signed char,signed char>
+checking type of ::boost::remove_volatile<unsigned char const>::type...failed
+   expected type was unsigned char const
+   typeid(unsigned char const) was: unsigned char
+   typeid(::boost::remove_volatile<unsigned char const>::type) was: unsigned char
+   In template class type_checker<const unsigned char,unsigned char>
+checking type of ::boost::remove_volatile<short const>::type...failed
+   expected type was short const
+   typeid(short const) was: short
+   typeid(::boost::remove_volatile<short const>::type) was: short
+   In template class type_checker<const short,short>
+checking type of ::boost::remove_volatile<unsigned short const>::type...failed
+   expected type was unsigned short const
+   typeid(unsigned short const) was: unsigned short
+   typeid(::boost::remove_volatile<unsigned short const>::type) was: unsigned short
+   In template class type_checker<const unsigned short,unsigned short>
+checking type of ::boost::remove_volatile<int const>::type...failed
+   expected type was int const
+   typeid(int const) was: int
+   typeid(::boost::remove_volatile<int const>::type) was: int
    In template class type_checker<const int,int>
-checking type of boost::remove_volatile<const volatile int>::type...failed
-   expected type was const int
-   typeid(const int) was: int
-   typeid(boost::remove_volatile<const volatile int>::type) was: int
+checking type of ::boost::remove_volatile<unsigned int const>::type...failed
+   expected type was unsigned int const
+   typeid(unsigned int const) was: unsigned int
+   typeid(::boost::remove_volatile<unsigned int const>::type) was: unsigned int
+   In template class type_checker<const unsigned int,unsigned int>
+checking type of ::boost::remove_volatile<long const>::type...failed
+   expected type was long const
+   typeid(long const) was: long
+   typeid(::boost::remove_volatile<long const>::type) was: long
+   In template class type_checker<const long,long>
+checking type of ::boost::remove_volatile<unsigned long const>::type...failed
+   expected type was unsigned long const
+   typeid(unsigned long const) was: unsigned long
+   typeid(::boost::remove_volatile<unsigned long const>::type) was: unsigned long
+   In template class type_checker<const unsigned long,unsigned long>
+checking type of ::boost::remove_volatile<float const>::type...failed
+   expected type was float const
+   typeid(float const) was: float
+   typeid(::boost::remove_volatile<float const>::type) was: float
+   In template class type_checker<const float,float>
+checking type of ::boost::remove_volatile<long double const>::type...failed
+   expected type was long double const
+   typeid(long double const) was: long double
+   typeid(::boost::remove_volatile<long double const>::type) was: long double
+   In template class type_checker<const long double,long double>
+checking type of ::boost::remove_volatile<double const>::type...failed
+   expected type was double const
+   typeid(double const) was: double
+   typeid(::boost::remove_volatile<double const>::type) was: double
+   In template class type_checker<const double,double>
+checking type of ::boost::remove_volatile<UDT const>::type...failed
+   expected type was UDT const
+   typeid(UDT const) was: UDT
+   typeid(::boost::remove_volatile<UDT const>::type) was: UDT
+   In template class type_checker<const UDT,UDT>
+checking type of ::boost::remove_volatile<enum1 const>::type...failed
+   expected type was enum1 const
+   typeid(enum1 const) was: enum1
+   typeid(::boost::remove_volatile<enum1 const>::type) was: enum1
+   In template class type_checker<const enum1,enum1>
+checking type of ::boost::remove_volatile<bool const volatile>::type...failed
+   expected type was bool const
+   typeid(bool const) was: bool
+   typeid(::boost::remove_volatile<bool const volatile>::type) was: bool
+   In template class type_checker<const bool,bool>
+checking type of ::boost::remove_volatile<char const volatile>::type...failed
+   expected type was char const
+   typeid(char const) was: char
+   typeid(::boost::remove_volatile<char const volatile>::type) was: char
+   In template class type_checker<const char,char>
+checking type of ::boost::remove_volatile<wchar_t const volatile>::type...failed
+   expected type was wchar_t const
+   typeid(wchar_t const) was: wchar_t
+   typeid(::boost::remove_volatile<wchar_t const volatile>::type) was: wchar_t
+   In template class type_checker<const wchar_t,wchar_t>
+checking type of ::boost::remove_volatile<signed char const volatile>::type...failed
+   expected type was signed char const
+   typeid(signed char const) was: signed char
+   typeid(::boost::remove_volatile<signed char const volatile>::type) was: signed char
+   In template class type_checker<const signed char,signed char>
+checking type of ::boost::remove_volatile<unsigned char const volatile>::type...failed
+   expected type was unsigned char const
+   typeid(unsigned char const) was: unsigned char
+   typeid(::boost::remove_volatile<unsigned char const volatile>::type) was: unsigned char
+   In template class type_checker<const unsigned char,unsigned char>
+checking type of ::boost::remove_volatile<short const volatile>::type...failed
+   expected type was short const
+   typeid(short const) was: short
+   typeid(::boost::remove_volatile<short const volatile>::type) was: short
+   In template class type_checker<const short,short>
+checking type of ::boost::remove_volatile<unsigned short const volatile>::type...failed
+   expected type was unsigned short const
+   typeid(unsigned short const) was: unsigned short
+   typeid(::boost::remove_volatile<unsigned short const volatile>::type) was: unsigned short
+   In template class type_checker<const unsigned short,unsigned short>
+checking type of ::boost::remove_volatile<int const volatile>::type...failed
+   expected type was int const
+   typeid(int const) was: int
+   typeid(::boost::remove_volatile<int const volatile>::type) was: int
    In template class type_checker<const int,int>
-39 tests completed, 4 failures found, 4 failures expected from this compiler.
-Pass
+checking type of ::boost::remove_volatile<unsigned int const volatile>::type...failed
+   expected type was unsigned int const
+   typeid(unsigned int const) was: unsigned int
+   typeid(::boost::remove_volatile<unsigned int const volatile>::type) was: unsigned int
+   In template class type_checker<const unsigned int,unsigned int>
+checking type of ::boost::remove_volatile<long const volatile>::type...failed
+   expected type was long const
+   typeid(long const) was: long
+   typeid(::boost::remove_volatile<long const volatile>::type) was: long
+   In template class type_checker<const long,long>
+checking type of ::boost::remove_volatile<unsigned long const volatile>::type...failed
+   expected type was unsigned long const
+   typeid(unsigned long const) was: unsigned long
+   typeid(::boost::remove_volatile<unsigned long const volatile>::type) was: unsigned long
+   In template class type_checker<const unsigned long,unsigned long>
+checking type of ::boost::remove_volatile<float const volatile>::type...failed
+   expected type was float const
+   typeid(float const) was: float
+   typeid(::boost::remove_volatile<float const volatile>::type) was: float
+   In template class type_checker<const float,float>
+checking type of ::boost::remove_volatile<long double const volatile>::type...failed
+   expected type was long double const
+   typeid(long double const) was: long double
+   typeid(::boost::remove_volatile<long double const volatile>::type) was: long double
+   In template class type_checker<const long double,long double>
+checking type of ::boost::remove_volatile<double const volatile>::type...failed
+   expected type was double const
+   typeid(double const) was: double
+   typeid(::boost::remove_volatile<double const volatile>::type) was: double
+   In template class type_checker<const double,double>
+checking type of ::boost::remove_volatile<UDT const volatile>::type...failed
+   expected type was UDT const
+   typeid(UDT const) was: UDT
+   typeid(::boost::remove_volatile<UDT const volatile>::type) was: UDT
+   In template class type_checker<const UDT,UDT>
+checking type of ::boost::remove_volatile<enum1 const volatile>::type...failed
+   expected type was enum1 const
+   typeid(enum1 const) was: enum1
+   typeid(::boost::remove_volatile<enum1 const volatile>::type) was: enum1
+   In template class type_checker<const enum1,enum1>
+checking type of ::boost::remove_volatile<bool *const>::type...failed
+   expected type was bool *const
+   typeid(bool *const) was: bool *
+   typeid(::boost::remove_volatile<bool *const>::type) was: bool *
+   In template class type_checker<bool * const,bool *>
+checking type of ::boost::remove_volatile<char *const>::type...failed
+   expected type was char *const
+   typeid(char *const) was: char *
+   typeid(::boost::remove_volatile<char *const>::type) was: char *
+   In template class type_checker<char * const,char *>
+checking type of ::boost::remove_volatile<wchar_t *const>::type...failed
+   expected type was wchar_t *const
+   typeid(wchar_t *const) was: wchar_t *
+   typeid(::boost::remove_volatile<wchar_t *const>::type) was: wchar_t *
+   In template class type_checker<wchar_t * const,wchar_t *>
+checking type of ::boost::remove_volatile<signed char *const>::type...failed
+   expected type was signed char *const
+   typeid(signed char *const) was: signed char *
+   typeid(::boost::remove_volatile<signed char *const>::type) was: signed char *
+   In template class type_checker<signed char * const,signed char *>
+checking type of ::boost::remove_volatile<unsigned char *const>::type...failed
+   expected type was unsigned char *const
+   typeid(unsigned char *const) was: unsigned char *
+   typeid(::boost::remove_volatile<unsigned char *const>::type) was: unsigned char *
+   In template class type_checker<unsigned char * const,unsigned char *>
+checking type of ::boost::remove_volatile<short *const>::type...failed
+   expected type was short *const
+   typeid(short *const) was: short *
+   typeid(::boost::remove_volatile<short *const>::type) was: short *
+   In template class type_checker<short * const,short *>
+checking type of ::boost::remove_volatile<unsigned short *const>::type...failed
+   expected type was unsigned short *const
+   typeid(unsigned short *const) was: unsigned short *
+   typeid(::boost::remove_volatile<unsigned short *const>::type) was: unsigned short *
+   In template class type_checker<unsigned short * const,unsigned short *>
+checking type of ::boost::remove_volatile<int *const>::type...failed
+   expected type was int *const
+   typeid(int *const) was: int *
+   typeid(::boost::remove_volatile<int *const>::type) was: int *
+   In template class type_checker<int * const,int *>
+checking type of ::boost::remove_volatile<unsigned int *const>::type...failed
+   expected type was unsigned int *const
+   typeid(unsigned int *const) was: unsigned int *
+   typeid(::boost::remove_volatile<unsigned int *const>::type) was: unsigned int *
+   In template class type_checker<unsigned int * const,unsigned int *>
+checking type of ::boost::remove_volatile<long *const>::type...failed
+   expected type was long *const
+   typeid(long *const) was: long *
+   typeid(::boost::remove_volatile<long *const>::type) was: long *
+   In template class type_checker<long * const,long *>
+checking type of ::boost::remove_volatile<unsigned long *const>::type...failed
+   expected type was unsigned long *const
+   typeid(unsigned long *const) was: unsigned long *
+   typeid(::boost::remove_volatile<unsigned long *const>::type) was: unsigned long *
+   In template class type_checker<unsigned long * const,unsigned long *>
+checking type of ::boost::remove_volatile<float *const>::type...failed
+   expected type was float *const
+   typeid(float *const) was: float *
+   typeid(::boost::remove_volatile<float *const>::type) was: float *
+   In template class type_checker<float * const,float *>
+checking type of ::boost::remove_volatile<long double *const>::type...failed
+   expected type was long double *const
+   typeid(long double *const) was: long double *
+   typeid(::boost::remove_volatile<long double *const>::type) was: long double *
+   In template class type_checker<long double * const,long double *>
+checking type of ::boost::remove_volatile<double *const>::type...failed
+   expected type was double *const
+   typeid(double *const) was: double *
+   typeid(::boost::remove_volatile<double *const>::type) was: double *
+   In template class type_checker<double * const,double *>
+checking type of ::boost::remove_volatile<UDT *const>::type...failed
+   expected type was UDT *const
+   typeid(UDT *const) was: UDT *
+   typeid(::boost::remove_volatile<UDT *const>::type) was: UDT *
+   In template class type_checker<UDT * const,UDT *>
+checking type of ::boost::remove_volatile<enum1 *const>::type...failed
+   expected type was enum1 *const
+   typeid(enum1 *const) was: enum1 *
+   typeid(::boost::remove_volatile<enum1 *const>::type) was: enum1 *
+   In template class type_checker<enum1 * const,enum1 *>
+checking type of ::boost::remove_volatile<bool *const volatile>::type...failed
+   expected type was bool *const
+   typeid(bool *const) was: bool *
+   typeid(::boost::remove_volatile<bool *const volatile>::type) was: bool *
+   In template class type_checker<bool * const,bool *>
+checking type of ::boost::remove_volatile<char *const volatile>::type...failed
+   expected type was char *const
+   typeid(char *const) was: char *
+   typeid(::boost::remove_volatile<char *const volatile>::type) was: char *
+   In template class type_checker<char * const,char *>
+checking type of ::boost::remove_volatile<wchar_t *const volatile>::type...failed
+   expected type was wchar_t *const
+   typeid(wchar_t *const) was: wchar_t *
+   typeid(::boost::remove_volatile<wchar_t *const volatile>::type) was: wchar_t *
+   In template class type_checker<wchar_t * const,wchar_t *>
+checking type of ::boost::remove_volatile<signed char *const volatile>::type...failed
+   expected type was signed char *const
+   typeid(signed char *const) was: signed char *
+   typeid(::boost::remove_volatile<signed char *const volatile>::type) was: signed char *
+   In template class type_checker<signed char * const,signed char *>
+checking type of ::boost::remove_volatile<unsigned char *const volatile>::type...failed
+   expected type was unsigned char *const
+   typeid(unsigned char *const) was: unsigned char *
+   typeid(::boost::remove_volatile<unsigned char *const volatile>::type) was: unsigned char *
+   In template class type_checker<unsigned char * const,unsigned char *>
+checking type of ::boost::remove_volatile<short *const volatile>::type...failed
+   expected type was short *const
+   typeid(short *const) was: short *
+   typeid(::boost::remove_volatile<short *const volatile>::type) was: short *
+   In template class type_checker<short * const,short *>
+checking type of ::boost::remove_volatile<unsigned short *const volatile>::type...failed
+   expected type was unsigned short *const
+   typeid(unsigned short *const) was: unsigned short *
+   typeid(::boost::remove_volatile<unsigned short *const volatile>::type) was: unsigned short *
+   In template class type_checker<unsigned short * const,unsigned short *>
+checking type of ::boost::remove_volatile<int *const volatile>::type...failed
+   expected type was int *const
+   typeid(int *const) was: int *
+   typeid(::boost::remove_volatile<int *const volatile>::type) was: int *
+   In template class type_checker<int * const,int *>
+checking type of ::boost::remove_volatile<unsigned int *const volatile>::type...failed
+   expected type was unsigned int *const
+   typeid(unsigned int *const) was: unsigned int *
+   typeid(::boost::remove_volatile<unsigned int *const volatile>::type) was: unsigned int *
+   In template class type_checker<unsigned int * const,unsigned int *>
+checking type of ::boost::remove_volatile<long *const volatile>::type...failed
+   expected type was long *const
+   typeid(long *const) was: long *
+   typeid(::boost::remove_volatile<long *const volatile>::type) was: long *
+   In template class type_checker<long * const,long *>
+checking type of ::boost::remove_volatile<unsigned long *const volatile>::type...failed
+   expected type was unsigned long *const
+   typeid(unsigned long *const) was: unsigned long *
+   typeid(::boost::remove_volatile<unsigned long *const volatile>::type) was: unsigned long *
+   In template class type_checker<unsigned long * const,unsigned long *>
+checking type of ::boost::remove_volatile<float *const volatile>::type...failed
+   expected type was float *const
+   typeid(float *const) was: float *
+   typeid(::boost::remove_volatile<float *const volatile>::type) was: float *
+   In template class type_checker<float * const,float *>
+checking type of ::boost::remove_volatile<long double *const volatile>::type...failed
+   expected type was long double *const
+   typeid(long double *const) was: long double *
+   typeid(::boost::remove_volatile<long double *const volatile>::type) was: long double *
+   In template class type_checker<long double * const,long double *>
+checking type of ::boost::remove_volatile<double *const volatile>::type...failed
+   expected type was double *const
+   typeid(double *const) was: double *
+   typeid(::boost::remove_volatile<double *const volatile>::type) was: double *
+   In template class type_checker<double * const,double *>
+checking type of ::boost::remove_volatile<UDT *const volatile>::type...failed
+   expected type was UDT *const
+   typeid(UDT *const) was: UDT *
+   typeid(::boost::remove_volatile<UDT *const volatile>::type) was: UDT *
+   In template class type_checker<UDT * const,UDT *>
+checking type of ::boost::remove_volatile<enum1 *const volatile>::type...failed
+   expected type was enum1 *const
+   typeid(enum1 *const) was: enum1 *
+   typeid(::boost::remove_volatile<enum1 *const volatile>::type) was: enum1 *
+   In template class type_checker<enum1 * const,enum1 *>
+checking type of ::boost::remove_volatile<bool const[2]>::type...failed
+   expected type was bool const[2]
+   typeid(bool const[2]) was: bool[2]
+   typeid(::boost::remove_volatile<bool const[2]>::type) was: bool[2]
+   In template class type_checker<bool const[2],bool[2]>
+checking type of ::boost::remove_volatile<char const[2]>::type...failed
+   expected type was char const[2]
+   typeid(char const[2]) was: char[2]
+   typeid(::boost::remove_volatile<char const[2]>::type) was: char[2]
+   In template class type_checker<char const[2],char[2]>
+checking type of ::boost::remove_volatile<wchar_t const[2]>::type...failed
+   expected type was wchar_t const[2]
+   typeid(wchar_t const[2]) was: wchar_t[2]
+   typeid(::boost::remove_volatile<wchar_t const[2]>::type) was: wchar_t[2]
+   In template class type_checker<wchar_t const[2],wchar_t[2]>
+checking type of ::boost::remove_volatile<signed char const[2]>::type...failed
+   expected type was signed char const[2]
+   typeid(signed char const[2]) was: signed char[2]
+   typeid(::boost::remove_volatile<signed char const[2]>::type) was: signed char[2]
+   In template class type_checker<signed char const[2],signed char[2]>
+checking type of ::boost::remove_volatile<unsigned char const[2]>::type...failed
+   expected type was unsigned char const[2]
+   typeid(unsigned char const[2]) was: unsigned char[2]
+   typeid(::boost::remove_volatile<unsigned char const[2]>::type) was: unsigned char[2]
+   In template class type_checker<unsigned char const[2],unsigned char[2]>
+checking type of ::boost::remove_volatile<short const[2]>::type...failed
+   expected type was short const[2]
+   typeid(short const[2]) was: short[2]
+   typeid(::boost::remove_volatile<short const[2]>::type) was: short[2]
+   In template class type_checker<short const[2],short[2]>
+checking type of ::boost::remove_volatile<unsigned short const[2]>::type...failed
+   expected type was unsigned short const[2]
+   typeid(unsigned short const[2]) was: unsigned short[2]
+   typeid(::boost::remove_volatile<unsigned short const[2]>::type) was: unsigned short[2]
+   In template class type_checker<unsigned short const[2],unsigned short[2]>
+checking type of ::boost::remove_volatile<int const[2]>::type...failed
+   expected type was int const[2]
+   typeid(int const[2]) was: int[2]
+   typeid(::boost::remove_volatile<int const[2]>::type) was: int[2]
+   In template class type_checker<int const[2],int[2]>
+checking type of ::boost::remove_volatile<unsigned int const[2]>::type...failed
+   expected type was unsigned int const[2]
+   typeid(unsigned int const[2]) was: unsigned int[2]
+   typeid(::boost::remove_volatile<unsigned int const[2]>::type) was: unsigned int[2]
+   In template class type_checker<unsigned int const[2],unsigned int[2]>
+checking type of ::boost::remove_volatile<long const[2]>::type...failed
+   expected type was long const[2]
+   typeid(long const[2]) was: long[2]
+   typeid(::boost::remove_volatile<long const[2]>::type) was: long[2]
+   In template class type_checker<long const[2],long[2]>
+checking type of ::boost::remove_volatile<unsigned long const[2]>::type...failed
+   expected type was unsigned long const[2]
+   typeid(unsigned long const[2]) was: unsigned long[2]
+   typeid(::boost::remove_volatile<unsigned long const[2]>::type) was: unsigned long[2]
+   In template class type_checker<unsigned long const[2],unsigned long[2]>
+checking type of ::boost::remove_volatile<float const[2]>::type...failed
+   expected type was float const[2]
+   typeid(float const[2]) was: float[2]
+   typeid(::boost::remove_volatile<float const[2]>::type) was: float[2]
+   In template class type_checker<float const[2],float[2]>
+checking type of ::boost::remove_volatile<long double const[2]>::type...failed
+   expected type was long double const[2]
+   typeid(long double const[2]) was: long double[2]
+   typeid(::boost::remove_volatile<long double const[2]>::type) was: long double[2]
+   In template class type_checker<long double const[2],long double[2]>
+checking type of ::boost::remove_volatile<double const[2]>::type...failed
+   expected type was double const[2]
+   typeid(double const[2]) was: double[2]
+   typeid(::boost::remove_volatile<double const[2]>::type) was: double[2]
+   In template class type_checker<double const[2],double[2]>
+checking type of ::boost::remove_volatile<UDT const[2]>::type...failed
+   expected type was UDT const[2]
+   typeid(UDT const[2]) was: UDT[2]
+   typeid(::boost::remove_volatile<UDT const[2]>::type) was: UDT[2]
+   In template class type_checker<UDT const[2],UDT[2]>
+checking type of ::boost::remove_volatile<enum1 const[2]>::type...failed
+   expected type was enum1 const[2]
+   typeid(enum1 const[2]) was: enum1[2]
+   typeid(::boost::remove_volatile<enum1 const[2]>::type) was: enum1[2]
+   In template class type_checker<enum1 const[2],enum1[2]>
+checking type of ::boost::remove_volatile<bool const volatile[2]>::type...failed
+   expected type was bool const[2]
+   typeid(bool const[2]) was: bool[2]
+   typeid(::boost::remove_volatile<bool const volatile[2]>::type) was: bool[2]
+   In template class type_checker<bool const[2],bool[2]>
+checking type of ::boost::remove_volatile<char const volatile[2]>::type...failed
+   expected type was char const[2]
+   typeid(char const[2]) was: char[2]
+   typeid(::boost::remove_volatile<char const volatile[2]>::type) was: char[2]
+   In template class type_checker<char const[2],char[2]>
+checking type of ::boost::remove_volatile<wchar_t const volatile[2]>::type...failed
+   expected type was wchar_t const[2]
+   typeid(wchar_t const[2]) was: wchar_t[2]
+   typeid(::boost::remove_volatile<wchar_t const volatile[2]>::type) was: wchar_t[2]
+   In template class type_checker<wchar_t const[2],wchar_t[2]>
+checking type of ::boost::remove_volatile<signed char const volatile[2]>::type...failed
+   expected type was signed char const[2]
+   typeid(signed char const[2]) was: signed char[2]
+   typeid(::boost::remove_volatile<signed char const volatile[2]>::type) was: signed char[2]
+   In template class type_checker<signed char const[2],signed char[2]>
+checking type of ::boost::remove_volatile<unsigned char const volatile[2]>::type...failed
+   expected type was unsigned char const[2]
+   typeid(unsigned char const[2]) was: unsigned char[2]
+   typeid(::boost::remove_volatile<unsigned char const volatile[2]>::type) was: unsigned char[2]
+   In template class type_checker<unsigned char const[2],unsigned char[2]>
+checking type of ::boost::remove_volatile<short const volatile[2]>::type...failed
+   expected type was short const[2]
+   typeid(short const[2]) was: short[2]
+   typeid(::boost::remove_volatile<short const volatile[2]>::type) was: short[2]
+   In template class type_checker<short const[2],short[2]>
+checking type of ::boost::remove_volatile<unsigned short const volatile[2]>::type...failed
+   expected type was unsigned short const[2]
+   typeid(unsigned short const[2]) was: unsigned short[2]
+   typeid(::boost::remove_volatile<unsigned short const volatile[2]>::type) was: unsigned short[2]
+   In template class type_checker<unsigned short const[2],unsigned short[2]>
+checking type of ::boost::remove_volatile<int const volatile[2]>::type...failed
+   expected type was int const[2]
+   typeid(int const[2]) was: int[2]
+   typeid(::boost::remove_volatile<int const volatile[2]>::type) was: int[2]
+   In template class type_checker<int const[2],int[2]>
+checking type of ::boost::remove_volatile<unsigned int const volatile[2]>::type...failed
+   expected type was unsigned int const[2]
+   typeid(unsigned int const[2]) was: unsigned int[2]
+   typeid(::boost::remove_volatile<unsigned int const volatile[2]>::type) was: unsigned int[2]
+   In template class type_checker<unsigned int const[2],unsigned int[2]>
+checking type of ::boost::remove_volatile<long const volatile[2]>::type...failed
+   expected type was long const[2]
+   typeid(long const[2]) was: long[2]
+   typeid(::boost::remove_volatile<long const volatile[2]>::type) was: long[2]
+   In template class type_checker<long const[2],long[2]>
+checking type of ::boost::remove_volatile<unsigned long const volatile[2]>::type...failed
+   expected type was unsigned long const[2]
+   typeid(unsigned long const[2]) was: unsigned long[2]
+   typeid(::boost::remove_volatile<unsigned long const volatile[2]>::type) was: unsigned long[2]
+   In template class type_checker<unsigned long const[2],unsigned long[2]>
+checking type of ::boost::remove_volatile<float const volatile[2]>::type...failed
+   expected type was float const[2]
+   typeid(float const[2]) was: float[2]
+   typeid(::boost::remove_volatile<float const volatile[2]>::type) was: float[2]
+   In template class type_checker<float const[2],float[2]>
+checking type of ::boost::remove_volatile<long double const volatile[2]>::type...failed
+   expected type was long double const[2]
+   typeid(long double const[2]) was: long double[2]
+   typeid(::boost::remove_volatile<long double const volatile[2]>::type) was: long double[2]
+   In template class type_checker<long double const[2],long double[2]>
+checking type of ::boost::remove_volatile<double const volatile[2]>::type...failed
+   expected type was double const[2]
+   typeid(double const[2]) was: double[2]
+   typeid(::boost::remove_volatile<double const volatile[2]>::type) was: double[2]
+   In template class type_checker<double const[2],double[2]>
+checking type of ::boost::remove_volatile<UDT const volatile[2]>::type...failed
+   expected type was UDT const[2]
+   typeid(UDT const[2]) was: UDT[2]
+   typeid(::boost::remove_volatile<UDT const volatile[2]>::type) was: UDT[2]
+   In template class type_checker<UDT const[2],UDT[2]>
+checking type of ::boost::remove_volatile<enum1 const volatile[2]>::type...failed
+   expected type was enum1 const[2]
+   typeid(enum1 const[2]) was: enum1[2]
+   typeid(::boost::remove_volatile<enum1 const volatile[2]>::type) was: enum1[2]
+   In template class type_checker<enum1 const[2],enum1[2]>
+checking type of ::boost::remove_reference<UDT const>::type...failed
+   expected type was UDT const
+   typeid(UDT const) was: UDT
+   typeid(::boost::remove_reference<UDT const>::type) was: UDT
+   In template class type_checker<const UDT,UDT>
+checking type of ::boost::remove_reference<enum1 const>::type...failed
+   expected type was enum1 const
+   typeid(enum1 const) was: enum1
+   typeid(::boost::remove_reference<enum1 const>::type) was: enum1
+   In template class type_checker<const enum1,enum1>
+checking type of ::boost::remove_reference<UDT volatile>::type...failed
+   expected type was UDT volatile
+   typeid(UDT volatile) was: UDT
+   typeid(::boost::remove_reference<UDT volatile>::type) was: UDT
+   In template class type_checker<volatile UDT,UDT>
+checking type of ::boost::remove_reference<enum1 volatile>::type...failed
+   expected type was enum1 volatile
+   typeid(enum1 volatile) was: enum1
+   typeid(::boost::remove_reference<enum1 volatile>::type) was: enum1
+   In template class type_checker<volatile enum1,enum1>
+checking type of ::boost::remove_reference<UDT const &>::type...failed
+   expected type was UDT const
+   typeid(UDT const) was: UDT
+   typeid(::boost::remove_reference<UDT const &>::type) was: UDT
+   In template class type_checker<const UDT,UDT>
+checking type of ::boost::remove_reference<enum1 const &>::type...failed
+   expected type was enum1 const
+   typeid(enum1 const) was: enum1
+   typeid(::boost::remove_reference<enum1 const &>::type) was: enum1
+   In template class type_checker<const enum1,enum1>
+checking type of ::boost::remove_reference<bool *volatile>::type...failed
+   expected type was bool *volatile
+   typeid(bool *volatile) was: bool *
+   typeid(::boost::remove_reference<bool *volatile>::type) was: bool *
+   In template class type_checker<bool * volatile,bool *>
+checking type of ::boost::remove_reference<char *volatile>::type...failed
+   expected type was char *volatile
+   typeid(char *volatile) was: char *
+   typeid(::boost::remove_reference<char *volatile>::type) was: char *
+   In template class type_checker<char * volatile,char *>
+checking type of ::boost::remove_reference<wchar_t *volatile>::type...failed
+   expected type was wchar_t *volatile
+   typeid(wchar_t *volatile) was: wchar_t *
+   typeid(::boost::remove_reference<wchar_t *volatile>::type) was: wchar_t *
+   In template class type_checker<wchar_t * volatile,wchar_t *>
+checking type of ::boost::remove_reference<signed char *volatile>::type...failed
+   expected type was signed char *volatile
+   typeid(signed char *volatile) was: signed char *
+   typeid(::boost::remove_reference<signed char *volatile>::type) was: signed char *
+   In template class type_checker<signed char * volatile,signed char *>
+checking type of ::boost::remove_reference<unsigned char *volatile>::type...failed
+   expected type was unsigned char *volatile
+   typeid(unsigned char *volatile) was: unsigned char *
+   typeid(::boost::remove_reference<unsigned char *volatile>::type) was: unsigned char *
+   In template class type_checker<unsigned char * volatile,unsigned char *>
+checking type of ::boost::remove_reference<short *volatile>::type...failed
+   expected type was short *volatile
+   typeid(short *volatile) was: short *
+   typeid(::boost::remove_reference<short *volatile>::type) was: short *
+   In template class type_checker<short * volatile,short *>
+checking type of ::boost::remove_reference<unsigned short *volatile>::type...failed
+   expected type was unsigned short *volatile
+   typeid(unsigned short *volatile) was: unsigned short *
+   typeid(::boost::remove_reference<unsigned short *volatile>::type) was: unsigned short *
+   In template class type_checker<unsigned short * volatile,unsigned short *>
+checking type of ::boost::remove_reference<int *volatile>::type...failed
+   expected type was int *volatile
+   typeid(int *volatile) was: int *
+   typeid(::boost::remove_reference<int *volatile>::type) was: int *
+   In template class type_checker<int * volatile,int *>
+checking type of ::boost::remove_reference<unsigned int *volatile>::type...failed
+   expected type was unsigned int *volatile
+   typeid(unsigned int *volatile) was: unsigned int *
+   typeid(::boost::remove_reference<unsigned int *volatile>::type) was: unsigned int *
+   In template class type_checker<unsigned int * volatile,unsigned int *>
+checking type of ::boost::remove_reference<long *volatile>::type...failed
+   expected type was long *volatile
+   typeid(long *volatile) was: long *
+   typeid(::boost::remove_reference<long *volatile>::type) was: long *
+   In template class type_checker<long * volatile,long *>
+checking type of ::boost::remove_reference<unsigned long *volatile>::type...failed
+   expected type was unsigned long *volatile
+   typeid(unsigned long *volatile) was: unsigned long *
+   typeid(::boost::remove_reference<unsigned long *volatile>::type) was: unsigned long *
+   In template class type_checker<unsigned long * volatile,unsigned long *>
+checking type of ::boost::remove_reference<float *volatile>::type...failed
+   expected type was float *volatile
+   typeid(float *volatile) was: float *
+   typeid(::boost::remove_reference<float *volatile>::type) was: float *
+   In template class type_checker<float * volatile,float *>
+checking type of ::boost::remove_reference<long double *volatile>::type...failed
+   expected type was long double *volatile
+   typeid(long double *volatile) was: long double *
+   typeid(::boost::remove_reference<long double *volatile>::type) was: long double *
+   In template class type_checker<long double * volatile,long double *>
+checking type of ::boost::remove_reference<double *volatile>::type...failed
+   expected type was double *volatile
+   typeid(double *volatile) was: double *
+   typeid(::boost::remove_reference<double *volatile>::type) was: double *
+   In template class type_checker<double * volatile,double *>
+checking type of ::boost::remove_reference<UDT *volatile>::type...failed
+   expected type was UDT *volatile
+   typeid(UDT *volatile) was: UDT *
+   typeid(::boost::remove_reference<UDT *volatile>::type) was: UDT *
+   In template class type_checker<UDT * volatile,UDT *>
+checking type of ::boost::remove_reference<enum1 *volatile>::type...failed
+   expected type was enum1 *volatile
+   typeid(enum1 *volatile) was: enum1 *
+   typeid(::boost::remove_reference<enum1 *volatile>::type) was: enum1 *
+   In template class type_checker<enum1 * volatile,enum1 *>
+checking type of ::boost::remove_reference<UDT const &>::type...failed
+   expected type was UDT const
+   typeid(UDT const) was: UDT
+   typeid(::boost::remove_reference<UDT const &>::type) was: UDT
+   In template class type_checker<const UDT,UDT>
+checking type of ::boost::remove_reference<enum1 const &>::type...failed
+   expected type was enum1 const
+   typeid(enum1 const) was: enum1
+   typeid(::boost::remove_reference<enum1 const &>::type) was: enum1
+   In template class type_checker<const enum1,enum1>
+checking type of ::boost::remove_reference<bool const[2]>::type...failed
+   expected type was bool const[2]
+   typeid(bool const[2]) was: bool[2]
+   typeid(::boost::remove_reference<bool const[2]>::type) was: bool[2]
+   In template class type_checker<bool const[2],bool[2]>
+checking type of ::boost::remove_reference<char const[2]>::type...failed
+   expected type was char const[2]
+   typeid(char const[2]) was: char[2]
+   typeid(::boost::remove_reference<char const[2]>::type) was: char[2]
+   In template class type_checker<char const[2],char[2]>
+checking type of ::boost::remove_reference<wchar_t const[2]>::type...failed
+   expected type was wchar_t const[2]
+   typeid(wchar_t const[2]) was: wchar_t[2]
+   typeid(::boost::remove_reference<wchar_t const[2]>::type) was: wchar_t[2]
+   In template class type_checker<wchar_t const[2],wchar_t[2]>
+checking type of ::boost::remove_reference<signed char const[2]>::type...failed
+   expected type was signed char const[2]
+   typeid(signed char const[2]) was: signed char[2]
+   typeid(::boost::remove_reference<signed char const[2]>::type) was: signed char[2]
+   In template class type_checker<signed char const[2],signed char[2]>
+checking type of ::boost::remove_reference<unsigned char const[2]>::type...failed
+   expected type was unsigned char const[2]
+   typeid(unsigned char const[2]) was: unsigned char[2]
+   typeid(::boost::remove_reference<unsigned char const[2]>::type) was: unsigned char[2]
+   In template class type_checker<unsigned char const[2],unsigned char[2]>
+checking type of ::boost::remove_reference<short const[2]>::type...failed
+   expected type was short const[2]
+   typeid(short const[2]) was: short[2]
+   typeid(::boost::remove_reference<short const[2]>::type) was: short[2]
+   In template class type_checker<short const[2],short[2]>
+checking type of ::boost::remove_reference<unsigned short const[2]>::type...failed
+   expected type was unsigned short const[2]
+   typeid(unsigned short const[2]) was: unsigned short[2]
+   typeid(::boost::remove_reference<unsigned short const[2]>::type) was: unsigned short[2]
+   In template class type_checker<unsigned short const[2],unsigned short[2]>
+checking type of ::boost::remove_reference<int const[2]>::type...failed
+   expected type was int const[2]
+   typeid(int const[2]) was: int[2]
+   typeid(::boost::remove_reference<int const[2]>::type) was: int[2]
+   In template class type_checker<int const[2],int[2]>
+checking type of ::boost::remove_reference<unsigned int const[2]>::type...failed
+   expected type was unsigned int const[2]
+   typeid(unsigned int const[2]) was: unsigned int[2]
+   typeid(::boost::remove_reference<unsigned int const[2]>::type) was: unsigned int[2]
+   In template class type_checker<unsigned int const[2],unsigned int[2]>
+checking type of ::boost::remove_reference<long const[2]>::type...failed
+   expected type was long const[2]
+   typeid(long const[2]) was: long[2]
+   typeid(::boost::remove_reference<long const[2]>::type) was: long[2]
+   In template class type_checker<long const[2],long[2]>
+checking type of ::boost::remove_reference<unsigned long const[2]>::type...failed
+   expected type was unsigned long const[2]
+   typeid(unsigned long const[2]) was: unsigned long[2]
+   typeid(::boost::remove_reference<unsigned long const[2]>::type) was: unsigned long[2]
+   In template class type_checker<unsigned long const[2],unsigned long[2]>
+checking type of ::boost::remove_reference<float const[2]>::type...failed
+   expected type was float const[2]
+   typeid(float const[2]) was: float[2]
+   typeid(::boost::remove_reference<float const[2]>::type) was: float[2]
+   In template class type_checker<float const[2],float[2]>
+checking type of ::boost::remove_reference<long double const[2]>::type...failed
+   expected type was long double const[2]
+   typeid(long double const[2]) was: long double[2]
+   typeid(::boost::remove_reference<long double const[2]>::type) was: long double[2]
+   In template class type_checker<long double const[2],long double[2]>
+checking type of ::boost::remove_reference<double const[2]>::type...failed
+   expected type was double const[2]
+   typeid(double const[2]) was: double[2]
+   typeid(::boost::remove_reference<double const[2]>::type) was: double[2]
+   In template class type_checker<double const[2],double[2]>
+checking type of ::boost::remove_reference<UDT const[2]>::type...failed
+   expected type was UDT const[2]
+   typeid(UDT const[2]) was: UDT[2]
+   typeid(::boost::remove_reference<UDT const[2]>::type) was: UDT[2]
+   In template class type_checker<UDT const[2],UDT[2]>
+checking type of ::boost::remove_reference<enum1 const[2]>::type...failed
+   expected type was enum1 const[2]
+   typeid(enum1 const[2]) was: enum1[2]
+   typeid(::boost::remove_reference<enum1 const[2]>::type) was: enum1[2]
+   In template class type_checker<enum1 const[2],enum1[2]>
+checking type of ::boost::remove_bounds<UDT const>::type...failed
+   expected type was UDT const
+   typeid(UDT const) was: UDT
+   typeid(::boost::remove_bounds<UDT const>::type) was: UDT
+   In template class type_checker<const UDT,UDT>
+checking type of ::boost::remove_bounds<enum1 const>::type...failed
+   expected type was enum1 const
+   typeid(enum1 const) was: enum1
+   typeid(::boost::remove_bounds<enum1 const>::type) was: enum1
+   In template class type_checker<const enum1,enum1>
+checking type of ::boost::remove_bounds<UDT volatile>::type...failed
+   expected type was UDT volatile
+   typeid(UDT volatile) was: UDT
+   typeid(::boost::remove_bounds<UDT volatile>::type) was: UDT
+   In template class type_checker<volatile UDT,UDT>
+checking type of ::boost::remove_bounds<enum1 volatile>::type...failed
+   expected type was enum1 volatile
+   typeid(enum1 volatile) was: enum1
+   typeid(::boost::remove_bounds<enum1 volatile>::type) was: enum1
+   In template class type_checker<volatile enum1,enum1>
+checking type of ::boost::remove_bounds<bool *volatile>::type...failed
+   expected type was bool *volatile
+   typeid(bool *volatile) was: bool *
+   typeid(::boost::remove_bounds<bool *volatile>::type) was: bool *
+   In template class type_checker<bool * volatile,bool *>
+checking type of ::boost::remove_bounds<char *volatile>::type...failed
+   expected type was char *volatile
+   typeid(char *volatile) was: char *
+   typeid(::boost::remove_bounds<char *volatile>::type) was: char *
+   In template class type_checker<char * volatile,char *>
+checking type of ::boost::remove_bounds<wchar_t *volatile>::type...failed
+   expected type was wchar_t *volatile
+   typeid(wchar_t *volatile) was: wchar_t *
+   typeid(::boost::remove_bounds<wchar_t *volatile>::type) was: wchar_t *
+   In template class type_checker<wchar_t * volatile,wchar_t *>
+checking type of ::boost::remove_bounds<signed char *volatile>::type...failed
+   expected type was signed char *volatile
+   typeid(signed char *volatile) was: signed char *
+   typeid(::boost::remove_bounds<signed char *volatile>::type) was: signed char *
+   In template class type_checker<signed char * volatile,signed char *>
+checking type of ::boost::remove_bounds<unsigned char *volatile>::type...failed
+   expected type was unsigned char *volatile
+   typeid(unsigned char *volatile) was: unsigned char *
+   typeid(::boost::remove_bounds<unsigned char *volatile>::type) was: unsigned char *
+   In template class type_checker<unsigned char * volatile,unsigned char *>
+checking type of ::boost::remove_bounds<short *volatile>::type...failed
+   expected type was short *volatile
+   typeid(short *volatile) was: short *
+   typeid(::boost::remove_bounds<short *volatile>::type) was: short *
+   In template class type_checker<short * volatile,short *>
+checking type of ::boost::remove_bounds<unsigned short *volatile>::type...failed
+   expected type was unsigned short *volatile
+   typeid(unsigned short *volatile) was: unsigned short *
+   typeid(::boost::remove_bounds<unsigned short *volatile>::type) was: unsigned short *
+   In template class type_checker<unsigned short * volatile,unsigned short *>
+checking type of ::boost::remove_bounds<int *volatile>::type...failed
+   expected type was int *volatile
+   typeid(int *volatile) was: int *
+   typeid(::boost::remove_bounds<int *volatile>::type) was: int *
+   In template class type_checker<int * volatile,int *>
+checking type of ::boost::remove_bounds<unsigned int *volatile>::type...failed
+   expected type was unsigned int *volatile
+   typeid(unsigned int *volatile) was: unsigned int *
+   typeid(::boost::remove_bounds<unsigned int *volatile>::type) was: unsigned int *
+   In template class type_checker<unsigned int * volatile,unsigned int *>
+checking type of ::boost::remove_bounds<long *volatile>::type...failed
+   expected type was long *volatile
+   typeid(long *volatile) was: long *
+   typeid(::boost::remove_bounds<long *volatile>::type) was: long *
+   In template class type_checker<long * volatile,long *>
+checking type of ::boost::remove_bounds<unsigned long *volatile>::type...failed
+   expected type was unsigned long *volatile
+   typeid(unsigned long *volatile) was: unsigned long *
+   typeid(::boost::remove_bounds<unsigned long *volatile>::type) was: unsigned long *
+   In template class type_checker<unsigned long * volatile,unsigned long *>
+checking type of ::boost::remove_bounds<float *volatile>::type...failed
+   expected type was float *volatile
+   typeid(float *volatile) was: float *
+   typeid(::boost::remove_bounds<float *volatile>::type) was: float *
+   In template class type_checker<float * volatile,float *>
+checking type of ::boost::remove_bounds<long double *volatile>::type...failed
+   expected type was long double *volatile
+   typeid(long double *volatile) was: long double *
+   typeid(::boost::remove_bounds<long double *volatile>::type) was: long double *
+   In template class type_checker<long double * volatile,long double *>
+checking type of ::boost::remove_bounds<double *volatile>::type...failed
+   expected type was double *volatile
+   typeid(double *volatile) was: double *
+   typeid(::boost::remove_bounds<double *volatile>::type) was: double *
+   In template class type_checker<double * volatile,double *>
+checking type of ::boost::remove_bounds<UDT *volatile>::type...failed
+   expected type was UDT *volatile
+   typeid(UDT *volatile) was: UDT *
+   typeid(::boost::remove_bounds<UDT *volatile>::type) was: UDT *
+   In template class type_checker<UDT * volatile,UDT *>
+checking type of ::boost::remove_bounds<enum1 *volatile>::type...failed
+   expected type was enum1 *volatile
+   typeid(enum1 *volatile) was: enum1 *
+   typeid(::boost::remove_bounds<enum1 *volatile>::type) was: enum1 *
+   In template class type_checker<enum1 * volatile,enum1 *>
+checking type of ::boost::remove_bounds<UDT const [2]>::type...failed
+   expected type was UDT const
+   typeid(UDT const) was: UDT
+   typeid(::boost::remove_bounds<UDT const [2]>::type) was: UDT
+   In template class type_checker<const UDT,UDT>
+checking type of ::boost::remove_bounds<enum1 const [2]>::type...failed
+   expected type was enum1 const
+   typeid(enum1 const) was: enum1
+   typeid(::boost::remove_bounds<enum1 const [2]>::type) was: enum1
+   In template class type_checker<const enum1,enum1>
+checking type of ::boost::remove_pointer<UDT const>::type...failed
+   expected type was UDT const
+   typeid(UDT const) was: UDT
+   typeid(::boost::remove_pointer<UDT const>::type) was: UDT
+   In template class type_checker<const UDT,UDT>
+checking type of ::boost::remove_pointer<enum1 const>::type...failed
+   expected type was enum1 const
+   typeid(enum1 const) was: enum1
+   typeid(::boost::remove_pointer<enum1 const>::type) was: enum1
+   In template class type_checker<const enum1,enum1>
+checking type of ::boost::remove_pointer<UDT volatile>::type...failed
+   expected type was UDT volatile
+   typeid(UDT volatile) was: UDT
+   typeid(::boost::remove_pointer<UDT volatile>::type) was: UDT
+   In template class type_checker<volatile UDT,UDT>
+checking type of ::boost::remove_pointer<enum1 volatile>::type...failed
+   expected type was enum1 volatile
+   typeid(enum1 volatile) was: enum1
+   typeid(::boost::remove_pointer<enum1 volatile>::type) was: enum1
+   In template class type_checker<volatile enum1,enum1>
+checking type of ::boost::remove_pointer<bool const [2]>::type...failed
+   expected type was bool const[2]
+   typeid(bool const[2]) was: bool[2]
+   typeid(::boost::remove_pointer<bool const [2]>::type) was: bool[2]
+   In template class type_checker<bool const[2],bool[2]>
+checking type of ::boost::remove_pointer<char const [2]>::type...failed
+   expected type was char const[2]
+   typeid(char const[2]) was: char[2]
+   typeid(::boost::remove_pointer<char const [2]>::type) was: char[2]
+   In template class type_checker<char const[2],char[2]>
+checking type of ::boost::remove_pointer<wchar_t const [2]>::type...failed
+   expected type was wchar_t const[2]
+   typeid(wchar_t const[2]) was: wchar_t[2]
+   typeid(::boost::remove_pointer<wchar_t const [2]>::type) was: wchar_t[2]
+   In template class type_checker<wchar_t const[2],wchar_t[2]>
+checking type of ::boost::remove_pointer<signed char const [2]>::type...failed
+   expected type was signed char const[2]
+   typeid(signed char const[2]) was: signed char[2]
+   typeid(::boost::remove_pointer<signed char const [2]>::type) was: signed char[2]
+   In template class type_checker<signed char const[2],signed char[2]>
+checking type of ::boost::remove_pointer<unsigned char const [2]>::type...failed
+   expected type was unsigned char const[2]
+   typeid(unsigned char const[2]) was: unsigned char[2]
+   typeid(::boost::remove_pointer<unsigned char const [2]>::type) was: unsigned char[2]
+   In template class type_checker<unsigned char const[2],unsigned char[2]>
+checking type of ::boost::remove_pointer<short const [2]>::type...failed
+   expected type was short const[2]
+   typeid(short const[2]) was: short[2]
+   typeid(::boost::remove_pointer<short const [2]>::type) was: short[2]
+   In template class type_checker<short const[2],short[2]>
+checking type of ::boost::remove_pointer<unsigned short const [2]>::type...failed
+   expected type was unsigned short const[2]
+   typeid(unsigned short const[2]) was: unsigned short[2]
+   typeid(::boost::remove_pointer<unsigned short const [2]>::type) was: unsigned short[2]
+   In template class type_checker<unsigned short const[2],unsigned short[2]>
+checking type of ::boost::remove_pointer<int const [2]>::type...failed
+   expected type was int const[2]
+   typeid(int const[2]) was: int[2]
+   typeid(::boost::remove_pointer<int const [2]>::type) was: int[2]
+   In template class type_checker<int const[2],int[2]>
+checking type of ::boost::remove_pointer<unsigned int const [2]>::type...failed
+   expected type was unsigned int const[2]
+   typeid(unsigned int const[2]) was: unsigned int[2]
+   typeid(::boost::remove_pointer<unsigned int const [2]>::type) was: unsigned int[2]
+   In template class type_checker<unsigned int const[2],unsigned int[2]>
+checking type of ::boost::remove_pointer<long const [2]>::type...failed
+   expected type was long const[2]
+   typeid(long const[2]) was: long[2]
+   typeid(::boost::remove_pointer<long const [2]>::type) was: long[2]
+   In template class type_checker<long const[2],long[2]>
+checking type of ::boost::remove_pointer<unsigned long const [2]>::type...failed
+   expected type was unsigned long const[2]
+   typeid(unsigned long const[2]) was: unsigned long[2]
+   typeid(::boost::remove_pointer<unsigned long const [2]>::type) was: unsigned long[2]
+   In template class type_checker<unsigned long const[2],unsigned long[2]>
+checking type of ::boost::remove_pointer<float const [2]>::type...failed
+   expected type was float const[2]
+   typeid(float const[2]) was: float[2]
+   typeid(::boost::remove_pointer<float const [2]>::type) was: float[2]
+   In template class type_checker<float const[2],float[2]>
+checking type of ::boost::remove_pointer<long double const [2]>::type...failed
+   expected type was long double const[2]
+   typeid(long double const[2]) was: long double[2]
+   typeid(::boost::remove_pointer<long double const [2]>::type) was: long double[2]
+   In template class type_checker<long double const[2],long double[2]>
+checking type of ::boost::remove_pointer<double const [2]>::type...failed
+   expected type was double const[2]
+   typeid(double const[2]) was: double[2]
+   typeid(::boost::remove_pointer<double const [2]>::type) was: double[2]
+   In template class type_checker<double const[2],double[2]>
+checking type of ::boost::remove_pointer<UDT const [2]>::type...failed
+   expected type was UDT const[2]
+   typeid(UDT const[2]) was: UDT[2]
+   typeid(::boost::remove_pointer<UDT const [2]>::type) was: UDT[2]
+   In template class type_checker<UDT const[2],UDT[2]>
+checking type of ::boost::remove_pointer<enum1 const [2]>::type...failed
+   expected type was enum1 const[2]
+   typeid(enum1 const[2]) was: enum1[2]
+   typeid(::boost::remove_pointer<enum1 const [2]>::type) was: enum1[2]
+   In template class type_checker<enum1 const[2],enum1[2]>
+checking type of ::boost::remove_pointer<UDT const*>::type...failed
+   expected type was UDT const
+   typeid(UDT const) was: UDT
+   typeid(::boost::remove_pointer<UDT const*>::type) was: UDT
+   In template class type_checker<const UDT,UDT>
+checking type of ::boost::remove_pointer<enum1 const*>::type...failed
+   expected type was enum1 const
+   typeid(enum1 const) was: enum1
+   typeid(::boost::remove_pointer<enum1 const*>::type) was: enum1
+   In template class type_checker<const enum1,enum1>
+checking type of ::boost::remove_pointer<UDT volatile*>::type...failed
+   expected type was UDT volatile
+   typeid(UDT volatile) was: UDT
+   typeid(::boost::remove_pointer<UDT volatile*>::type) was: UDT
+   In template class type_checker<volatile UDT,UDT>
+checking type of ::boost::remove_pointer<enum1 volatile*>::type...failed
+   expected type was enum1 volatile
+   typeid(enum1 volatile) was: enum1
+   typeid(::boost::remove_pointer<enum1 volatile*>::type) was: enum1
+   In template class type_checker<volatile enum1,enum1>
+checking type of ::boost::add_reference<bool const[2][3]>::type...failed
+   expected type was bool const (&)[2][3]
+   typeid(bool const (&)[2][3]) was: bool ( *) const[3]
+   typeid(::boost::add_reference<bool const[2][3]>::type) was: bool ( *) const[3]
+   In template class type_checker<bool ( *) const[3],bool ( *) const[3]>
+checking type of ::boost::add_reference<char const[2][3]>::type...failed
+   expected type was char const (&)[2][3]
+   typeid(char const (&)[2][3]) was: char ( *) const[3]
+   typeid(::boost::add_reference<char const[2][3]>::type) was: char ( *) const[3]
+   In template class type_checker<char ( *) const[3],char ( *) const[3]>
+checking type of ::boost::add_reference<wchar_t const[2][3]>::type...failed
+   expected type was wchar_t const (&)[2][3]
+   typeid(wchar_t const (&)[2][3]) was: wchar_t ( *) const[3]
+   typeid(::boost::add_reference<wchar_t const[2][3]>::type) was: wchar_t ( *) const[3]
+   In template class type_checker<wchar_t ( *) const[3],wchar_t ( *) const[3]>
+checking type of ::boost::add_reference<signed char const[2][3]>::type...failed
+   expected type was signed char const (&)[2][3]
+   typeid(signed char const (&)[2][3]) was: signed char ( *) const[3]
+   typeid(::boost::add_reference<signed char const[2][3]>::type) was: signed char ( *) const[3]
+   In template class type_checker<signed char ( *) const[3],signed char ( *) const[3]>
+checking type of ::boost::add_reference<unsigned char const[2][3]>::type...failed
+   expected type was unsigned char const (&)[2][3]
+   typeid(unsigned char const (&)[2][3]) was: unsigned char ( *) const[3]
+   typeid(::boost::add_reference<unsigned char const[2][3]>::type) was: unsigned char ( *) const[3]
+   In template class type_checker<unsigned char ( *) const[3],unsigned char ( *) const[3]>
+checking type of ::boost::add_reference<short const[2][3]>::type...failed
+   expected type was short const (&)[2][3]
+   typeid(short const (&)[2][3]) was: short ( *) const[3]
+   typeid(::boost::add_reference<short const[2][3]>::type) was: short ( *) const[3]
+   In template class type_checker<short ( *) const[3],short ( *) const[3]>
+checking type of ::boost::add_reference<unsigned short const[2][3]>::type...failed
+   expected type was unsigned short const (&)[2][3]
+   typeid(unsigned short const (&)[2][3]) was: unsigned short ( *) const[3]
+   typeid(::boost::add_reference<unsigned short const[2][3]>::type) was: unsigned short ( *) const[3]
+   In template class type_checker<unsigned short ( *) const[3],unsigned short ( *) const[3]>
+checking type of ::boost::add_reference<int const[2][3]>::type...failed
+   expected type was int const (&)[2][3]
+   typeid(int const (&)[2][3]) was: int ( *) const[3]
+   typeid(::boost::add_reference<int const[2][3]>::type) was: int ( *) const[3]
+   In template class type_checker<int ( *) const[3],int ( *) const[3]>
+checking type of ::boost::add_reference<unsigned int const[2][3]>::type...failed
+   expected type was unsigned int const (&)[2][3]
+   typeid(unsigned int const (&)[2][3]) was: unsigned int ( *) const[3]
+   typeid(::boost::add_reference<unsigned int const[2][3]>::type) was: unsigned int ( *) const[3]
+   In template class type_checker<unsigned int ( *) const[3],unsigned int ( *) const[3]>
+checking type of ::boost::add_reference<long const[2][3]>::type...failed
+   expected type was long const (&)[2][3]
+   typeid(long const (&)[2][3]) was: long ( *) const[3]
+   typeid(::boost::add_reference<long const[2][3]>::type) was: long ( *) const[3]
+   In template class type_checker<long ( *) const[3],long ( *) const[3]>
+checking type of ::boost::add_reference<unsigned long const[2][3]>::type...failed
+   expected type was unsigned long const (&)[2][3]
+   typeid(unsigned long const (&)[2][3]) was: unsigned long ( *) const[3]
+   typeid(::boost::add_reference<unsigned long const[2][3]>::type) was: unsigned long ( *) const[3]
+   In template class type_checker<unsigned long ( *) const[3],unsigned long ( *) const[3]>
+checking type of ::boost::add_reference<float const[2][3]>::type...failed
+   expected type was float const (&)[2][3]
+   typeid(float const (&)[2][3]) was: float ( *) const[3]
+   typeid(::boost::add_reference<float const[2][3]>::type) was: float ( *) const[3]
+   In template class type_checker<float ( *) const[3],float ( *) const[3]>
+checking type of ::boost::add_reference<long double const[2][3]>::type...failed
+   expected type was long double const (&)[2][3]
+   typeid(long double const (&)[2][3]) was: long double ( *) const[3]
+   typeid(::boost::add_reference<long double const[2][3]>::type) was: long double ( *) const[3]
+   In template class type_checker<long double ( *) const[3],long double ( *) const[3]>
+checking type of ::boost::add_reference<double const[2][3]>::type...failed
+   expected type was double const (&)[2][3]
+   typeid(double const (&)[2][3]) was: double ( *) const[3]
+   typeid(::boost::add_reference<double const[2][3]>::type) was: double ( *) const[3]
+   In template class type_checker<double ( *) const[3],double ( *) const[3]>
+checking type of ::boost::add_reference<UDT const[2][3]>::type...failed
+   expected type was UDT const (&)[2][3]
+   typeid(UDT const (&)[2][3]) was: UDT ( *) const[3]
+   typeid(::boost::add_reference<UDT const[2][3]>::type) was: UDT ( *) const[3]
+   In template class type_checker<UDT ( *) const[3],UDT ( *) const[3]>
+checking type of ::boost::add_reference<enum1 const[2][3]>::type...failed
+   expected type was enum1 const (&)[2][3]
+   typeid(enum1 const (&)[2][3]) was: enum1 ( *) const[3]
+   typeid(::boost::add_reference<enum1 const[2][3]>::type) was: enum1 ( *) const[3]
+   In template class type_checker<enum1 ( *) const[3],enum1 ( *) const[3]>
+checking type of ::boost::add_pointer<bool const>::type...failed
+   expected type was bool const*
+   typeid(bool const*) was: const bool *
+   typeid(::boost::add_pointer<bool const>::type) was: bool *
+   In template class type_checker<const bool *,bool *>
+checking type of ::boost::add_pointer<char const>::type...failed
+   expected type was char const*
+   typeid(char const*) was: const char *
+   typeid(::boost::add_pointer<char const>::type) was: char *
+   In template class type_checker<const char *,char *>
+checking type of ::boost::add_pointer<wchar_t const>::type...failed
+   expected type was wchar_t const*
+   typeid(wchar_t const*) was: const wchar_t *
+   typeid(::boost::add_pointer<wchar_t const>::type) was: wchar_t *
+   In template class type_checker<const wchar_t *,wchar_t *>
+checking type of ::boost::add_pointer<signed char const>::type...failed
+   expected type was signed char const*
+   typeid(signed char const*) was: const signed char *
+   typeid(::boost::add_pointer<signed char const>::type) was: signed char *
+   In template class type_checker<const signed char *,signed char *>
+checking type of ::boost::add_pointer<unsigned char const>::type...failed
+   expected type was unsigned char const*
+   typeid(unsigned char const*) was: const unsigned char *
+   typeid(::boost::add_pointer<unsigned char const>::type) was: unsigned char *
+   In template class type_checker<const unsigned char *,unsigned char *>
+checking type of ::boost::add_pointer<short const>::type...failed
+   expected type was short const*
+   typeid(short const*) was: const short *
+   typeid(::boost::add_pointer<short const>::type) was: short *
+   In template class type_checker<const short *,short *>
+checking type of ::boost::add_pointer<unsigned short const>::type...failed
+   expected type was unsigned short const*
+   typeid(unsigned short const*) was: const unsigned short *
+   typeid(::boost::add_pointer<unsigned short const>::type) was: unsigned short *
+   In template class type_checker<const unsigned short *,unsigned short *>
+checking type of ::boost::add_pointer<int const>::type...failed
+   expected type was int const*
+   typeid(int const*) was: const int *
+   typeid(::boost::add_pointer<int const>::type) was: int *
+   In template class type_checker<const int *,int *>
+checking type of ::boost::add_pointer<unsigned int const>::type...failed
+   expected type was unsigned int const*
+   typeid(unsigned int const*) was: const unsigned int *
+   typeid(::boost::add_pointer<unsigned int const>::type) was: unsigned int *
+   In template class type_checker<const unsigned int *,unsigned int *>
+checking type of ::boost::add_pointer<long const>::type...failed
+   expected type was long const*
+   typeid(long const*) was: const long *
+   typeid(::boost::add_pointer<long const>::type) was: long *
+   In template class type_checker<const long *,long *>
+checking type of ::boost::add_pointer<unsigned long const>::type...failed
+   expected type was unsigned long const*
+   typeid(unsigned long const*) was: const unsigned long *
+   typeid(::boost::add_pointer<unsigned long const>::type) was: unsigned long *
+   In template class type_checker<const unsigned long *,unsigned long *>
+checking type of ::boost::add_pointer<float const>::type...failed
+   expected type was float const*
+   typeid(float const*) was: const float *
+   typeid(::boost::add_pointer<float const>::type) was: float *
+   In template class type_checker<const float *,float *>
+checking type of ::boost::add_pointer<long double const>::type...failed
+   expected type was long double const*
+   typeid(long double const*) was: const long double *
+   typeid(::boost::add_pointer<long double const>::type) was: long double *
+   In template class type_checker<const long double *,long double *>
+checking type of ::boost::add_pointer<double const>::type...failed
+   expected type was double const*
+   typeid(double const*) was: const double *
+   typeid(::boost::add_pointer<double const>::type) was: double *
+   In template class type_checker<const double *,double *>
+checking type of ::boost::add_pointer<UDT const>::type...failed
+   expected type was UDT const*
+   typeid(UDT const*) was: const UDT *
+   typeid(::boost::add_pointer<UDT const>::type) was: UDT *
+   In template class type_checker<const UDT *,UDT *>
+checking type of ::boost::add_pointer<enum1 const>::type...failed
+   expected type was enum1 const*
+   typeid(enum1 const*) was: const enum1 *
+   typeid(::boost::add_pointer<enum1 const>::type) was: enum1 *
+   In template class type_checker<const enum1 *,enum1 *>
+checking type of ::boost::add_pointer<bool volatile>::type...failed
+   expected type was bool volatile*
+   typeid(bool volatile*) was: volatile bool *
+   typeid(::boost::add_pointer<bool volatile>::type) was: bool *
+   In template class type_checker<volatile bool *,bool *>
+checking type of ::boost::add_pointer<char volatile>::type...failed
+   expected type was char volatile*
+   typeid(char volatile*) was: volatile char *
+   typeid(::boost::add_pointer<char volatile>::type) was: char *
+   In template class type_checker<volatile char *,char *>
+checking type of ::boost::add_pointer<wchar_t volatile>::type...failed
+   expected type was wchar_t volatile*
+   typeid(wchar_t volatile*) was: volatile wchar_t *
+   typeid(::boost::add_pointer<wchar_t volatile>::type) was: wchar_t *
+   In template class type_checker<volatile wchar_t *,wchar_t *>
+checking type of ::boost::add_pointer<signed char volatile>::type...failed
+   expected type was signed char volatile*
+   typeid(signed char volatile*) was: volatile signed char *
+   typeid(::boost::add_pointer<signed char volatile>::type) was: signed char *
+   In template class type_checker<volatile signed char *,signed char *>
+checking type of ::boost::add_pointer<unsigned char volatile>::type...failed
+   expected type was unsigned char volatile*
+   typeid(unsigned char volatile*) was: volatile unsigned char *
+   typeid(::boost::add_pointer<unsigned char volatile>::type) was: unsigned char *
+   In template class type_checker<volatile unsigned char *,unsigned char *>
+checking type of ::boost::add_pointer<short volatile>::type...failed
+   expected type was short volatile*
+   typeid(short volatile*) was: volatile short *
+   typeid(::boost::add_pointer<short volatile>::type) was: short *
+   In template class type_checker<volatile short *,short *>
+checking type of ::boost::add_pointer<unsigned short volatile>::type...failed
+   expected type was unsigned short volatile*
+   typeid(unsigned short volatile*) was: volatile unsigned short *
+   typeid(::boost::add_pointer<unsigned short volatile>::type) was: unsigned short *
+   In template class type_checker<volatile unsigned short *,unsigned short *>
+checking type of ::boost::add_pointer<int volatile>::type...failed
+   expected type was int volatile*
+   typeid(int volatile*) was: volatile int *
+   typeid(::boost::add_pointer<int volatile>::type) was: int *
+   In template class type_checker<volatile int *,int *>
+checking type of ::boost::add_pointer<unsigned int volatile>::type...failed
+   expected type was unsigned int volatile*
+   typeid(unsigned int volatile*) was: volatile unsigned int *
+   typeid(::boost::add_pointer<unsigned int volatile>::type) was: unsigned int *
+   In template class type_checker<volatile unsigned int *,unsigned int *>
+checking type of ::boost::add_pointer<long volatile>::type...failed
+   expected type was long volatile*
+   typeid(long volatile*) was: volatile long *
+   typeid(::boost::add_pointer<long volatile>::type) was: long *
+   In template class type_checker<volatile long *,long *>
+checking type of ::boost::add_pointer<unsigned long volatile>::type...failed
+   expected type was unsigned long volatile*
+   typeid(unsigned long volatile*) was: volatile unsigned long *
+   typeid(::boost::add_pointer<unsigned long volatile>::type) was: unsigned long *
+   In template class type_checker<volatile unsigned long *,unsigned long *>
+checking type of ::boost::add_pointer<float volatile>::type...failed
+   expected type was float volatile*
+   typeid(float volatile*) was: volatile float *
+   typeid(::boost::add_pointer<float volatile>::type) was: float *
+   In template class type_checker<volatile float *,float *>
+checking type of ::boost::add_pointer<long double volatile>::type...failed
+   expected type was long double volatile*
+   typeid(long double volatile*) was: volatile long double *
+   typeid(::boost::add_pointer<long double volatile>::type) was: long double *
+   In template class type_checker<volatile long double *,long double *>
+checking type of ::boost::add_pointer<double volatile>::type...failed
+   expected type was double volatile*
+   typeid(double volatile*) was: volatile double *
+   typeid(::boost::add_pointer<double volatile>::type) was: double *
+   In template class type_checker<volatile double *,double *>
+checking type of ::boost::add_pointer<UDT volatile>::type...failed
+   expected type was UDT volatile*
+   typeid(UDT volatile*) was: volatile UDT *
+   typeid(::boost::add_pointer<UDT volatile>::type) was: UDT *
+   In template class type_checker<volatile UDT *,UDT *>
+checking type of ::boost::add_pointer<enum1 volatile>::type...failed
+   expected type was enum1 volatile*
+   typeid(enum1 volatile*) was: volatile enum1 *
+   typeid(::boost::add_pointer<enum1 volatile>::type) was: enum1 *
+   In template class type_checker<volatile enum1 *,enum1 *>
+checking type of ::boost::add_pointer<bool const &>::type...failed
+   expected type was bool const*
+   typeid(bool const*) was: const bool *
+   typeid(::boost::add_pointer<bool const &>::type) was: bool *
+   In template class type_checker<const bool *,bool *>
+checking type of ::boost::add_pointer<char const &>::type...failed
+   expected type was char const*
+   typeid(char const*) was: const char *
+   typeid(::boost::add_pointer<char const &>::type) was: char *
+   In template class type_checker<const char *,char *>
+checking type of ::boost::add_pointer<wchar_t const &>::type...failed
+   expected type was wchar_t const*
+   typeid(wchar_t const*) was: const wchar_t *
+   typeid(::boost::add_pointer<wchar_t const &>::type) was: wchar_t *
+   In template class type_checker<const wchar_t *,wchar_t *>
+checking type of ::boost::add_pointer<signed char const &>::type...failed
+   expected type was signed char const*
+   typeid(signed char const*) was: const signed char *
+   typeid(::boost::add_pointer<signed char const &>::type) was: signed char *
+   In template class type_checker<const signed char *,signed char *>
+checking type of ::boost::add_pointer<unsigned char const &>::type...failed
+   expected type was unsigned char const*
+   typeid(unsigned char const*) was: const unsigned char *
+   typeid(::boost::add_pointer<unsigned char const &>::type) was: unsigned char *
+   In template class type_checker<const unsigned char *,unsigned char *>
+checking type of ::boost::add_pointer<short const &>::type...failed
+   expected type was short const*
+   typeid(short const*) was: const short *
+   typeid(::boost::add_pointer<short const &>::type) was: short *
+   In template class type_checker<const short *,short *>
+checking type of ::boost::add_pointer<unsigned short const &>::type...failed
+   expected type was unsigned short const*
+   typeid(unsigned short const*) was: const unsigned short *
+   typeid(::boost::add_pointer<unsigned short const &>::type) was: unsigned short *
+   In template class type_checker<const unsigned short *,unsigned short *>
+checking type of ::boost::add_pointer<int const &>::type...failed
+   expected type was int const*
+   typeid(int const*) was: const int *
+   typeid(::boost::add_pointer<int const &>::type) was: int *
+   In template class type_checker<const int *,int *>
+checking type of ::boost::add_pointer<unsigned int const &>::type...failed
+   expected type was unsigned int const*
+   typeid(unsigned int const*) was: const unsigned int *
+   typeid(::boost::add_pointer<unsigned int const &>::type) was: unsigned int *
+   In template class type_checker<const unsigned int *,unsigned int *>
+checking type of ::boost::add_pointer<long const &>::type...failed
+   expected type was long const*
+   typeid(long const*) was: const long *
+   typeid(::boost::add_pointer<long const &>::type) was: long *
+   In template class type_checker<const long *,long *>
+checking type of ::boost::add_pointer<unsigned long const &>::type...failed
+   expected type was unsigned long const*
+   typeid(unsigned long const*) was: const unsigned long *
+   typeid(::boost::add_pointer<unsigned long const &>::type) was: unsigned long *
+   In template class type_checker<const unsigned long *,unsigned long *>
+checking type of ::boost::add_pointer<float const &>::type...failed
+   expected type was float const*
+   typeid(float const*) was: const float *
+   typeid(::boost::add_pointer<float const &>::type) was: float *
+   In template class type_checker<const float *,float *>
+checking type of ::boost::add_pointer<long double const &>::type...failed
+   expected type was long double const*
+   typeid(long double const*) was: const long double *
+   typeid(::boost::add_pointer<long double const &>::type) was: long double *
+   In template class type_checker<const long double *,long double *>
+checking type of ::boost::add_pointer<double const &>::type...failed
+   expected type was double const*
+   typeid(double const*) was: const double *
+   typeid(::boost::add_pointer<double const &>::type) was: double *
+   In template class type_checker<const double *,double *>
+checking type of ::boost::add_pointer<UDT const &>::type...failed
+   expected type was UDT const*
+   typeid(UDT const*) was: const UDT *
+   typeid(::boost::add_pointer<UDT const &>::type) was: UDT *
+   In template class type_checker<const UDT *,UDT *>
+checking type of ::boost::add_pointer<enum1 const &>::type...failed
+   expected type was enum1 const*
+   typeid(enum1 const*) was: const enum1 *
+   typeid(::boost::add_pointer<enum1 const &>::type) was: enum1 *
+   In template class type_checker<const enum1 *,enum1 *>
+checking type of ::boost::add_pointer<bool *volatile>::type...failed
+   expected type was bool *volatile*
+   typeid(bool *volatile*) was: bool * volatile *
+   typeid(::boost::add_pointer<bool *volatile>::type) was: bool * *
+   In template class type_checker<bool * volatile *,bool * *>
+checking type of ::boost::add_pointer<char *volatile>::type...failed
+   expected type was char *volatile*
+   typeid(char *volatile*) was: char * volatile *
+   typeid(::boost::add_pointer<char *volatile>::type) was: char * *
+   In template class type_checker<char * volatile *,char * *>
+checking type of ::boost::add_pointer<wchar_t *volatile>::type...failed
+   expected type was wchar_t *volatile*
+   typeid(wchar_t *volatile*) was: wchar_t * volatile *
+   typeid(::boost::add_pointer<wchar_t *volatile>::type) was: wchar_t * *
+   In template class type_checker<wchar_t * volatile *,wchar_t * *>
+checking type of ::boost::add_pointer<signed char *volatile>::type...failed
+   expected type was signed char *volatile*
+   typeid(signed char *volatile*) was: signed char * volatile *
+   typeid(::boost::add_pointer<signed char *volatile>::type) was: signed char * *
+   In template class type_checker<signed char * volatile *,signed char * *>
+checking type of ::boost::add_pointer<unsigned char *volatile>::type...failed
+   expected type was unsigned char *volatile*
+   typeid(unsigned char *volatile*) was: unsigned char * volatile *
+   typeid(::boost::add_pointer<unsigned char *volatile>::type) was: unsigned char * *
+   In template class type_checker<unsigned char * volatile *,unsigned char * *>
+checking type of ::boost::add_pointer<short *volatile>::type...failed
+   expected type was short *volatile*
+   typeid(short *volatile*) was: short * volatile *
+   typeid(::boost::add_pointer<short *volatile>::type) was: short * *
+   In template class type_checker<short * volatile *,short * *>
+checking type of ::boost::add_pointer<unsigned short *volatile>::type...failed
+   expected type was unsigned short *volatile*
+   typeid(unsigned short *volatile*) was: unsigned short * volatile *
+   typeid(::boost::add_pointer<unsigned short *volatile>::type) was: unsigned short * *
+   In template class type_checker<unsigned short * volatile *,unsigned short * *>
+checking type of ::boost::add_pointer<int *volatile>::type...failed
+   expected type was int *volatile*
+   typeid(int *volatile*) was: int * volatile *
+   typeid(::boost::add_pointer<int *volatile>::type) was: int * *
+   In template class type_checker<int * volatile *,int * *>
+checking type of ::boost::add_pointer<unsigned int *volatile>::type...failed
+   expected type was unsigned int *volatile*
+   typeid(unsigned int *volatile*) was: unsigned int * volatile *
+   typeid(::boost::add_pointer<unsigned int *volatile>::type) was: unsigned int * *
+   In template class type_checker<unsigned int * volatile *,unsigned int * *>
+checking type of ::boost::add_pointer<long *volatile>::type...failed
+   expected type was long *volatile*
+   typeid(long *volatile*) was: long * volatile *
+   typeid(::boost::add_pointer<long *volatile>::type) was: long * *
+   In template class type_checker<long * volatile *,long * *>
+checking type of ::boost::add_pointer<unsigned long *volatile>::type...failed
+   expected type was unsigned long *volatile*
+   typeid(unsigned long *volatile*) was: unsigned long * volatile *
+   typeid(::boost::add_pointer<unsigned long *volatile>::type) was: unsigned long * *
+   In template class type_checker<unsigned long * volatile *,unsigned long * *>
+checking type of ::boost::add_pointer<float *volatile>::type...failed
+   expected type was float *volatile*
+   typeid(float *volatile*) was: float * volatile *
+   typeid(::boost::add_pointer<float *volatile>::type) was: float * *
+   In template class type_checker<float * volatile *,float * *>
+checking type of ::boost::add_pointer<long double *volatile>::type...failed
+   expected type was long double *volatile*
+   typeid(long double *volatile*) was: long double * volatile *
+   typeid(::boost::add_pointer<long double *volatile>::type) was: long double * *
+   In template class type_checker<long double * volatile *,long double * *>
+checking type of ::boost::add_pointer<double *volatile>::type...failed
+   expected type was double *volatile*
+   typeid(double *volatile*) was: double * volatile *
+   typeid(::boost::add_pointer<double *volatile>::type) was: double * *
+   In template class type_checker<double * volatile *,double * *>
+checking type of ::boost::add_pointer<UDT *volatile>::type...failed
+   expected type was UDT *volatile*
+   typeid(UDT *volatile*) was: UDT * volatile *
+   typeid(::boost::add_pointer<UDT *volatile>::type) was: UDT * *
+   In template class type_checker<UDT * volatile *,UDT * *>
+checking type of ::boost::add_pointer<enum1 *volatile>::type...failed
+   expected type was enum1 *volatile*
+   typeid(enum1 *volatile*) was: enum1 * volatile *
+   typeid(::boost::add_pointer<enum1 *volatile>::type) was: enum1 * *
+   In template class type_checker<enum1 * volatile *,enum1 * *>
+checking type of ::boost::add_pointer<bool const [2]>::type...failed
+   expected type was bool const *
+   typeid(bool const *) was: const bool *
+   typeid(::boost::add_pointer<bool const [2]>::type) was: bool *
+   In template class type_checker<const bool *,bool *>
+checking type of ::boost::add_pointer<char const [2]>::type...failed
+   expected type was char const *
+   typeid(char const *) was: const char *
+   typeid(::boost::add_pointer<char const [2]>::type) was: char *
+   In template class type_checker<const char *,char *>
+checking type of ::boost::add_pointer<wchar_t const [2]>::type...failed
+   expected type was wchar_t const *
+   typeid(wchar_t const *) was: const wchar_t *
+   typeid(::boost::add_pointer<wchar_t const [2]>::type) was: wchar_t *
+   In template class type_checker<const wchar_t *,wchar_t *>
+checking type of ::boost::add_pointer<signed char const [2]>::type...failed
+   expected type was signed char const *
+   typeid(signed char const *) was: const signed char *
+   typeid(::boost::add_pointer<signed char const [2]>::type) was: signed char *
+   In template class type_checker<const signed char *,signed char *>
+checking type of ::boost::add_pointer<unsigned char const [2]>::type...failed
+   expected type was unsigned char const *
+   typeid(unsigned char const *) was: const unsigned char *
+   typeid(::boost::add_pointer<unsigned char const [2]>::type) was: unsigned char *
+   In template class type_checker<const unsigned char *,unsigned char *>
+checking type of ::boost::add_pointer<short const [2]>::type...failed
+   expected type was short const *
+   typeid(short const *) was: const short *
+   typeid(::boost::add_pointer<short const [2]>::type) was: short *
+   In template class type_checker<const short *,short *>
+checking type of ::boost::add_pointer<unsigned short const [2]>::type...failed
+   expected type was unsigned short const *
+   typeid(unsigned short const *) was: const unsigned short *
+   typeid(::boost::add_pointer<unsigned short const [2]>::type) was: unsigned short *
+   In template class type_checker<const unsigned short *,unsigned short *>
+checking type of ::boost::add_pointer<int const [2]>::type...failed
+   expected type was int const *
+   typeid(int const *) was: const int *
+   typeid(::boost::add_pointer<int const [2]>::type) was: int *
+   In template class type_checker<const int *,int *>
+checking type of ::boost::add_pointer<unsigned int const [2]>::type...failed
+   expected type was unsigned int const *
+   typeid(unsigned int const *) was: const unsigned int *
+   typeid(::boost::add_pointer<unsigned int const [2]>::type) was: unsigned int *
+   In template class type_checker<const unsigned int *,unsigned int *>
+checking type of ::boost::add_pointer<long const [2]>::type...failed
+   expected type was long const *
+   typeid(long const *) was: const long *
+   typeid(::boost::add_pointer<long const [2]>::type) was: long *
+   In template class type_checker<const long *,long *>
+checking type of ::boost::add_pointer<unsigned long const [2]>::type...failed
+   expected type was unsigned long const *
+   typeid(unsigned long const *) was: const unsigned long *
+   typeid(::boost::add_pointer<unsigned long const [2]>::type) was: unsigned long *
+   In template class type_checker<const unsigned long *,unsigned long *>
+checking type of ::boost::add_pointer<float const [2]>::type...failed
+   expected type was float const *
+   typeid(float const *) was: const float *
+   typeid(::boost::add_pointer<float const [2]>::type) was: float *
+   In template class type_checker<const float *,float *>
+checking type of ::boost::add_pointer<long double const [2]>::type...failed
+   expected type was long double const *
+   typeid(long double const *) was: const long double *
+   typeid(::boost::add_pointer<long double const [2]>::type) was: long double *
+   In template class type_checker<const long double *,long double *>
+checking type of ::boost::add_pointer<double const [2]>::type...failed
+   expected type was double const *
+   typeid(double const *) was: const double *
+   typeid(::boost::add_pointer<double const [2]>::type) was: double *
+   In template class type_checker<const double *,double *>
+checking type of ::boost::add_pointer<UDT const [2]>::type...failed
+   expected type was UDT const *
+   typeid(UDT const *) was: const UDT *
+   typeid(::boost::add_pointer<UDT const [2]>::type) was: UDT *
+   In template class type_checker<const UDT *,UDT *>
+checking type of ::boost::add_pointer<enum1 const [2]>::type...failed
+   expected type was enum1 const *
+   typeid(enum1 const *) was: const enum1 *
+   typeid(::boost::add_pointer<enum1 const [2]>::type) was: enum1 *
+   In template class type_checker<const enum1 *,enum1 *>
+checking type of ::boost::add_pointer<bool const &>::type...failed
+   expected type was bool const*
+   typeid(bool const*) was: const bool *
+   typeid(::boost::add_pointer<bool const &>::type) was: bool *
+   In template class type_checker<const bool *,bool *>
+checking type of ::boost::add_pointer<char const &>::type...failed
+   expected type was char const*
+   typeid(char const*) was: const char *
+   typeid(::boost::add_pointer<char const &>::type) was: char *
+   In template class type_checker<const char *,char *>
+checking type of ::boost::add_pointer<wchar_t const &>::type...failed
+   expected type was wchar_t const*
+   typeid(wchar_t const*) was: const wchar_t *
+   typeid(::boost::add_pointer<wchar_t const &>::type) was: wchar_t *
+   In template class type_checker<const wchar_t *,wchar_t *>
+checking type of ::boost::add_pointer<signed char const &>::type...failed
+   expected type was signed char const*
+   typeid(signed char const*) was: const signed char *
+   typeid(::boost::add_pointer<signed char const &>::type) was: signed char *
+   In template class type_checker<const signed char *,signed char *>
+checking type of ::boost::add_pointer<unsigned char const &>::type...failed
+   expected type was unsigned char const*
+   typeid(unsigned char const*) was: const unsigned char *
+   typeid(::boost::add_pointer<unsigned char const &>::type) was: unsigned char *
+   In template class type_checker<const unsigned char *,unsigned char *>
+checking type of ::boost::add_pointer<short const &>::type...failed
+   expected type was short const*
+   typeid(short const*) was: const short *
+   typeid(::boost::add_pointer<short const &>::type) was: short *
+   In template class type_checker<const short *,short *>
+checking type of ::boost::add_pointer<unsigned short const &>::type...failed
+   expected type was unsigned short const*
+   typeid(unsigned short const*) was: const unsigned short *
+   typeid(::boost::add_pointer<unsigned short const &>::type) was: unsigned short *
+   In template class type_checker<const unsigned short *,unsigned short *>
+checking type of ::boost::add_pointer<int const &>::type...failed
+   expected type was int const*
+   typeid(int const*) was: const int *
+   typeid(::boost::add_pointer<int const &>::type) was: int *
+   In template class type_checker<const int *,int *>
+checking type of ::boost::add_pointer<unsigned int const &>::type...failed
+   expected type was unsigned int const*
+   typeid(unsigned int const*) was: const unsigned int *
+   typeid(::boost::add_pointer<unsigned int const &>::type) was: unsigned int *
+   In template class type_checker<const unsigned int *,unsigned int *>
+checking type of ::boost::add_pointer<long const &>::type...failed
+   expected type was long const*
+   typeid(long const*) was: const long *
+   typeid(::boost::add_pointer<long const &>::type) was: long *
+   In template class type_checker<const long *,long *>
+checking type of ::boost::add_pointer<unsigned long const &>::type...failed
+   expected type was unsigned long const*
+   typeid(unsigned long const*) was: const unsigned long *
+   typeid(::boost::add_pointer<unsigned long const &>::type) was: unsigned long *
+   In template class type_checker<const unsigned long *,unsigned long *>
+checking type of ::boost::add_pointer<float const &>::type...failed
+   expected type was float const*
+   typeid(float const*) was: const float *
+   typeid(::boost::add_pointer<float const &>::type) was: float *
+   In template class type_checker<const float *,float *>
+checking type of ::boost::add_pointer<long double const &>::type...failed
+   expected type was long double const*
+   typeid(long double const*) was: const long double *
+   typeid(::boost::add_pointer<long double const &>::type) was: long double *
+   In template class type_checker<const long double *,long double *>
+checking type of ::boost::add_pointer<double const &>::type...failed
+   expected type was double const*
+   typeid(double const*) was: const double *
+   typeid(::boost::add_pointer<double const &>::type) was: double *
+   In template class type_checker<const double *,double *>
+checking type of ::boost::add_pointer<UDT const &>::type...failed
+   expected type was UDT const*
+   typeid(UDT const*) was: const UDT *
+   typeid(::boost::add_pointer<UDT const &>::type) was: UDT *
+   In template class type_checker<const UDT *,UDT *>
+checking type of ::boost::add_pointer<enum1 const &>::type...failed
+   expected type was enum1 const*
+   typeid(enum1 const*) was: const enum1 *
+   typeid(::boost::add_pointer<enum1 const &>::type) was: enum1 *
+   In template class type_checker<const enum1 *,enum1 *>
+checking type of ::boost::add_pointer<bool const[2][3]>::type...failed
+   expected type was bool const (*)[3]
+   typeid(bool const (*)[3]) was: bool ( *) const[3]
+   typeid(::boost::add_pointer<bool const[2][3]>::type) was: bool ( *)[3]
+   In template class type_checker<bool ( *) const[3],bool ( *)[3]>
+checking type of ::boost::add_pointer<char const[2][3]>::type...failed
+   expected type was char const (*)[3]
+   typeid(char const (*)[3]) was: char ( *) const[3]
+   typeid(::boost::add_pointer<char const[2][3]>::type) was: char ( *)[3]
+   In template class type_checker<char ( *) const[3],char ( *)[3]>
+checking type of ::boost::add_pointer<wchar_t const[2][3]>::type...failed
+   expected type was wchar_t const (*)[3]
+   typeid(wchar_t const (*)[3]) was: wchar_t ( *) const[3]
+   typeid(::boost::add_pointer<wchar_t const[2][3]>::type) was: wchar_t ( *)[3]
+   In template class type_checker<wchar_t ( *) const[3],wchar_t ( *)[3]>
+checking type of ::boost::add_pointer<signed char const[2][3]>::type...failed
+   expected type was signed char const (*)[3]
+   typeid(signed char const (*)[3]) was: signed char ( *) const[3]
+   typeid(::boost::add_pointer<signed char const[2][3]>::type) was: signed char ( *)[3]
+   In template class type_checker<signed char ( *) const[3],signed char ( *)[3]>
+checking type of ::boost::add_pointer<unsigned char const[2][3]>::type...failed
+   expected type was unsigned char const (*)[3]
+   typeid(unsigned char const (*)[3]) was: unsigned char ( *) const[3]
+   typeid(::boost::add_pointer<unsigned char const[2][3]>::type) was: unsigned char ( *)[3]
+   In template class type_checker<unsigned char ( *) const[3],unsigned char ( *)[3]>
+checking type of ::boost::add_pointer<short const[2][3]>::type...failed
+   expected type was short const (*)[3]
+   typeid(short const (*)[3]) was: short ( *) const[3]
+   typeid(::boost::add_pointer<short const[2][3]>::type) was: short ( *)[3]
+   In template class type_checker<short ( *) const[3],short ( *)[3]>
+checking type of ::boost::add_pointer<unsigned short const[2][3]>::type...failed
+   expected type was unsigned short const (*)[3]
+   typeid(unsigned short const (*)[3]) was: unsigned short ( *) const[3]
+   typeid(::boost::add_pointer<unsigned short const[2][3]>::type) was: unsigned short ( *)[3]
+   In template class type_checker<unsigned short ( *) const[3],unsigned short ( *)[3]>
+checking type of ::boost::add_pointer<int const[2][3]>::type...failed
+   expected type was int const (*)[3]
+   typeid(int const (*)[3]) was: int ( *) const[3]
+   typeid(::boost::add_pointer<int const[2][3]>::type) was: int ( *)[3]
+   In template class type_checker<int ( *) const[3],int ( *)[3]>
+checking type of ::boost::add_pointer<unsigned int const[2][3]>::type...failed
+   expected type was unsigned int const (*)[3]
+   typeid(unsigned int const (*)[3]) was: unsigned int ( *) const[3]
+   typeid(::boost::add_pointer<unsigned int const[2][3]>::type) was: unsigned int ( *)[3]
+   In template class type_checker<unsigned int ( *) const[3],unsigned int ( *)[3]>
+checking type of ::boost::add_pointer<long const[2][3]>::type...failed
+   expected type was long const (*)[3]
+   typeid(long const (*)[3]) was: long ( *) const[3]
+   typeid(::boost::add_pointer<long const[2][3]>::type) was: long ( *)[3]
+   In template class type_checker<long ( *) const[3],long ( *)[3]>
+checking type of ::boost::add_pointer<unsigned long const[2][3]>::type...failed
+   expected type was unsigned long const (*)[3]
+   typeid(unsigned long const (*)[3]) was: unsigned long ( *) const[3]
+   typeid(::boost::add_pointer<unsigned long const[2][3]>::type) was: unsigned long ( *)[3]
+   In template class type_checker<unsigned long ( *) const[3],unsigned long ( *)[3]>
+checking type of ::boost::add_pointer<float const[2][3]>::type...failed
+   expected type was float const (*)[3]
+   typeid(float const (*)[3]) was: float ( *) const[3]
+   typeid(::boost::add_pointer<float const[2][3]>::type) was: float ( *)[3]
+   In template class type_checker<float ( *) const[3],float ( *)[3]>
+checking type of ::boost::add_pointer<long double const[2][3]>::type...failed
+   expected type was long double const (*)[3]
+   typeid(long double const (*)[3]) was: long double ( *) const[3]
+   typeid(::boost::add_pointer<long double const[2][3]>::type) was: long double ( *)[3]
+   In template class type_checker<long double ( *) const[3],long double ( *)[3]>
+checking type of ::boost::add_pointer<double const[2][3]>::type...failed
+   expected type was double const (*)[3]
+   typeid(double const (*)[3]) was: double ( *) const[3]
+   typeid(::boost::add_pointer<double const[2][3]>::type) was: double ( *)[3]
+   In template class type_checker<double ( *) const[3],double ( *)[3]>
+checking type of ::boost::add_pointer<UDT const[2][3]>::type...failed
+   expected type was UDT const (*)[3]
+   typeid(UDT const (*)[3]) was: UDT ( *) const[3]
+   typeid(::boost::add_pointer<UDT const[2][3]>::type) was: UDT ( *)[3]
+   In template class type_checker<UDT ( *) const[3],UDT ( *)[3]>
+checking type of ::boost::add_pointer<enum1 const[2][3]>::type...failed
+   expected type was enum1 const (*)[3]
+   typeid(enum1 const (*)[3]) was: enum1 ( *) const[3]
+   typeid(::boost::add_pointer<enum1 const[2][3]>::type) was: enum1 ( *)[3]
+   In template class type_checker<enum1 ( *) const[3],enum1 ( *)[3]>
+checking type of ::boost::add_pointer<bool (&)[2]>::type...failed
+   expected type was bool *
+   typeid(bool *) was: bool *
+   typeid(::boost::add_pointer<bool (&)[2]>::type) was: bool * *
+   In template class type_checker<bool *,bool * *>
+checking type of ::boost::add_pointer<char (&)[2]>::type...failed
+   expected type was char *
+   typeid(char *) was: char *
+   typeid(::boost::add_pointer<char (&)[2]>::type) was: char * *
+   In template class type_checker<char *,char * *>
+checking type of ::boost::add_pointer<wchar_t (&)[2]>::type...failed
+   expected type was wchar_t *
+   typeid(wchar_t *) was: wchar_t *
+   typeid(::boost::add_pointer<wchar_t (&)[2]>::type) was: wchar_t * *
+   In template class type_checker<wchar_t *,wchar_t * *>
+checking type of ::boost::add_pointer<signed char (&)[2]>::type...failed
+   expected type was signed char *
+   typeid(signed char *) was: signed char *
+   typeid(::boost::add_pointer<signed char (&)[2]>::type) was: signed char * *
+   In template class type_checker<signed char *,signed char * *>
+checking type of ::boost::add_pointer<unsigned char (&)[2]>::type...failed
+   expected type was unsigned char *
+   typeid(unsigned char *) was: unsigned char *
+   typeid(::boost::add_pointer<unsigned char (&)[2]>::type) was: unsigned char * *
+   In template class type_checker<unsigned char *,unsigned char * *>
+checking type of ::boost::add_pointer<short (&)[2]>::type...failed
+   expected type was short *
+   typeid(short *) was: short *
+   typeid(::boost::add_pointer<short (&)[2]>::type) was: short * *
+   In template class type_checker<short *,short * *>
+checking type of ::boost::add_pointer<unsigned short (&)[2]>::type...failed
+   expected type was unsigned short *
+   typeid(unsigned short *) was: unsigned short *
+   typeid(::boost::add_pointer<unsigned short (&)[2]>::type) was: unsigned short * *
+   In template class type_checker<unsigned short *,unsigned short * *>
+checking type of ::boost::add_pointer<int (&)[2]>::type...failed
+   expected type was int *
+   typeid(int *) was: int *
+   typeid(::boost::add_pointer<int (&)[2]>::type) was: int * *
+   In template class type_checker<int *,int * *>
+checking type of ::boost::add_pointer<unsigned int (&)[2]>::type...failed
+   expected type was unsigned int *
+   typeid(unsigned int *) was: unsigned int *
+   typeid(::boost::add_pointer<unsigned int (&)[2]>::type) was: unsigned int * *
+   In template class type_checker<unsigned int *,unsigned int * *>
+checking type of ::boost::add_pointer<long (&)[2]>::type...failed
+   expected type was long *
+   typeid(long *) was: long *
+   typeid(::boost::add_pointer<long (&)[2]>::type) was: long * *
+   In template class type_checker<long *,long * *>
+checking type of ::boost::add_pointer<unsigned long (&)[2]>::type...failed
+   expected type was unsigned long *
+   typeid(unsigned long *) was: unsigned long *
+   typeid(::boost::add_pointer<unsigned long (&)[2]>::type) was: unsigned long * *
+   In template class type_checker<unsigned long *,unsigned long * *>
+checking type of ::boost::add_pointer<float (&)[2]>::type...failed
+   expected type was float *
+   typeid(float *) was: float *
+   typeid(::boost::add_pointer<float (&)[2]>::type) was: float * *
+   In template class type_checker<float *,float * *>
+checking type of ::boost::add_pointer<long double (&)[2]>::type...failed
+   expected type was long double *
+   typeid(long double *) was: long double *
+   typeid(::boost::add_pointer<long double (&)[2]>::type) was: long double * *
+   In template class type_checker<long double *,long double * *>
+checking type of ::boost::add_pointer<double (&)[2]>::type...failed
+   expected type was double *
+   typeid(double *) was: double *
+   typeid(::boost::add_pointer<double (&)[2]>::type) was: double * *
+   In template class type_checker<double *,double * *>
+checking type of ::boost::add_pointer<UDT (&)[2]>::type...failed
+   expected type was UDT *
+   typeid(UDT *) was: UDT *
+   typeid(::boost::add_pointer<UDT (&)[2]>::type) was: UDT * *
+   In template class type_checker<UDT *,UDT * *>
+checking type of ::boost::add_pointer<enum1 (&)[2]>::type...failed
+   expected type was enum1 *
+   typeid(enum1 *) was: enum1 *
+   typeid(::boost::add_pointer<enum1 (&)[2]>::type) was: enum1 * *
+   In template class type_checker<enum1 *,enum1 * *>
+1799 tests completed, 422 failures found, 4 failures expected from this compiler.
+Fail
 
 ** Microsoft Visual C++
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/transform_traits_test.cpp /link user32.lib
 transform_traits_test.cpp
-LINK : LNK6004: boosttmp.exe not found or not built by the last incremental link; performing full link
-boosttmp.exe
-checking type of boost::remove_const<const int>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_const<const int>::type) was: int
-   In template class struct type_checker<int,int const >
-checking type of boost::remove_const<const volatile int>::type...failed
-   expected type was volatile int
-   typeid(volatile int) was: int
-   typeid(boost::remove_const<const volatile int>::type) was: int
-   In template class struct type_checker<int volatile ,int const volatile >
-checking type of boost::remove_const<int* const>::type...failed
-   expected type was int*
-   typeid(int*) was: int *
-   typeid(boost::remove_const<int* const>::type) was: int *
-   In template class struct type_checker<int *,int * const>
-checking type of boost::remove_volatile<volatile int>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_volatile<volatile int>::type) was: int
-   In template class struct type_checker<int,int volatile >
-checking type of boost::remove_volatile<const volatile int>::type...failed
-   expected type was const int
-   typeid(const int) was: int
-   typeid(boost::remove_volatile<const volatile int>::type) was: int
-   In template class struct type_checker<int const ,int const volatile >
-checking type of boost::remove_volatile<int* volatile>::type...failed
-   expected type was int*
-   typeid(int*) was: int *
-   typeid(boost::remove_volatile<int* volatile>::type) was: int *
-   In template class struct type_checker<int *,int * volatile>
-checking type of boost::remove_cv<volatile int>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_cv<volatile int>::type) was: int
-   In template class struct type_checker<int,int volatile >
-checking type of boost::remove_cv<const int>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_cv<const int>::type) was: int
-   In template class struct type_checker<int,int const >
-checking type of boost::remove_cv<const volatile int>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_cv<const volatile int>::type) was: int
-   In template class struct type_checker<int,int const volatile >
-checking type of boost::remove_cv<int* volatile>::type...failed
-   expected type was int*
-   typeid(int*) was: int *
-   typeid(boost::remove_cv<int* volatile>::type) was: int *
-   In template class struct type_checker<int *,int * volatile>
-checking type of boost::remove_cv<int* const>::type...failed
-   expected type was int*
-   typeid(int*) was: int *
-   typeid(boost::remove_cv<int* const>::type) was: int *
-   In template class struct type_checker<int *,int * const>
-checking type of boost::remove_cv<int* const volatile>::type...failed
-   expected type was int*
-   typeid(int*) was: int *
-   typeid(boost::remove_cv<int* const volatile>::type) was: int *
-   In template class struct type_checker<int *,int * const volatile>
-checking type of boost::remove_cv<const int * const>::type...failed
-   expected type was const int *
-   typeid(const int *) was: int const *
-   typeid(boost::remove_cv<const int * const>::type) was: int const *
-   In template class struct type_checker<int const *,int const * const>
-checking type of boost::remove_reference<int&>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_reference<int&>::type) was: int &
-   In template class struct type_checker<int,int &>
-checking type of boost::remove_reference<const int&>::type...failed
-   expected type was const int
-   typeid(const int) was: int
-   typeid(boost::remove_reference<const int&>::type) was: int const &
-   In template class struct type_checker<int const ,int const &>
-checking type of boost::remove_reference<volatile int&>::type...failed
-   expected type was volatile int
-   typeid(volatile int) was: int
-   typeid(boost::remove_reference<volatile int&>::type) was: int volatile &
-   In template class struct type_checker<int volatile ,int volatile &>
-checking type of boost::remove_reference<cr_type>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_reference<cr_type>::type) was: int &
-   In template class struct type_checker<int,int &>
-checking type of boost::remove_bounds<int[3]>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_bounds<int[3]>::type) was: int [3]
-   In template class struct type_checker<int,int [3]>
-checking type of boost::remove_bounds<int[2][3]>::type...failed
-   expected type was int[3]
-   typeid(int[3]) was: int [3]
-   typeid(boost::remove_bounds<int[2][3]>::type) was: int [2][3]
-   In template class struct type_checker<int [3],int [2][3]>
-checking type of boost::remove_pointer<int*>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_pointer<int*>::type) was: int *
-   In template class struct type_checker<int,int *>
-checking type of boost::remove_pointer<const int*>::type...failed
-   expected type was const int
-   typeid(const int) was: int
-   typeid(boost::remove_pointer<const int*>::type) was: int const *
-   In template class struct type_checker<int const ,int const *>
-checking type of boost::remove_pointer<int*const>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_pointer<int*const>::type) was: int *
-   In template class struct type_checker<int,int * const>
-checking type of boost::remove_pointer<volatile int*const volatile>::type...failed
-   expected type was volatile int
-   typeid(volatile int) was: int
-   typeid(boost::remove_pointer<volatile int*const volatile>::type) was: int volatile *
-   In template class struct type_checker<int volatile ,int volatile * const volatile>
-39 tests completed, 23 failures found, 0 failures expected from this compiler.
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<bool const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<char const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<unsigned short const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<signed char const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<unsigned char const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<short const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<int const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<unsigned int const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<long const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<unsigned long const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<float const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<long double const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<double const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<struct UDT const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<enum enum1 const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<bool &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<char &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<unsigned short &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<signed char &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<unsigned char &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<short &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<int &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<unsigned int &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<long &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<unsigned long &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<float &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<long double &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<double &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<struct UDT &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<enum enum1 &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<bool (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<char (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<unsigned short (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<signed char (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<unsigned char (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<short (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<int (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<unsigned int (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<long (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<unsigned long (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<float (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<long double (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<double (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<struct UDT (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<enum enum1 (&)[2]>' being compiled
 Fail
 
 ** Microsoft Visual C++ with STLport
 cl /Feboosttmp.exe /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "e:/stlport//stlport" /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/transform_traits_test.cpp /link /libpath:e:/stlport/lib user32.lib
 transform_traits_test.cpp
-boosttmp.exe
-checking type of boost::remove_const<const int>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_const<const int>::type) was: int
-   In template class struct type_checker<int,int const >
-checking type of boost::remove_const<const volatile int>::type...failed
-   expected type was volatile int
-   typeid(volatile int) was: int
-   typeid(boost::remove_const<const volatile int>::type) was: int
-   In template class struct type_checker<int volatile ,int const volatile >
-checking type of boost::remove_const<int* const>::type...failed
-   expected type was int*
-   typeid(int*) was: int *
-   typeid(boost::remove_const<int* const>::type) was: int *
-   In template class struct type_checker<int *,int * const>
-checking type of boost::remove_volatile<volatile int>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_volatile<volatile int>::type) was: int
-   In template class struct type_checker<int,int volatile >
-checking type of boost::remove_volatile<const volatile int>::type...failed
-   expected type was const int
-   typeid(const int) was: int
-   typeid(boost::remove_volatile<const volatile int>::type) was: int
-   In template class struct type_checker<int const ,int const volatile >
-checking type of boost::remove_volatile<int* volatile>::type...failed
-   expected type was int*
-   typeid(int*) was: int *
-   typeid(boost::remove_volatile<int* volatile>::type) was: int *
-   In template class struct type_checker<int *,int * volatile>
-checking type of boost::remove_cv<volatile int>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_cv<volatile int>::type) was: int
-   In template class struct type_checker<int,int volatile >
-checking type of boost::remove_cv<const int>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_cv<const int>::type) was: int
-   In template class struct type_checker<int,int const >
-checking type of boost::remove_cv<const volatile int>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_cv<const volatile int>::type) was: int
-   In template class struct type_checker<int,int const volatile >
-checking type of boost::remove_cv<int* volatile>::type...failed
-   expected type was int*
-   typeid(int*) was: int *
-   typeid(boost::remove_cv<int* volatile>::type) was: int *
-   In template class struct type_checker<int *,int * volatile>
-checking type of boost::remove_cv<int* const>::type...failed
-   expected type was int*
-   typeid(int*) was: int *
-   typeid(boost::remove_cv<int* const>::type) was: int *
-   In template class struct type_checker<int *,int * const>
-checking type of boost::remove_cv<int* const volatile>::type...failed
-   expected type was int*
-   typeid(int*) was: int *
-   typeid(boost::remove_cv<int* const volatile>::type) was: int *
-   In template class struct type_checker<int *,int * const volatile>
-checking type of boost::remove_cv<const int * const>::type...failed
-   expected type was const int *
-   typeid(const int *) was: int const *
-   typeid(boost::remove_cv<const int * const>::type) was: int const *
-   In template class struct type_checker<int const *,int const * const>
-checking type of boost::remove_reference<int&>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_reference<int&>::type) was: int &
-   In template class struct type_checker<int,int &>
-checking type of boost::remove_reference<const int&>::type...failed
-   expected type was const int
-   typeid(const int) was: int
-   typeid(boost::remove_reference<const int&>::type) was: int const &
-   In template class struct type_checker<int const ,int const &>
-checking type of boost::remove_reference<volatile int&>::type...failed
-   expected type was volatile int
-   typeid(volatile int) was: int
-   typeid(boost::remove_reference<volatile int&>::type) was: int volatile &
-   In template class struct type_checker<int volatile ,int volatile &>
-checking type of boost::remove_reference<cr_type>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_reference<cr_type>::type) was: int &
-   In template class struct type_checker<int,int &>
-checking type of boost::remove_bounds<int[3]>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_bounds<int[3]>::type) was: int [3]
-   In template class struct type_checker<int,int [3]>
-checking type of boost::remove_bounds<int[2][3]>::type...failed
-   expected type was int[3]
-   typeid(int[3]) was: int [3]
-   typeid(boost::remove_bounds<int[2][3]>::type) was: int [2][3]
-   In template class struct type_checker<int [3],int [2][3]>
-checking type of boost::remove_pointer<int*>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_pointer<int*>::type) was: int *
-   In template class struct type_checker<int,int *>
-checking type of boost::remove_pointer<const int*>::type...failed
-   expected type was const int
-   typeid(const int) was: int
-   typeid(boost::remove_pointer<const int*>::type) was: int const *
-   In template class struct type_checker<int const ,int const *>
-checking type of boost::remove_pointer<int*const>::type...failed
-   expected type was int
-   typeid(int) was: int
-   typeid(boost::remove_pointer<int*const>::type) was: int *
-   In template class struct type_checker<int,int * const>
-checking type of boost::remove_pointer<volatile int*const volatile>::type...failed
-   expected type was volatile int
-   typeid(volatile int) was: int
-   typeid(boost::remove_pointer<volatile int*const volatile>::type) was: int volatile *
-   In template class struct type_checker<int volatile ,int volatile * const volatile>
-39 tests completed, 23 failures found, 0 failures expected from this compiler.
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<bool const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<char const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<unsigned short const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<signed char const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<unsigned char const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<short const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<int const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<unsigned int const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<long const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<unsigned long const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<float const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<long double const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<double const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<struct UDT const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(319) : see reference to class template instantiation 'boost::add_pointer<enum enum1 const &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<bool &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<char &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<unsigned short &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<signed char &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<unsigned char &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<short &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<int &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<unsigned int &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<long &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<unsigned long &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<float &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<long double &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<double &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<struct UDT &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(320) : see reference to class template instantiation 'boost::add_pointer<enum enum1 &>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<bool (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<char (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<unsigned short (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<signed char (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<unsigned char (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<short (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<int (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<unsigned int (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<long (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<unsigned long (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<float (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<long double (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<double (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<struct UDT (&)[2]>' being compiled
+../..\boost/type_traits/transform_traits.hpp(167) : error C2528: '<Unknown>' : pointer to reference is illegal
+        ../../libs/type_traits/transform_traits_test.cpp(327) : see reference to class template instantiation 'boost::add_pointer<enum enum1 (&)[2]>' being compiled
 Fail
 
 *** libs/type_traits/trivial_destructor_example.cpp ***
@@ -726,31 +2765,31 @@ Pass
 cl /c /nologo /Zm400 /MDd /W3 /GR /GX /Zi /Od /GZ /I "../.." /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_CONSOLE" ../../libs/type_traits/iter_swap_example.cpp
 iter_swap_example.cpp
 ../../libs/type_traits/iter_swap_example.cpp(108) : warning C4508: 'main' : function should return a value; 'void' return type assumed
-e:\VS98\INCLUDE\utility(81) : error C2039: 'iterator_category' : is not a member of '`global namespace''
+e:\CPP\VC98\INCLUDE\utility(81) : error C2039: 'iterator_category' : is not a member of '`global namespace''
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<int *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(103) : see reference to function template instantiation 'void __cdecl opt::iter_swap(int *,int *)' being compiled
-e:\VS98\INCLUDE\utility(81) : error C2146: syntax error : missing ';' before identifier 'iterator_category'
+e:\CPP\VC98\INCLUDE\utility(81) : error C2146: syntax error : missing ';' before identifier 'iterator_category'
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<int *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(103) : see reference to function template instantiation 'void __cdecl opt::iter_swap(int *,int *)' being compiled
-e:\VS98\INCLUDE\utility(81) : error C2868: 'iterator_category' : illegal syntax for using-declaration; expected qualified-name
+e:\CPP\VC98\INCLUDE\utility(81) : error C2868: 'iterator_category' : illegal syntax for using-declaration; expected qualified-name
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<int *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(103) : see reference to function template instantiation 'void __cdecl opt::iter_swap(int *,int *)' being compiled
-e:\VS98\INCLUDE\utility(82) : error C2039: 'value_type' : is not a member of '`global namespace''
+e:\CPP\VC98\INCLUDE\utility(82) : error C2039: 'value_type' : is not a member of '`global namespace''
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<int *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(103) : see reference to function template instantiation 'void __cdecl opt::iter_swap(int *,int *)' being compiled
-e:\VS98\INCLUDE\utility(82) : error C2146: syntax error : missing ';' before identifier 'value_type'
+e:\CPP\VC98\INCLUDE\utility(82) : error C2146: syntax error : missing ';' before identifier 'value_type'
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<int *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(103) : see reference to function template instantiation 'void __cdecl opt::iter_swap(int *,int *)' being compiled
-e:\VS98\INCLUDE\utility(82) : error C2868: 'value_type' : illegal syntax for using-declaration; expected qualified-name
+e:\CPP\VC98\INCLUDE\utility(82) : error C2868: 'value_type' : illegal syntax for using-declaration; expected qualified-name
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<int *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(103) : see reference to function template instantiation 'void __cdecl opt::iter_swap(int *,int *)' being compiled
-e:\VS98\INCLUDE\utility(83) : error C2039: 'distance_type' : is not a member of '`global namespace''
+e:\CPP\VC98\INCLUDE\utility(83) : error C2039: 'distance_type' : is not a member of '`global namespace''
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<int *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(103) : see reference to function template instantiation 'void __cdecl opt::iter_swap(int *,int *)' being compiled
-e:\VS98\INCLUDE\utility(83) : error C2146: syntax error : missing ';' before identifier 'distance_type'
+e:\CPP\VC98\INCLUDE\utility(83) : error C2146: syntax error : missing ';' before identifier 'distance_type'
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<int *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(103) : see reference to function template instantiation 'void __cdecl opt::iter_swap(int *,int *)' being compiled
-e:\VS98\INCLUDE\utility(83) : error C2868: 'distance_type' : illegal syntax for using-declaration; expected qualified-name
+e:\CPP\VC98\INCLUDE\utility(83) : error C2868: 'distance_type' : illegal syntax for using-declaration; expected qualified-name
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<int *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(103) : see reference to function template instantiation 'void __cdecl opt::iter_swap(int *,int *)' being compiled
 ../../libs/type_traits/iter_swap_example.cpp(79) : error C2039: 'reference' : is not a member of 'iterator_traits<int *>'
@@ -777,31 +2816,31 @@ e:\VS98\INCLUDE\utility(83) : error C2868: 'distance_type' : illegal syntax for 
 ../../libs/type_traits/iter_swap_example.cpp(86) : error C2955: 'ice_and' : use of class template requires template argument list
         ../..\boost/type_traits/ice.hpp(60) : see declaration of 'ice_and'
         ../../libs/type_traits/iter_swap_example.cpp(103) : see reference to function template instantiation 'void __cdecl opt::iter_swap(int *,int *)' being compiled
-e:\VS98\INCLUDE\utility(81) : error C2039: 'iterator_category' : is not a member of '`global namespace''
+e:\CPP\VC98\INCLUDE\utility(81) : error C2039: 'iterator_category' : is not a member of '`global namespace''
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<bool *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(104) : see reference to function template instantiation 'void __cdecl opt::iter_swap(bool *,bool *)' being compiled
-e:\VS98\INCLUDE\utility(81) : error C2146: syntax error : missing ';' before identifier 'iterator_category'
+e:\CPP\VC98\INCLUDE\utility(81) : error C2146: syntax error : missing ';' before identifier 'iterator_category'
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<bool *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(104) : see reference to function template instantiation 'void __cdecl opt::iter_swap(bool *,bool *)' being compiled
-e:\VS98\INCLUDE\utility(81) : error C2868: 'iterator_category' : illegal syntax for using-declaration; expected qualified-name
+e:\CPP\VC98\INCLUDE\utility(81) : error C2868: 'iterator_category' : illegal syntax for using-declaration; expected qualified-name
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<bool *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(104) : see reference to function template instantiation 'void __cdecl opt::iter_swap(bool *,bool *)' being compiled
-e:\VS98\INCLUDE\utility(82) : error C2039: 'value_type' : is not a member of '`global namespace''
+e:\CPP\VC98\INCLUDE\utility(82) : error C2039: 'value_type' : is not a member of '`global namespace''
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<bool *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(104) : see reference to function template instantiation 'void __cdecl opt::iter_swap(bool *,bool *)' being compiled
-e:\VS98\INCLUDE\utility(82) : error C2146: syntax error : missing ';' before identifier 'value_type'
+e:\CPP\VC98\INCLUDE\utility(82) : error C2146: syntax error : missing ';' before identifier 'value_type'
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<bool *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(104) : see reference to function template instantiation 'void __cdecl opt::iter_swap(bool *,bool *)' being compiled
-e:\VS98\INCLUDE\utility(82) : error C2868: 'value_type' : illegal syntax for using-declaration; expected qualified-name
+e:\CPP\VC98\INCLUDE\utility(82) : error C2868: 'value_type' : illegal syntax for using-declaration; expected qualified-name
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<bool *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(104) : see reference to function template instantiation 'void __cdecl opt::iter_swap(bool *,bool *)' being compiled
-e:\VS98\INCLUDE\utility(83) : error C2039: 'distance_type' : is not a member of '`global namespace''
+e:\CPP\VC98\INCLUDE\utility(83) : error C2039: 'distance_type' : is not a member of '`global namespace''
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<bool *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(104) : see reference to function template instantiation 'void __cdecl opt::iter_swap(bool *,bool *)' being compiled
-e:\VS98\INCLUDE\utility(83) : error C2146: syntax error : missing ';' before identifier 'distance_type'
+e:\CPP\VC98\INCLUDE\utility(83) : error C2146: syntax error : missing ';' before identifier 'distance_type'
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<bool *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(104) : see reference to function template instantiation 'void __cdecl opt::iter_swap(bool *,bool *)' being compiled
-e:\VS98\INCLUDE\utility(83) : error C2868: 'distance_type' : illegal syntax for using-declaration; expected qualified-name
+e:\CPP\VC98\INCLUDE\utility(83) : error C2868: 'distance_type' : illegal syntax for using-declaration; expected qualified-name
         ../../libs/type_traits/iter_swap_example.cpp(79) : see reference to class template instantiation 'std::iterator_traits<bool *>' being compiled
         ../../libs/type_traits/iter_swap_example.cpp(104) : see reference to function template instantiation 'void __cdecl opt::iter_swap(bool *,bool *)' being compiled
 ../../libs/type_traits/iter_swap_example.cpp(79) : error C2039: 'reference' : is not a member of 'iterator_traits<bool *>'
