@@ -416,7 +416,7 @@ typedef unsigned long jm_uintfast32_t;
        some of these (std)
        may be guesswork: */
 
-      # if (!defined (__SGI_STL_OWN_IOSTREAMS) && !defined(__STL_USE_NEW_IOSTREAMS)) || defined (__STL_HAS_NO_NEW_IOSTREAMS) || defined (__STL_USE_NO_IOSTREAMS) || defined(__STL_NO_MBSTATE_T)
+      # if (!defined (__SGI_STL_OWN_IOSTREAMS) && !defined(__GLIBCPP__) && !defined(__STL_USE_NEW_IOSTREAMS)) || defined (__STL_HAS_NO_NEW_IOSTREAMS) || defined (__STL_USE_NO_IOSTREAMS) || defined(__STL_NO_MBSTATE_T)
          // Old IO streams:
          #define BOOST_RE_NO_LOCALE_H
          #define BOOST_RE_OLD_IOSTREAM
@@ -1231,6 +1231,7 @@ namespace std{
 
 
 #endif  // BOOST_REGEX_CONFIG_HPP
+
 
 
 
