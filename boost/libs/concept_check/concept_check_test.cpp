@@ -130,14 +130,6 @@ main()
   //===========================================================================
   // Iterator Concepts
   {
-    typedef trivial_iterator_archetype<null_archetype<> > Iter;
-    function_requires< TrivialIteratorConcept<Iter> >();
-  }
-  {
-    typedef mutable_trivial_iterator_archetype<null_archetype<> > Iter;
-    function_requires< Mutable_TrivialIteratorConcept<Iter> >();
-  }
-  {
     typedef input_iterator_archetype<null_archetype<> > Iter;
     function_requires< InputIteratorConcept<Iter> >();
   }

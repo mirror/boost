@@ -4,10 +4,10 @@
 // "as is" without express or implied warranty, and with no claim as
 // to its suitability for any purpose.
 
-#include <boost/concept_check.hpp>
-#include <boost/concept_archetype.hpp>
 #include <algorithm>
 #include <numeric>
+#include <boost/concept_check.hpp>
+#include <boost/concept_archetype.hpp>
 
 /*
 
