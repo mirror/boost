@@ -38,6 +38,9 @@ DEPENDS all : test ;
 
    test-suite date_time_posixtime
      : 
+   [ run posix_time/testlocal_adjustor.cpp
+     <lib>../build/boost_date_time
+    : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
    [ run posix_time/testc_local_adjustor.cpp
      <lib>../build/boost_date_time
     : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
