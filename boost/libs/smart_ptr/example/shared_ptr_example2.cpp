@@ -10,10 +10,6 @@ class example::implementation
 };
 
 example::example() : _imp( new implementation ) {}
-example::example( const example & s ) : _imp( s._imp ) {}
-
-example & example::operator=( const example & s )
-  { _imp = s._imp; return *this; }
 
 void example::do_something()
   { std::cout << "use_count() is " << _imp.use_count() << "\n"; }

@@ -14,12 +14,10 @@
 
 class example
 {
- public:
+public:
   example();
-  example( const example & );
-  example & operator=( const example & );
   void do_something();
- private:
+private:
   class implementation;
   boost::shared_ptr< implementation > _imp; // hide implementation details
 };
