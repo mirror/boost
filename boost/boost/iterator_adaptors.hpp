@@ -12,7 +12,20 @@
 //
 // Revision History:
 
-// 07 Feb 2001
+// 07 Feb 2001   Jeremy Siek
+//      Removed all pair generator's except for projection and
+//      some const adaptor generators.
+//
+//      Added make_xxx_iterator() helper functions for remaining
+//      iterator adaptors.
+//
+//      Removed some traits template parameters where they
+//      where no longer needed thanks to detail::iterator_traits.
+//
+//      Moved some of the compile-time logic into enums for
+//      EDG compatibility.
+//
+// 07 Feb 2001  David Abrahams
 //      Removed iterator_adaptor_pair_generator and
 //      reverse_iterator_pair_generator (more such culling to come)
 //
@@ -24,7 +37,7 @@
 //
 //      Fixed naming convention of non-template parameter names
 //
-// 06 Feb 2001
+// 06 Feb 2001   David Abrahams
 //      Produce operator-> proxy objects for InputIterators
 //
 //      Added static assertions to do some basic concept checks
@@ -321,10 +334,9 @@ namespace detail {
       typedef typename Traits::iterator_category category;
       typedef operator_arrow_proxy<typename Traits::value_type> proxy;
       typedef typename Traits::pointer pointer;
-      typedef typename boost::detail::if_true<(
-          boost::is_convertible<category,std::input_iterator_tag>::value
-          & !boost::is_convertible<category,std::forward_iterator_tag>::value
-      )>::template
+      enum { is_input_iter = boost::is_convertible<category,std::input_iterator_tag>::value
+	     & !boost::is_convertible<category,std::forward_iterator_tag>::value };
+      typedef typename boost::detail::if_true<(is_input_iter)>::template
       then<
         proxy,
    // else
@@ -382,14 +394,19 @@ public:
     typedef typename Traits::iterator_category iterator_category;
     typedef Iterator iterator_type;
 
+    enum { is_input_or_output_iter = 
+           boost::is_convertible<iterator_category,std::input_iterator_tag>::value
+           || boost::is_convertible<iterator_category,std::output_iterator_tag>::value };
+
     // Iterators should satisfy one of the known categories
-    BOOST_STATIC_ASSERT((boost::is_convertible<iterator_category,std::input_iterator_tag>::value
-                         || boost::is_convertible<iterator_category,std::output_iterator_tag>::value));
+    BOOST_STATIC_ASSERT(is_input_or_output_iter);
 
     // Iterators >= ForwardIterator must produce real references.
-    BOOST_STATIC_ASSERT((!boost::is_convertible<iterator_category,std::forward_iterator_tag>::value
-                         || boost::is_same<reference,value_type&>::value
-                         || boost::is_same<reference,const value_type&>::value));
+    enum { forward_iter_with_real_reference =
+           (!boost::is_convertible<iterator_category,std::forward_iterator_tag>::value
+           || boost::is_same<reference,value_type&>::value
+           || boost::is_same<reference,const value_type&>::value) };
+    BOOST_STATIC_ASSERT(forward_iter_with_real_reference);
 
     iterator_adaptor() { }
 
@@ -566,30 +583,22 @@ struct transform_iterator_policies : public default_iterator_policies
     AdaptableUnaryFunction m_f;
 };
 
-template <class AdaptableUnaryFunction, class IteratorTraits>
-struct transform_iterator_traits {
-    typedef typename AdaptableUnaryFunction::result_type value_type;
-    typedef value_type reference;
-    typedef value_type* pointer;
-    typedef typename IteratorTraits::difference_type difference_type;
-    typedef std::input_iterator_tag iterator_category;
-};
-  
-template <class AdaptableUnaryFunction,
-          class Iterator,
-          class Traits = boost::detail::iterator_traits<Iterator>
-         >
-struct transform_iterator_generator
+template <class AdaptableUnaryFunction, class Iterator>
+class transform_iterator_generator
 {
-    typedef transform_iterator_traits<AdaptableUnaryFunction,Traits>
-      transform_traits;
+    typedef typename boost::detail::iterator_traits<Iterator>::difference_type
+      difference_type;
+    typedef typename AdaptableUnaryFunction::result_type value_type;
+public:
+    typedef boost::iterator<std::input_iterator_tag, 
+      value_type, difference_type, value_type*, value_type> transform_traits;
     typedef iterator_adaptor<Iterator, 
       transform_iterator_policies<AdaptableUnaryFunction>, transform_traits>
       type;
 };
 
 template <class AdaptableUnaryFunction, class Iterator>
-typename transform_iterator_generator<AdaptableUnaryFunction,Iterator>::type
+inline typename transform_iterator_generator<AdaptableUnaryFunction,Iterator>::type
 make_transform_iterator(
     const Iterator& base,
     const AdaptableUnaryFunction& f = AdaptableUnaryFunction())
@@ -620,52 +629,44 @@ struct indirect_iterator_policies : public default_iterator_policies
         { return **x; }
 };
 
-template <class OuterIterator,
-          class InnerIterator = typename boost::detail::iterator_traits<OuterIterator>::value_type,
-          class InnerTraits = boost::detail::iterator_traits<InnerIterator>,
-          class OuterTraits = boost::detail::iterator_traits<OuterIterator> // never needed (?)
-       >
-struct indirect_traits
-{
-    typedef typename OuterTraits::difference_type difference_type;
-    typedef typename InnerTraits::value_type value_type;
-    typedef typename InnerTraits::pointer pointer;
-    typedef typename InnerTraits::reference reference;
-    typedef typename OuterTraits::iterator_category iterator_category;
-};
-
 template <class OuterIterator,      // Mutable or Immutable, does not matter
     // Mutable -> mutable indirect iterator;  Immutable -> immutable indirect iterator
           class InnerIterator = typename boost::detail::iterator_traits<OuterIterator>::value_type,
-          class InnerTraits = boost::detail::iterator_traits<InnerIterator>,
-          class OuterTraits = boost::detail::iterator_traits<OuterIterator> // never needed (?)
-           >
-struct indirect_iterator_generator
+          class InnerTraits = boost::detail::iterator_traits<InnerIterator>
+         >
+class indirect_iterator_generator
 {
-    typedef iterator_adaptor<OuterIterator,
-        indirect_iterator_policies,
-        indirect_traits<OuterIterator, InnerIterator,
-                        InnerTraits, OuterTraits>
-    > type;
+    typedef boost::detail::iterator_traits<OuterIterator> OuterTraits;
+    typedef typename OuterTraits::difference_type difference_type;
+    typedef typename OuterTraits::iterator_category iterator_category;
+
+    typedef typename InnerTraits::value_type value_type;
+    typedef typename InnerTraits::pointer pointer;
+    typedef typename InnerTraits::reference reference;
+public:
+    typedef boost::iterator<iterator_category, value_type, difference_type, pointer, reference> indirect_traits;
+    typedef iterator_adaptor<OuterIterator, indirect_iterator_policies, indirect_traits> type;
 };
 
-template <class OuterIterator,      // Mutable or Immutable, does not matter
-          class ConstInnerIterator, // Immutable
-          class ConstInnerTraits = boost::detail::iterator_traits<ConstInnerIterator>,
-          class InnerIterator = typename boost::detail::iterator_traits<OuterIterator>::value_type,
-          class InnerTraits = boost::detail::iterator_traits<InnerIterator>,
-          class OuterTraits = boost::detail::iterator_traits<OuterIterator> // never needed (?)
-           >
-struct indirect_iterator_pair_generator
+template <class OuterIterator, class InnerIterator, class InnerTraits>
+inline typename indirect_iterator_generator<OuterIterator, InnerIterator, InnerTraits>::type
+make_indirect_iterator(OuterIterator outer, InnerIterator, InnerTraits)
 {
-    typedef iterator_adaptor<OuterIterator,
-        indirect_traits<OuterIterator, InnerIterator, InnerTraits, OuterTraits>,
-        indirect_iterator_policies> iterator;
-        
-    typedef iterator_adaptor<OuterIterator,
-        indirect_traits<OuterIterator, ConstInnerIterator, ConstInnerTraits, OuterTraits>,
-        indirect_iterator_policies> const_iterator;
-};
+    typedef typename indirect_iterator_generator
+        <OuterIterator, InnerIterator, InnerTraits>::type result_t;
+    return result_t(outer);
+}
+
+#if !defined(BOOST_NO_STD_ITERATOR_TRAITS)
+template <class OuterIterator>
+inline typename indirect_iterator_generator<OuterIterator>::type
+make_indirect_iterator(OuterIterator outer)
+{
+    typedef typename indirect_iterator_generator
+        <OuterIterator>::type result_t;
+    return result_t(outer);
+}
+#endif
 
 
 //=============================================================================
@@ -712,14 +713,23 @@ struct reverse_iterator_generator
         Traits> type;
 };
 
-template <class ConstIterator,
-          class ConstTraits = boost::detail::iterator_traits<ConstIterator>
-         >
-struct const_reverse_iterator_generator
+template <class Iterator, class Traits>
+inline typename reverse_iterator_generator<Iterator, Traits>::type
+make_reverse_iterator(Iterator iter, Traits)
 {
-    typedef iterator_adaptor<ConstIterator, reverse_iterator_policies,
-        ConstTraits> type;
-};
+    typedef typename reverse_iterator_generator<Iterator, Traits>::type result_t;
+    return result_t(iter);
+}
+
+#if !defined(BOOST_NO_STD_ITERATOR_TRAITS)
+template <class Iterator>
+inline typename reverse_iterator_generator<Iterator>::type
+make_reverse_iterator(Iterator iter)
+{
+    typedef typename reverse_iterator_generator<Iterator>::type result_t;
+    return result_t(iter);
+}
+#endif
 
 //=============================================================================
 // Projection Iterators Adaptor
@@ -738,101 +748,119 @@ struct projection_iterator_policies : public default_iterator_policies
     AdaptableUnaryFunction m_f;    
 };
 
-template <class AdaptableUnaryFunction, class Traits>
-struct projection_iterator_traits {
+template <class AdaptableUnaryFunction, class Iterator>
+class projection_iterator_generator {
+    typedef boost::detail::iterator_traits<Iterator> Traits;
     typedef typename AdaptableUnaryFunction::result_type value_type;
-    typedef value_type& reference;
-    typedef value_type* pointer;
-    typedef typename Traits::difference_type difference_type;
-    typedef typename Traits::iterator_category iterator_category;
-};
-
-template <class AdaptableUnaryFunction, class Traits>
-struct const_projection_iterator_traits {
-    typedef typename AdaptableUnaryFunction::result_type value_type;
-    typedef value_type const& reference;
-    typedef value_type const* pointer;
-    typedef typename Traits::difference_type difference_type;
-    typedef typename Traits::iterator_category iterator_category;
-};
-
-template <class AdaptableUnaryFunction, class Iterator,
-        class Traits = boost::detail::iterator_traits<Iterator>
-        >
-struct projection_iterator_generator {
-    typedef projection_iterator_traits<AdaptableUnaryFunction, Traits>
+    typedef boost::iterator<typename Traits::iterator_category, 
+        value_type, typename Traits::difference_type, value_type*, value_type&>
             projection_traits;
+public:
     typedef iterator_adaptor<Iterator,
-            projection_iterator_policies<AdaptableUnaryFunction>,
+        projection_iterator_policies<AdaptableUnaryFunction>,
             projection_traits> type;
 };
 
-template <class AdaptableUnaryFunction, class Iterator,
-        class Traits = boost::detail::iterator_traits<Iterator>
-        >
-struct const_projection_iterator_generator {
-    typedef const_projection_iterator_traits<AdaptableUnaryFunction,
-            Traits> projection_traits;
+template <class AdaptableUnaryFunction, class Iterator>
+class const_projection_iterator_generator {
+    typedef boost::detail::iterator_traits<Iterator> Traits;
+    typedef typename AdaptableUnaryFunction::result_type value_type;
+    typedef boost::iterator<typename Traits::iterator_category, 
+        value_type, typename Traits::difference_type, const value_type*, const value_type&>
+            projection_traits;
+public:
     typedef iterator_adaptor<Iterator,
-            projection_iterator_policies<AdaptableUnaryFunction>,
+        projection_iterator_policies<AdaptableUnaryFunction>,
             projection_traits> type;
 };
 
-template <class AdaptableUnaryFunction, class Iterator, class ConstIterator,
-        class Traits = boost::detail::iterator_traits<Iterator>,
-        class ConstTraits = boost::detail::iterator_traits<ConstIterator>
-        >
+template <class AdaptableUnaryFunction, class Iterator, class ConstIterator>
 struct projection_iterator_pair_generator {
-    typedef projection_iterator_traits<AdaptableUnaryFunction, Traits>
-            projection_traits;
-    typedef const_projection_iterator_traits<AdaptableUnaryFunction,
-            ConstTraits> const_projection_traits;
-    typedef iterator_adaptor<Iterator, projection_iterator_policies<AdaptableUnaryFunction>,
-        projection_traits> iterator;
-    typedef iterator_adaptor<ConstIterator, projection_iterator_policies<AdaptableUnaryFunction>,
-        const_projection_traits > const_iterator;
+    typedef typename projection_iterator_generator<AdaptableUnaryFunction, Iterator>::type iterator;
+    typedef typename const_projection_iterator_generator<AdaptableUnaryFunction, Iterator>::type const_iterator;
 };
+
+
+template <class AdaptableUnaryFunction, class Iterator>
+inline typename projection_iterator_generator<AdaptableUnaryFunction, Iterator>::type
+make_projection_iterator(Iterator iter, AdaptableUnaryFunction f)
+{
+    typedef typename projection_iterator_generator<AdaptableUnaryFunction, Iterator>::type result_t;
+    return result_t(iter, f);
+}
+
+template <class AdaptableUnaryFunction, class Iterator>
+inline typename const_projection_iterator_generator<AdaptableUnaryFunction, Iterator>::type
+make_const_projection_iterator(Iterator iter, AdaptableUnaryFunction f)
+{
+    typedef typename const_projection_iterator_generator<AdaptableUnaryFunction, Iterator>::type result_t;
+    return result_t(iter, f);
+}
 
 //=============================================================================
 // Filter Iterator Adaptor
 
-  template <class Predicate, class Iterator>
-  class filter_iterator_policies : public default_iterator_policies {
-  public:
+template <class Predicate, class Iterator>
+class filter_iterator_policies : public default_iterator_policies {
+public:
     filter_iterator_policies() { }
 
     filter_iterator_policies(const Predicate& p, const Iterator& end) 
-      : m_predicate(p), m_end(end) { }
+        : m_predicate(p), m_end(end) { }
 
     void initialize(Iterator& x) {
-      advance(x);
+        advance(x);
     }
 
     // dwa 2/4/01 - The Iter template argument neccessary for compatibility with
     // a MWCW bug workaround
     template <class Iter>
     void increment(Iter& x) {
-      ++x;
-      advance(x);
+        ++x;
+        advance(x);
     }
-  private:
+private:
     void advance(Iterator& iter)
     {
-      while (m_end != iter && !m_predicate(*iter))
-	++iter;
+        while (m_end != iter && !m_predicate(*iter))
+            ++iter;
     }  
     Predicate m_predicate;
     Iterator m_end;
-  };
-  
-  template <class Predicate, class Iterator, 
-            class Traits = boost::detail::iterator_traits<Iterator>
-           >
-  class filter_iterator_generator {
+};
+
+template <class Predicate, class Iterator, 
+	  class Traits = boost::detail::iterator_traits<Iterator>
+	 >
+class filter_iterator_generator {
     typedef filter_iterator_policies<Predicate, Iterator> Policies;
-  public:
+public:
+    typedef filter_iterator_policies<Predicate, Iterator> policies_type;
     typedef iterator_adaptor<Iterator, Policies, Traits> type;
-  };
+};
+
+
+template <class Predicate, class Iterator, class Traits>
+inline typename filter_iterator_generator<Predicate, Iterator, Traits>::type
+make_filter_iterator(Iterator first, Iterator last, Predicate p, Traits)
+{
+  typedef filter_iterator_generator<Predicate, Iterator, Traits> Gen;
+  typedef typename Gen::policies_type policies_t;
+  typedef typename Gen::type result_t;
+  return result_t(first, policies_t(p, last));
+}
+
+#if !defined(BOOST_NO_STD_ITERATOR_TRAITS)
+template <class Predicate, class Iterator>
+inline typename filter_iterator_generator<Predicate, Iterator>::type
+make_filter_iterator(Iterator first, Iterator last, Predicate p)
+{
+  typedef filter_iterator_generator<Predicate, Iterator> Gen;
+  typedef typename Gen::policies_type policies_t;
+  typedef typename Gen::type result_t;
+  return result_t(first, policies_t(p, last));
+}
+#endif
 
 
 } // namespace boost
