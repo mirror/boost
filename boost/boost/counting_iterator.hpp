@@ -28,6 +28,7 @@
 //     Incrementable.
 // 
 // Revision History
+// 11 Feb 2001  Use BOOST_STATIC_CONSTANT (Dave Abrahams)
 // 11 Feb 2001  Clean up after John Maddocks's (finally effective!) Borland
 //              fixes (David Abrahams).
 // 10 Feb 2001  Use new iterator_adaptor<> interface (David Abrahams)
@@ -131,18 +132,16 @@ namespace detail {
   struct is_numeric {
     // For a while, this wasn't true, but we rely on it below. This is a regression assert.
     BOOST_STATIC_ASSERT(::boost::is_integral<char>::value);
-#if !defined(__BORLANDC__)
-    enum { value =
 # ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-        std::numeric_limits<T>::is_specialized
+    BOOST_STATIC_CONSTANT(bool, value = std::numeric_limits<T>::is_specialized);
 # else
-        boost::is_convertible<int,T>::value && boost::is_convertible<T,int>::value
+#  if !defined(__BORLANDC__)
+    BOOST_STATIC_CONSTANT(bool, value = (
+        boost::is_convertible<int,T>::value && boost::is_convertible<T,int>::value));
+#  else
+    BOOST_STATIC_CONSTANT(bool, value = ::boost::is_arithmetic<T>::value);
+#  endif
 # endif
-    };
-#else
-    // Borland seems to have a strange problem with using an enum in this case
-    static const bool value = ::boost::is_arithmetic<T>::value;
-#endif
   };
 
   // Compute the distance over arbitrary numeric and/or iterator types
