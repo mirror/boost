@@ -18,7 +18,6 @@ SOURCES =
     basic_xml_archive
     binary_iarchive
     binary_oarchive
-    codecvt_null
     extended_type_info
     extended_type_info_no_rtti
     extended_type_info_typeid
@@ -33,6 +32,7 @@ SOURCES =
 ;
     
 WSOURCES = 
+    codecvt_null
     basic_text_wiprimitive
     basic_text_woprimitive
     binary_wiarchive
@@ -54,14 +54,13 @@ lib boost_serialization
         <msvc-stlport><*><include>$(SPIRIT_ROOT) 
         <vc7><*><include>$(SPIRIT_ROOT) 
         <borland><*><include>$(SPIRIT_ROOT) 
-        <borland-5.5.1><*><include>$(SPIRIT_ROOT) 
-        <borland-5.6.4><*><include>$(SPIRIT_ROOT) 
-        <gcc-2.95.3-stlport-4.5.3-linux><include>$(SPIRIT_ROOT)
+        <borland-5_5_1><*><include>$(SPIRIT_ROOT) 
+        <borland-5_6_4><*><include>$(SPIRIT_ROOT) 
         <sysinclude>$(BOOST_ROOT)
         <borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
         <msvc><*><cxxflags>-Gy
         <vc7><*><cxxflags>-Gy
-        <vc7.1><*><cxxflags>-Gy
+        <vc7_1><*><cxxflags>-Gy
         <define>BOOST_TEST_NO_AUTO_LINK=1
     : ## default-build
         <runtime-link>static/dynamic <threading>single/multi
@@ -76,14 +75,13 @@ lib boost_wserialization
         <msvc-stlport><*><include>$(SPIRIT_ROOT) 
         <vc7><*><include>$(SPIRIT_ROOT) 
         <borland><*><include>$(SPIRIT_ROOT) 
-        <borland-5.5.1><*><include>$(SPIRIT_ROOT) 
-        <borland-5.6.4><*><include>$(SPIRIT_ROOT) 
-        <gcc-2.95.3-stlport-4.5.3-linux><include>$(SPIRIT_ROOT)
+        <borland-5_5_1><*><include>$(SPIRIT_ROOT) 
+        <borland-5_6_4><*><include>$(SPIRIT_ROOT) 
         <sysinclude>$(BOOST_ROOT)
         <borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
         <msvc><*><cxxflags>-Gy
         <vc7><*><cxxflags>-Gy
-        <vc7.1><*><cxxflags>-Gy
+        <vc7_1><*><cxxflags>-Gy
         <define>BOOST_TEST_NO_AUTO_LINK=1
         <vacpp><*><define>BOOST_MPL_USE_APPLY_INTERNALLY
     : ## default-build
