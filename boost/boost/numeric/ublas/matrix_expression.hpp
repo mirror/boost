@@ -229,7 +229,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_reference ():
               e_ (nil_) {}
         BOOST_UBLAS_INLINE
-        matrix_reference (refered_type &e):
+        explicit matrix_reference (refered_type &e):
               e_ (e) {}
 
         // Accessors
@@ -1047,7 +1047,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_unary1 ():
             e_ () {}
         BOOST_UBLAS_INLINE
-        matrix_unary1 (const expression_type &e):
+        explicit matrix_unary1 (const expression_type &e):
             e_ (e) {}
 
         // Accessors
@@ -1526,7 +1526,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         // ISSUE may be used as mutable expression.
         // matrix_unary2 (const expression_type &e):
-        matrix_unary2 (expression_type &e):
+        explicit matrix_unary2 (expression_type &e):
             e_ (e) {}
 
         // Accessors
@@ -5175,7 +5175,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_scalar_unary ():
             e_ () {}
         BOOST_UBLAS_INLINE
-        matrix_scalar_unary (const expression_type &e):
+        explicit matrix_scalar_unary (const expression_type &e):
             e_ (e) {}
 
 #ifndef BOOST_UBLAS_NESTED_CLASS_DR45
