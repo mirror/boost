@@ -616,6 +616,8 @@ public: // visitor interface
             nothrow_move;
 
         backup_assign_impl( lhs_content, nothrow_move() );
+
+        BOOST_VARIANT_AUX_RETURN_VOID;
     }
 
 };
