@@ -246,6 +246,11 @@
 //  Edison Design Group front-ends
 # if defined(__EDG_VERSION__)
 
+#   if __EDG_VERSION__ <= 238
+      // SGI MIPSpro 7.3 uses the EDG 2.38 front-end.
+#     define BOOST_NO_DEPENDENT_BASE_LOOKUP
+#   endif
+
 #   if __EDG_VERSION__ <= 241
 #     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #   endif
@@ -411,7 +416,7 @@
 #     define BOOST_NO_STDC_NAMESPACE
 #   endif
  
-//  Metrowerks CodeWarrior  --------------------------------------------------//
+//  Metrowerks CodeWarrior  -------------------------------------------------//
 
 # elif defined  __MWERKS__
 #   if __MWERKS__ <= 0x2401  // 6.2
@@ -440,23 +445,30 @@
 #     define BOOST_DECL
 #   endif
 
-//  SGI MIPSpro C++ ----------------------------------------------------------//
+//  SGI MIPSpro C++ ---------------------------------------------------------//
 
-#elif defined __sgi
-#   define BOOST_NO_DEPENDENT_BASE_LOOKUP
+# elif defined __sgi
+    // This is a generic STLport condition and could be moved elsewhere.
+#   include <iterator>
+#   if defined(__SGI_STL_PORT) && !defined(__STL_MEMBER_TEMPLATE_CLASSES) && !defined(_STLP_MEMBER_TEMPLATE_CLASSES)
+#     define BOOST_NO_STD_ALLOCATOR
+#   endif
 
-//  Sun Workshop Compiler C++ ------------------------------------------------//
+//  Sun Workshop Compiler C++ -----------------------------------------------//
 
 # elif defined  __SUNPRO_CC
 #    if __SUNPRO_CC <= 0x520
 #      define BOOST_NO_SLIST
 #      define BOOST_NO_HASH
 #      define BOOST_NO_STD_ITERATOR_TRAITS
+#      define BOOST_NO_STD_ALLOCATOR
+
        // although sunpro 5.1 supports the syntax for
        // inline initialization it often gets the value
        // wrong, especially where the value is computed
        // from other constants (J Maddock 6th May 2001)
 #      define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+
        // although sunpro 5.1 supports the syntax for
        // partial specialization, it often seems to
        // bind to the wrong specialization.  Better
