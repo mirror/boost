@@ -16,6 +16,9 @@ namespace date_time {
   enum month_format_spec {month_as_integer, month_as_short_string, 
                           month_as_long_string};
 
+  //! Enum for distinguishing the order of Month, Day, & Year.
+  /*! Enum for distinguishing the order in which Month, Day, & Year
+   * will appear in a date string */
   enum ymd_order_spec {ymd_order_iso,  //order is year-month-day
                        ymd_order_dmy,  //day-month-year
                        ymd_order_us};  //order is month-day-year

@@ -12,6 +12,7 @@
 #include "boost/tokenizer.hpp"
 #include "boost/lexical_cast.hpp"
 #include "boost/date_time/compiler_config.hpp"
+#include "boost/date_time/parse_format_base.hpp"
 #include <string>
 #include <iterator>
 #include <algorithm>
@@ -53,61 +54,78 @@ namespace date_time {
     return std::string(tmp);
   }
 
+  //! Helper function for parse_date.
+  /* Used by-value parameter because we change the string and may 
+   * want to preserve the original argument */
+  template<class month_type> 
+  unsigned short month_str_to_ushort(std::string s)
+  {
+    if((s.at(0) >= '0') && (s.at(0) <= '9'))
+    {
+      return boost::lexical_cast<unsigned short>(s);
+    }
+    else
+    {
+      s = convert_to_lower(s);
+      typename month_type::month_map_ptr_type ptr = month_type::get_month_map_ptr();
+      typename month_type::month_map_type::iterator iter = ptr->find(s);
+      if(iter != ptr->end()) // required for STLport
+      {
+	return iter->second;
+      }
+    }
+    return 13; // intentionally out of range - name not found
+  }
+
   //! Generic function to parse a delimited date (eg: 2002-02-10)
   /*! Accepted formats are: "2003-02-10" or " 2003-Feb-10" or
    * "2003-Feburary-10" 
-   * Note: Month names may be case in-sensitive, check compiler_config.hpp
-   * to see if case insensitivity is suppoerted for your compiler */
+   * The order in which the Month, Day, & Year appear in the argument 
+   * string can be accomodated by passing in the appropriate ymd_order_spec */
   template<class date_type>
   date_type
-  parse_date(const std::string& s)
+  parse_date(const std::string& s, int order_spec = ymd_order_iso)
   {
+    std::string spec_str("");
+    if(order_spec == ymd_order_iso)
+    {
+      spec_str = "ymd";
+    }
+    else if(order_spec == ymd_order_dmy)
+    {
+      spec_str = "dmy";
+    }
+    else{ // (order_spec == ymd_order_us)
+      spec_str = "mdy";
+    }
+    
     typedef typename date_type::year_type year_type;
     typedef typename date_type::month_type month_type;
-    int pos = 0;
+    unsigned pos = 0;
     typename date_type::ymd_type ymd(year_type::min(),1,1);
     boost::tokenizer<boost::char_delimiters_separator<char> > tok(s);
-    for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end();++beg)
+    for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end(), pos < spec_str.size(); ++beg, ++pos)
     {
       unsigned short i =0; 
-      switch(pos) {
-        case 0:
+      switch(spec_str.at(pos)) {
+        case 'y':
 	{
           i = boost::lexical_cast<unsigned short>(*beg);
 	  ymd.year = i; 
 	  break;
 	}
-        case 1:
+        case 'm':
 	{
-	  std::string s = *beg;
-	  if((s.at(0) >= '0') && (s.at(0) <= '9'))
-          {
-            i = boost::lexical_cast<unsigned short>(s);
-	  }
-	  else
-          {
-	    typename month_type::month_map_ptr_type ptr = month_type::get_month_map_ptr();
-	    s = convert_to_lower(s);
-	    typename month_type::month_map_type::iterator iter = ptr->find(s);
-	    if(iter != ptr->end()) // required for STLport
-	    {
-	      i = iter->second;
-	    }
-	    else{
-	      i = 13; // intentionally out of range - name not found
-	    }
-	  }
-	  ymd.month = i; 
+	  ymd.month = month_str_to_ushort<month_type>(*beg); 
 	  break;
 	}
-        case 2:
+        case 'd':
         {
           i = boost::lexical_cast<unsigned short>(*beg);
           ymd.day = i; 
           break;
         }
       }; //switch
-      pos++;
     }
     return date_type(ymd);
   }

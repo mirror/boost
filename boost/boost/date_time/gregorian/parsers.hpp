@@ -12,6 +12,7 @@
 #include "boost/date_time/gregorian/gregorian_types.hpp"
 #include "boost/date_time/date_parsing.hpp"
 #include "boost/date_time/compiler_config.hpp"
+#include "boost/date_time/parse_format_base.hpp"
 #include <string>
 #include <sstream>
 
@@ -23,9 +24,19 @@ namespace gregorian {
     return date_time::parse_date<date>(s);
   }
 
-  //! From delimited date string where with order year-month-day eg: 2002-1-25 or 2003-Jan-25
+  //! From delimited date string where with order year-month-day eg: 2002-1-25 or 2003-Jan-25 (full month name is also accepted)
   inline date from_simple_string(std::string s) {
-    return date_time::parse_date<date>(s);
+    return date_time::parse_date<date>(s, date_time::ymd_order_iso);
+  }
+  
+  //! From delimited date string where with order year-month-day eg: 1-25-2003 or Jan-25-2003 (full month name is also accepted)
+  inline date from_us_string(std::string s) {
+    return date_time::parse_date<date>(s, date_time::ymd_order_us);
+  }
+  
+  //! From delimited date string where with order day-month-year eg: 25-1-2002 or 25-Jan-2003 (full month name is also accepted)
+  inline date from_uk_string(std::string s) {
+    return date_time::parse_date<date>(s, date_time::ymd_order_dmy);
   }
   
 #if !(defined(BOOST_NO_STD_ITERATOR_TRAITS))
