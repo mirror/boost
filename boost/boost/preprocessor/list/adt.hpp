@@ -71,18 +71,10 @@ BOOST_PP_LIST_FOLD_RIGHT
 #define BOOST_PP_LIST_NIL (_,_,0)
 
 /** <p>Expands to 1 if the list is not nil and 0 otherwise.</p> */
-#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
-#  define BOOST_PP_LIST_IS_CONS(LIST) BOOST_PP_TUPLE_ELEM(3,2,LIST)
-#else
-#  define BOOST_PP_LIST_IS_CONS(LIST) BOOST_PP_TUPLE3_ELEM2 LIST
-#endif
+#define BOOST_PP_LIST_IS_CONS(LIST) BOOST_PP_TUPLE_ELEM(3,2,LIST)
 
 /** <p>Expands to 1 if the list is nil and 0 otherwise.</p> */
-#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
-#  define BOOST_PP_LIST_IS_NIL(LIST) BOOST_PP_NOT(BOOST_PP_TUPLE_ELEM(3,2,LIST))
-#else
-#  define BOOST_PP_LIST_IS_NIL(LIST) BOOST_PP_NOT(BOOST_PP_TUPLE3_ELEM2 LIST)
-#endif
+#define BOOST_PP_LIST_IS_NIL(LIST) BOOST_PP_NOT(BOOST_PP_TUPLE_ELEM(3,2,LIST))
 
 /** <p>Expands to the first element of the list. The list must not be nil.</p>
 
@@ -94,11 +86,7 @@ BOOST_PP_LIST_FIRST(BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5)))
 
 <p>expands to 1.</p>
 */
-#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
-#  define BOOST_PP_LIST_FIRST(LIST) BOOST_PP_TUPLE_ELEM(3,0,LIST)
-#else
-#  define BOOST_PP_LIST_FIRST(LIST) BOOST_PP_TUPLE3_ELEM0 LIST
-#endif
+#define BOOST_PP_LIST_FIRST(LIST) BOOST_PP_TUPLE_ELEM(3,0,LIST)
 
 /** <p>Expands to a list of all but the first element of the list.</p>
 
@@ -116,9 +104,5 @@ BOOST_PP_LIST_REST(BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5)))
 BOOST_PP_TUPLE_TO_LIST(4,(2,3,4,5))
 </pre>
 */
-#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
-#  define BOOST_PP_LIST_REST(LIST) BOOST_PP_TUPLE_ELEM(3,1,LIST)
-#else
-#  define BOOST_PP_LIST_REST(LIST) BOOST_PP_TUPLE3_ELEM1 LIST
-#endif
+#define BOOST_PP_LIST_REST(LIST) BOOST_PP_TUPLE_ELEM(3,1,LIST)
 #endif
