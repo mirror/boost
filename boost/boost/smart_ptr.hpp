@@ -9,6 +9,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  24 Jul 00  Change throw() to // never throws.  See lib guidelines
+//             Exception-specification rationale. (Beman Dawes)
 //  22 Jun 00  Remove #if continuations to fix GCC 2.95.2 problem (Beman Dawes)
 //   1 Feb 00  Additional shared_ptr BOOST_NO_MEMBER_TEMPLATES workarounds
 //             (Dave Abrahams)
@@ -67,16 +69,16 @@ template<typename T> class scoped_ptr : noncopyable {
  public:
   typedef T element_type;
 
-  explicit scoped_ptr( T* p=0 ) throw() : ptr(p) {}
+  explicit scoped_ptr( T* p=0 ) : ptr(p) {}  // never throws
   ~scoped_ptr()                 { delete ptr; }
 
   void reset( T* p=0 )          { if ( ptr != p ) { delete ptr; ptr = p; } }
-  T& operator*() const throw()  { return *ptr; }
-  T* operator->() const throw() { return ptr; }
-  T* get() const throw()        { return ptr; }
+  T& operator*() const          { return *ptr; }  // never throws
+  T* operator->() const         { return ptr; }  // never throws
+  T* get() const                { return ptr; }  // never throws
 #ifdef BOOST_SMART_PTR_CONVERSION
   // get() is safer! Define BOOST_SMART_PTR_CONVERSION at your own risk!
-  operator T*() const throw()   { return ptr; } 
+  operator T*() const           { return ptr; }  // never throws 
 #endif
   };  // scoped_ptr
 
@@ -93,17 +95,17 @@ template<typename T> class scoped_array : noncopyable {
  public:
   typedef T element_type;
 
-  explicit scoped_array( T* p=0 ) throw() : ptr(p) {}
+  explicit scoped_array( T* p=0 ) : ptr(p) {}  // never throws
   ~scoped_array()                    { delete [] ptr; }
 
   void reset( T* p=0 )               { if ( ptr != p ) {delete [] ptr; ptr=p;} }
 
-  T* get() const throw()             { return ptr; }
+  T* get() const                     { return ptr; }  // never throws
 #ifdef BOOST_SMART_PTR_CONVERSION
   // get() is safer! Define BOOST_SMART_PTR_CONVERSION at your own risk!
-  operator T*() const throw()        { return ptr; }
+  operator T*() const                { return ptr; }  // never throws
 #else 
-  T& operator[](std::size_t i) const throw() { return ptr[i]; }
+  T& operator[](std::size_t i) const { return ptr[i]; }  // never throws
 #endif
   };  // scoped_array
 
@@ -122,7 +124,7 @@ template<typename T> class shared_ptr {
       catch (...) { delete p; throw; } 
    }
 
-   shared_ptr(const shared_ptr& r) throw() : px(r.px) { ++*(pn = r.pn); }
+   shared_ptr(const shared_ptr& r) : px(r.px) { ++*(pn = r.pn); }  // never throws
 
    ~shared_ptr() { dispose(); }
 
@@ -133,7 +135,7 @@ template<typename T> class shared_ptr {
 
 #if !defined( BOOST_NO_MEMBER_TEMPLATES )
    template<typename Y>
-      shared_ptr(const shared_ptr<Y>& r) throw() : px(r.px) { 
+      shared_ptr(const shared_ptr<Y>& r) : px(r.px) {  // never throws 
          ++*(pn = r.pn); 
       }
 
@@ -195,18 +197,18 @@ template<typename T> class shared_ptr {
       px = p;
    } // reset
 
-   T& operator*() const throw()  { return *px; }
-   T* operator->() const throw() { return px; }
-   T* get() const throw()        { return px; }
+   T& operator*() const          { return *px; }  // never throws
+   T* operator->() const         { return px; }  // never throws
+   T* get() const                { return px; }  // never throws
  #ifdef BOOST_SMART_PTR_CONVERSION
    // get() is safer! Define BOOST_SMART_PTR_CONVERSION at your own risk!
-   operator T*() const throw()   { return px; } 
+   operator T*() const           { return px; }  // never throws 
  #endif
 
-   long use_count() const throw(){ return *pn; }
-   bool unique() const throw()   { return *pn == 1; }
+   long use_count() const        { return *pn; }  // never throws
+   bool unique() const           { return *pn == 1; }  // never throws
 
-   void swap(shared_ptr<T>& other) throw()
+   void swap(shared_ptr<T>& other)  // never throws
      { std::swap(px,other.px); std::swap(pn,other.pn); }
 
 // Tasteless as this may seem, making all members public allows member templates
@@ -258,7 +260,8 @@ template<typename T> class shared_array {
       catch (...) { delete [] p; throw; } 
    }
 
-   shared_array(const shared_array& r) throw() : px(r.px) { ++*(pn = r.pn); }
+   shared_array(const shared_array& r) : px(r.px)  // never throws
+      { ++*(pn = r.pn); }
 
    ~shared_array() { dispose(); }
 
@@ -286,18 +289,18 @@ template<typename T> class shared_array {
       px = p;
    } // reset
 
-   T* get() const throw()             { return px; }
+   T* get() const                     { return px; }  // never throws
  #ifdef BOOST_SMART_PTR_CONVERSION
    // get() is safer! Define BOOST_SMART_PTR_CONVERSION at your own risk!
-   operator T*() const throw()        { return px; }
+   operator T*() const                { return px; }  // never throws
  #else 
-   T& operator[](std::size_t i) const throw() { return px[i]; }
+   T& operator[](std::size_t i) const { return px[i]; }  // never throws
  #endif
 
-   long use_count() const throw()     { return *pn; }
-   bool unique() const throw()        { return *pn == 1; }
+   long use_count() const             { return *pn; }  // never throws
+   bool unique() const                { return *pn == 1; }  // never throws
 
-   void swap(shared_array<T>& other) throw()
+   void swap(shared_array<T>& other)  // never throws
      { std::swap(px,other.px); std::swap(pn,other.pn); }
 
   private:
