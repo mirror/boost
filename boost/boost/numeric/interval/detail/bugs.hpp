@@ -20,28 +20,28 @@
 #include <boost/config.hpp>
 
 #if defined(__GLIBC__) && !defined(__GLIBCPP__) && (defined(__USE_MISC) || defined(__USE_XOPEN_EXTENDED) || defined(__USE_ISOC99)) && !defined(__ICC)
-#  define BOOST_HAVE_INV_HYPERBOLIC
+#  define BOOST_HAS_INV_HYPERBOLIC
 #endif
 
-#ifndef BOOST_HAVE_INV_HYPERBOLIC
-#  define BOOST_NUMERIC_INTERVAL_using_ahyp(a)
-#endif
-
-#if defined(BOOST_NO_STDC_NAMESPACE)
-#  define BOOST_NUMERIC_INTERVAL_using_max(a) ::a
-#  define BOOST_NUMERIC_INTERVAL_using_math(a) ::a
-#  ifndef BOOST_NUMERIC_INTERVAL_using_ahyp
-#    define BOOST_NUMERIC_INTERVAL_using_ahyp(a) ::a
+#ifdef BOOST_NO_STDC_NAMESPACE
+#  define BOOST_NUMERIC_INTERVAL_using_max(a) using ::a
+#  define BOOST_NUMERIC_INTERVAL_using_math(a) using ::a
+#  ifdef BOOST_HAS_INV_HYPERBOLIC
+#    define BOOST_NUMERIC_INTERVAL_using_ahyp(a) using ::a
 #  endif
 #else
 #  define BOOST_NUMERIC_INTERVAL_using_max(a) using std::a
 #  define BOOST_NUMERIC_INTERVAL_using_math(a) using std::a
-#  ifndef BOOST_NUMERIC_INTERVAL_using_ahyp
+#  ifdef BOOST_HAS_INV_HYPERBOLIC
 #    define BOOST_NUMERIC_INTERVAL_using_ahyp(a) using std::a
 #  endif
 #endif
 
-#if __GNUC__ <= 2
+#ifndef BOOST_NUMERIC_INTERVAL_using_ahyp
+#  define BOOST_NUMERIC_INTERVAL_using_ahyp(a)
+#endif
+
+#if defined(__GNUC__) && (__GNUC__ <= 2)
 // cf PR c++/1981 for a description of the bug
 #include <algorithm>
 #include <cmath>
@@ -66,7 +66,7 @@ namespace numeric {
 # undef BOOST_NUMERIC_INTERVAL_using_math
 # define BOOST_NUMERIC_INTERVAL_using_max(a)
 # define BOOST_NUMERIC_INTERVAL_using_math(a)
-# if defined(BOOST_HAVE_INV_HYPERBOLIC)
+# ifdef BOOST_HAS_INV_HYPERBOLIC
   using std::asinh;
   using std::acosh;
   using std::atanh;
