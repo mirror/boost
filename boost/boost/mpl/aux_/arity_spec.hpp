@@ -22,7 +22,6 @@
 #include <boost/mpl/aux_/template_arity_fwd.hpp>
 #include <boost/mpl/aux_/config/ttp.hpp>
 #include <boost/mpl/aux_/config/lambda.hpp>
-#include <boost/mpl/aux_/config/overload_resolution.hpp>
 #include <boost/mpl/aux_/config/static_constant.hpp>
 
 #if defined(BOOST_MPL_CFG_BROKEN_DEFAULT_PARAMETERS_IN_NESTED_TEMPLATES)
@@ -49,7 +48,8 @@ struct arity< \
 /**/
 
 
-#if defined(BOOST_MPL_CFG_EXTENDED_TEMPLATE_PARAMETERS_MATCHING)
+#if defined(BOOST_MPL_CFG_EXTENDED_TEMPLATE_PARAMETERS_MATCHING) \
+    && !defined(BOOST_MPL_CFG_NO_FULL_LAMBDA_SUPPORT)
 #   define BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(i, name) \
 namespace aux { \
 template< BOOST_MPL_PP_PARAMS(i,typename T) > \
