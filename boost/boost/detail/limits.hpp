@@ -20,6 +20,8 @@
 
 /*
  * Revision history:
+ * 10 Aug 2001:
+ *    Added MIPS (big endian) to the big endian family. (Jens Maurer)
  * 13 Apr 2001:
  *    Added powerpc to the big endian family. (Jeremy Siek)
  * 5 Apr 2001:
@@ -36,9 +38,11 @@
 #include <cwchar>             // for WCHAR_MIN and WCHAR_MAX
 #include <boost/config.hpp>
 
-#if defined(__sparc) || defined(__sparc__) || defined(__powerpc__) || defined(__ppc__) || defined(__hppa)
+#if defined(__sparc) || defined(__sparc__) || defined(__powerpc__) || defined(__ppc__) || defined(__hppa) || defined(_MIPSEB)
 #define BOOST_BIG_ENDIAN
-#elif !defined(__i386__)
+#elif defined(__i386__)
+#define BOOST_LITTLE_ENDIAN
+#else
 #error The file boost/detail/limits.hpp needs to be set up for your CPU type.
 #endif
 
