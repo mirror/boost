@@ -27,7 +27,9 @@
 #include <climits>
 #include <iterator>
 #include <stdlib.h>
-#include <boost/tuple/tuple.hpp>
+#ifndef __BORLANDC__
+# include <boost/tuple/tuple.hpp>
+#endif 
 #include <vector>
 #include <list>
 #include <cassert>
@@ -72,8 +74,12 @@ void category_test(
 
     // Try some binary searches on the range to show that it's ordered
     assert(std::binary_search(start, finish, *internal));
-    CountingIterator x,y;
-    boost::tie(x,y) = std::equal_range(start, finish, *internal);
+
+    // #including tuple crashed borland, so I had to give up on tie().
+    std::pair<CountingIterator,CountingIterator> xy(
+        std::equal_range(start, finish, *internal));
+    CountingIterator x = xy.first, y = xy.second;
+    
     assert(boost::detail::distance(x, y) == 1);
 
     // Show that values outside the range can't be found
@@ -253,7 +259,7 @@ int main()
 # ifndef BOOST_NO_SLIST
     test_container<BOOST_STD_EXTENSION_NAMESPACE::slist<int> >();
 # endif
-    
+
     // Also prove that we can handle raw pointers.
     int array[2000];
     test(boost::make_counting_iterator(array), boost::make_counting_iterator(array+2000-1));
