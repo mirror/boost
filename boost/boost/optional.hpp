@@ -77,7 +77,7 @@ class aligned_storage
 } ;
 
 template<class T>
-class types_when_isnt_ref
+struct types_when_isnt_ref
 {
   typedef T const& reference_const_type ;
   typedef T &      reference_type ;
@@ -86,7 +86,7 @@ class types_when_isnt_ref
   typedef T const& argument_type ;
 } ;
 template<class T>
-class types_when_is_ref
+struct types_when_is_ref
 {
   typedef BOOST_DEDUCED_TYPENAME remove_reference<T>::type raw_type ;
 
@@ -117,9 +117,9 @@ class optional_base
     typedef mpl::false_ is_not_reference_tag ;
 
     typedef BOOST_DEDUCED_TYPENAME is_reference<T>::type is_reference_predicate ;
-    
+
     typedef BOOST_DEDUCED_TYPENAME mpl::if_<is_reference_predicate,types_when_ref,types_when_not_ref>::type types ;
-    
+
     typedef bool (this_type::*unspecified_bool_type)() const;
 
     typedef BOOST_DEDUCED_TYPENAME types::reference_type       reference_type ;
