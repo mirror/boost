@@ -37,7 +37,8 @@ namespace detail {
 #ifndef BOOST_BAD_ISDIGIT
     return std::isdigit(c, os.rdbuf()->getloc() );
 # else
-    return std::isdigit(c); // this is a good backup solution.
+    using namespace std;
+    return isdigit(c); 
 #endif 
   } //end- wrap_isdigit(..)
 
