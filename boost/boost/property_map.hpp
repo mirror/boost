@@ -344,7 +344,7 @@ namespace boost {
     IndexMap index;
   };
 
-#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if !defined BOOST_NO_STD_ITERATOR_TRAITS
   template <class RAIter, class ID>
   inline iterator_property_map<
     RAIter, ID,
