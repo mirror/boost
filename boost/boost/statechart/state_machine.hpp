@@ -794,7 +794,8 @@ class state_machine : noncopyable
             defer_event( evt, get_pointer( *pState ) ); break;
           case do_forward_event:
             ++pState; break;
-          // intentionally no default case (do nothing)
+          default:
+            break;
         }
       }
 

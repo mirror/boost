@@ -213,14 +213,15 @@ int main()
 }</pre>
 <p>This compiles but doesn't do anything observable yet. A few comments:</p>
 <ul>
-  <li>The <code>simple_state</code> class template accepts up to four 
+  <li>The <code>simple_state</code> class template accepts up to five 
   parameters.
   <ul>
     <li>The third parameter specifies <a href="definitions.html#Reaction">
     reactions</a> (explained in due course). Because there aren't any yet, we 
-    pass <code>fsm::no_reactions</code>, which is also the default.</li>
+    pass <code>no_reactions</code>, which is also the default</li>
     <li>The fourth parameter specifies the inner initial state, if there is 
-    one.</li>
+    one</li>
+    <li>The fifth parameter specifies whether and what kind of history is kept</li>
   </ul>
   </li>
   <li>A state is defined as an inner state simply by passing its outer state 
@@ -263,7 +264,7 @@ int main()
 </b>  return 0;
 }</pre>
 <p>A state can define an arbitrary number of reactions. That's why we have to 
-put them into an <code>mpl::list</code> as soon as there is more than one of 
+put them into an <code>mpl::list&lt;&gt;</code> as soon as there is more than one of 
 them (see <a href="#Specifying multiple reactions for a state">Specifying 
 multiple reactions for a state</a>).<br>
 Now we have all the states and all the transitions in place and a number of 
@@ -526,13 +527,12 @@ fsm::result Idle::react( const EvConfig &amp; )
 {
   return transit&lt; Configuring &gt;();
 }</pre>
-<p><b><font color="#FF0000">Caution: Any call to the <code>
-simple_state::transit&lt;&gt;()</code> or <code>simple_state::terminate()</code> 
-(see <a href="reference.html#transit1">reference</a>) member functions will 
-inevitably destruct the state object (similar to <code>delete this;</code>)! 
-That is, code executed after any of these calls may invoke undefined behavior!</font></b> 
-That's why these functions should only be called as part of a return 
-statement.</p>
+<p><b><font color="#FF0000">Caution: Any call to <code>simple_state&lt;&gt;::transit&lt;&gt;()</code> 
+or <code>simple_state&lt;&gt;::terminate()</code> (see
+<a href="reference.html#transit1">reference</a>) will inevitably destruct the 
+state object (similar to <code>delete this;</code>)! That is, code executed 
+after any of these calls may invoke undefined behavior!</font></b> That's why 
+these functions should only be called as part of a return statement.</p>
 <h3><a name="Guards">Guards</a></h3>
 <p>The inner workings of the Shooting state could look as follows:</p>
 <p><img border="0" src="Camera2.gif" width="427" height="427"></p>
@@ -676,7 +676,7 @@ fsm::result Focusing::react( const EvInFocus &amp; evt )
 <h3><a name="Specifying multiple reactions for a state">Specifying multiple 
 reactions for a state</a></h3>
 <p>Often a state must define reactions for more than one event. In this case, 
-an <code>mpl::list</code> must be used as outlined below:</p>
+an <code>mpl::list&lt;&gt;</code> must be used as outlined below:</p>
 <pre>// ...
 
 <b>#include &lt;boost/mpl/list.hpp&gt;
@@ -714,28 +714,28 @@ in <code>Shooting.cpp</code> in the Camera example): </p>
 };</pre>
 <p>Please note the bold parts. As soon as an entry action of a state needs to 
 contact the &quot;outside world&quot; (here: the event queue in the state machine), the 
-state must derive from <code>fsm::state</code> rather than from <code>
-fsm::simple_state</code> and must implement a forwarding constructor as 
-outlined above (apart from the constructor, <code>fsm::state</code> offers the 
-same interface as <code>fsm::simple_state</code>). Hence, this must be done 
-whenever an entry action makes one or more calls to the following functions:</p>
+state must derive from <code>state&lt;&gt;</code> rather than from <code>
+simple_state&lt;&gt;</code> and must implement a forwarding constructor as outlined 
+above (apart from the constructor, <code>state&lt;&gt;</code> offers the same 
+interface as <code>simple_state&lt;&gt;</code>). Hence, this must be done whenever 
+an entry action makes one or more calls to the following functions:</p>
 <ul>
-  <li><code>simple_state::post_event()</code></li>
-  <li><code>simple_state::clear_shallow_history&lt;&gt;()</code></li>
-  <li><code>simple_state::clear_deep_history&lt;&gt;()</code></li>
-  <li><code>simple_state::outermost_context&lt;&gt;()</code></li>
-  <li><code>simple_state::context&lt;&gt;()</code></li>
-  <li><code>simple_state::state_cast&lt;&gt;()</code></li>
-  <li><code>simple_state::state_downcast&lt;&gt;()</code></li>
-  <li><code>simple_state::state_begin()</code></li>
-  <li><code>simple_state::state_end()</code></li>
+  <li><code>simple_state&lt;&gt;::post_event()</code></li>
+  <li><code>simple_state&lt;&gt;::clear_shallow_history&lt;&gt;()</code></li>
+  <li><code>simple_state&lt;&gt;::clear_deep_history&lt;&gt;()</code></li>
+  <li><code>simple_state&lt;&gt;::outermost_context()</code></li>
+  <li><code>simple_state&lt;&gt;::context&lt;&gt;()</code></li>
+  <li><code>simple_state&lt;&gt;::state_cast&lt;&gt;()</code></li>
+  <li><code>simple_state&lt;&gt;::state_downcast&lt;&gt;()</code></li>
+  <li><code>simple_state&lt;&gt;::state_begin()</code></li>
+  <li><code>simple_state&lt;&gt;::state_end()</code></li>
 </ul>
 <p>In my experience, these functions are needed only rarely in entry actions 
 so this workaround should not uglify user code too much.</p>
 <h3><a name="Deferring events">Deferring events</a></h3>
 <p>To avoid a number of overheads, event deferral has one limitation: Only 
 events allocated with <code>new</code> <b>and</b> pointed to by a <code>
-boost::intrusive_ptr</code> can be deferred. Any attempt to defer a 
+boost::intrusive_ptr&lt;&gt;</code> can be deferred. Any attempt to defer a 
 differently allocated event will result in a failing runtime assert. Example:</p>
 <pre>struct Event : fsm::event&lt; Event &gt; {};
 struct Initial;
@@ -795,18 +795,18 @@ pseudo state is exited, information about the previously active inner state
 hierarchy must be saved. Secondly, when a transition to the history pseudo 
 state is made later, the saved state hierarchy information must be retrieved 
 and the appropriate states entered. The former is expressed by passing either
-<code>fsm::has_shallow_history</code>, <code>fsm::has_deep_history</code> or
-<code>fsm::has_full_history</code> (which combines shallow and deep history) 
-as the last parameter to the <code>simple_state</code> and <code>state</code> 
-templates. The latter is expressed by specifying either <code>
-fsm::shallow_history</code> or <code>fsm::deep_history</code> as a transition 
-destination or, as we'll see in an instant, as an inner initial state. Because 
-it is possible that a state containing a history pseudo state has never been 
-entered before a transition to history is made, both class templates demand a 
-parameter specifying the default state to enter in such situations.</p>
+<code>has_shallow_history</code>, <code>has_deep_history</code> or <code>
+has_full_history</code> (which combines shallow and deep history) as the last 
+parameter to the <code>simple_state</code> and <code>state</code> class 
+templates. The latter is expressed by specifying either <code>shallow_history&lt;&gt;</code> 
+or <code>deep_history&lt;&gt;</code> as a transition destination or, as we'll see in 
+an instant, as an inner initial state. Because it is possible that a state 
+containing a history pseudo state has never been entered before a transition 
+to history is made, both class templates demand a parameter specifying the 
+default state to enter in such situations.</p>
 <p>The redundancy necessary for using history is checked for consistency at 
 compile time. That is, the state machine wouldn't have compiled had we 
-forgotten to pass <code>fsm::has_deep_history</code> to the base of <code>
+forgotten to pass <code>has_deep_history</code> to the base of <code>
 NotShooting</code>.</p>
 <p>Another change request filed by a few beta testers says that they would 
 like to see the camera go back into the state it had before turning it off 
@@ -825,7 +825,7 @@ struct NotShooting : fsm::simple_state&lt; NotShooting, Camera,
 // ...</pre>
 <p>Unfortunately, there is a small inconvenience due to some template-related 
 implementation details. When the inner initial state is a class template 
-instantiation we always have to put it into an <code>mpl::list</code>, 
+instantiation we always have to put it into an <code>mpl::list&lt;&gt;</code>, 
 although there is only one inner initial state. Moreover, the current deep 
 history implementation has some <a href="rationale.html#Limitations">
 limitations</a>.</p>
@@ -899,7 +899,7 @@ struct CapsLockOff : fsm::simple_state&lt;
 more orthogonal regions. This is because orthogonal regions are not completely 
 orthogonal or a certain reaction in an outer state can only take place if the 
 inner orthogonal regions are in particular states. For this purpose, the <code>
-state_cast&lt;&gt;()</code> function introduced under
+state_cast&lt;&gt;</code> function introduced under
 <a href="#Getting state information out of the machine">Getting state 
 information out of the machine</a> is also available within states.</p>
 <p>As a somewhat far-fetched example, let's assume that our
@@ -952,9 +952,9 @@ additional base), is slow (under the hood <code>state_cast&lt;&gt;()</code> uses
 and has a negative impact on state entry/exit speed.</p>
 <p>Especially for debugging it would be so much more useful being able to ask 
 &quot;In which state(s) are you?&quot;. For this purpose it is possible to iterate over 
-all active <b>innermost</b> states with <code>state_machine::state_begin()</code> 
-and <code>state_machine::state_end()</code>. Dereferencing the returned 
-iterator returns a reference to <code>const state_machine::state_base_type</code>, 
+all active <b>innermost</b> states with <code>state_machine&lt;&gt;::state_begin()</code> 
+and <code>state_machine&lt;&gt;::state_end()</code>. Dereferencing the returned 
+iterator returns a reference to <code>const state_machine&lt;&gt;::state_base_type</code>, 
 the common base of all states. We can thus print the currently active state 
 configuration as follows (see the Keyboard example for the complete code):</p>
 <pre>void DisplayStateConfiguration( const Keyboard &amp; kbd )
@@ -970,22 +970,21 @@ configuration as follows (see the Keyboard example for the complete code):</p>
     ++region;
   }
 }</pre>
-<p>If necessary, the outer states can be accessed with <code>
-state_machine::state_base_type::outer_state_ptr()</code>, which returns a 
-pointer to <code>const state_machine::state_base_type</code>. When called on 
-an outermost state this function simply returns 0.</p>
+<p>If necessary, the outer states can be accessed with <code>state_machine&lt;&gt;::state_base_type::outer_state_ptr()</code>, 
+which returns a pointer to <code>const state_machine&lt;&gt;::state_base_type</code>. 
+When called on an outermost state this function simply returns 0.</p>
 <h3><a name="State type information">State type information</a></h3>
 <p>To cut down on executable size some applications must be compiled with C++ 
 RTTI turned off. This would render the ability to iterate over all active 
 states pretty much useless if it weren't for the following two functions:</p>
 <ul>
-  <li><code>static <i>unspecified_type</i> simple_state::static_type()</code></li>
+  <li><code>static <i>unspecified_type</i> simple_state&lt;&gt;::static_type()</code></li>
   <li><code><i>unspecified_type<br>
-  </i>&nbsp; state_machine::state_base_type::dynamic_type() const</code></li>
+  </i>&nbsp; state_machine&lt;&gt;::state_base_type::dynamic_type() const</code></li>
 </ul>
 <p>Both return a value that is comparable via <code>operator==()</code> and
-<code>std::less</code>. This alone would be enough to implement the <code>
-DisplayStateConfiguration()</code> function above without the help of <code>
+<code>std::less&lt;&gt;</code>. This alone would be enough to implement the <code>
+DisplayStateConfiguration</code> function above without the help of <code>
 typeid</code> but it is still somewhat cumbersome as a map must be used to 
 associate the type information values with the state names.</p>
 <h4><a name="Custom state type information">Custom state type information</a></h4>
@@ -994,11 +993,11 @@ associate the type information values with the state names.</p>
 BOOST_FSM_USE_NATIVE_RTTI</a> is <b>not</b> defined):</p>
 <ul>
   <li><code>template&lt; class T &gt;<br>
-  static void simple_state::custom_static_type_ptr( const T * );</code></li>
+  static void simple_state&lt;&gt;::custom_static_type_ptr( const T * );</code></li>
   <li><code>template&lt; class T &gt;<br>
-  static const T * simple_state::custom_static_type_ptr();</code></li>
+  static const T * simple_state&lt;&gt;::custom_static_type_ptr();</code></li>
   <li><code>template&lt; class T &gt;<br>
-  const T * state_machine::<br>
+  const T * state_machine&lt;&gt;::<br>
 &nbsp; state_base_type::custom_dynamic_type_ptr() const;</code></li>
 </ul>
 <p>These allow us to directly associate arbitrary state type information with 
@@ -1034,13 +1033,13 @@ int main()
 <h3><a name="Exception handling">Exception handling</a></h3>
 <p>Exceptions can be propagated from all user code except from state exit 
 actions (mapped to destructors and destructors should virtually never throw in 
-C++). Out of the box, <code>state_machine</code> does the following:</p>
+C++). Out of the box, <code>state_machine&lt;&gt;</code> does the following:</p>
 <ol>
   <li>The exception is caught.</li>
-  <li>In the catch block, an <code>fsm::exception_thrown</code> event is 
-  allocated on the stack.</li>
+  <li>In the catch block, an <code>exception_thrown</code> event is allocated 
+  on the stack.</li>
   <li>Also in the catch block, an <b>immediate</b> dispatch of the <code>
-  fsm::exception_thrown</code> event is attempted. That is, possibly remaining 
+  exception_thrown</code> event is attempted. That is, possibly remaining 
   events in the queue are dispatched only after the exception has been handled 
   successfully.</li>
   <li>If the exception was handled successfully, the state machine returns to 
@@ -1048,17 +1047,17 @@ C++). Out of the box, <code>state_machine</code> does the following:</p>
   original exception is rethrown so that the client of the state machine can 
   handle the exception.</li>
 </ol>
-<p>This behavior is implemented in the <code>exception_translator</code> 
-class, which is the default for the <code>ExceptionTranslator</code> parameter 
-of the <code>state_machine</code> class template. It was introduced because 
-users would want to change this on some platforms to work around buggy 
+<p>This behavior is implemented in the <code>exception_translator</code> class 
+template, which is the default for the <code>ExceptionTranslator</code> 
+parameter of the <code>state_machine</code> class template. It was introduced 
+because users would want to change this on some platforms to work around buggy 
 exception handling implementations (see <a href="#Discriminating exceptions">
 Discriminating exceptions</a>).</p>
 <p>boost::fsm can also be used in applications compiled with C++ exception 
 handling turned off but doing so means losing <b>all</b> error handling 
 support, making proper error handling much more cumbersome (see
 <a href="rationale.html#Error handling">Error handling</a> in the Rationale).</p>
-<h4>Which states can react to an <code>fsm::exception_thrown</code> event?</h4>
+<h4>Which states can react to an <code>exception_thrown</code> event?</h4>
 <p>This depends on where the exception occurred. There are three scenarios:</p>
 <ol>
   <li>A <code>react</code> member function propagates an exception <b>before</b> 
@@ -1095,8 +1094,8 @@ receiving an EvNumLockPressed event:</p>
 <h4>Successful exception handling</h4>
 <p>An exception is considered handled successfully, if:</p>
 <ul>
-  <li>an appropriate reaction for the <code>fsm::exception_thrown</code> event 
-  has been found, <b>and</b></li>
+  <li>an appropriate reaction for the <code>exception_thrown</code> event has 
+  been found, <b>and</b></li>
   <li>the state machine is in a stable state after the reaction has completed.</li>
 </ul>
 <p>The second condition is important for scenarios 2 and 3 in the last 
@@ -1108,9 +1107,8 @@ anything else.</p>
 rethrow the original exception. The state machine is terminated before the 
 exception is propagated to the machine client.</p>
 <h4><a name="Discriminating exceptions">Discriminating exceptions</a></h4>
-<p>Because the <code>fsm::exception_thrown</code> object is dispatched from 
-within the catch block, we can rethrow and catch the exception in a custom 
-reaction:</p>
+<p>Because the <code>exception_thrown</code> object is dispatched from within 
+the catch block, we can rethrow and catch the exception in a custom reaction:</p>
 <pre>struct Defective : fsm::simple_state&lt;
   Defective, Purifier &gt; {};
 
@@ -1199,60 +1197,48 @@ struct Off : fsm::simple_state&lt;
 <h4>Why asynchronous state machines are necessary</h4>
 <p>As the name suggests, a synchronous state machine processes each event 
 synchronously. This behavior is implemented by the <code>state_machine</code> 
-class template, whose <code>process_event()</code> function only returns after 
+class template, whose <code>process_event</code> function only returns after 
 having executed all reactions (including the ones provoked by internal events 
 that actions might have posted). This function is strictly non-reentrant (just 
-like all other member functions, so <code>state_machine</code> is not 
-thread-safe). This makes it difficult for two <code>state_machine</code> 
+like all other member functions, so <code>state_machine&lt;&gt;</code> is not 
+thread-safe). This makes it difficult for two <code>state_machine&lt;&gt;</code> 
 subclasses to communicate via events in a bi-directional fashion correctly, <b>
 even in a single-threaded program</b>. For example, state machine <code>A</code> 
 is in the middle of processing an external event. Inside an action, it decides 
 to send a new event to state machine <code>B</code> (by calling <code>
-B::process_event()</code>). It then &quot;waits&quot; for B to send back an answer via a 
-boost::function-like call-back, which references <code>A::process_event()</code> 
-and was passed as a data member of the event. However, while <code>A</code> is 
-&quot;waiting&quot; for <code>B</code> to send back an event, <code>A::process_event()</code> 
-has not yet returned from processing the external event and as soon as <code>B</code> 
-answers via the call-back, <code>A::process_event()</code> is <b>unavoidably</b> 
-reentered. This all really happens in a single thread, that's why &quot;wait&quot; is in 
-quotes.</p>
+B::process_event()</code>). It then &quot;waits&quot; for B to send back an answer via a
+<code>boost::function&lt;&gt;</code>-like call-back, which references <code>
+A::process_event()</code> and was passed as a data member of the event. 
+However, while <code>A</code> is &quot;waiting&quot; for <code>B</code> to send back an 
+event, <code>A::process_event()</code> has not yet returned from processing 
+the external event and as soon as <code>B</code> answers via the call-back,
+<code>A::process_event()</code> is <b>unavoidably</b> reentered. This all 
+really happens in a single thread, that's why &quot;wait&quot; is in quotes.</p>
 <h4>How it works</h4>
 <p>The <code>asynchronous_state_machine</code> class template has none of the 
 member functions the <code>state_machine</code> class template has. Moreover,
-<code>asynchronous_state_machine</code> subclass objects cannot even be 
+<code>asynchronous_state_machine&lt;&gt;</code> subclass objects cannot even be 
 created or destroyed directly. Instead, all these operations must be performed 
 through the <code>Worker</code> object each asynchronous state machine is 
 associated with. All these <code>Worker</code> member functions only push an 
-appropriate event into the workers' event queue and then return immediately. A 
-dedicated worker thread will later pop the events out of the queue to have 
-them processed.</p>
-<p>Applications will usually first create a <code>worker&lt;&gt;</code> object and 
-then call <code>worker&lt;&gt;::create_processor()</code> to create one or more
-<code>asynchronous_state_machine</code> subclass objects. Finally, <code>
-worker&lt;&gt;::operator()()</code> is either called directly to let the machine(s) 
-run in the current thread, or, a <code>boost::function</code> object 
-referencing <code>operator()</code> is passed to a new <code>boost::thread</code>. 
-In the following code, we are running one state machine in a new boost::thread 
-and the other in the main thread (see the PingPong example for the full source 
-code):</p>
+appropriate item into the schedulers' queue and then return immediately. A 
+dedicated thread will later pop the items out of the queue to have them 
+processed.</p>
+<p>Applications will usually first create a <code>scheduler&lt;&gt;</code> object 
+and then call <code>scheduler&lt;&gt;::create_processor()</code> to create one or 
+more <code>asynchronous_state_machine&lt;&gt;</code> subclass objects. Finally,
+<code>scheduler&lt;&gt;::operator()()</code> is either called directly to let the 
+machine(s) run in the current thread, or, a <code>boost::function&lt;&gt;</code> 
+object referencing <code>operator()()</code> is passed to a new <code>
+boost::thread</code>. In the following code, we are running one state machine 
+in a new boost::thread and the other in the main thread (see the PingPong 
+example for the full source code):</p>
 <pre>// ...
 
 struct Waiting;
 struct Player : 
   <b>fsm::asynchronous_state_machine</b>&lt; Player, Waiting &gt;
 {
-  typedef fsm::asynchronous_state_machine&lt; Player, Waiting &gt;
-    BaseType;
-
-  Player( const processor_context &amp; myContext ) :
-    BaseType( myContext ) // ...
-  {
-    // ...
-    // Make sure each Player is initiated right after
-    // construction
-    my_worker().initiate_processor( my_handle() );
-  }
-
   // ...
 };
 
@@ -1260,14 +1246,16 @@ struct Player :
 
 int main()
 {
-  fsm::worker&lt;&gt; worker1;
-  fsm::worker&lt;&gt; worker2;
+  fsm::scheduler&lt;&gt; scheduler1;
+  fsm::scheduler&lt;&gt; scheduler2;
 
-  // each player runs in its own worker thread
-  fsm::worker&lt;&gt;::processor_handle player1 = 
-    worker1.create_processor&lt; Player &gt;( /* ... */ );
-  fsm::worker&lt;&gt;::processor_handle player2 = 
-    worker2.create_processor&lt; Player &gt;( /* ... */ );
+  // each player runs in its own thread
+  fsm::scheduler&lt;&gt;::processor_handle player1 = 
+    scheduler1.create_processor&lt; Player &gt;( /* ... */ );
+  scheduler1.initiate_processor( player1 );
+  fsm::scheduler&lt;&gt;::processor_handle player2 = 
+    scheduler2.create_processor&lt; Player &gt;( /* ... */ );
+  scheduler2.initiate_processor( player2 );
 
   // the initial event that will start the game
   boost::intrusive_ptr&lt; BallReturned &gt; pInitialBall =
@@ -1275,13 +1263,13 @@ int main()
 
   // ...
 
-  worker2.queue_event( player2, pInitialBall );
+  scheduler2.queue_event( player2, pInitialBall );
 
-  // run first worker in a new thread
+  // run first scheduler in a new thread
   boost::thread otherThread(
-    boost::bind( &amp;fsm::worker&lt;&gt;::operator(), &amp;worker1, 0 ) );
+    boost::bind( &amp;fsm::scheduler&lt;&gt;::operator(), &amp;scheduler1, 0 ) );
 
-  worker2(); // run second worker in this thread 
+  scheduler2(); // run second scheduler in this thread 
   otherThread.join();
 
   return 0;
@@ -1292,9 +1280,9 @@ int main()
   // ...
 
   boost::thread thread1(
-    boost::bind( &amp;fsm::worker&lt;&gt;::operator(), &amp;worker1, 0 ) );
+    boost::bind( &amp;fsm::scheduler&lt;&gt;::operator(), &amp;scheduler1, 0 ) );
   boost::thread thread2(
-    boost::bind( &amp;fsm::worker&lt;&gt;::operator(), &amp;worker2, 0 ) );
+    boost::bind( &amp;fsm::scheduler&lt;&gt;::operator(), &amp;scheduler2, 0 ) );
 
   // do something else ...
 
@@ -1303,29 +1291,29 @@ int main()
 
   return 0;
 }</pre>
-<p>Or, run both machines in the same worker thread:</p>
+<p>Or, run both machines in the same thread:</p>
 <pre>int main()
 {
-  fsm::worker&lt;&gt; worker1;
+  fsm::scheduler&lt;&gt; scheduler1;
 
-  fsm::worker&lt;&gt;::processor_handle player1 = 
-    worker1.create_processor&lt; Player &gt;( /* ... */ );
-  fsm::worker&lt;&gt;::processor_handle player2 = 
-    worker1.create_processor&lt; Player &gt;( /* ... */ );
+  fsm::scheduler&lt;&gt;::processor_handle player1 = 
+    scheduler1.create_processor&lt; Player &gt;( /* ... */ );
+  fsm::scheduler&lt;&gt;::processor_handle player2 = 
+    scheduler1.create_processor&lt; Player &gt;( /* ... */ );
 
   // ...
 
-  worker1();
+  scheduler1();
 
   return 0;
 }</pre>
-<p>By default <code>worker&lt;&gt;::operator()()</code> waits on an empty event 
-queue and will only return after a call to <code>worker&lt;&gt;::terminate()</code>. 
+<p>By default <code>scheduler&lt;&gt;::operator()()</code> waits on an empty event 
+queue and will only return after a call to <code>scheduler&lt;&gt;::terminate()</code>. 
 In the example, each of the two <code>Player</code> state machines calls this 
-function on its <code>worker&lt;&gt;</code> object right before terminating.</p>
+function on its <code>scheduler&lt;&gt;</code> object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28866" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->13 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28867" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

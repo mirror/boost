@@ -9,11 +9,9 @@
 
 
 
-#include <boost/detail/lightweight_mutex.hpp>
-#include <boost/assert.hpp> // BOOST_ASSERT
+#include <boost/detail/atomic_count.hpp>
 #include <boost/config.hpp> // BOOST_STATIC_CONSTANT
 
-#include <limits> // std::numeric_limits
 
 
 
@@ -27,40 +25,40 @@ namespace detail
 
   
 template< bool NeedsLocking >
-struct locked_base
+struct count_base
 {
-  typedef ::boost::detail::lightweight_mutex::scoped_lock scoped_lock;
-  mutable ::boost::detail::lightweight_mutex mutex_;
+  count_base() : count_( 0 ) {}
+  mutable boost::detail::atomic_count count_;
 };
 
 template<>
-struct locked_base< false >
+struct count_base< false >
 {
-  typedef bool scoped_lock;
-  BOOST_STATIC_CONSTANT( bool, mutex_ = false );
+  count_base() : count_( 0 ) {}
+  mutable long count_;
 };
 
 //////////////////////////////////////////////////////////////////////////////
-template< typename CountType, bool NeedsLocking = true >
-class counted_base : private locked_base< NeedsLocking >
+template< bool NeedsLocking = true >
+class counted_base : private count_base< NeedsLocking >
 {
-  typedef locked_base< NeedsLocking > base_type;
+  typedef count_base< NeedsLocking > base_type;
   public:
     //////////////////////////////////////////////////////////////////////////
     bool ref_counted() const
     {
-      return count_ != 0;
+      return base_type::count_ != 0;
     }
 
   protected:
     //////////////////////////////////////////////////////////////////////////
-    counted_base() : count_( 0 ) {}
+    counted_base() {}
     virtual ~counted_base() {}
 
     // do nothing copy implementation is intentional (the number of
     // referencing pointers of the source and the destination is not changed
     // through the copy operation)
-    counted_base( const counted_base & ) : count_( 0 ) {}
+    counted_base( const counted_base & ) {}
     counted_base & operator=( const counted_base & ) {}
 
   public:
@@ -70,34 +68,16 @@ class counted_base : private locked_base< NeedsLocking >
     //////////////////////////////////////////////////////////////////////////
     void add_ref() const
     {
-      typename base_type::scoped_lock lock( base_type::mutex_ );
-      lock;
-      BOOST_ASSERT( count_ < std::numeric_limits< CountType >::max() );
-      ++count_;
+      ++base_type::count_;
     }
 
     void release() const
     {
-      bool shouldDelete = false;
-
-      {
-        // release the mutex in the base class before the base class object
-        // is destroyed
-        typename base_type::scoped_lock lock( base_type::mutex_ );
-        lock;
-        BOOST_ASSERT( count_ > 0 );
-        shouldDelete = ( --count_ == 0 );
-      }
-
-      if ( shouldDelete )
+      if ( --base_type::count_ == 0 )
       {
         delete this;
       }
     }
-
-  private:
-    //////////////////////////////////////////////////////////////////////////
-    mutable CountType count_;
 };
 
 
@@ -110,16 +90,16 @@ class counted_base : private locked_base< NeedsLocking >
 
 
 
-template< typename CountType, bool NeedsLocking >
+template< bool NeedsLocking >
 inline void intrusive_ptr_add_ref(
-  const ::boost::fsm::detail::counted_base< CountType, NeedsLocking > * pBase )
+  const ::boost::fsm::detail::counted_base< NeedsLocking > * pBase )
 {
   pBase->add_ref();
 }
 
-template< typename CountType, bool NeedsLocking >
+template< bool NeedsLocking >
 inline void intrusive_ptr_release(
-  const ::boost::fsm::detail::counted_base< CountType, NeedsLocking > * pBase )
+  const ::boost::fsm::detail::counted_base< NeedsLocking > * pBase )
 {
   pBase->release();
 }

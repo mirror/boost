@@ -21,19 +21,19 @@ class event_base;
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class Worker >
+template< class Scheduler >
 class event_processor
 {
   public:
     //////////////////////////////////////////////////////////////////////////
     virtual ~event_processor() {}
 
-    Worker & my_worker() const
+    Scheduler & my_scheduler() const
     {
-      return myWorker_;
+      return myScheduler_;
     }
 
-    typedef typename Worker::processor_handle processor_handle;
+    typedef typename Scheduler::processor_handle processor_handle;
 
     processor_handle my_handle() const
     {
@@ -57,11 +57,11 @@ class event_processor
 
   protected:
     //////////////////////////////////////////////////////////////////////////
-    typedef typename Worker::processor_context processor_context;
+    typedef const typename Scheduler::processor_context & my_context;
 
-    event_processor( const processor_context & myContext ) :
-      myWorker_( myContext.my_worker() ),
-      myHandle_( myContext.my_handle() )
+    event_processor( my_context ctx ) :
+      myScheduler_( ctx.my_scheduler() ),
+      myHandle_( ctx.my_handle() )
     {
     }
 
@@ -71,7 +71,7 @@ class event_processor
     virtual void process_event_impl( const event_base & evt ) = 0;
     virtual void terminate_impl() = 0;
 
-    Worker & myWorker_;
+    Scheduler & myScheduler_;
     const processor_handle myHandle_;
 };
 

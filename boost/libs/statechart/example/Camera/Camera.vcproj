@@ -203,6 +203,9 @@
 				RelativePath="..\..\..\..\boost\fsm\exception_translator.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\boost\fsm\fifo_scheduler.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\boost\fsm\result.hpp">
 			</File>
 			<File
@@ -222,9 +225,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\transition.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\fsm\worker.hpp">
 			</File>
 		</Filter>
 	</Files>

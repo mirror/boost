@@ -26,10 +26,10 @@ namespace fsm
 
 //////////////////////////////////////////////////////////////////////////////
 class event_base : public detail::rtti_policy::rtti_base_type<
-  detail::counted_base< unsigned int > >
+  detail::counted_base<> >
 {
   typedef detail::rtti_policy::rtti_base_type<
-    detail::counted_base< unsigned int > > base_type;
+    detail::counted_base<> > base_type;
   public:
     //////////////////////////////////////////////////////////////////////////
     intrusive_ptr< const event_base > intrusive_from_this() const

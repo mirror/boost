@@ -61,10 +61,10 @@ class state_base :
   public RttiPolicy::template rtti_base_type<
     // Derived class objects will be created, handled and destroyed by exactly
     // one thread --> locking is not necessary
-    counted_base< orthogonal_position_type, false > >
+    counted_base< false > >
 {
   typedef typename RttiPolicy::template rtti_base_type<
-    counted_base< orthogonal_position_type, false > > base_type;
+    counted_base< false > > base_type;
 
   public:
     //////////////////////////////////////////////////////////////////////////

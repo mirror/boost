@@ -193,7 +193,7 @@ every-day state machines all the time. For example, x() could acquire memory
 the contents of which is later modified by y(). There is a different but in 
 terms of error handling equally critical situation in the Tutorial under
 <a href="tutorial.html#Getting state information out of the machine">Getting 
-state information out of the machine</a> when <code>Running::~Running</code> 
+state information out of the machine</a> when <code>Running::~Running()</code> 
 accesses its outer state <code>Active</code>. Had the entry action of <code>
 Active</code> failed and had <code>Running</code> been entered anyway then
 <code>Running</code>'s exit action would have invoked undefined behavior.<br>
@@ -252,26 +252,40 @@ code is simply boring and quite unnecessary.</p>
   rethrown. </li>
 </ul>
 <h2><a name="Asynchronous state machines">Asynchronous state machines</a></h2>
-<p>The design of the <code>asynchronous_state_machine</code> and <code>worker</code> 
-class templates follow from the requirements:</p>
+<h3>Requirements</h3>
+<p>For asynchronous state machines different applications have rather varied 
+requirements:</p>
 <ol>
-  <li>The user must be able to specify in which thread a particular machine 
-  will run:<br>
-  The <code>worker</code> class template is not associated with a particular 
-  thread. Instead, users can choose to either call <code>worker&lt;&gt;::operator()</code> 
-  directly from the current thread or pass an appropriate function object to a 
-  new thread.</li>
-  <li>An arbitrary number of state machines might run in the same thread:<br>
-  Multiple state machine objects can be constructed passing the same <code>
-  worker</code> object. The state machines will then share the same 
-  thread-safe queue and event loop.</li>
-  <li>Out of the box, the boost::thread library should be employed. However, 
-  it should be possible to use any other threading library or run asynchronous 
-  machines on OS-less systems:<br>
-  In such cases, the locking and waiting logic can be fully customized by 
-  implementing a new class template that is interface-compatible with <code>
-  worker</code>.</li>
+  <li>In some applications each state machine needs to run in its own thread, 
+  other applications are single-threaded and run all machines in the same 
+  thread</li>
+  <li>For some applications a FIFO scheduler is perfect, others need priority- 
+  or EDF-schedulers</li>
+  <li>For some applications the boost::thread library is just fine, others 
+  might want to use another threading library, yet other applications run on 
+  OS-less platforms where ISRs are the only mode of (apparently) concurrent 
+  execution</li>
 </ol>
+<h3>Out of the box behavior</h3>
+<p>By default, <code>asynchronous_state_machine&lt;&gt;</code> subclass objects are 
+serviced by a <code>fifo_scheduler&lt;&gt;</code> object. <code>fifo_scheduler&lt;&gt;</code> 
+does not lock or wait in single-threaded applications and uses boost::thread 
+primitives in multi-threaded programs. Moreover, a <code>fifo_scheduler&lt;&gt;</code> 
+object can service an arbitrary number of <code>asynchronous_state_machine&lt;&gt;</code> 
+subclass objects. Under the hood, <code>fifo_scheduler&lt;&gt;</code> is just a thin 
+wrapper around <code>processor_container&lt;&gt;</code> (which manages the lifetime 
+of the state machines) and <code>fifo_worker&lt;&gt;</code> (which manages the queue 
+and ensures thread safety).</p>
+<h3>Customization</h3>
+<p>If a user needs to customize this behavior she can do so by providing her 
+own class modeling the Scheduler concept. Custom scheduler implementations can 
+in most cases reuse <code>processor_container&lt;&gt;</code> and only need to 
+rewrite the worker, which is relatively little code. I considered a much more 
+generic design where locking and waiting is implemented in a policy but I have 
+so far failed to come up with a clean and simple interface for it. Especially 
+the waiting is difficult to model as some platforms have condition variables, 
+others have events and yet others don't have any notion of waiting whatsoever 
+(they instead loop until a new event arrives, presumably via an ISR).</p>
 <h2><a name="User actions: Member functions vs. function objects">User 
 actions: Member functions vs. function objects</a></h2>
 <p>All user-supplied functions (<code>react</code> member functions, entry-, 
@@ -287,14 +301,16 @@ as follows: </p>
 </ul>
 <h2><a name="Speed versus scalability tradeoffs">Speed versus scalability 
 tradeoffs</a></h2>
-<p>Quite a bit of effort has gone into making the library scaleable <b>and</b> 
-keeping it fast for small simple machines. While I believe it should perform 
-reasonably in most applications, the scalability does not come for free. 
-Small, carefully handcrafted state machines will thus easily outperform 
-equivalent boost::fsm machines. To get a picture of how big the gap is I 
-implemented a simple benchmark in the BitMachine example. The Handcrafted 
-example is a handcrafted variant of the 1-bit-BitMachine implementing the same 
-benchmark.</p>
+<p>Quite a bit of effort has gone into making the library fast for small 
+simple machines <b>and</b> scaleable at the same time (this applies only to
+<code>state_machine&lt;&gt;</code>, there still is some room for optimizing <code>
+fifo_scheduler&lt;&gt;</code>, especially for multi-threaded builds). While I 
+believe it should perform reasonably in most applications, the scalability 
+does not come for free. Small, carefully handcrafted state machines will thus 
+easily outperform equivalent boost::fsm machines. To get a picture of how big 
+the gap is, I implemented a simple benchmark in the BitMachine example. The 
+Handcrafted example is a handcrafted variant of the 1-bit-BitMachine 
+implementing the same benchmark.</p>
 <p>I tried to create a fair but somewhat unrealistic <b>worst-case</b> 
 scenario:</p>
 <ul>
@@ -321,19 +337,21 @@ handcrafted or boost::fsm machines it will...</p>
   as many events as in the benchmarks. Unless a state machine is abused for 
   parsing, it will typically spend a good deal of time waiting for events</li>
   <li>often run state machines in their own threads. This adds considerable 
-  locking and task-switching overhead. Performance tests with the PingPong 
+  locking and thread-switching overhead. Performance tests with the PingPong 
   example, where two asynchronous state machines exchange events, gave the 
-  following times to process one event and perform the resulting transition 
-  (using the library out-of-the-box):<ul>
-    <li>Single-threaded (no locking and waiting): 1000ns</li>
-    <li>Multi-threaded with one worker thread (the worker uses mutex locking 
-    but never has to wait for events): 3700ns</li>
-    <li>Multi-threaded with two worker threads (both workers use mutex locking 
-    and exactly one worker always waits for an event): 6400ns</li>
+  following times to process one event and perform the resulting in-state 
+  reaction (using the library with <code>boost::fast_pool_allocator&lt;&gt;</code>):<ul>
+    <li>Single-threaded (no locking and waiting): 590ns</li>
+    <li>Multi-threaded with one thread (the scheduler uses mutex locking but 
+    never has to wait for events): 4300ns</li>
+    <li>Multi-threaded with two threads (both schedulers use mutex locking and 
+    exactly one always waits for an event): 7000ns</li>
   </ul>
-  <p>Handcrafted machines will also pay the 2700ns/5400ns per event 
-  multithreading overhead, making raw dispatch and transition speed much less 
-  important</li>
+  <p>As mentioned above there definitely is some room to improve the 
+  multi-threaded timings. However, a quick test has shown that the MT overhead 
+  will always be well over 1000ns per event. Handcrafted machines will 
+  inevitably have the same overhead, making raw single-threaded dispatch and 
+  transition speed much less important</li>
   <li>almost always allocate events with <code>new</code> and destroy them 
   after consumption. This will add a few cycles, even if event memory 
   management is customized</li>
@@ -399,18 +417,18 @@ optimization:</p>
   </tr>
 </table>
 <h3>Possible optimizations</h3>
-<p>Currently, <code>std::list</code>s are used for event and state storage. 
+<p>Currently, <code>std::list&lt;&gt;</code>s are used for event and state storage. 
 These could be replaced with an intrusive linked list container what would 
-eliminate 50% of the <code>operator new</code> and <code>operator delete</code> 
+eliminate 50% of the <code>operator new()</code> and <code>operator delete()</code> 
 calls made during an event dispatch &amp; transition cycle of the smallest 
 BitMachine. I would guess that this could speed it up by 25%-50%. However, 
 dispatch time is not affected and can quickly consume considerable time, as 
 the 6-bit-BitMachine shows. Moreover, most states of real-world machines are 
 quite deeply nested and the average transition involves the deallocation and 
-allocation of 2 states. Since std::list allocations occur only once per 
-transition and orthogonal region, the relative performance gain of this 
-optimization becomes much smaller for typical machines and does not seem to be 
-worth the effort of hand-crafting an intrusive linked list.</p>
+allocation of 2 states. Since <code>std::list&lt;&gt;</code> allocations occur only 
+once per transition and orthogonal region, the relative performance gain of 
+this optimization becomes much smaller for typical machines and does not seem 
+to be worth the effort of hand-crafting an intrusive linked list.</p>
 <h2><a name="Memory management customization">Memory management customization</a></h2>
 <p>Out of the box, all internal data is allocated on the normal heap. This 
 should be satisfactory for applications where all the following prerequisites 
@@ -430,21 +448,21 @@ are met:</p>
 memory management (not just boost::fsm's) should be considered, which is 
 supported as follows:</p>
 <ul>
-  <li>By passing a class offering a <code>std::allocator</code> interface for 
-  the <code>Allocator</code> parameter of the <code>state_machine</code> class 
-  template. The <code>rebind</code> member template is used to customize 
+  <li>By passing a class offering a <code>std::allocator&lt;&gt;</code> interface 
+  for the <code>Allocator</code> parameter of the <code>state_machine</code> 
+  class template. The <code>rebind</code> member template is used to customize 
   memory allocation of the internal containers.</li>
   <li>By replacing the <code>simple_state</code>, <code>state</code> and <code>
   event</code> class templates with ones that have a customized <code>operator 
-  new</code> and <code>operator delete</code>. This can be as easy as 
+  new()</code> and <code>operator delete()</code>. This can be as easy as 
   inheriting your customized class templates from the framework-supplied class 
   templates <b>and</b> your preferred small-object/deterministic/constant-time 
   allocator base class.</li>
 </ul>
-<p><code>simple_state</code> and <code>state</code> subclass objects are 
+<p><code>simple_state&lt;&gt;</code> and <code>state&lt;&gt;</code> subclass objects are 
 constructed and destructed only by the state machine. It would therefore be 
-possible to use the <code>state_machine</code> allocator instead of forcing 
-the user to overload <code>operator new</code> and <code>operator delete</code>. 
+possible to use the <code>state_machine&lt;&gt;</code> allocator instead of forcing 
+the user to overload <code>operator new()</code> and <code>operator delete()</code>. 
 However, a lot of systems employ at most one instance of a particular state 
 machine, which means that a) there is at most one object of a particular state 
 and b) this object is always constructed, accessed and destructed by one and 
@@ -462,12 +480,12 @@ Currently, there are exactly two options:</p>
   <code><a href="configuration.html#Application Defined Macros">
   BOOST_FSM_USE_NATIVE_RTTI</a></code></li>
 </ol>
-<p>Just about the only reason to favor 2 is the fact that state objects need 
-to store one pointer less, meaning that in the best case the memory footprint 
-of a state machine object could shrink by 15%. However, on most platforms 
-executable size grows when C++ RTTI is turned on. So, given the small per 
-machine object savings, option 2 only makes sense in applications where both 
-of the following conditions hold:</p>
+<p>Just about the only reason to favor 2 is the fact that state and event 
+objects need to store one pointer less, meaning that in the best case the 
+memory footprint of a state machine object could shrink by 15%. However, on 
+most platforms executable size grows when C++ RTTI is turned on. So, given the 
+small per machine object savings, option 2 only makes sense in applications 
+where both of the following conditions hold:</p>
 <ul>
   <li>So few events are processed that event dispatch will never become a 
   bottleneck</li>
@@ -557,25 +575,25 @@ consume how many cycles:</p>
 need to queue events, it is possible to operate such machines entirely with 
 stack-allocated events. However, as soon as events need to be deferred and/or 
 posted there is no way around queuing and allocation with <code>new</code>. 
-The interface of <code>simple_state::post_event</code> enforces the use of
-<code>boost::intrusive_ptr</code> at compile time. But there is no way to do 
+The interface of <code>simple_state&lt;&gt;::post_event</code> enforces the use of
+<code>boost::intrusive_ptr&lt;&gt;</code> at compile time. But there is no way to do 
 the same for deferred events because allocation and deferral happen in 
 completely unrelated places. Of course, a &quot;wrongly&quot; allocated event could 
 easily be transformed into one allocated with <code>new</code> and pointed to 
-by <code>boost::intrusive_ptr</code> with a virtual <code>clone()</code> 
+by <code>boost::intrusive_ptr&lt;&gt;</code> with a virtual <code>clone()</code> 
 function. However, in my experience, event deferral is needed only very rarely 
 in synchronous state machines and the asynchronous variant enforces the use of
-<code>boost::intrusive_ptr</code> anyway. So, most users won't run into this 
+<code>boost::intrusive_ptr&lt;&gt;</code> anyway. So, most users won't run into this 
 limitation and I rejected the <code>clone()</code> idea because it could cause 
 inefficiencies casual users wouldn't be aware of. In addition, users not 
 needing event deferral would nevertheless pay with increased code size.</p>
 <h4>Junction points</h4>
 <p>UML junction points are not supported because arbitrarily complex guard 
-expressions can easily be implemented with <code>custom_reaction</code>s.</p>
+expressions can easily be implemented with <code>custom_reaction&lt;&gt;</code>s.</p>
 <h4>Dynamic choice points</h4>
 <p>Currently there is no direct support for this UML element because its 
-behavior can often be implemented with <code>custom_reaction</code>s. In rare 
-cases this is not possible, namely when a choice point happens to be the 
+behavior can often be implemented with <code>custom_reaction&lt;&gt;</code>s. In 
+rare cases this is not possible, namely when a choice point happens to be the 
 initial state. Then, the behavior can easily be implemented as follows:</p>
 <pre>struct make_choice : fsm::event&lt; make_choice &gt; {};
 
@@ -624,9 +642,9 @@ struct MyChoicePoint : choice_point&lt; MyChoicePoint, Machine &gt;
     }
   }
 };</pre>
-<p><code>choice_point</code> is not currently part of boost::fsm, mainly 
+<p><code>choice_point&lt;&gt;</code> is not currently part of boost::fsm, mainly 
 because I fear that beginners could use it in places where they would be 
-better off with <code>custom_reaction</code>. If the demand is high enough I 
+better off with <code>custom_reaction&lt;&gt;</code>. If the demand is high enough I 
 will add it to the library.</p>
 <h4>Deep history of orthogonal regions</h4>
 <p>Deep history of states with orthogonal regions is currently not supported:</p>
@@ -685,7 +703,7 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->26 February, 2004<!--webbot bot="Timestamp" endspan i-checksum="40411" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28865" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

@@ -10,7 +10,7 @@
 
 
 #include <boost/fsm/state_machine.hpp>
-#include <boost/fsm/worker.hpp>
+#include <boost/fsm/fifo_scheduler.hpp>
 #include <boost/fsm/event_processor.hpp>
 
 
@@ -29,20 +29,22 @@ class event_base;
 //////////////////////////////////////////////////////////////////////////////
 template< class MostDerived,
           class InitialState,
-          class Worker = worker<>,
+          class Scheduler = fifo_scheduler<>,
           class Allocator = std::allocator< void >,
           class ExceptionTranslator = exception_translator<> >
 class asynchronous_state_machine : public state_machine<
   MostDerived, InitialState, Allocator, ExceptionTranslator >,
-  public event_processor< Worker >
+  public event_processor< Scheduler >
 {
   typedef state_machine< MostDerived,
     InitialState, Allocator, ExceptionTranslator > machine_base;
-  typedef event_processor< Worker > processor_base;
+  typedef event_processor< Scheduler > processor_base;
   protected:
     //////////////////////////////////////////////////////////////////////////
-    asynchronous_state_machine( const processor_context & myContext ) :
-      processor_base( myContext )
+    typedef asynchronous_state_machine my_base;
+
+    asynchronous_state_machine( my_context ctx ) :
+      processor_base( ctx )
     {
     }
 
