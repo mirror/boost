@@ -106,7 +106,7 @@ namespace boost {
       template<typename Iterator>
       struct apply
       { 
-#if BOOST_WORKAROUND(__EDG_VERSION__, <= 300)   \
+#if BOOST_WORKAROUND(__EDG_VERSION__, != 0)     \
     || BOOST_WORKAROUND(__GNUC__, == 2)         \
     || BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
         typedef typename
