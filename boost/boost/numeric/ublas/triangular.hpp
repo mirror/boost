@@ -958,10 +958,10 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class F1, class F2, class A>
     typename triangular_matrix<T, F1, F2, A>::value_type triangular_matrix<T, F1, F2, A>::zero_ =
-        triangular_matrix<T, F1, F2, A>::value_type ();
+        typename triangular_matrix<T, F1, F2, A>::value_type ();
     template<class T, class F1, class F2, class A>
     typename triangular_matrix<T, F1, F2, A>::value_type triangular_matrix<T, F1, F2, A>::one_ =
-        triangular_matrix<T, F1, F2, A>::value_type (1);
+        typename triangular_matrix<T, F1, F2, A>::value_type (1);
 
     // Triangular matrix adaptor class
     template<class M, class F>
@@ -1890,10 +1890,10 @@ namespace boost { namespace numeric { namespace ublas {
     typename triangular_adaptor<M, F>::matrix_type triangular_adaptor<M, F>::nil_;
     template<class M, class F>
     typename triangular_adaptor<M, F>::value_type triangular_adaptor<M, F>::zero_ =
-        triangular_adaptor<M, F>::value_type ();
+        typename triangular_adaptor<M, F>::value_type ();
     template<class M, class F>
     typename triangular_adaptor<M, F>::value_type triangular_adaptor<M, F>::one_ =
-        triangular_adaptor<M, F>::value_type (1);
+        typename triangular_adaptor<M, F>::value_type (1);
 
     template<class E1, class E2>
     struct matrix_vector_solve_traits {
