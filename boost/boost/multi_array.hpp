@@ -143,7 +143,7 @@ public:
               sub_array<T,NumDims>& rhs) :
     super_type(rhs) {
     allocate_space();
-    std::copy(rhs.begin(),rhs.end(),begin());
+    std::copy(rhs.begin(),rhs.end(),super_type::begin());
   }
 
   // Since assignment is a deep copy, multi_array_ref 

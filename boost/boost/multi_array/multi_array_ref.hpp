@@ -149,7 +149,7 @@ public:
   void reindex(index value) {
     index_base_list_.assign(value);
     origin_offset_ =
-      calculate_origin_offset(stride_list_,extent_list_,
+      super_type::calculate_origin_offset(stride_list_,extent_list_,
                               storage_,index_base_list_);
   }
 
@@ -467,18 +467,18 @@ public:
     if (&other != this) {
       // make sure the dimensions agree
       
-      assert(other.num_dimensions() == num_dimensions());
-      assert(std::equal(other.shape(),other.shape()+num_dimensions(),
-                        shape()));
+      assert(other.num_dimensions() == super_type::num_dimensions());
+      assert(std::equal(other.shape(),other.shape()+super_type::num_dimensions(),
+                        super_type::shape()));
       // iterator-based copy
       std::copy(other.begin(),other.end(),begin());
     }
     return *this;
   }
 
-  element* origin() { return base_+origin_offset_; }
+  element* origin() { return super_type::base_+super_type::origin_offset_; }
 
-  element* data() { return base_; }
+  element* data() { return super_type::base_; }
 
   template <class IndexList>
   element& operator()(const IndexList& indices) {
@@ -493,8 +493,8 @@ public:
   reference operator[](index idx) {
     return super_type::access(boost::type<reference>(),
                               idx,origin(),
-                              shape(),strides(),
-                              index_bases());
+                              super_type::shape(),super_type::strides(),
+                              super_type::index_bases());
   }
 
 
@@ -519,13 +519,13 @@ public:
   
   
   iterator begin() {
-    return iterator(iter_base(*index_bases(),origin(),shape(),
-                              strides(),index_bases()));
+    return iterator(iter_base(*super_type::index_bases(),origin(),super_type::shape(),
+                              super_type::strides(),super_type::index_bases()));
   }
 
   iterator end() {
-    return iterator(iter_base(*index_bases()+*shape(),origin(),
-                              shape(),strides(),index_bases()));
+    return iterator(iter_base(*super_type::index_bases()+*super_type::shape(),origin(),
+                              super_type::shape(),super_type::strides(),super_type::index_bases()));
   }
 
   // RG - rbegin() and rend() written naively to thwart MSVC ICE.
@@ -555,7 +555,7 @@ public:
   const_reference operator[](index idx) const {
     return super_type::access(boost::type<const_reference>(),
                               idx,origin(),
-                              shape(),strides(),index_bases());
+                              super_type::shape(),super_type::strides(),super_type::index_bases());
   }
 
   // See note attached to generate_array_view in base.hpp
