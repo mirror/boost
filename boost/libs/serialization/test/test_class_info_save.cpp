@@ -43,7 +43,7 @@ BOOST_CLASS_TRACKING(A, ::boost::serialization::track_never)
 
 // second case : serialize WITH class information
 class B;
-BOOST_CLASS_VERSION(B, 3)
+BOOST_CLASS_VERSION(B, 2)
 
 class B
 {

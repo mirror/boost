@@ -50,7 +50,7 @@ class B
     void serialize(Archive & /*ar*/, const unsigned int file_version){
         // verify at execution that the version number corresponds to the saved
         // one
-        BOOST_CHECK(file_version == 3);
+        BOOST_CHECK(file_version == 2);
         ++count;
     }
 public:
