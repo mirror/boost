@@ -24,15 +24,17 @@
       reference operator*() const;
       filter_iterator& operator++();
   private:
-      Predicate m_pred; // exposition
-      Iterator m_iter;  // exposition
-      Iterator m_end;   // exposition
+      Predicate m_pred; // exposition only
+      Iterator m_iter;  // exposition only
+      Iterator m_end;   // exposition only
   };
 
 
-The ``iterator_category`` member is a type convertible to the tags
-corresponding to each standard concept modeled by ``filter_iterator``,
-as described in the models section.
+If the ``Iterator`` argument models Readable Lvalue Iterator and
+Forward Traversal Iterator then the ``iterator_category`` member is a
+type convertible to ``std::forward_iterator_tag``. Otherwise
+``iterator_category`` is a type convertible to
+``std::input_iterator_tag``.
 
 
 
