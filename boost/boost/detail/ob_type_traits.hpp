@@ -317,7 +317,12 @@ template <typename T> struct is_reference
 private:
    typedef T const volatile cv_t;
 public:
-   enum{ value = !is_const<cv_t>::value || !is_volatile<cv_t>::value }; 
+   enum // dwa 10/27/00 - VC6.4 seems to choke on short-circuit (&&,||)
+   {    // evaluations in constant expressions
+       value = !is_const<cv_t>::value ? true
+             : !is_volatile<cv_t>::value ? true
+             : false
+   }; 
 };
 template <> struct is_reference<void> 
 { 
