@@ -146,14 +146,41 @@ underlying generator functor.
 <pre>bool operator==(const generator_iterator&lt;Generator&gt;& x, 
 	         const generator_iterator&lt;Generator&gt;& y)</pre>
 
-<strong>Returns:</strong> <code>true</code> iff the <code>x</code> and
-<code>y</code> have been initialized with a reference to the same
-generator functor and <code>*x == *y</code>.
+<strong>Returns:</strong> <code>true</code> if and only if the
+<code>x</code> and <code>y</code> have been initialized with a
+reference to the same generator functor and <code>*x == *y</code>.
 
+<h3>Example</h3>
+
+The following program shows how <code>generator_iterator</code>
+transforms a generator into an input iterator.
+
+<pre>
+#include &lt;iostream>
+#include &lt;boost/random.hpp>
+
+class my_generator
+{
+public:
+  typedef int result_type;
+  my_generator() : state(0) { }
+  int operator()() { return ++state; }
+private:
+  int state;
+};
+
+int main()
+{
+  my_generator gen;
+  boost::generator_iterator&lt;my_generator> it(gen);
+  for(int i = 0; i &lt; 10; ++i, ++it)
+    std::cout &lt;&lt; *it &lt;&lt; std::endl;
+}
+</pre>
 
 <p>
 <hr>
-Jens Maurer, 2000-03-06
+Jens Maurer, 2001-01-30
 
 </body>
 </html>
