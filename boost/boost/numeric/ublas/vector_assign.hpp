@@ -284,8 +284,13 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
+#ifndef BOOST_MSVC
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
         indexing_vector_assign (functor_type::template make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
+#else
+        indexing_vector_assign (scalar_assign<value_type, value_type> (), cv, v);
+        indexing_vector_assign (functor_type (), cv, e);
+#endif
 #endif
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());
@@ -339,8 +344,13 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
+#ifndef BOOST_MSVC
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
         indexing_vector_assign (functor_type::template make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
+#else
+        indexing_vector_assign (scalar_assign<value_type, value_type> (), cv, v);
+        indexing_vector_assign (functor_type (), cv, e);
+#endif
 #endif
         v.clear ();
         typename E::const_iterator ite (e ().begin ());
@@ -368,8 +378,13 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::reference reference;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
+#ifndef BOOST_MSVC
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
         indexing_vector_assign (functor_type::template make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
+#else
+        indexing_vector_assign (scalar_assign<value_type, value_type> (), cv, v);
+        indexing_vector_assign (functor_type (), cv, e);
+#endif
 #endif
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());
