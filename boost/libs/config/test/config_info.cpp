@@ -177,6 +177,8 @@ void print_compiler_macros()
   PRINT_MACRO(__sparc__);
   PRINT_MACRO(__powerpc__);
   PRINT_MACRO(__hppa);
+  PRINT_MACRO(__CYGWIN__);
+  PRINT_MACRO(__MINGW32__);
   // HP aCC:
   PRINT_MACRO(__HP_aCC);
   PRINT_MACRO(_HPACC_);
