@@ -45,11 +45,20 @@ namespace boost
 
   namespace detail
   {
+    // A binary metafunction class that always returns bool.  VC6
+    // ICEs on mpl::always<bool>, probably because of the default
+    // parameters.
+    struct always_bool2
+    {
+        template <class T, class U>
+        struct apply
+        {
+            typedef bool type;
+        };
+    };
+    
     //
     // enable if for use in operator implementation.
-    //
-    // enable_if_interoperable falls back to always enabled for compilers
-    // that don't support enable_if or is_convertible.
     //
     template <
         class Facade1
@@ -57,7 +66,6 @@ namespace boost
       , class Return
     >
     struct enable_if_interoperable
-#ifndef BOOST_NO_STRICT_ITERATOR_INTEROPERABILITY
       : ::boost::iterators::enable_if<
            mpl::or_<
                is_convertible<Facade1, Facade2>
@@ -65,11 +73,7 @@ namespace boost
            >
          , Return
         >
-#endif
     {
-#ifdef BOOST_NO_STRICT_ITERATOR_INTEROPERABILITY
-        typedef Return type;
-#endif
     };
 
     //
@@ -250,6 +254,17 @@ namespace boost
 
 
   // Macros which describe the declarations of binary operators
+# ifdef BOOST_NO_STRICT_ITERATOR_INTEROPERABILITY
+#  define BOOST_ITERATOR_FACADE_INTEROP_HEAD(prefix, op, result_type)   \
+    template <                                                          \
+        class Derived1, class V1, class TC1, class R1, class D1         \
+      , class Derived2, class V2, class TC2, class R2, class D2         \
+    >                                                                   \
+    prefix typename mpl::apply2<result_type,Derived1,Derived2>::type    \
+    operator op(                                                        \
+        iterator_facade<Derived1, V1, TC1, R1, D1> const& lhs           \
+      , iterator_facade<Derived2, V2, TC2, R2, D2> const& rhs)
+# else 
 #  define BOOST_ITERATOR_FACADE_INTEROP_HEAD(prefix, op, result_type)   \
     template <                                                          \
         class Derived1, class V1, class TC1, class R1, class D1         \
@@ -262,6 +277,7 @@ namespace boost
     operator op(                                                        \
         iterator_facade<Derived1, V1, TC1, R1, D1> const& lhs           \
       , iterator_facade<Derived2, V2, TC2, R2, D2> const& rhs)
+# endif 
 
 #  define BOOST_ITERATOR_FACADE_PLUS_HEAD(prefix,args)              \
     template <class Derived, class V, class TC, class R, class D>   \
@@ -287,8 +303,8 @@ namespace boost
       
       template <class I, class V, class TC, class R, class D> friend class iterator_facade;
 
-#  define BOOST_ITERATOR_FACADE_RELATION(op)                            \
-      BOOST_ITERATOR_FACADE_INTEROP_HEAD(friend,op, mpl::always<bool>);
+#  define BOOST_ITERATOR_FACADE_RELATION(op)                                \
+      BOOST_ITERATOR_FACADE_INTEROP_HEAD(friend,op, detail::always_bool2);
 
       BOOST_ITERATOR_FACADE_RELATION(==)
       BOOST_ITERATOR_FACADE_RELATION(!=)
@@ -356,14 +372,14 @@ namespace boost
       }
 
       template <class Facade1, class Facade2>
-      static typename Facade1::difference_type minus(
+      static typename Facade1::difference_type distance_from(
           Facade1 const& f1, Facade2 const& f2, mpl::true_)
       {
           return -f1.distance_to(f2);
       }
 
       template <class Facade1, class Facade2>
-      static typename Facade2::difference_type minus(
+      static typename Facade2::difference_type distance_from(
           Facade1 const& f1, Facade2 const& f2, mpl::false_)
       {
           return f2.distance_to(f1);
@@ -598,7 +614,7 @@ namespace boost
 # define BOOST_ITERATOR_FACADE_RELATION(op, return_prefix, base_op) \
   BOOST_ITERATOR_FACADE_INTEROP(                                    \
       op                                                            \
-    , mpl::always<bool>                                             \
+    , detail::always_bool2                                          \
     , return_prefix                                                 \
     , base_op                                                       \
   )
@@ -606,10 +622,10 @@ namespace boost
   BOOST_ITERATOR_FACADE_RELATION(==, return, equal)
   BOOST_ITERATOR_FACADE_RELATION(!=, return !, equal)
 
-  BOOST_ITERATOR_FACADE_RELATION(<, return 0 >, minus)
-  BOOST_ITERATOR_FACADE_RELATION(>, return 0 <, minus)
-  BOOST_ITERATOR_FACADE_RELATION(<=, return 0 >=, minus)
-  BOOST_ITERATOR_FACADE_RELATION(>=, return 0 <=, minus)
+  BOOST_ITERATOR_FACADE_RELATION(<, return 0 >, distance_from)
+  BOOST_ITERATOR_FACADE_RELATION(>, return 0 <, distance_from)
+  BOOST_ITERATOR_FACADE_RELATION(<=, return 0 >=, distance_from)
+  BOOST_ITERATOR_FACADE_RELATION(>=, return 0 <=, distance_from)
 # undef BOOST_ITERATOR_FACADE_RELATION
 
   // operator- requires an additional part in the static assertion
@@ -617,7 +633,7 @@ namespace boost
       -
     , detail::choose_difference_type
     , return
-    , minus
+    , distance_from
   )
 # undef BOOST_ITERATOR_FACADE_INTEROP
 # undef BOOST_ITERATOR_FACADE_INTEROP_HEAD
