@@ -378,7 +378,17 @@ namespace std {
   inline const _Tp& max(const _Tp& __a, const _Tp& __b) {
     return  __a < __b ? __b : __a;
   }
+#ifdef BOOST_MSVC
+  inline long min(long __a, long __b) {
+    return __b < __a ? __b : __a;
+  }
+  inline long max(long __a, long __b) {
+    return  __a < __b ? __b : __a;
+  }
+#endif
 }
 #endif
 
 #endif  // BOOST_CONFIG_HPP
+
+
