@@ -14,7 +14,7 @@
 // resize.cpp - Test of resizing multi_arrays
 //
 
-#include "boost/test/test_tools.hpp"
+#include "boost/test/minimal.hpp"
 #include "boost/multi_array.hpp"
 #include <iostream>
 using namespace std;

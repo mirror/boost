@@ -14,8 +14,7 @@
 // test out my new storage_order stuff
 //
 
-#define BOOST_INCLUDE_MAIN
-#include "boost/test/test_tools.hpp"
+#include "boost/test/minimal.hpp"
 
 #include "boost/multi_array/storage_order.hpp"
 
