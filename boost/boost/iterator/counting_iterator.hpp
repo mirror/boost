@@ -127,7 +127,7 @@ namespace detail
   {
       static Difference distance(Incrementable1 x, Incrementable2 y)
       {
-          return boost::detail::distance(x, y);
+          return y - x;
       }
   };
 
