@@ -77,13 +77,14 @@ template<int> struct static_assert_test{};
 // The following piece of macro magic joins the two 
 // arguments together, even when one of the arguments is
 // itself a macro (see 16.3.1 in C++ standard).  The key
-// is that macro expantion of macro arguments does not
+// is that macro expansion of macro arguments does not
 // occur in BOOST_DO_ASSERT_JOIN but does in BOOST_ASSERT_JOIN
 // provided it is called from within another macro.
 #define BOOST_ASSERT_JOIN( X, Y ) BOOST_DO_ASSERT_JOIN( X, Y )
 #define BOOST_DO_ASSERT_JOIN( X, Y ) X##Y
 
 #endif // BOOST_STATIC_ASSERT_HPP
+
 
 
 
