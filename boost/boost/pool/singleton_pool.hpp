@@ -105,13 +105,13 @@ struct singleton_pool
     {
       pool_type & p = singleton::instance();
       details::pool::guard<Mutex> g(p);
-      return p.release_memory();
+      return p.p.release_memory();
     }
     static bool purge_memory()
     {
       pool_type & p = singleton::instance();
       details::pool::guard<Mutex> g(p);
-      return p.purge_memory();
+      return p.p.purge_memory();
     }
 };
 
