@@ -1,5 +1,6 @@
 //  Boost scoped_ptr_example header file  ------------------------------------//
 
+#include <boost/utility.hpp>
 #include <boost/scoped_ptr.hpp>
 
 //  The point of this example is to prove that even though
