@@ -65,12 +65,13 @@ struct make_list : public mpl::apply_if<
 using namespace mpl::placeholders;
 
 //////////////////////////////////////////////////////////////////////////////
-template< class Derived, class Context, class InnerInitial >
+template< class MostDerived, class Context, class InnerInitial >
 struct simple_state_base_type
 {
   private:
-    typedef typename Context::state_list_type state_list_type;
-    typedef typename Context::rtti_policy_type rtti_policy_type;
+    typedef typename Context::top_context_type::allocator_type allocator_type;
+    typedef typename Context::top_context_type::rtti_policy_type
+      rtti_policy_type;
     // TODO: Check that position in inner initial list corresponds to
     // orthogonal_position
     typedef typename detail::make_list< InnerInitial >::type
@@ -80,13 +81,13 @@ struct simple_state_base_type
     typedef typename mpl::apply_if<
       mpl::empty< inner_initial_list >,
       mpl::identity< typename rtti_policy_type::
-        template derived_type< Derived, leaf_state<
-          state_list_type,
+        template derived_type< MostDerived, leaf_state<
+          allocator_type,
           rtti_policy_type > > >,
       mpl::identity< typename rtti_policy_type::
-        template derived_type< Derived, node_state<
+        template derived_type< MostDerived, node_state<
           mpl::size< inner_initial_list >::type::value,
-          state_list_type,
+          allocator_type,
           rtti_policy_type > > > >::type type;
 };
 
@@ -239,15 +240,15 @@ typedef detail::empty_list no_reactions;
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class Derived,
+template< class MostDerived,
           class Context, // either an outer state or a state_machine
           class Reactions = no_reactions,
           class InnerInitial = detail::empty_list > // initial inner state
-class simple_state : public detail::simple_state_base_type< Derived,
+class simple_state : public detail::simple_state_base_type< MostDerived,
   typename Context::inner_context_type, InnerInitial >::type
 {
   typedef typename detail::simple_state_base_type<
-    Derived, typename Context::inner_context_type,
+    MostDerived, typename Context::inner_context_type,
     InnerInitial >::type base_type;
 
   public:
@@ -268,7 +269,7 @@ class simple_state : public detail::simple_state_base_type< Derived,
       BOOST_STATIC_CONSTANT(
         detail::orthogonal_position_type,
         inner_orthogonal_position = innerOrthogonalPosition );
-      typedef Derived inner_context_type;
+      typedef MostDerived inner_context_type;
     };
 
 
@@ -382,7 +383,7 @@ class simple_state : public detail::simple_state_base_type< Derived,
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     // TODO: check that this state really has such an inner orthogonal state
-    typedef Derived inner_context_type;
+    typedef MostDerived inner_context_type;
     BOOST_STATIC_CONSTANT(
       detail::orthogonal_position_type,
       inner_orthogonal_position = 0 );
@@ -394,7 +395,7 @@ class simple_state : public detail::simple_state_base_type< Derived,
     typedef typename context_type::top_context_type top_context_type;
     typedef typename context_type::inner_context_ptr_type context_ptr_type;
     typedef typename context_type::state_list_type state_list_type;
-    typedef intrusive_ptr< Derived > inner_context_ptr_type;
+    typedef intrusive_ptr< MostDerived > inner_context_ptr_type;
     typedef typename detail::make_list< InnerInitial >::type
       inner_initial_list;
     typedef typename mpl::push_front<
@@ -477,7 +478,7 @@ class simple_state : public detail::simple_state_base_type< Derived,
     static inner_context_ptr_type shallow_construct(
       const context_ptr_type & pContext )
     {
-      const inner_context_ptr_type pInnerContext( new Derived );
+      const inner_context_ptr_type pInnerContext( new MostDerived );
       pInnerContext->set_context( pContext );
       return pInnerContext;
     }
@@ -531,9 +532,9 @@ class simple_state : public detail::simple_state_base_type< Derived,
     }
 
     template<>
-    Derived & context_impl( Derived * )
+    MostDerived & context_impl( MostDerived * )
     {
-      return *polymorphic_downcast< Derived * >( this );
+      return *polymorphic_downcast< MostDerived * >( this );
     }
 
     template< class OtherContext >
@@ -545,9 +546,9 @@ class simple_state : public detail::simple_state_base_type< Derived,
     }
 
     template<>
-    const Derived & context_impl( Derived * ) const
+    const MostDerived & context_impl( MostDerived * ) const
     {
-      return *polymorphic_downcast< const Derived * >( this );
+      return *polymorphic_downcast< const MostDerived * >( this );
     }
 
 
@@ -562,7 +563,7 @@ class simple_state : public detail::simple_state_base_type< Derived,
       typedef typename mpl::deref< common_context_iter >::type
         common_context_type;
       typedef typename mpl::at<
-        typename mpl::push_front< context_type_list, Derived >::type,
+        typename mpl::push_front< context_type_list, MostDerived >::type,
         typename mpl::distance<
           typename mpl::begin< context_type_list >::type,
           common_context_iter >::type >::type termination_state_type;
@@ -603,7 +604,7 @@ class simple_state : public detail::simple_state_base_type< Derived,
       typename rtti_policy_type::id_type eventType )
     {
       result reactionResult = mpl::front< ReactionList >::type::react(
-        *polymorphic_downcast< Derived * >( this ), evt, eventType );
+        *polymorphic_downcast< MostDerived * >( this ), evt, eventType );
 
       if ( reactionResult == no_reaction )
       {

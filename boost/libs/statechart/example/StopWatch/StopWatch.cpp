@@ -48,8 +48,9 @@ namespace mpl = boost::mpl;
 
 
 
-class EvStartStop : public fsm::event< EvStartStop > {};
-class EvReset : public fsm::event< EvReset > {};
+struct EvStartStop : fsm::event< EvStartStop > {};
+struct EvReset : fsm::event< EvReset > {};
+
 
 struct IElapsedTime
 {
@@ -58,13 +59,12 @@ struct IElapsedTime
 
 
 struct Active;
-struct StopWatch : public fsm::state_machine< StopWatch, Active > {};
+struct StopWatch : fsm::state_machine< StopWatch, Active > {};
 
 
 struct Stopped;
-struct Active :
-  public fsm::simple_state< Active, StopWatch,
-    fsm::transition< EvReset, Active >, Stopped >
+struct Active : fsm::simple_state< Active, StopWatch,
+  fsm::transition< EvReset, Active >, Stopped >
 {
   public:
     Active() : elapsedTime_( 0 ) {}
@@ -84,8 +84,8 @@ struct Active :
 };
 
 struct Running :
-  public IElapsedTime,
-  public fsm::simple_state< Running, Active,
+  IElapsedTime,
+  fsm::simple_state< Running, Active,
     fsm::transition< EvStartStop, Stopped > >
 {
   public:
@@ -106,8 +106,8 @@ struct Running :
 };
 
 struct Stopped :
-  public IElapsedTime,
-  public fsm::simple_state< Stopped, Active,
+  IElapsedTime,
+  fsm::simple_state< Stopped, Active,
     fsm::transition< EvStartStop, Running > >
 {
   virtual std::clock_t ElapsedTime() const

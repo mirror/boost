@@ -15,8 +15,20 @@
 
 #include <boost/fsm/detail/counted_base.hpp>
 
+#include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/assert.hpp>
+
+#ifdef BOOST_MSVC
+#pragma warning( push )
+#pragma warning( disable: 4702 ) // unreachable code (in release mode only)
+#endif
+
+#include <list>
+
+#ifdef BOOST_MSVC
+#pragma warning( pop )
+#endif
 
 
 
@@ -46,11 +58,11 @@ typedef unsigned char orthogonal_position_type;
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class RttiPolicy >
-class state_base : private noncopyable,
+template< class Allocator, class RttiPolicy >
+class state_base : private noncopyable, public RttiPolicy::base_type<
   // Derived class objects will be created, handled and destroyed by one and
   // the same thread --> locking is not necessary
-  public RttiPolicy::base_type< counted_base< orthogonal_position_type, false > >
+  counted_base< orthogonal_position_type, false > >
 {
   typedef typename RttiPolicy::base_type<
     counted_base< orthogonal_position_type, false > > base_type;
@@ -93,6 +105,12 @@ class state_base : private noncopyable,
       return deferredEvents_;
     }
 
+    template< class Context >
+    void set_context( orthogonal_position_type position, Context * pContext )
+    {
+      pContext->add_inner_state( position, this );
+    }
+
   public:
     //////////////////////////////////////////////////////////////////////////
     // The following declarations should be private.
@@ -105,6 +123,16 @@ class state_base : private noncopyable,
     // returns a pointer to the immediate outer state _if_ there is one,
     // returns 0 otherwise (this is the outermost state then)
     virtual state_base * outer_state_ptr() const = 0;
+
+    typedef intrusive_ptr< state_base > state_base_ptr_type;
+    typedef std::list<
+      state_base_ptr_type,
+      typename Allocator::rebind< state_base_ptr_type >::other
+    > state_list_type;
+
+    virtual void remove_from_state_list(
+      state_list_type & states,
+      typename state_list_type::iterator & pUnstableState ) = 0;
 
   private:
     //////////////////////////////////////////////////////////////////////////

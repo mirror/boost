@@ -25,7 +25,7 @@ Shooting::~Shooting()
 }
 
 
-struct Storing : public fsm::simple_state< Storing, Shooting >
+struct Storing : fsm::simple_state< Storing, Shooting >
 {
   Storing()
   {
@@ -34,10 +34,10 @@ struct Storing : public fsm::simple_state< Storing, Shooting >
 };
 
 
-struct Focused : public fsm::simple_state< Focused, Shooting,
+struct Focused : fsm::simple_state< Focused, Shooting,
   fsm::custom_reaction< EvShutterFull > >
 {
-  virtual fsm::result react( const EvShutterFull & );
+  fsm::result react( const EvShutterFull & );
 };
 
 fsm::result Focused::react( const EvShutterFull & )

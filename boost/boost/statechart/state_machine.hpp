@@ -32,7 +32,6 @@
 #pragma warning( disable: 4702 ) // unreachable code (in release mode only)
 #endif
 
-#include <list>
 #include <map>
 
 #ifdef BOOST_MSVC
@@ -62,12 +61,10 @@ namespace detail
 
   
   
-template< class StateList, class RttiPolicy >
-class universal_state;
 template< orthogonal_position_type noOfOrthogonalRegions,
-  class StateList, class RttiPolicy >
+  class Allocator, class RttiPolicy >
 class node_state;
-template< class StateList, class RttiPolicy >
+template< class Allocator, class RttiPolicy >
 class leaf_state;
 
 
@@ -180,7 +177,7 @@ struct state_cast_impl
 //////////////////////////////////////////////////////////////////////////////
 // Base class for all state machines
 // Some function names were derived from a state machine by Aleksey Gurtovoy.
-template< class Derived,
+template< class MostDerived,
           class InitialState, 
           class Allocator = std::allocator< void >,
           class ExceptionTranslator = exception_translator<>,
@@ -189,6 +186,7 @@ class state_machine : private noncopyable
 {
   public:
     //////////////////////////////////////////////////////////////////////////
+    typedef Allocator allocator_type;
     typedef RttiPolicy rtti_policy_type;
     typedef event_base< rtti_policy_type > event_base_type;
     typedef intrusive_ptr< const event_base_type > event_base_ptr_type;
@@ -315,7 +313,7 @@ class state_machine : private noncopyable
     }
 
     // This destructor was only made virtual, so that that
-    // polymorphic_downcast can be used to cast to Derived.
+    // polymorphic_downcast can be used to cast to MostDerived.
     virtual ~state_machine() {}
 
   public:
@@ -323,20 +321,17 @@ class state_machine : private noncopyable
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
-    typedef detail::state_base< rtti_policy_type > state_base_type;
+    typedef detail::state_base< allocator_type, rtti_policy_type > state_base_type;
 
-    typedef Derived inner_context_type;
+    typedef MostDerived inner_context_type;
     BOOST_STATIC_CONSTANT(
       detail::orthogonal_position_type,
       inner_orthogonal_position = 0 );
 
-    typedef Derived top_context_type;
-    typedef Derived * inner_context_ptr_type;
-    typedef intrusive_ptr< state_base_type > state_base_ptr_type;
-    typedef std::list<
-      state_base_ptr_type,
-      typename Allocator::rebind< state_base_ptr_type >::other
-    > state_list_type;
+    typedef MostDerived top_context_type;
+    typedef MostDerived * inner_context_ptr_type;
+    typedef typename state_base_type::state_base_ptr_type state_base_ptr_type;
+    typedef typename state_base_type::state_list_type state_list_type;
 
     typedef mpl::clear< mpl::list<> >::type context_type_list;
 
@@ -356,24 +351,24 @@ class state_machine : private noncopyable
     Context & context()
     {
       // As we are in the top context here, only this object can be returned.
-      return *polymorphic_downcast< Derived * >( this );
+      return *polymorphic_downcast< MostDerived * >( this );
     }
 
     template< class Context >
     const Context & context() const
     {
       // As we are in the top context here, only this object can be returned.
-      return *polymorphic_downcast< const Derived * >( this );
+      return *polymorphic_downcast< const MostDerived * >( this );
     }
 
     top_context_type & top_context()
     {
-      return *polymorphic_downcast< Derived * >( this );
+      return *polymorphic_downcast< MostDerived * >( this );
     }
 
     const top_context_type & top_context() const
     {
-      return *polymorphic_downcast< const Derived * >( this );
+      return *polymorphic_downcast< const MostDerived * >( this );
     }
 
 
@@ -385,8 +380,7 @@ class state_machine : private noncopyable
       eventQueue_.clear();
     }
 
-    void terminate(
-      detail::universal_state< state_list_type, rtti_policy_type > & theState )
+    void terminate( state_base_type & theState )
     {
 		  if ( currentStates_.size() == 1 )
 		  {
@@ -431,8 +425,7 @@ class state_machine : private noncopyable
 
 
     void add_inner_state(
-      detail::orthogonal_position_type position,
-      detail::universal_state< state_list_type, rtti_policy_type > * )
+      detail::orthogonal_position_type position, state_base_type * )
     {
       BOOST_ASSERT( position == 0 );
       position;
@@ -464,7 +457,7 @@ class state_machine : private noncopyable
     void initial_construct()
     {
       InitialState::deep_construct(
-        *polymorphic_downcast< Derived * >( this ) );
+        *polymorphic_downcast< MostDerived * >( this ) );
     }
 
     class initial_construct_function
@@ -659,10 +652,10 @@ class state_machine : private noncopyable
 
     template< detail::orthogonal_position_type noOfOrthogonalRegions >
     void add_impl( const detail::node_state<
-      noOfOrthogonalRegions, state_list_type, rtti_policy_type > & ) {}
+      noOfOrthogonalRegions, allocator_type, rtti_policy_type > & ) {}
 
     void add_impl(
-      detail::leaf_state< state_list_type, rtti_policy_type > & theState )
+      detail::leaf_state< allocator_type, rtti_policy_type > & theState )
     {
       theState.set_list_position( pUnstableState_ );
       pUnstableState_ = currentStates_.end();
@@ -670,13 +663,13 @@ class state_machine : private noncopyable
 
     typedef std::list<
       event_base_ptr_type,
-      typename Allocator::rebind< event_base_ptr_type >::other
+      typename allocator_type::rebind< event_base_ptr_type >::other
     > event_queue_type;
 
     typedef std::map<
       const state_base_type *, event_queue_type,
       std::less< const state_base_type * >,
-      typename Allocator::rebind< std::pair< const state_base_type * const,
+      typename allocator_type::rebind< std::pair< const state_base_type * const,
         event_queue_type > >::other > deferred_map_type;
 
     event_queue_type eventQueue_;

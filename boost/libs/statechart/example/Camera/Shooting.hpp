@@ -19,15 +19,17 @@
 #include <boost/fsm/deferral.hpp>
 #include <boost/mpl/list.hpp>
 
+
+
 namespace fsm = boost::fsm;
 namespace mpl = boost::mpl;
 
 
 
-struct EvInFocus : public fsm::event< EvInFocus > {};
+struct EvInFocus : fsm::event< EvInFocus > {};
 
 struct Focusing;
-struct Shooting : public fsm::simple_state< Shooting, Camera,
+struct Shooting : fsm::simple_state< Shooting, Camera,
   fsm::transition< EvShutterRelease, NotShooting >, Focusing >
 {
   Shooting();
@@ -39,7 +41,7 @@ struct Shooting : public fsm::simple_state< Shooting, Camera,
   }
 };
 
-struct Focusing : public fsm::state< Focusing, Shooting, mpl::list<
+struct Focusing : fsm::state< Focusing, Shooting, mpl::list<
   fsm::custom_reaction< EvInFocus >, fsm::deferral< EvShutterFull > > >
 {
   Focusing( my_context ctx );

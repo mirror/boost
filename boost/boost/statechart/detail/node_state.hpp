@@ -10,7 +10,7 @@
 
 
 
-#include <boost/fsm/detail/universal_state.hpp>
+#include <boost/fsm/detail/state_base.hpp>
 
 #include <boost/assert.hpp>  // BOOST_ASSERT
 
@@ -27,10 +27,10 @@ namespace detail
 
 //////////////////////////////////////////////////////////////////////////////
 template< orthogonal_position_type noOfOrthogonalRegions,
-  class StateList, class RttiPolicy >
-class node_state : public universal_state< StateList, RttiPolicy >
+  class Allocator, class RttiPolicy >
+class node_state : public state_base< Allocator, RttiPolicy >
 {
-  typedef universal_state< StateList, RttiPolicy > base_type;
+  typedef state_base< Allocator, RttiPolicy > base_type;
   protected:
     //////////////////////////////////////////////////////////////////////////
     node_state( typename RttiPolicy::id_type id ) : base_type( id )
@@ -61,8 +61,11 @@ class node_state : public universal_state< StateList, RttiPolicy >
       pInnerStates[ position ] = 0;
     }
 
+    typedef typename base_type::state_list_type state_list_type;
+
     virtual void remove_from_state_list(
-      StateList & states, typename StateList::iterator & pUnstableState )
+      state_list_type & states,
+      typename state_list_type::iterator & pUnstableState )
     {
       if ( ( pUnstableState != states.end() ) &&
            ( get_pointer( *pUnstableState ) == this ) )

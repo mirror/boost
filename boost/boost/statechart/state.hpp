@@ -21,13 +21,13 @@ namespace fsm
 
 
 
-template< class Derived,
+template< class MostDerived,
           class Context, // either an outer state or a state_machine
           class Reactions = no_reactions,
           class InnerInitial = detail::empty_list > // initial inner state
-class state : public simple_state< Derived, Context, Reactions, InnerInitial >
+class state : public simple_state< MostDerived, Context, Reactions, InnerInitial >
 {
-  typedef simple_state< Derived, Context, Reactions, InnerInitial >
+  typedef simple_state< MostDerived, Context, Reactions, InnerInitial >
     base_type;
 
   protected:
@@ -79,7 +79,7 @@ class state : public simple_state< Derived, Context, Reactions, InnerInitial >
     static inner_context_ptr_type shallow_construct(
       const context_ptr_type & pContext )
     {
-      return inner_context_ptr_type( new Derived( my_context( pContext ) ) );
+      return inner_context_ptr_type( new MostDerived( my_context( pContext ) ) );
     }
 };
 

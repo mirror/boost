@@ -59,6 +59,9 @@ class counted_base : private locked_base< NeedsLocking >
     //////////////////////////////////////////////////////////////////////////
     counted_base() : count_( 0 ) {}
 
+    // do nothing copy implementation is intentional (the number of
+    // referencing pointers of the source and the destination is not changed
+    // through the copy operation)
     counted_base( const counted_base & ) : count_( 0 ) {}
     counted_base & operator=( const counted_base & ) {}
 

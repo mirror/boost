@@ -31,7 +31,6 @@ const unsigned int noOfBits = 6;
 //
 // Compiler      | max. noOfBits b | max. states s  | max. transitions t
 // --------------|-----------------|----------------|-------------------
-// MSVC 7.0      |      b < 5      |  16 < s < 32   |  64 < t < 120
 // MSVC 7.1      |      b < 7      |  64 < s < 128  |  384 < t < 896
 //
 // CAUTION: Due to the fact that the amount of generated code more than
@@ -116,18 +115,18 @@ void DisplayBits( unsigned int number )
 
 //////////////////////////////////////////////////////////////////////////////
 template< unsigned int bitNo >
-class EvFlipBit :
-  public fsm::event< EvFlipBit< bitNo >, IntegerRttiPolicy<> > {};
+struct EvFlipBit :
+  fsm::event< EvFlipBit< bitNo >, IntegerRttiPolicy<> > {};
 
 const fsm::event_base< IntegerRttiPolicy<> > * pFlipBitEvents[ 10 ] = { 0 };
 
-class ExceptionThrown :
-  public fsm::event< ExceptionThrown, IntegerRttiPolicy<> > {};
+struct ExceptionThrown :
+  fsm::event< ExceptionThrown, IntegerRttiPolicy<> > {};
 
 template< unsigned int stateNo >
-class BitState;
+struct BitState;
 //////////////////////////////////////////////////////////////////////////////
-class BitMachine : public fsm::state_machine< BitMachine, BitState< 0 >,
+struct BitMachine : fsm::state_machine< BitMachine, BitState< 0 >,
   boost::fast_pool_allocator< int >,
   fsm::exception_translator< ExceptionThrown >, IntegerRttiPolicy<> > {};
 
@@ -166,27 +165,24 @@ struct FlipTransitionList
 
 
 //////////////////////////////////////////////////////////////////////////////
-class IDisplay
+struct IDisplay
 {
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    virtual void DisplayBits() const = 0;
+  virtual void DisplayBits() const = 0;
 };
 
 
 //////////////////////////////////////////////////////////////////////////////
 template< unsigned int stateNo >
-class BitState : public fsm::simple_state<
-  BitState< stateNo >, BitMachine,
-  typename FlipTransitionList< stateNo >::type >, 
-  public IDisplay, public UniqueObject< BitState< stateNo > >
+struct BitState :
+  fsm::simple_state< BitState< stateNo >, BitMachine,
+    typename FlipTransitionList< stateNo >::type >, 
+  IDisplay,
+  UniqueObject< BitState< stateNo > >
 {
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    virtual void DisplayBits() const
-    {
-      ::DisplayBits( stateNo );
-    }
+  virtual void DisplayBits() const
+  {
+    ::DisplayBits( stateNo );
+  }
 };
 
 

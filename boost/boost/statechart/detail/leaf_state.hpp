@@ -10,7 +10,7 @@
 
 
 
-#include <boost/fsm/detail/universal_state.hpp>
+#include <boost/fsm/detail/state_base.hpp>
 
 
 
@@ -24,10 +24,10 @@ namespace detail
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class StateList, class RttiPolicy >
-class leaf_state : public universal_state< StateList, RttiPolicy >
+template< class Allocator, class RttiPolicy >
+class leaf_state : public state_base< Allocator, RttiPolicy >
 {
-  typedef universal_state< StateList, RttiPolicy > base_type;
+  typedef state_base< Allocator, RttiPolicy > base_type;
   protected:
     //////////////////////////////////////////////////////////////////////////
     leaf_state( typename RttiPolicy::id_type id ) : base_type( id ) {}
@@ -37,13 +37,15 @@ class leaf_state : public universal_state< StateList, RttiPolicy >
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
-    void set_list_position( typename StateList::iterator listPosition )
+    void set_list_position( typename state_list_type::iterator listPosition )
     {
       listPosition_ = listPosition;
     }
 
+    typedef typename base_type::state_list_type state_list_type;
+
     virtual void remove_from_state_list(
-      StateList & states, typename StateList::iterator & )
+      state_list_type & states, typename state_list_type::iterator & )
     {
       // Because the list owns the leaf_state, this leads to the immediate
       // termination of this state.
@@ -52,7 +54,7 @@ class leaf_state : public universal_state< StateList, RttiPolicy >
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    typename StateList::iterator listPosition_;
+    typename state_list_type::iterator listPosition_;
 };
 
 

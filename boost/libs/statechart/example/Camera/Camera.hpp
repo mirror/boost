@@ -19,14 +19,14 @@ namespace fsm = boost::fsm;
 
 
 
-class EvShutterHalf : public fsm::event< EvShutterHalf > {};
-class EvShutterFull : public fsm::event< EvShutterFull > {};
-class EvShutterRelease : public fsm::event< EvShutterRelease > {};
-class EvConfig : public fsm::event< EvConfig > {};
+struct EvShutterHalf : fsm::event< EvShutterHalf > {};
+struct EvShutterFull : fsm::event< EvShutterFull > {};
+struct EvShutterRelease : fsm::event< EvShutterRelease > {};
+struct EvConfig : fsm::event< EvConfig > {};
 
 
 struct NotShooting;
-struct Camera : public fsm::state_machine< Camera, NotShooting >
+struct Camera : fsm::state_machine< Camera, NotShooting >
 {
     bool IsMemoryAvailable() const { return true; }
     bool IsBatteryLow() const { return false; }
@@ -34,7 +34,7 @@ struct Camera : public fsm::state_machine< Camera, NotShooting >
 
 
 struct Idle;
-struct NotShooting : public fsm::simple_state< NotShooting, Camera,
+struct NotShooting : fsm::simple_state< NotShooting, Camera,
   fsm::custom_reaction< EvShutterHalf >, Idle >
 {
   NotShooting();
@@ -43,7 +43,7 @@ struct NotShooting : public fsm::simple_state< NotShooting, Camera,
   fsm::result react( const EvShutterHalf & );
 };
 
-struct Idle : public fsm::simple_state< Idle, NotShooting,
+struct Idle : fsm::simple_state< Idle, NotShooting,
   fsm::custom_reaction< EvConfig > >
 {
   Idle();

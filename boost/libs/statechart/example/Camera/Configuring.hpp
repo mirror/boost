@@ -18,7 +18,7 @@ namespace fsm = boost::fsm;
 
 
 
-struct Configuring : public fsm::simple_state< Configuring, NotShooting,
+struct Configuring : fsm::simple_state< Configuring, NotShooting,
   fsm::transition< EvConfig, Idle > >
 {
   Configuring();
