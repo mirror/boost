@@ -543,8 +543,15 @@ template <typename T> struct is_empty
 private:
    typedef typename remove_cv<T>::type cvt;
 public:
+#ifdef __GNUC__
+   // is_convertible gives a warning for g++
+   static const bool value = ::boost::detail::empty_helper<T, is_class<T>::value , false>::value
+                     || BOOST_IS_EMPTY(cvt);
+
+#else
    static const bool value = ::boost::detail::empty_helper<T, is_class<T>::value , is_convertible<T,int>::value>::value
                      || BOOST_IS_EMPTY(cvt);
+#endif
 };
 
 //*? T has trivial default constructor (allows cv-qual)
