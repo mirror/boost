@@ -16,6 +16,9 @@
  * 20 Jan 2001 - STLport fix (Beman Dawes)
  * 29 Sep 2000 - Initial Revision (Nico Josuttis)
  */
+
+// See http://www.boost.org/libs/array for Documentation.
+
 #ifndef BOOST_ARRAY_HPP
 #define BOOST_ARRAY_HPP
 

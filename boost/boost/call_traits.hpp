@@ -3,7 +3,7 @@
 //  in all copies. This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 
-//  See http://www.boost.org for most recent version including documentation.
+//  See http://www.boost.org/libs/utility/call_traits.htm for Documentation.
 //  See boost/detail/call_traits.hpp and boost/detail/ob_call_traits.hpp
 //  for full copyright notices.
 

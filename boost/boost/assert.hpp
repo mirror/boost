@@ -11,6 +11,9 @@
 //  Note: There are no include guards. This is intentional.
 //
 
+// See http://www.boost.org/libs/utility for Documentation.
+
+
 #undef BOOST_ASSERT
 
 #if defined(BOOST_DISABLE_ASSERTS)

@@ -1,3 +1,5 @@
+// See http://www.boost.org/libs/any for Documentation.
+
 #ifndef BOOST_ANY_INCLUDED
 #define BOOST_ANY_INCLUDED
 

@@ -8,6 +8,8 @@
 
 // With optimizations, bug fixes, and improvements by Gennaro Prota.
 
+// See http://www.boost.org/libs/dynamic_bitset for Documentation.
+
 // -------------------------------------
 // CHANGE LOG:
 //
