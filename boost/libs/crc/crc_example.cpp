@@ -6,7 +6,7 @@
 //  implied warranty, and with no claim as to its suitability for any purpose.
 
 //  Revision History
-//  12 Jun 2003  Initial version (Daryle Walker)
+//  17 Jun 2003  Initial version (Daryle Walker)
 
 #include <boost/crc.hpp>  // for boost::crc_32_type
 
@@ -44,15 +44,13 @@ try
 
         if ( ifs )
         {
-            char             buffer[ buffer_size ];
-            std::streamsize  len;
-
             do
             {
+                char  buffer[ buffer_size ];
+
                 ifs.read( buffer, buffer_size );
-                len = ifs.gcount();
-                result.process_bytes( buffer, len );
-            } while ( ifs && (buffer_size == len) );
+                result.process_bytes( buffer, ifs.gcount() );
+            } while ( ifs );
         }
         else
         {
