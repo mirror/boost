@@ -382,7 +382,7 @@ namespace detail {
   };
 
 
-# ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+# if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(BOOST_NO_STD_ITERATOR_TRAITS)
 
    // Select default pointer and reference types for adapted non-pointer
    // iterators based on the iterator and the value_type. Poor man's partial
