@@ -614,19 +614,19 @@ struct index
 template<
   typename Tag,typename Value,typename IndexSpecifierList,typename Allocator
 >
-typename index<
+typename ::boost::multi_index::index<
   multi_index_container<Value,IndexSpecifierList,Allocator>,Tag>::type&
 get(
   multi_index_container<Value,IndexSpecifierList,Allocator>& m
   BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))
 {
   typedef multi_index_container<
-    Value,IndexSpecifierList,Allocator>    multi_index_type;
-  typedef typename index<
+    Value,IndexSpecifierList,Allocator>         multi_index_type;
+  typedef typename ::boost::multi_index::index<
     multi_index_container<
       Value,IndexSpecifierList,Allocator>,
     Tag
-  >::type                                  index;
+  >::type                                       index;
 
   return detail::converter<multi_index_type,index>::index(m);
 }
@@ -634,19 +634,19 @@ get(
 template<
   typename Tag,typename Value,typename IndexSpecifierList,typename Allocator
 >
-const typename index<
+const typename ::boost::multi_index::index<
   multi_index_container<Value,IndexSpecifierList,Allocator>,Tag>::type&
 get(
   const multi_index_container<Value,IndexSpecifierList,Allocator>& m
   BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))
 {
   typedef multi_index_container<
-    Value,IndexSpecifierList,Allocator>    multi_index_type;
-  typedef typename index<
+    Value,IndexSpecifierList,Allocator>         multi_index_type;
+  typedef typename ::boost::multi_index::index<
     multi_index_container<
       Value,IndexSpecifierList,Allocator>,
     Tag
-  >::type                                  index;
+  >::type                                       index;
 
   return detail::converter<multi_index_type,index>::index(m);
 }
@@ -746,13 +746,15 @@ project(
 template<typename MultiIndexContainer,typename Tag>
 struct index_iterator
 {
-  typedef typename index<MultiIndexContainer,Tag>::type::iterator type;
+  typedef typename ::boost::multi_index::index<
+    MultiIndexContainer,Tag>::type::iterator    type;
 };
 
 template<typename MultiIndexContainer,typename Tag>
 struct index_const_iterator
 {
-  typedef typename index<MultiIndexContainer,Tag>::type::const_iterator type;
+  typedef typename ::boost::multi_index::index<
+    MultiIndexContainer,Tag>::type::const_iterator type;
 };
 
 template<
@@ -766,8 +768,9 @@ project(
   BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))
 {
   typedef multi_index_container<
-    Value,IndexSpecifierList,Allocator>              multi_index_type;
-  typedef typename index<multi_index_type,Tag>::type index;
+    Value,IndexSpecifierList,Allocator>         multi_index_type;
+  typedef typename ::boost::multi_index::index<
+    multi_index_type,Tag>::type                 index;
 
 #if !defined(BOOST_MSVC)||!(BOOST_MSVC<1300) /* this ain't work in MSVC++ 6.0 */
   BOOST_STATIC_ASSERT((
@@ -800,8 +803,9 @@ project(
   BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))
 {
   typedef multi_index_container<
-    Value,IndexSpecifierList,Allocator>              multi_index_type;
-  typedef typename index<multi_index_type,Tag>::type index;
+    Value,IndexSpecifierList,Allocator>         multi_index_type;
+  typedef typename ::boost::multi_index::index<
+    multi_index_type,Tag>::type                 index;
 
 #if !defined(BOOST_MSVC)||!(BOOST_MSVC<1300) /* this ain't work in MSVC++ 6.0 */
   BOOST_STATIC_ASSERT((
