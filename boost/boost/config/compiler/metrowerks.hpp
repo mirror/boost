@@ -25,6 +25,7 @@
 
 #   if(__MWERKS__ <= 0x2406) || !defined(BOOST_STRICT_CONFIG)  // 7.0 & 7.1
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#     define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
 #   endif
 
 #if !__option(wchar_type)

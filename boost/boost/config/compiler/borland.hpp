@@ -31,6 +31,7 @@
 #  define BOOST_NO_PRIVATE_IN_AGGREGATE
 #  define BOOST_NO_SWPRINTF
 #  define BOOST_NO_USING_TEMPLATE
+#  define BOOST_BCB_PARTIAL_SPECIALIZATION_BUG
    // we shouldn't really need this - but too many things choke
    // without it, this needs more investigation:
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -57,6 +58,10 @@
 #ifndef _CPPUNWIND
 #  define BOOST_NO_EXCEPTIONS
 #endif
+//
+// all versions have a <dirent.h>:
+//
+#define BOOST_HAS_DIRENT_H
 //
 // Disable Win32 support in ANSI mode:
 //

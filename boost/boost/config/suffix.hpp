@@ -78,6 +78,14 @@
 #  endif
 
 //
+// Without partial specialization, can't test for partial specialisation bugs:
+//
+#  if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+      && !defined(BOOST_BCB_PARTIAL_SPECIALIZATION_BUG)
+#     define BOOST_BCB_PARTIAL_SPECIALIZATION_BUG
+#  endif
+
+//
 // Without partial specialization, std::iterator_traits can't work:
 //
 #  if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \

@@ -20,6 +20,11 @@
 #        define BOOST_HAS_STDINT_H
 #     endif
 
+      // POSIX version 2 requires <dirent.h>
+#     if defined(_POSIX_VERSION) && (_POSIX_VERSION >= 199009L)
+#        define BOOST_HAS_DIRENT_H
+#     endif
+
       // POSIX defines _POSIX_THREADS > 0 for pthread support,
       // however some platforms define _POSIX_THREADS without
       // a value, hence the (_POSIX_THREADS+0 >= 0) check.
