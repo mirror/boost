@@ -31,7 +31,7 @@
     <code><macroname>BOOST_VARIANT_LIMIT_TYPES</macroname></code>
     unnecessarily clutters otherwise simple code. Therefore, for common
     use-cases, this library provides its own macro
-    <code><macroname>BOOST_VARIANT_ENUM_PARAMS</macroname></code>.</para>
+    <code><emphasis role="bold"><macroname>BOOST_VARIANT_ENUM_PARAMS</macroname></emphasis></code>.</para>
 
   <para>This macro simplifies for the user the process of declaring 
     <code>variant</code> types in function templates or explicit partial
@@ -42,12 +42,12 @@ template &lt;typename T&gt; void some_func(const T &amp;);
 template &lt;typename T&gt; class some_class;
 
 // function template overload
-template &lt;<emphasis role="bold">BOOST_VARIANT_ENUM_PARAMS(typename T)</emphasis>&gt;
-void some_func(const <classname>boost::variant</classname>&lt;<emphasis role="bold">BOOST_VARIANT_ENUM_PARAMS(T)</emphasis>&gt; &amp;);
+template &lt;<macroname>BOOST_VARIANT_ENUM_PARAMS</macroname>(typename T)&gt;
+void some_func(const <classname>boost::variant</classname>&lt;<macroname>BOOST_VARIANT_ENUM_PARAMS</macroname>(T)&gt; &amp;);
 
 // explicit partial specialization
-template &lt;<emphasis role="bold">BOOST_VARIANT_ENUM_PARAMS(typename T)</emphasis>&gt;
-class some_class&lt; <classname>boost::variant</classname>&lt;<emphasis role="bold">BOOST_VARIANT_ENUM_PARAMS(T)</emphasis>&gt; &gt;;</programlisting>
+template &lt;<macroname>BOOST_VARIANT_ENUM_PARAMS</macroname>(typename T)&gt;
+class some_class&lt; <classname>boost::variant</classname>&lt;<macroname>BOOST_VARIANT_ENUM_PARAMS</macroname>(T)&gt; &gt;;</programlisting>
 
   </para>
 
@@ -94,8 +94,8 @@ typedef <classname>mpl::push_front</classname>&lt; types_initial, int &gt;::type
 
 </section>
 
-<section id="variant.tutorial.recursive-variant">
-  <title>Recursive types with <code>recursive_variant</code></title>
+<section id="variant.tutorial.recursive-wrapper">
+  <title>Recursive types with <code>recursive_wrapper</code></title>
 
   <para>Recursive types facilitate the construction of complex semantics from
     simple snytax. For instance, nearly every programmer is familiar with the
@@ -113,21 +113,116 @@ struct list_node
 
   <para>The nature of <code>variant</code> as a reusable class template
     unfortunately precludes the straightforward construction of recursive
-    <code>variant</code> types. Consider for instance a likely initial attempt
-    at construction of a tree structure, which uses <code>std::vector</code>
-    to provide an unlimited number of branches:
+    <code>variant</code> types. Consider the following attempt to construct
+    a structure for simple mathematical expressions:
 
-<programlisting>typedef <classname>boost::variant</classname>&lt;
+    <programlisting>struct add;
+struct sub;
+template &lt;typename OpTag&gt; struct binary_op;
+
+
+typedef <classname>boost::variant</classname>&lt;
       int
-    , std::vector&lt; /* ??? */ &gt;
-    &gt; int_tree_t;</programlisting>
+    , binary_op&lt;add&gt;
+    , binary_op&lt;sub&gt;
+    > expression;
+
+template &lt;typename OpTag&gt;
+struct binary_op
+{
+    expression left;  // <emphasis>variant instantiated here</emphasis>
+    expression right;
+
+    binary_op( const expression &amp; lhs, const expression &amp; rhs )
+        : left(lhs), right(rhs)
+    {
+    }
+
+}; // <emphasis>oops! binary_op not complete until here</emphasis></programlisting>
 
   </para>
 
-  <para>Unlike the <code>list_node</code> example above,
-    <code>int_tree_t</code> isn't in scope until the end of the declaration.
-    The <code>boost::recursive_variant</code> class template solves the
-    problem with clean, meaningful syntax:
+  <para>While well-intentioned, the above approach will not compile because
+    <code>binary_op</code> is still incomplete when the <code>variant</code>
+    template is instantiated. Further, the approach suffers from a more
+    significant logical flaw: for the example to work, <code>expression</code>
+    would need to be of infinite size, which is clearly absurd.</para>
+    
+  <para>To overcome these difficulties, <code>variant</code> includes special
+    support for the <code>recursive_wrapper</code> class template, which breaks
+    the circular dependency at the heart of these problems. The following
+    example demonstrates its use:
+
+    <programlisting>typedef <classname>boost::variant</classname>&lt;
+      int
+    , <classname>boost::recursive_wrapper</classname>&lt; binary_op&lt;add&gt; &gt;
+    , <classname>boost::recursive_wrapper</classname>&lt; binary_op&lt;sub&gt; &gt;
+    > expression;</programlisting>
+
+  </para>
+
+  <para>Because <code>variant</code> provides special support for
+    <code>recursive_wrapper</code>, clients may treat the resultant
+    <code>variant</code> as though the wrapper were not present. This is seen
+    in the implementation of the following visitor, which calculates the value
+    of an <code>expression</code> without any reference to
+    <code>recursive_wrapper</code>:
+
+    <programlisting>class calculator : public <classname>boost::static_visitor&lt;int&gt;</classname>
+{
+public:
+
+    int operator()(int value) const
+    {
+        return value;
+    }
+
+    int operator()(const binary_op&lt;add&gt; &amp; binary) const
+    {
+        return <functionname>boost::apply_visitor</functionname>( calculator(), binary.left )
+             + <functionname>boost::apply_visitor</functionname>( calculator(), binary.right );
+    }
+
+    int operator()(const binary_op&lt;sub&gt; &amp; binary) const
+    {
+        return <functionname>boost::apply_visitor</functionname>( calculator(), binary.left )
+             - <functionname>boost::apply_visitor</functionname>( calculator(), binary.right );
+    }
+
+};</programlisting>
+
+  </para>
+  
+  <para>Finally, we can demonstrate <code>expression</code> in action:
+  
+    <programlisting>void f()
+{
+    // result = ((7-3)+8) = 12
+    expression result(
+        binary_op&lt;add&gt;(
+            binary_op&lt;sub&gt;(7,3)
+          , 8
+          )
+      );
+
+    assert( <functionname>boost::apply_visitor</functionname>(calculator(),result) == 12 );
+}</programlisting>
+
+  </para>
+
+</section>
+
+<section id="variant.tutorial.recursive-variant">
+  <title>Recursive types with <code>recursive_variant</code></title>
+
+  <para>(For a tutorial on recursive types in general and using
+    <code>recursive_wrapper</code> with <code>variant</code>, see
+    <xref linkend="variant.tutorial.recursive-wrapper"/>.)</para>
+
+  <para>For some applications of recursive <code>variant</code> types, a user
+    may be able to sacrifice the full flexibility of using
+    <code>recursive_wrapper</code> with <code>variant</code> for the following
+    convenient syntax:
 
 <programlisting>typedef <classname>boost::recursive_variant</classname>&lt;
       int
@@ -140,7 +235,7 @@ struct list_node
     <code>recursive_variant</code>. This less-than-ideal syntax is required
     due to the lack of template typedefs in C++98. Once declared, however,
     use of the resultant <code>variant</code> type is as expected:
-  
+
 <programlisting>std::vector&lt; int_tree_t &gt; subresult;
 subresult.push_back(3);
 subresult.push_back(5);
@@ -154,19 +249,19 @@ int_tree_t var(result);</programlisting>
 
   </para>
 
-  <para>One might represent the resultant content of <code>var</code> as
-    <code>( 1 ( 3 5 ) 7 )</code>. The &quot;depth&quot; of this tree could
-    of course be greater, and is in fact limited only by available
-    memory.</para>
+  <para>To be clear, one might represent the resultant content of
+    <code>var</code> as <code>( 1 ( 3 5 ) 7 )</code>.</para>
 
   <para><emphasis role="bold">Portability</emphasis>: Unfortunately, due to
     standard conformance issues in several compilers,
     <code>recursive_variant</code> is not universally supported. On these
     compilers the library indicates its lack of support for via the definition
     of the preprocessor symbol
-    <code><macroname>BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT</macroname></code>.</para>
-
-  <!-- TODO: mention boost::incomplete workaround -->
+    <code><macroname>BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT</macroname></code>.
+    Thus, unless working with highly-conformant compilers, maximum portability
+    will be achieved by instead using <code>recursive_wrapper</code>, as
+    described <link linkend="variant.tutorial.recursive-wrapper">elsewhere in
+    this tutorial</link>.</para>
 
 </section>
 
@@ -179,10 +274,10 @@ int_tree_t var(result);</programlisting>
     visitation of the content of two different <code>variant</code>
     objects.</para>
 
-  <para>Unfortunately, this feature requires that binary visitors are
-    incompatible with the visitor objects discussed in the tutorial above, as
-    they must operate on two arguments. The following demonstrates the
-    implementation of a binary visitor:
+  <para>Notably this feature requires that binary visitors are incompatible
+    with the visitor objects discussed in the tutorial above, as they must
+    operate on two arguments. The following demonstrates the implementation of
+    a binary visitor:
 
 <programlisting>class are_strict_equals
     : public <classname>boost::static_visitor</classname>&lt;bool&gt;
