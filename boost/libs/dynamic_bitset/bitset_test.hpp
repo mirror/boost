@@ -56,7 +56,7 @@ std::string get_long_string()
   return std::string(p);
 }
 
-const char * const test_file_name()
+const char * test_file_name()
 {
   return "boost_dynamic_bitset_tests";
 }
