@@ -1,8 +1,7 @@
-// Copyright Vladimir Prus 2002. Permission to copy, use,
-// modify, sell and distribute this software is granted provided this
-// copyright notice appears in all copies. This software is provided
-// "as is" without express or implied warranty, and with no claim as
-// to its suitability for any purpose.
+// Copyright Vladimir Prus 2002.
+// Distributed under the Boost Software License, Version 1.0. (See
+// accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef PROGRAM_OPTIONS_VP_2003_05_19
 #define PROGRAM_OPTIONS_VP_2003_05_19
