@@ -296,6 +296,9 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 //
 // finally undef any macros we may have set:
 //
+#ifdef BOOST_LIB_PREFIX
+#  undef BOOST_LIB_PREFIX
+#endif
 #if defined(BOOST_LIB_NAME)
 #  undef BOOST_LIB_NAME
 #endif
