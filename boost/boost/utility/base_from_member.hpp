@@ -9,7 +9,6 @@
 #ifndef BOOST_UTILITY_BASE_FROM_MEMBER_HPP
 #define BOOST_UTILITY_BASE_FROM_MEMBER_HPP
 
-#include <boost/utility_fwd.hpp>  // required for parameter defaults
 #include <boost/preprocessor/arithmetic/inc.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
@@ -62,7 +61,7 @@ namespace boost
 
 // Contributed by Daryle Walker
 
-template < typename MemberType, int UniqueID >
+template < typename MemberType, int UniqueID = 0 >
 class base_from_member
 {
 protected:
