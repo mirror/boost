@@ -81,9 +81,10 @@ namespace date_time {
      * greg_weekday::max() or date_time::NumSpecialValues */
     template<class charT>
     short find_match(const charT* const* short_names, 
-                     const charT* const* long_names, const int limit,
+                     const charT* const* long_names, 
+                     short limit,
                      const std::basic_string<charT>& s) {
-      for(int i = 0; i <= limit; ++i){
+      for(short i = 0; i <= limit; ++i){
         if(short_names[i] == s || long_names[i] == s){
           return i;
         }
