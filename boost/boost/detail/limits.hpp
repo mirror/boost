@@ -274,24 +274,23 @@ class numeric_limits<unsigned char>
 {};
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
+template<>
+class numeric_limits<wchar_t>
 #if !defined(WCHAR_MAX) || !defined(WCHAR_MIN)
-#if !defined(_WIN32) && !defined(__CYGWIN__)
-template<>
-class numeric_limits<wchar_t>
-  : public _Integer_limits<wchar_t, INT_MIN, INT_MAX>
-{};
-#else
-template<>
-class numeric_limits<wchar_t>
+#if defined(_WIN32) || defined(__CYGWIN__)
   : public _Integer_limits<wchar_t, 0, USHRT_MAX>
-{};
+#elif defined(__hppa)
+// wchar_t has "unsigned int" as the underlying type
+  : public _Integer_limits<wchar_t, 0, UINT_MAX>
+#else
+// assume that wchar_t has "int" as the underlying type
+  : public _Integer_limits<wchar_t, INT_MIN, INT_MAX>
 #endif
 #else
-template<>
-class numeric_limits<wchar_t>
+// we have WCHAR_MIN and WCHAR_MAX defined, so use it
   : public _Integer_limits<wchar_t, WCHAR_MIN, WCHAR_MAX>
-{};
 #endif
+{};
 #endif
 
 template<>
