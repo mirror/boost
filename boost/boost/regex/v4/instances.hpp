@@ -3,8 +3,8 @@
  * Copyright (c) 1998-2002
  * Dr John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
@@ -37,7 +37,7 @@ namespace boost{
 // what follows is compiler specific:
 //
 
-#ifdef __BORLANDC__
+#if  defined(__BORLANDC__) && (__BORLANDC__ < 0x600)
 
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
@@ -83,7 +83,7 @@ template class BOOST_REGEX_DECL reg_expression< BOOST_REGEX_CHAR_T >;
 } // namespace boost
 
 #endif // BOOST_REGEX_NO_EXTERNAL_TEMPLATES
- 
+
 
 
 

@@ -3,12 +3,12 @@
  * Copyright (c) 1998-2002
  * Dr John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
- 
+
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         cregex.cpp
@@ -189,7 +189,7 @@ struct pred4;
 
 }  // namespace re_detail
 
-#if defined(BOOST_MSVC) || defined(__BORLANDC__)
+#if (defined(BOOST_MSVC) || defined(__BORLANDC__)) && !defined(BOOST_DISABLE_WIN32)
 typedef bool (__cdecl *GrepCallback)(const RegEx& expression);
 typedef bool (__cdecl *GrepFileCallback)(const char* file, const RegEx& expression);
 typedef bool (__cdecl *FindFilesCallback)(const char* file);

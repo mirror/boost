@@ -3,8 +3,8 @@
  * Copyright (c) 2002
  * Dr John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
@@ -20,8 +20,8 @@
 #ifndef BOOST_REGEX_V4_CHAR_REGEX_TRAITS_HPP
 #define BOOST_REGEX_V4_CHAR_REGEX_TRAITS_HPP
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc -w-8027
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 namespace boost{
@@ -74,8 +74,8 @@ public:
 } // namespace deprecated
 } // namespace boost
 
-#ifdef __BORLANDC__
-#  pragma option pop
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 #endif // include

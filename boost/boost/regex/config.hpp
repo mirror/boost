@@ -3,12 +3,12 @@
  * Copyright (c) 1998-2002
  * Dr John Maddock
  *
- * Use, modification and distribution are subject to the 
- * Boost Software License, Version 1.0. (See accompanying file 
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
- 
+
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         config.hpp
@@ -218,8 +218,8 @@ namespace boost{ typedef wchar_t regex_wchar_type; }
 #ifndef BOOST_REGEX_DECL
 #  define BOOST_REGEX_DECL
 #endif
- 
-#if (defined(BOOST_MSVC) || defined(__BORLANDC__)) && !defined(BOOST_REGEX_NO_LIB) && !defined(BOOST_REGEX_SOURCE) && !defined(BOOST_ALL_NO_LIB)
+
+#if (defined(BOOST_MSVC) || defined(__BORLANDC__)) && !defined(BOOST_REGEX_NO_LIB) && !defined(BOOST_REGEX_SOURCE) && !defined(BOOST_ALL_NO_LIB) && defined(__cplusplus)
 #  define BOOST_LIB_NAME boost_regex
 #  if defined(BOOST_REGEX_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)
 #     define BOOST_DYN_LINK
@@ -245,7 +245,7 @@ namespace boost{ typedef wchar_t regex_wchar_type; }
 #  define BOOST_REGEX_CCALL __cdecl
 #endif
 
-#if defined(__BORLANDC__)
+#if defined(__BORLANDC__) && !defined(BOOST_DISABLE_WIN32)
 #  define BOOST_REGEX_CALL __fastcall
 #  define BOOST_REGEX_CCALL __stdcall
 #endif
@@ -392,7 +392,7 @@ public:
  ****************************************************************************/
 
 #if !defined(BOOST_REGEX_NO_W32) && !defined(BOOST_REGEX_V3)
-#  if(defined(_WIN32) || defined(_WIN64) || defined(_WINCE)) && !defined(__GNUC__)
+#  if(defined(_WIN32) || defined(_WIN64) || defined(_WINCE)) && !defined(__GNUC__) && !(__BORLANDC__ >= 0x600)
 #     define BOOST_REGEX_HAS_MS_STACK_GUARD
 #  endif
 #elif defined(BOOST_REGEX_HAS_MS_STACK_GUARD)
@@ -401,7 +401,7 @@ public:
 
 #if defined(__cplusplus) && defined(BOOST_REGEX_HAS_MS_STACK_GUARD)
 
-namespace boost{ 
+namespace boost{
 namespace re_detail{
 
 BOOST_REGEX_DECL void BOOST_REGEX_CALL reset_stack_guard_page();
@@ -420,16 +420,16 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL reset_stack_guard_page();
 
 #if defined(__cplusplus)
 
-namespace boost{ 
+namespace boost{
 namespace re_detail{
 
 BOOST_REGEX_DECL void BOOST_REGEX_CALL raise_regex_exception(const std::string& s);
 
 template <class traits>
 void raise_error(const traits& t, unsigned code)
-{ 
+{
    (void)t;  // warning suppression
-   raise_regex_exception(t.error_string(code)); 
+   raise_regex_exception(t.error_string(code));
 }
 
 }
@@ -584,7 +584,7 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block(void*);
 #ifdef BOOST_REGEX_CONFIG_INFO
 BOOST_REGEX_DECL void BOOST_REGEX_CALL print_regex_library_info();
 #endif
- 
+
 #if defined(BOOST_REGEX_DIAG)
 #  pragma message ("BOOST_REGEX_DECL set as: " BOOST_STRINGIZE(BOOST_REGEX_DECL))
 #  pragma message ("BOOST_REGEX_CALL set as: " BOOST_STRINGIZE(BOOST_REGEX_CALL))
