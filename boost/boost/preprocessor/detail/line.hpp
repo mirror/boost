@@ -13,7 +13,7 @@
 #
 # include <boost/preprocessor/stringize.hpp>
 #
-# if !defined(__MWERKS__) || __MWERKS__ > 0x3000
+# if !defined(__MWERKS__) || __MWERKS__ > 0x3001
 #   define BOOST_PP_DETAIL_LINE(text) 1 BOOST_PP_STRINGIZE(text)
 # else
 #   define BOOST_PP_DETAIL_LINE(text) 1

@@ -12,7 +12,7 @@
  */
 
 # define BOOST_PP_DETAIL_EXPAND(X) X
-# if !defined(__MWERKS__) || __MWERKS__ > 0x3000
+# if !defined(__MWERKS__) || __MWERKS__ > 0x3001
 #  define BOOST_PP_DETAIL_EXPAND2(X,Y) BOOST_PP_DETAIL_EXPAND(X Y)
 # else
 #  define BOOST_PP_DETAIL_EXPAND2(X, Y) BOOST_PP_DETAIL_EXPAND2_DELAY(X, Y)

@@ -54,7 +54,7 @@
 # define BOOST_PP_SET_ITERATION_FINISH() BOOST_PP_DETAIL_CAT3(<boost/preprocessor/detail/iterate/upper, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()),.hpp>)
 # define BOOST_PP_SET_ITERATION_FLAGS() BOOST_PP_DETAIL_CAT3(<boost/preprocessor/detail/iterate/flags, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()),.hpp>)
 #
-# if !defined(__MWERKS__) || __MWERKS__ > 0x3000
+# if !defined(__MWERKS__) || __MWERKS__ > 0x3001
 #   define BOOST_PP_LINE(line, file) line BOOST_PP_STRINGIZE(BOOST_PP_DETAIL_CAT2(file, BOOST_PP_DETAIL_CAT2(BOOST_PP_LINE_, BOOST_PP_ITERATION_DEPTH())()))
 # else
 #   define BOOST_PP_LINE(line, file) __LINE__ __FILE__
