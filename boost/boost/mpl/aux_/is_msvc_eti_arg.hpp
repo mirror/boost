@@ -45,7 +45,7 @@ struct is_msvc_eti_arg
 { 
     static no_tag test(...);
     static yes_tag test(eti_int_convertible);
-    static T get();
+    static T& get();
 
     BOOST_STATIC_CONSTANT(bool, value = 
           sizeof(test(get())) == sizeof(yes_tag)

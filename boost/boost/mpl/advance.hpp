@@ -46,10 +46,13 @@ namespace aux {
 template< typename Category, typename Iterator, typename N >
 struct advance_impl
 {
+    typedef typename less< N,integral_c<long,0> >::type backward_;
+    typedef typename if_< backward_, negate<N>, N >::type offset_;
+
     typedef typename if_<
-          typename less< N,integral_c<long,0> >::type
-        , aux::advance_backward< ::boost::mpl::negate<N>::value >
-        , aux::advance_forward< BOOST_MPL_AUX_VALUE_WKND(N)::value >
+          backward_
+        , aux::advance_backward< BOOST_MPL_AUX_VALUE_WKND(offset_)::value >
+        , aux::advance_forward< BOOST_MPL_AUX_VALUE_WKND(offset_)::value >
         >::type algo_;
 
     typedef typename BOOST_MPL_AUX_APPLY1(algo_,Iterator)::type type;

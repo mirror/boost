@@ -42,7 +42,7 @@ template< typename Category, typename First, typename Last >
 struct distance_impl
     : iter_fold<
           iterator_range<First,Last>
-        , integral_c<unsigned long, 0>
+        , integral_c<long, 0>
         , next<>
         >
 {
@@ -81,7 +81,7 @@ struct distance_impl
     template< typename First, typename Last > struct result_
         : iter_fold<
               iterator_range<First,Last>
-            , integral_c<unsigned long, 0>
+            , integral_c<long, 0>
             , next<>
             >
     {
