@@ -21,11 +21,21 @@
 
 #include <vector>
 #include <string>
-#include <sstream>
-#include <ostream>
 
-#include "boost/config.hpp"
-#include "boost/format/format_config.hpp"
+
+#include <boost/config.hpp>
+
+
+#include <sstream>
+
+#ifndef BOOST_NO_STD_LOCALE
+#include <locale>
+#endif //BOOST_NO_STD_LOCALE
+
+
+#include <boost/format/macros_stlport.hpp>  // stlport workarounds
+#include <boost/format/macros_default.hpp> 
+
 
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
 #define BOOST_OVERLOAD_FOR_NON_CONST
@@ -33,29 +43,29 @@
 
 
 // ****  Forward declarations ----------------------------------
-#include "boost/format/format_fwd.hpp"           // basic_format<Ch,Tr>, and other frontends
-#include "boost/format/internals_fwd.hpp"        // misc forward declarations for internal use
+#include <boost/format/format_fwd.hpp>           // basic_format<Ch,Tr>, and other frontends
+#include <boost/format/internals_fwd.hpp>        // misc forward declarations for internal use
 
 
 // ****  Auxiliary structs (stream_format_state<Ch,Tr> , and format_item<Ch,Tr> )
-#include "boost/format/internals.hpp"    
+#include <boost/format/internals.hpp>    
 
 // ****  Format  class  interface --------------------------------
-#include "boost/format/format_class.hpp"
+#include <boost/format/format_class.hpp>
 
 // **** Exceptions -----------------------------------------------
-#include "boost/format/exceptions.hpp"
+#include <boost/format/exceptions.hpp>
 
 // **** Implementation -------------------------------------------
-#include "boost/format/format_implementation.hpp"   // member functions
+#include <boost/format/format_implementation.hpp>   // member functions
 
-#include "boost/format/group.hpp"                   // class for grouping arguments
+#include <boost/format/group.hpp>                   // class for grouping arguments
 
-#include "boost/format/feed_args.hpp"               // argument-feeding functions
-#include "boost/format/parsing.hpp"                 // format-string parsing (member-)functions
+#include <boost/format/feed_args.hpp>               // argument-feeding functions
+#include <boost/format/parsing.hpp>                 // format-string parsing (member-)functions
 
 // **** Implementation of the free functions ----------------------
-#include "boost/format/free_funcs.hpp"
+#include <boost/format/free_funcs.hpp>
 
 #ifdef BOOST_OVERLOAD_FOR_NON_CONST
 #undef BOOST_OVERLOAD_FOR_NON_CONST
