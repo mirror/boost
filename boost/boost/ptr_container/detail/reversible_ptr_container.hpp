@@ -77,12 +77,22 @@ namespace ptr_container_detail
         
         struct null_clone_allocator
         {
+            template< class Iter >
+            static Ty_* allocate_clone_from_iterator( Iter i )
+            { 
+                return allocate_clone( Config::get_const_pointer( i ) );
+            }
+            
             static Ty_* allocate_clone( const Ty_* x )
             {
                 if( allow_null )
                 {
                     if( x == 0 )
                         return 0;
+                }
+                else
+                {
+                    BOOST_ASSERT( x != 0 && "Cannot insert clone of null!" );
                 }
 
                 return CloneAllocator::allocate_clone( *x );
@@ -146,7 +156,7 @@ namespace ptr_container_detail
             
     protected: // implementation
             
-        typedef ptr_container::ptr_container_detail::scoped_deleter<Ty_,null_clone_allocator>
+        typedef ptr_container_detail::scoped_deleter<Ty_,null_clone_allocator>
                                    scoped_deleter;
     private:
 
@@ -256,7 +266,7 @@ namespace ptr_container_detail
         template< class I >
         void remove( I i )
         { 
-            null_policy_deallocate_clone( &*i );
+            null_policy_deallocate_clone( Config::get_const_pointer(i) );
         }
 
         template< class I >
@@ -340,7 +350,7 @@ namespace ptr_container_detail
         {
             while( first != last )
             {
-                insert( end(), null_clone_allocator::allocate_clone( &*first ) );
+                insert( end(), null_clone_allocator::allocate_clone_from_iterator(first) );
                 ++first;
             }
         }
@@ -359,8 +369,8 @@ namespace ptr_container_detail
         // overhead: 1 heap allocation (very cheap compared to cloning)
         template< class InputIterator >
         reversible_ptr_container( InputIterator first, 
-                                    InputIterator last,
-                                    const allocator_type& a = allocator_type() ) // basic, strong
+                                  InputIterator last,
+                                  const allocator_type& a = allocator_type() ) // basic, strong
         : c_( a )
         { 
             constructor_impl( first, last, BOOST_DEDUCED_TYPENAME
@@ -369,7 +379,7 @@ namespace ptr_container_detail
 
         template< class Compare >
         reversible_ptr_container( const Compare& comp,
-                                    const allocator_type& a )
+                                  const allocator_type& a )
         : c_( comp, a ) {}
 
     public:        
@@ -425,7 +435,6 @@ namespace ptr_container_detail
         void swap( reversible_ptr_container& r ) // notrow
         { 
             c_.swap( r.c_ );
-            // swap CloneAllocator ?
         }
           
         size_type size() const // nothrow
@@ -542,9 +551,9 @@ namespace ptr_container_detail
             if( empty() )
                 throw bad_ptr_container_operation( "'release()' on empty container" ); 
             
-            auto_type ptr( &*where );                     // nothrow
-            c_.erase( Config::get_base( where.base() ) ); // nothrow
-            return move( ptr ); 
+            auto_type ptr( Config::get_pointer( where ) );  // nothrow
+            c_.erase( Config::get_base( where.base() ) );   // nothrow
+            return boost::ptr_container_detail::move( ptr ); 
         }
 
         auto_type replace( iterator where, Ty_* x ) // strong  
@@ -558,9 +567,9 @@ namespace ptr_container_detail
             if( empty() )
                 throw bad_ptr_container_operation( "'replace()' on empty container" );
 
-            auto_type old( &*where );        // nothrow
-            *where.base() = ptr.release();   // nothrow, commit
-            return move( old );
+            auto_type old( Config::get_pointer( where ) );  // nothrow
+            *where.base() = ptr.release();                  // nothrow, commit
+            return boost::ptr_container_detail::move( old );
         }
 
         /*
@@ -581,7 +590,7 @@ namespace ptr_container_detail
             
             auto_type old( static_cast<Ty_*>( c_[idx] ) ); // nothrow
             c_[idx] = ptr.release();                       // nothrow, commit
-            return move( old );
+            return boost::ptr_container_detail::move( old );
         } 
         
     }; // 'reversible_ptr_container'

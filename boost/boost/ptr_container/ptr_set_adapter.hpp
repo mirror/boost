@@ -74,6 +74,18 @@ namespace boost
            return i.base();
        }
 
+       template< class Iter >
+       static Key* get_pointer( Iter i )
+       {
+           return static_cast<Key*>( *i.base() );
+       }
+
+       template< class Iter >
+       static const Key* get_const_pointer( Iter i )
+       {
+           return static_cast<const Key*>( *i.base() );
+       }
+
        BOOST_STATIC_CONSTANT(bool, allow_null = false );
     };
 

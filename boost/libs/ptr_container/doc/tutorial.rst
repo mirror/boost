@@ -269,7 +269,7 @@ pointer is removed from the container and the containers size
 shrinks. You can also release the entire container if you
 want to return it from a function ::
 
-    boost::ptr_deque<animal> get_zoo()
+    std::auto_ptr< boost::ptr_deque<animal> > get_zoo()
     {
         boost::ptr_deque<animal>  result;
         ...
@@ -295,10 +295,10 @@ If you want to replace an element, you can easily do so ::
     zoo_type::auto_type old_animal = zoo.replace( zoo.begin(), new monkey("bibi") ); 
     zoo.replace( 2, old_animal.release() ); // for random access containers
 
-A map is a little different to iterator over than normal standard maps.
+A map is a little different to iterator over than standard maps.
 Now we say ::
 
-    typedef boost::ptr_map<std::String, boost::nullable<animal> > animal_map;
+    typedef boost::ptr_map<std::string, boost::nullable<animal> > animal_map;
     animal_map map;
     ...
     for( animal_map::iterator i = map.begin();

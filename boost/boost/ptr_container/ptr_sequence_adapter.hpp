@@ -86,6 +86,18 @@ namespace boost
             return i.base();
         }
 
+        template< class Iter >
+        static U* get_pointer( Iter i )
+        {
+            return static_cast<U*>( *i.base() );
+        }
+
+        template< class Iter >
+        static const U* get_const_pointer( Iter i )
+        {
+            return static_cast<const U*>( *i.base() );
+        }
+
         BOOST_STATIC_CONSTANT(bool, allow_null = is_nullable<T>::value );
     };
 

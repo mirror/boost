@@ -44,7 +44,12 @@ public:
     typedef Deleter                                     deleter_type;
 private:
     BOOST_STATIC_CONSTANT(bool, is_array = boost::is_array<T>::value);
-    BOOST_STATIC_ASSERT(!is_array || (is_same<T, element_type[]>::value));
+    BOOST_STATIC_ASSERT(!is_array);
+    //
+    // Reamrk: won't compile when element_type is abstract base
+    //  (is_same<T, element_type[]>::value*/
+    //
+    
     struct safe_bool_helper { int x; };
     typedef int safe_bool_helper::* safe_bool;
     typedef boost::compressed_pair<element_type*, Deleter> impl_type;

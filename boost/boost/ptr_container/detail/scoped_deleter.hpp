@@ -24,94 +24,93 @@
 
 namespace boost
 {
-    namespace ptr_container
+
+    namespace ptr_container_detail
     {
-        namespace ptr_container_detail
+        template< class T, class CloneAllocator >
+        class scoped_deleter
         {
-            template< class T, class CloneAllocator >
-            class scoped_deleter
+            typedef std::size_t size_type;
+            scoped_array<T*>  ptrs_;
+            size_type         stored_; 
+            bool              released_;
+            
+        public:
+            scoped_deleter( size_type size ) : 
+                ptrs_( new T*[size] ), stored_( 0 ), 
+                released_( false )
             {
-                scoped_array<T*>  ptrs_;
-                size_t            stored_; 
-                bool              released_;
-                
-            public:
-                scoped_deleter( size_t size ) : 
-                    ptrs_( new T*[size] ), stored_( 0 ), 
-                    released_( false )
-                {
-                    BOOST_ASSERT( size > 0 );
-                }
+                BOOST_ASSERT( size > 0 );
+            }
 
 
-                
-                scoped_deleter( size_t n, const T& x ) // strong
-                    : ptrs_( new T*[n] ), stored_(0),
-                      released_( false )
-                {
-                    for( size_t i = 0; i != n; i++ )
-                        add( CloneAllocator::allocate_clone( &x ) );
-                    BOOST_ASSERT( stored_ > 0 );
-                }
+            
+            scoped_deleter( size_type n, const T& x ) // strong
+                : ptrs_( new T*[n] ), stored_(0),
+                  released_( false )
+            {
+                for( size_type i = 0; i != n; i++ )
+                    add( CloneAllocator::allocate_clone( &x ) );
+                BOOST_ASSERT( stored_ > 0 );
+            }
 
 
-                
-                template< class InputIterator >
-                scoped_deleter ( InputIterator first, InputIterator last  ) // strong
-                    : ptrs_( new T*[ std::distance(first,last) ] ),
-                      stored_(0),
-                      released_( false )
-                {
-                    for( ; first != last; ++first )
-                        add( CloneAllocator::allocate_clone( &*first ) );
-                    BOOST_ASSERT( stored_ > 0 );
-                }
+            
+            template< class InputIterator >
+            scoped_deleter ( InputIterator first, InputIterator last  ) // strong
+                : ptrs_( new T*[ std::distance(first,last) ] ),
+                  stored_(0),
+                  released_( false )
+            {
+                for( ; first != last; ++first )
+                    add( CloneAllocator::allocate_clone_from_iterator( first ) );
+                BOOST_ASSERT( stored_ > 0 );
+            }
 
-                
-                
-                ~scoped_deleter()
+            
+            
+            ~scoped_deleter()
+            {
+                if ( !released_ )
                 {
-                    if ( !released_ )
-                    {
-                        for( size_t i = 0u; i != stored_; ++i )
-                            CloneAllocator::deallocate_clone( ptrs_[i] ); 
-                    }
+                    for( size_type i = 0u; i != stored_; ++i )
+                        CloneAllocator::deallocate_clone( ptrs_[i] ); 
                 }
-                
-                
-                
-                void add( T* t )
-                {
-                    BOOST_ASSERT( ptrs_.get() != 0 );
-                    ptrs_[stored_] = t;
-                    ++stored_;
-                }
-                
-                
-                
-                void release()
-                {
-                    released_ = true;
-                }
-                
-                
-                
-                T** begin()
-                {
-                    BOOST_ASSERT( ptrs_.get() != 0 );
-                    return &ptrs_[0];
-                }
-                
-                
-                
-                T** end()
-                {
-                    BOOST_ASSERT( ptrs_.get() != 0 );
-                    return &ptrs_[stored_];
-                }
-                
-            }; // class 'scoped_deleter'
-        }
+            }
+            
+            
+            
+            void add( T* t )
+            {
+                BOOST_ASSERT( ptrs_.get() != 0 );
+                ptrs_[stored_] = t;
+                ++stored_;
+            }
+            
+            
+            
+            void release()
+            {
+                released_ = true;
+            }
+            
+            
+            
+            T** begin()
+            {
+                BOOST_ASSERT( ptrs_.get() != 0 );
+                return &ptrs_[0];
+            }
+            
+            
+            
+            T** end()
+            {
+                BOOST_ASSERT( ptrs_.get() != 0 );
+                return &ptrs_[stored_];
+            }
+            
+        }; // class 'scoped_deleter'
     }
 }
 

@@ -264,7 +264,7 @@ pointer is removed from the container and the containers size
 shrinks. You can also release the entire container if you
 want to return it from a function</p>
 <pre class="literal-block">
-boost::ptr_deque&lt;animal&gt; get_zoo()
+std::auto_ptr&lt; boost::ptr_deque&lt;animal&gt; &gt; get_zoo()
 {
     boost::ptr_deque&lt;animal&gt;  result;
     ...
@@ -289,10 +289,10 @@ as the same as <tt class="docutils literal"><span class="pre">splice()</span></t
 zoo_type::auto_type old_animal = zoo.replace( zoo.begin(), new monkey(&quot;bibi&quot;) ); 
 zoo.replace( 2, old_animal.release() ); // for random access containers
 </pre>
-<p>A map is a little different to iterator over than normal standard maps.
+<p>A map is a little different to iterator over than standard maps.
 Now we say</p>
 <pre class="literal-block">
-typedef boost::ptr_map&lt;std::String, boost::nullable&lt;animal&gt; &gt; animal_map;
+typedef boost::ptr_map&lt;std::string, boost::nullable&lt;animal&gt; &gt; animal_map;
 animal_map map;
 ...
 for( animal_map::iterator i = map.begin();

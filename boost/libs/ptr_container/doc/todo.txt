@@ -1,14 +1,5 @@
 Hi,
 
-3. improve docs as discussed during the review
-
-5. add more debug checks after access to ptr_begin(), ptr_end()
-
-7. improve tests
-
-8. test for replace and 0. All functions that can take a null
-   might need to handle it??
-
 -------------------
 
 10) Specify difference between assignment from an input_iterator (basic exception safety guarantee)
@@ -25,33 +16,10 @@ Hi,
 47) Consider if list implemetation of multi-insert can benefit
     from strong exception-safety.
     
-48) should the clone_allocator be changed to
-
-    struct shared_ptr_allocator
-    {
-        typedef shared_ptr<T> ptr_type;
-        
-        ptr_type allocate_clone( const T& r )
-        {
-            return ptr_type( new_clone(r) );
-        }
-        
-        void deallocate_clone( const ptr_type& )
-        { }
-        
-        template< class Iter >
-        ptr_type get_ptr_from_iterator( Iter i )
-        {
-            // default reurn &*i;
-            return *i;
-        }
-   };
-   
-    shared_ptr<Foo> new_clone( const Foo& r )
-    { ... }; // bad for generality 
-
 74) consider simple static assert by nesting a typedef a la
 T::boost_indirect_container
+
+74.5) a new function in map: auto_type replace( key&, T* );? 
 
 75) toturial:
 
@@ -68,4 +36,5 @@ ptr_insert( ptr_map )( "foo", "bla bla", 3 )
                      
         
 
-
+76) use boost::get_pointer() to retrieve
+    the pointer withint dereferenceing.
