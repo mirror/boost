@@ -37,8 +37,14 @@ namespace boost{
   
 
 // The out of the box GCC 2.95 on cygwin does not have a char_traits class.
+// MSVC does not like typename below
+#ifndef BOOST_MSVC
   template <class Char, 
 	  class Traits = typename std::basic_string<Char>::traits_type >
+#else
+  template <class Char,
+    class Traits = std::basic_string<Char>::traits_type >
+#endif
   class escaped_list_separator{
 
   private:
@@ -194,8 +200,14 @@ namespace boost{
   // delimiters cannot be returned as tokens. These are often whitespace
 
 // The out of the box GCC 2.95 on cygwin does not have a char_traits class.
-  template <class Char, 
-	  class Traits = typename std::basic_string<Char>::traits_type >
+  // MSVC does not like typename below
+#ifndef BOOST_MSVC
+  template <class Char,
+    class Traits = typename std::basic_string<Char>::traits_type >
+#else
+  template <class Char,
+    class Traits = std::basic_string<Char>::traits_type >
+#endif
   class char_delimiters_separator{
 
 
