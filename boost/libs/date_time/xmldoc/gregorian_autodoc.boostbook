@@ -1,4 +1,8 @@
 <?xml version="1.0" standalone="yes"?>
+<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+     Subject to the Boost Software License, Version 1.0. 
+     (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
+-->
 <section id="gregorian_reference">
 <title>Gregorian Reference</title>
   <header name="boost/date_time/gregorian/formatters.hpp">
@@ -841,38 +845,38 @@
               <type>month_enum</type>
             </method>
             <method name="as_short_string" cv="const">
-              <type>const  char *</type>
+              <type>const char *</type>
             </method>
             <method name="as_long_string" cv="const">
-              <type>const  char *</type>
+              <type>const char *</type>
             </method>
             <method name="as_short_wstring" cv="const">
-              <type>const  wchar_t *</type>
+              <type>const wchar_t *</type>
             </method>
             <method name="as_long_wstring" cv="const">
-              <type>const  wchar_t *</type>
+              <type>const wchar_t *</type>
             </method>
             <method name="as_short_string" cv="const">
-              <type>const  char *</type>
-              <parameter name="c">
+              <type>const char *</type>
+              <parameter name="">
                 <paramtype>char</paramtype>
               </parameter>
             </method>
             <method name="as_long_string" cv="const">
-              <type>const  char *</type>
-              <parameter name="c">
+              <type>const char *</type>
+              <parameter name="">
                 <paramtype>char</paramtype>
               </parameter>
             </method>
             <method name="as_short_string" cv="const">
-              <type>const  wchar_t *</type>
-              <parameter name="c">
+              <type>const wchar_t *</type>
+              <parameter name="">
                 <paramtype>wchar_t</paramtype>
               </parameter>
             </method>
             <method name="as_long_string" cv="const">
-              <type>const  wchar_t *</type>
-              <parameter name="c">
+              <type>const wchar_t *</type>
+              <parameter name="">
                 <paramtype>wchar_t</paramtype>
               </parameter>
             </method>
@@ -943,16 +947,16 @@
               <type>unsigned short</type>
             </method>
             <method name="as_short_string" cv="const">
-              <type>const  char *</type>
+              <type>const char *</type>
             </method>
             <method name="as_long_string" cv="const">
-              <type>const  char *</type>
+              <type>const char *</type>
             </method>
             <method name="as_short_wstring" cv="const">
-              <type>const  wchar_t *</type>
+              <type>const wchar_t *</type>
             </method>
             <method name="as_long_wstring" cv="const">
-              <type>const  wchar_t *</type>
+              <type>const wchar_t *</type>
             </method>
             <method name="as_enum" cv="const">
               <type>weekday_enum</type>

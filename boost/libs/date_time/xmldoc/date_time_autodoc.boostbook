@@ -1,4 +1,8 @@
 <?xml version="1.0" standalone="yes"?>
+<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+     Subject to the Boost Software License, Version 1.0. 
+     (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
+-->
 <section id="date_time_reference">
 <title>Date Time Reference</title>
   <header name="boost/date_time/adjust_functors.hpp">
@@ -705,6 +709,25 @@
             </method>
           </method-group>
         </class>
+        <struct name="duration_traits_long">
+          <description>
+            <para>Struct for instantiating date_duration with <emphasis role="bold">NO</emphasis>  special values functionality. Allows for transparent implementation of either date_duration&lt;long&gt; or date_duration&lt;int_adapter&lt;long&gt; &gt; </para>
+          </description>
+          <typedef name="int_type">
+            <type>long</type>
+          </typedef>
+          <typedef name="impl_type">
+            <type>long</type>
+          </typedef>
+          <method-group name="public static functions">
+            <method name="as_number" cv="">
+              <type>int_type</type>
+              <parameter name="i">
+                <paramtype>impl_type</paramtype>
+              </parameter>
+            </method>
+          </method-group>
+        </struct>
         <struct name="duration_traits_adapted">
           <description>
             <para>Struct for instantiating date_duration <emphasis role="bold">WITH</emphasis>  special values functionality. Allows for transparent implementation of either date_duration&lt;long&gt; or date_duration&lt;int_adapter&lt;long&gt; &gt; </para>
@@ -726,31 +749,32 @@
             </method>
           </method-group>
         </struct>
-        <struct name="duration_traits_long">
-          <description>
-            <para>Struct for instantiating date_duration with <emphasis role="bold">NO</emphasis>  special values functionality. Allows for transparent implementation of either date_duration&lt;long&gt; or date_duration&lt;int_adapter&lt;long&gt; &gt; </para>
-          </description>
-          <typedef name="int_type">
-            <type>long</type>
-          </typedef>
-          <typedef name="impl_type">
-            <type>long</type>
-          </typedef>
-          <method-group name="public static functions">
-            <method name="as_number" cv="">
-              <type>int_type</type>
-              <parameter name="i">
-                <paramtype>impl_type</paramtype>
-              </parameter>
-            </method>
-          </method-group>
-        </struct>
       </namespace>
     </namespace>
   </header>
   <header name="boost/date_time/date_duration_types.hpp">
     <namespace name="boost">
       <namespace name="date_time">
+        <class name="weeks_duration">
+          <template>
+      <template-type-parameter name="duration_config"/>
+    </template>
+          <inherit access="public">boost::date_time::date_duration&lt; duration_config &gt;</inherit>
+          <purpose>
+            <simpara>Additional duration type that represents a number of n*7 days. </simpara>
+          </purpose>
+          <method-group name="public member functions"/>
+          <constructor>
+            <parameter name="w">
+              <paramtype>typename duration_config::impl_type</paramtype>
+            </parameter>
+          </constructor>
+          <constructor>
+            <parameter name="sv">
+              <paramtype>special_values</paramtype>
+            </parameter>
+          </constructor>
+        </class>
         <class name="months_duration">
           <template>
       <template-type-parameter name="base_config"/>
@@ -880,26 +904,6 @@
           <constructor>
             <parameter name="num">
               <paramtype>int_rep</paramtype>
-            </parameter>
-          </constructor>
-          <constructor>
-            <parameter name="sv">
-              <paramtype>special_values</paramtype>
-            </parameter>
-          </constructor>
-        </class>
-        <class name="weeks_duration">
-          <template>
-      <template-type-parameter name="duration_config"/>
-    </template>
-          <inherit access="public">boost::date_time::date_duration&lt; duration_config &gt;</inherit>
-          <purpose>
-            <simpara>Additional duration type that represents a number of n*7 days. </simpara>
-          </purpose>
-          <method-group name="public member functions"/>
-          <constructor>
-            <parameter name="w">
-              <paramtype>typename duration_config::impl_type</paramtype>
             </parameter>
           </constructor>
           <constructor>
@@ -1040,24 +1044,27 @@
     <namespace name="boost">
       <namespace name="date_time">
         <class name="simple_format">
+          <template>
+      <template-type-parameter name="charT"/>
+    </template>
           <purpose>
             <simpara>Class to provide simple basic formatting rules. </simpara>
           </purpose>
           <method-group name="public static functions">
             <method name="not_a_date" cv="">
-              <type>const  char *</type>
+              <type>const charT *</type>
               <purpose>
                 <simpara>String used printed is date is invalid. </simpara>
               </purpose>
             </method>
             <method name="pos_infinity" cv="">
-              <type>const  char *</type>
+              <type>const charT *</type>
               <purpose>
                 <simpara>String used to for positive infinity value. </simpara>
               </purpose>
             </method>
             <method name="neg_infinity" cv="">
-              <type>const  char *</type>
+              <type>const charT *</type>
               <purpose>
                 <simpara>String used to for positive infinity value. </simpara>
               </purpose>
@@ -1078,82 +1085,130 @@
               </purpose>
             </method>
             <method name="year_sep_char" cv="">
-              <type>char</type>
+              <type>charT</type>
               <purpose>
                 <simpara>Char to sep? </simpara>
               </purpose>
             </method>
             <method name="month_sep_char" cv="">
-              <type>char</type>
+              <type>charT</type>
               <purpose>
                 <simpara>char between year-month </simpara>
               </purpose>
             </method>
             <method name="day_sep_char" cv="">
-              <type>char</type>
+              <type>charT</type>
               <purpose>
                 <simpara>Char to separate month-day. </simpara>
               </purpose>
             </method>
             <method name="hour_sep_char" cv="">
-              <type>char</type>
+              <type>charT</type>
               <purpose>
                 <simpara>char between date-hours </simpara>
               </purpose>
             </method>
             <method name="minute_sep_char" cv="">
-              <type>char</type>
+              <type>charT</type>
               <purpose>
                 <simpara>char between hour and minute </simpara>
               </purpose>
             </method>
             <method name="second_sep_char" cv="">
-              <type>char</type>
+              <type>charT</type>
               <purpose>
                 <simpara>char for second </simpara>
               </purpose>
             </method>
           </method-group>
         </class>
+        <class-specialization name="simple_format">
+          <template>
+    </template>
+          <specialization>
+            <template-arg>wchar_t</template-arg>
+          </specialization>
+          <purpose>
+            <simpara>Specialization of formmating rules for wchar_t. </simpara>
+          </purpose>
+          <method-group name="public static functions">
+            <method name="not_a_date" cv="">
+              <type>const wchar_t *</type>
+              <purpose>
+                <simpara>String used printed is date is invalid. </simpara>
+              </purpose>
+            </method>
+            <method name="pos_infinity" cv="">
+              <type>const wchar_t *</type>
+              <purpose>
+                <simpara>String used to for positive infinity value. </simpara>
+              </purpose>
+            </method>
+            <method name="neg_infinity" cv="">
+              <type>const wchar_t *</type>
+              <purpose>
+                <simpara>String used to for positive infinity value. </simpara>
+              </purpose>
+            </method>
+            <method name="month_format" cv="">
+              <type>month_format_spec</type>
+              <purpose>
+                <simpara>Describe month format. </simpara>
+              </purpose>
+            </method>
+            <method name="date_order" cv="">
+              <type>ymd_order_spec</type>
+            </method>
+            <method name="has_date_sep_chars" cv="">
+              <type>bool</type>
+              <purpose>
+                <simpara>This format uses '-' to separate date elements. </simpara>
+              </purpose>
+            </method>
+            <method name="year_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>Char to sep? </simpara>
+              </purpose>
+            </method>
+            <method name="month_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>char between year-month </simpara>
+              </purpose>
+            </method>
+            <method name="day_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>Char to separate month-day. </simpara>
+              </purpose>
+            </method>
+            <method name="hour_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>char between date-hours </simpara>
+              </purpose>
+            </method>
+            <method name="minute_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>char between hour and minute </simpara>
+              </purpose>
+            </method>
+            <method name="second_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>char for second </simpara>
+              </purpose>
+            </method>
+          </method-group>
+        </class-specialization>
       </namespace>
     </namespace>
   </header>
   <header name="boost/date_time/date_formatting.hpp">
     <namespace name="boost">
       <namespace name="date_time">
-        <class name="date_formatter">
-          <template>
-      <template-type-parameter name="date_type"/>
-      <template-type-parameter name="format_type"/>
-      <template-type-parameter name="charT"><default>char</default></template-type-parameter>
-    </template>
-          <purpose>
-            <simpara>Convert a date to string using format policies. </simpara>
-          </purpose>
-          <typedef name="string_type">
-            <type>std::basic_string&lt; charT &gt;</type>
-          </typedef>
-          <method-group name="public static functions">
-            <method name="date_to_string" cv="">
-              <type>string_type</type>
-              <parameter name="d">
-                <paramtype>date_type</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Convert to a date to standard string using format policies. </simpara>
-              </purpose>
-            </method>
-            <method name="date_to_string" cv="">
-              <type>std::string</type>
-              <parameter name="d">
-                <paramtype>date_type</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Convert to a date to standard string using format policies. </simpara>
-              </purpose>
-            </method>
-          </method-group>
-        </class>
         <class name="month_formatter">
           <template>
       <template-type-parameter name="month_type"/>
@@ -1232,6 +1287,39 @@
             </method>
           </method-group>
         </class>
+        <class name="date_formatter">
+          <template>
+      <template-type-parameter name="date_type"/>
+      <template-type-parameter name="format_type"/>
+      <template-type-parameter name="charT"><default>char</default></template-type-parameter>
+    </template>
+          <purpose>
+            <simpara>Convert a date to string using format policies. </simpara>
+          </purpose>
+          <typedef name="string_type">
+            <type>std::basic_string&lt; charT &gt;</type>
+          </typedef>
+          <method-group name="public static functions">
+            <method name="date_to_string" cv="">
+              <type>string_type</type>
+              <parameter name="d">
+                <paramtype>date_type</paramtype>
+              </parameter>
+              <purpose>
+                <simpara>Convert to a date to standard string using format policies. </simpara>
+              </purpose>
+            </method>
+            <method name="date_to_string" cv="">
+              <type>std::string</type>
+              <parameter name="d">
+                <paramtype>date_type</paramtype>
+              </parameter>
+              <purpose>
+                <simpara>Convert to a date to standard string using format policies. </simpara>
+              </purpose>
+            </method>
+          </method-group>
+        </class>
       </namespace>
     </namespace>
   </header>
@@ -1243,51 +1331,6 @@
   <header name="boost/date_time/date_formatting_locales.hpp">
     <namespace name="boost">
       <namespace name="date_time">
-        <class name="ostream_date_formatter">
-          <template>
-      <template-type-parameter name="date_type"/>
-      <template-type-parameter name="facet_type"/>
-      <template-type-parameter name="charT"><default>char</default></template-type-parameter>
-    </template>
-          <purpose>
-            <simpara>Convert a date to string using format policies. </simpara>
-          </purpose>
-          <typedef name="ostream_type">
-            <type>std::basic_ostream&lt; charT &gt;</type>
-          </typedef>
-          <typedef name="ymd_type">
-            <type>date_type::ymd_type</type>
-          </typedef>
-          <method-group name="public static functions">
-            <method name="date_put" cv="">
-              <type>void</type>
-              <parameter name="d">
-                <paramtype>const date_type &amp;</paramtype>
-              </parameter>
-              <parameter name="os">
-                <paramtype>ostream_type &amp;</paramtype>
-              </parameter>
-              <parameter name="f">
-                <paramtype>const facet_type &amp;</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Put date into an ostream. </simpara>
-              </purpose>
-            </method>
-            <method name="date_put" cv="">
-              <type>void</type>
-              <parameter name="d">
-                <paramtype>const date_type &amp;</paramtype>
-              </parameter>
-              <parameter name="os">
-                <paramtype>ostream_type &amp;</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Put date into an ostream. </simpara>
-              </purpose>
-            </method>
-          </method-group>
-        </class>
         <class name="ostream_month_formatter">
           <template>
       <template-type-parameter name="facet_type"/>
@@ -1398,6 +1441,51 @@
             </method>
           </method-group>
         </class>
+        <class name="ostream_date_formatter">
+          <template>
+      <template-type-parameter name="date_type"/>
+      <template-type-parameter name="facet_type"/>
+      <template-type-parameter name="charT"><default>char</default></template-type-parameter>
+    </template>
+          <purpose>
+            <simpara>Convert a date to string using format policies. </simpara>
+          </purpose>
+          <typedef name="ostream_type">
+            <type>std::basic_ostream&lt; charT &gt;</type>
+          </typedef>
+          <typedef name="ymd_type">
+            <type>date_type::ymd_type</type>
+          </typedef>
+          <method-group name="public static functions">
+            <method name="date_put" cv="">
+              <type>void</type>
+              <parameter name="d">
+                <paramtype>const date_type &amp;</paramtype>
+              </parameter>
+              <parameter name="os">
+                <paramtype>ostream_type &amp;</paramtype>
+              </parameter>
+              <parameter name="f">
+                <paramtype>const facet_type &amp;</paramtype>
+              </parameter>
+              <purpose>
+                <simpara>Put date into an ostream. </simpara>
+              </purpose>
+            </method>
+            <method name="date_put" cv="">
+              <type>void</type>
+              <parameter name="d">
+                <paramtype>const date_type &amp;</paramtype>
+              </parameter>
+              <parameter name="os">
+                <paramtype>ostream_type &amp;</paramtype>
+              </parameter>
+              <purpose>
+                <simpara>Put date into an ostream. </simpara>
+              </purpose>
+            </method>
+          </method-group>
+        </class>
       </namespace>
     </namespace>
   </header>
@@ -1405,18 +1493,139 @@
     <para>Definition and implementation of date algorithm templates</para>
     <namespace name="boost">
       <namespace name="date_time">
-        <class name="first_kday_after">
+        <class name="year_based_generator">
           <template>
       <template-type-parameter name="date_type"/>
     </template>
           <purpose>
-            <simpara>Calculate something like "First Sunday after Jan 1,2002. </simpara>
+            <simpara>Base class for all generators that take a year and produce a date. </simpara>
           </purpose>
           <description>
-            <para>Date generator that takes a date and finds kday after <programlisting>     typedef boost::date_time::first_kday_after&lt;date&gt; firstkdayafter;
-     firstkdayafter fkaf(Monday);
-     fkaf.get_date(date(2002,Feb,1));
+            <para>This class is a base class for polymorphic function objects that take a year and produce a concrete date. 
+</para>
+          </description>
+          <typedef name="calendar_type">
+            <type>date_type::calendar_type</type>
+          </typedef>
+          <typedef name="year_type">
+            <type>calendar_type::year_type</type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="get_date" cv="const">
+              <type>virtual date_type</type>
+              <parameter name="y">
+                <paramtype>year_type</paramtype>
+              </parameter>
+            </method>
+          </method-group>
+          <constructor/>
+          <destructor/>
+        </class>
+        <class name="partial_date">
+          <template>
+      <template-type-parameter name="date_type"/>
+    </template>
+          <inherit access="public">boost::date_time::year_based_generator&lt; date_type &gt;</inherit>
+          <purpose>
+            <simpara>Generates a date by applying the year to the given month and day. </simpara>
+          </purpose>
+          <description>
+            <para>Example usage: <programlisting>    partial_date pd(1, Jan);
+    partial_date pd2(70);
+    date d = pd.get_date(2002); //2002-Jan-01
+    date d2 = pd2.get_date(2002); //2002-Mar-10
 </programlisting></para>
+          </description>
+          <typedef name="calendar_type">
+            <type>date_type::calendar_type</type>
+          </typedef>
+          <typedef name="day_type">
+            <type>calendar_type::day_type</type>
+          </typedef>
+          <typedef name="month_type">
+            <type>calendar_type::month_type</type>
+          </typedef>
+          <typedef name="year_type">
+            <type>calendar_type::year_type</type>
+          </typedef>
+          <typedef name="duration_type">
+            <type>date_type::duration_type</type>
+          </typedef>
+          <typedef name="duration_rep">
+            <type>duration_type::duration_rep</type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="get_date" cv="const">
+              <type>date_type</type>
+              <parameter name="y">
+                <paramtype>year_type</paramtype>
+              </parameter>
+              <purpose>
+                <simpara>Return a concrete date when provided with a year specific year. </simpara>
+              </purpose>
+              <description>
+                <para>Will throw an 'invalid_argument' exception if a partial_date object, instantiated with Feb-29, has get_date called with a non-leap year. Example: <programlisting> partial_date pd(29, Feb);
+ pd.get_date(2003); // throws invalid_argument exception
+ pg.get_date(2000); // returns 2000-2-29
+</programlisting></para>
+              </description>
+            </method>
+            <method name="operator()" cv="const">
+              <type>date_type</type>
+              <parameter name="y">
+                <paramtype>year_type</paramtype>
+              </parameter>
+            </method>
+            <method name="operator==" cv="const">
+              <type>bool</type>
+              <parameter name="rhs">
+                <paramtype>const <classname>partial_date</classname> &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="operator&lt;" cv="const">
+              <type>bool</type>
+              <parameter name="rhs">
+                <paramtype>const <classname>partial_date</classname> &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="month" cv="const">
+              <type>month_type</type>
+            </method>
+            <method name="day" cv="const">
+              <type>day_type</type>
+            </method>
+          </method-group>
+          <constructor>
+            <parameter name="d">
+              <paramtype>day_type</paramtype>
+            </parameter>
+            <parameter name="m">
+              <paramtype>month_type</paramtype>
+            </parameter>
+          </constructor>
+          <constructor>
+            <parameter name="days">
+              <paramtype>duration_rep</paramtype>
+            </parameter>
+            <purpose>
+              <simpara>Partial date created from number of days into year. Range 1-366. </simpara>
+            </purpose>
+            <description>
+              <para>Allowable values range from 1 to 366. 1=Jan1, 366=Dec31. If argument exceeds range, partial_date will be created with closest in-range value. 60 will always be Feb29, if get_date() is called with a non-leap year an exception will be thrown </para>
+            </description>
+          </constructor>
+        </class>
+        <class name="nth_kday_of_month">
+          <template>
+      <template-type-parameter name="date_type"/>
+    </template>
+          <inherit access="public">boost::date_time::year_based_generator&lt; date_type &gt;</inherit>
+          <purpose>
+            <simpara>Useful generator functor for finding holidays. </simpara>
+          </purpose>
+          <description>
+            <para>Based on the idea in Cal. Calc. for finding holidays that are the 'first Monday of September'. When instantiated with 'fifth' kday of month, the result will be the last kday of month which can be the fourth or fifth depending on the structure of the month.</para>
+            <para>The algorithm here basically guesses for the first day of the month. Then finds the first day of the correct type. That is, if the first of the month is a Tuesday and it needs Wenesday then we simply increment by a day and then we can add the length of a week until we get to the 'nth kday'. There are probably more efficient algorithms based on using a mod 7, but this one works reasonably well for basic applications. </para>
           </description>
           <typedef name="calendar_type">
             <type>date_type::calendar_type</type>
@@ -1424,68 +1633,56 @@
           <typedef name="day_of_week_type">
             <type>calendar_type::day_of_week_type</type>
           </typedef>
+          <typedef name="month_type">
+            <type>calendar_type::month_type</type>
+          </typedef>
+          <typedef name="year_type">
+            <type>calendar_type::year_type</type>
+          </typedef>
           <typedef name="duration_type">
             <type>date_type::duration_type</type>
           </typedef>
+          <enum name="week_num">
+            <enumvalue name="first">
+              <default>1</default>
+            </enumvalue>
+            <enumvalue name="second"/>
+            <enumvalue name="third"/>
+            <enumvalue name="fourth"/>
+            <enumvalue name="fifth"/>
+          </enum>
           <method-group name="public member functions">
             <method name="get_date" cv="const">
               <type>date_type</type>
-              <parameter name="start_day">
-                <paramtype>date_type</paramtype>
+              <parameter name="y">
+                <paramtype>year_type</paramtype>
               </parameter>
               <purpose>
-                <simpara>Return next kday given. </simpara>
+                <simpara>Return a concrete date when provided with a year specific year. </simpara>
               </purpose>
+            </method>
+            <method name="month" cv="const">
+              <type>month_type</type>
+            </method>
+            <method name="nth_week" cv="const">
+              <type>week_num</type>
             </method>
             <method name="day_of_week" cv="const">
               <type>day_of_week_type</type>
             </method>
+            <method name="nth_week_as_str" cv="const">
+              <type>const char *</type>
+            </method>
           </method-group>
           <constructor>
+            <parameter name="week_no">
+              <paramtype>week_num</paramtype>
+            </parameter>
             <parameter name="dow">
               <paramtype>day_of_week_type</paramtype>
             </parameter>
-          </constructor>
-        </class>
-        <class name="first_kday_before">
-          <template>
-      <template-type-parameter name="date_type"/>
-    </template>
-          <purpose>
-            <simpara>Calculate something like "First Sunday before Jan 1,2002. </simpara>
-          </purpose>
-          <description>
-            <para>Date generator that takes a date and finds kday after <programlisting>     typedef boost::date_time::first_kday_before&lt;date&gt; firstkdaybefore;
-     firstkdaybefore fkbf(Monday);
-     fkbf.get_date(date(2002,Feb,1));
-</programlisting></para>
-          </description>
-          <typedef name="calendar_type">
-            <type>date_type::calendar_type</type>
-          </typedef>
-          <typedef name="day_of_week_type">
-            <type>calendar_type::day_of_week_type</type>
-          </typedef>
-          <typedef name="duration_type">
-            <type>date_type::duration_type</type>
-          </typedef>
-          <method-group name="public member functions">
-            <method name="get_date" cv="const">
-              <type>date_type</type>
-              <parameter name="start_day">
-                <paramtype>date_type</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Return next kday given. </simpara>
-              </purpose>
-            </method>
-            <method name="day_of_week" cv="const">
-              <type>day_of_week_type</type>
-            </method>
-          </method-group>
-          <constructor>
-            <parameter name="dow">
-              <paramtype>day_of_week_type</paramtype>
+            <parameter name="m">
+              <paramtype>month_type</paramtype>
             </parameter>
           </constructor>
         </class>
@@ -1620,17 +1817,18 @@
             </description>
           </constructor>
         </class>
-        <class name="nth_kday_of_month">
+        <class name="first_kday_after">
           <template>
       <template-type-parameter name="date_type"/>
     </template>
-          <inherit access="public">boost::date_time::year_based_generator&lt; date_type &gt;</inherit>
           <purpose>
-            <simpara>Useful generator functor for finding holidays. </simpara>
+            <simpara>Calculate something like "First Sunday after Jan 1,2002. </simpara>
           </purpose>
           <description>
-            <para>Based on the idea in Cal. Calc. for finding holidays that are the 'first Monday of September'. When instantiated with 'fifth' kday of month, the result will be the last kday of month which can be the fourth or fifth depending on the structure of the month.</para>
-            <para>The algorithm here basically guesses for the first day of the month. Then finds the first day of the correct type. That is, if the first of the month is a Tuesday and it needs Wenesday then we simply increment by a day and then we can add the length of a week until we get to the 'nth kday'. There are probably more efficient algorithms based on using a mod 7, but this one works reasonably well for basic applications. </para>
+            <para>Date generator that takes a date and finds kday after <programlisting>     typedef boost::date_time::first_kday_after&lt;date&gt; firstkdayafter;
+     firstkdayafter fkaf(Monday);
+     fkaf.get_date(date(2002,Feb,1));
+</programlisting></para>
           </description>
           <typedef name="calendar_type">
             <type>date_type::calendar_type</type>
@@ -1638,183 +1836,73 @@
           <typedef name="day_of_week_type">
             <type>calendar_type::day_of_week_type</type>
           </typedef>
-          <typedef name="month_type">
-            <type>calendar_type::month_type</type>
-          </typedef>
-          <typedef name="year_type">
-            <type>calendar_type::year_type</type>
-          </typedef>
           <typedef name="duration_type">
             <type>date_type::duration_type</type>
           </typedef>
-          <enum name="week_num">
-            <enumvalue name="first">
-              <default>1</default>
-            </enumvalue>
-            <enumvalue name="second"/>
-            <enumvalue name="third"/>
-            <enumvalue name="fourth"/>
-            <enumvalue name="fifth"/>
-          </enum>
           <method-group name="public member functions">
             <method name="get_date" cv="const">
               <type>date_type</type>
-              <parameter name="y">
-                <paramtype>year_type</paramtype>
+              <parameter name="start_day">
+                <paramtype>date_type</paramtype>
               </parameter>
               <purpose>
-                <simpara>Return a concrete date when provided with a year specific year. </simpara>
+                <simpara>Return next kday given. </simpara>
               </purpose>
-            </method>
-            <method name="month" cv="const">
-              <type>month_type</type>
-            </method>
-            <method name="nth_week" cv="const">
-              <type>week_num</type>
             </method>
             <method name="day_of_week" cv="const">
               <type>day_of_week_type</type>
             </method>
-            <method name="nth_week_as_str" cv="const">
-              <type>const  char *</type>
-            </method>
           </method-group>
           <constructor>
-            <parameter name="week_no">
-              <paramtype>week_num</paramtype>
-            </parameter>
             <parameter name="dow">
               <paramtype>day_of_week_type</paramtype>
             </parameter>
-            <parameter name="m">
-              <paramtype>month_type</paramtype>
-            </parameter>
           </constructor>
         </class>
-        <class name="partial_date">
+        <class name="first_kday_before">
           <template>
       <template-type-parameter name="date_type"/>
     </template>
-          <inherit access="public">boost::date_time::year_based_generator&lt; date_type &gt;</inherit>
           <purpose>
-            <simpara>Generates a date by applying the year to the given month and day. </simpara>
+            <simpara>Calculate something like "First Sunday before Jan 1,2002. </simpara>
           </purpose>
           <description>
-            <para>Example usage: <programlisting>    partial_date pd(1, Jan);
-    partial_date pd2(70);
-    date d = pd.get_date(2002); //2002-Jan-01
-    date d2 = pd2.get_date(2002); //2002-Mar-10
+            <para>Date generator that takes a date and finds kday after <programlisting>     typedef boost::date_time::first_kday_before&lt;date&gt; firstkdaybefore;
+     firstkdaybefore fkbf(Monday);
+     fkbf.get_date(date(2002,Feb,1));
 </programlisting></para>
           </description>
           <typedef name="calendar_type">
             <type>date_type::calendar_type</type>
           </typedef>
-          <typedef name="day_type">
-            <type>calendar_type::day_type</type>
-          </typedef>
-          <typedef name="month_type">
-            <type>calendar_type::month_type</type>
-          </typedef>
-          <typedef name="year_type">
-            <type>calendar_type::year_type</type>
+          <typedef name="day_of_week_type">
+            <type>calendar_type::day_of_week_type</type>
           </typedef>
           <typedef name="duration_type">
             <type>date_type::duration_type</type>
           </typedef>
-          <typedef name="duration_rep">
-            <type>duration_type::duration_rep</type>
-          </typedef>
           <method-group name="public member functions">
             <method name="get_date" cv="const">
               <type>date_type</type>
-              <parameter name="y">
-                <paramtype>year_type</paramtype>
+              <parameter name="start_day">
+                <paramtype>date_type</paramtype>
               </parameter>
               <purpose>
-                <simpara>Return a concrete date when provided with a year specific year. </simpara>
+                <simpara>Return next kday given. </simpara>
               </purpose>
-              <description>
-                <para>Will throw an 'invalid_argument' exception if a partial_date object, instantiated with Feb-29, has get_date called with a non-leap year. Example: <programlisting> partial_date pd(29, Feb);
- pd.get_date(2003); // throws invalid_argument exception
- pg.get_date(2000); // returns 2000-2-29
-</programlisting></para>
-              </description>
             </method>
-            <method name="operator()" cv="const">
-              <type>date_type</type>
-              <parameter name="y">
-                <paramtype>year_type</paramtype>
-              </parameter>
-            </method>
-            <method name="operator==" cv="const">
-              <type>bool</type>
-              <parameter name="rhs">
-                <paramtype>const <classname>partial_date</classname> &amp;</paramtype>
-              </parameter>
-            </method>
-            <method name="operator&lt;" cv="const">
-              <type>bool</type>
-              <parameter name="rhs">
-                <paramtype>const <classname>partial_date</classname> &amp;</paramtype>
-              </parameter>
-            </method>
-            <method name="month" cv="const">
-              <type>month_type</type>
-            </method>
-            <method name="day" cv="const">
-              <type>day_type</type>
+            <method name="day_of_week" cv="const">
+              <type>day_of_week_type</type>
             </method>
           </method-group>
           <constructor>
-            <parameter name="d">
-              <paramtype>day_type</paramtype>
-            </parameter>
-            <parameter name="m">
-              <paramtype>month_type</paramtype>
+            <parameter name="dow">
+              <paramtype>day_of_week_type</paramtype>
             </parameter>
           </constructor>
-          <constructor>
-            <parameter name="days">
-              <paramtype>duration_rep</paramtype>
-            </parameter>
-            <purpose>
-              <simpara>Partial date created from number of days into year. Range 1-366. </simpara>
-            </purpose>
-            <description>
-              <para>Allowable values range from 1 to 366. 1=Jan1, 366=Dec31. If argument exceeds range, partial_date will be created with closest in-range value. 60 will always be Feb29, if get_date() is called with a non-leap year an exception will be thrown </para>
-            </description>
-          </constructor>
-        </class>
-        <class name="year_based_generator">
-          <template>
-      <template-type-parameter name="date_type"/>
-    </template>
-          <purpose>
-            <simpara>Base class for all generators that take a year and produce a date. </simpara>
-          </purpose>
-          <description>
-            <para>This class is a base class for polymorphic function objects that take a year and produce a concrete date. 
-</para>
-          </description>
-          <typedef name="calendar_type">
-            <type>date_type::calendar_type</type>
-          </typedef>
-          <typedef name="year_type">
-            <type>calendar_type::year_type</type>
-          </typedef>
-          <method-group name="public member functions">
-            <method name="get_date" cv="const">
-              <type>virtual date_type</type>
-              <parameter name="y">
-                <paramtype>year_type</paramtype>
-              </parameter>
-            </method>
-          </method-group>
-          <constructor/>
-          <destructor/>
         </class>
         <function name="nth_as_str">
-          <type>BOOST_DATE_TIME_DECL const  char *</type>
+          <type>BOOST_DATE_TIME_DECL const char *</type>
           <parameter name="n">
             <paramtype>int</paramtype>
           </parameter>
@@ -1904,43 +1992,6 @@
   <header name="boost/date_time/date_iterator.hpp">
     <namespace name="boost">
       <namespace name="date_time">
-        <class name="date_itr">
-          <template>
-      <template-type-parameter name="offset_functor"/>
-      <template-type-parameter name="date_type"/>
-    </template>
-          <inherit access="public">boost::date_time::date_itr_base&lt; date_type &gt;</inherit>
-          <purpose>
-            <simpara>Overrides the base date iterator providing hook for functors. </simpara>
-          </purpose>
-          <typedef name="duration_type">
-            <type>date_type::duration_type</type>
-          </typedef>
-          <method-group name="public member functions"/>
-          <constructor>
-            <parameter name="d">
-              <paramtype>date_type</paramtype>
-            </parameter>
-            <parameter name="factor">
-              <paramtype>int</paramtype>
-              <default>1</default>
-            </parameter>
-          </constructor>
-          <method-group name="private member functions">
-            <method name="get_offset" cv="const">
-              <type>virtual duration_type</type>
-              <parameter name="current">
-                <paramtype>const date_type &amp;</paramtype>
-              </parameter>
-            </method>
-            <method name="get_neg_offset" cv="const">
-              <type>virtual duration_type</type>
-              <parameter name="current">
-                <paramtype>const date_type &amp;</paramtype>
-              </parameter>
-            </method>
-          </method-group>
-        </class>
         <class name="date_itr_base">
           <template>
       <template-type-parameter name="date_type"/>
@@ -2032,6 +2083,43 @@
           </constructor>
           <destructor/>
         </class>
+        <class name="date_itr">
+          <template>
+      <template-type-parameter name="offset_functor"/>
+      <template-type-parameter name="date_type"/>
+    </template>
+          <inherit access="public">boost::date_time::date_itr_base&lt; date_type &gt;</inherit>
+          <purpose>
+            <simpara>Overrides the base date iterator providing hook for functors. </simpara>
+          </purpose>
+          <typedef name="duration_type">
+            <type>date_type::duration_type</type>
+          </typedef>
+          <method-group name="public member functions"/>
+          <constructor>
+            <parameter name="d">
+              <paramtype>date_type</paramtype>
+            </parameter>
+            <parameter name="factor">
+              <paramtype>int</paramtype>
+              <default>1</default>
+            </parameter>
+          </constructor>
+          <method-group name="private member functions">
+            <method name="get_offset" cv="const">
+              <type>virtual duration_type</type>
+              <parameter name="current">
+                <paramtype>const date_type &amp;</paramtype>
+              </parameter>
+            </method>
+            <method name="get_neg_offset" cv="const">
+              <type>virtual duration_type</type>
+              <parameter name="current">
+                <paramtype>const date_type &amp;</paramtype>
+              </parameter>
+            </method>
+          </method-group>
+        </class>
         <enum name="date_resolutions">
           <enumvalue name="day"/>
           <enumvalue name="week"/>
@@ -2050,161 +2138,6 @@
   <header name="boost/date_time/date_names_put.hpp">
     <namespace name="boost">
       <namespace name="date_time">
-        <class name="all_date_names_put">
-          <template>
-      <template-type-parameter name="Config"/>
-      <template-type-parameter name="charT"><default>char</default></template-type-parameter>
-      <template-type-parameter name="OutputIterator"><default>std::ostreambuf_iterator&lt;charT&gt;</default></template-type-parameter>
-    </template>
-          <inherit access="public">boost::date_time::date_names_put&lt; Config, charT, OutputIterator &gt;</inherit>
-          <purpose>
-            <simpara>An date name output facet that takes an array of char* to define strings. </simpara>
-          </purpose>
-          <typedef name="iter_type">
-            <type>OutputIterator</type>
-          </typedef>
-          <typedef name="month_enum">
-            <type>Config::month_enum</type>
-          </typedef>
-          <typedef name="weekday_enum">
-            <type>Config::weekday_enum</type>
-          </typedef>
-          <typedef name="special_value_enum">
-            <type>Config::special_value_enum</type>
-          </typedef>
-          <method-group name="public member functions">
-            <method name="get_short_month_names" cv="const">
-              <type>const  charT *const *</type>
-            </method>
-            <method name="get_long_month_names" cv="const">
-              <type>const  charT *const *</type>
-            </method>
-            <method name="get_special_value_names" cv="const">
-              <type>const  charT *const *</type>
-            </method>
-            <method name="get_short_weekday_names" cv="const">
-              <type>const  charT *const *</type>
-            </method>
-            <method name="get_long_weekday_names" cv="const">
-              <type>const  charT *const *</type>
-            </method>
-          </method-group>
-          <constructor>
-            <parameter name="month_short_names">
-              <paramtype>const charT *const </paramtype>
-            </parameter>
-            <parameter name="month_long_names">
-              <paramtype>const charT *const </paramtype>
-            </parameter>
-            <parameter name="special_value_names">
-              <paramtype>const charT *const </paramtype>
-            </parameter>
-            <parameter name="weekday_short_names">
-              <paramtype>const charT *const </paramtype>
-            </parameter>
-            <parameter name="weekday_long_names">
-              <paramtype>const charT *const </paramtype>
-            </parameter>
-            <parameter name="separator_char">
-              <paramtype>charT</paramtype>
-              <default>'-'</default>
-            </parameter>
-            <parameter name="order_spec">
-              <paramtype>ymd_order_spec</paramtype>
-              <default>ymd_order_iso</default>
-            </parameter>
-            <parameter name="month_format">
-              <paramtype>month_format_spec</paramtype>
-              <default>month_as_short_string</default>
-            </parameter>
-          </constructor>
-          <method-group name="protected member functions">
-            <method name="do_put_month_short" cv="const">
-              <type>virtual void</type>
-              <parameter name="oitr">
-                <paramtype>iter_type &amp;</paramtype>
-              </parameter>
-              <parameter name="moy">
-                <paramtype>month_enum</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Generic facet that takes array of chars. </simpara>
-              </purpose>
-            </method>
-            <method name="do_put_month_long" cv="const">
-              <type>virtual void</type>
-              <parameter name="oitr">
-                <paramtype>iter_type &amp;</paramtype>
-              </parameter>
-              <parameter name="moy">
-                <paramtype>month_enum</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Long month names. </simpara>
-              </purpose>
-            </method>
-            <method name="do_put_special_value" cv="const">
-              <type>virtual void</type>
-              <parameter name="oitr">
-                <paramtype>iter_type &amp;</paramtype>
-              </parameter>
-              <parameter name="sv">
-                <paramtype>special_value_enum</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Special values names. </simpara>
-              </purpose>
-            </method>
-            <method name="do_put_weekday_short" cv="const">
-              <type>virtual void</type>
-              <parameter name="oitr">
-                <paramtype>iter_type &amp;</paramtype>
-              </parameter>
-              <parameter name="wd">
-                <paramtype>weekday_enum</paramtype>
-              </parameter>
-            </method>
-            <method name="do_put_weekday_long" cv="const">
-              <type>virtual void</type>
-              <parameter name="oitr">
-                <paramtype>iter_type &amp;</paramtype>
-              </parameter>
-              <parameter name="wd">
-                <paramtype>weekday_enum</paramtype>
-              </parameter>
-            </method>
-            <method name="do_month_sep_char" cv="const">
-              <type>virtual void</type>
-              <parameter name="oitr">
-                <paramtype>iter_type &amp;</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>char between year-month </simpara>
-              </purpose>
-            </method>
-            <method name="do_day_sep_char" cv="const">
-              <type>virtual void</type>
-              <parameter name="oitr">
-                <paramtype>iter_type &amp;</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Char to separate month-day. </simpara>
-              </purpose>
-            </method>
-            <method name="do_date_order" cv="const">
-              <type>virtual ymd_order_spec</type>
-              <purpose>
-                <simpara>Set the date ordering. </simpara>
-              </purpose>
-            </method>
-            <method name="do_month_format" cv="const">
-              <type>virtual month_format_spec</type>
-              <purpose>
-                <simpara>Set the date ordering. </simpara>
-              </purpose>
-            </method>
-          </method-group>
-        </class>
         <class name="date_names_put">
           <template>
       <template-type-parameter name="Config"/>
@@ -2371,19 +2304,19 @@
             </method>
             <method name="do_put_weekday_short" cv="const">
               <type>virtual void</type>
-              <parameter name="oitr">
+              <parameter name="">
                 <paramtype>iter_type &amp;</paramtype>
               </parameter>
-              <parameter name="wd">
+              <parameter name="">
                 <paramtype>weekday_enum</paramtype>
               </parameter>
             </method>
             <method name="do_put_weekday_long" cv="const">
               <type>virtual void</type>
-              <parameter name="oitr">
+              <parameter name="">
                 <paramtype>iter_type &amp;</paramtype>
               </parameter>
-              <parameter name="wd">
+              <parameter name="">
                 <paramtype>weekday_enum</paramtype>
               </parameter>
             </method>
@@ -2432,7 +2365,7 @@
                 <paramtype>iter_type &amp;</paramtype>
               </parameter>
               <parameter name="s">
-                <paramtype>const charT *const </paramtype>
+                <paramtype>const charT *const</paramtype>
               </parameter>
             </method>
             <method name="put_string" cv="const">
@@ -2446,6 +2379,161 @@
             </method>
           </method-group>
         </class>
+        <class name="all_date_names_put">
+          <template>
+      <template-type-parameter name="Config"/>
+      <template-type-parameter name="charT"><default>char</default></template-type-parameter>
+      <template-type-parameter name="OutputIterator"><default>std::ostreambuf_iterator&lt;charT&gt;</default></template-type-parameter>
+    </template>
+          <inherit access="public">boost::date_time::date_names_put&lt; Config, charT, OutputIterator &gt;</inherit>
+          <purpose>
+            <simpara>An date name output facet that takes an array of char* to define strings. </simpara>
+          </purpose>
+          <typedef name="iter_type">
+            <type>OutputIterator</type>
+          </typedef>
+          <typedef name="month_enum">
+            <type>Config::month_enum</type>
+          </typedef>
+          <typedef name="weekday_enum">
+            <type>Config::weekday_enum</type>
+          </typedef>
+          <typedef name="special_value_enum">
+            <type>Config::special_value_enum</type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="get_short_month_names" cv="const">
+              <type>const charT *const *</type>
+            </method>
+            <method name="get_long_month_names" cv="const">
+              <type>const charT *const *</type>
+            </method>
+            <method name="get_special_value_names" cv="const">
+              <type>const charT *const *</type>
+            </method>
+            <method name="get_short_weekday_names" cv="const">
+              <type>const charT *const *</type>
+            </method>
+            <method name="get_long_weekday_names" cv="const">
+              <type>const charT *const *</type>
+            </method>
+          </method-group>
+          <constructor>
+            <parameter name="month_short_names">
+              <paramtype>const charT *const</paramtype>
+            </parameter>
+            <parameter name="month_long_names">
+              <paramtype>const charT *const</paramtype>
+            </parameter>
+            <parameter name="special_value_names">
+              <paramtype>const charT *const</paramtype>
+            </parameter>
+            <parameter name="weekday_short_names">
+              <paramtype>const charT *const</paramtype>
+            </parameter>
+            <parameter name="weekday_long_names">
+              <paramtype>const charT *const</paramtype>
+            </parameter>
+            <parameter name="separator_char">
+              <paramtype>charT</paramtype>
+              <default>'-'</default>
+            </parameter>
+            <parameter name="order_spec">
+              <paramtype>ymd_order_spec</paramtype>
+              <default>ymd_order_iso</default>
+            </parameter>
+            <parameter name="month_format">
+              <paramtype>month_format_spec</paramtype>
+              <default>month_as_short_string</default>
+            </parameter>
+          </constructor>
+          <method-group name="protected member functions">
+            <method name="do_put_month_short" cv="const">
+              <type>virtual void</type>
+              <parameter name="oitr">
+                <paramtype>iter_type &amp;</paramtype>
+              </parameter>
+              <parameter name="moy">
+                <paramtype>month_enum</paramtype>
+              </parameter>
+              <purpose>
+                <simpara>Generic facet that takes array of chars. </simpara>
+              </purpose>
+            </method>
+            <method name="do_put_month_long" cv="const">
+              <type>virtual void</type>
+              <parameter name="oitr">
+                <paramtype>iter_type &amp;</paramtype>
+              </parameter>
+              <parameter name="moy">
+                <paramtype>month_enum</paramtype>
+              </parameter>
+              <purpose>
+                <simpara>Long month names. </simpara>
+              </purpose>
+            </method>
+            <method name="do_put_special_value" cv="const">
+              <type>virtual void</type>
+              <parameter name="oitr">
+                <paramtype>iter_type &amp;</paramtype>
+              </parameter>
+              <parameter name="sv">
+                <paramtype>special_value_enum</paramtype>
+              </parameter>
+              <purpose>
+                <simpara>Special values names. </simpara>
+              </purpose>
+            </method>
+            <method name="do_put_weekday_short" cv="const">
+              <type>virtual void</type>
+              <parameter name="oitr">
+                <paramtype>iter_type &amp;</paramtype>
+              </parameter>
+              <parameter name="wd">
+                <paramtype>weekday_enum</paramtype>
+              </parameter>
+            </method>
+            <method name="do_put_weekday_long" cv="const">
+              <type>virtual void</type>
+              <parameter name="oitr">
+                <paramtype>iter_type &amp;</paramtype>
+              </parameter>
+              <parameter name="wd">
+                <paramtype>weekday_enum</paramtype>
+              </parameter>
+            </method>
+            <method name="do_month_sep_char" cv="const">
+              <type>virtual void</type>
+              <parameter name="oitr">
+                <paramtype>iter_type &amp;</paramtype>
+              </parameter>
+              <purpose>
+                <simpara>char between year-month </simpara>
+              </purpose>
+            </method>
+            <method name="do_day_sep_char" cv="const">
+              <type>virtual void</type>
+              <parameter name="oitr">
+                <paramtype>iter_type &amp;</paramtype>
+              </parameter>
+              <purpose>
+                <simpara>Char to separate month-day. </simpara>
+              </purpose>
+            </method>
+            <method name="do_date_order" cv="const">
+              <type>virtual ymd_order_spec</type>
+              <purpose>
+                <simpara>Set the date ordering. </simpara>
+              </purpose>
+            </method>
+            <method name="do_month_format" cv="const">
+              <type>virtual month_format_spec</type>
+              <purpose>
+                <simpara>Set the date ordering. </simpara>
+              </purpose>
+            </method>
+          </method-group>
+        </class>
       </namespace>
     </namespace>
   </header>
@@ -2454,67 +2542,6 @@
     <para>Contains template class to provide static dst rule calculations</para>
     <namespace name="boost">
       <namespace name="date_time">
-        <class name="dst_calc_engine">
-          <template>
-      <template-type-parameter name="date_type"/>
-      <template-type-parameter name="time_duration_type"/>
-      <template-type-parameter name="dst_traits"/>
-    </template>
-          <purpose>
-            <simpara>Compile-time configurable daylight savings time calculation engine. </simpara>
-          </purpose>
-          <typedef name="year_type">
-            <type>date_type::year_type</type>
-          </typedef>
-          <typedef name="calendar_type">
-            <type>date_type::calendar_type</type>
-          </typedef>
-          <typedef name="dstcalc">
-            <type><classname>dst_calculator</classname>&lt; date_type, time_duration_type &gt;</type>
-          </typedef>
-          <method-group name="public static functions">
-            <method name="local_is_dst" cv="">
-              <type>time_is_dst_result</type>
-              <parameter name="d">
-                <paramtype>const date_type &amp;</paramtype>
-              </parameter>
-              <parameter name="td">
-                <paramtype>const time_duration_type &amp;</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Calculates if the given local time is dst or not. </simpara>
-              </purpose>
-              <description>
-                <para>Determines if the time is really in DST or not. Also checks for invalid and ambiguous. 
-</para>
-              </description>
-            </method>
-            <method name="is_dst_boundary_day" cv="">
-              <type>bool</type>
-              <parameter name="d">
-                <paramtype>date_type</paramtype>
-              </parameter>
-            </method>
-            <method name="dst_offset" cv="">
-              <type>time_duration_type</type>
-              <purpose>
-                <simpara>The time of day for the dst transition (eg: typically 01:00:00 or 02:00:00). </simpara>
-              </purpose>
-            </method>
-            <method name="local_dst_start_day" cv="">
-              <type>date_type</type>
-              <parameter name="year">
-                <paramtype>year_type</paramtype>
-              </parameter>
-            </method>
-            <method name="local_dst_end_day" cv="">
-              <type>date_type</type>
-              <parameter name="year">
-                <paramtype>year_type</paramtype>
-              </parameter>
-            </method>
-          </method-group>
-        </class>
         <class name="dst_calculator">
           <template>
       <template-type-parameter name="date_type_"/>
@@ -2640,48 +2667,40 @@
             </method>
           </method-group>
         </class>
-        <class name="null_dst_rules">
+        <class name="dst_calc_engine">
           <template>
-      <template-type-parameter name="date_type_"/>
-      <template-type-parameter name="time_duration_type_"/>
+      <template-type-parameter name="date_type"/>
+      <template-type-parameter name="time_duration_type"/>
+      <template-type-parameter name="dst_traits"/>
     </template>
           <purpose>
-            <simpara>Used for local time adjustments in places that don't use dst. </simpara>
+            <simpara>Compile-time configurable daylight savings time calculation engine. </simpara>
           </purpose>
-          <typedef name="time_duration_type">
-            <type>time_duration_type_</type>
+          <typedef name="year_type">
+            <type>date_type::year_type</type>
           </typedef>
-          <typedef name="date_type">
-            <type>date_type_</type>
+          <typedef name="calendar_type">
+            <type>date_type::calendar_type</type>
+          </typedef>
+          <typedef name="dstcalc">
+            <type><classname>dst_calculator</classname>&lt; date_type, time_duration_type &gt;</type>
           </typedef>
           <method-group name="public static functions">
             <method name="local_is_dst" cv="">
               <type>time_is_dst_result</type>
-              <parameter name="">
+              <parameter name="d">
                 <paramtype>const date_type &amp;</paramtype>
               </parameter>
-              <parameter name="">
+              <parameter name="td">
                 <paramtype>const time_duration_type &amp;</paramtype>
               </parameter>
               <purpose>
                 <simpara>Calculates if the given local time is dst or not. </simpara>
               </purpose>
               <description>
-                <para>
+                <para>Determines if the time is really in DST or not. Also checks for invalid and ambiguous. 
 </para>
               </description>
-            </method>
-            <method name="utc_is_dst" cv="">
-              <type>time_is_dst_result</type>
-              <parameter name="">
-                <paramtype>const date_type &amp;</paramtype>
-              </parameter>
-              <parameter name="">
-                <paramtype>const time_duration_type &amp;</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Calculates if the given utc time is in dst. </simpara>
-              </purpose>
             </method>
             <method name="is_dst_boundary_day" cv="">
               <type>bool</type>
@@ -2691,6 +2710,21 @@
             </method>
             <method name="dst_offset" cv="">
               <type>time_duration_type</type>
+              <purpose>
+                <simpara>The time of day for the dst transition (eg: typically 01:00:00 or 02:00:00). </simpara>
+              </purpose>
+            </method>
+            <method name="local_dst_start_day" cv="">
+              <type>date_type</type>
+              <parameter name="year">
+                <paramtype>year_type</paramtype>
+              </parameter>
+            </method>
+            <method name="local_dst_end_day" cv="">
+              <type>date_type</type>
+              <parameter name="year">
+                <paramtype>year_type</paramtype>
+              </parameter>
             </method>
           </method-group>
         </class>
@@ -2765,6 +2799,60 @@
             </method>
           </method-group>
         </class>
+        <class name="null_dst_rules">
+          <template>
+      <template-type-parameter name="date_type_"/>
+      <template-type-parameter name="time_duration_type_"/>
+    </template>
+          <purpose>
+            <simpara>Used for local time adjustments in places that don't use dst. </simpara>
+          </purpose>
+          <typedef name="time_duration_type">
+            <type>time_duration_type_</type>
+          </typedef>
+          <typedef name="date_type">
+            <type>date_type_</type>
+          </typedef>
+          <method-group name="public static functions">
+            <method name="local_is_dst" cv="">
+              <type>time_is_dst_result</type>
+              <parameter name="">
+                <paramtype>const date_type &amp;</paramtype>
+              </parameter>
+              <parameter name="">
+                <paramtype>const time_duration_type &amp;</paramtype>
+              </parameter>
+              <purpose>
+                <simpara>Calculates if the given local time is dst or not. </simpara>
+              </purpose>
+              <description>
+                <para>
+</para>
+              </description>
+            </method>
+            <method name="utc_is_dst" cv="">
+              <type>time_is_dst_result</type>
+              <parameter name="">
+                <paramtype>const date_type &amp;</paramtype>
+              </parameter>
+              <parameter name="">
+                <paramtype>const time_duration_type &amp;</paramtype>
+              </parameter>
+              <purpose>
+                <simpara>Calculates if the given utc time is in dst. </simpara>
+              </purpose>
+            </method>
+            <method name="is_dst_boundary_day" cv="">
+              <type>bool</type>
+              <parameter name="d">
+                <paramtype>date_type</paramtype>
+              </parameter>
+            </method>
+            <method name="dst_offset" cv="">
+              <type>time_duration_type</type>
+            </method>
+          </method-group>
+        </class>
         <enum name="time_is_dst_result">
           <enumvalue name="is_not_in_dst"/>
           <enumvalue name="is_in_dst"/>
@@ -2777,11 +2865,37 @@
   <header name="boost/date_time/dst_transition_day_generators.hpp">
     <namespace name="boost">
       <namespace name="date_time">
+        <class name="dst_day_calc_rule">
+          <template>
+      <template-type-parameter name="date_type"/>
+    </template>
+          <purpose>
+            <simpara>Defines base interface for calculating start and end date of daylight savings. </simpara>
+          </purpose>
+          <typedef name="year_type">
+            <type>date_type::year_type</type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="start_day" cv="const">
+              <type>virtual date_type</type>
+              <parameter name="y">
+                <paramtype>year_type</paramtype>
+              </parameter>
+            </method>
+            <method name="end_day" cv="const">
+              <type>virtual date_type</type>
+              <parameter name="y">
+                <paramtype>year_type</paramtype>
+              </parameter>
+            </method>
+          </method-group>
+          <destructor/>
+        </class>
         <class name="day_calc_dst_rule">
           <template>
       <template-type-parameter name="spec"/>
     </template>
-          <inherit access="public">boost::date_time::dst_day_calc_rule&lt; date_type &gt;</inherit>
+          <inherit access="public">boost::date_time::dst_day_calc_rule&lt; spec::date_type &gt;</inherit>
           <purpose>
             <simpara>Canonical form for a class that provides day rule calculation. </simpara>
           </purpose>
@@ -2824,32 +2938,6 @@
               <paramtype>end_rule</paramtype>
             </parameter>
           </constructor>
-        </class>
-        <class name="dst_day_calc_rule">
-          <template>
-      <template-type-parameter name="date_type"/>
-    </template>
-          <purpose>
-            <simpara>Defines base interface for calculating start and end date of daylight savings. </simpara>
-          </purpose>
-          <typedef name="year_type">
-            <type>date_type::year_type</type>
-          </typedef>
-          <method-group name="public member functions">
-            <method name="start_day" cv="const">
-              <type>virtual date_type</type>
-              <parameter name="y">
-                <paramtype>year_type</paramtype>
-              </parameter>
-            </method>
-            <method name="end_day" cv="const">
-              <type>virtual date_type</type>
-              <parameter name="y">
-                <paramtype>year_type</paramtype>
-              </parameter>
-            </method>
-          </method-group>
-          <destructor/>
         </class>
       </namespace>
     </namespace>
@@ -3198,13 +3286,13 @@
               <type>bool</type>
             </method>
             <method name="pos_infinity" cv="">
-              <type>const  <classname>int_adapter</classname></type>
+              <type>const <classname>int_adapter</classname></type>
             </method>
             <method name="neg_infinity" cv="">
-              <type>const  <classname>int_adapter</classname></type>
+              <type>const <classname>int_adapter</classname></type>
             </method>
             <method name="not_a_number" cv="">
-              <type>const  <classname>int_adapter</classname></type>
+              <type>const <classname>int_adapter</classname></type>
             </method>
             <method name="BOOST_PREVENT_MACRO_SUBSTITUTION" cv="">
               <type><classname>int_adapter</classname> max</type>
@@ -3315,22 +3403,267 @@
   <header name="boost/date_time/iso_format.hpp">
     <namespace name="boost">
       <namespace name="date_time">
-        <class name="iso_extended_format">
-          <inherit access="public">boost::date_time::iso_format_base</inherit>
+        <class name="iso_format_base">
+          <template>
+      <template-type-parameter name="charT"/>
+    </template>
           <purpose>
-            <simpara>Extended format uses seperators YYYY-MM-DD. </simpara>
+            <simpara>Class to provide common iso formatting spec. </simpara>
           </purpose>
           <method-group name="public static functions">
-            <method name="has_date_sep_chars" cv="">
-              <type>bool</type>
+            <method name="month_format" cv="">
+              <type>month_format_spec</type>
               <purpose>
-                <simpara>Extended format needs char separators. </simpara>
+                <simpara>Describe month format -- its an integer in iso format. </simpara>
               </purpose>
+            </method>
+            <method name="not_a_date" cv="">
+              <type>const charT *</type>
+              <purpose>
+                <simpara>String used printed is date is invalid. </simpara>
+              </purpose>
+            </method>
+            <method name="pos_infinity" cv="">
+              <type>const charT *</type>
+              <purpose>
+                <simpara>String used to for positive infinity value. </simpara>
+              </purpose>
+            </method>
+            <method name="neg_infinity" cv="">
+              <type>const charT *</type>
+              <purpose>
+                <simpara>String used to for positive infinity value. </simpara>
+              </purpose>
+            </method>
+            <method name="year_sep_char" cv="">
+              <type>charT</type>
+              <purpose>
+                <simpara>ISO char for a year -- used in durations. </simpara>
+              </purpose>
+            </method>
+            <method name="month_sep_char" cv="">
+              <type>charT</type>
+              <purpose>
+                <simpara>ISO char for a month. </simpara>
+              </purpose>
+            </method>
+            <method name="day_sep_char" cv="">
+              <type>charT</type>
+              <purpose>
+                <simpara>ISO char for a day. </simpara>
+              </purpose>
+            </method>
+            <method name="hour_sep_char" cv="">
+              <type>charT</type>
+              <purpose>
+                <simpara>char for minute </simpara>
+              </purpose>
+            </method>
+            <method name="minute_sep_char" cv="">
+              <type>charT</type>
+              <purpose>
+                <simpara>char for minute </simpara>
+              </purpose>
+            </method>
+            <method name="second_sep_char" cv="">
+              <type>charT</type>
+              <purpose>
+                <simpara>char for second </simpara>
+              </purpose>
+            </method>
+            <method name="period_start_char" cv="">
+              <type>charT</type>
+              <purpose>
+                <simpara>ISO char for a period. </simpara>
+              </purpose>
+            </method>
+            <method name="time_start_char" cv="">
+              <type>charT</type>
+              <purpose>
+                <simpara>Used in time in mixed strings to set start of time. </simpara>
+              </purpose>
+            </method>
+            <method name="week_start_char" cv="">
+              <type>charT</type>
+              <purpose>
+                <simpara>Used in mixed strings to identify start of a week number. </simpara>
+              </purpose>
+            </method>
+            <method name="period_sep_char" cv="">
+              <type>charT</type>
+              <purpose>
+                <simpara>Separators for periods. </simpara>
+              </purpose>
+            </method>
+            <method name="time_sep_char" cv="">
+              <type>charT</type>
+              <purpose>
+                <simpara>Separator for hh:mm:ss. </simpara>
+              </purpose>
+            </method>
+            <method name="fractional_time_sep_char" cv="">
+              <type>charT</type>
+              <purpose>
+                <simpara>Preferred Separator for hh:mm:ss,decimal_fraction. </simpara>
+              </purpose>
+            </method>
+            <method name="is_component_sep" cv="">
+              <type>bool</type>
+              <parameter name="sep">
+                <paramtype>charT</paramtype>
+              </parameter>
+            </method>
+            <method name="is_fractional_time_sep" cv="">
+              <type>bool</type>
+              <parameter name="sep">
+                <paramtype>charT</paramtype>
+              </parameter>
+            </method>
+            <method name="is_timezone_sep" cv="">
+              <type>bool</type>
+              <parameter name="sep">
+                <paramtype>charT</paramtype>
+              </parameter>
+            </method>
+            <method name="element_sep_char" cv="">
+              <type>charT</type>
             </method>
           </method-group>
         </class>
+        <class-specialization name="iso_format_base">
+          <template>
+    </template>
+          <specialization>
+            <template-arg>wchar_t</template-arg>
+          </specialization>
+          <purpose>
+            <simpara>Class to provide common iso formatting spec. </simpara>
+          </purpose>
+          <method-group name="public static functions">
+            <method name="month_format" cv="">
+              <type>month_format_spec</type>
+              <purpose>
+                <simpara>Describe month format -- its an integer in iso format. </simpara>
+              </purpose>
+            </method>
+            <method name="not_a_date" cv="">
+              <type>const wchar_t *</type>
+              <purpose>
+                <simpara>String used printed is date is invalid. </simpara>
+              </purpose>
+            </method>
+            <method name="pos_infinity" cv="">
+              <type>const wchar_t *</type>
+              <purpose>
+                <simpara>String used to for positive infinity value. </simpara>
+              </purpose>
+            </method>
+            <method name="neg_infinity" cv="">
+              <type>const wchar_t *</type>
+              <purpose>
+                <simpara>String used to for positive infinity value. </simpara>
+              </purpose>
+            </method>
+            <method name="year_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>ISO char for a year -- used in durations. </simpara>
+              </purpose>
+            </method>
+            <method name="month_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>ISO char for a month. </simpara>
+              </purpose>
+            </method>
+            <method name="day_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>ISO char for a day. </simpara>
+              </purpose>
+            </method>
+            <method name="hour_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>char for minute </simpara>
+              </purpose>
+            </method>
+            <method name="minute_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>char for minute </simpara>
+              </purpose>
+            </method>
+            <method name="second_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>char for second </simpara>
+              </purpose>
+            </method>
+            <method name="period_start_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>ISO char for a period. </simpara>
+              </purpose>
+            </method>
+            <method name="time_start_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>Used in time in mixed strings to set start of time. </simpara>
+              </purpose>
+            </method>
+            <method name="week_start_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>Used in mixed strings to identify start of a week number. </simpara>
+              </purpose>
+            </method>
+            <method name="period_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>Separators for periods. </simpara>
+              </purpose>
+            </method>
+            <method name="time_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>Separator for hh:mm:ss. </simpara>
+              </purpose>
+            </method>
+            <method name="fractional_time_sep_char" cv="">
+              <type>wchar_t</type>
+              <purpose>
+                <simpara>Preferred Separator for hh:mm:ss,decimal_fraction. </simpara>
+              </purpose>
+            </method>
+            <method name="is_component_sep" cv="">
+              <type>bool</type>
+              <parameter name="sep">
+                <paramtype>wchar_t</paramtype>
+              </parameter>
+            </method>
+            <method name="is_fractional_time_sep" cv="">
+              <type>bool</type>
+              <parameter name="sep">
+                <paramtype>wchar_t</paramtype>
+              </parameter>
+            </method>
+            <method name="is_timezone_sep" cv="">
+              <type>bool</type>
+              <parameter name="sep">
+                <paramtype>wchar_t</paramtype>
+              </parameter>
+            </method>
+            <method name="element_sep_char" cv="">
+              <type>wchar_t</type>
+            </method>
+          </method-group>
+        </class-specialization>
         <class name="iso_format">
-          <inherit access="public">boost::date_time::iso_format_base</inherit>
+          <template>
+      <template-type-parameter name="charT"/>
+    </template>
+          <inherit access="public">boost::date_time::iso_format_base&lt; charT &gt;</inherit>
           <purpose>
             <simpara>Format description for iso normal YYYYMMDD. </simpara>
           </purpose>
@@ -3343,127 +3676,20 @@
             </method>
           </method-group>
         </class>
-        <class name="iso_format_base">
+        <class name="iso_extended_format">
+          <template>
+      <template-type-parameter name="charT"/>
+    </template>
+          <inherit access="public">boost::date_time::iso_format_base&lt; charT &gt;</inherit>
           <purpose>
-            <simpara>Class to provide common iso formatting spec. </simpara>
+            <simpara>Extended format uses seperators YYYY-MM-DD. </simpara>
           </purpose>
           <method-group name="public static functions">
-            <method name="month_format" cv="">
-              <type>month_format_spec</type>
-              <purpose>
-                <simpara>Describe month format -- its an integer in iso format. </simpara>
-              </purpose>
-            </method>
-            <method name="not_a_date" cv="">
-              <type>const  char *</type>
-              <purpose>
-                <simpara>String used printed is date is invalid. </simpara>
-              </purpose>
-            </method>
-            <method name="pos_infinity" cv="">
-              <type>const  char *</type>
-              <purpose>
-                <simpara>String used to for positive infinity value. </simpara>
-              </purpose>
-            </method>
-            <method name="neg_infinity" cv="">
-              <type>const  char *</type>
-              <purpose>
-                <simpara>String used to for positive infinity value. </simpara>
-              </purpose>
-            </method>
-            <method name="year_sep_char" cv="">
-              <type>char</type>
-              <purpose>
-                <simpara>ISO char for a year -- used in durations. </simpara>
-              </purpose>
-            </method>
-            <method name="month_sep_char" cv="">
-              <type>char</type>
-              <purpose>
-                <simpara>ISO char for a month. </simpara>
-              </purpose>
-            </method>
-            <method name="day_sep_char" cv="">
-              <type>char</type>
-              <purpose>
-                <simpara>ISO char for a day. </simpara>
-              </purpose>
-            </method>
-            <method name="hour_sep_char" cv="">
-              <type>char</type>
-              <purpose>
-                <simpara>char for minute </simpara>
-              </purpose>
-            </method>
-            <method name="minute_sep_char" cv="">
-              <type>char</type>
-              <purpose>
-                <simpara>char for minute </simpara>
-              </purpose>
-            </method>
-            <method name="second_sep_char" cv="">
-              <type>char</type>
-              <purpose>
-                <simpara>char for second </simpara>
-              </purpose>
-            </method>
-            <method name="period_start_char" cv="">
-              <type>char</type>
-              <purpose>
-                <simpara>ISO char for a period. </simpara>
-              </purpose>
-            </method>
-            <method name="time_start_char" cv="">
-              <type>char</type>
-              <purpose>
-                <simpara>Used in time in mixed strings to set start of time. </simpara>
-              </purpose>
-            </method>
-            <method name="week_start_char" cv="">
-              <type>char</type>
-              <purpose>
-                <simpara>Used in mixed strings to identify start of a week number. </simpara>
-              </purpose>
-            </method>
-            <method name="period_sep_char" cv="">
-              <type>char</type>
-              <purpose>
-                <simpara>Separators for periods. </simpara>
-              </purpose>
-            </method>
-            <method name="time_sep_char" cv="">
-              <type>char</type>
-              <purpose>
-                <simpara>Separator for hh:mm:ss. </simpara>
-              </purpose>
-            </method>
-            <method name="fractional_time_sep_char" cv="">
-              <type>char</type>
-              <purpose>
-                <simpara>Preferred Separator for hh:mm:ss,decimal_fraction. </simpara>
-              </purpose>
-            </method>
-            <method name="is_component_sep" cv="">
+            <method name="has_date_sep_chars" cv="">
               <type>bool</type>
-              <parameter name="sep">
-                <paramtype>char</paramtype>
-              </parameter>
-            </method>
-            <method name="is_fractional_time_sep" cv="">
-              <type>bool</type>
-              <parameter name="sep">
-                <paramtype>char</paramtype>
-              </parameter>
-            </method>
-            <method name="is_timezone_sep" cv="">
-              <type>bool</type>
-              <parameter name="sep">
-                <paramtype>char</paramtype>
-              </parameter>
-            </method>
-            <method name="element_sep_char" cv="">
-              <type>char</type>
+              <purpose>
+                <simpara>Extended format needs char separators. </simpara>
+              </purpose>
             </method>
           </method-group>
         </class>
@@ -3474,6 +3700,24 @@
     <para>Time adjustment calculations for local times</para>
     <namespace name="boost">
       <namespace name="date_time">
+        <class name="utc_adjustment">
+          <template>
+      <template-type-parameter name="time_duration_type"/>
+      <template-nontype-parameter name="hours"><type>short</type></template-nontype-parameter>
+      <template-nontype-parameter name="minutes"><type>unsigned short</type><default>0</default></template-nontype-parameter>
+    </template>
+          <purpose>
+            <simpara>Provides a base offset adjustment from utc. </simpara>
+          </purpose>
+          <method-group name="public static functions">
+            <method name="local_to_utc_base_offset" cv="">
+              <type>time_duration_type</type>
+            </method>
+            <method name="utc_to_local_base_offset" cv="">
+              <type>time_duration_type</type>
+            </method>
+          </method-group>
+        </class>
         <class name="dynamic_local_time_adjustor">
           <template>
       <template-type-parameter name="time_type"/>
@@ -3504,6 +3748,54 @@
               <paramtype>time_duration_type</paramtype>
             </parameter>
           </constructor>
+        </class>
+        <class name="static_local_time_adjustor">
+          <template>
+      <template-type-parameter name="time_type"/>
+      <template-type-parameter name="dst_rules"/>
+      <template-type-parameter name="utc_offset_rules"/>
+    </template>
+          <purpose>
+            <simpara>Embed the rules for local time adjustments at compile time. </simpara>
+          </purpose>
+          <typedef name="time_duration_type">
+            <type>time_type::time_duration_type</type>
+          </typedef>
+          <typedef name="date_type">
+            <type>time_type::date_type</type>
+          </typedef>
+          <method-group name="public static functions">
+            <method name="utc_to_local_offset" cv="">
+              <type>time_duration_type</type>
+              <parameter name="t">
+                <paramtype>const time_type &amp;</paramtype>
+                <description>
+                  <para>UTC time to calculate offset to local time This adjustment depends on the following observations about the workings of the DST boundary offset. Since UTC time labels are monotonically increasing we can determine if a given local time is in DST or not and therefore adjust the offset appropriately.</para>
+                </description>
+              </parameter>
+              <purpose>
+                <simpara>Calculates the offset from a utc time to local based on dst and utc offset. </simpara>
+              </purpose>
+              <description>
+                <para>
+The logic is as follows. Starting with UTC time use the offset to create a label for an non-dst adjusted local time. Then call dst_rules::local_is_dst with the non adjust local time. The results of this function will either unabiguously decide that the initial local time is in dst or return an illegal or ambiguous result. An illegal result only occurs at the end of dst (where labels are skipped) and indicates that dst has ended. An ambiguous result means that we need to recheck by making a dst adjustment and then rechecking. If the dst offset is added to the utc time and the recheck proves non-ambiguous then we are past the boundary. If it is still ambiguous then we are ahead of the boundary and dst is still in effect.</para>
+                <para>TODO -- check if all dst offsets are positive. If not then the algorithm needs to check for this and reverse the illegal/ambiguous logic. </para>
+              </description>
+            </method>
+            <method name="local_to_utc_offset" cv="">
+              <type>time_duration_type</type>
+              <parameter name="t">
+                <paramtype>const time_type &amp;</paramtype>
+              </parameter>
+              <parameter name="dst">
+                <paramtype>date_time::dst_flags</paramtype>
+                <default>date_time::calculate</default>
+              </parameter>
+              <purpose>
+                <simpara>Get the offset to UTC given a local time. </simpara>
+              </purpose>
+            </method>
+          </method-group>
         </class>
         <class name="local_adjustor">
           <template>
@@ -3559,72 +3851,6 @@
             </method>
           </method-group>
         </class>
-        <class name="static_local_time_adjustor">
-          <template>
-      <template-type-parameter name="time_type"/>
-      <template-type-parameter name="dst_rules"/>
-      <template-type-parameter name="utc_offset_rules"/>
-    </template>
-          <purpose>
-            <simpara>Embed the rules for local time adjustments at compile time. </simpara>
-          </purpose>
-          <typedef name="time_duration_type">
-            <type>time_type::time_duration_type</type>
-          </typedef>
-          <typedef name="date_type">
-            <type>time_type::date_type</type>
-          </typedef>
-          <method-group name="public static functions">
-            <method name="utc_to_local_offset" cv="">
-              <type>time_duration_type</type>
-              <parameter name="t">
-                <paramtype>const time_type &amp;</paramtype>
-                <description>
-                  <para>UTC time to calculate offset to local time This adjustment depends on the following observations about the workings of the DST boundary offset. Since UTC time labels are monotonically increasing we can determine if a given local time is in DST or not and therefore adjust the offset appropriately.</para>
-                </description>
-              </parameter>
-              <purpose>
-                <simpara>Calculates the offset from a utc time to local based on dst and utc offset. </simpara>
-              </purpose>
-              <description>
-                <para>
-The logic is as follows. Starting with UTC time use the offset to create a label for an non-dst adjusted local time. Then call dst_rules::local_is_dst with the non adjust local time. The results of this function will either unabiguously decide that the initial local time is in dst or return an illegal or ambiguous result. An illegal result only occurs at the end of dst (where labels are skipped) and indicates that dst has ended. An ambiguous result means that we need to recheck by making a dst adjustment and then rechecking. If the dst offset is added to the utc time and the recheck proves non-ambiguous then we are past the boundary. If it is still ambiguous then we are ahead of the boundary and dst is still in effect.</para>
-                <para>TODO -- check if all dst offsets are positive. If not then the algorithm needs to check for this and reverse the illegal/ambiguous logic. </para>
-              </description>
-            </method>
-            <method name="local_to_utc_offset" cv="">
-              <type>time_duration_type</type>
-              <parameter name="t">
-                <paramtype>const time_type &amp;</paramtype>
-              </parameter>
-              <parameter name="dst">
-                <paramtype>date_time::dst_flags</paramtype>
-                <default>date_time::calculate</default>
-              </parameter>
-              <purpose>
-                <simpara>Get the offset to UTC given a local time. </simpara>
-              </purpose>
-            </method>
-          </method-group>
-        </class>
-        <class name="utc_adjustment">
-          <template>
-      <template-type-parameter name="time_duration_type"/>
-      <template-nontype-parameter name="hours"><type>short</type></template-nontype-parameter>
-      <template-nontype-parameter name="minutes"><type>unsigned short</type><default>0</default></template-nontype-parameter>
-    </template>
-          <purpose>
-            <simpara>Provides a base offset adjustment from utc. </simpara>
-          </purpose>
-          <method-group name="public static functions">
-            <method name="local_to_utc_base_offset" cv="">
-              <type>time_duration_type</type>
-            </method>
-            <method name="utc_to_local_base_offset" cv="">
-              <type>time_duration_type</type>
-            </method>
-          </method-group>
-        </class>
         <function name="dummy_to_prevent_msvc6_ice">
           <type>void</type>
         </function>
@@ -3663,10 +3889,36 @@ The logic is as follows. Starting with UTC time use the offset to create a label
   <header name="boost/date_time/local_timezone_defs.hpp">
     <namespace name="boost">
       <namespace name="date_time">
-        <struct name="acst_dst_trait">
+        <struct name="us_dst_trait">
           <template>
       <template-type-parameter name="date_type"/>
     </template>
+          <purpose>
+            <simpara>Specification for daylight savings start rules in US. </simpara>
+          </purpose>
+          <description>
+            <para>This class is used to configure dst_calc_engine template typically as follows: <programlisting>          using namespace boost::gregorian;
+          using namespace boost::posix_time;
+          typedef us_dst_trait&lt;date&gt; us_dst_traits;
+          typedef boost::date_time::dst_calc_engine&lt;date, time_duration, 
+                                                    us_dst_traits&gt;  
+                                                    us_dst_calc;
+          //calculate the 2002 transition day of USA April 7 2002
+          date dst_start = us_dst_calc::local_dst_start_day(2002); 
+
+          //calculate the 2002 transition day of USA Oct 27 2002
+          date dst_end = us_dst_calc::local_dst_end_day(2002); 
+                                                    
+          //check if a local time is in dst or not -- posible answers
+          //are yes, no, invalid time label, ambiguous
+          ptime t(...some time...);  
+          if (us_dst::local_is_dst(t.date(), t.time_of_day()) 
+              == boost::date_time::is_not_in_dst) 
+          {
+
+          }
+</programlisting>This generates a type suitable for the calculation of dst transitions for the United States. Of course other templates can be used for other locales. </para>
+          </description>
           <typedef name="day_of_week_type">
             <type>date_type::day_of_week_type</type>
           </typedef>
@@ -3674,7 +3926,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             <type>date_type::month_type</type>
           </typedef>
           <typedef name="start_rule_functor">
-            <type><classname>date_time::last_kday_of_month</classname>&lt; date_type &gt;</type>
+            <type><classname>date_time::first_kday_of_month</classname>&lt; date_type &gt;</type>
           </typedef>
           <typedef name="end_rule_functor">
             <type><classname>date_time::last_kday_of_month</classname>&lt; date_type &gt;</type>
@@ -3771,36 +4023,10 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </method>
           </method-group>
         </struct>
-        <struct name="us_dst_trait">
+        <struct name="acst_dst_trait">
           <template>
       <template-type-parameter name="date_type"/>
     </template>
-          <purpose>
-            <simpara>Specification for daylight savings start rules in US. </simpara>
-          </purpose>
-          <description>
-            <para>This class is used to configure dst_calc_engine template typically as follows: <programlisting>          using namespace boost::gregorian;
-          using namespace boost::posix_time;
-          typedef us_dst_trait&lt;date&gt; us_dst_traits;
-          typedef boost::date_time::dst_calc_engine&lt;date, time_duration, 
-                                                    us_dst_traits&gt;  
-                                                    us_dst_calc;
-          //calculate the 2002 transition day of USA April 7 2002
-          date dst_start = us_dst_calc::local_dst_start_day(2002); 
-
-          //calculate the 2002 transition day of USA Oct 27 2002
-          date dst_end = us_dst_calc::local_dst_end_day(2002); 
-                                                    
-          //check if a local time is in dst or not -- posible answers
-          //are yes, no, invalid time label, ambiguous
-          ptime t(...some time...);  
-          if (us_dst::local_is_dst(t.date(), t.time_of_day()) 
-              == boost::date_time::is_not_in_dst) 
-          {
-
-          }
-</programlisting>This generates a type suitable for the calculation of dst transitions for the United States. Of course other templates can be used for other locales. </para>
-          </description>
           <typedef name="day_of_week_type">
             <type>date_type::day_of_week_type</type>
           </typedef>
@@ -3808,7 +4034,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             <type>date_type::month_type</type>
           </typedef>
           <typedef name="start_rule_functor">
-            <type><classname>date_time::first_kday_of_month</classname>&lt; date_type &gt;</type>
+            <type><classname>date_time::last_kday_of_month</classname>&lt; date_type &gt;</type>
           </typedef>
           <typedef name="end_rule_functor">
             <type><classname>date_time::last_kday_of_month</classname>&lt; date_type &gt;</type>
@@ -4393,24 +4619,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
   <header name="boost/date_time/time_duration.hpp">
     <namespace name="boost">
       <namespace name="date_time">
-        <class name="subsecond_duration">
-          <template>
-      <template-type-parameter name="base_duration"/>
-      <template-nontype-parameter name="frac_of_second"><type>long</type></template-nontype-parameter>
-    </template>
-          <purpose>
-            <simpara>Template for instantiating derived adjusting durations. </simpara>
-          </purpose>
-          <typedef name="traits_type">
-            <type>base_duration::traits_type</type>
-          </typedef>
-          <method-group name="public member functions"/>
-          <constructor>
-            <parameter name="ss">
-              <paramtype>long</paramtype>
-            </parameter>
-          </constructor>
-        </class>
         <class name="time_duration">
           <template>
       <template-type-parameter name="T"/>
@@ -4675,6 +4883,24 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           <constructor>
             <parameter name="in">
               <paramtype>impl_type</paramtype>
+            </parameter>
+          </constructor>
+        </class>
+        <class name="subsecond_duration">
+          <template>
+      <template-type-parameter name="base_duration"/>
+      <template-nontype-parameter name="frac_of_second"><type>long</type></template-nontype-parameter>
+    </template>
+          <purpose>
+            <simpara>Template for instantiating derived adjusting durations. </simpara>
+          </purpose>
+          <typedef name="traits_type">
+            <type>base_duration::traits_type</type>
+          </typedef>
+          <method-group name="public member functions"/>
+          <constructor>
+            <parameter name="ss">
+              <paramtype>long</paramtype>
             </parameter>
           </constructor>
         </class>
@@ -4943,6 +5169,110 @@ The logic is as follows. Starting with UTC time use the offset to create a label
   <header name="boost/date_time/time_resolution_traits.hpp">
     <namespace name="boost">
       <namespace name="date_time">
+        <struct name="time_resolution_traits_bi32_impl">
+          <purpose>
+            <simpara>traits struct for time_resolution_traits implementation type </simpara>
+          </purpose>
+          <typedef name="int_type">
+            <type>boost::int32_t</type>
+          </typedef>
+          <typedef name="impl_type">
+            <type>boost::int32_t</type>
+          </typedef>
+          <method-group name="public static functions">
+            <method name="as_number" cv="">
+              <type>int_type</type>
+              <parameter name="i">
+                <paramtype>impl_type</paramtype>
+              </parameter>
+            </method>
+            <method name="is_adapted" cv="">
+              <type>bool</type>
+              <purpose>
+                <simpara>Used to determine if implemented type is int_adapter or int. </simpara>
+              </purpose>
+            </method>
+          </method-group>
+        </struct>
+        <struct name="time_resolution_traits_adapted32_impl">
+          <purpose>
+            <simpara>traits struct for time_resolution_traits implementation type </simpara>
+          </purpose>
+          <typedef name="int_type">
+            <type>boost::int32_t</type>
+          </typedef>
+          <typedef name="impl_type">
+            <type><classname>boost::date_time::int_adapter</classname>&lt; boost::int32_t &gt;</type>
+          </typedef>
+          <method-group name="public static functions">
+            <method name="as_number" cv="">
+              <type>int_type</type>
+              <parameter name="i">
+                <paramtype>
+                  <classname>impl_type</classname>
+                </paramtype>
+              </parameter>
+            </method>
+            <method name="is_adapted" cv="">
+              <type>bool</type>
+              <purpose>
+                <simpara>Used to determine if implemented type is int_adapter or int. </simpara>
+              </purpose>
+            </method>
+          </method-group>
+        </struct>
+        <struct name="time_resolution_traits_bi64_impl">
+          <purpose>
+            <simpara>traits struct for time_resolution_traits implementation type </simpara>
+          </purpose>
+          <typedef name="int_type">
+            <type>boost::int64_t</type>
+          </typedef>
+          <typedef name="impl_type">
+            <type>boost::int64_t</type>
+          </typedef>
+          <method-group name="public static functions">
+            <method name="as_number" cv="">
+              <type>int_type</type>
+              <parameter name="i">
+                <paramtype>impl_type</paramtype>
+              </parameter>
+            </method>
+            <method name="is_adapted" cv="">
+              <type>bool</type>
+              <purpose>
+                <simpara>Used to determine if implemented type is int_adapter or int. </simpara>
+              </purpose>
+            </method>
+          </method-group>
+        </struct>
+        <struct name="time_resolution_traits_adapted64_impl">
+          <purpose>
+            <simpara>traits struct for time_resolution_traits implementation type </simpara>
+          </purpose>
+          <typedef name="int_type">
+            <type>boost::int64_t</type>
+          </typedef>
+          <typedef name="impl_type">
+            <type><classname>boost::date_time::int_adapter</classname>&lt; boost::int64_t &gt;</type>
+          </typedef>
+          <method-group name="public static functions">
+            <method name="as_number" cv="">
+              <type>int_type</type>
+              <parameter name="i">
+                <paramtype>
+                  <classname>impl_type</classname>
+                </paramtype>
+              </parameter>
+            </method>
+            <method name="is_adapted" cv="">
+              <type>bool</type>
+              <purpose>
+                <simpara>Used to determine if implemented type is int_adapter or int. </simpara>
+              </purpose>
+            </method>
+          </method-group>
+        </struct>
         <class name="time_resolution_traits">
           <template>
       <template-type-parameter name="frac_sec_type"/>
@@ -5024,110 +5354,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
             </method>
           </method-group>
         </class>
-        <struct name="time_resolution_traits_adapted32_impl">
-          <purpose>
-            <simpara>traits struct for time_resolution_traits implementation type </simpara>
-          </purpose>
-          <typedef name="int_type">
-            <type>boost::int32_t</type>
-          </typedef>
-          <typedef name="impl_type">
-            <type><classname>boost::date_time::int_adapter</classname>&lt; boost::int32_t &gt;</type>
-          </typedef>
-          <method-group name="public static functions">
-            <method name="as_number" cv="">
-              <type>int_type</type>
-              <parameter name="i">
-                <paramtype>
-                  <classname>impl_type</classname>
-                </paramtype>
-              </parameter>
-            </method>
-            <method name="is_adapted" cv="">
-              <type>bool</type>
-              <purpose>
-                <simpara>Used to determine if implemented type is int_adapter or int. </simpara>
-              </purpose>
-            </method>
-          </method-group>
-        </struct>
-        <struct name="time_resolution_traits_adapted64_impl">
-          <purpose>
-            <simpara>traits struct for time_resolution_traits implementation type </simpara>
-          </purpose>
-          <typedef name="int_type">
-            <type>boost::int64_t</type>
-          </typedef>
-          <typedef name="impl_type">
-            <type><classname>boost::date_time::int_adapter</classname>&lt; boost::int64_t &gt;</type>
-          </typedef>
-          <method-group name="public static functions">
-            <method name="as_number" cv="">
-              <type>int_type</type>
-              <parameter name="i">
-                <paramtype>
-                  <classname>impl_type</classname>
-                </paramtype>
-              </parameter>
-            </method>
-            <method name="is_adapted" cv="">
-              <type>bool</type>
-              <purpose>
-                <simpara>Used to determine if implemented type is int_adapter or int. </simpara>
-              </purpose>
-            </method>
-          </method-group>
-        </struct>
-        <struct name="time_resolution_traits_bi32_impl">
-          <purpose>
-            <simpara>traits struct for time_resolution_traits implementation type </simpara>
-          </purpose>
-          <typedef name="int_type">
-            <type>boost::int32_t</type>
-          </typedef>
-          <typedef name="impl_type">
-            <type>boost::int32_t</type>
-          </typedef>
-          <method-group name="public static functions">
-            <method name="as_number" cv="">
-              <type>int_type</type>
-              <parameter name="i">
-                <paramtype>impl_type</paramtype>
-              </parameter>
-            </method>
-            <method name="is_adapted" cv="">
-              <type>bool</type>
-              <purpose>
-                <simpara>Used to determine if implemented type is int_adapter or int. </simpara>
-              </purpose>
-            </method>
-          </method-group>
-        </struct>
-        <struct name="time_resolution_traits_bi64_impl">
-          <purpose>
-            <simpara>traits struct for time_resolution_traits implementation type </simpara>
-          </purpose>
-          <typedef name="int_type">
-            <type>boost::int64_t</type>
-          </typedef>
-          <typedef name="impl_type">
-            <type>boost::int64_t</type>
-          </typedef>
-          <method-group name="public static functions">
-            <method name="as_number" cv="">
-              <type>int_type</type>
-              <parameter name="i">
-                <paramtype>impl_type</paramtype>
-              </parameter>
-            </method>
-            <method name="is_adapted" cv="">
-              <type>bool</type>
-              <purpose>
-                <simpara>Used to determine if implemented type is int_adapter or int. </simpara>
-              </purpose>
-            </method>
-          </method-group>
-        </struct>
         <typedef name="milli_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
         </typedef>

@@ -1,4 +1,8 @@
 <?xml version="1.0" standalone="yes"?>
+<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+     Subject to the Boost Software License, Version 1.0. 
+     (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
+-->
 <section id="posix_time_reference">
 <title>Posix Time Reference</title>
   <header name="boost/date_time/posix_time/conversion.hpp">
@@ -159,124 +163,6 @@
   <header name="boost/date_time/posix_time/posix_time_config.hpp">
     <namespace name="boost">
       <namespace name="posix_time">
-        <class name="millisec_posix_time_system_config">
-          <typedef name="time_rep_type">
-            <type>boost::int64_t</type>
-          </typedef>
-          <typedef name="date_type">
-            <type>gregorian::date</type>
-          </typedef>
-          <typedef name="date_duration_type">
-            <type>gregorian::date_duration</type>
-          </typedef>
-          <typedef name="time_duration_type">
-            <type>
-              <classname>time_duration</classname>
-            </type>
-          </typedef>
-          <typedef name="int_type">
-            <type>time_res_traits::tick_type</type>
-          </typedef>
-          <typedef name="impl_type">
-            <type>time_res_traits::impl_type</type>
-          </typedef>
-          <typedef name="resolution_traits">
-            <type>time_res_traits</type>
-          </typedef>
-          <method-group name="public member functions">
-            <method name="BOOST_STATIC_CONSTANT" cv="">
-              <type/>
-              <parameter name="">
-                <paramtype>boost::int64_t</paramtype>
-              </parameter>
-              <parameter name="">
-                <paramtype>tick_per_second</paramtype>
-                <default>1000000</default>
-              </parameter>
-            </method>
-          </method-group>
-        </class>
-        <class name="posix_time_system_config">
-          <typedef name="time_rep_type">
-            <type>
-              <classname>simple_time_rep</classname>
-            </type>
-          </typedef>
-          <typedef name="date_type">
-            <type>gregorian::date</type>
-          </typedef>
-          <typedef name="date_duration_type">
-            <type>gregorian::date_duration</type>
-          </typedef>
-          <typedef name="time_duration_type">
-            <type>
-              <classname>time_duration</classname>
-            </type>
-          </typedef>
-          <typedef name="int_type">
-            <type>time_res_traits::tick_type</type>
-          </typedef>
-          <typedef name="resolution_traits">
-            <type>time_res_traits</type>
-          </typedef>
-          <method-group name="public member functions">
-            <method name="BOOST_STATIC_CONSTANT" cv="">
-              <type/>
-              <parameter name="">
-                <paramtype>boost::int64_t</paramtype>
-              </parameter>
-              <parameter name="">
-                <paramtype>tick_per_second</paramtype>
-                <default>1000000000</default>
-              </parameter>
-            </method>
-          </method-group>
-        </class>
-        <struct name="simple_time_rep">
-          <purpose>
-            <simpara>Simple implementation for the time rep. </simpara>
-          </purpose>
-          <typedef name="date_type">
-            <type>gregorian::date</type>
-          </typedef>
-          <typedef name="time_duration_type">
-            <type>
-              <classname>time_duration</classname>
-            </type>
-          </typedef>
-          <method-group name="public member functions">
-            <method name="is_special" cv="const">
-              <type>bool</type>
-            </method>
-            <method name="is_pos_infinity" cv="const">
-              <type>bool</type>
-            </method>
-            <method name="is_neg_infinity" cv="const">
-              <type>bool</type>
-            </method>
-            <method name="is_not_a_date_time" cv="const">
-              <type>bool</type>
-            </method>
-          </method-group>
-          <constructor>
-            <parameter name="d">
-              <paramtype>date_type</paramtype>
-            </parameter>
-            <parameter name="tod">
-              <paramtype>
-                <classname>time_duration_type</classname>
-              </paramtype>
-            </parameter>
-          </constructor>
-          <data-member name="day">
-            <type>date_type</type>
-          </data-member>
-          <data-member name="time_of_day">
-            <type>
-              <classname>time_duration_type</classname>
-            </type>
-          </data-member>
-        </struct>
         <class name="time_duration">
           <purpose>
             <simpara>Base time duration type. </simpara>
@@ -336,6 +222,124 @@
               <paramtype>impl_type</paramtype>
             </parameter>
           </constructor>
+        </class>
+        <struct name="simple_time_rep">
+          <purpose>
+            <simpara>Simple implementation for the time rep. </simpara>
+          </purpose>
+          <typedef name="date_type">
+            <type>gregorian::date</type>
+          </typedef>
+          <typedef name="time_duration_type">
+            <type>
+              <classname>time_duration</classname>
+            </type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="is_special" cv="const">
+              <type>bool</type>
+            </method>
+            <method name="is_pos_infinity" cv="const">
+              <type>bool</type>
+            </method>
+            <method name="is_neg_infinity" cv="const">
+              <type>bool</type>
+            </method>
+            <method name="is_not_a_date_time" cv="const">
+              <type>bool</type>
+            </method>
+          </method-group>
+          <constructor>
+            <parameter name="d">
+              <paramtype>date_type</paramtype>
+            </parameter>
+            <parameter name="tod">
+              <paramtype>
+                <classname>time_duration_type</classname>
+              </paramtype>
+            </parameter>
+          </constructor>
+          <data-member name="day">
+            <type>date_type</type>
+          </data-member>
+          <data-member name="time_of_day">
+            <type>
+              <classname>time_duration_type</classname>
+            </type>
+          </data-member>
+        </struct>
+        <class name="posix_time_system_config">
+          <typedef name="time_rep_type">
+            <type>
+              <classname>simple_time_rep</classname>
+            </type>
+          </typedef>
+          <typedef name="date_type">
+            <type>gregorian::date</type>
+          </typedef>
+          <typedef name="date_duration_type">
+            <type>gregorian::date_duration</type>
+          </typedef>
+          <typedef name="time_duration_type">
+            <type>
+              <classname>time_duration</classname>
+            </type>
+          </typedef>
+          <typedef name="int_type">
+            <type>time_res_traits::tick_type</type>
+          </typedef>
+          <typedef name="resolution_traits">
+            <type>time_res_traits</type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="BOOST_STATIC_CONSTANT" cv="">
+              <type/>
+              <parameter name="">
+                <paramtype>boost::int64_t</paramtype>
+              </parameter>
+              <parameter name="">
+                <paramtype>tick_per_second</paramtype>
+                <default>1000000000</default>
+              </parameter>
+            </method>
+          </method-group>
+        </class>
+        <class name="millisec_posix_time_system_config">
+          <typedef name="time_rep_type">
+            <type>boost::int64_t</type>
+          </typedef>
+          <typedef name="date_type">
+            <type>gregorian::date</type>
+          </typedef>
+          <typedef name="date_duration_type">
+            <type>gregorian::date_duration</type>
+          </typedef>
+          <typedef name="time_duration_type">
+            <type>
+              <classname>time_duration</classname>
+            </type>
+          </typedef>
+          <typedef name="int_type">
+            <type>time_res_traits::tick_type</type>
+          </typedef>
+          <typedef name="impl_type">
+            <type>time_res_traits::impl_type</type>
+          </typedef>
+          <typedef name="resolution_traits">
+            <type>time_res_traits</type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="BOOST_STATIC_CONSTANT" cv="">
+              <type/>
+              <parameter name="">
+                <paramtype>boost::int64_t</paramtype>
+              </parameter>
+              <parameter name="">
+                <paramtype>tick_per_second</paramtype>
+                <default>1000000</default>
+              </parameter>
+            </method>
+          </method-group>
         </class>
         <typedef name="time_res_traits">
           <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::nano, 1000000000, 9 &gt;</type>
