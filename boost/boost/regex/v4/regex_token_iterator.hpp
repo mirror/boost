@@ -91,7 +91,7 @@ public:
    {
       if(N == -1)
          return false;
-      if(N+1 < subs.size())
+      if(N+1 < (int)subs.size())
       {
          ++N;
          result =((subs[N] == -1) ? value_type(what.prefix().str()) : value_type(what[subs[N]].str()));
