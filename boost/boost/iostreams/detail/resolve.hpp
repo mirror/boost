@@ -104,7 +104,7 @@ struct resolve_traits {
     // Note: test for is_iterator_range must come before test for output
     // iterator.
     typedef typename 
-            select<
+            do_select<
                 is_std_io<T>,
                 mode_adapter<Mode, T>,
                 is_iterator_range<T>,
