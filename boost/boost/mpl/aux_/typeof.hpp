@@ -16,12 +16,13 @@
 
 #ifndef BOOST_MPL_AUX_TYPEOF_HPP_INCLUDED
 #define BOOST_MPL_AUX_TYPEOF_HPP_INCLUDED
+#include <boost/detail/workaround.hpp>
 
 #if defined(__BORLANDC__) 
 #   define BOOST_MPL_AUX_TYPEOF(T,x) typename T::value_type
-#elif defined(__MWERKS__) || defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__EDG_VERSION__) && __EDG_VERSION__ <= 243
+#elif BOOST_WORKAROUND(__MWERKS__, <= 0x2407) || BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(__EDG_VERSION__, <= 243)
 #   define BOOST_MPL_AUX_TYPEOF(T,x) long
-#elif defined(__GCC__)
+#elif defined(__GCC__) && !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
 #   define BOOST_MPL_AUX_TYPEOF(T,x) __typeof__(x)
 #else
 #   include "boost/config.hpp"
