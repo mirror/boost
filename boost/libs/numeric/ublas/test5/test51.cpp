@@ -112,6 +112,16 @@ struct test_my_vector {
             initialize_vector (v2);
             t = ublas::inner_prod (v1, v2);
             std::cout << "inner_prod (v1, v2) = " << t << std::endl;
+
+            // Scalar and binary vector expression resulting in a vector
+            initialize_vector (v1);
+            initialize_vector (v2);
+            v1 = v1 * ublas::inner_prod (v1, v2);
+            std::cout << "v1 * inner_prod (v1, v2) = " << v1 << std::endl;
+            initialize_vector (v1);
+            initialize_vector (v2);
+            v1 = ublas::inner_prod (v1, v2) * v1;
+            std::cout << "inner_prod (v1, v2) * v1 = " << v1 << std::endl;
         }
     }
     void operator () () const {
