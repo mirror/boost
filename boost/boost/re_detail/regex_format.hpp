@@ -64,11 +64,15 @@ void BOOST_RE_CALL re_skip_format(const charT*& fmt, const traits_type& traits_i
    // dwa 9/13/00 - suppress incorrect unused parameter warning for MSVC
    (void)traits_inst;
 
+   typedef typename traits_type::size_type traits_size_type;
+   typedef typename traits_type::uchar_type traits_uchar_type;
+   typedef typename traits_type::string_type traits_string_type;
+
    unsigned int parens = 0;
    unsigned int c;
    while(*fmt)
    {
-      c = traits_inst.syntax_type(*fmt);
+      c = traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*fmt));
       if((c == traits_type::syntax_colon) && (parens == 0))
       {
          ++fmt;
@@ -148,9 +152,13 @@ OutputIterator BOOST_RE_CALL _reg_format_aux(OutputIterator out,
    const charT* fmt_end = fmt;
    while(*fmt_end) ++ fmt_end;
 
+   typedef typename traits_type::size_type traits_size_type;
+   typedef typename traits_type::uchar_type traits_uchar_type;
+   typedef typename traits_type::string_type traits_string_type;
+
    while(*fmt)
    {
-      switch(traits_inst.syntax_type(*fmt))
+      switch(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*fmt)))
       {
       case traits_type::syntax_dollar:
          if(flags & format_sed)
@@ -167,7 +175,7 @@ OutputIterator BOOST_RE_CALL _reg_format_aux(OutputIterator out,
             ++out;
             return out;
          }
-         switch(traits_inst.syntax_type(*fmt))
+         switch(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*fmt)))
          {
          case traits_type::syntax_start_buffer:
             oi_assign(&out, re_copy_out(out, iterator(m[-1].first), iterator(m[-1].second)));
@@ -213,7 +221,7 @@ expand_sub:
             ++fmt;
             return out;
          }
-         switch(traits_inst.syntax_type(*fmt))
+         switch(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*fmt)))
          {
          case traits_type::syntax_a:
             c = '\a';
@@ -248,7 +256,7 @@ expand_sub:
                return out;
             }
             // maybe have \x{ddd}
-            if(traits_inst.syntax_type(*fmt) == traits_type::syntax_open_brace)
+            if(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*fmt)) == traits_type::syntax_open_brace)
             {
                ++fmt;
                if(fmt == fmt_end)
@@ -268,9 +276,9 @@ expand_sub:
                   continue;
                }
                c = (charT)traits_inst.toi(fmt, fmt_end, -16);
-               if(traits_inst.syntax_type(*fmt) != traits_type::syntax_close_brace)
+               if(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*fmt)) != traits_type::syntax_close_brace)
                {
-                  while(traits_inst.syntax_type(*fmt) != traits_type::syntax_slash)
+                  while(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*fmt)) != traits_type::syntax_slash)
                      --fmt;
                   ++fmt;
                   *out = *fmt;
@@ -394,13 +402,13 @@ expand_sub:
             if(m[id].matched)
             {
                oi_assign(&out, _reg_format_aux(out, m, fmt, flags | format_is_if, traits_inst));
-               if(traits_inst.syntax_type(*(fmt-1)) == traits_type::syntax_colon)
+               if(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*(fmt-1))) == traits_type::syntax_colon)
                   re_skip_format(fmt, traits_inst);
             }
             else
             {
                re_skip_format(fmt, traits_inst);
-               if(traits_inst.syntax_type(*(fmt-1)) == traits_type::syntax_colon)
+               if(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*(fmt-1))) == traits_type::syntax_colon)
                   oi_assign(&out, _reg_format_aux(out, m, fmt, flags | format_is_if, traits_inst));
             }
             return out;

@@ -309,7 +309,11 @@ template <class charT, class traits, class Allocator>
 charT BOOST_RE_CALL reg_expression<charT, traits, Allocator>::parse_escape(const charT*& first, const charT* last)
 {
    charT c(*first);
-   switch(traits_inst.syntax_type(*first))
+   traits_size_type c_unsigned = (traits_size_type)(traits_uchar_type)*first;
+   // this is only used for the switch(), but cannot be folded in
+   // due to a bug in Comeau 4.2.44beta3
+   traits_size_type syntax = traits_inst.syntax_type(c_unsigned);
+   switch(syntax)
    {
    case traits_type::syntax_a:
       c = '\a';
@@ -343,7 +347,7 @@ charT BOOST_RE_CALL reg_expression<charT, traits, Allocator>::parse_escape(const
          break;
       }
       // maybe have \x{ddd}
-      if(traits_inst.syntax_type(*first) == traits_type::syntax_open_brace)
+      if(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*first)) == traits_type::syntax_open_brace)
       {
          ++first;
          if(first == last)
@@ -357,7 +361,7 @@ charT BOOST_RE_CALL reg_expression<charT, traits, Allocator>::parse_escape(const
             break;
          }
          c = (charT)traits_inst.toi(first, last, -16);
-         if((first == last) || (traits_inst.syntax_type(*first) != traits_type::syntax_close_brace))
+         if((first == last) || (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*first)) != traits_type::syntax_close_brace))
          {
             fail(REG_BADBR);
          }
@@ -675,7 +679,10 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
    while((first != last) && !done)
    {
       traits_size_type c = (traits_size_type)(traits_uchar_type)*first;
-      switch(traits_inst.syntax_type(c))
+      // this is only used for the switch(), but cannot be folded in
+      // due to a bug in Comeau 4.2.44beta3
+      traits_size_type syntax = traits_inst.syntax_type(c);
+      switch(syntax)
       {
       case traits_type::syntax_caret:
          if(!started && !isnot)
@@ -697,7 +704,10 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
          }
          // check to see if we really have a class:
          const charT* base = first;
-         switch(parse_inner_set(first, last))
+         // this is only used for the switch(), but cannot be folded in
+         // due to a bug in Comeau 4.2.44beta3
+	 unsigned int inner_set = parse_inner_set(first, last);
+         switch(inner_set)
          {
          case traits_type::syntax_colon:
             {
@@ -836,7 +846,11 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
             ++first;
             if(first == last)
                continue;
-            switch(traits_inst.syntax_type(*first))
+            traits_size_type c = (traits_size_type)(traits_uchar_type)*first;
+            // this is only used for the switch(), but cannot be folded in
+            // due to a bug in Comeau 4.2.44beta3
+            traits_size_type syntax = traits_inst.syntax_type(c);
+            switch(syntax)
             {
             case traits_type::syntax_w:
                if(l == last_dash)
@@ -1261,7 +1275,10 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::set_express
    while (ptr < end)
    {
       c = (traits_size_type)(traits_uchar_type)*ptr;
-      switch(traits_inst.syntax_type(c))
+      // this is only used for the switch(), but cannot be folded in
+      // due to a bug in Comeau 4.2.44beta3
+      traits_size_type syntax = traits_inst.syntax_type(c);
+      switch(syntax)
       {
       case traits_type::syntax_open_bracket:
          if(_flags & bk_parens)
@@ -1284,7 +1301,10 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::set_express
          {
             ++ptr;
             c = (traits_size_type)(traits_uchar_type)*ptr;
-            switch(traits_inst.syntax_type(c))
+            // this is only used for the switch(), but cannot be folded in
+            // due to a bug in Comeau 4.2.44beta3
+            traits_size_type syntax = traits_inst.syntax_type(c);
+            switch(syntax)
             {
             case traits_type::syntax_colon:
                ((re_detail::re_brace*)dat)->index = 0;
@@ -1370,13 +1390,17 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::set_express
          ++ptr;
          break;
       case traits_type::syntax_slash:
+      {
          if(++ptr == end)
          {
             fail(REG_EESCAPE);
             return error_code();
          }
          c = (traits_size_type)(traits_uchar_type)*ptr;
-         switch(traits_inst.syntax_type(c))
+         // this is only used for the switch(), but cannot be folded in
+         // due to a bug in Comeau 4.2.44beta3
+         traits_size_type syntax = traits_inst.syntax_type(c);
+         switch(syntax)
          {
          case traits_type::syntax_open_bracket:
             if(_flags & bk_parens)
@@ -1546,6 +1570,7 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::set_express
          dat = add_literal(dat, (charT)c);
          ++ptr;
          break;
+      }
       case traits_type::syntax_dollar:
          dat = add_simple(dat, re_detail::syntax_element_end_line, sizeof(re_detail::re_syntax_base));
          ++ptr;
