@@ -80,7 +80,7 @@ int main(int argc, char * argv[])
       if(is.good() == false)
       {
          cout << "Error unable to open file: " << argv[i] << endl << endl;
-         continue;
+         return -1;
       }
       std::strcpy(file, argv[i]);
       line = 0;
@@ -243,4 +243,5 @@ void jm_debug_alloc::deallocate(pointer p, size_type n)
    --(*blocks);
    delete[] p;
 }
+
 
