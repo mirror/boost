@@ -193,29 +193,29 @@ namespace boost { namespace numeric { namespace ublas {
 
 
   /** \brief computes <tt>v += A x</tt> or <tt>v = A x</tt> in an
-	  optimized fashion.
+          optimized fashion.
 
-	  \param e1 the matrix expression \c A
-	  \param e2 the vector expression \c x
-	  \param v  the result vector \c v
-	  \param init a boolean parameter
+          \param e1 the matrix expression \c A
+          \param e2 the vector expression \c x
+          \param v  the result vector \c v
+          \param init a boolean parameter
 
-	  <tt>axpy_prod(A, x, v, init)</tt> implements the well known
-	  axpy-product.  Setting \a init to \c true is equivalent to call
-	  <tt>v.clear()</tt> before <tt>axpy_prod</tt>. Currently \a init
-	  defaults to \c true, but this may change in the future.
+          <tt>axpy_prod(A, x, v, init)</tt> implements the well known
+          axpy-product.  Setting \a init to \c true is equivalent to call
+          <tt>v.clear()</tt> before <tt>axpy_prod</tt>. Currently \a init
+          defaults to \c true, but this may change in the future.
 
-	  Up to now there are some specialisation for compressed
-	  matrices that give a large speed up compared to prod.
-	  
-	  \ingroup blas2
+          Up to now there are some specialisation for compressed
+          matrices that give a large speed up compared to prod.
+          
+          \ingroup blas2
 
-	  \internal
-	  
-	  template parameters:
-	  \param V type of the result vector \c v
-	  \param E1 type of a matrix expression \c A
-	  \param E2 type of a vector expression \c x
+          \internal
+          
+          template parameters:
+          \param V type of the result vector \c v
+          \param E1 type of a matrix expression \c A
+          \param E2 type of a vector expression \c x
   */
     template<class V, class E1, class E2>
     BOOST_UBLAS_INLINE
@@ -419,29 +419,29 @@ namespace boost { namespace numeric { namespace ublas {
 
 
   /** \brief computes <tt>v += A<sup>T</sup> x</tt> or <tt>v = A<sup>T</sup> x</tt> in an
-	  optimized fashion.
+          optimized fashion.
 
-	  \param e1 the vector expression \c x
-	  \param e2 the matrix expression \c A
-	  \param v  the result vector \c v
-	  \param init a boolean parameter
+          \param e1 the vector expression \c x
+          \param e2 the matrix expression \c A
+          \param v  the result vector \c v
+          \param init a boolean parameter
 
-	  <tt>axpy_prod(x, A, v, init)</tt> implements the well known
-	  axpy-product.  Setting \a init to \c true is equivalent to call
-	  <tt>v.clear()</tt> before <tt>axpy_prod</tt>. Currently \a init
-	  defaults to \c true, but this may change in the future.
+          <tt>axpy_prod(x, A, v, init)</tt> implements the well known
+          axpy-product.  Setting \a init to \c true is equivalent to call
+          <tt>v.clear()</tt> before <tt>axpy_prod</tt>. Currently \a init
+          defaults to \c true, but this may change in the future.
 
-	  Up to now there are some specialisation for compressed
-	  matrices that give a large speed up compared to prod.
-	  
-	  \ingroup blas2
+          Up to now there are some specialisation for compressed
+          matrices that give a large speed up compared to prod.
+          
+          \ingroup blas2
 
-	  \internal
-	  
-	  template parameters:
-	  \param V type of the result vector \c v
-	  \param E1 type of a vector expression \c x
-	  \param E2 type of a matrix expression \c A
+          \internal
+          
+          template parameters:
+          \param V type of the result vector \c v
+          \param E1 type of a vector expression \c x
+          \param E2 type of a matrix expression \c A
   */
     template<class V, class E1, class E2>
     BOOST_UBLAS_INLINE
@@ -493,7 +493,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 
 #if BOOST_UBLAS_TYPE_CHECK
-        matrix<value_type, row_major> cm ( m ) ;
+        matrix<value_type, row_major> cm (m);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_plus_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
@@ -523,7 +523,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef F functor_type;
 
 #if BOOST_UBLAS_TYPE_CHECK
-        matrix<value_type, row_major> cm ( m ) ;
+        matrix<value_type, row_major> cm (m);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_plus_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
@@ -572,7 +572,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 
 #if BOOST_UBLAS_TYPE_CHECK
-        matrix<value_type, column_major> cm ( m ) ;
+        matrix<value_type, column_major> cm (m);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_plus_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
@@ -602,7 +602,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef F functor_type;
 
 #if BOOST_UBLAS_TYPE_CHECK
-        matrix<value_type, column_major> cm ( m ) ;
+        matrix<value_type, column_major> cm (m);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_plus_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
@@ -669,28 +669,28 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
   /** \brief computes <tt>M += A X</tt> or <tt>M = A X</tt> in an
-	  optimized fashion.
+          optimized fashion.
 
-	  \param e1 the matrix expression \c A
-	  \param e2 the matrix expression \c X
-	  \param m  the result matrix \c M
-	  \param init a boolean parameter
+          \param e1 the matrix expression \c A
+          \param e2 the matrix expression \c X
+          \param m  the result matrix \c M
+          \param init a boolean parameter
 
-	  <tt>axpy_prod(A, X, M, init)</tt> implements the well known
-	  axpy-product.  Setting \a init to \c true is equivalent to call
-	  <tt>M.clear()</tt> before <tt>axpy_prod</tt>. Currently \a init
-	  defaults to \c true, but this may change in the future.
+          <tt>axpy_prod(A, X, M, init)</tt> implements the well known
+          axpy-product.  Setting \a init to \c true is equivalent to call
+          <tt>M.clear()</tt> before <tt>axpy_prod</tt>. Currently \a init
+          defaults to \c true, but this may change in the future.
 
-	  Up to now there are no specialisations.
-	  
-	  \ingroup blas3
+          Up to now there are no specialisations.
+          
+          \ingroup blas3
 
-	  \internal
-	  
-	  template parameters:
-	  \param M type of the result matrix \c M
-	  \param E1 type of a matrix expression \c A
-	  \param E2 type of a matrix expression \c X
+          \internal
+          
+          template parameters:
+          \param M type of the result matrix \c M
+          \param E1 type of a matrix expression \c A
+          \param E2 type of a matrix expression \c X
   */
     template<class M, class E1, class E2>
     BOOST_UBLAS_INLINE
@@ -733,7 +733,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 
 #if BOOST_UBLAS_TYPE_CHECK
-        matrix<value_type, row_major> cm ( m ) ;
+        matrix<value_type, row_major> cm (m);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_plus_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
@@ -764,7 +764,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 
 #if BOOST_UBLAS_TYPE_CHECK
-        matrix<value_type, column_major> cm ( m ) ;
+        matrix<value_type, column_major> cm (m);
         typedef typename type_traits<value_type>::real_type real_type;
         real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_plus_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
@@ -813,30 +813,30 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
   /** \brief computes <tt>M += A X</tt> or <tt>M = A X</tt> in an
-	  optimized fashion.
+          optimized fashion.
 
-	  \param e1 the matrix expression \c A
-	  \param e2 the matrix expression \c X
-	  \param m  the result matrix \c M
-	  \param init a boolean parameter
+          \param e1 the matrix expression \c A
+          \param e2 the matrix expression \c X
+          \param m  the result matrix \c M
+          \param init a boolean parameter
 
-	  <tt>opb_prod(A, X, M, init)</tt> implements the well known
-	  axpy-product. Setting \a init to \c true is equivalent to call
-	  <tt>M.clear()</tt> before <tt>opb_prod</tt>. Currently \a init
-	  defaults to \c true, but this may change in the future.
+          <tt>opb_prod(A, X, M, init)</tt> implements the well known
+          axpy-product. Setting \a init to \c true is equivalent to call
+          <tt>M.clear()</tt> before <tt>opb_prod</tt>. Currently \a init
+          defaults to \c true, but this may change in the future.
 
-	  This function may give a speedup if \c A has less columns than
-	  rows, because the product is computed as a sum of outer
-	  products.
-	  
-	  \ingroup blas3
+          This function may give a speedup if \c A has less columns than
+          rows, because the product is computed as a sum of outer
+          products.
+          
+          \ingroup blas3
 
-	  \internal
-	  
-	  template parameters:
-	  \param M type of the result matrix \c M
-	  \param E1 type of a matrix expression \c A
-	  \param E2 type of a matrix expression \c X
+          \internal
+          
+          template parameters:
+          \param M type of the result matrix \c M
+          \param E1 type of a matrix expression \c A
+          \param E2 type of a matrix expression \c X
   */
     template<class M, class E1, class E2>
     BOOST_UBLAS_INLINE
