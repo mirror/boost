@@ -60,6 +60,7 @@ namespace re_detail{
 //
 BOOST_REGEX_DECL void BOOST_REGEX_CALL verify_options(boost::regex::flag_type /*ef*/, match_flag_type mf)
 {
+#ifndef BOOST_REGEX_V3
    //
    // can't mix match_extra with POSIX matching rules:
    //
@@ -68,6 +69,7 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL verify_options(boost::regex::flag_type /*
       std::logic_error msg("Usage Error: Can't mix regular expression captures with POSIX matching rules");
       throw_exception(msg);
    }
+#endif
 }
 
 #ifdef BOOST_REGEX_HAS_MS_STACK_GUARD

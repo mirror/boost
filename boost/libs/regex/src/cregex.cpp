@@ -449,6 +449,10 @@ unsigned int RegEx::FindFiles(FindFilesCallback cb, const char* files, bool recu
 }
 #endif
 
+#ifdef BOOST_REGEX_V3
+#define regex_replace regex_merge
+#endif
+
 std::string RegEx::Merge(const std::string& in, const std::string& fmt,
                     bool copy, match_flag_type flags)
 {

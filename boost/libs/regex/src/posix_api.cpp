@@ -61,7 +61,9 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA* expression, const char
    if(f & REG_NOCOLLATE)
    {
       flags |= regex::nocollate;
+#ifndef BOOST_REGEX_V3
       flags &= ~regex::collate;
+#endif
    }
 
    if(f & REG_NOSUB)

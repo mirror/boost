@@ -29,6 +29,11 @@
 
 using namespace boost;
 
+#ifdef BOOST_REGEX_V3
+#define regex_constants regbase
+#endif
+
+
 //
 // start by defining all our flag types:
 
@@ -63,9 +68,9 @@ flag_info flag_data[] = {
                           { BOOST_RE_STR("bk_vbar"), 7, regex_constants::bk_vbar, 2 },
                           { BOOST_RE_STR("use_except"), 10, regex_constants::use_except, 2 },
                           { BOOST_RE_STR("literal"), 7, regex_constants::literal, 2 },
+#ifndef BOOST_REGEX_V3
                           { BOOST_RE_STR("nosubs"), 6, regex_constants::nosubs, 2 },
                           { BOOST_RE_STR("optimize"), 8, regex_constants::optimize, 2 },
-#ifndef BOOST_REGEX_V3
                           { BOOST_RE_STR("perlex"), 6, regex_constants::perlex, 2 },
 #endif
                           { BOOST_RE_STR("normal"), 6, regex_constants::normal, 2 },
@@ -87,9 +92,10 @@ flag_info flag_data[] = {
                           { BOOST_RE_STR("match_not_null"), 14, match_not_null, 3 },
                           { BOOST_RE_STR("match_continuous"), 16, match_continuous, 3 },
                           { BOOST_RE_STR("match_partial"), 13, match_partial, 3 },
+#ifndef BOOST_REGEX_V3
                           { BOOST_RE_STR("match_nosubs"), 12, match_nosubs, 3 },
                           { BOOST_RE_STR("match_single_line"), 17, match_single_line, 3 },
-
+#endif
                           { BOOST_RE_STR("format_all"), 10, format_all, 3 },
                           { BOOST_RE_STR("format_sed"), 10, format_sed, 3 },
                           { BOOST_RE_STR("format_perl"), 11, format_perl, 3 },

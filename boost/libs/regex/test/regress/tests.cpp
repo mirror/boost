@@ -434,12 +434,14 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
                begin_error();
                cout << "regex++ API result mismatch in regex_search(const std::string&, match_results&, const basic_regex&, int)" << endl;
             }
+#ifndef BOOST_REGEX_V3
             if(!regex_search(s2, e, static_cast<boost::match_flag_type>(flags[3]))
                || !regex_search(s2.begin(), s2.end(), e, static_cast<boost::match_flag_type>(flags[3])))
             {
                begin_error();
                cout << "regex++ API result mismatch in regex_search(const std::string&, const basic_regex&, int)" << endl;
             }
+#endif
             //
             // partial match should give same result as full match
             // provided a full match is expected:
@@ -476,11 +478,13 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
                   begin_error();
                   cout << "regex++ API result mismatch in regex_search(const char_t*, match_results&, const basic_regex&, int)" << endl;
                }
+#ifndef BOOST_REGEX_V3
                if(!regex_search(search_text.c_str(), e, static_cast<boost::match_flag_type>(flags[3])))
                {
                   begin_error();
                   cout << "regex++ API result mismatch in regex_search(const char_t*, const basic_regex&, int)" << endl;
                }
+#endif
             }
          }
          if((false == recurse) && (matches[0] == 0) && (matches[1] == static_cast<int>(search_text.size())))
