@@ -1,6 +1,6 @@
 #  Boost.Bind Library test Jamfile
 #
-#  Copyright (c) 2003, 2004 Peter Dimov
+#  Copyright (c) 2003-2005 Peter Dimov
 #
 #  Permission to copy, use, modify, sell and distribute this software
 #  is granted provided this copyright notice appears in all copies.
@@ -12,6 +12,7 @@ import testing ;
 
 test-suite "bind"
     : [ run bind_test.cpp ]
+      [ run bind_dm_test.cpp ]
       [ run bind_eq_test.cpp ]
       [ run bind_const_test.cpp ]
       [ run bind_cv_test.cpp ]
