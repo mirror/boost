@@ -19,6 +19,10 @@
 #include <deque>
 #include <set>
 
+// use of test_main() eases automatic regression testing by eliminating
+// the need for manual intervention on test failures (Beman Dawes)
+#include <boost/test/test_tools.hpp>
+
 // VERBOSE will print out trace-like statements to show exactly what this
 //  test file is doing.
 //#define VERBOSE
@@ -300,7 +304,7 @@ void test_mem_usage()
     std::cout << "Memory error" << std::endl;
 }
 
-int main(void)
+int test_main(int, char * [])
 {
   test();
   test_alloc();
