@@ -218,17 +218,23 @@ jm_debug_alloc::jm_debug_alloc()
 
 jm_debug_alloc::jm_debug_alloc(const jm_debug_alloc& d)
 {
-   blocks = d.blocks;
-   count = d.count;
-   ++(*count);
-   guard = this;
+   if(&d != this)
+   {
+      blocks = d.blocks;
+      count = d.count;
+      ++(*count);
+      guard = this;
+   }
 }
 jm_debug_alloc& jm_debug_alloc::operator=(const jm_debug_alloc& d)
 {
-   free_();
-   blocks = d.blocks;
-   count = d.count;
-   ++(*count);
+   if(&d != this)
+   {
+      free_();
+      blocks = d.blocks;
+      count = d.count;
+      ++(*count);
+   }
    return *this;
 }
 
