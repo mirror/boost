@@ -26,11 +26,6 @@ BOOST_PP_LIST_AT(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)),1)
 
 <p>expands to <code>B</code>.</p>
 
-<h3>Uses</h3>
-<ul>
-  <li>BOOST_PP_WHILE()</li>
-</ul>
-
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
@@ -38,6 +33,6 @@ BOOST_PP_LIST_AT(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)),1)
 */
 #define BOOST_PP_LIST_AT(LIST,INDEX) BOOST_PP_LIST_AT_D(0,LIST,INDEX)
 
-/** <p>Can be used inside BOOST_PP_WHILE().</p> */
+/** <p>Can be used inside BOOST_PP_WHILE() (see for an explanation of the D parameter).</p> */
 #define BOOST_PP_LIST_AT_D(D,LIST,INDEX) BOOST_PP_LIST_FIRST(BOOST_PP_LIST_REST_N_D(D,INDEX,LIST))
 #endif

@@ -26,11 +26,6 @@ BOOST_PP_LIST_SIZE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
 
 <p>expands to <code>3</code>.</p>
 
-<h3>Uses</h3>
-<ul>
-  <li>BOOST_PP_LIST_FOLD_LEFT()</li>
-</ul>
-
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
@@ -38,7 +33,7 @@ BOOST_PP_LIST_SIZE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
 */
 #define BOOST_PP_LIST_SIZE(LIST) BOOST_PP_LIST_SIZE_D(0,LIST)
 
-/** <p>Can be used inside BOOST_PP_WHILE().</p> */
+/** <p>Can be used inside BOOST_PP_WHILE() (see for an explanation of the D parameter).</p> */
 #define BOOST_PP_LIST_SIZE_D(D,LIST) BOOST_PP_LIST_FOLD_LEFT_D(D,BOOST_PP_LIST_SIZE_F,0,LIST)
-#define BOOST_PP_LIST_SIZE_F(D,P,H) BOOST_PP_INC(P)
+#define BOOST_PP_LIST_SIZE_F(D,S,X) BOOST_PP_INC(S)
 #endif

@@ -37,7 +37,7 @@ A,B,C
 */
 #define BOOST_PP_LIST_ENUM(LIST) BOOST_PP_LIST_ENUM_R(0,LIST)
 
-/** <p>Can be used inside BOOST_PP_FOR().</p> */
+/** <p>Can be used inside BOOST_PP_FOR() (see for an explanation of the R parameter).</p> */
 #define BOOST_PP_LIST_ENUM_R(R,LIST) BOOST_PP_LIST_FOR_EACH_I_R(R,BOOST_PP_LIST_ENUM_F,_,LIST)
 #define BOOST_PP_LIST_ENUM_F(R,_,I,X) BOOST_PP_COMMA_IF(I) X
 #endif

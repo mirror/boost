@@ -30,11 +30,6 @@ BOOST_PP_LIST_CAT(BOOST_PP_TUPLE_TO_LIST(3,(1,2,3)))
 123
 </pre>
 
-<h3>Uses</h3>
-<ul>
-  <li>BOOST_PP_LIST_FOLD_LEFT()</li>
-</ul>
-
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
@@ -42,7 +37,7 @@ BOOST_PP_LIST_CAT(BOOST_PP_TUPLE_TO_LIST(3,(1,2,3)))
 */
 #define BOOST_PP_LIST_CAT(LIST) BOOST_PP_LIST_CAT_D(0,LIST)
 
-/** <p>Can be used inside BOOST_PP_WHILE().</p> */
+/** <p>Can be used inside BOOST_PP_WHILE() (see for an explanation of the D parameter).</p> */
 #define BOOST_PP_LIST_CAT_D(D,LIST) BOOST_PP_LIST_FOLD_LEFT_D(D,BOOST_PP_LIST_CAT_F,BOOST_PP_TUPLE3_ELEM0 LIST,BOOST_PP_TUPLE3_ELEM1 LIST)
-#define BOOST_PP_LIST_CAT_F(D,P,H) BOOST_PP_CAT(P,H)
+#define BOOST_PP_LIST_CAT_F(D,S,X) BOOST_PP_CAT(S,X)
 #endif

@@ -15,7 +15,6 @@
  */
 
 #include <boost/preprocessor/repeat.hpp>
-#include <boost/preprocessor/repeat_2nd.hpp>
 
 /** Repeats the macro M(X,Y,P) for X = [0,W[ and Y = [0,H[.
 
@@ -28,13 +27,13 @@ In other words, expands to the sequence:
   M(  0,H-1,  P) M(  1,H-1,  P) ... M(W-1,H-1,  P)
 \endverbatim</PRE>
 
-Uses BOOST_PP_REPEAT() and BOOST_PP_REPEAT_2ND().
+Uses BOOST_PP_REPEAT().
 */
 #define REPEAT_2D(W,H,M,P)\
-  /* Here we must use BOOST_PP_REPEAT_2ND(), because\
-   * we use BOOST_PP_REPEAT() in REPEAT_2D_ROW().\
+  /* Here we can simply use BOOST_PP_REPEAT(), because\
+   * it implements automatic recursion.\
    */\
-  BOOST_PP_REPEAT_2ND\
+  BOOST_PP_REPEAT\
   ( H\
   , REPEAT_2D_ROW\
   , (W,M,P)\

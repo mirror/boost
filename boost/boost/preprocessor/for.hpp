@@ -75,6 +75,14 @@ still quite useful on its own.</p>
 <p>BOOST_PP_FOR() can be used for multidimensional repetition simply by
 invoking BOOST_PP_FOR##R() directly.</p>
 
+<h3>Automatic recursion?</h3>
+
+<p>BOOST_PP_FOR() currently does not implement automatic recursion. The reason
+for this is that it would lead to very poor performance. The automatic recursion
+technique takes O(N) steps just to find out that the Nth recursion should be used.
+This would dramatically effect the time complexity of macros using automatic
+recursion.</p>
+
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/for_test.cpp">for_test.cpp</a></li>
@@ -213,5 +221,5 @@ invoking BOOST_PP_FOR##R() directly.</p>
 #define BOOST_PP_FOR126(S,P,O,M) BOOST_PP_FOR_C0(P,127,S,M)(127,S) BOOST_PP_FOR_C1(P,127,S)(O(127,S),P,O,M)
 #define BOOST_PP_FOR127(S,P,O,M) BOOST_PP_FOR_C0(P,128,S,M)(128,S) BOOST_PP_FOR_C1(P,128,S)(O(128,S),P,O,M)
 #define BOOST_PP_FOR128(S,P,O,M) BOOST_PP_FOR_C0(P,129,S,M)(129,S) BOOST_PP_FOR_C1(P,129,S)(O(129,S),P,O,M)
-#define BOOST_PP_FOR129(S,P,O,M) RECURSION DEPTH EXCEEDED!
+#define BOOST_PP_FOR129(S,P,O,M) (RECURSION DEPTH EXCEEDED!)
 #endif

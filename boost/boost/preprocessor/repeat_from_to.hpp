@@ -13,9 +13,9 @@
  * See http://www.boost.org for most recent version.
  */
 
-#include <boost/preprocessor/repeat.hpp>
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/arithmetic/add.hpp>
+#include <boost/preprocessor/repeat.hpp>
 
 /** <p>Repeats the macro <code>MACRO(INDEX,DATA)</code> for <code>INDEX = [FIRST,LAST)</code>.</p>
 
@@ -38,16 +38,47 @@ BOOST_PP_REPEAT_FROM_TO(4,7,TEST,X)
 X(4); X(5); X(6);
 </pre>
 
-<h3>Uses</h3>
+<h3>2D and 3D repetition</h3>
+
+<p>BOOST_PP_REPEAT_FROM_TO() implements automatic recursion. 2D and 3D repetition
+are directly supported.</p>
+
+<h3>See</h3>
 <ul>
-  <li>BOOST_PP_REPEAT()</li>
+  <li>BOOST_PP_FOR()</li>
+  <li>BOOST_PP_LIMIT_DIM</li>
+  <li>BOOST_PP_LIMIT_MAG</li>
 </ul>
 
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/repeat_test.cpp">repeat_test.cpp</a></li>
+  <li><a href="../../test/repeat_2nd_test.cpp">repeat_2nd_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_REPEAT_FROM_TO(FIRST,LAST,MACRO,DATA) BOOST_PP_REPEAT(BOOST_PP_SUB(LAST,FIRST),BOOST_PP_REPEAT_FROM_TO_F,(FIRST,MACRO,DATA))
-#define BOOST_PP_REPEAT_FROM_TO_F(I,SMP) BOOST_PP_TUPLE_ELEM(3,1,SMP)(BOOST_PP_ADD(I,BOOST_PP_TUPLE_ELEM(3,0,SMP)),BOOST_PP_TUPLE_ELEM(3,2,SMP))
+#if 0
+#  define BOOST_PP_REPEAT_FROM_TO(FIRST,LAST,MACRO,DATA)
+#endif
+
+#define BOOST_PP_REPEAT_FROM_TO\
+  BOOST_PP_AUTO_REC_CAT1(BOOST_PP_REPEAT_FROM_TO,BOOST_PP_REPEAT_AUTO_REC1(BOOST_PP_AUTO_REC_ID,(1)))
+#define BOOST_PP_REPEAT_FROM_TOBOOST_PP_REPEAT_AUTO_REC1(M,P)\
+  BOOST_PP_AUTO_REC_CAT2(BOOST_PP_REPEAT_FROM_TO,BOOST_PP_REPEAT_AUTO_REC2(BOOST_PP_AUTO_REC_ID,(2)))
+#define BOOST_PP_REPEAT_FROM_TOBOOST_PP_REPEAT_AUTO_REC2(M,P)\
+  BOOST_PP_AUTO_REC_CAT3(BOOST_PP_REPEAT_FROM_TO,BOOST_PP_REPEAT_AUTO_REC3(BOOST_PP_AUTO_REC_ID,(3)))
+#define BOOST_PP_REPEAT_FROM_TOBOOST_PP_REPEAT_AUTO_REC3(M,P)\
+  (TOO MANY NESTED REPEATS!)
+
+#define BOOST_PP_REPEAT_FROM_TO1(F,L,M,D) BOOST_PP_REPEAT(BOOST_PP_SUB(L,F),BOOST_PP_REPEAT_FROM_TO_M1,(F,M,D))
+#define BOOST_PP_REPEAT_FROM_TO2(F,L,M,D) BOOST_PP_REPEAT(BOOST_PP_SUB(L,F),BOOST_PP_REPEAT_FROM_TO_M2,(F,M,D))
+#define BOOST_PP_REPEAT_FROM_TO3(F,L,M,D) BOOST_PP_REPEAT(BOOST_PP_SUB(L,F),BOOST_PP_REPEAT_FROM_TO_M3,(F,M,D))
+
+#define BOOST_PP_REPEAT_FROM_TO_M1(I,FMD) BOOST_PP_TUPLE_ELEM(3,1,FMD)(BOOST_PP_ADD(I,BOOST_PP_TUPLE_ELEM(3,0,FMD)),BOOST_PP_TUPLE_ELEM(3,2,FMD))
+#define BOOST_PP_REPEAT_FROM_TO_M2(I,FMD) BOOST_PP_TUPLE_ELEM(3,1,FMD)(BOOST_PP_ADD(I,BOOST_PP_TUPLE_ELEM(3,0,FMD)),BOOST_PP_TUPLE_ELEM(3,2,FMD))
+#define BOOST_PP_REPEAT_FROM_TO_M3(I,FMD) BOOST_PP_TUPLE_ELEM(3,1,FMD)(BOOST_PP_ADD(I,BOOST_PP_TUPLE_ELEM(3,0,FMD)),BOOST_PP_TUPLE_ELEM(3,2,FMD))
+
+/** <p>Obsolete, just use BOOST_PP_REPEAT_FROM_TO().</p> */
+#define BOOST_PP_REPEAT_FROM_TO_2ND BOOST_PP_REPEAT_FROM_TO
+/** <p>Obsolete, just use BOOST_PP_REPEAT_FROM_TO().</p> */
+#define BOOST_PP_REPEAT_FROM_TO_3RD BOOST_PP_REPEAT_FROM_TO
 #endif

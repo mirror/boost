@@ -32,7 +32,7 @@
       <dt><a href="#ENUM_PARAMS">Avoid O(N) repetition on lists in general</a></dt>
       <dt><a href="#Conditional Define">Use a Conditional Define to enable user configuration of code repetition</a></dt>
       <dt><a href="#Token Look-Up">Use Token Look-Up Function to eliminate categorical repetition</a></dt>
-      <dt><a href="#2ND_REPEAT">Use BOOST_PP_REPEAT_2ND to avoid O(N*N) repetition</a></dt>
+      <dt><a href="#2ND_REPEAT">Use BOOST_PP_REPEAT to avoid O(N*N) repetition</a></dt>
       <dt><a href="#IF">Use BOOST_PP_IF to implement special case for the first element</a></dt>
       <dt><a href="#Arithmetic">Use arithmetic, logical and comparison operations when necessary</a></dt>
     </dl>
@@ -69,8 +69,8 @@ yes_type is_function_tester(R (*)(A0, A1, A2));
 <P>The need for this kind of repetition occurs particularly frequently while implementing 
   generic components or metaprogramming facilities, but the need also manifests 
   itself in many far simpler situations. </P>
-<h3>Typical solutions</h3>
 
+<h3>Typical solutions</h3>
 
 <p>Typically the repetition is done manually. Manual code repetition is highly 
   unproductive, but sometimes more readable to the untrained eye.</p>
@@ -111,7 +111,7 @@ yes_type is_function_tester(R (*)(A0, A1, A2));
   template&lt;class R BOOST_PP_COMMA_IF(N) BOOST_PP_ENUM_PARAMS(N, class A)&gt;\
   yes_type is_function_tester(R (*)(BOOST_PP_ENUM_PARAMS(N,A)));
 
-BOOST_PP_REPEAT_2ND(BOOST_PP_INC(MAX_IS_FUNCTION_TESTER_PARAMS),IS_FUNCTION_TESTER,_)
+BOOST_PP_REPEAT(BOOST_PP_INC(MAX_IS_FUNCTION_TESTER_PARAMS),IS_FUNCTION_TESTER,_)
 #undef IS_FUNCTION_TESTER
 </pre>
 
@@ -189,12 +189,12 @@ of the line continuation operators without making the code too unreadable.</P>
 <P><B>TIP:</B> Use syntax highlighting on preprocessor metaprogramming macro and 
   parameter identifiers such as</P>
 <ul>
-  <li> BOOST_PP_DEF,</li>
+  <li>BOOST_PP_DEF,</li>
   <li>BOOST_PP_EMPTY,</li>
-  <li> BOOST_PP_REPEAT,</li>
-  <li> OP,</li>
-  <li> CV,</li>
-  <li> ...</li>
+  <li>BOOST_PP_REPEAT,</li>
+  <li>OP,</li>
+  <li>CV,</li>
+  <li>...</li>
 </ul>
 <p>It can greatly improve readability.</p>
 <HR>
@@ -235,12 +235,12 @@ STATIC_ASSERT(sizeof(int) &lt;= sizeof(long));
 <P><B><a name="ENUM_PARAMS"></a><a href="examples_preprocessed.htm#ENUM_PARAMS">EXAMPLE</a>:</B> 
   Use:</P>
 <ul>
-  <li> BOOST_PP_ENUM_PARAMS,</li>
-  <li> BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT,</li>
-  <li> BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS,</li>
-  <li> BOOST_PP_ENUM_SHIFTED_PARAMS, or</li>
+  <li>BOOST_PP_ENUM_PARAMS,</li>
+  <li>BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT,</li>
+  <li>BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS,</li>
+  <li>BOOST_PP_ENUM_SHIFTED_PARAMS, or</li>
   <li>BOOST_PP_REPEAT, and</li>
-  <li> BOOST_PP_COMMA_IF</li>
+  <li>BOOST_PP_COMMA_IF</li>
 </ul>
 <p>to avoid O(N) repetition on lists in general</p>
 
@@ -359,7 +359,7 @@ categorical repetition of operator tokens can not be completely eliminated by
 using template metaprogramming.</P>
 <HR>
 <P><B><a name="2ND_REPEAT"></a><a href="examples_preprocessed.htm#2ND_REPEAT">EXAMPLE</a>:</B> 
-  Use BOOST_PP_REPEAT_2ND to avoid O(N*N) repetition</P>
+  Use BOOST_PP_REPEAT to avoid O(N*N) repetition</P>
 
 <pre>#ifndef MAX_VEC_ARG_CNT
 #define MAX_VEC_ARG_CNT 8
@@ -375,7 +375,7 @@ vec( BOOST_PP_REPEAT(I,ARG_FUN,_) )\
 { BOOST_PP_REPEAT(I,ASSIGN_FUN,_)\
 }
 
-BOOST_PP_REPEAT_2ND
+BOOST_PP_REPEAT
 ( BOOST_PP_INC(MAX_VEC_ARG_CNT)
 , DEF_VEC_CTOR_FUN
 , _
@@ -388,8 +388,9 @@ BOOST_PP_REPEAT_2ND
 // ...
 </pre>
 
-<P><B>HOW:</B> BOOST_PP_REPEAT_2ND is implemented separately, so it 
-  is possible to combine BOOST_PP_REPEAT and BOOST_PP_REPEAT_2ND.</P>
+<P><B>HOW:</B> BOOST_PP_REPEAT is implemented in a special way to enable
+automatic recursion.</P>
+
 <HR>
 
 <P><a name="IF"></a><a href="examples_preprocessed.htm#IF"><B>EXAMPLE:</B></a> Use BOOST_PP_IF to implement special case for the first element</P>

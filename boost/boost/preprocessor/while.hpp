@@ -57,13 +57,21 @@ BOOST_PP_WHILE(PRED,OP,(0,3))
       C++ preprocessor.</li>
 </ul>
 
+<h3>Automatic recursion?</h3>
+
+<p>BOOST_PP_WHILE() currently does not implement automatic recursion. The reason
+for this is that it would lead to very poor performance. The automatic recursion
+technique takes O(N) steps just to find out that the Nth recursion should be used.
+This would dramatically effect the time complexity of macros using automatic
+recursion.</p>
+
 <h3>Note</h3>
 <ul>
   <li>The value of the D parameter may exceed BOOST_PP_LIMIT_MAG.</li>
   <li>Using BOOST_PP_WHILE() is a bit tricky. This is due to the C++
       preprocessor limitations. It is recommended to take a look at the
-      implementations of the various PREPROCESSOR library primitives such as
-      BOOST_PP_ADD() for additional examples.</li>
+      implementations of the various PREPROCESSOR library primitives
+      such as BOOST_PP_ADD() for additional examples.</li>
 </ul>
 
 <h3>Example</h3>
@@ -334,6 +342,6 @@ BOOST_PP_WHILE(PRED,OP,(0,3))
 #define BOOST_PP_WHILE255(P,O,S) BOOST_PP_WHILE_C(P(257,S),256,S)(P,O,O(257,S))
 #define BOOST_PP_WHILE256(P,O,S) BOOST_PP_WHILE_C(P(258,S),257,S)(P,O,O(258,S))
 #define BOOST_PP_WHILE257(P,O,S) BOOST_PP_WHILE_C(P(259,S),258,S)(P,O,O(259,S))
-#define BOOST_PP_WHILE258(P,O,S) RECURSION DEPTH EXCEEDED!
-#define BOOST_PP_WHILE259(P,O,S) RECURSION DEPTH EXCEEDED!
+#define BOOST_PP_WHILE258(P,O,S) (RECURSION DEPTH EXCEEDED!)
+#define BOOST_PP_WHILE259(P,O,S) (RECURSION DEPTH EXCEEDED!)
 #endif

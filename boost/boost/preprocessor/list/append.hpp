@@ -32,11 +32,6 @@ BOOST_PP_LIST_APPEND
 BOOST_PP_TUPLE_TO_LIST(4,(1,2,3,4))
 </pre>
 
-<h3>Uses</h3>
-<ul>
-  <li>BOOST_PP_LIST_FOLD_RIGHT()</li>
-</ul>
-
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
@@ -44,7 +39,7 @@ BOOST_PP_TUPLE_TO_LIST(4,(1,2,3,4))
 */
 #define BOOST_PP_LIST_APPEND(LIST_1ST,LIST_2ND) BOOST_PP_LIST_APPEND_D(0,LIST_1ST,LIST_2ND)
 
-/** <p>Can be used inside BOOST_PP_WHILE().</p> */
+/** <p>Can be used inside BOOST_PP_WHILE() (see for an explanation of the D parameter).</p> */
 #define BOOST_PP_LIST_APPEND_D(D,LIST_1ST,LIST_2ND) BOOST_PP_LIST_FOLD_RIGHT_D(D,BOOST_PP_LIST_APPEND_F,LIST_1ST,LIST_2ND)
-#define BOOST_PP_LIST_APPEND_F(D,H,P) (H,P,1)
+#define BOOST_PP_LIST_APPEND_F(D,X,S) (X,S,1)
 #endif

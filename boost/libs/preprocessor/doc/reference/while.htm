@@ -66,13 +66,21 @@ OP(D, ... OP(D, OP(D,STATE) ) ... )
       C++ preprocessor.</li>
 </ul>
 
+<h3>Automatic recursion?</h3>
+
+<p><a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>() currently does not implement automatic recursion. The reason
+for this is that it would lead to very poor performance. The automatic recursion
+technique takes O(N) steps just to find out that the Nth recursion should be used.
+This would dramatically effect the time complexity of macros using automatic
+recursion.</p>
+
 <h3>Note</h3>
 <ul>
   <li>The value of the D parameter may exceed <a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>.</li>
   <li>Using <a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>() is a bit tricky. This is due to the C++
       preprocessor limitations. It is recommended to take a look at the
-      implementations of the various PREPROCESSOR library primitives such as
-      <a href="arithmetic_add.htm#BOOST_PP_ADD">BOOST_PP_ADD</a>() for additional examples.</li>
+      implementations of the various PREPROCESSOR library primitives
+      such as <a href="arithmetic_add.htm#BOOST_PP_ADD">BOOST_PP_ADD</a>() for additional examples.</li>
 </ul>
 
 <h3>Example</h3>

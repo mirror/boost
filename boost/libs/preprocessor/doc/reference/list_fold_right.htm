@@ -59,10 +59,10 @@ OP
 _CBA
 </pre>
 
-<h3>Uses</h3>
+<h3>Note</h3>
 <ul>
-  <li><a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>() (see for explanation of the D parameter)</li>
-  <li><a href="list_fold_left.htm#BOOST_PP_LIST_FOLD_LEFT">BOOST_PP_LIST_FOLD_LEFT</a>()</li>
+  <li>Folding, or accumulation, is a very general pattern of computation.
+      Most list operations can be implemented in terms of folding.</li>
 </ul>
 
 <h3>Test</h3>
@@ -73,7 +73,22 @@ _CBA
 <hr>
 
 <h3><a name="BOOST_PP_LIST_FOLD_RIGHT_D">#define BOOST_PP_LIST_FOLD_RIGHT_D</a>(D,OP,LIST,STATE)</h3>
- <p>Can be used inside <a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>().</p> 
+ <p>Can be used inside <a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>() (see for an explanation of the D parameter).</p>
+
+<h3>Note</h3>
+<ul>
+  <li><a href="list_fold_right.htm#BOOST_PP_LIST_FOLD_RIGHT_D">BOOST_PP_LIST_FOLD_RIGHT_D</a>() implements automatic recursion. You
+      can use a fold in the OP macro.</li>
+</ul>
+
+<hr>
+
+<h3><a name="BOOST_PP_LIST_FOLD_RIGHT_2ND">#define BOOST_PP_LIST_FOLD_RIGHT_2ND</a></h3>
+ <p>Obsolete, just use <a href="list_fold_right.htm#BOOST_PP_LIST_FOLD_RIGHT">BOOST_PP_LIST_FOLD_RIGHT</a>().</p> 
+<hr>
+
+<h3><a name="BOOST_PP_LIST_FOLD_RIGHT_2ND_D">#define BOOST_PP_LIST_FOLD_RIGHT_2ND_D</a></h3>
+ <p>Obsolete, just use <a href="list_fold_right.htm#BOOST_PP_LIST_FOLD_RIGHT_D">BOOST_PP_LIST_FOLD_RIGHT_D</a>().</p> 
 <hr>
 
 <a href="list_fold_left_2nd.htm">Prev</a> <a href="list_fold_right_2nd.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>

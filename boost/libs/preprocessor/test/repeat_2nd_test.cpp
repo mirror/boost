@@ -13,13 +13,14 @@
 #include <boost/preprocessor/enum_params.hpp>
 #include <boost/preprocessor/enum_shifted_params.hpp>
 #include <boost/preprocessor/inc.hpp>
-#include <boost/preprocessor/repeat_2nd.hpp>
+#include <boost/preprocessor/repeat_from_to.hpp>
+#include <libs/preprocessor/test/test.hpp>
 
 /* *** */
 
 /* RATIONALE:
- * - BOOST_PP_REPEAT, BOOST_PP_REPEAT_2ND, ... must work
- * together.
+ * - BOOST_PP_REPEAT, BOOST_PP_ENUM, BOOST_PP_REPEAT_FROM_TO and must work
+ * recursively together.
  * - BOOST_PP_REPEAT is already tested with
  * BOOST_PP_ENUM_PARAMS.
  * - The tested repeat count should exceed imaginable usage.
@@ -44,6 +45,18 @@ typedef char yes_type;
   yes_type is_function_helper(\
     P0 (*)(BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_INC(I),P)));
 
-BOOST_PP_REPEAT_2ND(BOOST_PP_INC(IS_FUNCTION_HELPER_TEST_MAX),IS_FUNCTION_HELPER,A)
+BOOST_PP_REPEAT(BOOST_PP_INC(IS_FUNCTION_HELPER_TEST_MAX),IS_FUNCTION_HELPER,A)
 
 #undef IS_FUNCTION_HELPER
+
+/* *** */
+
+#define ELEM(_,X) X
+#define COL(I,_) +(BOOST_PP_ENUM(2,ELEM,-I))
+#define ROW(I,_) BOOST_PP_REPEAT(I,COL,_)
+
+TEST_B 0 == (+1 +1+2 +1+2+3) + BOOST_PP_REPEAT_FROM_TO(2,5,ROW,_) TEST_E
+
+#undef ROW
+#undef COL
+#undef ELEM

@@ -48,8 +48,8 @@ X(0); X(1); X(2);
 
 <h3>2D and 3D repetition</h3>
 
-<p>2D and 3D repetition are supported with the <a href="repeat_2nd.htm#BOOST_PP_REPEAT_2ND">BOOST_PP_REPEAT_2ND</a>() and
-<a href="repeat_3rd.htm#BOOST_PP_REPEAT_3RD">BOOST_PP_REPEAT_3RD</a>() macros.</p>
+<p><a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>() implements automatic recursion. 2D and 3D repetition
+are directly supported.</p>
 
 <h3>Example</h3>
 <ul>
@@ -60,9 +60,24 @@ X(0); X(1); X(2);
 <h3>See</h3>
 <ul>
   <li><a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>()</li>
+  <li><a href="limits.htm#BOOST_PP_LIMIT_DIM">BOOST_PP_LIMIT_DIM</a></li>
   <li><a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a></li>
 </ul>
 
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/repeat_test.cpp">repeat_test.cpp</a></li>
+  <li><a href="../../test/repeat_2nd_test.cpp">repeat_2nd_test.cpp</a></li>
+</ul>
+
+<hr>
+
+<h3><a name="BOOST_PP_REPEAT_2ND">#define BOOST_PP_REPEAT_2ND</a></h3>
+ <p>Obsolete, just use <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>().</p> 
+<hr>
+
+<h3><a name="BOOST_PP_REPEAT_3RD">#define BOOST_PP_REPEAT_3RD</a></h3>
+ <p>Obsolete, just use <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>().</p> 
 <hr>
 
 <a href="min.htm">Prev</a> <a href="repeat_2nd.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>

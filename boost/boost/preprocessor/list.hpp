@@ -13,14 +13,25 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <p>Includes all list headers.</p> */
+/** <p>Includes all list headers.</p>
+
+<p>A list is an arbitrary size collection of elements.</p>
+
+<p>In the preprocessor library, the internal representation of lists
+uses parts that are like macro parameter lists. Thus an element of a list
+can be any sequence of tokens that constitutes a single macro parameter.</p>
+
+<p>Lists are manipulated using both list ADT macros and higher-order macros. For an introduction to manipulation of lists in functional programming, see
+<a href="../bibliography.htm#[Thompson]">[Thompson]</a>,
+<a href="../bibliography.htm#[Abelson]">[Abelson]</a> or
+<a href="../bibliography.htm#[Cousineau]">[Cousineau]</a>.</p>
+*/
 
 #include <boost/preprocessor/list/append.hpp>
 #include <boost/preprocessor/list/at.hpp>
 #include <boost/preprocessor/list/cat.hpp>
 #include <boost/preprocessor/list/filter.hpp>
 #include <boost/preprocessor/list/first_n.hpp>
-#include <boost/preprocessor/list/fold_right_2nd.hpp>
 #include <boost/preprocessor/list/for_each.hpp>
 #include <boost/preprocessor/list/for_each_product.hpp>
 #include <boost/preprocessor/list/size.hpp>

@@ -84,6 +84,14 @@ still quite useful on its own.</p>
 <p><a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>() can be used for multidimensional repetition simply by
 invoking <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>##R() directly.</p>
 
+<h3>Automatic recursion?</h3>
+
+<p><a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>() currently does not implement automatic recursion. The reason
+for this is that it would lead to very poor performance. The automatic recursion
+technique takes O(N) steps just to find out that the Nth recursion should be used.
+This would dramatically effect the time complexity of macros using automatic
+recursion.</p>
+
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/for_test.cpp">for_test.cpp</a></li>

@@ -13,11 +13,12 @@
  * See http://www.boost.org for most recent version.
  */
 
-#include <boost/preprocessor/repeat_3rd.hpp>
-#include <boost/preprocessor/arithmetic/sub.hpp>
-#include <boost/preprocessor/arithmetic/add.hpp>
+/** <p>This header is obsolete. Use the following code instead.</p>
 
-/** <p>Same as BOOST_PP_REPEAT_FROM_TO(), but implemented independently.</p> */
-#define BOOST_PP_REPEAT_FROM_TO_3RD(FIRST,LAST,MACRO,DATA) BOOST_PP_REPEAT_3RD(BOOST_PP_SUB(LAST,FIRST),BOOST_PP_REPEAT_FROM_TO_3RD_F,(FIRST,MACRO,DATA))
-#define BOOST_PP_REPEAT_FROM_TO_3RD_F(I,SMP) BOOST_PP_TUPLE_ELEM(3,1,SMP)(BOOST_PP_ADD(I,BOOST_PP_TUPLE_ELEM(3,0,SMP)),BOOST_PP_TUPLE_ELEM(3,2,SMP))
+<pre>
+#include &lt;boost/preprocessor/repeat_from_to.hpp&gt;
+</pre>
+*/
+
+#include <boost/preprocessor/repeat_from_to.hpp>
 #endif

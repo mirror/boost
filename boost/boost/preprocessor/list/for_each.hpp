@@ -45,12 +45,6 @@ prefix_A(); prefix_B(); prefix_C();
   <li><a href="../../example/catch_builtin.cpp">catch_builtin.cpp</a></li>
 </ul>
 
-<h3>Uses</h3>
-<ul>
-  <li>BOOST_PP_FOR() (see for explanation of the R parameter)</li>
-  <li>BOOST_PP_LIST_FOR_EACH_I() </li>
-</ul>
-
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
@@ -58,7 +52,7 @@ prefix_A(); prefix_B(); prefix_C();
 */
 #define BOOST_PP_LIST_FOR_EACH(MACRO,DATA,LIST) BOOST_PP_LIST_FOR_EACH_R(0,MACRO,DATA,LIST)
 
-/** <p>Can be used inside BOOST_PP_FOR().</p> */
+/** <p>Can be used inside BOOST_PP_FOR() (see for an explanation of the R parameter).</p> */
 #define BOOST_PP_LIST_FOR_EACH_R(R,MACRO,DATA,LIST) BOOST_PP_LIST_FOR_EACH_I_R(R,BOOST_PP_LIST_FOR_EACH_F,(MACRO,DATA),LIST)
-#define BOOST_PP_LIST_FOR_EACH_F(R,FP,I,X) BOOST_PP_TUPLE_ELEM(2,0,FP)(R,BOOST_PP_TUPLE_ELEM(2,1,FP),X)
+#define BOOST_PP_LIST_FOR_EACH_F(R,MD,I,X) BOOST_PP_TUPLE_ELEM(2,0,MD)(R,BOOST_PP_TUPLE_ELEM(2,1,MD),X)
 #endif

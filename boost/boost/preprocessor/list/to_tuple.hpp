@@ -31,11 +31,6 @@ BOOST_PP_LIST_TO_TUPLE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
       BOOST_PP_LIMIT_MAG rather than BOOST_PP_LIMIT_TUPLE.</li>
 </ul>
 
-<h3>Uses</h3>
-<ul>
-  <li>BOOST_PP_FOR()</li>
-</ul>
-
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
@@ -43,6 +38,6 @@ BOOST_PP_LIST_TO_TUPLE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
 */
 #define BOOST_PP_LIST_TO_TUPLE(LIST) BOOST_PP_LIST_TO_TUPLE_R(0,LIST)
 
-/** <p>Can be used inside BOOST_PP_FOR().</p> */
+/** <p>Can be used inside BOOST_PP_FOR() (see for an explanation of the R parameter).</p> */
 #define BOOST_PP_LIST_TO_TUPLE_R(R,LIST) (BOOST_PP_LIST_ENUM_R(R,LIST))
 #endif

@@ -50,11 +50,6 @@ BOOST_PP_LIST_FOR_EACH_PRODUCT
   <li><a href="../../example/array_arithmetic.c">array_arithmetic.c</a></li>
 </ul>
 
-<h3>Uses</h3>
-<ul>
-  <li>BOOST_PP_FOR() (see for explanation of the R parameter)</li>
-</ul>
-
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
@@ -62,7 +57,7 @@ BOOST_PP_LIST_FOR_EACH_PRODUCT
 */
 #define BOOST_PP_LIST_FOR_EACH_PRODUCT(MACRO,SIZE_OF_TUPLE,TUPLE_OF_LISTS) BOOST_PP_LIST_FOR_EACH_PRODUCT_R(0,MACRO,SIZE_OF_TUPLE,TUPLE_OF_LISTS)
 
-/** <p>Can be used inside BOOST_PP_FOR().</p> */
+/** <p>Can be used inside BOOST_PP_FOR() (see for an explanation of the R parameter).</p> */
 #define BOOST_PP_LIST_FOR_EACH_PRODUCT_R(R,MACRO,SIZE_OF_TUPLE,TUPLE_OF_LISTS) BOOST_PP_LIST_FOR_EACH_PRODUCT_R2(0,MACRO,BOOST_PP_TUPLE_TO_LIST(SIZE_OF_TUPLE,BOOST_PP_TUPLE_REVERSE(SIZE_OF_TUPLE,TUPLE_OF_LISTS)))
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) ||\
   !defined(BOOST_NO_COMPILER_CONFIG) && defined(_MSC_VER)
