@@ -160,7 +160,10 @@ public: // visitor interfaces
     void operator()(T& operand) const
     {
         operand.~T();
+
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
         operand; // suppresses warnings
+#endif
     }
 
 };
