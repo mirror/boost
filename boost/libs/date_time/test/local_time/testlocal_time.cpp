@@ -176,9 +176,9 @@ main()
     //Now construct with a date and time - invalid parameters
     try{
       local_date_time blt(d, h, ny_tz, true);
-      check("Did not catch expected exception (DSTNotValid)", false);
+      check("Did not catch expected exception (dst_not_valid)", false);
     }catch(dst_not_valid& d){
-      check(std::string("Caught expected exception (DSTNotValid) ") + d.what(), true);
+      check(std::string("Caught expected exception (dst_not_valid) ") + d.what(), true);
     }catch(std::exception& e){
       check(std::string("Caught unexpected exception ") + e.what(), false);
     }
@@ -215,7 +215,7 @@ main()
         //local_date_time lt1(d,td,ny_tz,false);
         local_date_time lt1(d,td,ny_tz,true);
         std::cout << "no exception thrown" << std::endl;
-      }catch(InvalidTimeLabel& e){
+      }catch(time_label_invalid& e){
         std::cout << "caught: " << e.what() << std::endl;
       }*/
       local_date_time lt2(ptime(d,time_duration(5,15,0)), ny_tz);
