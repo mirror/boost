@@ -38,7 +38,7 @@ static inline boost::arg<7> _7() { return boost::arg<7>(); }
 static inline boost::arg<8> _8() { return boost::arg<8>(); }
 static inline boost::arg<9> _9() { return boost::arg<9>(); }
 
-#elif (defined(BOOST_MSVC) && BOOST_MSVC <= 1300) || (defined(__DECCXX_VER) && __DECCXX_VER <= 60590031) || defined(__MWERKS__)
+#elif defined(BOOST_MSVC) || (defined(__DECCXX_VER) && __DECCXX_VER <= 60590031) || defined(__MWERKS__)
 
 static boost::arg<1> _1;
 static boost::arg<2> _2;
