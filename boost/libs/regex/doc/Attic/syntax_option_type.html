@@ -24,13 +24,15 @@
       </P>
       <HR>
       <H3>Synopsis</H3>
-      <P>Type syntax_option type is an implementation defined bitmask type that controls 
-         how a regular expression string is to be interpreted.&nbsp; For convenience 
-         note that all the constants listed here, are also duplicated within the scope 
-         of class template <A href="basic_regex.html">basic_regex</A>.</P>
+      <P>Type syntax_option type is an implementation specific bitmask type that 
+         controls how a regular expression string is to be interpreted.&nbsp; For 
+         convenience note that all the constants listed here, are also duplicated within 
+         the scope of class template <A href="basic_regex.html">basic_regex</A>.</P>
       <PRE>namespace std{ namespace regex_constants{
 
-typedef bitmask_type syntax_option_type;
+typedef <EM>implementation-specific-bitmask-type</EM>   
+
+  syntax_option_type;
 // these flags are standardized:
 static const syntax_option_type normal;
 static const syntax_option_type icase;
@@ -50,7 +52,7 @@ static const syntax_option_type perl;<BR>// these are boost.regex specific:<BR>s
 } // namespace regex_constants
 } // namespace std</PRE>
       <H3>Description</H3>
-      <P>The type <CODE>syntax_option_type</CODE> is an implementation defined bitmask 
+      <P>The type <CODE>syntax_option_type</CODE> is an implementation specific bitmask 
          type (17.3.2.1.2). Setting its elements has the effects listed in the table 
          below, a valid value of type <CODE>syntax_option_type</CODE> will always have 
          exactly one of the elements <CODE>normal, basic, extended, awk, grep, egrep, sed 
@@ -314,18 +316,15 @@ static const syntax_option_type perl;<BR>// these are boost.regex specific:<BR>s
             </TR>
          </TABLE>
       </P>
-         <HR>
+      <HR>
       <p>Revised 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
          24 Oct 2003 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
-            2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
    </body>
 </html>
-
-

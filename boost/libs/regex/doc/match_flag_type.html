@@ -26,14 +26,14 @@
       <br>
       <hr>
       <h3>Synopsis</h3>
-      <p>The type <code>match_flag_type</code> is an implementation defined bitmask type 
-         (17.3.2.1.2) that controls how a regular expression is matched against a 
+      <p>The type <code>match_flag_type</code> is an implementation specific bitmask 
+         type (17.3.2.1.2) that controls how a regular expression is matched against a 
          character sequence.&nbsp; The behavior of the format flags is descibed in more 
          detail in the <A href="format_syntax.html">format syntax guide</A>.</p>
       <pre>
 namespace boost{ namespace regex_constants{
 
-typedef bitmask_type match_flag_type;
+typedef <EM>implemenation-specific-bitmask-type</EM> match_flag_type;
 
 static const match_flag_type match_default = 0;
 static const match_flag_type match_not_bob;
@@ -62,8 +62,8 @@ static const match_flag_type format_all;
 } // namespace boost
 </pre>
       <h3>Description</h3>
-      <p>The type <code>match_flag_type</code> is an implementation defined bitmask type 
-         (17.3.2.1.2). When matching a regular expression against a sequence of 
+      <p>The type <code>match_flag_type</code> is an implementation specific bitmask 
+         type (17.3.2.1.2). When matching a regular expression against a sequence of 
          characters [first, last) then setting its elements has the effects listed in 
          the table below:</p>
       <p></p>
