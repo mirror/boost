@@ -65,7 +65,7 @@
 #  define BOOST_NO_SWPRINTF
 #endif
 
-#if _MSC_VER <= 1310
+#if _MSC_VER <= 1400  // 1400 == VC++ 8.0
 #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #endif
 
