@@ -43,19 +43,19 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
+    private:
         typedef F functor_type;
         typedef A array_type;
         typedef const A const_array_type;
         typedef const matrix<T, F, A> const_self_type;
         typedef matrix<T, F, A> self_type;
+    public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
 #else
         typedef const matrix_reference<const_self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
-        typedef typename A::const_iterator const_iterator_type;
-        typedef typename A::iterator iterator_type;
         typedef dense_tag storage_category;
         // This could be better for performance,
         // typedef typename unknown_orientation_tag orientation_category;
@@ -264,6 +264,13 @@ namespace boost { namespace numeric { namespace ublas {
             std::fill (data ().begin (), data ().end (), value_type ());
         }
 
+        // Iterator types
+    private:
+        // Use the storage array iterator
+        typedef typename A::const_iterator const_iterator_type;
+        typedef typename A::iterator iterator_type;
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator1<self_type, dense_random_access_iterator_tag> iterator1;
         typedef indexed_iterator2<self_type, dense_random_access_iterator_tag> iterator2;
@@ -321,7 +328,6 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
 
-        // Iterators simply are pointers.
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator1:
@@ -986,21 +992,19 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
+    private:
         typedef F functor_type;
         typedef A array_type;
         typedef const A const_array_type;
         typedef const vector_of_vector<T, F, A> const_self_type;
         typedef vector_of_vector<T, F, A> self_type;
+    public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
 #else
         typedef const matrix_reference<const_self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
-        typedef typename A::const_iterator vector_const_iterator_type;
-        typedef typename A::iterator vector_iterator_type;
-        typedef typename A::value_type::const_iterator const_iterator_type;
-        typedef typename A::value_type::iterator iterator_type;
         typedef dense_tag storage_category;
         // This could be better for performance,
         // typedef typename unknown_orientation_tag orientation_category;
@@ -1191,6 +1195,14 @@ namespace boost { namespace numeric { namespace ublas {
                 std::fill (data () [k].begin (), data () [k].end (), value_type ());
         }
 
+        // Iterator types
+    private:
+        // Use the vector iterator
+        typedef typename A::const_iterator vector_const_iterator_type;
+        typedef typename A::iterator vector_iterator_type;
+        typedef typename A::value_type::const_iterator const_iterator_type;
+        typedef typename A::value_type::iterator iterator_type;
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator1<self_type, dense_random_access_iterator_tag> iterator1;
         typedef indexed_iterator2<self_type, dense_random_access_iterator_tag> iterator2;
@@ -1248,7 +1260,6 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
 
-        // Iterators simply are pointers.
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator1:
@@ -1947,15 +1958,16 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
+    private:
         typedef const identity_matrix<T> const_self_type;
         typedef identity_matrix<T> self_type;
+    public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
 #else
         typedef const matrix_reference<const_self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
-        typedef size_type const_iterator_type;
         typedef packed_tag storage_category;
         typedef unknown_orientation_tag orientation_category;
 
@@ -2033,6 +2045,12 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+        // Use an index
+        typedef size_type const_iterator_type;
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_const_iterator1<self_type, packed_random_access_iterator_tag> iterator1;
         typedef indexed_const_iterator2<self_type, packed_random_access_iterator_tag> iterator2;
@@ -2068,7 +2086,6 @@ namespace boost { namespace numeric { namespace ublas {
             return const_iterator2 (*this, i, j);
         }
 
-        // Iterators simply are indices.
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator1:
@@ -2409,15 +2426,16 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
+    private:
         typedef const zero_matrix<T> const_self_type;
         typedef zero_matrix<T> self_type;
+    public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
 #else
         typedef const matrix_reference<const_self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
-        typedef size_type const_iterator_type;
         typedef sparse_tag storage_category;
         typedef unknown_orientation_tag orientation_category;
 
@@ -2495,6 +2513,11 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+        // Use an index
+        typedef size_type const_iterator_type;
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_const_iterator1<self_type, sparse_bidirectional_iterator_tag> iterator1;
         typedef indexed_const_iterator2<self_type, sparse_bidirectional_iterator_tag> iterator2;
@@ -2526,7 +2549,6 @@ namespace boost { namespace numeric { namespace ublas {
             return const_iterator2 (*this, i, j);
         }
 
-        // Iterators simply are indices.
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator1:
@@ -2857,14 +2879,15 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
+    private:
         typedef const scalar_matrix<T> const_self_type;
         typedef scalar_matrix<T> self_type;
+    public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
 #else
         typedef const matrix_reference<const_self_type> const_closure_type;
 #endif
-        typedef size_type const_iterator_type;
         typedef dense_tag storage_category;
         typedef unknown_orientation_tag orientation_category;
 
@@ -2935,6 +2958,12 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+        // Use an index
+        typedef size_type const_iterator_type;
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_const_iterator1<self_type, dense_random_access_iterator_tag> iterator1;
         typedef indexed_const_iterator2<self_type, dense_random_access_iterator_tag> iterator2;
@@ -2962,7 +2991,6 @@ namespace boost { namespace numeric { namespace ublas {
             return const_iterator2 (*this, i, j);
         }   
 
-        // Iterators simply are indices.
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator1:
@@ -3295,16 +3323,16 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
+    private:
         typedef const c_matrix<T, N, M> const_self_type;
         typedef c_matrix<T, N, M> self_type;
+    public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
 #else
         typedef const matrix_reference<const_self_type> const_closure_type;
 #endif
         typedef matrix_reference<self_type> closure_type;
-        typedef const T *const_iterator_type;
-        typedef T *iterator_type;
         typedef dense_tag storage_category;
         // This could be better for performance,
         // typedef typename unknown_orientation_tag orientation_category;
@@ -3523,6 +3551,13 @@ namespace boost { namespace numeric { namespace ublas {
                 std::fill (data_ [i], data_ [i] + size2_, value_type ());
         }
 
+        // Iterator types
+    private:
+        // Use pointers for iterator
+        typedef const T *const_iterator_type;
+        typedef T *iterator_type;
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator1<self_type, dense_random_access_iterator_tag> iterator1;
         typedef indexed_iterator2<self_type, dense_random_access_iterator_tag> iterator2;
@@ -3580,7 +3615,6 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
 
-        // Iterators simply are pointers.
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator1:

@@ -196,7 +196,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef typename E::const_pointer const_pointer;
         typedef const_pointer pointer;
-        typedef typename E::const_iterator const_iterator_type;
         typedef typename E::storage_category storage_category;
         typedef typename E::simd_category simd_category;
 
@@ -235,14 +234,15 @@ namespace boost { namespace numeric { namespace ublas {
             return &(*this).e_ == &vr.e_;
         }
 
-        typedef const_iterator_type const_iterator;
-        typedef const_iterator iterator;
-
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator find (size_type i) const {
             return expression ().find (i);
         }
+
+        // Iterator types
+        typedef typename E::const_iterator const_iterator;
+        typedef const_iterator iterator;
 
         // Iterator is the iterator of the referenced expression.
 
@@ -294,7 +294,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_reference<E> >::operator ();
 #endif
-        typedef E expression_type;
         typedef typename E::size_type size_type;
         typedef typename E::difference_type difference_type;
         typedef typename E::value_type value_type;
@@ -313,19 +312,13 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename E::const_pointer,
                                           typename E::pointer>::type pointer;
 #endif
+    private:
+        typedef E expression_type;
         typedef const vector_reference<E> const_self_type;
         typedef vector_reference<E> self_type;
+    public:
         typedef const_self_type const_closure_type;
         typedef const_closure_type closure_type;
-#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef typename E::const_iterator const_iterator_type;
-        typedef typename E::iterator iterator_type;
-#else
-        typedef typename E::const_iterator const_iterator_type;
-        typedef typename boost::mpl::if_c<boost::is_const<E>::value,
-                                          typename E::const_iterator,
-                                          typename E::iterator>::type iterator_type;
-#endif
         typedef typename E::storage_category storage_category;
         typedef typename E::simd_category simd_category;
 
@@ -444,8 +437,16 @@ namespace boost { namespace numeric { namespace ublas {
             return &(*this).e_ == &vr.e_;
         }
 
-        typedef const_iterator_type const_iterator;
-        typedef iterator_type iterator;
+        // Iterator types
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
+        typedef typename E::const_iterator const_iterator;
+        typedef typename E::iterator iterator;
+#else
+        typedef typename E::const_iterator const_iterator;
+        typedef typename boost::mpl::if_c<boost::is_const<E>::value,
+                                          typename E::const_iterator,
+                                          typename E::iterator>::type iterator;
+#endif
 
         // Element lookup
         BOOST_UBLAS_INLINE
@@ -524,30 +525,30 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_unary<E, F> >::operator ();
 #endif
-        // typedef E expression_type;
         typedef typename boost::mpl::if_c<boost::is_same<F,
                                                          scalar_identity<typename E::value_type> >::value,
                                           E,
                                           const E>::type expression_type;
-        typedef F functor_type;
         typedef typename E::size_type size_type;
         typedef typename E::difference_type difference_type;
         typedef typename F::result_type value_type;
         typedef value_type const_reference;
-        typedef typename boost::mpl::if_c<boost::is_same<functor_type,
+        typedef typename boost::mpl::if_c<boost::is_same<F,
                                                          scalar_identity<value_type> >::value,
                                           typename E::reference,
                                           value_type>::type reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+    private:
+        typedef F functor_type;
         typedef typename boost::mpl::if_c<boost::is_const<expression_type>::value,
                                           typename E::const_closure_type,
                                           typename E::closure_type>::type expression_closure_type;
         typedef const vector_unary<E, F> const_self_type;
         typedef vector_unary<E, F> self_type;
+    public:
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
-        typedef typename E::const_iterator const_iterator_type;
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction
@@ -596,6 +597,11 @@ namespace boost { namespace numeric { namespace ublas {
             return (*this).expression ().same_closure (vu.expression ());
         }
 
+        // Iterator types
+    private:
+        typedef typename E::const_iterator const_iterator_type;
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_const_iterator<const_closure_type, typename const_iterator_type::iterator_category> const_iterator;
         typedef const_iterator iterator;
@@ -820,9 +826,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_binary<E1, E2, F> >::operator ();
 #endif
-        typedef E1 expression1_type;
-        typedef E2 expression2_type;
-        typedef F functor_type;
         typedef typename promote_traits<typename E1::size_type, typename E2::size_type>::promote_type size_type;
         typedef typename promote_traits<typename E1::difference_type, typename E2::difference_type>::promote_type difference_type;
         typedef typename F::result_type value_type;
@@ -830,14 +833,17 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+    private:
+        typedef E1 expression1_type;
+        typedef E2 expression2_type;
+        typedef F functor_type;
         typedef typename E1::const_closure_type expression1_closure_type;
         typedef typename E2::const_closure_type expression2_closure_type;
         typedef const vector_binary<E1, E2, F> const_self_type;
         typedef vector_binary<E1, E2, F> self_type;
+    public:
         typedef const_self_type const_closure_type;
         typedef const_closure_type closure_type;
-        typedef typename E1::const_iterator const_iterator1_type;
-        typedef typename E2::const_iterator const_iterator2_type;
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction
@@ -880,6 +886,11 @@ namespace boost { namespace numeric { namespace ublas {
                    (*this).expression2 ().same_closure (vb.expression2 ());
         }
 
+        // Iterator types
+    private:
+        typedef typename E1::const_iterator const_iterator1_type;
+        typedef typename E2::const_iterator const_iterator2_type;
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef typename iterator_restrict_traits<typename const_iterator1_type::iterator_category,
                                                   typename const_iterator2_type::iterator_category>::iterator_category iterator_category;
@@ -1209,9 +1220,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_binary_scalar1<E1, E2, F> >::operator ();
 #endif
-        typedef E1 expression1_type;
-        typedef E2 expression2_type;
-        typedef F functor_type;
         typedef typename E2::size_type size_type;
         typedef typename E2::difference_type difference_type;
         typedef typename F::result_type value_type;
@@ -1219,14 +1227,17 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+    private:
+        typedef E1 expression1_type;
+        typedef E2 expression2_type;
+        typedef F functor_type;
         typedef E1 expression1_closure_type;
         typedef typename E2::const_closure_type expression2_closure_type;
         typedef const vector_binary_scalar1<E1, E2, F> const_self_type;
         typedef vector_binary_scalar1<E1, E2, F> self_type;
+    public:
         typedef const_self_type const_closure_type;
         typedef const_closure_type closure_type;
-        typedef typename E1::value_type const_iterator1_type;
-        typedef typename E2::const_iterator const_iterator2_type;
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction
@@ -1269,6 +1280,12 @@ namespace boost { namespace numeric { namespace ublas {
                    (*this).expression2 ().same_closure (vbs1.expression2 ());
         }
 
+        // Iterator types
+    private:
+        typedef typename E1::value_type const_iterator1_type;
+        typedef typename E2::const_iterator const_iterator2_type;
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_const_iterator<const_closure_type, typename const_iterator2_type::iterator_category> const_iterator;
         typedef const_iterator iterator;
@@ -1450,9 +1467,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_binary_scalar2<E1, E2, F> >::operator ();
 #endif
-        typedef E1 expression1_type;
-        typedef E2 expression2_type;
-        typedef F functor_type;
         typedef typename E1::size_type size_type;
         typedef typename E1::difference_type difference_type;
         typedef typename F::result_type value_type;
@@ -1460,14 +1474,17 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
+    private:
+        typedef E1 expression1_type;
+        typedef E2 expression2_type;
+        typedef F functor_type;
         typedef typename E1::const_closure_type expression1_closure_type;
         typedef E2 expression2_closure_type;
         typedef const vector_binary_scalar2<E1, E2, F> const_self_type;
         typedef vector_binary_scalar2<E1, E2, F> self_type;
+    public:
         typedef const_self_type const_closure_type;
         typedef const_closure_type closure_type;
-        typedef typename E1::const_iterator const_iterator1_type;
-        typedef typename E2::value_type const_iterator2_type;
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction
@@ -1510,6 +1527,12 @@ namespace boost { namespace numeric { namespace ublas {
                    (*this).expression2 ().same_closure (vbs2.expression2 ());
         }
 
+        // Iterator types
+    private:
+        typedef typename E1::const_iterator const_iterator1_type;
+        typedef typename E2::value_type const_iterator2_type;
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_const_iterator<const_closure_type, typename const_iterator2_type::iterator_category> const_iterator;
         typedef const_iterator iterator;
@@ -1698,13 +1721,15 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_scalar_unary:
         public scalar_expression<typename F::result_type> {
     public:
-        typedef E expression_type;
-        typedef F functor_type;
         typedef typename F::size_type size_type;
         typedef typename F::difference_type difference_type;
         typedef typename F::result_type value_type;
+    private:
+        typedef E expression_type;
+        typedef F functor_type;
         typedef typename E::const_closure_type expression_closure_type;
         typedef typename E::const_iterator::iterator_category iterator_category;
+    public:
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction
@@ -1824,16 +1849,18 @@ namespace boost { namespace numeric { namespace ublas {
         public scalar_expression<typename F::result_type> {
     public:
         BOOST_STATIC_CONSTANT (int, complexity = 1);
-        typedef E1 expression1_type;
-        typedef E2 expression2_type;
-        typedef F functor_type;
         typedef typename F::size_type size_type;
         typedef typename F::difference_type difference_type;
         typedef typename F::result_type value_type;
+    private:
+        typedef E1 expression1_type;
+        typedef E2 expression2_type;
+        typedef F functor_type;
         typedef typename E1::const_closure_type expression1_closure_type;
         typedef typename E2::const_closure_type expression2_closure_type;
         typedef typename iterator_restrict_traits<typename E1::const_iterator::iterator_category,
                                                   typename E2::const_iterator::iterator_category>::iterator_category iterator_category;
+    public:
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction

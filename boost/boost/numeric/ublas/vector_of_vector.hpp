@@ -44,11 +44,13 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const T *const_pointer;
         typedef T *pointer;
+    private:
         typedef A array_type;
         typedef const A const_array_type;
         typedef F functor_type;
         typedef const generalized_vector_of_vector<T, F, A> const_self_type;
         typedef generalized_vector_of_vector<T, F, A> self_type;
+    public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
 #else
@@ -56,10 +58,6 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef matrix_reference<self_type> closure_type;
         typedef typename A::value_type vector_data_value_type;
-        typedef typename A::const_iterator vector_const_iterator_type;
-        typedef typename A::iterator vector_iterator_type;
-        typedef typename A::value_type::const_iterator const_iterator_type;
-        typedef typename A::value_type::iterator iterator_type;
         typedef sparse_tag storage_category;
         typedef typename F::orientation_category orientation_category;
 
@@ -302,6 +300,15 @@ namespace boost { namespace numeric { namespace ublas {
             data_ [functor_type::size1 (size1_, size2_)] = vector_data_value_type ();
         }
 
+        // Iterator types
+    private:
+        // Use vector iterator
+        typedef typename A::const_iterator vector_const_iterator_type;
+        typedef typename A::iterator vector_iterator_type;
+        typedef typename A::value_type::const_iterator const_iterator_type;
+        typedef typename A::value_type::iterator iterator_type;
+
+    public:
         class const_iterator1;
         class iterator1;
         class const_iterator2;
@@ -476,7 +483,6 @@ namespace boost { namespace numeric { namespace ublas {
             }
         }
 
-        // Iterators simply are pointers.
 
         class const_iterator1:
             public container_const_reference<generalized_vector_of_vector>,

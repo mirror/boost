@@ -255,18 +255,18 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const T *const_pointer;
         typedef T *pointer;
+    private:
         typedef A array_type;
         typedef const A const_array_type;
         typedef const sparse_vector<T, A> const_self_type;
         typedef sparse_vector<T, A> self_type;
+    public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const vector_const_reference<const_self_type> const_closure_type;
 #else
         typedef const vector_reference<const_self_type> const_closure_type;
 #endif
         typedef vector_reference<self_type> closure_type;
-        typedef typename A::const_iterator const_iterator_type;
-        typedef typename A::iterator iterator_type;
         typedef sparse_tag storage_category;
 
         // Construction and destruction
@@ -488,6 +488,13 @@ namespace boost { namespace numeric { namespace ublas {
             data ().clear ();
         }
 
+        // Iterator types
+    private:
+        // Use storage iterator
+        typedef typename A::const_iterator const_iterator_type;
+        typedef typename A::iterator iterator_type;
+
+    public:
         class const_iterator;
         class iterator;
 
@@ -503,7 +510,6 @@ namespace boost { namespace numeric { namespace ublas {
             return iterator (*this, data ().lower_bound (i));
         }
 
-        // Iterators simply are pointers.
 
         class const_iterator:
             public container_const_reference<sparse_vector>,
@@ -738,18 +744,18 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const T *const_pointer;
         typedef T *pointer;
+    private:
         typedef IA index_array_type;
         typedef TA value_array_type;
         typedef const compressed_vector<T, IB, IA, TA> const_self_type;
         typedef compressed_vector<T, IB, IA, TA> self_type;
+    public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const vector_const_reference<const_self_type> const_closure_type;
 #else
         typedef const vector_reference<const_self_type> const_closure_type;
 #endif
         typedef vector_reference<self_type> closure_type;
-        typedef typename IA::const_iterator const_iterator_type;
-        typedef typename IA::iterator iterator_type;
         typedef sparse_tag storage_category;
 
         // Construction and destruction
@@ -1034,6 +1040,13 @@ namespace boost { namespace numeric { namespace ublas {
             filled_ = 0;
         }
 
+        // Iterator types
+    private:
+        // Use index array iterator
+        typedef typename IA::const_iterator const_iterator_type;
+        typedef typename IA::iterator iterator_type;
+
+    public:
         class const_iterator;
         class iterator;
 
@@ -1049,7 +1062,6 @@ namespace boost { namespace numeric { namespace ublas {
             return iterator (*this, detail::lower_bound (index_data ().begin (), index_data ().begin () + filled_, k_based (i), std::less<size_type> ()));
         }
 
-        // Iterators simply are pointers.
 
         class const_iterator:
             public container_const_reference<compressed_vector>,
@@ -1296,18 +1308,18 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const T *const_pointer;
         typedef T *pointer;
+    private:
         typedef IA index_array_type;
         typedef TA value_array_type;
         typedef const coordinate_vector<T, IB, IA, TA> const_self_type;
         typedef coordinate_vector<T, IB, IA, TA> self_type;
+    public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const vector_const_reference<const_self_type> const_closure_type;
 #else
         typedef const vector_reference<const_self_type> const_closure_type;
 #endif
         typedef vector_reference<self_type> closure_type;
-        typedef typename IA::const_iterator const_iterator_type;
-        typedef typename IA::iterator iterator_type;
         typedef sparse_tag storage_category;
 
         // Construction and destruction
@@ -1620,6 +1632,13 @@ namespace boost { namespace numeric { namespace ublas {
             filled_ = 0;
         }
 
+        // Iterator types
+    private:
+        // Use index array iterator
+        typedef typename IA::const_iterator const_iterator_type;
+        typedef typename IA::iterator iterator_type;
+
+    public:
         class const_iterator;
         class iterator;
 
@@ -1637,7 +1656,6 @@ namespace boost { namespace numeric { namespace ublas {
             return iterator (*this, detail::lower_bound (index_data ().begin (), index_data ().begin () + filled_, k_based (i), std::less<size_type> ()));
         }
 
-        // Iterators simply are pointers.
 
         class const_iterator:
             public container_const_reference<coordinate_vector>,

@@ -921,7 +921,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         // DEPRECATED typedef const value_type *const_pointer;
         // DEPRECATED typedef value_type *pointer;
-        typedef size_type const_iterator_type;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -965,8 +964,12 @@ namespace boost { namespace numeric { namespace ublas {
             return ! (*this == r);
         }
 
-        // Iterator simply is a index.
+        // Iterator types
+    private:
+        // Use and index
+        typedef size_type const_iterator_type;
 
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_const_iterator<range, std::random_access_iterator_tag> const_iterator;
 #else
@@ -1116,7 +1119,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
         // DEPRECATED typedef const value_type *const_pointer;
         // DEPRECATED typedef value_type *pointer;
-        typedef size_type const_iterator_type;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -1169,8 +1171,12 @@ namespace boost { namespace numeric { namespace ublas {
             return ! (*this == s);
         }
 
-        // Iterator simply is a index.
+        // Iterator types
+    private:
+        // Use and index
+        typedef size_type const_iterator_type;
 
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_const_iterator<slice, std::random_access_iterator_tag> const_iterator;
 #else
@@ -1322,7 +1328,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename A::reference reference;
         typedef typename A::const_pointer const_pointer;
         typedef typename A::pointer pointer;
-        typedef difference_type const_iterator_type;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -1418,8 +1423,12 @@ namespace boost { namespace numeric { namespace ublas {
             return ! (*this == ia);
         }
 
-        // Iterator simply is a index.
+        // Iterator types
+    private:
+        // Use a index difference
+        typedef difference_type const_iterator_type;
 
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_const_iterator<indirect_array, std::random_access_iterator_tag> const_iterator;
 #else
