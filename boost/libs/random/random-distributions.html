@@ -176,31 +176,31 @@ in detail which are already defined in the
 
 <pre>
 namespace boost {
-  template&lt;class UniformRandomNumberGenerator, class IntType = int&gt;
+  template&lt;class IntType = int&gt;
   class uniform_smallint;
-  template&lt;class UniformRandomNumberGenerator, class IntType = int&gt;
+  template&lt;class IntType = int&gt;
   class uniform_int;
-  template&lt;class UniformRandomNumberGenerator, class RealType = double&gt;
+  template&lt;class RealType = double&gt;
   class uniform_01;
-  template&lt;class UniformRandomNumberGenerator, class RealType = double&gt;
+  template&lt;class RealType = double&gt;
   class uniform_real;
 
   // discrete distributions
-  template&lt;class UniformRandomNumberGenerator&gt;
+  template&lt;class RealType = double&gt;
   class bernoulli_distribution;
-  template&lt;class UniformRandomNumberGenerator, class IntType = int&gt;
+  template&lt;class IntType = int&gt;
   class geometric_distribution;
 
   // continuous distributions
-  template&lt;class UniformRandomNumberGenerator, class RealType = double&gt;
+  template&lt;class RealType = double&gt;
   class triangle_distribution;
-  template&lt;class UniformRandomNumberGenerator, class RealType = double&gt;
+  template&lt;class RealType = double&gt;
   class exponential_distribution;
-  template&lt;class UniformRandomNumberGenerator, class RealType = double&gt;
+  template&lt;class RealType = double&gt;
   class normal_distribution;
-  template&lt;class UniformRandomNumberGenerator, class RealType = double&gt;
+  template&lt;class RealType = double&gt;
   class lognormal_distribution;
-  template&lt;class UniformRandomNumberGenerator, class RealType = double,
+  template&lt;class RealType = double,
     class Cont = std::vector&lt;RealType&gt; &gt;
   class uniform_on_sphere;
 }
