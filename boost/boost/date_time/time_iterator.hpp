@@ -2,7 +2,7 @@
 #define DATE_TIME_TIME_ITERATOR_HPP___
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 
@@ -20,7 +20,12 @@ namespace date_time {
     {
       current_ = current_ + offset_;
       return *this;
-    };
+    }
+    time_itr& operator--() 
+    {
+      current_ = current_ - offset_;
+      return *this;
+    }
     time_type operator*() {return current_;};
     time_type* operator->() {return &current_;};
     bool operator<  (const time_type& t) {return current_ < t;};
