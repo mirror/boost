@@ -56,17 +56,24 @@ struct ice_and<true, true, true, true, true, true, true>
    BOOST_STATIC_CONSTANT(bool, value = true);
 };
 
-template <bool b1, bool b2>
+template <int b1, int b2>
 struct ice_eq
 {
    BOOST_STATIC_CONSTANT(bool, value = (b1 == b2));
 };
 
-template <bool b1, bool b2>
+template <int b1, int b2>
 struct ice_ne
 {
    BOOST_STATIC_CONSTANT(bool, value = (b1 != b2));
 };
+
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+template <int b1, int b2>
+const bool ice_eq<b1,b2>::value;
+template <int b1, int b2>
+const bool ice_ne<b1,b2>::value;
+#endif
 
 } // namespace type_traits
 
