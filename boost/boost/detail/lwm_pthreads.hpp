@@ -37,7 +37,14 @@ public:
 
     lightweight_mutex()
     {
+
+// HPUX 10.20 / DCE has a nonstandard pthread_mutex_init
+
+#if defined(__hpux) && defined(_DECTHREADS_)
+        pthread_mutex_init(&m_, pthread_mutexattr_default);
+#else
         pthread_mutex_init(&m_, 0);
+#endif
     }
 
     ~lightweight_mutex()
