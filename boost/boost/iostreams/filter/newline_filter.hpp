@@ -209,8 +209,9 @@ private:
     // must be returned before EOF.)
     int_type non_newline(int_type c)
     {
+        using namespace newline;
         if ( c == EOF && 
-            (flags_ & newline::final_newline) &&
+            (flags_ & final_newline) != 0 && 
             (flags_ & line_complete) == 0 ) 
         {
             flags_ |= has_EOF;
