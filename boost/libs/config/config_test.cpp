@@ -1,4 +1,4 @@
-//  Boost config.hpp configuration test program file  ------------------------------//
+//  Boost config.hpp configuration test program file  -----------------------//
 
 //  (C) Copyright Boost.org 2000. Permission to copy, use, modify, sell and
 //  distribute this software is granted provided this copyright notice appears
@@ -11,9 +11,13 @@
 #include <iostream>
 
 using std::cout;
+using std::hex;
+using std::dec;
 
 int main()
 {
+
+  // boost compiler workaround defines
 
 #   ifdef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
         cout << "BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS defined\n";
@@ -63,8 +67,15 @@ int main()
         cout << "BOOST_SYSTEM_HAS_STDINT_H defined\n";
 #   endif
 
+
+  // compilers
+
 #   ifdef __GNUC__
         cout << "__GNUC__ defined as " << __GNUC__ << "\n";
+#   endif
+
+#   ifdef __GNUC_MINOR__
+        cout << "__GNUC_MINOR__ defined as " << __GNUC_MINOR__ << "\n";
 #   endif
 
 #   ifdef __EDG_VERSION__
@@ -83,6 +94,20 @@ int main()
         cout << "__SUNPRO_CC defined as " << __SUNPRO_CC << "\n";
 #   endif
 
+#   ifdef __sgi
+        cout << "__sgi is defined\n";
+#     ifdef _COMPILER_VERSION
+        cout << "_COMPILER_VERSION defined as " << _COMPILER_VERSION << "\n";
+#     endif
+#   endif
+
+#   ifdef __DECCXX
+        cout << "__DECCXX defined\n";
+#     ifdef __DECCXX_VER
+        cout << "__DECCXX_VER defined as " << __DECCXX_VER << "\n";
+#     endif
+#   endif
+
 #   ifdef _MSC_VER
         cout << "_MSC_VER defined as " << _MSC_VER << "\n";
 #   endif
@@ -99,8 +124,28 @@ int main()
         cout << "BOOST_MSVC_STD_ITERATOR defined\n";
 #   endif
 
+
+  // libraries
+
 #   ifdef __SGI_STL_PORT
-        cout << "__SGI_STL_PORT defined\n";
+        cout << "__SGI_STL_PORT defined as 0x"
+             << hex << __SGI_STL_PORT << dec << "\n";
+#   endif
+
+#   ifdef __GLIBCPP__
+        cout << "__GLIBCPP__ defined\n";
+#   endif
+
+#   ifdef _GLIBCPP_VERSION
+        cout << "_GLIBCPP_VERSION defined as " << _GLIBCPP_VERSION << "\n";
+#   endif
+
+#   ifdef _GLIBCPP_USE_LONG_LONG
+        cout << "_GLIBCPP_USE_LONG_LONG defined\n";
+#   endif
+
+#   ifdef _GLIBCPP_USE_WCHAR_T
+        cout << "_GLIBCPP_USE_WCHAR_T defined\n";
 #   endif
 
 #   ifdef __STL_NO_NAMESPACES
@@ -113,6 +158,10 @@ int main()
 
 #   ifdef __STL_IMPORT_VENDOR_CSTD
         cout << "__STL_IMPORT_VENDOR_CSTD defined\n";
+#   endif
+
+#   ifdef _RWSTD_VER
+        cout << "_RWSTD_VER defined as " << _RWSTD_VER << "\n";
 #   endif
 
     return 0;
