@@ -130,7 +130,7 @@ reg_expression<charT, traits, Allocator>::reg_expression(const reg_expression<ch
    }
    else
    {
-      _flags = regbase::use_except;
+      _flags = e.flags() & ~(regbase::use_except);
       fail(e.error_code());
    }
 }
@@ -1174,6 +1174,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_d
          switch(ptr->type)
          {
          case re_detail::syntax_element_rep:
+            jm_assert(data.size() > ((re_detail::re_jump*)ptr)->alt.i);
             ((re_detail::re_jump*)ptr)->alt.p = add_offset(base, ((re_detail::re_jump*)ptr)->alt.i);
 #ifdef BOOST_REGEX_DEBUG
             if((re_detail::padding_mask & (int)((re_detail::re_jump*)ptr)->alt.p) && (((re_detail::re_jump*)ptr)->alt.p != b))
@@ -1187,6 +1188,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_d
             goto rebase;
          case re_detail::syntax_element_jump:
          case re_detail::syntax_element_alt:
+            jm_assert(data.size() > ((re_detail::re_jump*)ptr)->alt.i);
             ((re_detail::re_jump*)ptr)->alt.p = add_offset(base, ((re_detail::re_jump*)ptr)->alt.i);
 #ifdef BOOST_REGEX_DEBUG
             if((re_detail::padding_mask & (int)((re_detail::re_jump*)ptr)->alt.p) && (((re_detail::re_jump*)ptr)->alt.p != b))
@@ -1209,6 +1211,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_d
             goto rebase;
          default:
             rebase:
+            jm_assert(data.size() > ptr->next.i);
             ptr->next.p = add_offset(base, ptr->next.i);
 #ifdef BOOST_REGEX_DEBUG
             if((re_detail::padding_mask & (int)(ptr->next.p)) && (((re_detail::re_jump*)ptr)->alt.p != b))
