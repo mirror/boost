@@ -143,11 +143,10 @@ public:
   {
     for(int j = 0; j < mt.state_size; ++j)
       is >> mt.x[j] >> std::ws;
-# if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292)) && BOOST_MSVC > 1300
+    // MSVC (up to 7.1) and Borland (up to 5.64) don't handle the template
+    // value parameter "n" available from the class template scope, so use
+    // the static constant with the same value
     mt.i = mt.state_size;
-# else 
-    mt.i = n;
-# endif 
     return is;
   }
 #endif

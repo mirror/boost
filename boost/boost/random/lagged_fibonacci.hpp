@@ -372,7 +372,7 @@ public:
 # else
         is >> f.i >> std::ws;
         for(unsigned int i = 0; i < f.long_lag; ++i) {
-            RealType value;
+            typename lagged_fibonacci_01::result_type value;
             is >> value >> std::ws;
             f.x[i] = value / f._modulus;
         }
