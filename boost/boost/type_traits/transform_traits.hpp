@@ -175,9 +175,8 @@ struct add_pointer
 {
 private:
    typedef typename remove_reference<T>::type no_ref_type;
-   typedef typename remove_bounds<no_ref_type>::type no_b_type;
 public:
-   typedef no_b_type* type;
+   typedef no_ref_type* type;
 };
 
 } // namespace boost
