@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 {
    if(argc > 1)
    {
-      for(unsigned int i = 1; i < argc; ++i)
+      for(int i = 1; i < argc; ++i)
       {
          std::ifstream fs(argv[i]);
          if(fs.bad()) continue;

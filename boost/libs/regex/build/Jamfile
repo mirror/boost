@@ -9,8 +9,6 @@ lib boost_regex : ../src/$(SOURCES).cpp
         <sysinclude>$(BOOST_ROOT)
         <define>BOOST_REGEX_NO_LIB=1
         <define>BOOST_REGEX_STATIC_LINK=1
-        <msvc><release><runtime-link-dynamic><threading>multi
-        <msvc><debug><runtime-link-dynamic><threading>multi
     : 
         debug release
     ;
@@ -20,6 +18,7 @@ dll boost_regex : ../src/$(SOURCES).cpp
     : 
         <sysinclude>$(BOOST_ROOT)
         <define>BOOST_RE_BUILD_DLL=1
+        <runtime-link>dynamic
     : 
         debug release
     ;
@@ -37,12 +36,6 @@ rule boost-regex-stage-tag ( toolset variant : properties * )
     if <runtime-link>dynamic in $(properties)
     {
         lib-rt-opt = d ;
-    }
-    
-    local lib-link-opt = s ;
-    if <target-type>DLL in $(properties)
-    {
-        lib-link-opt = i ;
     }
     
     local lib-debug-opt = "" ;
@@ -71,6 +64,11 @@ rule boost-regex-stage-tag ( toolset variant : properties * )
      case msvc :
         warning = "msvc toolset builds Boost.Regex library for vc6; use vc7 or vc7.1 toolsets for other versions" ;
         lib-toolset = vc6 ;
+        if <runtime-link>dynamic in $(properties)
+        {
+            lib-thread-opt = m ;
+        }
+
      
      case msvc-stlport :
         warning = "msvc-stlport toolset only builds Boost.Regex library for use with vc6" ;
@@ -79,6 +77,16 @@ rule boost-regex-stage-tag ( toolset variant : properties * )
         {
             lib-debug-opt = dd ;
         }
+        if <runtime-link>dynamic in $(properties)
+        {
+            lib-thread-opt = m ;
+        }
+     case vc7.1 :
+        lib-toolset = vc71 ;
+        if <runtime-link>dynamic in $(properties)
+        {
+            lib-thread-opt = m ;
+        }
     }
     
     if $(warning) && ! $($(warning-var))
@@ -86,7 +94,7 @@ rule boost-regex-stage-tag ( toolset variant : properties * )
         ECHO Warning: $(warning) ;
         $(warning-var) = issued ;
     }
-    return $(properties) <tag><$(variant)>_$(lib-toolset)_$(lib-thread-opt)$(lib-rt-opt)$(lib-link-opt)$(lib-debug-opt) ;
+    return $(properties) <tag><$(variant)>_$(lib-toolset)_$(lib-thread-opt)$(lib-rt-opt)$(lib-debug-opt) ;
 }
       
 stage bin-stage : <lib>boost_regex <dll>boost_regex
@@ -95,6 +103,8 @@ stage bin-stage : <lib>boost_regex <dll>boost_regex
     :
         debug release
     ;
+
+
 
 
 

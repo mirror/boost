@@ -67,9 +67,7 @@ public:
    map_type& get_map() { return index; }
    void IndexClasses(const std::string& file);
    class_index()
-      : index(),
-        expression(re)
-        {}
+      : expression(re) {}
 };
 
 bool class_index::grep_callback(boost::match_results<std::string::const_iterator> what)

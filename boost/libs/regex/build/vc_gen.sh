@@ -132,39 +132,39 @@ function vc6_gen()
 	
 	prefix="$subdir-"
 
-	libname="boost_regex_${subdir}_sss"
+	libname="libboost_regex_${subdir}_ss"
 	opts='/c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD'
 	vc6_gen_lib
 	
-	libname="boost_regex_${subdir}_mss"
+	libname="libboost_regex_${subdir}_ms"
 	opts='/nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c'
 	vc6_gen_lib
 	
 	debug="yes"
-	libname="boost_regex_${subdir}_sssd"
+	libname="libboost_regex_${subdir}_ssd"
 	opts='/nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c '
 	vc6_gen_lib
 	
-	libname="boost_regex_${subdir}_mssd"
+	libname="libboost_regex_${subdir}_msd"
 	opts='/nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c'
 	vc6_gen_lib
 	
-	libname="boost_regex_${subdir}_mdid"
+	libname="boost_regex_${subdir}_mdd"
 	opts='/nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c'
 	vc6_gen_dll
 	
 	debug="no"
 	opts='/nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c'
-	libname="boost_regex_${subdir}_mdi"
+	libname="boost_regex_${subdir}_md"
 	vc6_gen_dll
 	
 	debug="no"
 	opts='/nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c'
-	libname="boost_regex_${subdir}_mds"
+	libname="libboost_regex_${subdir}_md"
 	vc6_gen_lib
 	
 	debug="yes"
-	libname="boost_regex_${subdir}_mdsd"
+	libname="libboost_regex_${subdir}_mdd"
 	opts='/nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c'
 	vc6_gen_lib
 	
@@ -237,44 +237,44 @@ function vc6_stlp_gen()
 	
 	prefix="$subdir-"
 
-	libname="boost_regex_${subdir}_mss"
+	libname="libboost_regex_${subdir}_ms"
 	opts='/nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c'
 	vc6_gen_lib
 	
 	debug="true"
-	libname="boost_regex_${subdir}_mssd"
+	libname="libboost_regex_${subdir}_msd"
 	opts='/nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c'
 	vc6_gen_lib
 	
-	libname="boost_regex_${subdir}_mdid"
+	libname="boost_regex_${subdir}_mdd"
 	opts='/nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c'
 	vc6_gen_dll
 	
 	debug="no"
 	opts='/nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c'
-	libname="boost_regex_${subdir}_mdi"
+	libname="boost_regex_${subdir}_md"
 	vc6_gen_dll
 	
 	debug="no"
 	opts='/nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c'
-	libname="boost_regex_${subdir}_mds"
+	libname="libboost_regex_${subdir}_md"
 	vc6_gen_lib
 	
 	debug="true"
-	libname="boost_regex_${subdir}_mdsd"
+	libname="libboost_regex_${subdir}_mdd"
 	opts='/nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c'
 	vc6_gen_lib
 
 #  debug STLPort mode:
 	debug="yes"
 	opts='/nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c'
-	libname="boost_regex_${subdir}_mdidd"
+	libname="boost_regex_${subdir}_mddd"
 	vc6_gen_dll
-	libname="boost_regex_${subdir}_mssdd"
+	libname="libboost_regex_${subdir}_msdd"
 	opts='/nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c'
 	vc6_gen_lib
 	opts='/nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c'
-	libname="boost_regex_${subdir}_mdsdd"
+	libname="libboost_regex_${subdir}_mddd"
 	vc6_gen_lib
 	
 	cat > $out << EOF

@@ -18,7 +18,7 @@ TLINK32 = $(BCROOT)\bin\ILink32.exe
 
 IDE_LinkFLAGS32 =  -L$(BCROOT)\LIB
 LINKOPTS= -ap -Tpe -x
-CFLAGS= -O2 -tWC -DSTRICT; -Vx -Ve -w-inl -w-aus -w-csu -w-eff -w-rch -I$(BCROOT)\include;..\..\..\..\; -L$(BCROOT)\lib\obj -L$(BCROOT)\lib\release -L..\..\build\bcb5 $(CXXFLAGS)
+CFLAGS= -tWC -DSTRICT; -Vx -Ve -w-inl -w-aus -w-csu -w-eff -w-rch -I$(BCROOT)\include;..\..\..\..\; -L$(BCROOT)\lib\obj -L$(BCROOT)\lib\release -L..\..\build\bcb6 $(CXXFLAGS)
 
 BPI= vcl.bpi rtl.bpi vclx.bpi vcle.lib
 
@@ -26,6 +26,7 @@ BPL= vcl.lib rtl.lib vcle.lib
       
 
 all :: r1.exe r2.exe r3.exe r4.exe r5.exe r6.exe r1m.exe r2m.exe r3m.exe r4m.exe r5m.exe r6m.exe r1v.exe r2v.exe r3v.exe r4v.exe r5v.exe r6v.exe r1l.exe r2l.exe r3l.exe r4l.exe r5l.exe r6l.exe r1lm.exe r2lm.exe r3lm.exe r4lm.exe r5lm.exe r6lm.exe r1lv.exe r2lv.exe r3lv.exe r4lv.exe r5lv.exe r6lv.exe
+	copy ..\..\build\bcb6\*.dll
 	echo testing static single threaded version....
 	r1 tests.txt test1252.txt
 	r2 tests.txt
@@ -128,60 +129,62 @@ r6v.exe : $(SOURCES)
 
 
 r1l.exe : $(SOURCES)
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er1l.exe -DBOOST_RE_TEST_LOCALE_W32 $(SOURCES)
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er1l.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_W32 $(SOURCES)
 
 r2l.exe : $(SOURCES)
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er2l.exe -DBOOST_RE_TEST_LOCALE_C $(SOURCES)
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er2l.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_C $(SOURCES)
 
 r3l.exe : $(SOURCES)
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er3l.exe -DBOOST_RE_TEST_LOCALE_CPP $(SOURCES)
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er3l.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_CPP $(SOURCES)
 
 r4l.exe : $(SOURCES)
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er4l.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE $(SOURCES)
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er4l.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE $(SOURCES)
 
 r5l.exe : $(SOURCES)
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er5l.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE $(SOURCES)
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er5l.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE $(SOURCES)
 
 r6l.exe : $(SOURCES)
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er6l.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES)
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er6l.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES)
 
 
 r1lm.exe : $(SOURCES)
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er1lm.exe -DBOOST_RE_TEST_LOCALE_W32 $(SOURCES)
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er1lm.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_W32 $(SOURCES)
 
 r2lm.exe : $(SOURCES)
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er2lm.exe -DBOOST_RE_TEST_LOCALE_C $(SOURCES)
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er2lm.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_C $(SOURCES)
 
 r3lm.exe : $(SOURCES)
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er3lm.exe -DBOOST_RE_TEST_LOCALE_CPP $(SOURCES)
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er3lm.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_CPP $(SOURCES)
 
 r4lm.exe : $(SOURCES)
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er4lm.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE $(SOURCES)
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er4lm.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE $(SOURCES)
 
 r5lm.exe : $(SOURCES)
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er5lm.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE $(SOURCES)
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er5lm.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE $(SOURCES)
 
 r6lm.exe : $(SOURCES)
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er6lm.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES)
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er6lm.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES)
 
 
 r1lv.exe : $(SOURCES)
-	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er1lv.exe -DBOOST_RE_TEST_LOCALE_W32 $(SOURCES) $(BPI)
+	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er1lv.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_W32 $(SOURCES) $(BPI)
 
 r2lv.exe : $(SOURCES)
-	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er2lv.exe -DBOOST_RE_TEST_LOCALE_C $(SOURCES) $(BPI)
+	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er2lv.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_C $(SOURCES) $(BPI)
 
 r3lv.exe : $(SOURCES)
-	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er3lv.exe -DBOOST_RE_TEST_LOCALE_CPP $(SOURCES) $(BPI)
+	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er3lv.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_CPP $(SOURCES) $(BPI)
 
 r4lv.exe : $(SOURCES)
-	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er4lv.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE $(SOURCES) $(BPI)
+	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er4lv.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE $(SOURCES) $(BPI)
 
 r5lv.exe : $(SOURCES)
-	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er5lv.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE $(SOURCES) $(BPI)
+	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er5lv.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE $(SOURCES) $(BPI)
 
 r6lv.exe : $(SOURCES)
-	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er6lv.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES) $(BPI)
+	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er6lv.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES) $(BPI)
+
+
 
 
 
