@@ -477,7 +477,7 @@ namespace boost {
       return (*m_c)[k];
     }
   private:
-    C* m_c;
+    C const* m_c;
   };
   
   template <class UniquePairAssociativeContainer>
