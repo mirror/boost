@@ -368,26 +368,18 @@ type ``T``.
 |``iterator_traits<X>::value_type`` |``T``                   |Any non-reference,       |
 |                                   |                        |non-cv-qualified type    |
 +-----------------------------------+------------------------+-------------------------+
-|``iterator_traits<X>::reference``  |``R``, Convertible to   |                         |
-|                                   |``T``                   |                         |
-+-----------------------------------+------------------------+-------------------------+
-|``*a``                             |Convertible to ``R``,   |pre: ``a`` is            |
-|                                   |Convertible to ``T``    |dereferenceable. If ``a  |
+|``*a``                             | Convertible to ``T``   |pre: ``a`` is            |
+|                                   |                        |dereferenceable. If ``a  |
 |                                   |                        |== b`` then ``*a`` is    |
-|                                   |                        |equivalent to ``*b``     |
-+-----------------------------------+------------------------+-------------------------+
-|``static_cast<T>(                  |``T``                   |equivalent to            |
-|static_cast<R>(*a) )``             |                        |``static_cast<T>(*a)``   |
+|                                   |                        |equivalent to ``*b``.    |
 +-----------------------------------+------------------------+-------------------------+
 |``a->m``                           |``U&``                  |pre: ``(*a).m`` is       |
 |                                   |                        |well-defined.  Equivalent|
 |                                   |                        |to ``(*a).m``            |
 +-----------------------------------+------------------------+-------------------------+
 
-.. TR1: the originally-proposed requirement that typeof(*a) == R
-   was too restrictive.  Now we just require that it's
-   convertible to R and that accessing a T through that conversion
-   is equivalent to accessing a T directly.
+.. We won't say anything about iterator_traits<X>::reference until
+   the DR is resolved.
 
 .. _Writable Iterator:
 
@@ -432,19 +424,25 @@ expressions are valid and respect the stated semantics.
 Lvalue Iterators [lib.lvalue.iterators]
 ---------------------------------------
 
-The *Lvalue Iterator* concept adds the requirement that the
-``reference`` type be a reference to the value type of the iterator.
+The *Lvalue Iterator* concept adds the requirement that the return
+type of ``operator*`` type be a reference to the value type of the
+iterator.
 
 +---------------------------------------------------------------------------------+
 | Lvalue Iterator Requirements                                                    |
 +---------------------------------+-----------+-----------------------------------+
-|Expression                       |Return Type|Assertion                          |
+|Expression                       |Return Type|Note/Assertion                     |
 +=================================+===========+===================================+
-|``iterator_traits<X>::reference``|``T&``     |``T`` is *cv*                      |
+|``*a``                           | ``T&``    |``T`` is *cv*                      |
 |                                 |           |``iterator_traits<X>::value_type`` |
 |                                 |           |where *cv* is an optional          |
-|                                 |           |cv-qualification                   |
+|                                 |           |cv-qualification.                  |
+|                                 |           |pre: ``a`` is                      |
+|                                 |           |dereferenceable. If ``a            |
+|                                 |           |== b`` then ``*a`` is              |
+|                                 |           |equivalent to ``*b``.              |
 +---------------------------------+-----------+-----------------------------------+
+
 
 
 Iterator Traversal Concepts [lib.iterator.traversal]

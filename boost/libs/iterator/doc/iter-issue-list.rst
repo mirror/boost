@@ -802,12 +802,14 @@ object. Is all this mechanism really necessary?
 c++std-lib-12333: 
 
   N1550 requires that for a Readable Iterator a of type X, ``*a`` returns an object of type 
-  iterator_traits<X>::reference. ``istreambuf_iterator::operator*`` returns charT, but 
-  istreambuf_iterator::reference is charT&. So am I overlooking something, or is 
-  istreambuf_iterator not Readable 
+  ``iterator_traits<X>::reference``. ``istreambuf_iterator::operator*`` returns ``charT``, but 
+  ``istreambuf_iterator::reference`` is ``charT&``. So am I overlooking something, or is 
+  ``istreambuf_iterator`` not Readable.
 
-:Proposed resolution:   **Needs language** (Jeremy)
-  Remove requirements on the reference type from Readable Iterator.
+:Proposed resolution:
+  Remove all constraints on ``iterator_traits<X>::reference`` in Readable Iterator
+  and Lvalue Iterator. Change Lvalue Iterator to refer to ``T&`` instead of
+  ``iterator_traits<X>::reference``.
 
 
 
