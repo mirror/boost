@@ -47,7 +47,7 @@ interval<T, Policies> log(const interval<T, Policies>& x)
     return I::empty();
   typename Policies::rounding rnd;
   typedef typename Policies::checking checking;
-  T l = (x.lower() <= static_cast<T>(0))
+  T l = !interval_lib::user::is_pos(x.lower())
              ? -checking::inf() : rnd.log_down(x.lower());
   return I(l, rnd.log_up(x.upper()), true);
 }
@@ -176,9 +176,9 @@ interval<T, Policies> cosh(const interval<T, Policies>& x)
   if (interval_lib::detail::test_input(x))
     return I::empty();
   typename Policies::rounding rnd;
-  if (interval_lib::detail::is_neg(x.upper()))
+  if (interval_lib::user::is_neg(x.upper()))
     return I(rnd.cosh_down(x.upper()), rnd.cosh_up(x.lower()), true);
-  else if (!interval_lib::detail::is_neg(x.lower()))
+  else if (!interval_lib::user::is_neg(x.lower()))
     return I(rnd.cosh_down(x.lower()), rnd.cosh_up(x.upper()), true);
   else
     return I(static_cast<T>(0), rnd.cosh_up(-x.lower() > x.upper() ? x.lower() : x.upper()), true);

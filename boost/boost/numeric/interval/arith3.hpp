@@ -57,7 +57,7 @@ template<class I> inline
 I div(const typename I::base_type& x, const typename I::base_type& y)
 {
   typedef typename I::traits_type Policies;
-  if (detail::test_input<typename I::base_type, Policies>(x, y) || detail::is_zero(y))
+  if (detail::test_input<typename I::base_type, Policies>(x, y) || user::is_zero(y))
     return I::empty();
   typename Policies::rounding rnd;
   return I(rnd.div_down(x, y), rnd.div_up(x, y), true);

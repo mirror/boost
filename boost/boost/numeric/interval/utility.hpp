@@ -262,8 +262,8 @@ interval<T, Policies> abs(const interval<T, Policies>& x)
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x))
     return I::empty();
-  if (!interval_lib::detail::is_neg(x.lower())) return x;
-  if (interval_lib::detail::is_neg(x.upper())) return -x;
+  if (!interval_lib::user::is_neg(x.lower())) return x;
+  if (!interval_lib::user::is_pos(x.upper())) return -x;
   return I(static_cast<T>(0), max(-x.lower(), x.upper()), true);
 }
 

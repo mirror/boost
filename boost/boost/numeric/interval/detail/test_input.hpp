@@ -21,16 +21,20 @@
 namespace boost {
 namespace numeric {
 namespace interval_lib {
+namespace user {
+
+template<class T> inline
+bool is_zero(T const &v) { return v == static_cast<T>(0); }
+
+template<class T> inline
+bool is_neg (T const &v) { return v <  static_cast<T>(0); }
+
+template<class T> inline
+bool is_pos (T const &v) { return v >  static_cast<T>(0); }
+
+} // namespace user
+
 namespace detail {
-
-template<class T> inline
-bool is_neg(const T& x) { return x < static_cast<T>(0); }
-
-template<class T> inline
-bool is_zero(const T& x) { return x == static_cast<T>(0); }
-
-template<class T> inline
-bool is_pos(const T& x) { return x > static_cast<T>(0); }
 
 template<class T, class Policies> inline
 bool test_input(const interval<T, Policies>& x) {
