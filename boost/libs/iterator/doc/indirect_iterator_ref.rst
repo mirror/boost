@@ -70,15 +70,24 @@ as follows::
 ``indirect_iterator`` requirements
 ..................................
 
-The ``Iterator`` type must meet the requirements of Readable
-Iterator. Also, the following requirements are placed on
-``iterator_traits<Iterator>::value_type``. Let ``i`` be an object of
-type ``iterator_traits<Iterator>::value_type``.  Then ``*i`` must be a
-valid expression, and the type of ``*i`` must be convertible to 
-``iterator_adaptor::reference``. Also, there are further requirements
-on the ``iterator_traits<Iterator>::value_type`` if the ``Value``
-parameter is not ``use_default``, as implied by the algorithm for deducing
-the default.
+The ``CategoryOrTraversal`` argument shall be one of the standard
+iterator tags or ``use_default``. If ``CategoryOrTraversal`` is an
+iterator tag, ``indirect_iterator`` satisfies the requirements
+corresponding to the iterator tag. The template parameter ``Iterator``
+argument shall meet the requirements corresponding to the iterator
+tag.  If ``CategoryOrTraversal`` is ``use_default`` then the
+``Iterator`` argument shall meet the requirements of Readable
+Iterator. In this case, ``indirect_iterator`` satisfies the
+requirements of the most refined standard traversal concept that is
+satisfied by the ``Iterator`` argument.
+
+The expression ``*i``, where ``i`` is an object of type
+``iterator_traits<Iterator>::value_type``, must be a valid expression
+and must be convertible to ``indirect_iterator::reference`` Also,
+there are further requirements on the
+``iterator_traits<Iterator>::value_type`` if the ``Value`` parameter
+is not ``use_default``, as implied by the algorithm for deducing the
+default.
 
 
 
