@@ -106,8 +106,8 @@ namespace boost { namespace program_options {
             const = 0;
 #endif
     };
-    /** Class which specifies the handling of a value for which user did not specified
-        anything. */    
+    /** Class which specifies a simple handling of a value: the value will
+        have string type and only one token is allowed. */    
     class BOOST_PROGRAM_OPTIONS_DECL 
     untyped_value : public value_semantic_codecvt_helper<char>  {
     public:
