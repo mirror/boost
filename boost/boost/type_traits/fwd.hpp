@@ -124,6 +124,8 @@ struct is_reference;
 template <class T>
 struct is_member_pointer;
 template <class T>
+struct is_member_function_pointer;
+template <class T>
 struct is_enum;
 template <class T>
 struct is_union;
