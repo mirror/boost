@@ -10,6 +10,10 @@
 // see libs/utility/type_traits.htm
 
 /* Release notes:
+   31 Jan 2001:
+      Fixed is_convertible warning for g++. Added specialization of
+      is_array to handle the const array case. Added parenthesis are
+      body of BOOST_IS_CLASS to prevent macro mistakes. (Jeremy Siek)
    21 Jan 2001:
       Fixed tests for long long to detect its presence on GCC (David Abrahams)
    03 Oct 2000:
@@ -474,9 +478,27 @@ struct is_convertible
 private:
  typedef char (&no)[1];
  typedef char (&yes)[2];
-#  if defined(__BORLANDC__) || defined(__GNUC__)
- // This workaround for Borland breaks the EDG C++ frontend,
- // so we only use it for Borland.
+ // The workarounds for Borland and GNU C++ break the EDG C++ frontend,
+ // so we only use them for those compilers.
+#if defined(__GNUC__)
+ struct accept_any {
+   template <class T> accept_any(const T&) { }
+ };
+ template <class T>
+ struct checker
+ {
+   // Need two arguments in the check functions to bias resolution
+   // towards the "yes" in the case when the From type has an implicit
+   // conversion operator defined for the To type, which would
+   // otherwise be an ambiguous situation.
+   static no check(accept_any, accept_any);
+   static yes check(T, From);
+ };
+ static From from;
+public:
+ static const bool value = 
+   sizeof( checker<To>::check(from, from) ) == sizeof(yes);
+#elif defined(__BORLANDC__)
  template <class T>
  struct checker
  {
@@ -486,7 +508,7 @@ private:
  static From from;
 public:
  static const bool value = sizeof( checker<To>::check(from) ) == sizeof(yes);
-#  else // not __BORLANDC__
+#  else // not __BORLANDC__ or __GNUC__
  static no check(...);
  static yes check(To);
  static From from;
