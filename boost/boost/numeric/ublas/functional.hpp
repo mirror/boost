@@ -19,6 +19,18 @@
 
 #include <functional>
 
+#include <boost/numeric/ublas/config.hpp>
+#include <boost/numeric/ublas/exception.hpp>
+#include <boost/numeric/ublas/traits.hpp>
+#ifdef BOOST_UBLAS_USE_DUFF_DEVICE
+#include <boost/numeric/ublas/duff.hpp>
+#endif
+#ifdef BOOST_UBLAS_USE_SIMD
+#include <boost/numeric/ublas/raw.hpp>
+#else
+namespace boost { namespace numeric { namespace ublas { namespace raw {
+}}}}
+#endif
 #ifdef BOOST_UBLAS_HAVE_BINDINGS
 #include <boost/numeric/bindings/traits/std_vector.hpp>
 #include <boost/numeric/bindings/traits/ublas_vector.hpp>
@@ -26,11 +38,7 @@
 #include <boost/numeric/bindings/atlas/cblas.hpp>
 #endif
 
-#include <boost/numeric/ublas/config.hpp>
-#include <boost/numeric/ublas/exception.hpp>
-#include <boost/numeric/ublas/traits.hpp>
-#include <boost/numeric/ublas/duff.hpp>
-#include <boost/numeric/ublas/raw.hpp>
+
 
 namespace boost { namespace numeric { namespace ublas {
 
@@ -649,6 +657,7 @@ namespace boost { namespace numeric { namespace ublas {
                                  const vector_expression<E2> &e2,
                                  concrete_tag) const {
 #ifndef BOOST_UBLAS_HAVE_BINDINGS
+            using namespace raw;
             size_type size (BOOST_UBLAS_SAME (e1 ().size (), e2 ().size ()));
             const T1 *data1 = data_const (e1 ());
             const T2 *data2 = data_const (e2 ());
@@ -806,6 +815,7 @@ namespace boost { namespace numeric { namespace ublas {
                                  const vector_expression<E2> &e2,
                                  size_type i, concrete_tag) const {
 #ifndef BOOST_UBLAS_HAVE_BINDINGS
+            using namespace raw;
             size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size ());
             const T1 *data1 = data_const (e1 ()) + i * stride1 (e1 ());
             const T2 *data2 = data_const (e2 ());
@@ -987,6 +997,7 @@ namespace boost { namespace numeric { namespace ublas {
                                  const matrix_expression<E2> &e2,
                                  size_type i, concrete_tag) const {
 #ifndef BOOST_UBLAS_HAVE_BINDINGS
+            using namespace raw;
             size_type size = BOOST_UBLAS_SAME (e1 ().size (), e2 ().size1 ());
             const T1 *data1 = data_const (e1 ());
             const T2 *data2 = data_const (e2 ()) + i * stride2 (e2 ());
@@ -1177,6 +1188,7 @@ namespace boost { namespace numeric { namespace ublas {
                                  const matrix_expression<E2> &e2,
                                  size_type i, size_type j, concrete_tag) const {
 #ifndef BOOST_UBLAS_HAVE_BINDINGS
+            using namespace raw;
             size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ());
             const T1 *data1 = data_const (e1 ()) + i * stride1 (e1 ());
             const T2 *data2 = data_const (e2 ()) + j * stride2 (e2 ());

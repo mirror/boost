@@ -15,7 +15,7 @@
 #ifndef BOOST_UBLAS_RAW_H
 #define BOOST_UBLAS_RAW_H
 
-namespace boost { namespace numeric { namespace ublas {
+namespace boost { namespace numeric { namespace ublas { namespace raw {
 
 // MSVC 6.0 gets confused by the forward declarations.
 #if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
@@ -1020,6 +1020,6 @@ namespace boost { namespace numeric { namespace ublas {
         return m.start1() * stride1( m.data () ) + m.start2() * stride2( m.data () ) ;
     }
 
-}}}
+}}}}
 
 #endif
