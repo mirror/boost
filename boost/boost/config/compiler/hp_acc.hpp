@@ -37,6 +37,10 @@
 #    define BOOST_HAS_PARTIAL_STD_ALLOCATOR
 #endif
 
+#if (__HP_aCC <= 53800 )
+#    define BOOST_NO_MEMBER_TEMPLATE_KEYWORD
+#endif
+
 #define BOOST_COMPILER "HP aCC version " BOOST_STRINGIZE(__HP_aCC)
 
 //
@@ -47,7 +51,7 @@
 #endif
 //
 // last known and checked version is 0:
-#if (__HP_aCC > 33900)
+#if (__HP_aCC > 53800)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif

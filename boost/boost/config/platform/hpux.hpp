@@ -22,13 +22,6 @@
 #define BOOST_HAS_UNISTD_H
 #include <boost/config/posix_features.hpp>
 
-// HPUX has an incomplete pthreads implementation, so it doesn't
-// define _POSIX_THREADS, but it might be enough to implement
-// Boost.Threads.
-#if !defined(BOOST_HAS_PTHREADS) && defined(_POSIX_THREAD_ATTR_STACKADDR)
-# define BOOST_HAS_PTHREADS 
-#endif
-
 // the following are always available:
 #ifndef BOOST_HAS_GETTIMEOFDAY
 #  define BOOST_HAS_GETTIMEOFDAY
