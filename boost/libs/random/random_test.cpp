@@ -499,6 +499,11 @@ int test_main(int, char*[])
   boost::variate_generator<boost::minstd_rand, boost::uniform_int<> > x(mr, boost::uniform_int<>(0, 8361));
   (void) x();
 
+  // bug report from Alan Stokes and others: this throws an assertion
+  boost::variate_generator<boost::minstd_rand, boost::uniform_int<> > y(mr, boost::uniform_int<>(1,1));
+  std::cout << "uniform_int(1,1) " << y() << ", " << y() << ", " << y()
+            << std::endl;
+
   return 0;
 #else
   std::cout << "Intel 7.00 on Win32 loops, so the test is disabled\n";
