@@ -75,7 +75,7 @@
 //
 // __int64 support:
 //
-#if (_MSC_VER >= 1200) && defined(_MSC_EXTENSIONS)
+#if (_MSC_VER >= 1200)
 #   define BOOST_HAS_MS_INT64
 #endif
 #if (_MSC_VER >= 1310) && defined(_MSC_EXTENSIONS)
