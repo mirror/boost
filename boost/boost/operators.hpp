@@ -701,7 +701,7 @@ struct input_iterator_helper
   , dereferenceable<T, P
   , boost::iterator<std::input_iterator_tag, V, D, P, R
     > > > > {};
-
+#ifndef BOOST_MSVC
 template <class T,
           class V = void,
           class D = void,
@@ -711,7 +711,7 @@ struct output_iterator_helper
   : incrementable<T
   , boost::iterator<std::output_iterator_tag, V, D, P, R
     > > {};
-
+#endif
 template <class T,
           class V,
           class D = std::ptrdiff_t,
