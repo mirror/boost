@@ -13,6 +13,9 @@
 
 #include "boost/date_time/compiler_config.hpp"
 #include "boost/date_time/posix_time/ptime.hpp"
+#if defined(BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES)
+#include "boost/date_time/posix_time/date_duration_operators.hpp"
+#endif
 #if defined(BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS)
 #include "boost/date_time/posix_time/time_formatters_limited.hpp"
 #else
