@@ -21,7 +21,7 @@
 using namespace boost::gregorian;
 
 <font class="comment">//Create a simple period class to contain all the times in a day</font>
-class day_period : <font class="keyword">public</font> 
+class day_period : <font class="keyword">public</font> time_period
 {
 <font class="keyword">public</font>:
   day_period(date d) : time_period(ptime(d),<font class="comment">//midnight</font>

@@ -29,7 +29,7 @@
 <h2><a name="intro">Introduction</a></h2>
 
 <p>
-The class boost::posix_time::time_period provides direct representation for ranges between two times.  Periods provide the ability to simplify some types of caculations by simplifing the conditional logic of the program.  
+The class boost::posix_time::time_period provides direct representation for ranges between two times.  Periods provide the ability to simplify some types of calculations by simplifing the conditional logic of the program.  
 
 <p>
 The <a href="exp-time_periods.html">time periods example</a> provides an example of using time periods.
@@ -100,6 +100,12 @@ or
             ptime t2(d, hours(10)); //10 hours after midnight<br>
 	    time_period tp(t1, t2);
             tp.last() --> 2002-Jan-01 10:00:00 </td></tr>
+<tr><td>time_duration <font class="func">length</font>() const</td>
+        <td>Return the length of the time period.</td>
+	<td>date d(2002,Jan,01);<br>
+            ptime t1(d); //midnight<br>
+	    time_period tp(t1, hours(1));<br>
+            tp.length() --> 1 hour </td></tr>
 <tr><td>bool <font class="func">is_null</font>() const</td>
         <td>True if period is not well formed.  eg: start less than end </td>
 	<td></td></tr>
@@ -153,15 +159,26 @@ or
 <p>
 <table border=1 cellspacing=3 cellpadding=3>
 <tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
-<tr><td>operator==, operator!=,<br> operator&gt;, operator&lt; 
-        <td>A full complement of comparison operators</td>
-	<td>tp1 == tp2, etc</td></tr>
+<tr><td>operator&lt;&lt;</td>
+        <td>Output streaming operator for time duration.  Uses facet to output
+         [date time_of_day/date time_of_day].  The default is format is
+         [YYYY-mmm-DD hh:mm:ss.fffffffff/YYYY-mmm-DD hh:mm:ss.fffffffff] string where 
+          mmm is 3 char month name.
+        </td>
+	<td>[2002-Jan-01 01:25:10.000000001/2002-Jan-31 01:25:10.123456789]</td></tr>
+<tr><td>operator==, operator!=
+        <td>Equality operators. Periods are equal if 
+            p1.begin == p2.begin &amp;&amp; p1.last == p2.last</td>
+	<td>if (tp1 == tp2) {...</td></tr>
 <tr><td>operator&lt;</td>
-        <td>True if tp1.end() less than tp2.begin()</td>
-	<td>tp1 &lt; tp2, etc</td></tr>
+        <td>Ordering with no overlap.  True if tp1.end() less than tp2.begin()</td>
+	<td>if (tp1 &lt; tp2) {...</td></tr>
 <tr><td>operator&gt;</td>
-        <td>True if tp1.begin() greater than tp2.end()</td>
-	<td>tp1 &gt; tp2, etc</td></tr>
+        <td>Ordering with no overlap. True if tp1.begin() greater than tp2.end()</td>
+	<td>if (tp1 &gt; tp2) {... etc</td></tr>
+<tr><td>operator&lt;=, operator&gt;=</td>
+        <td>Defined in terms of the other operators.</td>
+	<td> </tr>
 </table>
 
 <p>
@@ -170,7 +187,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Thu Sep  5 07:28:02 MST 2002
+Last modified: Sat Nov  2 16:01:32 MST 2002
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
