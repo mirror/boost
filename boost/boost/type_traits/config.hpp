@@ -25,7 +25,7 @@
 #   define BOOST_TT_DECL /**/
 #endif
 
-# if (defined(__MWERKS__) && __MWERKS__ >= 0x3000) || (defined(BOOST_MSVC) && (BOOST_MSVC > 1301)) || defined(BOOST_NO_COMPILER_CONFIG)
+# if (defined(__MWERKS__) && __MWERKS__ >= 0x3000) || (defined(BOOST_MSVC) && (BOOST_MSVC > 1301)) || defined(__EDG_VERSION__) || defined(BOOST_NO_COMPILER_CONFIG)
 #   define BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION
 #endif
 

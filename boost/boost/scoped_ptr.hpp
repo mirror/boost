@@ -110,8 +110,15 @@ public:
         return ptr != 0;
     }
 
-#else
+#elif defined(__MWERKS__) && BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
+    typedef T * (this_type::*unspecified_bool_type)() const;
+    
+    operator unspecified_bool_type() const // never throws
+    {
+        return ptr == 0? 0: &this_type::get;
+    }
 
+#else 
     typedef T * this_type::*unspecified_bool_type;
 
     operator unspecified_bool_type() const // never throws

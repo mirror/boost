@@ -1,5 +1,5 @@
 //  (C) Copyright Dave Abrahams, Steve Cleary, Beman Dawes, Howard
-//  Hinnant & John Maddock 2000-2002.  Permission to copy, use,
+//  Hinnant & John Maddock 2000-2003.  Permission to copy, use,
 //  modify, sell and distribute this software is granted provided this
 //  copyright notice appears in all copies. This software is provided
 //  "as is" without express or implied warranty, and with no claim as
@@ -17,6 +17,10 @@
 
 #ifdef BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION
 #   include "boost/type_traits/detail/yes_no_type.hpp"
+#   ifdef __EDG_VERSION__
+#       include "boost/type_traits/is_const.hpp"
+#       include "boost/type_traits/is_volatile.hpp"
+#   endif 
 #else
 #   include "boost/type_traits/is_scalar.hpp"
 #   include "boost/type_traits/is_array.hpp"
@@ -58,6 +62,26 @@ struct is_class_impl
         >::value)
         );
 };
+
+# ifdef __EDG_VERSION__
+template <typename T>
+struct is_class_impl<T const>
+  : is_class_impl<T>
+{
+};
+
+template <typename T>
+struct is_class_impl<T volatile>
+  : is_class_impl<T>
+{
+};
+
+template <typename T>
+struct is_class_impl<T const volatile>
+  : is_class_impl<T>
+{
+};
+# endif
 
 #else
 

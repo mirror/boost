@@ -20,10 +20,6 @@
 #endif
 #include "boost/type_traits/config.hpp"
 
-#ifdef BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION
-#   include "boost/type_traits/is_class.hpp"
-#endif
-
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
 
@@ -32,7 +28,29 @@ namespace boost {
 #if !(defined(__BORLANDC__) && (__BORLANDC__ <= 0x551))
 
 namespace detail {
-  
+
+template <typename T>
+struct is_class_or_union
+{
+# if BOOST_WORKAROUND(BOOST_MSVC, == 1200) // we simply can't detect it this way.
+    BOOST_STATIC_CONSTANT(bool, value = false);
+# else
+    template <class U> static ::boost::type_traits::yes_type is_class_or_union_tester(void(U::*)(void));
+    
+#  if BOOST_WORKAROUND(BOOST_MSVC, == 1300)                 \
+    || BOOST_WORKAROUND(__MWERKS__, <= 0x3000) // no SFINAE
+    static ::boost::type_traits::no_type is_class_or_union_tester(...);
+    BOOST_STATIC_CONSTANT(
+        bool, value = sizeof(is_class_or_union_tester(0)) == sizeof(::boost::type_traits::yes_type));
+#  else
+    template <class U>
+    static ::boost::type_traits::no_type is_class_or_union_tester(...);
+    BOOST_STATIC_CONSTANT(
+        bool, value = sizeof(is_class_or_union_tester<T>(0)) == sizeof(::boost::type_traits::yes_type));
+#  endif 
+# endif 
+};
+
 struct int_convertible
 {
     int_convertible(int);
@@ -63,20 +81,7 @@ template <typename T> struct is_enum_impl
    typedef ::boost::add_reference<T> ar_t;
    typedef typename ar_t::type r_type;
        
-#if defined(BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION)
-   BOOST_STATIC_CONSTANT(bool, selector =
-      (::boost::type_traits::ice_or<
-           ::boost::is_arithmetic<T>::value
-         , ::boost::is_reference<T>::value
-       // We MUST do this on conforming compilers in order to
-       // correctly deduce that noncopyable types are not enums (dwa
-       // 2002/04/15)...
-       // strictly speaking is_convertible should work with non-copyable
-       // types rendering this fix unnecessary - unfortunately this is not
-       // the case for all compilers yet (JM 2003/04/16)...
-         , ::boost::is_class<T>::value
-      >::value));
-#elif defined __GNUC__ 
+#if defined __GNUC__ 
    BOOST_STATIC_CONSTANT(bool, selector =
       (::boost::type_traits::ice_or<
            ::boost::is_arithmetic<T>::value
@@ -88,6 +93,7 @@ template <typename T> struct is_enum_impl
       (::boost::type_traits::ice_or<
            ::boost::is_arithmetic<T>::value
          , ::boost::is_reference<T>::value
+         , is_class_or_union<T>::value
        // However, not doing this on non-conforming compilers prevents
        // a dependency recursion.
       >::value));
@@ -100,6 +106,7 @@ template <typename T> struct is_enum_impl
 #else
     typedef ::boost::detail::is_enum_helper<selector> se_t;
 #endif
+
     typedef typename se_t::template type<r_type> helper;
     BOOST_STATIC_CONSTANT(bool, value = helper::value);
 };

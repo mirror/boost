@@ -81,6 +81,7 @@ test-suite type_traits :
 [ type-traits-run tricky_add_pointer_test.cpp ]
 [ type-traits-run tricky_function_type_test.cpp ]
 [ type-traits-run tricky_incomplete_type_test.cpp ]
+[ type-traits-run tricky_is_enum_test.cpp ]
 [ type-traits-run tricky_partial_spec_test.cpp ]
 [ type-traits-run type_with_alignment_test.cpp ]
 
