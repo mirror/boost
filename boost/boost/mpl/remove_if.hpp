@@ -25,6 +25,7 @@
 #include "boost/mpl/identity.hpp"
 #include "boost/mpl/protect.hpp"
 #include "boost/mpl/lambda.hpp"
+#include "boost/mpl/apply.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 
 namespace boost {
