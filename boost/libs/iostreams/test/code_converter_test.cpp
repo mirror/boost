@@ -4,7 +4,7 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-#include <boost/iostreams/detail/config/locale.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/test/unit_test.hpp>
 
 using boost::unit_test_framework::test_suite;     

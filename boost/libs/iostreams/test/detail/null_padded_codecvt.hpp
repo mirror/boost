@@ -23,7 +23,7 @@
 
 #include <boost/config.hpp>                          // NO_STDC_NAMESPACE
 #include <boost/iostreams/detail/codecvt_helper.hpp>
-#include <boost/iostreams/detail/config/locale.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <cstddef>                                   // mbstate_t.
 #include <locale>                                    // codecvt.
 #include <boost/integer_traits.hpp>                  // const_max.

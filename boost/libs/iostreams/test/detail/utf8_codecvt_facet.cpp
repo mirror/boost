@@ -17,7 +17,7 @@
 //   - Derived from codecvt_helper instead of codecvt.
 
 #include <boost/config.hpp>
-#include <boost/iostreams/detail/config/locale.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
 #ifdef BOOST_IOSTREAMS_NO_LOCALES
 # error "C++ locales not supported on this platform"
 #else
