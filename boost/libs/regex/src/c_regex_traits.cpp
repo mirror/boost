@@ -136,7 +136,7 @@ nl_catd message_cat = (nl_catd)-1;
 unsigned int message_count = 0;
 std::string* mess_locale;
 
-BOOST_REGEX_DECL char* re_custom_error_messages[] = {
+char* re_custom_error_messages[] = {
    0,
    0,
    0,
@@ -182,8 +182,8 @@ std::size_t BOOST_REGEX_CALL _re_get_message(char* buf, std::size_t len, std::si
 
 #ifndef BOOST_NO_WREGEX
 
-BOOST_REGEX_DECL boost::regex_wchar_type re_zero_w;
-BOOST_REGEX_DECL boost::regex_wchar_type re_ten_w;
+boost::regex_wchar_type re_zero_w;
+boost::regex_wchar_type re_ten_w;
 
 unsigned int nlsw_count = 0;
 std::string* wlocale_name = 0;

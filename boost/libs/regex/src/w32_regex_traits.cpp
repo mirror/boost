@@ -108,7 +108,7 @@ std::list<collate_name_t>* pcoll_names = 0;
 
 HINSTANCE hresmod = 0;
 
-BOOST_REGEX_DECL char* re_custom_error_messages[] = {
+char* re_custom_error_messages[] = {
    0,
    0,
    0,
@@ -147,8 +147,8 @@ enum syntax_map_size
 
 #ifndef BOOST_NO_WREGEX
 
-BOOST_REGEX_DECL boost::regex_wchar_type re_zero_w;
-BOOST_REGEX_DECL boost::regex_wchar_type re_ten_w;
+boost::regex_wchar_type re_zero_w;
+boost::regex_wchar_type re_ten_w;
 
 bool isPlatformNT = false;
 
