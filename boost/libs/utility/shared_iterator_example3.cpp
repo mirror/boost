@@ -11,10 +11,9 @@
 #include <vector>
 
 
-typedef boost::shared_container_iterator_generator< std::vector<int> >::type 
-  function_iterator;
+typedef boost::shared_container_iterator< std::vector<int> > iterator;
 
-std::pair<function_iterator,function_iterator>
+std::pair<iterator,iterator>
 return_range() {
   boost::shared_ptr< std::vector<int> > range(new std::vector<int>());
   range->push_back(0);
@@ -30,7 +29,7 @@ return_range() {
 int main() {
 
 
-  function_iterator i,end;
+  iterator i,end;
   
   boost::tie(i,end) = return_range();
 

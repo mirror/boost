@@ -9,8 +9,7 @@
 #include <iostream>
 #include <vector>
 
-typedef boost::shared_container_iterator_generator< std::vector<int> >::type
-  iterator;
+typedef boost::shared_container_iterator< std::vector<int> > iterator;
 
 
 void set_range(iterator& i, iterator& end)  {

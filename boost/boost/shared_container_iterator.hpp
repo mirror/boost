@@ -15,38 +15,41 @@
 namespace boost {
 
 template <typename Container>
-struct shared_container_iterator_policies :
-  public boost::default_iterator_policies {
+class shared_container_iterator : public iterator_adaptor<
+                                    shared_container_iterator<Container>,
+                                    typename Container::iterator> {
+
+  typedef iterator_adaptor<
+    shared_container_iterator<Container>,
+    typename Container::iterator> super_t;
+
+  typedef typename Container::iterator iterator_t;
   typedef boost::shared_ptr<Container> container_ref_t;
+
   container_ref_t container_ref;
-  shared_container_iterator_policies(container_ref_t const& c) :
-    container_ref(c) { }
-  shared_container_iterator_policies() { }
-};
-
-
-template <typename Container>
-class shared_container_iterator_generator {
-  typedef typename Container::iterator iterator;
-  typedef shared_container_iterator_policies<Container> policy;
 public:
-  typedef boost::iterator_adaptor<iterator,policy> type;
+  shared_container_iterator() { }
+
+  shared_container_iterator(iterator_t const& x,container_ref_t const& c) :
+    super_t(x), container_ref(c) { }
+
+
 };
 
 template <typename Container>
-typename shared_container_iterator_generator<Container>::type
+shared_container_iterator<Container>
 make_shared_container_iterator(typename Container::iterator iter,
 			       boost::shared_ptr<Container> const& container) {
-  typedef typename shared_container_iterator_generator<Container>::type
-    iterator;
-  typedef shared_container_iterator_policies<Container> policy;
-  return iterator(iter,policy(container));
+  typedef shared_container_iterator<Container> iterator;
+  return iterator(iter,container);
 }
+
+
 
 template <typename Container>
 std::pair<
-  typename shared_container_iterator_generator<Container>::type,
-  typename shared_container_iterator_generator<Container>::type>
+  shared_container_iterator<Container>,
+  shared_container_iterator<Container> >
 make_shared_container_range(boost::shared_ptr<Container> const& container) {
   return
     std::make_pair(
