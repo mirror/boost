@@ -26,7 +26,7 @@
 #define BOOST_UTILITY_HPP
 
 #include <boost/config.hpp>        // broken compiler workarounds 
-#include <boost/static_assert.hpp> // broken compiler workarounds 
+#include <boost/static_assert.hpp> 
 #include <cstddef>                 // for size_t
 #include <utility>                 // for std::pair
 
@@ -44,9 +44,11 @@ namespace boost
     inline void checked_delete(T  /*const volatile*/ * x)
 # endif
     {
-# if !defined(__BORLANDC__) || __BORLANDC__ > 0x0551
+# if !((defined(__BORLANDC__) && __BORLANDC__ <= 0x0551) || (defined(__ICL) && __ICL <= 500))
         BOOST_STATIC_ASSERT( sizeof(T) ); // assert type complete at point
                                           // of instantiation
+# else
+        sizeof(T); // force error if type incomplete
 # endif
         delete x;
     }
@@ -59,9 +61,11 @@ namespace boost
     inline void checked_array_delete(T  /*const volatile*/ * x)
 # endif
     {
-# if !defined(__BORLANDC__) || __BORLANDC__ > 0x0551
+# if !((defined(__BORLANDC__) && __BORLANDC__ <= 0x0551) || (defined(__ICL) && __ICL <= 500))
         BOOST_STATIC_ASSERT( sizeof(T) ); // assert type complete at point
                                           // of instantiation
+# else
+        sizeof(T); // force error if type incomplete
 # endif
         delete [] x;
     }
