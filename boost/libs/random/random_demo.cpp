@@ -22,6 +22,7 @@
 #include <boost/random/linear_congruential.hpp>
 #include <boost/random/uniform_smallint.hpp>
 #include <boost/random/uniform_01.hpp>
+#include <boost/generator_iterator.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std {
@@ -35,14 +36,15 @@ typedef boost::minstd_rand base_generator_type;
 // This is a reproducible simulation experiment.
 void experiment(base_generator_type & generator)
 {
-  boost::uniform_smallint<base_generator_type> die(generator, 1, 6);
+  typedef boost::uniform_smallint<base_generator_type> generator_type;
+  generator_type die_gen(generator, 1, 6);
 
-#if 0  // iterator interface removed
-  // you can use a STL Iterator interface
+  // For an STL iterator interface, use iterator_adaptors.hpp
+  boost::generator_iterator_generator<generator_type>::type
+    die = boost::make_generator_iterator(die_gen);
   for(int i = 0; i < 10; i++)
     std::cout << *die++ << " ";
   std::cout << '\n';
-#endif
 }
 
 int main()
@@ -60,9 +62,22 @@ int main()
   for(int i = 0; i < 10; i++)
     std::cout << uni() << '\n';
 
-  // change seed to something else
-  // Make sure the seed is unsigned, otherwise the wrong overload may be
-  // selected with mt19937.
+  /*
+   * Change seed to something else
+   * Make sure the seed is unsigned, otherwise the wrong overload may be
+   * selected with mt19937.
+   *
+   * Caveat: std::time(0) is not a very good truly-random seed.  When
+   * called in rapid succession, it could return the same values, and
+   * thus the same random number sequences could ensue.  If not the same
+   * values are returned, the values differ only slightly in the
+   * lowest bits.  A linear congruential generator with a small factor
+   * wrapped in a uniform_smallint (see experiment) will produce the same
+   * values for the first few iterations.   This is because uniform_smallint
+   * takes only the highest bits of the generator, and the generator itself
+   * needs a few iterations to spread the initial entropy from the lowest bits
+   * to the whole state.
+   */
   generator.seed(static_cast<unsigned int>(std::time(0)));
 
   std::cout << "\nexperiment: roll a die 10 times:\n";
