@@ -2,7 +2,7 @@
 #define BOOST_ITERATOR_CONCEPTS_HPP
 
 #include <boost/concept_check.hpp>
-#include <boost/iterator_traits.hpp>
+#include <boost/iterator_categories.hpp>
 #include <boost/type_traits/conversion_traits.hpp>
 #include <boost/static_assert.hpp>
 
@@ -18,10 +18,9 @@ namespace boost_concepts {
   template <typename Iterator>
   class ReadableIteratorConcept {
   public:
-    typedef typename boost::iterator_traits<Iterator>::value_type value_type;
-    typedef typename boost::iterator_traits<Iterator>::reference reference;
-    typedef typename boost::iterator_traits<Iterator>::return_category 
-      return_category;
+    typedef typename std::iterator_traits<Iterator>::value_type value_type;
+    typedef typename std::iterator_traits<Iterator>::reference reference;
+    typedef typename boost::return_category<Iterator>::type return_category;
 
     void constraints() {
       boost::function_requires< boost::SGIAssignableConcept<Iterator> >();
@@ -42,8 +41,7 @@ namespace boost_concepts {
   template <typename Iterator, typename ValueType>
   class WritableIteratorConcept {
   public:
-    typedef typename boost::iterator_traits<Iterator>::return_category 
-      return_category;
+    typedef typename boost::return_category<Iterator>::type return_category;
 
     void constraints() {
       boost::function_requires< boost::SGIAssignableConcept<Iterator> >();
@@ -54,7 +52,7 @@ namespace boost_concepts {
       BOOST_STATIC_ASSERT((boost::is_convertible<return_category*,
                            boost::writable_iterator_tag*>::value));
 
-      *i = v; // an alternative could be something like write(x, v)
+      *i = v; // a good alternative could be something like write(x, v)
     }
     ValueType v;
     Iterator i;
@@ -63,10 +61,9 @@ namespace boost_concepts {
   template <typename Iterator>
   class ConstantLvalueIteratorConcept {
   public:
-    typedef typename boost::iterator_traits<Iterator>::value_type value_type;
-    typedef typename boost::iterator_traits<Iterator>::reference reference;
-    typedef typename boost::iterator_traits<Iterator>::return_category 
-      return_category;
+    typedef typename std::iterator_traits<Iterator>::value_type value_type;
+    typedef typename std::iterator_traits<Iterator>::reference reference;
+    typedef typename boost::return_category<Iterator>::type return_category;
 
     void constraints() {
       boost::function_requires< ReadableIteratorConcept<Iterator> >();
@@ -86,10 +83,9 @@ namespace boost_concepts {
   template <typename Iterator>
   class MutableLvalueIteratorConcept {
   public:
-    typedef typename boost::iterator_traits<Iterator>::value_type value_type;
-    typedef typename boost::iterator_traits<Iterator>::reference reference;
-    typedef typename boost::iterator_traits<Iterator>::return_category 
-      return_category;
+    typedef typename std::iterator_traits<Iterator>::value_type value_type;
+    typedef typename std::iterator_traits<Iterator>::reference reference;
+    typedef typename boost::return_category<Iterator>::type return_category;
 
     void constraints() {
       boost::function_requires< ReadableIteratorConcept<Iterator> >();
@@ -111,12 +107,9 @@ namespace boost_concepts {
   // Iterator Traversal Concepts
 
   template <typename Iterator>
-  class SinglePassIteratorConcept {
+  class ForwardIteratorConcept {
   public:
-    typedef typename boost::iterator_traits<Iterator>::traversal_category 
-      traversal_category;
-    typedef typename boost::iterator_traits<Iterator>::difference_type
-      difference_type;
+    typedef typename boost::traversal_category<Iterator>::type traversal_category;
 
     void constraints() {
       boost::function_requires< boost::SGIAssignableConcept<Iterator> >();
@@ -125,42 +118,23 @@ namespace boost_concepts {
         boost::DefaultConstructibleConcept<Iterator> >();
 
       BOOST_STATIC_ASSERT((boost::is_convertible<traversal_category*, 
-                           boost::single_pass_iterator_tag*>::value));
-
-      // difference_type must be a signed integral type
-
+                           boost::forward_traversal_tag*>::value));
       ++i;
       (void)i++;
     }
-    
     Iterator i;
-  };
-  
-  template <typename Iterator>
-  class ForwardIteratorConcept {
-  public:
-    typedef typename boost::iterator_traits<Iterator>::traversal_category 
-      traversal_category;
-
-    void constraints() {
-      boost::function_requires< SinglePassIteratorConcept<Iterator> >();
-
-      BOOST_STATIC_ASSERT((boost::is_convertible<traversal_category*, 
-                           boost::forward_iterator_tag*>::value));
-    }
   };
   
   template <typename Iterator>
   class BidirectionalIteratorConcept {
   public:
-    typedef typename boost::iterator_traits<Iterator>::traversal_category 
-      traversal_category;
+    typedef typename boost::traversal_category<Iterator>::type traversal_category;
 
     void constraints() {
       boost::function_requires< ForwardIteratorConcept<Iterator> >();
       
       BOOST_STATIC_ASSERT((boost::is_convertible<traversal_category*, 
-                           boost::bidirectional_iterator_tag*>::value));
+                           boost::bidirectional_traversal_tag*>::value));
 
       --i;
       (void)i--;
@@ -171,16 +145,15 @@ namespace boost_concepts {
   template <typename Iterator>
   class RandomAccessIteratorConcept {
   public:
-    typedef typename boost::iterator_traits<Iterator>::traversal_category 
-      traversal_category;
-    typedef typename boost::iterator_traits<Iterator>::difference_type
+    typedef typename boost::traversal_category<Iterator>::type traversal_category;
+    typedef typename std::iterator_traits<Iterator>::difference_type
       difference_type;
 
     void constraints() {
       boost::function_requires< BidirectionalIteratorConcept<Iterator> >();
 
       BOOST_STATIC_ASSERT((boost::is_convertible<traversal_category*, 
-                           boost::random_access_iterator_tag*>::value));
+                           boost::random_access_traversal_tag*>::value));
       
       i += n;
       i = i + n;
