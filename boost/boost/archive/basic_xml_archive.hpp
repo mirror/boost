@@ -44,7 +44,8 @@ public:
             msg = "XML start/end tag mismatch";
             break;
         default:
-            archive_exception::what();
+            msg = archive_exception::what();
+            break;
         }
         return msg;
     }
