@@ -582,7 +582,7 @@ namespace boost { namespace date_time {
       }
       typedef std::num_get<CharT, InItrT> num_get;
       typename duration_type::duration_rep_type val = 0;
-      std::ios_base::iostate err;
+      std::ios_base::iostate err = std::ios_base::goodbit;
       
       if (std::has_facet<num_get>(a_ios.getloc())) {
         from = std::use_facet<num_get>(a_ios.getloc()).get(from, to, a_ios, err, val);
