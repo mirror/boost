@@ -23,6 +23,10 @@
 // David Abrahams.
 
 // Revision history:
+// 2002 04 18 Jaakko: tuple element types can be void or plain function 
+//                    types, as long as no object is created.
+//                    Tuple objects can no hold even noncopyable types
+//                    such as arrays.             
 // 2001 10 22 John Maddock
 //      Fixes for Borland C++
 // 2001 08 30 David Abrahams
@@ -36,6 +40,7 @@
 #include <utility> // needed for the assignment from pair to tuple
 
 #include "boost/type_traits/cv_traits.hpp"
+#include "boost/type_traits/function_traits.hpp"
 							    
 namespace boost {
 namespace tuples {
@@ -45,7 +50,18 @@ struct null_type {};
 
 // a helper function to provide a const null_type type temporary
 namespace detail {
-  inline const null_type cnull_type() { return null_type(); }
+  inline const null_type cnull() { return null_type(); }
+
+
+// -- if construct ------------------------------------------------
+// Proposed by Krzysztof Czarnecki and Ulrich Eisenecker
+
+template <bool If, class Then, class Else> struct IF { typedef Then RET; };
+
+template <class Then, class Else> struct IF<false, Then, Else> {
+  typedef Else RET;
+};
+
 } // end detail
 
 // - cons forward declaration -----------------------------------------------
@@ -82,41 +98,6 @@ namespace detail {
 // template is used to produce compilation errors intentionally
 template<class T>
 class generate_error;
-
-// tuple default argument wrappers ---------------------------------------
-// Work for non-reference types, intentionally not for references
-template <class T>
-struct default_arg {
-
-// Non-class temporaries cannot have qualifiers.
-// To prevent f to return for example const int, we remove cv-qualifiers
-// from all temporaries. 
-     static typename boost::remove_cv<T>::type f() { return T(); }
-};
-
-// This is just to produce a more informative error message
-// The code would fail in any case
-template<class T, int N>
-struct default_arg<T[N]> {
-  static T* f() { 
-    return generate_error<T[N]>::arrays_are_not_valid_tuple_elements; }
-};
-   
-template <class T>
-struct default_arg<T&> {
-  static T& f() { 
-#ifndef __sgi
-    return generate_error<T>::no_default_values_for_reference_types;
-#else
-    // MIPSpro instantiates functions even when it should not, so
-    // this technique can not be used for error checking.
-    // The simple workaround is to just not have this error checking
-    // with MIPSpro.
-    static T x;
-    return x;
-#endif
-  }
-};
 
 // - cons getters --------------------------------------------------------
 // called: get_class<N>::get<RETURN_TYPE>(aTuple)
@@ -185,6 +166,7 @@ template <class T> struct access_traits {
   typedef T& non_const_type;
 
   typedef const typename boost::remove_cv<T>::type& parameter_type;
+
 // used as the tuple constructors parameter types
 // Rationale: non-reference tuple element types can be cv-qualified.
 // It should be possible to initialize such types with temporaries,
@@ -199,7 +181,6 @@ template <class T> struct access_traits<T&> {
    
   typedef T& parameter_type;   
 };
-
 
 // get function for non-const cons-lists, returns a reference to the element
 
@@ -231,6 +212,28 @@ get(const cons<HT, TT>& c BOOST_TUPLE_DUMMY_PARM) {
 } 
 
 // -- the cons template  --------------------------------------------------
+namespace detail {
+
+//  These helper templates wrap void types and plain function types.
+//  The reationale is to allow one to write tuple types with those types
+//  as elements, even though it is not possible to instantiate such object.
+//  E.g: typedef tuple<void> some_type; // ok
+//  but: some_type x; // fails
+
+template <class T> class non_storeable_type {
+  non_storeable_type();
+};
+
+template <class T> struct wrap_non_storeable_type {
+  typedef typename IF<
+    boost::is_function<T>::value, non_storeable_type<T>, T
+  >::RET type;
+};
+template <> struct wrap_non_storeable_type<void> {
+  typedef non_storeable_type<void> type; 
+};
+
+} // detail
 
 template <class HT, class TT>
 struct cons {
@@ -238,28 +241,33 @@ struct cons {
   typedef HT head_type;
   typedef TT tail_type;
 
-  head_type head;
+  typedef typename 
+    detail::wrap_non_storeable_type<head_type>::type stored_head_type;
+
+  stored_head_type head;
   tail_type tail;
 
-  typename access_traits<head_type>::non_const_type 
+  typename access_traits<stored_head_type>::non_const_type 
   get_head() { return head; }
 
   typename access_traits<tail_type>::non_const_type 
   get_tail() { return tail; }  
 
-  typename access_traits<head_type>::const_type 
+  typename access_traits<stored_head_type>::const_type 
   get_head() const { return head; }
   
   typename access_traits<tail_type>::const_type 
   get_tail() const { return tail; }  
 
-  cons() : head(detail::default_arg<HT>::f()), tail() {}
+  cons() : head(), tail() {}
+  //  cons() : head(detail::default_arg<HT>::f()), tail() {}
+
   // the argument for head is not strictly needed, but it prevents 
   // array type elements. This is good, since array type elements 
   // cannot be supported properly in any case (no assignment, 
   // copy works only if the tails are exactly the same type, ...)
   
-  cons(typename access_traits<head_type>::parameter_type h,
+  cons(typename access_traits<stored_head_type>::parameter_type h,
        const tail_type& t)
     : head (h), tail(t) {}  
 
@@ -268,8 +276,17 @@ struct cons {
   cons( T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, 
         T6& t6, T7& t7, T8& t8, T9& t9, T10& t10 ) 
     : head (t1), 
-      tail (t2, t3, t4, t5, t6, t7, t8, t9, t10, detail::cnull_type())
+      tail (t2, t3, t4, t5, t6, t7, t8, t9, t10, detail::cnull())
       {}
+
+  template <class T2, class T3, class T4, class T5, 
+            class T6, class T7, class T8, class T9, class T10>
+  cons( const null_type& t1, T2& t2, T3& t3, T4& t4, T5& t5, 
+        T6& t6, T7& t7, T8& t8, T9& t9, T10& t10 ) 
+    : head (), 
+      tail (t2, t3, t4, t5, t6, t7, t8, t9, t10, detail::cnull())
+      {}
+
 
   template <class HT2, class TT2>
   cons( const cons<HT2, TT2>& u ) : head(u.head), tail(u.tail) {}
@@ -315,21 +332,24 @@ struct cons<HT, null_type> {
   typedef HT head_type;
   typedef null_type tail_type;
 
-  head_type head;
+  typedef typename 
+    detail::wrap_non_storeable_type<head_type>::type stored_head_type;
+  stored_head_type head;
  
-  typename access_traits<head_type>::non_const_type 
+  typename access_traits<stored_head_type>::non_const_type 
   get_head() { return head; }
   
   null_type get_tail() { return null_type(); }  
 
-  typename access_traits<head_type>::const_type 
+  typename access_traits<stored_head_type>::const_type 
   get_head() const { return head; }
   
   const null_type get_tail() const { return null_type(); }  
 
-  cons() : head(detail::default_arg<HT>::f()) {}
+  //  cons() : head(detail::default_arg<HT>::f()) {}
+  cons() : head() {}
 
-  cons(typename access_traits<head_type>::parameter_type h,
+  cons(typename access_traits<stored_head_type>::parameter_type h,
        const null_type& = null_type())
     : head (h) {}  
 
@@ -338,6 +358,12 @@ struct cons<HT, null_type> {
        const null_type&, const null_type&, const null_type&, 
        const null_type&, const null_type&, const null_type&)
   : head (t1) {}
+
+  cons(const null_type& t1, 
+       const null_type&, const null_type&, const null_type&, 
+       const null_type&, const null_type&, const null_type&, 
+       const null_type&, const null_type&, const null_type&)
+  : head () {}
 
   template <class HT2>
   cons( const cons<HT2, null_type>& u ) : head(u.head) {}
@@ -424,29 +450,95 @@ public:
 
 
 // access_traits<T>::parameter_type takes non-reference types as const T& 
-  explicit tuple(
-    typename access_traits<T0>::parameter_type t0 
-      = detail::default_arg<T0>::f(),
-    typename access_traits<T1>::parameter_type t1 
-      = detail::default_arg<T1>::f(),
-    typename access_traits<T2>::parameter_type t2 
-      = detail::default_arg<T2>::f(),
-    typename access_traits<T3>::parameter_type t3 
-      = detail::default_arg<T3>::f(),
-    typename access_traits<T4>::parameter_type t4 
-      = detail::default_arg<T4>::f(),
-    typename access_traits<T5>::parameter_type t5 
-      = detail::default_arg<T5>::f(),
-    typename access_traits<T6>::parameter_type t6 
-      = detail::default_arg<T6>::f(),
-    typename access_traits<T7>::parameter_type t7 
-      = detail::default_arg<T7>::f(),
-    typename access_traits<T8>::parameter_type t8 
-      = detail::default_arg<T8>::f(),
-    typename access_traits<T9>::parameter_type t9 
-      = detail::default_arg<T9>::f())
+  tuple() {}
+  
+  tuple(typename access_traits<T0>::parameter_type t0)
+    : inherited(t0, detail::cnull(), detail::cnull(), detail::cnull(), 
+                detail::cnull(), detail::cnull(), detail::cnull(), 
+                detail::cnull(), detail::cnull(), detail::cnull()) {}
 
-        : inherited(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9) {}
+  tuple(typename access_traits<T0>::parameter_type t0,
+        typename access_traits<T1>::parameter_type t1)
+    : inherited(t0, t1, detail::cnull(), detail::cnull(), 
+                detail::cnull(), detail::cnull(), detail::cnull(), 
+                detail::cnull(), detail::cnull(), detail::cnull()) {}
+
+  tuple(typename access_traits<T0>::parameter_type t0,
+        typename access_traits<T1>::parameter_type t1,
+        typename access_traits<T2>::parameter_type t2)
+    : inherited(t0, t1, t2, detail::cnull(), detail::cnull(), 
+                detail::cnull(), detail::cnull(), detail::cnull(), 
+                detail::cnull(), detail::cnull()) {}
+
+  tuple(typename access_traits<T0>::parameter_type t0,
+        typename access_traits<T1>::parameter_type t1,
+        typename access_traits<T2>::parameter_type t2,
+        typename access_traits<T3>::parameter_type t3)
+    : inherited(t0, t1, t2, t3, detail::cnull(), detail::cnull(), 
+                detail::cnull(), detail::cnull(), detail::cnull(), 
+                detail::cnull()) {}
+
+  tuple(typename access_traits<T0>::parameter_type t0,
+        typename access_traits<T1>::parameter_type t1,
+        typename access_traits<T2>::parameter_type t2,
+        typename access_traits<T3>::parameter_type t3,
+        typename access_traits<T4>::parameter_type t4)
+    : inherited(t0, t1, t2, t3, t4, detail::cnull(), detail::cnull(), 
+                detail::cnull(), detail::cnull(), detail::cnull()) {}
+
+  tuple(typename access_traits<T0>::parameter_type t0,
+        typename access_traits<T1>::parameter_type t1,
+        typename access_traits<T2>::parameter_type t2,
+        typename access_traits<T3>::parameter_type t3,
+        typename access_traits<T4>::parameter_type t4,
+        typename access_traits<T5>::parameter_type t5)
+    : inherited(t0, t1, t2, t3, t4, t5, detail::cnull(), detail::cnull(), 
+                detail::cnull(), detail::cnull()) {}
+
+  tuple(typename access_traits<T0>::parameter_type t0,
+        typename access_traits<T1>::parameter_type t1,
+        typename access_traits<T2>::parameter_type t2,
+        typename access_traits<T3>::parameter_type t3,
+        typename access_traits<T4>::parameter_type t4,
+        typename access_traits<T5>::parameter_type t5,
+        typename access_traits<T6>::parameter_type t6)
+    : inherited(t0, t1, t2, t3, t4, t5, t6, detail::cnull(), 
+                detail::cnull(), detail::cnull()) {}
+
+  tuple(typename access_traits<T0>::parameter_type t0,
+        typename access_traits<T1>::parameter_type t1,
+        typename access_traits<T2>::parameter_type t2,
+        typename access_traits<T3>::parameter_type t3,
+        typename access_traits<T4>::parameter_type t4,
+        typename access_traits<T5>::parameter_type t5,
+        typename access_traits<T6>::parameter_type t6,
+        typename access_traits<T7>::parameter_type t7)
+    : inherited(t0, t1, t2, t3, t4, t5, t6, t7, detail::cnull(), 
+                detail::cnull()) {}
+
+  tuple(typename access_traits<T0>::parameter_type t0,
+        typename access_traits<T1>::parameter_type t1,
+        typename access_traits<T2>::parameter_type t2,
+        typename access_traits<T3>::parameter_type t3,
+        typename access_traits<T4>::parameter_type t4,
+        typename access_traits<T5>::parameter_type t5,
+        typename access_traits<T6>::parameter_type t6,
+        typename access_traits<T7>::parameter_type t7,
+        typename access_traits<T8>::parameter_type t8)
+    : inherited(t0, t1, t2, t3, t4, t5, t6, t7, t8, detail::cnull()) {}
+
+  tuple(typename access_traits<T0>::parameter_type t0,
+        typename access_traits<T1>::parameter_type t1,
+        typename access_traits<T2>::parameter_type t2,
+        typename access_traits<T3>::parameter_type t3,
+        typename access_traits<T4>::parameter_type t4,
+        typename access_traits<T5>::parameter_type t5,
+        typename access_traits<T6>::parameter_type t6,
+        typename access_traits<T7>::parameter_type t7,
+        typename access_traits<T8>::parameter_type t8,
+        typename access_traits<T9>::parameter_type t9)
+    : inherited(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9) {}
+
 
   template<class U1, class U2>
   tuple(const cons<U1, U2>& p) : inherited(p) {}
