@@ -55,7 +55,7 @@ struct lambda< arg<N>, Tag >
 {
     typedef true_ is_le;
     typedef mpl::arg<N> result_; // qualified for the sake of MIPSpro 7.41
-    typedef protect<result_> type;
+    typedef mpl::protect<result_> type;
 };
 
 template<
@@ -104,7 +104,7 @@ struct le_result1< true_,Tag,F,L1 >
         , typename L1::result_
         > result_;
 
-    typedef protect<result_> type;
+    typedef mpl::protect<result_> type;
 };
 
 } // namespace aux
@@ -181,7 +181,7 @@ struct le_result2< true_,Tag,F,L1,L2 >
         , typename L1::result_, typename L2::result_
         > result_;
 
-    typedef protect<result_> type;
+    typedef mpl::protect<result_> type;
 };
 
 } // namespace aux
@@ -263,7 +263,7 @@ struct le_result3< true_,Tag,F,L1,L2,L3 >
         , typename L1::result_, typename L2::result_, typename L3::result_
         > result_;
 
-    typedef protect<result_> type;
+    typedef mpl::protect<result_> type;
 };
 
 } // namespace aux
@@ -349,7 +349,7 @@ struct le_result4< true_,Tag,F,L1,L2,L3,L4 >
         , typename L4::result_
         > result_;
 
-    typedef protect<result_> type;
+    typedef mpl::protect<result_> type;
 };
 
 } // namespace aux
@@ -437,7 +437,7 @@ struct le_result5< true_,Tag,F,L1,L2,L3,L4,L5 >
         , typename L4::result_, typename L5::result_
         > result_;
 
-    typedef protect<result_> type;
+    typedef mpl::protect<result_> type;
 };
 
 } // namespace aux
@@ -505,10 +505,10 @@ struct lambda<
 
 /// special case for 'protect'
 template< typename T, typename Tag >
-struct lambda< protect<T>, Tag >
+struct lambda< mpl::protect<T>, Tag >
 {
     typedef false_ is_le;
-    typedef protect<T> result_;
+    typedef mpl::protect<T> result_;
     typedef result_ type;
 };
 

@@ -127,7 +127,7 @@ struct lambda< arg<N>,Tag AUX778076_ARITY_PARAM(int_<-1>) >
 {
     typedef true_ is_le;
     typedef mpl::arg<N> result_; // qualified for the sake of MIPSpro 7.41
-    typedef protect<result_> type; 
+    typedef mpl::protect<result_> type; 
 };
 
 
@@ -137,10 +137,10 @@ struct lambda< arg<N>,Tag AUX778076_ARITY_PARAM(int_<-1>) >
 
 /// special case for 'protect'
 template< typename T, typename Tag >
-struct lambda< protect<T>,Tag AUX778076_ARITY_PARAM(int_<1>) >
+struct lambda< mpl::protect<T>,Tag AUX778076_ARITY_PARAM(int_<1>) >
 {
     typedef false_ is_le;
-    typedef protect<T> result_;
+    typedef mpl::protect<T> result_;
     typedef result_ type;
 };
 
@@ -270,7 +270,7 @@ struct BOOST_PP_CAT(le_result,i_)< true_,Tag,F,AUX778076_LAMBDA_PARAMS(i_, L) >
         , BOOST_MPL_PP_REPEAT(i_, AUX778076_RESULT, L)
         > result_;
 
-    typedef protect<result_> type;
+    typedef mpl::protect<result_> type;
 };
 
 #   undef AUX778076_TYPE
