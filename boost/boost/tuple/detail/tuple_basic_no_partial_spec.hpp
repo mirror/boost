@@ -648,8 +648,8 @@ namespace tuples {
                         detail::assign_to_pointee<T2>(&t2),
                         detail::assign_to_pointee<T3>(&t3),
                         detail::assign_to_pointee<T4>(&t4),
-                        detail::assign_to_pointee<T6>(&t5),
-                        detail::assign_to_pointee<T5>(&t6));
+                        detail::assign_to_pointee<T5>(&t5),
+                        detail::assign_to_pointee<T6>(&t6));
     }
 
     // Tie variables into a tuple
