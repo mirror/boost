@@ -361,10 +361,12 @@ namespace boost
         template< class Range >
         BOOST_DEDUCED_TYPENAME
         boost::disable_if< ptr_container_detail::is_pointer_or_integral<Range> >::type
-        insert( iterator before, const Range& r )
+        insert( iterator before, const Range& r )// ptr_container_detail::is_range_tag )
         {
             insert( before, this->adl_begin(r), this->adl_end(r) );
         }
+
+
 
         /*
         auto_type release( size_type at )

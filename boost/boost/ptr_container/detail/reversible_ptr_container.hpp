@@ -58,6 +58,11 @@ namespace ptr_container_detail
     {
         BOOST_STATIC_CONSTANT(bool, value = is_pointer<T>::value || is_integral<T>::value );
     };
+
+    struct is_pointer_or_integral_tag {};
+    struct is_range_tag {};
+
+    
     
     template
     < 
@@ -493,6 +498,13 @@ namespace ptr_container_detail
         
     public: // modifiers
 
+        /*
+        iterator insert_range_impl( iterator before, int x )
+        {
+            return insert_range_impl( before, (Ty_*)0 );
+        };
+        */
+
         iterator insert( iterator before, Ty_* x )
         {
             enforce_null_policy( x, "Null pointer in 'insert()'" );
@@ -501,8 +513,29 @@ namespace ptr_container_detail
             iterator res( c_.insert( before.base().base(), x ) ); // strong, commit
             ptr.release();                                        // nothrow
             return res;
+        }
+
+        /*
+        template< class T >
+        iterator insert_range_impl( iterator before, T x, is_pointer_or_integral_tag )
+        {
+            return insert_range_impl( before, x );
         };
 
+        template< class U >
+        BOOST_DEDUCED_TYPENAME mpl::if_< ptr_container_detail::is_pointer_or_integral<U>,
+                                         iterator, void >::type
+        insert( iterator i, const U& r )
+        {
+            typedef BOOST_DEDUCED_TYPENAME mpl::if_< ptr_container_detail::is_pointer_or_integral<U>,
+                                                     ptr_container_detail::is_pointer_or_integral_tag,
+                                                     ptr_container_detail::is_range_tag >::type tag;                                  
+      //      typedef BOOST_DEDUCED_TYPENAME mpl::if_< is_pointer_or_integral<T>,
+      //                                               Ty_*,
+      //                                               T >::type cast_type;
+            return this->insert_range_impl( i, r, tag() );
+        }*/
+                                             
         /*
         void insert( iterator before, size_type n, const_reference x ) // strong 
         {
