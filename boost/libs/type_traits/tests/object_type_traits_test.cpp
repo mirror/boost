@@ -221,8 +221,12 @@ int cpp_main(int argc, char* argv[])
 #ifdef __BORLANDC__
 // can't handle enum's or classes that are POD's
 unsigned int expected_failures = 6;
-#elif defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x520)
+#elif defined(__SUNPRO_CC)
+#if (__SUNPRO_CC <= 0x520)
 unsigned int expected_failures = 55;
+#else // (__SUNPRO_CC <= 0x530)
+unsigned int expected_failures = 20;
+#endif
 #elif defined(__MWERKS__)
 unsigned int expected_failures = 10;
 #elif defined(BOOST_MSVC)

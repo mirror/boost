@@ -61,7 +61,7 @@ int cpp_main(int argc, char* argv[])
 // define the number of failures expected for given compilers:
 #ifdef BOOST_MSVC
 unsigned int expected_failures = 3;
-#elif defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x520)
+#elif defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x530)
 unsigned int expected_failures = 1;
 #elif defined(__GNUC__)
 unsigned int expected_failures = 1; // cr_type doesn't compile
