@@ -47,7 +47,7 @@
 #endif
 
  
-#ifdef BOOST_MSVC
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
 //  in certain situations VC++ requires a redefinition of
 //  default template arguments, in contrast with 14.1/12
 //
