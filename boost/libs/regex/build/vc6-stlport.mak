@@ -316,37 +316,37 @@ vc6-stlport-re300ls_clean :
 #
 ########################################################
 vc6-stlport/vc6-stlport-re300ddl/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/c_regex_traits.cpp
 
 vc6-stlport/vc6-stlport-re300ddl/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/c_regex_traits_common.cpp
 
 vc6-stlport/vc6-stlport-re300ddl/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/cpp_regex_traits.cpp
 
 vc6-stlport/vc6-stlport-re300ddl/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/cregex.cpp
 
 vc6-stlport/vc6-stlport-re300ddl/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/fileiter.cpp
 
 vc6-stlport/vc6-stlport-re300ddl/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/posix_api.cpp
 
 vc6-stlport/vc6-stlport-re300ddl/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/regex.cpp
 
 vc6-stlport/vc6-stlport-re300ddl/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/regex_debug.cpp
 
 vc6-stlport/vc6-stlport-re300ddl/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/regex_synch.cpp
 
 vc6-stlport/vc6-stlport-re300ddl/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/w32_regex_traits.cpp
 
 vc6-stlport/vc6-stlport-re300ddl/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddl/vc6-stlport-re300ddl.pch -Fo./vc6-stlport/vc6-stlport-re300ddl/ -Fdvc6-stlport/vc6-stlport-re300ddl.pdb ../src/wide_posix_api.cpp
 
 vc6-stlport-re300ddl_dir :
 	if not exist "vc6-stlport\vc6-stlport-re300ddl\$(NULL)" mkdir vc6-stlport\vc6-stlport-re300ddl
@@ -366,37 +366,37 @@ vc6-stlport-re300ddl_clean :
 #
 ########################################################
 vc6-stlport/vc6-stlport-re300ddm/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/c_regex_traits.cpp
 
 vc6-stlport/vc6-stlport-re300ddm/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/c_regex_traits_common.cpp
 
 vc6-stlport/vc6-stlport-re300ddm/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/cpp_regex_traits.cpp
 
 vc6-stlport/vc6-stlport-re300ddm/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/cregex.cpp
 
 vc6-stlport/vc6-stlport-re300ddm/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/fileiter.cpp
 
 vc6-stlport/vc6-stlport-re300ddm/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/posix_api.cpp
 
 vc6-stlport/vc6-stlport-re300ddm/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/regex.cpp
 
 vc6-stlport/vc6-stlport-re300ddm/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/regex_debug.cpp
 
 vc6-stlport/vc6-stlport-re300ddm/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/regex_synch.cpp
 
 vc6-stlport/vc6-stlport-re300ddm/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/w32_regex_traits.cpp
 
 vc6-stlport/vc6-stlport-re300ddm/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6-stlport/vc6-stlport-re300ddm/vc6-stlport-re300ddm.pch -Fo./vc6-stlport/vc6-stlport-re300ddm/ -Fdvc6-stlport/vc6-stlport-re300ddm.pdb ../src/wide_posix_api.cpp
 
 vc6-stlport-re300ddm_dir :
 	if not exist "vc6-stlport\vc6-stlport-re300ddm\$(NULL)" mkdir vc6-stlport\vc6-stlport-re300ddm
@@ -409,4 +409,5 @@ vc6-stlport-re300ddm_clean :
 
 ./vc6-stlport/vc6-stlport-re300ddm.lib : vc6-stlport/vc6-stlport-re300ddm/c_regex_traits.obj vc6-stlport/vc6-stlport-re300ddm/c_regex_traits_common.obj vc6-stlport/vc6-stlport-re300ddm/cpp_regex_traits.obj vc6-stlport/vc6-stlport-re300ddm/cregex.obj vc6-stlport/vc6-stlport-re300ddm/fileiter.obj vc6-stlport/vc6-stlport-re300ddm/posix_api.obj vc6-stlport/vc6-stlport-re300ddm/regex.obj vc6-stlport/vc6-stlport-re300ddm/regex_debug.obj vc6-stlport/vc6-stlport-re300ddm/regex_synch.obj vc6-stlport/vc6-stlport-re300ddm/w32_regex_traits.obj vc6-stlport/vc6-stlport-re300ddm/wide_posix_api.obj
 	link -lib /nologo /out:vc6-stlport/vc6-stlport-re300ddm.lib $(XSFLAGS)  vc6-stlport/vc6-stlport-re300ddm/c_regex_traits.obj vc6-stlport/vc6-stlport-re300ddm/c_regex_traits_common.obj vc6-stlport/vc6-stlport-re300ddm/cpp_regex_traits.obj vc6-stlport/vc6-stlport-re300ddm/cregex.obj vc6-stlport/vc6-stlport-re300ddm/fileiter.obj vc6-stlport/vc6-stlport-re300ddm/posix_api.obj vc6-stlport/vc6-stlport-re300ddm/regex.obj vc6-stlport/vc6-stlport-re300ddm/regex_debug.obj vc6-stlport/vc6-stlport-re300ddm/regex_synch.obj vc6-stlport/vc6-stlport-re300ddm/w32_regex_traits.obj vc6-stlport/vc6-stlport-re300ddm/wide_posix_api.obj
+
 

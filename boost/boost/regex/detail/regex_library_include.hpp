@@ -28,10 +28,10 @@
 #ifndef BOOST_REGEX_NO_LIB
 
 #if defined(BOOST_MSVC) && !defined(BOOST_REGEX_BUILD_DLL)
-#ifdef __SGI_STL_PORT
+#if defined(__SGI_STL_PORT) || defined(_STLP_VERSION)
    #ifdef _DLL
       // All these are multithreaded:
-      #if defined(_DEBUG) && defined(__STL_DEBUG)
+      #if defined(_DEBUG) && (defined(__STL_DEBUG) || defined(_STLP_DEBUG))
          #pragma comment(lib, "vc6-stlport-re300ddl.lib")
       #elif defined(_DEBUG)
          #pragma comment(lib, "vc6-stlport-re300dl.lib")
@@ -43,7 +43,7 @@
       #endif // _DEBUG
    #else // _DLL
       #ifdef _MT
-         #if defined(_DEBUG) && defined(__STL_DEBUG)
+         #if defined(_DEBUG) && (defined(__STL_DEBUG) || defined(_STLP_DEBUG))
             #pragma comment(lib, "vc6-stlport-re300ddm.lib")
          #elif defined(_DEBUG)
             #pragma comment(lib, "vc6-stlport-re300dm.lib")
