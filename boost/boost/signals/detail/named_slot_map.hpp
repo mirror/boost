@@ -72,13 +72,13 @@ public:
   class BOOST_SIGNALS_DECL iterator :
     public iterator_facade<iterator,
                            connection_slot_pair,
-                           single_pass_traversal_tag>
+                           forward_traversal_tag>
   {
     class impl;
 
     typedef iterator_facade<iterator,
                             connection_slot_pair,
-                            single_pass_traversal_tag> inherited;
+                            forward_traversal_tag> inherited;
   public:
     iterator();
     iterator(const iterator& other);
@@ -88,6 +88,11 @@ public:
     connection_slot_pair& dereference() const;
     void increment();
     bool equal(const iterator& other) const;
+
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 0x1701)
+    void decrement();
+    void advance(difference_type);
+#endif
 
   private:
     iterator(std::auto_ptr<impl>);

@@ -121,6 +121,11 @@ bool named_slot_map::iterator::equal(const iterator& other) const
               || impl_->slot_ == other.impl_->slot_));
 }
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 0x1701)
+void named_slot_map::iterator::decrement() { assert(false); }
+void named_slot_map::iterator::advance(difference_type) { assert(false); }
+#endif
+
 named_slot_map::named_slot_map(const compare_type& compare)
 {
   impl_.reset(new impl(compare));
@@ -193,6 +198,7 @@ void named_slot_map::disconnect(const any& name)
       i->first.disconnect();
       i = next;
     }
+    impl_->groups.erase(group);
   }
 }
 
@@ -200,9 +206,6 @@ void named_slot_map::erase(iterator pos)
 {
   // Erase the slot
   pos.impl_->group->second.erase(pos.impl_->slot_);
-
-  // Erase empty groups
-  if (impl_->empty(pos.impl_->group)) impl_->groups.erase(pos.impl_->group);
 }
 
 void named_slot_map::remove_disconnected_slots()
