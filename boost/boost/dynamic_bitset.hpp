@@ -195,8 +195,7 @@ public:
     dynamic_bitset(BlockInputIterator first, BlockInputIterator last,
                const Allocator& alloc = Allocator())
         : detail::dynamic_bitset_base<Block, Allocator>
-            (detail::initial_num_blocks(first, last, 
-      typename std::iterator_traits<BlockInputIterator>::iterator_category()) 
+            (detail::initial_num_blocks(first, last) 
             * bits_per_block, alloc)           
     {
         if (first != last) {
@@ -229,8 +228,7 @@ public:
     void append(BlockInputIterator first, BlockInputIterator last)
     {
         if (first != last) {
-            typename std::iterator_traits<BlockInputIterator>::iterator_category cat;
-            std::size_t nblocks = detail::initial_num_blocks(first, last, cat);
+            std::size_t nblocks = detail::initial_num_blocks(first, last);
             if (nblocks == 0) { // dealing with input iterators
                 for (; first != last; ++first)
                     append(*first);
@@ -479,6 +477,15 @@ namespace detail {
       ++first, ++n;
     return n;
   }
+
+  template <typename BlockInputIterator>
+  std::size_t initial_num_blocks(BlockInputIterator first,
+                                 BlockInputIterator last)
+  {
+    typename std::iterator_traits<BlockInputIterator>::iterator_category cat;
+    return initial_num_blocks(first, last, cat);
+  }
+
 
 } // namespace detail
 
