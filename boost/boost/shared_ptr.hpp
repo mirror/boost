@@ -76,12 +76,6 @@ template<> struct shared_ptr_traits<void const>
 //  is destroyed or reset.
 //
 
-#if defined(BOOST_SP_ENABLE_CONSTRUCTOR_HOOK)
-
-void shared_ptr_constructor_hook(void * p);
-
-#endif
-
 template<class T> class weak_ptr;
 template<class T> class enable_shared_from_this;
 
@@ -119,10 +113,6 @@ public:
     explicit shared_ptr(Y * p): px(p), pn(p, checked_deleter<Y>()) // Y must be complete
     {
         sp_enable_shared_from_this(p);
-
-#if defined(BOOST_SP_ENABLE_CONSTRUCTOR_HOOK)
-        shared_ptr_constructor_hook(p);
-#endif
     }
 
     //
@@ -156,7 +146,7 @@ public:
     template<class Y>
     shared_ptr(shared_ptr<Y> const & r, detail::dynamic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
     {
-        if (px == 0) // need to allocate new counter -- the cast failed
+        if(px == 0) // need to allocate new counter -- the cast failed
         {
             pn = detail::shared_count();
         }
