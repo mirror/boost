@@ -27,7 +27,6 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/mpl/bool.hpp> 
-#include <boost/utility/enable_if.hpp>    
 
 namespace boost { namespace iostreams { namespace detail {
                     
