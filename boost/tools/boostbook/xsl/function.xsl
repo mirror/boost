@@ -240,7 +240,7 @@
           <xsl:with-param name="to" select="$link-to"/>
           <xsl:with-param name="text" select="$function-name"/>
           <xsl:with-param name="link-type" select="$link-type"/>
-          <xsl:with-param name="highlight" select="false()"/>
+          <xsl:with-param name="highlight" select="true()"/>
         </xsl:call-template>
 
         <xsl:text>(</xsl:text>
