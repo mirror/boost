@@ -465,6 +465,12 @@ namespace boost {
       public:
         BOOST_STATIC_CONSTANT(int, args = BOOST_FUNCTION_NUM_ARGS);
     
+#if BOOST_FUNCTION_NUM_ARGS == 1
+        typedef T1 argument_type;
+#elif BOOST_FUNCTION_NUM_ARGS == 2
+        typedef T1 first_argument_type;
+        typedef T2 second_argument_type;
+#endif
         typedef typename function_return_type<R>::type result_type;
         typedef Policy policy_type;
         typedef Mixin mixin_type;
