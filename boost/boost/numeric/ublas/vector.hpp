@@ -1730,7 +1730,8 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             size_type index () const {
                 BOOST_UBLAS_CHECK (it_ >= (*this) ().begin ().it_ && it_ < (*this) ().end ().it_, bad_index ());
-                const self_type &v = (*this) ();
+                // EDG won't allow const self_type it doesn't allow friend access to it_
+                self_type &v = (*this) ();
                 return it_ - v.begin ().it_;
             }
 

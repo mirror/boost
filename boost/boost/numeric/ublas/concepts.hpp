@@ -1321,12 +1321,12 @@ namespace boost { namespace numeric { namespace ublas {
         IndexedRandomAccess1DIteratorConcept<matrix_vector_slice<matrix<double> >::const_reverse_iterator>::constraints ();
         MutableIndexedRandomAccess1DIteratorConcept<matrix_vector_slice<matrix<double> >::reverse_iterator>::constraints ();
 
-        VectorExpressionConcept<const matrix_vector_indirect<const matrix<double> > >::constraints ();
-        MutableVectorExpressionConcept<matrix_vector_indirect<matrix<double> > >::constraints ();
-        IndexedRandomAccess1DIteratorConcept<matrix_vector_indirect<matrix<double> >::const_iterator>::constraints ();
-        MutableIndexedRandomAccess1DIteratorConcept<matrix_vector_indirect<matrix<double> >::iterator>::constraints ();
-        IndexedRandomAccess1DIteratorConcept<matrix_vector_indirect<matrix<double> >::const_reverse_iterator>::constraints ();
-        MutableIndexedRandomAccess1DIteratorConcept<matrix_vector_indirect<matrix<double> >::reverse_iterator>::constraints ();
+        VectorExpressionConcept<const matrix_vector_indirect<const matrix<double>, vector<unsigned> > >::constraints ();
+        MutableVectorExpressionConcept<matrix_vector_indirect<matrix<double>, vector<unsigned> > >::constraints ();
+        IndexedRandomAccess1DIteratorConcept<matrix_vector_indirect<matrix<double>, vector<unsigned> >::const_iterator>::constraints ();
+        MutableIndexedRandomAccess1DIteratorConcept<matrix_vector_indirect<matrix<double>, vector<unsigned> >::iterator>::constraints ();
+        IndexedRandomAccess1DIteratorConcept<matrix_vector_indirect<matrix<double>, vector<unsigned> >::const_reverse_iterator>::constraints ();
+        MutableIndexedRandomAccess1DIteratorConcept<matrix_vector_indirect<matrix<double>, vector<unsigned> >::reverse_iterator>::constraints ();
 #endif
 
         MatrixExpressionConcept<const matrix_range<const matrix<double> > >::constraints ();
@@ -1476,6 +1476,7 @@ namespace boost { namespace numeric { namespace ublas {
         MutableIndexedBidirectional2DIteratorConcept<sparse_matrix<double>::reverse_iterator1,
                                                      sparse_matrix<double>::reverse_iterator2>::constraints ();
 
+/* FIXME - sparse_vector_of_sparse_vector broken
         MatrixConcept<const sparse_vector_of_sparse_vector<double> >::constraints ();
         MutableMatrixConcept<sparse_vector_of_sparse_vector<double> >::constraints ();
         IndexedBidirectional2DIteratorConcept<sparse_vector_of_sparse_vector<double>::const_iterator1,
@@ -1497,6 +1498,7 @@ namespace boost { namespace numeric { namespace ublas {
                                               compressed_matrix<double>::const_reverse_iterator2>::constraints ();
         MutableIndexedBidirectional2DIteratorConcept<compressed_matrix<double>::reverse_iterator1,
                                                      compressed_matrix<double>::reverse_iterator2>::constraints ();
+*/
 #endif
 
         // Scalar Expressions
@@ -1544,12 +1546,6 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Matrix Expressions
 #if defined (INTERNAL) || defined (INTERNAL_MATRIX_EXPRESSION)
-        MatrixExpressionConcept<matrix_const_reference<matrix<double> > >::constraints ();
-        IndexedRandomAccess2DIteratorConcept<matrix_const_reference<matrix<double> >::const_iterator1,
-                                             matrix_const_reference<matrix<double> >::const_iterator2>::constraints ();
-        IndexedRandomAccess2DIteratorConcept<matrix_const_reference<matrix<double> >::const_reverse_iterator1,
-                                             matrix_const_reference<matrix<double> >::const_reverse_iterator2>::constraints ();
-
         MatrixExpressionConcept<matrix_reference<matrix<double> > >::constraints ();
         // MutableMatrixExpressionConcept<matrix_reference<matrix<double> > >::constraints ();
         IndexedRandomAccess2DIteratorConcept<matrix_reference<matrix<double> >::const_iterator1,

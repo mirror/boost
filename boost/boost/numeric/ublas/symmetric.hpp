@@ -279,13 +279,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
             BOOST_UBLAS_CHECK (j < size_, bad_index ());
             if (functor1_type::other (i, j)) {
-                size_type k = functor1_type::element (functor2_type (), i, size_, j, size_);
+                // size_type k = functor1_type::element (functor2_type (), i, size_, j, size_);
                 // data ().erase (data ().begin () + k));
                 data () [functor1_type::element (functor2_type (), i, size_, j, size_)] = value_type ();
             } else {
-                size_type k = functor1_type::element (functor2_type (), j, size_, i, size_);
                 // data ().erase (data ().begin () + k);
-                data () [k] = value_type ();
+                data () [functor1_type::element (functor2_type (), j, size_, i, size_)] = value_type ();
             }
         }
         BOOST_UBLAS_INLINE
@@ -1289,6 +1288,8 @@ namespace boost { namespace numeric { namespace ublas {
                                    (current_ == 0 && it1_ != it1_end_) ||
                                    (current_ == 1 && it2_ != it2_end_), internal_logic ());
             }
+            // FIXME cannot compiler
+            //  iterator1 does not have these members!
             BOOST_UBLAS_INLINE
             const_iterator1 (const iterator1 &it):
                 container_const_reference<self_type> (it ()),
@@ -1736,6 +1737,8 @@ namespace boost { namespace numeric { namespace ublas {
                                    (current_ == 0 && it1_ != it1_end_) ||
                                    (current_ == 1 && it2_ != it2_end_), internal_logic ());
             }
+            // FIXME cannot compiler
+            //  iterator2 does not have these members!
             BOOST_UBLAS_INLINE
             const_iterator2 (const iterator2 &it):
                 container_const_reference<self_type> (it ()),
@@ -2176,11 +2179,11 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         matrix_closure_type data_;
-        static const_matrix_type nil_;
+        static matrix_type nil_;
     };
 
     template<class M, class F>
-    typename symmetric_adaptor<M, F>::const_matrix_type symmetric_adaptor<M, F>::nil_;
+    typename symmetric_adaptor<M, F>::matrix_type symmetric_adaptor<M, F>::nil_;
 
 }}}
 

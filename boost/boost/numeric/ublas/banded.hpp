@@ -2030,13 +2030,13 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         size_type lower_;
         size_type upper_;
-        static const_matrix_type nil_;
+        static matrix_type nil_;
         typedef const value_type const_value_type;
         static const_value_type zero_;
     };
 
     template<class M>
-    typename banded_adaptor<M>::const_matrix_type banded_adaptor<M>::nil_;
+    typename banded_adaptor<M>::matrix_type banded_adaptor<M>::nil_;
     template<class M>
     typename banded_adaptor<M>::const_value_type banded_adaptor<M>::zero_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT

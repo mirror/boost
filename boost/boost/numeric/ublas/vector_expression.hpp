@@ -61,6 +61,12 @@ namespace boost { namespace numeric { namespace ublas {
             return t_;
         }
 
+        // Closure comparison
+        BOOST_UBLAS_INLINE
+        bool same_closure (const scalar_value &sv) const {
+            return this == &sv;    // shortcut for &t_ == &sv.t_
+        }
+
     private:
         value_type t_;
     };
@@ -96,7 +102,8 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T>
-    const typename scalar_const_reference<T>::value_type scalar_const_reference<T>::nil_;
+    const typename scalar_const_reference<T>::value_type scalar_const_reference<T>::nil_
+        = BOOST_UBLAS_TYPENAME scalar_const_reference<T>::value_type ();
 
 
 
@@ -193,111 +200,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
     };
-
-#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-    template<class E>
-    class vector_const_reference:
-        public vector_expression<vector_const_reference<E> > {
-    public:
-#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
-        BOOST_UBLAS_USING vector_expression<vector_const_reference<E> >::operator ();
-#endif
-        typedef E expression_type;
-        typedef typename E::size_type size_type;
-        typedef typename E::difference_type difference_type;
-        typedef typename E::value_type value_type;
-        typedef typename E::const_reference const_reference;
-        typedef const_reference reference;
-        typedef typename E::storage_category storage_category;
-        typedef typename E::simd_category simd_category;
-
-        // Construction and destruction
-        BOOST_UBLAS_INLINE
-        vector_const_reference ():
-            e_ (nil_) {}
-        BOOST_UBLAS_INLINE
-        vector_const_reference (const expression_type &e):
-            e_ (e) {}
-
-        // Accessors
-        BOOST_UBLAS_INLINE
-        size_type size () const {
-            return e_.size ();
-        }
-        BOOST_UBLAS_INLINE
-        const expression_type &expression () const {
-            return e_;
-        }
-
-        // Element access
-        BOOST_UBLAS_INLINE
-        const_reference operator () (size_type i) const {
-            return expression () (i);
-        }
-
-        BOOST_UBLAS_INLINE
-        const_reference operator [] (size_type i) const {
-            return expression () [i];
-        }
-
-        // Closure comparison
-        BOOST_UBLAS_INLINE
-        bool same_closure (const vector_const_reference &vr) const {
-            return &(*this).e_ == &vr.e_;
-        }
-
-        // Element lookup
-        BOOST_UBLAS_INLINE
-        const_iterator find (size_type i) const {
-            return expression ().find (i);
-        }
-
-        // Iterator types
-        typedef typename E::const_iterator const_iterator;
-        typedef const_iterator iterator;
-
-        // Iterator is the iterator of the referenced expression.
-
-        BOOST_UBLAS_INLINE
-        const_iterator begin () const {
-            return expression ().begin ();
-        }
-        BOOST_UBLAS_INLINE
-        const_iterator end () const {
-            return expression ().end ();
-        }
-
-        // Reverse iterator
-
-#ifdef BOOST_MSVC_STD_ITERATOR
-        typedef reverse_iterator_base<const_iterator, value_type, const_reference> const_reverse_iterator;
-#else
-        typedef reverse_iterator_base<const_iterator> const_reverse_iterator;
-#endif
-
-        BOOST_UBLAS_INLINE
-        const_reverse_iterator rbegin () const {
-            return const_reverse_iterator (end ());
-        }
-        BOOST_UBLAS_INLINE
-        const_reverse_iterator rend () const {
-            return const_reverse_iterator (begin ());
-        }
-
-#ifdef BOOST_MSVC_STD_ITERATOR
-        typedef reverse_iterator_base<const_iterator, value_type, const_reference> reverse_iterator;
-#else
-        typedef reverse_iterator_base<const_iterator> reverse_iterator;
-#endif
-
-    private:
-        const expression_type &e_;
-        static const expression_type nil_;
-    };
-
-    template<class E>
-    const typename vector_const_reference<E>::expression_type vector_const_reference<E>::nil_;
-#endif
 
     template<class E>
     class vector_reference:
@@ -518,11 +420,11 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         expression_type &e_;
-        const static expression_type nil_;
+        static expression_type nil_;
     };
 
     template<class E>
-    const typename vector_reference<E>::expression_type vector_reference<E>::nil_;
+    typename vector_reference<E>::expression_type vector_reference<E>::nil_;
 
     template<class E, class F>
     class vector_unary:

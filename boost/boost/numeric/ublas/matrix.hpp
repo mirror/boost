@@ -1039,9 +1039,9 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         vector_of_vector (const matrix_expression<AE> &ae):
             matrix_expression<self_type> (),
-            size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (functor_type::size1 (size1, size2) + 1) {
-            for (size_type k = 0; k < functor_type::size1 (size1, size2); ++ k)
-                detail::resize (data () [k], functor_type::size2 (size1, size2), false);
+            size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (functor_type::size1 (size1_, size2_) + 1) {
+            for (size_type k = 0; k < functor_type::size1 (size1_, size2_); ++ k)
+                detail::resize (data () [k], functor_type::size2 (size1_, size2_), false);
             matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
@@ -3420,7 +3420,7 @@ namespace boost { namespace numeric { namespace ublas {
                 const size_type size1_min = (std::min) (size1, size1_);
                 const size_type size2_min = (std::min) (size2, size2_);
                 for (size_type i = 0; i != size1_min; ++i) {    // indexing copy over major
-                    for (size_type j = 0; j != size1_min; ++j) {
+                    for (size_type j = 0; j != size2_min; ++j) {
                         temporary.data_[i][j] = data_[i][j];
                     }
                 }

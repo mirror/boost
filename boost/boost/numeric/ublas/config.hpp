@@ -107,8 +107,6 @@
 #if defined (__GNUC__) && ! defined (BOOST_STRICT_CONFIG)
 
 #if __GNUC__ <= 2 && __GNUC_MINOR__ <= 95
-// GCC 2.95.3 needs BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS (this seems to be arguable).
-#define BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS
 #define BOOST_UBLAS_NO_MEMBER_FRIENDS
 #define BOOST_UBLAS_NO_PROXY_SHORTCUTS
 // Cannot access private members from member class
@@ -200,6 +198,7 @@ namespace std {
 #endif
 
 
+
 // Default configuration without compiler problems
 #ifndef BOOST_UBLAS_TYPENAME
 #define BOOST_UBLAS_TYPENAME typename
@@ -208,9 +207,12 @@ namespace std {
 #define BOOST_UBLAS_USING using
 #endif
 
+#ifndef BOOST_UBLAS_USE_BASIC_STREAM
+#define BOOST_UBLAS_USE_BASIC_STREAM
+#endif
 
-#ifndef BOOST_UBLAS_USE_STREAM
-#define BOOST_UBLAS_USE_STREAM
+#ifndef BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS
+#define BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS 1
 #endif
 
 

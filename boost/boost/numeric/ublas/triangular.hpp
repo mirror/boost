@@ -1843,13 +1843,13 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         matrix_closure_type data_;
-        static const_matrix_type nil_;
+        static matrix_type nil_;
         static const value_type zero_;
         static const value_type one_;
     };
 
     template<class M, class F>
-    typename triangular_adaptor<M, F>::const_matrix_type triangular_adaptor<M, F>::nil_;
+    typename triangular_adaptor<M, F>::matrix_type triangular_adaptor<M, F>::nil_;
     template<class M, class F>
     const typename triangular_adaptor<M, F>::value_type triangular_adaptor<M, F>::zero_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT

@@ -1640,6 +1640,8 @@ namespace boost { namespace numeric { namespace ublas {
                                    (current_ == 0 && it1_ != it1_end_) ||
                                    (current_ == 1 && it2_ != it2_end_), internal_logic ());
             }
+            // FIXME cannot compiler
+            //  iterator1 does not have these members!
             BOOST_UBLAS_INLINE
             const_iterator1 (const iterator1 &it):
                 container_const_reference<self_type> (it ()),
@@ -2097,6 +2099,8 @@ namespace boost { namespace numeric { namespace ublas {
                                    (current_ == 0 && it1_ != it1_end_) ||
                                    (current_ == 1 && it2_ != it2_end_), internal_logic ());
             }
+            // FIXME cannot compiler
+            //  iterator2 does not have these members!
             BOOST_UBLAS_INLINE
             const_iterator2 (const iterator2 &it):
                 container_const_reference<self_type> (it ()),
@@ -2543,12 +2547,12 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         matrix_closure_type data_;
-        static const_matrix_type nil_;
+        static matrix_type nil_;
         static value_type conj_;
     };
 
     template<class M, class F>
-    typename hermitian_adaptor<M, F>::const_matrix_type hermitian_adaptor<M, F>::nil_;
+    typename hermitian_adaptor<M, F>::matrix_type hermitian_adaptor<M, F>::nil_;
     template<class M, class F>
     typename hermitian_adaptor<M, F>::value_type hermitian_adaptor<M, F>::conj_;
 
