@@ -3,7 +3,6 @@
 +++++++++++++++++++++++++++++++++++++
 
 :date: $Date$
-:copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.
 
 .. contents:: Index
 
