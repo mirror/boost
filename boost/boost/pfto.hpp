@@ -28,7 +28,8 @@
 // int argument before the default one (with a long argument).  This is
 // known to function with VC 6.0. On other compilers this fails (Borland)
 // or causes other problems (GCC).  note: this 
-#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
+#if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
     #define BOOST_PFTO long
 #else
     #define BOOST_PFTO
