@@ -42,7 +42,8 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
 
-  geometric_distribution(base_type & rng, const RealType& p)
+  explicit geometric_distribution(base_type & rng,
+                                  const RealType& p = RealType(0.5))
     : _rng(rng), _p(p)
   {
     assert(RealType(0) < p && p < RealType(1));

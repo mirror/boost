@@ -40,8 +40,9 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
-  cauchy_distribution(base_type & rng, result_type median = result_type(0), 
-                      result_type sigma = result_type(1))
+  explicit cauchy_distribution(base_type & rng,
+                               result_type median = result_type(0), 
+                               result_type sigma = result_type(1))
     : _rng(rng), _median(median), _sigma(sigma) { }
 
   // compiler-generated copy ctor and assignment operator are fine

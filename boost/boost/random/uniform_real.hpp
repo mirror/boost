@@ -39,7 +39,8 @@ public:
   typedef RealType result_type;
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
 
-  uniform_real(base_type & rng, RealType min, RealType max) 
+  explicit uniform_real(base_type & rng, RealType min = RealType(0),
+                        RealType max = RealType(1)) 
     : _rng(rng), _min(min), _max(max)
   {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS

@@ -205,7 +205,7 @@ public:
   BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
 #endif
 
-  uniform_int(base_type & rng, IntType min, IntType max)
+  explicit uniform_int(base_type & rng, IntType min = 0, IntType max = 9)
     : impl(rng, min, max)
   { }
 

@@ -34,10 +34,12 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
 
-  explicit binomial_distribution(base_type & rng, IntType t, const RealType& p)
+  explicit binomial_distribution(base_type & rng, IntType t = 1,
+                                 const RealType& p = RealType(0.5))
     : _rng(rng, p), _t(t)
   {
     assert(t >= 0);
+    assert(RealType(0) <= 0 && p <= RealType(1));
   }
 
   // compiler-generated copy ctor and assignment operator are fine

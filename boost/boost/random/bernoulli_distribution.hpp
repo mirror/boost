@@ -32,7 +32,9 @@ class bernoulli_distribution
 public:
   typedef UniformRandomNumberGenerator base_type;
   typedef bool result_type;
-  bernoulli_distribution(base_type & rng, const RealType& p = RealType(0.5)) 
+
+  explicit bernoulli_distribution(base_type & rng,
+                                  const RealType& p = RealType(0.5)) 
     : _rng(&rng),
       _p(p),
       _threshold(static_cast<base_result>

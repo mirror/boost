@@ -34,14 +34,15 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
 
-  explicit poisson_distribution(base_type & rng, const RealType& mean)
+  explicit poisson_distribution(base_type & rng,
+                                const RealType& mean = RealType(1))
     : _rng(rng), _mean(mean)
   {
 #ifndef BOOST_NO_STDC_NAMESPACE
     // allow for Koenig lookup
     using std::exp;
 #endif
-    assert(mean > 0);
+    assert(mean > RealType(0));
     _exp_mean = exp(-_mean);
   }
 

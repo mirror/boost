@@ -35,8 +35,11 @@ class triangle_distribution
 public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
-  triangle_distribution(base_type & rng, result_type a, result_type b,
-                        result_type c)
+
+  explicit triangle_distribution(base_type & rng,
+                                 result_type a = result_type(0),
+                                 result_type b = result_type(0.5),
+                                 result_type c = result_type(1))
     : _rng(rng), _a(a), _b(b), _c(c),
       d1(_b-_a), d2(_c-_a), d3(_c-_b), q1(d1/d2), p1(d1*d2)
   {

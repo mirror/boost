@@ -178,7 +178,7 @@ public:
   BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
 #endif
 
-  uniform_smallint(base_type & rng, IntType min, IntType max)
+  explicit uniform_smallint(base_type & rng, IntType min = 0, IntType max = 9)
     : _impl(rng, min, max)
   { }
 

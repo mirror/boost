@@ -41,7 +41,8 @@ public:
   BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
 
-  exponential_distribution(base_type& rng, result_type lambda)
+  explicit exponential_distribution(base_type& rng,
+                                    result_type lambda = result_type(1))
     : _rng(rng), _lambda(lambda) { assert(lambda > result_type(0)); }
 
   // compiler-generated copy ctor and assignment operator are fine

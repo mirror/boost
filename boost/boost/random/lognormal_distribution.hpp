@@ -47,8 +47,10 @@ class lognormal_distribution
 public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
-  lognormal_distribution(base_type & rng, result_type mean, 
-                         result_type sigma)
+
+  explicit lognormal_distribution(base_type & rng,
+                                  result_type mean = result_type(1),
+                                  result_type sigma = result_type(1))
     : _rng(rng, std::log(mean*mean/std::sqrt(sigma*sigma + mean*mean)),
            std::sqrt(std::log(sigma*sigma/mean/mean+result_type(1))))
   { 
