@@ -23,6 +23,10 @@
 #    define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
 #endif
 
+#if (__HP_aCC <= 33900)
+#    define BOOST_NO_TEMPLATE_TEMPLATES
+#endif 
+
 #define BOOST_COMPILER "HP aCC version " BOOST_STRINGIZE(__HP_aCC)
 
 //
@@ -33,7 +37,7 @@
 #endif
 //
 // last known and checked version is 0:
-#if (__HP_aCC > 33300)
+#if (__HP_aCC > 33900)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
