@@ -211,7 +211,7 @@ the explicit return type can be omitted:
 <pre>
 int x = 8;
 
-bind(std::less&lt;int&gt;, _1, 9)(x);               // x < 9
+bind(std::less&lt;int&gt;(), _1, 9)(x);               // x < 9
 </pre>
 
 <p>
