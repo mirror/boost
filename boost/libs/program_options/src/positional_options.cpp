@@ -5,7 +5,6 @@
 
 #define BOOST_PROGRAM_OPTIONS_SOURCE
 #include <boost/program_options/config.hpp>
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
 
 #include <boost/program_options/positional_options.hpp>
 

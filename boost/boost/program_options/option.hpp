@@ -3,11 +3,10 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef OPTION_HPP_VP_2004_02_25
-#define OPTION_HPP_VP_2004_02_25
+#ifndef BOOST_OPTION_HPP_VP_2004_02_25
+#define BOOST_OPTION_HPP_VP_2004_02_25
 
 #include <boost/program_options/config.hpp>
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
 
 #include <string>
 #include <vector>
@@ -47,8 +46,5 @@ namespace boost { namespace program_options {
     typedef basic_option<wchar_t> woption;
 
 }}
-
-#undef DECL
-
 
 #endif

@@ -4,8 +4,8 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef CONFIG_FILE_VP_2003_01_02
-#define CONFIG_FILE_VP_2003_01_02
+#ifndef BOOST_CONFIG_FILE_VP_2003_01_02
+#define BOOST_CONFIG_FILE_VP_2003_01_02
 
 #include <iosfwd>
 #include <string>

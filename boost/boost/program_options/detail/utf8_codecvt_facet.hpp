@@ -48,21 +48,25 @@
 // specialized on those types for this to work.
 
 #include <locale>
-// for mbstate_t
-#include <cwchar>
 
 #include <boost/program_options/config.hpp>
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
 
 #include <boost/detail/workaround.hpp>
-
-#if BOOST_WORKAROUND(__ICL, <= 700) || BOOST_WORKAROUND(_MSC_VER, <= 1200)
-#include <wchar.h>
-namespace std
-{
-    using ::mbstate_t;
-    using ::size_t;    
-}
+#if BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x551))
+    #ifndef _RWSTD_NO_NAMESPACE
+    using std::codecvt;
+    using std::min;
+    #ifdef _RWSTD_NO_MBSTATE_T
+    using std::mbstate_t;
+    #endif
+    #endif
+#elif defined(__COMO__) || defined(_MSC_VER) && _MSC_VER <= 1300 
+    typedef ::mbstate_t mbstate_t;
+#elif defined(BOOST_NO_STDC_NAMESPACE)
+    typedef std::mbstate_t mbstate_t;
+    namespace std{ 
+        using ::codecvt; 
+    } // namespace std
 #endif
 
 // maximum lenght of a multibyte string
@@ -70,16 +74,16 @@ namespace std
 
 namespace boost { namespace program_options { namespace detail {
 
-struct DECL utf8_codecvt_facet_wchar_t :
-    public std::codecvt<wchar_t, char, std::mbstate_t>  
+struct BOOST_PROGRAM_OPTIONS_DECL utf8_codecvt_facet_wchar_t :
+    public std::codecvt<wchar_t, char, mbstate_t>  
 {
 public:
     explicit utf8_codecvt_facet_wchar_t(std::size_t no_locale_manage=0)
-        : std::codecvt<wchar_t, char, std::mbstate_t>(no_locale_manage) 
+        : std::codecvt<wchar_t, char, mbstate_t>(no_locale_manage) 
     {}
 protected:
     virtual std::codecvt_base::result do_in(
-        std::mbstate_t& state, 
+        mbstate_t& state, 
         const char * from,
         const char * from_end, 
         const char * & from_next,
@@ -89,7 +93,7 @@ protected:
     ) const;
 
     virtual std::codecvt_base::result do_out(
-        std::mbstate_t & state, const wchar_t * from,
+        mbstate_t & state, const wchar_t * from,
         const wchar_t * from_end, const wchar_t*  & from_next,
         char * to, char * to_end, char * & to_next
     ) const;
@@ -118,7 +122,7 @@ protected:
 
     // UTF-8 isn't really stateful since we rewind on partial conversions
     virtual std::codecvt_base::result do_unshift(
-        std::mbstate_t&,
+        mbstate_t&,
         char * from,
         char * to,
         char * & next
@@ -136,7 +140,7 @@ protected:
     // How many char objects can I process to get <= max_limit
     // wchar_t objects?
     virtual int do_length(
-        const std::mbstate_t &,
+        const mbstate_t &,
         const char * from,
         const char * from_end, 
         std::size_t max_limit
@@ -160,7 +164,7 @@ public:
     {}
 protected:
     virtual std::codecvt_base::result do_in(
-        std::mbstate_t & state, 
+        mbstate_t & state, 
         const char * from, 
         const char * from_end, 
         const char * & from_next,
@@ -170,7 +174,7 @@ protected:
     ) const;
 
     virtual std::codecvt_base::result do_out(
-        std::mbstate_t & state, 
+        mbstate_t & state, 
         const char * from,
         const char * from_end, 
         const char*  & from_next,
@@ -182,7 +186,7 @@ protected:
     // How many char objects can I process to get <= max_limit
     // char objects?
     virtual int do_length(
-        const std::mbstate_t&, 
+        const mbstate_t&, 
         const char * from,
         const char * from_end, 
         size_t max_limit
@@ -195,7 +199,7 @@ struct utf8_codecvt_facet
 {};
 
 template<>
-struct DECL utf8_codecvt_facet<wchar_t, char>
+struct BOOST_PROGRAM_OPTIONS_DECL utf8_codecvt_facet<wchar_t, char>
     : public utf8_codecvt_facet_wchar_t
 {};
 

@@ -7,7 +7,6 @@
 #define BOOST_PROGRAM_OPTIONS_POSITIONAL_OPTIONS_VP_2004_03_02
 
 #include <boost/program_options/config.hpp>
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
 
 #include <vector>
 #include <string>
@@ -29,7 +28,7 @@ namespace boost { namespace program_options {
         options should be given the name X1, following M options should be given 
         the name X2 and so on. 
     */
-    class DECL positional_options_description {
+    class BOOST_PROGRAM_OPTIONS_DECL positional_options_description {
     public:
         positional_options_description();
 
@@ -60,8 +59,6 @@ namespace boost { namespace program_options {
     };
 
 }}
-
-#undef DECL
 
 #endif
 

@@ -4,8 +4,8 @@
 //    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //    http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef PROGRAM_OPTIONS_CONFIG_HK_2004_01_11
-#define PROGRAM_OPTIONS_CONFIG_HK_2004_01_11
+#ifndef BOOST_PROGRAM_OPTIONS_CONFIG_HK_2004_01_11
+#define BOOST_PROGRAM_OPTIONS_CONFIG_HK_2004_01_11
 
 #include <boost/config.hpp>
 

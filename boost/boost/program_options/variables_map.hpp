@@ -4,12 +4,10 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef VARIABLES_MAP_VP_2003_05_19
-#define VARIABLES_MAP_VP_2003_05_19
+#ifndef BOOST_VARIABLES_MAP_VP_2003_05_19
+#define BOOST_VARIABLES_MAP_VP_2003_05_19
 
 #include <boost/program_options/config.hpp>
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
-
 
 #include <boost/any.hpp>
 #include <boost/shared_ptr.hpp>
@@ -28,7 +26,7 @@ namespace boost { namespace program_options {
     /** Class holding value of option. Contains details about how the 
         value is set and allows to conveniently obtain the value.
     */
-    class DECL variable_value {
+    class BOOST_PROGRAM_OPTIONS_DECL variable_value {
     public:
         variable_value() : m_defaulted(false) {}
         variable_value(const boost::any& v, bool defaulted) 
@@ -62,14 +60,15 @@ namespace boost { namespace program_options {
         // be easily accessible, so we need to store semantic here.
         shared_ptr<const value_semantic> m_value_semantic;
 
-        friend void DECL store(const basic_parsed_options<char>& options, 
-                               variables_map& m, bool);
-        friend void DECL notify(variables_map& m);
+        friend void BOOST_PROGRAM_OPTIONS_DECL 
+        store(const basic_parsed_options<char>& options, 
+              variables_map& m, bool);
+        friend void BOOST_PROGRAM_OPTIONS_DECL notify(variables_map& m);
     };
 
     /** Implements string->string mapping with convenient value casting
         facilities. */
-    class DECL abstract_variables_map {
+    class BOOST_PROGRAM_OPTIONS_DECL abstract_variables_map {
     public:
         abstract_variables_map();
         abstract_variables_map(const abstract_variables_map* next);
@@ -105,7 +104,7 @@ namespace boost { namespace program_options {
     };
 
     /** Concrete variables map which store variables in real map. */
-    class DECL variables_map : public abstract_variables_map,
+    class BOOST_PROGRAM_OPTIONS_DECL variables_map : public abstract_variables_map,
                                public std::map<std::string, variable_value>
     {
     public:
@@ -126,7 +125,7 @@ namespace boost { namespace program_options {
         If 'm' already has a non-defaulted value of an option, that value
         is not changed, even of 'options' specify some value.        
     */
-    DECL void store(const basic_parsed_options<char>& options, variables_map& m,
+    BOOST_PROGRAM_OPTIONS_DECL void store(const basic_parsed_options<char>& options, variables_map& m,
                     bool utf8 = false);
 
     /** Stores in 'm' all options that are defined in 'options'. 
@@ -134,12 +133,12 @@ namespace boost { namespace program_options {
         is not changed, even of 'options' specify some value.        
         This is wide character variant.
     */
-    DECL void store(const basic_parsed_options<wchar_t>& options, 
+    BOOST_PROGRAM_OPTIONS_DECL void store(const basic_parsed_options<wchar_t>& options, 
                     variables_map& m);
 
 
     /** Runs all 'notify' function for options in 'm'. */
-    DECL void notify(variables_map& m);
+    BOOST_PROGRAM_OPTIONS_DECL void notify(variables_map& m);
 
 
     /*
@@ -191,7 +190,5 @@ namespace boost { namespace program_options {
         return *r;
     }
 }}
-
-#undef DECL
 
 #endif

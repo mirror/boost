@@ -11,8 +11,6 @@
 // should move that to a separate headers.
 #include <boost/program_options/parsers.hpp>
 
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
-
 #include <boost/lexical_cast.hpp>
 
 #include <boost/detail/workaround.hpp>
@@ -268,7 +266,7 @@ namespace boost { namespace program_options {
     }
 
 
-    DECL
+    BOOST_PROGRAM_OPTIONS_DECL
     std::ostream& operator<<(std::ostream& os, const options_description& desc)
     {
         desc.print(os);

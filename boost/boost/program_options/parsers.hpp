@@ -4,13 +4,11 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef PARSERS_VP_2003_05_19
-#define PARSERS_VP_2003_05_19
+#ifndef BOOST_PARSERS_VP_2003_05_19
+#define BOOST_PARSERS_VP_2003_05_19
 
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/option.hpp>
-
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
 
 #include <boost/function/function1.hpp>
 
@@ -49,7 +47,7 @@ namespace boost { namespace program_options {
         - stores the passed char-based options for later use.
     */
     template<>
-    class DECL basic_parsed_options<wchar_t> {
+    class BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t> {
     public:
         /** Constructs wraped_options from options in UTF8 encoding. */
         explicit basic_parsed_options(const basic_parsed_options<char>& po);
@@ -72,7 +70,7 @@ namespace boost { namespace program_options {
     typedef function1<std::pair<std::string, std::string>, const std::string&> ext_parser;
 
     /** Character-type independent command line parser. */
-    class DECL common_command_line_parser {
+    class BOOST_PROGRAM_OPTIONS_DECL common_command_line_parser {
     public:
         /// Creates the parsers. The arguments must be in internal encoding.
         common_command_line_parser(const std::vector<std::string>& args);
@@ -154,7 +152,7 @@ namespace boost { namespace program_options {
         This is done since naming of environment variables is typically 
         different from the naming of command line options.        
     */
-    DECL parsed_options
+    BOOST_PROGRAM_OPTIONS_DECL parsed_options
     parse_environment(const options_description&, 
                       const function1<std::string, std::string>& name_mapper);
 
@@ -164,7 +162,7 @@ namespace boost { namespace program_options {
         name is obtained from variable name by removing the prefix and 
         converting the remaining string into lower case.
     */
-    DECL parsed_options
+    BOOST_PROGRAM_OPTIONS_DECL parsed_options
     parse_environment(const options_description&, const std::string& prefix);
 
     /** @overload
@@ -172,7 +170,7 @@ namespace boost { namespace program_options {
         functions when second argument is of 'char*' type. There's implicit
         convension to both function1 and string.
     */
-    DECL parsed_options
+    BOOST_PROGRAM_OPTIONS_DECL parsed_options
     parse_environment(const options_description&, const char* prefix);
 
 }}

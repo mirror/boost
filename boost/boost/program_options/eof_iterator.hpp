@@ -3,8 +3,8 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef EOF_ITERATOR_VP_2004_03_12
-#define EOF_ITERATOR_VP_2004_03_12
+#ifndef BOOST_EOF_ITERATOR_VP_2004_03_12
+#define BOOST_EOF_ITERATOR_VP_2004_03_12
 
 #include <boost/iterator/iterator_facade.hpp>
 

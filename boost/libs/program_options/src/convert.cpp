@@ -17,7 +17,6 @@
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/detail/convert.hpp>
 #include <boost/program_options/detail/utf8_codecvt_facet.hpp>
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
 
 #include <boost/bind.hpp>
 
@@ -83,7 +82,7 @@ namespace boost { namespace detail {
 namespace boost {
 
 #ifndef BOOST_NO_STD_WSTRING
-    DECL std::wstring 
+    BOOST_PROGRAM_OPTIONS_DECL std::wstring 
     from_8_bit(const std::string& s, 
                const std::codecvt<wchar_t, char, std::mbstate_t>& cvt)
     {
@@ -94,7 +93,7 @@ namespace boost {
                         _1, _2, _3, _4, _5, _6, _7));
     }
 
-    DECL std::string 
+    BOOST_PROGRAM_OPTIONS_DECL std::string 
     to_8_bit(const std::wstring& s, 
              const std::codecvt<wchar_t, char, std::mbstate_t>& cvt)
     {
@@ -111,19 +110,19 @@ namespace boost {
             utf8_facet;
     }
     
-    DECL std::wstring
+    BOOST_PROGRAM_OPTIONS_DECL std::wstring
     from_utf8(const std::string& s)
     {
         return from_8_bit(s, utf8_facet);
     }
     
-    DECL std::string
+    BOOST_PROGRAM_OPTIONS_DECL std::string
     to_utf8(const std::wstring& s)
     {
         return to_8_bit(s, utf8_facet);
     }
 
-    DECL std::wstring
+    BOOST_PROGRAM_OPTIONS_DECL std::wstring
     from_local_8_bit(const std::string& s)
     {
         typedef codecvt<wchar_t, char, mbstate_t> facet_type;
@@ -131,7 +130,7 @@ namespace boost {
                           BOOST_USE_FACET(facet_type, locale()));
     }
 
-    DECL std::string
+    BOOST_PROGRAM_OPTIONS_DECL std::string
     to_local_8_bit(const std::wstring& s)
     {
         typedef codecvt<wchar_t, char, mbstate_t> facet_type;
@@ -142,13 +141,13 @@ namespace boost {
 
     namespace program_options
     {
-        DECL std::string to_internal(const std::string& s)
+        BOOST_PROGRAM_OPTIONS_DECL std::string to_internal(const std::string& s)
         {
             return s;
         }
 
 #ifndef BOOST_NO_STD_WSTRING
-        DECL std::string to_internal(const std::wstring& s)
+        BOOST_PROGRAM_OPTIONS_DECL std::string to_internal(const std::wstring& s)
         {
             return to_utf8(s);
         }

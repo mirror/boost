@@ -4,14 +4,12 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef CMDLINE_VP_2003_05_19
-#define CMDLINE_VP_2003_05_19
+#ifndef BOOST_CMDLINE_VP_2003_05_19
+#define BOOST_CMDLINE_VP_2003_05_19
 
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/errors.hpp>
 #include <boost/program_options/cmdline.hpp>
-
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
 
 #include <boost/detail/workaround.hpp>
 
@@ -49,7 +47,7 @@ namespace boost { namespace program_options { namespace detail {
 
         @todo mininal match length for guessing?
     */
-    class DECL cmdline {
+    class BOOST_PROGRAM_OPTIONS_DECL cmdline {
     public:
 
         typedef ::boost::program_options::command_line_style::style_t style_t;
@@ -283,8 +281,6 @@ namespace boost { namespace program_options { namespace detail {
     void test_cmdline_detail();
     
 }}}
-
-#undef DECL
 
 #endif
 

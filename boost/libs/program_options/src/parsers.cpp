@@ -16,8 +16,6 @@
 #include <boost/program_options/environment_iterator.hpp>
 #include <boost/program_options/detail/convert.hpp>
 
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
-
 #include <boost/bind.hpp>
 
 
@@ -204,13 +202,13 @@ namespace boost { namespace program_options {
     }
 
     template
-    DECL basic_parsed_options<char>
+    BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<char>
     parse_config_file(std::basic_istream<char>& is, 
                       const options_description& desc);
 
 #ifndef BOOST_NO_STD_WSTRING
     template
-    DECL basic_parsed_options<wchar_t>
+    BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t>
     parse_config_file(std::basic_istream<wchar_t>& is, 
                       const options_description& desc);
 #endif
@@ -219,7 +217,7 @@ namespace boost { namespace program_options {
 // in the hope that nobody will need it and we cant drop it altogether.
 // Besides, probably the right way to handle all options is the '*' name.
 #if 0
-    DECL parsed_options
+    BOOST_PROGRAM_OPTIONS_DECL parsed_options
     parse_config_file(std::istream& is)
     {
         detail::config_file_iterator cf(is, false);
@@ -230,7 +228,7 @@ namespace boost { namespace program_options {
     }
 #endif
 
-    DECL parsed_options
+    BOOST_PROGRAM_OPTIONS_DECL parsed_options
     parse_environment(const options_description& desc, 
                       const function1<std::string, std::string>& name_mapper)
     {
@@ -275,14 +273,14 @@ namespace boost { namespace program_options {
         };
     }
 
-    DECL parsed_options
+    BOOST_PROGRAM_OPTIONS_DECL parsed_options
     parse_environment(const options_description& desc, 
                       const std::string& prefix)
     {
         return parse_environment(desc, prefix_name_mapper(prefix));
     }
 
-    DECL parsed_options
+    BOOST_PROGRAM_OPTIONS_DECL parsed_options
     parse_environment(const options_description& desc, const char* prefix)
     {
         return parse_environment(desc, string(prefix));

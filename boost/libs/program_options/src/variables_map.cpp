@@ -10,7 +10,6 @@
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/value_semantic.hpp>
 #include <boost/program_options/variables_map.hpp>
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
 
 #include <cassert>
 
@@ -20,8 +19,9 @@ namespace boost { namespace program_options {
 
     // First, performs semantic actions for 'oa'. 
     // Then, stores in 'm' all options that are defined in 'desc'. 
-    DECL void store(const parsed_options& options, variables_map& xm,
-                    bool utf8)
+    BOOST_PROGRAM_OPTIONS_DECL 
+    void store(const parsed_options& options, variables_map& xm,
+               bool utf8)
     {       
         assert(options.description);
         const options_description& desc = *options.description;
@@ -89,12 +89,14 @@ namespace boost { namespace program_options {
             }        
     }
 
-    DECL void store(const wparsed_options& options, variables_map& m)
+    BOOST_PROGRAM_OPTIONS_DECL 
+    void store(const wparsed_options& options, variables_map& m)
     {
         store(options.utf8_encoded_options, m, true);
     }
 
-    DECL void notify(variables_map& vm)
+    BOOST_PROGRAM_OPTIONS_DECL 
+    void notify(variables_map& vm)
     {        
         // Lastly, run notify actions.
         for (map<string, variable_value>::iterator k = vm.begin(); 

@@ -5,7 +5,6 @@
 
 #define BOOST_PROGRAM_OPTIONS_SOURCE
 #include <boost/program_options/config.hpp>
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
 
 #include <boost/config.hpp>
 
@@ -37,20 +36,29 @@ namespace boost { namespace program_options {
         // Initially, store the message in 'const char*' variable,
         // to avoid convesion to std::string in all cases.
         const char* msg;
-        if (kind == long_not_allowed)
+        switch(kind)
+        {
+        case long_not_allowed:
             msg = "long options are not allowed";
-        else if (kind == long_adjacent_not_allowed)
+            break;
+        case long_adjacent_not_allowed:
             msg = "parameters adjuacent to long options not allowed";
-        else if (kind == short_adjacent_not_allowed)
+            break;
+        case short_adjacent_not_allowed:
             msg = "parameters adjust to short options are not allowed";
-        else if (kind == empty_adjacent_parameter)
+            break;
+        case empty_adjacent_parameter:
             msg = "adjacent parameter is empty";
-        else if (kind == missing_parameter)
+            break;
+        case missing_parameter:
             msg = "required parameter is missing";
-        else if (kind == extra_parameter)
+            break;
+        case extra_parameter:
             msg = "extra parameter";
-        else 
+            break;
+        default:
             msg = "unknown error";
+        }
         return msg;
     }
 
@@ -100,7 +108,7 @@ namespace boost { namespace program_options { namespace detail {
         check_style(style);
 
         this->args = args;        
-        this->style = style ? style_t(style) : default_style;
+        this->style = style_t(style);
         this->allow_unregistered = allow_unregistered,
 
         index = 0;

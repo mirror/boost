@@ -19,7 +19,7 @@ namespace boost { namespace program_options { namespace detail {
 
 // Translate incoming UTF-8 into UCS-4
 std::codecvt_base::result utf8_codecvt_facet_wchar_t::do_in(
-    std::mbstate_t& state, 
+    mbstate_t& state, 
     const char * from,
     const char * from_end, 
     const char * & from_next,
@@ -96,7 +96,7 @@ std::codecvt_base::result utf8_codecvt_facet_wchar_t::do_in(
 }
 
 std::codecvt_base::result utf8_codecvt_facet_wchar_t::do_out(
-    std::mbstate_t& state, 
+    mbstate_t& state, 
     const wchar_t *   from,
     const wchar_t * from_end, 
     const wchar_t * & from_next,
@@ -157,7 +157,7 @@ std::codecvt_base::result utf8_codecvt_facet_wchar_t::do_out(
 // How many char objects can I process to get <= max_limit
 // wchar_t objects?
 int utf8_codecvt_facet_wchar_t::do_length(
-    const std::mbstate_t &,
+    const mbstate_t &,
     const char * from,
     const char * from_end, 
     std::size_t max_limit
@@ -250,7 +250,7 @@ int utf8_codecvt_facet_wchar_t::get_cont_octet_out_count(
 // implementation for char
 
 std::codecvt_base::result utf8_codecvt_facet_char::do_in(
-    std::mbstate_t & state, 
+    mbstate_t & state, 
     const char * from, 
     const char * from_end, 
     const char * & from_next,
@@ -279,7 +279,7 @@ std::codecvt_base::result utf8_codecvt_facet_char::do_in(
 }
 
 std::codecvt_base::result utf8_codecvt_facet_char::do_out(
-    std::std::mbstate_t & state, 
+    std::mbstate_t & state, 
     const char * from,
     const char * from_end, 
     const char * & from_next,
@@ -310,7 +310,7 @@ std::codecvt_base::result utf8_codecvt_facet_char::do_out(
 // How many bytes objects can I process to get <= max_limit
 // char objects?
 int utf8_codecvt_facet_char::do_length(
-    const std::mbstate_t & initial_state,
+    const mbstate_t & initial_state,
     const char * from_next,
     const char * from_end, 
     std::size_t max_limit
@@ -318,7 +318,7 @@ int utf8_codecvt_facet_char::do_length(
 {
     int total_length = 0;
     const char *from = from_next;
-    std::mbstate_t state = initial_state;
+    mbstate_t state = initial_state;
     while(from_next < from_end){
         wchar_t w;
         wchar_t *wnext = & w;

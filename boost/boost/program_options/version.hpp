@@ -10,6 +10,10 @@
     The value will be incremented whenever a change is made which might
     cause compilation errors for existing code.
 */
+#ifdef BOOST_PROGRAM_OPTIONS_VERSION
+#error BOOST_PROGRAM_OPTIONS_VERSION already defined
+#endif
 #define BOOST_PROGRAM_OPTIONS_VERSION 2
+
 
 #endif

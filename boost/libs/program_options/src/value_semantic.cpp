@@ -7,7 +7,6 @@
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/value_semantic.hpp>
 #include <boost/program_options/detail/convert.hpp>
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
 
 namespace boost { namespace program_options {
 
@@ -62,7 +61,7 @@ namespace boost { namespace program_options {
     }
 #endif
 
-    DECL std::string arg("arg");
+    BOOST_PROGRAM_OPTIONS_DECL std::string arg("arg");
 
     std::string
     untyped_value::name() const
@@ -81,13 +80,13 @@ namespace boost { namespace program_options {
         value_store = new_tokens.empty() ? std::string("") : new_tokens.front();
     }
 
-    DECL typed_value<bool>*
+    BOOST_PROGRAM_OPTIONS_DECL typed_value<bool>*
     bool_switch()
     {
         return bool_switch(0);
     }
 
-    DECL typed_value<bool>*
+    BOOST_PROGRAM_OPTIONS_DECL typed_value<bool>*
     bool_switch(bool* v)
     {
         typed_value<bool>* r = new typed_value<bool>(v);
@@ -103,7 +102,7 @@ namespace boost { namespace program_options {
         Case is ignored. Regardless of name passed, parameter will always
         be optional.
     */
-    DECL void validate(any& v, const vector<string>& xs,
+    BOOST_PROGRAM_OPTIONS_DECL void validate(any& v, const vector<string>& xs,
                        bool*, int)
     {
         check_first_occurence(v);
@@ -124,7 +123,8 @@ namespace boost { namespace program_options {
     // since wstring can't be constructed/compared with char*. We'd need to
     // create auxilliary 'widen' routine to convert from char* into 
     // needed string type, and that's more work.
-    DECL void validate(any& v, const vector<wstring>& xs, bool*, int)
+    BOOST_PROGRAM_OPTIONS_DECL 
+    void validate(any& v, const vector<wstring>& xs, bool*, int)
     {
         check_first_occurence(v);
         wstring s(get_single_string(xs, true));
@@ -140,7 +140,8 @@ namespace boost { namespace program_options {
             throw validation_error("invalid bool value");
     }
 
-    DECL void validate(any& v, const vector<string>& xs, std::string*, int)
+    BOOST_PROGRAM_OPTIONS_DECL 
+    void validate(any& v, const vector<string>& xs, std::string*, int)
     {
         check_first_occurence(v);
         string s(get_single_string(xs));
@@ -151,7 +152,8 @@ namespace boost { namespace program_options {
             v = any(s);
     }
 
-    DECL void validate(any& v, const vector<wstring>& xs, std::string*, int)
+    BOOST_PROGRAM_OPTIONS_DECL 
+    void validate(any& v, const vector<wstring>& xs, std::string*, int)
     {
         check_first_occurence(v);
         wstring s(get_single_string(xs));
@@ -165,7 +167,8 @@ namespace boost { namespace program_options {
 
     namespace validators {
 
-        DECL void check_first_occurence(const boost::any& value)
+        BOOST_PROGRAM_OPTIONS_DECL 
+        void check_first_occurence(const boost::any& value)
         {
             if (!value.empty())
                 throw multiple_occurences("multiple_occurences");

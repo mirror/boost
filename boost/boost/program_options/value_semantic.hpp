@@ -3,12 +3,11 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef VALUE_SEMANTIC_HPP_VP_2004_02_24
-#define VALUE_SEMANTIC_HPP_VP_2004_02_24
+#ifndef BOOST_VALUE_SEMANTIC_HPP_VP_2004_02_24
+#define BOOST_VALUE_SEMANTIC_HPP_VP_2004_02_24
 
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/errors.hpp>
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
 
 #include <boost/any.hpp>
 #include <boost/function/function1.hpp>
@@ -24,7 +23,7 @@ namespace boost { namespace program_options {
     /** Class which specifies how the option's value is to be parsed
         and converted into C++ types.
     */
-    class DECL value_semantic {
+    class BOOST_PROGRAM_OPTIONS_DECL value_semantic {
     public:
         /** Returns the name of the option. The name is only meaningfull
             for automatic help message.
@@ -81,7 +80,8 @@ namespace boost { namespace program_options {
     };
 
     template<>
-    class DECL value_semantic_codecvt_helper<char> : public value_semantic {
+    class BOOST_PROGRAM_OPTIONS_DECL 
+    value_semantic_codecvt_helper<char> : public value_semantic {
     private: // base overrides
         void parse(boost::any& value_store, 
                    const std::vector<std::string>& new_tokens,
@@ -93,7 +93,8 @@ namespace boost { namespace program_options {
     };
 
     template<>
-    class DECL value_semantic_codecvt_helper<wchar_t> : public value_semantic {
+    class BOOST_PROGRAM_OPTIONS_DECL
+    value_semantic_codecvt_helper<wchar_t> : public value_semantic {
     private: // base overrides
         void parse(boost::any& value_store, 
                    const std::vector<std::string>& new_tokens,
@@ -106,7 +107,8 @@ namespace boost { namespace program_options {
 
     /** Class which specify handling of value for which user did not specified
         anything. */    
-    class DECL untyped_value : public value_semantic_codecvt_helper<char>  {
+    class BOOST_PROGRAM_OPTIONS_DECL 
+    untyped_value : public value_semantic_codecvt_helper<char>  {
     public:
         untyped_value(bool zero_tokens = false)
         : m_zero_tokens(zero_tokens)
@@ -206,31 +208,17 @@ namespace boost { namespace program_options {
 
         std::string name() const;
 
-        bool zero_tokens() const 
-        { 
-            return false;
-        }
-
-        bool is_composing() const
-        {
-            return m_composing;
-        }
-
-        bool is_implicit() const 
-        {
-            return m_implicit;
-        }
-        
-        bool is_multitoken() const 
-        { 
-            return m_multitoken;
-        }
+        bool zero_tokens() const { return false; }
+        bool is_composing() const { return m_composing; }
+        bool is_implicit() const { return m_implicit; }        
+        bool is_multitoken() const { return m_multitoken; }
 
 
         /** Creates an instance of the 'validator' class and calls
             it's operator() to perform actual convertion. */
         void xparse(boost::any& value_store, 
-                    const std::vector< std::basic_string<charT> >& new_tokens) const;
+                    const std::vector< std::basic_string<charT> >& new_tokens) 
+            const;
 
         /** If default value was specified via previous call to 
             'default_value', stores that value into 'value_store'.
@@ -238,11 +226,11 @@ namespace boost { namespace program_options {
         */
         virtual bool apply_default(boost::any& value_store) const
         {
-            if (!m_default_value.empty()) {
+            if (m_default_value.empty()) {
+                return false;
+            } else {
                 value_store = m_default_value;
                 return true;
-            } else { 
-                return false;
             }
         }
 
@@ -298,19 +286,17 @@ namespace boost { namespace program_options {
         value_semantic implicit, i.e. the value can be omitted. The omitted
         value is considered to be 'true'.
     */
-    DECL typed_value<bool>*
+    BOOST_PROGRAM_OPTIONS_DECL typed_value<bool>*
     bool_switch();
 
     /** @overload
     */
-    DECL typed_value<bool>*    
+    BOOST_PROGRAM_OPTIONS_DECL typed_value<bool>*    
     bool_switch(bool* v);
 
 }}
 
 #include "detail/value_semantic.hpp"
-
-#undef DECL
 
 #endif
 

@@ -4,14 +4,12 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef OPTION_DESCRIPTION_VP_2003_05_19
-#define OPTION_DESCRIPTION_VP_2003_05_19
+#ifndef BOOST_OPTION_DESCRIPTION_VP_2003_05_19
+#define BOOST_OPTION_DESCRIPTION_VP_2003_05_19
 
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/errors.hpp>
 #include <boost/program_options/value_semantic.hpp>
-
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
 
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
@@ -39,7 +37,7 @@ namespace program_options {
         never use second kind of properties -- they are side effect free.
         @sa options_description
     */
-    class DECL option_description {
+    class BOOST_PROGRAM_OPTIONS_DECL option_description {
     public:
 
         option_description();
@@ -112,7 +110,7 @@ namespace program_options {
 
     /** Class which provides convenient creation syntax to option_description. 
      */        
-    class DECL options_description_easy_init {
+    class BOOST_PROGRAM_OPTIONS_DECL options_description_easy_init {
     public:
         options_description_easy_init(options_description* owner);
 
@@ -141,7 +139,7 @@ namespace program_options {
         See @ref a_adding_options "here" for option adding interface discussion.
         @sa option_description
     */
-    class DECL options_description {
+    class BOOST_PROGRAM_OPTIONS_DECL options_description {
     public:
 
         /** Creates the instance. */
@@ -201,7 +199,7 @@ namespace program_options {
         /** Produces a human readable output of 'desc', listing options,
             their descriptions and allowed parameters. Other options_description
             instances previously passed to add will be output separately. */
-        friend DECL std::ostream& operator<<(std::ostream& os, 
+        friend BOOST_PROGRAM_OPTIONS_DECL std::ostream& operator<<(std::ostream& os, 
                                              const options_description& desc);
 
         /** Output 'desc' to the specified streeam, calling 'f' to output each
@@ -236,12 +234,10 @@ namespace program_options {
     };
 
     /** Class thrown when duplicate option description is found. */
-    class DECL duplicate_option_error : public error {
+    class BOOST_PROGRAM_OPTIONS_DECL duplicate_option_error : public error {
     public:
         duplicate_option_error(const std::string& what) : error(what) {}
     };
 }}
-
-#undef DECL
 
 #endif

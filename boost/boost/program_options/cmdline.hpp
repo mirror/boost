@@ -3,8 +3,8 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef CMDLINE_HPP_VP_2004_03_13
-#define CMDLINE_HPP_VP_2004_03_13
+#ifndef BOOST_CMDLINE_HPP_VP_2004_03_13
+#define BOOST_CMDLINE_HPP_VP_2004_03_13
 
 namespace boost { namespace program_options { namespace command_line_style {
     /** Various possible styles of options.

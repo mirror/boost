@@ -25,6 +25,7 @@
     "example/first.cpp"):
 
 <programlisting>
+// Declare the supported options.
 po::options_description desc(&quot;Allowed options&quot;);
 desc.add_options()
     (&quot;help&quot;, &quot;produce help message&quot;)
