@@ -38,9 +38,9 @@ private:
     typedef one_step_filter<Ch, Alloc>                 base_type;
 public:
     typedef typename base_type::char_type              char_type;
-    typedef typename base_type::category               category;
+    typedef typename base_type::category               io_category;
     typedef std::basic_string<Ch>                      string_type;
-    typedef basic_regex<Ch, Tr, Alloc>                 regex_type;
+    typedef basic_regex<Ch, Tr>                        regex_type;
     typedef regex_constants::match_flag_type           flag_type;
     typedef match_results<const Ch*>                   match_type;
     typedef function1<string_type, const match_type&>  formatter;
