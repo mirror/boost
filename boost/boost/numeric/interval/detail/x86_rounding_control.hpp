@@ -73,6 +73,8 @@ struct rounding_control<float>: detail::x86_rounding_control
 template<>
 struct rounding_control<double>: detail::x86_rounding_control
 {
+  /*static double force_rounding(double r) 
+  { asm volatile ("" : "+m"(r) : ); return r; }*/
   static double force_rounding(const double& r) 
   { volatile double r_ = r; return r_; }
 };

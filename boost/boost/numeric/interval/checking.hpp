@@ -129,7 +129,7 @@ template <class T> inline bool is_nan(const T& x) { return x != x; }
 
 } // namespace detail
 
-} // namespace interval
+} // namespace interval_lib
 } // namespace numeric
 } // namespace boost
 

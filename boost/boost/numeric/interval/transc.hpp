@@ -106,13 +106,13 @@ interval<T, Policies> tan(const interval<T, Policies>& x)
 
   // get lower bound within [-pi/2, pi/2]
   const R pi = interval_lib::pi<I>();
-  R tmp = fmod((const I&)x, pi);
+  R tmp = fmod((const R&)x, pi);
   const T pi_half_d = interval_lib::constants::pi_half_lower<T>();
   if (tmp.lower() >= pi_half_d)
     tmp -= pi;
   if (tmp.lower() <= -pi_half_d || tmp.upper() >= pi_half_d)
     return I::whole();
-  return I(rnd.tan_down(tmp.lower()), rnd.tan_up  (tmp.upper()), true);
+  return I(rnd.tan_down(tmp.lower()), rnd.tan_up(tmp.upper()), true);
 }
 
 template<class T, class Policies> inline

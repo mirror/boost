@@ -108,7 +108,7 @@ template<class T, class Policies> inline
 bool in_zero(const interval<T, Policies>& x)
 {
   if (interval_lib::detail::test_input(x)) return false;
-  return x.lower() <= T(0) && T(0) <= x.upper();
+  return x.lower() <= static_cast<T>(0) && static_cast<T>(0) <= x.upper();
 }
 
 template<class T, class Policies> inline
@@ -241,6 +241,18 @@ bisect(const interval<T, Policies>& x)
 /*
  * Elementary functions
  */
+
+template<class T, class Policies> inline
+T norm(const interval<T, Policies>& x)
+{
+  BOOST_NUMERIC_INTERVAL_using_max(max);
+  typedef interval<T, Policies> I;
+  if (interval_lib::detail::test_input(x)) {
+    typedef typename Policies::checking checking;
+    return checking::nan();
+  }
+  return max(-x.lower(), x.upper());
+}
 
 template<class T, class Policies> inline
 interval<T, Policies> abs(const interval<T, Policies>& x)

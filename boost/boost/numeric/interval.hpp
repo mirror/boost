@@ -32,6 +32,7 @@
 
 #include <boost/numeric/interval/arith.hpp>
 #include <boost/numeric/interval/arith2.hpp>
+#include <boost/numeric/interval/arith3.hpp>
 #include <boost/numeric/interval/transc.hpp>
 
 #endif // BOOST_NUMERIC_INTERVAL_HPP
