@@ -95,7 +95,7 @@ are directly supported.</p>
 #define BOOST_PP_REPEAT_2(C,M,D) BOOST_PP_REPEAT_AUTO_REC2(BOOST_PP_DETAIL_CAT2(BOOST_PP_R2_,C),(M,D))
 #define BOOST_PP_REPEAT_3(C,M,D) BOOST_PP_REPEAT_AUTO_REC3(BOOST_PP_DETAIL_CAT2(BOOST_PP_R3_,C),(M,D))
 
-#if defined __EDG__ // unrolled repeats for EDG front end
+#if defined(__EDG_VERSION__) && (__EDG_VERSION__ <= 245) // unrolled repeats for EDG front end
 #include <boost/preprocessor/detail/repeat_edg.hpp>
 #else
 
@@ -489,7 +489,7 @@ are directly supported.</p>
 #define BOOST_PP_R3_127(M,D) BOOST_PP_R3_126(M,D) M(126,D)
 #define BOOST_PP_R3_128(M,D) BOOST_PP_R3_127(M,D) M(127,D)
 
-#endif // !__EDG__
+#endif // !(defined(__EDG_VERSION__) && (__EDG_VERSION__ <= 245))
 
 /** <p>Obsolete, just use BOOST_PP_REPEAT().</p> */
 #define BOOST_PP_REPEAT_2ND BOOST_PP_REPEAT
