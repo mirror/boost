@@ -303,8 +303,8 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
     }
     BOOST_TEST(urng == urng2);
 #endif // BOOST_MSVC
-#endif // BOOST_NO_STD_WSTREAMBUF, BOOST_NO_STD_WSTRING
   }
+#endif // BOOST_NO_STD_WSTREAMBUF, BOOST_NO_STD_WSTRING
 #endif // BOOST_NO_OPERATORS_IN_NAMESPACE etc.
 
   // instantiate various distributions with this URNG
