@@ -80,6 +80,20 @@ void check_iterator_range()
     string res  = copy_range<string>( r );
     BOOST_CHECK( equal( res.begin(), res.end(), r.begin() ) );
 
+    irange rr = make_iterator_range( str );
+    BOOST_CHECK( rr.equal( r ) );
+
+    rr  = make_iterator_range( str.begin(), str.begin() + 5 );
+    BOOST_CHECK( rr == "hello" );
+    BOOST_CHECK( rr != "hell" );
+    BOOST_CHECK( rr < "hello dude" );
+    BOOST_CHECK( "hello" == rr );
+    BOOST_CHECK( "hell"  != rr );
+    BOOST_CHECK( ! ("hello dude" < rr ) );
+    irange rrr = rr;
+    BOOST_CHECK( rrr == rr );
+    BOOST_CHECK( !( rrr != rr ) );
+    BOOST_CHECK( !( rrr < rr ) );
 }
 
 

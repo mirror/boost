@@ -57,7 +57,7 @@ void check_char()
     const char*      char_s           = "a string";
     char             my_string[]      = "another string";
     const unsigned   my_string_length = 14;
-
+    char*            char_s2          = "a string";
     
     BOOST_STATIC_ASSERT(( is_same<  range_value<char_iterator_t>::type, 
                                     detail::iterator_traits<char_iterator_t>::value_type>::value ));
@@ -85,7 +85,14 @@ void check_char()
     BOOST_CHECK_EQUAL( end( char_s ), end1 );
     BOOST_CHECK_EQUAL( empty( char_s ), (char_s == 0 || char_s[0] == char()) );
     BOOST_CHECK_EQUAL( sz, std::char_traits<char>::length( char_s ) );
-    
+/*    
+    BOOST_CHECK_EQUAL( begin( char_s2 ), char_s2 );
+    std::size_t sz2 = size( char_s2 );
+    const char* end12 = begin( char_s2 ) + sz;
+    BOOST_CHECK_EQUAL( end( char_s2 ), end12 );
+    BOOST_CHECK_EQUAL( empty( char_s2 ), (char_s2 == 0 || char_s2[0] == char()) );
+    BOOST_CHECK_EQUAL( sz2, std::char_traits<char>::length( char_s2 ) );
+*/
     BOOST_CHECK_EQUAL( begin( my_string ), my_string );
     range_iterator<char_array_t>::type end2 = begin( my_string ) + size( my_string );
     range_iterator<char_array_t>::type end3 = end( my_string );
@@ -93,7 +100,6 @@ void check_char()
     BOOST_CHECK_EQUAL( empty( my_string ), (my_string == 0 || my_string[0] == char()) );
     BOOST_CHECK_EQUAL( size( my_string ), my_string_length );
     BOOST_CHECK_EQUAL( size( my_string ), std::char_traits<char>::length( my_string ) );
-
 
     char to_search = 'n';
     BOOST_CHECK( find( char_s, to_search ) != end( char_s ) );
@@ -114,7 +120,8 @@ void check_string()
     typedef wchar_t*               wchar_iterator_t;          
     const wchar_t*  char_ws      = L"a wide string";
     wchar_t         my_wstring[] = L"another wide string";
-    
+    wchar_t*        char_ws2     = L"a wide string";
+            
     BOOST_STATIC_ASSERT(( is_same< range_value<wchar_iterator_t>::type, 
                                    detail::iterator_traits<wchar_iterator_t>::value_type>::value ));
     BOOST_STATIC_ASSERT(( is_same< range_iterator<wchar_iterator_t>::type, wchar_iterator_t >::value ));
@@ -130,7 +137,13 @@ void check_string()
     BOOST_CHECK_EQUAL( end( char_ws ), (begin( char_ws ) + sz) );
     BOOST_CHECK_EQUAL( empty( char_ws ), (char_ws == 0 || char_ws[0] == wchar_t()) );
     BOOST_CHECK_EQUAL( sz, std::char_traits<wchar_t>::length( char_ws ) );
-        
+ /*       
+    std::size_t sz2 = size( char_ws2 );
+    BOOST_CHECK_EQUAL( begin( char_ws2 ), char_ws2 );
+    BOOST_CHECK_EQUAL( end( char_ws2 ), (begin( char_ws2 ) + sz2) );
+    BOOST_CHECK_EQUAL( empty( char_ws2 ), (char_ws2 == 0 || char_ws2[0] == wchar_t()) );
+    BOOST_CHECK_EQUAL( sz2, std::char_traits<wchar_t>::length( char_ws2 ) );
+   */ 
     wchar_t to_search = L'n';
     BOOST_CHECK( find( char_ws, to_search ) != end( char_ws ) );    
 
@@ -144,6 +157,7 @@ void check_string()
     find( check_rvalue_return(), 'n' );
 
 }
+
 
 
 
