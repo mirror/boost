@@ -236,6 +236,9 @@ namespace boost {
   >
   class BOOST_FUNCTION_FUNCTION : public function_base, public Mixin
   {
+    typedef typename detail::function::function_return_type<R>::type 
+      internal_result_type;
+
   public:
     BOOST_STATIC_CONSTANT(int, args = BOOST_FUNCTION_NUM_ARGS);
     
@@ -245,8 +248,7 @@ namespace boost {
     typedef T0 first_argument_type;
     typedef T1 second_argument_type;
 #endif
-    typedef typename detail::function::function_return_type<R>::type 
-      result_type;
+    typedef R         result_type;
     typedef Policy    policy_type;
     typedef Mixin     mixin_type;
     typedef Allocator allocator_type;
@@ -290,11 +292,12 @@ namespace boost {
       policy_type policy;
       policy.precall(this);
 
-      result_type result = invoker(function_base::functor BOOST_FUNCTION_COMMA
-                                   BOOST_FUNCTION_ARGS);
+      internal_result_type result = invoker(function_base::functor 
+                                            BOOST_FUNCTION_COMMA
+                                            BOOST_FUNCTION_ARGS);
 
       policy.postcall(this);
-      return result;
+      return static_cast<result_type>(result);
     }
 
     // The distinction between when to use BOOST_FUNCTION_FUNCTION and
@@ -465,9 +468,9 @@ namespace boost {
       function_base::functor = detail::function::any_pointer(this);
     }
 
-    typedef result_type (*invoker_type)(detail::function::any_pointer
-                                        BOOST_FUNCTION_COMMA
-                                        BOOST_FUNCTION_TEMPLATE_ARGS);
+    typedef internal_result_type (*invoker_type)(detail::function::any_pointer
+                                                 BOOST_FUNCTION_COMMA
+                                                 BOOST_FUNCTION_TEMPLATE_ARGS);
     
     invoker_type invoker;
   };
