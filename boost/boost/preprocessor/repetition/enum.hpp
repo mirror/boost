@@ -68,10 +68,8 @@
 #    define BOOST_PP_ENUM_M_3_A(z, n, m, d) BOOST_PP_ENUM_M_3_B(z, n, m, d)
 # endif
 #
-# if BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW || BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_ENUM_M_1_B(z, n, m, d) BOOST_PP_COMMA_IF(n) m(z, n, d)
-#    define BOOST_PP_ENUM_M_2_B(z, n, m, d) BOOST_PP_COMMA_IF(n) m(z, n, d)
-#    define BOOST_PP_ENUM_M_3_B(z, n, m, d) BOOST_PP_COMMA_IF(n) m(z, n, d)
-# endif
+# define BOOST_PP_ENUM_M_1_B(z, n, m, d) BOOST_PP_COMMA_IF(n) m(z, n, d)
+# define BOOST_PP_ENUM_M_2_B(z, n, m, d) BOOST_PP_COMMA_IF(n) m(z, n, d)
+# define BOOST_PP_ENUM_M_3_B(z, n, m, d) BOOST_PP_COMMA_IF(n) m(z, n, d)
 #
 # endif
