@@ -8,7 +8,7 @@
         <template-type-parameter name="T"/>
       </template>
 
-      <purpose>Evaluate an InputIterator sequence and return the
+      <purpose>Evaluate an <conceptname>InputIterator</conceptname> sequence and return the
       last value in the sequence.</purpose>
 
       <typedef name="result_type"><type>T</type></typedef>
