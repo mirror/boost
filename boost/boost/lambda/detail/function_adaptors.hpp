@@ -345,6 +345,7 @@ struct function_adaptor<Result (Object::*)(Arg1, Arg2, Arg3) const> {
 template <class Object, class Arg1, class Arg2, class Arg3, class Result>
 struct function_adaptor<Result (Object::*)(Arg1, Arg2, Arg3)> {
 
+  template<class T> struct sig { typedef Result type; };
   template <class RET, class A1, class A2, class A3>
   static Result apply( Result (Object::*func)(Arg1, Arg2, Arg3), Object* o, A1& a1, A2& a2, A3& a3) {
     return (o->*func)(a1, a2, a3);
