@@ -50,6 +50,7 @@
 #include "boost/preprocessor/repeat.hpp"
 #include "boost/type_traits/alignment_of.hpp"
 #include "boost/type_traits/add_const.hpp"
+#include "boost/type_traits/has_nothrow_constructor.hpp"
 #include "boost/type_traits/has_nothrow_copy.hpp"
 #include "boost/type_traits/is_const.hpp"
 #include "boost/type_traits/is_same.hpp"
@@ -128,6 +129,47 @@ public: // metafunction result
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// (detail) class null_storage
+//
+// Simulates aligned_storage's interface, but with nothing underneath.
+//
+struct null_storage
+{
+public: // queries
+
+    void* address()
+    {
+        return 0;
+    }
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
+    const void* address() const
+    {
+        return 0;
+    }
+
+#else // MSVC6
+
+    const void* address() const;
+
+#endif // MSVC6 workaround
+
+};
+
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
+// MSVC6 seems not to like inline functions with const void* returns, so we
+// declare the following here:
+
+const void* null_storage::address() const
+{
+    return 0;
+}
+
+#endif // MSVC6 workaround
+
+///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction make_storage
 //
 // Provides an aligned storage type capable of holding any of the types
@@ -179,45 +221,41 @@ struct make_storage<int>
 #endif // BOOST_MPL_MSVC_60_ETI_BUG workaround
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) class null_storage
+// (detail) metafunction make_storage2
 //
-// Simulates aligned_storage's interface, but with nothing underneath.
+// Provides an aligned storage type capable of holding any of the types
+// specified in the given type-sequence that have throwing move constructors.
 //
-struct null_storage
+template <typename Types>
+struct make_storage2
 {
-public: // queries
+private: // helpers, for metafunction result (below)
 
-    void* address()
-    {
-        return 0;
-    }
+    typedef typename mpl::remove_if<
+          Types
+        , has_nothrow_move_constructor<mpl::_1>
+        >::type throwing_types_;
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+public: // metafunction result
 
-    const void* address() const
-    {
-        return 0;
-    }
-
-#else // MSVC6
-
-    const void* address() const;
-
-#endif // MSVC6 workaround
+    // [empty(throwing_types) ? null_storage : make_storage<throwing_types>]
+    typedef typename mpl::apply_if<
+          mpl::empty<throwing_types_>
+        , mpl::identity<null_storage>
+        , make_storage<throwing_types_>
+        >::type type;
 
 };
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
 
-// MSVC6 seems not to like inline functions with const void* returns, so we
-// declare the following here:
-
-const void* null_storage::address() const
+template<>
+struct make_storage2<int>
 {
-    return 0;
-}
+    typedef int type;
+};
 
-#endif // MSVC6 workaround
+#endif // BOOST_MPL_MSVC_60_ETI_BUG workaround
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class destroyer
@@ -782,19 +820,18 @@ private: // static precondition assertions
 
 private: // helpers, for representation (below)
 
+    struct T0_has_nothrow_constructor_
+        : has_nothrow_constructor<internal_T0>
+    {
+    };
+
     typedef typename detail::variant::make_storage<internal_types>::type
         storage1_t;
 
-    typedef typename mpl::remove_if<
-          internal_types
-        , detail::variant::has_nothrow_move_constructor<mpl::_1>
-        >::type throwing_internal_types;
-
-    // [storage2_t = empty(throwing_types) ? null_storage : make_storage<throwing_types>]
     typedef typename mpl::apply_if<
-          mpl::empty<throwing_internal_types>
-        , mpl::identity<detail::variant::null_storage>
-        , detail::variant::make_storage<throwing_internal_types>
+          T0_has_nothrow_constructor_
+        , mpl::identity< detail::variant::null_storage >
+        , detail::variant::make_storage2<internal_types>
         >::type storage2_t;
 
 private: // representation (int which_)
@@ -1202,11 +1239,12 @@ private: // helpers, for modifiers (below)
 
     private: // helpers, for visitor interfaces (below)
 
-        template <typename T, typename B>
+        template <typename T, typename B1, typename B2>
         void assign_impl(
               const T& operand
             , mpl::true_// has_nothrow_copy
-            , B// has_nothrow_move_constructor
+            , B1// has_nothrow_move_constructor
+            , B2// T0_has_nothrow_constructor
             )
         {
             // Destroy the target's active storage...
@@ -1220,11 +1258,12 @@ private: // helpers, for modifiers (below)
             target_.activate_storage1(source_which_); // nothrow
         }
 
-        template <typename T>
+        template <typename T, typename B>
         void assign_impl(
               const T& operand
             , mpl::false_// has_nothrow_copy
             , mpl::true_// has_nothrow_move_constructor
+            , B// T0_has_nothrow_constructor
             )
         {
             // Attempt to make a temporary copy (so as to move it below)...
@@ -1246,6 +1285,42 @@ private: // helpers, for modifiers (below)
               const T& operand
             , mpl::false_// has_nothrow_copy
             , mpl::false_// has_nothrow_move_constructor
+            , mpl::true_// T0_has_nothrow_constructor
+            )
+        {
+            // Destroy the target's active storage...
+            target_.destroy_content(); // nothrow
+
+            try
+            {
+                // ...and attempt to copy the source content into the
+                //      target's storage1:
+                new(target_.storage1())
+                    T( operand );
+            }
+            catch (...)
+            {
+                // In case of failure, default-construct T0...
+                new (target_.storage1())
+                    internal_T0; // nothrow
+
+                // ...indicate the construction...
+                target_.activate_storage1(0);
+
+                // ...and rethrow:
+                throw;
+            }
+
+            // In the event of success, activate the target's storage1:
+            target_.activate_storage1(source_which_); // nothrow
+        }
+
+        template <typename T>
+        void assign_impl(
+              const T& operand
+            , mpl::false_// has_nothrow_copy
+            , mpl::false_// has_nothrow_move_constructor
+            , mpl::false_// T0_has_nothrow_constructor
             )
         {
             // Attempt a copy into target's inactive storage...
@@ -1278,6 +1353,7 @@ private: // helpers, for modifiers (below)
                   operand
                 , nothrow_copy()
                 , nothrow_move_constructor()
+                , T0_has_nothrow_constructor_()
                 );
 
             BOOST_VARIANT_AUX_RETURN_VOID;
@@ -1350,55 +1426,90 @@ private: // helpers, for modifiers, cont. (below)
 
     private: // helpers, for visitor interfaces (below)
 
-        template <typename T>
+        template <typename rhs_T, typename B>
         void swap_impl(
-              T& rhs_content
-            , mpl::true_// has_nothrow_move_constructor
+              rhs_T& rhs_content
+            , mpl::true_// rhs_T_has_nothrow_move_constructor
+            , B// T0_has_nothrow_constructor (lhs)
             )
         {
             // Cache rhs's which-index (because it will be overwritten)...
-            int rhs_old_which = rhs_.which();
+            int rhs_old_which = rhs_.which(); // nothrow
 
             // ...move rhs_content to the side...
-            T rhs_old_content( detail::variant::move(rhs_content) ); // nothrow
+            rhs_T rhs_old_content(
+                  detail::variant::move(rhs_content)
+                ); // nothrow
 
-            try
-            {
-                // ...attempt to move-assign lhs to (now-moved) rhs:
-                rhs_ = detail::variant::move(lhs_);
-            }
-            catch(...)
-            {
-                // In case of failure, restore rhs's old contents...
-                new(boost::addressof(rhs_content))
-                    T( detail::variant::move(rhs_old_content) ); // nothrow
-
-                // ...and rethrow:
-                throw;
-            }
+            // ...attempt to move-assign lhs to (now-moved) rhs:
+            rhs_ = detail::variant::move(lhs_);
 
             // In case of success, destroy lhs's active storage...
             lhs_.destroy_content(); // nothrow
 
             // ...move rhs's old contents to lhs's storage1...
             new(lhs_.storage1())
-                T( detail::variant::move(rhs_old_content) ); // nothrow
+                rhs_T( detail::variant::move(rhs_old_content) ); // nothrow
 
             // ...and activate lhs's storage1:
             lhs_.activate_storage1(rhs_old_which); // nothrow
         }
 
-        template <typename T>
+        template <typename rhs_T>
         void swap_impl(
-              T& rhs_content
-            , mpl::false_// has_nothrow_move_constructor
+              rhs_T& rhs_content
+            , mpl::false_// rhs_T_has_nothrow_move_constructor
+            , mpl::true_// T0_has_nothrow_constructor (lhs)
             )
         {
             // Cache rhs's which-index (because it will be overwritten)...
-            int rhs_old_which = rhs_.which();
+            int rhs_old_which = rhs_.which(); // nothrow
+
+            // ...move rhs_content to the side...
+            rhs_T rhs_old_content( detail::variant::move(rhs_content) );
+
+            // ...attempt to move-assign lhs to (now-moved) rhs:
+            rhs_ = detail::variant::move(lhs_);
+
+            // In case of success, destroy lhs's active storage...
+            lhs_.destroy_content(); // nothrow
+
+            try
+            {
+                // ...attempt to move rhs's old contents to lhs's storage1...
+                new(lhs_.storage1())
+                    rhs_T( detail::variant::move(rhs_old_content) );
+            }
+            catch (...)
+            {
+                // In case of failure, default-construct lhs's T0...
+                new(lhs_.storage1())
+                    internal_T0; // nothrow
+
+                // ...indicate the construction...
+                lhs_.activate_storage1(0); // nothrow
+
+                // ...and rethrow:
+                throw;
+            }
+
+            // In case of success, activate lhs's storage1:
+            lhs_.activate_storage1(rhs_old_which); // nothrow
+        }
+
+        template <typename rhs_T>
+        void swap_impl(
+              rhs_T& rhs_content
+            , mpl::false_// rhs_T_has_nothrow_move_constructor
+            , mpl::false_// T0_has_nothrow_constructor (lhs)
+            )
+        {
+            // Cache rhs's which-index (because it will be overwritten)...
+            int rhs_old_which = rhs_.which(); // nothrow
 
             // ...move rhs's content into lhs's inactive storage...
-            new(lhs_.inactive_storage()) T(detail::variant::move(rhs_content));
+            new(lhs_.inactive_storage())
+                rhs_T( detail::variant::move(rhs_content) );
 
             try
             {
@@ -1407,8 +1518,10 @@ private: // helpers, for modifiers, cont. (below)
             }
             catch(...)
             {
-                // In case of failure, destroy the copied value...
-                static_cast<T*>(lhs_.inactive_storage())->~T(); // nothrow
+                // In case of failure, destroy copied value (restoring lhs)...
+                static_cast<rhs_T*>(
+                      lhs_.inactive_storage()
+                    )->~rhs_T(); // nothrow
 
                 // ...and rethrow:
                 throw;
@@ -1437,11 +1550,12 @@ private: // helpers, for modifiers, cont. (below)
         operator()(T& rhs_content)
         {
             typedef typename detail::variant::has_nothrow_move_constructor<T>::type
-                has_nothrow_move_constructor;
+                T_has_nothrow_move_constructor;
 
             swap_impl(
                   rhs_content
-                , has_nothrow_move_constructor()
+                , T_has_nothrow_move_constructor()
+                , T0_has_nothrow_constructor_() // lhs
                 );
 
             BOOST_VARIANT_AUX_RETURN_VOID;
