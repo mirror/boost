@@ -18,6 +18,7 @@
 */
 
 #include <boost/preprocessor/if.hpp>
+#include <boost/preprocessor/tuple/eat.hpp>
 
 //! Iterates F(D,X) while C(D,X) is true.
 /*!
@@ -113,8 +114,7 @@ it possible to compute N*N functions.
 #define BOOST_PP_WHILE(C,F,X) BOOST_PP_WHILE_C(C(1,X),0,X)(C,F,F(1,X))
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PP_WHILE_C(C,D,X) BOOST_PP_IF(C,BOOST_PP_WHILE##D,X BOOST_PP_WHILE_E)
-#define BOOST_PP_WHILE_E(C,F,X)
+#define BOOST_PP_WHILE_C(C,D,X) BOOST_PP_IF(C,BOOST_PP_WHILE##D,X BOOST_PP_TUPLE3_EAT)
 #define BOOST_PP_WHILE0(C,F,X) BOOST_PP_WHILE_C(C(2,X),1,X)(C,F,F(2,X))
 #define BOOST_PP_WHILE1(C,F,X) BOOST_PP_WHILE_C(C(3,X),2,X)(C,F,F(3,X))
 #define BOOST_PP_WHILE2(C,F,X) BOOST_PP_WHILE_C(C(4,X),3,X)(C,F,F(4,X))

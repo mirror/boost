@@ -19,5 +19,6 @@
 Includes all tuple headers.
 */
 
+#include <boost/preprocessor/tuple/eat.hpp>
 #include <boost/preprocessor/tuple/elem.hpp>
 #endif
