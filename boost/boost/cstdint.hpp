@@ -9,8 +9,9 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//   22 Sep 00  Better 64-bit support (John Maddock)
 //   29 Jun 00  Reimplement to avoid including stdint.h within namespace boost
-//    8 Aug 99  Initial version
+//    8 Aug 99  Initial version (Beman Dawes)
 
 #ifndef BOOST_CSTDINT_HPP
 #define BOOST_CSTDINT_HPP
@@ -43,7 +44,7 @@ namespace boost
   using ::uint_least32_t;     
   using ::uint_fast32_t;      
                      
-# ifdef ULLONG_MAX
+# ifdef BOOST_NO_INT64_T
 
   using ::int64_t;            
   using ::int_least64_t;      

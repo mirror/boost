@@ -12,7 +12,8 @@
 //  this header.
 
 //  Revision History
-//    8 Aug 99  Initial version
+//   22 Sep 00  64-bit support for Borland & Microsoft compilers (John Maddock)
+//    8 Aug 99  Initial version (Beman Dawes)
 
 #ifndef BOOST_STDINT_H
 #define BOOST_STDINT_H
@@ -110,7 +111,20 @@
 #    else
 #       error defaults not correct; you must hand modify boost/stdint.hpp
 #    endif
+# elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1100)) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x520))
+     //
+     // we have Borland/Microsoft __int64:
+     //
+     typedef __int64             intmax_t;
+     typedef unsigned __int64    uintmax_t;
+     typedef __int64             int64_t;
+     typedef __int64             int_least64_t;
+     typedef __int64             int_fast64_t;
+     typedef unsigned __int64    uint64_t;
+     typedef unsigned __int64    uint_least64_t;
+     typedef unsigned __int64    uint_fast64_t;
 # else // assume no 64-bit integers
+#define BOOST_NO_INT64_T
      typedef int32_t              intmax_t;
      typedef uint32_t             uintmax_t;
 # endif
