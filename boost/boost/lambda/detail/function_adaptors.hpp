@@ -105,17 +105,33 @@ struct function_adaptor<T Object::*> {
       typename boost::add_const<T>::type,
       T
     >::RET properly_consted_return_type;
+
+    typedef typename detail::IF<
+        boost::is_volatile<properly_consted_return_type>::value,
+      typename boost::add_volatile<properly_consted_return_type>::type,
+      properly_consted_return_type
+    >::RET properly_cvd_return_type;
+
+
   public:
     typedef typename 
-      boost::add_reference<properly_consted_return_type>::type type;
+      boost::add_reference<properly_cvd_return_type>::type type;
   };
 
   template <class RET>
-  static RET apply( T Object::*data, const Object* o) {
-    return o->*data;
+  static RET apply( T Object::*data, Object& o) {
+    return o.*data;
   }
   template <class RET>
   static RET apply( T Object::*data, const Object& o) {
+    return o.*data;
+  }
+  template <class RET>
+  static RET apply( T Object::*data, volatile Object& o) {
+    return o.*data;
+  }
+  template <class RET>
+  static RET apply( T Object::*data, const volatile Object& o) {
     return o.*data;
   }
   template <class RET>
@@ -123,8 +139,16 @@ struct function_adaptor<T Object::*> {
     return o->*data;
   }
   template <class RET>
-  static RET apply( T Object::*data, Object& o) {
-    return o.*data;
+  static RET apply( T Object::*data, const Object* o) {
+    return o->*data;
+  }
+  template <class RET>
+  static RET apply( T Object::*data, volatile Object* o) {
+    return o->*data;
+  }
+  template <class RET>
+  static RET apply( T Object::*data, const volatile Object* o) {
+    return o->*data;
   }
 };
 
