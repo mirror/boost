@@ -1,28 +1,9 @@
 //
-//=======================================================================
-// Copyright 1997, 1998, 1999, 2000 University of Notre Dame.
-// Authors: Andrew Lumsdaine, Lie-Quan Lee, Jeremy G. Siek
-//
-// This file is part of the Generic Graph Component Library
-//
-// You should have received a copy of the License Agreement for the
-// Generic Graph Component Library along with the software;  see the
-// file LICENSE.  If not, contact Office of Research, University of Notre
-// Dame, Notre Dame, IN  46556.
-//
-// Permission to modify the code and to distribute modified code is
-// granted, provided the text of this NOTICE is retained, a notice that
-// the code was modified is included with the above COPYRIGHT NOTICE and
-// with the COPYRIGHT NOTICE in the LICENSE file, and that the LICENSE
-// file is distributed with the modified code.
-//
-// LICENSOR MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED.
-// By way of example, but not limitation, Licensor MAKES NO
-// REPRESENTATIONS OR WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY
-// PARTICULAR PURPOSE OR THAT THE USE OF THE LICENSED SOFTWARE COMPONENTS
-// OR DOCUMENTATION WILL NOT INFRINGE ANY PATENTS, COPYRIGHTS, TRADEMARKS
-// OR OTHER RIGHTS.
-//=======================================================================
+// (C) Copyright Jeremy Siek 2000. Permission to copy, use, modify,
+// sell and distribute this software is granted provided this
+// copyright notice appears in all copies. This software is provided
+// "as is" without express or implied warranty, and with no claim as
+// to its suitability for any purpose.
 //
 #ifndef BOOST_GRAPH_DETAIL_CONCEPT_CHECKS_HPP
 #define BOOST_GRAPH_DETAIL_CONCEPT_CHECKS_HPP
@@ -119,7 +100,7 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct Integer_concept {
     void constraints() { 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      error_the_type_must_be_an_integer_type();
+      error__type_must_be_an_integer_type();
 #endif      
     }
   };
@@ -130,6 +111,21 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   template <> struct Integer_concept<unsigned int> { void constraints() {} };
   template <> struct Integer_concept<long> { void constraints() {} };
   template <> struct Integer_concept<unsigned long> { void constraints() {} };
+  // etc.
+#endif      
+
+  template <class T>
+  struct SignedInteger_concept {
+    void constraints() { 
+#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+      error__type_must_be_a_signed_integer_type();
+#endif      
+    }
+  };
+#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+  template <> struct SignedInteger_concept<short> { void constraints() {} };
+  template <> struct SignedInteger_concept<int> { void constraints() {} };
+  template <> struct SignedInteger_concept<long> { void constraints() {} };
   // etc.
 #endif      
 
@@ -146,6 +142,9 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
     X x;
   };
 
+  // Issue, the SGI STL version of Assignable is
+  // different from the C++ standard definition of Assignable.
+  // This follows the C++ standard version.
   template <class TT>
   struct Assignable_concept
   {
@@ -153,16 +152,12 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
 #if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
       a = a;              // require assignment operator
 #endif
-      TT c(a);            // require copy constructor
       const_constraints(a);
-      ignore_unused_variable_warning(c);
     }
     void const_constraints(const TT& b) {
 #if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
       a = b;              // const required for argument to assignment
 #endif
-      TT c(b);            // const required for argument to copy constructor
-      ignore_unused_variable_warning(c);
     }
     TT a;
   };
@@ -213,7 +208,18 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
     // the error message appears.
     template <class B> void require_boolean_return(B) { REQUIRE(B, Boolean); }
     TT a, b;
-    bool r;
+  };
+
+  template <class XX, class YY>
+  struct LeftEqualityComparable_concept
+  {
+    void constraints() {
+      require_boolean_return(b == a);
+      require_boolean_return(b != a);
+    }
+    template <class B> void require_boolean_return(B) { REQUIRE(B, Boolean); }
+    XX a;
+    YY b;
   };
 
   template <class TT>
@@ -267,6 +273,7 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
       // require iterator_traits typedef's
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
       typedef typename std::iterator_traits<TT>::difference_type D;
+      REQUIRE(D, SignedInteger);
       typedef typename std::iterator_traits<TT>::reference R;
       typedef typename std::iterator_traits<TT>::pointer P;
       typedef typename std::iterator_traits<TT>::iterator_category C;
