@@ -101,19 +101,7 @@ template< typename Case1 = mpl::true_,
           typename Case9 = mpl::true_,
           typename Type9 = detail::select_default,
           typename Case10 = mpl::true_,
-          typename Type10 = detail::select_default,
-          typename Case11 = mpl::true_,
-          typename Type11 = detail::select_default,
-          typename Case12 = mpl::true_,
-          typename Type12 = detail::select_default,
-          typename Case13 = mpl::true_,
-          typename Type13 = detail::select_default,
-          typename Case14 = mpl::true_,
-          typename Type14 = detail::select_default,
-          typename Case15 = mpl::true_,
-          typename Type15 = detail::select_default,
-          typename Case16 = mpl::true_,
-          typename Type16 = detail::select_default >
+          typename Type10 = detail::select_default >
 struct select {
     typedef typename
             mpl::eval_if<
@@ -125,15 +113,8 @@ struct select {
                 Case6, mpl::identity<Type6>, mpl::eval_if<
                 Case7, mpl::identity<Type7>, mpl::eval_if<
                 Case8, mpl::identity<Type8>, mpl::eval_if<
-                Case9, mpl::identity<Type9>, mpl::eval_if<
-                Case10, mpl::identity<Type10>, mpl::eval_if<
-                Case11, mpl::identity<Type11>, mpl::eval_if<
-                Case12, mpl::identity<Type12>, mpl::eval_if<
-                Case13, mpl::identity<Type13>, mpl::eval_if<
-                Case14, mpl::identity<Type14>, mpl::eval_if<
-                Case15, mpl::identity<Type15>, mpl::if_<
-                Case16, Type16, mpl::void_
-                > > > > > > > > > > > > > > >
+                Case9, mpl::identity<Type9>, mpl::if_<
+                Case10, Type10, mpl::void_ > > > > > > > > >
             >::type                                 temp;
     typedef typename detail::lazy_eval<temp>::type  type;
 };
