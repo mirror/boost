@@ -325,17 +325,32 @@ void test_const_parameters() {
 
 }
 
+void test_rvalue_arguments()
+{
+  BOOST_TEST((_1 + _2)(1, 2) == 3);
+}
+
 void test_break_const() 
 {
+
+  // break_const is currently unnecessary, as LL supports perfect forwarding
+  // for up to there argument lambda functors, and LL does not support
+  // lambda functors with more than 3 args.
+
+  // I'll keep the test case around anyway, if more arguments will be supported
+  // in the future. 
+
+
+  
   // break_const breaks constness! Be careful!
   // You need this only if you need to have side effects on some argument(s)
-  // and some arguments are non-const rvalues:
+  // and some arguments are non-const rvalues and your lambda functors
+  // take more than 3 arguments. 
+
   
-  // E.g.
   int i = 1;
-  //  (_1 += _2)(i, 2) // fails, 2 is a non-const rvalue
-  
-  //   const_parameters(_1 += _2)(i, 2) // fails, side-effect to i
+  //  OLD COMMENT: (_1 += _2)(i, 2) // fails, 2 is a non-const rvalue  
+  //  OLD COMMENT:  const_parameters(_1 += _2)(i, 2) // fails, side-effect to i
   break_const(_1 += _2)(i, 2); // ok
   BOOST_TEST(i == 3);
 }
@@ -347,6 +362,7 @@ int test_main(int, char *[]) {
   test_protect();
   test_lambda_functors_as_arguments_to_lambda_functors();
   test_const_parameters();
+  test_rvalue_arguments(); 
   test_break_const(); 
   return 0;
 }
