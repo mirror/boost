@@ -20,8 +20,9 @@
 
     <p>
     A huge effort has been made to port the library to as many compilers as possible. 
-    The results of the test-suites can be found <a href="http://boost.sourceforge.net/regression-logs/developer/range.html">here</a>.
-    </p>
+<!--    The results of the test-suites can be found <a 
+href="http://boost.sourceforge.net/regression-logs/developer/range.html">here</a
+>.--> </p>
 
     <p>
     Full support for built-in arrays require that the compiler supports class 
@@ -44,21 +45,25 @@
 
     <ol>
         <li>
-            do not use built-in arrays
+            do not use built-in arrays,
         <li>
             do not pass rvalues to <a
            href="boost_range.html#begin"><code>begin()</code></a>, <a
            href="boost_range.html#end"><code>end()</code></a> and <a href="utility_class.html#iter_range">
             <code>iterator_range</code></a> Range constructors and assignment operators,
-
         <li>
+            use <a href="boost_range.html#const_begin"><code>const_begin()</code></a> 
+            and <a href="boost_range.html#const_begin"><code>const_end()</code></a>
+            whenever your code by intention is read-only; this will also solve
+            most rvalue problems,
+         <li>
             do not rely on ADL:
             <ul>
                 <li>
                     if you overload functions, include that header <i>before</i> the headers in this 
                     library,
                 <li>
-                    put all overloads in namespace <code>boost</code>,
+                    put all overloads in namespace <code>boost</code>.
             </ul>
             
     </ol>
