@@ -95,5 +95,6 @@ test-suite fsm :
   [ fsm-compile-fail-variants UnsupportedDeepHistoryTest ]
   [ fsm-st-run-variants StateCastTest ]
   [ fsm-st-run-variants TypeInfoTest ]
+  [ fsm-st-run-variants StateIterationTest ]
 ;
       
