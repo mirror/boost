@@ -23,6 +23,12 @@
 #include <boost/random/uniform_smallint.hpp>
 #include <boost/random/uniform_01.hpp>
 
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std {
+  using ::time;
+}
+#endif
+
 // try boost::mt19937 or boost::ecuyer1988 instead of boost::minstd_rand
 typedef boost::minstd_rand base_generator_type;
 
@@ -31,10 +37,12 @@ void experiment(base_generator_type & generator)
 {
   boost::uniform_smallint<base_generator_type> die(generator, 1, 6);
 
+#if 0  // iterator interface removed
   // you can use a STL Iterator interface
   for(int i = 0; i < 10; i++)
     std::cout << *die++ << " ";
   std::cout << '\n';
+#endif
 }
 
 int main()
@@ -48,19 +56,14 @@ int main()
   boost::uniform_01<base_generator_type> uni(generator);
   std::cout.setf(std::ios::fixed);
 
-  // you can also use a STL Generator interface
+  // Random number generators have an STL Generator interface
   for(int i = 0; i < 10; i++)
     std::cout << uni() << '\n';
 
   // change seed to something else
-  // Note: this is not the preferred way of hacking around missing std::
   // Make sure the seed is unsigned, otherwise the wrong overload may be
   // selected with mt19937.
-  generator.seed( static_cast<unsigned int>( 
-#ifndef BOOST_NO_STDC_NAMESPACE
-		 std::
-#endif
-		 time(0)));
+  generator.seed(static_cast<unsigned int>(std::time(0)));
 
   std::cout << "\nexperiment: roll a die 10 times:\n";
   base_generator_type saved_generator = generator;
