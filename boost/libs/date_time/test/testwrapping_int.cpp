@@ -83,6 +83,6 @@ main()
 //   check("construction/conversion", wi == 121);
 //   check("add with wrap",    wi.add(1) == 1);
 
-  printTestStats();
-  return 0;
+  return printTestStats();
+
 };

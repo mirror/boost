@@ -87,6 +87,6 @@ main()
   test_int< int_adapter<boost::int64_t> >();
 
 
-  printTestStats();
-  return 0;
+  return printTestStats();
+
 };
