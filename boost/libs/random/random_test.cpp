@@ -22,7 +22,7 @@
 #include <boost/config.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
-  namespace std { using ::abs; }
+  namespace std { using ::fabs; }
 #endif
 
 
@@ -234,7 +234,7 @@ void check_uniform_int(Generator & gen, int iter)
   int avg = sum/range;
   double threshold = 2*avg/std::sqrt(static_cast<double>(iter));
   for(int i = 0; i < range; i++) {
-    if(std::abs(bucket[i] - avg) > threshold) {
+    if(std::fabs(bucket[i] - avg) > threshold) {
       // 95% confidence interval
       std::cout << "   ... has bucket[" << i << "] = " << bucket[i] 
 		<< "  (distance " << (bucket[i] - avg) << ")" 
