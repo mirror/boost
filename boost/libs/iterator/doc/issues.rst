@@ -85,9 +85,7 @@ The same problem applies to ``is_swappable``.
    the Readable Iterator concept.
 
 
-3. Remove ``iterator_tag``.
-
-
+3. Remove the ``iterator_tag`` class.
 
 4. Change the specification of ``traversal_category`` to::
 
@@ -134,23 +132,21 @@ The same problem applies to ``is_swappable``.
    Readable Iterator concept, and change the definition of
    ``is_readable`` so that it works for any iterator type.
 
-3. With ``is_writable`` and ``is_swappable`` gone, and
+3. The purpose of the ``iterator_tag`` class was to
+   bundle the traversal and access category tags
+   into the ``iterator_category`` typedef.
+   With ``is_writable`` and ``is_swappable`` gone, and
    ``is_readable`` no longer in need of special hints,
-   there is no reason for the ``iterator_tag`` class to provide
+   there is no reason for iterators to provide
    information about the access capabilities of an iterator.
-   This new version provides only information about the traversal
-   capabilities and the old iterator category tag. Instead of accessing
-   the traversal category as a nested typedef ``::traversal``,
-   the ``iterator_tag`` itself will be convertible to the traversal
-   tag. The ``access_bits`` parameter is no longer needed for
-   specifying the access member (which is now gone). However,
-   some access information is still needed so that we can
-   deduce the appropriate old iterator category. The 
-   ``Value`` and ``Reference`` parameters fill this need.
-   Note that this solution cleans up the issue that John
-   Maddock raised on the reflector (``c++std-lib-12187``) about the
-   non-uniformity of the lvalue bit.
+   Thus there is no need for the ``iterator_tag``. The
+   traversal tag can be directly used for the
+   ``iterator_category``. If a new iterator is intended to be backward
+   compatible with old iterator concepts, a tag type
+   that is convertible to both one of the new traversal tags 
+   and also to an old iterator tag can be created and use
+   for the ``iterator_category``.
 
 4. The changes to the specification of ``traversal_category`` are a 
-   direct result of the changes to ``iterator_tag``.
+   direct result of the removal of ``iterator_tag``.
 
