@@ -9,7 +9,7 @@ SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
 include testing.jam ;
 
 run config_info.cpp ;
-run config_test.cpp <lib>../../test/build/boost_test_exec_monitor ;
+run config_test.cpp <lib>../../test/build/boost_test_exec_monitor : <no-warn>config_test.cpp ;
 run limits_test.cpp <lib>../../test/build/boost_test_exec_monitor ;
 
 test-suite "BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP" : 
