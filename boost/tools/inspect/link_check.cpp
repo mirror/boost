@@ -82,14 +82,28 @@ namespace boost
         || url.find( "news:" ) == 0
         ) return;
 
+      if ( url.find( "file:" ) == 0 )
+      {
+        ++m_invalid_errors;
+        error( library_name, source_path, "invalid URL (hardwired file): " + url );
+        return;
+      }
+
+      // detect characters banned by RFC2396:
+      if ( url.find_first_of( " <>\"{}|\\^[]'" ) != string::npos )
+      {
+        ++m_invalid_errors;
+        error( library_name, source_path, "invalid character in URL: " + url );
+      }
+      
       // strip url of bookmarks
       string plain_url( url );
       string::size_type pos( plain_url.find( '#' ) );
       if ( pos != string::npos )
       {
         plain_url.erase( pos );
-        // detect characters banned by RFC2396:
-        if ( url.find_first_of( " <>#\"{}|\\^[]'", pos+1 ) != string::npos )
+        // detect characters banned by RFC2396 in bookmark:
+        if ( url.find( '#', pos+1 ) != string::npos )
         {
           ++m_bookmark_errors;
           error( library_name, source_path, "invalid bookmark: " + url );
@@ -101,8 +115,8 @@ namespace boost
 
       // url is relative source_path.branch()
       // convert to target_path, which is_complete() 
-      path target_path( source_path.branch_path() );
-      try { target_path /= plain_url; }
+      path target_path;
+      try { target_path = source_path.branch_path() /= path( plain_url, fs::no_check ); }
       catch ( const fs::filesystem_error & )
       {
         ++m_invalid_errors;
