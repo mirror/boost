@@ -124,7 +124,7 @@ void validate_all()
  */
 
 template<class Dist>
-void instantiate_dist(const Dist& dist)
+void instantiate_dist(const char * name, const Dist& dist)
 {
   // check reference maintenance throughout
   typename Dist::base_type& b = dist.base();
@@ -137,20 +137,59 @@ void instantiate_dist(const Dist& dist)
   d = dist;            // copy assignment
   b();
   BOOST_TEST(d.base() == b);
+
+  Dist d2(dist.base());    // single-argument constructor
+  d2();
+
+  typename Dist::adaptor_type& adapt = d2.adaptor();
+  adapt();
+
+#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+  {
+    std::ostringstream file;
+    file << d.base() << std::endl;
+    file << d;
+    std::istringstream input(file.str());
+    // std::cout << file.str() << std::endl;
+    typename Dist::base_type engine;
+    input >> engine;
+    input >> std::ws;
+    Dist restored_dist(engine);
+    input >> restored_dist;
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // MSVC brokenness
+    // advance some more so that state is exercised
+    for(int i = 0; i < 10000; ++i) {
+      d();
+      restored_dist();
+    }
+    BOOST_CHECK_MESSAGE(std::abs(d()-restored_dist()) < 0.0001,
+                        std::string(name) + " d == restored_dist");
+#endif // BOOST_MSVC
+  }
+#endif // BOOST_NO_OPERATORS_IN_NAMESPACE
 }
 
 template<class URNG, class RealType>
 void instantiate_real_dist(URNG& urng, RealType /* ignored */)
 {
-  instantiate_dist(boost::uniform_01<URNG, RealType>(urng));
-  instantiate_dist(boost::uniform_real<URNG, RealType>(urng, 0, 2.1));
-  instantiate_dist(boost::triangle_distribution<URNG, RealType>(urng, 1, 1.5, 7));
-  instantiate_dist(boost::exponential_distribution<URNG, RealType>(urng, 5));
-  instantiate_dist(boost::normal_distribution<URNG, RealType>(urng));
-  instantiate_dist(boost::lognormal_distribution<URNG, RealType>(urng, 1, 1));
-  instantiate_dist(boost::poisson_distribution<URNG, RealType>(urng, 1));
-  instantiate_dist(boost::cauchy_distribution<URNG, RealType>(urng, 1));
-  instantiate_dist(boost::gamma_distribution<URNG, RealType>(urng, 1));
+  instantiate_dist("uniform_01",
+                   boost::uniform_01<URNG, RealType>(urng));
+  instantiate_dist("uniform_real",
+                   boost::uniform_real<URNG, RealType>(urng, 0, 2.1));
+  instantiate_dist("triangle_distribution",
+                   boost::triangle_distribution<URNG, RealType>(urng, 1, 1.5, 7));
+  instantiate_dist("exponential_distribution",
+                   boost::exponential_distribution<URNG, RealType>(urng, 5));
+  instantiate_dist("normal_distribution",
+                   boost::normal_distribution<URNG, RealType>(urng));
+  instantiate_dist("lognormal_distribution",
+                   boost::lognormal_distribution<URNG, RealType>(urng, 1, 1));
+  instantiate_dist("poisson_distribution",
+                   boost::poisson_distribution<URNG, RealType>(urng, 1));
+  instantiate_dist("cauchy_distribution",
+                   boost::cauchy_distribution<URNG, RealType>(urng, 1));
+  instantiate_dist("gamma_distribution",
+                   boost::gamma_distribution<URNG, RealType>(urng, 1));
 }
 
 template<class URNG, class ResultType>
@@ -233,18 +272,26 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
 #endif // BOOST_NO_OPERATORS_IN_NAMESPACE
 
   // instantiate various distributions with this URNG
-  instantiate_dist(boost::uniform_smallint<URNG>(urng, 0, 11));
-  instantiate_dist(boost::uniform_int<URNG>(urng, -200, 20000));
-  instantiate_dist(boost::geometric_distribution<URNG>(urng, 0.8));
-  instantiate_dist(boost::bernoulli_distribution<URNG>(urng, 0.2));
-  instantiate_dist(boost::binomial_distribution<URNG>(urng, 4, 0.2));
-  instantiate_dist(boost::poisson_distribution<URNG>(urng, 1));
+  instantiate_dist("uniform_smallint",
+                   boost::uniform_smallint<URNG>(urng, 0, 11));
+  instantiate_dist("uniform_int",
+                   boost::uniform_int<URNG>(urng, -200, 20000));
+  instantiate_dist("geometric_distribution",
+                   boost::geometric_distribution<URNG>(urng, 0.8));
+  instantiate_dist("bernoulli_distribution",
+                   boost::bernoulli_distribution<URNG>(urng, 0.2));
+  instantiate_dist("binomial_distribution",
+                   boost::binomial_distribution<URNG>(urng, 4, 0.2));
 
   instantiate_real_dist(urng, 1.0f);
   instantiate_real_dist(urng, 1.0);
   instantiate_real_dist(urng, 1.0l);
 
-  instantiate_dist(boost::uniform_on_sphere<URNG>(urng, 2));
+#if 0
+  // We cannot compare the outcomes before/after save with std::abs(x-y)
+  instantiate_dist("uniform_on_sphere",
+                   boost::uniform_on_sphere<URNG>(urng, 2));
+#endif
 }
 
 void instantiate_all()
