@@ -27,7 +27,7 @@ void write_bidirectional_streambuf_test()
         {
             filebuf dest;
             dest.open(test2.name().c_str(), ios::out);
-            filtering_stream<bidirectional> out(adapt(dest), 0);
+            filtering_stream<bidirectional> out(dest, 0);
             write_data_in_chars(out);
         }
         BOOST_CHECK_MESSAGE(
@@ -42,7 +42,7 @@ void write_bidirectional_streambuf_test()
         {
             filebuf dest;
             dest.open(test2.name().c_str(), ios::out);
-            filtering_stream<bidirectional> out(adapt(dest), 0);
+            filtering_stream<bidirectional> out(dest, 0);
             write_data_in_chunks(out);
         }
         BOOST_CHECK_MESSAGE(
@@ -57,7 +57,7 @@ void write_bidirectional_streambuf_test()
         {
             filebuf dest;
             dest.open(test2.name().c_str(), ios::out);
-            filtering_stream<bidirectional> out(adapt(dest));
+            filtering_stream<bidirectional> out(dest);
             write_data_in_chars(out);
         }
         BOOST_CHECK_MESSAGE(
@@ -72,7 +72,7 @@ void write_bidirectional_streambuf_test()
         {
             filebuf dest;
             dest.open(test2.name().c_str(), ios::out);
-            filtering_stream<bidirectional> out(adapt(dest));
+            filtering_stream<bidirectional> out(dest);
             write_data_in_chunks(out);
         }
         BOOST_CHECK_MESSAGE(

@@ -27,7 +27,7 @@ void read_bidirectional_streambuf_test()
     {
         filebuf fb;
         fb.open(test1.name().c_str(), ios::in);
-        filtering_stream<bidirectional> first(adapt(fb), 0);
+        filtering_stream<bidirectional> first(fb, 0);
         ifstream second(test2.name().c_str());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
@@ -39,7 +39,7 @@ void read_bidirectional_streambuf_test()
     {
         filebuf fb;
         fb.open(test1.name().c_str(), ios::in);
-        filtering_stream<bidirectional> first(adapt(fb), 0);
+        filtering_stream<bidirectional> first(fb, 0);
         ifstream second(test2.name().c_str());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
@@ -51,7 +51,7 @@ void read_bidirectional_streambuf_test()
     {
         filebuf fb;
         fb.open(test1.name().c_str(), ios::in);
-        filtering_stream<bidirectional> first(adapt(fb));
+        filtering_stream<bidirectional> first(fb);
         ifstream second(test2.name().c_str());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
@@ -63,7 +63,7 @@ void read_bidirectional_streambuf_test()
     {
         filebuf fb;
         fb.open(test1.name().c_str(), ios::in);
-        filtering_stream<bidirectional> first(adapt(fb));
+        filtering_stream<bidirectional> first(fb);
         ifstream second(test2.name().c_str());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
@@ -71,7 +71,6 @@ void read_bidirectional_streambuf_test()
             "streambuf in chunks with large buffer"
         );
     }
-
 }
 
 #endif // #ifndef BOOST_IOSTREAMS_TEST_READ_BIDIRECTIONAL_STREAMBUF_HPP_INCLUDED

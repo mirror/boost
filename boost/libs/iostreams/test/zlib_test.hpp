@@ -13,6 +13,7 @@
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
 #include "detail/sequence.hpp"
 #include "detail/verification.hpp"
@@ -35,13 +36,13 @@ void zlib_test()
                                default_filter_buffer_size );
         filtering_ostream  out(zc);
         out.push(iostreams::back_inserter(compressed));
-        iostreams::copy(adapt(src.begin(), src.end()), out);
+        iostreams::copy(make_iterator_range(src), out);
         out.pop();
 
         zlib_decompressor  zd( zlib::default_window_bits, 
                                default_filter_buffer_size );
         filtering_istream  in(zd);
-        in.push(compressed.begin(), compressed.end());
+        in.push(make_iterator_range(compressed));
         BOOST_CHECK_MESSAGE(
             compare_container_and_stream(src, in),
             "failed zlib test with small buffer"
@@ -56,12 +57,12 @@ void zlib_test()
         filtering_ostream out;
         out.push(zlib_compressor());
         out.push(iostreams::back_inserter(compressed));
-        iostreams::copy(adapt(src.begin(), src.end()), out);
+        iostreams::copy(make_iterator_range(src), out);
         out.reset();
 
         filtering_istream in;
         in.push(zlib_decompressor());
-        in.push(compressed.begin(), compressed.end());
+        in.push(make_iterator_range(compressed));
         BOOST_CHECK_MESSAGE(
             compare_container_and_stream(src, in),
             "failed zlib test with default buffer size"
@@ -76,12 +77,12 @@ void zlib_test()
         filtering_ostream  out;
         out.push(basic_zlib_compressor<zlib_alloc>());
         out.push(iostreams::back_inserter(compressed));
-        iostreams::copy(adapt(src.begin(), src.end()), out);
+        iostreams::copy(make_iterator_range(src), out);
         out.reset();
 
         filtering_istream  in;
         in.push(basic_zlib_decompressor<zlib_alloc>());
-        in.push(compressed.begin(), compressed.end());
+        in.push(make_iterator_range(compressed));
         BOOST_CHECK_MESSAGE(
             compare_container_and_stream(src, in),
             "failed zlib test with custom allocation"

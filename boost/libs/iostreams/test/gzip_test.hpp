@@ -13,6 +13,7 @@
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
 #include "detail/sequence.hpp"
 #include "detail/verification.hpp"
@@ -34,12 +35,12 @@ void gzip_test()
         gzip_compressor    gc(gzip::default_compression);
         filtering_ostream  out(gc);
         out.push(iostreams::back_inserter(compressed));
-        iostreams::copy(adapt(src.begin(), src.end()), out);
+        iostreams::copy(make_iterator_range(src), out);
         out.reset();
 
         gzip_decompressor  gd(gzip::default_window_bits);
         filtering_istream  in(gd);
-        in.push(compressed.begin(), compressed.end());
+        in.push(make_iterator_range(compressed));
         BOOST_CHECK_MESSAGE(
             compare_container_and_stream(src, in),
             "failed gzip test with small buffer"
@@ -54,12 +55,12 @@ void gzip_test()
         filtering_ostream out;
         out.push(gzip_compressor());
         out.push(iostreams::back_inserter(compressed));
-        iostreams::copy(adapt(src.begin(), src.end()), out);
+        iostreams::copy(make_iterator_range(src), out);
         out.reset();
 
         filtering_istream  in;
         in.push(gzip_decompressor());
-        in.push(compressed.begin(), compressed.end());
+        in.push(make_iterator_range(compressed));
         BOOST_CHECK_MESSAGE(
             compare_container_and_stream(src, in),
             "failed gzip test with default buffer size"
@@ -74,12 +75,12 @@ void gzip_test()
         filtering_ostream  out;
         out.push(basic_gzip_compressor<gzip_alloc>());
         out.push(iostreams::back_inserter(compressed));
-        iostreams::copy(adapt(src.begin(), src.end()), out);
+        iostreams::copy(make_iterator_range(src), out);
         out.reset();
 
         filtering_istream  in;
         in.push(basic_gzip_decompressor<gzip_alloc>());
-        in.push(compressed.begin(), compressed.end());
+        in.push(make_iterator_range(compressed));
         BOOST_CHECK_MESSAGE(
             compare_container_and_stream(src, in),
             "failed gzip test with custom allocation"

@@ -11,6 +11,7 @@
 #include <fstream>
 #include <vector>
 #include <boost/iostreams/filtering_stream.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
 #include "detail/sequence.hpp"
 #include "detail/temp_file.hpp"
@@ -27,7 +28,7 @@ void write_seekable_sequence_test()
 
     {
         vector<char> first(data_reps * data_length(), 0);
-        filtering_stream<seekable> out(first.begin(), first.end(), 0);
+        filtering_stream<seekable> out(make_iterator_range(first), 0);
         write_data_in_chars(out);
         ifstream second(test.name().c_str());
         BOOST_CHECK_MESSAGE(
@@ -39,7 +40,7 @@ void write_seekable_sequence_test()
 
     {
         vector<char> first(data_reps * data_length(), 0);
-        filtering_stream<seekable> out(first.begin(), first.end(), 0);
+        filtering_stream<seekable> out(make_iterator_range(first), 0);
         write_data_in_chunks(out);
         ifstream second(test.name().c_str());
         BOOST_CHECK_MESSAGE(
@@ -51,7 +52,7 @@ void write_seekable_sequence_test()
 
     {
         vector<char> first(data_reps * data_length(), 0);
-        filtering_stream<seekable> out(first.begin(), first.end(), 0);
+        filtering_stream<seekable> out(make_iterator_range(first));
         write_data_in_chars(out);
         ifstream second(test.name().c_str());
         BOOST_CHECK_MESSAGE(
@@ -63,7 +64,7 @@ void write_seekable_sequence_test()
 
     {
         vector<char> first(data_reps * data_length(), 0);
-        filtering_stream<seekable> out(first.begin(), first.end(), 0);
+        filtering_stream<seekable> out(make_iterator_range(first));
         write_data_in_chunks(out);
         ifstream second(test.name().c_str());
         BOOST_CHECK_MESSAGE(

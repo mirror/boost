@@ -14,6 +14,7 @@
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filtering_streambuf.hpp>
 #include <boost/iostreams/filter/newline_filter.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
 #include "detail/verification.hpp"
 
@@ -68,26 +69,26 @@ int count_lines(const std::string text, int print)
 bool test_input_options(int flags, int count)
 {
     using namespace std;
-    using namespace boost::iostreams;
+    namespace io = boost::iostreams;
     string result;
-    filtering_istreambuf in;
-    in.push(newline_filter(flags));
-    in.push(text, text + strlen(text));
-    copy(in, boost::iostreams::back_inserter(result));
-    return count_lines(result, flags & newline::print_mask) == count;
+    io::filtering_istreambuf in;
+    in.push(io::newline_filter(flags));
+    in.push(boost::make_iterator_range(text, text + strlen(text)));
+    io::copy(in, boost::iostreams::back_inserter(result));
+    return count_lines(result, flags & io::newline::print_mask) == count;
 }
 
 bool test_output_options(int flags, int count)
 {
     using namespace std;
-    using namespace boost::iostreams;
+    namespace io = boost::iostreams;
     string result;
-    filtering_ostreambuf out;
-    out.push(newline_filter(flags));
+    io::filtering_ostreambuf out;
+    out.push(io::newline_filter(flags));
     out.push(boost::iostreams::back_inserter(result));
-    copy(adapt(text, text + strlen(text)), out);
+    io::copy(boost::make_iterator_range(text, text + strlen(text)), out);
     out.reset();
-    return count_lines(result, flags & newline::print_mask) == count;
+    return count_lines(result, flags & io::newline::print_mask) == count;
 }
 
 bool test_options(int flags, int count)

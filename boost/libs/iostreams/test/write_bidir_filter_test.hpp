@@ -31,7 +31,7 @@ void write_bidirectional_filter_test()
         out.push(combine(toupper_filter(), tolower_filter()));
         filebuf dest;
         dest.open(lower2.name().c_str(), ios::out | ios::trunc);
-        out.push(adapt(dest));
+        out.push(dest);
         write_data_in_chars(out);
         dest.close();
         BOOST_CHECK_MESSAGE(
@@ -49,7 +49,7 @@ void write_bidirectional_filter_test()
         out.push(combine(toupper_filter(), tolower_filter()));
         filebuf dest;
         dest.open(lower2.name().c_str(), ios::out | ios::trunc);
-        out.push(adapt(dest));
+        out.push(dest);
         write_data_in_chunks(out);
         dest.close();
         BOOST_CHECK_MESSAGE(
@@ -66,7 +66,7 @@ void write_bidirectional_filter_test()
         );
         filebuf dest;
         dest.open(lower2.name().c_str(), ios::out | ios::trunc);
-        out.push(adapt(dest));
+        out.push(dest);
         write_data_in_chars(out);
         dest.close();
         BOOST_CHECK_MESSAGE(
@@ -83,7 +83,7 @@ void write_bidirectional_filter_test()
         );
         filebuf dest;
         dest.open(lower2.name().c_str(), ios::out | ios::trunc);
-        out.push(adapt(dest));
+        out.push(dest);
         write_data_in_chunks(out);
         dest.close();
         BOOST_CHECK_MESSAGE(
@@ -100,7 +100,7 @@ void write_bidirectional_filter_test()
         );
         filebuf dest;
         dest.open(lower2.name().c_str(), ios::out | ios::trunc);
-        out.push(adapt(dest));
+        out.push(dest);
         write_data_in_chars(out);
         dest.close();
         BOOST_CHECK_MESSAGE(
@@ -117,7 +117,7 @@ void write_bidirectional_filter_test()
         );
         filebuf dest;
         dest.open(lower2.name().c_str(), ios::out | ios::trunc);
-        out.push(adapt(dest));
+        out.push(dest);
         write_data_in_chunks(out);
         dest.close();
         BOOST_CHECK_MESSAGE(

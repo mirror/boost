@@ -19,12 +19,14 @@
 
 # include <boost/iostreams/device/back_inserter.hpp>
 # include <boost/iostreams/filtering_stream.hpp>
+# include <boost/range/iterator_range.hpp>
 # include "detail/filters.hpp"
 # include "detail/sequence.hpp"
 # include "detail/temp_file.hpp"
 # include "detail/verification.hpp"
  
 using namespace std;
+using namespace boost;
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
 
@@ -33,7 +35,7 @@ void read_wide_input_test()
     test_sequence<wchar_t> seq;
 
     {
-        filtering_wistream            first(adapt(seq.begin(), seq.end()), 0);
+        filtering_wistream            first(make_iterator_range(seq), 0);
         basic_istringstream<wchar_t>  second(
             basic_string<wchar_t>(seq.begin(), seq.end())
         );
@@ -44,7 +46,7 @@ void read_wide_input_test()
     }
 
     {
-        filtering_wistream            first(adapt(seq.begin(), seq.end()), 0);
+        filtering_wistream            first(make_iterator_range(seq), 0);
         basic_istringstream<wchar_t>  second(
             basic_string<wchar_t>(seq.begin(), seq.end())
         );
@@ -55,7 +57,7 @@ void read_wide_input_test()
     }
 
     {
-        filtering_wistream            first(adapt(seq.begin(), seq.end()));
+        filtering_wistream            first(make_iterator_range(seq));
         basic_istringstream<wchar_t>  second(
             basic_string<wchar_t>(seq.begin(), seq.end())
         );
@@ -66,7 +68,7 @@ void read_wide_input_test()
     }
 
     {
-        filtering_wistream            first(adapt(seq.begin(), seq.end()));
+        filtering_wistream            first(make_iterator_range(seq));
         basic_istringstream<wchar_t>  second(
             basic_string<wchar_t>(seq.begin(), seq.end())
         );

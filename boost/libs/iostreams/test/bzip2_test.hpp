@@ -13,6 +13,7 @@
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/bzip2.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
 #include "detail/sequence.hpp"
 #include "detail/verification.hpp"
@@ -34,14 +35,14 @@ void bzip2_test()
         bzip2_compressor      zc( bzip2::default_block_size,
                                   default_filter_buffer_size );
         filtering_ostream     out(zc);
-        out.push(iostreams::back_inserter(dest));
-        iostreams::copy(adapt(src.begin(), src.end()), out);
+        out.push(boost::iostreams::back_inserter(dest));
+        iostreams::copy(make_iterator_range(src), out);
         out.reset();
 
         bzip2_decompressor    zd( bzip2::default_small,
                                   default_filter_buffer_size );
         filtering_istream     in(zd);
-        in.push(dest.begin(), dest.end());
+        in.push(make_iterator_range(dest));
 
         BOOST_CHECK_MESSAGE(
             compare_container_and_stream(src, in),
@@ -56,13 +57,13 @@ void bzip2_test()
 
         filtering_ostream     out;
         out.push(bzip2_compressor());
-        out.push(iostreams::back_inserter(dest));
-        iostreams::copy(adapt(src.begin(), src.end()), out);
+        out.push(boost::iostreams::back_inserter(dest));
+        iostreams::copy(make_iterator_range(src), out);
         out.reset();
 
         filtering_istream     in;
         in.push(bzip2_decompressor());
-        in.push(dest.begin(), dest.end());
+        in.push(make_iterator_range(dest));
         BOOST_CHECK_MESSAGE(
             compare_container_and_stream(src, in),
             "failed bzip2 test with default buffer size"
@@ -77,12 +78,12 @@ void bzip2_test()
         filtering_ostream      out;
         out.push(basic_bzip2_compressor<bzip2_alloc>());
         out.push(iostreams::back_inserter(dest));
-        iostreams::copy(adapt(src.begin(), src.end()), out);
+        iostreams::copy(make_iterator_range(src), out);
         out.reset();
 
         filtering_istream      in;
         in.push(basic_bzip2_decompressor<bzip2_alloc>());
-        in.push(dest.begin(), dest.end());
+        in.push(make_iterator_range(dest));
         BOOST_CHECK_MESSAGE(
             compare_container_and_stream(src, in),
             "failed bzip2 test with custom allocation"

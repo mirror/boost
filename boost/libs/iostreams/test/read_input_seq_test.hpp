@@ -9,6 +9,7 @@
 
 #include <fstream>
 #include <boost/iostreams/filtering_stream.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
 #include "detail/sequence.hpp"
 #include "detail/temp_file.hpp"
@@ -25,7 +26,7 @@ void read_input_sequence_test()
     test_sequence<>  seq;
 
     {
-        filtering_stream<input> first(seq.begin(), seq.end(), 0);
+        filtering_stream<input> first(make_iterator_range(seq), 0);
         ifstream second(file.name().c_str());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
@@ -35,7 +36,7 @@ void read_input_sequence_test()
     }
 
     {
-        filtering_stream<input> first(seq.begin(), seq.end(), 0);
+        filtering_stream<input> first(make_iterator_range(seq), 0);
         ifstream second(file.name().c_str());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
@@ -45,7 +46,7 @@ void read_input_sequence_test()
     }
 
     {
-        filtering_stream<input> first(seq.begin(), seq.end());
+        filtering_stream<input> first(make_iterator_range(seq));
         ifstream second(file.name().c_str());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
@@ -55,7 +56,7 @@ void read_input_sequence_test()
     }
 
     {
-        filtering_stream<input> first(seq.begin(), seq.end());
+        filtering_stream<input> first(make_iterator_range(seq));
         ifstream second(file.name().c_str());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
