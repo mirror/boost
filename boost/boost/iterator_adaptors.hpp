@@ -829,7 +829,7 @@ template <class Iterator,
 struct reverse_iterator_generator
 {
     typedef typename boost::remove_const<Value>::type value_type;
-    typedef typename boost::iterator<Category,value_type,Distance,Pointer,Reference> traits;
+    typedef boost::iterator<Category,value_type,Distance,Pointer,Reference> traits;
     typedef iterator_adaptor<Iterator,reverse_iterator_policies,traits> type;
 };
 
