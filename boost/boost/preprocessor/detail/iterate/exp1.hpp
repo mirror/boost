@@ -8,25 +8,37 @@
 #  *                                                                          *
 #  ************************************************************************** */
 # 
-# line BOOST_PP_DETAIL_LINE()
+# line BOOST_PP_DETAIL_LINE(_)
 #
-# ifdef BOOST_PP_ITERATION_LIMITS
-#   ifndef BOOST_PP_FILENAME_1
+# if defined(BOOST_PP_ITERATION_LIMITS)
+#   if !defined(BOOST_PP_FILENAME_1)
 #      error BOOST_PP:  depth #1 filename is not defined
 #   endif
-#   define BOOST_PP_VALUE BOOST_PP_TUPLE_ELEM(2, 0, BOOST_PP_ITERATION_LIMITS)
+#   define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(0, (BOOST_PP_ITERATION_LIMITS))
 #   include BOOST_PP_SET_ITERATION_START()
-#   define BOOST_PP_VALUE BOOST_PP_TUPLE_ELEM(2, 1, BOOST_PP_ITERATION_LIMITS)
+#   define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(1, (BOOST_PP_ITERATION_LIMITS))
 #   include BOOST_PP_SET_ITERATION_FINISH()
+#   if BOOST_PP_ARRAY_SIZE((BOOST_PP_ITERATION_LIMITS)) >= 3
+#      define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(2, (BOOST_PP_ITERATION_LIMITS))
+#      include BOOST_PP_SET_ITERATION_FLAGS()
+#   else
+#      define BOOST_PP_ITERATION_FLAGS_1 0
+#   endif
 #   undef BOOST_PP_ITERATION_LIMITS
 # elif defined(BOOST_PP_ITERATION_PARAMS_1)
-#   define BOOST_PP_VALUE BOOST_PP_TUPLE_ELEM(3, 0, BOOST_PP_ITERATION_PARAMS_1)
+#   define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(0, (BOOST_PP_ITERATION_PARAMS_1))
 #   include BOOST_PP_SET_ITERATION_START()
-#   define BOOST_PP_VALUE BOOST_PP_TUPLE_ELEM(3, 1, BOOST_PP_ITERATION_PARAMS_1)
+#   define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(1, (BOOST_PP_ITERATION_PARAMS_1))
 #   include BOOST_PP_SET_ITERATION_FINISH()
-#   define BOOST_PP_FILENAME_1 BOOST_PP_TUPLE_ELEM(3, 2, BOOST_PP_ITERATION_PARAMS_1)
+#   define BOOST_PP_FILENAME_1 BOOST_PP_ARRAY_ELEM(2, (BOOST_PP_ITERATION_PARAMS_1))
+#   if BOOST_PP_ARRAY_SIZE((BOOST_PP_ITERATION_PARAMS_1)) >= 4
+#      define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(3, (BOOST_PP_ITERATION_PARAMS_1))
+#      include BOOST_PP_SET_ITERATION_FLAGS()
+#   else
+#      define BOOST_PP_ITERATION_FLAGS_1 0
+#   endif
 # else
-#   error BOOST_PP:  depth #1 iterations boundaries not defined
+#   error BOOST_PP:  depth #1 iteration boundaries or filename not defined
 # endif
 #
 # if BOOST_PP_ITERATION_DEPTH() != 0
@@ -1334,5 +1346,7 @@
 # undef BOOST_PP_ITERATION_START_1
 # undef BOOST_PP_ITERATION_FINISH_1
 # undef BOOST_PP_FILENAME_1
+#
+# undef BOOST_PP_ITERATION_FLAGS_1
 #
 # undef BOOST_PP_ITERATION_PARAMS_1
