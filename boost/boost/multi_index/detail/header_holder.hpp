@@ -38,8 +38,6 @@ private:
   Final& final(){return *static_cast<Final*>(this);}
 };
 
-
-
 } /* namespace multi_index::detail */
 
 } /* namespace multi_index */
