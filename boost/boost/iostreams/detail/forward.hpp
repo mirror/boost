@@ -50,14 +50,14 @@
 #define BOOST_IOSTREAMS_FORWARDING_CTOR(z, n, tuple) \
     template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename U)> \
     BOOST_PP_TUPLE_ELEM(3, 0, tuple) \
-    (BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, U, u)) \
+    (BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, const U, &u)) \
     { this->BOOST_PP_TUPLE_ELEM(3, 1, tuple) \
       ( BOOST_PP_TUPLE_ELEM(3, 2, tuple) \
         (BOOST_PP_ENUM_PARAMS_Z(z, n, u)) ); } \
     /**/
 #define BOOST_IOSTREAMS_FORWARDING_FN(z, n, tuple) \
     template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename U)> \
-    void open(BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, U, u)) \
+    void open(BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, const U, &u)) \
     { this->BOOST_PP_TUPLE_ELEM(3, 1, tuple) \
       ( BOOST_PP_TUPLE_ELEM(3, 2, tuple) \
         (BOOST_PP_ENUM_PARAMS_Z(z, n, u)) ); } \
