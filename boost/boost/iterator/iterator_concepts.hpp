@@ -79,7 +79,7 @@ namespace boost_concepts {
   
   template <
       typename Iterator
-    , typename ValueType = typename boost::detail::iterator_traits<Iterator>::value_type
+    , typename ValueType = BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::value_type
   >
   class WritableIteratorConcept {
   public:
