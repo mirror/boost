@@ -82,10 +82,15 @@ namespace date_time {
     {
       return absolute_value(((ticks() / (60*rep_type::res_adjust())) % 60));
     }
-    //! Returns normalized number of seconds
+    //! Returns normalized number of seconds (0..60)
     sec_type seconds() const
     {
       return absolute_value((ticks()/rep_type::res_adjust()) % 60);
+    }
+    //! Returns total number of seconds truncating any fractional seconds
+    sec_type total_seconds() const
+    {
+      return ticks_ / rep_type::res_adjust();
     }
     //! Returns count of fractional seconds at given resolution
     fractional_seconds_type fractional_seconds() const
@@ -121,9 +126,10 @@ namespace date_time {
     {
       return duration_type(ticks_ + d.ticks_);
     }
-	duration_type operator/(int divisor){
-	  return duration_type(ticks_ / divisor);
-	}
+    duration_type operator/(int divisor) 
+    {
+      return duration_type(ticks_ / divisor);
+    }
     time_duration operator-=(const duration_type& d)
     {
       ticks_ -= d.ticks_;
@@ -135,7 +141,8 @@ namespace date_time {
       return *this;
     }
     //! Division operations on a duration with an integer.
-    time_duration operator/=(int divisor) {
+    time_duration operator/=(int divisor) 
+    {
       ticks_ /= divisor;
       return *this;
     }
@@ -154,7 +161,7 @@ namespace date_time {
   /* These templates are designed to work with multiples of
    * 10 for frac_of_second and resoultion adjustment 
    */
-  template<class base_duration, int frac_of_second>
+  template<class base_duration, long frac_of_second>
   class subsecond_duration : public base_duration
   {
   public:
@@ -164,46 +171,12 @@ namespace date_time {
     {}
   };
 
-  //The following types are supplied to allow simple typedefs later on
-  template <class base_duration>
-  class millisec_duration : public base_duration
-  {
-  public:
-    typedef typename base_duration::traits_type traits_type;
-    explicit millisec_duration(long ss) :
-      base_duration(0,0,0,ss*traits_type::res_adjust()/1000)
-    {}
-
-  };
-
-  template <class base_duration>
-  class microsec_duration : public base_duration
-  {
-  public:
-    typedef typename base_duration::traits_type traits_type;
-    explicit microsec_duration(long ss) :
-      base_duration(0,0,0,ss*traits_type::res_adjust()/1000000)
-    {}
-
-  };
-
-  template <class base_duration>
-  class nanosec_duration : public base_duration
-  {
-  public:
-    typedef typename base_duration::traits_type traits_type;
-    explicit nanosec_duration(long ss) :
-      base_duration(0,0,0,ss*traits_type::res_adjust()/1000000000)
-    {}
-
-  };
-
   
   
 } } //namespace date_time
 
 
-/* Copyright (c) 2000
+/* Copyright (c) 2003
  * CrystalClear Software, Inc.
  *
  * Permission to use, copy, modify, distribute and sell this software
