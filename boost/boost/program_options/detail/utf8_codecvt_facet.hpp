@@ -70,7 +70,7 @@ struct utf8_codecvt_facet_wchar_t :
     public std::codecvt<wchar_t, char, std::mbstate_t>  
 {
 public:
-    explicit utf8_codecvt_facet_wchar_t(size_t no_locale_manage=0)
+    explicit utf8_codecvt_facet_wchar_t(std::size_t no_locale_manage=0)
         : std::codecvt<wchar_t, char, std::mbstate_t>(no_locale_manage) 
     {}
 protected:
@@ -135,7 +135,7 @@ protected:
         const std::mbstate_t &,
         const char * from,
         const char * from_end, 
-        size_t max_limit
+        std::size_t max_limit
     ) const throw();
 
     // Largest possible value do_length(state,from,from_end,1) could return.

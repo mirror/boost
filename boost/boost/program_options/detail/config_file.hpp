@@ -15,6 +15,11 @@
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/option.hpp>
 #include <boost/program_options/eof_iterator.hpp>
+
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202))
+#include <boost/program_options/detail/convert.hpp>
+#endif
+
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/shared_ptr.hpp>
@@ -140,6 +145,7 @@ namespace boost { namespace program_options { namespace detail {
     bool
     basic_config_file_iterator<wchar_t>::getline(std::string& s)
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202))
+    {
         // When the function is out-of-line, Metrowerks tries to use
         // the unspecialized version below, which causes an error.
         std::wstring ws;
