@@ -1137,7 +1137,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E1, class E2, class F>
     struct vector_matrix_binary_traits {
         typedef vector_matrix_binary<E1, E2, F> expression_type;
-#ifdef BOOST_UBLAS_USE_ET
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type; 
 #else
         typedef matrix<typename F::result_type> result_type;
@@ -1562,7 +1562,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E, class F>
     struct matrix_unary1_traits {
         typedef matrix_unary1<E, F> expression_type;
-#ifdef BOOST_UBLAS_USE_ET
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type; 
 #else
         typedef matrix<typename F::result_type> result_type;
@@ -2036,7 +2036,7 @@ namespace boost { namespace numeric { namespace ublas {
     struct matrix_unary2_traits {
         typedef matrix_unary2<E, F> expression_type;
 //FIXME
-// #ifdef BOOST_UBLAS_USE_ET
+// #ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 // #else
 //         typedef matrix<typename F::result_type> result_type;
@@ -2757,7 +2757,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E1, class E2, class F>
     struct matrix_binary_traits {
         typedef matrix_binary<E1, E2, F> expression_type;
-#ifdef BOOST_UBLAS_USE_ET
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type; 
 #else
         typedef matrix<typename F::result_type> result_type;
@@ -3244,7 +3244,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T1, class E2, class F>
     struct matrix_binary_scalar1_traits {
         typedef matrix_binary_scalar1<scalar_const_reference<T1>, E2, F> expression_type;
-#ifdef BOOST_UBLAS_USE_ET
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 #else
         typedef matrix<typename F::result_type> result_type;
@@ -3693,7 +3693,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E1, class T2, class F>
     struct matrix_binary_scalar2_traits {
         typedef matrix_binary_scalar2<E1, scalar_const_reference<T2>, F> expression_type;
-#ifdef BOOST_UBLAS_USE_ET
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type; 
 #else
         typedef matrix<typename F::result_type> result_type;
@@ -4017,7 +4017,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef row_major_tag orientation_category;
         typedef typename promote_traits<T1, T2>::promote_type promote_type;
         typedef matrix_vector_binary1<E1, E2, matrix_vector_prod1<T1, T2, promote_type> > expression_type;
-#ifdef BOOST_UBLAS_USE_ET
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 #else
         typedef vector<promote_type> result_type;
@@ -4412,7 +4412,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef column_major_tag orientation_category;
         typedef typename promote_traits<T1, T2>::promote_type promote_type;
         typedef matrix_vector_binary2<E1, E2, matrix_vector_prod2<T1, T2, promote_type> > expression_type;
-#ifdef BOOST_UBLAS_USE_ET
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 #else
         typedef vector<promote_type> result_type;
@@ -5122,7 +5122,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef unknown_orientation_tag orientation_category;
         typedef typename promote_traits<T1, T2>::promote_type promote_type;
         typedef matrix_matrix_binary<E1, E2, matrix_matrix_prod<T1, T2, promote_type> > expression_type;
-#ifdef BOOST_UBLAS_USE_ET
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 #else
         typedef matrix<promote_type> result_type;
@@ -5254,7 +5254,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E, class F>
     struct matrix_scalar_unary_traits {
         typedef matrix_scalar_unary<E, F> expression_type;
-#ifdef BOOST_UBLAS_USE_ET
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
          typedef expression_type result_type;
 #else
          typedef typename F::result_type result_type;

@@ -263,11 +263,6 @@ namespace boost { namespace numeric { namespace ublas {
         void insert (size_type i, size_type j, const_reference t) {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
             BOOST_UBLAS_CHECK (j < size_, bad_index ());
-// FIXME: is this ugly check still needed?!
-// #ifndef BOOST_UBLAS_USE_ET
-//             if (t == value_type ())
-//                 return;
-// #endif
             if (functor1_type::other (i, j)) {
                 size_type k = functor1_type::element (functor2_type (), i, size_, j, size_);
                 BOOST_UBLAS_CHECK (type_traits<value_type>::equals (data () [k], value_type ()) ||

@@ -758,7 +758,7 @@ namespace boost { namespace numeric { namespace ublas {
     struct vector_unary_traits {
         typedef vector_unary<E, F> expression_type;
 //FIXME
-// #ifdef BOOST_UBLAS_USE_ET
+// #ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 // #else
 //         typedef vector<typename F::result_type> result_type;
@@ -1160,7 +1160,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E1, class E2, class F>
     struct vector_binary_traits {
         typedef vector_binary<E1, E2, F> expression_type;
-#ifdef BOOST_UBLAS_USE_ET
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type; 
 #else
         typedef vector<typename F::result_type> result_type;
@@ -1439,7 +1439,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T1, class E2, class F>
     struct vector_binary_scalar1_traits {
         typedef vector_binary_scalar1<scalar_const_reference<T1>, E2, F> expression_type;
-#ifdef BOOST_UBLAS_USE_ET
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 #else
         typedef vector<typename F::result_type> result_type;
@@ -1680,7 +1680,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E1, class T2, class F>
     struct vector_binary_scalar2_traits {
         typedef vector_binary_scalar2<E1, scalar_const_reference<T2>, F> expression_type;
-#ifdef BOOST_UBLAS_USE_ET
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 #else
         typedef vector<typename F::result_type> result_type;
@@ -1775,7 +1775,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E, class F>
     struct vector_scalar_unary_traits {
         typedef vector_scalar_unary<E, F> expression_type;
-#if defined (BOOST_UBLAS_USE_ET) && defined (BOOST_UBLAS_USE_SCALAR_ET)
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
          typedef expression_type result_type;
 #else
          typedef typename F::result_type result_type;
@@ -1907,7 +1907,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E1, class E2, class F>
     struct vector_scalar_binary_traits {
         typedef vector_scalar_binary<E1, E2, F> expression_type;
-#if defined (BOOST_UBLAS_USE_ET) && defined (BOOST_UBLAS_USE_SCALAR_ET)
+#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 #else
         typedef typename F::result_type result_type;

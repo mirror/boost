@@ -68,6 +68,14 @@
 // MSVC doesn't support long double
 #define BOOST_UBLAS_NO_LONG_DOUBLE
 
+#ifdef NDEBUG
+// MSVC has special inlining options
+#pragma inline_recursion (on)
+#pragma inline_depth (255)
+#pragma auto_inline (on)
+// #define BOOST_UBLAS_INLINE __forceinline
+#define BOOST_UBLAS_INLINE __inline
+#endif
 
 // With MSVC we could perform IO via basic_stream
 // #define BOOST_UBLAS_USE_BASIC_STREAM
@@ -238,68 +246,53 @@ namespace std {
 
 
 
-// Enable performance options in release mode
+// Enable performance options in RELEASE mode
 #ifdef NDEBUG
 
-#ifdef BOOST_MSVC
-// MSVC has special inlining options
-#pragma inline_recursion (on)
-#pragma inline_depth (255)
-#pragma auto_inline (on)
-// #define BOOST_UBLAS_INLINE __forceinline
-#define BOOST_UBLAS_INLINE __inline
-#else
+#ifndef BOOST_UBLAS_INLINE
 #define BOOST_UBLAS_INLINE inline
 #endif
 
 // Do not check sizes!
 #define BOOST_UBLAS_USE_FAST_SAME
 
-// Use expression templates.
-#ifndef BOOST_UBLAS_USE_ET
-#define BOOST_UBLAS_USE_ET
-#endif // BOOST_UBLAS_USE_ET
-
 // NO runtime error checks with BOOST_UBLAS_CHECK macro
 #ifndef BOOST_UBLAS_CHECK_ENABLE
 #define BOOST_UBLAS_CHECK_ENABLE 0
 #endif
 
-// NO numeric checks for non dense matrices
-#ifndef  BOOST_UBLAS_TYPE_CHECK
+// NO type compatibility numeric checks
+#ifndef BOOST_UBLAS_TYPE_CHECK
 #define BOOST_UBLAS_TYPE_CHECK 0
 #endif
 
-// Disable performance options in debug mode
+
+// Disable performance options in DEBUG mode
 #else
 
-#ifdef BOOST_MSVC
-// MSVC has special inlining options
-// #pragma inline_recursion (off)
-// #pragma inline_depth ()
-// #pragma auto_inline (off)
-#endif
-#define BOOST_UBLAS_INLINE
+// In order to simplify debugging is is possible to simplify expression template
+// so they are restricted to a single operation
+// #define BOOST_UBLAS_SIMPLE_ET_DEBUG
 
-#ifdef BOOST_MSVC
-// Use expression templates (otherwise we get many ICE's)
-#ifndef BOOST_UBLAS_USE_ET
-#define BOOST_UBLAS_USE_ET
-#endif // BOOST_UBLAS_USE_ET
-#endif // BOOST_MSVC
+#ifndef BOOST_UBLAS_INLINE
+#define BOOST_UBLAS_INLINE
+#endif
 
 // Enable runtime error checks with BOOST_UBLAS_CHECK macro. Check bounds etc
 #ifndef BOOST_UBLAS_CHECK_ENABLE
 #define BOOST_UBLAS_CHECK_ENABLE 1
 #endif
 
-// Type compatible numeric checks for non dense matrices (requires additional storage and complexity)
-#ifndef  BOOST_UBLAS_TYPE_CHECK
+// Type compatibiltity numeric checks
+#ifndef BOOST_UBLAS_TYPE_CHECK
 #define BOOST_UBLAS_TYPE_CHECK 1
 #endif
 
 #endif
 
+
+// Control type compatibility numeric runtime checks for non dense matrices.
+// Require additional storage and complexity
 #if BOOST_UBLAS_TYPE_CHECK
 template <class Dummy>
 struct disable_type_check
