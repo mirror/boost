@@ -13,6 +13,7 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/mpl/bind.hpp>
 #include <boost/mpl/reverse_iter_fold.hpp>
+#include <boost/mpl/deref.hpp>
 #include <boost/multi_index_container_fwd.hpp>
 #include <boost/multi_index/detail/header_holder.hpp>
 #include <boost/multi_index/detail/index_base.hpp>
@@ -37,7 +38,7 @@ struct index_applier
 {
   template<typename IndexSpecifierIterator,typename Super>
   struct apply:
-    msvc_index_specifier<IndexSpecifierIterator::type>::
+    msvc_index_specifier< mpl::deref<IndexSpecifierIterator>::type>::
       template result_index_class<Super>
   {
   }; 
@@ -48,7 +49,7 @@ struct index_applier
   template<typename IndexSpecifierIterator,typename Super>
   struct apply
   {
-    typedef typename IndexSpecifierIterator::type index_specifier;
+    typedef typename mpl::deref<IndexSpecifierIterator>::type index_specifier;
     typedef typename index_specifier::
       BOOST_NESTED_TEMPLATE index_class<Super>::type type;
   }; 
