@@ -13,6 +13,7 @@
 #include "boost/date_time/posix_time/posix_time_duration.hpp"
 #include "boost/date_time/filetime_functions.hpp"
 #include "boost/date_time/c_time.hpp"
+#include "boost/date_time/gregorian/conversion.hpp"
 
 namespace boost {
 
