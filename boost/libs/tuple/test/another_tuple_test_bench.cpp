@@ -1,5 +1,8 @@
-//  tuple_test_bench.cpp  --------------------------------
-//
+//  another_test_bench.cpp  --------------------------------
+
+// This file has various tests to see that things that shouldn't
+// compile, don't compile.
+
 // Defining any of E1 to E5 or E7 to E11 opens some illegal code that 
 // should cause the compliation to fail.
 
@@ -8,156 +11,148 @@
 
 #include "boost/tuple/tuple.hpp"
 
-#include "boost/tuple/tuple_comparison.hpp"
+#include <string>
+#include <utility>
 
 using namespace std;
 using namespace boost;
+using namespace boost::tuples;
 
-class foo
-{
+
+template<class T> void dummy(const T&) {}
+
+class A {}; class B {}; class C {};
+
+// A non-copyable class
+class no_copy {
+  no_copy(const no_copy&) {}
 public:
-  explicit foo(int v) : val(v) {}
-
-  bool operator==(const foo& other) const
-  {
-    return val == other.val;
-  }
-
-private:
-  foo() {}
-  int val;
+  no_copy() {};
 };
 
-void
-construction_test()
-{
-  tuple<int> t1; 
-  BOOST_TEST(get<0>(t1) == int());
-  
-  tuple<float> t2(5.5f);
-  BOOST_TEST(get<0>(t2) == 5.5f);
+no_copy y;
 
-  tuple<foo> t3(foo(12));
-  BOOST_TEST(get<0>(t3) == foo(12));
+#ifdef E1
+tuple<no_copy> v1;  // should faild
+#endif
 
-  tuple<double> t4(t2);
-  BOOST_TEST(get<0>(t4) == 5.5);
 
-  tuple<int, float> t5;
-  BOOST_TEST(get<0>(t5) == int());
-  BOOST_TEST(get<1>(t5) == float());
+#ifdef E2
+char cs[10];
+tuple<char[10]> v3;  // should fail, arrays must be stored as references
+#endif
 
-  tuple<int, float> t6(12, 5.5f);
-  BOOST_TEST(get<0>(t6) == 12);
-  BOOST_TEST(get<1>(t6) == 5.5f);
+// a class without a public default constructor
+class no_def_constructor {
+  no_def_constructor() {}
+public:
+  no_def_constructor(std::string) {} // can be constructed with a string
+};
 
-  tuple<long, double> t7(t6);
-  BOOST_TEST(get<0>(t7) == 12);
-  BOOST_TEST(get<1>(t7) == 5.5f);
+void foo1() {
+
+#ifdef E3
+  dummy(tuple<no_def_constructor, no_def_constructor, no_def_constructor>()); 
+  // should fail
+
+#endif
 }
 
-void
-copy_test()
-{
-  tuple<int, float> t1(4, 12.5f);
-  tuple<int, float> t2(5, 2.2f);
-  t2 = t1;
-  BOOST_TEST(get<0>(t1) == get<0>(t2));
-  BOOST_TEST(get<1>(t1) == get<1>(t2));
+void foo2() {
+// testing default values
+#ifdef E4
+  dummy(tuple<double&>()); // should fail, not defaults for references
+  dummy(tuple<const double&>()); // likewise
+#endif
 
-  tuple<long, double> t3(2, 3.3);
-  t3 = t1;
-  BOOST_TEST((double)get<0>(t1) == get<0>(t3));
-  BOOST_TEST((double)get<1>(t1) == get<1>(t3));
-}
+  double dd = 5;
 
-void
-mutate_test()
-{
-  tuple<int, float, bool, foo> t1(5, 12.2f, true, foo(4));
-  get<0>(t1) = 6;
-  get<1>(t1) = 2.2f;
-  get<2>(t1) = false;
-  get<3>(t1) = foo(5);
-
-  BOOST_TEST(get<0>(t1) == 6);
-  BOOST_TEST(get<1>(t1) == 2.2f);
-  BOOST_TEST(get<2>(t1) == false);
-  BOOST_TEST(get<3>(t1) == foo(5));
-}
-
-void
-make_tuple_test()
-{
-  tuple<int, float> t1 = make_tuple(5, 2.25f);
-  BOOST_TEST(get<0>(t1) == 5);
-  BOOST_TEST(get<1>(t1) == 2.25f);
-
-  tuple<int, double> t2;
-  t2 = make_tuple((short int)2, 2.25);
-  BOOST_TEST(get<0>(t2) == 2);
-  BOOST_TEST(get<1>(t2) == 2.25);
-}
-
-void
-tie_test()
-{
-  int a;
-  float b;
-  foo c(5);
-
-  tie(a, b, c) = make_tuple(2, 5.5f, foo(3));
-  BOOST_TEST(a == 2);
-  BOOST_TEST(b == 5.5f);
-  BOOST_TEST(c == foo(3));
-
-  tie(a, ignore, c) = make_tuple((short int)5, false, foo(5));
-  BOOST_TEST(a == 5);
-  BOOST_TEST(b == 5.5f);
-  BOOST_TEST(c == foo(5));
-}
-
-void
-equality_test()
-{
-  tuple<int, float> t1(5, 3.3f);
-  tuple<int, float> t2(5, 3.3f);
-  BOOST_TEST(t1 == t2);
-
-  tuple<int, float> t3(5, 2.2f);
-  tuple<int, float> t4(2, 3.3f);
-  BOOST_TEST(t1 != t3);
-  BOOST_TEST(t1 != t4);
-}
-
-void
-ordering_test()
-{
-  tuple<int, float> t1(4, 3.3f);
-  tuple<short, float> t2(5, 3.3f);
-  tuple<long, double> t3(5, 4.4);
-  BOOST_TEST(t1 < t2);
-  BOOST_TEST(t1 <= t2);
-  BOOST_TEST(t2 > t1);
-  BOOST_TEST(t2 >= t1);
-  BOOST_TEST(t2 < t3);
-  BOOST_TEST(t2 <= t3);
-  BOOST_TEST(t3 > t2);
-  BOOST_TEST(t3 >= t2);
-
+#ifdef E5
+  dummy(tuple<double&>(dd+3.14)); // should fail, temporary to non-const reference
+#endif
 }
 
 
-int
-test_main(int, char *[])
+
+// make_tuple ------------------------------------------
+
+
+   void foo3() {
+#ifdef E7
+    std::make_pair("Doesn't","Work"); // fails
+#endif
+    //    make_tuple("Does", "Work"); // this should work
+}
+
+
+
+// - testing element access
+
+void foo4() 
 {
-  construction_test();
-  copy_test();
-  mutate_test();
-  make_tuple_test();
-  tie_test();
-  equality_test();
-  ordering_test();
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+  double d = 2.7; 
+  A a;
+  tuple<int, double&, const A&> t(1, d, a);
+  const tuple<int, double&, const A> ct = t;
+
+#ifdef E8
+  get<0>(ct) = 5; // can't assign to const
+#endif
+
+#ifdef E9
+  get<4>(t) = A(); // can't assign to const
+#endif
+#ifdef E10
+  dummy(get<5>(ct)); // illegal index
+#endif
+
+#endif
+}
+
+// testing copy and assignment with implicit conversions between elements
+// testing tie
+
+  class AA {};
+  class BB : public AA {};
+  struct CC { CC() {} CC(const BB& b) {} };
+  struct DD { operator CC() const { return CC(); }; };
+
+  void foo5() {
+    tuple<char, BB*, BB, DD> t;
+
+    tuple<char, char> aaa;
+    tuple<int, int> bbb(aaa);
+    //    tuple<int, AA*, CC, CC> a = t;
+    //    a = t;
+  }
+
+
+// testing tie
+// testing assignment from std::pair
+void foo7() {
+
+   tuple<int, int, float> a;
+#ifdef E11
+   a = std::make_pair(1, 2); // should fail, tuple is of length 3, not 2
+#endif
+
+    dummy(a);
+}
+
+
+
+// --------------------------------
+// ----------------------------
+int test_main(int, char *[]) {
+
+  foo1();
+  foo2();
+  foo3();
+  foo4();
+  foo5();
+
+  foo7();
 
   return 0;
 }

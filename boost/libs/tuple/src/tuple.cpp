@@ -22,12 +22,13 @@
 #include "boost/tuple/tuple_io.hpp"
 
 namespace boost {
-namespace detail {
 namespace tuples {
+namespace detail {
+   
 const int
  format_info::stream_index[number_of_manipulators] 
    = { std::ios::xalloc(), std::ios::xalloc(), std::ios::xalloc() };
    
-} // namespace tuples   
 } // namespace detail
+} // namespace tuples   
 } // namespace boost

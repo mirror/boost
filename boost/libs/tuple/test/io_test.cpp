@@ -34,6 +34,10 @@ typedef istringstream useThisIStringStream;
 
 int test_main(int argc, char * argv[] ) {
 
+   using boost::tuples::set_close;
+   using boost::tuples::set_open;
+   using boost::tuples::set_delimiter;
+   
   useThisOStringStream os1;
 
   // Set format [a, b, c] for os1
