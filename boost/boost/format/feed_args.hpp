@@ -12,7 +12,6 @@
 // ideas taken from Rüdiger Loos's format class
 // and Karl Nelson's ofstream
 
-//  version $Id$
 // ----------------------------------------------------------------------------
 // feed_args.hpp :  functions for processing each argument 
 //                      (feed, feed_manip, and distribute)
@@ -104,11 +103,11 @@ namespace  {
   
   template< class Ch, class Tr, class T> inline
   void put_head( BOOST_IO_STD basic_ostream<Ch, Tr>& os, const T& x ) {
-	  disambiguater<Ch, Tr, T>::put_head(os, x, 1L);
+    disambiguater<Ch, Tr, T>::put_head(os, x, 1L);
   }
   template< class Ch, class Tr, class T> inline
   void put_last( BOOST_IO_STD basic_ostream<Ch, Tr>& os, const T& x ) {
-	  disambiguater<Ch, Tr, T>::put_last(os, x, 1L);
+    disambiguater<Ch, Tr, T>::put_last(os, x, 1L);
   }
 
 #endif  // -msvc workaround

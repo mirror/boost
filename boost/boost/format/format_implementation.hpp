@@ -12,8 +12,6 @@
 // ideas taken from Rüdiger Loos's format class
 // and Karl Nelson's ofstream
 
-//  version $Id$
-
 // ----------------------------------------------------------------------------
 // format_implementation.hpp  Implementation of the basic_format class
 // ----------------------------------------------------------------------------

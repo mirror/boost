@@ -12,7 +12,6 @@
 // ideas taken from Rüdiger Loos's format class
 // and Karl Nelson's ofstream
 
-//  version $Id$
 // ----------------------------------------------------------------------------
 // format.hpp :  primary header
 // ----------------------------------------------------------------------------

@@ -109,7 +109,7 @@ int test_main(int, char* [])
                       % group(internal, setfill('W'), 234)
                       % group(internal, setfill('X'), -345)
                       % group(setfill('Y'), 456)
-		      % group(setfill('Z'), -10 ) );
+                      % group(setfill('Z'), -10 ) );
 
     if(s != "[  123 ] [+WW234] [-XX345] [YY 456] [ZZZ-10]\n" ) {
       cerr << s ;

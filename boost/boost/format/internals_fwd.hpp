@@ -12,9 +12,8 @@
 // ideas taken from Rüdiger Loos's format class
 // and Karl Nelson's ofstream (also took its parsing code as basis for printf parsing)
 
-//  version $Id$
 // ------------------------------------------------------------------------------
-// format_internal_fwd.hpp :  forward declarations, for internal headers
+// internals_fwd.hpp :  forward declarations, for internal headers
 // ------------------------------------------------------------------------------
 
 #ifndef BOOST_FORMAT_INTERNAL_FWD_HPP

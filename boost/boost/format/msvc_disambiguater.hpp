@@ -12,7 +12,6 @@
 // ideas taken from Rüdiger Loos's format class
 // and Karl Nelson's ofstream
 
-//  version $Id$
 // ----------------------------------------------------------------------------
 // msvc_disambiguater.hpp : msvc workarounds. (for put_{head|last} overloads)
 //                          the trick was described in boost's list  by Aleksey Gurtovoy
@@ -49,7 +48,7 @@ struct disambiguater
    }
    static void put_last(BOOST_IO_STD basic_ostream<Ch, Tr>& os, T const& x, int)
    {
-	   os << x;
+     os << x;
    }
 };
 

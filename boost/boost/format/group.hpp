@@ -13,7 +13,6 @@
 // ideas taken from Rüdiger Loos's format class
 // and Karl Nelson's ofstream
 
-//  version $Id$
 // ----------------------------------------------------------------------------
 
 // group.hpp :  encapsulates a group of manipulators along with an argument

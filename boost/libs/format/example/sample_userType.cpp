@@ -24,8 +24,8 @@ public:
   Rational(int n, int d);    // convert denominator to unsigned
   friend std::ostream& operator<<(std::ostream&, const Rational&);
 private:
-  int n_;		// numerator
-  unsigned int d_;	// denominator
+  int n_;               // numerator
+  unsigned int d_;      // denominator
 };
 
 Rational::Rational(int n, int d) : n_(n) 

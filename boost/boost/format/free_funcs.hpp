@@ -12,9 +12,8 @@
 // ideas taken from Rüdiger Loos's format class
 // and Karl Nelson's ofstream (also took its parsing code as basis for printf parsing)
 
-//  version $Id$
 // ------------------------------------------------------------------------------
-// format_funcs.hpp :  implementation of the free functions declared in namespace format
+// free_funcs.hpp :  implementation of the free functions declared in namespace format
 // ------------------------------------------------------------------------------
 
 #ifndef BOOST_FORMAT_FUNCS_HPP

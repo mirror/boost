@@ -12,9 +12,8 @@
 // ideas taken from Rüdiger Loos's format class
 // and Karl Nelson's ofstream
 
-//  version $Id$
 // ----------------------------------------------------------------------------
-// format_internals.hpp :  internal structs. included by format.hpp
+// internals.hpp :  internal structs. included by format.hpp
 //                              stream_format_state, and format_item
 // ----------------------------------------------------------------------------
 

@@ -49,7 +49,7 @@ int main(){
 
 
     // printf directives's type-flag can be used to pass formatting options :
-    cout <<  format("_%1$4d_ is : _%1$#4x_, _%1$#4o_, and _%1$s_ by default\n") 	% 18;
+    cout <<  format("_%1$4d_ is : _%1$#4x_, _%1$#4o_, and _%1$s_ by default\n")  % 18;
     //          prints  "_  18_ is : _0x12_, _ 022_, and _18_ by default\n"
 
     // Taking the string value :
