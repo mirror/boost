@@ -8,7 +8,7 @@
 #endif
 
 //
-//  bind_dm_test.cpp - data members, advanced uses
+//  bind_dm2_test.cpp - data members, advanced uses
 //
 //  Copyright (c) 2005 Peter Dimov
 //
