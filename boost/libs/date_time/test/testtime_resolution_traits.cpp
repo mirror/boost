@@ -42,7 +42,7 @@ main()
         nano_res::to_tick_count(0,0,0,1) == 1);
   check("nano tick calculations",  
         nano_res::to_tick_count(0,0,1,1) == 1000000001);
-#if (defined(__GNUC__) && (__GNUC__ < 3))
+#if ((defined(__GNUC__) && (__GNUC__ < 3)) || defined(__IBMCPP__))
   check("nano tick calculations",  
         nano_res::to_tick_count(0,1,0,0) == 60000000000LL);
 #else
