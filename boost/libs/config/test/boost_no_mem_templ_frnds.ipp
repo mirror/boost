@@ -28,7 +28,7 @@ class foo
 private:
    template<typename Y> friend class foobar;
    template<typename Y> friend class foo;
-   template<typename T> friend bool must_be_friend_proc(const foo<T>& f);
+   template<typename Y> friend bool must_be_friend_proc(const foo<Y>& f);
    int i;
 public:
    foo(){ i = 0; }
@@ -55,7 +55,9 @@ int test()
 {
    foo<int> fi;
    foo<double> fd(fi);
+   (void) &fd;           // avoid "unused variable" warning
    foobar<long> fb(fi);
+   (void) &fb;           // avoid "unused variable" warning
    return 0;
 }
 
