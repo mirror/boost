@@ -22,6 +22,7 @@
 <a href="class_ptime.html#construct">Construction</a> -- 
 <a href="class_ptime.html#constructfromstring">Construct from String</a> -- 
 <a href="class_ptime.html#constructfromclock">Construct from Clock</a> -- 
+<a href="class_ptime.html#constructfromtimet">Construct from time_t</a> -- 
 <a href="class_ptime.html#accessors">Accessors</a> -- 
 <a href="class_ptime.html#conversiontostring">Conversion To String</a> -- 
 <a href="class_ptime.html#operators">Operators</a>
@@ -96,6 +97,17 @@ or
 <tr><td>static ptime second_clock::universal_time()</td>
         <td>Get the UTC time.</td>
 	<td>ptime t(second_clock::universal_day())</td></tr>
+</table>
+
+<p>
+<h2><a name="constructfromtimet">Construction From time_t</a></h2>
+
+<p>
+<table border=1 cellspacing=3 cellpadding=3>
+<tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
+<tr><td>ptime from_time_t(time_t t);</td>
+        <td>Converts a time_t into a ptime.</td>
+	<td>ptime t = from_time_t(tt);</td></tr>
 </table>
 
 <p>
@@ -184,7 +196,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sun Oct 13 10:52:41 MST 2002
+Last modified: Sat Aug  9 17:49:45 MST 2003
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
