@@ -2598,13 +2598,13 @@ namespace boost { namespace numeric { namespace ublas {
         value_array_type &value_data () {
             return value_data_;
         }
-        BOOST_UBLAS_INLINE
-        void complete_index1_data () {
-            while (filled1_ <= layout_type::size1 (size1_, size2_)) {
-                this->index1_data_ [filled1_] = k_based (filled2_);
-                ++ this->filled1_;
-            }
-        }
+        BOOST_UBLAS_INLINE
+        void complete_index1_data () {
+            while (filled1_ <= layout_type::size1 (size1_, size2_)) {
+                this->index1_data_ [filled1_] = k_based (filled2_);
+                ++ this->filled1_;
+            }
+        }
 
         // Resizing
     private:
