@@ -3,7 +3,7 @@
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
-// Copyright (c) 2000-02
+// Copyright (c) 2000-03
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -31,8 +31,8 @@
 
 #include "boost/mpl/aux_/config/use_preprocessed.hpp"
 
-#if !defined(BOOST_MPL_NO_PREPROCESSED_HEADERS) && \
-    !defined(BOOST_MPL_PREPROCESSING_MODE)
+#if !defined(BOOST_MPL_NO_PREPROCESSED_HEADERS) \
+ && !defined(BOOST_MPL_PREPROCESSING_MODE)
 
 #   define BOOST_MPL_PREPROCESSED_HEADER apply.hpp
 #   include "boost/mpl/aux_/include_preprocessed.hpp"
@@ -40,6 +40,7 @@
 #else
 
 #   include "boost/mpl/limits/arity.hpp"
+#   include "boost/mpl/aux_/lambda_support.hpp"
 #   include "boost/mpl/aux_/preprocessor/params.hpp"
 #   include "boost/mpl/aux_/preprocessor/default_params.hpp"
 #   include "boost/mpl/aux_/preprocessor/partial_spec_params.hpp"
@@ -167,18 +168,8 @@ struct apply
 template< typename F >
 struct apply0 : F
 {
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(1, apply0, (F))
 };
-
-#if defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
-template<>
-struct apply0< arg<-1> >
-{
-    template< typename F > struct apply
-        : F
-    {
-    };
-};
-#endif
 
 #if defined(BOOST_MPL_MSVC_ETI_BUG)
 //: workaround for the ETI bug
@@ -210,6 +201,11 @@ struct BOOST_PP_CAT(apply,i)
           AUX_APPLY_N_PARAMS(i, T)
         >
 {
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(
+          BOOST_PP_INC(i)
+        , BOOST_PP_CAT(apply,i)
+        , (F, AUX_APPLY_N_PARAMS(i,T))
+        )
 };
 
 #   elif defined(BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
@@ -236,6 +232,11 @@ struct BOOST_PP_CAT(apply,i)
         , AUX_APPLY_N_PARAMS(i, T)
         >::type
 {
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(
+          BOOST_PP_INC(i)
+        , BOOST_PP_CAT(apply,i)
+        , (F, AUX_APPLY_N_PARAMS(i,T))
+        )
 };
 
 #   else
@@ -249,6 +250,11 @@ struct BOOST_PP_CAT(apply,i)
           AUX_APPLY_N_PARAMS(i, T)
         >
 {
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(
+          BOOST_PP_INC(i)
+        , BOOST_PP_CAT(apply,i)
+        , (F, AUX_APPLY_N_PARAMS(i,T))
+        )
 };
 
 #   endif // workarounds
@@ -261,38 +267,6 @@ struct BOOST_PP_CAT(apply,i)<AUX_APPLY_N_SPEC_PARAMS(i, int)>
     typedef int type;
 };
 #endif
-
-#if defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
-#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
-template<>
-struct BOOST_PP_CAT(apply,i)< AUX_APPLY_N_SPEC_PARAMS(i, arg<-1>) >
-{
-    template<
-          typename F, AUX_APPLY_N_PARAMS(i, typename T)
-        >
-    struct apply
-        : BOOST_PP_CAT(aux::msvc_apply,i)<F>::template result_<
-              AUX_APPLY_N_PARAMS(i, T)
-            >
-    {
-    };
-};
-#else
-template<>
-struct BOOST_PP_CAT(apply,i)< AUX_APPLY_N_SPEC_PARAMS(i, arg<-1>) >
-{
-    template<
-          typename F, AUX_APPLY_N_PARAMS(i, typename T)
-        >
-    struct apply
-        : F::template apply<
-              AUX_APPLY_N_PARAMS(i, T)
-            >
-    {
-    };
-};
-#endif // BOOST_MSVC
-#endif // BOOST_MPL_NO_FULL_LAMBDA_SUPPORT
 
 #   endif // i > 0
 
