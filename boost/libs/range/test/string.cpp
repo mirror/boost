@@ -47,7 +47,7 @@ void check_char()
     typedef char                   char_array_t[10];
     const char*      char_s       = "a string";
     char             my_string[]  = "another string";
-    const int        my_string_length = 14;
+    const unsigned        my_string_length = 14;
 
     
     BOOST_STATIC_ASSERT(( is_same<  value_type_of<char_iterator_t>::type, 
