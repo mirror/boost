@@ -20,27 +20,9 @@ vectors.</p>
 <p><a href="expression.htm#vector_expression">Vector Expression</a>
 .</p>
 <h4>Associated types</h4>
-<table border="1" summary="associated types">
-<tbody>
-<tr>
-<td>Value type</td>
-<td><code>value_type</code></td>
-<td>The type of the vector.</td>
-</tr>
-<tr>
-<td>Distance type</td>
-<td><code>difference_type</code></td>
-<td>A signed integral type used to represent the distance between
-two of the vector's iterators.</td>
-</tr>
-<tr>
-<td>Size type</td>
-<td><code>size_type</code></td>
-<td>An unsigned integral type that can represent any nonnegative
-value of the vector's distance type.</td>
-</tr>
-</tbody>
-</table>
+<p>
+See <a href="expression.htm#vector_expression">Vector Expression</a>
+</p>
 <h4>Notation</h4>
 <table border="0" summary="notation">
 <tbody>
@@ -160,7 +142,8 @@ from, or is not defined in <a href=
 </tr>
 <tr>
 <td>Resize</td>
-<td><code>v.resize (n)</code></td>
+<td><code>v.resize (n)
+<br />v.resize (n, p)</code></td>
 <td>&nbsp;</td>
 <td>Modifies the vector so that it can hold <code>n</code>
 elements.<br />
@@ -184,11 +167,9 @@ size.</p>
 <h4>Invariants</h4>
 <h4>Models</h4>
 <ul>
-<li><code>vector&lt;T, A&gt;</code></li>
-<li><code>unit_vector&lt;T&gt;</code></li>
-<li><code>zero_vector&lt;T&gt;</code></li>
-<li><code>scalar_vector&lt;T, A&gt;</code></li>
-<li><code>sparse_vector&lt;T, A&gt;</code></li>
+<li><code>vector&lt;T&gt;</code> , <code>bounded_vector&lt;T, N&gt;</code></li>
+<li><code>unit_vector&lt;T&gt;</code> , <code>zero_vector&lt;T&gt;</code> , <code>scalar_vector&lt;T&gt;</code></li>
+<li><code>sparse_vector&lt;T&gt;</code> , <code>compressed_vector</code> , <code>coordinate_vector</code></li>
 </ul>
 <h2><a name="matrix" id="matrix"></a> Matrix</h2>
 <h4>Description</h4>
@@ -198,27 +179,9 @@ matrices.</p>
 <p><a href="expression.htm#matrix_expression">Matrix Expression</a>
 .</p>
 <h4>Associated types</h4>
-<table border="1" summary="associated types">
-<tbody>
-<tr>
-<td>Value type</td>
-<td><code>value_type</code></td>
-<td>The type of the matrix.</td>
-</tr>
-<tr>
-<td>Distance type</td>
-<td><code>difference_type</code></td>
-<td>A signed integral type used to represent the distance between
-two of the matrix's iterators.</td>
-</tr>
-<tr>
-<td>Size type</td>
-<td><code>size_type</code></td>
-<td>An unsigned integral type that can represent any nonnegative
-value of the matrix's distance type.</td>
-</tr>
-</tbody>
-</table>
+<p>
+See <a href="expression.htm#matrix_expression">Matrix Expression</a>
+</p>
 <h4>Notation</h4>
 <table border="0" summary="notation">
 <tbody>
@@ -284,7 +247,7 @@ following expressions must be valid.</p>
 <tr>
 <td>Resize</td>
 <td><code>m.resize (n1, n2)</code><br />
-<code>v.resize (n1, n2, p)</code></td>
+<code>m.resize (n1, n2, p)</code></td>
 <td><code>m</code> is mutable.</td>
 <td><code>void</code></td>
 </tr>
@@ -343,7 +306,10 @@ m (i, j)</code> is a copy of <code>value_type ()</code>.</td>
 </tr>
 <tr>
 <td>Resize</td>
-<td><code>m.resize (n1, n2)</code></td>
+<td><code>m.resize (n1, n2)
+<br />
+m.resize (n1, n2, p)
+</code></td>
 <td>&nbsp;</td>
 <td>Modifies the matrix so that it can hold <code>n1</code> rows
 and <code>n2</code> columns.<br />
@@ -368,14 +334,10 @@ size.</p>
 <h4>Invariants</h4>
 <h4>Models</h4>
 <ul>
-<li><code>matrix&lt;T, F, A&gt;</code></li>
-<li><code>identity_matrix&lt;T&gt;</code></li>
-<li><code>zero_matrix&lt;T&gt;</code></li>
-<li><code>scalar_matrix&lt;T&gt;</code></li>
-<li><code>triangular_matrix&lt;T, F1, F2, A&gt;</code></li>
-<li><code>symmetric_matrix&lt;T, F1, F2, A&gt;</code></li>
-<li><code>banded_matrix&lt;T, F, A&gt;</code></li>
-<li><code>sparse_matrix&lt;T, F, A&gt;</code></li>
+<li><code>matrix&lt;T&gt;</code> , <code>bounded_matrix&lt;T, M, N&gt;</code></li>
+<li><code>identity_matrix&lt;T&gt;</code> , <code>zero_matrix&lt;T&gt;</code> , <code>scalar_matrix&lt;T&gt;</code></li>
+<li><code>triangular_matrix&lt;T&gt;</code> , <code>symmetric_matrix&lt;T&gt;</code> , <code>banded_matrix&lt;T&gt;</code></li>
+<li><code>sparse_matrix&lt;T&gt;</code> , <code>compressed_matrix</code> , <code>coordinate_matrix</code></li>
 </ul>
 <hr />
 <p>Copyright (&copy;) 2000-2002 Joerg Walter, Mathias Koch<br />

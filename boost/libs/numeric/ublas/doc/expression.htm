@@ -105,7 +105,43 @@ Iterator</a> .</p>
 <tr>
 <td>Value type</td>
 <td><code>value_type</code></td>
-<td>The type of the vector expression.</td>
+<td>
+The element type of the vector expression.
+</td>
+</tr>
+<tr>
+<td>Reference type</td>
+<td><code>reference</code></td>
+<td>
+The return type when accessing an element of a vector expression.
+<br />
+Convertable to a<code>value_type</code>.
+</td>
+</tr>
+<tr>
+<td>Const reference type</td>
+<td><code>const_reference</code></td>
+<td>
+The return type when accessing an element of a constant vector expression.
+<br />
+Convertable to a<code>value_type</code>.
+</td>
+</tr>
+<tr>
+<td>Size type</td>
+<td><code>size_type</code></td>
+<td>
+The index type of the vector expression. Am unsigned integral type used to represent size and index values.
+<br />
+Can represent any nonnegative value of <code>difference_type</code>.
+</td>
+</tr>
+<tr>
+<td>Distance type</td>
+<td><code>difference_type</code></td>
+<td>
+A signed integral type used to represent the distance between two of the vector expression&#039;s iterators.
+</td>
 </tr>
 <tr>
 <td>Const iterator type</td>
@@ -118,18 +154,6 @@ expression's elements.</td>
 <td><code>iterator</code></td>
 <td>A type of iterator that may be used to modify a vector
 expression's elements.</td>
-</tr>
-<tr>
-<td>Distance type</td>
-<td><code>difference_type</code></td>
-<td>A signed integral type used to represent the distance between
-two of the vector expression's iterators.</td>
-</tr>
-<tr>
-<td>Size type</td>
-<td><code>size_type</code></td>
-<td>An unsigned integral type that can represent any nonnegative
-value of the vector expression's distance type.</td>
 </tr>
 <tr>
 <td>Const reverse iterator type</td>
@@ -471,6 +495,7 @@ to <code>v.rend ()</code>.</td>
 <li><code>matrix_vector_binary1&lt;E1, E2, F&gt;</code></li>
 <li><code>matrix_vector_binary2&lt;E1, E2, F&gt;</code></li>
 </ul>
+
 <h2><a name="matrix_expression" id="matrix_expression"></a> Matrix
 Expression</h2>
 <h4>Description</h4>
@@ -488,7 +513,43 @@ Access Column/Row Iterator</a> .</p>
 <tr>
 <td>Value type</td>
 <td><code>value_type</code></td>
-<td>The type of the matrix expression.</td>
+<td>
+The element type of the matrix expression.
+</td>
+</tr>
+<tr>
+<td>Reference type</td>
+<td><code>reference</code></td>
+<td>
+The return type when accessing an element of a matrix expression.
+<br />
+Convertable to a<code>value_type</code>.
+</td>
+</tr>
+<tr>
+<td>Const reference type</td>
+<td><code>const_reference</code></td>
+<td>
+The return type when accessing an element of a constant matrix expression.
+<br />
+Convertable to a<code>value_type</code>.
+</td>
+</tr>
+<tr>
+<td>Size type</td>
+<td><code>size_type</code></td>
+<td>
+The index type of the matrix expression. Am unsigned integral type used to represent size and index values.
+<br />
+Can represent any nonnegative value of <code>difference_type</code>.
+</td>
+</tr>
+<tr>
+<td>Distance type</td>
+<td><code>difference_type</code></td>
+<td>
+A signed integral type used to represent the distance between two of the matrix expression&#039;s iterators.
+</td>
 </tr>
 <tr>
 <td rowspan="2">Const iterator types</td>
@@ -511,18 +572,6 @@ expression's elements.</td>
 <td><code>iterator2</code></td>
 <td>A type of row iterator that may be used to modify a matrix
 expression's elements.</td>
-</tr>
-<tr>
-<td>Distance type</td>
-<td><code>difference_type</code></td>
-<td>A signed integral type used to represent the distance between
-two of the matrix expression's iterators.</td>
-</tr>
-<tr>
-<td>Size type</td>
-<td><code>size_type</code></td>
-<td>An unsigned integral type that can represent any nonnegative
-value of the matrix expression's distance type.</td>
 </tr>
 <tr>
 <td rowspan="2">Const reverse iterator types</td>

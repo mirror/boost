@@ -14,7 +14,7 @@
 Sparse Storage</h1>
 <h2><a name="map_std" id="map_std"></a> Default Standard Map</h2>
 <h4>Description</h4>
-<p>The templated class <code>map_std&lt;I, T&gt;</code> provides a
+<p>The templated class <code>map_std&lt;I, T, ALLOC&gt;</code> provides a
 wrapper for the standard library associative container
 <code>std::map</code>. The wrapper has one simple purpose. It
 allows the definition of a default template parameter (for the
@@ -52,6 +52,11 @@ int main () {
 <td>The type of object stored in the array.</td>
 <td></td>
 </tr>
+<tr>
+<td><code>ALLOC</code></td>
+<td>An STL Allocator</td>
+<td>std::allocator</td>
+</tr>
 </tbody>
 </table>
 <h4>Model of</h4>
@@ -63,9 +68,11 @@ Container.</p>
 <p>std::map</p>
 <h2><a name="map_array" id="map_array"></a> Map Array</h2>
 <h4>Description</h4>
-<p>The templated class <code>map_array&lt;I, T&gt;</code>
-implements a simple std::map-like associative container as a sorted
-array.</p>
+<p>The templated class <code>map_array&lt;I, T, ALLOC&gt;</code> implements a <code>std::map</code> like associative container as a sorted array. It therefore some of the Associative Container interface without having the same semantics as an std::map.
+<p>At any time the <code>map_array</code> has a capacity up to which new element can be inserted.
+If <code>insert</code> would cause the size of the <code>map_array</code> to exceeds its capactity then it is <strong>reallocated</strong>. Iterators and reference are invalidated.
+The capacity can be directly control using the <code>reserve</code> member function.
+</p>
 <h4>Example</h4>
 <pre>
 #include &lt;boost/numeric/ublas/storage_sparse.hpp&gt;
@@ -99,6 +106,11 @@ int main () {
 <td>The type of object stored in the array.</td>
 <td></td>
 </tr>
+<tr>
+<td><code>ALLOC</code></td>
+<td>An STL Allocator</td>
+<td>std::allocator</td>
+</tr>
 </tbody>
 </table>
 <h4>Model of</h4>
@@ -116,17 +128,12 @@ Container.</p>
 <th>Description</th>
 </tr>
 <tr>
-<td><code>map_array ()</code></td>
+<td><code>map_array (ALLOC &amp;a = ALLOC())</code></td>
 <td>Allocates a <code>map_array</code> that holds at most zero
 elements.</td>
 </tr>
 <tr>
-<td><code>map_array (size_type size)</code></td>
-<td>Allocates a <code>map_array</code> that holds at most
-<code>size</code> elements.</td>
-</tr>
-<tr>
-<td><code>map_array (const map_array &amp;a)</code></td>
+<td><code>map_array (const map_array &amp;c)</code></td>
 <td>The copy constructor.</td>
 </tr>
 <tr>
@@ -134,14 +141,17 @@ elements.</td>
 <td>Deallocates the <code>map_array</code> itself.</td>
 </tr>
 <tr>
-<td><code>void resize (size_type size)</code></td>
-<td>Reallocates a <code>map_array</code> to hold at most
-<code>size</code> elements. The content of the
-<code>map_array</code> is preserved.</td>
+<td><code>void reserve (size_type capacity)</code></td>
+<td>
+Changes the<code>map_array</code> capacity. It can hold at most<code>capacity</code> elements without reallocation. The capacity can be reduced such that <code>capacity >= size()</code>. The content of the<code>map_array</code> is preserved.</td>
 </tr>
 <tr>
 <td><code>size_type size () const</code></td>
 <td>Returns the size of the <code>map_array</code>.</td>
+</tr>
+<tr>
+<td><code>size_type size () const</code></td>
+<td>Returns the capacity of the <code>map_array</code>.</td>
 </tr>
 <tr>
 <td><code>data_reference operator [] (index_type i)</code></td>
