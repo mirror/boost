@@ -15,12 +15,29 @@
 #
 # define BOOST_PP_ARRAY(size, data) (size, data)
 #
-# define BOOST_PP_ARRAY_SIZE(arr) BOOST_PP_ARRAY_SIZE_I arr
+# if !defined(__MWERKS__) || __MWERKS__ > 0x3000
+#   define BOOST_PP_ARRAY_SIZE(arr) BOOST_PP_ARRAY_SIZE_I arr
+# else
+#   define BOOST_PP_ARRAY_SIZE(arr) BOOST_PP_ARRAY_SIZE_D(arr)
+#   define BOOST_PP_ARRAY_SIZE_D(arr) BOOST_PP_ARRAY_SIZE_I ## arr
+# endif
+#
 # define BOOST_PP_ARRAY_SIZE_I(size, data) size
 #
-# define BOOST_PP_ARRAY_DATA(arr) BOOST_PP_ARRAY_DATA_I arr
+# if !defined(__MWERKS__) || __MWERKS__ > 0x3000
+#   define BOOST_PP_ARRAY_DATA(arr) BOOST_PP_ARRAY_DATA_I arr
+# else
+#   define BOOST_PP_ARRAY_DATA(arr) BOOST_PP_ARRAY_DATA_D(arr)
+#   define BOOST_PP_ARRAY_DATA_D(arr) BOOST_PP_ARRAY_DATA_I ## arr
+# endif
+#
 # define BOOST_PP_ARRAY_DATA_I(size, data) data
 #
-# define BOOST_PP_ARRAY_ELEM(i, arr) BOOST_PP_TUPLE_ELEM(BOOST_PP_ARRAY_SIZE_I arr, i, BOOST_PP_ARRAY_DATA_I arr)
+# if !defined(__MWERKS__) || __MWERKS__ > 0x3000
+#   define BOOST_PP_ARRAY_ELEM(i, arr) BOOST_PP_TUPLE_ELEM(BOOST_PP_ARRAY_SIZE_I arr, i, BOOST_PP_ARRAY_DATA_I arr)
+# else
+#   define BOOST_PP_ARRAY_ELEM(i, arr) BOOST_PP_ARRAY_ELEM_D(i, arr)
+#   define BOOST_PP_ARRAY_ELEM_D(i, arr) BOOST_PP_TUPLE_ELEM(BOOST_PP_ARRAY_SIZE(arr), i, BOOST_PP_ARRAY_DATA(arr))
+# endif
 #
 # endif
