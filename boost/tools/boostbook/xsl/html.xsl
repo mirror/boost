@@ -134,11 +134,13 @@
             <xsl:if test="count($revision-nodes)">
               <xsl:variable name="revision-node"
                 select="$revision-nodes[last()]"/>
-              <xsl:text>Last revised: </xsl:text>
-              <xsl:call-template name="format.cvs.revision">
-                <xsl:with-param name="text"
+              <p>
+                <xsl:text>Last revised: </xsl:text>
+                <xsl:call-template name="format.cvs.revision">
+                  <xsl:with-param name="text"
                   select="string($revision-node/attribute::rev:last-revision)"/>
-              </xsl:call-template>
+                </xsl:call-template>
+	      </p>
             </xsl:if>
           </small>
         </td>
