@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  04 Mar 01 Workaround for Borland (Dave Abrahams)
 //  19 Feb 01 Take adavantage of improved iterator_traits to do more tests
 //            on MSVC. Hack around an MSVC-with-STLport internal compiler
 //            error. (David Abrahams)
@@ -384,8 +385,13 @@ main()
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         , dummyT
 #endif
-        >::type filter_iter;
-    
+        > filter_iter_gen;
+
+#ifndef __BORLANDC__
+    typedef filter_iter_gen::type filter_iter;
+#else
+# define filter_iter filter_iter_gen::type // Borland has a problem with the above
+#endif
     filter_iter i(array, filter_iter::policies_type(one_or_four(), array + N));
     boost::forward_iterator_test(i, dummyT(1), dummyT(4));
 
