@@ -10,10 +10,11 @@
 #ifndef BOOST_TT_IS_POD_HPP_INCLUDED
 #define BOOST_TT_IS_POD_HPP_INCLUDED
 
+#include "boost/type_traits/config.hpp"
 #include "boost/type_traits/is_void.hpp"
 #include "boost/type_traits/is_scalar.hpp"
 #include "boost/type_traits/detail/ice_or.hpp"
-#include "boost/type_traits/config.hpp"
+#include "boost/type_traits/intrinsics.hpp"
 
 #include <cstddef>
 

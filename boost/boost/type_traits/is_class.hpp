@@ -11,18 +11,18 @@
 #define BOOST_TT_IS_CLASS_HPP_INCLUDED
 
 #include "boost/type_traits/config.hpp"
+#   include "boost/type_traits/is_union.hpp"
+#   include "boost/type_traits/detail/ice_and.hpp"
+#   include "boost/type_traits/detail/ice_not.hpp"
 
 #ifdef BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION
 #   include "boost/type_traits/detail/yes_no_type.hpp"
 #else
-#   include "boost/type_traits/is_union.hpp"
 #   include "boost/type_traits/is_scalar.hpp"
 #   include "boost/type_traits/is_array.hpp"
 #   include "boost/type_traits/is_reference.hpp"
 #   include "boost/type_traits/is_void.hpp"
 #   include "boost/type_traits/is_function.hpp"
-#   include "boost/type_traits/detail/ice_and.hpp"
-#   include "boost/type_traits/detail/ice_not.hpp"
 #endif
 
 // should be the last #include
@@ -52,7 +52,10 @@ struct is_class_impl
     template <class U> static ::boost::type_traits::no_type is_class_tester(...);
 
     BOOST_STATIC_CONSTANT(bool, value = 
-        sizeof(is_class_tester<T>(0)) == sizeof(::boost::type_traits::yes_type)
+        (::boost::type_traits::ice_and<
+            sizeof(is_class_tester<T>(0)) == sizeof(::boost::type_traits::yes_type),
+            ::boost::type_traits::ice_not< ::boost::is_union<T>::value >::value
+        >::value)
         );
 };
 

@@ -13,6 +13,7 @@
 
 #include "boost/type_traits/remove_cv.hpp"
 #include "boost/type_traits/config.hpp"
+#include "boost/type_traits/intrinsics.hpp"
 
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
