@@ -73,7 +73,8 @@ void test_modifiers()
   i2.insert(ve.begin(),ve.end());
   BOOST_CHECK(i3.size()==3);
 
-  i3.erase(i3.begin(),i3.end());
+  BOOST_CHECK(*(i3.erase(i3.begin()))==employee(1,"Rachel",27));
+  BOOST_CHECK(i3.erase(i3.begin(),i3.end())==i3.end());
   BOOST_CHECK(es.size()==0);
 
   i3.insert(i3.end(),ve.begin(),ve.end());
