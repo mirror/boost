@@ -41,6 +41,10 @@ struct printer
     std::ostream* f_stream;
 };
 
+#ifdef __ICL
+# pragma warning(disable:985)
+#endif
+
 int main()
 {
     typedef mpl::list<char,short,int,long,float,double> types;
