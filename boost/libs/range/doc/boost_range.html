@@ -61,7 +61,7 @@
     </p>
 
     <p>
-    Please also see <a href="range.htm">Range concepts</a> for more details.
+    Please also see <a href="range.html">Range concepts</a> for more details.
     </p>
 
     <a name="Synopsis" ></a> <h3  >Synopsis</h3>
@@ -179,8 +179,29 @@ class=identifier>range_reverse_result_iterator</span></a><span class=special>;
     </span><a href="#rend"><span class=identifier>rend</span></a><span class=special>( </span><span class=keyword>const </span><span 
 class=identifier>T</span><span class=special>&amp; </span><span class=identifier>c </span><span class=special>);
     </span>
+    <span class=comment>//
+    // Special const Range functions
+    // 
+    </span>
+    <span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;</span>
+    <span class=keyword>typename </span><span class=identifier>range_const_iterator</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type </span>
+    <a href="#const_begin"><span class=identifier>const_begin</span></a><span class=special>(</span><span class=keyword> const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
+    </span>
+    <span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;</span>
+    <span class=keyword>typename </span><span class=identifier>range_const_iterator</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type </span>
+    <a href="#const_end"><span class=identifier>const_end</span></a><span class=special>(</span><span class=keyword> const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
+    </span>
+    <span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;</span>
+    <span class=keyword>typename </span><span class=identifier>range_const_reverse_iterator</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type </span>
+    <a href="#const_rbegin"><span class=identifier>const_rbegin</span></a><span class=special>(</span><span class=keyword> const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
+    </span>
+    <span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;</span>
+    <span class=keyword>typename </span><span class=identifier>range_const_reverse_iterator</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type </span>
+    <a href="#const_rend"><span class=identifier>const_rend</span></a><span class=special>( </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);</span>
+
 <span class=special>} </span><span class=comment>// namespace 'boost' 
-</span></pre>
+</span>
+</pre>
     </p>
 
     <a name="Semantics" ></a> <h3  >Semantics</h3>
@@ -390,8 +411,42 @@ class=identifier>T</span><span class=special>&amp; </span><span class=identifier
             <td  ><code  >range_reverse_result_iterator&lt;X&gt;::type( begin(x) )</code>
             <td  >same as <code>begin(x)</code></td>
         </tr>
+        <tr  >
+            <a name="const_begin" ></a>
+            <td  ><code  >const_begin(x)</code></td>
+            <td  ><code  >range_const_iterator&lt;X&gt;::type</code></td>
+            <td  ><code  >range_const_iterator&lt;X&gt;::type( begin(x) )</code> 
+<br> <td  >same as <code>begin(x)</code> </td>
+        </tr>
+        <tr  >
+            <a name="const_end" ></a>
+            <td  ><code  >const_end(x)</code></td>
+            <td  ><code  >range_const_iterator&lt;X&gt;::type</code></td>
+            <td  ><code  >range_const_iterator&lt;X&gt;::type( end(x) )</code>
+            <td  >same as <code>end(x)</code></td>
+        </tr>
+        <tr  >
+            <a name="const_rbegin" ></a>
+            <td  ><code  >const_rbegin(x)</code></td>
+            <td  ><code  >range_const_reverse_iterator&lt;X&gt;::type</code></td>
+            <td  ><code  >range_const_reverse_iterator&lt;X&gt;::type( rbegin(x) )</code>
+             <br> <td  >same as <code>rbegin(x)</code> </td>
+        </tr>
+        <tr  >
+            <a name="const_rend" ></a>
+            <td  ><code  >const_rend(x)</code></td>
+            <td  ><code  >range_const_reverse_iterator&lt;X&gt;::type</code></td>
+            <td  ><code  >range_const_reverse_iterator&lt;X&gt;::type( rend(x) )</code>
+            <td  >same as <code>rend(x)</code></td>
+        </tr>
 
     </table>
+    </p>
+    
+    <p>
+    The special <code>const</code> functions are not part of any Range concept, 
+    but are very useful when you want to document clearly that your code is 
+    read-only.
     </p>
 
     <hr>
