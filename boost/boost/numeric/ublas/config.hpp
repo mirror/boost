@@ -69,6 +69,7 @@
 #define BOOST_UBLAS_NO_LONG_DOUBLE
 
 #ifdef NDEBUG
+//TODO Make these MSVC version specific if appropriate
 // MSVC has special inlining options
 #pragma inline_recursion (on)
 #pragma inline_depth (255)
@@ -104,11 +105,11 @@
 // One of these workarounds is needed for MSVC 7.1 AFAIK
 // (thanks to John Maddock and Martin Lauer).
 // The second workaround looks like BOOST_UBLAS_QUALIFIED_TYPENAME.
+#if !(defined(BOOST_UBLAS_NO_NESTED_CLASS_RELATION) || defined(BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION))
 #define BOOST_UBLAS_NO_NESTED_CLASS_RELATION
-// #define BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
-
 #endif
 
+#endif
 #endif
 
 
@@ -120,12 +121,12 @@
 #define BOOST_UBLAS_USING using
 #define BOOST_UBLAS_USE_STREAM
 
-// GCC 2.95.3 allows to use iterator_base_traits.
+// GCC allows to use iterator_base_traits.
 #define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
-// GCC 2.95.3 needs BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS (this seems to be arguable).
-#define BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS
 
 #if __GNUC__ <= 2 && __GNUC_MINOR__ <= 95
+// GCC 2.95.3 needs BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS (this seems to be arguable).
+#define BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS
 #define BOOST_UBLAS_NO_MEMBER_FRIENDS
 #define BOOST_UBLAS_NO_PROXY_SHORTCUTS
 #endif
@@ -152,11 +153,15 @@
 #define BOOST_UBLAS_USING using
 #define BOOST_UBLAS_USE_STREAM
 
+//TODO When is this true?
 // ICC sometimes needs qualified type names.
-#define BOOST_UBLAS_QUALIFIED_TYPENAME
+//#define BOOST_UBLAS_QUALIFIED_TYPENAME
 
-#define BOOST_UBLAS_USE_SIMD
+// ICC allows to use iterator_base_traits.
+#define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
 
+// Needed for ICC on Itanium?
+#ifdef BOOST_UBLAS_ICC_DEFINE_SWAP
 namespace boost { namespace numeric { namespace ublas {
 
     template<class C, class IC>
@@ -171,7 +176,6 @@ namespace boost { namespace numeric { namespace ublas {
 
 namespace std {
 
-    // Needed for Intel on Itanium?
     template<class C, class IC>
     inline
     void iter_swap (boost::numeric::ublas::indexed_iterator<C, IC> it1,
@@ -191,6 +195,7 @@ namespace std {
     }
 
 }
+#endif
 
 #endif
 
