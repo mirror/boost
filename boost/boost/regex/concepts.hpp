@@ -24,7 +24,9 @@
 #include <boost/type_traits/is_enum.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/static_assert.hpp>
+#ifndef BOOST_TEST_TR1_REGEX
 #include <boost/regex.hpp>
+#endif
 #include <bitset>
 #include <vector>
 #include <iostream>
@@ -122,7 +124,11 @@ private:
 //
 // alter this to std::tr1, to test a std implementation:
 //
+#ifndef BOOST_TEST_TR1_REGEX
 namespace global_regex_namespace = ::boost;
+#else
+namespace global_regex_namespace = ::std::tr1;
+#endif
 
 template <class Bitmask>
 struct BitmaskConcept
@@ -265,11 +271,9 @@ struct BaseRegexConcept
          | global_regex_namespace::regex_constants::match_any
          | global_regex_namespace::regex_constants::match_not_null
          | global_regex_namespace::regex_constants::match_continuous
-         | global_regex_namespace::regex_constants::match_partial
          | global_regex_namespace::regex_constants::match_prev_avail
          | global_regex_namespace::regex_constants::format_default
          | global_regex_namespace::regex_constants::format_sed
-         | global_regex_namespace::regex_constants::format_perl
          | global_regex_namespace::regex_constants::format_no_copy
          | global_regex_namespace::regex_constants::format_first_only;
       ignore_unused_variable_warning(mopts);
@@ -756,6 +760,23 @@ struct BoostRegexConcept
 
    void constraints() 
    {
+      global_regex_namespace::regex_constants::match_flag_type mopts
+         = global_regex_namespace::regex_constants::match_default
+         | global_regex_namespace::regex_constants::match_not_bol
+         | global_regex_namespace::regex_constants::match_not_eol
+         | global_regex_namespace::regex_constants::match_not_bow
+         | global_regex_namespace::regex_constants::match_not_eow
+         | global_regex_namespace::regex_constants::match_any
+         | global_regex_namespace::regex_constants::match_not_null
+         | global_regex_namespace::regex_constants::match_continuous
+         | global_regex_namespace::regex_constants::match_partial
+         | global_regex_namespace::regex_constants::match_prev_avail
+         | global_regex_namespace::regex_constants::format_default
+         | global_regex_namespace::regex_constants::format_sed
+         | global_regex_namespace::regex_constants::format_perl
+         | global_regex_namespace::regex_constants::format_no_copy
+         | global_regex_namespace::regex_constants::format_first_only;
+
       function_requires<RegexConcept<Regex> >();
       const global_regex_namespace::regex_error except(global_regex_namespace::regex_constants::error_collate);
       std::ptrdiff_t pt = except.position();
