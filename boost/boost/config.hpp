@@ -471,6 +471,9 @@
        // to disable it until suppport becomes more stable
        // (J Maddock 6th May 2001).
 #      define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+       // integral constant expressions with 64 bit numbers fail
+#      define BOOST_NO_INTEGRAL_INT64_T
 #    endif
 #    if __SUNPRO_CC <= 0x500
 #      define BOOST_NO_MEMBER_TEMPLATES
