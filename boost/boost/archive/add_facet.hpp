@@ -23,7 +23,7 @@
 // does STLport uses native STL for locales?
 #if (defined _STLPORT_VERSION) && !(defined _STLP_NO_OWN_IOSTREAMS)
 // and this native STL lib is old Dinkumware (has not defined _CPPLIB_VER)
-#  if defined(_YVALS) && ! defined(__IBMCPP__) && ! defined(_CPPLIB_VER)
+#  if defined(_YVALS) && defined(__IBMCPP__) && ! defined(_CPPLIB_VER)
 #    define BOOST_ARCHIVE_OLD_DINKUMWARE_BENEATH_STLPORT
 #  endif
 #endif
