@@ -40,8 +40,8 @@ struct is_object
 {
    BOOST_DECL_MC(bool, value,
       (::boost::type_traits::ice_and<
-         !::boost::is_reference<T>::value,
-         !::boost::is_void<T>::value
+         ::boost::type_traits::ice_not< ::boost::is_reference<T>::value>::value,
+         ::boost::type_traits::ice_not< ::boost::is_void<T>::value>::value
       >::value));
 };
 
@@ -72,11 +72,11 @@ struct is_class
 {
    BOOST_DECL_MC(bool, value,
       (::boost::type_traits::ice_and<
-         !::boost::is_union<T>::value,
-         !::boost::is_scalar<T>::value,
-         !::boost::is_array<T>::value,
-         !::boost::is_reference<T>::value,
-         !::boost::is_void<T>::value
+         ::boost::type_traits::ice_not< ::boost::is_union<T>::value >::value,
+         ::boost::type_traits::ice_not< ::boost::is_scalar<T>::value >::value,
+         ::boost::type_traits::ice_not< ::boost::is_array<T>::value >::value,
+         ::boost::type_traits::ice_not< ::boost::is_reference<T>::value>::value,
+         ::boost::type_traits::ice_not< ::boost::is_void<T>::value >::value
       >::value));
 };
 
@@ -150,7 +150,7 @@ struct has_trivial_copy
             ::boost::is_POD<T>::value,
             BOOST_HAS_TRIVIAL_COPY(T)
          >::value,
-      !::boost::is_volatile<T>::value
+      ::boost::type_traits::ice_not< ::boost::is_volatile<T>::value >::value
       >::value));
 };
 
@@ -168,8 +168,8 @@ struct has_trivial_assign
             ::boost::is_POD<T>::value,
             BOOST_HAS_TRIVIAL_ASSIGN(T)
          >::value,
-      !::boost::is_const<T>::value,
-      !::boost::is_volatile<T>::value
+      ::boost::type_traits::ice_not< ::boost::is_const<T>::value >::value,
+      ::boost::type_traits::ice_not< ::boost::is_volatile<T>::value >::value
       >::value));
 };
 
