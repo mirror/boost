@@ -22,6 +22,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
+#include <iostream>
+
 bool boost_error(char const *, char const *, char const *, long)
 {
     return true;
