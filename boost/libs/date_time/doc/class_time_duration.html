@@ -49,6 +49,11 @@ As an example:
   time_duration td = hours(1) + seconds(10); <font class="comment">//01:00:01</font>
   td = hours(1) + nanosec(5); <font class="comment">//01:00:00.000000005</font>
 </pre></div>
+<p>
+Note that the existence of the higher resolution classes depends on 
+the installation of the library.  See 
+<a href="BuildInfo.html">Build-Compiler Information</a> for more 
+information.
 
 
 <p>
@@ -131,7 +136,7 @@ or
 <tr><td>time_duration <font class="func">invert_sign</font>() const</td>
         <td>Generate a new duration with the sign inverted/</td>
 	<td>time_duration td(-1,0,0); td.invert_sign() --> 01:00:00</td></tr>
-<tr><td>static gdtl::time_resolutions <font class="func">resolution</font>()</td>
+<tr><td>static boost::date_time::time_resolutions <font class="func">resolution</font>()</td>
         <td>Describes the resolution capability of the time_duration class.</td>
 	<td>time_duration::resolution() --> nano</td></tr>
 <tr><td>boost::int64_t <font class="func">ticks</font>()</td>
@@ -190,7 +195,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Thu Feb 13 09:03:26 MST 2003
+Last modified: Thu Feb 13 09:19:15 MST 2003
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
