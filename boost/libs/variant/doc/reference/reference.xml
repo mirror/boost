@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE library-reference PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+  "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<library-reference xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<!--
+  <header name="boost/variant.hpp">
+    <section>
+      <para>This header exists simply as a convenience, including the other
+        headers that are part of the library.</para>
+    </section>
+  </header>
+
+  <header name="boost/variant/variant_fwd.hpp">
+    <namespace name="boost">
+      <section>
+        <para>Provides a forward declaration of the
+          <classname>boost::variant</classname> class template.</para>
+      </section>
+    </namespace>
+  </header>
+-->
+
+  <xi:include href="variant.xml"/>
+  <xi:include href="apply_visitor.xml"/>
+  <xi:include href="get.xml"/>
+  <xi:include href="static_visitor.xml"/>
+  <xi:include href="visitor_ptr.xml"/>
+</library-reference>

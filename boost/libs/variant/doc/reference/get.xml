@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE header PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+  "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<header name="boost/variant/get.hpp">
+  <namespace name="boost">
+
+    <class name="bad_get">
+      <inherit access="public">
+        <classname>std::exception</classname>
+      </inherit>
+      <purpose>The exception thrown in the event of a failed
+      <code><functionname>get</functionname></code> of a
+      <code><classname>variant</classname></code> value.</purpose>
+
+      <method name="what" specifiers="virtual" cv="const">
+        <type>const char *</type>
+      </method>
+    </class>
+
+    <overloaded-function name="get">
+      <signature>
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <type>T &amp;</type>
+
+        <parameter name="operand">
+          <paramtype><classname>variant</classname>&lt;...&gt; &amp;</paramtype>
+        </parameter>
+      </signature>
+
+      <signature>
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <type>T &amp;</type>
+
+        <parameter name="operand">
+          <paramtype>const <classname>variant</classname>&lt;...&gt; &amp;</paramtype>
+        </parameter>
+      </signature>
+
+      <signature>
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <type>T *</type>
+
+        <parameter name="operand">
+          <paramtype><classname>variant</classname>&lt;...&gt; *</paramtype>
+        </parameter>
+      </signature>
+
+      <signature>
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <type>T *</type>
+
+        <parameter name="operand">
+          <paramtype>const <classname>variant</classname>&lt;...&gt; *</paramtype>
+        </parameter>
+      </signature>
+
+      <purpose><simpara>Retrieves a value of a specified type from a given
+        <code><classname>variant</classname></code>.</simpara>
+      </purpose>
+
+      <returns><simpara>If passed a pointer, it returns a similarly qualified
+        pointer to the value content if successful, otherwise null is returned.
+        If passed a reference, it returns a similarly qualified reference to the
+        value content if successful.</simpara>
+      </returns>
+
+      <throws><simpara>Overloads taking a
+        <code><classname>variant</classname></code> pointer do not
+        throw; the overloads taking a
+        <code><classname>variant</classname></code> reference throws
+        <code><classname>bad_get</classname></code> if
+        unsuccessful.</simpara>
+      </throws>
+
+      <rationale><simpara>While visitation via
+        <code><functionname>apply_visitor</functionname></code> is generally
+        prefered due to its greater safety, explicit retrieval via
+        <code>get</code> may be convenient in some circumstances.</simpara>
+      </rationale>
+    </overloaded-function>
+
+  </namespace>
+</header>

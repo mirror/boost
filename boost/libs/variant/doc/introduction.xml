@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+  "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+
+<section id="variant.intro">
+  <title>Introduction</title>
+
+<section>
+  <title>Abstract</title>
+
+<para>The variant class template offers a simple, type-safe solution 
+for manipulating an object from an heterogeneous set of types in a 
+uniform manner. Whereas standard containers such as std::vector may 
+be thought of as "<emphasis role="bold">multi-value, single 
+type</emphasis>," variant is "<emphasis role="bold">multi-type, 
+single value</emphasis>." This reduces code duplication and enhances
+maintainability.</para>
+
+<para>Notable features of <code><classname>boost::variant</classname>
+</code> include:</para>
+
+<itemizedlist>
+  <listitem>Full value semantics, including adherence to standard
+    overload resolution rules.</listitem>
+  <listitem>Minimum strong exception-safety guarantee for all
+    operations.</listitem>
+  <listitem>Compile-time type-safe value visitation.</listitem>
+  <listitem>Run-time checked explicit value retrieval.</listitem>
+  <listitem>Support for incomplete types and recursive variant
+    types.</listitem>
+  <listitem>Efficient, stack-based implementation.</listitem>
+</itemizedlist>
+
+</section>
+
+<section>
+  <title>Motivation</title>
+
+<para>Many times, during the development of a C++ program, the
+programmer finds himself in need of manipulating several distinct
+types in a uniform manner. Indeed, C++ features direct language
+support for such types through its <code>union</code> 
+keyword:</para>
+
+<programlisting>union { int i; double d; } u;
+u.d = 3.14;
+u.i = 3; // overwrites u.d (OK: u.d is a POD type)</programlisting>
+
+<para>C++'s <code>union</code> construct, however, is nearly
+useless in an object-oriented environment. The construct entered
+the language primarily as a means for preserving compatibility with
+C, which supports only POD (Plain Old Data) types, and so does not
+accept types exhibiting non-trivial construction or
+destruction:</para>
+
+<programlisting>union {
+  int i;
+  std::string s; // illegal: std::string is not a POD type!
+};</programlisting>
+
+<para>Clearly another approach is required. Typical solutions
+feature the dynamic-allocation of objects, which are subsequently
+manipulated through a common base type (often a virtual base class
+[Hen01] or, more dangerously, a <code>void*</code>). Objects of
+concrete type may be then retrieved by way of a polymorphic downcast
+construct (e.g., <code>dynamic_cast</code>).</para>
+
+<para>However, solutions of this sort are highly error-prone, due
+to the following:</para>
+
+<itemizedlist>
+  <lititem><emphasis>Downcast errors cannot be detected at
+    compile-time.</emphasis> Thus, incorrect usage of downcast
+    constructs will lead to bugs detectable only at run-time.</listitem>
+  <listitem><emphasis>Addition of new concrete types may be 
+    ignored.</emphasis> If a new concrete type is added to the
+    hierarchy, existing downcast code will continue to work as-is,
+    wholly ignoring the new type. Consequently, the programmer must
+    manually locate and modify code at numerous locations, which often
+    results in run-time errors that are difficult to find.</listitem>
+</itemizedlist>
+
+<para>Furthermore, even when properly implemented, these solutions tend
+to incur a relatively significant abstraction penalty due to the use of
+the heap, virtual function calls, and polymorphic downcasts.</para>
+
+<para>Thus, the <code><classname alt="boost::variant">variant</classname>
+</code> class template (inspired by Andrei Alexandrescu's class of the
+same name [Ale02]) is an efficient, recursive-capable, bounded
+discriminated union value type capable of containing both POD and non-POD
+value types. It supports direct initialization from any type convertible
+to one of its bounded types or from a source <code>variant</code> whose
+bounded types are each convertible to one of the destination
+<code>variant</code>'s bounded types. As well, <code>variant</code>
+supports both compile-time checked type-safe visitation and explicit,
+run-time checked type-safe value retrieval.</para>
+
+</section>
+
+</section>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+  "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+
+<section id="variant.credits">
+  <title>Credits</title>
+
+<section>
+  <title>Acknowledgments</title>
+
+<para>Eric Friedman and Itay Maman designed and implemented the
+initial submission.</para>
+
+<para>Andrei Alexandrescu's work in [Ale01A] and [Ale02] inspired
+the library's design.</para>
+
+<para>Anthony Williams suggested the method [Wil02] by which
+<code>variant</code> generally guarantees strong
+exception-safety.</para>
+
+<para>Douglas Gregor, Dave Abrahams, Fernando Cacciola, Brad
+King, Giovanni Bajo, and others provided helpful feedback and
+suggestions to refine the semantics, interface, and implementation
+of the library.</para>
+
+</section>
+
+<section>
+  <title>Bibliography</title>
+
+<para>TODO</para>
+
+</section>
+
+</section>
