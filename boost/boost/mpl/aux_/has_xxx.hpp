@@ -3,8 +3,8 @@
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
-// Copyright (c) 2002
-// Aleksey Gurtovoy
+// Copyright (c) 2002-2003
+// Aleksey Gurtovoy and David Abrahams
 //
 // Permission to use, copy, modify, distribute and sell this software
 // and its documentation for any purpose is hereby granted without fee, 
@@ -70,13 +70,17 @@ namespace boost { namespace mpl { namespace aux {
 
 struct has_xxx_tag;
 
-template< typename T >
+template <typename T>
 struct msvc_is_incomplete
 {
-    struct incomplete_;
-    BOOST_STATIC_CONSTANT(bool, value = 
-          sizeof(void (T::*)()) == sizeof(void (incomplete_::*)())
-        );
+    // MSVC is capable of some kinds of SFINAE.  If U is an incomplete
+    // type, it won't pick the second overload
+    static char tester(...);
+    template <class U>
+    static char(& tester(type_wrapper<U>) )[sizeof(U) + 1];
+    
+    BOOST_STATIC_CONSTANT(
+        bool, value = sizeof(tester(type_wrapper<T>())) == 1);
 };
 
 template<>
