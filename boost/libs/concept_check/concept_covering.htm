@@ -51,8 +51,9 @@ concept, which must be verified by careful (manual) inspection.
 <pre>
   template &lt;class T&gt;
   struct input_proxy {
-    operator T() { return t; }
-    static T t;
+    operator const T&() {
+      return static_object&lt;T&gt;::get(); // Get a reference without constructing
+    }
   };
   template &lt;class T&gt;
   class trivial_iterator_archetype
@@ -107,8 +108,7 @@ layered archetype can be used.
 <pre>
   {
     typedef less_than_comparable_archetype&lt; 
-      copy_constructible_archetype&lt;
-        assignable_archetype&lt;&gt; &gt; &gt; ValueType;
+        sgi_assignable_archetype&lt;&gt; &gt; ValueType;
     random_access_iterator_archetype&lt;ValueType&gt; ri;
     std::stable_sort(ri, ri);
   }
