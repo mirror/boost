@@ -58,16 +58,16 @@ namespace date_time {
     //! Used to determine if implemented type is int_adapter or int
     static bool is_adapted() { return true;}
   };
-
+  
   template<typename frac_sec_type, 
            time_resolutions res,
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
-	   boost::int64_t resolution_adjust,
+             boost::int64_t resolution_adjust,
 #else
-           typename frac_sec_type::int_type resolution_adjust,
+             typename frac_sec_type::int_type resolution_adjust,
 #endif
-           unsigned short frac_digits,
-           typename v_type = boost::int32_t >
+             unsigned short frac_digits,
+             typename v_type = boost::int32_t >
   class time_resolution_traits {
   public:
     typedef typename frac_sec_type::int_type fractional_seconds_type;
@@ -77,7 +77,7 @@ namespace date_time {
     typedef v_type  hour_type;
     typedef v_type  min_type;
     typedef v_type  sec_type;
-
+    
     // bring in function from frac_sec_type traits structs
     static typename frac_sec_type::int_type as_number(typename frac_sec_type::impl_type i)
     {
@@ -87,11 +87,11 @@ namespace date_time {
     {
       return frac_sec_type::is_adapted();
     }
-
+    
     //Would like this to be frac_sec_type, but some compilers complain
     BOOST_STATIC_CONSTANT(int, ticks_per_second = resolution_adjust);
     //    static const boost::int32_t ticks_per_second = resolution_adjust;
-
+    
     static time_resolutions resolution()
     {
       return res;
@@ -112,13 +112,13 @@ namespace date_time {
     {
       if(hours < 0 || minutes < 0 || seconds < 0 || fs < 0)
       {
-	hours = absolute_value(hours);
-	minutes = absolute_value(minutes);
-	seconds = absolute_value(seconds);
-	fs = absolute_value(fs);
+        hours = absolute_value(hours);
+        minutes = absolute_value(minutes);
+        seconds = absolute_value(seconds);
+        fs = absolute_value(fs);
         return (((((fractional_seconds_type(hours)*3600) 
-                 + (fractional_seconds_type(minutes)*60) 
-                 + seconds)*res_adjust()) + fs) * -1);
+                   + (fractional_seconds_type(minutes)*60) 
+                   + seconds)*res_adjust()) + fs) * -1);
       }
       else{
         return (((fractional_seconds_type(hours)*3600) 

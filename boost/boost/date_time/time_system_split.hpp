@@ -46,58 +46,47 @@ namespace date_time {
                                       const time_duration_type& tod,
                                       date_time::dst_flags dst=not_dst)
     {
-      if(day.is_special() || tod.is_special())
-      {
-	if(day.is_not_a_date() || tod.is_not_a_date_time())
-	{
-	  return time_rep_type(date_type(not_a_date_time),
-	      time_duration_type(not_a_date_time));
-	}
-	else if(day.is_pos_infinity())
-	{
-	  if(tod.is_neg_infinity())
-	  {
-	    return time_rep_type(date_type(not_a_date_time),
-		time_duration_type(not_a_date_time));
-	  }
-	  else{
-	    return time_rep_type(day, time_duration_type(pos_infin));
-	  }
-	}
-	else if(day.is_neg_infinity())
-	{
-	  if(tod.is_pos_infinity())
-	  {
-	    return time_rep_type(date_type(not_a_date_time),
-		time_duration_type(not_a_date_time));
-	  }
-	  else{
-	    return time_rep_type(day, time_duration_type(neg_infin));
-	  }
-	}
-	else if(tod.is_pos_infinity())
-	{
-	  if(day.is_neg_infinity())
-	  {
-	    return time_rep_type(date_type(not_a_date_time),
-		time_duration_type(not_a_date_time));
-	  }
-	  else{
-	    return time_rep_type(date_type(pos_infin), tod);
-	  }
-	}
-	else if(tod.is_neg_infinity())
-	{
-	  if(day.is_pos_infinity())
-	  {
-	    return time_rep_type(date_type(not_a_date_time),
-		time_duration_type(not_a_date_time));
-	  }
-	  else{
-	    return time_rep_type(date_type(neg_infin), tod);
-	  }
-	}
-
+      if(day.is_special() || tod.is_special()) {
+        if(day.is_not_a_date() || tod.is_not_a_date_time()) {
+          return time_rep_type(date_type(not_a_date_time),
+                               time_duration_type(not_a_date_time));
+        }
+        else if(day.is_pos_infinity()) {
+          if(tod.is_neg_infinity()) {
+            return time_rep_type(date_type(not_a_date_time),
+                                 time_duration_type(not_a_date_time));
+          }
+          else {
+            return time_rep_type(day, time_duration_type(pos_infin));
+          }
+        }
+        else if(day.is_neg_infinity()) {
+          if(tod.is_pos_infinity()) {
+            return time_rep_type(date_type(not_a_date_time),
+                                 time_duration_type(not_a_date_time));
+          }
+          else {
+            return time_rep_type(day, time_duration_type(neg_infin));
+          }
+        }
+        else if(tod.is_pos_infinity()) {
+          if(day.is_neg_infinity()) {
+            return time_rep_type(date_type(not_a_date_time),
+                                 time_duration_type(not_a_date_time));
+          }
+          else {
+            return time_rep_type(date_type(pos_infin), tod);
+          }
+        }
+        else if(tod.is_neg_infinity()) {
+          if(day.is_pos_infinity()) {
+            return time_rep_type(date_type(not_a_date_time),
+                                 time_duration_type(not_a_date_time));
+          }
+          else {
+            return time_rep_type(date_type(neg_infin), tod);
+          }
+        }
       }
       return time_rep_type(day, tod);
     }
@@ -116,7 +105,6 @@ namespace date_time {
     static bool is_equal(const time_rep_type& lhs, const time_rep_type& rhs)
     {
       return ((lhs.day == rhs.day) && (lhs.time_of_day == rhs.time_of_day));
-      //      return true;
     }
     static bool is_less(const time_rep_type& lhs, const time_rep_type& rhs)
     {
@@ -133,7 +121,6 @@ namespace date_time {
                                        const date_duration_type& dd)
     {
       return split_timedate_system::get_time_rep(base.day-dd, base.time_of_day);
-      //return time_rep_type(base.day-dd, base.time_of_day);
     }
     static time_rep_type subtract_time_duration(const time_rep_type& base,
                                                 const time_duration_type& td)
@@ -154,8 +141,7 @@ namespace date_time {
     static time_rep_type add_time_duration(const time_rep_type& base,
                                            time_duration_type td)
     {
-      if(base.day.is_special() || td.is_special())
-      {
+      if(base.day.is_special() || td.is_special()) {
         return split_timedate_system::get_time_rep(base.day, td);
       }
       if (td.is_negative()) {

@@ -202,10 +202,10 @@ namespace date_time {
     {
       if(traits_type::is_adapted())
       {
-	return ticks_.is_special();
+        return ticks_.is_special();
       }
       else{
-	return false;
+        return false;
       }
     }
     //! Is duration pos-infinity
@@ -213,10 +213,10 @@ namespace date_time {
     {
       if(traits_type::is_adapted())
       {
-	return ticks_.is_pos_infinity();
+        return ticks_.is_pos_infinity();
       }
       else{
-	return false;
+        return false;
       }
     }
     //! Is duration neg-infinity
@@ -224,10 +224,10 @@ namespace date_time {
     {
       if(traits_type::is_adapted())
       {
-	return ticks_.is_neg_infinity();
+        return ticks_.is_neg_infinity();
       }
       else{
-	return false;
+        return false;
       }
     }
     //! Is duration not-a-date-time
@@ -235,10 +235,10 @@ namespace date_time {
     {
       if(traits_type::is_adapted())
       {
-	return ticks_.is_nan();
+        return ticks_.is_nan();
       }
       else{
-	return false;
+        return false;
       }
     }
 
