@@ -95,39 +95,39 @@ struct Active : fsm::simple_state< Active, StopWatch,
     double elapsedTime_;
 };
 
-struct Running :
-  IElapsedTime,
-  fsm::simple_state< Running, Active,
-    fsm::transition< EvStartStop, Stopped > >
-{
-  public:
-    Running() : startTime_( std::time( 0 ) ) {}
+  struct Running :
+    IElapsedTime,
+    fsm::simple_state< Running, Active,
+      fsm::transition< EvStartStop, Stopped > >
+  {
+    public:
+      Running() : startTime_( std::time( 0 ) ) {}
 
-    ~Running()
-    {
-      context< Active >().ElapsedTime() = ElapsedTime();
-    }
+      ~Running()
+      {
+        context< Active >().ElapsedTime() = ElapsedTime();
+      }
 
+      virtual double ElapsedTime() const
+      {
+        return context< Active >().ElapsedTime() +
+          std::difftime( std::time( 0 ), startTime_ );
+      }
+
+    private:
+      std::time_t startTime_;
+  };
+
+  struct Stopped :
+    IElapsedTime,
+    fsm::simple_state< Stopped, Active,
+      fsm::transition< EvStartStop, Running > >
+  {
     virtual double ElapsedTime() const
     {
-      return context< Active >().ElapsedTime() +
-        std::difftime( std::time( 0 ), startTime_ );
+      return context< Active >().ElapsedTime();
     }
-
-  private:
-    std::time_t startTime_;
-};
-
-struct Stopped :
-  IElapsedTime,
-  fsm::simple_state< Stopped, Active,
-    fsm::transition< EvStartStop, Running > >
-{
-  virtual double ElapsedTime() const
-  {
-    return context< Active >().ElapsedTime();
-  }
-};
+  };
 
 
 namespace
@@ -139,6 +139,7 @@ namespace
     return key;
   }
 }
+
 
 int main()
 {

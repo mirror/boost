@@ -227,6 +227,7 @@ namespace
   }
 }
 
+
 int main()
 {
   std::cout << "boost::fsm PingPong example\n\n";

@@ -46,12 +46,12 @@ struct Shooting : fsm::simple_state< Shooting, Camera,
   }
 };
 
-struct Focusing : fsm::state< Focusing, Shooting, mpl::list<
-  fsm::custom_reaction< EvInFocus >, fsm::deferral< EvShutterFull > > >
-{
-  Focusing( my_context ctx );
-  fsm::result react( const EvInFocus & );
-};
+  struct Focusing : fsm::state< Focusing, Shooting, mpl::list<
+    fsm::custom_reaction< EvInFocus >, fsm::deferral< EvShutterFull > > >
+  {
+    Focusing( my_context ctx );
+    fsm::result react( const EvInFocus & );
+  };
 
 
 

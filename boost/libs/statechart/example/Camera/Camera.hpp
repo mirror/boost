@@ -49,14 +49,14 @@ struct NotShooting : fsm::simple_state< NotShooting, Camera,
   fsm::result react( const EvShutterHalf & );
 };
 
-struct Idle : fsm::simple_state< Idle, NotShooting,
-  fsm::custom_reaction< EvConfig > >
-{
-  Idle();
-  ~Idle();
+  struct Idle : fsm::simple_state< Idle, NotShooting,
+    fsm::custom_reaction< EvConfig > >
+  {
+    Idle();
+    ~Idle();
 
-  fsm::result react( const EvConfig & );
-};
+    fsm::result react( const EvConfig & );
+  };
 
 
 

@@ -56,30 +56,29 @@ struct Active: fsm::simple_state<
   fsm::result react( const EvRequestShutdown & );
 };
 
-struct NumLockOn : fsm::simple_state<
-  NumLockOn, Active::orthogonal< 0 >,
-  fsm::transition< EvNumLockPressed, NumLockOff > > {};
+  struct NumLockOn : fsm::simple_state<
+    NumLockOn, Active::orthogonal< 0 >,
+    fsm::transition< EvNumLockPressed, NumLockOff > > {};
 
-struct NumLockOff : fsm::simple_state<
-  NumLockOff, Active::orthogonal< 0 >,
-  fsm::transition< EvNumLockPressed, NumLockOn > > {};
+  struct NumLockOff : fsm::simple_state<
+    NumLockOff, Active::orthogonal< 0 >,
+    fsm::transition< EvNumLockPressed, NumLockOn > > {};
 
-struct CapsLockOn : fsm::simple_state<
-  CapsLockOn, Active::orthogonal< 1 >,
-  fsm::transition< EvCapsLockPressed, CapsLockOff > > {};
+  struct CapsLockOn : fsm::simple_state<
+    CapsLockOn, Active::orthogonal< 1 >,
+    fsm::transition< EvCapsLockPressed, CapsLockOff > > {};
 
-struct CapsLockOff : fsm::simple_state<
-  CapsLockOff, Active::orthogonal< 1 >,
-  fsm::transition< EvCapsLockPressed, CapsLockOn > > {};
+  struct CapsLockOff : fsm::simple_state<
+    CapsLockOff, Active::orthogonal< 1 >,
+    fsm::transition< EvCapsLockPressed, CapsLockOn > > {};
 
-struct ScrollLockOn : fsm::simple_state<
-  ScrollLockOn, Active::orthogonal< 2 >,
-  fsm::transition< EvScrollLockPressed, ScrollLockOff > > {};
+  struct ScrollLockOn : fsm::simple_state<
+    ScrollLockOn, Active::orthogonal< 2 >,
+    fsm::transition< EvScrollLockPressed, ScrollLockOff > > {};
 
-struct ScrollLockOff : fsm::simple_state<
-  ScrollLockOff, Active::orthogonal< 2 >,
-  fsm::transition< EvScrollLockPressed, ScrollLockOn > > {};
-
+  struct ScrollLockOff : fsm::simple_state<
+    ScrollLockOff, Active::orthogonal< 2 >,
+    fsm::transition< EvScrollLockPressed, ScrollLockOn > > {};
 
 fsm::result Active::react( const EvRequestShutdown & )
 {
@@ -134,7 +133,6 @@ namespace
     std::cout << "\n";
   }
 }
-
 
 
 int main()
