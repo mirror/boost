@@ -24,6 +24,7 @@
 //    string_char_traits and std::alloc 
 
 #if  BOOST_WORKAROUND(__GNUC__, < 3) & defined(__STL_CONFIG_H) 
+
    // only for broken gcc stdlib
 #ifndef BOOST_FORMAT_WORKAROUNDS_GCC295_H
 #define BOOST_FORMAT_WORKAROUNDS_GCC295_H
@@ -34,6 +35,7 @@
 #include <streambuf.h>
 #define BOOST_FORMAT_STREAMBUF_DEFINED
 
+#define BOOST_NO_TEMPLATE_STD_STREAM
 
 #ifndef BOOST_IO_STD
 #  define BOOST_IO_STD std::
@@ -107,7 +109,6 @@ namespace boost {
             : public ::std::string_char_traits<Ch> 
         {
         public:
-            typedef ::std::string_char_traits<Ch> type_for_string;
             typedef CompatTraits                compatible_type;
 
             typedef Ch char_type;
@@ -135,50 +136,17 @@ namespace boost {
         };
 
         template<class Ch>
-        class CompatTraits< ::std::char_traits<Ch> >
-        // this will be used by classes using default template argument 
-        // Tr=std::char_traits<Ch> so in fact, we want the type_for_string
-        // to reflect the default Tr for this stdlib,
-        // -> string_char_traits.  
-        // The real traits stuff is placed in the previous CompatTraits, 
-        // this one just points to it as compatible_type;
-        {
+        class CompatTraits< ::std::char_traits<Ch> > {
         public:
-            typedef ::std::string_char_traits<Ch> type_for_string;
-            typedef CompatTraits< ::std::string_char_traits<Ch> > 
-               compatible_type;
+            typedef CompatTraits< ::std::string_char_traits<Ch> >  compatible_type;
         };
-
-
 
         // ** CompatAlloc gcc-2.95  specialisations ---------------------------
-        template<class Ch>
-        class CompatAlloc< ::std::allocator<Ch> >
-        {
-        public:
-            typedef ::std::alloc         type_for_string;
-            typedef ::std::allocator<Ch> compatible_type;
-        };
-
         template<>
         class CompatAlloc< ::std::alloc>
         {
         public:
-            typedef ::std::alloc         type_for_string;
             typedef ::std::allocator<char> compatible_type;
-        };
-
-       // ** CompatOStream gcc-2.95  specialisations --------------------------
-        template<class Ch, class Tr>
-        class CompatOStream< ::std::basic_ostream<Ch, Tr> >
-            : public ::std::basic_ostream<Ch, Tr>
-        {
-        public:
-            typedef ::std::ostream      type_for_string;
-            typedef CompatOStream             compatible_type;
-
-            CompatOStream(::std::streambuf * p) 
-                : ::std::basic_ostream<Ch,Tr> (p) {}
         };
 
     } // N.S. io

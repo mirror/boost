@@ -41,7 +41,7 @@ namespace detail {
         void reset(Ch fill);                     //- sets to default state.
         void set_by_stream(const basic_ios& os); //- sets to os's state.
         void apply_on(basic_ios & os,            //- applies format_state to the stream
-                      boost::io::detail::locale_or_dummy_t * loc_default = 0) const;
+                      boost::io::detail::locale_t * loc_default = 0) const;
         template<class T> 
         void apply_manip(T manipulator)          //- modifies state by applying manipulator
             { apply_manip_body<Ch, Tr, T>( *this, manipulator) ; }
@@ -53,7 +53,7 @@ namespace detail {
         std::ios_base::fmtflags flags_;
         std::ios_base::iostate  rdstate_;
         std::ios_base::iostate  exceptions_;
-        boost::optional<boost::io::detail::locale_or_dummy_t>  loc_;
+        boost::optional<boost::io::detail::locale_t>  loc_;
     };  
 
 
@@ -103,7 +103,7 @@ namespace detail {
 // -   stream_format_state:: -------------------------------------------------
     template<class Ch, class Tr>
     void stream_format_state<Ch,Tr>:: apply_on (basic_ios & os,
-                      boost::io::detail::locale_or_dummy_t * loc_default) const {
+                      boost::io::detail::locale_t * loc_default) const {
         // set the state of this stream according to our params
         if(width_ != -1)
             os.width(width_);

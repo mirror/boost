@@ -114,7 +114,7 @@ namespace detail {
               const format_item<Ch, Tr, Alloc>& specs, 
               typename basic_format<Ch, Tr, Alloc>::string_type& res, 
               typename basic_format<Ch, Tr, Alloc>::internal_streambuf_t & buf,
-              io::detail::locale_or_dummy_t *loc_p = NULL)
+              io::detail::locale_t *loc_p = NULL)
     {
         // does the actual conversion of x, with given params, into a string
         // using the supplied stringbuf.

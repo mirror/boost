@@ -29,12 +29,10 @@ namespace boost {
     template<class Ch, class Tr, class Alloc>
     class basic_format 
     {
+        typedef typename io::CompatTraits<Tr>::compatible_type compat_traits;  
     public:
         typedef Ch  CharT;   // borland fails in operator% if we use Ch and Tr directly
-        typedef typename io::CompatTraits<Tr>::type_for_string   stringTr;  
-        typedef typename io::CompatAlloc<Alloc>::type_for_string stringAlloc;  
-
-        typedef std::basic_string<Ch, stringTr, stringAlloc>  string_type;
+        typedef std::basic_string<Ch, Tr, Alloc>              string_type;
         typedef typename string_type::size_type               size_type;
         typedef io::detail::format_item<Ch, Tr, Alloc>        format_item_t;
         typedef io::basic_altstringbuf<Ch, Tr, Alloc>         internal_streambuf_t;
@@ -50,7 +48,7 @@ namespace boost {
         explicit basic_format(const Ch* str, const std::locale & loc);
         explicit basic_format(const string_type& s, const std::locale & loc);
 #endif
-        io::detail::locale_or_dummy_t  getloc() const;
+        io::detail::locale_t  getloc() const;
 
         basic_format& clear();       // empty all converted string buffers (except bound items)
         basic_format& clear_binds(); // unbind all bound items, and call clear()
@@ -88,10 +86,17 @@ namespace boost {
     && !BOOST_WORKAROUND( _CRAYC, != 0)
         // use friend templates and private members only if supported
 
+#ifndef  BOOST_NO_TEMPLATE_STD_STREAM
         template<class Ch2, class Tr2, class Alloc2>
-        friend typename io::CompatOStream<std::basic_ostream<Ch2, Tr2> >::type_for_string & 
-        operator<<( typename io::CompatOStream<std::basic_ostream<Ch2, Tr2> >::type_for_string& ,
+        friend std::basic_ostream<Ch2, Tr2> & 
+        operator<<( std::basic_ostream<Ch2, Tr2> & ,
                     const basic_format<Ch2, Tr2, Alloc2>& );
+#else
+        template<class Ch2, class Tr2, class Alloc2>
+        friend std::ostream & 
+        operator<<( std::ostream & ,
+                    const basic_format<Ch2, Tr2, Alloc2>& );
+#endif
 
         template<class Ch2, class Tr2, class Alloc2, class T>  
         friend basic_format<Ch2, Tr2, Alloc2>&  
@@ -128,7 +133,7 @@ namespace boost {
         string_type      prefix_; // piece of string to insert before first item
         unsigned char exceptions_;
         internal_streambuf_t   buf_; // the internal stream buffer.
-        boost::optional<io::detail::locale_or_dummy_t>     loc_;
+        boost::optional<io::detail::locale_t>     loc_;
     }; // class basic_format
 
 } // namespace boost

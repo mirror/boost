@@ -45,9 +45,6 @@ namespace boost {
         // alloc template argument, so we need a replacement allocator
         template<class Alloc>
         class CompatAlloc; 
-   
-        template<class OStream>
-        class CompatOStream;
     } // N.S. io
 }// N.S. boost
 
@@ -67,7 +64,6 @@ namespace boost {
         class CompatTraits
         {        // general case : be transparent
         public:
-            typedef Tr  type_for_string;
             typedef Tr  compatible_type;
         };
 
@@ -76,18 +72,7 @@ namespace boost {
         class CompatAlloc
         {        // general case : be transparent
         public:
-            typedef Alloc  type_for_string;
             typedef Alloc  compatible_type;
-        };
-
-
-        // **** CompatOStream general definitions : ---------------------------
-        template<class OStream>
-        class CompatOStream
-        {        // general case : be transparent
-        public:
-            typedef OStream  type_for_string;
-            typedef OStream  compatible_type;
         };
 
     } //N.S. io

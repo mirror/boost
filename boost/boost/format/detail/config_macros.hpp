@@ -22,8 +22,9 @@
 
 // make sure our local macros wont override something :
 #if defined(BOOST_NO_LOCALE_ISDIGIT) || defined(BOOST_OVERLOAD_FOR_NON_CONST) \
-  || defined(BOOST_IO_STD) || defined( BOOST_IO_NEEDS_USING_DECLARATION )
-#error "boost::format defines a local macro that would overwrite a previously defined macro."
+  || defined(BOOST_IO_STD) || defined( BOOST_IO_NEEDS_USING_DECLARATION ) \
+    || defined(BOOST_NO_TEMPLATE_STD_STREAM)
+#error "boost::format uses a local macro that is already defined."
 #endif
 
 // specific workarounds. each header can define BOOS_IO_STD if it 
@@ -83,9 +84,9 @@ namespace boost {
 // this typedef is either std::locale or int, avoids placing ifdefs everywhere
 namespace boost { namespace io { namespace detail {
 #if ! defined(BOOST_NO_STD_LOCALE)
-    typedef BOOST_IO_STD locale locale_or_dummy_t;
+    typedef BOOST_IO_STD locale locale_t;
 #else 
-    typedef int          locale_or_dummy_t;
+    typedef int          locale_t;
 #endif
 } } }
 

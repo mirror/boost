@@ -50,9 +50,9 @@ namespace boost {
     }
 #endif // ! BOOST_NO_STD_LOCALE
     template< class Ch, class Tr, class Alloc>
-    io::detail::locale_or_dummy_t basic_format<Ch, Tr, Alloc>:: 
+    io::detail::locale_t basic_format<Ch, Tr, Alloc>:: 
     getloc() const {
-        return loc_ ? loc_.get() : io::detail::locale_or_dummy_t(); 
+        return loc_ ? loc_.get() : io::detail::locale_t(); 
     }
 
     template< class Ch, class Tr, class Alloc>

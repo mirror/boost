@@ -38,29 +38,27 @@ namespace boost {
             : public ::std::basic_streambuf<Ch, Tr>
         {
             typedef ::std::basic_streambuf<Ch, Tr>  streambuf_t;
+            typedef typename CompatAlloc<Alloc>::compatible_type compat_allocator_type;
+            typedef typename CompatTraits<Tr>::compatible_type   compat_traits_type;
         public:
-            typedef typename CompatTraits<Tr>::type_for_string stringTr;
-            typedef typename CompatAlloc<Alloc>::type_for_string stringAlloc;
-            typedef typename CompatTraits<Tr>::compatible_type traits_type;
-            typedef Alloc   allocator_type;
-
-            typedef ::std::basic_string<Ch, stringTr, stringAlloc> string_type;
-            typedef ::std::ios_base ios_base;
+            typedef Ch     char_type;
+            typedef Tr     traits_type;
+            typedef typename compat_traits_type::int_type     int_type;
+            typedef typename compat_traits_type::pos_type     pos_type;
+            typedef typename compat_traits_type::off_type     off_type;
+            typedef Alloc                     allocator_type;
+            typedef ::std::basic_string<Ch, Tr, Alloc> string_type;
 
             typedef ::std::streamsize streamsize;
-            typedef Ch                             char_type;
-            typedef typename traits_type::int_type int_type;
-            typedef typename traits_type::pos_type pos_type;
-            typedef typename traits_type::off_type off_type;
 
 
-            explicit basic_altstringbuf(ios_base::openmode mode
-                                        = ios_base::in | ios_base::out)
+            explicit basic_altstringbuf(::std::ios_base::openmode mode
+                                        = ::std::ios_base::in | ::std::ios_base::out)
                 : putend_(NULL), is_allocated_(false), mode_(mode) 
                 {}
             explicit basic_altstringbuf(const string_type& s,
-                                        ios_base::openmode mode
-                                        = ios_base::in | ios_base::out)
+                                        ::std::ios_base::openmode mode
+                                        = ::std::ios_base::in | ::std::ios_base::out)
                 : putend_(NULL), is_allocated_(false), mode_(mode) 
                 { dealloc(); str(s); }
             virtual ~basic_altstringbuf() 
@@ -91,28 +89,28 @@ namespace boost {
                 { return string_type(begin(), cur_size()); }
         protected:
             explicit basic_altstringbuf (basic_altstringbuf * s,
-                                         ios_base::openmode mode 
-                                         = ios_base::in | ios_base::out)
+                                         ::std::ios_base::openmode mode 
+                                         = ::std::ios_base::in | ::std::ios_base::out)
                 : putend_(NULL), is_allocated_(false), mode_(mode) 
                 { dealloc(); str(s); }
 
-            virtual pos_type seekoff(off_type off, ios_base::seekdir way, 
-                                     ios_base::openmode which 
-                                     = ios_base::in | ios_base::out);
+            virtual pos_type seekoff(off_type off, ::std::ios_base::seekdir way, 
+                                     ::std::ios_base::openmode which 
+                                     = ::std::ios_base::in | ::std::ios_base::out);
             virtual pos_type seekpos (pos_type pos, 
-                                      ios_base::openmode which 
-                                      = ios_base::in | ios_base::out);
+                                      ::std::ios_base::openmode which 
+                                      = ::std::ios_base::in | ::std::ios_base::out);
             virtual int_type underflow();
-            virtual int_type pbackfail(int_type meta = traits_type::eof());
-            virtual int_type overflow(int_type meta = traits_type::eof());
+            virtual int_type pbackfail(int_type meta = compat_traits_type::eof());
+            virtual int_type overflow(int_type meta = compat_traits_type::eof());
             void dealloc();
         private:
             enum { alloc_min = 256}; // minimum size of allocations
 
             Ch *putend_;  // remembers (over seeks) the highest value of pptr()
             bool is_allocated_;
-            ios_base::openmode mode_;
-            allocator_type alloc_;  // the allocator object
+            ::std::ios_base::openmode mode_;
+            compat_allocator_type alloc_;  // the allocator object
         };
 
 
@@ -120,7 +118,7 @@ namespace boost {
         template <class Ch, class Tr, class Alloc>
         class basic_oaltstringstream 
             : private base_from_member< shared_ptr< basic_altstringbuf< Ch, Tr, Alloc> > >,
-              public CompatOStream< ::std::basic_ostream<Ch, Tr> > ::compatible_type
+              public ::std::basic_ostream<Ch, Tr>
         {
             class No_Op { 
                 // used as no-op deleter for (not-owner) shared_pointers
@@ -128,19 +126,14 @@ namespace boost {
                 template<class T>
                 const T & operator()(const T & arg) { return arg; }
             };
-            typedef typename CompatTraits<Tr>::type_for_string stringTr;
-            typedef typename CompatAlloc<Alloc>::type_for_string stringAlloc;
-            typedef typename CompatOStream<std::basic_ostream<Ch, Tr> > ::compatible_type
-                stream_t;
+            typedef ::std::basic_ostream<Ch, Tr> stream_t;
             typedef boost::base_from_member<boost::shared_ptr<
                 basic_altstringbuf<Ch,Tr, Alloc> > > 
                 pbase_type;
-        public:
-            typedef typename CompatTraits<Tr>::compatible_type traits_type;
-            typedef typename CompatAlloc<Tr>::compatible_type  allocator_type;
-            typedef ::std::basic_string<Ch, stringTr, stringAlloc> string_type;
+            typedef ::std::basic_string<Ch, Tr, Alloc>  string_type;
             typedef basic_altstringbuf<Ch, Tr, Alloc>   stringbuf_t;
-        
+        public:
+            typedef Alloc  allocator_type;
             basic_oaltstringstream() 
                 : pbase_type(new stringbuf_t), stream_t(rdbuf()) 
                 { }
