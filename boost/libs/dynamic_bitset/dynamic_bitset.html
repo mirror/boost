@@ -622,7 +622,7 @@ explicit
 <b>Effects:</b> Constructs a bitset based on a range of blocks.
 Let <tt>*first</tt> be block number 0, <tt>*++first</tt> block number
 1, etc. Block number <tt>b</tt> is used to initialize the bits of the
-dynamic_bitset in the position range <tt>[b, b + bits_per_block)</tt>.  For
+dynamic_bitset in the position range <tt>[b*bits_per_block, (b+1)*bits_per_block)</tt>.  For
 each block number <tt>b</tt> with value <tt>bval</tt>, the bit
 <tt>(bval >> i) &amp; 1</tt> corresponds to the bit at position <tt>(b *
 bits_per_block + i)</tt> in the bitset (where <tt>i</tt> goes through the
@@ -1075,7 +1075,7 @@ bool <a name="is_subset_of">is_subset_of</a>(const dynamic_bitset&amp; a) const
 </pre>
 <b>Requires:</b> <tt>this->size() == a.size()</tt><br>
 <b>Returns:</b> true if this bitset is a subset of bitset <tt>a</tt>.
-That is, it returns true if, for every bit in this bitset, the
+That is, it returns true if, for every bit that is set in this bitset, the
 corresponding bit in bitset <tt>a</tt> is also set. Otherwise this
 function returns false.<br>
 <b>Throws:</b> nothing.
@@ -1087,7 +1087,7 @@ bool <a name="is_proper_subset_of">is_proper_subset_of</a>(const dynamic_bitset&
 </pre>
 <b>Requires:</b> <tt>this->size() == a.size()</tt><br>
 <b>Returns:</b> true if this bitset is a proper subset of bitset <tt>a</tt>.
-That is, it returns true if, for every bit in this bitset, the
+That is, it returns true if, for every bit that is set in this bitset, the
 corresponding bit in bitset <tt>a</tt> is also set and if
 <tt>this->count() < a.count()</tt>. Otherwise this
 function returns false.<br>
