@@ -49,7 +49,10 @@ void allocator_construct(T* p, const T& t)
 
 template <class T>
 void allocator_destroy(T* p)
-{ p->~T(); }
+{ 
+   (void)p; // warning suppression
+   p->~T(); 
+}
 
 } }
 
@@ -57,7 +60,7 @@ void allocator_destroy(T* p)
 
 #include <memory>
 
-#define BOOST_DEFAULT_ALLOCATOR(T) std::allocator<T>
+#define BOOST_DEFAULT_ALLOCATOR(T) std::allocator< T >
 
 namespace boost{ namespace detail{
 
@@ -76,7 +79,7 @@ struct rebind_allocator
 // no std::allocator, but the compiler supports the necessary syntax,
 // write our own allocator instead:
 
-#define BOOST_DEFAULT_ALLOCATOR(T) ::boost::detail::allocator<T>
+#define BOOST_DEFAULT_ALLOCATOR(T) ::boost::detail::allocator< T >
 
 namespace boost{ namespace detail{
 
