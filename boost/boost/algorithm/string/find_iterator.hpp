@@ -44,7 +44,7 @@ namespace boost {
         {
         private:
             // facade support
-            friend class iterator_core_access;
+            friend class ::boost::iterator_core_access;
 
             // base type
             typedef iterator_facade<
@@ -189,7 +189,7 @@ namespace boost {
         {
         private:
             // facade support
-            friend class iterator_core_access;
+            friend class ::boost::iterator_core_access;
 
             // base type
             typedef iterator_facade<
