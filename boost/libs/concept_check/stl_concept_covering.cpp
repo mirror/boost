@@ -93,22 +93,19 @@ namespace boost { // so Koenig lookup will find
 // for std::partial_sum and adj_diff
 namespace part_sum
 {
-  typedef boost::null_archetype<> Tout;
-  typedef boost::sgi_assignable_archetype<
-    boost::convertible_to_archetype<Tout> > Ret;
-  class Tin {
+  class T {
   public:
-    Tin(const Ret&) { }
-    Tin(boost::detail::dummy_constructor x) { }  
-    operator const Tout&() const { return boost::static_object<Tout>::get(); }
+    typedef boost::sgi_assignable_archetype<> Ret;
+    T(const Ret&) { }
+    T(boost::detail::dummy_constructor x) { }  
   private:
-    Tin() { }
+    T() { }
   };
-  Ret operator+(const Tin&, const Tin&) {
-    return Ret(dummy_cons);
+  T::Ret operator+(const T&, const T&) {
+    return T::Ret(dummy_cons);
   }
-  Ret operator-(const Tin&, const Tin&) {
-    return Ret(dummy_cons);
+  T::Ret operator-(const T&, const T&) {
+    return T::Ret(dummy_cons);
   }
 }
 
@@ -130,6 +127,7 @@ namespace power_stuff {
 struct tag1 { };
 struct tag2 { };
 
+
 int
 main()
 {
@@ -138,12 +136,12 @@ main()
   //===========================================================================
   // Non-mutating Algorithms
   {
-    input_iterator_archetype< 
-      convertible_to_archetype< null_archetype<>  > > in;
+    input_iterator_archetype< null_archetype<> > in;
     unary_function_archetype< null_archetype<> , null_archetype<> > 
       f(dummy_cons);
     std::for_each(in, in, f);
   }
+  // gcc bug
   {
     typedef equality_comparable2_first_archetype<> Left;
     input_iterator_archetype< Left > in;
@@ -151,9 +149,9 @@ main()
     in = std::find(in, in, value);
   }
   {
-    input_iterator_archetype< 
-      convertible_to_archetype< null_archetype<>  > > in;
-    unary_predicate_archetype< null_archetype<>  > pred(dummy_cons);
+    typedef null_archetype<> T;
+    input_iterator_archetype<T> in;
+    unary_predicate_archetype<T> pred(dummy_cons);
     in = std::find_if(in, in, pred);
   }
   {
@@ -167,6 +165,7 @@ main()
       pred(dummy_cons);
     fo = std::adjacent_find(fo, fo, pred);
   }
+  // gcc bug
   {
     typedef equal_op_first_archetype<> Left;
     input_iterator_archetype<Left> in;
@@ -185,14 +184,14 @@ main()
     ignore_unused_variable_warning(n);
   }
   {
-    typedef input_iterator_archetype<
-      convertible_to_archetype<null_archetype<> > > InIter;
+    typedef input_iterator_archetype< null_archetype<> > InIter;
     InIter in;
     unary_predicate_archetype<null_archetype<> > pred(dummy_cons);
     std::iterator_traits<InIter>::difference_type
       n = std::count_if(in, in, pred);
     ignore_unused_variable_warning(n);
   }
+  // gcc bug
   {
     typedef equal_op_first_archetype<> Left;
     typedef input_iterator_archetype<Left> InIter1;
@@ -204,14 +203,14 @@ main()
     ignore_unused_variable_warning(p);
   }
   {
-    typedef input_iterator_archetype<
-      convertible_to_archetype<null_archetype<> > > InIter;
+    typedef input_iterator_archetype<null_archetype<> > InIter;
     InIter in1, in2;
     binary_predicate_archetype<null_archetype<> , null_archetype<> > 
       pred(dummy_cons);
     std::pair<InIter, InIter> p = std::mismatch(in1, in1, in2, pred);
     ignore_unused_variable_warning(p);
   }
+  // gcc bug
   {
     typedef equality_comparable2_first_archetype<> Left;
     input_iterator_archetype<Left> in1;
@@ -221,7 +220,7 @@ main()
     ignore_unused_variable_warning(b);
   }
   {
-    input_iterator_archetype< convertible_to_archetype<null_archetype<> > >
+    input_iterator_archetype< null_archetype<> >
       in1, in2;
     binary_predicate_archetype<null_archetype<> , null_archetype<> > 
       pred(dummy_cons);
@@ -286,10 +285,9 @@ main()
   // Mutating Algorithms
 
   {
-    typedef null_archetype<> OutT;
-    typedef convertible_to_archetype<OutT> InT;
-    input_iterator_archetype<InT> in;
-    output_iterator_archetype<OutT> out(dummy_cons);
+    typedef null_archetype<> T;
+    input_iterator_archetype<T> in;
+    output_iterator_archetype<T> out(dummy_cons);
     out = std::copy(in, in, out);
   }
   {
@@ -316,8 +314,8 @@ main()
     fi2 = std::swap_ranges(fi1, fi1, fi2);
   }
   {
-    typedef convertible_to_archetype<null_archetype<> > Tin;
-    typedef null_archetype<> Tout;
+    typedef null_archetype<int> Tin;
+    typedef null_archetype<char> Tout;
     input_iterator_archetype<Tin> in;
     output_iterator_archetype<Tout> out(dummy_cons);
     unary_function_archetype<null_archetype<> , 
@@ -325,13 +323,13 @@ main()
     out = std::transform(in, in, out, op);
   }
   {
-    typedef convertible_to_archetype<null_archetype<int> > Tin1;
-    typedef convertible_to_archetype<null_archetype<char> > Tin2;
-    typedef null_archetype<> Tout;
+    typedef null_archetype<int> Tin1;
+    typedef null_archetype<char> Tin2;
+    typedef null_archetype<double> Tout;
     input_iterator_archetype<Tin1> in1;
     input_iterator_archetype<Tin2> in2;
     output_iterator_archetype<Tout> out(dummy_cons);
-    binary_function_archetype<null_archetype<int>, null_archetype<char>,
+    binary_function_archetype<Tin1, Tin2,
       convertible_to_archetype<Tout> > op(dummy_cons);
     out = std::transform(in1, in1, in2, out, op);
   }
@@ -352,8 +350,8 @@ main()
     convertible_to_archetype<FT> value(dummy_cons);
     std::replace_if(fi, fi, pred, value);
   }
+  // gcc bug
   {
-#if 0
     // Issue, the use of ?: inside replace_copy() complicates things
     typedef equal_op_first_archetype<> Tin;
     typedef null_archetype<> Tout;
@@ -362,33 +360,15 @@ main()
     output_iterator_archetype<Tout> out(dummy_cons);
     T value(dummy_cons);
     out = std::replace_copy(in, in, out, value, value);
-#else
-    typedef null_archetype<> Tout;
-    typedef equal_op_second_archetype< convertible_to_archetype<Tout> > T;
-    // Adding convertible to T for Tin solves the problem, so would
-    // making T convertible to Tin. Not sure what the right way to
-    // express the requirement would be. Also, perhaps the
-    // implementation's use of ?: is invalid.
-    typedef equal_op_first_archetype< convertible_to_archetype<T> > Tin;
-    input_iterator_archetype<Tin> in;
-    output_iterator_archetype<Tout> out(dummy_cons);
-    T value(dummy_cons);
-    out = std::replace_copy(in, in, out, value, value);
-#endif
   }
   {
     // The issue of ?: also affects this function
-    typedef null_archetype<int> PredArg;
-    typedef null_archetype<char> Tout;
-    typedef convertible_to_archetype<Tout, 
-      convertible_to_archetype<PredArg> > T;
-    typedef convertible_to_archetype<PredArg,
-      convertible_to_archetype<Tout,
-      convertible_to_archetype<T> > > Tin;
+    typedef null_archetype<> Tout;
+    typedef assignable_archetype< convertible_to_archetype<Tout> > Tin;
     input_iterator_archetype<Tin> in;
     output_iterator_archetype<Tout> out(dummy_cons);
-    unary_predicate_archetype<PredArg> pred(dummy_cons);
-    T value(dummy_cons);
+    unary_predicate_archetype<Tin> pred(dummy_cons);
+    Tin value(dummy_cons);
     out = std::replace_copy_if(in, in, out, pred, value);
   }
   {
@@ -435,6 +415,7 @@ main()
     unary_predicate_archetype<PredArg> pred(dummy_cons);
     fi = std::remove_if(fi, fi, pred);
   }
+  // gcc bug
   {
     typedef null_archetype<> Tout;
     typedef equality_comparable2_first_archetype<
@@ -446,13 +427,10 @@ main()
     out = std::remove_copy(in, in, out, value);
   }
   {
-    typedef null_archetype<int> Tout;
-    typedef null_archetype<char> PredArg;
-    typedef convertible_to_archetype<PredArg,
-      convertible_to_archetype<Tout> > Tin;
-    input_iterator_archetype<Tin> in;
-    output_iterator_archetype<Tout> out(dummy_cons);
-    unary_predicate_archetype<PredArg> pred(dummy_cons);
+    typedef null_archetype<> T;
+    input_iterator_archetype<T> in;
+    output_iterator_archetype<T> out(dummy_cons);
+    unary_predicate_archetype<T> pred(dummy_cons);
     out = std::remove_copy_if(in, in, out, pred);
   }
   {
@@ -470,6 +448,7 @@ main()
     binary_predicate_archetype<Arg1, Arg2> pred(dummy_cons);
     fi = std::unique(fi, fi, pred);
   }
+  // gcc bug
   {
     typedef equality_comparable_archetype< sgi_assignable_archetype<> > T;
     input_iterator_archetype<T> in;
@@ -477,16 +456,10 @@ main()
     out = std::unique_copy(in, in, out);
   }
   {
-    typedef null_archetype<int> Arg1;
-    typedef null_archetype<char> Arg2;
-    typedef null_archetype<short> Tout;
-    typedef sgi_assignable_archetype< 
-      convertible_to_archetype<Tout,
-      convertible_to_archetype<Arg1,
-      convertible_to_archetype<Arg2> > > > Tin;
-    input_iterator_archetype<Tin> in;
-    output_iterator_archetype<Tout> out(dummy_cons);
-    binary_predicate_archetype<Arg1, Arg2> pred(dummy_cons);
+    typedef sgi_assignable_archetype<> T;
+    input_iterator_archetype<T> in;
+    output_iterator_archetype<T> out(dummy_cons);
+    binary_predicate_archetype<T, T> pred(dummy_cons);
     out = std::unique_copy(in, in, out, pred);
   }
   {
@@ -585,6 +558,7 @@ main()
     binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
     std::partial_sort(ri, ri, ri, comp);
   }
+  // gcc bug
   {
     // This could be formulated so that the two iterators are not
     // required to have the same value type, but it is messy.
@@ -595,12 +569,10 @@ main()
     ri_out = std::partial_sort_copy(in, in , ri_out, ri_out);
   }
   {
-    typedef null_archetype<> Arg;
-    typedef sgi_assignable_archetype<
-      convertible_to_archetype<Arg> > T;
+    typedef sgi_assignable_archetype<> T;
     input_iterator_archetype<T> in;
     mutable_random_access_iterator_archetype<T> ri_out;
-    binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
+    binary_predicate_archetype<T, T> comp(dummy_cons);
     ri_out = std::partial_sort_copy(in, in , ri_out, ri_out, comp);
   }
   {
@@ -737,6 +709,7 @@ main()
       less_than_op_first_archetype<
       convertible_to_archetype<Tout>, optag2> ,optag1> Tin2;
 #endif
+    // gcc bug
     input_iterator_archetype<Tin1> in1;
     input_iterator_archetype<Tin2> in2;
     output_iterator_archetype<Tout> out(dummy_cons);
@@ -747,21 +720,12 @@ main()
     out = std::set_symmetric_difference(in1, in1, in2, in2, out);
   }
   {
-    typedef null_archetype<int> Arg1;
-    typedef null_archetype<char> Arg2;
-    typedef null_archetype<short> Tout;
-#if defined(__GNUC__) || defined(__KCC)
-    typedef convertible_to_archetype<Tout,
-      convertible_to_archetype<Arg1,
-      convertible_to_archetype<Arg2> > > Tin1;
-    typedef convertible_to_archetype<Tout,
-      convertible_to_archetype<Arg2,
-      convertible_to_archetype<Arg1> > > Tin2;
-#endif
-    input_iterator_archetype<Tin1> in1;
-    input_iterator_archetype<Tin2> in2;
-    output_iterator_archetype<Tout> out(dummy_cons);
-    binary_predicate_archetype<Arg1, Arg2> comp(dummy_cons);
+    typedef null_archetype<> T;
+    input_iterator_archetype<T> in1;
+    input_iterator_archetype<T,2> in2;
+    typedef convertible_from_archetype<T> Tout;
+    output_iterator_archetype<T> out(dummy_cons);
+    binary_predicate_archetype<T, T> comp(dummy_cons);
     out = std::merge(in1, in1, in2, in2, out, comp);
     out = std::set_union(in1, in1, in2, in2, out, comp);
     out = std::set_intersection(in1, in1, in2, in2, out, comp);
@@ -782,13 +746,12 @@ main()
     binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
     std::inplace_merge(bi, bi, bi, comp);
   }
+  // gcc bug
   {
-#if defined(__GNUC__) || defined(__KCC)
     typedef less_than_op_first_archetype<
       less_than_op_second_archetype<null_archetype<>, optag1>, optag2> Tin1;
     typedef less_than_op_second_archetype<
       less_than_op_first_archetype<null_archetype<>, optag1>, optag2> Tin2;
-#endif
     input_iterator_archetype<Tin1> in1;
     input_iterator_archetype<Tin2> in2;
     bool b = std::includes(in1, in1, in2, in2);
@@ -796,17 +759,10 @@ main()
     ignore_unused_variable_warning(b);
   }
   {
-    typedef null_archetype<int> Arg1;
-    typedef null_archetype<char> Arg2;
-#if defined(__GNUC__) || defined(__KCC)
-    typedef convertible_to_archetype<Arg1,
-      convertible_to_archetype<Arg2> > Tin1;
-    typedef convertible_to_archetype<Arg2,
-      convertible_to_archetype<Arg1> > Tin2;
-#endif
-    input_iterator_archetype<Tin1> in1;
-    input_iterator_archetype<Tin2> in2;
-    binary_predicate_archetype<Arg1, Arg2> comp(dummy_cons);
+    typedef null_archetype<int> Tin;
+    input_iterator_archetype<Tin> in1;
+    input_iterator_archetype<Tin,1> in2;
+    binary_predicate_archetype<Tin, Tin> comp(dummy_cons);
     bool b = std::includes(in1, in1, in2, in2, comp);
     b = std::lexicographical_compare(in1, in1, in2, in2, comp);
     ignore_unused_variable_warning(b);
@@ -897,8 +853,7 @@ main()
     typedef sgi_assignable_archetype<
       convertible_to_archetype<Arg1> > T;
     typedef convertible_to_archetype<T> Ret;
-    typedef convertible_to_archetype<Arg2> Tin;
-    input_iterator_archetype<Tin> in;
+    input_iterator_archetype<Arg2> in;
     T init(dummy_cons);
     binary_function_archetype<Arg1, Arg2, Ret> op(dummy_cons);
     init = std::accumulate(in, in, init, op);
@@ -918,38 +873,30 @@ main()
       convertible_to_archetype<AddArg1> > T;
     typedef convertible_to_archetype<AddArg2> RetMult;
     typedef convertible_to_archetype<T> RetAdd;
-    typedef convertible_to_archetype<MultArg1> Tin1;
-    typedef convertible_to_archetype<MultArg2> Tin2;
-    input_iterator_archetype<Tin1> in1;
-    input_iterator_archetype<Tin2> in2;
+    input_iterator_archetype<MultArg1> in1;
+    input_iterator_archetype<MultArg2> in2;
     T init(dummy_cons);
     binary_function_archetype<MultArg1, MultArg2, RetMult> mult_op(dummy_cons);
     binary_function_archetype<AddArg1, AddArg2, RetAdd> add_op(dummy_cons);
     init = std::inner_product(in1, in1, in2, init, add_op, mult_op);
   }
   {
-    input_iterator_archetype<part_sum::Tin> in;
-    output_iterator_archetype<part_sum::Tout> out(dummy_cons);
+    input_iterator_archetype<part_sum::T> in;
+    output_iterator_archetype<part_sum::T> out(dummy_cons);
     out = std::partial_sum(in, in, out);
   }
   {
-    typedef null_archetype<int> Arg;
-    typedef null_archetype<char> Tout;
-    typedef sgi_assignable_archetype<
-      convertible_to_archetype<Arg,
-      convertible_to_archetype<Tout> > > Tin;
-    typedef convertible_to_archetype<Tout,
-      convertible_to_archetype<Tin> > Ret;
-    input_iterator_archetype<Tin> in;
-    output_iterator_archetype<Tout> out(dummy_cons);
-    binary_function_archetype<Arg, Arg, Ret> add_op(dummy_cons);
+    typedef sgi_assignable_archetype<> T;
+    input_iterator_archetype<T> in;
+    output_iterator_archetype<T> out(dummy_cons);
+    binary_function_archetype<T, T, T> add_op(dummy_cons);
     out = std::partial_sum(in, in, out, add_op);
-    binary_function_archetype<Arg, Arg, Ret> subtract_op(dummy_cons);
+    binary_function_archetype<T, T, T> subtract_op(dummy_cons);
     out = std::adjacent_difference(in, in, out, subtract_op);
   }
   {
-    input_iterator_archetype<part_sum::Tin> in;
-    output_iterator_archetype<part_sum::Tout> out(dummy_cons);
+    input_iterator_archetype<part_sum::T> in;
+    output_iterator_archetype<part_sum::T> out(dummy_cons);
     out = std::adjacent_difference(in, in, out);
   }
   return 0;
