@@ -33,7 +33,7 @@ testsuite: .dummy
 	$(XSL) --stringparam boost.root $(BOOST_ROOT) $(BOOSTBOOK_XSL_PATH)/testing/Jamfile.xsl boost.xml
 
 check: .dummy
-	$(CHECK_DTD) boost.xml
+	$(CHECK_DTD) $(BOOST_ROOT)/doc/src/boost.xml
 
 check-docbook: docbook
 	$(CHECK_DTD) boost.docbook
