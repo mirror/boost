@@ -92,6 +92,11 @@ public:
         super_t(Base(BOOST_MAKE_PFTO_WRAPPER(static_cast<T>(start)))),
         m_full(false)
     {}
+    // intel 7.1 doesn't like default copy constructor
+    wchar_from_mb(const wchar_from_mb & rhs) : 
+        super_t(rhs.base_reference()),
+        m_full(rhs.m_full)
+    {}
 };
 
 template<class Base>
@@ -99,7 +104,7 @@ wchar_t wchar_from_mb<Base>::drain(){
     char buffer[9];
     char * bptr = buffer;
     char val;
-    for(unsigned i = 0; i < MB_CUR_MAX; ++i){
+    for(int i = 0; i < MB_CUR_MAX; ++i){
         val = * this->base_reference();
         *bptr++ = val;
         int result = std::mblen(buffer, i);

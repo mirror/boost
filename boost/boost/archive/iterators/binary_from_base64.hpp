@@ -98,7 +98,14 @@ public:
             detail::to_6_bit<CharType>()
         )
     {}
-    binary_from_base64(){};
+    // intel 7.1 doesn't like default copy constructor
+    binary_from_base64(const binary_from_base64 & rhs) : 
+        super_t(
+            Base(rhs.base_reference()),
+            detail::to_6_bit<CharType>()
+        )
+    {}
+//    binary_from_base64(){};
 };
 
 } // namespace iterators

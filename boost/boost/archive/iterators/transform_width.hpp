@@ -118,6 +118,15 @@ public:
         m_full(false),
         m_bufferfull(false)
     {}
+    // intel 7.1 doesn't like default copy constructor
+    transform_width(const transform_width & rhs) : 
+        super_t(rhs.base_reference()),
+        m_current_value(rhs.m_current_value),
+        m_displacement(rhs.m_displacement),
+        m_buffer(rhs.m_buffer),
+        m_full(rhs.m_full),
+        m_bufferfull(rhs.m_bufferfull)
+    {}
 };
 
 template<class Base, int BitsOut, int BitsIn, class CharType>

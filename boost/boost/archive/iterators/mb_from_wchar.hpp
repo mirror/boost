@@ -113,6 +113,13 @@ public:
         m_bnext(0),
         m_full(false)
     {}
+    // intel 7.1 doesn't like default copy constructor
+    mb_from_wchar(const mb_from_wchar & rhs) : 
+        super_t(rhs.base_reference()),
+        m_bend(rhs.m_bend),
+        m_bnext(rhs.m_bnext),
+        m_full(rhs.m_full)
+    {}
 };
 
 } // namespace iterators

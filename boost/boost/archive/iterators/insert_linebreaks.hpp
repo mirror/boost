@@ -89,6 +89,11 @@ public:
         super_t(Base(BOOST_MAKE_PFTO_WRAPPER(static_cast<T>(start)))),
         m_count(0)
     {}
+    // intel 7.1 doesn't like default copy constructor
+    insert_linebreaks(const insert_linebreaks & rhs) : 
+        super_t(rhs.base_reference()),
+        m_count(rhs.m_count)
+    {}
 };
 
 } // namespace iterators
