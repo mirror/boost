@@ -23,18 +23,34 @@
 using namespace std;
 using namespace boost;
 
-static int sub_ints(int x = 0, int y = 0, int z = 0) { return x-y-z; }
+static int sub_ints(int x = 5, int y = 3, int z = 1) { return x-y-z; }
+
+static void 
+test_zero_args()
+{
+  function<int> one(&sub_ints);
+  BOOST_TEST(one() == 1);
+}
+
+static void
+test_one_arg()
+{
+  function<int, int> minus_four(&sub_ints);
+  BOOST_TEST(minus_four(7) == 3);
+}
 
 static void
 test_two_args()
 {
   function<int, int, int> sub(&sub_ints);
-  BOOST_TEST(sub(10, 2) == 8);
+  BOOST_TEST(sub(10, 2) == 7);
 }
 
 int
 test_main(int, char* [])
 {
+  test_zero_args();
+  test_one_arg();
   test_two_args();
   return 0;
 }
