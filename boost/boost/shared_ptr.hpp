@@ -275,6 +275,11 @@ public:
         return pn < rhs.pn;
     }
 
+    void * _internal_get_deleter(std::type_info const & ti) const
+    {
+        return pn.get_deleter(ti);
+    }
+
 // Tasteless as this may seem, making all members public allows member templates
 // to work in the absence of member template friends. (Matthew Langston)
 
@@ -362,6 +367,13 @@ template<class T, class U> shared_ptr<T> shared_polymorphic_downcast(shared_ptr<
 template<class T> inline T * get_pointer(shared_ptr<T> const & p)
 {
     return p.get();
+}
+
+// get_deleter (experimental)
+
+template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
+{
+    return static_cast<D *>(p._internal_get_deleter(typeid(D)));
 }
 
 } // namespace boost

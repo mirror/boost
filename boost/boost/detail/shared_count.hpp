@@ -29,6 +29,7 @@
 #include <functional>       // for std::less
 #include <exception>        // for std::exception
 #include <new>              // for std::bad_alloc
+#include <typeinfo>         // for std::type_info in get_deleter
 
 #ifdef __BORLANDC__
 # pragma warn -8026     // Functions with excep. spec. are not expanded inline
@@ -105,6 +106,8 @@ public:
     {
         delete this;
     }
+
+    virtual void * get_deleter(std::type_info const & ti) = 0;
 
     void add_ref()
     {
@@ -253,6 +256,11 @@ public:
         del(ptr);
     }
 
+    virtual void * get_deleter(std::type_info const & ti)
+    {
+        return ti == typeid(D)? &del: 0;
+    }
+
 #if defined(BOOST_SP_USE_STD_ALLOCATOR)
 
     void * operator new(std::size_t)
@@ -370,6 +378,11 @@ public:
     friend inline bool operator<(shared_count const & a, shared_count const & b)
     {
         return std::less<counted_base *>()(a.pi_, b.pi_);
+    }
+
+    void * get_deleter(std::type_info const & ti) const
+    {
+        return pi_->get_deleter(ti);
     }
 };
 
