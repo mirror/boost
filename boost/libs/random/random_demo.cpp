@@ -112,7 +112,7 @@ int main()
   // After that, both generators are equivalent
   assert(generator == saved_generator);
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   {
     // You can save the generator state for future use.  You can read the
     // state back in at any later time using operator>>.

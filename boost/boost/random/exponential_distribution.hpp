@@ -39,7 +39,7 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) && !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
   BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
 

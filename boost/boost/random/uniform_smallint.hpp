@@ -121,7 +121,7 @@ public:
     : _rng(rng)
   {
     // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) && !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
     BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
     BOOST_STATIC_ASSERT(!std::numeric_limits<typename base_type::result_type>::is_integer);
 #endif

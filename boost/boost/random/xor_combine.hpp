@@ -67,7 +67,7 @@ public:
   result_type operator()()
   {
     // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) && !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
     BOOST_STATIC_ASSERT(std::numeric_limits<typename base1_type::result_type>::is_integer);
     BOOST_STATIC_ASSERT(std::numeric_limits<typename base2_type::result_type>::is_integer);
     BOOST_STATIC_ASSERT(std::numeric_limits<typename base1_type::result_type>::digits >= std::numeric_limits<typename base2_type::result_type>::digits);

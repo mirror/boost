@@ -13,6 +13,10 @@
  * $Id$
  */
 
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
+#pragma warning( disable : 4786 )
+#endif
+
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -22,8 +26,8 @@
 #include <boost/random.hpp>
 #include <boost/config.hpp>
 
-#define BOOST_INCLUDE_MAIN
 #include <boost/test/test_tools.hpp>
+#include <boost/test/included/test_exec_monitor.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
   namespace std { using ::abs; using ::fabs; using ::pow; }
@@ -221,7 +225,8 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
 
   const std::vector<int> v(9999u, 0x41);
   std::vector<int>::const_iterator it = v.begin();
-  URNG urng3(it, v.end());
+  std::vector<int>::const_iterator it_end = v.end();
+  URNG urng3(it, it_end);
   BOOST_TEST(it != v.begin());
   std::cout << "; seeding uses " << (it - v.begin()) << " words" << std::endl;
 
@@ -229,7 +234,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   try {
     // now check that exceptions are thrown
     it = v.end();
-    urng3.seed(it, v.end());
+    urng3.seed(it, it_end);
   } catch(std::invalid_argument& x) {
     have_exception = true;
   }

@@ -40,7 +40,7 @@ public:
 
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
 
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) && !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
   BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
 
