@@ -21,7 +21,6 @@
 using namespace boost::multi_index;
 using namespace boost::tuples;
 
-template<typename T>
 struct is_composite_key_result_helper
 {
   typedef char yes;
@@ -36,7 +35,7 @@ struct is_composite_key_result_helper
 template<typename T>
 struct is_composite_key_result
 {
-  typedef is_composite_key_result_helper<T> helper;
+  typedef is_composite_key_result_helper helper;
 
   BOOST_STATIC_CONSTANT(bool,
     value=(
