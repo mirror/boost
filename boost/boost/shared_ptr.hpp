@@ -435,9 +435,10 @@ template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::
 
 // get_deleter (experimental)
 
-#if defined(__GNUC__) &&  (__GNUC__ < 3)
+#if (defined(__GNUC__) &&  (__GNUC__ < 3)) || (defined(__EDG_VERSION__) && (__EDG_VERSION__ <= 238))
 
 // g++ 2.9x doesn't allow static_cast<X const *>(void *)
+// apparently EDG 2.38 also doesn't accept it
 
 template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
 {
