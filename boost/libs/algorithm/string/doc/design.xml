@@ -5,7 +5,48 @@
     <title>Design Topics</title>
 
     <using-namespace name="boost"/>
-    <using-namespace name="boost::string_algo"/>
+    <using-namespace name="boost::algorithm"/>
+
+    <section id="string_algo.string">
+        <title>String Representation</title>
+
+        <para>
+            As the name suggest, this library works mainly with strings. However, in the context of this library,
+            a string is not restricted to any particular implementation (like <code>std::basic_string</code>),
+            rather it is a concept. This allows the algorithms in this library to be reused for any string type,
+            that satisfies the given requirements.
+        </para>
+        <para>
+            <emphasis role="bold">Definition:</emphasis> A string is a 
+            <ulink url="../../libs/utility/Collection.html">collection</ulink> of characters accessible in sequential
+            ordered fashion. Character is any value type with "cheap" copying and assignment.                
+        </para>
+        <para>
+            First requirement of string-type is that it must accessible using 
+            <link linkend="string_algo.collection_traits">collection traits</link>. This facility allows to access
+            the elements inside the string in a uniform iterator-based fashion. 
+            This facility actualy requires lessen requirements then collection concept. It implements 
+            <ulink url="../../libs/algorithm/string/doc/external_concepts.html">external</ulink> collection interface.
+            This is sufficient for our library
+        </para>
+        <para>            
+            Second requirement defines the way in which are the characters stored in the string. Algorithms in 
+            this library work with an assumption, that copying a character is cheaper then allocating an extra 
+            storage to cache results. This is natural assumption for common character types. Algorithms will 
+            work even if this requirement will not be satisfied, however at the cost of performance degradation.
+        <para>
+        </para>
+            In addition some algorithms have additional requirements on the string-type. Particulary, it is required,
+            that an algorithm can create a new string of the given type. In this case, it is required, that
+            the type satifies the sequence (Std &sect;23.1.1) requirements.
+        </para>
+        <para>
+            In the reference and also in the code, requirement on the string type is designated by the name of
+            template argument. <code>CollectionT</code> means that the basic collection requirements must be held.
+            <code>SequenceT</code> designates extended sequence requirements.
+        </para>
+    </section>
+    
     
     <section id="string_algo.iterator_range">
         <title><code>iterator_range</code> class</title>
@@ -32,27 +73,35 @@
         </para>
         <para>
             The intention of the <code>iterator_range</code> class is to manage a range as a single value and provide 
-            a basic interface for common operations. Its interface is similar to that of container. 
+            a basic interface for common operations. Its interface is similar to that of collection. 
             In addition of <code>begin()</code>
             and <code>end()</code> accessors, it has member functions for checking if the range is empty,
             or to determine the size of the range. It has also a set of member typedefs that extract
             type information from the encapsulated iterators. As such, the interface is compatible with 
-            the <link linkend="string_algo.container_traits">container traits</link> requirements so
+            the <link linkend="string_algo.collection_traits">collecion traits</link> requirements so
             it is possible to use this class as a parameter to many algorithms in this library.
+        </para>
+        <para>
+            <classname>iterator_range</classname> will be moved to Boost.Range library in the future
+            releases. Internal version will be deprecated then.
         </para>
     </section>
         
-    <section id="string_algo.container_traits">
-        <title>Container Traits</title>
+    <section id="string_algo.collection_traits">
+        <title>Collection Traits</title>
 
         <para>
-            Container traits provide uniform access to different types of containers. 
+            Collection traits provide uniform access to different types of 
+            <ulink url="../../libs/utility/Collection.html">collections</ulink> . 
             This functionality allows to write generic algorithms which work with several 
-            different kinds of containers. For this library it means, that, for instance,
+            different kinds of collections. For this library it means, that, for instance,
             many algorithms work with <code>std::string</code> as well as with <code>char[]</code>.
+            This facility implements
+            <ulink url="../../libs/algorithm/string/doc/external_concepts.html">external</ulink> collection
+            concept.
         </para>
         <para>
-            The following container types are supported:
+            The following collection types are supported:
             <itemizedlist>
                 <listitem>
                     Standard containers
@@ -69,78 +118,78 @@
             </itemizedlist>
         </para>
         <para>
-            Container traits support a subset of container concept (Std &sect;23.1). This subset 
+            Collection traits support a subset of container concept (Std &sect;23.1). This subset 
             can be described as an input container concept, e.g. a container with an immutable content. 
-            Its definition can be found in the header <headername>boost/string_algo/container_traits.hpp</headername>.
+            Its definition can be found in the header <headername>boost/algorithm/string/collection_traits.hpp</headername>.
         </para>
         <para>
             In the table C denotes a container and c is an object of C. 
         </para>
         <table>
-            <title>Container Traits</title>
+            <title>Collection Traits</title>
             <tgroup cols="3" align="left">
                 <thead>
                     <row>   
                         <entry>Name</entry>
-                        <entry>Standard container equivalent</entry>
+                        <entry>Standard collection equivalent</entry>
                         <entry>Description</entry>
                     </row>Maeterlinck
                 </thead>
                 <tbody>
                     <row>
-                        <entry><classname>container_value_type&lt;C&gt;</classname>::type</entry>
+                        <entry><classname>value_type_of&lt;C&gt;</classname>::type</entry>
                         <entry><code>C::value_type</code></entry>
                         <entry>Type of contained values</entry>
                     </row>
                     <row>
-                        <entry><classname>container_difference_type&lt;C&gt;</classname>::type</entry>
+                        <entry><classname>difference_type_of&lt;C&gt;</classname>::type</entry>
                         <entry><code>C::difference_type</code></entry>
-                        <entry>difference type of the container</entry>
+                        <entry>difference type of the collection</entry>
                     </row>
                     <row>
-                        <entry><classname>container_iterator&lt;C&gt;</classname>::type</entry>
+                        <entry><classname>iterator_of&lt;C&gt;</classname>::type</entry>
                         <entry><code>C::iterator</code></entry>
-                        <entry>iterator type of the container</entry>
+                        <entry>iterator type of the collection</entry>
                     </row>
                     <row>
-                        <entry><classname>container_const_iterator&lt;C&gt;</classname>::type</entry>
+                        <entry><classname>const_iterator_of&lt;C&gt;</classname>::type</entry>
                         <entry><code>C::const_iterator</code></entry>
-                        <entry>const_iterator type of the container</entry>
+                        <entry>const_iterator type of the collection</entry>
                     </row>
                     <row>
-                        <entry><classname>container_result_iterator&lt;C&gt;</classname>::type</entry>
+                        <entry><classname>result_iterator_of&lt;C&gt;</classname>::type</entry>
                         <entry></entry>
                         <entry>
-                            result_iterator type of the container. This type maps to <code>C::iterator</code>
-                            for mutable container and <code>C::const_iterator</code> for const containers.
+                            result_iterator type of the collection. This type maps to <code>C::iterator</code>
+                            for mutable collection and <code>C::const_iterator</code> for const collection.
                         </entry>
                     </row>
                     <row>
                         <entry><functionname>begin(c)</functionname></entry>
                         <entry><code>c.begin()</code></entry>
                         <entry>
-                            Gets the iterator pointing to the start of the container.
+                            Gets the iterator pointing to the start of the collection.
                         </entry>
                     </row>
                     <row>
                         <entry><functionname>end(c)</functionname></entry>
                         <entry><code>c.end()</code></entry>
                         <entry>
-                            Gets the iterator pointing to the end of the container.
+                            Gets the iterator pointing to the end of the collection.
                         </entry>
                     </row>
                     <row>
                         <entry><functionname>size(c)</functionname></entry>
                         <entry><code>c.size()</code></entry>
                         <entry>
-                            Gets the size of the container.
+                            Gets the size of the collection.
                         </entry>
                     </row>
                     <row>
                         <entry><functionname>empty(c)</functionname></entry>
                         <entry><code>c.empty()</code></entry>
                         <entry>
-                            Checks if the container is empty.
+                            Checks if the collection is empty.
                         </entry>
                     </row>
                 </tbody>
@@ -148,9 +197,8 @@
         </table>
 
         <para>
-            The container traits are only a temporary part of this library. There is a plan for a separate submission
-            of a container_traits library to Boost. Once it gets accepted, String Algorithm Library will be adopted to 
-            use it and the internal implementation will be deprecated.
+            The collection traits are only a temporary part of this library. They will be replaced in the future
+            releases by Boost.Range library. Use of the internal implementation will be deprecated then.
         </para>
     
     </section>
@@ -169,7 +217,7 @@
             Sequence traits allows one to specify additional properties of a sequence container (see Std.&sect;32.2).
             These properties are then used by algorithms to select optimized handling for some operations.
             The sequence traits are declared in the header 
-            <headername>boost/string_algo/sequence_traits.hpp</headername>.
+            <headername>boost/algorithm/string/sequence_traits.hpp</headername>.
         </para>
 
         <para>
@@ -186,11 +234,11 @@
                 </thead>
                 <tbody>
                     <row>
-                        <entry><classname>sequence_has_native_replace&lt;C&gt;</classname>::value</entry>
+                        <entry><classname>has_native_replace&lt;C&gt;</classname>::value</entry>
                         <entry>Specifies that the sequence has std::string like replace method</entry>
                     </row>
                     <row>
-                        <entry><classname>sequence_has_stable_iterators&lt;C&gt;</classname>::value</entry>
+                        <entry><classname>has_stable_iterators&lt;C&gt;</classname>::value</entry>
                         <entry>
                             Specifies that the sequence has stable iterators. It means,
                             that operations like <code>insert</code>/<code>erase</code>/<code>replace</code> 
@@ -198,14 +246,14 @@
                         </entry>
                     </row>
                     <row>
-                        <entry><classname>sequence_has_const_time_insert&lt;C&gt;</classname>::value</entry>
+                        <entry><classname>has_const_time_insert&lt;C&gt;</classname>::value</entry>
                         <entry>
                             Specifies that the insert method of the sequence has 
                             constant time complexity.
                         </entry>
                     </row>
                     <row>
-                        <entry><classname>sequence_has_const_time_erase&lt;C&gt;</classname>::value</entry>
+                        <entry><classname>has_const_time_erase&lt;C&gt;</classname>::value</entry>
                         <entry>
                             Specifies that the erase method of the sequence has constant time complexity
                         </entry>
@@ -243,7 +291,7 @@
             Currently the library contains only naive implementation of find algorithms with complexity 
             O(n * m) where n is the size of the input sequence and m is the size of the search sequence. 
             There are algorithms with complexity O(n), but for smaller sequence a constant overhead is 
-            rather big. For small m &lt;&lt; n (m magnitued smaller than n) the current implementation 
+            rather big. For small m &lt;&lt; n (m by magnitude smaller than n) the current implementation 
             provides acceptable efficiency. 
             Even the C++ standard defines the required complexity for search algorithm as O(n * m). 
             It is possible that a future version of library will also contain algorithms with linear 
@@ -268,14 +316,44 @@
         </para>         
     </section>
     <section id="string_algo.split">
-        <title>Split Algorithms</title>
+        <title>Find Iterators &amp; Split Algorithms</title>
 
         <para>
-            Split algorithms are a logical extension of <link linkend="string_algo.find">find facility</link>.
-            Instead of searching for one match, the whole input is searched. The result of the search is then used 
-            to partition the input. It depends on the algorithms which parts are returned as the result of
-            split operations. It can be the matching parts (<functionname>find_all()</functionname>) of the parts in
-            between (<functionname>split()</functionname>). 
+               Find iterators are a logical extension of <link linkend="string_algo.find">find facility</link>.
+            Instead of searching for one match, the whole input can be iteratively searched for multiple matches.
+            The result of the search is then used to partition the input. It depends on the algorithms which parts 
+            are returned as the result. It can be the matching parts (<classname>find_iterator</classname>) of the parts in
+            between (<classname>split_iterator</classname>). 
+        </para>
+        <para>
+            In addition the split algorithms like <functionname>find_all()</functionname> and <functionname>split()</functionname>
+            can simplify the common operations. They use a find iterator to search the whole input and copy the 
+            matches they found into the supplied container.
+        </para>
+    </section>
+    <section id="string_algo.exception">
+        <title>Exception Safety</title>
+
+        <para>
+            The library provides some exceptions safety guaranties under following assumptions:
+            <orderedlist numeration="arabic">
+                <listitem>
+                    <para>        
+                        All types that are used as a template arguments or passed as arguments to the 
+                        facilities in this library provide <emphasis>basic exception guarantie</emphasis>.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        If the types mentioned in the first assumption can provide 
+                        <emphasis>strong exception guarantie</emphasis> for their const operations, some algorithm
+                        can provide stronger guaranties.
+                    </para>
+                </listitem>
+            </orderedlist>
+        </para>        
+        <para>
+            Unless stated otherwise, all facilities and algorithms in this library have <emphasis>basic exception guarantie</emphasis>.
         </para>
     </section>
 </section>

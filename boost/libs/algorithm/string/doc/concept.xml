@@ -5,7 +5,7 @@
     <title>Concepts</title>
 
     <using-namespace name="boost"/>
-    <using-namespace name="boost::string_algo"/>
+    <using-namespace name="boost::algorithm"/>
 
     <section>   
         <title>Definitions</title>

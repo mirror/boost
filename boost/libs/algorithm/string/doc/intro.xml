@@ -18,23 +18,25 @@
         algorithms are using container specific features when it means a performance
         gain.
     </para>
+    <para>
+        <emphasis role="bold">
+            Important note: In this documentation we use term <emphasis>string</emphasis> to 
+            designate a sequence of <emphasis>characters</emphasis> stored in an arbitrary container.
+            A <emphasis>string</emphasis> is not restricted to <code>std::basic_string</code> and 
+            <emphasis>character</emphasis> does not have to be <code>char</code> or <code>wchar_t</code>,
+            although these are most common candidates.
+        </emphasis>
+        Consult <link linkend="string_algo.design">design chapter</link> to see precise specification of
+        supported string types.
+    </para>
     <para>      
-        The library has layered structure to simplify the usage without sacrificing the
-        generalization. 
-
-        The easy-to-use interface, defined in the namespace <code>boost</code>, represents the first layer. 
-        Algorithms and classes defined here do not offer a lot of customization opportunities 
-        rather they are provided in more different variants, so a user can chose the 
-        one that suits her needs.
-
-        The second layer, defined in the namespace <code>boost::string_algo</code>, on the 
-        other hand, is generic. Basically it contains the same set of algorithms as the first layer,
-        but the interface is more flexible and allows more customization, but it is harder to use.
-        The first layer is implemented as set of wrappers around the second layer.
+        The library interface functions and classes are defined in the namespace <code>boost::algorithm</code>, and
+        they are lift into namespace <code>boost</code> via using declaration.
     </para>
     <para>
         The documentation is divided into several sections. For a quick start read the 
-        <link linkend="string_algo.usage">Usage</link> section. 
+        <link linkend="string_algo.usage">Usage</link> section followed by 
+        <link linkend="string_algo.quickref">Quick Reference</link>. 
         <link linkend="string_algo.design">The Design Topics</link>,
         <link linkend="string_algo.concept">Concepts</link> and <link linkend="string_algo.rationale">Rationale</link>
         provide some explanation about the library design and structure an explain how it should be used.

@@ -8,7 +8,7 @@
         <para>
             The whole library is provided in headers. Regex variants of some algorithms, 
             however, are dependent on the <libraryname>Boost.Regex</libraryname> library. All such algorithms are
-            separated in <headername>boost/string_algo/regex.hpp</headername>. 
+            separated in <headername>boost/algorithm/string_regex.hpp</headername>. 
             If this header is used, an application must be linked with the <libraryname>Boost.Regex</libraryname> 
             library. 
         </para>
@@ -17,7 +17,7 @@
     <section>
         <title>Examples</title>
         <para>
-            Examples showing the basic usage of the library can be found in the libs/string_algo/example
+            Examples showing the basic usage of the library can be found in the libs/algorithm/string/example
             directory. There is a separate file for the each part of the library. Please follow the boost
             build guidelines to build examples using the bjam. To successfully build regex examples 
             the <libraryname>Boost.Regex</libraryname> library is required. 
@@ -27,7 +27,7 @@
     <section>
         <title>Tests</title>
         <para>
-            A full set of test cases for the library is located in the libs/string_algo/test directory. 
+            A full set of test cases for the library is located in the libs/algorithm/string/test directory. 
             The test cases can be executed using the boost build system. For the tests of regular 
             expression variants of algorithms, the <libraryname>Boost.Regex</libraryname> library is required. 
         </para>
@@ -44,12 +44,16 @@
                 <listitem>GCC 3.2</listitem>
                 <listitem>GCC 3.3.1</listitem>
             </itemizedlist>
+
+            See <ulink url="http://boost.sourceforge.net/regression-logs/">Boost regression tables</ulink>
+            for additional info for a particular compiler.
         </para>
         <para>
             There are known limitation on platforms not supporting partial template specialization. 
-            Library depends on correctly implemented std::iterator_traits class. If a standard library provided 
-            with compiler is broken, the String Algorithm Library cannot function properly. Usually it implies 
-            that primitive pointer iterators are not working with the library functions. 
+            Library depends on correctly implemented <code>std::iterator_traits</code> class. 
+            If a standard library provided with compiler is broken, the String Algorithm Library 
+            cannot function properly. Usually it implies that primitive pointer iterators are not 
+            working with the library functions. 
         </para>
     </section>
 </section>
