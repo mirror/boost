@@ -19,6 +19,7 @@
 #define BOOST_INTEGER_LOG2_HPP_GP_20030301
 
 #include <cassert>
+#include <climits> // actually used for Borland only
 #include "boost/limits.hpp"
 #include "boost/config.hpp"
 
@@ -67,6 +68,22 @@ namespace boost {
       BOOST_STATIC_CONSTANT(int, value = 0);
   };
 
+  // this template is here just for Borland :(
+  // we could simply rely on numeric_limits but sometimes
+  // Borland tries to use numeric_limits<const T>, because
+  // of its usual const-related problems in argument deduction
+  // - gps
+  template <typename T>
+  struct width {
+
+#ifdef __BORLANDC__
+      BOOST_STATIC_CONSTANT(int, value = sizeof(T) * CHAR_BIT);
+#else
+      BOOST_STATIC_CONSTANT(int, value = (std::numeric_limits<T>::digits));
+#endif
+
+  };
+
  } // detail
 
 
@@ -80,8 +97,8 @@ namespace boost {
      assert(x > 0);
 
      const int n = detail::max_pow2_less<
-                    std::numeric_limits<T> :: digits, 4
-                    > :: value;
+                     detail::width<T> :: value, 4
+                   > :: value;
 
      return detail::integer_log2_impl(x, n);
 
