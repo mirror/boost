@@ -36,7 +36,7 @@ char * tmpdir(){
     if(NULL == dirname)
         dirname = std::getenv("TEMP");
     if(NULL == dirname){
-        assert(false); // no temp directory found
+        //assert(false); // no temp directory found
         dirname = ".";
     }
 	return dirname;
