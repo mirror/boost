@@ -23,7 +23,7 @@ using std::cout;
 using std::endl;
 using boost::rational;
 
-#ifdef _MSC_VER
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 // This is a nasty hack, required because MSVC does not implement "Koenig
 // Lookup". Basically, if I call abs(r), the C++ standard says that the
 // compiler should look for a definition of abs in the namespace which
