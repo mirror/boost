@@ -11,6 +11,7 @@
 #include <boost/test/included/test_exec_monitor.hpp>
 
 #include <string>
+#include <string.h>
 #include <iostream>
 #include <boost/algorithm/string/case_conv.hpp>
 #include <boost/test/test_tools.hpp>
