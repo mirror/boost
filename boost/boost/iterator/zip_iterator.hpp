@@ -32,10 +32,6 @@
 
 #include <boost/tuple/tuple.hpp>
 
-#if BOOST_WORKAROUND(__GNUC__, == 2) || BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
-# include <boost/type_traits/remove_cv.hpp>
-#endif 
-
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/apply.hpp>
@@ -106,23 +102,13 @@ namespace boost {
       template<typename Iterator>
       struct apply
       { 
-#if BOOST_WORKAROUND(__EDG_VERSION__, != 0)     \
-    || BOOST_WORKAROUND(__GNUC__, == 2)         \
-    || BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
         typedef typename
-        iterator_traits<
-            typename boost::remove_cv<Iterator>::type
-        >::reference
+          iterator_traits<Iterator>::reference
         type;
-#else 
-        typedef typename
-        iterator_traits<Iterator>::reference
-        type;
-#endif
       };
 
       template<typename Iterator>
-        typename apply<Iterator>::type operator()(Iterator& it)
+        typename apply<Iterator>::type operator()(Iterator const& it)
       { return *it; }
     };
            
