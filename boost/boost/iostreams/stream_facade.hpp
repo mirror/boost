@@ -121,18 +121,24 @@ public:
                std::streamsize buffer_size = -1,
                std::streamsize pback_size = -1 )
     { this->open_impl(ref , buffer_size, pback_size); }
-    template<typename U0>
-    stream_facade(U0 u0) { this->open_impl(Device(u0)); }
-    template<typename U0, typename U1>
-    stream_facade(U0 u0, U1 u1) { this->open_impl(Device(u0, u1)); }
-    template<typename U0, typename U1, typename U2>
-    stream_facade(U0 u0, U1 u1, U2 u2) { this->open_impl(Device(u0, u1, u2)); }
-    template<typename U0>
-    void open(U0 u0) { this->open_impl (Device(u0)); }
-    template<typename U0, typename U1>
-    void open(U0 u0, U1 u1) { this->open_impl (Device(u0, u1)); }
-    template<typename U0, typename U1, typename U2>
-    void open(U0 u0, U1 u1, U2 u2) { this->open_impl (Device(u0, u1, u2)); }
+    template<typename U0> 
+    stream_facade(const U0& u0) 
+    { this->open_impl(Device(u0)); }
+    template<typename U0, typename U1> 
+    stream_facade(const U0& u0, const U1& u1) 
+    { this->open_impl(Device(u0, u1)); }
+    template<typename U0, typename U1, typename U2> 
+    stream_facade(const U0& u0, const U1& u1, const U2& u2) 
+    { this->open_impl(Device(u0, u1, u2)); }
+    template<typename U0> 
+    void open(const U0& u0) 
+    { this->open_impl(Device(u0)); }
+    template<typename U0, typename U1> 
+    void open(const U0& u0, const U1& u1) 
+    { this->open_impl(Device(u0, u1)); }
+    template<typename U0, typename U1, typename U2> 
+    void open(const U0& u0, const U1& u1, const U2& u2) 
+    { this->open_impl(Device(u0, u1, u2)); }
     // END DEBUG
     //BOOST_IOSTREAMS_FORWARD( streambuf_facade, open_impl, Device,
     //                         BOOST_IOSTREAMS_PUSH_PARAMS(),
