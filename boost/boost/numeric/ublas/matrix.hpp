@@ -119,7 +119,7 @@ namespace boost { namespace numeric { namespace ublas {
                 // Order loop for i-major and j-minor sizes
                 const size_type i_size = functor_type::size1 (size1_min, size2_min);
                 const size_type j_size = functor_type::size2 (size1_min, size2_min);
-                for (size_t_type i = 0; i != i_size; ++i) {    // indexing copy over major
+                for (size_type i = 0; i != i_size; ++i) {    // indexing copy over major
                     for (size_type j = 0; j != j_size; ++j) {
                         temporary.data () [functor_type::element (functor_type::element1(i,i_size, j,j_size), size1, functor_type::element2(i,i_size, j,j_size), size2)] =
                             data() [functor_type::element (functor_type::element1(i,i_size, j,j_size), size1_, functor_type::element2(i,i_size, j,j_size), size2_)];
