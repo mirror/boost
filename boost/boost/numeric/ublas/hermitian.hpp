@@ -319,8 +319,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_ = size;
             if (preserve) {
                 self_type temporary (size_, size_);
-                // FIXME use matrix_resize_preserve on conformant compilers
-                // detail::matrix_resize_preserve<layout_type> (*this, temporary, size_, size_);
+                detail::matrix_resize_preserve<layout_type> (*this, temporary, size_, size_);
                 assign_temporary (temporary);
             }
             else
@@ -333,7 +332,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void resize_packed_preserve (size_type size) {
             size_ = BOOST_UBLAS_SAME (size, size);
-            data ().resize (triangular_type::packed_size (layout_type (), size_, size_), value_type (0));
+            data ().resize (triangular_type::packed_size (layout_type (), size_, size_), value_type ());
         }
 
         // Element access

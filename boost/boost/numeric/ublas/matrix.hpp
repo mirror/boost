@@ -3096,16 +3096,12 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         c_matrix ():
             size1_ (N), size2_ (M) /* , data_ () */ {
-            for (size_type i = 0; i < size1_; ++ i)
-                std::fill (data_ [i], data_ [i] + size2_, value_type (0));
         }
         BOOST_UBLAS_INLINE
         c_matrix (size_type size1, size_type size2):
             size1_ (size1), size2_ (size2) /* , data_ () */ {
             if (size1_ > N || size2_ > M)
                 bad_size ().raise ();
-            for (size_type i = 0; i < size1_; ++ i)
-                std::fill (data_ [i], data_ [i] + size2_, value_type (0));
         }
         BOOST_UBLAS_INLINE
         c_matrix (const c_matrix &m):
@@ -3159,9 +3155,11 @@ namespace boost { namespace numeric { namespace ublas {
                 assign_temporary (temporary);
             }
             else {
+                // only necessary for non POD to maintain default initialised invariant
+	            std::fill (data_ + size1_*size2_, data_ + size1+size2, value_type ());
                 size1_ = size1;
                 size2_ = size2;
-            }
+	        }
         }
 
         // Element access

@@ -93,7 +93,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
             if (preserve)
-                data ().resize (size, typename A::value_type());
+                data ().resize (size, typename A::value_type ());
             else
                 data ().resize (size);
         }
@@ -148,7 +148,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class A2>          // Generic vector assignment without temporary
         BOOST_UBLAS_INLINE
         vector &operator = (const vector<T, A2> &v) {
-            resize (v.size ());
+            resize (v.size (), false);
             assign (v);
             return *this;
         }
@@ -1182,7 +1182,6 @@ namespace boost { namespace numeric { namespace ublas {
             size_ (size) /* , data_ () */ {
             if (size_ > N)
                 bad_size ().raise ();
-            std::fill (data_, data_ + size_, value_type (0));
         }
         BOOST_UBLAS_INLINE
         c_vector (const c_vector &v):
@@ -1219,7 +1218,8 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size, bool preserve = true) {
             if (size > N)
                 bad_size ().raise ();
-            std::fill (data_ + (std::min) (size, size_), data_ + size, value_type (0));
+                // only necessary for non POD to maintain default initialised invariant
+            std::fill (data_ + size_, data_ + size, value_type ());
             size_ = size;
         }
 
