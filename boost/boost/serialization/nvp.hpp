@@ -101,7 +101,7 @@ struct tracking_level<nvp<T> >
 #define BOOST_SERIALIZATION_BASE_OBJECT_NVP(name)                  \
     boost::serialization::make_nvp(                                \
         BOOST_PP_STRINGIZE(name),                                  \
-        boost::serialization::base_object<name>(*this)             \
+        boost::serialization::base_object<name >(*this)            \
     )
 /**/
 
