@@ -243,6 +243,7 @@ void_upcast(
             t_new = void_upcast(derived_type, (*it)->m_derived_type, t, false);
             if (NULL != t_new){
                 t_new = (*it)->upcast(t_new);
+                assert(NULL != t_new);
                 if(top){
                     // register the this pair so we will have to go through
                     // keep this expensive search process more than once.
@@ -291,18 +292,19 @@ void_downcast(
         it != void_cast_detail::void_caster_registry::end();
         ++it
     ){
-        // if the current candidate doesn't cast from the desired target type
-        if ((*it)->m_base_type == base_type){
+        // if the current candidate doesn't casts from the desired target type
+        if ((*it)->m_derived_type == derived_type){
             // if the current candidate casts to the desired source type
-            if ((*it)->m_derived_type == derived_type){
+            if ((*it)->m_base_type == base_type){
                 // we have a base/derived match - we're done
                 // cast to the intermediate type
                 t_new = (*it)->downcast(t);
                 break;
             }
-            t_new = void_downcast(derived_type, (*it)->m_derived_type, t, false);
+            t_new = void_downcast((*it)->m_base_type, base_type, t, false);
             if (NULL != t_new){
                 t_new = (*it)->downcast(t_new);
+                assert(NULL != t_new);
                 if(top){
                     // register the this pair so we will have to go through
                     // keep this expensive search process more than once.
