@@ -10,8 +10,8 @@
 
 ///// header body
 
-#ifndef BOOST_TT_DETAIL_IS_FUNCTION_REF_TESTER_HPP_INCLUDED
-#define BOOST_TT_DETAIL_IS_FUNCTION_REF_TESTER_HPP_INCLUDED
+#ifndef BOOST_DETAIL_IS_FUNCTION_REF_TESTER_HPP_INCLUDED
+#define BOOST_DETAIL_IS_FUNCTION_REF_TESTER_HPP_INCLUDED
 
 #include "boost/type_traits/detail/yes_no_type.hpp"
 #include "boost/type_traits/config.hpp"
@@ -23,8 +23,8 @@
 #endif
 
 namespace boost {
-namespace python {
 namespace detail {
+namespace is_function_ref_tester_ {
 
 template <class T>
 boost::type_traits::no_type BOOST_TT_DECL is_function_ref_tester(T& ...);
@@ -122,7 +122,7 @@ boost::type_traits::yes_type is_function_ref_tester(R (&)(T0,T1,T2,T3,T4,T5,T6,T
 } // namespace python
 } // namespace boost
 
-#endif // BOOST_TT_DETAIL_IS_FUNCTION_REF_TESTER_HPP_INCLUDED
+#endif // BOOST_DETAIL_IS_FUNCTION_REF_TESTER_HPP_INCLUDED
 
 ///// iteration
 

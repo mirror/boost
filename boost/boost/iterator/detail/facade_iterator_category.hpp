@@ -24,7 +24,7 @@
 # include <boost/iterator/detail/config_def.hpp> // try to keep this last
 
 # ifdef BOOST_ITERATOR_REF_CONSTNESS_KILLS_WRITABILITY
-#  include <boost/python/detail/indirect_traits.hpp>
+#  include <boost/detail/indirect_traits.hpp>
 # endif
 
 //
@@ -61,7 +61,7 @@ struct iterator_writability_disabled
 # ifdef BOOST_ITERATOR_REF_CONSTNESS_KILLS_WRITABILITY // Adding Thomas' logic?
   : mpl::or_<
         is_const<Reference>
-      , python::detail::is_reference_to_const<Reference>
+      , boost::detail::indirect_traits::is_reference_to_const<Reference>
       , is_const<ValueParam>
     >
 # else 

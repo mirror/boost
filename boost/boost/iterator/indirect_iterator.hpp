@@ -14,7 +14,7 @@
 #include <boost/indirect_reference.hpp>
 #include <boost/detail/iterator.hpp>
 
-#include <boost/python/detail/indirect_traits.hpp>
+#include <boost/detail/indirect_traits.hpp>
 
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/add_reference.hpp>
