@@ -2,6 +2,9 @@ If you have suggestions for additions or improvements to this library,
 please e-mail such suggestions to boost@yahoogroups.com, but also cc
 them to vesa_karvonen@hotmail.com.
 
-Current R&D:
+Current:
+- Writing examples
+- Improving documentation
+- Categorization of preprocessor bugs
 - Faster preprocessing
 - Faster arithmetic
