@@ -48,7 +48,11 @@
 #include <crt_externs.h>
 #define environ (*_NSGetEnviron()) 
 #else
+#if defined(__MWERKS__)
+#include <crtl.h>
+#else
 extern char** environ;
+#endif
 #endif
 
 using namespace std;
