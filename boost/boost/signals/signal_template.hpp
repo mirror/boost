@@ -206,7 +206,7 @@ namespace boost {
     void disconnect(const T& t)
     {
       typedef mpl::bool_<(is_convertible<T, group_type>::value)> is_group;
-      return this->do_disconnect(t, is_group());
+      this->do_disconnect(t, is_group());
     }
 
   private:
