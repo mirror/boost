@@ -92,8 +92,8 @@ iterator concepts corresponding to
 ``iterator_traits<Derived>::iterator_category``, the expressions
 involving ``m_iterator`` in the specifications of those private
 member functions of ``iterator_adaptor`` that may be called by
-``iterator_facade<Derived, ``\ *V*\``, ``\ *C*\``, ``\ *R*\``, ``\
-*D*\``>`` in evaluating any valid expression involving ``Derived``
+``iterator_facade<Derived, V, C, R, D>``
+in evaluating any valid expression involving ``Derived``
 in those concepts' requirements.
 
 ``iterator_adaptor`` public operations
