@@ -22,6 +22,12 @@
 #  define BOOST_NO_STD_WSTREAMBUF
 #endif
 
+#if defined(__osf__) && !defined(_REENTRANT) && defined(_GLIBCXX_HAVE_GTHR_DEFAULT)
+// GCC 3.4 on Tru64 forces the definition of _REENTRANT when any std lib header
+// file is included, therefore for consistency we define it here as well.
+#  define _REENTRANT
+#endif
+
 #ifdef __GLIBCXX__ // gcc 3.4 and greater:
 #  ifdef _GLIBCXX_HAVE_GTHR_DEFAULT
       // 
@@ -43,5 +49,3 @@
 // support is useless.
 #  undef BOOST_HAS_LONG_LONG
 #endif
-
-
