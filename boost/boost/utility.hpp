@@ -13,37 +13,13 @@
 #ifndef BOOST_UTILITY_HPP
 #define BOOST_UTILITY_HPP
 
-#include <boost/config.hpp>        // broken compiler workarounds
-#include <boost/static_assert.hpp>
-
 // certain headers are part of the <utility.hpp> interface
+
+#include <boost/checked_delete.hpp>
 #include <boost/utility/base_from_member.hpp>  
- 
-#include <cstddef>                 // for size_t
-#include <utility>                 // for std::pair
 
 namespace boost
 {
-//  checked_delete() and checked_array_delete()  -----------------------------//
-
-    // verify that types are complete for increased safety
-
-    template< typename T >
-    inline void checked_delete(T * x)
-    {
-        BOOST_STATIC_ASSERT( sizeof(T) != 0 ); // assert type complete at point
-                                               // of instantiation
-        delete x;
-    }
-
-    template< typename T >
-    inline void checked_array_delete(T  * x)
-    {
-        BOOST_STATIC_ASSERT( sizeof(T) != 0 ); // assert type complete at point
-                                               // of instantiation
-        delete [] x;
-    }
-
 //  next() and prior() template functions  -----------------------------------//
 
     //  Helper functions for classes like bidirectional iterators not supporting
