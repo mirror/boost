@@ -8,6 +8,7 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
+#define _MSL_USING_NAMESPACE 1
 
 #include <boost/detail/workaround.hpp>
 
@@ -45,6 +46,8 @@ template< typename Container, typename T >
 BOOST_DEDUCED_TYPENAME boost::range_iterator<Container>::type
 find_mutable( Container& c,  T value )
 {
+    boost::size( c );
+    boost::end( c );
     return std::find( boost::begin( c ), boost::end( c ), value );
 }
 
@@ -52,6 +55,8 @@ template< typename Container, typename T >
 BOOST_DEDUCED_TYPENAME boost::range_const_iterator<Container>::type
 find_const( const Container& c, T value )
 {
+    boost::size( c );
+    boost::end( c );
     return std::find( boost::begin( c ), boost::end( c ), value );
 }
 

@@ -31,15 +31,6 @@
 using namespace boost;
 using namespace std;
 
-struct add_one
-{
-    template< class T >
-    T operator()( T r ) const
-    {
-        return r + 1;
-    }
-};
-
 void check_iterator_range()
 {
    
@@ -107,8 +98,4 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
 
     return test;
 }
-
-
-
-
 
