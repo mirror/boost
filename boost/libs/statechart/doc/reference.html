@@ -94,14 +94,14 @@ value <code>hsr</code> the following expression must be well-formed and have
 the indicated results:</p>
 <table border="3" width="100%" id="AutoNumber1" cellpadding="2">
   <tr>
-    <td width="292"><b>Expression</b></td>
-    <td width="50"><b>Type</b></td>
-    <td width="783"><b>Effects/Result</b></td>
+    <td width="299"><b>Expression</b></td>
+    <td width="101"><b>Type</b></td>
+    <td width="1129"><b>Effects/Result</b></td>
   </tr>
   <tr>
-    <td width="292"><code>et( a, eh, hsr );</code></td>
-    <td width="50"><code>result</code></td>
-    <td width="783">
+    <td width="299"><code>et( a, eh, hsr );</code></td>
+    <td width="101"><code>result</code></td>
+    <td width="1129">
     <ol>
       <li>Attempts to call <code>operator()()</code> on <code>a</code> and to 
       return the result</li>
@@ -126,20 +126,20 @@ the indicated results:</p>
 <table border="3" width="100%" id="AutoNumber1" cellpadding="2">
   <tr>
     <td width="26%"><b>Expression</b></td>
-    <td width="14%"><b>Type</b></td>
-    <td width="35%"><b>Result</b></td>
+    <td width="21%"><b>Type</b></td>
+    <td width="51%"><b>Result</b></td>
   </tr>
   <tr>
     <td width="26%"><code>cs.outer_state_ptr()</code></td>
-    <td width="14%"><code>const S *</code></td>
-    <td width="35%"><code>0</code> if <code>cs</code> is an
+    <td width="21%"><code>const S *</code></td>
+    <td width="51%"><code>0</code> if <code>cs</code> is an
     <a href="definitions.html#Outermost state">outermost state</a>, a pointer 
     to the direct outer state of <code>cs</code> otherwise</td>
   </tr>
   <tr>
     <td width="25%"><code>cs.dynamic_type()</code></td>
-    <td width="14%"><code>S::id_type</code></td>
-    <td width="35%">A value unambiguously identifying the most-derived type of
+    <td width="21%"><code>S::id_type</code></td>
+    <td width="51%">A value unambiguously identifying the most-derived type of
     <code>cs</code>. <code>S::id_type</code> values are comparable with <code>
     operator==()</code> and <code>operator!=()</code>. An unspecified 
     collating order can be established with <code>std::less&lt; S::id_type &gt;</code></td>
@@ -147,8 +147,8 @@ the indicated results:</p>
   <tr>
     <td width="25%"><code>cs.custom_dynamic_type_ptr&lt;<br>
 &nbsp; Type &gt;()</code></td>
-    <td width="14%"><code>const Type *</code></td>
-    <td width="35%">A pointer to the custom type identifier or <code>0</code>. 
+    <td width="21%"><code>const Type *</code></td>
+    <td width="51%">A pointer to the custom type identifier or <code>0</code>. 
     If <code>!= 0</code>, <code>Type</code> must match the type of the 
     previously set pointer. This function is only available if
     <a href="configuration.html#Application Defined Macros">
@@ -178,19 +178,19 @@ cpc</code> of type <code>S::processor_context</code> the following expressions
 must be well-formed and have the indicated results:</p>
 <table border="3" width="100%" id="AutoNumber9" cellpadding="2">
   <tr>
-    <td width="26%"><b>Expression</b></td>
-    <td width="14%"><b>Type</b></td>
-    <td width="35%"><b>Result</b></td>
+    <td width="24%"><b>Expression</b></td>
+    <td width="25%"><b>Type</b></td>
+    <td width="48%"><b>Result</b></td>
   </tr>
   <tr>
-    <td width="25%"><code>cpc.my_scheduler()</code></td>
-    <td width="14%"><code>S &amp;</code></td>
-    <td width="35%">A reference to the scheduler</td>
+    <td width="24%"><code>cpc.my_scheduler()</code></td>
+    <td width="25%"><code>S &amp;</code></td>
+    <td width="48%">A reference to the scheduler</td>
   </tr>
   <tr>
-    <td width="25%"><code>cpc.my_handle()</code></td>
-    <td width="14%"><code>S::processor_handle</code></td>
-    <td width="35%">The handle identifying the <code>event_processor&lt;&gt;</code> 
+    <td width="24%"><code>cpc.my_handle()</code></td>
+    <td width="25%"><code>S::processor_handle</code></td>
+    <td width="48%">The handle identifying the <code>event_processor&lt;&gt;</code> 
     subtype object</td>
   </tr>
 </table>
@@ -211,58 +211,59 @@ unsigned long</code> value <code>n</code> the following expressions must be
 well-formed and have the indicated results:</p>
 <table border="3" width="100%" id="AutoNumber17" cellpadding="2">
   <tr>
-    <td width="26%"><b>Expression</b></td>
-    <td width="14%"><b>Type</b></td>
-    <td width="35%"><b>Effects/Result</b></td>
+    <td width="36%"><b>Expression</b></td>
+    <td width="10%"><b>Type</b></td>
+    <td width="52%"><b>Effects/Result</b></td>
   </tr>
   <tr>
-    <td width="25%"><code>F::work_item</code></td>
-    <td width="14%"><code>boost::function0&lt; void &gt;</code></td>
-    <td width="35%">&nbsp;</td>
+    <td width="36%"><code>F::work_item</code></td>
+    <td width="10%"><code>boost::function0&lt;<br>
+&nbsp; void &gt;</code></td>
+    <td width="52%">&nbsp;</td>
   </tr>
   <tr>
-    <td width="25%"><code>F()</code> or <code>F( false )</code></td>
-    <td width="14%"><code>F</code></td>
-    <td width="35%">Constructs a <b>non-blocking</b> (see below) object of the 
+    <td width="36%"><code>F()</code> or <code>F( false )</code></td>
+    <td width="10%"><code>F</code></td>
+    <td width="52%">Constructs a <b>non-blocking</b> (see below) object of the 
     FifoWorker type. In single-threaded builds the second expression is not 
     well-formed</td>
   </tr>
   <tr>
-    <td width="25%"><code>F( true )</code></td>
-    <td width="14%"><code>F</code></td>
-    <td width="35%">Constructs a <b>blocking</b> (see below) object of the 
+    <td width="36%"><code>F( true )</code></td>
+    <td width="10%"><code>F</code></td>
+    <td width="52%">Constructs a <b>blocking</b> (see below) object of the 
     FifoWorker type. Not well-formed in single-threaded builds</td>
   </tr>
   <tr>
-    <td width="25%"><code>f.queue_work_item( w );</code></td>
-    <td width="14%">&nbsp;</td>
-    <td width="35%">Constructs and queues an object of type <code>F::work_item</code>, 
+    <td width="36%"><code>f.queue_work_item( w );</code></td>
+    <td width="10%">&nbsp;</td>
+    <td width="52%">Constructs and queues an object of type <code>F::work_item</code>, 
     passing <code>w</code> as the only argument</td>
   </tr>
   <tr>
-    <td width="25%"><code>f.terminate();</code></td>
-    <td width="14%">&nbsp;</td>
-    <td width="35%">Creates and queues an object of type <code>F::work_item</code> 
+    <td width="36%"><code>f.terminate();</code></td>
+    <td width="10%">&nbsp;</td>
+    <td width="52%">Creates and queues an object of type <code>F::work_item</code> 
     that, when later executed in <code>operator()()</code>, leads to a 
     modification of internal state so that <code>terminated()</code> 
     henceforth returns <code>true</code></td>
   </tr>
   <tr>
-    <td width="25%"><code>cf.terminated();</code></td>
-    <td width="14%"><code>bool</code></td>
-    <td width="35%"><code>true</code> if <code>terminate()</code> has been 
+    <td width="36%"><code>cf.terminated();</code></td>
+    <td width="10%"><code>bool</code></td>
+    <td width="52%"><code>true</code> if <code>terminate()</code> has been 
     called and the resulting work item has been executed in <code>operator()()</code>. 
     Returns <code>false</code> otherwise<br>
     <br>
     <b>Must only be called from the thread that also calls <code>operator()()</code></b></td>
   </tr>
   <tr>
-    <td width="25%"><code>f( n );</code></td>
-    <td width="14%"><code>unsigned long</code></td>
-    <td width="35%">Enters a loop that, with each cycle, dequeues and calls
+    <td width="36%"><code>f( n );</code></td>
+    <td width="10%"><code>unsigned long</code></td>
+    <td width="52%">Enters a loop that, with each cycle, dequeues and calls
     <code>operator()()</code> on the oldest work item in the queue.<p>The loop 
-    is left and the number of executed work items returned if either of the 
-    following conditions is met:</p>
+    is left and the number of executed work items returned if one or more of the 
+    following conditions are met:</p>
     <ul>
       <li><code>f.terminated() == true</code></li>
       <li>The application is single-threaded and the internal queue is empty</li>
@@ -271,16 +272,16 @@ well-formed and have the indicated results:</p>
       <li><code>n != 0</code> and the number of work items that have been 
       processed since <code>operator()()</code> was called equals <code>n</code></li>
     </ul>
-    <p>If the queue is empty and none of the above conditions is met then the 
+    <p>If the queue is empty and none of the above conditions are met then the 
     thread calling <code>operator()()</code> is put into a wait state until
     <code>f.queue_work_item()</code> is called from another thread.<br>
     <br>
     <b>Must only be called from exactly one thread</b></td>
   </tr>
   <tr>
-    <td width="25%"><code>f();</code></td>
-    <td width="14%"><code>unsigned long</code></td>
-    <td width="35%">Has exactly the same semantics as <code>f( n );</code> 
+    <td width="36%"><code>f();</code></td>
+    <td width="10%"><code>unsigned long</code></td>
+    <td width="52%">Has exactly the same semantics as <code>f( n );</code> 
     with <code>n == 0</code> (see above)</td>
   </tr>
 </table>
@@ -882,6 +883,10 @@ namespace fsm
         const processor_handle &amp; processor,
         const event_ptr_type &amp; pEvent );
 
+      typedef typename FifoWorker::work_item work_item;
+
+      void <a href="#queue_work_item">queue_work_item</a>( const work_item &amp; item );
+
       void <a href="#fifo_scheduler::terminate">terminate</a>();
       bool <a href="#fifo_scheduler::terminated">terminated</a>() const;
 
@@ -990,6 +995,9 @@ in <code>FifoWorker::operator()()</code>, leads to a call to <code>
 on the event processor object associated with <code>processor</code>. The 
 object is silently discarded if the event processor object has been destructed 
 before<br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
+<pre>void <a name="queue_work_item">queue_work_item</a>( const work_item &amp; item );</pre>
+<p><b>Effects</b>: Calls <code>FifoWorker::queue_work_item( item );</code><br>
 <b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
 <pre>void <a name="fifo_scheduler::terminate">terminate</a>();</pre>
 <p><b>Effects</b>: Calls <code>FifoWorker::terminate()</code><br>
@@ -1972,7 +1980,7 @@ and <code><a href="#Class template state">state</a></code> class templates.</p>
     <td width="15%"><code>Event</code></td>
     <td width="45%">A most-derived direct or indirect subtype of the <code>
     <a href="#Class template event">event</a></code> class template</td>
-    <td width="24%">The event triggering the deferral</td>
+    <td width="24%">The event triggering the termination</td>
   </tr>
 </table>
 <h3>Class template <code>termination</code> synopsis</h3>
@@ -2100,7 +2108,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40404" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->06 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40410" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
