@@ -137,7 +137,7 @@ namespace std{ using _STLP_VENDOR_CSTD::strcmp; using _STLP_VENDOR_CSTD::strcpy;
 //
 #if defined(_STLP_NO_NATIVE_WIDE_FUNCTIONS) && !defined(BOOST_NO_STDC_NAMESPACE)
 #  define BOOST_NO_CWCHAR
-#  define BOOST_NO_CWTYPE
+#  define BOOST_NO_CWCTYPE
 #endif
 
 //
