@@ -546,7 +546,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         static void constraints () {
             DefaultConstructibleConcept<vector_type>::constraints ();
-            const vector_type v = vector_type ();
+            vector_type v = vector_type ();
             size_type n (0), i (0);
             value_type t;
             // Find (internal?)
@@ -629,7 +629,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         static void constraints () {
             DefaultConstructibleConcept<matrix_type>::constraints ();
-            const matrix_type m = matrix_type ();
+            matrix_type m = matrix_type ();
             size_type n (0), i (0), j (0);
             value_type t;
             // Find (internal?)
@@ -742,6 +742,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::value_type value_type;
 
         static void constraints () {
+            VectorConcept<vector_type>::constraints ();
             MutableVectorExpressionConcept<vector_type>::constraints ();
             size_type n (0);
             value_type t = value_type ();
@@ -779,6 +780,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 
         static void constraints () {
+            MatrixConcept<matrix_type>::constraints ();
             MutableMatrixExpressionConcept<matrix_type>::constraints ();
             size_type n (0);
             value_type t = value_type ();
@@ -1372,7 +1374,10 @@ namespace boost { namespace numeric { namespace ublas {
                                                     symmetric_matrix<double>::reverse_iterator2>::constraints ();
 
         MatrixExpressionConcept<const symmetric_adaptor<const matrix<double> > >::constraints ();
+#ifndef SKIP_BAD
+        // const_iterator (iterator) constructor is bad
         MutableMatrixExpressionConcept<symmetric_adaptor<matrix<double> > >::constraints ();
+#endif
         IndexedRandomAccess2DIteratorConcept<symmetric_adaptor<matrix<double> >::const_iterator1,
                                              symmetric_adaptor<matrix<double> >::const_iterator2>::constraints ();
         MutableIndexedRandomAccess2DIteratorConcept<symmetric_adaptor<matrix<double> >::iterator1,
@@ -1397,7 +1402,10 @@ namespace boost { namespace numeric { namespace ublas {
                                                     hermitian_matrix<double>::reverse_iterator2>::constraints ();
 
         MatrixExpressionConcept<const hermitian_adaptor<const matrix<double> > >::constraints ();
+#ifndef SKIP_BAD
+        // const_iterator (iterator) constructor is bad
         MutableMatrixExpressionConcept<hermitian_adaptor<matrix<double> > >::constraints ();
+#endif
         IndexedRandomAccess2DIteratorConcept<hermitian_adaptor<matrix<double> >::const_iterator1,
                                              hermitian_adaptor<matrix<double> >::const_iterator2>::constraints ();
         MutableIndexedRandomAccess2DIteratorConcept<hermitian_adaptor<matrix<double> >::iterator1,
