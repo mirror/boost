@@ -318,7 +318,7 @@ namespace boost {
       if (this->empty())
         boost::throw_exception(bad_function_call());
 
-      internal_result_type result = invoker(function_base::functor
+      internal_result_type result = invoker(this->functor
                                             BOOST_FUNCTION_COMMA
                                             BOOST_FUNCTION_ARGS);
 
@@ -379,21 +379,20 @@ namespace boost {
       if (&other == this)
         return;
 
-      std::swap(function_base::manager, other.manager);
-      std::swap(function_base::functor, other.functor);
+      std::swap(this->manager, other.manager);
+      std::swap(this->functor, other.functor);
       std::swap(invoker, other.invoker);
     }
 
     // Clear out a target, if there is one
     void clear()
     {
-      if (function_base::manager) {
+      if (this->manager) {
         function_base::functor =
-          function_base::manager(function_base::functor,
-                                 detail::function::destroy_functor_tag);
+          this->manager(this->functor, detail::function::destroy_functor_tag);
       }
 
-      function_base::manager = 0;
+      this->manager = 0;
       invoker = 0;
     }
 
@@ -421,8 +420,8 @@ namespace boost {
     {
       if (!f.empty()) {
         invoker = f.invoker;
-        function_base::manager = f.manager;
-        function_base::functor =
+        this->manager = f.manager;
+        this->functor =
           f.manager(f.functor, detail::function::clone_functor_tag);
       }
     }
@@ -448,10 +447,10 @@ namespace boost {
           invoker_type;
 
         invoker = &invoker_type::invoke;
-        function_base::manager =
+        this->manager =
           &detail::function::functor_manager<FunctionPtr, Allocator>::manage;
-        function_base::functor =
-          function_base::manager(detail::function::make_any_pointer(
+        this->functor =
+          this->manager(detail::function::make_any_pointer(
                             // should be a reinterpret cast, but some compilers
                             // insist on giving cv-qualifiers to free functions
                             (void (*)())(f)
@@ -481,7 +480,7 @@ namespace boost {
           invoker_type;
 
         invoker = &invoker_type::invoke;
-        function_base::manager = &detail::function::functor_manager<
+        this->manager = &detail::function::functor_manager<
                                     FunctionObj, Allocator>::manage;
 #ifndef BOOST_NO_STD_ALLOCATOR
         typedef typename Allocator::template rebind<FunctionObj>::other
@@ -496,7 +495,7 @@ namespace boost {
 #else
         FunctionObj* new_f = new FunctionObj(f);
 #endif // BOOST_NO_STD_ALLOCATOR
-        function_base::functor =
+        this->functor =
           detail::function::make_any_pointer(static_cast<void*>(new_f));
       }
     }
@@ -515,9 +514,9 @@ namespace boost {
           invoker_type;
 
         invoker = &invoker_type::invoke;
-        function_base::manager = &detail::function::trivial_manager;
-        function_base::functor =
-          function_base::manager(
+        this->manager = &detail::function::trivial_manager;
+        this->functor =
+          this->manager(
             detail::function::make_any_pointer(
               const_cast<FunctionObj*>(f.get_pointer())),
             detail::function::clone_functor_tag);
@@ -536,8 +535,8 @@ namespace boost {
                      >::type
           invoker_type;
       invoker = &invoker_type::invoke;
-      function_base::manager = &detail::function::trivial_manager;
-      function_base::functor = detail::function::make_any_pointer(this);
+      this->manager = &detail::function::trivial_manager;
+      this->functor = detail::function::make_any_pointer(this);
     }
 
     typedef internal_result_type (*invoker_type)(detail::function::any_pointer
