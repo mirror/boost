@@ -46,16 +46,16 @@
 // broken preprocessor in MWCW 8.3 and earlier.
 //
 // The basic mechanism works as follows:
-//      (symbol test) + 1        =>   2 if the test passes, 1 otherwise
-//      1 % ((symbol test) + 1)  =>   1 if the test passes, 0 otherwise
+//      (symbol test) + 1        =>   if (symbol test) then 2 else 1
+//      1 % ((symbol test) + 1)  =>   if (symbol test) then 1 else 0
 //
 // The complication with % is for cooperation with BOOST_TESTED_AT().
 // When "test" is BOOST_TESTED_AT(x) and
 // BOOST_DETECT_OUTDATED_WORKAROUNDS is #defined,
 //
-//      symbol test              =>   if symbol <= x then 1 else -1
-//      (symbol test) + 1        =>   if symbol <= x then 2 else 0
-//      1 % ((symbol test) + 1)  =>   if symbol <= x then 1 else divide-by-zero
+//      symbol test              =>   if (symbol <= x) then 1 else -1
+//      (symbol test) + 1        =>   if (symbol <= x) then 2 else 0
+//      1 % ((symbol test) + 1)  =>   if (symbol <= x) then 1 else divide-by-zero
 //
 
 #  ifdef BOOST_DETECT_OUTDATED_WORKAROUNDS
