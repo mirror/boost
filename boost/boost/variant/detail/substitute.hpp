@@ -157,6 +157,9 @@ struct substitute<
 #elif BOOST_PP_ITERATION_DEPTH() == 1
 #define i BOOST_PP_FRAME_ITERATION(1)
 
+//
+// template specializations
+//
 template <
       template < BOOST_MPL_PP_PARAMS(i,typename P) > class T
     , BOOST_MPL_PP_PARAMS(i,typename U)
@@ -175,6 +178,32 @@ private:
 
 public:
     typedef T< BOOST_MPL_PP_PARAMS(i,u) > type;
+};
+
+//
+// function specializations
+//
+template <
+      typename R
+    , BOOST_MPL_PP_PARAMS(i,typename U)
+    , typename Dest
+    , typename Source
+    >
+struct substitute<
+      R (*)( BOOST_MPL_PP_PARAMS(i,U) )
+    , Dest
+    , Source
+      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>)
+    >
+{
+private:
+    typedef typename substitute< R, Dest, Source >::type r;
+    BOOST_MPL_PP_REPEAT(i, BOOST_VARIANT_AUX_SUBSTITUTE_TYPEDEF, _)
+
+public:
+
+    typedef r (*type)( BOOST_MPL_PP_PARAMS(i,u) );
+
 };
 
 #undef i
