@@ -353,6 +353,9 @@ struct require_same { typedef T type; };
   template <class Func, class Return, class Arg>
   struct UnaryFunctionConcept
   {
+    // required in case any of our template args are const-qualified:
+    UnaryFunctionConcept();
+    
     void constraints() {
       r = f(arg); // require operator()
     }
