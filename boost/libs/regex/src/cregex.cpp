@@ -83,6 +83,7 @@ public:
    std::map<int, int, std::less<int> > positions;
    void update();
    void clean();
+   RegExData() e(), m(), fm, t(type_copy), pbase(0), line(0), fbase(), strings(), positions() {}
 };
 
 void RegExData::update()
@@ -583,6 +584,7 @@ basic_string<char>::replace<const char*>(char* f1, char* f2, const char* i1, con
 #endif
 
 #endif
+
 
 
 
