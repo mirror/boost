@@ -8,11 +8,11 @@
 		<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="middle" width="277" height="86">Smart 
 			Pointers</h1>
 		<p><a href="#Introduction">Introduction</a><br>
-        <a href="#common_requirements">Common Requirements</a><br>
-        <a href="#Exception_Safety">Exception Safety</a><br>
-        <a href="#Exception-specifications">Exception-specifications</a><br>
-        <a href="#History">History and Acknowledgements</a><br>
-        <a href="#References">References</a></p>
+			<a href="#common_requirements">Common Requirements</a><br>
+			<a href="#Exception_Safety">Exception Safety</a><br>
+			<a href="#Exception-specifications">Exception-specifications</a><br>
+			<a href="#History">History and Acknowledgements</a><br>
+			<a href="#References">References</a></p>
 		<h2><a name="Introduction">Introduction</a></h2>
 		<p>Smart pointers are objects which store pointers to dynamically allocated (heap) 
 			objects. They behave much like built-in C++ pointers except that they 
@@ -56,7 +56,7 @@
 		<p>They are examples of the "resource acquisition is initialization" idiom 
 			described in Bjarne Stroustrup's "The C++ Programming Language", 3rd edition, 
 			Section 14.4, Resource Management.</p>
-		<p>A test program, <a href="smart_ptr_test.cpp">smart_ptr_test.cpp</a>, is provided 
+		<p>A test program, <a href="test/smart_ptr_test.cpp">smart_ptr_test.cpp</a>, is provided 
 			to verify correct operation.</p>
 		<p>A page on <a href="compatibility.htm">compatibility</a> with older versions of 
 			the Boost smart pointer library describes some of the changes since earlier 
@@ -121,11 +121,11 @@
 		<p>September 1999. Luis Coelho provided <b>shared_ptr::swap</b> and <b>shared_array::swap</b></p>
 		<p>May 1999. In April and May, 1999, Valentin Bonnard and David Abrahams made a 
 			number of suggestions resulting in numerous improvements.</p>
-		<p>October 1998. Beman Dawes proposed reviving the original semantics under the names <b>safe_ptr</b>
-			and <b>counted_ptr</b>, meeting of Per Andersson, Matt 
+		<p>October 1998. Beman Dawes proposed reviving the original semantics under the 
+			names <b>safe_ptr</b> and <b>counted_ptr</b>, meeting of Per Andersson, Matt 
 			Austern, Greg Colvin, Sean Corfield, Pete Becker, Nico Josuttis, Dietmar Kühl, 
-			Nathan Myers, Chichiang Wan and Judy Ward. During the discussion, the four 
-			new class names were finalized, it was decided that there was no need to exactly 
+			Nathan Myers, Chichiang Wan and Judy Ward. During the discussion, the four new 
+			class names were finalized, it was decided that there was no need to exactly 
 			follow the <b>std::auto_ptr</b> interface, and various function signatures and 
 			semantics were finalized.</p>
 		<p>Over the next three months, several implementations were considered for <b>shared_ptr</b>, 
@@ -154,26 +154,24 @@
 			experimented with.</p>
 		<p>But Greg Colvin and Jerry Schwarz argued that "parameterization will discourage 
 			users", and in the end we choose to supply only the direct implementation.</p>
-		<p>Summer, 1994. Greg Colvin proposed to the C++ Standards Committee 
-			classes named <b>auto_ptr</b> and <b>counted_ptr</b> which were very similar to 
-			what we now call <b>scoped_ptr</b> and <b>shared_ptr</b>. 
-        <a href="#Col-94">[Col-94]</a> In one of the very 
-			few cases where the Library Working Group's recommendations were not followed 
-			by the full committee, <b>counted_ptr</b> was rejected and surprising 
+		<p>Summer, 1994. Greg Colvin proposed to the C++ Standards Committee classes named <b>auto_ptr</b>
+			and <b>counted_ptr</b> which were very similar to what we now call <b>scoped_ptr</b>
+			and <b>shared_ptr</b>. <a href="#Col-94">[Col-94]</a> In one of the very few 
+			cases where the Library Working Group's recommendations were not followed by 
+			the full committee, <b>counted_ptr</b> was rejected and surprising 
 			transfer-of-ownership semantics were added to <b>auto_ptr</b>.</p>
 		<h2><a name="References">References</a></h2>
-		<p>[<a name="Col-94">Col-94</a>] Gregory Colvin,
-        <a href="http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/1994/N0555.pdf">
-        Exception Safe Smart Pointers</a>, C++ committee document 94-168/N0555, 
-        July, 1994.</p>
-		<p>[<a name="E&amp;D-94">E&amp;D-94</a>] John R. Ellis &amp; David L. Detlefs,
-        <a href="http://www.usenix.org/publications/library/proceedings/c++94/full_papers/ellis.a">
-        Safe, Efficient Garbage Collection for C++</a>, Usenix Proceedings, 
-        February, 1994. This paper includes an extensive discussion of weak 
-        pointers and an extensive bibliography.</p>
+		<p>[<a name="Col-94">Col-94</a>] Gregory Colvin, <a href="http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/1994/N0555.pdf">
+				Exception Safe Smart Pointers</a>, C++ committee document 94-168/N0555, 
+			July, 1994.</p>
+		<p>[<a name="E&amp;D-94">E&amp;D-94</a>] John R. Ellis &amp; David L. Detlefs, <a href="http://www.usenix.org/publications/library/proceedings/c++94/full_papers/ellis.a">
+				Safe, Efficient Garbage Collection for C++</a>, Usenix Proceedings, 
+			February, 1994. This paper includes an extensive discussion of weak pointers 
+			and an extensive bibliography.</p>
 		<hr>
 		<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan
--->15 January 2003<!--webbot bot="Timestamp" endspan i-checksum="32303"
+--> 
+			15 January 2003<!--webbot bot="Timestamp" endspan i-checksum="32303"
 --></p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
 			Permission to copy, use, modify, sell and distribute this document is granted 

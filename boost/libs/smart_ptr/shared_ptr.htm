@@ -361,9 +361,9 @@ q = p;
 		<h3><a name="use_count">use_count</a></h3>
 		<pre>long use_count() const; // never throws</pre>
 		<blockquote>
-			<p><b>Returns:</b> the number of <b>shared_ptr</b> objects, <STRONG>*this</STRONG> included, that
-				<i>share ownership</i> with <b>*this</b>, or an unspecified nonnegative value 
-				when <STRONG>*this</STRONG> is <EM>empty</EM>.</p>
+			<p><b>Returns:</b> the number of <b>shared_ptr</b> objects, <STRONG>*this</STRONG> included, 
+				that <i>share ownership</i> with <b>*this</b>, or an unspecified nonnegative 
+				value when <STRONG>*this</STRONG> is <EM>empty</EM>.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> <code>use_count()</code> is not necessarily efficient. Use only 
 				for debugging and testing purposes, not for production code.</P>
@@ -490,9 +490,9 @@ q = p;
 			<P><B>Returns:</B> <b>os</b>.</P>
 		</BLOCKQUOTE>
 		<h2><a name="example">Example</a></h2>
-		<p>See <A href="shared_ptr_example.cpp">shared_ptr_example.cpp</A> for a complete 
-			example program. The program builds a <b>std::vector</b> and <b>std::set</b> of <b>shared_ptr</b>
-			objects.</p>
+		<p>See <A href="example/shared_ptr_example.cpp">shared_ptr_example.cpp</A> for a 
+			complete example program. The program builds a <b>std::vector</b> and <b>std::set</b>
+			of <b>shared_ptr</b> objects.</p>
 		<p>Note that after the containers have been populated, some of the <b>shared_ptr</b>
 			objects will have a use count of 1 rather than a use count of 2, since the set 
 			is a <b>std::set</b> rather than a <b>std::multiset</b>, and thus does not 
@@ -505,11 +505,11 @@ q = p;
 		<p>One common usage of <b>shared_ptr</b> is to implement a handle/body (also called 
 			pimpl) idiom which avoids exposing the body (implementation) in the header 
 			file.</p>
-		<p>The <A href="shared_ptr_example2_test.cpp">shared_ptr_example2_test.cpp</A> sample 
-			program includes a header file, <A href="shared_ptr_example2.hpp">shared_ptr_example2.hpp</A>, 
+		<p>The <A href="example/shared_ptr_example2_test.cpp">shared_ptr_example2_test.cpp</A> 
+			sample program includes a header file, <A href="example/shared_ptr_example2.hpp">shared_ptr_example2.hpp</A>, 
 			which uses a <b>shared_ptr&lt;&gt;</b> to an incomplete type to hide the 
 			implementation. The instantiation of member functions which require a complete 
-			type occurs in the <A href="shared_ptr_example2.cpp">shared_ptr_example2.cpp</A>
+			type occurs in the <A href="example/shared_ptr_example2.cpp">shared_ptr_example2.cpp</A>
 			implementation file. Note that there is no need for an explicit destructor. 
 			Unlike ~scoped_ptr, ~shared_ptr does not require that <b>T</b> be a complete 
 			type.</p>

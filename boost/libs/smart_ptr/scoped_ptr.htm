@@ -14,10 +14,9 @@
 		<p>The <b>scoped_ptr</b> template is a simple solution for simple needs. It 
 			supplies a basic "resource acquisition is initialization" facility, without 
 			shared-ownership or transfer-of-ownership semantics. Both its name and 
-			enforcement of semantics (by being
-        <a href="../utility/utility.htm#Class_noncopyable">noncopyable</a>) signal its intent to retain ownership solely within the 
-			current scope. Because it is
-        <a href="../utility/utility.htm#Class_noncopyable">noncopyable</a>, 
+			enforcement of semantics (by being <a href="../utility/utility.htm#Class_noncopyable">
+				noncopyable</a>) signal its intent to retain ownership solely within the 
+			current scope. Because it is <a href="../utility/utility.htm#Class_noncopyable">noncopyable</a>, 
 			it is safer than <b>shared_ptr</b> or <b>std::auto_ptr</b> for pointers which 
 			should not be copied.</p>
 		<p>Because <b>scoped_ptr</b> is simple, in its usual implementation every operation 
@@ -151,12 +150,12 @@ Buckle my shoe</pre>
 		<p>One common usage of <b>scoped_ptr</b> is to implement a handle/body (also called 
 			pimpl) idiom which avoids exposing the body (implementation) in the header 
 			file.</p>
-		<p>The <a href="scoped_ptr_example_test.cpp">scoped_ptr_example_test.cpp</a> sample 
-			program includes a header file, <a href="scoped_ptr_example.hpp">scoped_ptr_example.hpp</a>, 
+		<p>The <a href="example/scoped_ptr_example_test.cpp">scoped_ptr_example_test.cpp</a> sample 
+			program includes a header file, <a href="example/scoped_ptr_example.hpp">scoped_ptr_example.hpp</a>, 
 			which uses a <b>scoped_ptr&lt;&gt;</b> to an incomplete type to hide the 
 			implementation. The instantiation of member functions which require a complete 
-			type occurs in the <a href="scoped_ptr_example.cpp">scoped_ptr_example.cpp</a> implementation 
-			file.</p>
+			type occurs in the <a href="example/scoped_ptr_example.cpp">scoped_ptr_example.cpp</a>
+			implementation file.</p>
 		<h2>Frequently Asked Questions</h2>
 		<p><b>Q</b>. Why doesn't <b>scoped_ptr</b> have a release() member?<br>
 			<b>A</b>. When reading source code, it is valuable to be able to draw 
@@ -166,7 +165,8 @@ Buckle my shoe</pre>
 			given context. Use <STRONG>std::auto_ptr</STRONG> where transfer of ownership 
 			is required. (supplied by Dave Abrahams)</p>
 		<hr>
-		<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->09 January 2003<!--webbot bot="Timestamp" endspan i-checksum="32310" --></p>
+		<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->
+			09 January 2003<!--webbot bot="Timestamp" endspan i-checksum="32310" --></p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
 			Copyright 2002 Peter Dimov. Permission to copy, use, modify, sell and 
 			distribute this document is granted provided this copyright notice appears in 

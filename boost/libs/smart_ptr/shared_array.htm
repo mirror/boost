@@ -26,8 +26,8 @@
 		<p>A <b>shared_ptr</b> to a <b>std::vector</b> is an alternative to a <b>shared_array</b>
 			that is a bit heavier duty but far more flexible.</p>
 		<p>The class template is parameterized on <b>T</b>, the type of the object pointed 
-			to. <b>T</b> must meet the smart pointer
-        <a href="smart_ptr.htm#common_requirements">common requirements</a>.</p>
+			to. <b>T</b> must meet the smart pointer <a href="smart_ptr.htm#common_requirements">
+				common requirements</a>.</p>
 		<h2>Synopsis</h2>
 		<pre>namespace boost {
 
@@ -98,8 +98,8 @@
 			The guarantee that this does not throw exceptions depends on the requirement 
 			that the deleted object's destructor does not throw exceptions. See the smart 
 			pointer <a href="smart_ptr.htm#common_requirements">common requirements</a>.</p>
-		<h3><a name="operator=">assignment</a></h3>
-		<pre>shared_array &amp; <a href="#assignment">operator=</a>(shared_array const &amp; r); // never throws</pre>
+		<h3><a name="assignment">assignment</a></h3>
+		<pre>shared_array &amp; operator=(shared_array const &amp; r); // never throws</pre>
 		<p>Constructs a new <b>shared_array</b> as described <a href="#constructors">above</a>, 
 			then replaces this <b>shared_array</b> with the new one, destroying the 
 			replaced object.</p>
@@ -115,7 +115,7 @@
 			replaced object. <b>D</b>'s copy constructor must not throw. The only exception 
 			which may be thrown is <b>std::bad_alloc</b>. If an exception is thrown, <b>d(p)</b>
 			is called.</p>
-		<h3><a name="indirection">indexing</a></h3>
+		<h3><a name="indexing">indexing</a></h3>
 		<pre>T &amp; operator[](std::ptrdiff_t i) const; // never throws</pre>
 		<p>Returns a reference to element <b>i</b> of the array pointed to by the stored 
 			pointer. Behavior is undefined and almost certainly undesirable if the stored 
@@ -169,7 +169,8 @@ template&lt;class T&gt;
 			Provided as an aid to generic programming.</p>
 		<hr>
 		<p>Revised 
-        <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->09 January 2003<!--webbot bot="Timestamp" endspan i-checksum="32310" --></p>
+			<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan --> 
+			09 January 2003<!--webbot bot="Timestamp" endspan i-checksum="32310" --></p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
 			Permission to copy, use, modify, sell and distribute this document is granted 
 			provided this copyright notice appears in all copies. This document is provided 
