@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        cregex.cpp
-  *   VERSION:     3.11
+  *   VERSION:     3.12
   *   DESCRIPTION: Implements high level class boost::RexEx
   */
 #include <boost/cregex.hpp>

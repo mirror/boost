@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex.h
-  *   VERSION      3.11
+  *   VERSION      3.12
   *   DESCRIPTION: Declares POSIX API functions
   */
 

@@ -111,13 +111,12 @@
 /* BOOST_RE_OLD_IOSTREAM           If the new iostreamm classes are not available */
 /* #define BOOST_RE_OLD_IOSTREAM */
 
-/* BOOST_NO_STD_DISTANCE             If std::distance is not present or non-standard */
+/* BOOST_NO_STD_DISTANCE             If there is no std::distance. */
 /* #define BOOST_NO_STD_DISTANCE */
 
 /* BOOST_RE_NO_OI_ASSIGN           If output iterators ostream_iterator<>, back_insert_iterator<> and 
                              front_insert_iterator<> do not have assignment operators */
 /* #define BOOST_RE_NO_OI_ASSIGN */
-
 
 #include <stdexcept>
 

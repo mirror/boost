@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_synch.hpp
-  *   VERSION      3.11
+  *   VERSION      3.12
   *   DESCRIPTION: Thread synchronisation for regex code.
   *                Note this is an internal header file included
   *                by regex.hpp, do not include on its own.

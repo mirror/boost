@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_match.hpp
-  *   VERSION      3.11
+  *   VERSION      3.12
   *   DESCRIPTION: Regular expression matching algorithms.
   *                Note this is an internal header file included
   *                by regex.hpp, do not include on its own.
@@ -1158,7 +1158,9 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
    
    // depending on what the first record is we may be able to
    // optimise the search:
-   type = (flags & match_continuous) ? regbase::restart_continue : access::restart_type(e);
+   type = (flags & match_continuous) ? 
+      static_cast<unsigned int>(regbase::restart_continue) 
+         : static_cast<unsigned int>(access::restart_type(e));
 
    if(type == regbase::restart_buf)
       return cmatches;

@@ -15,7 +15,7 @@
  
  /*
   *   FILE     jgrep.h
-  *   VERSION  3.11
+  *   VERSION  3.12
   */
 
 #ifndef _JGREP_H
