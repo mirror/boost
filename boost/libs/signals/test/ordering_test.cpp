@@ -72,8 +72,11 @@ int test_main(int, char* [])
   boost::signal0<void> sig;
   sig.connect(write_ungrouped1());
   for (int i = 0; i < 100; ++i) {
-    using namespace std;
+#ifdef BOOST_NO_STDC_NAMESPACE
     int v = rand() % 100;
+#else
+    int v = std::rand() % 100;
+#endif
     sortedValues.push_back(v);
     sig.connect(v, emit_int(v));
 
