@@ -53,9 +53,9 @@ class regex_traits;
 template <class charT, class traits = regex_traits<charT>, class Allocator = BOOST_DEFAULT_ALLOCATOR(charT) >
 class reg_expression;
 
-typedef reg_expression<char, regex_traits<char>, BOOST_DEFAULT_ALLOCATOR(char)> regex;
+typedef reg_expression<char, regex_traits<char>, BOOST_DEFAULT_ALLOCATOR(char) > regex;
 #ifndef BOOST_NO_WREGEX
-typedef reg_expression<wchar_t, regex_traits<wchar_t>, BOOST_DEFAULT_ALLOCATOR(wchar_t)> wregex;
+typedef reg_expression<wchar_t, regex_traits<wchar_t>, BOOST_DEFAULT_ALLOCATOR(wchar_t) > wregex;
 #endif
 
 } // namespace boost
