@@ -24,11 +24,11 @@ doxygen date_time_autodoc :
 	$(date_time_files) 
 	;
 
-doxygen date_time_gregorian_autodoc :
+doxygen gregorian_autodoc :
 	$(gregorian_files)
 	;
 
-doxygen date_time_posix_time_autodoc :
+doxygen posix_time_autodoc :
 	[ glob ../../../boost/date_time/posix_time/*.hpp ] 
 	;
 
