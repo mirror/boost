@@ -508,6 +508,7 @@ namespace boost {
     typedef output_proxy<T> reference;
     typedef void pointer;
     typedef void difference_type;
+    output_iterator_archetype(detail::dummy_constructor) { }
     output_iterator_archetype(const self&) { }
     self& operator=(const self&) { return *this; }
     bool operator==(const self&) const { return true; }
