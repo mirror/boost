@@ -28,6 +28,13 @@
 #  define BOOST_FUNCTION_INIT , invoker(0)
 #endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
 
+// Type of the default allocator
+#ifndef BOOST_NO_STD_ALLOCATOR
+#  define BOOST_FUNCTION_DEFAULT_ALLOCATOR std::allocator<function_base>
+#else
+#  define BOOST_FUNCTION_DEFAULT_ALLOCATOR void
+#endif // BOOST_NO_STD_ALLOCATOR
+
 namespace boost {
   namespace detail {
     namespace function {
@@ -417,7 +424,7 @@ namespace boost {
     BOOST_FUNCTION_TEMPLATE_PARMS,
     typename Policy    = empty_function_policy,
     typename Mixin     = empty_function_mixin,
-    typename Allocator = std::allocator<function_base>
+    typename Allocator = BOOST_FUNCTION_DEFAULT_ALLOCATOR
   >
   class BOOST_FUNCTION_FUNCTION : public function_base, public Mixin
   {
@@ -727,4 +734,5 @@ namespace boost {
 }
 
 // Cleanup after ourselves...
+#undef BOOST_FUNCTION_DEFAULT_ALLOCATOR
 #undef BOOST_FUNCTION_INIT
