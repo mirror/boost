@@ -1155,8 +1155,8 @@ private: // helpers, for structors, cont. (below)
     template <typename Variant>
     void convert_construct_variant(const Variant& operand)
     {
-        // [Determine if operand is a bounded type, or if it needs to be
-        //  converted (foreign):]
+        // [Determine if the given variant is itself a bounded type, or if its
+        //  content needs to be converted (i.e., it is a 'foreign' variant):]
         //
 
         typedef typename mpl::find_if<
@@ -1639,15 +1639,11 @@ public: // comparison operators
         // Dirk Schreib suggested this collating order.
         //
 
-        if (this->which() == rhs.which())
-        {
-            detail::variant::compare_less visitor( active_storage() );
-            return rhs.apply_visitor(visitor);
-        }
-        else
-        {
+        if (this->which() != rhs.which())
             return this->which() < rhs.which();
-        }
+
+        detail::variant::compare_less visitor( active_storage() );
+        return rhs.apply_visitor(visitor);
     }
 
     template <typename U>
