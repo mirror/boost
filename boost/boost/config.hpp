@@ -421,6 +421,10 @@
 #   if __MWERKS__ <= 0x2301  // 5.3
 #     define BOOST_NO_POINTER_TO_MEMBER_CONST
 #     define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+#     define BOOST_NO_HASH
+#   endif
+#   if __MWERKS__ >= 0x2400
+#     define BOOST_STD_EXTENSION_NAMESPACE Metrowerks
 #   endif
 #   if __MWERKS__ >= 0x2300
 #     define BOOST_SYSTEM_HAS_STDINT_H
@@ -435,8 +439,6 @@
 #   else
 #     define BOOST_DECL
 #   endif
-
-#   define BOOST_STD_EXTENSION_NAMESPACE Metrowerks
 
 //  SGI MIPSpro C++ ----------------------------------------------------------//
 
@@ -643,6 +645,7 @@ namespace std {
 #endif
 
 #endif  // BOOST_CONFIG_HPP
+
 
 
 
