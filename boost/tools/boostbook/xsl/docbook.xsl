@@ -69,7 +69,7 @@
 
         <xsl:apply-templates select="para|section" mode="annotation"/>
         
-        <xsl:if test="macro and namespace">
+        <xsl:if test="macro">
           <xsl:call-template name="synopsis">
             <xsl:with-param name="text">
               <xsl:apply-templates mode="synopsis" select="macro">

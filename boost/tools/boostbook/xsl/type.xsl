@@ -114,24 +114,24 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
         <xsl:call-template name="indent">
           <xsl:with-param name="indentation" select="$indentation"/>
         </xsl:call-template>
+        <xsl:apply-templates select="template" mode="synopsis">
+          <xsl:with-param name="indentation" select="$indentation"/>
+        </xsl:apply-templates>
+
+        <xsl:call-template name="highlight-keyword">
+          <xsl:with-param name="keyword" select="$class-key"/>
+        </xsl:call-template>
+        <xsl:text> </xsl:text>
         <xsl:call-template name="internal-link">
           <xsl:with-param name="to">
-            <xsl:call-template name="generate.id">
-              <xsl:with-param name="node" select="."/>
-            </xsl:call-template>
+            <xsl:call-template name="generate.id"/>
           </xsl:with-param>
           <xsl:with-param name="text">
-            <xsl:apply-templates select="template" mode="synopsis">
-              <xsl:with-param name="indentation" select="$indentation"/>
-            </xsl:apply-templates>
-            <xsl:value-of select="$class-key"/>
-            <xsl:text> </xsl:text>
             <xsl:value-of select="@name"/>
-            <xsl:apply-templates select="specialization"/>
-            <xsl:text>;</xsl:text>
           </xsl:with-param>
-          <xsl:with-param name="highlight" select="true()"/>
         </xsl:call-template>
+        <xsl:apply-templates select="specialization"/>
+        <xsl:text>;</xsl:text>
       </xsl:when>
 
       <xsl:otherwise>
