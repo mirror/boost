@@ -16,7 +16,7 @@
 // Tests, whether the argument of #error is optional
 
 // 8.2: #error should be executed even without argument.
-//E 005_010.cpp(20): fatal error: encountered #error directive or #pragma wave stop()
+//E 005_010.cpp(20): fatal error: encountered #error directive or #pragma wave stop(): 
 #error
 
 /*-
