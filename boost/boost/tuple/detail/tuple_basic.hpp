@@ -548,54 +548,54 @@ struct make_tuple_mapper {
 } // end detail
 
 // -make_tuple function templates -----------------------------------
-tuple<> inline make_tuple() {
+inline tuple<> make_tuple() {
   return tuple<>(); 
 }
 
 template<class T0>
-typename boost::detail::tuples::make_tuple_mapper<T0>::type
-inline make_tuple(const T0& t0) {
+inline typename boost::detail::tuples::make_tuple_mapper<T0>::type
+make_tuple(const T0& t0) {
   return typename boost::detail::tuples::make_tuple_mapper<T0>::type(t0); 
 }
 
 template<class T0, class T1>
-typename boost::detail::tuples::make_tuple_mapper<T0, T1>::type
-inline make_tuple(const T0& t0, const T1& t1) {
+inline typename boost::detail::tuples::make_tuple_mapper<T0, T1>::type
+make_tuple(const T0& t0, const T1& t1) {
   return typename boost::detail::tuples::make_tuple_mapper<T0, T1>::type(t0, t1); 
 }
 
 template<class T0, class T1, class T2>
-typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2>::type
-inline make_tuple(const T0& t0, const T1& t1, const T2& t2) {
+inline typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2>::type
+make_tuple(const T0& t0, const T1& t1, const T2& t2) {
   return typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2>::type(t0, t1, t2); 
 }
 
 template<class T0, class T1, class T2, class T3>
-typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3>::type
-inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3) {
+inline typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3>::type
+make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3) {
   return typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3>::type
            (t0, t1, t2, t3); 
 }
 
 template<class T0, class T1, class T2, class T3, class T4>
-typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4>::type
-inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
+inline typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4>::type
+make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4) {
   return typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4>::type
            (t0, t1, t2, t3, t4); 
 }
 
 template<class T0, class T1, class T2, class T3, class T4, class T5>
-typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4, T5>::type
-inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
+inline typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4, T5>::type
+make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5) {
   return typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4, T5>::type
            (t0, t1, t2, t3, t4, t5); 
 }
 
 template<class T0, class T1, class T2, class T3, class T4, class T5, class T6>
-typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4, T5, T6>::type
-inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
+inline typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4, T5, T6>::type
+make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5, const T6& t6) {
   return typename boost::detail::tuples::make_tuple_mapper
            <T0, T1, T2, T3, T4, T5, T6>::type
@@ -604,8 +604,8 @@ inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
 
 template<class T0, class T1, class T2, class T3, class T4, class T5, class T6,
          class T7>
-typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4, T5, T6, T7>::type
-inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
+inline typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4, T5, T6, T7>::type
+make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5, const T6& t6, const T7& t7) {
   return typename boost::detail::tuples::make_tuple_mapper
            <T0, T1, T2, T3, T4, T5, T6, T7>::type
@@ -614,9 +614,9 @@ inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
 
 template<class T0, class T1, class T2, class T3, class T4, class T5, class T6,
          class T7, class T8>
-typename boost::detail::tuples::make_tuple_mapper
+inline typename boost::detail::tuples::make_tuple_mapper
   <T0, T1, T2, T3, T4, T5, T6, T7, T8>::type
-inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
+make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5, const T6& t6, const T7& t7,
                   const T8& t8) {
   return typename boost::detail::tuples::make_tuple_mapper
@@ -626,9 +626,9 @@ inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
 
 template<class T0, class T1, class T2, class T3, class T4, class T5, class T6,
          class T7, class T8, class T9>
-typename boost::detail::tuples::make_tuple_mapper
+inline typename boost::detail::tuples::make_tuple_mapper
   <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>::type
-inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
+make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5, const T6& t6, const T7& t7,
                   const T8& t8, const T9& t9) {
   return typename boost::detail::tuples::make_tuple_mapper
@@ -640,55 +640,55 @@ inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
 
 // Tie function templates -------------------------------------------------
 template<class T1>
-tuple<T1&> inline tie(T1& t1) {
+inline tuple<T1&> tie(T1& t1) {
   return tuple<T1&> (t1);
 }
 
 template<class T1, class T2>
-tuple<T1&, T2&> inline tie(T1& t1, T2& t2) {
+inline tuple<T1&, T2&> tie(T1& t1, T2& t2) {
   return tuple<T1&, T2&> (t1, t2);
 }
 
 template<class T1, class T2, class T3>
-tuple<T1&, T2&, T3&> inline tie(T1& t1, T2& t2, T3& t3) {
+inline tuple<T1&, T2&, T3&> tie(T1& t1, T2& t2, T3& t3) {
   return tuple<T1&, T2&, T3&> (t1, t2, t3);
 }
 
 template<class T1, class T2, class T3, class T4>
-tuple<T1&, T2&, T3&, T4&> inline tie(T1& t1, T2& t2, T3& t3, T4& t4) {
+inline tuple<T1&, T2&, T3&, T4&> tie(T1& t1, T2& t2, T3& t3, T4& t4) {
   return tuple<T1&, T2&, T3&, T4&> (t1, t2, t3, t4);
 }
 
 template<class T1, class T2, class T3, class T4, class T5>
-tuple<T1&, T2&, T3&, T4&, T5&> 
-inline tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5) {
+inline tuple<T1&, T2&, T3&, T4&, T5&> 
+tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5) {
   return tuple<T1&, T2&, T3&, T4&, T5&> (t1, t2, t3, t4, t5);
 }
 
 template<class T1, class T2, class T3, class T4, class T5, class T6>
-tuple<T1&, T2&, T3&, T4&, T5&, T6&> 
-inline tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6) {
+inline tuple<T1&, T2&, T3&, T4&, T5&, T6&> 
+tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6) {
   return tuple<T1&, T2&, T3&, T4&, T5&, T6&> (t1, t2, t3, t4, t5, t6);
 }
 
 template<class T1, class T2, class T3, class T4, class T5, class T6, class T7>
-tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&> 
-inline tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7) {
+inline tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&> 
+tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7) {
   return tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&> (t1, t2, t3, t4, t5, t6, t7);
 }
 
 template<class T1, class T2, class T3, class T4, class T5, class T6, class T7, 
          class T8>
-tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&> 
-inline tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7, T8& t8) {
+inline tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&> 
+tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7, T8& t8) {
   return tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&> 
            (t1, t2, t3, t4, t5, t6, t7, t8);
 }
 
 template<class T1, class T2, class T3, class T4, class T5, class T6, class T7, 
          class T8, class T9>
-tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&, T9&> 
-inline tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7, T8& t8, 
+inline tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&, T9&> 
+tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7, T8& t8, 
            T9& t9) {
   return tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&, T9&> 
             (t1, t2, t3, t4, t5, t6, t7, t8, t9);
@@ -696,8 +696,8 @@ inline tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7, T8& t8,
 
 template<class T1, class T2, class T3, class T4, class T5, class T6, class T7, 
          class T8, class T9, class T10>
-tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&, T9&, T10&> 
-inline tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7, T8& t8, 
+inline tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&, T9&, T10&> 
+tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7, T8& t8, 
            T9& t9, T10& t10) {
   return tuple<T1&, T2&, T3&, T4&, T5&, T6&, T7&, T8&, T9&, T10&> 
            (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
