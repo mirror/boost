@@ -15,7 +15,19 @@
 <hr>
 <a href="index.html">Overall Index</a>
 <p>
-
+<h3>Changes from Boost 1.30 to 1.31 (date_time 1.01 to 1.02)</h3>
+    <p class="bold">
+    <table>
+        <tr class="row_title"><td>Type</td><td>Description</td></tr>
+        <tr class="content">
+           <td class="nowrap">Bug</td>
+           <td>Fixed time_duration_traits calculation bug which was 
+               causing time duration to be limited to 32bit range even
+               when 64 bits were available.  Thanks to Joe de Guzman
+               for tracking this down.
+          </td>
+        </tr>
+    </table>
 <h3>Changes from Boost 1.29 to 1.30 (date_time 1.00 to 1.01)</h3>
     <p class="bold">
       Notice:  The interface to the <font class="el">partial_date</font> 
@@ -30,12 +42,13 @@
     <table>
         <tr class="row_title"><td>Type</td><td>Description</td></tr>
         <tr class="content">
-           <td class="nowrap">Feature</td>
+           <td class="nowrap">Bug</td>
            <td>Added new experimental feature for Daylight Savings Time
                calculations.  This allows traits based specification of
                dst rules.
 
           </td>
+        </tr>
         <tr class="content">
            <td class="nowrap">Feature</td>
            <td>Added new interfaces to calculate julian day and modified 
@@ -103,7 +116,7 @@
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sun Feb  9 10:41:53 MST 2003
+Last modified: Sun Apr 20 10:55:08 MST 2003
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
