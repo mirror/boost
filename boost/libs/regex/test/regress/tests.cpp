@@ -907,6 +907,48 @@ void reset_error()
    last_line = 0;
 }
 
+#if defined(__BORLANDC__) && (__BORLANDC__ >= 0x550) && (__BORLANDC__ <= 0x551) && !defined(_RWSTD_COMPILE_INSTANTIATE)
+//
+// this is an ugly hack to work around an ugly problem:
+// by default this file will produce unresolved externals during
+// linking unless _RWSTD_COMPILE_INSTANTIATE is defined (Borland bug).
+// However if _RWSTD_COMPILE_INSTANTIATE is defined then we get separate
+// copies of basic_string's static data in the RTL and this DLL, this messes
+// with basic_string's memory management and results in run-time crashes,
+// Oh sweet joy of Catch 22....
+//
+namespace std{
+template<> template<>
+basic_string<string_type::value_type>&
+basic_string<string_type::value_type>
+   ::replace<debug_iterator<string_type::iterator> >(
+         string_type::iterator f1, 
+         string_type::iterator f2, 
+         debug_iterator<string_type::iterator> i1, 
+         debug_iterator<string_type::iterator> i2)
+{
+   unsigned insert_pos = f1 - begin();
+   unsigned remove_len = f2 - f1;
+   unsigned insert_len = i2 - i1;
+   unsigned org_size = size();
+   if(insert_len > remove_len)
+   {
+      append(insert_len-remove_len, ' ');
+      std::copy_backward(begin() + insert_pos + remove_len, begin() + org_size, end());
+      std::copy(i1, i2, begin() + insert_pos);
+   }
+   else
+   {
+      std::copy(begin() + insert_pos + remove_len, begin() + org_size, begin() + insert_pos + insert_len);
+      std::copy(i1, i2, begin() + insert_pos);
+      erase(size() + insert_len - remove_len);
+   }
+   return *this;
+}
+}
+#endif
+
+
 
 #endif
 
