@@ -81,7 +81,9 @@ namespace smart_cast_impl {
             template<class U>
              static T cast(U & u){
                 // if we're in debug mode
-                #if ! defined(NDEBUG) || defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
+                #if ! defined(NDEBUG)                               \
+                || defined(__BORLANDC__) && (__BORLANDC__ <= 0x551) \
+                || defined(__MWERKS__)
                     // do a checked dynamic cast
                     return cross::cast(u);
                 #else
@@ -139,7 +141,7 @@ namespace smart_cast_impl {
             };
 
             struct cross {
-                 template<class U>
+                template<class U>
                 static T cast(U * u){
                     T tmp = dynamic_cast<T>(u);
                     #ifndef NDEBUG
