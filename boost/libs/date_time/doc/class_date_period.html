@@ -98,6 +98,10 @@ or
         <td>Return one past the last in period</td>
 	<td>date_period dp(date(2002,Jan,1), date(2002,Jan,10));<br>
             dp.end() --> 2002-Jan-10</td></tr>
+<tr><td>date_duration <font class="func">length</font>() const</td>
+        <td>Return the length of the date_period</td>
+	<td>date_period dp(date(2002,Jan,1), date_duration(2));<br>
+            dp.length() --> 2</td></tr>
 <tr><td>bool <font class="func">is_null</font>() const</td>
         <td>True if period is not well formed.  eg: start less than end </td>
 	<td>date_period dp(date(2002,Jan,10), date(2002,Jan,1));<br>
@@ -153,6 +157,9 @@ or
 <p>
 <table border=1 cellspacing=3 cellpadding=3>
 <tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
+<tr><td>operator&lt;&lt;</td> 
+        <td>ostream operator for date_period.  Uses facet to format time points.  Typical output: [2002-Jan-01/2002-Jan-31].</td>
+	<td>std::cout &lt;&lt; std::endl;</td></tr>
 <tr><td>operator==, operator!=,<br> operator&gt;, operator&lt; 
         <td>A full complement of comparison operators</td>
 	<td>dp1 == dp2, etc</td></tr>
@@ -170,7 +177,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sun Oct 13 11:07:46 MST 2002
+Last modified: Sat Nov  2 16:51:11 MST 2002
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
