@@ -121,7 +121,7 @@ void bad()
       bool <A href="#unique" >unique</A>() const; // never throws
       long <A href="#use_count" >use_count</A>() const; // never throws
 
-      operator <a href="#conversions"><i>implementation-defined-type</i></a> () const; // never throws
+      operator <a href="#conversions"><i>unspecified-bool-type</i></a> () const; // never throws
 
       void <A href="#swap" >swap</A>(shared_ptr&lt;T&gt; &amp; b); // never throws
   };
@@ -145,6 +145,11 @@ void bad()
     shared_ptr&lt;T&gt; <A href="#shared_polymorphic_downcast" >shared_polymorphic_downcast</A>(shared_ptr&lt;U&gt; const &amp; r); // never throws
 
 }</pre>
+		<P><EM>[It might be&nbsp;convenient to relax the requirements on <STRONG>shared_ptr</STRONG>'s 
+				signature, allowing an additional, defaulted, template parameter. This would 
+				help in detecting possible ODR violations. On the other hand, using <STRONG>shared_ptr</STRONG>
+				as an argument to a&nbsp;template template parameter requires an exact 
+				signature match.]</EM></P>
 		<h2><a name="Members">Members</a></h2>
 		<h3><a name="element_type">element_type</a></h3>
 		<pre>typedef T element_type;</pre>
@@ -413,7 +418,9 @@ q = p;
 				specialization for consistency and legality reasons, as <STRONG>std::less</STRONG>
 				is required to return the results of <STRONG>operator&lt;</STRONG>, and many 
 				standard algorithms use <STRONG>operator&lt;</STRONG> instead of <STRONG>std::less</STRONG>
-				for comparisons when a predicate is not supplied.</EM></P>
+				for comparisons when a predicate is not supplied. Composite objects, like <STRONG>std::pair</STRONG>, 
+				also implement their <STRONG>operator&lt;</STRONG> in terms of their contained 
+				subobjects'&nbsp;<STRONG>operator&lt;</STRONG>.</EM></P>
 		<P><EM>The rest of the comparison operators are omitted by design.]</EM></P>
 		<h3><a name="free-swap">swap</a></h3>
 		<pre>template&lt;typename T&gt;
