@@ -331,7 +331,7 @@ main()
     boost::const_nonconst_iterator_test(i, ++j);    
   }
 
-  // Test reverse_iterator_pair_generator now, with traits fully deducible on most platforms
+  // Test reverse_iterator_generator again, with traits fully deducible on most platforms
 #if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
   {
     std::deque<dummyT> reversed_container;
@@ -339,9 +339,10 @@ main()
     const std::deque<dummyT>::iterator reversed = reversed_container.begin();
     std::reverse(reversed, reversed + N);
 
-    typedef std::deque<dummyT>::iterator base_iterator;
-    typedef boost::reverse_iterator_pair_generator<base_iterator>::iterator reverse_iterator;
-    typedef boost::reverse_iterator_pair_generator<base_iterator>::const_iterator const_reverse_iterator;
+    typedef boost::reverse_iterator_generator<
+        std::deque<dummyT>::iterator>::type reverse_iterator;
+    typedef boost::reverse_iterator_generator<
+        std::deque<dummyT>::const_iterator, const dummyT>::type const_reverse_iterator;
 
     reverse_iterator i(reversed + N);
     boost::random_access_iterator_test(i, N, array);
