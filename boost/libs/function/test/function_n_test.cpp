@@ -500,8 +500,9 @@ test_zero_args()
 #else
   func_void_type v9; // just default construct
 #endif
-#if !defined(BOOST_MSVC)
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 || defined(BOOST_STRICT_CONFIG)
   BOOST_TEST(v9 == 0);
+# if !defined(__SUNPRO_CC) || __SUNPRO_CC > 0x540 || defined(BOOST_STRICT_CONFIG)
   BOOST_TEST(0 == v9);
 #else
   BOOST_TEST(v9.empty());
