@@ -184,7 +184,7 @@ namespace boost {
 
             bool equal( const iterator_range& r ) const
             {
-                return m_Begin == r.m_Begin && m_End == r.m_End;
+                return singular == r.singular && m_Begin == r.m_Begin && m_End == r.m_End;
             }
             
         private:
