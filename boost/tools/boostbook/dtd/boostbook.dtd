@@ -175,9 +175,9 @@
 <!ELEMENT default ANY>
 <!ATTLIST default %boost.common.attrib;>
 
-<!ELEMENT inherit ANY>
+<!ELEMENT inherit (type, purpose?)>
 <!ATTLIST inherit
-    access  CDATA  #REQUIRED
+    access  CDATA  #IMPLIED
     %boost.common.attrib;>
 
 <!ELEMENT purpose ANY>
