@@ -21,7 +21,9 @@ struct is_polymorphic_imp1
    struct d1 : public ncvT
    {
       d1();
+# if !defined(__GNUC__) // this raises warnings with some classes, and buys nothing with GCC
       ~d1()throw();
+# endif 
       char padding[256];
    };
    struct d2 : public ncvT
