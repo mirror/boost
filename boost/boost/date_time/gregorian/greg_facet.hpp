@@ -279,7 +279,7 @@ namespace gregorian {
       const facet_def& f = std::use_facet<facet_def>(is.getloc());
       num = date_time::find_match(f.get_short_month_names(), 
                                   f.get_long_month_names(), 
-                                  greg_month::max(), s); 
+                                  (greg_month::max)(), s); 
     }
     /* bad_cast will be thrown if the desired facet is not accessible
      * so we can generate the facet. This has the drawback of using english
@@ -290,7 +290,7 @@ namespace gregorian {
       const facet_def* f = create_facet_def(a);
       num = date_time::find_match(f->get_short_month_names(), 
                                   f->get_long_month_names(), 
-                                  greg_month::max(), s); 
+                                  (greg_month::max)(), s); 
       delete(f);
     }
    
@@ -320,7 +320,7 @@ namespace gregorian {
       const facet_def& f = std::use_facet<facet_def>(is.getloc());
       num = date_time::find_match(f.get_short_weekday_names(), 
                                   f.get_long_weekday_names(), 
-                                  greg_weekday::max(), s); 
+                                  (greg_weekday::max)(), s); 
     }
     /* bad_cast will be thrown if the desired facet is not accessible
      * so we can generate the facet. This has the drawback of using english
@@ -331,7 +331,7 @@ namespace gregorian {
       const facet_def* f = create_facet_def(a);
       num = date_time::find_match(f->get_short_weekday_names(), 
                                   f->get_long_weekday_names(), 
-                                  greg_weekday::max(), s); 
+                                  (greg_weekday::max)(), s); 
       delete(f);
     }
    
