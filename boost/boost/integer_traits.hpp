@@ -147,42 +147,64 @@ class integer_traits<unsigned long>
     public detail::integer_traits_base<unsigned long, 0, ULONG_MAX>
 { };
 
-#if defined(ULLONG_MAX) && !defined(__SUNPRO_CC)
+#if !defined(BOOST_NO_INTEGRAL_INT64_T) && !defined(BOOST_NO_INT64_T)
+#if defined(ULLONG_MAX) && defined(BOOST_HAS_LONG_LONG)
+
 template<>
 class integer_traits<long long>
   : public std::numeric_limits<long long>,
     public detail::integer_traits_base<long long, LLONG_MIN, LLONG_MAX>
 { };
+
 template<>
 class integer_traits<unsigned long long>
   : public std::numeric_limits<unsigned long long>,
     public detail::integer_traits_base<unsigned long long, 0, ULLONG_MAX>
 { };
-#elif defined(ULONG_LONG_MAX)
+
+#elif defined(ULONG_LONG_MAX) && defined(BOOST_HAS_LONG_LONG)
+
 template<>
-class integer_traits<long long>
-  : public std::numeric_limits<long long>,
-    public detail::integer_traits_base<long long, LONG_LONG_MIN, LONG_LONG_MAX>
-{ };
+class integer_traits<long long>  : public std::numeric_limits<long long>,    public detail::integer_traits_base<long long, LONG_LONG_MIN, LONG_LONG_MAX>{ };
 template<>
 class integer_traits<unsigned long long>
   : public std::numeric_limits<unsigned long long>,
     public detail::integer_traits_base<unsigned long long, 0, ULONG_LONG_MAX>
 { };
-#elif defined(ULONGLONG_MAX) && !defined(BOOST_MSVC) && !defined(__BORLANDC__)
+
+#elif defined(ULONGLONG_MAX) && defined(BOOST_HAS_LONG_LONG)
+
 template<>
 class integer_traits<long long>
   : public std::numeric_limits<long long>,
     public detail::integer_traits_base<long long, LONGLONG_MIN, LONGLONG_MAX>
 { };
+
 template<>
 class integer_traits<unsigned long long>
   : public std::numeric_limits<unsigned long long>,
     public detail::integer_traits_base<unsigned long long, 0, ULONGLONG_MAX>
 { };
+
+#elif defined(_LLONG_MAX) && defined(_C2) && defined(BOOST_HAS_LONG_LONG)
+
+template<>
+class integer_traits<long long>
+  : public std::numeric_limits<long long>,
+    public detail::integer_traits_base<long long, -_LLONG_MAX - _C2, _LLONG_MAX>
+{ };
+
+template<>
+class integer_traits<unsigned long long>
+  : public std::numeric_limits<unsigned long long>,
+    public detail::integer_traits_base<unsigned long long, 0, _ULLONG_MAX>
+{ };
+
+#endif
 #endif
 
 } // namespace boost
 
 #endif /* BOOST_INTEGER_TRAITS_HPP */
+
 
