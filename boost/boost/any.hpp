@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <typeinfo>
 
+#include "boost/config.hpp"
+
 namespace boost
 {
     class any
@@ -71,7 +73,11 @@ namespace boost
             return content ? content->type() : typeid(void);
         }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     private: // types
+#else
+    public: // types (public so any_cast can be non-friend)
+#endif
 
         class placeholder
         {
@@ -117,10 +123,18 @@ namespace boost
 
         };
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+
     private: // representation
 
         template<typename ValueType>
         friend ValueType * any_cast(any *);
+
+#else
+
+    public: // representation (public so any_cast can be non-friend)
+
+#endif
 
         placeholder * content;
 
