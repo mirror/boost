@@ -183,9 +183,9 @@ void test_conversion_to_string()
 
 void test_conversion_from_to_wchar_t_alias()
 {
-    BOOST_CHECK_EQUAL(123, lexical_cast<unsigned short>("123"));
-    BOOST_CHECK_EQUAL(123, lexical_cast<unsigned int>("123"));
-    BOOST_CHECK_EQUAL(123, lexical_cast<unsigned long>("123"));
+    BOOST_CHECK_EQUAL(123u, lexical_cast<unsigned short>("123"));
+    BOOST_CHECK_EQUAL(123u, lexical_cast<unsigned int>("123"));
+    BOOST_CHECK_EQUAL(123u, lexical_cast<unsigned long>("123"));
     BOOST_CHECK_EQUAL(std::string("123"),
         lexical_cast<std::string>(static_cast<unsigned short>(123)));
     BOOST_CHECK_EQUAL(std::string("123"), lexical_cast<std::string>(123u));
