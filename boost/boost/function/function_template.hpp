@@ -425,11 +425,7 @@ namespace boost {
     template<typename FunctionObj>
     void assign_to(FunctionObj f, detail::function::function_obj_tag)
     {
-      typedef detail::function::truth<
-                boost::is_base_and_derived<function_base, FunctionObj>::value>
-        is_boost_function;
-
-      if (!detail::function::has_empty_target(f, is_boost_function())) {
+      if (!detail::function::has_empty_target(addressof(f))) {
         typedef 
           typename detail::function::BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER<
                                        FunctionObj,
@@ -463,11 +459,7 @@ namespace boost {
     void assign_to(const reference_wrapper<FunctionObj>& f, 
                    detail::function::function_obj_ref_tag)
     {
-      typedef detail::function::truth<
-                boost::is_base_and_derived<function_base, FunctionObj>::value>
-        is_boost_function;
-
-      if (!detail::function::has_empty_target(f.get(), is_boost_function())) {
+      if (!detail::function::has_empty_target(f.get_pointer())) {
         typedef 
           typename detail::function::BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER<
                                        FunctionObj,

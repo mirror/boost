@@ -307,13 +307,13 @@ namespace boost {
   public: // should be protected, but GCC 2.95.3 will fail to allow access
     detail::function::any_pointer (*manager)(
                            detail::function::any_pointer, 
+                           detail::function::functor_manager_operation_type);
+    detail::function::any_pointer functor;
+
 #if (defined __SUNPRO_CC) && (__SUNPRO_CC <= 0x530) && !(defined BOOST_NO_COMPILER_CONFIG)
     // Sun C++ 5.3 can't handle the safe_bool idiom, so don't use it
     operator bool () const { return !this->empty(); }
 #else
-                           detail::function::functor_manager_operation_type);
-    detail::function::any_pointer functor;
-
   private:
     struct dummy {
       void nonnull() {};
@@ -324,10 +324,10 @@ namespace boost {
   public:
     operator safe_bool () const 
       { return (this->empty())? 0 : &dummy::nonnull; }
-#endif
 
     safe_bool operator!() const
       { return (this->empty())? &dummy::nonnull : 0; }
+#endif
   };
 
   /* Poison comparison between Boost.Function objects (because it is 
@@ -341,20 +341,14 @@ namespace boost {
 
   namespace detail {
     namespace function {
-      // The result is not a Boost.Function object, so we assume that this
-      // target is not empty
-      template<typename FunctionObj>
-      inline bool has_empty_target(const FunctionObj&, truth<false>)
+      inline bool has_empty_target(const function_base* f)
       {
-        return false;
+        return f->empty();
       }
 
-      // The result is a Boost.Function object, so query whether it is empty
-      // or not
-      template<typename FunctionObj>
-      inline bool has_empty_target(const FunctionObj& f, truth<true>)
-      { 
-        return f.empty();
+      inline bool has_empty_target(...)
+      {
+        return false;
       }
     } // end namespace function
   } // end namespace detail
