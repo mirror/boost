@@ -23,16 +23,6 @@
 
 <p>expands to <code>B</code>.</p>
 
-<p>Tuples can be used for representing structured data.</p>
-
-<p>Examples of tuples:</p>
-
-<pre>
-  2-tuple: (A, B)
-  3-tuple: (1, 2, 3)
-  4-tuple: (A B C, D, EF, 34)
-</pre>
-
 <h3>See</h3>
 <ul>
   <li>BOOST_PP_LIMIT_TUPLE</li>

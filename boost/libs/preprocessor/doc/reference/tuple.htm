@@ -23,7 +23,24 @@
 <hr>
 
 <h1>#include &lt;<a href="../../../../boost/preprocessor/tuple.hpp">boost/preprocessor/tuple.hpp</a>&gt;</h1>
- <p>Includes all tuple headers.</p> 
+ <p>Includes all tuple headers.</p>
+
+<p>A tuple is a fixed size collection of elements.</p>
+
+<p>In the preprocessor library, tuples are represented like macro parameter
+lists. Thus an element of a tuple can be any sequence of tokens that
+constitutes a single macro parameter.</p>
+
+<p>Examples of tuples:</p>
+
+<pre>
+  (const, volatile)    // 2-tuple
+  (*, /, %)            // 3-tuple
+  (1, "2", '3', (4,5)) // 4-tuple
+</pre>
+
+<p>Tuples can be used for representing structured data.</p>
+
 <hr>
 
 <a href="stringize.htm">Prev</a> <a href="tuple_eat.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
