@@ -35,8 +35,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::size_type size_type;
         typedef typename V::value_type value_type;
         typedef const value_type &const_reference;
-        typedef value_type *pointer;
         typedef value_type &reference;
+        typedef value_type *pointer;
 
         /* FIXME Why was this function provided to generate a runtime error?
          * without the incorrect conversion is a compiletime error!
