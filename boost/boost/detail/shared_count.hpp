@@ -55,7 +55,7 @@ public:
 
     virtual char const * what() const throw()
     {
-		return "boost::use_count_is_zero";
+        return "boost::use_count_is_zero";
     }
 };
 
