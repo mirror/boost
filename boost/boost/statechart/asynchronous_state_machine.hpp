@@ -10,11 +10,11 @@
 
 
 
-#include <boost/fsm/detail/state_base.hpp>
-
 #include <boost/fsm/state_machine.hpp>
 #include <boost/fsm/worker.hpp>
+
 #include <boost/fsm/detail/event_processor.hpp>
+#include <boost/fsm/detail/state_base.hpp>
 
 
 
@@ -27,17 +27,16 @@ namespace fsm
 
 //////////////////////////////////////////////////////////////////////////////
 template< class MostDerived,
-          class InitialState, 
+          class InitialState,
+          class Worker = worker<>,
           class Allocator = std::allocator< void >,
-          class ExceptionTranslator = exception_translator<>,
-          class RttiPolicy = rtti_policy,
-          class Worker = worker<> >
+          class ExceptionTranslator = exception_translator<> >
 class asynchronous_state_machine : public state_machine<
-  MostDerived, InitialState, Allocator, ExceptionTranslator, RttiPolicy >,
+  MostDerived, InitialState, Allocator, ExceptionTranslator >,
   public detail::event_processor< Worker >
 {
   typedef state_machine< MostDerived,
-    InitialState, Allocator, ExceptionTranslator, RttiPolicy > machine_base;
+    InitialState, Allocator, ExceptionTranslator > machine_base;
   typedef detail::event_processor< Worker > processor_base;
   public:
     //////////////////////////////////////////////////////////////////////////

@@ -10,6 +10,8 @@
 
 //////////////////////////////////////////////////////////////////////////////
 const unsigned int noOfBits = 6;
+// #define CUSTOMIZE_MEMORY_MANAGEMENT
+// #define BOOST_FSM_USE_NATIVE_RTTI
 //////////////////////////////////////////////////////////////////////////////
 // This program demonstrates the fact that measures must be taken to hide some
 // of the complexity (e.g. in separate .cpp file) of a boost::fsm state
@@ -64,8 +66,10 @@ const unsigned int noOfBits = 6;
 #pragma warning( disable: 4127 ) // conditional expression is constant
 #endif
 
+#ifdef CUSTOMIZE_MEMORY_MANAGEMENT
 #define BOOST_NO_MT
 #include <boost/pool/pool_alloc.hpp>
+#endif
 
 #ifdef BOOST_MSVC
 #pragma warning( pop )
@@ -75,8 +79,9 @@ const unsigned int noOfBits = 6;
 #include <iomanip>
 #include <ctime>
 
+#ifdef CUSTOMIZE_MEMORY_MANAGEMENT
 #include "UniqueObject.hpp"
-#include "IntegerRttiPolicy.hpp"
+#endif
 
 
 
@@ -115,20 +120,19 @@ void DisplayBits( unsigned int number )
 
 //////////////////////////////////////////////////////////////////////////////
 template< unsigned int bitNo >
-struct EvFlipBit :
-  fsm::event< EvFlipBit< bitNo >, IntegerRttiPolicy<> > {};
+struct EvFlipBit : fsm::event< EvFlipBit< bitNo > > {};
 
-const fsm::event_base< IntegerRttiPolicy<> > * pFlipBitEvents[ 10 ] = { 0 };
-
-struct ExceptionThrown :
-  fsm::event< ExceptionThrown, IntegerRttiPolicy<> > {};
+const fsm::event_base * pFlipBitEvents[ 10 ] = { 0 };
 
 template< unsigned int stateNo >
 struct BitState;
 //////////////////////////////////////////////////////////////////////////////
+#ifdef CUSTOMIZE_MEMORY_MANAGEMENT
 struct BitMachine : fsm::state_machine< BitMachine, BitState< 0 >,
-  boost::fast_pool_allocator< int >,
-  fsm::exception_translator< ExceptionThrown >, IntegerRttiPolicy<> > {};
+  boost::fast_pool_allocator< int > > {};
+#else
+struct BitMachine : fsm::state_machine< BitMachine, BitState< 0 > > {};
+#endif
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -175,9 +179,12 @@ struct IDisplay
 template< unsigned int stateNo >
 struct BitState :
   fsm::simple_state< BitState< stateNo >, BitMachine,
-    typename FlipTransitionList< stateNo >::type >, 
-  IDisplay,
-  UniqueObject< BitState< stateNo > >
+    typename FlipTransitionList< stateNo >::type >,
+  #ifdef CUSTOMIZE_MEMORY_MANAGEMENT
+  IDisplay, UniqueObject< BitState< stateNo > >
+  #else
+  IDisplay
+  #endif
 {
   virtual void DisplayBits() const
   {

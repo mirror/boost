@@ -19,12 +19,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\..\boost_1_30_0;&quot;..\..\..\..\..\boost-sandbox&quot;"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\..\boost-sandbox&quot;;&quot;..\..\..\..\..\boost-1.30.2&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				DisableLanguageExtensions="FALSE"
+				BufferSecurityCheck="TRUE"
+				DisableLanguageExtensions="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
@@ -75,15 +76,16 @@
 				Name="VCCLCompilerTool"
 				Optimization="3"
 				GlobalOptimizations="TRUE"
-				FavorSizeOrSpeed="1"
-				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..\..\..\..\boost_1_30_0;&quot;..\..\..\..\..\boost-sandbox&quot;"
+				InlineFunctionExpansion="2"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\..\boost-sandbox&quot;;&quot;..\..\..\..\..\boost-1.30.2&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				StringPooling="TRUE"
 				RuntimeLibrary="0"
+				BufferSecurityCheck="FALSE"
+				EnableFunctionLevelLinking="TRUE"
 				DisableLanguageExtensions="FALSE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
-				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
 				WarnAsError="FALSE"
@@ -151,6 +153,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\exception_translator.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\fsm\history.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\result.hpp">

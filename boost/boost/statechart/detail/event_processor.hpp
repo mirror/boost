@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_EVENT_PROCESSOR_INCLUDED
-#define BOOST_FSM_EVENT_PROCESSOR_INCLUDED
+#ifndef BOOST_FSM_DETAIL_EVENT_PROCESSOR_INCLUDED
+#define BOOST_FSM_DETAIL_EVENT_PROCESSOR_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software

@@ -31,38 +31,38 @@ include:</p>
   <li>Straightforward transformation from UML state chart to executable C++ 
   code and vice versa (no code generator required)</li>
   <li>Comprehensive <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">
-  UML semantics</a> support<ul>
+  UML semantics</a> support:<ul>
     <li>Hierarchical (composite, nested) states</li>
     <li>Orthogonal (concurrent) states</li>
     <li>Entry-, exit- and transition-actions</li>
     <li>Guards</li>
+    <li>Shallow/deep history</li>
     <li>Event deferral</li>
   </ul>
   </li>
   <li>Error handling support</li>
   <li>Full type-safety</li>
+  <li>Compile-time state chart validation</li>
   <li>Support for asynchronous state machines and multi-threading</li>
   <li>State-local storage</li>
   <li>Generic design allowing for the customization of memory management, 
-  error handling, RTTI and threading</li>
+  error handling and threading</li>
 </ul>
 <p>All code has been tested on the following platforms:</p>
 <ul>
   <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003) with boost 
-  distribution 1.30.0</li>
+  distribution 1.30.2</li>
 </ul>
-<p>The library is not yet complete. Here is the current to-do list:</p>
+<p>The library is almost functionally complete. However, the following is 
+still in the making:</p>
 <ol>
-  <li>Add support for shallow/deep history</li>
-  <li>Add checks for invalid transitions between different orthogonal regions 
-  (the documentation claims these are already present)</li>
-  <li>Add reference documentation</li>
-  <li>Add regression tests</li>
-  <li>Factor out several functions in the <code>state_machine</code> class 
-  template into base classes to reduce code size in projects with many 
-  different state machines</li>
-  <li>gcc-port</li>
-  <li>Allow triggerless transitions</li>
+  <li>A facility allowing users to attach arbitrary type information to states</li>
+  <li>A way to iterate over all current states of a machine.</li>
+  <li>Reference documentation</li>
+  <li>Regression tests</li>
+  <li>Ports to other compilers</li>
+  <li>Refactoring of the <code>state_machine</code> class template to reduce 
+  code size in projects with many different state machines</li>
 </ol>
 <p><b>This is a preliminary submission. All comments are most welcome!</b></p>
 <hr>
@@ -76,6 +76,22 @@ include:</p>
 </dl>
 <hr>
 <h2>Change history</h2>
+<p>12 October 2003:</p>
+<ul>
+  <li><b>Breaking change</b>: Removed <code>rtti_policy</code> from the 
+  interface. By default, the library now uses its own (often faster) RTTI 
+  implementation. Users can demand the use of native C++ RTTI by defining
+  <code>BOOST_FSM_USE_INTERNAL_RTTI</code>. This change only affects users who 
+  customized <code>state_machine&lt;&gt;</code>, <code>asynchronous_state_machine&lt;&gt;</code> 
+  or <code>worker&lt;&gt;</code></li>
+  <li><b>Breaking change</b>: Reordered template arguments of <code>
+  state_machine</code> and <code>asynchronous_state_machine</code>. This 
+  change only affects users who customized <code>state_machine&lt;&gt;</code> or
+  <code>asynchronous_state_machine&lt;&gt;</code></li>
+  <li>Added shallow/deep history support and updated documentation accordingly</li>
+  <li>Added various compile-time sanity checks</li>
+  <li>Added 1 FAQ (asked by Mitsuo Fukasawa)</li>
+</ul>
 <p>16 August, 2003:</p>
 <ul>
   <li>Added <code>asynchronous_state_machine&lt;&gt;</code> and <code>worker&lt;&gt;</code> 
@@ -95,7 +111,7 @@ include:</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 August, 2003<!--webbot bot="Timestamp" endspan i-checksum="34481" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 October, 2003<!--webbot bot="Timestamp" endspan i-checksum="38550" --></p>
 <p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003. All Rights Reserved.</i></p>
 

@@ -38,7 +38,7 @@ struct termination
     {
       return no_reaction;
     }
-  };
+  }
 };
 
 

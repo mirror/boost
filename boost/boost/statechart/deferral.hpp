@@ -37,7 +37,7 @@ struct deferral
     {
       return no_reaction;
     }
-  };
+  }
 };
 
 

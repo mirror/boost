@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_LEAF_STATE_HPP_INCLUDED
-#define BOOST_FSM_LEAF_STATE_HPP_INCLUDED
+#ifndef BOOST_FSM_DETAIL_LEAF_STATE_HPP_INCLUDED
+#define BOOST_FSM_DETAIL_LEAF_STATE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software

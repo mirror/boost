@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_STATE_BASE_HPP_INCLUDED
-#define BOOST_FSM_STATE_BASE_HPP_INCLUDED
+#ifndef BOOST_FSM_DETAIL_STATE_BASE_HPP_INCLUDED
+#define BOOST_FSM_DETAIL_STATE_BASE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
@@ -18,6 +18,7 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/assert.hpp>
+#include <boost/config.hpp>
 
 #ifdef BOOST_MSVC
 #pragma warning( push )
@@ -45,9 +46,6 @@ namespace boost
 {
 namespace fsm
 {
-
-
-
 namespace detail
 {
 
@@ -74,7 +72,8 @@ class state_base : private noncopyable, public RttiPolicy::base_type<
     state_base( typename RttiPolicy::id_type id ) :
       base_type( id ),
       reactionEnabled_( false ),
-      deferredEvents_( false )
+      deferredEvents_( false ),
+      terminationState_( false )
     {
     }
 
@@ -111,13 +110,23 @@ class state_base : private noncopyable, public RttiPolicy::base_type<
       pContext->add_inner_state( position, this );
     }
 
+    bool termination_state() const
+    {
+      return terminationState_;
+    }
+
   public:
     //////////////////////////////////////////////////////////////////////////
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
+    void set_termination_state()
+    {
+      terminationState_ = true;
+    }
+
     virtual result react_impl(
-      const event_base< RttiPolicy > & evt,
+      const event_base & evt,
       typename RttiPolicy::id_type eventType ) = 0;
 
     // returns a pointer to the immediate outer state _if_ there is one,
@@ -138,6 +147,7 @@ class state_base : private noncopyable, public RttiPolicy::base_type<
     //////////////////////////////////////////////////////////////////////////
     bool reactionEnabled_;
     bool deferredEvents_;
+    bool terminationState_;
 };
 
 

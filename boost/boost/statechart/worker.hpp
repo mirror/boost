@@ -11,7 +11,7 @@
 
 
 #include <boost/fsm/event.hpp>
-#include <boost/fsm/rtti_policy.hpp>
+#include <boost/fsm/detail/rtti_policy.hpp>
 #include <boost/fsm/detail/event_processor.hpp>
 
 #include <boost/config.hpp>
@@ -49,8 +49,7 @@ class event_processor;
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class Allocator = std::allocator< void >,
-          class RttiPolicy = rtti_policy >
+template< class Allocator = std::allocator< void > >
 class worker : noncopyable
 {
   public:
@@ -122,7 +121,8 @@ class worker : noncopyable
 
     typedef detail::event_processor< worker > processor_type;
     typedef std::list< processor_type *, Allocator > processor_list_type;
-    typedef intrusive_ptr< const event_base< RttiPolicy > > event_ptr_type;
+    typedef intrusive_ptr< const event_base >
+      event_ptr_type;
     typedef std::pair< processor_type *, event_ptr_type > queue_element;
     typedef std::list< queue_element, Allocator > event_queue_type;
 
@@ -183,7 +183,7 @@ class worker : noncopyable
         queueNotEmpty_.wait( lock );
       }
       #else
-      // If the queue happens to run empty in a single threaded system,
+      // If the queue happens to run empty in a single-threaded system,
       // waiting for new events (which means to loop indefinitely!) is
       // pointless as there is no way that new events could find their way
       // into the queue. The only sensible thing is to exit the loop and

@@ -34,6 +34,10 @@
   <a href="#Is it possible to inherit from a given state machine and modify its layout in the subclass">
   Is it possible to inherit from a given state machine and modify its layout 
   in the subclass?</a></dt>
+  <dt>
+  <a href="#Why are exit-actions called in the wrong order when I use multiple inheritance">
+  Why are exit-actions called in the wrong order when I use multiple 
+  inheritance?</a></dt>
 </dl>
 <h2><a name="Does boost::fsm support polymorphic events">Does boost::fsm 
 support polymorphic events?</a></h2>
@@ -46,11 +50,11 @@ struct EvButtonPressed : fsm::event&lt; MostDerived &gt;
   // common code
 };
 
-sturct EvPlayButtonPressed :
+struct EvPlayButtonPressed :
   EvButtonPressed&lt; EvPlayButtonPressed &gt; {};
-sturct EvStopButtonPressed :
+struct EvStopButtonPressed :
   EvButtonPressed&lt; EvStopButtonPressed &gt; {};
-sturct EvForwardButtonPressed :
+struct EvForwardButtonPressed :
   EvButtonPressed&lt; EvForwardButtonPressed &gt; {};
 
 /* ... */
@@ -128,8 +132,8 @@ state machine: </p>
 struct Idle;
 struct PumpBase : fsm::state_machine&lt; PumpBase, Idle &gt;
 {
-<b>  virtual fsm::result react(
-    Idle &amp; idle, const EvStart &amp; ) const;
+  <b>virtual fsm::result react(
+</b>    <b>Idle &amp; idle, const EvStart &amp; ) const;
 </b>};
 
 struct Idle : fsm::simple_state&lt; Idle, PumpBase,
@@ -146,7 +150,7 @@ struct Running : fsm::simple_state&lt; Running, PumpBase &gt; {};
 fsm::result PumpBase::react(
   Idle &amp; idle, const EvStart &amp; ) const
 {
-<b>  return idle.transit&lt; Running &gt;();
+  <b>return idle.transit&lt; Running &gt;();
 </b>}
 
 
@@ -157,12 +161,95 @@ struct MyPump : PumpBase
   virtual fsm::result react(
     Idle &amp; idle, const EvStart &amp; ) const
   {
-<b>    return idle.transit&lt; MyRunning &gt;();
+    <b>return idle.transit&lt; MyRunning &gt;();
 </b>  }
 };</pre>
+<h2>
+<a name="Why are exit-actions called in the wrong order when I use multiple inheritance">
+Why are exit-actions called in the wrong order when I use multiple 
+inheritance?</a></h2>
+<p>They definitely aren't for the <code>simple_state</code> and <code>state</code> 
+subclasses, but the destructors of additional bases might be called in 
+construction order (rather than the reverse construction order):</p>
+<pre>#include &lt;boost/fsm/state_machine.hpp&gt;
+#include &lt;boost/fsm/simple_state.hpp&gt;
+
+namespace fsm = boost::fsm;
+
+class EntryExitDisplayer
+{
+  protected:
+    EntryExitDisplayer( const char * pName ) :
+      pName_( pName )
+    {
+      std::cout &lt;&lt; pName_ &lt;&lt; &quot; entered\n&quot;;
+    }
+
+    ~EntryExitDisplayer()
+    {
+      std::cout &lt;&lt; pName_ &lt;&lt; &quot; exited\n&quot;;
+    }
+
+  private:
+    const char * const pName_;
+};
+
+struct Outer;
+struct Machine : fsm::state_machine&lt; Machine, Outer &gt; {};
+struct Inner;
+struct Outer : EntryExitDisplayer, fsm::simple_state&lt;
+  Outer, Machine, fsm::no_reactions, Inner &gt;
+{
+  Outer() : EntryExitDisplayer( &quot;Outer&quot; ) {}
+};
+
+struct Inner : EntryExitDisplayer,
+  fsm::simple_state&lt; Inner, Outer &gt;
+{
+  Inner() : EntryExitDisplayer( &quot;Inner&quot; ) {}
+};
+
+int main()
+{
+  Machine myMachine;
+  myMachine.initiate();
+  return 0;
+}</pre>
+<p>This program will produce the following output:</p>
+<pre>Outer entered
+Inner entered
+Outer exited
+Inner exited</pre>
+<p>That is, the <b><code>EntryExitDisplayer</code> base class portion</b> of
+<code>Outer</code> is destructed before the one of <code>Inner</code> although
+<code>Inner::~Inner()</code> is called before <code>Outer::~Outer()</code>. 
+This somewhat counter-intuitive behavior is caused by the following facts: </p>
+<ul>
+  <li>The <code>simple_state&lt;&gt;</code> base class portion of <code>Inner</code> 
+  is responsible to destruct <code>Outer</code></li>
+  <li>Destructors of base class portions are called in the reverse order of 
+  construction</li>
+</ul>
+<p>So, when the <code>Outer</code> destructor is called the call stack looks 
+as follows:</p>
+<pre>Outer::~Outer()
+simple_state&lt; Inner, ... &gt;::~simple_state()
+Inner::~Inner()</pre>
+<p>Note that <code>Inner::~Inner()</code> did not yet have a chance to destroy 
+its <code>EntryExitDisplayer</code> base class portion, as it first has to 
+call the destructor of the <b>second</b> base class. Now <code>Outer::~Outer()</code> 
+will first destruct its <code>simple_state&lt; Outer, ... &gt;</code> base class 
+portion and then do the same with its <code>EntryExitDisplayer</code> base 
+class portion. The stack then unwinds back to <code>Inner::~Inner()</code>, 
+which can then finally finish by calling <code>
+EntryExitDisplayer::~EntryExitDisplayer()</code>.</p>
+<p>Luckily, there is an easy work-around: Always let <code>simple_state&lt;&gt;</code> 
+and <code>state&lt;&gt;</code> be the first base class of a state. This ensures that 
+destructors of additional bases are called before recursion employed by state 
+base destructors can alter the order of destruction.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 August, 2003<!--webbot bot="Timestamp" endspan i-checksum="34481" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 October, 2003<!--webbot bot="Timestamp" endspan i-checksum="38550" --></p>
 <p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003. All Rights Reserved.</i></p>
 

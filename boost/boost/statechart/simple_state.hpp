@@ -10,16 +10,16 @@
 
 
 
+#include <boost/fsm/event.hpp>
+
 #include <boost/fsm/detail/leaf_state.hpp>
 #include <boost/fsm/detail/node_state.hpp>
-
-#include <boost/fsm/event.hpp>
+#include <boost/fsm/detail/constructor.hpp>
 
 #include <boost/mpl/apply_if.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/is_sequence.hpp>
-#include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/empty.hpp>
 #include <boost/mpl/size.hpp>
@@ -31,14 +31,13 @@
 #include <boost/mpl/find_if.hpp>
 #include <boost/mpl/deref.hpp>
 #include <boost/mpl/clear.hpp>
-#include <boost/mpl/erase.hpp>
-#include <boost/mpl/reverse.hpp>
 #include <boost/mpl/placeholders.hpp>
 
 #include <boost/get_pointer.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/cast.hpp>   // boost::polymorphic_downcast
 #include <boost/config.hpp> // BOOST_STATIC_CONSTANT
 
@@ -114,8 +113,8 @@ class transition_function
     template< class CommonContext >
     void operator()( CommonContext & commonContext ) const
     {
-      ( commonContext.context< TransitionContext >().*pTransitionAction_ )(
-        evt_ );
+      ( commonContext.template context< TransitionContext >()
+        .*pTransitionAction_ )( evt_ );
     }
 
   private:
@@ -124,62 +123,34 @@ class transition_function
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-template< class ContextList, class OutermostContext >
-struct outer_constructor
+template< bool contextHasInheritedDeepHistory, bool contextHasDeepHistory >
+struct deep_history_storer
 {
-  typedef typename mpl::front< ContextList >::type to_construct;
-  typedef typename to_construct::context_ptr_type context_ptr_type;
-  typedef typename to_construct::inner_context_ptr_type
-    inner_context_ptr_type;
+  template< class HistorizedState, class LeafState, class Context >
+  static void store_deep_history( Context & ) {}
+};
 
-  typedef typename to_construct::inner_initial_list inner_initial_list;
-  typedef typename mpl::pop_front< ContextList >::type inner_context_list;
-  typedef mpl::integral_c< long,
-    mpl::front< inner_context_list >::type::orthogonal_position
-  > inner_orthogonal_position;
-
-  typedef typename mpl::erase< 
-    inner_initial_list,
-    typename mpl::advance<
-      typename mpl::begin< inner_initial_list >::type,
-      inner_orthogonal_position >::type >::type remaining_inner_initial_list;
-
-  static construct(
-    const context_ptr_type & pContext, OutermostContext & outermostContext )
+template<>
+struct deep_history_storer< true, false >
+{
+  template< class HistorizedState, class LeafState, class Context >
+  static void store_deep_history( Context & ctx )
   {
-    outermostContext.add( pContext );
-    const inner_context_ptr_type pInnerContext =
-      to_construct::shallow_construct( pContext );
-    to_construct::template deep_construct_inner<
-      remaining_inner_initial_list >( pInnerContext, outermostContext );
-    constructor< inner_context_list, OutermostContext >::construct(
-      pInnerContext, outermostContext );
+    ctx.template store_deep_history_impl< LeafState >();
   }
 };
 
-template< class ContextList, class OutermostContext >
-struct inner_constructor
+template<>
+struct deep_history_storer< true, true >
 {
-  typedef typename mpl::front< ContextList >::type to_construct;
-  typedef typename to_construct::context_ptr_type context_ptr_type;
-
-  static construct(
-    const context_ptr_type & pContext, OutermostContext & outermostContext )
+  template< class HistorizedState, class LeafState, class Context >
+  static void store_deep_history( Context & ctx )
   {
-    to_construct::deep_construct( pContext, outermostContext );
+    ctx.outermost_context().template store_deep_history<
+      HistorizedState, LeafState >();
+    ctx.template store_deep_history_impl< LeafState >();
   }
 };
-
-template< class ContextList, class OutermostContext >
-struct constructor_impl : public mpl::apply_if< 
-  mpl::equal_to< mpl::size< ContextList >, mpl::integral_c< long, 1 > >,
-  mpl::identity< inner_constructor< ContextList, OutermostContext > >,
-  mpl::identity< outer_constructor< ContextList, OutermostContext > > > {};
-
-template< class ContextList, class OutermostContext >
-struct constructor :
-  public constructor_impl< ContextList, OutermostContext >::type {};
 
 
 
@@ -187,7 +158,17 @@ struct constructor :
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 typedef detail::empty_list no_reactions;
+
+//////////////////////////////////////////////////////////////////////////////
+enum history_mode
+{
+  has_no_history,
+  has_shallow_history,
+  has_deep_history,
+  has_full_history // shallow & deep
+};
 
 
 
@@ -195,7 +176,8 @@ typedef detail::empty_list no_reactions;
 template< class MostDerived,
           class Context, // either an outer state or a state_machine
           class Reactions = no_reactions,
-          class InnerInitial = detail::empty_list > // initial inner state
+          class InnerInitial = detail::empty_list, // initial inner state
+          history_mode historyMode = has_no_history >
 class simple_state : public detail::simple_state_base_type< MostDerived,
   typename Context::inner_context_type, InnerInitial >::type
 {
@@ -211,13 +193,18 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       orthogonal_position = Context::inner_orthogonal_position );
     typedef typename context_type::event_base_ptr_type event_base_ptr_type;
 
+    // If you receive a 
+    // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or similar
+    // compiler error here then this state resides in a non-existent
+    // orthogonal region of the outer state. 
+    BOOST_STATIC_ASSERT(
+      orthogonal_position < context_type::no_of_orthogonal_regions );
 
     typedef simple_state my_base;
 
     template< detail::orthogonal_position_type innerOrthogonalPosition >
     struct orthogonal
     {
-      // TODO: check that this state really has such an inner orthogonal state
       BOOST_STATIC_CONSTANT(
         detail::orthogonal_position_type,
         inner_orthogonal_position = innerOrthogonalPosition );
@@ -249,14 +236,14 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     template< class Target >
     Target state_cast() const
     {
-      return outermost_context().state_cast< Target >();
+      return outermost_context().template state_cast< Target >();
     }
 
     // see state_machine class for documentation
     template< class Target >
     Target state_downcast() const
     {
-      return outermost_context().state_downcast< Target >();
+      return outermost_context().template state_downcast< Target >();
     }
 
     
@@ -325,6 +312,9 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
           outermost_context().release_events( this );
         }
 
+        check_store_shallow_history< stores_shallow_history >();
+        check_store_deep_history< stores_deep_history >();
+
         pContext_->remove_inner_state( orthogonal_position );
       }
     }
@@ -334,7 +324,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
-    // TODO: check that this state really has such an inner orthogonal state
     typedef MostDerived inner_context_type;
     BOOST_STATIC_CONSTANT(
       detail::orthogonal_position_type,
@@ -351,17 +340,43 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     typedef intrusive_ptr< MostDerived > inner_context_ptr_type;
     typedef typename detail::make_list< InnerInitial >::type
       inner_initial_list;
+    BOOST_STATIC_CONSTANT(
+      detail::orthogonal_position_type,
+      no_of_orthogonal_regions = mpl::size< inner_initial_list >::value );
     typedef typename mpl::push_front<
       typename context_type::context_type_list,
       context_type >::type context_type_list;
 
+    // If you receive a 
+    // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or similar
+    // compiler error here then the direct or indirect context of this state
+    // has deep history _and_ this state has two or more orthogonal regions.
+    // boost::fsm does not currently support deep history in a state whose
+    // direct or indirect inner states have two or more orthogonal regions.
+    // Please consult the documentation on how to work around this limitation.
+    BOOST_STATIC_ASSERT(
+      ( mpl::size< inner_initial_list >::value <= 1 ) ||
+      ( !context_type::inherited_deep_history ) );
+
+    BOOST_STATIC_CONSTANT( bool, shallow_history =
+      ( historyMode & has_shallow_history ) != 0 );
+    BOOST_STATIC_CONSTANT( bool, stores_shallow_history =
+      context_type::shallow_history );
+    BOOST_STATIC_CONSTANT( bool, deep_history =
+      ( historyMode & has_deep_history ) != 0 );
+    BOOST_STATIC_CONSTANT( bool, inherited_deep_history =
+      ( deep_history || context_type::inherited_deep_history ) );
+    BOOST_STATIC_CONSTANT( bool, stores_deep_history =
+      inherited_deep_history && mpl::empty< inner_initial_list >::value );
+
+    BOOST_STATIC_CONSTANT( bool, history_destination = false );
 
     virtual result react_impl(
       const event_base_type & evt,
       typename rtti_policy_type::id_type eventType )
     {
       state_base_type::enable_reaction();
-      typedef detail::make_list< Reactions >::type reaction_list;
+      typedef typename detail::make_list< Reactions >::type reaction_list;
       result reactionResult =
         local_react_impl< reaction_list >( evt, eventType );
 
@@ -413,7 +428,8 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     // construction only.
     // After each successful (non-throwing) construction the current state is
     // reported back to the state machine.
-    static void deep_construct( outermost_context_type & outermostContext )
+    static void initial_deep_construct(
+      outermost_context_type & outermostContext )
     {
       deep_construct( &outermostContext, outermostContext );
     }
@@ -462,6 +478,27 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       outermost_context_type & outermostContext )
     {
       outermostContext.add( pInnerContext );
+    }
+
+
+    static void reserve_history_slot(
+      outermost_context_type & outermostContext )
+    {
+      reserve_shallow_history_slot_impl< context_type::shallow_history >(
+        outermostContext );
+      reserve_deep_history_slot_impl< context_type::deep_history >(
+        outermostContext );
+    }
+
+    template< class LeafState >
+    void store_deep_history_impl()
+    {
+      if ( !state_base_type::termination_state() )
+      {
+        detail::deep_history_storer< 
+          context_type::inherited_deep_history, context_type::deep_history
+        >::store_deep_history< MostDerived, LeafState >( *pContext_ );
+      }
     }
 
   private:
@@ -515,6 +552,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     result transit_impl( const TransitionAction & transitionAction )
     {
       base_type::reaction_initiated();
+
       typedef typename mpl::find_if<
         context_type_list,
         mpl::contains<
@@ -528,6 +566,18 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
           typename mpl::begin< context_type_list >::type,
           common_context_iter >::type >::type termination_state_type;
 
+      // If you receive a 
+      // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or
+      // similar compiler error here then you tried to make a transition to
+      // history from a state residing on the same level as the history
+      // connector (or from a direct or indirect inner state). Since the
+      // outer state has never been left no history has ever been saved.
+      BOOST_STATIC_ASSERT( (
+        !DestinationState::history_destination ||
+        !is_same<
+          typename DestinationState::context_type,
+          common_context_type >::value ) );
+
       termination_state_type & terminationState(
         context< termination_state_type >() );
       const common_context_type::inner_context_ptr_type pCommonContext(
@@ -539,25 +589,20 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       outermostContext.add( pCommonContext );
       transitionAction( *pCommonContext );
 
-      // TODO: Check that the termination state and the construction state
-      // have the same orthogonal_position
+      typedef typename detail::make_context_list<
+        common_context_type, DestinationState >::type context_list_type;
 
-      typedef typename mpl::reverse< typename mpl::push_front<
-        typename mpl::erase<
-          typename DestinationState::context_type_list,
-          typedef typename mpl::find<
-            typename DestinationState::context_type_list, 
-            common_context_type
-          >::type,
-          typename mpl::end<
-            typename DestinationState::context_type_list
-          >::type
-        >::type,
-        DestinationState
-      >::type >::type context_list;
+      // If you receive a 
+      // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or similar
+      // compiler error here then you tried to make an invalid transition
+      // between different orthogonal regions.
+      BOOST_STATIC_ASSERT(
+        termination_state_type::orthogonal_position ==
+        mpl::front< context_list_type >::type::orthogonal_position );
 
-      detail::constructor< context_list, outermost_context_type >::construct(
-        pCommonContext, outermostContext );
+      detail::constructor<
+        context_list_type, outermost_context_type >::construct(
+          pCommonContext, outermostContext );
 
       return do_discard_event;
     }
@@ -573,7 +618,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       if ( reactionResult == no_reaction )
       {
         reactionResult =
-          local_react_impl< mpl::pop_front< ReactionList >::type >(
+          local_react_impl< typename mpl::pop_front< ReactionList >::type >(
             evt, eventType );
       }
 
@@ -605,15 +650,77 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       const inner_context_ptr_type & pInnerContext,
       outermost_context_type & outermostContext )
     {
-      mpl::front< InnerList >::type::deep_construct(
-        pInnerContext, outermostContext );
-      deep_construct_inner_impl< mpl::pop_front< InnerList >::type >(
+      typedef typename mpl::front< InnerList >::type current_inner;
+      
+      // If you receive a 
+      // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or
+      // similar compiler error here then there is a mismatch between the
+      // orthogonal position of a state and its position in the inner initial
+      // list of its outer state.
+      BOOST_STATIC_ASSERT( ( is_same< 
+        current_inner,
+        typename mpl::at_c<
+          typename current_inner::context_type::inner_initial_list,
+          current_inner::orthogonal_position >::type >::value ) );
+      
+      current_inner::reserve_history_slot( outermostContext );
+      current_inner::deep_construct( pInnerContext, outermostContext );
+      deep_construct_inner_impl< typename mpl::pop_front< InnerList >::type >(
         pInnerContext, outermostContext );
     }
 
     template<>
     static void deep_construct_inner_impl< detail::empty_list >(
       const inner_context_ptr_type &, outermost_context_type & ) {}
+
+
+    template< bool reserveShallowHistorySlot >
+    static void reserve_shallow_history_slot_impl(
+      outermost_context_type & ) {}
+
+    template<>
+    static void reserve_shallow_history_slot_impl< true >(
+      outermost_context_type & outermostContext )
+    {
+      outermostContext.template reserve_shallow_history_slot< MostDerived >();
+    }
+
+    template< bool storeShallowHistory >
+    void check_store_shallow_history() {}
+
+    template<>
+    void check_store_shallow_history< true >()
+    {
+      // If we are not the termination state then it can only be one of our
+      // direct or indirect outer states
+      if ( !state_base_type::termination_state() )
+      {
+        outermost_context().template store_shallow_history< MostDerived >();
+      }
+    }
+
+
+    template< bool reserveDeepHistorySlot >
+    static void reserve_deep_history_slot_impl(
+      outermost_context_type & ) {}
+
+    template<>
+    static void reserve_deep_history_slot_impl< true >(
+      outermost_context_type & outermostContext )
+    {
+      outermostContext.template reserve_deep_history_slot< MostDerived >();
+    }
+
+    template< bool storeDeepHistory >
+    void check_store_deep_history() {}
+
+    template<>
+    void check_store_deep_history< true >()
+    {
+      store_deep_history_impl< MostDerived >();
+      // If we are not the termination state then it can only be one of our
+      // direct or indirect outer states
+    }
 
 
     context_ptr_type pContext_;

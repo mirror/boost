@@ -57,7 +57,7 @@ namespace mpl = boost::mpl;
 
 
 
-const unsigned int noOfEvents = 100000;
+const unsigned int noOfEvents = 1000000;
 
 template< class T >
 boost::intrusive_ptr< T > MakeIntrusive( T * pObject )
@@ -77,7 +77,7 @@ struct GameAborted : fsm::event< GameAborted > {};
 
 
 struct Waiting;
-struct Player : public fsm::asynchronous_state_machine< Player, Waiting >
+struct Player : fsm::asynchronous_state_machine< Player, Waiting >
 {
   typedef fsm::asynchronous_state_machine< Player, Waiting > BaseType;
   public:

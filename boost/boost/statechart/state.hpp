@@ -24,12 +24,13 @@ namespace fsm
 template< class MostDerived,
           class Context, // either an outer state or a state_machine
           class Reactions = no_reactions,
-          class InnerInitial = detail::empty_list > // initial inner state
+          class InnerInitial = detail::empty_list, // initial inner state
+          history_mode historyMode = has_no_history >
 class state : public simple_state<
-  MostDerived, Context, Reactions, InnerInitial >
+  MostDerived, Context, Reactions, InnerInitial, historyMode >
 {
-  typedef simple_state< MostDerived, Context, Reactions, InnerInitial >
-    base_type;
+  typedef simple_state<
+    MostDerived, Context, Reactions, InnerInitial, historyMode > base_type;
   protected:
     //////////////////////////////////////////////////////////////////////////
     struct my_context
@@ -60,7 +61,8 @@ class state : public simple_state<
     typedef typename base_type::context_ptr_type context_ptr_type;
     typedef typename base_type::inner_initial_list inner_initial_list;
 
-    static void deep_construct( outermost_context_type & outermostContext )
+    static void initial_deep_construct(
+      outermost_context_type & outermostContext )
     {
       deep_construct( &outermostContext, outermostContext );
     }

@@ -10,8 +10,8 @@
 
 
 
+#include <boost/fsm/detail/rtti_policy.hpp>
 #include <boost/fsm/detail/counted_base.hpp>
-#include <boost/fsm/rtti_policy.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/noncopyable.hpp>
@@ -27,11 +27,10 @@ namespace fsm
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class RttiPolicy >
-class event_base :
-  public RttiPolicy::base_type< detail::counted_base< unsigned int > >
+class event_base : public detail::rtti_policy::base_type<
+  detail::counted_base< unsigned int > >
 {
-  typedef typename RttiPolicy::base_type<
+  typedef detail::rtti_policy::base_type<
     detail::counted_base< unsigned int > > base_type;
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -43,14 +42,17 @@ class event_base :
 
   protected:
     //////////////////////////////////////////////////////////////////////////
-    event_base( typename RttiPolicy::id_type id ) : base_type( id ) {}
+    event_base( detail::rtti_policy::id_type id ) :
+      base_type( id )
+    {
+    }
 };
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class MostDerived, class RttiPolicy = rtti_policy >
-class event : public RttiPolicy::derived_type<
-  MostDerived, event_base< RttiPolicy > >
+template< class MostDerived >
+class event : public detail::rtti_policy::derived_type<
+  MostDerived, event_base >
 {
   protected:
     //////////////////////////////////////////////////////////////////////////

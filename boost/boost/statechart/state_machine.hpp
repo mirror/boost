@@ -10,12 +10,13 @@
 
 
 
-#include <boost/fsm/detail/state_base.hpp>
-
 #include <boost/fsm/event.hpp>
-#include <boost/fsm/rtti_policy.hpp>
+#include <boost/fsm/detail/rtti_policy.hpp>
 #include <boost/fsm/exception_translator.hpp>
 #include <boost/fsm/result.hpp>
+
+#include <boost/fsm/detail/state_base.hpp>
+#include <boost/fsm/detail/constructor.hpp>
 
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/clear.hpp>
@@ -40,6 +41,7 @@
 
 #include <memory>   // std::allocator
 #include <typeinfo> // std::bad_cast
+#include <functional> // std::less
 
 
 
@@ -169,6 +171,52 @@ struct state_cast_impl
 };
 
 
+//////////////////////////////////////////////////////////////////////////////
+template< class RttiPolicy >
+class history_key
+{
+  public:
+    //////////////////////////////////////////////////////////////////////////
+    template< class HistorizedState >
+    static history_key make_history_key()
+    {
+      return history_key(
+        HistorizedState::context_type::static_type(),
+        HistorizedState::orthogonal_position );
+    }
+
+    typename RttiPolicy::id_type history_context_type() const
+    {
+      return historyContextType_;
+    }
+
+    friend bool operator<(
+      const history_key & left, const history_key & right )
+    {
+      return
+        std::less< RttiPolicy::id_type >()( 
+          left.historyContextType_, right.historyContextType_ ) ||
+        ( ( left.historyContextType_ == right.historyContextType_ ) &&
+          ( left.historizedOrthogonalRegion_ <
+            right.historizedOrthogonalRegion_ ) );
+    }
+
+  private:
+    //////////////////////////////////////////////////////////////////////////
+    history_key(
+      typename RttiPolicy::id_type historyContextType, 
+      orthogonal_position_type historizedOrthogonalRegion
+    ) :
+      historyContextType_( historyContextType ),
+      historizedOrthogonalRegion_( historizedOrthogonalRegion )
+    {
+    }
+
+    const typename RttiPolicy::id_type historyContextType_;
+    const orthogonal_position_type historizedOrthogonalRegion_;
+};
+
+
 
 } // namespace detail
 
@@ -180,15 +228,14 @@ struct state_cast_impl
 template< class MostDerived,
           class InitialState, 
           class Allocator = std::allocator< void >,
-          class ExceptionTranslator = exception_translator<>,
-          class RttiPolicy = rtti_policy >
+          class ExceptionTranslator = exception_translator<> >
 class state_machine : noncopyable
 {
   public:
     //////////////////////////////////////////////////////////////////////////
     typedef Allocator allocator_type;
-    typedef RttiPolicy rtti_policy_type;
-    typedef event_base< rtti_policy_type > event_base_type;
+    typedef detail::rtti_policy rtti_policy_type;
+    typedef event_base event_base_type;
     typedef intrusive_ptr< const event_base_type > event_base_ptr_type;
 
     // Initiates the state machine.
@@ -240,8 +287,9 @@ class state_machine : noncopyable
     template< class Target >
     Target state_cast() const
     {
-      typedef detail::state_cast_impl< rtti_policy_type::id_type >::
-        impl< is_pointer< Target >::value > impl;
+      typedef detail::state_cast_impl<
+        typename rtti_policy_type::id_type >::template
+          impl< is_pointer< Target >::value > impl;
 
       for ( state_list_type::const_iterator pCurrentLeafState =
               currentStates_.begin();
@@ -291,10 +339,11 @@ class state_machine : noncopyable
     template< class Target >
     Target state_downcast() const
     {
-      typedef detail::state_cast_impl< rtti_policy_type::id_type >::
-        impl< is_pointer< Target >::value > impl;
+      typedef detail::state_cast_impl<
+        typename rtti_policy_type::id_type >::template
+          impl< is_pointer< Target >::value > impl;
 
-      rtti_policy_type::id_type targetType = impl::type< Target >();
+      typename rtti_policy_type::id_type targetType = impl::type< Target >();
 
       for ( state_list_type::const_iterator pCurrentLeafState =
               currentStates_.begin();
@@ -342,6 +391,9 @@ class state_machine : noncopyable
     BOOST_STATIC_CONSTANT(
       detail::orthogonal_position_type,
       inner_orthogonal_position = 0 );
+    BOOST_STATIC_CONSTANT(
+      detail::orthogonal_position_type,
+      no_of_orthogonal_regions = 1 );
 
     typedef MostDerived outermost_context_type;
     typedef MostDerived * inner_context_ptr_type;
@@ -349,6 +401,10 @@ class state_machine : noncopyable
     typedef typename state_base_type::state_list_type state_list_type;
 
     typedef mpl::clear< mpl::list<> >::type context_type_list;
+
+    BOOST_STATIC_CONSTANT( bool, shallow_history = false );
+    BOOST_STATIC_CONSTANT( bool, deep_history = false );
+    BOOST_STATIC_CONSTANT( bool, inherited_deep_history = false );
 
 
     result react_impl(
@@ -392,13 +448,17 @@ class state_machine : noncopyable
     void terminate( state_machine & )
     {
       pUnstableState_ = currentStates_.end();
-      currentStates_.clear();
+      currentStates_.clear(); // this also empties the deferredMap_
       // there is no longer any use for possibly remaining events
       eventQueue_.clear();
+      shallowHistoryMap_.clear();
+      deepHistoryMap_.clear();
     }
 
     void terminate( state_base_type & theState )
     {
+      theState.set_termination_state();
+
       if ( currentStates_.size() == 1 )
       {
         // The following optimization is only correct when there are no
@@ -456,7 +516,7 @@ class state_machine : noncopyable
 
     void release_events( const state_base_type * pForState )
     {
-      const deferred_map_type::iterator pFound =
+      const typename deferred_map_type::iterator pFound =
         deferredMap_.find( pForState );
 
       // We are not guaranteed to find an entry because a state is marked for
@@ -469,11 +529,74 @@ class state_machine : noncopyable
       }
     }
 
+
+    template< class ForState >
+    void reserve_shallow_history_slot()
+    {
+      reserve_history_slot_impl( 
+        shallowHistoryMap_,
+        history_key_type::make_history_key< ForState >() );
+    }
+
+    template< class HistorizedState >
+    void store_shallow_history()
+    {
+      // 5.2.10.6 declares that reinterpret_casting a function pointer to a
+      // different function pointer and back must yield the same value. The
+      // following reinterpret_cast is the first half of such a sequence.
+      store_history_impl(
+        shallowHistoryMap_, 
+        history_key_type::make_history_key< HistorizedState >(),
+        reinterpret_cast< void (*)() >( &HistorizedState::deep_construct ) );
+    }
+
+    template< class DefaultState >
+    void construct_with_shallow_history(
+      const typename DefaultState::context_ptr_type & pContext )
+    {
+      construct_with_history_impl< DefaultState >(
+        shallowHistoryMap_, pContext );
+    }
+
+
+    template< class ForState >
+    void reserve_deep_history_slot()
+    {
+      reserve_history_slot_impl( 
+        deepHistoryMap_,
+        history_key_type::make_history_key< ForState >() );
+    }
+
+    template< class HistorizedState, class LeafState >
+    void store_deep_history()
+    {
+      typedef typename detail::make_context_list<
+        typename HistorizedState::context_type,
+        LeafState >::type history_context_list;
+      typedef detail::constructor< 
+        history_context_list, outermost_context_type > constructor_type;
+      // 5.2.10.6 declares that reinterpret_casting a function pointer to a
+      // different function pointer and back must yield the same value. The
+      // following reinterpret_cast is the first half of such a sequence.
+      store_history_impl(
+        deepHistoryMap_, 
+        history_key_type::make_history_key< HistorizedState >(),
+        reinterpret_cast< void (*)() >( &constructor_type::construct ) );
+    }
+
+    template< class DefaultState >
+    void construct_with_deep_history(
+      const typename DefaultState::context_ptr_type & pContext )
+    {
+      construct_with_history_impl< DefaultState >(
+        deepHistoryMap_, pContext );
+    }
+
   private: // implementation
     //////////////////////////////////////////////////////////////////////////
     void initial_construct()
     {
-      InitialState::deep_construct(
+      InitialState::initial_deep_construct(
         *polymorphic_downcast< MostDerived * >( this ) );
     }
 
@@ -584,15 +707,16 @@ class state_machine : noncopyable
         bool dismissed_;
     };
 
+
     void send_event( const event_base_type & evt )
     {
       terminator guard( *this );
       BOOST_ASSERT( machine_status() != unstable );
 
-      rtti_policy_type::id_type eventType = evt.dynamic_type();
+      typename rtti_policy_type::id_type eventType = evt.dynamic_type();
 
       result reactionResult = do_forward_event;
-      state_list_type::iterator pState = currentStates_.begin();
+      typename state_list_type::iterator pState = currentStates_.begin();
 
       while ( ( reactionResult == do_forward_event ) &&
         ( pState != currentStates_.end() ) )
@@ -678,22 +802,91 @@ class state_machine : noncopyable
       pUnstableState_ = currentStates_.end();
     }
 
+
+    typedef detail::history_key< rtti_policy_type > history_key_type;
+
+    typedef std::map<
+      history_key_type, void (*)(),
+      std::less< history_key_type >,
+      typename allocator_type::template rebind< 
+        std::pair< const history_key_type, void (*)() > >::other
+    > history_map_type;
+
+    void reserve_history_slot_impl(
+      history_map_type & historyMap, 
+      const history_key_type & historyId )
+    {
+      historyMap.insert(
+        std::make_pair( historyId, static_cast< void (*)() >( 0 ) ) );
+    }
+
+    void store_history_impl(
+      history_map_type & historyMap,
+      const history_key_type & historyId,
+      void (*pConstructFunction)() )
+    {
+      // Make sure we don't save history if the most derived class constructor
+      // throws (test only necessary with state).
+      if ( machine_status() != unstable )
+      {
+        historyMap[ historyId ] = pConstructFunction;
+      }
+    }
+
+    template< class DefaultState >
+    void construct_with_history_impl(
+      history_map_type & historyMap,
+      const typename DefaultState::context_ptr_type & pContext )
+    {
+      history_map_type::iterator pFoundSlot = historyMap.find(
+        history_key_type::make_history_key< DefaultState >() );
+      // The slot is allocated before this state is entered.
+      BOOST_ASSERT( pFoundSlot != historyMap.end() );
+      
+      if ( pFoundSlot->second == 0 )
+      {
+        // We either have never entered this state before or we are not
+        // transitioning from outside the outer state.
+        DefaultState::deep_construct(
+          pContext, *polymorphic_downcast< MostDerived * >( this ) );
+      }
+      else
+      {
+        typedef void construct_function(
+          const typename DefaultState::context_ptr_type &,
+          typename DefaultState::outermost_context_type & );
+        // 5.2.10.6 declares that reinterpret_casting a function pointer to a
+        // different function pointer and back must yield the same value. The
+        // following reinterpret_cast is the second half of such a sequence.
+        construct_function * const pConstructFunction =
+          reinterpret_cast< construct_function * >( pFoundSlot->second );
+        // Delete history, so that transitions to history from inside will
+        // go to the default state.
+        pFoundSlot->second = 0;
+        (*pConstructFunction)(
+          pContext, *polymorphic_downcast< MostDerived * >( this ) );
+      }
+    }
+
     typedef std::list<
-      event_base_ptr_type,
-      typename allocator_type::rebind< event_base_ptr_type >::other
+      event_base_ptr_type, 
+      typename allocator_type::template rebind< event_base_ptr_type >::other
     > event_queue_type;
 
     typedef std::map<
       const state_base_type *, event_queue_type,
       std::less< const state_base_type * >,
-      typename allocator_type::rebind< std::pair<
-        const state_base_type *,
-        event_queue_type > >::other > deferred_map_type;
+      typename allocator_type::template rebind<
+        std::pair< const state_base_type * const, event_queue_type > >::other
+    > deferred_map_type;
+
 
     event_queue_type eventQueue_;
     deferred_map_type deferredMap_;
     state_list_type currentStates_;
     typename state_list_type::iterator pUnstableState_;
+    history_map_type shallowHistoryMap_;
+    history_map_type deepHistoryMap_;
     ExceptionTranslator translator_;
 };
 

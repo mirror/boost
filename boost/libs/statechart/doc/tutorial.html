@@ -37,8 +37,7 @@
   <dt><a href="#A digital camera">A digital camera</a></dt>
   <dd><a href="#Spreading a state machine over multiple translation units">
   Spreading a state machine over multiple translation units</a></dd>
-  <dd><a href="#Guards, junctions and choice points">Guards, junctions and 
-  choice points</a></dd>
+  <dd><a href="#Guards">Guards</a></dd>
   <dd><a href="#In-state reactions (aka inner transitions)">In-state reactions 
   (aka inner transitions)</a></dd>
   <dd><a href="#Transition actions">Transition actions</a></dd>
@@ -49,9 +48,11 @@
   reactions for a state</a></dd>
   <dd><a href="#Posting events">Posting events</a></dd>
   <dd><a href="#Deferring events">Deferring events</a></dd>
+  <dd><a href="#History">History</a></dd>
   <dd><a href="#Orthogonal states">Orthogonal states</a></dd>
   <dd><a href="#Exception handling">Exception handling</a></dd>
-  <dd><a href="#Submachines">Submachines</a></dd>
+  <dd><a href="#Submachines & Parametrized States">Submachines &amp; Parametrized 
+  States</a></dd>
   <dd><a href="#Asynchronous state machines">Asynchronous state machines</a></dd>
 </dl>
 <hr>
@@ -61,12 +62,16 @@ a UML state chart into executable C++ code. This tutorial requires some
 familiarity with the state machine concept and UML state charts. A nice 
 introduction to both can be found in
 <a href="http://www.objectmentor.com/resources/articles/umlfsm.pdf">
-http://www.objectmentor.com/resources/articles/umlfsm.pdf</a>. The UML 
-specifications can be found in
+http://www.objectmentor.com/resources/articles/umlfsm.pdf</a>. David Harel, 
+the inventor of state charts, presents an excellent tutorial-like but still 
+thorough discussion in his original paper:
+<a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">
+http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf</a>. 
+The UML specifications can be found at
 <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">
 http://www.omg.org/cgi-bin/doc?formal/03-03-01</a> (see chapters 2.12 and 
 3.74).</p>
-<p>All examples have been tested with MSVC7.1 and boost distribution 1.30.0.</p>
+<p>All examples have been tested with MSVC7.1 and boost distribution 1.30.2.</p>
 <h2><a name="Hello World!">Hello World!</a></h2>
 <p>We follow the tradition and use the simplest possible program to make our 
 first steps. We will implement the following state chart:</p>
@@ -198,10 +203,9 @@ int main()
   declarations.</li>
 </ul>
 <h3><a name="Adding reactions">Adding reactions</a></h3>
-<p>With boost::fsm a reaction is always defined as part of a state. A reaction 
-is anything that happens as the result of the processing of an event. For the 
-moment we will use only one type of reaction: transitions. We <b>insert</b> 
-the bold part of the following code:</p>
+<p>A reaction is anything that happens as the result of the processing of an 
+event. For the moment we will use only one type of reaction: transitions. We
+<b>insert</b> the bold part of the following code:</p>
 <pre><b>#include &lt;boost/fsm/transition.hpp&gt;
 </b>
 // ...
@@ -237,7 +241,7 @@ state the stop watch is in, we need different variables:</p>
 <ul>
   <li>Stopped: One variable holding the elapsed time</li>
   <li>Running: One variable holding the elapsed time <b>and</b> one variable 
-  storing the point in time at which the watch was started.</li>
+  storing the point in time at which the watch was last started.</li>
 </ul>
 <p>We observe that the elapsed time variable is needed no matter what state 
 the machine is in. Moreover, this variable should be reset to 0 when we send 
@@ -494,10 +498,28 @@ member functions will inevitably destruct the current state object (similar to
 <code>delete this;</code>)! That is, code executed after any of these calls 
 may invoke undefined behavior!</font></b> That's why these functions should 
 only be called as part of a return statement.</p>
-<h3><a name="Guards, junctions and choice points">Guards, junctions and choice 
-points</a></h3>
+<h3><a name="Guards">Guards</a></h3>
 <p>The inner workings of the Shooting state could look as follows:</p>
 <p><img border="0" src="Camera2.gif" width="427" height="427"></p>
+<p>When the user half-presses the shutter, Shooting and its inner initial 
+state Focusing are entered. In the Focusing entry action the camera instructs 
+the focusing circuit to bring the subject into focus. The focusing circuit 
+then moves the lenses accordingly and sends the EvInFocus event as soon as it 
+is done. Of course, the user can fully-press the shutter while the lenses are 
+still in motion. Without any precautions, the resulting EvShutterFull event 
+would simply be lost because the Focusing state does not define a reaction for 
+this event. As a result, the user would have to fully-press the shutter again 
+after the camera has finished focusing. To prevent this, the EvShutterFull 
+event is deferred inside the Focusing state. This means that all events of 
+this type are stored in a separate queue, which is emptied into the main queue 
+when the Focusing state is exited.</p>
+<pre>struct Focusing : fsm::state&lt; Focusing, Shooting, mpl::list&lt;
+  fsm::custom_reaction&lt; EvInFocus &gt;,
+  <b>fsm::deferral&lt; EvShutterFull &gt;</b> &gt; &gt;
+{
+  Focusing( my_context ctx );
+  fsm::result react( const EvInFocus &amp; );
+};</pre>
 <p>Both transitions originating at the Focused state are triggered by the same 
 event but they have mutually exclusive guards. Here is an appropriate custom 
 reaction:</p>
@@ -596,7 +618,7 @@ struct Focusing : fsm::simple_state&lt; Focusing, Shooting,
   fsm::transition&lt; EvInFocus, Focused<b>,</b>
     <b>Shooting, &amp;Shooting::DisplayFocused</b> &gt; &gt; {};</pre>
 <p><b>Or</b>, the following is also possible (here the state machine itself 
-serves as the outermost context)</p>
+serves as the outermost context):</p>
 <pre>// not part of the Camera example
 struct Camera : fsm::state_machine&lt; Camera, NotShooting &gt;
 {
@@ -685,7 +707,7 @@ struct Playing : fsm::simple_state&lt; Playing, Mp3Player,
     fsm::transition&lt; EvStop, Stopped &gt; <b>&gt;</b> &gt; { /* ... */ };</pre>
 <h3><a name="Posting events">Posting events</a></h3>
 <p>Non-trivial state machines often need to post internal events. Here's an 
-example of how to do this with boost::fsm: </p>
+example of how to do this: </p>
 <pre>Pumping::~Pumping()
 {
   post_event( boost::intrusive_ptr&lt; EvPumpingFinished &gt;(
@@ -722,11 +744,10 @@ whenever an entry action makes one or more calls to the following functions:</p>
 <p>In my experience, these functions are needed only rarely in entry actions 
 so this workaround should not uglify user code too much.</p>
 <h3><a name="Deferring events">Deferring events</a></h3>
-<p>To avoid a number of overheads, event deferral with boost::fsm has one 
-limitation: Only events allocated with <code>new</code> <b>and</b> pointed to 
-by a <code>boost::intrusive_ptr&lt;&gt;</code> can be deferred. Any attempt to defer 
-a differently allocated event will result in a failing runtime assert. 
-Example:</p>
+<p>To avoid a number of overheads, event deferral has one limitation: Only 
+events allocated with <code>new</code> <b>and</b> pointed to by a <code>
+boost::intrusive_ptr&lt;&gt;</code> can be deferred. Any attempt to defer a 
+differently allocated event will result in a failing runtime assert. Example:</p>
 <pre>struct Event : fsm::event&lt; Event &gt; {};
 struct Initial;
 struct Machine : fsm::state_machine&lt;
@@ -745,10 +766,83 @@ int main()
     *<b>boost::intrusive_ptr&lt; Event &gt;( new Event() )</b> ); // fine
   return 0;
 }</pre>
+<h3><a name="History">History</a></h3>
+<p>Photographers testing beta versions of our
+<a href="#Spreading a state machine over multiple translation units">digital 
+camera</a> said that they really liked that half-pressing the shutter anytime 
+(even while the camera is being configured) immediately readies the camera for 
+picture-taking. However, most of them found it unintuitive that the camera 
+always goes into the idle mode after releasing the shutter. They would rather 
+see the camera go back into the state it had before half-pressing the shutter. 
+This way they can easily test the influence of a configuration setting by 
+modifying it, half- and then fully-pressing the shutter to take a picture. 
+Finally, releasing the shutter will bring them back to the screen where they 
+have modified the setting. To implement this behavior we'd change the state 
+chart as follows:</p>
+<p><img border="0" src="CameraWithHistory1.gif" width="542" height="378"></p>
+<p>As mentioned earlier, the Configuring state contains a fairly complex and 
+deeply nested inner machine. Naturally, we'd like to restore the previous 
+state down to the innermost state(s) in Configuring, that's why we use a deep 
+history pseudo state. The associated code looks as follows:</p>
+<pre>// not part of the Camera example
+struct NotShooting : fsm::simple_state&lt; NotShooting, Camera,
+  /* ... */, Idle, <b>fsm::has_deep_history</b> &gt; //
+{
+  // ...
+};
+
+// ...
+
+struct Shooting : fsm::simple_state&lt; Shooting, Camera,
+  fsm::transition&lt; EvShutterRelease,
+    <b>fsm::deep_history&lt; Idle &gt;</b> &gt;, Focusing &gt;
+{
+  // ...
+};
+</pre>
+<p>History has two phases: Firstly, when the state containing the history 
+pseudo state is exited, information about the previously active inner state 
+hierarchy must be saved. Secondly, when a transition to the history pseudo 
+state is made later, the saved state hierarchy information must be retrieved 
+and the appropriate states entered. The former is expressed by passing either
+<code>fsm::has_shallow_history</code>, <code>fsm::has_deep_history</code> or
+<code>fsm::has_full_history</code> (which combines shallow and deep history) 
+as the last parameter to the <code>simple_state</code> and <code>state</code> 
+templates. The latter is expressed by specifying either <code>
+fsm::shallow_history&lt;&gt;</code> or <code>fsm::deep_history&lt;&gt;</code> as a 
+transition destination or, as we'll see in an instant, as an inner initial 
+state. Because it is possible that a state containing a history pseudo state 
+has never been entered before a transition to history is made, both templates 
+demand a parameter specifying the default state to enter in such situations.</p>
+<p>The redundancy necessary for using history is checked for consistency at 
+compile time. That is, the state machine wouldn't have compiled had we 
+forgotten to pass <code>fsm::has_deep_history</code> to the base of <code>
+NotShooting</code>.</p>
+<p>Another change request filed by a few beta testers says that they would 
+like to see the camera go back into the state it had before turning it off 
+when they turn it back on. Here's the implementation:</p>
+<p><img border="0" src="CameraWithHistory2.gif" width="468" height="483"></p>
+<pre>// ...
+
+// not part of the Camera example
+struct NotShooting : fsm::simple_state&lt; NotShooting, Camera,
+  /* ... */, <b>mpl::list&lt; fsm::deep_history&lt; Idle &gt; &gt;</b>,
+  <b>fsm::has_deep_history</b> &gt;
+{
+  // ...
+};
+
+// ...</pre>
+<p>Unfortunately, there is a small inconvenience due to some template-related 
+implementation details. When the inner initial state is a class template 
+instantiation we always have to put it into an <code>mpl::list&lt;&gt;</code>, 
+although there is only one inner initial state. Moreover, the current deep 
+history implementation has some limitations. Please have a look at the
+<a href="rationale.html#Limitations">Limitations</a> chapter in the Rationale.</p>
 <h3><a name="Orthogonal states">Orthogonal states</a></h3>
 <p><img border="0" src="OrthogonalStates.GIF" width="633" height="393"></p>
-<p>To implement this state chart with boost::fsm, you simply specify more than 
-one inner initial state (see the Keyboard example):</p>
+<p>To implement this state chart you simply specify more than one inner 
+initial state (see the Keyboard example):</p>
 <pre>struct Active;
 struct Keyboard : fsm::state_machine&lt; Keyboard, Active &gt; {};
 
@@ -876,20 +970,9 @@ class, which is the default for the <code>ExceptionTranslator</code> parameter
 of the <code>state_machine</code> class template. It was introduced because 
 users would want to change this on some platforms to work around buggy 
 exception handling implementations (see <a href="#Discriminating exceptions">
-Discriminating exceptions</a>). Moreover, applications running on heavily 
-resource-starved platforms are often compiled with C++ exception handling 
-turned off. Such applications can still use boost::fsm if they pass the 
-following exception translator instead of the default one:</p>
-<pre>struct NoExceptionHandlingTranslator
-{
-  template&lt; class Action, class ExceptionEventHandler &gt;
-  result operator()(
-    Action action, ExceptionEventHandler, fsm::result )
-  {
-    return action();
-  }
-};</pre>
-<p>However, doing so also means losing <b>all</b> boost::fsm error handling 
+Discriminating exceptions</a>).</p>
+<p>boost::fsm can also be used in applications compiled with C++ exception 
+handling turned off but doing so means losing <b>all</b> error handling 
 support, making proper error handling much more cumbersome (see
 <a href="rationale.html#Error handling">Error handling</a> in the Rationale).</p>
 <h4>Which states can react to an <code>fsm::exception_thrown</code> event?</h4>
@@ -929,10 +1012,9 @@ receiving an EvNumLockPressed event:</p>
 <h4>Successful exception handling</h4>
 <p>An exception is considered handled successfully, if:</p>
 <ul>
-  <li>an appropriate reaction to the <code>fsm::exception_thrown</code> event
-  <b>not</b> returning by calling <code>forward_event()</code> has been found.</li>
-  <li>the state machine is in a stable state, after the reaction has 
-  completed.</li>
+  <li>an appropriate reaction for the <code>fsm::exception_thrown</code> event 
+  has been found, <b>and</b></li>
+  <li>the state machine is in a stable state after the reaction has completed.</li>
 </ul>
 <p>The second condition is important for scenarios 2 and 3 in the last 
 section. In these scenarios, the state machine is in the middle of a 
@@ -949,6 +1031,8 @@ reaction:</p>
 <pre>struct Defective : fsm::simple_state&lt;
   Defective, Purifier &gt; {};
 
+// Pretend this is a state deeply nested in the Purifier
+// state machine
 struct Idle : fsm::simple_state&lt; Idle, Purifier,
   mpl::list&lt;
     fsm::custom_reaction&lt; EvStart &gt;,
@@ -968,18 +1052,31 @@ struct Idle : fsm::simple_state&lt; Idle, Purifier,
     catch ( const std::runtime_error &amp; )
     {
       // only std::runtime_errors will lead to a transition
-      // to Defective, all other exceptions are propagated
-      // to the state machine client 
+      // to Defective ...
       return transit&lt; Defective &gt;();
     }
+    catch ( ... )
+    {
+      // ... all other exceptions are forwarded to our outer
+      // state(s). The state machine is terminated and the
+      // exception rethrown if the outer state(s) can't
+      // handle it either...
+      return forward_event();
+    }
+
+    // Alternatively, if we want to terminate the machine
+    // immediately, we can also either rethrow or throw
+    // a different exception.
   }
 };</pre>
-<p><b>Unfortunately, this idiom does not work on at least one very popular 
-compiler.</b> If you have to use one of these platforms, you can pass a 
-customized exception translator class to the <code>state_machine</code> class 
-template. This will allow you to generate different events depending on the 
-type of the exception.</p>
-<h3><a name="Submachines">Submachines</a></h3>
+<p><b>Unfortunately, this idiom (using <code>throw;</code> inside a <code>try</code> 
+block nested inside a <code>catch</code> block) does not work on at least one 
+very popular compiler.</b> If you have to use one of these platforms, you can 
+pass a customized exception translator class to the <code>state_machine</code> 
+class template. This will allow you to generate different events depending on 
+the type of the exception.</p>
+<h3><a name="Submachines &amp; parameterized states">Submachines &amp; 
+parameterized states</a></h3>
 <p>Submachines are to event-driven programming what functions are to 
 procedural programming, reusable building blocks implementing often needed 
 functionality. The associated UML notation is not entirely clear to me. It 
@@ -1015,30 +1112,27 @@ template&lt; LockType lockType &gt;
 struct Off : fsm::simple_state&lt;
   Off&lt; lockType &gt;, Active::orthogonal&lt; lockType &gt;,
   fsm::transition&lt; EvPressed&lt; lockType &gt;, On&lt; lockType &gt; &gt; &gt; {};</pre>
-<p>The <code>On</code> and <code>Off</code> templates could be given 
-additional parameters to make them truly reusable.</p>
 <h3><a name="Asynchronous state machines">Asynchronous state machines</a></h3>
 <h4>Why asynchronous state machines are necessary</h4>
 <p>As the name suggests, a synchronous state machine processes each event 
-synchronously. In boost::fsm this behavior is implemented by the <code>
-state_machine&lt;&gt;</code> class template, whose <code>process_event()</code> only 
-returns after having executed all reactions (including the ones provoked by 
-internal events that actions might have posted). Moreover, this function is 
-also strictly non-reentrant (just like all other member functions, so <code>
-state_machine&lt;&gt;</code> is not thread-safe). This makes it difficult for two
-<code>state_machine&lt;&gt;</code> subclasses to communicate via events in a 
-bi-directional fashion correctly, <b>even in a single-threaded program</b>. 
-For example, state machine <code>A</code> is in the middle of processing an 
-external event. Inside an action, it decides to send a new event to state 
-machine <code>B</code> (by calling <code>B::process_event</code> with an 
-appropriate event). It then &quot;waits&quot; for B to send back an answer via a 
-boost::function-like call-back, which references <code>A::process_event</code> 
-and was passed as a data member of the event. However, while <code>A</code> is 
-&quot;waiting&quot; for <code>B</code> to send back an event, <code>A::process_event</code> 
-has not yet returned from processing the external event and as soon as <code>B</code> 
-answers via the call-back, <code>A::process_event</code> is <b>unavoidably</b> 
-reentered. This all really happens in a single thread, that's why &quot;wait&quot; is in 
-quotes.</p>
+synchronously. This behavior is implemented by the <code>state_machine&lt;&gt;</code> 
+class template, whose <code>process_event()</code> only returns after having 
+executed all reactions (including the ones provoked by internal events that 
+actions might have posted). Moreover, this function is also strictly 
+non-reentrant (just like all other member functions, so <code>state_machine&lt;&gt;</code> 
+is not thread-safe). This makes it difficult for two <code>state_machine&lt;&gt;</code> 
+subclasses to communicate via events in a bi-directional fashion correctly, <b>
+even in a single-threaded program</b>. For example, state machine <code>A</code> 
+is in the middle of processing an external event. Inside an action, it decides 
+to send a new event to state machine <code>B</code> (by calling <code>
+B::process_event</code> with an appropriate event). It then &quot;waits&quot; for B to 
+send back an answer via a boost::function-like call-back, which references
+<code>A::process_event</code> and was passed as a data member of the event. 
+However, while <code>A</code> is &quot;waiting&quot; for <code>B</code> to send back an 
+event, <code>A::process_event</code> has not yet returned from processing the 
+external event and as soon as <code>B</code> answers via the call-back, <code>
+A::process_event</code> is <b>unavoidably</b> reentered. This all really 
+happens in a single thread, that's why &quot;wait&quot; is in quotes.</p>
 <h4>How it works</h4>
 <p>In contrast to <code>state_machine&lt;&gt;</code>, <code>
 asynchronous_state_machine&lt;&gt;</code> does not have a member function <code>
@@ -1060,18 +1154,18 @@ code):</p>
 
 struct Waiting;
 struct Player : 
-  public <b>fsm::asynchronous_state_machine</b>&lt; Player, Waiting &gt;
+  <b>fsm::asynchronous_state_machine</b>&lt; Player, Waiting &gt;
 {
   typedef fsm::asynchronous_state_machine&lt; Player, Waiting &gt;
     BaseType;
-  public:
-    Player( fsm::worker&lt;&gt; &amp; myWorker ) :
-      BaseType( myWorker ) // ...
-    {
-      // ...
-    }
 
+  Player( fsm::worker&lt;&gt; &amp; myWorker ) :
+    BaseType( myWorker ) // ...
+  {
     // ...
+  }
+
+  // ...
 };
 
 // ...
@@ -1137,11 +1231,11 @@ exceptions that machines fail to handle. In this case all machines are
 terminated before the exception is propagated.</p>
 <p><b>Caution:</b></p>
 <ul>
-  <li><b>State machine objects must not be destructed before <code>
-  worker::operator()()</code> returns. Moreover, the <code>worker&lt;&gt;</code> 
-  object may be destructed only after all of the registered state machines 
-  have been destructed. Violations of these rules will result in failing 
-  runtime asserts. </b></li>
+  <li><b><code>asynchronous_state_machine&lt;&gt;</code> subclass objects must not 
+  be destructed before <code>worker::operator()()</code> returns. Moreover, 
+  the <code>worker&lt;&gt;</code> object may be destructed only after all of the 
+  registered state machines have been destructed. Violations of these rules 
+  will result in failing runtime asserts. </b></li>
   <li><b>The interface of <code>asynchronous_state_machine</code> consists of 
   only the constructor and <code>queue_event()</code>. For technical reasons, 
   other functions like <code>initiate()</code>, <code>process_event()</code>, 
@@ -1153,7 +1247,7 @@ terminated before the exception is propagated.</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 August, 2003<!--webbot bot="Timestamp" endspan i-checksum="34481" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 October, 2003<!--webbot bot="Timestamp" endspan i-checksum="38550" --></p>
 <p><i>Copyright © 2003 <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a>. 
 All Rights Reserved.</i></p>
 

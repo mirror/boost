@@ -13,6 +13,8 @@
 #include <boost/fsm/event.hpp>
 #include <boost/fsm/result.hpp>
 
+#include <boost/config.hpp> // BOOST_NO_EXCEPTIONS
+
 
 
 namespace boost
@@ -37,6 +39,11 @@ struct exception_translator
     ExceptionEventHandler eventHandler,
     result handlerSuccessResult )
   {
+    #ifdef BOOST_NO_EXCEPTIONS
+    eventHandler;
+    handlerSuccessResult;
+    return action();
+    #else
     try
     {
       return action();
@@ -50,6 +57,7 @@ struct exception_translator
 
       return handlerSuccessResult;
     }
+    #endif
   }
 };
 

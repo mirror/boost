@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_COUNTED_BASE_HPP_INCLUDED
-#define BOOST_FSM_COUNTED_BASE_HPP_INCLUDED
+#ifndef BOOST_FSM_DETAIL_COUNTED_BASE_HPP_INCLUDED
+#define BOOST_FSM_DETAIL_COUNTED_BASE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
@@ -72,7 +72,7 @@ class counted_base : private locked_base< NeedsLocking >
     //////////////////////////////////////////////////////////////////////////
     void add_ref() const
     {
-      base_type::scoped_lock lock( base_type::mutex_ );
+      typename base_type::scoped_lock lock( base_type::mutex_ );
       lock;
       BOOST_ASSERT( count_ < std::numeric_limits< CountType >::max() );
       ++count_;
@@ -85,7 +85,7 @@ class counted_base : private locked_base< NeedsLocking >
       {
         // release the mutex in the base class before the base class object
         // is destroyed
-        base_type::scoped_lock lock( base_type::mutex_ );
+        typename base_type::scoped_lock lock( base_type::mutex_ );
         lock;
         BOOST_ASSERT( count_ > 0 );
         shouldDelete = ( --count_ == 0 );
