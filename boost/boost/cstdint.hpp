@@ -44,7 +44,7 @@ namespace boost
   using ::uint_least32_t;     
   using ::uint_fast32_t;      
                      
-# ifdef BOOST_NO_INT64_T
+#ifndef BOOST_NO_INT64_T
 
   using ::int64_t;            
   using ::int_least64_t;      
@@ -53,7 +53,7 @@ namespace boost
   using ::uint_least64_t;     
   using ::uint_fast64_t;      
                      
-# endif
+#endif
 
   using ::intmax_t;      
   using ::uintmax_t;     
@@ -61,4 +61,3 @@ namespace boost
 } // namespace boost
 
 #endif
- 
