@@ -1066,6 +1066,17 @@ void g() { return f(); }</pre>
             </td>
          </tr>
          <tr>
+            <td valign="top" width="50%">BOOST_HAS_FACET(Type, loc)</td>
+            <td valign="top" width="50%">When the standard library does not have a comforming 
+               std::has_facet there are various workarounds available, but they differ from 
+               library to library. This macro provides a consistent way to check a locale's 
+               facets. For example, replace:<pre>std::has_facet&lt;Type&gt;(loc);</pre>
+               <p>with:</p>
+               <pre>BOOST_HAS_FACET(Type, loc);</pre>
+               <p>Note do not add a std:: prefix to the front of BOOST_HAS_FACET.</p>
+            </td>
+         </tr>
+         <tr>
             <td valign="top" width="50%">BOOST_NESTED_TEMPLATE</td>
             <td valign="top" width="50%">Member templates are supported by some compilers even 
                though they can't use the A::template member&lt;U&gt; syntax, as a workaround 
