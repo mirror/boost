@@ -23,11 +23,15 @@ template fsm-common-options
     <mingw-stlport><*><cxxflags>-Wno-non-virtual-dtor
 ;
 
+local test_monitor = <lib>../../../libs/test/build/boost_test_exec_monitor ;
+
+rule fsm-run-st ( sources + )
 {
-  test-suite fsm
-    : [ run TransitionTest.cpp
-        <lib>../../../libs/test/build/boost_test_exec_monitor
-        <template>fsm-common-options ]
-  ;
+  return [ run $(sources) $(test_monitor) <template>fsm-common-options : : : <threading>single ] ;
 }
+
+test-suite fsm :
+  [ fsm-run-st TransitionTest.cpp ]
+  [ fsm-run-st DeferralTest.cpp ]
+;
       
