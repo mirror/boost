@@ -31,6 +31,20 @@ bool operator==(const ReturnInt& x, const ReturnInt& y)
 bool operator!=(const ReturnInt& x, const ReturnInt& y)
 { return x.value != y.value; }
 
+struct ReturnIntFE
+{
+  explicit ReturnIntFE(int value) : value(value) {}
+
+  int operator()() const { return value; }
+
+  int value;
+};
+
+namespace boost {
+  bool function_equal(const ReturnIntFE& x, const ReturnIntFE& y)
+  { return x.value == y.value; }
+}
+
 static void target_test()
 {
   boost::function0<int> f;
@@ -75,6 +89,18 @@ static void equal_test()
 #endif
 
   BOOST_CHECK(f.contains(ReturnInt(17)));
+
+  f = ReturnIntFE(17);
+  BOOST_CHECK(f != &forty_two);
+  BOOST_CHECK(f == ReturnIntFE(17));
+  BOOST_CHECK(f != ReturnIntFE(16));
+#if !(defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3)
+  BOOST_CHECK(&forty_two != f);
+  BOOST_CHECK(ReturnIntFE(17) == f);
+  BOOST_CHECK(ReturnIntFE(16) != f);
+#endif
+
+  BOOST_CHECK(f.contains(ReturnIntFE(17)));
 
 #if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
   boost::function<int(void)> g;
