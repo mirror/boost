@@ -45,8 +45,7 @@ function templates to compute a CRC in one step.</p>
 
 <h2><a name="header">Header Synopsis</a></h2>
 
-<blockquote><pre>
-#include &lt;boost/integer.hpp&gt;  <i>// for boost::uint_t</i>
+<blockquote><pre>#include &lt;boost/integer.hpp&gt;  <i>// for boost::uint_t</i>
 #include &lt;cstddef&gt;            <i>// for std::size_t</i>
 
 namespace boost
@@ -161,8 +160,7 @@ Done</a> web page.</p>
 
 <h2><a name="crc_basic">Theoretical CRC Computer</a></h2>
 
-<blockquote><pre>
-template &lt; std::size_t Bits &gt;
+<blockquote><pre>template &lt; std::size_t Bits &gt;
 class boost::crc_basic
 {
 public:
@@ -213,8 +211,7 @@ constructor parameters.</p>
 
 <h2><a name="crc_optimal">Optimized CRC Computer</a></h2>
 
-<blockquote><pre>
-template &lt; std::size_t Bits, <em>impl_def</em> TruncPoly,
+<blockquote><pre>template &lt; std::size_t Bits, <em>impl_def</em> TruncPoly,
            <em>impl_def</em> InitRem, <em>impl_def</em> FinalXor,
            bool ReflectIn, bool ReflectRem &gt;
 class boost::crc_optimal
@@ -382,8 +379,7 @@ lists the feeding and extracting operations.</p>
 
 <p>You can use them like this:</p>
 
-<blockquote><pre>
-#include &lt;boost/crc.hpp&gt;      <i>// for boost::crc_basic, boost::crc_optimal</i>
+<blockquote><pre>#include &lt;boost/crc.hpp&gt;      <i>// for boost::crc_basic, boost::crc_optimal</i>
 #include &lt;boost/cstdint.hpp&gt;  <i>// for boost::uint16_t</i>
 
 #include &lt;algorithm&gt;  <i>// for std::for_each</i>
@@ -422,8 +418,7 @@ main ()
 
 <h2><a name="crc_func">CRC Function</a></h2>
 
-<blockquote><pre>
-template &lt; std::size_t Bits, <em>impl_def</em> TruncPoly,
+<blockquote><pre>template &lt; std::size_t Bits, <em>impl_def</em> TruncPoly,
  <em>impl_def</em> InitRem, <em>impl_def</em> FinalXor,
  bool ReflectIn, bool ReflectRem &gt;
 typename boost::uint_t&lt;Bits&gt;::fast
@@ -439,8 +434,7 @@ such a computer is used to implement this function.</p>
 
 <h2><a name="a_crc_func">Augmented-CRC Functions</a></h2>
 
-<blockquote><pre>
-template &lt; std::size_t Bits, <em>impl_def</em> TruncPoly &gt;
+<blockquote><pre>template &lt; std::size_t Bits, <em>impl_def</em> TruncPoly &gt;
 typename boost::uint_t&lt;Bits&gt;::fast
 boost::augmented_crc( void const *buffer, std::size_t byte_count,
  typename boost::uint_t&lt;Bits&gt;::fast initial_remainder );
@@ -499,8 +493,7 @@ remainder for a augmented-CRC algorithm, the result from processing just
 zero-valued CRC bytes without any message bytes is the equivalent inital
 remainder for the unaugmented-CRC algorithm.  An example follows:</p>
 
-<blockquote><pre>
-#include &lt;boost/crc.hpp&gt;      <i>// for boost::crc_basic, boost::augmented_crc</i>
+<blockquote><pre>#include &lt;boost/crc.hpp&gt;      <i>// for boost::crc_basic, boost::augmented_crc</i>
 #include &lt;boost/cstdint.hpp&gt;  <i>// for boost::uint16_t</i>
 
 #include &lt;cassert&gt;    <i>// for assert</i>
@@ -635,7 +628,7 @@ interface, algorithms, and bug reports:</p>
 
 <p>Copyright 2001, 2003 Daryle Walker.  Use, modification, and distribution
 are subject to the Boost Software License, Version 1.0.  (See accompanying
-file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at
+file <a href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at
 &lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.</p>
 
 </body>
