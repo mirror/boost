@@ -48,7 +48,21 @@ BOOST_PP_LIST_CONS(). For example,</p>
 
 <p>Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.</p>
 
-<p>Longer lists can be built with the help of BOOST_PP_LIST_APPEND().</p>
+<p>Longer lists can be built from short lists with BOOST_PP_LIST_APPEND_D()
+and BOOST_PP_LIST_FOLD_RIGHT_2ND():</p>
+
+<pre>
+  BOOST_PP_LIST_FOLD_RIGHT_2ND
+  ( BOOST_PP_LIST_APPEND_D
+  , BOOST_PP_TUPLE_TO_LIST
+    ( N
+    , BOOST_PP_TUPLE_TO_LIST(M, (E11, E12, ..., E1M) )
+    , BOOST_PP_TUPLE_TO_LIST(M, (E21, E22, ..., E2M) )
+    , ...
+    , BOOST_PP_TUPLE_TO_LIST(M, (EN1, EN2, ..., ENM) )
+    )
+  )
+</pre>
 */
 #define BOOST_PP_LIST_CONS(H,T) (H,T,1)
 

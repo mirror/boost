@@ -57,7 +57,21 @@
 
 <p>Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.</p>
 
-<p>Longer lists can be built with the help of <a href="list_append.htm#BOOST_PP_LIST_APPEND">BOOST_PP_LIST_APPEND</a>().</p>
+<p>Longer lists can be built from short lists with <a href="list_append.htm#BOOST_PP_LIST_APPEND_D">BOOST_PP_LIST_APPEND_D</a>()
+and <a href="list_fold_right_2nd.htm#BOOST_PP_LIST_FOLD_RIGHT_2ND">BOOST_PP_LIST_FOLD_RIGHT_2ND</a>():</p>
+
+<pre>
+  <a href="list_fold_right_2nd.htm#BOOST_PP_LIST_FOLD_RIGHT_2ND">BOOST_PP_LIST_FOLD_RIGHT_2ND</a>
+  ( <a href="list_append.htm#BOOST_PP_LIST_APPEND_D">BOOST_PP_LIST_APPEND_D</a>
+  , <a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>
+    ( N
+    , <a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(M, (E11, E12, ..., E1M) )
+    , <a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(M, (E21, E22, ..., E2M) )
+    , ...
+    , <a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(M, (EN1, EN2, ..., ENM) )
+    )
+  )
+</pre>
 
 <hr>
 
