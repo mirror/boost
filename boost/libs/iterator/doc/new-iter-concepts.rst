@@ -395,9 +395,7 @@ Writable Iterators [lib.writable.iterators]
 
 A class or built-in type ``X`` models the *Writable Iterator* concept
 if the following expressions are valid and respect the stated
-semantics.  In addition, a model of *Writable Iterator* must include
-in its documentation the *set of value types* that it allows for
-output.
+semantics.  Writable Iterators have an associated *set of value types*.
 
 +---------------------------------------------------------------------+
 |Writable Iterator Requirements (in addition to CopyConstructible)    |
