@@ -21,8 +21,6 @@
 // up on the compiler support:
 //
 // (these should largely ignore cv-qualifiers)
-// BOOST_IS_CLASS(T) should evaluate to true if T is a class or struct type
-// BOOST_IS_ENUM(T) should evaluate to true if T is an enumerator type
 // BOOST_IS_UNION(T) should evaluate to true if T is a union type
 // BOOST_IS_POD(T) should evaluate to true if T is a POD type
 // BOOST_IS_EMPTY(T) should evaluate to true if T is an empty struct or union
@@ -32,6 +30,8 @@
 // BOOST_HAS_TRIVIAL_DESTRUCTOR(T) should evaluate to true if ~T() has no effect
 
 #ifdef BOOST_HAS_SGI_TYPE_TRAITS
+    // Hook into SGI's __type_traits class, this will pick up user supplied
+    // specializations as well as SGI - compiler supplied specializations.
 #   include "boost/type_traits/is_same.hpp"
 #   include <type_traits.h>
 #   define BOOST_IS_POD(T) ::boost::is_same< typename ::__type_traits<T>::is_POD_type, ::__true_type>::value
@@ -42,21 +42,17 @@
 #endif
 
 #if defined(__MSL_CPP__) && (__MSL_CPP__ >= 0x8000)
+    // Metrowerks compiler is acquiring intrinsic type traits support
+    // post version 8.  We hook into the published interface to pick up
+    // user defined specializations as well as compiler intrinsics as 
+    // and when they become available:
 #   include <msl_utility>
 #   define BOOST_IS_UNION(T) BOOST_STD_EXTENSION_NAMESPACE::is_union<T>::value
 #   define BOOST_IS_POD(T) BOOST_STD_EXTENSION_NAMESPACE::is_POD<T>::value
-#   define BOOST_HAS_TRIVIAL_CONSTRUCTOR(T) BOOST_STD_EXTENSION_NAMESPACE::has_trivial_constructor<T>::value
-#   define BOOST_HAS_TRIVIAL_COPY(T) BOOST_STD_EXTENSION_NAMESPACE::has_trivial_copy<T>::value
-//#   define BOOST_HAS_TRIVIAL_ASSIGN(T) BOOST_STD_EXTENSION_NAMESPACE::has_trivial_assign<T>::value
-#   define BOOST_HAS_TRIVIAL_DESTRUCTOR(T) BOOST_STD_EXTENSION_NAMESPACE::has_trivial_destructor<T>::value
-#endif
-
-#ifndef BOOST_IS_CLASS
-#   define BOOST_IS_CLASS(T) false
-#endif
-
-#ifndef BOOST_IS_ENUM
-#   define BOOST_IS_ENUM(T) false
+#   define BOOST_HAS_TRIVIAL_CONSTRUCTOR(T) BOOST_STD_EXTENSION_NAMESPACE::has_trivial_default_ctor<T>::value
+#   define BOOST_HAS_TRIVIAL_COPY(T) BOOST_STD_EXTENSION_NAMESPACE::has_trivial_copy_ctor<T>::value
+#   define BOOST_HAS_TRIVIAL_ASSIGN(T) BOOST_STD_EXTENSION_NAMESPACE::has_trivial_assignment<T>::value
+#   define BOOST_HAS_TRIVIAL_DESTRUCTOR(T) BOOST_STD_EXTENSION_NAMESPACE::has_trivial_dtor<T>::value
 #endif
 
 #ifndef BOOST_IS_UNION
@@ -88,6 +84,7 @@
 #endif
 
 #endif // BOOST_TT_INTRINSICS_HPP_INCLUDED
+
 
 
 
