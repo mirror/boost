@@ -325,37 +325,6 @@ public:
     }
     return int_adapter<int_type>(value_ / rhs);
   }
-#ifndef BOOST_DATE_TIME_NO_LOCALE
-  /*! Expected output is either a numeric representation 
-   * or a special values representation.<BR> 
-   * Ex. "12", "+infinity", "not-a-number", etc. */
-  friend std::ostream& operator<<(std::ostream& os, 
-      const int_adapter<int_type> ia)
-  {
-    if(ia.is_special())
-    {
-      // switch copied from date_names_put.hpp
-      switch(ia.as_special())
-      {
-	case not_a_date_time:
-	  os << "not-a-number";
-	  break;
-	case pos_infin:
-	  os << "+infinity";
-	  break;
-	case neg_infin:
-	  os << "-infinity";
-	  break;
-	default:
-	  os << "";
-      }
-    }
-    else {
-      os << ia.as_number(); 
-    }
-    return os;
-  }
-#endif
 private:
   int_type value_;
   
@@ -453,6 +422,41 @@ private:
   
 };
 
+#ifndef BOOST_DATE_TIME_NO_LOCALE
+  /*! Expected output is either a numeric representation 
+   * or a special values representation.<BR> 
+   * Ex. "12", "+infinity", "not-a-number", etc. */
+  template<typename int_type>
+  inline
+  std::ostream& operator<<(std::ostream& os, 
+                           const int_adapter<int_type>& ia)
+  {
+    if(ia.is_special())
+    {
+      // switch copied from date_names_put.hpp
+      switch(ia.as_special())
+      {
+	case not_a_date_time:
+	  os << "not-a-number";
+	  break;
+	case pos_infin:
+	  os << "+infinity";
+	  break;
+	case neg_infin:
+	  os << "-infinity";
+	  break;
+	default:
+	  os << "";
+      }
+    }
+    else {
+      os << ia.as_number(); 
+    }
+    return os;
+  }
+#endif
+
+
 } } //namespace date_time
 
 /*
@@ -467,8 +471,6 @@ private:
  * representations about the suitability of this software for any
  * purpose.  It is provided as is without express or implied warranty.
  *
- *
- * Author:  Jeff Garland (jeff@CrystalClearSoftware.com)
  * Created: Sat Sep  8 19:37:11 2001
  *
  */
