@@ -28,7 +28,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<foo0_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_enum<foo0_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<foo0_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<foo0_t>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<foo0_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<foo0_t>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<foo0_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_constructor<foo0_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<foo0_t>::value, false);
@@ -40,7 +40,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<foo0_t, foo0_t>::value)
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<foo1_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_enum<foo1_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<foo1_t>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<foo1_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<foo1_t>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<foo1_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_constructor<foo1_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<foo1_t>::value, false);
@@ -50,7 +50,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<foo1_t>::value, false
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<foo2_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_enum<foo2_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<foo2_t>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<foo2_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<foo2_t>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<foo2_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_constructor<foo2_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<foo2_t>::value, false);
@@ -60,7 +60,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<foo2_t>::value, false
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<foo3_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_enum<foo3_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<foo3_t>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<foo3_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<foo3_t>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<foo3_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_constructor<foo3_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<foo3_t>::value, false);
@@ -70,7 +70,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<foo3_t>::value, false
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<foo4_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_enum<foo4_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<foo4_t>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<foo4_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<foo4_t>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<foo4_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_constructor<foo4_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<foo4_t>::value, false);
