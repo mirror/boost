@@ -84,17 +84,5 @@ test_main(int, char*[])
   fv = &do_nothing;
   fv.clear();
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  typedef int Ftype(int, int);
-  function<Ftype, empty_function_policy, empty_function_mixin,
-           counting_allocator<int> > f2;
-  alloc_count = 0;
-  dealloc_count = 0;
-  f2 = plus<int>();
-  f2.clear();
-  BOOST_TEST(alloc_count == 1);
-  BOOST_TEST(dealloc_count == 1);
-#endif
-
   return 0;
 }

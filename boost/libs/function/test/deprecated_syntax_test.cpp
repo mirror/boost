@@ -14,7 +14,6 @@
 // For more information, see http://www.boost.org
 
 #define BOOST_INCLUDE_MAIN
-#define BOOST_FUNCTION_NO_DEPRECATED
 #include <boost/test/test_tools.hpp>
 #include <boost/function.hpp>
 #include <functional>
@@ -22,7 +21,8 @@
 #include <string>
 
 using namespace boost;
-using namespace std;
+using std::string;
+using std::negate;
 
 int global_int;
 
@@ -56,7 +56,7 @@ struct add_to_obj
 static void
 test_zero_args()
 {
-  typedef function<void ()> func_void_type;
+  typedef function<void> func_void_type;
 
   write_five_obj five;
   write_three_obj three;
@@ -480,8 +480,8 @@ test_zero_args()
 
   // Const vs. non-const
   write_const_1_nonconst_2 one_or_two;
-  const function<void ()> v7(one_or_two);
-  function<void ()> v8(one_or_two);
+  const function<void> v7(one_or_two);
+  function <void> v8(one_or_two);
 
   global_int = 0;
   v7();
@@ -492,7 +492,7 @@ test_zero_args()
   BOOST_TEST(global_int == 2);
 
   // Test return values
-  typedef function<int ()> func_int_type;
+  typedef function<int> func_int_type;
   generate_five_obj gen_five;
   generate_three_obj gen_three;
 
@@ -510,7 +510,7 @@ test_zero_args()
   BOOST_TEST(!i0);
 
   // Test return values with compatible types
-  typedef function<long ()> func_long_type;
+  typedef function<long> func_long_type;
   func_long_type i1(gen_five);
 
   BOOST_TEST(i1() == 5);
@@ -530,44 +530,44 @@ test_one_arg()
 {
   negate<int> neg;
 
-  function<int (int)> f1(neg);
+  function<int, int> f1(neg);
   BOOST_TEST(f1(5) == -5);
 
-  function<string (string)> id(&identity_str);
+  function<string, string> id(&identity_str);
   BOOST_TEST(id("str") == "str");
 
-  function<string (const char*)> id2(&identity_str);
+  function<std::string, const char*> id2(&identity_str);
   BOOST_TEST(id2("foo") == "foo");
 
   add_to_obj add_to(5);
-  function<int (int)> f2(add_to);
+  function<int, int> f2(add_to);
   BOOST_TEST(f2(3) == 8);
 
-  const function<int (int)> cf2(add_to);
+  const function<int, int> cf2(add_to);
   BOOST_TEST(cf2(3) == 8);
 }
 
 static void
 test_two_args()
 {
-  function<string (const string&, const string&)> cat(&string_cat);
+  function<string, const string&, const string&> cat(&string_cat);
   BOOST_TEST(cat("str", "ing") == "string");  
 
-  function<int (short, short)> sum(&sum_ints);
+  function<int, short, short> sum(&sum_ints);
   BOOST_TEST(sum(2, 3) == 5);
 }
 
 static void
 test_emptiness()
 {
-  function<float ()> f1;
+  function<float> f1;
   BOOST_TEST(f1.empty());
 
-  function<float ()> f2;
+  function<float> f2;
   f2 = f1;
   BOOST_TEST(f2.empty());
 
-  function<double ()> f3;
+  function<double> f3;
   f3 = f2;
   BOOST_TEST(f3.empty());
 }
@@ -584,7 +584,7 @@ struct X {
 static void
 test_member_functions()
 {
-  boost::function<int (X*)> f1(&X::twice);
+  boost::function<int, X*> f1(&X::twice);
   
   X one(1);
   X five(5);
@@ -592,13 +592,13 @@ test_member_functions()
   BOOST_TEST(f1(&one) == 2);
   BOOST_TEST(f1(&five) == 10);
 
-  boost::function<int (X*)> f1_2;
+  boost::function<int, X*> f1_2;
   f1_2 = &X::twice;
 
   BOOST_TEST(f1_2(&one) == 2);
   BOOST_TEST(f1_2(&five) == 10);
 
-  boost::function<int (X&, int)> f2(&X::plus);
+  boost::function<int, X&, int> f2(&X::plus);
   BOOST_TEST(f2(one, 3) == 4);
   BOOST_TEST(f2(five, 4) == 9);
 }
@@ -610,12 +610,12 @@ struct add_with_throw_on_copy {
 
   add_with_throw_on_copy(const add_with_throw_on_copy&)
   {
-    throw runtime_error("But this CAN'T throw");
+    throw std::runtime_error("But this CAN'T throw");
   }
 
   add_with_throw_on_copy& operator=(const add_with_throw_on_copy&)
   {
-    throw runtime_error("But this CAN'T throw");
+    throw std::runtime_error("But this CAN'T throw");
   }
 };
 
@@ -624,74 +624,12 @@ test_ref()
 {
   add_with_throw_on_copy atc;
   try {
-    boost::function<int (int, int)> f(ref(atc));
+    boost::function<int, int, int> f(ref(atc));
     BOOST_TEST(f(1, 3) == 4);
   }
-  catch(runtime_error e) {
+  catch(std::runtime_error e) {
     BOOST_ERROR("Nonthrowing constructor threw an exception");
   }
-}
-
-static int alloc_count = 0;
-static int dealloc_count = 0;
-
-template<typename T>
-struct counting_allocator : public allocator<T>
-{
-  template<typename U>
-  struct rebind
-  {
-    typedef counting_allocator<U> other;
-  };
-
-  
-  T* allocate(size_t n)
-  {
-    alloc_count++;
-    return allocator<T>::allocate(n);
-  }
-
-  void deallocate(T* p, size_t n)
-  {
-    dealloc_count++;
-    allocator<T>::deallocate(p, n);
-  }
-};
-
-static int do_minus(int x, int y) { return x-y; }
-
-struct DoNothing
-{
-  void operator()() const {}
-};
-
-static void do_nothing() {}
-
-static void test_allocator()
-{
-  boost::function<int (int, int), counting_allocator<int> > f;
-  f = plus<int>();
-  f.clear();
-  BOOST_TEST(alloc_count == 1);
-  BOOST_TEST(dealloc_count == 1);
-
-  alloc_count = 0;
-  dealloc_count = 0;
-  f = &do_minus;
-  f.clear();
-
-  boost::function<void (), counting_allocator<int> > fv;
-  alloc_count = 0;
-  dealloc_count = 0;
-  fv = DoNothing();
-  fv.clear();
-  BOOST_TEST(alloc_count == 1);
-  BOOST_TEST(dealloc_count == 1);
-  
-  alloc_count = 0;
-  dealloc_count = 0;
-  fv = &do_nothing;
-  fv.clear();
 }
 
 int test_main(int, char* [])
@@ -702,7 +640,6 @@ int test_main(int, char* [])
   test_emptiness();
   test_member_functions();
   test_ref();
-  test_allocator();
 
   return 0;
 }
