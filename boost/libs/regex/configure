@@ -2304,7 +2304,7 @@ pthread_mutex_t m;
 
 int main() {
 
- pthread_mutex_init(&m, NULL);
+ pthread_mutex_init(&m, 0);
  pthread_mutex_lock(&m);
  pthread_mutex_unlock(&m);
  pthread_mutex_destroy(&m);
@@ -2832,16 +2832,24 @@ cat > conftest.$ac_ext <<EOF
 #include "confdefs.h"
  
 #include <locale>
+#include <string>
+#include <map>
 #include "confdefs.h"
 
 std::locale l;
+//
+// regex locale support also requires
+// std::map to be working so we test this
+// as well here:
+//
+std::map<std::string, std::string> m;
 
 int main() {
 
 
 ; return 0; }
 EOF
-if { (eval echo configure:2845: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2853: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 ac_have_locale='yes'
@@ -2863,9 +2871,9 @@ fi
 
 if test "$enable_stl" != "no"; then
 echo $ac_n "checking for <iostream>""... $ac_c" 1>&6
-echo "configure:2867: checking for <iostream>" >&5
+echo "configure:2875: checking for <iostream>" >&5
 cat > conftest.$ac_ext <<EOF
-#line 2869 "configure"
+#line 2877 "configure"
 #include "confdefs.h"
  
 #include <iostream>
@@ -2881,7 +2889,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2885: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2893: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 
@@ -2901,9 +2909,9 @@ rm -f conftest*
 fi
 
 echo $ac_n "checking for std::distance""... $ac_c" 1>&6
-echo "configure:2905: checking for std::distance" >&5
+echo "configure:2913: checking for std::distance" >&5
 cat > conftest.$ac_ext <<EOF
-#line 2907 "configure"
+#line 2915 "configure"
 #include "confdefs.h"
  
 #include <iterator>
@@ -2917,7 +2925,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2921: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2929: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 cat >> confdefs.h <<\EOF
@@ -2934,7 +2942,7 @@ rm -f conftest*
 
 if test "$enable_stl" != "no" && test "$have_dist" != "yes"; then
 cat > conftest.$ac_ext <<EOF
-#line 2938 "configure"
+#line 2946 "configure"
 #include "confdefs.h"
  
 #include <iterator>
@@ -2948,7 +2956,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2952: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2960: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 cat >> confdefs.h <<\EOF
@@ -2974,9 +2982,9 @@ fi
 
 if test "$enable_stl" != "no" && test "$have_si" != "yes"; then
 echo $ac_n "checking for standard iterator syntax""... $ac_c" 1>&6
-echo "configure:2978: checking for standard iterator syntax" >&5
+echo "configure:2986: checking for standard iterator syntax" >&5
 cat > conftest.$ac_ext <<EOF
-#line 2980 "configure"
+#line 2988 "configure"
 #include "confdefs.h"
  
 #include <iterator>
@@ -2993,7 +3001,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:2997: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:3005: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 cat >> confdefs.h <<\EOF
@@ -3017,7 +3025,7 @@ fi
 
 if test "$enable_stl" != "no" && test "$have_si" != "yes"; then
 cat > conftest.$ac_ext <<EOF
-#line 3021 "configure"
+#line 3029 "configure"
 #include "confdefs.h"
  
 #include <iterator>
@@ -3034,7 +3042,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3038: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:3046: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 cat >> confdefs.h <<\EOF
@@ -3065,9 +3073,9 @@ fi
 
 if test "$have_oi" != "yes"; then
 echo $ac_n "checking for output iterator syntax""... $ac_c" 1>&6
-echo "configure:3069: checking for output iterator syntax" >&5
+echo "configure:3077: checking for output iterator syntax" >&5
 cat > conftest.$ac_ext <<EOF
-#line 3071 "configure"
+#line 3079 "configure"
 #include "confdefs.h"
  
 #include <iterator>
@@ -3080,7 +3088,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3084: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:3092: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 cat >> confdefs.h <<\EOF
@@ -3106,9 +3114,9 @@ fi
 
 if test "$enable_stl" != "no" && test "$have_ii" != "yes"; then
 echo $ac_n "checking for input iterator syntax""... $ac_c" 1>&6
-echo "configure:3110: checking for input iterator syntax" >&5
+echo "configure:3118: checking for input iterator syntax" >&5
 cat > conftest.$ac_ext <<EOF
-#line 3112 "configure"
+#line 3120 "configure"
 #include "confdefs.h"
  
 #include <iterator>
@@ -3121,7 +3129,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3125: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:3133: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 cat >> confdefs.h <<\EOF
@@ -3140,7 +3148,7 @@ fi
 
 if test "$enable_stl" != "no" && test "$have_ii" != "yes"; then
 cat > conftest.$ac_ext <<EOF
-#line 3144 "configure"
+#line 3152 "configure"
 #include "confdefs.h"
  
 #include <iterator>
@@ -3153,7 +3161,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3157: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:3165: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 cat >> confdefs.h <<\EOF
@@ -3179,9 +3187,9 @@ fi
 
 if test "$enable_stl" != "no" && test "$have_fi" != "yes"; then
 echo $ac_n "checking for forward iterator syntax""... $ac_c" 1>&6
-echo "configure:3183: checking for forward iterator syntax" >&5
+echo "configure:3191: checking for forward iterator syntax" >&5
 cat > conftest.$ac_ext <<EOF
-#line 3185 "configure"
+#line 3193 "configure"
 #include "confdefs.h"
  
 #include <iterator>
@@ -3194,7 +3202,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3198: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:3206: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 cat >> confdefs.h <<\EOF
@@ -3220,9 +3228,9 @@ fi
 
 if test "$enable_stl" != "no" && test "$have_bi" != "yes"; then
 echo $ac_n "checking for bidirectional iterator syntax""... $ac_c" 1>&6
-echo "configure:3224: checking for bidirectional iterator syntax" >&5
+echo "configure:3232: checking for bidirectional iterator syntax" >&5
 cat > conftest.$ac_ext <<EOF
-#line 3226 "configure"
+#line 3234 "configure"
 #include "confdefs.h"
  
 #include <iterator>
@@ -3235,7 +3243,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3239: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:3247: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 cat >> confdefs.h <<\EOF
@@ -3261,9 +3269,9 @@ fi
 
 if test "$enable_stl" != "no" && test "$have_ri" != "yes"; then
 echo $ac_n "checking for random access iterator syntax""... $ac_c" 1>&6
-echo "configure:3265: checking for random access iterator syntax" >&5
+echo "configure:3273: checking for random access iterator syntax" >&5
 cat > conftest.$ac_ext <<EOF
-#line 3267 "configure"
+#line 3275 "configure"
 #include "confdefs.h"
  
 #include <iterator>
@@ -3276,7 +3284,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3280: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:3288: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 cat >> confdefs.h <<\EOF
@@ -3302,9 +3310,9 @@ fi
 
 if test "$enable_stl" != "no"; then
 echo $ac_n "checking for output iterator assignment""... $ac_c" 1>&6
-echo "configure:3306: checking for output iterator assignment" >&5
+echo "configure:3314: checking for output iterator assignment" >&5
 cat > conftest.$ac_ext <<EOF
-#line 3308 "configure"
+#line 3316 "configure"
 #include "confdefs.h"
  
 #include "confdefs.h"
@@ -3339,7 +3347,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3343: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:3351: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 
@@ -3475,9 +3483,9 @@ old_libs="$LIBS"
 LIBS="conf2.cpp $old_libs"
 
 echo $ac_n "checking for link time template merging""... $ac_c" 1>&6
-echo "configure:3479: checking for link time template merging" >&5
+echo "configure:3487: checking for link time template merging" >&5
 cat > conftest.$ac_ext <<EOF
-#line 3481 "configure"
+#line 3489 "configure"
 #include "confdefs.h"
 
 #include "conf2.h"
@@ -3490,7 +3498,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3494: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:3502: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 else
@@ -3514,9 +3522,9 @@ if eval "$CXX $CXXFLAGS -c conf2.cpp" && eval "ar -rc libconf2.a conf2$ac_obj_ex
 LIBS="-L./ -lconf2 $old_libs"
 
 echo $ac_n "checking for link time template merging from archive files""... $ac_c" 1>&6
-echo "configure:3518: checking for link time template merging from archive files" >&5
+echo "configure:3526: checking for link time template merging from archive files" >&5
 cat > conftest.$ac_ext <<EOF
-#line 3520 "configure"
+#line 3528 "configure"
 #include "confdefs.h"
 
 #include "conf2.h"
@@ -3529,7 +3537,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3533: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:3541: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 else
@@ -3658,9 +3666,9 @@ old_libs="$LIBS"
 LIBS="conf2.cpp $old_libs"
 
 echo $ac_n "checking for link time template merging of switch statements""... $ac_c" 1>&6
-echo "configure:3662: checking for link time template merging of switch statements" >&5
+echo "configure:3670: checking for link time template merging of switch statements" >&5
 cat > conftest.$ac_ext <<EOF
-#line 3664 "configure"
+#line 3672 "configure"
 #include "confdefs.h"
 
 #include "conf2.h"
@@ -3673,7 +3681,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:3677: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:3685: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   echo "$ac_t""yes" 1>&6
 else
@@ -4028,6 +4036,7 @@ cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
 sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/re_detail/regex_options.hpp > jm_opt.out
 cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
 rm -f jm_opt.out
+
 
 
 

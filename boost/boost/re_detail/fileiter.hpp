@@ -95,7 +95,7 @@ struct _fi_find_data
 struct _fi_priv_data;
 
 typedef _fi_priv_data* _fi_find_handle;
-#define _fi_invalid_handle NULL
+#define _fi_invalid_handle 0
 #define _fi_dir 1
 
 _fi_find_handle _fi_FindFirstFile(const char* lpFileName, _fi_find_data* lpFindFileData);

@@ -221,9 +221,9 @@ void BOOST_RE_CALL re_free_classes()
 void BOOST_RE_CALL re_update_classes()
 {
    BOOST_RE_GUARD_STACK
-   if(*re_cls_name != std::setlocale(LC_CTYPE, NULL))
+   if(*re_cls_name != std::setlocale(LC_CTYPE, 0))
    {
-      *re_cls_name = std::setlocale(LC_CTYPE, NULL);
+      *re_cls_name = std::setlocale(LC_CTYPE, 0);
       char buf[256];
       unsigned int i;
       for(i = 0; i < re_classes_max; ++i)
@@ -265,9 +265,9 @@ void BOOST_RE_CALL re_free_collate()
 void BOOST_RE_CALL re_update_collate()
 {
    BOOST_RE_GUARD_STACK
-   if(*re_coll_name != std::setlocale(LC_COLLATE, NULL))
+   if(*re_coll_name != std::setlocale(LC_COLLATE, 0))
    {
-      *re_coll_name = std::setlocale(LC_COLLATE, NULL);
+      *re_coll_name = std::setlocale(LC_COLLATE, 0);
       char buf[256];
       unsigned int i = 400;
       re_get_message(buf, 256, i);
@@ -296,7 +296,7 @@ unsigned int BOOST_RE_CALL _re_get_message(char* buf, unsigned int len, unsigned
    #if !defined(BOOST_RE_NO_CAT)
    if(message_cat != (nl_catd)-1)
    {
-      const char* m = catgets(message_cat, 0, id, NULL);
+      const char* m = catgets(message_cat, 0, id, 0);
       if(m)
       {
          unsigned int size = std::strlen(m) + 1;
@@ -329,7 +329,7 @@ void BOOST_RE_CALL re_message_update()
    //
    // called whenever the global locale changes:
    //
-   std::string l(std::setlocale(LC_MESSAGES, NULL));
+   std::string l(std::setlocale(LC_MESSAGES, 0));
    if(*mess_locale != l)
    {
       *mess_locale = l;
@@ -547,7 +547,7 @@ bool BOOST_RE_CALL c_regex_traits<wchar_t>::lookup_collatename(std::basic_string
 {
    BOOST_RE_GUARD_STACK
    std::basic_string<wchar_t> s(first, last);
-   unsigned int len = strnarrow((char*)NULL, 0, s.c_str());
+   unsigned int len = strnarrow((char*)0, 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    std::string t_out;
@@ -604,15 +604,15 @@ void c_regex_traits<char>::update()
    re_detail::cs_guard g(*re_detail::p_re_lock);
    #endif
    re_message_update();
-   if(*collate_name != std::setlocale(LC_COLLATE, NULL))
+   if(*collate_name != std::setlocale(LC_COLLATE, 0))
    {
       do_update_collate();
-      *collate_name = std::setlocale(LC_COLLATE, NULL);
+      *collate_name = std::setlocale(LC_COLLATE, 0);
    }
-   if(*ctype_name != std::setlocale(LC_CTYPE, NULL))
+   if(*ctype_name != std::setlocale(LC_CTYPE, 0))
    {
       do_update_ctype();
-      *ctype_name = std::setlocale(LC_CTYPE, NULL);
+      *ctype_name = std::setlocale(LC_CTYPE, 0);
    }
    sort_type = re_detail::find_sort_syntax(&i, &sort_delim);
 }
@@ -769,7 +769,7 @@ bool BOOST_RE_CALL c_regex_traits<wchar_t>::do_lookup_collate(std::basic_string<
 {
    BOOST_RE_GUARD_STACK
    std::basic_string<wchar_t> s(first, last);
-   unsigned int len = strnarrow((char*)NULL, 0, s.c_str());
+   unsigned int len = strnarrow((char*)0, 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    std::string t_out;
@@ -794,7 +794,7 @@ void BOOST_RE_CALL c_regex_traits<wchar_t>::update()
    re_message_update();
    re_update_classes();
    re_update_collate();
-   std::string l(std::setlocale(LC_CTYPE, NULL));
+   std::string l(std::setlocale(LC_CTYPE, 0));
    if(*wlocale_name != l)
    {
       *wlocale_name = l;
@@ -979,7 +979,7 @@ int BOOST_RE_CALL c_regex_traits<wchar_t>::toi(const wchar_t*& first, const wcha
 jm_uintfast32_t BOOST_RE_CALL c_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)
 {
    std::basic_string<wchar_t> s(first, last);
-   unsigned int len = strnarrow((char*)NULL, 0, s.c_str());
+   unsigned int len = strnarrow((char*)0, 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    len =  do_lookup_class(buf.get());

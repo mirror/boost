@@ -753,7 +753,7 @@ pthread_mutex_t m;
 
 ],
 [
- pthread_mutex_init(&m, NULL);
+ pthread_mutex_init(&m, 0);
  pthread_mutex_lock(&m);
  pthread_mutex_unlock(&m);
  pthread_mutex_destroy(&m);
@@ -1055,9 +1055,17 @@ AC_MSG_CHECKING(for <locale>)
 AC_TRY_COMPILE(
 [ 
 #include <locale>
+#include <string>
+#include <map>
 #include "confdefs.h"
 
 std::locale l;
+//
+// regex locale support also requires
+// std::map to be working so we test this
+// as well here:
+//
+std::map<std::string, std::string> m;
 ],
 [
 ],
@@ -1661,6 +1669,7 @@ cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
 sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/re_detail/regex_options.hpp > jm_opt.out
 cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
 rm -f jm_opt.out
+
 
 
 

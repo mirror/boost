@@ -665,7 +665,7 @@ private:
    unsigned error_code_;
 
    void BOOST_RE_CALL compile_maps();
-   void BOOST_RE_CALL compile_map(re_detail::re_syntax_base* node, unsigned char* _map, unsigned int* pnull, unsigned char mask, re_detail::re_syntax_base* terminal = NULL)const;
+   void BOOST_RE_CALL compile_map(re_detail::re_syntax_base* node, unsigned char* _map, unsigned int* pnull, unsigned char mask, re_detail::re_syntax_base* terminal = 0)const;
    bool BOOST_RE_CALL probe_start(re_detail::re_syntax_base* node, charT c, re_detail::re_syntax_base* terminal)const;
    bool BOOST_RE_CALL probe_start_null(re_detail::re_syntax_base* node, re_detail::re_syntax_base* terminal)const;
    void BOOST_RE_CALL fixup_apply(re_detail::re_syntax_base* b, unsigned cbraces);
@@ -848,7 +848,7 @@ public:
    typedef Allocator                                                 alloc_type;
    typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(iterator, Allocator)  iterator_alloc;
    typedef typename iterator_alloc::size_type                        size_type;
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || !defined(BOOST_NO_STD_ITERATOR_TRAITS)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR_TRAITS)
    typedef typename std::iterator_traits<iterator>::difference_type  difference_type;
    typedef typename std::iterator_traits<iterator>::value_type       char_type;
 #else

@@ -69,7 +69,7 @@ void mapfile::open(const char* file)
 #endif
    if(hfile != INVALID_HANDLE_VALUE)
    {
-      hmap = CreateFileMapping(hfile, NULL, PAGE_READONLY, 0, 0, 0);
+      hmap = CreateFileMapping(hfile, 0, PAGE_READONLY, 0, 0, 0);
       if(hmap == INVALID_HANDLE_VALUE)
       {
          CloseHandle(hfile);
@@ -782,13 +782,13 @@ _fi_find_handle _fi_FindFirstFile(const char* lpFileName, _fi_find_data* lpFindF
 
    DIR* h = opendir(dat->root);
    dat->d = h;
-   if(h != NULL)
+   if(h != 0)
    {
       if(_fi_FindNextFile(dat, lpFindFileData))
          return dat;
    }
    delete dat;
-   return NULL;
+   return 0;
 }
 
 bool _fi_FindNextFile(_fi_find_handle dat, _fi_find_data* lpFindFileData)

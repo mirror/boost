@@ -284,6 +284,7 @@ Do not change this file unless you really really have to, add options to
    #define BOOST_RE_NESTED_TEMPLATE_DECL
    #define BOOST_RE_NO_SWPRINTF
    #define BOOST_RE_NO_TEMPLATE_FRIEND
+   #define BOOST_RE_NO_LOCALE_H
 #endif
 
 #if defined(__HP_aCC) || defined(__hpux)
@@ -329,6 +330,14 @@ Do not change this file unless you really really have to, add options to
 #   if __KCC_VERSION <= 3499
 #    define BOOST_RE_NO_WCSTRING
 #   endif
+#endif
+
+#ifdef _REENTRANT
+//
+// several compilers define _REENTRANT when 
+// threading support is turned on:
+//
+#define BOOST_RE_THREADS
 #endif
 
 #endif  // BOOST_RE_AUTO_CONFIGURE
@@ -407,7 +416,7 @@ typedef unsigned long jm_uintfast32_t;
        some of these (std)
        may be guesswork: */
 
-      # if !defined (__SGI_STL_OWN_IOSTREAMS) || defined (__STL_HAS_NO_NEW_IOSTREAMS) || defined (__STL_USE_NO_IOSTREAMS) || defined(__STL_NO_MBSTATE_T)
+      # if (!defined (__SGI_STL_OWN_IOSTREAMS) && !defined(__STL_USE_NEW_IOSTREAMS)) || defined (__STL_HAS_NO_NEW_IOSTREAMS) || defined (__STL_USE_NO_IOSTREAMS) || defined(__STL_NO_MBSTATE_T)
          // Old IO streams:
          #define BOOST_RE_NO_LOCALE_H
          #define BOOST_RE_OLD_IOSTREAM

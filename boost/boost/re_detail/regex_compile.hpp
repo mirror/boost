@@ -418,7 +418,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_maps()
    // always compile the first _map:
    std::memset(startmap, 0, 256);
    record->can_be_null = 0;
-   compile_map(record, startmap, NULL, re_detail::mask_all);
+   compile_map(record, startmap, 0, re_detail::mask_all);
 
    while(record->type != re_detail::syntax_element_match)
    {
@@ -432,7 +432,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_maps()
       else
       {
          record->can_be_null = 0;
-         compile_map(record, NULL, &(record->can_be_null), re_detail::mask_all);
+         compile_map(record, 0, &(record->can_be_null), re_detail::mask_all);
       }
       record = record->next.p;
    }
@@ -717,7 +717,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                if(l == last_dash)
                {
                   fail(REG_ERANGE);
-                  return NULL;
+                  return 0;
                }
                jm_uintfast32_t id = traits_inst.lookup_classname(base+2, first-2);
                if(_flags & regbase::icase)
@@ -730,7 +730,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                if(id == 0)
                {
                   fail(REG_ECTYPE);
-                  return NULL;
+                  return 0;
                }
                classes.push(id);
                started = true;
@@ -749,7 +749,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                if(s.size())goto char_set_literal;
             }
             fail(REG_ECOLLATE);
-            return NULL;
+            return 0;
          case traits_type::syntax_equal:
             //
             // we have an equivalence class [=collating-name=]
@@ -774,7 +774,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                }
             }
             fail(REG_ECOLLATE);
-            return NULL;
+            return 0;
          case traits_type::syntax_left_word:
             if((started == false) && (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*first) == traits_type::syntax_close_set))
             {
@@ -782,7 +782,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                return add_simple(0, re_detail::syntax_element_word_start);
             }
             fail(REG_EBRACK);
-            return NULL;
+            return 0;
          case traits_type::syntax_right_word:
             if((started == false) && (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*first) == traits_type::syntax_close_set))
             {
@@ -790,7 +790,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                return add_simple(0, re_detail::syntax_element_word_end);
             }
             fail(REG_EBRACK);
-            return NULL;
+            return 0;
          default:
             if(started == false)
             {
@@ -803,12 +803,12 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                }
             }
             fail(REG_EBRACK);
-            return NULL;
+            return 0;
          }
          if(first == last)
          {
             fail(REG_EBRACK);
-            return NULL;
+            return 0;
          }
          continue;
       }
@@ -836,7 +836,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
          if((singles.empty() == true) || (l != last_single))
          {
             fail(REG_ERANGE);
-            return NULL;
+            return 0;
          }
          ranges.push(singles.peek());
          if(singles.peek().size() <= 1)  // leave digraphs and ligatures in place
@@ -859,7 +859,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                if(l == last_dash)
                {
                   fail(REG_ERANGE);
-                  return NULL;
+                  return 0;
                }
                classes.push(traits_type::char_class_word);
                started = true;
@@ -870,7 +870,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                if(l == last_dash)
                {
                   fail(REG_ERANGE);
-                  return NULL;
+                  return 0;
                }
                classes.push(traits_type::char_class_digit);
                started = true;
@@ -881,7 +881,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                if(l == last_dash)
                {
                   fail(REG_ERANGE);
-                  return NULL;
+                  return 0;
                }
                classes.push(traits_type::char_class_space);
                started = true;
@@ -892,7 +892,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                if(l == last_dash)
                {
                   fail(REG_ERANGE);
-                  return NULL;
+                  return 0;
                }
                classes.push(traits_type::char_class_lower);
                started = true;
@@ -903,7 +903,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                if(l == last_dash)
                {
                   fail(REG_ERANGE);
-                  return NULL;
+                  return 0;
                }
                classes.push(traits_type::char_class_upper);
                started = true;
@@ -916,7 +916,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
             case traits_type::syntax_U:
             case traits_type::syntax_L:
                fail(REG_EESCAPE);
-               return NULL;
+               return 0;
             default:
                c = parse_escape(first, last);
                --first;
@@ -957,7 +957,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
       ++first;
    }
    if(!done)
-      return NULL;
+      return 0;
 
    re_detail::re_syntax_base* result;
    if(has_digraphs)
@@ -1018,7 +1018,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
          #ifdef __BORLANDC__
          _flags = f;
          #endif
-         return NULL;
+         return 0;
       }
       ++cranges;
       unsigned len = (re_detail::re_strlen(c1.c_str()) + 1) * sizeof(charT);
@@ -1091,7 +1091,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
          #ifdef __BORLANDC__
          _flags = f;
          #endif
-         return NULL;
+         return 0;
       }
       for(unsigned int i = 0; i < 256; ++i)
       {

@@ -556,7 +556,7 @@ bool BOOST_RE_CALL w32_regex_traits<wchar_t>::lookup_collatename(std::basic_stri
 {
    BOOST_RE_GUARD_STACK
    std::basic_string<wchar_t> s(first, last);
-   unsigned int len = strnarrow((char*)NULL, 0, s.c_str());
+   unsigned int len = strnarrow((char*)0, 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    std::string t_out;
@@ -596,7 +596,7 @@ bool BOOST_RE_CALL w32_regex_traits<wchar_t>::do_lookup_collate(std::basic_strin
 {
    BOOST_RE_GUARD_STACK
    std::basic_string<wchar_t> s(first, last);
-   unsigned int len = strnarrow((char*)NULL, 0, s.c_str());
+   unsigned int len = strnarrow((char*)0, 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    std::string t_out;
@@ -759,7 +759,7 @@ int BOOST_RE_CALL w32_regex_traits<wchar_t>::toi(const wchar_t*& first, const wc
 jm_uintfast32_t BOOST_RE_CALL w32_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)
 {
    std::basic_string<wchar_t> s(first, last);
-   unsigned int len = strnarrow((char*)NULL, 0, s.c_str());
+   unsigned int len = strnarrow((char*)0, 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    len =  do_lookup_class(buf.get());
@@ -780,10 +780,10 @@ w32_regex_traits<wchar_t> w32_regex_traits<wchar_t>::init_;
 unsigned int BOOST_RE_CALL w32_regex_traits<wchar_t>::strnarrow(char *s1, unsigned int len, const wchar_t *s2)
 {
    BOOST_RE_GUARD_STACK
-   unsigned int size = WideCharToMultiByte(CP_ACP, 0, s2, -1, s1, 0, NULL, NULL);
+   unsigned int size = WideCharToMultiByte(CP_ACP, 0, s2, -1, s1, 0, 0, 0);
    if(size > len)
       return size;
-   return WideCharToMultiByte(CP_ACP, 0, s2, -1, s1, len, NULL, NULL);
+   return WideCharToMultiByte(CP_ACP, 0, s2, -1, s1, len, 0, 0);
 }
 
 unsigned int BOOST_RE_CALL w32_regex_traits<wchar_t>::strwiden(wchar_t *s1, unsigned int len, const char *s2)

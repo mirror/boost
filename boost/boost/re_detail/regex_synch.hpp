@@ -60,7 +60,7 @@ typedef pthread_mutex_t CRITICAL_SECTION;
 
 inline void BOOST_RE_CALL InitializeCriticalSection(CRITICAL_SECTION* ps)
 {
-   pthread_mutex_init(ps, NULL);
+   pthread_mutex_init(ps, 0);
 }
 
 inline void BOOST_RE_CALL DeleteCriticalSection(CRITICAL_SECTION* ps)
