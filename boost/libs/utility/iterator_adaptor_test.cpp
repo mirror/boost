@@ -102,6 +102,8 @@ typedef std::set<storage::iterator> iterator_set;
 
 template <class T> struct foo;
 
+void blah(int) { }
+
 int
 main()
 {
@@ -136,11 +138,18 @@ main()
   }
   {  
     // Test computation of default when the Value is const
-    typedef boost::iterator_adaptor<int*, boost::default_iterator_policies,
+    typedef boost::iterator_adaptor<int*,
+      boost::default_iterator_policies,
       boost::value_type_is<const int> > Iter1;
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::value_type, int>::value));
+#ifdef __BORLANDC__
+    // This is a bug
+    BOOST_STATIC_ASSERT((boost::is_same<Iter1::reference, int&>::value));
+    BOOST_STATIC_ASSERT((boost::is_same<Iter1::pointer, int*>::value));
+#else
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::reference, const int&>::value));
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::pointer, const int*>::value));
+#endif
   }
   {
     // Test with no defaults

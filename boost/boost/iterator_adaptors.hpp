@@ -354,7 +354,6 @@ namespace detail {
   struct operator_arrow_result_generator
   {
       typedef operator_arrow_proxy<Value> proxy;
-      
       // Borland chokes unless it's an actual enum (!)
       enum { is_input_iter
             = (boost::is_convertible<Category*,std::input_iterator_tag*>::value
@@ -626,9 +625,16 @@ namespace detail {
 
   template <class Key, class Value>
   struct make_arg {
+#ifdef __BORLANDC__
+    // Borland C++ doesn't like the extra indirection of is_named_parameter
+    typedef typename 
+      if_true<(is_convertible<Value,named_template_param_base>::value)>::
+      template then<make_named_arg, make_key_value>::type Make;
+#else
     enum { is_named = is_named_parameter<Value>::value };
     typedef typename if_true<(is_named)>::template
       then<make_named_arg, make_key_value>::type Make;
+#endif
     typedef typename Make::template select<Key, Value>::type type;
   };
 
@@ -779,7 +785,8 @@ struct iterator_adaptor :
 {
     typedef iterator_adaptor<Base,Policies,Value,Reference,Pointer,Category,Distance> self;
  public:
-    typedef typename detail::iterator_adaptor_traits_gen<Base,Value,Reference,Pointer,Category,Distance>::type Traits;
+    typedef detail::iterator_adaptor_traits_gen<Base,Value,Reference,Pointer,Category,Distance> TraitsGen;
+    typedef typename TraitsGen::type Traits;
 
     typedef typename Traits::difference_type difference_type;
     typedef typename Traits::value_type value_type;
