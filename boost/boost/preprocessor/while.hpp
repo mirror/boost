@@ -84,8 +84,8 @@ BOOST_PP_MUL().
   // #1) The state is a 3-tuple. After the iteration is finished, the first
   // element of the tuple is the result.
   //
-  // #2) The WHILE primitive is "invoked" directly. BOOST_PP_WHILE(D,...) can't
-  // be used because it would not be expanded by the C/C++ preprocessor.
+  // #2) The WHILE primitive is "invoked" directly. BOOST_PP_WHILE(D,...)
+  // can't be used because it would not be expanded by the C preprocessor.
   //
   // #3) ???_C is the condition and ???_F is the iteration function.
 

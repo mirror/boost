@@ -17,11 +17,11 @@
 <a href="../../../../boost/preprocessor/assert_msg.hpp">Click here to see the header.</a>
 */
 
-#include <boost/preprocessor/identity.hpp>
+#include <boost/preprocessor/empty.hpp>
 #include <boost/preprocessor/if.hpp>
 
 //! Expands to nothing if C != 0 and to MSG if C == 0.
-#define BOOST_PP_ASSERT_MSG(C,MSG) BOOST_PP_IF(C,BOOST_PP_EMPTY,BOOST_PP_IDENTITY(MSG))()
+#define BOOST_PP_ASSERT_MSG(C,MSG) BOOST_PP_IF(C,BOOST_PP_EMPTY,MSG BOOST_PP_EMPTY)()
 
 //! Obsolete. Use BOOST_PP_ASSERT_MSG().
 #define BOOST_PREPROCESSOR_ASSERT_MSG(C,MSG) BOOST_PP_ASSERT_MSG(C,MSG)
