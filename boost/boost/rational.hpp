@@ -14,6 +14,7 @@
 //    Ed Brey, for many comments, including picking up on some dreadful typos
 
 //  Revision History
+//  19 Nov 00  Throw on divide by zero in operator /= (John (EBo) David)
 //  23 Jun 00  Incorporate changes from Mark Rodgers for Borland C++
 //  22 Jun 00  Change _MSC_VER to BOOST_MSVC so other compilers are not
 //             affected (Beman Dawes)
@@ -195,6 +196,8 @@ rational<IntType>& rational<IntType>::operator*= (const rational<IntType>& r)
 template <typename IntType>
 rational<IntType>& rational<IntType>::operator/= (const rational<IntType>& r)
 {
+    // Trap division by zero
+    if (r.num == 0) throw bad_rational();
     // Avoid overflow and preserve normalization
     IntType gcd1 = gcd<IntType>(num, r.num);
     IntType gcd2 = gcd<IntType>(r.den, den);
