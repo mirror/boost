@@ -15,6 +15,8 @@
  * $Id$
  */
 
+#include <boost/config.hpp>
+
 // Borland compiler complains about unused variables a bit easily and
 // incorrectly
 
@@ -38,7 +40,7 @@ namespace detail {
 
 // Some compilers are broken with respect to name resolution
 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP || defined( __BORLANDC__)
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP) || defined( __BORLANDC__)
 
 using namespace boost;
 using namespace numeric;
