@@ -71,14 +71,22 @@ no_over_sequence_t is_over_sequence_test(...);
 
 template<typename T>
 yes_over_sequence_t is_over_sequence_test(
-      type< ::boost::over_sequence<T> >
+      type< ::boost::detail::variant::over_sequence<T> >
     );
+
+template<typename T>
+struct is_over_sequence_impl
+{
+    BOOST_STATIC_CONSTANT(bool, value = (
+          sizeof(is_over_sequence_test(type<T>()))
+          == sizeof(yes_over_sequence_t)
+        ));
+};
 
 template <typename T>
 struct is_over_sequence
     : mpl::bool_<
-          sizeof(is_over_sequence_test(type<T>()))
-          == sizeof(yes_over_sequence_t)
+          ::boost::detail::variant::is_over_sequence_impl<T>::value
         >
 {
 };
