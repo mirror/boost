@@ -93,7 +93,7 @@ test_zero_args()
 
   // Invocation and self-assignment
   global_int = 0;
-  v1.set(v1);
+  v1 = (v1);
   v1();
   BOOST_TEST(global_int == 5);
 
@@ -152,7 +152,7 @@ test_zero_args()
   BOOST_TEST(global_int == 3);
 
   // Assignment to a non-empty function
-  v2.set(five);
+  v2 = (five);
 
   // Invocation
   global_int = 0;
@@ -163,7 +163,7 @@ test_zero_args()
   BOOST_TEST(v2.empty());
 
   // Assignment to an empty function from a free function
-  v2.set(BOOST_FUNCTION_TARGET_FIX(&) write_five);
+  v2 = (BOOST_FUNCTION_TARGET_FIX(&) write_five);
   BOOST_TEST(v2);
 
   // Invocation

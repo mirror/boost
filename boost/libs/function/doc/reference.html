@@ -22,19 +22,19 @@
   };
 
   // For <i>N</i> in [0, <i>MAX_ARGS</i>]
-  <b>template</b>&lt;<b>typename</b> ResultType,
+  <b>template</b>&lt;<b>typename</b> Signature,
            <b>typename</b> Arg1,
 	   <b>typename</b> Arg2,
            <i>...</i>
            <b>typename</b> Arg<i>N</i>,
-	   <b>typename</b> Policy    = empty_function_policy,
-	   <b>typename</b> Mixin     = empty_function_mixin,
+	   <b>typename</b> Policy    = empty_function_policy, <em>// Deprecated</em>
+	   <b>typename</b> Mixin     = empty_function_mixin, <em>// Deprecated</em>
 	   <b>typename</b> Allocator = std::allocator&lt;function_base&gt; &gt;
   <b>class</b> <a href="#functionN">function<i>N</i></a> : <b>public</b> <a href="#function_base">function_base</a>, <b>public</b> Mixin
   {
     <b>typedef</b> ResultType result_type; <em>// <a href="#novoid">[1]</a></em>
-    <b>typedef</b> Policy     policy_type;
-    <b>typedef</b> Mixin      mixin_type;
+    <b>typedef</b> Policy     policy_type; <em>// Deprecated</em>
+    <b>typedef</b> Mixin      mixin_type; <em>// Deprecated</em>
     <b>typedef</b> Allocator  allocator_type;
 
     <b>typedef</b> Arg1 argument_type;        <i>// If N == 1</i>
@@ -52,8 +52,8 @@
     <a href="#functionN_copy_assn">function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
     <a href="#functionN_target_assn"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(F)</a>;
     <a href="#functionN_target_ref_assn"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(reference_wrapper&lt;F&gt;)</a>;
-    <a href="#functionN_copy_set"><b>void</b> set(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
-    <a href="#functionN_target_set"><b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(F)</a>;
+    <a href="#functionN_copy_set"><b>void</b> set(<b>const</b> function<i>N</i><b>&amp;</b>)</a>; <em>// Deprecated</em>
+    <a href="#functionN_target_set"><b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(F)</a>; <em>// Deprecated</em>
     <a href="#functionN_swap"><b>void</b> swap(function<i>N</i><b>&amp;</b>)</a>;
     <a href="#functionN_clear"><b>void</b> clear()</a>;
 
@@ -66,22 +66,17 @@
 	   <b>typename</b> Arg2,
            <i>...</i>
 	   <b>typename</b> Arg<i>N</i>,
-           <b>typename</b> Policy,
-           <b>typename</b> Mixin,
+           <b>typename</b> Policy, <em>// Deprecated</em>
+           <b>typename</b> Mixin, <em>// Deprecated</em>
            <b>typename</b> Allocator&gt;
   <b>void</b> <a href="#swap_functionN">swap</a>(function<em>N</em>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>,
             function<em>N</em>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>);
 
   // For any <i>N</i> in [0, <i>MAX_ARGS</i>]
-  <b>template</b>&lt;<b>typename</b> ResultType,
-           <b>typename</b> Arg1,
-	   <b>typename</b> Arg2,
-           <i>...</i>
-           <b>typename</b> Arg<i>N</i>,
-           <b>typename</b> Arg<i>N+1</i> = <i>implementation-defined</i>,
-           <b>typename</b> Arg<i>N+2</i> = <i>implementation-defined</i>,
-	   <i>...</i>
-	   <b>typename</b> Arg<i>MAX_ARGS</i> = <i>implementation-defined</i>&gt;
+  <b>template</b>&lt;<b>typename</b> Signature, <em>// Function type: ResultType (Arg1, Arg2, ..., Arg<em>N</em>)</em>
+	   <b>typename</b> Policy    = empty_function_policy, <em>// Deprecated</em>
+	   <b>typename</b> Mixin     = empty_function_mixin, <em>// Deprecated</em>
+	   <b>typename</b> Allocator = std::allocator&lt;function_base&gt; &gt;
   <b>class</b> <a href="#function">function</a> : <b>public</b> <a href="#functionN">function<i>N</i></a>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>&gt;
   {
     <i>// Construction</i>
@@ -94,18 +89,14 @@
     function<b>&amp;</b> <b>operator</b>=(<b>const</b> function<b>&amp;</b>);
     function<b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i>&lt;ResultType, Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
     <b>template</b>&lt;<b>typename</b> F&gt; function<b>&amp;</b> <b>operator</b>=(F);
-    <b>void</b> set(<b>const</b> function<b>&amp;</b>);
-    <b>void</b> set(<b>const</b> function<i>N</i>&lt;ResultType, Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
-    <b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(F);
+    <b>void</b> set(<b>const</b> function<b>&amp;</b>); <em>// Deprecated</em>
+    <b>void</b> set(<b>const</b> function<i>N</i>&lt;ResultType, Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>); <em>// Deprecated</em>
+    <b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(F); <em>// Deprecated</em>
   };
 
-  <b>template</b>&lt;<b>typename</b> ResultType,
-           <b>typename</b> Arg1,
-	   <b>typename</b> Arg2,
-           <i>...</i>
-	   <b>typename</b> Arg<i>MAX_ARGS</i>&gt;
-  <b>void</b> <a href="#swap_function">swap</a>(function&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b>,
-            function&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b>);
+  <b>template</b>&lt;<b>typename</b> Signature, <b>typename</b> Policy, <b>typename</b> Mixin, <b>typename</b> Allocator&gt;
+  <b>void</b> <a href="#swap_function">swap</a>(function&lt;Signature, Policy, Mixin, Allocator&gt;<b>&amp;</b>,
+            function&lt;Signature, Policy, Mixin, Allocator&gt;<b>&amp;</b>);
 }	   
 </pre>
 
@@ -218,11 +209,13 @@
 <p> <a name="functionN_copy_set"><code><b>void</b> set(<b>const</b> function<i>N</i><b>&amp;</b> g);</code></a>
 <ul>
   <li><b>Effects</b>: <code><a href="#functionN_copy_assn">*this = g</a></code>.</li>
+  <li><b>Note</b>: This function is deprecated and will be removed in future versions of Boost.Function. Please use the assignment operator instead.</li>
 </ul>
 
 <p> <a name="functionN_target_set"><code><b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(F g);</code></a>
 <ul>
   <li><b>Effects</b>: <code><a href="#functionN_target_assn">*this = g</a></code>.</li>
+  <li><b>Note</b>: This function is deprecated and will be removed in future versions of Boost.Function. Please use the assignment operator instead.</li>
 </ul>
 
 <p> <a name="functionN_swap"><code><b>void</b> swap(function<i>N</i><b>&amp;</b> g);</code></a>
@@ -248,6 +241,7 @@
       <li><code>policy.postcall(this);</code></li>
     </ol>
   <li><b>Returns</b>: the value returned by <i>target</i>.</li>
+  <li><b>Note</b>: invocation policies have been deprecated and will be removed in a later release.</li>
 </ul>
 
 <h2><a name="function">Class template <code>function</code></a></h2>
@@ -263,8 +257,8 @@
 	 <b>typename</b> Arg2,
          <i>...</i>
 	 <b>typename</b> Arg<i>N</i>,
-         <b>typename</b> Policy,
-         <b>typename</b> Mixin,
+         <b>typename</b> Policy, <em>// Deprecated</em>
+         <b>typename</b> Mixin, <em>// Deprecated</em>
          <b>typename</b> Allocator&gt;
 <b>void</b> <a name="swap_functionN">swap</a>(function<i>N</i>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b> f,
           function<i>N</i>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b> g);
@@ -275,13 +269,9 @@
 
 <p>
 <pre>
-<b>template</b>&lt;<b>typename</b> ResultType,
-         <b>typename</b> Arg1,
-	 <b>typename</b> Arg2,
-         <i>...</i>
-	 <b>typename</b> Arg<i>MAX_ARGS</i>&gt;
-<b>void</b> <a name="swap_function">swap</a>(function&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b> f,
-          function&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b> g);
+<b>template</b>&lt;<b>typename</b> Signature, <b>typename</b> Policy, <b>typename</b> Mixin, <b>typename</b> Allocator&gt;
+<b>void</b> <a name="swap_function">swap</a>(function&lt;Signature, Policy, Mixin, Allocator&gt;<b>&amp;</b> f,
+          function&lt;Signature, Policy, Mixin, Allocator&gt;<b>&amp;</b> g);
 </pre>
 <ul>
   <li><b>Effects</b>: <code>f.<a href="#functionN_swap">swap</a>(g);</code></li>
@@ -293,7 +283,7 @@
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Thu Jan 31 21:55:35 EST 2002
+Last modified: Fri Jul 19 16:40:00 EDT 2002
 <!-- hhmts end -->
   </body>
 </html>
