@@ -1271,7 +1271,7 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
             {
                _skip_and_dec(clines, last_line, first, base, j);
                restart = first;
-               restart += len;
+               std::advance(restart, len);
                m.set_first(first);
                m.set_second(restart);
                m.set_line(clines, last_line);
