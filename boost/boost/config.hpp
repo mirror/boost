@@ -156,9 +156,6 @@
 //  void bar(int);
 //  f(&bar); // should choose #2. 
 
-//  BOOST_NO_DEPENDENT_BASE_LOOKUP: The compiler fails to lookup members
-//  in dependent base classes properly. 
-
 //  BOOST_NO_DEPENDENT_NESTED_DERIVATIONS: The compiler fails to compile
 //  a nested class that has a dependent base class:
 //  template<typename T>
@@ -166,9 +163,6 @@
 //    template<typename U>
 //    struct bar : public T, public U {};
 //  };
-
-//  BOOST_WEAK_CONVERSION_OPERATORS: The compiler fails to consider all
-//  correct possibilities when applying user-defined conversions.
 
 //  
 //  Compiler Control or Information Macros  ----------------------------------//
@@ -245,12 +239,6 @@
 
 //  Edison Design Group front-ends
 # if defined(__EDG_VERSION__)
-
-#   if __EDG_VERSION__ <= 238
-      // SGI MIPSpro 7.3 uses the EDG 2.38 front-end.
-#     define BOOST_NO_DEPENDENT_BASE_LOOKUP
-#   endif
-
 #   if __EDG_VERSION__ <= 241
 #     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #   endif
@@ -269,9 +257,7 @@
 // pull in standard library version:
 #   include <memory>
 #   if __BORLANDC__ <= 0x0551
-#     define BOOST_NO_DEPENDENT_BASE_LOOKUP
 #     define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
-#     define BOOST_WEAK_CONVERSION_OPERATORS
 #     define BOOST_NO_INTEGRAL_INT64_T
 #     define BOOST_NO_PRIVATE_IN_AGGREGATE
 #   endif
