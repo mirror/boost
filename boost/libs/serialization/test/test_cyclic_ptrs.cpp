@@ -133,6 +133,7 @@ int test_main( int /* argc */, char* /* argv */[] )
             exception.code == boost::archive::archive_exception::pointer_conflict
         );
     }
+	std::remove(testfile);
     return boost::exit_success;
 }
 

@@ -84,6 +84,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         }
         BOOST_CATCH (boost::archive::archive_exception ae){}
     }
+	std::remove(testfile);
     return boost::exit_success;
 }
 
