@@ -111,7 +111,7 @@ boost::random_device::~random_device()
   delete pimpl;
 }
 
-double boost::random_device::entropy()
+double boost::random_device::entropy() const
 {
   return 10;
 }
