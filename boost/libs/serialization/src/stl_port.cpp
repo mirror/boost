@@ -12,26 +12,38 @@
 # pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
-#include <boost/config.hpp>
-
-#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-
-#include <boost/archive/codecvt_null.hpp>
-
-namespace std {
-
 // this befuddles the msvc 6 compiler so we can't use it
 #if ! ((defined _MSC_VER) && (_MSC_VER <= 1300)) \
 &&  ! defined(__BORLANDC__)
 
+#include <boost/config.hpp>
+
+#if defined(__SGI_STL_PORT) 
+#if defined(_STLPORT_VERSION) && (_STLPORT_VERSION < 0x500)
+
+#include <boost/archive/codecvt_null.hpp>
+
 // explicit instantiation
+
+namespace std {
+
+#pragma auto_inline(off)
+
 template
 locale::locale(
     const locale& __loc, boost::archive::codecvt_null<char> * __f
 );
 
-#endif
+template
+locale::locale(
+    const locale& __loc, boost::archive::codecvt_null<wchar_t> * __f
+);
 
-} // std
+#pragma auto_inline()
+
+} // namespace std
+
+#endif
+#endif
 
 #endif
