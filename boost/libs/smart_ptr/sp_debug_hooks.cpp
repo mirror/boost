@@ -155,7 +155,7 @@ static void scan_and_count(void const * area, size_t size, map_type const & m, s
 {
     unsigned char const * p = static_cast<unsigned char const *>(area);
 
-    for(size_t n = 0; n < size; p += pointer_align, n += pointer_align)
+    for(size_t n = 0; n + sizeof(shared_ptr_layout) <= size; p += pointer_align, n += pointer_align)
     {
         shared_ptr_layout const * q = reinterpret_cast<shared_ptr_layout const *>(p);
 
@@ -171,7 +171,7 @@ static bool scan_and_mark(void const * area, size_t size, map_type const & m, st
     bool updated = false;
     unsigned char const * p = static_cast<unsigned char const *>(area);
 
-    for(size_t n = 0; n < size; p += pointer_align, n += pointer_align)
+    for(size_t n = 0; n + sizeof(shared_ptr_layout) <= size; p += pointer_align, n += pointer_align)
     {
         shared_ptr_layout const * q = reinterpret_cast<shared_ptr_layout const *>(p);
 
