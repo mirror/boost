@@ -1,3 +1,19 @@
+/* Boost test/test_float.cpp
+ * test arithmetic operations on a range of intervals
+ *
+ * Copyright Guillaume Melquiond 2003
+ * Permission to use, copy, modify, sell, and distribute this software
+ * is hereby granted without fee provided that the above copyright notice
+ * appears in all copies and that both that copyright notice and this
+ * permission notice appear in supporting documentation.
+ *
+ * None of the above authors make any representation about the
+ * suitability of this software for any purpose. It is provided "as
+ * is" without express or implied warranty.
+ *
+ * $Id$
+ */
+
 #include <boost/numeric/interval.hpp>
 #include <boost/test/test_tools.hpp>
 
@@ -26,7 +42,7 @@ void test_binary() {
       I rIT1 = F::f_IT(a, bl), rIT2 = F::f_IT(a, bu);
       I rTI1 = F::f_TI(al, b), rTI2 = F::f_TI(au, b);
       T rTT1 = F::f_TT(al, bl), rTT2 = F::f_TT(al, bu),
-	rTT3 = F::f_TT(au, bl), rTT4 = F::f_TT(au, bu);
+        rTT3 = F::f_TT(au, bl), rTT4 = F::f_TT(au, bu);
       BOOST_CHECK(in(rTT1, rIT1));
       BOOST_CHECK(in(rTT3, rIT1));
       BOOST_CHECK(in(rTT2, rIT2));

@@ -1,6 +1,5 @@
 /* Boost interval/compare.hpp template implementation file
  *
- * Copyright Jens Maurer 2000
  * Copyright Hervé Brönnimann, Guillaume Melquiond, Sylvain Pion 2002
  * Permission to use, copy, modify, sell, and distribute this software
  * is hereby granted without fee provided that the above copyright notice
@@ -12,10 +11,6 @@
  * purpose. It is provided "as is" without express or implied warranty.
  *
  * $Id$
- *
- * Revision history:
- *   2002-08-31	 Prepared for boost formal review
- *   2000-09-24	 Separated from interval.hpp
  */
 
 #ifndef BOOST_NUMERIC_INTERVAL_COMPARE_HPP

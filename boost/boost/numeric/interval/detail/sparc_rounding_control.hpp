@@ -12,13 +12,9 @@
  * purpose. It is provided "as is" without express or implied warranty.
  *
  * $Id$
- *
- * Revision history:
- *   2002-08-31	 Prepared for boost formal review
- *   2000-09-24	 Separated from interval.hpp
  */
 
- /* The basic code in this file was kindly provided by Jeremy Siek. */
+/* The basic code in this file was kindly provided by Jeremy Siek. */
 
 #ifndef BOOST_NUMERIC_INTERVAL_DETAIL_SPARC_ROUNDING_CONTROL_HPP
 #define BOOST_NUMERIC_INTERVAL_DETAIL_SPARC_ROUNDING_CONTROL_HPP

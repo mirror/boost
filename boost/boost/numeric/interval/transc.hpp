@@ -12,10 +12,6 @@
  * purpose. It is provided "as is" without express or implied warranty.
  *
  * $Id$
- *
- * Revision history:
- *   2002-08-31	 Prepared for boost formal review
- *   2000-09-24	 Separated from interval.hpp
  */
 
 #ifndef BOOST_NUMERIC_INTERVAL_TRANSC_HPP
@@ -128,11 +124,11 @@ interval<T, Policies> asin(const interval<T, Policies>& x)
     return I::empty();
   typename Policies::rounding rnd;
   T l = (x.lower() <= static_cast<T>(-1))
-	     ? -interval_lib::constants::pi_half_upper<T>()
-	     : rnd.asin_down(x.lower());
+             ? -interval_lib::constants::pi_half_upper<T>()
+             : rnd.asin_down(x.lower());
   T u = (x.upper() >= static_cast<T>(1) )
-	     ?  interval_lib::constants::pi_half_upper<T>()
-	     : rnd.asin_up  (x.upper());
+             ?  interval_lib::constants::pi_half_upper<T>()
+             : rnd.asin_up  (x.upper());
   return I(l, u, true);
 }
 
@@ -145,11 +141,11 @@ interval<T, Policies> acos(const interval<T, Policies>& x)
     return I::empty();
   typename Policies::rounding rnd;
   T l = (x.upper() >= static_cast<T>(1) )
-	  ? 0
-	  : rnd.acos_down(x.upper());
+          ? 0
+          : rnd.acos_down(x.upper());
   T u = (x.lower() <= static_cast<T>(-1))
-	  ? interval_lib::constants::pi_upper<T>()
-	  : rnd.acos_up  (x.lower());
+          ? interval_lib::constants::pi_upper<T>()
+          : rnd.acos_up  (x.lower());
   return I(l, u, true);
 }
 

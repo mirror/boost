@@ -1,9 +1,21 @@
-// Example program of how to use interval<> of rational<> numbers.
-//
-// Sylvain Pion, Guillaume Melquiond, 2002.
+/* Boost example/rational.cpp
+ * example program of how to use interval< rational<> >
+ *
+ * Copyright Sylvain Pion, Guillaume Melquiond 2002-2003
+ * Permission to use, copy, modify, sell, and distribute this software
+ * is hereby granted without fee provided that the above copyright notice
+ * appears in all copies and that both that copyright notice and this
+ * permission notice appear in supporting documentation.
+ *
+ * None of the above authors make any representation about the
+ * suitability of this software for any purpose. It is provided "as
+ * is" without express or implied warranty.
+ *
+ * $Id$
+ */
 
 // it would have been enough to only include:
-//   <boost/numeric/interval/interval.hpp>
+//   <boost/numeric/interval.hpp>
 // but it's a bit overkill to include processor intrinsics
 // and transcendental functions, so we do it by ourselves
 

@@ -1,3 +1,18 @@
+/* Boost interval/detail/division.hpp file
+ *
+ * Copyright Guillaume Melquiond, Sylvain Pion 2003
+ * Permission to use, copy, modify, sell, and distribute this software
+ * is hereby granted without fee provided that the above copyright notice
+ * appears in all copies and that both that copyright notice and this
+ * permission notice appear in supporting documentation,
+ *
+ * None of the above authors make any representation about the
+ * suitability of this software for any purpose. It is provided "as
+ * is" without express or implied warranty.
+ *
+ * $Id$
+ */
+
 #ifndef BOOST_NUMERIC_INTERVAL_DETAIL_DIVISION_HPP
 #define BOOST_NUMERIC_INTERVAL_DETAIL_DIVISION_HPP
 
@@ -13,7 +28,7 @@ namespace detail {
 
 template<class T, class Policies> inline
 interval<T, Policies> div_non_zero(const interval<T, Policies>& x,
-				   const interval<T, Policies>& y)
+                                   const interval<T, Policies>& y)
 {
   // assert(!in_zero(y));
   typename Policies::rounding rnd;
@@ -139,7 +154,7 @@ interval<T, Policies> div_zero(const T& x)
 
 template<class T, class Policies> inline
 interval<T, Policies> div_zero_part1(const interval<T, Policies>& x,
-				     const interval<T, Policies>& y, bool& b)
+                                     const interval<T, Policies>& y, bool& b)
 {
   // assert(y.lower() < 0 && y.upper() > 0);
   if (is_zero(x.lower()) && is_zero(x.upper()))
@@ -162,7 +177,7 @@ interval<T, Policies> div_zero_part1(const interval<T, Policies>& x,
 
 template<class T, class Policies> inline
 interval<T, Policies> div_zero_part2(const interval<T, Policies>& x,
-				     const interval<T, Policies>& y)
+                                     const interval<T, Policies>& y)
 {
   // assert(y.lower() < 0 && y.upper() > 0 && (div_zero_part1(x, y, b), b));
   typename Policies::rounding rnd;

@@ -1,7 +1,7 @@
 /* Boost interval/utility.hpp template implementation file
  *
  * Copyright Jens Maurer 2000
- * Copyright Hervé Brönnimann, Guillaume Melquiond, Sylvain Pion 2002
+ * Copyright Hervé Brönnimann, Guillaume Melquiond, Sylvain Pion 2002-2003
  * Permission to use, copy, modify, sell, and distribute this software
  * is hereby granted without fee provided that the above copyright notice
  * appears in all copies and that both that copyright notice and this
@@ -12,10 +12,6 @@
  * purpose. It is provided "as is" without express or implied warranty.
  *
  * $Id$
- *
- * Revision history:
- *   2002-08-31	 Prepared for boost formal review
- *   2000-09-24	 Separated from interval.hpp
  */
 
 #ifndef BOOST_NUMERIC_INTERVAL_UTILITY_HPP
@@ -95,7 +91,7 @@ interval<T, Policies> widen(const interval<T, Policies>& x, const T& v)
     return interval<T, Policies>::empty();
   typename Policies::rounding rnd;
   return interval<T, Policies>(rnd.sub_down(x.lower(), v),
-			       rnd.add_up  (x.upper(), v), true);
+                               rnd.add_up  (x.upper(), v), true);
 }
 
 /*
@@ -124,7 +120,7 @@ bool in(const T& x, const interval<T, Policies>& y)
 
 template<class T, class Policies> inline
 bool subset(const interval<T, Policies>& x,
-	    const interval<T, Policies>& y)
+            const interval<T, Policies>& y)
 {
   if (empty(x)) return true;
   return !empty(y) && y.lower() <= x.lower() && x.upper() <= y.upper();
@@ -132,7 +128,7 @@ bool subset(const interval<T, Policies>& x,
 
 template<class T, class Policies1, class Policies2> inline
 bool proper_subset(const interval<T, Policies1>& x,
-		   const interval<T, Policies2>& y)
+                   const interval<T, Policies2>& y)
 {
   if (empty(y)) return false;
   if (empty(x)) return true;
@@ -142,7 +138,7 @@ bool proper_subset(const interval<T, Policies1>& x,
 
 template<class T, class Policies1, class Policies2> inline
 bool overlap(const interval<T, Policies1>& x,
-	     const interval<T, Policies2>& y)
+             const interval<T, Policies2>& y)
 {
   if (interval_lib::detail::test_input(x, y)) return false;
   return x.lower() <= y.lower() && y.lower() <= x.upper() ||
@@ -164,7 +160,7 @@ bool equal(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
 
 template<class T, class Policies> inline
 interval<T, Policies> intersect(const interval<T, Policies>& x,
-				const interval<T, Policies>& y)
+                                const interval<T, Policies>& y)
 {
   BOOST_NUMERIC_INTERVAL_using_max(min);
   BOOST_NUMERIC_INTERVAL_using_max(max);
@@ -178,7 +174,7 @@ interval<T, Policies> intersect(const interval<T, Policies>& x,
 
 template<class T, class Policies> inline
 interval<T, Policies> hull(const interval<T, Policies>& x,
-			   const interval<T, Policies>& y)
+                           const interval<T, Policies>& y)
 {
   BOOST_NUMERIC_INTERVAL_using_max(min);
   BOOST_NUMERIC_INTERVAL_using_max(max);
@@ -190,7 +186,7 @@ interval<T, Policies> hull(const interval<T, Policies>& x,
   else
     if (bad_y) return x;
   return interval<T, Policies>(min(x.lower(), y.lower()),
-			       max(x.upper(), y.upper()), true);
+                               max(x.upper(), y.upper()), true);
 }
 
 template<class T, class Policies> inline
@@ -206,7 +202,7 @@ interval<T, Policies> hull(const interval<T, Policies>& x, const T& y)
   else
     if (bad_x) return interval<T, Policies>(y, y, true);
   return interval<T, Policies>(min(x.lower(), y),
-			       max(x.upper(), y), true);
+                               max(x.upper(), y), true);
 }
 
 template<class T, class Policies> inline
@@ -222,7 +218,7 @@ interval<T, Policies> hull(const T& x, const interval<T, Policies>& y)
   else
     if (bad_y) return interval<T, Policies>(x, x, true);
   return interval<T, Policies>(min(x, y.lower()),
-			       max(x, y.upper()), true);
+                               max(x, y.upper()), true);
 }
 
 template<class T> inline
@@ -260,7 +256,7 @@ interval<T, Policies> abs(const interval<T, Policies>& x)
 
 template<class T, class Policies> inline
 interval<T, Policies> max(const interval<T, Policies>& x,
-			  const interval<T, Policies>& y)
+                          const interval<T, Policies>& y)
 {
   BOOST_NUMERIC_INTERVAL_using_max(max);
   typedef interval<T, Policies> I;
@@ -291,7 +287,7 @@ interval<T, Policies> max(const T& x, const interval<T, Policies>& y)
 
 template<class T, class Policies> inline
 interval<T, Policies> min(const interval<T, Policies>& x,
-			  const interval<T, Policies>& y)
+                          const interval<T, Policies>& y)
 {
   BOOST_NUMERIC_INTERVAL_using_max(min);
   typedef interval<T, Policies> I;

@@ -1,3 +1,18 @@
+/* Boost interval/arith2.hpp template implementation file
+ *
+ * Copyright Hervé Brönnimann, Guillaume Melquiond, Sylvain Pion 2002-2003
+ * Permission to use, copy, modify, sell, and distribute this software
+ * is hereby granted without fee provided that the above copyright notice
+ * appears in all copies and that both that copyright notice and this
+ * permission notice appear in supporting documentation.
+ *
+ * None of the above authors nor Polytechnic University make any
+ * representation about the suitability of this software for any
+ * purpose. It is provided "as is" without express or implied warranty.
+ *
+ * $Id$
+ */
+
 #ifndef BOOST_NUMERIC_INTERVAL_ARITH2_HPP
 #define BOOST_NUMERIC_INTERVAL_ARITH2_HPP
 
@@ -16,7 +31,7 @@ namespace numeric {
 
 template<class T, class Policies> inline
 interval<T, Policies> fmod(const interval<T, Policies>& x,
-			   const interval<T, Policies>& y)
+                           const interval<T, Policies>& y)
 {
   if (interval_lib::detail::test_input(x, y))
     return interval<T, Policies>::empty();
@@ -54,7 +69,7 @@ namespace interval_lib {
 
 template<class T, class Policies> inline
 interval<T, Policies> division_part1(const interval<T, Policies>& x,
-				     const interval<T, Policies>& y, bool& b)
+                                     const interval<T, Policies>& y, bool& b)
 {
   typedef interval<T, Policies> I;
   b = false;
@@ -63,21 +78,21 @@ interval<T, Policies> division_part1(const interval<T, Policies>& x,
   if (in_zero(y))
     if (!detail::is_zero(y.lower()))
       if (!detail::is_zero(y.upper()))
-	return detail::div_zero_part1(x, y, b);
+        return detail::div_zero_part1(x, y, b);
       else
-	return detail::div_negative(x, y.lower());
+        return detail::div_negative(x, y.lower());
     else
       if (!detail::is_zero(y.upper()))
-	return detail::div_positive(x, y.upper());
+        return detail::div_positive(x, y.upper());
       else
-	return I::empty();
+        return I::empty();
   else
     return detail::div_non_zero(x, y);
 }
 
 template<class T, class Policies> inline
 interval<T, Policies> division_part2(const interval<T, Policies>& x,
-				     const interval<T, Policies>& y)
+                                     const interval<T, Policies>& y)
 {
   return detail::div_zero_part2(x, y);
 }
@@ -94,14 +109,14 @@ interval<T, Policies> multiplicative_inverse(const interval<T, Policies>& x)
     typedef typename Policies::checking checking;
     if (!detail::is_zero(x.lower()))
       if (!detail::is_zero(x.upper()))
-	return I::whole();
+        return I::whole();
       else
-	return I(-checking::inf(), rnd.div_up(one, x.lower()), true);
+        return I(-checking::inf(), rnd.div_up(one, x.lower()), true);
     else
       if (!detail::is_zero(x.upper()))
-	return I(rnd.div_down(one, x.upper()), checking::inf(), true);
+        return I(rnd.div_down(one, x.upper()), checking::inf(), true);
       else
-	return I::empty();
+        return I::empty();
   } else 
     return I(rnd.div_down(one, x.upper()), rnd.div_up(one, x.lower()), true);
 }
@@ -136,7 +151,7 @@ interval<T, Policies> pow(const interval<T, Policies>& x, int pwr)
 
   if (pwr == 0)
     if (interval_lib::detail::is_zero(x.lower())
-	&& interval_lib::detail::is_zero(x.upper()))
+        && interval_lib::detail::is_zero(x.upper()))
       return I::empty();
     else
       return I(1);

@@ -1,6 +1,5 @@
 /* Boost interval/constants.hpp template implementation file
  *
- * Copyright Jens Maurer 2000
  * Copyright Hervé Brönnimann, Guillaume Melquiond, Sylvain Pion 2002
  * Permission to use, copy, modify, sell, and distribute this software
  * is hereby granted without fee provided that the above copyright notice
@@ -12,10 +11,6 @@
  * purpose. It is provided "as is" without express or implied warranty.
  *
  * $Id$
- *
- * Revision history:
- *   2002-08-31	 Prepared for boost formal review
- *   2000-09-24	 Separated from interval.hpp
  */
 
 #ifndef BOOST_NUMERIC_INTERVAL_CONSTANTS_HPP
@@ -70,7 +65,7 @@ I pi()
 {
   typedef typename I::base_type T;
   return I(constants::pi_lower<T>(),
-	   constants::pi_upper<T>(), true);
+           constants::pi_upper<T>(), true);
 }
 
 template<class I> inline
@@ -78,7 +73,7 @@ I pi_half()
 {
   typedef typename I::base_type T;
   return I(constants::pi_half_lower<T>(),
-	   constants::pi_half_upper<T>(), true);
+           constants::pi_half_upper<T>(), true);
 }
 
 template<class I> inline
@@ -86,7 +81,7 @@ I pi_twice()
 {
   typedef typename I::base_type T;
   return I(constants::pi_twice_lower<T>(),
-	   constants::pi_twice_upper<T>(), true);
+           constants::pi_twice_upper<T>(), true);
 }
 
 } // namespace interval_lib

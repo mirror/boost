@@ -1,4 +1,4 @@
-/* boost interval.hpp header file
+/* Boost interval.hpp header file
  *
  * Copyright Jens Maurer 2000
  * Copyright Hervé Brönnimann, Guillaume Melquiond, Sylvain Pion 2002

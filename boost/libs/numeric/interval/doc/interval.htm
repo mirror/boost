@@ -9,9 +9,11 @@
 
 <body lang="en">
 <h1><img src="../../../../c++boost.gif" alt="c++boost.gif (8819 bytes)"
-align="middle"> Interval Arithmetic Library</h1>
+align="middle">
+ Interval Arithmetic Library</h1>
 
 <center>
+
 <table cols="2" width="80%">
   <tbody>
     <tr align=TOP>
@@ -28,12 +30,13 @@ align="middle"> Interval Arithmetic Library</h1>
       <td align=TOP><b>Other pages associated with this page:</b><br>
         <a href="rounding.htm">Rounding policies</a><br>
         <a href="checking.htm">Checking policies</a><br>
-	<a href="policies.htm">Policies manipulation</a><br>
+        <a href="policies.htm">Policies manipulation</a><br>
         <a href="comparisons.htm">Comparisons</a><br>
         <a href="numbers.htm">Base number type requirements</a><br>
         <a href="guide.htm">Choosing your own interval type</a><br>
         <a href="examples.htm">Test and example programs</a><br>
-        <a href="includes.htm">Headers inclusion</a></td>
+        <a href="includes.htm">Headers inclusion</a><br>
+        <a href="todo.htm">Some items on the todo list</a></td>
     </tr>
   </tbody>
 </table>
@@ -44,12 +47,12 @@ align="middle"> Interval Arithmetic Library</h1>
 <p>As implied by its name, this library is intended to help manipulating
 mathematical intervals. It consists of a single header &lt;<a
 href="../../../../boost/numeric/interval.hpp">boost/numeric/interval.hpp</a>&gt;
-and principally
-a type which can be used as <code>interval&lt;T&gt;</code>. In fact, this
-interval template is declared as <code>interval&lt;T,Policies&gt;</code> where
-<code>Policies</code> is a policy class that controls the various behaviours of
-the interval class; <code>interval&lt;T&gt;</code> just happens to pick the
-default policies for the type <code>T</code>.</p>
+and principally a type which can be used as <code>interval&lt;T&gt;</code>.
+In fact, this interval template is declared as
+<code>interval&lt;T,Policies&gt;</code> where <code>Policies</code> is a
+policy class that controls the various behaviours of the interval class;
+<code>interval&lt;T&gt;</code> just happens to pick the default policies for
+the type <code>T</code>.</p>
 
 <h3>Interval Arithmetic</h3>
 
@@ -810,8 +813,8 @@ all the algorithms and templates that could require it (for example,
 <code>std::map</code>).</p>
 
 <p><strong>Input/output.</strong> The basic header
-<code>boost/numeric/interval.hpp</code> does not include the I/O operators for the
-class interval. Somewhat default operators can be had by including
+<code>boost/numeric/interval.hpp</code> does not include the I/O operators
+for the class interval. Somewhat default operators can be had by including
 <code>boost/numeric/interval/io.hpp</code>, and they make very few effort to
 guarantee the inclusion property (they do so for <code>float</code>,
 <code>double</code>, and <code>long double</code>). But they cannot guarantee
@@ -857,8 +860,9 @@ order for this library to be written. Hervé reorganized and wrote chapters of
 the documentation based on Guillaume's great starting point.</p>
 <hr>
 
-<p>Revised: 2003-01-21<br>
-Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.<br>
+<p>Revised: 2003-02-05<br>
+Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann,
+2002-2003.<br>
 Polytechnic University, 2002.</p>
 </body>
 </html>

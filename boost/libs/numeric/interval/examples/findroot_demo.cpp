@@ -1,14 +1,16 @@
-/* boost findroot_demo.cc find zero points of some function
+/* Boost example/findroot_demo.cpp
+ * find zero points of some function by dichotomy
  *
- * Copyright Jens Maurer 2000
+ * Copyright Jens Maurer 2000, Guillaume Melquiond 2002-2003
  * Permission to use, copy, modify, sell, and distribute this software
  * is hereby granted without free provided that the above copyright notice
  * appears in all copies and that both that copyright notice and this
- * permission notice appear in supporting documentation,
+ * permission notice appear in supporting documentation.
  *
- * Jens Maurer makes no representations about the suitability of this
- * software for any purpose. It is provided "as is" without express or
- * implied warranty.
+ * None of the above authors nor Polytechnic University makes no
+ * representations about the suitability of this software for any
+ * purpose. It is provided "as is" without express or implied
+ * warranty.
  *
  * $Id$
  *
@@ -93,8 +95,8 @@ void find_zeros(std::ostream & os, Function f, I searchrange)
     I val = f(range);
     if (in_zero(val)) {
       if(width(range) < 1e-6) {
-	os << range << '\n';
-	continue;
+        os << range << '\n';
+        continue;
       }
       // there's still a solution hidden somewhere
       std::pair<I,I> p = bisect(range);
@@ -127,20 +129,20 @@ void find_zeros(std::ostream & os, Function f, I rx, I ry)
     I val = f(rect.first, rect.second);
     if (in_zero(val)) {
       if(width(rect.first) < epsilon && width(rect.second) < epsilon) {
-	os << median(rect.first) << " " << median(rect.second) << " "
-	   << lower(rect.first) << " " << upper(rect.first) << " "
-	   << lower(rect.second) << " " << upper(rect.second) 
-	   << '\n';
+        os << median(rect.first) << " " << median(rect.second) << " "
+           << lower(rect.first) << " " << upper(rect.first) << " "
+           << lower(rect.second) << " " << upper(rect.second) 
+           << '\n';
       } else {
-	if(width(rect.first) > width(rect.second)) {
-	  std::pair<I,I> p = bisect(rect.first);
-	  l.push_back(std::make_pair(p.first, rect.second));
-	  l.push_back(std::make_pair(p.second, rect.second));
-	} else {
-	  std::pair<I,I> p = bisect(rect.second);
-	  l.push_back(std::make_pair(rect.first, p.first));
-	  l.push_back(std::make_pair(rect.first, p.second));
-	}
+        if(width(rect.first) > width(rect.second)) {
+          std::pair<I,I> p = bisect(rect.first);
+          l.push_back(std::make_pair(p.first, rect.second));
+          l.push_back(std::make_pair(p.second, rect.second));
+        } else {
+          std::pair<I,I> p = bisect(rect.second);
+          l.push_back(std::make_pair(rect.first, p.first));
+          l.push_back(std::make_pair(rect.first, p.second));
+        }
       }
     }
     if(i % 10000 == 0)

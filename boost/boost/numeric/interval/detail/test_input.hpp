@@ -1,3 +1,18 @@
+/* Boost interval/detail/test_input.hpp file
+ *
+ * Copyright Hervé Brönnimann, Guillaume Melquiond, Sylvain Pion 2002
+ * Permission to use, copy, modify, sell, and distribute this software
+ * is hereby granted without fee provided that the above copyright notice
+ * appears in all copies and that both that copyright notice and this
+ * permission notice appear in supporting documentation,
+ *
+ * None of the above authors nor Polytechnic University make any
+ * representation about the suitability of this software for any
+ * purpose. It is provided "as is" without express or implied warranty.
+ *
+ * $Id$
+ */
+
 #ifndef BOOST_NUMERIC_INTERVAL_DETAIL_TEST_INPUT_HPP
 #define BOOST_NUMERIC_INTERVAL_DETAIL_TEST_INPUT_HPP
 
@@ -28,7 +43,7 @@ bool test_input(const interval<T, Policies1>& x, const interval<T, Policies2>& y
   typedef typename Policies1::checking checking1;
   typedef typename Policies2::checking checking2;
   return checking1::is_empty(x.lower(), x.upper()) ||
-	 checking2::is_empty(y.lower(), y.upper());
+         checking2::is_empty(y.lower(), y.upper());
 }
 
 template<class T, class Policies> inline

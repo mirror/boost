@@ -1,3 +1,18 @@
+/* Boost interval/interval.hpp header file
+ *
+ * Copyright Hervé Brönnimann, Guillaume Melquiond, Sylvain Pion 2002-2003
+ * Permission to use, copy, modify, sell, and distribute this software
+ * is hereby granted without fee provided that the above copyright notice
+ * appears in all copies and that both that copyright notice and this
+ * permission notice appear in supporting documentation,
+ *
+ * None of the above authors nor Polytechnic University make any
+ * representation about the suitability of this software for any
+ * purpose. It is provided "as is" without express or implied warranty.
+ *
+ * $Id$
+ */
+
 #ifndef BOOST_NUMERIC_INTERVAL_INTERVAL_HPP
 #define BOOST_NUMERIC_INTERVAL_INTERVAL_HPP
 
@@ -96,7 +111,7 @@ private:
     {
       typedef typename Policies2::checking checking2;
       if (checking2::is_empty(low, up))
-	throw interval_lib::comparison_error();
+        throw interval_lib::comparison_error();
     }
 
     const T& low;
@@ -107,7 +122,7 @@ private:
     number_holder(const T& r) : val(r)
     {
       if (checking::is_nan(r))
-	throw interval_lib::comparison_error();
+        throw interval_lib::comparison_error();
     }
     
     const T& val;
@@ -189,7 +204,7 @@ template<class T, class Policies> inline
 interval<T, Policies> interval<T, Policies>::empty()
 {
   return interval<T, Policies>(checking::empty_lower(),
-			       checking::empty_upper(), true);
+                               checking::empty_upper(), true);
 }
 
 template<class T, class Policies> inline

@@ -12,7 +12,6 @@
  * purpose. It is provided "as is" without express or implied warranty.
  *
  * $Id$
- *
  */
 
 #ifndef BOOST_NUMERIC_INTERVAL_DETAIL_C99SUB_ROUNDING_CONTROL_HPP
