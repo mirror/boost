@@ -102,7 +102,9 @@ protected:
 public:
 
     #if defined(BOOST_MSVC) && _MSC_VER == 1300
-        virtual ~chain_base() { } // If omitted, some tests fail on VC7.0. Why?
+        // Although chain_base is not otherwise polymorphic, if this definition
+        // is omitted some tests fail on VC7.0.
+        virtual ~chain_base() { }
     #endif
 
     //----------Buffer sizing-------------------------------------------------//
@@ -199,7 +201,7 @@ private:
     static void close(streambuf_type* b, std::ios::openmode m)
     { if (m & std::ios::out) b->pubsync(); b->close(m); }
 
-    struct closer : public std::unary_function<streambuf_type*, void> {
+    struct closer  : public std::unary_function<streambuf_type*, void>  {
         closer(std::ios::openmode m) : mode_(m) { }
         void operator() (streambuf_type* b) { close(b, mode_); }
         std::ios::openmode mode_;
@@ -220,15 +222,14 @@ private:
             }
         void close()
             {
-                using namespace std;
                 if (!complete_) return;
                 links_.front()->pubsync();
                 if (is_convertible<Mode, input>::value)
-                    for_each( links_.rbegin(), links_.rend(), 
-                              closer(ios::in) );
+                    std::for_each( links_.rbegin(), links_.rend(), 
+                                   closer(std::ios::in) );
                 if (is_convertible<Mode, output>::value)
-                    for_each( links_.begin(), links_.end(), 
-                              closer(ios::out) );
+                    std::for_each( links_.begin(), links_.end(), 
+                                   closer(std::ios::out) );
             }
         list_type        links_;
         client_type*     client_;
