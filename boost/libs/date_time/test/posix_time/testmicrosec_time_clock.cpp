@@ -26,6 +26,9 @@ main()
     for (int j=0; j<100000; j++)
     {
 #if defined(BOOST_HAS_FTIME)
+      // non-posix systems loop too fast so "last is less" tests fail
+      // due to 'last' & 't2' being equal. These two calls slow
+      // it down enough to make 'last' & 't2' different
       SYSTEMTIME st;
       GetSystemTime(&st);
 #endif
@@ -48,13 +51,20 @@ main()
     
   }
 
-#if defined(BOOST_HAS_GETTIMEOFDAY)
+
   std::cout << "Now do the same test for universal time -- a few less iterations" << std::endl;
   max = 10;
   for (int i = 0; i<max; i++)
   {
     for (int j=0; j<100000; j++)
     {
+#if defined(BOOST_HAS_FTIME)
+      // non-posix systems loop too fast so "last is less" tests fail
+      // due to 'last' & 't2' being equal. These two calls slow
+      // it down enough to make 'last' & 't2' different
+      SYSTEMTIME st;
+      GetSystemTime(&st);
+#endif
     }
 
     ptime t1 = second_clock::universal_time();
@@ -73,7 +83,7 @@ main()
 
     
   }
-#endif
+
 #else
   check("Get time of day micro second clock not supported due to inadequate compiler/platform", false);
 #endif
