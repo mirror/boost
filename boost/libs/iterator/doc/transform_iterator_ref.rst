@@ -46,7 +46,7 @@ following options that is also modeled by ``Iterator``.
   * Readable Iterator otherwise. 
 
 
-The ``transform_iterator`` models the traversal
+The ``transform_iterator`` models the most refined standard traversal
 concept that is modeled by ``Iterator``.
 
 The ``reference`` type of ``transform_iterator`` is
