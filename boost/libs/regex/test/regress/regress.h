@@ -157,8 +157,7 @@ public:
 
    void deallocate(pointer p, size_type n)
    {
-      assert( (p == 0) == (n == 0) );
-      if (p != 0)
+      if ((p != 0) && (n != 0))
          base_type::deallocate((void*)p, n * sizeof(value_type));
    }
 

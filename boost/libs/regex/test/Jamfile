@@ -75,7 +75,11 @@ test-suite regex
             pathology/recursion_test.cpp
             <lib>../../test/build/boost_test_exec_monitor
       ]
+      
+      [ compile pathology/concept_check.cpp
+      ]
 ;
+
 
 
 
