@@ -41,12 +41,36 @@
       <PRE>bcp regex config build /foo</PRE>
       <P>Copies the full regex lib (in libs/regex) plus the config lib (libs/config) and 
          the build system (tools/build) to /foo including all the dependencies.</P>
+      <PRE>bcp --scan --boost=/boost foo.cpp bar.cpp boost</PRE>
+      <P>Scans the [non-boost] files foo.cpp and bar.cpp for boost dependencies and 
+         copies those dependencies to the sub-directory boost.</P>
+      <PRE>bcp --report regex.hpp boost-regex-report.html</PRE>
+      <P>Creates a HTML report called <EM>boost-regex-report.html</EM> for the boost 
+         module <EM>regex.hpp</EM>.&nbsp; The report contains license information, 
+         author details, and file dependencies.</P>
       <H2>Syntax:</H2>
       <PRE>bcp --list [options] module-list</PRE>
       <P>Outputs a list of all the files in module-list including dependencies.</P>
       <PRE>bcp [options] module-list output-path</PRE>
       <P>Copies all the files found in module-list to output-path</P>
-      <H4>Options:</H4>
+      <PRE>bcp --report [options] module-list html-file</PRE>
+      <P>Outputs a html report file containing:</P>
+      <UL>
+         <LI>
+            All the licenses in effect, plus the files using each license, and 
+            the&nbsp;copyright holders&nbsp;using each license.</LI>
+         <LI>
+            Any files with no recognizable license (please report these to the boost 
+            mailing lists).</LI>
+         <LI>
+            Any files with no recognizable copyright holders (please report these to the 
+            boost mailing lists).</LI>
+         <LI>
+            All the copyright holders and the files on which they hold copyright.</LI>
+         <LI>
+            File dependency information - indicates the reason for the inclusion of any 
+            particular file in the dependencies found.</LI></UL>
+      <H3>Options:</H3>
       <PRE>--boost=path</PRE>
       <P>Sets the location of the boost tree to <EM>path.</EM></P>
       <PRE>--scan</PRE>
@@ -109,3 +133,4 @@
             for any purpose. It is provided "as is" without express or implied warranty.</I></P>
    </body>
 </html>
+
