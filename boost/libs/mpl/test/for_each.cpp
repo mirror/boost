@@ -50,16 +50,22 @@ int main()
     typedef mpl::list<char,short,int,long,float,double> types;
     mpl::for_each< types,mpl::make_identity<_> >(printer(std::cout));
 
-#if !defined(__BORLANDC__) || __BORLANDC__ != 0x560
     typedef mpl::range_c<int,0,10> numbers;
     std::vector<int> v;
+
+#if !defined(__BORLANDC__) && (__BORLANDC__ >= 0x561 && !defined(BOOST_STRICT_CONFIG))
     mpl::for_each<numbers,mpl::_>(
           boost::bind(&std::vector<int>::push_back, &v, _1)
+        );    
+#else
+    void (std::vector<int>::* push_back)(int const&) = &std::vector<int>::push_back;
+    mpl::for_each<numbers,mpl::_>(
+          boost::bind(push_back, &v, _1)
         );
-    
+#endif
+
     for (int i = 0; i < v.size(); ++i)
         assert(v[i] == i);
-#endif
 
     return 0;
 }
