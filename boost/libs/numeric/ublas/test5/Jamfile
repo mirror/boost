@@ -27,7 +27,5 @@ exe test5
       <define>USE_ADAPTOR
 #      <gcc><*><cxxflags>"-fabi-version=0"
       <intel-linux><*><cxxflags>"-Xc"
-      <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
-      <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
     ;
 

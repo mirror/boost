@@ -20,6 +20,8 @@ import testing ;
 
 project
     : requirements 
+# Useful for GCC-3.3 on some platforms (MacOS-X)
+#      <gcc><*><cxxflags>"-fabi-version=0"
     ;
 
 test-suite uBLAS
