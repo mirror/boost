@@ -26,7 +26,9 @@
 #  if defined(_MSC_VER)
       // Intel C++ 5.0.1 uses EDG 2.45, but fails to activate Koenig lookup
       // in the frontend even in "strict" mode, unless you use 
-      // -Qoption,cpp,--arg_dep_lookup..  (reported by Kirk Klobe & Thomas Witt)
+      // -Qoption,cpp,--arg_dep_lookup.  (reported by Kirk Klobe & Thomas Witt)
+      // Similarly, -Qoption,cpp,--new_for_init enables new-style "for" loop
+      // variable scoping. (reported by Thomas Witt)
       // Intel C++ 6.0 (currently in Beta test) doesn't have any front-end
       // changes at all.  (reported by Kirk Klobe)
 #     ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
