@@ -108,22 +108,10 @@ template<class T> void test_is_Y(T const & p)
     BOOST_TEST((*p).id() == 2);
 }
 
-// std::rel_ops::operator!= breaks x != y when defined in the global namespace
-
-#if defined(__STL_BEGIN_RELOPS_NAMESPACE) && !defined(__STL_USE_NAMESPACE_FOR_RELOPS)
-#  define BOOST_BROKEN_INEQUALITY
-#endif
-
 template<class T> void test_eq(T const & a, T const & b)
 {
     BOOST_TEST(a == b);
-
-#ifndef BOOST_BROKEN_INEQUALITY
-
     BOOST_TEST(!(a != b));
-
-#endif
-
     BOOST_TEST(!(a < b));
     BOOST_TEST(!(b < a));
 }
@@ -131,13 +119,7 @@ template<class T> void test_eq(T const & a, T const & b)
 template<class T> void test_ne(T const & a, T const & b)
 {
     BOOST_TEST(!(a == b));
-
-#ifndef BOOST_BROKEN_INEQUALITY
-
     BOOST_TEST(a != b);
-
-#endif
-
     BOOST_TEST(a < b || b < a);
     BOOST_TEST(!(a < b && b < a));
 }
@@ -145,25 +127,13 @@ template<class T> void test_ne(T const & a, T const & b)
 template<class T, class U> void test_eq2(T const & a, U const & b)
 {
     BOOST_TEST(a == b);
-
-#ifndef BOOST_BROKEN_INEQUALITY
-
     BOOST_TEST(!(a != b));
-
-#endif
-
 }
 
 template<class T, class U> void test_ne2(T const & a, U const & b)
 {
     BOOST_TEST(!(a == b));
-
-#ifndef BOOST_BROKEN_INEQUALITY
-
     BOOST_TEST(a != b);
-
-#endif
-
 }
 
 int test_main(int, char * [])

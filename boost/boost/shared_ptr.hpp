@@ -225,6 +225,17 @@ template<typename T, typename U> inline bool operator!=(shared_ptr<T> const & a,
     return a.get() != b.get();
 }
 
+#if __GNUC__ == 2 && __GNUC_MINOR__ <= 96
+
+// Resolve the ambiguity between our op!= and the one in rel_ops
+
+template<typename T> inline bool operator!=(shared_ptr<T> const & a, shared_ptr<T> const & b)
+{
+    return a.get() != b.get();
+}
+
+#endif
+
 template<typename T> inline bool operator<(shared_ptr<T> const & a, shared_ptr<T> const & b)
 {
     return std::less<T*>()(a.get(), b.get());

@@ -164,6 +164,17 @@ template<class T, class U> inline bool operator!=(weak_ptr<T> const & a, weak_pt
     return a.get() != b.get();
 }
 
+#if __GNUC__ == 2 && __GNUC_MINOR__ <= 96
+
+// Resolve the ambiguity between our op!= and the one in rel_ops
+
+template<typename T> inline bool operator!=(weak_ptr<T> const & a, weak_ptr<T> const & b)
+{
+    return a.get() != b.get();
+}
+
+#endif
+
 template<class T> inline bool operator<(weak_ptr<T> const & a, weak_ptr<T> const & b)
 {
     return a.less(b);
