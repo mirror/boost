@@ -11,6 +11,7 @@
 #define BOOST_NUMERIC_INTERVAL_COMPARE_SET_HPP
 
 #include <boost/numeric/interval/detail/interval_prototype.hpp>
+#include <boost/numeric/interval/detail/test_input.hpp>
 #include <boost/numeric/interval/utility.hpp>
 
 namespace boost {
@@ -28,7 +29,7 @@ bool operator<(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
 template<class T, class Policies> inline
 bool operator<(const interval<T, Policies>& x, const T& y)
 {
-  return empty(x);
+  throw comparison_error();
 }
 
 template<class T, class Policies1, class Policies2> inline
@@ -40,7 +41,7 @@ bool operator<=(const interval<T, Policies1>& x, const interval<T, Policies2>& y
 template<class T, class Policies> inline
 bool operator<=(const interval<T, Policies>& x, const T& y)
 {
-  return empty(x) || (x.lower() == y && x.upper() == y);
+  throw comparison_error();
 }
 
 template<class T, class Policies1, class Policies2> inline
@@ -52,7 +53,7 @@ bool operator>(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
 template<class T, class Policies> inline
 bool operator>(const interval<T, Policies>& x, const T& y)
 {
-  return in(y, x) && !singleton(x);
+  throw comparison_error();
 }
 
 template<class T, class Policies1, class Policies2> inline
@@ -64,7 +65,7 @@ bool operator>=(const interval<T, Policies1>& x, const interval<T, Policies2>& y
 template<class T, class Policies> inline
 bool operator>=(const interval<T, Policies>& x, const T& y)
 {
-  return in(y, x);
+  throw comparison_error();
 }
 
 template<class T, class Policies1, class Policies2> inline
@@ -76,7 +77,7 @@ bool operator==(const interval<T, Policies1>& x, const interval<T, Policies2>& y
 template<class T, class Policies> inline
 bool operator==(const interval<T, Policies>& x, const T& y)
 {
-  return x.lower() == y && x.upper() == y;
+  throw comparison_error();
 }
 
 template<class T, class Policies1, class Policies2> inline
@@ -88,7 +89,7 @@ bool operator!=(const interval<T, Policies1>& x, const interval<T, Policies2>& y
 template<class T, class Policies> inline
 bool operator!=(const interval<T, Policies>& x, const T& y)
 {
-  return x.lower() != y || x.upper() != y;
+  throw comparison_error();
 }
 
 } // namespace set
