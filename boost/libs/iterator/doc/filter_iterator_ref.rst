@@ -20,6 +20,8 @@
           );
       Predicate predicate() const;
       Iterator end() const;
+      reference operator*() const;
+      filter_iterator& operator++();
   };
 
 
@@ -152,7 +154,7 @@ operations.
 
 
 
-``reference operator*();``
+``reference operator*() const;``
 
 :Returns: ``*(this->base())``
 
