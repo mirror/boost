@@ -151,13 +151,29 @@ namespace boost {
   {
     typedef typename property_traits<PA>::category Category;
     typedef boost::lvalue_property_map_tag LvalueTag;
+    typedef const typename property_traits<PA>::value_type& const_reference;
     void constraints() { 
       REQUIRE2(PA, Key, ReadWritePropertyMap);
       REQUIRE2(Category, LvalueTag, Convertible);
 
-      ref = pa[k];
+      const_reference ref = pa[k];
     }
-    typename property_traits<PA>::value_type& ref;
+    PA pa;
+    Key k;
+  };
+
+  template <class PA, class Key>
+  struct Mutable_LvaluePropertyMap_concept
+  {
+    typedef typename property_traits<PA>::category Category;
+    typedef boost::lvalue_property_map_tag LvalueTag;
+    typedef typename property_traits<PA>::value_type& reference;
+    void constraints() { 
+      REQUIRE2(PA, Key, ReadWritePropertyMap);
+      REQUIRE2(Category, LvalueTag, Convertible);
+
+      reference ref = pa[k];
+    }
     PA pa;
     Key k;
   };
