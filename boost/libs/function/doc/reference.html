@@ -42,6 +42,15 @@
     <b>typedef</b> Arg1 first_argument_type;  <i>// If N == 2</i>
     <b>typedef</b> Arg2 second_argument_type; <i>// If N == 2</i>
 
+    <b>typedef</b> Arg1 arg1_type;
+    <b>typedef</b> Arg2 arg2_type;
+             .
+             .
+             .
+    <b>typedef</b> Arg<em>N</em> arg<em>N</em>_type;
+
+    <b>enum</b> { arity = <em>N</em> };
+
     <i>// Construction</i>
     <a href="#functionN_default"><b>explicit</b> function<i>N</i>(<b>const</b> Mixin<b>&amp;</b> = Mixin())</a>;
     <a href="#functionN_copy">function<i>N</i>(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
@@ -283,7 +292,7 @@
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Fri Jul 19 16:40:00 EDT 2002
+Last modified: Fri Sep  6 14:46:50 EDT 2002
 <!-- hhmts end -->
   </body>
 </html>
