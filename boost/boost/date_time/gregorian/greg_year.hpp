@@ -15,7 +15,7 @@ namespace gregorian {
   struct bad_year : public std::out_of_range
   {
     bad_year() : 
-      std::out_of_range("Year is out of valid range: 1400..10000") 
+      std::out_of_range(std::string("Year is out of valid range: 1400..10000")) 
     {}
   };
   //! Policy class that declares error handling gregorian year type

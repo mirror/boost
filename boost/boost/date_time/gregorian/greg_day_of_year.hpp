@@ -15,7 +15,7 @@ namespace gregorian {
   struct bad_day_of_year : public std::out_of_range
   {
     bad_day_of_year() : 
-      std::out_of_range("Day of year value is out of range 1..366") 
+      std::out_of_range(std::string("Day of year value is out of range 1..366")) 
     {}
   };
 

@@ -19,7 +19,7 @@ namespace gregorian {
   //! Exception thrown if a greg_month is constructed with a value out of range
   struct bad_month : public std::out_of_range
   {
-    bad_month() : std::out_of_range("Month number is out of range 1..12") {}
+    bad_month() : std::out_of_range(std::string("Month number is out of range 1..12")) {}
   };
   //! Build a policy class for the greg_month_rep
   typedef CV::simple_exception_policy<unsigned short, 1, 12, bad_month> greg_month_policies;
