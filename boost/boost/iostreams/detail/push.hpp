@@ -11,6 +11,9 @@
 # pragma once
 #endif                    
  
+#include <boost/config.hpp> // BOOST_MSVC.
+#include <boost/detail/workaround.hpp>
+#include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/adapter/range_adapter.hpp>
 #include <boost/iostreams/detail/enable_if_stream.hpp>   
@@ -45,7 +48,8 @@
                   BOOST_IOSTREAMS_PUSH_ARGS() ); \
     /**/
 
-#define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+# define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
     template<typename CharType, typename TraitsType> \
     BOOST_PP_EXPR_IF(has_return, result) \
     name(::std::basic_streambuf<CharType, TraitsType>& sb BOOST_IOSTREAMS_PUSH_PARAMS()) \
@@ -83,5 +87,19 @@
     { this->helper( ::boost::iostreams::detail::resolve<mode, ch>(t) \
                     BOOST_IOSTREAMS_PUSH_ARGS() ); } \
     /**/
+#else // #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+# define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
+    template<typename Piper, typename Concept> \
+    BOOST_PP_EXPR_IF(has_return, result) \
+    name( const ::boost::iostreams::detail::piper<Piper, Concept>& p \
+          BOOST_IOSTREAMS_PUSH_PARAMS() ) \
+    { p.push(*this); } \
+    template<typename T> \
+    BOOST_PP_EXPR_IF(has_return, result) \
+    name(const T& t BOOST_IOSTREAMS_PUSH_PARAMS()) \
+    { this->helper( ::boost::iostreams::detail::resolve<mode, ch>(t) \
+                    BOOST_IOSTREAMS_PUSH_ARGS() ); } \
+    /**/
+#endif // #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_PUSH_HPP_INCLUDED
