@@ -1592,7 +1592,7 @@ For example, using this syntax the <literal>if_then</literal> example above
 can be written as:
 <programlisting>
 <![CDATA[for_each(a.begin(), a.end(), 
-         if(_1 % 2 == 0)[ cout << _1 ])]]>  
+         if_(_1 % 2 == 0)[ cout << _1 ])]]>  
 </programlisting>
 
 As more experience is gained, we may end up deprecating one or the other 

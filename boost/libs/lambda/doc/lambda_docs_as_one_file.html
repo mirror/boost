@@ -1083,7 +1083,7 @@ For example, using this syntax the <tt>if_then</tt> example above
 can be written as:
 <pre class="programlisting">
 for_each(a.begin(), a.end(), 
-         if(_1 % 2 == 0)[ cout &lt;&lt; _1 ])  
+         if_(_1 % 2 == 0)[ cout &lt;&lt; _1 ])  
 </pre>
 
 As more experience is gained, we may end up deprecating one or the other 
