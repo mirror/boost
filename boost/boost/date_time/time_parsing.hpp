@@ -2,7 +2,7 @@
 #define _DATE_TIME_TIME_PARSING_HPP___
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/tokenizer.hpp"
@@ -20,14 +20,17 @@ namespace date_time {
   time_duration
   parse_delimited_time_duration(const std::string& s)
   {
-    unsigned short hour=0, min=0, sec =0;
+    unsigned short min=0, sec =0;
+    short hour=0;
     boost::int64_t fs=0;
     int pos = 0;
-    boost::tokenizer<boost::char_delimiters_separator<char> > tok(s);
-    for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end();++beg){
+    
+    char_separator<char> sep(":,.");
+    tokenizer<char_separator<char> > tok(s,sep);
+    for(tokenizer<char_separator<char> >::iterator beg=tok.begin(); beg!=tok.end();++beg){
       switch(pos) {
       case 0: {
-        hour = boost::lexical_cast<unsigned short>(*beg);
+        hour = boost::lexical_cast<short>(*beg);
         break;
       }
       case 1: {
