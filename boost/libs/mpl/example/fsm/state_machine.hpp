@@ -39,7 +39,8 @@ class state_machine
     
  public: 
     typedef long state_t;
-
+    typedef void (Derived::* invariant_func_t)() const;
+    
     template< typename DerivedEvent >
     struct event
         : aux::event<DerivedEvent>
@@ -92,10 +93,14 @@ class state_machine
 
     template<
           long State
-        , void (Derived::* invariant_func)() const = 0
+#if !defined(BOOST_INTEL_CXX_VERSION) && (!defined(__GNUC__) || __GNUC__ >= 3)
+        , invariant_func_t f = static_cast<invariant_func_t>(0)
+#else
+        , invariant_func_t f = 0
+#endif
         >
     struct state
-        : fsm::aux::state<Derived,State,invariant_func>
+        : fsm::aux::state<Derived,State,f>
     {
     };
 
