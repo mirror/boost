@@ -18,7 +18,6 @@
 */
 
 #include <boost/preprocessor/comma_if.hpp>
-#include <boost/preprocessor/expand.hpp>
 #include <boost/preprocessor/repeat.hpp>
 #include <boost/preprocessor/tuple.hpp>
 
@@ -35,6 +34,6 @@ NOTE: The implementation uses BOOST_PP_REPEAT().
 #define BOOST_PP_ENUM(N,F,P) BOOST_PP_REPEAT(N,BOOST_PP_ENUM_F,(F,P))
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PP_ENUM_F(I,FP) BOOST_PP_COMMA_IF(I) BOOST_PP_EXPAND(BOOST_PP_TUPLE_ELEM(2,0,FP)(I,BOOST_PP_TUPLE_ELEM(2,1,FP)))
+#define BOOST_PP_ENUM_F(I,FP) BOOST_PP_COMMA_IF(I) BOOST_PP_TUPLE_ELEM(2,0,FP)(I,BOOST_PP_TUPLE_ELEM(2,1,FP))
 #endif
 #endif
