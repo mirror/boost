@@ -89,6 +89,12 @@ public:
       set_expression(ptr, f | regex_constants::use_except);
       return *this;
    }
+   reg_expression& assign(const charT* ptr, size_type len, flag_type f)
+   {
+      std::basic_string<charT> s(ptr, len);
+      set_expression(s.c_str(), f | regex_constants::use_except);
+      return *this;
+   }
 
    reg_expression& assign(const charT* first,
                           const charT* last,
@@ -172,9 +178,11 @@ public:
    locale_type BOOST_REGEX_CALL imbue(locale_type l){ return traits_inst.imbue(l); }
    locale_type BOOST_REGEX_CALL getloc()const{ return traits_inst.getloc(); }
    //
-   // flags:
+   // getflags:
+   // retained for backwards compatibility only, the base class has "flags"
+   // member which is now the prefered name:
    flag_type BOOST_REGEX_CALL getflags()const
-   { return flags(); }
+   { return this->flags(); }
    //
    // str:
    std::basic_string<charT> BOOST_REGEX_CALL str()const

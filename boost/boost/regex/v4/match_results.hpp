@@ -38,7 +38,11 @@ private:
 #endif
 public: 
    typedef          sub_match<RandomAccessIterator>                         value_type;
+#ifndef BOOST_NO_STD_ALLOCATOR
+   typedef typename Allocator::const_reference                              const_reference;
+#else
    typedef          const value_type&                                       const_reference;
+#endif
    typedef          const_reference                                         reference;
    typedef typename vector_type::const_iterator                             const_iterator;
    typedef          const_iterator                                          iterator;
@@ -116,9 +120,7 @@ public:
       {
          return m_subs[sub];
       }
-      assert(0);
-      // we should never get here:
-      return m_subs[0];
+      return m_null;
    }
 
    const_reference prefix() const
@@ -181,6 +183,9 @@ public:
       m_subs[2].matched = true;
       m_subs[0].first = i;
       m_subs[0].matched = (m_subs[0].first != m_subs[0].second);
+      m_null.first = i;
+      m_null.second = i;
+      m_null.matched = false;
    }
 
    void BOOST_REGEX_CALL set_second(RandomAccessIterator i, size_type pos, bool m = true)
@@ -193,6 +198,9 @@ public:
       {
          m_subs[0].first = i;
          m_subs[0].matched = (m_subs[0].first != m_subs[0].second);
+         m_null.first = i;
+         m_null.second = i;
+         m_null.matched = false;
       }
    }
    void BOOST_REGEX_CALL set_size(size_type n, RandomAccessIterator i, RandomAccessIterator j)
@@ -244,6 +252,7 @@ public:
 private:
    vector_type            m_subs; // subexpressions
    RandomAccessIterator   m_base; // where the search started from
+   sub_match<RandomAccessIterator> m_null; // a null match
 };
 
 template <class RandomAccessIterator, class Allocator>

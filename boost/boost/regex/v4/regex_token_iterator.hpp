@@ -211,17 +211,17 @@ public:
       pdata = that.pdata;
       return *this;
    }
-   bool operator==(const regex_token_iterator& that)
+   bool operator==(const regex_token_iterator& that)const
    { 
       if((pdata.get() == 0) || (that.pdata.get() == 0))
          return pdata.get() == that.pdata.get();
       return pdata->compare(*(that.pdata.get())); 
    }
-   bool operator!=(const regex_token_iterator& that)
+   bool operator!=(const regex_token_iterator& that)const
    { return !(*this == that); }
-   const value_type& operator*()
+   const value_type& operator*()const
    { return pdata->get(); }
-   const value_type* operator->()
+   const value_type* operator->()const
    { return &(pdata->get()); }
    regex_token_iterator& operator++()
    {
