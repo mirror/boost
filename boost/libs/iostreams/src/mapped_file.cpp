@@ -15,9 +15,6 @@
 #include <boost/iostreams/device/mapped_file.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/windows_posix.hpp>
-// BEGIN DEBUG
-//#include <iostream>
-// END DEBUG
 
 #ifdef BOOST_IOSTREAMS_WINDOWS
 # define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
@@ -59,9 +56,6 @@ struct mapped_file_impl {
             ::CloseHandle(mapped_handle_);
             ::CloseHandle(handle_);
             error_ = ::GetLastError() != 0;
-            // BEGIN DEBUG
-            //std::cout << "closing file: error = " << ::GetLastError() << "\n";
-            // END DEBUG
         #else
             errno = 0;
             ::munmap(reinterpret_cast<char *>(data_), size_);
@@ -142,22 +136,12 @@ void mapped_file_source::open( const std::string& path, std::ios::openmode mode,
 
     //--------------Open underlying file--------------------------------------//
 
-
-    // BEGIN DEBUG
-    //SetLastError(0);
-    //std::cout << "about to open file " << path.c_str() << "\n";
-    // END DEBUG
-
     pimpl_->handle_ =
         ::CreateFileA( path.c_str(),
                        readonly ? GENERIC_READ : GENERIC_ALL,
                        FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL );
     if (pimpl_->handle_ == INVALID_HANDLE_VALUE) {
         pimpl_->clear(true);
-        // BEGIN DEBUG
-        //std::cout << "failed opening file " << path.c_str() << std::endl;
-        //std::cout << "GetLastError() ==  " << GetLastError() << std::endl;
-        // END DEBUG
         return;
     }
 
@@ -170,9 +154,6 @@ void mapped_file_source::open( const std::string& path, std::ios::openmode mode,
     if (pimpl_->mapped_handle_ == NULL) {
         ::CloseHandle(pimpl_->handle_);
         pimpl_->clear(true);
-        // BEGIN DEBUG
-        //std::cout << "failed creating mapping for file " << path.c_str() << std::endl;
-        // END DEBUG
         return;
     }
 
@@ -186,9 +167,6 @@ void mapped_file_source::open( const std::string& path, std::ios::openmode mode,
                            length != max_length ? length : 0, 0 );
     if (!data) {
         close_handles(*pimpl_);
-        // BEGIN DEBUG
-        //std::cout << "failed mapping view for for file " << path.c_str() <<std::endl;
-        // END DEBUG
         return;
     }
 
@@ -214,9 +192,6 @@ void mapped_file_source::open( const std::string& path, std::ios::openmode mode,
                 );
         } else {
             close_handles(*pimpl_);
-            // BEGIN DEBUG
-            //std::cout << "failed getting size_ex of file " << path.c_str() << "\n";
-            // END DEBUG
             return;
         }
     } else {
@@ -236,9 +211,6 @@ void mapped_file_source::open( const std::string& path, std::ios::openmode mode,
                 );
         } else {
             close_handles(*pimpl_);
-            // BEGIN DEBUG
-            //std::cout << "failed getting size of file " << path.c_str() << "\n";
-            // END DEBUG
             return;
         }
     }
@@ -296,8 +268,7 @@ void mapped_file_source::open( const std::string& path, std::ios::openmode mode,
 
     void* data = ::mmap( 0, pimpl_->size_,
                          readonly ? PROT_READ : PROT_WRITE,
-                         MAP_SHARED | MAP_FILE,
-                         // readonly ? MAP_PRIVATE : MAP_SHARED,
+                         readonly ? MAP_PRIVATE : MAP_SHARED,
                          pimpl_->handle_, offset );
     if (data == MAP_FAILED) {
         ::close(pimpl_->handle_);
