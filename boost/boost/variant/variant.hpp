@@ -22,7 +22,7 @@
 #include <typeinfo> // for typeid, std::type_info
 
 #include "boost/variant/variant_fwd.hpp"
-#include "boost/variant/detail/forced_return.hpp"
+#include "boost/variant/detail/apply_visitor_impl.hpp"
 #include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/variant/detail/has_nothrow_move.hpp"
 #include "boost/variant/detail/move.hpp"
@@ -74,26 +74,18 @@
 #include "boost/mpl/transform.hpp"
 #include "boost/mpl/void.hpp"
 
-
 ///////////////////////////////////////////////////////////////////////////////
+// Implementation Macros:
+//
 // BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT
+//   Defined in boost/variant/detail/apply_visitor_impl.hpp.
 //
-// Unrolls variant's visitation mechanism to reduce template instantiation
-// and potentially increase runtime performance. (TODO: Investigate further.)
-//
-#if !defined(BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT)
-#   define BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT   \
-        BOOST_VARIANT_LIMIT_TYPES
-#endif
-
-///////////////////////////////////////////////////////////////////////////////
 // BOOST_VARIANT_MINIMIZE_SIZE
-//
-// When #defined, implementation employs all known means to minimize the
-// size of variant objects. However, often unsuccessful due to alignment
-// issues, and potentially harmful to runtime speed, so not enabled by
-// default. (TODO: Investigate further.)
-//
+//   When #defined, implementation employs all known means to minimize the
+//   size of variant objects. However, often unsuccessful due to alignment
+//   issues, and potentially harmful to runtime speed, so not enabled by
+//   default. (TODO: Investigate further.)
+
 #if defined(BOOST_VARIANT_MINIMIZE_SIZE)
 #   include <climits> // for SCHAR_MAX
 #   include "boost/mpl/less.hpp"
@@ -652,161 +644,6 @@ struct quoted_enable_recursive
     {
     };
 };
-
-///////////////////////////////////////////////////////////////////////////////
-// (detail) function template cast_storage
-//
-// Casts the given storage to the specified type, but with qualification.
-//
-
-template <typename T>
-inline T& cast_storage(
-      void* storage
-      BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T)
-    )
-{
-    return *static_cast<T*>(storage);
-}
-
-template <typename T>
-inline const T& cast_storage(
-      const void* storage
-      BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T)
-    )
-{
-    return *static_cast<const T*>(storage);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// (detail) function template apply_visitor_impl
-//
-// Invokes the given visitor on the type in the given variant storage.
-//
-
-struct unrolled {};
-
-template <typename Iter, typename LastIter>
-struct apply_visitor_impl_step
-{
-    typedef typename mpl::apply_if<
-          is_same<Iter, LastIter>
-        , mpl::identity<unrolled>
-        , Iter
-        >::type type;
-
-    typedef typename mpl::apply_if<
-          is_same<type, unrolled> //is_same<Iter, LastIter>
-        , mpl::identity<LastIter>
-        , mpl::next<Iter>
-        >::type next_iter;
-
-    typedef apply_visitor_impl_step<
-          next_iter, LastIter
-        > next;
-};
-
-template <typename Visitor, typename VoidPtrCV, typename T>
-inline
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-apply_visitor_impl(Visitor& visitor, VoidPtrCV operand, T*, int)
-{
-    return visitor( cast_storage<T>(operand) );
-}
-
-template <typename Visitor, typename VoidPtrCV>
-inline
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-apply_visitor_impl(Visitor&, VoidPtrCV, unrolled*, long)
-{
-    // should never be here at runtime:
-    typedef typename Visitor::result_type result_type;
-    return ::boost::detail::variant::forced_return< result_type >();
-}
-
-template <
-      typename W, typename S
-    , typename Visitor, typename VPCV
-    >
-inline
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-apply_visitor_impl(
-      const int, Visitor&, VPCV
-    , mpl::true_ // is_unrolled
-    , W* = 0, S* = 0
-    )
-{
-    // should never be here at runtime:
-    typedef typename Visitor::result_type result_type;
-    return ::boost::detail::variant::forced_return< result_type >();
-}
-
-template <
-      typename Which, typename step0
-    , typename Visitor, typename VoidPtrCV
-    >
-inline
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-apply_visitor_impl(
-      const int var_which, Visitor& visitor, VoidPtrCV storage
-    , mpl::false_ // is_unrolled
-    , Which* = 0, step0* = 0
-    )
-{
-    // Typedef unrolled steps and associated types...
-#   define BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_TYPEDEF(z, N, _)    \
-    typedef typename BOOST_PP_CAT(step,N)::type BOOST_PP_CAT(T,N);  \
-    typedef typename BOOST_PP_CAT(step,N)::next                     \
-        BOOST_PP_CAT(step, BOOST_PP_INC(N));                        \
-    /**/
-
-    BOOST_PP_REPEAT(
-          BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT
-        , BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_TYPEDEF
-        , _
-        )
-
-#   undef BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_TYPEDEF
-
-    // ...switch on the target which-index value...
-    switch (var_which)
-    {
-
-    // ...applying the appropriate case:
-#   define BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_CASE(z, N, _)           \
-    case (Which::value + (N)):                                          \
-        return apply_visitor_impl(                                      \
-              visitor, storage, static_cast<BOOST_PP_CAT(T,N)*>(0), 1L  \
-            );                                                          \
-    /**/
-
-    BOOST_PP_REPEAT(
-          BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT
-        , BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_CASE
-        , _
-        )
-
-#   undef BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_CASE
-
-    }
-
-    // If not handled in this iteration, continue unrolling:
-    typedef mpl::int_<
-          Which::value + (BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT)
-        > next_which;
-
-    typedef BOOST_PP_CAT(step, BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT)
-        next_step;
-
-    typedef typename next_step::type next_type;
-    typedef typename is_same< next_type,unrolled >::type
-        is_unrolled;
-
-    return apply_visitor_impl(
-          var_which, visitor, storage
-        , is_unrolled()
-        , static_cast<next_which*>(0), static_cast<next_step*>(0)
-        );
-}
 
 }} // namespace detail::variant
 
