@@ -238,7 +238,7 @@ main()
 
 
 
-  printTestStats();
-  return 0;
+  return printTestStats();
+
 };
 
