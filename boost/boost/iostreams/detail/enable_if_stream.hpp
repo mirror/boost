@@ -14,7 +14,6 @@
 #include <boost/config.hpp>                         // BOOST_NO_SFINAE 
 #include <boost/utility/enable_if.hpp>                  
 #include <boost/iostreams/detail/ios_traits.hpp>    // is_std_io.
-#include <boost/type_traits/function_traits.hpp>    
 
 #ifndef BOOST_NO_SFINAE
 # define BOOST_IOSTREAMS_ENABLE_IF_STREAM(T) \
