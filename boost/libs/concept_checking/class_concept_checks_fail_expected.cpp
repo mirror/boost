@@ -19,7 +19,7 @@ using namespace boost;
 
 class class_requires_test
 {
-  typedef class_requires< EqualityComparableConcept<foo> >::check req;
+  BOOST_CLASS_REQUIRES(foo, EqualityComparableConcept);
 };
 
 int

@@ -21,12 +21,11 @@ using namespace boost;
 
 class class_requires_test
 {
-  typedef class_requires< EqualityComparableConcept<int> >::check req1;
-  typedef class_requires<EqualityComparableConcept<int> >::check req2;
-  typedef class_requires<Comparable2Concept<int*, const int*> >::check req3;
-  typedef class_requires<UnaryFunctionConcept<foo, bool, int> >::check req4;
-  typedef class_requires<BinaryFunctionConcept<bar, bool, int, char> >::check
-    req5;
+  BOOST_CLASS_REQUIRES(int, EqualityComparableConcept);
+  typedef int* int_ptr; typedef const int* const_int_ptr;
+  BOOST_CLASS_REQUIRES2(int_ptr, const_int_ptr, Comparable2Concept);
+  BOOST_CLASS_REQUIRES3(foo, bool, int, UnaryFunctionConcept);
+  BOOST_CLASS_REQUIRES4(bar, bool, int, char, BinaryFunctionConcept);
 };
 
 int

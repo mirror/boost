@@ -32,21 +32,42 @@ void function_requires()
 #endif
 }
 
-template <class Concept>
-class class_requires
-{
-#if defined(NDEBUG)
-public:
-  typedef int check;
-#else
-  typedef void (Concept::* function_pointer)();
+// The BOOST_CLASS_REQUIRES macros use function pointers as
+// template parameters, which VC++ does not support.
 
-  template <function_pointer Fptr>
-  struct dummy_struct { };
-public:
-  typedef dummy_struct< BOOST_FPTR Concept::constraints > check;
-#endif
-};
+#define BOOST_CLASS_REQUIRES(type_var, concept) \
+  typedef void (concept <type_var>::* func##type_var##concept)(); \
+  template <func##type_var##concept _Tp1> \
+  struct concept_checking_##type_var##concept { }; \
+  typedef concept_checking_##type_var##concept< \
+    BOOST_FPTR concept <type_var>::constraints> \
+    concept_checking_typedef_##type_var##concept
+
+#define BOOST_CLASS_REQUIRES2(type_var1, type_var2, concept) \
+  typedef void (concept <type_var1,type_var2>::* func##type_var1##type_var2##concept)(); \
+  template <func##type_var1##type_var2##concept _Tp1> \
+  struct concept_checking_##type_var1##type_var2##concept { }; \
+  typedef concept_checking_##type_var1##type_var2##concept< \
+    BOOST_FPTR concept <type_var1,type_var2>::constraints> \
+    concept_checking_typedef_##type_var1##type_var2##concept
+
+#define BOOST_CLASS_REQUIRES3(type_var1, type_var2, type_var3, concept) \
+  typedef void (concept <type_var1,type_var2,type_var3>::* func##type_var1##type_var2##type_var3##concept)(); \
+  template <func##type_var1##type_var2##type_var3##concept _Tp1> \
+  struct concept_checking_##type_var1##type_var2##type_var3##concept { }; \
+  typedef concept_checking_##type_var1##type_var2##type_var3##concept< \
+    BOOST_FPTR concept <type_var1,type_var2,type_var3>::constraints>  \
+  concept_checking_typedef_##type_var1##type_var2##type_var3##concept
+
+#define BOOST_CLASS_REQUIRES4(type_var1, type_var2, type_var3, type_var4, concept) \
+  typedef void (concept <type_var1,type_var2,type_var3,type_var4>::* func##type_var1##type_var2##type_var3##type_var4##concept)(); \
+  template <func##type_var1##type_var2##type_var3##type_var4##concept _Tp1> \
+  struct concept_checking_##type_var1##type_var2##type_var3##type_var4##concept { }; \
+  typedef concept_checking_##type_var1##type_var2##type_var3##type_var4##concept< \
+    BOOST_FPTR concept <type_var1,type_var2,type_var3,type_var4>::constraints>  \
+    concept_checking_typedef_##type_var1##type_var2##type_var3##type_var4##concept
+
+
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T, class U>
@@ -64,7 +85,7 @@ struct require_same { typedef T type; };
   struct IntegerConcept {
     void constraints() { 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      error__type_must_be_an_integer_type();
+      errortype_must_be_an_integer_type();
 #endif      
     }
   };
@@ -82,7 +103,7 @@ struct require_same { typedef T type; };
   struct SignedIntegerConcept {
     void constraints() { 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      error__type_must_be_a_signed_integer_type();
+      errortype_must_be_a_signed_integer_type();
 #endif      
     }
   };
@@ -97,7 +118,7 @@ struct require_same { typedef T type; };
   struct UnsignedIntegerConcept {
     void constraints() { 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      error__type_must_be_an_unsigned_integer_type();
+      errortype_must_be_an_unsigned_integer_type();
 #endif      
     }
   };
@@ -167,22 +188,22 @@ struct require_same { typedef T type; };
     }
   };
 
-  template <class T>
+  template <class TT>
   struct CopyConstructibleConcept
   {
     void constraints() {
-      T a(b);            // require copy constructor
-      T* ptr = &a;       // require address of operator
+      TT a(b);            // require copy constructor
+      TT* ptr = &a;       // require address of operator
       const_constraints(a);
       ignore_unused_variable_warning(ptr);
     }
-    void const_constraints(const T& a) {
-      T c(a);            // require const copy constructor
-      const T* ptr = &a; // require const address of operator
+    void const_constraints(const TT& a) {
+      TT c(a);            // require const copy constructor
+      const TT* ptr = &a; // require const address of operator
       ignore_unused_variable_warning(c);
       ignore_unused_variable_warning(ptr);
     }
-    T b;
+    TT b;
   };
 
   // The C++ standard requirements for many concepts talk about return
@@ -194,8 +215,8 @@ struct require_same { typedef T type; };
   // 2) stay with convertible to bool, and also
   //    specify stuff about all the logical operators.
   // For now we just test for convertible to bool.
-  template <class T>
-  void require_boolean_expr(const T& t) {
+  template <class TT>
+  void require_boolean_expr(const TT& t) {
     bool x = t;
     ignore_unused_variable_warning(x);
   }
@@ -447,71 +468,71 @@ struct require_same { typedef T type; };
   //===========================================================================
   // Function Object Concepts
 
-  template <class _Func, class _Ret>
+  template <class Func, class Return>
   struct GeneratorConcept
   {
     void constraints() {
-      __r = __f();   // require operator() member function
+      r = f();   // require operator() member function
     }
-    _Func __f;
-    _Ret __r;
+    Func f;
+    Return r;
   };
 
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  template <class _Func>
-  struct GeneratorConcept<_Func,void>
+  template <class Func>
+  struct GeneratorConcept<Func,void>
   {
     void constraints() {
-      __f();              // require operator() member function
+      f();              // require operator() member function
     }
-    _Func __f;
+    Func f;
   };
 #endif
 
-  template <class _Func, class _Ret, class _Arg>
+  template <class Func, class Return, class Arg>
   struct UnaryFunctionConcept
   {
     void constraints() {
-      __r = __f(__arg); // require operator()
+      r = f(arg); // require operator()
     }
-    _Func __f;
-    _Arg __arg;
-    _Ret __r;
+    Func f;
+    Arg arg;
+    Return r;
   };
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  template <class _Func, class _Arg>
-  struct UnaryFunctionConcept<_Func,void,_Arg> {
+  template <class Func, class Arg>
+  struct UnaryFunctionConcept<Func, void, Arg> {
     void constraints() { 
-      __f(__arg);                 // require operator()
+      f(arg);                 // require operator()
     }
-    _Func __f;
+    Func f;
   };
 #endif
 
-  template <class _Func, class _Ret, class _First, class _Second>
+  template <class Func, class Return, class First, class Second>
   struct BinaryFunctionConcept
   {
     void constraints() { 
-      __r = __f(__first, __second); // require operator()
+      r = f(first, second); // require operator()
     }
-    _Func __f;
-    _First __first;
-    _Second __second;
-    _Ret __r;
+    Func f;
+    First first;
+    Second second;
+    Return r;
   };
 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  template <class _Func, class _First, class _Second>
-  struct BinaryFunctionConcept<_Func,void,_First,_Second>
+  template <class Func, class First, class Second>
+  struct BinaryFunctionConcept<Func, void, First, Second>
   {
     void constraints() {
-      __f(__first, __second); // require operator()
+      f(first, second); // require operator()
     }
-    _Func __f;
-    _First __first;
-    _Second __second;
+    Func f;
+    First first;
+    Second second;
   };
 #endif
 
@@ -568,7 +589,7 @@ struct require_same { typedef T type; };
   struct NAME { \
     void constraints() { (void)constraints_(); } \
     Ret constraints_() {  \
-      Ret x = a OP b; \
+      return a OP b; \
     } \
     First a; \
     Second b; \
