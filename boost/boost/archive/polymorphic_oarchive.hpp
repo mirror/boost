@@ -16,6 +16,8 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/config.hpp>
+
 #include <string>
 #include <boost/cstdint.hpp>
 
@@ -93,13 +95,15 @@ public:
 
     // at least one compiler, borland (there might be others) won't pass 
     // unmatched overrides to the base class - so do it explicitly here.
+	// note: at least one other compiler MSVC 6.0 chokes if you leave this in
+    // so leave it just for borland
+    #if ! defined(_MSC_VER) || _MSC_VER > 1300
     template<class T>
     void save_override(const T & t, BOOST_PFTO int)
     {
-        detail::interface_oarchive<polymorphic_oarchive>
-        	::save_override(t, 0);
+        detail::interface_oarchive<polymorphic_oarchive>::save_override(t, 0);
+		
     }
-
     // special treatment for name-value pairs.
     template<class T>
     void save_override(const ::boost::serialization::nvp<T> & t, int)
@@ -108,6 +112,7 @@ public:
         archive::save(* this, t.value());
  		save_end(t.name());
     }
+    #endif
 };
 
 } // namespace archive
