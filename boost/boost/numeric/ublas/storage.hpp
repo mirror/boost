@@ -80,6 +80,7 @@ namespace boost { namespace numeric { namespace ublas {
     class unbounded_array:
         public storage_array<unbounded_array<T, ALLOC> > {
     public:
+        typedef ALLOC allocator_type;
         typedef typename ALLOC::size_type size_type;
         typedef typename ALLOC::difference_type difference_type;
         typedef T value_type;
@@ -287,6 +288,11 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator (begin ());
         }
 
+        // Allocator
+        allocator_type get_allocator () {
+            return alloc_;
+        }
+
     private:
         // Handle explict destroy on a (possibly indexed) iterator
         BOOST_UBLAS_INLINE
@@ -303,6 +309,7 @@ namespace boost { namespace numeric { namespace ublas {
     class bounded_array:
         public storage_array<bounded_array<T, N, ALLOC> > {
     public:
+        // No allocator_type as ALLOC is not used for allocation
         typedef typename ALLOC::size_type size_type;
         typedef typename ALLOC::difference_type difference_type;
         typedef T value_type;
