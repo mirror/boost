@@ -5,11 +5,11 @@
 .. _N1550: http://www.boost-consulting.com/writing/n1550.html
 .. _N1530: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1530.html
 
-:Author: David Abrahams
-:Contact: dave@boost-consulting.com
-:Organization: `Boost Consulting`_
+:Author: David Abrahams and Jeremy Siek
+:Contact: dave@boost-consulting.com, jsiek@osl.iu.edu
+:Organization: `Boost Consulting`_, Indiana University Bloomington
 :date: $Date$
-:Copyright: Copyright David Abrahams 2003. Use, modification and
+:Copyright: Copyright David Abrahams, Jeremy Siek 2003. Use, modification and
       distribution is subject to the Boost Software License,
       Version 1.0. (See accompanying file LICENSE_1_0.txt or copy
       at http://www.boost.org/LICENSE_1_0.txt)
