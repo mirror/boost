@@ -963,6 +963,24 @@ namespace boost { namespace numeric { namespace ublas {
             typename base_type::types, index>::type id;
         typedef typename id::type promote_type;
     };
+    template<class X, class Y>
+    struct promote_type_multiplies {
+        typedef type_deduction_detail::base_result_of<X, Y> base_type;
+        static typename base_type::x_type x;
+        static typename base_type::y_type y;
+        BOOST_STATIC_CONSTANT(int,
+            size = sizeof(
+                type_deduction_detail::test<
+                    typename base_type::x_type
+                  , typename base_type::y_type
+                >(x * y)     // Specifically the * arithmetic actions
+            ));
+
+        BOOST_STATIC_CONSTANT(int, index = (size / sizeof(char)) - 1);
+        typedef typename mpl::at_c<
+            typename base_type::types, index>::type id;
+        typedef typename id::type promote_type;
+    };
 
 
 #else
