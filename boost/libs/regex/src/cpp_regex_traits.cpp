@@ -186,14 +186,14 @@ struct message_data<char>
    std::istream is;
    std::string error_strings[boost::REG_E_UNKNOWN+1];
 
-   message_data(const std::locale& l, const std::string& regex_message_catalogue);
+   message_data(const std::locale& l, std::string regex_message_catalogue);
 private:
    message_data(const message_data&);
    message_data& operator=(const message_data&);
 };
 
 
-message_data<char>::message_data(const std::locale& l, const std::string& regex_message_catalogue)
+message_data<char>::message_data(const std::locale& l, std::string regex_message_catalogue)
    : is(&sbuf)
 {
    is.imbue(l);
