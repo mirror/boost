@@ -110,7 +110,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
     std::ifstream file("rng.tmp");
     file >> urng;
   }
-#ifndef BOOST_MSVC || BOOST_MSVC > 1300    // MSVC brokenness
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // MSVC brokenness
   BOOST_TEST(urng == urng2);
 #endif // BOOST_MSVC
 #endif // BOOST_NO_OPERATORS_IN_NAMESPACE
