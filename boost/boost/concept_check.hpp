@@ -536,34 +536,15 @@ struct require_same { typedef T type; };
   // Iterator Concepts
 
   template <class TT>
-  struct TrivialIteratorConcept
-  {
-    void constraints() {
-      function_requires< AssignableConcept<TT> >();
-      function_requires< DefaultConstructibleConcept<TT> >();
-      function_requires< EqualityComparableConcept<TT> >();
-      (void)*i;           // require dereference operator
-    }
-    TT i;
-  };
-
-  template <class TT>
-  struct Mutable_TrivialIteratorConcept
-  {
-    void constraints() {
-      function_requires< TrivialIteratorConcept<TT> >();
-      *i = *j;            // require dereference and assignment
-    }
-    TT i, j;
-  };
-
-  template <class TT>
   struct InputIteratorConcept
   {
     void constraints() {
-      function_requires< TrivialIteratorConcept<TT> >();
-      // require iterator_traits typedef's
+      function_requires< AssignableConcept<TT> >();
+      function_requires< EqualityComparableConcept<TT> >();
+      TT j(i);
+      (void)*i;           // require dereference operator
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
+      // require iterator_traits typedef's
       typedef typename std::iterator_traits<TT>::difference_type D;
       // Hmm, the following is a bit fragile
       //function_requires< SignedIntegerConcept<D> >();
@@ -572,7 +553,7 @@ struct require_same { typedef T type; };
       typedef typename std::iterator_traits<TT>::iterator_category C;
       function_requires< ConvertibleConcept<C, std::input_iterator_tag> >();
 #endif
-      ++i;                // require preincrement operator
+      ++j;                // require preincrement operator
       i++;                // require postincrement operator
     }
     TT i;
