@@ -9,6 +9,9 @@
 //  defines traits classes for cv-qualified types:
 //  is_const, is_volatile, remove_const, remove_volatile, remove_cv.
 //
+//  Revision History:
+//  24th March 2001:
+//    Fixed is_const/is_volatile so that they work with reference types
 
 #ifndef BOOST_CV_TYPE_TRAITS_HPP
 #define BOOST_CV_TYPE_TRAITS_HPP
@@ -125,6 +128,20 @@ struct is_const
 {
    BOOST_STATIC_CONSTANT(bool, value = detail::cv_traits_imp<T*>::is_const);
 };
+template <typename T> struct is_const<T&>
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
+#if defined(__BORLANDC__)
+// these are illegal specialisations; cv-qualifies applied to
+// references have no effect according to [8.3.2p1],
+// C++ Builder requires them though as it treats cv-qualified
+// references as distinct types...
+template <typename T> struct is_const<T&const>
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
+template <typename T> struct is_const<T&volatile>
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
+template <typename T> struct is_const<T&const volatile>
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
+#endif
 
 //* is a type T declared volatile - is_volatile<T>
 template <typename T>
@@ -132,6 +149,20 @@ struct is_volatile
 {
    BOOST_STATIC_CONSTANT(bool, value = detail::cv_traits_imp<T*>::is_volatile);
 };
+template <typename T> struct is_volatile<T&>
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
+#if defined(__BORLANDC__)
+// these are illegal specialisations; cv-qualifies applied to
+// references have no effect according to [8.3.2p1],
+// C++ Builder requires them though as it treats cv-qualified
+// references as distinct types...
+template <typename T> struct is_volatile<T&const>
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
+template <typename T> struct is_volatile<T&volatile>
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
+template <typename T> struct is_volatile<T&const volatile>
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
+#endif
 
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 // The following three don't work:
@@ -213,9 +244,36 @@ struct is_volatile<const volatile void>
 #endif
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+// * convert a type T to const type - add_const<T>
+// this is not required since the result is always
+// the same as "T const", but it does suppress warnings
+// from some compilers:
+template <typename T>
+struct add_const
+{
+   typedef T const type;
+};
+// * convert a type T to volatile type - add_volatile<T>
+// this is not required since the result is always
+// the same as "T volatile", but it does suppress warnings
+// from some compilers:
+template <typename T>
+struct add_volatile
+{
+   typedef T volatile type;
+};
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+template <class T>
+struct add_const<T&>{ typedef T& type; };
+template <class T>
+struct add_volatile<T&>{ typedef T& type; };
+#endif
+
 } // namespace boost
 
 
 #endif // BOOST_CV_TYPE_TRAITS_HPP
+
 
 

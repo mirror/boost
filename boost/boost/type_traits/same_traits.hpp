@@ -44,7 +44,11 @@ struct is_same<T, T>
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 #ifdef BOOST_MSVC
-
+//
+// the following VC6 specific implementation is *NOT* legal
+// C++, but has the advantage that it works for incomplete
+// types.
+//
 namespace detail{
 
 template<class T1>

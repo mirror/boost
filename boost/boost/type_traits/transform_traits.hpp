@@ -9,6 +9,9 @@
 //  defines traits classes for transforming one type to another:
 //  remove_reference, add_reference, remove_bounds, remove_pointer.
 //
+// Revision History:
+// 21st March 2001
+//    Added void specialisations to add_reference.
 
 #ifndef BOOST_TRANSFORM_TRAITS_HPP
 #define BOOST_TRANSFORM_TRAITS_HPP
@@ -105,6 +108,16 @@ template <typename T>
 struct add_reference
 { typedef T& type; };
 #endif
+
+//
+// these full specialisations are always required:
+template <> struct add_reference<void>{ typedef void type; };
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+template <> struct add_reference<const volatile void>{ typedef const volatile void type; };
+template <> struct add_reference<const void>{ typedef const void type; };
+template <> struct add_reference<volatile void>{ typedef volatile void type; };
+#endif
+
 
 /**********************************************
  *

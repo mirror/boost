@@ -27,6 +27,9 @@
 #ifndef BOOST_ARITHMETIC_TYPE_TRAITS_HPP
 #include <boost/type_traits/arithmetic_traits.hpp>
 #endif
+#ifndef BOOST_FUNCTION_TYPE_TRAITS_HPP
+#include <boost/type_traits/function_traits.hpp>
+#endif
 
 namespace boost{
 
@@ -38,11 +41,20 @@ namespace boost{
 template <typename T>
 struct is_object
 {
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   BOOST_STATIC_CONSTANT(bool, value =
+      (::boost::type_traits::ice_and<
+         ::boost::type_traits::ice_not< ::boost::is_reference<T>::value>::value,
+         ::boost::type_traits::ice_not< ::boost::is_void<T>::value>::value,
+         ::boost::type_traits::ice_not< ::boost::is_function<T>::value>::value
+      >::value));
+#else
    BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_and<
          ::boost::type_traits::ice_not< ::boost::is_reference<T>::value>::value,
          ::boost::type_traits::ice_not< ::boost::is_void<T>::value>::value
       >::value));
+#endif
 };
 
 /**********************************************
@@ -70,6 +82,17 @@ struct is_scalar
 template <typename T>
 struct is_class
 {
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   BOOST_STATIC_CONSTANT(bool, value =
+      (::boost::type_traits::ice_and<
+         ::boost::type_traits::ice_not< ::boost::is_union<T>::value >::value,
+         ::boost::type_traits::ice_not< ::boost::is_scalar<T>::value >::value,
+         ::boost::type_traits::ice_not< ::boost::is_array<T>::value >::value,
+         ::boost::type_traits::ice_not< ::boost::is_reference<T>::value>::value,
+         ::boost::type_traits::ice_not< ::boost::is_void<T>::value >::value,
+         ::boost::type_traits::ice_not< ::boost::is_function<T>::value >::value
+      >::value));
+#else
    BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_and<
          ::boost::type_traits::ice_not< ::boost::is_union<T>::value >::value,
@@ -78,6 +101,7 @@ struct is_class
          ::boost::type_traits::ice_not< ::boost::is_reference<T>::value>::value,
          ::boost::type_traits::ice_not< ::boost::is_void<T>::value >::value
       >::value));
+#endif
 };
 
 /**********************************************
@@ -222,12 +246,13 @@ struct is_empty
 {
 private:
    typedef typename remove_cv<T>::type cvt;
+   typedef typename add_reference<T>::type r_type;
 public:
    BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_or<
          ::boost::detail::empty_helper<T,
             ::boost::is_class<T>::value ,
-            ::boost::is_convertible<T,int>::value
+            ::boost::is_convertible< r_type,int>::value
          >::value,
          BOOST_IS_EMPTY(cvt)
       >::value));

@@ -350,7 +350,19 @@ struct non_empty : boost::noncopyable
 {
    int i;
 };
+//
+// abstract base classes:
+struct test_abc1
+{
+   virtual void foo() = 0;
+   virtual void foo2() = 0;
+};
 
+struct test_abc2
+{
+   virtual void foo() = 0;
+   virtual void foo2() = 0;
+};
 
 
 #endif // BOOST_TYPE_TRAITS_TEST_HPP
