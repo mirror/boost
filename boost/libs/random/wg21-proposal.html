@@ -15,7 +15,7 @@ Document Nxxxx
 <br>
 <em>Draft</em>
 <br>
-<code>$Id: proposal.html,v 1.31 2002/10/08 22:32:01 jmaurer Exp $</code>
+<code>$Id: proposal.html,v 1.33 2002/10/10 22:53:00 jmaurer Exp $</code>
 </font>
 
 <h1>A Proposal to Add an Extensible Random Number Facility to the
@@ -38,8 +38,8 @@ it based on existing practice?</i></blockquote>
 
 Computers are deterministic machines by design: equal input data
 results in equal output, given the same internal state.  Sometimes,
-applications require non-deterministic behaviour, usually provided by
-generating random numbers.  Such applications include:
+applications require seemingly non-deterministic behaviour, usually
+provided by generating random numbers.  Such applications include:
 <ul>
 <li>numerics (simulation, Monte-Carlo integration)
 <li>games (shuffling card decks, non-deterministic enemy behavior)
@@ -198,7 +198,7 @@ difference between radioactive decay of individual atoms or noise of a
 Zehner diode.  Relatively unforeseeable random sources are also (the
 low bits of) timing between key touches, mouse movements, Ethernet
 packet arrivals, etc.  An estimate for the amount of
-unforeseeability is the entropy, an concept from information theory.
+unforeseeability is the entropy, a concept from information theory.
 Completely foreseeable sequences (e.g., from pseudo-random number
 engines) have entropy 0, if all bits are unforeseeable, the entropy is
 equal to the number of bits in each number.
@@ -210,7 +210,8 @@ I/O to query some randomness device outside of the computer.  However,
 there is a common interface feature subset of both pseudo-random and
 non-deterministic random-number engines.  For example, a
 non-deterministic random-number engine could be employed to produce
-random numbers with normal distribution; this is probably unlikely.
+random numbers with normal distribution; I believe this to be an
+unlikely scenario in practice.
 <p>
 
 Other libraries, including those mentioned above, only provide
@@ -227,7 +228,7 @@ Random-number generation is usually conceptually separated into
 random numbers between a given minimum and maximum and
 <em>random-number distributions</em> that retrieve uniformly
 distributed random numbers from some engine and produce numbers
-according to a some distribution (e.g., Gaussian normal or Bernoulli
+according to some distribution (e.g., Gaussian normal or Bernoulli
 distribution).
 Returning to the formalism in section A, the former can be identified
 with the function f and the latter with the output function o.
@@ -286,10 +287,11 @@ implementation version to the next.
 Other libraries usually provide the same differentiation between
 engines and distributions, but sometimes require a distribution
 wrapper in all cases.  Since other libraries do not aim to provide a
-specification framework, engines are sometimes only described
-qualitatively.  Also, distributions are given as specific functions or
-classes, so the quality-of-implementation question which
-distribution algorithm to employ is not addressed.
+portable specification framework, engines are sometimes only described
+qualitatively without giving the exact parameterization.  Also,
+distributions are given as specific functions or classes, so the
+quality-of-implementation question which distribution algorithm to
+employ does not need to be addressed.
 
 
 <h3>D. Templates vs. Virtual Functions</h3>
@@ -393,8 +395,8 @@ with deterministic seeding.
 
 In addition to the default constructor, all engines provide a
 constructor and <code>seed</code> function taking an iterator range
-[it1,it2).  An engine initializes its state by successively consuming
-values from the iterator range, return the advanced iterator it1.
+[it1,it2) pointing to unsigned integral values.  An engine initializes its state by successively consuming
+values from the iterator range, then returning the advanced iterator it1.
 This approach has the advantage that the user can completely exploit
 the large state of some engines for initialization.  Also, it allows
 to initialize compound engines in a uniform manner.  For example, a
@@ -402,6 +404,86 @@ compound engine consisting of two simpler engines would initialize the
 first engine with its [it1,it2).  The first engine returns a smaller
 iterator range that it has not consumed yet.  This can be used to
 initialize the second engine.
+<p>
+
+The iterator range [it1,it2) is specified to point to unsigned
+integral values.  There is no way to determine from a generic user
+program how the initialization values will be treated and what range
+of bits must be provided, except by enumerating all engines, e.g. in
+template specializations.  The problem is that a given generator might
+have differing requirements on the bit sizes of the seed range even
+within one <code>seed</code> call.
+<p>
+
+For example, imagine a
+
+<pre>   xor_combine&lt;lagged_fibonacci&lt;...>, mersenne_twister&lt;...> ></pre>
+
+generator.  For this, <code>seed(first, last)</code> will consume
+values as follows: First, seed the state of the
+<code>lagged_fibonacci</code> generator by consuming one item from
+[first, last) for each word of state.  The values are reduced to
+(e.g.) 24 bits to fit the <code>lagged_fibonacci</code> state
+requirements.  Then, seed the state of the
+<code>mersenne_twister</code> by consuming some number of items from
+the remaining [first, last). The values are reduced to 32 bits to fit
+the <code>mersenne_twister</code> state requirements.
+<p>
+
+How does a concise programming interface for those increasingly
+complex and varying requirements on [first, last) look like?  I don't
+know, and I don't want to complicate the specification by inventing
+something complicated here.
+<p>
+
+Thus, the specification says for each generator how it uses the seed
+values, and how many are consumed.  Additional features are left to
+the user.
+<p>
+
+In a way, this is similar to STL containers: It's intended that you
+can exchange iterators to various containers in generic algorithms,
+but the container itself is not meant to be exchanged, i.e. having a
+Container template parameter is often not adequate.  That's analogous
+to the random number case: You can pass a generator around and use its
+<code>operator()</code> and <code>min</code> and <code>max</code>
+functions generically.  However, you can't generically query the
+generator parameters, simply because most are entirely different in
+semantics for each generator.
+<p>
+
+The <code>seed(first, last)</code> interface can serve two purposes:
+
+<ol>
+<li>In a generic context, you can pass a bunch of integer values >= 1
+for seeding.  It is unlikely that you explore the full state space
+with the seeds you provide, but you can be reasonably sure that your
+seeds aren't entirely off.  (No formal guarantee for that, except that
+the ability to provide bad seeds usually means the parameterization of
+your generator is bad, e.g. non-prime modulus for linear congruential
+generators.)  For example, if you want a <code>seed(uint32_t)</code>
+on top of <code>seed(first, last)</code>, one option is to use a
+<code>linear_congruential</code> generator that produces the values
+required for <code>seed(first, last)</code>.  When you define the
+iterator type for <code>first</code> and <code>last</code> so that it
+encapsulates the <code>linear_congruential</code> engine in
+<code>operator++</code>, you don't even need to know beforehand how
+many values <code>seed(first, last)</code> will need.</li>
+
+<li>If you are in a non-generic context, you know the specific
+template type of your generator (probably not the template value-based
+parameterization).  The precise specification for <code>seed(first,
+last)</code> allows you to know what values you need to pass in so
+that you attain a specific seed state, for example to compare one
+implementation of the generator with another one that uses different
+seeding.</li>
+
+<li>If you want both, you need to inject knowledge into (1) so that
+you're in the position of (2).  One way to inject the knowledge is to
+use (partial) template specialization to add the knowledge.  The
+specific parameterization of some engine can then be obtained by
+querying the data members of the generators.</li>
+</ol>
 <p>
 
 I haven't seen the iterator-based approach to engine initialization in
@@ -1454,16 +1536,16 @@ is a value of <code>T</code>, <code>u</code> is a value of
 <code>X</code>, <code>v</code> is an lvalue of <code>X</code>,
 <code>it1</code> is an lvalue and <code>it2</code> is a (possibly
 <code>const</code>) value of an input iterator type <code>It</code>
-having an integral value type, <code>x</code>, <code>y</code> are
-(possibly <code>const</code>) values of
+having an unsigned integral value type, <code>x</code>, <code>y</code>
+are (possibly <code>const</code>) values of
 <code>X</code>, <code>os</code> is convertible to an lvalue of type
 <code>std::ostream</code>, and <code>is</code> is convertible to an
 lvalue of type <code>std::istream</code>.
 <p>
 A pseudo-random number engine x has a state x(i) at any given time.
-Each pseudo-random number engines defines the storage size of its
-state, given as an integral constant expression involving
-<code>sizeof</code>.
+Each pseudo-random number engines defines the size of its
+state in multiples of the size of its <code>result_type</code>, given
+as an integral constant expression.
 <p>
 
 <table border=1>
@@ -1540,7 +1622,7 @@ of x is equal to the current state y(j) of y.</td>
 <tr>
 <td><code>os &lt;&lt; x</code></td>
 <td><code>std::ostream&</code></td>
-<td>writes a textual representation of the state x(i) of
+<td>writes the textual representation of the state x(i) of
 <code>x</code> to <code>os</code>, with
 <code>os.<em>fmtflags</em></code> set to
 <code>ios_base::dec|ios_base::fixed|ios_base::left</code> and the fill
@@ -1787,24 +1869,30 @@ implementation-defined.  Otherwise, the template parameters
 <code>a</code> and <code>c</code> shall be less than m.
 <p>
 
-The size of the state x(i) is sizeof(IntType).
+The size of the state x(i) is 1.
 
 
 <pre>    explicit linear_congruential(IntType x0 = 1)</pre>
-
 <strong>Requires:</strong> <code>c &gt; 0 || (x0 % m) &gt; 0</code>
 <br>
 <strong>Effects:</strong> Constructs a
 <code>linear_congruential</code> engine with state x(0) :=
-<code>x0</code>.
-
+<code>x0</code> mod m.
 
 <pre>    void seed(IntType x0 = 1)</pre>
-
 <strong>Requires:</strong> <code>c &gt; 0 || (x0 % m) &gt; 0</code>
 <br>
 <strong>Effects:</strong> Sets the state x(i) of the engine to
-<code>x0</code>.
+<code>x0</code> mod m.
+
+<pre>    template&lt;class In&gt; linear_congruential(In& first, In last)</pre>
+<strong>Requires:</strong> <code>c &gt; 0 || *first &gt; 0</code>
+<br>
+<strong>Effects:</strong> Sets the state x(i) of the engine to
+<code>*first</code> mod m.
+<br>
+<strong>Complexity:</strong> Exactly one dereference of
+<code>*first</code>.
 
 
 <pre>
@@ -1850,6 +1938,7 @@ namespace std {
     typedef UIntType result_type;
 
     // <em>parameter values</em>
+    static const int word_size = w;
     static const int state_size = n;
     static const int shift_size = m;
     static const int mask_bits = r;
@@ -1901,7 +1990,7 @@ integral type large enough to store values up to
 1&lt=m&lt=n.  0&lt=r,u,s,t,l&lt=w.  0&lt=a,b,c&lt=2<sup>w</sup>-1.
 <p>
 
-The size of the state x(i) is <code>n * sizeof(UIntType)</code>.
+The size of the state x(i) is <code>n</code>.
 
 
 <pre>    mersenne_twister()</pre>
@@ -1933,8 +2022,8 @@ to l(1) ... l(n), respectively.
 <pre>    template&lt;class In&gt; void seed(In& first, In last)</pre>
 <strong>Effects:</strong> Given the values z<sub>0</sub>
 ... z<sub>n-1</sub> obtained by dereferencing [first, first+n), sets
-x(-n) ... x(-1) to z<sub>0</sub> mod 2<sup>32</sup>
-... z<sub>n-1</sub> mod 2<sup>32</sup>.
+x(-n) ... x(-1) to z<sub>0</sub> mod 2<sup>w</sup>
+... z<sub>n-1</sub> mod 2<sup>w</sup>.
 <br>
 <strong>Complexity:</strong> Exactly <code>n</code> dereferences of
 <code>first</code>.
@@ -2022,7 +2111,7 @@ integral type large enough to store values up to m.  The following
 relation shall hold: 0&lt;s&lt;r.
 <p>
 
-The size of the state is <code>r * sizeof(IntType)</code>.
+The size of the state is <code>r</code>.
 
 <pre>    subtract_with_carry()</pre>
 <strong>Effects:</strong> Constructs a <code>subtract_with_carry</code>
@@ -2136,7 +2225,7 @@ namespace std {
 The following relation shall hold: 0&lt;s&lt;r.
 <p>
 
-The size of the state is <code>r * sizeof(RealType)</code>.
+The size of the state is <code>r</code>.
 
 <pre>    subtract_with_carry_01()</pre>
 <strong>Effects:</strong> Constructs a <code>subtract_with_carry_01</code>
@@ -2248,7 +2337,7 @@ namespace std {
 The template parameter <code>UniformRandomNumberGenerator</code> shall
 denote a class that satisfies all the requirements of a uniform random
 number generator, given in tables in section x.x. r &lt;= p.  The size
-of the state is the size of <code><em>b</em></code> plus sizeof(n).
+of the state is the size of <code><em>b</em></code> plus 1.
 
 <pre>    discard_block()</pre>
 <strong>Effects:</strong> Constructs a <code>discard_block</code>
