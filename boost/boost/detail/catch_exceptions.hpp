@@ -135,8 +135,9 @@ namespace boost
         << "**********  errors detected; see stdout for details  ***********"
         << std::endl;
     }
+#if !defined(BOOST_NO_CPP_MAIN_SUCCESS_MESSAGE)
     else { out << std::flush << "no errors detected" << std::endl; }
-
+#endif
     return result;
   } // catch_exceptions
 
