@@ -14,6 +14,8 @@
 #include <boost/preprocessor/enum_params.hpp>
 #include <boost/preprocessor/enum_params_with_a_default.hpp>
 #include <boost/preprocessor/enum_params_with_defaults.hpp>
+#include <boost/preprocessor/repeat_from_to.hpp>
+#include <libs/preprocessor/test/test.hpp>
 
 /* *** */
 
@@ -46,3 +48,9 @@ TEST_ENUM_PARAMS(ENUM_PARAMS_TEST_MAX)
 
 template<BOOST_PP_ENUM_PARAMS(ENUM_PARAMS_TEST_MAX,class T)>
 struct no_rescan;
+
+/* *** */
+
+#define F(I,P) P I
+TEST_B 1 + (4+5+6) BOOST_PP_REPEAT_FROM_TO(4,7,F,-) TEST_E
+#undef F

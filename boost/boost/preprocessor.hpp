@@ -29,8 +29,8 @@
 #include <boost/preprocessor/logical.hpp>
 #include <boost/preprocessor/max.hpp>
 #include <boost/preprocessor/min.hpp>
-#include <boost/preprocessor/repeat.hpp>
-#include <boost/preprocessor/repeat_2nd.hpp>
-#include <boost/preprocessor/repeat_3rd.hpp>
+#include <boost/preprocessor/repeat_from_to.hpp>
+#include <boost/preprocessor/repeat_from_to_2nd.hpp>
+#include <boost/preprocessor/repeat_from_to_3rd.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #endif

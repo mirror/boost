@@ -19,35 +19,48 @@
 
 <hr>
 
-<a href="repeat_from_to_3rd.htm">Prev</a> <a href="tuple.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<a href="repeat_3rd.htm">Prev</a> <a href="repeat_from_to_2nd.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
 <hr>
 
-<h1>#include &lt;<a href="../../../../boost/preprocessor/stringize.hpp">boost/preprocessor/stringize.hpp</a>&gt;</h1>
+<h1>#include &lt;<a href="../../../../boost/preprocessor/repeat_from_to.hpp">boost/preprocessor/repeat_from_to.hpp</a>&gt;</h1>
 
 <hr>
 
-<h2><a name="BOOST_PP_STRINGIZE">#define BOOST_PP_STRINGIZE</a>(X)</h2>
- <p>Stringizes <code>X</code> after it is macro expanded.</p>
+<h2><a name="BOOST_PP_REPEAT_FROM_TO">#define BOOST_PP_REPEAT_FROM_TO</a>(S,E,M,P)</h2>
+ <p>Repeats the macro <code>M(I,P)</code> for <code>I = [S,E[</code>.</p>
 
-<p>For example, <code><a href="stringize.htm#BOOST_PP_STRINGIZE">BOOST_PP_STRINGIZE</a>(<a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(a,b))</code> expands to <code>"ab"</code>.</p>
+<p>In other words, expands to the sequence:</p>
 
-<h3>Example</h3>
+<pre>
+  M(S,P) M(<a href="inc.htm#BOOST_PP_INC">BOOST_PP_INC</a>(S),P) ... M(<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(E),P)
+</pre>
+
+<p>For example,</p>
+
+<pre>
+  #define TEST(I,P) P(I);
+  <a href="repeat_from_to.htm#BOOST_PP_REPEAT_FROM_TO">BOOST_PP_REPEAT_FROM_TO</a>(4,7,TEST,X)
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  X(4); X(5); X(6);
+</pre>
+
+<h3>Uses</h3>
 <ul>
-  <li><a href="../../example/note.c">note.c</a></li>
+  <li><a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>()</li>
 </ul>
 
 <h3>Test</h3>
 <ul>
-  <li><a href="../../test/preprocessor_test.cpp">preprocessor_test.cpp</a></li>
+  <li><a href="../../test/repeat_test.cpp">repeat_test.cpp</a></li>
 </ul>
 
 <hr>
 
-<h2><a name="BOOST_PREPROCESSOR_STRINGIZE">#define BOOST_PREPROCESSOR_STRINGIZE</a>(E)</h2>
- <p>Obsolete. Use <a href="stringize.htm#BOOST_PP_STRINGIZE">BOOST_PP_STRINGIZE</a>().</p> 
-<hr>
-
-<a href="repeat_from_to_3rd.htm">Prev</a> <a href="tuple.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<a href="repeat_3rd.htm">Prev</a> <a href="repeat_from_to_2nd.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
 <hr>
 
 <p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
