@@ -8,6 +8,17 @@
   <xsl:key name="macros" match="macro" use="@name"/>
   <xsl:key name="headers" match="header" use="@name"/>
 
+  <xsl:template match="function|overloaded-function" mode="generate.id">
+    <xsl:choose>
+      <xsl:when test="count(key('functions', @name))=1">
+        <xsl:value-of select="@name"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="generate-id(.)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="classname" mode="annotation">
     <!-- Determine the (possibly qualified) class name we are looking for -->
     <xsl:variable name="fullname">
