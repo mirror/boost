@@ -172,7 +172,7 @@ namespace assign_detail
         operator Container() const
         {
             static Container* c = 0;
-            BOOST_STATIC_CONSTANT( bool, is_array_flag = sizeof( is_array( c ) ) 
+            BOOST_STATIC_CONSTANT( bool, is_array_flag = sizeof( assign_detail::is_array( c ) ) 
                                    == sizeof( type_traits::yes_type ) );
             
             typedef BOOST_DEDUCED_TYPENAME mpl::if_c< is_array_flag,
