@@ -400,7 +400,7 @@ public:
       detail::function::any_pointer result =
         manager(detail::function::make_any_pointer(&typeid(Functor)),
                 detail::function::check_functor_type_tag);
-      if (!result.obj_ptr) return false;
+      if (!result.obj_ptr) return 0;
       else {
         typedef typename detail::function::get_function_tag<Functor>::type tag;
         return get_functor_pointer<Functor>(tag(), 0);
@@ -415,7 +415,7 @@ public:
       detail::function::any_pointer result =
         manager(detail::function::make_any_pointer(&typeid(Functor)),
                 detail::function::check_functor_type_tag);
-      if (!result.obj_ptr) return false;
+      if (!result.obj_ptr) return 0;
       else {
         typedef typename detail::function::get_function_tag<Functor>::type tag;
         return get_functor_pointer<Functor>(tag(), 0);
