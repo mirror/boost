@@ -20,18 +20,10 @@
 //
 
 #include <boost/config.hpp>
+#include <boost/get_pointer.hpp>
 
 namespace boost
 {
-
-// get_pointer(p) extracts a ->* capable pointer from p
-
-template<class T> T * get_pointer(T * p)
-{
-    return p;
-}
-
-// get_pointer(shared_ptr<T> const & p) has been moved to shared_ptr.hpp
 
 #if defined(BOOST_NO_VOID_RETURNS)
 
