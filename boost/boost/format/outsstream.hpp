@@ -41,6 +41,10 @@ class basic_outsstream : private std::basic_stringbuf<Ch, Tr>,
 {
   typedef std::basic_string<Ch,Tr>     string_t;
   typedef std::basic_stringbuf<Ch, Tr> buff_t;
+  using buff_t::pptr;
+  using buff_t::pbase;
+  using buff_t::epptr;
+  using buff_t::seekpos;
 public:
 
   basic_outsstream() : std::basic_stringbuf<Ch,Tr>(), 

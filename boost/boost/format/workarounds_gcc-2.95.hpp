@@ -11,8 +11,7 @@
 
 
 
-#if ! BOOST_WORKAROUND(__GNUC__, < 3)  // nothing to do then.
-#else
+#if  BOOST_WORKAROUND(__GNUC__, < 3) & defined(__STL_CONFIG_H) // nothing to do else
 
 // workarounds for gcc < 3.0  :
 // . defines a few macros 
@@ -83,4 +82,4 @@ class basic_streambuf<char, Tr> : public streambuf {
 
 #endif // include guard
 
-#endif // if !workaround
+#endif // if workaround
