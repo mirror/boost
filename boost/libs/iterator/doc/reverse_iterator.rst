@@ -24,5 +24,6 @@
 -----------------------------
 
 .. include:: reverse_iterator_ref.rst
+.. include:: make_reverse_iterator.rst
 
 .. include:: reverse_iterator_eg.rst

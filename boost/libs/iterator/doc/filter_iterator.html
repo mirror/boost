@@ -268,11 +268,44 @@ or <tt class="literal"><span class="pre">f(**this)</span> <span class="pre">==</
 </tr>
 </tbody>
 </table>
+<pre class="literal-block">
+template &lt;class Predicate, class Iterator&gt;
+filter_iterator&lt;Predicate,Iterator&gt;
+make_filter_iterator(Predicate f, Iterator x, Iterator end = Iterator());
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">filter_iterator&lt;Predicate,Iterator&gt;</span></tt> at
+the first position in the range <tt class="literal"><span class="pre">[x,end)</span></tt> such that
+<tt class="literal"><span class="pre">f(*this-&gt;base())</span> <span class="pre">==</span> <span class="pre">true</span></tt> or else at position <tt class="literal"><span class="pre">end</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<pre class="literal-block">
+template &lt;class Predicate, class Iterator&gt;
+filter_iterator&lt;Predicate,Iterator&gt;
+make_filter_iterator(Iterator x, Iterator end = Iterator());
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">filter_iterator&lt;Predicate,Iterator&gt;</span></tt> at
+the first position in the range <tt class="literal"><span class="pre">[x,end)</span></tt>
+such that <tt class="literal"><span class="pre">f(*this-&gt;base())</span> <span class="pre">==</span> <span class="pre">true</span></tt>, where <tt class="literal"><span class="pre">f</span></tt> is a default
+constructed <tt class="literal"><span class="pre">Predicate</span></tt>, or else at position <tt class="literal"><span class="pre">end</span></tt>.</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="example">
 <h1><a class="toc-backref" href="#id4" name="example">Example</a></h1>
-<p>This example uses <tt class="literal"><span class="pre">filter_iterator</span></tt> to output only the positive
-integers from an array of integers.</p>
+<p>This example uses <tt class="literal"><span class="pre">filter_iterator</span></tt> and then
+<tt class="literal"><span class="pre">make_filter_iterator</span></tt> to output only the positive integers from an
+array of integers. Then <tt class="literal"><span class="pre">make_filter_iterator</span></tt> is is used to output
+the integers greater than <tt class="literal"><span class="pre">-2</span></tt>.</p>
 <pre class="literal-block">
 struct is_positive_number {
   bool operator()(int x) { return 0 &lt; x; }
@@ -286,6 +319,7 @@ int main()
   typedef int* base_iterator;
   base_iterator numbers(numbers_);
 
+  // Example using filter_iterator
   typedef boost::filter_iterator&lt;is_positive_number, base_iterator&gt;
     FilterIter;
 
@@ -296,12 +330,35 @@ int main()
   std::copy(filter_iter_first, filter_iter_last, std::ostream_iterator&lt;int&gt;(std::cout, &quot; &quot;));
   std::cout &lt;&lt; std::endl;
 
-  return 0;
+  // Example using make_filter_iterator()
+  std::copy(boost::make_filter_iterator&lt;is_positive_number&gt;(numbers, numbers + N),
+            boost::make_filter_iterator&lt;is_positive_number&gt;(numbers + N, numbers + N),
+            std::ostream_iterator&lt;int&gt;(std::cout, &quot; &quot;));
+  std::cout &lt;&lt; std::endl;
+
+  // Another example using make_filter_iterator()
+  std::copy(
+      boost::make_filter_iterator(
+          std::bind2nd(std::greater&lt;int&gt;(), -2)
+        , numbers, numbers + N)
+
+    , boost::make_filter_iterator(
+          std::bind2nd(std::greater&lt;int&gt;(), -2)
+        , numbers + N, numbers + N)
+
+    , std::ostream_iterator&lt;int&gt;(std::cout, &quot; &quot;)
+  );
+
+  std::cout &lt;&lt; std::endl;
+
+  return boost::exit_success;
 }
 </pre>
 <p>The output is:</p>
 <pre class="literal-block">
-4 5 8
+4 5 8 
+4 5 8 
+0 -1 4 5 8 
 </pre>
 </div>
 </div>

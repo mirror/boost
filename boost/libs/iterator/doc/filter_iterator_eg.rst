@@ -2,8 +2,10 @@
 Example
 -------
 
-This example uses ``filter_iterator`` to output only the positive
-integers from an array of integers.
+This example uses ``filter_iterator`` and then
+``make_filter_iterator`` to output only the positive integers from an
+array of integers. Then ``make_filter_iterator`` is is used to output
+the integers greater than ``-2``.
 
 ::
 
@@ -19,6 +21,7 @@ integers from an array of integers.
       typedef int* base_iterator;
       base_iterator numbers(numbers_);
 
+      // Example using filter_iterator
       typedef boost::filter_iterator<is_positive_number, base_iterator>
 	FilterIter;
 
@@ -29,10 +32,34 @@ integers from an array of integers.
       std::copy(filter_iter_first, filter_iter_last, std::ostream_iterator<int>(std::cout, " "));
       std::cout << std::endl;
 
-      return 0;
+      // Example using make_filter_iterator()
+      std::copy(boost::make_filter_iterator<is_positive_number>(numbers, numbers + N),
+		boost::make_filter_iterator<is_positive_number>(numbers + N, numbers + N),
+		std::ostream_iterator<int>(std::cout, " "));
+      std::cout << std::endl;
+
+      // Another example using make_filter_iterator()
+      std::copy(
+	  boost::make_filter_iterator(
+	      std::bind2nd(std::greater<int>(), -2)
+	    , numbers, numbers + N)
+
+	, boost::make_filter_iterator(
+	      std::bind2nd(std::greater<int>(), -2)
+	    , numbers + N, numbers + N)
+
+	, std::ostream_iterator<int>(std::cout, " ")
+      );
+
+      std::cout << std::endl;
+
+      return boost::exit_success;
     }
 
 
 The output is::
 
-  4 5 8
+    4 5 8 
+    4 5 8 
+    0 -1 4 5 8 
+

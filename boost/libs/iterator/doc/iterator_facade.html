@@ -3,204 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
 <title>Iterator Facade</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
-<meta name="date" content="2003-11-24" />
+<meta name="date" content="2004-01-11" />
 <meta name="copyright" content="Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved" />
-<style type="text/css"><!--
-
-/*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:date: $Date$
-:version: $Revision$
-:copyright: This stylesheet has been placed in the public domain.
-
-Default cascading style sheet for the HTML output of Docutils.
-*/
-
-.first {
-  margin-top: 0 }
-
-.last {
-  margin-bottom: 0 }
-
-a.toc-backref {
-  text-decoration: none ;
-  color: black }
-
-dd {
-  margin-bottom: 0.5em }
-
-div.abstract {
-  margin: 2em 5em }
-
-div.abstract p.topic-title {
-  font-weight: bold ;
-  text-align: center }
-
-div.attention, div.caution, div.danger, div.error, div.hint,
-div.important, div.note, div.tip, div.warning {
-  margin: 2em ;
-  border: medium outset ;
-  padding: 1em }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title {
-  color: red ;
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.hint p.admonition-title, div.important p.admonition-title,
-div.note p.admonition-title, div.tip p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.dedication {
-  margin: 2em 5em ;
-  text-align: center ;
-  font-style: italic }
-
-div.dedication p.topic-title {
-  font-weight: bold ;
-  font-style: normal }
-
-div.figure {
-  margin-left: 2em }
-
-div.footer, div.header {
-  font-size: smaller }
-
-div.system-messages {
-  margin: 5em }
-
-div.system-messages h1 {
-  color: red }
-
-div.system-message {
-  border: medium outset ;
-  padding: 1em }
-
-div.system-message p.system-message-title {
-  color: red ;
-  font-weight: bold }
-
-div.topic {
-  margin: 2em }
-
-h1.title {
-  text-align: center }
-
-h2.subtitle {
-  text-align: center }
-
-hr {
-  width: 75% }
-
-ol.simple, ul.simple {
-  margin-bottom: 1em }
-
-ol.arabic {
-  list-style: decimal }
-
-ol.loweralpha {
-  list-style: lower-alpha }
-
-ol.upperalpha {
-  list-style: upper-alpha }
-
-ol.lowerroman {
-  list-style: lower-roman }
-
-ol.upperroman {
-  list-style: upper-roman }
-
-p.caption {
-  font-style: italic }
-
-p.credits {
-  font-style: italic ;
-  font-size: smaller }
-
-p.label {
-  white-space: nowrap }
-
-p.topic-title {
-  font-weight: bold }
-
-pre.address {
-  margin-bottom: 0 ;
-  margin-top: 0 ;
-  font-family: serif ;
-  font-size: 100% }
-
-pre.line-block {
-  font-family: serif ;
-  font-size: 100% }
-
-pre.literal-block, pre.doctest-block {
-  margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
-
-span.classifier {
-  font-family: sans-serif ;
-  font-style: oblique }
-
-span.classifier-delimiter {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-span.interpreted {
-  font-family: sans-serif }
-
-span.option-argument {
-  font-style: italic }
-
-span.pre {
-  white-space: pre }
-
-span.problematic {
-  color: red }
-
-table {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
-
-table.citation {
-  border-left: solid thin gray ;
-  padding-left: 0.5ex }
-
-table.docinfo {
-  margin: 2em 4em }
-
-table.footnote {
-  border-left: solid thin black ;
-  padding-left: 0.5ex }
-
-td, th {
-  padding-left: 0.5em ;
-  padding-right: 0.5em ;
-  vertical-align: top }
-
-th.docinfo-name, th.field-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap }
-
-h1 tt, h2 tt, h3 tt, h4 tt, h5 tt, h6 tt {
-  font-size: 100% }
-
-tt {
-  background-color: #eeeeee }
-
-ul.auto-toc {
-  list-style-type: none }
-
---></style>
+<link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
 <div class="document" id="iterator-facade">
@@ -218,7 +27,7 @@ ul.auto-toc {
 Lab</a>, University of Hanover <a class="last reference" href="http://www.ive.uni-hannover.de">Institute for Transport
 Railway Operation and Construction</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2003-11-24</td></tr>
+<td>2004-01-11</td></tr>
 <tr><th class="docinfo-name">Copyright:</th>
 <td>Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved</td></tr>
 </tbody>
@@ -244,12 +53,16 @@ and associated types, to be supplied by a derived iterator class.</td>
 <li><a class="reference" href="#id2" id="id12" name="id12"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></li>
 </ul>
 </li>
-<li><a class="reference" href="#tutorial-example" id="id13" name="id13">Tutorial Example</a></li>
-<li><a class="reference" href="#reference" id="id14" name="id14">Reference</a><ul>
-<li><a class="reference" href="#ref" id="id15" name="id15">Ref</a><ul>
-<li><a class="reference" href="#iterator-facade-usage" id="id16" name="id16"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a></li>
-<li><a class="reference" href="#iterator-facade-iterator-category" id="id17" name="id17"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></li>
-<li><a class="reference" href="#iterator-facade-operations" id="id18" name="id18"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
+<li><a class="reference" href="#tutorial-example" id="id13" name="id13">Tutorial Example</a><ul>
+<li><a class="reference" href="#introduction" id="id14" name="id14">Introduction</a></li>
+<li><a class="reference" href="#the-problem" id="id15" name="id15">The Problem</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#reference" id="id16" name="id16">Reference</a><ul>
+<li><a class="reference" href="#ref" id="id17" name="id17">Ref</a><ul>
+<li><a class="reference" href="#iterator-facade-usage" id="id18" name="id18"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a></li>
+<li><a class="reference" href="#iterator-facade-iterator-category" id="id19" name="id19"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></li>
+<li><a class="reference" href="#iterator-facade-operations" id="id20" name="id20"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
 </ul>
 </li>
 </ul>
@@ -412,14 +225,16 @@ into the temporary iterator <tt class="literal"><span class="pre">p+n</span></tt
 <tt class="literal"><span class="pre">operator[]</span></tt> returns.</p>
 <p>Writable iterators built with <tt class="literal"><span class="pre">iterator_facade</span></tt> implement the
 semantics required by the preferred resolution to <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-active.html#299">issue 299</a> and
-adopted by proposal <a class="reference" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html">n1550</a>: the result of <tt class="literal"><span class="pre">p[n]</span></tt> is a proxy object
-containing a copy of <tt class="literal"><span class="pre">p+n</span></tt>, and <tt class="literal"><span class="pre">p[n]</span> <span class="pre">=</span> <span class="pre">x</span></tt> is equivalent to <tt class="literal"><span class="pre">*(p</span>
-<span class="pre">+</span> <span class="pre">n)</span> <span class="pre">=</span> <span class="pre">x</span></tt>.  This approach will work properly for any random-access
-iterator regardless of the other details of its implementation.  A
-user who knows more about the implementation of her iterator is free
-to implement an <tt class="literal"><span class="pre">operator[]</span></tt> which returns an lvalue in the derived
-iterator class; it will hide the one supplied by <tt class="literal"><span class="pre">iterator_facade</span></tt>
-from clients of her iterator.</p>
+adopted by proposal <a class="reference" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html">n1550</a>: the result of <tt class="literal"><span class="pre">p[n]</span></tt> is an object
+convertible to the iterator's <tt class="literal"><span class="pre">value_type</span></tt>, and <tt class="literal"><span class="pre">p[n]</span> <span class="pre">=</span> <span class="pre">x</span></tt> is
+equivalent to <tt class="literal"><span class="pre">*(p</span> <span class="pre">+</span> <span class="pre">n)</span> <span class="pre">=</span> <span class="pre">x</span></tt> (Note: This result object may be
+implemented as a proxy containing a copy of <tt class="literal"><span class="pre">p+n</span></tt>).  This approach
+will work properly for any random-access iterator regardless of the
+other details of its implementation.  A user who knows more about
+the implementation of her iterator is free to implement an
+<tt class="literal"><span class="pre">operator[]</span></tt> that returns an lvalue in the derived iterator
+class; it will hide the one supplied by <tt class="literal"><span class="pre">iterator_facade</span></tt> from
+clients of her iterator.</p>
 <a class="target" id="operator-arrow" name="operator-arrow"></a></div>
 <div class="section" id="id2">
 <h2><a class="toc-backref" href="#id12" name="id2"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></h2>
@@ -445,12 +260,82 @@ Patterns, C++ Report, February 1995, pp. 24-27.</td></tr>
 </div>
 <div class="section" id="tutorial-example">
 <h1><a class="toc-backref" href="#id13" name="tutorial-example">Tutorial Example</a></h1>
-<p>I'm working on a Tutorial example to go here.</p>
+<!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
+<!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
+<!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id14" name="introduction">Introduction</a></h2>
+<p>In this section we'll walk through the implementation of a few
+iterators using <tt class="literal"><span class="pre">iterator_facade</span></tt>, based around the simple
+example of a linked list of polymorphic objects.</p>
+</div>
+<div class="section" id="the-problem">
+<h2><a class="toc-backref" href="#id15" name="the-problem">The Problem</a></h2>
+<p>Say we've written a polymorphic linked list node as follows:</p>
+<pre class="literal-block">
+# include &lt;iostream&gt;
+
+struct node_base
+{
+    node_base() : m_next(0) {}
+
+    virtual ~node_base() { delete m_next; }
+
+    node_base* next() const { return m_next; }
+
+    // print to the stream
+    virtual void print(std::ostream&amp; s) const = 0;
+    
+    // double the value
+    virtual void twice() = 0;
+
+    void append(node_base* p)
+    {
+        if (m_next)
+            m_next-&gt;append(p);
+        else
+            m_next = p;
+    }
+
+ private:
+    node_base* m_next;
+};
+</pre>
+<p>Lists can hold objects of different types by linking together
+specializations of the following template:</p>
+<pre class="literal-block">
+template &lt;class T&gt;
+struct node : node_base
+{
+    node(T x)
+      : m_value(x)
+    {}
+
+    void print(std::ostream&amp; s) const { s &lt;&lt; this-&gt;m_value; }
+    void twice() { m_value += m_value; }
+
+ private:
+    T m_value;
+};
+</pre>
+<p>And we can print any node using the following streaming operator:</p>
+<pre class="literal-block">
+inline std::ostream&amp; operator&lt;&lt;(std::ostream&amp; s, node_base const&amp; n)
+{
+    n.print(s);
+    return s;
+}
+</pre>
+<div class="sidebar">
+<p class="sidebar-title">Note</p>
+<p>This is in progress; check the ../example directory for code.</p>
+</div>
+</div>
 </div>
 <div class="section" id="reference">
-<h1><a class="toc-backref" href="#id14" name="reference">Reference</a></h1>
+<h1><a class="toc-backref" href="#id16" name="reference">Reference</a></h1>
 <div class="section" id="ref">
-<h2><a class="toc-backref" href="#id15" name="ref">Ref</a></h2>
+<h2><a class="toc-backref" href="#id17" name="ref">Ref</a></h2>
 <p>We need to resolve the title levels here.</p>
 <!-- Version 1.3 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
@@ -563,7 +448,7 @@ struct enable_if_interoperable
 {};
 </pre>
 <div class="section" id="iterator-facade-usage">
-<h3><a class="toc-backref" href="#id16" name="iterator-facade-usage"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a></h3>
+<h3><a class="toc-backref" href="#id18" name="iterator-facade-usage"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a></h3>
 <p>The following table describes the typical valid expressions on
 <tt class="literal"><span class="pre">iterator_facade</span></tt>'s <tt class="literal"><span class="pre">Derived</span></tt> parameter, depending on the
 iterator concept(s) it will model.  The operations in the first
@@ -647,7 +532,7 @@ Iterator</td>
 </table>
 <a class="target" id="facade-iterator-category" name="facade-iterator-category"></a></div>
 <div class="section" id="iterator-facade-iterator-category">
-<h3><a class="toc-backref" href="#id17" name="iterator-facade-iterator-category"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></h3>
+<h3><a class="toc-backref" href="#id19" name="iterator-facade-iterator-category"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></h3>
 <p>The <tt class="literal"><span class="pre">iterator_category</span></tt> member of <tt class="literal"><span class="pre">iterator_facade&lt;X,V,R,C,D&gt;</span></tt>
 is a type which satisfies the following conditions:</p>
 <blockquote>
@@ -700,7 +585,7 @@ convertible, and not to any more-derived traversal tag type.</p>
 </blockquote>
 </div>
 <div class="section" id="iterator-facade-operations">
-<h3><a class="toc-backref" href="#id18" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h3>
+<h3><a class="toc-backref" href="#id20" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h3>
 <p>The operations in this section are described in terms of operations on
 the core interface of <tt class="literal"><span class="pre">Derived</span></tt> which may be inaccessible
 (i.e. private).  The implementation should access these operations
@@ -736,10 +621,13 @@ of type <tt class="literal"><span class="pre">pointer</span></tt> equal to:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">an object convertible to <tt class="literal"><span class="pre">reference</span></tt> and holding a copy
-<em>p</em> of <tt class="literal"><span class="pre">*static_cast&lt;Derived</span> <span class="pre">const*&gt;(this)</span> <span class="pre">+</span> <span class="pre">n</span></tt> such that, for a constant object <tt class="literal"><span class="pre">v</span></tt> of type
-<tt class="literal"><span class="pre">value_type</span></tt>, <tt class="literal"><span class="pre">(*static_cast&lt;Derived</span> <span class="pre">const*&gt;(this))[n]</span> <span class="pre">=</span> <span class="pre">v</span></tt> is equivalent
-to <tt class="literal"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">v</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">an object convertible to <tt class="literal"><span class="pre">value_type</span></tt>. For constant
+objects <tt class="literal"><span class="pre">v</span></tt> of type <tt class="literal"><span class="pre">value_type</span></tt>, and <tt class="literal"><span class="pre">n</span></tt> of type
+<tt class="literal"><span class="pre">difference_type</span></tt>, and reference <tt class="literal"><span class="pre">p</span></tt> equal to
+<tt class="literal"><span class="pre">*static_cast&lt;Derived</span> <span class="pre">const*&gt;(this)</span></tt>, <tt class="literal"><span class="pre">(*this)[n]</span> <span class="pre">=</span> <span class="pre">v</span></tt> is
+equivalent to <tt class="literal"><span class="pre">*(p+</span> <span class="pre">n)</span> <span class="pre">=</span> <span class="pre">v</span></tt>, and <tt class="literal"><span class="pre">static_cast&lt;value_type</span>
+<span class="pre">const&amp;&gt;((*this)[n])</span></tt> is equivalent to
+<tt class="literal"><span class="pre">static_cast&lt;value_type</span> <span class="pre">const&amp;&gt;(*(p+n))</span></tt></td>
 </tr>
 </tbody>
 </table>
@@ -839,12 +727,6 @@ return tmp -= n;
 </div>
 </div>
 </div>
-</div>
-<hr class="footer" />
-<div class="footer">
-<a class="reference" href="iterator_facade.rst">View document source</a>.
-Generated on: 2004-01-10 18:59 UTC.
-Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
 </html>

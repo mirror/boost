@@ -153,6 +153,20 @@ return *--tmp;
 </tr>
 </tbody>
 </table>
+<pre class="literal-block">
+template &lt;class BidirectionalIterator&gt;
+reverse_iterator&lt;BidirectionalIterator&gt;n
+make_reverse_iterator(BidirectionalIterator x);
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">reverse_iterator&lt;BidirectionalIterator&gt;</span></tt>
+with a <tt class="literal"><span class="pre">current</span></tt> constructed from <tt class="literal"><span class="pre">x</span></tt>.</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="example">
 <h1><a class="toc-backref" href="#id5" name="example">Example</a></h1>
@@ -163,21 +177,28 @@ char letters_[] = &quot;hello world!&quot;;
 const int N = sizeof(letters_)/sizeof(char) - 1;
 typedef char* base_iterator;
 base_iterator letters(letters_);
-std::cout &lt;&lt; &quot;original sequence of letters:\t&quot; &lt;&lt; letters_ &lt;&lt; std::endl;
+std::cout &lt;&lt; &quot;original sequence of letters:\t\t\t&quot; &lt;&lt; letters_ &lt;&lt; std::endl;
 
 boost::reverse_iterator&lt;base_iterator&gt;
   reverse_letters_first(letters + N),
   reverse_letters_last(letters);
 
-std::cout &lt;&lt; &quot;sequence in reverse order:\t&quot;;
+std::cout &lt;&lt; &quot;sequence in reverse order:\t\t\t&quot;;
 std::copy(reverse_letters_first, reverse_letters_last,
+          std::ostream_iterator&lt;char&gt;(std::cout));
+std::cout &lt;&lt; std::endl;
+
+std::cout &lt;&lt; &quot;sequence in double-reversed (normal) order:\t&quot;;
+std::copy(boost::make_reverse_iterator(reverse_letters_last),
+          boost::make_reverse_iterator(reverse_letters_first),
           std::ostream_iterator&lt;char&gt;(std::cout));
 std::cout &lt;&lt; std::endl;
 </pre>
 <p>The output is:</p>
 <pre class="literal-block">
-original sequence of letters:   hello world!
-sequence in reverse order:      !dlrow olleh
+original sequence of letters:                   hello world!
+sequence in reverse order:                      !dlrow olleh
+sequence in double-reversed (normal) order:     hello world!
 </pre>
 </div>
 </div>

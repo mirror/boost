@@ -21,5 +21,6 @@
 .. contents:: Table of Contents
 
 .. include:: filter_iterator_ref.rst
+.. include:: make_filter_iterator.rst
 
 .. include:: filter_iterator_eg.rst
