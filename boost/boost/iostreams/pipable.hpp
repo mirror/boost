@@ -11,6 +11,8 @@
 # pragma once
 #endif
 
+#include <boost/config.hpp> // BOOST_MSVC.
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/is_filter.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/preprocessor/control/expr_if.hpp>
@@ -20,6 +22,9 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+# include <boost/type_traits/is_base_and_derived.hpp>
+#endif
 
 #define BOOST_IOSTREAMS_PIPABLE_TEMPLATE_PARAMS(arity) \
     BOOST_PP_ENUM_PARAMS(arity, typename T) BOOST_PP_COMMA_IF(arity) \
@@ -52,8 +57,21 @@
 
 namespace boost { namespace iostreams { namespace detail {
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+struct piper_base { };
+
+template<typename T>
+struct is_piper 
+    : is_base_and_derived<piper_base, T>
+    { };
+#endif
+
 template<typename Concept>
-struct concept_piper {
+struct concept_piper 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    : piper_base 
+#endif 
+{
     concept_piper(const Concept& concept) : concept_(concept) { }
     template<typename Chain>
     void push(Chain& chn) const { chn.push(concept_); }
@@ -62,6 +80,8 @@ struct concept_piper {
 
 template<typename Piper, typename Concept>
 struct piper : Piper {
+    typedef Piper    piper_type;
+    typedef Concept  concept_type;
     piper(const Piper& p, const Concept& concept)
         : Piper(p), concept_(concept)
         { }
