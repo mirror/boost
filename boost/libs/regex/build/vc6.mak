@@ -36,7 +36,7 @@ NULL=nul
 !ENDIF
 
 
-ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/detail/fileiter.hpp ../../../boost/regex/detail/instances.hpp ../../../boost/regex/detail/regex_compile.hpp ../../../boost/regex/detail/regex_cstring.hpp ../../../boost/regex/detail/regex_format.hpp ../../../boost/regex/detail/regex_kmp.hpp ../../../boost/regex/detail/regex_library_include.hpp ../../../boost/regex/detail/regex_match.hpp ../../../boost/regex/detail/regex_raw_buffer.hpp ../../../boost/regex/detail/regex_split.hpp ../../../boost/regex/detail/regex_stack.hpp ../../../boost/regex/detail/regex_synch.hpp
+ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/v3/fileiter.hpp ../../../boost/regex/v3/instances.hpp ../../../boost/regex/v3/regex_compile.hpp ../../../boost/regex/v3/regex_cstring.hpp ../../../boost/regex/v3/regex_format.hpp ../../../boost/regex/v3/regex_kmp.hpp ../../../boost/regex/v3/regex_library_include.hpp ../../../boost/regex/v3/regex_match.hpp ../../../boost/regex/v3/regex_raw_buffer.hpp ../../../boost/regex/v3/regex_split.hpp ../../../boost/regex/v3/regex_stack.hpp ../../../boost/regex/v3/regex_synch.hpp
 
 all : main_dir boost_regex_vc6_sss_dir ./vc6/boost_regex_vc6_sss.lib boost_regex_vc6_mss_dir ./vc6/boost_regex_vc6_mss.lib boost_regex_vc6_sssd_dir ./vc6/boost_regex_vc6_sssd.lib boost_regex_vc6_mssd_dir ./vc6/boost_regex_vc6_mssd.lib boost_regex_vc6_mdid_dir ./vc6/boost_regex_vc6_mdid.lib boost_regex_vc6_mdi_dir ./vc6/boost_regex_vc6_mdi.lib boost_regex_vc6_mds_dir ./vc6/boost_regex_vc6_mds.lib boost_regex_vc6_mdsd_dir ./vc6/boost_regex_vc6_mdsd.lib
 
@@ -509,4 +509,6 @@ boost_regex_vc6_mdsd_clean :
 
 ./vc6/boost_regex_vc6_mdsd.lib : vc6/boost_regex_vc6_mdsd/c_regex_traits.obj vc6/boost_regex_vc6_mdsd/c_regex_traits_common.obj vc6/boost_regex_vc6_mdsd/cpp_regex_traits.obj vc6/boost_regex_vc6_mdsd/cregex.obj vc6/boost_regex_vc6_mdsd/fileiter.obj vc6/boost_regex_vc6_mdsd/instances.obj vc6/boost_regex_vc6_mdsd/posix_api.obj vc6/boost_regex_vc6_mdsd/regex.obj vc6/boost_regex_vc6_mdsd/regex_debug.obj vc6/boost_regex_vc6_mdsd/regex_synch.obj vc6/boost_regex_vc6_mdsd/w32_regex_traits.obj vc6/boost_regex_vc6_mdsd/wide_posix_api.obj vc6/boost_regex_vc6_mdsd/winstances.obj
 	link -lib /nologo /out:vc6/boost_regex_vc6_mdsd.lib $(XSFLAGS)  vc6/boost_regex_vc6_mdsd/c_regex_traits.obj vc6/boost_regex_vc6_mdsd/c_regex_traits_common.obj vc6/boost_regex_vc6_mdsd/cpp_regex_traits.obj vc6/boost_regex_vc6_mdsd/cregex.obj vc6/boost_regex_vc6_mdsd/fileiter.obj vc6/boost_regex_vc6_mdsd/instances.obj vc6/boost_regex_vc6_mdsd/posix_api.obj vc6/boost_regex_vc6_mdsd/regex.obj vc6/boost_regex_vc6_mdsd/regex_debug.obj vc6/boost_regex_vc6_mdsd/regex_synch.obj vc6/boost_regex_vc6_mdsd/w32_regex_traits.obj vc6/boost_regex_vc6_mdsd/wide_posix_api.obj vc6/boost_regex_vc6_mdsd/winstances.obj
+
+
 

@@ -6,13 +6,13 @@ for file in ../../../boost/regex/*.hpp ; do
 	fi
 done
 
-for file in ../../../boost/regex/detail/*.hpp; do
+for file in ../../../boost/regex/v3/*.hpp; do
 	if [ -f $file ]; then
 		header="$header $file"
 	fi
 done
 
-for file in ../../../boost/regex/detail/*.hxx; do
+for file in ../../../boost/regex/v3/*.hxx; do
 	if [ -f $file ]; then
 		header="$header $file"
 	fi
@@ -25,4 +25,5 @@ for file in ../src/*.cpp; do
 		src="$src $file"
 	fi
 done
+
 

@@ -35,7 +35,7 @@ BCROOT=$(MAKEDIR)\..
 !endif
 
 
-ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/detail/fileiter.hpp ../../../boost/regex/detail/instances.hpp ../../../boost/regex/detail/regex_compile.hpp ../../../boost/regex/detail/regex_cstring.hpp ../../../boost/regex/detail/regex_format.hpp ../../../boost/regex/detail/regex_kmp.hpp ../../../boost/regex/detail/regex_library_include.hpp ../../../boost/regex/detail/regex_match.hpp ../../../boost/regex/detail/regex_raw_buffer.hpp ../../../boost/regex/detail/regex_split.hpp ../../../boost/regex/detail/regex_stack.hpp ../../../boost/regex/detail/regex_synch.hpp
+ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/v3/fileiter.hpp ../../../boost/regex/v3/instances.hpp ../../../boost/regex/v3/regex_compile.hpp ../../../boost/regex/v3/regex_cstring.hpp ../../../boost/regex/v3/regex_format.hpp ../../../boost/regex/v3/regex_kmp.hpp ../../../boost/regex/v3/regex_library_include.hpp ../../../boost/regex/v3/regex_match.hpp ../../../boost/regex/v3/regex_raw_buffer.hpp ../../../boost/regex/v3/regex_split.hpp ../../../boost/regex/v3/regex_stack.hpp ../../../boost/regex/v3/regex_synch.hpp
 
 all : bcb4 bcb4\boost_regex_bcb4_sss bcb4\boost_regex_bcb4_sss.lib bcb4\boost_regex_bcb4_mss bcb4\boost_regex_bcb4_mss.lib bcb4\boost_regex_bcb4_mdi bcb4\boost_regex_bcb4_mdi.lib bcb4\boost_regex_bcb4_sdi bcb4\boost_regex_bcb4_sdi.lib bcb4\boost_regex_bcb4_mds bcb4\boost_regex_bcb4_mds.lib bcb4\boost_regex_bcb4_sds bcb4\boost_regex_bcb4_sds.lib
 
@@ -564,4 +564,5 @@ bcb4\boost_regex_bcb4_sds.lib : bcb4\boost_regex_bcb4_sds\c_regex_traits.obj bcb
 	tlib @&&|
 /P128 /C /u /a $(XSFLAGS) bcb4\boost_regex_bcb4_sds.lib  -+bcb4\boost_regex_bcb4_sds\c_regex_traits.obj -+bcb4\boost_regex_bcb4_sds\c_regex_traits_common.obj -+bcb4\boost_regex_bcb4_sds\cpp_regex_traits.obj -+bcb4\boost_regex_bcb4_sds\cregex.obj -+bcb4\boost_regex_bcb4_sds\fileiter.obj -+bcb4\boost_regex_bcb4_sds\instances.obj -+bcb4\boost_regex_bcb4_sds\posix_api.obj -+bcb4\boost_regex_bcb4_sds\regex.obj -+bcb4\boost_regex_bcb4_sds\regex_debug.obj -+bcb4\boost_regex_bcb4_sds\regex_synch.obj -+bcb4\boost_regex_bcb4_sds\w32_regex_traits.obj -+bcb4\boost_regex_bcb4_sds\wide_posix_api.obj -+bcb4\boost_regex_bcb4_sds\winstances.obj
 |
+
 

@@ -35,7 +35,7 @@ BCROOT=$(MAKEDIR)\..
 !endif
 
 
-ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/detail/fileiter.hpp ../../../boost/regex/detail/instances.hpp ../../../boost/regex/detail/regex_compile.hpp ../../../boost/regex/detail/regex_cstring.hpp ../../../boost/regex/detail/regex_format.hpp ../../../boost/regex/detail/regex_kmp.hpp ../../../boost/regex/detail/regex_library_include.hpp ../../../boost/regex/detail/regex_match.hpp ../../../boost/regex/detail/regex_raw_buffer.hpp ../../../boost/regex/detail/regex_split.hpp ../../../boost/regex/detail/regex_stack.hpp ../../../boost/regex/detail/regex_synch.hpp
+ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/v3/fileiter.hpp ../../../boost/regex/v3/instances.hpp ../../../boost/regex/v3/regex_compile.hpp ../../../boost/regex/v3/regex_cstring.hpp ../../../boost/regex/v3/regex_format.hpp ../../../boost/regex/v3/regex_kmp.hpp ../../../boost/regex/v3/regex_library_include.hpp ../../../boost/regex/v3/regex_match.hpp ../../../boost/regex/v3/regex_raw_buffer.hpp ../../../boost/regex/v3/regex_split.hpp ../../../boost/regex/v3/regex_stack.hpp ../../../boost/regex/v3/regex_synch.hpp
 
 all : bcb6 bcb6\boost_regex_bcb6_sss bcb6\boost_regex_bcb6_sss.lib bcb6\boost_regex_bcb6_mss bcb6\boost_regex_bcb6_mss.lib bcb6\boost_regex_bcb6_mdi bcb6\boost_regex_bcb6_mdi.lib bcb6\boost_regex_bcb6_sdi bcb6\boost_regex_bcb6_sdi.lib bcb6\boost_regex_bcb6_mds bcb6\boost_regex_bcb6_mds.lib bcb6\boost_regex_bcb6_sds bcb6\boost_regex_bcb6_sds.lib bcb6\boost_regex_bcb6_sssdd bcb6\boost_regex_bcb6_sssdd.lib bcb6\boost_regex_bcb6_mssdd bcb6\boost_regex_bcb6_mssdd.lib bcb6\boost_regex_bcb6_mdidd bcb6\boost_regex_bcb6_mdidd.lib bcb6\boost_regex_bcb6_sdidd bcb6\boost_regex_bcb6_sdidd.lib bcb6\boost_regex_bcb6_mdsdd bcb6\boost_regex_bcb6_mdsdd.lib bcb6\boost_regex_bcb6_sdsdd bcb6\boost_regex_bcb6_sdsdd.lib
 
@@ -1082,4 +1082,5 @@ bcb6\boost_regex_bcb6_sdsdd.lib : bcb6\boost_regex_bcb6_sdsdd\c_regex_traits.obj
 	tlib @&&|
 /P128 /C /u /a $(XSFLAGS) bcb6\boost_regex_bcb6_sdsdd.lib  -+bcb6\boost_regex_bcb6_sdsdd\c_regex_traits.obj -+bcb6\boost_regex_bcb6_sdsdd\c_regex_traits_common.obj -+bcb6\boost_regex_bcb6_sdsdd\cpp_regex_traits.obj -+bcb6\boost_regex_bcb6_sdsdd\cregex.obj -+bcb6\boost_regex_bcb6_sdsdd\fileiter.obj -+bcb6\boost_regex_bcb6_sdsdd\instances.obj -+bcb6\boost_regex_bcb6_sdsdd\posix_api.obj -+bcb6\boost_regex_bcb6_sdsdd\regex.obj -+bcb6\boost_regex_bcb6_sdsdd\regex_debug.obj -+bcb6\boost_regex_bcb6_sdsdd\regex_synch.obj -+bcb6\boost_regex_bcb6_sdsdd\w32_regex_traits.obj -+bcb6\boost_regex_bcb6_sdsdd\wide_posix_api.obj -+bcb6\boost_regex_bcb6_sdsdd\winstances.obj
 |
+
 

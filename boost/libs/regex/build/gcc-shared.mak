@@ -29,7 +29,7 @@ C1=-c -O2 -I../../../ -fPIC
 C2=-c -g -I../../../ -fPIC
 
 
-ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/detail/fileiter.hpp ../../../boost/regex/detail/instances.hpp ../../../boost/regex/detail/regex_compile.hpp ../../../boost/regex/detail/regex_cstring.hpp ../../../boost/regex/detail/regex_format.hpp ../../../boost/regex/detail/regex_kmp.hpp ../../../boost/regex/detail/regex_library_include.hpp ../../../boost/regex/detail/regex_match.hpp ../../../boost/regex/detail/regex_raw_buffer.hpp ../../../boost/regex/detail/regex_split.hpp ../../../boost/regex/detail/regex_stack.hpp ../../../boost/regex/detail/regex_synch.hpp
+ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/v3/fileiter.hpp ../../../boost/regex/v3/instances.hpp ../../../boost/regex/v3/regex_compile.hpp ../../../boost/regex/v3/regex_cstring.hpp ../../../boost/regex/v3/regex_format.hpp ../../../boost/regex/v3/regex_kmp.hpp ../../../boost/regex/v3/regex_library_include.hpp ../../../boost/regex/v3/regex_match.hpp ../../../boost/regex/v3/regex_raw_buffer.hpp ../../../boost/regex/v3/regex_split.hpp ../../../boost/regex/v3/regex_stack.hpp ../../../boost/regex/v3/regex_synch.hpp
 
 all : gcc  gcc gcc/boost_regex_shared ./gcc/libboost_regex.so gcc gcc/boost_regex_debug_shared ./gcc/libboost_regex_debug.so
 
@@ -147,4 +147,5 @@ boost_regex_debug_clean :
 
 ./gcc/libboost_regex_debug.so : gcc/boost_regex_debug_shared/c_regex_traits.o gcc/boost_regex_debug_shared/c_regex_traits_common.o gcc/boost_regex_debug_shared/cpp_regex_traits.o gcc/boost_regex_debug_shared/cregex.o gcc/boost_regex_debug_shared/fileiter.o gcc/boost_regex_debug_shared/instances.o gcc/boost_regex_debug_shared/posix_api.o gcc/boost_regex_debug_shared/regex.o gcc/boost_regex_debug_shared/regex_debug.o gcc/boost_regex_debug_shared/regex_synch.o gcc/boost_regex_debug_shared/w32_regex_traits.o gcc/boost_regex_debug_shared/wide_posix_api.o gcc/boost_regex_debug_shared/winstances.o
 	$(LINKER) -o gcc/libboost_regex_debug.so $(LDFLAGS)  gcc/boost_regex_debug_shared/c_regex_traits.o gcc/boost_regex_debug_shared/c_regex_traits_common.o gcc/boost_regex_debug_shared/cpp_regex_traits.o gcc/boost_regex_debug_shared/cregex.o gcc/boost_regex_debug_shared/fileiter.o gcc/boost_regex_debug_shared/instances.o gcc/boost_regex_debug_shared/posix_api.o gcc/boost_regex_debug_shared/regex.o gcc/boost_regex_debug_shared/regex_debug.o gcc/boost_regex_debug_shared/regex_synch.o gcc/boost_regex_debug_shared/w32_regex_traits.o gcc/boost_regex_debug_shared/wide_posix_api.o gcc/boost_regex_debug_shared/winstances.o $(LIBS)
+
 
