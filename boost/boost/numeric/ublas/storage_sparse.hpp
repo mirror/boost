@@ -65,10 +65,10 @@ namespace boost { namespace numeric { namespace ublas {
 
     }
 
-#ifdef BOOST_UBLAS_STRICT_STORAGE_SPARSE
+#ifdef BOOST_UBLAS_STRICT_MAP_ARRAY
     template<class D>
     struct sparse_storage_element_traits {
-        typedef typename D::index_type index_type;
+        typedef typename D::key_type index_type;
         typedef typename D::data_const_reference data_const_reference;
         typedef typename D::data_reference data_reference;
     };
@@ -118,8 +118,8 @@ namespace boost { namespace numeric { namespace ublas {
        public container_reference<A> {
     public:
         typedef A array_type;
-        typedef typename A::index_type index_type;
-        typedef typename A::data_value_type data_value_type;
+        typedef typename A::key_type index_type;
+        typedef typename A::mapped_type data_value_type;
         // typedef const data_value_type &data_const_reference;
         typedef typename type_traits<data_value_type>::const_reference data_const_reference;
         typedef data_value_type &data_reference;
@@ -256,19 +256,19 @@ namespace boost { namespace numeric { namespace ublas {
     public:
         typedef typename ALLOC::size_type size_type;
         typedef typename ALLOC::difference_type difference_type;
-        typedef I index_type;
-        typedef T data_value_type;
-        typedef const T &data_const_reference;
-#ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
-        typedef T &data_reference;
-#else
-        typedef sparse_storage_element<map_array> data_reference;
-#endif
-        typedef typename ALLOC::value_type value_type;
+        typedef std::pair<I,T> value_type;
+        typedef I key_type;
+        typedef T mapped_type;
         typedef const value_type &const_reference;
         typedef value_type &reference;
         typedef const value_type *const_pointer;
         typedef value_type *pointer;
+        typedef const T &data_const_reference;
+#ifndef BOOST_UBLAS_STRICT_MAP_ARRAY
+        typedef T &data_reference;
+#else
+        typedef sparse_storage_element<map_array> data_reference;
+#endif
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -296,7 +296,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        // Resizing - implicitly exposses uninitialized (but default constructed) data_value_type
+        // Resizing - implicitly exposses uninitialized (but default constructed) mapped_type
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
             BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
@@ -354,11 +354,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element access
         BOOST_UBLAS_INLINE
-        data_reference operator [] (index_type i) {
-#ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
+        data_reference operator [] (key_type i) {
+#ifndef BOOST_UBLAS_STRICT_MAP_ARRAY
             pointer it = find (i);
             if (it == end ())
-                it = insert (end (), value_type (i, data_value_type (0)));
+                it = insert (end (), value_type (i, mapped_type (0)));
             BOOST_UBLAS_CHECK (it != end (), internal_logic ());
             return it->second;
 #else
@@ -442,7 +442,7 @@ namespace boost { namespace numeric { namespace ublas {
         void erase (pointer it) {
             BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
             // Fixed by George Katsirelos.
-            // (*it).second = data_value_type (0);
+            // (*it).second = mapped_type (0);
             std::copy (it + 1, end (), it);
             resize (size () - 1);
         }
@@ -453,7 +453,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Fixed by George Katsirelos.
             // while (it1 != it2) {
             //     BOOST_UBLAS_CHECK (begin () <= it1 && it1 < end (), bad_index ());
-            //     (*it1).second = data_value_type (0);
+            //     (*it1).second = mapped_type (0);
             //     ++ it1;
             // }
             std::copy (it2, end (), it1);
@@ -468,29 +468,29 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
-        const_pointer find (index_type i) const {
-            const_pointer it (detail::lower_bound (begin (), end (), value_type (i, data_value_type (0)), detail::less_pair<value_type> ()));
+        const_pointer find (key_type i) const {
+            const_pointer it (detail::lower_bound (begin (), end (), value_type (i, mapped_type (0)), detail::less_pair<value_type> ()));
             if (it == end () || it->first != i)
                 it = end ();
             return it;
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
-        pointer find (index_type i) {
-            pointer it (detail::lower_bound (begin (), end (), value_type (i, data_value_type (0)), detail::less_pair<value_type> ()));
+        pointer find (key_type i) {
+            pointer it (detail::lower_bound (begin (), end (), value_type (i, mapped_type (0)), detail::less_pair<value_type> ()));
             if (it == end () || it->first != i)
                 it = end ();
             return it;
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
-        const_pointer lower_bound (index_type i) const {
-            return detail::lower_bound (begin (), end (), value_type (i, data_value_type (0)), detail::less_pair<value_type> ());
+        const_pointer lower_bound (key_type i) const {
+            return detail::lower_bound (begin (), end (), value_type (i, mapped_type (0)), detail::less_pair<value_type> ());
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
-        pointer lower_bound (index_type i) {
-            return detail::lower_bound (begin (), end (), value_type (i, data_value_type (0)), detail::less_pair<value_type> ());
+        pointer lower_bound (key_type i) {
+            return detail::lower_bound (begin (), end (), value_type (i, mapped_type (0)), detail::less_pair<value_type> ());
         }
 
         // Iterators simply are pointers.
@@ -562,25 +562,21 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     namespace detail {
-        using namespace boost::numeric::ublas;
-
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         template<class A>
-        struct map_traits {};
-
+        struct map_traits {
+            typedef BOOST_UBLAS_TYPENAME A::mapped_type &reference;
+        };
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         template<class I, class T, class ALLOC>
         struct map_traits<map_array<I, T, ALLOC> > {
             typedef typename map_array<I, T, ALLOC>::data_reference reference;
         };
-
-        template<class I, class T, class ALLOC>
-        struct map_traits<std::map<I, T, ALLOC> > {
-            typedef typename std::map<I, T, ALLOC>::mapped_type &reference;
-
-        };
+#elif defined (BOOST_UBLAS_STRICT_MAP_ARRAY)
+#error BOOST_UBLAS_STRICT_MAP_ARRAY require partial template speciazation
 #endif
 
-        // Some helpers for map_array
+        // reserve helpers for map_array and generic maps
+        // ISSUE should be in map_traits but want to use on all compilers
 
         template<class I, class T, class ALLOC>
         BOOST_UBLAS_INLINE
@@ -588,27 +584,11 @@ namespace boost { namespace numeric { namespace ublas {
             m.reserve (capacity);
         }
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        template<class I, class T, class ALLOC>
-        BOOST_UBLAS_INLINE
-        typename map_array<I, T, ALLOC>::data_reference make_reference (map_array<I, T, ALLOC> &a, typename map_array<I, T, ALLOC>::iterator it) {
-            return reference (a, it);
-        }
-#endif
-
         // Some helpers for std::map
 
         template<class I, class T, class ALLOC>
         BOOST_UBLAS_INLINE
         void reserve (std::map<I, T, ALLOC> &/* m */, typename std::map<I, T, ALLOC>::size_type /* capacity */) {}
-
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        template<class I, class T, class ALLOC>
-        BOOST_UBLAS_INLINE
-        typename std::map<I, T, ALLOC>::mapped_type &make_reference (std::map<I, T, ALLOC> &/* a */, typename std::map<I, T, ALLOC>::iterator it) {
-            return (*it).second;
-        }
-#endif
 
     }
 
@@ -622,9 +602,10 @@ namespace boost { namespace numeric { namespace ublas {
 
 
 #ifdef BOOST_UBLAS_DEPRACATED
-// Depracted due to:
-//  no allocator interface
+// Depracated due to:
+//  no allocator implementation
 //  inconsitent value_type zero init
+//  non STL typedefs
 
     // Set array
     template<class I, class ALLOC>
