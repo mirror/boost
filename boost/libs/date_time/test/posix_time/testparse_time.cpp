@@ -35,6 +35,10 @@ main()
   time_duration td5= boost::date_time::parse_delimited_time_duration<time_duration>(s5);
   check("parse time duration: " + s5, 
         td5 == time_duration(23,59,59)+nanosec(999999999));
+  std::string s5b("-23:59:59.999999999");
+  time_duration td5b= boost::date_time::parse_delimited_time_duration<time_duration>(s5b);
+  check("parse time duration: " + s5b, 
+        td5b == time_duration(-23,59,59)+nanosec(999999999));
 #endif
 
 #if defined(BOOST_DATE_TIME_HAS_MICROSECONDS) && (!defined(BOOST_DATE_TIME_HAS_NANOSECONDS))
@@ -59,6 +63,10 @@ main()
     time_duration td5= boost::date_time::parse_delimited_time_duration<time_duration>(s5);
     check("parse time duration: " + s5, 
           td5 == time_duration(23,59,59)+microsec(999999));
+    std::string s5b("-23:59:59.999999");
+    time_duration td5b= boost::date_time::parse_delimited_time_duration<time_duration>(s5b);
+    check("parse time duration: " + s5b, 
+          td5b == time_duration(-23,59,59)+microsec(999999));
   }
 #endif
 
