@@ -55,4 +55,6 @@
 #
 # define BOOST_PP_LOCAL_ITERATE() <boost/preprocessor/detail/iterate/local_iterate.hpp>
 #
+# define BOOST_PP_INCLUDE_SELF() <boost/preprocessor/detail/iterate/self.hpp>
+#
 # endif
