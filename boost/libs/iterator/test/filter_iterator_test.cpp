@@ -1,8 +1,10 @@
-// Copyright David Abrahams 2003. Permission to copy, use,
-// modify, sell and distribute this software is granted provided this
-// copyright notice appears in all copies. This software is provided
-// "as is" without express or implied warranty, and with no claim as
-// to its suitability for any purpose.
+// Copyright David Abrahams 2003, Jeremy Siek 2004. 
+
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all
+// copies. This software is provided "as is" without express or
+// implied warranty, and with no claim as to its suitability for any
+// purpose.
 
 #include <boost/iterator/filter_iterator.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
@@ -12,6 +14,7 @@
 #include <boost/concept_archetype.hpp>
 #include <boost/iterator/iterator_concepts.hpp>
 #include <boost/iterator/iterator_archetypes.hpp>
+#include <boost/cstdlib.hpp>
 
 #include <deque>
 #include <iostream>
@@ -184,5 +187,5 @@ int main()
 
 
   std::cout << "test successful " << std::endl;
-  return 0;
+  return boost::exit_success;
 }

@@ -1,13 +1,21 @@
-// Copyright Thomas Witt 2003. Permission to copy, use,
-// modify, sell and distribute this software is granted provided this
-// copyright notice appears in all copies. This software is provided
-// "as is" without express or implied warranty, and with no claim as
-// to its suitability for any purpose.
+// Copyright Thomas Witt 2003, Jeremy Siek 2004.
+
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all
+// copies. This software is provided "as is" without express or
+// implied warranty, and with no claim as to its suitability for any
+// purpose.
 
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/iterator/new_iterator_tests.hpp>
+#include <boost/concept_check.hpp>
+#include <boost/concept_archetype.hpp>
+#include <boost/iterator/iterator_concepts.hpp>
+#include <boost/iterator/iterator_archetypes.hpp>
+#include <boost/cstdlib.hpp>
 #include <algorithm>
 #include <deque>
+#include <iostream>
 
 using boost::dummyT;
 
@@ -18,7 +26,73 @@ int main()
                      dummyT(3), dummyT(4), dummyT(5) };
   const int N = sizeof(array)/sizeof(dummyT);
 
-  // Test reverse_iterator_generator
+  // Concept checks
+  // Adapting old-style iterators
+  {
+    typedef boost::reverse_iterator<boost::bidirectional_iterator_archetype<dummyT> > Iter;
+    boost::function_requires< boost::BidirectionalIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::ReadableLvalueIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+  }
+  {
+    typedef boost::reverse_iterator<boost::mutable_bidirectional_iterator_archetype<dummyT> > Iter;
+    boost::function_requires< boost::Mutable_BidirectionalIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::WritableLvalueIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+  }
+  // Adapting new-style iterators
+  {
+    typedef boost::iterator_archetype<
+	const dummyT
+      , boost::iterator_archetypes::readable_iterator_t
+      , boost::bidirectional_traversal_tag
+    > Iter;      
+    boost::function_requires< boost::InputIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+  }
+  {
+    typedef boost::iterator_archetype<
+	dummyT
+      , boost::iterator_archetypes::writable_iterator_t
+      , boost::bidirectional_traversal_tag
+    > Iter;      
+    boost::function_requires< boost_concepts::WritableIteratorConcept<Iter, dummyT> >();
+    boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+  }
+  {
+    typedef boost::iterator_archetype<
+	dummyT
+      , boost::iterator_archetypes::readable_writable_iterator_t
+      , boost::bidirectional_traversal_tag
+    > Iter;      
+    boost::function_requires< boost::InputIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::WritableIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+  }
+  {
+    typedef boost::iterator_archetype<
+	const dummyT
+      , boost::iterator_archetypes::readable_lvalue_iterator_t
+      , boost::bidirectional_traversal_tag
+    > Iter;      
+    boost::function_requires< boost::BidirectionalIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::ReadableLvalueIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+  }
+  {
+    typedef boost::iterator_archetype<
+	dummyT
+      , boost::iterator_archetypes::writable_lvalue_iterator_t
+      , boost::bidirectional_traversal_tag
+    > Iter;      
+    boost::function_requires< boost::BidirectionalIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::WritableLvalueIteratorConcept<Iter> >();
+    boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
+  }
+
+  // Test reverse_iterator
   {
     dummyT reversed[N];
     std::copy(array, array + N, reversed);
@@ -43,7 +117,7 @@ int main()
     boost::const_nonconst_iterator_test(i, ++j);
   }
 
-  // Test reverse_iterator_generator again, with traits fully deducible on all platforms
+  // Test reverse_iterator again, with traits fully deducible on all platforms
   {
     std::deque<dummyT> reversed_container;
     std::reverse_copy(array, array + N, std::back_inserter(reversed_container));
@@ -82,5 +156,7 @@ int main()
     
 #endif
   }
-  return 0;
+
+  std::cout << "test successful " << std::endl;
+  return boost::exit_success;
 }
