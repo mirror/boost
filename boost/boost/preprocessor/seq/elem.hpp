@@ -14,6 +14,7 @@
 # define BOOST_PREPROCESSOR_SEQ_ELEM_HPP
 #
 # include <boost/preprocessor/config/config.hpp>
+# include <boost/preprocessor/facilities/empty.hpp>
 #
 # /* BOOST_PP_SEQ_ELEM */
 #
@@ -26,7 +27,7 @@
 # if BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
 #    define BOOST_PP_SEQ_ELEM_I(i, seq) BOOST_PP_SEQ_ELEM_II((BOOST_PP_SEQ_ELEM_ ## i seq))
 #    define BOOST_PP_SEQ_ELEM_II(res) BOOST_PP_SEQ_ELEM_IV(BOOST_PP_SEQ_ELEM_III res)
-#    define BOOST_PP_SEQ_ELEM_III(x, _) x
+#    define BOOST_PP_SEQ_ELEM_III(x, _) x BOOST_PP_EMPTY()
 #    define BOOST_PP_SEQ_ELEM_IV(x) x
 # elif BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
 #    define BOOST_PP_SEQ_ELEM_I(par) BOOST_PP_SEQ_ELEM_II ## par
