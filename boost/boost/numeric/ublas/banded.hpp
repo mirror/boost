@@ -1193,7 +1193,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         banded_adaptor &operator = (const banded_adaptor &m) {
-            matrix_assign (scalar_assign<reference, value_type> (), *this, m);
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1_type::reference, value_type> (), *this, m);
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -1204,49 +1204,49 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_adaptor &operator = (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (ae));
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1_type::reference, value_type> (), *this, matrix<value_type> (ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_adaptor &assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1_type::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_adaptor& operator += (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (*this + ae));
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1_type::reference, value_type> (), *this, matrix<value_type> (*this + ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_adaptor &plus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_plus_assign<BOOST_UBLAS_TYPENAME iterator1_type::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_adaptor& operator -= (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (*this - ae));
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1_type::reference, value_type> (), *this, matrix<value_type> (*this - ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_adaptor &minus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_minus_assign<BOOST_UBLAS_TYPENAME iterator1_type::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         banded_adaptor& operator *= (const AT &at) {
-            matrix_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_multiplies_assign<BOOST_UBLAS_TYPENAME iterator1_type::reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         banded_adaptor& operator /= (const AT &at) {
-            matrix_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_divides_assign<BOOST_UBLAS_TYPENAME iterator1_type::reference, AT> (), *this, at);
             return *this;
         }
 
@@ -1262,7 +1262,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &m) {
                 BOOST_UBLAS_CHECK (lower_ == m.lower_, bad_size ());
                 BOOST_UBLAS_CHECK (upper_ == m.upper_, bad_size ());
-                matrix_swap (scalar_swap<reference, reference> (), *this, m);
+                matrix_swap (scalar_swap<BOOST_UBLAS_TYPENAME iterator1_type::reference, BOOST_UBLAS_TYPENAME iterator1_type::reference> (), *this, m);
             }
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -2078,9 +2078,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-
-
-
-
-
