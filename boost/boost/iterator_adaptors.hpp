@@ -12,6 +12,12 @@
 //
 // Revision History:
 
+// 09 Feb 2001   David Abrahams
+//      Rolled back Jeremy's new constructor for now; it was causing
+//      problems with counting_iterator_test
+//
+//      Attempted fix for Borland
+//
 // 09 Feb 2001   Jeremy Siek
 //      Added iterator constructor to allow const adaptor
 //      from non-const adaptee.
@@ -408,8 +414,8 @@ public:
     typedef Iterator iterator_type;
 
     enum { is_input_or_output_iter = 
-           boost::is_convertible<iterator_category,std::input_iterator_tag>::value
-           || boost::is_convertible<iterator_category,std::output_iterator_tag>::value };
+           boost::is_convertible<iterator_category*,std::input_iterator_tag*>::value
+           || boost::is_convertible<iterator_category*,std::output_iterator_tag*>::value };
 
     // Iterators should satisfy one of the known categories
     BOOST_STATIC_ASSERT(is_input_or_output_iter);
@@ -428,7 +434,7 @@ public:
       policies().initialize(iter());
     }
 
-#ifndef BOOST_MSVC
+#if 0 // ndef BOOST_MSVC
     // To allow construction of const adaptor from non-const adaptee.
     // However, when this is defined MSVC gives ambiguous error.
     template <class OtherIterator>
