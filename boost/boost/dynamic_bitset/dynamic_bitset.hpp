@@ -22,15 +22,13 @@
 #include <algorithm>           // for std::swap, std::min, std::copy, std::fill
 #include <vector>
 
-#include "boost/config.hpp"
+#include "boost/dynamic_bitset/config.hpp"
 
 #ifndef BOOST_NO_STD_LOCALE
 # include <locale> // G.P.S
 #endif
 
-#if defined (__STL_CONFIG_H) && !defined (__STL_USE_NEW_IOSTREAMS)
-   // support for pre 3.0 libstdc++ - thanks Phil Edwards
-#  define BOOST_OLD_IOSTREAMS
+#if defined(BOOST_OLD_IOSTREAMS)
 #  include <iostream.h>
 #  include <ctype.h> // for isspace
 #else
@@ -535,7 +533,7 @@ dynamic_bitset(size_type num_bits, unsigned long value, const Allocator& alloc)
       for(size_type i = 0; value != 0; ++i) {
 
           m_bits[i] = static_cast<block_type>(value);
-          value >>= detail::make_non_const(bits_per_block); //bits_per_block; // gps - gcc bug c++/8419
+          value >>= BOOST_DYNAMIC_BITSET_WRAP_CONSTANT(bits_per_block);
       }
   }
 
