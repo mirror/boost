@@ -136,6 +136,13 @@
 #  endif
 
 //
+// without ADL support then using declarations will break ADL as well:
+//
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP) && !defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL)
+#  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
+#endif
+
+//
 // If we have a standard allocator, then we have a partial one as well:
 //
 #if !defined(BOOST_NO_STD_ALLOCATOR)
