@@ -18,11 +18,13 @@
 #include <exception>
 #include <ios>                             // failure, streamoff, openmode.
 #include <string>
+#include <boost/config.hpp>                // BOOST_DEDUCED_TYPENAME.
 #include <boost/iostreams/constants.hpp>   // default_buffer_size.
 #include <boost/iostreams/detail/adapter/concept_adapter.hpp>
 #include <boost/iostreams/detail/adapter/direct_adapter.hpp>
 #include <boost/iostreams/detail/buffer.hpp>
 #include <boost/iostreams/detail/codecvt_holder.hpp>
+#include <boost/iostreams/detail/codecvt_helper.hpp>
 #include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/forward.hpp>
 #include <boost/iostreams/detail/select.hpp>
@@ -48,11 +50,19 @@ namespace detail {
 
 // Buffer and conversion state for reading.
 template<typename Codecvt, typename Alloc>
-class conversion_buffer : public buffer<typename Codecvt::extern_type, Alloc> {
+class conversion_buffer 
+    : public buffer<
+                 BOOST_DEDUCED_TYPENAME detail::codecvt_extern<Codecvt>::type,
+                 Alloc
+             > 
+{
 public:
     typedef typename Codecvt::state_type state_type;
     conversion_buffer() 
-        : buffer<typename Codecvt::extern_type, Alloc>(0) 
+        : buffer<
+              BOOST_DEDUCED_TYPENAME detail::codecvt_extern<Codecvt>::type,
+              Alloc
+          >(0) 
     { 
         reset(); 
     }
@@ -205,9 +215,9 @@ private:
     typedef typename impl_type::policy_type                         policy_type;
     typedef typename impl_type::buffer_type                         buffer_type;
     typedef typename detail::codecvt_holder<Codecvt>::codecvt_type  codecvt_type;
-    typedef typename Codecvt::intern_type                           intern_type;
-    typedef typename Codecvt::extern_type                           extern_type;
-    typedef typename Codecvt::state_type                            state_type;
+    typedef typename detail::codecvt_intern<Codecvt>::type          intern_type;
+    typedef typename detail::codecvt_extern<Codecvt>::type          extern_type;
+    typedef typename detail::codecvt_state<Codecvt>::type           state_type;
 public:
     typedef intern_type                                             char_type;    
     struct io_category 
