@@ -10,23 +10,13 @@
 #ifndef BOOST_UTILITY_FWD_HPP
 #define BOOST_UTILITY_FWD_HPP
 
-
 namespace boost
 {
-
 
 //  From <boost/utility/base_from_member.hpp>  -------------------------------//
 
 template < typename MemberType, int UniqueID = 0 >
     class base_from_member;
-
-
-//  From <boost/noncopyable.hpp>  --------------------------------------------//
-
-class noncopyable;
-
-// Also has a few function templates
-
 
 }  // namespace boost
 
