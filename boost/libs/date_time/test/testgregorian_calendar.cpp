@@ -4,7 +4,6 @@
 #include "boost/date_time/testfrmwk.hpp"
 #include <iostream>
 
-
 int
 main() 
 {
@@ -96,6 +95,63 @@ main()
   check("from_day_number test 2000-1-1",  (ymd.year==2000)&&
                                           (ymd.month==1) &&
                                           (ymd.day==1) );
+  
+  unsigned long julianday1 = gregorian_calendar::julian_day_number(gregorian_calendar::ymd_type(2000,12,31));
+  check("ToJulianDayNumber 2000-12-31 is day 2451910", julianday1 == 2451910);
+  gregorian_calendar::ymd_type ymd1 = gregorian_calendar::from_julian_day_number(julianday1);
+  std::cout << ymd1.year << "-" << ymd1.month << "-" << ymd1.day << std::endl;
+  check("from_julian_day_number test 2000-12-31", (ymd1.year==2000) &&
+                                                  (ymd1.month==12) &&
+                                                  (ymd1.day==31) );
+  unsigned long julianday2 = gregorian_calendar::modjulian_day_number(gregorian_calendar::ymd_type(2000,12,31));
+  std::cout << julianday2 << std::endl;
+  check("TomodJulianDayNumber 2000-12-31 is day 51909", julianday2 == 51909);
+  gregorian_calendar::ymd_type ymd2 = gregorian_calendar::from_modjulian_day_number(julianday2);
+  check("from_modjulian_day_number test 2000-12-31", (ymd2.year==2000) &&
+                                                     (ymd2.month==12) &&
+                                                     (ymd2.day==31) ); 
+  unsigned long julianday3 = gregorian_calendar::julian_day_number(gregorian_calendar::ymd_type(1400,1,1));
+  check("ToJulianDayNumber 1400-1-1 is day 2232400", julianday3 == 2232400);
+  gregorian_calendar::ymd_type ymd3 = gregorian_calendar::from_julian_day_number(julianday3);
+  check("from_julian_day_number test 1400-1-1",   (ymd3.year==1400) &&
+                                                  (ymd3.month==1) &&
+                                                  (ymd3.day==1) );
+  long mjd3 = gregorian_calendar::modjulian_day_number(gregorian_calendar::ymd_type(1400,1,1));
+  std::cout << "mjd3: " << mjd3 << std::endl;
+  check("mod julian day 1400-1-1 is day -167601", mjd3 == -167601);
+  gregorian_calendar::ymd_type mjd_ymd3 = gregorian_calendar::from_modjulian_day_number(mjd3);
+  check("from_julian_day_number test 1400-1-1",   (mjd_ymd3.year==1400) &&
+                                                  (mjd_ymd3.month==1) &&
+                                                  (mjd_ymd3.day==1) );
+
+
+  unsigned long julianday4 = gregorian_calendar::julian_day_number(gregorian_calendar::ymd_type(1900,2,28));
+  check("ToJulianDayNumber 1900-2-28 is day 2415079", julianday4 == 2415079);
+  gregorian_calendar::ymd_type ymd4 = gregorian_calendar::from_julian_day_number(julianday4);
+  check("from_julian_day_number test 1900-2-28",  (ymd4.year==1900) &&
+                                                  (ymd4.month==2) &&
+                                                  (ymd4.day==28) );
+
+  unsigned long julianday5 = gregorian_calendar::julian_day_number(gregorian_calendar::ymd_type(1436,2,3));
+  check("ToJulianDayNumber 1436-2-3 is day 2245581", julianday5 == 2245581);
+  gregorian_calendar::ymd_type ymd5 = gregorian_calendar::from_julian_day_number(julianday5);
+  check("from_julian_day_number test 1436-2-3",  (ymd5.year==1436) &&
+                                                 (ymd5.month==2) &&
+                                                 (ymd5.day==3) );
+
+  unsigned long julianday6 = gregorian_calendar::julian_day_number(gregorian_calendar::ymd_type(1996,2,25));
+  check("ToJulianDayNumber 1996-2-25 is day 2450139", julianday6 == 2450139);
+  gregorian_calendar::ymd_type ymd6 = gregorian_calendar::from_julian_day_number(julianday6);
+  check("from_julian_day_number test 1996-2-25",  (ymd6.year==1996) &&
+                                                  (ymd6.month==2) &&
+                                                  (ymd6.day==25) );
+  long mjd6 = gregorian_calendar::modjulian_day_number(gregorian_calendar::ymd_type(1996,2,25));
+  check("ToJulianDayNumber 1996-2-25 is day 50138", mjd6 == 50138);
+  gregorian_calendar::ymd_type mjd_ymd6 = gregorian_calendar::from_modjulian_day_number(mjd6);
+  check("from_julian_day_number test 1996-2-25",  (mjd_ymd6.year==1996) &&
+                                                  (mjd_ymd6.month==2) &&
+                                                  (mjd_ymd6.day==25) );
+
 
   unsigned long jday3 = gregorian_calendar::day_number(gregorian_calendar::ymd_type(1999,1,1));
   check("366 days between 2000-1-1 and 2001-1-1", (jday2-jday1) == 366);
@@ -128,3 +184,4 @@ main()
   printTestStats();
   return 0;
 };
+
