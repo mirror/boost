@@ -10,15 +10,9 @@
 #ifndef BOOST_TT_IS_COMPOUND_HPP_INCLUDED
 #define BOOST_TT_IS_COMPOUND_HPP_INCLUDED
 
-#include "boost/type_traits/is_array.hpp"
-#include "boost/type_traits/is_pointer.hpp"
-#include "boost/type_traits/is_reference.hpp"
-#include "boost/type_traits/is_class.hpp"
-#include "boost/type_traits/is_union.hpp"
-#include "boost/type_traits/is_enum.hpp"
-#include "boost/type_traits/is_member_pointer.hpp"
-#include "boost/type_traits/detail/ice_or.hpp"
 #include "boost/config.hpp"
+#include "boost/type_traits/is_fundamental.hpp"
+#include "boost/type_traits/detail/ice_not.hpp"
 
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
@@ -31,15 +25,9 @@ template <typename T>
 struct is_compound_impl
 {
    BOOST_STATIC_CONSTANT(bool, value =
-      (::boost::type_traits::ice_or<
-         ::boost::is_array<T>::value,
-         ::boost::is_pointer<T>::value,
-         ::boost::is_reference<T>::value,
-         ::boost::is_class<T>::value,
-         ::boost::is_union<T>::value,
-         ::boost::is_enum<T>::value,
-         ::boost::is_member_pointer<T>::value
-      >::value));
+      (::boost::type_traits::ice_not<
+         ::boost::is_fundamental<T>::value
+       >::value));
 };
 
 } // namespace detail
