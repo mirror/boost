@@ -166,4 +166,20 @@
         </tbody></xsl:if>
      </table>
   </xsl:template>
+
+  <!-- table of contents -->
+
+  <xsl:template name="section.toc">
+     <xsl:param name="toc-context" select="."/>
+     <xsl:param name="toc.title.p" select="true()"/>
+
+     <xsl:call-template name="make.toc">
+        <xsl:with-param name="toc-context" select="$toc-context"/>
+        <xsl:with-param name="toc.title.p" select="$toc.title.p"/>
+        <xsl:with-param name="nodes" select="
+           section|sect1|sect2|sect3|sect4|sect5|
+           bridgehead[$bridgehead.in.toc != 0]
+        "/>
+     </xsl:call-template>
+  </xsl:template>
 </xsl:stylesheet>
