@@ -31,9 +31,12 @@ This macro is useful for generating code to avoid combinatorial explosion.
 
 <B>X</B> is an element of the cartesian product of the lists LL.
 
-<H3>Examples</H3>
+<H3>Example</H3>
 - <a href="../../example/is_integral.cpp">is_integral.cpp</a>
 - <a href="../../example/array_arithmetic.c">array_arithmetic.c</a>
+
+<H3>Uses</H3>
+- BOOST_PP_FOR()
 */
 #define BOOST_PP_LIST_FOR_EACH_PRODUCT(F,P,LL) BOOST_PP_LIST_FOR_EACH_PRODUCT_R(0,F,P,LL)
 

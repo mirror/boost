@@ -33,6 +33,9 @@ expands to (A,B,C).
 
 NOTE: The supported size of the list being converted to a tuple is limited by
 BOOST_PP_LIMIT_MAG rather than BOOST_PP_LIMIT_TUPLE.
+
+<H3>Uses</H3>
+- BOOST_PP_FOR()
 */
 #define BOOST_PP_LIST_TO_TUPLE(L) BOOST_PP_LIST_TO_TUPLE_R(0,L)
 

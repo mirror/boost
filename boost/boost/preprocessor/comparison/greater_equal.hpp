@@ -20,7 +20,11 @@
 
 #include <boost/preprocessor/comparison/less_equal.hpp>
 
-/** Expands to 1 if X>=Y and 0 otherwise. */
+/** Expands to 1 if X>=Y and 0 otherwise.
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
+*/
 #define BOOST_PP_GREATER_EQUAL(X,Y) BOOST_PP_GREATER_EQUAL_D(0,X,Y)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

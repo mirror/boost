@@ -29,6 +29,9 @@ For example,
 \endverbatim</PRE>
 
 expands to a list containing 1 and 3.
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_LIST_FILTER(F,P,L) BOOST_PP_LIST_FILTER_D(0,F,P,L)
 

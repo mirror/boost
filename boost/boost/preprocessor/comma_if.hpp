@@ -23,7 +23,6 @@
 #include <boost/preprocessor/if.hpp>
 
 /** Expands to a comma if C != 0 and nothing if C == 0. */
-
 #define BOOST_PP_COMMA_IF(C) BOOST_PP_IF(C,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
 
 /** Obsolete. Use BOOST_PP_COMMA_IF(). */

@@ -46,7 +46,11 @@ expands to:
   )
 \endverbatim</PRE>
 
-See BOOST_PP_LIST_FOLD_LEFT().
+<H3>See</H3>
+- BOOST_PP_LIST_FOLD_LEFT()
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_LIST_FOLD_RIGHT(F,L,P) BOOST_PP_LIST_FOLD_RIGHT_D(0,F,L,P)
 

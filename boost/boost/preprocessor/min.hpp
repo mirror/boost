@@ -24,6 +24,9 @@
 /** Expands to the minimum of X and Y.
 
 For example, BOOST_PP_MIN(5,7) expands to 5 (a single token).
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_MIN(X,Y) BOOST_PP_MIN_D(0,X,Y)
 

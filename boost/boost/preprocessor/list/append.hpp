@@ -32,6 +32,9 @@ For example,
 \endverbatim</PRE>
 
 produces a list containing 1, 2, 3 and 4.
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_LIST_APPEND(L,P) BOOST_PP_LIST_APPEND_D(0,L,P)
 

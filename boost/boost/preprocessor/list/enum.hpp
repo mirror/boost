@@ -34,6 +34,9 @@ expands to:
 <PRE>\verbatim
   A, B, C
 \endverbatim</PRE>
+
+<H3>Uses</H3>
+- BOOST_PP_FOR().
 */
 #define BOOST_PP_LIST_ENUM(L) BOOST_PP_LIST_ENUM_R(0,L)
 

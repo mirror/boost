@@ -39,6 +39,9 @@ For example,
 \endverbatim</PRE>
 
 expands to a list containing 3 and 4.
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_LIST_TRANSFORM(F,P,L) BOOST_PP_LIST_TRANSFORM_D(0,F,P,L)
 

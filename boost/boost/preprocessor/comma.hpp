@@ -20,7 +20,8 @@
 
 /** Expands to a comma. Can be used with BOOST_PP_IF().
 
-See BOOST_PP_COMMA_IF().
+<H3>See</H3>
+- BOOST_PP_COMMA_IF()
 */
 #define BOOST_PP_COMMA() ,
 

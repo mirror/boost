@@ -42,7 +42,11 @@ expands to:
 Note that folding, or accumulation, is a very general pattern of computation.
 Most list operations can be implemented in terms of folding.
 
-See BOOST_PP_LIST_FOLD_RIGHT().
+<H3>See</H3>
+- BOOST_PP_LIST_FOLD_RIGHT()
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_LIST_FOLD_LEFT(F,P,L) BOOST_PP_LIST_FOLD_LEFT_D(0,F,P,L)
 

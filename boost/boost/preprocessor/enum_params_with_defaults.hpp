@@ -29,7 +29,8 @@ In other words, expands to the sequence:
   P##0 = D##0, P##1 = D##1, ..., P##N-1 = D##N-1
 \endverbatim</PRE>
 
-NOTE: The implementation uses BOOST_PP_REPEAT().
+<H3>Uses</H3>
+- BOOST_PP_REPEAT()
 */
 #define BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS(N,P,D) BOOST_PP_ENUM(N,BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS_F,(P,D))
 

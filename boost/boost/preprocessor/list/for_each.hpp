@@ -32,7 +32,11 @@ In other words, expands to the sequence:
   F(R,P,BOOST_PP_LIST_AT(L,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(L))))
 \endverbatim</PRE>
 
-See BOOST_PP_FOR() for an explanation of the R parameter.
+<H3>Example</H3>
+- <a href="../../example/catch_builtin.cpp">catch_builtin.cpp</a>
+
+<H3>Uses</H3>
+- BOOST_PP_FOR()
 */
 #define BOOST_PP_LIST_FOR_EACH(F,P,L) BOOST_PP_LIST_FOR_EACH_R(0,F,P,L)
 

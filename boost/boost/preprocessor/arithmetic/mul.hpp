@@ -23,6 +23,9 @@
 /** Expands to the product of X and Y.
 
 For example, BOOST_PP_MUL(4,3) expands to 12 (a single token).
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_MUL(X,Y) BOOST_PP_MUL_D(0,X,Y)
 

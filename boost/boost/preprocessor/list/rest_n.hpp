@@ -31,6 +31,9 @@ For example,
 \endverbatim</PRE>
 
 expands to a list containing * and /.
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_LIST_REST_N(N,L) BOOST_PP_LIST_REST_N_D(0,N,L)
 

@@ -24,6 +24,9 @@
 /** Expands to the maximum of X and Y.
 
 For example, BOOST_PP_MAX(5,7) expands to 7 (a single token).
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_MAX(X,Y) BOOST_PP_MAX_D(0,X,Y)
 

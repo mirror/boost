@@ -53,13 +53,15 @@ Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.
 
 /** List nil constructor.
 
-See BOOST_PP_LIST_CONS().
+<H3>See</H3>
+- BOOST_PP_LIST_CONS()
 */
 #define BOOST_PP_LIST_NIL (_,_,0)
 
 /** Expands to 1 if the list is not nil and 0 otherwise.
 
-See BOOST_PP_LIST_IS_NIL().
+<H3>See</H3>
+- BOOST_PP_LIST_IS_NIL()
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_IS_CONS(L) BOOST_PP_TUPLE_ELEM(3,2,L)
@@ -69,7 +71,8 @@ See BOOST_PP_LIST_IS_NIL().
 
 /** Expands to 1 if the list is nil and 0 otherwise.
 
-See BOOST_PP_LIST_IS_CONS().
+<H3>See</H3>
+- BOOST_PP_LIST_IS_CONS()
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_IS_NIL(L) BOOST_PP_NOT(BOOST_PP_TUPLE_ELEM(3,2,L))
@@ -87,7 +90,8 @@ For example,
 
 expands to 1.
 
-See BOOST_PP_LIST_REST().
+<H3>See</H3>
+- BOOST_PP_LIST_REST()
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_FIRST(L) BOOST_PP_TUPLE_ELEM(3,0,L)
@@ -105,7 +109,8 @@ For example,
 
 expands to a list containing 2, 3, 4 and 5.
 
-See BOOST_PP_LIST_FIRST().
+<H3>See</H3>
+- BOOST_PP_LIST_FIRST()
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_REST(L) BOOST_PP_TUPLE_ELEM(3,1,L)

@@ -18,7 +18,7 @@
 <a href="../../../../boost/preprocessor/repeat.hpp">Click here to see the header.</a>
 */
 
-/** Repeats the macro M(I,P) for I = 0 to N-1.
+/** Repeats the macro M(I,P) for I = [0,N-1[.
 
 In other words, expands to the sequence:
 
@@ -26,61 +26,17 @@ In other words, expands to the sequence:
   M(0,P) M(1,P) ... M(N-1,P)
 \endverbatim</PRE>
 
-See BOOST_PP_LIMIT_MAG.
-
 <H3>2D and 3D repetition</H3>
 
 2D and 3D repetition are supported with the BOOST_PP_REPEAT_2ND() and
-BOOST_PP_REPEAT_3RD() macros. For example,
+BOOST_PP_REPEAT_3RD() macros.
 
-<PRE>\verbatim
-   * A generalized macro for generating 2D arrays
-  #define ARRAY_2D(W,H,M,P)\
-    BOOST_PP_REPEAT_2ND\
-    ( H\
-    , ARRAY_2D_ROW\
-    , (W,H,M,P)\
-    )
-  #define ARRAY_2D_ROW(Y,WHMP)\
-    BOOST_PP_EXPAND\
-    ( BOOST_PP_REPEAT\
-      ( BOOST_PP_TUPLE_ELEM(4,0,WHMP)\
-      , ARRAY_2D_ELEM\
-      , (Y,BOOST_PP_TUPLE4_ENUM WHMP)\
-      )\
-    )
-  #define BOOST_PP_TUPLE4_ENUM(A,B,C,D) A,B,C,D
-  #define ARRAY_2D_ELEM(X,YWHMP)\
-    BOOST_PP_TUPLE_ELEM(5,3,YWHMP)\
-    BOOST_PP_EXPAND\
-    ( ( X\
-      , BOOST_PP_TUPLE_ELEM(5,0,YWHMP)\
-      , BOOST_PP_TUPLE_ELEM(5,1,YWHMP)\
-      , BOOST_PP_TUPLE_ELEM(5,2,YWHMP)\
-      , BOOST_PP_TUPLE_ELEM(5,4,YWHMP)\
-      )\
-    )
+<H3>Example</H3>
+- <a href="../../example/repeat_2d.c">repeat_2d.c</a>
 
-   * Here we use the above macro to generate something
-  #define ELEM(X,Y,W,H,E) BOOST_PP_COMMA_IF(BOOST_PP_OR(X,Y)) E##_##X##_##Y
-
-  ARRAY_2D(3,4,ELEM,elem)
-\endverbatim</PRE>
-
-expands to:
-
-<PRE>\verbatim
-  elem_0_0, elem_1_0, elem_2_0,
-  elem_0_1, elem_1_1, elem_2_1,
-  elem_0_2, elem_1_2, elem_2_2,
-  elem_0_3, elem_1_3, elem_2_3
-\endverbatim</PRE>
-
-Since recursive expansion of macros is not allowed by the C++ preprocessor,
-replacing the BOOST_PP_REPEAT_2ND above with BOOST_PP_REPEAT, would not
-produce the above expansion.
-
-See BOOST_PP_FOR().
+<H3>See</H3>
+- BOOST_PP_FOR()
+- BOOST_PP_LIMIT_MAG
 */
 #define BOOST_PP_REPEAT(N,M,P) BOOST_PP_REPEAT_DELAY(N,M,P)
 

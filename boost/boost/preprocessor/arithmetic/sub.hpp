@@ -25,6 +25,9 @@
 /** Expands to the difference of X and Y.
 
 For example, BOOST_PP_SUB(4,3) expands to 1 (a single token).
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_SUB(X,Y) BOOST_PP_SUB_D(0,X,Y)
 

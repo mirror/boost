@@ -29,9 +29,10 @@ In other words, expands to the sequence:
   P##1, P##2, ..., P##N-1
 \endverbatim</PRE>
 
-NOTE: The implementation uses BOOST_PP_REPEAT().
+<H3>Uses</H3>
+- BOOST_PP_REPEAT()
 
-RATIONALE:
+<H3>Rationale</H3>
 - This macro facilitates a typical usage of the library. Shifted parameter
 lists are common in template metaprograms. 
 */

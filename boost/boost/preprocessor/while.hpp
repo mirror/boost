@@ -23,50 +23,42 @@
 
 /** Iterates F(D,X) while C(D,X) is true.
 
+In other words, expands to:
+
+<PRE>\verbatim
+  F(D, ... F(D, F(D,X) ) ... )
+\endverbatim</PRE>
+
+The depth of iteration is determined by C(D,X).
+
 <H3>Legend</H3>
 
-<B>X</B> is the current state of iteration. The state is usually a tuple.
-
-<B>C</B> is the condition for iteration. It must expand to a decimal integer
-literal.
-
-<B>F</B> is the iterated macro. Note that if the state is a tuple, then
+- <B>X</B> is the current state of iteration. The state is usually a tuple.
+- <B>C</B> is the condition for iteration. It must expand to a decimal
+integer literal.
+- <B>F</B> is the iterated macro. Note that if the state is a tuple, then
 F(D,X) usually expands to a tuple of the same number of elements.
-
-<B>D</B> is the recursion depth and should only be used as a parameter to
-other macros implemented using BOOST_PP_WHILE(). Such macros include
+- <B>D</B> is the recursion depth and should only be used as a parameter
+to other macros implemented using BOOST_PP_WHILE(). Such macros include
 BOOST_PP_ADD() and other arithmetic operations. For each macro implemented
 using BOOST_PP_WHILE(), there is a version of the macro, distinguished by
-the _D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion
+the D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion
 depth as the first parameter. This technique is necessary to avoid
 recursively expanding the same macro again, which is not permitted by the
 C++ preprocessor.
 
 NOTE: The value of the D parameter may exceed BOOST_PP_LIMIT_MAG.
 
-<H3>Usage</H3>
+<H3>Caveat</H3>
 
 Using BOOST_PP_WHILE() is a bit tricky. This is due to the C++ preprocessor
 limitations. It is recommended to take a look at the implementations of the
 various PREPROCESSOR library primitives such as BOOST_PP_ADD() for additional
 examples.
 
-Here is a trivial example that simply counts down from N to 0 ultimately
-expanding to a 0:
+<H3>Example</H3>
 
-<PRE>\verbatim
-  #define COUNT_DOWN(N) BOOST_PP_WHILE(COUNT_DOWN_C,COUNT_DOWN_F,N)
-  // Above is the macro we are implementing using BOOST_PP_WHILE().
-
-  #define COUNT_DOWN_C(D,N) N
-  // Above is the condition. It expands to the current N.
-
-  #define COUNT_DOWN_F(D,N) BOOST_PP_DEC(N)
-  // Above is the iteration macro. It decrements N.
-
-  COUNT_DOWN(50)
-  // The above expands to 0.
-\endverbatim</PRE>
+- <a href="../../example/count_down.c">count_down.c</a>
 
 For a more complex example, let's take a look at an implementation of
 BOOST_PP_MUL().
@@ -106,9 +98,8 @@ BOOST_PP_MUL().
   // )
 \endverbatim</PRE>
 
-<H3>Implementation</H3>
+<H3>Implementation rationale</H3>
 
-RATIONALE:
 - The maximum iteration depth is greater than 2*BOOST_PP_LIMIT_MAG to make
 it possible to compute N*N functions.
 */

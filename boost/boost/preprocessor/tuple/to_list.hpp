@@ -22,9 +22,9 @@
 
 /** Converts a tuple to a list.
 
-See BOOST_PP_LIST_CONS() for an example.
-
-See BOOST_PP_LIMIT_TUPLE.
+<H3>See</H3>
+- BOOST_PP_LIST_CONS()
+- BOOST_PP_LIMIT_TUPLE
 */
 #define BOOST_PP_TUPLE_TO_LIST(N,T) BOOST_PP_TUPLE_TO_LIST_DELAY(N,T)
 

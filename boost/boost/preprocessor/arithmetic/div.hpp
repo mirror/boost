@@ -24,6 +24,9 @@
 /** Expands to the quotient of X and Y.
 
 For example, BOOST_PP_DIV(4,3) expands to 1 (a single token).
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_DIV(X,Y) BOOST_PP_DIV_D(0,X,Y)
 

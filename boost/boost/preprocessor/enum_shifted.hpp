@@ -30,7 +30,8 @@ In other words, expands to the sequence:
   F(1,P), F(2,P), ..., F(N-1,P)
 \endverbatim</PRE>
 
-NOTE: The implementation uses BOOST_PP_REPEAT().
+<H3>Uses</H3>
+- BOOST_PP_REPEAT()
 */
 #define BOOST_PP_ENUM_SHIFTED(N,F,P) BOOST_PP_ENUM(BOOST_PP_DEC(N),BOOST_PP_ENUM_SHIFTED_F,(F,P))
 

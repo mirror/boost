@@ -30,6 +30,9 @@ For example,
 \endverbatim</PRE>
 
 expands to 123.
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_LIST_CAT(L) BOOST_PP_LIST_CAT_D(0,L)
 

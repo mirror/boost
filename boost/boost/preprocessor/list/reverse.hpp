@@ -29,6 +29,9 @@ For example,
 \endverbatim</PRE>
 
 expands to a list containing C, B and A.
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_LIST_REVERSE(L) BOOST_PP_LIST_REVERSE_D(0,L)
 

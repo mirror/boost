@@ -29,6 +29,9 @@ For example,
 \endverbatim</PRE>
 
 expands to B.
+
+<H3>Uses</H3>
+- BOOST_PP_WHILE()
 */
 #define BOOST_PP_LIST_AT(L,I) BOOST_PP_LIST_AT_D(0,L,I)
 

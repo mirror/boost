@@ -33,20 +33,16 @@ The length of the sequence is determined by C(R,X).
 
 <H3>Legend</H3>
 
-<B>X</B> is the current state of iteration. The state is usually a tuple.
-
-<B>C</B> is the condition for iteration. It must expand to a decimal integer
+- <B>X</B> is the current state of iteration. The state is usually a tuple.
+- <B>C</B> is the condition for iteration. It must expand to a decimal integer
 literal.
-
-<B>F</B> is the iterated macro. Note that if the state is a tuple, then
+- <B>F</B> is the iterated macro. Note that if the state is a tuple, then
 F(R,X) usually expands to a tuple of the same number of elements.
-
-<B>I</B> is the state instantiation macro.
-
-<B>R</B> is the recursion depth and should only be used as a parameter to
+- <B>I</B> is the state instantiation macro.
+- <B>R</B> is the recursion depth and should only be used as a parameter to
 other macros implemented using BOOST_PP_FOR() or for invoking
 BOOST_PP_FOR##R() directly. For each macro implemented using BOOST_PP_FOR(),
-there is a version of the macro, distinguished by the _R suffix, that accepts
+there is a version of the macro, distinguished by the R suffix, that accepts
 an additional recursion depth as the first parameter. This technique is
 necessary to avoid recursively expanding the same macro again, which is not
 permitted by the C++ preprocessor.
