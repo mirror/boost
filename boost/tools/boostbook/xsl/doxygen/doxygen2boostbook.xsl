@@ -568,10 +568,14 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
         </xsl:apply-templates>
       </xsl:when>
       <xsl:when test="@kind='typedef'">
-        <xsl:apply-templates/>
+        <xsl:apply-templates>
+          <xsl:with-param name="in-file" select="$in-file"/>
+        </xsl:apply-templates>
       </xsl:when>
       <xsl:when test="@kind='var'">
-        <xsl:apply-templates/>
+        <xsl:apply-templates>
+          <xsl:with-param name="in-file" select="$in-file"/>
+        </xsl:apply-templates>
       </xsl:when>
       <xsl:when test="@kind='enum'">
         <xsl:apply-templates>
@@ -603,7 +607,9 @@ Cannot handle sectiondef with kind=<xsl:value-of select="@kind"/>
       <xsl:when test="contains(briefdescription/para, 'INTERNAL ONLY')"/>
 
       <xsl:when test="@kind='typedef'">
-        <xsl:call-template name="typedef"/>
+        <xsl:call-template name="typedef">
+          <xsl:with-param name="in-file" select="$in-file"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:when test="@kind='function'">
         <xsl:choose>
@@ -671,18 +677,22 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
 
   <!-- Display typedefs -->
   <xsl:template name="typedef">
-    <!-- TBD: Handle public/protected/private -->
-    <typedef>
-      <!-- Name of the type -->
-      <xsl:attribute name="name">
-        <xsl:value-of select="name/text()"/>
-      </xsl:attribute>
-      
-      <xsl:apply-templates select="briefdescription" mode="passthrough"/>
-      <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
-      
-      <type><xsl:apply-templates select="type"/></type>
-    </typedef>
+    <xsl:param name="in-file" select="''"/>
+
+    <xsl:if test="contains(string(location/attribute::file), $in-file)">
+      <!-- TBD: Handle public/protected/private -->
+      <typedef>
+        <!-- Name of the type -->
+        <xsl:attribute name="name">
+          <xsl:value-of select="name/text()"/>
+        </xsl:attribute>
+        
+        <xsl:apply-templates select="briefdescription" mode="passthrough"/>
+        <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+        
+        <type><xsl:apply-templates select="type"/></type>
+      </typedef>
+    </xsl:if>
   </xsl:template>
 
   <!-- Handle function parameters -->
