@@ -115,16 +115,14 @@ struct code_converter_impl {
     }
 
     #include <boost/iostreams/detail/config/disable_warnings.hpp> // Borland 5.x
-    void open(const Device& dev, std::streamsize buffer_size)
+    void open(const Device& dev, int buffer_size)
     {
         if (open_)
             throw failure("already open");
         if (buffer_size == -1)
             buffer_size = default_filter_buffer_size;
         int max_length = cvt_.get().max_length();
-        buffer_size = 
-            std::max( buffer_size,
-                      static_cast<std::streamsize>(2 * max_length) );
+        buffer_size = (std::max)(buffer_size, 2 * max_length);
         if (can_read::value) {
             buf_.first().resize(buffer_size);
             buf_.first().set(0, 0);
