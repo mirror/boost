@@ -155,7 +155,7 @@ void put( T x,
       put_last( oss_, x);
       res = oss_.str();
 
-      if (specs.truncate_ >= 0)
+      if (specs.truncate_ >= 0 && static_cast<unsigned int>(specs.truncate_) < res.size() )
         res.erase(specs.truncate_);
 
       // complex pads :
