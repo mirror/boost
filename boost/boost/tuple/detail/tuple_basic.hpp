@@ -581,7 +581,7 @@ namespace detail {
 struct swallow_assign {
 
   template<typename T>
-  swallow_assign& operator=(const T&) {
+  swallow_assign const& operator=(const T&) const {
     return *this;
   }
 };
