@@ -111,14 +111,12 @@ public:
    explicit reg_expression(const std::basic_string<charT, ST, SA>& p, flag_type f = regex_constants::normal, const Allocator& a = Allocator())
     : data(a), pkmp(0), error_code_(REG_EMPTY), _expression(0) { set_expression(p, f | regex_constants::use_except); }
 
-   template <class I>
-   reg_expression(I first, I last, flag_type f = regex_constants::normal, const Allocator& al = Allocator())
+   template <class InputIterator>
+   reg_expression(InputIterator first, InputIterator last, flag_type f = regex_constants::normal, const Allocator& al = Allocator())
     : data(al), pkmp(0), error_code_(REG_EMPTY), _expression(0)
    {
-      size_type len = last-first;
-      scoped_array<charT> a(new charT[len]);
-      std::copy(first, last, a.get());
-      set_expression(a.get(), a.get() + len, f | regex_constants::use_except);
+      std::basic_string<charT> a(first, last);
+      set_expression(a.data(), a.data() + a.size(), f | regex_constants::use_except);
    }
 
    template <class ST, class SA>
@@ -137,15 +135,13 @@ public:
       return *this;
    }
 
-   template <class fwd_iterator>
-   reg_expression& BOOST_REGEX_CALL assign(fwd_iterator first,
-                          fwd_iterator last,
+   template <class InputIterator>
+   reg_expression& BOOST_REGEX_CALL assign(InputIterator first,
+                          InputIterator last,
                           flag_type f = regex_constants::normal)
    {
-      size_type len = last-first;
-      scoped_array<charT> a(new charT[len]);
-      std::copy(first, last, a.get());
-      set_expression(a.get(), a.get() + len, f | regex_constants::use_except);
+      std::basic_string<charT> a(first, last);
+      set_expression(a.data(), a.data() + a.size(), f | regex_constants::use_except);
       return *this;
    }
 #else
