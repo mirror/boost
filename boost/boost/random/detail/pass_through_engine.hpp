@@ -53,6 +53,8 @@ private:
   UniformRandomNumberGenerator _rng;
 };
 
+#ifndef BOOST_NO_STD_LOCALE
+
 template<class UniformRandomNumberGenerator, class CharT, class Traits>
 std::basic_ostream<CharT,Traits>&
 operator<<(
@@ -73,8 +75,29 @@ operator>>(
     return is >> ud.base();
 }
 
+#else // no new streams
+
+template<class UniformRandomNumberGenerator>
+inline std::ostream&
+operator<<(std::ostream& os, 
+           const pass_through_engine<UniformRandomNumberGenerator>& ud)
+{
+    return os << ud.base();
+}
+
+template<class UniformRandomNumberGenerator>
+inline std::istream&
+operator>>(std::istream& is, 
+           const pass_through_engine<UniformRandomNumberGenerator>& ud)
+{
+    return is >> ud.base();
+}
+
+#endif
+
 } // namespace detail
 } // namespace random
 } // namespace boost
 
 #endif // BOOST_RANDOM_DETAIL_PASS_THROUGH_ENGINE_HPP
+
