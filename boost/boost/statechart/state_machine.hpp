@@ -878,15 +878,22 @@ class state_machine : noncopyable
     {
       isInnermostCommonOuter_ = false;
 
+      // If pOutermostUnstableState_ == 0, we know for sure that
+      // currentStates_.size() > 0, otherwise theState couldn't be alive any
+      // more
       if ( get_pointer( pOutermostUnstableState_ ) != 0 )
       {
         theState.remove_from_state_list(
           currentStatesEnd_, pOutermostUnstableState_, callExitActions );
       }
+      // Optimization: We want to find out whether currentStates_ has size 1
+      // and if yes use the optimized implementation below. Since
+      // list<>::size() is implemented quite inefficiently in some std libs
+      // it is best to just decrement the currentStatesEnd_ here and
+      // increment it again, if the test failed.
       else if ( currentStates_.begin() == --currentStatesEnd_ )
       {
-        // The machine is stable and there is exactly one innermost state
-        BOOST_ASSERT( !currentStates_.empty() );
+        // The machine is stable and there is exactly one innermost state.
         // The following optimization is only correct for a stable machine
         // without orthogonal regions.
         leaf_state_ptr_type & pState = *currentStatesEnd_;
@@ -895,6 +902,7 @@ class state_machine : noncopyable
       }
       else
       {
+        BOOST_ASSERT( currentStates_.size() > 1 );
         // The machine is stable and there are multiple innermost states
         theState.remove_from_state_list(
           ++currentStatesEnd_, pOutermostUnstableState_, callExitActions );
