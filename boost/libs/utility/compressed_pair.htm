@@ -5,7 +5,7 @@
 content="text/html; charset=iso-8859-1">
 <meta name="Template"
 content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
-<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
 <title>Header </title>
 <boost/compressed_pair.hpp>
 </head>
@@ -42,6 +42,8 @@ public:
 	explicit compressed_pair(first_param_type x);
 	explicit compressed_pair(second_param_type y);
 
+	compressed_pair&amp; operator=(const compressed_pair&amp;);
+
 	first_reference       first();
 	first_const_reference first() const;
 
@@ -62,17 +64,19 @@ constructor, and this constructor initialises both values in the
 pair to the passed value.</p>
 
 <p>Note that compressed_pair can not be instantiated if either of
-the template arguments is an enumerator type, unless there is
-compiler support for boost::is_enum, or if boost::is_enum is
-specialised for the enumerator type.</p>
+the template arguments is a union type, unless there is compiler
+support for boost::is_union, or if boost::is_union is specialised
+for the union type.</p>
 
-<p>Finally, compressed_pair requires compiler support for partial
-specialisation of class templates - without that support
-compressed_pair behaves just like std::pair.</p>
+<p>Finally, a word of caution for Visual C++ 6 users: if either
+argument is an empty type, then assigning to that member will
+produce memory corruption, unless the empty type has a &quot;do
+nothing&quot; assignment operator defined. This is due to a bug
+in the way VC6 generates implicit assignment operators.</p>
 
 <hr>
 
-<p>Revised 08 March 2000</p>
+<p>Revised 08 May 2001</p>
 
 <p>© Copyright boost.org 2000. Permission to copy, use, modify,
 sell and distribute this document is granted provided this
@@ -86,7 +90,8 @@ Hinnant and John Maddock.</p>
 <p>Maintained by <a href="mailto:John_Maddock@compuserve.com">John
 Maddock</a>, the latest version of this file can be found at <a
 href="http://www.boost.org">www.boost.org</a>, and the boost
-discussion list at <a href="http://www.yahoogroups.com/list/boost">www.yahoogroups.com/list/boost</a>.</p>
+discussion list at <a
+href="http://www.yahoogroups.com/list/boost">www.yahoogroups.com/list/boost</a>.</p>
 
 <p>&nbsp;</p>
 </body>
