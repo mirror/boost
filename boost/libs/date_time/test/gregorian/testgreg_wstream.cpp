@@ -41,6 +41,7 @@ int main(){
   ws = to_sql_wstring(dp.begin());
   check("date to_sql_string", ws == res);
   wss.str(L"");
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
   { 
     res = L"2003-Aug-21";
     std::wstringstream wss(L"2003-Aug-21");
@@ -48,6 +49,9 @@ int main(){
     wss >> testdate;
     check("date operator>>", to_simple_wstring(testdate) == res);
   }
+#else
+  check("no date operator>> for this compiler", false);
+#endif
   
   // greg_month
   wss << dp.begin().month();
