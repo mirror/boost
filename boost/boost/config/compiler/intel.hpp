@@ -31,18 +31,17 @@
 
 #  if defined(_MSC_VER) && (_MSC_VER <= 1300) // added check for <= VC 7 (Peter Dimov)
 
-      // Intel C++ 5.0.1 uses EDG 2.45, but fails to activate Koenig lookup
-      // in the frontend even in "strict" mode, unless you use 
-      // -Qoption,cpp,--arg_dep_lookup.  (reported by Kirk Klobe & Thomas Witt)
-      // Similarly, -Qoption,cpp,--new_for_init enables new-style "for" loop
-      // variable scoping. (reported by Thomas Witt)
-      // Intel C++ 6.0 (currently in Beta test) doesn't have any front-end
-      // changes at all.  (reported by Kirk Klobe)
-      // That can't be right, since it supports template template
-      // arguments (reported by Dave Abrahams)
-#     ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-#        define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-#     endif
+// Boost libraries assume strong standard conformance unless otherwise
+// indicated by a config macro. As configured by Intel, the EDG front-end
+// requires certain compiler options be set to achieve that strong conformance.
+// Particularly /Qoption,c,--arg_dep_lookup (reported by Kirk Klobe & Thomas Witt)
+// and /Zc:wchar_t,forScope. See boost-root/tools/build/intel-win32-tools.jam for
+// details as they apply to particular versions of the compiler. When the
+// compiler does not predefine a macro indicating if an option has been set,
+// this config file simply assumes the option has been set.
+// Thus BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP will not be defined, even if
+// the compiler option is not enabled.
+
 #     define BOOST_NO_SWPRINTF
 #  endif
 
