@@ -228,9 +228,9 @@ namespace local_time {
     //! returns false is time_zone is NULL and if time value is a special_value
     bool is_dst() const
     {
-      if(zone_ != NULL && zone_->has_dst() && !is_special()) {
+      if(zone_ != NULL && zone_->has_dst() && !this->is_special()) {
         // check_dst takes a local time, *this is utc
-        utc_time_type lt(time_);
+        utc_time_type lt(this->time_);
         lt += zone_->base_utc_offset();
         // dst_offset only needs to be considered with ambiguous time labels
         // make that adjustment there
@@ -259,7 +259,7 @@ namespace local_time {
     //! Returns object's time value as a utc representation
     utc_time_type utc_time() const 
     {
-      return utc_time_type(time_);
+      return utc_time_type(this->time_);
     }
     //! Returns object's time value as a local representation
     utc_time_type local_time() const 
@@ -271,7 +271,7 @@ namespace local_time {
         }
         return lt;
       }
-      return utc_time_type(time_);
+      return utc_time_type(this->time_);
     }
     //! Returns string in the form "2003-Aug-20 05:00:00 EDT"
     /*! Returns string in the form "2003-Aug-20 05:00:00 EDT". If
@@ -281,7 +281,7 @@ namespace local_time {
     {
       //TODO is this a temporary function ???
       std::stringstream ss;
-      if(is_special()){
+      if(this->is_special()){
         ss << utc_time();
         return ss.str();
       }
@@ -308,7 +308,7 @@ namespace local_time {
     local_date_time_base local_time_in(boost::shared_ptr<tz_type> new_tz, 
                                        time_duration_type td=time_duration_type(0,0,0)) const 
     {
-      return local_date_time_base(utc_time_type(time_) + td, new_tz);
+      return local_date_time_base(utc_time_type(this->time_) + td, new_tz);
     }
     
     //! Returns name of associated time zone or "Coordinated Universal Time".
@@ -420,45 +420,45 @@ namespace local_time {
     //! Local_date_time + date_duration 
     local_date_time_base operator+(const date_duration_type& dd) const
     {
-      return local_date_time_base(time_system_type::add_days(time_,dd), zone_);
+      return local_date_time_base(time_system_type::add_days(this->time_,dd), zone_);
     }
     //! Local_date_time += date_duration 
     local_date_time_base operator+=(const date_duration_type& dd)
     {
-      this->time_ = time_system_type::add_days(time_,dd);
+      this->time_ = time_system_type::add_days(this->time_,dd);
       return *this;
     }
     //! Local_date_time - date_duration 
     local_date_time_base operator-(const date_duration_type& dd) const
     {
-      return local_date_time_base(time_system_type::subtract_days(time_,dd), zone_);
+      return local_date_time_base(time_system_type::subtract_days(this->time_,dd), zone_);
     }
     //! Local_date_time -= date_duration 
     local_date_time_base operator-=(const date_duration_type& dd)
     {
-      this->time_ = time_system_type::subtract_days(time_,dd);
+      this->time_ = time_system_type::subtract_days(this->time_,dd);
       return *this;
     }
     //! Local_date_time + time_duration 
     local_date_time_base operator+(const time_duration_type& td) const
     {
-      return local_date_time_base(time_system_type::add_time_duration(time_,td), zone_);
+      return local_date_time_base(time_system_type::add_time_duration(this->time_,td), zone_);
     }
     //! Local_date_time += time_duration 
     local_date_time_base operator+=(const time_duration_type& td) 
     {
-      this->time_ = time_system_type::add_time_duration(time_,td);
+      this->time_ = time_system_type::add_time_duration(this->time_,td);
       return *this;
     }
     //! Local_date_time - time_duration 
     local_date_time_base operator-(const time_duration_type& td) const
     {
-      return local_date_time_base(time_system_type::subtract_time_duration(time_,td), zone_);
+      return local_date_time_base(time_system_type::subtract_time_duration(this->time_,td), zone_);
     }
     //! Local_date_time -= time_duration 
     local_date_time_base operator-=(const time_duration_type& td)
     {
-      this->time_ = time_system_type::subtract_time_duration(time_,td);
+      this->time_ = time_system_type::subtract_time_duration(this->time_,td);
       return *this;
     }
   private:
