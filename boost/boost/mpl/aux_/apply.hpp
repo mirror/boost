@@ -24,6 +24,12 @@
     BOOST_PP_CAT(BOOST_MPL_AUX_APPLY,arity) args \
 /**/
 
+// agurt, 14/nov/02: temporary fix, need to research a couple of ICEs to
+// get rid of this mess
+#if defined(BOOST_MSVC) && BOOST_MSVC == 1300 && !defined(BOOST_MPL_PREPROCESSING_MODE)
+#   include "boost/mpl/apply.hpp"
+#endif
+
 #if defined(BOOST_MPL_USE_APPLY_INTERNALLY) \
     || defined(BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES) \
     || defined(BOOST_MSVC) && (BOOST_MSVC < 1300 || BOOST_MSVC == 1300 && defined(BOOST_MPL_PREPROCESSING_MODE))
