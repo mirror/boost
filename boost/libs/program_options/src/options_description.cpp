@@ -424,14 +424,17 @@ namespace boost { namespace program_options {
             // this assert may fail due to user error or environment conditions!
             assert(line_length > first_column_width);
 
-            typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+            // Note: can't use 'tokenizer' as name of typedef -- borland
+            // will consider subsequence uses of 'tokenizer' as uses of
+            // boost::tokenizer, not typedef.
+            typedef boost::tokenizer<boost::char_separator<char> > tok;
           
-            tokenizer paragraphs(
+            tok paragraphs(
                 desc,
                 char_separator<char>("\n", "", boost::keep_empty_tokens));
           
-            tokenizer::const_iterator       par_iter = paragraphs.begin();                
-            const tokenizer::const_iterator par_end = paragraphs.end();
+            tok::const_iterator       par_iter = paragraphs.begin();                
+            const tok::const_iterator par_end = paragraphs.end();
 
             while (par_iter != par_end)  // paragraphs
             {
