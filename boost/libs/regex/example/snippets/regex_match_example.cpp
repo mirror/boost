@@ -68,30 +68,35 @@ istream& getline(istream& is, std::string& s)
 }
 #endif
 
-int main()
+int main(int argc)
 {
-  std::string in, out;
-  while(true)
-  {
-  cout << "enter test string" << endl;
-  getline(cin, in);
-  if(in == "quit")
-     break;
-  int result;
-  result = process_ftp(in.c_str(), &out);
-  if(result != -1)
-  {
-     cout << "Match found:" << endl;
-     cout << "Response code: " << result << endl;
-     cout << "Message text: " << out << endl;
-  }
-  else
-  {
-     cout << "Match not found" << endl;
-  }
-  cout << endl;
-  }
-  return 0;
+   std::string in, out;
+   do
+   {
+      if(argc == 1)
+      {
+         cout << "enter test string" << endl;
+         getline(cin, in);
+         if(in == "quit")
+            break;
+      }
+      else
+         in = "100 this is an ftp message text";
+      int result;
+      result = process_ftp(in.c_str(), &out);
+      if(result != -1)
+      {
+         cout << "Match found:" << endl;
+         cout << "Response code: " << result << endl;
+         cout << "Message text: " << out << endl;
+      }
+      else
+      {
+         cout << "Match not found" << endl;
+      }
+      cout << endl;
+   } while(argc == 1);
+   return 0;
 }
 
 

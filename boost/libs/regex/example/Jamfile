@@ -1,24 +1,28 @@
 subproject libs/regex/example ;
 
 
-exe timer : timer/regex_timer.cpp 
+unit-test timer : timer/regex_timer.cpp 
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
-		debug
+		release
+	:
+		timer/input_script.txt
 	;
 
-exe jgrep : jgrep/jgrep.cpp jgrep/main.cpp
+unit-test jgrep : jgrep/jgrep.cpp jgrep/main.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
-		debug
+		release
+	:
+		-n boost/ ../../../boost/regex.hpp
 	;
 
 unit-test credit_card_example : snippets/credit_card_example.cpp
@@ -44,7 +48,7 @@ unit-test partial_regex_grep : snippets/partial_regex_grep.cpp
 		../index.htm
 	;
 
-exe partial_regex_match : snippets/partial_regex_match.cpp
+unit-test partial_regex_match : snippets/partial_regex_match.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
@@ -52,6 +56,8 @@ exe partial_regex_match : snippets/partial_regex_match.cpp
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
+	:
+		1234-5678-8765-4
 	;
 
 unit-test regex_grep_example_1 : snippets/regex_grep_example_1.cpp
@@ -102,7 +108,7 @@ unit-test regex_grep_example_4 : snippets/regex_grep_example_4.cpp
 		../../../boost/smart_ptr.hpp
 	;
 
-exe regex_match_example : snippets/regex_match_example.cpp
+unit-test regex_match_example : snippets/regex_match_example.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
@@ -110,6 +116,8 @@ exe regex_match_example : snippets/regex_match_example.cpp
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
+	:
+		-auto
 	;
 
 unit-test regex_merge_example : snippets/regex_merge_example.cpp
@@ -136,7 +144,7 @@ unit-test regex_search_example : snippets/regex_search_example.cpp
 		../../../boost/smart_ptr.hpp
 	;
 
-exe regex_split_example_1 : snippets/regex_split_example_1.cpp
+unit-test regex_split_example_1 : snippets/regex_split_example_1.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
@@ -144,6 +152,8 @@ exe regex_split_example_1 : snippets/regex_split_example_1.cpp
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
+	:
+		-auto
 	;
 
 unit-test regex_split_example_2 : snippets/regex_split_example_2.cpp
@@ -157,6 +167,7 @@ unit-test regex_split_example_2 : snippets/regex_split_example_2.cpp
 	:
 		../index.htm
 	;
+
 
 
 

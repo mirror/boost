@@ -15,14 +15,18 @@
 
 #ifdef BOOST_RE_OLD_IOSTREAM
 #include <iostream.h>
+#include <fstream.h>
 #else
 #include <iostream>
+#include <fstream>
 using std::cout;
 using std::cin;
 using std::cerr;
 using std::istream;
 using std::ostream;
 using std::endl;
+using std::ifstream;
+using std::streambuf;
 #endif
 
 #include <algorithm>
@@ -87,8 +91,21 @@ istream& getline(istream& is, std::string& s)
 #endif
 
 
-int main()
+int main(int argc, char**argv)
 {
+   ifstream ifs;
+   streambuf* pbuf = 0;
+   if(argc == 2)
+   {
+      ifs.open(argv[1]);
+      if(ifs.bad())
+      {
+         cout << "Bad filename: " << argv[1] << endl;
+         return -1;
+      }
+      pbuf = cin.rdbuf(ifs.rdbuf());
+   }
+   
    boost::regex ex;
    boost::match_results<std::string::const_iterator> sm;
 #ifndef BOOST_NO_WREGEX
@@ -111,6 +128,8 @@ int main()
    {
       cout << "Enter expression (or \"quit\" to exit): ";
       getline(cin, s1);
+      if(argc == 2)
+         cout << endl << s1 << endl;
       if(s1 == "quit")
          break;
 #ifndef BOOST_NO_WREGEX
@@ -143,6 +162,8 @@ int main()
       {
          cout << "Enter string to search (or \"quit\" to exit): ";
          getline(cin, s2);
+         if(argc == 2)
+            cout << endl << s2 << endl;
          if(s2 == "quit")
             break;
 
@@ -313,6 +334,10 @@ int main()
       }
       regfree(&r);
    }
+
+   if(pbuf)
+      cin.rdbuf(pbuf);
+
    return 0;
 }
 

@@ -29,7 +29,10 @@ int main(int argc, char* argv[])
 {
    try{
       std::string input;
-      std::cin >> input;
+      if(argc > 1)
+         input = argv[1];
+      else
+         std::cin >> input;
       if(is_possible_card_number(input))
       {
          std::cout << "Matched OK..." << std::endl;

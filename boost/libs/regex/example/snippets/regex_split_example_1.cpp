@@ -51,14 +51,19 @@ istream& getline(istream& is, std::string& s)
 #endif
 
 
-int main()
+int main(int argc)
 {
    string s;
    list<string> l;
    do{
-      cout << "Enter text to split (or \"quit\" to exit): ";
-      getline(cin, s);
-      if(s == "quit") break;
+      if(argc == 1)
+      {
+         cout << "Enter text to split (or \"quit\" to exit): ";
+         getline(cin, s);
+         if(s == "quit") break;
+      }
+      else
+         s = "This is a string of tokens";
       unsigned result = tokenise(l, s);
       cout << result << " tokens found" << endl;
       cout << "The remaining text is: \"" << s << "\"" << endl;
@@ -68,6 +73,6 @@ int main()
          l.pop_front();
          cout << s << endl;
       }
-   }while(true);
+   }while(argc == 1);
    return 0;
 }
