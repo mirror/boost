@@ -13,7 +13,7 @@
 
 #include <boost/config.hpp> // BOOST_MSVC.
 #include <boost/detail/workaround.hpp>
-#include <boost/iostreams/is_filter.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/preprocessor/control/expr_if.hpp>
 #include <boost/preprocessor/control/if.hpp>

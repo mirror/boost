@@ -27,7 +27,6 @@
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
 #include <boost/iostreams/traits.hpp>
-#include <boost/iostreams/is_filter.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/optional.hpp>

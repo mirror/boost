@@ -23,12 +23,11 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/traits.hpp>
-#include <boost/iostreams/is_device.hpp>
-#include <boost/iostreams/is_filter.hpp>
 #include <boost/iostreams/detail/access_control.hpp>
 #include <boost/iostreams/detail/character.hpp>
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
+#include <boost/iostreams/traits.hpp>           // is_filter.
 #include <boost/iostreams/streambuf_facade.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>

@@ -17,10 +17,8 @@
 #ifndef BOOST_NO_STD_LOCALE
 # include <locale>
 #endif
-//#include <boost/detail/workaround.hpp>       
 #include <boost/iostreams/detail/wrap_unwrap.hpp>       
 #include <boost/iostreams/traits.hpp>         
-#include <boost/iostreams/is_device.hpp>     
 #include <boost/iostreams/operations.hpp>        
 #include <boost/mpl/if.hpp>    
 #include <boost/static_assert.hpp>  

@@ -17,7 +17,6 @@
 #include <boost/iostreams/detail/ios_traits.hpp>
 #include <boost/iostreams/device/null.hpp>
 #include <boost/iostreams/traits.hpp>
-#include <boost/iostreams/is_device.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/static_assert.hpp>

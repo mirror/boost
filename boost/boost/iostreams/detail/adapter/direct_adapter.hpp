@@ -21,8 +21,7 @@
 #include <boost/iostreams/detail/config/limits.hpp>       // forwarding.
 #include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/error.hpp>
-#include <boost/iostreams/traits.hpp>                     // io_mode.
-#include <boost/iostreams/is_direct.hpp>
+#include <boost/iostreams/traits.hpp>                     // io_mode, is_direct.
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/bool.hpp> 
 #include <boost/mpl/or.hpp> 

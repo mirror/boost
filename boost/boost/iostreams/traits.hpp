@@ -26,6 +26,7 @@
 #include <boost/iostreams/detail/ios_traits.hpp>   
 #include <boost/iostreams/detail/select.hpp>            
 #include <boost/iostreams/detail/wrap_unwrap.hpp> 
+#include <boost/mpl/bool.hpp>   
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>      
 #include <boost/mpl/int.hpp>  
@@ -184,6 +185,32 @@ struct io_mode_id {
 
 template<typename T> // Borland 5.6.4 requires this circumlocution.
 struct io_mode : detail::io_mode_impl< detail::io_mode_id<T>::value > { };
+
+//----------Definition of is_device, is_filter and is_direct------------------//
+
+namespace detail {
+
+template<typename T, typename Tag>
+struct has_trait_impl {
+    typedef typename io_category<T>::type category;
+    BOOST_STATIC_CONSTANT(bool, value = (is_convertible<category, Tag>::value));
+};
+
+template<typename T, typename Tag>
+struct has_trait 
+    : mpl::bool_<has_trait_impl<T, Tag>::value>
+    { }; 
+
+} // End namespace detail.
+
+template<typename T>
+struct is_device : detail::has_trait<T, device_tag> { };
+
+template<typename T>
+struct is_filter : detail::has_trait<T, filter_tag> { };
+
+template<typename T>
+struct is_direct : detail::has_trait<T, direct_tag> { };
 
 //----------Definition of BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS------------------//
 

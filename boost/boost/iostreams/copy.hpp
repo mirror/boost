@@ -28,7 +28,6 @@
 #include <boost/iostreams/detail/enable_if_stream.hpp>                      
 #include <boost/iostreams/detail/resolve.hpp>                   
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
-#include <boost/iostreams/is_direct.hpp>
 #include <boost/iostreams/operations.hpp>          // read, write, close.
 #include <boost/static_assert.hpp>  
 #include <boost/type_traits/is_same.hpp>  

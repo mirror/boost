@@ -20,7 +20,6 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/traits.hpp>
-#include <boost/iostreams/is_filter.hpp>
 #include <boost/iostreams/operations.hpp> 
 #include <boost/mpl/if.hpp> 
 
