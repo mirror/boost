@@ -13,4 +13,8 @@
 #define BOOST_HAS_PTHREADS
 #define BOOST_HAS_NL_TYPES_H
 
+// Threading API's:
+#define BOOST_HAS_PTHREAD_DELAY_NP
+#define BOOST_HAS_PTHREAD_YIELD
+
 

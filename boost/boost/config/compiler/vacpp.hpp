@@ -10,6 +10,13 @@
 #define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 
+//
+// On AIX thread support seems to be indicated by _THREAD_SAFE:
+//
+#ifdef _THREAD_SAFE
+#  define BOOST_HAS_THREADS
+#endif
+
 #define BOOST_COMPILER "IBM Visual Age" BOOST_STRINGIZE(__IBMCPP__)
 
 //
