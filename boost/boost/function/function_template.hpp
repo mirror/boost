@@ -450,7 +450,7 @@ namespace boost {
     }
     
     template<typename FunctionObj>
-    void assign_to(FunctionObj f, detail::function::stateless_function_obj_tag)
+    void assign_to(FunctionObj, detail::function::stateless_function_obj_tag)
     {
       typedef 
           typename detail::function::
