@@ -28,6 +28,7 @@ BOOST_PP_REPEAT_3RD() macros.</p>
 
 <h3>Example</h3>
 <ul>
+  <li><a href="../../example/duffs_device.c">duffs_device.c</a></li>
   <li><a href="../../example/repeat_2d.c">repeat_2d.c</a></li>
 </ul>
 
