@@ -54,7 +54,7 @@ void iterator_test()
     BOOST_CHECK( tokens[0]==string("xx") );
     BOOST_CHECK( tokens[1]==string("xx") );
 
-	ifind_all(
+    ifind_all(
         tokens,
         str2,
         "xx" );
