@@ -53,15 +53,11 @@ In other words, expands to the sequence:
   M(0,P) M(1,P) ... M(N-1,P)
 </pre></div></pre>
 <p>
-See BOOST_PREPROCESSOR_LIMIT_MAG.
-<p>
-RATIONALE:<ul>
-<li>BOOST_PREPROCESSOR_REPEAT, BOOST_PREPROCESSOR_REPEAT_2ND, ... must work together.<li>BOOST_PREPROCESSOR_REPEAT is already tested with BOOST_PREPROCESSOR_ENUM_PARAMS.<li>The tested repeat count should exceed imaginable usage.<li>Testing the generation of is_function_helper()s upto 40 arguments should be sufficient in this case. Many compilers may fail the repetition tests (at least with higher counts). However, the primary purpose of the repetition primitives is to enable configurability with reasonable defaults, and not necessarily "the most impressive repetition". </ul>
-    </td>
+See BOOST_PREPROCESSOR_LIMIT_MAG.     </td>
   </tr>
 </table>
 <hr>
-<p>© Copyright Housemarque, Inc. 2001</p>
+<p>© Copyright Housemarque Oy 2001</p>
 <p>Permission to copy, use, modify, sell and distribute this document is granted 
   provided this copyright notice appears in all copies. This document is provided 
   "as is" without express or implied warranty, and with no claim as to its suitability 
