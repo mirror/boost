@@ -15,6 +15,9 @@
 #include <windows.h> // more things to test
 #endif
 
+// this test was added to check for bug reported on 21 May 2003:
+struct poly_bug { virtual int foo() = 0; };
+
 TT_TEST_BEGIN(is_polymorphic)
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<int>::value, false);
@@ -63,6 +66,10 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<ITypeComp>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<ICreateTypeInfo>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<IDispatch>::value, true);
 #endif
+
+//
+// this test was added to check for bug reported on 21 May 2003:
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<poly_bug>::value, true);
 
 TT_TEST_END
 
