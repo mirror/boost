@@ -290,12 +290,11 @@ namespace boost {
     typedef KeyArchetype key_type;
     typedef ValueArchetype value_type;
     typedef lvalue_property_map_tag category;
-    const value_type& operator[](const key_type&) const { return s_v; }
-    static value_type s_v;
+    const value_type& operator[](const key_type&) const {
+      static value_type s_v;
+      return s_v;
+    }
   };
-  template <typename K, typename V>
-  V lvalue_property_map_archetype<K,V>::s_v(dummy_cons);
-
 
   template <class PMap, class Key>
   struct Mutable_LvaluePropertyMapConcept
@@ -304,8 +303,8 @@ namespace boost {
     typedef boost::lvalue_property_map_tag LvalueTag;
     typedef typename property_traits<PMap>::value_type& reference;
     void constraints() { 
-      function_requires< ReadWritePropertyMapConcept<PMap, Key> >();
-      function_requires<ConvertibleConcept<Category, LvalueTag> >();
+      boost::function_requires< ReadWritePropertyMapConcept<PMap, Key> >();
+      boost::function_requires<ConvertibleConcept<Category, LvalueTag> >();
 
       reference ref = pmap[k];
     }
@@ -320,12 +319,11 @@ namespace boost {
     typedef KeyArchetype key_type;
     typedef ValueArchetype value_type;
     typedef lvalue_property_map_tag category;
-    value_type& operator[](const key_type&) const { return s_v; }
-    static value_type s_v;
+    value_type& operator[](const key_type&) const { 
+      static value_type s_v;
+      return s_v;
+    }
   };
-  template <typename K, typename V>
-  V mutable_lvalue_property_map_archetype<K,V>::s_v(dummy_cons);
-
 
   struct identity_property_map;
 
