@@ -39,11 +39,13 @@ namespace  {
   }
 
   template<class Ch, class Tr>
-  void do_fill( std::basic_string<Ch,Tr> & s, 
+  void do_pad( std::basic_string<Ch,Tr> & s, 
                 std::streamsize w, 
                 const Ch c, 
                 std::ios_base::fmtflags f, 
                 bool center) 
+    // applies centered / left / right  padding  to the string s.
+    // Effects : string s is padded.
   {
     std::streamsize n=w-s.size();
     if(n<=0) {
@@ -65,7 +67,7 @@ namespace  {
           s.insert(s.begin(), n, c);
         }
       }
-  } // -do_fill(..) 
+  } // -do_pad(..) 
 
 
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
@@ -140,13 +142,13 @@ namespace  {
     const std::streamsize w=oss_.width();
     const std::ios_base::fmtflags fl=oss_.flags();
     const bool internal = (fl & std::ios_base::internal) != 0;
-    const bool two_phased_filling = internal
+    const bool two_stepped_padding = internal
                                         &&  ! ( specs.pad_scheme_ & format_item_t::spacepad ) 
                                         && specs.truncate_ < 0 ;
 
     if( w > 0)
       {
-        if(two_phased_filling)
+        if(two_stepped_padding)
           { } // in this case, let the stream do the padding, and later on, we'll do our hack..
         else {
             oss_.width(0);
@@ -159,7 +161,7 @@ namespace  {
     if (specs.truncate_ >= 0)
       res.erase(specs.truncate_);
 
-    // complex fills :
+    // complex pads :
 
     if(specs.pad_scheme_ & format_item_t::spacepad)
       {
@@ -169,12 +171,12 @@ namespace  {
           }
       }
 
-    if(two_phased_filling)
+    if(two_stepped_padding)
       {
         if( res.size() - w > 0)
           { 
             // either it was one big arg and we have nothing to do about it,
-            // either it was multi-output with first output filling up all width..
+            // either it was multi-output with first output padding up all width..
             empty_buf( oss_);
             oss_.width(0);
             put_last(oss_, x );
@@ -199,9 +201,9 @@ namespace  {
           { // okay, only one thing was printed and padded, so res is fine.
           }
       }
-    else if(w > 0) // other cases that need do_fill
+    else if(w > 0) // other cases that need do_pad
       {
-        do_fill(res,w,oss_.fill(), fl, (specs.pad_scheme_ & format_item_t::centered) !=0 );
+        do_pad(res,w,oss_.fill(), fl, (specs.pad_scheme_ & format_item_t::centered) !=0 );
       }
 
     prev_state.apply_on(oss_);
