@@ -1,20 +1,37 @@
 subproject libs/format/test ;
 
-unit-test format_test1
-    : format_test1.cpp
-      <lib>../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
+SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
+include testing.jam ;
 
-unit-test format_test2
-    : format_test2.cpp
-      <lib>../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
+# Make tests run by default.
+DEPENDS all : test ;
 
-unit-test format_test_wstring
-    : format_test_wstring.cpp
-      <lib>../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
+{
+
+    # look in BOOST_ROOT for sources first, just in this Jamfile
+    local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
+
+test-suite "format"
+   :    [  run libs/format/test/format_test1.cpp 
+		<lib>../../../libs/test/build/boost_test_exec_monitor
+              : # args
+              : # input files
+              : <runtime-link>static # uses locale; metrowerks toolsets don't have a locale in the dynamic library
+ 	]
+
+ 	[ run libs/format/test/format_test2.cpp 
+		<lib>../../../libs/test/build/boost_test_exec_monitor
+              : # args
+              : # input files
+              : <runtime-link>static # uses locale; metrowerks toolsets don't have a locale in the dynamic library
+        ]
+
+	[ run libs/format/test/format_test_wstring.cpp 
+		<lib>../../../libs/test/build/boost_test_exec_monitor
+              : # args
+              : # input files
+              : <runtime-link>static # uses locale; metrowerks toolsets don't have a locale in the dynamic library
+	]
+  ;
+}
 
