@@ -126,9 +126,11 @@ int main(int, char*[])
       <tr>
         <td><tt>BaseIterator</tt> 
 
-        <td>The iterator type being wrapped. The <tt>value_type</tt> of the
-        base iterator should itself be dereferenceable (a <a href=
-        "http://www.sgi.com/tech/stl/trivial.html">Trivial Iterator</a>).
+        <td>The iterator type being wrapped. The <tt>value_type</tt>
+        of the base iterator should itself be dereferenceable. 
+        Also, if the default <tt>Value</tt> template
+	parameter is used, the <tt>value_type</tt> must provide
+        a specialization of <tt>iterator_traits</tt>.
 
       <tr>
         <td><tt>Value</tt> 
@@ -253,8 +255,10 @@ b,c,d,e,f,g,h,
         <td><tt>BaseIterator</tt> 
 
         <td>The iterator type being wrapped. The <tt>value_type</tt> of the
-        base iterator should itself be dereferenceable (a <a href=
-        "http://www.sgi.com/tech/stl/trivial.html">Trivial Iterator</a>).
+        base iterator should itself be dereferenceable.
+        Also, if the default <tt>Value</tt> template
+	parameter is used, the <tt>value_type</tt> must provide
+        a specialization of <tt>iterator_traits</tt>.
 
       <tr>
         <td><tt>Value</tt> 
