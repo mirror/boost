@@ -35,6 +35,9 @@ namespace boost
         typedef BOOST_DEDUCED_TYPENAME range_size<ForwardRange>::type             size_type;
 
     public:
+        sub_range() : base() 
+        { }
+            
         template< class ForwardRange2 >
         sub_range( ForwardRange2& r ) : base( r )
         { }
@@ -68,7 +71,7 @@ namespace boost
         const_iterator  begin() const    { return base::begin(); }
         iterator        end()            { return base::end();   }
         const_iterator  end() const      { return base::end();   }
-        size_type       size() const     { return std::distance( begin(), end() ); }   
+        size_type       size() const     { return base::size();  }   
 
     };
         

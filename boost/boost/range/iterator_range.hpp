@@ -75,34 +75,54 @@ namespace boost {
             //! iterator type
             typedef IteratorT iterator;
 
+            iterator_range() : m_Begin( iterator() ), m_End( iterator() ), 
+                               singular( true )
+            { }
+            
             //! Constructor from a pair of iterators
             template< class Iterator >
             iterator_range( Iterator Begin, Iterator End ) : 
-                m_Begin(Begin), m_End(End) {}
+                m_Begin(Begin), m_End(End), singular(false) {}
 
             //! Constructor from a Range
             template< class Range >
             iterator_range( const Range& r ) : 
-                m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ) {}
+                m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ), 
+                singular(false) {}
 
             //! Constructor from a Range
             template< class Range >
             iterator_range( Range& r ) : 
-            m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ) {}
+                m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ), 
+                singular(false) {}
             
+            template< class Iterator >
+            iterator_range& operator=( const iterator_range<Iterator>& r )    
+            {
+                m_Begin  = r.begin(); 
+                m_End    = r.end();
+                //
+                // remark: this need not necessarily be true, but it does no harm
+                //
+                singular = r.empty();
+                return *this;
+            }
+                                      
             template< class ForwardRange >
             iterator_range& operator=( ForwardRange& r )
             {
-                m_Begin = boost::begin( r ); 
-                m_End   = boost::end( r );
+                m_Begin  = boost::begin( r ); 
+                m_End    = boost::end( r );
+                singular = false;
                 return *this;
             }
 
             template< class ForwardRange >
             iterator_range& operator=( const ForwardRange& r )
             {
-                m_Begin = boost::begin( r ); 
-                m_End   = boost::end( r );
+                m_Begin  = boost::begin( r ); 
+                m_End    = boost::end( r );
+                singular = false;
                 return *this;
             }
 
@@ -130,11 +150,17 @@ namespace boost {
             */
             size_type size() const
             { 
+                if( singular )
+                    return 0;
+                
                 return std::distance( m_Begin, m_End );
             }
             
             bool empty() const
             {
+                if( singular )
+                    return true;
+                
                 return m_Begin == m_End;
             }
 
@@ -160,7 +186,7 @@ namespace boost {
             // begin and end iterators
             IteratorT m_Begin;
             IteratorT m_End;
-            
+            bool      singular;
         };
 
 //  iterator range free-standing operators ---------------------------//

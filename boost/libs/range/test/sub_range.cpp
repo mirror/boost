@@ -113,6 +113,14 @@ void check_iterator_range()
     r.size();
     s.size();
     
+    irange singular_irange;
+    BOOST_CHECK( singular_irange.empty() );
+    BOOST_CHECK( singular_irange.size() == 0 );
+    
+    srange singular_srange;
+    BOOST_CHECK( singular_srange.empty() );
+    BOOST_CHECK( singular_srange.size() == 0 );
+
 }
 
 
