@@ -31,10 +31,6 @@
 // Rogue Wave library:
 #  define BOOST_STDLIB_CONFIG "boost/config/stdlib/roguewave.hpp"
 
-#elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
-// Dinkumware Library:
-#  define BOOST_STDLIB_CONFIG "boost/config/stdlib/dinkumware.hpp"
-
 #elif defined(__GLIBCPP__)
 // GNU libstdc++ 3
 #  define BOOST_STDLIB_CONFIG "boost/config/stdlib/libstdcpp3.hpp"
@@ -54,6 +50,10 @@
 #elif defined(MSIPL_COMPILE_H)
 // Modena C++ standard library
 #  define BOOST_STDLIB_CONFIG "boost/config/stdlib/modena.hpp"
+
+#elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
+// Dinkumware Library (this has to appear after any possible replacement libraries):
+#  define BOOST_STDLIB_CONFIG "boost/config/stdlib/dinkumware.hpp"
 
 #elif defined (BOOST_ASSERT_CONFIG)
 // this must come last - generate an error if we don't
