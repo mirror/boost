@@ -22,17 +22,12 @@ project boost/date_time
 	<link>static:<define>BOOST_DATE_TIME_STATIC_LINK	
     : usage-requirements 	
         <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG     
+        <link>shared:<define>BOOST_DATE_TIME_DYN_LINK=1
+    : source-location ../src
     ;
 
-#######################
-
-#
-# Declare the boost date_time static link library
-#
-
 # Base names of the source files for libboost_date_time
-local GREGORIAN_CPP_SOURCES = gregorian_types greg_month greg_weekday ;
+CPP_SOURCES = greg_month greg_weekday date_generators ;
 
-lib boost_date_time : ../src/gregorian/$(GREGORIAN_CPP_SOURCES).cpp ;
+lib boost_date_time : gregorian/$(CPP_SOURCES).cpp ;
     
-#time examples
