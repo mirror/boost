@@ -8,7 +8,8 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
-#include <boost/range.hpp>
+#include <boost/range/functions.hpp>
+#include <boost/range/types.hpp>
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -16,16 +17,16 @@
 
 namespace
 {
-   template< typename ExternalCollection, typename T >
-   inline typename boost::iterator_of<ExternalCollection>::type
-   find( ExternalCollection& c, const T& value )
+   template< typename ExternalRange, typename T >
+   inline typename boost::iterator_of<ExternalRange>::type
+   find( ExternalRange& c, const T& value )
    {
        return std::find( boost::begin( c ), boost::end( c ), value );
    }
 
-   template< typename ExternalCollection, typename T >
-   inline typename boost::const_iterator_of<ExternalCollection>::type 
-   find( const ExternalCollection& c, const T& value )
+   template< typename ExternalRange, typename T >
+   inline typename boost::const_iterator_of<ExternalRange>::type 
+   find( const ExternalRange& c, const T& value )
    {
        return std::find( boost::begin( c ), boost::end( c ), value );
    }
@@ -33,11 +34,11 @@ namespace
    // 
    // replace first value and return its index
    //                                
-   template< typename EC, typename T >
-   inline typename boost::size_type_of< EC >::type
-   my_generic_replace( EC& c, const T& value, const T& replacement )
+   template< typename ER, typename T >
+   inline typename boost::size_type_of< ER >::type
+   my_generic_replace( ER& c, const T& value, const T& replacement )
    {
-       typename boost::iterator_of<EC>::type found = find( c, value );
+       typename boost::iterator_of<ER>::type found = find( c, value );
        
        if( found != boost::end( c ) )
            *found = replacement;
@@ -46,13 +47,12 @@ namespace
 }
 
 
-
 int main()
 {
     const int N = 5;                     
-    int v[] = { 1,2,3,4,5,6,6,7,8,9 };
     std::vector<int> my_vector;
-    my_vector.assign( boost::begin( v ), boost::end( v ) );
+	int values[] = { 1,2,3,4,5,6,7,8,9 };
+	my_vector.assign( values, values + 9 );
     typedef std::vector<int>::iterator iterator;
     std::pair<iterator,iterator>       my_view( boost::begin( my_vector ), 
                                                 boost::begin( my_vector ) + N );
