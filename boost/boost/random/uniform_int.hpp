@@ -49,6 +49,7 @@ public:
     // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
     BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
 #endif
+    assert(min <= max);
     init();
   }
 
@@ -63,8 +64,10 @@ public:
     typedef typename Engine::result_type base_result;
     base_result bmin = eng.min();
     base_result brange = eng.max() - eng.min();
-    
-    if(random::equal_signed_unsigned(brange, _range)) {
+
+    if(_range == 0) {
+      return _min;    
+    } else if(random::equal_signed_unsigned(brange, _range)) {
       // this will probably never happen in real life
       // basically nothing to do; just take care we don't overflow / underflow
       return static_cast<result_type>(eng() - bmin) + _min;
