@@ -41,6 +41,7 @@ protected:
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
+    friend class detail::interface_oarchive<Archive>;
     friend class basic_text_oarchive<Archive>;
     friend class save_access;
 #endif

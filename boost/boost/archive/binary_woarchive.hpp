@@ -31,8 +31,8 @@ class binary_woarchive_impl :
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
+    friend class detail::interface_oarchive<Archive>;
     friend class basic_binary_oarchive<Archive>;
-    friend class basic_binary_oprimitive<Archive, std::wostream>;
     friend class save_access;
 protected:
 #endif

@@ -31,10 +31,14 @@ class binary_wiarchive_impl :
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
+    friend class detail::interface_iarchive<Archive>;
     friend class basic_binary_iarchive<Archive>;
-    friend class basic_binary_iprimitive<Archive, std::wistream>;
     friend class load_access;
 #endif
+    // return a pointer to the most derived class
+    Archive * This(){
+        return static_cast<Archive *>(this);
+    }
     // note: the following should not needed - but one compiler (vc 7.1)
     // fails to compile one test (test_shared_ptr) without it !!!
     template<class T>
