@@ -42,33 +42,27 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         sparse_matrix_element (const value_type &d):
-            container_reference<matrix_type> (), it_ (), i_ (), j_ (), d_ (d), dirty_ (false) {
+            container_reference<matrix_type> (), i_ (), j_ (), d_ (d), dirty_ (false) {
             external_logic ().raise ();
         }
         BOOST_UBLAS_INLINE
-        sparse_matrix_element (matrix_type &m, pointer it, size_type i, size_type j):
-            container_reference<matrix_type> (m), it_ (it), i_ (i), j_ (j), d_ (*it), dirty_ (false) {}
-        BOOST_UBLAS_INLINE
         sparse_matrix_element (matrix_type &m, size_type i, size_type j):
-            container_reference<matrix_type> (m), it_ (), i_ (i), j_ (j), d_ (), dirty_ (false) {
+            container_reference<matrix_type> (m), i_ (i), j_ (j), d_ (), dirty_ (false) {
             pointer it = (*this) ().find_element (i_, j_);
             if (it)
                 d_ = *it;
         }
         BOOST_UBLAS_INLINE
         sparse_matrix_element (const sparse_matrix_element &p):
-            container_reference<matrix_type> (p), it_ (p.it_), i_ (p.i_), d_ (p.d_), dirty_ (p.dirty_) {}
+            container_reference<matrix_type> (p), i_ (p.i_), d_ (p.d_), dirty_ (p.dirty_) {}
         BOOST_UBLAS_INLINE
         ~sparse_matrix_element () {
             if (dirty_) {
-                if (! it_) {
-                    it_ = (*this) ().find_element (i_, j_);
-                    if (! it_)
-                        (*this) ().insert (i_, j_, d_);
-                    else
-                        *it_ = d_;
-                } else
-                    *it_ = d_;
+                pointer it = (*this) ().find_element (i_, j_);
+                if (! it)
+                    (*this) ().insert (i_, j_, d_);
+                else
+                    *it = d_;
             }
         }
 
@@ -152,7 +146,6 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
     private:
-        pointer it_;
         size_type i_;
         size_type j_;
         value_type d_;
@@ -250,6 +243,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
+        typedef A array_type;
         typedef const T &const_reference;
 #if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
         typedef T &reference;
@@ -258,10 +252,9 @@ namespace boost { namespace numeric { namespace ublas {
 #elif defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE)
         typedef typename detail::map_traits<A>::reference reference;
 #endif
-        typedef const T *const_pointer;
-        typedef T *pointer;
-        typedef A array_type;
     private:
+        typedef T &true_reference;
+        typedef T *pointer;
         typedef F functor_type;
         typedef const sparse_matrix<T, F, A> const_self_type;
         typedef sparse_matrix<T, F, A> self_type;
@@ -296,7 +289,7 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), non_zeros_ (non_zeros), data_ () {
             reserve (non_zeros_);
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
         // Accessors
@@ -350,6 +343,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Proxy support
 #ifdef BOOST_UBLAS_STRICT_MATRIX_SPARSE
+        BOOST_UBLAS_INLINE
         pointer find_element (size_type i, size_type j) {
             iterator_type it (data ().find (functor_type::element (i, size1_, j, size2_)));
             if (it == data ().end () || (*it).first != functor_type::element (i, size1_, j, size2_))
@@ -360,16 +354,24 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element access
         BOOST_UBLAS_INLINE
-        const_reference operator () (size_type i, size_type j) const {
+        const_reference at_element (size_type i, size_type j) const {
             const_iterator_type it (data ().find (functor_type::element (i, size1_, j, size2_)));
             if (it == data ().end () || (*it).first != functor_type::element (i, size1_, j, size2_))
                 return zero_;
             return (*it).second;
         }
         BOOST_UBLAS_INLINE
+        true_reference at_element (size_type i, size_type j) {
+            return data () [functor_type::element (i, size1_, j, size2_)];
+        }
+        BOOST_UBLAS_INLINE
+        const_reference operator () (size_type i, size_type j) const {
+            return at_element (i, j);
+        }
+        BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) {
 #ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
-            return data () [functor_type::element (i, size1_, j, size2_)];
+            return at_element (i, j);
 #else
             return reference (*this, i, j);
 #endif
@@ -404,15 +406,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        sparse_matrix &reset (const matrix_expression<AE> &ae) {
-            self_type temporary (ae, non_zeros_);
-            resize (temporary.size1 (), temporary.size2 (), non_zeros_);
-            return assign_temporary (temporary);
-        }
-        template<class AE>
-        BOOST_UBLAS_INLINE
         sparse_matrix &assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -429,7 +424,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_matrix &plus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_plus_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -446,19 +441,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_matrix &minus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_minus_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         sparse_matrix& operator *= (const AT &at) {
-            matrix_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_multiplies_assign<true_reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         sparse_matrix& operator /= (const AT &at) {
-            matrix_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_divides_assign<true_reference, AT> (), *this, at);
             return *this;
         }
 
@@ -500,7 +495,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Iterator types
     private:
-        // Use a storage iterator
+        // Use storage iterator
         typedef typename A::const_iterator const_iterator_type;
         typedef typename A::iterator iterator_type;
 
@@ -653,10 +648,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename sparse_matrix::difference_type difference_type;
             typedef typename sparse_matrix::value_type value_type;
+            typedef typename sparse_matrix::difference_type difference_type;
             typedef typename sparse_matrix::const_reference reference;
-            typedef typename sparse_matrix::const_pointer pointer;
+            typedef const typename sparse_matrix::pointer pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -698,7 +693,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     return (*it_).second;
                 } else {
-                    return (*this) () (i_, j_);
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -805,9 +800,9 @@ namespace boost { namespace numeric { namespace ublas {
         public:
             typedef sparse_bidirectional_iterator_tag iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename sparse_matrix::difference_type difference_type;
             typedef typename sparse_matrix::value_type value_type;
-            typedef typename sparse_matrix::reference reference;
+            typedef typename sparse_matrix::difference_type difference_type;
+            typedef typename sparse_matrix::true_reference reference;
             typedef typename sparse_matrix::pointer pointer;
 #endif
             typedef iterator2 dual_iterator_type;
@@ -845,15 +840,13 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
+#ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
                     return (*it_).second;
-#elif defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
-                    return reference ((*this) (), &(*it_).second, index1 (), index2 ());
-#elif defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE)
+#else
                     return detail::make_reference ((*this) ().data (), it_);
 #endif
                 } else {
-                    return reference ((*this) () (i_, j_));
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -964,10 +957,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename sparse_matrix::difference_type difference_type;
             typedef typename sparse_matrix::value_type value_type;
+            typedef typename sparse_matrix::difference_type difference_type;
             typedef typename sparse_matrix::const_reference reference;
-            typedef typename sparse_matrix::const_pointer pointer;
+            typedef const typename sparse_matrix::pointer pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -1009,7 +1002,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     return (*it_).second;
                 } else {
-                    return (*this) () (i_, j_);
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -1116,9 +1109,9 @@ namespace boost { namespace numeric { namespace ublas {
         public:
             typedef sparse_bidirectional_iterator_tag iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename sparse_matrix::difference_type difference_type;
             typedef typename sparse_matrix::value_type value_type;
-            typedef typename sparse_matrix::reference reference;
+            typedef typename sparse_matrix::difference_type difference_type;
+            typedef typename sparse_matrix::true_reference reference;
             typedef typename sparse_matrix::pointer pointer;
 #endif
             typedef iterator1 dual_iterator_type;
@@ -1156,15 +1149,13 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
+#ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
                     return (*it_).second;
-#elif defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
-                    return reference ((*this) (), &(*it_).second, index1 (), index2 ());
-#elif defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE)
+#else
                     return detail::make_reference ((*this) ().data (), it_);
 #endif
                 } else {
-                    return reference ((*this) () (i_, j_));
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -1338,9 +1329,9 @@ namespace boost { namespace numeric { namespace ublas {
 #elif defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE)
         typedef typename detail::map_traits<typename A::data_value_type>::reference reference;
 #endif
-        typedef const T *const_pointer;
-        typedef T *pointer;
     private:
+        typedef T &true_reference;
+        typedef T *pointer;
         typedef A array_type;
         typedef const A const_array_type;
         typedef F functor_type;
@@ -1380,7 +1371,7 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), non_zeros_ (non_zeros), data_ () {
             data_ [functor_type::size1 (size1_, size2_)] = vector_data_value_type ();
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
         // Accessors
@@ -1420,6 +1411,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Proxy support
 #ifdef BOOST_UBLAS_STRICT_MATRIX_SPARSE
+        BOOST_UBLAS_INLINE
         pointer find_element (size_type i, size_type j) {
             vector_iterator_type itv (data ().find (functor_type::element1 (i, size1_, j, size2_)));
             if (itv == data ().end () || (*itv).first != functor_type::element1 (i, size1_, j, size2_))
@@ -1433,7 +1425,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element access
         BOOST_UBLAS_INLINE
-        const_reference operator () (size_type i, size_type j) const {
+        const_reference at_element (size_type i, size_type j) const {
             vector_const_iterator_type itv (data ().find (functor_type::element1 (i, size1_, j, size2_)));
             if (itv == data ().end () || (*itv).first != functor_type::element1 (i, size1_, j, size2_))
                 return zero_;
@@ -1443,9 +1435,17 @@ namespace boost { namespace numeric { namespace ublas {
             return (*it).second;
         }
         BOOST_UBLAS_INLINE
+        true_reference at_element (size_type i, size_type j) {
+            return data () [functor_type::element1 (i, size1_, j, size2_)] [functor_type::element2 (i, size1_, j, size2_)];
+        }
+        BOOST_UBLAS_INLINE
+        const_reference operator () (size_type i, size_type j) const {
+            return at_element (i, j);
+        }
+        BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) {
 #ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
-            return data () [functor_type::element1 (i, size1_, j, size2_)] [functor_type::element2 (i, size1_, j, size2_)];
+            return at_element (i, j);
 #else
             return reference (*this, i, j);
 #endif
@@ -1480,15 +1480,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        sparse_vector_of_sparse_vector &reset (const matrix_expression<AE> &ae) {
-            self_type temporary (ae, non_zeros_);
-            resize (temporary.size1 (), temporary.size2 (), non_zeros_);
-            return assign_temporary (temporary);
-        }
-        template<class AE>
-        BOOST_UBLAS_INLINE
         sparse_vector_of_sparse_vector &assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -1505,7 +1498,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_vector_of_sparse_vector &plus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_plus_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -1522,19 +1515,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_vector_of_sparse_vector &minus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_minus_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         sparse_vector_of_sparse_vector& operator *= (const AT &at) {
-            matrix_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_multiplies_assign<true_reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         sparse_vector_of_sparse_vector& operator /= (const AT &at) {
-            matrix_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_divides_assign<true_reference, AT> (), *this, at);
             return *this;
         }
 
@@ -1773,10 +1766,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename sparse_vector_of_sparse_vector::difference_type difference_type;
             typedef typename sparse_vector_of_sparse_vector::value_type value_type;
+            typedef typename sparse_vector_of_sparse_vector::difference_type difference_type;
             typedef typename sparse_vector_of_sparse_vector::const_reference reference;
-            typedef typename sparse_vector_of_sparse_vector::const_pointer pointer;
+            typedef const typename sparse_vector_of_sparse_vector::pointer pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -1836,7 +1829,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     return (*it_).second;
                 } else {
-                    return (*this) () (i_, j_);
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -1943,9 +1936,9 @@ namespace boost { namespace numeric { namespace ublas {
         public:
             typedef sparse_bidirectional_iterator_tag iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename sparse_vector_of_sparse_vector::difference_type difference_type;
             typedef typename sparse_vector_of_sparse_vector::value_type value_type;
-            typedef typename sparse_vector_of_sparse_vector::reference reference;
+            typedef typename sparse_vector_of_sparse_vector::difference_type difference_type;
+            typedef typename sparse_vector_of_sparse_vector::true_reference reference;
             typedef typename sparse_vector_of_sparse_vector::pointer pointer;
 #endif
             typedef iterator2 dual_iterator_type;
@@ -2001,15 +1994,13 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
+#ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
                     return (*it_).second;
-#elif defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
-                    return reference ((*this) (), &(*it_).second, index1 (), index2 ());
-#elif defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE)
+#else
                     return detail::make_reference ((*itv_).second, it_);
 #endif
                 } else {
-                    return reference ((*this) () (i_, j_));
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -2120,10 +2111,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename sparse_vector_of_sparse_vector::difference_type difference_type;
             typedef typename sparse_vector_of_sparse_vector::value_type value_type;
+            typedef typename sparse_vector_of_sparse_vector::difference_type difference_type;
             typedef typename sparse_vector_of_sparse_vector::const_reference reference;
-            typedef typename sparse_vector_of_sparse_vector::const_pointer pointer;
+            typedef const typename sparse_vector_of_sparse_vector::pointer pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -2183,7 +2174,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     return (*it_).second;
                 } else {
-                    return (*this) () (i_, j_);
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -2290,9 +2281,9 @@ namespace boost { namespace numeric { namespace ublas {
         public:
             typedef sparse_bidirectional_iterator_tag iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename sparse_vector_of_sparse_vector::difference_type difference_type;
             typedef typename sparse_vector_of_sparse_vector::value_type value_type;
-            typedef typename sparse_vector_of_sparse_vector::reference reference;
+            typedef typename sparse_vector_of_sparse_vector::difference_type difference_type;
+            typedef typename sparse_vector_of_sparse_vector::true_reference reference;
             typedef typename sparse_vector_of_sparse_vector::pointer pointer;
 #endif
             typedef iterator1 dual_iterator_type;
@@ -2348,15 +2339,13 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
+#ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
                     return (*it_).second;
-#elif defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
-                    return reference ((*this) (), &(*it_).second, index1 (), index2 ());
-#elif defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE)
+#else
                     return detail::make_reference ((*itv_).second, it_);
 #endif
                 } else {
-                    return reference ((*this) () (i_, j_));
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -2530,11 +2519,11 @@ namespace boost { namespace numeric { namespace ublas {
 #else
         typedef sparse_matrix_element<compressed_matrix<T, F, IB, IA, TA> > reference;
 #endif
-        typedef const T *const_pointer;
-        typedef T *pointer;
         typedef IA index_array_type;
         typedef TA value_array_type;
     private:
+        typedef T &true_reference;
+        typedef T *pointer;
         typedef F functor_type;
         typedef const compressed_matrix<T, F, IB, IA, TA> const_self_type;
         typedef compressed_matrix<T, F, IB, IA, TA> self_type;
@@ -2587,7 +2576,7 @@ namespace boost { namespace numeric { namespace ublas {
             index2_data_ (non_zeros), value_data_ (non_zeros) {
             index1_data_ [filled1_ - 1] = k_based (filled2_);
             reserve (non_zeros_, false);
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
         // Accessors
@@ -2678,6 +2667,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Proxy support
 #ifdef BOOST_UBLAS_STRICT_MATRIX_SPARSE
+        BOOST_UBLAS_INLINE
         pointer find_element (size_type i, size_type j) {
             size_type element1 (functor_type::element1 (i, size1_, j, size2_));
             size_type element2 (functor_type::element2 (i, size1_, j, size2_));
@@ -2695,7 +2685,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element access
         BOOST_UBLAS_INLINE
-        const_reference operator () (size_type i, size_type j) const {
+        const_reference at_element (size_type i, size_type j) const {
             size_type element1 (functor_type::element1 (i, size1_, j, size2_));
             size_type element2 (functor_type::element2 (i, size1_, j, size2_));
             if (filled1_ <= element1 + 1)
@@ -2709,8 +2699,7 @@ namespace boost { namespace numeric { namespace ublas {
             return value_data () [it - index2_data ().begin ()];
         }
         BOOST_UBLAS_INLINE
-        reference operator () (size_type i, size_type j) {
-#ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
+        true_reference at_element (size_type i, size_type j) {
             size_type element1 (functor_type::element1 (i, size1_, j, size2_));
             size_type element2 (functor_type::element2 (i, size1_, j, size2_));
             if (filled1_ <= element1 + 1)
@@ -2726,6 +2715,15 @@ namespace boost { namespace numeric { namespace ublas {
                 it = detail::lower_bound (it_begin, it_end, k_based (element2), std::less<size_type> ());
             }
             return value_data () [it - index2_data ().begin ()];
+        }
+        BOOST_UBLAS_INLINE
+        const_reference operator () (size_type i, size_type j) const {
+            return at_element (i, j);
+        }
+        BOOST_UBLAS_INLINE
+        reference operator () (size_type i, size_type j) {
+#ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
+            return at_element (i, j);
 #else
             return reference (*this, i, j);
 #endif
@@ -2767,15 +2765,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        compressed_matrix &reset(const matrix_expression<AE> &ae) {
-            self_type temporary (ae, non_zeros_);
-            resize (temporary.size1 (), temporary.size2 (), non_zeros_, false);
-            return assign_temporary (temporary);
-        }
-        template<class AE>
-        BOOST_UBLAS_INLINE
         compressed_matrix &assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -2792,7 +2783,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         compressed_matrix &plus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_plus_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -2809,19 +2800,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         compressed_matrix &minus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_minus_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         compressed_matrix& operator *= (const AT &at) {
-            matrix_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_multiplies_assign<true_reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         compressed_matrix& operator /= (const AT &at) {
-            matrix_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_divides_assign<true_reference, AT> (), *this, at);
             return *this;
         }
 
@@ -3148,10 +3139,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename compressed_matrix::difference_type difference_type;
             typedef typename compressed_matrix::value_type value_type;
+            typedef typename compressed_matrix::difference_type difference_type;
             typedef typename compressed_matrix::const_reference reference;
-            typedef typename compressed_matrix::const_pointer pointer;
+            typedef const typename compressed_matrix::pointer pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -3199,7 +3190,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     return (*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()];
                 } else {
-                    return (*this) () (i_, j_);
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -3306,9 +3297,9 @@ namespace boost { namespace numeric { namespace ublas {
         public:
             typedef sparse_bidirectional_iterator_tag iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename compressed_matrix::difference_type difference_type;
             typedef typename compressed_matrix::value_type value_type;
-            typedef typename compressed_matrix::reference reference;
+            typedef typename compressed_matrix::difference_type difference_type;
+            typedef typename compressed_matrix::true_reference reference;
             typedef typename compressed_matrix::pointer pointer;
 #endif
             typedef iterator2 dual_iterator_type;
@@ -3352,13 +3343,9 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#if ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return (*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()];
-#else
-                    return reference ((*this) (), &(*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()], index1 (), index2 ());
-#endif
                 } else {
-                    return reference ((*this) () (i_, j_));
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -3469,10 +3456,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename compressed_matrix::difference_type difference_type;
             typedef typename compressed_matrix::value_type value_type;
+            typedef typename compressed_matrix::difference_type difference_type;
             typedef typename compressed_matrix::const_reference reference;
-            typedef typename compressed_matrix::const_pointer pointer;
+            typedef const typename compressed_matrix::pointer pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -3520,7 +3507,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     return (*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()];
                 } else {
-                    return (*this) () (i_, j_);
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -3627,9 +3614,9 @@ namespace boost { namespace numeric { namespace ublas {
         public:
             typedef sparse_bidirectional_iterator_tag iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename compressed_matrix::difference_type difference_type;
             typedef typename compressed_matrix::value_type value_type;
-            typedef typename compressed_matrix::reference reference;
+            typedef typename compressed_matrix::difference_type difference_type;
+            typedef typename compressed_matrix::true_reference reference;
             typedef typename compressed_matrix::pointer pointer;
 #endif
             typedef iterator1 dual_iterator_type;
@@ -3673,13 +3660,9 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#if ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return (*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()];
-#else
-                    return reference ((*this) (), &(*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()], index1 (), index2 ());
-#endif
                 } else {
-                    return reference ((*this) () (i_, j_));
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -3871,11 +3854,11 @@ namespace boost { namespace numeric { namespace ublas {
 #else
         typedef sparse_matrix_element<coordinate_matrix<T, F, IB, IA, TA> > reference;
 #endif
-        typedef const T *const_pointer;
-        typedef T *pointer;
         typedef IA index_array_type;
         typedef TA value_array_type;
     private:
+        typedef T &true_reference;
+        typedef T *pointer;
         typedef F functor_type;
         typedef const coordinate_matrix<T, F, IB, IA, TA> const_self_type;
         typedef coordinate_matrix<T, F, IB, IA, TA> self_type;
@@ -3922,7 +3905,7 @@ namespace boost { namespace numeric { namespace ublas {
             sorted_ (true), index1_data_ (non_zeros),
             index2_data_ (non_zeros), value_data_ (non_zeros) {
             reserve (non_zeros_, false);
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
         // Accessors
@@ -4006,6 +3989,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Proxy support
 #ifdef BOOST_UBLAS_STRICT_MATRIX_SPARSE
+        BOOST_UBLAS_INLINE
         pointer find_element (size_type i, size_type j) {
             sort ();
             size_type element1 (functor_type::element1 (i, size1_, j, size2_));
@@ -4025,7 +4009,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element access
         BOOST_UBLAS_INLINE
-        const_reference operator () (size_type i, size_type j) const {
+        const_reference at_element (size_type i, size_type j) const {
             sort ();
             size_type element1 (functor_type::element1 (i, size1_, j, size2_));
             size_type element2 (functor_type::element2 (i, size1_, j, size2_));
@@ -4041,8 +4025,7 @@ namespace boost { namespace numeric { namespace ublas {
             return value_data () [it - index2_data ().begin ()];
         }
         BOOST_UBLAS_INLINE
-        reference operator () (size_type i, size_type j) {
-#ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
+        true_reference at_element (size_type i, size_type j) {
             sort ();
             size_type element1 (functor_type::element1 (i, size1_, j, size2_));
             size_type element2 (functor_type::element2 (i, size1_, j, size2_));
@@ -4067,6 +4050,15 @@ namespace boost { namespace numeric { namespace ublas {
                 it = detail::lower_bound (it_begin, it_end, k_based (element2), std::less<size_type> ());
             }
             return value_data () [it - index2_data ().begin ()];
+        }
+        BOOST_UBLAS_INLINE
+        const_reference operator () (size_type i, size_type j) const {
+            return at_element (i, j);
+        }
+        BOOST_UBLAS_INLINE
+        reference operator () (size_type i, size_type j) {
+#ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
+            return at_element (i, j);
 #else
             return reference (*this, i, j);
 #endif
@@ -4108,15 +4100,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        coordinate_matrix &reset(const matrix_expression<AE> &ae) {
-            self_type temporary (ae, non_zeros_);
-            resize (temporary.size1 (), temporary.size2 (), non_zeros_, false);
-            return assign_temporary (temporary);
-        }
-        template<class AE>
-        BOOST_UBLAS_INLINE
         coordinate_matrix &assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -4133,7 +4118,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_matrix &plus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_plus_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -4150,19 +4135,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_matrix &minus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_minus_assign<true_reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         coordinate_matrix& operator *= (const AT &at) {
-            matrix_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_multiplies_assign<true_reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         coordinate_matrix& operator /= (const AT &at) {
-            matrix_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_divides_assign<true_reference, AT> (), *this, at);
             return *this;
         }
 
@@ -4464,10 +4449,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename coordinate_matrix::difference_type difference_type;
             typedef typename coordinate_matrix::value_type value_type;
+            typedef typename coordinate_matrix::difference_type difference_type;
             typedef typename coordinate_matrix::const_reference reference;
-            typedef typename coordinate_matrix::const_pointer pointer;
+            typedef const typename coordinate_matrix::pointer pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -4515,7 +4500,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     return (*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()];
                 } else {
-                    return (*this) () (i_, j_);
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -4622,9 +4607,9 @@ namespace boost { namespace numeric { namespace ublas {
         public:
             typedef sparse_bidirectional_iterator_tag iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename coordinate_matrix::difference_type difference_type;
             typedef typename coordinate_matrix::value_type value_type;
-            typedef typename coordinate_matrix::reference reference;
+            typedef typename coordinate_matrix::difference_type difference_type;
+            typedef typename coordinate_matrix::true_reference reference;
             typedef typename coordinate_matrix::pointer pointer;
 #endif
             typedef iterator2 dual_iterator_type;
@@ -4668,13 +4653,9 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#if ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return (*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()];
-#else
-                    return reference ((*this) (), &(*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()], index1 (), index2 ());
-#endif
                 } else {
-                    return reference ((*this) () (i_, j_));
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -4785,10 +4766,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename coordinate_matrix::difference_type difference_type;
             typedef typename coordinate_matrix::value_type value_type;
+            typedef typename coordinate_matrix::difference_type difference_type;
             typedef typename coordinate_matrix::const_reference reference;
-            typedef typename coordinate_matrix::const_pointer pointer;
+            typedef const typename coordinate_matrix::pointer pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -4836,7 +4817,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1) {
                     return (*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()];
                 } else {
-                    return (*this) () (i_, j_);
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 
@@ -4943,9 +4924,9 @@ namespace boost { namespace numeric { namespace ublas {
         public:
             typedef sparse_bidirectional_iterator_tag iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename coordinate_matrix::difference_type difference_type;
             typedef typename coordinate_matrix::value_type value_type;
-            typedef typename coordinate_matrix::reference reference;
+            typedef typename coordinate_matrix::difference_type difference_type;
+            typedef typename coordinate_matrix::true_reference reference;
             typedef typename coordinate_matrix::pointer pointer;
 #endif
             typedef iterator1 dual_iterator_type;
@@ -4989,13 +4970,9 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#if ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
                     return (*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()];
-#else
-                    return reference ((*this) (), &(*this) ().value_data () [it_ - (*this) ().index2_data ().begin ()], index1 (), index2 ());
-#endif
                 } else {
-                    return reference ((*this) () (i_, j_));
+                    return (*this) ().at_element (i_, j_);
                 }
             }
 

@@ -41,17 +41,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
         typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<M>,
-                                          typename M::const_pointer,
-                                          typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
@@ -277,8 +271,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename const_iterator_type::iterator_category iterator_category;
-            typedef typename const_iterator_type::difference_type difference_type;
             typedef typename const_iterator_type::value_type value_type;
+            typedef typename const_iterator_type::difference_type difference_type;
             typedef typename const_iterator_type::reference reference;
             typedef typename const_iterator_type::pointer pointer;
 
@@ -385,8 +379,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename iterator_type::iterator_category iterator_category;
-            typedef typename iterator_type::difference_type difference_type;
             typedef typename iterator_type::value_type value_type;
+            typedef typename iterator_type::difference_type difference_type;
             typedef typename iterator_type::reference reference;
             typedef typename iterator_type::pointer pointer;
 
@@ -554,17 +548,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
         typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<M>,
-                                          typename M::const_pointer,
-                                          typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
@@ -778,8 +766,6 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
 
-        // Iterators simply are pointers.
-
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
             public container_const_reference<matrix_column>,
@@ -792,8 +778,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename const_iterator_type::iterator_category iterator_category;
-            typedef typename const_iterator_type::difference_type difference_type;
             typedef typename const_iterator_type::value_type value_type;
+            typedef typename const_iterator_type::difference_type difference_type;
             typedef typename const_iterator_type::reference reference;
             typedef typename const_iterator_type::pointer pointer;
 
@@ -900,8 +886,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename iterator_type::iterator_category iterator_category;
-            typedef typename iterator_type::difference_type difference_type;
             typedef typename iterator_type::value_type value_type;
+            typedef typename iterator_type::difference_type difference_type;
             typedef typename iterator_type::reference reference;
             typedef typename iterator_type::pointer pointer;
 
@@ -1069,17 +1055,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
         typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<M>,
-                                          typename M::const_pointer,
-                                          typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
@@ -1296,10 +1276,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename matrix_vector_range::difference_type difference_type;
             typedef typename matrix_vector_range::value_type value_type;
+            typedef typename matrix_vector_range::difference_type difference_type;
             typedef typename matrix_vector_range::const_reference reference;
-            typedef typename matrix_vector_range::const_pointer pointer;
+            typedef const typename matrix_vector_range::value_type *pointer;
 #endif
 
             // Construction and destruction
@@ -1412,10 +1392,10 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename iterator_restrict_traits<typename M::iterator1::iterator_category,
                                                       typename M::iterator2::iterator_category>::iterator_category iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename matrix_vector_range::difference_type difference_type;
             typedef typename matrix_vector_range::value_type value_type;
+            typedef typename matrix_vector_range::difference_type difference_type;
             typedef typename matrix_vector_range::reference reference;
-            typedef typename matrix_vector_range::pointer pointer;
+            typedef typename matrix_vector_range::value_type *pointer;
 #endif
 
             // Construction and destruction
@@ -1570,17 +1550,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
         typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<M>,
-                                          typename M::const_pointer,
-                                          typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
@@ -1806,10 +1780,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename matrix_vector_slice::difference_type difference_type;
             typedef typename matrix_vector_slice::value_type value_type;
+            typedef typename matrix_vector_slice::difference_type difference_type;
             typedef typename matrix_vector_slice::const_reference reference;
-            typedef typename matrix_vector_slice::const_pointer pointer;
+            typedef const typename matrix_vector_slice::value_type *pointer;
 #endif
 
             // Construction and destruction
@@ -1922,10 +1896,10 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename iterator_restrict_traits<typename M::iterator1::iterator_category,
                                                       typename M::iterator2::iterator_category>::iterator_category iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename matrix_vector_slice::difference_type difference_type;
             typedef typename matrix_vector_slice::value_type value_type;
+            typedef typename matrix_vector_slice::difference_type difference_type;
             typedef typename matrix_vector_slice::reference reference;
-            typedef typename matrix_vector_slice::pointer pointer;
+            typedef typename matrix_vector_slice::value_type *pointer;
 #endif
 
             // Construction and destruction
@@ -2082,17 +2056,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
         typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<M>,
-                                          typename M::const_pointer,
-                                          typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
@@ -2317,10 +2285,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename matrix_vector_indirect::difference_type difference_type;
             typedef typename matrix_vector_indirect::value_type value_type;
+            typedef typename matrix_vector_indirect::difference_type difference_type;
             typedef typename matrix_vector_indirect::const_reference reference;
-            typedef typename matrix_vector_indirect::const_pointer pointer;
+            typedef const typename matrix_vector_indirect::value_type *pointer;
 #endif
 
             // Construction and destruction
@@ -2433,10 +2401,10 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename iterator_restrict_traits<typename M::iterator1::iterator_category,
                                                       typename M::iterator2::iterator_category>::iterator_category iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename matrix_vector_indirect::difference_type difference_type;
             typedef typename matrix_vector_indirect::value_type value_type;
+            typedef typename matrix_vector_indirect::difference_type difference_type;
             typedef typename matrix_vector_indirect::reference reference;
-            typedef typename matrix_vector_indirect::pointer pointer;
+            typedef typename matrix_vector_indirect::value_type *pointer;
 #endif
 
             // Construction and destruction
@@ -2591,17 +2559,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
         typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<M>,
-                                          typename M::const_pointer,
-                                          typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
@@ -2862,7 +2824,6 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
 
-        // Iterators simply are pointers.
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator1:
@@ -2876,8 +2837,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename const_iterator1_type::iterator_category iterator_category;
-            typedef typename const_iterator1_type::difference_type difference_type;
             typedef typename const_iterator1_type::value_type value_type;
+            typedef typename const_iterator1_type::difference_type difference_type;
             typedef typename const_iterator1_type::reference reference;
             typedef typename const_iterator1_type::pointer pointer;
             typedef const_iterator2 dual_iterator_type;
@@ -3016,8 +2977,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename iterator1_type::iterator_category iterator_category;
-            typedef typename iterator1_type::difference_type difference_type;
             typedef typename iterator1_type::value_type value_type;
+            typedef typename iterator1_type::difference_type difference_type;
             typedef typename iterator1_type::reference reference;
             typedef typename iterator1_type::pointer pointer;
             typedef iterator2 dual_iterator_type;
@@ -3155,8 +3116,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename const_iterator2_type::iterator_category iterator_category;
-            typedef typename const_iterator2_type::difference_type difference_type;
             typedef typename const_iterator2_type::value_type value_type;
+            typedef typename const_iterator2_type::difference_type difference_type;
             typedef typename const_iterator2_type::reference reference;
             typedef typename const_iterator2_type::pointer pointer;
             typedef const_iterator1 dual_iterator_type;
@@ -3295,8 +3256,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename iterator2_type::iterator_category iterator_category;
-            typedef typename iterator2_type::difference_type difference_type;
             typedef typename iterator2_type::value_type value_type;
+            typedef typename iterator2_type::difference_type difference_type;
             typedef typename iterator2_type::reference reference;
             typedef typename iterator2_type::pointer pointer;
             typedef iterator1 dual_iterator_type;
@@ -3519,17 +3480,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
         typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<M>,
-                                          typename M::const_pointer,
-                                          typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
@@ -3801,8 +3756,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename M::const_iterator1::iterator_category iterator_category;
-            typedef typename M::const_iterator1::difference_type difference_type;
             typedef typename M::const_iterator1::value_type value_type;
+            typedef typename M::const_iterator1::difference_type difference_type;
             typedef typename M::const_iterator1::reference reference;
             typedef typename M::const_iterator1::pointer pointer;
             typedef const_iterator2 dual_iterator_type;
@@ -3944,8 +3899,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename M::iterator1::iterator_category iterator_category;
-            typedef typename M::iterator1::difference_type difference_type;
             typedef typename M::iterator1::value_type value_type;
+            typedef typename M::iterator1::difference_type difference_type;
             typedef typename M::iterator1::reference reference;
             typedef typename M::iterator1::pointer pointer;
             typedef iterator2 dual_iterator_type;
@@ -4086,8 +4041,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename M::const_iterator2::iterator_category iterator_category;
-            typedef typename M::const_iterator2::difference_type difference_type;
             typedef typename M::const_iterator2::value_type value_type;
+            typedef typename M::const_iterator2::difference_type difference_type;
             typedef typename M::const_iterator2::reference reference;
             typedef typename M::const_iterator2::pointer pointer;
             typedef const_iterator1 dual_iterator_type;
@@ -4229,8 +4184,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename M::iterator2::iterator_category iterator_category;
-            typedef typename M::iterator2::difference_type difference_type;
             typedef typename M::iterator2::value_type value_type;
+            typedef typename M::iterator2::difference_type difference_type;
             typedef typename M::iterator2::reference reference;
             typedef typename M::iterator2::pointer pointer;
             typedef iterator1 dual_iterator_type;
@@ -4474,17 +4429,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename M::const_reference const_reference;
         typedef typename M::reference reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
         typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
-        typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<M>,
-                                          typename M::const_pointer,
-                                          typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
@@ -4749,8 +4698,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename M::const_iterator1::iterator_category iterator_category;
-            typedef typename M::const_iterator1::difference_type difference_type;
             typedef typename M::const_iterator1::value_type value_type;
+            typedef typename M::const_iterator1::difference_type difference_type;
             typedef typename M::const_iterator1::reference reference;
             typedef typename M::const_iterator1::pointer pointer;
             typedef const_iterator2 dual_iterator_type;
@@ -4892,8 +4841,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename M::iterator1::iterator_category iterator_category;
-            typedef typename M::iterator1::difference_type difference_type;
             typedef typename M::iterator1::value_type value_type;
+            typedef typename M::iterator1::difference_type difference_type;
             typedef typename M::iterator1::reference reference;
             typedef typename M::iterator1::pointer pointer;
             typedef iterator2 dual_iterator_type;
@@ -5034,8 +4983,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename M::const_iterator2::iterator_category iterator_category;
-            typedef typename M::const_iterator2::difference_type difference_type;
             typedef typename M::const_iterator2::value_type value_type;
+            typedef typename M::const_iterator2::difference_type difference_type;
             typedef typename M::const_iterator2::reference reference;
             typedef typename M::const_iterator2::pointer pointer;
             typedef const_iterator1 dual_iterator_type;
@@ -5177,8 +5126,8 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         public:
             typedef typename M::iterator2::iterator_category iterator_category;
-            typedef typename M::iterator2::difference_type difference_type;
             typedef typename M::iterator2::value_type value_type;
+            typedef typename M::iterator2::difference_type difference_type;
             typedef typename M::iterator2::reference reference;
             typedef typename M::iterator2::pointer pointer;
             typedef iterator1 dual_iterator_type;

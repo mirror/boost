@@ -51,6 +51,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef M matrix_type;
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
+        typedef const value_type &const_reference;
         typedef value_type &reference;
         typedef value_type *pointer;
 
@@ -60,7 +61,7 @@ namespace boost { namespace numeric { namespace ublas {
             container_reference<matrix_type> (m), i_ (i), j_ (j), d_ (d), dirty_ (false) {}
         BOOST_UBLAS_INLINE
         hermitian_matrix_element (const hermitian_matrix_element &p):
-            container_reference<matrix_type> (p), it_ (p.it_), i_ (p.i_), d_ (p.d_), dirty_ (p.dirty_) {}
+            container_reference<matrix_type> (p), i_ (p.i_), d_ (p.d_), dirty_ (p.dirty_) {}
         BOOST_UBLAS_INLINE
         ~hermitian_matrix_element () {
             if (dirty_)
@@ -68,23 +69,17 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Assignment
-        template<class D>
-        BOOST_UBLAS_INLINE
-        hermitian_matrix_element &operator = (const D &d) {
-            d_ = d;
-            dirty_ = true;
-            return *this;
-        }
         BOOST_UBLAS_INLINE
         hermitian_matrix_element &operator = (const hermitian_matrix_element &p) {
+            // Overide the implict copy assignment
             d_ = p.d_;
             dirty_ = true;
             return *this;
         }
-        template<class OM>
+        template<class D>
         BOOST_UBLAS_INLINE
-        hermitian_matrix_element &operator = (const hermitian_matrix_element<OM> &p) {
-            d_ = value_type (p);
+        hermitian_matrix_element &operator = (const D &d) {
+            d_ = d;
             dirty_ = true;
             return *this;
         }
@@ -95,36 +90,10 @@ namespace boost { namespace numeric { namespace ublas {
             dirty_ = true;
             return *this;
         }
-        BOOST_UBLAS_INLINE
-        hermitian_matrix_element &operator += (const hermitian_matrix_element &p) {
-            d_ += p.d_;
-            dirty_ = true;
-            return *this;
-        }
-        template<class OM>
-        BOOST_UBLAS_INLINE
-        hermitian_matrix_element &operator += (const hermitian_matrix_element<OM> &p) {
-            d_ += value_type (p);
-            dirty_ = true;
-            return *this;
-        }
         template<class D>
         BOOST_UBLAS_INLINE
         hermitian_matrix_element &operator -= (const D &d) {
             d_ -= d;
-            dirty_ = true;
-            return *this;
-        }
-        BOOST_UBLAS_INLINE
-        hermitian_matrix_element &operator -= (const hermitian_matrix_element &p) {
-            d_ -= p.d_;
-            dirty_ = true;
-            return *this;
-        }
-        template<class OM>
-        BOOST_UBLAS_INLINE
-        hermitian_matrix_element &operator -= (const hermitian_matrix_element<OM> &p) {
-            d_ -= value_type (p);
             dirty_ = true;
             return *this;
         }
@@ -135,19 +104,6 @@ namespace boost { namespace numeric { namespace ublas {
             dirty_ = true;
             return *this;
         }
-        BOOST_UBLAS_INLINE
-        hermitian_matrix_element &operator *= (const hermitian_matrix_element &p) {
-            d_ *= p.d_;
-            dirty_ = true;
-            return *this;
-        }
-        template<class OM>
-        BOOST_UBLAS_INLINE
-        hermitian_matrix_element &operator *= (const hermitian_matrix_element<OM> &p) {
-            d_ *= value_type (p);
-            dirty_ = true;
-            return *this;
-        }
         template<class D>
         BOOST_UBLAS_INLINE
         hermitian_matrix_element &operator /= (const D &d) {
@@ -155,18 +111,17 @@ namespace boost { namespace numeric { namespace ublas {
             dirty_ = true;
             return *this;
         }
+        
+        // Comparison
+        template<class D>
         BOOST_UBLAS_INLINE
-        hermitian_matrix_element &operator /= (const hermitian_matrix_element &p) {
-            d_ /= p.d_;
-            dirty_ = true;
-            return *this;
+        bool operator == (const D &d) const {
+            return d_ == d;
         }
-        template<class OM>
+        template<class D>
         BOOST_UBLAS_INLINE
-        hermitian_matrix_element &operator /= (const hermitian_matrix_element<OM> &p) {
-            d_ /= value_type (p);
-            dirty_ = true;
-            return *this;
+        bool operator != (const D &d) const {
+            return d_ != d;
         }
 
         // Conversion
@@ -296,14 +251,13 @@ namespace boost { namespace numeric { namespace ublas {
 #else
         typedef hermitian_matrix_element<hermitian_matrix<T, F1, F2, A> > reference;
 #endif
-        typedef const T *const_pointer;
-        typedef T *pointer;
+        typedef A array_type;
+    private:
         typedef F1 functor1_type;
         typedef F2 functor2_type;
-        typedef const A const_array_type;
-        typedef A array_type;
         typedef const hermitian_matrix<T, F1, F2, A> const_self_type;
         typedef hermitian_matrix<T, F1, F2, A> self_type;
+    public:
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef const matrix_const_reference<const_self_type> const_closure_type;
 #else
@@ -356,7 +310,7 @@ namespace boost { namespace numeric { namespace ublas {
             return size_;
         }
         BOOST_UBLAS_INLINE
-        const_array_type &data () const {
+        const array_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
@@ -442,13 +396,6 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (ae);
             return assign_temporary (temporary);
 #endif
-        }
-        template<class AE>
-        BOOST_UBLAS_INLINE
-        hermitian_matrix &reset (const matrix_expression<AE> &ae) {
-            self_type temporary (ae);
-            resize (temporary.size1 (), temporary.size2 (), false);
-            return assign_temporary (temporary);
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -567,6 +514,7 @@ namespace boost { namespace numeric { namespace ublas {
             std::fill (data ().begin (), data ().end (), value_type (0));
         }
 
+        // Iterator types
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator1<self_type, packed_random_access_iterator_tag> iterator1;
         typedef indexed_iterator2<self_type, packed_random_access_iterator_tag> iterator2;
@@ -624,10 +572,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename hermitian_matrix::difference_type difference_type;
             typedef typename hermitian_matrix::value_type value_type;
+            typedef typename hermitian_matrix::difference_type difference_type;
             typedef typename hermitian_matrix::const_reference reference;
-            typedef typename hermitian_matrix::const_pointer pointer;
+            typedef const typename hermitian_matrix::value_type *pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -764,10 +712,10 @@ namespace boost { namespace numeric { namespace ublas {
         public:
             typedef packed_random_access_iterator_tag iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename hermitian_matrix::difference_type difference_type;
             typedef typename hermitian_matrix::value_type value_type;
+            typedef typename hermitian_matrix::difference_type difference_type;
             typedef typename hermitian_matrix::reference reference;
-            typedef typename hermitian_matrix::pointer pointer;
+            typedef typename hermitian_matrix::value_type *pointer;
 #endif
             typedef iterator2 dual_iterator_type;
             typedef reverse_iterator2 dual_reverse_iterator_type;
@@ -905,10 +853,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename hermitian_matrix::difference_type difference_type;
             typedef typename hermitian_matrix::value_type value_type;
+            typedef typename hermitian_matrix::difference_type difference_type;
             typedef typename hermitian_matrix::const_reference reference;
-            typedef typename hermitian_matrix::const_pointer pointer;
+            typedef const typename hermitian_matrix::value_type *pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -1045,10 +993,10 @@ namespace boost { namespace numeric { namespace ublas {
         public:
             typedef packed_random_access_iterator_tag iterator_category;
 #ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename hermitian_matrix::difference_type difference_type;
             typedef typename hermitian_matrix::value_type value_type;
+            typedef typename hermitian_matrix::difference_type difference_type;
             typedef typename hermitian_matrix::reference reference;
-            typedef typename hermitian_matrix::pointer pointer;
+            typedef typename hermitian_matrix::value_type *pointer;
 #endif
             typedef iterator1 dual_iterator_type;
             typedef reverse_iterator1 dual_reverse_iterator_type;
@@ -1250,14 +1198,7 @@ namespace boost { namespace numeric { namespace ublas {
 #else
         typedef hermitian_matrix_element<hermitian_adaptor<M, F> > reference;
 #endif
-        typedef typename M::const_pointer const_pointer;
-        typedef typename M::pointer pointer;
 #else
-        // FIXME: no better way to not return the address of a temporary?
-        // typedef typename M::const_reference const_reference;
-        // typedef typename boost::mpl::if_<boost::is_const<M>,
-        //                                   typename M::const_reference,
-        //                                   typename M::reference>::type reference;
         typedef typename M::value_type const_reference;
 #ifndef BOOST_UBLAS_STRICT_HERMITIAN
         typedef typename boost::mpl::if_<boost::is_const<M>,
@@ -1268,10 +1209,6 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::value_type,
                                           hermitian_matrix_element<const hermitian_adaptor<M, F> > >::type reference;
 #endif
-        typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<M>,
-                                          typename M::const_pointer,
-                                          typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
@@ -1280,25 +1217,12 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::const_closure_type,
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
+    private:
         typedef const hermitian_adaptor<M, F> const_self_type;
         typedef hermitian_adaptor<M, F> self_type;
+    public:
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
-#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
-        typedef typename M::const_iterator1 const_iterator1_type;
-        typedef typename M::iterator1 iterator1_type;
-        typedef typename M::const_iterator2 const_iterator2_type;
-        typedef typename M::iterator2 iterator2_type;
-#else
-        typedef typename M::const_iterator1 const_iterator1_type;
-        typedef typename boost::mpl::if_<boost::is_const<M>,
-                                          typename M::const_iterator1,
-                                          typename M::iterator1>::type iterator1_type;
-        typedef typename M::const_iterator2 const_iterator2_type;
-        typedef typename boost::mpl::if_<boost::is_const<M>,
-                                          typename M::const_iterator2,
-                                          typename M::iterator2>::type iterator2_type;
-#endif
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  packed_proxy_tag>::storage_category storage_category;
         typedef typename F::packed_category packed_category;
@@ -1506,6 +1430,26 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+        // Use matrix iterator
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
+        typedef typename M::const_iterator1 const_iterator1_type;
+        typedef typename M::iterator1 iterator1_type;
+        typedef typename M::const_iterator2 const_iterator2_type;
+        typedef typename M::iterator2 iterator2_type;
+#else
+        typedef typename M::const_iterator1 const_iterator1_type;
+        typedef typename boost::mpl::if_<boost::is_const<M>,
+                                          typename M::const_iterator1,
+                                          typename M::iterator1>::type iterator1_type;
+        typedef typename M::const_iterator2 const_iterator2_type;
+        typedef typename boost::mpl::if_<boost::is_const<M>,
+                                          typename M::const_iterator2,
+                                          typename M::iterator2>::type iterator2_type;
+#endif
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator1<self_type, packed_random_access_iterator_tag> iterator1;
         typedef indexed_iterator2<self_type, packed_random_access_iterator_tag> iterator2;
@@ -1602,8 +1546,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_MSVC_STD_ITERATOR
             typedef typename iterator_restrict_traits<typename const_iterator1_type::iterator_category,
                                                       dense_random_access_iterator_tag>::iterator_category iterator_category;
-            typedef typename const_iterator1_type::difference_type difference_type;
             typedef typename const_iterator1_type::value_type value_type;
+            typedef typename const_iterator1_type::difference_type difference_type;
             // FIXME: no better way to not return the address of a temporary?
             // typedef typename const_iterator1_type::reference reference;
             typedef typename const_iterator1_type::value_type reference;
@@ -1923,8 +1867,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_MSVC_STD_ITERATOR
             typedef typename iterator_restrict_traits<typename iterator1_type::iterator_category,
                                                       packed_random_access_iterator_tag>::iterator_category iterator_category;
-            typedef typename iterator1_type::difference_type difference_type;
             typedef typename iterator1_type::value_type value_type;
+            typedef typename iterator1_type::difference_type difference_type;
             typedef typename iterator1_type::reference reference;
             typedef typename iterator1_type::pointer pointer;
 #else
@@ -2061,8 +2005,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_MSVC_STD_ITERATOR
             typedef typename iterator_restrict_traits<typename const_iterator2_type::iterator_category,
                                                       dense_random_access_iterator_tag>::iterator_category iterator_category;
-            typedef typename const_iterator2_type::difference_type difference_type;
             typedef typename const_iterator2_type::value_type value_type;
+            typedef typename const_iterator2_type::difference_type difference_type;
             // FIXME: no better way to not return the address of a temporary?
             // typedef typename const_iterator2_type::reference reference;
             typedef typename const_iterator2_type::value_type reference;
@@ -2382,8 +2326,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_MSVC_STD_ITERATOR
             typedef typename iterator_restrict_traits<typename iterator2_type::iterator_category,
                                                       packed_random_access_iterator_tag>::iterator_category iterator_category;
-            typedef typename iterator2_type::difference_type difference_type;
             typedef typename iterator2_type::value_type value_type;
+            typedef typename iterator2_type::difference_type difference_type;
             typedef typename iterator2_type::reference reference;
             typedef typename iterator2_type::pointer pointer;
 #else

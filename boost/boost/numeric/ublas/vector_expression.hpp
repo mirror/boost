@@ -291,12 +291,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        vector_reference &reset (const vector_expression<AE> &ae) {
-            expression ().reset (ae);
-            return *this;
-        }
-        template<class AE>
-        BOOST_UBLAS_INLINE
         vector_reference &assign (const vector_expression<AE> &ae) {
             expression ().assign (ae);
             return *this;

@@ -108,7 +108,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         vector ():
             vector_expression<self_type> (),
-            data_ (0) {}
+            data_ () {}
         explicit BOOST_UBLAS_INLINE
         vector (size_type size):
             vector_expression<self_type> (),
@@ -175,6 +175,13 @@ namespace boost { namespace numeric { namespace ublas {
             data () = v.data ();
             return *this;
         }
+        template<class A2>          // Generic vector assignment without temporary
+        BOOST_UBLAS_INLINE
+        vector &operator = (const vector<T, A2> &v) {
+            resize (v.size ());
+            assign (v);
+            return *this;
+        }
         BOOST_UBLAS_INLINE
         vector &assign_temporary (vector &v) {
             swap (v);
@@ -190,14 +197,6 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (ae);
             return assign_temporary (temporary);
 #endif
-        }
-        template<class AE>
-        BOOST_UBLAS_INLINE
-        vector &reset (const vector_expression<AE> &ae) {
-            self_type temporary (ae);
-            // FIXME resizing here would seems to destroy temporary
-            // resize (temporary.size (), false);
-            return assign_temporary (temporary);
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -579,6 +578,13 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         bounded_vector (std::size_t size):
             vector_type (size) {}
+        BOOST_UBLAS_INLINE
+        bounded_vector (const bounded_vector &v):
+            vector_type (v) {}
+        template<class A2>              // Allow vector<T,bounded_array<N> construction
+        BOOST_UBLAS_INLINE
+        bounded_vector (const vector<T, A2> &v):
+            vector_type (v) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         bounded_vector (const vector_expression<AE> &ae):
@@ -592,13 +598,12 @@ namespace boost { namespace numeric { namespace ublas {
             vector_type::operator = (v);
             return *this;
         }
-        /* FIXME This overload would be useful but is never chosen
-        template<std::size_t N2>
+        template<class A2>              // Generic vector assignment
         BOOST_UBLAS_INLINE
-        bounded_vector &operator = (const vector<bounded_array<T,N2> > &v) {
+        bounded_vector &operator = (const vector<T, A2> &v) {
             vector_type::operator = (v);
             return *this;
-        }*/
+        }
         template<class AE>
         BOOST_UBLAS_INLINE
         bounded_vector &operator = (const vector_expression<AE> &ae) {
@@ -1434,14 +1439,6 @@ namespace boost { namespace numeric { namespace ublas {
             self_type temporary (ae);
             return assign_temporary (temporary);
 #endif
-        }
-        template<class AE>
-        BOOST_UBLAS_INLINE
-        c_vector &reset (const vector_expression<AE> &ae) {
-            self_type temporary (ae);
-            // FIXME resizing here would seems to destroy temporary
-            // resize (temporary.size (), false);
-            return assign_temporary (temporary);
         }
         template<class AE>
         BOOST_UBLAS_INLINE

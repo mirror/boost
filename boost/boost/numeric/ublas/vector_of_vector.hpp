@@ -188,13 +188,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        generalized_vector_of_vector &reset (const matrix_expression<AE> &ae) {
-            self_type temporary (ae, non_zeros_);
-            resize (temporary.size1 (), temporary.size2 (), non_zeros_);
-            return assign_temporary (temporary);
-        }
-        template<class AE>
-        BOOST_UBLAS_INLINE
         generalized_vector_of_vector &assign (const matrix_expression<AE> &ae) {
             matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
             return *this;

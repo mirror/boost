@@ -318,16 +318,16 @@ bool disable_type_check<Dummy>::value = false;
 #define BOOST_UBLAS_NON_CONFORMANT_PROXIES
 
 // Enable different sparse element proxies
-// These fix a [1] = a [0] = 1, but probably won't work on broken compilers.
-// Thanks to Marc Duflot for spotting this.
 #ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
+// Sparse proxies prevent reference invalidation problems in expressions such as:
+// a [1] = a [0] = 1        Thanks to Marc Duflot for spotting this.
 // #define BOOST_UBLAS_STRICT_STORAGE_SPARSE
 #define BOOST_UBLAS_STRICT_VECTOR_SPARSE
 #define BOOST_UBLAS_STRICT_MATRIX_SPARSE
+// Hermitian matrices use element proxies to allow assignment to conjugate triangle
+#define BOOST_UBLAS_STRICT_HERMITIAN
 #endif
 
-// Hermitian matrices can also use element proxies to allow assignment to conjugate triangle
-// #define BOOST_UBLAS_STRICT_HERMITIAN
 
 
 // Define to enable compile time const propagation for reference, proxy and closure types
