@@ -49,10 +49,6 @@
 //  where a spinlock can be several orders of magnitude faster than a CRITICAL_SECTION.
 
 
-//  Note: lwm_linux.hpp has been disabled by default; see the comments
-//        inside for more info.
-
-
 #include <boost/config.hpp>
 
 //  Note to implementors: if you write a platform-specific spinlock
@@ -75,8 +71,6 @@
 #  else
 #    include <boost/detail/lwm_nop.hpp>
 #  endif
-#elif defined(BOOST_LWM_USE_SPINLOCK) && defined(BOOST_USE_ASM_ATOMIC_H)
-#  include <boost/detail/lwm_linux.hpp>
 #elif defined(BOOST_LWM_USE_CRITICAL_SECTION)
 #  include <boost/detail/lwm_win32_cs.hpp>
 #elif defined(BOOST_LWM_USE_PTHREADS)
