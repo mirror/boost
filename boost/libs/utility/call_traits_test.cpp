@@ -160,10 +160,10 @@ struct call_traits_checker<T[N]>
 
 //
 // check_wrap:
-template <class T, class U>
-void check_wrap(const contained<T>& w, const U& u)
+template <class W, class U>
+void check_wrap(const W& w, const U& u)
 {
-   cout << "checking contained<" << typeid(T).name() << ">..." << endl;
+   cout << "checking " << typeid(W).name() << "..." << endl;
    assert(w.value() == u);
 }
 
@@ -218,9 +218,6 @@ int main(int argc, char *argv[ ])
 #endif
 
    check_wrap(wrap(2), 2);
-   // compiler can't deduce this for some reason:
-   //const char ca[4] = "abc";
-   //check_wrap(wrap(ca), ca);
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__SUNPRO_CC)
    check_wrap(wrap(a), a);
    check_make_pair(test::make_pair(a, a), a, a);
@@ -376,8 +373,10 @@ void call_traits_test<T, true>::assert_construct(typename boost::call_traits<T>:
    unused_variable(v3);
    unused_variable(v4);
    unused_variable(v5);
+#ifndef __BORLANDC__
    unused_variable(r2);
    unused_variable(cr2);
+#endif
    unused_variable(cr3);
    unused_variable(p2);
    unused_variable(p3);
@@ -401,7 +400,7 @@ template struct call_traits_test<int[2], true>;
 unsigned int expected_failures = 10;
 #elif defined(__SUNPRO_CC)
 #if(__SUNPRO_CC <= 0x520)
-unsigned int expected_failures = 11;
+unsigned int expected_failures = 14;
 #else
 unsigned int expected_failures = 6;
 #endif
