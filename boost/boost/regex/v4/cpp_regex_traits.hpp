@@ -561,7 +561,7 @@ typename cpp_regex_traits_implementation<charT>::string_type
       while(result.size() && (charT(0) == *result.rbegin()))
          result.erase(result.size() - 1);
 #endif
-      BOOST_ASSERT(result.find(charT(0)) == string_type::npos);
+      BOOST_ASSERT(std::find(result.begin(), result.end(), charT(0)) == result.end());
    }
    catch(...)
    {
