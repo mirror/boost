@@ -72,6 +72,24 @@ void run_test_cases()
     Tests::xor_assignment(lhs, rhs);
   }
   //=====================================================================
+  // Test operator-=
+  {
+    boost::dynamic_bitset<Block> lhs, rhs;
+    Tests::sub_assignment(lhs, rhs);
+  }
+  {
+    boost::dynamic_bitset<Block> lhs(std::string("1")), rhs(std::string("0"));
+    Tests::sub_assignment(lhs, rhs);
+  }
+  {
+    boost::dynamic_bitset<Block> lhs(std::string("0")), rhs(std::string("1"));
+    Tests::sub_assignment(lhs, rhs);
+  }
+  {
+    boost::dynamic_bitset<Block> lhs(long_string), rhs(long_string);
+    Tests::sub_assignment(lhs, rhs);
+  }
+  //=====================================================================
   // Test operator<<=
   { // case pos == 0
     std::size_t pos = 0;
