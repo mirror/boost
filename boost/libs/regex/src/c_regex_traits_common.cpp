@@ -199,7 +199,7 @@ const mss default_messages[] = {
                             { 0, "", },
                          };
 
-BOOST_REGEX_DECL unsigned int BOOST_REGEX_CALL re_get_default_message(char* buf, unsigned int len, unsigned int id)
+BOOST_REGEX_DECL std::size_t BOOST_REGEX_CALL re_get_default_message(char* buf, std::size_t len, std::size_t id)
 {
    BOOST_RE_GUARD_STACK
    const mss* pm = default_messages;
@@ -207,7 +207,7 @@ BOOST_REGEX_DECL unsigned int BOOST_REGEX_CALL re_get_default_message(char* buf,
    {
       if(pm->id == id)
       {
-         unsigned int size = re_strlen(pm->what) + 1;
+         std::size_t size = re_strlen(pm->what) + 1;
          if(size > len)
             return size;
          re_strcpy(buf, pm->what);

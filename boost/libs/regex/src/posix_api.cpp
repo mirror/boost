@@ -103,10 +103,10 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA* expression, const char
 
 }
 
-BOOST_REGEX_DECL unsigned int BOOST_REGEX_CCALL regerrorA(int code, const regex_tA* e, char* buf, unsigned int buf_size)
+BOOST_REGEX_DECL regsize_t BOOST_REGEX_CCALL regerrorA(int code, const regex_tA* e, char* buf, regsize_t buf_size)
 {
    BOOST_RE_GUARD_STACK
-   unsigned int result = 0;
+   std::size_t result = 0;
    if(code & REG_ITOA)
    {
       code &= ~REG_ITOA;
@@ -149,7 +149,7 @@ BOOST_REGEX_DECL unsigned int BOOST_REGEX_CCALL regerrorA(int code, const regex_
          boost::regex_traits<char> t;
          p = t.error_string(code);
       }
-      unsigned int len = p.size();
+      std::size_t len = p.size();
       if(len < buf_size)
       {
          std::strcpy(buf, p.c_str());
@@ -161,7 +161,7 @@ BOOST_REGEX_DECL unsigned int BOOST_REGEX_CCALL regerrorA(int code, const regex_
    return 0;
 }
 
-BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecA(const regex_tA* expression, const char* buf, unsigned int n, regmatch_t* array, int eflags)
+BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecA(const regex_tA* expression, const char* buf, regsize_t n, regmatch_t* array, int eflags)
 {
    BOOST_RE_GUARD_STACK
    bool result = false;

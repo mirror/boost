@@ -45,6 +45,10 @@ using std::endl;
 
 #if defined(TEST_UNICODE)
 
+#ifdef BOOST_NO_WREGEX
+#error "Wide character support is not enabled in regex lib - can't build wide character test program"
+#endif
+
 #ifdef __GNUC__
 #define char_t wchar_t
 #else
@@ -408,6 +412,10 @@ __iterator_category(const debug_iterator<T>&) {
   return random_access_iterator_tag();
 }
 }
+#endif
+
+#if defined(_WIN32) && !defined(BOOST_RE_TEST_LOCALE_CPP) && !defined(BOOST_RE_TEST_LOCALE_C) && !defined(BOOST_RE_TEST_LOCALE_W32)
+#define BOOST_RE_TEST_LOCALE_W32
 #endif
 
 

@@ -147,7 +147,7 @@ public:
 template <class iterator, class Alloc>
 bool grep_test_predicate<iterator, Alloc>::operator()(const boost::match_results< iterator, Alloc >& m)
 {
-   int start, end;
+   std::ptrdiff_t start, end;
    start = m[0].first - base;
    end = m[0].second - base;
    if((matches[match_id] != start) || (matches[match_id + 1] != end))
@@ -452,7 +452,7 @@ __cdecl
 #endif
 hl_grep_test_proc(const RegEx& e)
 {
-   int start, end;
+   std::ptrdiff_t start, end;
 
    start = e.Position(0);
    end = start + e.Length();

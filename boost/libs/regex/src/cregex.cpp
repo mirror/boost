@@ -39,7 +39,7 @@ namespace boost{
 // we need to instantiate the vector classes we use
 // since declaring a reference to type doesn't seem to
 // do the job...
-std::vector<unsigned int> inst1;
+std::vector<std::size_t> inst1;
 std::vector<std::string> inst2;
 #endif
 #endif
@@ -84,7 +84,7 @@ public:
    unsigned line;
    mapfile::iterator fbase;
    std::map<int, std::string, std::less<int> > strings;
-   std::map<int, int, std::less<int> > positions;
+   std::map<int, std::ptrdiff_t, std::less<int> > positions;
    void update();
    void clean();
    RegExData() : e(), m(), fm(), t(type_copy), pbase(0), line(0), fbase(), strings(), positions() {}
@@ -283,21 +283,21 @@ unsigned int RegEx::Grep(std::vector<std::string>& v, const char* p, unsigned in
 namespace re_detail{
 struct pred3
 {
-   std::vector<unsigned int>& v;
+   std::vector<std::size_t>& v;
    const char* base;
    RegEx* pe;
-   pred3(std::vector<unsigned int>& o, const char* pb, RegEx* p) : v(o), base(pb), pe(p) {}
+   pred3(std::vector<std::size_t>& o, const char* pb, RegEx* p) : v(o), base(pb), pe(p) {}
    bool operator()(const cmatch& m)
    {
       pe->pdata->m = m;
-      v.push_back(m[0].first - base);
+      v.push_back(static_cast<std::size_t>(m[0].first - base));
       return true;
    }
 private:
    pred3& operator=(const pred3&);
 };
 }
-unsigned int RegEx::Grep(std::vector<unsigned int>& v, const char* p, unsigned int flags)
+unsigned int RegEx::Grep(std::vector<std::size_t>& v, const char* p, unsigned int flags)
 {
    BOOST_RE_GUARD_STACK
    pdata->t = re_detail::RegExData::type_pc;
@@ -452,7 +452,7 @@ std::string RegEx::Merge(const char* in, const char* fmt,
    return result;
 }
 
-unsigned int RegEx::Split(std::vector<std::string>& v, 
+std::size_t RegEx::Split(std::vector<std::string>& v, 
                       std::string& s,
                       unsigned flags,
                       unsigned max_count)
@@ -465,7 +465,7 @@ unsigned int RegEx::Split(std::vector<std::string>& v,
 //
 // now operators for returning what matched in more detail:
 //
-unsigned int RegEx::Position(int i)const
+std::size_t RegEx::Position(int i)const
 {
    BOOST_RE_GUARD_STACK
    switch(pdata->t)
@@ -509,7 +509,7 @@ unsigned int RegEx::Marks()const
 }
 
 
-unsigned int RegEx::Length(int i)const
+std::size_t RegEx::Length(int i)const
 {
    BOOST_RE_GUARD_STACK
    switch(pdata->t)

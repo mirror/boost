@@ -116,10 +116,11 @@ template<class charT, class traits>
 typename parser_buf<charT, traits>::pos_type
 parser_buf<charT, traits>::seekoff(off_type off, ::std::ios_base::seekdir way, ::std::ios_base::openmode which)
 {
+   typedef typename parser_buf<charT, traits>::pos_type pos_type;
    if(which & ::std::ios_base::out)
       return pos_type(off_type(-1));
-   int size = this->egptr() - this->eback();
-   int pos = this->gptr() - this->eback();
+   std::ptrdiff_t size = this->egptr() - this->eback();
+   std::ptrdiff_t pos = this->gptr() - this->eback();
    charT* g = this->eback();
    switch(way)
    {
@@ -135,14 +136,14 @@ parser_buf<charT, traits>::seekoff(off_type off, ::std::ios_base::seekdir way, :
          this->setg(g, g + size - off, g + size);
    case ::std::ios_base::cur:
    {
-      int newpos = pos + off;
+      std::ptrdiff_t newpos = pos + off;
       if((newpos < 0) || (newpos > size))
          return pos_type(off_type(-1));
       else
          this->setg(g, g + newpos, g + size);
    }
    }
-   return this->gptr() - this->eback();
+   return static_cast<pos_type>(this->gptr() - this->eback());
 }
 
 template<class charT, class traits>
@@ -151,7 +152,7 @@ parser_buf<charT, traits>::seekpos(pos_type sp, ::std::ios_base::openmode which)
 {
    if(which & ::std::ios_base::out)
       return pos_type(off_type(-1));
-   int size = this->egptr() - this->eback();
+   std::ptrdiff_t size = this->egptr() - this->eback();
    charT* g = this->eback();
    if(sp <= size)
    {
@@ -171,7 +172,7 @@ struct message_data<char>
 {
    unsigned char syntax_map[CHAR_MAX-CHAR_MIN];
    std::map<std::string, std::string, std::less<std::string> > collating_elements;
-   std::map<std::string, unsigned long, std::less<std::string> > classes;
+   std::map<std::string, std::size_t, std::less<std::string> > classes;
    //std::string _zero;
    //std::string _ten;
    parser_buf<char> sbuf;
@@ -209,10 +210,10 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
    } 
 #endif
    std::memset(syntax_map, cpp_regex_traits<char>::syntax_char, 256);
-   unsigned int i;
+   unsigned i;
    scoped_array<char> a;
-   unsigned array_size = 0;
-   unsigned new_size;
+   std::size_t array_size = 0;
+   std::size_t new_size;
    for(i = 1; i < cpp_regex_traits<char>::syntax_max; ++i)
    {
       new_size = re_get_default_message(0, 0, i+100);
@@ -227,7 +228,7 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
       if((int)cat >= 0)
          s = pm->get(cat, 0, i+100, s);
 #endif
-      for(unsigned int j = 0; j < s.size(); ++j)
+      for(std::size_t j = 0; j < s.size(); ++j)
       {
          syntax_map[s[j]] = (unsigned char)(i);
       }
@@ -290,7 +291,7 @@ std::string BOOST_REGEX_CALL cpp_regex_traits_base::set_message_catalogue(const 
    return old;
 }
 
-char cpp_regex_traits_base::regex_message_cat[200] = {0};
+char cpp_regex_traits_base::regex_message_cat[BOOST_REGEX_MAX_PATH] = {0};
 
 
 } // namespace re_detail
@@ -343,7 +344,7 @@ int BOOST_REGEX_CALL cpp_regex_traits<char>::toi(char c)const
 
 int BOOST_REGEX_CALL cpp_regex_traits<char>::toi(const char*& first, const char* last, int radix)const
 {
-   pmd->sbuf.pubsetbuf(const_cast<char*>(first), last-first);
+   pmd->sbuf.pubsetbuf(const_cast<char*>(first), static_cast<std::streamsize>(last-first));
    pmd->is.clear();
    if(std::abs(radix) == 16) pmd->is >> std::hex;
    else if(std::abs(radix) == 8) pmd->is >> std::oct;
@@ -364,7 +365,7 @@ boost::uint_fast32_t BOOST_REGEX_CALL cpp_regex_traits<char>::lookup_classname(c
    unsigned int i;
    std::string s(first, last);
 
-   std::map<std::string, unsigned long, std::less<std::string> >::const_iterator pos = pmd->classes.find(s);
+   std::map<std::string, std::size_t, std::less<std::string> >::const_iterator pos = pmd->classes.find(s);
    if(pos != pmd->classes.end())
       return re_char_class_id[(*pos).second];
 
@@ -445,7 +446,7 @@ namespace re_detail{
 std::string BOOST_REGEX_CALL to_narrow(const std::basic_string<wchar_t>& is, const std::codecvt<wchar_t, char, std::mbstate_t>& cvt)
 {
    BOOST_RE_GUARD_STACK
-   unsigned int bufsize = is.size() * 2;
+   std::basic_string<wchar_t>::size_type bufsize = is.size() * 2;
    //
    // declare buffer first as VC6 workaround for internal compiler error!
    char* pc = new char[bufsize];
@@ -484,8 +485,8 @@ std::string BOOST_REGEX_CALL to_narrow(const std::basic_string<wchar_t>& is, con
 std::wstring BOOST_REGEX_CALL to_wide(const std::string& is, const std::codecvt<wchar_t, char, std::mbstate_t>& cvt)
 {
    BOOST_RE_GUARD_STACK
-   unsigned int bufsize = is.size() + 2;
-   unsigned int maxsize = is.size() * 100;
+   std::string::size_type bufsize = is.size() + 2;
+   std::string::size_type maxsize = is.size() * 100;
    //
    // declare buffer first as VC6 workaround for internal compiler error!
    wchar_t* pc = new wchar_t[bufsize];
@@ -547,7 +548,7 @@ struct message_data<wchar_t>
    };
 
    std::list<syntax_map> syntax;
-   std::map<string_type, unsigned long> classes;
+   std::map<string_type, std::size_t> classes;
    std::map<string_type, string_type> collating_elements;
    unsigned char syntax_[CHAR_MAX-CHAR_MIN+1];
 
@@ -586,9 +587,9 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
    }
 #endif
    scoped_array<char> a;
-   unsigned array_size = 0;
-   unsigned new_size;
-   unsigned int i;
+   std::size_t array_size = 0;
+   std::size_t new_size;
+   std::size_t i;
    std::memset(syntax_, cpp_regex_traits<wchar_t>::syntax_char, sizeof(syntax_));
    for(i = 1; i < cpp_regex_traits<wchar_t>::syntax_max; ++i)
    {
@@ -603,7 +604,7 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
       string_type s = to_wide(ns, cvt);
 #ifndef BOOST_NO_STD_MESSAGES
       if((int)cat >= 0)
-         s = BOOST_USE_FACET(std::messages<wchar_t>, l).get(cat, 0, i+100, s);
+         s = BOOST_USE_FACET(std::messages<wchar_t>, l).get(cat, 0, (int)i+100, s);
 #endif
       for(unsigned int j = 0; j < s.size(); ++j)
       {
@@ -612,7 +613,7 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
          else
          {
             m.c = s[j];
-            m.type = i;
+            m.type = static_cast<unsigned int>(i);
             syntax.push_back(m);
          }
       }
@@ -624,7 +625,7 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
    i = 400;
    if((int)cat >= 0)
    {
-      c2 = msgs.get(cat, 0, i, c1);
+      c2 = msgs.get(cat, 0, (int)i, c1);
       while(c2.size())
       {
          const wchar_t* p1, *p2, *p3, *p4;;
@@ -639,7 +640,7 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
          collating_elements[std::basic_string<wchar_t>(p1, p2)] = std::basic_string<wchar_t>(p3, p4);
 
          ++i;
-         c2 = msgs.get(cat, 0, i, c1);
+         c2 = msgs.get(cat, 0, (int)i, c1);
       }
    }
 
@@ -648,13 +649,13 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
       c2.erase();
       for(i = 0; i < re_classes_max; ++i)
       {
-         c1 = msgs.get(cat, 0, i+300, c2);
+         c1 = msgs.get(cat, 0, static_cast<int>(i+300), c2);
          if(c1.size())
             classes[c1] = i;
       }
       for(i = 0; i <= boost::REG_E_UNKNOWN ; ++i)
       {
-         c1 = msgs.get(cat, 0, i+200, c2);
+         c1 = msgs.get(cat, 0, static_cast<int>(i+200), c2);
          error_strings[i] = to_narrow(c1, cvt);
       }
    }
@@ -720,7 +721,7 @@ int BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::toi(wchar_t c)const
 
 int BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::toi(const wchar_t*& first, const wchar_t* last, int radix)const
 {
-   pmd->sbuf.pubsetbuf(const_cast<wchar_t*>(first), last-first);
+   pmd->sbuf.pubsetbuf(const_cast<wchar_t*>(first), static_cast<std::streamsize>(last-first));
    pmd->is.clear();
    if(std::abs(radix) == 16) pmd->is >> std::hex;
    else if(std::abs(radix) == 8) pmd->is >> std::oct;
@@ -741,7 +742,7 @@ boost::uint_fast32_t BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::lookup_classnam
    unsigned int i;
    std::wstring s(first, last);
 
-   std::map<std::wstring, unsigned long>::const_iterator pos = pmd->classes.find(s);
+   std::map<std::wstring, std::size_t>::const_iterator pos = pmd->classes.find(s);
    if(pos != pmd->classes.end())
       return re_char_class_id[(*pos).second];
 
@@ -831,7 +832,7 @@ cpp_regex_traits<wchar_t>::locale_type BOOST_REGEX_CALL cpp_regex_traits<wchar_t
    return old_l;
 }
 
-unsigned int BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::strwiden(wchar_t *s1, unsigned int len, const char *s2)const
+std::size_t BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::strwiden(wchar_t *s1, std::size_t len, const char *s2)const
 {
    std::string s(s2);
    std::wstring ws = re_detail::to_wide(s2, *pcdv);

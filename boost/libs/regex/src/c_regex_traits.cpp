@@ -179,12 +179,12 @@ std::list<syntax_map_t>* syntax;
 #endif
 
 
-unsigned int BOOST_REGEX_CALL _re_get_message(char* buf, unsigned int len, unsigned int id);
+std::size_t BOOST_REGEX_CALL _re_get_message(char* buf, std::size_t len, std::size_t id);
 
 template <class charT>
-unsigned int BOOST_REGEX_CALL re_get_message(charT* buf, unsigned int len, unsigned int id)
+std::size_t BOOST_REGEX_CALL re_get_message(charT* buf, std::size_t len, std::size_t id)
 {
-   unsigned int size = _re_get_message(static_cast<char*>(0), 0, id);
+   std::size_t size = _re_get_message(static_cast<char*>(0), 0, id);
    if(len < size)
       return size;
    boost::scoped_array<char> cb(new char[size]);
@@ -193,7 +193,7 @@ unsigned int BOOST_REGEX_CALL re_get_message(charT* buf, unsigned int len, unsig
    return size;
 }
 
-inline unsigned int BOOST_REGEX_CALL re_get_message(char* buf, unsigned int len, unsigned int id)
+inline std::size_t BOOST_REGEX_CALL re_get_message(char* buf, std::size_t len, std::size_t id)
 {
    return _re_get_message(buf, len, id);
 }
@@ -307,7 +307,7 @@ void BOOST_REGEX_CALL re_update_collate()
    }
 }
 
-unsigned int BOOST_REGEX_CALL _re_get_message(char* buf, unsigned int len, unsigned int id)
+std::size_t BOOST_REGEX_CALL _re_get_message(char* buf, std::size_t len, std::size_t id)
 {
    BOOST_RE_GUARD_STACK
    // get the customised message if any:
@@ -317,7 +317,7 @@ unsigned int BOOST_REGEX_CALL _re_get_message(char* buf, unsigned int len, unsig
       const char* m = catgets(message_cat, 0, id, 0);
       if(m)
       {
-         unsigned int size = std::strlen(m) + 1;
+         std::size_t size = std::strlen(m) + 1;
          if(size > len)
             return size;
          std::strcpy(buf, m);
@@ -430,7 +430,7 @@ const char* BOOST_REGEX_CALL re_get_error_str(unsigned int id)
 namespace boost{
 namespace re_detail{
 
-char c_traits_base::regex_message_catalogue[200] = {0};
+char c_traits_base::regex_message_catalogue[BOOST_REGEX_MAX_PATH] = {0};
 
 std::string BOOST_REGEX_CALL c_traits_base::error_string(unsigned id)
 {
@@ -576,7 +576,7 @@ bool BOOST_REGEX_CALL c_regex_traits<wchar_t>::lookup_collatename(std::basic_str
 {
    BOOST_RE_GUARD_STACK
    std::basic_string<wchar_t> s(first, last);
-   unsigned int len = strnarrow(static_cast<char*>(0), 0, s.c_str());
+   std::size_t len = strnarrow(static_cast<char*>(0), 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    std::string t_out;
@@ -808,7 +808,7 @@ bool BOOST_REGEX_CALL c_regex_traits<wchar_t>::do_lookup_collate(std::basic_stri
 {
    BOOST_RE_GUARD_STACK
    std::basic_string<wchar_t> s(first, last);
-   unsigned int len = strnarrow(static_cast<char*>(0), 0, s.c_str());
+   std::size_t len = strnarrow(static_cast<char*>(0), 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    std::string t_out;
@@ -1018,28 +1018,28 @@ int BOOST_REGEX_CALL c_regex_traits<wchar_t>::toi(const wchar_t*& first, const w
 boost::uint_fast32_t BOOST_REGEX_CALL c_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)
 {
    std::basic_string<wchar_t> s(first, last);
-   unsigned int len = strnarrow(static_cast<char*>(0), 0, s.c_str());
+   std::size_t len = strnarrow(static_cast<char*>(0), 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
-   len =  do_lookup_class(buf.get());
-   return len;
+   boost::uint_fast32_t result =  do_lookup_class(buf.get());
+   return result;
 }
 
 c_regex_traits<wchar_t> c_regex_traits<wchar_t>::init_;
 
-unsigned int BOOST_REGEX_CALL c_regex_traits<wchar_t>::strnarrow(char *s1, unsigned int len, const wchar_t *s2)
+std::size_t BOOST_REGEX_CALL c_regex_traits<wchar_t>::strnarrow(char *s1, std::size_t len, const wchar_t *s2)
 {
    BOOST_RE_GUARD_STACK
-   unsigned int size = std::wcslen(s2) + 1;
+   std::size_t size = std::wcslen(s2) + 1;
    if(size > len)
       return size;
    return std::wcstombs(s1, s2, len);
 }
 
-unsigned int BOOST_REGEX_CALL c_regex_traits<wchar_t>::strwiden(wchar_t *s1, unsigned int len, const char *s2)
+std::size_t BOOST_REGEX_CALL c_regex_traits<wchar_t>::strwiden(wchar_t *s1, std::size_t len, const char *s2)
 {
    BOOST_RE_GUARD_STACK
-   unsigned int size = std::strlen(s2) + 1;
+   std::size_t size = std::strlen(s2) + 1;
    if(size > len)
       return size;
    size = std::mbstowcs(s1, s2, len);
