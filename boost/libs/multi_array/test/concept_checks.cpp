@@ -1,6 +1,6 @@
 // Copyright 2002 The Trustees of Indiana University.
 
-// Use, modification and distribution is subject to the Boost Software 
+// Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
@@ -10,7 +10,7 @@
 //           Andrew Lumsdaine
 //  See http://www.boost.org/libs/multi_array for documentation.
 
-// 
+//
 // concept_checks.cpp -
 //   make sure the types meet concept requirements
 //
@@ -60,6 +60,6 @@ boost::function_requires<
   boost::detail::multi_array::MutableMultiArrayConcept<array_view,ndims> >();
 boost::function_requires<
   boost::detail::multi_array::MutableMultiArrayConcept<subarray,ndims> >();
- 
-  return boost::exit_success;
+
+  return 0;
 }
