@@ -12,6 +12,9 @@
 //
 // Revision History:
 
+// 16 Feb 2001   David Abrahams
+//      Add an implicit conversion operator to operator_arrow_proxy
+//      as CW and BCC workarounds.
 // 11 Feb 2001   David Abrahams
 //      Switch to use of BOOST_STATIC_CONSTANT where possible
 // 11 Feb 2001   Jeremy Siek
@@ -316,6 +319,9 @@ namespace detail {
   {
       operator_arrow_proxy(const T& x) : m_value(x) {}
       const T* operator->() const { return &m_value; }
+      // This function is needed for MWCW and BCC, which won't call operator->
+      // again automatically per 13.3.1.2 para 8
+      operator const T*() const { return &m_value; }
       T m_value;
   };
 
