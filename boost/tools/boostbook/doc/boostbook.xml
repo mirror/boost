@@ -32,7 +32,7 @@
 
   <title>The BoostBook Documentation Format</title>
 
-  <chapter>
+  <chapter id="boostbook.introduction">
     <title>Introduction</title>
    
     <para>The BoostBook documentation format is an extension of <ulink
@@ -86,12 +86,6 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
           testsuite generation so that example programs are normal
           tests in BoostBook.</para>
         </listitem>
-        <listitem>
-          <para><emphasis role="bold">Library
-          categorization</emphasis>: BoostBook contains primitives for
-          placing libraries into categories and generating categorized
-          and alphabetized lists of libraries.</para>
-        </listitem>
       </itemizedlist>
     </para>
   </chapter>
@@ -135,74 +129,134 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
     <section id="boostbook.setup.manual">
       <title>Manual setup for all systems</title>
     
-      <para>Manual setup for TBD </para>
+      <para>This section describes how to manually configure Boost
+      Boost version 2 (BBv@) for BoostBook. If you can use the
+      automatic setup script, you should. All configuration will
+      happen in the BBv2 user configuration file,
+      <filename>user-config.jam</filename>. If you do not have a copy
+      of this file in your home directory, you should copy the one
+      that resides in <code>tools/build/v2</code> to your home
+      directory. Alternatively, you can edit
+      <filename>tools/build/v2/user-config.jam</filename> directly or
+      a site-wide <filename>site-config.jam</filename> file.</para>
 
-    <section id="boostbook.docbook.config">
-      <title>Configuring local DocBook XSL and DTD distributions</title>
+      <section id="boostbook.setup.xsltproc">
+        <title>Configuring <command>xsltproc</command></title>
+
+        <para>To configure <command>xsltproc</command> manually, you
+        will need to add a directive to
+        <filename>user-config.jam</filename> telling it where to find
+        <command>xsltproc</command>. If the program is in your path,
+        just add the following line to
+        <filename>user-config.jam</filename>:</para>
+
+<programlisting>using xsltproc ;</programlisting>
+
+        <para>If <command>xsltproc</command> is somewhere else, use
+        this directive, where <code>XSLTPROC</code> is the full
+        pathname to <command>xsltproc</command> (including
+        <command>xsltproc</command>):</para>
+
+<programlisting>using xsltproc : XSLTPROC ;</programlisting>
+      </section>
+
+      <section id="boostbook.setup.docbook">
+        <title>Configuring local DocBook XSL and DTD distributions</title>
  
-      <para>By default, the DocBook DTD and XSL stylesheets are
-      accessed over a network automatically by the XSLT
-      processor. However, these documents tend to be large and
-      introduce a noticeable delay in the XSLT transformation
-      step. This section describes how to configure Boost.Build to use
-      local copies of the DocBook DTD and XSL stylesheets to improve
-      processing time. There are a few requirements:
+        <para>This section describes how to configure Boost.Build to
+        use local copies of the DocBook DTD and XSL stylesheets to
+        improve processing time. You will first need to download two
+        packages:
 
-      <itemizedlist>
-        <listitem><para>Norman Walsh's DocBook XSL stylesheets,
-        available at the <ulink
-        url="http://docbook.sourceforge.net">DocBook sourceforge
-        site</ulink>. Extract the DocBook XSL stylesheets to a
-        directory on your hard disk (which we'll refer to as the
-        <code>DOCBOOK_XSL_DIR</code>).</para>
-        </listitem>
+        <itemizedlist>
+          <listitem><para>Norman Walsh's DocBook XSL stylesheets,
+          available at the <ulink
+          url="http://docbook.sourceforge.net">DocBook sourceforge
+          site</ulink>. Extract the DocBook XSL stylesheets to a
+          directory on your hard disk (which we'll refer to as the
+          <code>DOCBOOK_XSL_DIR</code>).</para>
+          </listitem>
 
-        <listitem><para>The DocBook DTD, available as a ZIP archive at
-        the <ulink
-        url="http://www.oasis-open.org/docbook/xml/4.2/index.shtml">OASIS
-        DocBook site</ulink>. The package is called "DocBook XML
-        4.2". Extract the DocBook DTD to a directory on your hard disk
-        (which we'll refer to as the
-        <code>DOCBOOK_DTD_DIR</code>).</para></listitem>
-      </itemizedlist>
-      </para>
+          <listitem><para>The DocBook DTD, available as a ZIP archive
+          at the <ulink
+          url="http://www.oasis-open.org/docbook/xml/4.2/index.shtml">OASIS
+          DocBook site</ulink>. The package is called "DocBook XML
+          4.2". Extract the DocBook DTD to a directory on your hard
+          disk (which we'll refer to as the
+          <code>DOCBOOK_DTD_DIR</code>). You will want to extract this
+          archive in a subdirectory!</para></listitem>
+        </itemizedlist>
+        </para>
 
-      <para>In the directory <code>tools/build/v2</code> is a file
-      named <filename>user-config.jam</filename>. Copy it to your home
-      directory (or edit it in-place), and add a directive telling
-      Boost.Build where to find the DocBook DTD and XSL stylesheets,
-      replacing <code>DOCBOOK_XSL_DIR</code> and
-      <code>DOCBOOK_DTD_DIR</code> with the paths of the DocBook XSL
-      stylsheets and DTD, respectively:
+        <para>Add the following directive telling BBv2 where to find
+        the DocBook DTD and XSL stylesheets:</para>
 
-<programlisting>#  BoostBook configuration
-using boostbook : DOCBOOK_XSL_DIR
-                : DOCBOOK_DTD_DIR
-                ;</programlisting></para>   
+        <programlisting>#  BoostBook configuration
+using boostbook 
+  : DOCBOOK_XSL_DIR
+  : DOCBOOK_DTD_DIR
+  ;</programlisting>
+
+        <para>Whenever you change this directive, you will need to
+        remove the <code>bin.v2</code> directory that BBv2 generates.
+        This is due to longstanding bug we are trying to fix.</para>
+
+        <para>At this point, you should be able to build HTML
+        documentation for libraries that do not require Doxygen. To
+        test this, change into the directory <filename
+        class="directory">$BOOST_ROOT/libs/function/doc</filename> and
+        run the command <code>bjam --v2</code>: it should produce HTML
+        documentation for the Boost.Function library in the
+        <code>html</code> subdirectory.</para>
+      </section>
+
+      <section id="boostbook.setup.doxygen">
+        <title>Configuring Doxygen for Documentation Extraction</title>
+ 
+        <para>Doxygen is required to build the documentation for
+        several Boost libraries. You will need a recent version of
+        <ulink url="http://www.doxygen.org">Doxygen</ulink> (most of
+        the 1.3.x and 1.4.x versions will suffice). BBv2 by adding the
+        following directive to
+        <filename>user-config.jam</filename>:</para>
+
+        <programlisting>using doxygen : DOXYGEN ;</programlisting>
+
+        <para><filename>DOXYGEN</filename> should be replaced with the
+        name of the <command>doxygen</command> executable (with full
+        path name). If the right <command>doxygen</command> executable
+        can be found via the path, this parameter can be
+        omitted, e.g.</para>
+
+        <programlisting>using doxygen ;</programlisting>
       
-      <para>Future invocations of <command>bjam</command> will use the
-      specified local copies of the DTD and XSL stylesheets in lieu of
-      downloading the same sources over the network.</para>
-    </section>
+        <important>
+          <para>The relative order of declarations in
+          <filename>user-config.jam</filename> /
+          <filename>site-config.jam</filename> files is
+          significant. In particular, the <literal>using
+          doxygen</literal> line should come
+          <emphasis>after</emphasis> the <literal>using
+          boostbook</literal> declaration.
+          </para>
+        </important>
+      </section>
 
-    <section id="boostbook.fop">
-      <title>Configuring PDF and PostScript Output</title>
+      <section id="boostbook.setup.fop">
+      <title>Configuring Apache FOP</title>
 
-      <para>In order to generate PDF and PostScript output, you have to
-      install two tools:
-        <itemizedlist> 
-          <listitem><simpara>A Java interpreter, available at <ulink url="http://java.sun.com"/>.</simpara></listitem>
-          <listitem><simpara>Apache FOP, available at <ulink url="http://xml.apache.org/fop/download.html"/>. Version 0.20.4 seems to be most stable.</simpara></listitem>
-        </itemizedlist> 
-      </para>
- 
-      <para>Install the Java interpreter and then unpack Apache FOP to some
-      directory. The top level directory of the FOP tool should contain a main
-      script called <filename>fop.sh</filename> on Unix and
-      <filename>fop.bat</filename> on Windows. You need to specify the
-      location of that script and Java location to Boost.Build. Add the
-      following to your <filename>user-config.jam</filename> or
-      <filename>site-config.jam</filename>: 
+      <para>In order to generate PDF and PostScript output using
+      Apache FOP, you will need a <ulink
+      url="http://java.sun.com">Java interpreter</ulink> and <ulink
+      url="http://xml.apache.org/fop/download.html">Apache FOP</ulink>
+      (version 0.20.5 is best). Unpack Apache FOP to some
+      directory. The top level directory of the FOP tool should
+      contain a main script called <filename>fop.sh</filename> on Unix
+      and <filename>fop.bat</filename> on Windows. You need to specify
+      the location of that script and Java location to
+      Boost.Build. Add the following to your
+      <filename>user-config.jam</filename> or
+      <filename>site-config.jam</filename>:
 <programlisting>
 using fop : FOP_COMMAND 
           : JAVA_HOME 
@@ -215,86 +269,24 @@ using fop : FOP_COMMAND
       </para>
     
       <para>To test PDF generation, switch to the directory <filename
-      class="directory">$BOOST_ROOT/doc</filename> and execute the
-      command <command>bjam --v2 pdf</command>. In the absence of any
-      errors, Apache FOP will be executed to transform the XSL:FO
-      output of DocBook into a PDF file.</para>
+      class="directory">$BOOST_ROOT/libs/function/doc</filename> and
+      execute the command <command>bjam --v2 pdf</command>. In the
+      absence of any errors, Apache FOP will be executed to transform
+      the XSL:FO output of DocBook into a PDF file.</para>
     </section>
+  </section>
 
-    <section id="boostbook.doxygen">
-      <title>Configuring Doxygen for Documentation Extraction</title>
- 
-      <para>This section details the steps necessary to use Doxygen to
-      extract documentation and comments from source code to build a
-      BoostBook document (and transform it into end-user
-      documentation). You will need a somewhat recent version of <ulink url="http://www.doxygen.org">Doxygen</ulink>; 1.2.18 or newer should suffice.</para>
+  <section id="boostbook.setup.running">
+    <title>Running BoostBook</title>
 
-      <para>Boost.Build can be configured for Doxygen support by editing
-      <filename>user-config.jam</filename> or
-      <filename>site-config.jam</filename> to add:
-
-        <programlisting>using doxygen : DOXYGEN ;</programlisting>
-
-      <filename>DOXYGEN</filename> should be replaced with the name of
-      the <command>doxygen</command> executable (with full path
-      name). If the right <command>doxygen</command> executable can be
-      found via the path, this parameter can be omitted.</para>
-      
-      <important>
-        <para>The relative order of declarations in 
-        <filename>user-config.jam</filename> / <filename>site-config.jam</filename>
-        files is significant. In particular, <literal>using doxygen</literal> 
-        line should come <emphasis>after</emphasis> the
-        <literal>using boostbook</literal> declaration.
-        </para>
-      </important>
-      
-
-      <para>Generating of documentation from source files using
-      Doxygen requires two steps. The first step involves identifying
-      the source files so that Doxygen can process them. The second
-      step is to specify that the output of this process, a file in
-      the Doxygen XML format, is input for a BoostBook document. The
-      following <filename>Jamfile.v2</filename> illustrates a simple
-      case of generating reference documentation for the
-      <libraryname>Any</libraryname> library: </para>
-
-      <programlisting>project boost/any/doc ;
-import boostbook : boostbook ; 
-import doxygen : doxygen ;
-
-doxygen any.doxygen : ../../../boost/any.hpp ;
-boostbook any : any.doxygen ;</programlisting>
-
-      <para>In this example, we generate the Doxygen XML
-      representation in the file <filename>any.doxygen</filename> from
-      the source file <filename>../../../boost/any.hpp</filename> by
-      invocing Doxygen. We then use <filename>any.doxygen</filename>
-      as a source for the BoostBook target <code>any</code>, which
-      will generate documentation in any format the user requests. The
-      actual sequence of events in this transformation is:</para>
- 
-      <orderedlist>
-        <listitem><simpara>Doxygen parses the header file <filename>../../../boost/any.hpp</filename> and outputs a single XML file <filename>any.doxygen</filename>.</simpara></listitem>
-        <listitem><simpara>The XSLT processor applies the stylesheet <filename>doxygen2boostbook.xsl</filename> to transform <filename>any.doxygen</filename> into the BoostBook file <filename>any.xml</filename>.</simpara></listitem>
-        <listitem><simpara>The XSLT processor applies the stylesheet <filename>docbook.xsl</filename> to transform <filename>any.xml</filename> into the DocBook XML document <filename>any.docbook</filename>.</simpara></listitem>
-        <listitem><simpara>Further transformations may generate HTML, FO, PDF, etc. from <filename>any.docbook</filename>.</simpara></listitem>
-      </orderedlist>
-    </section>
-    </section>
-
-    <section id="boostbook.setup.running">
-      <title>Running BoostBook</title>
-
-      <para>Once BoostBook has been configured, we can build some
-      documentation. First, change to the
-      directory <code>$BOOST_ROOT/doc</code> and remove (or make
-      writable) the <code>.html</code> files
-      in <code>$BOOST_ROOT/doc/html</code>. Then,
-      run <code>bjam --v2</code> to build HTML documentation. You
-      should see several warnings like these while DocBook
-      documentation is being built from BoostBook
-      documentation:</para>
+    <para>Once BoostBook has been configured, we can build some
+    documentation. First, change to the directory
+    <code>$BOOST_ROOT/doc</code> and remove (or make writable) the
+    <code>.html</code> files in
+    <code>$BOOST_ROOT/doc/html</code>. Then, run <code>bjam
+    --v2</code> to build HTML documentation. You should see several
+    warnings like these while DocBook documentation is being built
+    from BoostBook documentation:</para>
 
     <programlisting>Cannot find function named 'checked_delete'
 Cannot find function named 'checked_array_delete'
@@ -355,7 +347,7 @@ Cannot find function named 'next'</programlisting>
     </table>
     </section>
 
-    <section id="boostbook.troubleshooting">
+    <section id="boostbook.setup.troubleshooting">
       <title>Troubleshooting</title>
     
       <para>The Boost documentation tools are still in their early phase of 
@@ -368,7 +360,6 @@ Cannot find function named 'next'</programlisting>
       </para>
  
     </section>
-
   </chapter>
     
   <xi:include href="documenting.xml"/>
