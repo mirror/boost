@@ -308,7 +308,7 @@ namespace boost { namespace program_options {
             const option_description& opt = *options[i];
             stringstream ss;
             ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
-            width = max(width, ss.str().size());            
+            width = max(width, static_cast<unsigned>(ss.str().size()));            
         }
 
         /* The options formatting style is stolen from Subversion. */
