@@ -20,7 +20,7 @@
   <xsl:template match="macro" mode="reference">
     <xsl:call-template name="reference-documentation">
       <xsl:with-param name="refname" select="@name"/>
-      <xsl:with-param name="purpose" select="purpose"/>
+      <xsl:with-param name="purpose" select="purpose/*|purpose/text()"/>
       <xsl:with-param name="anchor">
         <xsl:call-template name="generate.id"/>
       </xsl:with-param>

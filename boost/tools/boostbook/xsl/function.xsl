@@ -969,7 +969,7 @@
             <xsl:with-param name="node" select="."/>
           </xsl:call-template>
         </xsl:with-param>
-        <xsl:with-param name="purpose" select="purpose"/>
+        <xsl:with-param name="purpose" select="purpose/*|purpose/text()"/>
         <xsl:with-param name="anchor">
           <xsl:call-template name="generate.id"/>
         </xsl:with-param>
@@ -1050,7 +1050,7 @@
             <xsl:with-param name="node" select="."/>
           </xsl:call-template>
         </xsl:with-param>
-        <xsl:with-param name="purpose" select="purpose"/>
+        <xsl:with-param name="purpose" select="purpose/*|purpose/text()"/>
         <xsl:with-param name="anchor">
           <xsl:call-template name="generate.id"/>
         </xsl:with-param>

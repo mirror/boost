@@ -757,7 +757,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
         </xsl:call-template>
         <xsl:apply-templates select="specialization"/>
       </xsl:with-param>
-      <xsl:with-param name="purpose" select="./purpose"/>
+      <xsl:with-param name="purpose" select="purpose/*|purpose/text()"/>
       <xsl:with-param name="anchor">
         <xsl:call-template name="generate.id">
           <xsl:with-param name="node" select="."/>
@@ -962,7 +962,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
             <xsl:with-param name="node" select="."/>
           </xsl:call-template>
         </xsl:with-param>
-        <xsl:with-param name="purpose" select="purpose"/>
+        <xsl:with-param name="purpose" select="purpose/*|purpose/text()"/>
         <xsl:with-param name="anchor">
           <xsl:call-template name="generate.id">
             <xsl:with-param name="node" select="."/>

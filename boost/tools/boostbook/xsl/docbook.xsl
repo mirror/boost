@@ -262,7 +262,9 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
       </refmeta>
       <refnamediv>
         <refname><xsl:value-of select="$refname"/></refname>
-        <refpurpose><xsl:value-of select="$purpose"/></refpurpose>
+        <refpurpose>
+		  <xsl:apply-templates mode="annotation" select="$purpose"/>
+		</refpurpose>
       </refnamediv>
       <refsynopsisdiv>
         <synopsis>
