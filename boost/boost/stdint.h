@@ -84,8 +84,10 @@
 
 //  64-bit types + intmax_t and uintmax_t  -----------------------------------//
 
-# ifdef ULLONG_MAX
-#    if ULLONG_MAX == 18446744073709551615 // 2**64 - 1
+# if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX)
+#    if (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615) ||  \
+        (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615)
+                                                                 // 2**64 - 1
      typedef long long            intmax_t;
      typedef unsigned long long   uintmax_t;
      typedef long long            int64_t;
