@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//   16 Apr 01  check LONGLONG_MAX when looking for "long long" (Jens Maurer)
 //   23 Jan 01  prefer "long" over "int" for int32_t and intmax_t (Jens Maurer)
 //   12 Nov 00  Merged <boost/stdint.h> (Jens Maurer)
 //   23 Sep 00  Added INTXX_C macro support (John Maddock).
@@ -133,8 +134,8 @@ namespace boost
 
 //  64-bit types + intmax_t and uintmax_t  ----------------------------------//
 
-# if (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX))
-#    if(defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615U) || (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615U)
+# if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX)
+#    if (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615U) || (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615U) || (defined(ULONGLONG_MAX) && ULONGLONG_MAX == 18446744073709551615U)
                                                                  // 2**64 - 1
      typedef long long            intmax_t;
      typedef unsigned long long   uintmax_t;
@@ -252,9 +253,9 @@ Added 23rd September (John Maddock).
 
 //  64-bit types + intmax_t and uintmax_t  ----------------------------------//
 
-#  if (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX))
-#    if(defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615) ||  \
-        (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615)
+#  if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX)
+#    if (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615U) ||  \
+        (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615U) || (defined(ULONGLONG_MAX) && ULONGLONG_MAX == 18446744073709551615U)
 #       define INT64_C(value) value##LL
 #       define UINT64_C(value) value##uLL
 #    else
