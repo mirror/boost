@@ -12,6 +12,7 @@
 
 namespace boost_no_integral_int64_t{
 
+#ifdef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 enum{ mask = 1uLL << 50 };
 
 template <unsigned long long m>
@@ -19,6 +20,15 @@ struct llt
 {
    enum{ value = m };
 };
+#else
+static const unsigned long long mask = 1uLL << 50;
+
+template <unsigned long long m>
+struct llt
+{
+   static const unsigned long long value = m;
+};
+#endif
 
 int test()
 {
