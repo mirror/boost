@@ -200,7 +200,8 @@ void instantiate_all()
   instantiate_urng("mt11213b", mt11213b(), 0u);
   instantiate_urng("mt19937", mt19937(), 0u);
   mt19937 mt(boost::uint32_t(17));  // needs to be an exact type match for MSVC
-  mt.seed(boost::uint32_t(42));
+  int i = 42;
+  mt.seed(boost::uint32_t(i));
   mt19937 mt2(mstd);
   mt2.seed(mstd);
 
