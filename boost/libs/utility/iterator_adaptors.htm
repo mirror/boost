@@ -155,28 +155,29 @@ struct iterator_adaptor;
         <td><tt>Value</tt> 
 
         <td>The <tt>value_type</tt> of the resulting iterator, unless const. If
-        Value is <tt>const X</tt>, a conforming compiler makes the
-        <tt>value_type</tt> <tt><i>non-</i>const X</tt><a href=
+        Value is <tt>const X</tt> the
+        <tt>value_type</tt> will be (<i>non-</i><tt>const</tt>) <tt>X</tt><a href=
         "#1">[1]</a>.<br>
          <b>Default:</b>
-        <tt>std::iterator_traits&lt;BaseType&gt;::value_type</tt> 
-
-      <tr>
-        <td><tt>Pointer</tt> 
-
-        <td>The <tt>pointer</tt> type of the resulting iterator, and in
-        particular, the result type of operator-&gt;().<br>
-         <b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>,
-        otherwise <tt>std::iterator_traits&lt;BaseType&gt;::pointer</tt>.
+        <tt>std::iterator_traits&lt;BaseType&gt;::value_type</tt> <a href=
+        "#2">[2]</a>
 
       <tr>
         <td><tt>Reference</tt> 
 
         <td>The <tt>reference</tt> type of the resulting iterator, and in
-        particular, the result type of operator*().<br>
+        particular, the result type of <tt>operator*()</tt>.<br>
          <b>Default:</b> If <tt>Value</tt> is supplied, <tt>Value&amp;</tt> is
         used. Otherwise
         <tt>std::iterator_traits&lt;BaseType&gt;::reference</tt> is used.
+
+      <tr>
+        <td><tt>Pointer</tt> 
+
+        <td>The <tt>pointer</tt> type of the resulting iterator, and in
+        particular, the result type of <tt>operator-&gt;()</tt>.<br>
+         <b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>,
+        otherwise <tt>std::iterator_traits&lt;BaseType&gt;::pointer</tt>.
 
       <tr>
         <td><tt>Category</tt> 
@@ -287,7 +288,7 @@ struct iterator_adaptor;
 
     <blockquote>
 <pre>
-struct default_iterator_policies
+struct <a name="default_iterator_policies">default_iterator_policies</a>
 {
   template &lt;class Reference, class BaseType&gt;
   Reference dereference(type&lt;Reference&gt;, const BaseType&amp; x) const
@@ -512,9 +513,9 @@ int main(int, char*[])
     <tt>iterator_adaptor</tt> can make it easy. The rules are as follows: 
 
     <ul>
-      <li>Adapted iterators that share the same <tt>Policies</tt>,
+      <li><a name="interoperable">Adapted iterators that share the same <tt>Policies</tt>,
       <tt>Category</tt>, and <tt>Distance</tt> parameters are called
-      <i>interoperable</i>.
+      <i>interoperable</i>.</a>
 
       <li>An adapted iterator can be implicitly converted to any other adapted
       iterator with which it is interoperable, so long as the <tt>Base</tt>
@@ -531,6 +532,52 @@ int main(int, char*[])
       <tt>distance</tt> member that can accept both <tt>Base</tt> types in
       either order.
     </ul>
+
+    <h4>Example</h4>
+    
+    <p>The <a href="projection_iterator.htm">Projection Iterator</a> portion of this
+    library lets you create iterators which, when dereferenced, apply a function to the result of
+    dereferencing their base iterator. The <a
+    href="projection_iterator.htm#projection_iterator_pair_generator">projection_iterator_pair_generator</a> template
+    is a special two-<a href="../../more/generic_programming.html#type_generator">type generator</a> for mutable and constant versions of a
+    projection iterator. It is defined as follows:
+<blockquote>
+<pre>
+template &lt;class Function, class Iterator, class ConstIterator&gt;
+struct projection_iterator_pair_generator {
+    typedef typename AdaptableUnaryFunction::result_type value_type;
+    typedef projection_iterator_policies&lt;Function&gt; policies;
+public:
+    typedef iterator_adaptor&lt;Iterator,policies,value_type&gt; iterator;
+    typedef iterator_adaptor&lt;ConstIterator,policies,value_type,
+        const value_type&amp;,const value_type*&gt; type;
+};
+</pre>
+</blockquote>
+
+<p>It is assumed that the <tt>Iterator</tt> and <tt>ConstIterator</tt> arguments are corresponding mutable
+and constant iterators. <ul>
+<li>
+Clearly, then, the
+<tt>projection_iterator_pair_generator</tt>'s <tt>iterator</tt> and
+<tt>const_iterator</tt> are <a href="#interoperable">interoperable</a>, since
+they share the same <tt>Policies</tt> and since <tt>Category</tt> and
+<tt>Distance</tt> as supplied by <tt>std::iterator_traits</tt> through the
+<a href="#template_parameters">default template parameters</a> to
+<tt>iterator_adaptor</tt> should be the same.
+
+<li>Since <tt>Iterator</tt> can presumably be converted to
+<tt>ConstIterator</tt>, the projection <tt>iterator</tt> will be convertible to
+the projection <tt>const_iterator</tt>.
+
+<li> Since <tt>projection_iterator_policies</tt> implements only the
+<tt>dereference</tt> operation, and inherits all other behaviors from <tt><a
+href="#default_iterator_policies">default_iterator_policies</a></tt>, which has
+fully-templatized <tt>equal</tt>, <tt>less</tt>, and <tt>distance</tt>
+operations, the <tt>iterator</tt> and <tt>const_iterator</tt> can be freely
+mixed in comparison and subtraction expressions.
+
+</ul>
 
     <h3><a name="challenge">Challenge</a></h3>
 
@@ -620,23 +667,23 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
 
     <h3><a name="notes">Notes</a></h3>
 
-    <p><a name="1">[1]</a> If your compiler does not support partial
-    specialization and the base iterator is a builtin pointer type, then you
-    will not be able to use the default for <tt>Value</tt> and will need to
-    explicitly specify this type.
-
-    <p><a name="2">[2]</a> The standard specifies that the <tt>value_type</tt>
+    <p><a name="1">[1]</a> The standard specifies that the <tt>value_type</tt>
     of <tt>const</tt> iterators to <tt>T</tt> (e.g. <tt>const T*</tt>) is
     <tt><i>non-</i>const T</tt>, while the <tt>pointer</tt> and
     <tt>reference</tt> types for all <a href=
-    "http://www.sgi.com/tech/stl/ForwardIterator.html">Forward Iterators</a>
-    are <tt>const T*</tt> and <tt>const T&amp;</tt>, respectively. Stripping
-    the <tt>const</tt>-ness of <tt>Value</tt> is designed to allow you to
-    easily make a <tt>const</tt> iterator adaptor by supplying a <tt>const</tt>
-    type for <tt>Value</tt>, and allowing the defaults for the <tt>Pointer</tt>
-    and <tt>Reference</tt> parameters to take effect. Although compilers that
-    don't support partial specialization won't do this for you, having a
+    "http://www.sgi.com/tech/stl/ForwardIterator.html">Forward Iterators</a> are
+    <tt>const T*</tt> and <tt>const T&amp;</tt>, respectively. Stripping the
+    <tt>const</tt>-ness of <tt>Value</tt> allows you to easily
+    make a <tt>const</tt> iterator adaptor by supplying a <tt>const</tt> type
+    for <tt>Value</tt>, and allowing the defaults for the <tt>Pointer</tt> and
+    <tt>Reference</tt> parameters to take effect. Although compilers that don't
+    support partial specialization won't strip <tt>const</tt> for you, having a
     <tt>const value_type</tt> is often harmless in practice.
+
+    <p><a name="2">[2]</a> If your compiler does not support partial
+    specialization and the base iterator is a builtin pointer type, you
+    will not be able to use the default for <tt>Value</tt> and will have to
+    specify this type explicitly.
 
     <p><a name="3">[3]</a> The result type for the <tt>operator-&gt;()</tt>
     depends on the category and value type of the iterator and is somewhat
@@ -681,6 +728,7 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
          -->
      
     <!--  LocalWords:  iostream hpp sizeof InputIterator constness ConstIterator
+         David Abrahams
          -->
 
 
