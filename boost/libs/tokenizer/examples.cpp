@@ -19,7 +19,7 @@
 #define BOOST_INCLUDE_MAIN
 #include <boost/test/test_tools.hpp>
 
-int test_main(int, char**)
+int test_main(int, char*[])
 {
   using namespace std;
   using namespace boost;

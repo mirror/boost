@@ -329,7 +329,7 @@ void compressed_pair_array_tester<T1, T2>::test(first_param_type p1, second_para
    BOOST_TEST(sizeof(T2) == sizeof(cp1.second()));
 }
 
-int test_main(int, char **)
+int test_main(int, char *[])
 {
    // declare some variables to pass to the tester:
    non_empty1 ne1(2);
