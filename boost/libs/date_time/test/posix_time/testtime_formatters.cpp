@@ -96,9 +96,8 @@ main()
 #endif
 
 
-  printTestStats();
+  return printTestStats();
 
-  return 0;
 
 }
 
