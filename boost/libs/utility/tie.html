@@ -24,8 +24,12 @@
 </H1>
 
 <h3>
-[tie has been deprecated.&nbsp; Its functionality is supplied by the Boost
-Tuples Library.]</h3>
+[This version of tie has been removed from the utility.hpp
+header.&nbsp; There is a new, more general version of <a
+href="../tuple/doc/tuple_users_guide.html#tiers">tie</a> in the Boost
+Tuples Library. The more general version handles an (almost) arbitrary
+number of arguments, instead of just two. The version in utility.hpp
+had to be removed to avoid name clashes.]</h3>
 <PRE>
 template &lt;class A, class B&gt;
 tied&lt;A,B&gt; tie(A&amp; a, B&amp; b);
