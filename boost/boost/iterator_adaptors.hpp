@@ -1029,8 +1029,8 @@ class filter_iterator_generator {
 #ifndef BOOST_MSVC // I don't have any idea why this occurs, but it doesn't seem to hurt too badly.
     BOOST_STATIC_ASSERT(!is_bidirectional);
 #endif
- public:
     typedef filter_iterator_policies<Predicate,Iterator> policies_type;
+ public:
     typedef iterator_adaptor<Iterator,policies_type,
         Value,Reference,Pointer,Category,Distance> type;
 };
