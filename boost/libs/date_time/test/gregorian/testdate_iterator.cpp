@@ -277,6 +277,29 @@ main()
       i--;
     }
  }
+  {
+    const date YearAnswers[] = {
+      date(2000,Feb,29),date(2001,Feb,28),date(2002,Feb,28),date(2003,Feb,28),
+      date(2004,Feb,29),date(2005,Feb,28),date(2006,Feb,28),date(2007,Feb,28),
+      date(2008,Feb,29),date(2009,Feb,28),date(2010,Feb,28)
+    };
+    
+    boost::date_time::date_itr<yfg, date> d3(date(2000,Feb,29));
+    int i = 0;
+    for (; d3 < date(2010,Mar,1); ++d3) {
+      //std::cout << *d3 << " ";
+      check("year iterator: " + to_iso_string(*d3), YearAnswers[i] == *d3);
+      i++;
+    }
+    std::cout << "Decrementing...." << std::endl;
+    i = 10;
+    --d3;
+    for (; d3 > date(2000,Feb,27); --d3) {
+      //std::cout << *d3 << " ";
+      check("year iterator: " + to_iso_string(*d3), YearAnswers[i] == *d3);
+      i--;
+    }
+ }
 
   {
     std::cout << "Increment by 2 years...." << std::endl;
