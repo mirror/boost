@@ -29,7 +29,7 @@ public:
   typedef IntT value_type;
   typedef IntT& reference;
   typedef IntT* pointer;
-  typedef ptrdiff_t difference_type;
+  typedef std::ptrdiff_t difference_type;
 
   inline int_iterator() : _i(0) { }
   inline int_iterator(IntT i) : _i(i) { }

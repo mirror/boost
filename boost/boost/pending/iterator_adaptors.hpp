@@ -259,11 +259,7 @@ namespace detail {
   template <class Iter, class Diff>
   inline void
   advance_impl(Iter& i, Diff n, std::random_access_iterator_tag) {
-#ifdef __MWERKS__
-        i.policies().advance<Iter>(i.iter(), n);
-#else
         i.policies().advance(i.iter(), n);
-#endif
   }
 
   // Dummy versions for non-bidirectional iterators 
@@ -276,11 +272,7 @@ namespace detail {
   template <class Iter>
   inline void
   decrement_impl(Iter& i, std::bidirectional_iterator_tag) {
-#ifdef __MWERKS__
-        i.policies().decrement<Iter>(i.iter());
-#else
         i.policies().decrement(i.iter());
-#endif
   }
 
 } // namespace detail
