@@ -17,6 +17,7 @@
   <xsl:param name="html.extra.head.links" select="1"/>
   <xsl:param name="make.year.ranges" select="1"/>
   <xsl:param name="generate.manifest" select="1"/>
+  <xsl:param name="generate.section.toc.level" select="3"/>
 
   <xsl:template name="header.navigation">
     <table border="1" cellpadding="2" bgcolor="#007F7F">
