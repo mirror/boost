@@ -12,11 +12,11 @@
 #  modified is included with the above copyright notice.
 #
 
+import testing ;
+
 project
     : source-location $(BOOST_ROOT)
     ;
-include testing.jam ;
-
 {
   test-suite optional :
     [ run libs/optional/test/optional_test.cpp ]
