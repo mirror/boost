@@ -22,7 +22,7 @@
 #include <boost/type_traits/add_pointer.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/is_POD.hpp>
+#include <boost/type_traits/is_pod.hpp>
 
 #include <boost/mpl/apply_if.hpp>
 #include <boost/mpl/or.hpp>
