@@ -52,7 +52,7 @@ template<int> struct static_assert_test{};
 // used as an enum initialiser, or as a template argument depending which version
 // is in use...
 //
-#ifndef BOOST_BUGGY_INTEGRAL_CONSTANT_EXPRESSIONS
+#if !defined(BOOST_BUGGY_INTEGRAL_CONSTANT_EXPRESSIONS) && !defined(__MWERKS__)
 #ifndef BOOST_MSVC
 #define BOOST_STATIC_ASSERT( B ) \
    typedef ::boost::static_assert_test<\
@@ -60,7 +60,7 @@ template<int> struct static_assert_test{};
          BOOST_ASSERT_JOIN(boost_static_assert_typedef_, __LINE__)
 #else
 // __LINE__ macro broken when -ZI is used see Q199057
-// fortunately MSVC ignores duplicate typedef's:
+// fortunately MSVC ignores duplicate typedef's.
 #define BOOST_STATIC_ASSERT( B ) \
    typedef ::boost::static_assert_test<\
       sizeof(::boost::STATIC_ASSERTION_FAILURE< ( B ) >)\
