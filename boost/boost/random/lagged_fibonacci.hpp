@@ -40,8 +40,9 @@ class lagged_fibonacci
 public:
   typedef UIntType result_type;
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = true);
+  BOOST_STATIC_CONSTANT(int, word_size = w);
   BOOST_STATIC_CONSTANT(result_type, min_value = 0);
-  BOOST_STATIC_CONSTANT(result_type, max_value = (1 << w));
+  BOOST_STATIC_CONSTANT(result_type, max_value = (1 << w)-1);
   BOOST_STATIC_CONSTANT(unsigned int, long_lag = p);
   BOOST_STATIC_CONSTANT(unsigned int, short_lag = q);
 
@@ -152,9 +153,8 @@ void lagged_fibonacci<UIntType, w, p, q, val>::fill()
   for(unsigned int j = 0; j < short_lag; ++j)
     x[j] = (x[j] + x[j+(long_lag-short_lag)]) & mask;
   }
-  for(unsigned int j = short_lag; j < long_lag; ++j) {
+  for(unsigned int j = short_lag; j < long_lag; ++j)
     x[j] = (x[j] + x[j-short_lag]) & mask;
-  }
   i = 0;
 }
 
@@ -209,20 +209,29 @@ class lagged_fibonacci_01
 public:
   typedef RealType result_type;
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
+  BOOST_STATIC_CONSTANT(int, word_size = w);
   BOOST_STATIC_CONSTANT(unsigned int, long_lag = p);
   BOOST_STATIC_CONSTANT(unsigned int, short_lag = q);
 
-  result_type min() const { return 0.0; }
-  result_type max() const { return 1.0; }
-
-  lagged_fibonacci_01() { seed(); }
-  explicit lagged_fibonacci_01(uint32_t value) { seed(value); }
+  lagged_fibonacci_01() { init_modulus(); seed(); }
+  explicit lagged_fibonacci_01(uint32_t value) { init_modulus(); seed(value); }
   template<class Generator>
-  explicit lagged_fibonacci_01(Generator & gen) { seed(gen); }
+  explicit lagged_fibonacci_01(Generator & gen) { init_modulus(); seed(gen); }
   template<class It> lagged_fibonacci_01(It& first, It last)
-  { seed(first, last); }
+  { init_modulus(); seed(first, last); }
   // compiler-generated copy ctor and assignment operator are fine
 
+private:
+  void init_modulus()
+  {
+#ifndef BOOST_NO_STDC_NAMESPACE
+    // allow for Koenig lookup
+    using std::pow;
+#endif
+    _modulus = pow(RealType(2.0), word_size);
+  }
+
+public:
   void seed(uint32_t value = 331u)
   {
     minstd_rand0 intgen(value);
@@ -247,18 +256,19 @@ public:
   {
 #ifndef BOOST_NO_STDC_NAMESPACE
     // allow for Koenig lookup
-    using std::pow;
+    using std::fmod;
 #endif
-    // word size could be smaller than the seed values
-    unsigned long mask = ~((~0) << w);
-    RealType factor = pow(RealType(0.5), w);
+    const unsigned long mask = ~((~0) << w);
     unsigned int j;
     for(j = 0; j < long_lag && first != last; ++j, ++first)
-      _x[j] = (*first & mask) * factor;
+      x[j] = fmod((*first & mask) / _modulus, RealType(1.0));
     i = long_lag;
     if(first == last && j < long_lag)
       throw std::invalid_argument("lagged_fibonacci_01::seed");
   }
+
+  result_type min() const { return result_type(0.0); }
+  result_type max() const { return result_type(1.0); }
 
   result_type operator()()
   {
@@ -288,9 +298,10 @@ public:
     using std::pow;
 #endif
     os << f.i << " ";
-    RealType factor = pow(RealType(2.0), w);
+    std::ios_base::fmtflags oldflags = os.flags(os.dec | os.fixed | os.left); 
     for(unsigned int i = 0; i < long_lag; ++i)
-      os << f.x[i] * factor << " ";
+      os << f.x[i] * f._modulus << " ";
+    os.flags(oldflags);
     return os;
   }
 
@@ -299,14 +310,14 @@ public:
   operator>>(std::basic_istream<CharT, Traits>& is, lagged_fibonacci_01& f)
   {
    is >> f.i >> std::ws;
-   RealType factor = pow(RealType(2.0), w);
    for(unsigned int i = 0; i < long_lag; ++i) {
       RealType value;
       is >> value >> std::ws;
-      f.x[i] = value / factor;
+      f.x[i] = value / f._modulus;
     }
     return is;
   }
+
   friend bool operator==(const lagged_fibonacci_01& x,
                          const lagged_fibonacci_01& y)
   { return x.i == y.i && std::equal(x.x, x.x+long_lag, y.x); }
@@ -325,6 +336,7 @@ private:
   void fill();
   unsigned int i;
   RealType x[long_lag];
+  RealType _modulus;
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
@@ -345,15 +357,15 @@ void lagged_fibonacci_01<RealType, w, p, q>::fill()
   {  // extra scope for MSVC brokenness w.r.t. for scope
   for(unsigned int j = 0; j < short_lag; ++j) {
     RealType t = x[j] + x[j+(long_lag-short_lag)];
-    if(t >= 1.0)
-      t -= 1.0;
+    if(t >= RealType(1.0))
+      t -= RealType(1.0);
     x[j] = t;
   }
   }
   for(unsigned int j = short_lag; j < long_lag; ++j) {
     RealType t = x[j] + x[j-short_lag];
-    if(t >= 1.0)
-      t -= 1.0;
+    if(t >= RealType(1.0))
+      t -= RealType(1.0);
     x[j] = t;
   }
   i = 0;
