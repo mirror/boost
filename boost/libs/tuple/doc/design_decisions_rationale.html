@@ -13,7 +13,8 @@
 
 <p>
 There was a discussion about whether tuples should be in a separate namespace or directly at the <code>boost</code> namespace.
-The common principle is that domain libraries (like <i>graph</i>, <i>python</i>) should be on a separate subnamespace, while utility like libraries directly in the <code>boost</code> namespace.
+The common principle is that domain libraries (like <i>graph</i>, <i>python</i>) should be on a separate
+sub-namespace, while utility like libraries directly in the <code>boost</code> namespace.
 Tuples are somewhere in between, as the tuple template is clearly a general utility, but the library introduces quite a lot of names in addition to just the tuple template. 
 As a result of the discussion, tuple definitions are now directly under the <code>boost</code> namespace.
 <p>
@@ -21,20 +22,23 @@ As a result of the discussion, tuple definitions are now directly under the <cod
 <h4>For those who are really interested in namespaces</h4>
 
 <p>
-Note! The following discussion is not relevant for the Tuple library, as the 'no subnamespace' decision was taken, but it may be useful for other library writers.
+Note! The following discussion is not relevant for the Tuple library, as the 'no
+sub-namespace' decision was taken, but it may be useful for other library writers.
 </p>
 <p>
-In the original tuple library submission, all names were under the namespace <code>tuples</code>. This brought up the issue of naming subnamespaces.
+In the original tuple library submission, all names were under the namespace <code>tuples</code>. This brought up the issue of naming
+sub-namespaces.
 The rationale for not using the most natural name 'tuple' was to avoid having an identical name with the tuple template. Namespace names are, however, not generally in plural form in boost libraries. Further, no real trouble was reported for using the same name for a namespace and a class. 
 But we found some trouble after all.
-One solution proposed to the dilemma of introducing a subnamespace or not was as follows: use a subnamespace but lift the most common names to the <code>boost</code> namespace with using declarations. 
+One solution proposed to the dilemma of introducing a sub-namespace or not was as follows: use a
+sub-namespace but lift the most common names to the <code>boost</code> namespace with using declarations. 
 Both gcc and edg compilers rejected such using declarations if the namespace and class names were identical:
 
 <code><pre>namespace boost {
   namespace tuple {
     class cons;
     class tuple; 
-      ...
+&nbsp;     ...
   }
   using tuple::cons; // ok
   using tuple::tuple; // error
@@ -50,7 +54,7 @@ using boost::tuple::tuple; // ok;
 </pre></code>
 
 
-<h2>The endmark of the cons list (nil, null_type, ...)</h2>
+<h2>The end mark of the cons list (nil, null_type, ...)</h2>
 
 <p>
 Tuples are internally represented as <code>cons</code> lists:
@@ -63,7 +67,6 @@ inherits from
 
 <code>null_type</code> is the end mark of the list. Original proposition was <code>nil</code>, but the name is used in MacOS, and might have caused problems, so <code>null_type</code> was chosen instead.
 Other names considered were <i>null_t</i> and <i>unit</i> (the empty tuple type in SML).
-</p>
 <p>
 Note that <code>null_type</code> is the internal representation of an empty tuple: <code>tuple&lt;&gt;</code> inherits from <code>null_type</code>.
 </p>
@@ -78,11 +81,10 @@ Whether to use 0- or 1-based indexing was discussed more than thoroughly, and th
 <li> 1-based 'name like' indexing exists as well, eg. <code>bind1st</code>, <code>bind2nd</code>, <code>pair::first</code>, etc.</li>
 </ul>
 Tuple access with the syntax <code>get&lt;N&gt;(a)</code>, or <code>a.get&lt;N&gt;()</code> (where <code>a</code> is a tuple and <code>N</code> an index), was considered to be of the first category, hence, the index of the first element in a tuple is 0.
-</p>
 
 <p>
 A suggestion to provide 1-based 'name like' indexing with constants like <code>_1st</code>, <code>_2nd</code>, <code>_3rd</code>, ... was made.
-By suitably chosen constant types, this would allow alternative syntaces:
+By suitably chosen constant types, this would allow alternative syntaxes:
 
 <code><pre>a.get&lt;0&gt;() == a.get(_1st) == a[_1st] == a(_1st);
 </pre></code>
@@ -116,12 +118,12 @@ Streams that have character types not convertible back and forth to long thus fa
 This may be revisited at some point. The two possible solutions are:
 <ul>
 <li>Allow only plain <code>char</code> types as the tuple delimiters and use <code>widen</code> and <code>narrow</code> to convert between the real character type of the stream. 
-This would always compile, but some calls to set manipulators might result in a differnt character than expected (some default charcter).</li>
-<li>Allocate enought space to hold the real character type of the stream. 
+This would always compile, but some calls to set manipulators might result in a different
+  character than expected (some default character).</li>
+<li>Allocate enough space to hold the real character type of the stream. 
 This means memory for holding the delimiter characters must be allocated separately, and that pointers to this memory are stored in the space allocated with <code>ios_base::xalloc</code>.
 Any volunteers?</li>
 </ul>
-</p>
 
 <A href="tuple_users_guide.html">Back to the user's guide</A>
 <hr><p>&copy; Copyright Jaakko J&auml;rvi 2001. 
