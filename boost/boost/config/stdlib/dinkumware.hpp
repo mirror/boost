@@ -70,10 +70,17 @@
 #endif
 
 #ifdef _CPPLIB_VER
+#  define BOOST_DINKUMWARE_STDLIB _CPPLIB_VER
+#else
+#  define BOOST_DINKUMWARE_STDLIB 1
+#endif
+
+#ifdef _CPPLIB_VER
 #  define BOOST_STDLIB "Dinkumware standard library version " BOOST_STRINGIZE(_CPPLIB_VER)
 #else
 #  define BOOST_STDLIB "Dinkumware standard library version 1.x"
 #endif
+
 
 
 

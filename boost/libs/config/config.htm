@@ -1029,16 +1029,13 @@ provide workarounds for compiler/standard library defects.</p>
         <td valign="top" width="50%"><p align="center"><b>Description</b></p>
         </td>
     </tr>
-
     <tr>
         <td valign="top" width="50%">BOOST_DEDUCED_TYPENAME</td>
-
-        <td valign="top" width="50%">Some compilers don't support the
-        use of <code>typename</code> for dependent types in deduced
-        contexts. This macro expands to nothing on those compilers,
-        and <code>typename</code> elsewhere.
-
-For example, replace:<pre>template <class T> void f(T, typename T::type);</pre>
+        <td valign="top" width="50%">Some compilers don't support
+        the use of <code>typename</code> for dependent types in
+        deduced contexts. This macro expands to nothing on those
+        compilers, and <code>typename</code> elsewhere. For
+        example, replace:<pre>template <class T> void f(T, typename T::type);</pre>
         <p>with:</p>
         <pre>template <class T> void f(T, BOOST_DEDUCED_TYPENAME T::type);</pre>
         </td>
@@ -1143,6 +1140,13 @@ user code.</p>
         <td valign="top">Defined if the compiler is really
         Microsoft Visual C++, as opposed to one of the many other
         compilers that also define _MSC_VER.</td>
+    </tr>
+    <tr>
+        <td>BOOST_DINKUMWARE_STDLIB</td>
+        <td>&lt;boost/config.hpp&gt;</td>
+        <td>Defined if the dinkumware standard library is in use,
+        takes the same value as the Dinkumware library version
+        macro _CPPLIB_VER if defined, otherwise 1.</td>
     </tr>
     <tr>
         <td valign="top" width="33%">BOOST_NO_WREGEX</td>
