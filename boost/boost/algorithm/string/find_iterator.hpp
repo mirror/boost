@@ -96,6 +96,22 @@ namespace boost {
                 increment();
             }
 
+            //! Constructor
+            /*!
+                Construct new find_iterator for a given finder
+                and a collection.
+            */
+            template<typename FinderT, typename CollectionT>
+            find_iterator(
+                    CollectionT& Col,
+                    FinderT Finder ) :
+                detail::find_iterator_base<IteratorT>(Finder,0),
+                m_Match(begin(Col),begin(Col)),
+                m_End(end(Col))
+            {
+                increment();
+            }
+
         private:
         // iterator operations
 
@@ -162,7 +178,7 @@ namespace boost {
             FinderT Finder)
         {
             return find_iterator<BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>(
-                Collection.begin(), Collection.end(), Finder);
+                begin(Collection), end(Collection), Finder);
         }
 
 //  split iterator -----------------------------------------------//
@@ -216,7 +232,7 @@ namespace boost {
             split_iterator() {}
             //! Copy constructor
             /*!
-                Construct a copy of the find_iterator
+                Construct a copy of the split_iterator
             */
             split_iterator( const split_iterator& Other ) :
                 base_type(Other),
@@ -226,7 +242,7 @@ namespace boost {
 
             //! Constructor
             /*!
-                Construct new find_iterator for a given finder
+                Construct new split_iterator for a given finder
                 and a range.
             */
             template<typename FinderT>
@@ -241,6 +257,23 @@ namespace boost {
             {
                 increment();
             }
+            //! Constructor
+            /*!
+                Construct new split_iterator for a given finder
+                and a collection.
+            */
+            template<typename FinderT, typename CollectionT>
+            split_iterator(
+					CollectionT& Col,
+					FinderT Finder ) :
+                detail::find_iterator_base<IteratorT>(Finder,0),
+                m_Match(begin(Col),begin(Col)),
+                m_Next(begin(Col)),
+                m_End(end(Col))
+            {
+                increment();
+            }
+
 
         private:
         // iterator operations
@@ -312,7 +345,7 @@ namespace boost {
             FinderT Finder)
         {
             return split_iterator<BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>(
-                Collection.begin(), Collection.end(), Finder);
+                begin(Collection), end(Collection), Finder);
         }
 
 
