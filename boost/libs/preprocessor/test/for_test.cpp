@@ -10,8 +10,7 @@
 // See http://www.boost.org for most recent version.
 
 #include <boost/preprocessor/for.hpp>
-#include <boost/preprocessor/comparison/less_equal.hpp>
-#include <boost/preprocessor/inc.hpp>
+#include <boost/preprocessor/dec.hpp>
 
 #include <libs/preprocessor/test/test.hpp>
 
@@ -21,8 +20,8 @@
 #define FOR_TEST_MAX 50
 #endif
 
-#define C(D,X) BOOST_PP_LESS_EQUAL(X,FOR_TEST_MAX)
-#define F(D,X) BOOST_PP_INC(X)
+#define C(D,X) X
+#define F(D,X) BOOST_PP_DEC(X)
 #define I(D,X) -X
 
-TEST((FOR_TEST_MAX*(FOR_TEST_MAX+1)/2)+1 BOOST_PP_FOR(0,C,F,I))
+TEST((FOR_TEST_MAX*(FOR_TEST_MAX+1)/2)+1 BOOST_PP_FOR(FOR_TEST_MAX,C,F,I))
