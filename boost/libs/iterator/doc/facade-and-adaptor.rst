@@ -585,8 +585,8 @@ out of the overload set when the types are not interoperable.]
 The ``Derived`` template parameter must be a class derived from
 ``iterator_facade``.
 
-The default for the ``Reference`` parameter is `Value&`` if the access
-category for ``iterator_facade`` is implicitly convertible to
+The default for the ``Reference`` parameter is ``Value&`` if the
+access category for ``iterator_facade`` is implicitly convertible to
 ``writable_iterator_tag``, and ``const Value&`` otherwise.
 
 The following table describes the other requirements on the
@@ -1513,7 +1513,7 @@ Class template ``function_output_iterator``
   public:
     typedef iterator_tag<
           writable_iterator_tag
-        , incrementable_iterator_tag
+        , incrementable_traversal_tag
     > iterator_category;
     typedef void                value_type;
     typedef void                difference_type;
