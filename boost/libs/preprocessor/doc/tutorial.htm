@@ -1,0 +1,485 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Boost PREPROCESSOR library</TITLE>
+<BODY bgcolor="#FFFFFF">
+<a href="index.htm"><IMG height=86
+ alt="c++boost.gif (8819 bytes)"
+ src="../../../c++boost.gif"
+ width=277 align=center></a>
+<hr>
+
+<h1>Boost PREPROCESSOR library: Tutorial</h1>
+<hr>
+<h2>Contents</h2>
+<ul>
+  <li><a href="#Motivation">Motivation</a></li>
+  <li><a href="#Techniques">Preprocessor Metaprogramming Techniques</a> 
+    <ul>
+      <li><a href="#Local Macro">Use a Local Macro to avoid small scale repetition</a></li>
+      <li><a href="#UNUSED">Use BOOST_PREPROCESSOR_EMPTY() as an unused parameter in Local Macro 
+        instantiations</a></li>
+      <li><a href="#CAT">Use BOOST_PREPROCESSOR_CAT instead of ## when necessary</a></li>
+      <li><a href="#STRINGIZE">Use BOOST_PREPROCESSOR_STRINGIZE instead of # whenever necessary</a></li>
+      <li><a href="#ENUM_PARAMS">Avoid O(N) repetition on lists in general</a></li>
+      <li><a href="#Conditional Define">Use a Conditional Define to enable user configuration of code repetition</a></li>
+      <li><a href="#Token Look-Up">Use Token Look-Up Function to eliminate categorical repetition</a></li>
+      <li><a href="#2ND_REPEAT">Use BOOST_PREPROCESSOR_REPEAT_2ND to avoid O(N*N) repetition</a></li>
+      <li><a href="#IF">Use BOOST_PREPROCESSOR_IF to implement special case for the first element</a>
+      <li><a href="#Arithmetic">Use arithmetic, logical and comparison operations when necessary</a>
+      </li>
+    </ul>
+  </li>
+</ul>
+<hr>
+<h2><a name="Motivation">Motivation</a></h2>
+<p>The C++ function and template parameter lists are special syntactic constructs 
+  and it is impossible to directly manipulate or generate them using C++ constructs. 
+  This leads to unnecessary code repetition.</p>
+<p> Consider the implementation of the is_function<> metafunction in Boost. The 
+  implementation uses an overloaded is_function_tester() function that is used 
+  for testing if a type is convertible to pointer to a function. Because of the 
+  special treatment of parameter lists, it is not possible to directly match a 
+  function with an arbitrary parameter list. Instead, the is_function_tester() 
+  must be overloaded for every distinct number of parameters that is to be supported. 
+  Example:</p>
+
+<blockquote> 
+  <pre>template &lt;class R&gt;
+yes_type is_function_tester(R (*)());
+template &lt;class R, class A0&gt;
+yes_type is_function_tester(R (*)(A0));
+template &lt;class R, class A0, A1&gt;
+yes_type is_function_tester(R (*)(A0, A1));
+template &lt;class R, class A0, A1, A2&gt;
+yes_type is_function_tester(R (*)(A0, A1, A2));
+
+// ...
+</pre>
+</blockquote>
+
+<P>The need for this kind of repetition occurs particularly frequently while implementing 
+  generic components or metaprogramming facilities, but the need also manifests 
+  itself in many far simpler situations. </P>
+<h3>Typical solutions</h3>
+
+
+<p>Typically the repetition is done manually. Manual code repetition is highly 
+  unproductive, but sometimes more readable to the untrained eye.</p>
+<p>Another solution is to write an external program for generating the repeated 
+  code or use some other extra linquistic means such as a smart editor. Unfortunately, 
+  using external code generators has many disadvantages:</p>
+<ul>
+  <li>writing the generator takes time (this could be helped by using a standard 
+    generator)</li>
+  <li>it is no longer productive to manipulate C++ code directly</li>
+  <li>invoking the generator may be difficult</li>
+  <li>automating the invocation of the generator can be difficult in certain environments 
+    (automatic invocation is desirable for active libraries)</li>
+</ul>
+<h3>What about the preprocessor?</h3>
+<p>Because C++ comes with a preprocessor, one would assume that it would support 
+  these kind of needs directly. Using the preprocessor in this case is highly 
+  desirable because:</p>
+<ul>
+  <li>preprocessor is highly portable</li>
+  <li>preprocessor is automatically invoked as part of the compiling process</li>
+  <li>preprocessor metacode can be directly embedded into the C++ source code</li>
+  <li>Compilers generally allow to view or output the preprocessed code, which 
+    can be used for debugging or to copy-paste the generated code.</li>
+</ul>
+<p>Most unfortunately, the preprocessor is a very low level preprocessor that 
+  specifically does not support repetition or recursive macros. Library support 
+  is needed!</p>
+<p><i>For detailed information on the capabilities and limitations of the preprocessor, 
+  please refer to the C++ standard <A href="references.htm#[5]">[5]</A>.</i></p>
+<h3>The motivation example revisited</h3>
+<p>Using the primitives of the PREPROCESSOR library, the is_function_tester()s 
+  could be implemented like this:</p>
+
+<blockquote>
+  <pre>#define IS_FUNCTION_TESTER(N,_)\
+  template&lt;class R BOOST_PREPROCESSOR_COMMA_IF(N) BOOST_PREPROCESSOR_ENUM_PARAMS(N, class A)&gt;\
+  yes_type is_function_tester(R (*)(BOOST_PREPROCESSOR_ENUM_PARAMS(N,A)));
+
+BOOST_PREPROCESSOR_REPEAT_2ND(BOOST_PREPROCESSOR_INC(MAX_IS_FUNCTION_TESTER_PARAMS),IS_FUNCTION_TESTER,_)
+#undef IS_FUNCTION_TESTER
+</pre>
+</blockquote>
+<p>In order to change the maximum number of function parameters supported, you 
+  now simply change the MAX_IS_FUNCTION_TESTER_PARAMS definition and recompile.</p>
+<HR>
+
+<H2><a name="Techniques">Preprocessor Metaprogramming Techniques</a></H2>
+<P>The&nbsp;preprocessor metaprogramming techniques are presented in example format. 
+</P>
+<HR>
+<P><B><a name="Local Macro"></a><a href="examples_preprocessed.htm#Local Macro">EXAMPLE</a>:</B> 
+  Use a Local Macro to avoid small scale repetition</P>
+
+<blockquote> 
+  <pre>#define BOOST_PREPROCESSOR_DEF(OP)\
+  template&lt;class T, int n&gt;        \
+  vec&lt;T,n&gt;&amp;                       \
+    operator OP##=                \
+    ( vec&lt;T,n&gt;&amp;                   \
+        lhs                       \
+    , const vec&lt;T,n&gt;&amp;             \
+        rhs                       \
+    )                             \
+  { for (int i=0; i&lt;n; ++i)       \
+      lhs(i) OP##= rhs(i);        \
+    return lhs;                   \
+  }
+
+BOOST_PREPROCESSOR_DEF(+)
+BOOST_PREPROCESSOR_DEF(-)
+BOOST_PREPROCESSOR_DEF(*)
+BOOST_PREPROCESSOR_DEF(/)
+#undef BOOST_PREPROCESSOR_DEF
+</pre>
+</blockquote>
+
+<P><B>TIP:</B> It is usually okay to use a standard macro name like BOOST_PREPROCESSOR_DEF 
+  for this kind of code, because the macro is both defined and undefined in the 
+  immediate site of its use.</P>
+<P><B>TIP:</B> It is easier to verify proper use of 
+the line continuation operator when they are aligned.</P>
+<P><B>NOTES:</B> You can extend this example by defining more and different kinds 
+  of operators. Before doing so, consider using the Algebraic Categories technique 
+  introduced in <A href="references.htm#[3]">[3]</A> or a Layered Architecture (see for instance 
+  <A href="references.htm#[2]">[2]</A>). However, at some point you must type the operator tokens 
+  *, /, +, -, ..., because it is impossible to generate them using templates. 
+  The resulting Categorical Repetition of tokens can be eliminated by using preprocessor 
+  metaprogramming.</P>
+<HR>
+<P><B><a name="UNUSED"></a><a href="examples_preprocessed.htm#UNUSED">EXAMPLE</a>:</B> 
+  Use BOOST_PREPROCESSOR_EMPTY() as an unused parameter in Local Macro instantiations</P>
+
+<blockquote> 
+  <pre>#define BOOST_PREPROCESSOR_DEF(CV)\
+  template&lt;class base&gt;            \
+  CV typename implement_subscript_using_begin_subscript&lt;base&gt;::value_type&amp;\
+    implement_subscript_using_begin_subscript&lt;base&gt;::operator[]\
+    ( index_type                  \
+        i                         \
+    ) CV                          \
+{ return base::begin()[i];        \
+}
+
+BOOST_PREPROCESSOR_DEF(BOOST_PREPROCESSOR_EMPTY())
+BOOST_PREPROCESSOR_DEF(const)
+#undef BOOST_PREPROCESSOR_DEF
+</pre>
+</blockquote>
+
+<P><B>HOW:</B> BOOST_PREPROCESSOR_EMPTY() expands to nothing and can be used as 
+  an unused parameter.</P>
+<P><b>NOTE:</b> BOOST_PREPROCESSOR_EMPTY without the () never get expanded. The 
+  () is necessary to invoke a function style macro.</P>
+<B>CAVEAT:</B> You can not safely use concatenation while using BOOST_PREPROCESSOR_EMPTY(). 
+<P><B>TIP:</B> Occasionally one or two lines are 
+considerably longer than the rest. It can often save some work to not align all 
+of the line continuation operators without making the code too unreadable.</P>
+<P><B>TIP:</B> Use syntax hilite on preprocessor metaprogramming macro and parameter 
+  identifiers such as</P>
+<ul>
+  <li> BOOST_PREPROCESSOR_DEF,</li>
+  <li>BOOST_PREPROCESSOR_EMPTY,</li>
+  <li> BOOST_PREPROCESSOR_REPEAT,</li>
+  <li> OP,</li>
+  <li> CV,</li>
+  <li> ...</li>
+</ul>
+<p>It can greatly improve readability.</p>
+<HR>
+<P><a name="CAT"></a><a href="examples_preprocessed.htm#CAT"><B>EXAMPLE:</B></a> Use BOOST_PREPROCESSOR_CAT instead of ## when necessary</P>
+
+<blockquote> 
+  <pre>#define STATIC_ASSERT(EXPR)\
+  enum\
+  { BOOST_PREPROCESSOR_CAT(static_check_,__LINE__) = (EXPR) ? 1 : -1\
+  };\
+  typedef char\
+    BOOST_PREPROCESSOR_CAT(static_assert_,__LINE__)\
+    [ BOOST_PREPROCESSOR_CAT(static_check_,__LINE__)\
+    ]
+
+// ...
+
+STATIC_ASSERT(sizeof(int) &lt;= sizeof(long));
+</pre>
+</blockquote>
+
+<P><B>WHY:</B> Macro expansion proceeds recursively in "layers". Token pasting 
+  prevents the&nbsp;preprocessor from performing macro expansion, therefore it 
+  is often necessary to delay token concatenation.</P>
+<hr>
+<p><a name="STRINGIZE"></a><a href="examples_preprocessed.htm#STRINGIZE"><B>EXAMPLE:</B></a> Use BOOST_PREPROCESSOR_STRINGIZE instead of # whenever necessary</p>
+<blockquote> 
+  <pre>#define NOTE(STR)\
+  message(__FILE__ &quot;(&quot; BOOST_PREPROCESSOR_STRINGIZE(__LINE__) &quot;) : &quot; STR)
+
+// ...
+
+#pragma NOTE("TBD!")
+</pre>
+</blockquote>
+<p><b>WHY:</b> Macro expansion proceeds recursively in &quot;layers&quot;. Stringization 
+  prevents the preprocessor from performing macro expansion, therefore it is often 
+  necessary to delay stringization.</p>
+<HR>
+<P><B><a name="ENUM_PARAMS"></a><a href="examples_preprocessed.htm#ENUM_PARAMS">EXAMPLE</a>:</B> 
+  Use:</P>
+<ul>
+  <li> BOOST_PREPROCESSOR_ENUM_PARAMS,</li>
+  <li> BOOST_PREPROCESSOR_ENUM_PARAMS_WITH_A_DEFAULT,</li>
+  <li> BOOST_PREPROCESSOR_ENUM_PARAMS_WITH_DEFAULTS,</li>
+  <li> BOOST_PREPROCESSOR_ENUM_SHIFTED_PARAMS, or</li>
+  <li>BOOST_PREPROCESSOR_REPEAT, and</li>
+  <li> BOOST_PREPROCESSOR_COMMA_IF</li>
+</ul>
+<p>to avoid O(N) repetition on lists in general</p>
+<blockquote> 
+  <pre>struct make_type_list_end;
+
+template
+&lt; BOOST_PREPROCESSOR_ENUM_PARAMS_WITH_A_DEFAULT
+  ( MAKE_TYPE_LIST_MAX_LENGTH
+  , class T
+  , make_type_list_end
+  )
+&gt;
+struct make_type_list
+{
+private:
+  enum
+  { end = is_same&lt;T0,make_type_list_end&gt;::value
+  };
+
+public:
+  typedef typename
+    type_if
+    &lt; end
+    , type_cons_empty
+    , type_cons
+      &lt; T0
+      , typename
+        type_inner_if
+        &lt; end
+        , type_identity&lt;end&gt;
+        , make_type_list
+          &lt; BOOST_PREPROCESSOR_ENUM_SHIFTED_PARAMS
+            ( MAKE_TYPE_LIST_MAX_LENGTH
+            , T
+            )
+          &gt;
+        &gt;::type
+      &gt;
+    &gt;::type type;
+};
+</pre>
+</blockquote>
+
+<P><B>HOW:</B> BOOST_PREPROCESSOR_REPEAT uses simulated recursion (pseudo code):</P>
+
+<blockquote> 
+  <pre>#define BOOST_PREPROCESSOR_REPEAT(N,M,P) BOOST_PREPROCESSOR_REPEAT##N(M,P)
+#define BOOST_PREPROCESSOR_REPEAT0(M,P)
+#define BOOST_PREPROCESSOR_REPEAT1(M,P) M(0,P)
+#define BOOST_PREPROCESSOR_REPEAT2(M,P) M(0,P) M(1,P)
+#define BOOST_PREPROCESSOR_REPEAT3(M,P) BOOST_PREPROCESSOR_REPEAT2(M,P) M(2,P)
+#define BOOST_PREPROCESSOR_REPEAT4(M,P) BOOST_PREPROCESSOR_REPEAT3(M,P) M(3,P)
+// ...
+</pre>
+</blockquote>
+
+<P>BOOST_PREPROCESSOR_ENUM_PARAMS variations use BOOST_PREPROCESSOR_REPEAT</P>
+
+<P>BOOST_PREPROCESSOR_COMMA_IF(I) expands to a comma if I != 0.</P>
+
+<P>BOOST_PREPROCESSOR_INC(I) expands essentially to "I+1" and BOOST_PREPROCESSOR_DEC(I) 
+  expands essentially to "I-1".</P>
+
+<HR>
+
+<P><a name="Conditional Define"><B>EXAMPLE:</B></a> Use a Conditional Define to 
+enable user configuration of code repetition based on need rather than some 
+"reasonable" upper limit</P>
+
+<blockquote>
+  <pre>#ifndef MAKE_TYPE_LIST_MAX_LENGTH
+#define MAKE_TYPE_LIST_MAX_LENGTH 8
+#endif
+</pre>
+</blockquote>
+
+<P>Now the user can configure the make_type_list primitive without modifying library 
+  code.</P>
+<HR>
+<P><B><a name="Token Look-Up"></a><a href="examples_preprocessed.htm#Token Look-Up">EXAMPLE</a>:</B> 
+  Use BOOST_PREPROCESSOR_REPEAT and a Token Look-Up Function to eliminate categorical 
+  repetition</P>
+
+<blockquote> 
+  <pre>// CAVEAT: My compiler is not standard on arithmetic types.
+#define ARITHMETIC_TYPE(I)  ARITHMETIC_TYPE##I
+#define ARITHMETIC_TYPE0    bool
+#define ARITHMETIC_TYPE1    char
+#define ARITHMETIC_TYPE2    signed char
+#define ARITHMETIC_TYPE3    unsigned char
+#define ARITHMETIC_TYPE4    short
+#define ARITHMETIC_TYPE5    unsigned short
+#define ARITHMETIC_TYPE6    int
+#define ARITHMETIC_TYPE7    unsigned int
+#define ARITHMETIC_TYPE8    long
+#define ARITHMETIC_TYPE9    unsigned long
+#define ARITHMETIC_TYPE10   float
+#define ARITHMETIC_TYPE11   double
+#define ARITHMETIC_TYPE12   long double
+#define ARITHMETIC_TYPE_CNT 13
+
+//  ...
+
+#define BOOST_PREPROCESSOR_DEF(I,_)\
+catch (ARITHMETIC_TYPE(I) t)\
+{ report_typeid(t);\
+  report_value(t);\
+}
+BOOST_PREPROCESSOR_REPEAT
+( ARITHMETIC_TYPE_CNT
+, BOOST_PREPROCESSOR_DEF
+, _
+)
+#undef BOOST_PREPROCESSOR_DEF
+
+// ...
+</pre>
+</blockquote>
+
+<P><B>NOTE:</B> The repetition of the above 
+example can be eliminated using template metaprogramming <A href="references.htm#[2]">[2]</A>&nbsp;as well. However 
+categorical repetition of operator tokens can not be completely eliminated by 
+using template metaprogramming.</P>
+<HR>
+<P><B><a name="2ND_REPEAT"></a><a href="examples_preprocessed.htm#2ND_REPEAT">EXAMPLE</a>:</B> 
+  Use BOOST_PREPROCESSOR_REPEAT_2ND to avoid O(N*N) repetition</P>
+
+<blockquote>
+  <pre>#ifndef MAX_VEC_ARG_CNT
+#define MAX_VEC_ARG_CNT 8
+#endif
+
+//  ...
+
+#define ARG_FUN(I,_) BOOST_PREPROCESSOR_COMMA_IF(I) T a##I
+#define ASSIGN_FUN(I,_) (*this)[I] = a##I;
+
+#define DEF_VEC_CTOR_FUN(I,_)\
+vec( BOOST_PREPROCESSOR_REPEAT(I,ARG_FUN,_) )\
+{ BOOST_PREPROCESSOR_REPEAT(I,ASSIGN_FUN,_)\
+}
+
+BOOST_PREPROCESSOR_REPEAT_2ND
+( BOOST_PREPROCESSOR_INC(MAX_VEC_ARG_CNT)
+, DEF_VEC_CTOR_FUN
+, _
+)
+
+#undef ARG_FUN
+#undef ASSIGN_FUN
+#undef DEF_VEC_CTOR_FUN
+
+// ...
+</pre>
+</blockquote>
+
+
+<P><B>HOW:</B> BOOST_PREPROCESSOR_REPEAT_2ND is implemented separately, so it 
+  is possible to combine BOOST_PREPROCESSOR_REPEAT and BOOST_PREPROCESSOR_REPEAT_2ND.</P>
+<HR>
+
+<P><a name="IF"></a><a href="examples_preprocessed.htm#IF"><B>EXAMPLE:</B></a> Use BOOST_PREPROCESSOR_IF to implement special case for the first element</P>
+
+<blockquote>
+  <pre>#define BOOST_PREPROCESSOR_COMMA_IF(C)\
+  BOOST_PREPROCESSOR_IF(C,BOOST_PREPROCESSOR_COMMA,BOOST_PREPROCESSOR_EMPTY)()
+
+BOOST_PREPROCESSOR_IF(0,true,false) == false;
+BOOST_PREPROCESSOR_IF(1,true,false) == true;
+</pre>
+</blockquote>
+
+<P>BOOST_PREPROCESSOR_IF enables convenient generation of lists using BOOST_PREPROCESSOR_REPEAT.</P>
+
+<P><B>NOTE:</B> THEN and ELSE don't have to be macros. However, if at least one 
+  of them is a function-like macro and you want it to be expanded conditionally, 
+  you have to make the other parameter a function-like macro, too. This can often 
+  be done using BOOST_PREPROCESSOR_IDENTITY. Consider the following example (by 
+  Aleksey Gurtovoy):</P>
+<blockquote>
+  <pre>#define NUMBERED_EXPRESSION(I,X)     \
+  BOOST_PREPROCESSOR_IF              \
+  ( I                                \
+  , BOOST_PREPROCESSOR_IDENTITY(X##I)\
+  , BOOST_PREPROCESSOR_EMPTY         \
+  )()</pre></blockquote>
+<P><b>NOTE:</b> Like in the above implementation of COMMA_IF, the result of IF 
+  is often invoked and not the THEN and ELSE parameters. If the parameters were 
+  invoked, the code would not expand correctly, because the EMPTY parameter would 
+  get expanded to nothing before the IF would be properly expanded.</P>
+<P><b>HOW:</b> BOOST_PREPROCESSOR_IF is defined for the entire repeat range (pseudo 
+  code):</P>
+<blockquote> 
+  <pre>#define BOOST_PREPROCESSOR_IF(C,THEN,ELSE) BOOST_PREPROCESSOR_IF##C(THEN,ELSE)
+#define BOOST_PREPROCESSOR_IF0(THEN,ELSE) ELSE
+#define BOOST_PREPROCESSOR_IF1(THEN,ELSE) THEN
+#define BOOST_PREPROCESSOR_IF2(THEN,ELSE) THEN
+// ...
+</pre>
+</blockquote>
+
+<hr>
+
+<p><a name="Arithmetic"></a><a href="examples_preprocessed.htm#Arithmetic"><B>EXAMPLE:</B></a> Use arithmetic, logical and comparison operations when necessary</p>
+
+<P>The PREPROCESSOR library supports saturated arithmetic, logical and
+comparison operations on decimal integer literals in the range [0,BOOST_PREPROCESSOR_LIMIT_MAG].</p>
+
+<p>Suppose that you want to generate a numbered lists with a special element inserted 
+  at a desired position. For example: E0, E1, S, E2. Consider the following example:</p>
+
+<blockquote> 
+  <pre>#define SPECIAL_NUMBERED_LIST(N,I,ELEM,SPECIAL)\
+  BOOST_PREPROCESSOR_ASSERT_MSG(BOOST_PREPROCESSOR_LESS(I,N),BAD PARAMS FOR SPECIAL_NUMBERED_LIST!)\
+  BOOST_PREPROCESSOR_ENUM_PARAMS(I,ELEM)\
+  BOOST_PREPROCESSOR_COMMA_IF(I) SPECIAL\
+  BOOST_PREPROCESSOR_REPEAT(BOOST_PREPROCESSOR_SUB(\
+    BOOST_PREPROCESSOR_DEC(N),I),SPECIAL_NUMBERED_LIST_HELPER,(ELEM,I))
+#define SPECIAL_NUMBERED_LIST_HELPER(I,ELEM_BASE)\
+  ,\
+  BOOST_PREPROCESSOR_CAT\
+  ( BOOST_PREPROCESSOR_TUPLE_ELEM(2,0,ELEM_BASE)\
+  , BOOST_PREPROCESSOR_ADD\
+    ( I\
+    , BOOST_PREPROCESSOR_TUPLE_ELEM(2,1,ELEM_BASE)\
+    )\
+  )
+
+SPECIAL_NUMBERED_LIST(3,0,E,S)
+SPECIAL_NUMBERED_LIST(3,1,E,S)
+SPECIAL_NUMBERED_LIST(3,2,E,S)
+SPECIAL_NUMBERED_LIST(3,3,E,S)
+</pre>
+</blockquote>
+
+<hr>
+
+<P></P>
+
+<p>© Copyright Housemarque, Inc. 2001</p>
+<p>Permission to copy, use, modify, sell and distribute this document is granted 
+  provided this copyright notice appears in all copies. This document is provided 
+  "as is" without express or implied warranty, and with no claim as to its suitability 
+  for any purpose. </p>
+<p>Updated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
+   
+</BODY></HTML>

@@ -1,0 +1,334 @@
+<html>
+<head>
+<title>Boost PREPROCESSOR library</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF">
+<a href="index.htm"><IMG height=86
+ alt="c++boost.gif (8819 bytes)"
+ src="../../../c++boost.gif"
+ width=277 align=center></a>
+<hr>
+<h1>Boost PREPROCESSOR library: Tutorial examples preprocessed</h1>
+
+<p>The following code snippets were produced by actually preprocessing the code 
+  snippets of the tutorial. After preprocessing the code was reformatted manually.</p>
+
+<hr>
+<p><strong><a name="Local Macro"></a><a href="tutorial.htm#Local Macro">EXAMPLE</a>:</strong> 
+  Use a Local Macro to avoid small scale repetition</p>
+
+<blockquote>
+  <pre>template&lt;class T, int n&gt;
+vec&lt;T,n&gt;&
+  operator +=
+  ( vec&lt;T,n&gt;&
+      lhs
+  , const vec&lt;T,n&gt;&
+      rhs
+  )
+{ for (int i=0; i&lt;n; ++i)
+    lhs(i) += rhs(i);
+  return lhs;
+}
+
+template&lt;class T, int n&gt;
+vec&lt;T,n&gt;&
+  operator -=
+  ( vec&lt;T,n&gt;&
+      lhs
+  , const vec&lt;T,n&gt;&
+      rhs
+  )
+{ for (int i=0; i&lt;n; ++i)
+    lhs(i) -= rhs(i);
+  return lhs;
+}
+
+template&lt;class T, int n&gt;
+vec&lt;T,n&gt;&
+  operator *=
+  ( vec&lt;T,n&gt;&
+      lhs
+  , const vec&lt;T,n&gt;&
+      rhs
+  )
+{ for (int i=0; i&lt;n; ++i)
+    lhs(i) *= rhs(i);
+  return lhs;
+}
+
+template&lt;class T, int n&gt;
+vec&lt;T,n&gt;&
+  operator /=
+  ( vec&lt;T,n&gt;&
+      lhs
+  , const vec&lt;T,n&gt;&
+      rhs
+  )
+{ for (int i=0; i&lt;n; ++i)
+    lhs(i) /= rhs(i);
+  return lhs;
+}
+</pre>
+</blockquote>
+
+<hr>
+<p><strong><a name="UNUSED"></a><a href="tutorial.htm#UNUSED">EXAMPLE</a>:</strong> 
+  Use BOOST_PREPROCESSOR_EMPTY() as an unused parameter in Local Macro instantiations</p>
+
+<blockquote>
+  <pre>template&lt;class base&gt;
+typename implement_subscript_using_begin_subscript&lt;base&gt;::value_type&
+  implement_subscript_using_begin_subscript&lt;base&gt;::operator[]
+  ( index_type
+      i
+  )
+{ return base::begin()[i];
+}
+
+template&lt;class base&gt;
+const typename implement_subscript_using_begin_subscript&lt;base&gt;::value_type&
+  implement_subscript_using_begin_subscript&lt;base&gt;::operator[]
+  ( index_type
+      i
+  ) const
+{ return base::begin()[i];
+}
+</pre>
+</blockquote>
+
+<hr>
+<p><b><a name="CAT"></a><a href="tutorial.htm#CAT">EXAMPLE:</a></b> Use BOOST_PREPROCESSOR_CAT instead of ## when necessary</p>
+
+<blockquote>
+  <pre>enum
+{ static_check_152 = (sizeof(int) &lt;= sizeof(long)) ? 1 : -1
+};
+typedef char
+  static_assert_152
+  [ static_check_152
+  ];
+</pre>
+</blockquote>
+<hr>
+<p><b><a name="STRINGIZE"></a><a href="tutorial.htm#STRINGIZE">EXAMPLE:</a></b> Use BOOST_PREPROCESSOR_STRINGIZE instead of # whenever necessary</p>
+<blockquote>
+  <pre>#pragma message("examples.cpp" "(" "20" ") : " "TBD!")</pre>
+</blockquote>
+<hr>
+<p><strong><a name="ENUM_PARAMS"></a><a href="tutorial.htm#ENUM_PARAMS">EXAMPLE</a>:</strong> 
+  Use:</p>
+<ul>
+  <li> BOOST_PREPROCESSOR_ENUM_PARAMS,</li>
+  <li> BOOST_PREPROCESSOR_ENUM_PARAMS_WITH_A_DEFAULT,</li>
+  <li> BOOST_PREPROCESSOR_ENUM_PARAMS_WITH_DEFAULTS,</li>
+  <li> BOOST_PREPROCESSOR_ENUM_SHIFTED_PARAMS, or</li>
+  <li>BOOST_PREPROCESSOR_REPEAT, and</li>
+  <li> BOOST_PREPROCESSOR_COMMA_IF</li>
+</ul>
+<p>to avoid O(N) repetition on lists in general</p>
+<blockquote>
+  <pre>struct make_type_list_end;
+
+template
+&lt; class T0=make_type_list_end
+, class T1=make_type_list_end
+, class T2=make_type_list_end
+, class T3=make_type_list_end
+, class T4=make_type_list_end
+, class T5=make_type_list_end
+, class T6=make_type_list_end
+, class T7=make_type_list_end
+&gt;
+struct make_type_list
+{
+private:
+  enum
+  { end = is_same&lt;T0,make_type_list_end&gt;::value
+  };
+public:
+  typedef typename
+    type_if
+    &lt; end
+    , type_cons_empty
+    , type_cons
+      &lt; T0
+      , typename
+        type_inner_if
+        &lt; end
+        , type_identity&lt;end&gt;
+        , make_type_list
+          &lt; T1
+          , T2
+          , T3
+          , T4
+          , T5
+          , T6
+          , T7
+          &gt;
+        &gt;::type
+      &gt;
+    &gt;::type type;
+};
+</pre>
+</blockquote>
+
+<hr>
+<p><strong><a name="Token Look-Up"></a><a href="tutorial.htm#Token Look-Up">EXAMPLE</a>:</strong> 
+  Use BOOST_PREPROCESSOR_REPEAT and a Token Look-Up Function to eliminate categorical 
+  repetition</p>
+
+<blockquote>
+  <pre>catch (bool t)
+{ report_typeid(t);
+  report_value(t);
+}
+catch (char t)
+{ report_typeid(t);
+  report_value(t);
+}
+catch (signed char t)
+{ report_typeid(t);
+  report_value(t);
+}
+catch (unsigned char t)
+{ report_typeid(t);
+  report_value(t);
+}
+catch (short t)
+{ report_typeid(t);
+  report_value(t);
+}
+catch (unsigned short t)
+{ report_typeid(t);
+  report_value(t);
+}
+catch (int t)
+{ report_typeid(t);
+  report_value(t);
+}
+catch (unsigned int t)
+{ report_typeid(t);
+  report_value(t);
+}
+catch (long t)
+{ report_typeid(t);
+  report_value(t);
+}
+catch (unsigned long t)
+{ report_typeid(t);
+  report_value(t);
+}
+catch (float t)
+{ report_typeid(t);
+  report_value(t);
+}
+catch (double t)
+{ report_typeid(t);
+  report_value(t);
+}
+catch (long double t)
+{ report_typeid(t);
+  report_value(t);
+}
+</pre>
+</blockquote>
+
+<hr>
+<p><strong><a name="2ND_REPEAT"></a><a href="tutorial.htm#2ND_REPEAT">EXAMPLE</a>:</strong> 
+  Use BOOST_PREPROCESSOR_REPEAT_2ND to avoid O(N*N) repetition</p>
+
+<blockquote>
+  <pre>vec()
+{
+}
+vec(T a0)
+{ (*this)[0] = a0;
+}
+vec(T a0, T a1)
+{ (*this)[0] = a0;
+  (*this)[1] = a1;
+}
+vec(T a0, T a1, T a2)
+{ (*this)[0] = a0;
+  (*this)[1] = a1;
+  (*this)[2] = a2;
+}
+vec(T a0, T a1, T a2, T a3)
+{ (*this)[0] = a0;
+  (*this)[1] = a1;
+  (*this)[2] = a2;
+  (*this)[3] = a3;
+}
+vec(T a0, T a1, T a2, T a3, T a4)
+{ (*this)[0] = a0;
+  (*this)[1] = a1;
+  (*this)[2] = a2;
+  (*this)[3] = a3;
+  (*this)[4] = a4;
+}
+vec(T a0, T a1, T a2, T a3, T a4, T a5)
+{ (*this)[0] = a0;
+  (*this)[1] = a1;
+  (*this)[2] = a2;
+  (*this)[3] = a3;
+  (*this)[4] = a4;
+  (*this)[5] = a5;
+}
+vec(T a0, T a1, T a2, T a3, T a4, T a5, T a6)
+{ (*this)[0] = a0;
+  (*this)[1] = a1;
+  (*this)[2] = a2;
+  (*this)[3] = a3;
+  (*this)[4] = a4;
+  (*this)[5] = a5;
+  (*this)[6] = a6;
+}
+vec(T a0, T a1, T a2, T a3, T a4, T a5, T a6, T a7)
+{ (*this)[0] = a0;
+  (*this)[1] = a1;
+  (*this)[2] = a2;
+  (*this)[3] = a3;
+  (*this)[4] = a4;
+  (*this)[5] = a5;
+  (*this)[6] = a6;
+  (*this)[7] = a7;
+}
+</pre>
+</blockquote>
+
+<p> 
+<hr>
+<p><a name="IF"></a><a href="tutorial.htm#IF"><b>EXAMPLE:</b></a> 
+  Use BOOST_PREPROCESSOR_IF to implement special case for the first element</p>
+
+<blockquote> 
+  <pre>false == false;
+true == true;
+</pre>
+</blockquote>
+
+<p> 
+<hr>
+
+<p><a name="Arithmetic"></a><a href="tutorial.htm#Arithmetic"><B>EXAMPLE:</B></a> Use arithmetic, logical and comparison operations when necessary</p>
+
+<blockquote> 
+  <pre>S, E0, E1
+E0, S, E1
+E0, E1, S
+BAD PARAMS FOR SPECIAL_NUMBERED_LIST! E0, E1, E2, S</pre>
+</blockquote>
+
+<hr>
+<p>© Copyright Housemarque, Inc. 2001</p>
+<p>Permission to copy, use, modify, sell and distribute this document is granted 
+  provided this copyright notice appears in all copies. This document is provided 
+  "as is" without express or implied warranty, and with no claim as to its suitability 
+  for any purpose. </p>
+<p>Updated: <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" -->
+<p></p>
+</body>
+</html>

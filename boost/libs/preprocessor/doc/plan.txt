@@ -1,0 +1,21 @@
+If you have suggestions for additions or improvements to this library,
+please e-mail such suggestions to boost@yahoogroups.com, but also cc
+them to vesa.karvonen@housemarque.fi.
+
+Issues:
+- case studies
+- more isolated examples & less complex examples in tutorial
+-> Please e-mail suggestions to vesa.karvonen@housemarque.fi
+
+Resolved for now:
+- explanations of tricky issues with macro replacement
+  - how macros are expanded, step-by-step examples
+  - delay of # and ##
+  - recursion prohibition
+  -> Just refer to the standard. It is not the purpose of the documentation to teach C++.
+
+- arithmetic
+  - The preprocessor limitations seem to make it impossible to achieve both:
+    - O(1) _size_ implementation of ADD, SUB, MUL, DIV, ...
+    - ease of use
+  -> I have choosen ease of use and used O(N) size implementations
