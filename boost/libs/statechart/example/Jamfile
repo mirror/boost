@@ -1,0 +1,44 @@
+#  (C) Copyright Andreas Huber Doenni 2004
+# Distributed under the Boost Software License, Version 1.0. (See accompany-
+# ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+subproject libs/fsm/example ;
+
+template fsm-common-options
+  :
+  : <include>$(BOOST_ROOT)
+    # The library ensures that all state destructors are only invoked on
+    # the most-derived type, therefore state destructors do not need to
+    # be virtual
+    <gcc><*><cxxflags>-Wno-non-virtual-dtor
+    <gcc-stlport><*><cxxflags>-Wno-non-virtual-dtor
+    <gcc-nocygwin><*><cxxflags>-Wno-non-virtual-dtor
+    <mingw><*><cxxflags>-Wno-non-virtual-dtor
+    <mingw-stlport><*><cxxflags>-Wno-non-virtual-dtor
+;
+
+rule fsm-st-example-build ( example-name : sources + )
+{
+  exe $(example-name)
+    : $(example-name)/$(sources).cpp <template>fsm-common-options
+    : <threading>single
+  ;
+}
+
+rule fsm-mt-example-build ( example-name : sources + )
+{
+  exe $(example-name)
+    : $(example-name)/$(sources).cpp
+      <dll>../../thread/build/boost_thread
+      <template>fsm-common-options
+    : <threading>multi
+  ;
+}
+
+fsm-st-example-build BitMachine : BitMachine ;
+fsm-st-example-build Camera : Camera Configuring Main Shooting ;
+fsm-st-example-build Handcrafted : Handcrafted ;
+fsm-st-example-build Keyboard : Keyboard ;
+fsm-st-example-build PingPong : PingPong ;
+fsm-mt-example-build PingPong : PingPong ;
+fsm-st-example-build StopWatch : StopWatch ;
