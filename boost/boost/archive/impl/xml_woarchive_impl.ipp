@@ -47,32 +47,6 @@ namespace archive {
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // implemenations of functions specific to wide char archives
 
-std::wostream & operator<<(std::wostream &os, const char *t){
-    for(;;){
-        wchar_t wc;
-        int result = std::mbtowc(&wc, t, 10 /* max number */);
-        if(0 < result)
-            os.put(wc);
-        else
-        if(0 == result)
-            break;
-        else
-            boost::throw_exception(
-                iterators::dataflow_exception(
-                    iterators::dataflow_exception::invalid_conversion
-                )
-            );
-    }
-    return os;
-}
-
-std::wostream & operator<<(std::wostream &os, const char t){
-    wchar_t wc;
-    std::mbtowc(&wc, &t, 1);
-    os.put(wc);
-    return os;
-}
-
 // copy chars to output escaping to xml and widening characters as we go
 template<class InputIterator>
 void save_iterator(std::wostream &os, InputIterator begin, InputIterator end){

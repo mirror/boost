@@ -39,6 +39,14 @@ namespace std{
 namespace boost {
 namespace archive {
 
+BOOST_DECL_WARCHIVE
+std::wostream &
+operator<<(std::wostream &os, const char *t);
+
+BOOST_DECL_WARCHIVE
+std::wostream &
+operator<<(std::wostream &os, const char t);
+
 template<class Archive>
 class xml_woarchive_impl : 
     public basic_text_oprimitive<std::wostream>,
