@@ -352,19 +352,16 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         bounded_array ():
-            // Kresimir Fresl suggested to change the default back to the template argument.
-            size_ (N), data_ () {
-            const value_type v = value_type (0);
-            std::fill (begin(), end(), v);
+            size_ (0), data_ () {   // size 0 - use bounded_vector to default construct with size N
         }
         explicit BOOST_UBLAS_INLINE
         bounded_array (size_type size):
             size_ (size) /*, data_ ()*/ {
             if (size_ > N)
                 bad_size ().raise ();
-            const value_type v = value_type (0);
-            std::fill (begin(), end(), v);
+            std::fill (begin(), end(), value_type (0));
         }
+        // No value initialised, but still be default constructed
         BOOST_UBLAS_INLINE
         bounded_array (size_type size, no_init):
             size_ (size) /*, data_ ()*/ {
