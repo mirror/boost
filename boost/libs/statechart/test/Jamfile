@@ -74,6 +74,9 @@ rule fsm-compile-fail-variants ( source )
 }
 
 test-suite fsm :
+  [ fsm-compile-fail-variants InvalidChartTest1 ]
+  [ fsm-compile-fail-variants InvalidChartTest2 ]
+  [ fsm-compile-fail-variants InvalidChartTest3 ]
   [ fsm-st-run-variants TransitionTest ]
   [ fsm-compile-fail-variants InvalidTransitionTest1 ]
   [ fsm-compile-fail-variants InvalidTransitionTest2 ]
@@ -81,5 +84,14 @@ test-suite fsm :
   [ fsm-compile-fail-variants InvalidTransitionTest4 ]
   [ fsm-st-run-variants DeferralTest ]
   [ fsm-st-run-variants HistoryTest ]
+  [ fsm-compile-fail-variants InconsistentHistoryTest1 ]
+  [ fsm-compile-fail-variants InconsistentHistoryTest2 ]
+  [ fsm-compile-fail-variants InconsistentHistoryTest3 ]
+  [ fsm-compile-fail-variants InconsistentHistoryTest4 ]
+  [ fsm-compile-fail-variants InconsistentHistoryTest5 ]
+  [ fsm-compile-fail-variants InconsistentHistoryTest6 ]
+  [ fsm-compile-fail-variants InconsistentHistoryTest7 ]
+  [ fsm-compile-fail-variants InconsistentHistoryTest8 ]
+  [ fsm-compile-fail-variants UnsupportedDeepHistoryTest ]
 ;
       

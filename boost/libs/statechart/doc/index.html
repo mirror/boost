@@ -21,7 +21,7 @@
     <h1 align="center">The boost::fsm library</h1>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/01/19<!--webbot bot="Timestamp" endspan i-checksum="12365" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/01/22<!--webbot bot="Timestamp" endspan i-checksum="12352" --></font></td>
   </tr>
 </table>
 <hr>
@@ -50,7 +50,8 @@ include:</p>
   <li>Generic design allowing for the customization of memory management, 
   error handling and threading</li>
 </ul>
-<p>boost::fsm has been submitted for formal review. <b>All feedback is highly 
+<p>The library has been submitted for formal review. <b>The review period has 
+been scheduled from 21 February till 6 March. All feedback is highly 
 welcome!</b></p>
 <h3>Supported platforms</h3>
 <p>All code has been tested on the following platforms using boost 
@@ -81,11 +82,31 @@ been tested yet):</p>
 	<li>MSVC 6.0 &amp; 7.0</li>
 	<li>BCB (all versions)</li>
 </ul>
-<h3>To-do list</h3>
+<hr>
+<h2>Contents</h2>
+<dl class="index">
+  <dt><a href="tutorial.html">Tutorial</a> [pdf: <a href="tutorial.pdf">
+  English</a>,
+  <a href="http://prdownloads.sourceforge.jp/jyugem/7127/fsm-tutorial-jp.pdf">
+  Japanese</a>]</dt>
+  <dt><a href="uml_mapping.html">UML to boost::fsm mapping summary</a></dt>
+  <dt><a href="faq.html">Frequently Asked Questions (FAQs)</a></dt>
+  <dt><a href="configuration.html">Configuration</a></dt>
+  <dt><a href="definitions.html">Definitions</a></dt>
+  <dt><a href="reference.html">Reference</a> [pdf: <a href="reference.pdf">
+  English</a>]</dt>
+  <dt><a href="rationale.html">Rationale</a> [pdf: <a href="rationale.pdf">
+  English</a>]</dt>
+  <dt><a href="acknowledgments.html">Acknowledgments</a></dt>
+</dl>
+<hr>
+<h2>To-do list</h2>
 <p>The library is functionally complete. However, there is still some work 
 left:</p>
 <ol>
-  <li>Implement regression tests</li>
+  <li>Implement regression tests: StateCastTest, CustomTypeInfoTest, 
+	StateIterationTest, CustomReactionTest, TerminationTest, FifoSchedulerTest, 
+	ExceptionTest</li>
 	<li>Incorporate id_type changes proposed by Robert Geimann (a better 
 	std::type_info class)</li>
 	<li>Review and integrate the v2 Jamfiles supplied by Jürgen Hunold</li>
@@ -118,25 +139,21 @@ left:</p>
 	<li>Issue an error if <code>BOOST_FSM_USE_NATIVE_RTTI</code> is defined 
 	when C++ RTTI is turned off</li>
 </ol>
-<hr>
-<h2>Contents</h2>
-<dl class="index">
-  <dt><a href="tutorial.html">Tutorial</a> [pdf: <a href="tutorial.pdf">
-  English</a>,
-  <a href="http://prdownloads.sourceforge.jp/jyugem/7127/fsm-tutorial-jp.pdf">
-  Japanese</a>]</dt>
-  <dt><a href="uml_mapping.html">UML to boost::fsm mapping summary</a></dt>
-  <dt><a href="faq.html">Frequently Asked Questions (FAQs)</a></dt>
-  <dt><a href="configuration.html">Configuration</a></dt>
-  <dt><a href="definitions.html">Definitions</a></dt>
-  <dt><a href="reference.html">Reference</a> [pdf: <a href="reference.pdf">
-  English</a>]</dt>
-  <dt><a href="rationale.html">Rationale</a> [pdf: <a href="rationale.pdf">
-  English</a>]</dt>
-  <dt><a href="acknowledgments.html">Acknowledgments</a></dt>
-</dl>
-<hr>
 <h2>Change history</h2>
+<p>25 January, 2005</p>
+<ul>
+	<li>Added HistoryTest</li>
+	<li>Fixed a bug that led to a compile-time error when <code>state_downcast</code> 
+	was instantiated with a reference target</li>
+	<li>Fixed a bug that led to a null function pointer dereference when 
+	history was cleared before making a transition to history</li>
+	<li>Updated the &quot;Speed versus scalability tradeoffs&quot; section</li>
+	<li>Fixed previously failing builds of single-threaded variants of the 
+	PingPong example</li>
+	<li>Moved the &quot;Incompatible compilers&quot; section to index.html</li>
+	<li>Added explanation for the BitMachine &amp; Handcrafted examples</li>
+	<li>Various other minor changes</li>
+</ul>
 <p>25 November, 2004</p>
 <ul>
 	<li>Adapted to the changes in the 1.32.0 distribution (mainly MPL 
@@ -307,7 +324,7 @@ left:</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38839" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->22 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38826" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
