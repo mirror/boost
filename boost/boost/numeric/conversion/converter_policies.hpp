@@ -31,8 +31,11 @@ struct Trunc
 
   static source_type nearbyint ( argument_type s )
   {
+#if !defined(BOOST_NO_STDC_NAMESPACE)
     using std::floor ;
     using std::ceil  ;
+#endif
+
     return s < static_cast<S>(0) ? ceil(s) : floor(s) ;
   }
 
@@ -50,9 +53,11 @@ struct RoundEven
   {
     // Algorithm contributed by Guillaume Melquiond
     
+#if !defined(BOOST_NO_STDC_NAMESPACE)
     using std::floor ;
     using std::ceil  ;
-    
+#endif    
+
     // only works inside the range not at the boundaries
     S a = floor(s); 
     S b = ceil(s);  
@@ -79,7 +84,10 @@ struct Ceil
 
   static source_type nearbyint ( argument_type s )
   {
+#if !defined(BOOST_NO_STDC_NAMESPACE)
     using std::ceil ;
+#endif
+
     return ceil(s) ;
   }
 
@@ -95,7 +103,10 @@ struct Floor
 
   static source_type nearbyint ( argument_type s )
   {
+#if !defined(BOOST_NO_STDC_NAMESPACE)
     using std::floor ;
+#endif
+
     return floor(s) ;
   }
 

@@ -494,7 +494,11 @@ void test_optimizations()
         else if ( r == cPosOverflow )
                throw positive_overflow() ;
         // rounding
+
+#if !defined(BOOST_NO_STDC_NAMESPACE)
         using std::floor ;
+#endif
+
         double s1 = floor(dv1b + 0.5);
 
         // conversion
