@@ -17,7 +17,7 @@
 //
 //  weak_ptr_test.cpp
 //
-//  Copyright (c) 2002, 2003 Peter Dimov
+//  Copyright (c) 2002-2005 Peter Dimov
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -500,7 +500,7 @@ void test()
 namespace n_assignment
 {
 
-template<class T> void copy_assignment(boost::shared_ptr<T> sp)
+template<class T> void copy_assignment(boost::shared_ptr<T> & sp)
 {
     BOOST_TEST(sp.unique());
 
@@ -611,7 +611,7 @@ void conversion_assignment()
     }
 }
 
-template<class T, class U> void shared_ptr_assignment(boost::shared_ptr<U> sp, T * = 0)
+template<class T, class U> void shared_ptr_assignment(boost::shared_ptr<U> & sp, T * = 0)
 {
     BOOST_TEST(sp.unique());
 
@@ -644,18 +644,62 @@ template<class T, class U> void shared_ptr_assignment(boost::shared_ptr<U> sp, T
 
 void test()
 {
-    copy_assignment(boost::shared_ptr<int>(new int));
-    copy_assignment(boost::shared_ptr<X>(new X));
-    copy_assignment(boost::shared_ptr<void>(new int));
-    copy_assignment(create_incomplete());
+    {
+        boost::shared_ptr<int> p( new int );
+        copy_assignment( p );
+    }
+
+    {
+        boost::shared_ptr<X> p( new X );
+        copy_assignment( p );
+    }
+
+    {
+        boost::shared_ptr<void> p( new int );
+        copy_assignment( p );
+    }
+
+    {
+        boost::shared_ptr<incomplete> p = create_incomplete();
+        copy_assignment( p );
+    }
+
     conversion_assignment();
-    shared_ptr_assignment<int>(boost::shared_ptr<int>(new int));
-    shared_ptr_assignment<void>(boost::shared_ptr<int>(new int));
-    shared_ptr_assignment<X>(boost::shared_ptr<X>(new X));
-    shared_ptr_assignment<void>(boost::shared_ptr<X>(new X));
-    shared_ptr_assignment<void>(boost::shared_ptr<void>(new int));
-    shared_ptr_assignment<incomplete>(create_incomplete());
-    shared_ptr_assignment<void>(create_incomplete());
+
+    {
+        boost::shared_ptr<int> p( new int );
+        shared_ptr_assignment<int>( p );
+    }
+
+    {
+        boost::shared_ptr<int> p( new int );
+        shared_ptr_assignment<void>( p );
+    }
+
+    {
+        boost::shared_ptr<X> p( new X );
+        shared_ptr_assignment<X>( p );
+    }
+
+    {
+        boost::shared_ptr<X> p( new X );
+        shared_ptr_assignment<void>( p );
+    }
+
+    {
+        boost::shared_ptr<void> p( new int );
+        shared_ptr_assignment<void>( p );
+    }
+
+    {
+        boost::shared_ptr<incomplete> p = create_incomplete();
+        shared_ptr_assignment<incomplete>( p );
+    }
+
+    {
+        boost::shared_ptr<incomplete> p = create_incomplete();
+        shared_ptr_assignment<void>( p );
+    }
 }
 
 } // namespace n_assignment
@@ -663,7 +707,7 @@ void test()
 namespace n_reset
 {
 
-template<class T, class U> void test2(boost::shared_ptr<U> sp, T * = 0)
+template<class T, class U> void test2( boost::shared_ptr<U> & sp, T * = 0 )
 {
     BOOST_TEST(sp.unique());
 
@@ -697,13 +741,40 @@ template<class T, class U> void test2(boost::shared_ptr<U> sp, T * = 0)
 
 void test()
 {
-    test2<int>(boost::shared_ptr<int>(new int));
-    test2<void>(boost::shared_ptr<int>(new int));
-    test2<X>(boost::shared_ptr<X>(new X));
-    test2<void>(boost::shared_ptr<X>(new X));
-    test2<void>(boost::shared_ptr<void>(new int));
-    test2<incomplete>(create_incomplete());
-    test2<void>(create_incomplete());
+    {
+        boost::shared_ptr<int> p( new int );
+        test2<int>( p );
+    }
+
+    {
+        boost::shared_ptr<int> p( new int );
+        test2<void>( p );
+    }
+
+    {
+        boost::shared_ptr<X> p( new X );
+        test2<X>( p );
+    }
+
+    {
+        boost::shared_ptr<X> p( new X );
+        test2<void>( p );
+    }
+
+    {
+        boost::shared_ptr<void> p( new int );
+        test2<void>( p );
+    }
+
+    {
+        boost::shared_ptr<incomplete> p = create_incomplete();
+        test2<incomplete>( p );
+    }
+
+    {
+        boost::shared_ptr<incomplete> p = create_incomplete();
+        test2<void>( p );
+    }
 }
 
 } // namespace n_reset
