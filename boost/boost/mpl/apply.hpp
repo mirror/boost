@@ -171,7 +171,7 @@ struct apply0 : F
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1, apply0, (F))
 };
 
-#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
 //: workaround for the ETI bug
 template<>
 struct apply0<int>
@@ -259,7 +259,7 @@ struct BOOST_PP_CAT(apply,i)
 
 #   endif // workarounds
 
-#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
 //: workaround for ETI bug
 template<>
 struct BOOST_PP_CAT(apply,i)<AUX_APPLY_N_SPEC_PARAMS(i, int)>

@@ -76,7 +76,7 @@ struct unique
         >::type fold_result_;
 
  public:
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
     // MSVC6.5 forces us to use 'select1st<fold_result_>::type' instead of 
     // simple 'fold_result_::first' here
     typedef typename select1st<fold_result_>::type type;

@@ -35,7 +35,7 @@ struct as_sequence
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,as_sequence,(T))
 };
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
 template<> struct as_sequence<int>
 {
     typedef single_view<int> type;

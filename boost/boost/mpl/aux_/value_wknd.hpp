@@ -20,7 +20,7 @@
 #include "boost/mpl/aux_/config/eti.hpp"
 
 #if defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
- || defined(BOOST_MPL_MSVC_ETI_BUG)
+ || defined(BOOST_MPL_MSVC_60_ETI_BUG)
  
 #   include "boost/mpl/int_c.hpp"
 
@@ -32,7 +32,7 @@ struct value_wknd
 {
 };
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
 template<>
 struct value_wknd<int>
     : int_c<0>
@@ -42,7 +42,7 @@ struct value_wknd<int>
 
 }}} // namespace boost::mpl::aux
 
-#   if !defined(BOOST_MPL_MSVC_ETI_BUG)
+#   if !defined(BOOST_MPL_MSVC_60_ETI_BUG)
 #       define BOOST_MPL_AUX_VALUE_WKND(C) ::boost::mpl::aux::value_wknd< C >
 #       define BOOST_MPL_AUX_MSVC_VALUE_WKND(C) BOOST_MPL_AUX_VALUE_WKND(C)
 #   else
@@ -55,6 +55,6 @@ struct value_wknd<int>
 #   define BOOST_MPL_AUX_VALUE_WKND(C) C
 #   define BOOST_MPL_AUX_MSVC_VALUE_WKND(C) C
 
-#endif // __BORLANDC__ || BOOST_MPL_MSVC_ETI_BUG
+#endif // __BORLANDC__ || BOOST_MPL_MSVC_60_ETI_BUG
 
 #endif // BOOST_MPL_AUX_VALUE_WKND_HPP_INCLUDED

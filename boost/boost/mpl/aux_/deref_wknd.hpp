@@ -19,7 +19,7 @@
 
 #include "boost/mpl/aux_/config/eti.hpp"
 
-#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
 
 namespace boost { namespace mpl { namespace aux {
 

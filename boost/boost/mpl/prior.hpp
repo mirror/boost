@@ -33,7 +33,7 @@ struct prior
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,prior,(T))
 };
 
-#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
 template<> struct prior<int>
 {
     typedef int type;

@@ -33,7 +33,7 @@ struct iterator_category
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,iterator_category,(Iterator))
 };
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
 template<> struct iterator_category<int>
 {
     typedef int type;

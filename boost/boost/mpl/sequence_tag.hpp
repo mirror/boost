@@ -21,6 +21,7 @@
 #include "boost/mpl/aux_/has_tag.hpp"
 #include "boost/mpl/aux_/has_begin.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
+#include "boost/mpl/aux_/is_msvc_eti_arg.hpp"
 #include "boost/mpl/aux_/config/eti.hpp"
 #include "boost/mpl/aux_/yes_no.hpp"
 #include "boost/mpl/aux_/config/workaround.hpp"
@@ -63,30 +64,13 @@ struct sequence_tag_impl<false>
     };
 };
 
-struct int_convertible_
-{
-    int_convertible_(int);
-};
-
-template< typename T >
-struct is_msvc_70_ETI_arg
-{ 
-    static no_tag test(...);
-    static yes_tag test(int_convertible_);
-    static T get();
-
-    BOOST_STATIC_CONSTANT(bool, value = 
-          sizeof(test(get())) == sizeof(yes_tag)
-        );
-};
-
 } // namespace aux
 
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
     >
 struct sequence_tag
-    : aux::sequence_tag_impl< !aux::is_msvc_70_ETI_arg<Sequence>::value >
+    : aux::sequence_tag_impl< !aux::is_msvc_eti_arg<Sequence>::value >
         ::template result_<Sequence>
 {
 };
@@ -135,7 +119,7 @@ struct sequence_tag
 
 #endif // BOOST_MSVC
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
 template<> struct sequence_tag<int>
 {
     typedef int type;

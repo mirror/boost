@@ -33,7 +33,7 @@ struct base
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,base,(T))
 };
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
 template<> struct base<int>
 {
     typedef int type;

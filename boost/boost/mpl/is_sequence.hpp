@@ -87,7 +87,7 @@ struct is_sequence
 
 #endif // BOOST_MSVC
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
 template<> struct is_sequence<int>
     : bool_c<false>
 {

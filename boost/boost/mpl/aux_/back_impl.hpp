@@ -36,7 +36,7 @@ struct back_traits
     template< typename Sequence > struct algorithm
     {
         typedef typename end<Sequence>::type iter_;
-#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
         typedef typename prior<iter_>::type last_;
 #else
         typedef typename iter_::prior last_;

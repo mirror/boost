@@ -102,7 +102,7 @@ struct advance_forward< BOOST_PP_FRAME_ITERATION(1) >
         typedef BOOST_PP_CAT(iter,i) type;
     };
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
     //: ETI workaround
     template<> struct apply<int>
     {

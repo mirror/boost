@@ -33,7 +33,7 @@ struct select1st
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,select1st,(Pair))
 };
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_60_ETI_BUG)
 template<> struct select1st<int>
 {
     typedef int type;

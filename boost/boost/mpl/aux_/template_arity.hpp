@@ -162,7 +162,7 @@ struct template_arity
 {
 };
 
-#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
 template<>
 struct template_arity<int>
 {

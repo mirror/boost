@@ -33,7 +33,7 @@ struct next
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,next,(T))
 };
 
-#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
 template<> struct next<int>
 {
     typedef int type;
