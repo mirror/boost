@@ -27,13 +27,14 @@
     enum { value = type::value }; \
     /**/
 #   define BOOST_TT_AUX_BOOL_C_BASE(C)
-#  endif
 
-#if defined(BOOST_MSVC) && BOOST_MSVC <= 1200
+#elif defined(BOOST_MSVC) && BOOST_MSVC <= 1200
+
 #   define BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
     typedef mpl::bool_c< C > base_; \
     using base_::value; \
     /**/
+
 #endif
 
 #ifndef BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL
@@ -44,27 +45,72 @@
 #   define BOOST_TT_AUX_BOOL_C_BASE(C) : mpl::bool_c< C >
 #endif 
 
-#define BOOST_TT_AUX_BOOL_TRAIT_DEF1(trait,T,C) \
-template< typename T > struct trait \
-    BOOST_TT_AUX_BOOL_C_BASE(C) \
-{ \
-    BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,trait,(T)) \
-}; \
-\
-BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1,trait) \
-/**/
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
 
-#define BOOST_TT_AUX_BOOL_TRAIT_DEF2(trait,T1,T2,C) \
-template< typename T1, typename T2 > struct trait \
-    BOOST_TT_AUX_BOOL_C_BASE(C) \
-{ \
-    BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(2,trait,(T1,T2)) \
-}; \
-\
-BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(2,trait) \
-/**/
+#   define BOOST_TT_AUX_BOOL_TRAIT_DEF1(trait,T,C)      \
+    template < typename T > struct trait;               \
+                                                        \
+    namespace mpl_rebind                                \
+    {                                                   \
+      template < typename T >                           \
+      struct rebind_##trait                             \
+      {                                                 \
+          enum { arity = 1 };                           \
+          typedef T arg1;                               \
+                                                        \
+          template< typename U1 >                       \
+          struct apply                                  \
+          {                                             \
+              typedef typename trait< U1 >::type type;  \
+          };                                            \
+      };                                                \
+    }                                                   \
+                                                        \
+    template< typename T > struct trait                 \
+        BOOST_TT_AUX_BOOL_C_BASE(C)                     \
+    {                                                   \
+        BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C)           \
+        typedef mpl_rebind::rebind_##trait< T > rebind; \
+    };                                                  \
+    /**/
+
+
+#   define BOOST_TT_AUX_BOOL_TRAIT_DEF2(trait,T1,T2,C) \
+    template< typename T1, typename T2 > struct trait \
+        BOOST_TT_AUX_BOOL_C_BASE(C) \
+    { \
+        BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
+        BOOST_MPL_AUX_LAMBDA_SUPPORT(2,trait,(T1,T2)) \
+    }; \
+    \
+    BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(2,trait) \
+    /**/
+#else
+
+#   define BOOST_TT_AUX_BOOL_TRAIT_DEF1(trait,T,C) \
+    template< typename T > struct trait \
+        BOOST_TT_AUX_BOOL_C_BASE(C) \
+    { \
+        BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
+        BOOST_MPL_AUX_LAMBDA_SUPPORT(1,trait,(T)) \
+    }; \
+    \
+    BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1,trait) \
+    /**/
+
+
+#   define BOOST_TT_AUX_BOOL_TRAIT_DEF2(trait,T1,T2,C) \
+    template< typename T1, typename T2 > struct trait \
+        BOOST_TT_AUX_BOOL_C_BASE(C) \
+    { \
+        BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
+        BOOST_MPL_AUX_LAMBDA_SUPPORT(2,trait,(T1,T2)) \
+    }; \
+    \
+    BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(2,trait) \
+    /**/
+
+#endif
 
 #define BOOST_TT_AUX_BOOL_TRAIT_SPEC1(trait,sp,C) \
 template<> struct trait< sp > \
