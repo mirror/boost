@@ -307,9 +307,6 @@
         <template-type-parameter name="Signature">
           <purpose>Function type R (T1, T2, ..., TN)</purpose>
         </template-type-parameter>
-        <template-type-parameter name="Allocator">
-          <default><classname>std::allocator</classname>&lt;void&gt;</default>
-        </template-type-parameter>
         <template-type-parameter name="Combiner">
           <default><classname>last_value</classname>&lt;R&gt;</default>
         </template-type-parameter>
