@@ -1,4 +1,4 @@
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -51,6 +51,11 @@ main()
   time_duration td7b= boost::date_time::parse_delimited_time_duration<time_duration>(s7b);
   check("parse time duration: " + s7b, 
         td7b == time_duration(-1,0,0)-nanosec(1000000)); // we want 1/1000th
+  
+  std::string s8b("1:22:33.123456789321"); // too many digits
+  time_duration td8b= boost::date_time::parse_delimited_time_duration<time_duration>(s8b);
+  check("parse time duration: " + s8b, 
+        td8b == time_duration(1,22,33,123456789)); // excess digits should be dropped
 #endif
 
 #if defined(BOOST_DATE_TIME_HAS_MICROSECONDS) && (!defined(BOOST_DATE_TIME_HAS_NANOSECONDS))
@@ -89,6 +94,11 @@ main()
     time_duration td7b= boost::date_time::parse_delimited_time_duration<time_duration>(s7b);
     check("parse time duration: " + s7b, 
           td7b == time_duration(-1,0,0)-microsec(1000)); // we want 1/1000th
+  
+  std::string s8b("1:22:33.123456321"); // too many digits
+  time_duration td8b= boost::date_time::parse_delimited_time_duration<time_duration>(s8b);
+  check("parse time duration: " + s8b, 
+        td8b == time_duration(1,22,33,123456)); // excess digits should be dropped
   }
 #endif
 
