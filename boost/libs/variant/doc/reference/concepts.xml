@@ -17,7 +17,7 @@
       <listitem>Complete at the point of <code>variant</code> template
         instantiation. (See
         <code><classname>boost::recursive_wrapper</classname>&lt;T&gt;</code>
-        for a type wrapper that accepts incomplete types to enables recursive
+        for a type wrapper that accepts incomplete types to enable recursive
         <code>variant</code> types.)</listitem>
     </itemizedlist>
 
@@ -34,7 +34,7 @@
         concept. (Note that top-level <code>const</code>-qualified types and
         reference types do <emphasis>not</emphasis> meet these
         requirements.)</listitem>
-      <listitem><link linkend="variant.concepts.default-constructible"><emphasis>DefaultConstructible</emphasis></link>:
+      <listitem><emphasis>DefaultConstructible</emphasis> [20.1.4]:
         <code>variant</code> is itself
         <emphasis>DefaultConstructible</emphasis> if and only if its first
         bounded type (i.e., <code>T1</code>) meets the requirements of the
@@ -113,14 +113,6 @@ public:
 
     <para>See
     <ulink url="http://www.sgi.com/tech/stl/Assignable.html">external
-    documentation</ulink> for this concept.</para>
-  </section>
-
-  <section id="variant.concepts.default-constructible">
-    <title><emphasis>DefaultConstructible</emphasis></title>
-
-    <para>See
-    <ulink url="http://www.sgi.com/tech/stl/DefaultConstructible.html">external
     documentation</ulink> for this concept.</para>
   </section>
 
