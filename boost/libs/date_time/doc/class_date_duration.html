@@ -27,7 +27,11 @@
 <h2><a name="intro">Introduction</a></h2>
 
 <p>
-The class boost::gregorian::date_duration is a simple day count used for arithmetic with <a href="class_date.html">gregorian::date</a>.  A duration can be either positive or negative.
+The class boost::gregorian::date_duration is a simple day count used for arithmetic 
+with <a href="class_date.html">gregorian::date</a>.  A duration can be either 
+positive or negative.  In addition, date_durations can take on special values such
+as not_a_date_time.  More information on how these special values impact calculation
+can be found in <a href="Calculations.html">Calculations</a>.
 <p>
 
 <p>
@@ -48,6 +52,13 @@ or
 <tr><td>date_duration(long)</td>
         <td>Create a duration count.</td>
 	<td>date_duration dd(3); //3 days</td></tr>
+<tr><td>date_duration(const date_duration& dd)</td>
+        <td>Copy constructor.</td>
+	<td></td></tr>
+<tr><td>date_duration(special_values)</td>
+        <td>Create a duration with a special value such as neg_infin, 
+            pos_infin or not_a_date_time</td>
+	<td>date_duration dd(note_a_date_time); //invalid value</td></tr>
 </table>
 
 <p>
@@ -93,6 +104,11 @@ or
 	<td>date_duration dd1(3); 
           <br>date_duration dd2(5); 
           <br>date_duration dd3 = dd1 - dd2;</td></tr>
+<tr><td>date_duration operator-() const</td>
+        <td>Invert sign</td>
+	<td>date_duration dd1(3); 
+          <br>-dd1; // dd1 == -3 days 
+         </td></tr>
 
 </table>
 
@@ -102,7 +118,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Wed Aug 21 15:12:43 MST 2002
+Last modified: Sun Jan 18 15:15:35 MST 2004
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>

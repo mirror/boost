@@ -88,32 +88,35 @@ or
 <table border=1 cellspacing=3 cellpadding=3>
 <tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
 <tr><td>time_duration(hours,minutes,seconds,fractional_seconds)</td>
-        <td>Construct ad duration from the counts</td>
+        <td>Construct a duration from the counts</td>
 	<td>time_duration td(1,2,3,9); //1 hr 2 min 3 sec 9 nanoseconds</td></tr>
+<tr><td>time_duration(special_values)</td>
+        <td>Construct a time duration with a special value such as not_a_date_time, pos_infin, or neg_infin.</td>
+	<td>time_duration td(not_a_date_time); //invalid value</td></tr>
 </table>
 
 <p>
 <h2><a name="countbasedconstruct">Construction By Count</a></h2>
 <table border=1 cellspacing=3 cellpadding=3>
 <tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
-<tr><td>hours(long)</td>
+<tr><td class="nowrap">hours(long)</td>
         <td>Number of hours</td>
-	<td>time_duration td = hours(3);</td></tr>
+	<td class="nowrap">time_duration td = hours(3);</td></tr>
 <tr><td>minutes(long)</td>
         <td>Number of minutes</td>
 	<td>time_duration td = minutes(3);</td></tr>
 <tr><td>seconds(long)</td>
         <td>Number of seconds</td>
 	<td>time_duration td = seconds(3);</td></tr>
-<tr><td>millisec(long)</td>
+<tr><td>milliseconds(long)</td>
         <td>Number of milliseconds.</td>
-	<td>time_duration td = millisec(3);</td></tr>
-<tr><td>microsec(long)</td>
+	<td>time_duration td = milliseconds(3);</td></tr>
+<tr><td>microseconds(long)</td>
         <td>Number of microseconds.</td>
-	<td>time_duration td = microsec(3);</td></tr>
-<tr><td>nanosec(long)</td>
+	<td>time_duration td = microseconds(3);</td></tr>
+<tr><td class="nowrap">nanoseconds(long)</td>
         <td>Number of nanoseconds.</td>
-	<td>time_duration td = nanosec(3);</td></tr>
+	<td class="nowrap">time_duration td = nanoseconds(3);</td></tr>
 </table>
 
 
@@ -137,38 +140,71 @@ or
 <p>
 <table border=1 cellspacing=3 cellpadding=3>
 <tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
-<tr><td>long <font class="func">hours</font>() const</td>
+<tr><td class="nowrap">long <font class="func">hours</font>() const</td>
         <td>Get the number of normalized hours.</td>
 	<td>time_duration td(1,2,3); td.hours() --> 1</td></tr>
-<tr><td>long <font class="func">minutes</font>() const</td>
+<tr><td class="nowrap">long <font class="func">minutes</font>() const</td>
         <td>Get the number of minutes normalized (0..59).</td>
 	<td>time_duration td(1,2,3); td.minutes() --> 2</td></tr>
-<tr><td>long <font class="func">seconds</font>() const</td>
+<tr><td class="nowrap">long <font class="func">seconds</font>() const</td>
         <td>Get the normalized number of second (0..59).</td>
 	<td>time_duration td(1,2,3); td.seconds() --> 3</td></tr>
-<tr><td>long <font class="func">total_seconds</font>() const</td>
+<tr><td class="nowrap">bool <font class="func">is_special</font>() const</td>
+        <td>Returns true if the value of the duration is a special value, otherwise false.</td>
+	<td>time_duration td(neg_infin); <br>
+            td.is_special() --> true</td></tr>
+<tr><td class="nowrap">bool <font class="func">is_neg_infinity</font>() const</td>
+        <td>Returns true if the value of the duration is negative infinity, otherwise false.</td>
+	<td>time_duration td(neg_inifin); <br>
+            td.is_neg_infinity() --> true</td></tr>
+<tr><td class="nowrap">bool <font class="func">is_pos_infinity</font>() const</td>
+        <td>Returns true if the value of the duration is positive infinity, otherwise false.</td>
+	<td>hours h(5); <br>
+            h.is_pos_infinity() --> false</td></tr>
+<tr><td class="nowrap">long <font class="func">total_seconds</font>() const</td>
         <td>Get the total number of seconds truncating 
             any fractional seconds.</td>
-	<td>time_duration td(1,2,3,10); <br>
+	<td class="nowrap">time_duration td(1,2,3,10); <br>
             td.total_seconds() --> (1*3600) + (2*60) + 3 == 3723</td></tr>
-<tr><td>long <font class="func">fractional_seconds</font>() const</td>
-        <td>Get the number of fractional seconds.</td>
-	<td>time_duration td(1,2,3, 1000); td.fractional_seconds() --> 1000</td></tr>
-<tr><td>bool <font class="func">is_negative</font>() const</td>
+<tr><td class="nowrap">long <font class="func">total_microseconds</font>() const</td>
+        <td>Return the total number of microseconds in the duration
+            truncating any fractional lower resolution (eg: nano 
+            second counts).
+         </td>
+	<td>seconds(1).total_microseconds() == 1000000</td></tr>
+<tr><td class="nowrap">long <font class="func">total_milliseconds</font>() const</td>
+        <td>Return the total number of milliseconds in the duration
+            truncating any fractional lower resolution (eg: micro or nano 
+            second counts).
+         </td>
+	<td>seconds(1).total_milliseconds() == 1000</td></tr>
+<tr><td class="nowrap">long <font class="func">total_nanoseconds</font>() const</td>
+        <td>Return the total number of nanoseconds in the duration.
+         </td>
+	<td>seconds(1).total_nanoseconds() == 1000000000</td></tr>
+<tr><td class="nowrap">long <font class="func">fractional_seconds</font>() const</td>
+        <td>Get the fractional seconds count. Note that the results of this
+            method vary based on the resolution of template instantiation
+            for the time duration (Normally either a nano-second or millisecond 
+            count).
+        </td>
+	<td class="nowrap">time_duration td(1,2,3, 1000); <br>
+            td.fractional_seconds() --> 1000</td></tr>
+<tr><td class="nowrap">bool <font class="func">is_negative</font>() const</td>
         <td>True if duration is negative.</td>
 	<td>time_duration td(-1,0,0); td.is_negative() --> true</td></tr>
-<tr><td>time_duration <font class="func">invert_sign</font>() const</td>
-        <td>Generate a new duration with the sign inverted/</td>
-	<td>time_duration td(-1,0,0); td.invert_sign() --> 01:00:00</td></tr>
-<tr><td>static boost::date_time::time_resolutions <font class="func">resolution</font>()</td>
-        <td>Describes the resolution capability of the time_duration class.</td>
-	<td>time_duration::resolution() --> nano</td></tr>
 <tr><td>boost::int64_t <font class="func">ticks</font>()</td>
         <td>Return the raw count of the duration type.</td>
-	<td>time_duration td(0,0,0, 1000); td.ticks() --> 1000</td></tr>
-<tr><td>static time_duration <font class="func">unit</font>()</td>
+	<td class="nowrap">time_duration td(0,0,0, 1000); td.ticks() --> 1000</td></tr>
+<tr><td class="nowrap">static boost::int64_t <font class="func">ticks_per_second</font>()</td>
+        <td>Return the number of ticks held internally to represent a second, which is
+	    driven by the resolution settings.  For nano second resolution the value
+            1000000000.
+         </td>
+	<td class="nowrap">time_duration::ticks_per_second() == 1000000000 //nano second resolution</td></tr>
+<tr><td class="nowrap">static time_duration <font class="func">unit</font>()</td>
         <td>Return smallest possible unit of duration type (1 nanosecond).</td>
-	<td>time_duration::unit() --> time_duration(0,0,0,1)</td></tr>
+	<td class="nowrap">time_duration::unit() --> time_duration(0,0,0,1)</td></tr>
 
 </table>
 
@@ -200,20 +236,24 @@ or
 	operator&gt;, operator&lt; <br> 
         operator&gt;=, operator&lt;=</td>
         <td>A full complement of comparison operators</td>
-	<td>dd1 == dd2, etc</td></tr>
-<tr><td>time_duration operator+(time_duration) const</td>
+	<td>td1 == td2, etc</td></tr>
+<tr><td class="nowrap">time_duration operator+(time_duration) const</td>
         <td>Add durations.</td>
-	<td>time_duration td1(hours(1)+minutes(2)); 
+	<td class="nowrap">time_duration td1(hours(1)+minutes(2)); 
           <br>time_duration td2(seconds(10)); 
           <br>time_duration td3 = td1 + td2;</td></tr>
-<tr><td>time_duration operator-(time_duration) const</td>
+<tr><td class="nowrap">time_duration operator-(time_duration) const</td>
         <td>Subtract durations.</td>
-	<td>time_duration td1(hours(1)+nanosec(2)); <br>
+	<td class="nowrap">time_duration td1(hours(1)+nanosec(2)); <br>
 	    time_duration td2 = td1 - minutes(1);</td></tr>
-<tr><td>time_duration operator/(int) const</td>
+<tr><td>time_duration operator-() const</td>
+        <td>Invert sign.</td>
+	<td>time_duration td1(hours(1)); <br>
+	    -td1; //equal -1 hour</td></tr>
+<tr><td class="nowrap">time_duration operator/(int) const</td>
         <td>Divide the length of a duration by an integer value.  Discards
             any remainder.</td>
-	<td>hours(3)/2 == time_duration(1,30,0);
+	<td class="nowrap">hours(3)/2 == time_duration(1,30,0);<br>
 	    nanosec(3)/2 == nanosec(1)</td></tr>
 <tr><td>time_duration operator*(int) const</td>
         <td>Multiply the length of a duration by an integer value. </td>
@@ -227,7 +267,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sun Aug 10 16:17:58 MST 2003
+Last modified: Mon Jan 19 19:44:14 MST 2004
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2003
 </small></address>
