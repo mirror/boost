@@ -50,6 +50,7 @@ provided by the class.</p>
 	<ul>
 		<li><a href="#dereference">Dereference operators</a></li>
 		<li><a href="#iterator">Iterator Helpers</a></li>
+		<li><a href="#iterator_helpers_notes">Iterator Helper Notes</a></li>
 		<li><a href="#i_demo">Iterator Demonstration and Test
 			Program</a></li>
 	</ul></li>
@@ -889,7 +890,7 @@ href="#chaining">base class chaining</a>.</p>
 
 <h3><a name="iterator">Iterator</a> Helpers</h3>
 
-<p>There are three separate iterator helper classes, each for a
+<p>There are five separate iterator helper classes, each for a
 different category of iterator.  Here is a summary of the core set of
 operators that the custom iterator must define, and the extra operators
 that are created by the helper classes.  These classes cannot be used for <a
@@ -931,11 +932,13 @@ C++ standard (<code>iterator_category</code>, <code>value_type</code>,
 		    </ul></td>
 	</tr>
 	<tr valign="baseline">
-		<td><code><a name="output_iterator_helper">output_iterator_helper&lt;T, V, D, P, R&gt;</a></code></td>
+		<td><code><a name="output_iterator_helper">output_iterator_helper&lt;T&gt;</a></code></td>
 		<td>Supports the operations and has the requirements of
 		    <ul>
 			   <li><code><a href="#incrementable">incrementable&lt;T&gt;</a></code></li>
-		    </ul></td>
+		    </ul>
+        See also [<a href="#1">1</a>], [<a href="#2">2</a>].
+        </td>
 	</tr>
 	<tr valign="baseline">
 		<td><code><a name="forward_iterator_helper">forward_iterator_helper&lt;T, V, D, P, R&gt;</a></code></td>
@@ -974,6 +977,53 @@ C++ standard (<code>iterator_category</code>, <code>value_type</code>,
 		    is also required.</td>
 	</tr>
 </table>
+
+<h3><a name="iterator_helpers_notes">Iterator Helper Notes</a></h3>
+
+<p><a name="1">[1]</a> Unlike other iterator helpers templates,
+<code>output_iterator_helper</code> takes only one template parameter - the type of
+its target class. Although to some it might seem like an unnecessary
+restriction, the standard requires <code>difference_type</code> and
+<code>value_type</code> of any output iterator to be 
+<code>void</code> (24.3.1 [lib.iterator.traits]), and
+<code>output_iterator_helper</code> template respects this
+requirement. Also, output iterators in the standard have void <tt>pointer</tt> and
+<tt>reference</tt> types, so the <tt>output_iterator_helper</tt> does the
+same.
+
+<p><a name="2">[2]</a> As self-proxying is the easiest and most common way to 
+implement output iterators (see, for example, insert [24.4.2] and stream 
+iterators [24.5] in the standard library), <code>output_iterator_helper</code>
+supports the idiom by defining <code>operator*</code> 
+and <code>operator++</code> member functions which just return a 
+non-const reference to the iterator itself. Support for 
+self-proxying allows us, in many cases, to reduce the task of writing an output 
+iterator to writing just two member functions - an appropriate 
+constructor and a copy-assignment operator. For example, here is a possible
+implementation of <code><a href="function_output_iterator.htm">boost::function_output_iterator</a></code>
+adaptor:</p>
+
+<pre>
+template&lt;class UnaryFunction&gt;
+struct function_output_iterator
+    : boost::output_iterator_helper&lt; function_output_iterator&lt;UnaryFunction&gt; &gt;
+{
+    explicit function_output_iterator(UnaryFunction const& f = UnaryFunction())
+        : func(f) {}
+
+    template&lt;typename T&gt;
+    function_output_iterator& operator=(T const& value)
+    {
+        this->func(value); 
+        return *this; 
+    }
+
+ private:
+    UnaryFunction func;
+};
+</pre>
+
+<p>Note that support for self-proxying does not prevent you from using <code>output_iterator_helper</code> to ease any other, different kind of output iterator's implementation. If <code>output_iterator_helper</code>'s target type provides its own definition of <code>operator*</code> or/and <code>operator++</code>, then these operators will get used and the ones supplied by <code>output_iterator_helper</code> will never be instantiated.</p>
 
 <h3><a name="i_demo">Iterator Demonstration</a> and Test Program</h3>
 
@@ -1092,7 +1142,7 @@ the library remain backward-compatible.</p>
 
 <hr>
 
-<p>Revised: 20 May 2001</p>
+<p>Revised: 25 Jun 2001</p>
 
 <p>Copyright &copy; David Abrahams and Beman Dawes 1999-2001. 
 Permission to copy, use, modify, sell and distribute this document is
