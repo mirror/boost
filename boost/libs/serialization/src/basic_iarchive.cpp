@@ -73,6 +73,16 @@ class basic_iarchive_impl
     object_id_vector_type object_id_vector;
 
     //////////////////////////////////////////////////////////////////////
+    // used to implement the reset_object_address operation.
+    // list of objects which might be moved. We use a vector for implemenation
+    // in the hope the the truncation operation will be faster than either
+    // with a list or stack adaptor
+    std::vector<std::size_t> moveable_object_stack;
+    std::size_t moveable_object_position;
+
+    void reset_object_address(const void * new_address, const void *old_address);
+
+    //////////////////////////////////////////////////////////////////////
     // used by load object to look up class id given basic_serializer
     struct cobject_type
     {
@@ -175,7 +185,8 @@ class basic_iarchive_impl
     const basic_iserializer * pending_bis;
     version_type pending_version;
 
-    basic_iarchive_impl() : 
+    basic_iarchive_impl() :
+        moveable_object_position(0),
         pending_object(NULL),
         pending_bis(NULL),
         pending_version(0)
@@ -222,7 +233,34 @@ class basic_iarchive_impl
             const boost::serialization::extended_type_info & type
         )
     );
-}; 
+};
+
+inline void 
+basic_iarchive_impl::reset_object_address(
+    const void * new_address, 
+    const void *old_address
+){
+    // if the this object wasn't tracked
+    std::size_t i = moveable_object_position;
+    if(i >= moveable_object_stack.size())
+        return;
+    if(old_address != object_id_vector[i].address)
+        // skip to any lower level ones
+        ++i;
+    while(i < moveable_object_stack.size()){
+        // calculate displacement from this level
+        assert(object_id_vector[i].address >= old_address);
+        // warning - pointer arithmetic on void * is in herently non-portable
+        // but expected to work on all platforms in current usage
+        std::size_t member_displacement
+            = reinterpret_cast<std::size_t>(object_id_vector[i].address) 
+            - reinterpret_cast<std::size_t>(old_address);
+        object_id_vector[i].address = reinterpret_cast<void *>(
+            reinterpret_cast<std::size_t>(new_address) + member_displacement
+        );
+        ++i;
+    }
+}
 
 inline void 
 basic_iarchive_impl::delete_created_pointers()
@@ -312,7 +350,6 @@ basic_iarchive_impl::load_object(
         return;
     }
 
-    bool result = true;
     const class_id_type cid = register_type(bis);
     // note: extra line used to evade borland issue
     const int id = cid;
@@ -320,16 +357,33 @@ basic_iarchive_impl::load_object(
 
     load_preamble(ar, co);
     // note: extra line used to evade borland issue
-    const bool b = co.tracking_level;
-    if(b){ 
-        result = track(ar, t);
-        if(! result)
-            return;
-        object_id_vector.push_back(aobject(t, cid));
+    const bool tracking = co.tracking_level;
+    // if we didn't track this object when the archive was saved
+    if(! tracking){ 
+        // all we need to do is read the data
+        (bis.load_object_data)(ar, t, co.file_version);
+        return;
     }
+
+    // we're tracking the object
+    // if it was already read
+    if(! track(ar, t))
+        // we're done
+        return;
+
+    std::size_t tracking_list_position = object_id_vector.size();
+    // add a new enty into the tracking list
+    object_id_vector.push_back(aobject(t, cid));
+    // save the current move stack position in case we want to truncate it
+    std::size_t next_moveable_object_position = moveable_object_stack.size();
+    // and add an entry for this object
+    moveable_object_stack.push_back(tracking_list_position);
 
     // read data
     (bis.load_object_data)(ar, t, co.file_version);
+
+    // last object created
+    moveable_object_position = next_moveable_object_position;
 }
 
 inline const basic_pointer_iserializer *
@@ -377,54 +431,55 @@ basic_iarchive_impl::load_pointer(
     }
     int i = cid;
     cobject_id & co = cobject_id_vector[i];
-    const basic_iserializer * bis_ptr = co.bis_ptr;
     bpis_ptr = co.bpis_ptr;
 
     load_preamble(ar, co);
 
-    // if we're not tracking
-    bool new_object = true;
     // extra line to evade borland issue
-    const bool b = co.tracking_level;
-    if(b)
-        new_object = track(ar, t);
-
-    if(! new_object){
-        // nothing to do
+    const bool tracking = co.tracking_level;
+    // if we're tracking and the pointer has already been read
+    if(tracking && ! track(ar, t))
+        // we're done
         return bpis_ptr;
-    }
-
-    if(! bis_ptr->tracking()){
-        bpis_ptr->load_object_ptr(ar, t, co.file_version);
-        return bpis_ptr;
-    }
 
     // save state
-    state_saver<void *> x(pending_object);
-    state_saver<const basic_iserializer *> y(pending_bis);
-    state_saver<version_type> z(pending_version);
+    std::size_t original_moveable_stack_size(moveable_object_stack.size());
+    state_saver<std::size_t> w(moveable_object_position);
 
-    pending_bis = & bpis_ptr->get_basic_serializer();
-    pending_version = co.file_version;
+    if(! tracking){
+        bpis_ptr->load_object_ptr(ar, t, co.file_version);
+    }
+    else{
+        state_saver<void *> x(pending_object);
+        state_saver<const basic_iserializer *> y(pending_bis);
+        state_saver<version_type> z(pending_version);
 
-    // predict next object id to be created
-    const unsigned int ui = object_id_vector.size();
+        pending_bis = & bpis_ptr->get_basic_serializer();
+        pending_version = co.file_version;
 
-    // because the following operation could move the items
-    // don't use co after this
-    // add to list of serialized objects so that we can properly handle
-    // cyclic strucures
-    object_id_vector.push_back(aobject(t, cid));
-    bpis_ptr->load_object_ptr(
-        ar, 
-        object_id_vector[ui].address, 
-        co.file_version
-    );
-    t = object_id_vector[ui].address;
-    assert(NULL != t);
+        // predict next object id to be created
+        const unsigned int ui = object_id_vector.size();
 
-    // and add to list of created pointers
-    created_pointers.push_back(created_pointer_type(cid, t));
+        // because the following operation could move the items
+        // don't use co after this
+        // add to list of serialized objects so that we can properly handle
+        // cyclic strucures
+        object_id_vector.push_back(aobject(t, cid));
+        bpis_ptr->load_object_ptr(
+            ar, 
+            object_id_vector[ui].address, 
+            co.file_version
+        );
+        t = object_id_vector[ui].address;
+        assert(NULL != t);
+
+        // and add to list of created pointers
+        created_pointers.push_back(created_pointer_type(cid, t));
+    }
+    // anything pointed to is never moved 
+    // so truncate the stack of moveable objects
+    moveable_object_stack.resize(original_moveable_stack_size);
+
     return bpis_ptr;
 }
 
@@ -453,6 +508,15 @@ BOOST_DECL_ARCHIVE
 basic_iarchive::~basic_iarchive()
 {
     delete pimpl;
+}
+
+void
+BOOST_DECL_ARCHIVE
+basic_iarchive::reset_object_address(
+    const void * new_address, 
+    const void * old_address
+){
+    pimpl->reset_object_address(new_address, old_address);
 }
 
 void
