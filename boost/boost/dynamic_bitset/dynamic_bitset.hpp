@@ -21,6 +21,7 @@
 #include <stdexcept>           // for std::overflow_error
 #include <algorithm>           // for std::swap, std::min, std::copy, std::fill
 #include <vector>
+#include <climits>             // for CHAR_BIT
 
 #include "boost/dynamic_bitset/config.hpp"
 
@@ -45,13 +46,18 @@
 
 
 
-// Helps getting a '0' or '1' character.
+// Helps getting a generic '0' or '1' character. When
+// both '0' and '1' are asked for this macro forces
+// inefficiency, especially in multithreaded environments,
+// because a) the locale must be either constructed twice or
+// retrieved twice from a stream b) two lock operations, rather
+// than one, will be performed :(
 //
 #if defined (BOOST_USE_FACET)
-# define BOOST_BITSET_CHAR(type, c) \
-           (BOOST_USE_FACET(std::ctype<type>, std::locale()).widen(c))
+# define BOOST_BITSET_CHAR(type, c, loc) \
+           (BOOST_USE_FACET(std::ctype< type >, loc).widen(c))
 #else
-# define BOOST_BITSET_CHAR(type, c)  (c)
+# define BOOST_BITSET_CHAR(type, c, loc)  (c)
 #endif
 
 
@@ -171,7 +177,7 @@ public:
 
 
         const size_type m = num_bits < rlen ? num_bits : rlen; // [gps]
-        const CharT one = BOOST_BITSET_CHAR(CharT, '1');
+        const CharT one = BOOST_BITSET_CHAR(CharT, '1', std::locale());
 
         typename StrT::size_type i = 0;
         for( ; i < m; ++i) {
@@ -179,7 +185,7 @@ public:
             const CharT c = s[(pos + m - 1) - i];
 
             assert( Tr::eq(c, one)
-                    || Tr::eq(c, BOOST_BITSET_CHAR(CharT, '0')) );
+                    || Tr::eq(c, BOOST_BITSET_CHAR(CharT, '0', std::locale())) );
 
             if (Tr::eq(c, one))
                 set(i);
@@ -987,10 +993,12 @@ dynamic_bitset<Block, Allocator>::count() const
     using namespace detail::dynamic_bitset_count_impl;
 
     const bool no_padding = bits_per_block == CHAR_BIT * sizeof(Block);
-    const mode m = table_width >= CHAR_BIT && no_padding
-                     ? access_by_bytes : access_by_blocks;
+    const bool enough_table_width = table_width >= CHAR_BIT;
 
-    return do_count(m_bits.begin(), num_blocks(), Block(0), (mode_to_type<m>*) 0 );
+    typedef mode_to_type< (no_padding && enough_table_width ?
+                          access_by_bytes : access_by_blocks) > m;
+
+    return do_count(m_bits.begin(), num_blocks(), Block(0), static_cast<m*>(0));
 
 }
 
@@ -1006,8 +1014,8 @@ void to_string_helper(const dynamic_bitset<B, A> & b, stringT & s,
     typedef typename stringT::traits_type Tr;
     typedef typename stringT::value_type  Ch;
 
-    const Ch zero = BOOST_BITSET_CHAR(Ch, '0');
-    const Ch one  = BOOST_BITSET_CHAR(Ch, '1');
+    const Ch zero = BOOST_BITSET_CHAR(Ch, '0', std::locale());
+    const Ch one  = BOOST_BITSET_CHAR(Ch, '1', std::locale());
 
     // Note that this function may access (when
     // dump_all == true) bits beyond position size() - 1
@@ -1392,7 +1400,7 @@ operator<<(std::ostream& os, const dynamic_bitset<Block, Alloc>& b)
 
         os.osfx();
         os.width(0);
- 
+
     } // if opfx
 
     if(err != ok)
@@ -1416,9 +1424,9 @@ operator<<(std::basic_ostream<Ch, Tr>& os,
     typename basic_ostream<Ch, Tr>::sentry cerberos(os);
     if (cerberos) {
 
-        const ctype<Ch> & fac = BOOST_USE_FACET(ctype<Ch>, os.getloc());
-        const Ch zero = fac.widen('0');
-        const Ch one  = fac.widen('1');
+        //const ctype<Ch> & fac = BOOST_USE_FACET(ctype<Ch>, os.getloc());
+        const Ch zero = BOOST_BITSET_CHAR(Ch, '0', os.getloc());
+        const Ch one  = BOOST_BITSET_CHAR(Ch, '1', os.getloc()); // gps
 
         try {
 
@@ -1510,7 +1518,7 @@ operator>>(std::istream& is, dynamic_bitset<Block, Alloc>& b)
     typedef dynamic_bitset<Block, Alloc> bitset_type;
     typedef typename bitset_type::size_type size_type;
 
-	std::ios::iostate err = std::ios::goodbit; // gps
+    std::ios::iostate err = std::ios::goodbit; // gps
     pseudo_sentry cerberos(is); // skips whitespaces
     if(cerberos) {
 
@@ -1573,9 +1581,9 @@ operator>>(std::basic_istream<Ch, Tr>& is, dynamic_bitset<Block, Alloc>& b)
     typename basic_istream<Ch, Tr>::sentry cerberos(is); // skips whitespaces
     if(cerberos) {
 
-        const ctype<Ch> & fac = BOOST_USE_FACET(ctype<Ch>, is.getloc());
-        const Ch zero = fac.widen('0'); // in accordance with prop. resol. of
-        const Ch one  = fac.widen('1'); // lib DR 303 [last checked 4 Feb 2004]
+        // in accordance with prop. resol. of lib DR 303 [last checked 4 Feb 2004]
+        const Ch zero = BOOST_BITSET_CHAR(Ch, '0', is.getloc());
+        const Ch one  = BOOST_BITSET_CHAR(Ch, '1', is.getloc());
 
         b.clear();
         try {
