@@ -29,14 +29,22 @@ See BOOST_PP_LIMIT_TUPLE.
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_TUPLE_TO_LIST_DELAY(N,T) BOOST_PP_TUPLE##N##_TO_LIST T
-#define BOOST_PP_TUPLE0_TO_LIST() BOOST_PP_LIST_NIL
-#define BOOST_PP_TUPLE1_TO_LIST(A) BOOST_PP_LIST_CONS(A,BOOST_PP_LIST_NIL)
-#define BOOST_PP_TUPLE2_TO_LIST(A,B) BOOST_PP_LIST_CONS(A,BOOST_PP_TUPLE1_TO_LIST(B))
-#define BOOST_PP_TUPLE3_TO_LIST(A,B,C) BOOST_PP_LIST_CONS(A,BOOST_PP_TUPLE2_TO_LIST(B,C))
-#define BOOST_PP_TUPLE4_TO_LIST(A,B,C,D) BOOST_PP_LIST_CONS(A,BOOST_PP_TUPLE3_TO_LIST(B,C,D))
-#define BOOST_PP_TUPLE5_TO_LIST(A,B,C,D,E) BOOST_PP_LIST_CONS(A,BOOST_PP_TUPLE4_TO_LIST(B,C,D,E))
-#define BOOST_PP_TUPLE6_TO_LIST(A,B,C,D,E,F) BOOST_PP_LIST_CONS(A,BOOST_PP_TUPLE5_TO_LIST(B,C,D,E,F))
-#define BOOST_PP_TUPLE7_TO_LIST(A,B,C,D,E,F,G) BOOST_PP_LIST_CONS(A,BOOST_PP_TUPLE6_TO_LIST(B,C,D,E,F,G))
-#define BOOST_PP_TUPLE8_TO_LIST(A,B,C,D,E,F,G,H) BOOST_PP_LIST_CONS(A,BOOST_PP_TUPLE7_TO_LIST(B,C,D,E,F,G,H))
+#define BOOST_PP_TUPLE0_TO_LIST() (_,_,0)
+#define BOOST_PP_TUPLE1_TO_LIST(A) (A,(_,_,0),1)
+#define BOOST_PP_TUPLE2_TO_LIST(A,B) (A,(B,(_,_,0),1),1)
+#define BOOST_PP_TUPLE3_TO_LIST(A,B,C) (A,(B,(C,(_,_,0),1),1),1)
+#define BOOST_PP_TUPLE4_TO_LIST(A,B,C,D) (A,(B,(C,(D,(_,_,0),1),1),1),1)
+#define BOOST_PP_TUPLE5_TO_LIST(A,B,C,D,E) (A,(B,(C,(D,(E,(_,_,0),1),1),1),1),1)
+#define BOOST_PP_TUPLE6_TO_LIST(A,B,C,D,E,F) (A,(B,(C,(D,(E,(F,(_,_,0),1),1),1),1),1),1)
+#define BOOST_PP_TUPLE7_TO_LIST(A,B,C,D,E,F,G) (A,(B,(C,(D,(E,(F,(G,(_,_,0),1),1),1),1),1),1),1)
+#define BOOST_PP_TUPLE8_TO_LIST(A,B,C,D,E,F,G,H) (A,(B,(C,(D,(E,(F,(G,(H,(_,_,0),1),1),1),1),1),1),1),1)
+#define BOOST_PP_TUPLE9_TO_LIST(A,B,C,D,E,F,G,H,I) (A,(B,(C,(D,(E,(F,(G,(H,(I,(_,_,0),1),1),1),1),1),1),1),1),1)
+#define BOOST_PP_TUPLE10_TO_LIST(A,B,C,D,E,F,G,H,I,J) (A,(B,(C,(D,(E,(F,(G,(H,(I,(J,(_,_,0),1),1),1),1),1),1),1),1),1),1)
+#define BOOST_PP_TUPLE11_TO_LIST(A,B,C,D,E,F,G,H,I,J,K) (A,(B,(C,(D,(E,(F,(G,(H,(I,(J,(K,(_,_,0),1),1),1),1),1),1),1),1),1),1),1)
+#define BOOST_PP_TUPLE12_TO_LIST(A,B,C,D,E,F,G,H,I,J,K,L) (A,(B,(C,(D,(E,(F,(G,(H,(I,(J,(K,(L,(_,_,0),1),1),1),1),1),1),1),1),1),1),1),1)
+#define BOOST_PP_TUPLE13_TO_LIST(A,B,C,D,E,F,G,H,I,J,K,L,M) (A,(B,(C,(D,(E,(F,(G,(H,(I,(J,(K,(L,(M,(_,_,0),1),1),1),1),1),1),1),1),1),1),1),1),1)
+#define BOOST_PP_TUPLE14_TO_LIST(A,B,C,D,E,F,G,H,I,J,K,L,M,N) (A,(B,(C,(D,(E,(F,(G,(H,(I,(J,(K,(L,(M,(N,(_,_,0),1),1),1),1),1),1),1),1),1),1),1),1),1),1)
+#define BOOST_PP_TUPLE15_TO_LIST(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O) (A,(B,(C,(D,(E,(F,(G,(H,(I,(J,(K,(L,(M,(N,(O,(_,_,0),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1)
+#define BOOST_PP_TUPLE16_TO_LIST(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P) (A,(B,(C,(D,(E,(F,(G,(H,(I,(J,(K,(L,(M,(N,(O,(P,(_,_,0),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1)
 #endif
 #endif

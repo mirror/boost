@@ -43,5 +43,13 @@ expands to nothing.
 #define BOOST_PP_TUPLE6_EAT(A,B,C,D,E,F)
 #define BOOST_PP_TUPLE7_EAT(A,B,C,D,E,F,G)
 #define BOOST_PP_TUPLE8_EAT(A,B,C,D,E,F,G,H)
+#define BOOST_PP_TUPLE9_EAT(A,B,C,D,E,F,G,H,I)
+#define BOOST_PP_TUPLE10_EAT(A,B,C,D,E,F,G,H,I,J)
+#define BOOST_PP_TUPLE11_EAT(A,B,C,D,E,F,G,H,I,J,K)
+#define BOOST_PP_TUPLE12_EAT(A,B,C,D,E,F,G,H,I,J,K,L)
+#define BOOST_PP_TUPLE13_EAT(A,B,C,D,E,F,G,H,I,J,K,L,M)
+#define BOOST_PP_TUPLE14_EAT(A,B,C,D,E,F,G,H,I,J,K,L,M,N)
+#define BOOST_PP_TUPLE15_EAT(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O)
+#define BOOST_PP_TUPLE16_EAT(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P)
 #endif
 #endif

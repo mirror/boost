@@ -39,7 +39,7 @@ due to compiler limitations.
 #define BOOST_PP_LIMIT_MAG 128
 
 //! Expands to the maximum tuple length supported by the library.
-#define BOOST_PP_LIMIT_TUPLE 8
+#define BOOST_PP_LIMIT_TUPLE 16
 
 //! Obsolete. Use BOOST_PP_LIMIT_DIM.
 #define BOOST_PREPROCESSOR_LIMIT_DIM BOOST_PP_LIMIT_DIM
