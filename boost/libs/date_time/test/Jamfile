@@ -34,6 +34,7 @@ DEPENDS all : test ;
    [ run gregorian/testgreg_cal.cpp <lib>../build/boost_date_time ]
    [ run gregorian/testgreg_day.cpp <lib>../build/boost_date_time ]          
    [ run gregorian/testgreg_month.cpp <lib>../build/boost_date_time ]
+   [ run gregorian/testgreg_year.cpp <lib>../build/boost_date_time ]
    [ run gregorian/testparse_date.cpp <lib>../build/boost_date_time ]
  ;
 
@@ -69,6 +70,12 @@ DEPENDS all : test ;
    [ run posix_time/testmicrosec_time_clock.cpp
      <lib>../build/boost_date_time
     : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
+   [ run posix_time/teststreams.cpp
+     <lib>../build/boost_date_time
+    : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
+   [ run posix_time/testtime_formatters.cpp
+     <lib>../build/boost_date_time
+    : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
  ;
 
 
@@ -84,4 +91,5 @@ DEPENDS all : test ;
 # in supporting documentation.  CrystalClear Software makes no
 # representations about the suitability of this software for any
 # purpose.  It is provided "as is" without express or implied warranty.
+
 
