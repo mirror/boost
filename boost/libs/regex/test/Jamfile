@@ -6,13 +6,22 @@ subproject libs/regex/test ;
 SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
 include testing.jam ;
 
+include $(BOOST_ROOT)/libs/regex/base.jam ;
+
+#
+# this template defines the options common to
+# all regex tests:
+#
 template test 
-  : <lib>../build/boost_regex           # sources
-  : <define>BOOST_REGEX_NO_LIB=1        # requirements
-    <define>BOOST_REGEX_STATIC_LINK=1
-    <threading>multi
-  ;
+   : <template>regex-options 
+     <lib>../build/boost_regex            # sources
+   : <threading>multi
+   ;
  
+#
+# this template defines the options common to
+# all builds of the test/regression program:
+#
 template regression
     : <template>test                    # sources
       regress/parse.cpp
@@ -21,45 +30,67 @@ template regression
       <lib>../../test/build/boost_prg_exec_monitor
     ;
 
+#
+# rule for simple regex test programs:
+#
 rule regex-test ( name : sources + : requirements * : input-files * )
 {
     return [ run $(sources)
                :
                : $(input-files)
-               : $(requirements) <no-warn>parse.cpp <no-warn>regress.cpp <no-warn>tests.cpp
+               : $(requirements)
                : $(name) ] ;
 }
 
+#
+# this template defines the options common to
+# all regex dll tests:
+#
+template test-dll 
+   : <template>regex-dll-options 
+     <dll>../build/boost_regex            # sources
+   : <threading>multi
+   ;
+ 
+#
+# this template defines the options common to
+# all builds of the test/regression program:
+#
+template regression-dll
+    : <template>test-dll                    # sources
+      regress/parse.cpp
+      regress/regress.cpp 
+      regress/tests.cpp
+      <lib>../../test/build/boost_prg_exec_monitor
+    ;
+
 test-suite regex
       : 
-      [ regex-test regress
+      [ regex-test regex_regress
           : <template>regression     # sources
           :                          # requirements
           : regress/tests.txt        # input files
       ]
 
-      [ regex-test wregress
+      [ regex-test regex_wide_regress
           : <template>regression     # sources
           : <define>TEST_UNICODE=1   # requirements
           : regress/tests.txt        # input files
       ]
 
-      [ regex-test posix_api_check_c
+      [ regex-test posix_api_check
           : <template>test                      # sources
             c_compiler_checks/posix_api_check.c
       ]
 
-      [ regex-test wide_posix_api_check_c
-          : <template>test                      # sources
-            c_compiler_checks/wide_posix_api_check.c
-      ]
+      [ compile <template>test c_compiler_checks/wide_posix_api_check.c ]
 
-      [ regex-test posix_api_check
+      [ regex-test posix_api_check_cpp
           : <template>test                      # sources
             c_compiler_checks/posix_api_check.cpp
       ]
 
-      [ regex-test wide_posix_api_check
+      [ regex-test wide_posix_api_check_cpp
           : <template>test                      # sources
             c_compiler_checks/wide_posix_api_check.cpp
       ]
@@ -76,7 +107,28 @@ test-suite regex
             <lib>../../test/build/boost_test_exec_monitor
       ]
       
-      [ compile pathology/concept_check.cpp
+      [ run config_info/regex_config_info.cpp <template>test 
+      : : : <test-info>always_show_run_output ]
+
+      [ run config_info/regex_config_info.cpp <template>test 
+      : : : <test-info>always_show_run_output
+      : regex_dll_config_info ]
+
+      [ regex-test regex_regress_dll
+          : <template>regression-dll     # sources
+          :                          # requirements
+          : regress/tests.txt        # input files
+      ]
+
+      [ regex-test regex_wide_regress_dll
+          : <template>regression-dll     # sources
+          : <define>TEST_UNICODE=1   # requirements
+          : regress/tests.txt        # input files
+      ]
+
+      [ compile concepts/concept_check.cpp
+      ]
+      [ compile concepts/wide_concept_check.cpp
       ]
 ;
 

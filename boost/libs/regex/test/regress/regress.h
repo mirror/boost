@@ -27,6 +27,12 @@
 
 #include <boost/regex/config.hpp>
 
+#if defined(BOOST_NO_WREGEX) && defined(TEST_UNICODE)
+#  define BOOST_REGEX_NO_TEST
+#endif
+
+#ifndef BOOST_REGEX_NO_TEST
+
 #ifdef BOOST_RE_OLD_IOSTREAM
 #include <iostream.h>
 #else
@@ -433,6 +439,8 @@ typedef boost::basic_regex<char_t, boost::c_regex_traits<char_t>, jm_debug_alloc
 #define REG_MERGE 8
 #define REG_MERGE_COPY 16
 #define REG_PARTIAL_MATCH 32
+
+#endif
 
 #endif
 

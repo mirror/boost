@@ -85,7 +85,17 @@ int main()
 }
 
 #else
-#  error "This library has not been configured for wide character support"
+
+#include <iostream> 
+
+int main()
+{
+   std::cout <<
+   "\n<note>\n"
+   "This platform does not provide the needed wide character support for this test.\n"
+   "</note>\n";
+   return 0;
+}
 #endif
 
 

@@ -25,6 +25,8 @@
 #include <boost/regex.hpp>
 #include "regress.h"
 
+#ifndef BOOST_REGEX_NO_TEST
+
 #ifndef BOOST_RE_ALGO_INCLUDED
 #include <algorithm>
 #endif
@@ -337,6 +339,4 @@ void expand_escapes(string_type& s)
    }
 }
 
-
-
-
+#endif

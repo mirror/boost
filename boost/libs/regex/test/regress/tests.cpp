@@ -26,6 +26,8 @@
 #include <boost/regex.hpp>
 #include "regress.h"
 
+#ifndef BOOST_REGEX_NO_TEST
+
 # ifdef BOOST_MSVC
 #  pragma warning(disable: 4244 4267)
 #endif
@@ -884,7 +886,7 @@ void reset_error()
 }
 
 
-
+#endif
 
 
 

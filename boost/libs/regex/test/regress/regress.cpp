@@ -43,6 +43,8 @@ using std::endl;
 
 #include "regress.h"
 
+#ifndef BOOST_REGEX_NO_TEST
+
 #if defined(BOOST_MSVC) && defined(_DEBUG)
 #include <CRTDBG.H>
 #endif
@@ -284,5 +286,18 @@ void jm_debug_alloc::deallocate(void* pv, size_type n)
    delete[] p;
 }
 
+#else
 
+#include <iostream>
+
+int cpp_main(int argc, char * argv[])
+{
+   std::cout <<
+   "\n<note>\n"
+   "This platform does not provide the needed wide character support for this test.\n"
+   "</note>\n";
+   return 0;
+}
+
+#endif
 

@@ -5,6 +5,7 @@ subproject libs/regex/example ;
 # bring in the rules for testing
 SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
 include testing.jam ;
+include $(BOOST_ROOT)/libs/regex/base.jam ;
 
 rule regex-test-run ( sources + : input * )
 {
@@ -12,6 +13,7 @@ rule regex-test-run ( sources + : input * )
            run
              # sources
              $(sources)
+             <template>regex-options
 
              # dependencies
              <lib>../build/boost_regex
@@ -19,9 +21,6 @@ rule regex-test-run ( sources + : input * )
             $(input)
          :  # test-files
          :  # requirements
-			<sysinclude>../../../
-			<define>BOOST_REGEX_NO_LIB=1
-			<define>BOOST_REGEX_STATIC_LINK=1
 			<threading>multi
          :  # test name
         ] ;
