@@ -1,4 +1,6 @@
-#if defined(_MSC_VER) && !defined(__ICL)
+#include <boost/config.hpp>
+
+#if defined(BOOST_MSVC)
 #pragma warning(disable: 4786)  // identifier truncated in debug info
 #pragma warning(disable: 4710)  // function not inlined
 #pragma warning(disable: 4711)  // function selected for automatic inline expansion

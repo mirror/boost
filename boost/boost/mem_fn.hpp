@@ -1,8 +1,10 @@
 #ifndef BOOST_MEM_FN_HPP_INCLUDED
 #define BOOST_MEM_FN_HPP_INCLUDED
 
-#if _MSC_VER+0 >= 1020
-#pragma once
+// MS compatible compilers support #pragma once
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma once
 #endif
 
 //

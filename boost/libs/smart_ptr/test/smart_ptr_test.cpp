@@ -13,11 +13,19 @@
 //  20 Jul 99  header name changed to .hpp
 //  20 Apr 99  additional error tests added.
 
-#if defined(_MSC_VER) && !defined(__ICL) && !defined(__COMO__)
+#include <boost/config.hpp>
+
+#if defined(BOOST_MSVC)
+
 # pragma warning(disable: 4786)  // identifier truncated in debug info
 # pragma warning(disable: 4710)  // function not inlined
 # pragma warning(disable: 4711)  // function selected for automatic inline expansion
 # pragma warning(disable: 4514)  // unreferenced inline removed
+
+#if (BOOST_MSVC >= 1310)
+# pragma warning(disable: 4675)  // resolved overload found with Koenig lookup
+#endif
+
 #endif
 
 #ifdef __BORLANDC__

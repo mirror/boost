@@ -1,9 +1,17 @@
-#if defined(_MSC_VER) && !defined(__ICL) && !defined(__COMO__)
+#include <boost/config.hpp>
+
+#if defined(BOOST_MSVC)
+
 #pragma warning(disable: 4786)  // identifier truncated in debug info
 #pragma warning(disable: 4710)  // function not inlined
 #pragma warning(disable: 4711)  // function selected for automatic inline expansion
 #pragma warning(disable: 4514)  // unreferenced inline removed
 #pragma warning(disable: 4355)  // 'this' : used in base member initializer list
+
+#if (BOOST_MSVC >= 1310)
+#pragma warning(disable: 4675)  // resolved overload found with Koenig lookup
+#endif
+
 #endif
 
 //

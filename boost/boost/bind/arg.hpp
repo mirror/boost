@@ -1,6 +1,8 @@
 #ifndef BOOST_BIND_ARG_HPP_INCLUDED
 #define BOOST_BIND_ARG_HPP_INCLUDED
 
+// MS compatible compilers support #pragma once
+
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
