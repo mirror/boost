@@ -69,6 +69,8 @@ namespace gregorian {
     month_enum as_enum() const {return static_cast<month_enum>(value_);}
     const char* as_short_string() const;
     const char* as_long_string()  const;
+    const wchar_t* as_short_wstring() const;
+    const wchar_t* as_long_wstring()  const;
     //! Shared pointer to a map of Month strings (Names & Abbrev) & numbers
     static month_map_ptr_type get_month_map_ptr();
   };
