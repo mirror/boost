@@ -23,33 +23,34 @@
 #include "boost/mpl/aux_/config/overload_resolution.hpp"
 #include "boost/config.hpp"
 
-#if !defined(BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION)
+#if !defined(BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION) && (!defined(__GNUC__) || __GNUC__ == 3)
 
-#   if (!defined(BOOST_MSVC) || BOOST_MSVC > 1300) && (!defined _MSC_VER || !defined(BOOST_INTEL_CXX_VERSION) || BOOST_INTEL_CXX_VERSION > 500)
+#   if (!defined(BOOST_MSVC) || BOOST_MSVC > 1300) \
+    && (!defined _MSC_VER || !defined(BOOST_INTEL_CXX_VERSION) \
+        || BOOST_INTEL_CXX_VERSION > 500)
 
 // the implementation below is based on a USENET newsgroup's posting by  
 // Rani Sharoni (comp.lang.c++.moderated, 2002-03-17 07:45:09 PST)
 
-#   define BOOST_MPL_HAS_XXX_TRAIT_DEF(name)                            \
-template< typename T >                                                  \
-boost::mpl::aux::yes_tag                                                \
-has_##name##_helper(                                                    \
-      T const volatile*                                                 \
-    , boost::mpl::aux::type_wrapper<BOOST_MSVC_TYPENAME T::name>* = 0   \
-    );                                                                  \
-                                                                        \
-boost::mpl::aux::no_tag has_##name##_helper(                            \
-    ...                                                                 \
-    );                                                                  \
-                                                                        \
-template< typename T >                                                  \
-struct has_##name                                                       \
-{                                                                       \
-     BOOST_STATIC_CONSTANT(bool, value =                                \
-        sizeof((has_##name##_helper)((T*)0))                            \
-            == sizeof(boost::mpl::aux::yes_tag)                         \
-        );                                                              \
-};                                                                      \
+#   define BOOST_MPL_HAS_XXX_TRAIT_DEF(name) \
+template< typename T > \
+boost::mpl::aux::yes_tag \
+has_##name##_helper( \
+      T const volatile* \
+    , boost::mpl::aux::type_wrapper<BOOST_MSVC_TYPENAME T::name>* = 0 \
+    ); \
+\
+boost::mpl::aux::no_tag \
+has_##name##_helper(...); \
+\
+template< typename T > \
+struct has_##name \
+{ \
+     BOOST_STATIC_CONSTANT(bool, value = \
+        sizeof((has_##name##_helper)(static_cast<T*>(0))) \
+            == sizeof(boost::mpl::aux::yes_tag) \
+        ); \
+}; \
 /**/
 
 #   else
@@ -61,7 +62,10 @@ struct has_##name                                                       \
 
 // Modified dwa 8/Oct/02 to handle reference types.
 
-namespace boost { namespace mpl { namespace aux { struct has_xxx_tag; } } }
+namespace boost { namespace mpl { namespace aux {
+struct has_xxx_tag;
+}}}
+
 #   define BOOST_MPL_HAS_XXX_TRAIT_DEF_(name) \
 template< typename T, typename name = ::boost::mpl::aux::has_xxx_tag > \
 struct has_##name : T \
@@ -72,7 +76,8 @@ struct has_##name : T \
 \
  public: \
     BOOST_STATIC_CONSTANT(bool, value =  \
-        sizeof(test(static_cast<void(*)(name)>(0))) != sizeof(boost::mpl::aux::no_tag) \
+        sizeof(test(static_cast<void(*)(name)>(0))) \
+            != sizeof(boost::mpl::aux::no_tag) \
         ); \
 }; \
 \
@@ -93,7 +98,7 @@ BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, long double) \
 /**/
 
 #   define BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, T) \
-template<> struct has_##name<T,int> \
+template<> struct has_##name<T,boost::mpl::aux::has_xxx_tag> \
 { \
     enum { value = false }; \
 }; \
