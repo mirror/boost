@@ -209,9 +209,12 @@ main()
   check("check infinity nad compare   ",      d12 != d11);
   date d13(max_date_time);
   check("check infinity - max compare   ",      d13 < d11);
+  check("max date_time value   ",       d13 == date(9999,Dec, 31));
+  std::cout << to_simple_string(d13) << std::endl;
   date d14(min_date_time);
   check("check infinity - min compare   ",      d14 > d10);
-  //  std::cout << to_simple_string(d14) << std::endl;
+  std::cout << to_simple_string(d14) << std::endl;
+  check("min date_time value   ",      d14 == date(1400,Jan, 1));
 
  
   date d15(1400,1,1);
