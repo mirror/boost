@@ -71,9 +71,10 @@ concepts, see our
 __ http://www.gotw.ca/gotw/050.htm
 
 
-   `Standard Proposal For New-Style Iterators`__
+   `Standard Proposal For New-Style Iterators`__ (PDF__)
 
 __ new-iter-concepts.html
+__ new-iter-concepts.pdf
 
 =============================
  Iterator Facade and Adaptor
@@ -96,25 +97,29 @@ behavior as possible.
 The documentation for these two classes can be found at the following
 web pages:
 
-* |facade|_
+* |facade|_ (PDF__)
 
-* |adaptor|_
+* |adaptor|_ (PDF__)
 
 
 .. |facade| replace:: ``iterator_facade``
 .. _facade: iterator_facade.html
+__ iterator_facade.pdf
+
 .. |adaptor| replace:: ``iterator_adaptor``
 .. _adaptor: iterator_adaptor.html
+__ iterator_adaptor.pdf
 
 Both |facade| and |adaptor| as well as many of the `specialized
 adaptors`_ mentioned below have been proposed for standardization,
 and accepted into the first C++ technical report; see our
 
-   `Standard Proposal For Iterator Facade and Adaptor`__
+   `Standard Proposal For Iterator Facade and Adaptor`__ (PDF__)
 
 for more details.
 
 __ facade-and-adaptor.html
+__ facade-and-adaptor.pdf
 
 ======================
  Specialized Adaptors
@@ -123,50 +128,57 @@ __ facade-and-adaptor.html
 The iterator library supplies a useful suite of standard-conforming
 iterator templates based on the Boost `iterator facade and adaptor`_.
 
-* |counting|_: an iterator over a sequence of consecutive values.
+* |counting|_ (PDF__): an iterator over a sequence of consecutive values.
   Implements a "lazy sequence"
 
-* |filter|_: an iterator over the subset of elements of some
+* |filter|_ (PDF__): an iterator over the subset of elements of some
   sequence which satisfy a given predicate
 
-* |indirect|_: an iterator over the objects *pointed-to* by the
+* |indirect|_ (PDF__): an iterator over the objects *pointed-to* by the
   elements of some sequence.
 
-* |permutation|_: an iterator over the elements of some random-access
+* |permutation|_ (PDF__): an iterator over the elements of some random-access
   sequence, rearranged according to some sequence of integer indices.
 
-* |reverse|_: an iterator which traverses the elements of some
+* |reverse|_ (PDF__): an iterator which traverses the elements of some
   bidirectional sequence in reverse.  Corrects many of the
   shortcomings of C++98's ``std::reverse_iterator``.
 
-* |transform|_: an iterator over elements which are the result of
+* |transform|_ (PDF__): an iterator over elements which are the result of
   applying some functional transformation to the elements of an
   underlying sequence.  This component also replaces the old
   ``projection_iterator_adaptor``.
 
-* |zip|_: an iterator over tuples of the elements at corresponding
+* |zip|_ (PDF__): an iterator over tuples of the elements at corresponding
   positions of heterogeneous underlying iterators.
 
 .. |counting| replace:: ``counting_iterator``
 .. _counting: counting_iterator.html
+__ counting_iterator.pdf
 
 .. |filter| replace:: ``filter_iterator``
 .. _filter: filter_iterator.html
+__ filter_iterator.pdf
 
 .. |indirect| replace:: ``indirect_iterator``
 .. _indirect: indirect_iterator.html
+__ indirect_iterator.pdf
 
 .. |permutation| replace:: ``permutation_iterator``
 .. _permutation: permutation_iterator.html
+__ permutation_iterator.pdf
 
 .. |reverse| replace:: ``reverse_iterator``
 .. _reverse: reverse_iterator.html
+__ reverse_iterator.pdf
 
 .. |transform| replace:: ``transform_iterator``
 .. _transform: transform_iterator.html
+__ transform_iterator.pdf
 
 .. |zip| replace:: ``zip_iterator``
 .. _zip: zip_iterator.html
+__ zip_iterator.pdf
 
 ====================
  Iterator Utilities
@@ -175,41 +187,45 @@ iterator templates based on the Boost `iterator facade and adaptor`_.
 Traits
 ------
 
-* |pointee|_: Provides the capability to deduce the referent types
+* |pointee|_ (PDF__): Provides the capability to deduce the referent types
   of pointers, smart pointers and iterators in generic code.  Used
   in |indirect|.
 
-* |iterator_traits|_: Provides MPL_\ -compatible metafunctions which
+* |iterator_traits|_ (PDF__): Provides MPL_\ -compatible metafunctions which
   retrieve an iterator's traits.  Also corrects for the deficiencies
   of broken implementations of ``std::iterator_traits``.
 
-* |interoperable|_: Provides an MPL_\ -compatible metafunction for
+* |interoperable|_ (PDF__): Provides an MPL_\ -compatible metafunction for
   testing iterator interoperability
 
 .. |pointee| replace:: ``pointee.hpp``
 .. _pointee: pointee.html
+__ pointee.pdf
 
 .. |iterator_traits| replace:: ``iterator_traits.hpp``
 .. _iterator_traits: iterator_traits.html
+__ iterator_traits.pdf
 
 .. |interoperable| replace:: ``interoperable.hpp``
 .. _interoperable: interoperable.html
+__ interoperable.pdf
 
 .. _MPL: ../../mpl/doc/index.html
 
 Testing and Concept Checking
 ----------------------------
 
-* |iterator_concepts|_: Concept checking classes for the new iterator concepts.
+* |iterator_concepts|_ (PDF__): Concept checking classes for the new iterator concepts.
 
-* |iterator_archetypes|_: Concept archetype classes for the new iterators concepts.
+* |iterator_archetypes|_ (PDF__): Concept archetype classes for the new iterators concepts.
 
 .. |iterator_concepts| replace:: ``iterator_concepts.hpp``
 .. _iterator_concepts: iterator_concepts.html
+__ iterator_concepts.pdf
 
 .. |iterator_archetypes| replace:: ``iterator_archetypes.hpp``
 .. _iterator_archetypes: iterator_archetypes.html
-
+__ iterator_archetypes.pdf
 
 =======================================================
  Upgrading from the old Boost Iterator Adaptor Library
