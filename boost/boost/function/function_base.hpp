@@ -66,21 +66,21 @@ namespace boost {
         char data[1];
       };
 
-      any_pointer make_any_pointer(void* o)
+      inline any_pointer make_any_pointer(void* o)
       {
         any_pointer p;
         p.obj_ptr = o;
         return p;
       }
 
-      any_pointer make_any_pointer(const void* o)
+      inline any_pointer make_any_pointer(const void* o)
       {
         any_pointer p;
         p.const_obj_ptr = o;
         return p;
       }
 
-      any_pointer make_any_pointer(void (*f)())
+      inline any_pointer make_any_pointer(void (*f)())
       {
         any_pointer p;
         p.func_ptr = f;
