@@ -44,8 +44,8 @@ public:
     max_value = integer_traits<result_type>::const_max
   };
 #endif
-  result_type min() const { return integer_traits<result_type>::min(); }
-  result_type max() const { return integer_traits<result_type>::max(); }
+  result_type min() const { return min_value; }
+  result_type max() const { return max_value; }
   explicit random_device(const std::string& token = default_token);
   ~random_device();
   unsigned int operator()();
