@@ -42,7 +42,7 @@ template< long N >
 struct O1_size_impl< aux::vector_tag<N> >
 {
     template< typename Vector > struct apply
-        : long_<N>
+        : mpl::long_<N>
     {
     };
 };

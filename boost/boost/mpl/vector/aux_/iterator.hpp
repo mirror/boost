@@ -40,7 +40,7 @@ struct v_iter
     typedef typename v_at<Vector,n_>::type type;
 
     typedef Vector vector_;
-    typedef long_<n_> pos;
+    typedef mpl::long_<n_> pos;
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
     enum { 
@@ -95,7 +95,7 @@ template<
     , BOOST_MPL_AUX_NTTP_DECL(long, m_)
     > 
 struct distance< v_iter<Vector,n_>, v_iter<Vector,m_> >
-    : long_<(m_ - n_)>
+    : mpl::long_<(m_ - n_)>
 {
 };
 

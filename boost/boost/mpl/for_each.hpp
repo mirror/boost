@@ -72,7 +72,7 @@ struct for_each_impl<false>
         value_initialized<arg> x;
         aux::unwrap(f, 0)(boost::get(x));
         
-        typedef typename next<Iterator>::type iter;
+        typedef typename mpl::next<Iterator>::type iter;
         for_each_impl<boost::is_same<iter,LastIterator>::value>
             ::execute((iter*)0, (LastIterator*)0, (TransformFunc*)0, f);
     }

@@ -41,7 +41,7 @@ template<
     >
 struct at_c
     : at_impl< typename sequence_tag<Sequence>::type >
-        ::template apply< Sequence,long_<N> >
+        ::template apply< Sequence,mpl::long_<N> >
 {
 };
 
