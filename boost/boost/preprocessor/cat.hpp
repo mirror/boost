@@ -48,9 +48,9 @@ The above expands to:
     ];
 \endverbatim</PRE>
 
-Using BOOST_PP_CAT() above lets the PP expand the __LINE__.
-If the above code would use the ## operator directly then __LINE__ would not be
-expanded and the above would expand to:
+Using BOOST_PP_CAT() above lets the PP expand the __LINE__. If the above code
+would use the ## operator directly then __LINE__ would not be expanded and
+the above would expand to:
 
 <PRE>\verbatim
   enum
