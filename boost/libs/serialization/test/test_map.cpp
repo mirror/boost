@@ -57,8 +57,8 @@ struct random_key {
     }
 };  
 
-// some borland/stlport versions need this
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0x564 )
+// borland/stlport versions need this
+#if defined(__BORLANDC__) && (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
 namespace std {
   template<>
   struct equal_to<random_key>
