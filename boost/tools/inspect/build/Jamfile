@@ -8,7 +8,7 @@ subproject tools/inspect/build ;
 
 exe inspect
   :
-  ../inspect.cpp ../link_check.cpp ../long_name_check.cpp ../tab_check.cpp ../crlf_check.cpp ../copyright_check.cpp
+  ../inspect.cpp ../license_check.cpp ../link_check.cpp ../long_name_check.cpp ../tab_check.cpp ../crlf_check.cpp ../copyright_check.cpp
         ../../../libs/test/src/cpp_main.cpp ../../../libs/test/src/execution_monitor.cpp
   <lib>../../../libs/filesystem/build/boost_filesystem
   <lib>../../../libs/regex/build/boost_regex
