@@ -284,7 +284,7 @@
 # ifdef BOOST_NO_STDC_NAMESPACE
 #   include <cstddef>
     namespace std { using ::ptrdiff_t; using ::size_t; }
-    // using ::wchar_t; removed to work around old compilers (Ed Brey)
+    // using ::wchar_t; removed since wchar_t is a C++ built-in type (Ed Brey)
 # endif
 
 
