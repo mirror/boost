@@ -6,21 +6,22 @@ import testing ;
 rule program-options-test ( name )
 {
     return [ 
-	run $(name).cpp <lib>../build/boost_program_options
-	<lib>../../test/build/boost_test_exec_monitor : :
-    : <include>$(BOOST_ROOT) 
-      std::facet-support std::locale-support ]
+      run $(name).cpp <lib>../build/boost_program_options
+        <lib>../../test/build/boost_test_exec_monitor : :
+        : <include>$(BOOST_ROOT) 
+          std::facet-support std::locale-support ]
     ;
 }
 
 rule program-options-dll-test ( name )
 {
     return [ 
-	run $(name).cpp <dll>../build/boost_program_options
-	<lib>../../test/build/boost_test_exec_monitor : :
-    : <include>$(BOOST_ROOT) 
-      std::facet-support std::locale-support 
-    : $(name)_dll ]
+      run $(name).cpp <dll>../build/boost_program_options
+        <lib>../../test/build/boost_test_exec_monitor : :
+        : <include>$(BOOST_ROOT) 
+          <define>BOOST_ALL_DYN_LINK=1
+          <runtime-link>dynamic
+        : $(name)_dll ]
     ;
 }
 
