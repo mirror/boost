@@ -119,7 +119,7 @@ inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type end( const T& r )
 }
 
 
-/*
+
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 // BCB is not able to overload pointer when class overloads are also available
 template<>
@@ -135,7 +135,6 @@ inline range_const_iterator<const wchar_t*>::type end<const wchar_t*>( const wch
 }
 
 #endif
-*/
 
 } // namespace 'boost'
 
