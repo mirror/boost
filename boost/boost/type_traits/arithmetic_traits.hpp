@@ -66,7 +66,7 @@ template <> struct is_integral<unsigned long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
-#elif defined(__BORLANDC__) || defined(_MSC_VER)
+#elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1100)) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x520))
 template <> struct is_integral<unsigned __int64>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<__int64>
@@ -126,7 +126,7 @@ template <> struct is_integral<const unsigned long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<const long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
-#elif defined(__BORLANDC__) || defined(_MSC_VER)
+#elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1100)) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x520))
 template <> struct is_integral<const unsigned __int64>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<const __int64>
@@ -171,7 +171,7 @@ template <> struct is_integral<volatile  unsigned long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<volatile  long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
-#elif defined(__BORLANDC__) || defined(_MSC_VER)
+#elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1100)) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x520))
 template <> struct is_integral<volatile  unsigned __int64>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<volatile  __int64>
@@ -216,7 +216,7 @@ template <> struct is_integral<const volatile unsigned long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<const volatile long long>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
-#elif defined(__BORLANDC__) || defined(_MSC_VER)
+#elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1100)) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x520))
 template <> struct is_integral<const volatile unsigned __int64>
 { BOOST_STATIC_CONSTANT(bool, value = true); };
 template <> struct is_integral<const volatile __int64>
