@@ -69,8 +69,8 @@ specified in the following table:
 +---------------------------------------+-----------------------------------+
 
 
-If iterator ``X`` is interoperable with iterator ``Y`` then
-``reverse_iterator<X>`` is interoperable with ``reverse_iterator<Y>``.
+``reverse_iterator<X>`` is interoperable with ``reverse_iterator<Y>``
+if and only if iterator ``X`` is interoperable with iterator ``Y``.
 
 
 

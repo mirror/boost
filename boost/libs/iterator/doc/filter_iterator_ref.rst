@@ -92,9 +92,8 @@ following tables.
 +-------------------------------------------------------+---------------------------------+
 
 
-If iterator ``X`` is interoperable with iterator ``Y`` then
-``filter_iterator<P1, X>`` is interoperable with
-``filter_iterator<P2, Y>``.
+``filter_iterator<P1, X>`` is interoperable with ``filter_iterator<P2, Y>`` 
+if and only if iterator ``X`` is interoperable with iterator ``Y``.
 
 
 ``filter_iterator`` operations

@@ -93,7 +93,8 @@ deducing the default for the ``value_type`` member.]
 ``indirect_iterator`` models
 ............................
 
-In addition to the concepts indicated by ``iterator_category``, a
+In addition to the concepts indicated by ``iterator_category``
+and by ``iterator_traversal<indirect_iterator>::type``, a
 specialization of ``indirect_iterator`` models the following
 concepts, Where ``v`` is an object of
 ``iterator_traits<Iterator>::value_type``:
@@ -107,8 +108,10 @@ concepts, Where ``v`` is an object of
 
   * Lvalue Iterator if ``reference`` is a reference type.
 
-Two specializations of ``indirect_iterator`` are interoperable if
-their ``Iterator`` parameters are interoperable.
+``indirect_iterator<X,V1,C1,R1,D1>`` is interoperable with
+``indirect_iterator<Y,V2,C2,R2,D2>`` if and only if iterator ``X`` is
+interoperable with iterator ``Y``.
+
 
 ``indirect_iterator`` operations
 ................................

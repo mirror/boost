@@ -193,7 +193,8 @@ deducing the default for the <tt class="literal"><span class="pre">value_type</s
 </div>
 <div class="section" id="indirect-iterator-models">
 <h1><a class="toc-backref" href="#id4" name="indirect-iterator-models"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></h1>
-<p>In addition to the concepts indicated by <tt class="literal"><span class="pre">iterator_category</span></tt>, a
+<p>In addition to the concepts indicated by <tt class="literal"><span class="pre">iterator_category</span></tt>
+and by <tt class="literal"><span class="pre">iterator_traversal&lt;indirect_iterator&gt;::type</span></tt>, a
 specialization of <tt class="literal"><span class="pre">indirect_iterator</span></tt> models the following
 concepts, Where <tt class="literal"><span class="pre">v</span></tt> is an object of
 <tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt>:</p>
@@ -207,8 +208,9 @@ expression (where <tt class="literal"><span class="pre">t</span></tt> is an obje
 <li>Lvalue Iterator if <tt class="literal"><span class="pre">reference</span></tt> is a reference type.</li>
 </ul>
 </blockquote>
-<p>Two specializations of <tt class="literal"><span class="pre">indirect_iterator</span></tt> are interoperable if
-their <tt class="literal"><span class="pre">Iterator</span></tt> parameters are interoperable.</p>
+<p><tt class="literal"><span class="pre">indirect_iterator&lt;X,V1,C1,R1,D1&gt;</span></tt> is interoperable with
+<tt class="literal"><span class="pre">indirect_iterator&lt;Y,V2,C2,R2,D2&gt;</span></tt> if and only if iterator <tt class="literal"><span class="pre">X</span></tt> is
+interoperable with iterator <tt class="literal"><span class="pre">Y</span></tt>.</p>
 </div>
 <div class="section" id="indirect-iterator-operations">
 <h1><a class="toc-backref" href="#id5" name="indirect-iterator-operations"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></h1>

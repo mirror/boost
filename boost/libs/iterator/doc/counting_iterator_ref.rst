@@ -83,10 +83,9 @@ tag ``CategoryOrTraversal``.  Otherwise, if
 Otherwise, ``counting_iterator`` models the same iterator traversal
 concepts modeled by ``Incrementable``.
 
-If iterator ``X`` is interoperable with iterator ``Y`` then
 ``counting_iterator<X,C1,D1>`` is interoperable with
-``counting_iterator<Y,C2,D2>`` if both counting iterators have the
-same traversal category and difference type.
+``counting_iterator<Y,C2,D2>`` if and only if iterator ``X`` is
+interoperable with iterator ``Y``.
 
 
 
