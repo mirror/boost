@@ -7,7 +7,6 @@
 // No include guards -- file included by boost/iostreams/streambuf_facade.hpp
 // within include guards.
 
-
 #include <memory>                       // allocator.       
 #include <boost/config.hpp>             // MSVC, DEDUCED_TYPENAME.
 #include <boost/detail/workaround.hpp>  
@@ -23,20 +22,27 @@ template< typename T,
               std::char_traits<
                   BOOST_DEDUCED_TYPENAME io_char<T>::type 
               >,
-          typename Alloc = std::allocator<BOOST_IOSTREAMS_CHAR_TYPE(T)>,
+          typename Alloc = 
+              std::allocator<
+                  BOOST_DEDUCED_TYPENAME io_char<T>::type 
+              >,
           typename Mode = BOOST_DEDUCED_TYPENAME io_mode<T>::type >
 class streambuf_facade
     : public detail::streambuf_facade_traits<T, Tr, Alloc, Mode>::type
 {
 private:
-    BOOST_STATIC_ASSERT((is_convertible<BOOST_IOSTREAMS_CATEGORY(T), Mode>::value));
+    BOOST_STATIC_ASSERT((
+        is_convertible<
+            BOOST_DEDUCED_TYPENAME iostreams::io_category<T>::type, Mode
+        >::value
+    ));
     typedef typename 
             detail::streambuf_facade_traits<
                 T, Tr, Alloc, Mode
-            >::type                               base_type;
-    typedef T                                     policy_type;
+            >::type                           base_type;
+    typedef T                                 policy_type;
 public:
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(T)          char_type;
+    typedef typename io_char<T>::type         char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
     streambuf_facade() { }
     template<typename U0>

@@ -82,7 +82,7 @@ private:
 // Contains member data, open/is_open/close and buffer management functions.
 template<typename Device, typename Codecvt, typename Alloc>
 struct code_converter_impl {
-    typedef BOOST_IOSTREAMS_CATEGORY(Device)                device_category;
+    typedef typename io_category<Device>::type              device_category;
     typedef is_convertible<device_category, input>          can_read;
     typedef is_convertible<device_category, output>         can_write;
     typedef is_convertible<device_category, bidirectional>  is_bidir;
@@ -224,7 +224,10 @@ public:
         : impl_type::mode, device_tag, closable_tag, localizable_tag
         { };
     BOOST_STATIC_ASSERT((
-        is_same<extern_type, BOOST_IOSTREAMS_CHAR_TYPE(Device)>::value
+        is_same<
+            extern_type, 
+            BOOST_DEDUCED_TYPENAME io_char<Device>::type
+        >::value
     ));
 public:
     code_converter() { }

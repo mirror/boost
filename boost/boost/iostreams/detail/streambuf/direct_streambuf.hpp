@@ -25,17 +25,20 @@
 namespace boost { namespace iostreams { namespace detail {
 
 template< typename T, 
-          typename Tr = std::char_traits<BOOST_IOSTREAMS_CHAR_TYPE(T)> >
+          typename Tr = 
+              std::char_traits<
+                 BOOST_DEDUCED_TYPENAME io_char<T>::type 
+              > >
 class direct_streambuf 
-    : public linked_streambuf<BOOST_IOSTREAMS_CHAR_TYPE(T), Tr> 
+    : public linked_streambuf<BOOST_DEDUCED_TYPENAME io_char<T>::type , Tr> 
 {
 public:
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(T)                  char_type;
+    typedef typename io_char<T>::type                     char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 private:
     typedef linked_streambuf<char_type, traits_type>      base_type;
     typedef std::basic_streambuf<char_type, traits_type>  streambuf_type;
-    typedef BOOST_IOSTREAMS_CATEGORY(T)                   io_category;
+    typedef typename io_category<T>::type                 io_category;
 public: // stream_facade needs access.
     void open( const T& t,
                std::streamsize,   // buffer size -- not used.

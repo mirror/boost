@@ -38,7 +38,7 @@ namespace boost { namespace iostreams { namespace detail {
 template<typename Direct>
 class direct_adapter_base {
 public:
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(Direct) char_type;
+    typedef typename io_char<Direct>::type char_type;
     struct io_category 
         : io_mode<Direct>::type,
           device_tag,

@@ -11,7 +11,7 @@
 # pragma once
 #endif              
 
-#include <boost/config.hpp> // BOOST_STATIC_CONSTANT.
+#include <boost/config.hpp> // BOOST_STATIC_CONSTANT, BOOST_DEDUCED_TYPENAME.
 #include <boost/iostreams/traits.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>   
 #include <boost/mpl/bool.hpp>   
@@ -21,8 +21,8 @@ namespace boost { namespace iostreams { namespace detail {
 
 template<typename T, typename Tag>
 struct has_trait_impl {
-    BOOST_STATIC_CONSTANT(bool, value = 
-        (is_convertible<BOOST_IOSTREAMS_CATEGORY(T), Tag>::value));
+    typedef typename io_category<T>::type category;
+    BOOST_STATIC_CONSTANT(bool, value = (is_convertible<category, Tag>::value));
 };
 
 template<typename T, typename Tag>

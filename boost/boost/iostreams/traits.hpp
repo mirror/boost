@@ -104,6 +104,7 @@ struct io_category {
                 mpl::true_,          lazy< detail::member_io_category<T> >
             >::type type;     
 };
+
 template<typename T>
 struct io_category< boost::reference_wrapper<T> > 
     : io_category<T> 
@@ -182,25 +183,9 @@ struct io_mode_id {
 
 template<typename T> // Borland 5.6.4 requires this circumlocution.
 struct io_mode : detail::io_mode_impl< detail::io_mode_id<T>::value > { };
-                
-//----------Definition of convenience metafunctions---------------------------//
 
-namespace detail {
+//----------Definition of BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS------------------//
 
-template<typename T>
-struct is_smart
-    : is_convertible<T, detail::smart_tag>
-    { };
-
-} // End namespace detail.
-
-//----------Definition of macros----------------------------------------------//
-
-#define BOOST_IOSTREAMS_CHAR_TYPE(T) typename boost::iostreams::io_char<T>::type
-#define BOOST_IOSTREAMS_CATEGORY(T) \
-    typename boost::iostreams::io_category<T>::type \
-    /**/
-#define BOOST_IOSTREAMS_INT_TYPE(T) typename io_int<T>::type
 #define BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr) \
     typedef Tr traits_type; \
     typedef typename traits_type::int_type int_type; \

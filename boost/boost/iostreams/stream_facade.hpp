@@ -25,9 +25,9 @@ namespace boost { namespace iostreams { namespace detail {
 
 template<typename Device, typename Tr>
 struct stream_facade_traits {
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(Device)                   char_type;
-    typedef Tr                                                  traits_type;
-    typedef BOOST_IOSTREAMS_CATEGORY(Device)                    mode;
+    typedef typename io_char<Device>::type                     char_type;
+    typedef Tr                                                 traits_type;
+    typedef typename io_category<Device>::type                 mode;
     typedef typename
             select<
                 mpl::and_<
@@ -39,7 +39,7 @@ struct stream_facade_traits {
                 std::basic_istream<char_type, traits_type>,
                 mpl::true_,
                 std::basic_ostream<char_type, traits_type>
-            >::type                                             stream_type;
+            >::type                                            stream_type;
 };
 
 // Hack to work around fact that streams don't have default constructors.
@@ -96,14 +96,14 @@ template< typename Device,
               > >
 struct stream_facade : detail::stream_facade_base<Device, Tr, Alloc> {
 public:
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(Device)        char_type;
+    typedef typename io_char<Device>::type  char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 private:
     typedef typename
             detail::stream_facade_traits<
                 Device, Tr
-            >::stream_type                           stream_type;
-    typedef Device                                   policy_type;
+            >::stream_type                  stream_type;
+    typedef Device                          policy_type;
 public:
     stream_facade() { }
     // BEGIN DEBUG

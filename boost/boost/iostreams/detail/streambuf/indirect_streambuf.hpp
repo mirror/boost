@@ -40,13 +40,13 @@ namespace boost { namespace iostreams { namespace detail {
 //
 template<typename T, typename Tr, typename Alloc, typename Mode>
 class indirect_streambuf
-    : public linked_streambuf<BOOST_IOSTREAMS_CHAR_TYPE(T), Tr>
+    : public linked_streambuf<BOOST_DEDUCED_TYPENAME io_char<T>::type, Tr>
 {
 public:
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(T)                      char_type;
+    typedef typename io_char<T>::type                         char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 private:
-    typedef BOOST_IOSTREAMS_CATEGORY(T)                       io_category;
+    typedef typename io_category<T>::type                     io_category;
     typedef concept_adapter<T>                                wrapper;
     typedef detail::basic_buffer<char_type, Alloc>            buffer_type;
     typedef indirect_streambuf<T, Tr, Alloc, Mode>            my_type;

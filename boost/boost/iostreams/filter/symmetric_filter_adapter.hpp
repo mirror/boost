@@ -54,7 +54,7 @@ namespace detail {
 template<typename SymmetricFilter, typename Alloc>
 class symmetric_filter_adapter_impl {
 public:
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(SymmetricFilter)        char_type;
+    typedef typename io_char<SymmetricFilter>::type           char_type;
     typedef std::char_traits<char_type>                       traits_type;
     typedef std::basic_string<char_type, traits_type, Alloc>  string_type;
     struct category

@@ -43,8 +43,8 @@ std::streamsize copy_impl( Source& src, Sink& snk,
                            mpl::true_, mpl::true_ )
 {   // Copy from a direct Source to a direct Sink.
     using namespace std;
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(Source)    char_type;
-    typedef pair<char_type*, char_type*>  pair_type;
+    typedef typename io_char<Source>::type  char_type;
+    typedef pair<char_type*, char_type*>    pair_type;
     pair_type p1 = iostreams::input_sequence(src);
     pair_type p2 = iostreams::output_sequence(snk);
     if (p1.second - p1.first < p2.second - p2.first) {
@@ -61,8 +61,8 @@ std::streamsize copy_impl( Source& src, Sink& snk,
                            mpl::true_, mpl::false_ )
 {   // Copy from a direct Source to an indirect Sink.
     using namespace std;
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(Source)    char_type;
-    typedef pair<char_type*, char_type*>  pair_type;
+    typedef typename io_char<Source>::type  char_type;
+    typedef pair<char_type*, char_type*>    pair_type;
     pair_type p = iostreams::input_sequence(src);
     iostreams::write(snk, p.first, static_cast<streamsize>(p.second - p.first));
     return static_cast<streamsize>(p.second - p.first);
@@ -74,8 +74,8 @@ std::streamsize copy_impl( Source& src, Sink& snk,
                            mpl::false_, mpl::true_ )
 {   // Copy from an indirect Source to a direct Sink.
     using namespace std;
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(Source)    char_type;
-    typedef pair<char_type*, char_type*>  pair_type;
+    typedef typename io_char<Source>::type  char_type;
+    typedef pair<char_type*, char_type*>    pair_type;
     detail::basic_buffer<char_type> buf(buffer_size);
     pair_type p = snk.output_sequence();
     streamsize total = 0;
@@ -96,7 +96,7 @@ std::streamsize copy_impl( Source& src, Sink& snk,
                            std::streamsize buffer_size,
                            mpl::false_, mpl::false_ )
 {   // Copy from an indirect Source to a indirect Sink.
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(Source) char_type;
+    typedef typename io_char<Source>::type char_type;
     detail::basic_buffer<char_type> buf(buffer_size);
     std::streamsize total = 0;
     bool done  = false;
@@ -115,8 +115,8 @@ template<typename Source, typename Sink>
 std::streamsize copy_impl(Source src, Sink snk, std::streamsize buffer_size)
 {
     using namespace std;
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(Source) src_char;
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(Source) snk_char;
+    typedef typename io_char<Source>::type  src_char;
+    typedef typename io_char<Sink>::type    snk_char;
     BOOST_STATIC_ASSERT((is_same<src_char, snk_char>::value));
     external_closer<Source> close_source(src, ios::in | ios::out);
     external_closer<Sink> close_sink(snk, ios::in | ios::out);
@@ -138,7 +138,7 @@ copy( const Source& src, const Sink& snk,
       BOOST_IOSTREAMS_DISABLE_IF_STREAM(Sink) )
 { 
     using namespace detail;
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(Source) char_type;
+    typedef typename io_char<Source>::type char_type;
     return copy_impl( resolve<input, char_type>(src), 
                       resolve<output, char_type>(snk), 
                       buffer_size ); 
@@ -153,7 +153,7 @@ copy( Source& src, const Sink& snk,
       BOOST_IOSTREAMS_DISABLE_IF_STREAM(Sink) ) 
 { 
     using namespace detail;
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(Source) char_type;
+    typedef typename io_char<Source>::type char_type;
     return copy_impl(wrap(src), resolve<output, char_type>(snk), buffer_size);
 }
 
@@ -165,7 +165,7 @@ copy( const Source& src, Sink& snk,
       BOOST_IOSTREAMS_ENABLE_IF_STREAM(Sink) ) 
 { 
     using namespace detail;
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(Source) char_type;
+    typedef typename io_char<Source>::type char_type;
     return copy_impl(resolve<input, char_type>(src), wrap(snk), buffer_size);
 }
 

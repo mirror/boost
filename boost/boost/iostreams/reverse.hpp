@@ -16,6 +16,7 @@
 #include <algorithm>                             // copy, min.  
 #include <deque>                               
 #include <memory>                                // allocator.
+#include <boost/config.hpp>                      // BOOST_DEDUCED_TYPENAME.
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/detail/buffer.hpp>
@@ -43,10 +44,13 @@ template<typename InputFilter> class reversing_output_filter;
 //
 template<typename OutputFilter>
 class reversing_input_filter
-    : public one_step_filter<BOOST_IOSTREAMS_CHAR_TYPE(OutputFilter)>
+    : public one_step_filter<BOOST_DEDUCED_TYPENAME io_char<OutputFilter>::type>
 {
 private:
-    typedef one_step_filter<BOOST_IOSTREAMS_CHAR_TYPE(OutputFilter)>   base_type;
+    typedef one_step_filter<
+                BOOST_DEDUCED_TYPENAME 
+                io_char<OutputFilter>::type
+            >                                                   base_type;
 public:
     typedef typename base_type::char_type                       char_type;
     typedef typename base_type::io_category                     io_category;
@@ -77,10 +81,13 @@ private:
 //
 template<typename InputFilter>
 class reversing_output_filter
-    : public one_step_filter<BOOST_IOSTREAMS_CHAR_TYPE(InputFilter)>
+    : public one_step_filter<BOOST_DEDUCED_TYPENAME io_char<InputFilter>::type>
 {
 private:
-    typedef one_step_filter<BOOST_IOSTREAMS_CHAR_TYPE(InputFilter)>    base_type;
+    typedef one_step_filter<
+                BOOST_DEDUCED_TYPENAME 
+                io_char<InputFilter>::type
+            >                                                   base_type;
 public:
     typedef typename base_type::char_type                       char_type;
     typedef typename base_type::io_category                     io_category;
@@ -105,7 +112,10 @@ template<typename Filter>
 struct reverse_traits {
     typedef typename
             mpl::if_<
-                is_convertible<BOOST_IOSTREAMS_CATEGORY(Filter), input>,
+                is_convertible<
+                    BOOST_DEDUCED_TYPENAME io_category<Filter>::type, 
+                    input
+                >,
                 reversing_output_filter<Filter>,
                 reversing_input_filter<Filter>
             >::type type;

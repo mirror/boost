@@ -32,7 +32,7 @@ private:
     struct empty_base { };
 public:
     typedef typename wrapped_type<T>::type  policy_type;
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(T)    char_type;
+    typedef typename io_char<T>::type       char_type;
     struct io_category 
         : Mode, 
           device_tag,

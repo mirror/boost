@@ -156,13 +156,13 @@ private:
                     std::streamsize buffer_size = -1,
                     std::streamsize pback_size = -1 )
         {
-            typedef BOOST_IOSTREAMS_CATEGORY(T)       category;
-            typedef typename unwrap_ios<T>::type      policy_type;
+            typedef typename iostreams::io_category<T>::type  category;
+            typedef typename unwrap_ios<T>::type              policy_type;
             typedef streambuf_facade<
                         policy_type, 
                         std::char_traits<char_type>,
                         Alloc, Mode
-                    >                                 facade_type;
+                    >                                         facade_type;
             BOOST_STATIC_ASSERT((is_convertible<category, Mode>::value));
             if (is_complete()) 
                 throw std::logic_error("chain complete");

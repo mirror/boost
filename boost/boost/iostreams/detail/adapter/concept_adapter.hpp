@@ -55,8 +55,8 @@ private:
                 flt_wrapper_impl<any_tag>
             >::type                                    any_impl;
 public:
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(T)               char_type;
-    typedef BOOST_IOSTREAMS_CATEGORY(T)                io_category;
+    typedef typename io_char<T>::type                  char_type;
+    typedef typename io_category<T>::type              io_category;
 
     concept_adapter(const reference_wrapper<T>& ref) : t_(ref.get())
     { BOOST_STATIC_ASSERT(is_std_io<T>::value); }
@@ -117,7 +117,7 @@ struct device_wrapper_impl<any_tag> {
     seek( Device& dev, Dummy*, std::streamoff off, 
           std::ios::seekdir way, std::ios::openmode which )
     { 
-        typedef BOOST_IOSTREAMS_CATEGORY(Device) io_category;
+        typedef typename io_category<Device>::type io_category;
         return seek(dev, off, way, which, io_category()); 
     }
 
@@ -148,12 +148,12 @@ template<>
 struct device_wrapper_impl<input> : device_wrapper_impl<any_tag>  {
     template<typename Device, typename Dummy>
     static std::streamsize
-    read( Device& dev, Dummy*, BOOST_IOSTREAMS_CHAR_TYPE(Device)* s,
+    read( Device& dev, Dummy*, typename io_char<Device>::type* s,
           std::streamsize n )
     { return iostreams::read(dev, s, n); }
 
     template<typename Device, typename Dummy>
-    static void write( Device&, Dummy*, const BOOST_IOSTREAMS_CHAR_TYPE(Device)*,
+    static void write( Device&, Dummy*, const typename io_char<Device>::type*,
                        std::streamsize )
     { throw cant_write(); }
 };
@@ -162,12 +162,12 @@ template<>
 struct device_wrapper_impl<output> {
     template<typename Device, typename Dummy>
     static std::streamsize
-    read(Device&, Dummy*, BOOST_IOSTREAMS_CHAR_TYPE(Device)*, std::streamsize)
+    read(Device&, Dummy*, typename io_char<Device>::type*, std::streamsize)
     { throw cant_read(); }
 
     template<typename Device, typename Dummy>
     static void write( Device& dev, Dummy*,
-                       const BOOST_IOSTREAMS_CHAR_TYPE(Device)* s,
+                       const typename io_char<Device>::type* s,
                        std::streamsize n )
     { iostreams::write(dev, s, n); }
 };
@@ -181,7 +181,7 @@ struct flt_wrapper_impl<any_tag> {
     seek( Filter& f, Device* dev, std::streamoff off,
           std::ios::seekdir way, std::ios::openmode which )
     {
-        typedef BOOST_IOSTREAMS_CATEGORY(Filter) io_category;
+        typedef typename io_category<Filter>::type io_category;
         return seek(f, dev, off, way, which, io_category());
     }
 
@@ -197,7 +197,7 @@ struct flt_wrapper_impl<any_tag> {
           std::ios::seekdir way, std::ios::openmode which,
           random_access tag )
     {
-        typedef BOOST_IOSTREAMS_CATEGORY(Filter) io_category;
+        typedef typename io_category<Filter>::type io_category;
         return seek(f, dev, off, way, which, tag, io_category());
     }
 
@@ -224,12 +224,12 @@ template<>
 struct flt_wrapper_impl<input> {
     template<typename Filter, typename Source>
     static std::streamsize
-    read( Filter& f, Source* src, BOOST_IOSTREAMS_CHAR_TYPE(Filter)* s,
+    read( Filter& f, Source* src, typename io_char<Filter>::type* s,
           std::streamsize n )
     { return iostreams::read(f, *src, s, n); }
 
     template<typename Filter, typename Sink>
-    static void write( Filter&, Sink*, const BOOST_IOSTREAMS_CHAR_TYPE(Filter)*,
+    static void write( Filter&, Sink*, const typename io_char<Filter>::type*,
                        std::streamsize)
     { throw cant_write(); }
 };
@@ -238,12 +238,12 @@ template<>
 struct flt_wrapper_impl<output> {
     template<typename Filter, typename Source>
     static std::streamsize
-    read(Filter&, Source*, BOOST_IOSTREAMS_CHAR_TYPE(Filter)*,std::streamsize)
+    read(Filter&, Source*, typename io_char<Filter>::type*,std::streamsize)
     { throw cant_read(); }
 
     template<typename Filter, typename Sink>
     static void write( Filter& f, Sink* snk,
-                       const BOOST_IOSTREAMS_CHAR_TYPE(Filter)* s,
+                       const typename io_char<Filter>::type* s,
                        std::streamsize n )
     { iostreams::write(f, *snk, s, n); }
 };

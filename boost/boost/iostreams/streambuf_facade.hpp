@@ -13,7 +13,8 @@
 
 #include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC.
 
-#include <memory>                                       // allocator.
+#include <memory>            // allocator.
+#include <boost/config.hpp>  // BOOST_DEDUCED_TYPENAME.
 #include <boost/iostreams/detail/config/overload_resolution.hpp>
 #include <boost/iostreams/detail/forward.hpp>
 #include <boost/iostreams/detail/param_type.hpp>
@@ -28,7 +29,10 @@ template<typename T, typename Tr, typename Alloc, typename Mode>
 struct streambuf_facade_traits {
     typedef typename 
             mpl::if_<
-                is_convertible<BOOST_IOSTREAMS_CATEGORY(T), direct_tag>,
+                is_convertible<
+                    BOOST_DEDUCED_TYPENAME io_category<T>::type, 
+                    direct_tag
+                >,
                 direct_streambuf<T, Tr>,
                 indirect_streambuf<T, Tr, Alloc, Mode>
             >::type type;
@@ -47,20 +51,27 @@ template< typename T,
               std::char_traits<
                   BOOST_DEDUCED_TYPENAME io_char<T>::type 
               >,
-          typename Alloc = std::allocator<BOOST_IOSTREAMS_CHAR_TYPE(T)>,
+          typename Alloc = 
+              std::allocator<
+                  BOOST_DEDUCED_TYPENAME io_char<T>::type
+              >,
           typename Mode = BOOST_DEDUCED_TYPENAME io_mode<T>::type >
 class streambuf_facade
     : public detail::streambuf_facade_traits<T, Tr, Alloc, Mode>::type
 {
 private:
-    BOOST_STATIC_ASSERT((is_convertible<BOOST_IOSTREAMS_CATEGORY(T), Mode>::value));
+    BOOST_STATIC_ASSERT((
+        is_convertible<
+            BOOST_DEDUCED_TYPENAME iostreams::io_category<T>::type, Mode
+        >::value
+    ));
     typedef typename 
             detail::streambuf_facade_traits<
                 T, Tr, Alloc, Mode
-            >::type                               base_type;
-    typedef T                                     policy_type;
+            >::type                           base_type;
+    typedef T                                 policy_type;
 public:
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(T)          char_type;
+    typedef typename io_char<T>::type         char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 public:
     streambuf_facade() { }
