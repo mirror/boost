@@ -13,21 +13,11 @@
 #endif
 #include "boost/date_time/gregorian/greg_weekday.hpp"
 
+#include "greg_names.hpp"
+
 namespace boost {
 namespace gregorian {
-
-  const char* const short_weekday_names[]={"Sun", "Mon", "Tue", 
-                                           "Wed", "Thu", "Fri", "Sat"};
-  const char* const long_weekday_names[]= {"Sunday","Monday","Tuesday",
-                                           "Wednesday", "Thursday",
-                                           "Friday", "Saturday"};
-
-  const wchar_t* const w_short_weekday_names[]={L"Sun", L"Mon", L"Tue", 
-                                           L"Wed", L"Thu", L"Fri", L"Sat"};
-  const wchar_t* const w_long_weekday_names[]= {L"Sunday",L"Monday",L"Tuesday",
-                                           L"Wednesday", L"Thursday",
-                                           L"Friday", L"Saturday"};
-
+  
   //! Return a 3 digit english string of the day of week (eg: Sun)
   const char*
   greg_weekday::as_short_string() const 
@@ -41,6 +31,7 @@ namespace gregorian {
     return long_weekday_names[value_];
   }
   
+#ifndef BOOST_NO_CWCHAR
   //! Return a 3 digit english wchar_t string of the day of week (eg: Sun)
   const wchar_t*
   greg_weekday::as_short_wstring() const 
@@ -53,6 +44,7 @@ namespace gregorian {
   {
     return w_long_weekday_names[value_];
   }
+#endif // BOOST_NO_CWCHAR
   
 } } //namespace gregorian
 

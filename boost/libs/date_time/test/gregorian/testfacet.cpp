@@ -252,9 +252,66 @@ main()
             << fka << '\n'
             << fkb << '\n'
             << std::endl;
+  
+  /*******************************************************************/
+  /* Input Streaming for greg_month                                  */
+  /*******************************************************************/
+  {
+    std::stringstream ss1("January");
+    std::stringstream ss2("dec"); // misspelled
+    std::stringstream german("Okt");
+    german.imbue(global2);
+    greg_month m(3);
+    ss1 >> m;
+    check("Stream in month", m = greg_month(Jan));
+#ifndef BOOST_NO_CWCHAR
+    std::wstringstream ws1(L"Dec");
+    ws1 >> m;
+    check("Wide Stream in month", m = greg_month(Dec));
+#else
+    check("Wide Stream in not supported by this compiler", false);
+#endif // BOOST_NO_CWCHAR
+    german >> m;
+    check("Stream in German month", m = greg_month(Oct));
+    try{
+      ss2 >> m; // misspelled
+    }catch(bad_month){
+      check("Bad month exception caught (misspelled name)", true);
+    }catch(...){
+      check("Bad month exception NOT caught (misspelled name)", false);
+    }
+  }
+  /*******************************************************************/
+  /* Input Streaming for greg_weekday                                */
+  /*******************************************************************/
+  {
+    std::stringstream ss1("Sun");
+    std::stringstream ss2("Wensday"); // misspelled
+    std::stringstream german("Mittwoch"); // Wednesday
+    german.imbue(global2);
+    greg_weekday wd(1);
+    ss1 >> wd;
+    check("Stream in weekday", wd == greg_weekday(Sunday));
+#ifndef BOOST_NO_CWCHAR
+    std::wstringstream ws1(L"Saturday");
+    ws1 >> wd;
+    check("Wide Stream in weekday", wd == greg_weekday(Saturday));
+#else
+    check("Wide Stream in not supported by this compiler", false);
+#endif // BOOST_NO_CWCHAR
+    german >> wd;
+    check("Stream in German weekday", wd == greg_weekday(Wednesday));
+    try{
+      ss2 >> wd;
+    }catch(bad_weekday){
+      check("Bad weekday exception caught (misspelled name)", true);
+    }catch(...){
+      check("Bad weekday exception NOT caught (misspelled name)", false);
+    }
+  }
 
 #else
-  check("All pass, no tests executed - Locales not supported", true);
+  check("No tests executed - Locales not supported by this compiler", false);
 
 #endif //BOOST_DATE_TIME_NO_LOCALE
 

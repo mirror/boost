@@ -22,14 +22,9 @@
 #endif
 #include "boost/date_time/date_parsing.hpp"
 
+#include "greg_names.hpp"
 namespace boost {
 namespace gregorian {
-
-  const char* const short_month_names[NumMonths]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec", "NAM"};
-  const char* const long_month_names[NumMonths]={"January","February","March","April","May","June","July","August","September","October","November","December","NotAMonth"};
-
-  const wchar_t* const w_short_month_names[NumMonths]={L"Jan",L"Feb",L"Mar",L"Apr",L"May",L"Jun",L"Jul",L"Aug",L"Sep",L"Oct",L"Nov",L"Dec",L"NAM"};
-  const wchar_t* const w_long_month_names[NumMonths]={L"January",L"February",L"March",L"April",L"May",L"June",L"July",L"August",L"September",L"October",L"November",L"December",L"NotAMonth"};
 
   /*! Returns a shared pointer to a map of Month strings & numbers.
    * Strings are both full names and abbreviations.
@@ -38,8 +33,7 @@ namespace gregorian {
    */
   greg_month::month_map_ptr_type greg_month::get_month_map_ptr()
   {
-    static month_map_ptr_type month_map_ptr(new greg_month::month_map_type())
-;
+    static month_map_ptr_type month_map_ptr(new greg_month::month_map_type());
 
     if(month_map_ptr->empty()) {
       std::string s("");
@@ -55,7 +49,6 @@ namespace gregorian {
     }
     return month_map_ptr;
   }
- 
 
 
   //! Returns 3 char english string for the month ex: Jan, Feb, Mar, Apr
@@ -73,6 +66,7 @@ namespace gregorian {
   }
 
 
+#ifndef BOOST_NO_CWCHAR
   //! Returns 3 wchar_t english string for the month ex: Jan, Feb, Mar, Apr
   const wchar_t*
   greg_month::as_short_wstring() const 
@@ -86,6 +80,33 @@ namespace gregorian {
   {
     return w_long_month_names[value_-1];
   }
+#endif // BOOST_NO_CWCHAR
+  
+#ifndef BOOST_DATE_TIME_NO_LOCALE
+  //! generates a locale with the set of gregorian name-strings of type char*
+  BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, char type){
+    typedef boost::date_time::all_date_names_put<greg_facet_config, char> facet_def;
+    return std::locale(loc, new facet_def(short_month_names,
+					  long_month_names,
+					  special_value_names,
+					  short_weekday_names,
+					  long_weekday_names)
+	);
+  }
+  
+#ifndef BOOST_NO_CWCHAR
+  //! generates a locale with the set of gregorian name-strings of type wchar_t*
+  BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, wchar_t type){
+    typedef boost::date_time::all_date_names_put<greg_facet_config, wchar_t> facet_def;
+    return std::locale(loc, new facet_def(w_short_month_names,
+					  w_long_month_names,
+					  w_special_value_names,
+					  w_short_weekday_names,
+					  w_long_weekday_names)
+	);
+  }
+#endif // BOOST_NO_CWCHAR
+#endif // BOOST_DATE_TIME_NO_LOCALE
 
 } } //namespace gregorian
 
