@@ -17,26 +17,26 @@ DEPENDS all : test ;
 
 {
 
-    # look in BOOST_ROOT for sources first, just in this Jamfile
-    local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
-
 test-suite "format"
-   :    [  run libs/format/test/format_test1.cpp 
+   :    [  run format_test1.cpp 
                 <lib>../../../libs/test/build/boost_test_exec_monitor
               : # args
               : # input files
+              : std::locale-support
         ]
 
-        [ run libs/format/test/format_test2.cpp 
+        [ run format_test2.cpp 
                 <lib>../../../libs/test/build/boost_test_exec_monitor
               : # args
               : # input files
+              : std::locale-support
         ]
 
-        [ run libs/format/test/format_test_wstring.cpp 
+        [ run format_test_wstring.cpp 
                 <lib>../../../libs/test/build/boost_test_exec_monitor
               : # args
               : # input files
+              : std::locale-support
         ]
   ;
 }
