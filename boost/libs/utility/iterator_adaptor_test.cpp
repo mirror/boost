@@ -71,6 +71,12 @@ struct select1st_
   }
 };
 
+struct one_or_four {
+  bool operator()(dummyT x) const {
+    return x.foo() == 1 || x.foo() == 4;
+  }
+};
+
 int
 main()
 {
@@ -170,6 +176,14 @@ main()
     boost::random_access_iterator_test(r.begin(), r.size(), int_array);
   }
 
+  // Test filter iterator
+  {
+    typedef boost::filter_iterator<one_or_four, dummyT*,
+      boost::iterator<std::forward_iterator_tag, dummyT, std::ptrdiff_t,
+      dummyT*, dummyT&> >::type FilterIter;
+    FilterIter i(array);
+    boost::forward_iterator_test(i, 1, 4);
+  }
   std::cout << "test successful " << std::endl;
 
   return 0;
