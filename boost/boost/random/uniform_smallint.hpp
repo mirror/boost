@@ -27,6 +27,7 @@
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/random/uniform_01.hpp>
+#include <boost/detail/workaround.hpp>
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #include <boost/type_traits/is_float.hpp>
 #endif
