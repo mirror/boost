@@ -770,10 +770,11 @@
     </xsl:if>
 
     <!-- Document parameters -->
-    <xsl:if test="parameter/description">
+    <xsl:if test="parameter/description|signature/parameter/description">
       <variablelist spacing="compact">
         <title>Parameters</title>
-        <xsl:for-each select="parameter">
+        <xsl:for-each select="parameter|signature/parameter">
+		  <xsl:sort select="attribute::name"/>
           <xsl:if test="description">
             <varlistentry>
               <term><xsl:value-of select="@name"/></term>
