@@ -124,7 +124,7 @@ namespace boost
     transform_iterator(
          transform_iterator<OtherUnaryFunction, OtherIterator, OtherReference, OtherValue> const& t
        , typename enable_if_convertible<OtherIterator, Iterator>::type* = 0
-#if 1 // !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1310))
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1310))
        , typename enable_if_convertible<OtherUnaryFunction, UnaryFunction>::type* = 0
 #endif 
     )
