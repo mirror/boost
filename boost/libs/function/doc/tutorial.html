@@ -66,8 +66,22 @@ else
 <h3>Member functions</h3>
 <a name="member_func">
 <p> In many systems, callbacks often call to member functions of a particular
-object. Handling argument binding is beyond the scope of Boost.Function. However, there are several libraries that perform 'argument binding', including
+object. This is often referred to as "argument binding", and is beyond the scope of Boost.Function. The use of member functions directly, however, is supported, so the following code is valid:
+<pre>
+  struct X {
+    int foo(int);
+  };
+
+  boost::function&lt;int, X*, int&gt; f;
+  f = &X::foo;
+  
+  X x;
+  f(&x, 5);
+</pre>
+<p> Several libraries exist that support argument binding. Three such libraries are summarized below:
 <ul>
+  <li> <a href="../../bind/bind.html">Boost.Bind</a>. This library allows binding of arguments for any function object. It is lightweight and very portable.</li>
+
   <li> The C++ Standard library. Using <code>std::bind1st</code> and <code>std::mem_fun</code> together one can bind the object of a pointer-to-member function for use with Boost.Function:
 <pre>
   struct X {
@@ -81,8 +95,6 @@ object. Handling argument binding is beyond the scope of Boost.Function. However
   f(5); // Call x.foo(5)</pre></li>
 
   <li><a href="http://lambda.cs.utu.fi/">The Lambda library</a>. This library provides a powerful composition mechanism to construct function objects that uses very natural C++ syntax. Lambda requires a compiler that is reasonably conformant to the C++ standard. Note that it is not a Boost library.</li>
-
-  <li>Peter Dimov's <a href="http://groups.yahoo.com/group/boost/files/bind/bind.hpp">bind</a> library. It has a smaller scope than the Lambda Library but is more tolerant of broken compilers. It is an unreviewed library in development.</li>
 </ul>
 
 <h2><a name="family">The <code>function</code> family</a></h2>
@@ -161,7 +173,7 @@ boost::function2&lt;float, int, int, SynchronizedPolicy, SynchronizedMixin&gt; f
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 12:47:11 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Fri Jul 13 23:58:17 EDT 2001
+Last modified: Sun Oct 28 00:49:02 EDT 2001
 <!-- hhmts end -->
   </body>
 </html>

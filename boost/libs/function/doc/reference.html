@@ -15,8 +15,10 @@
 <b>namespace</b> boost {
   <b>class</b> <a href="#function_base">function_base</a>
   {
+    <b>typedef</b> <em>implementation-defined</em> safe_bool;
     <a href="#empty"><b>bool</b> empty() <b>const</b></a>;
-    <a href="#bool"><b>operator</b> <b>bool</b>() <b>const</b></a>;
+    <a href="#bool"><b>operator</b> safe_bool() <b>const</b></a>;
+    <a href="#not">safe_bool <b>operator!</b>() <b>const</b></a>;
   };
 
   // For <i>N</i> in [0, <i>MAX_ARGS</i>]
@@ -65,8 +67,8 @@
            <b>typename</b> Policy,
            <b>typename</b> Mixin,
            <b>typename</b> Allocator&gt;
-  <b>void</b> <a href="#swap_functionN">swap</a>(<b>const</b> function&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>,
-            <b>const</b> function&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>);
+  <b>void</b> <a href="#swap_functionN">swap</a>(<b>const</b> function<em>N</em>&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>,
+            <b>const</b> function<em>N</em>&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>);
 
   // For any <i>N</i> in [0, <i>MAX_ARGS</i>]
   <b>template</b>&lt;<b>typename</b> ResultType,
@@ -105,6 +107,43 @@
 }	   
 </pre>
 
+<h2>Definitions</h2>
+<p>
+<ul>
+  <li><a name="compatible"></a>A function object <code>f</code> is <em>compatible</em> if for the given set of argument types <code>Arg1</code>, <code>Arg2</code>, ..., <code>Arg<em>N</em></code> and a return type <code>ResultType</code>, the appropriate following function is well-formed:
+<pre>
+  <em>// if ResultType is not <b>void</b></em>
+  ResultType foo(Arg1 arg1, Arg2 arg2, ..., Arg<em>N</em> arg<em>N</em>)
+  {
+    <b>return</b> f(arg1, arg2, ..., arg<em>N</em>);
+  }
+
+  <em>// if ResultType is <b>void</b></em>
+  ResultType foo(Arg1 arg1, Arg2 arg2, ..., Arg<em>N</em> arg<em>N</em>)
+  {
+    f(arg1, arg2, ..., arg<em>N</em>);
+  }
+</pre>
+        <p> A special provision is made for pointers to member functions. Though they are not function objects, Boost.Function will adapt them internally to function objects. This requires that a pointer to member function of the form <code>R (X::*mf)(Arg1, Arg2, ..., Arg<em>N</em>) <em>cv-quals</em></code> be adapted to a function object with the following function call operator overloads:
+<pre>
+  R <b>operator</b>()(<em>cv-quals</em> X&amp; x, Arg1 arg1, Arg2 arg2, ..., Arg<em>N</em> arg<em>N</em>) <b>const</b>
+  {
+    <b>return</b> x.*mf(arg1, arg2, ..., arg<em>N</em>);
+  }
+
+  R <b>operator</b>()(<em>cv-quals</em> X* x, Arg1 arg1, Arg2 arg2, ..., Arg<em>N</em> arg<em>N</em>) <b>const</b>
+  {
+    <b>return</b> x->*mf(arg1, arg2, ..., arg<em>N</em>);
+  }
+  
+  <b>template</b>&lt;<b>typename P</b>&gt;
+  R <b>operator</b>()(<em>cv-quals</em> P&amp; x, Arg1 arg1, Arg2 arg2, ..., Arg<em>N</em> arg<em>N</em>) <b>const</b>
+  {
+    <b>return</b> (*x).*mf(arg1, arg2, ..., arg<em>N</em>);
+  }
+</pre>
+</ul>
+
 <h2><a name="function_base">Class <code>function_base</code></a></h2>
 <p> Class <code>function_base</code> is the common base class for all Boost.Function objects. Objects of type <code>function_base</code> may not be created directly. 
 
@@ -114,10 +153,18 @@
   <li><b>Throws</b>: will not throw.</li>
 </ul>
 
-<p> <a name="bool"><code><b>operator</b> <b>bool</b>() <b>const</b></code></a>
+<p> <a name="bool"><code><b>operator</b> safe_bool() <b>const</b></code></a>
 <ul>
-  <li><b>Returns</b>: <code>!<a href="#empty">empty</a>()</code></li>
+  <li><b>Returns</b>: <code>safe_bool</code> equivalent of <code>!<a href="#empty">empty</a>()</code></li>
   <li><b>Throws</b>: will not throw.</li>
+  <li><b>Notes</b>: The <code>safe_bool</code> type can be used in contexts where a <b>bool</b> is expected (e.g., an <b>if</b> condition); however, implicit conversions (e.g., to <b>int</b>) that can occur with <b>bool</b> are not allowed, eliminating some sources of user error.
+</ul>
+
+<p> <a name="not"><code>safe_bool <b>operator!</b>() <b>const</b></code></a>
+<ul>
+  <li><b>Returns</b>: <code>safe_bool</code> equivalent of <code><a href="#empty">empty</a>()</code></li>
+  <li><b>Throws</b>: will not throw.</li>
+  <li><b>Notes</b>: See <a href="#bool"><code>safe_bool</code> conversion</a>
 </ul>
 
 <h2><a name="functionN">Class template <code>function<i>N</i></code></a></h2>
@@ -137,7 +184,7 @@
 
 <p> <a name="functionN_target"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<b>const</b> F<b>&amp;</b> g, <b>const</b> Mixin<b>&amp;</b> = Mixin());</code></a>
 <ul>
-  <li><b>Requires</b>: <code>g</code> is a compatible function object.</li>
+  <li><b>Requires</b>: <code>g</code> is a <a href="#compatible">compatible</a> function object.</li>
   <li><b>Effects</b>: Constructs the <code>Mixin</code> subobject from the given mixin.</li>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code> if <code>g</code> is nonempty, or <code>f.<a href="#empty">empty</a>()</code> if <code>g</code> is empty.</li>
   <li><b>Rationale</b>: <code>g</code> is a reference-to-<code><b>const</b></code> because it is a portable, efficient, and concise way to accept any function object or function pointer. In the case of a function pointer, the type of <code>g</code> is reference-to-<code><b>const</b></code> pointer-to-function.</li>
@@ -151,7 +198,7 @@
 
 <p> <a name="functionN_target_assn"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> F<b>&amp;</b> g);</code></a>
 <ul>
-  <li><b>Requires</b>: <code>g</code> is a compatible function object.</li>
+  <li><b>Requires</b>: <code>g</code> is a <a href="#compatible">compatible</a> function object.</li>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code> if <code>g</code> is nonempty, or <code>f.<a href="#empty">empty</a>()</code> if <code>g</code> is empty.</li>
   <li><b>Returns</b>: <code>*this</code>.</li>
   <li><b>Rationale</b>: <code>g</code> is a reference-to-<code><b>const</b></code> because it is a portable, efficient, and concise way to accept any function object or function pointer. In the case of a function pointer, the type of <code>g</code> is reference-to-<code><b>const</b></code> pointer-to-function.</li>
@@ -233,7 +280,7 @@
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Sun Jul 22 01:29:50 EDT 2001
+Last modified: Sun Oct 28 00:40:55 EDT 2001
 <!-- hhmts end -->
   </body>
 </html>
