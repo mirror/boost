@@ -17,7 +17,7 @@
 #include <boost/mpl/aux_/lambda_support.hpp>
 #include <boost/config.hpp>
 
-#if defined(__SUNPRO_CC)
+#if defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x570)
 #   define BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
     typedef ::boost::integral_constant<bool,C> type; \
     enum { value = type::value }; \

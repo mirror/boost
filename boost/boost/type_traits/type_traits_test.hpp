@@ -257,7 +257,7 @@ struct nested_test
    }
 };
 
-#ifndef __SUNPRO_CC
+#if !(defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x570))
 #define NESTED_DECL(what)\
 template <class T> \
 struct BOOST_TT_JOIN(nested_tester_,what){\

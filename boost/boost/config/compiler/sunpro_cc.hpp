@@ -57,7 +57,7 @@
 #      define BOOST_NO_INTEGRAL_INT64_T
 #    endif
 
-#    if (__SUNPRO_CC <= 0x540) || !defined(BOOST_STRICT_CONFIG)
+#    if (__SUNPRO_CC <= 0x570) 
 #      define BOOST_NO_TEMPLATE_TEMPLATES
        // see http://lists.boost.org/MailArchives/boost/msg47184.php
        // and http://lists.boost.org/MailArchives/boost/msg47220.php
@@ -76,8 +76,8 @@
 #error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 0x540:
-#if (__SUNPRO_CC > 0x540)
+// last known and checked version is 0x570:
+#if (__SUNPRO_CC > 0x570)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
