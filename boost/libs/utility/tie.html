@@ -31,7 +31,7 @@ tied&lt;A,B&gt; tie(A&amp; a, B&amp; b);
 
 <P>
 This is a utility function that makes it more convenient to work with
-a function which returns a pair. The effect of the <TT>tie()</TT>
+a function which returns a std::pair&lt;&gt;. The effect of the <TT>tie()</TT>
 function is to allow the assignment of the two values of the pair to
 two separate variables. The idea for this comes from Jaakko
 J&#228;rvi's Binders&nbsp;[<A
@@ -63,8 +63,7 @@ pair of iterators is assigned to the iterator variables <TT>i</TT> and
 </PRE>
 
 <P>
-Here is another example that uses <TT>tie()</TT> for handling
-operaitons with <a
+Here is another example that uses <TT>tie()</TT> for handling operations with <a
 href="http://www.sgi.com/Technology/STL/set.html"><TT>std::set</TT></a>.
 
 <P>
@@ -92,9 +91,9 @@ main(int, char*[])
     for (int k = 0; k &lt; 2; ++k) {
       boost::tie(i,inserted) = s.insert(new_vals[k]);
       if (!inserted)
-        std::cout &lt;&lt; *i &lt;&lt; " was already in the set." &lt;&lt; std::endl;
+        std::cout &lt;&lt; *i &lt;&lt; &quot; was already in the set.&quot; &lt;&lt; std::endl;
       else
-        std::cout &lt;&lt; *i &lt;&lt; " successfully inserted." &lt;&lt; std::endl;    
+        std::cout &lt;&lt; *i &lt;&lt; &quot; successfully inserted.&quot; &lt;&lt; std::endl;    
     }
   }    
   {
@@ -105,8 +104,8 @@ main(int, char*[])
     // Using tie() with a return value of pair&lt;iterator,iterator&gt;
 
     boost::tie(i,end) = std::equal_range(vals, vals + 6, 4);
-    std::cout &lt;&lt; "There were " &lt;&lt; std::distance(i,end)
-              &lt;&lt; " occurances of " &lt;&lt; *i &lt;&lt; "." &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;There were &quot; &lt;&lt; std::distance(i,end)
+              &lt;&lt; &quot; occurrences of &quot; &lt;&lt; *i &lt;&lt; &quot;.&quot; &lt;&lt; std::endl;
     // Footnote: of course one would normally just use std::count()
     // to get this information, but that would spoil the example :)
   }
@@ -117,7 +116,7 @@ The output is:
 <PRE>
   3 successfully inserted.
   9 was already in the set.
-  There were 2 occurances of 4.
+  There were 2 occurrences of 4.
 </PRE>
 
 <br>
