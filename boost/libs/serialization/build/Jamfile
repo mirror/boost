@@ -50,6 +50,7 @@ lib boost_serialization
         ../src/$(SOURCES).cpp
     : ## requirements ##
         <msvc><*><include>$(SPIRIT_ROOT) 
+        <vc7><*><include>$(SPIRIT_ROOT) 
         <borland><*><include>$(SPIRIT_ROOT) 
         <borland-5.5.1><*><include>$(SPIRIT_ROOT) 
         <borland-5.6.4><*><include>$(SPIRIT_ROOT) 
@@ -68,15 +69,15 @@ lib boost_wserialization
         ../src/$(WSOURCES).cpp
     : ## requirements ##
         <msvc><*><include>$(SPIRIT_ROOT) 
+        <vc7><*><include>$(SPIRIT_ROOT) 
         <borland><*><include>$(SPIRIT_ROOT) 
         <borland-5.5.1><*><include>$(SPIRIT_ROOT) 
         <borland-5.6.4><*><include>$(SPIRIT_ROOT) 
-        <include>$(BOOST_ROOT) 
         <sysinclude>$(BOOST_ROOT)
         <borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
         <msvc><*><cxxflags>-Gy
         <vc7><*><cxxflags>-Gy
-        <vc7.1><<*><cxxflags>-Gy
+        <vc7.1><*><cxxflags>-Gy
         <define>BOOST_TEST_NO_AUTO_LINK=1
         <vacpp><*><define>BOOST_MPL_USE_APPLY_INTERNALLY
     : ## default-build
