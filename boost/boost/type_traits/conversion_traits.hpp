@@ -54,12 +54,12 @@ namespace detail{
   struct from_not_void_conversion {
     template <class From, class To>
     struct bind {
-      static no_type check(...);
-      static yes_type check(To);
+      static no_type _m_check(...);
+      static yes_type _m_check(To);
     public:
       void foo(); // avoid warning about all members being private
-      static From from;
-      enum { exists = sizeof( check(from) ) == sizeof(yes_type) };
+      static From _m_from;
+      enum { exists = sizeof( _m_check(_m_from) ) == sizeof(yes_type) };
     };
   };
   struct from_is_void_conversion {
@@ -103,12 +103,12 @@ private:
    template <class T>
    struct checker
    {
-      static type_traits::no_type check(...);
-      static type_traits::yes_type check(T);
+      static type_traits::no_type _m_check(...);
+      static type_traits::yes_type _m_check(T);
    };
-   static From from;
+   static From _m_from;
 public:
-   static const bool value = sizeof( checker<To>::check(from) ) == sizeof(type_traits::yes_type);
+   static const bool value = sizeof( checker<To>::_m_check(_m_from) ) == sizeof(type_traits::yes_type);
 
    void foo(); // avoid warning about all members being private
 };
@@ -155,17 +155,17 @@ namespace detail{
    template <class T>
    struct checker
    {
-      static boost::type_traits::no_type check(any_conversion ...);
-      static boost::type_traits::yes_type check(T, int);
+      static boost::type_traits::no_type _m_check(any_conversion ...);
+      static boost::type_traits::yes_type _m_check(T, int);
    };
 } // namespace detail
 template <class From, class To>
 struct is_convertible
 {
 private:
-   static From from;
+   static From _m_from;
 public:
-   static const bool value = sizeof( detail::checker<To>::check(from, 0) ) == sizeof(type_traits::yes_type);
+   static const bool value = sizeof( detail::checker<To>::_m_check(_m_from, 0) ) == sizeof(type_traits::yes_type);
 
    void foo(); // avoid warning about all members being private
 };
@@ -192,11 +192,11 @@ template <class From, class To>
 struct is_convertible
 {
 private:
-   static type_traits::no_type check(...);
-   static type_traits::yes_type check(To);
-   static From from;
+   static type_traits::no_type _m_check(...);
+   static type_traits::yes_type _m_check(To);
+   static From _m_from;
 public:
-   BOOST_STATIC_CONSTANT(bool, value = sizeof( check(from) ) == sizeof(type_traits::yes_type));
+   BOOST_STATIC_CONSTANT(bool, value = sizeof( _m_check(_m_from) ) == sizeof(type_traits::yes_type));
    void foo(); // avoid warning about all members being private
 };
 
@@ -225,4 +225,5 @@ struct is_convertible<void, void>
 } // namespace boost
 
 #endif  // include guard
+
 
