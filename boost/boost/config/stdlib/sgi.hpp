@@ -24,7 +24,7 @@
 //
 // No std::stringstream with gcc < 3
 //
-#if defined(__GNUC__) && (__GNUC__ < 3) && (__GNUC_MINOR__ < 95) && !defined(__STL_USE_NEW_IOSTREAMS)
+#if defined(__GNUC__) && (__GNUC__ < 3) && (__GNUC_MINOR__ < 95) && !defined(__STL_USE_NEW_IOSTREAMS) || defined(__APPLE_CC__)
    // Note that we only set this for gnu C++ prior to 2.95 since the
    // latest patches for that release do contain a minimal <sstream>
    // If you are running a 2.95 release prior to 2.95.3 then this will need
@@ -74,8 +74,13 @@
 #  define BOOST_NO_STD_ITERATOR
 #endif
 
+//
+// Define BOOST_NO_CWCHAR and BOOST_NO_CWCTYPE for platforms known to
+// have C libraries without <wchar_t.h> or <wctype.h>:
+//
+#if defined(__APPLE_CC__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
+#  define BOOST_NO_CWCHAR
+#  define BOOST_NO_CWCTYPE
+#endif
+
 #define BOOST_STDLIB "SGI standard library"
-
-
-
-

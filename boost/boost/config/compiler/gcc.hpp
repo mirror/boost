@@ -29,14 +29,6 @@
 #   endif
 
 //
-// define BOOST_NO_INTRINSIC_WCHAR_T for gcc platforms known not to
-// have wchar_t as an intrinsic type:
-//
-#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
-#  define BOOST_NO_INTRINSIC_WCHAR_T
-#endif
-
-//
 // Threading support:
 // Turn this on unconditionally here, it will get turned off again later
 // if no threading API is detected.
@@ -60,7 +52,3 @@
 #     warning "Unknown compiler version - please run the configure tests and report the results"
 #  endif
 #endif
-
-
-
-
