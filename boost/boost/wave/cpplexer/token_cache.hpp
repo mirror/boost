@@ -36,7 +36,6 @@ public:
     :   cache(T_LAST_TOKEN - T_FIRST_TOKEN)
     {
         typename std::vector<StringT>::iterator it = cache.begin();
-        typename std::vector<StringT>::iterator end = cache.end();
         for (unsigned int i = T_FIRST_TOKEN; i < T_LAST_TOKEN;  ++i, ++it)
         {
             *it = StringT(boost::wave::get_token_value(token_id(i)));

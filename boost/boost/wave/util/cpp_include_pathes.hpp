@@ -132,22 +132,29 @@ bool include_pathes::find_include_file (std::string &s,
 {
     namespace fs = boost::filesystem;
     typedef include_list_t::const_iterator const_include_list_iter_t;
-    
+
+    const_include_list_iter_t it = pathes.begin();
     const_include_list_iter_t include_pathes_end = pathes.end();
-    for (const_include_list_iter_t it = pathes.begin(); 
-         it != include_pathes_end; ++it)
-    {
+    
+    if (0 != current_file) {
+    // re-locate the current file first (#include_next handling)
+        for (/**/; it != include_pathes_end; ++it) {
+            fs::path currpath ((*it).string(), fs::native);
+            currpath /= fs::path(s, fs::native);  // append filename
+
+            if (currpath.native_file_string() == current_file) {
+                ++it;     // start searching with the next directory
+                break;
+            }
+        }
+    }
+        
+    for (/**/; it != include_pathes_end; ++it) {
         fs::path currpath ((*it).string(), fs::native);
         currpath /= fs::path(s, fs::native);      // append filename
 
-        if (fs::exists(currpath) && 
-            (   0 == current_file || 
-                strcmp(currpath.native_file_string().c_str(), current_file)
-            )
-           ) 
-        {
-        // found the required file
-            s = currpath.string();
+        if (fs::exists(currpath)) {
+            s = currpath.string();                // found the required file
             return true;
         }
     }
@@ -169,12 +176,10 @@ include_pathes::find_include_file (std::string &s, bool is_system,
         // first look in the current directory
             fs::path currpath (current_dir.string(), fs::native);
             currpath /= fs::path(s, fs::native);
-            if (fs::exists(currpath) && 
-                (   0 == current_file || 
-                    strcmp(currpath.native_file_string().c_str(), current_file)
-                )
-               ) 
-            {
+            
+            if (fs::exists(currpath) && 0 == current_file) {
+            // if 0 != current_path (#include_next handling) it can't be
+            // the file in the current directory
                 s = currpath.string();    // found in local directory
                 return true;
             }   

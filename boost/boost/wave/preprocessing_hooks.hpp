@@ -104,8 +104,8 @@ struct default_preprocessing_hooks {
     //
     //  The include_depth parameter contains the current include file depth.
     //
-    //  The is_system_include parameter denotes, if the given file was found
-    //  as a result of a #include <...> directive.
+    //  The is_system_include parameter denotes, whether the given file was 
+    //  found as a result of a #include <...> directive.
     //  
     ///////////////////////////////////////////////////////////////////////////
     void 

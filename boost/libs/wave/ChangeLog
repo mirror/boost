@@ -29,6 +29,10 @@ CHANGELOG
   <Unknown>.
 - Added the --listincludes option to the Wave driver executable which allows to
   log the file names of the include files opened.
+- Fixed a gcc warning in token_cache.hpp (unused variable end).
+- Changed the logic behind #include_next. It now starts searching with the 
+  next directory after the directory the current file (the file containing the 
+  #include_next directive) is located in.
   
 Mon Feb 21 09:30:04 WEST 2005
 Version 1.1.14 (Fixes in response to the Boost review)
