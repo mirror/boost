@@ -92,6 +92,20 @@ public:
         return px;
     }
 
+    // implicit conversion to "bool"
+
+    typedef T * (this_type::*unspecified_bool_type)() const;
+
+    operator unspecified_bool_type() const // never throws
+    {
+        return px == 0? 0: &this_type::get;
+    }
+
+    bool operator! () const // never throws
+    {
+        return px == 0;
+    }
+
     bool unique() const // never throws
     {
         return pn.unique();

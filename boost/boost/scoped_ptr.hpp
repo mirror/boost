@@ -15,6 +15,10 @@
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
 
+#ifndef BOOST_NO_AUTO_PTR
+# include <memory>          // for std::auto_ptr
+#endif
+
 namespace boost
 {
 
@@ -27,10 +31,12 @@ template<typename T> class scoped_ptr // noncopyable
 {
 private:
 
-    T* ptr;
+    T * ptr;
 
     scoped_ptr(scoped_ptr const &);
     scoped_ptr & operator=(scoped_ptr const &);
+
+    typedef scoped_ptr<T> this_type;
 
 public:
 
@@ -39,6 +45,14 @@ public:
     explicit scoped_ptr(T * p = 0): ptr(p) // never throws
     {
     }
+
+#ifndef BOOST_NO_AUTO_PTR
+
+    explicit scoped_ptr(std::auto_ptr<T> p): ptr(p.release()) // never throws
+    {
+    }
+
+#endif
 
     ~scoped_ptr() // never throws
     {
@@ -71,6 +85,20 @@ public:
         return ptr;
     }
 
+    // implicit conversion to "bool"
+
+    typedef T * (this_type::*unspecified_bool_type)() const;
+
+    operator unspecified_bool_type() const // never throws
+    {
+        return px == 0? 0: &this_type::get;
+    }
+
+    bool operator! () const // never throws
+    {
+        return px == 0;
+    }
+
     void swap(scoped_ptr & b) // never throws
     {
         T * tmp = b.ptr;
@@ -82,6 +110,13 @@ public:
 template<typename T> inline void swap(scoped_ptr<T> & a, scoped_ptr<T> & b) // never throws
 {
     a.swap(b);
+}
+
+// get_pointer(p) is a generic way to say p.get()
+
+template<typename T> inline T * get_pointer(scoped_ptr<T> const & p)
+{
+    return p.get();
 }
 
 } // namespace boost

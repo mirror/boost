@@ -206,6 +206,20 @@ public:
         return px;
     }
 
+    // implicit conversion to "bool"
+
+    typedef T * (this_type::*unspecified_bool_type)() const;
+
+    operator unspecified_bool_type() const // never throws
+    {
+        return px == 0? 0: &this_type::get;
+    }
+
+    bool operator! () const // never throws
+    {
+        return px == 0;
+    }
+
     bool unique() const // never throws
     {
         return pn.unique();
@@ -214,20 +228,6 @@ public:
     long use_count() const // never throws
     {
         return pn.use_count();
-    }
-
-    // implicit conversion to "bool"
-
-    typedef long (this_type::*bool_type)() const;
-
-    operator bool_type() const // never throws
-    {
-        return px == 0? 0: &this_type::use_count;
-    }
-
-    bool operator! () const // never throws
-    {
-        return px == 0;
     }
 
     void swap(shared_ptr<T> & other) // never throws

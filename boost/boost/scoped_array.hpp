@@ -33,6 +33,8 @@ private:
     scoped_array(scoped_array const &);
     scoped_array & operator=(scoped_array const &);
 
+    typedef scoped_array<T> this_type;
+
 public:
 
     typedef T element_type;
@@ -65,6 +67,20 @@ public:
     T * get() const // never throws
     {
         return ptr;
+    }
+
+    // implicit conversion to "bool"
+
+    typedef T * (this_type::*unspecified_bool_type)() const;
+
+    operator unspecified_bool_type() const // never throws
+    {
+        return px == 0? 0: &this_type::get;
+    }
+
+    bool operator! () const // never throws
+    {
+        return px == 0;
     }
 
     void swap(scoped_array & b) // never throws
