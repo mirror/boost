@@ -114,13 +114,13 @@ namespace boost { namespace numeric { namespace ublas {
             if (preserve) {
                 self_type temporary (size1, size2);
                 // Common elements to preserve
-                const size_t size1_min = (std::min) (size1, size1_);
-                const size_t size2_min = (std::min) (size2, size2_);
+                const size_type size1_min = (std::min) (size1, size1_);
+                const size_type size2_min = (std::min) (size2, size2_);
                 // Order loop for i-major and j-minor sizes
-                const size_t i_size = functor_type::size1 (size1_min, size2_min);
-                const size_t j_size = functor_type::size2 (size1_min, size2_min);
-                for (size_t i = 0; i != i_size; ++i) {    // indexing copy over major
-                    for (size_t j = 0; j != j_size; ++j) {
+                const size_type i_size = functor_type::size1 (size1_min, size2_min);
+                const size_type j_size = functor_type::size2 (size1_min, size2_min);
+                for (size_t_type i = 0; i != i_size; ++i) {    // indexing copy over major
+                    for (size_type j = 0; j != j_size; ++j) {
                         temporary.data () [functor_type::element (functor_type::element1(i,i_size, j,j_size), size1, functor_type::element2(i,i_size, j,j_size), size2)] =
                             data() [functor_type::element (functor_type::element1(i,i_size, j,j_size), size1_, functor_type::element2(i,i_size, j,j_size), size2_)];
                     }
@@ -3375,10 +3375,10 @@ namespace boost { namespace numeric { namespace ublas {
             if (preserve) {
                 self_type temporary (size1, size2);
                 // Common elements to preserve
-                const size_t size1_min = (std::min) (size1, size1_);
-                const size_t size2_min = (std::min) (size2, size2_);
-                for (size_t i = 0; i != size1_min; ++i) {    // indexing copy over major
-                    for (size_t j = 0; j != size1_min; ++j) {
+                const size_type size1_min = (std::min) (size1, size1_);
+                const size_type size2_min = (std::min) (size2, size2_);
+                for (size_type i = 0; i != size1_min; ++i) {    // indexing copy over major
+                    for (size_type j = 0; j != size1_min; ++j) {
                     	temporary.data_[i][j] = data_[i][j];
                     }
                 }
