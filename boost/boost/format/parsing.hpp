@@ -361,7 +361,7 @@ void basic_format<Ch, Traits> ::parse(const string_t & buf)
     
     // A: find upper_bound on num_items and allocates arrays
     i1=0; 
-    while( (i1=buf.find(arg_mark,i1)) != string::npos ) 
+    while( (i1=buf.find(arg_mark,i1)) != string_t::npos ) 
     {
       if( i1+1 >= buf.size() ) {
         if(exceptions() & io::bad_format_string_bit)
