@@ -1,5 +1,5 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// test_polymorphic_archive.cpp
+// test_polymorphic.cpp
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
 // Use, modification and distribution is subject to the Boost Software
@@ -28,7 +28,7 @@ namespace std{
 #include <boost/archive/polymorphic_iarchive.hpp>
 
 #include <boost/serialization/nvp.hpp>
-#include "test_polymorphic_archive_data.hpp"
+#include "test_polymorphic_A.hpp"
 
 int test_main(int /* argc */, char * /* argv */ [])
 {
