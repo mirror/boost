@@ -33,17 +33,10 @@ class random_device : noncopyable
 {
 public:
   typedef unsigned int result_type;
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  static const bool has_fixed_range = true;
-  static const result_type min_value = integer_traits<result_type>::const_min;
-  static const result_type max_value = integer_traits<result_type>::const_max;
-#else
-  enum { 
-    has_fixed_range = true, 
-    min_value = integer_traits<result_type>::const_min, 
-    max_value = integer_traits<result_type>::const_max
-  };
-#endif
+  BOOST_STATIC_CONSTANT(bool, has_fixed_range = true);
+  BOOST_STATIC_CONSTANT(result_type, min_value = integer_traits<result_type>::const_min);
+  BOOST_STATIC_CONSTANT(result_type, max_value = integer_traits<result_type>::const_max);
+
   result_type min() const { return min_value; }
   result_type max() const { return max_value; }
   explicit random_device(const std::string& token = default_token);
