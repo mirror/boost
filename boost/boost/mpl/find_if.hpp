@@ -69,7 +69,7 @@ struct find_if
     typedef typename aux::iter_fold_if_impl<
           first_
         , pred_
-        , arg<1>
+        , mpl::arg<1>
         , aux::find_if_pred<last_>
         , void
         , always<false_c>
