@@ -161,8 +161,14 @@ namespace assign
             return *this;
         }
         
-        template< template <class> class Repeater, class T >
-        list_inserter& operator=( Repeater<T> r )
+        template< class T >
+        list_inserter& operator=( assign_detail::repeater<T> r )
+        {
+            return operator,( r );
+        }
+        
+        template< class Nullary_function >
+        list_inserter& operator=( assign_detail::fun_repeater<Nullary_function> r )
         {
             return operator,( r );
         }
