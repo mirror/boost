@@ -21,13 +21,7 @@ namespace boost
 template< typename T >
 inline T const & std_min( T const & a, T const & b )
 {
-#if defined(__COMO__) || defined(BOOST_INTEL) || defined(BOOST_NO_STD_MIN_MAX)
     using std::min;
-#elif defined(BOOST_NO_STDC_NAMESPACE)
-    using ::min;
-#else
-    using std::min;
-#endif
 
     return min BOOST_PREVENT_MACRO_SUBSTITUTION ( a, b );
 }
@@ -35,13 +29,7 @@ inline T const & std_min( T const & a, T const & b )
 template< typename T >
 inline T const & std_max( T const & a, T const & b )
 {
-#if defined(__COMO__) || defined(BOOST_INTEL) || defined(BOOST_NO_STD_MIN_MAX)
     using std::max;
-#elif defined(BOOST_NO_STDC_NAMESPACE)
-    using ::max;
-#else
-    using std::max;
-#endif
 
     return max BOOST_PREVENT_MACRO_SUBSTITUTION ( a, b );
 }
