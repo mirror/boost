@@ -58,6 +58,21 @@ indication of which compilers are actually supported.
   <li><a href="#msvc_70">Microsoft Visual C++ 7.0</a></li>
   <li><a href="#msvc_71">Microsoft Visual C++ 7.1</a></li>
   <li><a href="#msvc_80">Microsoft Visual C++ 8.0</a></li>
+  <li><a href="#portability">Portability techniques</a>
+    <ul>
+      <li><a href="#member_offset">Use of <code>member_offset</code></a></li>
+      <li><a href="#mem_fun_explicit">Use of <code>const_mem_fun_explicit</code> and
+        <code>mem_fun_explicit</code></a></li>
+      <li><a href="#composite_key_no_pts"><code>composite_key</code> in compilers
+        without partial template specialization</a></li>
+      <li><a href="#symbol_reduction">Reduction of symbol name lengths</a>
+        <ul>
+          <li><a href="#argument_limitation">Limitation of maximum number of arguments</a></li>
+          <li><a href="#type_hiding">Type hiding</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 
 <h2><a name="bcb_64">Borland C++ Builder 6.4</a></h2>
@@ -110,32 +125,18 @@ exceeds 32,768 bytes, resulting in the error <code>mips-tfile, ... string
 too big</code>. You may encounter this issue with heavily templatized
 code like Boost.MultiIndex, which typically produces long symbol names. The problem
 can be overcome by omitting the compiler option <code>-g</code> (generate debugging
-information.) Alternatively, you can restrict the maximum number of elements accepted by 
-<a href="reference/indices.html#indexed_by"><code>indexed_by</code></a>,
-<a href="reference/indices.html#tag"><code>tag</code></a> and
-<a href="reference/key_extraction.html#composite_key"><code>composite_key</code></a>
-by globally setting the values of the macros
-<ul>
-  <li><code>BOOST_MULTI_INDEX_LIMIT_INDEXED_BY_SIZE</code>
-    (default: 20),</li>
-  <li><code>BOOST_MULTI_INDEX_LIMIT_TAG_SIZE</code>
-    (default: 20),</li>
-  <li><code>BOOST_MULTI_INDEX_LIMIT_COMPOSITE_KEY_SIZE</code>
-    (default: 10).</li>
-</ul>
-This operation results in a modest reduction of the lengths of symbol
-names.
+information.) Alternatively, consult the section on
+<a href="#symbol_reduction">reduction of symbol name lengths</a> for various
+applicable workarounds.
 </p>
 
 <h2><a name="va_60">IBM VisualAge C++ V6.0 for AIX</a></h2>
 
 <p>
 <a href="reference/key_extraction.html#member"><code>member</code></a> not supported,
-replace with
-<a href="reference/key_extraction.html#member_offset"><code>member_offset</code></a> or
-use the cross-platform macro
-<a href="reference/key_extraction.html#boost_multi_index_member">
-<code>BOOST_MULTI_INDEX_MEMBER</code></a>. The compiler emits warnings about the
+refer to the section on
+<a href="#member_offset">use of <code>member_offset</code></a> for workarounds.
+<code>member_offset</code> causes the compiler to emit warnings about the
 use of <code>offsetof</code> with non-POD types: these warnings can be suppressed
 by setting the compiler option <code>-qsuppress=1540-1281</code>, or, alternatively,
 by inserting the following preprocessor directive:
@@ -160,20 +161,18 @@ No problems have been detected with these compilers.
 
 <p>
 <a href="reference/key_extraction.html#member"><code>member</code></a> not supported,
-replace with
-<a href="reference/key_extraction.html#member_offset"><code>member_offset</code></a> or
-use the cross-platform macro
-<a href="reference/key_extraction.html#boost_multi_index_member">
-<code>BOOST_MULTI_INDEX_MEMBER</code></a>.
+refer to the section on
+<a href="#member_offset">use of <code>member_offset</code></a> for workarounds.
 </p>
 
 <blockquote><hr></blockquote>
 
 <p>
-Altough Koenig lookup seems to be officially supported by this compiler,
-some issues have arisen seemingly due to bugs related to this facility.
-In these cases you might need to explicitly qualify global names with
-<code>::boost::multi_index</code>.
+When used on top of MSVC++ 7.0 or prior, argument dependent lookup is
+disabled by default. This will cause problems with many Boost libraries,
+and in particular with the serialization part of Boost.MultiIndex.
+Argument dependent lookup is enabled by adding
+<code>/Qoption,c,--arg_dep_lookup</code> to the project options.
 </p>
 
 <h2><a name="#intel_71_win_stlport_453">
@@ -188,7 +187,12 @@ also been confirmed to work correctly.
 <h2><a name="intel_8x_win">Intel C++ Compiler for Windows 32-bit 8.0/8.1</a></h2>
 
 <p>
-No problems have been detected with these compilers.
+When used on top of MSVC++ 7.0 or prior, argument dependent lookup is
+disabled by default. This will cause problems with many Boost libraries,
+and in particular with the serialization part of Boost.MultiIndex.
+Argument dependent lookup is enabled by adding
+<code>/Qoption,c,--arg_dep_lookup</code> to the project options.
+Other than this, Boost.MultiIndex works without problems.
 </p>
 
 <h2><a name="cw_83_9x">Metrowerks CodeWarrior 8.3/9.2/9.3</a></h2>
@@ -202,31 +206,16 @@ two operating systems tested: Mac OS and Windows.
 
 <p>
 <a href="reference/key_extraction.html#member"><code>member</code></a> not supported,
-replace with
-<a href="reference/key_extraction.html#member_offset"><code>member_offset</code></a> or
-use the cross-platform macro
-<a href="reference/key_extraction.html#boost_multi_index_member">
-<code>BOOST_MULTI_INDEX_MEMBER</code></a>.
+refer to the section on
+<a href="#member_offset">use of <code>member_offset</code></a> for workarounds.
 </p>
 
 <p>
-<a href="reference/key_extraction.html#const_mem_fun"><code>const_mem_fun</code></a> not
-supported, replace with
-<a href="reference/key_extraction.html#const_mem_fun_explicit">
-<code>const_mem_fun_explicit</code></a>
-or use the cross-platform macro
-<a href="reference/key_extraction.html#boost_multi_index_const_mem_fun">
-<code>BOOST_MULTI_INDEX_CONST_MEM_FUN</code></a>.
-</p>
-
-<p>
-<a href="reference/key_extraction.html#mem_fun"><code>mem_fun</code></a> is not
-supported, replace with
-<a href="reference/key_extraction.html#mem_fun_explicit">
-<code>mem_fun_explicit</code></a> or
-use the cross-platform macro
-<a href="reference/key_extraction.html#boost_multi_index_mem_fun">
-<code>BOOST_MULTI_INDEX_MEM_FUN</code></a>.
+<a href="reference/key_extraction.html#const_mem_fun"><code>const_mem_fun</code></a> and
+<a href="reference/key_extraction.html#mem_fun"><code>mem_fun</code></a>
+not supported, refer to the section on
+<a href="#mem_fun_explicit">use of <code>const_mem_fun_explicit</code> and
+<code>mem_fun_explicit</code></a> for workarounds.
 </p>
 
 <blockquote><hr></blockquote>
@@ -246,8 +235,33 @@ nested types and member functions:
   <li><code>project</code>.</li>
 </ul>
 You can use instead their global equivalents. Also, this compiler does not
-implement Koenig lookup, so you might need to explicitly qualify these
-global names with <code>::boost::multi_index</code>.
+implement argument dependent lookup, so you might need to explicitly qualify
+these global names with <code>::boost::multi_index</code>.
+</p>
+
+<blockquote><hr></blockquote>
+
+<p>
+<code>boost::multi_index::multi_index_container</code> is imported to
+<code>namespace boost</code> by means of a <code>using</code> declaration.
+MSVC++ 6.0, however, does not properly handle this import. So, instead of
+writing:
+</p>
+
+<blockquote><pre>
+<span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index_container</span><span class=special>&lt;...&gt;</span>
+</pre></blockquote>
+
+<p>
+use the following:
+</p>
+
+<blockquote><pre>
+<span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>multi_index_container</span><span class=special>&lt;...&gt;</span>
+</pre></blockquote>
+
+<p>
+or else resort to a directive <code>using namespace boost::multi_index</code>.
 </p>
 
 <blockquote><hr></blockquote>
@@ -256,9 +270,8 @@ global names with <code>::boost::multi_index</code>.
 The lack of partial template specialization support in MSVC++ 6.0
 results in some inconveniences when using <code>composite_key</code> that
 can be remedied as explained in
-<a href="advanced_topics.html#composite_key_no_pts">"<code>composite_key</code>
-in compilers without partial template specialization"</a> on the advanced
-topics section.
+<a href="#composite_key_no_pts">"<code>composite_key</code>
+in compilers without partial template specialization"</a>.
 </p>
 
 <blockquote><hr></blockquote>
@@ -269,22 +282,9 @@ symbol names generated by the compiler, which might result in the
 linker error
 <code><a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vccore98/html/lnk1179.asp">LNK1179</a>:
 invalid or corrupt file: duplicate comdat
-comdat</code>. To overcome this problem, you can restrict the maximum
-number of elements accepted by 
-<a href="reference/indices.html#indexed_by"><code>indexed_by</code></a>,
-<a href="reference/indices.html#tag"><code>tag</code></a> and
-<a href="reference/key_extraction.html#composite_key"><code>composite_key</code></a>
-by globally setting the values of the macros
-<ul>
-  <li><code>BOOST_MULTI_INDEX_LIMIT_INDEXED_BY_SIZE</code>
-    (default in MSVC++ 6.0: 5),</li>
-  <li><code>BOOST_MULTI_INDEX_LIMIT_TAG_SIZE</code>
-    (default in MSVC++ 6.0: 3),</li>
-  <li><code>BOOST_MULTI_INDEX_LIMIT_COMPOSITE_KEY_SIZE</code>
-    (default in MSVC++ 6.0: 5).</li>
-</ul>
-This operation results in a modest reduction of the lengths of symbol
-names.
+comdat</code>. To overcome this problem, consult the section on
+<a href="#symbol_reduction">reduction of symbol name lengths</a> for various
+applicable workarounds. 
 </p>
 
 <blockquote><hr></blockquote>
@@ -337,7 +337,6 @@ with the following:
 <blockquote><pre>
  <span class=preprocessor>#define</span> <span class=identifier>_VIRTUAL</span>
 </pre></blockquote>
-</p>
 
 <p>
 <b>Warning</b>: it is not known whether this
@@ -380,15 +379,21 @@ in MSVC++ 6.0 with its original Dinkumware standard library. STLport 4.6.2 has
 also been confirmed to work correctly.
 </p>
 
+<blockquote><hr></blockquote>
+
+<p>
+It is not possible to use the serialization capabilities of Boost.MultiIndex
+along with the dynamic version of STLport, as some linking errors result.
+Use instead the static version of STLport. This bug is reportedly fixed in
+STLport 5.0 (in beta stage as of this writing.)
+</p>
+
 <h2><a name="msvc_70">Microsoft Visual C++ 7.0</a></h2>
 
 <p>
 <a href="reference/key_extraction.html#member"><code>member</code></a> not supported,
-replace with
-<a href="reference/key_extraction.html#member_offset"><code>member_offset</code></a> or
-use the cross-platform macro
-<a href="reference/key_extraction.html#boost_multi_index_member">
-<code>BOOST_MULTI_INDEX_MEMBER</code></a>.
+refer to the section on
+<a href="#member_offset">use of <code>member_offset</code></a> for workarounds.
 </p>
 
 <blockquote><hr></blockquote>
@@ -408,8 +413,33 @@ nested types and member functions:
   <li><code>project</code>.</li>
 </ul>
 You can use instead their global equivalents. Also, this compiler does not
-implement Koenig lookup, so you might need to explicitly qualify these
-global names with <code>::boost::multi_index</code>.
+implement argument dependent lookup, so you might need to explicitly qualify
+these global names with <code>::boost::multi_index</code>.
+</p>
+
+<blockquote><hr></blockquote>
+
+<p>
+<code>boost::multi_index::multi_index_container</code> is imported to
+<code>namespace boost</code> by means of a <code>using</code> declaration.
+MSVC++ 7.0, however, does not properly handle this import. So, instead of
+writing:
+</p>
+
+<blockquote><pre>
+<span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index_container</span><span class=special>&lt;...&gt;</span>
+</pre></blockquote>
+
+<p>
+use the following:
+</p>
+
+<blockquote><pre>
+<span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>multi_index_container</span><span class=special>&lt;...&gt;</span>
+</pre></blockquote>
+
+<p>
+or else resort to a directive <code>using namespace boost::multi_index</code>.
 </p>
 
 <blockquote><hr></blockquote>
@@ -418,9 +448,8 @@ global names with <code>::boost::multi_index</code>.
 The lack of partial template specialization support in MSVC++ 7.0
 results in some inconveniences when using <code>composite_key</code> that
 can be remedied as explained in
-<a href="advanced_topics.html#composite_key_no_pts">"<code>composite_key</code>
-in compilers without partial template specialization"</a> on the advanced
-topics section.
+<a href="#composite_key_no_pts">"<code>composite_key</code>
+in compilers without partial template specialization"</a>.
 </p>
 
 <h2><a name="msvc_71">Microsoft Visual C++ 7.1</a></h2>
@@ -442,6 +471,412 @@ No problems have been detected with this compiler. The Beta 1 version of
 this product was used for the testing.
 </p>
 
+<h2><a name="portability">Portability techniques</a></h2>
+
+<h3><a name="member_offset">Use of <code>member_offset</code></a></h3>
+
+<p>
+The <code>member</code> key extractor poses some problems in compilers
+that do not properly support pointers to members as non-type
+template arguments, as indicated by the
+<a href="../../../libs/config/config.htm">Boost Configuration Library</a>
+defect macro <code>BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</code>.
+The following compilers have been confirmed not
+to work correctly with <code>member</code>:
+<ul>
+  <li>MSVC++ 6.0/7.0,</li>
+  <li>Intel C++ 7.0/7.1 for Windows,</li>
+  <li>VisualAge 6.0 for AIX.</li>
+</ul>
+This program can help determine if your compiler
+properly supports pointers to members as non-type template parameters:
+</p>
+
+<blockquote><pre>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>iostream</span><span class=special>&gt;</span>
+
+<span class=keyword>struct</span> <span class=identifier>pair</span>
+<span class=special>{</span>
+  <span class=keyword>int</span> <span class=identifier>x</span><span class=special>,</span><span class=identifier>y</span><span class=special>;</span>
+
+  <span class=identifier>pair</span><span class=special>(</span><span class=keyword>int</span> <span class=identifier>x_</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>y_</span><span class=special>):</span><span class=identifier>x</span><span class=special>(</span><span class=identifier>x_</span><span class=special>),</span><span class=identifier>y</span><span class=special>(</span><span class=identifier>y_</span><span class=special>){}</span>
+<span class=special>};</span>
+
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>int</span> <span class=identifier>pair</span><span class=special>::*</span> <span class=identifier>PtrToPairMember</span><span class=special>&gt;</span>
+<span class=keyword>struct</span> <span class=identifier>foo</span>
+<span class=special>{</span>
+  <span class=keyword>int</span> <span class=identifier>bar</span><span class=special>(</span><span class=identifier>pair</span><span class=special>&amp;</span> <span class=identifier>p</span><span class=special>){</span><span class=keyword>return</span> <span class=identifier>p</span><span class=special>.*</span><span class=identifier>PtrToPairMember</span><span class=special>;}</span>
+<span class=special>};</span>
+
+<span class=keyword>int</span> <span class=identifier>main</span><span class=special>()</span>
+<span class=special>{</span>
+  <span class=identifier>pair</span> <span class=identifier>p</span><span class=special>(</span><span class=number>0</span><span class=special>,</span><span class=number>1</span><span class=special>);</span>
+  <span class=identifier>foo</span><span class=special>&lt;&amp;</span><span class=identifier>pair</span><span class=special>::</span><span class=identifier>x</span><span class=special>&gt;</span> <span class=identifier>fx</span><span class=special>;</span>
+  <span class=identifier>foo</span><span class=special>&lt;&amp;</span><span class=identifier>pair</span><span class=special>::</span><span class=identifier>y</span><span class=special>&gt;</span> <span class=identifier>fy</span><span class=special>;</span>
+
+  <span class=keyword>if</span><span class=special>(</span><span class=identifier>fx</span><span class=special>.</span><span class=identifier>bar</span><span class=special>(</span><span class=identifier>p</span><span class=special>)!=</span><span class=number>0</span><span class=special>||</span><span class=identifier>fy</span><span class=special>.</span><span class=identifier>bar</span><span class=special>(</span><span class=identifier>p</span><span class=special>)!=</span><span class=number>1</span><span class=special>)</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>cout</span><span class=special>&lt;&lt;</span><span class=string>&quot;KO&quot;</span><span class=special>&lt;&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>endl</span><span class=special>;</span>
+  <span class=keyword>else</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>cout</span><span class=special>&lt;&lt;</span><span class=string>&quot;OK&quot;</span><span class=special>&lt;&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>endl</span><span class=special>;</span>
+
+  <span class=keyword>return</span> <span class=number>0</span><span class=special>;</span>
+<span class=special>}</span>
+
+</pre></blockquote>
+
+<p>
+If you find a compiler that does not pass the test, and for which
+<code>BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</code> is <i>not</i> defined,
+please report to the Boost developers mailing list.
+</p>
+<p>To overcome this defect, a replacement utility
+<a href="reference/key_extraction.html#member_offset"><code>member_offset</code></a>
+has been provided that does the work of <code>member</code> at the
+expense of less convenient notation and the possibility of
+non-conformance with the standard. Please consult
+the reference for further information on <code>member_offset</code>.
+As an example of use, given the class
+</p>
+
+<blockquote><pre>
+<span class=keyword>class</span> <span class=identifier>A</span>
+<span class=special>{</span>
+  <span class=keyword>int</span> <span class=identifier>x</span><span class=special>;</span>
+<span class=special>}</span>
+</pre></blockquote>
+
+<p>
+the instantiation <code>member&lt;A,int,&amp;A::x></code> can be simulated then
+as <code>member_offset&lt;A,int,offsetof(A,x)></code>.
+</p>
+
+<p>
+For those writing portable code, Boost.MultiIndex provides the ternary macro
+<a href="reference/key_extraction.html#boost_multi_index_member"><code>BOOST_MULTI_INDEX_MEMBER</code></a>.
+Continuing with the example above, the
+expression
+</p>
+
+<blockquote><pre>
+<span class=identifier>BOOST_MULTI_INDEX_MEMBER</span><span class=special>(</span><span class=identifier>A</span><span class=special>,</span><span class=keyword>int</span><span class=special>,</span><span class=identifier>x</span><span class=special>)</span>
+</pre></blockquote>
+
+<p>
+expands by default to
+</p>
+
+<blockquote><pre>
+<span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>A</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>A</span><span class=special>::</span><span class=identifier>x</span><span class=special>&gt;</span>
+</pre></blockquote>
+
+<p>
+or alternatively to
+</p>
+
+<blockquote><pre>
+<span class=identifier>member_offset</span><span class=special>&lt;</span><span class=identifier>A</span><span class=special>,</span><span class=keyword>int</span><span class=special>,</span><span class=identifier>offsetof</span><span class=special>(</span><span class=identifier>A</span><span class=special>,</span><span class=identifier>x</span><span class=special>)&gt;</span>
+</pre></blockquote>
+
+<p>
+if <code>BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</code> is defined.
+</p>
+
+<h3><a name="mem_fun_explicit">Use of <code>const_mem_fun_explicit</code> and
+<code>mem_fun_explicit</code></a></h3>
+
+<p>
+MSVC++ 6.0 has problems with <code>const</code> member functions as non-type
+template parameters, and thus does not accept the <code>const_mem_fun</code>
+key extractor. A simple workaround, fortunately, has been found, consisting
+in specifying the <i>type</i> of these pointers as an additional template
+parameter. The alternative
+<a href="reference/key_extraction.html#const_mem_fun_explicit"><code>const_mem_fun_explicit</code></a>
+extractor adopts this solution; for instance, given the type
+</p>
+
+<blockquote><pre>
+<span class=keyword>struct</span> <span class=identifier>A</span>
+<span class=special>{</span>
+  <span class=keyword>int</span> <span class=identifier>f</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
+<span class=special>};</span>
+</pre></blockquote>
+
+<p>
+the extractor <code>const_mem_fun&lt;A,int,&amp;A::f></code> can be replaced by
+<code>const_mem_fun_explicit&lt;A,int,int (A::*)()const,&amp;A::f></code>. A similar
+<code>mem_fun_explicit</code> class template is provided for non-constant
+member functions.
+</p>
+
+<p>
+If you are writing cross-platform code, the selection of either key extractor
+is transparently handled by the macro
+<a href="reference/key_extraction.html#boost_multi_index_const_mem_fun"><code>BOOST_MULTI_INDEX_CONST_MEM_FUN</code></a>,
+so that
+</p>
+
+<blockquote><pre>
+<span class=identifier>BOOST_MULTI_INDEX_CONST_MEM_FUN</span><span class=special>(</span><span class=identifier>A</span><span class=special>,</span><span class=keyword>int</span><span class=special>,</span><span class=identifier>f</span><span class=special>)</span>
+</pre></blockquote>
+
+<p>
+expands by default to
+</p>
+
+<blockquote><pre>
+<span class=identifier>const_mem_fun</span><span class=special>&lt;</span><span class=identifier>A</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>A</span><span class=special>::</span><span class=identifier>f</span><span class=special>&gt;</span>
+</pre></blockquote>
+
+<p>
+but resolves to 
+</p>
+
+<blockquote><pre>
+<span class=identifier>const_mem_fun_explicit</span><span class=special>&lt;</span><span class=identifier>A</span><span class=special>,</span><span class=keyword>int</span><span class=special>,</span><span class=keyword>int</span> <span class=special>(</span><span class=identifier>A</span><span class=special>::*)()</span><span class=keyword>const</span><span class=special>,&amp;</span><span class=identifier>A</span><span class=special>::</span><span class=identifier>f</span><span class=special>&gt;</span>
+</pre></blockquote>
+
+<p>
+in MSVC++ 6.0. Non-<code>const</code> member functions are covered by
+<a href="reference/key_extraction.html#mem_fun_explicit"><code>mem_fun_explicit</code></a>
+and the macro
+<a href="reference/key_extraction.html#boost_multi_index_mem_fun"><code>BOOST_MULTI_INDEX_MEM_FUN</code></a>.
+</p>
+
+<h3><a name="composite_key_no_pts"><code>composite_key</code> in compilers
+without partial template specialization</a></h3>
+
+<p>
+When using <code>composite_key</code>s, lookup is performed by passing
+tuples of values: this ability is achieved by suitably specializing
+the class templates <code>std::equal_to</code>, <code>std::less</code>,
+<code>std::greater</code> and <code>boost::hash</code> for
+<a href="reference/key_extraction.html#composite_key_result">
+<code>composite_key_result</code></a> instantiations so that they
+provide the appropriate overloads accepting tuples --and in the case
+of <code>std::less</code> and <code>std::greater</code>, also partial
+tuples where only the first components are specified.
+</p>
+
+<p>
+In those compilers that do not support partial template specialization,
+these specializations cannot be provided, and so 
+tuple-based lookup is not available by default. In this case,
+<code>multi_index_container</code> instantiations using composite keys
+will work as expected, both for ordered and hashed indices,
+except that lookup operations will not accept tuples as an argument.
+For ordered indices, the most obvious workaround
+to this deficiency involves explicitly specifying the comparison
+predicate with
+<a href="reference/key_extraction.html#composite_key_compare"><code>composite_key_compare</code></a>;
+in the case of hashed indices we can use the analogous
+<a href="reference/key_extraction.html#composite_key_equal_to"><code>composite_key_equal_to</code></a>
+and
+<a href="reference/key_extraction.html#composite_key_hash"><code>composite_key_hash</code></a>.
+This substitution is tedious as the elementary components for all the constituent key extractors must
+be explicitly typed. For this reason, Boost.MultiIndex provides the following replacement
+class templates
+<ul>
+  <li><a href="reference/key_extraction.html#composite_key_result_equal_to">
+    <code>composite_key_result_equal_to</code></a>,</li>
+  <li><a href="reference/key_extraction.html#composite_key_result_less">
+    <code>composite_key_result_less</code></a>,</li>
+  <li><a href="reference/key_extraction.html#composite_key_result_greater">
+    <code>composite_key_result_greater</code></a> and</li>
+  <li><a href="reference/key_extraction.html#composite_key_result_hash">
+    <code>composite_key_result_hash</code></a>,</li>
+</ul>
+that act as the missing specializations of <code>std::equal_to</code>, <code>std::less</code>,
+<code>std::greater</code> and <code>boost::hash</code> for <code>composite_key_result</code>s.
+They can be used as follows:
+</p>
+
+<blockquote><pre>
+<span class=keyword>typedef</span> <span class=identifier>composite_key</span><span class=special>&lt;</span>
+  <span class=identifier>phonebook_entry</span><span class=special>,</span>
+  <span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>phonebook_entry</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,&amp;</span><span class=identifier>phonebook_entry</span><span class=special>::</span><span class=identifier>family_name</span><span class=special>&gt;,</span>
+  <span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>phonebook_entry</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,&amp;</span><span class=identifier>phonebook_entry</span><span class=special>::</span><span class=identifier>given_name</span><span class=special>&gt;</span>
+<span class=special>&gt;</span> <span class=identifier>ckey_t</span><span class=special>;</span>
+
+<span class=keyword>typedef</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span>
+  <span class=identifier>phonebook_entry</span><span class=special>,</span>
+  <span class=identifier>indexed_by</span><span class=special>&lt;</span>
+    <span class=identifier>ordered_non_unique</span><span class=special>&lt;</span> 
+      <span class=identifier>ckey_t</span><span class=special>,</span>
+      <span class=comment>// composite_key_result_less plays the role of
+      // std::less&lt;ckey_t::result_type&gt;</span>
+      <span class=identifier>composite_key_result_less</span><span class=special>&lt;</span><span class=identifier>ckey_t</span><span class=special>::</span><span class=identifier>result_type</span><span class=special>&gt;</span>
+    <span class=special>&gt;,</span>
+    <span class=identifier>ordered_unique</span><span class=special>&lt;</span>
+      <span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>phonebook_entry</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,&amp;</span><span class=identifier>phonebook_entry</span><span class=special>::</span><span class=identifier>phone_number</span><span class=special>&gt;</span>
+    <span class=special>&gt;</span>
+  <span class=special>&gt;</span>
+<span class=special>&gt;</span> <span class=identifier>phonebook</span><span class=special>;</span>
+</pre></blockquote>
+
+<h3><a name="symbol_reduction">Reduction of symbol name lengths</a></h3>
+
+<p>
+The types generated on the instantiations of <code>multi_index_container</code>s
+typically produce very long symbol names, sometimes beyond the internal limits
+of some compilers. There are several techniques to shorten generated symbol
+names: these techniques have also the beneficial side effect that resulting error
+messages are more readable.
+</p>
+
+<h4><a name="argument_limitation">Limitation of maximum number of arguments</a></h4>
+
+<p>
+The class templates <a href="reference/indices.html#indexed_by"><code>indexed_by</code></a>,
+<a href="reference/indices.html#tag"><code>tag</code></a> and
+<a href="reference/key_extraction.html#composite_key"><code>composite_key</code></a>
+accept a variable number of arguments whose maximum number is limited by
+internal macros. Even non-used arguments contribute to the final types,
+so manually adjusting the corresponding macros can result in a modest reduction
+of symbol names.
+</p>
+
+<p align="center">
+<table cellspacing="0">
+  <caption><b>Limiting maximum number of arguments of some class templates
+  of Boost.MultiIndex.</b></caption>
+<tr>
+  <th>class template</th>
+  <th>limiting macro</th>
+  <th>default value</th>
+  <th>default value<br>(MSVC++ 6.0)</th>
+</tr>
+<tr>
+  <td align="center">&nbsp;<code>indexed_by</code>&nbsp;</td>
+  <td align="center">&nbsp;<code>BOOST_MULTI_INDEX_LIMIT_INDEXED_BY_SIZE</code>&nbsp;</td>
+  <td align="center">20</td>
+  <td align="center">5</td>
+</tr>
+<tr class="odd_tr">
+  <td align="center">&nbsp;<code>tag</code>&nbsp;</td>
+  <td align="center">&nbsp;<code>BOOST_MULTI_INDEX_LIMIT_TAG_SIZE</code>&nbsp;</td>
+  <td align="center">20</td>
+  <td align="center">3</td>
+</tr>
+<tr>
+  <td align="center">&nbsp;<code>composite_key</code>&nbsp;</td>
+  <td align="center">&nbsp;<code>BOOST_MULTI_INDEX_LIMIT_COMPOSITE_KEY_SIZE</code>&nbsp;</td>
+  <td align="center">10</td>
+  <td align="center">5</td>
+</tr>
+</table>
+</p>
+
+<h4><a name="type_hiding">Type hiding</a></h4>
+
+<p>
+Consider a typical instantiation of <code>multi_index_container</code>:
+</p>
+
+<blockquote><pre>
+<span class=keyword>typedef</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span>
+  <span class=identifier>employee</span><span class=special>,</span>
+  <span class=identifier>indexed_by</span><span class=special>&lt;</span>
+    <span class=identifier>ordered_unique</span><span class=special>&lt;</span><span class=identifier>identity</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>&gt;</span> <span class=special>&gt;,</span>
+    <span class=identifier>ordered_non_unique</span><span class=special>&lt;</span><span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,&amp;</span><span class=identifier>employee</span><span class=special>::</span><span class=identifier>name</span><span class=special>&gt;</span> <span class=special>&gt;,</span>
+    <span class=identifier>ordered_unique</span><span class=special>&lt;</span><span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>employee</span><span class=special>::</span><span class=identifier>ssnumber</span><span class=special>&gt;</span> <span class=special>&gt;</span>
+  <span class=special>&gt;</span>
+<span class=special>&gt;</span> <span class=identifier>employee_set</span><span class=special>;</span>
+</pre></blockquote>
+
+<p>
+Then, for instance, the type <code>employee_set::nth_type&lt;0&gt;::type</code>
+resolves to the following in GCC:
+</p>
+
+<blockquote><pre>
+<span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>detail</span><span class=special>::</span><span class=identifier>ordered_index</span><span class=special>&lt;</span>
+  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>identity</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>&gt;,</span>
+  <span class=identifier>std</span><span class=special>::</span><span class=identifier>less</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>&gt;,</span>
+  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>detail</span><span class=special>::</span><span class=identifier>nth_layer</span><span class=special>&lt;</span>
+    <span class=number>1</span><span class=special>,</span> <span class=identifier>employee</span><span class=special>,</span>
+    <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>indexed_by</span><span class=special>&lt;</span>
+      <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>ordered_unique</span><span class=special>&lt;</span>
+        <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>identity</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>&gt;,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span>
+      <span class=special>&gt;,</span>
+      <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>ordered_non_unique</span><span class=special>&lt;</span>
+        <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>,</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,</span> <span class=special>&amp;</span><span class=identifier>employee</span><span class=special>::</span><span class=identifier>name</span><span class=special>&gt;,</span>
+        <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span>
+      <span class=special>&gt;,</span>
+      <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>ordered_unique</span><span class=special>&lt;</span>
+        <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>,</span> <span class=keyword>int</span><span class=special>,</span> <span class=special>&amp;</span><span class=identifier>employee</span><span class=special>::</span><span class=identifier>ssnumber</span><span class=special>&gt;,</span>
+        <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span>
+      <span class=special>&gt;,</span>
+      <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span>
+      <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span>
+      <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>,</span> <span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span>
+    <span class=special>&gt;,</span>
+    <span class=identifier>std</span><span class=special>::</span><span class=identifier>allocator</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>&gt;</span>
+  <span class=special>&gt;,</span>
+  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>mpl</span><span class=special>::</span><span class=identifier>vector0</span><span class=special>&lt;</span><span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>&gt;,</span>
+  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>detail</span><span class=special>::</span><span class=identifier>ordered_unique_tag</span>
+<span class=special>&gt;</span>
+</pre></blockquote>
+
+<p>
+It can be seen that a significant portion of the type name is contributed by
+the <code>indexed_by&lt;...&gt;</code> part, which is nothing but an expanded
+version of the index specifier list provided in the definition of
+<code>employee_set</code>. We can prevent this very long name from appearing
+in the final type by encapsulating it into another, shorter-named construct:
+</p>
+
+<blockquote><pre>
+<span class=comment>// reducing symbol names through type hiding
+// type hide the index spexifier list within employee_set_indices</span>
+
+<span class=keyword>struct</span> <span class=identifier>employee_set_indices</span><span class=special>:</span>
+  <span class=identifier>indexed_by</span><span class=special>&lt;</span>
+    <span class=identifier>ordered_unique</span><span class=special>&lt;</span><span class=identifier>identity</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>&gt;</span> <span class=special>&gt;,</span>
+    <span class=identifier>ordered_non_unique</span><span class=special>&lt;</span><span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,&amp;</span><span class=identifier>employee</span><span class=special>::</span><span class=identifier>name</span><span class=special>&gt;</span> <span class=special>&gt;,</span>
+    <span class=identifier>ordered_unique</span><span class=special>&lt;</span><span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>employee</span><span class=special>::</span><span class=identifier>ssnumber</span><span class=special>&gt;</span> <span class=special>&gt;</span>
+  <span class=special>&gt;</span>
+<span class=special>{};</span>
+
+<span class=keyword>typedef</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span>
+  <span class=identifier>employee</span><span class=special>,</span>
+  <span class=identifier>employee_set_indices</span>
+<span class=special>&gt;</span> <span class=identifier>employee_set</span><span class=special>;</span>
+</pre></blockquote>
+
+<p>
+<code>employee_set_indices</code> works as a conventional <code>typedef</code>
+in all respects, save for a detail: its name does not explicitly
+include the information contained in the <code>indexed_by</code> instantiation.
+Applying this technique, <code>employee_set::nth_type&lt;0&gt;::type</code>
+now becomes:
+</p>
+
+<blockquote><pre>
+<span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>detail</span><span class=special>::</span><span class=identifier>ordered_index</span><span class=special>&lt;</span>
+  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>identity</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>&gt;,</span>
+  <span class=identifier>std</span><span class=special>::</span><span class=identifier>less</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>&gt;,</span>
+  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>detail</span><span class=special>::</span><span class=identifier>nth_layer</span><span class=special>&lt;</span>
+    <span class=number>1</span><span class=special>,</span> <span class=identifier>employee</span><span class=special>,</span>
+    <span class=identifier>employee_set_indices</span><span class=special>,</span>
+    <span class=identifier>std</span><span class=special>::</span><span class=identifier>allocator</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>&gt;</span>
+  <span class=special>&gt;,</span>
+  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>mpl</span><span class=special>::</span><span class=identifier>vector0</span><span class=special>&lt;</span><span class=identifier>mpl_</span><span class=special>::</span><span class=identifier>na</span><span class=special>&gt;,</span>
+  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>detail</span><span class=special>::</span><span class=identifier>ordered_unique_tag</span>
+<span class=special>&gt;</span>
+</pre></blockquote>
+
+<p>
+which is considerably shorter than the original, and also more
+easily parsed by a human reader. Type hiding would not work if, instead of
+making <code>employee_set_indices</code> a derived <code>struct</code> of
+<code>indexed_by&lt;...&gt;</code>, we had defined it as a <code>typedef</code>:
+<code>typedef</code>s are syntactic aliases and usually get expanded
+by the compiler before doing any further type handling.
+</p>
+
+<p>
+Type hiding techniques can also be applied to <code>composite_key</code> intantiations,
+which often contribute a great deal to symbol name lengths.
+</p>
+
 <hr>
 
 <div class="prev_link"><a href="reference/key_extraction.html"><img src="prev.gif" alt="key extraction" border="0"><br>
@@ -456,9 +891,9 @@ Performance
 
 <br>
 
-<p>Revised October 18th 2004</p>
+<p>Revised March 10th 2005</p>
 
-<p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
