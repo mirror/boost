@@ -16,4 +16,4 @@
 // #define BOOST_HAS_STDINT_H
 
 #define BOOST_NO_SWPRINTF 
-
+#define BOOST_NO_CWCTYPE
