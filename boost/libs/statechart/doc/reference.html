@@ -107,9 +107,9 @@ the indicated results:</p>
       return the result</li>
       <li>Catches the exception propagated from <code>a</code>, if necessary</li>
       <li>Translates the exception to a suitable <code>
-      <a href="#Class template event">event&lt;&gt;</a></code> subclass and 
+      <a href="#Class template event">event&lt;&gt;</a></code> subtype and 
       constructs an object of the event <b>on the stack</b></li>
-      <li>Passes the <code>event&lt;&gt;</code> subclass object to <code>eh</code></li>
+      <li>Passes the <code>event&lt;&gt;</code> subtype object to <code>eh</code></li>
       <li>Rethrows the original exception if <code>eh</code> returns <code>
       false</code>, returns <code>hsr</code> otherwise</li>
     </ol>
@@ -160,18 +160,18 @@ the indicated results:</p>
 <ul>
   <li>What is passed to the constructors of <code>
   <a href="#Class template event_processor">event_processor&lt;&gt;</a></code> 
-  subclasses and how the lifetime of such objects is managed</li>
-  <li>Whether or not multiple <code>event_processor&lt;&gt;</code> subclass objects 
+  subtypes and how the lifetime of such objects is managed</li>
+  <li>Whether or not multiple <code>event_processor&lt;&gt;</code> subtype objects 
   can share the same queue and scheduler thread</li>
   <li>How events are added to the schedulers' queue</li>
   <li>Whether and how to wait for new events when the schedulers' queue runs 
   empty</li>
   <li>Whether and what type of locking is used to ensure thread-safety</li>
   <li>Whether it is possible to queue events for no longer existing <code>
-  event_processor&lt;&gt;</code> subclass objects and what happens when such an 
+  event_processor&lt;&gt;</code> subtype objects and what happens when such an 
   event is processed</li>
   <li>What happens when one of the serviced <code>event_processor&lt;&gt;</code> 
-  subclass objects propagates an exception</li>
+  subtype objects propagates an exception</li>
 </ul>
 <p>For a Scheduler type <code>S</code> and a <code>const</code> object <code>
 cpc</code> of type <code>S::processor_context</code> the following expressions 
@@ -191,7 +191,7 @@ must be well-formed and have the indicated results:</p>
     <td width="25%"><code>cpc.my_handle()</code></td>
     <td width="14%"><code>S::processor_handle</code></td>
     <td width="35%">The handle identifying the <code>event_processor&lt;&gt;</code> 
-    subclass object</td>
+    subtype object</td>
   </tr>
 </table>
 <p>To protect against abuse, all members of <code>S::processor_context</code> 
@@ -297,13 +297,13 @@ well-formed and have the indicated results:</p>
   </tr>
   <tr>
     <td width="15%"><code>MostDerived</code></td>
-    <td width="51%">The most-derived subclass of this class template</td>
+    <td width="51%">The most-derived subtype of this class template</td>
     <td width="18%">&nbsp;</td>
     <td width="19%">&nbsp;</td>
   </tr>
   <tr>
     <td width="15%"><code>InitialState</code></td>
-    <td width="51%">A most-derived direct or indirect subclass of the
+    <td width="51%">A most-derived direct or indirect subtype of the
     <code>simple_state</code> class template. The 
     type that <code>InitialState</code> passes as <code>Context</code> to 
 	<code>simple_state&lt;&gt;</code> must be equal to <code>MostDerived</code>. That is, <code>
@@ -650,13 +650,13 @@ asynchronous_state_machine</code></a></h2>
   </tr>
   <tr>
     <td width="15%"><code>MostDerived</code></td>
-    <td width="51%">The most-derived subclass of this class template</td>
+    <td width="51%">The most-derived subtype of this class template</td>
     <td width="18%">&nbsp;</td>
     <td width="19%">&nbsp;</td>
   </tr>
   <tr>
     <td width="15%"><code>InitialState</code></td>
-    <td width="51%">A most-derived direct or indirect subclass of the
+    <td width="51%">A most-derived direct or indirect subtype of the
     <code>simple_state</code> class template. The 
     type that <code>InitialState</code> passes as <code>Context</code> to 
 	<code>simple_state&lt;&gt;</code> must be equal to <code>MostDerived</code>. That is, <code>
@@ -715,17 +715,17 @@ destructor</h3>
   const processor_context &amp; myContext );</pre>
 <p><b>Effects</b>: Constructs a non-running asynchronous state machine<br>
 <b>Note</b>: Users cannot create <code>asynchronous_state_machine&lt;&gt;</code> 
-subclass objects directly. This can only be done through an object of the
+subtype objects directly. This can only be done through an object of the
 <code>Scheduler</code> class</p>
 <pre>~asynchronous_state_machine();</pre>
-<p><b>Effects</b>: Terminates the state machine<br>
+<p><b>Effects</b>: Destructs the state machine<br>
 <b>Note</b>: Users cannot destruct <code>asynchronous_state_machine&lt;&gt;</code> 
-subclass objects directly. This can only be done through an object of the
+subtype objects directly. This can only be done through an object of the
 <code>Scheduler</code> class</p>
 <h1>Header &lt;boost/fsm/<a name="event_processor.hpp">event_processor.hpp</a>&gt;</h1>
 <h2><a name="Class template event_processor">Class template <code>
 event_processor</code></a></h2>
-<p>This is the base class template of all classes that process events. <code>
+<p>This is the base class template of all types that process events. <code>
 asynchronous_state_machine&lt;&gt;</code> is just one possible event processor 
 implementation.</p>
 <h3>Class template <code>event_processor</code> parameters</h3>
@@ -782,12 +782,13 @@ namespace fsm
 <p><b>Effects</b>: Constructs an event processor object and stores copies of 
 the reference returned by <code>myContext.my_scheduler()</code> and the object 
 returned by <code>myContext.my_handle()</code><br>
-<b>Note</b>: Users cannot create <code>event_processor&lt;&gt;</code> subclass 
+<b>Note</b>: Users cannot create <code>event_processor&lt;&gt;</code> subtype 
 objects directly. This can only be done through an object of the <code>
 Scheduler</code> class</p>
 <pre>virtual <a name="~event_processor">~event_processor</a>();</pre>
 <p><b>Effects</b>: Destructs an event processor object<br>
-<b>Note</b>: Users cannot destruct <code>event_processor&lt;&gt;</code> subclass 
+<b>Note</b>: Users cannot destruct <code>event_processor&lt;&gt;</code> 
+subtype 
 objects directly. This can only be done through an object of the <code>
 Scheduler</code> class</p>
 <h3>Class template <code>event_processor</code> modifier functions</h3>
@@ -802,9 +803,7 @@ Scheduler</code> class</p>
 <pre>void <a name="event_processor::terminate">terminate</a>();</pre>
 <p><b>Effects</b>: <code>terminate_impl();<br>
 </code><b>Throws</b>: Any exceptions propagated from the implementation of
-<code>terminate_impl()</code>. However, since <code>terminate()</code> is 
-called from destructors, <code>terminate_impl()</code> overrides should not 
-propagate any exceptions</p>
+<code>terminate_impl()</code></p>
 <h3>Class template <code>event_processor</code> observer functions</h3>
 <pre>Scheduler &amp; <a name="my_scheduler">my_scheduler</a>() const;</pre>
 <p><b>Returns</b>: The <code>Scheduler</code> reference obtained in the 
@@ -815,7 +814,7 @@ constructor</p>
 <h1>Header &lt;boost/fsm/<a name="fifo_scheduler.hpp">fifo_scheduler.hpp</a>&gt;</h1>
 <h2><a name="Class template fifo_scheduler">Class template <code>
 fifo_scheduler</code></a></h2>
-<p>This class is a model of the <a href="#Scheduler">Scheduler concept</a>.</p>
+<p>This class template is a model of the <a href="#Scheduler">Scheduler concept</a>.</p>
 <h3>Class template <code>fifo_scheduler</code> parameters</h3>
 <table border="3" cellpadding="2" width="100%" id="AutoNumber16">
   <tr>
@@ -905,7 +904,7 @@ always returns to the caller when the event queue is empty</p>
 <pre>template&lt; class Processor &gt;
 processor_handle <a name="create_processor()">create_processor</a>();</pre>
 <p><b>Requires</b>: The <code>Processor</code> type must be a direct or 
-indirect subclass of the <a href="#Class template event_processor"><code>
+indirect subtype of the <a href="#Class template event_processor"><code>
 event_processor</code></a> class template<br>
 <b>Effects</b>: Creates and passes to <code>FifoWorker::queue_work_item()</code> 
 an object of type <code>FifoWorker::work_item</code> that, when later executed 
@@ -922,7 +921,7 @@ function in applications with hard real-time requirements</p>
 <pre>template&lt; class Processor, typename Param1 &gt;
 processor_handle <a name="create_processor( Param1 param1 )">create_processor( Param1 param1 )</a>;</pre>
 <p><b>Requires</b>: The <code>Processor</code> type must be a direct or 
-indirect subclass of the <a href="#Class template event_processor"><code>
+indirect subtype of the <a href="#Class template event_processor"><code>
 event_processor</code></a> class template<br>
 <b>Effects</b>: Creates and passes to <code>FifoWorker::queue_work_item()</code> 
 an object of type <code>FifoWorker::work_item</code> that, when later executed 
@@ -1022,7 +1021,7 @@ ExceptionTranslator concept</a>.</p>
   </tr>
   <tr>
     <td width="12%"><code>ExceptionEvent</code></td>
-    <td width="30%">A most-derived direct or indirect subclass of the <code>
+    <td width="30%">A most-derived direct or indirect subtype of the <code>
     <a href="#Class template event">event</a></code> class template</td>
     <td width="35%">The type of event that is dispatched when an exception is 
 	propagated into the framework</td>
@@ -1155,17 +1154,17 @@ must derive from the <code>state</code> class template.</p>
   </tr>
   <tr>
     <td width="15%"><code>MostDerived</code></td>
-    <td width="51%">The most-derived subclass of this class template</td>
+    <td width="51%">The most-derived subtype of this class template</td>
     <td width="18%">&nbsp;</td>
     <td width="19%">&nbsp;</td>
   </tr>
   <tr>
     <td width="15%"><code>Context</code></td>
-    <td width="51%">A most-derived direct or indirect subclass of either the
+    <td width="51%">A most-derived direct or indirect subtype of either the
     <code>state_machine</code>, <code>asynchronous_state_machine</code> or <code>
     simple_state</code> class templates or an 
-    instantiation of the <code>orthogonal</code> class template nested in the 
-    state base classes. Must be a complete type</td>
+    instantiation of the <code><a href="#Class template simple_state">
+	simple_state&lt;&gt;::orthogonal</a></code> class template. Must be a complete type</td>
     <td width="18%">Defines the states' position in the state hierarchy</td>
     <td width="19%">&nbsp;</td>
   </tr>
@@ -1184,7 +1183,7 @@ must derive from the <code>state</code> class template.</p>
   <tr>
     <td width="15%"><code>InnerInitial</code></td>
     <td width="51%">An <code>mpl::list&lt;&gt;</code> containing most-derived direct 
-    or indirect subclasses of the <code>simple_state</code> class template or instantiations of either the <code>
+    or indirect subtypes of the <code>simple_state</code> class template or instantiations of either the <code>
     shallow_history</code> or <code>deep_history</code> class templates. If 
     there is only a single inner initial state that is not a template 
     instantiation then it can also be passed directly, without wrapping it 
@@ -1300,7 +1299,7 @@ namespace fsm
 }</pre>
 <h3>Class template <code>simple_state</code> constructor and destructor</h3>
 <pre><a name="simple_state">simple_state</a>();</pre>
-<p><b>Requires</b>: The constructors of all direct and indirect subclasses 
+<p><b>Requires</b>: The constructors of all direct and indirect subtypes 
 must be exception-neutral<b><br>
 Effects</b>: Constructs a state object<br>
 <b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
@@ -1313,7 +1312,7 @@ into the posted events queue</p>
 <pre>void <a name="post_event">post_event</a>(
   const intrusive_ptr&lt; const <a href="#Class event_base">event_base</a> &gt; &amp; );</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
-subclass then the most-derived type must either directly or indirectly derive 
+subtype then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template<b>. </b>All direct and indirect 
 callers must be exception-neutral<b><br>
 Effects</b>: Pushes the passed event into the state machine's posted events 
@@ -1528,7 +1527,7 @@ attempt to access anything except stack objects before returning to its caller</
 </i>    orthogonalPosition &gt;
 void <a name="clear_shallow_history">clear_shallow_history</a>();</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
-subclass then the most-derived type must either directly or indirectly derive 
+subtype then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template. Either <code>has_shallow_history</code> 
 or <code>has_full_history</code> must be passed to the base class template of
 <code>HistoryContext</code><br>
@@ -1544,7 +1543,7 @@ outermost_context_type</code>)</p>
 </i>    orthogonalPosition &gt;
 void <a name="clear_deep_history">clear_deep_history</a>();</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
-subclass then the most-derived type must either directly or indirectly derive 
+subtype then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template. Either <code>has_deep_history</code> 
 or <code>has_full_history</code> must be passed to the base class template of
 <code>HistoryContext</code><br>
@@ -1556,32 +1555,32 @@ outermost_context_type</code>)</p>
 <h3>Class template <code>simple_state</code> observer functions</h3>
 <pre>outermost_context_type &amp; <a name="outermost_context">outermost_context</a>();</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
-subclass then the most-derived type must either directly or indirectly derive 
+subtype then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template<b><br>
 Returns</b>: A reference to the outermost context, which is always the state 
 machine this state belongs to</p>
 <pre>const outermost_context_type &amp; <a name="outermost_context() const">outermost_context() const</a>;</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
-subclass then the most-derived type must either directly or indirectly derive 
+subtype then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template<b><br>
 Returns</b>: A reference to the const outermost context, which is always the 
 state machine this state belongs to</p>
 <pre>template&lt; class OtherContext &gt;
 OtherContext &amp; <a name="context">context</a>();</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
-subclass then the most-derived type must either directly or indirectly derive 
+subtype then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template<b><br>
 Returns</b>: A reference to a direct or indirect context</p>
 <pre>template&lt; class OtherContext &gt;
 const OtherContext &amp; <a name="context() const">context() const</a>;</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
-subclass then the most-derived type must either directly or indirectly derive 
+subtype then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template<b><br>
 Returns</b>: A reference to a const direct or indirect context</p>
 <pre>template&lt; class Target &gt;
 Target <a name="simple_state::state_cast">state_cast</a>() const;</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
-subclass then the most-derived type must either directly or indirectly derive 
+subtype then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template<b><br>
 Returns</b>: Has exactly the same semantics as <code><a href="#state_cast">
 state_machine&lt;&gt;::state_cast</a>&lt;&gt;()</code><br>
@@ -1592,7 +1591,7 @@ machine is <a href="definitions.html#Unstable state machine">unstable</a></p>
 <pre>template&lt; class Target &gt;
 Target <a name="simple_state::state_downcast">state_downcast</a>() const;</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
-subclass then the most-derived type must either directly or indirectly derive 
+subtype then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template. Moreover, <code>
 <a href="#state_downcast">state_machine&lt;&gt;::state_downcast</a>&lt;&gt;()</code> requirements 
 also apply<br>
@@ -1605,7 +1604,7 @@ machine is <a href="definitions.html#Unstable state machine">unstable</a></p>
 <pre>state_iterator <a name="simple_state::state_begin">state_begin</a>() const;</pre>
 <pre>state_iterator <a name="simple_state::state_end">state_end</a>() const;</pre>
 <p><b>Require</b>: If called from a constructor of a direct or indirect 
-subclass then the most-derived type must either directly or indirectly derive 
+subtype then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template<b><br>
 Return</b>: Have exactly the same semantics as <code><a href="#state_begin">
 state_machine&lt;&gt;::state_begin</a>()</code> and <code><a href="#state_end">
@@ -1700,7 +1699,7 @@ namespace fsm
   };
 }
 }</pre>
-<p>Direct and indirect subclasses of <code>state&lt;&gt;</code> must provide a 
+<p>Direct and indirect subtypes of <code>state&lt;&gt;</code> must provide a 
 constructor with the same signature as the <code>state&lt;&gt;</code> constructor, 
 forwarding the context parameter.</p>
 <h1>Header &lt;boost/fsm/<a name="shallow_history.hpp">shallow_history.hpp</a>&gt;</h1>
@@ -1717,8 +1716,9 @@ or a shallow history inner initial state.</p>
   </tr>
   <tr>
     <td width="15%"><code>DefaultState</code></td>
-    <td width="45%">A most-derived direct or indirect subclass of the
-    <code><a href="#Class template simple_state">simple_state</a></code> class. 
+    <td width="45%">A most-derived direct or indirect subtype of the
+    <code><a href="#Class template simple_state">simple_state</a></code> class 
+	template. 
 	The type that <code>DefaultState</code> passes as <code>Context</code> to 
 	its base class template must itself specify <code>has_shallow_history</code> 
 	or <code>has_full_history</code> for the last parameter of its base class 
@@ -1753,7 +1753,7 @@ has some <a href="rationale.html#Limitations">limitations</a>.</p>
   </tr>
   <tr>
     <td width="15%"><code>DefaultState</code></td>
-    <td width="45%">A most-derived direct or indirect subclass of the
+    <td width="45%">A most-derived direct or indirect subtype of the
     <code><a href="#Class template simple_state">simple_state</a></code> class template. 
 	The type that <code>DefaultState</code> passes as <code>Context</code> to 
 	its base class template must itself specify <code>has_deep_history</code> 
@@ -1894,14 +1894,14 @@ and <code><a href="#Class template state">state</a></code> class templates.</p>
   </tr>
   <tr>
     <td width="15%"><code>Event</code></td>
-    <td width="45%">A most-derived direct or indirect subclass of the <code>
+    <td width="45%">A most-derived direct or indirect subtype of the <code>
     <a href="#Class template event">event</a></code> class template</td>
     <td width="24%">The event triggering the transition</td>
     <td width="19%">&nbsp;</td>
   </tr>
   <tr>
     <td width="15%"><code>Destination</code></td>
-    <td width="45%">A most-derived direct or indirect subclass of the
+    <td width="45%">A most-derived direct or indirect subtype of the
     <code><a href="#Class template simple_state">simple_state</a></code> class template 
     or an instantiation of either the <code>
     <a href="#Class template shallow_history">shallow_history</a></code> or
@@ -1970,7 +1970,7 @@ and <code><a href="#Class template state">state</a></code> class templates.</p>
   </tr>
   <tr>
     <td width="15%"><code>Event</code></td>
-    <td width="45%">A most-derived direct or indirect subclass of the <code>
+    <td width="45%">A most-derived direct or indirect subtype of the <code>
     <a href="#Class template event">event</a></code> class template</td>
     <td width="24%">The event triggering the deferral</td>
   </tr>
@@ -2006,7 +2006,7 @@ of this template can be passed to the <code>Reactions</code> parameter of the
   </tr>
   <tr>
     <td width="15%"><code>Event</code></td>
-    <td width="45%">A most-derived direct or indirect subclass of the <code>
+    <td width="45%">A most-derived direct or indirect subtype of the <code>
     <a href="#Class template event">event</a></code> class template</td>
     <td width="24%">The event triggering the deferral</td>
   </tr>
@@ -2043,7 +2043,7 @@ this template can be passed to the <code>Reactions</code> parameter of the
   </tr>
   <tr>
     <td width="15%"><code>Event</code></td>
-    <td width="45%">A most-derived direct or indirect subclass of the <code>
+    <td width="45%">A most-derived direct or indirect subtype of the <code>
     <a href="#Class template event">event</a></code> class template</td>
     <td width="24%">The event triggering the custom reaction</td>
   </tr>
@@ -2100,7 +2100,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->29 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38840" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->30 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38823" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
