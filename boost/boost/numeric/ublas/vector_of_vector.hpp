@@ -1198,7 +1198,8 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class F, class A>
-    typename generalized_vector_of_vector<T, F, A>::value_type generalized_vector_of_vector<T, F, A>::zero_ = 0;
+    typename generalized_vector_of_vector<T, F, A>::value_type generalized_vector_of_vector<T, F, A>::zero_ =
+        generalized_vector_of_vector<T, F, A>::value_type ();
 
 }}}
 

@@ -284,7 +284,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
-#ifndef BOOST_MSVC
+#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
         indexing_vector_assign (functor_type::template make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
 #else
@@ -344,7 +344,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
-#ifndef BOOST_MSVC
+#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
         indexing_vector_assign (functor_type::template make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
 #else
@@ -378,7 +378,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::reference reference;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
-#ifndef BOOST_MSVC
+#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
         indexing_vector_assign (functor_type::template make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
 #else

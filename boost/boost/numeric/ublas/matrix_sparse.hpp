@@ -53,9 +53,7 @@ namespace boost { namespace numeric { namespace ublas {
         sparse_matrix_element (matrix_type &m, size_type i, size_type j):
             container_reference<matrix_type> (m), it_ (), i_ (i), j_ (j), d_ (), dirty_ (false) {
             pointer it = (*this) ().find_element (i_, j_);
-            if (! it)
-                (*this) ().insert (i_, j_, d_);
-            else
+            if (it)
                 d_ = *it;
         }
         BOOST_UBLAS_INLINE
@@ -64,10 +62,14 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         ~sparse_matrix_element () {
             if (dirty_) {
-                if (! it_)
+                if (! it_) {
                     it_ = (*this) ().find_element (i_, j_);
-                BOOST_UBLAS_CHECK (it_, internal_logic ());
-                *it_ = d_;
+                    if (! it_)
+                        (*this) ().insert (i_, j_, d_);
+                    else
+                        *it_ = d_;
+                } else
+                    *it_ = d_;
             }
         }
 
@@ -1394,7 +1396,8 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class F, class A>
-    typename sparse_matrix<T, F, A>::value_type sparse_matrix<T, F, A>::zero_ = 0;
+    typename sparse_matrix<T, F, A>::value_type sparse_matrix<T, F, A>::zero_ =
+        sparse_matrix<T, F, A>::value_type ();
 
     // Array based sparse matrix class 
     template<class T, class F, class A>
@@ -2552,7 +2555,8 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class F, class A>
-    typename sparse_vector_of_sparse_vector<T, F, A>::value_type sparse_vector_of_sparse_vector<T, F, A>::zero_ = 0;
+    typename sparse_vector_of_sparse_vector<T, F, A>::value_type sparse_vector_of_sparse_vector<T, F, A>::zero_ =
+        sparse_vector_of_sparse_vector<T, F, A>::value_type ();
 
     // Array based sparse matrix class
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
@@ -3861,7 +3865,8 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class F, std::size_t IB, class IA, class TA>
-    typename compressed_matrix<T, F, IB, IA, TA>::value_type compressed_matrix<T, F, IB, IA, TA>::zero_ = 0;
+    typename compressed_matrix<T, F, IB, IA, TA>::value_type compressed_matrix<T, F, IB, IA, TA>::zero_ =
+        compressed_matrix<T, F, IB, IA, TA>::value_type ();
 
     // Array based sparse matrix class
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
@@ -5168,7 +5173,8 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class F, std::size_t IB, class IA, class TA>
-    typename coordinate_matrix<T, F, IB, IA, TA>::value_type coordinate_matrix<T, F, IB, IA, TA>::zero_ = 0;
+    typename coordinate_matrix<T, F, IB, IA, TA>::value_type coordinate_matrix<T, F, IB, IA, TA>::zero_ =
+        coordinate_matrix<T, F, IB, IA, TA>::value_type ();
 
 }}}
 

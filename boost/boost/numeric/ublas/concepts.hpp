@@ -1038,7 +1038,7 @@ namespace boost { namespace numeric { namespace ublas {
             AdditiveAbelianGroupConcept<value_type>::constraints ();
             bool r;
             value_type a = value_type (), b = value_type (), c = value_type ();
-            r = prod (prod<T> (a, b), c) == prod (a, prod<T> (b, c)) ;
+            r = prod (T (prod (a, b)), c) == prod (a, T (prod (b, c)));
             r = prod (a + b, c) == prod (a, c) + prod (b, c);
             r = prod (OneElement (value_type ()), a) == a;
             r = prod (a, OneElement (value_type ())) == a;
