@@ -283,6 +283,13 @@ int test_main(int, char*[])
   validate_all();
   boost::mt19937 mt;
   test_uniform_int(mt);
+
+  // bug report from Ken Mahler:  This lead to an endless loop.
+  boost::minstd_rand r1;
+  boost::uniform_int<boost::minstd_rand, unsigned int> r2(r1, 0, 0xffffffff);
+  r2();
+  r2();
+
   // Some compilers don't pay attention to std:3.6.1/5 and issue a
   // warning here if "return 0;" is omitted.
   return 0;
