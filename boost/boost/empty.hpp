@@ -17,6 +17,8 @@
 #ifndef BOOST_EMPTY_HPP
 #define BOOST_EMPTY_HPP
 
+#include <iosfwd> // for std::basic_ostream forward declare
+
 #include "boost/config.hpp"
 #include "boost/mpl/bool.hpp"
 #include "boost/type_traits/is_pod.hpp"
@@ -33,6 +35,26 @@ struct is_pod<empty>
     BOOST_STATIC_CONSTANT(bool, value = true);
     typedef mpl::bool_<value> type;
 };
+
+bool operator==(const empty&, const empty&)
+{
+    return true;
+}
+
+bool operator<(const empty&, const empty&)
+{
+    return false;
+}
+
+template <typename E, typename T>
+inline std::basic_ostream<E,T>& operator<<(
+      std::basic_ostream<E,T>& out
+    , const empty&
+    )
+{
+    // (output nothing)
+    return out;
+}
 
 } // namespace boost
 
