@@ -88,7 +88,7 @@ Incomplete * check_incomplete( shared_ptr<Incomplete>& incomplete,
 
 //  This isn't a very systematic test; it just hits some of the basics.
 
-int test_main( int, char ** ) {
+int test_main( int, char *[] ) {
 
   BOOST_TEST( UDT_use_count == 0 );  // reality check
 
