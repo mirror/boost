@@ -32,6 +32,7 @@
 #endif
 
 #include <boost/config.hpp>  // Make sure size_t is in std.
+#include <boost/detail/workaround.hpp>
 #include <algorithm>         // min.
 #include <cstddef>           // size_t.
 #include <locale>            // locale, codecvt_base, codecvt.
@@ -52,10 +53,10 @@ public:
     typedef Intern  intern_type;
     typedef Extern  extern_type;
     typedef State   state_type;
-    std::codecvt_base::result
 
     codecvt_impl(std::size_t refs = 0) : std::locale::facet(refs) { } 
 
+    std::codecvt_base::result
     in( State& state, const Extern* first1, const Extern* last1,
         const Extern*& next1, Intern* first2, Intern* last2,
         Intern*& next2 ) const
@@ -160,7 +161,11 @@ struct codecvt_helper : std::codecvt<Intern, Extern, State> {
     typedef Extern  extern_type;
     typedef State   state_type;
     codecvt_helper(std::size_t refs = 0) 
+    #if !BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
         : std::codecvt<Intern, Extern, State>(refs)
+    #else
+        : std::codecvt<Intern, Extern, State>()
+    #endif
         { }
 };
 
