@@ -18,6 +18,7 @@
 #define BOOST_VARIANT_DETAIL_DEFINE_FORWARDING_FUNC_HPP
 
 #include "boost/preprocessor/debug/assert.hpp"
+#include "boost/preprocessor/cat.hpp"
 #include "boost/preprocessor/comparison/less_equal.hpp"
 
 //////////////////////////////////////////////////////////////////////////
