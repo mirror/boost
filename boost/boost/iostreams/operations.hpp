@@ -11,8 +11,8 @@
 # pragma once
 #endif
 
-#include <utility>                              // pair.
-#include <boost/config.hpp>                     // BOOST_NO_STD_LOCALE.
+#include <utility>           // pair.
+#include <boost/config.hpp>  // NO_STD_LOCALE, DEDUCED_TYPENAME, MSVC.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
 #include <boost/iostreams/detail/ios_traits.hpp>
@@ -24,76 +24,112 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-----------------------------------//
+# include <boost/iostreams/detail/vc6/operations.hpp>
+#else // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //--------------------------//
+
 namespace boost { namespace iostreams {
 
 //--------------Fundamental i/o operations------------------------------------//
-
-template<typename T>
-BOOST_IOSTREAMS_INT_TYPE(T) get(T&);
-
-template<typename T>
-std::streamsize read(T&, BOOST_IOSTREAMS_CHAR_TYPE(T)*, std::streamsize);
-
-template<typename T>
-void putback(T&, BOOST_IOSTREAMS_CHAR_TYPE(T));
-
-template<typename T>
-void put(T&, BOOST_IOSTREAMS_CHAR_TYPE(T));
-
-template<typename T>
-void write(T&, const BOOST_IOSTREAMS_CHAR_TYPE(T)*, std::streamsize);
-
-template<typename T>
-std::streamoff
-seek( T&, std::streamoff, std::ios::seekdir,
-      std::ios::openmode mode =
-          std::ios::in | std::ios::out );
-
-template<typename T, typename Source>
-std::streamsize
-read(T&, Source&, BOOST_IOSTREAMS_CHAR_TYPE(T)*, std::streamsize);
-
-template<typename T, typename Sink>
-void write(T&, Sink&, const BOOST_IOSTREAMS_CHAR_TYPE(T)*, std::streamsize);
-
-template<typename T>
-void close(T&, std::ios::openmode);
-
-template<typename T, typename Sink>
-void close(T&, Sink&, std::ios::openmode which);
-
-// Avoid including <locale>.
-template<typename T, typename Locale>
-void imbue(T&, const Locale& loc);
-
-template<typename T>
-std::pair<BOOST_IOSTREAMS_CHAR_TYPE(T)*, BOOST_IOSTREAMS_CHAR_TYPE(T)*> 
-input_sequence(T&);
-
-template<typename T>
-std::pair<BOOST_IOSTREAMS_CHAR_TYPE(T)*, BOOST_IOSTREAMS_CHAR_TYPE(T)*> 
-output_sequence(T&);
-
-//--------------Implementation of read, write, get and put--------------------//
 
 namespace detail {
 
 // Implementation templates for simulated tag dispatch.
 template<typename Category> struct read_impl;
 template<typename Category> struct write_impl;
+template<typename Category> struct filter_impl;
+template<typename Category> struct direct_impl;
 template<typename Category> struct seek_impl;
 template<typename Category> struct close_impl;
-template<typename Category> struct read_filter_impl;
-template<typename Category> struct write_filter_impl;
-template<typename Category> struct close_filter_impl;
+template<typename Category> struct imbue_impl;
+
+} // End namespace detail.
+
+template<typename T>
+typename io_int<T>::type get(T& t)
+{ return detail::read_impl<T>::get(detail::unwrap(t)); }
+
+template<typename T>
+inline std::streamsize
+read(T& t, typename io_char<T>::type* s, std::streamsize n)
+{ return detail::read_impl<T>::read(detail::unwrap(t), s, n); }
+
+template<typename T, typename Source>
+std::streamsize
+read(T& t, Source& src, typename io_char<T>::type* s, std::streamsize n)
+{ return detail::filter_impl<T>::read(detail::unwrap(t), src, s, n); }
+
+template<typename T>
+void putback(T& t, typename io_char<T>::type c)
+{ return detail::read_impl<T>::putback(detail::unwrap(t), c); }
+
+template<typename T>
+void put(T& t, typename io_char<T>::type c)
+{ detail::write_impl<T>::put(detail::unwrap(t), c); }
+
+template<typename T>
+inline void write(T& t, const typename io_char<T>::type* s, std::streamsize n)
+{ detail::write_impl<T>::write(detail::unwrap(t), s, n); }
+
+template<typename T, typename Sink>
+void write(T& t, Sink& snk, const typename io_char<T>::type* s, std::streamsize n)
+{ detail::filter_impl<T>::write(detail::unwrap(t), snk, s, n); }
+
+template<typename T>
+inline std::streamoff
+seek( T& t, std::streamoff off, std::ios::seekdir way,
+      std::ios::openmode which = std::ios::in | std::ios::out )
+{ return detail::seek_impl<T>::seek(detail::unwrap(t), off, way, which); }
+
+template<typename T>
+inline std::pair<
+    BOOST_DEDUCED_TYPENAME io_char<T>::type*, 
+    BOOST_DEDUCED_TYPENAME io_char<T>::type*
+> 
+input_sequence(T& t) { return detail::direct_impl<T>::input_sequence(t); }
+
+template<typename T>
+inline std::pair<
+    BOOST_DEDUCED_TYPENAME io_char<T>::type*, 
+    BOOST_DEDUCED_TYPENAME io_char<T>::type*
+> 
+output_sequence(T& t) { return detail::direct_impl<T>::output_sequence(t); }
+
+template<typename T>
+void close(T& t, std::ios::openmode which)
+{ detail::close_impl<T>::close(detail::unwrap(t), which); }
+
+template<typename T, typename Sink>
+void close(T& t, Sink& snk, std::ios::openmode which)
+{ detail::close_impl<T>::close(detail::unwrap(t), snk, which); }
+
+template<typename T, typename Locale>
+void imbue(T& t, const Locale& loc)
+{ detail::imbue_impl<T>::imbue(detail::unwrap(t), loc); }
+
+//----------------------------------------------------------------------------//
+
+namespace detail {
+                    
+//------------------Definition of read_impl-----------------------------------//
+
+template< typename T>
+struct read_impl 
+    : read_impl<
+          BOOST_DEDUCED_TYPENAME 
+          detail::dispatch<
+              T, istream_tag, streambuf_tag, input
+          >::type
+      > 
+    { };
 
 template<>
 struct read_impl<input> {
     template<typename T>
-    static BOOST_IOSTREAMS_INT_TYPE(T) get(T& t)
+    static typename io_int<T>::type get(T& t)
     {
-        typedef std::char_traits<BOOST_IOSTREAMS_CHAR_TYPE(T)> traits_type;
-        BOOST_IOSTREAMS_CHAR_TYPE(T) c;
+        typedef std::char_traits<typename io_char<T>::type> traits_type;
+        typename io_char<T>::type c;
         return t.read(&c, 1) == 1 ?
             traits_type::to_int_type(c) :
             traits_type::eof();
@@ -101,28 +137,22 @@ struct read_impl<input> {
 
     template<typename T>
     static std::streamsize
-    read(T& t, BOOST_IOSTREAMS_CHAR_TYPE(T)* s, std::streamsize n)
+    read(T& t, typename io_char<T>::type* s, std::streamsize n)
     { return t.read(s, n); }
 
-    // Suggeted by Peter Dimov. See
-    // http://lists.boost.org/MailArchives/boost/msg06980.php.
-    template<typename T> struct always_false : mpl::false_ { };
-
     template<typename T>
-    static void putback(T&, BOOST_IOSTREAMS_CHAR_TYPE(T))
-    { BOOST_STATIC_ASSERT(always_false<T>::value); }
-};
-
-template<>
-struct read_impl<peekable_tag> : read_impl<input> {
-    template<typename T>
-    static void putback(T& t, BOOST_IOSTREAMS_CHAR_TYPE(T) c) { t.putback(c); }
+    static void putback(T& t, typename io_char<T>::type c)
+    { 
+        typedef typename io_category<T>::type category;
+        BOOST_STATIC_ASSERT((is_convertible<category, peekable_tag>::value)); 
+        t.putback(c);
+    }
 };
 
 template<>
 struct read_impl<istream_tag> {
     template<typename T>
-    static BOOST_IOSTREAMS_INT_TYPE(T) get(T& t)
+    static typename io_int<T>::type get(T& t)
     { return t.get(); }
 
     template<typename T>
@@ -131,14 +161,14 @@ struct read_impl<istream_tag> {
     { t.read(s, n); return t.gcount(); }
 
     template<typename T>
-    static void putback(T& t, BOOST_IOSTREAMS_CHAR_TYPE(T) c)
+    static void putback(T& t, typename io_char<T>::type c)
     { t.putback(c); }
 };
 
 template<>
 struct read_impl<streambuf_tag> {
     template<typename T>
-    static BOOST_IOSTREAMS_INT_TYPE(T) get(T& t)
+    static typename io_int<T>::type get(T& t)
     { return t.sbumpc(); }
 
     template<typename T>
@@ -147,26 +177,38 @@ struct read_impl<streambuf_tag> {
     { return t.sgetn(s, n); }
 
     template<typename T>
-    static void putback(T& t, BOOST_IOSTREAMS_CHAR_TYPE(T) c)
+    static void putback(T& t, typename io_char<T>::type c)
     { t.sputbackc(c); }
 };
+
+//------------------Definition of write_impl----------------------------------//
+
+template<typename T>
+struct write_impl 
+    : write_impl<
+          BOOST_DEDUCED_TYPENAME 
+          detail::dispatch<
+              T, ostream_tag, streambuf_tag, output
+          >::type
+      > 
+    { };
 
 template<>
 struct write_impl<output> {
     template<typename T>
-    static void put(T& t, BOOST_IOSTREAMS_CHAR_TYPE(T) c)
+    static void put(T& t, typename io_char<T>::type c)
     { t.write(&c, 1); }
 
     template<typename T>
     static void
-    write(T& t, const BOOST_IOSTREAMS_CHAR_TYPE(T)* s, std::streamsize n)
+    write(T& t, const typename io_char<T>::type* s, std::streamsize n)
     { t.write(s, n); }
 };
 
 template<>
 struct write_impl<ostream_tag> {
     template<typename T>
-    static void put(T& t, BOOST_IOSTREAMS_CHAR_TYPE(T) c)
+    static void put(T& t, typename io_char<T>::type c)
     { t.put(c); }
 
     template<typename T>
@@ -177,13 +219,93 @@ struct write_impl<ostream_tag> {
 template<>
 struct write_impl<streambuf_tag> {
     template<typename T>
-    static void put(T& t, BOOST_IOSTREAMS_CHAR_TYPE(T) c)
+    static void put(T& t, typename io_char<T>::type c)
     { t.sputc(c); }
 
     template<typename T>
     static void write(T& t, const typename T::char_type* s, std::streamsize n)
     { t.sputn(s, n); }
 };
+
+//------------------Definition of filter_impl---------------------------------//
+
+template<typename T>
+struct filter_impl 
+    : filter_impl<
+          BOOST_DEDUCED_TYPENAME 
+          detail::dispatch<
+              T, multichar_tag, any_tag
+          >::type
+      > 
+    { };
+
+template<>
+struct filter_impl<multichar_tag> {
+    template<typename T, typename Source>
+    static std::streamsize read
+        (T& t, Source& src, typename io_char<T>::type* s, std::streamsize n)
+    { return t.read(src, s, n); }
+
+    template<typename T, typename Sink>
+    static void write( T& t, Sink& snk, const typename io_char<T>::type* s,
+                       std::streamsize n )
+    { t.write(snk, s, n); }
+};
+
+template<>
+struct filter_impl<any_tag> {
+    template<typename T, typename Source>
+    static std::streamsize read
+        (T& t, Source& src, typename io_char<T>::type* s, std::streamsize n)
+    {
+        typedef typename io_char<T>::type    char_type;
+        typedef std::char_traits<char_type>  traits_type;
+        std::streamsize result;
+        for (result = 0; result < n; ++result) {
+            typename io_int<T>::type c = t.get(src);
+            if (traits_type::eq_int_type(c, traits_type::eof()))
+                break;
+            s[result] = traits_type::to_int_type(c);
+        }
+        return result;
+    }
+    template<typename T, typename Sink>
+    static void write( T& t, Sink& snk, const typename io_char<T>::type* s,
+                       std::streamsize n )
+    { for (std::streamsize off = 0; off < n; ++off) t.put(snk, s[off]); }
+};
+
+//------------------Definition of direct_impl-------------------------------//
+
+template<typename T>
+struct direct_impl {
+    template<typename U>
+    static std::pair<
+        BOOST_DEDUCED_TYPENAME io_char<U>::type*, 
+        BOOST_DEDUCED_TYPENAME io_char<U>::type*
+    > 
+    input_sequence(U& u) { return u.input_sequence(); }
+
+    template<typename U>
+    static std::pair<
+        BOOST_DEDUCED_TYPENAME io_char<U>::type*, 
+        BOOST_DEDUCED_TYPENAME io_char<U>::type*
+    > 
+    output_sequence(U& u) { return u.output_sequence(); }
+};
+
+//------------------Definition of seek_impl-----------------------------------//
+
+template<typename T>
+struct seek_impl 
+    : seek_impl<
+          BOOST_DEDUCED_TYPENAME 
+          detail::dispatch<
+              T, iostream_tag, istream_tag, ostream_tag,
+              streambuf_tag, detail::two_head, any_tag
+          >::type
+      > 
+    { };
 
 template<>
 struct seek_impl<any_tag> {
@@ -225,246 +347,116 @@ struct seek_impl<streambuf_tag> {
     { return t.pubseekoff(off, way, which); }
 };
 
+//------------------Definition of close_impl----------------------------------//
+
+template<typename T>
+struct close_tag {
+    typedef typename io_category<T>::type category;
+    typedef typename 
+            mpl::eval_if<
+                is_convertible<category, closable_tag>,
+                mpl::if_<
+                    mpl::or_<
+                        is_convertible<category, detail::two_sequence>,
+                        is_convertible<category, dual_use>
+                    >,
+                    detail::two_sequence,
+                    closable_tag
+                >,
+                mpl::identity<any_tag>
+            >::type type;
+};
+
+template<typename T>
+struct close_impl 
+    : close_impl<BOOST_DEDUCED_TYPENAME close_tag<T>::type>
+    { };
+
+// VC6 has trouble deducing the first template argument in each of the 
+// following implementation functions, and yields an ICE when it is explicitly
+// specified. As a result, for VC6 we have made this template parameter a
+// parameter of an enclosing struct 'inner'; the implementation functions each
+// have one fewer template parameters than they do for other compilers.
+
+// A consequence is that with VC6 close() cannot be customized for user-defined 
+// classes by specializing close_impl in the usual way.
+
 template<>
 struct close_impl<any_tag> {
     template<typename T>
     static void close(T&, std::ios::openmode) { }
+    template<typename T, typename Sink>
+    static void close(T&, Sink&, std::ios::openmode) { }
 };
 
+#include <boost/iostreams/detail/disable_warnings.hpp> // Borland.
 template<>
 struct close_impl<closable_tag> {
     template<typename T>
     static void close(T& t, std::ios::openmode which)
     {
-        typedef BOOST_IOSTREAMS_CATEGORY(T) category;
+        typedef typename io_category<T>::type category;
         const bool in =  is_convertible<category, input>::value &&
                         !is_convertible<category, output>::value;
         if (in == ((which & std::ios::in) != 0))
             t.close();
     }
+    template<typename T, typename Sink>
+    static void close(T& t, Sink& snk, std::ios::openmode which)
+    {
+        typedef typename io_category<T>::type category;
+        const bool in =  is_convertible<category, input>::value &&
+                        !is_convertible<category, output>::value;
+        if (in == ((which & std::ios::in) != 0))
+            t.close(snk);
+    }
 };
+#include <boost/iostreams/detail/enable_warnings.hpp>
 
 template<>
 struct close_impl<two_sequence> {
     template<typename T>
     static void close(T& t, std::ios::openmode which) { t.close(which); }
-};
-
-template<>
-struct read_filter_impl<any_tag> {
-    template<typename T, typename Source>
-    static std::streamsize read
-        (T& t, Source& src, BOOST_IOSTREAMS_CHAR_TYPE(T)* s, std::streamsize n)
-    {
-        typedef BOOST_IOSTREAMS_CHAR_TYPE(T)        char_type;
-        typedef std::char_traits<char_type>  traits_type;
-        std::streamsize result;
-        for (result = 0; result < n; ++result) {
-            BOOST_IOSTREAMS_INT_TYPE(T) c = t.get(src);
-            if (traits_type::eq_int_type(c, traits_type::eof()))
-                break;
-            s[result] = traits_type::to_int_type(c);
-        }
-        return result;
-    }
-};
-
-template<>
-struct read_filter_impl<multichar_tag> {
-    template<typename T, typename Source>
-    static std::streamsize read
-        (T& t, Source& src, BOOST_IOSTREAMS_CHAR_TYPE(T)* s, std::streamsize n)
-    { return t.read(src, s, n); }
-};
-
-template<>
-struct write_filter_impl<any_tag> {
     template<typename T, typename Sink>
-    static void write( T& t, Sink& snk, const BOOST_IOSTREAMS_CHAR_TYPE(T)* s,
-                       std::streamsize n )
-    { for (std::streamsize off = 0; off < n; ++off) t.put(snk, s[off]); }
+    static void close(T& t, Sink& snk, std::ios::openmode which)
+    { t.close(snk, which); }
+};
+
+//------------------Definition of imbue_impl----------------------------------//
+
+template<typename T>
+struct imbue_impl 
+    : imbue_impl<
+          BOOST_DEDUCED_TYPENAME 
+          detail::dispatch<
+              T, streambuf_tag, localizable_tag, any_tag
+          >::type
+      > 
+    { };
+
+template<>
+struct imbue_impl<any_tag> {
+template<typename T, typename Locale>
+    static void imbue(T&, const Locale&) { }
 };
 
 template<>
-struct write_filter_impl<multichar_tag> {
-    template<typename T, typename Sink>
-    static void write( T& t, Sink& snk, const BOOST_IOSTREAMS_CHAR_TYPE(T)* s,
-                       std::streamsize n )
-    { t.write(snk, s, n); }
+struct imbue_impl<streambuf_tag> {
+template<typename T, typename Locale>
+    static void imbue(T& t, const Locale& loc) { t.pubimbue(loc); }
+};
+
+template<>
+struct imbue_impl<localizable_tag> {
+template<typename T, typename Locale>
+    static void imbue(T& t, const Locale& loc) { t.imbue(loc); }
 };
 
 } // End namespace detail.
 
-template<typename T>
-BOOST_IOSTREAMS_INT_TYPE(T) get(T& t)
-{
-    typedef typename detail::dispatch<
-                T, istream_tag, streambuf_tag, input
-            >::type tag;
-    return detail::read_impl<tag>::get(detail::unwrap(t));
-}
-
-template<typename T>
-inline std::streamsize
-read(T& t, BOOST_IOSTREAMS_CHAR_TYPE(T)* s, std::streamsize n)
-{
-    typedef typename detail::dispatch<
-                T, istream_tag, streambuf_tag, input
-            >::type tag;
-    return detail::read_impl<tag>::read(detail::unwrap(t), s, n);
-}
-
-template<typename T>
-void putback(T& t, BOOST_IOSTREAMS_CHAR_TYPE(T) c)
-{
-    typedef typename detail::dispatch<
-                T, istream_tag, streambuf_tag, peekable_tag, input
-            >::type tag;
-    return detail::read_impl<tag>::putback(detail::unwrap(t), c);
-}
-
-template<typename T>
-void put(T& t, BOOST_IOSTREAMS_CHAR_TYPE(T) c)
-{
-    typedef typename detail::dispatch<
-                T, ostream_tag, streambuf_tag, output
-            >::type tag;
-    detail::write_impl<tag>::put(detail::unwrap(t), c);
-}
-
-template<typename T>
-inline void
-write(T& t, const BOOST_IOSTREAMS_CHAR_TYPE(T)* s, std::streamsize n)
-{
-    typedef typename detail::dispatch<
-                T, ostream_tag, streambuf_tag, output
-            >::type tag;
-    detail::write_impl<tag>::write(detail::unwrap(t), s, n);
-}
-
-template<typename T>
-inline std::streamoff
-seek( T& t, std::streamoff off, std::ios::seekdir way,
-      std::ios::openmode which )
-{
-    typedef typename detail::dispatch<
-                T, iostream_tag, istream_tag, ostream_tag,
-                streambuf_tag, detail::two_head, any_tag
-            >::type tag;
-    return detail::seek_impl<tag>::seek(detail::unwrap(t), off, way, which);
-}
-
-template<typename T>
-void close(T& t, std::ios::openmode which)
-{
-    typedef BOOST_IOSTREAMS_CATEGORY(T) category;
-    typedef typename
-            mpl::eval_if<
-                is_convertible<category, closable_tag>,
-                mpl::if_<
-                    is_convertible<category, detail::two_sequence>,
-                    detail::two_sequence,
-                    closable_tag
-                >,
-                mpl::identity<any_tag>
-            >::type tag;
-    detail::close_impl<tag>::close(detail::unwrap(t), which);
-}
-
-template<typename T, typename Source>
-std::streamsize
-read(T& t, Source& src, BOOST_IOSTREAMS_CHAR_TYPE(T)* s, std::streamsize n)
-{
-    typedef typename detail::dispatch<
-                T, multichar_tag, any_tag
-            >::type tag;
-    return detail::read_filter_impl<tag>::read(detail::unwrap(t), src, s, n);
-}
-
-template<typename T, typename Sink>
-void write(T& t, Sink& snk, const BOOST_IOSTREAMS_CHAR_TYPE(T)* s, std::streamsize n)
-{
-    typedef typename detail::dispatch<
-                T, multichar_tag, any_tag
-            >::type tag;
-    detail::write_filter_impl<tag>::write(detail::unwrap(t), snk, s, n);
-}
-
-//--------------Implementation of close---------------------------------------//
-
-namespace detail {
-
-        // Implemention of close for filter types.
-
-#include <boost/iostreams/detail/disable_warnings.hpp> // Borland.
-template<typename T, typename Sink>
-void close_filter( T& t, Sink& snk, std::ios::openmode which,
-                   closable_tag, any_tag )
-{
-    typedef BOOST_IOSTREAMS_CATEGORY(T) category;
-    const bool in =  is_convertible<category, input>::value &&
-                    !is_convertible<category, output>::value;
-    if (in == ((which & std::ios::in) != 0))
-        t.close(snk);
-}
-#include <boost/iostreams/detail/enable_warnings.hpp>
-
-template<typename T, typename Sink>
-void close_filter( T& t, Sink& snk, std::ios::openmode which,
-                   closable_tag, dual_use )
-{ t.close(snk, which); }
-
-template<typename T, typename Sink>
-void close_filter( T& t, Sink& snk, std::ios::openmode which,
-                   closable_tag, two_sequence )
-{ t.close(snk, which); }
-
-template<typename T, typename Sink>
-void close_filter( T&, Sink&, std::ios::openmode, any_tag )
-{ }
-
-template<typename T, typename Sink>
-void close_filter( T& t, Sink& snk, std::ios::openmode which,
-                   closable_tag )
-{
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
-    typedef io_category<T>::type category;
-    close_filter(t, snk, which, closable_tag(), category());
-#else
-    close_filter(t, snk, which, closable_tag(), get_category(t));
-#endif
-}
-
-template<typename T, typename Locale>
-void imbue(T&, const Locale&, any_tag) { }
-
-// Covers streams as well as localizable filters and devices.
-template<typename T, typename Locale>
-void imbue(T& t, const Locale& loc, localizable_tag) { t.imbue(loc); }
-
-template<typename T, typename Locale>
-void imbue(T& t, const Locale& loc, streambuf_tag) { t.pubimbue(loc); }
-
-} // End namespace detail.
-
-template<typename T, typename Sink>
-void close(T& t, Sink& snk, std::ios::openmode which)
-{ detail::close_filter(detail::unwrap(t), snk, which, get_category(t)); }
-
-template<typename T, typename Locale>
-void imbue(T& t, const Locale& loc)
-{ detail::imbue(detail::unwrap(t), loc, get_category(t)); }
-
-//--------------Implementation of input_sequence and output_sequence----------//
-
-template<typename T>
-inline std::pair<BOOST_IOSTREAMS_CHAR_TYPE(T)*, BOOST_IOSTREAMS_CHAR_TYPE(T)*> 
-input_sequence(T& t) { return t.input_sequence(); }
-
-template<typename T>
-inline std::pair<BOOST_IOSTREAMS_CHAR_TYPE(T)*, BOOST_IOSTREAMS_CHAR_TYPE(T)*> 
-output_sequence(T& t) { return t.output_sequence(); }
+//----------------------------------------------------------------------------//
 
 } } // End namespaces iostreams, boost.
 
-#endif // #ifndef BOOST_IOSTREAMS_OPERATIONS_HPP_INCLUDED //-------------------------//
+#endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-------------------------//
+#endif // #ifndef BOOST_IOSTREAMS_OPERATIONS_HPP_INCLUDED //------------------//
