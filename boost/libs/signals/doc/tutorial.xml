@@ -391,7 +391,7 @@ connected to <code>sig</code> must therefore be able to take two
 <section><title>Signal Return Values (Advanced)</title>
 <para>Just as slots can receive arguments, they can also return
 values. These values can then be returned back to the caller of the
-signal through a <emphasis>combiner</emphasis>. The combiner is a mechanism
+signal through a <firstterm>combiner</firstterm>. The combiner is a mechanism
 that can take the results of calling slots (there many be no
 results or a hundred; we don't know until the program runs) and
 coalesces them into a single result to be returned to the caller.
