@@ -38,7 +38,8 @@ template<> struct integral_rank<long>           : int_<10> {};
 template<> struct integral_rank<unsigned long>  : int_<11> {};
 
 template< typename T1, typename T2 > struct largest_int
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
+    && !BOOST_WORKAROUND(__EDG_VERSION__, <= 238)
     : if_c< 
           ( integral_rank<T1>::value >= integral_rank<T2>::value )
         , T1
