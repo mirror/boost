@@ -23,7 +23,7 @@ namespace boost
     template< class Range > 
     class sub_range : public iterator_range< BOOST_DEDUCED_TYPENAME result_iterator_of<Range>::type > 
     {
-		
+      
         typedef BOOST_DEDUCED_TYPENAME result_iterator_of<Range>::type iterator_t;
         typedef iterator_range< iterator_t  > base;
         
@@ -65,8 +65,7 @@ namespace boost
         size_type size() const
         {
             return base::size();
-        }
-		
+        }   
 
     };
         

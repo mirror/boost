@@ -83,7 +83,7 @@ void check_char()
     
     BOOST_CHECK_EQUAL( begin( my_string ), my_string );
     const char* end2 = begin( my_string ) + size( my_string );
-	const char* end3 = end( my_string );
+   const char* end3 = end( my_string );
     BOOST_CHECK_EQUAL( end3, end2 );
     BOOST_CHECK_EQUAL( empty( my_string ), (my_string == 0 || my_string[0] == char()) );
     BOOST_CHECK_EQUAL( size( my_string ), my_string_length );
@@ -93,7 +93,7 @@ void check_char()
     char to_search = 'n';
     BOOST_CHECK( find( char_s, to_search ) != end( char_s ) );
     BOOST_CHECK( find( my_string, to_search ) != end( my_string ) );
-	
+   
 }
 
 

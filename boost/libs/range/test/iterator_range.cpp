@@ -34,7 +34,7 @@ struct add_one
 
 void check_iterator_range()
 {
-	
+   
     typedef string::iterator               iterator;
     typedef string::const_iterator         const_iterator;
     typedef iterator_range<iterator>       irange;

@@ -51,8 +51,8 @@ int main()
 {
     const int N = 5;                     
     std::vector<int> my_vector;
-	int values[] = { 1,2,3,4,5,6,7,8,9 };
-	my_vector.assign( values, values + 9 );
+    int values[] = { 1,2,3,4,5,6,7,8,9 };
+    my_vector.assign( values, values + 9 );
     typedef std::vector<int>::iterator iterator;
     std::pair<iterator,iterator>       my_view( boost::begin( my_vector ), 
                                                 boost::begin( my_vector ) + N );
