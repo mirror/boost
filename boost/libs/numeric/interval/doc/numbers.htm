@@ -23,8 +23,8 @@ itself by the operators <code>&lt; &lt;= =&gt; &gt; == !=</code>. It must be
 a total order (reflexivity, antisymmetry, transitivity, and each pair of
 numbers is ordered). So <code>complex&lt;T&gt;</code> will not be a good
 candidate for the base type; if you need the inclusion property of interval
-property, you should use <code>complex&lt;interval&lt;T&gt; &gt;</code> in
-place of <code>interval&lt;complex&lt;T&gt; &gt;</code> (but unfortunately,
+property, you should use <code>complex&lt; interval&lt;T&gt; &gt;</code> in
+place of <code>interval&lt; complex&lt;T&gt; &gt;</code> (but unfortunately,
 <code>complex</code> only provides specialization).</p>
 
 <p>Please note that invalid numbers are not concerned by the order; it can
@@ -34,6 +34,17 @@ policy uses <code>interval_lib::checking_base</code> and your base type
 contains invalid numbers, then this property is needed: <code>nan!=nan</code>
 (here <code>nan</code> is an invalid number). If this property is not
 present, then you should not use <code>checking_base</code> directly.</p>
+
+<p>Interval arithmetic involves a lot of comparison to zero. By default, they
+are done by comparing the numbers to <code>static_cast&lt;T&gt;(0)</code>.
+However, if the format of the numbers allows some faster comparisons when
+dealing with zero, the template functions in the
+<code>interval_lib::user</code> namespace can be specialized:</p>
+<pre>namespace user {
+template&lt;class T&gt; inline bool is_zero(T const &amp;v) { return v == static_cast&lt;T&gt;(0); }
+template&lt;class T&gt; inline bool is_neg (T const &amp;v) { return v &lt;  static_cast&lt;T&gt;(0); }
+template&lt;class T&gt; inline bool is_pos (T const &amp;v) { return v &gt;  static_cast&lt;T&gt;(0); }
+}</pre>
 
 <h3>Numeric limits</h3>
 
@@ -122,8 +133,9 @@ The conversion the other way around is provided by the rounding policy; and
 no other conversion is needed.</p>
 <hr>
 
-<p>Revised: 2003-01-21<br>
-Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.<br>
-Polytechnic University.</p>
+<p>Revised: 2004-02-16<br>
+Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
+Polytechnic University.<br>
+Copyright (c) Guillaume Melquiond, 2004.</p>
 </body>
 </html>
