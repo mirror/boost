@@ -3,7 +3,6 @@
 #include <cmath> // for pow
 #include <boost/dynamic_bitset.hpp>
 
-#define BOOST_INCLUDE_MAIN
 #include <boost/test/test_tools.hpp>
 
 #include "bitset_test.hpp"
