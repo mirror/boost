@@ -1,42 +1,57 @@
 <html>
-<head>
-	<title>BOOST_PP_SET_POP_BACK</title>
-	<link rel="stylesheet" type="text/css" href="../styles.css">
-</head>
-<body>
-	<div style="margin-left:  0px;">
-		The <b>BOOST_PP_SET_POP_BACK</b> macro pops an element from the end of a <i>set</i>.
-	</div>
-	<h4>Usage</h4>
-		<div class="code">
-			<b>BOOST_PP_SET_POP_BACK</b>(<i>set</i>)
+	<head>
+		<title>BOOST_PP_SEQ_POP_BACK</title>
+		<link rel="stylesheet" type="text/css" href="../styles.css">
+	</head>
+	<body>
+		<div style="margin-left:  0px;">
+			The <b>BOOST_PP_SEQ_POP_BACK</b> macro pops an element from the end of a <i>seq</i>.
 		</div>
-	<h4>Arguments</h4>
+		<h4>
+			Usage
+		</h4>
+		<div class="code">
+			<b>BOOST_PP_SEQ_POP_BACK</b>(<i>seq</i>)
+		</div>
+		<h4>
+			Arguments
+		</h4>
 		<dl>
-			<dt>set</dt>
+			<dt>seq</dt>
 			<dd>
-				The <i>set</i> to pop an element from.
+				The <i>seq</i> to pop an element from.
 			</dd>
 		</dl>
-	<h4>Remarks</h4>
+		<h4>
+			Remarks
+		</h4>
 		<div>
-			This macro returns <i>set</i> after removing the last element.&nbsp;
+			This macro returns <i>seq</i> after removing the last element.&nbsp;
 		</div>
-	<h4>See Also</h4>
+		<h4>
+			See Also
+		</h4>
 		<ul>
-			<li><a href="set_pop_front.html">BOOST_PP_SET_POP_FRONT</a></li>
+			<li>
+				<a href="seq_pop_front.html">BOOST_PP_SEQ_POP_FRONT</a></li>
 		</ul>
-	<h4>Requirements</h4>
+		<h4>
+			Requirements
+		</h4>
 		<div>
-			<b>Header:</b> &nbsp;<a href="../headers/set/pop_back.hpp.html">&lt;boost/preprocessor/set/pop_back.hpp&gt;</a>
+			<b>Header:</b> &nbsp;<a href="../headers/seq/pop_back.hpp.html">&lt;boost/preprocessor/seq/pop_back.hpp&gt;</a>
 		</div>
-	<h4>Sample Code</h4>
-<div><pre>
-#include &lt;<a href="../headers/set/pop_back.hpp.html">boost/preprocessor/set/pop_back.hpp</a>&gt;
+		<h4>
+			Sample Code
+		</h4>
+		<div>
+			<pre>
+#include &lt;<a href="../headers/seq/pop_back.hpp.html">boost/preprocessor/seq/pop_back.hpp</a>&gt;
 
-#define SET (a)(b)(c)
+#define SEQ (a)(b)(c)
 
-<a href="set_pop_back.html">BOOST_PP_SET_POP_BACK</a>(SET) // expands to (a)(b)
-</pre></div>
-</body>
+<a href="seq_pop_back.html">BOOST_PP_SEQ_POP_BACK</a>(SEQ) // expands to (a)(b)
+</pre>
+		</div>
+	</body>
 </html>

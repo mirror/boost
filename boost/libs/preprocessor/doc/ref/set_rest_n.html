@@ -1,17 +1,22 @@
 <html>
-<head>
-	<title>BOOST_PP_SET_REST_N</title>
-	<link rel="stylesheet" type="text/css" href="../styles.css">
-</head>
-<body>
-	<div style="margin-left:  0px;">
-		The <b>BOOST_PP_SET_REST_N</b> macro expands to a <i>set</i> of all but the first <i>n</i> elements of a <i>set</i>.
-	</div>
-	<h4>Usage</h4>
-		<div class="code">
-			<b>BOOST_PP_SET_REST_N</b>(<i>n</i>, <i>list</i>)
+	<head>
+		<title>BOOST_PP_SEQ_REST_N</title>
+		<link rel="stylesheet" type="text/css" href="../styles.css">
+	</head>
+	<body>
+		<div style="margin-left:  0px;">
+			The <b>BOOST_PP_SEQ_REST_N</b> macro expands to a <i>seq</i> of all but the 
+			first <i>n</i> elements of a <i>seq</i>.
 		</div>
-	<h4>Arguments</h4>
+		<h4>
+			Usage
+		</h4>
+		<div class="code">
+			<b>BOOST_PP_SEQ_REST_N</b>(<i>n</i>, <i>list</i>)
+		</div>
+		<h4>
+			Arguments
+		</h4>
 		<dl>
 			<dt>n</dt>
 			<dd>
@@ -19,28 +24,39 @@
 			</dd>
 			<dt>list</dt>
 			<dd>
-				The <i>set</i> from which the elements are to be removed.
+				The <i>seq</i> from which the elements are to be removed.
 			</dd>
 		</dl>
-	<h4>Remarks</h4>
+		<h4>
+			Remarks
+		</h4>
 		<div>
-			This macro extracts <i>n</i> elements from the beginning of <i>set</i> and returns the remainder of <i>set</i> as a new <i>set</i>
+			This macro extracts <i>n</i> elements from the beginning of <i>seq</i> and 
+			returns the remainder of <i>seq</i> as a new <i>seq</i>
 		</div>
-	<h4>See Also</h4>
+		<h4>
+			See Also
+		</h4>
 		<ul>
-			<li><a href="set_first_n.html">BOOST_PP_SET_FIRST_N</a></li>
+			<li>
+				<a href="seq_first_n.html">BOOST_PP_SEQ_FIRST_N</a></li>
 		</ul>
-	<h4>Requirements</h4>
+		<h4>
+			Requirements
+		</h4>
 		<div>
-			<b>Header:</b> &nbsp;<a href="../headers/set/rest_n.hpp.html">&lt;boost/preprocessor/set/rest_n.hpp&gt;</a>
+			<b>Header:</b> &nbsp;<a href="../headers/seq/rest_n.hpp.html">&lt;boost/preprocessor/seq/rest_n.hpp&gt;</a>
 		</div>
-	<h4>Sample Code</h4>
-<div><pre>
+		<h4>
+			Sample Code
+		</h4>
+		<div>
+			<pre>
 #include &lt;<a href="../headers/arithmetic/inc.hpp.html">boost/preprocessor/arithmetic/inc.hpp</a>&gt;
-#include &lt;<a href="../headers/set/elem.hpp.html">boost/preprocessor/set/elem.hpp</a>&gt;
-#include &lt;<a href="../headers/set/first_n.hpp.html">boost/preprocessor/set/first_n.hpp</a>&gt;
-#include &lt;<a href="../headers/set/rest_n.hpp.html">boost/preprocessor/set/rest_n.hpp</a>&gt;
-#include &lt;<a href="../headers/set/size.hpp.html">boost/preprocessor/set/size.hpp</a>&gt;
+#include &lt;<a href="../headers/seq/elem.hpp.html">boost/preprocessor/seq/elem.hpp</a>&gt;
+#include &lt;<a href="../headers/seq/first_n.hpp.html">boost/preprocessor/seq/first_n.hpp</a>&gt;
+#include &lt;<a href="../headers/seq/rest_n.hpp.html">boost/preprocessor/seq/rest_n.hpp</a>&gt;
+#include &lt;<a href="../headers/seq/size.hpp.html">boost/preprocessor/seq/size.hpp</a>&gt;
 
 #define NUMBERS \
    (0)(1)(2)(3)(4)(5)(6)(7)(8)(9) \
@@ -71,15 +87,15 @@
    (250)(251)(252)(253)(254)(255)(256) \
    /**/
 
-#define SUPER_ADD(x, y) <a href="set_elem.html">BOOST_PP_SET_ELEM</a>(y, <a href="set_rest_n.html">BOOST_PP_SET_REST_N</a>(x, NUMBERS))
+#define SUPER_ADD(x, y) <a href="seq_elem.html">BOOST_PP_SEQ_ELEM</a>(y, <a href="seq_rest_n.html">BOOST_PP_SEQ_REST_N</a>(x, NUMBERS))
 
 SUPER_ADD(100, 100) // expands to 200
 
 #define SUPER_SUB(x, y) \
-   <a href="set_size.html">BOOST_PP_SET_SIZE</a>( \
-      <a href="set_rest_n.html">BOOST_PP_SET_REST_N</a>( \
+   <a href="seq_size.html">BOOST_PP_SEQ_SIZE</a>( \
+      <a href="seq_rest_n.html">BOOST_PP_SEQ_REST_N</a>( \
          <a href="inc.html">BOOST_PP_INC</a>(y), \
-         <a href="set_first_n.html">BOOST_PP_SET_FIRST_N</a>( \
+         <a href="seq_first_n.html">BOOST_PP_SEQ_FIRST_N</a>( \
             <a href="inc.html">BOOST_PP_INC</a>(x), NUMBERS \
          ) \
       ) \
@@ -87,6 +103,7 @@ SUPER_ADD(100, 100) // expands to 200
    /**/
 
 SUPER_SUB(67, 25) // expands to 42
-</pre></div>
-</body>
+</pre>
+		</div>
+	</body>
 </html>

@@ -1,57 +1,64 @@
 <html>
-<head>
-	<title>sets.html</title>
-	<link rel="stylesheet" type="text/css" href="../styles.css">
-</head>
-<body>
-	<h4>Sets</h4>
-	<div>
-		A <i>set</i> is a group of adjacent parenthesized elements.
-		For example,
-	</div>
-	<div class="code">
-		(<i>a</i>)(<i>b</i>)(<i>c</i>)
-	</div>
-	<div>
-		...is a <i>set</i> of <i>3</i> elements--<i>a</i>, <i>b</i>, and <i>c</i>.
-	</div>
-	<div>
-		<i>Sets</i> are data structures that merge the properties of both <i>lists</i> and <i>tuples</i>
-		with the exception that <i>sets</i> cannot be empty.&nbsp;
-		Therefore, an "empty" <i>set</i> is considered a special case scenario that must be handled separately in C++.
-	</div>
-<div class="code"><pre>
-#define SET (x)(y)(z)
+	<head>
+		<title>seqs.html</title>
+		<link rel="stylesheet" type="text/css" href="../styles.css">
+	</head>
+	<body>
+		<h4>
+			Sets
+		</h4>
+		<div>
+			A <i>seq</i> is a group of adjacent parenthesized elements. For example,
+		</div>
+		<div class="code">
+			(<i>a</i>)(<i>b</i>)(<i>c</i>)
+		</div>
+		<div>
+			...is a <i>seq</i> of <i>3</i> elements--<i>a</i>, <i>b</i>, and <i>c</i>.
+		</div>
+		<div>
+			<i>Sets</i> are data structures that merge the properties of both <i>lists</i> and
+			<i>tuples</i> with the exception that <i>seqs</i> cannot be empty.&nbsp; 
+			Therefore, an "empty" <i>seq</i> is considered a special case scenario that 
+			must be handled separately in C++.
+		</div>
+		<div class="code">
+			<pre>
+#define SEQ (x)(y)(z)
 #define REVERSE(s, state, elem) (elem) state
    // append to head                  ^
 
-BOOST_PP_SET_FOLD_LEFT(REVERSE, BOOST_PP_EMPTY, SET)()
+BOOST_PP_SEQ_FOLD_LEFT(REVERSE, BOOST_PP_EMPTY, SEQ)()
    //                           #1                  #2
-   // 1) placeholder for "empty" set
+   // 1) placeholder for "empty" seq
    // 2) remove placeholder
 
-#define SET_B (1)(2)(3)
+#define SEQ_B (1)(2)(3)
 #define INC(s, state, elem) state (BOOST_PP_INC(elem))
    // append to tail             ^
 
-BOOST_PP_SET_FOLD_RIGHT(INC, BOOST_PP_SET_NIL, SET)
+BOOST_PP_SEQ_FOLD_RIGHT(INC, BOOST_PP_SEQ_NIL, SEQ)
    //                        ^
    // special placeholder that will be "eaten"
    // by appending to the tail
-</pre></div>
-	<div>
-		<i>Sets</i> are extremely efficient.&nbsp;
-		Element access speed approaches random access--even with <i>sets</i> of up to <i>256</i> elements.&nbsp;
-		This is because element access (among other things) is implemented iteratively rather than recursively.&nbsp;
-		Therefore, elements can be accessed at extremely high indices even on preprocessors with low maximum expansion depths.
-	</div>
-	<div>
-		Elements of a <i>set</i> can be extracted with
-		<b>BOOST_PP_SET_ELEM</b>.
-	</div>
-	<h4>Primitives</h4>
+</pre>
+		</div>
+		<div>
+			<i>Sets</i> are extremely efficient.&nbsp; Element access speed approaches 
+			random access--even with <i>seqs</i> of up to <i>256</i> elements.&nbsp; This 
+			is because element access (among other things) is implemented iteratively 
+			rather than recursively.&nbsp; Therefore, elements can be accessed at extremely 
+			high indices even on preprocessors with low maximum expansion depths.
+		</div>
+		<div>
+			Elements of a <i>seq</i> can be extracted with <b>BOOST_PP_SEQ_ELEM</b>.
+		</div>
+		<h4>
+			Primitives
+		</h4>
 		<ul>
-			<li><a href="../ref/set_elem.html">BOOST_PP_SET_ELEM</a></li>
+			<li>
+				<a href="../ref/seq_elem.html">BOOST_PP_SEQ_ELEM</a></li>
 		</ul>
-</body>
+	</body>
 </html>

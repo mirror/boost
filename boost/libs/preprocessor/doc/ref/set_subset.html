@@ -1,46 +1,58 @@
 <html>
-<head>
-	<title>BOOST_PP_SET_SUBSET</title>
-	<link rel="stylesheet" type="text/css" href="../styles.css">
-</head>
-<body>
-	<div style="margin-left:  0px;">
-		The <b>BOOST_PP_SET_SUBSET</b> macro expands to a subset of elements in a <i>set</i>.
-	</div>
-	<h4>Usage</h4>
-		<div class="code">
-			<b>BOOST_PP_SET_SUBSET</b>(<i>set</i>, <i>i</i>, <i>len</i>)
+	<head>
+		<title>BOOST_PP_SEQ_SUBSEQ</title>
+		<link rel="stylesheet" type="text/css" href="../styles.css">
+	</head>
+	<body>
+		<div style="margin-left:  0px;">
+			The <b>BOOST_PP_SEQ_SUBSEQ</b> macro expands to a subseq of elements in a <i>seq</i>.
 		</div>
-	<h4>Arguments</h4>
+		<h4>
+			Usage
+		</h4>
+		<div class="code">
+			<b>BOOST_PP_SEQ_SUBSEQ</b>(<i>seq</i>, <i>i</i>, <i>len</i>)
+		</div>
+		<h4>
+			Arguments
+		</h4>
 		<dl>
-			<dt>set</dt>
+			<dt>seq</dt>
 			<dd>
-				The <i>set</i> whose size is to be calculated.
+				The <i>seq</i> whose size is to be calculated.
 			</dd>
 			<dt>i</dt>
 			<dd>
-				The index of the first element of the subset to be extracted.
+				The index of the first element of the subseq to be extracted.
 			</dd>
 			<dt>len</dt>
 			<dd>
-				The length of the subset to be extracted.
+				The length of the subseq to be extracted.
 			</dd>
 		</dl>
-	<h4>Remarks</h4>
+		<h4>
+			Remarks
+		</h4>
 		<div>
-			This macro expands to a <i>set</i> extracted from <i>set</i>.
+			This macro expands to a <i>seq</i> extracted from <i>seq</i>.
 		</div>
-	<h4>Requirements</h4>
+		<h4>
+			Requirements
+		</h4>
 		<div>
-			<b>Header:</b> &nbsp;<a href="../headers/set/subset.hpp.html">&lt;boost/preprocessor/set/subset.hpp&gt;</a>
+			<b>Header:</b> &nbsp;<a href="../headers/seq/subseq.hpp.html">&lt;boost/preprocessor/seq/subseq.hpp&gt;</a>
 		</div>
-	<h4>Sample Code</h4>
-<div><pre>
-#include &lt;<a href="../headers/set/subset.hpp.html">boost/preprocessor/set/subset.hpp</a>&gt;
+		<h4>
+			Sample Code
+		</h4>
+		<div>
+			<pre>
+#include &lt;<a href="../headers/seq/subseq.hpp.html">boost/preprocessor/seq/subseq.hpp</a>&gt;
 
-#define SET (0)(1)(2)(3)(4)(5)
+#define SEQ (0)(1)(2)(3)(4)(5)
 
-<a href="set_subset.html">BOOST_PP_SET_SUBSET</a>(SET, 2, 3) // expands to (2)(3)(4)
-</pre></div>
-</body>
+<a href="seq_subseq.html">BOOST_PP_SEQ_SUBSEQ</a>(SEQ, 2, 3) // expands to (2)(3)(4)
+</pre>
+		</div>
+	</body>
 </html>
