@@ -936,6 +936,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_DERIVED_HELPERS
         BOOST_UBLAS_USING matrix<T, F, bounded_array<T, M * N> >::operator =;
 #endif
+        BOOST_STATIC_CONSTANT (std::size_t, max_size1 = M);
+        BOOST_STATIC_CONSTANT (std::size_t, max_size2 = N);
         typedef matrix<T, F, bounded_array<T, M * N> > matrix_type;
 
         // Construction and destruction

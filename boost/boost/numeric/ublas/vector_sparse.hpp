@@ -537,8 +537,9 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it_ == it.it_;
+                // FIXME: won't work with vector of vectors.
+                // BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                return &(*this) () == &it () && it_ == it.it_;
             }
 
         private:
@@ -617,8 +618,9 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it_ == it.it_;
+                // FIXME: won't work with vector of vectors.
+                // BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                return &(*this) () == &it () && it_ == it.it_;
             }
 
         private:
@@ -1008,7 +1010,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
-        const_iterator find (size_type i) const {            
+        const_iterator find (size_type i) const {
             return const_iterator (*this, detail::lower_bound (index_data ().begin (), index_data ().begin () + filled_, k_based (i), std::less<size_type> ()));
         }
         // This function seems to be big. So we do not let the compiler inline it.
@@ -1086,8 +1088,9 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it_ == it.it_;
+                // FIXME: won't work with vector of vectors.
+                // BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                return &(*this) () == &it () && it_ == it.it_;
             }
 
         private:
@@ -1164,8 +1167,9 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it_ == it.it_;
+                // FIXME: won't work with vector of vectors.
+                // BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                return &(*this) () == &it () && it_ == it.it_;
             }
 
         private:
@@ -1678,8 +1682,9 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it_ == it.it_;
+                // FIXME: won't work with vector of vectors.
+                // BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                return &(*this) () == &it () && it_ == it.it_;
             }
 
         private:
@@ -1756,8 +1761,9 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it_ == it.it_;
+                // FIXME: won't work with vector of vectors.
+                // BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                return &(*this) () == &it () && it_ == it.it_;
             }
 
         private:

@@ -19,6 +19,7 @@
 
 // axpy-based products
 // Alexei Novakov had a lot of ideas to improve these. Thanks.
+// Hendrik Kueck proposed some new kernel. Thanks again.
 
 namespace boost { namespace numeric { namespace ublas {
 
@@ -99,7 +100,7 @@ namespace boost { namespace numeric { namespace ublas {
     V &
     axpy_prod (const matrix_expression<E1> &e1,
                const vector_expression<E2> &e2,
-               V &v, row_major_tag) {
+               V &v, packed_random_access_iterator_tag, row_major_tag) {
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
         typedef typename V::size_type size_type;
@@ -129,7 +130,7 @@ namespace boost { namespace numeric { namespace ublas {
     V &
     axpy_prod (const matrix_expression<E1> &e1,
                const vector_expression<E2> &e2,
-               V &v, column_major_tag) {
+               V &v, packed_random_access_iterator_tag, column_major_tag) {
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
         typedef typename V::size_type size_type;
@@ -154,7 +155,35 @@ namespace boost { namespace numeric { namespace ublas {
         return v;
     }
 
+    template<class V, class E1, class E2>
+    BOOST_UBLAS_INLINE
+    V &
+    axpy_prod (const matrix_expression<E1> &e1,
+               const vector_expression<E2> &e2,
+               V &v, sparse_bidirectional_iterator_tag) {
+        typedef const E1 expression1_type;
+        typedef const E2 expression2_type;
+        typedef typename V::size_type size_type;
+
+        typename expression2_type::const_iterator it (e2 ().begin ());
+        typename expression2_type::const_iterator it_end (e2 ().end ());
+        while (it != it_end) {
+            v.plus_assign (column (e1 (), it.index ()) * *it);
+            ++ it;
+        }
+        return v;
+    }
+
     // Dispatcher
+    template<class V, class E1, class E2>
+    BOOST_UBLAS_INLINE
+    V &
+    axpy_prod (const matrix_expression<E1> &e1,
+               const vector_expression<E2> &e2,
+               V &v, packed_random_access_iterator_tag) {
+        typedef typename E1::orientation_category orientation_category;
+        return axpy_prod (e1, e2, v, packed_random_access_iterator_tag (), orientation_category ());
+    }
     template<class V, class E1, class E2>
     BOOST_UBLAS_INLINE
     V &
@@ -162,7 +191,7 @@ namespace boost { namespace numeric { namespace ublas {
                const vector_expression<E2> &e2,
                V &v, bool init = true) {
         typedef typename V::value_type value_type;
-        typedef typename E1::orientation_category orientation_category;
+        typedef typename E2::const_iterator::iterator_category iterator_category;
 
         if (init)
             v.assign (zero_vector<value_type> (e1 ().size1 ()));
@@ -170,7 +199,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector<value_type> cv (v);
         indexing_vector_assign (scalar_plus_assign<value_type, value_type> (), cv, prod (e1, e2));
 #endif
-        axpy_prod (e1, e2, v, orientation_category ());
+        axpy_prod (e1, e2, v, iterator_category ());
 #ifdef BOOST_UBLAS_TYPE_CHECK
         BOOST_UBLAS_CHECK (equals (v, cv), internal_logic ());
 #endif
@@ -266,7 +295,7 @@ namespace boost { namespace numeric { namespace ublas {
     V &
     axpy_prod (const vector_expression<E1> &e1,
                const matrix_expression<E2> &e2,
-               V &v, column_major_tag) {
+               V &v, packed_random_access_iterator_tag, column_major_tag) {
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
         typedef typename V::size_type size_type;
@@ -296,7 +325,7 @@ namespace boost { namespace numeric { namespace ublas {
     V &
     axpy_prod (const vector_expression<E1> &e1,
                const matrix_expression<E2> &e2,
-               V &v, row_major_tag) {
+               V &v, packed_random_access_iterator_tag, row_major_tag) {
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
         typedef typename V::size_type size_type;
@@ -321,7 +350,35 @@ namespace boost { namespace numeric { namespace ublas {
         return v;
     }
 
+    template<class V, class E1, class E2>
+    BOOST_UBLAS_INLINE
+    V &
+    axpy_prod (const vector_expression<E1> &e1,
+               const matrix_expression<E2> &e2,
+               V &v, sparse_bidirectional_iterator_tag) {
+        typedef const E1 expression1_type;
+        typedef const E2 expression2_type;
+        typedef typename V::size_type size_type;
+
+        typename expression1_type::const_iterator it (e1 ().begin ());
+        typename expression1_type::const_iterator it_end (e1 ().end ());
+        while (it != it_end) {
+            v.plus_assign (*it * row (e2 (), it.index ()));
+            ++ it;
+        }
+        return v;
+    }
+
     // Dispatcher
+    template<class V, class E1, class E2>
+    BOOST_UBLAS_INLINE
+    V &
+    axpy_prod (const vector_expression<E1> &e1,
+               const matrix_expression<E2> &e2,
+               V &v, packed_random_access_iterator_tag) {
+        typedef typename E2::orientation_category orientation_category;
+        return axpy_prod (e1, e2, v, packed_random_access_iterator_tag (), orientation_category ());
+    }
     template<class V, class E1, class E2>
     BOOST_UBLAS_INLINE
     V &
@@ -329,7 +386,7 @@ namespace boost { namespace numeric { namespace ublas {
                const matrix_expression<E2> &e2,
                V &v, bool init = true) {
         typedef typename V::value_type value_type;
-        typedef typename E2::orientation_category orientation_category;
+        typedef typename E1::const_iterator::iterator_category iterator_category;
 
         if (init)
             v.assign (zero_vector<value_type> (e2 ().size2 ()));
@@ -337,7 +394,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector<value_type> cv (v);
         indexing_vector_assign (scalar_plus_assign<value_type, value_type> (), cv, prod (e1, e2));
 #endif
-        axpy_prod (e1, e2, v, orientation_category ());
+        axpy_prod (e1, e2, v, iterator_category ());
 #ifdef BOOST_UBLAS_TYPE_CHECK
         BOOST_UBLAS_CHECK (equals (v, cv), internal_logic ());
 #endif

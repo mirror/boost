@@ -1123,6 +1123,14 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Accessors
         BOOST_UBLAS_INLINE
+        size_type start1 () const {
+            return r1_.start ();
+        }
+        BOOST_UBLAS_INLINE
+        size_type start2 () const {
+            return r2_.start ();
+        }
+        BOOST_UBLAS_INLINE
         size_type size () const {
             return BOOST_UBLAS_SAME (r1_.size (), r2_.size ());
         }
@@ -1621,6 +1629,22 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Accessors
+        BOOST_UBLAS_INLINE
+        size_type start1 () const {
+            return s1_.start ();
+        }
+        BOOST_UBLAS_INLINE
+        size_type start2 () const {
+            return s2_.start ();
+        }
+        BOOST_UBLAS_INLINE
+        difference_type stride1 () const {
+            return s1_.stride ();
+        }
+        BOOST_UBLAS_INLINE
+        difference_type stride2 () const {
+            return s2_.stride ();
+        }
         BOOST_UBLAS_INLINE
         size_type size () const {
             return BOOST_UBLAS_SAME (s1_.size (), s2_.size ());

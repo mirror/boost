@@ -1030,7 +1030,9 @@ namespace boost { namespace numeric { namespace ublas {
     class diagonal_matrix:
         public banded_matrix<T, F, A> {
     public:
+#ifndef BOOST_UBLAS_NO_DERIVED_HELPERS
         BOOST_UBLAS_USING banded_matrix<T, F, A>::operator =;
+#endif
         typedef banded_matrix<T, F, A> matrix_type;
 
         // Construction and destruction
@@ -2064,7 +2066,9 @@ namespace boost { namespace numeric { namespace ublas {
     class diagonal_adaptor:
         public banded_adaptor<M> {
     public:
+#ifndef BOOST_UBLAS_NO_DERIVED_HELPERS
         BOOST_UBLAS_USING banded_adaptor<M>::operator =;
+#endif
         typedef M matrix_type;
         typedef banded_adaptor<M> adaptor_type;
 

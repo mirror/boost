@@ -1212,12 +1212,12 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ == it.it_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ < it.it_;
             }
 
@@ -1420,12 +1420,12 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ == it.it_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ < it.it_;
             }
 
@@ -1664,12 +1664,12 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ == it.it_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
                 return it_ < it.it_;
             }
 
@@ -1742,20 +1742,24 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         index_pair(V& v, size_type i) :
             container_reference<V>(v), i_(i),
-            v1_(v.data1_[i]), v2_(v.data2_[i]) {}
+            v1_(v.data1_[i]), v2_(v.data2_[i]), dirty_(false) {}
         BOOST_UBLAS_INLINE
         index_pair(const self_type& rhs) :
-            container_reference<V>(), i_(-1),
-            v1_(rhs.v1_), v2_(rhs.v2_) {}
+            container_reference<V>(rhs()), i_(rhs.i_),
+            v1_(rhs.v1_), v2_(rhs.v2_), dirty_(false) {}
+        BOOST_UBLAS_INLINE
+        ~index_pair() {
+            if (dirty_) {
+                (*this)().data1_[i_] = v1_;
+                (*this)().data2_[i_] = v2_;
+            }
+        }
 
         BOOST_UBLAS_INLINE
         self_type& operator=(const self_type& rhs) {
             v1_ = rhs.v1_;
             v2_ = rhs.v2_;
-            if (i_ != size_type(-1)) {
-                (*this)().data1_[i_] = v1_;
-                (*this)().data2_[i_] = v2_;
-            }
+            dirty_ = true;
             return *this;
         }
 
@@ -1787,6 +1791,7 @@ namespace boost { namespace numeric { namespace ublas {
         size_type i_;
         typename V::value1_type v1_;
         typename V::value2_type v2_;
+        bool dirty_;
     };
 
 #ifdef BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -1817,14 +1822,15 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename std::ptrdiff_t difference_type;
         typedef index_pair<self_type> value_type;
         typedef value_type reference;
-        typedef const value_type& const_reference;
+        // typedef const value_type& const_reference;
+        typedef const value_type const_reference;
 
         BOOST_UBLAS_INLINE
         index_pair_array(size_type size, V1& data1, V2& data2) :
               size_(size),data1_(data1),data2_(data2) {}
 
         BOOST_UBLAS_INLINE
-        const size_type size() const {
+        size_type size() const {
             return size_;
         }
 
@@ -1893,22 +1899,26 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         index_triple(M& m, size_type i) :
             container_reference<M>(m), i_(i),
-            v1_(m.data1_[i]), v2_(m.data2_[i]), v3_(m.data3_[i]) {}
+            v1_(m.data1_[i]), v2_(m.data2_[i]), v3_(m.data3_[i]), dirty_(false) {}
         BOOST_UBLAS_INLINE
         index_triple(const self_type& rhs) :
-            container_reference<M>(), i_(-1),
-            v1_(rhs.v1_), v2_(rhs.v2_), v3_(rhs.v3_) {}
+            container_reference<M>(rhs()), i_(rhs.i_),
+            v1_(rhs.v1_), v2_(rhs.v2_), v3_(rhs.v3_), dirty_(false) {}
+        BOOST_UBLAS_INLINE
+        ~index_triple() {
+            if (dirty_) {
+                (*this)().data1_[i_] = v1_;
+                (*this)().data2_[i_] = v2_;
+                (*this)().data3_[i_] = v3_;
+            }
+        }
 
         BOOST_UBLAS_INLINE
         self_type& operator=(const self_type& rhs) {
             v1_ = rhs.v1_;
             v2_ = rhs.v2_;
             v3_ = rhs.v3_;
-            if (i_ != size_type(-1)) {
-                (*this)().data1_[i_] = v1_;
-                (*this)().data2_[i_] = v2_;
-                (*this)().data3_[i_] = v3_;
-            }
+            dirty_ = true;
             return *this;
         }
 
@@ -1942,6 +1952,7 @@ namespace boost { namespace numeric { namespace ublas {
         typename M::value1_type v1_;
         typename M::value2_type v2_;
         typename M::value3_type v3_;
+        bool dirty_;
     };
 
 #ifdef BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -1973,14 +1984,15 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename std::ptrdiff_t difference_type;
         typedef index_triple<self_type> value_type;
         typedef value_type reference;
-        typedef const value_type& const_reference;
+        // typedef const value_type& const_reference;
+        typedef const value_type const_reference;
 
         BOOST_UBLAS_INLINE
         index_triple_array(size_type size, V1& data1, V2& data2, V3& data3) :
               size_(size),data1_(data1),data2_(data2),data3_(data3) {}
 
         BOOST_UBLAS_INLINE
-        const size_type size() const {
+        size_type size() const {
             return size_;
         }
 

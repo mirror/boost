@@ -279,6 +279,11 @@ namespace boost { namespace numeric { namespace ublas {
             derived_iterator_type tmp (d);
             return tmp += n;
         }
+        BOOST_UBLAS_INLINE
+        friend derived_iterator_type operator + (derived_difference_type n, const derived_iterator_type &d) {
+            derived_iterator_type tmp (d);
+            return tmp += n;
+        }
 #endif
         BOOST_UBLAS_INLINE
         derived_iterator_type operator - (derived_difference_type n) const {
@@ -338,6 +343,13 @@ namespace boost { namespace numeric { namespace ublas {
     template<class IC, class I, class T>
     BOOST_UBLAS_INLINE
     typename random_access_iterator_base<IC, I, T>::derived_iterator_type operator + (const random_access_iterator_base<IC, I, T> &it, std::ptrdiff_t n) {
+        typedef BOOST_UBLAS_TYPENAME random_access_iterator_base<IC, I, T>::derived_iterator_type derived_iterator_type;
+        derived_iterator_type tmp (static_cast<const derived_iterator_type &> (it));
+        return tmp += n;
+    }
+    template<class IC, class I, class T>
+    BOOST_UBLAS_INLINE
+    typename random_access_iterator_base<IC, I, T>::derived_iterator_type operator + (std::ptrdiff_t n, const random_access_iterator_base<IC, I, T> &it) {
         typedef BOOST_UBLAS_TYPENAME random_access_iterator_base<IC, I, T>::derived_iterator_type derived_iterator_type;
         derived_iterator_type tmp (static_cast<const derived_iterator_type &> (it));
         return tmp += n;
@@ -422,6 +434,12 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I, class T, class R>
     BOOST_UBLAS_INLINE
     reverse_iterator_base<I, T, R> operator + (const reverse_iterator_base<I, T, R> &it, std::ptrdiff_t n) {
+        reverse_iterator_base<I, T, R> tmp (it);
+        return tmp += n;
+    }
+    template<class I, class T, class R>
+    BOOST_UBLAS_INLINE
+    reverse_iterator_base<I, T, R> operator + (std::ptrdiff_t n, const reverse_iterator_base<I, T, R> &it) {
         reverse_iterator_base<I, T, R> tmp (it);
         return tmp += n;
     }
@@ -540,6 +558,12 @@ namespace boost { namespace numeric { namespace ublas {
     }
     template<class I, class T, class R>
     BOOST_UBLAS_INLINE
+    reverse_iterator_base1<I, T, R> operator + (std::ptrdiff_t n, const reverse_iterator_base1<I, T, R> &it) {
+        reverse_iterator_base1<I, T, R> tmp (it);
+        return tmp += n;
+    }
+    template<class I, class T, class R>
+    BOOST_UBLAS_INLINE
     reverse_iterator_base1<I, T, R> operator - (const reverse_iterator_base1<I, T, R> &it, std::ptrdiff_t n) {
         reverse_iterator_base1<I, T, R> tmp (it);
         return tmp -= n;
@@ -653,6 +677,12 @@ namespace boost { namespace numeric { namespace ublas {
     }
     template<class I, class T, class R>
     BOOST_UBLAS_INLINE
+    reverse_iterator_base2<I, T, R> operator + (std::ptrdiff_t n, const reverse_iterator_base2<I, T, R> &it) {
+        reverse_iterator_base2<I, T, R> tmp (it);
+        return tmp += n;
+    }
+    template<class I, class T, class R>
+    BOOST_UBLAS_INLINE
     reverse_iterator_base2<I, T, R> operator - (const reverse_iterator_base2<I, T, R> &it, std::ptrdiff_t n) {
         reverse_iterator_base2<I, T, R> tmp (it);
         return tmp -= n;
@@ -730,6 +760,11 @@ namespace boost { namespace numeric { namespace ublas {
             return tmp += n;
         }
         BOOST_UBLAS_INLINE
+        friend reverse_iterator_base operator + (difference_type n, const reverse_iterator_base &it) {
+            reverse_iterator_base tmp (it);
+            return tmp += n;
+        }
+        BOOST_UBLAS_INLINE
         friend reverse_iterator_base operator - (const reverse_iterator_base &it, difference_type n) {
             reverse_iterator_base tmp (it);
             return tmp -= n;
@@ -758,6 +793,12 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I>
     BOOST_UBLAS_INLINE
     reverse_iterator_base<I> operator + (const reverse_iterator_base<I> &it, std::ptrdiff_t n) {
+        reverse_iterator_base<I> tmp (it);
+        return tmp += n;
+    }
+    template<class I>
+    BOOST_UBLAS_INLINE
+    reverse_iterator_base<I> operator + (std::ptrdiff_t n, const reverse_iterator_base<I> &it) {
         reverse_iterator_base<I> tmp (it);
         return tmp += n;
     }
@@ -841,6 +882,11 @@ namespace boost { namespace numeric { namespace ublas {
             return tmp += n;
         }
         BOOST_UBLAS_INLINE
+        friend reverse_iterator_base1 operator + (difference_type n, const reverse_iterator_base1 &it) {
+            reverse_iterator_base1 tmp (it);
+            return tmp += n;
+        }
+        BOOST_UBLAS_INLINE
         friend reverse_iterator_base1 operator - (const reverse_iterator_base1 &it, difference_type n) {
             reverse_iterator_base1 tmp (it);
             return tmp -= n;
@@ -896,6 +942,12 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I>
     BOOST_UBLAS_INLINE
     reverse_iterator_base1<I> operator + (const reverse_iterator_base1<I> &it, std::ptrdiff_t n) {
+        reverse_iterator_base1<I> tmp (it);
+        return tmp += n;
+    }
+    template<class I>
+    BOOST_UBLAS_INLINE
+    reverse_iterator_base1<I> operator + (std::ptrdiff_t n, const reverse_iterator_base1<I> &it) {
         reverse_iterator_base1<I> tmp (it);
         return tmp += n;
     }
@@ -979,6 +1031,11 @@ namespace boost { namespace numeric { namespace ublas {
             return tmp += n;
         }
         BOOST_UBLAS_INLINE
+        friend reverse_iterator_base2 operator + (difference_type n, const reverse_iterator_base2 &it) {
+            reverse_iterator_base2 tmp (it);
+            return tmp += n;
+        }
+        BOOST_UBLAS_INLINE
         friend reverse_iterator_base2 operator - (const reverse_iterator_base2 &it, difference_type n) {
             reverse_iterator_base2 tmp (it);
             return tmp -= n;
@@ -1034,6 +1091,12 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I>
     BOOST_UBLAS_INLINE
     reverse_iterator_base2<I> operator + (const reverse_iterator_base2<I> &it, std::ptrdiff_t n) {
+        reverse_iterator_base2<I> tmp (it);
+        return tmp += n;
+    }
+    template<class I>
+    BOOST_UBLAS_INLINE
+    reverse_iterator_base2<I> operator + (std::ptrdiff_t n, const reverse_iterator_base2<I> &it) {
         reverse_iterator_base2<I> tmp (it);
         return tmp += n;
     }
@@ -1168,6 +1231,12 @@ namespace boost { namespace numeric { namespace ublas {
     }
     template<class C, class I>
     BOOST_UBLAS_INLINE
+    indexed_iterator<C, I> operator + (std::ptrdiff_t n, const indexed_iterator<C, I> &it) {
+        indexed_iterator<C, I> tmp (it);
+        return tmp += n;
+    }
+    template<class C, class I>
+    BOOST_UBLAS_INLINE
     indexed_iterator<C, I> operator - (const indexed_iterator<C, I> &it, std::ptrdiff_t n) {
         indexed_iterator<C, I> tmp (it);
         return tmp -= n;
@@ -1291,6 +1360,12 @@ namespace boost { namespace numeric { namespace ublas {
     template<class C, class I>
     BOOST_UBLAS_INLINE
     indexed_const_iterator<C, I> operator + (const indexed_const_iterator<C, I> &it, std::ptrdiff_t n) {
+        indexed_const_iterator<C, I> tmp (it);
+        return tmp += n;
+    }
+    template<class C, class I>
+    BOOST_UBLAS_INLINE
+    indexed_const_iterator<C, I> operator + (std::ptrdiff_t n, const indexed_const_iterator<C, I> &it) {
         indexed_const_iterator<C, I> tmp (it);
         return tmp += n;
     }
@@ -1449,6 +1524,12 @@ namespace boost { namespace numeric { namespace ublas {
     template<class C, class I>
     BOOST_UBLAS_INLINE
     indexed_iterator1<C, I> operator + (const indexed_iterator1<C, I> &it, std::ptrdiff_t n) {
+        indexed_iterator1<C, I> tmp (it);
+        return tmp += n;
+    }
+    template<class C, class I>
+    BOOST_UBLAS_INLINE
+    indexed_iterator1<C, I> operator + (std::ptrdiff_t n, const indexed_iterator1<C, I> &it) {
         indexed_iterator1<C, I> tmp (it);
         return tmp += n;
     }
@@ -1618,6 +1699,12 @@ namespace boost { namespace numeric { namespace ublas {
     }
     template<class C, class I>
     BOOST_UBLAS_INLINE
+    indexed_const_iterator1<C, I> operator + (std::ptrdiff_t n, const indexed_const_iterator1<C, I> &it) {
+        indexed_const_iterator1<C, I> tmp (it);
+        return tmp += n;
+    }
+    template<class C, class I>
+    BOOST_UBLAS_INLINE
     indexed_const_iterator1<C, I> operator - (const indexed_const_iterator1<C, I> &it, std::ptrdiff_t n) {
         indexed_const_iterator1<C, I> tmp (it);
         return tmp -= n;
@@ -1768,6 +1855,12 @@ namespace boost { namespace numeric { namespace ublas {
     template<class C, class I>
     BOOST_UBLAS_INLINE
     indexed_iterator2<C, I> operator + (const indexed_iterator2<C, I> &it, std::ptrdiff_t n) {
+        indexed_iterator2<C, I> tmp (it);
+        return tmp += n;
+    }
+    template<class C, class I>
+    BOOST_UBLAS_INLINE
+    indexed_iterator2<C, I> operator + (std::ptrdiff_t n, const indexed_iterator2<C, I> &it) {
         indexed_iterator2<C, I> tmp (it);
         return tmp += n;
     }
@@ -1929,6 +2022,12 @@ namespace boost { namespace numeric { namespace ublas {
     template<class C, class I>
     BOOST_UBLAS_INLINE
     indexed_const_iterator2<C, I> operator + (const indexed_const_iterator2<C, I> &it, std::ptrdiff_t n) {
+        indexed_const_iterator2<C, I> tmp (it);
+        return tmp += n;
+    }
+    template<class C, class I>
+    BOOST_UBLAS_INLINE
+    indexed_const_iterator2<C, I> operator + (std::ptrdiff_t n, const indexed_const_iterator2<C, I> &it) {
         indexed_const_iterator2<C, I> tmp (it);
         return tmp += n;
     }

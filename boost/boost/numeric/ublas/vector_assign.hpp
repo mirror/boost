@@ -167,7 +167,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
     template<>
     struct vector_assign_traits<dense_tag, computed_assign_tag, sparse_bidirectional_iterator_tag> {
-        typedef sparse_tag storage_category;
+        typedef sparse_proxy_tag storage_category;
     };
 
     template<>
@@ -193,7 +193,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
     template<>
     struct vector_assign_traits<packed_tag, computed_assign_tag, sparse_bidirectional_iterator_tag> {
-        typedef sparse_tag storage_category;
+        typedef sparse_proxy_tag storage_category;
     };
 
     template<>

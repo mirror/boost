@@ -874,13 +874,26 @@ namespace boost { namespace numeric { namespace ublas {
             }
             return t;
         }
+        // Packed sparse case
+        template<class I1, class I2>
+        BOOST_UBLAS_INLINE
+        result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
+                                 packed_random_access_iterator_tag, sparse_bidirectional_iterator_tag) const {
+            result_type t (0);
+            while (it2 != it2_end) {
+                t += it1 () (it1.index1 (), it2.index ()) * *it2;
+                ++ it2;
+            }
+            return t;
+        }
         // Another dispatcher
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
                                  sparse_bidirectional_iterator_tag) const {
-            typedef typename I2::iterator_category iterator_category;
-            return operator () (it1, it1_end, it2, it2_end,sparse_bidirectional_iterator_tag (), iterator_category ());
+            typedef typename I1::iterator_category iterator1_category;
+            typedef typename I2::iterator_category iterator2_category;
+            return operator () (it1, it1_end, it2, it2_end, iterator1_category (), iterator2_category ());
         }
     };
 
@@ -1013,15 +1026,27 @@ namespace boost { namespace numeric { namespace ublas {
             }
             return t;
         }
+        // Packed sparse case
+        template<class I1, class I2>
+        BOOST_UBLAS_INLINE
+        result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
+                                 packed_random_access_iterator_tag, sparse_bidirectional_iterator_tag) const {
+            result_type t (0);
+            while (it2 != it2_end) {
+                t += it1 () (it2.index1 ()) * *it2;
+                ++ it2;
+            }
+            return t;
+        }
         // Sparse packed case
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
                                  sparse_bidirectional_iterator_tag, packed_random_access_iterator_tag) const {
             result_type t (0);
-            while (it2 != it2_end) {
-                t += it1 () (it2.index1 ()) * *it2;
-                ++ it2;
+            while (it1 != it1_end) {
+                t += *it1 * it2 () (it1.index (), it2.index2 ());
+                ++ it1;
             }
             return t;
         }
@@ -1030,8 +1055,9 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
                                  sparse_bidirectional_iterator_tag) const {
-            typedef typename I1::iterator_category iterator_category;
-            return operator () (it1, it1_end, it2, it2_end,sparse_bidirectional_iterator_tag (), iterator_category ());
+            typedef typename I1::iterator_category iterator1_category;
+            typedef typename I2::iterator_category iterator2_category;
+            return operator () (it1, it1_end, it2, it2_end, iterator1_category (), iterator2_category ());
         }
     };
 

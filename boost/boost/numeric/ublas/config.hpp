@@ -219,22 +219,35 @@ namespace std {
 
 namespace boost { namespace numeric { namespace ublas {
 
-    template <class V>
+    template<class C, class IC>
+    class indexed_iterator;
+
+    template<class V>
     class index_pair;
-    template <class M>
+    template<class M>
     class index_triple;
 
 }}}
 
 namespace std {
 
+    // Needed for Intel on Itanium?
+    template<class C, class IC>
+    inline
+    void iter_swap (boost::numeric::ublas::indexed_iterator<C, IC> it1,
+                    boost::numeric::ublas::indexed_iterator<C, IC> it2) {
+        swap (*it1, *it2);
+    }
+
     template<class V>
-    void swap(boost::numeric::ublas::index_pair<V> i1, boost::numeric::ublas::index_pair<V> i2) {
-        i1.swap(i2);
+    inline
+    void swap (boost::numeric::ublas::index_pair<V> i1, boost::numeric::ublas::index_pair<V> i2) {
+        i1.swap (i2);
     }
     template<class M>
-    void swap(boost::numeric::ublas::index_triple<M> i1, boost::numeric::ublas::index_triple<M> i2) {
-        i1.swap(i2);
+    inline
+    void swap (boost::numeric::ublas::index_triple<M> i1, boost::numeric::ublas::index_triple<M> i2) {
+        i1.swap (i2);
     }
 
 }

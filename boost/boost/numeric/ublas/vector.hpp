@@ -234,7 +234,8 @@ namespace boost { namespace numeric { namespace ublas {
         // Thanks to Kresimir Fresl for spotting this.
         BOOST_UBLAS_INLINE
         void insert (size_type i, const_reference t) {
-            BOOST_UBLAS_CHECK (data () [i] == value_type (), bad_index ());
+            // FIXME: only works for EqualityComparable value types.
+            // BOOST_UBLAS_CHECK (data () [i] == value_type (), bad_index ());
             // data ().insert (data ().begin () + i, t);
             data () [i] = t;
         }
@@ -527,6 +528,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_DERIVED_HELPERS
         BOOST_UBLAS_USING vector<T, bounded_array<T, N> >::operator =;
 #endif
+        BOOST_STATIC_CONSTANT (std::size_t,  max_size = N);
         typedef vector<T, bounded_array<T, N> > vector_type;
 
         // Construction and destruction

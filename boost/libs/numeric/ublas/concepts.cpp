@@ -42,32 +42,7 @@ namespace ublas = boost::numeric::ublas;
 
 int main () {
     void (* check) (void) = ublas::concept_checks;
-    ublas::ignore_unused_variable_warning (check);
+    boost::ignore_unused_variable_warning (check);
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -30,6 +30,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E>
     struct matrix_expression:
         private boost::nonassignable {
+        BOOST_STATIC_CONSTANT (int, complexity = 0);
         typedef E expression_type;
         typedef matrix_tag type_category;
         typedef abstract_tag simd_category;
@@ -1143,6 +1144,7 @@ namespace boost { namespace numeric { namespace ublas {
     typename vector_matrix_binary_traits<E1, E2, scalar_multiplies<typename E1::value_type, typename E2::value_type> >::result_type
     outer_prod (const vector_expression<E1> &e1,
                 const vector_expression<E2> &e2) {
+        BOOST_STATIC_ASSERT (E1::complexity == 0 && E2::complexity == 0);
         typedef BOOST_UBLAS_TYPENAME vector_matrix_binary_traits<E1, E2, scalar_multiplies<BOOST_UBLAS_TYPENAME E1::value_type, BOOST_UBLAS_TYPENAME E2::value_type> >::expression_type expression_type;
         return expression_type (e1 (), e2 ());
     }
@@ -3655,6 +3657,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<matrix_vector_binary1<E1, E2, F> >::operator ();
 #endif
+        BOOST_STATIC_CONSTANT (int, complexity = 1);
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef F functor_type;
@@ -3964,6 +3967,7 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename E2::value_type, E2>::result_type
     prod (const matrix_expression<E1> &e1,
           const vector_expression<E2> &e2) {
+        BOOST_STATIC_ASSERT (E2::complexity == 0);
         typedef BOOST_UBLAS_TYPENAME matrix_vector_binary1_traits<BOOST_UBLAS_TYPENAME E1::value_type, E1,
                                                                   BOOST_UBLAS_TYPENAME E2::value_type, E2>::storage_category storage_category;
         typedef BOOST_UBLAS_TYPENAME matrix_vector_binary1_traits<BOOST_UBLAS_TYPENAME E1::value_type, E1,
@@ -3991,6 +3995,7 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename type_traits<typename E2::value_type>::precision_type, E2>::result_type
     prec_prod (const matrix_expression<E1> &e1,
                const vector_expression<E2> &e2) {
+        BOOST_STATIC_ASSERT (E2::complexity == 0);
         typedef BOOST_UBLAS_TYPENAME matrix_vector_binary1_traits<BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME E1::value_type>::precision_type, E1,
                                                                   BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME E2::value_type>::precision_type, E2>::storage_category storage_category;
         typedef BOOST_UBLAS_TYPENAME matrix_vector_binary1_traits<BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME E1::value_type>::precision_type, E1,
@@ -4039,6 +4044,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<matrix_vector_binary2<E1, E2, F> >::operator ();
 #endif
+        BOOST_STATIC_CONSTANT (int, complexity = 1);
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef F functor_type;
@@ -4349,6 +4355,7 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename E2::value_type, E2>::result_type
     prod (const vector_expression<E1> &e1,
           const matrix_expression<E2> &e2) {
+        BOOST_STATIC_ASSERT (E1::complexity == 0);
         typedef BOOST_UBLAS_TYPENAME matrix_vector_binary2_traits<BOOST_UBLAS_TYPENAME E1::value_type, E1,
                                                                   BOOST_UBLAS_TYPENAME E2::value_type, E2>::storage_category storage_category;
         typedef BOOST_UBLAS_TYPENAME matrix_vector_binary2_traits<BOOST_UBLAS_TYPENAME E1::value_type, E1,
@@ -4376,6 +4383,7 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename type_traits<typename E2::value_type>::precision_type, E2>::result_type
     prec_prod (const vector_expression<E1> &e1,
                const matrix_expression<E2> &e2) {
+        BOOST_STATIC_ASSERT (E1::complexity == 0);
         typedef BOOST_UBLAS_TYPENAME matrix_vector_binary2_traits<BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME E1::value_type>::precision_type, E1,
                                                                   BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME E2::value_type>::precision_type, E2>::storage_category storage_category;
         typedef BOOST_UBLAS_TYPENAME matrix_vector_binary2_traits<BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME E1::value_type>::precision_type, E1,
@@ -4424,6 +4432,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_matrix_binary<E1, E2, F> >::operator ();
 #endif
+        BOOST_STATIC_CONSTANT (int, complexity = 1);
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef F functor_type;
@@ -5049,6 +5058,7 @@ namespace boost { namespace numeric { namespace ublas {
                                          typename E2::value_type, E2>::result_type
     prod (const matrix_expression<E1> &e1,
           const matrix_expression<E2> &e2) {
+        BOOST_STATIC_ASSERT (E1::complexity == 0 && E2::complexity == 0);
         typedef BOOST_UBLAS_TYPENAME matrix_matrix_binary_traits<BOOST_UBLAS_TYPENAME E1::value_type, E1,
                                                                  BOOST_UBLAS_TYPENAME E2::value_type, E2>::storage_category storage_category;
         typedef BOOST_UBLAS_TYPENAME matrix_matrix_binary_traits<BOOST_UBLAS_TYPENAME E1::value_type, E1,
@@ -5076,6 +5086,7 @@ namespace boost { namespace numeric { namespace ublas {
                                          typename type_traits<typename E2::value_type>::precision_type, E2>::result_type
     prec_prod (const matrix_expression<E1> &e1,
                const matrix_expression<E2> &e2) {
+        BOOST_STATIC_ASSERT (E1::complexity == 0 && E2::complexity == 0);
         typedef BOOST_UBLAS_TYPENAME matrix_matrix_binary_traits<BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME E1::value_type>::precision_type, E1,
                                                                  BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME E2::value_type>::precision_type, E2>::storage_category storage_category;
         typedef BOOST_UBLAS_TYPENAME matrix_matrix_binary_traits<BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME E1::value_type>::precision_type, E1,

@@ -60,7 +60,7 @@ namespace boost { namespace numeric { namespace ublas {
         public scalar_expression<T> {
     public:
         typedef T value_type;
-        
+
         // Construction and destruction
         BOOST_UBLAS_INLINE
         scalar_const_reference ():
@@ -86,6 +86,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E>
     struct vector_expression:
         private boost::nonassignable {
+        BOOST_STATIC_CONSTANT (int, complexity = 0);
         typedef E expression_type;
         typedef vector_tag type_category;
         typedef abstract_tag simd_category;
@@ -1771,6 +1772,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_scalar_binary:
         public scalar_expression<typename F::result_type> {
     public:
+        BOOST_STATIC_CONSTANT (int, complexity = 1);
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef F functor_type;

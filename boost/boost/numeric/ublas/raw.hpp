@@ -17,6 +17,9 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
+// MSVC 6.0 gets confused by the forward declarations.
+#ifndef BOOST_MSVC
+
     template < typename V >
     BOOST_UBLAS_INLINE
     int size( const V &v ) ;
@@ -415,6 +418,8 @@ namespace boost { namespace numeric { namespace ublas {
     template < typename M >
     BOOST_UBLAS_INLINE
     typename M::size_type start( const matrix_slice<M> &m ) ;
+
+#endif
 
 
 

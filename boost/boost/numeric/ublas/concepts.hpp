@@ -17,6 +17,8 @@
 #ifndef BOOST_UBLAS_CONCEPTS_H
 #define BOOST_UBLAS_CONCEPTS_H
 
+#include <boost/concept_check.hpp>
+
 // #define INTERNAL_STORAGE
 // #define INTERNAL_STORAGE_SPARSE
 // #define INTERNAL_VECTOR
@@ -38,8 +40,10 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
+#ifdef BOOST_UBLAS_DEPRECATED
     template<class T>
     void ignore_unused_variable_warning (const T &t) {}
+#endif
 
     template<class T>
     struct AssignableConcept {
@@ -1034,7 +1038,7 @@ namespace boost { namespace numeric { namespace ublas {
             AdditiveAbelianGroupConcept<value_type>::constraints ();
             bool r;
             value_type a = value_type (), b = value_type (), c = value_type ();
-            r = prod (prod (a, b), c) == prod (a, prod (b, c)) ;
+            r = prod (prod<T> (a, b), c) == prod (a, prod<T> (b, c)) ;
             r = prod (a + b, c) == prod (a, c) + prod (b, c);
             r = prod (OneElement (value_type ()), a) == a;
             r = prod (a, OneElement (value_type ())) == a;
