@@ -105,7 +105,7 @@ interval<T, Policies> tan(const interval<T, Policies>& x)
   typedef typename interval_lib::unprotect<I>::type R;
 
   // get lower bound within [-pi/2, pi/2]
-  const R pi = interval_lib::pi<I>();
+  const R pi = interval_lib::pi<R>();
   R tmp = fmod((const R&)x, pi);
   const T pi_half_d = interval_lib::constants::pi_half_lower<T>();
   if (tmp.lower() >= pi_half_d)
