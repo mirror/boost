@@ -328,10 +328,12 @@ bool disable_type_check<Dummy>::value = false;
 // #define BOOST_UBLAS_STRICT_HERMITIAN
 
 
-// Enable compile time typedefs for proxies
+// Define to enable compile time const propagation for reference, proxy and closure types
 #define BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
 #define BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
 #define BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
+
+// Define to configure special settings for reference returning members
 // #define BOOST_UBLAS_REFERENCE_CONST_MEMBER
 // #define BOOST_UBLAS_PROXY_CONST_MEMBER
 
