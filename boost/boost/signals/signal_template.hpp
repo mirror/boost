@@ -280,10 +280,8 @@ namespace boost {
       return BOOST_SIGNALS_NAMESPACE::connection();
     }
 
-    return impl->connect_slot(in_slot.get_slot_function(),
-                              any(),
-                              in_slot.get_bound_objects(),
-                              at);
+    return impl->connect_slot(in_slot.get_slot_function(), any(), 
+			      in_slot.get_data(), at);
   }
 
   template<
@@ -304,10 +302,14 @@ namespace boost {
              const slot_type& in_slot,
              BOOST_SIGNALS_NAMESPACE::connect_position at)
   {
-    return impl->connect_slot(in_slot.get_slot_function(),
-                              group,
-                              in_slot.get_bound_objects(),
-                              at);
+    // If the slot has been disconnected, just return a disconnected
+    // connection
+    if (!in_slot.is_active()) {
+      return BOOST_SIGNALS_NAMESPACE::connection();
+    }
+
+    return impl->connect_slot(in_slot.get_slot_function(), group, 
+			      in_slot.get_data(), at);
   }
 
   template<

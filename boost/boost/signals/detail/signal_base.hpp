@@ -15,6 +15,7 @@
 #include <boost/signals/detail/named_slot_map.hpp>
 #include <boost/signals/connection.hpp>
 #include <boost/signals/trackable.hpp>
+#include <boost/signals/slot.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/any.hpp>
 #include <boost/utility.hpp>
@@ -87,7 +88,7 @@ namespace boost {
 
         connection connect_slot(const any& slot,
                                 const any& name,
-                                const std::vector<const trackable*>&,
+                                shared_ptr<slot_base::data_t> data,
                                 connect_position at);
 
       private:
@@ -138,10 +139,10 @@ namespace boost {
       protected:
         connection connect_slot(const any& slot,
                                 const any& name,
-                                const std::vector<const trackable*>& bound,
+                                shared_ptr<slot_base::data_t> data,
                                 connect_position at)
         {
-          return impl->connect_slot(slot, name, bound, at);
+          return impl->connect_slot(slot, name, data, at);
         }
 
         typedef named_slot_map::iterator iterator;

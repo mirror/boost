@@ -87,7 +87,12 @@ namespace boost {
 
     public: // TBD: CHANGE THIS
       // Set whether this connection object is controlling or not
-      void set_controlling() { controlling_connection = true; }
+      void set_controlling(bool control = true) 
+      { controlling_connection = control; }
+
+      shared_ptr<BOOST_SIGNALS_NAMESPACE::detail::basic_connection>
+      get_connection() const 
+      { return con; }
 
     private:
       friend class detail::signal_base_impl;

@@ -29,25 +29,27 @@ namespace boost {
 
         // This connection watches for destruction of bound objects. Note
         // that the reset routine will delete con if an allocation throws
-        watch_bound_objects.reset(con);
+        data->watch_bound_objects.reset(con);
 
         // We create a scoped connection, so that exceptions thrown while
         // adding bound objects will cause a cleanup of the bound objects
         // already connected.
-        scoped_connection safe_connection(watch_bound_objects);
+        scoped_connection safe_connection(data->watch_bound_objects);
 
         // Now notify each of the bound objects that they are connected to this
         // slot.
-        for(std::vector<const trackable*>::iterator i = bound_objects.begin();
-            i != bound_objects.end(); ++i) {
+        for(std::vector<const trackable*>::iterator i = 
+	      data->bound_objects.begin(); 
+	    i != data->bound_objects.end(); ++i) {
           // Notify the object that the slot is connecting to it
           BOOST_SIGNALS_NAMESPACE::detail::bound_object binding;
-          (*i)->signal_connected(watch_bound_objects, binding);
+          (*i)->signal_connected(data->watch_bound_objects, binding);
 
           // This will notify the bound object that the connection just made
           // should be disconnected if an exception is thrown before the
           // end of this iteration
-          BOOST_SIGNALS_NAMESPACE::detail::auto_disconnect_bound_object disconnector(binding);
+          BOOST_SIGNALS_NAMESPACE::detail::auto_disconnect_bound_object
+	    disconnector(binding);
 
           // Add the binding to the list of bindings for the connection
           con->bound_objects.push_back(binding);
@@ -60,6 +62,8 @@ namespace boost {
 
         // No exceptions will be thrown past this point.
         safe_connection.release();
+
+	data->watch_bound_objects.set_controlling(true);
       }
     } // end namespace detail
   } // end namespace BOOST_SIGNALS_NAMESPACE

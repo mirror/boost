@@ -61,30 +61,22 @@ namespace boost {
       signal_base_impl::
         connect_slot(const any& slot,
                      const any& name,
-                     const std::vector<const trackable*>& bound_objects,
+		     shared_ptr<slot_base::data_t> data,
                      connect_position at)
       {
-        // Allocate storage for a new basic_connection object to represent the
-        // connection
-        basic_connection* con = new basic_connection();
-
-        // Create a new connection handle object and place the basic_connection
-        // object we just created under its control. Note that the "reset"
-        // routine will delete con if allocation throws.
-        connection slot_connection;
-        slot_connection.reset(con);
+	// Transfer the burden of ownership to a local, scoped
+	// connection.
+	data->watch_bound_objects.set_controlling(false);
+	scoped_connection safe_connection(data->watch_bound_objects);
 
         // Allocate storage for an iterator that will hold the point of
         // insertion of the slot into the list. This is used to later remove
         // the slot when it is disconnected.
-        std::auto_ptr<iterator> saved_iter(new iterator());
+        std::auto_ptr<iterator> saved_iter(new iterator);
 
         // Add the slot to the list.
-        iterator pos = slots_.insert(name, slot_connection, slot, at);
-
-        // Make the copy of the connection in the list disconnect when it is
-        // destroyed
-        pos->first.set_controlling();
+        iterator pos = 
+	  slots_.insert(name, data->watch_bound_objects, slot, at);
 
         // The assignment operation here absolutely must not throw, which
         // intuitively makes sense (because any container's insert method
@@ -94,45 +86,17 @@ namespace boost {
 
         // Fill out the connection object appropriately. None of these
         // operations can throw
-        con->signal = this;
-        con->signal_data = saved_iter.release();
-        con->signal_disconnect = &signal_base_impl::slot_disconnected;
+        data->watch_bound_objects.get_connection()->signal = this;
+        data->watch_bound_objects.get_connection()->signal_data = 
+	  saved_iter.release();
+        data->watch_bound_objects.get_connection()->signal_disconnect = 
+	  &signal_base_impl::slot_disconnected;
 
-        // If an exception is thrown the connection will automatically be
-        // disconnected.
-        scoped_connection safe_connection = slot_connection;
-
-        // Connect each of the bound objects
-        for(std::vector<const trackable*>::const_iterator i =
-              bound_objects.begin();
-            i != bound_objects.end();
-            ++i) {
-          // Notify the object that the signal is connecting to it by passing
-          // it a copy of the connection. If the connection
-          // should throw, the scoped connection safe_connection will
-          // disconnect the connection completely.
-          bound_object binding;
-          (*i)->signal_connected(slot_connection, binding);
-
-          // This will notify the bound object that the connection just made
-          // should be disconnected if an exception is thrown before the
-          // end of this iteration
-          auto_disconnect_bound_object disconnector(binding);
-
-          // Add the binding to the list of bindings for the connection.
-          con->bound_objects.push_back(binding);
-
-          // The connection object now knows about the bound object, so if an
-          // exception is thrown later the connection object will notify the
-          // bound object of the disconnection automatically
-          disconnector.release();
-        }
-
-        // No exceptions will be thrown past this point, and we must not
-        // disconnect the connection now
-        safe_connection.release();
-
-        return slot_connection;
+        // Make the copy of the connection in the list disconnect when it is
+        // destroyed. The local, scoped connection is then released
+	// because ownership has been transferred.
+        pos->first.set_controlling();
+        return safe_connection.release();
       }
 
       bool signal_base_impl::empty() const
