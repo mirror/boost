@@ -284,7 +284,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         size_type non_zeros () const {
-            return data_.size ();
+            return detail::map_capacity (data ());
         }
         BOOST_UBLAS_INLINE
         const array_type &data () const {
