@@ -91,9 +91,9 @@ namespace detail
 
   template <class T>
   struct read_write_proxy
-    : assign_proxy<T>
-    , read_proxy<T>
+    : read_proxy<T> // Use to inherit from assign_proxy, but that doesn't work. -JGS
   {
+    read_write_proxy& operator=(T);
   };
 
   template <class T>
