@@ -15,6 +15,7 @@
 
 #include <boost/config.hpp>
 #include <boost/iterator.hpp>
+#include <boost/type_traits/conversion_traits.hpp>
 #include <utility>
 #include <boost/type_traits/conversion_traits.hpp>
 #include <boost/static_assert.hpp>
