@@ -7,7 +7,7 @@
 <title>New Iterator Concepts</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, Zephyr Associates, Inc." />
-<meta name="date" content="2004-01-18" />
+<meta name="date" content="2004-01-19" />
 <meta name="copyright" content="Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved" />
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
@@ -26,7 +26,7 @@
 <td><a class="first reference" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="reference" href="http://www.osl.iu.edu">Open Systems
 Lab</a>, <a class="last reference" href="http://www.styleadvisor.com">Zephyr Associates, Inc.</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2004-01-18</td></tr>
+<td>2004-01-19</td></tr>
 <tr class="field"><th class="docinfo-name">Number:</th><td class="field-body">This is a revised version of <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1550.html">n1550</a>=03-0133, which was
 accepted for Technical Report 1 by the C++ standard
 committee's library working group. This proposal is a
@@ -601,9 +601,9 @@ single_pass_traversal_tag for consistency -->
 <div class="section" id="forward-traversal-iterators-lib-forward-traversal-iterators">
 <h4><a class="toc-backref" href="#id18" name="forward-traversal-iterators-lib-forward-traversal-iterators">Forward Traversal Iterators [lib.forward.traversal.iterators]</a></h4>
 <p>A class or built-in type <tt class="literal"><span class="pre">X</span></tt> models the <em>Forward Traversal Iterator</em>
-concept if, in addition to <tt class="literal"><span class="pre">X</span></tt> meeting the requirements of Single
-Pass Iterator, the following expressions are valid and respect the
-stated semantics.</p>
+concept if, in addition to <tt class="literal"><span class="pre">X</span></tt> meeting the requirements of Default
+Constructible and Single Pass Iterator, the following expressions are
+valid and respect the stated semantics.</p>
 <table border class="table">
 <colgroup>
 <col width="38%" />

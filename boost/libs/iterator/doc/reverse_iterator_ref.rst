@@ -85,13 +85,13 @@ operations.
 ``reverse_iterator();``
 
 :Requires: ``Iterator`` must be Default Constructible.
-:Returns: An instance of ``reverse_iterator`` with ``m_iterator`` 
+:Effects: Constructs an instance of ``reverse_iterator`` with ``m_iterator`` 
   default constructed.
 
 ``explicit reverse_iterator(Iterator x);``
 
-:Returns: An instance of ``reverse_iterator`` with a
-  ``m_iterator`` constructed from ``x``.
+:Effects: Constructs an instance of ``reverse_iterator`` with
+    ``m_iterator`` copy constructed from ``x``.
 
 
 ::
@@ -103,8 +103,8 @@ operations.
     );
 
 :Requires: ``OtherIterator`` is implicitly convertible to ``Iterator``.
-:Returns: An instance of ``reverse_iterator`` that is a copy of ``r``.
-
+:Effects: Constructs instance of ``reverse_iterator`` whose 
+    ``m_iterator`` subobject is constructed from ``y.base()``.
 
 
 

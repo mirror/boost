@@ -144,6 +144,9 @@ iterator templates based on the Boost `iterator facade and adaptor`_.
   underlying sequence.  This component also replaces the old
   ``projection_iterator_adaptor``.
 
+* |zip|_: an iterator over tuples of the elements at corresponding
+  positions of heterogeneous underlying iterators.
+
 .. |counting| replace:: ``counting_iterator``
 .. _counting: counting_iterator.html
 
@@ -161,6 +164,9 @@ iterator templates based on the Boost `iterator facade and adaptor`_.
 
 .. |transform| replace:: ``transform_iterator``
 .. _transform: transform_iterator.html
+
+.. |zip| replace:: ``zip_iterator``
+.. _zip: zip_iterator.html
 
 ====================
  Iterator Utilities

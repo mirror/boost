@@ -21,7 +21,7 @@
    public:
       iterator_adaptor();
       explicit iterator_adaptor(Base iter);
-      Base const const& base() const;
+      Base const& base() const;
    protected:
       Base const& base_reference() const;
       Base& base_reference();
@@ -54,9 +54,8 @@ __ base_parameters_
 ``iterator_adaptor`` requirements
 ---------------------------------
 
-The ``Base`` argument shall be Assignable and Copy
-Constructible. In addition,
 ``static_cast<Derived*>(iterator_adaptor*)`` shall be well-formed.
+The ``Base`` argument shall be Assignable and Copy Constructible.
 
 
 .. _base_parameters:
@@ -93,17 +92,18 @@ above are defined as follows:
          else
              return Difference
 
-``iterator_adaptor`` models
----------------------------
+.. ``iterator_adaptor`` models
+   ---------------------------
 
-In order for ``Derived`` to model the iterator concepts corresponding
-to ``iterator_traits<Derived>::iterator_category``, the expressions
-involving ``m_iterator`` in the specifications of those private member
-functions of ``iterator_adaptor`` that may be called by
-``iterator_facade<Derived, V, C, R, D>`` in evaluating any valid
-expression involving ``Derived`` in those concepts' requirements.
+   In order for ``Derived`` to model the iterator concepts corresponding
+   to ``iterator_traits<Derived>::iterator_category``, the expressions
+   involving ``m_iterator`` in the specifications of those private member
+   functions of ``iterator_adaptor`` that may be called by
+   ``iterator_facade<Derived, V, C, R, D>`` in evaluating any valid
+   expression involving ``Derived`` in those concepts' requirements.
 
 .. The above is confusing and needs a rewrite. -JGS
+.. That's why it's removed.  We're embracing inheritance, remember?
 
 ``iterator_adaptor`` public operations
 --------------------------------------

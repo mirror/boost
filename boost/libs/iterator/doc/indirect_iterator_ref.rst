@@ -128,13 +128,13 @@ following operations.
 ``indirect_iterator();``
 
 :Requires: ``Iterator`` must be Default Constructible.
-:Returns: An instance of ``indirect_iterator`` with 
+:Effects: Constructs an instance of ``indirect_iterator`` with 
    a default-constructed ``m_iterator``.
 
 
 ``indirect_iterator(Iterator x);``
 
-:Returns: An instance of ``indirect_iterator`` with
+:Effects: Constructs an instance of ``indirect_iterator`` with
     ``m_iterator`` copy constructed from ``x``.
 
 ::
@@ -151,7 +151,7 @@ following operations.
   );
 
 :Requires: ``Iterator2`` is implicitly convertible to ``Iterator``.
-:Returns: An instance of ``indirect_iterator`` whose 
+:Effects: Constructs an instance of ``indirect_iterator`` whose 
     ``m_iterator`` subobject is constructed from ``y.base()``.
 
 

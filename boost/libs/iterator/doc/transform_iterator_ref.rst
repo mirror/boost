@@ -87,17 +87,17 @@ If ``transform_iterator`` is a model of Readable Lvalue Iterator then
 it models the following original iterator concepts depending on what
 the ``Iterator`` argument models.
 
-+-----------------------------------+---------------------------------+
-| If ``Iterator`` models            | then ``filter_iterator`` models |
-+===================================+=================================+
-| Single Pass Iterator              | Input Iterator                  |
-+-----------------------------------+---------------------------------+
-| Forward Traversal Iterator        | Forward Iterator                |
-+-----------------------------------+---------------------------------+
-| Bidirectional Traversal Iterator  | Bidirectional Iterator          |
-+-----------------------------------+---------------------------------+
-| Random Access Traversal Iterator  | Random Access Iterator          |
-+-----------------------------------+---------------------------------+
++-----------------------------------+---------------------------------------+
+| If ``Iterator`` models            | then ``transform_iterator`` models    |
++===================================+=======================================+
+| Single Pass Iterator              | Input Iterator                        |
++-----------------------------------+---------------------------------------+
+| Forward Traversal Iterator        | Forward Iterator                      |
++-----------------------------------+---------------------------------------+
+| Bidirectional Traversal Iterator  | Bidirectional Iterator                |
++-----------------------------------+---------------------------------------+
+| Random Access Traversal Iterator  | Random Access Iterator                |
++-----------------------------------+---------------------------------------+
 
 If ``transform_iterator`` models Writable Lvalue Iterator then it is a
 mutable iterator (as defined in the old iterator requirements).

@@ -242,7 +242,7 @@ __ `operator arrow`_
    ::
 
       static_cast<Derived*>(this)->decrement();
-      return static_cast<Derived*>(this);
+      return *static_cast<Derived*>(this);
 
 
 ``Derived operator--(int);``
@@ -263,7 +263,7 @@ __ `operator arrow`_
   ::
 
       static_cast<Derived*>(this)->advance(n);
-      return static_cast<Derived*>(this);
+      return *static_cast<Derived*>(this);
 
 
 ``Derived& operator-=(difference_type n);``
@@ -273,7 +273,7 @@ __ `operator arrow`_
   ::
 
       static_cast<Derived*>(this)->advance(-n);
-      return static_cast<Derived*>(this);
+      return *static_cast<Derived*>(this);
 
 
 ``Derived operator-(difference_type n) const;``
@@ -302,8 +302,6 @@ __ `operator arrow`_
     Derived tmp(static_cast<Derived const*>(this));
     return tmp += n;
 
-``iterator_facade`` interoperability
-------------------------------------
 
 ::
 

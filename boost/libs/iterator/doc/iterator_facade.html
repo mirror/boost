@@ -55,28 +55,27 @@ and associated types, to be supplied by a derived iterator class.</td>
 <li><a class="reference" href="#reference" id="id28" name="id28">Reference</a><ul>
 <li><a class="reference" href="#iterator-facade-requirements" id="id29" name="id29"><tt class="literal"><span class="pre">iterator_facade</span></tt> Requirements</a></li>
 <li><a class="reference" href="#iterator-facade-operations" id="id30" name="id30"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
-<li><a class="reference" href="#iterator-facade-interoperability" id="id31" name="id31"><tt class="literal"><span class="pre">iterator_facade</span></tt> interoperability</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#tutorial-example" id="id32" name="id32">Tutorial Example</a><ul>
-<li><a class="reference" href="#the-problem" id="id33" name="id33">The Problem</a></li>
-<li><a class="reference" href="#a-basic-iterator-using-iterator-facade" id="id34" name="id34">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
-<li><a class="reference" href="#template-arguments-for-iterator-facade" id="id35" name="id35">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
-<li><a class="reference" href="#derived" id="id36" name="id36"><tt class="literal"><span class="pre">Derived</span></tt></a></li>
-<li><a class="reference" href="#value" id="id37" name="id37"><tt class="literal"><span class="pre">Value</span></tt></a></li>
-<li><a class="reference" href="#categoryortraversal" id="id38" name="id38"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></li>
-<li><a class="reference" href="#id12" id="id39" name="id39"><tt class="literal"><span class="pre">Reference</span></tt></a></li>
-<li><a class="reference" href="#difference" id="id40" name="id40"><tt class="literal"><span class="pre">Difference</span></tt></a></li>
+<li><a class="reference" href="#tutorial-example" id="id31" name="id31">Tutorial Example</a><ul>
+<li><a class="reference" href="#the-problem" id="id32" name="id32">The Problem</a></li>
+<li><a class="reference" href="#a-basic-iterator-using-iterator-facade" id="id33" name="id33">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
+<li><a class="reference" href="#template-arguments-for-iterator-facade" id="id34" name="id34">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
+<li><a class="reference" href="#derived" id="id35" name="id35"><tt class="literal"><span class="pre">Derived</span></tt></a></li>
+<li><a class="reference" href="#value" id="id36" name="id36"><tt class="literal"><span class="pre">Value</span></tt></a></li>
+<li><a class="reference" href="#categoryortraversal" id="id37" name="id37"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></li>
+<li><a class="reference" href="#id12" id="id38" name="id38"><tt class="literal"><span class="pre">Reference</span></tt></a></li>
+<li><a class="reference" href="#difference" id="id39" name="id39"><tt class="literal"><span class="pre">Difference</span></tt></a></li>
 </ul>
 </li>
-<li><a class="reference" href="#constructors-and-data-members" id="id41" name="id41">Constructors and Data Members</a></li>
-<li><a class="reference" href="#implementing-the-core-operations" id="id42" name="id42">Implementing the Core Operations</a></li>
+<li><a class="reference" href="#constructors-and-data-members" id="id40" name="id40">Constructors and Data Members</a></li>
+<li><a class="reference" href="#implementing-the-core-operations" id="id41" name="id41">Implementing the Core Operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#a-constant-node-iterator" id="id43" name="id43">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></li>
-<li><a class="reference" href="#interoperability" id="id44" name="id44">Interoperability</a></li>
-<li><a class="reference" href="#telling-the-truth" id="id45" name="id45">Telling the Truth</a></li>
-<li><a class="reference" href="#wrap-up" id="id46" name="id46">Wrap Up</a></li>
+<li><a class="reference" href="#a-constant-node-iterator" id="id42" name="id42">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></li>
+<li><a class="reference" href="#interoperability" id="id43" name="id43">Interoperability</a></li>
+<li><a class="reference" href="#telling-the-truth" id="id44" name="id44">Telling the Truth</a></li>
+<li><a class="reference" href="#wrap-up" id="id45" name="id45">Wrap Up</a></li>
 </ul>
 </li>
 </ul>
@@ -584,7 +583,7 @@ return tmp;
 <tbody valign="top">
 <tr class="field"><th class="field-name">Effects:</th><td class="field-body"><pre class="first last literal-block">
 static_cast&lt;Derived*&gt;(this)-&gt;decrement();
-return static_cast&lt;Derived*&gt;(this);
+return *static_cast&lt;Derived*&gt;(this);
 </pre>
 </td>
 </tr>
@@ -611,7 +610,7 @@ return tmp;
 <tbody valign="top">
 <tr class="field"><th class="field-name">Effects:</th><td class="field-body"><pre class="first last literal-block">
 static_cast&lt;Derived*&gt;(this)-&gt;advance(n);
-return static_cast&lt;Derived*&gt;(this);
+return *static_cast&lt;Derived*&gt;(this);
 </pre>
 </td>
 </tr>
@@ -624,7 +623,7 @@ return static_cast&lt;Derived*&gt;(this);
 <tbody valign="top">
 <tr class="field"><th class="field-name">Effects:</th><td class="field-body"><pre class="first last literal-block">
 static_cast&lt;Derived*&gt;(this)-&gt;advance(-n);
-return static_cast&lt;Derived*&gt;(this);
+return *static_cast&lt;Derived*&gt;(this);
 </pre>
 </td>
 </tr>
@@ -664,9 +663,6 @@ return tmp += n;
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="iterator-facade-interoperability">
-<h2><a class="toc-backref" href="#id31" name="iterator-facade-interoperability"><tt class="literal"><span class="pre">iterator_facade</span></tt> interoperability</a></h2>
 <pre class="literal-block">
 template &lt;class Dr1, class V1, class TC1, class R1, class D1,
           class Dr2, class V2, class TC2, class R2, class D2&gt;
@@ -792,7 +788,7 @@ operator -(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 </div>
 </div>
 <div class="section" id="tutorial-example">
-<h1><a class="toc-backref" href="#id32" name="tutorial-example">Tutorial Example</a></h1>
+<h1><a class="toc-backref" href="#id31" name="tutorial-example">Tutorial Example</a></h1>
 <!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
 <!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
@@ -802,7 +798,7 @@ example of a linked list of polymorphic objects.  This example was
 inspired by a <a class="reference" href="http://thread.gmane.org/gmane.comp.lib.boost.user/5100">posting</a> by Keith Macdonald on the <a class="reference" href="../../../more/mailing_lists.htm#users">Boost-Users</a>
 mailing list.</p>
 <div class="section" id="the-problem">
-<h2><a class="toc-backref" href="#id33" name="the-problem">The Problem</a></h2>
+<h2><a class="toc-backref" href="#id32" name="the-problem">The Problem</a></h2>
 <p>Say we've written a polymorphic linked list node base class:</p>
 <pre class="literal-block">
 # include &lt;iostream&gt;
@@ -864,7 +860,7 @@ inline std::ostream&amp; operator&lt;&lt;(std::ostream&amp; s, node_base const&a
 lists.</p>
 </div>
 <div class="section" id="a-basic-iterator-using-iterator-facade">
-<h2><a class="toc-backref" href="#id34" name="a-basic-iterator-using-iterator-facade">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id33" name="a-basic-iterator-using-iterator-facade">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h2>
 <p>We will construct a <tt class="literal"><span class="pre">node_iterator</span></tt> class using inheritance from
 <tt class="literal"><span class="pre">iterator_facade</span></tt> to implement most of the iterator's operations.</p>
 <pre class="literal-block">
@@ -878,24 +874,24 @@ class node_iterator
 };
 </pre>
 <div class="section" id="template-arguments-for-iterator-facade">
-<h3><a class="toc-backref" href="#id35" name="template-arguments-for-iterator-facade">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h3>
+<h3><a class="toc-backref" href="#id34" name="template-arguments-for-iterator-facade">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h3>
 <p><tt class="literal"><span class="pre">iterator_facade</span></tt> has several template parameters, so we must decide
 what types to use for the arguments. The parameters are <tt class="literal"><span class="pre">Derived</span></tt>,
 <tt class="literal"><span class="pre">Value</span></tt>, <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>, <tt class="literal"><span class="pre">Reference</span></tt>, and <tt class="literal"><span class="pre">Difference</span></tt>.</p>
 <div class="section" id="derived">
-<h4><a class="toc-backref" href="#id36" name="derived"><tt class="literal"><span class="pre">Derived</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id35" name="derived"><tt class="literal"><span class="pre">Derived</span></tt></a></h4>
 <p>Because <tt class="literal"><span class="pre">iterator_facade</span></tt> is meant to be used with the CRTP
 <a class="citation-reference" href="#cop95" id="id10" name="id10">[Cop95]</a> the first parameter is the iterator class name itself,
 <tt class="literal"><span class="pre">node_iterator</span></tt>.</p>
 </div>
 <div class="section" id="value">
-<h4><a class="toc-backref" href="#id37" name="value"><tt class="literal"><span class="pre">Value</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id36" name="value"><tt class="literal"><span class="pre">Value</span></tt></a></h4>
 <p>The <tt class="literal"><span class="pre">Value</span></tt> parameter determines the <tt class="literal"><span class="pre">node_iterator</span></tt>'s
 <tt class="literal"><span class="pre">value_type</span></tt>.  In this case, we are iterating over <tt class="literal"><span class="pre">node_base</span></tt>
 objects, so <tt class="literal"><span class="pre">Value</span></tt> will be <tt class="literal"><span class="pre">node_base</span></tt>.</p>
 </div>
 <div class="section" id="categoryortraversal">
-<h4><a class="toc-backref" href="#id38" name="categoryortraversal"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id37" name="categoryortraversal"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></h4>
 <p>Now we have to determine which <a class="reference" href="new-iter-concepts.html#iterator-traversal-concepts-lib-iterator-traversal">iterator traversal concept</a> our
 <tt class="literal"><span class="pre">node_iterator</span></tt> is going to model.  Singly-linked lists only have
 forward links, so our iterator can't can't be a <a class="reference" href="new-iter-concepts.html#bidirectional-traversal-iterators-lib-bidirectional-traversal-iterators">bidirectional
@@ -915,7 +911,7 @@ end up being <tt class="literal"><span class="pre">std::forward_iterator_tag</sp
 </table>
 </div>
 <div class="section" id="id12">
-<h4><a class="toc-backref" href="#id39" name="id12"><tt class="literal"><span class="pre">Reference</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id38" name="id12"><tt class="literal"><span class="pre">Reference</span></tt></a></h4>
 <p>The <tt class="literal"><span class="pre">Reference</span></tt> argument becomes the type returned by
 <tt class="literal"><span class="pre">node_iterator</span></tt>'s dereference operation, and will also be the
 same as <tt class="literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::reference</span></tt>.  The
@@ -924,7 +920,7 @@ library's default for this parameter is <tt class="literal"><span class="pre">Va
 type, we can omit this argument, or pass <tt class="literal"><span class="pre">use_default</span></tt>.</p>
 </div>
 <div class="section" id="difference">
-<h4><a class="toc-backref" href="#id40" name="difference"><tt class="literal"><span class="pre">Difference</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id39" name="difference"><tt class="literal"><span class="pre">Difference</span></tt></a></h4>
 <p>The <tt class="literal"><span class="pre">Difference</span></tt> argument determines how the distance between
 two <tt class="literal"><span class="pre">node_iterator</span></tt>s will be measured and will also be the
 same as <tt class="literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::difference_type</span></tt>.
@@ -951,7 +947,7 @@ class node_iterator
 </div>
 </div>
 <div class="section" id="constructors-and-data-members">
-<h3><a class="toc-backref" href="#id41" name="constructors-and-data-members">Constructors and Data Members</a></h3>
+<h3><a class="toc-backref" href="#id40" name="constructors-and-data-members">Constructors and Data Members</a></h3>
 <p>Next we need to decide how to represent the iterator's position.
 This representation will take the form of data members, so we'll
 also need to write constructors to initialize them.  The
@@ -996,7 +992,7 @@ default constructor to leave <tt class="literal"><span class="pre">m_node</span>
 </table>
 </div>
 <div class="section" id="implementing-the-core-operations">
-<h3><a class="toc-backref" href="#id42" name="implementing-the-core-operations">Implementing the Core Operations</a></h3>
+<h3><a class="toc-backref" href="#id41" name="implementing-the-core-operations">Implementing the Core Operations</a></h3>
 <p>The last step is to implement the <a class="reference" href="#core-operations">core operations</a> required by
 the concepts we want our iterator to model.  Referring to the
 <a class="reference" href="#core-operations">table</a>, we can see that the first three rows are applicable
@@ -1047,7 +1043,7 @@ iterator!  For a working example of its use, see <a class="reference" href="../e
 </div>
 </div>
 <div class="section" id="a-constant-node-iterator">
-<h2><a class="toc-backref" href="#id43" name="a-constant-node-iterator">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id42" name="a-constant-node-iterator">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></h2>
 <div class="sidebar">
 <p class="sidebar-title">Constant and Mutable iterators</p>
 <p>The term <strong>mutable iterator</strong> means an iterator through which
@@ -1148,7 +1144,7 @@ typedef node_iter&lt;node_base const&gt; node_const_iterator;
 </pre>
 </div>
 <div class="section" id="interoperability">
-<h2><a class="toc-backref" href="#id44" name="interoperability">Interoperability</a></h2>
+<h2><a class="toc-backref" href="#id43" name="interoperability">Interoperability</a></h2>
 <p>Our <tt class="literal"><span class="pre">const_node_iterator</span></tt> works perfectly well on its own, but
 taken together with <tt class="literal"><span class="pre">node_iterator</span></tt> it doesn't quite meet
 expectations.  For example, we'd like to be able to pass a
@@ -1221,7 +1217,7 @@ traversal iterator</a>, we'd have had to templatize its
 iterators <a class="reference" href="../example/node_iterator2.cpp">here</a>.</p>
 </div>
 <div class="section" id="telling-the-truth">
-<h2><a class="toc-backref" href="#id45" name="telling-the-truth">Telling the Truth</a></h2>
+<h2><a class="toc-backref" href="#id44" name="telling-the-truth">Telling the Truth</a></h2>
 <p>Now <tt class="literal"><span class="pre">node_iterator</span></tt> and <tt class="literal"><span class="pre">node_const_iterator</span></tt> behave exactly as
 you'd expect... almost.  We can compare them and we can convert in
 one direction: from <tt class="literal"><span class="pre">node_iterator</span></tt> to <tt class="literal"><span class="pre">node_const_iterator</span></tt>.
@@ -1259,7 +1255,7 @@ appropriate:</p>
 </pre>
 </div>
 <div class="section" id="wrap-up">
-<h2><a class="toc-backref" href="#id46" name="wrap-up">Wrap Up</a></h2>
+<h2><a class="toc-backref" href="#id45" name="wrap-up">Wrap Up</a></h2>
 <p>This concludes our <tt class="literal"><span class="pre">iterator_facade</span></tt> tutorial, but before you
 stop reading we urge you to take a look at <a class="reference" href="iterator_adaptor.html"><tt class="literal"><span class="pre">iterator_adaptor</span></tt></a>.
 There's another way to approach writing these iterators which might

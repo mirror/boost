@@ -7,7 +7,7 @@
   >
   class counting_iterator
   {
-   public:
+  public:
       typedef Incrementable value_type;
       typedef const Incrementable& reference;
       typedef const Incrementable* pointer;
@@ -21,9 +21,9 @@
       reference operator*() const;
       counting_iterator& operator++();
       counting_iterator& operator--();
-   private:
+  private:
       Incrementable m_inc; // exposition
-    };
+  };
 
 
 If the ``Difference`` argument is ``use_default`` then

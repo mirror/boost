@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
 <title>Iterator Adaptor</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
@@ -61,13 +61,12 @@ core interface functions of <tt class="literal"><span class="pre">iterator_facad
 <li><a class="reference" href="#reference" id="id7" name="id7">Reference</a><ul>
 <li><a class="reference" href="#iterator-adaptor-requirements" id="id8" name="id8"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> requirements</a></li>
 <li><a class="reference" href="#iterator-adaptor-base-class-parameters" id="id9" name="id9"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></li>
-<li><a class="reference" href="#iterator-adaptor-models" id="id10" name="id10"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> models</a></li>
-<li><a class="reference" href="#iterator-adaptor-public-operations" id="id11" name="id11"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></li>
-<li><a class="reference" href="#iterator-adaptor-protected-member-functions" id="id12" name="id12"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></li>
-<li><a class="reference" href="#iterator-adaptor-private-member-functions" id="id13" name="id13"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> private member functions</a></li>
+<li><a class="reference" href="#iterator-adaptor-public-operations" id="id10" name="id10"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></li>
+<li><a class="reference" href="#iterator-adaptor-protected-member-functions" id="id11" name="id11"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></li>
+<li><a class="reference" href="#iterator-adaptor-private-member-functions" id="id12" name="id12"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> private member functions</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#tutorial-example" id="id14" name="id14">Tutorial Example</a></li>
+<li><a class="reference" href="#tutorial-example" id="id13" name="id13">Tutorial Example</a></li>
 </ul>
 </div>
 <div class="section" id="overview">
@@ -133,7 +132,7 @@ class iterator_adaptor
  public:
     iterator_adaptor();
     explicit iterator_adaptor(Base iter);
-    Base const const&amp; base() const;
+    Base const&amp; base() const;
  protected:
     Base const&amp; base_reference() const;
     Base&amp; base_reference();
@@ -161,9 +160,8 @@ class iterator_adaptor
 </pre>
 <a class="target" id="requirements" name="requirements"></a><div class="section" id="iterator-adaptor-requirements">
 <h2><a class="toc-backref" href="#id8" name="iterator-adaptor-requirements"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> requirements</a></h2>
-<p>The <tt class="literal"><span class="pre">Base</span></tt> argument shall be Assignable and Copy
-Constructible. In addition,
-<tt class="literal"><span class="pre">static_cast&lt;Derived*&gt;(iterator_adaptor*)</span></tt> shall be well-formed.</p>
+<p><tt class="literal"><span class="pre">static_cast&lt;Derived*&gt;(iterator_adaptor*)</span></tt> shall be well-formed.
+The <tt class="literal"><span class="pre">Base</span></tt> argument shall be Assignable and Copy Constructible.</p>
 <a class="target" id="base-parameters" name="base-parameters"></a></div>
 <div class="section" id="iterator-adaptor-base-class-parameters">
 <h2><a class="toc-backref" href="#id9" name="iterator-adaptor-base-class-parameters"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></h2>
@@ -194,19 +192,20 @@ above are defined as follows:</p>
       else
           return Difference
 </pre>
-</div>
-<div class="section" id="iterator-adaptor-models">
-<h2><a class="toc-backref" href="#id10" name="iterator-adaptor-models"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> models</a></h2>
-<p>In order for <tt class="literal"><span class="pre">Derived</span></tt> to model the iterator concepts corresponding
-to <tt class="literal"><span class="pre">iterator_traits&lt;Derived&gt;::iterator_category</span></tt>, the expressions
-involving <tt class="literal"><span class="pre">m_iterator</span></tt> in the specifications of those private member
-functions of <tt class="literal"><span class="pre">iterator_adaptor</span></tt> that may be called by
-<tt class="literal"><span class="pre">iterator_facade&lt;Derived,</span> <span class="pre">V,</span> <span class="pre">C,</span> <span class="pre">R,</span> <span class="pre">D&gt;</span></tt> in evaluating any valid
-expression involving <tt class="literal"><span class="pre">Derived</span></tt> in those concepts' requirements.</p>
+<!-- ``iterator_adaptor`` models
+- - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+In order for ``Derived`` to model the iterator concepts corresponding
+to ``iterator_traits<Derived>::iterator_category``, the expressions
+involving ``m_iterator`` in the specifications of those private member
+functions of ``iterator_adaptor`` that may be called by
+``iterator_facade<Derived, V, C, R, D>`` in evaluating any valid
+expression involving ``Derived`` in those concepts' requirements. -->
 <!-- The above is confusing and needs a rewrite. -JGS -->
+<!-- That's why it's removed.  We're embracing inheritance, remember? -->
 </div>
 <div class="section" id="iterator-adaptor-public-operations">
-<h2><a class="toc-backref" href="#id11" name="iterator-adaptor-public-operations"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></h2>
+<h2><a class="toc-backref" href="#id10" name="iterator-adaptor-public-operations"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></h2>
 <p><tt class="literal"><span class="pre">iterator_adaptor();</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -240,7 +239,7 @@ expression involving <tt class="literal"><span class="pre">Derived</span></tt> i
 </table>
 </div>
 <div class="section" id="iterator-adaptor-protected-member-functions">
-<h2><a class="toc-backref" href="#id12" name="iterator-adaptor-protected-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></h2>
+<h2><a class="toc-backref" href="#id11" name="iterator-adaptor-protected-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></h2>
 <p><tt class="literal"><span class="pre">Base</span> <span class="pre">const&amp;</span> <span class="pre">base_reference()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -261,7 +260,7 @@ expression involving <tt class="literal"><span class="pre">Derived</span></tt> i
 </table>
 </div>
 <div class="section" id="iterator-adaptor-private-member-functions">
-<h2><a class="toc-backref" href="#id13" name="iterator-adaptor-private-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> private member functions</a></h2>
+<h2><a class="toc-backref" href="#id12" name="iterator-adaptor-private-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> private member functions</a></h2>
 <p><tt class="literal"><span class="pre">typename</span> <span class="pre">iterator_adaptor::reference</span> <span class="pre">dereference()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -330,7 +329,7 @@ typename iterator_adaptor::difference_type distance_to(
 </div>
 </div>
 <div class="section" id="tutorial-example">
-<h1><a class="toc-backref" href="#id14" name="tutorial-example">Tutorial Example</a></h1>
+<h1><a class="toc-backref" href="#id13" name="tutorial-example">Tutorial Example</a></h1>
 <!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
 <!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
@@ -436,11 +435,6 @@ adaptors</a> to get an idea of the sorts of things you can do with
 adaptor, and also <a class="reference" href="counting_iterator.html"><tt class="literal"><span class="pre">counting_iterator</span></tt></a>, which demonstrates that
 <tt class="literal"><span class="pre">iterator_adaptor</span></tt>'s <tt class="literal"><span class="pre">Base</span></tt> type needn't be an iterator.</p>
 </div>
-</div>
-<hr class="footer" />
-<div class="footer">
-<a class="reference" href="iterator_adaptor.rst">View document source</a>.
-Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
 </html>

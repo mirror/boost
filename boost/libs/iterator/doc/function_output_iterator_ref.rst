@@ -40,8 +40,8 @@ Incrementable Iterator concepts.
 
 ``explicit function_output_iterator(const UnaryFunction& f = UnaryFunction());``
 
-:Returns: An instance of ``function_output_iterator`` with
-  ``m_f`` constructed from ``f``.
+:Effects: Constructs an instance of ``function_output_iterator`` 
+  with ``m_f`` constructed from ``f``.
 
 
 ``operator*();``

@@ -290,7 +290,7 @@ Header ``<iterator_helper>`` synopsis    [lib.iterator.helper.synopsis]
     , class CategoryOrTraversal  = use_default
     , class Difference = use_default
   >
-  class counting_iterator
+  class counting_iterator;
 
   template <class UnaryFunction>
   class function_output_iterator;

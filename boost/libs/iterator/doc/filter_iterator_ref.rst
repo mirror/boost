@@ -44,16 +44,15 @@ convertible to ``std::input_iterator_tag``.
 ``filter_iterator`` requirements
 ................................
 
+The ``Iterator`` argument shall meet the requirements of Readable
+Iterator and Single Pass Iterator or it shall meet the requirements of
+Input Iterator.
+
 The ``Predicate`` argument must be Assignable, Copy Constructible, and
 the expression ``p(x)`` must be valid where ``p`` is an object of type
 ``Predicate``, ``x`` is an object of type
 ``iterator_traits<Iterator>::value_type``, and where the type of
 ``p(x)`` must be convertible to ``bool``.
-
-The ``Iterator`` argument shall meet the requirements of Readable
-Iterator and Single Pass Iterator or it shall meet the requirements of
-Input Iterator.
-
 
 
 ``filter_iterator`` models
@@ -107,13 +106,13 @@ operations.
 ``filter_iterator();``
 
 :Requires: ``Predicate`` and ``Iterator`` must be Default Constructible.
-:Returns: a ``filter_iterator`` whose``m_pred``,  ``m_iter``, and ``m_end`` 
+:Effects: Constructs a ``filter_iterator`` whose``m_pred``,  ``m_iter``, and ``m_end`` 
   members are a default constructed.
 
 
 ``filter_iterator(Predicate f, Iterator x, Iterator end = Iterator());``
 
-:Returns: A ``filter_iterator`` where ``m_iter`` is either
+:Effects: Constructs a ``filter_iterator`` where ``m_iter`` is either
     the first position in the range ``[x,end)`` such that ``f(*m_iter) == true`` 
     or else``m_iter == end``. The member ``m_pred`` is constructed from
     ``f`` and ``m_end`` from ``end``.
@@ -124,7 +123,7 @@ operations.
 
 :Requires: ``Predicate`` must be Default Constructible and
   ``Predicate`` is a class type (not a function pointer).
-:Returns: A ``filter_iterator`` where ``m_iter`` is either
+:Effects: Constructs a ``filter_iterator`` where ``m_iter`` is either
     the first position in the range ``[x,end)`` such that ``m_pred(*m_iter) == true`` 
     or else``m_iter == end``. The member ``m_pred`` is default constructed.
 
@@ -138,7 +137,7 @@ operations.
         );``
 
 :Requires: ``OtherIterator`` is implicitly convertible to ``Iterator``.
-:Returns: A filter iterator whose members are copied from ``t``.
+:Effects: Constructs a filter iterator whose members are copied from ``t``.
 
 
 ``Predicate predicate() const;``

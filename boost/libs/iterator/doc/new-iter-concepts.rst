@@ -519,9 +519,9 @@ Forward Traversal Iterators [lib.forward.traversal.iterators]
 -------------------------------------------------------------
 
 A class or built-in type ``X`` models the *Forward Traversal Iterator*
-concept if, in addition to ``X`` meeting the requirements of Single
-Pass Iterator, the following expressions are valid and respect the
-stated semantics.
+concept if, in addition to ``X`` meeting the requirements of Default
+Constructible and Single Pass Iterator, the following expressions are
+valid and respect the stated semantics.
 
 +--------------------------------------------------------------------------------------------------------+
 |Forward Traversal Iterator Requirements (in addition to Default Constructible and Single Pass Iterator) |
