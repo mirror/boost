@@ -148,7 +148,7 @@ public:
               const_sub_array<T,NumDims,OPtr>& rhs) :
     super_type(rhs) {
     allocate_space();
-    std::copy(rhs.begin(),rhs.end(),begin());
+    std::copy(rhs.begin(),rhs.end(),this->begin());
   }
 
   // For some reason, gcc 2.95.2 doesn't pick the above template
@@ -158,7 +158,7 @@ public:
               sub_array<T,NumDims>& rhs) :
     super_type(rhs) {
     allocate_space();
-    std::copy(rhs.begin(),rhs.end(),super_type::begin());
+    std::copy(rhs.begin(),rhs.end(),this->begin());
   }
 
   // Since assignment is a deep copy, multi_array_ref 
@@ -217,8 +217,8 @@ public:
                    detail::multi_array::populate_index_ranges());
 
     // Build same-shape views of the two arrays
-    multi_array::array_view<3>::type view_old = (*this)[old_idxes];
-    multi_array::array_view<3>::type view_new = new_array[new_idxes];
+    typename multi_array::array_view<3>::type view_old = (*this)[old_idxes];
+    typename multi_array::array_view<3>::type view_new = new_array[new_idxes];
 
     // Set the right portion of the new array
     view_new = view_old;
@@ -248,9 +248,9 @@ public:
 private:
   void allocate_space() {
     typename Allocator::const_pointer no_hint=0;
-    base_ = allocator_.allocate(super_type::num_elements(),no_hint);
-    super_type::set_base_ptr(base_);
-    allocated_elements_ = super_type::num_elements();
+    base_ = allocator_.allocate(this->num_elements(),no_hint);
+    this->set_base_ptr(base_);
+    allocated_elements_ = this->num_elements();
     std::uninitialized_fill_n(base_,allocated_elements_,T());
   }
 
