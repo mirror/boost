@@ -36,9 +36,9 @@ public:
         {}
 
 protected:
-    virtual  string_type  do_truename() const
+    virtual  base_type::string_type  do_truename() const
         { return "eurt"; }
-    virtual  string_type  do_falsename() const
+    virtual  base_type::string_type  do_falsename() const
         { return "eslaf"; }
 };
 
