@@ -24,7 +24,7 @@ TODO (known issues):
 CHANGELOG
 
 - Fixed a bug in the white space eating component, which prevented a C++ 
-  comment to be supressed if it followed after another whitespace.
+  comment to be suppressed if it followed after another whitespace.
 - Fixed the inconsistencies between the documentation and the behaviour wrt the 
   different include search paths. See the Wave driver docs for details of how
   the '-I', '-I-', and '-S' options work.
@@ -36,7 +36,7 @@ CHANGELOG
   tokens (instead of beeing igored completely).
 - Fixed a bug in the white space eater component.
 - Fixed a bug which reported wrong line numbers for error encountered during 
-  retokenisation (concatenation).
+  retokenisation (concatination).
 - Fixed a bug in the unescaping code.
 - Fixed a compilation error of the testwave executable (added a missing 
   namespace specifier).
@@ -54,6 +54,10 @@ CHANGELOG
 - If the comments should not be preserved every C comment containing at minimum 
   one newline is now converted to a newline token.
 - Added the lexed_tokens sample.
+- Fixed warnings and errors reported by the CodeWarrior compiler.
+- Added the '$V' replacement string to the testwave application. It expands to 
+  the current BOOST_LIB_VERSION.
+- Diagnosed the attempt to redefine the alternative operators as and, or etc.
 
 Tue Mar 22 14:52:45 WEST 2005
 Version 1.1.15

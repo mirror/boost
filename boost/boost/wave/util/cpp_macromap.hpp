@@ -213,6 +213,11 @@ macromap<ContextT>::add_macro(token_type const &name, bool has_parameters,
         BOOST_WAVE_THROW(preprocess_exception, illegal_redefinition, 
             name.get_value(), main_pos);
     }
+    if (AltExtTokenType == (token_id(name) & ExtTokenOnlyMask)) {
+    // exclude special operator names
+        BOOST_WAVE_THROW(preprocess_exception, illegal_operator_redefinition, 
+            name.get_value(), main_pos);
+    }
     
 // try to define the new macro
 defined_macros_type *current_scope = scope ? scope : current_macros;

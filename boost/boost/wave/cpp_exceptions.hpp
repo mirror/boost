@@ -153,7 +153,8 @@ public:
         undefined_macroname,
         invalid_macroname,
         unexpected_qualified_name,
-        division_by_zero
+        division_by_zero,
+        illegal_operator_redefinition
     };
 
     preprocess_exception(char const *what_, error_code code, int line_, 
@@ -218,11 +219,12 @@ public:
             "a macro or scope name",                    // alreadydefined_name
             "undefined macro or scope name may not be imported", // undefined_macroname
             "ill formed macro name",                    // invalid_macroname
-            "qualified names are supported in C++0x mode only",   // unexpected_qualified_name
-            "division by zero in preprocessor expression"   // division_by_zero
+            "qualified names are supported in C++0x mode only",  // unexpected_qualified_name
+            "division by zero in preprocessor expression",       // division_by_zero
+            "this macro name cannot be used as a as it is an operator in C++"  // illegal_operator_redefinition
         };
         BOOST_ASSERT(unexpected_error <= code && 
-            code <= division_by_zero);
+            code <= illegal_operator_redefinition);
         return preprocess_exception_errors[code];
     }
 
@@ -259,10 +261,11 @@ public:
             util::severity_error,              // undefined_macroname
             util::severity_error,              // invalid_macroname
             util::severity_error,              // unexpected_qualified_name
-            util::severity_fatal               // division_by_zero
+            util::severity_fatal,              // division_by_zero
+            util::severity_error               // illegal_operator_redefinition
         };
         BOOST_ASSERT(unexpected_error <= code && 
-            code <= division_by_zero);
+            code <= illegal_operator_redefinition);
         return preprocess_exception_severity[code];
     }
     static char const *severity_text(int code)

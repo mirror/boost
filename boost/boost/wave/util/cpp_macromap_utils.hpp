@@ -154,6 +154,30 @@ is_special_macroname (StringT const &name)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+//  Test, whether a given identifier resolves to a operator name
+//
+///////////////////////////////////////////////////////////////////////////////
+//template <typename StringT>
+//inline bool 
+//is_operator_macroname (StringT const &name)
+//{
+//    if (name.size() < 2 || name.size() > 6)
+//        return false;
+//        
+//    if (str == "and"    || str == "and_eq" || 
+//        str == "bitand" || str == "bitor" ||
+//        str == "compl"  || 
+//        str == "not"    || str == "not_eq" || 
+//        str == "or"     || str == "or_eq" || 
+//        str == "xor"    || str == "xor_eq")
+//    {
+//        return true;
+//    }
+//    return false;
+//}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 //  Test, whether two tokens are to be considered equal (different sequences
 //  of whitespace are considered to be equal)
 //
