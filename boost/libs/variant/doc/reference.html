@@ -46,6 +46,8 @@
                 Header &quot;boost/get.hpp&quot;: <a href="#ValueExtraction"><code>get</code></a></li>
             <li>
                 Header &quot;boost/incomplete.hpp&quot;: <a href="#incomplete"><code>incomplete</code></a></li>
+            <li>
+                Header &quot;boost/empty.hpp&quot;: <a href="#empty"><code>empty</code></a></li>
         </ul>
         <hr>
         <h2>Header <code>&quot;boost/variant.hpp&quot;</code></h2>
@@ -107,17 +109,19 @@ each of the variant's <A HREF=#BoundedType">bounded types</A>, is a
         <p>Additional requirements on visitors are as follows:</p>
         <ul>
             <li>
-                Must expose inner type <code>result_type</code>. <!-- (See 
-<code><a href="#visitor_ptr">visitor_ptr</a></code>
+                Must expose inner type <code>result_type</code>,
+		or - alternatively - derive from
+		<a href="#StaticVisitor"><code>static_visitor</code></a>.
+		<!-- (See <code><a href="#visitor_ptr">visitor_ptr</a></code>
                 wrapper for a solution to functions as visitors.)--> </li>
             <li>
-                Each operation of the function object must return a value 
-                implicitly-convertible to <code>result_type</code>.</li>
+                Each overload of <code>operator()</code>must return a value
+                that is implicitly-convertible to <code>result_type</code>.</li>
         </ul>
         <h3><b>Examples:</b></h3>
-        <p>The following class is a visitor of a number of <code>variant</code> types 
-            (e.g., explicitly: <code>variant&lt;int, std::string&gt;</code>, or implicitly: <code>
-                variant&lt;short, std::string&gt;</code>, etc.):</p>
+        <p>The following class is a visitor of a number of <code>variant</code> types
+            (e.g., explicitly: <code>variant&lt;int,std::string&gt;</code>, or implicitly: <code>
+                variant&lt;short,std::string&gt;</code>, etc.):</p>
         <pre>class my_visitor
 {
     typedef int result_type;
@@ -132,16 +136,16 @@ each of the variant's <A HREF=#BoundedType">bounded types</A>, is a
         return s.length();
     }
 };</pre>
-        <p>Another example is the following class, which exposes a templated function 
-            operator, allowing it to operate on values of many types. Thus, the following 
-            class is a visitor of any <code>variant</code> whose bounded types each support 
+        <p>Another example is the following class, which exposes a templated function
+            operator, allowing it to operate on values of many types. Thus, the following
+            class is a visitor of any <code>variant</code> whose bounded types each support
             streaming output:</p>
         <pre>class printer
 {
     typedef void result_type;
 
     template &lt;typename T&gt;
-      void operator()(const T&amp; t)
+    void operator()(const T&amp; t)
     {
         std::cout &lt;&lt; t &lt;&lt; '\n';
     }
@@ -177,21 +181,22 @@ public: // <i><a href="#variant-modifiers">modifiers</a></i>
 
     variant &amp; <a href="#variant-swap">swap</a>(variant &amp;);
     variant &amp; <a href="#variant-copy-assign">operator=</a>(const variant &amp;);
+
     template &lt;typename OperandType&gt;
-      variant &amp; <a href="#variant-template-assign">operator=</a>(const OperandType &amp;);
+    variant &amp; <a href="#variant-template-assign">operator=</a>(const OperandType &amp;);
 
 public: // <i><a href="#variant-queries">queries</a></i>
 
     int <a href="#variant-which">which</a>() const;
     const std::type_info &amp; <a href="#variant-type">type</a>() const;
 
-    bool <a href="#variant-empty">empty</a>() const; // always false (<a href="../../any/index.html#any">boost::any</a> compatibility)
+    bool <a href="#variant-empty">empty</a>() const;
 
 private: // <i>representation</i>
     ...
 };</pre>
-        <p>An instance of <code>variant</code> contains exactly one instance of one of its 
-            bounded types, which are specified as arguments to <code>variant</code>'s 
+        <p>An instance of <code>variant</code> contains exactly one instance of one of its
+            bounded types, which are specified as arguments to <code>variant</code>'s
             template parameter list. The length of <code>variant</code>'s template 
             parameter list is equal to the implementation defined value <a href="#BOOST_VARIANT_LIMIT_TYPES">
                 <code>BOOST_VARIANT_LIMIT_TYPES</code></a>.</p>
@@ -199,8 +204,8 @@ private: // <i>representation</i>
             requirements. Note that&nbsp; <code>variant</code> itself satisfies <a href="#BoundedType">
                 <i>BoundedType</i></a> requirements with default construction.
         </p>
-        <p>All members of <code>variant</code> satisfy the strong guarantee of 
-            exception-safety, unless otherwise specified.</p>
+        <p>All members of <code>variant</code> satisfy the strong guarantee of
+            exception-safety.</p>
         <blockquote>
             <hr>
             <h3><a name="variant-structors">Structors</a></h3>
@@ -224,12 +229,12 @@ private: // <i>representation</i>
                 <li>
                     If <code>OperandType</code> is <b>not a <code>variant</code></b>:<ul>
                         <li>
-                            If <code>OperandType</code> is one of the bounded types of the <code>variant</code>, 
+                            If <code>OperandType</code> is one of the bounded types of the <code>variant</code>,
                             initialize <code>*this</code> with a copy of <code>operand</code>.</li>
                         <li>
-                            Otherwise, use overload resolution rules to find the best conversion for <code>OperandType</code>, 
-                            and initialize <code>*this</code> with a copy of the converted <code>operand</code>. 
-                            (However, if the conversion is ambiguous, or if none exists, a compiler error 
+                            Otherwise, use overload resolution rules to find the best conversion for <code>OperandType</code>,
+                            and initialize <code>*this</code> with a copy of the converted <code>operand</code>.
+                            (However, if the conversion is ambiguous, or if none exists, a compiler error
                             is generated.)</li>
                     </ul>
                 </li>
@@ -237,11 +242,11 @@ private: // <i>representation</i>
                     Otherwise (i.e: <code>OperandType</code> <b>is a <code>variant</code></b>):
                     <ul>
                         <li>
-                            If <code>OperandType</code> does not appear on <code>*this</code>'s set of 
-                            types, then <code>*this</code> is initialized with <code>operand</code>'s held 
+                            If <code>OperandType</code> does not appear on <code>*this</code>'s set of
+                            types, then <code>*this</code> is initialized with <code>operand</code>'s held
                             value (as described in item 1, above).</li>
                         <li>
-                            Otherwise, <code>operand</code> is assigned, as-is, into <code>*this</code>. 
+                            Otherwise, <code>operand</code> is assigned, as-is, into <code>*this</code>.
                             Hence, the held value of <code>*this</code> is, by itself, a variant.</li>
                     </ul>
                 </li>
@@ -250,43 +255,47 @@ private: // <i>representation</i>
             </p>
             <pre><a name="variant-dtor">~variant</a>();
 </pre>
-            <p>Non-throwing destructor that releases all resources used in management of <code>*this</code>, 
+            <p>Non-throwing destructor that releases all resources used in management of <code>*this</code>,
                 including the currently contained value.
             </p>
-            <h3>Modifiers</h3>
+            <a name="variant-modifiers"><h3>Modifiers</h3></a>
             <pre>void <a name="variant-swap">swap</a>(variant&amp; other);
 </pre>
-            <p>Exchanges contents of <code>*this</code> and <code>other</code>. May fail with 
+            <p>Exchanges contents of <code>*this</code> and <code>other</code>. May fail with
                 any exceptions arising from the copy constructors of the contained types of <code>*this</code>
-                or <code>other</code>, or from the swap primitive of the held values, if <code>this-&gt;type() 
+                or <code>other</code>, or from the swap primitive of the held values, if <code>this-&gt;type()
                     == other.type()</code>.<br>
             </p>
             <pre>variant&amp; <a name="variant-copy-assign">operator=</a>(const variant&amp; rhs);
 </pre>
-            <p>Copy assignment. Assigns <code>rhs</code>'s contained value into <code>*this</code>. 
+            <p>Copy assignment. Assigns <code>rhs</code>'s contained value into <code>*this</code>.
                 The old value contained by <code>*this</code> is properly destroyed.</p>
-            <p>Note: this operator follows the same logic as the <a href="#CopyConstructor">copy 
+            <p>Note: this operator follows the same logic as the <a href="#CopyConstructor">copy
                     constructor</a>.</p>
-            <pre>template&lt;class OperandType&gt;
-  variant&amp; operator=(const OperandType &amp;);
+            <a name="variant-template-assign"></a>
+	    <pre>template&lt;class OperandType&gt;
+variant&amp; operator=(const OperandType &amp;);
 </pre>
-            <p>Templated assignment. Assigns <code>rhs</code> into <code>*this</code>. The old 
+            <p>Templated assignment. Assigns <code>rhs</code> into <code>*this</code>. The old
                 value held by <code>*this</code> is properly destroyed.</p>
-            <p>Note: This operator follows the same logic as the <a href="#TemplatedConstructor">templated 
+            <p>Note: This operator follows the same logic as the <a href="#TemplatedConstructor">templated
                     constructor</a>.</p>
-            <h3>Queries</h3>
-            <pre>const std::type_info &amp; type() const;
-</pre>
+            <a name="variant-queries"><h3>Queries</h3></a>
+            <a name="variant-type"></a>
+            <pre>const std::type_info &amp; type() const;</pre>
             <p>Non-throwing query that returns the <code>typeid()</code> of the contained value</p>
-            <pre>bool empty() const;
-</pre>
-            <p>Always returns <code>false</code>. This non-throwing member function is provided 
-                for <a HREF="../../any/index.html">boost::any</a> compatibility.</p>
-            <p>Note: a <code>variant</code> object is never empty. (See the <a href="#variant-default-ctor">
-                    default constructor</a>.)</p>
-            <pre>int which() const;
-</pre>
-            <p>Non-throwing query that returns the zero-based index of the bounded type of the 
+            <a name="variant-empty"></a>
+            <pre>bool empty() const;</pre>
+            <p>Non-throwing query that returns <code>true</code> if, and
+	    only if, the held value is of type
+	    <a href="#empty"><code>boost::empty</code></a>.<br>
+  	    Consequently, if <code>boost::empty</code> is not one of the
+	    <a href="#BoundedType">BoundedTypes</a>, then
+            <code>empty()</code> will always yield <code>false</code>.</p>
+
+            <a name="variant-which"></a>
+            <pre>int which() const;</pre>
+            <p>Non-throwing query that returns the zero-based index of the bounded type of the
                 contained value.<br>
             </p>
         </blockquote>
@@ -314,15 +323,15 @@ public:
 };
 </pre>
         <p><code>boost::apply_visitor(visitor, var_inst)</code> passes the variant object, <code>
-                var_inst</code>, to the given visitor (<code>visitor</code>). This is 
-            equivalent to calling <code>visitor</code>'s function-call operator, with <code>var_inst</code>'s 
+                var_inst</code>, to the given visitor (<code>visitor</code>). This is
+            equivalent to calling <code>visitor</code>'s function-call operator, with <code>var_inst</code>'s
             currently held value.<br>
-            <code>VisitorType</code> must be a <a href="#Visitor">visitor of</a> <code>VariantType</code>. 
-            See <a HREF="tutorial.html#FunctorBasedVisitation">Functor-based visitation</a> 
+            <code>VisitorType</code> must be a <a href="#Visitor">visitor of</a> <code>VariantType</code>.
+            See <a HREF="tutorial.html#FunctorBasedVisitation">Functor-based visitation</a>
             for an in-depth description of visitors.<br>
             <br>
-            The unary form of <code>apply_visitor()</code> tranforms the given visitor into 
-            a unary function object which accepts a variant object, thus, the following two 
+            The unary form of <code>apply_visitor()</code> tranforms the given visitor into
+            a unary function object which accepts a variant object, thus, the following two
             lines are equivalent:<br>
         </p>
         <pre>      boost::apply_visitor(visitor, var_inst); // Binary form
@@ -367,12 +376,13 @@ struct static_visitor
   const ToType* get(const boost::variant&lt;T1,T2,...&gt;* v);
 
 </pre>
-Returns a reference/pointer to a held value.<br>
-<br>
-If a pointer is passed: returns a pointer to the held value if its type is
-<code>ToType</code>. Otherwise, returns <code>NULL</code>.<br>
-If a value/reference is passed: returns a reference to the held value if its type
+Returns a reference/pointer to a held value:<ul>
+<li>If a pointer is passed: Returns a pointer to the held value if its type is
+<code>ToType</code>. Otherwise, returns <code>NULL</code>.</li>
+<li>If a value/reference is passed: Returns a reference to the held value if its type
 is <code>ToType</code>. Otherwise, throws a <code>bad_get</code> exception.<br>
+</li>
+</ul>
 <br><hr>
 <h2><a name="incomplete"><code>incomplete</code></a></h2>
 <p><code>incomplete&lt;T&gt;</code> is a class template, which allows a <code>variant</code>
@@ -413,15 +423,50 @@ is <code>ToType</code>. Otherwise, throws a <code>bad_get</code> exception.<br>
    };
 
 </pre>
-        <hr>
-        <p>Revised 14 February 2003</p>
+
+<br><hr>
+<h2><a name="empty"><code>empty</code></a></h2>
+<pre>
+struct empty { };
+
+bool operator==(const empty&, const empty&); // Always true
+bool operator<(const empty&, const empty&);  // Always false
+
+BOOST_TEMPLATED_STREAM_TEMPLATE(E,T)
+BOOST_TEMPLATED_STREAM(ostream, E,T)& 
+operator&lt;&lt;(BOOST_TEMPLATED_STREAM(ostream, E,T)&, const empty& );  // NOP
+</pre>
+<p><code>boost::empty</code> is a predefined type, used for representing an
+'empty' <code>variant</code>: a <code>variant</code> object holding a value of
+type <code>boost::empty</code> is considered to be empty.<br>
+This convention is acknowledged by <code>varinat::empty()</code> - Its
+return value is <code>true</code>, only if the held value is of type
+<code>boost::empty</code>.<br>
+<br>
+Comments:
+<ul>
+<li>A <code>variant</code> object that does not have <code>boost::empty</code>
+as one of its <a href="#BoundedType">BoundedTypes</a>, can never be in an empty
+state. At any given point it will hold a valid value.
+</li>
+<li>Empty variants are visitable. Consequently, every visitor of a possibly
+empty variant, must be capable of accepting a <code>boost::empty</code> value.
+</li>
+<li><code>boost::empty</code> has no state. Thus, when two instances are
+compared for equality, the result is always <code>true</code>.</li>
+<li><code>operator&lt;&lt;</code> is also supported, with a "do-nothing" behavior.</li>
+</ul>
+
+
+	<hr>
+        <p>Revised 28 July 2003</p>
         <p><i>© Copyright Eric Friedman and Itay Maman 2002-2003. All rights reserved.</i></p>
-        <p>Permission to use, copy, modify, distribute and sell this software and its 
-            documentation for any purpose is hereby granted without fee, provided that the 
-            above copyright notice appear in all copies and that both that copyright notice 
-            and this permission notice appear in supporting documentation. Eric Friedman 
-            and Itay Maman make no representations about the suitability of this software 
-            for any purpose. It is provided &quot;as is&quot; without express or implied 
+        <p>Permission to use, copy, modify, distribute and sell this software and its
+            documentation for any purpose is hereby granted without fee, provided that the
+            above copyright notice appear in all copies and that both that copyright notice
+            and this permission notice appear in supporting documentation. Eric Friedman
+            and Itay Maman make no representations about the suitability of this software
+            for any purpose. It is provided &quot;as is&quot; without express or implied
             warranty.</p>
     </body>
 </html>
