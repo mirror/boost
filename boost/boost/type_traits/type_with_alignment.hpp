@@ -13,7 +13,7 @@
 #include "boost/preprocessor/tuple/to_list.hpp"
 #include "boost/preprocessor/cat.hpp"
 #include "boost/type_traits/alignment_of.hpp"
-#include "boost/type_traits/is_POD.hpp"
+#include "boost/type_traits/is_pod.hpp"
 #include "boost/static_assert.hpp"
 #include "boost/config.hpp"
 

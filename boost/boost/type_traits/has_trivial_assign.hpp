@@ -10,7 +10,7 @@
 #ifndef BOOST_TT_HAS_TRIVIAL_ASSIGN_HPP_INCLUDED
 #define BOOST_TT_HAS_TRIVIAL_ASSIGN_HPP_INCLUDED
 
-#include "boost/type_traits/is_POD.hpp"
+#include "boost/type_traits/is_pod.hpp"
 #include "boost/type_traits/is_const.hpp"
 #include "boost/type_traits/is_volatile.hpp"
 #include "boost/type_traits/detail/ice_and.hpp"
