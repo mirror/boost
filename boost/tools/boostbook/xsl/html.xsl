@@ -4,10 +4,10 @@
                 version="1.0">
 
   <!-- Import the HTML chunking stylesheet -->
-  <xsl:import 
+  <xsl:import
     href="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"/>
 
-  <xsl:param name="html.stylesheet" select="'reference.css'"/>
+  <xsl:param name="html.stylesheet" select="'boostbook.css'"/>
   <xsl:param name="navig.graphics" select="1"/>
   <xsl:param name="navig.graphics.extension" select="'.png'"/>
   <xsl:param name="chapter.autolabel" select="1"/>
@@ -20,39 +20,26 @@
   <xsl:param name="generate.section.toc.level" select="3"/>
 
   <xsl:template name="header.navigation">
-    <table border="1" cellpadding="2" bgcolor="#007F7F">
+    <table border = "1" cellpadding = "2" width = "100%" class = "boost-head">
       <tr>
-        <td bgcolor="#FFFFFF">
+        <td bgcolor = "#FFFFFF" width = "50%">
           <img src="../../c++boost.gif"
             alt="c++boost.gif (8819 bytes)" width="277" height="86"/>
         </td>
-        <td>
-          <a href="../../index.htm">
-            <font color="#FFFFFF" size="4" face="Arial">Home</font>
-          </a>
-        </td>
-        <td>
-          <a href="libraries.html">
-            <font color="#FFFFFF" size="4" face="Arial">Libraries</font>
-          </a>
-        </td>
-        <td>
-          <a href="../../people/people.htm">
-            <font color="#FFFFFF" size="4" face="Arial">People</font>
-          </a>
-        </td>
-        <td>
-          <a href="../../more/faq.htm">
-            <font color="#FFFFFF" size="4" face="Arial">FAQ</font>
-          </a>
-        </td>
-        <td>
-          <a href="../../more/index.htm">
-            <font color="#FFFFFF" size="4" face="Arial">More</font>
-          </a>
+        <td align = "center" class = "boost-headtd">
+          <a href="../../index.htm" class = "boost-headelem">Home</a>
+        </td><td align = "center" class = "boost-headtd">
+          <a href="libraries.html" class = "boost-headelem">Libraries</a>
+        </td><td align = "center" class = "boost-headtd">
+          <a href="../../people/people.htm" class = "boost-headelem">People</a>
+        </td><td align = "center" class = "boost-headtd">
+          <a href="../../more/faq.htm" class = "boost-headelem">FAQ</a>
+        </td><td align = "center" class = "boost-headtd">
+          <a href="../../more/index.htm" class = "boost-headelem">More</a>
         </td>
       </tr>
     </table>
+    <hr/>
   </xsl:template>
 
   <xsl:template name="format.cvs.revision">
@@ -192,4 +179,11 @@
   <!-- We don't want refentry's to show up in the TOC because they
        will merely be redundant with the synopsis. -->
   <xsl:template match="refentry" mode="toc"/>
- </xsl:stylesheet>
+
+  <!-- override the behaviour of some DocBook elements for better
+       rendering facilities -->
+
+  <xsl:template match = "programlisting[ancestor::informaltable]">
+     <pre class = "table-{name(.)}"><xsl:apply-templates/></pre>
+  </xsl:template>
+</xsl:stylesheet>
