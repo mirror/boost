@@ -70,10 +70,6 @@ struct name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
     { \
     }; \
 }; \
-\
-namespace v2_1 { \
-/*struct name : ::boost::mpl::name<> {};  breaks mpl::if_<...> */ \
-} \
 /**/
 
 #if defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
