@@ -6,6 +6,8 @@
  //  warranty, and with no claim as to its suitability for any purpose.   
 
 // standalone test program for <boost/call_traits.hpp>
+// 18 Mar 2002:
+//    Changed some names to prevent conflicts with some new type_traits additions.
 // 03 Oct 2000:
 //    Enabled extra tests for VC6.
 
@@ -78,7 +80,7 @@ struct contained<T[N]>
 #endif
 
 template <class T>
-contained<typename boost::call_traits<T>::value_type> wrap(const T& t)
+contained<typename boost::call_traits<T>::value_type> test_wrap_type(const T& t)
 {
    typedef typename boost::call_traits<T>::value_type ct;
    return contained<ct>(t);
@@ -217,9 +219,9 @@ int main(int argc, char *argv[ ])
 #endif
 #endif
 
-   check_wrap(wrap(2), 2);
+   check_wrap(test_wrap_type(2), 2);
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__SUNPRO_CC)
-   check_wrap(wrap(a), a);
+   check_wrap(test_wrap_type(a), a);
    check_make_pair(test::make_pair(a, a), a, a);
 #endif
 
