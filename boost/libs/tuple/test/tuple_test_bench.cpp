@@ -395,6 +395,7 @@ equality_test()
   tuple<int, char> t4(2, 'a');
   BOOST_TEST(t1 != t3);
   BOOST_TEST(t1 != t4);
+  BOOST_TEST(!(t1 != t2));
 }
 
 
