@@ -8,7 +8,9 @@ For example, in libs/tuple/test directory you would type (using g++):
 
 g++ -I../../.. tuple_test_bench.cpp
 
-If you want to use tuple_io, you need to compile and link src/tuple.cpp:
+The following is not true anymore:
 
-g++ -I../../.. ../src/tuple.cpp io_test.cpp
+  If you want to use tuple_io, you need to compile and link src/tuple.cpp:
+  g++ -I../../.. ../src/tuple.cpp io_test.cpp
 
+Thanks to Hartmut Kaiser's suggestion, the tuple.cpp is not needed anymore.
