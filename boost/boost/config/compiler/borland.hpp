@@ -66,7 +66,9 @@
 //
 // Post 0x561 we have long long and stdint.h:
 #if __BORLANDC__ >= 0x561
-#  define BOOST_HAS_LONG_LONG
+#  ifndef __NO_LONG_LONG
+#     define BOOST_HAS_LONG_LONG
+#  endif
    // On non-Win32 platforms let the platform config figure this out:
 #  ifdef _WIN32
 #      define BOOST_HAS_STDINT_H
@@ -85,7 +87,7 @@
 //
 // __int64:
 //
-#if __BORLANDC__ >= 0x530
+#if (__BORLANDC__ >= 0x530) && !defined(__STRICT_ANSI__)
 #  define BOOST_HAS_MS_INT64
 #endif
 //
@@ -97,7 +99,9 @@
 //
 // all versions have a <dirent.h>:
 //
-#define BOOST_HAS_DIRENT_H
+#ifndef __STRICT_ANSI__
+#  define BOOST_HAS_DIRENT_H
+#endif
 //
 // all versions support __declspec:
 //
@@ -114,7 +118,18 @@
 //
 // Disable Win32 support in ANSI mode:
 //
-#pragma defineonoption BOOST_DISABLE_WIN32 -A
+#if __BORLANDC__ < 0x600
+#  pragma defineonoption BOOST_DISABLE_WIN32 -A
+#elif defined(__STRICT_ANSI__)
+#  define BOOST_DISABLE_WIN32
+#endif
+//
+// MSVC compatibility mode does some nasty things:
+//
+#if defined(_MSC_VER) && (_MSC_VER <= 1200)
+#  define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#  define BOOST_NO_VOID_RETURNS
+#endif
 
 #define BOOST_COMPILER "Borland C++ version " BOOST_STRINGIZE(__BORLANDC__)
 
