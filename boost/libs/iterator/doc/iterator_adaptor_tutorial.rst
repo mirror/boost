@@ -20,17 +20,19 @@ we're going to pick up right where it left off.
    position is to compare another ``node_base*`` to it.  In other
    words, the original iterator traverses a one-element array.
 
-You probably didn't think of it that way, but the ``node_base*``
+You probably didn't think of it this way, but the ``node_base*``
 object which underlies ``node_iterator`` is itself an iterator,
 just like all other pointers.  If we examine that pointer closely
 from an iterator perspective, we can see that it has much in common
 with the ``node_iterator`` we're building.  First, they share most
 of the same associated types (``value_type``, ``reference``,
-``pointer``, and ``difference_type``).  Second, even much of the
+``pointer``, and ``difference_type``).  Second, even some of the
 core functionality is the same: ``operator*`` and ``operator==`` on
-the ``node_iterator`` just return the result of invoking the same
+the ``node_iterator`` return the result of invoking the same
 operations on the underlying pointer, via the ``node_iterator``\ 's
-|dereference_and_equal|_)
+|dereference_and_equal|_). However, the ``operator++`` for
+``node_iterator`` behaves differently than for ``node_base*``
+since it follows the ``m_next`` pointer.
 
 .. |dereference_and_equal| replace:: ``dereference`` and ``equal`` member functions
 .. _dereference_and_equal: iterator_facade.html#implementing-the-core-operations
@@ -112,14 +114,18 @@ We urge you to review the documentation and implementations of
 |reverse_iterator|_ and the other Boost `specialized iterator
 adaptors`__ to get an idea of the sorts of things you can do with
 ``iterator_adaptor``.  In particular, have a look at
-|counting_iterator|_, which demonstrates that ``iterator_adaptor``\
-'s ``Base`` type needn't be an iterator.
+|transform_iterator|_, which is perhaps the most straightforward
+adaptor, and also |counting_iterator|_, which demonstrates that
+``iterator_adaptor``\ 's ``Base`` type needn't be an iterator.
 
 .. |reverse_iterator| replace:: ``reverse_iterator``
 .. _reverse_iterator: reverse_iterator.html
 
 .. |counting_iterator| replace:: ``counting_iterator``
 .. _counting_iterator: counting_iterator.html
+
+.. |transform_iterator| replace:: ``transform_iterator``
+.. _transform_iterator: transform_iterator.html
 
 __ index.html#specialized-adaptors
 
