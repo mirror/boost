@@ -45,11 +45,19 @@ namespace detail {
 
 class format_info {
 public:   
+
    enum manipulator_type { open, close, delimiter };
    BOOST_STATIC_CONSTANT(int, number_of_manipulators = delimiter + 1);
 private:
    
-   static const int stream_index[number_of_manipulators];
+   static int get_stream_index (int m)
+   {
+     static const int stream_index[number_of_manipulators]
+        = { std::ios::xalloc(), std::ios::xalloc(), std::ios::xalloc() };
+
+     return stream_index[m];
+   }
+
    format_info(const format_info&);
    format_info();   
 
@@ -58,7 +66,7 @@ public:
 
 #if defined (BOOST_NO_TEMPLATED_STREAMS)
    static char get_manipulator(std::ios& i, manipulator_type m) {
-     char c = static_cast<char>(i.iword(stream_index[m])); 
+     char c = static_cast<char>(i.iword(get_stream_index(m))); 
      
      // parentheses and space are the default manipulators
      if (!c) {
@@ -72,7 +80,7 @@ public:
    }
 
    static void set_manipulator(std::ios& i, manipulator_type m, char c) {
-      i.iword(stream_index[m]) = static_cast<long>(c);
+      i.iword(get_stream_index(m)) = static_cast<long>(c);
    }
 #else
    template<class CharType, class CharTrait>
@@ -82,7 +90,7 @@ public:
      // A valid instanitation of basic_stream allows CharType to be any POD,
      // hence, the static_cast may fail (it fails if long is not convertible 
      // to CharType
-     CharType c = static_cast<CharType>(i.iword(stream_index[m]) ); 
+     CharType c = static_cast<CharType>(i.iword(get_stream_index(m)) ); 
      // parentheses and space are the default manipulators
      if (!c) {
        switch(m) {
@@ -102,7 +110,7 @@ public:
      // A valid instanitation of basic_stream allows CharType to be any POD,
      // hence, the static_cast may fail (it fails if CharType is not 
      // convertible long.
-      i.iword(stream_index[m]) = static_cast<long>(c);
+      i.iword(get_stream_index(m)) = static_cast<long>(c);
    }
 #endif	// BOOST_NO_TEMPLATED_STREAMS
 };
