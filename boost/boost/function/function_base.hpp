@@ -76,8 +76,15 @@ namespace boost { namespace python { namespace objects {
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 namespace boost {
 
+#if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_STRICT_CONFIG)
+// The library shipping with MIPSpro 7.3.1.3m has a broken allocator<void>
+template<typename Signature,
+         typename Allocator = std::allocator<function_base> >
+class function;
+#else
 template<typename Signature, typename Allocator = std::allocator<void> >
 class function;
+#endif
 
 template<typename Signature, typename Allocator>
 inline void swap(function<Signature, Allocator>& f1,
