@@ -22,8 +22,13 @@ int main()
 
   // adjustor is used to truncate ptime's fractional seconds for 
   // comparison with SYSTEMTIME's milliseconds
+#if defined(BOOST_NO_STDC_NAMESPACE)
+  const int adjustor = 
+    static_cast<int>(pow(10.0, time_duration::num_fractional_digits() - 3));
+#else
   const int adjustor = 
     static_cast<int>(std::pow(10.0, time_duration::num_fractional_digits() - 3));
+#endif
   
   for(int i = 0; i < 5; ++i){
 
