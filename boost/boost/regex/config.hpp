@@ -169,9 +169,9 @@ using std::distance;
 #  endif
 #  define BOOST_REGEX_MAKE_BOOL(x) static_cast<bool>(x)
 #endif
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-// backwards compatibitity:
+/* backwards compatibitity: */
 #if defined(BOOST_RE_NO_LIB)
 #  define BOOST_REGEX_NO_LIB
 #endif
@@ -523,7 +523,7 @@ namespace std{
 #     if !defined(BOOST_NO_STD_LOCALE) && !defined (__STL_NO_NATIVE_MBSTATE_T) && !defined(_STLP_NO_NATIVE_MBSTATE_T)
    using ::mbstate_t;
 #     endif
-#  endif // BOOST_NO_WREGEX
+#  endif /* BOOST_NO_WREGEX */
    using ::fseek;
    using ::fread;
    using ::ftell;

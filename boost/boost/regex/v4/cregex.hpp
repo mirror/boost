@@ -165,10 +165,10 @@ typedef enum
 } // namespace
 #endif
 
+#if defined(__cplusplus)
 //
 // C++ high level wrapper goes here:
 //
-#if defined(__cplusplus)
 #include <string>
 #include <vector>
 namespace boost{
@@ -271,7 +271,7 @@ public:
 
 #endif
 
-#endif // include guard
+#endif /* include guard */
 
 
 
