@@ -569,7 +569,7 @@ test_main( int , char * [] )
     
     cout << "Created point, and operated on it." << endl;
     
-    for (int n = 0; n < 10000; ++n)
+    for (int n = 0; n < 1000; ++n)  // was 10,000 but took too long (Beman)
     {
         boost::minstd_rand r;
         tester<long, int>()(r);
