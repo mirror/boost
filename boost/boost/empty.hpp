@@ -23,7 +23,9 @@
 
 #include "boost/detail/templated_streams.hpp"
 #include "boost/mpl/bool.hpp"
+#include "boost/type_traits/is_empty.hpp"
 #include "boost/type_traits/is_pod.hpp"
+#include "boost/type_traits/is_stateless.hpp"
 
 namespace boost {
 
@@ -31,11 +33,29 @@ struct empty
 {
 };
 
+// type traits specializations
+//
+
 template <>
 struct is_pod< empty >
     : mpl::true_
 {
 };
+
+template <>
+struct is_empty< empty >
+    : mpl::true_
+{
+};
+
+template <>
+struct is_stateless< empty >
+    : mpl::true_
+{
+};
+
+// relational operators
+//
 
 inline bool operator==(const empty&, const empty&)
 {
@@ -47,6 +67,8 @@ inline bool operator<(const empty&, const empty&)
     return false;
 }
 
+// streaming support
+//
 BOOST_TEMPLATED_STREAM_TEMPLATE(E,T)
 inline BOOST_TEMPLATED_STREAM(ostream, E,T)& operator<<(
       BOOST_TEMPLATED_STREAM(ostream, E,T)& out
