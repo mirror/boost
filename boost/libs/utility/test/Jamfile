@@ -39,5 +39,5 @@ test-suite utility
         [ run ../enable_if_namespace_disambiguation.cpp $(test_monitor) ]
         [ run ../enable_if_no_disambiguation.cpp $(test_monitor) ]
         [ run ../enable_if_partial_specializations.cpp $(test_monitor) ]
-        [ run ../next_prior_test.cpp $(test_monitor) ]          
+        [ run next_prior_test.cpp $(test_monitor) ]          
     ;
