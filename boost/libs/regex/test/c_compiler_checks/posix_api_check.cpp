@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <assert.h>
+#include <boost/assert.hpp>
 #include <boost/regex.h>
 
 const char* expression = "^";
@@ -42,7 +42,7 @@ int main()
       printf(buf);
       return result;
    }
-   assert(re.re_nsub == 0);
+   BOOST_ASSERT(re.re_nsub == 0);
    matches[0].rm_so = 0;
    matches[0].rm_eo = strlen(text);
    result = regexec(&re, text, 1, matches, REG_NOTBOL | REG_NOTEOL | REG_STARTEND);
@@ -54,7 +54,7 @@ int main()
       regfree(&re);
       return result;
    }
-   assert(matches[0].rm_so == matches[0].rm_eo == 1);
+   BOOST_ASSERT(matches[0].rm_so == matches[0].rm_eo == 1);
    regfree(&re);
    printf("no errors found\n");
    return 0;

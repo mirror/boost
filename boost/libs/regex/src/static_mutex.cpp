@@ -117,7 +117,7 @@ void scoped_static_mutex_lock::unlock()
 // Portable version of a static mutex based on Boost.Thread library:
 //
 #include <stdlib.h>
-#include <assert.h>
+#include <boost/assert.hpp>
 
 boost::recursive_mutex* static_mutex::m_pmutex = 0;
 boost::once_flag static_mutex::m_once = BOOST_ONCE_INIT;
@@ -132,7 +132,7 @@ void static_mutex::init()
 {
    m_pmutex = new boost::recursive_mutex();
    int r = atexit(free_static_mutex);
-   assert(0 == r);
+   BOOST_ASSERT(0 == r);
 }
 
 scoped_static_mutex_lock::scoped_static_mutex_lock(static_mutex& , bool lk)

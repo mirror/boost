@@ -235,8 +235,8 @@ mapfile::iterator mapfile::end()const
 
 void mapfile::lock(pointer* node)const
 {
-   assert(node >= _first);
-   assert(node <= _last);
+   BOOST_ASSERT(node >= _first);
+   BOOST_ASSERT(node <= _last);
    if(node < _last)
    {
       if(*node == 0)
@@ -275,8 +275,8 @@ void mapfile::lock(pointer* node)const
 
 void mapfile::unlock(pointer* node)const
 {
-   assert(node >= _first);
-   assert(node <= _last);
+   BOOST_ASSERT(node >= _first);
+   BOOST_ASSERT(node <= _last);
    if(node < _last)
    {
       if(--(*reinterpret_cast<int*>(*node)) == 0)
