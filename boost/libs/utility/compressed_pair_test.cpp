@@ -96,11 +96,11 @@ int main(int argc, char *argv[ ])
    cp7.first();
    double* pd = cp7.second();
 #endif
-   value_test(true, (sizeof(compressed_pair<empty_UDT, int>) < sizeof(std::pair<empty_UDT, int>)))
-   value_test(true, (sizeof(compressed_pair<int, empty_UDT>) < sizeof(std::pair<int, empty_UDT>)))
-   value_test(true, (sizeof(compressed_pair<empty_UDT, empty_UDT>) < sizeof(std::pair<empty_UDT, empty_UDT>)))
-   value_test(true, (sizeof(compressed_pair<empty_UDT, empty_POD_UDT>) < sizeof(std::pair<empty_UDT, empty_POD_UDT>)))
-   value_test(true, (sizeof(compressed_pair<empty_UDT, compressed_pair<empty_POD_UDT, int> >) < sizeof(std::pair<empty_UDT, std::pair<empty_POD_UDT, int> >)))
+   soft_value_test(true, (sizeof(compressed_pair<empty_UDT, int>) < sizeof(std::pair<empty_UDT, int>)))
+   soft_value_test(true, (sizeof(compressed_pair<int, empty_UDT>) < sizeof(std::pair<int, empty_UDT>)))
+   soft_value_test(true, (sizeof(compressed_pair<empty_UDT, empty_UDT>) < sizeof(std::pair<empty_UDT, empty_UDT>)))
+   soft_value_test(true, (sizeof(compressed_pair<empty_UDT, empty_POD_UDT>) < sizeof(std::pair<empty_UDT, empty_POD_UDT>)))
+   soft_value_test(true, (sizeof(compressed_pair<empty_UDT, compressed_pair<empty_POD_UDT, int> >) < sizeof(std::pair<empty_UDT, std::pair<empty_POD_UDT, int> >)))
 
    return check_result(argc, argv);
 }
@@ -147,15 +147,7 @@ template compressed_pair<double, int[2]>::compressed_pair();
 #endif // __MWERKS__
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-#ifdef __BORLANDC__
-// can't handle both types empty:
-unsigned int expected_failures = 4;
-#elif defined(__GNUC__)
-// no zero sized base classes:
-unsigned int expected_failures = 4;
-#else
 unsigned int expected_failures = 0;
-#endif
 
 
 

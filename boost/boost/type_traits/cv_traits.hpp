@@ -94,6 +94,8 @@ struct remove_volatile
    typedef typename detail::remove_volatile_helper<uq_type, ::boost::is_const<T>::value>::type type;
 };
 template <typename T> struct remove_volatile<T&>{ typedef T& type; };
+template <typename T, std::size_t N> struct remove_volatile<volatile T[N]>{ typedef T type[N]; };
+template <typename T, std::size_t N> struct remove_volatile<const volatile T[N]>{ typedef const T type[N]; };
 
 // * convert a type T to non-const type - remove_const<T>
 template <typename T>
@@ -103,6 +105,8 @@ struct remove_const
    typedef typename detail::remove_const_helper<uq_type, ::boost::is_volatile<T>::value>::type type;
 };
 template <typename T> struct remove_const<T&>{ typedef T& type; };
+template <typename T, std::size_t N> struct remove_const<const T[N]>{ typedef T type[N]; };
+template <typename T, std::size_t N> struct remove_const<const volatile T[N]>{ typedef volatile T type[N]; };
 
 //  convert a type T to a non-cv-qualified type - remove_cv<T>
 template <typename T>
@@ -111,6 +115,9 @@ struct remove_cv
    typedef typename detail::cv_traits_imp<T*>::unqualified_type type;
 };
 template <typename T> struct remove_cv<T&>{ typedef T& type; };
+template <typename T, std::size_t N> struct remove_cv<const T[N]>{ typedef T type[N]; };
+template <typename T, std::size_t N> struct remove_cv<volatile T[N]>{ typedef T type[N]; };
+template <typename T, std::size_t N> struct remove_cv<const volatile T[N]>{ typedef T type[N]; };
 
 //* is a type T  declared const - is_const<T>
 template <typename T>
