@@ -3,16 +3,15 @@
 <HTML><HEAD><TITLE>The Boost Format library</TITLE>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
 </HEAD>
-<BODY bgColor=#ffffff text=#000000>
+<BODY bgColor=white text=black>
 
-<H1><IMG align=center alt="c++boost.gif (8819 bytes)" height=86 
+<H1><IMG align=middle alt="c++boost.gif (8819 bytes)" height=86 
 src="../../../c++boost.gif" width=277>The Boost Format library</H1>
 <P>The <CODE>
 <A href="../../../boost/format.hpp">&lt;boost/format.hpp&gt;</A></CODE> 
 format class provides printf-like formatting, in a type-safe manner which allows output of 
 user-defined types. 
 <br>
-(It does not depend on other boost libraries)
 </P>
 <ul>
 <li><a href="#synopsis">Synopsis</a> </li>
@@ -21,19 +20,20 @@ user-defined types.
 <li><a href="#syntax">Syntax</a> 
         <ul>
           <li><a href="#printf_directives">printf format-specification syntax</a> </li>
-          <li><a href="#printf_differences"">Incompatibilities with printf</a> </li>
+          <li><a href="#printf_differences">Incompatibilities with printf</a> </li>
         </ul>
 </li>
 <li><a href="#manipulators">Manipulators and the internal stream state</a> </li>
 <li><a href="#user-defined">User-defined types</a> </li>
 <li><a href="#exceptions">Exceptions</a></li>
+<li><a href="#performance">Performance</a></li>
+<li><a href="#extract">Class Interface Extract</a></li>
 <li><a href="#alternatives">Alternatives</a> </li>
 </ul>
+<a name="synopsis"></a>
 <hr>
 <H2>Synopsis</H2>
-<a name="synopsis">
-<P>
-A format object is constructed from a format-string, and is then given arguments through 
+<P>A format object is constructed from a format-string, and is then given arguments through 
 repeated calls to <i>operator%</i>.
 <br>
 Each of those arguments are then converted to strings, who are in turn  combined into one string,
@@ -44,10 +44,9 @@ cout << boost::format("writing %1%,  x=%2% : %3%-th try") % "toto" % 40.23 % 50;
      // prints "writing toto,  x=40.230 : 50-th try"
 </PRE></BLOCKQUOTE>
 
+<a name="how_it_works"></a>
 <hr>
 <H2>How it works</H2>
-<a name="how_it_works">
-<p>
 <ol>
 <li>When you call <i>format(s)</i>, where s is the format-string, it constructs an object,
 which parses the format string and look for all directives in it and prepares internal structures
@@ -66,9 +65,8 @@ and the format object stores the string results for the last step.
 </li>
 <li>Once all arguments have been fed  you can dump the format object to a stream, 
 or get its string value by using the 
-<i>str()</i> member function, or the free function <i>str(const format& )</i> in namespace <i>boost::io</i>. The result string stays accessible in the format object until another argument is passed,
+<i>str()</i> member function, or the free function <i>str(const format& )</i> in namespace <i>boost</i>. The result string stays accessible in the format object until another argument is passed,
 at which time it is reinitialised.
-</P>
 
 <BLOCKQUOTE><PRE>
 
@@ -83,7 +81,9 @@ s = fmter.str( );
 
 // You can also do all steps at once :
 cout << boost::format("%2% %1%") % 36 % 77; 
-string s2 = boost::io::str( format("%2% %1%") % 36 % 77 );
+
+// using the str free function :
+string s2 = str( format("%2% %1%") % 36 % 77 );
 
 </PRE></BLOCKQUOTE>
 </li>
@@ -98,18 +98,15 @@ All in all, the format class translates a format-string  (with eventually printf
 into operations on an internal stream, and finally returns the result of the formatting,
 as a string, or directly into an output stream.
 
+<a name="examples"></a>
 <hr>
 <H2>Examples</H2>
-<a name="examples">
-<p>
 
 <BLOCKQUOTE><PRE>
 using namespace std;
 using boost::format;
 using boost::io::group;
-using boost::io::str;
 </PRE></BLOCKQUOTE>
-
 <ul>
 <li> Simple output, with reordering :
 <BLOCKQUOTE><PRE>
@@ -176,7 +173,7 @@ cout << format("_%1%_ %1% \n") % group(showpos, setw(5), 101);
         The manipulators are applied at each occurence of %1%, and thus it prints : "_ +101_  +101 \n"
 </li>
 
-<li> New formatting feature : 'absolute tabulations', useful in loops, 
+<li> New formatting feature : 'absolute tabulations', useful inside loops, 
 to insure a field is printed at the same position from one line to the next, 
 even if the widthes of the previous arguments can vary a lot.
 
@@ -187,7 +184,7 @@ for(unsigned int i=0; i < names.size(); ++i)
 
 </PRE></BLOCKQUOTE>
 
-For some vector names, surnames, and tel (see sample_new_features.cpp) it prints :
+For some std::vector <i>names</i>, <i>surnames</i>, and <i>tel</i> (see sample_new_features.cpp) it prints :
 <BLOCKQUOTE><PRE>
 Marc-François Michel, Durand,           +33 (0) 123 456 789
 Jean, de Lattre de Tassigny,            +33 (0) 987 654 321
@@ -198,7 +195,6 @@ Jean, de Lattre de Tassigny,            +33 (0) 987 654 321
 
 </ul>
 
-</p>
 <hr>
 <H2>Sample Files</H2>
 <P>The program <A href="../example/sample_formats.cpp">sample_formats.cpp</A> 
@@ -216,9 +212,9 @@ shows the behaviour of the <b>format</b> library on user-defined types.
 </P>
 
 
+<a name="syntax"></a>
 <hr>
 <H2>Syntax</H2>
-<a name="syntax">
 <P>
 <b>boost::format( </b> format-string <b> ) %</b> arg1 <b>%</b> arg2 <b>%</b> ... <b>%</b> argN
 
@@ -229,7 +225,7 @@ The <i>format-string</i> contains text in which special directives will be repla
 strings resulting from the formatting of the given arguments.
 <br>The legacy syntax in the C and C++ worlds is the one used by printf, and thus format can use 
 directly printf format-strings, and produce the same result (in almost all cases. see 
-<a href="#printf_differences"">Incompatibilities with printf</a> for details)
+<a href="#printf_differences">Incompatibilities with printf</a> for details)
 <br>
 This core syntax was extended, to allow new features, but also to adapt to the C++ streams context.
 Thus, format accepts several forms of directives in format-strings :
@@ -268,10 +264,9 @@ Thus, format accepts several forms of directives in format-strings :
 </li>
 </UL>
     On top of the standard printf format specifications, new features were implemented, like centered alignment. See <a href="#new_directives">new format specification</a> for details.
-</P>
 
+<a name="printf_directives"></a>
 <h3>printf format specifications</h3>
-<a name="printf_directives">
 <p> 
 The printf format specifications supported by Boost.format follows the Unix98
 <a href="http://www.opengroup.org/onlinepubs/7908799/xsh/fprintf.html">Open-group printf</a>
@@ -315,15 +310,18 @@ Each of those fields are explained one by one in the following list :
 		<td>N/A (applied later on the string)</td> 
 </tr>
 <tr> 
-	    <td><b>'='</b></td> <td>centered alignment</td> 
-	    <td>N/A (applied later on the string)<br>
-	      Inexistent in printf <i>(added feature)</i></td> 
+            <td><b>'='</b></td> <td>centered alignment</td> 
+            <td>N/A (applied later on the string) 
+               <br><i>- note : added feature, not in printf -</i>
+            </td> 
 </tr>
-<tr> 
-	    <td><b>'_'</b></td> <td>internal alignment</td> 
-	    <td>sets internal alignment<br>
-	      Inexistent in printf <i>(added feature)</i></td> 
+<tr>
+            <td><b>'_'</b></td> <td>internal alignment</td>
+            <td>sets internal alignment 
+               <br><i>- note : added feature, not in printf -</i>
+            </td> 
 </tr>
+
 <tr> <td><b>'+'</b></td> <td>show sign even for positive numbers</td> 
 	    <td>sets <i>showpos</i></td> 
 </tr>
@@ -348,7 +346,8 @@ Each of those fields are explained one by one in the following list :
 </tr>
 
 </table>
-
+</blockquote>
+</li>
 
 <li>
 <i>width</i> specifies a minimal width for the string resulting form the conversion.
@@ -361,16 +360,17 @@ the width is handled after stream conversion of the whole argument object,
 in the format class code.
 <li>
 <i>precision</i> (preceded by a point), sets the stream's <i>precision</i>
-<ul>
-<li>When outputting a floatting type number, it sets the maximum number of digits 
-	<ul><li>after decimal point when in fixed or scientific mode</li>
-	  <li>in total when in default mode ('<i>general mode</i>', like <i>%g</i>) </li>
-	</ul>
-<li>When used with type-char <b>s</b> or <b>S</b> it takes another meaning : 
-	the conversion string is truncated to the <i>precision</i> first chars.
- (Note that the eventual padding to <i>width</i> is done after truncation.)
-</li></ul>
-
+        <ul>
+          <li>When outputting a floatting type number, it sets the maximum number of digits 
+            <ul><li>after decimal point when in fixed or scientific mode</li>
+              <li>in total when in default mode ('<i>general mode</i>', like <i>%g</i>) </li>
+            </ul>
+          <li>When used with type-char <b>s</b> or <b>S</b> it takes another meaning : 
+            the conversion string is truncated to the <i>precision</i> first chars.
+            (Note that the eventual padding to <i>width</i> is done after truncation.)
+          </li>
+        </ul>
+</li>
 <li>
 <i>type-char</i>. it does <b>not</b> impose the concerned argument to be of a restricted set 
 of types, but merely sets the flags that are associated with this type specification.
@@ -438,6 +438,7 @@ of types, but merely sets the flags that are associated with this type specifica
             <td>N/A</td>
 </tr>
 </table>
+</blockquote>
 <p>Note that the 'n' type specification is ignored (and so is the corresponding argument),
  because it does not fit in this context.
 <br>
@@ -448,10 +449,11 @@ Also, printf 'l', 'L',  or 'h' modifiers (to indicate wide, long or short types)
 </li>
 </ul>
 
+<a name="new_directives"></a>
 <h3>new format-specifications</h3>
-<a name="new_directives">
 <ul>
-<li> as stated in the flags table, centered and internal alignment flags (' <i>=</i> ', and ' <i>_</i> ')  were added.
+<li> as stated in the flags table, centered and internal alignment flags (' <i>=</i> ', 
+and ' <i>_</i> ')  were added.
 </li>
 <li> <i><b>%{</b>n</i><b>t}</b> , where <i>n</i> is a positive number, 
         inserts an <i>absolute tabulation</i>.
@@ -465,9 +467,8 @@ Also, printf 'l', 'L',  or 'h' modifiers (to indicate wide, long or short types)
 </li>
 </ul>
 
+<a name="printf_differences"></a>
 <h2>Differences of behaviour vs printf</h2>
-<a name="printf_differences">
-<p>
 Suppose you have variables <i>x1, x2</i> (built_in types, supported by C's printf),
 <br> and a format string <i>s</i> intended for use with a printf function this way :
 <BLOCKQUOTE><PRE>
@@ -479,11 +480,13 @@ In almost all cases, the result will be the same as with this command :
 cout << format(s) % x1 % x2;
 </PRE></BLOCKQUOTE>
 
+<p>
 But because some printf format specifications don't translate well into stream formatting options,
 there are a few notable imperfections in the way Boost.format emulates printf.<br>
 In any case, the <i>format</i> class should quietly ignore the unsupported options, so
 that printf format-strings are always accepted by format and produce almost the same 
 output as printf.
+</p>
 <br>Here is the full list of such differences :
 <ul>
 <li> <b>'0'</b> and <b>' '</b> options : 
@@ -513,51 +516,55 @@ has no effect in format.
 string by printf or format. 
 It will not cause differences in the formatted strings between printf and format.
 <br>To get the number of characters in the formatted string using Boost.Format, 
-do as follows :
+you can use the <i>size()</i> member function :
 <BLOCKQUOTE><PRE>
 format formatter("%+5d");
 cout << formatter % x;
-unsigned int n = formatter.str().size();
+unsigned int n = formatter.size();
 </PRE></BLOCKQUOTE>
 
-</p>
+<a name="user-defined"></a>
 <hr>
 <h2>User-defined types output</h2>
-<a name="user-defined">
 <p> 
 All flags which are translated into modification to the stream state 
 act recursively within user-defined types.
 ( the flags remain active, and so does the desired format option, for each of
 the '<<' operations that might be called by the user-defined class)
-<br>e.g., with a reasonable class  Rational, we would have something like :
+</p>
+e.g., with a Rational class, we would have something like :
 <BLOCKQUOTE><PRE>
 Rational ratio(16,9);
 cerr << format("%#x \n")  % ratio;  // -> "0x10/0x9 \n"
 </PRE></BLOCKQUOTE>
-</p>
 
 <p>
 It's a different story for other formatting options. For example, setting width applies 
 to the final output produced by the object, not to each of its internal outputs, and
 that's fortunate :
+</p>
 <BLOCKQUOTE><PRE>
 cerr << format("%-8d")  % ratio;  // -> "16/9    "      and not    "16      /9       "
 cerr << format("%=8d")  % ratio;  // -> "  16/9  "      and not    "   16   /    9   "
 </PRE></BLOCKQUOTE>
-</p>
 <p>
 <br>But so does the 0 and ' ' options (contrarily to '+' which is directly translated to the stream
 state by <i>showpos</i>. But no such flags exist for the zero and space printf options)
 <br>and that is less natural :
-<p>
+</p>
 <BLOCKQUOTE><PRE>
 cerr << format("%+08d \n")  % ratio;  // -> "+00016/9"
 cerr << format("% 08d \n")  % ratio;  // -> "000 16/9"
 </PRE></BLOCKQUOTE>
+It is possible to obtain a better behaviour by carefully designing the Rational's <i>operator<<</i> 
+to handle the stream's width, alignment and <i>showpos</i> paramaters by itself. This is demonstrated in 
+<A href="../example/sample_userType.cpp">sample_userType.cpp</A>.
+
 <p></p>
+
+<a name="manipulators"></a>
 <hr>
 <h3>Manipulators, and internal stream state</h3>
-<a name="manipulators">
 <P>
 The internal stream state of <B>format</B> is saved before 
 and restored after output of an argument; therefore, the modifiers are not sticky and affect only
@@ -568,10 +575,11 @@ precision 6, width 0, right alignment, and decimal flag set.
 <P>
 The state of the internal <B>format</B> stream can be changed by manipulators passed along 
 with the argument; via the <i>group</i> function, like that :
+</p>
 <BLOCKQUOTE><PRE>
 cout << format("%1% %2% %1%\n") % group(hex, showbase, 40) % 50; // prints "0x28 50 0x28\n"
 </PRE></BLOCKQUOTE>
-
+<p>
 <br>When passing N items inside a 'group' Boost.format needs to process manipulators
 diferently from regular argument, and thus using group is subject to the following constraints :
 <ol>
@@ -582,20 +590,19 @@ diferently from regular argument, and thus using group is subject to the followi
 
 
 
-<br>
+<p>
 Such manipulators are passed to the streams right before the following argument, 
 at every occurence.
 Note that formatting options specified within the format string are overridden
 by stream state modifiers passed this way. For instance in the following code,
 the <i>hex</i> manipulator has priority over the <i>d</i> type-specification in
  the format-string which would set decimal output :
+</P>
 <BLOCKQUOTE><PRE>
 cout << format("%1$d %2% %1%\n") % group(hex, showbase, 40) % 50; 
 // prints "0x28 50 0x28\n"
 </PRE></BLOCKQUOTE>
-</P>
 
-</p>
 
 <H2>Alternatives</H2> 
 <ul>
@@ -605,13 +612,7 @@ cout << format("%1$d %2% %1%\n") % group(hex, showbase, 40) % 50;
 <a href="http://www.ece.ucdavis.edu/~kenelson/ofrstream.cc">ofrstream.cc</a> 
 	by Karl Nelson's design was a big source of inspiration to this format class.
 </li>
-<li><a href="http://groups.yahoo.com/group/boost/files/format/">format.hpp</a> 
-	By Rüdiger Loo. It was a previous proposition for a boost::format class.
-	It was an other source for this one, complementary to Karl's,
-	in simplicity of design, and minimalistic "%1 %2" syntax - 
-	which this class borrowed.
-</li>
-<li><a href="http://www.gabi-soft.de/code/gabi-lib.tgz">James Kanze's library</a>
+<li><a href="http://www.gabi-soft.fr/gabi-lib.tgz">James Kanze's library</a>
 	has a format class (in <i>srcode/Extended/format</i> ) which looks 
 	very well polished. Its design has in common with this class the use of internal stream
 	for the actual conversions, as well as using operators to pass arguments. 
@@ -624,9 +625,9 @@ cout << format("%1$d %2% %1%\n") % group(hex, showbase, 40) % 50;
 </ul>
 
 
+<a name="exceptions"></a>
 <hr>
 <H2>Exceptions</H2>
-<a name="exceptions">
 <p>
 Boost.format enforces a number of rules on the usage of format objects. The format-string must obeys 
 the syntax described above, the user must supply exactly the right number of arguments before outputting to the final destination, and if using modify_item or bind_arg, items and arguments index
@@ -637,13 +638,13 @@ so that the mistakes don't go unnoticed and unhandled.
 <br>
 But the user can change this behaviour to fit his needs, 
 and select which types of errors may raise exceptions  using the following functions :
+</p>
 <BLOCKQUOTE><PRE>
 
 unsigned char exceptions(unsigned char newexcept); // query and set
 unsigned char exceptions() const;                  // just query
 
 </PRE></BLOCKQUOTE>
-</p>
 
 <p>
 The user can compute the argument <i>newexcept</i> by combining the following atoms using binary arithmetic :
@@ -669,10 +670,10 @@ The user can compute the argument <i>newexcept</i> by combining the following at
 </li>
         
 </ul>
-
+<p>
 For instance, if you don't want Boost.format to detect bad number of arguments, you can define
 a specific wrapper function for building format objects with the right exceptions settings :
-
+</p>
 <BLOCKQUOTE><PRE>
 
 boost::format  my_fmt(const std::string & f_string) {
@@ -701,24 +702,89 @@ cout << my_fmt(" _%2%_ _%1%_ \n") % 1 ;
 // prints      " __ _1_ \n"
 
 </PRE></BLOCKQUOTE>
-</p>
 
-
+<a name="performance"></a>
 <hr>
-<H2>Extract</H2>
+<H2>A Note about performance</H2>
+<p>
+The performance of boost::format for formatting a few builtin type arguments with reordering can be compared
+to that of Posix-printf, and of the equivalent stream manual operations to give a measure
+of the overhead incurred.
+The result may greatly depend on the compiler, standard library implementation, and the precise
+choice of format-string and arguments. 
+</p>
+<p>
+Since common stream implementations eventually call functions of the printf family for the actual 
+formatting of numbers, in general printf will be noticeably faster than the direct stream operations 
+And due to to the reordering overhead (allocations to store the pieces of string,
+stream initialisation at each item formatting, ..) the
+direct stream operations would be faster than boost::format, 
+(one cas expect a ratio ranging from 2 to 5 or more)
+</p>
+<p>
+When iterated formattings are a performance bottleneck, performance can be slightly increased by parsing
+the format string into a format object, and copying it at each formatting, in the following way.
+</p>
+<BLOCKQUOTE><PRE>
+    const boost::format fmter(fstring);
+    dest << boost::format(fmter) % arg1 % arg2 % arg3 ;
+</PRE></BLOCKQUOTE>
+<p>
+As an example of performance results, the author measured the time of execution of iterated formattings
+with 4 different methods 
+</p>
+<ol>
+<li> posix printf </li>
+<li> manual stream output (to a dummy <i>nullStream</i> stream sending the bytes into oblivion)</li>
+<li> boost::format copied from a const object as shown above</li>
+<li> the straigt boost::format usage </li>
+</ol>
+<p>
+the test was compiled with g++-3.3.3 and the following timings were measured (in seconds, and ratios) :
+</p>
+<BLOCKQUOTE><PRE>
+string     fstring="%3$0#6x %1$20.10E %2$g %3$0+5d \n";
+double     arg1=45.23;
+double     arg2=12.34;
+int        arg3=23;
+
+- release mode :
+printf                 : 2.13
+nullStream             : 3.43,  = 1.61033 * printf
+boost::format copied   : 6.77,  = 3.1784  * printf ,  = 1.97376 * nullStream
+boost::format straight :10.67,  = 5.00939 * printf ,  = 3.11079 * nullStream
+
+- debug mode :
+printf                 : 2.12
+nullStream             : 3.69,  = 1.74057 * printf
+boost::format copied   :10.02,  = 4.72642 * printf ,  = 2.71545 * nullStream
+boost::format straight :17.03,  = 8.03302 * printf ,  = 4.61518 * nullStream
+</PRE></BLOCKQUOTE>
+
+
+<a name="extract"></a>
+<hr>
+<H2>Class Interface Extract</H2>
+
 <BLOCKQUOTE><PRE>namespace boost {
 
 template&lt;class charT, class Traits=std::char_traits&lt;charT&gt; &gt; 
 class basic_format 
 {
 public:
-  typedef std::basic_string&lt;charT, Traits&gt string_t,
+  typedef std::basic_string&lt;charT, Traits&gt; string_t;
+  typedef typename string_t::size_type     size_type;
   basic_format(const charT* str);
   basic_format(const charT* str, const std::locale & loc);
   basic_format(const string_t& s);
   basic_format(const string_t& s, const std::locale & loc);
+  basic_format& operator= (const basic_format& x);
+
+  void clear(); // reset buffers
+  basic_format& parse(const string_t&); // clears and parse a new format string
 
   string_t str() const;
+  size_type size() const;
 
   // pass arguments through those operators :
   template&lt;class T&gt;  basic_format&   operator%(T& x);  
@@ -728,6 +794,10 @@ public:
   friend std::basic_ostream&lt;charT, Traits&gt;& 
   operator&lt;&lt; &lt;&gt; ( std::basic_ostream&lt;charT, Traits&gt;& , basic_format& ); 
 
+   // Choosing which errors will throw exceptions :
+   unsigned char exceptions() const;
+   unsigned char exceptions(unsigned char newexcept);
+
 // ............  this is just an extract .......
 }; // basic_format
 
@@ -735,13 +805,11 @@ typedef basic_format&lt;char &gt;          format;
 typedef basic_format&lt;wchar_t &gt;      wformat;
 
 
-namespace io {
 // free function for ease of use :
 template&lt;class charT, class Traits&gt; 
 std::basic_string&lt;charT,Traits&gt;  str(const basic_format&lt;charT,Traits&gt;& f) {
       return f.str();
 }
-} //namespace io
 
 
 } // namespace boost
@@ -773,14 +841,21 @@ Precisely, <b>format</b> was designed to provide the following features :
 </p>
 <hr>
 <H2>Credits</H2>
-<P>The author of Boost format is Samuel Krempp. &nbsp; He used ideas from both
-    Rüdiger Loos' and Karl Nelson's formatting classes.
+<P>The author of Boost format is Samuel Krempp. &nbsp; He used ideas from
+    Rüdiger Loos' format.hpp and Karl Nelson's formatting classes.
 <HR>
 
-<P>February 19, 2002</P>
-<P>© Copyright Samuel Krempp 2002. Permission to copy, use, modify, sell and 
-distribute this document is granted provided this copyright notice appears in 
-all copies. This document is provided "as is" without express or implied 
-warranty, and with no claim as to its suitability for any purpose.</P>
+<P>Revised  26 January, 2003</P>
+<p>
+<a href="http://validator.w3.org/check/referer"><img border="0"
+          src="http://www.w3.org/Icons/valid-html40"
+          alt="Valid HTML 4.0!" height="31" width="88"></a>
+</p>
+<P>© Samuel Krempp 2002</p>
+<p> Use, modification, and distribution are subject to the Boost Software
+License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
+LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
+www.boost.org/LICENSE_1_0.txt</a>)</p>
+
 <P></P>
 <P>&nbsp;</P></BODY></HTML>
