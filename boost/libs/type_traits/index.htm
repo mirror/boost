@@ -529,7 +529,8 @@ relationship between two types:</p>
         </td>
         <td valign="top" width="25%" bgcolor="#C0C0C0">Note that
         this template is currently broken with Borland's
-        compiler, for constructor-based conversions.</td>
+        compiler, for constructor-based conversions, and for the
+        Metrowerks compiler in all cases.</td>
         <td valign="top" width="5%">&nbsp;</td>
     </tr>
     <tr>
@@ -543,7 +544,16 @@ relationship between two types:</p>
     </tr>
 </table>
 
-<p>&nbsp;</p>
+<p>Note that both <code>is_convertible</code>, and <code>is_base_and_derived</code> can
+produce compiler errors if the convertion is ambiguous:</p>
+
+<pre>struct A {};
+struct B : A {};
+struct C : A {};
+struct D : B, C {};
+bool const x = boost::is_base_and_derived&lt;A,D&gt;::value;  // error
+bool const y = boost::is_convertible&lt;D*,A*&gt;::value;     // error
+</pre>
 
 <h2><a name="transformations"></a>Transformations Between Types</h2>
 
@@ -1324,3 +1334,4 @@ discussion list at <a
 href="http://www.yahoogroups.com/list/boost">www.yahoogroups.com/list/boost</a>.</p>
 </body>
 </html>
+
