@@ -111,7 +111,7 @@ namespace tuples {
         // of this return type
         template <class H, class T>
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
-        static typename add_const<typename add_reference<T>::type>::type
+        static typename add_reference<typename add_const<T>::type>::type
 #else
         static typename add_const_reference<T>::type
 #endif
