@@ -114,16 +114,17 @@
         <computeroutput>T</computeroutput>. 
       </purpose>
 
-      <para>
-        <computeroutput><classname>reference_wrapper</classname></computeroutput>
+      <description>
+        <para><computeroutput><classname>reference_wrapper</classname></computeroutput>
         is primarily used to "feed" references to function templates
         (algorithms) that take their parameter by value.  It provides
         an implicit conversion to
         <computeroutput>T&amp;</computeroutput>, which usually allows
-        the function templates to work on references unmodified.
-      </para>
-  
-      <typedef type="T" name="type"/>
+        the function templates to work on references
+        unmodified.</para>
+      </description>
+
+      <typedef name="type"><type>T</type></typedef>
 
       <constructor>
         <parameter name="t">
@@ -185,7 +186,12 @@
 
       <purpose>Determine if a type <computeroutput>T</computeroutput> is an instantiation of <computeroutput><classname>reference_wrapper</classname></computeroutput>.</purpose>
 
-      <para>The <computeroutput>value</computeroutput> static constant will be <computeroutput>true</computeroutput> iff the type <computeroutput>T</computeroutput> is a specialization of <computeroutput><classname>reference_wrapper</classname></computeroutput>.</para>
+      <description>
+        <para>The <computeroutput>value</computeroutput> static
+        constant will be <computeroutput>true</computeroutput> iff the
+        type <computeroutput>T</computeroutput> is a specialization of
+        <computeroutput><classname>reference_wrapper</classname></computeroutput>.</para>
+      </description>
 
       <static-constant type="bool" name="value" value="unspecified"/>
     </class>
@@ -197,9 +203,15 @@
   
       <purpose>Find the type in a <computeroutput><classname>reference_wrapper</classname></computeroutput>.</purpose>
 
-      <para>The typedef <computeroutput>type</computeroutput> is <computeroutput>T::type</computeroutput> if <computeroutput>T</computeroutput> is a <computeroutput><classname>reference_wrapper</classname></computeroutput>, <computeroutput>T</computeroutput> otherwise.</para>
+      <description>
+        <para>The typedef <computeroutput>type</computeroutput> is
+        <computeroutput>T::type</computeroutput> if
+        <computeroutput>T</computeroutput> is a
+        <computeroutput><classname>reference_wrapper</classname></computeroutput>,
+        <computeroutput>T</computeroutput> otherwise.</para>
+      </description>
 
-      <typedef type="unspecified" name="T"/>
+      <typedef name="T"><type><emphasis>unspecified</emphasis></type></typedef>
     </class>
   </namespace>
 </header>

@@ -8,14 +8,14 @@
         <!-- Models LessThanComparable and EqualityComparable -->
         <purpose>Query/disconnect a signal-slot connection.</purpose>
 
-        <para>
-          The <classname>connection</classname> class represents a
-          connection between a Signal and a Slot. It is a lightweight
-          object that has the ability to query whether the signal and
-          slot are currently connected, and to disconnect the signal
-          and slot. It is always safe to query or disconnect a
-          connection.
-        </para>
+        <description>
+          <para>The <classname>connection</classname> class represents
+          a connection between a Signal and a Slot. It is a
+          lightweight object that has the ability to query whether the
+          signal and slot are currently connected, and to disconnect
+          the signal and slot. It is always safe to query or
+          disconnect a connection.</para>
+        </description>
 
         <constructor>
           <effects><para>Sets the currently represented connection to the

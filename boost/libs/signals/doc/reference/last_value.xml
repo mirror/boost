@@ -11,7 +11,7 @@
       <purpose>Evaluate an InputIterator sequence and return the
       last value in the sequence.</purpose>
 
-      <typedef type="T" name="result_type"/>
+      <typedef name="result_type"><type>T</type></typedef>
 
       <member-function-group name="invocation">
         <method name="operator()" return-type="result_type" cv="const">
@@ -42,7 +42,9 @@
 
       <purpose>Evaluate an InputIterator sequence.</purpose>
 
-      <typedef type="unspecified" name="result_type"/>
+      <typedef name="result_type">
+        <type><emphasis>unspecified</emphasis></type>
+      </typedef>
 
       <member-function-group name="invocation">
         <method name="operator()" return-type="result_type" cv="const">

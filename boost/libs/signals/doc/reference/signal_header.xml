@@ -27,34 +27,49 @@
       <inherit access="private"><classname>noncopyable</classname></inherit>
 
       <purpose>Set of safe multicast callback types.</purpose>
- 
-      <para>
-         The class template <classname>signalN</classname> covers
+
+      <description> 
+        <para>The class template <classname>signalN</classname> covers
          several related classes signal0, signal1, signal2, etc.,
          where the number suffix describes the number of function
          parameters the signal and its connected slots will
          take. Instead of enumerating all classes, a single pattern
          <classname>signalN</classname> will be described, where N
-         represents the number of function parameters.
-      </para>
+         represents the number of function parameters.</para>
+      </description>
 
-      <typedef type="typename Combiner::result_type" name="result_type"/>
-      <typedef type="Combiner" name="combiner_type"/>
-      <typedef type="Group" name="group_type"/>
-      <typedef type="GroupCompare" name="group_compare_type"/>
-      <typedef type="SlotFunction" name="slot_function_type"/>
+      <typedef name="result_type">
+        <type>typename Combiner::result_type</type>
+      </typedef>
+      <typedef name="combiner_type"><type>Combiner</type></typedef>
+      <typedef name="group_type"><type>Group</type></typedef>
+      <typedef name="group_compare_type"><type>GroupCompare</type></typedef>
+      <typedef name="slot_function_type"><type>SlotFunction</type></typedef>
       <typedef name="slot_type">
         <type><classname>slot</classname>&lt;SlotFunction&gt;</type>
       </typedef>
-      <typedef type="unspecified" name="slot_result_type"/>
-      <typedef type="unspecified" name="slot_call_iterator"/>
-      <typedef type="T1" name="argument_type" comment="If N == 1"/>
-      <typedef type="T1" name="first_argument_type" comment="If N == 2"/>
-      <typedef type="T2" name="second_argument_type" comment="If N == 2"/>
-      <typedef type="T1" name="arg1_type"/>
-      <typedef type="T2" name="arg2_type"/>
+      <typedef name="slot_result_type">
+        <type><emphasis>unspecified</emphasis></type>
+      </typedef>
+      <typedef name="slot_call_iterator">
+        <type><emphasis>unspecified</emphasis></type>
+      </typedef>
+      <typedef name="argument_type">
+        <type>T1</type>
+        <purpose>If N == 1</purpose>
+      </typedef>
+      <typedef name="first_argument_type">
+        <type>T1</type>
+        <purpose>If N == 2</purpose>
+      </typedef>
+      <typedef name="second_argument_type">
+        <type>T2</type>
+        <purpose>If N == 2</purpose>
+      </typedef>
+      <typedef name="arg1_type"><type>T1</type></typedef>
+      <typedef name="arg2_type"><type>T2</type></typedef>
       <typedef name="..."/>
-      <typedef type="TN" name="argN_type"/>
+      <typedef name="argN_type"><type>TN</type></typedef>
 
       <static-constant type="int" name="arity" value="N"/>
 
@@ -231,7 +246,9 @@
     <class name="signal">
       <template>
         <template-type-parameter name="Signature" comment="Function type R (T1, T2, ..., TN)"/>
-        <template-type-parameter name="Allocator" default="std::allocator&lt;void&gt;"/>
+        <template-type-parameter name="Allocator">
+          <default><classname>std::allocator</classname>&lt;void&gt;</default>
+        </template-type-parameter>
         <template-type-parameter name="Combiner">
           <default><classname>last_value</classname>&lt;R&gt;</default>
         </template-type-parameter>
@@ -249,17 +266,19 @@
       <inherit access="public"><classname>signalN</classname>&lt;R, T1, T2, ..., TN, Combiner, Group, GroupCompare, SlotFunction&gt;</inherit>
       <purpose>Safe multicast callback.</purpose>
 
-      <para>Class template <classname>signal</classname> is a thin
-      wrapper around the numbered class templates <classname
-      alt="signalN">signal0</classname>, <classname
-      alt="signalN">signal1</classname>, etc. It accepts a function
-      type with N arguments instead of N separate arguments, and
-      derives from the appropriate <classname>signalN</classname>
-      instantiation.</para>
-   
-      <para>All functionality of this class template is in its base
-      class <classname>signalN</classname>.</para>
- 
+      <description>
+        <para>Class template <classname>signal</classname> is a thin
+        wrapper around the numbered class templates <classname
+        alt="signalN">signal0</classname>, <classname
+        alt="signalN">signal1</classname>, etc. It accepts a function
+        type with N arguments instead of N separate arguments, and
+        derives from the appropriate <classname>signalN</classname>
+        instantiation.</para>
+      
+        <para>All functionality of this class template is in its base
+        class <classname>signalN</classname>.</para>
+      </description>
+
       <constructor>
         <parameter name="combiner">
           <paramtype>const combiner_type&amp;</paramtype>

@@ -100,14 +100,14 @@
 
     <purpose>A set of generalized function pointers that can be used for callbacks or wrapping function objects.</purpose>
 
-    <para>
-       Class template <classname>functionN</classname> is actually a
-       family of related classes <classname alt="functionN">function0</classname>,
-       <classname alt="functionN">function1</classname>, etc., up to some
-       implementation-defined maximum. In this context,
-       <code>N</code> refers to the number of
-       parameters.
-    </para>
+    <description>
+      <para>Class template <classname>functionN</classname> is
+      actually a family of related classes <classname
+      alt="functionN">function0</classname>, <classname
+      alt="functionN">function1</classname>, etc., up to some
+      implementation-defined maximum. In this context, <code>N</code>
+      refers to the number of parameters.</para>
+    </description>
 
     <typedef name="result_type"><type>R</type></typedef>
     <typedef name="allocator_type"><type>Allocator</type></typedef>
@@ -268,27 +268,30 @@
   <class name="function">
     <template>
       <template-type-parameter name="Signature" comment="Function type R (T1, T2, ..., TN)"/>
-      <template-type-parameter name="Allocator" default="std::allocator&lt;void&gt;"/>
+      <template-type-parameter name="Allocator">
+        <default><classname>std::allocator</classname>&lt;void&gt;</default>
+      </template-type-parameter>
     </template>
     <inherit access="public"><classname>functionN</classname>&lt;R, T1, T2, ..., TN, Allocator&gt;</inherit>
 
     <purpose>A generalized function pointer that can be used for
     callbacks or wrapping function objects.</purpose>
 
-    <para>
-      Class template <classname>function</classname> is a thin wrapper
-      around the numbered class templates <classname
+    <description>
+      <para>Class template <classname>function</classname> is a thin
+      wrapper around the numbered class templates <classname
       alt="functionN">function0</classname>, <classname
       alt="functionN">function1</classname>, etc. It accepts a
       function type with N arguments and will will derive from
-      <classname>functionN</classname> instantiated with the arguments it receives.
+      <classname>functionN</classname> instantiated with the arguments
+      it receives.</para>
 
-      The semantics of all operations in class template
-      <classname>function</classname> are equivalent to that of the underlying
-      <classname>functionN</classname> object, although additional member
-      functions are required to allow proper copy construction and
-      copy assignment of function objects.
-    </para>
+      <para>The semantics of all operations in class template
+      <classname>function</classname> are equivalent to that of the
+      underlying <classname>functionN</classname> object, although
+      additional member functions are required to allow proper copy
+      construction and copy assignment of function objects.</para>
+    </description>
 
     <typedef name="result_type"><type>R</type></typedef>
     <typedef name="allocator_type"><type>Allocator</type></typedef>
