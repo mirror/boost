@@ -80,6 +80,11 @@ public:
    BOOST_STATIC_CONSTANT(bool, value = answer::value);
 };
 
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+template <class I>
+bool is_random_access_iterator<I>::value;
+#endif
+
 }
 
 #endif
