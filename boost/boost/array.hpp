@@ -11,7 +11,8 @@
  * This software is provided "as is" without express or implied
  * warranty, and with no claim as to its suitability for any purpose.
  *
- * Sep 29, 2000
+ * 20 Jan 2001 - STLport fix (Beman Dawes)
+ * 29 Sep 2000 - Initial Revision (Nico Josuttis)
  */
 #ifndef BOOST_ARRAY_HPP
 #define BOOST_ARRAY_HPP
