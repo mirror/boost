@@ -132,12 +132,12 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
                 bad_index ().raise ();
 #endif
-                return one_;
+                return const_cast<reference>(one_);
             } else {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
                 bad_index ().raise ();
 #endif
-                return zero_;
+                return const_cast<reference>(zero_);
             }
         }
 
@@ -929,14 +929,14 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size1_;
         size_type size2_;
         array_type data_;
-        static value_type zero_;
-        static value_type one_;
+        static const value_type zero_;
+        static const value_type one_;
     };
 
     template<class T, class F1, class F2, class A>
-    typename triangular_matrix<T, F1, F2, A>::value_type triangular_matrix<T, F1, F2, A>::zero_ (0);
+    const typename triangular_matrix<T, F1, F2, A>::value_type triangular_matrix<T, F1, F2, A>::zero_ (0);
     template<class T, class F1, class F2, class A>
-    typename triangular_matrix<T, F1, F2, A>::value_type triangular_matrix<T, F1, F2, A>::one_ (1);
+    const typename triangular_matrix<T, F1, F2, A>::value_type triangular_matrix<T, F1, F2, A>::one_ (1);
 
     // Triangular matrix adaptor class
     template<class M, class F>
@@ -959,18 +959,18 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
         typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_pointer,
                                           typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
 #else
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_closure_type,
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
@@ -985,11 +985,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::iterator2 iterator2_type;
 #else
         typedef typename M::const_iterator1 const_iterator1_type;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_iterator1,
                                           typename M::iterator1>::type iterator1_type;
         typedef typename M::const_iterator2 const_iterator2_type;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_iterator2,
                                           typename M::iterator2>::type iterator2_type;
 #endif
@@ -1053,12 +1053,12 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
                 bad_index ().raise ();
 #endif
-                return one_;
+                return const_cast<reference>(one_);
             } else {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
                 bad_index ().raise ();
 #endif
-                return zero_;
+                return const_cast<reference>(zero_);
             }
         }
 #else
@@ -1072,12 +1072,12 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
                 bad_index ().raise ();
 #endif
-                return one_;
+                return const_cast<reference>(one_);
             } else {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
                 bad_index ().raise ();
 #endif
-                return zero_;
+                return const_cast<reference>(zero_);
             }
         }
 #endif
@@ -1837,16 +1837,16 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         matrix_closure_type data_;
         static const_matrix_type nil_;
-        static value_type zero_;
-        static value_type one_;
+        static const value_type zero_;
+        static const value_type one_;
     };
 
     template<class M, class F>
     typename triangular_adaptor<M, F>::const_matrix_type triangular_adaptor<M, F>::nil_;
     template<class M, class F>
-    typename triangular_adaptor<M, F>::value_type triangular_adaptor<M, F>::zero_ (0);
+    const typename triangular_adaptor<M, F>::value_type triangular_adaptor<M, F>::zero_ (0);
     template<class M, class F>
-    typename triangular_adaptor<M, F>::value_type triangular_adaptor<M, F>::one_ (1);
+    const typename triangular_adaptor<M, F>::value_type triangular_adaptor<M, F>::one_ (1);
 
     template<class E1, class E2>
     struct matrix_vector_solve_traits {

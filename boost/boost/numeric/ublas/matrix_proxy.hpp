@@ -45,18 +45,18 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
         typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_pointer,
                                           typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
 #else
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_closure_type,
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
@@ -229,7 +229,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::iterator2 iterator_type;
 #else
         typedef typename M::const_iterator2 const_iterator_type;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_iterator2,
                                           typename M::iterator2>::type iterator_type;
 #endif
@@ -554,18 +554,18 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
         typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_pointer,
                                           typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
 #else
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_closure_type,
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
@@ -738,7 +738,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::iterator1 iterator_type;
 #else
         typedef typename M::const_iterator1 const_iterator_type;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_iterator1,
                                           typename M::iterator1>::type iterator_type;
 #endif
@@ -1065,18 +1065,18 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
         typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_pointer,
                                           typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
 #else
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_closure_type,
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
@@ -1562,18 +1562,18 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
         typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_pointer,
                                           typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
 #else
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_closure_type,
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
@@ -2070,18 +2070,18 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
         typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_pointer,
                                           typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
 #else
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_closure_type,
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
@@ -2575,18 +2575,18 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
         typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_pointer,
                                           typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
 #else
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_closure_type,
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
@@ -2767,11 +2767,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::iterator2 iterator2_type;
 #else
         typedef typename M::const_iterator1 const_iterator1_type;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_iterator1,
                                           typename M::iterator1>::type iterator1_type;
         typedef typename M::const_iterator2 const_iterator2_type;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_iterator2,
                                           typename M::iterator2>::type iterator2_type;
 #endif
@@ -3499,18 +3499,18 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
         typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_pointer,
                                           typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
 #else
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_closure_type,
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
@@ -4450,18 +4450,18 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::pointer pointer;
 #else
         typedef typename M::const_reference const_reference;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_reference,
                                           typename M::reference>::type reference;
         typedef typename M::const_pointer const_pointer;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_pointer,
                                           typename M::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename M::closure_type matrix_closure_type;
 #else
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+        typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_closure_type,
                                           typename M::closure_type>::type matrix_closure_type;
 #endif

@@ -326,11 +326,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename E::pointer pointer;
 #else
         typedef typename E::const_reference const_reference;
-        typedef typename boost::mpl::if_c<boost::is_const<E>::value,
+        typedef typename boost::mpl::if_<boost::is_const<E>,
                                           typename E::const_reference,
                                           typename E::reference>::type reference;
         typedef typename E::const_pointer const_pointer;
-        typedef typename boost::mpl::if_c<boost::is_const<E>::value,
+        typedef typename boost::mpl::if_<boost::is_const<E>,
                                           typename E::const_pointer,
                                           typename E::pointer>::type pointer;
 #endif
@@ -465,7 +465,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename E::iterator iterator;
 #else
         typedef typename E::const_iterator const_iterator;
-        typedef typename boost::mpl::if_c<boost::is_const<E>::value,
+        typedef typename boost::mpl::if_<boost::is_const<E>,
                                           typename E::const_iterator,
                                           typename E::iterator>::type iterator;
 #endif
@@ -547,23 +547,23 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_unary<E, F> >::operator ();
 #endif
-        typedef typename boost::mpl::if_c<boost::is_same<F,
-                                                         scalar_identity<typename E::value_type> >::value,
+        typedef typename boost::mpl::if_<boost::is_same<F,
+                                                         scalar_identity<typename E::value_type> >,
                                           E,
                                           const E>::type expression_type;
         typedef typename E::size_type size_type;
         typedef typename E::difference_type difference_type;
         typedef typename F::result_type value_type;
         typedef value_type const_reference;
-        typedef typename boost::mpl::if_c<boost::is_same<F,
-                                                         scalar_identity<value_type> >::value,
+        typedef typename boost::mpl::if_<boost::is_same<F,
+                                                         scalar_identity<value_type> >,
                                           typename E::reference,
                                           value_type>::type reference;
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
     private:
         typedef F functor_type;
-        typedef typename boost::mpl::if_c<boost::is_const<expression_type>::value,
+        typedef typename boost::mpl::if_<boost::is_const<expression_type>,
                                           typename E::const_closure_type,
                                           typename E::closure_type>::type expression_closure_type;
         typedef const vector_unary<E, F> const_self_type;

@@ -1257,7 +1257,7 @@ namespace boost { namespace numeric { namespace ublas {
                                               BOOST_UBLAS_TYPENAME E::const_iterator1::iterator_category,
                                               BOOST_UBLAS_TYPENAME E::const_iterator2::iterator_category>::storage_category storage_category;
         // give preference to expressions orientation if known
-        typedef typename boost::mpl::if_c<boost::is_same<BOOST_UBLAS_TYPENAME E::orientation_category, unknown_orientation_tag>::value,
+        typedef typename boost::mpl::if_<boost::is_same<BOOST_UBLAS_TYPENAME E::orientation_category, unknown_orientation_tag>,
                                           BOOST_UBLAS_TYPENAME M::orientation_category ,
                                           BOOST_UBLAS_TYPENAME E::orientation_category >::type orientation_category;
         matrix_assign (functor_type (), full (), m, e, storage_category (), orientation_category ());
@@ -1272,7 +1272,7 @@ namespace boost { namespace numeric { namespace ublas {
                                               BOOST_UBLAS_TYPENAME E::const_iterator1::iterator_category,
                                               BOOST_UBLAS_TYPENAME E::const_iterator2::iterator_category>::storage_category storage_category;
         // give preference to expressions orientation if known
-        typedef typename boost::mpl::if_c<boost::is_same<BOOST_UBLAS_TYPENAME E::orientation_category, unknown_orientation_tag>::value,
+        typedef typename boost::mpl::if_<boost::is_same<BOOST_UBLAS_TYPENAME E::orientation_category, unknown_orientation_tag>,
                                           BOOST_UBLAS_TYPENAME M::orientation_category ,
                                           BOOST_UBLAS_TYPENAME E::orientation_category >::type orientation_category;
         matrix_assign (functor1_type (), functor2_type (), m, e, storage_category (), orientation_category ());

@@ -703,9 +703,9 @@ namespace boost { namespace numeric { namespace ublas {
         result_type operator () (const vector_expression<E1> &e1,
                                  const vector_expression<E2> &e2) const {
 #ifdef BOOST_UBLAS_USE_SIMD
-            typedef typename boost::mpl::if_c<
+            typedef typename boost::mpl::if_<
                 boost::mpl::and_<boost::is_same<typename E1::simd_category, concrete_tag>,
-                                 boost::is_same<typename E2::simd_category, concrete_tag> >::value,
+                                 boost::is_same<typename E2::simd_category, concrete_tag> >,
                     concrete_tag,
                     abstract_tag>::type simd_category;
 #else
@@ -862,9 +862,9 @@ namespace boost { namespace numeric { namespace ublas {
                                  const vector_expression<E2> &e2,
                                  size_type i) const {
 #ifdef BOOST_UBLAS_USE_SIMD
-            typedef typename boost::mpl::if_c<
+            typedef typename boost::mpl::if_<
                 boost::mpl::and_<boost::is_same<typename E1::simd_category, concrete_tag>,
-                                 boost::is_same<typename E2::simd_category, concrete_tag> >::value,
+                                 boost::is_same<typename E2::simd_category, concrete_tag> >,
                     concrete_tag,
                     abstract_tag>::type simd_category;
 #else
@@ -1044,9 +1044,9 @@ namespace boost { namespace numeric { namespace ublas {
                                  const matrix_expression<E2> &e2,
                                  size_type i) const {
 #ifdef BOOST_UBLAS_USE_SIMD
-            typedef typename boost::mpl::if_c<
+            typedef typename boost::mpl::if_<
                 boost::mpl::and_<boost::is_same<typename E1::simd_category, concrete_tag>,
-                                 boost::is_same<typename E2::simd_category, concrete_tag> >::value,
+                                 boost::is_same<typename E2::simd_category, concrete_tag> >,
                     concrete_tag,
                     abstract_tag>::type simd_category;
 #else
@@ -1235,9 +1235,9 @@ namespace boost { namespace numeric { namespace ublas {
                                  const matrix_expression<E2> &e2,
                                  size_type i, size_type j) const {
 #ifdef BOOST_UBLAS_USE_SIMD
-            typedef typename boost::mpl::if_c<
+            typedef typename boost::mpl::if_<
                 boost::mpl::and_<boost::is_same<typename E1::simd_category, concrete_tag>,
-                                 boost::is_same<typename E2::simd_category, concrete_tag> >::value,
+                                 boost::is_same<typename E2::simd_category, concrete_tag> >,
                     concrete_tag,
                     abstract_tag>::type simd_category;
 #else
