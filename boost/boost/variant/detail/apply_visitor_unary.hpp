@@ -18,10 +18,7 @@
 #define BOOST_VARIANT_DETAIL_APPLY_VISITOR_UNARY_HPP
 
 #include "boost/detail/workaround.hpp"
-
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-#   include "boost/variant/detail/define_forwarding_func.hpp"
-#endif
+#include "boost/variant/detail/define_forwarding_func.hpp"
 
 namespace boost {
 
