@@ -284,11 +284,13 @@ struct POD_UDT { int x; };
 struct empty_UDT
 {
    ~empty_UDT(){};
+   empty_UDT& operator=(const empty_UDT&){ return *this; }
    bool operator==(const empty_UDT&)const
    { return true; }
 };
 struct empty_POD_UDT
 {
+   empty_POD_UDT& operator=(const empty_POD_UDT&){ return *this; }
    bool operator==(const empty_POD_UDT&)const
    { return true; }
 };
