@@ -26,7 +26,7 @@ namespace std{
     #elif defined(BOOST_MSVC)
 		using ::mbstate_t;
     #elif defined(BOOST_INTEL)
-        using ::mbstate_t
+        using ::mbstate_t;
     #elif defined(BOOST_NO_STDC_NAMESPACE)
         using ::codecvt;
 		using ::mbstate_t;
