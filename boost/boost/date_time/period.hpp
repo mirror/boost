@@ -62,7 +62,7 @@ namespace date_time {
     typedef point_rep point_type;
     typedef duration_rep duration_type;
 
-    period(point_rep begin, point_rep last);
+    period(point_rep begin, point_rep end);
     period(point_rep begin, duration_rep len);
     point_rep begin() const;
     point_rep end() const;
@@ -80,7 +80,7 @@ namespace date_time {
     bool is_after(const point_rep& point) const;
     period intersection(const period& other) const;
     period merge(const period& other) const;
-    period hull(const period& other) const;
+    period span(const period& other) const;
   private:
     point_rep begin_;
     point_rep last_;
@@ -137,7 +137,7 @@ namespace date_time {
   inline
   bool period<point_rep,duration_rep>::is_null() const 
   {
-    return last_ <= begin_;
+    return end() <= begin_;
   }
 
   //! Return the length of the period
@@ -162,7 +162,7 @@ namespace date_time {
   inline
   bool period<point_rep,duration_rep>::operator<(const period& rhs) const 
   {
-    return (last_ <= rhs.begin_);
+    return (last_ < rhs.begin_);
   } 
 
 
@@ -334,11 +334,11 @@ namespace date_time {
   template<class point_rep, class duration_rep>
   inline
   period<point_rep,duration_rep>
-  period<point_rep,duration_rep>::hull(const period<point_rep,duration_rep>& other) const 
+  period<point_rep,duration_rep>::span(const period<point_rep,duration_rep>& other) const 
   {
-    point_rep start = min(begin_, other.begin_);
-    point_rep last   = max(end(), other.end());
-    return period<point_rep,duration_rep>(start, last);
+    point_rep start((begin_ < other.begin_) ? begin() : other.begin());
+    point_rep end((last_  < other.last_)  ? other.end() : end());
+    return period<point_rep,duration_rep>(start, end);
   }
 
 
