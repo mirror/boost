@@ -33,7 +33,7 @@ template< typename C > struct imag : C::imag {};
 
 namespace boost { namespace mpl {
 
-template<> struct numeric_cast< integral_c_tag,complex_tag >
+template<> struct BOOST_MPL_AUX_NUMERIC_CAST< integral_c_tag,complex_tag >
 {
     template< typename N > struct apply
         : complex< N, integral_c< typename N::value_type, 0 > >

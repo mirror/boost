@@ -15,12 +15,24 @@
 // $Revision$
 
 #include <boost/mpl/apply_wrap.hpp>
+#include <boost/mpl/aux_/config/msvc.hpp>
+#include <boost/mpl/aux_/config/workaround.hpp>
+
+// agurt 21/sep/04: portability macro for the sake of MSVC 6.x-7.0; 
+// resolves conflicts with 'boost::numeric_cast' function template.
+// use it in your own code _only_ if you care about compatibility with 
+// these outdated compilers!
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#   define BOOST_MPL_AUX_NUMERIC_CAST numeric_cast_
+#else
+#   define BOOST_MPL_AUX_NUMERIC_CAST numeric_cast
+#endif
 
 namespace boost { namespace mpl {
 
 // no default implementation; the definition is needed to make MSVC happy
 
-template< typename SourceTag, typename TargetTag > struct numeric_cast
+template< typename SourceTag, typename TargetTag > struct BOOST_MPL_AUX_NUMERIC_CAST
 {
     template< typename N > struct apply;
 };
@@ -38,7 +50,7 @@ struct cast1st_impl
     template< typename N1, typename N2 > struct apply
         : apply_wrap2< 
               F
-            , typename apply_wrap1< numeric_cast<Tag1,Tag2>,N1 >::type
+            , typename apply_wrap1< BOOST_MPL_AUX_NUMERIC_CAST<Tag1,Tag2>,N1 >::type
             , N2
             >
     {
@@ -56,7 +68,7 @@ struct cast2nd_impl
         : apply_wrap2< 
               F
             , N1
-            , typename apply_wrap1< numeric_cast<Tag2,Tag1>,N2 >::type
+            , typename apply_wrap1< BOOST_MPL_AUX_NUMERIC_CAST<Tag2,Tag1>,N2 >::type
             >
     {
     };
