@@ -16,7 +16,7 @@
 #include <cwchar>            // mbstate_t.
 #include <locale>            // codecvt, locale.
 #include <boost/config.hpp>  // HAS_MACRO_USE_FACET.
-#include <boost/iostreams/detail/config/wide_streams.hpp>
+#include <boost/iostreams/detail/config/codecvt.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
 

@@ -31,43 +31,12 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp>  // Make sure size_t is in std, BOOST_MSVC.
+#include <boost/config.hpp>  // Put size_t in std, BOOST_MSVC, Dinkum.
 #include <boost/detail/workaround.hpp>
 #include <algorithm>         // min.
 #include <cstddef>           // size_t.
 #include <locale>            // locale, codecvt_base, codecvt.
-#include <boost/iostreams/detail/config/wide_streams.hpp>
-
-//------------------Definition of add_facet-----------------------------------//
-
-// Borrowed from <boost/archive/add_facet.hpp>
-
-// does STLport uses native STL for locales?
-#if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) \
-&& defined(_STLP_NO_OWN_IOSTREAMS)
-// and this native STL lib is old Dinkumware (has not defined _CPPLIB_VER)
-#  if (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
-#    define BOOST_IOSTREMS_OLD_DINKUMWARE_BENEATH_STLPORT
-#  endif
-#endif
-
-namespace boost { namespace iostreams { namespace detail {
-
-template<class Facet>
-inline std::locale add_facet(const std::locale &l, Facet * f)
-{
-    return
-        #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) || \
-            defined BOOST_ARCHIVE_OLD_DINKUMWARE_BENEATH_STLPORT \
-            /**/
-            std::locale(std::_Addfac(l, f));
-        #else
-            // standard compatible
-            std::locale(l, f);
-        #endif
-}
-
-} } } // End namespaces iostreams, boost.
+#include <boost/iostreams/detail/config/codecvt.hpp>
 
 //------------------Definition of traits--------------------------------------//
 
@@ -98,9 +67,9 @@ struct codecvt_state { typedef typename T::state_type type; };
 
 //------------------Definition of codecvt_impl--------------------------------//
 
-#if defined(BOOST_NO_PRIMARY_CODECVT_DEFINITION) || \
-    defined(BOOST_EMPTY_PRIMARY_CODECVT_DEFINITION) || \
-    defined(BOOST_NO_STD_LOCALE) \
+#if defined(BOOST_IOSTREAMS_NO_PRIMARY_CODECVT_DEFINITION) || \
+    defined(BOOST_IOSTREAMS_EMPTY_PRIMARY_CODECVT_DEFINITION) || \
+    defined(BOOST_IOSTREAMS_NO_LOCALE) \
     /**/
 
 namespace boost { namespace iostreams { namespace detail {
@@ -186,25 +155,56 @@ protected:
 
 } } } // End namespaces detail, iostreams, boost.
 
-#endif // no primary codecvt definition, or empty definition.
+#endif // no primary codecvt definition, empty definition.
 
 //------------------Definition of BOOST_IOSTREAMS_CODECVT_SPEC----------------//
 
-#if defined(BOOST_NO_PRIMARY_CODECVT_DEFINITION) || \
-    defined(BOOST_EMPTY_PRIMARY_CODECVT_DEFINITION) \
+#if defined(BOOST_IOSTREAMS_NO_PRIMARY_CODECVT_DEFINITION) || \
+    defined(BOOST_IOSTREAMS_EMPTY_PRIMARY_CODECVT_DEFINITION) \
     /**/
-# define BOOST_IOSTREAMS_CODECVT_SPEC(state) \
+# ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#  define BOOST_IOSTREAMS_CODECVT_SPEC(state) \
     namespace std { \
         template<typename Intern, typename Extern> \
-        struct codecvt<Intern, Extern, state> \
-            : ::boost::iostreams::detail::codecvt_impl<Intern, Extern, state> \
+        class codecvt<Intern, Extern, state> \
+            : public ::boost::iostreams::detail::codecvt_impl< \
+                         Intern, Extern, state \
+                     > \
         { \
+        public: \
+            codecvt(std::size_t refs = 0) \
+                : ::boost::iostreams::detail::codecvt_impl< \
+                      Intern, Extern, state \
+                  >(refs) \
+                { } \
             static std::locale::id id; \
         }; \
         template<typename Intern, typename Extern> \
         std::locale::id codecvt<Intern, Extern, state>::id; \
     } \
     /**/
+# else
+#  define BOOST_IOSTREAMS_CODECVT_SPEC(state) \
+    namespace std { \
+        template<> \
+        class codecvt<wchar_t, char, state> \
+            : public ::boost::iostreams::detail::codecvt_impl< \
+                         wchar_t, char, state \
+                     > \
+        { \
+        public: \
+            codecvt(std::size_t refs = 0) \
+                : ::boost::iostreams::detail::codecvt_impl< \
+                      wchar_t, char, state \
+                  >(refs) \
+                { } \
+            static std::locale::id id; \
+        }; \
+        template<> \
+        std::locale::id codecvt<wchar_t, char, state>::id; \
+    } \
+    /**/
+# endif
 #else
 # define BOOST_IOSTREAMS_CODECVT_SPEC(state)
 #endif // no primary codecvt definition, or empty definition.
@@ -219,13 +219,17 @@ struct codecvt_helper : std::codecvt<Intern, Extern, State> {
     typedef Extern  extern_type;
     typedef State   state_type;
     codecvt_helper(std::size_t refs = 0) 
-    #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003) || \
-        BOOST_WORKAROUND(__BORLANDC__, <= 0x600)
-        : std::codecvt<Intern, Extern, State>()
-    #else
+    #if !defined(BOOST_IOSTREAMS_NO_CODECVT_CTOR_FROM_SIZE_T)
         : std::codecvt<Intern, Extern, State>(refs)
+    #else
+        : std::codecvt<Intern, Extern, State>()
     #endif
         { }
+#ifdef BOOST_IOSTREAMS_NO_CODECVT_MAX_LENGTH
+    int max_length() const throw() { return do_max_length(); }
+protected:
+    virtual int do_max_length() const throw() { return 1; }
+#endif
 };
 
 } } } // End namespaces detail, iostreams, boost.

@@ -44,45 +44,10 @@
 # endif
 #endif // #ifndef BOOST_IOSTREAMS_NO_LOCALE
 
-//------------------Support for codecvt with user-defined state types---------//
-
-#if defined(__MSL_CPP__)
-# define BOOST_NO_PRIMARY_CODECVT_DEFINITION
-#endif
-
-#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION) || \
-    defined(__GLIBCPP__) || defined(__GLIBCXX__) \
-    /**/
-# define BOOST_EMPTY_PRIMARY_CODECVT_DEFINITION
-#endif
-
-//------------------Normalize codecvt::length---------------------------------//
-
-#if !defined(__MSL_CPP__) && !defined(__LIBCOMO__)
-    #define BOOST_IOSTREAMS_CODECVT_CV_QUALIFIER const
-#else
-    #define BOOST_IOSTREAMS_CODECVT_CV_QUALIFIER
-#endif
-                    
-//------------------Put mbstate_t and codecvt in std--------------------------//
-
 #ifndef BOOST_IOSTREAMS_NO_LOCALE
-# include <locale>
-#endif
-
-// From Robert Ramey's version of utf8_codecvt_facet.
-namespace std { 
-
-#if defined(__LIBCOMO__)
-    using ::mbstate_t;
-#elif defined(BOOST_DINKUMWARE_STDLIB)
-    using ::mbstate_t;
-#elif defined(__SGI_STL_PORT)
-#elif defined(BOOST_NO_STDC_NAMESPACE)
-    using ::codecvt;
-    using ::mbstate_t;
-#endif
-
-} // End namespace std.
+# if defined(BOOST_NO_STD_LOCALE) || defined(__CYGWIN__)
+#  define BOOST_IOSTREAMS_NO_LOCALE
+# endif
+#endif // #ifndef BOOST_IOSTREAMS_NO_LOCALE
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_CONFIG_WIDE_STREAMS_HPP_INCLUDED
