@@ -180,6 +180,8 @@
             <simpara>Returns a reference to the content of
               <code>*this</code>.</simpara>
           </description>
+
+          <throws>Will not throw.</throws>
         </overloaded-method>
 
         <overloaded-method name="get_pointer">
@@ -194,6 +196,8 @@
             <simpara>Returns a pointer to the content of
               <code>*this</code>.</simpara>
           </description>
+
+          <throws>Will not throw.</throws>
         </overloaded-method>
 
       </method-group>
