@@ -12,10 +12,10 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
-namespace boost { namespace iostreams {           
-                    
+namespace boost { namespace iostreams {
+
 //------------------Tags for dispatch according to i/o mode-------------------//
 
 struct any_tag { };
@@ -23,26 +23,26 @@ namespace detail { struct two_sequence : virtual any_tag { }; }
 namespace detail { struct random_access : virtual any_tag { }; }
 namespace detail { struct one_head : virtual any_tag { }; }
 namespace detail { struct two_head : virtual any_tag { }; }
-struct input : virtual any_tag { }; 
-struct output : virtual any_tag { }; 
-struct bidirectional : virtual input, virtual output, detail::two_sequence { }; 
+struct input : virtual any_tag { };
+struct output : virtual any_tag { };
+struct bidirectional : virtual input, virtual output, detail::two_sequence { };
 struct dual_use : virtual input, virtual output { }; // Pseudo-mode.
-struct input_seekable : virtual input, virtual detail::random_access { }; 
-struct output_seekable : virtual output, virtual detail::random_access { }; 
-struct seekable 
+struct input_seekable : virtual input, virtual detail::random_access { };
+struct output_seekable : virtual output, virtual detail::random_access { };
+struct seekable
     : virtual input_seekable, 
-      virtual output_seekable, 
-      detail::one_head 
-    { }; 
+      virtual output_seekable,
+      detail::one_head
+    { };
 struct dual_seekable
-    : virtual input_seekable, 
-      virtual output_seekable, 
-      detail::two_head 
+    : virtual input_seekable,
+      virtual output_seekable,
+      detail::two_head
     { };  
-struct bidirectional_seekable 
-    : input_seekable, output_seekable, 
-      bidirectional, detail::two_head 
-    { }; 
+struct bidirectional_seekable
+    : input_seekable, output_seekable,
+      bidirectional, detail::two_head
+    { };
 
 //------------------Tags for use as i/o categories----------------------------//
 
@@ -70,56 +70,56 @@ struct bidirectional_filter_tag : filter_tag, bidirectional { };
 struct seekable_filter_tag : filter_tag, seekable { };
 
 struct multichar_input_filter_tag
-    : multichar_tag, 
-      input_filter_tag 
+    : multichar_tag,
+      input_filter_tag
     { };
-struct multichar_output_filter_tag 
-    : multichar_tag, 
-      output_filter_tag 
+struct multichar_output_filter_tag
+    : multichar_tag,
+      output_filter_tag
     { };
-struct multichar_bidirectional_filter_tag 
-    : multichar_tag, 
-      bidirectional_filter_tag 
+struct multichar_bidirectional_filter_tag
+    : multichar_tag,
+      bidirectional_filter_tag
     { };
-struct multichar_seekable_filter_tag 
-    : multichar_tag, 
-      seekable_filter_tag 
+struct multichar_seekable_filter_tag
+    : multichar_tag,
+      seekable_filter_tag
     { };
 
     //
     // Tags for standard streams and streambufs.
-    // 
+    //
 
 struct std_io_tag : virtual localizable_tag { };
-struct istream_tag 
-    : virtual input_seekable, 
-      virtual device_tag, 
-      virtual peekable_tag, 
-      virtual std_io_tag 
+struct istream_tag
+    : virtual input_seekable,
+      virtual device_tag,
+      virtual peekable_tag,
+      virtual std_io_tag
     { };
-struct ostream_tag 
-    : virtual output_seekable, 
-      virtual device_tag, 
-      virtual peekable_tag, 
-      virtual std_io_tag 
+struct ostream_tag
+    : virtual output_seekable,
+      virtual device_tag,
+      virtual peekable_tag,
+      virtual std_io_tag
     { };
-struct iostream_tag 
-    : seekable_device_tag, 
-      istream_tag, 
+struct iostream_tag
+    : seekable_device_tag,
+      istream_tag,
       ostream_tag
     { };
-struct streambuf_tag 
-    : seekable_device_tag, 
-      peekable_tag, 
-      std_io_tag 
+struct streambuf_tag
+    : seekable_device_tag,
+      peekable_tag,
+      std_io_tag
     { };
-struct stringstream_tag 
-    : dual_seekable, 
+struct stringstream_tag
+    : dual_seekable,
       device_tag,
       std_io_tag
     { };
-struct stringbuf_tag 
-    : dual_seekable, 
+struct stringbuf_tag
+    : dual_seekable,
       device_tag,
       std_io_tag
     { };
