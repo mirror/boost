@@ -16,10 +16,50 @@
 <h2>Contents</h2>
 
 <ul>
+  <li>Function templates <a href="#checked_delete">checked_delete() and
+    checked_array_delete()</a></li>
   <li>Function templates <a href="#functions next">next() and prior()</a></li>
   <li>Class <a href="#Class noncopyable">noncopyable</a></li>
   <li>Function template <a href="tie.html">tie()</a> and supporting class tied.</li>
 </ul>
+<h2> Function templates <a name="checked_delete">checked_delete</a>() and
+checked_array_delete()</h2>
+
+<p>Deletion of a pointer to an incomplete type is an unsafe programming practice
+because there is no way for the compiler to verify that the destructor is indeed
+trivial.&nbsp; The checked_delete() and checked_array_delete() function
+templates simply <b>delete</b> or <b>delete[]</b> their argument, but also
+require that their argument be a complete type.&nbsp; They issue an appropriate
+compiler error diagnostic if that requirement is not met.&nbsp; A typical
+implementation is shown; other implementations may vary:</p>
+
+<pre>    template&lt; typename T &gt;
+    inline void checked_delete(T const volatile * x)
+    {
+        BOOST_STATIC_ASSERT( sizeof(T) ); // assert type complete at point
+                                          // of instantiation
+        delete x;
+    }
+
+    template&lt; typename T &gt;
+    inline void checked_array_delete(T const volatile * x)
+    {
+        BOOST_STATIC_ASSERT( sizeof(T) ); // assert type complete at point
+                                          // of instantiation
+        delete [] x;
+    }</pre>
+
+<p>Contributed by Beman Dawes, based on a suggestion from Dave Abrahams,
+generalizing an idea from Vladimir Prus, with comments from Rainer Deyke, John
+Maddock, and others.</p>
+
+<h3>Background</h3>
+
+<p>The C++ Standard specifies that delete on a pointer to an incomplete types is
+undefined behavior if the type has a non-trivial destructor in&nbsp; [expr.delete]
+5.3.5 paragraph.&nbsp; No diagnostic is required.&nbsp; Some but not all
+compilers issue warnings if the type is incomplete at point of deletion.</p>
+
 <h2> <a name="functions next">Function</a> templates next() and prior()</h2>
 
 <p>Certain data types, such as the C++ Standard Library's forward and
@@ -91,9 +131,11 @@ emphasize that it is to be used only as a base class.&nbsp; Dave Abrahams notes
 concern about the effect on compiler optimization of adding (even trivial inline)
 destructor declarations. He says &quot;Probably this concern is misplaced, because
 noncopyable will be used mostly for classes which own resources and thus have non-trivial destruction semantics.&quot;</p>
+<h2>Function template tie()</h2>
+<p>See <a href="tie.html">separate documentation</a>.</p>
 <hr>
 <p>Revised&nbsp; <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan
--->08 March, 2001<!--webbot bot="Timestamp" endspan i-checksum="28780"
+-->22 May, 2001<!--webbot bot="Timestamp" endspan i-checksum="13960"
 -->
 </p>
 <p>© Copyright boost.org 1999. Permission to copy, use, modify, sell and

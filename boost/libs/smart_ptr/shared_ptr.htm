@@ -118,6 +118,8 @@ the macro name BOOST_NO_MEMBER_TEMPLATES is defined.</p>
 <p>Provides the type of the stored pointer.</p>
 <h3><a name="shared_ptr_ctor">shared_ptr constructors</a></h3>
 <pre>explicit shared_ptr( T* p=0 );</pre>
+<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
+Requirements</a>.</p>
 <p>Constructs a <strong>shared_ptr</strong>, storing a copy of <tt>p</tt>, which
 must have been allocated via a C++ <tt>new</tt> expression or be 0. Afterwards, <strong>use_count()</strong>
 is 1 (even if p==0; see <a href="#shared_ptr_~shared_ptr">~shared_ptr</a>).</p>
@@ -128,6 +130,8 @@ template&lt;typename Y&gt;
    shared_ptr(const shared_ptr&lt;Y&gt;&amp; r);  // never throws
 template&lt;typename Y&gt;
    shared_ptr(std::auto_ptr&lt;Y&gt;&amp; r);</pre>
+<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
+See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Constructs a <strong>shared_ptr</strong>, as if by storing a copy of the
 pointer stored in <strong>r</strong>. Afterwards, <strong>use_count()</strong>
 for all copies is 1 more than the initial <strong>r.use_count()</strong>, or 1
@@ -138,6 +142,8 @@ is <tt>std::bad_alloc</tt>.&nbsp;&nbsp; If an exception is thrown, that
 constructor has no effect.</p>
 <h3><a name="shared_ptr_~shared_ptr">shared_ptr destructor</a></h3>
 <pre>~shared_ptr();</pre>
+<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
+Requirements</a>.</p>
 <p>If <strong>use_count()</strong> == 1, deletes the object pointed to by the
 stored pointer.&nbsp;Otherwise, <strong>use_count()</strong> for any remaining
 copies is decremented by 1. Note that in C++&nbsp; <tt>delete</tt> on a pointer
@@ -149,6 +155,8 @@ template&lt;typename Y&gt;
    shared_ptr&amp; operator=(const shared_ptr&lt;Y&gt;&amp; r);
 template&lt;typename Y&gt;
    shared_ptr&amp; operator=(std::auto_ptr&lt;Y&gt;&amp; r);</pre>
+<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
+Requirements</a>.</p>
 <p>First, if <strong>use_count()</strong> == 1, deletes the object pointed to by
 the stored pointer.&nbsp;Otherwise, <strong>use_count()</strong> for any
 remaining copies is decremented by 1. Note that in C++&nbsp; <tt>delete</tt> on
@@ -164,6 +172,8 @@ is <tt>std::bad_alloc</tt>.&nbsp;&nbsp; If an exception is thrown, the function
 has no effect.</p>
 <h3>shared_ptr <a name="shared_ptr_reset">reset</a></h3>
 <pre>void reset( T* p=0 );</pre>
+<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
+Requirements</a>.</p>
 <p>First, if <strong>use_count()</strong> == 1, deletes the object pointed to by
 the stored pointer.&nbsp;Otherwise, <strong>use_count()</strong> for any
 remaining copies is decremented by 1.&nbsp;</p>
@@ -176,33 +186,46 @@ on a pointer with a value of 0 is harmless.</p>
 an exception is thrown,&nbsp; <tt>delete p</tt> is called.</p>
 <h3>shared_ptr <a name="shared_ptr_operator*">operator*</a></h3>
 <pre>T&amp; operator*() const;  // never throws</pre>
+<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
+Requirements</a>.</p>
 <p>Returns a reference to the object pointed to by the stored pointer.</p>
 <h3>shared_ptr <a name="shared_ptr_operator-&gt;">operator-&gt;</a> and <a name="shared_ptr_get">get</a></h3>
 <pre>T* operator-&gt;() const;  // never throws
 T* get() const;  // never throws</pre>
+<p><b>T</b> is required be a complete type at point of instantiation of
+operator-&gt;().&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
+Requirements</a>.</p>
+<p><b>T</b> is not required be a complete type at point of instantiation of
+get().&nbsp; See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Both return the stored pointer.</p>
 <h3>shared_ptr<a name="shared_ptr_use_count"> use_count</a></h3>
 <p><tt>long use_count() const; // never throws</tt></p>
+<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
+See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Returns the number of <strong>shared_ptrs</strong> sharing ownership of the
 stored pointer.</p>
 <h3>shared_ptr <a name="shared_ptr_unique">unique</a></h3>
 <p><tt>bool unique() const; // never throws</tt></p>
+<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
+See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Returns <strong>use_count()</strong> == 1.</p>
 <h3><a name="shared_ptr_swap">shared_ptr swap</a></h3>
 <p><code>void swap( shared_ptr&lt;T&gt;&amp; other ) throw()</code></p>
+<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
+See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Swaps the two smart pointers, as if by std::swap.</p>
 <h2>Class <a name="shared_ptr_example">shared_ptr example</a></h2>
 <p>See <a href="shared_ptr_example.cpp"> shared_ptr_example.cpp</a> for a complete example program.</p>
 <p>This program builds a std::vector and std::set of FooPtr's.</p>
 <p>Note that after the two containers have been populated, some of the FooPtr objects
 will have use_count()==1 rather than use_count()==2, since foo_set is a std::set
-rather than a std::multiset.&nbsp; Furthermore, use_count() may be even higher
+rather than a std::multiset, and thus does not contain duplicate entries.&nbsp; Furthermore, use_count() may be even higher
 at various times while push_back() and insert() container operations are performed.&nbsp;
 More complicated yet, the container operations may throw exceptions under a
 variety of circumstances.&nbsp; Without using a smart pointer, memory and
 exception management would be a nightmare.</p>
 <hr>
-<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->21 May, 2001<!--webbot bot="Timestamp" endspan i-checksum="13958" -->
+<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->22 May, 2001<!--webbot bot="Timestamp" endspan i-checksum="13960" -->
 </p>
 <p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
 modify, sell and distribute this document is granted provided this copyright

@@ -27,11 +27,11 @@ provides four smart pointer template classes:</p>
     <tr>
       <td>
         <p align="left"><a href="scoped_ptr.htm"><strong>scoped_ptr</strong></a></td>
-      <td>Simple sole ownership of single objects.</td>
+      <td>Simple sole ownership of single objects. Noncopyable.</td>
     </tr>
     <tr>
       <td><a href="scoped_array.htm"><strong>scoped_array</strong></a></td>
-      <td>Simple sole ownership of arrays.</td>
+      <td>Simple sole ownership of arrays. Noncopyable.</td>
     </tr>
     <tr>
       <td><a href="shared_ptr.htm"><strong>shared_ptr</strong></a></td>
@@ -53,10 +53,25 @@ provided to verify correct operation.</p>
 <p>A page on <a href="smarttests.htm">Smart Pointer Timings</a> will be of
 interest to those curious about performance issues.</p>
 <h2><a name="Common requirements">Common requirements</a></h2>
-<p>These smart pointer classes have a template parameter, <tt>T</tt>, which
+<p>These smart pointer classes have a template parameter, <tt><b>T</b></tt>, which
 specifies the type of the object pointed to by the smart pointer.&nbsp; The
 behavior of all four classes is undefined if the destructor or operator delete
-for objects of type <tt>T</tt> throws exceptions.</p>
+for objects of type <tt><b>T</b></tt> throws exceptions.</p>
+<p><code><b>T</b></code> may be an incomplete type at the point of smart pointer
+declaration.&nbsp; Unless otherwise specified, it is required that <code><b>T</b></code>
+be a complete type at point of instantiation of all member functions.</p>
+<h3>Rationale</h3>
+<p>The requirements on <tt><b>T</b></tt> are carefully crafted to ensure safety
+yet allow handle-body (aka pimpl) and similar idioms.&nbsp; In these idioms a
+smart pointer may appear in translation units where <tt><b>T</b></tt> is an
+incomplete type.&nbsp; This separates interface from implementation and hides
+implementation from translation units which merely use the interface.</p>
+<h3>Example</h3>
+<p>The <a href="scoped_ptr_example_test.cpp">scoped_ptr_example_test.cpp</a>
+sample program includes a header file, <a href="scoped_ptr_example.hpp">scoped_ptr_example.hpp</a>,
+which uses a <b>scoped_ptr&lt;&gt;</b> to an incomplete type.&nbsp;&nbsp; The
+instantiation of member functions which require a complete type occurs in the <a href="scoped_ptr_example.cpp">scoped_ptr_example.cpp</a>
+implementation file.&nbsp;</p>
 <h2>Exception safety</h2>
 <p>Several functions in these smart pointer classes are specified as having
 &quot;no effect&quot; or &quot;no effect except such-and-such&quot; if an
@@ -78,6 +93,10 @@ never throws</kbd>. </p>
 <p>Functions which destroy objects of the pointed to type are prohibited from
 throwing exceptions by the <a href="#Common requirements">Common requirements</a>.</p>
 <h2>History and acknowledgements</h2>
+<p>May, 2001. Vladimir Prus suggested requiring a complete type on
+destruction.&nbsp; Refinement evolved in discussions including Dave Abrahams,
+Greg Colvin, Beman Dawes, Rainer Deyke, Peter Dimov, John Maddock, Vladimir Prus,
+Shankar Sai, and others.</p>
 <p>November, 1999. Darin Adler provided operator ==, operator !=, and std::swap
 and std::less specializations for shared types.</p>
 <p>September, 1999. Luis Coelho provided shared_ptr::swap and shared_array::swap</p>
@@ -125,7 +144,7 @@ implementation.</p>
 <p>See the Revision History section of the header for further contributors.</p>
 <hr>
 <p>Revised&nbsp; <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan
--->27 Jul 2000<!--webbot bot="Timestamp" endspan i-checksum="14992"
+-->22 May 2001<!--webbot bot="Timestamp" endspan i-checksum="15106"
 --></p>
 <p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
 modify, sell and distribute this document is granted provided this copyright

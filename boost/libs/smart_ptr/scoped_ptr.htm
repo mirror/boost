@@ -59,25 +59,38 @@ template&lt;typename T&gt; class scoped_ptr : <a href="../utility/utility.htm#cl
 <p>Provides the type of the stored pointer.</p>
 <h3><a name="scoped_ptr_ctor">scoped_ptr constructors</a></h3>
 <pre>explicit scoped_ptr( T* p=0 );  // never throws</pre>
+<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
+See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Constructs a <tt>scoped_ptr</tt>, storing a copy of <tt>p</tt>, which must
-have been allocated via a C++ <tt>new</tt> expression or be 0..</p>
+have been allocated via a C++ <tt>new</tt> expression or be 0.</p>
 <h3><a name="scoped_ptr_~scoped_ptr">scoped_ptr destructor</a></h3>
 <pre>~scoped_ptr();</pre>
+<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
+Requirements</a>.</p>
 <p>Deletes the object pointed to by the stored pointer.&nbsp; Note that in C++, <tt>delete</tt>
 on a pointer with a value of 0 is harmless.</p>
 <p>Does not throw exceptions.</p>
 <h3>scoped_ptr <a name="scoped_ptr_reset">reset</a></h3>
 <pre>void reset( T* p=0 );</pre>
+<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
+Requirements</a>.</p>
 <p>If p is not equal to the stored pointer, deletes the object pointed to by the
 stored pointer and then stores a copy of p, which must have been allocated via a
 C++ <tt>new</tt> expression or be 0.</p>
 <p>Does not throw exceptions.</p>
 <h3>scoped_ptr <a name="scoped_ptr_operator*">operator*</a></h3>
 <pre>T&amp; operator*() const;  // never throws</pre>
+<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
+Requirements</a>.</p>
 <p>Returns a reference to the object pointed to by the stored pointer.</p>
 <h3>scoped_ptr <a name="scoped_ptr_operator-&gt;">operator-&gt;</a> and <a name="scoped_ptr_get">get</a></h3>
 <pre>T* operator-&gt;() const;  // never throws
 T* get() const;  // never throws</pre>
+<p><b>T</b> is required be a complete type at point of instantiation of
+operator-&gt;().&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
+Requirements</a>.</p>
+<p><b>T</b> is not required be a complete type at point of instantiation of
+get().&nbsp; See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Both return the stored pointer.</p>
 <h2>Class <a name="scoped_ptr_example">scoped_ptr example</a>s</h2>
 <pre>#include &lt;iostream&gt;
@@ -106,24 +119,16 @@ output:</p>
 Buckle my shoe</pre>
 </blockquote>
 <h2>Handle/Body Idiom</h2>
-<p>One common usage of <b>scoped_ptr</b> is to implement a handle/body
-structure which avoids exposing the body (implementation) in the header file:</p>
-<pre>class handle
-{
-public:    // simple forwarding functions to the body class
-    void f();
-    void g(int);
-private:
-    friend class body;  //incomplete class hides implementation
-    boost::scoped_ptr&lt;body&gt; imp;
-};</pre>
-<p>This code requires that <code>class body</code> have a trivial destructor to
-avoid undefined behavior.&nbsp; This is because the definition of <code>class
-body</code> is not visible at the time scoped_ptr&lt;&gt; deletes it. See ISO
-5.3.5/5.&nbsp; Note that some compilers will issue a warning even though the
-above code is well defined.</p>
+<p>One common usage of <b>scoped_ptr</b> is to implement a handle/body idiom which avoids exposing the body (implementation) in the header
+file.</p>
+<p>The <a href="scoped_ptr_example_test.cpp">scoped_ptr_example_test.cpp</a>
+sample program includes a header file, <a href="scoped_ptr_example.hpp">scoped_ptr_example.hpp</a>,
+which uses a <b>scoped_ptr&lt;&gt;</b> to an incomplete type to hide the
+implementation.&nbsp;&nbsp; The
+instantiation of member functions which require a complete type occurs in the <a href="scoped_ptr_example.cpp">scoped_ptr_example.cpp</a>
+implementation file.&nbsp;</p>
 <hr>
-<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->21 May 2001<!--webbot bot="Timestamp" endspan i-checksum="15104" --></p>
+<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->22 May 2001<!--webbot bot="Timestamp" endspan i-checksum="15106" --></p>
 <p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
 modify, sell and distribute this document is granted provided this copyright
 notice appears in all copies. This document is provided &quot;as is&quot;

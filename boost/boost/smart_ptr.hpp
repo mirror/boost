@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  21 May 01  Require complete type on delete (suggested by Vladimir Prus)
 //  21 May 01  operator= fails if operand transitively owned by *this, as in a
 //             linked list (report by Ken Johnson, fix by Beman Dawes)
 //  21 Jan 01  Suppress some useless warnings with MSVC (David Abrahams)
@@ -54,8 +55,9 @@
 #include <cstddef>            // for std::size_t
 #include <memory>             // for std::auto_ptr
 #include <algorithm>          // for std::swap
-#include <boost/utility.hpp>  // for boost::noncopyable
+#include <boost/utility.hpp>  // for boost::noncopyable, checked_delete, checked_array_delete
 #include <functional>         // for std::less
+#include <boost/static_assert.hpp> // for BOOST_STATIC_ASSERT
 
 namespace boost {
 
@@ -74,9 +76,8 @@ template<typename T> class scoped_ptr : noncopyable {
   typedef T element_type;
 
   explicit scoped_ptr( T* p=0 ) : ptr(p) {}  // never throws
-  ~scoped_ptr()                 { delete ptr; }
-
-  void reset( T* p=0 )          { if ( ptr != p ) { delete ptr; ptr = p; } }
+  ~scoped_ptr()                 { checked_delete(ptr); }
+  void reset( T* p=0 )          { if ( ptr != p ) { checked_delete(ptr); ptr = p; } }
   T& operator*() const          { return *ptr; }  // never throws
 #ifdef BOOST_MSVC
 # pragma warning(push)
@@ -107,9 +108,10 @@ template<typename T> class scoped_array : noncopyable {
   typedef T element_type;
 
   explicit scoped_array( T* p=0 ) : ptr(p) {}  // never throws
-  ~scoped_array()                    { delete [] ptr; }
+  ~scoped_array()                    { checked_array_delete(ptr); }
 
-  void reset( T* p=0 )               { if ( ptr != p ) {delete [] ptr; ptr=p;} }
+  void reset( T* p=0 )               { if ( ptr != p )
+                                         {checked_array_delete(ptr); ptr=p;} }
 
   T* get() const                     { return ptr; }  // never throws
 #ifdef BOOST_SMART_PTR_CONVERSION
@@ -132,7 +134,7 @@ template<typename T> class shared_ptr {
 
    explicit shared_ptr(T* p =0) : px(p) {
       try { pn = new long(1); }  // fix: prevent leak if new throws
-      catch (...) { delete p; throw; } 
+      catch (...) { checked_delete(p); throw; } 
    }
 
    shared_ptr(const shared_ptr& r) : px(r.px) { ++*(pn = r.pn); }  // never throws
@@ -167,7 +169,7 @@ template<typename T> class shared_ptr {
    template<typename Y>
       shared_ptr& operator=(std::auto_ptr<Y>& r) {
          // code choice driven by guarantee of "no effect if new throws"
-         if (*pn == 1) { delete px; }
+         if (*pn == 1) { checked_delete(px); }
          else { // allocate new reference counter
            long * tmp = new long(1); // may throw
            --*pn; // only decrement once danger of new throwing is past
@@ -186,7 +188,7 @@ template<typename T> class shared_ptr {
 
       shared_ptr& operator=(std::auto_ptr<T>& r) {
          // code choice driven by guarantee of "no effect if new throws"
-         if (*pn == 1) { delete px; }
+         if (*pn == 1) { checked_delete(px); }
          else { // allocate new reference counter
            long * tmp = new long(1); // may throw
            --*pn; // only decrement once danger of new throwing is past
@@ -200,12 +202,12 @@ template<typename T> class shared_ptr {
 
    void reset(T* p=0) {
       if ( px == p ) return;  // fix: self-assignment safe
-      if (--*pn == 0) { delete px; }
+      if (--*pn == 0) { checked_delete(px); }
       else { // allocate new reference counter
         try { pn = new long; }  // fix: prevent leak if new throws
         catch (...) {
           ++*pn;  // undo effect of --*pn above to meet effects guarantee 
-          delete p;
+          checked_delete(p);
           throw;
         } // catch
       } // allocate new reference counter
@@ -249,7 +251,7 @@ template<typename T> class shared_ptr {
    template<typename Y> friend class shared_ptr;
 #endif
 
-   void dispose() { if (--*pn == 0) { delete px; delete pn; } }
+   void dispose() { if (--*pn == 0) { checked_delete(px); delete pn; } }
 
    void share(T* rpx, long* rpn) {
       if (pn != rpn) { // Q: why not px != rpx? A: fails when both == 0
@@ -282,7 +284,7 @@ template<typename T> class shared_array {
 
    explicit shared_array(T* p =0) : px(p) {
       try { pn = new long(1); }  // fix: prevent leak if new throws
-      catch (...) { delete [] p; throw; } 
+      catch (...) { checked_array_delete(p); throw; } 
    }
 
    shared_array(const shared_array& r) : px(r.px)  // never throws
@@ -303,12 +305,12 @@ template<typename T> class shared_array {
 
    void reset(T* p=0) {
       if ( px == p ) return;  // fix: self-assignment safe
-      if (--*pn == 0) { delete [] px; }
+      if (--*pn == 0) { checked_array_delete(px); }
       else { // allocate new reference counter
         try { pn = new long; }  // fix: prevent leak if new throws
         catch (...) {
           ++*pn;  // undo effect of --*pn above to meet effects guarantee 
-          delete [] p;
+          checked_array_delete(p);
           throw;
         } // catch
       } // allocate new reference counter
@@ -335,7 +337,7 @@ template<typename T> class shared_array {
    T*     px;     // contained pointer
    long*  pn;     // ptr to reference counter
 
-   void dispose() { if (--*pn == 0) { delete [] px; delete pn; } }
+   void dispose() { if (--*pn == 0) { checked_array_delete(px); delete pn; } }
 
 };  // shared_array
 

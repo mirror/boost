@@ -11,6 +11,9 @@
 //  Classes appear in alphabetical order
 
 //  Revision History
+//  21 May 01  checked_delete() and checked_array_delete() added (Beman Dawes,
+//             suggested by Dave Abrahams, generalizing idea from Vladimir Prus)
+//  21 May 01  made next() and prior() inline (Beman Dawes)  
 //  26 Jan 00  protected noncopyable destructor added (Miki Jovanovic)
 //  10 Dec 99  next() and prior() templates added (Dave Abrahams)
 //  30 Aug 99  moved cast templates to cast.hpp (Beman Dawes)
@@ -22,12 +25,44 @@
 #ifndef BOOST_UTILITY_HPP
 #define BOOST_UTILITY_HPP
 
-#include <boost/config.hpp>
-#include <cstddef>            // for size_t
-#include <utility>            // for std::pair
+#include <boost/config.hpp>        // broken compiler workarounds 
+#include <boost/static_assert.hpp> // broken compiler workarounds 
+#include <cstddef>                 // for size_t
+#include <utility>                 // for std::pair
 
 namespace boost
 {
+//  checked_delete() and checked_array_delete()  -----------------------------//
+
+    // verify that types are complete for increased safety
+
+    template< typename T >
+# if !defined(BOOST_MSVC) || BOOST_MSVC > 1200
+    inline void checked_delete(T const volatile * x)
+# else
+    inline void checked_delete(T  /*const volatile*/ * x)
+# endif
+    {
+# if !defined(__BORLANDC__) || __BORLANDC__ > 0x0551
+        BOOST_STATIC_ASSERT( sizeof(T) ); // assert type complete at point
+                                          // of instantiation
+# endif
+        delete x;
+    }
+
+    template< typename T >
+# if !defined(BOOST_MSVC) || BOOST_MSVC > 1200
+    inline void checked_array_delete(T const volatile * x)
+# else
+    inline void checked_array_delete(T  /*const volatile*/ * x)
+# endif
+    {
+# if !defined(__BORLANDC__) || __BORLANDC__ > 0x0551
+        BOOST_STATIC_ASSERT( sizeof(T) ); // assert type complete at point
+                                          // of instantiation
+# endif
+        delete [] x;
+    }
 
 //  next() and prior() template functions  -----------------------------------//
 
@@ -41,10 +76,10 @@ namespace boost
     //  Contributed by Dave Abrahams
 
     template <class T>
-    T next(T x) { return ++x; }
+    inline T next(T x) { return ++x; }
 
     template <class T>
-    T prior(T x) { return --x; }
+    inline T prior(T x) { return --x; }
 
 
 //  class noncopyable  -------------------------------------------------------//
