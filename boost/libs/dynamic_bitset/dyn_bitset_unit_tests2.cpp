@@ -1,27 +1,27 @@
-// (C) Copyright Jeremy Siek 2001. 
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all
-// copies. This software is provided "as is" without express or
-// implied warranty, and with no claim as to its suitability for any
-// purpose.
- 
-#include <iostream>
-#include <fstream>
-#include <cmath> // for pow
-#include <boost/dynamic_bitset.hpp>
+// --------------------------------------------------------
+//        (C) Copyright Jeremy Siek   2001.
+//        (C) Copyright Gennaro Prota 2003 - 2004.
+//
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+//
+// -----------------------------------------------------------
 
-#include <boost/test/test_tools.hpp>
 
 #include "bitset_test.hpp"
+#include "boost/dynamic_bitset.hpp"
+#include "boost/config.hpp"
+
 
 template <typename Block>
-void run_test_cases()
+void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
 {
-  typedef bitset_test< boost::dynamic_bitset<Block> > Tests;
+  typedef boost::dynamic_bitset<Block> bitset_type;
+  typedef bitset_test< bitset_type > Tests;
+  const int bits_per_block = bitset_type::bits_per_block;
 
-  std::string long_string(101, '0');
-  for (std::size_t i = 0; i < long_string.size(); ++i)
-    long_string[i] = '0' + (i % 2);
+  std::string long_string = get_long_string();
 
   //=====================================================================
   // Test operator&=
@@ -99,8 +99,31 @@ void run_test_cases()
   // Test operator<<=
   { // case pos == 0
     std::size_t pos = 0;
-    boost::dynamic_bitset<Block> b(std::string("1010"));
-    Tests::shift_left_assignment(b, pos);
+    {
+      boost::dynamic_bitset<Block> b;
+      Tests::shift_left_assignment(b, pos);
+    }
+    {
+      boost::dynamic_bitset<Block> b(std::string("1010"));
+      Tests::shift_left_assignment(b, pos);
+    }
+    {
+      boost::dynamic_bitset<Block> b(long_string);
+      Tests::shift_left_assignment(b, pos);
+    }
+  }
+  {
+    // test with both multiple and
+    // non multiple of bits_per_block
+    const int how_many = 10;
+    for (int i = 1; i <= how_many; ++i) {
+        std::size_t     multiple = i * bits_per_block;
+        std::size_t non_multiple = multiple - 1;
+        boost::dynamic_bitset<Block> b(long_string);
+
+        Tests::shift_left_assignment(b, multiple);
+        Tests::shift_left_assignment(b, non_multiple);
+    }
   }
   { // case pos == size()/2
     std::size_t pos = long_string.size() / 2;
@@ -116,8 +139,32 @@ void run_test_cases()
   // Test operator>>=
   { // case pos == 0
     std::size_t pos = 0;
-    boost::dynamic_bitset<Block> b(std::string("1010"));
-    Tests::shift_right_assignment(b, pos);
+    {
+      boost::dynamic_bitset<Block> b;
+      Tests::shift_right_assignment(b, pos);
+    }
+    {
+      boost::dynamic_bitset<Block> b(std::string("1010"));
+      Tests::shift_right_assignment(b, pos);
+    }
+    {
+      boost::dynamic_bitset<Block> b(long_string);
+      Tests::shift_right_assignment(b, pos);
+    }
+  }
+  {
+    // test with both multiple and
+    // non multiple of bits_per_block
+    const int how_many = 10;
+    for (int i = 1; i <= how_many; ++i) {
+        std::size_t     multiple = i * bits_per_block;
+        std::size_t non_multiple = multiple - 1;
+        boost::dynamic_bitset<Block> b(long_string);
+
+        Tests::shift_right_assignment(b, multiple);
+        Tests::shift_right_assignment(b, non_multiple);
+    }
+
   }
   { // case pos == size()/2
     std::size_t pos = long_string.size() / 2;
@@ -172,7 +219,7 @@ void run_test_cases()
     Tests::reset_all(b);
   }
   //=====================================================================
-  // Test b.reset(pos)  
+  // Test b.reset(pos)
   { // case pos >= b.size()
     boost::dynamic_bitset<Block> b;
     Tests::reset_one(b, 0);
@@ -214,7 +261,7 @@ void run_test_cases()
     Tests::flip_all(b);
   }
   //=====================================================================
-  // Test b.flip(pos)  
+  // Test b.flip(pos)
   { // case pos >= b.size()
     boost::dynamic_bitset<Block> b;
     Tests::flip_one(b, 0);
@@ -230,11 +277,15 @@ void run_test_cases()
 }
 
 int
-test_main(int argc, char*[])
-{ 
+test_main(int, char*[])
+{
   run_test_cases<unsigned char>();
   run_test_cases<unsigned short>();
+  run_test_cases<unsigned int>();
   run_test_cases<unsigned long>();
-  return EXIT_SUCCESS;
+# ifdef BOOST_HAS_LONG_LONG
+  run_test_cases<unsigned long long>();
+# endif
+
+  return 0;
 }
- 

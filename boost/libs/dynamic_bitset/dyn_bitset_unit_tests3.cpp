@@ -1,30 +1,46 @@
-// (C) Copyright Jeremy Siek 2001. 
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all
-// copies. This software is provided "as is" without express or
-// implied warranty, and with no claim as to its suitability for any
-// purpose.
+// --------------------------------------------------------
+//        (C) Copyright Jeremy Siek   2001.
+//        (C) Copyright Gennaro Prota 2003 - 2004.
+//
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+//
+// -----------------------------------------------------------
 
-#include <iostream>
-#include <fstream>
-#include <cmath> // for pow
-#include <boost/dynamic_bitset.hpp>
-
-#include <boost/test/test_tools.hpp>
 
 #include "bitset_test.hpp"
+#include "boost/dynamic_bitset.hpp"
+#include "boost/limits.hpp"
+#include "boost/config.hpp"
+
 
 template <typename Block>
-void run_test_cases()
+void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
 {
-  typedef bitset_test< boost::dynamic_bitset<Block> > Tests;
+  // a bunch of typedefs to have handy later on
+  typedef boost::dynamic_bitset<Block> bitset_type;
+  typedef bitset_test<bitset_type> Tests;
+  // typedef typename bitset_type::size_type size_type; // unusable with Borland 5.5.1
 
-  std::string long_string(101, '0');
-  for (std::size_t i = 0; i < long_string.size(); ++i)
-    long_string[i] = '0' + (i % 2);
+  std::string long_string = get_long_string();
+  std::size_t ul_width = std::numeric_limits<unsigned long>::digits;
 
-  std::size_t ul_size = CHAR_BIT * sizeof(unsigned long);
-
+  //=====================================================================
+  // Test b.empty()
+  {
+    bitset_type b;
+    Tests::empty(b); // gps
+  }
+  {
+    bitset_type b(1, 1ul);
+    Tests::empty(b);
+  }
+  {
+    bitset_type b(bitset_type::bits_per_block
+                  + bitset_type::bits_per_block/2, 15ul);
+    Tests::empty(b);
+  }
   //=====================================================================
   // Test b.to_long()
   {
@@ -32,7 +48,17 @@ void run_test_cases()
     Tests::to_ulong(b);
   }
   {
-    std::string ul_str(ul_size, '1');
+    boost::dynamic_bitset<Block> b(std::string("1"));
+    Tests::to_ulong(b);
+  }
+  {
+    Block all_ones = ~Block(0);
+    boost::dynamic_bitset<Block> b(bitset_type::bits_per_block,
+                                   static_cast<unsigned long>(all_ones));
+    Tests::to_ulong(b);
+  }
+  {
+    std::string ul_str(ul_width, '1');
     boost::dynamic_bitset<Block> b(ul_str);
     Tests::to_ulong(b);
   }
@@ -165,6 +191,132 @@ void run_test_cases()
     boost::dynamic_bitset<Block> a(long_string), b(long_string);
     b[long_string.size()/2].flip();
     Tests::proper_subset(a, b);
+  }
+  //=====================================================================
+  // Test intersects
+  {
+    bitset_type a; // empty
+    bitset_type b;
+    Tests::intersects(a, b);
+  }
+  {
+    bitset_type a;
+    bitset_type b(5, 8ul);
+    Tests::intersects(a, b);
+  }
+  {
+    bitset_type a(8, 0ul);
+    bitset_type b(15, 0ul);
+    b[9] = 1;
+    Tests::intersects(a, b);
+  }
+  {
+    bitset_type a(15, 0ul);
+    bitset_type b(22, 0ul);
+    a[14] = b[14] = 1;
+    Tests::intersects(a, b);
+  }
+  //=====================================================================
+  // Test find_first
+  {
+      // empty bitset
+      bitset_type b;
+      Tests::find_first(b);
+  }
+  {
+      // bitset of size 1
+      bitset_type b(1, 1ul);
+      Tests::find_first(b);
+  }
+  {
+      // all-0s bitset
+      bitset_type b(4 * bitset_type::bits_per_block, 0ul);
+      Tests::find_first(b);
+  }
+  {
+      // first bit on
+      bitset_type b(1, 1ul);
+      Tests::find_first(b);
+  }
+  {
+      // last bit on
+      bitset_type b(4 * bitset_type::bits_per_block - 1, 0ul);
+      b.set(b.size() - 1);
+      Tests::find_first(b);
+  }
+  //=====================================================================
+  // Test find_next
+  {
+      // empty bitset
+      bitset_type b;
+
+      // check
+      Tests::find_next(b, 0);
+      Tests::find_next(b, 1);
+      Tests::find_next(b, 200);
+      Tests::find_next(b, b.npos);
+  }
+  {
+      // bitset of size 1 (find_next can never find)
+      bitset_type b(1, 1ul);
+
+      // check
+      Tests::find_next(b, 0);
+      Tests::find_next(b, 1);
+      Tests::find_next(b, 200);
+      Tests::find_next(b, b.npos);
+  }
+  {
+      // all-1s bitset
+      bitset_type b(16 * bitset_type::bits_per_block);
+      b.set();
+
+      // check
+      const typename bitset_type::size_type larger_than_size = 5 + b.size();
+      for(typename bitset_type::size_type i = 0; i <= larger_than_size; ++i) {
+          Tests::find_next(b, i);
+      }
+      Tests::find_next(b, b.npos);
+  }
+  {
+      // a bitset with 1s at block boundary only
+      const int num_blocks = 32;
+      const int block_width = bitset_type::bits_per_block;
+
+      bitset_type b(num_blocks * block_width);
+      typename bitset_type::size_type i = block_width - 1;
+      for ( ; i < b.size(); i += block_width) {
+
+        b.set(i);
+        typename bitset_type::size_type first_in_block = i - (block_width - 1);
+        b.set(first_in_block);
+      }
+
+      // check
+      const typename bitset_type::size_type larger_than_size = 5 + b.size();
+      for (i = 0; i <= larger_than_size; ++i) {
+          Tests::find_next(b, i);
+      }
+      Tests::find_next(b, b.npos);
+
+  }
+  {
+      // bitset with alternate 1s and 0s
+      const typename bitset_type::size_type sz = 1000;
+      bitset_type b(sz);
+
+      typename bitset_type::size_type i = 0;
+      for ( ; i < sz; ++i) {
+        b[i] = (i%2 == 0);
+      }
+
+      // check
+      const typename bitset_type::size_type larger_than_size = 5 + b.size();
+      for (i = 0; i <= larger_than_size; ++i) {
+          Tests::find_next(b, i);
+      }
+      Tests::find_next(b, b.npos);
+
   }
   //=====================================================================
   // Test operator==
@@ -387,7 +539,7 @@ void run_test_cases()
     assert(a >= b);
   }
   //=====================================================================
-  // Test b.test(pos)  
+  // Test b.test(pos)
   { // case pos >= b.size()
     boost::dynamic_bitset<Block> b;
     Tests::test_bit(b, 0);
@@ -401,7 +553,7 @@ void run_test_cases()
     Tests::test_bit(b, long_string.size()/2);
   }
   //=====================================================================
-  // Test b << pos  
+  // Test b << pos
   { // case pos == 0
     std::size_t pos = 0;
     boost::dynamic_bitset<Block> b(std::string("1010"));
@@ -418,7 +570,7 @@ void run_test_cases()
     Tests::operator_shift_left(b, pos);
   }
   //=====================================================================
-  // Test b >> pos  
+  // Test b >> pos
   { // case pos == 0
     std::size_t pos = 0;
     boost::dynamic_bitset<Block> b(std::string("1010"));
@@ -506,30 +658,18 @@ void run_test_cases()
     boost::dynamic_bitset<Block> lhs(long_string.size(), 1), rhs(long_string);
     Tests::operator_sub(lhs, rhs);
   }
-  //=====================================================================
-  // Test stream operator<< and operator>>
-  {
-    boost::dynamic_bitset<Block> b;
-    boost::dynamic_bitset<Block> x(b.size());
-    Tests::stream_read_write(b, x);
-  }
-  {
-    boost::dynamic_bitset<Block> b(std::string("0"));
-    boost::dynamic_bitset<Block> x(b.size());
-    Tests::stream_read_write(b, x);
-  }
-  {
-    boost::dynamic_bitset<Block> b(long_string);
-    boost::dynamic_bitset<Block> x(b.size());
-    Tests::stream_read_write(b, x);
-  }
 }
 
 int
 test_main(int, char*[])
-{ 
+{
   run_test_cases<unsigned char>();
   run_test_cases<unsigned short>();
+  run_test_cases<unsigned int>();
   run_test_cases<unsigned long>();
-  return EXIT_SUCCESS;
+# ifdef BOOST_HAS_LONG_LONG
+  run_test_cases<unsigned long long>();
+# endif
+
+  return 0;
 }
