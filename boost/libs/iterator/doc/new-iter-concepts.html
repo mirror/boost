@@ -300,15 +300,16 @@ lvalue so that the appropriate old category can be chosen for the base
 class. The <tt class="literal"><span class="pre">lvalue_iterator</span></tt> bit is not recorded in the
 <tt class="literal"><span class="pre">iterator_tag::access</span></tt> data member.</p>
 <p>The <tt class="literal"><span class="pre">iterator_tag</span></tt> class template is derived from the appropriate
-iterator tag or tags from the old requirements based on the new-style
-tags passed as template parameters.  The algorithm for determining the
-old tag or tags from the new tags picks the least-refined old concepts
-that include all of the requirements of the access and traversal
-concepts (that is, the closest fit), if any such category exists.  For
-example, the category tag for a Readable Single Pass Iterator will
-always be derived from <tt class="literal"><span class="pre">input_iterator_tag</span></tt>, while the category tag
-for a Single Pass Iterator that is both Readable and Writable will be
-derived from both <tt class="literal"><span class="pre">input_iterator_tag</span></tt> and <tt class="literal"><span class="pre">output_iterator_tag</span></tt>.</p>
+iterator tag or tags from the old requirements based on the access
+bits and traversal tag passed as template parameters.  The algorithm
+for determining the old tag or tags picks the least-refined old
+concepts that include all of the requirements of the access and
+traversal concepts (that is, the closest fit), if any such category
+exists.  For example, the category tag for a Readable Single Pass
+Iterator will always be derived from <tt class="literal"><span class="pre">input_iterator_tag</span></tt>, while the
+category tag for a Single Pass Iterator that is both Readable and
+Writable will be derived from both <tt class="literal"><span class="pre">input_iterator_tag</span></tt> and
+<tt class="literal"><span class="pre">output_iterator_tag</span></tt>.</p>
 <p>We also provide several helper classes that make it convenient to
 obtain the access and traversal characteristics of an iterator. These
 helper classes work both for iterators whose <tt class="literal"><span class="pre">iterator_category</span></tt> is

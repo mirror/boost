@@ -283,16 +283,16 @@ class. The ``lvalue_iterator`` bit is not recorded in the
 ``iterator_tag::access`` data member.
 
 The ``iterator_tag`` class template is derived from the appropriate
-iterator tag or tags from the old requirements based on the new-style
-tags passed as template parameters.  The algorithm for determining the
-old tag or tags from the new tags picks the least-refined old concepts
-that include all of the requirements of the access and traversal
-concepts (that is, the closest fit), if any such category exists.  For
-example, the category tag for a Readable Single Pass Iterator will
-always be derived from ``input_iterator_tag``, while the category tag
-for a Single Pass Iterator that is both Readable and Writable will be
-derived from both ``input_iterator_tag`` and ``output_iterator_tag``.
-
+iterator tag or tags from the old requirements based on the access
+bits and traversal tag passed as template parameters.  The algorithm
+for determining the old tag or tags picks the least-refined old
+concepts that include all of the requirements of the access and
+traversal concepts (that is, the closest fit), if any such category
+exists.  For example, the category tag for a Readable Single Pass
+Iterator will always be derived from ``input_iterator_tag``, while the
+category tag for a Single Pass Iterator that is both Readable and
+Writable will be derived from both ``input_iterator_tag`` and
+``output_iterator_tag``.
 
 We also provide several helper classes that make it convenient to
 obtain the access and traversal characteristics of an iterator. These
