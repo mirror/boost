@@ -262,6 +262,7 @@ typedef int (UDT::*mf2)();
 typedef int (UDT::*mf3)(int);
 typedef int (UDT::*mf4)(int, float);
 typedef int (UDT::*mp);
+typedef int (UDT::*cmf)(int) const;
 
 // cv-qualifiers applied to reference types should have no effect
 // declare these here for later use with is_reference and remove_reference:

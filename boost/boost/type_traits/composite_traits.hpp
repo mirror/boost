@@ -491,6 +491,195 @@ template <class R, class T, class A0, class A1, class A2, class A3, class A4, cl
 ::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28));
 template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28, class A29>
 ::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29));
+
+template <class R, class T>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(void) const);
+template <class R, class T, class A0>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0) const);
+template <class R, class T, class A0, class A1>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1) const);
+template <class R, class T, class A0, class A1, class A2>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2) const);
+template <class R, class T, class A0, class A1, class A2, class A3>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28) const);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28, class A29>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29) const);
+
+template <class R, class T>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(void) volatile);
+template <class R, class T, class A0>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0) volatile);
+template <class R, class T, class A0, class A1>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1) volatile);
+template <class R, class T, class A0, class A1, class A2>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28) volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28, class A29>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29) volatile);
+
+template <class R, class T>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(void) const volatile);
+template <class R, class T, class A0>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0) const volatile);
+template <class R, class T, class A0, class A1>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1) const volatile);
+template <class R, class T, class A0, class A1, class A2>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28) const volatile);
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28, class A29>
+::boost::type_traits::yes_type is_member_pointer_helper(R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29) const volatile);
    no_type is_member_pointer_helper(...);
 }
 template <typename T> 
