@@ -1,0 +1,20 @@
+subproject libs/numeric/ublas ;
+subinclude libs/numeric/ublas/test1 ;
+subinclude libs/numeric/ublas/test2 ;
+subinclude libs/numeric/ublas/test3 ;
+subinclude libs/numeric/ublas/test4 ;
+subinclude libs/numeric/ublas/test5 ;
+subinclude libs/numeric/ublas/test6 ;
+subinclude libs/numeric/ublas/bench1 ;
+subinclude libs/numeric/ublas/bench2 ;
+subinclude libs/numeric/ublas/bench3 ;
+
+SOURCES = concepts ;
+
+exe concepts
+	: $(SOURCES).cpp
+	: <include>$(BOOST_ROOT)
+	: <define>EXTERNAL
+	  <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+	;
+

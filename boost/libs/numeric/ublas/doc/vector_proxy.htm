@@ -1,0 +1,861 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>Vector Proxies</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1><img src="c++boost.gif" alt="c++boost.gif" align="center"
+width="277" height="86">Vector Proxies</h1>
+
+<h2><a name="vector_range"></a>Vector Range</h2>
+
+<h4>Description</h4>
+
+<p>The templated class <code>vector_range&lt;V&gt; </code>allows
+addressing a range of a vector.</p>
+
+<h4>Example</h4>
+
+<pre>int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v (3);
+    vector_range&lt;vector&lt;double&gt; &gt; vr (v, range (0, 3));
+    for (int i = 0; i &lt; vr.size (); ++ i)
+        vr (i) = i;
+    std::cout &lt;&lt; vr &lt;&lt; std::endl;
+}</pre>
+
+<h4>Definition</h4>
+
+<p>Defined in the header vector_proxy.hpp.</p>
+
+<h4>Template parameters</h4>
+
+<table border="1">
+    <tr>
+        <th>Parameter </th>
+        <th>Description </th>
+        <th>Default </th>
+    </tr>
+    <tr>
+        <td><code>V</code> </td>
+        <td>The type of vector referenced. </td>
+        <td>&nbsp;</td>
+    </tr>
+</table>
+
+<h4>Model of</h4>
+
+<p><a href="expression.htm#vector_expressio">Vector Expression</a>.
+</p>
+
+<h4>Type requirements</h4>
+
+<p>None, except for those imposed by the requirements of <a
+href="expression.htm#vector_expression">Vector Expression</a>.</p>
+
+<h4>Public base classes</h4>
+
+<p><code>vector_expression&lt;vector_range&lt;V&gt; &gt;</code> </p>
+
+<h4>Members</h4>
+
+<table border="1">
+    <tr>
+        <th>Member </th>
+        <th>Description </th>
+    </tr>
+    <tr>
+        <td><code>vector_range (vector_type &amp;data, const
+        range &amp;r)</code></td>
+        <td>Constructs a sub vector.</td>
+    </tr>
+    <tr>
+        <td><code>size_type start () const</code></td>
+        <td>Returns the start of the sub vector.</td>
+    </tr>
+    <tr>
+        <td><code>size_type size () const</code></td>
+        <td>Returns the size of the sub vector.</td>
+    </tr>
+    <tr>
+        <td><code>const_reference operator () (size_type i) const</code></td>
+        <td>Returns the value of the <code>i</code>-th element. </td>
+    </tr>
+    <tr>
+        <td><code>reference operator () (size_type i)</code></td>
+        <td>Returns a reference of the <code>i</code>-th element.
+        </td>
+    </tr>
+    <tr>
+        <td><code>const_reference operator [] (size_type i) const</code></td>
+        <td>Returns the value of the <code>i</code>-th element. </td>
+    </tr>
+    <tr>
+        <td><code>reference operator [] (size_type i)</code></td>
+        <td>Returns a reference of the <code>i</code>-th element.
+        </td>
+    </tr>
+    <tr>
+        <td><code>vector_range &amp;operator = (const
+        vector_range &amp;vr)</code></td>
+        <td>The assignment operator.</td>
+    </tr>
+    <tr>
+        <td><code>vector_range &amp;assign_temporary
+        (vector_range &amp;vr)</code></td>
+        <td>Assigns a temporary. May change the vector range <code>vr</code>.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        vector_range &amp;operator = (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>The extended assignment operator.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        vector_range &amp;assign (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>Assigns a vector expression to the sub vector. Left
+        and right hand side of the assignment should be
+        independent.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        vector_range &amp;operator += (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>A computed assignment operator. Adds the vector
+        expression to the sub vector.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        vector_range &amp;plus_assign (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>Adds a vector expression to the sub vector. Left and
+        right hand side of the assignment should be independent.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        vector_range &amp;operator -= (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>A computed assignment operator. Subtracts the vector
+        expression from the sub vector.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        vector_range &amp;minus_assign (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>Subtracts a vector expression from the sub vector.
+        Left and right hand side of the assignment should be
+        independent.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AT&gt;<br>
+        vector_range &amp;operator *= (const AT &amp;at)</code></td>
+        <td>A computed assignment operator. Multiplies the sub
+        vector with a scalar.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AT&gt;<br>
+        vector_range &amp;operator /= (const AT &amp;at)</code></td>
+        <td>A computed assignment operator. Divides the sub
+        vector through a scalar.</td>
+    </tr>
+    <tr>
+        <td><code>void swap (vector_range &amp;vr)</code></td>
+        <td>Swaps the contents of the sub vectors. </td>
+    </tr>
+    <tr>
+        <td><code>const_iterator begin () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        beginning of the <code>vector_range</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_iterator end () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        end of the <code>vector_range</code>. </td>
+    </tr>
+    <tr>
+        <td><code>iterator begin () </code></td>
+        <td>Returns a <code>iterator</code> pointing to the
+        beginning of the <code>vector_range</code>. </td>
+    </tr>
+    <tr>
+        <td><code>iterator end () </code></td>
+        <td>Returns a <code>iterator</code> pointing to the end
+        of the <code>vector_range</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rbegin () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the beginning of the reversed <code>vector_range</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rend () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the end of the reversed <code>vector_range</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>reverse_iterator rbegin () </code></td>
+        <td>Returns a <code>reverse_iterator</code> pointing to
+        the beginning of the reversed <code>vector_range</code>. </td>
+    </tr>
+    <tr>
+        <td><code>reverse_iterator rend () </code></td>
+        <td>Returns a <code>reverse_iterator</code> pointing to
+        the end of the reversed <code>vector_range</code>. </td>
+    </tr>
+</table>
+
+<h4>Interface</h4>
+
+<pre><code>    // Vector based range class
+    template&lt;class V&gt;
+    class vector_range:
+        public vector_expression&lt;vector_range&lt;V&gt; &gt; {
+    public:      
+        typedef const V const_vector_type;
+        typedef V vector_type;
+        typedef typename V::size_type size_type;
+        typedef typename V::difference_type difference_type;
+        typedef typename V::value_type value_type;
+        typedef typename V::const_reference const_reference;
+        typedef typename V::reference reference;
+        typedef typename V::const_pointer const_pointer;
+        typedef typename V::pointer pointer;
+        typedef const vector_const_reference&lt;const vector_range&lt;vector_type&gt; &gt; const_closure_type;
+        typedef vector_reference&lt;vector_range&lt;vector_type&gt; &gt; closure_type;
+        typedef typename V::const_iterator const_iterator_type;
+        typedef typename V::iterator iterator_type;
+        typedef typename storage_restrict_traits&lt;typename V::storage_category,
+                                                 dense_proxy_tag&gt;::storage_category storage_category;
+
+        // Construction and destruction
+        vector_range (); 
+        vector_range (vector_type &amp;data, const range &amp;r); 
+
+        // Accessors
+        size_type start () const; 
+        size_type size () const; 
+        const_vector_type &amp;data () const;
+        vector_type &amp;data ();
+
+
+        // Element access
+        const_reference operator () (size_type i) const;
+        reference operator () (size_type i);
+
+        const_reference operator [] (size_type i) const;
+        reference operator [] (size_type i);
+
+        vector_range&lt;vector_type&gt; project (const range &amp;r) const;
+
+        // Assignment
+        vector_range &amp;operator = (const vector_range &amp;vr);
+        vector_range &amp;assign_temporary (vector_range &amp;vr);
+        template&lt;class AE&gt;
+        vector_range &amp;operator = (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        vector_range &amp;assign (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        vector_range &amp;operator += (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        vector_range &amp;plus_assign (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        vector_range &amp;operator -= (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        vector_range &amp;minus_assign (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AT&gt;
+        vector_range &amp;operator *= (const AT &amp;at);
+        template&lt;class AT&gt;
+        vector_range &amp;operator /= (const AT &amp;at);
+
+        // Swapping
+        void swap (vector_range &amp;vr);
+        friend void swap (vector_range &amp;vr1, vector_range &amp;vr2);
+
+        class const_iterator;
+        class iterator;
+
+        // Element lookup
+        const_iterator find_first (size_type i) const;
+        iterator find_first (size_type i);
+        const_iterator find_last (size_type i) const;
+        iterator find_last (size_type i);
+
+        // Iterators simply are pointers.
+
+        class const_iterator:
+            public container_const_reference&lt;vector_range&gt;,
+            public random_access_iterator_base&lt;const_iterator, value_type&gt; {
+        public:
+            typedef typename V::const_iterator::iterator_category iterator_category;
+            typedef typename V::const_iterator::difference_type difference_type;
+            typedef typename V::const_iterator::value_type value_type;
+            typedef typename V::const_iterator::reference reference;
+            typedef typename V::const_iterator::pointer pointer;
+
+            // Construction and destruction
+            const_iterator ();
+            const_iterator (const vector_range &amp;vr, const const_iterator_type &amp;it);
+            const_iterator (const iterator &amp;it);
+
+            // Arithmetic
+            const_iterator &amp;operator ++ ();
+            const_iterator &amp;operator -- ();
+            const_iterator &amp;operator += (difference_type n);
+            const_iterator &amp;operator -= (difference_type n);
+            difference_type operator - (const const_iterator &amp;it) const;
+
+            // Dereference
+            reference operator * () const;
+
+            // Index
+            size_type index () const;
+
+            // Assignment 
+            const_iterator &amp;operator = (const const_iterator &amp;it);
+
+            // Comparison
+            bool operator == (const const_iterator &amp;it) const;
+            bool operator &lt;(const const_iterator &amp;it) const;
+        };
+
+        const_iterator begin () const;
+        const_iterator end () const;
+
+        class iterator:
+            public container_reference&lt;vector_range&gt;,
+            public random_access_iterator_base&lt;iterator, value_type&gt; {
+        public:
+            typedef typename V::iterator::iterator_category iterator_category;
+            typedef typename V::iterator::difference_type difference_type;
+            typedef typename V::iterator::value_type value_type;
+            typedef typename V::iterator::reference reference;
+            typedef typename V::iterator::pointer pointer;
+
+            // Construction and destruction
+            iterator ();
+            iterator (vector_range &amp;vr, const iterator_type &amp;it);
+
+            // Arithmetic
+            iterator &amp;operator ++ ();
+            iterator &amp;operator -- ();
+            iterator &amp;operator += (difference_type n);
+            iterator &amp;operator -= (difference_type n);
+            difference_type operator - (const iterator &amp;it) const;
+
+            // Dereference
+            reference operator * () const;
+
+            // Index
+            size_type index () const;
+
+            // Assignment 
+            iterator &amp;operator = (const iterator &amp;it);
+
+            // Comparison
+            bool operator == (const iterator &amp;it) const;
+            bool operator &lt;(const iterator &amp;it) const;
+        };
+
+        iterator begin ();
+        iterator end ();
+
+        // Reverse iterator
+
+        typedef reverse_iterator_base&lt;const_iterator&gt; const_reverse_iterator;
+
+        const_reverse_iterator rbegin () const;
+        const_reverse_iterator rend () const;
+
+        typedef reverse_iterator_base&lt;iterator&gt; reverse_iterator;
+
+        reverse_iterator rbegin ();
+        reverse_iterator rend ();
+    };</code></pre>
+
+<h3>Projections</h3>
+
+<h4>Prototypes</h4>
+
+<pre><code>    template&lt;class V&gt;
+    vector_range&lt;V&gt; project (V &amp;data, const range &amp;r);
+    template&lt;class V&gt;
+    const vector_range&lt;const V&gt; project (const V &amp;data, const range &amp;r);
+    template&lt;class V&gt;
+    vector_range&lt;V&gt; project (const vector_range&lt;V&gt; &amp;data, const range &amp;r);</code></pre>
+
+<h4>Description</h4>
+
+<p>The free <code>project</code> functions support the
+construction of vector ranges.</p>
+
+<h4>Definition</h4>
+
+<p>Defined in the header vector_proxy.hpp.</p>
+
+<h4>Type requirements</h4>
+
+<dir>
+    <li><code>V</code> is a model of <a
+        href="expression.htm#vector_expression">Vector Expression</a>.</li>
+</dir>
+
+<h4>Preconditions</h4>
+
+<dir>
+    <li><code>r.start () + r.size () &lt;= data.size ()</code></li>
+</dir>
+
+<h4>Complexity</h4>
+
+<p>Linear depending from the size of the range.</p>
+
+<h4>Examples</h4>
+
+<pre>int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v (3);
+    for (int i = 0; i &lt; 3; ++ i)
+        project (v, range (0, 3)) (i) = i;
+    std::cout &lt;&lt; project (v, range (0, 3)) &lt;&lt; std::endl;
+}</pre>
+
+<h2><a name="vector_slice"></a>Vector Slice</h2>
+
+<h4>Description</h4>
+
+<p>The templated class <code>vector_slice&lt;V&gt; </code>allows
+addressing a slice of a vector.</p>
+
+<h4>Example</h4>
+
+<pre>int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v (3);
+    vector_slice&lt;vector&lt;double&gt; &gt; vs (v, slice (0, 1, 3));
+    for (int i = 0; i &lt; vs.size (); ++ i) 
+        vs (i) = i;
+    std::cout &lt;&lt; vs &lt;&lt; std::endl;
+}</pre>
+
+<h4>Definition</h4>
+
+<p>Defined in the header vector_proxy.hpp.</p>
+
+<h4>Template parameters</h4>
+
+<table border="1">
+    <tr>
+        <th>Parameter </th>
+        <th>Description </th>
+        <th>Default </th>
+    </tr>
+    <tr>
+        <td><code>V</code> </td>
+        <td>The type of vector referenced. </td>
+        <td>&nbsp;</td>
+    </tr>
+</table>
+
+<h4>Model of</h4>
+
+<p><a href="expression.htm#vector_expression">Vector Expression</a>.
+</p>
+
+<h4>Type requirements</h4>
+
+<p>None, except for those imposed by the requirements of <a
+href="expression.htm#vector_expression">Vector Expression</a>.</p>
+
+<h4>Public base classes</h4>
+
+<p><code>vector_expression&lt;vector_slice&lt;V&gt; &gt;</code> </p>
+
+<h4>Members</h4>
+
+<table border="1">
+    <tr>
+        <th>Member </th>
+        <th>Description </th>
+    </tr>
+    <tr>
+        <td><code>vector_slice (vector_type &amp;data, const
+        slice &amp;s)</code></td>
+        <td>Constructs a sub vector.</td>
+    </tr>
+    <tr>
+        <td><code>size_type size () const</code></td>
+        <td>Returns the size of the sub vector.</td>
+    </tr>
+    <tr>
+        <td><code>const_reference operator () (size_type i) const</code></td>
+        <td>Returns the value of the <code>i</code>-th element. </td>
+    </tr>
+    <tr>
+        <td><code>reference operator () (size_type i)</code></td>
+        <td>Returns a reference of the <code>i</code>-th element.
+        </td>
+    </tr>
+    <tr>
+        <td><code>const_reference operator [] (size_type i) const</code></td>
+        <td>Returns the value of the <code>i</code>-th element. </td>
+    </tr>
+    <tr>
+        <td><code>reference operator [] (size_type i)</code></td>
+        <td>Returns a reference of the <code>i</code>-th element.
+        </td>
+    </tr>
+    <tr>
+        <td><code>vector_slice &amp;operator = (const
+        vector_slice &amp;vs)</code></td>
+        <td>The assignment operator.</td>
+    </tr>
+    <tr>
+        <td><code>vector_slice &amp;assign_temporary
+        (vector_slice &amp;vs)</code></td>
+        <td>Assigns a temporary. May change the vector slice <code>vs</code>.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        vector_slice &amp;operator = (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>The extended assignment operator.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        vector_slice &amp;assign (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>Assigns a vector expression to the sub vector. Left
+        and right hand side of the assignment should be
+        independent.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        vector_slice &amp;operator += (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>A computed assignment operator. Adds the vector
+        expression to the sub vector.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        vector_slice &amp;plus_assign (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>Adds a vector expression to the sub vector. Left and
+        right hand side of the assignment should be independent.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        vector_slice &amp;operator -= (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>A computed assignment operator. Subtracts the vector
+        expression from the sub vector.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        vector_slice &amp;minus_assign (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>Subtracts a vector expression from the sub vector.
+        Left and right hand side of the assignment should be
+        independent.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AT&gt;<br>
+        vector_slice &amp;operator *= (const AT &amp;at)</code></td>
+        <td>A computed assignment operator. Multiplies the sub
+        vector with a scalar.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AT&gt;<br>
+        vector_slice &amp;operator /= (const AT &amp;at)</code></td>
+        <td>A computed assignment operator. Divides the sub
+        vector through a scalar.</td>
+    </tr>
+    <tr>
+        <td><code>void swap (vector_slice &amp;vs)</code></td>
+        <td>Swaps the contents of the sub vectors. </td>
+    </tr>
+    <tr>
+        <td><code>const_iterator begin () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        beginning of the <code>vector_slice</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_iterator end () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        end of the <code>vector_slice</code>. </td>
+    </tr>
+    <tr>
+        <td><code>iterator begin () </code></td>
+        <td>Returns a <code>iterator</code> pointing to the
+        beginning of the <code>vector_slice</code>. </td>
+    </tr>
+    <tr>
+        <td><code>iterator end () </code></td>
+        <td>Returns a <code>iterator</code> pointing to the end
+        of the <code>vector_slice</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rbegin () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the beginning of the reversed <code>vector_slice</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rend () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the end of the reversed <code>vector_slice</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>reverse_iterator rbegin () </code></td>
+        <td>Returns a <code>reverse_iterator</code> pointing to
+        the beginning of the reversed <code>vector_slice</code>. </td>
+    </tr>
+    <tr>
+        <td><code>reverse_iterator rend () </code></td>
+        <td>Returns a <code>reverse_iterator</code> pointing to
+        the end of the reversed <code>vector_slice</code>. </td>
+    </tr>
+</table>
+
+<h4>Interface</h4>
+
+<pre><code>    // Vector based slice class
+    template&lt;class V&gt;
+    class vector_slice:
+        public vector_expression&lt;vector_slice&lt;V&gt; &gt; {
+    public:      
+        typedef const V const_vector_type;
+        typedef V vector_type;
+        typedef typename V::size_type size_type;
+        typedef typename V::difference_type difference_type;
+        typedef typename V::value_type value_type;
+        typedef typename V::const_reference const_reference;
+        typedef typename V::reference reference;
+        typedef typename V::const_pointer const_pointer;
+        typedef typename V::pointer pointer;
+        typedef const vector_const_reference&lt;const vector_slice&lt;vector_type&gt; &gt; const_closure_type;
+        typedef vector_reference&lt;vector_slice&lt;vector_type&gt; &gt; closure_type;
+        typedef slice::const_iterator const_iterator_type;
+        typedef slice::const_iterator iterator_type;
+        typedef typename storage_restrict_traits&lt;typename V::storage_category,
+                                                 dense_proxy_tag&gt;::storage_category storage_category;
+
+        // Construction and destruction
+        vector_slice ();
+        vector_slice (vector_type &amp;data, const slice &amp;s);
+
+        // Accessors
+        size_type start () const;
+        size_type stride () const;
+        size_type size () const;
+        const_vector_type &amp;data () const;
+        vector_type &amp;data ();
+
+
+        // Element access
+        const_reference operator () (size_type i) const;
+        reference operator () (size_type i);
+
+        const_reference operator [] (size_type i) const;
+        reference operator [] (size_type i);
+
+        vector_slice&lt;vector_type&gt; project (const range &amp;r) const;
+        vector_slice&lt;vector_type&gt; project (const slice &amp;s) const;
+
+        // Assignment
+        vector_slice &amp;operator = (const vector_slice &amp;vs);
+        vector_slice &amp;assign_temporary (vector_slice &amp;vs);
+        template&lt;class AE&gt;
+        vector_slice &amp;operator = (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        vector_slice &amp;assign (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        vector_slice &amp;operator += (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        vector_slice &amp;plus_assign (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        vector_slice &amp;operator -= (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        vector_slice &amp;minus_assign (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AT&gt;
+        vector_slice &amp;operator *= (const AT &amp;at);
+        template&lt;class AT&gt;
+        vector_slice &amp;operator /= (const AT &amp;at);
+
+        // Swapping
+        void swap (vector_slice &amp;vs);
+        friend void swap (vector_slice &amp;vs1, vector_slice &amp;vs2);
+
+        class const_iterator;
+        class iterator;
+
+        // Element lookup
+        const_iterator find_first (size_type i) const;
+        iterator find_first (size_type i);
+        const_iterator find_last (size_type i) const;
+        iterator find_last (size_type i);
+
+        // Iterators simply are indices.
+
+        class const_iterator:
+            public container_const_reference&lt;vector_slice&gt;,
+            public random_access_iterator_base&lt;const_iterator, value_type&gt; {
+        public:
+            typedef typename V::const_iterator::iterator_category iterator_category;
+            typedef typename V::const_iterator::difference_type difference_type;
+            typedef typename V::const_iterator::value_type value_type;
+            typedef typename V::const_iterator::reference reference;
+            typedef typename V::const_iterator::pointer pointer;
+
+            // Construction and destruction
+            const_iterator ();
+            const_iterator (const vector_slice &amp;vs, const const_iterator_type &amp;it);
+            const_iterator (const iterator &amp;it);
+
+            // Arithmetic
+            const_iterator &amp;operator ++ ();
+            const_iterator &amp;operator -- ();
+            const_iterator &amp;operator += (difference_type n);
+            const_iterator &amp;operator -= (difference_type n);
+            difference_type operator - (const const_iterator &amp;it) const;
+
+            // Dereference
+            reference operator * () const;
+
+            // Index
+            size_type index () const;
+
+            // Assignment 
+            const_iterator &amp;operator = (const const_iterator &amp;it);
+
+            // Comparison
+            bool operator == (const const_iterator &amp;it) const;
+            bool operator &lt;(const const_iterator &amp;it) const;
+        };
+
+        const_iterator begin () const;
+        const_iterator end () const;
+
+        class iterator:
+            public container_reference&lt;vector_slice&gt;,
+            public random_access_iterator_base&lt;iterator, value_type&gt; {
+        public:
+            typedef typename V::iterator::iterator_category iterator_category;
+            typedef typename V::iterator::difference_type difference_type;
+            typedef typename V::iterator::value_type value_type;
+            typedef typename V::iterator::reference reference;
+            typedef typename V::iterator::pointer pointer;
+
+            // Construction and destruction
+            iterator ();
+            iterator (vector_slice &amp;vs, const iterator_type &amp;it);
+
+            // Arithmetic
+            iterator &amp;operator ++ ();
+            iterator &amp;operator -- ();
+            iterator &amp;operator += (difference_type n);
+            iterator &amp;operator -= (difference_type n);
+            difference_type operator - (const iterator &amp;it) const;
+
+            // Dereference
+            reference operator * () const;
+
+            // Index
+            size_type index () const;
+
+            // Assignment 
+            iterator &amp;operator = (const iterator &amp;it);
+
+            // Comparison
+            bool operator == (const iterator &amp;it) const;
+            bool operator &lt;(const iterator &amp;it) const;
+        };
+
+        iterator begin ();
+        iterator end ();
+
+        // Reverse iterator
+
+        typedef reverse_iterator_base&lt;const_iterator&gt; const_reverse_iterator;
+
+        const_reverse_iterator rbegin () const;
+        const_reverse_iterator rend () const;
+
+        typedef reverse_iterator_base&lt;iterator&gt; reverse_iterator;
+
+        reverse_iterator rbegin ();
+        reverse_iterator rend ();
+    };</code></pre>
+
+<h3>Projections</h3>
+
+<h4>Prototypes</h4>
+
+<pre><code>    template&lt;class V&gt;
+    vector_slice&lt;V&gt; project (const vector_slice&lt;V&gt; &amp;data, const range &amp;r);
+    template&lt;class V&gt;
+    vector_slice&lt;V&gt; project (V &amp;data, const slice &amp;s);
+    template&lt;class V&gt;
+    const vector_slice&lt;const V&gt; project (const V &amp;data, const slice &amp;s);
+    template&lt;class V&gt;
+    vector_slice&lt;V&gt; project (const vector_slice&lt;V&gt; &amp;data, const slice &amp;s);</code></pre>
+
+<h4>Description</h4>
+
+<p>The free <code>project</code> functions support the
+construction of vector slices.</p>
+
+<h4>Definition</h4>
+
+<p>Defined in the header vector_proxy.hpp.</p>
+
+<h4>Type requirements</h4>
+
+<dir>
+    <li><code>V</code> is a model of <a
+        href="expression.htm#vector_expression">Vector Expression</a>.</li>
+</dir>
+
+<h4>Preconditions</h4>
+
+<ul type="disc">
+    <li><code>s.start () + s.stride () * s.size () &lt;=
+        data.size ()</code></li>
+</ul>
+
+<h4>Complexity</h4>
+
+<p>Linear depending from the size of the slice.</p>
+
+<h4>Examples</h4>
+
+<pre>int main () {
+    using namespace boost::numeric::ublas;
+    vector&lt;double&gt; v (3);
+    for (int i = 0; i &lt; 3; ++ i)
+        project (v, slice (0, 1, 3)) (i) = i;
+    std::cout &lt;&lt; project (v, slice (0, 1, 3)) &lt;&lt; std::endl;
+}</pre>
+
+<hr>
+
+<p>Copyright (©) 2000-2002 Joerg Walter, Mathias Koch <br>
+Permission to copy, use, modify, sell and distribute this
+document is granted provided this copyright notice appears in all
+copies. This document is provided ``as is'' without express or
+implied warranty, and with no claim as to its suitability for any
+purpose.</p>
+
+<p>Last revised: 8/3/2002</p>
+</body>
+</html>

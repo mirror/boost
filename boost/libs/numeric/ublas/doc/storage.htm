@@ -1,0 +1,860 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>Storage</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1><img src="c++boost.gif" alt="c++boost.gif" align="center">Storage</h1>
+
+<h2><a name="unbounded_array"></a>Unbounded Array</h2>
+
+<h4>Description</h4>
+
+<p>The templated class <code>unbounded_array&lt;T&gt; </code>implements
+a simple C-like array using allocation via <code>new/delete</code>.</p>
+
+<h4>Example</h4>
+
+<pre>int main () {
+    using namespace boost::numeric::ublas;
+    unbounded_array&lt;double&gt; a (3);
+    for (int i = 0; i &lt; a.size (); ++ i) {
+        a [i] = i;
+        std::cout &lt;&lt; a [i] &lt;&lt; std::endl;
+    }
+}</pre>
+
+<h4>Definition</h4>
+
+<p>Defined in the header storage.hpp.</p>
+
+<h4>Template parameters</h4>
+
+<table border="1">
+    <tr>
+        <th>Parameter </th>
+        <th>Description </th>
+        <th>Default </th>
+    </tr>
+    <tr>
+        <td><code>T</code> </td>
+        <td>The type of object stored in the array. </td>
+        <td>&nbsp;</td>
+    </tr>
+</table>
+
+<h4>Model of</h4>
+
+<p>Random Access Container. </p>
+
+<h4>Type requirements</h4>
+
+<p>None, except for those imposed by the requirements of Random
+Access Container. </p>
+
+<h4>Public base classes</h4>
+
+<p>None. </p>
+
+<h4>Members</h4>
+
+<table border="1">
+    <tr>
+        <th>Member </th>
+        <th>Description </th>
+    </tr>
+    <tr>
+        <td><code>unbounded_array ()</code> </td>
+        <td>Allocates an uninitialized <code>unbounded_array </code>that
+        holds at most zero elements.</td>
+    </tr>
+    <tr>
+        <td><code>unbounded_array (size_type size)</code></td>
+        <td>Allocates an uninitialized <code>unbounded_array </code>that
+        holds at most <code>size</code> elements.</td>
+    </tr>
+    <tr>
+        <td><code>unbounded_array (const unbounded_array &amp;a)</code></td>
+        <td>The copy constructor.</td>
+    </tr>
+    <tr>
+        <td><code>~unbounded_array ()</code></td>
+        <td>Deallocates the <code>unbounded_array </code>itself. </td>
+    </tr>
+    <tr>
+        <td><code>void resize (size_type size)</code></td>
+        <td>Reallocates an <code>unbounded_array </code>to hold
+        at most <code>size</code> elements. The content of the <code>unbounded_array
+        </code>is not preserved.</td>
+    </tr>
+    <tr>
+        <td><code>size_type size () const</code></td>
+        <td>Returns the size of the <code>unbounded_array</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>const_reference operator [] (size_type i)
+        const</code></td>
+        <td>Returns a <code>const </code>reference of the <code>i</code>-th
+        element. </td>
+    </tr>
+    <tr>
+        <td><code>reference operator [] (size_type i)</code></td>
+        <td>Returns a reference of the <code>i</code>-th element.
+        </td>
+    </tr>
+    <tr>
+        <td><code>unbounded_array &amp;operator = (const
+        unbounded_array &amp;a)</code></td>
+        <td>The assignment operator.</td>
+    </tr>
+    <tr>
+        <td><code>unbounded_array &amp;assign_temporary
+        (unbounded_array &amp;a)</code></td>
+        <td>Assigns a temporary. May change the array <code>a</code>.</td>
+    </tr>
+    <tr>
+        <td><code>void swap (unbounded_array &amp;a)</code></td>
+        <td>Swaps the contents of the arrays. </td>
+    </tr>
+    <tr>
+        <td><code>pointer insert (pointer it, const
+        value_type &amp;t)</code></td>
+        <td>Inserts the value <code>t</code> at <code>it</code>.</td>
+    </tr>
+    <tr>
+        <td><code>void erase (pointer it)</code></td>
+        <td>Erases the value at <code>it</code>.</td>
+    </tr>
+    <tr>
+        <td><code>void clear ()</code></td>
+        <td>Clears the array. </td>
+    </tr>
+    <tr>
+        <td><code>const_iterator begin () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        beginning of the <code>unbounded_array</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_iterator end () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        end of the <code>unbounded_array</code>. </td>
+    </tr>
+    <tr>
+        <td><code>iterator begin () </code></td>
+        <td>Returns a <code>iterator</code> pointing to the
+        beginning of the <code>unbounded_array</code>. </td>
+    </tr>
+    <tr>
+        <td><code>iterator end () </code></td>
+        <td>Returns a <code>iterator</code> pointing to the end
+        of the <code>unbounded_array</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rbegin () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the beginning of the reversed <code>unbounded_array</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rend () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the end of the reversed <code>unbounded_array</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>reverse_iterator rbegin () </code></td>
+        <td>Returns a <code>reverse_iterator</code> pointing to
+        the beginning of the reversed <code>unbounded_array</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>reverse_iterator rend () </code></td>
+        <td>Returns a <code>reverse_iterator</code> pointing to
+        the end of the reversed <code>unbounded_array</code>. </td>
+    </tr>
+</table>
+
+<h4>Interface</h4>
+
+<pre><code>    // Unbounded array 
+    template&lt;class T&gt;
+    class unbounded_array {
+    public:      
+        typedef std::size_t size_type;
+        typedef std::ptrdiff_t difference_type;
+        typedef T value_type;
+        typedef const T &amp;const_reference;
+        typedef T &amp;reference;
+        typedef const T *const_pointer;
+        typedef T *pointer;
+
+        // Construction and destruction
+        unbounded_array ();
+        unbounded_array (size_type size);
+        unbounded_array (const unbounded_array &amp;a);
+        ~unbounded_array ();
+
+        // Resizing
+        void resize (size_type size);
+
+        size_type size () const;
+
+        // Element access
+        const_reference operator [] (size_type i) const;
+        reference operator [] (size_type i);
+
+        // Assignment
+        unbounded_array &amp;operator = (const unbounded_array &amp;a);
+        unbounded_array &amp;assign_temporary (unbounded_array &amp;a);
+
+        // Swapping
+        void swap (unbounded_array &amp;a);
+        friend void swap (unbounded_array &amp;a1, unbounded_array &amp;a2);
+
+        // Element insertion and deletion
+        pointer insert (pointer it, const value_type &amp;t);
+        void insert (pointer it, pointer it1, pointer it2);
+        void erase (pointer it);
+        void erase (pointer it1, pointer it2);
+        void clear ();
+
+        // Iterators simply are pointers.
+
+        typedef const_pointer const_iterator;
+
+        const_iterator begin () const;
+        const_iterator end () const;
+
+        typedef pointer iterator;
+
+        iterator begin ();
+        iterator end ();
+
+        // Reverse iterators
+
+        typedef std::reverse_iterator&lt;const_iterator&gt; const_reverse_iterator;
+
+        const_reverse_iterator rbegin () const;
+        const_reverse_iterator rend () const;
+
+        typedef std::reverse_iterator&lt;iterator&gt; reverse_iterator;
+
+        reverse_iterator rbegin ();
+        reverse_iterator rend ();
+    };
+
+    template&lt;class T&gt;
+    unbounded_array&lt;T&gt; &amp;assign_temporary (unbounded_array&lt;T&gt; &amp;a1, unbounded_array&lt;T&gt; &amp;a2);</code></pre>
+
+<h2><a name="bounded_array"></a>Bounded Array</h2>
+
+<h4>Description</h4>
+
+<p>The templated class <code>bounded_array&lt;T, N&gt; </code>implements
+a simple C-like array.</p>
+
+<h4>Example</h4>
+
+<pre>int main () {
+    using namespace boost::numeric::ublas;
+    bounded_array&lt;double, 3&gt; a (3);
+    for (int i = 0; i &lt; a.size (); ++ i) {
+        a [i] = i;
+        std::cout &lt;&lt; a [i] &lt;&lt; std::endl;
+    }
+}</pre>
+
+<h4>Definition</h4>
+
+<p>Defined in the header storage.hpp.</p>
+
+<h4>Template parameters</h4>
+
+<table border="1">
+    <tr>
+        <th>Parameter </th>
+        <th>Description </th>
+        <th>Default </th>
+    </tr>
+    <tr>
+        <td><code>T</code> </td>
+        <td>The type of object stored in the array. </td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>N</code></td>
+        <td>The allocation size of the array.</td>
+        <td>&nbsp;</td>
+    </tr>
+</table>
+
+<h4>Model of</h4>
+
+<p>Random Access Container. </p>
+
+<h4>Type requirements</h4>
+
+<p>None, except for those imposed by the requirements of Random
+Access Container. </p>
+
+<h4>Public base classes</h4>
+
+<p>None. </p>
+
+<h4>Members</h4>
+
+<table border="1">
+    <tr>
+        <th>Member </th>
+        <th>Description </th>
+    </tr>
+    <tr>
+        <td><code>bounded_array ()</code> </td>
+        <td>Allocates an uninitialized <code>bounded_array </code>that
+        holds at most zero elements.</td>
+    </tr>
+    <tr>
+        <td><code>bounded_array (size_type size)</code></td>
+        <td>Allocates an uninitialized <code>bounded_array </code>that
+        holds at most <code>size</code> elements.</td>
+    </tr>
+    <tr>
+        <td><code>bounded_array (const bounded_array &amp;a)</code></td>
+        <td>The copy constructor.</td>
+    </tr>
+    <tr>
+        <td><code>~bounded_array ()</code></td>
+        <td>Deallocates the <code>bounded_array </code>itself. </td>
+    </tr>
+    <tr>
+        <td><code>void resize (size_type size)</code></td>
+        <td>Reallocates a <code>bounded_array </code>to hold at
+        most <code>size</code> elements. The content of the <code>bounded_array
+        </code>is preserved.</td>
+    </tr>
+    <tr>
+        <td><code>size_type size () const</code></td>
+        <td>Returns the size of the <code>bounded_array</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_reference operator [] (size_type i)
+        const</code></td>
+        <td>Returns a <code>const </code>reference of the <code>i</code>-th
+        element. </td>
+    </tr>
+    <tr>
+        <td><code>reference operator [] (size_type i)</code></td>
+        <td>Returns a reference of the <code>i</code>-th element.
+        </td>
+    </tr>
+    <tr>
+        <td><code>bounded_array &amp;operator = (const
+        bounded_array &amp;a)</code></td>
+        <td>The assignment operator.</td>
+    </tr>
+    <tr>
+        <td><code>bounded_array &amp;assign_temporary
+        (bounded_array &amp;a)</code></td>
+        <td>Assigns a temporary. May change the array <code>a</code>.</td>
+    </tr>
+    <tr>
+        <td><code>void swap (bounded_array &amp;a)</code></td>
+        <td>Swaps the contents of the arrays. </td>
+    </tr>
+    <tr>
+        <td><code>pointer insert (pointer it, const
+        value_type &amp;t)</code></td>
+        <td>Inserts the value <code>t</code> at <code>it</code>.</td>
+    </tr>
+    <tr>
+        <td><code>void erase (pointer it)</code></td>
+        <td>Erases the value at <code>it</code>.</td>
+    </tr>
+    <tr>
+        <td><code>void clear ()</code></td>
+        <td>Clears the array. </td>
+    </tr>
+    <tr>
+        <td><code>const_iterator begin () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        beginning of the <code>bounded_array</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_iterator end () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        end of the <code>bounded_array</code>. </td>
+    </tr>
+    <tr>
+        <td><code>iterator begin () </code></td>
+        <td>Returns a <code>iterator</code> pointing to the
+        beginning of the <code>bounded_array</code>. </td>
+    </tr>
+    <tr>
+        <td><code>iterator end () </code></td>
+        <td>Returns a <code>iterator</code> pointing to the end
+        of the <code>bounded_array</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rbegin () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the beginning of the reversed <code>bounded_array</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rend () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the end of the reversed <code>bounded_array</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>reverse_iterator rbegin () </code></td>
+        <td>Returns a <code>reverse_iterator</code> pointing to
+        the beginning of the reversed <code>bounded_array</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>reverse_iterator rend () </code></td>
+        <td>Returns a <code>reverse_iterator</code> pointing to
+        the end of the reversed <code>bounded_array</code>. </td>
+    </tr>
+</table>
+
+<h4>Interface</h4>
+
+<pre><code>    // Bounded array 
+    template&lt;class T, std::size_t N&gt;
+    class bounded_array {
+    public:      
+        typedef std::size_t size_type;
+        typedef std::ptrdiff_t difference_type;
+        typedef T value_type;
+        typedef const T &amp;const_reference;
+        typedef T &amp;reference;
+        typedef const T *const_pointer;
+        typedef T *pointer;
+
+        // Construction and destruction
+        bounded_array ();
+        bounded_array (size_type size);
+        bounded_array (const bounded_array &amp;a);
+
+        // Resizing
+        void resize (size_type size);
+
+        size_type size () const;
+
+        // Element access
+        const_reference operator [] (size_type i) const;
+        reference operator [] (size_type i);
+
+        // Assignment
+        bounded_array &amp;operator = (const bounded_array &amp;a);
+        bounded_array &amp;assign_temporary (bounded_array &amp;a);
+
+        // Swapping
+        void swap (bounded_array &amp;a);
+        friend void swap (bounded_array &amp;a1, bounded_array &amp;a2);
+
+        // Element insertion and deletion
+        pointer insert (pointer it, const value_type &amp;t);
+        void insert (pointer it, pointer it1, pointer it2);
+        void erase (pointer it);
+        void erase (pointer it1, pointer it2);
+        void clear ();
+
+        // Iterators simply are pointers.
+
+        typedef const_pointer const_iterator;
+
+        const_iterator begin () const;
+        const_iterator end () const;
+
+        typedef pointer iterator;
+
+        iterator begin ();
+        iterator end ();
+
+        // Reverse iterators
+
+        typedef std::reverse_iterator&lt;const_iterator&gt; const_reverse_iterator;
+
+        const_reverse_iterator rbegin () const;
+        const_reverse_iterator rend () const;
+
+        typedef std::reverse_iterator&lt;iterator, value_type, reference&gt; reverse_iterator;
+
+        reverse_iterator rbegin ();
+        reverse_iterator rend ();
+    };
+
+    template&lt;class T, std::size_t N&gt;
+    bounded_array&lt;T, N&gt; &amp;assign_temporary (bounded_array&lt;T, N&gt; &amp;a1, bounded_array&lt;T, N&gt; &amp;a2);</code></pre>
+
+<h2><a name="range"></a>Range</h2>
+
+<h4>Description</h4>
+
+<p>The class <code>range </code>implements base functionality
+needed to address ranges of vectors and matrices.</p>
+
+<h4>Example</h4>
+
+<pre>int main () {
+    using namespace boost::numeric::ublas;
+    range r (0, 3);
+    for (int i = 0; i &lt; r.size (); ++ i) {
+        std::cout &lt;&lt; r (i) &lt;&lt; std::endl;
+    }
+}</pre>
+
+<h4>Definition</h4>
+
+<p>Defined in the header storage.hpp.</p>
+
+<h4>Model of</h4>
+
+<p>Reversible Container. </p>
+
+<h4>Type requirements</h4>
+
+<p>None, except for those imposed by the requirements of
+Reversible Container. </p>
+
+<h4>Public base classes</h4>
+
+<p>None. </p>
+
+<h4>Members</h4>
+
+<table border="1">
+    <tr>
+        <th>Member </th>
+        <th>Description </th>
+    </tr>
+    <tr>
+        <td><code>range (size_type start, size_type stop)</code> </td>
+        <td>Constructs a range from <code>start </code>to <code>stop</code>.</td>
+    </tr>
+    <tr>
+        <td><code>size_type start () const</code></td>
+        <td>Returns the beginning of the <code>range</code>. </td>
+    </tr>
+    <tr>
+        <td><code>size_type size () const</code></td>
+        <td>Returns the size of the <code>range</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_reference operator [] (size_type i) const</code></td>
+        <td>Returns the value <code>start + i</code> of the <code>i</code>-th
+        element. </td>
+    </tr>
+    <tr>
+        <td><code>range compose (const range &amp;r) const</code></td>
+        <td>Returns the composite range from <code>start +
+        r.start ()</code> to <code>start + r.start () + r.size ()</code>.</td>
+    </tr>
+    <tr>
+        <td><code>bool operator == (const range &amp;r) const</code></td>
+        <td>Tests two ranges for equality.</td>
+    </tr>
+    <tr>
+        <td><code>bool operator != (const range &amp;r) const</code></td>
+        <td>Tests two ranges for inequality.</td>
+    </tr>
+    <tr>
+        <td><code>const_iterator begin () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        beginning of the <code>range</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_iterator end () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        end of the <code>range</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rbegin () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the beginning of the reversed <code>range</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rend () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the end of the reversed <code>range</code>. </td>
+    </tr>
+</table>
+
+<h4>Interface</h4>
+
+<pre><code>    // Range class
+    class range {
+    public:
+        typedef std::size_t size_type;
+        typedef std::ptrdiff_t difference_type;
+        typedef difference_type value_type;
+        typedef value_type const_reference;
+        typedef const_reference reference;
+        typedef const difference_type *const_pointer;
+        typedef difference_type *pointer;
+        typedef size_type const_iterator_type;
+
+        // Construction and destruction
+        range ();
+        range (size_type start, size_type stop);
+
+        size_type start () const;
+        size_type size () const;
+
+        // Element access
+        const_reference operator () (size_type i) const;
+
+        // Composition
+        range compose (const range &amp;r) const;
+
+        // Comparison
+        bool operator == (const range &amp;r) const;
+        bool operator != (const range &amp;r) const;
+
+        // Iterator simply is a index.
+
+        class const_iterator:
+            public container_const_reference&lt;range&gt;,
+            public random_access_iterator_base&lt;const_iterator, value_type&gt; {
+        public:
+
+            // Construction and destruction
+            const_iterator ();
+            const_iterator (const range &amp;r, const const_iterator_type &amp;it);
+
+            // Arithmetic
+            const_iterator &amp;operator ++ ();
+            const_iterator &amp;operator -- ();
+            const_iterator &amp;operator += (difference_type n);
+            const_iterator &amp;operator -= (difference_type n);
+            difference_type operator - (const const_iterator &amp;it) const;
+
+            // Dereference
+            const_reference operator * () const;
+
+            // Index
+            size_type index () const;
+
+            // Assignment 
+            const_iterator &amp;operator = (const const_iterator &amp;it);
+
+            // Comparison
+            bool operator == (const const_iterator &amp;it) const;
+        };
+
+        const_iterator begin () const;
+        const_iterator end () const;
+
+        // Reverse iterator
+
+        typedef std::reverse_iterator&lt;const_iterator&gt; const_reverse_iterator;
+
+        const_reverse_iterator rbegin () const;
+        const_reverse_iterator rend () const;
+    };</code></pre>
+
+<h2><a name="slice"></a>Slice</h2>
+
+<h4>Description</h4>
+
+<p>The class <code>slice </code>implements base functionality
+needed to address slices of vectors and matrices.</p>
+
+<h4>Example</h4>
+
+<pre>int main () {
+    using namespace boost::numeric::ublas;
+    slice s (0, 1, 3);
+    for (int i = 0; i &lt; s.size (); ++ i) {
+        std::cout &lt;&lt; s (i) &lt;&lt; std::endl;
+    }
+}</pre>
+
+<h4>Definition</h4>
+
+<p>Defined in the header storage.hpp.</p>
+
+<h4>Model of</h4>
+
+<p>Reversible Container. </p>
+
+<h4>Type requirements</h4>
+
+<p>None, except for those imposed by the requirements of
+Reversible Container. </p>
+
+<h4>Public base classes</h4>
+
+<p>None. </p>
+
+<h4>Members</h4>
+
+<table border="1">
+    <tr>
+        <th>Member </th>
+        <th>Description </th>
+    </tr>
+    <tr>
+        <td><code>slice (size_type start, size_type stride,
+        size_type size)</code> </td>
+        <td>Constructs a slice from <code>start </code>to <code>start
+        + size </code>with stride <code>stride</code>.</td>
+    </tr>
+    <tr>
+        <td><code>size_type start () const</code></td>
+        <td>Returns the beginning of the <code>slice</code>. </td>
+    </tr>
+    <tr>
+        <td><code>size_type stride () const</code></td>
+        <td>Returns the stride of the <code>slice</code>. </td>
+    </tr>
+    <tr>
+        <td><code>size_type size () const</code></td>
+        <td>Returns the size of the <code>slice</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_reference operator [] (size_type i) const</code></td>
+        <td>Returns the value <code>start + i * stride</code> of
+        the <code>i</code>-th element. </td>
+    </tr>
+    <tr>
+        <td><code>slice compose (const range &amp;r) const</code></td>
+        <td>Returns the composite slice from <code>start + stride
+        * r.start ()</code> to <code>start + stride * (r.start ()
+        + r.size ()) </code>with stride <code>stride</code>.</td>
+    </tr>
+    <tr>
+        <td><code>slice compose (const slice &amp;s) const</code></td>
+        <td>Returns the composite slice from <code>start + stride
+        * s.start ()</code> to <code>start + stride * s.stride ()
+        * (s.start () + s.size ()) </code>with stride <code>stride
+        * s.stride ()</code>.</td>
+    </tr>
+    <tr>
+        <td><code>bool operator == (const slice &amp;s) const</code></td>
+        <td>Tests two slices for equality.</td>
+    </tr>
+    <tr>
+        <td><code>bool operator != (const slice &amp;s) const</code></td>
+        <td>Tests two slices for inequality.</td>
+    </tr>
+    <tr>
+        <td><code>const_iterator begin () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        beginning of the <code>slice</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_iterator end () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        end of the <code>slice</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rbegin () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the beginning of the reversed <code>slice</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rend () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the end of the reversed <code>slice</code>. </td>
+    </tr>
+</table>
+
+<h4>Interface</h4>
+
+<pre><code>    // Slice class
+    class slice {
+    public:
+        typedef std::size_t size_type;
+        typedef std::ptrdiff_t difference_type;
+        typedef difference_type value_type;
+        typedef value_type const_reference;
+        typedef const_reference reference;
+        typedef const difference_type *const_pointer;
+        typedef difference_type *pointer;
+        typedef size_type const_iterator_type;
+
+        // Construction and destruction
+        slice ();
+        slice (size_type start, size_type stride, size_type size);
+
+        size_type start () const;
+        size_type stride () const;
+        size_type size () const;
+
+        // Element access
+        const_reference operator () (size_type i) const;
+
+        // Composition
+        slice compose (const range &amp;r) const;
+        slice compose (const slice &amp;s) const;
+
+        // Comparison
+        bool operator == (const slice &amp;s) const;
+        bool operator != (const slice &amp;s) const;
+
+        // Iterator simply is a index.
+
+        class const_iterator:
+            public container_const_reference&lt;slice&gt;,
+            public random_access_iterator_base&lt;const_iterator, value_type&gt; {
+        public:
+
+            // Construction and destruction
+            const_iterator ();
+            const_iterator (const slice &amp;s, const const_iterator_type &amp;it);
+
+            // Arithmetic
+            const_iterator &amp;operator ++ ();
+            const_iterator &amp;operator -- ();
+            const_iterator &amp;operator += (difference_type n);
+            const_iterator &amp;operator -= (difference_type n);
+            difference_type operator - (const const_iterator &amp;it) const;
+
+            // Dereference
+            const_reference operator * () const;
+
+            // Index
+            size_type index () const;
+
+            // Assignment 
+            const_iterator &amp;operator = (const const_iterator &amp;it);
+
+            // Comparison
+            bool operator == (const const_iterator &amp;it) const;
+        };
+
+        const_iterator begin () const;
+        const_iterator end () const;
+
+        // Reverse iterator
+
+        typedef std::reverse_iterator&lt;const_iterator&gt; const_reverse_iterator;
+
+        const_reverse_iterator rbegin () const;
+        const_reverse_iterator rend () const;
+    };</code></pre>
+
+<hr>
+
+<p>Copyright (©) 2000-2002 Joerg Walter, Mathias Koch <br> 
+Permission to copy, use, modify, sell and distribute this document is granted 
+provided this copyright notice appears in all copies. This document is provided 
+``as is'' without express or implied warranty, and with no claim as to its suitability 
+for any purpose.</p>
+
+<p>Last revised: 8/3/2002</p>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+subproject libs/numeric/ublas/test1 ;
+
+SOURCES = test1 test11 test12 test13 ;
+
+exe test1
+	: $(SOURCES).cpp 
+	: <include>$(BOOST_ROOT)
+	  <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+	;
+
+
+
+

@@ -1,0 +1,448 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>Sparse Vector</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1><img src="c++boost.gif" alt="c++boost.gif" align="center"
+width="277" height="86">Sparse Vector</h1>
+
+<h2><a name="sparse_vector"></a>Sparse Vector</h2>
+
+<h4>Description</h4>
+
+<p>The templated class <code>sparse_vector&lt;T, A&gt; </code>is
+the base container adaptor for sparse vectors. For a <em>n</em>-dimensional
+sparse vector and <em>0 &lt;= i &lt; n </em>every non-zero
+element <em>v</em><sub><em>i</em></sub> is mapped to the <em>i-</em>th
+element of the container.</p>
+
+<h4>Example</h4>
+
+<pre>int main () {
+    using namespace boost::numeric::ublas;
+    sparse_vector&lt;double&gt; v (3, 3);
+    for (int i = 0; i &lt; v.size (); ++ i) 
+        v (i) = i;
+    std::cout &lt;&lt; v &lt;&lt; std::endl;
+}</pre>
+
+<h4>Definition</h4>
+
+<p>Defined in the header vector_sparse.hpp.</p>
+
+<h4>Template parameters</h4>
+
+<table border="1">
+    <tr>
+        <th>Parameter </th>
+        <th>Description </th>
+        <th>Default </th>
+    </tr>
+    <tr>
+        <td><code>T</code> </td>
+        <td>The type of object stored in the sparse vector. </td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>F</code></td>
+        <td>Functor describing the storage organization.</td>
+        <td><code>forward</code></td>
+    </tr>
+    <tr>
+        <td><code>A</code></td>
+        <td>The type of the adapted array.</td>
+        <td><code>map_array&lt;std::size_t, T&gt;</code></td>
+    </tr>
+</table>
+
+<h4>Model of</h4>
+
+<p><a href="container.htm#vector">Vector</a>. </p>
+
+<h4>Type requirements</h4>
+
+<p>None, except for those imposed by the requirements of <a
+href="container.htm#vector">Vector</a>.</p>
+
+<h4>Public base classes</h4>
+
+<p><code>vector_expression&lt;sparse_vector&lt;T, A&gt; &gt;</code>
+</p>
+
+<h4>Members</h4>
+
+<table border="1">
+    <tr>
+        <th>Member </th>
+        <th>Description </th>
+    </tr>
+    <tr>
+        <td><code>sparse_vector ()</code> </td>
+        <td>Allocates a <code>sparse_vector </code>that holds
+        zero elements.</td>
+    </tr>
+    <tr>
+        <td><code>sparse_vector (size_type size, size_type
+        non_zeros)</code></td>
+        <td>Allocates a <code>sparse_vector </code>that holds at
+        most <code>size</code> elements.</td>
+    </tr>
+    <tr>
+        <td><code>sparse_vector (const sparse_vector &amp;v)</code></td>
+        <td>The copy constructor.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        sparse_vector (size_type non_zeros, const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>The extended copy constructor.</td>
+    </tr>
+    <tr>
+        <td><code>void resize (size_type size, size_type
+        non_zeros)</code></td>
+        <td>Reallocates a <code>sparse_vector </code>to hold at
+        most <code>size</code> elements. The content of the <code>sparse_vector
+        </code>is preserved.</td>
+    </tr>
+    <tr>
+        <td><code>size_type size () const</code></td>
+        <td>Returns the size of the <code>sparse_vector</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_reference operator () (size_type i) const</code></td>
+        <td>Returns the value of the <code>i</code>-th element. </td>
+    </tr>
+    <tr>
+        <td><code>reference operator () (size_type i)</code></td>
+        <td>Returns a reference of the <code>i</code>-th element.
+        </td>
+    </tr>
+    <tr>
+        <td><code>const_reference operator [] (size_type i) const</code></td>
+        <td>Returns the value of the <code>i</code>-th element. </td>
+    </tr>
+    <tr>
+        <td><code>reference operator [] (size_type i)</code></td>
+        <td>Returns a reference of the <code>i</code>-th element.
+        </td>
+    </tr>
+    <tr>
+        <td><code>sparse_vector &amp;operator = (const
+        sparse_vector &amp;v)</code></td>
+        <td>The assignment operator.</td>
+    </tr>
+    <tr>
+        <td><code>sparse_vector &amp;assign_temporary
+        (sparse_vector &amp;v)</code></td>
+        <td>Assigns a temporary. May change the sparse vector <code>v</code>.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        sparse_vector &amp;operator = (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>The extended assignment operator.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        sparse_vector &amp;assign (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>Assigns a vector expression to the sparse vector.
+        Left and right hand side of the assignment should be
+        independent.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        sparse_vector &amp;operator += (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>A computed assignment operator. Adds the vector
+        expression to the sparse vector.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        sparse_vector &amp;plus_assign (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>Adds a vector expression to the sparse vector. Left
+        and right hand side of the assignment should be
+        independent.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        sparse_vector &amp;operator -= (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>A computed assignment operator. Subtracts the vector
+        expression from the sparse vector.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AE&gt;<br>
+        sparse_vector &amp;minus_assign (const
+        vector_expression&lt;AE&gt; &amp;ae)</code></td>
+        <td>Subtracts a vector expression from the sparse vector.
+        Left and right hand side of the assignment should be
+        independent.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AT&gt;<br>
+        sparse_vector &amp;operator *= (const AT &amp;at)</code></td>
+        <td>A computed assignment operator. Multiplies the sparse
+        vector with a scalar.</td>
+    </tr>
+    <tr>
+        <td><code>template&lt;class AT&gt;<br>
+        sparse_vector &amp;operator /= (const AT &amp;at)</code></td>
+        <td>A computed assignment operator. Divides the sparse
+        vector through a scalar.</td>
+    </tr>
+    <tr>
+        <td><code>void swap (sparse_vector &amp;v)</code></td>
+        <td>Swaps the contents of the sparse vectors. </td>
+    </tr>
+    <tr>
+        <td><code>void insert (size_type i, const_reference t)</code></td>
+        <td>Inserts the value <code>t</code> at the <code>i</code>-th
+        element.</td>
+    </tr>
+    <tr>
+        <td><code>void erase (size_type i)</code></td>
+        <td>Erases the value at the <code>i</code>-th element.</td>
+    </tr>
+    <tr>
+        <td><code>void clear ()</code></td>
+        <td>Clears the sparse vector.</td>
+    </tr>
+    <tr>
+        <td><code>const_iterator begin () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        beginning of the <code>sparse_vector</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_iterator end () const</code></td>
+        <td>Returns a <code>const_iterator</code> pointing to the
+        end of the <code>sparse_vector</code>. </td>
+    </tr>
+    <tr>
+        <td><code>iterator begin () </code></td>
+        <td>Returns a <code>iterator</code> pointing to the
+        beginning of the <code>sparse_vector</code>. </td>
+    </tr>
+    <tr>
+        <td><code>iterator end () </code></td>
+        <td>Returns a <code>iterator</code> pointing to the end
+        of the <code>sparse_vector</code>. </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rbegin () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the beginning of the reversed <code>sparse_vector</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>const_reverse_iterator rend () const</code></td>
+        <td>Returns a <code>const_reverse_iterator</code>
+        pointing to the end of the reversed <code>sparse_vector</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>reverse_iterator rbegin () </code></td>
+        <td>Returns a <code>reverse_iterator</code> pointing to
+        the beginning of the reversed <code>sparse_vector</code>.
+        </td>
+    </tr>
+    <tr>
+        <td><code>reverse_iterator rend () </code></td>
+        <td>Returns a <code>reverse_iterator</code> pointing to
+        the end of the reversed <code>sparse_vector</code>. </td>
+    </tr>
+</table>
+
+<h4>Interface</h4>
+
+<pre><code>    // Array based sparse vector class 
+    template&lt;class T, class A&gt;
+    class sparse_vector: 
+        public vector_expression&lt;sparse_vector&lt;T, A&gt; &gt; {
+    public:      
+        typedef std::size_t size_type;
+        typedef std::ptrdiff_t difference_type;
+        typedef T value_type;
+        typedef const T &amp;const_reference;
+        typedef T &amp;reference;
+        typedef const T *const_pointer;
+        typedef T *pointer;
+        typedef F functor_type;
+        typedef A array_type;
+        typedef const A const_array_type;
+        typedef const sparse_vector&lt;T, A&gt; const_self_type;
+        typedef sparse_vector&lt;T, A&gt; self_type;
+        typedef const vector_const_reference&lt;const_self_type&gt; const_closure_type;
+        typedef vector_reference&lt;self_type&gt; closure_type;
+        typedef typename A::const_iterator const_iterator_type;
+        typedef typename A::iterator iterator_type;
+        typedef sparse_tag storage_category;
+
+        // Construction and destruction
+        sparse_vector (); 
+        sparse_vector (size_type size, size_type non_zeros = 0);
+        sparse_vector (const sparse_vector &amp;v);
+        template&lt;class AE&gt;
+        sparse_vector (const vector_expression&lt;AE&gt; &amp;ae, size_type non_zeros = 0);
+
+        // Accessors
+        size_type size () const;
+        size_type non_zeros () const;
+        const_array_type &amp;data () const;
+        array_type &amp;data ();
+
+        // Resizing
+        void resize (size_type size, size_type non_zeros = 0);
+
+        // Element access
+        const_reference operator () (size_type i) const;
+        reference operator () (size_type i);
+
+        const_reference operator [] (size_type i) const;
+        reference operator [] (size_type i);
+
+        // Assignment
+        sparse_vector &amp;operator = (const sparse_vector &amp;v);
+        sparse_vector &amp;assign_temporary (sparse_vector &amp;v);
+        template&lt;class AE&gt;
+        sparse_vector &amp;operator = (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        sparse_vector &amp;reset (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        sparse_vector &amp;assign (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        sparse_vector &amp;operator += (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        sparse_vector &amp;plus_assign (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        sparse_vector &amp;operator -= (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AE&gt;
+        sparse_vector &amp;minus_assign (const vector_expression&lt;AE&gt; &amp;ae);
+        template&lt;class AT&gt;
+        sparse_vector &amp;operator *= (const AT &amp;at);
+        template&lt;class AT&gt;
+        sparse_vector &amp;operator /= (const AT &amp;at);
+
+        // Swapping
+        void swap (sparse_vector &amp;v);
+        friend void swap (sparse_vector &amp;v1, sparse_vector &amp;v2);
+
+        // Element insertion and erasure
+        void insert (size_type i, const_reference t);
+        void erase (size_type i);
+        void clear ();
+
+        class const_iterator;
+        class iterator;
+
+        // Element lookup
+        const_iterator find (size_type i) const;
+        iterator find (size_type i);
+        const_iterator find_first (size_type i) const;
+        iterator find_first (size_type i);
+        const_iterator find_last (size_type i) const;
+        iterator find_last (size_type i);
+
+        // Iterators simply are pointers.
+
+        class const_iterator:
+            public container_const_reference&lt;sparse_vector&gt;,
+            public bidirectional_iterator_base&lt;const_iterator, value_type&gt; {
+        public:
+            typedef sparse_bidirectional_iterator_tag iterator_category;
+            typedef typename sparse_vector::difference_type difference_type;
+            typedef typename sparse_vector::value_type value_type;
+            typedef typename sparse_vector::const_reference reference;
+            typedef typename sparse_vector::const_pointer pointer;
+
+            // Construction and destruction
+            const_iterator ();
+            const_iterator (const sparse_vector &amp;v, const const_iterator_type &amp;it);
+            const_iterator (const iterator &amp;it);
+
+            // Arithmetic
+            const_iterator &amp;operator ++ ();
+            const_iterator &amp;operator -- ();
+
+            // Dereference
+            reference operator * () const;
+
+            // Index
+            size_type index () const;
+
+            // Assignment
+            const_iterator &amp;operator = (const const_iterator &amp;it);
+
+            // Comparison
+            bool operator == (const const_iterator &amp;it) const;
+        };
+
+        const_iterator begin () const;
+        const_iterator end () const;
+
+        class iterator:
+            public container_reference&lt;sparse_vector&gt;,
+            public bidirectional_iterator_base&lt;iterator, value_type&gt; {
+        public:
+            typedef sparse_bidirectional_iterator_tag iterator_category;
+            typedef typename sparse_vector::difference_type difference_type;
+            typedef typename sparse_vector::value_type value_type;
+            typedef typename sparse_vector::reference reference;
+            typedef typename sparse_vector::pointer pointer;
+
+            // Construction and destruction
+            iterator ();
+            iterator (sparse_vector &amp;v, const iterator_type &amp;it);
+
+            // Arithmetic
+            iterator &amp;operator ++ ();
+            iterator &amp;operator -- ();
+
+            // Dereference
+            reference operator * () const;
+
+            // Index
+            size_type index () const;
+
+            // Assignment
+            iterator &amp;operator = (const iterator &amp;it);
+
+            // Comparison
+            bool operator == (const iterator &amp;it) const;
+        };
+
+        iterator begin ();
+        iterator end ();
+
+        // Reverse iterator
+
+        typedef reverse_iterator_base&lt;const_iterator&gt; const_reverse_iterator;
+
+        const_reverse_iterator rbegin () const;
+        const_reverse_iterator rend () const;
+
+        typedef reverse_iterator_base&lt;iterator&gt; reverse_iterator;
+
+        reverse_iterator rbegin ();
+        reverse_iterator rend ();
+    };</code></pre>
+
+<hr>
+
+<p>Copyright (©) 2000-2002 Joerg Walter, Mathias Koch <br>
+Permission to copy, use, modify, sell and distribute this
+document is granted provided this copyright notice appears in all
+copies. This document is provided ``as is'' without express or
+implied warranty, and with no claim as to its suitability for any
+purpose.</p>
+
+<p>Last revised: 8/3/2002</p>
+</body>
+</html>

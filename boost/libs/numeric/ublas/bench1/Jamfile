@@ -1,0 +1,24 @@
+subproject libs/numeric/ublas/bench1 ;
+
+SOURCES = bench1 bench11 bench12 bench13 ;
+
+exe bench1
+	: $(SOURCES).cpp
+	: <include>$(BOOST_ROOT)
+	  <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+          <intel-linux><*><cxxflags>"-tpp7"
+	;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
