@@ -1,12 +1,12 @@
 // Copyright (C) 2002 Ronald Garcia
 //
 // Permission to copy, use, sell and distribute this software is granted
-// provided this copyright notice appears in all copies. 
+// provided this copyright notice appears in all copies.
 // Permission to modify the code and to distribute modified code is granted
-// provided this copyright notice appears in all copies, and a notice 
+// provided this copyright notice appears in all copies, and a notice
 // that the code was modified is included with the copyright notice.
 //
-// This software is provided "as is" without express or implied warranty, 
+// This software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
 //
 
@@ -52,11 +52,11 @@ namespace boost {
 
 template<typename T, std::size_t NumDims,
   typename Allocator>
-class multi_array : 
+class multi_array :
   public multi_array_ref<T,NumDims>
 {
   typedef multi_array_ref<T,NumDims> super_type;
-public: 
+public:
   typedef typename super_type::value_type value_type;
   typedef typename super_type::reference reference;
   typedef typename super_type::const_reference const_reference;
@@ -96,7 +96,7 @@ public:
 
   template <class ExtentList>
   explicit multi_array(ExtentList const& extents,
-                       const general_storage_order<NumDims>& so) : 
+                       const general_storage_order<NumDims>& so) :
     super_type((T*)initial_base_,extents,so) {
     boost::function_requires<
       detail::multi_array::CollectionConcept<ExtentList> >();
@@ -164,7 +164,7 @@ public:
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
 
-  // Since assignment is a deep copy, multi_array_ref 
+  // Since assignment is a deep copy, multi_array_ref
   // contains all the necessary code.
   template <typename ConstMultiArray>
   multi_array& operator=(const ConstMultiArray& other) {
@@ -200,7 +200,7 @@ public:
                    min_extents.begin(),
                    min);
 
-    
+
     // typedef boost::array<index,NumDims> index_list;
     // Build index_gen objects to create views with the same shape
 
@@ -221,9 +221,9 @@ public:
 
     // Build same-shape views of the two arrays
     typename
-      multi_array::array_view<NumDims>::type view_old = (*this)[old_idxes];
+      multi_array::BOOST_NESTED_TEMPLATE array_view<NumDims>::type view_old = (*this)[old_idxes];
     typename
-      multi_array::array_view<NumDims>::type view_new = new_array[new_idxes];
+      multi_array::BOOST_NESTED_TEMPLATE array_view<NumDims>::type view_new = new_array[new_idxes];
 
     // Set the right portion of the new array
     view_new = view_old;
@@ -265,8 +265,8 @@ private:
         allocator_.destroy(i);
       allocator_.deallocate(base_,allocated_elements_);
     }
-  }    
-  
+  }
+
   typedef boost::array<size_type,NumDims> size_list;
   typedef boost::array<index,NumDims> index_list;
 
