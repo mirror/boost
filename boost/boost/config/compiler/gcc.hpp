@@ -50,7 +50,7 @@
 #endif
 //
 // last known and checked version is 3.0:
-#if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 0))
+#if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 1))
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
