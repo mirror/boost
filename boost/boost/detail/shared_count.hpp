@@ -219,6 +219,8 @@ private:
     counted_base_impl(counted_base_impl const &);
     counted_base_impl & operator= (counted_base_impl const &);
 
+    typedef counted_base_impl<P, D> this_type;
+
 public:
 
     // pre: initial_use_count <= initial_weak_count, d(p) must not throw
@@ -232,6 +234,20 @@ public:
     {
         del(ptr);
     }
+
+#if defined(BOOST_SP_USE_STD_ALLOCATOR)
+
+    void * operator new(std::size_t)
+    {
+        return std::allocator<this_type>().allocate(1, static_cast<this_type *>(0));
+    }
+
+    void operator delete(void * p)
+    {
+        std::allocator<this_type>().deallocate(static_cast<this_type *>(p), 1);
+    }
+
+#endif
 };
 
 class weak_count;
