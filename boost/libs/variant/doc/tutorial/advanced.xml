@@ -64,7 +64,7 @@ class some_class&lt; <classname>boost::variant</classname>&lt;<emphasis role="bo
     implementation-defined maximum (namely,
     <code><macroname>BOOST_VARIANT_LIMIT_TYPES</macroname></code>).
     Second, the nature of parameter lists in general makes compile-time
-    manipulation of the lists (metaprogramming) excessively difficult.</para>
+    manipulation of the lists excessively difficult.</para>
 
   <para>To solve these problems <code>variant</code> offers the following
     alternative declaration syntax:
@@ -74,8 +74,8 @@ class some_class&lt; <classname>boost::variant</classname>&lt;<emphasis role="bo
     exposed therein will constitute the set of bounded types for the
     <code>variant</code>. For instance,
 
-<programlisting>typedef mpl::vector&lt; std::string &gt; types_initial;
-typedef mpl::push_front&lt; types_initial, int &gt;::type types;
+<programlisting>typedef <classname>mpl::vector</classname>&lt; std::string &gt; types_initial;
+typedef <classname>mpl::push_front</classname>&lt; types_initial, int &gt;::type types;
 
 <classname>boost::variant</classname>&lt; types &gt; v1;</programlisting>
 
