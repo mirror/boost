@@ -62,7 +62,8 @@ T stirling2(int n, int m)
 {
   T sum = 0;
   for(int k = 0; k <= m; ++k)
-    sum += binomial<T>(m, k) * std::pow(k, n) * ( (m-k)%2 == 0 ? 1 : -1);
+    sum += binomial<T>(m, k) * std::pow(double(k), n) *
+      ( (m-k)%2 == 0 ? 1 : -1);
   return sum / fac<T>(m);
 }
 
@@ -417,7 +418,7 @@ class kolmogorov_smirnov_probability : public distribution_function<double>
 {
 public:
   kolmogorov_smirnov_probability(int n) 
-    : approx(n > 50), n(n), sqrt_n(std::sqrt(n))
+    : approx(n > 50), n(n), sqrt_n(std::sqrt(double(n)))
   {
     if(!approx)
       n_n = std::pow(static_cast<double>(n), n);
@@ -479,8 +480,8 @@ public:
 	kplus = std::max(kplus, j/static_cast<double>(n) - b[k]);
       }
     }
-    kplus *= std::sqrt(n);
-    kminus *= std::sqrt(n);
+    kplus *= std::sqrt(double(n));
+    kminus *= std::sqrt(double(n));
     // std::cout << "k+ " << kplus << "   k- " << kminus << std::endl;
     return kplus;
   }
