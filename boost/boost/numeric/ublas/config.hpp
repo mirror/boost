@@ -63,7 +63,6 @@
 #define BOOST_UBLAS_NO_LONG_DOUBLE
 
 #ifdef NDEBUG
-//TODO Make these MSVC version specific if appropriate
 // MSVC has special inlining options
 #pragma inline_recursion (on)
 #pragma inline_depth (255)
