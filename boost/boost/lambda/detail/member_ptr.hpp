@@ -436,10 +436,10 @@ namespace detail {
 
 template<class RET, class A, class B>
 class member_pointer_caller {
-  A a;
-  B b;
+  A a; B b;
+
 public:
-  member_pointer_caller(A aa, B bb) : a(aa), b(bb) {}
+  member_pointer_caller(const A& aa, const B& bb) : a(aa), b(bb) {}
 
   RET operator()() const { return (a->*b)(); } 
 
@@ -589,29 +589,24 @@ struct member_pointer_action_helper<false, true> {
 
   template<class RET, class A, class B>
   static RET apply(A& a, B& b) { 
-
     typedef typename ::boost::remove_cv<B>::type plainB;
     typedef typename detail::member_pointer<plainB>::type ret_t; 
+    typedef typename ::boost::remove_cv<A>::type plainA;
 
-    // we always add const (it is just the pointer types, not the types
-    // pointed to) to make the to routes (calling and type deduction)
+    // we always strip cv:s to 
+    // make the two routes (calling and type deduction)
     // to give the same results (and the const does not make any functional
     // difference)
-    return detail::member_pointer_caller<ret_t, const A&, const B&>(a, b); 
+    return detail::member_pointer_caller<ret_t, plainA, plainB>(a, b); 
   }
 
   template<class A, class B>
   struct return_type {
     typedef typename detail::remove_reference_and_cv<B>::type plainB;
     typedef typename detail::member_pointer<plainB>::type ret_t; 
+    typedef typename detail::remove_reference_and_cv<A>::type plainA; 
 
-    // we always add const (it is just the pointer types, not the types
-    // pointed to)
-    typedef detail::member_pointer_caller<
-      ret_t, 
-      typename boost::add_reference<const A>::type, 
-      typename boost::add_reference<const B>::type
-    > type;  
+    typedef detail::member_pointer_caller<ret_t, plainA, plainB> type; 
   };
 };
 
@@ -621,17 +616,15 @@ template<> class other_action<member_pointer_action>  {
 public:
   template<class RET, class A, class B>
   static RET apply(A& a, B& b) {
-
     typedef typename 
       ::boost::remove_cv<B>::type plainB;
 
-    return 
-      detail::member_pointer_action_helper<
+    return detail::member_pointer_action_helper<
         boost::is_pointer<A>::value && 
           detail::member_pointer<plainB>::is_data_member,
         boost::is_pointer<A>::value && 
           detail::member_pointer<plainB>::is_function_member
-      >::template apply<RET>(a, b); 
+	  >::template apply<RET>(a, b); 
     }
 };
 
