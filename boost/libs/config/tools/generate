@@ -13,6 +13,22 @@ run libs/config/test/config_test.cpp
 run libs/config/test/limits_test.cpp
 
 EOF
+cat > ../test/Jamfile << EOF
+#
+# Regression test Jamfile for boost configuration setup.
+# This file was automatically generated on $date_string,
+# do not edit by hand...
+#
+subproject libs/config/test ;
+# bring in the rules for testing
+SEARCH on testing.jam = \$(BOOST_BUILD_PATH) ;
+include testing.jam ;
+
+run config_info.cpp ;
+run config_test.cpp <lib>../../test/build/test_exec_monitor ;
+run limits_test.cpp <lib>../../test/build/test_exec_monitor ;
+
+EOF
 
 # init main config test file:
 cat > ../test/config_test.cpp << EOF
@@ -83,7 +99,6 @@ for file in ../test/boost_no_*.cxx; do
 #endif
 
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #ifndef $macroname
@@ -129,7 +144,6 @@ EOF
 #endif
 
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #ifdef $macroname
@@ -160,6 +174,9 @@ EOF
    echo "run libs/config/test/$basename""_pass.cpp" >> ../test/regression.cfg
    echo "link-fail libs/config/test/$basename""_fail.cpp" >> ../test/regression.cfg
    
+   echo 'test-suite "'$macroname'" : ' >> ../test/Jamfile
+   echo "[ run $basename""_pass.cpp <lib>../../test/build/prg_exec_monitor ]" >> ../test/Jamfile
+   echo "[ link-fail $basename""_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;" >> ../test/Jamfile
    
 done
 
@@ -207,7 +224,6 @@ for file in ../test/boost_has_*.cxx; do
 #endif
 
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #ifdef $macroname
@@ -252,7 +268,6 @@ EOF
 #endif
 
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #ifndef $macroname
@@ -283,6 +298,10 @@ EOF
    echo "run libs/config/test/$basename""_pass.cpp" >> ../test/regression.cfg
    echo "link-fail libs/config/test/$basename""_fail.cpp" >> ../test/regression.cfg
    
+   echo 'test-suite "'$macroname'" : ' >> ../test/Jamfile
+   echo "[ run $basename""_pass.cpp <lib>../../test/build/prg_exec_monitor ]" >> ../test/Jamfile
+   echo "[ link-fail $basename""_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;" >> ../test/Jamfile
+
 done
 
 
@@ -317,6 +336,9 @@ EOF
 echo "updating configure script..."
 autoconf ../tools/configure.in > ../configure
 echo
+
+
+
 
 
 

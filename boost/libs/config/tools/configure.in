@@ -158,7 +158,6 @@ for file in $boost_base/libs/config/test/boost_no*.cxx; do
    AC_TRY_LINK(
    [
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #ifndef $macroname
@@ -167,14 +166,9 @@ for file in $boost_base/libs/config/test/boost_no*.cxx; do
 namespace ${namespace} = empty_boost;
 #endif
 
-int cpp_main( int, char *[] )
-{
-   return ${namespace}::test();
-}
-#define main _main   
    ]
    ,
-   []
+   [ return ${namespace}::test(); ]
    ,
    [AC_MSG_RESULT(OK)]
    ,
@@ -189,7 +183,6 @@ int cpp_main( int, char *[] )
    AC_TRY_LINK(
    [
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #ifdef $macroname
@@ -198,14 +191,9 @@ int cpp_main( int, char *[] )
 #error "this file should not compile"
 #endif
 
-int cpp_main( int, char *[] )
-{
-   return ${namespace}::test();
-}  
-#define main _main   
    ]
    ,
-   []
+   [return ${namespace}::test();]
    ,
    [AC_MSG_RESULT(failed)
    required_undefs="$macroname $required_undefs"]
@@ -238,7 +226,6 @@ for file in $boost_base/libs/config/test/boost_has*.cxx; do
    AC_TRY_LINK(
    [
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #ifdef $macroname
@@ -247,14 +234,9 @@ for file in $boost_base/libs/config/test/boost_has*.cxx; do
 namespace ${namespace} = empty_boost;
 #endif
 
-int cpp_main( int, char *[] )
-{
-   return ${namespace}::test();
-}  
-#define main _main   
    ]
    ,
-   []
+   [return ${namespace}::test();]
    ,
    [AC_MSG_RESULT(OK)]
    ,
@@ -266,7 +248,6 @@ int cpp_main( int, char *[] )
    AC_TRY_LINK(
    [
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #ifndef $macroname
@@ -275,14 +256,9 @@ int cpp_main( int, char *[] )
 #error "this file should not compile"
 #endif
 
-int cpp_main( int, char *[] )
-{
-   return ${namespace}::test();
-}  
-#define main _main   
    ]
    ,
-   []
+   [return ${namespace}::test();]
    ,
    [
    AC_MSG_RESULT(failed)
@@ -301,19 +277,13 @@ int cpp_main( int, char *[] )
    AC_TRY_LINK(
    [
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #include "boost_$basename.cxx"
 
-int cpp_main( int, char *[] )
-{
-   return ${namespace}::test();
-}  
-#define main _main   
    ]
    ,
-   []
+   [return ${namespace}::test();]
    ,
    [
       AC_MSG_RESULT(Yes)
@@ -425,6 +395,8 @@ cat_conts="$cat_conts"
 )
 
 fi
+
+
 
 
 

@@ -2010,7 +2010,6 @@ echo $ECHO_N "checking $title ... $ECHO_C" >&6
 #include "confdefs.h"
 
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #ifndef $macroname
@@ -2019,11 +2018,6 @@ echo $ECHO_N "checking $title ... $ECHO_C" >&6
 namespace ${namespace} = empty_boost;
 #endif
 
-int cpp_main( int, char *[] )
-{
-   return ${namespace}::test();
-}
-#define main _main
 
 
 #ifdef F77_DUMMY_MAIN
@@ -2035,7 +2029,7 @@ int cpp_main( int, char *[] )
 int
 main ()
 {
-
+ return ${namespace}::test();
 
   ;
   return 0;
@@ -2076,7 +2070,6 @@ echo $ECHO_N "checking $title (fail expected) ... $ECHO_C" >&6
 #include "confdefs.h"
 
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #ifdef $macroname
@@ -2085,11 +2078,6 @@ echo $ECHO_N "checking $title (fail expected) ... $ECHO_C" >&6
 #error "this file should not compile"
 #endif
 
-int cpp_main( int, char *[] )
-{
-   return ${namespace}::test();
-}
-#define main _main
 
 
 #ifdef F77_DUMMY_MAIN
@@ -2101,7 +2089,7 @@ int cpp_main( int, char *[] )
 int
 main ()
 {
-
+return ${namespace}::test();
 
   ;
   return 0;
@@ -2160,7 +2148,6 @@ echo $ECHO_N "checking $title (pass expected) ... $ECHO_C" >&6
 #include "confdefs.h"
 
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #ifdef $macroname
@@ -2169,11 +2156,6 @@ echo $ECHO_N "checking $title (pass expected) ... $ECHO_C" >&6
 namespace ${namespace} = empty_boost;
 #endif
 
-int cpp_main( int, char *[] )
-{
-   return ${namespace}::test();
-}
-#define main _main
 
 
 #ifdef F77_DUMMY_MAIN
@@ -2185,7 +2167,7 @@ int cpp_main( int, char *[] )
 int
 main ()
 {
-
+return ${namespace}::test();
 
   ;
   return 0;
@@ -2223,7 +2205,6 @@ echo $ECHO_N "checking $title (fail expected) ... $ECHO_C" >&6
 #include "confdefs.h"
 
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #ifndef $macroname
@@ -2232,11 +2213,6 @@ echo $ECHO_N "checking $title (fail expected) ... $ECHO_C" >&6
 #error "this file should not compile"
 #endif
 
-int cpp_main( int, char *[] )
-{
-   return ${namespace}::test();
-}
-#define main _main
 
 
 #ifdef F77_DUMMY_MAIN
@@ -2248,7 +2224,7 @@ int cpp_main( int, char *[] )
 int
 main ()
 {
-
+return ${namespace}::test();
 
   ;
   return 0;
@@ -2293,16 +2269,10 @@ echo $ECHO_N "checking $title... $ECHO_C" >&6
 #include "confdefs.h"
 
 #include <boost/config.hpp>
-#include <boost/test/cpp_main.cpp>
 #include "test.hpp"
 
 #include "boost_$basename.cxx"
 
-int cpp_main( int, char *[] )
-{
-   return ${namespace}::test();
-}
-#define main _main
 
 
 #ifdef F77_DUMMY_MAIN
@@ -2314,7 +2284,7 @@ int cpp_main( int, char *[] )
 int
 main ()
 {
-
+return ${namespace}::test();
 
   ;
   return 0;
@@ -3048,6 +3018,8 @@ fi
 
 
 fi
+
+
 
 
 
