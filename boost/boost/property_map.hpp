@@ -426,7 +426,7 @@ namespace boost {
     typedef typename C::data_type value_type;
     associative_property_map(C& c) : m_c(c) { }
     value_type& operator[](const key_type& k) const {
-      return (*c.find(k)).second;
+      return (*m_c.find(k)).second;
     }
   private:
     C& m_c;
@@ -444,7 +444,7 @@ namespace boost {
     typedef typename C::data_type value_type;
     const_associative_property_map(const C& c) : m_c(c) { }
     const value_type& operator[](const key_type& k) const {
-      return (*c.find(k)).second;
+      return (*m_c.find(k)).second;
     }
   private:
     C& m_c;
