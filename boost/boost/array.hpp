@@ -4,6 +4,9 @@
  * See
  *      http://www.josuttis.com/cppcode
  * for details and the latest version.
+ * See
+ *      http://www.boost.org/libs/array for Documentation.
+ * for documentation.
  *
  * (C) Copyright Nicolai M. Josuttis 2001.
  * Permission to copy, use, modify, sell and distribute this software
@@ -11,14 +14,14 @@
  * This software is provided "as is" without express or implied
  * warranty, and with no claim as to its suitability for any purpose.
  *
+ * 29 Jan 2004 - c_array() added, BOOST_NO_PRIVATE_IN_AGGREGATE removed (Nico Josuttis)
  * 23 Aug 2002 - fix for Non-MSVC compilers combined with MSVC libraries.
  * 05 Aug 2001 - minor update (Nico Josuttis)
  * 20 Jan 2001 - STLport fix (Beman Dawes)
  * 29 Sep 2000 - Initial Revision (Nico Josuttis)
+ *
+ * Jan 29, 2004
  */
-
-// See http://www.boost.org/libs/array for Documentation.
-
 #ifndef BOOST_ARRAY_HPP
 #define BOOST_ARRAY_HPP
 
@@ -31,6 +34,7 @@
 
 // FIXES for broken compilers
 #include <boost/config.hpp>
+
 
 namespace boost {
 
@@ -105,8 +109,11 @@ namespace boost {
             std::swap_ranges(begin(),end(),y.begin());
         }
 
-        // direct access to data
+        // direct access to data (read-only)
         const T* data() const { return elems; }
+
+        // use array as C array (direct read/write access to data)
+        T* c_array() { return elems; }
 
         // assignment with type conversion
         template <typename T2>
@@ -121,12 +128,11 @@ namespace boost {
             std::fill_n(begin(),size(),value);
         }
 
-#ifndef BOOST_NO_PRIVATE_IN_AGGREGATE
-      private:
-#endif
         // check range (may be private because it is static)
         static void rangecheck (size_type i) {
-            if (i >= size()) { throw std::range_error("array"); }
+            if (i >= size()) { 
+                throw std::range_error("array<>: index out of range");
+            }
         }
 
     };
@@ -166,10 +172,3 @@ namespace boost {
 } /* namespace boost */
 
 #endif /*BOOST_ARRAY_HPP*/
-
-
-
-
-
-
-
