@@ -28,7 +28,7 @@ using namespace boost;
 using std::cout;
 
 
-int main( int argc, char * argv[] )
+int test_main( int argc, char * argv[] )
 {
 
 #   ifdef NDEBUG
@@ -65,36 +65,36 @@ int main( int argc, char * argv[] )
 
     //  tests which should result in errors being detected
 
-    caught_exception = false;
+    bool caught_exception = false;
     try { c = numeric_cast<signed char>( large_value ); }
     catch (bad_numeric_cast)
         { cout<<"caught bad_numeric_cast #1\n"; caught_exception = true; }
-    BOOST_CHECK ( caught_exception )
+    BOOST_CHECK ( caught_exception );
 
     caught_exception = false;
     try { c = numeric_cast<signed char>( large_negative_value ); }
     catch (bad_numeric_cast)
         { cout<<"caught bad_numeric_cast #2\n"; caught_exception = true; }
-    BOOST_CHECK ( caught_exception )
+    BOOST_CHECK ( caught_exception );
 
     unsigned long ul;
     caught_exception = false;
     try { ul = numeric_cast<unsigned long>( large_negative_value ); }
     catch (bad_numeric_cast)
         { cout<<"caught bad_numeric_cast #3\n"; caught_exception = true; }
-    BOOST_CHECK ( caught_exception )
+    BOOST_CHECK ( caught_exception );
 
     caught_exception = false;
     try { ul = numeric_cast<unsigned long>( small_negative_value ); }
     catch (bad_numeric_cast)
         { cout<<"caught bad_numeric_cast #4\n"; caught_exception = true; }
-    BOOST_CHECK ( caught_exception )
+    BOOST_CHECK ( caught_exception );
 
     caught_exception = false;
     try { numeric_cast<int>( DBL_MAX ); }
     catch (bad_numeric_cast)
         { cout<<"caught bad_numeric_cast #5\n"; caught_exception = true; }
-    BOOST_CHECK ( caught_exception )
+    BOOST_CHECK ( caught_exception );
 
     return 0 ;
-}   // main
+}
