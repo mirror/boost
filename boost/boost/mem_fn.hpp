@@ -1,14 +1,12 @@
 #ifndef BOOST_MEM_FN_HPP_INCLUDED
 #define BOOST_MEM_FN_HPP_INCLUDED
 
-#if _MSC_VER >= 1020
+#if _MSC_VER+0 >= 1020
 #pragma once
 #endif
 
 //
 //  mem_fn.hpp - a generalization of std::mem_fun[_ref]
-//
-//  Version 1.02.0001 (2001-08-30)
 //
 //  Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
 //
@@ -19,6 +17,8 @@
 //
 //  See http://www.boost.org/libs/bind/mem_fn.html for documentation.
 //
+
+#include <boost/config.hpp>
 
 namespace boost
 {
@@ -47,7 +47,7 @@ namespace _mfi // mem_fun_impl
 
 // mf0
 
-template<class R, class T> class mf0
+template<class R, class T, class F = R (T::*) ()> class mf0
 {
 public:
 
@@ -56,7 +56,6 @@ public:
 
 private:
     
-    typedef R (T::*F) ();
     F f_;
 
 public:
@@ -81,7 +80,7 @@ public:
 
 // cmf0
 
-template<class R, class T> class cmf0
+template<class R, class T, class F = R (T::*) () const> class cmf0
 {
 public:
 
@@ -90,7 +89,6 @@ public:
 
 private:
     
-    typedef R (T::*F) () const;
     F f_;
 
 public:
@@ -110,7 +108,7 @@ public:
 
 // mf1
 
-template<class R, class T, class A1> class mf1
+template<class R, class T, class A1, class F = R (T::*) (A1)> class mf1
 {
 public:
 
@@ -120,7 +118,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1);
     F f_;
 
 public:
@@ -145,7 +142,7 @@ public:
 
 // cmf1
 
-template<class R, class T, class A1> class cmf1
+template<class R, class T, class A1, class F = R (T::*) (A1) const> class cmf1
 {
 public:
 
@@ -155,7 +152,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1) const;
     F f_;
 
 public:
@@ -175,7 +171,7 @@ public:
 
 // mf2
 
-template<class R, class T, class A1, class A2> class mf2
+template<class R, class T, class A1, class A2, class F = R (T::*) (A1, A2)> class mf2
 {
 public:
 
@@ -183,7 +179,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1, A2);
     F f_;
 
 public:
@@ -208,7 +203,7 @@ public:
 
 // cmf2
 
-template<class R, class T, class A1, class A2> class cmf2
+template<class R, class T, class A1, class A2, class F = R (T::*) (A1, A2) const> class cmf2
 {
 public:
 
@@ -216,7 +211,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1, A2) const;
     F f_;
 
 public:
@@ -236,7 +230,7 @@ public:
 
 // mf3
 
-template<class R, class T, class A1, class A2, class A3> class mf3
+template<class R, class T, class A1, class A2, class A3, class F = R (T::*) (A1, A2, A3)> class mf3
 {
 public:
 
@@ -244,7 +238,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1, A2, A3);
     F f_;
 
 public:
@@ -269,7 +262,7 @@ public:
 
 // cmf3
 
-template<class R, class T, class A1, class A2, class A3> class cmf3
+template<class R, class T, class A1, class A2, class A3, class F = R (T::*) (A1, A2, A3) const> class cmf3
 {
 public:
 
@@ -277,7 +270,6 @@ public:
 
 private:
 
-    typedef R (T::*F) (A1, A2, A3) const;
     F f_;
 
 public:
@@ -297,7 +289,7 @@ public:
 
 // mf4
 
-template<class R, class T, class A1, class A2, class A3, class A4> class mf4
+template<class R, class T, class A1, class A2, class A3, class A4, class F = R (T::*) (A1, A2, A3, A4)> class mf4
 {
 public:
 
@@ -305,7 +297,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1, A2, A3, A4);
     F f_;
 
 public:
@@ -330,7 +321,7 @@ public:
 
 // cmf4
 
-template<class R, class T, class A1, class A2, class A3, class A4> class cmf4
+template<class R, class T, class A1, class A2, class A3, class A4, class F = R (T::*) (A1, A2, A3, A4) const> class cmf4
 {
 public:
 
@@ -338,7 +329,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1, A2, A3, A4) const;
     F f_;
 
 public:
@@ -358,7 +348,7 @@ public:
 
 // mf5
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5> class mf5
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class F = R (T::*) (A1, A2, A3, A4, A5)> class mf5
 {
 public:
 
@@ -366,7 +356,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1, A2, A3, A4, A5);
     F f_;
 
 public:
@@ -391,7 +380,7 @@ public:
 
 // cmf5
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5> class cmf5
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class F = R (T::*) (A1, A2, A3, A4, A5) const> class cmf5
 {
 public:
 
@@ -399,7 +388,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1, A2, A3, A4, A5) const;
     F f_;
 
 public:
@@ -419,7 +407,7 @@ public:
 
 // mf6
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6> class mf6
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class F = R (T::*) (A1, A2, A3, A4, A5, A6)> class mf6
 {
 public:
 
@@ -427,7 +415,6 @@ public:
 
 private:
 
-    typedef R (T::*F) (A1, A2, A3, A4, A5, A6);
     F f_;
 
 public:
@@ -452,7 +439,7 @@ public:
 
 // cmf6
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6> class cmf6
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class F = R (T::*) (A1, A2, A3, A4, A5, A6) const> class cmf6
 {
 public:
 
@@ -460,7 +447,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1, A2, A3, A4, A5, A6) const;
     F f_;
 
 public:
@@ -480,7 +466,7 @@ public:
 
 // mf7
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7> class mf7
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class F = R (T::*) (A1, A2, A3, A4, A5, A6, A7)> class mf7
 {
 public:
 
@@ -488,7 +474,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1, A2, A3, A4, A5, A6, A7);
     F f_;
 
 public:
@@ -513,7 +498,7 @@ public:
 
 // cmf7
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7> class cmf7
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class F = R (T::*) (A1, A2, A3, A4, A5, A6, A7) const> class cmf7
 {
 public:
 
@@ -521,7 +506,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1, A2, A3, A4, A5, A6, A7) const;
     F f_;
 
 public:
@@ -541,7 +525,7 @@ public:
 
 // mf8
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> class mf8
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class F = R (T::*) (A1, A2, A3, A4, A5, A6, A7, A8)> class mf8
 {
 public:
 
@@ -549,7 +533,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1, A2, A3, A4, A5, A6, A7, A8);
     F f_;
 
 public:
@@ -574,7 +557,7 @@ public:
 
 // cmf8
 
-template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> class cmf8
+template<class R, class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class F = R (T::*) (A1, A2, A3, A4, A5, A6, A7, A8) const> class cmf8
 {
 public:
 
@@ -582,7 +565,6 @@ public:
 
 private:
     
-    typedef R (T::*F) (A1, A2, A3, A4, A5, A6, A7, A8) const;
     F f_;
 
 public:
@@ -608,6 +590,20 @@ public:
 } // namespace _mfi
 
 // mem_fn
+
+#if defined(BOOST_MEM_FN_ENABLE_STDCALL) || (defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
+
+#if defined(BOOST_MEM_FN_ENABLE_STDCALL)
+#define BOOST_MEM_FN_CC __stdcall
+#include <boost/bind/mem_fn_cc.hpp>
+#undef BOOST_MEM_FN_CC
+#endif
+
+#define BOOST_MEM_FN_CC
+#include <boost/bind/mem_fn_cc.hpp>
+#undef BOOST_MEM_FN_CC
+
+#else
 
 template<class R, class T> _mfi::mf0<R, T> mem_fn(R (T::*f) ())
 {
@@ -698,6 +694,8 @@ template<class R, class T, class A1, class A2, class A3, class A4, class A5, cla
 {
     return _mfi::cmf8<R, T, A1, A2, A3, A4, A5, A6, A7, A8>(f);
 }
+
+#endif // !defined(BOOST_MEM_FN_ENABLE_STDCALL)
 
 } // namespace boost
 
