@@ -22,11 +22,12 @@ unit-test is_function_test : is_function_test.cpp
 unit-test is_same_test : is_same_test.cpp
 	: <include>$(BOOST_ROOT) : ;
 
-unit-test object_traits_test : object_traits_test.cpp
+unit-test object_type_traits_test : object_type_traits_test.cpp
 	: <include>$(BOOST_ROOT) : ;
 
 unit-test transform_traits_test : transform_traits_test.cpp
 	: <include>$(BOOST_ROOT) : ;
+
 
 
 

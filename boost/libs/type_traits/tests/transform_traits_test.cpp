@@ -471,13 +471,20 @@ unsigned int expected_failures = 474; // cv-qualifiers
 #endif
 #elif defined(BOOST_MSVC)
 unsigned int expected_failures = 84; // partial specialisation (fails for UDT's)
-#elif defined(__GNUC__) || defined(__SUNPRO_CC)
+#elif defined(__SUNPRO_CC)
 unsigned int expected_failures = 1; // cv-qualified references
+#elif defined(__GNUC__)
+#if __GNUC__==3 && __GNUC_MINOR__>=1
+unsigned int expected_failures = 0;
+#else
+unsigned int expected_failures = 1 // cv-qualified references
+#endif
 #elif defined(__HP_aCC)
 unsigned int expected_failures = 272; // remove_const/remove_volatile/remove_cv don't work
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
 
 

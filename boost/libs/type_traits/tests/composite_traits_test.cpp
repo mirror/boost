@@ -151,7 +151,11 @@ unsigned int expected_failures = 11;
 unsigned int expected_failures = 1;
 #endif
 #elif defined(__GNUC__)
-unsigned int expected_failures = 1; // can't handle cv-qualified references
+# if __GNUC__==3 && __GNUC_MINOR__>=1
+unsigned int expected_failures = 0;
+# else
+unsigned int expected_failures = 1 // can't handle cv-qualified references
+# endif
 #elif defined(BOOST_MSVC)
 unsigned int expected_failures = 0;
 #elif defined(__MWERKS__) || defined(__HP_aCC)
@@ -159,6 +163,7 @@ unsigned int expected_failures = 1; // is_enum doesn't work
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
 
 
