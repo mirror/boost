@@ -238,6 +238,17 @@
 #     define BOOST_NO_HASH
 #  endif
 
+//  BOOST_HAS_ABI_HEADERS
+//  This macro gets set if we have headers that fix the ABI,
+//  and prevent ODR violations when linking to external libraries:
+#if defined(BOOST_ABI_PREFIX) && defined(BOOST_ABI_SUFFIX) && !defined(BOOST_HAS_ABI_HEADERS)
+#  define BOST_HAS_ABI_HEADERS
+#endif
+
+#if defined(BOST_HAS_ABI_HEADERS) && defined(BOOST_DISABLE_ABI_HEADERS)
+#  undef BOST_HAS_ABI_HEADERS
+#endif
+
 //  BOOST_NO_STDC_NAMESPACE workaround  --------------------------------------//
 //  Because std::size_t usage is so common, even in boost headers which do not
 //  otherwise use the C library, the <cstddef> workaround is included here so

@@ -97,6 +97,15 @@
 //
 #define BOOST_HAS_DIRENT_H
 //
+// ABI fixing headers:
+//
+#ifndef BOOST_ABI_PREFIX
+#  define BOOST_ABI_PREFIX "boost/config/abi/borland_prefix.hpp"
+#endif
+#ifndef BOOST_ABI_SUFFIX
+#  define BOOST_ABI_SUFFIX "boost/config/abi/borland_suffix.hpp"
+#endif
+//
 // Disable Win32 support in ANSI mode:
 //
 #pragma defineonoption BOOST_DISABLE_WIN32 -A

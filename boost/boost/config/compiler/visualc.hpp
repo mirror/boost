@@ -89,6 +89,16 @@
 #  define BOOST_DISABLE_WIN32
 #endif
 
+//
+// prefix and suffix headers:
+//
+#ifndef BOOST_ABI_PREFIX
+#  define BOOST_ABI_PREFIX "boost/config/abi/msvc_prefix.hpp"
+#endif
+#ifndef BOOST_ABI_SUFFIX
+#  define BOOST_ABI_SUFFIX "boost/config/abi/msvc_suffix.hpp"
+#endif
+
 # if _MSC_VER == 1200
 #   define BOOST_COMPILER_VERSION 6.0
 # elif _MSC_VER == 1300
