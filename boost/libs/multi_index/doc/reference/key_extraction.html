@@ -81,7 +81,7 @@ Key extraction classes are used by <a href="ord_indices.html">ordered indices</a
 obtain the sorting keys from the elements of a <code>multi_index_container</code>.
 An <a href="http://www.sgi.com/tech/stl/Assignable.html"><code>Assignable</code></a>
 class <code>KeyFromValue</code> is said to be a key extractor from a
-type <code>T</code> if
+type <code>Type</code> if
 <ol>
   <li>the type <code>KeyFromValue::result_type</code> is defined,</li>
   <li><code>k1(ca)</code> is defined and returns a value convertible
@@ -112,8 +112,8 @@ Boost.MultiIndex provides five general-purpose key extractors:
 <ul>
   <li><a href="#identity"><code>identity</code></a>,</li>
   <li><a href="#member"><code>member</code></a>,</li>
-  <li><a href="#const_mem_fun"><code>const_mem_fun</code></a> and</li>
-  <li><a href="#mem_fun"><code>mem_fun</code></a>,</li>
+  <li><a href="#const_mem_fun"><code>const_mem_fun</code></a>,</li>
+  <li><a href="#mem_fun"><code>mem_fun</code></a> and</li>
   <li><a href="#composite_key"><code>composite_key</code></a>,</li>
 </ul>
 plus replacements for some of them:
@@ -137,9 +137,9 @@ to <code>Type</code> (or to reference wrappers of <code>Type</code>): a chained 
 is any type <code>P</code> such that, for an object <code>p</code> of type
 <code>const P</code>
 <ul>
-  <li><code>*x</code> yields an object of type <code>Type&amp;</code> or
+  <li><code>*p</code> yields an object of type <code>Type&amp;</code> or
     <code>boost::reference_wrapper&lt;Type></code>, OR</li>
-  <li><code>*x</code> yields a chained pointer to <code>Type&amp;</code>,</li>
+  <li><code>*p</code> yields a chained pointer to <code>Type</code>,</li>
 </ul>
 that is, chained pointers are arbitrary compositions of pointer-like objects
 ultimately dereferencing to values of <code>Type&amp;</code> or
@@ -218,7 +218,7 @@ that acts as a do-nothing identity functor.
     from <code>reference_wrapper&lt;Type></code>,</li>
   <li><a href="#key_extractors"><code>Key Extractor</code></a>
     from any <a href="#chained_pointers">chained pointer</a> to
-    <code>const Type</code>.</li>
+    <code>const Type</code>,</li>
   <li>read/write <a href="#key_extractors"><code>Key Extractor</code></a>
     from any <a href="#chained_pointers">chained pointer</a>
     to <code>Type</code>.</li>
@@ -313,7 +313,7 @@ The <code>PtrToMember</code> template argument specifies the particular
 <code>member&lt;Class,Type,PtrToMember></code> is a model of:
 <ul>
   <li>read/write <a href="#key_extractors"><code>Key Extractor</code></a>
-    from <code>Class</code> if <code>Type</code> is non-<code>const</code>,</li>
+    from <code>Class</code>,</li>
   <li><a href="#key_extractors"><code>Key Extractor</code></a>
     from <code>reference_wrapper&lt;const Class></code>,</li>
   <li>read/write <a href="#key_extractors"><code>Key Extractor</code></a>
@@ -1490,7 +1490,7 @@ Compiler specifics
 
 <br>
 
-<p>Revised June 28th 2004</p>
+<p>Revised July 16th 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
