@@ -92,7 +92,7 @@ public:
   result_type operator()()
   {
     const UIntType b = (((value << q) ^ value) & wordmask) >> (k-s);
-    const UIntType mask = ( (~0) << (w-k) ) & wordmask;
+    const UIntType mask = ( (~static_cast<UIntType>(0)) << (w-k) ) & wordmask;
     value = ((value & mask) << s) ^ b;
     return value;
   }
