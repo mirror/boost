@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
+<title>Function Output Iterator</title>
+<meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
+<meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
+<meta name="date" content="2003-08-05" />
+<meta name="copyright" content="Copyright Dave Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved" />
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="function-output-iterator">
+<h1 class="title">Function Output Iterator</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>David Abrahams, Jeremy Siek, Thomas Witt</td></tr>
+<tr><th class="docinfo-name">Contact:</th>
+<td><a class="first reference" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="reference" href="mailto:jsiek&#64;osl.iu.edu">jsiek&#64;osl.iu.edu</a>, <a class="last reference" href="mailto:witt&#64;ive.uni-hannover.de">witt&#64;ive.uni-hannover.de</a></td></tr>
+<tr><th class="docinfo-name">Organization:</th>
+<td><a class="first reference" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="reference" href="http://www.osl.iu.edu">Open Systems
+Lab</a>, University of Hanover <a class="last reference" href="http://www.ive.uni-hannover.de">Institute for Transport
+Railway Operation and Construction</a></td></tr>
+<tr><th class="docinfo-name">Date:</th>
+<td>2003-08-05</td></tr>
+<tr><th class="docinfo-name">Copyright:</th>
+<td>Copyright Dave Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved</td></tr>
+</tbody>
+</table>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">abstract:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>The function output iterator adaptor makes it easier to create custom
+output iterators. The adaptor takes a unary function and creates a
+model of Output Iterator. Each item assigned to the output iterator is
+passed as an argument to the unary function.  The motivation for this
+iterator is that creating a conforming output iterator is non-trivial,
+particularly because the proper implementation usually requires a
+proxy object.</p>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#function-output-iterator-requirements" id="id1" name="id1"><tt class="literal"><span class="pre">function_output_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#function-output-iterator-operations" id="id2" name="id2"><tt class="literal"><span class="pre">function_output_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#function-output-iterator-output-proxy-operations" id="id3" name="id3"><tt class="literal"><span class="pre">function_output_iterator::output_proxy</span></tt> operations</a></li>
+</ul>
+</div>
+<pre class="literal-block">
+template &lt;class UnaryFunction&gt;
+class function_output_iterator {
+public:
+  typedef iterator_tag&lt;
+        writable_iterator_tag
+      , incrementable_traversal_tag
+  &gt; iterator_category;
+  typedef void                value_type;
+  typedef void                difference_type;
+  typedef void                pointer;
+  typedef void                reference;
+
+  explicit function_output_iterator(const UnaryFunction&amp; f = UnaryFunction());
+
+  struct output_proxy {
+    output_proxy(UnaryFunction&amp; f);
+    template &lt;class T&gt; output_proxy&amp; operator=(const T&amp; value);
+  };
+  output_proxy operator*();
+  function_output_iterator&amp; operator++();
+  function_output_iterator&amp; operator++(int);
+};
+</pre>
+<div class="section" id="function-output-iterator-requirements">
+<h1><a class="toc-backref" href="#id1" name="function-output-iterator-requirements"><tt class="literal"><span class="pre">function_output_iterator</span></tt> requirements</a></h1>
+<p>The <tt class="literal"><span class="pre">UnaryFunction</span></tt> must be Assignable, Copy Constructible, and the
+expression <tt class="literal"><span class="pre">f(x)</span></tt> must be valid, where <tt class="literal"><span class="pre">f</span></tt> is an object of type
+<tt class="literal"><span class="pre">UnaryFunction</span></tt> and <tt class="literal"><span class="pre">x</span></tt> is an object of a type accepted by <tt class="literal"><span class="pre">f</span></tt>.
+The resulting <tt class="literal"><span class="pre">function_output_iterator</span></tt> is a model of the Writable
+and Incrementable Iterator concepts.</p>
+</div>
+<div class="section" id="function-output-iterator-operations">
+<h1><a class="toc-backref" href="#id2" name="function-output-iterator-operations"><tt class="literal"><span class="pre">function_output_iterator</span></tt> operations</a></h1>
+<p><tt class="literal"><span class="pre">explicit</span> <span class="pre">function_output_iterator(const</span> <span class="pre">UnaryFunction&amp;</span> <span class="pre">f</span> <span class="pre">=</span> <span class="pre">UnaryFunction());</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">function_output_iterator</span></tt> with
+<tt class="literal"><span class="pre">f</span></tt> stored as a data member.</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">output_proxy</span> <span class="pre">operator*();</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">output_proxy</span></tt> constructed with
+a copy of the unary function <tt class="literal"><span class="pre">f</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">function_output_iterator&amp;</span> <span class="pre">operator++();</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">*this</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">function_output_iterator&amp;</span> <span class="pre">operator++(int);</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">*this</span></tt></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="function-output-iterator-output-proxy-operations">
+<h1><a class="toc-backref" href="#id3" name="function-output-iterator-output-proxy-operations"><tt class="literal"><span class="pre">function_output_iterator::output_proxy</span></tt> operations</a></h1>
+<p><tt class="literal"><span class="pre">output_proxy(UnaryFunction&amp;</span> <span class="pre">f);</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">output_proxy</span></tt> with <tt class="literal"><span class="pre">f</span></tt> stored as
+a data member.</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">template</span> <span class="pre">&lt;class</span> <span class="pre">T&gt;</span> <span class="pre">output_proxy&amp;</span> <span class="pre">operator=(const</span> <span class="pre">T&amp;</span> <span class="pre">value);</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><pre class="first last literal-block">
+m_f(value); 
+return *this; 
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</body>
+</html>

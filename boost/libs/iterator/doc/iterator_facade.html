@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
+<title>Iterator Facade</title>
+<meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
+<meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
+<meta name="date" content="2003-08-05" />
+<meta name="copyright" content="Copyright Dave Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved" />
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="iterator-facade">
+<h1 class="title">Iterator Facade</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>David Abrahams, Jeremy Siek, Thomas Witt</td></tr>
+<tr><th class="docinfo-name">Contact:</th>
+<td><a class="first reference" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="reference" href="mailto:jsiek&#64;osl.iu.edu">jsiek&#64;osl.iu.edu</a>, <a class="last reference" href="mailto:witt&#64;ive.uni-hannover.de">witt&#64;ive.uni-hannover.de</a></td></tr>
+<tr><th class="docinfo-name">Organization:</th>
+<td><a class="first reference" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="reference" href="http://www.osl.iu.edu">Open Systems
+Lab</a>, University of Hanover <a class="last reference" href="http://www.ive.uni-hannover.de">Institute for Transport
+Railway Operation and Construction</a></td></tr>
+<tr><th class="docinfo-name">Date:</th>
+<td>2003-08-05</td></tr>
+<tr><th class="docinfo-name">Copyright:</th>
+<td>Copyright Dave Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved</td></tr>
+</tbody>
+</table>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">abstract:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">iterator_facade</span></tt> is a base class template that implements the
+interface of standard iterators in terms of a few core functions
+and associated types, to be supplied by a derived iterator class.</p>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#motivation" id="id10" name="id10">Motivation</a></li>
+<li><a class="reference" href="#usage" id="id11" name="id11">Usage</a></li>
+<li><a class="reference" href="#iterator-core-access" id="id12" name="id12">Iterator Core Access</a></li>
+<li><a class="reference" href="#operator" id="id13" name="id13"><tt class="literal"><span class="pre">operator[]</span></tt></a></li>
+<li><a class="reference" href="#id3" id="id14" name="id14"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></li>
+<li><a class="reference" href="#reference" id="id15" name="id15">Reference</a><ul>
+<li><a class="reference" href="#id8" id="id16" name="id16"><tt class="literal"><span class="pre">iterator_facade</span></tt> requirements</a></li>
+<li><a class="reference" href="#iterator-facade-operations" id="id17" name="id17"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="motivation">
+<h1><a class="toc-backref" href="#id10" name="motivation">Motivation</a></h1>
+<p>While the iterator interface is rich, there is a core subset of the
+interface that is necessary for all the functionality.  We have
+identified the following core behaviors for iterators:</p>
+<ul class="simple">
+<li>dereferencing</li>
+<li>incrementing</li>
+<li>decrementing</li>
+<li>equality comparison</li>
+<li>random-access motion</li>
+<li>distance measurement</li>
+</ul>
+<p>In addition to the behaviors listed above, the core interface elements
+include the associated types exposed through iterator traits:
+<tt class="literal"><span class="pre">value_type</span></tt>, <tt class="literal"><span class="pre">reference</span></tt>, <tt class="literal"><span class="pre">difference_type</span></tt>, and
+<tt class="literal"><span class="pre">iterator_category</span></tt>.</p>
+<p>Iterator facade uses the Curiously Recurring Template Pattern (CRTP)
+<a class="citation-reference" href="#cop95" id="id1" name="id1">[Cop95]</a> so that the user can specify the behavior of
+<tt class="literal"><span class="pre">iterator_facade</span></tt> in a derived class.  Former designs used policy
+objects to specify the behavior.  <tt class="literal"><span class="pre">iterator_facade</span></tt> does not use policy
+objects for several reasons:</p>
+<blockquote>
+<ol class="arabic simple">
+<li>the creation and eventual copying of the policy object may create
+overhead that can be avoided with the current approach.</li>
+<li>The policy object approach does not allow for custom constructors
+on the created iterator types, an essential feature if
+<tt class="literal"><span class="pre">iterator_facade</span></tt> should be used in other library
+implementations.</li>
+<li>Without the use of CRTP, the standard requirement that an
+iterator's <tt class="literal"><span class="pre">operator++</span></tt> returns the iterator type itself means
+that all iterators generated by <tt class="literal"><span class="pre">iterator_facade</span></tt> would be
+instantiations of <tt class="literal"><span class="pre">iterator_facade</span></tt>.  Cumbersome type generator
+metafunctions would be needed to build new parameterized
+iterators, and a separate <tt class="literal"><span class="pre">iterator_adaptor</span></tt> layer would be
+impossible.</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="usage">
+<h1><a class="toc-backref" href="#id11" name="usage">Usage</a></h1>
+<p>The user of <tt class="literal"><span class="pre">iterator_facade</span></tt> derives his iterator class from an
+instantiation of <tt class="literal"><span class="pre">iterator_facade</span></tt> which takes the derived iterator
+class as the first template parameter.  The order of the other
+template parameters to <tt class="literal"><span class="pre">iterator_facade</span></tt> have been carefully chosen
+to take advantage of useful defaults.  For example, when defining a
+constant lvalue iterator, the user can pass a const-qualified version
+of the iterator's <tt class="literal"><span class="pre">value_type</span></tt> as <tt class="literal"><span class="pre">iterator_facade</span></tt>'s <tt class="literal"><span class="pre">Value</span></tt>
+parameter and omit the <tt class="literal"><span class="pre">Reference</span></tt> parameter which follows.</p>
+<p>The derived iterator class must define member functions implementing
+the iterator's core behaviors.  The following table describes
+expressions which are required to be valid depending on the category
+of the derived iterator type.  These member functions are described
+briefly below and in more detail in the iterator facade
+requirements.</p>
+<blockquote>
+<table border class="table">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>Expression</th>
+<th>Effects</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="literal"><span class="pre">i.dereference()</span></tt></td>
+<td>Access the value referred to</td>
+</tr>
+<tr><td><tt class="literal"><span class="pre">i.equal(j)</span></tt></td>
+<td>Compare for equality with <tt class="literal"><span class="pre">j</span></tt></td>
+</tr>
+<tr><td><tt class="literal"><span class="pre">i.increment()</span></tt></td>
+<td>Advance by one position</td>
+</tr>
+<tr><td><tt class="literal"><span class="pre">i.decrement()</span></tt></td>
+<td>Retreat by one position</td>
+</tr>
+<tr><td><tt class="literal"><span class="pre">i.advance(n)</span></tt></td>
+<td>Advance by <tt class="literal"><span class="pre">n</span></tt> positions</td>
+</tr>
+<tr><td><tt class="literal"><span class="pre">i.distance_to(j)</span></tt></td>
+<td>Measure the distance to <tt class="literal"><span class="pre">j</span></tt></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<!-- Should we add a comment that a zero overhead implementation of iterator_facade
+is possible with proper inlining? -->
+<p>In addition to implementing the core interface functions, an iterator
+derived from <tt class="literal"><span class="pre">iterator_facade</span></tt> typically defines several
+constructors. To model any of the standard iterator concepts, the
+iterator must at least have a copy constructor. Also, if the iterator
+type <tt class="literal"><span class="pre">X</span></tt> is meant to be automatically interoperate with another
+iterator type <tt class="literal"><span class="pre">Y</span></tt> (as with constant and mutable iterators) then
+there must be an implicit conversion from <tt class="literal"><span class="pre">X</span></tt> to <tt class="literal"><span class="pre">Y</span></tt> or from <tt class="literal"><span class="pre">Y</span></tt>
+to <tt class="literal"><span class="pre">X</span></tt> (but not both), typically implemented as a conversion
+constructor. Finally, if the iterator is to model Forward Traversal
+Iterator or a more-refined iterator concept, a default constructor is
+required.</p>
+</div>
+<div class="section" id="iterator-core-access">
+<h1><a class="toc-backref" href="#id12" name="iterator-core-access">Iterator Core Access</a></h1>
+<p><tt class="literal"><span class="pre">iterator_facade</span></tt> and the operator implementations need to be able
+to access the core member functions in the derived class.  Making the
+core member functions public would expose an implementation detail to
+the user.  The design used here ensures that implementation details do
+not appear in the public interface of the derived iterator type.</p>
+<p>Preventing direct access to the core member functions has two
+advantages.  First, there is no possibility for the user to accidently
+use a member function of the iterator when a member of the value_type
+was intended.  This has been an issue with smart pointer
+implementations in the past.  The second and main advantage is that
+library implementers can freely exchange a hand-rolled iterator
+implementation for one based on <tt class="literal"><span class="pre">iterator_facade</span></tt> without fear of
+breaking code that was accessing the public core member functions
+directly.</p>
+<p>In a naive implementation, keeping the derived class' core member
+functions private would require it to grant friendship to
+<tt class="literal"><span class="pre">iterator_facade</span></tt> and each of the seven operators.  In order to
+reduce the burden of limiting access, <tt class="literal"><span class="pre">iterator_core_access</span></tt> is
+provided, a class that acts as a gateway to the core member functions
+in the derived iterator class.  The author of the derived class only
+needs to grant friendship to <tt class="literal"><span class="pre">iterator_core_access</span></tt> to make his core
+member functions available to the library.</p>
+<!-- This is no long uptodate -thw  -->
+<!-- Yes it is; I made sure of it! -DWA -->
+<p><tt class="literal"><span class="pre">iterator_core_access</span></tt> will be typically implemented as an empty
+class containing only private static member functions which invoke the
+iterator core member functions. There is, however, no need to
+standardize the gateway protocol.  Note that even if
+<tt class="literal"><span class="pre">iterator_core_access</span></tt> used public member functions it would not
+open a safety loophole, as every core member function preserves the
+invariants of the iterator.</p>
+</div>
+<div class="section" id="operator">
+<h1><a class="toc-backref" href="#id13" name="operator"><tt class="literal"><span class="pre">operator[]</span></tt></a></h1>
+<p>The indexing operator for a generalized iterator presents special
+challenges.  A random access iterator's <tt class="literal"><span class="pre">operator[]</span></tt> is only
+required to return something convertible to its <tt class="literal"><span class="pre">value_type</span></tt>.
+Requiring that it return an lvalue would rule out currently-legal
+random-access iterators which hold the referenced value in a data
+member (e.g. <a class="reference" href="counting_iterator.html">counting_iterator</a>), because <tt class="literal"><span class="pre">*(p+n)</span></tt> is a reference
+into the temporary iterator <tt class="literal"><span class="pre">p+n</span></tt>, which is destroyed when
+<tt class="literal"><span class="pre">operator[]</span></tt> returns.</p>
+<p>Writable iterators built with <tt class="literal"><span class="pre">iterator_facade</span></tt> implement the
+semantics required by the preferred resolution to <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-active.html#299">issue 299</a> and
+adopted by proposal <a class="reference" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1477.html">n1477</a>: the result of <tt class="literal"><span class="pre">p[n]</span></tt> is a proxy object
+containing a copy of <tt class="literal"><span class="pre">p+n</span></tt>, and <tt class="literal"><span class="pre">p[n]</span> <span class="pre">=</span> <span class="pre">x</span></tt> is equivalent to <tt class="literal"><span class="pre">*(p</span>
+<span class="pre">+</span> <span class="pre">n)</span> <span class="pre">=</span> <span class="pre">x</span></tt>.  This approach will work properly for any random-access
+iterator regardless of the other details of its implementation.  A
+user who knows more about the implementation of her iterator is free
+to implement an <tt class="literal"><span class="pre">operator[]</span></tt> which returns an lvalue in the derived
+iterator class; it will hide the one supplied by <tt class="literal"><span class="pre">iterator_facade</span></tt>
+from clients of her iterator.</p>
+<a class="target" id="operator-arrow" name="operator-arrow"></a></div>
+<div class="section" id="id3">
+<h1><a class="toc-backref" href="#id14" name="id3"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></h1>
+<p>The <tt class="literal"><span class="pre">reference</span></tt> type of a readable iterator (and today's input
+iterator) need not in fact be a reference, so long as it is
+convertible to the iterator's <tt class="literal"><span class="pre">value_type</span></tt>.  When the <tt class="literal"><span class="pre">value_type</span></tt>
+is a class, however, it must still be possible to access members
+through <tt class="literal"><span class="pre">operator-&gt;</span></tt>.  Therefore, an iterator whose <tt class="literal"><span class="pre">reference</span></tt>
+type is not in fact a reference must return a proxy containing a copy
+of the referenced value from its <tt class="literal"><span class="pre">operator-&gt;</span></tt>.</p>
+<p>The return type for <tt class="literal"><span class="pre">operator-&gt;</span></tt> and <tt class="literal"><span class="pre">operator[]</span></tt> is not
+explicitly specified. Instead it requires each <tt class="literal"><span class="pre">iterator_facade</span></tt>
+instantiation to meet the requirements of its <tt class="literal"><span class="pre">iterator_category</span></tt>.</p>
+<table class="citation" frame="void" id="cop95" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<col />
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1" name="cop95">[Cop95]</a></td><td>[Coplien, 1995] Coplien, J., Curiously Recurring Template
+Patterns, C++ Report, February 1995, pp. 24-27.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="reference">
+<h1><a class="toc-backref" href="#id15" name="reference">Reference</a></h1>
+<pre class="literal-block">
+template &lt;
+    class Derived
+  , class Value
+  , class AccessCategory
+  , class TraversalCategory
+  , class Reference  = /* see <a class="reference" href="#iterator-facade-requirements">below</a> */
+  , class Difference = ptrdiff_t
+&gt;
+class iterator_facade {
+public:
+    typedef remove_cv&lt;Value&gt;::type value_type;
+    typedef Reference reference;
+    typedef /* see <a class="reference" href="#operator-arrow">description of operator-&gt;</a> */ pointer;
+    typedef Difference difference_type;
+    typedef iterator_tag&lt;AccessCategory, TraversalCategory&gt; iterator_category;
+
+    reference operator*() const;
+    /* see <a class="reference" href="#operator-arrow">below</a> */ operator-&gt;() const;
+    /* see <a class="reference" href="#brackets">below</a> */ operator[](difference_type n) const;
+    Derived&amp; operator++();
+    Derived operator++(int);
+    Derived&amp; operator--();
+    Derived operator--(int);
+    Derived&amp; operator+=(difference_type n);
+    Derived&amp; operator-=(difference_type n);
+    Derived operator-(difference_type n) const;
+};
+
+// Comparison operators
+template &lt;class Dr1, class V1, class AC1, class TC1, class R1, class D1,
+          class Dr2, class V2, class AC2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type // exposition
+operator ==(iterator_facade&lt;Dr1, V1, AC1, TC1, R1, D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2, V2, AC2, TC2, R2, D2&gt; const&amp; rhs);
+
+template &lt;class Dr1, class V1, class AC1, class TC1, class R1, class D1,
+          class Dr2, class V2, class AC2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
+operator !=(iterator_facade&lt;Dr1, V1, AC1, TC1, R1, D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2, V2, AC2, TC2, R2, D2&gt; const&amp; rhs);
+
+template &lt;class Dr1, class V1, class AC1, class TC1, class R1, class D1,
+          class Dr2, class V2, class AC2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
+operator &lt;(iterator_facade&lt;Dr1, V1, AC1, TC1, R1, D1&gt; const&amp; lhs,
+           iterator_facade&lt;Dr2, V2, AC2, TC2, R2, D2&gt; const&amp; rhs);
+
+template &lt;class Dr1, class V1, class AC1, class TC1, class R1, class D1,
+          class Dr2, class V2, class AC2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
+operator &lt;=(iterator_facade&lt;Dr1, V1, AC1, TC1, R1, D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2, V2, AC2, TC2, R2, D2&gt; const&amp; rhs);
+
+template &lt;class Dr1, class V1, class AC1, class TC1, class R1, class D1,
+          class Dr2, class V2, class AC2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
+operator &gt;(iterator_facade&lt;Dr1, V1, AC1, TC1, R1, D1&gt; const&amp; lhs,
+           iterator_facade&lt;Dr2, V2, AC2, TC2, R2, D2&gt; const&amp; rhs);
+
+template &lt;class Dr1, class V1, class AC1, class TC1, class R1, class D1,
+          class Dr2, class V2, class AC2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
+operator &gt;=(iterator_facade&lt;Dr1, V1, AC1, TC1, R1, D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2, V2, AC2, TC2, R2, D2&gt; const&amp; rhs);
+
+template &lt;class Dr1, class V1, class AC1, class TC1, class R1, class D1,
+          class Dr2, class V2, class AC2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
+operator &gt;=(iterator_facade&lt;Dr1, V1, AC1, TC1, R1, D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2, V2, AC2, TC2, R2, D2&gt; const&amp; rhs);
+
+// Iterator difference
+template &lt;class Dr1, class V1, class AC1, class TC1, class R1, class D1,
+          class Dr2, class V2, class AC2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
+operator -(iterator_facade&lt;Dr1, V1, AC1, TC1, R1, D1&gt; const&amp; lhs,
+           iterator_facade&lt;Dr2, V2, AC2, TC2, R2, D2&gt; const&amp; rhs);
+
+// Iterator addition
+template &lt;class Derived, class V, class AC, class TC, class R, class D&gt;
+Derived operator+ (iterator_facade&lt;Derived, V, AC, TC, R, D&gt; const&amp;,
+                   typename Derived::difference_type n)
+</pre>
+<p>[<em>Note:</em> The <tt class="literal"><span class="pre">enable_if_interoperable</span></tt> template used above is for exposition
+purposes. The member operators should be only be in an overload set
+provided the derived types <tt class="literal"><span class="pre">Dr1</span></tt> and <tt class="literal"><span class="pre">Dr2</span></tt> are interoperable, by
+which we mean they are convertible to each other.  The
+<tt class="literal"><span class="pre">enable_if_interoperable</span></tt> approach uses SFINAE to take the operators
+out of the overload set when the types are not interoperable.]</p>
+<!-- we need a new label here because the presence of markup in the
+title prevents an automatic link from being generated -->
+<a class="target" id="iterator-facade-requirements" name="iterator-facade-requirements"></a><div class="section" id="id8">
+<h2><a class="toc-backref" href="#id16" name="id8"><tt class="literal"><span class="pre">iterator_facade</span></tt> requirements</a></h2>
+<p>The <tt class="literal"><span class="pre">Derived</span></tt> template parameter must be a class derived from
+<tt class="literal"><span class="pre">iterator_facade</span></tt>.</p>
+<p>The default for the <tt class="literal"><span class="pre">Reference</span></tt> parameter is <tt class="literal"><span class="pre">Value&amp;</span></tt> if the
+access category for <tt class="literal"><span class="pre">iterator_facade</span></tt> is implicitly convertible to
+<tt class="literal"><span class="pre">writable_iterator_tag</span></tt>, and <tt class="literal"><span class="pre">const</span> <span class="pre">Value&amp;</span></tt> otherwise.</p>
+<p>The following table describes the other requirements on the
+<tt class="literal"><span class="pre">Derived</span></tt> parameter.  Depending on the resulting iterator's
+<tt class="literal"><span class="pre">iterator_category</span></tt>, a subset of the expressions listed in the table
+are required to be valid.  The operations in the first column must be
+accessible to member functions of class <tt class="literal"><span class="pre">iterator_core_access</span></tt>.</p>
+<p>In the table below, <tt class="literal"><span class="pre">X</span></tt> is the derived iterator type, <tt class="literal"><span class="pre">a</span></tt> is an
+object of type <tt class="literal"><span class="pre">X</span></tt>, <tt class="literal"><span class="pre">b</span></tt> and <tt class="literal"><span class="pre">c</span></tt> are objects of type <tt class="literal"><span class="pre">const</span> <span class="pre">X</span></tt>,
+<tt class="literal"><span class="pre">n</span></tt> is an object of <tt class="literal"><span class="pre">X::difference_type</span></tt>, <tt class="literal"><span class="pre">y</span></tt> is a constant
+object of a single pass iterator type interoperable with X, and <tt class="literal"><span class="pre">z</span></tt>
+is a constant object of a random access traversal iterator type
+interoperable with <tt class="literal"><span class="pre">X</span></tt>.</p>
+<table border class="table">
+<colgroup>
+<col width="19%" />
+<col width="18%" />
+<col width="36%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>Expression</th>
+<th>Return Type</th>
+<th>Assertion/Note</th>
+<th>Required to implement
+Iterator Concept(s)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="literal"><span class="pre">c.dereference()</span></tt></td>
+<td><tt class="literal"><span class="pre">X::reference</span></tt></td>
+<td>&nbsp;</td>
+<td>Readable Iterator, Writable
+Iterator</td>
+</tr>
+<tr><td><tt class="literal"><span class="pre">c.equal(b)</span></tt></td>
+<td>convertible to bool</td>
+<td>true iff <tt class="literal"><span class="pre">b</span></tt> and <tt class="literal"><span class="pre">c</span></tt> are
+equivalent.</td>
+<td>Single Pass Iterator</td>
+</tr>
+<tr><td><tt class="literal"><span class="pre">c.equal(y)</span></tt></td>
+<td>convertible to bool</td>
+<td>true iff <tt class="literal"><span class="pre">c</span></tt> and <tt class="literal"><span class="pre">y</span></tt> refer to the
+same position.  Implements <tt class="literal"><span class="pre">c</span> <span class="pre">==</span> <span class="pre">y</span></tt>
+and <tt class="literal"><span class="pre">c</span> <span class="pre">!=</span> <span class="pre">y</span></tt>.</td>
+<td>Single Pass Iterator</td>
+</tr>
+<tr><td><tt class="literal"><span class="pre">a.advance(n)</span></tt></td>
+<td>unused</td>
+<td>&nbsp;</td>
+<td>Random Access Traversal
+Iterator</td>
+</tr>
+<tr><td><tt class="literal"><span class="pre">a.increment()</span></tt></td>
+<td>unused</td>
+<td>&nbsp;</td>
+<td>Incrementable Iterator</td>
+</tr>
+<tr><td><tt class="literal"><span class="pre">a.decrement()</span></tt></td>
+<td>unused</td>
+<td>&nbsp;</td>
+<td>Bidirectional Traversal
+Iterator</td>
+</tr>
+<tr><td><tt class="literal"><span class="pre">c.distance_to(b)</span></tt></td>
+<td>convertible to
+X::difference_type</td>
+<td>equivalent to <tt class="literal"><span class="pre">distance(c,</span> <span class="pre">b)</span></tt></td>
+<td>Random Access Traversal
+Iterator</td>
+</tr>
+<tr><td><tt class="literal"><span class="pre">c.distance_to(z)</span></tt></td>
+<td>convertible to
+X::difference_type</td>
+<td>equivalent to <tt class="literal"><span class="pre">distance(c,</span> <span class="pre">z)</span></tt>.
+Implements <tt class="literal"><span class="pre">c</span> <span class="pre">-</span> <span class="pre">z</span></tt>, <tt class="literal"><span class="pre">c</span> <span class="pre">&lt;</span> <span class="pre">z</span></tt>, <tt class="literal"><span class="pre">c</span>
+<span class="pre">&lt;=</span> <span class="pre">z</span></tt>, <tt class="literal"><span class="pre">c</span> <span class="pre">&gt;</span> <span class="pre">z</span></tt>, and <tt class="literal"><span class="pre">c</span> <span class="pre">&gt;=</span> <span class="pre">c</span></tt>.</td>
+<td>Random Access Traversal
+Iterator</td>
+</tr>
+</tbody>
+</table>
+<!-- We should explain more about how the
+functions in the interface of iterator_facade
+are there conditionally. -JGS -->
+</div>
+<div class="section" id="iterator-facade-operations">
+<h2><a class="toc-backref" href="#id17" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h2>
+<p>The operations in this section are described in terms of operations on
+the core interface of <tt class="literal"><span class="pre">Derived</span></tt> which may be inaccessible
+(i.e. private).  The implementation should access these operations
+through member functions of class <tt class="literal"><span class="pre">iterator_core_access</span></tt>.</p>
+<p><tt class="literal"><span class="pre">reference</span> <span class="pre">operator*()</span> <span class="pre">const;</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">static_cast&lt;Derived</span> <span class="pre">const*&gt;(this)-&gt;dereference()</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">operator-&gt;()</span> <span class="pre">const;</span></tt> (see <a class="reference" href="#operator-arrow">below</a>)</p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">If <tt class="literal"><span class="pre">X::reference</span></tt> is a reference type, returns an object
+of type <tt class="literal"><span class="pre">X::pointer</span></tt> equal to:</p>
+<pre class="literal-block">
+&amp;static_cast&lt;Derived const*&gt;(this)-&gt;dereference()
+</pre>
+<p>Otherwise returns an object of unspecified type such that, given an
+object <tt class="literal"><span class="pre">a</span></tt> of type <tt class="literal"><span class="pre">X</span></tt>, <tt class="literal"><span class="pre">a-&gt;m</span></tt> is equivalent to <tt class="literal"><span class="pre">(w</span> <span class="pre">=</span> <span class="pre">*a,</span>
+<span class="pre">w.m)</span></tt> for some temporary object <tt class="literal"><span class="pre">w</span></tt> of type <tt class="literal"><span class="pre">X::value_type</span></tt>.</p>
+<p class="last">The type <tt class="literal"><span class="pre">X::pointer</span></tt> is <tt class="literal"><span class="pre">Value*</span></tt> if the access category for
+<tt class="literal"><span class="pre">X</span></tt> is implicitly convertible to <tt class="literal"><span class="pre">writable_iterator_tag</span></tt>, and
+<tt class="literal"><span class="pre">Value</span> <span class="pre">const*</span></tt> otherwise.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<a class="target" id="brackets" name="brackets"></a><p><em>unspecified</em> <tt class="literal"><span class="pre">operator[](difference_type</span> <span class="pre">n)</span> <span class="pre">const;</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">an object convertible to <tt class="literal"><span class="pre">X::reference</span></tt> and holding a copy
+<em>p</em> of <tt class="literal"><span class="pre">a+n</span></tt> such that, for a constant object <tt class="literal"><span class="pre">v</span></tt> of type
+<tt class="literal"><span class="pre">X::value_type</span></tt>, <tt class="literal"><span class="pre">X::reference(a[n]</span> <span class="pre">=</span> <span class="pre">v)</span></tt> is equivalent
+to <tt class="literal"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">v</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">Derived&amp;</span> <span class="pre">operator++();</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><pre class="first last literal-block">
+static_cast&lt;Derived*&gt;(this)-&gt;increment();
+return *this;
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- I realize that the committee is moving away from specifying things
+like this in terms of code, but I worried about the imprecision of
+saying that a core interface function is invoked without describing
+the downcast.  An alternative to what I did would be to mention it
+above where we talk about accessibility. -->
+<p><tt class="literal"><span class="pre">Derived</span> <span class="pre">operator++(int);</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><pre class="first last literal-block">
+Derived tmp(static_cast&lt;Derived const*&gt;(this));
+++*this;
+return tmp;
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">Derived&amp;</span> <span class="pre">operator--();</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><pre class="first last literal-block">
+static_cast&lt;Derived*&gt;(this)-&gt;decrement();
+return *this;
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">Derived</span> <span class="pre">operator--(int);</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><pre class="first last literal-block">
+Derived tmp(static_cast&lt;Derived const*&gt;(this));
+--*this;
+return tmp;
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">Derived&amp;</span> <span class="pre">operator+=(difference_type</span> <span class="pre">n);</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><pre class="first last literal-block">
+static_cast&lt;Derived*&gt;(this)-&gt;advance(n);
+return *this;
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">Derived&amp;</span> <span class="pre">operator-=(difference_type</span> <span class="pre">n);</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><pre class="first last literal-block">
+static_cast&lt;Derived*&gt;(this)-&gt;advance(-n);
+return *this;
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">Derived</span> <span class="pre">operator-(difference_type</span> <span class="pre">n)</span> <span class="pre">const;</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Derived tmp(static_cast&lt;Derived const*&gt;(this));
+return tmp -= n;</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">static_cast&lt;Derived</span> <span class="pre">const*&gt;(this)-&gt;advance(-n);</span></tt></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</body>
+</html>
