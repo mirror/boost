@@ -23,6 +23,14 @@
 #include <boost/ref.hpp>
 #include <boost/mem_fn.hpp>
 
+// Borland-specific bug, visit_each() silently fails to produce code
+
+#if defined(__BORLANDC__)
+#  define BOOST_BIND_VISIT_EACH boost::visit_each
+#else
+#  define BOOST_BIND_VISIT_EACH visit_each
+#endif
+
 namespace boost
 {
 
@@ -120,10 +128,10 @@ public:
 
 #ifdef BOOST_NO_VOID_RETURNS
 
-	template<class R> struct evaluator
-	{
+    template<class R> struct evaluator
+    {
         typedef evaluator0<R> type;
-	};
+    };
 
 #endif
 
@@ -157,15 +165,15 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        v(a1_);
+        BOOST_BIND_VISIT_EACH(v, a1_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
 
-	template<class R> struct evaluator
-	{
+    template<class R> struct evaluator
+    {
         typedef evaluator1<R> type;
-	};
+    };
 
 #else
 
@@ -206,16 +214,16 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        v(a1_);
-        v(a2_);
+        BOOST_BIND_VISIT_EACH(v, a1_, 0);
+        BOOST_BIND_VISIT_EACH(v, a2_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
 
-	template<class R> struct evaluator
-	{
+    template<class R> struct evaluator
+    {
         typedef evaluator2<R> type;
-	};
+    };
 
 #else
 
@@ -258,17 +266,17 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        v(a1_);
-        v(a2_);
-        v(a3_);
+        BOOST_BIND_VISIT_EACH(v, a1_, 0);
+        BOOST_BIND_VISIT_EACH(v, a2_, 0);
+        BOOST_BIND_VISIT_EACH(v, a3_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
 
-	template<class R> struct evaluator
-	{
+    template<class R> struct evaluator
+    {
         typedef evaluator3<R> type;
-	};
+    };
 
 #else
 
@@ -313,18 +321,18 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        v(a1_);
-        v(a2_);
-        v(a3_);
-        v(a4_);
+        BOOST_BIND_VISIT_EACH(v, a1_, 0);
+        BOOST_BIND_VISIT_EACH(v, a2_, 0);
+        BOOST_BIND_VISIT_EACH(v, a3_, 0);
+        BOOST_BIND_VISIT_EACH(v, a4_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
 
-	template<class R> struct evaluator
-	{
+    template<class R> struct evaluator
+    {
         typedef evaluator4<R> type;
-	};
+    };
 
 #else
 
@@ -371,19 +379,19 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        v(a1_);
-        v(a2_);
-        v(a3_);
-        v(a4_);
-        v(a5_);
+        BOOST_BIND_VISIT_EACH(v, a1_, 0);
+        BOOST_BIND_VISIT_EACH(v, a2_, 0);
+        BOOST_BIND_VISIT_EACH(v, a3_, 0);
+        BOOST_BIND_VISIT_EACH(v, a4_, 0);
+        BOOST_BIND_VISIT_EACH(v, a5_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
 
-	template<class R> struct evaluator
-	{
+    template<class R> struct evaluator
+    {
         typedef evaluator5<R> type;
-	};
+    };
 
 #else
 
@@ -432,20 +440,20 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        v(a1_);
-        v(a2_);
-        v(a3_);
-        v(a4_);
-        v(a5_);
-        v(a6_);
+        BOOST_BIND_VISIT_EACH(v, a1_, 0);
+        BOOST_BIND_VISIT_EACH(v, a2_, 0);
+        BOOST_BIND_VISIT_EACH(v, a3_, 0);
+        BOOST_BIND_VISIT_EACH(v, a4_, 0);
+        BOOST_BIND_VISIT_EACH(v, a5_, 0);
+        BOOST_BIND_VISIT_EACH(v, a6_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
 
-	template<class R> struct evaluator
-	{
+    template<class R> struct evaluator
+    {
         typedef evaluator6<R> type;
-	};
+    };
 
 #else
 
@@ -496,21 +504,21 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        v(a1_);
-        v(a2_);
-        v(a3_);
-        v(a4_);
-        v(a5_);
-        v(a6_);
-        v(a7_);
+        BOOST_BIND_VISIT_EACH(v, a1_, 0);
+        BOOST_BIND_VISIT_EACH(v, a2_, 0);
+        BOOST_BIND_VISIT_EACH(v, a3_, 0);
+        BOOST_BIND_VISIT_EACH(v, a4_, 0);
+        BOOST_BIND_VISIT_EACH(v, a5_, 0);
+        BOOST_BIND_VISIT_EACH(v, a6_, 0);
+        BOOST_BIND_VISIT_EACH(v, a7_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
 
-	template<class R> struct evaluator
-	{
+    template<class R> struct evaluator
+    {
         typedef evaluator7<R> type;
-	};
+    };
 
 #else
 
@@ -563,22 +571,22 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        v(a1_);
-        v(a2_);
-        v(a3_);
-        v(a4_);
-        v(a5_);
-        v(a6_);
-        v(a7_);
-        v(a8_);
+        BOOST_BIND_VISIT_EACH(v, a1_, 0);
+        BOOST_BIND_VISIT_EACH(v, a2_, 0);
+        BOOST_BIND_VISIT_EACH(v, a3_, 0);
+        BOOST_BIND_VISIT_EACH(v, a4_, 0);
+        BOOST_BIND_VISIT_EACH(v, a5_, 0);
+        BOOST_BIND_VISIT_EACH(v, a6_, 0);
+        BOOST_BIND_VISIT_EACH(v, a7_, 0);
+        BOOST_BIND_VISIT_EACH(v, a8_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
 
-	template<class R> struct evaluator
-	{
+    template<class R> struct evaluator
+    {
         typedef evaluator8<R> type;
-	};
+    };
 
 #else
 
@@ -633,23 +641,23 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        v(a1_);
-        v(a2_);
-        v(a3_);
-        v(a4_);
-        v(a5_);
-        v(a6_);
-        v(a7_);
-        v(a8_);
-        v(a9_);
+        BOOST_BIND_VISIT_EACH(v, a1_, 0);
+        BOOST_BIND_VISIT_EACH(v, a2_, 0);
+        BOOST_BIND_VISIT_EACH(v, a3_, 0);
+        BOOST_BIND_VISIT_EACH(v, a4_, 0);
+        BOOST_BIND_VISIT_EACH(v, a5_, 0);
+        BOOST_BIND_VISIT_EACH(v, a6_, 0);
+        BOOST_BIND_VISIT_EACH(v, a7_, 0);
+        BOOST_BIND_VISIT_EACH(v, a8_, 0);
+        BOOST_BIND_VISIT_EACH(v, a9_, 0);
     }
 
 #ifdef BOOST_NO_VOID_RETURNS
 
-	template<class R> struct evaluator
-	{
+    template<class R> struct evaluator
+    {
         typedef evaluator9<R> type;
-	};
+    };
 
 #else
 
@@ -1103,6 +1111,18 @@ template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, c
 };
 
 } // namespace _bi
+
+// visit_each
+
+template<class V, class T> void visit_each(V & v, _bi::value<T> const & t, int)
+{
+    BOOST_BIND_VISIT_EACH(v, t.get(), 0);
+}
+
+template<class V, class R, class F, class L> void visit_each(V & v, _bi::bind_t<R, F, L> const & t, int)
+{
+    t.accept(v);
+}
 
 // bind
 

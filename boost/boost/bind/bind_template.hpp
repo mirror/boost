@@ -1,7 +1,7 @@
 //
 //  bind/bind_template.hpp
 //
-//	Do not include this header directly.
+//  Do not include this header directly.
 //
 //  Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
 //
@@ -147,7 +147,7 @@
 
     template<class V> void accept(V & v) const
     {
-        v(f_);
+        BOOST_BIND_VISIT_EACH(v, f_, 0);
         l_.accept(v);
     }
 

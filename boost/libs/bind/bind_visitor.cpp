@@ -8,8 +8,6 @@
 //
 //  bind_visitor.cpp - tests bind.hpp with a visitor
 //
-//  Version 1.00.0003 (2001-10-18)
-//
 //  Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
 //
 //  Permission to copy, use, modify, sell and distribute this software
@@ -20,42 +18,48 @@
 
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
+
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#pragma warning(push, 3)
+#endif
+
 #include <iostream>
 #include <typeinfo>
 
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#pragma warning(pop)
+#endif
+
+// default implementation of visit_each
+
+namespace boost
+{
+    template<class V, class T> void visit_each(V & v, T const & t, long)
+    {
+        v(t, 0);
+    }
+}
+
+// visitor
+
 int hash = 0;
 
-struct ref_visitor
+struct visitor
 {
-    template<class R, class F, class L> void operator()(boost::_bi::bind_t<R, F, L> const & b) const
-    {
-        b.accept(*this);
-    }
-
-    template<class T> void operator()(boost::reference_wrapper<T> const & r) const
+    template<class T> void operator()(boost::reference_wrapper<T> const & r, int) const
     {
         std::cout << "Reference to " << typeid(T).name() << " @ " << &r.get() << " (with value " << r.get() << ")\n";
         hash += r.get();
     }
 
-#ifndef BOOST_MSVC
-
-    template<class T> void operator()(T const &) const
+    template<class T> void operator()(T const &, long) const
     {
-        std::cout << "Catch-all: " << typeid(T).name() << '\n';
+        std::cout << "Value of type " << typeid(T).name() << '\n';
+        ++hash;
     }
-
-#else
-
-    void operator()(...) const
-    {
-    }
-
-#endif
-
 };
 
-int f(int & i, int & j)
+int f(int & i, int & j, int)
 {
     ++i;
     --j;
@@ -83,7 +87,8 @@ int main()
 {
     using namespace boost;
 
-    ref_visitor()(bind<int>(bind(f, ref(x), _1), ref(y)));
+    visitor v;
+    visit_each(v, bind<int>(bind(f, ref(x), _1, 42), ref(y)), 0);
 
-    return detect_errors(hash == 9);
+    return detect_errors(hash == 12);
 }
