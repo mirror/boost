@@ -222,8 +222,10 @@ public:
                    detail::multi_array::populate_index_ranges());
 
     // Build same-shape views of the two arrays
-    typename multi_array::array_view<3>::type view_old = (*this)[old_idxes];
-    typename multi_array::array_view<3>::type view_new = new_array[new_idxes];
+    typename
+      multi_array::array_view<NumDims>::type view_old = (*this)[old_idxes];
+    typename
+      multi_array::array_view<NumDims>::type view_new = new_array[new_idxes];
 
     // Set the right portion of the new array
     view_new = view_old;
