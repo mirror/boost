@@ -210,7 +210,7 @@ struct make_storage<int>
     typedef int type;
 };
 
-#endif
+#endif // BOOST_MPL_MSVC_60_ETI_BUG workaround
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class null_storage
@@ -917,9 +917,12 @@ public: // queries
 
 private: // helpers, for structors (below)
 
-    typedef BOOST_VARIANT_AUX_INITIALIZER_T(
-          recursive_enabled_types, recursive_enabled_T
-        ) initializer;
+    struct initializer
+        : BOOST_VARIANT_AUX_INITIALIZER_T(
+              recursive_enabled_types, recursive_enabled_T
+            )
+    {
+    };
 
     void destroy_content()
     {

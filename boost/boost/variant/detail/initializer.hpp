@@ -187,6 +187,22 @@ public: // static functions
 
 };
 
+#   if defined(BOOST_MPL_MSVC_60_ETI_BUG)
+
+#if !defined(BOOST_VARIANT_AUX_ECHO)
+#   define BOOST_VARIANT_AUX_ECHO(z,N,token) token
+#endif
+
+template <>
+struct preprocessor_list_initializer<
+      BOOST_PP_ENUM(BOOST_VARIANT_LIMIT_TYPES, BOOST_VARIANT_AUX_ECHO, int)
+    , BOOST_PP_ENUM(BOOST_VARIANT_LIMIT_TYPES, BOOST_VARIANT_AUX_ECHO, const int)
+    >
+{
+};
+
+#   endif // BOOST_MPL_MSVC_60_ETI_BUG workaround
+
 #endif // BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE workaround
 
 }} // namespace detail::variant
@@ -203,7 +219,7 @@ public: // static functions
 #if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
 #define BOOST_VARIANT_AUX_INITIALIZER_T( mpl_seq, typename_base ) \
-    typename ::boost::mpl::iter_fold< \
+    ::boost::mpl::iter_fold< \
           mpl_seq \
         , ::boost::mpl::pair< \
               ::boost::detail::variant::initializer_root \
