@@ -38,12 +38,23 @@ int main(){
   using namespace boost::gregorian;
 
   tz_database time_zones;
-  try{
+
+  try {
+    // first try to find the data file from the test dir
     time_zones.load_from_file("../data/date_time_zonespec.csv");
-  }catch(data_not_accessible e){
-    check(e.what(), false);
-    return printTestStats();
   }
+  catch(const data_not_accessible& e) {
+    // couldn't find the data file so assume we are being run from 
+    // boost_root/status and try again
+    try {
+      time_zones.load_from_file("../libs/date_time/data/date_time_zonespec.csv");
+    }
+    catch(const data_not_accessible&) {
+      check("Cannot locate data file - aborting.", false);
+      return printTestStats();
+    }
+  }
+
   shared_ptr<time_zone_base> utc;
   shared_ptr<time_zone_base> chicago = time_zones.time_zone_from_region("America/Chicago");
   shared_ptr<time_zone_base> denver = time_zones.time_zone_from_region("America/Denver");
