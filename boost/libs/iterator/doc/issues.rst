@@ -1,6 +1,6 @@
-+++++++++++++++++++++++++++++++
- Issues With N1550_ and N1530_
-+++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Problem with ``is_writable`` and ``is_swappable`` in N1550_
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. _N1550: http://www.boost-consulting.com/writing/n1550.html
 .. _N1530: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1530.html
@@ -22,285 +22,168 @@
  Introduction
 ==============
 
-Several issues with N1550_ (New Iterator Concepts) were raised in
-the run-up before the fall 2003 C++ Committee meeting, in a thread
-beginning with John Maddock's posting ``c++std-lib-12187``.  In
-looking at those issues, several other problems came up.  This
-document addresses those issues and discusses some potential
-solutions and their impact on N1530_ (Iterator Facade and Adaptor).
+The ``is_writable`` and ``is_swappable`` traits classes in N1550_
+provide a mechanism for determining at compile time if a type is a
+model of the new Writable Iterator and Swappable Iterator concepts,
+analogous to ``iterator_traits<X>::iterator_category`` for the old
+iterator concepts. For backward compatibility, ``is_writable`` and
+``is_swappable`` not only work with new iterators, but they also are
+intended to work for old iterators (iterators that meet the
+requirements for one of the iterator concepts in the current
+standard). In the case of old iterators, the writability and
+swapability is deduced based on the ``iterator_category`` and also the
+``reference`` type. The specification for this deduction gives false
+positives for forward iterators that have non-assignable value types.
 
-============
- The Issues
-============
-
-Non-Uniformity of the "``lvalue_iterator`` Bit"
-===============================================
-
-The proposed ``iterator_tag`` class template accepts an "access
-bits" parameter which includes a bit to indicate the iterator's
-*lvalueness* (whether its dereference operator returns a reference
-to its ``value_type``.  The relevant part of N1550_ says:
-
-  The purpose of the ``lvalue_iterator`` part of the
-  ``iterator_access`` enum is to communicate to ``iterator_tag``
-  whether the reference type is an lvalue so that the appropriate
-  old category can be chosen for the base class. The
-  ``lvalue_iterator`` bit is not recorded in the
-  ``iterator_tag::access`` data member.
-
-The ``lvalue_iterator`` bit is not recorded because N1550_ aims to
-improve orthogonality of the iterator concepts, and a new-style
-iterator's lvalueness is detectable by examining its ``reference``
-type.  This inside/outside difference is awkward and confusing.
-
-Redundancy of Some Explicit Access Category Flags
-=================================================
-
-Shortly after N1550_ was accepted, we discovered that an iterator's
-lvalueness can be determined knowing only its ``value_type``.  This
-predicate can be calculated even for old-style iterators (on whose
-``reference`` type the standard places few requirements).  A trait
-in the Boost iterator library does it by relying on the compiler's
-unwillingness to bind an rvalue to a ``T&`` function template
-parameter.  Similarly, it is possible to detect an iterator's
-readability knowing only its ``value_type``. Thus, any interface
-which asks the *user* to explicitly describe an iterator's
-lvalue-ness or readability seems to introduce needless complexity.
-
-New Access Traits Templates Wrong For Some Iterators
-====================================================
-
-``is_writable_iterator``
-------------------------
-
-The part of the ``is_writable_iterator`` trait definition which
-applies to old-style iterators is::
+To review, the part of the ``is_writable`` trait definition which
+applies to old iterators is::
 
   if (cat is convertible to output_iterator_tag)
-           return true;
-      else if (
-           cat is convertible to forward_iterator_tag
+      return true;
+  else if (cat is convertible to forward_iterator_tag
            and iterator_traits<Iterator>::reference is a 
                mutable reference)
-          return true;
-      else
-          return false;
+      return true;
+  else
+      return false;
 
-The current forward iterator requirements place no constraints on
-the iterator's ``reference`` type, so the logic above will give
-false negatives for some otherwise-writable forward iterators whose
-``reference`` type is not a mutable reference.  Also, it will
-report false positives for any forward, bidirectional, or random
-access iterator whose ``reference`` is a mutable reference but
-whose ``value_type`` is not assignable (e.g. has a private
-assignment operator).
+Suppose the ``value_type`` of the iterator has a private assignment
+operator::
 
-``is_swappable_iterator``
--------------------------
+  class B {
+  public:
+    ...
+  private:
+    B& operator=(const B&);
+  };
 
-Similarly, the part of ``is_swappable_iterator`` which applies to
-old-style iterators is::
+and suppose the ``reference`` type of the iterator is ``B&``.  Then
+``is_writable`` will deduce true when in fact attempting to write into
+``B`` will cause an error.
 
-    else if (cat is convertible to forward_iterator_tag) {
-        if (iterator_traits<Iterator>::reference is a const reference)
-            return false;
-        else
-            return true;
-    } else 
-        return false;
-
-In this case false positives are possible for non-writable forward
-iterators whose ``reference`` type is not a reference, or as above,
-any forward, bidirectional, or random access iterator whose
-``reference`` is not a constant reference but whose ``value_type``
-is not assignable (e.g., because it has a private assignment
-operator).
-
-False negatives can be "reasoned away": since it is part of a
-writable iterator's concept definition that
-``is_writable<I>::value`` is ``true``, any iterator for which
-it is ``false`` is by definition not writable.  This seems like a
-perverse use of logic, though.
-
-It might be reasonable to conclude that it is a defect that the
-standard allows forward iterators with a ``reference`` type other
-than ``value_type`` *cv*\ ``&``, but that still leaves the problem
-of old-style iterators whose ``value_type`` is not assignable.  It
-is not possible to correctly compute writability and swappability
-for those old-style iterators without intervention
-(specializations of ``is_writable_iterator`` and
-``is_swappable_iterator``) from a user.
-
-No Use Cases for Some Access Traits 
-===================================
-
-``is_swappable_iterator``
--------------------------
-
-``is_swappable_iterator<I>`` is supposed to yield true if
-``iter_swap(x,y)`` is valid for instances ``x`` and ``y`` of type
-``I``.  The only argument we have heard for
-``is_swappable_iterator`` goes something like this:
-
-     *"If* ``is_swappable_iterator`` *yields* ``false``\ *, you
-     could fall back to using copy construction and assignment on
-     the* ``value_type`` *instead."*
-
-This line of reasoning, however, falls down when closely examined.
-To achieve the same effect using copy construction and assignment
-on the iterator's ``value_type``, the iterator must be readable and
-writable, and its ``value_type`` must be copy-constructible.  But
-then, ``iter_swap`` must work in that case, because its default
-implementation just calls ``swap`` on the dereferenced iterators.
-The only purpose for the swappable iterator concept is to represent
-iterators which do not fulfill the properties listed above, but
-which are nonetheless swappable because the user has provided an
-overload or specialization of ``iter_swap``.  In other words,
-generic code which wants to swap the referents of two iterators
-should *always* call ``iter_swap`` instead of doing the
-assignments.
-
-``is_writable_iterator``
-------------------------
-
-Try to imagine a case where ``is_writable_iterator`` can be used to
-choose behavior.  Since the only requirement on a writable iterator
-is that we can assign into its referent, the only use for
-``is_writable_iterator`` in selecting behavior is to modify a
-sequence when the sequence is mutable, and to not modify it
-otherwise.
-
-There is no precedent for generic functions which modify their
-arguments only if the arguments are non-const reference, and with
-good reason: the simple fact that data is mutable does not mean
-that a user *intends* it to be mutated.  We provide ``const`` and
-non-\ ``const`` overloads for functions like ``operator[]``, but
-these do not modify data; they merely return a reference to data
-which preserves the object's mutability properties.  We can do the
-same with iterators using their ``reference`` types; the
-accessibility of an assignment operator on the ``value_type``,
-which determines writability, does not change that.
-
-The one plausible argument we can imagine for
-``is_writable_iterator`` and ``is_swappable_iterator`` is that they
-can be used to remove algorithms from an overload set using a
-SFINAE technique like enable_if_, thus minimizing unintentional
-matches due to Koenig Lookup.  If it means requiring explicit
-indications of writability and swappability from new-style iterator
-implementors, however, it seems to be too small a gain to be worth
-the cost.  That's especially true since we can't get many existing
-old-style iterators to meet the same requirements.
-
-.. _enable_if: http://tinyurl.com/tsr7
-
-Naming Issues
-=============
-
-Traversal Concepts and Tags
----------------------------
-
-Howard Hinnant pointed out some inconsistencies with the naming of
-these tag types::
-
-  incrementable_iterator_tag            // ++r, r++
-  single_pass_iterator_tag              // adds a == b, a != b
-  forward_traversal_iterator_tag        // adds multi-pass capability
-  bidirectional_traversal_iterator_tag  // adds --r, r--
-  random_access_traversal_iterator_tag  // adds r+n,n+r,r-n,r[n],etc.
-
-Howard thought that it might be better if all tag names contained
-the word "traversal".
-
-It's not clear that would result in the best possible names,
-though.  For example, incrementable iterators can only make a
-single pass over their input.  What really distinguishes single
-pass iterators from incrementable iterators is not that they can
-make a single pass, but that they are equality comparable.  Forward
-traversal iterators really distinguish themselves by introducing
-multi-pass capability.  Without entering a "Parkinson's Bicycle
-Shed" type of discussion, it might be worth giving the names of
-these tags (and the associated concepts) some extra attention.
-
-Access Traits
--------------
-
-The names ``is_readable``, ``is_writable``, and ``is_swappable``
-are probably too general for their semantics.  In particular, a
-swappable iterator is only swappable in the same sense that a
-mutable iterator is mutable: the trait refers to the iterator's
-referent.  It would probably be better to add the ``_iterator``
-suffix to each of these names.
-
-================================
- Proposed Solution (in progress)
-================================
-
-We believe that ``is_readable_iterator`` is a fine name for the
-proposed ``is_readable`` trait and will use that from here on.  In
-order to avoid confusion, however, and because we aren't terribly
-convinced of any answer yet, we are going to phrase this solution
-in terms of the existing traversal concept and tag names.  We'll
-propose a few possible traversal naming schemes at the end of this
-section.
-
-Overview
-========
-
-Following the dictum that what we can't do well probably shouldn't
-be done at all, we'd like to solve many of the problems above by
-eliminating details and simplifying the library as proposed.  In
-particular, we'd eliminate ``is_writable`` and ``is_swappable``,
-and remove the requirements which say that writable, and swappable
-iterators must support these traits.  ``is_readable_iterator`` has
-proven to be useful and will be retained, but since it can be
-implemented with no special hints from the iterator, it will not be
-mentioned in the readable iterator requirements.  Since we don't
-want to require the user to explicitly specify access category
-information, we'll change ``iterator_tag`` so that it computes the
-old-style category in terms of the iterator's traversal category,
-``reference``, and ``value_type``.
-
-Future Enhancements
-===================
-
-For C++0x, we could consider a change to ``iterator_traits`` which
-allows the user to avoid the use of iterator_tag (or similar
-devices) altogether and write a new-style iterator by specifying
-only a traversal tag.  This change is not being proposed as it does
-not constitute a "pure bolt-on"::
-
-  iterator_traits<I>::iterator_category
-    = if (I::iterator_category is a type) // use mpl::has_xxx (SFINAE)
-         return I::iterator_category
-
-      // Only old-style output iterators may have a void value_type 
-      // or difference_type
-      if (iterator_value_type<I>::type is void
-          || iterator_difference_type<I>::type is void
-      )
-         return std::output_iterator_tag
-
-      t = iterator_traversal<I>::type
-      
-      if (I is an lvalue iterator)
-      {
-         if (t is convertible to random_access_traversal_tag)
-            return std::random_access_iterator_tag
-         if (t is convertible to bidirectional_traversal_tag)
-            return std::bidirectional_iterator_tag
-         else if (t is convertible to forward_traversal_tag)
-            return std::forward_iterator_tag
-      }
-
-      if (t is convertible to single_pass_traversal_tag
-          && I is a readable iterator
-      )
-         return input_output_iterator_tag // (**)
-      else
-         return std::output_iterator_tag
+The same problem applies to ``is_swappable``.
 
 
-Impact on N1530_ (Iterator Facade and Adaptor)
-==============================================
+====================
+ Proposed Resolution
+====================
 
-XXX
+1. Remove the ``is_writable`` and ``is_swappable`` traits, and remove the
+   requirements in the Writable Iterator and Swappable Iterator concepts
+   that require their models to support these traits.
+
+2. Change the ``is_readable`` specification to be:
+   ``is_readable<X>::type`` is ``true_type`` if the
+   result type of ``X::operator*`` is convertible to
+   ``iterator_traits<X>::value_type`` and is ``false_type``
+   otherwise.
+
+   Remove the requirement for support of the ``is_readable`` trait from
+   the Readable Iterator concept.
+
+3. Change ``iterator_tag`` to::
+
+     template <class Value, class Reference, class Traversal>
+     struct iterator_tag;
+
+   The argument for ``Value`` must be the value type of the
+   iterator, ``Reference`` must be the return type of
+   ``operator*`` [*]_, and ``Traversal`` the traversal tag for the
+   iterator.
+
+   ``iterator_tag`` is required to be convertible to both the
+   ``Traversal`` tag and also to the appropriate old iterator category
+   tag, as specified by the following pseudo-code::
+
+     inherit-category(Value, Reference, Traversal) =
+         if (Reference is a reference
+             and Traversal is convertible to forward_traversal_tag) {
+             if (Traversal is convertible to random_access_traversal_tag)
+                 return random_access_iterator_tag;
+             else if (Traversal is convertible to bidirectional_traversal_tag)
+                 return bidirectional_iterator_tag;
+             else
+                 return forward_iterator_tag;
+         } else if (Traversal is convertible to single_pass_traversal_tag
+                    and Reference is convertible to Value) {
+             if (Value is const)
+                 return input_iterator_tag;
+             else
+                 return input_output_iterator_tag;
+         } else
+             return output_iterator_tag;
+             
+
+.. [*] Instead of saying "return type of operator*", we could have
+   said ``iterator_traits<X>::reference``. However, the standard
+   specifies nothing about ``iterator_traits<X>::reference``,
+   which we believe is a defect. Once the defect is fixed,
+   the above could be rephrased.
+
+
+4. Change the specification of ``traversal_category`` to::
+
+    traversal-category(Iterator) =
+	let cat = iterator_traits<Iterator>::iterator_category
+	if (cat convertible to incrementable_iterator_tag)
+	  return cat; // Iterator is a new iterator
+	else if (cat is convertible to random_access_iterator_tag)
+	    return random_access_traversal_tag;
+	else if (cat is convertible to bidirectional_iterator_tag)
+	    return bidirectional_traversal_tag;
+	else if (cat is convertible to forward_iterator_tag)
+	    return forward_traversal_tag;
+	else if (cat is convertible to input_iterator_tag)
+	    return single_pass_iterator_tag;
+	else if (cat is convertible to output_iterator_tag)
+	    return incrementable_iterator_tag;
+	else
+	    return null_category_tag;
+
+
+==========
+ Rationale
+==========
+
+1. There are two reasons for removing ``is_writable``
+   and ``is_swappable``. The first is that we do not know of
+   a way to fix the specification so that it gives the correct
+   answer for all iterators. Second, there was only a weak
+   motivation for having ``is_writable`` and ``is_swappable``
+   there in the first place. The main motivation was simply
+   uniformity: we have tags for the old iterator categories
+   so we should have tags for the new iterator categories.
+   While having tags and the capability to dispatch based
+   on the traversal categories is often used, we see
+   less of a need for dispatching based on writability
+   and swappability, since typically algorithms
+   that need these capabilities have no alternative if
+   they are not provided.
+
+2. We discovered that the ``is_readable`` trait can be
+   implemented without special hints from the iterator.
+   Therefore we remove the requirement for ``is_readable``
+   from the Readable Iterator concept, and change
+   the definition of ``is_readable`` so that it works
+   for any iterator type.
+
+3. With ``is_writable`` and ``is_swappable`` gone, and
+   ``is_readable`` no longer in need of special hints,
+   there is no reason for the ``iterator_tag`` class to provide
+   information about the access capabilities of an iterator.
+   This new version provides only information about the traversal
+   capabilities and the old iterator category tag. Instead of accessing
+   the traversal category as a nested typedef ``::traversal``,
+   the ``iterator_tag`` itself will be convertible to the traversal
+   tag. The ``access_bits`` parameter is no longer needed for
+   specifying the access member (which is now gone). However,
+   some access information is still needed so that we can
+   deduce the appropriate old iterator category. The 
+   ``Value`` and ``Reference`` parameters fill this need.
+   Note that this solution cleans up the issue that John
+   Maddock raised on the reflector about the non-uniformity
+   of the lvalue bit.
+
+4. The changes to the specification of ``traversal_category`` are a 
+   direct result of the changes to ``iterator_tag``.
+
