@@ -155,6 +155,7 @@ namespace boost { namespace program_options { namespace detail {
         } else {
             return false;
         }                    
+    }
 #else
 ;
 #endif

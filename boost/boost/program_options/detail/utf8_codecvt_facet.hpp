@@ -58,6 +58,7 @@
 namespace std
 {
     using ::mbstate_t;
+    using ::size_t;    
 }
 #endif
 
