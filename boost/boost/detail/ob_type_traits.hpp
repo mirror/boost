@@ -10,6 +10,8 @@
 //  support partial specialisation. (C) John Maddock 2000
 
 /* Release notes:
+	07 Oct 2000:
+		Added more fixes for is_array (based on a newgroup posting by Jonathan Lundquist).
    03 Oct 2000:
       Added more fixes to is_pointer and is_array (JM).
    01st October 2000:
@@ -95,9 +97,9 @@ namespace detail{
    typedef char yes_result;
    typedef char (&no_result)[8];
    yes_result is_const_helper(const volatile void*);
-   double is_const_helper(volatile void *);
+   no_result is_const_helper(volatile void *);
    yes_result is_volatile_helper(const volatile void*);
-   double is_volatile_helper(const void *);
+   no_result is_volatile_helper(const void *);
 }
 
 template <typename T>
@@ -263,14 +265,21 @@ namespace detail{
       pointer_helper(const volatile void*);
    };
    yes_result is_pointer_helper(pointer_helper);
-   double is_pointer_helper(...);
+   no_result is_pointer_helper(...);
    template <class T>
    yes_result is_pointer_helper3(T (*)(void));
    template <class T, class A1>
    yes_result is_pointer_helper3(T (*)(A1));
    template <class T, class A1, class A2>
    yes_result is_pointer_helper3(T (*)(A1, A2));
-   double is_pointer_helper3(...);
+   template <class T, class A1, class A2, class A3>
+   yes_result is_pointer_helper3(T (*)(A1, A2, A3));
+   no_result is_pointer_helper3(...);
+
+   yes_result is_array_helper(const volatile void*, const volatile void*);
+   template <class T>
+   no_result is_array_helper(T**, const volatile void*);
+   no_result is_array_helper(...);
 }
 template <typename T> struct is_array
 { 
@@ -278,14 +287,12 @@ private:
    static T t;
 public:
    enum{ value = (1 == sizeof(detail::is_pointer_helper(t))) 
-                 && (sizeof(T) != sizeof(void*))
-                 && !is_reference<T>::value }; 
+                 && (1 == sizeof(detail::is_array_helper(&t, t)))
+                 && !is_reference<T>::value
+                 && !(1 == sizeof(detail::is_pointer_helper3(t))) }; 
 };
 
 //* is a type T a pointer type (including function pointers) - is_pointer<T>
-namespace detail{
-}
-
 template <typename T> struct is_pointer 
 { 
 private:
@@ -293,10 +300,10 @@ private:
 public:
    enum{ value = (!is_const<T>::value 
                  && !is_volatile<T>::value 
-                 && (sizeof(T) == sizeof(void*))
-                 && (1 == sizeof(detail::is_pointer_helper(t)))
-                 && !is_reference<T>::value)
-                 || (1 == sizeof(detail::is_pointer_helper3(t))) }; 
+                 && !is_reference<T>::value
+                 && !is_array<T>::value)
+                 && ((1 == sizeof(detail::is_pointer_helper(t)))
+                     || (1 == sizeof(detail::is_pointer_helper3(t)))) }; 
 };
 
 # ifdef BOOST_MSVC
@@ -339,7 +346,7 @@ namespace detail{
    yes_result is_member_pointer_helper(T (U::*)(A1));
    template <class T, class U, class A1, class A2>
    yes_result is_member_pointer_helper(T (U::*)(A1, A2));
-   double is_member_pointer_helper(...);
+   no_result is_member_pointer_helper(...);
 }
 template <typename T> struct is_member_pointer
 { 
@@ -567,6 +574,7 @@ struct has_trivial_destructor
 #undef BOOST_HAS_TRIVIAL_DESTRUCTOR
 
 #endif // BOOST_OB_TYPE_TRAITS_HPP
+
 
 
 

@@ -41,6 +41,24 @@ template <> struct is_POD<empty_POD_UDT>
 #endif
 }
 
+struct non_empty1
+{ 
+   int i;
+   non_empty1() : i(1){}
+   non_empty1(int v) : i(v){}
+   friend bool operator==(const non_empty1& a, const non_empty1& b)
+   { return a.i == b.i; }
+};
+
+struct non_empty2
+{ 
+   int i;
+   non_empty2() : i(3){}
+   non_empty2(int v) : i(v){}
+   friend bool operator==(const non_empty2& a, const non_empty2& b)
+   { return a.i == b.i; }
+};
+
 int main()
 {
    compressed_pair<int, double> cp1(1, 1.3);
@@ -54,14 +72,21 @@ int main()
    assert(cp1b.second() == 1.3);
    assert(cp1.first() == 2);
    assert(cp1.second() == 2.3);
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   compressed_pair<non_empty1, non_empty2> cp1c(non_empty1(9));
+   assert(cp1c.second() == non_empty2());
+   assert(cp1c.first() == non_empty1(9));
+   compressed_pair<non_empty1, non_empty2> cp1d(non_empty2(9));
+   assert(cp1d.second() == non_empty2(9));
+   assert(cp1d.first() == non_empty1());
    compressed_pair<empty_UDT, int> cp2(2);
    assert(cp2.second() == 2);
-#endif
    compressed_pair<int, empty_UDT> cp3(1);
    assert(cp3.first() ==1);
    compressed_pair<empty_UDT, empty_UDT> cp4;
    compressed_pair<empty_UDT, empty_POD_UDT> cp5;
+   compressed_pair<int, empty_UDT> cp9(empty_UDT());
+   compressed_pair<int, empty_UDT> cp10(1);
+   assert(cp10.first() == 1);
 #if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES) || !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
    int i = 0;
    compressed_pair<int&, int&> cp6(i,i);
@@ -121,7 +146,6 @@ template compressed_pair<double, int[2]>::compressed_pair(const double&);
 template compressed_pair<double, int[2]>::compressed_pair();
 #endif // __MWERKS__
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
 
 
 

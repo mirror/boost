@@ -8,6 +8,8 @@
 //  see libs/utility/compressed_pair.hpp
 //
 /* Release notes:
+	07 Oct 2000:
+		Added better single argument constructor support.
    03 Oct 2000:
       Added VC6 support (JM).
    23rd July 2000:
@@ -34,10 +36,51 @@ namespace boost
 #if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
 //
 // use member templates to emulate
-// partial specialisation:
+// partial specialisation.  Note that due to
+// problems with overload resolution with VC6
+// each of the compressed_pair versions that follow
+// have one template single-argument constructor
+// in place of two specific constructors:
 //
 namespace detail{
 
+template <class A, class T1, class T2>
+struct best_convertion_traits
+{
+   typedef char one;
+   typedef char (&two)[2];
+   static A a;
+   static one test(T1);
+   static two test(T2);
+
+   enum { value = sizeof(test(a)) };
+};
+
+template <int>
+struct init_one;
+
+template <>
+struct init_one<1>
+{
+   template <class A, class T1, class T2>
+   static void init(const A& a, T1* p1, T2*)
+   {
+      *p1 = a;
+   }
+};
+
+template <>
+struct init_one<2>
+{
+   template <class A, class T1, class T2>
+   static void init(const A& a, T1*, T2* p2)
+   {
+      *p2 = a;
+   }
+};
+
+
+// T1 != T2, both non-empty
 template <class T1, class T2>
 class compressed_pair_0
 {
@@ -56,7 +99,11 @@ public:
 
             compressed_pair_0() : _first(), _second() {}
             compressed_pair_0(first_param_type x, second_param_type y) : _first(x), _second(y) {}
-   explicit compressed_pair_0(first_param_type x) : _first(x), _second() {}
+   template <class A>
+   explicit compressed_pair_0(const A& val)
+   {
+      init_one<best_convertion_traits<A, T1, T2>::value>::init(val, &_first, &_second);
+   }
 
    first_reference       first()       { return _first; }
    first_const_reference first() const { return _first; }
@@ -72,6 +119,7 @@ public:
    }
 };
 
+// T1 != T2, T2 empty
 template <class T1, class T2>
 class compressed_pair_1 : T2
 {
@@ -89,7 +137,11 @@ public:
 
             compressed_pair_1() : T2(), _first() {}
             compressed_pair_1(first_param_type x, second_param_type y) : T2(y), _first(x) {}
-   explicit compressed_pair_1(first_param_type x) : T2(), _first(x) {}
+   template <class A>
+   explicit compressed_pair_1(const A& val)
+   {
+      init_one<best_convertion_traits<A, T1, T2>::value>::init(val, &_first, static_cast<T2*>(this));
+   }
 
    first_reference       first()       { return _first; }
    first_const_reference first() const { return _first; }
@@ -105,6 +157,7 @@ public:
    }
 };
 
+// T1 != T2, T1 empty
 template <class T1, class T2>
 class compressed_pair_2 : T1
 {
@@ -122,7 +175,11 @@ public:
 
             compressed_pair_2() : T1(), _second() {}
             compressed_pair_2(first_param_type x, second_param_type y) : T1(x), _second(y) {}
-   explicit compressed_pair_2(first_param_type x) : T1(x), _second() {}
+   template <class A>
+   explicit compressed_pair_2(const A& val)
+   {
+      init_one<best_convertion_traits<A, T1, T2>::value>::init(val, static_cast<T1*>(this), &_second);
+   }
 
    first_reference       first()       { return *this; }
    first_const_reference first() const { return *this; }
@@ -138,6 +195,7 @@ public:
    }
 };
 
+// T1 != T2, both empty
 template <class T1, class T2>
 class compressed_pair_3 : T1, T2
 {
@@ -153,7 +211,11 @@ public:
 
             compressed_pair_3() : T1(), T2() {}
             compressed_pair_3(first_param_type x, second_param_type y) : T1(x), T2(y) {}
-   explicit compressed_pair_3(first_param_type x) : T1(x), T2() {}
+   template <class A>
+   explicit compressed_pair_3(const A& val)
+   {
+      init_one<best_convertion_traits<A, T1, T2>::value>::init(val, static_cast<T1*>(this), static_cast<T2*>(this));
+   }
 
    first_reference       first()       { return *this; }
    first_const_reference first() const { return *this; }
@@ -183,6 +245,7 @@ public:
 
             compressed_pair_4() : T1() {}
             compressed_pair_4(first_param_type x, second_param_type) : T1(x) {}
+   // only one single argument constructor since T1 == T2
    explicit compressed_pair_4(first_param_type x) : T1(x) {}
 
    first_reference       first()       { return *this; }
@@ -216,6 +279,7 @@ public:
 
             compressed_pair_5() : _first(), _second() {}
             compressed_pair_5(first_param_type x, second_param_type y) : _first(x), _second(y) {}
+   // only one single argument constructor since T1 == T2
    explicit compressed_pair_5(first_param_type x) : _first(x), _second() {}
 
    first_reference       first()       { return _first; }
@@ -321,9 +385,8 @@ public:
 
             compressed_pair() : base_type() {}
             compressed_pair(first_param_type x, second_param_type y) : base_type(x, y) {}
-   explicit compressed_pair(first_param_type x) : base_type(x) {}
-   // can't define this in case T1 == T2:
-   // explicit compressed_pair(second_param_type y) : _first(), _second(y) {}
+   template <class A>
+   explicit compressed_pair(const A& x) : base_type(x){}
 
    first_reference       first()       { return base_type::first(); }
    first_const_reference first() const { return base_type::first(); }
@@ -388,4 +451,5 @@ inline void swap(compressed_pair<T1, T2>& x, compressed_pair<T1, T2>& y)
 } // boost
 
 #endif // BOOST_OB_COMPRESSED_PAIR_HPP
+
 

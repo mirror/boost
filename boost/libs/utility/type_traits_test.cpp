@@ -182,7 +182,6 @@ struct non_empty : boost::noncopyable
    int i;
 };
 
-
 // Steve: All comments that I (Steve Cleary) have added below are prefixed with
 //  "Steve:"  The failures that BCB4 has on the tests are due to Borland's
 //  not considering cv-qual's as a part of the type -- they are considered
@@ -384,7 +383,11 @@ int main()
 
    value_test(false, is_array<int>::value)
    value_test(false, is_array<int*>::value)
+   value_test(false, is_array<const int*>::value)
+   value_test(false, is_array<const volatile int*>::value)
    value_test(true, is_array<int[2]>::value)
+   value_test(true, is_array<const int[2]>::value)
+   value_test(true, is_array<const volatile int[2]>::value)
    value_test(true, is_array<int[2][3]>::value)
    value_test(true, is_array<UDT[2]>::value)
    value_test(false, is_array<int(&)[2]>::value)
@@ -396,15 +399,15 @@ int main()
    typedef int (UDT::*mf2)();
    typedef int (UDT::*mf3)(int);
    typedef int (UDT::*mf4)(int, float);
-
+   
+   value_test(false, is_const<f1>::value)
+   value_test(false, is_reference<f1>::value)
+   value_test(false, is_array<f1>::value)
    value_test(false, is_pointer<int>::value)
    value_test(false, is_pointer<int&>::value)
    value_test(true, is_pointer<int*>::value)
    value_test(true, is_pointer<const int*>::value)
    value_test(true, is_pointer<volatile int*>::value)
-   value_test(true, is_pointer<f1>::value)
-   value_test(true, is_pointer<f2>::value)
-   value_test(true, is_pointer<f3>::value)
    value_test(true, is_pointer<non_pointer*>::value)
    // Steve: was 'true', should be 'false', via 3.9.2p3, 3.9.3p1
    value_test(false, is_pointer<int*const>::value)
@@ -416,6 +419,8 @@ int main()
    value_test(false, is_pointer<non_pointer>::value)
    value_test(false, is_pointer<int*&>::value)
    value_test(false, is_pointer<int(&)[2]>::value)
+   value_test(false, is_pointer<int[2]>::value)
+   value_test(false, is_pointer<char[sizeof(void*)]>::value)
 
    value_test(true, is_pointer<f1>::value)
    value_test(true, is_pointer<f2>::value)
