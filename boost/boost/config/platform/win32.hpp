@@ -26,3 +26,5 @@
 
 #define BOOST_HAS_WINTHREADS
 
+// WEK: Added
+#define BOOST_HAS_FTIME
