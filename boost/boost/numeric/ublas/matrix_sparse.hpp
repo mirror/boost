@@ -156,8 +156,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename type_traits<element_type>::real_type real_type;
         typedef typename type_traits<element_type>::precision_type precision_type;
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = type_traits<element_type>::plus_complexity);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = type_traits<element_type>::multiplies_complexity);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = type_traits<element_type>::plus_complexity);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = type_traits<element_type>::multiplies_complexity);
 
         static
         BOOST_UBLAS_INLINE
@@ -234,8 +234,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<sparse_matrix<T, F, A> >::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename A::size_type size_type;
+        typedef typename A::difference_type difference_type;
         typedef T value_type;
         typedef A array_type;
         typedef const T &const_reference;
@@ -1290,8 +1290,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<sparse_vector_of_sparse_vector<T, F, A> >::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename A::size_type size_type;
+        typedef typename A::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
 #ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
@@ -2464,8 +2464,9 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<compressed_matrix<T, F, IB, IA, TA> >::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        // ISSUE require type consistency check for IA TA and IA::value_type
+        typedef typename IA::size_type size_type;
+        typedef typename IA::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
 #ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
@@ -3787,8 +3788,9 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<coordinate_matrix<T, F, IB, IA, TA> >::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        // ISSUE require type consistency check for IA TA and IA::value_type
+        typedef typename IA::size_type size_type;
+        typedef typename IA::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
 #ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
