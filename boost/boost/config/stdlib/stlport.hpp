@@ -7,9 +7,9 @@
 
 //  STLPort standard library config:
 
-#if !defined(__SGI_STL_PORT)
+#if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
 #  include <utility>
-#  if !defined(__SGI_STL_PORT)
+#  if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
 #      error "This is not STLPort!"
 #  endif
 #endif
@@ -89,6 +89,14 @@
 #if defined(__STL_NO_EXPLICIT_FUNCTION_TMPL_ARGS) || defined(_STLP_NO_EXPLICIT_FUNCTION_TMPL_ARGS)
 #  define BOOST_NO_STD_USE_FACET
 #  define BOOST_HAS_STLP_USE_FACET
+#endif
+
+//
+// If STLport thinks there are no wide functions, <cwchar> etc. is not working.
+//
+#if defined(_STLP_NO_NATIVE_WIDE_FUNCTIONS)
+#  define BOOST_NO_CWCHAR
+#  define BOOST_NO_CWTYPE
 #endif
 
 
