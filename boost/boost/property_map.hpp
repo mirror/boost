@@ -218,7 +218,7 @@ namespace boost {
   };
   template <typename K, typename V>
   V get(const readable_property_map_archetype<K,V>&, const K&) {
-    return V(dummy_cons);
+    return static_object<V>::get();
   }
 
 
