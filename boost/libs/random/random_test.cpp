@@ -55,7 +55,8 @@ void validate(const std::string & name, const PRNG &)
 void validate_all()
 {
   using namespace boost;
-#ifdef BOOST_STDINT_H_HAS_UINT64_T
+#if !defined(BOOST_NO_INT64_T) && \
+    !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)
   validate("rand48", rand48());
 #endif
   validate("minstd_rand", minstd_rand());
@@ -171,8 +172,9 @@ void instantiate_all()
 {
   using namespace boost;
 
-#ifdef BOOST_STDINT_H_HAS_UINT64_T
-  instantiate_urng("rand48", rand48, 0);
+#if !defined(BOOST_NO_INT64_T) && \
+    !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)
+  instantiate_urng("rand48", rand48(), 0);
   rand48 rnd(5);
   rand48 rnd2(uint64_t(0x80000000) * 42);
   rnd.seed(17);
@@ -226,7 +228,8 @@ void check_uniform_int(Generator & gen, int iter)
     sum += bucket[k];
   int avg = sum/range;
   for(int i = 0; i < range; i++) {
-    if(abs(bucket[i] - avg) > 2*avg/sqrt(iter)) {   // 95% confidence interval
+    if(std::abs(bucket[i] - avg) > 2*avg/std::sqrt(iter)) {
+      // 95% confidence interval
       std::cout << "   ... has bucket[" << i << "] = " << bucket[i] 
 		<< "  (distance " << (bucket[i] - avg) << ")" 
 		<< std::endl;
