@@ -163,8 +163,7 @@ std::list<syntax_map_t>* syntax;
 
 std::size_t BOOST_REGEX_CALL _re_get_message(char* buf, std::size_t len, unsigned id);
 
-template <class charT>
-std::size_t BOOST_REGEX_CALL get_message(charT* buf, std::size_t len, unsigned id)
+std::size_t BOOST_REGEX_CALL get_message(wchar_t* buf, std::size_t len, unsigned id)
 {
    std::size_t size = _re_get_message(static_cast<char*>(0), 0, id);
    if(len < size)
@@ -1099,5 +1098,6 @@ unsigned short w32_regex_traits<wchar_t>::wide_unicode_classes[] = {
 } // namespace boost
 
 #endif // #if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
+
 
 
