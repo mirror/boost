@@ -32,17 +32,23 @@
 <hr><h3>Constructor</h3>
 <p><code><b>template</b>&lt;<b>typename</b> Slot&gt; <a name="constructor">slot(<b>const</b> Slot<b>&amp;</b> slot)</a>;</code>
 <ul>
-  <li><b>Effects</b>: initializes <code>this</code> to contain the
-        incoming <code>slot</code>, which may be any function object
-        that <a
-                href="signalN.html#slot_function_type"><code>SlotFunction</code></a> can be constructed with. 
+  <li><b>Effects</b>: invokes <a
+  href="visit_each.html"><code>visit_each</code></a> (unqualified) to
+  discover pointers and references to <a
+  href="trackable.html"><code>trackable</code></a> objects in the
+  slot.
+
+  <p>Initializes <code>this</code> to contain the incoming
+  <code>slot</code>, which may be any function object that <a
+  href="signalN.html#slot_function_type"><code>SlotFunction</code></a>
+  can be constructed with.</li>
 </ul>
 
     <hr>
     <address><a href="mailto:gregod@cs.rpi.edu"></a></address>
 <!-- Created: Fri Dec 28 10:58:18 EST 2001 -->
 <!-- hhmts start -->
-Last modified: Thu Feb 14 21:18:12 EST 2002
+Last modified: Fri Nov  1 09:51:32 EST 2002
 <!-- hhmts end -->
   </body>
 </html>

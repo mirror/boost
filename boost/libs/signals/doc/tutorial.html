@@ -58,6 +58,11 @@ Function's preferred syntactic form.
                 <li>Borland C++ 5.5.1</li>
                 <li>Sun WorkShop 6 update 2 C++ 5.3</li>
                 <li>Metrowerks CodeWarrior 8.1</li>
+                <li>GNU C++ 2.95.x, 3.0.x, 3.1.x</li>
+                <li>Comeau C++ 4.2.45.2</li>
+                <li>SGI MIPSpro 7.3.0</li>
+                <li>Intel C++ 5.0, 6.0</li>
+                <li>Compaq's cxx 6.2</li>
               </ul>
             </td>
           </tr>
@@ -92,7 +97,9 @@ can keep this table up-to-date.
       <li><em>Intermediate:</em> <a href="#scoped">Scoped
       connections</a></li>
       <li><em>Intermediate:</em> <a href="#tracking">Automatic
-      connection management</li>
+      connection management</a></li>
+      <li><em>Intermediate:</em> <a href="#when">When can
+              disconnections occur?</a>.</li>
     </ul></li>
   <li><a href="#passing_slots">Passing slots</a></li>
 </ul>
@@ -469,8 +476,8 @@ iterator sequence to calculate the maximum element, and returns that
 maximum value. 
 
 <p> We actually use this new function object type by installing it as
-a combiner for our signal. It is supplied via a <em>named template
-parameter</em> like this:
+a combiner for our signal. The combiner template argument follows the
+signal's calling signature:
 
     <center>
       <table border=1 cellspacing=1>
@@ -564,6 +571,38 @@ will also be the <code>value_type</code> of the input iterators passed
 to the combiner. The combiner itself is a function object and its
 <code>result_type</code> member type becomes the return type of the
 signal. 
+
+<p> The input iterators passed to the combiner transform dereference
+      operations into slot calls. Combiners therefore have the option
+      to invoke only some slots until some particular criterion is
+      met. For instance, in a distributed computing system, the
+      combiner may ask each remote system whether it will handle the
+      request. Only one remote system needs to handle a particular
+      request, so after a remote system accepts the work we do not
+      want to ask any other remote systems to perform the same
+      task. Such a combiner need only check the value returned when
+      dereferencing the iterator, and return when the value is
+      acceptable. The following combiner returns the first non-NULL
+      pointer to a <code>FulfilledRequest</code> data structure,
+      without asking any later slots to fulfill the request:
+
+<pre>
+struct DistributeRequest {
+  typedef FulfilledRequest* result_type;
+
+  template&lt;typename InputIterator&gt;
+  result_type operator()(InputIterator first, InputIterator last) const
+  {
+    while (first != last) {
+      if (result_type fulfilled = *first)
+        return fulfilled;
+      ++first;
+    }
+    return 0;
+  }
+};
+</pre>
+
 <hr>
 
 <h1>Connection Management</h1>
@@ -682,22 +721,52 @@ struct NewsMessageArea : public MessageArea, public boost::signals::trackable
 
 <p> At this time there is a significant limitation to the use of
 <code>trackable</code> objects in making slot connections: function
-objects built using Boost.Bind are understood, so that any place a
-<code>trackable</code> object appears in a bind expression. However,
-user-defined function objects and function objects from other
-libraries (e.g., Boost.Function or Boost.Lambda) do not implement the
-required interfaces for <code>trackable</code> object detection, and
-<em>will silently ignore any bound trackable objects</em>. Future
-versions of the Boost libraries will address this limitation.
+objects built using Boost.Bind are understood, such that pointers or
+references to <code>trackable</code> objects passed to
+<code>boost::bind</code> will be found and tracked.
 
-<h2><a name="passing_slots">Passing slots</a></h2>
+<p><b>Warning</b>: User-defined function objects and function objects
+from other libraries (e.g., Boost.Function or Boost.Lambda) do not
+implement the required interfaces for <code>trackable</code> object
+detection, and <em>will silently ignore any bound trackable
+objects</em>. Future versions of the Boost libraries will address this
+limitation.
+
+<h3><a name="when">When can disconnections occur?</a></h2> 
+<p>Signal/slot disconnections occur when any of these conditions
+      occur:
+<ul>
+  <li>The connection is explicitly disconnected via the connection's
+        <code>disconnect</code> method directly, or indirectly via the
+        signal's <code>disconnect</code> method or
+        <code>scoped_connection</code>'s destructor.</li>
+  <li>A <code>trackable</code> object bound to the slot is
+        destroyed.</li>
+  <li>The signal is destroyed.</li>
+</ul>
+
+<p> These events can occur at any time without disrupting a signal's
+      calling sequence. If a signal/slot connection is disconnected at
+      any time during a signal's calling sequence, the calling
+      sequence will still continue but will not invoke the
+      disconnected slot. Additionally, a signal may be destroyed while
+      it is in a calling sequence, and which case it will complete its
+      slot call sequence but may not be accessed directly. </p>
+
+<p> Signals may be invoked recursively (e.g., a signal A calls a slot
+B that invokes signal A...). The disconnection behavior does not
+change in the recursive case, except that the slot calling sequence
+includes slot calls for all nested invocations of the signal.
+
+<h2><a name="passing_slots">Passing slots</a></h2> 
+
 <p> Slots in the Boost.Signals library are created from arbitrary
 function objects, and therefore have no fixed type. However, it is
 commonplace to require that slots be passed through interfaces that
 cannot be templates. Slots can be passed via the
-<code>slot_type</code> for each particular signal type and any valid
-function object can be passed to a <code>slot_type</code>
-parameter. For instance:
+<code>slot_type</code> for each particular signal type and any
+function object compatible with the signature of the signal can be
+passed to a <code>slot_type</code> parameter. For instance:
 
     <center>
       <table border=1 cellspacing=1>
@@ -720,6 +789,17 @@ void Button::doOnClick(const OnClick::slot_type& slot)
 {
   onClick.connect(slot);
 }
+
+void printCoordinates(long x, long y)
+{
+  std::cout &lt;&lt; "(" &lt;&lt; x &lt;&lt; ", " &lt;&lt; y &lt;&lt; ")\n";
+}
+
+void f(Button& button)
+{
+  button.doOnClick(&amp;printCoordinates);
+}
+
 </pre>
 </td><td>
 <pre>
@@ -737,6 +817,16 @@ private:
 void Button::doOnClick(const OnClick::slot_type& slot)
 {
   onClick.connect(slot);
+}
+
+void printCoordinates(long x, long y)
+{
+  std::cout &lt;&lt; "(" &lt;&lt; x &lt;&lt; ", " &lt;&lt; y &lt;&lt; ")\n";
+}
+
+void f(Button& button)
+{
+  button.doOnClick(&amp;printCoordinates);
 }
 </pre>
 </td></tr></table></center>

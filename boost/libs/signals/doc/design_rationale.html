@@ -41,12 +41,16 @@
   <ul>
     <li><b>Slots derive from a specific base class</b>: generally a
     scheme such as this will require all user-defined slots to derive
-    from some library-specified <code>Slot</code> abstract class
-    that defines a virtual function calling the slot. Adaptors can be
-    used to convert a definition such as this to a definition similar
-    to that used by Boost.Signals, but in this case the original
-    specification ties the implementation to the use of virtual
-    functions internally. This approach does have the benefit of
+    from some library-specified <code>Slot</code> abstract class that
+    defines a virtual function calling the slot. Adaptors can be used
+    to convert a definition such as this to a definition similar to
+    that used by Boost.Signals, but the use of a large number of small
+    adaptor classes containing virtual functions has been found to
+    cause an unacceptable increase in the size of executables
+    (polymorphic class types require more code than non-polymorphic
+    types).
+
+    <p> This approach does have the benefit of
     simplicity of implementation and user interface, from an
     object-oriented perspective.</li>
 
@@ -62,9 +66,10 @@
     become quite advanced and it is out of the scope of a signals and
     slots library to encorporate such enhancements. Thus Boost.Signals
     does not include argument binding or function object composition
-    primitives, but instead uses a set of well-defined interfaces to
-    discover information about the composition of arbitrary function
-    objects.</li>
+    primitives, but instead provides a hook (via the <a
+    href="reference/visit_each.html"><code>visit_each</code></a>
+    mechanism) that allows existing binder/composition libraries to
+    provide the necessary information to Signals.</li>
   </ul>
 
   <p> Users not satisfied with the slot definition choice may opt to
@@ -88,10 +93,12 @@
     removed from the list. Unfortunately, querying connectedness will
     generally also end up as linear-time operations. This model also
     fails for implementation reasons when slots become more complex
-    than simple function pointers, member function pointers, and a
-    limited set of compositions and argument binders it is tough to
-    rely on comparison of function objects because arbitrary function
-    objects are not comparable.</li>
+    than simple function pointers, member function pointers and a
+    limited set of compositions and argument binders: to match the
+    slot given in the call to <code>disconnect</code> with an existing
+    slot we would need to be able to compare arbitrary function
+    objects, which is not feasible.
+
     <li><b>Pass a token to disconnect</b>: this approach identifies
     slots with a token that is easily comparable (e.g., a string),
     enabling slots to be arbitrary function objects. While this
@@ -116,9 +123,9 @@
       the learning curver and overcomplicates a simple interface.</li>
     </ul>
     <p> This type of interface is supported in Boost.Signals via the
-          named connections mechanism. It augments the <a
-  href="reference/connection.html"><code>connection</code></a>
-          object-based connection management scheme.
+    slot grouping mechanism. It augments the <a
+    href="reference/connection.html"><code>connection</code></a>
+    object-based connection management scheme.
     </li>
   </ul>
 
@@ -224,7 +231,7 @@ private:
   version is a reusable function object that is based on an input
   iterator sequence with an integer <code>value_type</code>, and is
   very straightforward in design. The "push" model, on the other hand,
-  relies on an interface specific to the caller and is generally
+  relies on an interface specific to the caller and is not generally
   reusable. It also requires extra state values to determine, for
   instance, if any elements have been received. Though code quality
   and ease-of-use is generally subjective, the "pull" model is clearly
@@ -255,11 +262,12 @@ private:
   this syntax has been rejected:
   <ul>
     <li><b>It's unnecessary</b>: the connection syntax supplied by
-    Boost.Signals is no less powerful that than supplied by the
-    signal. The savings in typing (<code>connect()</code>
-    vs. <code>+=</code>) is essentially negligible. Furthemore, one
-    could argue that calling <code>connect()</code> is more readable
-    than an overload of <code>+=</code>.
+    Boost.Signals is no less powerful that that supplied by the
+    <code>+=</code> operator. The savings in typing
+    (<code>connect()</code> vs. <code>+=</code>) is essentially
+    negligible. Furthermore, one could argue that calling
+    <code>connect()</code> is more readable than an overload of
+    <code>+=</code>.
 
     <li><b>Ambiguous return type</b>: 
     there is an ambiguity concerning the return value of the
@@ -368,7 +376,7 @@ private:
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Sun Jul 28 14:37:35 EDT 2002
+Last modified: Fri Nov  1 10:10:15 EST 2002
 <!-- hhmts end -->
   </body>
 </html>

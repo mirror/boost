@@ -42,3 +42,7 @@ exe ordering_test : <lib>../build/boost_signals
                     ordering_test.cpp
                   : <include>$(BOOST_ROOT)
                   ;
+
+exe honk : <lib>../build/boost_signals honk.cpp
+         : <include>$(BOOST_ROOT)
+         ;

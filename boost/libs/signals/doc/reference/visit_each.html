@@ -16,7 +16,7 @@
 <p>The <code>visit_each</code> mechanism allows a visitor to be
       applied to every subobject in a given object. It is used by the
       Signals library to discover trackable objects within a function
-      object, but other uses may surface if it used universally (e.g.,
+      object, but other uses may surface if used universally (e.g.,
       conservative garbage collection). To fit within the
       <code>visit_each</code> framework, a <code>visit_each</code>
       overload must be supplied for each object type.
@@ -36,9 +36,9 @@
         <code>x</code> of <code>t</code>,
         <ul>
           <li>If <code>x</code> is a reference, executes
-            <code>v(<a href="../../../bind/ref.html">boost::ref</a>(x))</code>.</li>
+            <code>visit_each(v, <a href="../../../bind/ref.html">boost::ref</a>(x), 0)</code>.</li>
           <li>If <code>x</code> is not a reference, executes
-            <code>v(x)</code>.</li>
+            <code>visit_each(v, x, 0)</code>.</li>
         </ul>
 
   <li><b>Returns</b>: nothing.</li>
@@ -48,15 +48,19 @@
                      href="../../../../boost/visit_each.hpp">boost/visit_each.hpp</a>&gt;</code>, and the argument supplied to this third paramter must always be 0. The third parameter is an artifact of the widespread lack of proper function template ordering, and will be removed in the future.
 
        <p>Library authors will be expected to add additional overloads
-      that specialize the <code>T</code> argument for their classes,
-          so that subobjects can be visited.</li>
+       that specialize the <code>T</code> argument for their classes,
+       so that subobjects can be visited.
+
+       <p>Calls to <code>visit_each</code> are required to be
+       unqualified, to enable argument-dependent lookup.
+</li>
 </ul>
 
     <hr>
     <address><a href="mailto:gregod@cs.rpi.edu"></a></address>
 <!-- Created: Fri Dec 28 13:24:08 EST 2001 -->
 <!-- hhmts start -->
-Last modified: Thu Feb 14 21:19:03 EST 2002
+Last modified: Fri Nov  1 09:47:15 EST 2002
 <!-- hhmts end -->
   </body>
 </html>

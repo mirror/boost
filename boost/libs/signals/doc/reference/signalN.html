@@ -190,32 +190,45 @@ objects.
 </pre>
 <ul>
   <li><b>Effects</b>: invokes the combiner with a
-  <code>slot_call_iterator</code> range <code>[first, last)</code>
-  (i.e., <code>combiner(first, last)</code>) that iterates over the
-  results of calling each slot with the given set of parameters
-  <code>a1, a2, ..., a<em>N</em></code>. Slots are called according to
-  the partial ordering given by the group comparison function object,
-  with ungrouped slots called last. </li>
+  <code>slot_call_iterator</code> range [first, last) corresponding to
+  the sequence of calls to the slots connected to signal
+  <code>*this</code>. Dereferencing an iterator in this range causes a
+  slot call with the given set of parameters (a1, a2, ..., aN), the
+  result of which is returned from the iterator dereference
+  operation.</li> 
+
   <li><b>Returns</b>: the result returned by the combiner.</li>
-  <li><b>Throws</b>: if an exception is thrown by a slot call, or if the combiner does not dereference any slot past some given slot, all slots after that slot in the internal list of connected slots will not be invoked.</li>
-  <li><b>Notes</b>: the <code><b>const</b></code> version of the
-  function call operator will invoke the combiner as
-  <code><b>const</b></code>, whereas the non-<code><b>const</b></code>
-  version will invoke the combiner as non-<code><b>const</b></code>.
-  <p>Ordering between members of a  given group or between ungrouped
+
+  <li><b>Throws</b>: if an exception is thrown by a slot call, or if
+  the combiner does not dereference any slot past some given slot, all
+  slots after that slot in the internal list of connected slots will
+  not be invoked.</li>
+
+  <li><b>Notes</b>: only the slots associated with iterators that are
+  actually dereferenced will be invoked. Multiple dereferences of the
+  same iterator will not result in multiple slot invocations, because
+  the return value of the slot will be cached.  <p> The
+  <code><b>const</b></code> version of the function call operator will
+  invoke the combiner as <code><b>const</b></code>, whereas the
+  non-<code><b>const</b></code> version will invoke the combiner as
+  non-<code><b>const</b></code>.  
+
+  <p>Ordering between members of a given group or between ungrouped
   slots is unspecified.
-   <p> Calling the function call operator may invoke undefined behavior if no
-       slots are connected to the signal, depending on the combiner used. The
-       default combiner is well-defined for zero slots when the return type is
-       <code><b>void</b></code> but is undefined when the return type is any
-       other type (because there is no way to synthesize a return value).</li>
+
+  <p> Calling the function call operator may invoke undefined behavior
+  if no slots are connected to the signal, depending on the combiner
+  used. The default combiner is well-defined for zero slots when the
+  return type is <code><b>void</b></code> but is undefined when the
+  return type is any other type (because there is no way to synthesize
+  a return value).</li>
 
 </ul>
     <hr>
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Thu Oct 31 17:03:12 EST 2002
+Last modified: Fri Nov  1 09:48:19 EST 2002
 <!-- hhmts end -->
   </body>
 </html>
