@@ -10,6 +10,8 @@
 #ifndef BOOST_POOL_MUTEX_HPP
 #define BOOST_POOL_MUTEX_HPP
 
+#include <boost/config.hpp>  // for workarounds
+
 // Extremely Light-Weight wrapper classes for OS thread synchronization
 
 // Configuration: for now, we just choose between pthread or Win32 mutexes or none
@@ -22,7 +24,7 @@
   // No multithreading -> make locks into no-ops
   #define BOOST_MUTEX_HELPER BOOST_MUTEX_HELPER_NONE
 #else
-  #ifdef __WIN32__
+  #ifdef BOOST_WINDOWS
     #define BOOST_MUTEX_HELPER BOOST_MUTEX_HELPER_WIN32
   #else
     #include <unistd.h>
@@ -37,7 +39,7 @@
 #endif
 
 
-#ifdef __WIN32__
+#ifdef BOOST_WINDOWS
   #include <windows.h>
 #endif
 #ifdef _POSIX_THREADS
@@ -49,7 +51,7 @@ namespace boost {
 namespace details {
 namespace pool {
 
-#ifdef __WIN32__
+#ifdef BOOST_WINDOWS
 
 class win32_mutex
 {
@@ -73,7 +75,7 @@ class win32_mutex
     { LeaveCriticalSection(&mtx); }
 };
 
-#endif // defined(__WIN32__)
+#endif // defined(BOOST_WINDOWS)
 
 #ifdef _POSIX_THREADS
 
