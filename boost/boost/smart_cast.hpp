@@ -82,7 +82,7 @@ namespace smart_cast_impl {
              static T cast(U & u){
                 // if we're in debug mode
                 #if ! defined(NDEBUG)                               \
-                || defined(__BORLANDC__) && (__BORLANDC__ <= 0x551) \
+                || defined(__BORLANDC__) && (__BORLANDC__ <= 0x564) \
                 || defined(__MWERKS__)
                     // do a checked dynamic cast
                     return cross::cast(u);
@@ -107,6 +107,7 @@ namespace smart_cast_impl {
                             mpl::identity<cross>,
                             mpl::identity<linear>
                     >::type typex;
+                    // typex works around gcc 2.95 issue
                     return typex::cast(u);
                 #endif
             }
@@ -120,11 +121,20 @@ namespace smart_cast_impl {
         };
         template<class U>
         static T cast(U & u){
-            return mpl::eval_if<
-                boost::is_polymorphic<U>,
-                mpl::identity<polymorphic>,
-                mpl::identity<non_polymorphic>
-            >::type::cast(u);
+            #if defined(__BORLANDC__)
+                return mpl::eval_if<
+                    boost::is_polymorphic<U>,
+                    mpl::identity<polymorphic>,
+                    mpl::identity<non_polymorphic>
+                >::type::cast(u);
+            #else
+                typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
+                    boost::is_polymorphic<U>,
+                    mpl::identity<polymorphic>,
+                    mpl::identity<non_polymorphic>
+                >::type typex;
+                return typex::cast(u);
+            #endif
         }
     };
 
@@ -154,7 +164,7 @@ namespace smart_cast_impl {
             template<class U>
              static T cast(U * u){
                 // if we're in debug mode
-                #if ! defined(NDEBUG) || defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
+                #if ! defined(NDEBUG) || defined(__BORLANDC__) && (__BORLANDC__ <= 0x564)
                     // do a checked dynamic cast
                     return cross::cast(u);
                 #else
@@ -193,11 +203,20 @@ namespace smart_cast_impl {
 
         template<class U>
         static T cast(U * u){
-            return mpl::eval_if<
-                boost::is_polymorphic<U>,
-                mpl::identity<polymorphic>,
-                mpl::identity<non_polymorphic>
-            >::type::cast(u);
+            #if defined(__BORLANDC__)
+                return BOOST_DEDUCED_TYPENAME mpl::eval_if<
+                    boost::is_polymorphic<U>,
+                    mpl::identity<polymorphic>,
+                    mpl::identity<non_polymorphic>
+                >::type::cast(u);
+            #else
+                typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
+                    boost::is_polymorphic<U>,
+                    mpl::identity<polymorphic>,
+                    mpl::identity<non_polymorphic>
+                >::type typex;
+                return typex::cast(u);
+            #endif
         }
 
     };

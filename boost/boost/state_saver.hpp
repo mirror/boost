@@ -77,11 +77,12 @@ public:
     {}
     
     ~state_saver() {
-        mpl::eval_if<
-            ::boost::has_nothrow_copy<T>,
+        typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
+            has_nothrow_copy<T>,
             mpl::identity<restore>,
             mpl::identity<restore_with_exception>
-        >::type::invoke(previous_ref, previous_value);
+        >::type typex;
+        typex::invoke(previous_ref, previous_value);
     }
 
 }; // state_saver<>

@@ -54,11 +54,12 @@ namespace detail {
             }
         };
         static void invoke(){
-            mpl::eval_if<
+            typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 BOOST_DEDUCED_TYPENAME type_info_implementation<Base>::type::is_polymorphic,
                 mpl::identity<reg<Base, Derived> >,
                 mpl::identity<nothing>
-            >::type::invoke();
+            >::type typex;
+            typex::invoke();
         }
     };
     
