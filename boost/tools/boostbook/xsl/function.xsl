@@ -407,8 +407,8 @@
 
     <!-- True if we should compact this function -->
     <xsl:variable name="compact"
-      select="not (para|requires|effects|postconditions|returns|throws|
-                   complexity|notes|rationale) and 
+      select="not (para|description|requires|effects|postconditions|returns|
+                   throws|complexity|notes|rationale) and 
               ($boost.compact.function='1')"/>
 
     <xsl:choose>
@@ -450,8 +450,8 @@
 
     <!-- True if we should compact this function -->
     <xsl:variable name="compact"
-      select="not (para|requires|effects|postconditions|returns|throws|
-                   complexity|notes|rationale) and 
+      select="not (para|description|requires|effects|postconditions|returns|
+                   throws|complexity|notes|rationale) and 
               ($boost.compact.function='1')"/>
 
     <xsl:choose>
@@ -675,7 +675,17 @@
       <xsl:apply-templates select="purpose/*"/>
     </xsl:if>
 
-    <xsl:apply-templates select="para"/>
+    <xsl:apply-templates select="description/*"/>
+
+    <xsl:if test="para">
+      <xsl:message>
+        <xsl:text>Warning: Use of 'para' elements in a function is deprecated.&#10;</xsl:text>
+        <xsl:text>  Wrap them in a 'description' element.</xsl:text>
+      </xsl:message>
+      <xsl:call-template name="print.warning.context"/>
+      <xsl:apply-templates select="para"/>
+    </xsl:if>
+
     <xsl:if test="requires|effects|postconditions|returns|throws|complexity|
                   notes|rationale">
       <xsl:choose>
@@ -798,8 +808,8 @@
   <xsl:template match="function|method" mode="reference">
     <!-- True if we should compact this function -->
     <xsl:variable name="compact"
-      select="not (para|requires|effects|postconditions|returns|throws|
-                   complexity|notes|rationale) and 
+      select="not (para|description|requires|effects|postconditions|returns|
+                   throws|complexity|notes|rationale) and 
               ($boost.compact.function='1')"/>
 
     <xsl:if test="not ($compact)">
@@ -827,8 +837,8 @@
   <xsl:template match="function" mode="namespace-reference">
     <!-- True if we should compact this function -->
     <xsl:variable name="compact"
-      select="not (para|requires|effects|postconditions|returns|throws|
-                   complexity|notes|rationale) and 
+      select="not (para|description|requires|effects|postconditions|returns|
+                   throws|complexity|notes|rationale) and 
               ($boost.compact.function='1')"/>
 
     <xsl:if test="not ($compact)">
@@ -870,8 +880,8 @@
 
     <!-- True if we should compact this function -->
     <xsl:variable name="compact"
-      select="not (para|requires|effects|postconditions|returns|throws|
-                   complexity|notes|rationale) and 
+      select="not (para|description|requires|effects|postconditions|returns|
+                   throws|complexity|notes|rationale) and 
               ($boost.compact.function='1')"/>
     
     <xsl:if test="not ($compact)">
@@ -904,8 +914,8 @@
   <xsl:template match="overloaded-function" mode="namespace-reference">
     <!-- True if we should compact this function -->
     <xsl:variable name="compact"
-      select="not (para|requires|effects|postconditions|returns|throws|
-                   complexity|notes|rationale) and 
+      select="not (para|description|requires|effects|postconditions|returns|
+                   throws|complexity|notes|rationale) and 
               ($boost.compact.function='1')"/>
 
     <xsl:variable name="name" select="@name"/>
@@ -952,8 +962,8 @@
 
     <!-- True if we should compact this function -->
     <xsl:variable name="compact"
-      select="not (para|requires|effects|postconditions|returns|throws|
-                   complexity|notes|rationale) and 
+      select="not (para|description|requires|effects|postconditions|returns|
+                   throws|complexity|notes|rationale) and 
               ($boost.compact.function='1')"/>
 
     <xsl:if test="not ($compact)">
