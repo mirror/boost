@@ -1,0 +1,34 @@
+
+project
+    : requirements 
+    <library>../build//program_options
+    <library>/boost/test//boost_test_exec_monitor
+    <hardcode-dll-paths>true
+    ;
+
+unit-test options_description_test
+    : options_description_test.cpp
+    ;
+
+unit-test parsers_test
+    : parsers_test.cpp
+    ;
+
+unit-test variable_map_test
+    : variable_map_test.cpp
+    ;
+
+unit-test cmdline_test
+    : cmdline_test.cpp
+    ;
+    
+unit-test positional_options_test
+    : positional_options_test.cpp
+    ;
+    
+unit-test unicode_test
+    : unicode_test.cpp
+    ;    
+    
+exe test_convert : test_convert.cpp ../build//program_options ;   
+

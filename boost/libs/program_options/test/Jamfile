@@ -1,0 +1,20 @@
+
+subproject libs/program_options/test ;
+
+rule program-options-test ( name )
+{
+    unit-test $(name) : $(name).cpp <lib>../build/boost_program_options
+	<lib>../../test/build/boost_test_exec_monitor
+    : <include>$(BOOST_ROOT) 
+    ;
+}
+
+test-suite program_options : 
+    [ program-options-test options_description_test ]
+    [ program-options-test parsers_test ]
+    [ program-options-test variable_map_test ]
+    [ program-options-test cmdline_test ]
+    [ program-options-test positional_options_test ]
+    [ program-options-test unicode_test ]
+    ;
+
