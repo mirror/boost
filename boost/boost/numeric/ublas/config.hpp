@@ -305,7 +305,9 @@ namespace std {
 #define BOOST_UBLAS_USE_FAST_SAME
 
 // Use expression templates.
+#ifndef BOOST_UBLAS_USE_ET
 #define BOOST_UBLAS_USE_ET
+#endif // BOOST_UBLAS_USE_ET
 
 // NO runtime error checks with BOOST_UBLAS_CHECK macro
 #ifndef BOOST_UBLAS_CHECK_ENABLE
@@ -330,8 +332,10 @@ namespace std {
 
 #ifdef BOOST_MSVC
 // Use expression templates (otherwise we get many ICE's)
+#ifndef BOOST_UBLAS_USE_ET
 #define BOOST_UBLAS_USE_ET
-#endif
+#endif // BOOST_UBLAS_USE_ET
+#endif // BOOST_MSVC
 
 // Enable runtime error checks with BOOST_UBLAS_CHECK macro. Check bounds etc
 #ifndef BOOST_UBLAS_CHECK_ENABLE
