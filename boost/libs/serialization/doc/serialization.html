@@ -366,7 +366,7 @@ inline void save_construct_data(
     Archive &amp; ar, const my_class * t, const unsigned long int file_version
 ){
     // save data required to construct instance
-    ar &lt;&lt; t.member;
+    ar &lt;&lt; t-&gt;member;
 }
 
 template&lt;class Archive&gt;
