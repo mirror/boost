@@ -136,4 +136,9 @@ namespace std {
 #include <boost/config/auto_link.hpp>
 #endif  // auto-linking disabled
 
+#if defined(BOOST_HAS_THREADS) && !defined(_MSC_VER)
+#  define(BOOST_DATE_TIME_HAS_REENTRANT_STD_FUNCTIONS)
+#endif
+
+
 #endif

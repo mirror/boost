@@ -43,7 +43,7 @@ namespace date_time {
    * pointer to it. A pointer to the user created struct will be returned. */
   struct c_time {
     public:
-#if defined(BOOST_HAS_THREADS)
+#if defined(BOOST_DATE_TIME_HAS_REENTRANT_STD_FUNCTIONS)
       //! requires a pointer to a user created std::tm struct
       inline
       static std::tm* localtime(const std::time_t* t, std::tm* result)
