@@ -210,11 +210,14 @@ struct iterator_adaptor;
     "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access
     Iterator</a>. Your <tt>Policies</tt> class must implement three, four, or
     seven of the core iterator operations below depending on the iterator
-    categories you want it to support.
+    categories you want it to support.<br>
+    <br>
+    
 
     <table border="1" summary="iterator_adaptor Policies operations">
       <caption>
-        <b>Core Iterator Operations</b>
+        <b>Core Iterator Operations</b><br>
+        <tt>T</tt>: iterator type; <tt>p</tt>: object of type T; <tt>n</tt>: <tt>T::size_type</tt>; <tt>x</tt>: <tt>T::difference_type</tt>; <tt>p1</tt>, <tt>p2</tt>: iterators
       </caption>
 
       <tr>
@@ -222,12 +225,16 @@ struct iterator_adaptor;
 
         <th>Effects
 
+        <th>Implements Operations
+
         <th>Required for Iterator Categories
 
       <tr>
         <td><tt>dereference</tt> 
 
         <td>returns an element of the iterator's <tt>reference</tt> type
+        
+        <td><tt>*p</tt>, <tt>p[n]</tt>
 
         <td rowspan="3"><a href=
         "http://www.sgi.com/tech/stl/InputIterator.html">Input</a>/ <a href=
@@ -243,15 +250,21 @@ struct iterator_adaptor;
 
         <td>tests the iterator for equality
 
+        <td><tt>p1&nbsp;==&nbsp;p2</tt>, <tt>p1&nbsp;!=&nbsp;p2</tt>
+
       <tr>
         <td><tt>increment</tt> 
 
         <td>increments the iterator
 
+        <td><tt>++p</tt>, <tt>p++</tt>
+
       <tr>
         <td><tt>decrement</tt> 
 
         <td>decrements the iterator
+
+        <td><tt>--p</tt>, <tt>p--</tt>
 
         <td><a href=
         "http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional</a>/
@@ -263,7 +276,13 @@ struct iterator_adaptor;
 
         <td>imposes a <a href=
         "http://www.sgi.com/tech/stl/StrictWeakOrdering.html">Strict Weak
-        Ordering</a> relation on the iterator's <tt>reference</tt> type
+        Ordering</a> relation on iterators
+
+        <td> 
+           <tt>p1&nbsp;&lt;&nbsp;p2</tt>,
+           <tt>p1&nbsp;&lt;=&nbsp;p2</tt>,
+           <tt>p1&nbsp;&gt;&nbsp;p2</tt>,
+           <tt>p1&nbsp;&gt;=&nbsp;p2</tt>
 
         <td rowspan="3"><a href=
         "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
@@ -274,10 +293,20 @@ struct iterator_adaptor;
 
         <td>measures the distance between iterators
 
+        <td><tt>p1 - p2</tt>
+
       <tr>
         <td><tt>advance</tt> 
 
         <td>adds an integer offset to iterators
+
+        <td>
+<tt>p&nbsp;+&nbsp;x</tt>,
+<tt>x&nbsp;+&nbsp;p</tt>,
+<tt>p&nbsp;+=&nbsp;x</tt>,
+<tt>p&nbsp;-&nbsp;x</tt>,
+<tt>p&nbsp;-=&nbsp;x</tt>
+        
     </table>
 
     <p>The library also supplies a "trivial" policy class,
@@ -516,8 +545,11 @@ int main(int, char*[])
       <li><tt>const</tt> and non-<tt>const</tt> pointers to <tt>T</tt> can be
       freely subtracted, in any order.
     </ul>
-    Getting user-defined iterators to work together that way is nontrivial, but
-    <tt>iterator_adaptor</tt> can make it easy. The rules are as follows: 
+
+    Getting user-defined iterators to work together that way is nontrivial (see
+    <a href="reverse_iterator.htm#interactions">here</a> for an example of where
+    the C++ standard got it wrong), but <tt>iterator_adaptor</tt> can make it
+    easy. The rules are as follows:
 
     <ul>
       <li><a name="interoperable">Adapted iterators that share the same <tt>Policies</tt>,
