@@ -17,6 +17,7 @@
 #include <set>
 #include <stdlib.h>
 #include <time.h>
+#include <boost/test/minimal.hpp>
 
 using namespace boost;
 using namespace boost::signals;
@@ -80,7 +81,15 @@ void remove_signal(signal_type* sig)
 void random_remove_signal(minstd_rand& rand_gen);
 
 struct tracking_bridge {
-  tracking_bridge(signal_type* s, minstd_rand& rg) : sig(s), rand_gen(rg) {}
+  tracking_bridge(signal_type* s, minstd_rand& rg) : sig(s), rand_gen(rg) 
+  {
+    ++bridge_count;
+  }
+
+  ~tracking_bridge()
+  {
+    --bridge_count;
+  }
 
   void operator()(int cur_dist, int max_dist, double deletion_prob,
                   int& deletions_left) const
@@ -116,7 +125,10 @@ struct tracking_bridge {
 
   signal_type* sig;
   minstd_rand& rand_gen;
+  static int bridge_count;
 };
+
+int tracking_bridge::bridge_count = 0;
 
 namespace boost {
   template<typename V>
@@ -259,7 +271,7 @@ void random_bacon_test(minstd_rand& rand_gen)
       put(vertex_index, signal_graph, *v, num++);
     }
 
-    assert(num == num_vertices(signal_graph));
+    BOOST_TEST(num == num_vertices(signal_graph));
   }
 
   // Perform a breadth-first search starting at kevin, and record the
@@ -293,7 +305,7 @@ void random_bacon_test(minstd_rand& rand_gen)
                   << bacon_distance_map[signal_to_descriptor[i->first]]
                   << std::endl;
       }
-      assert(i->second == bacon_distance_map[signal_to_descriptor[i->first]]);
+      BOOST_TEST(i->second == bacon_distance_map[signal_to_descriptor[i->first]]);
     }
   }
 }
@@ -330,7 +342,7 @@ void random_recursive_deletion(minstd_rand& rand_gen)
   (*kevin)(0, horizon, 0.05, deletions_left);
 }
 
-int main(int argc, char* argv[])
+int test_main(int argc, char* argv[])
 {
   if (argc < 4) {
     std::cerr << "Usage: random_signal_system <# of initial signals> "
@@ -403,5 +415,6 @@ int main(int argc, char* argv[])
     }
   }
 
+  BOOST_TEST(tracking_bridge::bridge_count == 0);
   return 0;
 }
