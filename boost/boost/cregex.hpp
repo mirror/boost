@@ -174,7 +174,8 @@ enum match_flags
    match_partial = match_continuous << 1,            // find partial matches
    
    match_stop = match_partial << 1,                  // stop after first match (grep)
-   match_max = match_stop
+   match_all = match_stop << 1,                      // must find the whole of input even if match_any is set
+   match_max = match_all
 };
 
 

@@ -326,7 +326,7 @@ bool query_match_aux(iterator first,
             temp_match.set_second(first);
             m.maybe_assign(temp_match);
             match_found = true;
-            if((flags & match_any) || ((first == last) && (need_push_match == false)))
+            if(((flags & match_any) && ((first == last) || !(flags & match_all))) || ((first == last) && (need_push_match == false)))
             {
                // either we don't care what we match or we've matched
                // the whole string and can't match anything longer.
@@ -608,7 +608,7 @@ bool query_match_aux(iterator first,
          {
             cur_acc = ((re_repeat*)ptr)->id;
             accumulators[cur_acc] = 0;
-            start_loop[cur_acc] = iterator();
+            start_loop[cur_acc] = first;
          }
 
          cur_acc = ((re_repeat*)ptr)->id;
@@ -649,7 +649,7 @@ bool query_match_aux(iterator first,
                   }
                }
                // move to next item in list:
-               if(first != start_loop[cur_acc])
+               if((first != start_loop[cur_acc]) || !accumulators[cur_acc])
                {
                   ++accumulators[cur_acc];
                   ptr = ptr->next.p;
@@ -704,7 +704,7 @@ bool query_match_aux(iterator first,
          // otherwise see if we can take the repeat:
          if(((unsigned int)accumulators[cur_acc] < ((re_repeat*)ptr)->max)
                && access::can_start(*first, ((re_repeat*)ptr)->_map, mask_take) &&
-               (first != start_loop[cur_acc]))
+               ((first != start_loop[cur_acc]) || !accumulators[cur_acc]))
          {
             // move to next item in list:
             ++accumulators[cur_acc];
@@ -1539,6 +1539,7 @@ bool regex_match(iterator first, iterator last, match_results<iterator, Allocato
       m.set_base(first);
       m.set_line(1, first);
    }
+   flags |= match_all; // must match all of input.
    re_detail::_priv_match_data<iterator, Allocator> pd(m);
    iterator restart;
    bool result = re_detail::query_match_aux(first, last, m, e, flags, pd, &restart);
@@ -1550,7 +1551,7 @@ template <class iterator, class charT, class traits, class Allocator2>
 bool regex_match(iterator first, iterator last, const reg_expression<charT, traits, Allocator2>& e, unsigned flags = match_default)
 {
    match_results<iterator> m;
-   return regex_match(first, last, e, flags);
+   return regex_match(first, last, m, e, flags);
 }
 //
 // query_match convenience interfaces:
