@@ -33,7 +33,7 @@
 #   include "boost/preprocessor/enum_params_with_defaults.hpp"
 #endif
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_LIMIT_TYPES
 //
 // Implementation-defined preprocessor symbol describing the actual
@@ -51,7 +51,7 @@
 #   define BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
 #endif
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_ENUM_PARAMS
 //
 // Convenience macro for enumeration of BOOST_VARIANT_LIMIT_TYPES params.
@@ -66,7 +66,7 @@ namespace boost {
 
 namespace detail { namespace variant {
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (detail) class void_ and class template convert_void
 // 
 // Provides the mechanism by which void(NN) types are converted to
@@ -92,7 +92,7 @@ struct convert_void< void_ >
     typedef mpl::void_ type;
 };
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (workaround) BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
 //
 // Needed to work around compilers that don't support using-declaration
@@ -101,7 +101,7 @@ struct convert_void< void_ >
 
 #if defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
-// (detail) tags voidNN -- NN defined on [0, BOOST_VARIANT_LIMIT_TYPES)
+// (detail) tags voidNN -- NN defined on [0, BOOST_VARIANT_LIMIT_TYPES - 1)
 //
 // Defines void types that are each unique and specializations of
 // convert_void that yields mpl::void_ for each voidNN type.
@@ -118,7 +118,7 @@ struct convert_void< void_ >
     /**/
 
 BOOST_PP_REPEAT(
-      BOOST_VARIANT_LIMIT_TYPES
+      BOOST_PP_DEC(BOOST_VARIANT_LIMIT_TYPES)
     , BOOST_VARIANT_DETAIL_DEFINE_VOID_N
     , _
     )
@@ -129,7 +129,7 @@ BOOST_PP_REPEAT(
 
 }} // namespace detail::variant
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // class template variant (concept inspired by Andrei Alexandrescu)
 //
 // Efficient, type-safe bounded discriminated union.
