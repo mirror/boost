@@ -16,7 +16,7 @@ test-suite utility
         [ compile-fail ../noncopyable_test.cpp ]
         [ run ../numeric_traits_test.cpp ]
         [ run ../operators_test.cpp ../../test/build//boost_test_exec_monitor ]
-        [ run ../binary_search_test.cpp ../../test/build//boost_test_exec_monitor ]
+        [ run ../binary_search_test.cpp ]
         [ run ../call_traits_test.cpp : -u ]
         [ compile-fail ../checked_delete_test.cpp ]
         [ run ../compressed_pair_test.cpp ../../test/build//boost_test_exec_monitor : -u ]
