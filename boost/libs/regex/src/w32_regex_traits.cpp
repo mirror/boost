@@ -383,7 +383,9 @@ void BOOST_REGEX_CALL w32_traits_base::do_free()
    BOOST_RE_GUARD_STACK
    delete[] pclasses;
    delete pcoll_names;
+#ifndef BOOST_NO_WREGEX
    delete syntax;
+#endif
    if(hresmod)
    {
       FreeLibrary(hresmod);
