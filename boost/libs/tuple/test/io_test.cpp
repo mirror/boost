@@ -19,8 +19,6 @@
 #include <sstream>
 #endif
 
-#include "boost/config.hpp"
-
 using namespace std;
 using namespace boost;
 
