@@ -1,3 +1,8 @@
+Version 303:
+FIXED:    Code glitches for Como compiler in strict mode.
+FIXED:    Missing fixes for cstdio header.
+FIXED:    memory leak in underlying w32 traits classes
+FIXED:    vc6 clean option to remove *.pch files.
 CHANGED:  Build options for VC6 to avoid compiler optimisation bug.
 FIXED:    Missing BOOST_RE_NO_WCSTRING guard around using declaration in regex.h
 FIXED:    Pathological regular expressions in snip4.cpp and in docs.
@@ -193,6 +198,7 @@ BUG:      POSIX API functions can propagate C++ exceptions if the
           default allocator can throw exceptions.
 BUG:      character sets don't function correctly when regbase::char_classes
           is not set.
+
 
 
 
