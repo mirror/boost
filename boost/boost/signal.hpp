@@ -1,6 +1,6 @@
 // Boost.Signals library
 //
-// Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001-2002 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -19,6 +19,7 @@
 #define BOOST_SIGNALS_MAX_ARGS 10
 
 #include <boost/config.hpp>
+#include <boost/type_traits/function_traits.hpp>
 #include <boost/signals/signal0.hpp>
 #include <boost/signals/signal1.hpp>
 #include <boost/signals/signal2.hpp>
@@ -30,329 +31,288 @@
 #include <boost/signals/signal8.hpp>
 #include <boost/signals/signal9.hpp>
 #include <boost/signals/signal10.hpp>
+#include <boost/function.hpp>
 
 namespace boost {
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
-      // The unusable class is a placeholder for unused function arguments.
-      struct unused {};
+      template<int Arity, 
+               typename Signature, 
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      struct real_get_signal_impl;
 
-      // value=1 if the given type is not "unused"
-      template<typename T>
-      struct count_if_used
+      template<typename Signature,
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      class real_get_signal_impl<0, Signature, Combiner, Group, GroupCompare,
+                                 SlotFunction>
       {
-        BOOST_STATIC_CONSTANT(int, value = 1);
-      };
-    
-      // value=0 for unused types
-      template<>
-      struct count_if_used<unused>
-      {
-        BOOST_STATIC_CONSTANT(int, value = 0);
-      };
-    
-      // Count the number of arguments (from the given set) which are not 
-      // "unused" (therefore, count those arguments that are used).
-      template<typename T1, typename T2, typename T3, typename T4, 
-               typename T5, typename T6, typename T7, typename T8, 
-               typename T9, typename T10>
-      struct count_used_args
-      {
-        BOOST_STATIC_CONSTANT(int, value = 
-                              (count_if_used<T1>::value + 
-                               count_if_used<T2>::value +
-                               count_if_used<T3>::value + 
-                               count_if_used<T4>::value +
-                               count_if_used<T5>::value + 
-                               count_if_used<T6>::value +
-                               count_if_used<T7>::value + 
-                               count_if_used<T8>::value +
-                               count_if_used<T9>::value +
-                               count_if_used<T10>::value));
-      };
+        typedef function_traits<Signature> traits;
 
-      // Choose the appropriate underlying implementation
-      template<int Args> struct real_get_signal_impl {};
-
-      template<>
-      struct real_get_signal_impl<0>
-      {
-        template<
-          typename R,
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5,
-          typename T6,
-          typename T7,
-          typename T8,
-          typename T9,
-          typename T10,
-          typename Combiner
-        >
-        struct params
-        {
-          typedef signal0<R, Combiner> type;
-        };
-      };
-
-      template<>
-      struct real_get_signal_impl<1>
-      {
-        template<
-          typename R, 
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5,
-          typename T6,
-          typename T7,
-          typename T8,
-          typename T9,
-          typename T10,
-          typename Combiner
-        >
-        struct params
-        {
-          typedef signal1<R, T1, Combiner> type;
-        };
-      };
-
-      template<>
-      struct real_get_signal_impl<2>
-      {
-        template<
-          typename R, 
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5,
-          typename T6,
-          typename T7,
-          typename T8,
-          typename T9,
-          typename T10,
-          typename Combiner
-        >
-        struct params
-        {
-          typedef signal2<R, T1, T2, Combiner> type;
-        };
-      };
-
-      template<>
-      struct real_get_signal_impl<3>
-      {
-        template<
-          typename R, 
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5,
-          typename T6,
-          typename T7,
-          typename T8,
-          typename T9,
-          typename T10,
-          typename Combiner
-        >
-        struct params
-        {
-          typedef signal3<R, T1, T2, T3, Combiner> type;
-        };
-      };
-
-      template<>
-      struct real_get_signal_impl<4>
-      {
-        template<
-          typename R, 
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5,
-          typename T6,
-          typename T7,
-          typename T8,
-          typename T9,
-          typename T10,
-          typename Combiner
-        >
-        struct params
-        {
-          typedef signal4<R, T1, T2, T3, T4, Combiner> type;
-        };
-      };
-
-      template<>
-      struct real_get_signal_impl<5>
-      {
-        template<
-          typename R, 
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5,
-          typename T6,
-          typename T7,
-          typename T8,
-          typename T9,
-          typename T10,
-          typename Combiner
-        >
-        struct params
-        {
-          typedef signal5<R, T1, T2, T3, T4, T5, Combiner> 
-          type;
-        };
-      };
-
-      template<>
-      struct real_get_signal_impl<6>
-      {
-        template<
-          typename R, 
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5,
-          typename T6,
-          typename T7,
-          typename T8,
-          typename T9,
-          typename T10,
-          typename Combiner
-        >
-        struct params
-        {
-          typedef signal6<R, T1, T2, T3, T4, T5, T6, Combiner> type;
-        };
-      };
-
-      template<>
-      struct real_get_signal_impl<7>
-      {
-        template<
-          typename R, 
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5,
-          typename T6,
-          typename T7,
-          typename T8,
-          typename T9,
-          typename T10,
-          typename Combiner
-        >
-        struct params
-        {
-          typedef signal7<R, T1, T2, T3, T4, T5, T6, T7, Combiner> type;
-        };
-      };
-
-      template<>
-      struct real_get_signal_impl<8>
-      {
-        template<
-          typename R, 
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5,
-          typename T6,
-          typename T7,
-          typename T8,
-          typename T9,
-          typename T10,
-          typename Combiner
-        >
-        struct params
-        {
-          typedef signal8<R, T1, T2, T3, T4, T5, T6, T7, T8, Combiner> type;
-        };
-      };
-
-      template<>
-      struct real_get_signal_impl<9>
-      {
-        template<
-          typename R, 
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5,
-          typename T6,
-          typename T7,
-          typename T8,
-          typename T9,
-          typename T10,
-          typename Combiner
-        >
-        struct params
-        {
-          typedef signal9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, Combiner> type;
-        };
-      };
-
-      template<>
-      struct real_get_signal_impl<10>
-      {
-        template<
-          typename R, 
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5,
-          typename T6,
-          typename T7,
-          typename T8,
-          typename T9,
-          typename T10,
-          typename Combiner
-        >
-        struct params
-        {
-          typedef signal10<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
-                           Combiner> type;
-        };
-      };
-
-      template<
-        typename R, 
-        typename T1, 
-        typename T2, 
-        typename T3, 
-        typename T4,
-        typename T5, 
-        typename T6, 
-        typename T7, 
-        typename T8, 
-        typename T9,
-        typename T10,
-        typename Combiner
-      >
-      struct get_signal_impl
-      {
-      private:
-        typedef real_get_signal_impl<
-          (::boost::BOOST_SIGNALS_NAMESPACE::detail::count_used_args<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>::value)> t1;
-        typedef typename t1::template params<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
-                             Combiner> t2;
       public:
-        typedef typename t2::type type;
+        typedef signal0<typename traits::result_type,
+                        Combiner,
+                        Group,
+                        GroupCompare,
+                        SlotFunction> type;
       };
+
+      template<typename Signature,
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      class real_get_signal_impl<1, Signature, Combiner, Group, GroupCompare,
+                                 SlotFunction>
+      {
+        typedef function_traits<Signature> traits;
+
+      public:
+        typedef signal1<typename traits::result_type,
+                        typename traits::arg1_type,
+                        Combiner,
+                        Group,
+                        GroupCompare,
+                        SlotFunction> type;
+      };
+
+      template<typename Signature,
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      class real_get_signal_impl<2, Signature, Combiner, Group, GroupCompare,
+                                 SlotFunction>
+      {
+        typedef function_traits<Signature> traits;
+
+      public:
+        typedef signal2<typename traits::result_type,
+                        typename traits::arg1_type,
+                        typename traits::arg2_type,
+                        Combiner,
+                        Group,
+                        GroupCompare,
+                        SlotFunction> type;
+      };
+
+      template<typename Signature,
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      class real_get_signal_impl<3, Signature, Combiner, Group, GroupCompare,
+                                 SlotFunction>
+      {
+        typedef function_traits<Signature> traits;
+
+      public:
+        typedef signal3<typename traits::result_type,
+                        typename traits::arg1_type,
+                        typename traits::arg2_type,
+                        typename traits::arg3_type,
+                        Combiner,
+                        Group,
+                        GroupCompare,
+                        SlotFunction> type;
+      };
+
+      template<typename Signature,
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      class real_get_signal_impl<4, Signature, Combiner, Group, GroupCompare,
+                                 SlotFunction>
+      {
+        typedef function_traits<Signature> traits;
+
+      public:
+        typedef signal4<typename traits::result_type,
+                        typename traits::arg1_type,
+                        typename traits::arg2_type,
+                        typename traits::arg3_type,
+                        typename traits::arg4_type,
+                        Combiner,
+                        Group,
+                        GroupCompare,
+                        SlotFunction> type;
+      };
+
+      template<typename Signature,
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      class real_get_signal_impl<5, Signature, Combiner, Group, GroupCompare,
+                                 SlotFunction>
+      {
+        typedef function_traits<Signature> traits;
+
+      public:
+        typedef signal5<typename traits::result_type,
+                        typename traits::arg1_type,
+                        typename traits::arg2_type,
+                        typename traits::arg3_type,
+                        typename traits::arg4_type,
+                        typename traits::arg5_type,
+                        Combiner,
+                        Group,
+                        GroupCompare,
+                        SlotFunction> type;
+      };
+
+      template<typename Signature,
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      class real_get_signal_impl<6, Signature, Combiner, Group, GroupCompare,
+                                 SlotFunction>
+      {
+        typedef function_traits<Signature> traits;
+
+      public:
+        typedef signal6<typename traits::result_type,
+                        typename traits::arg1_type,
+                        typename traits::arg2_type,
+                        typename traits::arg3_type,
+                        typename traits::arg4_type,
+                        typename traits::arg5_type,
+                        typename traits::arg6_type,
+                        Combiner,
+                        Group,
+                        GroupCompare,
+                        SlotFunction> type;
+      };
+
+      template<typename Signature,
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      class real_get_signal_impl<7, Signature, Combiner, Group, GroupCompare,
+                                 SlotFunction>
+      {
+        typedef function_traits<Signature> traits;
+
+      public:
+        typedef signal7<typename traits::result_type,
+                        typename traits::arg1_type,
+                        typename traits::arg2_type,
+                        typename traits::arg3_type,
+                        typename traits::arg4_type,
+                        typename traits::arg5_type,
+                        typename traits::arg6_type,
+                        typename traits::arg7_type,
+                        Combiner,
+                        Group,
+                        GroupCompare,
+                        SlotFunction> type;
+      };
+
+      template<typename Signature,
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      class real_get_signal_impl<8, Signature, Combiner, Group, GroupCompare,
+                                 SlotFunction>
+      {
+        typedef function_traits<Signature> traits;
+
+      public:
+        typedef signal8<typename traits::result_type,
+                        typename traits::arg1_type,
+                        typename traits::arg2_type,
+                        typename traits::arg3_type,
+                        typename traits::arg4_type,
+                        typename traits::arg5_type,
+                        typename traits::arg6_type,
+                        typename traits::arg7_type,
+                        typename traits::arg8_type,
+                        Combiner,
+                        Group,
+                        GroupCompare,
+                        SlotFunction> type;
+      };
+
+      template<typename Signature,
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      class real_get_signal_impl<9, Signature, Combiner, Group, GroupCompare,
+                                 SlotFunction>
+      {
+        typedef function_traits<Signature> traits;
+
+      public:
+        typedef signal9<typename traits::result_type,
+                        typename traits::arg1_type,
+                        typename traits::arg2_type,
+                        typename traits::arg3_type,
+                        typename traits::arg4_type,
+                        typename traits::arg5_type,
+                        typename traits::arg6_type,
+                        typename traits::arg7_type,
+                        typename traits::arg8_type,
+                        typename traits::arg9_type,
+                        Combiner,
+                        Group,
+                        GroupCompare,
+                        SlotFunction> type;
+      };
+
+      template<typename Signature,
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      class real_get_signal_impl<10, Signature, Combiner, Group, GroupCompare,
+                                 SlotFunction>
+      {
+        typedef function_traits<Signature> traits;
+
+      public:
+        typedef signal10<typename traits::result_type,
+                         typename traits::arg1_type,
+                         typename traits::arg2_type,
+                         typename traits::arg3_type,
+                         typename traits::arg4_type,
+                         typename traits::arg5_type,
+                         typename traits::arg6_type,
+                         typename traits::arg7_type,
+                         typename traits::arg8_type,
+                         typename traits::arg9_type,
+                         typename traits::arg10_type,
+                         Combiner,
+                         Group,
+                         GroupCompare,
+                         SlotFunction> type;
+      };
+
+      template<typename Signature,
+               typename Combiner,
+               typename Group,
+               typename GroupCompare,
+               typename SlotFunction>
+      struct get_signal_impl : 
+        public real_get_signal_impl<function_traits<Signature>::arity,
+                                    Signature,
+                                    Combiner,
+                                    Group,
+                                    GroupCompare,
+                                    SlotFunction>
+      {
+      };
+
     } // end namespace detail
   } // end namespace BOOST_SIGNALS_NAMESPACE
 
@@ -360,32 +320,36 @@ namespace boost {
   // be created where the number of arguments does not need to be part of the
   // class name.
   template<
-    typename R, 
-    typename T1  = BOOST_SIGNALS_NAMESPACE::detail::unused, 
-    typename T2  = BOOST_SIGNALS_NAMESPACE::detail::unused,
-    typename T3  = BOOST_SIGNALS_NAMESPACE::detail::unused,
-    typename T4  = BOOST_SIGNALS_NAMESPACE::detail::unused,
-    typename T5  = BOOST_SIGNALS_NAMESPACE::detail::unused,
-    typename T6  = BOOST_SIGNALS_NAMESPACE::detail::unused,
-    typename T7  = BOOST_SIGNALS_NAMESPACE::detail::unused,
-    typename T8  = BOOST_SIGNALS_NAMESPACE::detail::unused,
-    typename T9  = BOOST_SIGNALS_NAMESPACE::detail::unused,
-    typename T10 = BOOST_SIGNALS_NAMESPACE::detail::unused
+    typename Signature, // function type R (T1, T2, ..., TN)
+    typename Combiner = last_value<typename function_traits<Signature>::result_type>,
+    typename Group = int,
+    typename GroupCompare = std::less<int>,
+    typename SlotFunction = function<Signature>
   >
   class signal :
-    public BOOST_SIGNALS_NAMESPACE::detail::get_signal_impl<R, T1, T2, T3, T4, T5, T6, T7,
-                                                            T8, T9, T10, boost::last_value<R> >::type
+    public BOOST_SIGNALS_NAMESPACE::detail::get_signal_impl<Signature,
+                                                            Combiner,
+                                                            Group,
+                                                            GroupCompare,
+                                                            SlotFunction>::type
   {
+    typedef typename BOOST_SIGNALS_NAMESPACE::detail::get_signal_impl<
+                       Signature,
+                       Combiner,
+                       Group,
+                       GroupCompare,
+                       SlotFunction>::type base_type;
+
   public:
-    template<typename Combiner>
-    struct combiner {
-    private:
-      typedef BOOST_SIGNALS_NAMESPACE::detail::get_signal_impl<R, T1, T2, T3, T4, T5,
-                                                               T6, T7, T8, T9, T10, Combiner> t1;
-    public:
-      typedef typename t1::type type;
-    };
+    signal(const Combiner& combiner = Combiner(),
+           const GroupCompare& group_compare = GroupCompare()) :
+      base_type(combiner, group_compare)
+    {
+    }
+
   };
+#endif // ndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
 } // end namespace boost
 
 #endif // BOOST_SIGNAL_HPP
