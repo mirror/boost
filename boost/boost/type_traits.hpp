@@ -4,8 +4,6 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 
 //  See http://www.boost.org for most recent version including documentation.
-//  See boost/detail/type_traits.hpp and boost/detail/ob_type_traits.hpp
-//  for full copyright notices.
 
 #ifndef BOOST_TYPE_TRAITS_HPP
 #define BOOST_TYPE_TRAITS_HPP
@@ -38,6 +36,7 @@
 #undef BOOST_HAS_TRIVIAL_DESTRUCTOR
 
 #endif // BOOST_TYPE_TRAITS_HPP
+
 
 
 
