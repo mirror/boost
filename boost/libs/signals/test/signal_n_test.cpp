@@ -71,7 +71,7 @@ test_zero_args()
     boost::signals::connection c72 = s0.connect("72", i72);
     boost::signals::connection c62 = s0.connect("6x", i62);
     boost::signals::connection c42 = s0.connect(i42);
-    boost::signals::connection c37 = s0.connect(get_37);
+    boost::signals::connection c37 = s0.connect(&get_37);
 
     BOOST_TEST(s0() == 72);
 
