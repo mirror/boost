@@ -35,7 +35,7 @@ template <typename T> struct is_union_impl
 //
 template <typename T> struct is_union_impl
 {
-   BOOST_STATIC_CONSTANT(bool, value = BOOST_IS_UNION(cvt));
+   BOOST_STATIC_CONSTANT(bool, value = BOOST_IS_UNION(T));
 };
 #endif
 } // namespace detail
