@@ -583,7 +583,7 @@ public:
 
   shuffle_output();
   template&lt;class T&gt; explicit shuffle_output(T seed);
-  explicit shuffle_output(const base_type & rng);
+  explicit shuffle_output(const base_type &amp; rng);
   template&lt;class T&gt; void seed(T s);
 
   result_type operator()();
@@ -820,7 +820,7 @@ of its state array.  For example, <code>mt11213b</code> requires about
 <strong>Effects:</strong> Constructs a <code>mersenne_twister</code>
 and calls <code>seed()</code>.
 
-<pre>explicit mersenne_twister(DataType value)</pre>
+<pre>explicit mersenne_twister(result_type value)</pre>
 
 <strong>Effects:</strong> Constructs a <code>mersenne_twister</code>
 and calls <code>seed(value)</code>.
@@ -836,15 +836,15 @@ templated constructor will be preferred over the compiler-generated
 copy constructor.  For variable definitions which should copy the
 state of another <code>mersenne_twister</code>, use e.g. <code>Gen
 gen2 = gen;</code>, which is copy-initialization syntax and guaranteed
-invoke the copy constructor.
+to invoke the copy constructor.
 
 <h3>Seeding</h3>
 
 <pre>void seed()</pre>
 
-<strong>Effects:</strong> Calls <code>seed(4357)</code>.
+<strong>Effects:</strong> Calls <code>seed(result_type(4357))</code>.
 
-<pre>void seed(DataType value)</pre>
+<pre>void seed(result_type value)</pre>
 
 <strong>Effects:</strong> Constructs a
 <code>linear_congruential&lt;uint32_t, 69069, 0, 0, 0&gt;</code>
@@ -861,6 +861,12 @@ invocations of <code>gen</code>.
 
 <strong>Complexity:</strong> Exactly <code>n</code> invocations of
 <code>gen</code>.
+<p>
+<em>Note:</em> When invoking <code>seed</code> with an lvalue,
+overload resolution chooses the function template unless the type of
+the argument exactly matches <code>result_type</code>.  For other
+integer types, you should convert the argument to
+<code>result_type</code> explicitly.
 
 <h3><a name="mt11213b"></a><a name="mt19937">Specializations</a></h3>
 
