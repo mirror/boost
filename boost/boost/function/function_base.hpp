@@ -486,7 +486,7 @@ namespace detail {
       return f->empty();
     }
 
-    inline bool has_empty_target(...)
+    inline bool has_empty_target(const void*)
     {
       return false;
     }
