@@ -18,7 +18,7 @@ namespace numeric {
 namespace interval_lib {
 namespace detail {
 
-struct c99_rounding_control
+struct c99_rounding_control: c99_rounding
 {
   template<class T>
   static T force_rounding(const T& r) { volatile T r_ = r; return r_; }

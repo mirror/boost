@@ -1,6 +1,5 @@
 /* Boost interval/detail/c99sub_rounding_control.hpp file
  *
- *
  * Copyright 2000 Jens Maurer
  * Copyright 2002 Hervé Brönnimann, Guillaume Melquiond, Sylvain Pion
  *
