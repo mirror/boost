@@ -12,6 +12,11 @@
 //
 // Revision History:
 
+// 11 Feb 2001   Jeremy Siek
+//      Removed workaround for older MIPSpro compiler. The workaround
+//        was preventing the proper functionality of the underlying
+//        iterator being carried forward into the iterator adaptor.
+//        Also added is_bidirectional enum to avoid EDG compiler error.
 // 11 Feb 2001   David Abrahams
 //      Borland fixes up the wazoo. It finally works!
 // 10 Feb 2001   David Abrahams
@@ -297,34 +302,7 @@ inline bool operator<=(const iterator_comparisons<D1,Base1>& xb,
 }
 #endif
 
-//============================================================================
-// Some compilers (SGI MIPSpro 7.1.3.3) instantiate/compile member functions
-// whether or not they are used. The following functions make sure that
-// when the base iterators do not support particular operators, those
-// operators do not get used.
-
 namespace detail {
-
-#if defined(__sgi) && !defined(__GNUC__)
-  // Dummy versions for iterators that don't support various operators
-  template <class Iter>
-  inline typename Iter::pointer
-  operator_arrow(const Iter&, std::output_iterator_tag) {
-    return typename Iter::pointer();
-  }
-
-  template <class Iter, class Diff>
-  inline void advance_impl(Iter&, Diff, std::input_iterator_tag) { }
-  template <class Iter, class Diff>
-  inline void advance_impl(Iter&, Diff, std::output_iterator_tag) { }
-
-  template <class Iter>
-  inline void decrement_impl(Iter&, std::input_iterator_tag) { }
-  template <class Iter>
-  inline void decrement_impl(Iter&, std::output_iterator_tag) { }
-#endif
-
-  // Real versions
 
   // operator->() needs special support for input iterators to strictly meet the
   // standard's requirements. If *i is not a reference type, we must still
@@ -371,17 +349,6 @@ namespace detail {
       >::type type;
   };
 
-  template <class Iter, class Diff>
-  inline void
-  advance_impl(Iter& i, Diff n, std::random_access_iterator_tag) {
-        i.policies().advance(i.iter(), n);
-  }
-
-  template <class Iter>
-  inline void
-  decrement_impl(Iter& i, std::bidirectional_iterator_tag) {
-        i.policies().decrement(i.iter());
-  }
 
 # ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
@@ -559,7 +526,7 @@ public:
 
     typename boost::detail::operator_arrow_result_generator<Category,value_type,Pointer>::type
     operator->() const
-        { return detail::operator_arrow(*this, iterator_category()); }
+        { return detail::operator_arrow(*this, Category()); }
 
 #ifdef _MSC_VER
 # pragma warning(pop)
@@ -582,19 +549,19 @@ public:
     self operator++(int) { self tmp(*this); ++*this; return tmp; }
     
     self& operator--() {
-        detail::decrement_impl(*this, iterator_category());
+        policies().decrement(iter());
         return *this;
     }
     
     self operator--(int) { self tmp(*this); --*this; return tmp; }
 
     self& operator+=(difference_type n) {
-        detail::advance_impl(*this, n, iterator_category());
+        policies().advance(iter(), n);
         return *this;
     }
   
     self& operator-=(difference_type n) {
-        detail::advance_impl(*this, -n, iterator_category());
+        policies().advance(iter(), -n);
         return *this;
     }
 
@@ -1009,7 +976,8 @@ namespace detail {
       >::type type;
    private:
       // For some reason, putting this assertion in filter_iterator_generator fails inexplicably under MSVC
-      BOOST_STATIC_ASSERT((!boost::is_convertible<type*, std::bidirectional_iterator_tag*>::value));
+    enum { is_bidirectional = (!boost::is_convertible<type*, std::bidirectional_iterator_tag*>::value) };
+      BOOST_STATIC_ASSERT(is_bidirectional);
 # else
       // is_convertible doesn't work with MWERKS
       typedef typename iterator_traits<Iterator>::iterator_category input_category;
