@@ -74,7 +74,7 @@ The ``Iterator`` type must meet the requirements of Readable
 Iterator. Also, the following requirements are placed on
 ``iterator_traits<Iterator>::value_type``. Let ``i`` be an object of
 type ``iterator_traits<Iterator>::value_type``.  Then ``*i`` must be a
-valid expression, and the type of ``*i`` must be the same as the
+valid expression, and the type of ``*i`` must be convertible to 
 ``iterator_adaptor::reference``. Also, there are further requirements
 on the ``iterator_traits<Iterator>::value_type`` if the ``Value``
 parameter is not ``use_default``, as implied by the algorithm for deducing
