@@ -9,8 +9,6 @@
 //
 
 #include <boost/assign.hpp>
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_tools.hpp>
 #include <string>
 #include <vector>
 #include <map>
