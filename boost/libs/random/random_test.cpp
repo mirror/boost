@@ -232,8 +232,9 @@ void check_uniform_int(Generator & gen, int iter)
   for(int k = 0; k < range; k++)
     sum += bucket[k];
   int avg = sum/range;
+  double threshold = 2*avg/std::sqrt(static_cast<double>(iter));
   for(int i = 0; i < range; i++) {
-    if(std::abs(bucket[i] - avg) > 2*avg/std::sqrt(iter)) {
+    if(std::abs(bucket[i] - avg) > threshold) {
       // 95% confidence interval
       std::cout << "   ... has bucket[" << i << "] = " << bucket[i] 
 		<< "  (distance " << (bucket[i] - avg) << ")" 
