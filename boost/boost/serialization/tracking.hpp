@@ -41,20 +41,20 @@ struct tracking_level {
     };
     typedef
         BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        	is_base_and_derived<basic_traits, T>,
-        	traits_class_tracking<T>,
+            is_base_and_derived<basic_traits, T>,
+            traits_class_tracking<T>,
         //else
         BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        	// for primitives
-        	BOOST_DEDUCED_TYPENAME mpl::equal_to<
-        		implementation_level<T>,
-        		mpl::int_<primitive_type> 
-        	>,
-        	// is never
-        	mpl::int_<track_never>,
-        	// otherwise its selective
-        	mpl::int_<track_selectivly>
-        	>
+            // for primitives
+            BOOST_DEDUCED_TYPENAME mpl::equal_to<
+                implementation_level<T>,
+                mpl::int_<primitive_type> 
+            >,
+            // is never
+            mpl::int_<track_never>,
+            // otherwise its selective
+            mpl::int_<track_selectivly>
+            >
         >::type type;
     BOOST_STATIC_CONSTANT(int, value = tracking_level::type::value);
 };

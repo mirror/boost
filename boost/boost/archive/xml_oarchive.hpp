@@ -16,6 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <cstddef> // size_t
 #include <ostream>
 
 #include <boost/archive/basic_text_oprimitive.hpp>
@@ -53,7 +54,7 @@ public:
     void save(const std::wstring &ws);
     #endif
 public:
-    void save_binary(const void *address, size_t count){
+	void save_binary(const void *address, std::size_t count){
         end_preamble();
         basic_text_oprimitive<std::ostream>::save_binary(
             address, 

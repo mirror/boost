@@ -16,6 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <cstddef> // size_t
 #include <string>
 #include <ostream>
 #include <boost/utility.hpp>
@@ -118,7 +119,7 @@ private:
     virtual unsigned int library_version() const{
         return ArchiveImplementation::library_version();
     }
-    virtual void save_binary(const void * t, size_t size){
+	virtual void save_binary(const void * t, std::size_t size){
         ArchiveImplementation::save(t);
     }
 

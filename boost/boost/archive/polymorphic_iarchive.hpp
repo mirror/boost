@@ -16,6 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <cstddef> // std::size_t
 #include <boost/config.hpp>
 
 #include <string>
@@ -90,7 +91,7 @@ public:
 public:
     // utility function implemented by all legal archives
     virtual unsigned int library_version() const = 0;
-    virtual void load_binary(void * t, size_t size) = 0;
+	virtual void load_binary(void * t, std::size_t size) = 0;
 
     virtual void delete_created_pointers() = 0;
 

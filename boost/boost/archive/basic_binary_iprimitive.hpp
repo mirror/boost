@@ -25,6 +25,7 @@
 
 #include <iosfwd>
 #include <cassert>
+#include <cstddef> // std::size_t
 
 #include <boost/config.hpp>
 #include <cstring>
@@ -88,21 +89,21 @@ public:
     basic_binary_iprimitive(IStream  &is_, bool no_codecvt);
     ~basic_binary_iprimitive();
 public:
-    void load_binary(void *address, size_t count);
+	void load_binary(void *address, std::size_t count);
 };
 
 template<class Archive, class IStream>
 inline void basic_binary_iprimitive<Archive, IStream>::load_binary(
     void *address, 
-    size_t count
+    std::size_t count
 ){
     assert(
-        static_cast<size_t>(std::numeric_limits<std::streamsize>::max()) >= count
+		static_cast<std::size_t>(std::numeric_limits<std::streamsize>::max()) >= count
     );
     if(is.fail())
         boost::throw_exception(archive_exception(archive_exception::stream_error));
     // note: an optimizer should eliminate the following for char files
-    size_t s = count / sizeof(BOOST_DEDUCED_TYPENAME IStream::char_type);
+    std::size_t s = count / sizeof(BOOST_DEDUCED_TYPENAME IStream::char_type);
     is.read(
         static_cast<BOOST_DEDUCED_TYPENAME IStream::char_type *>(address), 
         s

@@ -17,6 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cassert>
+#include <cstddef> // std::size_t
 
 #include <boost/config.hpp>
 
@@ -31,7 +32,7 @@ namespace serialization {
 
 struct binary_object {
     /* const */ void * const m_t;
-    const size_t m_size;
+    const std::size_t m_size;
     template<class Archive>
     void save(Archive & ar, const unsigned int /* file_version */) const {
         ar.save_binary(m_t, m_size);
@@ -41,7 +42,7 @@ struct binary_object {
         ar.load_binary(const_cast<void *>(m_t), m_size);
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
-    binary_object(/* const */ void * const t, size_t size) :
+        binary_object(/* const */ void * const t, std::size_t size) :
         m_t(t),
         m_size(size)
     {}
@@ -54,7 +55,7 @@ struct binary_object {
 // just a little helper to support the convention that all serialization
 // wrappers follow the naming convention make_xxxxx
 inline 
-binary_object make_binary_object(/* const */ void * t, size_t size){
+binary_object make_binary_object(/* const */ void * t, std::size_t size){
     return binary_object(t, size);
 }
 

@@ -47,12 +47,12 @@ struct type_info_implementation {
     };
     typedef 
         BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        	boost::is_base_and_derived<basic_traits, T>,
-        	traits_class_typeinfo_implementation<T>,
+            boost::is_base_and_derived<basic_traits, T>,
+            traits_class_typeinfo_implementation<T>,
         //else
-        	mpl::identity<
-        		BOOST_SERIALIZATION_DEFAULT_TYPE_INFO(T)
-        	>
+            mpl::identity<
+                BOOST_SERIALIZATION_DEFAULT_TYPE_INFO(T)
+            >
         >::type type;
 };
 

@@ -20,21 +20,18 @@
 
 #include <boost/config.hpp>
 
-#include <boost/detail/workaround.hpp>
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0x564)
-    #ifndef _RWSTD_NO_NAMESPACE
-    using std::codecvt;
-    using std::min;
-    #ifdef _RWSTD_NO_MBSTATE_T
-    using std::mbstate_t;
-    #endif
-    #endif
-#elif defined(__COMO__) || defined(_MSC_VER) && _MSC_VER <= 1300  || defined(__BORLANDC__)
-    typedef ::mbstate_t mbstate_t;
-#elif defined(BOOST_NO_STDC_NAMESPACE)
-    typedef std::mbstate_t mbstate_t;
+#if defined(__COMO__)
     namespace std{ 
-        using ::codecvt; 
+		using ::mbstate_t;
+    } // namespace std
+#elif (defined(BOOST_MSVC) && (_MSC_VER <= 1300))
+    namespace std{ 
+		using ::mbstate_t;
+    } // namespace std
+#elif defined(BOOST_NO_STDC_NAMESPACE)
+    namespace std{ 
+        using ::codecvt;
+		using ::mbstate_t;
     } // namespace std
 #endif
 
@@ -45,24 +42,23 @@ template<class Ch>
 class codecvt_null;
 
 template<>
-class codecvt_null<char> : public std::codecvt<char, char, mbstate_t> 
+class codecvt_null<char> : public std::codecvt<char, char, std::mbstate_t> 
 {
-    // mbstate_t not available in global namespace
     virtual bool do_always_noconv() const throw() {
         return true;    
     }
 public:
     explicit codecvt_null(size_t no_locale_manage = 0) :
-        std::codecvt<char, char, mbstate_t>(no_locale_manage)
+        std::codecvt<char, char, std::mbstate_t>(no_locale_manage)
     {}
 };
 
 template<>
-class codecvt_null<wchar_t> : public std::codecvt<wchar_t, char, mbstate_t>    
+class codecvt_null<wchar_t> : public std::codecvt<wchar_t, char, std::mbstate_t>    
 {
     virtual std::codecvt_base::result 
     do_out(
-        mbstate_t & state,
+        std::mbstate_t & state,
         const wchar_t * first1, 
         const wchar_t * last1,
         const wchar_t * & next1,
@@ -72,7 +68,7 @@ class codecvt_null<wchar_t> : public std::codecvt<wchar_t, char, mbstate_t>
     ) const;
     virtual std::codecvt_base::result  
     do_in(
-        mbstate_t & state,
+        std::mbstate_t & state,
         const char * first1, 
         const char * last1, 
         const char * & next1,

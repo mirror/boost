@@ -154,19 +154,19 @@ class void_caster_primitive : public void_caster
 {
     virtual void const* downcast( void const * t ) const {
         return boost::smart_cast<const Derived *>(
-        	boost::smart_cast<const Base *>(t)
+            boost::smart_cast<const Base *>(t)
         );
     }
     virtual void const* upcast(void const * t) const {
         return boost::smart_cast<const Base *>(
-        	boost::smart_cast<const Derived *>(t)
+            boost::smart_cast<const Derived *>(t)
         );
     }
 
 public:
     void_caster_primitive() :
         void_caster( 
-        	* type_info_implementation<Derived>::type::get_instance(), 
+            * type_info_implementation<Derived>::type::get_instance(), 
             * type_info_implementation<Base>::type::get_instance() 
         )
     {

@@ -167,7 +167,7 @@ xml_wiarchive_impl<Archive>::xml_wiarchive_impl(
 
 template<class Archive>
 xml_wiarchive_impl<Archive>::~xml_wiarchive_impl(){
-    if(header)
+    if(this->header)
         gimpl->windup(is);
     delete gimpl;
 }

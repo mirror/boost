@@ -64,30 +64,30 @@ namespace export_impl
     struct archive {
         struct i {
             static void invoke(){
-        		instantiate_pointer_iserializer(
-        			static_cast<Archive *>(NULL),
-        			static_cast<T *>(NULL)
-        		);
-        	}
+                instantiate_pointer_iserializer(
+                    static_cast<Archive *>(NULL),
+                    static_cast<T *>(NULL)
+                );
+            }
         };
         struct o {
             static void invoke(){
-        		instantiate_pointer_oserializer(
-        			static_cast<Archive *>(NULL),
-        			static_cast<T *>(NULL)
-        		);
-        	}
+                instantiate_pointer_oserializer(
+                    static_cast<Archive *>(NULL),
+                    static_cast<T *>(NULL)
+                );
+            }
         };
         static void instantiate(){
-        	BOOST_STATIC_ASSERT(
-        		Archive::is_loading::value || Archive::is_saving::value
-        	);
+            BOOST_STATIC_ASSERT(
+                Archive::is_loading::value || Archive::is_saving::value
+            );
             mpl::apply_if<
                 BOOST_DEDUCED_TYPENAME Archive::is_saving,
                 mpl::identity<o>,
             // else
             mpl::apply_if<
-        		BOOST_DEDUCED_TYPENAME Archive::is_loading,
+                BOOST_DEDUCED_TYPENAME Archive::is_loading,
                 mpl::identity<i>,
             // else
                 mpl::identity<nothing>
@@ -134,16 +134,16 @@ struct guid_initializer {
     struct non_empty {
         typedef BOOST_DEDUCED_TYPENAME boost::serialization::type_info_implementation<T>::type eti_type;
         static void key_register(const char *key){
-        	boost::serialization::extended_type_info * eti = eti_type::get_instance();
-        	eti->key_register(key);
+            boost::serialization::extended_type_info * eti = eti_type::get_instance();
+            eti->key_register(key);
         }
     };
     static const guid_initializer instance;
     guid_initializer(const char *key){
         typedef BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        	mpl::empty<ASeq>,
-        	mpl::identity<empty>,
-        	mpl::identity<non_empty>
+            mpl::empty<ASeq>,
+            mpl::identity<empty>,
+            mpl::identity<non_empty>
         >::type typex;
         typex::key_register(key);
     }
@@ -193,7 +193,7 @@ boost_template_instantiate(T &, ASeq &){
         export_generator<T, ASEQ >::instance;                    \
     template                                                     \
     const guid_initializer<T, ASEQ >                             \
-	guid_initializer<T, ASEQ >::instance(K) ;                    \
+    guid_initializer<T, ASEQ >::instance(K) ;                    \
     } } }                                                        \
     /**/
 #endif
@@ -203,7 +203,7 @@ boost_template_instantiate(T &, ASeq &){
 #define BOOST_CLASS_EXPORT_CHECK(T)                              \
     BOOST_STATIC_WARNING(                                        \
         boost::serialization::type_info_implementation<T>        \
-        	::type::is_polymorphic::value                        \
+            ::type::is_polymorphic::value                        \
     );                                                           \
     /**/
 

@@ -25,6 +25,7 @@
 // use two template parameters
 
 #include <cassert>
+#include <cstddef> // size_t
 #include <locale>
 
 #include <boost/config.hpp>
@@ -107,7 +108,7 @@ public:
      basic_text_iprimitive(IStream  &is, bool no_codecvt);
     ~basic_text_iprimitive();
 public:
-    void load_binary(void *address, size_t count);
+	void load_binary(void *address, std::size_t count);
 };
 
 } // namespace archive

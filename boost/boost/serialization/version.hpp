@@ -41,9 +41,9 @@ struct version
     };
     typedef
         BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        	is_base_and_derived<basic_traits,T>,
-        	traits_class_version<T>,
-        	mpl::int_<0>
+            is_base_and_derived<basic_traits,T>,
+            traits_class_version<T>,
+            mpl::int_<0>
         >::type type;
     BOOST_STATIC_CONSTANT(unsigned int, value = version::type::value);
 };

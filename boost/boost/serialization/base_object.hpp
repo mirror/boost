@@ -48,8 +48,8 @@ namespace detail {
         struct reg{
             static void invoke(){
                 void_cast_register<const D, const B>(
-                	static_cast<const D *>(NULL),
-                	static_cast<const B *>(NULL)
+                    static_cast<const D *>(NULL),
+                    static_cast<const B *>(NULL)
                 );
             }
         };
@@ -67,14 +67,14 @@ namespace detail {
     struct base_cast
     {
         typedef BOOST_DEDUCED_TYPENAME
-        	mpl::if_<
-        		is_const<Derived>,
-        		const Base,
-        		Base
-        	>::type type;
+            mpl::if_<
+                is_const<Derived>,
+                const Base,
+                Base
+            >::type type;
         BOOST_STATIC_ASSERT(
-        	is_const<type>::value && is_const<Derived>::value
-        	||	! is_const<type>::value && ! is_const<Derived>::value
+            is_const<type>::value && is_const<Derived>::value
+            || ! is_const<type>::value && ! is_const<Derived>::value
         );
     };
 } // namespace detail

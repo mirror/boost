@@ -16,9 +16,10 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <boost/config.hpp>
-
+#include <cstddef> // size_t
 #include <string>
+
+#include <boost/config.hpp>
 #include <boost/cstdint.hpp>
 
 #include <boost/pfto.hpp>
@@ -89,7 +90,7 @@ public:
     virtual unsigned int library_version() const = 0;
     virtual void end_preamble() = 0;
     // utility function implemented by all legal archives
-    virtual void save_binary(const void * t, size_t size) = 0;
+	virtual void save_binary(const void * t, std::size_t size) = 0;
 
 	// msvc and borland won't automatically pass these to the base class so
 	// make it explicit here

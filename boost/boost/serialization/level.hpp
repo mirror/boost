@@ -42,34 +42,34 @@ struct implementation_level {
     };
     typedef
         BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        	is_base_and_derived<basic_traits, T>,
-        	traits_class_level<T>,
+            is_base_and_derived<basic_traits, T>,
+            traits_class_level<T>,
         //else
         BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        	is_fundamental<T>,
-        	mpl::int_<primitive_type>,
+            is_fundamental<T>,
+            mpl::int_<primitive_type>,
         //else
         BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        	is_class<T>,
-        	mpl::int_<object_class_info>,
+            is_class<T>,
+            mpl::int_<object_class_info>,
         //else
         BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        	is_array<T>,
-        	#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-        		mpl::int_<not_serializable>,
-        	#else
-        		mpl::int_<object_serializable>,
-        	#endif
+            is_array<T>,
+            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+                mpl::int_<not_serializable>,
+            #else
+                mpl::int_<object_serializable>,
+            #endif
         //else
         BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        	is_enum<T>,
-        	#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-        		mpl::int_<not_serializable>,
-        	#else
-        		mpl::int_<object_serializable>,
-        	#endif
+            is_enum<T>,
+            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+                mpl::int_<not_serializable>,
+            #else
+                mpl::int_<object_serializable>,
+            #endif
         //else
-        	mpl::int_<not_serializable>
+            mpl::int_<not_serializable>
         >::type
         >::type
         >::type
@@ -98,8 +98,8 @@ inline bool operator>=(implementation_level<T> t, enum level_type l)
     {                                                    \
         typedef mpl::int_< E > type;                     \
         BOOST_STATIC_CONSTANT(                           \
-        	int,                                         \
-        	value = implementation_level::type::value    \
+            int,                                         \
+            value = implementation_level::type::value    \
         );                                               \
     };                                                   \
     }                                                    \

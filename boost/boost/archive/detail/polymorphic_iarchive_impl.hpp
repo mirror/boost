@@ -16,6 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <cstddef>
 #include <string>
 #include <ostream>
 #include <boost/utility.hpp>
@@ -121,7 +122,7 @@ private:
         ArchiveImplementation::load(t);
     }
     #endif
-    virtual void load_binary(void * t, size_t size){
+	virtual void load_binary(void * t, std::size_t size){
         ArchiveImplementation::load(t);
     }
 

@@ -6,6 +6,8 @@
 # pragma once
 #endif
 
+#include <cstddef> // size_t
+
 #include <boost/pfto.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/serialization/nvp.hpp>
@@ -135,12 +137,12 @@ template <typename T>
 class auto_ptr_with_deleter
 {
 public:
-    explicit auto_ptr_with_deleter(T* p)
-        :	m_p(p)
+    explicit auto_ptr_with_deleter(T* p) :
+        m_p(p)
     {}
     ~auto_ptr_with_deleter(){
         if (m_p)
-        	access::destroy(m_p);
+            access::destroy(m_p);
     }
     T* get() const {
         return m_p;

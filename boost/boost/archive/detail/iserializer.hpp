@@ -20,6 +20,7 @@
 
 #include <new>    // for placement new
 #include <memory> // for auto_ptr
+#include <cstddef> // size_t
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>

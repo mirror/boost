@@ -7,7 +7,7 @@
 #endif
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// codecvt_null.hpp:
+// tmpdir.hpp:
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
 // Use, modification and distribution is subject to the Boost Software
@@ -16,16 +16,23 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <cstdlib> // getenv
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std {
+	using ::getenv;
+}
+#endif
+
 namespace boost {
 namespace archive {
 
-const char * tmpdir(){
+char * tmpdir(){
     char *dirname;
-    dirname = getenv("TMP");
+	dirname = std::getenv("TMP");
     if(NULL == dirname)
-        dirname = getenv("TMPDIR");
+        dirname = std::getenv("TMPDIR");
     if(NULL == dirname)
-        dirname = getenv("TEMP");
+        dirname = std::getenv("TEMP");
     if(NULL == dirname)
         dirname = "/tmp";
 	return dirname;

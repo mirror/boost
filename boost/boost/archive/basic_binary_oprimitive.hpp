@@ -26,6 +26,7 @@
 #include <iosfwd>
 #include <cassert>
 #include <locale>
+#include <cstddef> // size_t
 
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp>
@@ -82,16 +83,16 @@ public:
     basic_binary_oprimitive(OStream & os, bool no_codecvt);
     ~basic_binary_oprimitive();
 public:
-    void save_binary(const void *address, size_t count);
+	void save_binary(const void *address, std::size_t count);
 };
 
 template<class Archive, class OStream>
 inline void basic_binary_oprimitive<Archive, OStream>::save_binary(
     const void *address, 
-    size_t count
+    std::size_t count
 ){
     assert(
-        static_cast<size_t>(std::numeric_limits<std::streamsize>::max()) >= count
+		static_cast<std::size_t>(std::numeric_limits<std::streamsize>::max()) >= count
     );
     // note: if the following assertions fail
     // a likely cause is that the output stream is set to "text"

@@ -32,6 +32,7 @@
 
 #include <iomanip>
 #include <locale>
+#include <cstddef>
 
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
@@ -132,7 +133,7 @@ public:
     basic_text_oprimitive(OStream & os, bool no_codecvt);
     ~basic_text_oprimitive();
 public:
-    void save_binary(const void *address,size_t count);
+	void save_binary(const void *address, std::size_t count);
 };
 
 } //namespace boost 
