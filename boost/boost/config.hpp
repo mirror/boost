@@ -216,6 +216,7 @@
 #     define BOOST_NO_STDC_NAMESPACE
 #     define BOOST_NO_SLIST
 #     define BOOST_NO_HASH
+#     define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
 #   endif
 
 
