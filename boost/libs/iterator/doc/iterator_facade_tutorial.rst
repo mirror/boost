@@ -75,11 +75,29 @@ lists.
 A Basic Iterator Using ``iterator_facade``
 ------------------------------------------
 
-Template Parameters
-...................
+We will construct a ``node_iterator`` class using inheritance from
+``iterator_facade`` to implement most of the iterator's operations.
 
-The first step in building a concrete iterator with iterator_facade
-is to decide what its template parameters will be.  
+::
+
+  # include "node.hpp"
+  # include <boost/iterator/iterator_facade.hpp>
+
+  class node_iterator
+    : public boost::iterator_facade<...>
+  {
+     ...
+  };
+
+
+
+Template Arguments for ``iterator_facade``
+..........................................
+
+``iterator_facade`` has several template parameters, so we must decide
+what types to use for the arguments. The parameters are ``Derived``,
+``Value``, ``CategoryOrTraversal``, ``Reference``, and ``Difference``.
+
 
 ``Derived``
 '''''''''''
@@ -109,7 +127,7 @@ must be a `forward traversal iterator`_.  Therefore, we'll pass
 ``boost::forward_traversal_tag`` in this position [#category]_.
 
 .. [#category] ``iterator_facade`` also supports old-style category
-   tags, so we could've passed ``std::forward_iterator_tag`` here;
+   tags, so we could have passed ``std::forward_iterator_tag`` here;
    either way, the resulting iterator's ``iterator_category`` will
    end up being ``std::forward_iterator_tag``.
 
