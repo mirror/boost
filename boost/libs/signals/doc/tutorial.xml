@@ -908,4 +908,28 @@ signal, but the details of the <code>doOnClick</code> method can be
 hidden in an implementation detail file.</para>
 </section>
 </section>
+
+<section>
+  <title>Linking against the Signals library</title>
+
+  <para>Part of the Boost.Signals library is compiled into a binary
+  library that must be linked into your application to use Signals. To
+  build this library, execute the command <command>bjam</command> in
+  either the top-level Boost directory or in
+  <code>libs/signals/build</code>. On Unix, the directory
+  <code>libs/signals/build/bin-stage</code> will then contain
+  libraries named, e.g., <code>libboost_signals.a</code> that can be
+  linked in your program with <code>-lboost_signals</code>.</para>
+
+  <para>On Windows, with Microsoft Visual C++ or Borland C++, the
+  linking process is nearly automatic. As with the
+  <libraryname>Regex</libraryname> library, the libraries in
+  <code>libs\signals\build\bin-stage</code> will have mangled names
+  and will be automatically be including in the link process. To link
+  against the Signals library binary dynamically (e.g., using the
+  Signals DLL), define <code>BOOST_SIGNALS_DYN_LINK</code> when
+  building your application; to link statically, define
+  <code>BOOST_SIGNALS_STATIC_LINK</code>. </para>
+</section>
+
 </section>

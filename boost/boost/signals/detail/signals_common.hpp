@@ -10,7 +10,7 @@
 //
 // This software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
- 
+
 // For more information, see http://www.boost.org
 
 #ifndef BOOST_SIGNALS_COMMON_HEADER
@@ -20,31 +20,7 @@
 #  define BOOST_SIGNALS_NAMESPACE signals
 #endif
 
-/*****************************************************************************
- *
- *  Set up dll import/export options:
- *
- ****************************************************************************/
-#if defined(_MSC_VER) && defined(_DLL)
-#  define BOOST_SIGNALS_HAS_DLL_RUNTIME
-#endif
-
-#if defined(BOOST_SIGNALS_HAS_DLL_RUNTIME) && !defined(BOOST_SIGNALS_STATIC_LINK)
-#   if defined(BOOST_SIGNALS_IN_LIBRARY_SOURCE)
-#       define BOOST_SIGNALS_DECL __declspec(dllexport)
-#       define BOOST_SIGNALS_BUILD_DLL
-#   else
-#       define BOOST_SIGNALS_DECL __declspec(dllimport)
-#  endif
-#endif
-
-#ifndef BOOST_SIGNALS_DECL
-#  define BOOST_SIGNALS_DECL
-#endif
-
-/*****************************************************************************
- ****************************************************************************/
-
+#include <boost/signals/detail/config.hpp>
 #include <boost/type_traits/conversion_traits.hpp>
 #include <boost/ref.hpp>
 
@@ -54,7 +30,7 @@ namespace boost {
       // The unusable class is a placeholder for unused function arguments
       // It is also completely unusable except that it constructable from
       // anything. This helps compilers without partial specialization
-      // handle slots returning void.  
+      // handle slots returning void.
       struct unusable {
         unusable() {}
       };
@@ -75,46 +51,46 @@ namespace boost {
 
       template<typename T>
       struct is_signal {
-        BOOST_STATIC_CONSTANT(bool, 
+        BOOST_STATIC_CONSTANT(bool,
           value = (is_convertible<T*, signal_base*>::value));
       };
 
       /*
        * The IF implementation is temporary code. When a Boost metaprogramming
-       * library is introduced, Boost.Signals will use it instead. 
+       * library is introduced, Boost.Signals will use it instead.
        */
       namespace intimate {
-        struct SelectThen 
-        {       
+        struct SelectThen
+        {
           template<typename Then, typename Else>
           struct Result
-          {       
+          {
             typedef Then type;
           };
         };
- 
+
         struct SelectElse
         {
           template<typename Then, typename Else>
           struct Result
-          { 
+          {
             typedef Else type;
           };
         };
- 
+
         template<bool Condition>
         struct Selector
         {
           typedef SelectThen type;
         };
- 
+
         template<>
         struct Selector<false>
         {
           typedef SelectElse type;
         };
-      } // end namespace intimate 
- 
+      } // end namespace intimate
+
       template<bool Condition, typename Then, typename Else>
       struct IF
       {
@@ -127,7 +103,7 @@ namespace boost {
       template<typename T>
       struct is_ref
       {
-        BOOST_STATIC_CONSTANT(bool, value = false); 
+        BOOST_STATIC_CONSTANT(bool, value = false);
       };
 
       template<typename T>
@@ -138,7 +114,7 @@ namespace boost {
 #else // no partial specialization
       typedef char yes_type;
       typedef double no_type;
-      
+
       no_type is_ref_tester(...);
 
       template<typename T>
@@ -148,18 +124,18 @@ namespace boost {
       struct is_ref
       {
         static T* t;
-        BOOST_STATIC_CONSTANT(bool, 
+        BOOST_STATIC_CONSTANT(bool,
           value = (sizeof(is_ref_tester(t)) == sizeof(yes_type)));
       };
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-      // A slot can be a signal, a reference to a function object, or a 
+      // A slot can be a signal, a reference to a function object, or a
       // function object.
       struct signal_tag {};
       struct reference_tag {};
       struct value_tag {};
 
-      // Classify the given slot as a signal, a reference-to-slot, or a 
+      // Classify the given slot as a signal, a reference-to-slot, or a
       // standard slot
       template<typename S>
       class get_slot_tag {
@@ -167,7 +143,7 @@ namespace boost {
                             signal_tag,
                             value_tag>::type signal_or_value;
 
-      public:   
+      public:
         typedef typename IF<(is_ref<S>::value),
                             reference_tag,
                             signal_or_value>::type type;
