@@ -1314,7 +1314,7 @@ private: // helpers, for modifiers (below)
             )
         {
             // Attempt to make a temporary copy (so as to move it below)...
-            RhsT temp(operand);
+            RhsT temp(rhs_content);
 
             // ...and upon success destroy lhs's content...
             lhs_.destroy_content(); // nothrow
