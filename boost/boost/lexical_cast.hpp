@@ -29,13 +29,8 @@
 #if defined(BOOST_NO_STRINGSTREAM) || \
     defined(BOOST_NO_STD_WSTRING) || \
     defined(BOOST_NO_STD_LOCALE) || \
-    defined(BOOST_NO_CWCHAR) || \
-    defined(BOOST_MSVC) && (BOOST_MSVC <= 1200)
+    defined(BOOST_NO_INTRINSIC_WCHAR_T)
 #define DISABLE_WIDE_CHAR_SUPPORT
-#endif
-
-#ifdef BOOST_NO_INTRINSIC_WCHAR_T
-#include <cwchar>
 #endif
 
 namespace boost
@@ -44,35 +39,36 @@ namespace boost
     class bad_lexical_cast : public std::bad_cast
     {
     public:
+        bad_lexical_cast()
+        : source(&typeid(void)), target(&typeid(void))
+        {
+        }
+        bad_lexical_cast(
+            const std::type_info &s,
+            const std::type_info &t) :
+            source(&s), target(&t)
+        {
+        }
+        const std::type_info &source_type() const
+        {
+            return *source;
+        }
+        const std::type_info &target_type() const
+        {
+            return *target;
+        }
+        virtual const char *what() throw()
+        {
+            return "bad lexical cast: "
+                   "source type value could not be interpreted as target";
+        }
         virtual ~bad_lexical_cast() throw()
         {
         }
+    private:
+        const std::type_info *source;
+        const std::type_info *target;
     };
-
-    namespace detail // actual underlying concrete exception type
-    {
-        template<typename Target, typename Source>
-        class no_lexical_conversion : public bad_lexical_cast
-        {
-        public:
-            no_lexical_conversion()
-              : description(
-                  std::string() + "bad lexical cast: " +
-                  "source type value could not be interpreted as target, Target=" +
-                  typeid(Target).name() + ", Source=" + typeid(Source).name())
-            {
-            }
-            virtual ~no_lexical_conversion() throw()
-            {
-            }
-            virtual const char *what() const throw()
-            {
-                return description.c_str();
-            }
-        private:
-            const std::string description; // static initialization fails on MSVC6
-        };
-    }
 
     namespace detail // selectors for choosing stream character type
     {
@@ -144,7 +140,7 @@ namespace boost
             }
             bool operator<<(const Source &input)
             {
-                return stream << input;
+                return !(stream << input).fail();
             }
             template<typename InputStreamable>
             bool operator>>(InputStreamable &output)
@@ -190,7 +186,7 @@ namespace boost
         Target result;
 
         if(!(interpreter << arg && interpreter >> result))
-            throw detail::no_lexical_conversion<Target, Source>();
+            throw bad_lexical_cast(typeid(Target), typeid(Source));
         return result;
     }
 }
