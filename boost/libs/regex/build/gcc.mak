@@ -18,6 +18,7 @@
 # compiler:
 CXX=g++
 LINKER=g++ -shared
+AR=ar
 
 #
 # compiler options for release build:
@@ -94,8 +95,8 @@ boost_regex-gcc-1_31_clean :
 	rm -f gcc/boost_regex-gcc-1_31/*.o
 
 ./gcc/libboost_regex-gcc-1_31.a : gcc/boost_regex-gcc-1_31/c_regex_traits.o gcc/boost_regex-gcc-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-1_31/cregex.o gcc/boost_regex-gcc-1_31/fileiter.o gcc/boost_regex-gcc-1_31/instances.o gcc/boost_regex-gcc-1_31/posix_api.o gcc/boost_regex-gcc-1_31/regex.o gcc/boost_regex-gcc-1_31/regex_debug.o gcc/boost_regex-gcc-1_31/regex_synch.o gcc/boost_regex-gcc-1_31/w32_regex_traits.o gcc/boost_regex-gcc-1_31/wide_posix_api.o gcc/boost_regex-gcc-1_31/winstances.o
-	ar -r gcc/libboost_regex-gcc-1_31.a  gcc/boost_regex-gcc-1_31/c_regex_traits.o gcc/boost_regex-gcc-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-1_31/cregex.o gcc/boost_regex-gcc-1_31/fileiter.o gcc/boost_regex-gcc-1_31/instances.o gcc/boost_regex-gcc-1_31/posix_api.o gcc/boost_regex-gcc-1_31/regex.o gcc/boost_regex-gcc-1_31/regex_debug.o gcc/boost_regex-gcc-1_31/regex_synch.o gcc/boost_regex-gcc-1_31/w32_regex_traits.o gcc/boost_regex-gcc-1_31/wide_posix_api.o gcc/boost_regex-gcc-1_31/winstances.o
-	-ar -s gcc/libboost_regex-gcc-1_31.a
+	$(AR) -r gcc/libboost_regex-gcc-1_31.a  gcc/boost_regex-gcc-1_31/c_regex_traits.o gcc/boost_regex-gcc-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-1_31/cregex.o gcc/boost_regex-gcc-1_31/fileiter.o gcc/boost_regex-gcc-1_31/instances.o gcc/boost_regex-gcc-1_31/posix_api.o gcc/boost_regex-gcc-1_31/regex.o gcc/boost_regex-gcc-1_31/regex_debug.o gcc/boost_regex-gcc-1_31/regex_synch.o gcc/boost_regex-gcc-1_31/w32_regex_traits.o gcc/boost_regex-gcc-1_31/wide_posix_api.o gcc/boost_regex-gcc-1_31/winstances.o
+	-$(AR) -s gcc/libboost_regex-gcc-1_31.a
 
 ########################################################
 #
@@ -148,6 +149,6 @@ boost_regex-gcc-d-1_31_clean :
 	rm -f gcc/boost_regex-gcc-d-1_31/*.o
 
 ./gcc/libboost_regex-gcc-d-1_31.a : gcc/boost_regex-gcc-d-1_31/c_regex_traits.o gcc/boost_regex-gcc-d-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-d-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-d-1_31/cregex.o gcc/boost_regex-gcc-d-1_31/fileiter.o gcc/boost_regex-gcc-d-1_31/instances.o gcc/boost_regex-gcc-d-1_31/posix_api.o gcc/boost_regex-gcc-d-1_31/regex.o gcc/boost_regex-gcc-d-1_31/regex_debug.o gcc/boost_regex-gcc-d-1_31/regex_synch.o gcc/boost_regex-gcc-d-1_31/w32_regex_traits.o gcc/boost_regex-gcc-d-1_31/wide_posix_api.o gcc/boost_regex-gcc-d-1_31/winstances.o
-	ar -r gcc/libboost_regex-gcc-d-1_31.a  gcc/boost_regex-gcc-d-1_31/c_regex_traits.o gcc/boost_regex-gcc-d-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-d-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-d-1_31/cregex.o gcc/boost_regex-gcc-d-1_31/fileiter.o gcc/boost_regex-gcc-d-1_31/instances.o gcc/boost_regex-gcc-d-1_31/posix_api.o gcc/boost_regex-gcc-d-1_31/regex.o gcc/boost_regex-gcc-d-1_31/regex_debug.o gcc/boost_regex-gcc-d-1_31/regex_synch.o gcc/boost_regex-gcc-d-1_31/w32_regex_traits.o gcc/boost_regex-gcc-d-1_31/wide_posix_api.o gcc/boost_regex-gcc-d-1_31/winstances.o
-	-ar -s gcc/libboost_regex-gcc-d-1_31.a
+	$(AR) -r gcc/libboost_regex-gcc-d-1_31.a  gcc/boost_regex-gcc-d-1_31/c_regex_traits.o gcc/boost_regex-gcc-d-1_31/c_regex_traits_common.o gcc/boost_regex-gcc-d-1_31/cpp_regex_traits.o gcc/boost_regex-gcc-d-1_31/cregex.o gcc/boost_regex-gcc-d-1_31/fileiter.o gcc/boost_regex-gcc-d-1_31/instances.o gcc/boost_regex-gcc-d-1_31/posix_api.o gcc/boost_regex-gcc-d-1_31/regex.o gcc/boost_regex-gcc-d-1_31/regex_debug.o gcc/boost_regex-gcc-d-1_31/regex_synch.o gcc/boost_regex-gcc-d-1_31/w32_regex_traits.o gcc/boost_regex-gcc-d-1_31/wide_posix_api.o gcc/boost_regex-gcc-d-1_31/winstances.o
+	-$(AR) -s gcc/libboost_regex-gcc-d-1_31.a
 
