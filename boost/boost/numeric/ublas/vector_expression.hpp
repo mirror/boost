@@ -289,6 +289,11 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
         // Assignment
+        BOOST_UBLAS_INLINE
+        vector_reference &operator = (const vector_reference &v) {
+            expression ().operator = (v);
+            return *this;
+        }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_reference &operator = (const vector_expression<AE> &ae) {
@@ -337,6 +342,20 @@ namespace boost { namespace numeric { namespace ublas {
             expression ().operator /= (at);
             return *this;
         }
+
+        // Swapping
+        BOOST_UBLAS_INLINE
+        void swap (vector_reference &v) {
+            if (this != &v) {
+                expression ().swap (v.expression ());
+            }
+        }
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
+        BOOST_UBLAS_INLINE
+        friend void swap (vector_reference &v1, vector_reference &v2) {
+            v1.swap (v2);
+        }
+#endif
 
         // Closure comparison
         BOOST_UBLAS_INLINE
