@@ -44,6 +44,13 @@ int test_main(int, char*[])
             << std::endl;
   BOOST_CHECK(out.str() == "2");
 
+  // Output indeterminate (noboolalpha)
+  out.str(std::string());
+  out << indeterminate;
+  std::cout << "Output indeterminate (noboolalpha): " << out.str()
+            << std::endl;
+  BOOST_CHECK(out.str() == "2");
+
 #ifndef BOOST_NO_STD_LOCALE
   const std::numpunct<char>& punct =
     BOOST_USE_FACET(std::numpunct<char>, out.getloc());
@@ -67,6 +74,13 @@ int test_main(int, char*[])
   out.str(std::string());
   x = indeterminate;
   out << std::boolalpha << x;
+  std::cout << "Output indeterminate (boolalpha - default name): " << out.str()
+            << std::endl;
+  BOOST_CHECK(out.str() == "indeterminate");
+
+  // Output indeterminate (boolalpha - default name)
+  out.str(std::string());
+  out << std::boolalpha << indeterminate;
   std::cout << "Output indeterminate (boolalpha - default name): " << out.str()
             << std::endl;
   BOOST_CHECK(out.str() == "indeterminate");
