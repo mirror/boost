@@ -1,6 +1,6 @@
 /* Copyright (c) 2001 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/gregorian/gregorian.hpp"
@@ -46,9 +46,21 @@ void test_date_duration()
   date_duration hundred(100);
   hundred /= -10;
   check("Division",           hundred.days() == -10 && hundred.is_negative());
+
+  date_duration pos_dur(123);
+  date_duration neg_dur(-pos_dur);
+  check("unary-",	neg_dur.days() == -123);
   
-
-
+  // special values tests
+  date_duration pi_dur(pos_infin);
+  date_duration ni_dur(neg_infin);
+  date_duration nd_dur(not_a_date_time);
+  check("pos_inf + neg_inf", 	(pi_dur + ni_dur) == nd_dur);
+  //check("inf * integer",	(pi_dur * 2) == pi_dur); // not implemented
+  check("neg_inf / integer",	(ni_dur / 3) == ni_dur);
+  check("inf + dur",		(pi_dur + hundred) == pi_dur);
+  check("unary-",	date_duration(-pi_dur) == ni_dur);
+ 
 //   date_duration dd(1);
 //   dd++;
 //   check("Increment",             dd == twoDays);
