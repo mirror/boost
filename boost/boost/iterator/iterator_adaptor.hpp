@@ -26,12 +26,32 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
+#ifdef BOOST_ITERATOR_REF_CONSTNESS_KILLS_WRITABILITY
+# include <boost/type_traits/remove_reference.hpp>
+#else 
+# include <boost/type_traits/add_reference.hpp>
+#endif 
+
 #include <boost/iterator/detail/config_def.hpp>
 
 #include <boost/iterator/iterator_traits.hpp>
 
 namespace boost
 {
+  // Used as a default template argument internally, merely to
+  // indicate "use the default", this can also be passed by users
+  // explicitly in order to specify that the default should be used.
+  struct use_default;
+  
+# ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+  // the incompleteness of use_default causes massive problems for
+  // is_convertible (naturally).  This workaround is fortunately not
+  // needed for vc6/vc7.
+  template<class To>
+  struct is_convertible<use_default,To>
+    : mpl::false_ {};
+# endif 
+  
   namespace detail
   {
 
@@ -142,63 +162,51 @@ namespace boost
         class Derived
       , class Base
       , class Value
-      , class Category
+      , class Traversal
       , class Reference
       , class Difference
     >
     struct iterator_adaptor_base
     {
-    private: // intermediate results
-
-        typedef typename mpl::apply_if<
-            mpl::or_< 
-                is_same<Category, use_default>
-              , mpl::or_<
-                    is_access_tag<Category>
-                  , is_traversal_tag<Category>
-                >
-            >
-          , BOOST_ITERATOR_CATEGORY<Base>
-          , mpl::identity<Category>
-        >::type category;
-
-        typedef typename detail::ia_dflt_help<
-            Reference
-          , mpl::apply_if<
-                is_same<Value, use_default>
-              , iterator_reference<Base>
-              , mpl::identity<Value&>
-            >
-        >::type reference;
-
-     public: // return type
         typedef iterator_facade<
             Derived
-         
+            
+# ifdef BOOST_ITERATOR_REF_CONSTNESS_KILLS_WRITABILITY
+          , typename detail::ia_dflt_help<
+                Value
+              , mpl::apply_if<
+                    is_same<Reference,use_default>
+                  , iterator_value<Base>
+                  , remove_reference<Reference>
+                >
+            >::type
+# else
           , typename detail::ia_dflt_help<
                 Value, iterator_value<Base>
             >::type
-                
-         , typename mpl::apply_if<
-               is_access_tag<Category>
-             , mpl::identity<Category>
-             , access_category_tag<category, reference>
-           >::type
+# endif
+            
+          , typename detail::ia_dflt_help<
+                Traversal
+              , iterator_traversal<Base>
+            >::type
 
-         , typename mpl::apply_if<
-               is_traversal_tag<Category>
-             , mpl::identity<Category>
-             , traversal_category_tag<category>
-           >::type
-                
-          , reference
-                
+          , typename detail::ia_dflt_help<
+                Reference
+              , mpl::apply_if<
+                    is_same<Value,use_default>
+                  , iterator_reference<Base>
+                  , add_reference<Value>
+                >
+            >::type
+
           , typename detail::ia_dflt_help<
                 Difference, iterator_difference<Base>
             >::type
         >
         type;
     };
+    template <class T> int static_assert_convertible_to(T);
   }
   
   //
@@ -215,8 +223,8 @@ namespace boost
   //      const. If const, a conforming compiler strips constness for the
   //      value_type. If not supplied, iterator_traits<Base>::value_type is used
   //
-  //   Category - the iterator_category of the resulting iterator. If not
-  //      supplied, iterator_traits<Base>::iterator_category is used.
+  //   Category - the traversal category of the resulting iterator. If not
+  //      supplied, iterator_traversal<Base>::type is used.
   //
   //   Reference - the reference type of the resulting iterator, and in
   //      particular, the result type of operator*(). If not supplied but
@@ -230,19 +238,19 @@ namespace boost
       class Derived
     , class Base
     , class Value        = use_default
-    , class Category     = use_default
+    , class Traversal    = use_default
     , class Reference    = use_default
     , class Difference   = use_default
   >
   class iterator_adaptor
     : public detail::iterator_adaptor_base<
-        Derived, Base, Value, Category, Reference, Difference
+        Derived, Base, Value, Traversal, Reference, Difference
       >::type
   {
       friend class iterator_core_access;
 
       typedef typename detail::iterator_adaptor_base<
-          Derived, Base, Value, Category, Reference, Difference
+          Derived, Base, Value, Traversal, Reference, Difference
       >::type super_t;
 
    public:
@@ -287,17 +295,18 @@ namespace boost
         //               );
           return m_iterator == x.base();
       }
-  
+
+      typedef typename iterator_category_to_traversal<
+          typename super_t::iterator_category
+      >::type my_traversal;
+
+# define BOOST_ITERATOR_ADAPTOR_ASSERT_TRAVERSAL(cat) \
+      typedef int assertion[sizeof(detail::static_assert_convertible_to<cat>(my_traversal()))];
+//      BOOST_STATIC_ASSERT((is_convertible<my_traversal,cat>::value));
+
       void advance(typename super_t::difference_type n)
       {
-# if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) // seems to get instantiated incorrectly
-          BOOST_STATIC_ASSERT(
-              (detail::is_tag< 
-               random_access_traversal_tag
-               , BOOST_ARG_DEPENDENT_TYPENAME super_t::iterator_category::traversal
-               >::value)
-              );
-# endif 
+          BOOST_ITERATOR_ADAPTOR_ASSERT_TRAVERSAL(random_access_traversal_tag)
           m_iterator += n;
       }
   
@@ -305,14 +314,7 @@ namespace boost
 
       void decrement() 
       {
-# if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) // seems to get instantiated incorrectly
-           BOOST_STATIC_ASSERT(
-              (detail::is_tag< 
-                   bidirectional_traversal_tag
-                 , BOOST_ARG_DEPENDENT_TYPENAME super_t::iterator_category::traversal
-               >::value)
-              );
-# endif 
+          BOOST_ITERATOR_ADAPTOR_ASSERT_TRAVERSAL(bidirectional_traversal_tag)
            --m_iterator;
       }
 
@@ -322,12 +324,7 @@ namespace boost
       typename super_t::difference_type distance_to(
           iterator_adaptor<OtherDerived, OtherIterator, V, C, R, D> const& y) const
       {
-          BOOST_STATIC_ASSERT(
-              (detail::is_tag< 
-                   random_access_traversal_tag
-                 , BOOST_ARG_DEPENDENT_TYPENAME super_t::iterator_category::traversal
-               >::value)
-              );
+          BOOST_ITERATOR_ADAPTOR_ASSERT_TRAVERSAL(random_access_traversal_tag)
           // Maybe readd with same_distance
           //           BOOST_STATIC_ASSERT(
           //               (detail::same_category_and_difference<Derived,OtherDerived>::value)
@@ -335,6 +332,8 @@ namespace boost
           return y.base() - m_iterator;
       }
 
+# undef BOOST_ITERATOR_ADAPTOR_ASSERT_TRAVERSAL
+      
    private: // data members
       Base m_iterator;
   };

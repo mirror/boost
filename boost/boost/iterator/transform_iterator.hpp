@@ -24,6 +24,8 @@
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
+#include <boost/iterator/detail/config_def.hpp>
+
 namespace boost
 {
   template <class UnaryFunction, class Iterator, class Reference = use_default, class Value = use_default>
@@ -46,53 +48,38 @@ namespace boost
     };
 #endif
 
-    // Given the transform iterator's transformation and iterator, this
-    // is the type used as its traits.
+    // Compute the iterator_adaptor instantiation to be used for transform_iterator
     template <class UnaryFunction, class Iterator, class Reference, class Value>
     struct transform_iterator_base
     {
-    private:
+     private:
+        // By default, dereferencing the iterator yields the same as
+        // the function.  Do we need to adjust the way
+        // function_object_result is computed for the standard
+        // proposal (e.g. using Doug's result_of)?
+        typedef typename ia_dflt_help<
+            Reference
+          , function_object_result<UnaryFunction>
+        >::type reference;
 
-      // transform_iterator does not support writable/swappable iterators
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-      BOOST_STATIC_ASSERT((is_tag< readable_iterator_tag, typename access_category<Iterator>::type >::value));
-#endif
- 
-      typedef typename mpl::apply_if<
-          is_same< Reference, use_default >
-        , function_object_result<UnaryFunction>
-        , mpl::identity<Reference>
-      >::type result_type;
+        // To get the default for Value: remove any reference on the
+        // result type, but retain any constness to signal
+        // non-writability.  Note that if we adopt Thomas' suggestion
+        // to key non-writability *only* on the Reference argument,
+        // we'd need to strip constness here as well.
+        typedef typename ia_dflt_help<
+            Value
+          , remove_reference<reference>
+        >::type cv_value_type;
 
-      typedef typename mpl::if_<
-          is_same< Value, use_default >
-        , typename remove_reference< result_type >::type
-        , Value
-      >::type cv_value_type;
-
-      typedef typename mpl::if_< 
-          is_reference< result_type >
-        , typename mpl::if_<
-              is_const< cv_value_type >
-            , readable_lvalue_iterator_tag
-            , writable_lvalue_iterator_tag
-          >::type
-        , readable_iterator_tag
-      >::type maximum_access_tag;
-  
-      typedef typename minimum_category<
-          maximum_access_tag
-        , typename access_category<Iterator>::type
-      >::type access_category;
-
-    public:
-      typedef iterator_adaptor<
-      transform_iterator<UnaryFunction, Iterator, Reference, Value>
-        , Iterator
-        , cv_value_type  
-        , access_category
-        , result_type  
-      > type;
+     public:
+        typedef iterator_adaptor<
+            transform_iterator<UnaryFunction, Iterator, Reference, Value>
+          , Iterator
+          , cv_value_type
+          , use_default    // Leave the traversal category alone
+          , reference
+        > type;
     };
   }
 
@@ -150,12 +137,16 @@ namespace boost
       return transform_iterator<UnaryFunction, Iterator>(it, fun);
   }
 
+  // Version which allows explicit specification of the UnaryFunction
+  // type.
+  //
+  // This generator is not provided if UnaryFunction is a function
+  // pointer type, because it's too dangerous: the default-constructed
+  // function pointer in the iterator be 0, leading to a runtime
+  // crash.
   template <class UnaryFunction, class Iterator>
-  // don't provide this generator if UnaryFunction is a
-  // function pointer type.  Too dangerous.  We should probably
-  // find a cheaper test than is_class<>
   typename iterators::enable_if<
-      is_class<UnaryFunction>
+      is_class<UnaryFunction>   // We should probably find a cheaper test than is_class<>
     , transform_iterator<UnaryFunction, Iterator>
   >::type
   make_transform_iterator(Iterator it)
@@ -173,5 +164,7 @@ namespace boost
 #endif
 
 } // namespace boost
+
+#include <boost/iterator/detail/config_undef.hpp>
 
 #endif // BOOST_TRANSFORM_ITERATOR_23022003THW_HPP

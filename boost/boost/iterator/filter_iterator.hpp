@@ -13,28 +13,42 @@
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/iterator/iterator_categories.hpp>
 
+#include <boost/type_traits/is_class.hpp>
+#include <boost/static_assert.hpp>
+
 namespace boost
 {
+  template <class Predicate, class Iterator>
+  class filter_iterator;
 
+  namespace detail
+  {
+    template <class Predicate, class Iterator>
+    struct filter_iterator_base
+    {
+        typedef iterator_adaptor<
+            filter_iterator<Predicate, Iterator>
+          , Iterator
+          , use_default
+          , typename mpl::if_<
+                is_convertible<
+                    typename iterator_traversal<Iterator>::type
+                  , bidirectional_traversal_tag
+                >
+              , forward_traversal_tag
+              , use_default
+            >::type
+        > type;
+    };
+  }
+  
   template <class Predicate, class Iterator>
   class filter_iterator
-      : public iterator_adaptor<
-            filter_iterator<Predicate, Iterator>, Iterator
-          , use_default
-          , typename detail::minimum_category<
-                bidirectional_traversal_tag
-              , typename traversal_category<Iterator>::type
-            >::type 
-        >
+    : public detail::filter_iterator_base<Predicate, Iterator>::type
   {
-      typedef iterator_adaptor<
-            filter_iterator<Predicate, Iterator>, Iterator
-          , use_default
-          , typename detail::minimum_category<
-                bidirectional_traversal_tag
-              , typename traversal_category<Iterator>::type
-            >::type 
-        > super_t;
+      typedef typename detail::filter_iterator_base<
+          Predicate, Iterator
+      >::type super_t;
 
       friend class iterator_core_access;
 

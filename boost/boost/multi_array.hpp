@@ -163,7 +163,7 @@ public:
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
-
+    
   // Since assignment is a deep copy, multi_array_ref
   // contains all the necessary code.
   template <typename ConstMultiArray>

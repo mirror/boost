@@ -12,14 +12,15 @@
 
 int main()
 {
-  {
-    typedef boost::iterator_archetype<int, 
-      boost::writable_lvalue_iterator_tag,
-      boost::random_access_traversal_tag> iter;
+    typedef boost::iterator_archetype<
+        int
+      , boost::iterator_archetypes::writable_lvalue_iterator_t
+      , boost::random_access_traversal_tag
+    > iter;
 
     boost::function_requires< boost_concepts::WritableLvalueIteratorConcept<iter> >();
     boost::function_requires< boost_concepts::RandomAccessTraversalConcept<iter> >();
-  }
-  return 0; // keep msvc happy
+    
+    return 0; // keep msvc happy
 }
 

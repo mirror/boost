@@ -19,6 +19,7 @@
 //
 
 #include "boost/concept_check.hpp"
+#include "boost/iterator/iterator_concepts.hpp"
 
 namespace boost {
 namespace detail {
@@ -99,6 +100,11 @@ namespace multi_array {
     typedef typename Array::extent_gen extent_gen;
     typedef typename Array::extent_range extent_range;
 
+    BOOST_CLASS_REQUIRE(iterator, boost_concepts, ForwardTraversalConcept);
+    BOOST_CLASS_REQUIRE(iterator, boost_concepts, ReadableIteratorConcept);
+    BOOST_CLASS_REQUIRE(const_iterator, boost_concepts, ForwardTraversalConcept);
+    BOOST_CLASS_REQUIRE(const_iterator, boost_concepts, ReadableIteratorConcept);
+                  
     Array a;
     size_type st;
     const size_type* stp;
@@ -180,6 +186,12 @@ namespace multi_array {
     typedef typename Array::extent_gen extent_gen;
     typedef typename Array::extent_range extent_range;
 
+    BOOST_CLASS_REQUIRE(iterator, boost_concepts, ForwardTraversalConcept);
+    BOOST_CLASS_REQUIRE(iterator, boost_concepts, ReadableIteratorConcept);
+    BOOST_CLASS_REQUIRE(iterator, boost_concepts, WritableIteratorConcept);
+    BOOST_CLASS_REQUIRE(const_iterator, boost_concepts, ForwardTraversalConcept);
+    BOOST_CLASS_REQUIRE(const_iterator, boost_concepts, ReadableIteratorConcept);
+      
     Array a;
     size_type st;
     const size_type* stp;

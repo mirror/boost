@@ -18,6 +18,8 @@ test-suite iterator
     # compilation problems.
     [ run is_convertible_fail.cpp ]  
 
+    [ run zip_iterator_test.cpp ]
+      
     # These tests should work for just about everything.
     [ compile is_lvalue_iterator.cpp ]
     [ compile is_readable_iterator.cpp ]
@@ -34,8 +36,6 @@ test-suite iterator
     [ run counting_iterator_test.cpp ]
     [ run permutation_iterator_test.cpp : : : # <stlport-iostream>on 
     ]
-    [ compile iterator_categories.cpp ]
-    [ run zip_iterator_test.cpp ]
       
     [ run ../../utility/iterator_adaptor_examples.cpp ]
     [ run ../../utility/counting_iterator_example.cpp ]

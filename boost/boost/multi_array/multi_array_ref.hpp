@@ -71,6 +71,9 @@ public:
   // make const_multi_array_ref a friend of itself
   template <typename,std::size_t,typename>
   friend class const_multi_array_ref;
+
+//  template <typename From, typename To>  // needed for enable_if_convertible tests
+//  friend class boost::detail::is_convertible_basic_impl;
 #endif
 
   template <typename OPtr>
@@ -322,9 +325,10 @@ public:
   void set_base_ptr(TPtr new_base) { base_ = new_base; }
 
   template <typename OPtr>
-  const_multi_array_ref(const detail::multi_array::
-                  const_sub_array<T,NumDims,OPtr>& rhs)
-    : base_(rhs.origin()),
+  const_multi_array_ref(
+      const detail::multi_array::const_sub_array<T,NumDims,OPtr>& rhs
+  )
+    : base_(0), // playing it "safe"; so we learn of errors
       storage_(c_storage_order()),
       origin_offset_(0), directional_offset_(0),
       num_elements_(rhs.num_elements())
@@ -394,7 +398,6 @@ private:
                                             storage_);
   }
 };
-
 
 template <typename T, std::size_t NumDims>
 class multi_array_ref :

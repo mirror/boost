@@ -11,8 +11,6 @@
 
 using boost::dummyT;
 
-BOOST_TT_BROKEN_COMPILER_SPEC(boost::dummyT)
-    
 // Test reverse iterator
 int main()
 {

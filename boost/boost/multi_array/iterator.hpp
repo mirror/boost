@@ -43,28 +43,25 @@ struct operator_arrow_proxy
 };
 
 
-template <typename T, typename TPtr, std::size_t NumDims,
-          typename AccessCategory, typename Reference>
+template <typename T, typename TPtr, std::size_t NumDims, typename Reference>
 class array_iterator :
     public iterator_facade<
-             array_iterator<T,TPtr,NumDims,AccessCategory,Reference>,
+             array_iterator<T,TPtr,NumDims,Reference>,
              typename value_accessor_generator<T,NumDims>::type::value_type,
-             AccessCategory,
-             ::boost::random_access_traversal_tag,
+             boost::random_access_traversal_tag,
              Reference
            >,
     private value_accessor_generator<T,NumDims>::type
 {
   friend class iterator_core_access;
-  template <typename TT, typename TP, std::size_t N, typename AC, typename R>
+  template <typename TT, typename TP, std::size_t N, typename R>
     friend class array_iterator;
 
   typedef typename value_accessor_generator<T,NumDims>::type access_t;
 
   typedef  iterator_facade<
-             array_iterator<T,TPtr,NumDims,AccessCategory,Reference>,
+             array_iterator<T,TPtr,NumDims,Reference>,
              typename access_t::value_type,
-             AccessCategory,
              ::boost::random_access_traversal_tag,
              Reference
            > facade_type;
@@ -93,9 +90,11 @@ public:
     idx_(idx), base_(base), extents_(extents),
     strides_(strides), index_base_(index_base) { }
 
-  template <typename OPtr, typename Cat, typename ORef>
-  array_iterator(const
-                 array_iterator<T,OPtr,NumDims,Cat,ORef>& rhs)
+  template <typename OPtr, typename ORef>
+  array_iterator(
+      const array_iterator<T,OPtr,NumDims,ORef>& rhs
+    , typename boost::enable_if_convertible<OPtr,TPtr>::type* = 0
+  )
     : idx_(rhs.idx_), base_(rhs.base_), extents_(rhs.extents_),
     strides_(rhs.strides_), index_base_(rhs.index_base_) { }
 

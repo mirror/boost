@@ -13,6 +13,8 @@
 // should be the last #include
 #include <boost/iterator/detail/config_def.hpp>
 
+#ifndef BOOST_NO_IS_CONVERTIBLE
+
 namespace boost {
  
 namespace detail
@@ -98,6 +100,8 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(
     is_readable_iterator,T,::boost::detail::is_readable_iterator_impl2<T>::value)
     
 } // namespace boost
+
+#endif
 
 #include <boost/iterator/detail/config_undef.hpp>
 

@@ -184,17 +184,14 @@ main()
     for (int k2 = 0; k2 < N; ++k2)
       x[k2] = x[k2] * 2;
     
-    boost::input_iterator_test(boost::make_transform_iterator(y, mult_2)
-                               , x[0]
-                               , x[1]);
+    boost::input_iterator_test(
+        boost::make_transform_iterator(y, mult_2), x[0], x[1]);
 
-    boost::input_iterator_test(boost::make_transform_iterator(&y[0], mult_2)
-                               , x[0]
-                               , x[1]);
+    boost::input_iterator_test(
+        boost::make_transform_iterator(&y[0], mult_2), x[0], x[1]);
  
-    boost::random_access_readable_iterator_test(boost::make_transform_iterator(y, mult_2)
-                                                , N
-                                                , x);
+    boost::random_access_readable_iterator_test(
+        boost::make_transform_iterator(y, mult_2), N, x);
 
   }
 
@@ -213,25 +210,34 @@ main()
 
     }
 
-    std::copy(x,
-              x + N,
-              boost::make_transform_iterator((pair_t*)values, select_first()));
+    std::copy(
+        x
+      , x + N
+      , boost::make_transform_iterator((pair_t*)values, select_first())
+    );
 
-    std::copy(y,
-              y + N,
-              boost::make_transform_iterator((pair_t*)values, select_second()));
+    std::copy(
+        y
+      , y + N
+      , boost::make_transform_iterator((pair_t*)values, select_second())
+    );
 
-    boost::random_access_readable_iterator_test(boost::make_transform_iterator((pair_t*)values, value_select_first()),
-                                                N,
-                                                x);
+    boost::random_access_readable_iterator_test(
+        boost::make_transform_iterator((pair_t*)values, value_select_first())
+      , N
+      , x
+    );
 
-    boost::random_access_readable_iterator_test(boost::make_transform_iterator((pair_t*)values, const_select_first()),
-                                                N,
-                                                x);
+    boost::random_access_readable_iterator_test(
+        boost::make_transform_iterator((pair_t*)values, const_select_first())
+      , N, x
+    );
 
-    boost::constant_lvalue_iterator_test(boost::make_transform_iterator((pair_t*)values, const_select_first()), x[0]); 
+    boost::constant_lvalue_iterator_test(
+        boost::make_transform_iterator((pair_t*)values, const_select_first()), x[0]); 
 
-    boost::mutable_lvalue_iterator_test(boost::make_transform_iterator((pair_t*)values, select_first()), x[0], 17); 
+    boost::non_const_lvalue_iterator_test(
+        boost::make_transform_iterator((pair_t*)values, select_first()), x[0], 17); 
 
   }
 

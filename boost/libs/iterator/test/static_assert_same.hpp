@@ -10,13 +10,17 @@
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T, class U>
-struct static_assert_same;
+struct static_assert_same_base;
 
 template <class T>
-struct static_assert_same<T,T>
+struct static_assert_same_base<T,T>
 {
     enum { value = 1 };
 };
+
+template <class T, class U>
+struct static_assert_same : static_assert_same_base<T,U> {};
+
 #else
 # include <boost/mpl/if.hpp>
 # include <boost/mpl/bool.hpp>

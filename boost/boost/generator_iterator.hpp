@@ -24,15 +24,15 @@ class generator_iterator
   : public iterator_facade<
         generator_iterator<Generator>
       , typename Generator::result_type
-      , readable_lvalue_iterator_tag
       , single_pass_traversal_tag
+      , typename Generator::result_type const&
     >
 {
     typedef iterator_facade<
         generator_iterator<Generator>
       , typename Generator::result_type
-      , readable_iterator_tag
       , single_pass_traversal_tag
+      , typename Generator::result_type const&
     > super_t;
     
  public:

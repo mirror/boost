@@ -9,20 +9,7 @@ subproject libs/multi_array/test ;
 import testing ;
 
 test-suite multi_array
-    : [ run constructors.cpp <lib>../../test/build/boost_test_exec_monitor ]
-      [ run access.cpp <lib>../../test/build/boost_test_exec_monitor ]
-      [ run compare.cpp <lib>../../test/build/boost_test_exec_monitor ]
-      [ run iterators.cpp <lib>../../test/build/boost_test_exec_monitor ]
-      [ run slice.cpp <lib>../../test/build/boost_test_exec_monitor ]
-      [ run assign.cpp <lib>../../test/build/boost_test_exec_monitor ]
-      [ run index_bases.cpp <lib>../../test/build/boost_test_exec_monitor ]
-      [ run storage_order.cpp <lib>../../test/build/boost_test_exec_monitor ]
-      [ run reshape.cpp <lib>../../test/build/boost_test_exec_monitor ]
-      [ run range1.cpp <lib>../../test/build/boost_test_exec_monitor  ]
-      [ run idxgen1.cpp <lib>../../test/build/boost_test_exec_monitor ]
-      [ run stl_interaction.cpp <lib>../../test/build/boost_test_exec_monitor ]
-      [ run resize.cpp <lib>../../test/build/boost_test_exec_monitor ]
-      [ compile concept_checks.cpp ]
+    : 
       [ compile-fail fail_cbracket.cpp ]
       [ compile-fail fail_cdata.cpp ]
       [ compile-fail fail_citerator.cpp ]
@@ -45,4 +32,19 @@ test-suite multi_array
       [ compile-fail fail_ref_cview.cpp ]
       [ compile-fail fail_ref_cview2.cpp ]
       [ compile-fail fail_ref_cview3.cpp ]
+  
+      [ run constructors.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ run access.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ run compare.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ run iterators.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ run slice.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ run assign.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ run index_bases.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ run storage_order.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ run reshape.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ run range1.cpp <lib>../../test/build/boost_test_exec_monitor  ]
+      [ run idxgen1.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ run stl_interaction.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ run resize.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ compile concept_checks.cpp ]
     ;

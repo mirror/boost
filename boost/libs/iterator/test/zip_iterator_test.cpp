@@ -48,32 +48,18 @@
 #include <set>
 #include <boost/tuple/tuple.hpp>
 #include <boost/iterator/transform_iterator.hpp>
+#include <boost/iterator/is_readable_iterator.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/detail/workaround.hpp>
 #include <stddef.h>
 
-// Uncomment to see static assert.
-// #define PROVOKE_STATIC_ASSERT
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Fake iterator for testing zip iterator categories
-//
-/////////////////////////////////////////////////////////////////////////////
-
-class fake_writable_iterator
-{
-public:
-  typedef int& reference;
-  typedef int value_type;
-  typedef int* pointer;
-  typedef ptrdiff_t difference_type;
-  typedef boost::iterator_tag<
-    boost::writable_iterator_tag,
-    boost::forward_traversal_tag
-    > iterator_category;
-};
-
+template <class It>
+struct pure_traversal
+  : boost::detail::pure_traversal_tag<
+        typename boost::iterator_traversal<It>::type
+    >
+{};
+  
 /////////////////////////////////////////////////////////////////////////////
 //
 // Das Main Funktion
@@ -871,25 +857,15 @@ int main( void )
             
   // The big iterator of the previous test has vector, list, and set iterators.
   // Therefore, it must be bidirectional, but not random access.
-  bool bBigItIsBidirectionalIterator = boost::is_same<
-    boost::bidirectional_traversal_tag,
-    boost::traversal_category<zip_it_12_type>::type
-    >::value;
-  //
-  bool bBigItIsRandomAccessIterator = boost::is_same<
-    boost::random_access_traversal_tag,
-    boost::traversal_category<zip_it_12_type>::type
-    >::value;
-  //
-  bool bBigItIsReadableIterator = boost::is_same<
-    boost::readable_iterator_tag,
-    boost::access_category<zip_it_12_type>::type
-    >::value;
-  //
-  bool bBigItIsReadableLValueIterator = boost::is_same<
-    boost::readable_lvalue_iterator_tag,
-    boost::access_category<zip_it_12_type>::type
-    >::value;
+  bool bBigItIsBidirectionalIterator = boost::is_convertible<
+    boost::iterator_traversal<zip_it_12_type>::type
+        , boost::bidirectional_traversal_tag
+        >::value;
+
+  bool bBigItIsRandomAccessIterator = boost::is_convertible<
+    boost::iterator_traversal<zip_it_12_type>::type
+        , boost::random_access_traversal_tag
+        >::value;
 
   // A combining iterator with all vector iterators must have random access
   // traversal.
@@ -901,63 +877,15 @@ int main( void )
       >
     > all_vects_type;
   
-  bool bAllVectsIsRandomAccessIterator = boost::is_same<
-    boost::random_access_traversal_tag,
-    boost::traversal_category<all_vects_type>::type
+  bool bAllVectsIsRandomAccessIterator = boost::is_convertible<
+    boost::iterator_traversal<all_vects_type>::type
+        , boost::random_access_traversal_tag
     >::value;
-  //
-  bool bAllVectsIsReadableIterator = boost::is_same<
-    boost::readable_iterator_tag,
-    boost::access_category<all_vects_type>::type
-    >::value;
-  //
-  bool bAllVectsIsReadableLValueIterator = boost::is_same<
-    boost::readable_lvalue_iterator_tag,
-    boost::access_category<all_vects_type>::type
-    >::value;
-
-  // Test if the meta function all_iterators_readable, which is used
-  // for compile-time asserting, works.
-  //
-  bool bAllIteratorsReadable1 = 
-    boost::detail::all_iterators_in_tuple_readable<
-      boost::tuples::tuple<
-        std::vector<int>::const_iterator,
-        std::set<double>::iterator
-        >
-      >::type::value;
-
-  bool bAllIteratorsReadable2 = 
-    boost::detail::all_iterators_in_tuple_readable<
-      boost::tuples::tuple<
-        std::vector<int>::const_iterator,
-        fake_writable_iterator,
-        std::set<double>::iterator
-        >
-      >::type::value;
-
-  // Compile-time assert because of non-readable iterator.
-  //
-#ifdef PROVOKE_STATIC_ASSERT
-  typedef boost::zip_iterator<
-    boost::tuples::tuple<
-      fake_writable_iterator
-      > 
-    >no_compile_type;
-
-  no_compile_type no_compile;
-#endif
 
   // The big test.
   if( bBigItIsBidirectionalIterator &&
       ! bBigItIsRandomAccessIterator &&
-      bBigItIsReadableIterator &&
-      ! bBigItIsReadableLValueIterator &&
-      bAllVectsIsRandomAccessIterator &&
-      ! bAllVectsIsReadableLValueIterator &&
-      bAllVectsIsReadableIterator &&
-      bAllIteratorsReadable1 &&
-      ! bAllIteratorsReadable2
+      bAllVectsIsRandomAccessIterator
     )
   {
     ++num_successful_tests;
@@ -977,6 +905,6 @@ int main( void )
             << "\nNumber of failed tests: " << static_cast<unsigned int>(num_failed_tests)
             << std::endl;
 
-  return 0;
+  return num_failed_tests;
 }
 

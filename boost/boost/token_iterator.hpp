@@ -21,38 +21,23 @@
 #define BOOST_TOKENIZER_POLICY_JRB070303_HPP_
 
 #include<boost/iterator/iterator_adaptor.hpp>
+#include<boost/iterator/detail/minimum_category.hpp>
 #include<boost/token_functions.hpp>
 #include<utility>
 #include<cassert>
 
 
-namespace boost {
-  
- namespace detail
-  {
-    template <class Iterator>
-    struct token_iterator_category
-    {
-       typedef iterator_tag<
-           readable_iterator_tag
-         , typename minimum_category<
-               forward_traversal_tag
-             , typename traversal_category<Iterator>::type
-           >::type 
-       > type;
-    };
-
-  } 
-
+namespace boost
+{
   template <class TokenizerFunc, class Iterator, class Type>
   class token_iterator
       : public iterator_facade<
             token_iterator<TokenizerFunc, Iterator, Type>
           , Type
-          , readable_iterator_tag, typename detail::minimum_category<
-               forward_traversal_tag
-             , typename traversal_category<Iterator>::type
-           >::type 
+          , typename detail::minimum_category<
+                forward_traversal_tag
+              , typename iterator_traversal<Iterator>::type
+            >::type 
           , const Type&
         >
   {

@@ -4,15 +4,18 @@
 #ifndef IS_LVALUE_ITERATOR_DWA2003112_HPP
 # define IS_LVALUE_ITERATOR_DWA2003112_HPP
 
-#include <boost/mpl/bool.hpp>
-#include <boost/detail/iterator.hpp>
 #include <boost/iterator.hpp>
 
-#include <boost/type_traits/detail/bool_trait_def.hpp>
+#include <boost/detail/workaround.hpp>
+#include <boost/detail/iterator.hpp>
+
 #include <boost/iterator/detail/any_conversion_eater.hpp>
 
-// should be the last #include
+// should be the last #includes
+#include <boost/type_traits/detail/bool_trait_def.hpp>
 #include <boost/iterator/detail/config_def.hpp>
+
+#ifndef BOOST_NO_IS_CONVERTIBLE
 
 namespace boost {
  
@@ -122,7 +125,7 @@ namespace detail
   {};
 
   template <class It>
-  struct is_mutable_lvalue_iterator_impl
+  struct is_non_const_lvalue_iterator_impl
     : is_lvalue_iterator_impl<
           BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<It>::value_type
       >::template rebind<It>
@@ -135,10 +138,13 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(
     is_lvalue_iterator,T,::boost::detail::is_readable_lvalue_iterator_impl<T>::value)
     
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(
-    is_mutable_lvalue_iterator,T,::boost::detail::is_mutable_lvalue_iterator_impl<T>::value)
+    is_non_const_lvalue_iterator,T,::boost::detail::is_non_const_lvalue_iterator_impl<T>::value)
     
 } // namespace boost
 
+#endif
+
 #include <boost/iterator/detail/config_undef.hpp>
+#include <boost/type_traits/detail/bool_trait_undef.hpp>
 
 #endif // IS_LVALUE_ITERATOR_DWA2003112_HPP

@@ -7,13 +7,12 @@
 #include <boost/iterator/filter_iterator.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/iterator/new_iterator_tests.hpp>
-#include <boost/type_traits/broken_compiler_spec.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 
 #include <deque>
 #include <iostream>
 
 using boost::dummyT;
-BOOST_TT_BROKEN_COMPILER_SPEC(boost::dummyT)
     
 struct one_or_four
 {
@@ -38,12 +37,12 @@ int main()
         filter_iter(one_or_four(), array, array+N)
         , dummyT(1), dummyT(4));
 
-    BOOST_STATIC_ASSERT((
-        !boost::detail::is_tag<
-         boost::random_access_traversal_tag
-       , boost::traversal_category<filter_iter>::type
-      >::value
-    ));
+    BOOST_STATIC_ASSERT(
+        (!boost::is_convertible<
+             boost::iterator_traversal<filter_iter>::type
+           , boost::random_access_traversal_tag
+         >::value
+        ));
     
     //# endif
     

@@ -5,9 +5,12 @@
 // to its suitability for any purpose.
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/static_assert.hpp>
+
 #include "static_assert_same.hpp"
+
 #include <boost/type_traits/broken_compiler_spec.hpp>
 
+#include <boost/iterator/detail/minimum_category.hpp>
 
 struct X { int a; };
 
@@ -40,29 +43,32 @@ void category_test()
     using namespace boost::detail;
     
     BOOST_STATIC_ASSERT((
-        !is_tag<
-            input_output_iterator_tag
-          , std::input_iterator_tag>::value));
-    
-    BOOST_STATIC_ASSERT((
-        !is_tag<
-            input_output_iterator_tag
-          , std::output_iterator_tag>::value));
-    
-    BOOST_STATIC_ASSERT((
-        is_tag<
+        !boost::is_convertible<
             std::input_iterator_tag
           , input_output_iterator_tag>::value));
     
     BOOST_STATIC_ASSERT((
-        is_tag<
+        !boost::is_convertible<
             std::output_iterator_tag
           , input_output_iterator_tag>::value));
-
+    
     BOOST_STATIC_ASSERT((
-        is_tag<
+        boost::is_convertible<
             input_output_iterator_tag
-          , std::forward_iterator_tag>::value));
+          , std::input_iterator_tag>::value));
+    
+    BOOST_STATIC_ASSERT((
+        boost::is_convertible<
+            input_output_iterator_tag
+          , std::output_iterator_tag>::value));
+
+#if 0 // This seems wrong; we're not advertising
+      // input_output_iterator_tag are we?
+    BOOST_STATIC_ASSERT((
+        boost::is_convertible<
+            std::forward_iterator_tag
+          , input_output_iterator_tag>::value));
+#endif 
 
     int test = static_assert_min_cat<
         std::input_iterator_tag,input_output_iterator_tag, std::input_iterator_tag
@@ -72,9 +78,11 @@ void category_test()
         input_output_iterator_tag,std::input_iterator_tag, std::input_iterator_tag
     >::value;
 
+#if 0
     test = static_assert_min_cat<
         input_output_iterator_tag,std::forward_iterator_tag, input_output_iterator_tag
     >::value;
+#endif 
 
     test = static_assert_min_cat<
         std::input_iterator_tag,std::forward_iterator_tag, std::input_iterator_tag
@@ -84,29 +92,13 @@ void category_test()
         std::input_iterator_tag,std::random_access_iterator_tag, std::input_iterator_tag
     >::value;
 
+#if 0  // This would be wrong: a random access iterator is not
+       // neccessarily writable, as is an output iterator.
     test = static_assert_min_cat<
         std::output_iterator_tag,std::random_access_iterator_tag, std::output_iterator_tag
     >::value;
+#endif 
     
-    BOOST_STATIC_ASSERT((is_traversal_tag< incrementable_traversal_tag >::value));
-    BOOST_STATIC_ASSERT((is_traversal_tag< single_pass_traversal_tag   >::value));
-    BOOST_STATIC_ASSERT((is_traversal_tag< forward_traversal_tag       >::value));
-    BOOST_STATIC_ASSERT((is_traversal_tag< bidirectional_traversal_tag >::value));
-    BOOST_STATIC_ASSERT((is_traversal_tag< random_access_traversal_tag >::value));
-
-    BOOST_STATIC_ASSERT((!is_traversal_tag< std::input_iterator_tag >::value));
-    BOOST_STATIC_ASSERT((!is_traversal_tag< readable_iterator_tag   >::value));
-
-    BOOST_STATIC_ASSERT((is_access_tag< readable_iterator_tag          >::value));
-    BOOST_STATIC_ASSERT((is_access_tag< writable_iterator_tag          >::value));
-    BOOST_STATIC_ASSERT((is_access_tag< swappable_iterator_tag         >::value));
-    BOOST_STATIC_ASSERT((is_access_tag< readable_writable_iterator_tag >::value));
-    BOOST_STATIC_ASSERT((is_access_tag< readable_lvalue_iterator_tag   >::value));
-    BOOST_STATIC_ASSERT((is_access_tag< writable_lvalue_iterator_tag   >::value));
-
-    BOOST_STATIC_ASSERT((!is_access_tag< std::input_iterator_tag     >::value));
-    BOOST_STATIC_ASSERT((!is_access_tag< incrementable_traversal_tag >::value));
-
     (void)test;
 }
 

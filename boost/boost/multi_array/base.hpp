@@ -78,8 +78,7 @@ class sub_array;
 template <typename T, std::size_t NumDims, typename TPtr = const T*>
 class const_sub_array;
 
-template <typename T, typename TPtr, std::size_t NumDims,
-          typename AccessCategory, typename Reference>
+template <typename T, typename TPtr, std::size_t NumDims, typename Reference>
 class array_iterator;
 
 template <typename T, std::size_t NumDims, typename TPtr = const T*>
@@ -244,20 +243,8 @@ public:
   //
   // iterator support
   //
-
-  typedef typename
-  mpl::if_c<(NumDims == 1), 
-    writable_lvalue_iterator_tag,
-    readable_writable_iterator_tag>::type  iterator_tag;
-
-  typedef typename 
-  mpl::if_c<(NumDims == 1),
-    readable_lvalue_iterator_tag,
-    readable_iterator_tag>::type const_iterator_tag;
-
-  typedef array_iterator<T,T*,NumDims,iterator_tag,reference> iterator;
-  typedef array_iterator<T,
-    T const*,NumDims,const_iterator_tag,const_reference> const_iterator;
+  typedef array_iterator<T,T*,NumDims,reference> iterator;
+  typedef array_iterator<T,T const*,NumDims,const_reference> const_iterator;
 
   typedef ::boost::reverse_iterator<iterator> reverse_iterator;
   typedef ::boost::reverse_iterator<const_iterator> const_reverse_iterator;

@@ -286,7 +286,7 @@ int main()
 # ifndef BOOST_NO_SLIST
     test_container<BOOST_STD_EXTENSION_NAMESPACE::slist<int> >();
 # endif
-
+    
     // Also prove that we can handle raw pointers.
     int array[2000];
     test(boost::make_counting_iterator(array), boost::make_counting_iterator(array+2000-1));
