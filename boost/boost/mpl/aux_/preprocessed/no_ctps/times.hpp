@@ -16,7 +16,7 @@ template<
     , typename Tag2
     >
 struct times_impl
-    : eval_if_c<
+    : if_c<
           ( BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag1)
               > BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag2)
             )
