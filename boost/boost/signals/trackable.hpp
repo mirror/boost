@@ -20,52 +20,11 @@
 #include <boost/signals/connection.hpp>
 #include <boost/pending/ct_if.hpp>
 #include <boost/ref.hpp>
-#include <boost/mem_fn.hpp>
 #include <boost/utility/addressof.hpp>
 #include <list>
 #include <vector>
 
 namespace boost {
-
-namespace detail {
-  template<typename T>
-  struct type_is_pointer
-  {
-    typedef typename ct_if<(is_pointer<T>::value), 
-                           type_traits::yes_type, 
-                           type_traits::no_type>::type type;
-  };
-
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-  template<typename T>
-  typename type_is_pointer<T>::type
-  is_pointerlike_helper(const T&, int); 
-
-#ifdef __BORLANDC__
-  template<typename T>
-  type_traits::yes_type is_pointerlike_helper(T*, int);
-#endif // __BORLANDC__
-
-#else
-  template<typename T>
-  typename type_is_pointer<T>::type
-  is_pointerlike_helper(const T&, long); 
-#endif 
-
-  template<typename T>
-  type_traits::yes_type is_pointerlike_helper(const T*, int);
-
-  template<typename T>
-  class is_pointerlike
-  {
-    static T t;
-
-  public:
-    BOOST_STATIC_CONSTANT(bool, 
-                          value = (sizeof(is_pointerlike_helper(t, 0)) == 
-                                   sizeof(type_traits::yes_type)));
-  };
-} // end namespace detail
 
 namespace BOOST_SIGNALS_NAMESPACE {
   // Base class for "trackable" objects that can be tracked when they are
@@ -129,18 +88,15 @@ namespace BOOST_SIGNALS_NAMESPACE {
       template<typename T>
       void decode(const T& t, long) const
       {
-        typedef ::boost::detail::is_pointerlike<T> pointerlike;
-        typedef truth<pointerlike::value> is_a_pointer;
+        typedef truth<(is_pointer<T>::value)> is_a_pointer;
         maybe_get_pointer(t, is_a_pointer());
       }
 
-      // maybe_get_pointer() decides between pointerlike objects (raw pointers,
-      // smart pointers, etc) and anything else
+      // maybe_get_pointer() decides between a pointer and a non-pointer
       template<typename T>
       void maybe_get_pointer(const T& t, truth<true>) const
       {
-        // Get the actual raw pointer 
-        add_if_trackable(get_pointer(t));
+        add_if_trackable(t);
       }
 
       template<typename T>
