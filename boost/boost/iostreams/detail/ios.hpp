@@ -35,17 +35,20 @@ namespace boost { namespace iostreams { namespace detail {
      /**/
 
 #define BOOST_IOS                std::ios
+#define BOOST_IOSTREAMS_FAILURE  std::ios::failure
 typedef std::ios_base::failure   failure;
 
 # else
 
 #define BOOST_IOS                std::ios_base
+#define BOOST_IOSTREAMS_FAILURE  std::ios_base::failure
 typedef std::ios_base::failure   failure;
 
 # endif
 #else // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //-----------------------//
 
-#define BOOST_IOS std::ios
+#define BOOST_IOS                std::ios
+#define BOOST_IOSTREAMS_FAILURE  boost::detail::failure
 
 class failure : std::exception {    
 public:
