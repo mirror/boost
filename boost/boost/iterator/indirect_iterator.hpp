@@ -35,7 +35,7 @@
 namespace boost
 {
   template <class Iter, class Value, class Category, class Reference, class Difference>
-  struct indirect_iterator;
+  class indirect_iterator;
 
   template <class T>
   struct referent;
