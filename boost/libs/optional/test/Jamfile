@@ -41,5 +41,6 @@ DEPENDS all : test ;
     [ compile-fail libs/optional/test/optional_test_references_fail3.cpp ]
     [ compile-fail libs/optional/test/optional_test_references_fail4.cpp ]
     [ compile-fail libs/optional/test/optional_test_inplace_fail.cpp ]
+    [ compile-fail libs/optional/test/optional_test_inplace_fail2.cpp ]
   ;
 }

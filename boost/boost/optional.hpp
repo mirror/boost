@@ -56,6 +56,7 @@
 namespace boost {
 
 class InPlaceFactoryBase ;
+class TypedInPlaceFactoryBase ;
 
 namespace optional_detail {
 
@@ -235,10 +236,17 @@ class optional_base
     template<class Expr>
     void construct ( Expr const& factory, InPlaceFactoryBase const* )
      {
-       BOOST_STATIC_ASSERT ( mpl::not_<is_reference_predicate>::value ) ;
+       BOOST_STATIC_ASSERT ( ::boost::mpl::not_<is_reference_predicate>::value ) ;
+       factory.BOOST_NESTED_TEMPLATE apply<T>(m_storage.address()) ;
+       m_initialized = true ;
+     }
 
-       boost::type<T> selector ;
-       factory(selector,m_storage.address()) ;
+    template<class Expr>
+    void construct ( Expr const& factory, TypedInPlaceFactoryBase const* )
+     {
+       BOOST_STATIC_ASSERT ( ::boost::mpl::not_<is_reference_predicate>::value ) ;
+
+       factory.apply(m_storage.address()) ;
        m_initialized = true ;
      }
 
@@ -542,9 +550,9 @@ bool operator >= ( optional<T> const& x, optional<T> const& y )
 //
 namespace optional_detail {
 
-// GCC <= 3.2 gets the using declaration at namespace scope (FLC)
-#if BOOST_WORKAROUND(__GNUC__, <= 3) && __GNUC_MINOR__ <= 2
-   // workaround for GCC (JM):
+// GCC < 3.2 gets the using declaration at namespace scope (FLC, DWA)
+#if BOOST_WORKAROUND(__GNUC__, < 3)                             \
+    || BOOST_WORKAROUND(__GNUC__, == 3) && __GNUC_MINOR__ <= 2
    using std::swap;
 #define BOOST_OPTIONAL_STD_SWAP_INTRODUCED_AT_NS_SCOPE
 #endif
