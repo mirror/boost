@@ -104,6 +104,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match()
    position = base;
    search_base = base;
    state_count = 0;
+   m_match_flags |= regex_constants::match_all;
    m_presult->set_size((m_match_flags & match_nosubs) ? 1 : re.mark_count(), base, last);
    m_presult->set_base(base);
    if(m_match_flags & match_posix)
@@ -691,7 +692,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_restart_lin
       }
       if(position == last)
          return false;
-      ++position;
+      //++position;
    }
    return false;
 }

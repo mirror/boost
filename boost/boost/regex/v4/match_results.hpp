@@ -103,7 +103,7 @@ public:
    {
       sub += 2;
       string_type result;
-      if(sub < m_subs.size() && (sub > 0))
+      if(sub < (int)m_subs.size() && (sub > 0))
       {
          const sub_match<RandomAccessIterator>& s = m_subs[sub];
          if(s.matched)
