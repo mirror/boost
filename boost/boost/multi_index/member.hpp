@@ -118,6 +118,7 @@ namespace detail{
 /* MSVC++ 6.0 does not support properly pointers to members as
  * non-type template arguments, as reported in
  *   http://support.microsoft.com/default.aspx?scid=kb;EN-US;249045
+ * A similar problem (though not identical) is shown by MSVC++ 7.0.
  * We provide an alternative to member<> accepting offsets instead
  * of pointers to members. This happens to work even for non-POD
  * types (although the standard forbids use of offsetof on these),
@@ -215,7 +216,7 @@ struct member_offset:
  */
 
 #if defined(BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS) ||\
-    defined(BOOST_MSVC)&&(BOOST_MSVC<1300) ||\
+    defined(BOOST_MSVC)&&(BOOST_MSVC<1310) ||\
     defined(BOOST_INTEL_CXX_VERSION)&&defined(_MSC_VER)&&\
            (BOOST_INTEL_CXX_VERSION<=700)
 #define BOOST_MULTI_INDEX_MEMBER(Class,Type,MemberName) \
