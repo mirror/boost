@@ -8,6 +8,10 @@
 !ifndef BCROOT
 BCROOT=$(MAKEDIR)\..
 !endif
+#
+# sources to compile for each test:
+#
+SOURCES=tests.cpp parse.cpp regress.cpp ../../../test/src/cpp_main.cpp ../../../test/src/execution_monitor.cpp
 
 BCC32   = $(BCROOT)\bin\Bcc32.exe 
 TLINK32 = $(BCROOT)\bin\ILink32.exe
@@ -66,118 +70,119 @@ all :: r1.exe r2.exe r3.exe r4.exe r5.exe r6.exe r1m.exe r2m.exe r3m.exe r4m.exe
 	r6lv tests.txt
 
 
-r1.exe : tests.cpp regress.cpp parse.cpp
-	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er1.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp regress.cpp parse.cpp
+r1.exe : $(SOURCES)
+	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er1.exe -DBOOST_RE_TEST_LOCALE_W32 $(SOURCES)
 
-r2.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er2.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp
+r2.exe : $(SOURCES)
+	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er2.exe -DBOOST_RE_TEST_LOCALE_C $(SOURCES)
 
-r3.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er3.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp
+r3.exe : $(SOURCES)
+	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er3.exe -DBOOST_RE_TEST_LOCALE_CPP $(SOURCES)
 
-r4.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er4.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
+r4.exe : $(SOURCES)
+	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er4.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE $(SOURCES)
 
-r5.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er5.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
+r5.exe : $(SOURCES)
+	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er5.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE $(SOURCES)
 
-r6.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er6.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
+r6.exe : $(SOURCES)
+	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er6.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES)
 	
 
-r1m.exe : tests.cpp regress.cpp parse.cpp
-	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er1m.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp regress.cpp parse.cpp
+r1m.exe : $(SOURCES)
+	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er1m.exe -DBOOST_RE_TEST_LOCALE_W32 $(SOURCES)
 
-r2m.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er2m.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp
+r2m.exe : $(SOURCES)
+	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er2m.exe -DBOOST_RE_TEST_LOCALE_C $(SOURCES)
 
-r3m.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er3m.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp
+r3m.exe : $(SOURCES)
+	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er3m.exe -DBOOST_RE_TEST_LOCALE_CPP $(SOURCES)
 
-r4m.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er4m.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
+r4m.exe : $(SOURCES)
+	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er4m.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE $(SOURCES)
 
-r5m.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er5m.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
+r5m.exe : $(SOURCES)
+	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er5m.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE $(SOURCES)
 
-r6m.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er6m.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
-
-
-r1v.exe : tests.cpp regress.cpp parse.cpp
-	$(BCC32) -tWM -tWV $(CFLAGS) -er1v.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp regress.cpp parse.cpp $(BPL)
-
-r2v.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWV $(CFLAGS) -er2v.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp $(BPL)
-
-r3v.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWV $(CFLAGS) -er3v.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp $(BPL)
-
-r4v.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWV $(CFLAGS) -er4v.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(BPL)
-
-r5v.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWV $(CFLAGS) -er5v.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(BPL)
-
-r6v.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWV $(CFLAGS) -er6v.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(BPL)
+r6m.exe : $(SOURCES)
+	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er6m.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES)
 
 
-r1l.exe : tests.cpp regress.cpp parse.cpp
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er1l.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp regress.cpp parse.cpp
+r1v.exe : $(SOURCES)
+	$(BCC32) -tWM -tWV $(CFLAGS) -er1v.exe -DBOOST_RE_TEST_LOCALE_W32 $(SOURCES) $(BPL)
 
-r2l.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er2l.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp
+r2v.exe : $(SOURCES)
+	$(BCC32) -tWM -tWV $(CFLAGS) -er2v.exe -DBOOST_RE_TEST_LOCALE_C $(SOURCES) $(BPL)
 
-r3l.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er3l.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp
+r3v.exe : $(SOURCES)
+	$(BCC32) -tWM -tWV $(CFLAGS) -er3v.exe -DBOOST_RE_TEST_LOCALE_CPP $(SOURCES) $(BPL)
 
-r4l.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er4l.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
+r4v.exe : $(SOURCES)
+	$(BCC32) -tWM -tWV $(CFLAGS) -er4v.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE $(SOURCES) $(BPL)
 
-r5l.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er5l.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
+r5v.exe : $(SOURCES)
+	$(BCC32) -tWM -tWV $(CFLAGS) -er5v.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE $(SOURCES) $(BPL)
 
-r6l.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er6l.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
-
-
-r1lm.exe : tests.cpp regress.cpp parse.cpp
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er1lm.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp regress.cpp parse.cpp
-
-r2lm.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er2lm.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp
-
-r3lm.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er3lm.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp
-
-r4lm.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er4lm.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
-
-r5lm.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er5lm.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
-
-r6lm.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er6lm.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
+r6v.exe : $(SOURCES)
+	$(BCC32) -tWM -tWV $(CFLAGS) -er6v.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES) $(BPL)
 
 
-r1lv.exe : tests.cpp regress.cpp parse.cpp
-	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er1lv.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp regress.cpp parse.cpp $(BPI)
+r1l.exe : $(SOURCES)
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er1l.exe -DBOOST_RE_TEST_LOCALE_W32 $(SOURCES)
 
-r2lv.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er2lv.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp $(BPI)
+r2l.exe : $(SOURCES)
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er2l.exe -DBOOST_RE_TEST_LOCALE_C $(SOURCES)
 
-r3lv.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er3lv.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp $(BPI)
+r3l.exe : $(SOURCES)
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er3l.exe -DBOOST_RE_TEST_LOCALE_CPP $(SOURCES)
 
-r4lv.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er4lv.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(BPI)
+r4l.exe : $(SOURCES)
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er4l.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE $(SOURCES)
 
-r5lv.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er5lv.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(BPI)
+r5l.exe : $(SOURCES)
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er5l.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE $(SOURCES)
 
-r6lv.exe : tests.cpp parse.cpp regress.cpp
-	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er6lv.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(BPI)
+r6l.exe : $(SOURCES)
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er6l.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES)
+
+
+r1lm.exe : $(SOURCES)
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er1lm.exe -DBOOST_RE_TEST_LOCALE_W32 $(SOURCES)
+
+r2lm.exe : $(SOURCES)
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er2lm.exe -DBOOST_RE_TEST_LOCALE_C $(SOURCES)
+
+r3lm.exe : $(SOURCES)
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er3lm.exe -DBOOST_RE_TEST_LOCALE_CPP $(SOURCES)
+
+r4lm.exe : $(SOURCES)
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er4lm.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE $(SOURCES)
+
+r5lm.exe : $(SOURCES)
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er5lm.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE $(SOURCES)
+
+r6lm.exe : $(SOURCES)
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er6lm.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES)
+
+
+r1lv.exe : $(SOURCES)
+	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er1lv.exe -DBOOST_RE_TEST_LOCALE_W32 $(SOURCES) $(BPI)
+
+r2lv.exe : $(SOURCES)
+	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er2lv.exe -DBOOST_RE_TEST_LOCALE_C $(SOURCES) $(BPI)
+
+r3lv.exe : $(SOURCES)
+	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er3lv.exe -DBOOST_RE_TEST_LOCALE_CPP $(SOURCES) $(BPI)
+
+r4lv.exe : $(SOURCES)
+	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er4lv.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE $(SOURCES) $(BPI)
+
+r5lv.exe : $(SOURCES)
+	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er5lv.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE $(SOURCES) $(BPI)
+
+r6lv.exe : $(SOURCES)
+	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er6lv.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES) $(BPI)
+
 
 
 

@@ -200,7 +200,7 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
 #ifndef BOOST_NO_STD_MESSAGES
 
    const std::messages<char>* pm = 0;
-   std::messages<char>::catalog cat = -1;
+   std::messages<char>::catalog cat = static_cast<std::messages<wchar_t>::catalog>(-1);
    if(regex_message_catalogue.size())
    {
       pm = &BOOST_USE_FACET(std::messages<char>, l);
@@ -592,7 +592,7 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
    const cvt_type& cvt = BOOST_USE_FACET(cvt_type, l);
 #ifndef BOOST_NO_STD_MESSAGES
    const std::messages<wchar_t>& msgs = BOOST_USE_FACET(std::messages<wchar_t>, l);
-   std::messages<wchar_t>::catalog cat = -1;
+   std::messages<wchar_t>::catalog cat = static_cast<std::messages<wchar_t>::catalog>(-1);
    if(regex_message_catalogue.size())
    {
       cat = msgs.open(regex_message_catalogue, l);
