@@ -577,7 +577,7 @@ struct iterator_adaptor :
 
     // Moved from global scope to avoid ambiguity with the operator-() which
     // subtracts iterators from one another.
-    self operator-(Distance x)
+    self operator-(Distance x) const
         { self result(*this); return result -= x; }
 private:
     typedef Policies policies_type;
