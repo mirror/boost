@@ -55,57 +55,57 @@ bcb4 :
 ########################################################
 bcb4\bcb4re300\c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\c_regex_traits.obj ../src/c_regex_traits.cpp
+-c $(XCFLAGS) -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\c_regex_traits.obj ../src/c_regex_traits.cpp
 |
 
 bcb4\bcb4re300\c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\c_regex_traits_common.obj ../src/c_regex_traits_common.cpp
+-c $(XCFLAGS) -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\c_regex_traits_common.obj ../src/c_regex_traits_common.cpp
 |
 
 bcb4\bcb4re300\cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\cpp_regex_traits.obj ../src/cpp_regex_traits.cpp
+-c $(XCFLAGS) -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\cpp_regex_traits.obj ../src/cpp_regex_traits.cpp
 |
 
 bcb4\bcb4re300\cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\cregex.obj ../src/cregex.cpp
+-c $(XCFLAGS) -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\cregex.obj ../src/cregex.cpp
 |
 
 bcb4\bcb4re300\fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\fileiter.obj ../src/fileiter.cpp
+-c $(XCFLAGS) -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\fileiter.obj ../src/fileiter.cpp
 |
 
 bcb4\bcb4re300\posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\posix_api.obj ../src/posix_api.cpp
+-c $(XCFLAGS) -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\posix_api.obj ../src/posix_api.cpp
 |
 
 bcb4\bcb4re300\regex.obj: ../src/regex.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\regex.obj ../src/regex.cpp
+-c $(XCFLAGS) -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\regex.obj ../src/regex.cpp
 |
 
 bcb4\bcb4re300\regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\regex_debug.obj ../src/regex_debug.cpp
+-c $(XCFLAGS) -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\regex_debug.obj ../src/regex_debug.cpp
 |
 
 bcb4\bcb4re300\regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\regex_synch.obj ../src/regex_synch.cpp
+-c $(XCFLAGS) -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\regex_synch.obj ../src/regex_synch.cpp
 |
 
 bcb4\bcb4re300\w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\w32_regex_traits.obj ../src/w32_regex_traits.cpp
+-c $(XCFLAGS) -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\w32_regex_traits.obj ../src/w32_regex_traits.cpp
 |
 
 bcb4\bcb4re300\wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\wide_posix_api.obj ../src/wide_posix_api.cpp
+-c $(XCFLAGS) -tWM- -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300\wide_posix_api.obj ../src/wide_posix_api.cpp
 |
 
 bcb4\bcb4re300 : 
@@ -129,57 +129,57 @@ bcb4\bcb4re300.lib : bcb4\bcb4re300\c_regex_traits.obj bcb4\bcb4re300\c_regex_tr
 ########################################################
 bcb4\bcb4re300m\c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\c_regex_traits.obj ../src/c_regex_traits.cpp
+-c $(XCFLAGS) -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\c_regex_traits.obj ../src/c_regex_traits.cpp
 |
 
 bcb4\bcb4re300m\c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\c_regex_traits_common.obj ../src/c_regex_traits_common.cpp
+-c $(XCFLAGS) -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\c_regex_traits_common.obj ../src/c_regex_traits_common.cpp
 |
 
 bcb4\bcb4re300m\cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\cpp_regex_traits.obj ../src/cpp_regex_traits.cpp
+-c $(XCFLAGS) -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\cpp_regex_traits.obj ../src/cpp_regex_traits.cpp
 |
 
 bcb4\bcb4re300m\cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\cregex.obj ../src/cregex.cpp
+-c $(XCFLAGS) -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\cregex.obj ../src/cregex.cpp
 |
 
 bcb4\bcb4re300m\fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\fileiter.obj ../src/fileiter.cpp
+-c $(XCFLAGS) -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\fileiter.obj ../src/fileiter.cpp
 |
 
 bcb4\bcb4re300m\posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\posix_api.obj ../src/posix_api.cpp
+-c $(XCFLAGS) -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\posix_api.obj ../src/posix_api.cpp
 |
 
 bcb4\bcb4re300m\regex.obj: ../src/regex.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\regex.obj ../src/regex.cpp
+-c $(XCFLAGS) -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\regex.obj ../src/regex.cpp
 |
 
 bcb4\bcb4re300m\regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\regex_debug.obj ../src/regex_debug.cpp
+-c $(XCFLAGS) -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\regex_debug.obj ../src/regex_debug.cpp
 |
 
 bcb4\bcb4re300m\regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\regex_synch.obj ../src/regex_synch.cpp
+-c $(XCFLAGS) -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\regex_synch.obj ../src/regex_synch.cpp
 |
 
 bcb4\bcb4re300m\w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\w32_regex_traits.obj ../src/w32_regex_traits.cpp
+-c $(XCFLAGS) -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\w32_regex_traits.obj ../src/w32_regex_traits.cpp
 |
 
 bcb4\bcb4re300m\wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\wide_posix_api.obj ../src/wide_posix_api.cpp
+-c $(XCFLAGS) -tWM -D_NO_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300m\wide_posix_api.obj ../src/wide_posix_api.cpp
 |
 
 bcb4\bcb4re300m : 
@@ -203,57 +203,57 @@ bcb4\bcb4re300m.lib : bcb4\bcb4re300m\c_regex_traits.obj bcb4\bcb4re300m\c_regex
 ########################################################
 bcb4\bcb4re300v\c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\c_regex_traits.obj ../src/c_regex_traits.cpp
+-c $(XCFLAGS) -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\c_regex_traits.obj ../src/c_regex_traits.cpp
 |
 
 bcb4\bcb4re300v\c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\c_regex_traits_common.obj ../src/c_regex_traits_common.cpp
+-c $(XCFLAGS) -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\c_regex_traits_common.obj ../src/c_regex_traits_common.cpp
 |
 
 bcb4\bcb4re300v\cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\cpp_regex_traits.obj ../src/cpp_regex_traits.cpp
+-c $(XCFLAGS) -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\cpp_regex_traits.obj ../src/cpp_regex_traits.cpp
 |
 
 bcb4\bcb4re300v\cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\cregex.obj ../src/cregex.cpp
+-c $(XCFLAGS) -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\cregex.obj ../src/cregex.cpp
 |
 
 bcb4\bcb4re300v\fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\fileiter.obj ../src/fileiter.cpp
+-c $(XCFLAGS) -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\fileiter.obj ../src/fileiter.cpp
 |
 
 bcb4\bcb4re300v\posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\posix_api.obj ../src/posix_api.cpp
+-c $(XCFLAGS) -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\posix_api.obj ../src/posix_api.cpp
 |
 
 bcb4\bcb4re300v\regex.obj: ../src/regex.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\regex.obj ../src/regex.cpp
+-c $(XCFLAGS) -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\regex.obj ../src/regex.cpp
 |
 
 bcb4\bcb4re300v\regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\regex_debug.obj ../src/regex_debug.cpp
+-c $(XCFLAGS) -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\regex_debug.obj ../src/regex_debug.cpp
 |
 
 bcb4\bcb4re300v\regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\regex_synch.obj ../src/regex_synch.cpp
+-c $(XCFLAGS) -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\regex_synch.obj ../src/regex_synch.cpp
 |
 
 bcb4\bcb4re300v\w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\w32_regex_traits.obj ../src/w32_regex_traits.cpp
+-c $(XCFLAGS) -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\w32_regex_traits.obj ../src/w32_regex_traits.cpp
 |
 
 bcb4\bcb4re300v\wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\wide_posix_api.obj ../src/wide_posix_api.cpp
+-c $(XCFLAGS) -tWM -tWV -DJM_USE_VCL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; $(XCFLAGS) -obcb4\bcb4re300v\wide_posix_api.obj ../src/wide_posix_api.cpp
 |
 
 bcb4\bcb4re300v : 
@@ -277,57 +277,57 @@ bcb4\bcb4re300v.lib : bcb4\bcb4re300v\c_regex_traits.obj bcb4\bcb4re300v\c_regex
 ########################################################
 bcb4\bcb4re300lv\c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\c_regex_traits.obj ../src/c_regex_traits.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\c_regex_traits.obj ../src/c_regex_traits.cpp
 |
 
 bcb4\bcb4re300lv\c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\c_regex_traits_common.obj ../src/c_regex_traits_common.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\c_regex_traits_common.obj ../src/c_regex_traits_common.cpp
 |
 
 bcb4\bcb4re300lv\cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\cpp_regex_traits.obj ../src/cpp_regex_traits.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\cpp_regex_traits.obj ../src/cpp_regex_traits.cpp
 |
 
 bcb4\bcb4re300lv\cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\cregex.obj ../src/cregex.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\cregex.obj ../src/cregex.cpp
 |
 
 bcb4\bcb4re300lv\fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\fileiter.obj ../src/fileiter.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\fileiter.obj ../src/fileiter.cpp
 |
 
 bcb4\bcb4re300lv\posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\posix_api.obj ../src/posix_api.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\posix_api.obj ../src/posix_api.cpp
 |
 
 bcb4\bcb4re300lv\regex.obj: ../src/regex.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\regex.obj ../src/regex.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\regex.obj ../src/regex.cpp
 |
 
 bcb4\bcb4re300lv\regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\regex_debug.obj ../src/regex_debug.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\regex_debug.obj ../src/regex_debug.cpp
 |
 
 bcb4\bcb4re300lv\regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\regex_synch.obj ../src/regex_synch.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\regex_synch.obj ../src/regex_synch.cpp
 |
 
 bcb4\bcb4re300lv\w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\w32_regex_traits.obj ../src/w32_regex_traits.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\w32_regex_traits.obj ../src/w32_regex_traits.cpp
 |
 
 bcb4\bcb4re300lv\wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\wide_posix_api.obj ../src/wide_posix_api.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lv\wide_posix_api.obj ../src/wide_posix_api.cpp
 |
 
 bcb4\bcb4re300lv :
@@ -353,57 +353,57 @@ bcb4\bcb4re300lv.lib : bcb4\bcb4re300lv\c_regex_traits.obj bcb4\bcb4re300lv\c_re
 ########################################################
 bcb4\bcb4re300lm\c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\c_regex_traits.obj ../src/c_regex_traits.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\c_regex_traits.obj ../src/c_regex_traits.cpp
 |
 
 bcb4\bcb4re300lm\c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\c_regex_traits_common.obj ../src/c_regex_traits_common.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\c_regex_traits_common.obj ../src/c_regex_traits_common.cpp
 |
 
 bcb4\bcb4re300lm\cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\cpp_regex_traits.obj ../src/cpp_regex_traits.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\cpp_regex_traits.obj ../src/cpp_regex_traits.cpp
 |
 
 bcb4\bcb4re300lm\cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\cregex.obj ../src/cregex.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\cregex.obj ../src/cregex.cpp
 |
 
 bcb4\bcb4re300lm\fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\fileiter.obj ../src/fileiter.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\fileiter.obj ../src/fileiter.cpp
 |
 
 bcb4\bcb4re300lm\posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\posix_api.obj ../src/posix_api.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\posix_api.obj ../src/posix_api.cpp
 |
 
 bcb4\bcb4re300lm\regex.obj: ../src/regex.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\regex.obj ../src/regex.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\regex.obj ../src/regex.cpp
 |
 
 bcb4\bcb4re300lm\regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\regex_debug.obj ../src/regex_debug.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\regex_debug.obj ../src/regex_debug.cpp
 |
 
 bcb4\bcb4re300lm\regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\regex_synch.obj ../src/regex_synch.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\regex_synch.obj ../src/regex_synch.cpp
 |
 
 bcb4\bcb4re300lm\w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\w32_regex_traits.obj ../src/w32_regex_traits.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\w32_regex_traits.obj ../src/w32_regex_traits.cpp
 |
 
 bcb4\bcb4re300lm\wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\wide_posix_api.obj ../src/wide_posix_api.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300lm\wide_posix_api.obj ../src/wide_posix_api.cpp
 |
 
 bcb4\bcb4re300lm :
@@ -429,57 +429,57 @@ bcb4\bcb4re300lm.lib : bcb4\bcb4re300lm\c_regex_traits.obj bcb4\bcb4re300lm\c_re
 ########################################################
 bcb4\bcb4re300l\c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\c_regex_traits.obj ../src/c_regex_traits.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\c_regex_traits.obj ../src/c_regex_traits.cpp
 |
 
 bcb4\bcb4re300l\c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\c_regex_traits_common.obj ../src/c_regex_traits_common.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\c_regex_traits_common.obj ../src/c_regex_traits_common.cpp
 |
 
 bcb4\bcb4re300l\cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\cpp_regex_traits.obj ../src/cpp_regex_traits.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\cpp_regex_traits.obj ../src/cpp_regex_traits.cpp
 |
 
 bcb4\bcb4re300l\cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\cregex.obj ../src/cregex.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\cregex.obj ../src/cregex.cpp
 |
 
 bcb4\bcb4re300l\fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\fileiter.obj ../src/fileiter.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\fileiter.obj ../src/fileiter.cpp
 |
 
 bcb4\bcb4re300l\posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\posix_api.obj ../src/posix_api.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\posix_api.obj ../src/posix_api.cpp
 |
 
 bcb4\bcb4re300l\regex.obj: ../src/regex.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\regex.obj ../src/regex.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\regex.obj ../src/regex.cpp
 |
 
 bcb4\bcb4re300l\regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\regex_debug.obj ../src/regex_debug.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\regex_debug.obj ../src/regex_debug.cpp
 |
 
 bcb4\bcb4re300l\regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\regex_synch.obj ../src/regex_synch.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\regex_synch.obj ../src/regex_synch.cpp
 |
 
 bcb4\bcb4re300l\w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\w32_regex_traits.obj ../src/w32_regex_traits.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\w32_regex_traits.obj ../src/w32_regex_traits.cpp
 |
 
 bcb4\bcb4re300l\wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
 	bcc32 @&&|
--c -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\wide_posix_api.obj ../src/wide_posix_api.cpp
+-c $(XCFLAGS) -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; $(XCFLAGS) -obcb4\bcb4re300l\wide_posix_api.obj ../src/wide_posix_api.cpp
 |
 
 bcb4\bcb4re300l :

@@ -1595,7 +1595,8 @@ structure, which contains information on what matched, and calls
 the predicate foo, passing the match_results&lt;iterator,
 Allocator&gt; as a single argument. If the predicate returns true,
 then the grep operation continues, otherwise it terminates
-without searching for further matches. </p>
+without searching for further matches. The function returns the
+number of matches found.</p>
 
 <p>The general form of the predicate is: </p>
 
@@ -1659,7 +1660,7 @@ void</b> IndexClasses(map_type&amp; m, <b>const</b> std::string&amp; file)
 &nbsp;&nbsp; std::string::const_iterator start, end; 
 &nbsp;&nbsp; start = file.begin(); 
 &nbsp;&nbsp; end = file.end(); 
-&nbsp;&nbsp; regex_grep(IndexClassesPred(m, start), start, end, expression; 
+&nbsp;&nbsp; regex_grep(IndexClassesPred(m, start), start, end, expression); 
 } </pre>
 
 <p><a href="demo/snippets/snip5.cpp">Example</a>: Use regex_grep

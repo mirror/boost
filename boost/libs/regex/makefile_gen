@@ -358,7 +358,7 @@ EOF
 		all_lib_obj="$all_lib_obj +$obj"
 		echo "$obj: $file \$(ALL_HEADER)" >> $tout
 		echo "	bcc32 @&&|" >> $tout
-		echo "-c $opts \$(XCFLAGS) -o$obj $file" >> $tout
+		echo "-c \$(XCFLAGS) $opts \$(XCFLAGS) -o$obj $file" >> $tout
 		echo "|" >> $tout
 		echo "" >> $tout
 	done
@@ -409,7 +409,7 @@ EOF
 		all_obj="$all_obj $obj"
 		echo "$obj: $file \$(ALL_HEADER)" >> $tout
 		echo "	bcc32 @&&|" >> $tout
-		echo "-c $opts \$(XCFLAGS) -o$obj $file" >> $tout
+		echo "-c \$(XCFLAGS) $opts \$(XCFLAGS) -o$obj $file" >> $tout
 		echo "|" >> $tout
 		echo "" >> $tout
 	done
@@ -598,6 +598,7 @@ bcb_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
 
 
 

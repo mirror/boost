@@ -761,7 +761,7 @@ jm_uintfast32_t BOOST_RE_CALL w32_regex_traits<wchar_t>::lookup_classname(const 
    unsigned int len = strnarrow((char*)NULL, 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
-   len =  re_detail::w32_traits_base::do_lookup_class(buf.get());
+   len =  base_type::do_lookup_class(buf.get());
    return len;
 }
 
