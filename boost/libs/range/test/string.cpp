@@ -45,9 +45,9 @@ void check_char()
 {
     typedef char*                  char_iterator_t;
     typedef char                   char_array_t[10];
-    const char*      char_s       = "a string";
-    char             my_string[]  = "another string";
-    const unsigned        my_string_length = 14;
+    const char*      char_s           = "a string";
+    char             my_string[]      = "another string";
+    const unsigned   my_string_length = 14;
 
     
     BOOST_STATIC_ASSERT(( is_same<  value_type_of<char_iterator_t>::type, 
@@ -74,10 +74,11 @@ void check_char()
     BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<const char_array_t>::type, const char* >::value ));
 
     BOOST_CHECK_EQUAL( begin( char_s ), char_s );
-    const char* end1 = begin( char_s ) + size( char_s );
+    std::size_t sz = size( char_s );
+    const char* end1 = begin( char_s ) + sz; 
     BOOST_CHECK_EQUAL( end( char_s ), end1 );
     BOOST_CHECK_EQUAL( empty( char_s ), (char_s == 0 || char_s[0] == char()) );
-    BOOST_CHECK_EQUAL( size( char_s ), std::char_traits<char>::length( char_s ) );
+    BOOST_CHECK_EQUAL( sz, std::char_traits<char>::length( char_s ) );
     
     BOOST_CHECK_EQUAL( begin( my_string ), my_string );
     const char* end2 = begin( my_string ) + size( my_string );
@@ -116,10 +117,11 @@ void check_string()
     BOOST_STATIC_ASSERT(( is_same< result_iterator_of<wchar_iterator_t>::type, wchar_iterator_t >::value ));
     BOOST_STATIC_ASSERT(( is_same< result_iterator_of<const wchar_t*>::type, const wchar_t* >::value ));
     
+    std::size_t sz = size( char_ws );
     BOOST_CHECK_EQUAL( begin( char_ws ), char_ws );
-    BOOST_CHECK_EQUAL( end( char_ws ), (begin( char_ws ) + size( char_ws )) );
+    BOOST_CHECK_EQUAL( end( char_ws ), (begin( char_ws ) + sz) );
     BOOST_CHECK_EQUAL( empty( char_ws ), (char_ws == 0 || char_ws[0] == wchar_t()) );
-    BOOST_CHECK_EQUAL( size( char_ws ), std::char_traits<wchar_t>::length( char_ws ) );
+    BOOST_CHECK_EQUAL( sz, std::char_traits<wchar_t>::length( char_ws ) );
         
     wchar_t to_search = L'n';
     BOOST_CHECK( find( char_ws, to_search ) != end( char_ws ) );    
