@@ -287,7 +287,9 @@
 <!ATTLIST rationale %boost.common.attrib;>
 
 <!ELEMENT functionname (#PCDATA)>
-<!ATTLIST functionname %boost.common.attrib;>
+<!ATTLIST functionname 
+    alt          CDATA  #IMPLIED
+    %boost.common.attrib;>
 
 <!ELEMENT macroname (#PCDATA)>
 <!ATTLIST macroname %boost.common.attrib;>
