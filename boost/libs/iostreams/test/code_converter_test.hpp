@@ -24,6 +24,7 @@
 # include <algorithm>                     // equal.
 # include <locale>
 # include <string>
+# include <boost/config.hpp> // BOOST_DEDUCED_TYPENAME.
 # include <boost/iostreams/code_converter.hpp>
 # include <boost/iostreams/copy.hpp>
 # include <boost/iostreams/device/back_inserter.hpp>
@@ -116,16 +117,18 @@
 
 using namespace std;
 using namespace boost::iostreams;
+using namespace boost::iostreams::detail;
 using namespace boost::iostreams::test;
 
 const int max_length = 30;
 const int string_length = 100;
 
 template<typename Codecvt>
-bool valid_char(typename Codecvt::intern_type c)
+bool valid_char(typename codecvt_intern<Codecvt>::type c)
 {
-    typedef typename Codecvt::state_type  state_type;
-    typedef typename Codecvt::intern_type intern_type;
+    using namespace boost::iostreams::detail;
+    typedef typename codecvt_state<Codecvt>::type   state_type;
+    typedef typename codecvt_intern<Codecvt>::type  intern_type;
     Codecvt             cvt;
     state_type          state = state_type();
     const intern_type*  nint;
@@ -139,10 +142,13 @@ bool valid_char(typename Codecvt::intern_type c)
 }
 
 template<typename Codecvt>
-std::basic_string<typename Codecvt::intern_type> 
+basic_string<
+    BOOST_DEDUCED_TYPENAME 
+    boost::iostreams::detail::codecvt_intern<Codecvt>::type
+> 
 test_string()
 {
-    typedef typename Codecvt::intern_type intern_type;
+    typedef typename codecvt_intern<Codecvt>::type intern_type;
     std::basic_string<intern_type> result;
     for (intern_type c = 0; result.size() < string_length; ++c)
         if (valid_char<Codecvt>(c))
@@ -153,9 +159,12 @@ test_string()
 template<typename Codecvt>
 bool codecvt_test1()
 {
-    typedef std::basic_string<typename Codecvt::intern_type>  string_type;
-    typedef code_converter<file_descriptor_source, Codecvt>   wide_file_source;
-    typedef code_converter<file_descriptor_sink, Codecvt>     wide_file_sink;
+    typedef basic_string<
+                BOOST_DEDUCED_TYPENAME 
+                codecvt_intern<Codecvt>::type
+            >                                                string_type;
+    typedef code_converter<file_descriptor_source, Codecvt>  wide_file_source;
+    typedef code_converter<file_descriptor_sink, Codecvt>    wide_file_sink;
 
     BOOST_CHECK(Codecvt().max_length() <= max_length);
     temp_file                       temp;
@@ -176,12 +185,15 @@ bool codecvt_test1()
 template<typename Codecvt>
 bool codecvt_test2()
 {
-    typedef std::basic_string<typename Codecvt::intern_type>  string_type;
-    typedef code_converter<file_source>                       wide_file_source;
-    typedef code_converter<file_sink>                         wide_file_sink;
+    typedef basic_string<
+                BOOST_DEDUCED_TYPENAME 
+                codecvt_intern<Codecvt>::type
+            >                            string_type;
+    typedef code_converter<file_source>  wide_file_source;
+    typedef code_converter<file_sink>    wide_file_sink;
 
     // Set global locale.
-    locale loc(locale(), new Codecvt);
+    locale loc = add_facet(locale(), new Codecvt);
     locale::global(loc);
 
     temp_file                       temp;
