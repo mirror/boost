@@ -36,7 +36,7 @@ template<> struct deref_wknd<int>
 
 }}} // namespace boost::mpl::aux
 
-#   define BOOST_MPL_AUX_DEREF_WNKD(iter) aux::deref_wknd<iter>::type
+#   define BOOST_MPL_AUX_DEREF_WNKD(iter) ::boost::mpl::aux::deref_wknd<iter>::type
 
 #else
 
