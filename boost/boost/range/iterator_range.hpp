@@ -14,8 +14,6 @@
 #include <boost/range/config.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
-#include <boost/range/empty.hpp>
-#include <boost/range/size.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <iterator>
@@ -164,7 +162,12 @@ namespace boost {
             */
             size_type size() const
             { 
-                return boost::size( make_pair( begin(), end() ) );
+                return std::distance( m_Begin, m_End );
+            }
+            
+            bool empty() const
+            {
+                return m_Begin == m_End;
             }
 
             //! Swap
@@ -173,8 +176,8 @@ namespace boost {
             */
             void swap( iterator_range& Other )
             {
-                std::swap( m_Begin, Other.begin() );
-                std::swap( m_End, Other.end() );
+                std::swap( m_Begin, Other.m_Begin );
+                std::swap( m_End, Other.m_End );
             }
             
             //! Safe bool conversion
@@ -192,7 +195,7 @@ namespace boost {
             typedef iterator (iterator_range::*unspecified_bool_type) () const;
             operator unspecified_bool_type() const
             {
-                return empty( *this )? 0: &iterator_range::end;
+                return empty() ? 0: &iterator_range::end;
             }
             
             /*
