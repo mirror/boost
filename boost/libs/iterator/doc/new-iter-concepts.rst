@@ -299,74 +299,21 @@ given in the following diagram.
 Like the old iterator requirements, we provide tags for purposes of
 dispatching based on the traversal concepts.  The tags are related via
 inheritance so that a tag is convertible to another tag if the concept
-associated with the first tag is a refinement of the second tag.
-Since the access concepts are not related via refinement, but instead
-cover orthogonal issues, we do not use tags for the access concepts,
-but instead use the equivalent of a bit field.
+associated with the first tag is a refinement of the second tag.  Our
+design reuses ``iterator_traits<Iter>::iterator_category`` as the
+access mechanism for the traversal tag. If an iterator wishes to meet
+the requirements of both a new iterator concept and an old iterator
+concept, it can use an iterator category type that inherits from both
+the the old iterator tag and the new traversal tag.
 
-We provide an access mechanism for mapping iterator types to the new
-traversal tags and access bit field. Our design reuses
-``iterator_traits<Iter>::iterator_category`` as the access
-mechanism. To that end, the access and traversal information is
-bundled into a single type using the following `iterator_tag` class.
+We do not provide tags for the purposes of dispatching based on the
+access concepts. There are two reasons: we could not find a way to
+automatically infer the right access tags for old-style iterators and
+the need for dispatching based on the access concepts is not as great.
 
-::
-
-  enum iterator_access { readable_iterator = 1, writable_iterator = 2, 
-      swappable_iterator = 4, lvalue_iterator = 8 };
-
-  template <unsigned int access_bits, class TraversalTag>
-  struct iterator_tag : /* appropriate old category or categories */ {
-    static const iterator_access access =
-      (iterator_access)access_bits & 
-        (readable_iterator | writable_iterator | swappable_iterator);
-    typedef TraversalTag traversal;
-  };
-
-The ``access_bits`` argument is declared to be ``unsigned int``
-instead of the enum ``iterator_access`` for convenience of use. For
-example, the expression ``(readable_iterator | writable_iterator)``
-produces an unsigned int, not an ``iterator_access``.  The purpose of
-the ``lvalue_iterator`` part of the ``iterator_access`` enum is to
-communicate to ``iterator_tag`` whether the reference type is an
-lvalue so that the appropriate old category can be chosen for the base
-class. The ``lvalue_iterator`` bit is not recorded in the
-``iterator_tag::access`` data member.
-
-The ``iterator_tag`` class template is derived from the appropriate
-iterator tag or tags from the old requirements based on the access
-bits and traversal tag passed as template parameters.  The algorithm
-for determining the old tag or tags picks the least-refined old
-concepts that include all of the requirements of the access and
-traversal concepts (that is, the closest fit), if any such category
-exists.  For example, the category tag for a Readable Single Pass
-Iterator will always be derived from ``input_iterator_tag``, while the
-category tag for a Single Pass Iterator that is both Readable and
-Writable will be derived from both ``input_iterator_tag`` and
-``output_iterator_tag``.
-
-We also provide several helper classes that make it convenient to
-obtain the access and traversal characteristics of an iterator. These
-helper classes work both for iterators whose ``iterator_category`` is
-``iterator_tag`` and also for iterators using the original iterator
-categories.
-
-::
-
-  template <class Iterator> struct is_readable  { typedef ... type; };
-  template <class Iterator> struct is_writable { typedef ... type; };
-  template <class Iterator> struct is_swappable { typedef ... type; };
-  template <class Iterator> struct traversal_category { typedef ... type; };
-
-
-We do not include a helper class ``is_lvalue_iterator`` because that
-can easily be deduced by checking whether
-``iterator_traits<Iterator>::reference`` is a real reference.
-
-
-The most difficult design decision concerned the ``operator[]``. The
-direct approach for specifying ``operator[]`` would have a return type
-of ``reference``; the same as ``operator*``. However, going in this
+A difficult design decision concerned the ``operator[]``. The direct
+approach for specifying ``operator[]`` would have a return type of
+``reference``; the same as ``operator*``. However, going in this
 direction would mean that an iterator satisfying the old Random Access
 Iterator requirements would not necessarily be a model of Readable or
 Writable Lvalue Iterator.  Instead we have chosen a design that
