@@ -365,14 +365,12 @@ BOOST_DECL_TRANSFORM_TEST(add_const_test_3, ::boost::add_const, *, *const)
 BOOST_DECL_TRANSFORM_TEST(add_const_test_7, ::boost::add_const, *volatile, *volatile const)
 BOOST_DECL_TRANSFORM_TEST(add_const_test_10, ::boost::add_const, const*, const*const)
 BOOST_DECL_TRANSFORM_TEST(add_const_test_11, ::boost::add_const, volatile*, volatile*const)
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 BOOST_DECL_TRANSFORM_TEST(add_const_test_5, ::boost::add_const, const &, const&)
 BOOST_DECL_TRANSFORM_TEST(add_const_test_6, ::boost::add_const, &, &)
 BOOST_DECL_TRANSFORM_TEST(add_const_test_8, ::boost::add_const, const [2], const [2])
 BOOST_DECL_TRANSFORM_TEST(add_const_test_9, ::boost::add_const, volatile &, volatile&)
 BOOST_DECL_TRANSFORM_TEST(add_const_test_12, ::boost::add_const, [2][3], const[2][3])
 BOOST_DECL_TRANSFORM_TEST(add_const_test_13, ::boost::add_const, (&)[2], (&)[2])
-#endif
 
 void check_add_const()
 {
@@ -383,14 +381,12 @@ void check_add_const()
    add_const_test_7();
    add_const_test_10();
    add_const_test_11();
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    add_const_test_5();
    add_const_test_6();
    add_const_test_8();
    add_const_test_9();
    add_const_test_12();
    add_const_test_13();
-#endif
 }
 
 /***********************************************************************
@@ -406,14 +402,12 @@ BOOST_DECL_TRANSFORM_TEST(add_volatile_test_3, ::boost::add_volatile, *, *volati
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_7, ::boost::add_volatile, *volatile, *volatile)
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_10, ::boost::add_volatile, const*, const*volatile)
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_11, ::boost::add_volatile, volatile*, volatile*volatile)
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_5, ::boost::add_volatile, const &, const&)
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_6, ::boost::add_volatile, &, &)
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_8, ::boost::add_volatile, const [2], const volatile [2])
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_9, ::boost::add_volatile, volatile &, volatile&)
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_12, ::boost::add_volatile, [2][3], volatile[2][3])
 BOOST_DECL_TRANSFORM_TEST(add_volatile_test_13, ::boost::add_volatile, (&)[2], (&)[2])
-#endif
 
 void check_add_volatile()
 {
@@ -424,14 +418,12 @@ void check_add_volatile()
    add_volatile_test_7();
    add_volatile_test_10();
    add_volatile_test_11();
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    add_volatile_test_5();
    add_volatile_test_6();
    add_volatile_test_8();
    add_volatile_test_9();
    add_volatile_test_12();
    add_volatile_test_13();
-#endif
 }
 
 
@@ -464,21 +456,21 @@ int cpp_main(int argc, char* argv[])
 //
 // define the number of failures expected for given compilers:
 #ifdef __BORLANDC__
-#ifdef SHORT_TRANSFORM_TEST
+# ifdef SHORT_TRANSFORM_TEST
 unsigned int expected_failures = 97; // cv-qualifiers
-#else
+# else
 unsigned int expected_failures = 474; // cv-qualifiers
-#endif
+# endif
 #elif defined(BOOST_MSVC)
 unsigned int expected_failures = 84; // partial specialisation (fails for UDT's)
 #elif defined(__SUNPRO_CC)
 unsigned int expected_failures = 1; // cv-qualified references
 #elif defined(__GNUC__)
-#if (__GNUC__ > 3) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
+# if (__GNUC__ > 3) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
 unsigned int expected_failures = 0;
-#else
+# else
 unsigned int expected_failures = 1; // cv-qualified references
-#endif
+# endif
 #elif defined(__HP_aCC)
 unsigned int expected_failures = 272; // remove_const/remove_volatile/remove_cv don't work
 #elif defined(__EDG_VERSION__) && __EDG_VERSION__ < 238
