@@ -46,11 +46,11 @@ namespace boost{
 # define STR_COMP(s,p) s.compare(p)
 #else
 template <class C, class T, class A>
-int string_compare(const std::basic_string<C,T,A>& s, const C* p)
+inline int string_compare(const std::basic_string<C,T,A>& s, const C* p)
 { return s.compare(p); }
-int string_compare(const std::string& s, const char* p)
+inline int string_compare(const std::string& s, const char* p)
 { return std::strcmp(s.c_str(), p); }
-int string_compare(const std::wstring& s, const wchar_t* p)
+inline int string_compare(const std::wstring& s, const wchar_t* p)
 { return std::wcscmp(s.c_str(), p); }
 # define STR_COMP(s,p) string_compare(s,p)
 #endif
