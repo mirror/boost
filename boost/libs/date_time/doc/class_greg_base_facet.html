@@ -32,7 +32,7 @@ between various parts of the date.  To localize the date the process entails con
 the facet with the desired parameters, calling imbue on the stream, and then streaming
 the date.
 <p>
-By default, the date operator<< uses the following default strings:
+By default, the date operator &lt;&lt; uses the following default strings:
 <div class="fragment"><pre>
  us_short_month_names={"Jan","Feb","Mar","Apr","May","Jun","Jul",
                        "Aug","Sep","Oct","Nov","Dec", "NAD"};
@@ -51,7 +51,7 @@ and then with long month names.
 
   <font class="keyword">using namespace</font> boost::gregorian;
 
-  typedef boost::date_time::all_date_names_put<greg_facet_config> date_facet;
+  typedef boost::date_time::all_date_names_put&lt;greg_facet_config&gt; date_facet;
 
   const char* const de_short_month_names[]={"Jan","Feb","Mar","Apr","Mai",
                                             "Jun","Jul","Aug","Sep","Okt",
@@ -128,9 +128,9 @@ and then with long month names.
 
 <hr><address><small>
 <!-- hhmts start -->
-Last modified: Mon Jan 19 21:16:12 MST 2004
+Last modified: Sun Feb  1 09:18:06 MST 2004
 <!-- hhmts end -->
- by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
+ by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2004
 </small></address>
 
 </body>
