@@ -208,12 +208,27 @@ main()
   check("check iso week number   ", d37.week_number() == 52);
   date d38(2001, Jan, 1);
   check("check iso week number   ", d38.week_number() == 1);
-  
-//   std::cout << d16.julian_day() << std::endl;
-//   std::cout << d16.modjulian_day() << std::endl;
 
+  try {
+    int dayofyear1 = d38.day_of_year();
+    check("check day of year number", dayofyear1 == 1);
+    check("check day of year number", d37.day_of_year() == 366);
+    date d39(2001,Dec,31);
+    check("check day of year number", d39.day_of_year() == 365);
+    date d40(2000,Feb,29);
+    check("check day of year number", d40.day_of_year() == 60);
+    date d41(1400,Jan,1);
+    check("check day of year number", d41.day_of_year() == 1);
+    date d42(1400,Jan,1);
+    check("check day of year number", d42.day_of_year() == 1);
+    date d43(2002,Nov,17);
+    check("check day of year number", d43.day_of_year() == 321);
+  }
+  catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+    check("check day of year number", false);
+  }
 
+  return printTestStats();
 
-  printTestStats();
-  return 0;
 };

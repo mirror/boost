@@ -23,6 +23,8 @@ namespace gregorian {
   public:
     //! Type to hold a weekday (eg: Sunday, Monday,...)
     typedef greg_weekday         day_of_week_type;
+    //! Counter type from 1 to 366 for gregorian dates.
+    typedef greg_day_of_year_rep day_of_year_type;
     //! Internal date representation that handles infinity, not a date
     typedef fancy_date_rep       date_rep_type;
     //! Date rep implements the traits stuff as well

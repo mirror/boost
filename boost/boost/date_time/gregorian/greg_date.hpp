@@ -10,7 +10,6 @@
 #include "boost/date_time/gregorian/greg_calendar.hpp"
 #include "boost/date_time/gregorian/greg_duration.hpp"
 
-
 namespace boost {
 namespace gregorian {
 
@@ -36,6 +35,7 @@ namespace gregorian {
     typedef gregorian_calendar::year_type year_type;
     typedef gregorian_calendar::month_type month_type;
     typedef gregorian_calendar::day_type day_type;
+    typedef gregorian_calendar::day_of_year_type day_of_year_type;
     typedef gregorian_calendar::ymd_type ymd_type;
     typedef gregorian_calendar::date_rep_type date_rep_type;
     typedef gregorian_calendar::date_int_type date_int_type;
@@ -70,13 +70,19 @@ namespace gregorian {
       ymd_type ymd = year_month_day();
       return gregorian_calendar::julian_day_number(ymd);
     }
+    //!Return the day of year 1..365 or 1..366 (for leap year)
+    day_of_year_type day_of_year() const
+    {
+      date start_of_year(year(), 1, 1);
+      return ((*this-start_of_year).days() + 1);
+    }
     //!Return the Modified Julian Day number for the date.
     long modjulian_day() const
     {
       ymd_type ymd = year_month_day();
       return gregorian_calendar::modjulian_day_number(ymd);      
     }
-    //!Return the iso 8601 week number
+    //!Return the iso 8601 week number 1..53
     int week_number() const
     {
       ymd_type ymd = year_month_day();
