@@ -20,6 +20,14 @@
 #include <iomanip>
 #include <ctime>
 
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std
+{
+  using ::clock_t;
+  using ::clock;
+}
+#endif
+
 #ifdef BOOST_INTEL
 #  pragma warning( disable: 304 ) // access control not specified
 #endif
@@ -178,11 +186,7 @@ int main()
           " events. Please wait...\n";
 
         const unsigned long startEvents2 = eventsSentTotal;
-        #ifdef BOOST_NO_STDC_NAMESPACE
-        const clock_t startTime2 = clock();
-        #else
         const std::clock_t startTime2 = std::clock();
-        #endif
 
         for ( unsigned int eventNo = 0; eventNo < noOfEvents; ++eventNo )
         {
@@ -190,11 +194,7 @@ int main()
           ++eventsSentTotal;
         }
 
-        #ifdef BOOST_NO_STDC_NAMESPACE
-        const clock_t elapsedTime2 = clock() - startTime2;
-        #else
         const std::clock_t elapsedTime2 = std::clock() - startTime2;
-        #endif
         const unsigned int eventsSent2 = eventsSentTotal - startEvents2;
         std::cout << "Time to dispatch one event and\n" <<
           "perform the resulting transition: ";

@@ -77,6 +77,14 @@
 #include <ctime>
 #include <memory> // std::allocator
 
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std
+{
+  using ::clock_t;
+  using ::clock;
+}
+#endif
+
 #ifdef BOOST_INTEL
 #  pragma warning( disable: 304 ) // access control not specified
 #  pragma warning( disable: 383 ) // reference to temporary used
@@ -282,11 +290,7 @@ int main()
           noOfEvents << " times. Please wait...\n";
 
         const unsigned int prevCount = Player::TotalNoOfProcessedEvents();
-        #ifdef BOOST_NO_STDC_NAMESPACE
-        const clock_t startTime = clock();
-        #else
         const std::clock_t startTime = std::clock();
-        #endif
 
         #ifdef USE_TWO_THREADS
         #ifdef BOOST_HAS_THREADS
@@ -301,11 +305,7 @@ int main()
         scheduler1();
         #endif
 
-        #ifdef BOOST_NO_STDC_NAMESPACE
-        const clock_t elapsedTime = clock() - startTime;
-        #else
         const std::clock_t elapsedTime = std::clock() - startTime;
-        #endif
         std::cout << "Time to send and dispatch one event and\n" <<
                      "perform the resulting transition: ";
         std::cout << elapsedTime / static_cast< double >( CLOCKS_PER_SEC ) *

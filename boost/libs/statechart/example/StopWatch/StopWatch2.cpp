@@ -43,6 +43,14 @@
 #include <ctime>
 #include <iostream>
 
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std
+{
+  using ::time;
+  using ::time_t;
+}
+#endif
+
 #ifdef BOOST_INTEL
 #  pragma warning( disable: 304 ) // access control not specified
 #  pragma warning( disable: 444 ) // destructor for base is not virtual
@@ -104,15 +112,7 @@ struct Running :
     fsm::transition< EvStartStop, Stopped > > >
 {
   public:
-    Running() : startTime_(
-      #ifdef BOOST_NO_STDC_NAMESPACE
-      time( 0 ) 
-      #else
-      std::time( 0 ) 
-      #endif
-    )
-    {
-    }
+    Running() : startTime_( std::time( 0 ) ) {}
 
     ~Running()
     {
@@ -129,18 +129,10 @@ struct Running :
     double ElapsedTime() const
     {
       return context< Active >().ElapsedTime() +
-        #ifdef BOOST_NO_STDC_NAMESPACE
-        difftime( time( 0 ), startTime_ );
-        #else
         std::difftime( std::time( 0 ), startTime_ );
-        #endif
     }
 
-    #ifdef BOOST_NO_STDC_NAMESPACE
-    time_t startTime_;
-    #else
     std::time_t startTime_;
-    #endif
 };
 
 struct Stopped :

@@ -91,6 +91,16 @@
 #include <iomanip>
 #include <ctime>
 
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std
+{
+  using ::clock_t;
+  using ::clock;
+}
+#endif
+
+
+
 #ifdef BOOST_INTEL
 #  pragma warning( disable: 304 ) // access control not specified
 #  pragma warning( disable: 444 ) // destructor for base is not virtual
@@ -318,23 +328,14 @@ int main()
           std::cout << "\nSending " << noOfEvents << " events. Please wait...\n";
 
           const unsigned long startEvents2 = eventsSentTotal;
-
-          #ifdef BOOST_NO_STDC_NAMESPACE
-          const clock_t startTime2 = clock();
-          #else
           const std::clock_t startTime2 = std::clock();
-          #endif
 
           for ( unsigned int lap = 0; lap < noOfLaps; ++lap )
           {
             VisitAllStates< NO_OF_BITS - 1, false >( bitMachine );
           }
 
-          #ifdef BOOST_NO_STDC_NAMESPACE
-          const clock_t elapsedTime2 = clock() - startTime2;
-          #else
           const std::clock_t elapsedTime2 = std::clock() - startTime2;
-          #endif
           const unsigned int eventsSent2 = eventsSentTotal - startEvents2;
           std::cout << "Time to dispatch one event and\n" <<
                        "perform the resulting transition: ";
