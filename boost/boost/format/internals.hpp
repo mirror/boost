@@ -70,7 +70,7 @@ struct format_item
                     argN_ignored    = -3  // ignored directive. (no argument read)
   };
   typedef BOOST_IO_STD basic_ios<Ch, Tr>              basic_ios;
-  typedef stream_format_state<Ch, Tr>         stream_format_state;
+  typedef detail::stream_format_state<Ch, Tr>         stream_format_state;
   typedef std::basic_string<Ch, Tr>           string_t;
   typedef BOOST_IO_STD basic_ostringstream<Ch, Tr>    internal_stream_t;
 
