@@ -9,11 +9,16 @@
 
 #ifndef BOOST_TYPE_TRAITS_TEST_HPP
 #define BOOST_TYPE_TRAITS_TEST_HPP
+
+#include "boost/config.hpp"
+#include "boost/utility.hpp"
+#include "boost/type_traits/alignment_of.hpp"
+#include "boost/type_traits/type_with_alignment.hpp"
+#include "boost/type_traits/ice.hpp"
+
 #include <iostream>
 #include <typeinfo>
-#include <boost/config.hpp>
-#include <boost/utility.hpp>
-#include <boost/type_traits/alignment_traits.hpp>
+
 //
 // define tests here
 unsigned failures = 0;
@@ -156,6 +161,7 @@ struct test_align
       char c;
       T t;
    };
+
    static void do_it()
    {
       padded p;
@@ -169,9 +175,12 @@ struct test_align
          std::cout << "\tfound: " << boost::alignment_of<T>::value << " expected " << a << std::endl;
       }
       // suppress warnings about unused variables:
-      (void)p;
-      (void)a;
+      not_unused(p);
+      not_unused(a);
    }
+    
+   template <class U>
+   static void not_unused(U const&) {}
 };
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T>
@@ -422,13 +431,3 @@ struct incomplete_type;
 
 
 #endif // BOOST_TYPE_TRAITS_TEST_HPP
-
-
-
-
-
-
-
-
-
-

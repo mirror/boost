@@ -79,20 +79,24 @@ struct is_mem_fun_pointer_impl
 
 #else // Borland C++
 
+namespace detail {
+
 template <typename T>
-struct is_member_function_pointer_impl
+struct is_mem_fun_pointer_impl
 {
    static T& m_t;
    BOOST_STATIC_CONSTANT(
               bool, value =
-               (1 == sizeof(detail::is_member_function_pointer_helper(m_t))) );
+               (1 == sizeof(type_traits::is_mem_fun_pointer_tester(m_t))) );
 };
 
 template <typename T>
-struct is_member_function_pointer_impl<T&>
+struct is_mem_fun_pointer_impl<T&>
 {
    BOOST_STATIC_CONSTANT(bool, value = false);
 };
+
+} // namespace detail
 
 #endif
 
