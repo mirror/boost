@@ -27,7 +27,7 @@
  *
  * Therefore, avoid explicit function template instantiations.
  */
-#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1200)
+#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
 template<typename T> inline T make_char_numeric_for_streaming(T x) { return x; }
 namespace fix{
 inline int make_char_numeric_for_streaming(char c) { return c; }
@@ -35,6 +35,23 @@ inline int make_char_numeric_for_streaming(signed char c) { return c; }
 inline int make_char_numeric_for_streaming(unsigned char c) { return c; }
 }
 using namespace fix;
+#  if defined(_YVALS) && !defined(_CPPLIB_VER) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
+// fix for missing operator<< in original Dinkumware lib:
+std::ostream& operator<<(std::ostream& os, __int64 i )
+{
+    char buf[80];
+    sprintf(buf,"%I64d", i );
+    os << buf;
+    return os;
+}
+std::ostream& operator<<(std::ostream& os, unsigned __int64 i )
+{
+    char buf[80];
+    sprintf(buf,"%I64u", i );
+    os << buf;
+    return os;
+}
+#  endif
 #else
 template<typename T> inline T make_char_numeric_for_streaming(T x) { return x; }
 inline int make_char_numeric_for_streaming(char c) { return c; }
@@ -157,11 +174,17 @@ int test_main(int, char*[])
   test_integral_limits(long(), "long");
   typedef unsigned long unsigned_long;
   test_integral_limits(unsigned_long(), "unsigned long");
-#if defined(__GNUC__) && !(__GNUC__ == 3 && __GNUC_MINOR__ == 0 && defined(__GLIBCPP__))
+#if defined(BOOST_HAS_LONG_LONG)
   typedef long long long_long;
   test_integral_limits(long_long(), "long long");
   typedef unsigned long long unsigned_long_long;
   test_integral_limits(unsigned_long_long(), "unsigned long long");
+#endif
+#ifdef BOOST_HAS_MS_INT64
+  typedef __int64 long_long;
+  test_integral_limits(long_long(), "__int64");
+  typedef unsigned __int64 unsigned_long_long;
+  test_integral_limits(unsigned_long_long(), "unsigned __int64");
 #endif
 
   test_float_limits(float(), "float");
