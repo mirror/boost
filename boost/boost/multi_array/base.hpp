@@ -25,6 +25,7 @@
 #include "boost/multi_array/storage_order.hpp"
 #include "boost/multi_array/types.hpp"
 #include "boost/config.hpp"
+#include "boost/mpl/apply_if.hpp"
 #include "boost/mpl/if.hpp"
 #include "boost/iterator/reverse_iterator.hpp"
 #include "boost/static_assert.hpp"
@@ -178,30 +179,23 @@ protected:
 // choose value accessor begins
 //
 
+template <typename T, std::size_t NumDims>
 struct choose_value_accessor_n {
-  template <typename T, std::size_t NumDims>
-  struct bind {
-    typedef value_accessor_n<T,NumDims> type;
-  };
+  typedef value_accessor_n<T,NumDims> type;
 };
 
+template <typename T, std::size_t NumDims>
 struct choose_value_accessor_one {
-  template <typename T, std::size_t NumDims>
-  struct bind {
-    typedef value_accessor_one<T> type;
-  };
+  typedef value_accessor_one<T> type;
 };
 
 template <typename T, std::size_t NumDims>
 struct value_accessor_generator {
-private:
-  //  typedef typename value_accessor_gen_helper<NumDims>::choice Choice;
   typedef typename
-  mpl::if_c<(NumDims == 1),
-    choose_value_accessor_one,
-    choose_value_accessor_n>::type Choice;
-public:
-  typedef typename Choice::template bind<T,NumDims>::type type;
+  mpl::apply_if_c<(NumDims == 1),
+    choose_value_accessor_one<T,NumDims>,
+    choose_value_accessor_n<T,NumDims>
+  >::type type;
 };
 
 //
