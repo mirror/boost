@@ -759,7 +759,7 @@ top level of the Caramel distribution. -->
 
   <xsl:template name="concept.link">
     <xsl:param name="name" select="text()"/>
-    <xsl:param name="warn" select="true"/>
+    <xsl:param name="warn" select="true()"/>
     <xsl:param name="text" select="$name"/>
     <xsl:variable name="node" select="key('concepts', $name)"/>
     
@@ -767,7 +767,7 @@ top level of the Caramel distribution. -->
       <xsl:when test="count($node)=0">
         <xsl:if test="$warn">
           <xsl:message>
-            <xsl:text>Cannot find concept '</xsl:text>
+            <xsl:text>warning: cannot find concept '</xsl:text>
             <xsl:value-of select="$name"/>
             <xsl:text>'</xsl:text>
           </xsl:message>

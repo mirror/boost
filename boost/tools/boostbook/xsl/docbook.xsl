@@ -42,6 +42,33 @@
               <xsl:text>Reference</xsl:text>
             </title>    
           </xsl:if>
+
+          <xsl:if test="concept">
+            <section>
+              <title>Concepts</title>
+
+              <xsl:if test="ancestor::library/attribute::id">
+                <xsl:attribute name="id">
+                  <xsl:value-of select="ancestor::library/attribute::id"/>
+                  <xsl:text>.concepts</xsl:text>
+                </xsl:attribute>
+              </xsl:if>
+
+              <itemizedlist>
+                <xsl:for-each select="concept">
+                  <listitem>
+                    <xsl:call-template name="internal-link">
+                      <xsl:with-param name="to">
+                        <xsl:call-template name="generate.id"/>
+                      </xsl:with-param>
+                      <xsl:with-param name="text" select="@name"/>
+                    </xsl:call-template>
+                  </listitem>
+                </xsl:for-each>
+              </itemizedlist>
+            </section>
+          </xsl:if>
+
           <xsl:apply-templates/>
         </section>
       </xsl:otherwise>
