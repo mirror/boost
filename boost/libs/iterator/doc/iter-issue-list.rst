@@ -140,8 +140,8 @@ There was more discussion on the reflector: c++std-lib-12312, c++std-lib-12325, 
     {};
 
 
-9.5 iterator_adaptor has an extraneous 'bool' at the start of the template definition 
-=====================================================================================
+9.5 ``iterator_adaptor`` has an extraneous '``bool``' at the start of the template definition 
+=============================================================================================
 
 :Submitter: Pete Becker 
 :Status: New 
@@ -156,27 +156,30 @@ The title says it all; this is probably just a typo.
 :Submitter: Pete Becker 
 :Status: New 
 
-iterator_adaptor has a private member named m_iterator. Presumably this is for exposition only, 
-since it's an implementation detail. It needs to be marked as such. 
+``iterator_adaptor`` has a private member named
+``m_iterator``. Presumably this is for exposition only, since it's
+an implementation detail. It needs to be marked as such.
 
-:Proposed resolution: Mark the member m_iterator as exposition
+:Proposed resolution: Mark the member ``m_iterator`` as exposition
    only.  Note/DWA: I think this is NAD because the user can't
    detect it, though I'm happy to mark it exposition only.
 
-9.7 iterator_adaptor operations specifications are a bit inconsistent 
-=====================================================================
+9.7 ``iterator_adaptor`` operations specifications are a bit inconsistent 
+=========================================================================
 
 :Submitter: Pete Becker 
 :Status: New 
 
-iterator_adpator() has a Requires clause, that Base must be default constructible. 
-iterator_adaptor(Base) has no Requires clause, although the Returns clause says that the Base 
-member is copy construced from the argument (this may actually be an oversight in N1550, 
-which doesn't require iterators to be copy constructible or assignable). 
+``iterator_adpator()`` has a Requires clause, that ``Base`` must be
+default constructible.  ``iterator_adaptor(Base)`` has no Requires
+clause, although the Returns clause says that the Base member is
+copy construced from the argument (this may actually be an
+oversight in N1550, which doesn't require iterators to be copy
+constructible or assignable).
 
 :Proposed resolution:
   Add a requirements section for the template parameters of
-  iterator_adaptor, and state that Base must be Copy Constructible and
+  ``iterator_adaptor``, and state that ``Base`` must be Copy Constructible and
   Assignable.
 
   N1550 does in fact include requirements for copy constructible
@@ -190,8 +193,8 @@ which doesn't require iterators to be copy constructible or assignable).
 :Submitter: Pete Becker 
 :Status: New 
 
-similar to 9.3, "Specialized Adaptors" has a note describing enable_if_convertible. This should 
-be normative text. 
+similar to 9.3, "Specialized Adaptors" has a note describing
+``enable_if_convertible``. This should be normative text.
 
 :Proposed resolution: Changed it to normative
   text.  See the resolution of 9.4
@@ -287,7 +290,7 @@ transform_iterator has a private member named 'm_f' which should be marked "expo
 
 The description of Counting iterator is unclear. "The counting iterator adaptor implements 
 dereference by returning a reference to the base object. The other operations are implemented by 
-the base m_iterator, as per the inheritance from iterator_adaptor." 
+the base m_iterator, as per the inheritance from ``iterator_adaptor``." 
 
 :Proposed resolution:
   Change the introduction to: ``counting_iterator`` adapts an object by adding an ``operator*`` that
@@ -491,11 +494,14 @@ is_swappable returns false negatives.
 :Submitter: Dave Abrahams 
 :Status: New 
 
-I am concerned that there is little use for any of is_readable, is_writable, or is_swappable, and 
-that not only do they unduly constrain iterator implementors but they add overhead to 
-iterator_facade and iterator_adaptor in the form of a template parameter which would otherwise 
-be unneeded. Since we can't implement two of them accurately for old-style iterators, I am 
-having a hard time justifying their impact on the rest of the proposal(s). 
+I am concerned that there is little use for any of is_readable,
+is_writable, or is_swappable, and that not only do they unduly
+constrain iterator implementors but they add overhead to
+``iterator_facade`` and ``iterator_adaptor`` in the form of a
+template parameter which would otherwise be unneeded. Since we
+can't implement two of them accurately for old-style iterators, I
+am having a hard time justifying their impact on the rest of the
+proposal(s).
 
 :Proposed Resolution: See the resolution to 9.15.
 
@@ -711,11 +717,15 @@ removed.
 :Submitter: Pete Becker 
 :Status: New 
 
-The default constructor returns "An instance of indirect_iterator with a default constructed base 
-object", but the constructor that takes an Iterator object returns "An instance of indirect_iterator 
-with the iterator_adaptor subobject copy constructed from x." The latter is the correct form, since 
-it does not reach inside the base class for its semantics. So the default constructor shoudl return 
-"An instance of indirect_iterator with a default-constructed iterator_adaptor subobject." 
+The default constructor returns "An instance of indirect_iterator
+with a default constructed base object", but the constructor that
+takes an Iterator object returns "An instance of indirect_iterator
+with the ``iterator_adaptor`` subobject copy constructed from
+``x``." The latter is the correct form, since it does not reach
+inside the base class for its semantics. So the default constructor
+should return
+"An instance of ``indirect_iterator`` with a default-constructed
+``iterator_adaptor`` subobject."
 
 :Proposed resolution: 
 
@@ -729,7 +739,7 @@ it does not reach inside the base class for its semantics. So the default constr
      :Returns: An instance of ``indirect_iterator`` with
        a default-constructed ``m_iterator``.
 
-:Rationale: Inheritance from iterator_adaptor has been removed, so we instead
+:Rationale: Inheritance from ``iterator_adaptor`` has been removed, so we instead
   give the semantics in terms of the (exposition only) member
   ``m_iterator``.
 
@@ -763,7 +773,7 @@ copy is.)
       ``m_iterator`` subobject is constructed from ``y.base()``.
 
 
-:Rationale: Inheritance from iterator_adaptor has been removed, so we
+:Rationale: Inheritance from ``iterator_adaptor`` has been removed, so we
   instead give the semantics in terms of the member ``m_iterator``.
 
 
@@ -891,11 +901,12 @@ c++std-lib-12563:
     c.distance_to(b)
     c.distance_to(z)
 
-  where b and c are const objects of the derived type, y and z are constant objects of certain iterator 
-  types that are interoperable with the derived type. 
-  Seems like the 'b' versions are redundant: in both cases, the other version will take a 'b'. In fact, 
-  iterator_adaptor is specified to use iterator_facade, but does not provide the 'b' versions of these 
-  functions. 
+  where b and c are const objects of the derived type, y and z are
+  constant objects of certain iterator types that are interoperable
+  with the derived type.  Seems like the 'b' versions are
+  redundant: in both cases, the other version will take a 'b'. In
+  fact, ``iterator_adaptor`` is specified to use iterator_facade,
+  but does not provide the 'b' versions of these functions.
 
   Are the 'b' versions needed? 
 
@@ -943,17 +954,17 @@ c++std-lib-12636:
 
 
 
-9.37x Inheritance in iterator_adaptor and other adaptors is an overspecification
-================================================================================
+9.37x Inheritance in ``iterator_adaptor`` and other adaptors is an overspecification
+=====================================================================================
 
 :Submitter: Pete Becker
 :Status: New 
 
 c++std-lib-12696:
-The paper requires that iterator_adaptor be derived from an
-appropriate instance of iterator_facade, and that most of the specific
+The paper requires that ``iterator_adaptor`` be derived from an
+appropriate instance of ``iterator_facade``, and that most of the specific
 forms of adaptors be derived from appropriate instances of
-iterator_adaptor. That seems like overspecification, and we ought to
+``iterator_adaptor``. That seems like overspecification, and we ought to
 look at specifying these things in terms of what the various templates
 provide rather than how they're implemented.
 
@@ -963,10 +974,10 @@ provide rather than how they're implemented.
   specification of all the functionality that was inherited from the
   specialized iterators. 
 
-  In iterator_adaptor, inheritance is retained, sorry NAD.  Also,
-  the Interoperable Iterators concept is added to the new iterator
-  concepts, and this concept is used in the specification of the
-  iterator adaptors.
+  In ``iterator_adaptor``, inheritance is retained, sorry NAD.
+  Also, the Interoperable Iterators concept is added to the new
+  iterator concepts, and this concept is used in the specification
+  of the iterator adaptors.
 
 
   In [lib.iterator.special.adaptors]
@@ -1306,17 +1317,17 @@ c++std-lib-12635:
  
 counting_iterator takes an argument for its Traversal type, with a
 default value of use_default. It is derived from an instance of
-iterator_adaptor, where the argument passed for the Traversal type
-is described as "\ ``/* see details for traversal category
+``iterator_adaptor``, where the argument passed for the Traversal
+type is described as "\ ``/* see details for traversal category
 */``". The details for counting_iterator describe constraints on
 the Incrementable type imposed by various traversal
 categories. There is no description of what the argument to
-iterator_adaptor should be.
+``iterator_adaptor`` should be.
 
 
-:Proposed resolution:
-  We no longer inherit from iterator_adaptor. So instead,
-  we specify the iterator_category in terms of the Traversal type
+:Proposed resolution: We no longer inherit from
+  ``iterator_adaptor``. So instead, we specify the
+  ``iterator_category`` in terms of the Traversal type
   (which is now called CategoryOrTraversal). Also the
   requirements and models section was reorganized to
   match these changes and to make more sense.
@@ -1344,7 +1355,7 @@ c++std-lib-12640:
     value_type will be non- const X.
 
   Also non-volatile, right? In other words, if Value isn't use_default, it 
-  just gets passed as the Value argument for iterator_adaptor.
+  just gets passed as the Value argument for ``iterator_adaptor``.
 
     The default for Value is::
 
@@ -1419,10 +1430,10 @@ c++std-lib-12641:
       ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``. The
       ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
 
-These are the defaults, right? If the user supplies their own types that's
-what gets passed to iterator_adaptor. And again, the specification should
-be in terms of the specialization of iterator_adaptor, and not in terms of
-the result:
+These are the defaults, right? If the user supplies their own types
+that's what gets passed to ``iterator_adaptor``. And again, the
+specification should be in terms of the specialization of
+``iterator_adaptor``, and not in terms of the result:
 
 Reference argument to iterator_adaptor::
 
