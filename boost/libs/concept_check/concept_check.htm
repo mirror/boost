@@ -169,14 +169,11 @@ a linked list.
    1  #include &lt;list&gt;
    2  #include &lt;algorithm&gt;
    3
-   4  struct foo {
-   5    bool operator&lt;(const foo&amp;) const { return false; }
-   6  };
-   7  int main(int, char*[]) {
-   8    std::list&lt;foo&gt; v;
-   9    std::stable_sort(v.begin(), v.end());
-  10    return 0;
-  11  }
+   4  int main(int, char*[]) {
+   5    std::list&lt;int&gt; v;
+   6    std::stable_sort(v.begin(), v.end());
+   7    return 0;
+   8  }
 </pre>
 
 Here, the
@@ -192,18 +189,18 @@ Appendix.
 
 <pre>
 stl_algo.h: In function `void __merge_sort_loop&lt;_List_iterator
-  &lt;foo,foo &amp;,foo *&gt;, foo *, int&gt;(_List_iterator&lt;foo,foo &amp;,foo *&gt;,
-  _List_iterator&lt;foo,foo &amp;,foo *&gt;, foo *, int)':
+  &lt;int,int &amp;,int *&gt;, int *, int&gt;(_List_iterator&lt;int,int &amp;,int *&gt;,
+  _List_iterator&lt;int,int &amp;,int *&gt;, int *, int)':
 stl_algo.h:1448:   instantiated from `__merge_sort_with_buffer
-  &lt;_List_iterator&lt;foo,foo &amp;,foo *&gt;, foo *, int&gt;(
-   _List_iterator&lt;foo,foo &amp;,foo *&gt;, _List_iterator&lt;foo,foo &amp;,foo *&gt;,
-   foo *, int *)'
+  &lt;_List_iterator&lt;int,int &amp;,int *&gt;, int *, int&gt;(
+   _List_iterator&lt;int,int &amp;,int *&gt;, _List_iterator&lt;int,int &amp;,int *&gt;,
+   int *, int *)'
 stl_algo.h:1485:   instantiated from `__stable_sort_adaptive&lt;
-  _List_iterator&lt;foo,foo &amp;,foo *&gt;, foo *, int&gt;(_List_iterator
-  &lt;foo,foo &amp;,foo *&gt;, _List_iterator&lt;foo,foo &amp;,foo *&gt;, foo *, int)'
+  _List_iterator&lt;int,int &amp;,int *&gt;, int *, int&gt;(_List_iterator
+  &lt;int,int &amp;,int *&gt;, _List_iterator&lt;int,int &amp;,int *&gt;, int *, int)'
 stl_algo.h:1524:   instantiated from here
-stl_algo.h:1377: no match for `_List_iterator&lt;foo,foo &amp;,foo *&gt; &amp; -
-  _List_iterator&lt;foo,foo &amp;,foo *&gt; &amp;'
+stl_algo.h:1377: no match for `_List_iterator&lt;int,int &amp;,int *&gt; &amp; -
+  _List_iterator&lt;int,int &amp;,int *&gt; &amp;'
 </pre>
 
 In this case, the fundamental error is that
@@ -219,7 +216,7 @@ the error may be obvious.  However, for the uninitiated, there are several
 reasons why this message would be hard to understand.
 
 <OL>
-  <LI> The location of the error, line 9 of <tt>bad_error_eg.cpp</tt>
+  <LI> The location of the error, line 6 of <tt>bad_error_eg.cpp</tt>
     is not pointed to by the error message, despite the fact that Gnu C++
     prints up to 4 levels deep in the instantiation stack.
   <LI> There is no textual correlation between the error message and the
@@ -241,21 +238,21 @@ Library produces):
 
 <pre>
 boost/concept_check.hpp: In method `void LessThanComparableConcept
-  &lt;_List_iterator&lt;foo,foo &amp;,foo *&gt; &gt;::constraints()':
+  &lt;_List_iterator&lt;int,int &amp;,int *&gt; &gt;::constraints()':
 boost/concept_check.hpp:334:   instantiated from `RandomAccessIteratorConcept
-  &lt;_List_iterator&lt;foo,foo &amp;,foo *&gt; &gt;::constraints()'
-bad_error_eg.cpp:9:   instantiated from `stable_sort&lt;_List_iterator
-  &lt;foo,foo &amp;,foo *&gt; &gt;(_List_iterator&lt;foo,foo &amp;,foo *&gt;, 
-  _List_iterator&lt;foo,foo &amp;,foo *&gt;)'
-boost/concept_check.hpp:209: no match for `_List_iterator&lt;foo,foo &amp;,foo *&gt; &amp;
-  &lt; _List_iterator&lt;foo,foo &amp;,foo *&gt; &amp;'
+  &lt;_List_iterator&lt;int,int &amp;,int *&gt; &gt;::constraints()'
+bad_error_eg.cpp:6:   instantiated from `stable_sort&lt;_List_iterator
+  &lt;int,int &amp;,int *&gt; &gt;(_List_iterator&lt;int,int &amp;,int *&gt;, 
+  _List_iterator&lt;int,int &amp;,int *&gt;)'
+boost/concept_check.hpp:209: no match for `_List_iterator&lt;int,int &amp;,int *&gt; &amp;
+  &lt; _List_iterator&lt;int,int &amp;,int *&gt; &amp;'
 </pre>
 
 This message rectifies several of the shortcomings of the standard
 error messages.
 
 <UL>
-<LI> The location of the error, <tt>bad_error_eg.cpp:9</tt> is
+<LI> The location of the error, <tt>bad_error_eg.cpp:6</tt> is
   specified in the error message.
 <LI> The message refers explicitly to concepts that the user can look
   up in the STL documentation (<a
