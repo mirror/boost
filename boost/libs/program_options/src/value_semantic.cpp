@@ -20,6 +20,7 @@ namespace boost { namespace program_options {
           bool utf8) const
     {
         if (utf8) {
+#ifndef BOOST_NO_STD_WSTRING
             // Need to convert to local encoding.
             std::vector<string> local_tokens;
             for (unsigned i = 0; i < new_tokens.size(); ++i) {
@@ -27,12 +28,16 @@ namespace boost { namespace program_options {
                 local_tokens.push_back(to_local_8_bit(w));
             }
             xparse(value_store, local_tokens);
+#else
+            throw std::runtime_error("UTF-8 conversion not supported.");
+#endif
         } else {
             // Already in local encoding, pass unmodified
             xparse(value_store, new_tokens);
         }        
     }
 
+#ifndef BOOST_NO_STD_WSTRING
     void 
     value_semantic_codecvt_helper<wchar_t>::
     parse(boost::any& value_store, 
@@ -55,7 +60,7 @@ namespace boost { namespace program_options {
 
         xparse(value_store, tokens);  
     }
-
+#endif
 
     string arg("arg");
 
@@ -171,4 +176,3 @@ namespace boost { namespace program_options {
 
 
 }}
-

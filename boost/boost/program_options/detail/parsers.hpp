@@ -36,7 +36,9 @@ namespace boost { namespace program_options {
     basic_command_line_parser<charT>::
     basic_command_line_parser(int argc, charT* argv[])
     : common_command_line_parser(
-        to_internal(detail::make_vector(argv+1, argv+argc)))
+        // Explicit template arguments are required by gcc 3.3.1 
+        // (at least mingw version), and do no harm on other compilers.
+        to_internal(detail::make_vector<charT, charT**>(argv+1, argv+argc)))
     {}
 
     

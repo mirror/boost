@@ -78,6 +78,7 @@ namespace boost { namespace detail {
 
 namespace boost {
 
+#ifndef BOOST_NO_STD_WSTRING
    std::wstring 
     from_8_bit(const std::string& s, 
                const std::codecvt<wchar_t, char, std::mbstate_t>& cvt)
@@ -106,7 +107,6 @@ namespace boost {
             utf8_facet;
     }
     
-
     std::wstring
     from_utf8(const std::string& s)
     {
@@ -134,6 +134,7 @@ namespace boost {
         return to_8_bit(s, 
                         BOOST_USE_FACET(facet_type, locale()));                        
     }
+#endif
 
     namespace program_options
     {
@@ -142,10 +143,12 @@ namespace boost {
             return s;
         }
 
+#ifndef BOOST_NO_STD_WSTRING
         std::string to_internal(const std::wstring& s)
         {
             return to_utf8(s);
         }
+#endif
     }
 
 

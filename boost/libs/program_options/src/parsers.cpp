@@ -61,6 +61,7 @@ using namespace std;
 
 namespace boost { namespace program_options {
 
+#ifndef BOOST_NO_STD_WSTRING
     namespace {
         woption woption_from_option(const option& opt)
         {
@@ -83,6 +84,7 @@ namespace boost { namespace program_options {
         for (unsigned i = 0; i < po.options.size(); ++i)
             options.push_back(woption_from_option(po.options[i]));
     }
+#endif
 
     namespace detail
     {
