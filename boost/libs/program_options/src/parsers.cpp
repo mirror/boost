@@ -42,9 +42,11 @@
 
 // It appears that on Mac OS X the 'environ' variable is not
 // available to dynamically linked libraries.
+// See: http://article.gmane.org/gmane.comp.lib.boost.devel/103843
+// See: http://lists.gnu.org/archive/html/bug-guile/2004-01/msg00013.html
 #if defined(__APPLE__) && defined(__DYNAMIC__)
 #include <crt_externs.h>
-static char** environ = *_NSGetEnviron();
+#define environ (*_NSGetEnviron()) 
 #else
 extern char** environ;
 #endif
