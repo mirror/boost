@@ -56,6 +56,10 @@ public:
   }
   // compiler-generated copy constructor is fine
   // normal_distribution cannot be assigned, neither can this class
+
+  base_type& base() const { return _rng.base(); }
+  void reset() { _rng.reset(); }
+
   result_type operator()()
   {
 #ifndef BOOST_NO_STDC_NAMESPACE

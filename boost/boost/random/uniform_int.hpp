@@ -55,9 +55,14 @@ public:
     else
       _range_comparison = 1;
   }
-  result_type operator()();
+
   result_type min() const { return _min; }
   result_type max() const { return _max; }
+  base_type& base() const { return _rng; }
+  void reset() { }
+
+  result_type operator()();
+
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const uniform_int& x, const uniform_int& y)
   { return x._min == y._min && x._max == y._max && x._rng == y._rng; }

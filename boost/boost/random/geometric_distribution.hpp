@@ -53,12 +53,16 @@ public:
   // compiler-generated copy ctor is fine
   // uniform_01 cannot be assigned, neither can this class
 
+  base_type& base() const { return _rng.base(); }
+  void reset() { _rng.reset(); }
+
   result_type operator()()
   {
 #ifndef BOOST_NO_STDC_NAMESPACE
     using std::log;
+    using std::floor;
 #endif
-    return IntType (log(1-_rng()) / _log_p) + 1;
+    return static_cast<IntType>(floor(log(1-_rng()) / _log_p)) + 1;
   }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE

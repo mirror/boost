@@ -49,6 +49,9 @@ public:
   }
   // uniform_01 cannot be assigned, neither can this class
 
+  base_type& base() const { return _rng.base(); }
+  void reset() { _valid = false; }
+
   result_type operator()()
   {
 #ifndef BOOST_NO_STDC_NAMESPACE

@@ -39,6 +39,10 @@ public:
     : _rng(rng), _lambda(lambda) { assert(lambda > 0); }
   // compiler-generated copy ctor is fine
   // uniform_01 cannot be assigned, neither can this class
+
+  base_type& base() const { return _rng.base(); }
+  void reset() { _rng.reset(); }
+
   result_type operator()()
   { 
 #ifndef BOOST_NO_STDC_NAMESPACE

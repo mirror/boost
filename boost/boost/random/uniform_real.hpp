@@ -50,9 +50,12 @@ public:
   // compiler-generated copy ctor is fine
   // uniform_01 cannot be assigned, neither can this class
 
-  result_type operator()() { return _rng() * (_max - _min) + _min; }
   result_type min() const { return _min; }
   result_type max() const { return _max; }
+  base_type& base() const { return _rng.base(); }
+  void reset() { _rng.reset(); }
+
+  result_type operator()() { return _rng() * (_max - _min) + _min; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const uniform_real& x, const uniform_real& y)

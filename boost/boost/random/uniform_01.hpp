@@ -46,6 +46,9 @@ public:
   // compiler-generated copy ctor is fine
   // assignment is disallowed because there is a reference member
 
+  base_type& base() const { return _rng; }
+  void reset() { }
+
   result_type operator()() {
     return static_cast<result_type>(_rng() - _rng.min()) /
       (static_cast<result_type>(_rng.max()-_rng.min()) +

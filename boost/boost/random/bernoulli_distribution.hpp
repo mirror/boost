@@ -43,7 +43,11 @@ public:
   // compiler-generated copy ctor is fine
   // assignment is disallowed because there is a reference member
 
+  base_type& base() const { return _rng; }
+  void reset() { }
+
   result_type operator()() { return _rng() <= _threshold; }
+
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const bernoulli_distribution& x, 
                          const bernoulli_distribution& y)
