@@ -10,12 +10,12 @@
  * See http://www.boost.org for most recent version.
  */
 
-/* This example implements a couple of 1-dimensional arithmetic array
- * manipulation functions in C. The idea is to use preprocessor data
- * structures, lists and tuples, for storing meta information to be used
- * for generating the actual C code.
+/* This example implements over 2200 functions for 1-dimensional arithmetic
+ * array manipulation in C. The idea is to use preprocessor data structures,
+ * lists and tuples, for storing metainformation to be used for generating
+ * the actual C code.
  *
- * Compile with gcc. It will take a while!
+ * Compile with any C compiler with a standards conforming preprocessor.
  */
 
 #include <libs/preprocessor/example/array_arithmetic_helpers.hpp>
@@ -47,9 +47,9 @@
 #define APPLICATIVE_UNARY_OPS\
   BOOST_PP_TUPLE_TO_LIST\
   ( 3\
-  , ( ( !  , logical_not   , 0 , 1 , 1 , 0 , 0 )\
-    , ( ~  , bitwise_not   , 0 , 0 , 0 , 0 , 0 )\
-    , ( -  , neg           , 0 , 1 , 0 , 0 , 0 )\
+  , ( ( !  , logical_not , 0 , 1 , 1 , 0 , 0 )\
+    , ( ~  , bitwise_not , 0 , 0 , 0 , 0 , 0 )\
+    , ( -  , neg         , 0 , 1 , 0 , 0 , 0 )\
     )\
   )
 
@@ -87,12 +87,11 @@
 /* ** Information about C built-in types for preprocessor metaprogramming. ** */
 
 /* Accessors for the type datatype. */
-#define TYPE_NAME(T)         BOOST_PP_TUPLE6_ELEM0 T
-#define TYPE_ABBREVIATION(T) BOOST_PP_TUPLE6_ELEM1 T
-#define TYPE_IS_FLOATING(T)  BOOST_PP_TUPLE6_ELEM2 T
-#define TYPE_IS_LONG(T)      BOOST_PP_TUPLE6_ELEM3 T
-#define TYPE_IS_UNSIGNED(T)  BOOST_PP_TUPLE6_ELEM4 T
-#define TYPE_SIZE(T)         BOOST_PP_TUPLE6_ELEM5 T
+#define TYPE_NAME(T)         BOOST_PP_TUPLE5_ELEM0 T
+#define TYPE_ABBREVIATION(T) BOOST_PP_TUPLE5_ELEM1 T
+#define TYPE_IS_FLOATING(T)  BOOST_PP_TUPLE5_ELEM2 T
+#define TYPE_IS_UNSIGNED(T)  BOOST_PP_TUPLE5_ELEM3 T
+#define TYPE_RANK(T)         BOOST_PP_TUPLE5_ELEM4 T
 
 /* List of C built-in types.
  *
@@ -102,41 +101,23 @@
 #define BUILTIN_TYPES\
   BOOST_PP_TUPLE_TO_LIST\
   ( 12\
-  , ( ( signed char    , sc , 0 , 0 , 0 , 1 )\
-    , ( char           , ch , 0 , 0 , 0 , 1 )\
-    , ( unsigned char  , uc , 0 , 0 , 1 , 1 )\
-    , ( short          , ss , 0 , 0 , 0 , 2 )\
-    , ( unsigned short , us , 0 , 0 , 1 , 2 )\
+  , ( ( signed char    , sc , 0 , 0 , 1 )\
+    , ( char           , ch , 0 , 0 , 1 )\
+    , ( unsigned char  , uc , 0 , 1 , 1 )\
+    , ( short          , ss , 0 , 0 , 2 )\
+    , ( unsigned short , us , 0 , 1 , 2 )\
     , TYPE_INT\
-    , ( unsigned int   , ui , 0 , 0 , 1 , 4 )\
-    , ( long           , sl , 0 , 1 , 0 , 4 )\
-    , ( unsigned long  , ul , 0 , 1 , 1 , 4 )\
-    , ( float          , fl , 1 , 0 , 0 , 4 )\
-    , ( double         , db , 1 , 0 , 0 , 8 )\
-    , ( long double    , ld , 1 , 1 , 0 , 8 )\
+    , ( unsigned int   , ui , 0 , 1 , 4 )\
+    , ( long           , sl , 0 , 0 , 5 )\
+    , ( unsigned long  , ul , 0 , 1 , 6 )\
+    , ( float          , fl , 1 , 0 , 7 )\
+    , ( double         , db , 1 , 0 , 8 )\
+    , ( long double    , ld , 1 , 0 , 9 )\
     )\
   )
 
 /* Type int is needed in some type operations. */
-#define TYPE_INT ( int , si , 0 , 0 , 0 , 4 )
-
-/* Computes the rank of the type for:
- * - integer promotions, and
- * - usual arithmetic conversions.
- */
-#define TYPE_RANK(T)\
-  BOOST_PP_ADD\
-  ( BOOST_PP_ADD\
-    ( BOOST_PP_ADD\
-      ( BOOST_PP_MUL(64,TYPE_IS_FLOATING(T))\
-      , BOOST_PP_MUL(32,TYPE_IS_LONG(T))\
-      )\
-    , BOOST_PP_MUL(TYPE_SIZE(T),2)\
-    )\
-  , TYPE_IS_UNSIGNED(T)\
-  )
-
-#define TYPE_IS_SAME(L,R) BOOST_PP_EQUAL(TYPE_RANK(L),TYPE_RANK(R))
+#define TYPE_INT ( int , si , 0 , 0 , 3 )
 
 /* Compute the type of the result of an integral promotion. */
 #define INTEGER_PROMOTION(T) BOOST_PP_IF(BOOST_PP_LESS(TYPE_RANK(T),TYPE_RANK(TYPE_INT)),TYPE_INT,T)
@@ -157,7 +138,7 @@
   BOOST_PP_IF\
   ( BOOST_PP_NOT_EQUAL(BOOST_PP_ADD(BOOST_PP_MUL(2,TYPE_IS_FLOATING(T)),OP_IS_FLOATING(O)),2)\
   , UNARY_ARRAY_OP3\
-  , BOOST_PP_TUPLE_EAT(2)\
+  , BOOST_PP_TUPLE2_EAT\
   )(O,T)
 #define UNARY_ARRAY_OP3(O,T)\
   void BOOST_PP_CAT4(array_,OP_NAME(O),_,TYPE_ABBREVIATION(T))\
@@ -173,7 +154,7 @@ BOOST_PP_LIST_FOR_EACH_PRODUCT(UNARY_ARRAY_OP,_,BOOST_PP_TUPLE_TO_LIST(2,(APPLIC
   BOOST_PP_IF\
   ( BOOST_PP_NOT_EQUAL(BOOST_PP_ADD(BOOST_PP_MUL(2,BOOST_PP_OR(TYPE_IS_FLOATING(L),TYPE_IS_FLOATING(R))),OP_IS_FLOATING(O)),2)\
   , BINARY_ARRAY_OP3\
-  , BOOST_PP_TUPLE_EAT(3)\
+  , BOOST_PP_TUPLE3_EAT\
   )(O,L,R)
 #define BINARY_ARRAY_OP3(O,L,R)\
   void BOOST_PP_CAT6(array_,OP_NAME(O),_,TYPE_ABBREVIATION(L),_,TYPE_ABBREVIATION(R))\
