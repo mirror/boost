@@ -129,6 +129,7 @@ struct template_arity
 
 #   include "boost/mpl/aux_/config/eti.hpp"
 #   include "boost/mpl/aux_/config/static_constant.hpp"
+#   include "boost/mpl/aux_/config/workaround.hpp"
 
 namespace boost { namespace mpl { namespace aux {
 
@@ -146,7 +147,11 @@ struct template_arity_impl<true>
 {
     template< typename F > struct result_
     {
+#if defined(__BORLANDC__) && (__BORLANDC__ >= 0x561 && !defined(BOOST_STRICT_CONFIG))
+        enum { value = F::arity };
+#else
         BOOST_STATIC_CONSTANT(int, value = F::arity);
+#endif
     };
 };
 
