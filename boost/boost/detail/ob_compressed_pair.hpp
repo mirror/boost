@@ -104,6 +104,8 @@ public:
    {
       init_one<best_convertion_traits<A, T1, T2>::value>::init(val, &_first, &_second);
    }
+   compressed_pair_0(const compressed_pair_0<T1,T2>& x)
+      : _first(x._first), _second(x._second) {}
 
    first_reference       first()       { return _first; }
    first_const_reference first() const { return _first; }
@@ -142,6 +144,8 @@ public:
    {
       init_one<best_convertion_traits<A, T1, T2>::value>::init(val, &_first, static_cast<T2*>(this));
    }
+   compressed_pair_1(const compressed_pair_1<T1,T2>& x)
+      : T2(x), _first(x._first) {}
 
    first_reference       first()       { return _first; }
    first_const_reference first() const { return _first; }
@@ -180,6 +184,8 @@ public:
    {
       init_one<best_convertion_traits<A, T1, T2>::value>::init(val, static_cast<T1*>(this), &_second);
    }
+   compressed_pair_2(const compressed_pair_2<T1,T2>& x)
+      : T1(x), _second(x._second) {}
 
    first_reference       first()       { return *this; }
    first_const_reference first() const { return *this; }
@@ -216,6 +222,8 @@ public:
    {
       init_one<best_convertion_traits<A, T1, T2>::value>::init(val, static_cast<T1*>(this), static_cast<T2*>(this));
    }
+   compressed_pair_3(const compressed_pair_3<T1,T2>& x)
+      : T1(x), T2(x) {}
 
    first_reference       first()       { return *this; }
    first_const_reference first() const { return *this; }
@@ -247,6 +255,8 @@ public:
             compressed_pair_4(first_param_type x, second_param_type) : T1(x) {}
    // only one single argument constructor since T1 == T2
    explicit compressed_pair_4(first_param_type x) : T1(x) {}
+   compressed_pair_4(const compressed_pair_4& x)
+      : T1(x){}
 
    first_reference       first()       { return *this; }
    first_const_reference first() const { return *this; }
@@ -451,5 +461,6 @@ inline void swap(compressed_pair<T1, T2>& x, compressed_pair<T1, T2>& y)
 } // boost
 
 #endif // BOOST_OB_COMPRESSED_PAIR_HPP
+
 
 
