@@ -162,7 +162,7 @@ public:
 
     long use_count() const // nothrow
     {
-        return static_cast<long const volatile &>( use_count_ );
+        return static_cast<int const volatile &>( use_count_ );
     }
 };
 
