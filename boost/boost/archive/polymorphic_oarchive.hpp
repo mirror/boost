@@ -33,6 +33,15 @@ namespace std{
 #include <boost/archive/detail/oserializer.hpp>
 #include <boost/archive/detail/interface_oarchive.hpp>
 
+// determine if its necessary to handle (u)int64_t specifically
+// i.e. that its not a synonym for (unsigned) long
+// if there is no 64 bit int or if its the same as a long
+// we shouldn't define separate functions for int64 data types.
+#if defined(BOOST_NO_UINT64_T) \
+    && ULONG_MAX == 18446744073709551615 // 2**64 - 1
+#   define BOOST_NO_INTRINSIC_UINT64_T
+#endif
+
 namespace boost { 
 namespace archive {
 namespace detail {
@@ -65,7 +74,7 @@ public:
     virtual void save(const unsigned int t) = 0;
     virtual void save(const long t) = 0;
     virtual void save(const unsigned long t) = 0;
-    #if !defined(BOOST_NO_INT64_T)
+    #if !defined(BOOST_NO_INTRINSIC_UINT64_T)
     virtual void save(const int64_t t) = 0;
     virtual void save(const uint64_t t) = 0;
     #endif
