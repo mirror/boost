@@ -86,12 +86,14 @@ int main()
          regex_traits_tester_type1
       >
    >();
+#ifndef __MWERKS__ // MWCW tries to instantiate std::basic_string<boost::char_architype>, not sure whose bug this is....
    typedef boost::basic_regex<boost::char_architype, boost::regex_traits_architype<boost::char_architype> > regex_traits_tester_type2;
    boost::function_requires<
       boost::BaseRegexConcept<
          regex_traits_tester_type2
       >
    >();
+#endif // __MWERKS__
 #endif   
    return 0;
 }
