@@ -8,9 +8,8 @@
 
 /*
 
-  This file verifies that the BOOST_FUNCTION_REQUIRES macro
-  of the Boost Concept Checking Library catches errors
-  when it is suppose to.
+  This file verifies that function_requires() of the Boost Concept
+  Checking Library catches errors when it is suppose to.
 
 */
 

@@ -25,7 +25,7 @@
 #include <slist>
 #endif
 
-#define BOOST_HIDE_EXPECTED_ERRORS
+//#define BOOST_HIDE_EXPECTED_ERRORS
 
 int
 main()
