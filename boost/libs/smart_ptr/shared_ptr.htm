@@ -252,9 +252,23 @@ complex project that turned out to have cyclic-dependencies.</p>
 <b>A.</b> Because complexity limit implementors and complicate the specification without apparent benefit to
 <b>shared_ptr</b> users. For example, error-checking implementations might become non-conforming if they
 had to meet stringent complexity requirements.</p>
+<p><b>Q.</b> Why doesn't <b>shared_ptr</b> provide a release() function?<br>
+<b>A.</b> <b>shared_ptr</b> cannot give away ownership unless it's unique() 
+because the other copy will still destroy the object.</p>
+<p>Consider:</p>
+<blockquote>
+  <pre>shared_ptr&lt;int&gt; a(new int);
+shared_ptr&lt;int&gt; b(a); // a.use_count() == b.use_count() == 2
+
+int * p = a.release();
+
+// Who owns p now? b will still call delete on it in its destructor.</pre>
+</blockquote>
+<p>[Provided by Peter Dimov]</p>
 <p><b>Q.</b> Why doesn't <b>shared_ptr</b> provide (your pet feature here)?<br>
 <b>A.</b> Because (your pet feature here) would mandate a reference counted (or a link-list, or ...) implementation. This is not the intent.
-[Provided by Peter Dimov]<br>
+[Provided by Peter Dimov]</p>
+<p><br>
 </p>
 <hr>
 <p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->11 January, 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan -->
