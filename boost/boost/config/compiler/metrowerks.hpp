@@ -33,8 +33,11 @@
 #   endif
 
 #   if(__MWERKS__ <= 0x3003)  // 8.x
-#     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #     define BOOST_NO_SFINAE
+#    endif
+
+#   if(__MWERKS__ <= 0x3201)  // 9.2
+#     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #    endif
 
 #if !__option(wchar_type)
