@@ -25,11 +25,10 @@ namespace std{
 }
 #endif
 
-// these compilers have brain-dead tmpnam functions.
+// win32 has a brain-dead tmpnam implementation.
+// which leaves temp files in root directory 
 // regardless of environmental settings
-// VC which leaves temp files in root directory 
-// and BORLAND leaves them in the current directory
-#if defined(BOOST_MSVC) || defined(__BORLANDC__)
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 
 #include <cstdlib>
 #include <cstdio>

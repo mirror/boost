@@ -62,7 +62,9 @@ class A
 
     A() : // default constructor not actually used
         i(0)
-    {assert(false);} 
+    {
+         BOOST_ERROR("default constructor should never be used");
+    } 
 public:
     static int count;
     const int & get_i() const {

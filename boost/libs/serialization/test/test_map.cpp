@@ -12,6 +12,8 @@
 #include <fstream>
 
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
+
 #include <cstdio>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
@@ -54,6 +56,26 @@ struct random_key {
         return m_i;
     }
 };  
+
+// some borland/stlport versions need this
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x564 )
+namespace std {
+  template<>
+  struct equal_to<random_key>
+  {
+    bool operator()(const random_key& lhs, const random_key& rhs) {
+      return lhs.operator==(rhs);
+    }
+  };
+  template<>
+  struct hash<random_key>
+  {
+    std::size_t operator()(const random_key& r) const {
+        return (std::size_t)r;
+    }
+  };
+}
+#endif
 
 int test_main( int /* argc */, char* /* argv */[] )
 {

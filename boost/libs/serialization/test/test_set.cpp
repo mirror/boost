@@ -12,6 +12,7 @@
 
 #include <cstdio> // remove
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::remove;
@@ -27,6 +28,19 @@ namespace std{
 #include "test_tools.hpp"
 
 #include "A.hpp"
+
+// some borland/stlport versions need this
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x564 )
+namespace std {
+    template<>
+    struct less<A>
+    {
+        bool operator()(const A & lhs, const A & rhs) {
+            return lhs.operator<(rhs);
+        }
+    };
+}
+#endif
 
 int test_main( int /* argc */, char* /* argv */[] )
 {
