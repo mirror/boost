@@ -53,12 +53,6 @@ namespace boost {
         return static_cast<const unsigned char *>(static_cast<const void *>(p));
     }
 
-    // This function is only used to workaround a g++ bug
-    //  See: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=8419
-    //
-    template <typename T>
-    inline T make_non_const(T t) { return t; }
-
 
     // ------- count function implementation --------------
 
