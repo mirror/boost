@@ -384,13 +384,13 @@ namespace boost { namespace numeric { namespace ublas {
         	return insert (p).first;
         }
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
-        void erase (pointer it) {
+        void erase (iterator it) {
             BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
             std::copy (it + 1, end (), it);
             resize (size () - 1);
         }
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
-        void erase (pointer it1, pointer it2) {
+        void erase (iterator it1, iterator it2) {
             BOOST_UBLAS_CHECK (begin () <= it1 && it1 < it2 && it2 <= end (), bad_index ());
             std::copy (it2, end (), it1);
             resize (size () - (it2 - it1));
@@ -402,25 +402,25 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element lookup
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
-        const_pointer find (key_type i) const {
-            const_pointer it (detail::lower_bound (begin (), end (), value_type (i, mapped_type (0)), detail::less_pair<value_type> ()));
+        const_iterator find (key_type i) const {
+            const_iterator it (detail::lower_bound (begin (), end (), value_type (i, mapped_type (0)), detail::less_pair<value_type> ()));
             if (it == end () || it->first != i)
                 it = end ();
             return it;
         }
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
-        pointer find (key_type i) {
-            pointer it (detail::lower_bound (begin (), end (), value_type (i, mapped_type (0)), detail::less_pair<value_type> ()));
+        iterator find (key_type i) {
+            iterator it (detail::lower_bound (begin (), end (), value_type (i, mapped_type (0)), detail::less_pair<value_type> ()));
             if (it == end () || it->first != i)
                 it = end ();
             return it;
         }
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
-        const_pointer lower_bound (key_type i) const {
+        const_iterator lower_bound (key_type i) const {
             return detail::lower_bound (begin (), end (), value_type (i, mapped_type (0)), detail::less_pair<value_type> ());
         }
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
-        pointer lower_bound (key_type i) {
+        iterator lower_bound (key_type i) {
             return detail::lower_bound (begin (), end (), value_type (i, mapped_type (0)), detail::less_pair<value_type> ());
         }
 
