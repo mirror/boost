@@ -15,7 +15,7 @@ struct list_c;
 
 template<
       typename T
-     
+   
     >
 struct list_c<
           T, LONG_MAX, LONG_MAX, LONG_MAX, LONG_MAX, LONG_MAX, LONG_MAX
@@ -135,6 +135,7 @@ struct list_c< T,C0,C1,C2,C3,C4,C5,C6,C7,C8,LONG_MAX >
 };
 
 // primary template (not a specialization!)
+
 template<
       typename T
     , long C0, long C1, long C2, long C3, long C4, long C5, long C6, long C7

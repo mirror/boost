@@ -24,11 +24,15 @@
 //   template< typename T > struct b;
 //   template< typename T, T n > struct b< a<T,n> > {};
 
-#if defined(__EDG__) && (__EDG_VERSION__ <= 300 || !defined(BOOST_STRICT_CONFIG)) \
- || defined(__GNUC__) && (__GNUC__ < 3 || __GNUC__ == 3 && __GNUC_MINOR__ <= 2 \
-    || !defined(BOOST_STRICT_CONFIG)) \
- && !defined(BOOST_NO_DEPENDENT_NON_TYPE_PARAMETER_IN_PARTIAL_SPECIALIZATION)
+#if    !defined(BOOST_NO_DEPENDENT_NON_TYPE_PARAMETER_IN_PARTIAL_SPECIALIZATION) \
+    && !defined(BOOST_MPL_PREPROCESSING_MODE) \
+    && (   defined(__EDG__) && (__EDG_VERSION__ <= 300 || !defined(BOOST_STRICT_CONFIG)) \
+        || defined(__GNUC__) && (__GNUC__ < 3 || __GNUC__ == 3 && __GNUC_MINOR__ <= 2 \
+        || !defined(BOOST_STRICT_CONFIG)) \
+        )
+
 #   define BOOST_NO_DEPENDENT_NON_TYPE_PARAMETER_IN_PARTIAL_SPECIALIZATION
+
 #endif
 
 #endif // BOOST_MPL_AUX_CONFIG_DEPENDENT_NTTP_HPP_INCLUDED

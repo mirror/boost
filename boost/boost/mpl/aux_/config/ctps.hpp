@@ -19,9 +19,12 @@
 
 #include "boost/config.hpp"
 
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
- && !defined(BOOST_NO_NON_TYPE_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if    !defined(BOOST_NO_NON_TYPE_TEMPLATE_PARTIAL_SPECIALIZATION) \
+    && !defined(BOOST_MPL_PREPROCESSING_MODE) \
+    && defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) 
+
 #   define BOOST_NO_NON_TYPE_TEMPLATE_PARTIAL_SPECIALIZATION
+
 #endif
 
 // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION is defined in "boost/config.hpp"

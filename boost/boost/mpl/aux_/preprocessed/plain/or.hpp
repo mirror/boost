@@ -59,4 +59,3 @@ BOOST_MPL_AUX_VOID_SPEC_EXT(
     )
 
 }} // namespace boost::mpl
-

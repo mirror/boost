@@ -19,16 +19,23 @@
 
 #include "boost/config.hpp"
 
-#if defined(BOOST_NO_TEMPLATE_TEMPLATES) \
- && (!defined(BOOST_MSVC) || BOOST_MSVC < 1300)
+#if     defined(BOOST_NO_TEMPLATE_TEMPLATES) \
+     && ( !defined(BOOST_MSVC) || BOOST_MSVC < 1300 )
+
 #   define BOOST_NO_TEMPLATE_TEMPLATE_PARAMETERS
+
 #endif
 
-#if defined(__GNUC__) && (__GNUC__ < 3 || __GNUC__ == 3 && __GNUC_MINOR__ <= 2 \
-    || !defined(BOOST_STRICT_CONFIG)) \
- || defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
- && !defined(BOOST_EXTENDED_TEMPLATE_PARAMETERS_MATCHING)
+
+#if    !defined(BOOST_EXTENDED_TEMPLATE_PARAMETERS_MATCHING) \
+    && !defined(BOOST_MPL_PREPROCESSING_MODE) \
+    && (   defined(__GNUC__) && (__GNUC__ < 3 || __GNUC__ == 3 && __GNUC_MINOR__ <= 2 \
+            || !defined(BOOST_STRICT_CONFIG)) \
+        || defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
+        )
+
 #   define BOOST_EXTENDED_TEMPLATE_PARAMETERS_MATCHING
+
 #endif
 
 #endif // BOOST_MPL_AUX_CONFIG_TTP_HPP_INCLUDED

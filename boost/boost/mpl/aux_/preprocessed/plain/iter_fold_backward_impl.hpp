@@ -6,6 +6,7 @@ namespace mpl {
 namespace aux {
 
 // forward declaration
+
 template<
       long N
     , typename First
@@ -13,7 +14,7 @@ template<
     , typename State
     , typename BackwardOp
     , typename ForwardOp
-    > 
+    >
 struct iter_fold_backward_impl;
 
 template<
@@ -147,7 +148,7 @@ template<
     , typename State
     , typename BackwardOp
     , typename ForwardOp
-    > 
+    >
 struct iter_fold_backward_impl
 {
     typedef First iter0;
@@ -170,7 +171,7 @@ struct iter_fold_backward_impl
         , BackwardOp
         , ForwardOp
         > nested_chunk;
-        
+
     typedef typename nested_chunk::state bkwd_state4;
     typedef typename BackwardOp::template apply< bkwd_state4,iter3 >::type bkwd_state3;
     typedef typename BackwardOp::template apply< bkwd_state3,iter2 >::type bkwd_state2;
@@ -188,7 +189,7 @@ template<
     , typename State
     , typename BackwardOp
     , typename ForwardOp
-    > 
+    >
 struct iter_fold_backward_impl< -1,First,Last,State,BackwardOp,ForwardOp >
 {
     typedef iter_fold_backward_impl<
@@ -209,7 +210,7 @@ template<
     , typename State
     , typename BackwardOp
     , typename ForwardOp
-    > 
+    >
 struct iter_fold_backward_impl< -1,Last,Last,State,BackwardOp,ForwardOp >
 {
     typedef State state;
@@ -219,4 +220,3 @@ struct iter_fold_backward_impl< -1,Last,Last,State,BackwardOp,ForwardOp >
 } // namespace aux
 } // namespace mpl
 } // namespace boost
-

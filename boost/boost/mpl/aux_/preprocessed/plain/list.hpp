@@ -13,7 +13,7 @@ template<
 struct list;
 
 template<
-      
+     
     >
 struct list<
           void_, void_, void_, void_, void_, void_, void_, void_, void_
@@ -38,9 +38,7 @@ struct list<
 template<
       typename T0, typename T1
     >
-struct list<
-          T0, T1, void_, void_, void_, void_, void_, void_, void_, void_
-        >
+struct list< T0,T1,void_,void_,void_,void_,void_,void_,void_,void_ >
     : list2< T0,T1 >
 {
     typedef list2< T0,T1 > type;
@@ -114,6 +112,7 @@ struct list< T0,T1,T2,T3,T4,T5,T6,T7,T8,void_ >
 };
 
 // primary template (not a specialization!)
+
 template<
       typename T0, typename T1, typename T2, typename T3, typename T4
     , typename T5, typename T6, typename T7, typename T8, typename T9

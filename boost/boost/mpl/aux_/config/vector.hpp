@@ -20,9 +20,12 @@
 // agurt, 10/jul/02: full-fledged __typeof is needed to permit the optimal 
 // vector implementation
 
-#if defined(__MWERKS__) && __MWERKS__ >= 0x3001 \
- && !defined(BOOST_MPL_TYPEOF_BASED_VECTOR_IMPL)
+#if    !defined(BOOST_MPL_TYPEOF_BASED_VECTOR_IMPL) \
+    && !defined(BOOST_MPL_PREPROCESSING_MODE) \
+    && defined(__MWERKS__) && __MWERKS__ >= 0x3001
+    
 #   define BOOST_MPL_TYPEOF_BASED_VECTOR_IMPL
+
 #endif
 
 #endif // BOOST_MPL_AUX_CONFIG_VECTOR_HPP_INCLUDED

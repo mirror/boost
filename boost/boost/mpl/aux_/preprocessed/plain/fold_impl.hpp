@@ -6,13 +6,14 @@ namespace mpl {
 namespace aux {
 
 // forward declaration
+
 template<
       long N
     , typename First
     , typename Last
     , typename State
     , typename ForwardOp
-    > 
+    >
 struct fold_impl;
 
 template<
@@ -119,7 +120,7 @@ template<
     , typename Last
     , typename State
     , typename ForwardOp
-    > 
+    >
 struct fold_impl
 {
     typedef fold_impl<
@@ -137,7 +138,7 @@ struct fold_impl
         , typename chunk_::state
         , ForwardOp
         > res_;
-        
+
     typedef typename res_::state state;
     typedef typename res_::iterator iterator;
 };
@@ -147,7 +148,7 @@ template<
     , typename Last
     , typename State
     , typename ForwardOp
-    > 
+    >
 struct fold_impl< -1,First,Last,State,ForwardOp >
     : fold_impl<
           -1
@@ -164,7 +165,7 @@ template<
       typename Last
     , typename State
     , typename ForwardOp
-    > 
+    >
 struct fold_impl< -1,Last,Last,State,ForwardOp >
 {
     typedef State state;
@@ -174,4 +175,3 @@ struct fold_impl< -1,Last,Last,State,ForwardOp >
 } // namespace aux
 } // namespace mpl
 } // namespace boost
-

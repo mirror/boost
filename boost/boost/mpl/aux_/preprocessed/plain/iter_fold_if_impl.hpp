@@ -95,7 +95,7 @@ struct iter_fold_if_impl
     typedef iter_fold_if_forward_step< typename forward_step2::iterator, typename forward_step2::state, ForwardOp, ForwardPredicate > forward_step3;
     typedef iter_fold_if_forward_step< typename forward_step3::iterator, typename forward_step3::state, ForwardOp, ForwardPredicate > forward_step4;
     
-    
+
     typedef typename if_<
           typename forward_step4::not_last
         , iter_fold_if_impl<
@@ -126,4 +126,3 @@ struct iter_fold_if_impl
 } // namespace aux
 } // namespace mpl
 } // namespace boost
-

@@ -7,7 +7,7 @@ namespace mpl {
 template<
       typename T
     , typename Protect = false_
-    
+   
     >
 struct lambda_impl
 {
@@ -17,7 +17,7 @@ struct lambda_impl
 
 template<
       typename T
-    
+   
     >
 struct lambda
     : lambda_impl< T,false_ >
@@ -56,7 +56,7 @@ template<
     >
 struct lambda_impl<
       bind0<F>
-    , Protect 
+    , Protect
     >
 {
     typedef false_ is_le;
@@ -119,8 +119,8 @@ template<
     , typename T1
     , typename Protect
     >
-struct lambda_impl< 
-      F<T1>, Protect 
+struct lambda_impl<
+      F<T1>, Protect
     >
 {
     typedef lambda_impl<T1> l1;
@@ -142,7 +142,7 @@ template<
     >
 struct lambda_impl<
       bind1< F,T1 >
-    , Protect 
+    , Protect
     >
 {
     typedef false_ is_le;
@@ -206,8 +206,8 @@ template<
     , typename T1, typename T2
     , typename Protect
     >
-struct lambda_impl< 
-      F< T1,T2 >, Protect 
+struct lambda_impl<
+      F< T1,T2 >, Protect
     >
 {
     typedef lambda_impl<T1> l1;
@@ -231,7 +231,7 @@ template<
     >
 struct lambda_impl<
       bind2< F,T1,T2 >
-    , Protect 
+    , Protect
     >
 {
     typedef false_ is_le;
@@ -295,8 +295,8 @@ template<
     , typename T1, typename T2, typename T3
     , typename Protect
     >
-struct lambda_impl< 
-      F< T1,T2,T3 >, Protect 
+struct lambda_impl<
+      F< T1,T2,T3 >, Protect
     >
 {
     typedef lambda_impl<T1> l1;
@@ -321,7 +321,7 @@ template<
     >
 struct lambda_impl<
       bind3< F,T1,T2,T3 >
-    , Protect 
+    , Protect
     >
 {
     typedef false_ is_le;
@@ -388,8 +388,8 @@ template<
     , typename T1, typename T2, typename T3, typename T4
     , typename Protect
     >
-struct lambda_impl< 
-      F< T1,T2,T3,T4 >, Protect 
+struct lambda_impl<
+      F< T1,T2,T3,T4 >, Protect
     >
 {
     typedef lambda_impl<T1> l1;
@@ -416,7 +416,7 @@ template<
     >
 struct lambda_impl<
       bind4< F,T1,T2,T3,T4 >
-    , Protect 
+    , Protect
     >
 {
     typedef false_ is_le;
@@ -499,8 +499,8 @@ template<
     , typename T1, typename T2, typename T3, typename T4, typename T5
     , typename Protect
     >
-struct lambda_impl< 
-      F< T1,T2,T3,T4,T5 >, Protect 
+struct lambda_impl<
+      F< T1,T2,T3,T4,T5 >, Protect
     >
 {
     typedef lambda_impl<T1> l1;
@@ -529,7 +529,7 @@ template<
     >
 struct lambda_impl<
       bind5< F,T1,T2,T3,T4,T5 >
-    , Protect 
+    , Protect
     >
 {
     typedef false_ is_le;
@@ -548,6 +548,7 @@ struct lambda_impl< protect<T>,Protect >
 };
 
 // specializations for main 'bind', 'bind1st' and 'bind2nd' forms
+
 template<
       typename F, typename T1, typename T2, typename T3, typename T4
     , typename T5
@@ -555,8 +556,8 @@ template<
     >
 struct lambda_impl<
       bind< F,T1,T2,T3,T4,T5 >
-    , Protect 
-    
+    , Protect
+   
     >
 {
     typedef false_ is_le;
