@@ -486,7 +486,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Resize
             c.resize (n, value_type (5));
             // Resize - none preserving
-            detail::resize (c, n, false);
+            c.resize (n);
         }
     };
 

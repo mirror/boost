@@ -29,58 +29,6 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
-    namespace detail {
-        using namespace boost::numeric::ublas;
-
-        // Resizing helper. Allow 'preserve' parameter to be used where possible.
-
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        // ISSUE Overloaded free function templates fail on some compilers!
-        // Thanks to Karl Meerbergen for the functor workaround which we use by default
-        template <class A>
-        struct resize_functor {
-            void operator() (A& a, typename A::size_type size, bool ) const {
-                a.resize (size, typename A::value_type (0));
-            }
-        };
-        // Specialise for storage_array
-        template <class A>
-        struct resize_functor<storage_array<A> > {
-            void operator() (A& a, typename A::size_type size, bool preserve) const {
-                if (preserve)
-                    a.resize (size, typename A::value_type (0));
-                else
-                    a.resize_new (size);
-            }
-        };
-
-        template<class A>
-        BOOST_UBLAS_INLINE
-        void resize (A& a, typename A::size_type size, bool preserve) {
-            resize_functor<A>() (a, size, preserve);
-        }
-#else
-        template<class A>
-        BOOST_UBLAS_INLINE
-        void resize (A& a, typename A::size_type size, bool preserve) {
-            if (preserve)
-                a.resize (size, BOOST_UBLAS_TYPENAME A::value_type (0));
-            else
-                a.resize_new (size);
-        }
-        /* ISSUE Specialise for std::vector ONLY
-         * however some (MSVC-6/7) compilers without template partial specialization
-         * also think this is ambiguous when std::vector is used!
-         */
-        template<class T, class ALLOC>
-        BOOST_UBLAS_INLINE
-        void resize (std::vector<T, ALLOC> &a, typename std::vector<T>::size_type size, bool ) {
-            a.resize (size);
-        }
-#endif
-    }
-
-
     // Array based vector class
     template<class T, class A>
     class vector:
@@ -152,7 +100,10 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
-            detail::resize (data (), size, preserve);
+            if (preserve)
+                data ().resize (size, BOOST_UBLAS_TYPENAME A::value_type (0));
+            else
+                data ().resize (size);
         }
 
         // Element access

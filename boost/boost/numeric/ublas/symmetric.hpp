@@ -134,7 +134,7 @@ namespace boost { namespace numeric { namespace ublas {
                 assign_temporary (temporary);
             }
             else
-                detail::resize (data (), functor1_type::packed_size (size_, size_), preserve);
+                data ().resize (functor1_type::packed_size (size_, size_));
         }
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2, bool preserve = true) {
@@ -143,7 +143,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void resize_packed_preserve (size_type size) {
             size_ = BOOST_UBLAS_SAME (size, size);
-            detail::resize (data (), functor1_type::packed_size (size_, size_), false);
+            data ().resize (functor1_type::packed_size (size_, size_), value_type (0));
         }
 
         // Element access
