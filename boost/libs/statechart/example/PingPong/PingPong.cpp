@@ -8,7 +8,7 @@
 
 
 //////////////////////////////////////////////////////////////////////////////
-// #define USE_TWO_WORKER_THREADS // ignored for single-threaded builds
+#define USE_TWO_WORKER_THREADS // ignored for single-threaded builds
 //////////////////////////////////////////////////////////////////////////////
 // The following example program demonstrates the use of asynchronous state
 // machines. First, it creates two objects of the same simple state machine
