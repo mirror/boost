@@ -21,19 +21,23 @@
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_traits.hpp>
+#include <boost/range/iterator_range.hpp>
+#include <boost/range/iterator.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+#include <boost/utility/enable_if.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
 
 // Used for simulated tag dispatch.
 template<typename Traversal> struct range_adapter_impl;
 
-template<typename Mode, typename Iter>
+template<typename Mode, typename Range>
 class range_adapter {
 public:
-    typedef typename iterator_value<Iter>::type      char_type;
-    typedef typename iterator_traversal<Iter>::type  traversal;
+    typedef typename range_iterator<Range>::type         iterator;
+    typedef typename iterator_value<iterator>::type      char_type;
+    typedef typename iterator_traversal<iterator>::type  traversal;
     struct io_category : Mode, device_tag { };
     typedef typename
             mpl::if_<
@@ -46,33 +50,38 @@ public:
             >::type                                  tag;
     typedef range_adapter_impl<tag>                  impl;
 
-    range_adapter(Iter first, Iter last);
+    range_adapter(const Range& rng);
+    range_adapter(iterator first, iterator last);
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
     std::streamoff seek(std::streamoff off, std::ios::seekdir way);
 private:
-    Iter first_, cur_, last_;
+    iterator first_, cur_, last_;
 };
 
 //------------------Implementation of range_adapter---------------------------//
 
-template<typename Mode, typename Iter>
-range_adapter<Mode, Iter>::range_adapter(Iter first, Iter last)
+template<typename Mode, typename Range>
+range_adapter<Mode, Range>::range_adapter(const Range& rng)
+    : first_(rng.begin()), cur_(rng.begin()), last_(rng.end()) { }
+
+template<typename Mode, typename Range>
+range_adapter<Mode, Range>::range_adapter(iterator first, iterator last)
     : first_(first), cur_(first), last_(last) { }
 
-template<typename Mode, typename Iter>
-std::streamsize range_adapter<Mode, Iter>::read
+template<typename Mode, typename Range>
+std::streamsize range_adapter<Mode, Range>::read
     (char_type* s, std::streamsize n)
 { return impl::read(cur_, last_, s, n); }
 
-template<typename Mode, typename Iter>
-void range_adapter<Mode, Iter>::write
+template<typename Mode, typename Range>
+void range_adapter<Mode, Range>::write
     (const char_type* s, std::streamsize n)
 { impl::write(cur_, last_, s, n); }
 
 
-template<typename Mode, typename Iter>
-std::streamoff range_adapter<Mode, Iter>::seek
+template<typename Mode, typename Range>
+std::streamoff range_adapter<Mode, Range>::seek
     (std::streamoff off, std::ios::seekdir way)
 { 
     impl::seek(first_, cur_, last_, off, way); 
