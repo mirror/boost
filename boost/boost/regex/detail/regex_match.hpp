@@ -214,12 +214,12 @@ public:
    void estimate_max_state_count(iterator a, iterator b, unsigned states, std::random_access_iterator_tag*)
    {
       difference_type dist = std::distance(a,b);
-      if(dist > (std::numeric_limits<difference_type>::max() / (states * 3)))
-         max_state_count = std::numeric_limits<difference_type>::max();
+      states *= states;
+      difference_type lim = std::numeric_limits<difference_type>::max() - 1000 - states;
+      if(dist > (difference_type)(lim / states))
+         max_state_count = lim;
       else
-         max_state_count = states * 3 * dist;
-      if(max_state_count < 1000)
-         max_state_count = 1000;
+         max_state_count = 1000 + states * dist;
    }
    void estimate_max_state_count(iterator a, iterator b, unsigned states, void*)
    {
@@ -964,7 +964,19 @@ bool query_match_aux(iterator first,
    //
    if(state_count >= pd.max_state_count)
    {
+#ifndef BOOST_NO_EXCEPTIONS
       throw std::runtime_error("Max regex search depth exceeded.");
+#else
+      while(matches.empty() == false)
+         matches.pop();
+      while(prev_pos.empty() == false)
+         prev_pos.pop();
+      while(prev_record.empty() == false)
+         prev_record.pop();
+      while(prev_acc.empty() == false)
+         prev_acc.pop();
+      return false;
+#endif
    }
 
    //
@@ -1075,7 +1087,10 @@ bool query_match_aux(iterator first,
    }
 
    if(match_found || have_partial_match)
+   {
       return true;
+      pd.state_count = 0;
+   }
 
    // if we get to here then everything has failed
    // and no match was found:
