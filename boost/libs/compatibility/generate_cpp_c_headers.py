@@ -33,7 +33,7 @@
 
 # Definition of platform specific exclusion of identifiers.
 defines = {
-  'defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730': (
+  'defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 740': (
     'btowc', 'fwide', 'fwprintf', 'fwscanf', 'mbrlen', 'mbrtowc',
     'mbsinit', 'mbsrtowcs', 'swprintf', 'swscanf', 'towctrans', 'vfwprintf',
     'vswprintf', 'vwprintf', 'wcrtomb', 'wcsrtombs', 'wctob', 'wctrans',
