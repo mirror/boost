@@ -18,8 +18,8 @@
 #include "boost/optional.hpp"
 
 #ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
-#include "boost/utility/in_place_factory.hpp"
-#include "boost/utility/typed_in_place_factory.hpp"
+#include "boost/detail/in_place_factory.hpp"
+#include "boost/detail/typed_in_place_factory.hpp"
 #endif
 
 #ifdef __BORLANDC__

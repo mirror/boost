@@ -21,15 +21,15 @@
 #pragma hdrstop
 #endif
 
-#include "boost/utility/none.hpp"
+#include "boost/detail/none.hpp"
 
 #include "boost/test/minimal.hpp"
 
-#include "optional_test_common.cpp"       
+#include "optional_test_common.cpp"
 
 void test_implicit_construction ( optional<double> opt, double v, double z )
 {
-  check_value(opt,v,z);        
+  check_value(opt,v,z);
 }
 
 void test_implicit_construction ( optional<X> opt, X const& v, X const& z )
