@@ -175,7 +175,7 @@ EOF
    echo "compile-fail libs/config/test/$basename""_fail.cpp" >> ../test/regression.cfg
    
    echo 'test-suite "'$macroname'" : ' >> ../test/Jamfile
-   echo "[ run $basename""_pass.cpp <lib>../../test/build/prg_exec_monitor ]" >> ../test/Jamfile
+   echo "[ run $basename""_pass.cpp <lib>../../test/build/boost_prg_exec_monitor ]" >> ../test/Jamfile
    echo "[ compile-fail $basename""_fail.cpp <lib>../../test/build/boost_prg_exec_monitor ] ;" >> ../test/Jamfile
    
 done
@@ -299,7 +299,7 @@ EOF
    echo "compile-fail libs/config/test/$basename""_fail.cpp" >> ../test/regression.cfg
    
    echo 'test-suite "'$macroname'" : ' >> ../test/Jamfile
-   echo "[ run $basename""_pass.cpp <lib>../../test/build/prg_exec_monitor ]" >> ../test/Jamfile
+   echo "[ run $basename""_pass.cpp <lib>../../test/build/boost_prg_exec_monitor ]" >> ../test/Jamfile
    echo "[ compile-fail $basename""_fail.cpp <lib>../../test/build/boost_prg_exec_monitor ] ;" >> ../test/Jamfile
 
 done
@@ -336,6 +336,7 @@ EOF
 echo "updating configure script..."
 autoconf ../tools/configure.in > ../configure
 echo
+
 
 
 

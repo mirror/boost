@@ -1,6 +1,6 @@
 #
 # Regression test Jamfile for boost configuration setup.
-# This file was automatically generated on Thu Feb 13 12:10:01 GMTST 2003,
+# This file was automatically generated on Fri May 23 11:49:09 GMTST 2003,
 # do not edit by hand...
 #
 subproject libs/config/test ;
@@ -150,6 +150,9 @@ test-suite "BOOST_NO_SWPRINTF" :
 test-suite "BOOST_NO_TEMPLATE_TEMPLATES" : 
 [ run no_template_template_pass.cpp <lib>../../test/build/boost_prg_exec_monitor ]
 [ compile-fail no_template_template_fail.cpp <lib>../../test/build/boost_prg_exec_monitor ] ;
+test-suite "BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE" : 
+[ run no_using_decl_overld_pass.cpp <lib>../../test/build/boost_prg_exec_monitor ]
+[ compile-fail no_using_decl_overld_fail.cpp <lib>../../test/build/boost_prg_exec_monitor ] ;
 test-suite "BOOST_NO_USING_TEMPLATE" : 
 [ run no_using_template_pass.cpp <lib>../../test/build/boost_prg_exec_monitor ]
 [ compile-fail no_using_template_fail.cpp <lib>../../test/build/boost_prg_exec_monitor ] ;
