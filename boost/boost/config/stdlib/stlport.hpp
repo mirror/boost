@@ -54,6 +54,10 @@
 #  define BOOST_NO_STD_ALLOCATOR
 #endif
 
+#if !defined(_STLP_MEMBER_TEMPLATE_CLASSES)
+#  define BOOST_NO_STD_ALLOCATOR
+#endif
+
 //
 // We always have SGI style hash_set, hash_map, and slist:
 //
