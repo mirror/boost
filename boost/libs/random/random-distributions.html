@@ -708,15 +708,23 @@ lognormal one.
 <strong>Effects:</strong> Constructs a
 <code>lognormal_distribution</code> functor with the uniform random
 number generator <code>rng</code> as the underlying source of random
-numbers. <code>mean</code> and <code>sigma</code> are the parameters for
-the distribution.
+numbers. <code>mean</code> and <code>sigma</code> are the mean and
+standard deviation of the lognormal distribution.
 <p>
 
 <pre>result_type operator()()</pre>
 
-<strong>Returns:</strong> A random floating-point value <em>x</em>
-with p(x) = 1/(x * sigma * sqrt(2*pi*sigma)) * exp(-
+<!-- <strong>Returns:</strong> A random floating-point value <em>x</em>
+with p(x) = 1/(x * sigma * sqrt(2*pi)) * exp(-
 (log(x)-mean)<sup>2</sup> / (2*sigma<sup>2</sup>) ) for x > 0.
+<p> -->
+<strong>Returns:</strong> A random floating-point value <em>x</em>
+with p(x) = 1/(x * normal_sigma * sqrt(2*pi)) * exp(
+-(log(x)-normal_mean)<sup>2</sup> / (2*normal_sigma<sup>2</sup>) )
+for x > 0,
+where normal_mean = log(mean<sup>2</sup>/sqrt(sigma<sup>2</sup>
++ mean<sup>2</sup>))
+and normal_sigma = sqrt(log(1 + sigma<sup>2</sup>/mean<sup>2</sup>)).
 
 
 <h2><a name="uniform_on_sphere">Class template
