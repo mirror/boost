@@ -499,7 +499,6 @@ namespace
         void operator()(boost::minstd_rand& randomizer) const
         {
             Big    b1 = Big( randomizer() );
-            Big    b2 = Big( randomizer() );
             Small  s = Small( randomizer() );
             
             test_left( Wrapped6<Big, Small>(b1), s, b1, s );
