@@ -110,7 +110,7 @@ namespace boost { namespace numeric { namespace ublas {
             EqualityComparableConcept<iterator_type>::constraints (iterator_type ());
             DefaultConstructibleConcept<iterator_type>::constraints ();
             iterator_type it = iterator_type ();
-            value_type t = value_type ();
+            value_type t;
             // Dereference
             t = *it;
             // Member access
@@ -157,7 +157,7 @@ namespace boost { namespace numeric { namespace ublas {
             BidirectionalIteratorConcept<iterator_type, value_type>::constraints ();
             iterator_type it = iterator_type (), it1 = iterator_type (), it2 = iterator_type ();
             difference_type n (0);
-            value_type t = value_type ();
+            value_type t;
             // Forward motion
             it += n;
             // Iterator addition
@@ -552,7 +552,7 @@ namespace boost { namespace numeric { namespace ublas {
             ReversibleContainerConcept<generator_type>::constraints ();
             generator_type g = generator_type ();
             size_type n (0);
-            value_type t = value_type ();
+            value_type t;
             // Element access
             t = g (n);
             ignore_unused_variable_warning (t);
@@ -567,7 +567,7 @@ namespace boost { namespace numeric { namespace ublas {
         static void constraints () {
             DefaultConstructibleConcept<scalar_type>::constraints ();
             scalar_type s = scalar_type ();
-            value_type t = value_type ();
+            value_type t;
             // Conversion
             t = s;
             ignore_unused_variable_warning (t);
@@ -587,7 +587,7 @@ namespace boost { namespace numeric { namespace ublas {
             DefaultConstructibleConcept<vector_type>::constraints ();
             vector_type v = vector_type ();
             size_type n (0), i (0);
-            value_type t = value_type ();
+            value_type t;
             // Find (internal?)
             const_iterator_type cit (v.find (i));
             // Beginning of range
@@ -678,7 +678,7 @@ namespace boost { namespace numeric { namespace ublas {
             DefaultConstructibleConcept<matrix_type>::constraints ();
             matrix_type m = matrix_type ();
             size_type n (0), i (0), j (0);
-            value_type t = value_type ();
+            value_type t;
             // Find (internal?)
             const_iterator1_type cit1 (m.find1 (0, i, j));
             const_iterator2_type cit2 (m.find2 (0, i, j));
