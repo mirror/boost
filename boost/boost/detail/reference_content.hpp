@@ -23,8 +23,6 @@
 #   include "boost/mpl/bool.hpp"
 #   include "boost/type_traits/has_nothrow_copy.hpp"
 #else
-#   include "boost/utility/addressof.hpp"
-#   include "boost/type.hpp"
 #   include "boost/mpl/if.hpp"
 #   include "boost/type_traits/is_reference.hpp"
 #endif
@@ -40,17 +38,12 @@ namespace detail {
 //
 // Non-Assignable wrapper for references.
 //
-
-template <typename RefT> class reference_content;
-
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-
-template <typename T>
-class reference_content< T& >
+template <typename RefT>
+class reference_content
 {
 private: // representation
 
-    T& content_;
+    RefT content_;
 
 public: // structors
 
@@ -58,7 +51,7 @@ public: // structors
     {
     }
 
-    reference_content(T& r)
+    reference_content(RefT r)
         : content_( r )
     {
     }
@@ -74,61 +67,12 @@ private: // non-Assignable
 
 public: // queries
 
-    T& get() const
+    RefT get() const
     {
         return content_;
     }
 
 };
-
-#else // defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-
-template <typename RefT>
-class reference_content
-{
-private: // representation
-
-    void* content_;
-
-public: // structors
-
-    ~reference_content()
-    {
-    }
-
-    reference_content(RefT r)
-        : content_( boost::addressof(r) )
-    {
-    }
-
-    reference_content(const reference_content& operand)
-        : content_( operand.content_ )
-    {
-    }
-
-private: // non-Assignable
-
-    reference_content& operator=(const reference_content&);
-
-private: // helpers, for queries (below)
-
-    template <typename T>
-    RefT get_impl( boost::type<T&> ) const
-    {
-        return *static_cast<T*>( content_ );
-    }
-
-public: // queries
-
-    RefT get() const
-    {
-        boost::type<RefT> wknd_type;
-        return get_impl( wknd_type );
-    }
-
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION workaround
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction make_reference_content
