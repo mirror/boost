@@ -256,7 +256,7 @@ namespace boost
    public:
       iterator_adaptor() {}
 
-      explicit iterator_adaptor(Base iter)
+      explicit iterator_adaptor(Base const &iter)
           : m_iterator(iter)
       {
       }
