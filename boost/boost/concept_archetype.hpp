@@ -176,7 +176,9 @@ namespace boost {
   boolean_archetype
   operator==(const equality_comparable2_first_archetype<Base1>&,
 	     const equality_comparable2_second_archetype<Base2>&) 
-    { return boolean_archetype(dummy_cons); }
+  {
+    return boolean_archetype(static_object<detail::dummy_constructor>::get());
+  }
   template <class Base1, class Base2>
   boolean_archetype
   operator!=(const equality_comparable2_first_archetype<Base1>&,
