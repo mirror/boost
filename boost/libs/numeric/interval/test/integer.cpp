@@ -16,11 +16,13 @@
 
 #include <boost/numeric/interval.hpp>
 #include <boost/numeric/interval/ext/integer.hpp>
+#include "bugs.hpp"
 
 typedef boost::numeric::interval<float> I;
 
 int main() {
   I x, y;
   x = 4 - (2 * y + 1) / 3;
+  detail::ignore_warnings();
   return 0;
 }

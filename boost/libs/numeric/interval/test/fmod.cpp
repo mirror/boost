@@ -21,6 +21,7 @@
 #include <boost/numeric/interval/checking.hpp>
 #include <boost/numeric/interval/rounding.hpp>
 #include <boost/test/minimal.hpp>
+#include "bugs.hpp"
 
 struct my_rounded_arith {
   int sub_down(int x, int y) { return x - y; }

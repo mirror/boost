@@ -16,6 +16,7 @@
 
 #include <boost/numeric/interval.hpp>
 #include <boost/test/minimal.hpp>
+#include "bugs.hpp"
 
 template<class I>
 void test_one(typename I::base_type x, typename I::base_type f) {
@@ -25,6 +26,7 @@ void test_one(typename I::base_type x, typename I::base_type f) {
   for(int i = 0; i < nb; i++) y *= f;
   for(int i = 0; i < nb; i++) y *= g;
   BOOST_TEST(in(x, y));
+  detail::ignore_unused_variable_warning(nb);
 }
 
 template<class I>
@@ -39,5 +41,6 @@ int test_main(int, char *[]) {
   test<boost::numeric::interval<float> >();
   test<boost::numeric::interval<double> >();
   test<boost::numeric::interval<long double> >();
+  detail::ignore_warnings();
   return 0;
 }

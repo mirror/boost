@@ -17,6 +17,7 @@
 #include <boost/numeric/interval.hpp>
 #include <boost/numeric/interval/io.hpp>
 #include <boost/test/minimal.hpp>
+#include "bugs.hpp"
 
 typedef boost::numeric::interval<double> I;
 
@@ -123,5 +124,6 @@ int test_main(int, char*[]) {
   BOOST_CHECK(test_sqrt(5, 7));
   BOOST_CHECK(test_sqrt(-1, 2));
 
+  detail::ignore_warnings();
   return 0;
 }

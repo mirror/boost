@@ -33,6 +33,9 @@ static void test_12_34() {
 
   BOOST_CHECK(!(a == b));
   BOOST_CHECK(a != b);
+
+  detail::ignore_unused_variable_warning(a);
+  detail::ignore_unused_variable_warning(b);
 }
 
 // comparisons between [1,3] and [2,4]
@@ -52,6 +55,9 @@ static void test_13_24() {
 
   BOOST_C_EXN(a == b);
   BOOST_C_EXN(a != b);
+
+  detail::ignore_unused_variable_warning(a);
+  detail::ignore_unused_variable_warning(b);
 }
 
 // comparisons between [1,2] and [2,3]
@@ -71,6 +77,9 @@ static void test_12_23() {
 
   BOOST_C_EXN(a == b);
   BOOST_C_EXN(a != b);
+
+  detail::ignore_unused_variable_warning(a);
+  detail::ignore_unused_variable_warning(b);
 }
 
 static void test_12_E() {
@@ -88,6 +97,9 @@ static void test_12_E() {
 
   BOOST_C_EXN(a == b);
   BOOST_C_EXN(a != b);
+
+  detail::ignore_unused_variable_warning(a);
+  detail::ignore_unused_variable_warning(b);
 }
 
 // comparisons between [1,2] and 0
@@ -103,6 +115,9 @@ static void test_12_0() {
 
   BOOST_CHECK(!(a == b));
   BOOST_CHECK(a != b);
+
+  detail::ignore_unused_variable_warning(a);
+  detail::ignore_unused_variable_warning(b);
 }
 
 // comparisons between [1,2] and 1
@@ -118,6 +133,9 @@ static void test_12_1() {
 
   BOOST_C_EXN(a == b);
   BOOST_C_EXN(a != b);
+
+  detail::ignore_unused_variable_warning(a);
+  detail::ignore_unused_variable_warning(b);
 }
 
 // comparisons between [1,2] and 2
@@ -133,6 +151,9 @@ static void test_12_2() {
 
   BOOST_C_EXN(a == b);
   BOOST_C_EXN(a != b);
+
+  detail::ignore_unused_variable_warning(a);
+  detail::ignore_unused_variable_warning(b);
 }
 
 // comparisons between [1,2] and 3
@@ -148,18 +169,25 @@ static void test_12_3() {
 
   BOOST_CHECK(!(a == b));
   BOOST_CHECK(a != b);
+
+  detail::ignore_unused_variable_warning(a);
+  detail::ignore_unused_variable_warning(b);
 }
 
 static void test_12_12() {
   const I a(1,2), b(1,2);
   BOOST_C_EXN(a == b);
   BOOST_C_EXN(a != b);
+  detail::ignore_unused_variable_warning(a);
+  detail::ignore_unused_variable_warning(b);
 }
 
 static void test_11_11() {
   const I a(1,1), b(1,1);
   BOOST_CHECK(a == b);
   BOOST_CHECK(!(a != b));
+  detail::ignore_unused_variable_warning(a);
+  detail::ignore_unused_variable_warning(b);
 }
 
 static void test_11_1() {
@@ -167,6 +195,8 @@ static void test_11_1() {
   const int b = 1;
   BOOST_CHECK(a == b);
   BOOST_CHECK(!(a != b));
+  detail::ignore_unused_variable_warning(a);
+  detail::ignore_unused_variable_warning(b);
 }
 
 int test_main(int, char *[]) {

@@ -18,6 +18,7 @@
 #include <boost/numeric/interval/compare.hpp>
 #include <boost/numeric/interval/policies.hpp>
 #include <boost/test/test_tools.hpp>
+#include "bugs.hpp"
 
 struct empty_class {};
 

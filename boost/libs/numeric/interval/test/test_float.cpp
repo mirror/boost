@@ -17,6 +17,7 @@
 #include <boost/numeric/interval.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/config.hpp>
+#include "bugs.hpp"
 
 /* All the following tests should be BOOST_CHECK; however, if a test fails,
    the probability is high that hundreds of other tests will fail, so it is
@@ -126,5 +127,6 @@ int test_main(int, char *[]) {
   //BOOST_CHECKPOINT("long double tests");
   //test_all_unaries<long double>();
   //test_all_binaries<long double>();
+  detail::ignore_warnings();
   return 0;
 }

@@ -16,6 +16,7 @@
 
 #include <boost/numeric/interval.hpp>
 #include <boost/test/minimal.hpp>
+#include "bugs.hpp"
 
 bool test_pow(double al, double au, double bl, double bu, int p) {
   typedef boost::numeric::interval<double> I;
@@ -40,5 +41,6 @@ int test_main(int, char *[]) {
   BOOST_TEST(test_pow(-3, 2, 1, 1, 0));
   BOOST_TEST(test_pow(-3, -2, 1, 1, 0));
 
+  detail::ignore_warnings();
   return 0;
 }

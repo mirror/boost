@@ -16,11 +16,16 @@
 
 #include <boost/numeric/interval.hpp>
 #include <boost/test/minimal.hpp>
+#include "bugs.hpp"
 
 #define size 8
 
 template<class I>
 void det(I (&mat)[size][size]) {
+  using namespace boost;
+  using namespace numeric;
+  using namespace interval_lib;
+
   for(int i = 0; i < size; i++)
     for(int j = 0; j < size; j++)
       mat[i][j] = I(1) / I(i + j + 1);
@@ -101,5 +106,6 @@ int test_main(int, char *[]) {
   BOOST_TEST(test<float>());
   BOOST_TEST(test<double>());
   BOOST_TEST(test<long double>());
+  detail::ignore_warnings();
   return 0;
 }
