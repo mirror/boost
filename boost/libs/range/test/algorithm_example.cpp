@@ -41,11 +41,11 @@ namespace
    // 
    // replace first value and return its index
    //                                
-   template< typename ER, typename T >
-   inline typename boost::size_type_of< ER >::type
-   my_generic_replace( ER& c, const T& value, const T& replacement )
+   template< class XRange, class T >
+   inline typename boost::size_type_of< XRange >::type
+   my_generic_replace( XRange& c, const T& value, const T& replacement )
    {
-       typename boost::iterator_of<ER>::type found = find( c, value );
+       typename boost::iterator_of<XRange>::type found = find( c, value );
        
        if( found != boost::end( c ) )
            *found = replacement;
@@ -63,7 +63,8 @@ int main()
     typedef std::vector<int>::iterator iterator;
     std::pair<iterator,iterator>       my_view( boost::begin( my_vector ), 
                                                 boost::begin( my_vector ) + N );
-    char str[] = "a string";
+    char  str_val[] = "a string";
+    char* str       = str_val;
     
     std::cout << my_generic_replace( my_vector, 4, 2 )
               << my_generic_replace( my_view, 4, 2 )
