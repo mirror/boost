@@ -72,7 +72,7 @@ template<class T, class Policies> inline
 interval<T, Policies> div_positive(const interval<T, Policies>& x, const T& yu)
 {
   // assert(yu > T(0));
-  if (is_zero(x)) return x;
+  if (is_zero(x.lower()) && is_zero(x.upper())) return x;
   typename Policies::rounding rnd;
   typedef interval<T, Policies> I;
   const T& xl = x.lower();
