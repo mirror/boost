@@ -94,10 +94,10 @@ struct le_result1
 };
 
 template<
-      template< typename P1 > class F
-    , typename Tag
-    , typename L1
-    >
+    typename Tag
+  , template< typename P1 > class F
+  , typename L1
+  >
 struct le_result1< true_,Tag,false_,F,L1 >
 {
     typedef bind1<
@@ -107,10 +107,10 @@ struct le_result1< true_,Tag,false_,F,L1 >
 };
 
 template<
-      template< typename P1 > class F
-    , typename Tag
-    , typename L1
-    >
+    typename Tag
+  , template< typename P1 > class F
+  , typename L1
+  >
 struct le_result1< true_,Tag,true_,F,L1 >
 {
     typedef protect< bind1<
@@ -188,8 +188,8 @@ struct le_result2
 };
 
 template<
-      template< typename P1, typename P2 > class F
-    , typename Tag
+      typename Tag
+    , template< typename P1, typename P2 > class F
     , typename L1, typename L2
     >
 struct le_result2< true_,Tag,false_,F,L1,L2 >
@@ -201,8 +201,8 @@ struct le_result2< true_,Tag,false_,F,L1,L2 >
 };
 
 template<
-      template< typename P1, typename P2 > class F
-    , typename Tag
+      typename Tag
+    , template< typename P1, typename P2 > class F
     , typename L1, typename L2
     >
 struct le_result2< true_,Tag,true_,F,L1,L2 >
@@ -284,8 +284,8 @@ struct le_result3
 };
 
 template<
-      template< typename P1, typename P2, typename P3 > class F
-    , typename Tag
+      typename Tag
+    , template< typename P1, typename P2, typename P3 > class F
     , typename L1, typename L2, typename L3
     >
 struct le_result3< true_,Tag,false_,F,L1,L2,L3 >
@@ -297,8 +297,8 @@ struct le_result3< true_,Tag,false_,F,L1,L2,L3 >
 };
 
 template<
-      template< typename P1, typename P2, typename P3 > class F
-    , typename Tag
+      typename Tag
+    , template< typename P1, typename P2, typename P3 > class F
     , typename L1, typename L2, typename L3
     >
 struct le_result3< true_,Tag,true_,F,L1,L2,L3 >
@@ -382,8 +382,8 @@ struct le_result4
 };
 
 template<
-      template< typename P1, typename P2, typename P3, typename P4 > class F
-    , typename Tag
+      typename Tag
+    , template< typename P1, typename P2, typename P3, typename P4 > class F
     , typename L1, typename L2, typename L3, typename L4
     >
 struct le_result4< true_,Tag,false_,F,L1,L2,L3,L4 >
@@ -396,8 +396,8 @@ struct le_result4< true_,Tag,false_,F,L1,L2,L3,L4 >
 };
 
 template<
-      template< typename P1, typename P2, typename P3, typename P4 > class F
-    , typename Tag
+      typename Tag
+    , template< typename P1, typename P2, typename P3, typename P4 > class F
     , typename L1, typename L2, typename L3, typename L4
     >
 struct le_result4< true_,Tag,true_,F,L1,L2,L3,L4 >
@@ -488,12 +488,12 @@ struct le_result5
 };
 
 template<
-      template<
+      typename Tag
+    , template<
           typename P1, typename P2, typename P3, typename P4
         , typename P5
         >
       class F
-    , typename Tag
     , typename L1, typename L2, typename L3, typename L4, typename L5
     >
 struct le_result5< true_,Tag,false_,F,L1,L2,L3,L4,L5 >
@@ -506,12 +506,12 @@ struct le_result5< true_,Tag,false_,F,L1,L2,L3,L4,L5 >
 };
 
 template<
-      template<
+      typename Tag
+    , template<
           typename P1, typename P2, typename P3, typename P4
         , typename P5
         >
       class F
-    , typename Tag
     , typename L1, typename L2, typename L3, typename L4, typename L5
     >
 struct le_result5< true_,Tag,true_,F,L1,L2,L3,L4,L5 >

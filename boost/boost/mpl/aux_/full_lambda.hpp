@@ -259,8 +259,8 @@ struct BOOST_PP_CAT(le_result,i)
 };
 
 template<
-      template< AUX_LAMBDA_PARAMS(i, typename P) > class F
-    , typename Tag
+      typename Tag
+    , template< AUX_LAMBDA_PARAMS(i, typename P) > class F
     , AUX_LAMBDA_PARAMS(i, typename L)
     >
 struct BOOST_PP_CAT(le_result,i)< true_,Tag,false_,F,AUX_LAMBDA_PARAMS(i, L) >
@@ -272,8 +272,8 @@ struct BOOST_PP_CAT(le_result,i)< true_,Tag,false_,F,AUX_LAMBDA_PARAMS(i, L) >
 };
 
 template<
-      template< AUX_LAMBDA_PARAMS(i, typename P) > class F
-    , typename Tag
+      typename Tag
+    , template< AUX_LAMBDA_PARAMS(i, typename P) > class F
     , AUX_LAMBDA_PARAMS(i, typename L)
     >
 struct BOOST_PP_CAT(le_result,i)< true_,Tag,true_,F,AUX_LAMBDA_PARAMS(i, L) >
