@@ -6,7 +6,6 @@
 #include <iostream>
 
 #include "jobs.h"
-#include "varout.h"
 
 
 //Just Another Class
@@ -15,8 +14,7 @@ struct jac
    jac() { }
    jac(int ) { }
    jac(const char* ) { }
-
-}; //jac
+};
 
 std::ostream& operator<<(std::ostream& out, const jac& )
 {

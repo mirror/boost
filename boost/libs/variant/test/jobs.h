@@ -3,21 +3,55 @@
 #ifndef _JOBSH_INC_
 #define _JOBSH_INC_
 
-#include <vector>
-#include <sstream>
 #include <algorithm>
+#include <iostream>
+#include <sstream>
+#include <string>
 #include <typeinfo>
+#include <vector>
 
 #include "boost/variant/get.hpp"
 #include "boost/variant/apply_visitor.hpp"
 #include "boost/variant/static_visitor.hpp"
 
-#include "varout.h"
-
 #include "boost/detail/workaround.hpp"
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
 #    pragma warn -lvc
 #endif
+
+struct to_text : boost::static_visitor<std::string>
+{
+private: // NO_FUNCTION_TEMPLATE_ORDERING workaround
+
+    template < BOOST_VARIANT_ENUM_PARAMS(typename U) >
+    std::string to_text_impl(
+          const boost::variant< BOOST_VARIANT_ENUM_PARAMS(U) >& operand, long
+        ) const
+    {
+        std::ostringstream ost;
+        ost << "[V] " << boost::apply_visitor(to_text(), operand);
+
+        return ost.str();
+    }
+
+    template <typename Value>
+    std::string to_text_impl(const Value& operand, int) const
+    {
+        std::ostringstream ost;
+        ost << "[V] " << operand;
+
+        return ost.str();
+    }
+
+public:
+
+    template <typename T>
+    std::string operator()(const T& operand) const
+    {
+        return to_text_impl(operand, 1L);
+    }
+
+};
 
 struct total_sizeof : boost::static_visitor<int>
 {

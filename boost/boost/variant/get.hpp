@@ -20,7 +20,6 @@
 #include <exception>
 
 #include "boost/detail/workaround.hpp"
-#include "boost/preprocessor/enum_params.hpp"
 #include "boost/utility/addressof.hpp"
 #include "boost/variant/variant_fwd.hpp"
 
@@ -120,9 +119,10 @@ public: // visitor interfaces
 
 }} // namespace detail::variant
 
-template <typename U, BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T) >
+template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
 inline U* get(
-      boost::variant< BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T) >* operand
+      boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
+    , U* = 0
     )
 {
     if (!operand) return static_cast<U*>(0);
@@ -131,9 +131,10 @@ inline U* get(
     return operand->apply_visitor(v);
 }
 
-template <typename U, BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T) >
+template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
 inline U* get(
-      const boost::variant< BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T) >* operand
+      const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
+    , U* = 0
     )
 {
     if (!operand) return static_cast<U*>(0);
@@ -142,9 +143,10 @@ inline U* get(
     return operand->apply_visitor(v);
 }
 
-template <typename U, BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T) >
+template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
 inline U& get(
-      boost::variant< BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T) >& operand
+      boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >& operand
+    , U* = 0
     )
 {
     U* result = get<U>(&operand);
@@ -153,9 +155,10 @@ inline U& get(
     return *result;
 }
 
-template <typename U, BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T) >
+template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
 inline U& get(
-      const boost::variant< BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T) >& operand
+      const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >& operand
+    , U* = 0
     )
 {
     U* result = get<U>(&operand);

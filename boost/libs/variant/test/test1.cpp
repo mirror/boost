@@ -5,7 +5,6 @@
 
 #include "class_a.h"
 #include "jobs.h"
-#include "varout.h"
 
 #include <iostream>
 #include <string>

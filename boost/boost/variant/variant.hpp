@@ -18,8 +18,9 @@
 #define BOOST_VARIANT_VARIANT_HPP
 
 #include <cstddef> // for std::size_t
+#include <iosfwd> // for std::basic_ostream forward declare
 #include <new> // for placement new
-#include <typeinfo> // for std::type_info
+#include <typeinfo> // for typeid, std::type_info
 
 #include "boost/variant/variant_fwd.hpp"
 #include "boost/variant/detail/generic_result_type.hpp"
@@ -451,7 +452,7 @@ public: // visitor interfaces
 //
 // Rationale #2: boost::empty behavior enables variant<> syntax.
 //
-template < BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T) >
+template < BOOST_VARIANT_ENUM_PARAMS(typename T) >
 struct make_variant_list
 {
 private: // helpers, for metafunction result (below)
@@ -491,9 +492,9 @@ public: // metafunction result
 //
 template <
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
-    BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T_)
+    BOOST_VARIANT_ENUM_PARAMS(typename T_)
 #else
-    BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T)
+    BOOST_VARIANT_ENUM_PARAMS(typename T)
 #endif
   >
 class variant
@@ -548,7 +549,7 @@ public: // typedefs
           mpl::is_sequence<T0>
         , mpl::identity<T0>
         , detail::variant::make_variant_list<
-              BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T)
+              BOOST_VARIANT_ENUM_PARAMS(T)
             >
         >::type types;
 
@@ -910,10 +911,10 @@ private: // helpers, for structors, cont. (below)
 
 public: // structors, cont.
 
-    template <BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename U)>
+    template <BOOST_VARIANT_ENUM_PARAMS(typename U)>
     variant(
           const boost::variant<
-              BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, U)
+              BOOST_VARIANT_ENUM_PARAMS(U)
             >& operand
         )
     {
@@ -930,10 +931,10 @@ public: // structors, cont.
 
 private: // workaround, for structors, cont. (below)
 
-    template <BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename U)>
+    template <BOOST_VARIANT_ENUM_PARAMS(typename U)>
     void constructor_simulated_partial_ordering(
           const boost::variant<
-              BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, U)
+              BOOST_VARIANT_ENUM_PARAMS(U)
             >& operand
         , long
         )
@@ -1331,7 +1332,7 @@ private: // helpers, for visitation support (below)
 // helpers, for visitation support (below) -- private when possible
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 
-    template < BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename U) >
+    template < BOOST_VARIANT_ENUM_PARAMS(typename U) >
     friend class variant;
 
 private:
@@ -1407,28 +1408,28 @@ public: // visitation support
 // MSVC6 seems not to like inline functions with const void* returns, so we
 // declare the following here:
 
-template < BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T) >
+template < BOOST_VARIANT_ENUM_PARAMS(typename T) >
 const void*
 variant<
-      BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T)
+      BOOST_VARIANT_ENUM_PARAMS(T)
     >::storage1() const
 {
     return msvc_storage1_.address();
 }
 
-template < BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T) >
+template < BOOST_VARIANT_ENUM_PARAMS(typename T) >
 const void*
 variant<
-      BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T)
+      BOOST_VARIANT_ENUM_PARAMS(T)
     >::storage2() const
 {
     return msvc_storage2_.address();
 }
 
-template < BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T) >
+template < BOOST_VARIANT_ENUM_PARAMS(typename T) >
 const void*
 variant<
-      BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T)
+      BOOST_VARIANT_ENUM_PARAMS(T)
     >::active_storage() const
 {
     return const_cast<variant*>(this)->active_storage();
@@ -1441,13 +1442,59 @@ variant<
 //
 // Swaps two variants of the same type (i.e., identical specification).
 //
-template < BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T) >
+template < BOOST_VARIANT_ENUM_PARAMS(typename T) >
 inline void swap(
-      boost::variant< BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T) >& lhs
-    , boost::variant< BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T) >& rhs
+      variant< BOOST_VARIANT_ENUM_PARAMS(T) >& lhs
+    , variant< BOOST_VARIANT_ENUM_PARAMS(T) >& rhs
     )
 {
     lhs.swap(rhs);
+}
+
+//////////////////////////////////////////////////////////////////////////
+// function template operator<<
+//
+// Outputs the content of the given variant to the given ostream.
+//
+
+namespace detail { namespace variant {
+
+template <typename OStream>
+class printer
+    : public boost::static_visitor<>
+{
+private: // representation
+
+    OStream& out_;
+
+public: // structors
+
+    explicit printer(OStream& out)
+        : out_( out )
+    {
+    }
+
+public: // visitor interface
+
+    template <typename T>
+    void operator()(const T& operand) const
+    {
+        out_ << operand;
+    }
+
+};
+
+}} // namespace detail::variant
+
+template <typename E, typename T, BOOST_VARIANT_ENUM_PARAMS(typename U)>
+inline std::basic_ostream<E,T>& operator<<(
+      std::basic_ostream<E,T>& out
+    , const variant< BOOST_VARIANT_ENUM_PARAMS(U) >& rhs
+    )
+{
+    detail::variant::printer< std::basic_ostream<E,T> > visitor(out);
+    rhs.apply_visitor(visitor);
+    return out;
 }
 
 } // namespace boost

@@ -4,7 +4,6 @@
 #include "boost/variant.hpp"
 #include "boost/incomplete.hpp"
 
-#include "varout.h"
 #include "jobs.h"
 
 #include <string>

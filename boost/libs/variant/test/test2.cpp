@@ -4,7 +4,6 @@
 #include "boost/variant.hpp"
 
 #include "jobs.h"
-#include "varout.h"
 
 #include <cassert>
 #include <iostream>

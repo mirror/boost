@@ -17,7 +17,7 @@
 #ifndef BOOST_VARIANT_DETAIL_APPLY_VISITOR_UNARY_HPP
 #define BOOST_VARIANT_DETAIL_APPLY_VISITOR_UNARY_HPP
 
-#include "boost/detail/workaround.hpp"
+#include "boost/config.hpp"
 #include "boost/variant/detail/define_forwarding_func.hpp"
 #include "boost/variant/detail/generic_result_type.hpp"
 
@@ -26,30 +26,30 @@ namespace boost {
 //////////////////////////////////////////////////////////////////////////
 // function template apply_visitor(visitor, variant)
 //
-// Visits visitable with visitor.
+// Visits variant with visitor.
 //
 
 #define BOOST_VARIANT_AUX_APPLY_VISITOR_FUNC(CV1_, CV2_)  \
-    template <                                                          \
-          typename Visitor                                              \
-        , BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T)   \
-        >                                                               \
-    inline                                                              \
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(                          \
-              typename Visitor::result_type                             \
-            )                                                           \
-    apply_visitor(                                                      \
-          CV1_ Visitor& visitor                                         \
-        , CV2_ boost::variant<                                          \
-              BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T)        \
-            >& var                                                      \
-        )                                                               \
-    {                                                                   \
-        return var.apply_visitor(visitor);                              \
-    }                                                                   \
+    template <                                      \
+          typename Visitor                          \
+        , BOOST_VARIANT_ENUM_PARAMS(typename T)     \
+        >                                           \
+    inline                                          \
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(      \
+              typename Visitor::result_type         \
+            )                                       \
+    apply_visitor(                                  \
+          CV1_ Visitor& visitor                     \
+        , CV2_ boost::variant<                      \
+              BOOST_VARIANT_ENUM_PARAMS(T)          \
+            >& var                                  \
+        )                                           \
+    {                                               \
+        return var.apply_visitor(visitor);          \
+    }                                               \
     /**/
 #
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
     BOOST_VARIANT_AUX_DEFINE_FORWARDING_FUNC(BOOST_VARIANT_AUX_APPLY_VISITOR_FUNC, 2)
 #else
     BOOST_VARIANT_AUX_APPLY_VISITOR_FUNC(BOOST_VARIANT_AUX_NOTHING,BOOST_VARIANT_AUX_NOTHING)

@@ -17,20 +17,40 @@
 #ifndef BOOST_VARIANT_VARIANT_FWD_HPP
 #define BOOST_VARIANT_VARIANT_FWD_HPP
 
+#include <iosfwd> // for std::basic_ostream forward declare
+
 #include "boost/config.hpp"
-#include "boost/preprocessor/enum_params_with_a_default.hpp"
-#include "boost/preprocessor/enum_params_with_defaults.hpp"
 #include "boost/mpl/limits/list.hpp"
 #include "boost/mpl/void.hpp"
+#include "boost/preprocessor/cat.hpp"
+#include "boost/preprocessor/enum_params.hpp"
+#include "boost/preprocessor/repeat.hpp"
+
+#if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
+#   include "boost/preprocessor/enum_params_with_a_default.hpp"
+#else
+#   include "boost/preprocessor/enum_params_with_defaults.hpp"
+#endif
 
 //////////////////////////////////////////////////////////////////////////
-// BOOST_VARIANT_LIMIT_TYPES
+// macro BOOST_VARIANT_LIMIT_TYPES
 //
 // Implementation-defined preprocessor symbol describing the actual
 // length of variant's pseudo-variadic template parameter list.
 //
 #define BOOST_VARIANT_LIMIT_TYPES \
     BOOST_MPL_LIMIT_LIST_SIZE
+
+//////////////////////////////////////////////////////////////////////////
+// macro BOOST_VARIANT_ENUM_PARAMS
+//
+// Convenience macro for enumeration of BOOST_VARIANT_LIMIT_TYPES params.
+//
+// Rationale: Cleaner, simpler code for clients of variant library.
+//
+#define BOOST_VARIANT_ENUM_PARAMS( param )  \
+    BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, param)
+
 
 namespace boost {
 
@@ -137,6 +157,21 @@ template <
 
   >
 class variant;
+
+//////////////////////////////////////////////////////////////////////////
+// function template operator<<
+//
+// Streaming output forward declare. See variant.hpp for details.
+//
+
+template <
+      typename E, typename T
+    , BOOST_VARIANT_ENUM_PARAMS(typename U)
+    >
+inline std::basic_ostream<E,T>& operator<<(
+      std::basic_ostream<E,T>& out
+    , const variant< BOOST_VARIANT_ENUM_PARAMS(U) >& rhs
+    );
 
 } // namespace boost
 

@@ -4,14 +4,11 @@
 #include "boost/variant.hpp"
 
 #include "jobs.h"
-#include "varout.h"
 
 #include <assert.h>
 #include <iostream>
 #include <string>
 #include <vector>
-
-
 
 
 void run()

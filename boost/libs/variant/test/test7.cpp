@@ -4,7 +4,6 @@
 #include "boost/variant.hpp"
 
 #include "jobs.h"
-#include "varout.h"
 
 #include <iostream>
 #include <algorithm>
@@ -20,7 +19,6 @@
 
 using namespace boost;
 using namespace std;
-
 
 
 struct jas

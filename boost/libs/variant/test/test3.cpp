@@ -51,7 +51,7 @@ Sub::Sub(const Sub& other) : lhs_(other.lhs_), rhs_(other.rhs_) { }
 //
 // insert-to operators
 //
-std::ostream& operator<<(std::ostream& out, const Expr& a);
+std::ostream& operator<<(std::ostream& out, const Sub& a);
 
 std::ostream& operator<<(std::ostream& out, const Add& a)
 {
@@ -62,27 +62,6 @@ std::ostream& operator<<(std::ostream& out, const Add& a)
 std::ostream& operator<<(std::ostream& out, const Sub& a)
 {
    out << '(' << a.lhs_ << '-' << a.rhs_ << ')';
-   return out;
-}
-
-
-struct raw_text_maker : boost::static_visitor<std::string>
-{
-   template<typename T>
-   std::string operator()(const T& t) const
-   {
-      std::ostringstream ost;
-      ost << t;
-
-      return ost.str();
-   }   
-};
-
-std::ostream& operator<<(std::ostream& out, const Expr& a)
-{
-   std::string temp = boost::apply_visitor(raw_text_maker(), a);
-   out << temp;
-
    return out;
 }
 
@@ -131,9 +110,11 @@ int test_main(int, char* [])
    int n = 13;
    Expr e1( Add(n, Sub(Add(40,2),Add(10,4))) ); //n + (40+2)-(10+14) = n+28
 
+   std::ostringstream e1_str;
+   e1_str << e1;
+
    BOOST_CHECK(e1.type() == typeid(Add));
-   BOOST_CHECK(boost::apply_visitor(raw_text_maker(), e1) == 
-      "(13+((40+2)-(10+4)))");
+   BOOST_CHECK(e1_str.str() == "(13+((40+2)-(10+4)))");
 
    //Evaluate expression
    int res = boost::apply_visitor(Calculator(), e1);
