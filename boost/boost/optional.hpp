@@ -1,13 +1,8 @@
-// (C) 2003, Fernando Luis Cacciola Carballal.
+// Copyright (C) 2003, Fernando Luis Cacciola Carballal.
 //
-// This material is provided "as is", with absolutely no warranty expressed
-// or implied. Any use is at your own risk.
-//
-// Permission to use or copy this software for any purpose is hereby granted
-// without fee, provided the above notices are retained on all copies.
-// Permission to modify the code and to distribute modified code is granted,
-// provided the above notices are retained, and a notice that the code was
-// modified is included with the above copyright notice.
+// Use, modification, and distribution is subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/lib/optional for documentation.
 //
@@ -55,7 +50,7 @@
 #define BOOST_OPTIONAL_NO_CONVERTING_COPY_CTOR
 #endif
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION,<=700)
 // AFAICT only VC7.1 correctly resolves the overload set
 // that includes the in-place factory taking functions,
 // so for the other VC versions, in-place factory support
@@ -74,7 +69,7 @@
 #endif
 
 
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x560)
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x551)
 // BCB (5.5.1) defines BOOST_NESTED_TEMPLATE as 'template' but in this context it produces an error.
 #define BOOST_OPTIONAL_NESTED_TEMPLATE
 #else
@@ -270,7 +265,7 @@ class optional_base : public optional_tag
     void construct ( Expr const& factory, InPlaceFactoryBase const* )
      {
        BOOST_STATIC_ASSERT ( ::boost::mpl::not_<is_reference_predicate>::value ) ;
-       factory.BOOST_NESTED_TEMPLATE apply<T>(m_storage.address()) ;
+       factory.BOOST_OPTIONAL_NESTED_TEMPLATE apply<T>(m_storage.address()) ;
        m_initialized = true ;
      }
 
@@ -603,12 +598,12 @@ bool operator >= ( optional<T> const& x, optional<T> const& y )
 
 template<class T>
 inline
-bool operator == ( optional<T> const& x, detail::none_t const& y )
+bool operator == ( optional<T> const& x, detail::none_t const& )
 { return equal_pointees(x, optional<T>() ); }
 
 template<class T>
 inline
-bool operator < ( optional<T> const& x, detail::none_t const& y )
+bool operator < ( optional<T> const& x, detail::none_t const& )
 { return less_pointees(x,optional<T>() ); }
 
 template<class T>
