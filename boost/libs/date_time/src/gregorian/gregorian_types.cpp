@@ -37,8 +37,12 @@
 /*! @example print_month.cpp 
   Simple utility to print out days of the month with the days of a month.  Demontstrates date iteration (date_time::date_itr). 
 */
+/*! @example localization.cpp
+  An example showing localized stream-based I/O.
+*/
 /*! @example dates_as_strings.cpp 
-  Various parsing and output of strings.
+  Various parsing and output of strings (mostly supported for 
+  compilers that do not support localized streams).
 */
 /*! @example period_calc.cpp 
   Calculates if a date is in an 'irregular' collection of periods using
@@ -46,6 +50,9 @@
 */
 /*! @example print_holidays.cpp
   This is an example of using functors to define a holiday schedule
+ */
+/*! @example localization.cpp
+  Demonstrates the use of facets to localize date output for Gregorian dates.
  */
 
  
