@@ -103,11 +103,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T>
     const typename scalar_const_reference<T>::value_type scalar_const_reference<T>::nil_
-#ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME scalar_const_reference<T>::value_type ()
-#endif
-    ;
-
+        = BOOST_UBLAS_TYPENAME scalar_const_reference<T>::value_type ();
 
 
     // Base class for the Barton Nackman trick
