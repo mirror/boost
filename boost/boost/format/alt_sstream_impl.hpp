@@ -38,7 +38,7 @@ namespace boost {
         void basic_altstringbuf<Ch, Tr, Alloc>:: 
         str (const string_type& s) {
             dealloc();
-            size_t sz=s.size();
+            std::size_t sz=s.size();
             if(sz != 0 && mode_ & (ios_base::in | ios_base::out) ) {
                 Ch *new_ptr = alloc_.allocate(sz);
                 s.copy(new_ptr);
@@ -217,14 +217,14 @@ namespace boost {
             else if(! (mode_ & ios_base::out)) // no write position, and cant make one
                 return traits_type::eof(); 
             else { // make a write position available
-                size_t prev_size = pptr() == NULL ? 0 : epptr() - eback();
-                size_t new_size = prev_size;
-                size_t add_size = new_size / 2;  // exponential growth : size *= 1.5
+                std::size_t prev_size = pptr() == NULL ? 0 : epptr() - eback();
+                std::size_t new_size = prev_size;
+                std::size_t add_size = new_size / 2;  // exponential growth : size *= 1.5
                 if(add_size < alloc_min)
                     add_size = alloc_min;
                 Ch * newptr = NULL,  *oldptr = eback();
 
-                while (0 < add_size && (std::numeric_limits<size_t>::max()-add_size < new_size) )
+                while (0 < add_size && (std::numeric_limits<std::size_t>::max()-add_size < new_size) )
                     add_size /= 2;  // make sure adding add_size wont overflow size_t
                 if(0 < add_size) {
                     new_size += add_size;
