@@ -38,7 +38,7 @@ int cpp_main(int argc, char* argv[])
 
 //
 // define the number of failures expected for given compilers:
-#ifdef BOOST_MSVC
+#if defined(BOOST_MSVC) && _MSC_VER <= 1300
 // can't separate void and cv-void:
 unsigned int expected_failures = 1;
 #elif defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x530)
