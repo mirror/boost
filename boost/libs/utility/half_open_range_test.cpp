@@ -6,6 +6,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 //
 // Revision History
+// 11 Feb 2001  Compile with Borland, re-enable failing tests (David Abrahams)
 // 29 Jan 2001  Initial revision (David Abrahams)
 
 #include <boost/half_open_range.hpp>
@@ -140,7 +141,6 @@ void category_test_2(
         assert(!greater(ri,rj));
         assert(!less(ri,rj));
     }
-#if 0
     else if (one_empty)
     {
         const range& empty = ri.empty() ? ri : rj;
@@ -184,7 +184,6 @@ void category_test_2(
             assert(greater_equal(ri,rj));
         }
     }
-#endif
 }
 
 
@@ -305,10 +304,10 @@ void test(T x0, T x1, T x2, T x3)
 template <class Integer>
 void test_integer(Integer* = 0) // default arg works around MSVC bug
 {
-    const Integer a = 0;
-    const Integer b = a + unsigned_random(128 - a);
-    const Integer c = b + unsigned_random(128 - b);
-    const Integer d = c + unsigned_random(128 - c);
+    Integer a = 0;
+    Integer b = a + unsigned_random(128 - a);
+    Integer c = b + unsigned_random(128 - b);
+    Integer d = c + unsigned_random(128 - c);
 
     test(a, b, c, d);
 }
