@@ -476,7 +476,7 @@ std::size_t RegEx::Position(int i)const
       return pdata->fm[i].matched ? pdata->fm[i].first - pdata->fbase : RegEx::npos;
    case re_detail::RegExData::type_copy:
       {
-      std::map<int, int, std::less<int> >::iterator pos = pdata->positions.find(i);
+      std::map<int, std::ptrdiff_t, std::less<int> >::iterator pos = pdata->positions.find(i);
       if(pos == pdata->positions.end())
          return RegEx::npos;
       return (*pos).second;
@@ -617,6 +617,7 @@ basic_string<char>::replace<const char*>(char* f1, char* f2, const char* i1, con
 #endif
 
 #endif
+
 
 
 
