@@ -24,38 +24,23 @@
         <hr>
         <p></p>
         <ul>
-            <li>
-                Header &quot;boost/variant.hpp&quot;<ul>
-                <li>
-                    <a href="#Synopsis">Synopsis</a></li>
-                <li>
-                    <a href="#BoundedType">BoundedType</a> concept</li>
-                <li>
-                    <a href="#Visitor">Visitor</a> concept</li>
-                <li>
-                    <a HREF="#BoostVariantLimitTypes">BOOST_VARIANT_LIMIT_TYPES</a></li>
-                <li>
-                    <code><a href="#variant">variant</a></code></li>
-            </ul>
-            </li>
-            <li>
-                Header &quot;boost/apply_visitor.hpp&quot;: <a href="#Visitation"><code>apply_visitor</code></a></li>
-            <li>
-                Header &quot;boost/static_visitor.hpp&quot;: <a href="#StaticVisitor"><code>static_visitor</code></a></li>
-            <li>
-                Header &quot;boost/get.hpp&quot;: <a href="#ValueExtraction"><code>get</code></a></li>
-            <li>
-                Header &quot;boost/incomplete.hpp&quot;: <a href="#incomplete"><code>incomplete</code></a></li>
-            <li>
-                Header &quot;boost/empty.hpp&quot;: <a href="#empty"><code>empty</code></a></li>
-        </ul>
+            <li><a href="#Synopsis">Synopsis</a></li>
+            <li><a href="#BoundedType">BoundedType Concept</a></li>
+            <li><a href="#Visitor">Visitor Concept</a></li>
+            <li><a HREF="#BoostVariantLimitTypes">BOOST_VARIANT_LIMIT_TYPES</a></li>
+            <li><a href="#variant"><code>boost::variant</code></li>
+            <li><a href="#Visitation"><code>boost::apply_visitor</code></a></li>
+            <li><a href="#StaticVisitor"><code>boost::static_visitor</code></a></li>
+            <li><a href="#ValueExtraction"><code>boost::get</code></a></li>
+            <li><a href="#incomplete"><code>boost::incomplete</code></a></li>
+            <li><a href="#empty"><code>boost::empty</code></a></li>
+	</ul>
         <hr>
-        <h2>Header <code>&quot;boost/variant.hpp&quot;</code></h2>
         <h3><a name="Synopsis">Synopsis</a></h3>
         <p>Dependencies and library features defined in <a href="../../../boost/variant.hpp">
                     &quot;<code>boost/variant.hpp</code>&quot;</a>:
         </p>
-        <pre>#include &lt;typeinfo&gt;
+        <pre>
 
 #define <a href="#BOOST_VARIANT_LIMIT_TYPES">BOOST_VARIANT_LIMIT_TYPES</a> <i>implementation-defined</i>
 
@@ -152,9 +137,9 @@ each of the variant's <A HREF=#BoundedType">bounded types</A>, is a
         return s.length();
     }
 };</pre>
-        <p>Another example is the following class, which exposes a templated 
-	function call operator, allowing it to operate on values of many types. 
-	Thus, the following class is a visitor of any <code>variant</code> 
+        <p>Another example is the following class, which exposes a templated
+	function call operator, allowing it to operate on values of many types.
+	Thus, the following class is a visitor of any <code>variant</code>
 	whose bounded types each support streaming output:</p>
 <pre>class printer
 {
@@ -169,13 +154,13 @@ each of the variant's <A HREF=#BoundedType">bounded types</A>, is a
         <hr>
         <h3><a name="BoostVariantLimitTypes">BOOST_VARIANT_LIMIT_TYPES</a></h3>
         <pre>#define BOOST_VARIANT_LIMIT_TYPES <i>implementation-defined</i></pre>
-        <p><i>Implementation-defined</i>. Equal to the length of the template parameter 
+        <p><i>Implementation-defined</i>. Equal to the length of the template parameter
             list for <code>variant</code>.</p>
-        <p><b>Note:</b> Conforming implementations of <code>variant</code> must allow at 
+        <p><b>Note:</b> Conforming implementations of <code>variant</code> must allow at
             least ten bounded types. That is, <code>BOOST_VARIANT_LIMIT_TYPES &gt;= 10</code>
             must evaluate true.</p>
         <hr>
-        <h2><a name="variant"><code>variant</code></a></h2>
+        <h2><a name="variant"><code>boost::variant</code></a></h2>
         <pre>template
 &lt;
     typename T1,
@@ -189,8 +174,10 @@ public: // <i><a href="#variant-structors">structors</a></i>
 
     <a href="#variant-default-ctor">variant</a>();
     <a href="#variant-copy-ctor">variant</a>(const variant &amp;);
+    
     template &lt;typename OperandType&gt;
-      <a href="#variant-template-ctor">variant</a>(const OperandType &amp;);
+    <a href="#variant-template-ctor">variant</a>(const OperandType &amp;);
+
     <a href="#dtor">~variant</a>();
 
 public: // <i><a href="#variant-modifiers">modifiers</a></i>
@@ -236,8 +223,9 @@ private: // <i>representation</i>
                 May fail with any exceptions arising from the copy constructor of <code>other</code>'s
                 contained type.<br>
             </p>
+            <a name="variant-template-ctor"></a>
             <pre>template &lt;typename OperandType&gt;
-  <a name="variant-template-ctor">variant</a>(const OperandType &amp; operand);
+variant(const OperandType &amp; operand);
 </pre>
             <p>Templated constructor. Initializes <code>*this</code> according to the following
                 logic:</p>
