@@ -11,6 +11,8 @@
 // See http://www.boost.org/libs/tokenizer for documentation.
 
 // Revision History:
+// 06 Apr 2004   John Bandela
+//      Fixed a bug involving using char_delimiter with a true input iterator
 // 28 Nov 2003   Robert Zeh and John Bandela
 //      Converted into "fast" functions that avoid using += when
 //      the supplied iterator isn't an input_iterator; based on
@@ -261,7 +263,7 @@ namespace boost{
     typedef typename mpl::if_<is_pointer<Iterator>,
       pointer_iterator_category<Iterator>,
       class_iterator_category<Iterator>
-    > cat;
+    >::type cat;
 
     typedef typename cat::type iterator_category;
   };
