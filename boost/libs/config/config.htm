@@ -30,7 +30,7 @@
 <a href="#Acknowledgements">Acknowledgements</a></pre>
       <h2><a name="configuring"></a>Configuring Boost for Your Platform</h2>
       <h4><a name="default_config"></a>Using the default boost configuration</h4>
-      <p>Boost is comes already configured for most common compilers and platforms; you 
+      <p>Boost comes already configured for most common compilers and platforms; you 
          should be able to use boost "as is". Since the compiler is configured 
          separately from the standard library, the default configuration should work 
          even if you replace the compiler's standard library with a third-party standard 
@@ -71,10 +71,10 @@
          running the boost configure script. From a shell command prompt you will need 
          to cd into &lt;boost-root&gt;/libs/config/ and type:</p>
       <pre>sh ./configure</pre>
-      <p>you will see a list of the items being checked as the script works it way 
+      <p>you will see a list of the items being checked as the script works its way 
          through the regression tests. Note that the configure script only really 
          auto-detects your compiler if it's called g++, c++ or CC. If you are using some 
-         other compiler then you will need to set one or more of the following 
+         other compiler you will need to set one or more of the following 
          environment variables:</p>
       <table border="1" cellpadding="7" cellspacing="1" width="624">
          <tr>
@@ -103,11 +103,10 @@
       <p>For example to run the configure script with HP aCC, you might use something 
          like:</p>
       <pre>export CXX="aCC"
-export CXXFLAGS="-Aa
--DAportable -D__HPACC_THREAD_SAFE_RB_TREE -DRWSTD_MULTI_THREAD -DRW_MULTI_THREAD -D_REENTRANT -D_THREAD_SAFE" export LDFLAGS="-DAportable"
-export LIBS=
-"-lpthread" sh
-./configure</pre>
+export CXXFLAGS="-Aa -DAportable -D__HPACC_THREAD_SAFE_RB_TREE -DRWSTD_MULTI_THREAD -DRW_MULTI_THREAD -D_REENTRANT -D_THREAD_SAFE" 
+export LDFLAGS="-DAportable"
+export LIBS="-lpthread" 
+sh ./configure</pre>
       <p>However you run the configure script, when it finishes you will find a new 
          header - user.hpp - located in the &lt;boost-root/libs/config/&gt; directory. <b><i>Note 
                that configure does not install this header into your boost include path by 
@@ -123,11 +122,11 @@ export LIBS=
          committing a configure-modified user.hpp to the cvs repository (something you 
          will not be thanked for!).</p>
       <p>Option 2: give the header a more memorable name, and place it somewhere 
-         convenient, then define the macro BOOST_USER_CONFIG to point to it. For example 
+         convenient; then, define the macro BOOST_USER_CONFIG to point to it. For example 
          create a new sub-directory &lt;boost-root&gt;/boost/config/user/, and copy the 
-         header there; for example as "multithread-gcc-config.hpp". Then when compiling 
+         header there; for example as "multithread-gcc-config.hpp". Then, when compiling 
          add the command line option: 
-         -DBOOST_USER_CONFIG="boost/config/user/multithread-gcc-config.hpp", and boost 
+         -DBOOST_USER_CONFIG="&lt;boost/config/user/multithread-gcc-config.hpp&gt;", and boost 
          will use the new configuration header. This option allows you to generate more 
          than one configuration header, and to keep them separate from the boost source 
          - so that updates to the source do not interfere with your configuration.</p>
@@ -1137,7 +1136,7 @@ void g() { return f(); }</pre>
          </tr>
       </table>
       <h4><a name="info_macros"></a>Boost Informational Macros</h4>
-      <p>The following macros describe boost features; these are the generally speaking 
+      <p>The following macros describe boost features; these are, generally speaking 
          the only boost macros that should be tested in user code.</p>
       <table border="1" cellpadding="7" cellspacing="1" width="100%">
          <tr>
@@ -1371,7 +1370,7 @@ namespace boost{
       <h4><a name="defect_guidelines"></a>Adding New Defect Macros</h4>
       <p>When you need to add a new defect macro - either to fix a problem with an 
          existing library, or when adding a new library - distil the issue down to a 
-         simple test case, often at this point other (possibly better) workarounds may 
+         simple test case; often, at this point other (possibly better) workarounds may 
          become apparent. Secondly always post the test case code to the boost mailing 
          list and invite comments; remember that C++ is complex and that sometimes what 
          may appear a defect, may in fact turn out to be a problem with the authors 
@@ -1463,7 +1462,7 @@ int test()
       <p>Consider a situation in which you are concurrently developing on multiple 
          platforms. Then consider adding a new platform or changing the platform 
          definitions of an existing platform. What happens? Everything, and this does 
-         literally mean everything, recompiles.. Isn't it quite absurd that adding a new 
+         literally mean everything, recompiles. Isn't it quite absurd that adding a new 
          platform, which has absolutely nothing to do with previously existing 
          platforms, means that all code on all existing platforms needs to be 
          recompiled?</p>
@@ -1494,8 +1493,8 @@ int test()
       <p>The approach taken by boost's configuration headers is to separate 
          configuration into three orthogonal parts: the compiler, the standard library 
          and the platform. Each compiler/standard library/platform gets its own 
-         mini-configuration header, so that change to one compiler's configuration (for 
-         example) does not effect other compilers. In addition there are measures that 
+         mini-configuration header, so that changes to one compiler's configuration (for 
+         example) does not affect other compilers. In addition there are measures that 
          can be taken both to omit the compiler/standard library/platform detection code 
          (so that adding support to a new platform does not break dependencies), or to 
          freeze the configuration completely; providing almost complete protection 

@@ -1257,7 +1257,7 @@ Be patient - this could take some time...
 
 Note that this test script only gives an approximate
 configuration - you will need to test the results carefully
-using the boost regresion test suite before using the results.
+using the boost regression test suite before using the results.
 EOF
 
 if test $enable_test = 'yes'; then
@@ -1265,8 +1265,8 @@ if test $enable_test = 'yes'; then
 cat << EOF
 
 This script reports only the difference between the detected
-configuration, and the existing boost configuration.  It's
-primary aim is to quicky report how well boost is configured
+configuration, and the existing boost configuration.  Its
+primary aim is to quickly report how well boost is configured
 for one compiler.
 
 ***
@@ -3271,7 +3271,7 @@ EEEOF
 cat << EEEOF
 
 Adjustments to boost configuration have been written to
-user.hpp, copy this to boost/config/user.hpp to use "as is",
+user.hpp.  Copy this to boost/config/user.hpp to use "as is",
 or define BOOST_SITE_CONFIG to point to its location.
 
 TREAT THIS FILE WITH CARE.
