@@ -9,6 +9,11 @@
 #include <algorithm>
 #include <iostream>
 
+bool equal(const int& a, const int& b)
+{
+  return a == b;
+}
+
 template <typename ArrayA, typename ArrayB>
 bool equal(const ArrayA& A, const ArrayB& B)
 {
@@ -18,11 +23,6 @@ bool equal(const ArrayA& A, const ArrayB& B)
     if (!equal(*ia, *ib))
       return false;
   return true;
-}
-
-bool equal(const int& a, const int& b)
-{
-  return a == b;
 }
 
 
