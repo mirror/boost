@@ -72,7 +72,11 @@ struct enable_recursive_impl
 };
 
 template <typename RecursiveVariant>
-struct enable_recursive_impl< recursive_variant_, RecursiveVariant > 
+struct enable_recursive_impl<
+      ::boost::recursive_variant_
+    , RecursiveVariant
+      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>)
+    > 
 {
     typedef RecursiveVariant type;
 };
