@@ -34,7 +34,7 @@ namespace opt{
 //
 // algorithm destroy_array:
 // The reverse of std::unitialized_copy, takes a block of
-// unitialized memory and calls destructors on all objects therein.
+// initialized memory and calls destructors on all objects therein.
 //
 
 namespace detail{
@@ -155,6 +155,7 @@ int main()
 
    return 0;
 }
+
 
 
 

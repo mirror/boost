@@ -166,6 +166,9 @@ struct test_align
          std::cout << "checking value of " << typeid(boost::alignment_of<T>).name() << "...failed" << std::endl;
          std::cout << "\tfound: " << boost::alignment_of<T>::value << " expected " << a << std::endl;
       }
+      // suppress warnings about unused variables:
+      (void)p;
+      (void)a;
    }
 };
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -224,7 +227,7 @@ struct BOOST_TT_JOIN(nested_tester_,what){\
    BOOST_TT_JOIN(nested_tester_,what)(const char* s) : tester(::boost::what<T>::value, s){}\
 };
 #define NESTED_TEST(what, with)\
-{BOOST_TT_JOIN(nested_tester_,what)<with> check(#what "<" #with ">");}
+{BOOST_TT_JOIN(nested_tester_,what)<with> check(#what "<" #with ">"); (void)check;}
 
 #define BOOST_TT_JOIN( X, Y ) BOOST_DO_TT_JOIN( X, Y )
 #define BOOST_DO_TT_JOIN( X, Y ) X##Y
@@ -350,6 +353,8 @@ struct non_empty : boost::noncopyable
 
 
 #endif // BOOST_TYPE_TRAITS_TEST_HPP
+
+
 
 
 

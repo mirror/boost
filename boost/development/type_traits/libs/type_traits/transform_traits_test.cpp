@@ -11,7 +11,6 @@
 #ifdef __BORLANDC__
 #pragma hrdstop
 #endif
-#include "boost/type_traits/type_traits_test.hpp"
 
 //
 // some of these tests, particularly those involving
@@ -20,6 +19,11 @@
 // template test code.  To prevent "Internal Compiler Error"
 // type messages, we have to split these up into lots of
 // separate functions:
+#if defined(BOOST_MSVC) || (defined(__BORLANDC__) && (__BORLANDC__ < 0x550))
+#define SHORT_TRANSFORM_TEST
+#endif
+#include "boost/type_traits/type_traits_test.hpp"
+
 #define BOOST_DECL_TRANSFORM_TEST(name, type, from, to)\
 void name(){ transform_check(type, from, to) }
 #define BOOST_DECL_TRANSFORM_TEST3(name, type, from)\
@@ -316,15 +320,17 @@ BOOST_DECL_TRANSFORM_TEST(add_pointer_test_1, ::boost::add_pointer, const, const
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_2, ::boost::add_pointer, volatile, volatile*)
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_3, ::boost::add_pointer, *, **)
 //BOOST_DECL_TRANSFORM_TEST2(add_pointer_test_4, ::boost::add_pointer)
-BOOST_DECL_TRANSFORM_TEST(add_pointer_test_5, ::boost::add_pointer, const &, const*)
-BOOST_DECL_TRANSFORM_TEST(add_pointer_test_6, ::boost::add_pointer, &, *)
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_7, ::boost::add_pointer, *volatile, *volatile*)
-BOOST_DECL_TRANSFORM_TEST(add_pointer_test_8, ::boost::add_pointer, const [2], const *)
-BOOST_DECL_TRANSFORM_TEST(add_pointer_test_9, ::boost::add_pointer, const &, const*)
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_10, ::boost::add_pointer, const*, const**)
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_11, ::boost::add_pointer, volatile*, volatile**)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+BOOST_DECL_TRANSFORM_TEST(add_pointer_test_5, ::boost::add_pointer, const &, const*)
+BOOST_DECL_TRANSFORM_TEST(add_pointer_test_6, ::boost::add_pointer, &, *)
+BOOST_DECL_TRANSFORM_TEST(add_pointer_test_8, ::boost::add_pointer, const [2], const *)
+BOOST_DECL_TRANSFORM_TEST(add_pointer_test_9, ::boost::add_pointer, const &, const*)
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_12, ::boost::add_pointer, const[2][3], const (*)[3])
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_13, ::boost::add_pointer, (&)[2], *)
+#endif
 
 void check_add_pointer()
 {
@@ -332,15 +338,17 @@ void check_add_pointer()
    add_pointer_test_2();
    add_pointer_test_3();
    //add_pointer_test_4();
-   add_pointer_test_5();
-   add_pointer_test_6();
    add_pointer_test_7();
-   add_pointer_test_8();
-   add_pointer_test_9();
    add_pointer_test_10();
    add_pointer_test_11();
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   add_pointer_test_5();
+   add_pointer_test_6();
+   add_pointer_test_8();
+   add_pointer_test_9();
    add_pointer_test_12();
    add_pointer_test_13();
+#endif
 }
 
 
@@ -381,6 +389,7 @@ unsigned int expected_failures = 1; // cv-qualified references
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
 
 

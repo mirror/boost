@@ -169,7 +169,16 @@ public:
 
 } // namespace boost
 
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+//
+// if there is no partial specialisation support
+// include a bunch of full specialisations as a workaround:
+//
+#include <boost/type_traits/transform_traits_spec.hpp>
+#endif
+
 #endif // TRANSFORM_TRAITS_HPP
  
+
 
 
