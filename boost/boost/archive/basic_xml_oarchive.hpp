@@ -126,13 +126,7 @@ protected:
     void save_override(const ::boost::serialization::nvp<T> & t, int)
     {
         this->This()->save_start(t.name());
-        // BCB has problems with arrays degrading to pointers
-        #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) 
-            T* aux = (T*)&t.value();
-            archive::save(* this->This(), *aux); 
-        #else
-            archive::save(* this->This(), t.value()); 
-        #endif
+        archive::save(* this->This(), t.value()); 
         this->This()->save_end(t.name());
     }
 

@@ -32,12 +32,15 @@
 
 #include <iomanip>
 #include <locale>
-#include <cstddef>
+#include <cstddef> // size_t
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
-    using ::size_t; 
+    using ::size_t;
+    #if ! defined(BOOST_DINKUMWARE_STDLIB)
+        using ::locale;
+    #endif
 } // namespace std
 #endif
 
