@@ -23,7 +23,7 @@
     function.
 
     Due to language restriction, it is not currently possible to define specialization for
-    stl containers without including the coresponding header. To decrease the overhead
+    stl containers without including the corresponding header. To decrease the overhead
     needed by this inclusion, user can selectively include specialization 
     header for a specific container. They are located in boost/algorithm/string/stl
     directory. Alternatively she can include boost/algorithm/string/std_collection_traits.hpp
@@ -52,7 +52,7 @@ namespace boost {
             Declare an override of this tester function with return 
             type boost::string_algo::yes_type for a sequence with this property.
 
-            \return yes_type if the seqeunce's insert/replace/erase methods do not invalidate
+            \return yes_type if the sequence's insert/replace/erase methods do not invalidate
             existing iterators.
         */
         no_type has_stable_iterators_tester(...);                     

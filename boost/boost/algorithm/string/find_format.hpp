@@ -43,9 +43,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template< 
             typename OutputIteratorT,
@@ -156,9 +156,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template< 
             typename OutputIteratorT,

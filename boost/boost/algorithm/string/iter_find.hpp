@@ -23,7 +23,7 @@
 /*! \file
     Defines generic split algorithms. Split algorithms can be 
     used to divide a sequence into several part according 
-    to a given criterium. Result is given as a 'container 
+    to a given criteria. Result is given as a 'container 
     of containers' where elements are copies or references 
     to extracted parts.
 

@@ -14,7 +14,7 @@ namespace boost {
     namespace algorithm {
 
         // taken from boost mailing-list
-        // when yes_no_type will become officialy
+        // when yes_no_type will become officially
         // a part of boost distribution, this header
         // will be deprecated
         template<int I> struct size_descriptor 

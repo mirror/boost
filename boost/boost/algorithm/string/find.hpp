@@ -64,9 +64,9 @@ namespace boost {
                 \c CollectionT::const_iterator, depending on the constness of 
                 the input parameter.
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -93,9 +93,9 @@ namespace boost {
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -123,9 +123,9 @@ namespace boost {
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -152,9 +152,9 @@ namespace boost {
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -212,9 +212,9 @@ namespace boost {
                 the input parameter.
 
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -245,9 +245,9 @@ namespace boost {
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename CollectionT>
         inline iterator_range< 
@@ -277,9 +277,9 @@ namespace boost {
                 the input parameter.
 
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename CollectionT>
         inline iterator_range< 
@@ -309,9 +309,9 @@ namespace boost {
                 \c CollectionT::const_iterator, depending on the constness of 
                 the input parameter.
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename CollectionT, typename PredicateT>
         inline iterator_range< 

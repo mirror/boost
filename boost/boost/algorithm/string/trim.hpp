@@ -48,9 +48,9 @@ namespace boost {
                 An output iterator pointing just after last inserted character or
                 a copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, the second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename OutputIteratorT, typename CollectionT, typename PredicateT>
         inline OutputIteratorT trim_left_copy_if( 
@@ -93,9 +93,9 @@ namespace boost {
             \param Loc a locale used for 'space' classification
             \return A trimmed copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename SequenceT>
         inline SequenceT trim_left_copy(const SequenceT& Input, const std::locale& Loc=std::locale())
@@ -158,9 +158,9 @@ namespace boost {
                 An output iterator pointing just after last inserted character or
                 a copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, the second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename OutputIteratorT, typename CollectionT, typename PredicateT>
         inline OutputIteratorT trim_right_copy_if( 
@@ -204,9 +204,9 @@ namespace boost {
             \param Loc A locale used for 'space' classification
             \return A trimmed copy of the input
 
-            \note If the input paramters satisfy second assumption
+            \note If the input parameters satisfy second assumption
                 about exception safety, this function provides strong
-                exception guarantie.
+                exception guarantee.
         */  
         template<typename SequenceT>
         inline SequenceT trim_right_copy(const SequenceT& Input, const std::locale& Loc=std::locale())
@@ -272,9 +272,9 @@ namespace boost {
                 An output iterator pointing just after last inserted character or
                 a copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, the second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename OutputIteratorT, typename CollectionT, typename PredicateT>
         inline OutputIteratorT trim_copy_if( 
@@ -331,9 +331,9 @@ namespace boost {
             \param Loc A locale used for 'space' classification
             \return A trimmed copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename SequenceT>
         inline SequenceT trim_copy( const SequenceT& Input, const std::locale& Loc=std::locale() )

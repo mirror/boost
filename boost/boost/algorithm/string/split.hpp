@@ -20,7 +20,7 @@
 /*! \file
     Defines basic split algorithms. 
     Split algorithms can be used to divide a string
-    into several parts according to a given criterium.
+    into several parts according to a given criteria.
     
     Each part is copied and added as a new element to the
     output container.
@@ -56,9 +56,9 @@ namespace boost {
 
             \note Prior content of the result will be overridden.
 
-            \note If the input paramters satisfy the second assumption
-                about exception safety and result's container swap method have strong exception guarantie, 
-                this function provides strong exception guarantie.
+            \note If the input parameters satisfy the second assumption
+                about exception safety and result's container swap method have strong exception guarantee, 
+                this function provides strong exception guarantee.
         */
         template< typename SequenceSequenceT, typename Collection1T, typename Collection2T >
         inline SequenceSequenceT& find_all(
@@ -93,9 +93,9 @@ namespace boost {
 
             \note Prior content of the result will be overridden.
 
-            \note If the input paramters satisfy the second assumption
-                about exception safety and result's container swap method have strong exception guarantie, 
-                this function provides strong exception guarantie.
+            \note If the input parameters satisfy the second assumption
+                about exception safety and result's container swap method have strong exception guarantee, 
+                this function provides strong exception guarantee.
         */
         template< typename SequenceSequenceT, typename Collection1T, typename Collection2T >
         inline SequenceSequenceT& ifind_all(
@@ -138,9 +138,9 @@ namespace boost {
 
             \note Prior content of the result will be overridden.
 
-            \note If the input paramters satisfy the second assumption
-                about exception safety and result's container swap() method have strong exception guarantie, 
-                this function provides strong exception guarantie.
+            \note If the input parameters satisfy the second assumption
+                about exception safety and result's container swap() method have strong exception guarantee, 
+                this function provides strong exception guarantee.
         */
         template< typename SequenceSequenceT, typename CollectionT, typename PredicateT >
         inline SequenceSequenceT& split(

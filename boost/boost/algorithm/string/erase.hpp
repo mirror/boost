@@ -19,7 +19,7 @@
 
 /*! \file
     Defines various erase algorithms. Each algorithm removes
-    a part(s) of the input according to a searching criterium.
+    a part(s) of the input according to a searching criteria.
 */
 
 namespace boost {
@@ -38,9 +38,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<typename OutputIteratorT, typename CollectionT>
         inline OutputIteratorT erase_range_copy(
@@ -109,9 +109,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
 
         */
         template<
@@ -180,9 +180,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<
             typename OutputIteratorT,
@@ -252,9 +252,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
 
         */
         template<
@@ -323,9 +323,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
 
         */
         template<
@@ -398,9 +398,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<
             typename OutputIteratorT,
@@ -473,9 +473,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<
             typename OutputIteratorT,
@@ -551,9 +551,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                     a modified copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.            
+                exception guarantee.            
         */
         template<
             typename OutputIteratorT,
@@ -621,9 +621,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                     a modified copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<
             typename OutputIteratorT,
@@ -695,9 +695,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<
             typename OutputIteratorT,
@@ -765,9 +765,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
             
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template<
             typename OutputIteratorT,

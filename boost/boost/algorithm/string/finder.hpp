@@ -19,7 +19,7 @@
 
 /*! \file
     Defines Finder generators. Finder object is a functor which is able to 
-    find a substring matching a specific criterium in the input.
+    find a substring matching a specific criteria in the input.
     Finders are used as a pluggable components for replace, find 
     and split facilities. This header contains generator functions 
     for finders provided in this library.

@@ -41,9 +41,9 @@ namespace boost {
                 \c InputContainerT::const_iterator, depending on the constness of 
                 the input parameter.
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template< 
             typename CollectionT, 
@@ -77,9 +77,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                     a modified copy of the input   
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template< 
             typename OutputIteratorT,
@@ -165,9 +165,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                     a modified copy of the input     
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template< 
             typename OutputIteratorT,
@@ -252,9 +252,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                        a modified copy of the input    
 
-           \note If the input paramters satisfy the second assumption
+           \note If the input parameters satisfy the second assumption
                about exception safety, second variant of this function provides strong
-               exception guarantie.
+               exception guarantee.
        */
         template< 
             typename OutputIteratorT,
@@ -333,9 +333,9 @@ namespace boost {
             \return An output iterator pointing just after last inserted character or
                     a modified copy of the input                        
 
-            \note If the input paramters satisfy the second assumption
+            \note If the input parameters satisfy the second assumption
                 about exception safety, second variant of this function provides strong
-                exception guarantie.
+                exception guarantee.
         */
         template< 
             typename OutputIteratorT,
@@ -420,9 +420,9 @@ namespace boost {
 
             \note Prior content of the result will be overridden.
 
-            \note If the input paramters satisfy the second assumption
-                about exception safety and result's container swap() method have strong exception guarantie, 
-                this function provides strong exception guarantie.
+            \note If the input parameters satisfy the second assumption
+                about exception safety and result's container swap() method have strong exception guarantee, 
+                this function provides strong exception guarantee.
         */
         template< 
             typename SequenceSequenceT, 
@@ -463,9 +463,9 @@ namespace boost {
 
             \note Prior content of the result will be overridden.
 
-            \note If the input paramters satisfy the second assumption
-                about exception safety and result's container swap() method have strong exception guarantie, 
-                this function provides strong exception guarantie.
+            \note If the input parameters satisfy the second assumption
+                about exception safety and result's container swap() method have strong exception guarantee, 
+                this function provides strong exception guarantee.
         */
         template< 
             typename SequenceSequenceT, 

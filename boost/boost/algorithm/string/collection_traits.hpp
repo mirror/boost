@@ -17,8 +17,8 @@
 // "as is" without express or implied warranty, and with no claim as
 // to its suitability for any purpose.
 
-//  Orignal idea of container traits was proposed by Jeremy Siek and
-//  Thorsten Ottosen. This implemenetation is lightweighted version
+//  Original idea of container traits was proposed by Jeremy Siek and
+//  Thorsten Ottosen. This implementation is lightweighted version
 //  of container_traits adapter for usage with string_algo library
 
 #ifndef BOOST_STRING_COLLECTION_TRAITS_HPP
@@ -104,7 +104,7 @@ namespace boost {
             //! Const iterator type
             typedef BOOST_STRING_TYPENAME 
                 container_helper_type::const_iterator const_iterator;
-            //! Result iterator type ( iterator of const_iterator, depending on the constness of the conainer )
+            //! Result iterator type ( iterator of const_iterator, depending on the constness of the container )
             typedef BOOST_STRING_TYPENAME 
                 container_helper_type::result_iterator result_iterator;
             //! Difference type
@@ -117,7 +117,7 @@ namespace boost {
 
         //! Container value_type trait
         /*!
-            Extract the type of elements conained in a container
+            Extract the type of elements contained in a container
         */
         template< typename C >
         struct value_type_of
