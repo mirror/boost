@@ -1,0 +1,104 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Filter Iterator Adaptor Documentation</title>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)"
+align="center" width="277" height="86">
+
+<h1>Filter Iterator Adaptor</h1>
+
+Defined in header
+<a href="../../boost/iterator_adaptors.hpp">boost/iterator_adaptors.hpp</a>
+
+
+<p>
+The filter iterator adaptor ...
+
+
+
+<h3>Example</h3>
+
+The following example uses filter iterator to print out all the
+positive integers in an array.
+
+<pre>
+#include &lt;boost/config.hpp&gt;
+#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;boost/iterator_adaptors.hpp&gt;
+
+struct is_positive_number {
+  bool operator()(int x) { return 0 &lt; x; }
+};
+
+int main()
+{
+  int numbers[] = { 0, -1, 4, -3, 5, 8, -2 };
+  const int N = sizeof(numbers)/sizeof(int);
+
+  std::copy(boost::make_filter_iterator&lt;is_positive_number&gt;(numbers, numbers + N),
+	    boost::make_filter_iterator&lt;is_positive_number&gt;(numbers + N, numbers + N),
+	    std::ostream_iterator&lt;int&gt;(std::cout, " "));
+  std::cout &lt;&lt; std::endl;
+  return 0;
+}
+</pre>
+The output is:
+<pre>
+4 5 8
+</pre>
+
+
+The filter iterator adaptors 
+models <a href="www.sgi.com/tech/stl/ForwardIterator.html">ForwardIterator</a>
+
+
+
+<h3>The Filter Iterator Type Generator</h3>
+
+<pre>
+template &lt;class Predicate, 
+          class Iterator,
+          class Value = <i>value default</i>,
+          class Pointer = <i>pointer default</i>,
+          class Reference = <i>reference default</i>,
+          class Category = <i>category default</i>,
+          class Distance = <i>difference type default</i>&gt;
+class filter_iterator_generator
+{
+  typedef ... type;
+  typedef ... policies_type;
+}
+</pre>
+
+<p>
+show another example and explain defaults...
+
+
+<h3>The Make Filter Iterator Helper Function</h3>
+
+<pre>
+template &lt;class Predicate, class Iterator&gt;
+inline typename detail::filter_generator&lt;Predicate, Iterator&gt;::type
+make_filter_iterator(Iterator first, Iterator last, const Predicate& p = Predicate())
+</pre>
+
+
+<hr>
+<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->10 Feb 2001<!--webbot bot="Timestamp" endspan i-checksum="14373" --></p>
+<p>© Copyright Jeremy Siek 2000. Permission to copy, use,
+modify, sell and distribute this document is granted provided this copyright
+notice appears in all copies. This document is provided &quot;as is&quot;
+without express or implied warranty, and with no claim as to its suitability for
+any purpose.</p>
+
+</body>
+
+</html>
