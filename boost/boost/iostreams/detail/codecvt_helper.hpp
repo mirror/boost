@@ -161,10 +161,11 @@ struct codecvt_helper : std::codecvt<Intern, Extern, State> {
     typedef Extern  extern_type;
     typedef State   state_type;
     codecvt_helper(std::size_t refs = 0) 
-    #if !BOOST_WORKAROUND(__MWERKS__, <= 0x3003)
-        : std::codecvt<Intern, Extern, State>(refs)
-    #else
+    #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003) || \
+        BOOST_WORKAROUND(__BORLANDC__, <= 0x600)
         : std::codecvt<Intern, Extern, State>()
+    #else
+        : std::codecvt<Intern, Extern, State>(refs)
     #endif
         { }
 };
