@@ -28,6 +28,8 @@
 //     Incrementable.
 // 
 // Revision History
+// 10 Feb 2001  Rolled in supposed Borland fixes from John Maddock, but not
+//              seeing any improvement yet
 // 09 Feb 2001  Factored out is_numeric computation. Borland still
 //              unhappy :( (David Abrahams)
 // 08 Feb 2001  Beginning of a failed attempt to appease Borland
@@ -60,11 +62,14 @@ namespace detail {
   // iterator_category and difference_type for a counting_iterator at
   // compile-time based on whether or not it wraps an integer or an iterator,
   // using "poor man's partial specialization".
-  template <bool is_integer> struct counting_iterator_traits_select;
+  template <bool is_integer> struct counting_iterator_traits_select
 
+#ifndef __BORLANDC__
+  ;
   // Incrementable is an iterator type
   template <>
   struct counting_iterator_traits_select<false>
+#endif
   {
       template <class Incrementable>
       struct traits
@@ -96,11 +101,13 @@ namespace detail {
   // the iterator wraps an integer or an iterator, using "poor man's partial
   // specialization".
 
-  template <bool is_integer> struct distance_policy_select;
-
+  template <bool is_integer> struct distance_policy_select
+#ifndef __BORLANDC__
+  ;
   // A policy for wrapped iterators
   template <>
   struct distance_policy_select<false>
+#endif
   {
       template <class Distance, class Incrementable>
       struct policy {
@@ -130,7 +137,7 @@ namespace detail {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
         std::numeric_limits<T>::is_specialized
 #elif defined(__BORLANDC__)
-        ::boost::is_integral<T>::value
+        ::boost::is_arithmetic<T>::value
 #else
         boost::is_convertible<int,T>::value && boost::is_convertible<T,int>::value
 #endif
