@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
-     "/home/ghost/Work/boost/tools/boostbook/dtd/boostbook.dtd">
+     "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <library 
     name="Program_options"
     dirname="program_options" id="program_options" 
     last-revision="$Date$" 
-    xmlns:xi="http://www.w3.org/2003/XInclude">
+    xmlns:xi="http://www.w3.org/2001/XInclude">
   <libraryinfo>
     <author>
       <firstname>Vladimir</firstname>
