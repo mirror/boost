@@ -396,6 +396,7 @@ namespace boost {
       assert(get(index, v) < n);
       return *(iter + get(index, v)) ;
     }
+    typename property_traits<IndexMap>::value_type size() const { return n; }
   protected:
     RandomAccessIterator iter;
     typename property_traits<IndexMap>::value_type n;
