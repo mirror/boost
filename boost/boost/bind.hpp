@@ -910,6 +910,10 @@ template<> struct bind_t_generator<void>
 
 template<class F, class L> class implementation
 {
+private:
+
+    typedef void R;
+
 public:
 
     implementation(F f, L const & l): f_(f), l_(l) {}
