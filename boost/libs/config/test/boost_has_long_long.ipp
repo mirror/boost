@@ -16,8 +16,8 @@ int test()
 {
    long long lli = 0LL;
    unsigned long long ulli = 0uLL;
-   (void)lli;
-   (void)ulli;
+   (void)&lli;
+   (void)&ulli;
    return 0;
 }
 
