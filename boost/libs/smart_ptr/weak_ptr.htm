@@ -90,9 +90,7 @@ If an exception is thrown, the constructor has no effect.</p>
 <pre>template&lt;typename Y&gt; weak_ptr</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
 <p>Constructs a <b>weak_ptr</b>, as if by storing a copy of the pointer stored in <b>r</b>.
 Afterwards, the <a href="#use_count">use count</a> for all copies is unchanged.
-When the last <b>shared_ptr</b> is destroyed, the use count and stored pointer become 0. 
-The only exception which may be thrown by this constructor is <b>std::bad_alloc</b>.
-If an exception is thrown, the constructor has no effect.</p>
+When the last <b>shared_ptr</b> is destroyed, the use count and stored pointer become 0.</p>
 
 <pre>weak_ptr(weak_ptr const &amp; r); // never throws
 template&lt;typename Y&gt; weak_ptr(weak_ptr&lt;Y&gt; const &amp; r); // never throws</pre>

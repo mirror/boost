@@ -11,7 +11,7 @@
 //  This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 //
-//  See http://www.boost.org for most recent version including documentation.
+//  See http://www.boost.org/libs/smart_ptr/weak_ptr.htm for documentation.
 //
 
 #include <boost/shared_ptr.hpp>
@@ -68,7 +68,9 @@ public:
     weak_ptr(weak_ptr<Y> const & r, detail::dynamic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
     {
         if (px == 0) // need to allocate new counter -- the cast failed
+        {
             pn = detail::weak_count();
+        }
     }
 
     template<typename Y>
