@@ -159,17 +159,21 @@ correctly handle elementary functions for this example to properly work.</p>
 operations for a whole function (which computes the value of a polynomial by
 using Horner scheme).</p>
 
-<p><b>newton-raphson.cpp</b> is a (bad) implementation of a specialized
-version of Newton-Raphson algorithm for finding the zeros of a function
-knowing its derivative. It exercises unprotecting, full division, some set
-operations and empty intervals.</p>
+<p><b>io.cpp</b> shows some stream input and output operators for intervals
+.The wide variety of possibilities explains why the library do not implement
+i/o operators and they are left to the user.</p>
+
+<p><b>newton-raphson.cpp</b> is an implementation of a specialized version of
+Newton-Raphson algorithm for finding the zeros of a function knowing its
+derivative. It exercises unprotecting, full division, some set operations and
+empty intervals.</p>
 
 <p><b>transc.cpp</b> implements the transcendental part of the rounding
 policy for <code>double</code> by using an external library (the MPFR subset
 of GMP in this case).</p>
 <hr>
 
-<p>Revised: 2003-04-22<br>
+<p>Revised: 2003-08-16<br>
 Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
 Polytechnic University.<br>
 Copyright (c) Guillaume Melquiond, 2003.</p>

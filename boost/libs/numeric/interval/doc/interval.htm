@@ -786,13 +786,13 @@ choosing his own behavior. See this <a href="guide.htm">page</a>  for some
 examples.</p>
 
 <p><strong>Rounding policy.</strong> The library provides specialized
-implementations of the second policy for the primitive types float and
+implementations of the rounding policy for the primitive types float and
 double. In order for these implementations to be correct and fast, the
 library needs to work a lot with rounding modes. Some processors are directly
 dealt with and some mecanisms are provided in order to speed up the
 computations. It seems to be heavy and hazardous optimizations for a gain of
 only a few computer cycles; but in reality, the speed-up factor can easily go
-past 2 or 3 depending on the computer.  Moreover, these optimizations do not
+past 2 or 3 depending on the computer. Moreover, these optimizations do not
 impact the interface in any major way (with the design we have chosen,
 everything can be added by specialization or by passing different template
 parameters).</p>
@@ -814,19 +814,12 @@ by the user, it is not possible to correctly specialize
 all the algorithms and templates that could require it (for example,
 <code>std::map</code>).</p>
 
-<p><strong>Input/output.</strong> The basic header
-<code>boost/numeric/interval.hpp</code> does not include the I/O operators
-for the class interval. Somewhat default operators can be had by including
-<code>boost/numeric/interval/io.hpp</code>, and they make very few effort to
-guarantee the inclusion property (they do so for <code>float</code>,
-<code>double</code>, and <code>long double</code>). But they cannot guarantee
-it for any base number type, especially since it is not know how the type
-will be displayed (for example, there could be trouble if the type is a
-symbolic type that uses the character `[` or `]'). For this, we would need an
-extra i/o policy. It was not felt worth the trouble. For one thing, it's
-always possible to display the bounds. For another, intervals are used
-somewhat internally and there is seldom need to display them. But if this
-should be needed, the header is there.</p>
+<p><strong>Input/output.</strong> The interval library does not include I/O
+operators. Printing an interval value allows a lot of customization: some
+people may want to output the bounds, others may want to display the median
+and the width of intervals, and so on. The example file io.cpp<code></code>
+shows some possibilities and may serve as a foundation in order for the user
+to define her own operators.</p>
 
 <p><strong>Conversion from <code>interval&lt;T1&gt;</code> to
 <code>interval&lt;T&gt;</code>.</strong> There is no such conversion in the
