@@ -1,0 +1,186 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Counting Iterator Adaptor Documentation</title>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)"
+align="center" width="277" height="86">
+
+<h1>Counting Iterator Adaptor</h1>
+
+Defined in header
+<a href="../../boost/couting_iterator.hpp">boost/counting_iterator.hpp</a>
+
+<p>
+Sometimes it would be nice if one could treat an integer like an
+iterator, for example, to fill up a vector with the numbers zero
+through one hundred using <a
+href="http://www.sgi.com/tech/stl/copy.html"><tt>std::copy()</tt></a>. The
+only iterator operation missing from builtin integer types is an
+<tt>operator*()</tt>, which we would want to just return the current
+value of the integer.  The counting iterator adaptor provides this
+functionality, though it is a bit more generalized. One can use the
+counting iterator adaptor not only with integer types, but with any
+type that is incrementable (has <tt>operator++()</tt>).  The following
+<b>pseudo-code</b> shows the general idea of how the counting iterator is
+implemented.
+</p>
+
+<pre>
+  // inside a hypothetical counting_iterator class...
+  typedef Incrementable value_type;
+  value_type counting_iterator::operator*() const {
+    return this->base; // no dereference!
+  }
+</pre>
+
+All of the other operators of the counting iterator behave in the same
+fashion as the incrementable base type.
+
+<h2>Synopsis</h2>
+
+<pre>
+namespace boost {
+  template &lt;class Incrementable&gt;
+  struct counting_iterator_generator;
+
+  template &lt;class Incrementable&gt;
+  typename counting_iterator_generator&lt;Incrementable&gt;::type
+  make_counting_iterator(Incrementable x);
+}
+</pre>
+
+<hr>
+
+<h2><a name="counting_iterator_generator">The Counting Iterator Type
+Generator</a></h2>
+
+The class <tt>counting_iterator_generator</tt> is a helper class whose
+purpose is to construct a counting iterator type.  The template
+parameters for this class is the <tt>Incrementable</tt> type that is
+being wrapped.
+
+<pre>
+template &lt;class Incrementable&gt;
+class counting_iterator_generator
+{
+public:
+    typedef <a href="./iterator_adaptors.htm#iterator_adaptor">iterator_adaptor</a>&lt;...&gt; type;
+};
+</pre>
+
+<h3>Example</h3>
+
+In this example we use the counting iterator generator to create a
+counting iterator, and count from zero to four.
+
+<pre>
+#include &lt;boost/config.hpp&gt;
+#include &lt;iostream&gt;
+#include &lt;boost/counting_iterator.hpp&gt;
+
+int main(int, char*[])
+{
+  // Example of using counting_iterator_generator
+  std::cout &lt;&lt; "counting from 0 to 4:" &lt;&lt; std::endl;
+  boost::counting_iterator_generator&lt;int&gt;::type first(0), last(4);
+  std::copy(first, last, std::ostream_iterator&lt;int&gt;(std::cout, " "));
+  std::cout &lt;&lt; std::endl;
+
+  // to be continued...
+</pre>
+
+
+<h3>Template Parameters</h3>
+
+<Table border>
+<TR>
+<TH>Parameter</TH><TH>Description</TH>
+</TR>
+
+<TR>
+<TD><tt>Incrementable</tt></TD>
+<TD>The type being wrapped by the adaptor.</TD>
+</TR>
+
+</Table>
+
+<h3>Model of</h3>
+
+If the <tt>Incrementable</tt> type has all of the functionality of a
+<a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+Access Iterator</a> except the <tt>operator*()</tt>, then the counting
+iterator will be a model of <a
+href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+Access Iterator</a>. In the <tt>Incrementable</tt> type has less
+functionality, then the counting iterator will have correspondingly
+less functionality.
+
+<h3>Members</h3>
+
+The counting iterator type implements the member functions and
+operators required of the <a
+href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+Access Iterator</a> concept. In addition it has the following
+constructor:
+
+<pre>
+counting_iterator_generator::type(const Incrementable&amp; i)
+</pre>
+
+<p>
+<hr>
+<p>
+
+
+<h2><a name="make_counting_iterator">The Counting Iterator Object Generator</a></h2>
+
+<pre>
+template &lt;class Incrementable&gt;
+typename counting_iterator_generator&lt;Incrementable&gt;::type
+make_counting_iterator(Incrementable base);
+</pre>
+
+This function provides a convenient way to create counting iterators.
+
+<h3>Example</h3>
+
+In this example we count from negative five to positive five, this
+time using the <tt>make_counting_iterator()</tt> function to save some
+typing.
+
+<pre>
+  // continuing from previous example...
+  std::cout &lt;&lt; "counting from -5 to 5:" &lt;&lt; std::endl;
+  std::copy(boost::make_counting_iterator(-5),
+	    boost::make_counting_iterator(5),
+	    std::ostream_iterator&lt;int&gt;(std::cout, " "));
+  std::cout &lt;&lt; std::endl;
+
+
+  return 0;
+}
+</pre>
+
+
+<hr>
+<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->10 Feb 2001<!--webbot bot="Timestamp" endspan i-checksum="14373" --></p>
+<p>© Copyright Jeremy Siek 2000. Permission to copy, use,
+modify, sell and distribute this document is granted provided this copyright
+notice appears in all copies. This document is provided &quot;as is&quot;
+without express or implied warranty, and with no claim as to its suitability for
+any purpose.</p>
+
+</body>
+
+</html>
+<!--  LocalWords:  html charset alt gif hpp incrementable const namespace htm
+ -->
+<!--  LocalWords:  struct  typename iostream int Siek
+ -->
