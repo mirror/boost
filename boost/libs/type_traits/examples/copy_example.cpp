@@ -27,7 +27,6 @@
 
 #include <boost/timer.hpp>
 #include <boost/type_traits.hpp>
-#include <boost/test/cpp_main.cpp>
 
 using std::cout;
 using std::endl;
