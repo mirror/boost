@@ -105,9 +105,11 @@ main()
     typedef generator_archetype<null_archetype<> > foo;
     function_requires< GeneratorConcept<foo, null_archetype<> > >();
   }
+#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   {
     function_requires< GeneratorConcept< void_generator_archetype, void > >();
   }
+#endif
   {
     typedef unary_function_archetype<int, int> F;
     function_requires< UnaryFunctionConcept<F, int, int> >();
