@@ -39,24 +39,16 @@ namespace boost
     template< typename T >
     inline void checked_delete(T * x)
     {
-# if !((defined(__BORLANDC__) && __BORLANDC__ <= 0x0551) || (defined(__ICL) && __ICL <= 500))
-        BOOST_STATIC_ASSERT( sizeof(T) ); // assert type complete at point
-                                          // of instantiation
-# else
-        sizeof(T); // force error if type incomplete
-# endif
+        BOOST_STATIC_ASSERT( sizeof(T) != 0 ); // assert type complete at point
+                                               // of instantiation
         delete x;
     }
 
     template< typename T >
     inline void checked_array_delete(T  * x)
     {
-# if !((defined(__BORLANDC__) && __BORLANDC__ <= 0x0551) || (defined(__ICL) && __ICL <= 500))
-        BOOST_STATIC_ASSERT( sizeof(T) ); // assert type complete at point
-                                          // of instantiation
-# else
-        sizeof(T); // force error if type incomplete
-# endif
+        BOOST_STATIC_ASSERT( sizeof(T) != 0 ); // assert type complete at point
+                                               // of instantiation
         delete [] x;
     }
 
