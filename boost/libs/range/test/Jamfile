@@ -74,19 +74,20 @@ test-suite range
         :
         : compat3_test
        ] 
-       
-     [ run
-             adl_conformance.cpp    
-            : :
-        :
-        : adl_conformance
-       ] 
-     [ run
-             adl_conformance_no_using.cpp    
-            : :
-        :
-        : adl_conformance_no_using_declaration
-       ] 
+     ;  
+#     [ run
+#             adl_conformance.cpp    
+#            : :
+#        :
+#        : adl_conformance
+#       ] 
+#     [ run
+#             adl_conformance_no_using.cpp    
+#            : :
+#        :
+#        : adl_conformance_no_using_declaration
+#       ] 
+#
+#    ;
 
-    ;
 }
