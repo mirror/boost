@@ -9,6 +9,9 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  08 Feb 01 Use Jeremy's new make_reverse_iterator form; add more
+//            comprehensive testing. Force-decay array function arguments to
+//            pointers.
 //  07 Feb 01 Added tests for the make_xxx_iterator() helper functions.
 //            (Jeremy Siek)
 //  07 Feb 01 Replaced use of xxx_pair_generator with xxx_generator where
@@ -247,9 +250,9 @@ main()
 
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
     typedef boost::iterator<std::random_access_iterator_tag, dummyT> InnerTraits;
-    boost::random_access_iterator_test(boost::make_indirect_iterator(ptr, *ptr, InnerTraits()), N, array);
+    boost::random_access_iterator_test(boost::make_indirect_iterator(&*ptr, *ptr, InnerTraits()), N, array);
 #else
-    boost::random_access_iterator_test(boost::make_indirect_iterator(ptr), N, array);
+    boost::random_access_iterator_test(boost::make_indirect_iterator(&*ptr), N, array);
 #endif
 
     const_indirect_iterator j = ptr;
@@ -309,7 +312,7 @@ main()
 
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
     typedef boost::iterator<std::random_access_iterator_tag,dummyT> ReverseTraits;
-    boost::random_access_iterator_test(boost::make_reverse_iterator(reversed + N, ReverseTraits()), N, array);
+    boost::random_access_iterator_test(boost::make_reverse_iterator<ReverseTraits>(reversed + N), N, array);
 #else
     boost::random_access_iterator_test(boost::make_reverse_iterator(reversed + N), N, array);
 #endif
@@ -320,7 +323,7 @@ main()
     const dummyT* const_reversed = reversed;
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
     typedef boost::iterator<std::random_access_iterator_tag,const dummyT> ConstReverseTraits;
-    boost::random_access_iterator_test(boost::make_reverse_iterator(const_reversed + N, ConstReverseTraits()), N, array);
+    boost::random_access_iterator_test(boost::make_reverse_iterator<ConstReverseTraits>(const_reversed + N), N, array);
 #else
     boost::random_access_iterator_test(boost::make_reverse_iterator(const_reversed + N), N, array);
 #endif
@@ -328,6 +331,33 @@ main()
     boost::const_nonconst_iterator_test(i, ++j);    
   }
 
+  // Test reverse_iterator_generator again, with traits fully deducible on most platforms
+#if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
+  {
+    std::deque<dummyT> reversed_container;
+    std::copy(array, array + N, std::back_inserter(reversed_container));
+    const std::deque<dummyT>::iterator reversed = reversed_container.begin();
+    std::reverse(reversed, reversed + N);
+    
+    typedef boost::reverse_iterator_generator<
+        std::deque<dummyT>::iterator>::type reverse_iterator;
+    typedef boost::reverse_iterator_generator<
+        std::deque<dummyT>::const_iterator>::type const_reverse_iterator;
+
+    reverse_iterator i = reversed + N;
+    boost::random_access_iterator_test(i, N, array);
+    boost::random_access_iterator_test(boost::make_reverse_iterator(reversed + N), N, array);
+
+    const_reverse_iterator j = reversed + N;
+    boost::random_access_iterator_test(j, N, array);
+
+    const std::deque<dummyT>::const_iterator const_reversed = reversed;
+    boost::random_access_iterator_test(boost::make_reverse_iterator(const_reversed + N), N, array);
+
+    boost::const_nonconst_iterator_test(i, ++j);    
+  }
+#endif
+  
   // Test integer_range's iterators
   {
     int int_array[] = { 0, 1, 2, 3, 4, 5 };
