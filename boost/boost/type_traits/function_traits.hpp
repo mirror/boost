@@ -113,34 +113,26 @@ struct is_function_ref_helper
    BOOST_STATIC_CONSTANT(bool, value = false);
 };
 
-
-template <bool is_ref>
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+template <class T, bool is_ref>
 struct is_function_chooser
 {
-   template <class T>
-   struct rebind
-   {
-      typedef is_function_helper<T> type;
-   };
+   typedef is_function_helper<T> type;
 };
-template <>
-struct is_function_chooser<true>
+template <class T>
+struct is_function_chooser<T, true>
 {
-   template <class T>
-   struct rebind
-   {
-      typedef is_function_ref_helper<T> type;
-   };
+   typedef is_function_ref_helper<T> type;
 };
+#endif
 } // namespace detail
 
 template <class T>
 struct is_function
 {
 private:
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_MEMBER_TEMPLATES)
-   typedef typename detail::is_function_chooser< ::boost::is_reference<T>::value>::template rebind<T> binder;
-   typedef typename binder::type m_type;
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+   typedef typename detail::is_function_chooser<T, ::boost::is_reference<T>::value>::type m_type;
 #else
    // without partial specialistaion we can't use is_reference on
    // function types, that leaves this template broken in the case that
