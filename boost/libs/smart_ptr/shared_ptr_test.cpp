@@ -2782,7 +2782,11 @@ public:
 
 private:
 
-    void operator delete(void *);
+    void operator delete(void *)
+    {
+        // Comeau 4.3.0.1 wants a definition
+        BOOST_ERROR("n_spt_static::X::operator delete() called.");
+    }
 };
 
 struct null_deleter
