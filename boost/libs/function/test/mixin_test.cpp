@@ -27,6 +27,8 @@ struct id_mixin
   int id;
 };
 
+static int do_plus(int x, int y) { return x+y; }
+
 typedef boost::function<int,int,int>::mixin<id_mixin>::type func;
 
 int test_main(int, char*[])
@@ -35,6 +37,9 @@ int test_main(int, char*[])
   f = std::plus<int>();
   BOOST_TEST(f.id == 3);
   
+  f = &do_plus;
+  BOOST_TEST(f.id == 3);
+
   f.clear();
   f.id = 7;    
   BOOST_TEST(f.id == 7);
