@@ -88,7 +88,7 @@ named_slot_map::iterator::iterator(const iterator& other)
 
 named_slot_map::iterator::~iterator() {}
 
-named_slot_map::iterator::iterator&
+named_slot_map::iterator&
 named_slot_map::iterator::operator=(const iterator& other)
 {
   if (impl_) {
