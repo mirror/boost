@@ -92,7 +92,17 @@ use the cross-platform macro
 <a href="reference/key_extraction.html#boost_multi_index_member">
 <code>BOOST_MULTI_INDEX_MEMBER</code></a>. The compiler emits warnings about the
 use of <code>offsetof</code> with non-POD types: these warnings can be suppressed
-by setting the compiler option <code>-qsuppress=1540-1281</code>.
+by setting the compiler option <code>-qsuppress=1540-1281</code>, or, alternatively,
+by inserting the following preprocessor directive:
+</p>
+
+<blockquote><pre>
+<span class=preprocessor>#pragma</span> <span class=identifier>info</span><span class=special>(</span><span class=identifier>nolan</span><span class=special>)</span>
+</pre></blockquote>
+
+<p>
+This latter pragma, however, may also eliminate other warnings not related
+to the use of <code>offsetof</code>.
 </p>
 
 <h2><a name="intel_7_8_lin">Intel C++ Compiler for Linux 7.1/8.0</a></h2>
@@ -394,7 +404,7 @@ Performance
 
 <br>
 
-<p>Revised June 21st 2004</p>
+<p>Revised June 22nd 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
