@@ -147,12 +147,6 @@ old requirements.
    a tag that is not input_iterator_tag but that
    is convertible to input_iterator_tag? -JGS
 
-Note that as currently specified, ``istreambuf_iterator`` doesn't
-meet the Readable Iterator requirements because its ``value_type``
-is not convertible to its ``reference`` type.  We believe this to
-be a defect in the standard; it should be fixed by changing its
-``reference`` type from ``value_type&`` to ``value_type const&``.
-
 Possible (but not proposed) Changes to the Working Paper
 ========================================================
 
