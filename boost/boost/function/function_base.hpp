@@ -47,7 +47,19 @@ namespace boost { namespace python { namespace objects {
 #if defined(__GNUC__) && __GNUC__ < 3 || ( __GNUC__ == 3 && __GNUC_MINOR__ <= 2 ) && !(BOOST_NO_CONFIG)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
+
+// MIPSpro 7.3.1.3m doesn't support enable_if
 #if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_NO_CONFIG)
+#  define BOOST_FUNCTION_NO_ENABLE_IF
+#endif
+
+// MSVC 6.0 doesn't support enable_if
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1200 && !defined(BOOST_NO_CONFIG)
+#  define BOOST_FUNCTION_NO_ENABLE_IF
+#endif
+
+// Borland C++ 5.5.1 doesn't support enable_if
+#if defined(__BORLANDC__) && __BORLANDC__ <= 0x551 && !defined(BOOST_NO_CONFIG)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
