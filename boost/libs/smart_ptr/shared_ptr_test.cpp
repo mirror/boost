@@ -40,7 +40,7 @@ struct X
         std::cout << "X(" << this << ")::X()\n";
     }
 
-    virtual ~X()
+    ~X() // virtual destructor deliberately omitted
     {
         --cnt;
         std::cout << "X(" << this << ")::~X()\n";
@@ -95,6 +95,28 @@ void release_object(int * p)
     --cnt;
     std::cout << "release_object()\n";
 }
+
+class Z: public virtual boost::counted_base
+{
+public:
+
+    Z()
+    {
+        ++cnt;
+        std::cout << "Z(" << this << ")::Z()\n";
+    }
+
+    ~Z()
+    {
+        --cnt;
+        std::cout << "Z(" << this << ")::~Z()\n";
+    }
+
+private:
+
+    Z(Z const &);
+    Z & operator= (Z const &);
+};
 
 template<class T> void test_is_X(boost::shared_ptr<T> const & p)
 {
@@ -244,7 +266,7 @@ int test_main(int, char * [])
             test_is_nonzero(boost::make_shared(wp2));
         }
 
-		weak_ptr<Y> wp3 = shared_dynamic_cast<Y>(boost::make_shared(wp2));
+        weak_ptr<Y> wp3 = shared_dynamic_cast<Y>(boost::make_shared(wp2));
 
         BOOST_TEST(wp3.use_count() == 1);
         BOOST_TEST(wp3.get() != 0);
@@ -302,7 +324,17 @@ int test_main(int, char * [])
         BOOST_TEST(b1 == (wp1 < wp5));
         BOOST_TEST(b2 == (wp5 < wp1));
 
-        shared_ptr<int> p6(get_object(), release_object);
+        {
+            // note that both get_object and release_object deal with int*
+            shared_ptr<void> p6(get_object(), release_object);
+        }
+
+        {
+            // test intrusive counting
+            boost::shared_ptr<void> pv(new Z);
+            boost::shared_ptr<Z> pz = boost::shared_static_cast<Z>(pv);
+            BOOST_TEST(pz.use_count() == pz->use_count());
+        }
     }
 
     BOOST_TEST(cnt == 0);

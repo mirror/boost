@@ -33,7 +33,8 @@ namespace boost
 //  
 //      void intrusive_ptr_add_ref(T * p);
 //      void intrusive_ptr_release(T * p);
-//          (note: p may be 0!)
+//
+//          (p != 0)
 //
 //  The object is responsible for destroying itself.
 //
@@ -52,26 +53,26 @@ public:
 
     intrusive_ptr(T * p): p_(p)
     {
-        intrusive_ptr_add_ref(p_);
+        if(p_ != 0) intrusive_ptr_add_ref(p_);
     }
 
     ~intrusive_ptr()
     {
-        intrusive_ptr_release(p_);
+        if(p_ != 0) intrusive_ptr_release(p_);
     }
 
 #ifdef BOOST_MSVC6_MEMBER_TEMPLATES
 
     template<class U> intrusive_ptr(intrusive_ptr<U> const & rhs): p_(rhs.get())
     {
-        intrusive_ptr_add_ref(p_);
+        if(p_ != 0) intrusive_ptr_add_ref(p_);
     }
 
 #endif
 
     intrusive_ptr(intrusive_ptr const & rhs): p_(rhs.p_)
     {
-        intrusive_ptr_add_ref(p_);
+        if(p_ != 0) intrusive_ptr_add_ref(p_);
     }
 
 #ifdef BOOST_MSVC6_MEMBER_TEMPLATES

@@ -169,12 +169,12 @@ private:
 
 inline void intrusive_ptr_add_ref(counted_base * p)
 {
-    if(p != 0) p->add_ref();
+    p->add_ref();
 }
 
 inline void intrusive_ptr_release(counted_base * p)
 {
-    if(p != 0) p->release();
+    p->release();
 }
 
 namespace detail
@@ -215,6 +215,8 @@ private:
 
     friend class weak_count;
 
+    template<class P, class D> shared_count(P, D, counted_base const *);
+
 public:
 
     shared_count(): pi_(new counted_base(1, 1))
@@ -226,7 +228,7 @@ public:
         pi_->add_ref();
     }
 
-    template<class P, class D> shared_count(P p, D d): pi_(0)
+    template<class P, class D> shared_count(P p, D d, void const * = 0): pi_(0)
     {
         try
         {
@@ -237,6 +239,11 @@ public:
             d(p); // delete p
             throw;
         }
+    }
+
+    template<class P, class D> shared_count(P, D, counted_base * pi): pi_(pi)
+    {
+        pi_->add_ref();
     }
 
 #ifndef BOOST_NO_AUTO_PTR

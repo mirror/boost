@@ -87,7 +87,7 @@ public:
     }
 
     template<typename Y>
-    explicit shared_ptr(Y * p): px(p), pn(p, checked_deleter<Y>()) // Y must be complete
+    explicit shared_ptr(Y * p): px(p), pn(p, checked_deleter<Y>(), p) // Y must be complete
     {
     }
 
