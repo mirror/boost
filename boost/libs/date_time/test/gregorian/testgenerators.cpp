@@ -13,11 +13,18 @@ main()
 
   using namespace boost::gregorian;
 
-  partial_date pd(1,1);
-  date d = pd.get_date(2000);
+  partial_date pd1(1,Jan);
+  date d = pd1.get_date(2000);
   check("Partial date getdate",     date(2000,1,1) == d);
-  d = pd.get_date(2001);
+  d = pd1.get_date(2001);
   check("Partial date getdate",     date(2001,1,1) == d);
+  partial_date pd2(1,Feb);
+  check("Partial date operator==",  pd1 == pd1);
+  check("Partial date operator==",  !(pd1 == pd2));
+  check("Partial date operator==",  !(pd2 == pd1));
+  check("Partial date operator<",   !(pd1 < pd1));
+  check("Partial date operator<",    pd1 < pd2);
+  check("Partial date operator<",   !(pd2 < pd1));
 
   typedef boost::date_time::last_kday_of_month<date> lastkday;
 

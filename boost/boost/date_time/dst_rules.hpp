@@ -21,7 +21,7 @@ namespace boost {
                              ambiguous, invalid_time_label};
 
 
-    //! Generic functions to calculate dst transition information
+    //! Dynamic class used to caluclate dst transition information
     template<class date_type_, 
              class time_duration_type_>
     class dst_calculator
@@ -90,7 +90,7 @@ namespace boost {
        *  @param dst_start_offset_minutes Offset within day for dst 
        *         boundary (eg 120 for US which is 02:00:00)
        *  @param dst_end_day    Ending day of dst for the given locality
-       *  @param dst_end_offset_minutes Offset within day for dst 
+       *  @param dst_end_offset_minutes Offset within day given in dst for dst 
        *         boundary (eg 120 for US which is 02:00:00)
        *  @param dst_length_minutes Length of dst adjusment (eg: 60 for US)
        *  @retval The time is either ambiguous, invalid, in dst, or not in dst
@@ -140,14 +140,104 @@ namespace boost {
     };
 
 
-    //! Class to calculate dst boundaries for US time zones
-    /* 
+    //! Compile-time configurable daylight savings time calculation engine
+    /* This template provides the ability to configure a daylight savings
+     * calculation at compile time covering all the cases.  Unfortunately
+     * because of the number of dimensions related to daylight savings
+     * calculation the number of parameters is high.  In addition, the
+     * start and end transition rules are complex types that specify 
+     * an algorithm for calculation of the starting day and ending
+     * day of daylight savings time including the month and day 
+     * specifications (eg: last sunday in October).
+     *
+     * @param date_type A type that represents dates, typically gregorian::date
+     * @param time_duration_type Used for the offset in the day calculations
+     * @param dst_traits A set of traits that define the rules of dst 
+     *        calculation.  The dst_trait must include the following:
+     * start_rule_functor - Rule to calculate the starting date of a
+     *                      dst transition (eg: last_kday_of_month).
+     * start_day - static function that returns month of dst start for 
+     *             start_rule_functor
+     * start_month -static function that returns day or day of week for 
+     *              dst start of dst
+     * end_rule_functor - Rule to calculate the end of dst day.
+     * end_day - static fucntion that returns end day for end_rule_functor
+     * end_month - static function that returns end month for end_rule_functor
+     * dst_start_offset_minutes - number of minutes from start of day to transition to dst -- 120 (or 2:00 am) is typical for the U.S. and E.U.
+     * dst_start_offset_minutes - number of minutes from start of day to transition off of dst -- 180 (or 3:00 am) is typical for E.U. 
+     * dst_length_minutes - number of minutes that dst shifts clock
+     */
+    template<class date_type, 
+             class time_duration_type,
+             class dst_traits>
+    class dst_calc_engine
+    {
+    public:
+      typedef typename date_type::year_type year_type;
+      typedef typename date_type::calendar_type calendar_type;
+      typedef dst_calculator<date_type, time_duration_type> dstcalc;
+
+      //! Calculates if the given local time is dst or not
+      /*! Determines if the time is really in DST or not.  Also checks for 
+       *  invalid and ambiguous.
+       *  @retval The time is either ambiguous, invalid, in dst, or not in dst
+       */
+      static time_is_dst_result local_is_dst(const date_type& d,
+                                             const time_duration_type& td) 
+      {
+
+        year_type y = d.year();
+        date_type dst_start = local_dst_start_day(y);
+        date_type dst_end   = local_dst_end_day(y);
+        return dstcalc::local_is_dst(d,td,
+                                     dst_start,
+                                     dst_traits::dst_start_offset_minutes(),
+                                     dst_end, 
+                                     dst_traits::dst_end_offset_minutes(), 
+                                     dst_traits::dst_shift_length_minutes());
+      
+      }
+
+      static bool is_dst_boundary_day(date_type d)
+      {
+        year_type y = d.year();
+        return ((d == local_dst_start_day(y)) ||
+                (d == local_dst_end_day(y)));
+      }
+
+      //! The time of day for the dst transition (eg: typically 01:00:00 or 02:00:00)
+      static time_duration_type dst_offset() 
+      {
+        return time_duration_type(0,dst_traits::dst_shift_length_minutes(),0);
+      }
+
+      static date_type local_dst_start_day(year_type year)
+      {
+        typedef typename dst_traits::start_rule_functor start_rule;
+        start_rule start(dst_traits::start_day(), 
+                         dst_traits::start_month());
+        return start.get_date(year);      
+      }
+
+      static date_type local_dst_end_day(year_type year)
+      {
+        typedef typename dst_traits::end_rule_functor end_rule;
+        end_rule end(dst_traits::end_day(), 
+                     dst_traits::end_month());
+        return end.get_date(year);      
+      }
+
+
+    };
+
+    //! Depricated: Class to calculate dst boundaries for US time zones
+    /* Use dst_calc_engine instead.
      */
     template<class date_type_, 
              class time_duration_type_,
              unsigned int dst_start_offset_minutes=120, //from start of day 
              short dst_length_minutes=60>  //1 hour == 60 min in US
-    class us_dst_rules
+    class us_dst_rules 
     {
     public:
       typedef time_duration_type_ time_duration_type;
@@ -199,14 +289,13 @@ namespace boost {
         return lsio.get_date(year);
       }
 
-      static time_duration_type dst_offset() 
+      static time_duration_type dst_offset()
       {
         return time_duration_type(0,dst_length_minutes,0);
       }
 
+
     };
-
-
 
     //! Used for local time adjustments in places that don't use dst
     template<class date_type_, class time_duration_type_>

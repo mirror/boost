@@ -71,10 +71,11 @@ Date algorithms or generators are tools for generating other dates or schedules 
     <td>Calculate something like first Monday of January</td>
     <td>first_kday_of_month fkm(Monday,Jan);<br>date d = fkm.get_date(2002);<font class="comment">//2002-Jan-07</font></td></tr>
 <tr><td><font class="el">partial_date</font></td>
-    <td><font class="el">greg_month</font> month<br><font class="el">greg_day</font> day_of_month</td>
+    <td><font class="el">greg_day</font> day_of_month<br>
+        <font class="el">greg_month</font> month</td>
     <td><font class="el">greg_year</font> year</td>
     <td>Generates a date by applying the year to the given month and day.</td>
-    <td>partial_date pd(Jan,1);<br>date d = pd.get_date(2002);<font class="comment">//2002-Jan-01</font></td></tr>
+    <td>partial_date pd(1,Jan);<br>date d = pd.get_date(2002);<font class="comment">//2002-Jan-01</font></td></tr>
      
 
 </table>
@@ -84,7 +85,7 @@ Date algorithms or generators are tools for generating other dates or schedules 
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Tue Sep  3 16:02:55 MST 2002
+Last modified: Fri Nov 29 19:40:48 MST 2002
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>

@@ -168,11 +168,11 @@ namespace boost {
      *  For example:
      *  @code
      *  //eastern timezone is utc-5
-     typedef date_time::us_local_adjustor<ptime, -5, us_dst> us_eastern;
-     typedef date_time::us_local_adjustor<ptime, -6, us_dst> us_central;
-     typedef date_time::us_local_adjustor<ptime, -7, us_dst> us_mountain;
-     typedef date_time::us_local_adjustor<ptime, -8, us_dst> us_pacific;
-     typedef date_time::us_local_adjustor<ptime, -7, no_dst> us_arizona;
+     typedef date_time::local_adjustor<ptime, -5, us_dst> us_eastern;
+     typedef date_time::local_adjustor<ptime, -6, us_dst> us_central;
+     typedef date_time::local_adjustor<ptime, -7, us_dst> us_mountain;
+     typedef date_time::local_adjustor<ptime, -8, us_dst> us_pacific;
+     typedef date_time::local_adjustor<ptime, -7, no_dst> us_arizona;
      @endcode
       
     */

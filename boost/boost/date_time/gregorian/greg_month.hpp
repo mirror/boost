@@ -6,6 +6,7 @@
  */
 
 #include "boost/date_time/constrained_value.hpp"
+#include "boost/date_time/date_defs.hpp"
 #include <stdexcept>
 #include <string>
 
@@ -13,9 +14,23 @@
 namespace boost {
 namespace gregorian {
 
+  typedef date_time::months_of_year months_of_year;
 
-  //! Simple enum to allow for nice programming with Jan, Feb, etc
-  enum months_of_year {Jan=1,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,NotAMonth,NumMonths};
+  //bring enum values into the namespace
+  using date_time::Jan;
+  using date_time::Feb;
+  using date_time::Mar;
+  using date_time::Apr;
+  using date_time::May;
+  using date_time::Jun;
+  using date_time::Jul;
+  using date_time::Aug;
+  using date_time::Sep;
+  using date_time::Oct;
+  using date_time::Nov;
+  using date_time::Dec;
+  using date_time::NotAMonth;
+  using date_time::NumMonths;
   
   //! Exception thrown if a greg_month is constructed with a value out of range
   struct bad_month : public std::out_of_range
@@ -31,9 +46,9 @@ namespace gregorian {
   //! Wrapper class to represent months in gregorian based calendar
   class greg_month : public greg_month_rep {
   public:
-    typedef months_of_year month_enum;
+    typedef date_time::months_of_year month_enum;
     //! Construct a month from the months_of_year enumeration
-    greg_month(months_of_year theMonth) : greg_month_rep(theMonth) {}
+    greg_month(month_enum theMonth) : greg_month_rep(theMonth) {}
     //! Construct from a short value
     greg_month(unsigned short theMonth) : greg_month_rep(theMonth) {}
     //! Convert the value back to a short

@@ -39,9 +39,9 @@ main() {
 
   //define a collection of holidays fixed by month and day
   std::vector<partial_date> holidays;
-  holidays.push_back(partial_date(Jan,1)); //Western New Year
-  holidays.push_back(partial_date(Jul,4)); //US Independence Day
-  holidays.push_back(partial_date(Dec,25));//Christmas day
+  holidays.push_back(partial_date(1,Jan)); //Western New Year
+  holidays.push_back(partial_date(4,Jul)); //US Independence Day
+  holidays.push_back(partial_date(25, Dec));//Christmas day
 
 
   //define a shorthand for the nkday function object

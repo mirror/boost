@@ -16,12 +16,12 @@ namespace date_time {
   
   //! Generates a date by applying the year to the given month and day.
   /*!
-   *Example usage: 
-   *@code
-   *   partial_date pd(Jan,1);
-   *   date d = pd.get_date(2002);//2002-Jan-01
-   *@endcode
-   *  \ingroup date_alg
+    Example usage: 
+    @code
+     partial_date pd(1, Jan);
+     date d = pd.get_date(2002); //2002-Jan-01
+    @endcode
+    \ingroup date_alg
    */
   template<class date_type>
   class partial_date {
@@ -31,9 +31,9 @@ namespace date_time {
     typedef typename calendar_type::month_type       month_type;
     typedef typename calendar_type::year_type        year_type;
     typedef typename date_type::duration_type        duration_type;
-    partial_date(month_type m, day_type d) :
-      month_(m),
-      day_(d)
+    partial_date(day_type d, month_type m) :
+      day_(d),
+      month_(m)
     {}
     //! Return a concrete date when provided with a year specific year.
     date_type get_date(year_type y) const
@@ -44,11 +44,22 @@ namespace date_time {
     {
       return date_type(y, month_, day_);
     }
+    bool operator==(const partial_date& rhs) const
+    {
+      return (month_ == rhs.month_) && (day_ == rhs.day_);
+    }
+    bool operator<(const partial_date& rhs) const
+    {
+      if (month_ < rhs.month_) return true;
+      if (month_ > rhs.month_) return false;
+      //months are equal
+      return (day_ < rhs.day_);
+    }
 
     
   private:
-    month_type month_;
     day_type day_;
+    month_type month_;
   };
 
 
@@ -144,6 +155,7 @@ namespace date_time {
   /*! Useful generator functor for finding holidays and daylight savings  
    *  Get the last day of the month and then calculate the difference
    *  to the last previous day.
+   *  @param date_type A date class that exports day_of_week, month_type, etc.
    *  \ingroup date_alg
    */
   template<class date_type>
@@ -154,7 +166,7 @@ namespace date_time {
     typedef typename calendar_type::month_type        month_type;
     typedef typename calendar_type::year_type         year_type;
     typedef typename date_type::duration_type        duration_type;
-    //!Specify the date spec like 'Sunday' in 'April' spec
+    //!Specify the date spec like last 'Sunday' in 'April' spec
     /*!@param dow The day of week, eg: Sunday, Monday, etc
      * @param month The month of the year, eg: Jan, Feb, Mar, etc
      */ 
