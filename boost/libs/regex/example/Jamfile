@@ -20,6 +20,7 @@ rule regex-test-run ( sources + : input * )
 			<sysinclude>../../../
 			<define>BOOST_REGEX_NO_LIB=1
 			<define>BOOST_REGEX_STATIC_LINK=1
+			<threading>multi
          :  # test name
         ] ;
 }
@@ -42,5 +43,6 @@ test-suite regex-examples :
 [ regex-test-run snippets/regex_split_example_2.cpp : $(BOOST_ROOT)/libs/regex/index.htm ]
 
 ;
+
 
 
