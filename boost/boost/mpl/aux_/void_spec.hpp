@@ -78,6 +78,7 @@ struct name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
 template<> \
 struct lambda< \
       name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
+    , void_ \
     , true \
     > \
 { \
@@ -89,6 +90,7 @@ struct lambda< \
 template<> \
 struct lambda< \
       name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
+    , void_ \
     BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(int_<-1>) \
     > \
 { \

@@ -1,9 +1,15 @@
-//-----------------------------------------------------------------------------
-// boost mpl/quote.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
+
+#if !defined(BOOST_PP_IS_ITERATING)
+
+///// header body
+
+#ifndef BOOST_MPL_QUOTE_HPP_INCLUDED
+#define BOOST_MPL_QUOTE_HPP_INCLUDED
+
+// + file: boost/mpl/quote.hpp
+// + last modified: 02/aug/03
+
+// Copyright (c) 2000-03
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -13,15 +19,11 @@
 // supporting documentation. No representations are made about the 
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
-
-#if !defined(BOOST_PP_IS_ITERATING)
-
-///// header body
-
-#ifndef BOOST_MPL_QUOTE_HPP_INCLUDED
-#define BOOST_MPL_QUOTE_HPP_INCLUDED
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
+#   include "boost/mpl/void.hpp"
 #   include "boost/mpl/aux_/has_type.hpp"
 #endif
 
@@ -39,6 +41,7 @@
 #   include "boost/mpl/aux_/preprocessor/params.hpp"
 #   include "boost/mpl/aux_/config/ttp.hpp"
 #   include "boost/mpl/aux_/config/ctps.hpp"
+#   include "boost/mpl/aux_/config/workaround.hpp"
 
 #   include "boost/preprocessor/iterate.hpp"
 #   include "boost/preprocessor/cat.hpp"
@@ -52,7 +55,7 @@ namespace mpl {
 
 template< typename T, bool has_type_ = aux::has_type<T>::value >
 struct quote_impl
-#if !defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG))
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561))
     : T
 {
 #else
@@ -106,6 +109,7 @@ template<> struct quote_impl<false>
 
 template<
       template< BOOST_MPL_PP_PARAMS(i, typename P) > class F
+    , typename Tag = void_
     >
 struct BOOST_PP_CAT(quote,i)
 {

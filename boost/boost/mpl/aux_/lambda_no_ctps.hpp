@@ -1,9 +1,15 @@
-//-----------------------------------------------------------------------------
-// boost mpl/lambda_no_ctps.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2001-02
+
+#if !defined(BOOST_PP_IS_ITERATING)
+
+///// header body
+
+#ifndef BOOST_MPL_AUX_LAMBDA_NO_CTPS_HPP_INCLUDED
+#define BOOST_MPL_AUX_LAMBDA_NO_CTPS_HPP_INCLUDED
+
+// + file: boost/mpl/lambda_no_ctps.hpp
+// + last modified: 03/aug/03
+
+// Copyright (c) 2001-03
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -13,26 +19,22 @@
 // supporting documentation. No representations are made about the 
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
-
-#if !defined(BOOST_PP_IS_ITERATING)
-
-///// header body
-
-#ifndef BOOST_MPL_AUX_LAMBDA_NO_CTPS_HPP_INCLUDED
-#define BOOST_MPL_AUX_LAMBDA_NO_CTPS_HPP_INCLUDED
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include "boost/mpl/lambda_fwd.hpp"
 #   include "boost/mpl/bind.hpp"
 #   include "boost/mpl/protect.hpp"
 #   include "boost/mpl/bool.hpp"
+#   include "boost/mpl/void.hpp"
 #   include "boost/mpl/aux_/template_arity.hpp"
 #endif
 
 #include "boost/mpl/aux_/config/use_preprocessed.hpp"
 
-#if !defined(BOOST_MPL_NO_PREPROCESSED_HEADERS) && \
-    !defined(BOOST_MPL_PREPROCESSING_MODE)
+#if    !defined(BOOST_MPL_NO_PREPROCESSED_HEADERS) \
+    && !defined(BOOST_MPL_PREPROCESSING_MODE)
 
 #   define BOOST_MPL_PREPROCESSED_HEADER lambda_no_ctps.hpp
 #   include "boost/mpl/aux_/include_preprocessed.hpp"
@@ -62,7 +64,7 @@ namespace aux {
 
 template< BOOST_MPL_AUX_NTTP_DECL(int, arity_), bool Protect > struct lambda_impl
 {
-    template< typename T > struct result_
+    template< typename T, typename Tag > struct result_
     {
         typedef T type;
     };
@@ -74,7 +76,11 @@ template< BOOST_MPL_AUX_NTTP_DECL(int, arity_), bool Protect > struct lambda_imp
 
 } // namespace aux
 
-template< typename T, bool Protect = true >
+template<
+      typename T
+    , typename Tag = void_
+    , bool Protect = true 
+    >
 struct lambda
     : aux::lambda_impl<
           ::boost::mpl::aux::template_arity<T>::value
@@ -83,7 +89,7 @@ struct lambda
 #else
         , bool_<Protect>::value
 #endif
-        >::template result_<T>
+        >::template result_<T,Tag>
 {
 };
 
@@ -101,32 +107,37 @@ struct lambda
 #define i BOOST_PP_FRAME_ITERATION(1)
 
 #   define AUX_LAMBDA_INVOCATION(unused, i, T) \
-    , typename lambda< \
+    typedef typename lambda< \
           typename F::BOOST_PP_CAT(arg,BOOST_PP_INC(i)) \
+        , Tag \
         , false \
-        >::type \
+        >::type BOOST_PP_CAT(arg,BOOST_PP_INC(i)); \
     /**/
 
 template<> struct lambda_impl<i,false>
 {
-    template< typename F > struct result_
+    template< typename F, typename Tag > struct result_
     {
         typedef typename F::rebind f_;
+        BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_INVOCATION, T)
+
         typedef BOOST_PP_CAT(bind,i)<
               f_
-            BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_INVOCATION, T)
+            , AUX_LAMBDA_PARAMS(i, arg)
             > type;
     };
 };
 
 template<> struct lambda_impl<i,true>
 {
-    template< typename F > struct result_
+    template< typename F, typename Tag > struct result_
     {
         typedef typename F::rebind f_;
+        BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_INVOCATION, T)
+
         typedef mpl::protect< BOOST_PP_CAT(bind,i)<
               f_
-            BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_INVOCATION, T)
+            , AUX_LAMBDA_PARAMS(i, arg)
             > > type;
     };
 };

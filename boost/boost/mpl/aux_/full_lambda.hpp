@@ -1,9 +1,15 @@
-//-----------------------------------------------------------------------------
-// boost mpl/aux_/full_lambda.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2001-02
+
+#if !defined(BOOST_PP_IS_ITERATING)
+
+///// header body
+
+#ifndef BOOST_MPL_AUX_FULL_LAMBDA_HPP_INCLUDED
+#define BOOST_MPL_AUX_FULL_LAMBDA_HPP_INCLUDED
+
+// + file: boost/mpl/full_lambda.hpp
+// + last modified: 03/aug/03
+
+// Copyright (c) 2001-03
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -13,13 +19,8 @@
 // supporting documentation. No representations are made about the 
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
-
-#if !defined(BOOST_PP_IS_ITERATING)
-
-///// header body
-
-#ifndef BOOST_MPL_AUX_FULL_LAMBDA_HPP_INCLUDED
-#define BOOST_MPL_AUX_FULL_LAMBDA_HPP_INCLUDED
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include "boost/mpl/lambda_fwd.hpp"
@@ -81,6 +82,7 @@ namespace mpl {
 
 template<
       typename T
+    , typename Tag
     , typename Protect = false_
     AUX_ARITY_PARAM(typename Arity = int_< aux::template_arity<T>::value >)
     >
@@ -92,10 +94,11 @@ struct lambda_impl
 
 template<
       typename T
+    , typename Tag = void_
     AUX_ARITY_PARAM(typename Arity = int_< aux::template_arity<T>::value >)
     >
 struct lambda
-    : lambda_impl<T,false_ AUX_ARITY_PARAM(Arity)>
+    : lambda_impl<T,Tag,false_ AUX_ARITY_PARAM(Arity)>
 {
 };
 
@@ -121,8 +124,8 @@ struct lambda_or< BOOST_MPL_PP_ENUM(n,false) >
 } // namespace aux
 #undef n
 
-template< int N, typename Protect >
-struct lambda_impl< arg<N>, Protect AUX_ARITY_PARAM(int_<-1>) >
+template< int N, typename Tag, typename Protect >
+struct lambda_impl< arg<N>,Tag,Protect AUX_ARITY_PARAM(int_<-1>) >
 {
     BOOST_MPL_AUX_IS_LAMBDA_EXPR(true_)
     typedef arg<N> type;
@@ -135,8 +138,8 @@ struct lambda_impl< arg<N>, Protect AUX_ARITY_PARAM(int_<-1>) >
 #include BOOST_PP_ITERATE()
 
 //: special case for 'protect'
-template< typename T, typename Protect >
-struct lambda_impl< protect<T>, Protect AUX_ARITY_PARAM(int_<1>) >
+template< typename T, typename Tag, typename Protect >
+struct lambda_impl< protect<T>,Tag,Protect AUX_ARITY_PARAM(int_<1>) >
 {
     BOOST_MPL_AUX_IS_LAMBDA_EXPR(false_)
     typedef protect<T> type;
@@ -145,10 +148,12 @@ struct lambda_impl< protect<T>, Protect AUX_ARITY_PARAM(int_<1>) >
 //: specializations for main 'bind', 'bind1st' and 'bind2nd' forms
 template<
       typename F, AUX_LAMBDA_BIND_PARAMS(typename T)
+    , typename Tag
     , typename Protect
     >
 struct lambda_impl<
       bind<F,AUX_LAMBDA_BIND_PARAMS(T)>
+    , Tag
     , Protect 
     AUX_ARITY_PARAM(int_<BOOST_PP_INC(BOOST_MPL_METAFUNCTION_MAX_ARITY)>)
     >
@@ -159,9 +164,10 @@ struct lambda_impl<
 
 template<
       typename F, typename T
+    , typename Tag
     , typename Protect
     >
-struct lambda_impl< bind1st<F,T>, Protect AUX_ARITY_PARAM(int_<2>) >
+struct lambda_impl< bind1st<F,T>,Tag,Protect AUX_ARITY_PARAM(int_<2>) >
 {
     BOOST_MPL_AUX_IS_LAMBDA_EXPR(false_)
     typedef bind1st<F,T> type;
@@ -169,9 +175,10 @@ struct lambda_impl< bind1st<F,T>, Protect AUX_ARITY_PARAM(int_<2>) >
 
 template<
       typename F, typename T
+    , typename Tag
     , typename Protect
     >
-struct lambda_impl< bind2nd<F,T>, Protect AUX_ARITY_PARAM(int_<2>) >
+struct lambda_impl< bind2nd<F,T>,Tag,Protect AUX_ARITY_PARAM(int_<2>) >
 {
     BOOST_MPL_AUX_IS_LAMBDA_EXPR(false_)
     typedef bind2nd<F,T> type;
@@ -198,9 +205,10 @@ struct lambda_impl< bind2nd<F,T>, Protect AUX_ARITY_PARAM(int_<2>) >
 template<
       template< AUX_LAMBDA_PARAMS(i, typename P) > class F
     , AUX_LAMBDA_PARAMS(i, typename T)
+    , typename Tag
     >
-struct lambda< F<AUX_LAMBDA_PARAMS(i, T)> AUX_ARITY_PARAM(int_<i>) >
-    : lambda_impl< F<AUX_LAMBDA_PARAMS(i, T)>, true_ AUX_ARITY_PARAM(int_<i>) >
+struct lambda< F<AUX_LAMBDA_PARAMS(i, T)>, Tag AUX_ARITY_PARAM(int_<i>) >
+    : lambda_impl< F<AUX_LAMBDA_PARAMS(i, T)>,Tag,true_ AUX_ARITY_PARAM(int_<i>) >
 {
 };
 
@@ -209,19 +217,20 @@ struct lambda< F<AUX_LAMBDA_PARAMS(i, T)> AUX_ARITY_PARAM(int_<i>) >
 template<
       template< AUX_LAMBDA_PARAMS(i, typename P) > class F
     , AUX_LAMBDA_PARAMS(i, typename T)
+    , typename Tag
     , typename Protect
     >
 struct lambda_impl< 
-      F<AUX_LAMBDA_PARAMS(i, T)>, Protect AUX_ARITY_PARAM(int_<i>)
+      F<AUX_LAMBDA_PARAMS(i, T)>, Tag, Protect AUX_ARITY_PARAM(int_<i>)
     >
 {
 #   define AUX_LAMBDA_INVOCATION(unused, i, T) \
     BOOST_PP_COMMA_IF(i) \
-    typename lambda_impl< BOOST_PP_CAT(T, BOOST_PP_INC(i)) >::type \
+    typename lambda_impl< BOOST_PP_CAT(T, BOOST_PP_INC(i)),Tag >::type \
     /**/
 
     typedef BOOST_PP_CAT(bind,i)<
-          BOOST_PP_CAT(quote,i)<F>
+          BOOST_PP_CAT(quote,i)<F,Tag>
         , BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_INVOCATION, T)
         > type;
 
@@ -238,7 +247,7 @@ struct lambda_impl<
 namespace aux {
 
 template<
-      typename IsLE, typename Protect
+      typename IsLE, typename Tag, typename Protect
     , template< AUX_LAMBDA_PARAMS(i, typename P) > class F
     , AUX_LAMBDA_PARAMS(i, typename L)
     >
@@ -251,24 +260,26 @@ struct BOOST_PP_CAT(le_result,i)
 
 template<
       template< AUX_LAMBDA_PARAMS(i, typename P) > class F
+    , typename Tag
     , AUX_LAMBDA_PARAMS(i, typename L)
     >
-struct BOOST_PP_CAT(le_result,i)< true_,false_,F,AUX_LAMBDA_PARAMS(i, L) >
+struct BOOST_PP_CAT(le_result,i)< true_,Tag,false_,F,AUX_LAMBDA_PARAMS(i, L) >
 {
     typedef BOOST_PP_CAT(bind,i)<
-          BOOST_PP_CAT(quote,i)<F>
+          BOOST_PP_CAT(quote,i)<F,Tag>
         , BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_RESULT, L)
         > type;
 };
 
 template<
       template< AUX_LAMBDA_PARAMS(i, typename P) > class F
+    , typename Tag
     , AUX_LAMBDA_PARAMS(i, typename L)
     >
-struct BOOST_PP_CAT(le_result,i)< true_,true_,F,AUX_LAMBDA_PARAMS(i, L) >
+struct BOOST_PP_CAT(le_result,i)< true_,Tag,true_,F,AUX_LAMBDA_PARAMS(i, L) >
 {
     typedef protect< BOOST_PP_CAT(bind,i)<
-          BOOST_PP_CAT(quote,i)<F>
+          BOOST_PP_CAT(quote,i)<F,Tag>
         , BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_RESULT, L)
         > > type;
 };
@@ -276,7 +287,7 @@ struct BOOST_PP_CAT(le_result,i)< true_,true_,F,AUX_LAMBDA_PARAMS(i, L) >
 } // namespace aux
 
 #   define AUX_LAMBDA_INVOCATION(unused, i, T) \
-    typedef lambda_impl< BOOST_PP_CAT(T, BOOST_PP_INC(i)) > \
+    typedef lambda_impl< BOOST_PP_CAT(T, BOOST_PP_INC(i)), Tag > \
         BOOST_PP_CAT(l,BOOST_PP_INC(i)); \
     /**/
 
@@ -288,10 +299,11 @@ struct BOOST_PP_CAT(le_result,i)< true_,true_,F,AUX_LAMBDA_PARAMS(i, L) >
 template<
       template< AUX_LAMBDA_PARAMS(i, typename P) > class F
     , AUX_LAMBDA_PARAMS(i, typename T)
+    , typename Tag
     , typename Protect
     >
 struct lambda_impl< 
-      F<AUX_LAMBDA_PARAMS(i, T)>, Protect AUX_ARITY_PARAM(int_<i>)
+      F<AUX_LAMBDA_PARAMS(i, T)>, Tag, Protect AUX_ARITY_PARAM(int_<i>)
     >
 {
     BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_INVOCATION, T)
@@ -301,6 +313,7 @@ struct lambda_impl<
 
     typedef typename aux::BOOST_PP_CAT(le_result,i)<
           typename is_le::type
+        , Tag
         , Protect
         , F
         , AUX_LAMBDA_PARAMS(i, l)
@@ -316,10 +329,12 @@ struct lambda_impl<
 
 template<
       typename F AUX_LAMBDA_BIND_N_PARAMS(i, typename T)
+    , typename Tag
     , typename Protect
     >
 struct lambda_impl<
       BOOST_PP_CAT(bind,i)<F AUX_LAMBDA_BIND_N_PARAMS(i, T)>
+    , Tag
     , Protect AUX_ARITY_PARAM(int_<BOOST_PP_INC(i)>)
     >
 {
