@@ -45,43 +45,44 @@ and associated types, to be supplied by a derived iterator class.</td>
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
-<li><a class="reference" href="#overview" id="id22" name="id22">Overview</a><ul>
-<li><a class="reference" href="#usage" id="id23" name="id23">Usage</a></li>
-<li><a class="reference" href="#iterator-core-access" id="id24" name="id24">Iterator Core Access</a></li>
-<li><a class="reference" href="#operator" id="id25" name="id25"><tt class="literal"><span class="pre">operator[]</span></tt></a></li>
-<li><a class="reference" href="#id2" id="id26" name="id26"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></li>
+<li><a class="reference" href="#overview" id="id23" name="id23">Overview</a><ul>
+<li><a class="reference" href="#usage" id="id24" name="id24">Usage</a></li>
+<li><a class="reference" href="#iterator-core-access" id="id25" name="id25">Iterator Core Access</a></li>
+<li><a class="reference" href="#operator" id="id26" name="id26"><tt class="literal"><span class="pre">operator[]</span></tt></a></li>
+<li><a class="reference" href="#id2" id="id27" name="id27"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></li>
 </ul>
 </li>
-<li><a class="reference" href="#reference" id="id27" name="id27">Reference</a><ul>
-<li><a class="reference" href="#iterator-facade-requirements" id="id28" name="id28"><tt class="literal"><span class="pre">iterator_facade</span></tt> Requirements</a></li>
-<li><a class="reference" href="#iterator-facade-operations" id="id29" name="id29"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
+<li><a class="reference" href="#reference" id="id28" name="id28">Reference</a><ul>
+<li><a class="reference" href="#iterator-facade-requirements" id="id29" name="id29"><tt class="literal"><span class="pre">iterator_facade</span></tt> Requirements</a></li>
+<li><a class="reference" href="#iterator-facade-operations" id="id30" name="id30"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
+<li><a class="reference" href="#iterator-facade-interoperability" id="id31" name="id31"><tt class="literal"><span class="pre">iterator_facade</span></tt> interoperability</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#tutorial-example" id="id30" name="id30">Tutorial Example</a><ul>
-<li><a class="reference" href="#the-problem" id="id31" name="id31">The Problem</a></li>
-<li><a class="reference" href="#a-basic-iterator-using-iterator-facade" id="id32" name="id32">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
-<li><a class="reference" href="#template-arguments-for-iterator-facade" id="id33" name="id33">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
-<li><a class="reference" href="#derived" id="id34" name="id34"><tt class="literal"><span class="pre">Derived</span></tt></a></li>
-<li><a class="reference" href="#value" id="id35" name="id35"><tt class="literal"><span class="pre">Value</span></tt></a></li>
-<li><a class="reference" href="#categoryortraversal" id="id36" name="id36"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></li>
-<li><a class="reference" href="#id11" id="id37" name="id37"><tt class="literal"><span class="pre">Reference</span></tt></a></li>
-<li><a class="reference" href="#difference" id="id38" name="id38"><tt class="literal"><span class="pre">Difference</span></tt></a></li>
+<li><a class="reference" href="#tutorial-example" id="id32" name="id32">Tutorial Example</a><ul>
+<li><a class="reference" href="#the-problem" id="id33" name="id33">The Problem</a></li>
+<li><a class="reference" href="#a-basic-iterator-using-iterator-facade" id="id34" name="id34">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
+<li><a class="reference" href="#template-arguments-for-iterator-facade" id="id35" name="id35">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
+<li><a class="reference" href="#derived" id="id36" name="id36"><tt class="literal"><span class="pre">Derived</span></tt></a></li>
+<li><a class="reference" href="#value" id="id37" name="id37"><tt class="literal"><span class="pre">Value</span></tt></a></li>
+<li><a class="reference" href="#categoryortraversal" id="id38" name="id38"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></li>
+<li><a class="reference" href="#id12" id="id39" name="id39"><tt class="literal"><span class="pre">Reference</span></tt></a></li>
+<li><a class="reference" href="#difference" id="id40" name="id40"><tt class="literal"><span class="pre">Difference</span></tt></a></li>
 </ul>
 </li>
-<li><a class="reference" href="#constructors-and-data-members" id="id39" name="id39">Constructors and Data Members</a></li>
-<li><a class="reference" href="#implementing-the-core-operations" id="id40" name="id40">Implementing the Core Operations</a></li>
+<li><a class="reference" href="#constructors-and-data-members" id="id41" name="id41">Constructors and Data Members</a></li>
+<li><a class="reference" href="#implementing-the-core-operations" id="id42" name="id42">Implementing the Core Operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#a-constant-node-iterator" id="id41" name="id41">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></li>
-<li><a class="reference" href="#interoperability" id="id42" name="id42">Interoperability</a></li>
-<li><a class="reference" href="#telling-the-truth" id="id43" name="id43">Telling the Truth</a></li>
-<li><a class="reference" href="#wrap-up" id="id44" name="id44">Wrap Up</a></li>
+<li><a class="reference" href="#a-constant-node-iterator" id="id43" name="id43">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></li>
+<li><a class="reference" href="#interoperability" id="id44" name="id44">Interoperability</a></li>
+<li><a class="reference" href="#telling-the-truth" id="id45" name="id45">Telling the Truth</a></li>
+<li><a class="reference" href="#wrap-up" id="id46" name="id46">Wrap Up</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="overview">
-<h1><a class="toc-backref" href="#id22" name="overview">Overview</a></h1>
+<h1><a class="toc-backref" href="#id23" name="overview">Overview</a></h1>
 <!-- Version 1.1 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
 <!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
@@ -126,7 +127,7 @@ impossible.</li>
 </ol>
 </blockquote>
 <div class="section" id="usage">
-<h2><a class="toc-backref" href="#id23" name="usage">Usage</a></h2>
+<h2><a class="toc-backref" href="#id24" name="usage">Usage</a></h2>
 <p>The user of <tt class="literal"><span class="pre">iterator_facade</span></tt> derives his iterator class from a
 specialization of <tt class="literal"><span class="pre">iterator_facade</span></tt> and passes the derived
 iterator class as <tt class="literal"><span class="pre">iterator_facade</span></tt>'s first template parameter.
@@ -190,7 +191,7 @@ Iterator or a more-refined iterator concept, a default constructor is
 required.</p>
 </div>
 <div class="section" id="iterator-core-access">
-<h2><a class="toc-backref" href="#id24" name="iterator-core-access">Iterator Core Access</a></h2>
+<h2><a class="toc-backref" href="#id25" name="iterator-core-access">Iterator Core Access</a></h2>
 <p><tt class="literal"><span class="pre">iterator_facade</span></tt> and the operator implementations need to be able
 to access the core member functions in the derived class.  Making the
 core member functions public would expose an implementation detail to
@@ -224,7 +225,7 @@ open a safety loophole, as every core member function preserves the
 invariants of the iterator.</p>
 </div>
 <div class="section" id="operator">
-<h2><a class="toc-backref" href="#id25" name="operator"><tt class="literal"><span class="pre">operator[]</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id26" name="operator"><tt class="literal"><span class="pre">operator[]</span></tt></a></h2>
 <p>The indexing operator for a generalized iterator presents special
 challenges.  A random access iterator's <tt class="literal"><span class="pre">operator[]</span></tt> is only
 required to return something convertible to its <tt class="literal"><span class="pre">value_type</span></tt>.
@@ -247,7 +248,7 @@ class; it will hide the one supplied by <tt class="literal"><span class="pre">it
 clients of her iterator.</p>
 <a class="target" id="operator-arrow" name="operator-arrow"></a></div>
 <div class="section" id="id2">
-<h2><a class="toc-backref" href="#id26" name="id2"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id27" name="id2"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></h2>
 <p>The <tt class="literal"><span class="pre">reference</span></tt> type of a readable iterator (and today's input
 iterator) need not in fact be a reference, so long as it is
 convertible to the iterator's <tt class="literal"><span class="pre">value_type</span></tt>.  When the <tt class="literal"><span class="pre">value_type</span></tt>
@@ -263,14 +264,14 @@ satisfied by the <tt class="literal"><span class="pre">iterator_facade</span></t
 <colgroup><col class="label" /><col /></colgroup>
 <col />
 <tbody valign="top">
-<tr><td class="label"><a name="cop95">[Cop95]</a></td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id9">2</a>)</em> [Coplien, 1995] Coplien, J., Curiously Recurring Template
+<tr><td class="label"><a name="cop95">[Cop95]</a></td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id10">2</a>)</em> [Coplien, 1995] Coplien, J., Curiously Recurring Template
 Patterns, C++ Report, February 1995, pp. 24-27.</td></tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="section" id="reference">
-<h1><a class="toc-backref" href="#id27" name="reference">Reference</a></h1>
+<h1><a class="toc-backref" href="#id28" name="reference">Reference</a></h1>
 <!-- Version 1.3 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
 <!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
@@ -306,64 +307,62 @@ public:
 // Comparison operators
 template &lt;class Dr1, class V1, class TC1, class R1, class D1,
           class Dr2, class V2, class TC2, class R2, class D2&gt;
-typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type // exposition
-operator ==(iterator_facade&lt;Dr1, V1, TC1, R1, D1&gt; const&amp; lhs,
-            iterator_facade&lt;Dr2, V2, TC2, R2, D2&gt; const&amp; rhs);
+typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type // exposition
+operator ==(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 
 template &lt;class Dr1, class V1, class TC1, class R1, class D1,
           class Dr2, class V2, class TC2, class R2, class D2&gt;
-typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
-operator !=(iterator_facade&lt;Dr1, V1, TC1, R1, D1&gt; const&amp; lhs,
-            iterator_facade&lt;Dr2, V2, TC2, R2, D2&gt; const&amp; rhs);
+typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
+operator !=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 
 template &lt;class Dr1, class V1, class TC1, class R1, class D1,
           class Dr2, class V2, class TC2, class R2, class D2&gt;
-typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
-operator &lt;(iterator_facade&lt;Dr1, V1, TC1, R1, D1&gt; const&amp; lhs,
-           iterator_facade&lt;Dr2, V2, TC2, R2, D2&gt; const&amp; rhs);
+typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
+operator &lt;(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+           iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 
 template &lt;class Dr1, class V1, class TC1, class R1, class D1,
           class Dr2, class V2, class TC2, class R2, class D2&gt;
-typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
-operator &lt;=(iterator_facade&lt;Dr1, V1, TC1, R1, D1&gt; const&amp; lhs,
-            iterator_facade&lt;Dr2, V2, TC2, R2, D2&gt; const&amp; rhs);
+typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
+operator &lt;=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 
 template &lt;class Dr1, class V1, class TC1, class R1, class D1,
           class Dr2, class V2, class TC2, class R2, class D2&gt;
-typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
-operator &gt;(iterator_facade&lt;Dr1, V1, TC1, R1, D1&gt; const&amp; lhs,
-           iterator_facade&lt;Dr2, V2, TC2, R2, D2&gt; const&amp; rhs);
+typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
+operator &gt;(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+           iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 
 template &lt;class Dr1, class V1, class TC1, class R1, class D1,
           class Dr2, class V2, class TC2, class R2, class D2&gt;
-typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
-operator &gt;=(iterator_facade&lt;Dr1, V1, TC1, R1, D1&gt; const&amp; lhs,
-            iterator_facade&lt;Dr2, V2, TC2, R2, D2&gt; const&amp; rhs);
-
-template &lt;class Dr1, class V1, class TC1, class R1, class D1,
-          class Dr2, class V2, class TC2, class R2, class D2&gt;
-typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
-operator &gt;=(iterator_facade&lt;Dr1, V1, TC1, R1, D1&gt; const&amp; lhs,
-            iterator_facade&lt;Dr2, V2, TC2, R2, D2&gt; const&amp; rhs);
+typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
+operator &gt;=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 
 // Iterator difference
 template &lt;class Dr1, class V1, class TC1, class R1, class D1,
           class Dr2, class V2, class TC2, class R2, class D2&gt;
-typename enable_if_interoperable&lt;Dr1, Dr2, bool&gt;::type
-operator -(iterator_facade&lt;Dr1, V1, TC1, R1, D1&gt; const&amp; lhs,
-           iterator_facade&lt;Dr2, V2, TC2, R2, D2&gt; const&amp; rhs);
+/* see <a class="reference" href="#minus">below</a> */
+operator-(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+          iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 
 // Iterator addition
-template &lt;class Derived, class V, class TC, class R, class D&gt;
-Derived operator+ (iterator_facade&lt;Derived, V, TC, R, D&gt; const&amp;,
-                   typename Derived::difference_type n)
+template &lt;class Dr, class V, class TC, class R, class D&gt;
+Derived operator+ (iterator_facade&lt;Dr,V,TC,R,D&gt; const&amp;,
+                   typename Derived::difference_type n);
+
+template &lt;class Dr, class V, class TC, class R, class D&gt;
+Derived operator+ (typename Derived::difference_type n,
+                   iterator_facade&lt;Dr,V,TC,R,D&gt; const&amp;);
 </pre>
 <a class="target" id="iterator-category" name="iterator-category"></a><p>The <tt class="literal"><span class="pre">iterator_category</span></tt> member of <tt class="literal"><span class="pre">iterator_facade</span></tt> is</p>
 <pre class="literal-block">
 <em>iterator-category</em>(CategoryOrTraversal, value_type, reference)
 </pre>
 <p>where <em>iterator-category</em> is defined as follows:</p>
-<a class="target" id="id6" name="id6"></a><pre class="literal-block">
+<a class="target" id="id7" name="id7"></a><pre class="literal-block">
 <em>iterator-category</em>(C,R,V) :=
    if (C is convertible to std::input_iterator_tag
        || C is convertible to std::output_iterator_tag
@@ -440,12 +439,13 @@ struct enable_if_interoperable
 {};
 </pre>
 <div class="section" id="iterator-facade-requirements">
-<h2><a class="toc-backref" href="#id28" name="iterator-facade-requirements"><tt class="literal"><span class="pre">iterator_facade</span></tt> Requirements</a></h2>
+<h2><a class="toc-backref" href="#id29" name="iterator-facade-requirements"><tt class="literal"><span class="pre">iterator_facade</span></tt> Requirements</a></h2>
 <p>The following table describes the typical valid expressions on
 <tt class="literal"><span class="pre">iterator_facade</span></tt>'s <tt class="literal"><span class="pre">Derived</span></tt> parameter, depending on the
 iterator concept(s) it will model.  The operations in the first
 column must be made accessible to member functions of class
-<tt class="literal"><span class="pre">iterator_core_access</span></tt>.</p>
+<tt class="literal"><span class="pre">iterator_core_access</span></tt>.  In addition,
+<tt class="literal"><span class="pre">static_cast&lt;Derived*&gt;(iterator_facade*)</span></tt> shall be well-formed.</p>
 <p>In the table below, <tt class="literal"><span class="pre">F</span></tt> is <tt class="literal"><span class="pre">iterator_facade&lt;X,V,C,R,D&gt;</span></tt>, <tt class="literal"><span class="pre">a</span></tt> is an
 object of type <tt class="literal"><span class="pre">X</span></tt>, <tt class="literal"><span class="pre">b</span></tt> and <tt class="literal"><span class="pre">c</span></tt> are objects of type <tt class="literal"><span class="pre">const</span> <span class="pre">X</span></tt>,
 <tt class="literal"><span class="pre">n</span></tt> is an object of <tt class="literal"><span class="pre">F::difference_type</span></tt>, <tt class="literal"><span class="pre">y</span></tt> is a constant
@@ -456,10 +456,10 @@ interoperable with <tt class="literal"><span class="pre">X</span></tt>.</p>
 <p class="topic-title"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</p>
 <table border class="table">
 <colgroup>
-<col width="19%" />
 <col width="21%" />
-<col width="35%" />
-<col width="25%" />
+<col width="23%" />
+<col width="27%" />
+<col width="29%" />
 </colgroup>
 <thead valign="bottom">
 <tr><th>Expression</th>
@@ -478,8 +478,9 @@ Iterator</td>
 </tr>
 <tr><td><tt class="literal"><span class="pre">c.equal(y)</span></tt></td>
 <td>convertible to bool</td>
-<td>true iff <tt class="literal"><span class="pre">c</span></tt> and <tt class="literal"><span class="pre">y</span></tt> refer to the
-same position.</td>
+<td>true iff <tt class="literal"><span class="pre">c</span></tt> and <tt class="literal"><span class="pre">y</span></tt>
+refer to the same
+position.</td>
 <td>Single Pass Iterator</td>
 </tr>
 <tr><td><tt class="literal"><span class="pre">a.increment()</span></tt></td>
@@ -502,7 +503,8 @@ Iterator</td>
 <tr><td><tt class="literal"><span class="pre">c.distance_to(z)</span></tt></td>
 <td>convertible to
 <tt class="literal"><span class="pre">F::difference_type</span></tt></td>
-<td>equivalent to <tt class="literal"><span class="pre">distance(c,</span> <span class="pre">X(z))</span></tt>.</td>
+<td>equivalent to
+<tt class="literal"><span class="pre">distance(c,</span> <span class="pre">X(z))</span></tt>.</td>
 <td>Random Access Traversal
 Iterator</td>
 </tr>
@@ -511,7 +513,7 @@ Iterator</td>
 </div>
 </div>
 <div class="section" id="iterator-facade-operations">
-<h2><a class="toc-backref" href="#id29" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h2>
+<h2><a class="toc-backref" href="#id30" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h2>
 <p>The operations in this section are described in terms of operations on
 the core interface of <tt class="literal"><span class="pre">Derived</span></tt> which may be inaccessible
 (i.e. private).  The implementation should access these operations
@@ -649,10 +651,156 @@ return tmp -= n;
 </tr>
 </tbody>
 </table>
+<pre class="literal-block">
+template &lt;class Dr, class V, class TC, class R, class D&gt;
+Derived operator+ (iterator_facade&lt;Dr,V,TC,R,D&gt; const&amp;,
+                   typename Derived::difference_type n);
+
+template &lt;class Dr, class V, class TC, class R, class D&gt;
+Derived operator+ (typename Derived::difference_type n,
+                   iterator_facade&lt;Dr,V,TC,R,D&gt; const&amp;);
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><pre class="first last literal-block">
+Derived tmp(static_cast&lt;Derived const*&gt;(this));
+return tmp += n;
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="iterator-facade-interoperability">
+<h2><a class="toc-backref" href="#id31" name="iterator-facade-interoperability"><tt class="literal"><span class="pre">iterator_facade</span></tt> interoperability</a></h2>
+<pre class="literal-block">
+template &lt;class Dr1, class V1, class TC1, class R1, class D1,
+          class Dr2, class V2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
+operator ==(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
+<tt class="literal"><span class="pre">lhs.equal(rhs)</span></tt>.  Otherwise, <tt class="literal"><span class="pre">rhs.equal(lhs)</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<pre class="literal-block">
+template &lt;class Dr1, class V1, class TC1, class R1, class D1,
+          class Dr2, class V2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
+operator !=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
+<tt class="literal"><span class="pre">!lhs.equal(rhs)</span></tt>.  Otherwise, <tt class="literal"><span class="pre">!rhs.equal(lhs)</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<pre class="literal-block">
+template &lt;class Dr1, class V1, class TC1, class R1, class D1,
+          class Dr2, class V2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
+operator &lt;(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+           iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
+<tt class="literal"><span class="pre">lhs.distance_to(rhs)</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>. Otherwise, <tt class="literal"><span class="pre">rhs.distance_to(lhs)</span> <span class="pre">&gt;</span>
+<span class="pre">0</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<pre class="literal-block">
+template &lt;class Dr1, class V1, class TC1, class R1, class D1,
+          class Dr2, class V2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
+operator &lt;=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
+<tt class="literal"><span class="pre">lhs.distance_to(rhs)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></tt>. Otherwise, <tt class="literal"><span class="pre">rhs.distance_to(lhs)</span>
+<span class="pre">&gt;=</span> <span class="pre">0</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<pre class="literal-block">
+template &lt;class Dr1, class V1, class TC1, class R1, class D1,
+          class Dr2, class V2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
+operator &gt;(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+           iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
+<tt class="literal"><span class="pre">lhs.distance_to(rhs)</span> <span class="pre">&gt;</span> <span class="pre">0</span></tt>. Otherwise,
+<tt class="literal"><span class="pre">rhs.distance_to(lhs)</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<pre class="literal-block">
+template &lt;class Dr1, class V1, class TC1, class R1, class D1,
+          class Dr2, class V2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1,Dr2,bool&gt;::type
+operator &gt;=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+            iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
+<tt class="literal"><span class="pre">lhs.distance_to(rhs)</span> <span class="pre">&gt;=</span> <span class="pre">0</span></tt>. Otherwise,
+<tt class="literal"><span class="pre">rhs.distance_to(lhs)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<a class="target" id="minus" name="minus"></a><pre class="literal-block">
+template &lt;class Dr1, class V1, class TC1, class R1, class D1,
+          class Dr2, class V2, class TC2, class R2, class D2&gt;
+typename enable_if_interoperable&lt;Dr1,Dr2,difference_type&gt;::type
+operator -(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
+           iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return Type:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then <tt class="literal"><span class="pre">difference_type</span></tt> shall be
+<tt class="literal"><span class="pre">iterator_traits&lt;Dr1&gt;::difference_type</span></tt>.  Otherwise,
+<tt class="literal"><span class="pre">difference_type</span></tt> shall be
+<tt class="literal"><span class="pre">iterator_traits&lt;Dr2&gt;::difference_type</span></tt>.</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
+<tt class="literal"><span class="pre">-lhs.distance_to(rhs)</span></tt>. Otherwise,
+<tt class="literal"><span class="pre">-rhs.distance_to(lhs)</span></tt>.</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="section" id="tutorial-example">
-<h1><a class="toc-backref" href="#id30" name="tutorial-example">Tutorial Example</a></h1>
+<h1><a class="toc-backref" href="#id32" name="tutorial-example">Tutorial Example</a></h1>
 <!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
 <!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
@@ -662,7 +810,7 @@ example of a linked list of polymorphic objects.  This example was
 inspired by a <a class="reference" href="http://thread.gmane.org/gmane.comp.lib.boost.user/5100">posting</a> by Keith Macdonald on the <a class="reference" href="../../../more/mailing_lists.htm#users">Boost-Users</a>
 mailing list.</p>
 <div class="section" id="the-problem">
-<h2><a class="toc-backref" href="#id31" name="the-problem">The Problem</a></h2>
+<h2><a class="toc-backref" href="#id33" name="the-problem">The Problem</a></h2>
 <p>Say we've written a polymorphic linked list node base class:</p>
 <pre class="literal-block">
 # include &lt;iostream&gt;
@@ -724,7 +872,7 @@ inline std::ostream&amp; operator&lt;&lt;(std::ostream&amp; s, node_base const&a
 lists.</p>
 </div>
 <div class="section" id="a-basic-iterator-using-iterator-facade">
-<h2><a class="toc-backref" href="#id32" name="a-basic-iterator-using-iterator-facade">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id34" name="a-basic-iterator-using-iterator-facade">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h2>
 <p>We will construct a <tt class="literal"><span class="pre">node_iterator</span></tt> class using inheritance from
 <tt class="literal"><span class="pre">iterator_facade</span></tt> to implement most of the iterator's operations.</p>
 <pre class="literal-block">
@@ -738,24 +886,24 @@ class node_iterator
 };
 </pre>
 <div class="section" id="template-arguments-for-iterator-facade">
-<h3><a class="toc-backref" href="#id33" name="template-arguments-for-iterator-facade">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h3>
+<h3><a class="toc-backref" href="#id35" name="template-arguments-for-iterator-facade">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h3>
 <p><tt class="literal"><span class="pre">iterator_facade</span></tt> has several template parameters, so we must decide
 what types to use for the arguments. The parameters are <tt class="literal"><span class="pre">Derived</span></tt>,
 <tt class="literal"><span class="pre">Value</span></tt>, <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>, <tt class="literal"><span class="pre">Reference</span></tt>, and <tt class="literal"><span class="pre">Difference</span></tt>.</p>
 <div class="section" id="derived">
-<h4><a class="toc-backref" href="#id34" name="derived"><tt class="literal"><span class="pre">Derived</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id36" name="derived"><tt class="literal"><span class="pre">Derived</span></tt></a></h4>
 <p>Because <tt class="literal"><span class="pre">iterator_facade</span></tt> is meant to be used with the CRTP
-<a class="citation-reference" href="#cop95" id="id9" name="id9">[Cop95]</a> the first parameter is the iterator class name itself,
+<a class="citation-reference" href="#cop95" id="id10" name="id10">[Cop95]</a> the first parameter is the iterator class name itself,
 <tt class="literal"><span class="pre">node_iterator</span></tt>.</p>
 </div>
 <div class="section" id="value">
-<h4><a class="toc-backref" href="#id35" name="value"><tt class="literal"><span class="pre">Value</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id37" name="value"><tt class="literal"><span class="pre">Value</span></tt></a></h4>
 <p>The <tt class="literal"><span class="pre">Value</span></tt> parameter determines the <tt class="literal"><span class="pre">node_iterator</span></tt>'s
 <tt class="literal"><span class="pre">value_type</span></tt>.  In this case, we are iterating over <tt class="literal"><span class="pre">node_base</span></tt>
 objects, so <tt class="literal"><span class="pre">Value</span></tt> will be <tt class="literal"><span class="pre">node_base</span></tt>.</p>
 </div>
 <div class="section" id="categoryortraversal">
-<h4><a class="toc-backref" href="#id36" name="categoryortraversal"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id38" name="categoryortraversal"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></h4>
 <p>Now we have to determine which <a class="reference" href="new-iter-concepts.html#iterator-traversal-concepts-lib-iterator-traversal">iterator traversal concept</a> our
 <tt class="literal"><span class="pre">node_iterator</span></tt> is going to model.  Singly-linked lists only have
 forward links, so our iterator can't can't be a <a class="reference" href="new-iter-concepts.html#bidirectional-traversal-iterators-lib-bidirectional-traversal-iterators">bidirectional
@@ -763,19 +911,19 @@ traversal iterator</a>.  Our iterator should be able to make multiple
 passes over the same linked list (unlike, say, an
 <tt class="literal"><span class="pre">istream_iterator</span></tt> which consumes the stream it traverses), so it
 must be a <a class="reference" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a>.  Therefore, we'll pass
-<tt class="literal"><span class="pre">boost::forward_traversal_tag</span></tt> in this position <a class="footnote-reference" href="#category" id="id10" name="id10"><sup>1</sup></a>.</p>
+<tt class="literal"><span class="pre">boost::forward_traversal_tag</span></tt> in this position <a class="footnote-reference" href="#category" id="id11" name="id11"><sup>1</sup></a>.</p>
 <table class="footnote" frame="void" id="category" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id10" name="category">[1]</a></td><td><tt class="literal"><span class="pre">iterator_facade</span></tt> also supports old-style category
+<tr><td class="label"><a class="fn-backref" href="#id11" name="category">[1]</a></td><td><tt class="literal"><span class="pre">iterator_facade</span></tt> also supports old-style category
 tags, so we could have passed <tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt> here;
 either way, the resulting iterator's <tt class="literal"><span class="pre">iterator_category</span></tt> will
 end up being <tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt>.</td></tr>
 </tbody>
 </table>
 </div>
-<div class="section" id="id11">
-<h4><a class="toc-backref" href="#id37" name="id11"><tt class="literal"><span class="pre">Reference</span></tt></a></h4>
+<div class="section" id="id12">
+<h4><a class="toc-backref" href="#id39" name="id12"><tt class="literal"><span class="pre">Reference</span></tt></a></h4>
 <p>The <tt class="literal"><span class="pre">Reference</span></tt> argument becomes the type returned by
 <tt class="literal"><span class="pre">node_iterator</span></tt>'s dereference operation, and will also be the
 same as <tt class="literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::reference</span></tt>.  The
@@ -784,7 +932,7 @@ library's default for this parameter is <tt class="literal"><span class="pre">Va
 type, we can omit this argument, or pass <tt class="literal"><span class="pre">use_default</span></tt>.</p>
 </div>
 <div class="section" id="difference">
-<h4><a class="toc-backref" href="#id38" name="difference"><tt class="literal"><span class="pre">Difference</span></tt></a></h4>
+<h4><a class="toc-backref" href="#id40" name="difference"><tt class="literal"><span class="pre">Difference</span></tt></a></h4>
 <p>The <tt class="literal"><span class="pre">Difference</span></tt> argument determines how the distance between
 two <tt class="literal"><span class="pre">node_iterator</span></tt>s will be measured and will also be the
 same as <tt class="literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::difference_type</span></tt>.
@@ -811,14 +959,14 @@ class node_iterator
 </div>
 </div>
 <div class="section" id="constructors-and-data-members">
-<h3><a class="toc-backref" href="#id39" name="constructors-and-data-members">Constructors and Data Members</a></h3>
+<h3><a class="toc-backref" href="#id41" name="constructors-and-data-members">Constructors and Data Members</a></h3>
 <p>Next we need to decide how to represent the iterator's position.
 This representation will take the form of data members, so we'll
 also need to write constructors to initialize them.  The
 <tt class="literal"><span class="pre">node_iterator</span></tt>'s position is quite naturally represented using
 a pointer to a <tt class="literal"><span class="pre">node_base</span></tt>.  We'll need a constructor to build an
 iterator from a <tt class="literal"><span class="pre">node_base*</span></tt>, and a default constructor to
-satisfy the <a class="reference" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a> requirements <a class="footnote-reference" href="#default" id="id12" name="id12"><sup>2</sup></a>.
+satisfy the <a class="reference" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a> requirements <a class="footnote-reference" href="#default" id="id13" name="id13"><sup>2</sup></a>.
 Our <tt class="literal"><span class="pre">node_iterator</span></tt> then becomes:</p>
 <pre class="literal-block">
 # include &quot;node.hpp&quot;
@@ -848,7 +996,7 @@ class node_iterator
 <table class="footnote" frame="void" id="default" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id12" name="default">[2]</a></td><td>Technically, the C++ standard places almost no
+<tr><td class="label"><a class="fn-backref" href="#id13" name="default">[2]</a></td><td>Technically, the C++ standard places almost no
 requirements on a default-constructed iterator, so if we were
 really concerned with efficiency, we could've written the
 default constructor to leave <tt class="literal"><span class="pre">m_node</span></tt> uninitialized.</td></tr>
@@ -856,7 +1004,7 @@ default constructor to leave <tt class="literal"><span class="pre">m_node</span>
 </table>
 </div>
 <div class="section" id="implementing-the-core-operations">
-<h3><a class="toc-backref" href="#id40" name="implementing-the-core-operations">Implementing the Core Operations</a></h3>
+<h3><a class="toc-backref" href="#id42" name="implementing-the-core-operations">Implementing the Core Operations</a></h3>
 <p>The last step is to implement the <a class="reference" href="#core-operations">core operations</a> required by
 the concepts we want our iterator to model.  Referring to the
 <a class="reference" href="#core-operations">table</a>, we can see that the first three rows are applicable
@@ -907,7 +1055,7 @@ iterator!  For a working example of its use, see <a class="reference" href="../e
 </div>
 </div>
 <div class="section" id="a-constant-node-iterator">
-<h2><a class="toc-backref" href="#id41" name="a-constant-node-iterator">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id43" name="a-constant-node-iterator">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></h2>
 <div class="sidebar">
 <p class="sidebar-title">Constant and Mutable iterators</p>
 <p>The term <strong>mutable iterator</strong> means an iterator through which
@@ -1008,7 +1156,7 @@ typedef node_iter&lt;node_base const&gt; node_const_iterator;
 </pre>
 </div>
 <div class="section" id="interoperability">
-<h2><a class="toc-backref" href="#id42" name="interoperability">Interoperability</a></h2>
+<h2><a class="toc-backref" href="#id44" name="interoperability">Interoperability</a></h2>
 <p>Our <tt class="literal"><span class="pre">const_node_iterator</span></tt> works perfectly well on its own, but
 taken together with <tt class="literal"><span class="pre">node_iterator</span></tt> it doesn't quite meet
 expectations.  For example, we'd like to be able to pass a
@@ -1020,7 +1168,7 @@ compare them for equality.</p>
 <p>This expected ability to use two different iterator types together
 is known as <a class="reference" href="new-iter-concepts.html#interoperable-iterators-lib-interoperable-iterators"><strong>interoperability</strong></a>.  Achieving interoperability in
 our case is as simple as templatizing the <tt class="literal"><span class="pre">equal</span></tt> function and
-adding a templatized converting constructor <a class="footnote-reference" href="#broken" id="id15" name="id15"><sup>3</sup></a> <a class="footnote-reference" href="#random" id="id16" name="id16"><sup>4</sup></a>:</p>
+adding a templatized converting constructor <a class="footnote-reference" href="#broken" id="id16" name="id16"><sup>3</sup></a> <a class="footnote-reference" href="#random" id="id17" name="id17"><sup>4</sup></a>:</p>
 <pre class="literal-block">
 template &lt;class Value&gt;
 class node_iter
@@ -1065,14 +1213,14 @@ typedef impl::node_iterator&lt;node_base const&gt; node_const_iterator;
 <table class="footnote" frame="void" id="broken" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id15" name="broken">[3]</a></td><td>If you're using an older compiler and it can't handle
+<tr><td class="label"><a class="fn-backref" href="#id16" name="broken">[3]</a></td><td>If you're using an older compiler and it can't handle
 this example, see the <a class="reference" href="../example/node_iterator2.hpp">example code</a> for workarounds.</td></tr>
 </tbody>
 </table>
 <table class="footnote" frame="void" id="random" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id16" name="random">[4]</a></td><td>If <tt class="literal"><span class="pre">node_iterator</span></tt> had been a <a class="reference" href="new-iter-concepts.html#random-access-traversal-iterators-lib-random-access-traversal-iterators">random access
+<tr><td class="label"><a class="fn-backref" href="#id17" name="random">[4]</a></td><td>If <tt class="literal"><span class="pre">node_iterator</span></tt> had been a <a class="reference" href="new-iter-concepts.html#random-access-traversal-iterators-lib-random-access-traversal-iterators">random access
 traversal iterator</a>, we'd have had to templatize its
 <tt class="literal"><span class="pre">distance_to</span></tt> function as well.</td></tr>
 </tbody>
@@ -1081,7 +1229,7 @@ traversal iterator</a>, we'd have had to templatize its
 iterators <a class="reference" href="../example/node_iterator2.cpp">here</a>.</p>
 </div>
 <div class="section" id="telling-the-truth">
-<h2><a class="toc-backref" href="#id43" name="telling-the-truth">Telling the Truth</a></h2>
+<h2><a class="toc-backref" href="#id45" name="telling-the-truth">Telling the Truth</a></h2>
 <p>Now <tt class="literal"><span class="pre">node_iterator</span></tt> and <tt class="literal"><span class="pre">node_const_iterator</span></tt> behave exactly as
 you'd expect... almost.  We can compare them and we can convert in
 one direction: from <tt class="literal"><span class="pre">node_iterator</span></tt> to <tt class="literal"><span class="pre">node_const_iterator</span></tt>.
@@ -1119,7 +1267,7 @@ appropriate:</p>
 </pre>
 </div>
 <div class="section" id="wrap-up">
-<h2><a class="toc-backref" href="#id44" name="wrap-up">Wrap Up</a></h2>
+<h2><a class="toc-backref" href="#id46" name="wrap-up">Wrap Up</a></h2>
 <p>This concludes our <tt class="literal"><span class="pre">iterator_facade</span></tt> tutorial, but before you
 stop reading we urge you to take a look at <a class="reference" href="iterator_adaptor.html"><tt class="literal"><span class="pre">iterator_adaptor</span></tt></a>.
 There's another way to approach writing these iterators which might

@@ -18,7 +18,7 @@
   public:
       typedef remove_const<Value>::type value_type;
       typedef Reference reference;
-      typedef Value* pointer;
+      typedef Value\* pointer;
       typedef Difference difference_type;
       typedef /* see below__ \*/ iterator_category;
 
@@ -37,63 +37,63 @@
   // Comparison operators
   template <class Dr1, class V1, class TC1, class R1, class D1,
             class Dr2, class V2, class TC2, class R2, class D2>
-  typename enable_if_interoperable<Dr1, Dr2, bool>::type // exposition
-  operator ==(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
-              iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
+  typename enable_if_interoperable<Dr1,Dr2,bool>::type // exposition
+  operator ==(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+              iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
   template <class Dr1, class V1, class TC1, class R1, class D1,
             class Dr2, class V2, class TC2, class R2, class D2>
-  typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator !=(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
-              iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
+  typename enable_if_interoperable<Dr1,Dr2,bool>::type
+  operator !=(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+              iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
   template <class Dr1, class V1, class TC1, class R1, class D1,
             class Dr2, class V2, class TC2, class R2, class D2>
-  typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator <(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
-             iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
+  typename enable_if_interoperable<Dr1,Dr2,bool>::type
+  operator <(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+             iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
   template <class Dr1, class V1, class TC1, class R1, class D1,
             class Dr2, class V2, class TC2, class R2, class D2>
-  typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator <=(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
-              iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
+  typename enable_if_interoperable<Dr1,Dr2,bool>::type
+  operator <=(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+              iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
   template <class Dr1, class V1, class TC1, class R1, class D1,
             class Dr2, class V2, class TC2, class R2, class D2>
-  typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator >(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
-             iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
+  typename enable_if_interoperable<Dr1,Dr2,bool>::type
+  operator >(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+             iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
   template <class Dr1, class V1, class TC1, class R1, class D1,
             class Dr2, class V2, class TC2, class R2, class D2>
-  typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator >=(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
-              iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
-
-  template <class Dr1, class V1, class TC1, class R1, class D1,
-            class Dr2, class V2, class TC2, class R2, class D2>
-  typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator >=(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
-              iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
+  typename enable_if_interoperable<Dr1,Dr2,bool>::type
+  operator >=(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+              iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
   // Iterator difference
   template <class Dr1, class V1, class TC1, class R1, class D1,
             class Dr2, class V2, class TC2, class R2, class D2>
-  typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator -(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
-             iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
+  /* see below__ \*/
+  operator-(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+            iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
   // Iterator addition
-  template <class Derived, class V, class TC, class R, class D>
-  Derived operator+ (iterator_facade<Derived, V, TC, R, D> const&,
-                     typename Derived::difference_type n)
+  template <class Dr, class V, class TC, class R, class D>
+  Derived operator+ (iterator_facade<Dr,V,TC,R,D> const&,
+                     typename Derived::difference_type n);
+
+  template <class Dr, class V, class TC, class R, class D>
+  Derived operator+ (typename Derived::difference_type n,
+                     iterator_facade<Dr,V,TC,R,D> const&);
 
 __ `iterator category`_
 
 __ `operator arrow`_
 
 __ brackets_
+
+__ minus_
 
 .. _`iterator category`:
 
@@ -138,7 +138,8 @@ The following table describes the typical valid expressions on
 ``iterator_facade``\ 's ``Derived`` parameter, depending on the
 iterator concept(s) it will model.  The operations in the first
 column must be made accessible to member functions of class
-``iterator_core_access``.
+``iterator_core_access``.  In addition,
+``static_cast<Derived*>(iterator_facade*)`` shall be well-formed.
 
 In the table below, ``F`` is ``iterator_facade<X,V,C,R,D>``, ``a`` is an
 object of type ``X``, ``b`` and ``c`` are objects of type ``const X``,
@@ -151,27 +152,28 @@ interoperable with ``X``.
 
 .. topic:: ``iterator_facade`` Core Operations
 
-   +--------------------+----------------------+-------------------------------------+---------------------------+
-   |Expression          |Return Type           |Assertion/Note                       |Used to implement Iterator |
-   |                    |                      |                                     |Concept(s)                 |
-   +====================+======================+=====================================+===========================+
-   |``c.dereference()`` |``F::reference``      |                                     |Readable Iterator, Writable|
-   |                    |                      |                                     |Iterator                   |
-   +--------------------+----------------------+-------------------------------------+---------------------------+
-   |``c.equal(y)``      |convertible to bool   |true iff ``c`` and ``y`` refer to the|Single Pass Iterator       |
-   |                    |                      |same position.                       |                           |
-   +--------------------+----------------------+-------------------------------------+---------------------------+
-   |``a.increment()``   |unused                |                                     |Incrementable Iterator     |
-   +--------------------+----------------------+-------------------------------------+---------------------------+
-   |``a.decrement()``   |unused                |                                     |Bidirectional Traversal    |
-   |                    |                      |                                     |Iterator                   |
-   +--------------------+----------------------+-------------------------------------+---------------------------+
-   |``a.advance(n)``    |unused                |                                     |Random Access Traversal    |
-   |                    |                      |                                     |Iterator                   |
-   +--------------------+----------------------+-------------------------------------+---------------------------+
-   |``c.distance_to(z)``|convertible to        |equivalent to ``distance(c, X(z))``. |Random Access Traversal    |
-   |                    |``F::difference_type``|                                     |Iterator                   |
-   +--------------------+----------------------+-------------------------------------+---------------------------+
+   +--------------------+----------------------+-------------------------+---------------------------+
+   |Expression          |Return Type           |Assertion/Note           |Used to implement Iterator |
+   |                    |                      |                         |Concept(s)                 |
+   +====================+======================+=========================+===========================+
+   |``c.dereference()`` |``F::reference``      |                         |Readable Iterator, Writable|
+   |                    |                      |                         |Iterator                   |
+   +--------------------+----------------------+-------------------------+---------------------------+
+   |``c.equal(y)``      |convertible to bool   |true iff ``c`` and ``y`` |Single Pass Iterator       |
+   |                    |                      |refer to the same        |                           |
+   |                    |                      |position.                |                           |
+   +--------------------+----------------------+-------------------------+---------------------------+
+   |``a.increment()``   |unused                |                         |Incrementable Iterator     |
+   +--------------------+----------------------+-------------------------+---------------------------+
+   |``a.decrement()``   |unused                |                         |Bidirectional Traversal    |
+   |                    |                      |                         |Iterator                   |
+   +--------------------+----------------------+-------------------------+---------------------------+
+   |``a.advance(n)``    |unused                |                         |Random Access Traversal    |
+   |                    |                      |                         |Iterator                   |
+   +--------------------+----------------------+-------------------------+---------------------------+
+   |``c.distance_to(z)``|convertible to        |equivalent to            |Random Access Traversal    |
+   |                    |``F::difference_type``|``distance(c, X(z))``.   |Iterator                   |
+   +--------------------+----------------------+-------------------------+---------------------------+
 
 
 
@@ -280,8 +282,115 @@ __ `operator arrow`_
 
   ::
 
-   Derived tmp(static_cast<Derived const*>(this));
-   return tmp -= n;
+    Derived tmp(static_cast<Derived const*>(this));
+    return tmp -= n;
+
+::
+
+  template <class Dr, class V, class TC, class R, class D>
+  Derived operator+ (iterator_facade<Dr,V,TC,R,D> const&,
+                     typename Derived::difference_type n);
+
+  template <class Dr, class V, class TC, class R, class D>
+  Derived operator+ (typename Derived::difference_type n,
+                     iterator_facade<Dr,V,TC,R,D> const&);
+
+:Effects:
+
+  ::
+
+    Derived tmp(static_cast<Derived const*>(this));
+    return tmp += n;
+
+``iterator_facade`` interoperability
+------------------------------------
+
+::
+
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
+  typename enable_if_interoperable<Dr1,Dr2,bool>::type
+  operator ==(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+              iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
+
+:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
+  ``lhs.equal(rhs)``.  Otherwise, ``rhs.equal(lhs)``.
+
+::
+
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
+  typename enable_if_interoperable<Dr1,Dr2,bool>::type
+  operator !=(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+              iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
+
+:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
+  ``!lhs.equal(rhs)``.  Otherwise, ``!rhs.equal(lhs)``.
+
+::
+
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
+  typename enable_if_interoperable<Dr1,Dr2,bool>::type
+  operator <(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+             iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
+
+:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
+  ``lhs.distance_to(rhs) < 0``. Otherwise, ``rhs.distance_to(lhs) >
+  0``.
+
+::
+
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
+  typename enable_if_interoperable<Dr1,Dr2,bool>::type
+  operator <=(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+              iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
+
+:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
+  ``lhs.distance_to(rhs) <= 0``. Otherwise, ``rhs.distance_to(lhs)
+  >= 0``.
+
+::
+
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
+  typename enable_if_interoperable<Dr1,Dr2,bool>::type
+  operator >(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+             iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
+
+:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
+  ``lhs.distance_to(rhs) > 0``. Otherwise,
+  ``rhs.distance_to(lhs) < 0``.
 
 
+::
 
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
+  typename enable_if_interoperable<Dr1,Dr2,bool>::type
+  operator >=(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+              iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
+
+:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
+  ``lhs.distance_to(rhs) >= 0``. Otherwise,
+  ``rhs.distance_to(lhs) <= 0``.
+
+.. _minus:
+
+::
+
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
+  typename enable_if_interoperable<Dr1,Dr2,difference_type>::type
+  operator -(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
+             iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
+
+:Return Type: if ``is_convertible<Dr2,Dr1>::value``, then ``difference_type`` shall be
+  ``iterator_traits<Dr1>::difference_type``.  Otherwise,
+  ``difference_type`` shall be
+  ``iterator_traits<Dr2>::difference_type``.
+
+:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
+  ``-lhs.distance_to(rhs)``. Otherwise,
+  ``-rhs.distance_to(lhs)``.

@@ -62,8 +62,8 @@ to be members or non-members.
   or non-members.
 
 
-9.3 enable_if_interoperable needs standardese (Dave)
-====================================================
+9.3 enable_if_interoperable needs standardese
+=============================================
 
 :Submitter: Pete Becker 
 :Status: New 
@@ -81,11 +81,7 @@ N1541 48
   behavior of these functions is undefined if the two types aren't
   interoperable.
 
-  **Needs work** (Dave)  I'm not happy with Pete's proposal.
-
-  (thw) Pete is correct with regard to the requirement. Removing the
-  interoperable stuff would be an error. By all means we don't want
-  undefined behaviour here.
+  **Needs diffs** (fixed in text).
 
 9.4 enable_if_convertible unspecified, conflicts with requires 
 ==============================================================
@@ -526,16 +522,12 @@ like "when using iterator_facade to define an iterator class Iter, the class Ite
 from a specialization of iterator_facade whose first template argument is Iter." That's a bit 
 awkward, but at the moment I don't see a better way of phrasing it. 
 
-:Proposed resolution:   **Needs work** (Dave) Reword.
-   01/01/04 thw
-   The wording is certainly insufficient. AFAICS there are two issues.
-   First the issue addressed by Pete i.e. specifying the requirements for
-   implementing a valid iterator. The other issue I can see is that we 
-   need to be able to unambigously cast the iterator_facade specialisation
-   to Iter.
+:Proposed resolution: Add: In addition,
+   ``static_cast<Derived*>(iterator_facade*)`` shall be
+   well-formed.
 
-9.22 return type of Iterator difference for iterator facade (Dave)
-==================================================================
+9.22 return type of Iterator difference for iterator facade
+===========================================================
 
 :Submitter: Pete Becker 
 :Status: New 
@@ -554,20 +546,7 @@ to the other type, then the subtraction is okay. Seems like the
 return type should then be the type that was converted to. Is that
 right?
 
-:Proposed resolution: 
-  Change the return type from ::
-
-    typename enable_if_interoperable<Dr1, Dr2, bool>::type
-
-  to ::
-
-    typename enable_if_interoperable<Dr1, Dr2, D1>::type
-
-   01/01/04 thw 
-   Almost, the return type should be the difference_type of the
-   converted to iterator. BTW how does std::distance handle
-   different but interoperable iterator types?
-
+:Proposed resolution: **Needs diffs** (fixed in text)
 
 9.23 Iterator_facade: minor wording Issue
 =========================================
@@ -818,8 +797,8 @@ c++std-lib-12333:
   this issue for Readable Iterator and Lvalue Iterator.
 
 
-9.34 iterator_facade free functions unspecified (Dave)
-======================================================
+9.34 iterator_facade free functions unspecified
+===============================================
 
 :Submitter: Pete Becker 
 :Status: New 
@@ -834,7 +813,7 @@ c++std-lib-12562:
   iterator_facade and an argument of type difference_type has no
   specification.
 
-:Proposed resolution: **Needs work** Add the missing specifications.
+:Proposed resolution: **Needs diffs** Added the missing specifications.
 
 
 9.35 iterator_facade: too many equals? 
