@@ -124,6 +124,7 @@
 # include <boost/type.hpp>
 # include <boost/static_assert.hpp>
 # include <boost/type_traits.hpp>
+# include <boost/type_traits/conversion_traits.hpp>
 # include <boost/detail/iterator.hpp>
 # include <boost/detail/select_type.hpp>
 
@@ -1353,9 +1354,9 @@ namespace detail {
   template <class Base, class T>
   struct reduce_to_base_class
   {
-      typedef typename if_true<(
-            ::boost::is_convertible<T*,Base*>::value
-          )>::template then<Base,T>::type type;
+      BOOST_STATIC_CONSTANT(bool, convertible = (::boost::is_convertible<T*,Base*>::value));
+      typedef typename if_true<convertible
+          >::template then<Base,T>::type type;
   };
 
   // "Steps down" the category of iterators below bidirectional so the category
