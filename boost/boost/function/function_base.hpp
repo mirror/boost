@@ -16,13 +16,13 @@
 #ifndef BOOST_FUNCTION_BASE_HEADER
 #define BOOST_FUNCTION_BASE_HEADER
 
-#include <string>
 #include <stdexcept>
 #include <memory>
 #include <new>
-#include <typeinfo>
 #include <boost/config.hpp>
-#include <boost/type_traits.hpp>
+#include <boost/type_traits/arithmetic_traits.hpp>
+#include <boost/type_traits/composite_traits.hpp>
+#include <boost/type_traits/is_stateless.hpp>
 #include <boost/ref.hpp>
 #include <boost/pending/ct_if.hpp>
 
@@ -32,18 +32,21 @@
 #  define BOOST_FUNCTION_TARGET_FIX(x)
 #endif // not MSVC
 
-#ifdef BOOST_FUNCTION_SILENT_DEPRECATED
-#  define BOOST_FUNCTION_DEPRECATED_PRE
-#  define BOOST_FUNCTION_DEPRECATED_INNER
-#else
-#  if defined (BOOST_MSVC) && (BOOST_MSVC >= 1300)
-#    define BOOST_FUNCTION_DEPRECATED_PRE __declspec(deprecated)
-#    define BOOST_FUNCTION_DEPRECATED_INNER
-#  else
-#    define BOOST_FUNCTION_DEPRECATED_PRE
-#    define BOOST_FUNCTION_DEPRECATED_INNER int deprecated;
-#  endif
-#endif
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+namespace boost {
+
+template<typename Signature, typename Allocator = std::allocator<void> >
+class function;
+
+template<typename Signature, typename Allocator>
+inline void swap(function<Signature, Allocator>& f1, 
+                 function<Signature, Allocator>& f2)
+{
+  f1.swap(f2);
+}
+
+} // end namespace boost
+#endif // have partial specialization
 
 namespace boost {
   namespace detail {
@@ -60,11 +63,29 @@ namespace boost {
         void* obj_ptr;
         const void* const_obj_ptr;
         void (*func_ptr)();
-
-        explicit any_pointer(void* p) : obj_ptr(p) {}
-        explicit any_pointer(const void* p) : const_obj_ptr(p) {}
-        explicit any_pointer(void (*p)()) : func_ptr(p) {}
+	char data[1];
       };
+
+      any_pointer make_any_pointer(void* o)
+      {
+	any_pointer p;
+	p.obj_ptr = o;
+	return p;
+      }
+
+      any_pointer make_any_pointer(const void* o)
+      {
+	any_pointer p;
+	p.const_obj_ptr = o;
+	return p;
+      }
+
+      any_pointer make_any_pointer(void (*f)())
+      {
+	any_pointer p;
+	p.obj_ptr = f;
+	return p;
+      }
 
       /**
        * The unusable class is a placeholder for unused function arguments
@@ -132,7 +153,7 @@ namespace boost {
         if (op == clone_functor_tag)
           return f;
         else
-          return any_pointer(reinterpret_cast<void*>(0));
+          return make_any_pointer(reinterpret_cast<void*>(0));
       }
 
       /**
@@ -154,7 +175,7 @@ namespace boost {
           if (op == clone_functor_tag)
             return function_ptr;
           else
-            return any_pointer(static_cast<void (*)()>(0));
+            return make_any_pointer(static_cast<void (*)()>(0));
         }
 
         // For function object pointers, we clone the pointer to each 
@@ -190,7 +211,7 @@ namespace boost {
 #  else
             functor_type* new_f = new functor_type(*f);
 #  endif // BOOST_NO_STD_ALLOCATOR
-            return any_pointer(static_cast<void*>(new_f));
+            return make_any_pointer(static_cast<void*>(new_f));
           }
           else {
             /* Cast from the void pointer to the functor pointer type */
@@ -209,7 +230,7 @@ namespace boost {
             delete f;
 #  endif // BOOST_NO_STD_ALLOCATOR
 
-            return any_pointer(static_cast<void*>(0));
+            return make_any_pointer(static_cast<void*>(0));
           }
         }
       public:
@@ -221,40 +242,6 @@ namespace boost {
           typedef typename get_function_tag<functor_type>::type tag_type;
           return manager(functor_ptr, op, tag_type());
         }
-      };
-
-      // value=1 if the given type is not "unusable"
-      template<typename T>
-      struct count_if_used
-      {
-        BOOST_STATIC_CONSTANT(int, value = 1);
-      };
-    
-      // value=0 for unusable types
-      template<>
-      struct count_if_used<unusable>
-      {
-        BOOST_STATIC_CONSTANT(int, value = 0);
-      };
-    
-      // Count the number of arguments (from the given set) which are not 
-      // "unusable" (therefore, count those arguments that are used).
-      template<typename T1, typename T2, typename T3, typename T4, 
-               typename T5, typename T6, typename T7, typename T8, 
-               typename T9, typename T10>
-      struct count_used_args
-      {
-        BOOST_STATIC_CONSTANT(int, value = 
-                              (count_if_used<T1>::value + 
-                               count_if_used<T2>::value +
-                               count_if_used<T3>::value + 
-                               count_if_used<T4>::value +
-                               count_if_used<T5>::value + 
-                               count_if_used<T6>::value +
-                               count_if_used<T7>::value + 
-                               count_if_used<T8>::value +
-                               count_if_used<T9>::value +
-                               count_if_used<T10>::value));
       };
     } // end namespace function
   } // end namespace detail
@@ -268,7 +255,10 @@ namespace boost {
   class function_base 
   {
   public:
-    function_base() : manager(0), functor(static_cast<void*>(0)) {}
+    function_base() : manager(0) 
+    {
+      functor.obj_ptr = 0;
+    }
     
     // Is this function empty?
     bool empty() const { return !manager; }
@@ -302,27 +292,6 @@ namespace boost {
       }
     } // end namespace function
   } // end namespace detail
-
-  // The default function policy is to do nothing before and after the call.
-  struct empty_function_policy
-  {
-    inline void precall(const function_base*) {}
-    inline void postcall(const function_base*) {}
-  };
-
-  // The default function mixin does nothing. The assignment and
-  // copy-construction operators are all defined because MSVC defines broken
-  // versions.
-  struct empty_function_mixin 
-  {
-    empty_function_mixin() {}
-    empty_function_mixin(const empty_function_mixin&) {}
-
-    empty_function_mixin& operator=(const empty_function_mixin&) 
-    {
-      return *this; 
-    }
-  };
 }
 
 #endif // BOOST_FUNCTION_BASE_HEADER

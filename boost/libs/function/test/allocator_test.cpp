@@ -60,7 +60,7 @@ static void do_nothing() {}
 int
 test_main(int, char*[])
 {
-  function<int, int, int>::allocator< counting_allocator<int> >::type f; 
+  function2<int, int, int, counting_allocator<int> > f; 
   f = plus<int>();
   f.clear();
   BOOST_TEST(alloc_count == 1);
@@ -71,7 +71,7 @@ test_main(int, char*[])
   f = &do_minus;
   f.clear();
 
-  function<void>::allocator< counting_allocator<int> >::type fv;
+  function0<void, counting_allocator<int> > fv;
   alloc_count = 0;
   dealloc_count = 0;
   fv = DoNothing();

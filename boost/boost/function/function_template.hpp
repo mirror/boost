@@ -1,6 +1,6 @@
 // Boost.Function library
 
-// Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001-2002 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -15,15 +15,23 @@
 
 // Note: this header is a header template and must NOT have multiple-inclusion
 // protection. 
+#include <boost/function/detail/prologue.hpp>
 
-#ifndef BOOST_FUNCTION_FUNCTION_TEMPLATE_HPP
-#define BOOST_FUNCTION_FUNCTION_TEMPLATE_HPP
-#  include <cassert>
-#  include <algorithm>
-#  include <boost/config.hpp>
-#  include <boost/function/function_base.hpp>
-#  include <boost/mem_fn.hpp>
-#endif // BOOST_FUNCTION_FUNCTION_TEMPLATE_HPP
+#define BOOST_FUNCTION_TEMPLATE_PARMS BOOST_PP_ENUM_PARAMS(BOOST_FUNCTION_NUM_ARGS, typename T)
+
+#define BOOST_FUNCTION_TEMPLATE_ARGS BOOST_PP_ENUM_PARAMS(BOOST_FUNCTION_NUM_ARGS, T)
+
+
+#define BOOST_FUNCTION_PARM(J,I,D) BOOST_PP_CAT(T,I) BOOST_PP_CAT(a,I)
+
+#define BOOST_FUNCTION_PARMS BOOST_PP_ENUM(BOOST_FUNCTION_NUM_ARGS,BOOST_FUNCTION_PARM,)
+
+#define BOOST_FUNCTION_ARGS BOOST_PP_ENUM_PARAMS(BOOST_FUNCTION_NUM_ARGS, a)
+
+#define BOOST_FUNCTION_ARG_TYPE(J,I,D) \
+  typedef BOOST_PP_CAT(T,I) BOOST_PP_CAT(arg, BOOST_PP_CAT(BOOST_PP_INC(I),_type));
+
+#define BOOST_FUNCTION_ARG_TYPES BOOST_PP_REPEAT(BOOST_FUNCTION_NUM_ARGS,BOOST_FUNCTION_ARG_TYPE,)
 
 // Type of the default allocator
 #ifndef BOOST_NO_STD_ALLOCATOR
@@ -229,16 +237,9 @@ namespace boost {
   template<
     typename R BOOST_FUNCTION_COMMA
     BOOST_FUNCTION_TEMPLATE_PARMS,
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-    typename Policy    = empty_function_policy,
-    typename Mixin     = empty_function_mixin,
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
     typename Allocator = BOOST_FUNCTION_DEFAULT_ALLOCATOR
   >
   class BOOST_FUNCTION_FUNCTION : public function_base
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-                                , public Mixin
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
   {
     typedef typename detail::function::function_return_type<R>::type 
       internal_result_type;
@@ -261,57 +262,24 @@ namespace boost {
 #else
     typedef internal_result_type result_type;
 #endif // BOOST_NO_VOID_RETURNS
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-    typedef Policy    policy_type;
-    typedef Mixin     mixin_type;
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
     typedef Allocator allocator_type;
     typedef BOOST_FUNCTION_FUNCTION self_type;
 
     BOOST_FUNCTION_FUNCTION() : function_base()
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-                              , Mixin()
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
                               , invoker(0) {}
-
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-    explicit BOOST_FUNCTION_FUNCTION(const Mixin& m) : 
-      function_base(), 
-      Mixin(m), 
-      invoker(0) 
-    {
-    }
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
 
     // MSVC chokes if the following two constructors are collapsed into
     // one with a default parameter.
     template<typename Functor>
     BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f) :
       function_base(), 
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-      Mixin(), 
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
       invoker(0)
     {
       this->assign_to(f);
     }
-
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-    template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(Functor f, const Mixin& m) :
-      function_base(), 
-      Mixin(m), 
-      invoker(0)
-    {
-      this->assign_to(f);
-    }
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
 
     BOOST_FUNCTION_FUNCTION(const BOOST_FUNCTION_FUNCTION& f) :
       function_base(),
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-      Mixin(static_cast<const Mixin&>(f)), 
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
       invoker(0)
     {
       this->assign_to_own(f);
@@ -323,18 +291,9 @@ namespace boost {
     {
       assert(!this->empty());
 
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-      policy_type policy;
-      policy.precall(this);
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
-
       internal_result_type result = invoker(function_base::functor 
                                             BOOST_FUNCTION_COMMA
                                             BOOST_FUNCTION_ARGS);
-
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-      policy.postcall(this);
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
 
 #ifndef BOOST_NO_VOID_RETURNS
       return static_cast<result_type>(result);
@@ -352,23 +311,9 @@ namespace boost {
     BOOST_FUNCTION_FUNCTION& 
     operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-      self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
-#else
       self_type(f).swap(*this);
-#endif // BOOST_FUNCTION_NO_DEPRECATED
       return *this;
     }
-
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-    template<typename Functor>
-    BOOST_FUNCTION_DEPRECATED_PRE
-    void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
-    {
-      BOOST_FUNCTION_DEPRECATED_INNER
-      self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
-    }
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
 
     // Assignment from another BOOST_FUNCTION_FUNCTION
     BOOST_FUNCTION_FUNCTION& operator=(const BOOST_FUNCTION_FUNCTION& f)
@@ -380,19 +325,6 @@ namespace boost {
       return *this;
     }
 
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-    // Assignment from another BOOST_FUNCTION_FUNCTION
-    BOOST_FUNCTION_DEPRECATED_PRE
-    void set(const BOOST_FUNCTION_FUNCTION& f)
-    {
-      BOOST_FUNCTION_DEPRECATED_INNER
-      if (&f == this)
-        return;
-
-      self_type(f).swap(*this);
-    }
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
-
     void swap(BOOST_FUNCTION_FUNCTION& other)
     {
       if (&other == this)
@@ -401,9 +333,6 @@ namespace boost {
       std::swap(function_base::manager, other.manager);
       std::swap(function_base::functor, other.functor);
       std::swap(invoker, other.invoker);
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-      std::swap(static_cast<Mixin&>(*this), static_cast<Mixin&>(other));
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
     }
 
     // Clear out a target, if there is one
@@ -473,7 +402,7 @@ namespace boost {
         function_base::manager = 
           &detail::function::functor_manager<FunctionPtr, Allocator>::manage;
         function_base::functor = 
-          function_base::manager(detail::function::any_pointer(
+          function_base::manager(detail::function::make_any_pointer(
                             // should be a reinterpret cast, but some compilers
                             // insist on giving cv-qualifiers to free functions
                             (void (*)())(f)
@@ -519,7 +448,7 @@ namespace boost {
         FunctionObj* new_f = new FunctionObj(f);
 #endif // BOOST_NO_STD_ALLOCATOR
         function_base::functor = 
-          detail::function::any_pointer(static_cast<void*>(new_f));
+          detail::function::make_any_pointer(static_cast<void*>(new_f));
       }
     }
     
@@ -540,7 +469,7 @@ namespace boost {
         function_base::manager = &detail::function::trivial_manager;
         function_base::functor = 
           function_base::manager(
-            detail::function::any_pointer(
+            detail::function::make_any_pointer(
               const_cast<FunctionObj*>(f.get_pointer())),
             detail::function::clone_functor_tag);
       }
@@ -559,7 +488,7 @@ namespace boost {
           invoker_type;
       invoker = &invoker_type::invoke;
       function_base::manager = &detail::function::trivial_manager;
-      function_base::functor = detail::function::any_pointer(this);
+      function_base::functor = detail::function::make_any_pointer(this);
     }
 
     typedef internal_result_type (*invoker_type)(detail::function::any_pointer
@@ -570,32 +499,74 @@ namespace boost {
   };
 
   template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-           typename Policy, typename Mixin, 
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
            typename Allocator>
   inline void swap(BOOST_FUNCTION_FUNCTION<
                      R BOOST_FUNCTION_COMMA
                      BOOST_FUNCTION_TEMPLATE_ARGS ,
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-                     Policy,
-                     Mixin,
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
                      Allocator
                    >& f1,
                    BOOST_FUNCTION_FUNCTION<
                      R BOOST_FUNCTION_COMMA 
                      BOOST_FUNCTION_TEMPLATE_ARGS,
-#ifndef BOOST_FUNCTION_NO_DEPRECATED
-                     Policy,
-                     Mixin,
-#endif // ndef BOOST_FUNCTION_NO_DEPRECATED
                      Allocator
                    >& f2)
   {
     f1.swap(f2);
   }
-}
+
+#if !defined (BOOST_NO_PARTIAL_SPECIALIZATION)
+
+#if BOOST_FUNCTION_NUM_ARGS == 0
+#define BOOST_FUNCTION_PARTIAL_SPEC R (void)
+#else 
+#define BOOST_FUNCTION_PARTIAL_SPEC R (BOOST_PP_ENUM_PARAMS(BOOST_FUNCTION_NUM_ARGS,T))
+#endif
+
+template<typename R BOOST_FUNCTION_COMMA
+         BOOST_FUNCTION_TEMPLATE_PARMS,
+         typename Allocator>
+class function<BOOST_FUNCTION_PARTIAL_SPEC, Allocator>
+  : public BOOST_FUNCTION_FUNCTION<R, BOOST_FUNCTION_TEMPLATE_ARGS 
+                                   BOOST_FUNCTION_COMMA Allocator>
+{
+  typedef BOOST_FUNCTION_FUNCTION<R, BOOST_FUNCTION_TEMPLATE_ARGS 
+                                  BOOST_FUNCTION_COMMA Allocator> base_type;
+  typedef function self_type;
+
+public:
+  typedef typename base_type::allocator_type allocator_type;
+
+  function() : base_type() {}
+
+  template<typename Functor>                                              
+  function(Functor BOOST_FUNCTION_TARGET_FIX(const &) f) : base_type(f) {}
+                      
+  function(const self_type& f) : base_type(static_cast<const base_type&>(f)){}
+         
+  template<typename Functor>
+  self_type& operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
+  {
+    self_type(f).swap(*this);
+    return *this;
+  }
+
+  self_type& operator=(const base_type& f)
+  {
+    self_type(f).swap(*this);
+    return *this;
+  }
+
+  self_type& operator=(const self_type& f)
+  {   
+    self_type(f).swap(*this);
+    return *this;
+  }
+};
+
+#undef BOOST_FUNCTION_PARTIAL_SPEC
+#endif // have partial specialization
+
+} // end namespace boost
 
 // Cleanup after ourselves...
 #undef BOOST_FUNCTION_DEFAULT_ALLOCATOR
@@ -611,3 +582,10 @@ namespace boost {
 #undef BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER
 #undef BOOST_FUNCTION_GET_STATELESS_FUNCTION_OBJ_INVOKER
 #undef BOOST_FUNCTION_GET_MEM_FUNCTION_INVOKER
+#undef BOOST_FUNCTION_TEMPLATE_PARMS
+#undef BOOST_FUNCTION_TEMPLATE_ARGS
+#undef BOOST_FUNCTION_PARMS
+#undef BOOST_FUNCTION_PARM
+#undef BOOST_FUNCTION_ARGS
+#undef BOOST_FUNCTION_ARG_TYPE
+#undef BOOST_FUNCTION_ARG_TYPES

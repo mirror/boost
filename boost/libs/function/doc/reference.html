@@ -13,9 +13,8 @@
 
 <pre>
 <b>namespace</b> boost {
-  <b>class</b> <a href="#function_base">function_base</a>
+  <b>class</b> <a href="#function_base">function_base</a> <em> // Deprecated</em>
   {
-    <b>typedef</b> <em>implementation-defined</em> safe_bool;
     <a href="#empty"><b>bool</b> empty() <b>const</b></a>;
   };
 
@@ -25,14 +24,13 @@
 	   <b>typename</b> Arg2,
            <i>...</i>
            <b>typename</b> Arg<i>N</i>,
-	   <b>typename</b> Policy    = empty_function_policy, <em>// Deprecated</em>
-	   <b>typename</b> Mixin     = empty_function_mixin, <em>// Deprecated</em>
-	   <b>typename</b> Allocator = std::allocator&lt;function_base&gt; &gt;
-  <b>class</b> <a href="#functionN">function<i>N</i></a> : <b>public</b> <a href="#function_base">function_base</a>, <b>public</b> Mixin
+	   <b>typename</b> Allocator = std::allocator&lt;<b>void</b>&gt; &gt;
+  <b>class</b> <a href="#functionN">function<i>N</i></a> : <b>public</b> <a href="#function_base">function_base</a>
   {
+    <b>typedef</b> <em>implementation-defined</em> safe_bool;
+
+  <b>public</b>:
     <b>typedef</b> ResultType result_type; <em>// <a href="#novoid">[1]</a></em>
-    <b>typedef</b> Policy     policy_type; <em>// Deprecated</em>
-    <b>typedef</b> Mixin      mixin_type; <em>// Deprecated</em>
     <b>typedef</b> Allocator  allocator_type;
 
     <b>typedef</b> Arg1 argument_type;        <i>// If N == 1</i>
@@ -50,17 +48,15 @@
     <b>enum</b> { arity = <em>N</em> };
 
     <i>// Construction</i>
-    <a href="#functionN_default"><b>explicit</b> function<i>N</i>(<b>const</b> Mixin<b>&amp;</b> = Mixin())</a>;
+    <a href="#functionN_default"><b>explicit</b> function<i>N</i>()</a>;
     <a href="#functionN_copy">function<i>N</i>(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
-    <a href="#functionN_target"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(F, <b>const</b> Mixin<b>&amp;</b> = Mixin())</a>;
+    <a href="#functionN_target"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(F)</a>;
     <a href="#functionN_target_ref"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(reference_wrapper&lt;F&gt;)</a>;
     
     <i>// Assignment</i>
     <a href="#functionN_copy_assn">function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
     <a href="#functionN_target_assn"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(F)</a>;
     <a href="#functionN_target_ref_assn"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(reference_wrapper&lt;F&gt;)</a>;
-    <a href="#functionN_copy_set"><b>void</b> set(<b>const</b> function<i>N</i><b>&amp;</b>)</a>; <em>// Deprecated</em>
-    <a href="#functionN_target_set"><b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(F)</a>; <em>// Deprecated</em>
     <a href="#functionN_swap"><b>void</b> swap(function<i>N</i><b>&amp;</b>)</a>;
     <a href="#functionN_clear"><b>void</b> clear()</a>;
 
@@ -77,37 +73,30 @@
 	   <b>typename</b> Arg2,
            <i>...</i>
 	   <b>typename</b> Arg<i>N</i>,
-           <b>typename</b> Policy, <em>// Deprecated</em>
-           <b>typename</b> Mixin, <em>// Deprecated</em>
            <b>typename</b> Allocator&gt;
-  <b>void</b> <a href="#swap_functionN">swap</a>(function<em>N</em>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>,
-            function<em>N</em>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>);
+  <b>void</b> <a href="#swap_functionN">swap</a>(function<em>N</em>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Allocator&gt;<b>&amp;</b>,
+            function<em>N</em>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Allocator&gt;<b>&amp;</b>);
 
   // For any <i>N</i> in [0, <i>MAX_ARGS</i>]
   <b>template</b>&lt;<b>typename</b> Signature, <em>// Function type: ResultType (Arg1, Arg2, ..., Arg<em>N</em>)</em>
-	   <b>typename</b> Policy    = empty_function_policy, <em>// Deprecated</em>
-	   <b>typename</b> Mixin     = empty_function_mixin, <em>// Deprecated</em>
-	   <b>typename</b> Allocator = std::allocator&lt;function_base&gt; &gt;
-  <b>class</b> <a href="#function">function</a> : <b>public</b> <a href="#functionN">function<i>N</i></a>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>&gt;
+	   <b>typename</b> Allocator = std::allocator&lt;<b>void</b>&gt; &gt;
+  <b>class</b> <a href="#function">function</a> : <b>public</b> <a href="#functionN">function<i>N</i></a>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Allocator&gt;
   {
     <i>// Construction</i>
     function();
     function(<b>const</b> function<b>&amp;</b>);
-    function(<b>const</b> function<i>N</i>&lt;ResultType, Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
+    function(<b>const</b> function<i>N</i>&lt;ResultType, Arg1, Arg2, ..., Arg<i>N</i>, Allocator&gt;<b>&amp;</b>);
     <b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(F);
     
     <i>// Assignment</i>
     function<b>&amp;</b> <b>operator</b>=(<b>const</b> function<b>&amp;</b>);
-    function<b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i>&lt;ResultType, Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>);
+    function<b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i>&lt;ResultType, Arg1, Arg2, ..., Arg<i>N</i>, Allocator&gt;<b>&amp;</b>);
     <b>template</b>&lt;<b>typename</b> F&gt; function<b>&amp;</b> <b>operator</b>=(F);
-    <b>void</b> set(<b>const</b> function<b>&amp;</b>); <em>// Deprecated</em>
-    <b>void</b> set(<b>const</b> function<i>N</i>&lt;ResultType, Arg1, Arg2, ..., Arg<i>N</i>&gt;<b>&amp;</b>); <em>// Deprecated</em>
-    <b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(F); <em>// Deprecated</em>
   };
 
-  <b>template</b>&lt;<b>typename</b> Signature, <b>typename</b> Policy, <b>typename</b> Mixin, <b>typename</b> Allocator&gt;
-  <b>void</b> <a href="#swap_function">swap</a>(function&lt;Signature, Policy, Mixin, Allocator&gt;<b>&amp;</b>,
-            function&lt;Signature, Policy, Mixin, Allocator&gt;<b>&amp;</b>);
+  <b>template</b>&lt;<b>typename</b> Signature, <b>typename</b> Allocator&gt;
+  <b>void</b> <a href="#swap_function">swap</a>(function&lt;Signature, Allocator&gt;<b>&amp;</b>,
+            function&lt;Signature, Allocator&gt;<b>&amp;</b>);
 }	   
 </pre>
 
@@ -141,7 +130,7 @@
 
 <h2><a name="function_base">Class <code>function_base</code></a></h2>
 <p> Class <code>function_base</code> is the common base class for all Boost.Function objects. Objects of type <code>function_base</code> may not be created directly. 
-
+<p> <font color=red>Note: the use of this class by users is deprecated. This class will become an implementation detail in the future.</font>
 <p> <a name="empty"><code><b>bool</b> empty() <b>const</b></code></a>
 <ul>
   <li><b>Returns</b>: <code>true</code> if the function object has a target, <code>false</code> otherwise.</li>
@@ -151,40 +140,37 @@
 <h2><a name="functionN">Class template <code>function<i>N</i></code></a></h2>
 <p> Class template <code>function<i>N</i></code> is actually a family of related classes <code>function0</code>, <code>function1</code>, etc., up to some implementation-defined maximum. In this context, <code><i>N</i></code> refers to the number of parameters and <code>f</code> refers to the implicit object parameter.
 
-<p> <a name="functionN_default"><code><b>explicit</b> function<i>N</i>(<b>const</b> Mixin<b>&amp;</b> = Mixin());</code></a>
+<p> <a name="functionN_default"><code><b>explicit</b> function<i>N</i>();</code></a>
 <ul>
-  <li><b>Effects</b>: Constructs the <code>Mixin</code> subobject with the given mixin.</li>
   <li><b>Postconditions</b>: <code>f.<a href="#empty">empty</a>()</code>.</li>
-  <li><b>Throws</b>: will not throw unless construction of the <code>Mixin</code> subobject throws.</li>
+  <li><b>Throws</b>: will not throw.</li>
 </ul>
 
 <p> <a name="functionN_copy"><code>function<i>N</i>(<b>const</b> function<i>N</i><b>&amp;</b> g);</code></a>
 <ul>
-  <li><b>Postconditions</b>: <code>f</code> contains a copy of the <code>g</code>'s target, if it has one, or is empty if <code>g.<a href="#empty">empty</a>()</code>. The mixin for the <code>f</code> is copy-constructed from the mixin of <code>g</code>.</li>
-  <li><b>Throws</b>: will not throw unless copying the target of <code>g</code> or construction of the <code>Mixin</code> subobject throws.</li>
+  <li><b>Postconditions</b>: <code>f</code> contains a copy of the <code>g</code>'s target, if it has one, or is empty if <code>g.<a href="#empty">empty</a>()</code>. </li>
+  <li><b>Throws</b>: will not throw unless copying the target of <code>g</code> throws.</li>
 </ul>
 
-<p> <a name="functionN_target"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(F g, <b>const</b> Mixin<b>&amp;</b> = Mixin());</code></a>
+<p> <a name="functionN_target"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(F g);</code></a>
 <ul>
   <li><b>Requires</b>: <code>g</code> is a <a href="#compatible">compatible</a> function object.</li>
-  <li><b>Effects</b>: Constructs the <code>Mixin</code> subobject from the given mixin.</li>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code> if <code>g</code> is nonempty, or <code>f.<a href="#empty">empty</a>()</code> if <code>g</code> is empty.</li>
-  <li><b>Throws</b>: will not throw when <code>g</code> is a <a href="#stateless">stateless</a> function object unless construction of the <code>Mixin</code> subobject throws.</li>
+  <li><b>Throws</b>: will not throw when <code>g</code> is <a href="#stateless">stateless</a>; otherwise, may throw when a copy of <code>g</code> is made.</li>
 </ul>
 
 <p> <a name="functionN_target_ref"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<a href="../../bind/ref.html">reference_wrapper</a>&lt;F&gt; g);</code></a>
 <ul>
   <li><b>Requires</b>: <code>g.get()</code> is a <a href="#compatible">compatible</a> function object.</li>
-  <li><b>Effects</b>: Constructs the <code>Mixin</code> subobject from the given mixin.</li>
   <li><b>Postconditions</b>: <code>this</code> object targets <code>g</code> (<em>not</em> a copy of <code>g.get()</code>) if <code>g.get()</code> is nonempty, or <code>this-&gt;empty()</code> if <code>g.get()</code> is empty.</li>
-  <li><b>Throws</b>: will not throw unless the construction of the <code>Mixin</code> subobject throws.</li>
+  <li><b>Throws</b>: will not throw.</li>
 </ul>
 
 <p> <a name="functionN_copy_assn"><code>function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i><b>&amp;</b> g);</code></a>
 <ul>
-  <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code>'s target, if it has one, or is empty if <code>g.<a href="#empty">empty</a>()</code>. The mixin for <code>f</code> is assigned the value of the mixin for <code>g</code>.</li>
+  <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code>'s target, if it has one, or is empty if <code>g.<a href="#empty">empty</a>()</code>. </li>
   <li><b>Returns</b>: <code>*this</code>.</li>
-  <li><b>Throws</b>: will not throw when the target of <code>g</code> is a <a href="#stateless">stateless</a> function object or a reference to the function object, unless the copy of the <code>Mixin</code> subobject throws.</li>
+  <li><b>Throws</b>: will not throw when the target of <code>g</code> is a <a href="#stateless">stateless</a> function object or a reference to the function object.</li>
 </ul>
 
 <p> <a name="functionN_target_assn"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(F g);</code></a>
@@ -203,21 +189,9 @@
   <li><b>Throws</b>: will throw only if the destruction or deallocation of the target of <code>this</code> throws.</li>
 </ul>
 
-<p> <a name="functionN_copy_set"><code><b>void</b> set(<b>const</b> function<i>N</i><b>&amp;</b> g);</code></a>
-<ul>
-  <li><b>Effects</b>: <code><a href="#functionN_copy_assn">*this = g</a></code>.</li>
-  <li><b>Note</b>: This function is deprecated and will be removed in future versions of Boost.Function. Please use the assignment operator instead.</li>
-</ul>
-
-<p> <a name="functionN_target_set"><code><b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(F g);</code></a>
-<ul>
-  <li><b>Effects</b>: <code><a href="#functionN_target_assn">*this = g</a></code>.</li>
-  <li><b>Note</b>: This function is deprecated and will be removed in future versions of Boost.Function. Please use the assignment operator instead.</li>
-</ul>
-
 <p> <a name="functionN_swap"><code><b>void</b> swap(function<i>N</i><b>&amp;</b> g);</code></a>
 <ul>
-  <li><b>Effects</b>: interchanges the targets of <code>f</code> and <code>g</code> and swaps the mixins of <code>f</code> and <code>g</code>.</li>
+  <li><b>Effects</b>: interchanges the targets of <code>f</code> and <code>g</code>. </li>
   <li><b>Throws</b>: will not throw.</li>
 </ul>
 
@@ -267,11 +241,9 @@
 	 <b>typename</b> Arg2,
          <i>...</i>
 	 <b>typename</b> Arg<i>N</i>,
-         <b>typename</b> Policy, <em>// Deprecated</em>
-         <b>typename</b> Mixin, <em>// Deprecated</em>
          <b>typename</b> Allocator&gt;
-<b>void</b> <a name="swap_functionN">swap</a>(function<i>N</i>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b> f,
-          function<i>N</i>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b> g);
+<b>void</b> <a name="swap_functionN">swap</a>(function<i>N</i>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Allocator&gt;<b>&amp;</b> f,
+          function<i>N</i>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Allocator&gt;<b>&amp;</b> g);
 </pre>
 <ul>
   <li><b>Effects</b>: <code>f.<a href="#functionN_swap">swap</a>(g);</code></li>
@@ -279,9 +251,9 @@
 
 <p>
 <pre>
-<b>template</b>&lt;<b>typename</b> Signature, <b>typename</b> Policy, <b>typename</b> Mixin, <b>typename</b> Allocator&gt;
-<b>void</b> <a name="swap_function">swap</a>(function&lt;Signature, Policy, Mixin, Allocator&gt;<b>&amp;</b> f,
-          function&lt;Signature, Policy, Mixin, Allocator&gt;<b>&amp;</b> g);
+<b>template</b>&lt;<b>typename</b> Signature, <b>typename</b> Allocator&gt;
+<b>void</b> <a name="swap_function">swap</a>(function&lt;Signature, Allocator&gt;<b>&amp;</b> f,
+          function&lt;Signature, Allocator&gt;<b>&amp;</b> g);
 </pre>
 <ul>
   <li><b>Effects</b>: <code>f.<a href="#functionN_swap">swap</a>(g);</code></li>

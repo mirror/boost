@@ -481,7 +481,7 @@ test_zero_args()
   // Const vs. non-const
   write_const_1_nonconst_2 one_or_two;
   const function0<void> v7(one_or_two);
-  function <void> v8(one_or_two);
+  function0<void> v8(one_or_two);
 
   global_int = 0;
   v7();
