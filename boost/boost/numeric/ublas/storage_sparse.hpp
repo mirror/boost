@@ -555,6 +555,16 @@ namespace boost { namespace numeric { namespace ublas {
             m.reserve (capacity);
         }
 
+        template<class M>
+        BOOST_UBLAS_INLINE
+        typename M::size_type map_capacity (M &m) {
+            return m.size ();
+        }
+        template<class I, class T, class ALLOC>
+        BOOST_UBLAS_INLINE
+        typename map_array<I, T, ALLOC>::size_type map_capacity (map_array<I, T, ALLOC> &m) {
+            m.capacity ();
+        }
     }
 
     // This specialization is missing in Dinkumware's STL?!
