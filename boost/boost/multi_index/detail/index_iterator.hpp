@@ -9,6 +9,10 @@
 #ifndef BOOST_MULTI_INDEX_DETAIL_INDEX_ITERATOR_HPP
 #define BOOST_MULTI_INDEX_DETAIL_INDEX_ITERATOR_HPP
 
+#if defined(_MSC_VER)&&(_MSC_VER>=1200)
+#pragma once
+#endif
+
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/detail/workaround.hpp>
 #include <boost/multi_index/detail/index_iterator_fwd.hpp>
@@ -149,14 +153,14 @@ private:
   {
     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(*this);
     node_base_type* bnode=node;
-    ar<<serialization::make_nvp("position",bnode);
+    ar<<serialization::make_nvp("pointer",bnode);
   }
 
   template<class Archive>
   void load(Archive& ar,const unsigned int version)
   {
     node_base_type* bnode;
-    ar>>serialization::make_nvp("position",bnode);
+    ar>>serialization::make_nvp("pointer",bnode);
     node=static_cast<Node*>(bnode);
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
