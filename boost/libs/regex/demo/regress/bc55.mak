@@ -47,80 +47,87 @@ all :: r1.exe r2.exe r3.exe r4.exe r5.exe r6.exe r1m.exe r2m.exe r3m.exe r4m.exe
 	r6lm tests.txt
 
 
-r1.exe : r1.cpp
-	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) r1.cpp
+r1.exe : tests.cpp regress.cpp parse.cpp
+	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er1.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp regress.cpp parse.cpp
 
-r2.exe : r2.cpp
-	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) r2.cpp
+r2.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er2.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp
 
-r3.exe : r3.cpp
-	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) r3.cpp
+r3.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er3.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp
 
-r4.exe : r4.cpp
-	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) r4.cpp
+r4.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er4.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
 
-r5.exe : r5.cpp
-	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) r5.cpp
+r5.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er5.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
 
-r6.exe : r6.cpp
-	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) r6.cpp
+r6.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM- -D_NO_VCL $(CFLAGS) -er6.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
 	
 
-r1m.exe : r1.cpp
-	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er1m.exe r1.cpp
+r1m.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er1m.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp parse.cpp regress.cpp
 
-r2m.exe : r2.cpp
-	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er2m.exe r2.cpp
+r2m.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er2m.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp
 
-r3m.exe : r3.cpp
-	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er3m.exe r3.cpp
+r3m.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er3m.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp
 
-r4m.exe : r4.cpp
-	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er4m.exe r4.cpp
+r4m.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er4m.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
 
-r5m.exe : r5.cpp
-	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er5m.exe r5.cpp
+r5m.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er5m.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
 
-r6m.exe : r6.cpp
-	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er6m.exe r6.cpp
-
-
-r1l.exe : r1.cpp
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er1l.exe r1.cpp
-
-r2l.exe : r2.cpp
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er2l.exe r2.cpp
-
-r3l.exe : r3.cpp
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er3l.exe r3.cpp
-
-r4l.exe : r4.cpp
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er4l.exe r4.cpp
-
-r5l.exe : r5.cpp
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er5l.exe r5.cpp
-
-r6l.exe : r6.cpp
-	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er6l.exe r6.cpp
+r6m.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM -D_NO_VCL $(CFLAGS) -er6m.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
 
 
-r1lm.exe : r1.cpp
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er1lm.exe r1.cpp
+r1l.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er1l.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp parse.cpp regress.cpp
 
-r2lm.exe : r2.cpp
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er2lm.exe r2.cpp
+r2l.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er2l.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp
 
-r3lm.exe : r3.cpp
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er3lm.exe r3.cpp
+r3l.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er3l.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp
 
-r4lm.exe : r4.cpp
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er4lm.exe r4.cpp
+r4l.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er4l.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
 
-r5lm.exe : r5.cpp
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er5lm.exe r5.cpp
+r5l.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er5l.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
 
-r6lm.exe : r6.cpp
-	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er6lm.exe r6.cpp
+r6l.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM- -tWR -D_NO_VCL $(CFLAGS) -er6l.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
+
+
+r1lm.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er1lm.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp parse.cpp regress.cpp
+
+r2lm.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er2lm.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp
+
+r3lm.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er3lm.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp
+
+r4lm.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er4lm.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
+
+r5lm.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er5lm.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
+
+r6lm.exe : tests.cpp parse.cpp regress.cpp
+	$(BCC32) -tWM -tWR -D_NO_VCL $(CFLAGS) -er6lm.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp
+
+
+
+
+
+
+
 
 
 

@@ -13,15 +13,16 @@ all: r2 r5
 %.o : %.cpp 
 	$(CXX) -c -o $@ $(CPP_FLAGS) $<
 
-r2 : r2.o
-	$(CXX) -o $@  $(CPP_FLAGS) r2.o -L../../lib -lregex++
+r2 : tests.cpp parse.cpp regress.cpp
+	$(CXX) -o $@  $(CPP_FLAGS) tests.cpp parse.cpp regress.cpp -L../../lib -lregex++
 
-r5 : r5.o
-	$(CXX) -o $@  $(CPP_FLAGS) r5.o -L../../lib -lregex++
+r5 : tests.cpp parse.cpp regress.cpp
+	$(CXX) -o $@  $(CPP_FLAGS) -DTEST_UNICODE tests.cpp parse.cpp regress.cpp -L../../lib -lregex++
 
 clean:
 	rm -rf SunWS_cache
 	rm -f r2.o r2 r5 r5.o
+
 
 
 

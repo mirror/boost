@@ -40,86 +40,79 @@ all :: r1m.exe r2m.exe r3m.exe r4m.exe r5m.exe r6m.exe r1l.exe r2l.exe r3l.exe r
 	r6lmd tests.txt
 
 
-r1m.exe : r1.cpp
-	cl /MT /D_MT -o r1m.exe $(CFLAGS) r1.cpp $(LFLAGS)
+r1m.exe : tests.cpp parse.cpp regress.cpp
+	cl /MT /D_MT -o r1m.exe $(CFLAGS) -DBOOST_RE_TEST_LOCALE_W32 tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
-r2m.exe : r2.cpp
-	cl /MT /D_MT $(CFLAGS) -o r2m.exe r2.cpp $(LFLAGS)
+r2m.exe : tests.cpp parse.cpp regress.cpp
+	cl /MT /D_MT $(CFLAGS) -o r2m.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
-r3m.exe : r3.cpp
-	cl /MT /D_MT $(CFLAGS) -o r3m.exe r3.cpp $(LFLAGS)
+r3m.exe : tests.cpp parse.cpp regress.cpp
+	cl /MT /D_MT $(CFLAGS) -o r3m.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
-r4m.exe : r4.cpp
-	cl /MT /D_MT $(CFLAGS) -o r4m.exe r4.cpp $(LFLAGS)
+r4m.exe : tests.cpp parse.cpp regress.cpp
+	cl /MT /D_MT $(CFLAGS) -o r4m.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
-r5m.exe : r5.cpp
-	cl /MT /D_MT $(CFLAGS) -o r5m.exe r5.cpp $(LFLAGS)
+r5m.exe : tests.cpp parse.cpp regress.cpp
+	cl /MT /D_MT $(CFLAGS) -o r5m.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
-r6m.exe : r6.cpp
-	cl /MT /D_MT $(CFLAGS) -o r6m.exe r6.cpp $(LFLAGS)
-
-
-r1l.exe : r1.cpp
-	cl /MD /D_MT /D_DLL $(CFLAGS) -o r1l.exe r1.cpp $(LFLAGS)
-
-r2l.exe : r2.cpp
-	cl /MD /D_MT /D_DLL $(CFLAGS) -o r2l.exe r2.cpp $(LFLAGS)
-
-r3l.exe : r3.cpp
-	cl /MD /D_MT /D_DLL $(CFLAGS) -o r3l.exe r3.cpp $(LFLAGS)
-
-r4l.exe : r4.cpp
-	cl /MD /D_MT /D_DLL $(CFLAGS) -o r4l.exe r4.cpp $(LFLAGS)
-
-r5l.exe : r5.cpp
-	cl /MD /D_MT /D_DLL $(CFLAGS) -o r5l.exe r5.cpp $(LFLAGS)
-
-r6l.exe : r6.cpp
-	cl /MD /D_MT /D_DLL $(CFLAGS) -o r6l.exe r6.cpp $(LFLAGS)
+r6m.exe : tests.cpp parse.cpp regress.cpp
+	cl /MT /D_MT $(CFLAGS) -o r6m.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
 
-r1md.exe : r1.cpp
-	cl /MTd /D_MT /D_DEBUG $(CFLAGS) -o r1md.exe r1.cpp $(LFLAGS)
+r1l.exe : tests.cpp parse.cpp regress.cpp
+	cl /MD /D_MT /D_DLL $(CFLAGS) -o r1l.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
-r2md.exe : r2.cpp
-	cl /MTd /D_MT /D_DEBUG $(CFLAGS) -o r2md.exe r2.cpp $(LFLAGS)
+r2l.exe : tests.cpp parse.cpp regress.cpp
+	cl /MD /D_MT /D_DLL $(CFLAGS) -o r2l.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
-r3md.exe : r3.cpp
-	cl /MTd /D_MT /D_DEBUG $(CFLAGS) -o r3md.exe r3.cpp $(LFLAGS)
+r3l.exe : tests.cpp parse.cpp regress.cpp
+	cl /MD /D_MT /D_DLL $(CFLAGS) -o r3l.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
-r4md.exe : r4.cpp
-	cl /MTd /D_MT /D_DEBUG $(CFLAGS) -o r4md.exe r4.cpp $(LFLAGS)
+r4l.exe : tests.cpp parse.cpp regress.cpp
+	cl /MD /D_MT /D_DLL $(CFLAGS) -o r4l.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
-r5md.exe : r5.cpp
-	cl /MTd /D_MT /D_DEBUG $(CFLAGS) -o r5md.exe r5.cpp $(LFLAGS)
+r5l.exe : tests.cpp parse.cpp regress.cpp
+	cl /MD /D_MT /D_DLL $(CFLAGS) -o r5l.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
-r6md.exe : r6.cpp
-	cl /MTd /D_MT /D_DEBUG $(CFLAGS) -o r6md.exe r6.cpp $(LFLAGS)
-
-
-r1lmd.exe : r1.cpp
-	cl /MDd /D_MT /D_DLL /D_DEBUG $(CFLAGS) -o r1lmd.exe r1.cpp $(LFLAGS)
-
-r2lmd.exe : r2.cpp
-	cl /MDd /D_MT /D_DLL /D_DEBUG $(CFLAGS) -o r2lmd.exe r2.cpp $(LFLAGS)
-
-r3lmd.exe : r3.cpp
-	cl /MDd /D_MT /D_DLL /D_DEBUG $(CFLAGS) -o r3lmd.exe r3.cpp $(LFLAGS)
-
-r4lmd.exe : r4.cpp
-	cl /MDd /D_MT /D_DLL /D_DEBUG $(CFLAGS) -o r4lmd.exe r4.cpp $(LFLAGS)
-
-r5lmd.exe : r5.cpp
-	cl /MDd /D_MT /D_DLL /D_DEBUG $(CFLAGS) -o r5lmd.exe r5.cpp $(LFLAGS)
-
-r6lmd.exe : r6.cpp
-	cl /MDd /D_MT /D_DLL /D_DEBUG $(CFLAGS) -o r6lmd.exe r6.cpp $(LFLAGS)
+r6l.exe : tests.cpp parse.cpp regress.cpp
+	cl /MD /D_MT /D_DLL $(CFLAGS) -o r6l.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
 
+r1md.exe : tests.cpp parse.cpp regress.cpp
+	cl /MTd /D_MT $(CFLAGS) -o r1md.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+r2md.exe : tests.cpp parse.cpp regress.cpp
+	cl /MTd /D_MT $(CFLAGS) -o r2md.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+r3md.exe : tests.cpp parse.cpp regress.cpp
+	cl /MTd /D_MT $(CFLAGS) -o r3md.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+r4md.exe : tests.cpp parse.cpp regress.cpp
+	cl /MTd /D_MT $(CFLAGS) -o r4md.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+r5md.exe : tests.cpp parse.cpp regress.cpp
+	cl /MTd /D_MT $(CFLAGS) -o r5md.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+r6md.exe : tests.cpp parse.cpp regress.cpp
+	cl /MTd /D_MT $(CFLAGS) -o r6md.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
 
+r1lmd.exe : tests.cpp parse.cpp regress.cpp
+	cl /MDd /D_MT /D_DLL $(CFLAGS) -o r1lmd.exe -DBOOST_RE_TEST_LOCALE_W32 tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
+r2lmd.exe : tests.cpp parse.cpp regress.cpp
+	cl /MDd /D_MT /D_DLL $(CFLAGS) -o r2lmd.exe -DBOOST_RE_TEST_LOCALE_C tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
+r3lmd.exe : tests.cpp parse.cpp regress.cpp
+	cl /MDd /D_MT /D_DLL $(CFLAGS) -o r3lmd.exe -DBOOST_RE_TEST_LOCALE_CPP tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
+r4lmd.exe : tests.cpp parse.cpp regress.cpp
+	cl /MDd /D_MT /D_DLL $(CFLAGS) -o r4lmd.exe -DBOOST_RE_TEST_LOCALE_W32 -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+r5lmd.exe : tests.cpp parse.cpp regress.cpp
+	cl /MDd /D_MT /D_DLL $(CFLAGS) -o r5lmd.exe -DBOOST_RE_TEST_LOCALE_C -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
+r6lmd.exe : tests.cpp parse.cpp regress.cpp
+	cl /MDd /D_MT /D_DLL $(CFLAGS) -o r6lmd.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
 
 
