@@ -72,7 +72,7 @@ namespace BOOST_SIGNALS_NAMESPACE {
       }
 
       template<typename T>
-      void operator()(const T& t) const
+      void operator()(T& t) const
       {
         decode(t, 0);
       }
@@ -96,8 +96,8 @@ namespace BOOST_SIGNALS_NAMESPACE {
       template<typename T>
       void maybe_get_pointer(T& t, truth<true>) const
       {
-        //        add_if_trackable(t);
-        maybe_get_pointer(*t, truth<false>());
+        if (t)
+          maybe_get_pointer(*t, truth<false>());
       }
 
       template<typename T>
@@ -112,9 +112,7 @@ namespace BOOST_SIGNALS_NAMESPACE {
       // add_if_trackable() adds trackable objects to the list of bound objects
       inline void add_if_trackable(const trackable* b, truth<true>) const
       {
-        if (b) {
-          bound_objects.push_back(b);
-        }
+        bound_objects.push_back(b);
       }
 
       template<typename T>
