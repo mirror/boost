@@ -1,6 +1,6 @@
 /* Boost.MultiIndex example of use of sequenced indices.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +14,6 @@
 #endif
 
 #include <boost/multi_index_container.hpp>
-#include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
