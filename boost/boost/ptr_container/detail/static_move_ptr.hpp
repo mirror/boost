@@ -184,6 +184,12 @@ private:
         }   
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300 )
+
+    template<typename Ptr> 
+    static_move_ptr(Ptr&);
+    
+#else // BOOST_WORKAROUND(BOOST_MSVC, <= 1300 )
+
     template<typename Ptr> struct cant_move_from_const;
 
     template<typename TT, typename DD> 
@@ -193,9 +199,7 @@ private:
 
     template<typename Ptr> 
     static_move_ptr(Ptr&, typename cant_move_from_const<Ptr>::type = 0);
-#else // BOOST_WORKAROUND(BOOST_MSVC, <= 1300 )
-    template<typename Ptr> 
-    static_move_ptr(Ptr&);
+
 #endif
 
     static_move_ptr(static_move_ptr&);
