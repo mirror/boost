@@ -244,7 +244,7 @@ int test_main(int, char * [])
             test_is_nonzero(boost::make_shared(wp2));
         }
 
-        weak_ptr<Y> wp3 = shared_dynamic_cast<Y>(wp2);
+		weak_ptr<Y> wp3 = shared_dynamic_cast<Y>(boost::make_shared(wp2));
 
         BOOST_TEST(wp3.use_count() == 1);
         BOOST_TEST(wp3.get() != 0);
