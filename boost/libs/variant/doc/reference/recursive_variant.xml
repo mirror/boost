@@ -9,7 +9,7 @@
     </typedef>
 
     <class name="make_recursive_variant">
-      <purpose>TODO</purpose>
+      <purpose>Simplifies declaration of recursive <code>variant</code> types.</purpose>
 
       <template>
         <template-type-parameter name="T1"/>
@@ -42,7 +42,7 @@
               <code>substitute(X) &amp;</code>;</listitem>
             <listitem>Else if <code>T<emphasis>i</emphasis></code> is of the
               form <code>R (*)( X1, X2, ..., XN )</code> then:
-              <code>substitute(R) (*)( &lt; substitute(X1), substitute(X2), ..., substitute(XN) )</code>;</listitem>
+              <code>substitute(R) (*)( substitute(X1), substitute(X2), ..., substitute(XN) )</code>;</listitem>
             <listitem>Else if <code>T<emphasis>i</emphasis></code> is of the
               form <code>F &lt; X1, X2, ..., XN &gt;</code> then:
               <code>F&lt; substitute(X1), substitute(X2), ..., substitute(XN) &gt;</code>;</listitem>
@@ -84,8 +84,6 @@
 
       <typedef name="type">
         <type>variant&lt; <emphasis>unspecified</emphasis> &gt;</type>
-
-        <description>TODO</description>
       </typedef>
 
       <description>
