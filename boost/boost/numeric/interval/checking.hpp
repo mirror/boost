@@ -60,12 +60,12 @@ struct checking_base
   static T empty_lower()
   {
     return (std::numeric_limits<T>::has_quiet_NaN ?
-            std::numeric_limits<T>::quiet_NaN() : T(1));
+            std::numeric_limits<T>::quiet_NaN() : static_cast<T>(1));
   }
   static T empty_upper()
   {
     return (std::numeric_limits<T>::has_quiet_NaN ?
-            std::numeric_limits<T>::quiet_NaN() : T(0));
+            std::numeric_limits<T>::quiet_NaN() : static_cast<T>(0));
   }
   static bool is_empty(const T& l, const T& u)
   {
