@@ -1,13 +1,10 @@
-// (C) 2002, Fernando Luis Cacciola Carballal.
+// Copyright (C) 2003, Fernando Luis Cacciola Carballal.
 //
-// This material is provided "as is", with absolutely no warranty expressed
-// or implied. Any use is at your own risk.
+// Use, modification, and distribution is subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 //
-// Permission to use or copy this software for any purpose is hereby granted
-// without fee, provided the above notices are retained on all copies.
-// Permission to modify the code and to distribute modified code is granted,
-// provided the above notices are retained, and a notice that the code was
-// modified is included with the above copyright notice.
+// See http://www.boost.org/lib/optional for documentation.
 //
 // You are welcome to contact the author at:
 //  fernando_cacciola@hotmail.com
@@ -24,7 +21,7 @@ namespace boost {
 
 namespace {
 
-detail::none_t const none = 0 ;
+detail::none_t const none = ((detail::none_t)0) ;
 
 }
 
