@@ -25,6 +25,7 @@ using boost::unit_test_framework::test_suite;
 # include <boost/iostreams/code_converter.hpp>
 # include <boost/iostreams/copy.hpp>
 # include <boost/iostreams/device/back_inserter.hpp>
+# include <boost/iostreams/detail/codecvt_helper.hpp>
 # include <boost/iostreams/device/file.hpp>
 # include <boost/iostreams/device/file_descriptor.hpp>
 # include <boost/iostreams/stream_facade.hpp>
@@ -123,7 +124,6 @@ const int string_length = 100;
 template<typename Codecvt>
 bool valid_char(typename codecvt_intern<Codecvt>::type c)
 {
-    using namespace boost::iostreams::detail;
     typedef typename codecvt_state<Codecvt>::type   state_type;
     typedef typename codecvt_intern<Codecvt>::type  intern_type;
     Codecvt             cvt;
@@ -141,7 +141,7 @@ bool valid_char(typename codecvt_intern<Codecvt>::type c)
 template<typename Codecvt>
 basic_string<
     BOOST_DEDUCED_TYPENAME 
-    boost::iostreams::detail::codecvt_intern<Codecvt>::type
+    codecvt_intern<Codecvt>::type
 > 
 test_string()
 {
