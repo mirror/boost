@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.4: http://docutils.sourceforge.net/" />
 <title>Iterator Facade and Adaptor</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, Zephyr Associates, Inc." />
@@ -11,7 +11,6 @@
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
-<div class="document" id="iterator-facade-and-adaptor">
 <h1 class="title">Iterator Facade and Adaptor</h1>
 <table class="docinfo" frame="void" rules="none">
 <col class="docinfo-name" />
@@ -32,6 +31,7 @@ committee's library working group.</td>
 </tr>
 </tbody>
 </table>
+<div class="document" id="iterator-facade-and-adaptor">
 <!-- Version 1.9 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG. -->
 <table class="field-list" frame="void" rules="none">
@@ -53,7 +53,7 @@ by adapting other iterators.</td>
 </tbody>
 </table>
 <div class="contents topic" id="table-of-contents">
-<p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
+<p class="topic-title first"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
 <li><a class="reference" href="#motivation" id="id15" name="id15">Motivation</a></li>
 <li><a class="reference" href="#impact-on-the-standard" id="id16" name="id16">Impact on the Standard</a></li>
@@ -325,7 +325,7 @@ of the derived iterator type.  These member functions are described
 briefly below and in more detail in the iterator facade
 requirements.</p>
 <blockquote>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="44%" />
 <col width="56%" />
@@ -443,7 +443,6 @@ are described in terms of a set of requirements, which must be
 satisfied by the <tt class="literal"><span class="pre">iterator_facade</span></tt> implementation.</p>
 <table class="citation" frame="void" id="cop95" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
-<col />
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id4" name="cop95">[Cop95]</a></td><td>[Coplien, 1995] Coplien, J., Curiously Recurring Template
 Patterns, C++ Report, February 1995, pp. 24-27.</td></tr>
@@ -776,8 +775,8 @@ object of a single pass iterator type interoperable with <tt class="literal"><sp
 is a constant object of a random access traversal iterator type
 interoperable with <tt class="literal"><span class="pre">X</span></tt>.</p>
 <a class="target" id="core-operations" name="core-operations"></a><div class="topic">
-<p class="topic-title"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</p>
-<table border class="table">
+<p class="topic-title first"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</p>
+<table border="1" class="table">
 <colgroup>
 <col width="21%" />
 <col width="23%" />
@@ -1774,7 +1773,7 @@ type <tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::refe
 traversal and iterator access concepts modeled by its <tt class="literal"><span class="pre">Iterator</span></tt>
 argument.  In addition, it may model old iterator concepts
 specified in the following table:</p>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="53%" />
 <col width="47%" />
@@ -1981,7 +1980,7 @@ concept that is modeled by the <tt class="literal"><span class="pre">Iterator</s
 <p>If <tt class="literal"><span class="pre">transform_iterator</span></tt> is a model of Readable Lvalue Iterator then
 it models the following original iterator concepts depending on what
 the <tt class="literal"><span class="pre">Iterator</span></tt> argument models.</p>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="47%" />
 <col width="53%" />
@@ -2038,17 +2037,20 @@ initialized to <tt class="literal"><span class="pre">f</span></tt> and <tt class
 </tbody>
 </table>
 <pre class="literal-block">
-template&lt;class OtherIterator, class R2, class V2&gt;
+template&lt;class F2, class I2, class R2, class V2&gt;
 transform_iterator(
-      transform_iterator&lt;UnaryFunction, OtherIterator, R2, V2&gt; const&amp; t
-    , typename enable_if_convertible&lt;OtherIterator, Iterator&gt;::type* = 0 // exposition
+      transform_iterator&lt;F2, I2, R2, V2&gt; const&amp; t
+    , typename enable_if_convertible&lt;I2, Iterator&gt;::type* = 0      // exposition only
+    , typename enable_if_convertible&lt;F2, UnaryFunction&gt;::type* = 0 // exposition only
 );
 </pre>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">transform_iterator</span></tt> that is a copy of <tt class="literal"><span class="pre">t</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">transform_iterator</span></tt> with <tt class="literal"><span class="pre">m_f</span></tt>
+initialized to <tt class="literal"><span class="pre">t.functor()</span></tt> and <tt class="literal"><span class="pre">m_iterator</span></tt> initialized to
+<tt class="literal"><span class="pre">t.base()</span></tt>.</td>
 </tr>
 <tr class="field"><th class="field-name">Requires:</th><td class="field-body"><tt class="literal"><span class="pre">OtherIterator</span></tt> is implicitly convertible to <tt class="literal"><span class="pre">Iterator</span></tt>.</td>
 </tr>
@@ -2174,7 +2176,7 @@ the expression <tt class="literal"><span class="pre">p(x)</span></tt> must be va
 <p>The concepts that <tt class="literal"><span class="pre">filter_iterator</span></tt> models are dependent on which
 concepts the <tt class="literal"><span class="pre">Iterator</span></tt> argument models, as specified in the
 following tables.</p>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="33%" />
 <col width="67%" />
@@ -2193,7 +2195,7 @@ following tables.</p>
 </tr>
 </tbody>
 </table>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="41%" />
 <col width="59%" />
@@ -2215,7 +2217,7 @@ following tables.</p>
 </tr>
 </tbody>
 </table>
-<table border class="table">
+<table border="1" class="table">
 <colgroup>
 <col width="63%" />
 <col width="38%" />

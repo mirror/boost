@@ -138,8 +138,8 @@ operations.
     );
 
 :Returns: An instance of ``transform_iterator`` with ``m_f``
-initialized to ``t.functor()`` and ``m_iterator`` initialized to
-``t.base()``.
+  initialized to ``t.functor()`` and ``m_iterator`` initialized to
+  ``t.base()``.
 :Requires: ``OtherIterator`` is implicitly convertible to ``Iterator``.
 
 
