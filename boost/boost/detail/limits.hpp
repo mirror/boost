@@ -35,7 +35,7 @@
 #include <cfloat>
 #include <boost/config.hpp>
 
-#if defined(__sparc) || defined(__sparc__) || defined(__powerpc__)
+#if defined(__sparc) || defined(__sparc__) || defined(__powerpc__) || defined(__hppa)
 #define BOOST_BIG_ENDIAN
 #elif !defined(__i386__)
 #error The file boost/detail/limits.hpp needs to be set up for your CPU type.
