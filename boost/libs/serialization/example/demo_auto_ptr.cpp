@@ -26,8 +26,15 @@ namespace std{
 
 #include <boost/serialization/split_free.hpp>
 
-namespace boost {
-namespace serialization {
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+namespace boost { namespace serialization {
+#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+namespace _STLP_STD {
+#else
+namespace std {
+#endif
 
 /////////////////////////////////////////////////////////////
 // implement serialization for auto_ptr<T>
@@ -69,11 +76,17 @@ inline void serialize(
     std::auto_ptr<T> &t,
     const unsigned int file_version
 ){
-    split_free(ar, t, file_version);
+    boost::serialization::split_free(ar, t, file_version);
 }
 
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 } // namespace serialization
 } // namespace boost
+#else
+} // namespace std
+#endif
 
 /////////////////////////////////////////////////////////////
 // test auto_ptr serialization
