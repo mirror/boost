@@ -15,13 +15,41 @@
 <hr>
 <a href="index.html">Overall Index</a>
 <p>
-<h3>Changes from Boost 1.30 to 1.31 (date_time 1.01 to 1.02-prerel)</h3>
+<h3>Changes from Boost 1.30 to 1.31 (date_time 1.01 to 1.02)</h3>
     <p class="bold">
     <table>
         <tr class="row_title"><td>Type</td><td>Description</td></tr>
+	<tr class="content">
+           <td class="nowrap">Bug Fix</td>
+           <td>Time_duration from_string is now correctly constructed 
+	      from a negative value. (ie "-0:39:00.000")
+	      Code provided by Bart Garst.
+          </td>
+        </tr>
+	<tr class="content">
+           <td class="nowrap">Bug Fix</td>
+           <td>Fixed many MSVC compiler warnings when compiled with 
+	       warning level 4.
+          </td>
+        </tr>
+	<tr class="content">
+           <td class="nowrap">Feature</td>
+           <td>Added prefix decrement operator (--) for date and time iterators.
+               See <a href="time_iterators.html">Time Iterators</a>
+               and <a href="date_iterators.html">Date Iterators</a>
+               for more details.
+	       Code provided by Bart Garst.
+          </td>
+        </tr>
+	<tr class="content">
+           <td class="nowrap">Feature</td>
+           <td>Special_values functionality added for date_duration,
+	       time_duration and time classes.  Code provided by Bart Garst.
+          </td>
+        </tr>
         <tr class="content">
            <td class="nowrap">Bug Fix</td>
-           <td>Fixed time_duration_traits calculation bug which was 
+           <td>Fixed time_duration_traits calculation bug which was
                causing time duration to be limited to 32bit range even
                when 64 bits were available.  Thanks to Joe de Guzman
                for tracking this down.
@@ -50,7 +78,7 @@
         </tr>
         <tr class="content">
            <td class="nowrap">Feature</td>
-           <td>Added a merge_inclusive function to periods. See
+           <td>Added a span function for combining periods. See
                <a href="class_date_period.html">date period</a> and
                <a href="class_time_period.html">time period</a> docs.
 
@@ -60,6 +88,12 @@
            <td class="nowrap">Feature</td>
            <td>Added a function to time_duration to get the total number
                of seconds in a duration truncating any fractional seconds.
+               In addition, other resolutions were added to allow for
+               easy conversions.  For example<br>
+               seconds(1).total_milliseconds() == 1000<br>
+               seconds(1).total_microseconds() == 1000000<br>
+               hours(1).total_milliseconds() == 3600*1000 //3600 sec/hour<br>
+               seconds(1).total_nanoseconds() == 1000000000<br>
           </td>
         </tr>
         <tr class="content">
@@ -67,6 +101,29 @@
            <td>Added output streaming operators for the 
                <a href="date_algorithms.html">date generator</a>
                 classes - partial_date, first_kday_after, first_kday_before, etc.  Thanks to Bart Garst for this work.
+          </td>
+        <tr class="content">
+           <td class="nowrap">Feature</td>
+           <td>Added unary- operators for durations for reversing the sign
+               of a time duration.  For example: <br>
+               time_duration td(5,0,0); //5 hours<br>
+               td  = -td; //-5 hours<br>
+               Thanks to Bart Garst for this work.
+          </td>
+        </tr>
+        <tr class="content">
+           <td class="nowrap">Feature</td>
+           <td>Added support for parsing strings with 'month names'.
+               Thus creating a date object from string now accepts
+               multiple formats ("2003-10-31","2003-Oct-31", and 
+               "2003-October-31").
+               Thus, date d = from_simple_string("2003-Feb-27") is now
+               allowed.  A bad month name string (
+               from_simple_string("2003-SomeBogusMonthName-27")) will 
+               cause a bad_month exception.
+               On most compilers the string compare is case
+               insensitive.
+               Thanks to Bart Garst for this work.
           </td>
         </tr>
         <tr class="content">
@@ -164,10 +221,11 @@
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sat Aug 16 07:33:39 MST 2003
+Last modified: Sun Nov  2 20:31:55 MST 2003
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
 </body>
 </html>
+
 
