@@ -27,22 +27,31 @@ namespace lambda {
 #error "Multiple defines of BOOST_LAMBDA_BE1"
 #endif
 
+  // For all BOOSTA_LAMBDA_BE* macros:
+
+  // CONSTA must be either 'A' or 'const A'
+  // CONSTB must be either 'B' or 'const B'
+
+  // It is stupid to have the names A and B as macro arguments, but it avoids
+  // the need to pass in emtpy macro arguments, which gives warnings on some
+  // compilers
+
 #define BOOST_LAMBDA_BE1(OPER_NAME, ACTION, CONSTA, CONSTB, CONVERSION)      \
 template<class Arg, class B>                                                 \
 inline const                                                                 \
 lambda_functor<                                                              \
   lambda_functor_base<                                                       \
     ACTION,                                                                  \
-    tuple<lambda_functor<Arg>, typename CONVERSION <CONSTB B>::type>         \
+    tuple<lambda_functor<Arg>, typename CONVERSION <CONSTB>::type>         \
   >                                                                          \
 >                                                                            \
-OPER_NAME (const lambda_functor<Arg>& a, CONSTB B& b) {                      \
+OPER_NAME (const lambda_functor<Arg>& a, CONSTB& b) {                      \
   return                                                                     \
     lambda_functor_base<                                                     \
       ACTION,                                                                \
-      tuple<lambda_functor<Arg>, typename CONVERSION <CONSTB B>::type>       \
+      tuple<lambda_functor<Arg>, typename CONVERSION <CONSTB>::type>       \
     >                                                                        \
-   (tuple<lambda_functor<Arg>, typename CONVERSION <CONSTB B>::type>(a, b)); \
+   (tuple<lambda_functor<Arg>, typename CONVERSION <CONSTB>::type>(a, b)); \
 }
 
 
@@ -56,16 +65,16 @@ inline const                                                                 \
 lambda_functor<                                                              \
   lambda_functor_base<                                                       \
     ACTION,                                                                  \
-    tuple<typename CONVERSION <CONSTA A>::type, lambda_functor<Arg> >        \
+    tuple<typename CONVERSION <CONSTA>::type, lambda_functor<Arg> >        \
   >                                                                          \
 >                                                                            \
-OPER_NAME (CONSTA A& a, const lambda_functor<Arg>& b) {                      \
+OPER_NAME (CONSTA& a, const lambda_functor<Arg>& b) {                      \
   return                                                                     \
     lambda_functor_base<                                                     \
       ACTION,                                                                \
-      tuple<typename CONVERSION <CONSTA A>::type, lambda_functor<Arg> >      \
+      tuple<typename CONVERSION <CONSTA>::type, lambda_functor<Arg> >      \
     >                                                                        \
-  (tuple<typename CONVERSION <CONSTA A>::type, lambda_functor<Arg> >(a, b)); \
+  (tuple<typename CONVERSION <CONSTA>::type, lambda_functor<Arg> >(a, b)); \
 }
 
 
@@ -100,36 +109,37 @@ BOOST_LAMBDA_BE1(OPER_NAME, ACTION, CONSTA, CONSTB, CONST_CONVERSION)        \
 BOOST_LAMBDA_BE2(OPER_NAME, ACTION, CONSTA, CONSTB, CONST_CONVERSION)        \
 BOOST_LAMBDA_BE3(OPER_NAME, ACTION, CONSTA, CONSTB, CONST_CONVERSION)
 
+#define BOOST_LAMBDA_EMPTY() 
 
-BOOST_LAMBDA_BE(operator+, arithmetic_action<plus_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator-, arithmetic_action<minus_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator*, arithmetic_action<multiply_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator/, arithmetic_action<divide_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator%, arithmetic_action<remainder_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator<<, bitwise_action<leftshift_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator>>, bitwise_action<rightshift_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator&, bitwise_action<and_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator|, bitwise_action<or_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator^, bitwise_action<xor_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator&&, logical_action<and_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator||, logical_action<or_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator<, relational_action<less_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator>, relational_action<greater_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator<=, relational_action<lessorequal_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator>=, relational_action<greaterorequal_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator==, relational_action<equal_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE(operator!=, relational_action<notequal_action>, const, const, const_copy_argument)
+BOOST_LAMBDA_BE(operator+, arithmetic_action<plus_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator-, arithmetic_action<minus_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator*, arithmetic_action<multiply_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator/, arithmetic_action<divide_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator%, arithmetic_action<remainder_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator<<, bitwise_action<leftshift_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator>>, bitwise_action<rightshift_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator&, bitwise_action<and_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator|, bitwise_action<or_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator^, bitwise_action<xor_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator&&, logical_action<and_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator||, logical_action<or_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator<, relational_action<less_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator>, relational_action<greater_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator<=, relational_action<lessorequal_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator>=, relational_action<greaterorequal_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator==, relational_action<equal_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE(operator!=, relational_action<notequal_action>, const A, const B, const_copy_argument)
 
-BOOST_LAMBDA_BE(operator+=, arithmetic_assignment_action<plus_action>, , const, reference_argument)
-BOOST_LAMBDA_BE(operator-=, arithmetic_assignment_action<minus_action>, , const, reference_argument)
-BOOST_LAMBDA_BE(operator*=, arithmetic_assignment_action<multiply_action>, , const, reference_argument)
-BOOST_LAMBDA_BE(operator/=, arithmetic_assignment_action<divide_action>, , const, reference_argument)
-BOOST_LAMBDA_BE(operator%=, arithmetic_assignment_action<remainder_action>, , const, reference_argument)
-BOOST_LAMBDA_BE(operator<<=, bitwise_assignment_action<leftshift_action>, , const, reference_argument)
-BOOST_LAMBDA_BE(operator>>=, bitwise_assignment_action<rightshift_action>, , const, reference_argument)
-BOOST_LAMBDA_BE(operator&=, bitwise_assignment_action<and_action>, , const, reference_argument)
-BOOST_LAMBDA_BE(operator|=, bitwise_assignment_action<or_action>, , const, reference_argument)
-BOOST_LAMBDA_BE(operator^=, bitwise_assignment_action<xor_action>, , const, reference_argument)
+BOOST_LAMBDA_BE(operator+=, arithmetic_assignment_action<plus_action>, A, const B, reference_argument)
+BOOST_LAMBDA_BE(operator-=, arithmetic_assignment_action<minus_action>, A, const B, reference_argument)
+BOOST_LAMBDA_BE(operator*=, arithmetic_assignment_action<multiply_action>, A, const B, reference_argument)
+BOOST_LAMBDA_BE(operator/=, arithmetic_assignment_action<divide_action>, A, const B, reference_argument)
+BOOST_LAMBDA_BE(operator%=, arithmetic_assignment_action<remainder_action>, A, const B, reference_argument)
+BOOST_LAMBDA_BE(operator<<=, bitwise_assignment_action<leftshift_action>, A, const B, reference_argument)
+BOOST_LAMBDA_BE(operator>>=, bitwise_assignment_action<rightshift_action>, A, const B, reference_argument)
+BOOST_LAMBDA_BE(operator&=, bitwise_assignment_action<and_action>, A, const B, reference_argument)
+BOOST_LAMBDA_BE(operator|=, bitwise_assignment_action<or_action>, A, const B, reference_argument)
+BOOST_LAMBDA_BE(operator^=, bitwise_assignment_action<xor_action>, A, const B, reference_argument)
 
 
 // A special trick for comma operator for correct preprocessing
@@ -139,9 +149,9 @@ BOOST_LAMBDA_BE(operator^=, bitwise_assignment_action<xor_action>, , const, refe
 
 #define BOOST_LAMBDA_COMMA_OPERATOR_NAME operator,
 
-BOOST_LAMBDA_BE1(BOOST_LAMBDA_COMMA_OPERATOR_NAME, other_action<comma_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE2(BOOST_LAMBDA_COMMA_OPERATOR_NAME, other_action<comma_action>, const, const, const_copy_argument)
-BOOST_LAMBDA_BE3(BOOST_LAMBDA_COMMA_OPERATOR_NAME, other_action<comma_action>, const, const, const_copy_argument)
+BOOST_LAMBDA_BE1(BOOST_LAMBDA_COMMA_OPERATOR_NAME, other_action<comma_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE2(BOOST_LAMBDA_COMMA_OPERATOR_NAME, other_action<comma_action>, const A, const B, const_copy_argument)
+BOOST_LAMBDA_BE3(BOOST_LAMBDA_COMMA_OPERATOR_NAME, other_action<comma_action>, const A, const B, const_copy_argument)
 
 
 
@@ -197,8 +207,8 @@ template<class T> struct convert_istream_to_ref_others_to_c_plain_by_default {
 
 } // detail
 
-BOOST_LAMBDA_BE2(operator<<, bitwise_action< leftshift_action>, , const, detail::convert_ostream_to_ref_others_to_c_plain_by_default)
-BOOST_LAMBDA_BE2(operator>>, bitwise_action< rightshift_action>, , const, detail::convert_istream_to_ref_others_to_c_plain_by_default)      
+BOOST_LAMBDA_BE2(operator<<, bitwise_action< leftshift_action>, A, const B, detail::convert_ostream_to_ref_others_to_c_plain_by_default)
+BOOST_LAMBDA_BE2(operator>>, bitwise_action< rightshift_action>, A, const B, detail::convert_istream_to_ref_others_to_c_plain_by_default)      
 
 
 // special case for io_manipulators.
@@ -253,17 +263,17 @@ operator>>(const lambda_functor<Arg>& a, Ret(&b)(ManipArg))
 #error "Multiple defines of  BOOST_LAMBDA_PTR_ARITHMETIC_E1"
 #endif
 
-#define BOOST_LAMBDA_PTR_ARITHMETIC_E1(OPER_NAME, ACTION, CONST)            \
+#define BOOST_LAMBDA_PTR_ARITHMETIC_E1(OPER_NAME, ACTION, CONSTB)            \
 template<class Arg, int N, class B>                                         \
 inline const                                                                \
 lambda_functor<                                                             \
-  lambda_functor_base<ACTION, tuple<lambda_functor<Arg>, CONST B(&)[N]> >   \
+  lambda_functor_base<ACTION, tuple<lambda_functor<Arg>, CONSTB(&)[N]> >   \
 >                                                                           \
-OPER_NAME (const lambda_functor<Arg>& a, CONST B(&b)[N])                    \
+OPER_NAME (const lambda_functor<Arg>& a, CONSTB(&b)[N])                    \
 {                                                                           \
   return lambda_functor<                                                    \
-    lambda_functor_base<ACTION, tuple<lambda_functor<Arg>, CONST B(&)[N]> > \
-  >(tuple<lambda_functor<Arg>, CONST B(&)[N]>(a, b));                       \
+    lambda_functor_base<ACTION, tuple<lambda_functor<Arg>, CONSTB(&)[N]> > \
+  >(tuple<lambda_functor<Arg>, CONSTB(&)[N]>(a, b));                       \
 }
 
 
@@ -271,31 +281,31 @@ OPER_NAME (const lambda_functor<Arg>& a, CONST B(&b)[N])                    \
 #error "Multiple defines of  BOOST_LAMBDA_PTR_ARITHMETIC_E2"
 #endif
 
-#define BOOST_LAMBDA_PTR_ARITHMETIC_E2(OPER_NAME, ACTION, CONST)             \
+#define BOOST_LAMBDA_PTR_ARITHMETIC_E2(OPER_NAME, ACTION, CONSTA)             \
 template<int N, class A, class Arg>                                          \
 inline const                                                                 \
 lambda_functor<                                                              \
-  lambda_functor_base<ACTION, tuple<CONST A(&)[N], lambda_functor<Arg> > >   \
+  lambda_functor_base<ACTION, tuple<CONSTA(&)[N], lambda_functor<Arg> > >   \
 >                                                                            \
-OPER_NAME (CONST A(&a)[N], const lambda_functor<Arg>& b)                     \
+OPER_NAME (CONSTA(&a)[N], const lambda_functor<Arg>& b)                     \
 {                                                                            \
   return                                                                     \
-    lambda_functor_base<ACTION, tuple<CONST A(&)[N], lambda_functor<Arg> > > \
-    (tuple<CONST A(&)[N], lambda_functor<Arg> >(a, b));                      \
+    lambda_functor_base<ACTION, tuple<CONSTA(&)[N], lambda_functor<Arg> > > \
+    (tuple<CONSTA(&)[N], lambda_functor<Arg> >(a, b));                      \
 }
 
 
-BOOST_LAMBDA_PTR_ARITHMETIC_E1(operator+, arithmetic_action<plus_action>,)
-BOOST_LAMBDA_PTR_ARITHMETIC_E2(operator+, arithmetic_action<plus_action>,)
-BOOST_LAMBDA_PTR_ARITHMETIC_E1(operator+, arithmetic_action<plus_action>,const)
-BOOST_LAMBDA_PTR_ARITHMETIC_E2(operator+, arithmetic_action<plus_action>,const)
+BOOST_LAMBDA_PTR_ARITHMETIC_E1(operator+, arithmetic_action<plus_action>, B)
+BOOST_LAMBDA_PTR_ARITHMETIC_E2(operator+, arithmetic_action<plus_action>, A)
+BOOST_LAMBDA_PTR_ARITHMETIC_E1(operator+, arithmetic_action<plus_action>,const B)
+BOOST_LAMBDA_PTR_ARITHMETIC_E2(operator+, arithmetic_action<plus_action>,const A)
 
 
 //BOOST_LAMBDA_PTR_ARITHMETIC_E1(operator-, arithmetic_action<minus_action>)
 // This is not needed, since the result of ptr-ptr is an rvalue anyway
 
-BOOST_LAMBDA_PTR_ARITHMETIC_E2(operator-, arithmetic_action<minus_action>, )
-BOOST_LAMBDA_PTR_ARITHMETIC_E2(operator-, arithmetic_action<minus_action>, const)
+BOOST_LAMBDA_PTR_ARITHMETIC_E2(operator-, arithmetic_action<minus_action>, A)
+BOOST_LAMBDA_PTR_ARITHMETIC_E2(operator-, arithmetic_action<minus_action>, const A)
 
 
 #undef BOOST_LAMBDA_BE1
