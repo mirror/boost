@@ -12,6 +12,7 @@
 #define ALIGNMENT_TYPE_TRAITS_HPP
 
 #include <cstdlib>
+#include <cstddef>
 #ifndef BOOST_ICE_TYPE_TRAITS_HPP
 #include <boost/type_traits/ice.hpp>
 #endif
@@ -80,3 +81,4 @@ struct alignment_of<const volatile void>
 #endif // ALIGNMENT_TYPE_TRAITS_HPP
 
  
+

@@ -56,12 +56,24 @@ struct ice_and<true, true, true, true, true, true, true>
    BOOST_STATIC_CONSTANT(bool, value = true);
 };
 
+template <bool b1, bool b2>
+struct ice_eq
+{
+   BOOST_STATIC_CONSTANT(bool, value = (b1 == b2));
+};
+
+template <bool b1, bool b2>
+struct ice_ne
+{
+   BOOST_STATIC_CONSTANT(bool, value = (b1 != b2));
+};
 
 } // namespace type_traits
 
 } // namespace boost
 
 #endif // BOOST_ICE_TYPE_TRAITS_HPP
+
 
 
 

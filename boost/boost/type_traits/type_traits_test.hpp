@@ -224,7 +224,7 @@ struct nested_test
 #define NESTED_DECL(what)\
 template <class T> \
 struct BOOST_TT_JOIN(nested_tester_,what){\
-   nested_test< (0 != ::boost::what<T>::value)> tester;\
+   nested_test< (::boost::type_traits::ice_ne<0, ::boost::what<T>::value>::value)> tester;\
    BOOST_TT_JOIN(nested_tester_,what)(const char* s) : tester(::boost::what<T>::value, s){}\
 };
 #define NESTED_TEST(what, with)\
@@ -354,6 +354,7 @@ struct non_empty : boost::noncopyable
 
 
 #endif // BOOST_TYPE_TRAITS_TEST_HPP
+
 
 
 
