@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # User configuration
-DOCBOOK_XSL_VERSION=1.65.1
+DOCBOOK_XSL_VERSION=1.67.2
 DOCBOOK_DTD_VERSION=4.2
 SOURCEFORGE_MIRROR=http://dl.sourceforge.net
 HTTP_GET_CMD="curl -O"
@@ -27,7 +27,7 @@ fi
 
 # Get the DocBook DTD
 DOCBOOK_DTD_ZIP=docbook-xml-$DOCBOOK_DTD_VERSION.zip
-DOCBOOK_DTD_URL=http://www.docbook.org/xml/$DOCBOOK_DTD_VERSION/$DOCBOOK_DTD_ZIP
+DOCBOOK_DTD_URL=http://www.oasis-open.org/docbook/xml/$DOCBOOK_DTD_VERSION/$DOCBOOK_DTD_ZIP
 if test -f $DOCBOOK_DTD_ZIP; then
   echo "Using existing DocBook XML DTD (version $DOCBOOK_DTD_VERSION)."
 else
