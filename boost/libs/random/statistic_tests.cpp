@@ -69,7 +69,7 @@ public:
     for(int i = 1; i <= k; ++i) {
       IntType tmp = values[i-1] + values[i];
       if(tmp >= m)
-	tmp -= m;
+        tmp -= m;
       values[i] = tmp;
     }
     return values[k];
@@ -282,7 +282,7 @@ class equidistribution_test : test_base
 {
 public:
   equidistribution_test(test_environment & env, unsigned int classes, 
-			unsigned int high_classes)
+                        unsigned int high_classes)
     : test_base(env), classes(classes),
       test_distrib_chi_square(chi_square_probability(classes-1), high_classes)
   { }
@@ -295,9 +295,9 @@ public:
     equidistribution_experiment equi(classes);
     uniform_smallint<RNG> uint_linear(rng, 0, classes-1);
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(equi, uint_linear, n1), n2));
+                         experiment_generator(equi, uint_linear, n1), n2));
     check(run_experiment(test_distrib_chi_square, 
-			 experiment_generator(equi, uint_linear, n1), 2*n2));
+                         experiment_generator(equi, uint_linear, n1), 2*n2));
 
     std::cout << "  2D: " << std::flush;
     equidistribution_2d_experiment equi_2d(classes);
@@ -305,9 +305,9 @@ public:
     assert(root * root == classes);
     uniform_smallint<RNG> uint_square(rng, 0, root-1);
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(equi_2d, uint_square, n1), n2));
+                         experiment_generator(equi_2d, uint_square, n1), n2));
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(equi_2d, uint_square, n1), 2*n2));
+                         experiment_generator(equi_2d, uint_square, n1), 2*n2));
     std::cout << std::endl;
   }
 private:
@@ -321,7 +321,7 @@ public:
   ks_equidistribution_test(test_environment & env, unsigned int classes)
     : test_base(env),
       test_distrib_chi_square(kolmogorov_smirnov_probability(5000), 
-			      classes)
+                              classes)
   { }
 
   template<class RNG>
@@ -334,9 +334,9 @@ public:
     kolmogorov_experiment ks(n1);
     uniform_distribution ud(rng.min_value, rng.max_value);
     check(run_experiment(test_distrib_chi_square,
-			 ks_experiment_generator(ks, gen_ref, ud), n2));
+                         ks_experiment_generator(ks, gen_ref, ud), n2));
     check(run_experiment(test_distrib_chi_square,
-			 ks_experiment_generator(ks, gen_ref, ud), 2*n2));
+                         ks_experiment_generator(ks, gen_ref, ud), 2*n2));
   }
 private:
   distribution_experiment test_distrib_chi_square;
@@ -346,7 +346,7 @@ class runs_test : test_base
 {
 public:
   runs_test(test_environment & env, unsigned int classes,
-	    unsigned int high_classes)
+            unsigned int high_classes)
     : test_base(env), classes(classes),
       test_distrib_chi_square(chi_square_probability(classes-1), high_classes)
   { }
@@ -360,16 +360,16 @@ public:
     // generator_reference_t<RNG> gen_ref(rng);
     RNG& gen_ref(rng);
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(r_up, gen_ref, n1), n2));
+                         experiment_generator(r_up, gen_ref, n1), n2));
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(r_up, gen_ref, n1), 2*n2));
+                         experiment_generator(r_up, gen_ref, n1), 2*n2));
 
     std::cout << "  down: " << std::flush;
     runs_experiment<false> r_down(classes);
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(r_down, gen_ref, n1), n2));
+                         experiment_generator(r_down, gen_ref, n1), n2));
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(r_down, gen_ref, n1), 2*n2));
+                         experiment_generator(r_down, gen_ref, n1), 2*n2));
 
     std::cout << std::endl;
   }
@@ -382,7 +382,7 @@ class gap_test : test_base
 {
 public:
   gap_test(test_environment & env, unsigned int classes,
-	    unsigned int high_classes)
+            unsigned int high_classes)
     : test_base(env), classes(classes),
       test_distrib_chi_square(chi_square_probability(classes-1), high_classes)
   { }
@@ -396,9 +396,9 @@ public:
     // generator_reference_t<RNG> gen_ref(rng);
     RNG& gen_ref(rng);
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(gap, gen_ref, n1), n2));
+                         experiment_generator(gap, gen_ref, n1), n2));
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(gap, gen_ref, n1), 2*n2));
+                         experiment_generator(gap, gen_ref, n1), 2*n2));
 
     std::cout << std::endl;
   }
@@ -411,7 +411,7 @@ class poker_test : test_base
 {
 public:
   poker_test(test_environment & env, unsigned int classes,
-	     unsigned int high_classes)
+             unsigned int high_classes)
     : test_base(env), classes(classes),
       test_distrib_chi_square(chi_square_probability(classes-1), high_classes)
   { }
@@ -424,9 +424,9 @@ public:
     poker_experiment poker(8, classes);
     uniform_smallint<RNG> usmall(rng, 0, 7);
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(poker, usmall, n1), n2));
+                         experiment_generator(poker, usmall, n1), n2));
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(poker, usmall, n1), 2*n2));
+                         experiment_generator(poker, usmall, n1), 2*n2));
     std::cout << std::endl;
   }
 private:
@@ -438,7 +438,7 @@ class coupon_collector_test : test_base
 {
 public:
   coupon_collector_test(test_environment & env, unsigned int classes,
-			unsigned int high_classes)
+                        unsigned int high_classes)
     : test_base(env), classes(classes),
       test_distrib_chi_square(chi_square_probability(classes-1), high_classes)
   { }
@@ -452,9 +452,9 @@ public:
 
     uniform_smallint<RNG> usmall(rng, 0, 4);
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(coupon, usmall, n1), n2));
+                         experiment_generator(coupon, usmall, n1), n2));
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(coupon, usmall, n1), 2*n2));
+                         experiment_generator(coupon, usmall, n1), 2*n2));
     std::cout << std::endl;
   }
 private:
@@ -466,10 +466,10 @@ class permutation_test : test_base
 {
 public:
   permutation_test(test_environment & env, unsigned int classes,
-		   unsigned int high_classes)
+                   unsigned int high_classes)
     : test_base(env), classes(classes),
       test_distrib_chi_square(chi_square_probability(fac<int>(classes)-1), 
-			      high_classes)
+                              high_classes)
   { }
 
   template<class RNG>
@@ -482,9 +482,9 @@ public:
     // generator_reference_t<RNG> gen_ref(rng);
     RNG& gen_ref(rng);
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(perm, gen_ref, n1), n2));
+                         experiment_generator(perm, gen_ref, n1), n2));
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(perm, gen_ref, n1), 2*n2));
+                         experiment_generator(perm, gen_ref, n1), 2*n2));
     std::cout << std::endl;
   }
 private:
@@ -498,7 +498,7 @@ public:
   maximum_test(test_environment & env, unsigned int high_classes)
     : test_base(env),
       test_distrib_chi_square(kolmogorov_smirnov_probability(1000),
-			      high_classes)
+                              high_classes)
   { }
 
   template<class RNG>
@@ -532,9 +532,9 @@ public:
     std::cout << run_experiment(bsp, uni, n1);
 #if 0
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(perm, gen_ref, n1), n2));
+                         experiment_generator(perm, gen_ref, n1), n2));
     check(run_experiment(test_distrib_chi_square,
-			 experiment_generator(perm, gen_ref, n1), 2*n2));
+                         experiment_generator(perm, gen_ref, n1), 2*n2));
 #endif
     std::cout << std::endl;
   }
@@ -561,12 +561,12 @@ public:
       bday_test(*this)
   {
     std::cout << "Confidence level: " << confid 
-	      << "; 1-alpha = " << (1-confid)
-	      << "; chi_square(" << (classes-1) 
-	      << ", " << confidence_chi_square_quantil
-	      << ") = " 
-	      << chi_square_probability(classes-1)(0, confidence_chi_square_quantil)
-	      << std::endl;
+              << "; 1-alpha = " << (1-confid)
+              << "; chi_square(" << (classes-1) 
+              << ", " << confidence_chi_square_quantil
+              << ") = " 
+              << chi_square_probability(classes-1)(0, confidence_chi_square_quantil)
+              << std::endl;
   }
   
   bool check_confidence(double val, double chi_square_conf) const
@@ -576,7 +576,7 @@ public:
     if(!result) {
       std::cout << "* [";
       double prob = (val > 10*chi_square_conf ? 1 :
-		     chi_square_probability(classes-1)(0, val));
+                     chi_square_probability(classes-1)(0, val));
       std::cout << (1-prob) << "]";
     }
     std::cout << " " << std::flush;
@@ -642,9 +642,9 @@ void print_ks_table()
     std::cout << std::setw(4) << n << " ";
     for(unsigned int i = 0; i < sizeof(all_p)/sizeof(all_p[0]); ++i) {
       std::cout << std::setw(8) 
-		<< (n == 0 ? all_p[i] : 
-		    invert_monotone_inc(kolmogorov_smirnov_probability(n), all_p[i], 0, 10))
-		<< " ";
+                << (n == 0 ? all_p[i] : 
+                    invert_monotone_inc(kolmogorov_smirnov_probability(n), all_p[i], 0, 10))
+                << " ";
     }
     std::cout << std::endl;
   }

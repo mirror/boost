@@ -92,7 +92,7 @@ public:
   void run(NumberGenerator f, Counter & count, int n) const
   {
     assert(f.min() == 0 &&
-	   static_cast<unsigned int>(f.max()) == classes()-1);
+           static_cast<unsigned int>(f.max()) == classes()-1);
     for(int i = 0; i < n; ++i)
       count(f());
   }
@@ -144,7 +144,7 @@ public:
   {
     for(int i = 0; i < n; ++i) {
       limits_type::const_iterator it =
-	std::lower_bound(limit.begin(), limit.end(), f());
+        std::lower_bound(limit.begin(), limit.end(), f());
       count(it-limit.begin());
     }
   }
@@ -170,13 +170,13 @@ public:
     for(int i = 0; i < n; ++i) {
       result_type val = f();
       if(up ? previous <= val : previous >= val) {
-	previous = val;
-	++length;
+        previous = val;
+        ++length;
       } else {
-	count(std::min(length, classes())-1);
-	length = 0;
-	previous = init;
-	// don't use this value, so that runs are independent
+        count(std::min(length, classes())-1);
+        length = 0;
+        previous = init;
+        // don't use this value, so that runs are independent
       }
     }
   }
@@ -207,11 +207,11 @@ public:
     for(int i = 0; i < n; ) {
       result_type value = f() - f.min();
       if(value < low || value > high)
-	++length;
+        ++length;
       else {
-	count(std::min(length, classes()-1));
-	length = 0;
-	++i;
+        count(std::min(length, classes()-1));
+        length = 0;
+        ++i;
       }
     }
   }
@@ -247,15 +247,15 @@ public:
     std::vector<result_type> v(classes());
     for(int i = 0; i < n; ++i) {
       for(unsigned int j = 0; j < classes(); ++j)
-	v[j] = f();
+        v[j] = f();
       std::sort(v.begin(), v.end());
       result_type prev = v[0];
       int r = 1;     // count different values in v
       for(unsigned int i = 1; i < classes(); ++i) {
-	if(prev != v[i]) {
-	  prev = v[i];
-	  ++r;
-	}
+        if(prev != v[i]) {
+          prev = v[i];
+          ++r;
+        }
       }
       count(r-1);
     }
@@ -297,14 +297,14 @@ public:
       unsigned int r = 0;            // length of current sequence
       int q = 0;                     // number of non-duplicates in current set
       for(;;) {
-	result_type val = f();
-	++r;
-	if(!occurs[val]) {       // new set element
-	  occurs[val] = true;
-	  ++q;
-	  if(q == d)
-	    break;     // one complete set
-	}
+        result_type val = f();
+        ++r;
+        if(!occurs[val]) {       // new set element
+          occurs[val] = true;
+          ++q;
+          if(q == d)
+            break;     // one complete set
+        }
       }
       count(std::min(r-d, classes()-1));
     }
@@ -313,10 +313,10 @@ public:
   {
     if(r == classes()-1)
       return 1-fac<double>(d)/std::pow(d, static_cast<double>(d+classes()-2))* 
-	stirling2<double>(d+classes()-2, d);
+        stirling2<double>(d+classes()-2, d);
     else
       return fac<double>(d)/std::pow(d, static_cast<double>(d+r)) * 
-	stirling2<double>(d+r-1, d-1);
+        stirling2<double>(d+r-1, d-1);
   }
 private:
   int d;
@@ -341,10 +341,10 @@ public:
       std::generate_n(v.begin(), t, f);
       int x = 0;
       for(int r = t-1; r > 0; r--) {
-	std::vector<result_type>::iterator it = 
-	  std::max_element(v.begin(), v.begin()+r+1);
-	x = (r+1)*x + (it-v.begin());
-	std::iter_swap(it, v.begin()+r);
+        std::vector<result_type>::iterator it = 
+          std::max_element(v.begin(), v.begin()+r+1);
+        x = (r+1)*x + (it-v.begin());
+        std::iter_swap(it, v.begin()+r);
       }
       count(x);
     }
@@ -376,13 +376,13 @@ public:
       std::sort(v.begin(), v.end());
       std::vector<result_type> spacing(n);
       for(int i = 0; i < n-1; i++)
-	spacing[i] = v[i+1]-v[i];
+        spacing[i] = v[i+1]-v[i];
       spacing[n-1] = v[0] + m - v[n-1];
       std::sort(spacing.begin(), spacing.end());
       unsigned int k = 0;
       for(int i = 0; i < n-1; ++i) {
-	if(spacing[i] == spacing[i+1])
-	  ++k;
+        if(spacing[i] == spacing[i+1])
+          ++k;
       }
       count(std::min(k, classes()-1));
     }
@@ -394,7 +394,7 @@ public:
     assert(m == (1<<25));
     assert(n == 512);
     static const double prob[] = { 0.368801577, 0.369035243, 0.183471182,
-				   0.078691997 };
+                                   0.078691997 };
     return prob[r];
   }
 private:
@@ -432,8 +432,8 @@ public:
       t *= sqrt_n;
       double sum = 0;
       for(int k = static_cast<int>(std::ceil(t)); k <= n; k++)
-	sum += binomial<double>(n, k) * std::pow(k-t, k) * 
-	  std::pow(t+n-k, n-k-1);
+        sum += binomial<double>(n, k) * std::pow(k-t, k) * 
+          std::pow(t+n-k, n-k-1);
       return 1 - t/n_n * sum;
     }
   }
@@ -466,7 +466,7 @@ public:
       double y = distrib(val);
       int k = static_cast<int>(std::floor(m*y));
       if(k >= m)
-	--k;    // should not happen
+        --k;    // should not happen
       a[k] = std::min(a[k], y);
       b[k] = std::max(b[k], y);
       ++c[k];
@@ -475,9 +475,9 @@ public:
     int j = 0;
     for(int k = 0; k < m; ++k) {
       if(c[k] > 0) {
-	kminus = std::max(kminus, a[k]-j/static_cast<double>(n));
-	j += c[k];
-	kplus = std::max(kplus, j/static_cast<double>(n) - b[k]);
+        kminus = std::max(kminus, a[k]-j/static_cast<double>(n));
+        j += c[k];
+        kplus = std::max(kplus, j/static_cast<double>(n) - b[k]);
       }
     }
     kplus *= std::sqrt(double(n));
@@ -506,7 +506,7 @@ public:
   double operator()() const
   {
     double res = ke.run(generator(f, t), 
-		  std::bind2nd(std::ptr_fun(static_cast<double (*)(double, double)>(&std::pow)), t));
+                  std::bind2nd(std::ptr_fun(static_cast<double (*)(double, double)>(&std::pow)), t));
     return res;
   }
 
@@ -517,7 +517,7 @@ private:
     {
       double mx = f();
       for(int i = 1; i < t; ++i)
-	mx = std::max(mx, f());
+        mx = std::max(mx, f());
       return mx;
     }
   private:
@@ -533,7 +533,7 @@ private:
 template<class ForwardIterator, class UnaryFunction>
 typename UnaryFunction::result_type
 chi_square_value(ForwardIterator first, ForwardIterator last,
-		 UnaryFunction probability)
+                 UnaryFunction probability)
 {
   typedef std::iterator_traits<ForwardIterator> iter_traits;
   typedef typename iter_traits::value_type counter_type;
@@ -551,8 +551,8 @@ chi_square_value(ForwardIterator first, ForwardIterator last,
     // std::cout << (n*probability(i)) << " ";
     if(n * probability(i) < 5)
       std::cerr << "Not enough test runs for slot " << i
-		<< " p=" << probability(i) << ", n=" << n
-		<< std::endl;
+                << " p=" << probability(i) << ", n=" << n
+                << std::endl;
   }
 #endif
   // std::cout << std::endl;
@@ -587,8 +587,8 @@ double run_experiment(const Experiment & experiment, Generator gen, int n)
   generic_counter<std::vector<int> > v(experiment.classes());
   experiment.run(gen, v, n);
   return chi_square_value(v.begin(), v.end(),
-			  std::bind1st(std::mem_fun_ref(&Experiment::probability), 
-				       experiment));
+                          std::bind1st(std::mem_fun_ref(&Experiment::probability), 
+                                       experiment));
 }
 
 // number generator with experiment results (for nesting)
@@ -618,7 +618,7 @@ class ks_experiment_generator_t
 {
 public:
   ks_experiment_generator_t(const Experiment & exper, Generator & gen,
-			    const Distribution & distrib)
+                            const Distribution & distrib)
     : experiment(exper), generator(gen), distribution(distrib) { }
   double operator()() { return experiment.run(generator, distribution); }
 private:
@@ -630,7 +630,7 @@ private:
 template<class Experiment, class Generator, class Distribution>
 ks_experiment_generator_t<Experiment, Generator, Distribution>
 ks_experiment_generator(const Experiment & e, Generator & gen,
-			const Distribution & distrib)
+                        const Distribution & distrib)
 {
   return ks_experiment_generator_t<Experiment, Generator, Distribution>
     (e, gen, distrib);
