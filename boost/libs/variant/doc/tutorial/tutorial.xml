@@ -5,8 +5,6 @@
 
 <title>Tutorial</title>
   <xi:include href="basic.xml"/>
-<!--
   <xi:include href="advanced.xml"/>
--->
 
 </section>
