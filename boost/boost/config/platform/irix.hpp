@@ -11,3 +11,6 @@
 
 #define BOOST_NO_SWPRINTF 
 
+// boilerplate code:
+#include <boost/config/posix_features.hpp>
+

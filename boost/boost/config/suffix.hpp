@@ -22,9 +22,12 @@
 # endif
 
 //
-// look for long long by looking for the appropriate macros in <climits>
+// look for long long by looking for the appropriate macros in <limits.h>.
+// Note that we use limits.h rather than climits for maximal portability,
+// remember that since these just declare a bunch of macros, there should be
+// no namespace issues from this.
 //
-#include <climits>
+#include <limits.h>
 # if !defined(BOOST_MSVC) && !defined(__BORLANDC__) \
    && (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
 #  define BOOST_HAS_LONG_LONG
@@ -117,26 +120,6 @@
 //
 #  if defined(BOOST_NO_CWCHAR) && !defined(BOOST_NO_SWPRINTF)
 #     define BOOST_NO_SWPRINTF
-#  endif
-
-//
-// If the platform claims to be Unix, then it had better behave like Unix!
-//
-#  if defined(unix) \
-      || defined(__unix) \
-      || defined(_XOPEN_SOURCE) \
-      || defined(_POSIX_SOURCE)
-
-#     ifndef BOOST_HAS_UNISTD_H
-#        define BOOST_HAS_UNISTD_H
-#     endif
-#  endif
-
-//
-// If we have a <unistd.h> then some options can be deduced from it:
-//
-#  ifdef BOOST_HAS_UNISTD_H
-#     include <boost/config/posix_features.hpp>
 #  endif
 
 //

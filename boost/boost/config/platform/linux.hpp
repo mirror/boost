@@ -48,6 +48,9 @@
 #  define BOOST_NO_SWPRINTF
 #endif
 
+// boilerplate code:
+#include <boost/config/posix_features.hpp>
+
 #ifndef __GNUC__
 //
 // if the compiler is not gcc we still need to be able to parse

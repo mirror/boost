@@ -17,3 +17,7 @@
 
 #define BOOST_NO_SWPRINTF 
 #define BOOST_NO_CWCTYPE
+
+// boilerplate code:
+#include <boost/config/posix_features.hpp>
+

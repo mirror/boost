@@ -17,4 +17,8 @@
 #define BOOST_HAS_PTHREAD_DELAY_NP
 #define BOOST_HAS_PTHREAD_YIELD
 
+// boilerplate code:
+#include <boost/config/posix_features.hpp>
+
+
 

@@ -52,10 +52,28 @@
 // IBM
 #  define BOOST_PLATFORM_CONFIG "boost/config/platform/aix.hpp"
 
-#elif defined (BOOST_ASSERT_CONFIG)
-// this must come last - generate an error if we don't
-// recognise the platform:
-#  error "Unknown platform - please configure and report the results to boost.org"
+#else
+
+#  if defined(unix) \
+      || defined(__unix) \
+      || defined(_XOPEN_SOURCE) \
+      || defined(_POSIX_SOURCE)
+
+   // generic unix platform:
+
+#  ifndef BOOST_HAS_UNISTD_H
+#     define BOOST_HAS_UNISTD_H
+#  endif
+
+#  include <boost/config/posix_features.hpp>
+
+#  endif
+
+#  if defined (BOOST_ASSERT_CONFIG)
+      // this must come last - generate an error if we don't
+      // recognise the platform:
+#     error "Unknown platform - please configure and report the results to boost.org"
+#  endif
 
 #endif
 

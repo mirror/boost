@@ -19,5 +19,7 @@
 #  define BOOST_HAS_THREADS
 #endif
 
+// boilerplate code:
+#include <boost/config/posix_features.hpp>
  
 

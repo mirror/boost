@@ -11,6 +11,8 @@
 
 #define BOOST_HAS_GETTIMEOFDAY
 
+// boilerplate code:
+#include <boost/config/posix_features.hpp>
 
 
 

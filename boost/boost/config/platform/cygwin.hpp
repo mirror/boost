@@ -26,5 +26,7 @@
 #  define BOOST_HAS_FTIME
 #endif
 
+// boilerplate code:
+#include <boost/config/posix_features.hpp>
  
 

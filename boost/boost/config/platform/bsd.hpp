@@ -37,3 +37,7 @@
 // The BSD <ctype.h> has macros only, no functions:
 //
 #define BOOST_NO_CTYPE_FUNCTIONS
+
+// boilerplate code:
+#include <boost/config/posix_features.hpp>
+
