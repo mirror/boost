@@ -16,7 +16,7 @@ BOOST_DECL_TRANSFORM_TEST(add_pointer_test_12, ::boost::add_pointer, const[2][3]
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_13, ::boost::add_pointer, (&)[2], (*)[2])
 
 
-TT_TEST_BEGIN(partial_specialization_tricky_tests)
+TT_TEST_BEGIN(trichy_partial_specialization_test)
 
    add_pointer_test_5();
    add_pointer_test_6();

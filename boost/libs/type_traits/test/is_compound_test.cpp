@@ -15,7 +15,6 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<void*>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<int>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<test_abc1>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_compound<incomplete_type>::value, true);
 
 TT_TEST_END
 

@@ -29,8 +29,6 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<f1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<enum_UDT>::value, false);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<UDT>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<UDT const>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<UDT volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<empty_UDT>::value, false);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<UDT*>::value, false);

@@ -11,7 +11,7 @@
 #include TYPE_TRAITS(is_enum)
 #include TYPE_TRAITS(is_class)
 #include TYPE_TRAITS(is_scalar)
-#include TYPE_TRAITS(is_POD)
+#include TYPE_TRAITS(is_pod)
 #include TYPE_TRAITS(has_trivial_constructor)
 #include TYPE_TRAITS(has_trivial_copy)
 #include TYPE_TRAITS(has_trivial_assign)
@@ -19,7 +19,7 @@
 #include TYPE_TRAITS(is_compound)
 #include TYPE_TRAITS(is_base_and_derived)
 
-TT_TEST_BEGIN(is_function)
+TT_TEST_BEGIN(tricky_function_type_test)
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<const int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_function<int (&)(int)>::value, false);

@@ -9,7 +9,7 @@
 #include TYPE_TRAITS(is_empty)
 #include TYPE_TRAITS(is_stateless)
 
-TT_TEST_BEGIN(abstract_type_tricky_tests)
+TT_TEST_BEGIN(tricky_abstract_type_test)
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<test_abc1>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<test_abc1>::value, false);

@@ -36,7 +36,7 @@ struct align_calc
 #define ALIGNOF(x) align_calc<x>::get()
 
 
-TT_TEST_BEGIN(partial_specialization_tricky_tests)
+TT_TEST_BEGIN(tricky_partial_specialization_test)
 //
 // corner cases which don't compile without partial specialization
 // support:

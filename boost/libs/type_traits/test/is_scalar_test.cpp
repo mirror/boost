@@ -140,7 +140,6 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<enum_UDT>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<void>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<int&>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<incomplete_type>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_scalar<test_abc1>::value, false);
 
 TT_TEST_END

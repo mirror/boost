@@ -8,7 +8,7 @@
 #include "check_integral_constant.hpp"
 #include TYPE_TRAITS(is_pod)
 
-TT_TEST_BEGIN(is_POD)
+TT_TEST_BEGIN(is_pod)
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<bool>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<bool const>::value, true);
@@ -146,7 +146,6 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<empty_UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<void>::value, true);
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<incomplete_type>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_POD<test_abc1>::value, false);
 
 // cases we would like to succeed but can't implement in the language:

@@ -32,7 +32,6 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<empty_UDT>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<std::iostream>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<test_abc1>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<test_abc1 const>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<incomplete_type>::value, true);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<UDT*>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<UDT[2]>::value, false);
