@@ -164,7 +164,7 @@ namespace std {
 
 
 
-// Thanks to Kresimir Fresl for porting to Comeau.
+// Comeau compiler - thanks to Kresimir Fresl
 #if defined (__COMO__) && ! defined (BOOST_STRICT_CONFIG)
 
 // Missing std::abs overloads for float types in <cmath> are in <cstdlib>
@@ -176,6 +176,15 @@ namespace std {
 
 
 
+//  HP aCC C++ compiler
+#if defined (__HP_aCC) && ! defined (BOOST_STRICT_CONFIG)
+// No version specific configuration
+// #if (__HP_aCC <= 53800)
+#endif
+
+
+
+//  SGI C++ compiler
 #if defined (__sgi) && ! defined (BOOST_STRICT_CONFIG)
 
 // Missing std::abs overloads for float types in <cmath> are in <cstdlib>
@@ -206,10 +215,6 @@ namespace std {
 #endif
 #ifndef BOOST_UBLAS_USING
 #define BOOST_UBLAS_USING using
-#endif
-
-#ifndef BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS
-#define BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS 1
 #endif
 
 
