@@ -104,5 +104,6 @@ test-suite numeric/uBLAS
         : # requirements
             <define>EXTERNAL
             <toolset>intel-linux:<cxxflags>"-Xc"
+			<toolset>darwin:<cxxflags>"-fabi-version=0"
       ]
     ;
