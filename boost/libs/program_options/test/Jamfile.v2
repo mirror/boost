@@ -6,29 +6,15 @@ project
     <hardcode-dll-paths>true
     ;
 
-unit-test options_description_test
-    : options_description_test.cpp
-    ;
+test-suite program_options :
 
-unit-test parsers_test
-    : parsers_test.cpp
+    [ run options_description_test.cpp ] 
+    [ run parsers_test.cpp ]
+    [ run variable_map_test.cpp ]
+    [ run cmdline_test.cpp ]
+    [ run positional_options_test.cpp ]
+    [ run unicode_test.cpp ] 
     ;
-
-unit-test variable_map_test
-    : variable_map_test.cpp
-    ;
-
-unit-test cmdline_test
-    : cmdline_test.cpp
-    ;
-    
-unit-test positional_options_test
-    : positional_options_test.cpp
-    ;
-    
-unit-test unicode_test
-    : unicode_test.cpp
-    ;    
-    
+        
 exe test_convert : test_convert.cpp ../build//program_options ;   
 
