@@ -16,7 +16,8 @@
 
 #include "boost/mpl/v2_1.hpp"
 
-#include "boost/mpl/logical/and.hpp"
+#include "boost/mpl/logical/not.hpp"
+#include "boost/mpl/logical/or.hpp"
 #include "boost/mpl/comparison/less.hpp"
 #include "boost/mpl/comparison/equal_to.hpp"
 #include "boost/mpl/arithmetic/multiplies.hpp"
@@ -42,16 +43,27 @@ typedef eval<
           list(int,char,long,int)
         , lambda(is_same(_,int))
         )
-    >::type r2;
+    >::type res;
 
-BOOST_STATIC_ASSERT(r2::value == 2);
+BOOST_STATIC_ASSERT(res::value == 2);
 
 typedef eval<
       find_if( 
-          filter_view(list(int,char,long,double), lambda(is_float(_)))
-        , lambda( and_( is_same(_,int), less(sizeof_(_),sizeof_(double)) ) )
+          filter_view(
+              list(int,float,char,long,double)
+            , lambda(not_(is_float(_)))
+            )
+        , lambda( or_( 
+              is_same(_,short)
+            , less(sizeof_(_),sizeof_(int))
+            ) )
         )
-    >::type t2;
+    >::type iter;
+
+typedef eval< is_same(iter::type,char) >::type res2;
+    
+BOOST_STATIC_ASSERT(res2::value);
+
 
 
 METAFUNCTION(factorial, (N)
