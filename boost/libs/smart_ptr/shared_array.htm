@@ -1,0 +1,180 @@
+<html>
+
+<head>
+<title>shared_array</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="center" width="277" height="86">Class
+<a name="shared_array">shared_array</a></h1>
+<p>Class <strong>shared_array</strong> stores a pointer to a dynamically
+allocated array. (Dynamically allocated arrays are allocated with the C++ <tt>new[]</tt>
+expression.)&nbsp;&nbsp; The array pointed to is guaranteed to be deleted,
+either on destruction of the <strong>shared_array</strong>, on <strong>shared_array::operator=()</strong>,
+or via an explicit <strong>shared_array::reset()</strong>.&nbsp; See <a href="#shared_array_example">example</a>.</p>
+<p>Class<strong> shared_array</strong> meets the <strong>CopyConstuctible</strong>
+and <strong>Assignable</strong> requirements of the C++ Standard Library, and so
+can be used in C++ Standard Library containers.&nbsp; A specialization of std::
+less&lt; &gt; for&nbsp; boost::shared_ptr&lt;Y&gt; is supplied so that&nbsp;<strong>
+shared_array</strong> works by default for Standard Library's Associative
+Container Compare template parameter.&nbsp; For compilers not supporting partial
+specialization, the user must explicitly pass the less&lt;&gt; functor.</p>
+<p>Class<strong> shared_array</strong> cannot correctly hold a pointer to a
+single object.&nbsp; See <a href="shared_ptr.htm"><strong>shared_array</strong></a>
+for that usage.</p>
+<p>Class<strong> shared_array</strong> will not work correctly with cyclic data
+structures. For example, if main() holds a shared_array pointing to array A,
+which directly or indirectly holds a shared_array pointing back to array A, then
+array A's use_count() will be 2, and destruction of the main() shared_array will
+leave array A dangling with a use_count() of 1.</p>
+<p>A heavier duty alternative to a <strong>shared_array</strong> is a <strong>shared_ptr</strong>
+to a C++ Standard Library <strong>vector</strong>.</p>
+<p>The class is a template parameterized on <tt>T</tt>, the type of the object
+pointed to.&nbsp;&nbsp; <tt>T</tt> must meet the smart pointer <a href="smart_ptr.htm#Common requirements">Common
+requirements</a>.</p>
+<h2>Class shared_array Synopsis</h2>
+<pre>#include &lt;boost/smart_ptr.hpp&gt;
+namespace boost {
+
+template&lt;typename T&gt; class shared_array {
+
+ public:
+   typedef T <a href="#shared_array_element_type">element_type</a>;
+
+   explicit <a href="#shared_array_ctor">shared_array</a>( T* p=0 );
+   <a href="#shared_array_ctor">shared_array</a>( const shared_array&amp; );  // never throws   
+  <strong> </strong><a href="#shared_array_~shared_array">~shared_array</a>();
+
+   shared_array&amp; <a href="#shared_array_operator=">operator=</a>( const shared_array&amp; );  // never throws  
+
+   void <a href="#shared_array_reset">reset</a>( T* p=0 );
+
+   T&amp; <a href="#shared_array_operator[]">operator[]</a>(std::size_t i) const;  // never throws
+   T* <a href="#shared_array_get">get</a>() const;  // never throws
+
+   long <a href="#shared_array_use_count">use_count</a>() const;  // never throws
+   bool <a href="#shared_array_unique">unique</a>() const;  // never throws
+
+   void <a href="#shared_array_swap">swap</a>( shared_array&lt;T&gt;&amp; other ) throw()
+   };
+
+template&lt;typename T&gt;
+  inline bool operator==(const shared_array&lt;T&gt;&amp; a, const shared_array&lt;T&gt;&amp; b)
+    { return a.get() == b.get(); }
+
+template&lt;typename T&gt;
+  inline bool operator!=(const shared_array&lt;T&gt;&amp; a, const shared_array&lt;T&gt;&amp; b)
+    { return a.get() != b.get(); }
+}</pre>
+<pre>namespace std {
+
+template&lt;typename T&gt;
+  inline void swap(boost::shared_array&lt;T&gt;&amp; a, boost::shared_array&lt;T&gt;&amp; b)
+    { a.swap(b); }
+
+template&lt;typename T&gt;
+  struct less&lt; boost::shared_array&lt;T&gt; &gt;
+    : binary_function&lt;boost::shared_array&lt;T&gt;, boost::shared_array&lt;T&gt;, bool&gt;
+  {
+    bool operator()(const boost::shared_array&lt;T&gt;&amp; a,
+        const boost::shared_array&lt;T&gt;&amp; b) const
+      { return less&lt;T*&gt;()(a.get(),b.get()); }
+  };
+
+} // namespace std </pre>
+<p>Specialization of std::swap uses the fast, non-throwing swap that's provided
+as a member function instead of using the default algorithm which creates a
+temporary and uses assignment.<br>
+<br>
+Specialization of std::less allows use of shared arrays as keys in&nbsp;C++
+Standard Library associative collections.<br>
+<br>
+The std::less specializations use std::less&lt;T*&gt; to perform the
+comparison.&nbsp; This insures that pointers are handled correctly, since the
+standard mandates that relational operations on pointers are unspecified (5.9 [expr.rel]
+paragraph 2) but std::less&lt;&gt; on pointers is well-defined (20.3.3 [lib.comparisons]
+paragraph 8).<br>
+<br>
+It's still a controversial question whether supplying only std::less is better
+than supplying a full range of comparison operators (&lt;, &gt;, &lt;=, &gt;=).</p>
+<p>The current implementation does not supply the specializations if the macro
+name BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION is defined.</p>
+<h2>Class shared_array Members</h2>
+<h3>shared_array <a name="shared_array_element_type">element_type</a></h3>
+<pre>typedef T element_type;</pre>
+<p>Provides the type of the stored pointer.</p>
+<h3><a name="shared_array_ctor">shared_array constructors</a></h3>
+<pre>explicit shared_array( T* p=0 );</pre>
+<p>Constructs a <strong>shared_array</strong>, storing a copy of <tt>p</tt>,
+which must have been allocated via a C++ <tt>new</tt>[] expression or be 0.
+Afterwards, use_count() is 1 (even if p==0; see <a href="#shared_array_~shared_array">~shared_array</a>).</p>
+<p>The only exception which may be thrown is <tt>std::bad_alloc</tt>.&nbsp; If
+an exception is thrown,&nbsp; <tt>delete[] p</tt> is called.</p>
+<pre>shared_array( const shared_array&amp; r);  // never throws</pre>
+<p>Constructs a <strong>shared_array</strong>, as if by storing a copy of the
+pointer stored in <strong>r</strong>. Afterwards, <strong>use_count()</strong>
+for all copies is 1 more than the initial <strong>r.use_count()</strong>.</p>
+<h3><a name="shared_array_~shared_array">shared_array destructor</a></h3>
+<pre>~shared_array();</pre>
+<p>If <strong>use_count()</strong> == 1, deletes the array pointed to by the
+stored pointer.&nbsp;Otherwise, <strong>use_count()</strong> for any remaining
+copies is decremented by 1. Note that in C++ <tt>delete</tt>[] on a pointer with
+a value of 0 is harmless.</p>
+<p>Does not throw exceptions.</p>
+<h3>shared_array <a name="shared_array_operator=">operator=</a></h3>
+<pre>shared_array&amp; operator=( const shared_array&amp; r);  // never throws</pre>
+<p>First, if <strong>use_count()</strong> == 1, deletes the array pointed to by
+the stored pointer.&nbsp;Otherwise, <strong>use_count()</strong> for any
+remaining copies is decremented by 1. Note that in C++ <tt>delete</tt>[] on a
+pointer with a value of 0 is harmless.</p>
+<p>Then replaces the contents of <strong>this</strong>, as if by storing a copy
+of the pointer stored in <strong>r</strong>. Afterwards, <strong>use_count()</strong>
+for all copies is 1 more than the initial <strong>r.use_count()</strong>.&nbsp;</p>
+<h3>shared_array <a name="shared_array_reset">reset</a></h3>
+<pre>void reset( T* p=0 );</pre>
+<p>First, if <strong>use_count()</strong> == 1, deletes the array pointed to by
+the stored pointer.&nbsp;Otherwise, <strong>use_count()</strong> for any
+remaining copies is decremented by 1. Note that in C++&nbsp; <tt>delete</tt>[]
+on a pointer with a value of 0 is harmless.</p>
+<p>Then replaces the contents of <strong>this</strong>, as if by storing a copy
+of <strong>p</strong>, which must have been allocated via a C++ <tt>new</tt>[]
+expression or be 0. Afterwards, <strong>use_count()</strong> is 1 (even if p==0;
+see <a href="#shared_array_~shared_array">~shared_array</a>).</p>
+<p>The only exception which may be thrown is <tt>std::bad_alloc</tt>.&nbsp; If
+an exception is thrown,&nbsp; <tt>delete[] p</tt> is called.</p>
+<h3>shared_array <a name="shared_array_operator[]">operator[]</a></h3>
+<p><tt>T&amp; operator[](std::size_t i) const; // never throws</tt></p>
+<p>Returns a reference to element <tt>i</tt> of the array pointed to by the
+stored pointer.</p>
+<p>Behavior is undefined (and almost certainly undesirable) if <tt>get()==0</tt>,
+or if <tt>i</tt> is less than 0 or is greater or equal to the number of elements
+in the array.</p>
+<h3>shared_array <a name="shared_array_get">get</a></h3>
+<pre>T* get() const;  // never throws</pre>
+<p>Returns the stored pointer.</p>
+<h3>shared_array<a name="shared_array_use_count"> use_count</a></h3>
+<p><tt>long use_count() const; // never throws</tt></p>
+<p>Returns the number of <strong>shared_arrays</strong> sharing ownership of the
+stored pointer.</p>
+<h3>shared_array <a name="shared_array_unique">unique</a></h3>
+<p><tt>bool unique() const; // never throws</tt></p>
+<p>Returns <strong>use_count()</strong> == 1.</p>
+<h3><a name="shared_array_swap">shared_array swap</a></h3>
+<p><code>void swap( shared_array&lt;T&gt;&amp; other ) throw()</code></p>
+<p>Swaps the two smart pointers, as if by std::swap.</p>
+<h2>Class <a name="shared_array_example">shared_array example</a></h2>
+<p>[To be supplied. In the meantime, see <a href="smart_ptr_test.cpp">smart_ptr_test.cpp</a>.]</p>
+<hr>
+<p>Revised December 8, 1999</p>
+<p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
+modify, sell and distribute this document is granted provided this copyright
+notice appears in all copies. This document is provided &quot;as is&quot;
+without express or implied warranty, and with no claim as to its suitability for
+any purpose.</p>
+
+</body>
+
+</html>

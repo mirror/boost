@@ -1,0 +1,138 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Smart Pointer Classes</title>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="center" width="277" height="86">Smart
+Pointers</h1>
+<p>Smart pointers are classes which store pointers to dynamically allocated
+(heap) objects.&nbsp; They behave much like built-in C++ pointers except that
+they automatically delete the object pointed to at the appropriate
+time.&nbsp;Smart pointers are particularly useful in the face of exceptions as
+they ensure proper destruction of dynamically allocated objects. They can also
+be used to keep track of dynamically allocated objects shared by multiple
+owners.</p>
+<p>Conceptually, smart pointers are seen as owning the object pointed to, and
+thus responsible for deletion of the object when it is no longer needed.</p>
+<p>The header <a href="../../boost/smart_ptr.hpp">boost/smart_ptr.hpp</a>
+provides four smart pointer template classes:</p>
+<div align="left">
+  <table border="1" cellpadding="4" cellspacing="4">
+    <tr>
+      <td>
+        <p align="left"><a href="scoped_ptr.htm"><strong>scoped_ptr</strong></a></td>
+      <td>Simple sole ownership of single objects.</td>
+    </tr>
+    <tr>
+      <td><a href="scoped_array.htm"><strong>scoped_array</strong></a></td>
+      <td>Simple sole ownership of arrays.</td>
+    </tr>
+    <tr>
+      <td><a href="shared_ptr.htm"><strong>shared_ptr</strong></a></td>
+      <td>Object ownership shared among multiple pointers</td>
+    </tr>
+    <tr>
+      <td><a href="shared_array.htm"><strong>shared_array</strong></a></td>
+      <td>Array ownership shared among multiple pointers.</td>
+    </tr>
+  </table>
+</div>
+<p>These classes are designed to complement the C++ Standard Library <tt>auto_ptr</tt>
+class.</p>
+<p>They are examples of the &quot;resource acquisition is initialization&quot;
+idiom described in Bjarne Stroustrup's &quot;The C++ Programming Language&quot;,
+3rd edition, Section 14.4, Resource Management.</p>
+<p>A test program (<a href="smart_ptr_test.cpp">smart_ptr_test.cpp</a>) is
+provided to verify correct operation.</p>
+<p>A page on <a href="smarttests.htm">Smart Pointer Timings</a> will be of
+interest to those curious about performance issues.</p>
+<h2><a name="Common requirements">Common requirements</a></h2>
+<p>These smart pointer classes have a template parameter, <tt>T</tt>, which
+specifies the type of the object pointed to by the smart pointer.&nbsp; The
+behavior of all four classes is undefined if the destructor or operator delete
+for objects of type <tt>T</tt> throws exceptions.</p>
+<h2>Exception safety</h2>
+<p>Several functions in these smart pointer classes are specified as having
+&quot;no effect&quot; or &quot;no effect except such-and-such&quot; if an
+exception is thrown.&nbsp;&nbsp; This means that when an exception is thrown by
+an object of one of these classes, the entire program state remains the same as
+it was prior to the function call which resulted in the exception being
+thrown.&nbsp; This amounts to a guarantee that there are no detectable side
+effects.&nbsp;&nbsp; Other functions never throw exceptions. The only exception
+ever thrown by functions which do throw (assuming <tt>T</tt> meets the <a href="#Common requirements">Common
+requirements</a>)&nbsp; is <tt>std::bad_alloc</tt>, and that is thrown only by
+functions which are explicitly documented as possibly throwing <tt>std::bad_alloc</tt>.</p>
+<h2>Exception-specifications</h2>
+<p>Exception-specifications are not used; see <a href="../../more/lib_guide.htm#Exception-specification">exception-specification
+rationale</a>.</p>
+<p>All four classes contain member functions which can never throw exceptions,
+because they neither throw exceptions themselves nor call other functions which
+may throw exceptions.&nbsp; These members are indicated by a comment: <kbd>//
+never throws</kbd>. </p>
+<p>Functions which destroy objects of the pointed to type are prohibited from
+throwing exceptions by the <a href="#Common requirements">Common requirements</a>.</p>
+<h2>History and acknowledgements</h2>
+<p>November, 1999. Darin Adler provided operator ==, operator !=, and std::swap
+and std::less specializations for shared types.</p>
+<p>September, 1999. Luis Coelho provided shared_ptr::swap and shared_array::swap</p>
+<p>May, 1999.&nbsp; In April and May, 1999, Valentin Bonnard and David Abrahams
+made a number of suggestions resulting in numerous improvements.&nbsp; See the
+revision history in <a href="../../boost/smart_ptr.hpp"><tt>smart_ptr.hpp</tt></a>
+for the specific changes made as a result of their constructive criticism.</p>
+<p>Oct, 1998.&nbsp; In 1994 Greg Colvin proposed to the C++ Standards Committee
+classes named <strong>auto_ptr</strong> and <strong>counted_ptr</strong> which
+were very similar to what we now call <strong>scoped_ptr</strong> and <strong>shared_ptr</strong>.&nbsp;
+The committee document was 94-168/N0555, Exception Safe Smart Pointers.&nbsp; In
+one of the very few cases where the Library Working Group's recommendations were
+not followed by the full committee, <strong>counted_ptr</strong> was rejected
+and surprising transfer-of-ownership semantics were added to <strong>auto-ptr</strong>.</p>
+<p>Beman Dawes proposed reviving the original semantics under the names <strong>safe_ptr</strong>
+and <strong>counted_ptr</strong> at an October, 1998, meeting of Per Andersson,
+Matt Austern, Greg Colvin, Sean Corfield, Pete Becker, Nico Josuttis, Dietmar
+Kühl, Nathan Myers, Chichiang Wan and Judy Ward.&nbsp; During the discussion,
+the four class names were finalized, it was decided that there was no need to
+exactly follow the <strong>std::auto_ptr</strong> interface, and various
+function signatures and semantics were finalized.</p>
+<p>Over the next three months, several implementations were considered for <strong>shared_ptr</strong>,
+and discussed on the <a href="http://www.boost.org">boost.org</a> mailing
+list.&nbsp; The implementation questions revolved around the reference count
+which must be kept, either attached to the pointed to object, or detached
+elsewhere. Each of those variants have themselves two major variants:
+<ul>
+  <li>Direct detached: the shared_ptr contains a pointer to the object, and a
+    pointer to the count.</li>
+  <li>Indirect detached: the shared_ptr contains a pointer to a helper object,
+    which in turn contains a pointer to the object and the count.</li>
+  <li>Embedded attached: the count is a member of the object pointed to.</li>
+  <li>Placement attached: the count is attached via operator new manipulations.</li>
+</ul>
+<p>Each implementation technique has advantages and disadvantages.&nbsp; We went
+so far as to run various timings of the direct and indirect approaches, and
+found that at least on Intel Pentium chips there was very little measurable
+difference.&nbsp; Kevlin Henney provided a paper he wrote on &quot;Counted Body
+Techniques.&quot;&nbsp; Dietmar Kühl suggested an elegant partial template
+specialization technique to allow users to choose which implementation they
+preferred, and that was also experimented with.</p>
+<p>But Greg Colvin and Jerry Schwarz argued that &quot;parameterization will
+discourage users&quot;, and in the end we choose to supply only the direct
+implementation.</p>
+<p>See the Revision History section of the header for further contributors.</p>
+<hr>
+<p>Revised&nbsp; <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan
+-->24 Jul 2000<!--webbot bot="Timestamp" endspan i-checksum="14986"
+--></p>
+<p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
+modify, sell and distribute this document is granted provided this copyright
+notice appears in all copies. This document is provided &quot;as is&quot;
+without express or implied warranty, and with no claim as to its suitability for
+any purpose.</p>
+
+</body>
+
+</html>

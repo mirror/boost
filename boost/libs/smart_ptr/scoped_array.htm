@@ -1,0 +1,90 @@
+<html>
+
+<head>
+<title>scoped_array</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="center" width="277" height="86">Class
+<a name="scoped_array">scoped_array</a></h1>
+<p>Class <strong>scoped_array</strong> stores a pointer to a dynamically
+allocated array. (Dynamically allocated arrays are allocated with the C++ <tt>new[]</tt>
+expression.)&nbsp;&nbsp; The array pointed to is guaranteed to be deleted,
+either on destruction of the <strong>scoped_array</strong>, or via an explicit <strong>scoped_array::reset()</strong>.</p>
+<p>Class<strong> scoped_array</strong> is a simple solution for simple
+needs.&nbsp; It cannot be used in C++ Standard Library containers.&nbsp; See <a href="shared_array.htm"><strong>shared_array</strong></a>
+if <strong>scoped_array</strong> does not meet your needs.</p>
+<p>Class<strong> scoped_array</strong> cannot correctly hold a pointer to a
+single object.&nbsp; See <a href="scoped_ptr.htm"><strong>scoped_ptr</strong></a>
+for that usage.</p>
+<p>Because <strong>scoped_array</strong> is so simple, in its usual
+implementation every operation is as fast as a built-in array pointer and has no
+more space overhead that a built-in array pointer.</p>
+<p>A heavier duty alternative to a <strong>scoped_array</strong> is a <strong>scoped_ptr</strong>
+to a C++ Standard Library <strong>vector</strong>.</p>
+<p>The class is a template parameterized on <tt>T</tt>, the type of the object
+pointed to.&nbsp;&nbsp; <tt>T</tt> must meet the smart pointer <a href="smart_ptr.htm#Common requirements">common
+requirements</a>.</p>
+<h2>Class scoped_array Synopsis</h2>
+<pre>#include &lt;boost/smart_ptr.hpp&gt;
+namespace boost {
+
+template&lt;typename T&gt; class scoped_array : <a href="../utility/utility.htm#noncopyable">noncopyable</a> {
+
+ public:
+   typedef T <a href="#scoped_array_element_type">element_type</a>;
+
+   explicit <a href="#scoped_array_ctor">scoped_array</a>( T* p=0 );  // never throws
+  <strong> </strong><a href="#scoped_array_~scoped_array">~scoped_array</a>();
+
+   void <a href="#scoped_array_reset">reset</a>( T* p=0 );
+
+   T&amp; <a href="#scoped_array_operator[]">operator[]</a>(std::size_t i) const;  // never throws
+   T* <a href="#scoped_array_get">get</a>() const;  // never throws
+   };
+}</pre>
+<h2>Class scoped_array Members</h2>
+<h3>scoped_array <a name="scoped_array_element_type">element_type</a></h3>
+<pre>typedef T element_type;</pre>
+<p>Provides the type of the stored pointer.</p>
+<h3><a name="scoped_array_ctor">scoped_array constructors</a></h3>
+<pre>explicit scoped_array( T* p=0 );  // never throws</pre>
+<p>Constructs a <tt>scoped_array</tt>, storing a copy of <tt>p</tt>, which must
+have been allocated via a C++ <tt>new</tt>[] expression or be 0.</p>
+<h3><a name="scoped_array_~scoped_array">scoped_array destructor</a></h3>
+<pre>~scoped_array();</pre>
+<p>Deletes the array pointed to by the stored pointer.&nbsp; Note that in C++ <tt>delete</tt>[]
+on a pointer with a value of 0 is harmless.</p>
+<p>Does not throw exceptions.</p>
+<h3>scoped_array <a name="scoped_array_reset">reset</a></h3>
+<pre>void reset( T* p=0 )();</pre>
+<p>If p is not equal to the stored pointer, deletes the array pointed to by the
+stored pointer and then stores a copy of p, which must have been allocated via a
+C++ <tt>new[]</tt> expression or be 0.</p>
+<p>Does not throw exceptions.</p>
+<h3>scoped_array <a name="scoped_array_operator[]">operator[]</a></h3>
+<p><tt>T&amp; operator[](std::size_t i) const; // never throws</tt></p>
+<p>Returns a reference to element <tt>i</tt> of the array pointed to by the
+stored pointer.</p>
+<p>Behavior is undefined (and almost certainly undesirable) if <tt>get()==0</tt>,
+or if <tt>i</tt> is less than 0 or is greater or equal to the number of elements
+in the array.</p>
+<h3>scoped_array <a name="scoped_array_get">get</a></h3>
+<pre>T* get() const;  // never throws</pre>
+<p>Returns the stored pointer.</p>
+<h2>Class <a name="shared_array_example">scoped_array example</a></h2>
+<p>[To be supplied. In the meantime, see <a href="smart_ptr_test.cpp">smart_ptr_test.cpp</a>.]</p>
+<hr>
+<p>Revised&nbsp; December 8, 1999</p>
+<p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
+modify, sell and distribute this document is granted provided this copyright
+notice appears in all copies. This document is provided &quot;as is&quot;
+without express or implied warranty, and with no claim as to its suitability for
+any purpose.</p>
+
+</body>
+
+</html>

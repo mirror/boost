@@ -1,0 +1,218 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Rational Number Library</title>
+</head>
+<body>
+<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)"
+     align="center" WIDTH="277" HEIGHT="86">
+Rational Numbers</h1>
+
+<h2>Rationale</h2>
+
+Numbers come in many different forms. The most basic forms are natural numbers
+(non-negative "whole" numbers), integers and real numbers.  These types are
+approximated by the C++ built-in types <b>unsigned int</b>, <b>int</b>, and
+<b>float</b> (and their various equivalents in different sizes).
+
+<p>The C++ Standard Library extends the range of numeric types available by
+providing the <b>complex</b> type.
+
+<p>This library provides a further numeric type, the <b>rational</b> numbers.
+
+<p>The <b>rational</b> class is actually a implemented as a template, in a
+similar manner to the standard <b>complex</b> class.
+
+<h2>Background</h2>
+
+The mathematical concept of a rational number is what is commonly thought of
+as a fraction - that is, a number which can be represented as the ratio of two
+integers. This concept is distinct from that of a real number, which can take
+on many more values (for example, the square root of 2, which cannot be
+represented as a fraction).
+
+<p>
+Computers cannot represent mathematical concepts exactly - there are always
+compromises to be made. Machine integers have a limited range of values (often
+32 bits), and machine approximations to reals are limited in precision. The
+compromises have differing motivations - machine integers allow exact
+calculation, but with a limited range, whereas machine reals allow a much
+greater range, but at the expense of exactness.
+
+<p>
+The rational number class provides an alternative compromise. Calculations
+with rationals are exact, but there are limitations on the available range. To
+be precise, rational numbers are exact as long as the numerator and
+denominator (which are always held in normalized form, with no common factors)
+are within the range of the underlying integer type. When values go outside
+these bounds, overflow occurs and the results are undefined.
+
+<p>
+The rational number class is a template to allow the programmer to control the
+overflow behaviour somewhat. If an unlimited precision integer type is
+available, rational numbers based on it will never overflow and will provide
+exact calculations in all circumstances.
+
+<h2>Integer Type Requirements</h2>
+
+The rational type takes a single template type parameter I, which must be a
+model of the following concepts.
+
+<p>
+<ul>
+<li>Assignable
+<li>Default Constructible
+<li>Equality Comparable
+<li>LessThan Comparable
+</ul>
+
+<p>
+Furthermore, I must be an <em>integer-like</em> type, that is the following
+expressions must be valid for any two values n and m of type I, with the
+"expected" semantics. In particular, division should truncate.
+
+<tt>
+<ul>
+<li>n + m
+<li>n - m
+<li>n * m
+<li>n / m
+<li>n % m
+<li>Assignment versions of the above
+<li>+n, -n
+</ul>
+</tt>
+
+<p>
+It is valid for I to be an unsigned type. In that case, the derived rational
+class will also be unsigned. Underflow behaviour of subtraction, where results
+would otherwise be negative, is unpredictable in this case.
+
+<ul>
+<li>
+The implementation of abs(rational&lt;I&gt;) relies on the validity of the
+expression abs(i), where i is of type I.
+<li>
+The implementation of rational_cast&lt;T&gt;(rational&lt;I&gt;) relies on the
+ability to static_cast from type I to type T, and on the expression x/y being
+valid for any two values of type T.
+<li>
+The input and output operators rely on the existence of corresponding input
+and output operators for type I.
+</ul>
+
+<h2>Interface</h2>
+Two utility functions are provided, which work on any types for which the
+following operations are defined: <tt>=, +=, *=, /=, %, &lt;</tt>
+<br><br>
+<table>
+<tr>
+<td width=5%></td>
+<td><tt>gcd(n, m)</tt></td>
+<td width=5%></td>
+<td>The greatest common divisor of n and m</td>
+</tr>
+<tr>
+<td width=5%></td>
+<td><tt>lcm(n, m)</tt></td>
+<td width=5%></td>
+<td>The least common multiple of n and m</td>
+</tr>
+</table>
+
+<p>All of the standard numeric operators are defined for the <b>rational</b>
+class. These include:
+<br>
+
+<pre>
+    +    +=
+    -    -=
+    *    *=
+    /    /=
+    ++   --    (both prefix and postfix)
+    ==   !=
+    &lt;    &gt;
+    &lt;=   &gt;=
+</pre>
+
+<p>Furthermore, input and output operators <tt>&lt;&lt;</tt> and
+<tt>&gt;&gt;</tt> are provided. The external representation of a rational is
+two integers, separated by a slash (<tt>/</tt>). On input, there must be no
+space between the numerator and the slash.
+
+<p>Rationals can be constructed from a pair (numerator, denominator) of
+integers, or a single integer. There is also a default constructor, which
+initialises the rational to a value of zero.
+
+<p>The single-argument constructor is <em>not</em> declared as explicit, so
+there is an implicit conversion from the underlying integer type to the
+rational type.
+
+<p>For any <tt>rational&lt;I&gt; r</tt>, <tt>r.assign(n, m)</tt> provides a
+fast equivalent of <tt>r = rational&lt;I&gt;(n, m);</tt>, without the
+construction of a temporary. While this is probably unnecessary for rationals
+based on machine integer types, it could offer a saving for rationals based on
+unlimited-precision integers, for example.
+
+<p>There are <em>no</em> implicit conversions from rationals to any other
+type. However, there is an explicit type-conversion function,
+<tt>rational_cast&lt;T&gt;(r)</tt>. This can be used as follows:
+
+<pre>
+    rational r(22,7);
+    double nearly_pi = boost::rational_cast&lt;double&gt;(r);</pre>
+
+<p>Finally, access to the internal representation of rationals is provided by
+the two member functions <tt>numerator()</tt> and <tt>denominator()</tt>.
+
+<h2>Exceptions</h2>
+Rationals can never have a denominator of zero. (This library does not support
+representations for infinity or NaN). Should a rational result ever generate a
+denominator of zero, the exception <tt>boost::bad_rational</tt> (a subclass of
+<tt>std::domain_error</tt>) is thrown.
+
+<h2>Internal representation</h2>
+<em>Note:</em> This information is for information only, and should be
+assumed to be subject to change without notice. Should the internal
+representation change, it is possible that the semantics of the
+<tt>numerator()</tt> and <tt>denominator()</tt> functions will change as well.
+Use at your own risk.
+
+<p>Internally, rational numbers are stored as a pair (numerator, denominator)
+of integers (whose type is specified as the template parameter for the
+rational type). Rationals are always stored in fully normalised form (ie,
+gcd(numerator,denominator) = 1, and the denominator is always positive).
+
+<p>Note that the range of values representable in a rational is dependent upon
+the denominator. If the denominator is 1, the range is the same as that of the
+underlying integer type. If the denominator is equal to the maximum
+representable value in the underlying integer type, the maximum value is
+(approximately) 1.
+
+<h2>References</h2>
+<ul>
+<li>The rational number header itself: <a href="../../boost/rational.hpp">rational.hpp</a>
+<li>Some example code: <a href="rational_example.cpp">rational_example.cpp</a>
+</ul>
+
+<h2>History and Acknowledgements</h2>
+
+In December, 1999, I implemented the initial version of the rational
+number class, and submitted it to the boost mailing list. Some discussion
+of the implementation took place on the
+<A HREF="http://www.boost.org/">boost.org</A>
+mailing list. In particular, Andrew D. Jewell pointed out the importance of
+ensuring that the risk of overflow was minimised, and provided overflow-free
+implementations of most of the basic operations. The name rational_cast was
+suggested by Kevlin Henney. Ed Brey provided invaluable comments - not least
+in pointing out some fairly stupid typing errors in the original code!
+
+<p>Revised&nbsp; December 14, 1999</p>
+
+<p>© Copyright Paul Moore 1999. Permission to copy, use, modify, sell
+and distribute this document is granted provided this copyright notice
+appears in all copies. This document is provided &quot;as is&quot; without
+express or implied warranty, and with no claim as to its suitability for
+any purpose.</p>
+</body>
+</html>
