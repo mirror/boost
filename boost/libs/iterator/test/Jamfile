@@ -19,6 +19,7 @@ test-suite iterator
     [ run is_convertible_fail.cpp ]  
 
     # These tests should work for just about everything.
+    [ compile is_lvalue_iterator.cpp ]
     [ run unit_tests.cpp ]
     [ run concept_tests.cpp ]
     [ run iterator_adaptor_cc.cpp ]
