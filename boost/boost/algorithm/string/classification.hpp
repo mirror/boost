@@ -235,9 +235,12 @@ namespace boost {
             const predicate_facade<Pred1T>& Pred1, 
             const predicate_facade<Pred2T>& Pred2 )
         {    
+            // Doing the static_cast with the pointer instead of the reference
+            // is a workaround for some compilers which have problems with
+            // static_cast's of template references, i.e. CW8. /grafik/
             return detail::pred_andF<Pred1T,Pred2T>(
-                static_cast<const Pred1T&>(Pred1), 
-                static_cast<const Pred2T&>(Pred2) );
+                *static_cast<const Pred1T*>(&Pred1), 
+                *static_cast<const Pred2T*>(&Pred2) );
         }
 
         //! predicate 'or' composition predicate
@@ -256,9 +259,12 @@ namespace boost {
             const predicate_facade<Pred1T>& Pred1, 
             const predicate_facade<Pred2T>& Pred2 )
         {    
+            // Doing the static_cast with the pointer instead of the reference
+            // is a workaround for some compilers which have problems with
+            // static_cast's of template references, i.e. CW8. /grafik/
             return detail::pred_orF<Pred1T,Pred2T>(
-                static_cast<const Pred1T&>(Pred1), 
-                static_cast<const Pred2T&>(Pred2));
+                *static_cast<const Pred1T*>(&Pred1), 
+                *static_cast<const Pred2T*>(&Pred2));
         }
 
         //! predicate negation operator
@@ -273,7 +279,10 @@ namespace boost {
         inline detail::pred_notF<PredT>
         operator!( const predicate_facade<PredT>& Pred )
         {
-            return detail::pred_notF<PredT>(static_cast<const PredT&>(Pred)); 
+            // Doing the static_cast with the pointer instead of the reference
+            // is a workaround for some compilers which have problems with
+            // static_cast's of template references, i.e. CW8. /grafik/
+            return detail::pred_notF<PredT>(*static_cast<const PredT*>(&Pred)); 
         }
 
     } // namespace algorithm
