@@ -32,13 +32,6 @@
 #define BOOST_DATE_TIME_NO_MEMBER_INIT
 #endif
 
-//Include extensions to date_duration - comment out to remove this feature
-#define BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES
-//these extensions are known to cause problems with gcc295
-#if defined(__GNUC__) && (__GNUC__ < 3)
-#undef BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES
-#endif
-
 // include these types before we try to re-define them
 #include "boost/cstdint.hpp"
 
