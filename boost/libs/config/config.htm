@@ -749,7 +749,7 @@ f(&amp;bar); // should choose #2.</pre>
         conforming std::use_facet.</td>
     </tr>
     <tr>
-        <td>BOOST_NO_STD_WSTREAM</td>
+        <td>BOOST_NO_STD_WSTREAMBUF</td>
         <td>Standard library</td>
         <td>The standard library's implementation of std::basic_streambuf&lt;wchar_t&gt;
         is either missing, incomplete, or buggy.</td>
@@ -1035,10 +1035,15 @@ provide workarounds for compiler/standard library defects.</p>
         the use of <code>typename</code> for dependent types in
         deduced contexts. This macro expands to nothing on those
         compilers, and <code>typename</code> elsewhere. For
-        example, replace:<pre>template <class T> void f(T, typename T::type);</pre>
+        example, replace:<pre>template &lt;class T&gt; void f(T, typename T::type);</pre>
         <p>with:</p>
-        <pre>template <class T> void f(T, BOOST_DEDUCED_TYPENAME T::type);</pre>
+        <pre>template &lt;class T&gt; void f(T, BOOST_DEDUCED_TYPENAME T::type);</pre>
         </td>
+    </tr>
+    <tr>
+        <td>BOOST_STD_EXTENSION_NAMESPACE</td>
+        <td>The namespace used for std library extensions (hashtable
+        classes etc).</td>
     </tr>
     <tr>
         <td valign="top" width="50%">BOOST_STATIC_CONSTANT(Type,
