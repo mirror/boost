@@ -59,10 +59,11 @@ struct test_case {
 
 /* Parses the syntax description in 'syntax' and initialized
    'cmd' accordingly' 
-   The "boost::" in parameter type is needed because CW9 has std::detail
-   and it causes an ambiguity.
+   The "boost::program_options" in parameter type is needed because CW9 
+   has std::detail and it causes an ambiguity.
 */
-void apply_syntax(boost::detail::cmdline& cmd, const char* syntax)
+void apply_syntax(boost::program_options::detail::cmdline& cmd, 
+                  const char* syntax)
 {
    
     string s;
