@@ -36,7 +36,7 @@
 #include <cwchar>             // for WCHAR_MIN and WCHAR_MAX
 #include <boost/config.hpp>
 
-#if defined(__sparc) || defined(__sparc__) || defined(__powerpc__) || defined(__hppa)
+#if defined(__sparc) || defined(__sparc__) || defined(__powerpc__) || defined(__ppc__) || defined(__hppa)
 #define BOOST_BIG_ENDIAN
 #elif !defined(__i386__)
 #error The file boost/detail/limits.hpp needs to be set up for your CPU type.
