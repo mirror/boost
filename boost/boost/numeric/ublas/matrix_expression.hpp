@@ -331,11 +331,11 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         const expression_type &e_;
-        static expression_type nil_;
+        static const expression_type nil_;
     };
 
     template<class E>
-    typename matrix_const_reference<E>::expression_type matrix_const_reference<E>::nil_;
+    const typename matrix_const_reference<E>::expression_type matrix_const_reference<E>::nil_;
 #endif
 
     template<class E>

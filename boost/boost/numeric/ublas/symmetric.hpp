@@ -2178,11 +2178,11 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         matrix_closure_type data_;
-        static matrix_type nil_;
+        static const_matrix_type nil_;
     };
 
     template<class M, class F>
-    typename symmetric_adaptor<M, F>::matrix_type symmetric_adaptor<M, F>::nil_;
+    typename symmetric_adaptor<M, F>::const_matrix_type symmetric_adaptor<M, F>::nil_;
 
 }}}
 

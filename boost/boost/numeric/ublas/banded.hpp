@@ -166,8 +166,10 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
             bad_index ().raise ();
-#endif
+            return const_cast<reference>(zero_);    // Never reached
+#else
             return zero_;
+#endif
         }
 
         // Assignment
@@ -1000,12 +1002,12 @@ namespace boost { namespace numeric { namespace ublas {
         size_type lower_;
         size_type upper_;
         array_type data_;
-        static value_type zero_;
+        typedef const value_type const_value_type;
+        static const_value_type zero_;
     };
 
     template<class T, class F, class A>
-    typename banded_matrix<T, F, A>::value_type banded_matrix<T, F, A>::zero_ =
-        BOOST_UBLAS_TYPENAME banded_matrix<T, F, A>::value_type (0);
+    typename banded_matrix<T, F, A>::const_value_type banded_matrix<T, F, A>::zero_ (0);
 
     // Diagonal matrix class
     template<class T, class F, class A>
@@ -2024,15 +2026,15 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         size_type lower_;
         size_type upper_;
-        static matrix_type nil_;
-        static value_type zero_;
+        static const_matrix_type nil_;
+        typedef const value_type const_value_type;
+        static const_value_type zero_;
     };
 
     template<class M>
-    typename banded_adaptor<M>::matrix_type banded_adaptor<M>::nil_;
+    typename banded_adaptor<M>::const_matrix_type banded_adaptor<M>::nil_;
     template<class M>
-    typename banded_adaptor<M>::value_type banded_adaptor<M>::zero_ =
-        BOOST_UBLAS_TYPENAME banded_adaptor<M>::value_type (0);
+    typename banded_adaptor<M>::const_value_type banded_adaptor<M>::zero_ (0);
 
     // Diagonal matrix adaptor class
     template<class M>

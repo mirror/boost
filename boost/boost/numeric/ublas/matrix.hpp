@@ -2405,11 +2405,9 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T>
-    typename identity_matrix<T>::value_type identity_matrix<T>::zero_ =
-        BOOST_UBLAS_TYPENAME identity_matrix<T>::value_type (0);
+    typename identity_matrix<T>::value_type identity_matrix<T>::zero_ (0);
     template<class T>
-    typename identity_matrix<T>::value_type identity_matrix<T>::one_ =
-        BOOST_UBLAS_TYPENAME identity_matrix<T>::value_type (1);
+    typename identity_matrix<T>::value_type identity_matrix<T>::one_ (1);
 
     // Zero matrix class
     template<class T>
@@ -2861,8 +2859,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T>
-    typename zero_matrix<T>::value_type zero_matrix<T>::zero_ =
-        BOOST_UBLAS_TYPENAME zero_matrix<T>::value_type (0);
+    typename zero_matrix<T>::value_type zero_matrix<T>::zero_ (0);
 
     // Scalar matrix class
     template<class T>

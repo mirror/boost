@@ -2545,12 +2545,12 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         matrix_closure_type data_;
-        static matrix_type nil_;
+        static const_matrix_type nil_;
         static value_type conj_;
     };
 
     template<class M, class F>
-    typename hermitian_adaptor<M, F>::matrix_type hermitian_adaptor<M, F>::nil_;
+    typename hermitian_adaptor<M, F>::const_matrix_type hermitian_adaptor<M, F>::nil_;
     template<class M, class F>
     typename hermitian_adaptor<M, F>::value_type hermitian_adaptor<M, F>::conj_;
 

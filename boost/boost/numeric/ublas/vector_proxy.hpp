@@ -521,11 +521,11 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         vector_closure_type data_;
         range r_;
-        static vector_type nil_;
+        static const_vector_type nil_;
     };
 
     template<class V>
-    typename vector_range<V>::vector_type vector_range<V>::nil_;
+    typename vector_range<V>::const_vector_type vector_range<V>::nil_;
 
     // Projections
     template<class V>
@@ -1054,11 +1054,11 @@ return true;
 #endif
         vector_closure_type data_;
         slice s_;
-        static vector_type nil_;
+        static const_vector_type nil_;
     };
 
     template<class V>
-    typename vector_slice<V>::vector_type vector_slice<V>::nil_;
+    typename vector_slice<V>::const_vector_type vector_slice<V>::nil_;
 
     // Projections
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
@@ -1602,11 +1602,11 @@ return true;
 #endif
         vector_closure_type data_;
         indirect_array_type ia_;
-        static vector_type nil_;
+        static const_vector_type nil_;
     };
 
     template<class V, class IA>
-    typename vector_indirect<V, IA>::vector_type vector_indirect<V, IA>::nil_;
+    typename vector_indirect<V, IA>::const_vector_type vector_indirect<V, IA>::nil_;
 
     // Projections
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING

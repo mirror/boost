@@ -27,9 +27,26 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
+    // Base class for linear algebra expression's
+    template<class T>
+    class expression_base:
+        private nonassignable {
+        typedef const T const_value_type;
+    public:
+        // Linear algebra identities
+        static const_value_type zero;
+        static const_value_type one;
+    };
+
+    template<class V>
+    typename expression_base<V>::const_value_type expression_base<V>::zero (0);
+    template<class V>
+    typename expression_base<V>::const_value_type expression_base<V>::one (1);
+
+
     template<class T>
     struct scalar_expression:
-        private nonassignable {
+        public expression_base<T> {
         typedef T value_type;
     };
 
@@ -83,20 +100,25 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         const value_type &t_;
-        static value_type nil_;
+        static const value_type nil_;
     };
 
     template<class T>
-    typename scalar_const_reference<T>::value_type scalar_const_reference<T>::nil_;
+    const typename scalar_const_reference<T>::value_type scalar_const_reference<T>::nil_;
+
+
 
     // Base class for the Barton Nackman trick
     template<class E>
-    struct vector_expression:
+    class vector_expression:
         private nonassignable {
+//FIXME        public expression_base<typename E::value_type> {
+    public:
         BOOST_STATIC_CONSTANT (int, complexity = 0);
         typedef E expression_type;
         typedef vector_tag type_category;
         typedef abstract_tag simd_category;
+ 
         typedef noalias_proxy<E> noalias_proxy_type;
         typedef const vector_range<const E> const_vector_range_type;
         typedef vector_range<E> vector_range_type;
@@ -280,11 +302,11 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         const expression_type &e_;
-        static expression_type nil_;
+        static const expression_type nil_;
     };
 
     template<class E>
-    typename vector_const_reference<E>::expression_type vector_const_reference<E>::nil_;
+    const typename vector_const_reference<E>::expression_type vector_const_reference<E>::nil_;
 #endif
 
     template<class E>
@@ -512,11 +534,11 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         expression_type &e_;
-        static expression_type nil_;
+        const static expression_type nil_;
     };
 
     template<class E>
-    typename vector_reference<E>::expression_type vector_reference<E>::nil_;
+    const typename vector_reference<E>::expression_type vector_reference<E>::nil_;
 
     template<class E, class F>
     class vector_unary:

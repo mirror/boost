@@ -1505,9 +1505,11 @@ namespace boost { namespace numeric { namespace ublas {
         ScalarExpressionConcept<scalar_const_reference<double > >::constraints ();
 
         // Vector Expressions
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         VectorExpressionConcept<vector_const_reference<vector<double> > >::constraints ();
         IndexedRandomAccess1DIteratorConcept<vector_const_reference<vector<double> >::const_iterator>::constraints ();
         IndexedRandomAccess1DIteratorConcept<vector_const_reference<vector<double> >::const_reverse_iterator>::constraints ();
+#endif
 
         VectorExpressionConcept<vector_reference<vector<double> > >::constraints ();
         // MutableVectorExpressionConcept<vector_reference<vector<double> > >::constraints ();

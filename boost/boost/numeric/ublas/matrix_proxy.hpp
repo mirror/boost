@@ -509,11 +509,11 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         matrix_closure_type data_;
         size_type i_;
-        static matrix_type nil_;
+        static const_matrix_type nil_;
     };
 
     template<class M>
-    typename matrix_row<M>::matrix_type matrix_row<M>::nil_;
+    typename matrix_row<M>::const_matrix_type matrix_row<M>::nil_;
 
     // Projections
     template<class M>
@@ -1020,11 +1020,11 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         matrix_closure_type data_;
         size_type j_;
-        static matrix_type nil_;
+        static const_matrix_type nil_;
     };
 
     template<class M>
-    typename matrix_column<M>::matrix_type matrix_column<M>::nil_;
+    typename matrix_column<M>::const_matrix_type matrix_column<M>::nil_;
 
     // Projections
     template<class M>
@@ -1536,11 +1536,11 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         range r1_;
         range r2_;
-        static matrix_type nil_;
+        static const_matrix_type nil_;
     };
 
     template<class M>
-    typename matrix_vector_range<M>::matrix_type matrix_vector_range<M>::nil_;
+    typename matrix_vector_range<M>::const_matrix_type matrix_vector_range<M>::nil_;
 
     // Matrix based vector slice class
     template<class M>
@@ -2042,11 +2042,11 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         slice s1_;
         slice s2_;
-        static matrix_type nil_;
+        static const_matrix_type nil_;
     };
 
     template<class M>
-    typename matrix_vector_slice<M>::matrix_type matrix_vector_slice<M>::nil_;
+    typename matrix_vector_slice<M>::const_matrix_type matrix_vector_slice<M>::nil_;
 
     // Matrix based vector indirection class
     template<class M, class IA>
@@ -2549,11 +2549,11 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         indirect_array_type ia1_;
         indirect_array_type ia2_;
-        static matrix_type nil_;
+        static const_matrix_type nil_;
     };
 
     template<class M, class IA>
-    typename matrix_vector_indirect<M, IA>::matrix_type matrix_vector_indirect<M, IA>::nil_;
+    typename matrix_vector_indirect<M, IA>::const_matrix_type matrix_vector_indirect<M, IA>::nil_;
 
     // Matrix based range class
     template<class M>
@@ -3444,11 +3444,11 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         range r1_;
         range r2_;
-        static matrix_type nil_;
+        static const_matrix_type nil_;
     };
 
     template<class M>
-    typename matrix_range<M>::matrix_type matrix_range<M>::nil_;
+    typename matrix_range<M>::const_matrix_type matrix_range<M>::nil_;
 
     // Projections
     template<class M>
@@ -4379,11 +4379,11 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         slice s1_;
         slice s2_;
-        static matrix_type nil_;
+        static const_matrix_type nil_;
     };
 
     template<class M>
-    typename matrix_slice<M>::matrix_type matrix_slice<M>::nil_;
+    typename matrix_slice<M>::const_matrix_type matrix_slice<M>::nil_;
 
     // Projections
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
@@ -5323,11 +5323,11 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type data_;
         indirect_array_type ia1_;
         indirect_array_type ia2_;
-        static matrix_type nil_;
+        static const_matrix_type nil_;
     };
 
     template<class M, class IA>
-    typename matrix_indirect<M, IA>::matrix_type matrix_indirect<M, IA>::nil_;
+    typename matrix_indirect<M, IA>::const_matrix_type matrix_indirect<M, IA>::nil_;
 
     // Projections
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING

@@ -721,8 +721,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class A>
-    typename sparse_vector<T, A>::value_type sparse_vector<T, A>::zero_ =
-        BOOST_UBLAS_TYPENAME sparse_vector<T, A>::value_type (0);
+    typename sparse_vector<T, A>::value_type sparse_vector<T, A>::zero_ (0);
 
     // Array based sparse vector class
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
@@ -1285,8 +1284,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, std::size_t IB, class IA, class TA>
-    typename compressed_vector<T, IB, IA, TA>::value_type compressed_vector<T, IB, IA, TA>::zero_ =
-        BOOST_UBLAS_TYPENAME compressed_vector<T, IB, IA, TA>::value_type (0);
+    typename compressed_vector<T, IB, IA, TA>::value_type compressed_vector<T, IB, IA, TA>::zero_ (0);
 
     // Array based sparse vector class
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
@@ -1880,8 +1878,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, std::size_t IB, class IA, class TA>
-    typename coordinate_vector<T, IB, IA, TA>::value_type coordinate_vector<T, IB, IA, TA>::zero_ =
-        BOOST_UBLAS_TYPENAME coordinate_vector<T, IB, IA, TA>::value_type (0);
+    typename coordinate_vector<T, IB, IA, TA>::value_type coordinate_vector<T, IB, IA, TA>::zero_ (0);
 
 }}}
 
