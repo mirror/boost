@@ -118,6 +118,7 @@ std::size_t regex_split(OutputIterator out,
       *out = std::basic_string<charT, Traits1, Alloc1>((ci_t)last, (ci_t)s.end());
       ++out;
       last = s.end();
+      --max_split;
    }
    //
    // delete from the string everything that has been processed so far:

@@ -1240,7 +1240,8 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::set_express
    register traits_size_type c;
    register re_detail::re_syntax_base* dat;
 
-   unsigned rep_min, rep_max;
+   unsigned rep_min = 0;
+   unsigned rep_max = 0;
 
    //
    // set up header:

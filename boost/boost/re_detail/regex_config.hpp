@@ -618,10 +618,13 @@ typedef unsigned long jm_uintfast32_t;
       #define BOOST_RE_NEED_ALLOC
 
       #define BOOST_RE_STL_DONE
-
-      #define BOOST_RE_USE_FACET(l, type) std::use_facet(l, (type*)0, true)
-      #define BOOST_RE_HAS_FACET(l, type) std::has_facet(l, (type*)0)
-
+      #ifndef _CPPLIB_VER
+         #define BOOST_RE_USE_FACET(l, type) std::use_facet(l, (type*)0, true)
+         #define BOOST_RE_HAS_FACET(l, type) std::has_facet(l, (type*)0)
+      #else
+         #define BOOST_RE_USE_FACET(l, type) std::use_facet(l, (type*)0)
+         #define BOOST_RE_HAS_FACET(l, type) std::has_facet(l, (type*)0)
+      #endif
 
 
    #else

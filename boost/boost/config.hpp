@@ -307,9 +307,13 @@
 #       define BOOST_NO_HASH
 #       define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
 #       define BOOST_NO_STD_ALLOCATOR
+#ifndef _CPPLIB_VER
+        // Updated Dinkum library defines this, and provides
+        // its own min and max definitions.
 #       define BOOST_NO_STD_MIN_MAX
 #       undef min
 #       undef max
+#endif
 #       define NOMINMAX
 #     endif
 #     define BOOST_NO_STD_ITERATOR_TRAITS
