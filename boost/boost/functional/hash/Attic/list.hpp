@@ -15,6 +15,7 @@
 # pragma once
 #endif
 
+#include <boost/config.hpp>
 #include <list>
 #include <boost/functional/hash/hash.hpp>
 

@@ -15,14 +15,18 @@
 # pragma once
 #endif
 
+#include <boost/config.hpp>
 #include <cstddef>
 #include <cmath>
 #include <string>
 #include <functional>
 #include <boost/limits.hpp>
 #include <boost/functional/detail/float_functions.hpp>
+#include <boost/detail/workaround.hpp>
+#if !defined(BOOST_NO_CV_SPECIALIZATIONS)
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
+#endif
 
 namespace boost
 {
@@ -53,8 +57,10 @@ namespace boost
 
     template <class It> std::size_t hash_range(It first, It last);
     template <class It> void hash_range(std::size_t&, It first, It last);
+#if !defined(BOOST_NO_CV_SPECIALIZATIONS)
     template <class Range> std::size_t hash_range(Range const& range);
     template <class Range> void hash_range(std::size_t&, Range const& range);
+#endif
 
     template <class T> void hash_combine(std::size_t& seed, T const& v);
 
@@ -143,6 +149,7 @@ namespace boost
         }
     }
 
+#if !defined(BOOST_NO_CV_SPECIALIZATIONS)
     template <class Range>
     inline std::size_t hash_range(Range const& range)
     {
@@ -154,6 +161,7 @@ namespace boost
     {
         hash_range(seed, boost::const_begin(range), boost::const_end(range));
     }
+#endif
 
 #if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
     template <class Ch, class A>
