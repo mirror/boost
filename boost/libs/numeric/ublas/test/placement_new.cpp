@@ -33,6 +33,11 @@ int main ()
     // Print offsets - we expect 0,0 or 0,sizeof(std::size_t)
     std::cout << new_offset <<','<< array_new_offset << std::endl;
 
+    // FIXME find out what version Intel 7.1 for linux says it is
+#ifdef BOOST_INTEL
+    std::cout << "intel " << BOOST_INTEL <<std::endl;
+#endif
+
     // Return status
     if (new_offset != 0)
         return -1;          // Very bad if new has an offset
