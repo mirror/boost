@@ -625,7 +625,7 @@ namespace detail {
   template <class Value>
   struct is_named_parameter
   {
-      enum { value = is_convertible< add_reference< Value >::type, add_reference< named_template_param_base >::type >::value };
+      enum { value = is_convertible< typename add_reference< Value >::type, add_reference< named_template_param_base >::type >::value };
   };
 
 # if defined(__MWERKS__) && __MWERKS__ <= 0x2406 // workaround for broken is_convertible implementation
