@@ -7,6 +7,9 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/algorithm/string/regex.hpp>
+#include <boost/algorithm/string/sequence_traits.hpp>
+
 // Include unit test framework
 #include <boost/test/included/test_exec_monitor.hpp>
 
@@ -14,8 +17,6 @@
 #include <vector>
 #include <iostream>
 #include <boost/regex.hpp>
-#include <boost/algorithm/string/sequence_traits.hpp>
-#include <boost/algorithm/string/regex.hpp>
 #include <boost/test/test_tools.hpp>
 
 using namespace std;

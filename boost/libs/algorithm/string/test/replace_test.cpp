@@ -7,6 +7,11 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/algorithm/string/erase.hpp>
+#include <boost/algorithm/string/std/list_traits.hpp>
+#include <boost/algorithm/string/std/string_traits.hpp>
+
 // Include unit test framework
 #include <boost/test/included/test_exec_monitor.hpp>
 
@@ -14,11 +19,6 @@
 #include <vector>
 #include <list>
 #include <iostream>
-
-#include <boost/algorithm/string/std/list_traits.hpp>
-#include <boost/algorithm/string/std/string_traits.hpp>
-#include <boost/algorithm/string/replace.hpp>
-#include <boost/algorithm/string/erase.hpp>
 
 // equals predicate is used for result comparison
 #include <boost/algorithm/string/predicate.hpp>

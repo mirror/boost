@@ -7,6 +7,9 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/algorithm/string/find.hpp>
+#include <boost/algorithm/string/classification.hpp>
+
 // Include unit test framework
 #include <boost/test/included/test_exec_monitor.hpp>
 
@@ -15,8 +18,6 @@
 #include <iostream>
 #include <iterator>
 #include <sstream>
-#include <boost/algorithm/string/find.hpp>
-#include <boost/algorithm/string/classification.hpp>
 #include <boost/test/test_tools.hpp>
 
 using namespace std;

@@ -7,12 +7,13 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/algorithm/string/trim.hpp>
+
 // Include unit test framework
 #include <boost/test/included/test_exec_monitor.hpp>
 
 #include <string>
 #include <iostream>
-#include <boost/algorithm/string/trim.hpp>
 #include <boost/test/test_tools.hpp>
 
 using namespace std;

@@ -7,6 +7,10 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/algorithm/string/collection_traits.hpp>
+// equals predicate is used for result comparison
+#include <boost/algorithm/string/predicate.hpp>
+
 // Include unit test framework
 #include <boost/test/included/test_exec_monitor.hpp>
 
@@ -14,11 +18,7 @@
 #include <utility>
 #include <vector>
 
-#include <boost/algorithm/string/collection_traits.hpp>
 #include <boost/type_traits.hpp>
-
-// equals predicate is used for result comparison
-#include <boost/algorithm/string/predicate.hpp>
 
 // test tools
 #include <boost/test/test_tools.hpp>
