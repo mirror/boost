@@ -15,7 +15,8 @@
 
 #include <boost/config.hpp>
 
-#if !defined(BOOST_MSVC)
+#if 1
+// Still evaluating whether VC++ can handle this.
 #define BOOST_USE_ITERATOR_ADAPTORS
 #endif
 
@@ -31,9 +32,9 @@ namespace boost {
 // Counting Iterator and Integer Range Class
 
 #ifdef BOOST_USE_ITERATOR_ADAPTORS
+template <class IntegerType>
 struct counting_iterator_policies : public default_iterator_policies
 {
-    template <class IntegerType>
     const IntegerType&
     dereference(type<const IntegerType&>, const IntegerType& i) const
         { return i; }
@@ -51,7 +52,8 @@ struct counting_iterator_traits {
 template <class IntegerType>
 struct integer_range {
 #ifdef BOOST_USE_ITERATOR_ADAPTORS
-    typedef iterator_adaptor<IntegerType, counting_iterator_policies,
+    typedef iterator_adaptor<IntegerType,
+      counting_iterator_policies<IntegerType>,
       counting_iterator_traits<IntegerType>, IntegerType> iterator;
 #else
     typedef int_iterator<IntegerType> iterator;
