@@ -1,0 +1,210 @@
+<HTML>
+<!--
+  -- Copyright (c) Jeremy Siek 2000
+  --
+  -- Permission to use, copy, modify, distribute and sell this software
+  -- and its documentation for any purpose is hereby granted without fee,
+  -- provided that the above copyright notice appears in all copies and
+  -- that both that copyright notice and this permission notice appear
+  -- in supporting documentation.  Silicon Graphics makes no
+  -- representations about the suitability of this software for any
+  -- purpose.  It is provided "as is" without express or implied warranty.
+  -->
+<Head>
+<Title>Property Accessor Concepts</Title>
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+	ALINK="#ff0000"> 
+<IMG SRC="../../c++boost.gif" 
+     ALT="C++ Boost"> 
+
+<BR Clear>
+
+
+<H1><A NAME="sec:property-accessors"></A>
+Property Accessor Concepts
+</H1>
+
+The property accessor interface consists of a set of concept that
+define a general purpose mechanism for mapping key objects to
+corresponding value objects, thereby hiding the details of how the
+mapping is implemented from algorithms that use property accessors.
+The property accessor requirements are purposefully vague on the type
+of the key and value objects to allow for the utmost flexibility.
+Since the property accessor operations are global functions, it is
+possible to overload the accessor functions such that nearly arbitrary
+property accessor types and key types can be used. The interface for
+property accessors consists of three functions: <tt>get()</tt>,
+<tt>put()</tt>, and <tt>at()</tt>. The following concrete example
+shows how the three functions could be used to access the addresses
+associated with various people.
+
+<pre>
+template &lt;class AddressAccessor&gt;
+void foo(AddressAccessor address)
+{
+  typedef typename boost::property_traits&lt;AddressAccessor&gt;::value_type value_type;
+  typedef typename boost::property_traits&lt;AddressAccessor&gt;::key_type key_type;
+
+  value_type old_address, new_address;
+  key_type fred = &quot;Fred&quot;;
+  old_address = get(address, fred);
+  new_address = &quot;384 Fitzpatrick Street&quot;
+  put(address, fred, new_address);
+
+  key_type joe = &quot;Joe&quot;;
+  value_type& joes_address = at(address, joe);
+  joes_address = &quot;325 Cushing Avenue&quot;;
+}
+</pre>
+
+<p>
+For each property accessor object there is a set of <i>valid keys</i>
+for which the mapping to value objects is defined.  Invoking a
+property accessor function on an <i>invalid</i> key results in
+undefined behaviour. The property accessor concepts do not specify how
+this set of valid keys is created or modified. A function that uses a
+property accessor must specify the expected set of valid keys in its
+preconditions.
+
+<p>
+The need for property accessors came out of the design of the Boost
+Graph Library, whose algorithms needed an interface for accessing
+properties attached to vertices and edges in a graph. In this context
+the vertex and edge descriptors are the key type of the property
+accessors.
+
+<!-- historical note about Decorators and Data Accessors -->
+
+<P>
+Several categories of property accessors provide
+different access capabilities:
+<DL>
+<DT><STRONG>readable</STRONG></DT>
+<DD>The associated property data can only be read. 
+  The data is returned by-value. Many property accessors defining the
+  problem input (such as edge weight) can be defined as readable
+  property accessors.
+
+<P>
+</DD>
+<DT><STRONG>writeable</STRONG></DT>
+<DD>The associated property can only be written to.
+  The parent array used to record the paths in a bread-first search tree
+  is an example of a property accessor that would be defined writeable.
+
+<P>
+</DD>
+<DT><STRONG>read/write</STRONG></DT>
+<DD>The associated property can both be written and read.
+  The distance property use in Dijkstra's shortest paths algorithm
+  would need to provide both read and write capabilities.
+
+<P>
+</DD>
+<DT><STRONG>lvalue</STRONG></DT>
+<DD>The associated property is actually represented in 
+  memory and it is possible to get a reference to it. 
+  The property accessors in the lvalue
+  category also support the requirements for read/write property
+  accessors.
+
+<P>
+</DD>
+</DL>
+
+<P>
+There is a separate concept defined for each of the four property
+accessor categories.  These property accessor concepts are listed
+below, with links to the documentation for each of them.
+
+<ul>
+<li><a href="./ReadablePropertyAccessor.html">ReadablePropertyAccessor</a></li>
+<li><a href="./WritablePropertyAccessor.html">WritablePropertyAccessor</a></li>
+<li><a href="./ReadWritePropertyAccessor.html">ReadWritePropertyAccessor</a></li>
+<li><a href="./LvaluePropertyAccessor.html">LvaluePropertyAccessor</a></li>
+</ul>
+
+<P>
+There is a tag struct for each of the categories of property
+accessors, which is defined in the header
+<tt>&lt;boost/property_accessor.hpp&gt;</tt>.
+
+<P>
+<PRE>
+namespace boost {
+
+  struct readable_property_accessor_tag { };
+
+  struct writable_property_accessor_tag { };
+
+  struct read_write_property_accessor_tag :
+    public readable_property_accessor_tag,
+    public writable_property_accessor_tag { };
+
+  struct lvalue_property_accessor_tag : 
+    public read_write_property_accessor_tag { };
+
+}
+</PRE>
+
+<P>
+Similar to the <TT>std::iterator_traits</TT> class of the STL, there
+is a <TT>boost::property_traits</TT> class that can be used to deduce
+the types associated with a property accessor type: the key and value
+types, and the property accessor category. There is a specialization
+of <TT>boost::property_traits</TT> so that pointers can be used as
+property accessor objects. In addition, the property accessor
+functions are overloaded for pointers. These traits classes and
+functions are defined in <tt>&lt;boost/property_accessor.hpp&gt;</tt>.
+
+<P>
+<PRE>
+namespace boost {
+
+  template &lt;class PropertyAccessor&gt;
+  struct property_traits {
+     typedef typename PropertyAccessor::key_type key_type;
+     typedef typename PropertyAccessor::value_type value_type;
+     typedef typename PropertyAccessor::category category;
+  };
+
+  // specialization for using pointers as property accessors
+  template &lt;class T&gt;
+  struct property_traits&lt;T*&gt; {
+    typedef T value_type;
+    typedef ptrdiff_t key_type;
+    typedef random_access_iterator_pa_tag category;
+  };
+
+  // overloads of the property accessor functions for pointers
+  template <class T>
+  void put(T* pa, std::ptrdiff_t k, const T& val) { pa[k] = val;  }
+
+  template <class T>
+  const T& get(const T* pa, std::ptrdiff_t k) { return pa[k]; }
+
+  template <class T>
+  T& at(T* pa, std::ptrdiff_t k) { return pa[k]; }
+
+  template <class T>
+  const T& at(const T* pa, std::ptrdiff_t k) { return pa[k]; }
+
+}
+</PRE>
+
+
+<h3>Notes to Implementors</h3>
+
+Copying a property accessor should be inexpensive since they are often
+passed by value.
+
+<br>
+<HR>
+<TABLE>
+<TR valign=top>
+<TD nowrap>Copyright &copy 2000</TD><TD>
+<A HREF=http://www.boost.org/people/jeremy_siek.htm>Jeremy Siek</A>, Univ.of Notre Dame (<A HREF="mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</A>)
+</TD></TR></TABLE>
+
+</BODY>
+</HTML> 
