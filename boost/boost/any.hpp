@@ -33,7 +33,7 @@ namespace boost
         {
         }
 
-        ~any() throw()
+        ~any()
         {
             delete content;
         }
