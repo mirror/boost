@@ -32,8 +32,15 @@
 #   define BOOST_NO_INTRINSIC_WCHAR_T
 #endif
 
+#   if __MWERKS__ == 0x3000
+#     define BOOST_COMPILER_VERSION 8.0
+#   elif __MWERKS__ == 0x3001
+#     define BOOST_COMPILER_VERSION 8.1
+#   else
+#     define BOOST_COMPILER_VERSION __MWERKS__
+#   endif 
 
-#define BOOST_COMPILER "Metrowerks CodeWarrior C++ version " BOOST_STRINGIZE(__MWERKS__)
+#define BOOST_COMPILER "Metrowerks CodeWarrior C++ version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
 
 //
 // versions check:
