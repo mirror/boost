@@ -62,7 +62,7 @@ namespace boost { namespace program_options {
     }
 #endif
 
-    DECL string arg("arg");
+    DECL std::string arg("arg");
 
     std::string
     untyped_value::name() const

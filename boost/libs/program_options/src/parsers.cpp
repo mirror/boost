@@ -204,13 +204,13 @@ namespace boost { namespace program_options {
     }
 
     template
-    basic_parsed_options<char>
+    DECL basic_parsed_options<char>
     parse_config_file(std::basic_istream<char>& is, 
                       const options_description& desc);
 
 #ifndef BOOST_NO_STD_WSTRING
     template
-    basic_parsed_options<wchar_t>
+    DECL basic_parsed_options<wchar_t>
     parse_config_file(std::basic_istream<wchar_t>& is, 
                       const options_description& desc);
 #endif
