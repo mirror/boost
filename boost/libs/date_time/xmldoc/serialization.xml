@@ -2,7 +2,7 @@
   <title>Serialization</title>
 
   <para>
-    The boost::date_time library is compatible with the boost::serialization library (currently in review for final acceptance into boost). The list of classes that are serializable are:
+    The boost::date_time library is compatible with the boost::serialization library. The list of classes that are serializable are:
   </para>
   
   <bridgehead renderas="sect3">boost::gregorian</bridgehead>
