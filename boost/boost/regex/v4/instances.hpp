@@ -60,7 +60,11 @@ template class BOOST_REGEX_DECL reg_expression< BOOST_REGEX_CHAR_T >;
 #elif (defined(BOOST_MSVC) && defined(_MSC_EXTENSIONS)) || defined(__GNUC__)
 
 #  ifndef BOOST_REGEX_INSTANTIATE
-#     define template extern template
+#     ifdef __GNUC__
+#        define template __extension__ extern template
+#     else
+#        define template extern template
+#     endif
 #  endif
 
 #  ifdef BOOST_MSVC

@@ -413,10 +413,11 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_match()
    m_presult->set_second(position);
    pstate = 0;
    m_has_found_match = true;
-   if((m_match_flags & (match_posix|match_any)) == match_posix)
+   if((m_match_flags & match_posix) == match_posix)
    {
       m_result.maybe_assign(*m_presult);
-      return false;
+      if((m_match_flags & match_any) == 0)
+         return false;
    }
 #ifdef BOOST_REGEX_MATCH_EXTRA
    if(match_extra & m_match_flags)
