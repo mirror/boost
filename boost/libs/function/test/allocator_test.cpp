@@ -84,7 +84,8 @@ test_main(int, char*[])
   fv = &do_nothing;
   fv.clear();
 
-  function<int (int, int), empty_function_policy, empty_function_mixin,
+  typedef int Ftype(int, int);
+  function<Ftype, empty_function_policy, empty_function_mixin,
            counting_allocator<int> > f2;
   alloc_count = 0;
   dealloc_count = 0;

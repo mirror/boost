@@ -647,10 +647,12 @@ test_new_syntax()
   v2();
 
   BOOST_TEST(global_int == 5);
-  function<string (const string& x, const string& y)> cat(&string_cat);
+  typedef string Fcat(const string& x, const string& y);
+  function<Fcat> cat(&string_cat);
   BOOST_TEST(cat("str", "ing") == "string");  
 
-  function<int (short lhs, short rhs)> sum(&sum_ints);
+  typedef int Fsum(short lhs, short rhs);
+  function<Fsum> sum(&sum_ints);
   BOOST_TEST(sum(2, 3) == 5);
 }
 
