@@ -40,12 +40,15 @@
 #include <boost/format/macros_stlport.hpp>  // stlport workarounds
 #include <boost/format/macros_default.hpp> 
 
-#if defined(BOOST_NO_STD_LOCALE) || ( BOOST_WORKAROUND(__BORLANDC__, <= 0x564) \
- || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT( 0x570 ) ) )
-#define BOOST_BAD_ISDIGIT
+#if defined(BOOST_NO_STD_LOCALE) || \
+ ( BOOST_WORKAROUND(__BORLANDC__, <= 0x564) \
+   || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT( 0x570 ) )  )
+// some future __BORLANDC__ >0x564  versions might not need this
+// 0x570 is Borland's kylix branch
+#define BOOST_NO_LOCALE_ISIDIGIT
 #endif
 
-#ifdef BOOST_BAD_ISDIGIT
+#ifdef BOOST_NO_LOCALE_ISIDIGIT
 #include <cctype>  // we'll use the non-locale  <cctype>'s std::isdigit(int)
 #endif
 
@@ -85,8 +88,8 @@
 #ifdef BOOST_NO_OVERLOAD_FOR_NON_CONST
 #undef BOOST_NO_OVERLOAD_FOR_NON_CONST
 #endif
-#ifdef BOOST_BAD_ISDIGIT
-#undef BOOST_BAD_ISDIGIT
+#ifdef BOOST_NO_LOCALE_ISIDIGIT
+#undef BOOST_NO_LOCALE_ISIDIGIT
 #endif
 #ifdef BOOST_IO_STD
 #undef BOOST_IO_STD
