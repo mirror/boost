@@ -17,7 +17,7 @@
 #
 # include <boost/preprocessor/config/config.hpp>
 #
-# /* BOOST_PP_TUPLE_REVERSE */
+# /* BOOST_PP_TUPLE_TO_LIST */
 #
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
 #    define BOOST_PP_TUPLE_TO_LIST(size, tuple) BOOST_PP_TUPLE_TO_LIST_I(size, tuple)

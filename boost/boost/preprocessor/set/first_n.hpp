@@ -10,23 +10,22 @@
 #
 # /* See http://www.boost.org for most recent version. */
 #
-# ifndef BOOST_PREPROCESSOR_DEBUG_ERROR_HPP
-# define BOOST_PREPROCESSOR_DEBUG_ERROR_HPP
+# ifndef BOOST_PREPROCESSOR_SET_FIRST_N_HPP
+# define BOOST_PREPROCESSOR_SET_FIRST_N_HPP
 #
-# include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/config/config.hpp>
+# include <boost/preprocessor/control/if.hpp>
+# include <boost/preprocessor/set/detail/split.hpp>
+# include <boost/preprocessor/tuple/eat.hpp>
+# include <boost/preprocessor/tuple/elem.hpp>
 #
-# /* BOOST_PP_ERROR */
+# /* BOOST_PP_SET_FIRST_N */
 #
-# if BOOST_PP_CONFIG_ERRORS
-#    define BOOST_PP_ERROR(code) BOOST_PP_CAT(BOOST_PP_ERROR_, code)
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_SET_FIRST_N(n, set) BOOST_PP_IF(n, BOOST_PP_TUPLE_ELEM, BOOST_PP_TUPLE_EAT_3)(2, 0, BOOST_PP_SET_SPLIT(n, set))
+# else
+#    define BOOST_PP_SET_FIRST_N(n, set) BOOST_PP_SET_FIRST_N_I(n, set)
+#    define BOOST_PP_SET_FIRST_N_I(n, set) BOOST_PP_IF(n, BOOST_PP_TUPLE_ELEM, BOOST_PP_TUPLE_EAT_3)(2, 0, BOOST_PP_SET_SPLIT(n, set))
 # endif
-#
-# define BOOST_PP_ERROR_0x0000 BOOST_PP_ERROR(0x0000, BOOST_PP_INDEX_OUT_OF_BOUNDS)
-# define BOOST_PP_ERROR_0x0001 BOOST_PP_ERROR(0x0001, BOOST_PP_WHILE_OVERFLOW)
-# define BOOST_PP_ERROR_0x0002 BOOST_PP_ERROR(0x0002, BOOST_PP_FOR_OVERFLOW)
-# define BOOST_PP_ERROR_0x0003 BOOST_PP_ERROR(0x0003, BOOST_PP_REPEAT_OVERFLOW)
-# define BOOST_PP_ERROR_0x0004 BOOST_PP_ERROR(0x0004, BOOST_PP_LIST_FOLD_OVERFLOW)
-# define BOOST_PP_ERROR_0x0005 BOOST_PP_ERROR(0x0005, BOOST_PP_SET_FOLD_OVERFLOW)
 #
 # endif

@@ -43,4 +43,14 @@
 #    define BOOST_PP_CONFIG_EXTENDED_LINE_INFO 0
 # endif
 #
+# /* BOOST_PP_CONFIG_ERRORS */
+#
+# ifndef BOOST_PP_CONFIG_ERRORS
+#    ifdef NDEBUG
+#        define BOOST_PP_CONFIG_ERRORS 0
+#    else
+#        define BOOST_PP_CONFIG_ERRORS 1
+#    endif
+# endif
+#
 # endif

@@ -27,6 +27,7 @@
 # include <boost/preprocessor/punctuation.hpp>
 # include <boost/preprocessor/repetition.hpp>
 # include <boost/preprocessor/selection.hpp>
+# include <boost/preprocessor/set.hpp>
 # include <boost/preprocessor/slot.hpp>
 # include <boost/preprocessor/stringize.hpp>
 # include <boost/preprocessor/tuple.hpp>
