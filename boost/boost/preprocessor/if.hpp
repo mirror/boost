@@ -18,6 +18,7 @@
 */
 
 #include <boost/preprocessor/logical/bool.hpp>
+#include <boost/preprocessor/tuple/elem.hpp>
 
 //! Expands to T if C != 0 and E if C == 0.
 /*!
@@ -28,9 +29,7 @@ BOOST_PP_REPEAT().
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define BOOST_PP_IF_BOOL(C,T,E) BOOST_PP_IF_BOOL_DELAY(C,T,E)
-#define BOOST_PP_IF_BOOL_DELAY(C,T,E) BOOST_PP_IF_BOOL##C(T,E)
-#define BOOST_PP_IF_BOOL0(T,E) E
-#define BOOST_PP_IF_BOOL1(T,E) T
+#define BOOST_PP_IF_BOOL_DELAY(C,T,E) BOOST_PP_TUPLE2_ELEM##C(E,T)
 #endif
 
 //! Obsolete. Use BOOST_PP_IF().
