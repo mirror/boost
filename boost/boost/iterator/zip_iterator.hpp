@@ -106,7 +106,9 @@ namespace boost {
       template<typename Iterator>
       struct apply
       { 
-#if BOOST_WORKAROUND(__GNUC__, == 2) || BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
+#if BOOST_WORKAROUND(__EDG_VERSION__, <= 300)   \
+    || BOOST_WORKAROUND(__GNUC__, == 2)         \
+    || BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
         typedef typename
         iterator_traits<
             typename boost::remove_cv<Iterator>::type
