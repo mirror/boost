@@ -814,7 +814,7 @@ public: // structors
         // Compile error from here indicates that the first bound
         // type is not default-constructible, and so variant cannot
         // support its own default-construction.
-
+        //
         new( storage1() ) T0();
         activate_storage1(0); // zero is the index of the first bounded type
     }
@@ -893,27 +893,54 @@ private: // helpers, for structors, cont. (below)
             );
     }
 
-private: // workaround, for structors, cont. (below)
-
-    // [While unnecessary for conforming compilers, this workaround doesn't break anything:]
-
-    template <BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename U)>
-    void constructor_simulated_partial_ordering(
-          const boost::variant<BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, U)>& operand
-        , long)
+    template <typename Variant>
+    void copy_construct_variant(const Variant& operand)
     {
-        // [Determine if operand is a bounded type, or if it needs to be converted (foreign):]
+        // [Determine if operand is a bounded type, or if it needs to be
+        //  converted (foreign):]
         typedef typename mpl::not_<
-              mpl::contains<
-                  types
-                , boost::variant<BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES,U)>
-                >
+              mpl::contains<types, Variant>
             >::type from_foreign_variant;
 
         copy_construct(
               operand
             , from_foreign_variant()
             );
+    }
+
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+
+public: // structors, cont.
+
+    template <BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename U)>
+    variant(
+          const boost::variant<
+              BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, U)
+            >& operand
+        )
+    {
+        copy_construct_variant(operand);
+    }
+
+    template <typename T>
+    variant(const T& operand)
+    {
+        copy_construct(operand);
+    }
+
+#else // defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+
+private: // workaround, for structors, cont. (below)
+
+    template <BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename U)>
+    void constructor_simulated_partial_ordering(
+          const boost::variant<
+              BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, U)
+            >& operand
+        , long
+        )
+    {
+        copy_construct_variant(operand);
     }
 
     template <typename T>
@@ -929,6 +956,8 @@ public: // structors, cont.
     {
         constructor_simulated_partial_ordering(operand, 1L);
     }
+
+#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING workaround
 
 private: // helpers, for modifiers (below)
 
@@ -1021,7 +1050,7 @@ private: // helpers, for modifiers (below)
     void assign(const variant& operand)
     {
         assign_into visitor(*this, operand.which());
-        operand.raw_apply_visitor(visitor);        
+        operand.raw_apply_visitor(visitor); 
     }
 
 public: // modifiers
@@ -1029,18 +1058,20 @@ public: // modifiers
     variant& operator=(const variant& rhs)
     {
         assign(rhs);
-        
         return *this;
     }
 
     template <typename T>
     variant& operator=(const T& rhs)
     {
-        // While potentially inefficient, the following (implicit)
-        // construction of a variant allows T as any type convertible
-        // to a bounded type (i.e., opposed to an exact match).
-
-        assign(rhs);  // rhs implicitly constructed as variant
+        // While potentially inefficient, the following construction of a
+        // variant allows T as any type convertible to a bounded type (i.e.,
+        // opposed to an exact match) without excessive code redundancy.
+        //
+        // TODO: When variant is moveable, move-assign temp into *this.
+        //
+        variant temp(rhs);
+        assign(temp);
         return *this;
     }
 
@@ -1052,7 +1083,6 @@ private: // helpers, for modifiers, cont. (below)
     //
     // NOTE: Must be applied to the rhs variant.
     //
-
     class swap_variants
         : public static_visitor<>
     {
