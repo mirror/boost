@@ -15,7 +15,7 @@
 			 <H1 ALIGN="center">Boost Numeric Conversion Library</H1>
 
       <H1><A HREF="http://www.boost.org">Header </A><A
-				HREF="../../../../boost/numeric/conversion_traits.hpp">boost/numeric/conversion_traits.hpp</A></H1>
+				HREF="../../../../boost/numeric/conversion/conversion_traits.hpp">boost/numeric/conversion/conversion_traits.hpp</A></H1>
 			 </TH>
 		</TR>
 	 </TABLE> <HR>
@@ -90,13 +90,13 @@ enum sign_mixture_enum
 
   template &lt;class T, class S&gt;
   struct int_float_mixture : mpl::integral_c&lt;int_float_mixture_enum, <i>impl-def-value</i>&gt; {} ;
-  
+
 } } // namespace boost::numeric
 </PRE>
 <p>Classifying <code>S</code> and <code>T</code> as either <code>integral</code>
 or <code>float</code>, this <a href="../../../mpl/doc/ref/Integral_Constant.html">MPL's Integral Constant</a>
 indicates the combination of these attributes. <br>
-Its <code>::value</code> is of enumeration type <A HREF="#ncm"><CODE>boost::numeric::int_float_mixture_enum</CODE></A> 
+Its <code>::value</code> is of enumeration type <A HREF="#ncm"><CODE>boost::numeric::int_float_mixture_enum</CODE></A>
 </p>
 
 <hr>
@@ -107,13 +107,13 @@ Its <code>::value</code> is of enumeration type <A HREF="#ncm"><CODE>boost::nume
 
   template &lt;class T, class S&gt;
   struct sign_mixture : mpl::integral_c&lt;sign_mixture_enum, <i>impl-def-value</i>&gt; {} ;
-  
+
 } } // namespace boost::numeric
 </PRE>
 <p>Classifying <code>S</code> and <code>T</code> as either <code>signed</code>
 or <code>unsigned</code>, this <a href="../../../mpl/doc/ref/Integral_Constant.html">MPL's Integral Constant</a>
 indicates the combination of these attributes. <br>
-Its <code>::value</code> is of enumeration type <A HREF="#ncm"><CODE>boost::numeric::sign_mixture_enum</CODE></A> 
+Its <code>::value</code> is of enumeration type <A HREF="#ncm"><CODE>boost::numeric::sign_mixture_enum</CODE></A>
 </p>
 
 <hr>
@@ -124,13 +124,13 @@ Its <code>::value</code> is of enumeration type <A HREF="#ncm"><CODE>boost::nume
 
   template &lt;class T, class S&gt;
   struct udt_builtin_mixture : mpl::integral_c&lt;udt_builtin__mixture_enum, <i>impl-def-value</i>&gt; {} ;
-  
+
 } } // namespace boost::numeric
 </PRE>
 <p>Classifying <code>S</code> and <code>T</code> as either <code>user-defined</code>
 or <code>builtin</code>, this <a href="../../../mpl/doc/ref/Integral_Constant.html">MPL's Integral Constant</a>
 indicates the combination of these attributes. <br>
-Its <code>::value</code> is of enumeration type <A HREF="#ncm"><CODE>boost::numeric::udt_builtin_mixture_enum</CODE></A> 
+Its <code>::value</code> is of enumeration type <A HREF="#ncm"><CODE>boost::numeric::udt_builtin_mixture_enum</CODE></A>
 </p>
 
 <hr>
@@ -141,13 +141,13 @@ Its <code>::value</code> is of enumeration type <A HREF="#ncm"><CODE>boost::nume
 
   template &lt;class T, class S&gt;
   struct is_subranged : mpl::bool_&lt;<i>impl-def-value</i>&gt; {} ;
-  
+
 } } // namespace boost::numeric
 </PRE>
 <p>Indicates if the range of the target type T is a subset of the range of the source type S.
 That is: if there are some source values which fall out of the Target type's range.<br>
 It is a boolean <a href="../../../mpl/doc/ref/Integral_Constant.html">MPL's Integral Constant</a>..<br>
-It does not indicate if 
+It does not indicate if
 a <i>particular</i> conversion is effectively out of range; it indicates that
 some conversion <i>might be</i> out of range because not all the source values
 are representable as Target type.</p>
@@ -176,7 +176,7 @@ are representable as Target type.</p>
     typedef ... supertype     ;
     typedef ... subtype       ;
   } ;
-  
+
 } } // namespace numeric, namespace boost
 </PRE>
 <BLOCKQUOTE>
@@ -211,59 +211,59 @@ are representable as Target type.</p>
 
       <TD>
         <P>Same as given by the traits class <A HREF="#ubm"><CODE>udt_builtin_mixture</CODE></A></P>
-      </TD> 
-		  </TR> 
-		</TABLE> 
-		
+      </TD>
+		  </TR>
+		</TABLE>
+
   <P>The traits class provides the following
      <a href="../../../mpl/doc/ref/Integral_Constant.html">MPL's Integral Constants</a>
     of boolean type which indicates indirectly the relation between the Source and Target
     <i>ranges</i>
-    (see <A href="definitions.html#range">Definitions</A> for details).</P> 
-		<TABLE BORDER="1"> 
-		  <TR> 
-			 <TD>&nbsp;<CODE> <B>subranged</B></CODE>&nbsp;</TD> 
-			 
-      <TD> 
-        <P>Same as given by <A HREF="#isr"><CODE>is_subranged</CODE></A></P>
-      </TD> 
-		  </TR> 
+    (see <A href="definitions.html#range">Definitions</A> for details).</P>
+		<TABLE BORDER="1">
 		  <TR>
-			 <TD>&nbsp;<CODE> <B>trivial</B></CODE>&nbsp;</TD> 
-			 
-      <TD> 
-        <P>Indicates if both Source and Target, <u>without cv-qualifications</u>, are 
+			 <TD>&nbsp;<CODE> <B>subranged</B></CODE>&nbsp;</TD>
+
+      <TD>
+        <P>Same as given by <A HREF="#isr"><CODE>is_subranged</CODE></A></P>
+      </TD>
+		  </TR>
+		  <TR>
+			 <TD>&nbsp;<CODE> <B>trivial</B></CODE>&nbsp;</TD>
+
+      <TD>
+        <P>Indicates if both Source and Target, <u>without cv-qualifications</u>, are
           the same type.<br>
           Its <code>::value</code> is of boolean type.</P>
-      </TD> 
-		  </TR> 
-		</TABLE> 
-		
-  <P>The traits class provides the following types. They are the Source and Target 
-    types classified and qualified for different purposes.</P> 
-		
+      </TD>
+		  </TR>
+		</TABLE>
+
+  <P>The traits class provides the following types. They are the Source and Target
+    types classified and qualified for different purposes.</P>
+
   <TABLE BORDER="1" width="720">
-    <TR> 
-			 <TD>&nbsp;<CODE><B>target_type</B></CODE>&nbsp;</TD> 
-			 <TD> 
-				
+    <TR>
+			 <TD>&nbsp;<CODE><B>target_type</B></CODE>&nbsp;</TD>
+			 <TD>
+
         <P>The template parameter <CODE>T</CODE><EM> without cv-qualifications</EM></P>
-      </TD> 
-		  </TR> 
-		  <TR> 
-			 <TD>&nbsp;<CODE><B>source_type</B></CODE>&nbsp;</TD> 
-			 <TD> 
-				
+      </TD>
+		  </TR>
+		  <TR>
+			 <TD>&nbsp;<CODE><B>source_type</B></CODE>&nbsp;</TD>
+			 <TD>
+
         <P>The template parameter <CODE>S</CODE><EM> without cv-qualifications</EM></P>
-      </TD> 
-		  </TR> 
-		  <TR> 
-			 <TD>&nbsp;<CODE><B>argument_type</B></CODE>&nbsp;</TD> 
+      </TD>
+		  </TR>
+		  <TR>
+			 <TD>&nbsp;<CODE><B>argument_type</B></CODE>&nbsp;</TD>
 			 <TD>
  		<P>This type is either <CODE>source_type</CODE> or <CODE>source_type
 const&amp;</CODE>. <BR> It represents the <I>optimal</I> argument type for the
  		  <A HREF="converter.html">converter</A> member functions.<BR>
-          If <CODE>S</CODE> is a built-in type, this is <CODE>source_type</CODE>, 
+          If <CODE>S</CODE> is a built-in type, this is <CODE>source_type</CODE>,
           otherwise, this is <CODE>source_type const&amp;</CODE>. </P>
       </TD>
 		  </TR>
@@ -282,7 +282,7 @@ const&amp;</CODE> <BR> It represents the return type of the
       <TD height="37">&nbsp;<CODE><B>supertype</B></CODE></TD>
 
       <TD height="37">
-        <P>If the conversion is <CODE>subranged</CODE>, it is <CODE>source_type</CODE>, 
+        <P>If the conversion is <CODE>subranged</CODE>, it is <CODE>source_type</CODE>,
           otherwise, it is <CODE>target_type</CODE></P>
       </TD>
 		  </TR>
@@ -296,7 +296,7 @@ const&amp;</CODE> <BR> It represents the return type of the
 		</TABLE> </BLOCKQUOTE> <HR>
 
 <H2><A NAME="examples">Examples</A></H2>
-<BLOCKQUOTE> 
+<BLOCKQUOTE>
   <PRE>#include &lt;boost/numeric/conversion_traits.hpp&gt;
 
 int main() {
@@ -325,9 +325,9 @@ int main() {
 <P>Back to <A HREF="index.html">Numeric Conversion library index</A></P>
 <HR>
 <P>Revised 23 June 2004</P>
-<p>© Copyright Fernando Luis Cacciola Carballal, 2000-2004</p>
-<p> Use, modification, and distribution are subject to the Boost Software 
-License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
+<p>© Copyright Fernando Luis Cacciola Carballal, 2004</p>
+<p> Use, modification, and distribution are subject to the Boost Software
+License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
 www.boost.org/LICENSE_1_0.txt</a>)</p>
 </BODY>

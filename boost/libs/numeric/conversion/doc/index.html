@@ -1,4 +1,4 @@
-<HTML> 
+<HTML>
   <HEAD>
 	 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
 	 <LINK REL="stylesheet" TYPE="text/css" HREF="../../../../boost.css">
@@ -43,20 +43,20 @@ conversions between values of different <a href="definitions.html#numtypes">nume
 the <A HREF="bounds.html"><code>bounds&lt;&gt;</code></A> traits class, which provides
 a consistent way to obtain the <a href="definitions.html#range">boundary</a> values for the
 <a href="definitions.html#range">range</a> of a numeric type.</p>
-<p>It also includes a set of <A HREF="conversion_traits.html">trait classes</A> which 
-  describes the compile-time properties of a conversion from a source to a target 
-  numeric type. Both <a href="definitions.html#stdtypes">arithmetic</a> and <a href="definitions.html#numtypes">user-defined 
+<p>It also includes a set of <A HREF="conversion_traits.html">trait classes</A> which
+  describes the compile-time properties of a conversion from a source to a target
+  numeric type. Both <a href="definitions.html#stdtypes">arithmetic</a> and <a href="definitions.html#numtypes">user-defined
   numeric types</a> can be used.</p>
 <p>A policy-based <A HREF="converter.html">converter</A> object which uses <code>conversion_traits</code>
 to select an optimized implementation is supplied.
 Such implementation uses an optimal range checking code suitable for the source/target combination.<br>
-  The converter's out-of-range behavior can be customized via an <A HREF="converter_policies.html#oh">OverflowHandler</A> 
+  The converter's out-of-range behavior can be customized via an <A HREF="converter_policies.html#oh">OverflowHandler</A>
   policy.<br>
 For floating-point to integral conversions, the rounding mode can be selected via
 the <A HREF="converter_policies.html#f2i">Float2IntRounder</A> policy.<br>
-  A custom low-level conversion routine (for UDTs for instance) can be passed 
+  A custom low-level conversion routine (for UDTs for instance) can be passed
   via a <A HREF="converter_policies.html#rawc">RawConverter</A> policy.<br>
-  The optimized automatic range-checking logic can be overridden via a <A HREF="converter_policies.html#rc">UserRangeChecker</A> 
+  The optimized automatic range-checking logic can be overridden via a <A HREF="converter_policies.html#rc">UserRangeChecker</A>
   policy.</p>
 <hr>
 <H2><A NAME="Ack"></A>History and Acknowledgments</H2>
@@ -64,20 +64,20 @@ the <A HREF="converter_policies.html#f2i">Float2IntRounder</A> policy.<br>
 <blockquote>
 <p>Kevlin Henney, with help from David Abrahams and Beman Dawes, originally contributed
 the previous version of numeric_cast&lt;&gt; which already presented the idea of a runtime range check.<br>
-    Later, Eric Ford, Kevin Lynch and the author spotted some genericity problems 
-    with that numeric_cast&lt;&gt; which prevented it from being used in a generic 
+    Later, Eric Ford, Kevin Lynch and the author spotted some genericity problems
+    with that numeric_cast&lt;&gt; which prevented it from being used in a generic
     layer of math functions.<br>
 An improved numeric_cast&lt;&gt; which properly handled all combinations of arithmetic types was presented.<br>
-    David Abrahams and Beman Dawes acknowledged the need of an improved version 
-    of numeric_cast&lt;&gt; and supported the submission as originally laid out. 
-    Daryl Walker and Darin Adler made some important comments and proposed fixes 
+    David Abrahams and Beman Dawes acknowledged the need of an improved version
+    of numeric_cast&lt;&gt; and supported the submission as originally laid out.
+    Daryl Walker and Darin Adler made some important comments and proposed fixes
     to the original submission.</p>
-  <p>Special thanks go to Björn Karlsoon who helped the author considerably. Having 
-    found the problems with numeric_cast&lt;&gt; himself, he revised very carefully 
-    the original submission and spot a subtle bug in the range checking implementation. 
-    He also wrote part of this documentation and proof-read and corrected other 
-    parts. And most importantly: the features now presented here in this library 
-    evolved from the original submission as a result of the useful private communications 
+  <p>Special thanks go to Björn Karlsoon who helped the author considerably. Having
+    found the problems with numeric_cast&lt;&gt; himself, he revised very carefully
+    the original submission and spot a subtle bug in the range checking implementation.
+    He also wrote part of this documentation and proof-read and corrected other
+    parts. And most importantly: the features now presented here in this library
+    evolved from the original submission as a result of the useful private communications
     between Björn and the author.</p>
 </blockquote>
 <p>Post-formal review:</p>
@@ -88,7 +88,7 @@ Daryle Walker, Jhon Torjo, Eric Ford, Gennadiy Rozental.
 <hr>
 <H2><A NAME="Ref"></A>Bibliography</H2>
 <ul>
-  <li>Standard Documents: 
+  <li>Standard Documents:
     <ol>
 <li>ISO/IEC 14882:98  (C++98 Standard)</li>
 <li>ISO/IEC 9899:1999 (C99 Standard)</li>
@@ -105,14 +105,14 @@ Daryle Walker, Jhon Torjo, Eric Ford, Gennadiy Rozental.
 <li>David Goldberg <A href="http://citeseer.nj.nec.com/goldberg91what.html">
     What Every Computer Scientist Should Know About Floating-Point Arithmetic</A></li>
 <li><A href="http://www.cs.berkeley.edu/~wkahan/">Prof. William Kahan</A> papers on floating-point.</li>
-</ol> 
+</ol>
 </li>
 </ul>
 <HR>
 <P>Revised 23 June 2004</P>
-<p>© Copyright Fernando Luis Cacciola Carballal, 2000-2004</p>
-<p> Use, modification, and distribution are subject to the Boost Software 
-License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
+<p>© Copyright Fernando Luis Cacciola Carballal, 2004</p>
+<p> Use, modification, and distribution are subject to the Boost Software
+License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
 www.boost.org/LICENSE_1_0.txt</a>)</p>
 </body>

@@ -10,7 +10,7 @@
 
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080">
 <H2><IMG SRC="../../../boost.png" WIDTH="276" HEIGHT="86">Header &lt;<A
-HREF="../../../boost/optional.hpp">boost/optional.hpp</A>&gt; </H2>
+HREF="../../../boost/optional/optional.hpp">boost/optional/optional.hpp</A>&gt; </H2>
 
 <H2>Contents</H2>
 <DL CLASS="page-index">
@@ -33,28 +33,28 @@ HREF="../../../boost/optional.hpp">boost/optional.hpp</A>&gt; </H2>
 
 <H2><A NAME="mot"></A>Motivation</H2>
 
-<P>Consider these functions which should return a value but which might not have 
+<P>Consider these functions which should return a value but which might not have
   a value to return:</P>
 <pre>(A) double sqrt(double n );
 (B) char get_async_input();
 (C) point polygon::get_any_point_effectively_inside();</pre>
 <P>There are different approaches to the issue of not having a value to return.</P>
-<P>A typical approach is to consider the existence of a valid return value as 
-  a postcondition, so that if the function cannot compute the value to return, 
-  it has either undefined behavior (and can use asssert in a debug build) 
-  or uses a runtime check and throws an exception if the postcondition is violated. 
-  This is a reasonable choice for example, for function (A), because the 
-  lack of a proper return value is directly related to an invalid parameter (out 
-  of domain argument), so it is appropriate to require the callee to supply only 
+<P>A typical approach is to consider the existence of a valid return value as
+  a postcondition, so that if the function cannot compute the value to return,
+  it has either undefined behavior (and can use asssert in a debug build)
+  or uses a runtime check and throws an exception if the postcondition is violated.
+  This is a reasonable choice for example, for function (A), because the
+  lack of a proper return value is directly related to an invalid parameter (out
+  of domain argument), so it is appropriate to require the callee to supply only
   parameters in a valid domain for execution to continue normally.</P>
-<P>However, function (B), because of its asynchronous nature, does not fail just 
+<P>However, function (B), because of its asynchronous nature, does not fail just
   because it can't find a value to return; so it is incorrect to consider
-  such a situation an error and assert or throw an exception. This function must 
-  return, and somehow, must tell the callee that it is not returning a meaningful 
+  such a situation an error and assert or throw an exception. This function must
+  return, and somehow, must tell the callee that it is not returning a meaningful
   value.</P>
-<P>A similar situation occurs with function (C): it is conceptually an error to 
-  ask a <i>null-area</i> polygon to return a point inside itself, but in many 
-  applications, it is just impractical for performance reasons to treat this as 
+<P>A similar situation occurs with function (C): it is conceptually an error to
+  ask a <i>null-area</i> polygon to return a point inside itself, but in many
+  applications, it is just impractical for performance reasons to treat this as
   an error (because detecting that the polygon has no area might be too expensive
   to be required to be tested previously), and either an arbitrary point (typically
   at infinity) is returned, or some efficient way to tell the callee that there
@@ -106,7 +106,7 @@ if ( p.second )
   when a variable is declared as optional&lt;T&gt; and no initial value is given,
   the variable is formally uninitialized. A formally uninitialized optional object has conceptually
   no value at all and this situation can be tested at runtime. It is formally <i>undefined behaviour</i>
-  to try to access the value of an uninitialized optional. An uninitialized optional can be <i>assigned</i> a      value, in which case its initialization state changes to initialized. Furthermore, given the formal 
+  to try to access the value of an uninitialized optional. An uninitialized optional can be <i>assigned</i> a      value, in which case its initialization state changes to initialized. Furthermore, given the formal
   treatment of initialization states in optional objects, it is even possible to reset an optional to <i>uninitialized</i>.</P>
 <P>In C++ there is no formal notion of uninitialized objects, which
   means that objects always have an initial value even if indeterminate.<br>
@@ -114,7 +114,7 @@ if ( p.second )
   information to tell if an object has been effectively initialized.<br>
   One of the typical ways in which this has been historically
   dealt with is via a special value: EOF,npos,-1, etc... This is equivalent to adding
-  the special value to the set of possible values of a given type. This super set of 
+  the special value to the set of possible values of a given type. This super set of
   T plus some <i>nil_t</i>&mdash;were nil_t is some stateless POD-can be modeled in modern
   languages as a <b>discriminated union</b> of <code>T</code> and <code>nil_t</code>.
   Discriminated unions are often called <i>variants</i>. A variant has a <i>current type</i>,
@@ -128,13 +128,13 @@ if ( p.second )
 the range of possible values adding an additional sentinel value with the special meaning of <i>Nothing. </i>
 However, this additional <i>Nothing</i> value is largely irrelevant for our purpose
  since our goal is to formalize the notion of uninitialized objects and, while a special extended value <i>can</i> be used to convey that meaning, it is not strictly neccesary in order to do so.</p>
-<p>The observation made in the last paragraph about the irrelevant nature of the additional <code>nil_t</code> with respect to 
+<p>The observation made in the last paragraph about the irrelevant nature of the additional <code>nil_t</code> with respect to
 <u>purpose</u> of optional&lt;T&gt; suggests
 an alternative model: a <i>container</i> that either has a value of T or nothing.
 </p>
-<p>As of this writting I don't know of any precedence for a variable-size fixed-capacity (of 1) 
-stack-based container model for optional values, yet I believe this is the consequence of 
-the lack of practical implementations of such a container rather than an inherent shortcoming 
+<p>As of this writting I don't know of any precedence for a variable-size fixed-capacity (of 1)
+stack-based container model for optional values, yet I believe this is the consequence of
+the lack of practical implementations of such a container rather than an inherent shortcoming
 of the container model.</p>
 <p>In any event, both the discriminated-union or the single-element container models serve as a conceptual
 ground for a class representing optional&mdash;i.e. possibly uninitialized&mdash;objects.<br>
@@ -174,71 +174,71 @@ conceptually wrong but also impractical: it is not allowed to derive from a non-
 <p>We can draw from the purpose of optional&lt;T&gt; the required basic semantics:</p>
 
 <blockquote>
-<p><b>Default Construction:</b> To introduce a formally uninitialized wrapped 
+<p><b>Default Construction:</b> To introduce a formally uninitialized wrapped
 object.</p>
 
-<p><b>Direct Value Construction via copy:</b> To introduce a formally 
+<p><b>Direct Value Construction via copy:</b> To introduce a formally
 initialized wrapped object whose value is obtained as a copy of some object.</p>
 
-<p><b>Deep Copy Construction:</b> To obtain a different yet equivalent wrapped 
+<p><b>Deep Copy Construction:</b> To obtain a different yet equivalent wrapped
 object.</p>
 
-<p><b>Direct Value Assignment (upon initialized):</b> To assign the wrapped object a value obtained 
+<p><b>Direct Value Assignment (upon initialized):</b> To assign the wrapped object a value obtained
 as a copy of some object.</p>
 
-<p><b>Direct Value Assignment (upon uninitialized):</b> To initialize the wrapped object 
-with a value obtained 
+<p><b>Direct Value Assignment (upon uninitialized):</b> To initialize the wrapped object
+with a value obtained
 as a copy of some object.</p>
 
-<p><b>Assignnment (upon initialized):</b> To assign the wrapped object a value obtained as a copy 
+<p><b>Assignnment (upon initialized):</b> To assign the wrapped object a value obtained as a copy
 of another wrapper's object.</p>
 
-<p><b>Assignnment (upon uninitialized):</b> To initialize the wrapped object 
-with value obtained as a copy 
+<p><b>Assignnment (upon uninitialized):</b> To initialize the wrapped object
+with value obtained as a copy
 of another wrapper's object.</p>
 
-<p><b>Deep Relational Operations (when supported by the type T):</b> To compare 
-wrapped object values taking into account the presence of uninitialized 
+<p><b>Deep Relational Operations (when supported by the type T):</b> To compare
+wrapped object values taking into account the presence of uninitialized
 operands.</p>
 
 <p><b>Value access:</b> To unwrap the wrapped object.</p>
 
-<p><b>Initialization state query:</b> To determine if the object is formally 
+<p><b>Initialization state query:</b> To determine if the object is formally
 initialized or not.</p>
 
-<p><b>Swap:</b> To exchange wrapper's objects. (with whatever exception safety 
+<p><b>Swap:</b> To exchange wrapper's objects. (with whatever exception safety
 guarantiees are provided by T's swap).</p>
 
-<p><b>De-initialization:</b> To release the wrapped object (if any) and leave 
+<p><b>De-initialization:</b> To release the wrapped object (if any) and leave
 the wrapper in the uninitialized state.</p>
 
 </blockquote>
 
-<p>Additional operations are useful, such as converting constructors and 
-converting assignments, in-place construction and assignment, and safe value 
+<p>Additional operations are useful, such as converting constructors and
+converting assignments, in-place construction and assignment, and safe value
 access via a pointer to the wrapped object or null.</p>
 <h3><u>The Interface:</u></h3>
-<p>Since the purpose of optional is to allow us to use objects with a formal 
-uninitialized additional state, the interface could try to follow the interface 
-of the underlying T type as much as possible. In order to choose the proper 
+<p>Since the purpose of optional is to allow us to use objects with a formal
+uninitialized additional state, the interface could try to follow the interface
+of the underlying T type as much as possible. In order to choose the proper
 degree of adoption of the native T interface, the following must be noted: <br>
-Even if all the operations supported by an instance of type T are defined for 
-the entire range of values for such a type, an optional&lt;T&gt; extends such a set of 
-values with a new value for which most (otherwise valid) operations are not 
+Even if all the operations supported by an instance of type T are defined for
+the entire range of values for such a type, an optional&lt;T&gt; extends such a set of
+values with a new value for which most (otherwise valid) operations are not
 defined in terms of T.<br>
-Furthermore, since optional&lt;T&gt; itself is merely a T wrapper (modeling a T 
-supertype), any attempt to define such operations upon uninitialized optionals 
+Furthermore, since optional&lt;T&gt; itself is merely a T wrapper (modeling a T
+supertype), any attempt to define such operations upon uninitialized optionals
 will be totally artificial w.r.t. T.<br>
-This library chooses an interface which follows from T's interface only for 
-those operations which are well defined (w.r.t the type T) even if any of the 
-operands are uninitialized. These operations include: construction, 
+This library chooses an interface which follows from T's interface only for
+those operations which are well defined (w.r.t the type T) even if any of the
+operands are uninitialized. These operations include: construction,
 copy-construction, assignment, swap and relational operations.<br>
-For the value access operations, which are undefined (w.r.t the type T) when the 
-operand is uninitialized, a different interface is choosen (which will be 
+For the value access operations, which are undefined (w.r.t the type T) when the
+operand is uninitialized, a different interface is choosen (which will be
 explained next).<br>
-Also, the presence of the possibly uninitialized state requires additional 
+Also, the presence of the possibly uninitialized state requires additional
 operations not provided by T itself which are supported by a special interface.</p>
-<h3>Lexically-hinted Value Access in the presence of possibly untitialized 
+<h3>Lexically-hinted Value Access in the presence of possibly untitialized
 optional objects: The operators * and -&gt;</h3>
 <p>A relevant feature of a pointer is that it can have a <b>null
   pointer value</b>. This is a <i>special</i> value which is used to indicate that the
@@ -248,7 +248,7 @@ optional objects: The operators * and -&gt;</h3>
   for handling optional objects because all you have to do to refer to a value which you
   don't really have is to use a null pointer value of the appropriate type.
   Pointers have been used for decades&mdash;from the days of C APIs to modern C++ libraries&mdash;to
-  <i>refer</i> to optional (that is, possibly inexistent) objects; particularly 
+  <i>refer</i> to optional (that is, possibly inexistent) objects; particularly
   as optional arguments to a function, but also quite often as optional data members.</P>
 <P>The possible presence of a null pointer value makes the operations that access the
   pointee's value possibly undefined, therefore, expressions which use dereference
@@ -282,10 +282,10 @@ them. The problem resides in the shallow-copy of pointer semantics: if you need 
   concept incarnated by pointers.
 </p>
 <h4>Optional&lt;T&gt; as a model of OptionalPointee</h4>
-<P>For value access operations optional&lt;&gt; uses operators * and -&gt; to lexically 
-warn about the possibliy uninitialized state appealing to the familiar pointer 
+<P>For value access operations optional&lt;&gt; uses operators * and -&gt; to lexically
+warn about the possibliy uninitialized state appealing to the familiar pointer
 semantics w.r.t. to null pointers.<br>
-<u><b>However, it is particularly important to note that optional<> objects are not pointers. optional&lt;&gt; 
+<u><b>However, it is particularly important to note that optional<> objects are not pointers. optional&lt;&gt;
 is not, and does not model, a pointer</b></u><b>.</b>
 <P>For instance, optional&lt;&gt; has not shallow-copy so does not alias: two different optionals
   never refer to the <i>same</i> value unless T itself is an reference (but my have <i>equivalent</i> values).<br>
@@ -296,7 +296,7 @@ is not, and does not model, a pointer</b></u><b>.</b>
   As a result, you might be able to replace optional&lt;T&gt; by T* on some situations but
   not always. Specifically, on generic code written for both, you cannot use relational
   operators directly, and must use the template functions
-  <a href="../../utility/OptionalPointee.html#equal">equal_pointees()</a> and 
+  <a href="../../utility/OptionalPointee.html#equal">equal_pointees()</a> and
   <a href="../../utility/OptionalPointee.html#less">less_pointees()</a> instead.
 <HR>
 
@@ -315,30 +315,30 @@ class optional
 
     optional ( detail::none_t ) ;
 
-    optional ( T const&amp; v ) ; 
+    optional ( T const&amp; v ) ;
 
-    optional ( optional const&amp; rhs ) ; 
+    optional ( optional const&amp; rhs ) ;
 
     template&lt;class U&gt; explicit optional ( optional&lt;U&gt; const&amp; rhs ) ;
-    
+
     template&lt;class InPlaceFactory&gt; explicit optional ( InPlaceFactory const&amp; f ) ;
-    
+
     template&lt;class TypedInPlaceFactory&gt; explicit optional ( TypedInPlaceFactory const&amp; f ) ;
 
     optional&amp; operator = ( detail::none_t ) ;
-    
-    optional&amp; operator = ( T const&amp; v ) ; 
+
+    optional&amp; operator = ( T const&amp; v ) ;
 
     optional&amp; operator = ( optional const&amp; rhs ) ;
 
     template&lt;class U&gt; optional&amp; operator = ( optional&lt;U&gt; const&amp rhs ) ;
 
     template&lt;class InPlaceFactory&gt; optional&amp; operator = ( InPlaceFactory const&amp f ) ;
-    
+
     template&lt;class TypedInPlaceFactory&gt; optional&amp; operator = ( TypedInPlaceFactory const&amp f ) ;
-    
-    T const& get() const ; 
-    T&       get() ;       
+
+    T const& get() const ;
+    T&       get() ;
 
     T const* operator -&gt;() const ;
     T*       operator -&gt;() ;
@@ -352,9 +352,9 @@ class optional
     operator <i>unspecified-bool-type</i>() const ;
 
     bool operator!() const ;
-    
+
     <i><u>deprecated methods</u></i>
-    
+
     void reset() ; (deprecated)
     void reset ( T const&amp; ) ; (deprecated)
     bool is_initialized() const ; (deprecated)
@@ -396,18 +396,18 @@ template&lt;class T&gt; inline void swap( optional&lt;T&gt;& x, optional&lt;T&gt
 
 <p><b><u>NOTES: </u></b></p>
 
-<p><b>Because T might be of reference type, in the sequel, those entries whose 
-semantic depends on T being of reference type or not will be distinguished using 
+<p><b>Because T might be of reference type, in the sequel, those entries whose
+semantic depends on T being of reference type or not will be distinguished using
 the following convention:<br>
-If the entry reads: optional&lt;T (not a ref)&gt;, the description corresponds only to 
+If the entry reads: optional&lt;T (not a ref)&gt;, the description corresponds only to
 the case where T is not of reference type.<br>
-If the entry reads: optional&lt;T&amp;&gt;, the description corresponds only to the case 
+If the entry reads: optional&lt;T&amp;&gt;, the description corresponds only to the case
 where T is of reference type. <br>
 If the entry reads: optional&lt;T&gt;, the description is the same for both cases.</b></p>
 
-<p><i>The following section contains various assert() which are used only to 
-show the postconditions as sample code. It is not implied that the type T must 
-support each particular expression but that if the expression is supported, the 
+<p><i>The following section contains various assert() which are used only to
+show the postconditions as sample code. It is not implied that the type T must
+support each particular expression but that if the expression is supported, the
 implied condition holds.</i></p>
 
 <hr>
@@ -435,8 +435,8 @@ assert ( !def ) ;</pre>
 <p><b>Notes:</b></p>
 <blockquote>
 <p>T's default constructor <u><i>is not</i></u> called.<br>
-The 
-expression <code>boost::none</code> denotes an instance of <code>boost::detail::none_t</code> that can be 
+The
+expression <code>boost::none</code> denotes an instance of <code>boost::detail::none_t</code> that can be
 used as the parameter.</p>
 </blockquote>
 <p><b>Example:</b></p>
@@ -471,7 +471,7 @@ assert ( *opt == v ) ;</pre>
 <pre>optional&lt;T&amp;&gt;::optional( T ref )</pre>
 <blockquote>
 <p><b>Effect:</b> Directly-Constructs an <b>optional</b>.</p>
-<p><b>Postconditions:</b> <b>*this</b> is <u>initialized</u> and its value is an 
+<p><b>Postconditions:</b> <b>*this</b> is <u>initialized</u> and its value is an
 instance of an internal type wrapping the reference 'ref'.</p>
 <p><b>Throws:</b> Nothing.</p>
 <p><b>Example:</b></p>
@@ -525,8 +525,8 @@ assert ( init2 == init ) ;
 and its value is a <i>copy</i> of the internal wrapper holding the references in <b>rhs</b>; else <b>*this</b>
 is uninitialized.</p>
 <p><b>Throws:</b> Nothing.</p>
-<p><b>Notes:</b> If <b>rhs</b> is initialized, the internal wrapper will be 
-copied and just like true references, both <b>*this</b> and <b>rhs</b> will 
+<p><b>Notes:</b> If <b>rhs</b> is initialized, the internal wrapper will be
+copied and just like true references, both <b>*this</b> and <b>rhs</b> will
 referr to the same object<b> </b>(will alias).</p>
 <p><b>Example:</b></p>
 <blockquote>
@@ -581,13 +581,13 @@ assert( *y == 123 ) ;
 
 <pre>template&lt;<i>TypedInPlaceFactory</i>&gt; explicit optional&lt;T <i>(not a ref)</i>&gt;::optional( <i>TypedInPlaceFactory</i> const&amp; f );</pre>
 <blockquote>
-<p><b>Effect:</b> Constructs an <b>optional</b> with a value of T obtained from 
+<p><b>Effect:</b> Constructs an <b>optional</b> with a value of T obtained from
 the factory.</p>
-<p><b>Postconditions:</b>&nbsp; <b>*this</b> is <u>initialized</u> and its value is 
+<p><b>Postconditions:</b>&nbsp; <b>*this</b> is <u>initialized</u> and its value is
 <i>directly given</i> from the factory 'f' (i.e, the value<u> is not copied</u>).</p>
 <p><b>Throws:</b> Whatever the T constructor called by the factory throws.</p>
 <p><b>Notes:</b> See <A HREF="#inplace">In-Place Factories</A></p>
-<p><b>Exception Safety:</b> Exceptions can only be thrown during the call to the 
+<p><b>Exception Safety:</b> Exceptions can only be thrown during the call to the
 T constructor used by the factory;
 in that case, this constructor has no effect.
 </p>
@@ -863,7 +863,7 @@ assert ( !!opt ) ;
 
 <pre>bool optional&lt;T&gt;::is_initialized() const ;</pre>
 <blockquote>
-<p><b>Returns:</b> <i>true</i> is the <b>optional</b> is initialized, <i>false</i> 
+<p><b>Returns:</b> <i>true</i> is the <b>optional</b> is initialized, <i>false</i>
 otherwise.</p>
 <p><b>Throws:</b> Nothing.</p>
 <blockquote>
@@ -921,7 +921,7 @@ assert ( optX != optZ ) ;
 
 <pre>bool operator &lt; ( optional&lt;T&gt; const&amp x, optional&lt;T&gt const&amp y );</pre>
 <blockquote>
-<p><b>Returns:</b> If <b>y</b> is not initialized, <code>false</code>. 
+<p><b>Returns:</b> If <b>y</b> is not initialized, <code>false</code>.
 If <b>y</b> is initialized and <b>x</b> is not initialized, <code>true</code>.
 If both <b>x</b> and <b>y</b> are initialized, <code>(*x &lt; *y)</code>.
 </p>
@@ -991,8 +991,8 @@ assert ( optX != optZ ) ;
 <HR>
 
 <pre>void swap ( optional&lt;T&gt;&amp x, optional&lt;T&gt&amp y );</pre>
-  
-<blockquote> 
+
+<blockquote>
 <p><b>Effect:</b> If both <b>x</b> and <b>y</b> are initialized, calls <code>swap(*x,*y)</code>
 using std::swap.<br>
 If only one is initialized, say x, calls: <code>y.reset(*x); x.reset();</code><br>
@@ -1105,7 +1105,7 @@ else print(&quot;employer's name not found!&quot;);
 
 };
 </pre>
-<h3>Bypassing expensive unnecesary default construction</h3> 
+<h3>Bypassing expensive unnecesary default construction</h3>
 <pre>class ExpensiveCtor { ... } ;
 class Fred
 {
@@ -1118,10 +1118,10 @@ class Fred
 <HR>
 
 <H2><A NAME="ref">Optional references</A></H2>
-<p>This library allow the template parameter T to be of reference type: T&amp;, and 
+<p>This library allow the template parameter T to be of reference type: T&amp;, and
 to some extent, T const&amp;.</p>
 
-<p>However, since references are not real objects some restrictions apply and 
+<p>However, since references are not real objects some restrictions apply and
 some operations are not available in this case:</p>
 
 <ul>
@@ -1131,13 +1131,13 @@ some operations are not available in this case:</p>
   <li>InPlace assignment</li>
   <li>Value-access via pointer</li>
 </ul>
-<p>Also, even though optional&lt;T&amp;&gt; treats it wrapped pseudo-object much as a real 
+<p>Also, even though optional&lt;T&amp;&gt; treats it wrapped pseudo-object much as a real
 value, a true real reference is stored so aliasing will ocurr: </p>
 
 <ul>
-  <li>Copies of optional&lt;T&amp;&gt; will copy the references but all these references 
+  <li>Copies of optional&lt;T&amp;&gt; will copy the references but all these references
   will nonetheless refeer to the same object.</li>
-  <li>Value-access will actually provide access to the referenced object rather 
+  <li>Value-access will actually provide access to the referenced object rather
   than the reference itself.</li>
 </ul>
 
@@ -1145,52 +1145,52 @@ value, a true real reference is stored so aliasing will ocurr: </p>
 
 <H2><A NAME="inplace">In-Place Factories</A></H2>
 <p>
-One of the typical problems with wrappers and containers is that their 
-interfaces usually provide an operation to initialize or assign the contained 
-object as a copy of some other object. This not only requires the underlying 
-type to be <a href="../../utility/CopyConstructible.html">Copy Constructible</a>, but also requires the existence of a fully 
+One of the typical problems with wrappers and containers is that their
+interfaces usually provide an operation to initialize or assign the contained
+object as a copy of some other object. This not only requires the underlying
+type to be <a href="../../utility/CopyConstructible.html">Copy Constructible</a>, but also requires the existence of a fully
 constructed object, often temporary, just to follow the copy from:</p>
-<pre>struct X 
+<pre>struct X
 {
-  X ( int, std:::string ) ; 
+  X ( int, std:::string ) ;
 } ;</pre>
 <pre>class W
 {
   X wrapped_ ;
-  
+
 public:
 
-  W ( X const& x ) : wrapped_(x) {}  
+  W ( X const& x ) : wrapped_(x) {}
 } ;</pre>
 <pre>void foo()
 {
   // Temporary object created.
-  W ( X(123,"hello") ) ; 
+  W ( X(123,"hello") ) ;
 }
 </pre>
-<p>A solution to this problem is to support direct construction of the contained 
+<p>A solution to this problem is to support direct construction of the contained
 object right in the container's storage.<br>
-In this shceme, the user only needs to supply the arguments to the constructor 
+In this shceme, the user only needs to supply the arguments to the constructor
 to use in the wrapped object construction.</p>
 <pre>class W
 {
   X wrapped_ ;
-  
+
 public:
 
-  W ( X const& x ) : wrapped_(x) {}  
+  W ( X const& x ) : wrapped_(x) {}
   W ( int a0, std::string a1) : wrapped_(a0,a1) {}
 } ;</pre>
 <pre>void foo()
 {
   // Wrapped object constructed in-place
   // No temporary created.
-  W (123,"hello") ; 
+  W (123,"hello") ;
 }
 </pre>
 <p>A limitation of this method is that it doesn't scale well to wrapped objects with multiple
 constructors nor to generic code were the constructor overloads are unknown.</p>
-<p>The solution presented in this library is the familiy of <b>InPlaceFactories</b> and 
+<p>The solution presented in this library is the familiy of <b>InPlaceFactories</b> and
 <b>TypedInPlaceFactories</b>.<br>
 These factories are a family of classes which encapsulate an increasing number of arbitrary
 constructor parameters and supply a method to construct an object of a given type using those
@@ -1200,29 +1200,29 @@ parameters at an address specified by the user via placement new.</p>
 class TypedInPlaceFactory2
 {
   A0 m_a0 ; A1 m_a1 ;
-  
+
 public:
 
   TypedInPlaceFactory2( A0 const& a0, A1 const& a1 ) : m_a0(a0), m_a1(a1) {}
 
-  void construct ( void* p ) { new (p) T(m_a0,m_a1) ; }  
+  void construct ( void* p ) { new (p) T(m_a0,m_a1) ; }
 } ;
 </pre>
 <p>A wrapper class aware of this can use it as:</p>
 <pre>class W
 {
   X wrapped_ ;
-  
+
 public:
 
-  W ( X const& x ) : wrapped_(x) {}  
+  W ( X const& x ) : wrapped_(x) {}
   W ( TypedInPlaceFactory2 const& fac ) { fac.construct(&wrapped_) ; }
 } ;</pre>
 <pre>void foo()
 {
   // Wrapped object constructed in-place via a TypedInPlaceFactory.
   // No temporary created.
-  W ( TypedInPlaceFactory2&lt;X,int,std::string&rt;(123,"hello")) ; 
+  W ( TypedInPlaceFactory2&lt;X,int,std::string&rt;(123,"hello")) ;
 }
 </pre>
 <p>The factories are divided in two groups:<ul>
@@ -1233,35 +1233,35 @@ public:
 <p></p>
 <p>This library provides an overloaded set of helper template functions to construct these factories
 without requiring unnecessary template parameters:</p>
-<pre>template&lt;class A0,...,class AN&gt; 
+<pre>template&lt;class A0,...,class AN&gt;
 InPlaceFactory<i>N </i>&lt;A0,...,AN&gt; <b>in_place</b> ( A0 const& a0, ..., AN const& aN) ;
 
-template&lt;class T,class A0,...,class AN&gt; 
+template&lt;class T,class A0,...,class AN&gt;
 TypedInPlaceFactory<i>N </i>&lt;T,A0,...,AN&gt; <b>in_place</b> ( T const& a0, A0 const& a0, ..., AN const& aN) ;</pre>
 
 <p>In-place factories can be used generically by the wrapper and user as follows:</p>
 <pre>class W
 {
   X wrapped_ ;
-  
+
 public:
 
-  W ( X const& x ) : wrapped_(x) {}  
-  
+  W ( X const& x ) : wrapped_(x) {}
+
   template<class InPlaceFactory></class>
   W ( InPlaceFactory const& fac ) { fac.template &lt;X&gt;construct(&wrapped_) ; }
-  
+
 } ;</pre>
 <pre>void foo()
 {
   // Wrapped object constructed in-place via a InPlaceFactory.
   // No temporary created.
-  W ( in_place(123,"hello") ) ; 
+  W ( in_place(123,"hello") ) ;
 }
 </pre>
 <p>The factories are implemented in the headers:
-<a href="../../../boost/detail/in_place_factory.hpp">in_place_factory.hpp</a> and 
-<a href="../../../boost/detail/typed_in_place_factory.hpp">typed_in_place_factory.hpp</a>
+<a href="../../../boost/utility/in_place_factory.hpp">in_place_factory.hpp</a> and
+<a href="../../../boost/utility/typed_in_place_factory.hpp">typed_in_place_factory.hpp</a>
 </p>
 
 <HR>
@@ -1272,7 +1272,7 @@ public:
 the <i>maybe</i> state <u>represents a valid value</u>, unlike the corresponding state
 of an uninitialized optional&lt;bool&gt;.<br>
 It should be carefully considered if an optional bool instead of a tribool is really needed</p>
-<p>Second, optional&lt;&gt; provides an implicit conversion to bool. This conversion 
+<p>Second, optional&lt;&gt; provides an implicit conversion to bool. This conversion
   refers to the initialization state and not to the contained value.<br>
 Using optional&lt;bool&gt; can lead to subtle errors due to the implicit bool conversion:</p>
 <pre>void foo ( bool v ) ;
@@ -1291,7 +1291,7 @@ integral promotions don't apply (i.e. if foo() takes an 'int' instead, it won't 
 
 <H2><A NAME="exsafety">Exception Safety Guarantees</A></H2>
 <H3><u>Assignment and Reset:</u></H3>
-<p>Because of the current implementation (see <A HREF="#impl">Implementation Notes</A>), all 
+<p>Because of the current implementation (see <A HREF="#impl">Implementation Notes</A>), all
 of the assignment methods:</p>
 <ul>
   <li> <code>optional&lt;T&gt;::operator= ( optional&lt;T&gt; const&amp; ) </code>
@@ -1299,9 +1299,9 @@ of the assignment methods:</p>
   <li> <code>optional&lt;T&gt;::operator= ( T const&amp; ) </code></li>
   <li> <code>template&lt;class U&gt; optional&lt;T&gt;::operator= ( optional&lt;U&gt; const&amp; ) </code>
   </li>
-  <li> <code>template&lt;class InPlaceFactory&gt; optional&lt;T&gt;::operator= ( 
+  <li> <code>template&lt;class InPlaceFactory&gt; optional&lt;T&gt;::operator= (
   InPlaceFactory const&amp; ) </code></li>
-  <li> <code>template&lt;class TypedInPlaceFactory&gt; optional&lt;T&gt;::operator= ( 
+  <li> <code>template&lt;class TypedInPlaceFactory&gt; optional&lt;T&gt;::operator= (
   TypedInPlaceFactory const&amp; ) </code></li>
   <li> <code>optional&lt;T&gt;:::reset ( T const&amp;)</code></li>
 </ul>
@@ -1363,7 +1363,7 @@ If none of the optionals is initialized, it has no-throw guarantee since it is a
 <HR>
 
 <H2><A NAME="requirements">Type requirements</A></H2>
-<p>In general, T must be <a href="../../utility/CopyConstructible.html">Copy Constructible</a> and have a no-throw destructor. The copy-constructible requirement is not needed 
+<p>In general, T must be <a href="../../utility/CopyConstructible.html">Copy Constructible</a> and have a no-throw destructor. The copy-constructible requirement is not needed
 if InPlaceFactories are used.<br>
 T <u>is not</u> required to be <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">Default Constructible</a> </p>
 
@@ -1407,39 +1407,40 @@ T <u>is not</u> required to be <a href="http://www.sgi.com/tech/stl/DefaultConst
   Henney, David Abrahams, and others I can't recall. </p>
 </blockquote>
 <p>Post-formal review:</p>
-<blockquote> 
-  <p>William Kempf carefully considered the originally proposed interface and 
-    suggested the new interface which is currently used. He also started and fueled 
-    the discussion about the analogy optional&lt;&gt;/smart pointer and about 
+<blockquote>
+  <p>William Kempf carefully considered the originally proposed interface and
+    suggested the new interface which is currently used. He also started and fueled
+    the discussion about the analogy optional&lt;&gt;/smart pointer and about
     relational operators.<br>
-    Peter Dimov, Joel de Guzman, David Abrahams, Tanton Gibbs and Ian Hanson focused 
-    on the relational semantics of optional (originally undefined); concluding 
-    with the fact that the pointer-like interface doesn't make it a pointer so 
+    Peter Dimov, Joel de Guzman, David Abrahams, Tanton Gibbs and Ian Hanson focused
+    on the relational semantics of optional (originally undefined); concluding
+    with the fact that the pointer-like interface doesn't make it a pointer so
     it shall have deep relational operators.<br>
-    Augustus Saunders also explored the different relational semantics between 
-    optional&lt;&gt; and a pointer and developed the OptionalPointee concept as 
+    Augustus Saunders also explored the different relational semantics between
+    optional&lt;&gt; and a pointer and developed the OptionalPointee concept as
     an aid against potential conflicts on generic code.<br>
-    Joel de Guzman noticed that optional&lt;&gt; can be seen as an API on top 
+    Joel de Guzman noticed that optional&lt;&gt; can be seen as an API on top
     of variant&lt;T,nil_t&gt;.<br>
-    Dave Gomboc explained the meaning and usage of the Haskell analog to optional&lt;&gt;: 
+    Dave Gomboc explained the meaning and usage of the Haskell analog to optional&lt;&gt;:
     the Maybe type constructor (analogy originally pointed out by David Sankel).<br>
-    Other comments were posted by Vincent Finn, Anthony Williams, Ed Brey, Rob 
+    Other comments were posted by Vincent Finn, Anthony Williams, Ed Brey, Rob
     Stewart, and others.<br>
-    Joel de Guzman made the case for the support of references and helped with 
+    Joel de Guzman made the case for the support of references and helped with
     the proper semantics.<br>
-    Mat Marcus shown the virtues of a value-oriented interface, influencing the 
+    Mat Marcus shown the virtues of a value-oriented interface, influencing the
     current design, and contributed the idea of &quot;none&quot;.</p>
 </blockquote>
 <HR>
 
 <P>Revised Jannuary 30, 2004</P>
-<P>&copy; Copyright boost.org 2003. Permission to copy, use, modify, sell and 
-  distribute this document is granted provided this copyright notice appears in 
-  all copies. This document is provided &quot;as is&quot; without express or implied 
-  warranty, and with no claim as to its suitability for any purpose.</P>
+<p>© Copyright Fernando Luis Cacciola Carballal, 2003,2004</p>
+<p> Use, modification, and distribution are subject to the Boost Software
+License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
+LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
+www.boost.org/LICENSE_1_0.txt</a>)</p>
 <P>Developed by <A HREF="mailto:fernando_cacciola@hotmail.com">Fernando Cacciola</A>,
 the latest version of this file can be found at <A
-HREF="http://www.boost.org">www.boost.org</A>, and the boost 
+HREF="http://www.boost.org">www.boost.org</A>, and the boost
 <A HREF="http://www.boost.org/more/mailing_lists.htm#main">discussion lists</A></P>
 </BODY>
 </HTML>
