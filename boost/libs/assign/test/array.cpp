@@ -51,7 +51,8 @@ void check_array()
     BOOST_CHECK_EQUAL( a2[5], 0 );
     // too many arguments
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)    
-   BOOST_CHECK_THROW( a2 = list_of(1)(2)(3)(4)(5)(6)(6).to_array(a2);
+   BOOST_CHECK_THROW( a2 = list_of(1)(2)(3)(4)(5)(6)(6).to_array(a2),
+                      assignment_exception );
 #else
     BOOST_CHECK_THROW( a2 = list_of(1)(2)(3)(4)(5)(6)(7), assignment_exception );
 #endif
