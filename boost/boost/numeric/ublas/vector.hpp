@@ -1321,7 +1321,7 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size, bool preserve = true) {
             if (size > N)
                 bad_size ().raise ();
-            std::fill (data_ + std::min (size, size_), data_ + size, value_type ());
+            std::fill (data_ + (std::min) (size, size_), data_ + size, value_type ());
             size_ = size;
         }
 

@@ -1426,7 +1426,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I>
     BOOST_UBLAS_INLINE
     void increment (I &it, const I &it_end, std::ptrdiff_t compare, packed_random_access_iterator_tag) {
-        it += std::min (compare, it_end - it);
+        it += (std::min) (compare, it_end - it);
     }
     template<class I>
     BOOST_UBLAS_INLINE
