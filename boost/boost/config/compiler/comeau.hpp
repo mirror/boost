@@ -29,8 +29,6 @@
 
 //
 // enable __int64 support in VC emulation mode
-// we should also set BOOST_HAS_LONG_LONG when that is
-// supported, but there is no way we can detect it:
 //
 #  if defined(_MSC_VER) && (_MSC_VER >= 1200)
 #     define BOOST_HAS_MS_INT64
