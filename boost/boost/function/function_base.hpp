@@ -32,6 +32,15 @@
 #  define BOOST_FUNCTION_TARGET_FIX(x)
 #endif // not MSVC
 
+#if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730
+// Work around a compiler bug.
+// boost::python::detail::function has to be seen by the compiler before the
+// boost::function class template.
+namespace boost { namespace python { namespace detail {
+  class function;
+}}}
+#endif
+
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 namespace boost {
 
