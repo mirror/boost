@@ -40,6 +40,13 @@ namespace gregorian {
    */
   typedef date_time::period<date, date_duration> date_period;  
 
+  //! A unifying date_generator base type
+  /*! A unifying date_generator base type for: 
+   * partial_date, nth_day_of_the_week_in_month,
+   * first_day_of_the_week_in_month, and last_day_of_the_week_in_month
+   */
+  typedef date_time::year_based_generator<date> year_based_generator;
+
   //! A date generation object type
   typedef date_time::partial_date<date> partial_date;
 
