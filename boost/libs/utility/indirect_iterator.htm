@@ -42,12 +42,12 @@ reference indirect_iterator::operator*() const {
 <pre>
 namespace boost {
   template &lt;class BaseIterator,
-            class Value, class Reference, class Pointer, class Category&gt;
+            class Value, class Reference, class Category, class Pointer&gt;
   struct indirect_iterator_generator;
   
   template &lt;class BaseIterator,
-      class Value, class Pointer, class Reference, 
-            class ConstPointer, class ConstReference, class Category&gt;b
+            class Value, class Reference, class ConstReference, 
+            class Category, class Pointer, class ConstPointer&gt;
   struct indirect_iterator_pair_generator;
 
   template &lt;class BaseIterator&gt;
