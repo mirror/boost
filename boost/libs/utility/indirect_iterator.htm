@@ -1,0 +1,199 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Indirect Iterator Adaptor Documentation</title>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)"
+align="center" width="277" height="86">
+
+<h1>Indirect Iterator Adaptor</h1>
+
+Defined in header
+<a href="../../boost/iterator_adaptors.hpp">boost/iterator_adaptors.hpp</a>
+
+<p>
+The indirect iterator adaptor augments an iterator by applying an
+<b>extra</b> dereference inside of <tt>operator*()</tt>. For example,
+this iterator makes it possible to view containers of pointers such as
+<tt>std::list&lt;foo*&gt;</tt> as if there were containers of the
+pointed-to type (in this case <tt>std::list&lt;foo&gt;</tt>).  The
+following <b>pseudo-code</b> shows the basic idea of the indirect
+iterator:
+
+<pre>
+  // inside a hypothetical indirect_iterator class...
+  typedef std::iterator_traits&lt;BaseIterator&gt;::value_type Pointer;
+  typedef std::iterator_traits&lt;Pointer&gt;::reference reference;
+
+  reference indirect_iterator::operator*() const {
+    return **this->base_iterator;
+  }
+</pre>
+
+
+<h2>Synopsis</h2>
+
+<pre>
+namespace boost {
+  template &lt;class BaseIterator,
+            class Value, class Reference, class Pointer&gt;
+  struct indirect_iterator_generator;
+  
+  template &lt;class BaseIterator,
+	    class Value, class Pointer, class Reference, 
+            class ConstPointer, class ConstReference&gt;
+  struct indirect_iterator_pair_generator;
+
+  template &lt;class BaseIterator&gt;
+  typename indirect_iterator_generator&lt;BaseIterator&gt;::type
+  make_indirect_iterator(BaseIterator base)  
+}
+</pre>
+
+<hr>
+
+<h2><a name="indirect_iterator_generator">The Indirect Iterator Type
+Generator</a></h2>
+
+The class <tt>indirect_iterator_generator</tt> is a helper class whose
+purpose is to construct an indirect iterator type.  The main template
+parameter for this class is the <tt>BaseIterator</tt> type that is
+being wrapped. In most cases the type of the elements being pointed to
+can be deduced using <tt>std::iterator_traits</tt>, but in some
+sitatuions the user may want to override these types, so there are
+also template parameters for the type being pointed to (the
+<tt>Value</tt>) as well as reference and pointer versions of the type.
+
+<pre>
+template &lt;class BaseIterator,
+          class Value, class Reference, class Pointer&gt;
+class indirect_iterator_generator
+{
+public:
+  typedef <tt><a href="./iterator_adaptor.htm">iterator_adaptor</a>&lt...&gt;</tt> type; // the resulting indirect iterator type 
+};
+</pre>
+
+<h3>Example</h3>
+
+This example uses the <tt>indirect_iterator_generator</tt> to create
+indirect iterators that dereference the pointers stored in the
+<tt>pointers_to_chars</tt> array to access the <tt>char</tt>'s in the
+<tt>characters</tt> array.
+
+<pre>
+#include &lt;boost/config.hpp&gt;
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+#include &lt;iterator&gt;
+#include &lt;boost/iterator_adaptors.hpp&gt;
+
+int main(int, char*[])
+{
+  char characters[] = "abcdefg";
+  const int N = sizeof(characters)/sizeof(char) - 1; // -1 since characters has a null char
+  char* pointers_to_chars[N];                        // at the end.
+  for (int i = 0; i &lt; N; ++i)
+    pointers_to_chars[i] = &characters[i];
+  
+  boost::indirect_iterator_generator&lt;char**, char&gt;::type 
+    indirect_first(pointers_to_chars), indirect_last(pointers_to_chars + N);
+
+  std::copy(indirect_first, indirect_last, std::ostream_iterator&lt;char&gt;(std::cout, ","));
+  std::cout &lt;&lt; std::endl;
+  
+  return 0;
+}
+</pre>
+
+<h3>Template Parameters</h3>
+
+<Table border>
+<TR>
+<TH>Parameter</TH><TH>Description</TH>
+</TR>
+
+<TR>
+<TD><tt>BaseIterator</tt></TD>
+<TD>The iterator type being wrapped. The value type of the base iterator
+should be a pointer (a <a
+href="http://www.sgi.com/tech/stl/trivial.html">Trivial
+Iterator</a>).</TD>
+</TD>
+</TR>
+
+<TR>
+<TD><tt>Value</tt></TD>
+<TD>The value-type of the value-type of the base iterator. That is, the
+type of object that is accessed by dereferences in the base iterator twice.<br>
+<b>Default:</b><br>
+<tt>std::iterator_traits&lt;std::iterator_traits&lt;BaseIterator&gt;::value_type&gt;::value_type</tt>
+</TD>
+
+<TR>
+<TD><tt>Reference</tt></TD>
+<TD>The corresponding reference type for the <tt>Value</tt>.
+<b>Default:</b> <tt>Value&</tt></TD>
+</TD>
+
+<TR>
+<TD><tt>Pointer</tt></TD>
+<TD>The corresponding pointer type for the <tt>Value</tt>.
+<b>Default:</b> <tt>Value*</tt></TD>
+</TD>
+
+</Table>
+
+<h3>Model of</h3>
+
+If the base iterator is a model of <a
+href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+Access Iterator</a> then so is the resulting indirect iterator.  If
+the base iterator supports less functionality than this the resulting
+indirect iterator will also support less functionality.
+
+<h3>Members</h3>
+
+The indirect iterator type implements the member functions and
+operators required of the <a
+href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+Access Iterator</a> concept.
+In addition it has the following constructor:
+
+<pre>
+indirect_iterator_generator::type(const BaseIterator&amp; it)
+</pre>
+
+<p>
+<hr>
+<p>
+
+<h2><a name="indirect_iterator_generator">The Indirect Iterator Pair
+Generator</a></h2>
+
+
+<p>
+<hr>
+<p>
+
+<h2><a name="make_indirect_iterator">The Indirect Iterator Object Generator</a></h2>
+
+
+
+<hr>
+<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->10 Feb 2001<!--webbot bot="Timestamp" endspan i-checksum="14373" --></p>
+<p>© Copyright Jeremy Siek 2000. Permission to copy, use,
+modify, sell and distribute this document is granted provided this copyright
+notice appears in all copies. This document is provided &quot;as is&quot;
+without express or implied warranty, and with no claim as to its suitability for
+any purpose.</p>
+
+</body>
+
+</html>
