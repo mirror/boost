@@ -192,6 +192,8 @@ namespace boost {
 
 //  iterator range free-standing operators ---------------------------//
 
+#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+#else
         template< class Iterator >
         inline bool empty( const iterator_range<Iterator>& r )
         {
@@ -201,6 +203,7 @@ namespace boost {
             //
             return r.empty();
         }
+#endif
         
         //! iterator_range output operator
         /*!

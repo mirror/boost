@@ -39,11 +39,23 @@ namespace boost
         { }
             
         template< class ForwardRange2 >
-        sub_range( ForwardRange2& r ) : base( r )
+        sub_range( ForwardRange2& r ) : 
+            
+#if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
+            base( boost::begin( r ), boost::end( r ) )
+#else
+            base( r )
+#endif        
         { }
         
         template< class ForwardRange2 >
-        sub_range( const ForwardRange2& r ) : base( r )
+        sub_range( const ForwardRange2& r ) : 
+
+#if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
+            base( boost::begin( r ), boost::end( r ) )
+#else
+            base( r )
+#endif                
         { }
 
         template< class Iter >
