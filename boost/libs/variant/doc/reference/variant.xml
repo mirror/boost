@@ -9,7 +9,7 @@
         <simpara>The <code>variant</code> class template (inspired by Andrei
         Alexandrescu's class of the same name
         [<link linkend="variant.biblio.ale01a">Ale01A</link>]) is an efficient,
-        <classname alt="boost::recursive_variant">recursive-capable</classname>,
+        <link linkend="variant.tutorial.recursive">recursive-capable</link>,
         bounded discriminated union value type capable of containing any value
         type (either POD or non-POD). It supports construction from any type
         convertible to one of its bounded types or from a source
@@ -20,6 +20,7 @@
         visitation; and through <code><functionname>get</functionname></code>,
         <code>variant</code> supports run-time checked, type-safe value
         retrieval.</simpara>
+
         <simpara><emphasis role="bold">Notes</emphasis>:</simpara>
         <itemizedlist>
           <listitem>All members of <code>variant</code> satisfy at least the
@@ -31,33 +32,23 @@
             <emphasis><link linkend="variant.concepts.bounded-type">BoundedType</link></emphasis>
             concept.</listitem>
           <listitem>Each type specified as a template argument to
-            <code>variant</code> must be distinct. For instance, use of
-            <code>variant&lt;int, int&gt;</code> or
-            <code>variant&lt;int, const int&gt;</code> results in undefined
+            <code>variant</code> must be distinct after removal of qualifiers.
+            Thus, for instance, both <code>variant&lt;int, int&gt;</code> and
+            <code>variant&lt;int, const int&gt;</code> have undefined
             behavior.</listitem>
           <listitem>Conforming implementations of <code>variant</code> must
             allow at least ten types as template arguments. The exact number
             of allowed arguments is exposed by the preprocessor macro
-            <code><macroname>BOOST_VARIANT_LIMIT_TYPES</macroname></code>.</listitem>
-          <listitem>The following syntax is also supported:
-            <code>variant&lt; <emphasis>type-sequence</emphasis> &gt;</code>,
-            where <emphasis>type-sequence</emphasis> must meet the requirements
-            of the <libraryname>MPL</libraryname>'s
-            <emphasis>Sequence</emphasis> concept. For instance,
-            <code>variant&lt; mpl::list&lt;int, std::string&gt; &gt;</code> is
-            functionally equivalent to
-            <code>variant&lt; int, std::string &gt;</code>. (Due to standard
-            conformance problems in several compilers, however, this syntax may
-            not be supported on your compiler. See
-            <code><macroname>BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT</macroname></code>
-            for more information.)</listitem>
+            <code><macroname>BOOST_VARIANT_LIMIT_TYPES</macroname></code>.
+            (See <code><classname>make_variant_over</classname></code> for a
+            means to specify the bounded types of a <code>variant</code> by
+            the elements of an <libraryname>MPL</libraryname> or compatible
+            Sequence, thus overcoming this limitation.)</listitem>
         </itemizedlist>
       </description>
 
       <template>
-        <template-type-parameter name="T1">
-          <default><classname>boost::empty</classname></default>
-        </template-type-parameter>
+        <template-type-parameter name="T1"/>
         <template-type-parameter name="T2">
           <default><emphasis>unspecified</emphasis></default>
         </template-type-parameter>
@@ -69,7 +60,12 @@
 
       <typedef name="types">
         <type><emphasis>unspecified</emphasis></type>
-        <purpose>T1, T2, ..., TN as an <libraryname>MPL</libraryname>-compatible Sequence.</purpose>
+
+        <description>
+          <simpara>Exposed as an <libraryname>MPL</libraryname>-compatible
+            Sequence, <code>types</code> is the set of bounded types that must
+            be handled by any visitor to <code>variant</code>.</simpara>
+        </description>
       </typedef>
 
       <destructor>
@@ -339,10 +335,14 @@
           <type>bool</type>
 
           <returns>
-            <simpara><code>true</code> if and only if the contained type of
-              <code>*this</code> is
-              <code><classname>boost::empty</classname></code>.</simpara>
+            <simpara><code>false</code>: <code>variant</code> always contains
+              exactly one of its bounded types.</simpara>
           </returns>
+
+          <rationale>
+            <simpara>Provides generic compatibility with
+              <classname>boost::any</classname>.</simpara>
+          </rationale>
 
           <throws>Will not throw.</throws>
         </method>
@@ -357,6 +357,111 @@
 
           <throws>Will not throw.</throws>
         </method>
+
+      </method-group>
+      
+      <method-group name="relational">
+
+        <overloaded-method name="operator==" cv="const">
+          <purpose>Equality comparison.</purpose>
+
+          <signature cv="const">
+            <type>bool</type>
+            <parameter name="rhs">
+              <paramtype>const variant &amp;</paramtype>
+            </parameter>
+          </signature>
+          
+          <signature cv="const">
+            <type>void</type>
+            <template>
+              <template-type-parameter name="U"/>
+            </template>
+            <parameter>
+              <paramtype>const U &amp;</paramtype>
+            </parameter>
+          </signature>
+
+          <notes>
+            <simpara>The overload returning <code>void</code> exists only to
+              prohibit implicit conversion of the operator's right-hand side
+              to <code>variant</code>; thus, its use will (purposefully)
+              result in a compile-time error.</simpara>
+          </notes>
+
+          <requires>
+            <simpara>Every bounded type of the <code>variant</code> must
+              fulfill the requirements of the
+              <link linkend="variant.concepts.equality-comparable"><emphasis>EqualityComparable</emphasis></link>
+              concept.</simpara>
+          </requires>
+
+          <returns>
+            <simpara><code>true</code> iff <code>which() == rhs.which()</code>
+              <emphasis>and</emphasis>
+              <code>content_this == content_rhs</code>, where
+              <code>content_this</code> is the content of <code>*this</code>
+              and <code>content_rhs</code> is the content of
+              <code>rhs</code>.</simpara>
+          </returns>
+          
+          <throws>
+            <simpara>If <code>which() == rhs.which()</code> then may fail with
+              any exceptions arising from <code>operator==(T,T)</code>, where
+              <code>T</code> is the contained type of
+              <code>*this</code>.</simpara>
+          </throws>
+        </overloaded-method>
+
+        <overloaded-method name="operator&lt;">
+          <purpose>LessThan comparison.</purpose>
+
+          <signature cv="const">
+            <type>bool</type>
+            <parameter name="rhs">
+              <paramtype>const variant &amp;</paramtype>
+            </parameter>
+          </signature>
+          
+          <signature cv="const">
+            <type>void</type>
+            <template>
+              <template-type-parameter name="U"/>
+            </template>
+            <parameter>
+              <paramtype>const U &amp;</paramtype>
+            </parameter>
+          </signature>
+
+          <notes>
+            <simpara>The overload returning <code>void</code> exists only to
+              prohibit implicit conversion of the operator's right-hand side
+              to <code>variant</code>; thus, its use will (purposefully)
+              result in a compile-time error.</simpara>
+          </notes>
+
+          <requires>
+            <simpara>Every bounded type of the <code>variant</code> must
+              fulfill the requirements of the
+              <link linkend="variant.concepts.lessthan-comparable"><emphasis>LessThanComparable</emphasis></link>
+              concept.</simpara>
+          </requires>
+
+          <returns>
+            <simpara>If <code>which() == rhs.which()</code> then:
+              <code>content_this &lt; content_rhs</code>, where
+              <code>content_this</code> is the content of <code>*this</code>
+              and <code>content_rhs</code> is the content of <code>rhs</code>.
+              Otherwise: <code>which() &lt; rhs.which()</code>.</simpara>
+          </returns>
+
+          <throws>
+            <simpara>If <code>which() == rhs.which()</code> then may fail with
+              any exceptions arising from <code>operator&lt;(T,T)</code>,
+              where <code>T</code> is the contained type of
+              <code>*this</code>.</simpara>
+          </throws>
+        </overloaded-method>
 
       </method-group>
     </class>
@@ -391,6 +496,8 @@
     </function>
 
     <function name="operator&lt;&lt;">
+      <purpose>Provides streaming output for <code>variant</code> types.</purpose>
+
       <template>
         <template-type-parameter name="ElemType"/>
         <template-type-parameter name="Traits"/>
@@ -422,5 +529,42 @@
           the content of <code>rhs</code>.</simpara>
       </effects>
     </function>
+    
+    <class name="make_variant_over">
+      <purpose>
+        <simpara>Exposes a <code>variant</code> whose bounded types are the
+          elements of the given type sequence.</simpara>
+      </purpose>
+
+      <template>
+        <template-type-parameter name="Sequence"/>
+      </template>
+
+      <typedef name="type">
+        <type>variant&lt; <emphasis>unspecified</emphasis> &gt;</type>
+
+        <description>TODO</description>
+      </typedef>
+
+      <description>
+        <simpara><code>type</code> has behavior equivalent in every respect to
+          <code><classname>variant</classname>&lt; Sequence[0], Sequence[1], ... &gt;</code>
+          (where <code>Sequence[<emphasis>i</emphasis>]</code> denotes the
+          <emphasis>i</emphasis>-th element of <code>Sequence</code>), except
+          that no upper limit is imposed on the number of types.</simpara>
+
+        <simpara><emphasis role="bold">Notes</emphasis>:</simpara>
+        <itemizedlist>
+          <listitem><code>Sequence</code> must meet the requirements of the
+            <libraryname>MPL</libraryname> <emphasis>Sequence</emphasis>
+            concept.</listitem>
+          <listitem>Due to standard conformance problems in several compilers,
+            <code>make_variant_over</code> may not be supported on your
+            compiler. See
+            <code><macroname>BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT</macroname></code>
+            for more information.</listitem>
+        </itemizedlist>
+      </description>
+    </class>
   </namespace>
 </header>
