@@ -28,12 +28,16 @@
 #     define BOOST_NO_OPERATORS_IN_NAMESPACE
 #   endif
 
+#ifndef __EXCEPTIONS
+# define BOOST_NO_EXCEPTIONS
+#endif
+
 //
 // Threading support: Turn this on unconditionally here (except for
-// MinGW, where we can know for sure). It will get turned off again
+// those platforms where we can know for sure). It will get turned off again
 // later if no threading API is detected.
 //
-#if !defined(__MINGW32__) || defined(_MT)
+#if !defined(__MINGW32__) && !defined(__CYGWIN__) && !defined(linux) && !defined(__linux) && !defined(__linux__)
 # define BOOST_HAS_THREADS
 #endif 
 
@@ -66,3 +70,4 @@
 #     warning "Unknown compiler version - please run the configure tests and report the results"
 #  endif
 #endif
+
