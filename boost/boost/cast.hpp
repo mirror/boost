@@ -9,6 +9,10 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  02 Apr 01  Removed BOOST_NO_LIMITS workarounds and included 
+//             <boost/limits.hpp> instead (the workaround did not 
+//             actually compile when BOOST_NO_LIMITS was defined in 
+//             any case, so we loose nothing). (John Maddock)
 //  21 Jan 01  Undid a bug I introduced yesterday. numeric_cast<> never
 //             worked with stock GCC; trying to get it to do that broke
 //             vc-stlport.
@@ -43,9 +47,7 @@
 # include <cassert>
 # include <typeinfo>
 # include <boost/type.hpp>
-# ifndef BOOST_NO_LIMITS
-#  include <limits>
-# endif
+# include <boost/limits.hpp>
 
 //  It has been demonstrated numerous times that MSVC 6.0 fails silently at link
 //  time if you use a template function which has template parameters that don't
@@ -266,7 +268,6 @@ namespace boost
 #  pragma option push -w-8041
 # endif
 
-# ifndef BOOST_NO_LIMITS
        // Move to namespace boost in utility.hpp?
        template <class T>
        struct fixed_numeric_limits : public std::numeric_limits<T>
@@ -277,7 +278,6 @@ namespace boost
                    ? T(-std::numeric_limits<T>::max()) : std::numeric_limits<T>::min();
            }
        };
-# endif // BOOST_NO_LIMITS
   
 # if BOOST_MSVC
 #  pragma warning(pop)
@@ -291,11 +291,9 @@ namespace boost
     template<typename Target, typename Source>
     inline Target numeric_cast(Source arg BOOST_EXPLICIT_DEFAULT_TARGET)
     {
-#ifndef BOOST_NO_LIMITS
         // typedefs abbreviating respective trait classes
         typedef std::numeric_limits<Source> arg_traits;
         typedef detail::fixed_numeric_limits<Target> result_traits;
-#endif
         
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
         // typedefs that act as compile time assertions
