@@ -10,6 +10,9 @@
 #include <algorithm>
 #include <list>
 
+void check_shape(const double&, unsigned int*, int*, unsigned int)
+{}
+
 template <class Array>
 void check_shape(const Array& A, 
                  unsigned int* sizes, 
@@ -23,8 +26,11 @@ void check_shape(const Array& A,
   check_shape(A[0], ++sizes, ++strides, num_elements / A.size());
 }
 
-void check_shape(const double&, unsigned int*, int*, unsigned int)
-{}
+
+bool equal(const double& a, const double& b)
+{
+  return a == b;
+}
 
 template <typename ArrayA, typename ArrayB>
 bool equal(const ArrayA& A, const ArrayB& B)
@@ -35,10 +41,6 @@ bool equal(const ArrayA& A, const ArrayB& B)
     if (!equal(*ia, *ib))
       return false;
   return true;
-}
-bool equal(const double& a, const double& b)
-{
-  return a == b;
 }
 
 
