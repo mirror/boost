@@ -10,7 +10,7 @@
   class indirect_iterator
     : public iterator_adaptor<
                  indirect_iterator<Iterator, Value, Access, Traversal, 
-Reference, Difference>,
+                                   Reference, Difference>,
                  Iterator,
                  /* Value = see below */,
                  CategoryOrTraversal,
@@ -101,6 +101,6 @@ concept that is modeled by the value type of ``Iterator``.
 
 :Requires: ``Iterator2`` is implicitly convertible to ``Iterator``.
 :Returns: An instance of ``indirect_iterator`` whose 
-``iterator_adaptor`` subobject is constructed from ``y.base()``.
+    ``iterator_adaptor`` subobject is constructed from ``y.base()``.
 
 

@@ -52,7 +52,8 @@ specific values. Is there a reason for iterator_access to be more specific?
 
 Resolution
 ----------
-  The iterator_access enum has been removed, so this is no longer an issue.
+
+The iterator_access enum has been removed, so this is no longer an issue.
 
 
 
@@ -267,6 +268,22 @@ argument's contained Iterator object should be converted to the target
 type's Iterator type. Is that what's meant here?
 
 
+Resolution
+----------
+
+1. As suggested, change the returns clause to read:
+
+:Returns: An instance of ``indirect_iterator`` with a default-constructed
+  ``iterator_adaptor`` subobject.
+
+
+2. Basically, yes. The return clause should be changed to:
+
+:Returns: An instance of ``indirect_iterator`` whose 
+  ``iterator_adaptor`` subobject is constructed from ``y.base()``.
+
+
+
 Subject: N1530: enable_if_convertible conflicts with requires
 =============================================================
 Date: Wed, 12 Nov 2003 15:09:48 -0500
@@ -389,8 +406,12 @@ iterator_facade, but does not provide the 'b' versions of these functions.
 Are the 'b' versions needed?
 
 
+
+Subject: Re: Proposed revision of N1550
+=======================================
+From: Pete Becker <petebecker@acm.org>
+Date: Wed, 03 Dec 2003 13:36:26 -0500
 Message c++std-lib-12566
-========================
 
 The footnote says:
  
@@ -703,6 +724,10 @@ Date: Tue, 09 Dec 2003 13:35:20 -0500
 From: Pete Becker <petebecker@acm.org>
 Message c++std-lib-12640
 
+
+Part 1
+------
+
 >The value_type of the Iterator template parameter should itself be 
 >dereferenceable. The return type of the operator* for the value_type must 
 >be the same type as the Reference template parameter.
@@ -714,12 +739,48 @@ iterator_traits<Iterator>::value_type must be dereferenceable.
 The Reference template parameter must be the same type as 
 *iterator_traits<Iterator>::value_type().
 
+
+Resolution
+----------
+
+I don't think we want to require default constructible for
+``iterator_traits<Iterator>::value_type``, so I've reworded to avoid
+that implication.
+
+Change the text to:
+
+The following requirements are placed on the type
+``iterator_traits<Iterator>::value_type``. Let ``i`` be an object of
+type ``iterator_traits<Iterator>::value_type``.  Then ``*i`` must be a
+valid expression, and the type of ``*i`` must be the same as the
+``Reference`` template parameter.
+
+Part 2
+------
+
 >The Value template parameter will be the value_type for the 
 >indirect_iterator, unless Value is const. If Value is const X, then 
 >value_type will be non- const X.
 
 Also non-volatile, right? In other words, if Value isn't use_default, it 
 just gets passed as the Value argument for iterator_adaptor.
+
+
+Resolution
+----------
+
+Yes, I think that's right. Dave, can you confirm?
+
+Here's the rewording:
+
+The ``Value`` template parameter will be the ``value_type`` for the
+``indirect_iterator``, unless ``Value`` is cv-qualified. If ``Value``
+is cv-qualified then ``value_type`` will be non-qualified version of
+the type.
+
+
+Part 3
+------
 
 >The default for Value is
 >
@@ -734,12 +795,31 @@ pun, or is iterator_traits<Iterator>::value_type required to be some form
 of iterator? If it's the former we need to find a different way to say it. 
 If it's the latter we need to say so.
 
+
+Resolution
+----------
+
+Dave, help!
+
+
+Part 4
+------
+
 >The Reference parameter will be the reference type of the 
 >indirect_iterator. The default is Value&.
 
 That is, the Reference parameter is passed unchanged as the Reference 
 argument to iterator_adaptor. Which is what it should say, instead of 
 repeating what iterator_adaptor does.
+
+Resolution
+----------
+
+Yes.
+
+
+Part 5
+------
 
 >The Access and Traversal parameters are passed unchanged to the 
 >corresponding parameters of the iterator_adaptor base class, and the 
@@ -766,6 +846,15 @@ Reference, Difference>,
                  Reference,
                  Difference>
 
+Resolution
+----------
+
+Yes.
+
+
+Part 6
+------
+
 >The indirect iterator will model the most refined standard traversal 
 >concept that is modeled by the Iterator type. The indirect iterator will 
 >model the most refined standard access concept that is modeled by the 
@@ -776,6 +865,17 @@ restrictive than the Iterator, in which case the operations needed for the
 most refined types are available, but iterator_traits<X>::iterator_category 
 won't reflect those capabilities.
 
+
+Resolution
+----------
+
+The indirect iterator will model the most refined standard traversal
+concept that is modeled by the ``Iterator`` type and that refines the
+traversal category specified in the ``CategoryOrTraversal`` parameter.
+The indirect iterator will model the most refined standard access
+concept that is modeled by the value type of ``Iterator``.
+
+.. I am not confident in the above. -JGS
 
 
 Subject: N1530: transform_iterator requirements
