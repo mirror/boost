@@ -27,6 +27,11 @@
 #include <boost/random/detail/uniform_int_float.hpp>
 #include <boost/random/detail/ptr_helper.hpp>
 
+// Borland C++ 5.6.0 has problems using its numeric_limits traits as
+// template parameters
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x564)
+#include <boost/type_traits/is_integral.hpp>
+#endif
 
 namespace boost {
 
@@ -99,7 +104,7 @@ public:
   result_type operator()() { return _dist(_eng); }
   template<class T>
   result_type operator()(T value) { return _dist(_eng, value); }
-  
+
   engine_value_type& engine() { return _eng.base().base(); }
   const engine_value_type& engine() const { return _eng.base().base(); }
 
@@ -110,11 +115,18 @@ public:
   result_type max() const { return distribution().max(); }
 
 private:
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x564)
+  typedef typename random::detail::engine_helper<
+    boost::is_integral<typename decorated_engine::result_type>::value,
+    boost::is_integral<typename Distribution::input_type>::value
+    >::BOOST_NESTED_TEMPLATE impl<decorated_engine, typename Distribution::input_type>::type internal_engine_type;
+#else
   enum {
     have_int = std::numeric_limits<typename decorated_engine::result_type>::is_integer,
     want_int = std::numeric_limits<typename Distribution::input_type>::is_integer
   };
   typedef typename random::detail::engine_helper<have_int, want_int>::BOOST_NESTED_TEMPLATE impl<decorated_engine, typename Distribution::input_type>::type internal_engine_type;
+#endif
 
   internal_engine_type _eng;
   distribution_type _dist;
