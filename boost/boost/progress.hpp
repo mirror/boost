@@ -43,15 +43,9 @@ class progress_timer : public timer, noncopyable
   //  Therefore, wrap the I/O in a try block, catch and ignore all exceptions.
     try
     {
-# if !defined(__GNUC__) || __GNUC__ > 2
-      std::ios_base::fmtflags old_flags = _os.setf( std::ios_base::fixed,
-                                                    std::ios_base::floatfield );
-#else
-      std::ios::fmtflags old_flags = _os.setf( std::ios::fixed,
-                                               std::ios::floatfield );
-# endif
-
-
+      // use istream instead of ios_base to workaround GNU problem (Greg Chicares)
+      std::istream::fmtflags old_flags = _os.setf( std::istream::fixed,
+                                                   std::istream::floatfield );
       std::streamsize old_prec = _os.precision( 2 );
       _os << elapsed() << " s\n" // "s" is System International d'Unités std
                        << std::endl;
