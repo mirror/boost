@@ -1,5 +1,5 @@
 #include <boost/numeric/interval.hpp>
-#include <boost/test/test_tools.hpp>
+#include <boost/test/minimal.hpp>
 
 template<class I>
 void test_one(typename I::base_type x, typename I::base_type f) {

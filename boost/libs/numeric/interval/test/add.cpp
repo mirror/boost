@@ -4,7 +4,7 @@
 #include <boost/numeric/interval/rounded_arith.hpp>
 #include <boost/numeric/interval/utility.hpp>
 #include <boost/numeric/interval/policies.hpp>
-#include <boost/test/test_tools.hpp>
+#include <boost/test/minimal.hpp>
 
 typedef enum { EXPR_VAR, EXPR_NEG, EXPR_UP, EXPR_DOWN, EXPR_ADD, EXPR_SUB } e_type;
 

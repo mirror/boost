@@ -1,6 +1,6 @@
 #include <boost/numeric/interval.hpp>
 #include <boost/numeric/interval/io.hpp>
-#include <boost/test/test_tools.hpp>
+#include <boost/test/minimal.hpp>
 
 typedef boost::numeric::interval<double> I;
 

@@ -4,7 +4,7 @@
 #include <boost/numeric/interval/utility.hpp>
 #include <boost/numeric/interval/checking.hpp>
 #include <boost/numeric/interval/rounding.hpp>
-#include <boost/test/test_tools.hpp>
+#include <boost/test/minimal.hpp>
 
 struct my_rounded_arith {
   int sub_down(int x, int y) { return x - y; }

@@ -1,67 +1,34 @@
+# Boost Interval Library test Jamfile
+
 subproject libs/numeric/interval/test ;
 
-unit-test add
-    : add.cpp
-      <lib>../../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
+# bring in rules for testing
+SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
+include testing.jam ;
 
-unit-test cmp
-    : cmp.cpp
-      <lib>../../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
+# Make tests run by default.
+DEPENDS all : test ;
 
-unit-test cmp_exp
-    : cmp_exp.cpp
-      <lib>../../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
+{
+  # look in BOOST_ROOT for sources first, just in this Jamfile
+  local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
 
-unit-test cmp_lex
-    : cmp_lex.cpp
-      <lib>../../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
+  test-suite "interval" :
+    [ run libs/numeric/interval/test/add.cpp      ]
+    [ run libs/numeric/interval/test/det.cpp      ]
+    [ run libs/numeric/interval/test/fmod.cpp     ]
+    [ run libs/numeric/interval/test/mul.cpp      ]
+    [ run libs/numeric/interval/test/overflow.cpp ]
+    [ run libs/numeric/interval/test/pi.cpp       ]
+    [ run libs/numeric/interval/test/pow.cpp      ]
 
-unit-test det
-    : det.cpp
-      <lib>../../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
-
-unit-test fmod
-    : fmod.cpp
-      <lib>../../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
-
-unit-test mul
-    : mul.cpp
-      <lib>../../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
-
-unit-test overflow
-    : overflow.cpp
-      <lib>../../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
-
-unit-test pi
-    : pi.cpp
-      <lib>../../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
-
-unit-test pow
-    : pow.cpp
-      <lib>../../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
-
-unit-test test_float
-    : test_float.cpp
-      <lib>../../../test/build/boost_test_exec_monitor
-    : <include>$(BOOST_ROOT)
-    ;
+    [ run libs/numeric/interval/test/cmp.cpp
+        <lib>../../../test/build/boost_test_exec_monitor ]
+    [ run libs/numeric/interval/test/cmp_exp.cpp
+        <lib>../../../test/build/boost_test_exec_monitor ]
+    [ run libs/numeric/interval/test/cmp_lex.cpp
+        <lib>../../../test/build/boost_test_exec_monitor ]
+    [ run libs/numeric/interval/test/test_float.cpp
+        <lib>../../../test/build/boost_test_exec_monitor ]
+  ;
+}

@@ -1,6 +1,6 @@
 #include <boost/numeric/interval.hpp>
 #include <boost/limits.hpp>
-#include <boost/test/test_tools.hpp>
+#include <boost/test/minimal.hpp>
 
 #define PI 3.14159265358979323846
 

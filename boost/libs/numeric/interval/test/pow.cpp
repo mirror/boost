@@ -1,5 +1,5 @@
 #include <boost/numeric/interval.hpp>
-#include <boost/test/test_tools.hpp>
+#include <boost/test/minimal.hpp>
 
 bool test_pow(double al, double au, double bl, double bu, int p) {
   typedef boost::numeric::interval<double> I;
