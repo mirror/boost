@@ -1,0 +1,17 @@
+# Boost Optional Library test Jamfile
+
+subproject libs/optional/test ;
+
+# bring in rules for testing
+SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
+include testing.jam ;
+
+# Make tests run by default.
+DEPENDS all : test ;
+
+{
+    # look in BOOST_ROOT for sources first, just in this Jamfile
+    local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
+
+   unit-test Optional : optional_test.cpp : <sysinclude>$(BOOST_ROOT) ;
+}

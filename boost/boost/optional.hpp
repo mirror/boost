@@ -1,4 +1,4 @@
-// (C) 2002, Fernando Luis Cacciola Carballal.
+// (C) 2003, Fernando Luis Cacciola Carballal.
 //
 // This material is provided "as is", with absolutely no warranty expressed
 // or implied. Any use is at your own risk.

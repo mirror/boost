@@ -1,4 +1,4 @@
-// (C) 2002, Fernando Luis Cacciola Carballal.
+// (C) 2003, Fernando Luis Cacciola Carballal.
 //
 // This material is provided "as is", with absolutely no warranty expressed
 // or implied. Any use is at your own risk.
@@ -16,7 +16,8 @@
 #include<stdexcept>
 #include<string>
 
-#define  BOOST_ENABLE_ASSERT_HANDLER
+#define BOOST_ENABLE_ASSERT_HANDLER
+
 #include "boost/optional.hpp"
 
 #ifdef __BORLANDC__
@@ -25,15 +26,28 @@
 
 #include "boost/test/minimal.hpp"
 
+#ifdef ENABLE_TRACE
+#define TRACE(msg) std::cout << msg << std::endl ;
+#else
+#define TRACE(msg)
+#endif
+
 namespace boost {
 
-bool assertion_failed (char const * expr, char const * func, char const * file, long line)
+void assertion_failed (char const * expr, char const * func, char const * file, long )
 {
-  throw std::logic_error(   std::string("Boost Error: assertion failed at\nfile: ")
-                          + std::string(file)
-                          + std::string("\nfunction: ")
-                          + std::string(func)
-                        ) ;
+  using std::string ;
+  string msg =  string("Boost assertion failure for \"")
+               + string(expr)
+               + string("\" at file \"")
+               + string(file)
+               + string("\" function \"")
+               + string(func) 
+               + string("\"") ;
+
+  TRACE(msg);
+  
+  throw std::logic_error(msg);
 }
 
 }
@@ -44,8 +58,6 @@ using boost::optional ;
 using boost::swap ;
 using boost::get_pointer ;
 #endif
-
-#define TRACE_LIFETIME(msg) if ( trace_lifetime ) { std::cout << msg << std::endl ; }
 
 #define ARG(T) (static_cast< T const* >(0))
 
@@ -60,47 +72,46 @@ using boost::get_pointer ;
 //
 // Helper class used to verify the lifetime managment of the values held by optional
 //
-class X 
+class X
 {
   public :
 
     X ( int av ) : v(av)
-      {
-        ++ count ;
+    {
+      ++ count ;
 
-        TRACE_LIFETIME ( "X::X(" << av << "). this=" << this ) ;
-      }
+      TRACE ( "X::X(" << av << "). this=" << this ) ;
+    }
 
     X ( X const& rhs ) : v(rhs.v)
-      {
-         pending_copy = false ;
+    {
+       pending_copy = false ;
 
-         TRACE_LIFETIME ( "X::X( X const& rhs). this=" << this << " rhs.v=" << rhs.v ) ;
+       TRACE ( "X::X( X const& rhs). this=" << this << " rhs.v=" << rhs.v ) ;
 
-         if ( throw_on_copy )
-         {
-           TRACE_LIFETIME ( "throwing exception in X's copy ctor" ) ;
-           throw 0 ;
-         }
+       if ( throw_on_copy )
+       {
+         TRACE ( "throwing exception in X's copy ctor" ) ;
+         throw 0 ;
+       }
 
-         ++ count ;
-      }
+       ++ count ;
+    }
 
     ~X()
-      {
-        pending_dtor = false ;
+    {
+      pending_dtor = false ;
 
-        -- count ;
+      -- count ;
 
-        TRACE_LIFETIME ( "X::~X(). v=" << v << "  this=" << this );
-
-      }
+      TRACE ( "X::~X(). v=" << v << "  this=" << this );
+    }
 
     X& operator= ( X const& rhs )
       {
         v = rhs.v ;
 
-        TRACE_LIFETIME ( "X::operator =( X const& rhs). this=" << this << " rhs.v=" << rhs.v ) ;
+        TRACE ( "X::operator =( X const& rhs). this=" << this << " rhs.v=" << rhs.v ) ;
 
         return *this ;
       }
@@ -120,7 +131,6 @@ class X
     static int  count ;
     static bool pending_copy   ;
     static bool pending_dtor   ;
-    static bool trace_lifetime ;
     static bool throw_on_copy ;
 
   private :
@@ -131,8 +141,9 @@ class X
 
     X() ;
 } ;
+
+
 int  X::count = 0 ;
-bool X::trace_lifetime = false ;
 bool X::pending_copy = false ;
 bool X::pending_dtor = false ;
 bool X::throw_on_copy = false ;
@@ -238,7 +249,7 @@ inline void check_value ( optional<T>& opt, T const& v, T const& z )
 template<class T>
 void test_basics( T const* )
 {
-  std::cout << std::endl ;
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION  );
 
   T z(-1);
 
@@ -360,6 +371,8 @@ void test_basics( T const* )
 template<class T>
 void test_direct_value_manip( T const* )
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+  
   T x(1);
 
   optional<T> const c_opt0(x) ;
@@ -384,6 +397,8 @@ void test_direct_value_manip( T const* )
 template<class T>
 void test_uninitialized_access( T const* )
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+
   optional<T> def ;
 
   bool passed = false ;
@@ -426,6 +441,8 @@ void test_uninitialized_access( T const* )
 template<class T>
 void test_throwing_direct_init( T const* )
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+
   T a(1234);
 
   int count = get_instance_count( ARG(T) ) ;
@@ -455,6 +472,8 @@ void test_throwing_direct_init( T const* )
 template<class T>
 void test_throwing_val_assign_on_uninitialized( T const* )
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+
   T a(1234);
 
   int count = get_instance_count( ARG(T) ) ;
@@ -488,6 +507,8 @@ void test_throwing_val_assign_on_uninitialized( T const* )
 template<class T>
 void test_throwing_val_assign_on_initialized( T const* )
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+
   T z(-1);
   T a(1234);
   T b(5678);
@@ -534,6 +555,8 @@ void test_throwing_val_assign_on_initialized( T const* )
 template<class T>
 void test_throwing_copy_initialization( T const* )
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+
   T z(-1);
   T a(1234);
 
@@ -574,6 +597,8 @@ void test_throwing_copy_initialization( T const* )
 template<class T>
 void test_throwing_assign_to_uninitialized( T const* )
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+
   T z(-1);
   T a(1234);
 
@@ -612,6 +637,8 @@ void test_throwing_assign_to_uninitialized( T const* )
 template<class T>
 void test_throwing_assign_to_initialized( T const* )
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+
   T z(-1);
   T a(1234);
   T b(5678);
@@ -654,6 +681,8 @@ void test_throwing_assign_to_initialized( T const* )
 template<class T>
 void test_no_throwing_swap( T const* )
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+  
   T z(-1);
   T a(1234);
   T b(5678);
@@ -695,6 +724,8 @@ void test_no_throwing_swap( T const* )
 template<class T>
 void test_throwing_swap( T const* )
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+  
   T a(1234);
   T b(5678);
 
@@ -756,8 +787,10 @@ void test_throwing_swap( T const* )
 // This verifies relational operators.
 //
 template<class T>
-void test_relops( T const* v )
+void test_relops( T const* )
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+  
   reset_throw_on_copy( ARG(T) ) ;
   
   T v0(1);
@@ -801,6 +834,8 @@ void test_relops( T const* v )
 
 void test_with_builtin_types()
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+  
   test_basics( ARG(double) );
   test_uninitialized_access( ARG(double) );
   test_no_throwing_swap( ARG(double) );
@@ -809,6 +844,8 @@ void test_with_builtin_types()
 
 void test_with_class_type()
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+  
   test_basics( ARG(X) );
   test_direct_value_manip( ARG(X) );
   test_uninitialized_access( ARG(X) );
@@ -821,8 +858,7 @@ void test_with_class_type()
   test_no_throwing_swap( ARG(X) );
   test_throwing_swap( ARG(X) );
   test_relops( ARG(X) ) ;
-
-  BOOST_CHECK ( X::count == 0 ) ;
+   BOOST_CHECK ( X::count == 0 ) ;
 }
 
 int eat ( char ) { return 1 ; }
@@ -835,14 +871,18 @@ template<class T> int eat ( T ) { return 0 ; }
 // This verifies that operator safe_bool() behaves properly.
 //
 template<class T>
-void test_no_implicit_conversions_impl( T const& v )
+void test_no_implicit_conversions_impl( T const& )
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+  
   optional<T> def ;
   BOOST_CHECK ( eat(def) == 0 ) ;
 }
 
 void test_no_implicit_conversions()
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+  
   char c = 0 ;
   int i = 0 ;
   void const* p = 0 ;
@@ -855,6 +895,8 @@ void test_no_implicit_conversions()
 struct A {} ;
 void test_conversions()
 {
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION );
+
   char c = 123 ;
   optional<char> opt0(c);
 
