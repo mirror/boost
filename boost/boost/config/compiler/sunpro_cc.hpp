@@ -47,6 +47,9 @@
 
 #    if (__SUNPRO_CC <= 0x540) || !defined(BOOST_STRICT_CONFIG)
 #      define BOOST_NO_TEMPLATE_TEMPLATES
+       // see http://lists.boost.org/MailArchives/boost/msg47184.php
+       // and http://lists.boost.org/MailArchives/boost/msg47220.php
+#      define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #    endif
 
 #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
