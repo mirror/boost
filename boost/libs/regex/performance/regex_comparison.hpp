@@ -3,9 +3,9 @@
  * Copyright (c) 2002
  * Dr John Maddock
  *
- * All rights reserved.
- * May not be transfered or disclosed to a third party without
- * prior consent of the author.
+ * Use, modification and distribution is subject to the 
+ * Boost Software License, Version 1.0. (See accompanying file 
+ * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  */
 
@@ -134,3 +134,4 @@ inline void test_find_all(const std::string& re, const std::string& text, bool i
 #define REPEAT_COUNT 10
 
 #endif
+
