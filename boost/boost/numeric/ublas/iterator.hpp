@@ -261,6 +261,7 @@ namespace boost { namespace numeric { namespace ublas {
    * is LessThan Comparable.
    */
     template<class IC, class I, class T, class D = std::ptrdiff_t>
+    // ISSUE the default here seems rather dangerous as it can easlly be (silently) incorrect
     struct random_access_iterator_base:
         public boost::iterator<IC, T> {
         typedef I derived_iterator_type;
@@ -269,6 +270,16 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
         typedef D difference_type;
 #endif
+
+        /*
+         *  FIXME Need to explicitly pass derived_refernce_type as otherwise I undefined type or foward declared
+        typedef BOOST_UBLAS_TYPENAME derived_iterator_type::reference derived_reference_type;
+        // Indexed element
+        BOOST_UBLAS_INLINE
+        derived_reference_type operator [] (derived_difference_type n) {
+            return *(*this + n);
+        }
+        */
 
         // Arithmetic
         BOOST_UBLAS_INLINE

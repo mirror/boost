@@ -187,13 +187,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_matrix &operator = (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (ae, lower_, upper_));
-#else
             // return assign (self_type (ae, lower_, upper_));
             self_type temporary (ae, lower_, upper_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -204,13 +200,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_matrix& operator += (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (*this + ae, lower_, upper_));
-#else
             // return assign (self_type (*this + ae, lower_, upper_));
             self_type temporary (*this + ae, lower_, upper_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -221,13 +213,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_matrix& operator -= (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (*this - ae, lower_, upper_));
-#else
             // return assign (self_type (*this - ae, lower_, upper_));
             self_type temporary (*this - ae, lower_, upper_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE

@@ -103,10 +103,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T value_type;
 
         static void constraints () {
-#define BOOST_UBLAS_ITERATOR_IS_ASSIGNABLE
-#ifdef BOOST_UBLAS_ITERATOR_IS_ASSIGNABLE
             AssignableConcept<iterator_type>::constraints (iterator_type ());
-#endif
             EqualityComparableConcept<iterator_type>::constraints (iterator_type ());
             DefaultConstructibleConcept<iterator_type>::constraints ();
             iterator_type it = iterator_type ();
@@ -161,27 +158,18 @@ namespace boost { namespace numeric { namespace ublas {
             // Forward motion
             it += n;
             // Iterator addition
-#ifdef BOOST_UBLAS_ITERATOR_IS_ASSIGNABLE
             it = it + n;
-#else
             iterator_type itp (it + n);
-#endif
             // Backward motion
             it -= n;
             // Iterator subtraction
-#ifdef BOOST_UBLAS_ITERATOR_IS_ASSIGNABLE
             it = it - n;
-#else
             iterator_type itm (it - n);
-#endif
             // Difference
             n = it1 - it2;
             // Element operator
-#ifdef BOOST_UBLAS_ITERATOR_IS_INDEXABLE
             t = it [n];
-#else
             t = *(it + n);
-#endif
             ignore_unused_variable_warning (t);
         }
     };
@@ -199,11 +187,8 @@ namespace boost { namespace numeric { namespace ublas {
             difference_type n (0);
             value_type t = value_type ();
             // Element assignment
-#ifdef BOOST_UBLAS_ITERATOR_IS_INDEXABLE
             it [n] = t;
-#else
             *(it + n) = t;
-#endif
         }
     };
 

@@ -38,13 +38,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const value_type &const_reference;
         typedef value_type *pointer;
 
-        /* FIXME Why was this function provided to generate a runtime error?
-         * without the incorrect conversion is a compiletime error!
-        BOOST_UBLAS_INLINE
-        sparse_matrix_element (const value_type &d):
-            container_reference<matrix_type> (), i_ (), j_ (), d_ (d), dirty_ (false) {
-            external_logic ().raise ();
-        }*/
         // Construction and destruction
         BOOST_UBLAS_INLINE
         sparse_matrix_element (matrix_type &m, size_type i, size_type j):
@@ -395,13 +388,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_matrix &operator = (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (ae, non_zeros_));
-#else
             // return assign (self_type (ae, non_zeros_));
             self_type temporary (ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -412,13 +401,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_matrix& operator += (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (*this + ae, non_zeros_));
-#else
             // return assign (self_type (*this + ae, non_zeros_));
             self_type temporary (*this + ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -429,13 +414,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_matrix& operator -= (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (*this - ae, non_zeros_));
-#else
             // return assign (self_type (*this - ae, non_zeros_));
             self_type temporary (*this - ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -1459,13 +1440,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_vector_of_sparse_vector &operator = (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (ae, non_zeros_));
-#else
             // return assign (self_type (ae, non_zeros_));
             self_type temporary (ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -1476,13 +1453,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_vector_of_sparse_vector& operator += (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (*this + ae, non_zeros_));
-#else
             // return assign (self_type (*this + ae, non_zeros_));
             self_type temporary (*this + ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -1493,13 +1466,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         sparse_vector_of_sparse_vector& operator -= (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (*this - ae, non_zeros_));
-#else
             // return assign (self_type (*this - ae, non_zeros_));
             self_type temporary (*this - ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -2740,13 +2709,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         compressed_matrix &operator = (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (ae, non_zeros_));
-#else
             // return assign (self_type (ae, non_zeros_));
             self_type temporary (ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -2757,13 +2722,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         compressed_matrix& operator += (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (*this + ae, non_zeros_));
-#else
             // return assign (self_type (*this + ae, non_zeros_));
             self_type temporary (*this + ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -2774,13 +2735,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         compressed_matrix& operator -= (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (*this - ae, non_zeros_));
-#else
             // return assign (self_type (*this - ae, non_zeros_));
             self_type temporary (*this - ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -4075,13 +4032,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_matrix &operator = (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (ae, non_zeros_));
-#else
             // return assign (self_type (ae, non_zeros_));
             self_type temporary (ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -4092,13 +4045,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_matrix& operator += (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (*this + ae, non_zeros_));
-#else
             // return assign (self_type (*this + ae, non_zeros_));
             self_type temporary (*this + ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -4109,13 +4058,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         coordinate_matrix& operator -= (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (*this - ae, non_zeros_));
-#else
             // return assign (self_type (*this - ae, non_zeros_));
             self_type temporary (*this - ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE

@@ -186,13 +186,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         generalized_vector_of_vector &operator = (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (ae, non_zeros_));
-#else
             // return assign (self_type (ae, non_zeros_));
             self_type temporary (ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -203,13 +199,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         generalized_vector_of_vector& operator += (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (*this + ae, non_zeros_));
-#else
             // return assign (self_type (*this + ae, non_zeros_));
             self_type temporary (*this + ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
@@ -220,13 +212,9 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         generalized_vector_of_vector& operator -= (const matrix_expression<AE> &ae) {
-#ifdef BOOST_UBLAS_MUTABLE_TEMPORARY
-            return assign_temporary (self_type (*this - ae, non_zeros_));
-#else
             // return assign (self_type (*this - ae, non_zeros_));
             self_type temporary (*this - ae, non_zeros_);
             return assign_temporary (temporary);
-#endif
         }
         template<class AE>
         BOOST_UBLAS_INLINE
