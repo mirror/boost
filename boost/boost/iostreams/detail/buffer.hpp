@@ -43,7 +43,7 @@ public:
     basic_buffer();
     basic_buffer(std::streamsize buffer_size);
     ~basic_buffer();
-    void realloc(std::streamsize buffer_size);
+    void resize(std::streamsize buffer_size);
     Ch* begin() const { return buf_; }
     Ch* end() const { return buf_ + size_; }
     Ch* data() const { return buf_; }
@@ -71,7 +71,7 @@ class buffer : public basic_buffer<Ch, Alloc> {
 private:
     typedef basic_buffer<Ch, Alloc> base;
 public:
-    using base::realloc; 
+    using base::resize; 
     using base::data; 
     using base::size;
     typedef Ch* const const_pointer;
@@ -105,7 +105,7 @@ inline basic_buffer<Ch, Alloc>::~basic_buffer()
 { if (buf_) allocator_type().deallocate(buf_, size_); }
 
 template<typename Ch, typename Alloc>
-inline void basic_buffer<Ch, Alloc>::realloc(std::streamsize buffer_size)
+inline void basic_buffer<Ch, Alloc>::resize(std::streamsize buffer_size)
 {
     if (size_ != buffer_size) {
         basic_buffer<Ch, Alloc> temp(buffer_size);
