@@ -19,6 +19,7 @@
 
 #include <iosfwd> // for std::basic_ostream forward declare
 
+#include "boost/detail/templated_streams.hpp"
 #include "boost/variant/static_visitor.hpp"
 
 namespace boost {
@@ -31,11 +32,12 @@ namespace boost {
 
 // forward declare (allows output of embedded variant< variant< ... >, ... >)
 template <
-      typename E, typename T
-    , BOOST_VARIANT_ENUM_PARAMS(typename U)
+      BOOST_TEMPLATED_STREAM_ARGS(E,T)
+    BOOST_TEMPLATED_STREAM_COMMA
+      BOOST_VARIANT_ENUM_PARAMS(typename U)
     >
-inline std::basic_ostream<E,T>& operator<<(
-      std::basic_ostream<E,T>& out
+inline BOOST_TEMPLATED_STREAM(ostream, E,T)& operator<<(
+      BOOST_TEMPLATED_STREAM(ostream, E,T)& out
     , const variant< BOOST_VARIANT_ENUM_PARAMS(U) >& rhs
     );
 
@@ -68,14 +70,22 @@ public: // visitor interface
 
 }} // namespace detail::variant
 
-template <typename E, typename T, BOOST_VARIANT_ENUM_PARAMS(typename U)>
-inline std::basic_ostream<E,T>& operator<<(
-      std::basic_ostream<E,T>& out
+template <
+      BOOST_TEMPLATED_STREAM_ARGS(E,T)
+    BOOST_TEMPLATED_STREAM_COMMA
+      BOOST_VARIANT_ENUM_PARAMS(typename U)
+    >
+inline BOOST_TEMPLATED_STREAM(ostream, E,T)& operator<<(
+      BOOST_TEMPLATED_STREAM(ostream, E,T)& out
     , const variant< BOOST_VARIANT_ENUM_PARAMS(U) >& rhs
     )
 {
-    detail::variant::printer< std::basic_ostream<E,T> > visitor(out);
+    detail::variant::printer<
+          BOOST_TEMPLATED_STREAM(ostream, E,T)
+        > visitor(out);
+
     rhs.apply_visitor(visitor);
+
     return out;
 }
 

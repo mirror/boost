@@ -20,6 +20,7 @@
 #include <iosfwd> // for std::basic_ostream forward declare
 
 #include "boost/config.hpp"
+#include "boost/detail/templated_streams.hpp"
 #include "boost/mpl/bool.hpp"
 #include "boost/type_traits/is_pod.hpp"
 
@@ -46,9 +47,9 @@ bool operator<(const empty&, const empty&)
     return false;
 }
 
-template <typename E, typename T>
-inline std::basic_ostream<E,T>& operator<<(
-      std::basic_ostream<E,T>& out
+BOOST_TEMPLATED_STREAM_TEMPLATE(E,T)
+inline BOOST_TEMPLATED_STREAM(ostream, E,T)& operator<<(
+      BOOST_TEMPLATED_STREAM(ostream, E,T)& out
     , const empty&
     )
 {
