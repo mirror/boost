@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -36,14 +36,11 @@
 // compilers soar when NO_OF_BITS > 6.
 //
 // Compiler      | max. NO_OF_BITS b | max. states s  |
-// --------------|-----------------|----------------|
-// MSVC 7.1      |      b < 7      |  64 < s < 128  |
-// GCC 3.2 (1)   |      b < 8      | 128 < s < 256  |
-// Intel 7.0 (2) |      b < 8      | 128 < s < 256  |
-// Intel 8.0 (2) |      b < 9      | 256 < s < 512  |
+// --------------|-------------------|----------------|
+// MSVC 7.1      |      b < 6        |  32 < s <  64  |
+// GCC 3.4.2 (1) |      b < 8        | 128 < s < 256  |
 //
-// (1) ICE for b = 8
-// (2) These are practical rather than hard limits, caused by a compiler
+// (1) This is a practical rather than a hard limit, caused by a compiler
 //     memory footprint that was significantly larger than the 1GB physical
 //     memory installed in the test machine. The resulting frequent swapping
 //     led to compilation times of hours rather than minutes.
