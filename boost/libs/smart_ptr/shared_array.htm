@@ -97,7 +97,7 @@
 			a pointer with a value of 0 is harmless. <b>T</b> need not be a complete type. 
 			The guarantee that this does not throw exceptions depends on the requirement 
 			that the deleted object's destructor does not throw exceptions. See the smart 
-			pointer <a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
+			pointer <a href="smart_ptr.htm#common_requirements">common requirements</a>.</p>
 		<h3><a name="operator=">assignment</a></h3>
 		<pre>shared_array &amp; <a href="#assignment">operator=</a>(shared_array const &amp; r); // never throws</pre>
 		<p>Constructs a new <b>shared_array</b> as described <a href="#constructors">above</a>, 
@@ -124,16 +124,16 @@
 		<h3><a name="get">get</a></h3>
 		<pre>T * get() const; // never throws</pre>
 		<p>Returns the stored pointer. <b>T</b> need not be a complete type. See the smart 
-			pointer <a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
+			pointer <a href="smart_ptr.htm#common_requirements">common requirements</a>.</p>
 		<h3><a name="unique">unique</a></h3>
 		<pre>bool unique() const; // never throws</pre>
 		<p>Returns true if no other <b>shared_array</b> is sharing ownership of the stored 
 			pointer, false otherwise. <b>T</b> need not be a complete type. See the smart 
-			pointer <a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
+			pointer <a href="smart_ptr.htm#common_requirements">common requirements</a>.</p>
 		<h3><a name="use_count">use_count</a></h3>
 		<pre>long use_count() const; // never throws</pre>
 		<p>Returns the number of <b>shared_array</b> objects sharing ownership of the 
-			stored pointer. <b>T</b> need not be a complete type. See the smart pointer <a href="smart_ptr.htm#Common requirements">
+			stored pointer. <b>T</b> need not be a complete type. See the smart pointer <a href="smart_ptr.htm#common_requirements">
 				common requirements</a>.</p>
 		<p>Because <b>use_count</b> is not necessarily efficient to implement for 
 			implementations of <b>shared_array</b> that do not use an explicit reference 
@@ -142,7 +142,7 @@
 		<h3><a name="swap">swap</a></h3>
 		<pre>void swap(shared_ptr &amp; b); // never throws</pre>
 		<p>Exchanges the contents of the two smart pointers. <b>T</b> need not be a 
-			complete type. See the smart pointer <a href="smart_ptr.htm#Common requirements">common 
+			complete type. See the smart pointer <a href="smart_ptr.htm#common_requirements">common 
 				requirements</a>.</p>
 		<h2><a name="functions">Free Functions</a></h2>
 		<h3><a name="comparison">comparison</a></h3>
@@ -153,7 +153,7 @@ template&lt;class T&gt;
 template&lt;class T&gt;
   bool operator&lt;(shared_array&lt;T&gt; const &amp; a, shared_array&lt;T&gt; const &amp; b); // never throws</pre>
 		<p>Compares the stored pointers of the two smart pointers. <b>T</b> need not be a 
-			complete type. See the smart pointer <a href="smart_ptr.htm#Common requirements">common 
+			complete type. See the smart pointer <a href="smart_ptr.htm#common_requirements">common 
 				requirements</a>.</p>
 		<p>The <b>operator&lt;</b> overload is provided to define an ordering so that <b>shared_array</b>
 			objects can be used in associative containers such as <b>std::map</b>. The 
@@ -168,7 +168,8 @@ template&lt;class T&gt;
 		<p>Equivalent to <b>a.swap(b)</b>. Matches the interface of <b>std::swap</b>. 
 			Provided as an aid to generic programming.</p>
 		<hr>
-		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->09 January 2003<!--webbot bot="Timestamp" i-checksum="32310" endspan --></p>
+		<p>Revised 
+        <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->09 January 2003<!--webbot bot="Timestamp" endspan i-checksum="32310" --></p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
 			Permission to copy, use, modify, sell and distribute this document is granted 
 			provided this copyright notice appears in all copies. This document is provided 
