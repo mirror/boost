@@ -80,11 +80,13 @@ main()
     ss << "2000-Oct-31 is Halloween 2k!";
     std::istream_iterator<std::string> iter(ss), eos;
     check("from stream - stringstream", d == from_stream(iter, eos));
-#if !(BOOST_NO_STD_WSTRING || BOOST_DATE_TIME_NO_WISTREAM_ITERATOR)
+#if !(defined(BOOST_NO_STD_WSTRING)) 
+#if !(defined(BOOST_DATE_TIME_NO_WISTREAM_ITERATOR))
     std::wstringstream ws;
     ws << "2000-Oct-31 is Halloween 2k!";
     std::istream_iterator<std::wstring, wchar_t> witer(ws), weos;
     check("from stream - wstringstream", d == from_stream(witer, weos));
+#endif // NO_WSTREAM_ITERATOR
 #endif // BOOST_NO_WSTRING
     char d2_string[] = {"2000-10-31 is Halloween 2k!"};
     char* end = d2_string + sizeof(d2_string) - 1;
