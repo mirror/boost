@@ -29,16 +29,16 @@ template<> foo<int>::~foo();
 template<> int foo<int>::bar();
 
 // provide defaults:
-template<class T> foo<T>::foo(){};
-template<class T> foo<T>::foo(const T&){};
-template<class T> foo<T>::~foo(){};
-template<class T> int foo<T>::bar(){ return 0; };
+template<class T> foo<T>::foo(){}
+template<class T> foo<T>::foo(const T&){}
+template<class T> foo<T>::~foo(){}
+template<class T> int foo<T>::bar(){ return 0; }
 
 // provide defs:
-template<> foo<int>::foo(){};
-template<> foo<int>::foo(const int&){};
-template<> foo<int>::~foo(){};
-template<> int foo<int>::bar(){ return 1; };
+template<> foo<int>::foo(){}
+template<> foo<int>::foo(const int&){}
+template<> foo<int>::~foo(){}
+template<> int foo<int>::bar(){ return 1; }
 
 
 int test()
