@@ -32,10 +32,14 @@
 #include <stddef.h>
 
   /*sym , name          ,bin,flt,log,sh?,com*/
-#define OPS\
+#define UNARY_OPS\
   (( !  , logical_not   , 0 , 1 , 1 , 0 , 0 ),\
   (( ~  , bitwise_not   , 0 , 0 , 0 , 0 , 0 ),\
   (( -  , neg           , 0 , 1 , 0 , 0 , 0 ),\
+  (_,_,0),1),1),1)
+
+  /*sym , name          ,bin,flt,log,sh?,com*/
+#define BINARY_OPS\
   (( *  , mul           , 1 , 1 , 0 , 0 , 1 ),\
   (( /  , div           , 1 , 1 , 0 , 0 , 0 ),\
   (( %  , mod           , 1 , 0 , 0 , 0 , 0 ),\
@@ -54,7 +58,7 @@
   (( ^  , bitwise_xor   , 1 , 0 , 0 , 0 , 1 ),\
   (( && , logical_and   , 1 , 1 , 1 , 0 , 1 ),\
   (( || , logical_or    , 1 , 1 , 1 , 0 , 1 ),\
-  (_,_,0),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1)
+  (_,_,0),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1),1)
 
 #define OP_SYMBOL(O)         BOOST_PP_TUPLE7_ELEM0 O
 #define OP_NAME(O)           BOOST_PP_TUPLE7_ELEM1 O
@@ -100,48 +104,41 @@
   )
 #define TYPE_IS_SAME(L,R) BOOST_PP_EQUAL(TYPE_RANK(L),TYPE_RANK(R))
 
-#define INTEGER_PROMOTION(T) BOOST_PP_IF(BOOST_PP_LESS(TYPE_RANK(T),TYPE_RANK(TYPE_INT)),TYPE_INT,T)
-#define UNARY_OP_RESULT(O,T) BOOST_PP_IF(OP_IS_LOGICAL(O),TYPE_INT,INTEGER_PROMOTION(T))
+/* Integer promotion and usual arithmetic conversions */
+#define INTEGER_PROMOTION(T)             BOOST_PP_IF(BOOST_PP_LESS(TYPE_RANK(T),TYPE_RANK(TYPE_INT)),TYPE_INT,T)
 #define USUAL_ARITHMETIC_CONVERSION(L,R) INTEGER_PROMOTION(BOOST_PP_IF(BOOST_PP_LESS(TYPE_RANK(L),TYPE_RANK(R)),R,L))
-#define BINARY_OP_RESULT(O,L,R)\
-  BOOST_PP_IF\
-  ( OP_IS_LOGICAL(O)\
-  , TYPE_INT\
-  , BOOST_PP_IF\
-    ( OP_IS_SHIFT(O)\
-    , INTEGER_PROMOTION(L)\
-    , USUAL_ARITHMETIC_CONVERSION(L,R)\
-    )\
-  )
 
-#define INSTANTIATE(_,L)\
-  INSTANTIATE_HELPER(BOOST_PP_LIST_AT(L,2),BOOST_PP_LIST_AT(L,1),BOOST_PP_LIST_AT(L,0))
-#define INSTANTIATE_HELPER(O,L,R)\
-  BOOST_PP_IF(OP_IS_BINARY(O),INSTANTIATE_BINARY,INSTANTIATE_UNARY)(O,L,R)
+#define UNARY_OP_RESULT(O,T)    BOOST_PP_IF(OP_IS_LOGICAL(O),TYPE_INT,INTEGER_PROMOTION(T))
+#define BINARY_OP_RESULT(O,L,R) BOOST_PP_IF(OP_IS_LOGICAL(O),TYPE_INT,BOOST_PP_IF(OP_IS_SHIFT(O),INTEGER_PROMOTION(L),USUAL_ARITHMETIC_CONVERSION(L,R)))
 
-#define INSTANTIATE_UNARY(O,L,R)\
+#define UNARY_ARRAY_OP(_,L)\
+  UNARY_ARRAY_OP2(BOOST_PP_LIST_AT(L,1),BOOST_PP_LIST_AT(L,0))
+#define UNARY_ARRAY_OP2(O,T)\
   BOOST_PP_IF\
-  ( BOOST_PP_AND\
-    ( TYPE_IS_SAME(L,R)\
-    , BOOST_PP_NOT_EQUAL(BOOST_PP_ADD(BOOST_PP_MUL(2,TYPE_IS_FLOATING(L)),OP_IS_FLOATING(O)),2)\
-    )\
-  , INSTANTIATE_UNARY_HELPER\
+  ( BOOST_PP_NOT_EQUAL(BOOST_PP_ADD(BOOST_PP_MUL(2,TYPE_IS_FLOATING(T)),OP_IS_FLOATING(O)),2)\
+  , UNARY_ARRAY_OP3\
   , BOOST_PP_TUPLE_EAT(2)\
-  )(O,L)
-#define INSTANTIATE_UNARY_HELPER(O,T)\
+  )(O,T)
+#define UNARY_ARRAY_OP3(O,T)\
   void BOOST_PP_CAT4(array_,OP_NAME(O),_,TYPE_ABBREVIATION(T))\
     (const TYPE_NAME(T)* in, TYPE_NAME(UNARY_OP_RESULT(O,T))* out, size_t n)\
   { do { *out++ = OP_SYMBOL(O) *in++; } while (--n); }
 
-#define INSTANTIATE_BINARY(O,L,R)\
+/* Unary array ops */
+BOOST_PP_LIST_FOR_EACH_PRODUCT(UNARY_ARRAY_OP,_,BOOST_PP_TUPLE_TO_LIST(2,(UNARY_OPS,TYPES)))
+
+#define BINARY_ARRAY_OP(_,L)\
+  BINARY_ARRAY_OP2(BOOST_PP_LIST_AT(L,2),BOOST_PP_LIST_AT(L,1),BOOST_PP_LIST_AT(L,0))
+#define BINARY_ARRAY_OP2(O,L,R)\
   BOOST_PP_IF\
   ( BOOST_PP_NOT_EQUAL(BOOST_PP_ADD(BOOST_PP_MUL(2,BOOST_PP_OR(TYPE_IS_FLOATING(L),TYPE_IS_FLOATING(R))),OP_IS_FLOATING(O)),2)\
-  , INSTANTIATE_BINARY_HELPER\
+  , BINARY_ARRAY_OP3\
   , BOOST_PP_TUPLE_EAT(3)\
   )(O,L,R)
-#define INSTANTIATE_BINARY_HELPER(O,L,R)\
+#define BINARY_ARRAY_OP3(O,L,R)\
   void BOOST_PP_CAT6(array_,OP_NAME(O),_,TYPE_ABBREVIATION(L),_,TYPE_ABBREVIATION(R))\
   (const TYPE_NAME(L)* lhs_in, const TYPE_NAME(R)* rhs_in, TYPE_NAME(BINARY_OP_RESULT(O,L,R))* out, size_t n)\
   { do { *out++ = *lhs_in++ OP_SYMBOL(O) *rhs_in++; } while (--n); }
 
-BOOST_PP_LIST_FOR_EACH_PRODUCT(INSTANTIATE,_,BOOST_PP_TUPLE_TO_LIST(3,(OPS,TYPES,TYPES)))
+/* Binary array ops */
+BOOST_PP_LIST_FOR_EACH_PRODUCT(BINARY_ARRAY_OP,_,BOOST_PP_TUPLE_TO_LIST(3,(BINARY_OPS,TYPES,TYPES)))
