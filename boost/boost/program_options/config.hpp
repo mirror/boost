@@ -8,6 +8,7 @@
 #define BOOST_PROGRAM_OPTIONS_CONFIG_HK_2004_01_11
 
 #include <boost/config.hpp>
+#include <boost/version.hpp>
 
 // Support for autolinking.
 #if BOOST_VERSION >= 103100   // works beginning from Boost V1.31.0
@@ -20,6 +21,10 @@
 // Set the name of our library, this will get undef'ed by auto_link.hpp
 // once it's done with it:
 #define BOOST_LIB_NAME boost_program_options
+// tell the auto-link code to select a dll when required:
+#if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_PROGRAM_OPTIONS_DYN_LINK)
+#  define BOOST_DYN_LINK
+#endif
 
 // And include the header that does the work:
 #include <boost/config/auto_link.hpp>
