@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  02 Dec 01 Bug fixed in random_access_iteratable.  (Helmut Zeisel)
 //  28 Sep 01 Factored out iterator operator groups.  (Daryle Walker)
 //  27 Aug 01 'left' form for non commutative operators added;
 //            additional classes for groups of related operators added;
@@ -597,10 +598,14 @@ struct bidirectional_iteratable
     , decrementable<T, B
       > > {};
 
+//  To avoid repeated derivation from equality_comparable,
+//  which is an indirect base class of bidirectional_iterable,
+//  random_access_iteratable must not be derived from totally_ordered1
+//  but from less_than_comparable1 only. (Helmut Zeisel, 02-Dec-2001)
 template <class T, class P, class D, class R, class B = ::boost::detail::empty_base>
 struct random_access_iteratable
     : bidirectional_iteratable<T, P
-    , totally_ordered1<T
+    , less_than_comparable1<T
     , additive2<T, D
     , indexable<T, D, R, B
       > > > > {};
@@ -894,11 +899,9 @@ template <class T,
           class P = V*,
           class R = V&>
 struct forward_iterator_helper
-  : equality_comparable1<T
-  , incrementable<T
-  , dereferenceable<T, P
+  : forward_iteratable<T, P
   , boost::iterator<std::forward_iterator_tag, V, D, P, R
-    > > > > {};
+    > > {};
 
 template <class T,
           class V,
@@ -906,11 +909,9 @@ template <class T,
           class P = V*,
           class R = V&>
 struct bidirectional_iterator_helper
-  : equality_comparable1<T
-  , unit_steppable<T
-  , dereferenceable<T, P
+  : bidirectional_iteratable<T, P
   , boost::iterator<std::bidirectional_iterator_tag, V, D, P, R
-    > > > > {};
+    > > {};
 
 template <class T,
           class V, 
@@ -918,13 +919,9 @@ template <class T,
           class P = V*,
           class R = V&>
 struct random_access_iterator_helper
-  : totally_ordered1<T
-  , unit_steppable<T
-  , dereferenceable<T, P
-  , additive2<T, D
-  , indexable<T, D, R
+  : random_access_iteratable<T, P, D, R
   , boost::iterator<std::random_access_iterator_tag, V, D, P, R
-    > > > > > >
+    > >
 {
   friend D requires_difference_operator(const T& x, const T& y) {
     return x - y;
