@@ -10,6 +10,8 @@
 // see libs/utility/type_traits.htm
 
 /* Release notes:
+   31 Jan 2001:
+      Fixes for is_convertible with g++. (Jeremy Siek)
    21 Jan 2001:
       Fixed tests for long long to detect its presence on GCC (David Abrahams)
    03 Oct 2000:
@@ -64,11 +66,11 @@
 // BOOST_HAS_TRIVIAL_ASSIGN(T) should evaluate to true if t = u <==> memcpy
 // BOOST_HAS_TRIVIAL_DESTRUCTOR(T) should evaluate to true if ~T() has no effect
 
-#define BOOST_IS_CLASS(T) !is_union<T>::value && \
+#define BOOST_IS_CLASS(T) (!is_union<T>::value && \
     !is_scalar<T>::value && \
     !is_array<T>::value && \
     !is_reference<T>::value && \
-    !is_void<T>::value
+    !is_void<T>::value)
 #define BOOST_IS_ENUM(T) false
 #define BOOST_IS_UNION(T) false
 #define BOOST_IS_POD(T) false
@@ -330,6 +332,8 @@ template <typename T> struct is_array
 { static const bool value = false; };
 template <typename T, std::size_t N> struct is_array<T[N]>
 { static const bool value = true; };
+template <typename T, std::size_t N> struct is_array<const T[N]>
+{ static const bool value = true; };
 
 //* is a type T a pointer type (including function pointers) - is_pointer<T>
 template <typename T> struct is_pointer { static const bool value = false; };
@@ -466,13 +470,51 @@ template <typename T, std::size_t sz> struct is_POD<T[sz]>
 
 //
 // is one type convertable to another?
+#if defined(__GNUC__)
+template <bool isPOD_or_nonclass, class From, class To>
+struct is_convertible_dispatch {
+  typedef char (&no)[1];
+  typedef char (&yes)[2];
+  template <class T>
+  struct checker {
+   static no check(...);
+   static yes check(T);
+  };
+  static From from;
+  static const bool value = sizeof( checker<To>::check(from) ) == sizeof(yes);
+};
+template <class From, class To>
+struct is_convertible_dispatch<false, From, To> {
+  typedef char (&no)[1];
+  typedef char (&yes)[2];
+  template <class T>
+  struct checker {
+    static no check(void*);
+    static yes check(T*);
+  };
+ static From from;
+ static const bool value = sizeof( checker<To>::check(&from) ) == sizeof(yes);
+};
+
+template <class From, class To>
+struct is_convertible
+{
+private:
+  typedef is_convertible_dispatch<is_POD<From>::value
+     || !BOOST_IS_CLASS(From) || is_reference<From>::value, From, To> Dispatch;
+public:
+ static const bool value = Dispatch::value;
+};
+
+#else // not __GNUC__
+
 template <class From, class To>
 struct is_convertible
 {
 private:
  typedef char (&no)[1];
  typedef char (&yes)[2];
-#  if defined(__BORLANDC__) || defined(__GNUC__)
+#  if defined(__BORLANDC__)
  // This workaround for Borland breaks the EDG C++ frontend,
  // so we only use it for Borland.
  template <class T>
@@ -484,7 +526,6 @@ private:
  static From from;
 public:
  static const bool value = sizeof( checker<To>::check(from) ) == sizeof(yes);
-
 #  else // not __BORLANDC__
  static no check(...);
  static yes check(To);
@@ -494,6 +535,7 @@ public:
 #  endif
  void foo(); // avoid warning about all members being private
 };
+#endif // not __GNUC__
 
 template <class From>
 struct is_convertible<From, void>
