@@ -472,8 +472,9 @@
 #       ifndef _GLOBAL_USING    // can be defined in yvals.h
 #         define BOOST_NO_STDC_NAMESPACE
 #       endif
+#       define BOOST_MSVC_STD_ITERATOR
 #     else
-#       define BOOST_MSVC_STD_ITERATOR 1
+#       define BOOST_MSVC_STD_ITERATOR
 #       define BOOST_NO_SLIST
 #       define BOOST_NO_HASH
 #       define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
