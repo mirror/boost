@@ -96,7 +96,7 @@ the heap, virtual function calls, and polymorphic downcasts.</para>
 
 <para>The <code><classname>boost::variant</classname></code> class template
 addresses these issues in a safe, straightforward, and efficient manner. The
-following example demonstrates how the class might be used:</para>
+following example demonstrates how the class can be used:</para>
 
 <programlisting>#include "boost/variant.hpp"
 #include &lt;iostream&gt;
