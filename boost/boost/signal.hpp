@@ -342,7 +342,7 @@ namespace boost {
 
   public:
     explicit signal(const Combiner& combiner = Combiner(),
-           const GroupCompare& group_compare = GroupCompare()) :
+                    const GroupCompare& group_compare = GroupCompare()) :
       base_type(combiner, group_compare)
     {
     }
