@@ -551,6 +551,7 @@ test_one_arg()
   const function<int, int> cf2(add_to);
   BOOST_TEST(cf2(3) == 8);
   BOOST_TEST(cf2.target_type() == typeid(add_to_obj));  
+  BOOST_TEST(function_cast<add_to_obj>(cf2).value == 5);
 }
 
 static void
