@@ -43,15 +43,15 @@
             <li>
                 Header &quot;boost/static_visitor.hpp&quot;: <a href="#StaticVisitor"><code>static_visitor</code></a></li>
             <li>
-                Header &quot;boost/extract.hpp&quot;: <a href="#ValueExtraction"><code>extract</code></a></li>
+                Header &quot;boost/get.hpp&quot;: <a href="#ValueExtraction"><code>get</code></a></li>
             <li>
                 Header &quot;boost/incomplete.hpp&quot;: <a href="#incomplete"><code>incomplete</code></a></li>
         </ul>
         <hr>
         <h2>Header <code>&quot;boost/variant.hpp&quot;</code></h2>
         <h3><a name="Synopsis">Synopsis</a></h3>
-        <p>Dependencies and library features defined in <code><a href="../../../../../../../boost/variant.hpp">
-                    &quot;</a></code><a href="../../../../../../../boost/variant.hpp"><code>boost/variant.hpp&quot;</code></a>:
+        <p>Dependencies and library features defined in <a href="../../../boost/variant.hpp">
+                    &quot;<code>boost/variant.hpp</code>&quot;</a>:
         </p>
         <pre>#include &lt;typeinfo&gt;
 
@@ -67,7 +67,7 @@ namespace boost
         typename T<i>n</i> = <em>implementation-defined</em>
     &gt;
     class <a href="#variant">variant</a>;
-    
+
     template &lt;typename T1, typename T2, ... , typename T<i>n</i>&gt;
     void swap(
           variant&lt;T1, T2, ... , T<i>n</i>&gt; &amp;
@@ -79,7 +79,7 @@ namespace boost
         <p></p>
         <hr>
         <h2><a name="BoundedType"><i>BoundedType</i>&nbsp;Concept</a></h2>
-        <p>Given <a href="#variant"><code>variant</code></a><code>&lt;T1, T2, ... , T<i>n</i>&gt;</code>, 
+        <p>Given <a href="#variant"><code>variant</code></a><code>&lt;T1, T2, ... , T<i>n</i>&gt;</code>,
             each type <code>T<i>i</i></code> is a <b>bounded type</b> of the <code>variant</code>.</p>
         <p>The requirements on bounded types are as follows:</p>
         <ul>
@@ -93,16 +93,16 @@ namespace boost
                 Not top-level <code>const</code>-qualified.</li>
             <li>
                 Complete at the point of variant template instantiation. (See <code><a href="#incomplete">
-                        incomplete&lt;T&gt;</a></code> wrapper for a solution to containing 
+                        incomplete&lt;T&gt;</a></code> wrapper for a solution to containing
                 incomplete types.)</li>
         </ul>
-        <p>A <code>variant</code>'s first bounded type has the additional requirement that 
+        <p>A <code>variant</code>'s first bounded type has the additional requirement that
             it&nbsp;is <em>DefaultConstructible</em> [??].</p>
         <hr>
         <h2><a name="Visitor"><i>Visitor</i> Concept</a></h2>
-        <p>Given <a href="#variant"><code>variant</code></a><code>&lt;T1, T2, ... , T<i>n</i>&gt;</code>, 
-            a function object which unambiguously accepts any value of 
-each of the variant's <A HREF=#BoundedType">bounded types</A>, is a 
+        <p>Given <a href="#variant"><code>variant</code></a><code>&lt;T1, T2, ... , T<i>n</i>&gt;</code>,
+            a function object which unambiguously accepts any value of
+each of the variant's <A HREF=#BoundedType">bounded types</A>, is a
 <B>Visitor</B> of of the <CODE>variant</CODE>.
         <p>Additional requirements on visitors are as follows:</p>
         <ul>
@@ -328,8 +328,8 @@ public:
         <pre>      boost::apply_visitor(visitor, var_inst); // Binary form
       boost::apply_visitor(visitor)(var_inst); // Unary form
 </pre>
-        <p>Consequently, the unary <code>apply_visitor()</code> function, is highly useful 
-            when <code>std::for_each</code> (or a similar STL algorithm) needs to be 
+        <p>Consequently, the unary <code>apply_visitor()</code> function, is highly useful
+            when <code>std::for_each</code> (or a similar STL algorithm) needs to be
             applied on a sequence of <code>variant</code> objects, as illustrated in the <a href="sample.html#poly">
                 Polymorphism: Inheritance Vs. Variants</a> sample.<br>
         </p>
@@ -342,101 +342,50 @@ struct static_visitor
 };
 
 </pre>
-        <p><code>static_visitor</code> defines the nested type <code>result_type</code>, 
-            which is required from each <a href="#Visitor">visitor</a> class.
-            <br>
-        </p>
-        <hr>
-        <h2><a name="ValueExtraction">Value Extraction: <code>extract</code></a></h2>
-        <pre></pre>
-        <pre>class bad_extract : public std::exception
-{
-public:
+<p><code>static_visitor</code> defines the nested type <code>result_type</code>,
+    which is required from each <a href="#Visitor">visitor</a> class.
+    <br>
+</p>
+<hr>
+<h2><a name="ValueExtraction">Value Extraction: <code>get</code></a></h2>
+<pre>  class bad_get : public std::exception
+  {
+  public:
+      virtual const char* what() const throw();
+  };
 
-    virtual const char* what() const throw();
+  template&lt;typename ToType,typename T1, typename T2, ...&gt;
+  ToType& get(boost::variant&lt;T1,T2,...&gt;&amp; v);
 
-};
+  template&lt;typename ToType,typename T1, typename T2, ...&gt;
+  const ToType& get(const boost::variant&lt;T1,T2,...&gt;&amp; v);
 
-template &lt;typename ToType&gt;
-struct extract
-{
-public: // typedefs
+  template&lt;typename ToType,typename T1, typename T2, ...&gt;
+  ToType* get(boost::variant&lt;T1,T2,...&gt;* v);
 
-    typedef ToType&amp; result_type;
+  template&lt;typename ToType,typename T1, typename T2, ...&gt;
+  const ToType* get(const boost::variant&lt;T1,T2,...&gt;* v);
 
-public: // structors
-
-    template &lt;typename VariantType&gt;
-      extract(VariantType &amp;);
-    template &lt;typename VariantType&gt;
-      extract(const VariantType &amp;);
-
-public: // queries
-
-    bool check() const;
-    ToType&amp; operator()() const;
-    operator ToType&amp;() const; //  Not supported on MSVC
-
-};
 </pre>
-        <pre></pre>
-        <p><code>boost::extract</code> is a facility for extracting a reference to a value 
-            held by a <code>variant</code> object. The 'extraction' succeeds only if the 
-            type of the held value is identical to the <code>ToType</code> template 
-            parameter. Usage:<br>
-        </p>
-        <ol>
-            <li>
-                <code>extract&lt;RR&gt;(var_inst)();</code> Initializes a temporary <code>extract</code>object 
-                and converts it to <code>RR&amp;</code>. If the given <code>variant</code>
-                object, <code>var_inst</code> does not hold a value of type <code>RR</code>, a <code>
-                    bad_extract</code> exception is thrown.
-            </li>
-            <li>
-                <code>extract&lt;RR&gt; ex(var_inst);</code> Initalizes an extract object, <code>ex</code>. 
-                Subsequently, client code can issue an <code>ex.check()</code> call, to 
-                determine whether <code>var_inst</code> is holding a value of type <code>RR</code>.
-            </li>
-        </ol>
-        <h3>Constructors</h3>
-        <pre>    template&lt;VariantType&gt;
-    extract(const VariantType&amp; from);
-
-    template&lt;VariantType&gt;
-    extract(VariantType&amp; from);
-</pre>
-        <p>Sets up an <code>extract</code> object which is associated with the given <code>variant</code>
-            object (<code>from</code>).<br>
-        </p>
-        <h3>Queries</h3>
-        <pre>    bool check() const;   
-</pre>
-        <p><code>check()</code> is a non throwing member function which return <code>true</code>, 
-            if, and only if, the associated <code>variant</code> object is holding a value 
-            of type <code>ToType</code>.</p>
-        <pre>    result_type operator()() const; 
-    operator result_type() const; //  Not supported on MSVC
-</pre>
-        <p>If <code>check()</code> is <code>true</code> - <code>operator()</code> returns a 
-            reference to the value held by the associated <code>variant</code> object. 
-            Otherwise - a <code>bad_extract</code> exception is thrown.<br>
-            <code>operator result_type()</code> supplies an implicit conversion to <code>ToType&amp;</code>. 
-            It is semantically identical to <code>operator()</code>. Note that the MSVC7 implementation does not support 
-            this operator.<br>
-        </p>
-        <hr>
-        <h2><a name="incomplete"><code>incomplete</code></a></h2>
-        <p><code>incomplete&lt;T&gt;</code> is a template class, which allows a <code>variant</code>
-            type to be instantiated with incomplete types.<br>
-            By specifying <code>incomplete&lt;T&gt;</code> as one of the actual template 
-            parameters, the instantiated variant will be able to handle values of type <code>T</code>, 
-            although <code>T</code> is incomplete at the instantiation point.<br>
-            <code>incomplete&lt;&gt;</code> is typically used for solving circular 
-            dependencies, but, more importantly, it also enables the creation of <b>recursive</b>, 
-            variant-based, constructs.<br>
-            The snip below demonstrates the usage of <code>Incomplete&lt;&gt;</code>. A 
-            complete sample program is available <a HREF="sample.html#tree">here</a>.
-        </p>
+Returns a reference/pointer to a held value.<br>
+<br>
+If a pointer is passed: returns a pointer to the held value if its type is
+<code>ToType</code>. Otherwise, returns <code>NULL</code>.<br>
+If a value/reference is passed: returns a reference to the held value if its type
+is <code>ToType</code>. Otherwise, throws a <code>bad_get</code> exception.<br>
+<br><hr>
+<h2><a name="incomplete"><code>incomplete</code></a></h2>
+<p><code>incomplete&lt;T&gt;</code> is a class template, which allows a <code>variant</code>
+    type to be instantiated with incomplete types.<br>
+    By specifying <code>incomplete&lt;T&gt;</code> as one of the actual template
+    parameters, the instantiated variant will be able to handle values of type <code>T</code>,
+    although <code>T</code> is incomplete at the instantiation point.<br>
+    <code>incomplete&lt;&gt;</code> is typically used for solving circular
+    dependencies, but, more importantly, it also enables the creation of <b>recursive</b>,
+    variant-based, constructs.<br>
+    The snip below demonstrates the usage of <code>Incomplete&lt;&gt;</code>. A
+    complete sample program is available <a HREF="sample.html#tree">here</a>.
+</p>
         <pre>   using boost::variant;
    using boost::incomplete;
 
