@@ -13,6 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
+#include <boost/preprocessor/detail/cat.hpp>
 #include <boost/preprocessor/logical/bool.hpp>
 
 /** <p>Expands to the logical NEITHER OR of the operands.</p>
@@ -27,12 +28,10 @@ in the range [0, BOOST_PP_LIMIT_MAG].</p>
   <li><a href="../../test/logical_test.cpp">logical_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_NOR(X,Y) BOOST_PP_NOR_BOOL(BOOST_PP_BOOL(X),BOOST_PP_BOOL(Y))
+#define BOOST_PP_NOR(X,Y) BOOST_PP_DETAIL_CAT3(BOOST_PP_NOR,BOOST_PP_BOOL(X),BOOST_PP_BOOL(Y))
 
-#define BOOST_PP_NOR_BOOL(X,Y) BOOST_PP_NOR_BOOL_DELAY(X,Y)
-#define BOOST_PP_NOR_BOOL_DELAY(X,Y) BOOST_PP_NOR_BOOL##X##Y
-#define BOOST_PP_NOR_BOOL00 1
-#define BOOST_PP_NOR_BOOL01 0
-#define BOOST_PP_NOR_BOOL10 0
-#define BOOST_PP_NOR_BOOL11 0
+#define BOOST_PP_NOR00 1
+#define BOOST_PP_NOR01 0
+#define BOOST_PP_NOR10 0
+#define BOOST_PP_NOR11 0
 #endif

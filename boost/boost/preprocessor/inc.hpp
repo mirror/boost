@@ -13,6 +13,8 @@
  * See http://www.boost.org for most recent version.
  */
 
+#include <boost/preprocessor/detail/cat.hpp>
+
 /** <p>Increments <code>X</code> expanding to a single token.</p>
 
 <p>For example, <code>BOOST_PP_INC(3)</code> expands to <code>4</code> (a
@@ -24,9 +26,8 @@ BOOST_PP_LIMIT_MAG yields a BOOST_PP_LIMIT_MAG.</p>
 <p>Only decimal integer literals in the range [0,BOOST_PP_LIMIT_MAG] are
 supported.</p>
 */
-#define BOOST_PP_INC(X) BOOST_PP_INC_DELAY(X)
+#define BOOST_PP_INC(X) BOOST_PP_DETAIL_CAT2(BOOST_PP_INC,X)
 
-#define BOOST_PP_INC_DELAY(X) BOOST_PP_INC##X
 #define BOOST_PP_INC0 1
 #define BOOST_PP_INC1 2
 #define BOOST_PP_INC2 3

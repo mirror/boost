@@ -13,6 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
+#include <boost/preprocessor/detail/cat.hpp>
 #include <boost/preprocessor/logical/bool.hpp>
 #include <boost/preprocessor/tuple/elem.hpp>
 
@@ -33,8 +34,5 @@
   <li><a href="../../test/preprocessor_test.cpp">preprocessor_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_IF(COND,THEN,ELSE) BOOST_PP_IF_BOOL(BOOST_PP_BOOL(COND))(ELSE,THEN)
-
-#define BOOST_PP_IF_BOOL(C) BOOST_PP_IF_BOOL_DELAY(C)
-#define BOOST_PP_IF_BOOL_DELAY(C) BOOST_PP_TUPLE2_ELEM##C
+#define BOOST_PP_IF(COND,THEN,ELSE) BOOST_PP_DETAIL_CAT2(BOOST_PP_TUPLE2_ELEM,BOOST_PP_BOOL(COND))(ELSE,THEN)
 #endif

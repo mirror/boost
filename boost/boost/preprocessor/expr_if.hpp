@@ -13,6 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
+#include <boost/preprocessor/detail/cat.hpp>
 #include <boost/preprocessor/logical/bool.hpp>
 
 /** <p>Expands to <code>EXPR</code> if <code>COND != 0</code> and to nothing if <code>COND == 0</code>.</p>
@@ -26,10 +27,8 @@
   <li>BOOST_PP_IF()</li>
 </ul>
 */
-#define BOOST_PP_EXPR_IF(COND,EXPR) BOOST_PP_EXPR_IF_BOOL(BOOST_PP_BOOL(COND))(EXPR)
+#define BOOST_PP_EXPR_IF(COND,EXPR) BOOST_PP_DETAIL_CAT2(BOOST_PP_EXPR_IF,BOOST_PP_BOOL(COND))(EXPR)
 
-#define BOOST_PP_EXPR_IF_BOOL(C) BOOST_PP_EXPR_IF_BOOL_DELAY(C)
-#define BOOST_PP_EXPR_IF_BOOL_DELAY(C) BOOST_PP_EXPR_IF_BOOL##C
-#define BOOST_PP_EXPR_IF_BOOL0(E)
-#define BOOST_PP_EXPR_IF_BOOL1(E) E
+#define BOOST_PP_EXPR_IF0(E)
+#define BOOST_PP_EXPR_IF1(E) E
 #endif
