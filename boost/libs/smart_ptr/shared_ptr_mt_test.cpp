@@ -27,6 +27,7 @@
 #include <stdexcept>
 
 #include <cstdio>
+#include <ctime>
 
 // 'portable' thread framework
 
@@ -40,7 +41,7 @@ public:
 
 #if !defined(BOOST_HAS_PTHREADS) && defined(BOOST_HAS_WINTHREADS)
 
-char const * title = "Using Windows threads.";
+char const * title = "Using Windows threads";
 
 #include <windows.h>
 #include <process.h>
@@ -79,7 +80,7 @@ int pthread_join(pthread_t thread, void ** /*value_ptr*/)
 
 #else
 
-char const * title = "Using POSIX threads.";
+char const * title = "Using POSIX threads";
 
 #include <pthread.h>
 
@@ -146,9 +147,11 @@ int const m = 16; // threads
 
 int test_main( int, char ** )
 {
-    std::puts(title);
+    std::printf("%s: %d threads, %d iterations, ", title, m, n);
 
     boost::shared_ptr<int> pi(new int(42));
+
+    std::clock_t t = std::clock();
 
     pthread_t a[m];
 
@@ -161,6 +164,10 @@ int test_main( int, char ** )
     {
         pthread_join(a[i], 0);
     }
+
+    t = std::clock() - t;
+
+    std::printf("%.4f seconds.\n", static_cast<double>(t) / CLOCKS_PER_SEC);
 
     return 0;
 }
