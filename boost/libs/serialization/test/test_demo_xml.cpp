@@ -1,5 +1,5 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// test_demo.cpp
+// test_demo_xml.cpp
 
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
 // Use, modification and distribution is subject to the Boost Software
@@ -10,4 +10,4 @@
 
 #define main test_main
 
-#include "../example/demo.cpp"
+#include "../example/demo_xml.cpp"
