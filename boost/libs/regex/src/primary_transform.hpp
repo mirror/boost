@@ -36,7 +36,7 @@ template <class S, class charT>
 unsigned count_chars(const S& s, charT c)
 {
    unsigned int count = 0;
-   for(unsigned pos = 0; pos <= s.size(); ++pos)
+   for(unsigned pos = 0; pos < s.size(); ++pos)
    {
       if(s[pos] == c) ++count;
    }
@@ -111,6 +111,7 @@ unsigned find_sort_syntax(const traits* pt, charT* delim)
 
    } // namespace re_detail
 } // namespace boost
+
 
 
 
