@@ -286,6 +286,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   }
   
   urng2 = urng;
+#if !defined(BOOST_NO_STD_WSTREAMBUF) && !defined(BOOST_NO_STD_WSTRING)
   {
     // then wide stream
     std::wostringstream file;
@@ -302,6 +303,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
     }
     BOOST_TEST(urng == urng2);
 #endif // BOOST_MSVC
+#endif // BOOST_NO_STD_WSTREAMBUF, BOOST_NO_STD_WSTRING
   }
 #endif // BOOST_NO_OPERATORS_IN_NAMESPACE etc.
 
