@@ -27,7 +27,7 @@ namespace boost {
 
     template <class Ch, 
 #if !( BOOST_WORKAROUND(__GNUC__, <3) &&  defined(__STL_CONFIG_H) )
-        class Tr = std::char_traits<Ch> > 
+        class Tr = BOOST_IO_STD char_traits<Ch> > 
 #else
     class Tr = std::string_char_traits<Ch> > 
 #endif

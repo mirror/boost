@@ -41,7 +41,7 @@ namespace io {
 
 
 // ---   class steal_basic_stringbuf : steals  pbase(), pptr() & co -----------
-    template<class Ch, class Tr = std::char_traits<Ch> >
+    template<class Ch, class Tr = BOOST_IO_STD char_traits<Ch> >
     class steal_basic_stringbuf : public std::basic_stringbuf<Ch, Tr>
     {
         typedef std::basic_stringbuf<Ch, Tr> buff_t;
@@ -62,7 +62,7 @@ namespace io {
 
 
 // ---   class basic_outsstream -----------------------------------------------
-    template<class Ch, class Tr = std::char_traits<Ch> >
+    template<class Ch, class Tr = BOOST_IO_STD char_traits<Ch> >
     class basic_outsstream : boost::base_from_member<steal_basic_stringbuf<Ch, Tr> >, 
                              public BOOST_IO_STD basic_ostream<Ch, Tr>
     // use stringbuf with its stolen protected members, 
@@ -96,7 +96,7 @@ namespace io {
 
     template <class Ch, 
 #if !( BOOST_WORKAROUND(__GNUC__, <3) &&  defined(__STL_CONFIG_H) )
-        class Tr = std::char_traits<Ch> > 
+        class Tr = BOOST_IO_STD char_traits<Ch> > 
 #else
     class Tr = std::string_char_traits<Ch> > 
 #endif
