@@ -34,6 +34,7 @@ appropriate to use the types supplied in <code><a href="../../boost/cstdint.hpp"
 <pre>namespace boost
 {
   //  fast integers from least integers
+  // int_fast_t&lt;&gt; works correctly for unsigned too, in spite of the name.
   template&lt; typename LeastInt &gt;  // Required: LeastInt is integral type, not bool
   struct int_fast_t { typedef LeastInt fast; }; // implementations may specialize
 
@@ -51,6 +52,7 @@ appropriate to use the types supplied in <code><a href="../../boost/cstdint.hpp"
   {
       typedef <i>implementation-supplied</i>  least;
       typedef int_fast_t&lt;least&gt;::fast  fast;
+      // int_fast_t&lt;&gt; works correctly for unsigned too, in spite of the name.
   };
 } // namespace boost
 </pre>

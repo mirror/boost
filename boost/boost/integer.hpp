@@ -23,6 +23,7 @@ namespace boost
   //  Helper templates  ------------------------------------------------------//
 
   //  fast integers from least integers
+  //  int_fast_t<> works correctly for unsigned too, in spite of the name.
   template< typename LeastInt >
   struct int_fast_t { typedef LeastInt fast; }; // imps may specialize
 
@@ -70,6 +71,7 @@ namespace boost
           (Bits <= std::numeric_limits<unsigned char>::digits)
         >::least  least;
       typedef typename int_fast_t<least>::fast  fast;
+      // int_fast_t<> works correctly for unsigned too, in spite of the name.
   };
 
 //  The same dispatching technique can be used to select types based on
