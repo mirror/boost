@@ -88,16 +88,6 @@ public:
     virtual void save(const std::wstring & t) = 0;
     #endif
 
-    // these are used by the serialization library implementation.
-    // should be private but it aint that easy
-    virtual void save_object(
-        const void *x, 
-        const detail::basic_oserializer & bos
-    ) = 0;
-    virtual void save_pointer(
-        const void * t,
-        const detail::basic_pointer_oserializer * bpos_ptr
-    ) = 0;
     virtual void save_null_pointer() = 0;
     // used for xml and other tagged formats
     virtual void save_start(const char * name) = 0;
@@ -124,6 +114,15 @@ public:
         archive::save(* this, t.value());
         save_end(t.name());
     }
+public:
+    virtual void save_object(
+        const void *x, 
+        const detail::basic_oserializer & bos
+    ) = 0;
+    virtual void save_pointer(
+        const void * t,
+        const detail::basic_pointer_oserializer * bpos_ptr
+    ) = 0;
 };
 
 } // namespace archive

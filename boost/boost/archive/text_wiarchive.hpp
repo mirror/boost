@@ -40,10 +40,6 @@ public:
     friend class basic_text_iarchive<Archive>;
     friend class load_access;
 #endif
-    // return a pointer to the most derived class
-    Archive * This(){
-        return static_cast<Archive *>(this);
-    }
     template<class T>
     void load(T & t){
         basic_text_iprimitive<std::wistream>::load(t);

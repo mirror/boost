@@ -65,10 +65,6 @@ public:
     #ifndef BOOST_NO_STD_WSTRING
     void load(std::wstring &ws);
     #endif
-    // return a pointer to the most derived class
-    Archive * This(){
-        return static_cast<Archive *>(this);
-    }
     template<class T>
     void load_override(T & t, BOOST_PFTO int){
         basic_xml_iarchive<Archive>::load_override(t, 0);

@@ -94,19 +94,6 @@ public:
     virtual void load_end(const char * name) = 0;
     virtual void register_basic_serializer(const detail::basic_iserializer & bis) = 0;
 
-    // these are used by the serialization library implementation.
-    virtual void load_object(
-        void *t, 
-        const detail::basic_iserializer & bis
-    ) = 0;
-    virtual const detail::basic_pointer_iserializer * load_pointer(
-        void * & t, 
-        const detail::basic_pointer_iserializer * bpis_ptr,
-        const detail::basic_pointer_iserializer * (*finder)(
-            const boost::serialization::extended_type_info & type
-        )
-    ) = 0;
-
     // utility function implemented by all legal archives
     virtual unsigned int library_version() const = 0;
     virtual void load_binary(void * t, std::size_t size) = 0;
@@ -129,6 +116,19 @@ public:
         archive::load(* this, t.value());
         load_end(t.name());
     }
+public:
+    // these are used by the serialization library implementation.
+    virtual void load_object(
+        void *t, 
+        const detail::basic_iserializer & bis
+    ) = 0;
+    virtual const detail::basic_pointer_iserializer * load_pointer(
+        void * & t, 
+        const detail::basic_pointer_iserializer * bpis_ptr,
+        const detail::basic_pointer_iserializer * (*finder)(
+            const boost::serialization::extended_type_info & type
+        )
+    ) = 0;
 };
 
 } // namespace archive
