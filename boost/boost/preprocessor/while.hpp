@@ -29,13 +29,13 @@
 <B>C</B> is the condition for iteration. It must expand to a decimal integer
 literal.
 
-<B>F</B> is the iterated function. Note that if the state is a tuple, then
+<B>F</B> is the iterated macro. Note that if the state is a tuple, then
 F(D,X) usually expands to a tuple of the same number of elements.
 
 <B>D</B> is the recursion depth and should only be used as a parameter to
-other functions implemented using BOOST_PP_WHILE(). Such functions include
-BOOST_PP_ADD() and other arithmetic operations. For each function implemented
-using BOOST_PP_WHILE(), there is a version of the function, distinguished by
+other macros implemented using BOOST_PP_WHILE(). Such macros include
+BOOST_PP_ADD() and other arithmetic operations. For each macro implemented
+using BOOST_PP_WHILE(), there is a version of the macro, distinguished by
 the _D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion
 depth as the first parameter. This technique is necessary to avoid
 recursively expanding the same macro again, which is not permitted by the
@@ -55,13 +55,13 @@ expanding to a 0:
 
 <PRE>\verbatim
   #define COUNT_DOWN(N) BOOST_PP_WHILE(COUNT_DOWN_C,COUNT_DOWN_F,N)
-  // Above is the function we are implementing using BOOST_PP_WHILE().
+  // Above is the macro we are implementing using BOOST_PP_WHILE().
 
   #define COUNT_DOWN_C(D,N) N
-  // Above is the Condition. It expands to the current N.
+  // Above is the condition. It expands to the current N.
 
   #define COUNT_DOWN_F(D,N) BOOST_PP_DEC(N)
-  // Above is the iteration Function. It decrements N.
+  // Above is the iteration macro. It decrements N.
 
   COUNT_DOWN(50)
   // The above expands to 0.
@@ -72,7 +72,7 @@ BOOST_PP_MUL().
 
 <PRE>\verbatim
   #define BOOST_PP_MUL(X,Y) BOOST_PP_MUL_D(0,X,Y)
-  // Since the function is implemented using WHILE, the actual implementation
+  // Since the macro is implemented using WHILE, the actual implementation
   // takes a depth as a parameter so that it can be called inside a WHILE.
   // The above easy-to-use version simply uses 0 as the depth and can not be
   // called inside a WHILE.
@@ -88,7 +88,7 @@ BOOST_PP_MUL().
   // #2) The WHILE primitive is "invoked" directly. BOOST_PP_WHILE(D,...)
   // can't be used because it would not be expanded by the C preprocessor.
   //
-  // #3) ???_C is the condition and ???_F is the iteration function.
+  // #3) ???_C is the condition and ???_F is the iteration macro.
 
   #define BOOST_PP_MUL_C(D,P)\
     BOOST_PP_TUPLE_ELEM(3,2,P)
