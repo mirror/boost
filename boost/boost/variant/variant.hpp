@@ -74,13 +74,13 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE
+// BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT
 //
 // Unrolls variant's visitation mechanism to reduce template instantiation
 // and potentially increase runtime performance. (TODO: Investigate further.)
 //
-#if !defined(BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE)
-#   define BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE   \
+#if !defined(BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT)
+#   define BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT   \
         BOOST_VARIANT_LIMIT_TYPES
 #endif
 
@@ -719,7 +719,7 @@ apply_visitor_impl(
     /**/
 
     BOOST_PP_REPEAT(
-          BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE
+          BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT
         , BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_TYPEDEF
         , _
         )
@@ -739,7 +739,7 @@ apply_visitor_impl(
     /**/
 
     BOOST_PP_REPEAT(
-          BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE
+          BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT
         , BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_CASE
         , _
         )
@@ -750,10 +750,10 @@ apply_visitor_impl(
 
     // If not handled in this iteration, continue unrolling:
     typedef mpl::int_<
-          Which::value + (BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE)
+          Which::value + (BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT)
         > next_which;
 
-    typedef BOOST_PP_CAT(step, BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE)
+    typedef BOOST_PP_CAT(step, BOOST_VARIANT_APPLY_VISITOR_UNROLLING_LIMIT)
         next_step;
 
     typedef typename next_step::type next_type;
