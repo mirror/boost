@@ -28,6 +28,8 @@
 //     Incrementable.
 // 
 // Revision History
+// 11 Feb 2001  Clean up after John Maddocks's (finally effective!) Borland
+//              fixes (David Abrahams).
 // 10 Feb 2001  Use new iterator_adaptor<> interface (David Abrahams)
 // 10 Feb 2001  Rolled in supposed Borland fixes from John Maddock, but not
 //              seeing any improvement yet (David Abrahams)
@@ -63,14 +65,11 @@ namespace detail {
   // iterator_category and difference_type for a counting_iterator at
   // compile-time based on whether or not it wraps an integer or an iterator,
   // using "poor man's partial specialization".
-  template <bool is_integer> struct counting_iterator_traits_select
+  template <bool is_integer> struct counting_iterator_traits_select;
 
-#ifndef __BORLANDC__
-  ;
   // Incrementable is an iterator type
   template <>
   struct counting_iterator_traits_select<false>
-#endif
   {
       template <class Incrementable>
       struct traits
@@ -102,13 +101,11 @@ namespace detail {
   // the iterator wraps an integer or an iterator, using "poor man's partial
   // specialization".
 
-  template <bool is_integer> struct distance_policy_select
-#ifndef __BORLANDC__
-  ;
+  template <bool is_integer> struct distance_policy_select;
+
   // A policy for wrapped iterators
   template <>
   struct distance_policy_select<false>
-#endif
   {
       template <class Distance, class Incrementable>
       struct policy {
@@ -130,36 +127,31 @@ namespace detail {
 
   // Try to detect numeric types at compile time in ways compatible with the
   // limitations of the compiler and library.
-#ifndef __BORLANDC__
   template <class T>
   struct is_numeric {
     // For a while, this wasn't true, but we rely on it below. This is a regression assert.
     BOOST_STATIC_ASSERT(::boost::is_integral<char>::value);
+#if !defined(__BORLANDC__)
     enum { value =
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+# ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
         std::numeric_limits<T>::is_specialized
-#else
+# else
         boost::is_convertible<int,T>::value && boost::is_convertible<T,int>::value
-#endif
+# endif
     };
-  };
 #else
-   // Borland seems to have a strange problem with is_numeric, just delegate
-   // to is_arithmetic instead:
-  template <class T>
-  struct is_numeric {
-    // For a while, this wasn't true, but we rely on it below. This is a regression assert.
-    BOOST_STATIC_ASSERT(::boost::is_integral<char>::value);
+    // Borland seems to have a strange problem with using an enum in this case
     static const bool value = ::boost::is_arithmetic<T>::value;
-  };
 #endif
+  };
+
   // Compute the distance over arbitrary numeric and/or iterator types
   template <class Distance, class Incrementable>
   Distance any_distance(Incrementable start, Incrementable finish, Distance* = 0)
   {
     
       return distance_policy_select<(
-          ::boost::detail::is_numeric<Incrementable>::value)>::template
+          is_numeric<Incrementable>::value)>::template
           policy<Distance, Incrementable>::distance(start, finish);
   }
   
@@ -168,11 +160,9 @@ namespace detail {
 template <class Incrementable>
 struct counting_iterator_traits {
  private:
- BOOST_STATIC_ASSERT(::boost::detail::is_numeric<Incrementable>::value == ::boost::is_arithmetic<Incrementable>::value);
     typedef ::boost::detail::counting_iterator_traits_select<(
-        ::boost::detail::is_numeric<Incrementable>::value
-        )> binder;
-    typedef typename binder::template traits<Incrementable> traits;
+        detail::is_numeric<Incrementable>::value
+     )>::template traits<Incrementable> traits;
  public:
     typedef Incrementable value_type;
     typedef const Incrementable& reference;
