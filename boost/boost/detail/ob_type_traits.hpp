@@ -281,6 +281,11 @@ public:
                  && (1 == sizeof(detail::is_pointer_helper(t)))}; 
 };
 
+# ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4181)
+# endif // BOOST_MSVC
+
 //* is a type T a reference type - is_reference<T>
 template <typename T> struct is_reference 
 { 
@@ -293,6 +298,10 @@ template <> struct is_reference<void>
 { 
    enum{ value = false }; 
 };
+
+# ifdef BOOST_MSVC
+#  pragma warning(pop)
+# endif // BOOST_MSVC
 
 //*? is a type T a union type - is_union<T>
 template <typename T> struct is_union
