@@ -149,6 +149,8 @@ namespace detail{
    {
       template <class T>
       any_conversion(const T&);
+      template <class T>
+      any_conversion(T&);
    };
    template <class T>
    struct checker
