@@ -12,5 +12,17 @@
 #define BOOST_NO_CWCHAR
 #define BOOST_NO_SWPRINTF
 
+//
+// Threading API:
+// See if we have POSIX threads, if we do use them, otherwise
+// revert to native Win threads.
+#include <unistd.h>
+#if if defined(_POSIX_THREADS) && (_POSIX_THREADS+0 >= 0) && !defined(BOOST_HAS_WINTHREADS)
+#  define BOOST_HAS_PTHREADS
+#  define BOOST_HAS_SCHED_YIELD
+#else
+#  define NOOST_HAS_WINTHREADS
+#endif
+
  
 

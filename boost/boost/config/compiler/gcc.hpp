@@ -36,6 +36,13 @@
 #  define BOOST_NO_INTRINSIC_WCHAR_T
 #endif
 
+//
+// Threading support:
+// Turn this on unconditionally here, it will get turned off again later
+// if no threading API is detected.
+//
+#define BOOST_HAS_THREADS
+
 #define BOOST_COMPILER "GNU C++ version " BOOST_STRINGIZE(__GNUC__) "." BOOST_STRINGIZE(__GNUC_MINOR__)
 
 //
