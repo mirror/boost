@@ -30,11 +30,12 @@ int main()
   std::cout << std::endl;
 
   // Example using filter_iterator_generator
-  typedef boost::filter_iterator_generator<is_positive_number, int*, int> Gen;
+  typedef boost::filter_iterator_generator<is_positive_number, int*, int>::type
+    FilterIter;
   is_positive_number predicate;
-  Gen::policies_type policies(predicate, numbers + N);
-  Gen::type filter_iter_first(numbers, policies);
-  Gen::type filter_iter_last(numbers + N, policies);
+  FilterIter::policies_type policies(predicate, numbers + N);
+  FilterIter filter_iter_first(numbers, policies);
+  FilterIter filter_iter_last(numbers + N, policies);
 
   std::copy(filter_iter_first, filter_iter_last, std::ostream_iterator<int>(std::cout, " "));
   std::cout << std::endl;
