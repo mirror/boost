@@ -24,21 +24,14 @@
 #include <boost/concept_check.hpp>
 
 
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+typedef std::pair<int,int> intpair;
+BOOST_TT_BROKEN_COMPILER_SPEC(intpair)
+#endif
+
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 namespace boost { namespace detail
 {
-  template<> struct iterator_traits<int*>
-  : ptr_iter_traits<int> {};
-
-  template<> struct iterator_traits<std::pair<int, int>*>
-  : ptr_iter_traits<std::pair<int, int> > {};
-  
-  template<> struct iterator_traits<int const*>
-  : ptr_iter_traits<int, int const> {};
-
-  template<> struct iterator_traits<std::pair<int, int> const*>
-  : ptr_iter_traits<std::pair<int, int>, std::pair<int, int> const> {};
-
   template<> struct function_object_result<int (*)(int)>
   {
       typedef int type;

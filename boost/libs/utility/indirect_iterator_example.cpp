@@ -11,41 +11,6 @@
 #include <algorithm>
 #include <boost/iterator/indirect_iterator.hpp>
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-namespace boost { namespace detail
-{
-  template <>
-  struct iterator_traits<char*>
-      : ptr_iter_traits<char>
-  {
-  };
-  
-  template <>
-  struct iterator_traits<char const*>
-      : ptr_iter_traits<char, char const>
-  {
-  };
-  
-  template <>
-  struct iterator_traits<char**>
-      : ptr_iter_traits<char*>
-  {
-  };
-  
-  template <>
-  struct iterator_traits<char const* const*>
-      : ptr_iter_traits<char const*, char const* const>
-  {
-  };
-
-  template <>
-  struct iterator_traits<char* const*>
-      : ptr_iter_traits<char*, char* const>
-  {
-  };
-}}
-#endif
-
 int main(int, char*[])
 {
   char characters[] = "abcdefg";

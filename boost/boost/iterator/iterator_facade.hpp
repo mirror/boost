@@ -37,9 +37,17 @@ namespace boost
   // explicitly in order to specify that the default should be used.
   struct use_default;
   
+# ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+  // the incompleteness of use_default causes massive problems for
+  // is_convertible (naturally).  This workaround is fortunately not
+  // needed for vc6/vc7.
+  template<class To>
+  struct is_convertible<use_default,To>
+    : mpl::false_ {};
+# endif 
+  
   namespace detail
   {
-
     //
     // enable if for use in operator implementation.
     //

@@ -26,6 +26,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
 
+#include <boost/type_traits/broken_compiler_spec.hpp>
+#include <vector>
 #include <stdlib.h>
 #include <set>
 
@@ -36,35 +38,19 @@
 
 // std container random-access iterators don't support mutable/const
 // interoperability (but may support const/mutable interop).
-# define NO_MUTABLE_CONST_STD_DEQUE_ITERATOR_INTEROPERABILITY
 # define NO_MUTABLE_CONST_STD_SET_ITERATOR_INTEROPERABILITY
 
 #endif 
 
-#if defined(BOOST_MSVC_STD_ITERATOR)                    \
-|| defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-
-// No working iterator_traits implementation, so we must use deque
-# define RA_CONTAINER std::deque
-# include <deque>
-
-# ifdef NO_MUTABLE_CONST_STD_DEQUE_ITERATOR_INTEROPERABILITY
-#  define NO_MUTABLE_CONST_RA_ITERATOR_INTEROPERABILITY
-# endif
-
-#else
-
-# define RA_CONTAINER std::vector
-# include <vector>
-
-#endif
 
 struct my_iterator_tag : public std::random_access_iterator_tag { };
 
 using boost::dummyT;
-
-typedef RA_CONTAINER<int> storage;
-typedef RA_CONTAINER<int*> pointer_ra_container;
+BOOST_TT_BROKEN_COMPILER_SPEC(boost::dummyT)
+BOOST_TT_BROKEN_COMPILER_SPEC(boost::shared_ptr<boost::dummyT>)
+    
+typedef std::vector<int> storage;
+typedef std::vector<int*> pointer_ra_container;
 typedef std::set<storage::iterator> iterator_set;
 
 template <class Container>
@@ -78,36 +64,8 @@ struct indirect_iterator_pair_generator
     > const_iterator;
 };
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-namespace boost { namespace detail
-{
-  template<> struct iterator_traits<int*>
-  : ptr_iter_traits<int> {};
-  
-  template<> struct iterator_traits<dummyT*>
-  : ptr_iter_traits<dummyT> {};
-  
-  template<> struct iterator_traits<dummyT*const>
-  : ptr_iter_traits<dummyT> {};
-  
-  template<> struct iterator_traits<dummyT const*>
-  : ptr_iter_traits<dummyT, dummyT const> {};
-  
-  template<> struct iterator_traits<dummyT**>
-  : ptr_iter_traits<dummyT*> {};
-  
-  template<> struct iterator_traits<dummyT*const*>
-  : ptr_iter_traits<dummyT*const> {};
-  
-  template<> struct iterator_traits<dummyT const*const*>
-  : ptr_iter_traits<dummyT const*, dummyT const*const> {};
-}}
-#endif
-
-
 void more_indirect_iterator_tests()
 {
-# if 0
     storage store(1000);
     std::generate(store.begin(), store.end(), rand);
     
@@ -177,7 +135,6 @@ void more_indirect_iterator_tests()
 
     boost::bidirectional_iterator_test(boost::next(sb), store[1], store[2]);
     assert(std::equal(db, de, store.begin()));
-#endif 
 }
 
 int
@@ -187,7 +144,7 @@ main()
                      dummyT(3), dummyT(4), dummyT(5) };
   const int N = sizeof(array)/sizeof(dummyT);
 
-  typedef RA_CONTAINER<boost::shared_ptr<dummyT> > shared_t;
+  typedef std::vector<boost::shared_ptr<dummyT> > shared_t;
   shared_t shared;
   
   // Concept checks

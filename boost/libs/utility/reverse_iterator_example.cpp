@@ -9,16 +9,7 @@
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/detail/iterator.hpp>
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-namespace boost { namespace detail
-{
-  template <>
-  struct iterator_traits<char*>
-      : ptr_iter_traits<char>
-  {
-  };
-}}
-#endif 
+//boost::detail::iterator_traits
 int main(int, char*[])
 {
   char letters_[] = "hello world!";

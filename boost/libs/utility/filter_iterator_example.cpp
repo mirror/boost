@@ -17,17 +17,6 @@ struct is_positive_number {
   bool operator()(int x) { return 0 < x; }
 };
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-namespace boost { namespace detail
-{
-  template <>
-  struct iterator_traits<int*>
-      : ptr_iter_traits<int>
-  {
-  };
-}}
-#endif
-
 int main()
 {
   int numbers_[] = { 0, -1, 4, -3, 5, 8, -2 };

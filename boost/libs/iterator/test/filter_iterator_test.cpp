@@ -7,12 +7,14 @@
 #include <boost/iterator/filter_iterator.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/iterator/new_iterator_tests.hpp>
+#include <boost/type_traits/broken_compiler_spec.hpp>
 
 #include <deque>
 #include <iostream>
 
 using boost::dummyT;
-
+BOOST_TT_BROKEN_COMPILER_SPEC(boost::dummyT)
+    
 struct one_or_four
 {
     bool operator()(dummyT x) const
@@ -20,14 +22,6 @@ struct one_or_four
         return x.foo() == 1 || x.foo() == 4;
     }
 };
-
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-namespace boost { namespace detail
-{
-  template<> struct iterator_traits<dummyT*>
-  : ptr_iter_traits<dummyT> {};
-}}
-#endif
 
 template <class T> struct undefined;
 

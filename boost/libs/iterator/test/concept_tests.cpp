@@ -149,7 +149,6 @@ main()
   test = static_assert_same<traversal_category, boost::random_access_traversal_tag>::value;
   (void)test;
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   boost::function_requires<
     boost_concepts::WritableLvalueIteratorConcept<int*> >();
   boost::function_requires<
@@ -159,7 +158,6 @@ main()
     boost_concepts::ReadableLvalueIteratorConcept<const int*> >();
   boost::function_requires<
     boost_concepts::RandomAccessTraversalConcept<const int*> >();
-#endif
 
   boost::function_requires<
     boost_concepts::WritableLvalueIteratorConcept<new_iterator> >();

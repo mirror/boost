@@ -16,6 +16,8 @@
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/pending/iterator_tests.hpp>
 
+# include <boost/type_traits/broken_compiler_spec.hpp>
+
 #include <stdlib.h>
 #include <vector>
 #include <deque>
@@ -27,6 +29,12 @@
 struct my_iterator_tag : public std::random_access_iterator_tag { };
 
 using boost::dummyT;
+
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+typedef std::pair<int,int> intpair;
+BOOST_TT_BROKEN_COMPILER_SPEC(intpair)
+BOOST_TT_BROKEN_COMPILER_SPEC(dummyT)
+#endif
 
 
 struct mult_functor {

@@ -39,5 +39,6 @@ test-suite iterator
     [ run ../../utility/projection_iterator_example.cpp ]
     [ run ../../utility/reverse_iterator_example.cpp ]
     [ run ../../utility/transform_iterator_example.cpp ]
+    [ run ../../utility/iterator_traits_test.cpp ]
       
 ;

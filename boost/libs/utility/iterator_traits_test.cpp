@@ -147,9 +147,7 @@ template <class Iterator,
     class value_type, class difference_type, class pointer, class reference, class category>
 struct maybe_pointer_test
     : portable_tests<Iterator,value_type,difference_type,pointer,reference,category>
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
       , non_portable_tests<Iterator,value_type,difference_type,pointer,reference,category>
-#endif
 {
 };
 

@@ -18,6 +18,7 @@ template< typename T > struct remove_const_impl     { typedef T type; };
 template< typename T > struct remove_volatile_impl  { typedef T type; };
 template< typename T > struct remove_pointer_impl   { typedef T type; };
 template< typename T > struct remove_reference_impl { typedef T type; };
+typedef int invoke_BOOST_TT_BROKEN_COMPILER_SPEC_outside_all_namespaces;
 }}
 #endif
 
@@ -75,6 +76,8 @@ template<> struct trait##_impl<spec> \
 
 #   define BOOST_TT_BROKEN_COMPILER_SPEC(T)                                         \
     namespace boost { namespace detail {                                            \
+    typedef invoke_BOOST_TT_BROKEN_COMPILER_SPEC_outside_all_namespaces             \
+      please_invoke_BOOST_TT_BROKEN_COMPILER_SPEC_outside_all_namespaces;           \
     BOOST_TT_AUX_REMOVE_ALL_RANK_1_SPEC(T)                                          \
     BOOST_TT_AUX_REMOVE_ALL_RANK_2_SPEC(T)                                          \
     BOOST_TT_AUX_REMOVE_ALL_RANK_2_SPEC(T*)                                         \

@@ -6,15 +6,12 @@
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/static_assert.hpp>
 #include "static_assert_same.hpp"
+#include <boost/type_traits/broken_compiler_spec.hpp>
+
 
 struct X { int a; };
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-namespace boost { namespace detail {
-template<> struct iterator_traits<X*>
-  : ptr_iter_traits<X> {};
-}}
-#endif 
+BOOST_TT_BROKEN_COMPILER_SPEC(X)
 
 struct Xiter : boost::iterator_adaptor<Xiter,X*>
 {

@@ -11,19 +11,8 @@
 
 using boost::dummyT;
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-namespace boost
-{
-  namespace detail
-  {
-    template<> struct iterator_traits<dummyT*>
-    : ptr_iter_traits<dummyT> {};
-    template<> struct iterator_traits<dummyT const*>
-    : ptr_iter_traits<dummyT const> {};
-  }
-}
-#endif
-
+BOOST_TT_BROKEN_COMPILER_SPEC(boost::dummyT)
+    
 // Test reverse iterator
 int main()
 {
