@@ -13,17 +13,22 @@
 #include <cstdlib>
 
 //
-// stdint.h added to glibc 2.1.1
+// <stdint.h> added to glibc 2.1.1
 // We can only test for 2.1 though:
 //
 #if defined(__GLIBC__) && ((__GLIBC__ > 2) || ((__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 1)))
-#define BOOST_HAS_STDINT_H
+   // <stdint.h> defines int64_t unconditionally, but <sys/types.h> defines
+   // int64_t only if __GNUC__.  Thus, assume a fully usable <stdint.h>
+   // only when using GCC.
+#  if defined __GNUC__
+#    define BOOST_HAS_STDINT_H
+#  endif
 #endif
 
 #if defined(__GLIBC__) && defined(__GLIBC_PREREQ)
 // __GLIBC_PREREQ is available since 2.1.2
 
-   // swprintf added to glibc 2.2.0
+   // swprintf is available since glibc 2.2.0
 #  if !__GLIBC_PREREQ(2,2) || (!defined(__USE_ISOC99) && !defined(__USE_UNIX98))
 #    define BOOST_NO_SWPRINTF
 #  endif
