@@ -75,7 +75,7 @@ namespace boost { namespace numeric { namespace ublas {
                     else
                         break;
                 } else if (compare > 0) {
-                    if (*ite != value_type (0))
+                    if (*ite != value_type/*zero*/())
                         index.push_back (ite.index ());
                     ++ ite;
                     if (ite != ite_end)
@@ -87,12 +87,12 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         while (ite != ite_end) {
-            if (*ite != value_type (0))
+            if (*ite != value_type/*zero*/())
                 index.push_back (ite.index ());
             ++ ite;
         }
         for (size_type k = 0; k < index.size (); ++ k)
-            v (index [k]) = value_type (0);
+            v (index [k]) = value_type/*zero*/();
     }
 
     // Explicitly iterating
@@ -320,7 +320,7 @@ namespace boost { namespace numeric { namespace ublas {
                 it_size -= size;
                 if (!functor_type::computed) {
                     while (-- size >= 0)    // zeroing
-                        functor_type::apply (*it, value_type (0)), ++ it;
+                        functor_type::apply (*it, value_type/*zero*/()), ++ it;
                 } else {
                     it += size;
                 }
@@ -334,7 +334,7 @@ namespace boost { namespace numeric { namespace ublas {
         size = it_size;
         if (!functor_type::computed) {
             while (-- size >= 0)    // zeroing
-                functor_type::apply (*it, value_type (0)), ++ it;
+                functor_type::apply (*it, value_type/*zero*/()), ++ it;
         } else {
             it += size;
         }
@@ -366,7 +366,7 @@ namespace boost { namespace numeric { namespace ublas {
         typename E::const_iterator ite_end (e ().end ());
         while (ite != ite_end) {
             value_type t (*ite);
-            if (t != value_type (0))
+            if (t != value_type/*zero*/())
                 v.insert_element (ite.index (), t);
             ++ ite;
         }
@@ -415,7 +415,7 @@ namespace boost { namespace numeric { namespace ublas {
                         break;
                 } else if (compare < 0) {
                     if (!functor_type::computed) {
-                        functor_type::apply (*it, value_type (0));
+                        functor_type::apply (*it, value_type/*zero*/());
                         ++ it;
                     } else
                         increment (it, it_end, - compare);
@@ -435,7 +435,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         if (!functor_type::computed) {
             while (it != it_end) {  // zeroing
-                functor_type::apply (*it, value_type (0));
+                functor_type::apply (*it, value_type/*zero*/());
                 ++ it;
             }
         } else {

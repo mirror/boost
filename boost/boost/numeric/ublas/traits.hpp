@@ -1069,7 +1069,7 @@ namespace boost { namespace numeric { namespace ublas {
 #if BOOST_UBLAS_TYPE_CHECK
         I cit (it);
         while (cit != it_end) {
-            BOOST_UBLAS_CHECK (*cit == typename I::value_type (0), internal_logic ());
+            BOOST_UBLAS_CHECK (*cit == typename I::value_type/*zero*/(), internal_logic ());
             ++ cit;
         }
 #endif

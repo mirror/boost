@@ -289,7 +289,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void clear () {
             const size_type sizeM = layout_type::size1 (size1_, size2_);
-            // FIXME should clear data () if this is done via value_type (0) then it is not size preserving
+            // FIXME should clear data () if this is done via value_type/*zero*/() then it is not size preserving
             for (size_type i = 0; i < sizeM; ++ i)
                 ref (data () [i]).clear ();
             storage_invariants ();

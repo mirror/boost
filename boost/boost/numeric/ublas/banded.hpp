@@ -202,7 +202,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Zeroing
         BOOST_UBLAS_INLINE
         void clear () {
-            std::fill (data ().begin (), data ().end (), value_type (0));
+            std::fill (data ().begin (), data ().end (), value_type/*zero*/());
         }
 
         // Assignment

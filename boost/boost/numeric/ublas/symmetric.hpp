@@ -176,7 +176,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void clear () {
             // data ().clear ();
-            std::fill (data ().begin (), data ().end (), value_type (0));
+            std::fill (data ().begin (), data ().end (), value_type/*zero*/());
         }
 
         // Assignment

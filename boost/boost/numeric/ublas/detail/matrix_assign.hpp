@@ -88,7 +88,7 @@ namespace boost { namespace numeric { namespace ublas {
                                 break;
                         } else if (compare > 0) {
                             if (conformant_restrict_type::other (it2e.index1 (), it2e.index2 ()))
-                                if (*it2e != value_type (0))
+                                if (*it2e != value_type/*zero*/())
                                     index.push_back (std::pair<size_type, size_type> (it2e.index1 (), it2e.index2 ()));
                             ++ it2e;
                             if (it2e != it2e_end)
@@ -100,7 +100,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
                 while (it2e != it2e_end) {
                     if (conformant_restrict_type::other (it2e.index1 (), it2e.index2 ()))
-                        if (*it2e != value_type (0))
+                        if (*it2e != value_type/*zero*/())
                             index.push_back (std::pair<size_type, size_type> (it2e.index1 (), it2e.index2 ()));
                     ++ it2e;
                 }
@@ -117,7 +117,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
                 while (it2e != it2e_end) {
                     if (conformant_restrict_type::other (it2e.index1 (), it2e.index2 ()))
-                        if (*it2e != value_type (0))
+                        if (*it2e != value_type/*zero*/())
                             index.push_back (std::pair<size_type, size_type> (it2e.index1 (), it2e.index2 ()));
                     ++ it2e;
                 }
@@ -134,7 +134,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
             while (it2e != it2e_end) {
                 if (conformant_restrict_type::other (it2e.index1 (), it2e.index2 ()))
-                    if (*it2e != value_type (0))
+                    if (*it2e != value_type/*zero*/())
                         index.push_back (std::pair<size_type, size_type> (it2e.index1 (), it2e.index2 ()));
                 ++ it2e;
             }
@@ -142,7 +142,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         // ISSUE proxies require insert_element
         for (size_type k = 0; k < index.size (); ++ k)
-            m (index [k].first, index [k].second) = value_type (0);
+            m (index [k].first, index [k].second) = value_type/*zero*/();
     }
     template<class M, class E, class R>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
@@ -191,7 +191,7 @@ namespace boost { namespace numeric { namespace ublas {
                                 break;
                         } else if (compare > 0) {
                             if (conformant_restrict_type::other (it1e.index1 (), it1e.index2 ()))
-                                if (*it1e != value_type (0))
+                                if (*it1e != value_type/*zero*/())
                                     index.push_back (std::pair<size_type, size_type> (it1e.index1 (), it1e.index2 ()));
                             ++ it1e;
                             if (it1e != it1e_end)
@@ -203,7 +203,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
                 while (it1e != it1e_end) {
                     if (conformant_restrict_type::other (it1e.index1 (), it1e.index2 ()))
-                        if (*it1e != value_type (0))
+                        if (*it1e != value_type/*zero*/())
                             index.push_back (std::pair<size_type, size_type> (it1e.index1 (), it1e.index2 ()));
                     ++ it1e;
                 }
@@ -220,7 +220,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
                 while (it1e != it1e_end) {
                     if (conformant_restrict_type::other (it1e.index1 (), it1e.index2 ()))
-                        if (*it1e != value_type (0))
+                        if (*it1e != value_type/*zero*/())
                             index.push_back (std::pair<size_type, size_type> (it1e.index1 (), it1e.index2 ()));
                     ++ it1e;
                 }
@@ -237,7 +237,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
             while (it1e != it1e_end) {
                 if (conformant_restrict_type::other (it1e.index1 (), it1e.index2 ()))
-                    if (*it1e != value_type (0))
+                    if (*it1e != value_type/*zero*/())
                         index.push_back (std::pair<size_type, size_type> (it1e.index1 (), it1e.index2 ()));
                 ++ it1e;
             }
@@ -245,7 +245,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         // ISSUE proxies require insert_element
         for (size_type k = 0; k < index.size (); ++ k)
-            m (index [k].first, index [k].second) = value_type (0);
+            m (index [k].first, index [k].second) = value_type/*zero*/();
     }
 
     // Explicitly iterating row major
@@ -677,7 +677,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
                         difference_type size2 (it2_end - it2);
                         while (-- size2 >= 0)
-                            functor_type::apply (*it2, value_type (0)), ++ it2;
+                            functor_type::apply (*it2, value_type/*zero*/()), ++ it2;
                         ++ it1;
                     }
                 } else {
@@ -717,7 +717,7 @@ namespace boost { namespace numeric { namespace ublas {
                     it2_size -= size2;
                     if (!functor_type::computed) {
                         while (-- size2 >= 0)   // zeroing
-                            functor_type::apply (*it2, value_type (0)), ++ it2;
+                            functor_type::apply (*it2, value_type/*zero*/()), ++ it2;
                     } else {
                         it2 += size2;
                     }
@@ -732,7 +732,7 @@ namespace boost { namespace numeric { namespace ublas {
             size2 = it2_size;
             if (!functor_type::computed) {
                 while (-- size2 >= 0)   // zeroing
-                    functor_type::apply (*it2, value_type (0)), ++ it2;
+                    functor_type::apply (*it2, value_type/*zero*/()), ++ it2;
             } else {
                 it2 += size2;
             }
@@ -750,7 +750,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
                 difference_type size2 (it2_end - it2);
                 while (-- size2 >= 0)
-                    functor_type::apply (*it2, value_type (0)), ++ it2;
+                    functor_type::apply (*it2, value_type/*zero*/()), ++ it2;
                 ++ it1;
             }
         } else {
@@ -811,7 +811,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
                         difference_type size1 (it1_end - it1);
                         while (-- size1 >= 0)
-                            functor_type::apply (*it1, value_type (0)), ++ it1;
+                            functor_type::apply (*it1, value_type/*zero*/()), ++ it1;
                         ++ it2;
                     }
                 } else {
@@ -851,7 +851,7 @@ namespace boost { namespace numeric { namespace ublas {
                     it1_size -= size1;
                     if (!functor_type::computed) {
                         while (-- size1 >= 0)   // zeroing
-                            functor_type::apply (*it1, value_type (0)), ++ it1;
+                            functor_type::apply (*it1, value_type/*zero*/()), ++ it1;
                     } else {
                         it1 += size1;
                     }
@@ -866,7 +866,7 @@ namespace boost { namespace numeric { namespace ublas {
             size1 = it1_size;
             if (!functor_type::computed) {
                 while (-- size1 >= 0)   // zeroing
-                    functor_type::apply (*it1, value_type (0)), ++ it1;
+                    functor_type::apply (*it1, value_type/*zero*/()), ++ it1;
             } else {
                 it1 += size1;
             }
@@ -884,7 +884,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
                 difference_type size1 (it1_end - it1);
                 while (-- size1 >= 0)
-                    functor_type::apply (*it1, value_type (0)), ++ it1;
+                    functor_type::apply (*it1, value_type/*zero*/()), ++ it1;
                 ++ it2;
             }
         } else {
@@ -920,7 +920,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
             while (it2e != it2e_end) {
                 value_type t (*it2e);
-                if (t != value_type (0))
+                if (t != value_type/*zero*/())
                     m.insert_element (it2e.index1 (), it2e.index2 (), t);
                 ++ it2e;
             }
@@ -952,7 +952,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
             while (it1e != it1e_end) {
                 value_type t (*it1e);
-                if (t != value_type (0))
+                if (t != value_type/*zero*/())
                     m.insert_element (it1e.index1 (), it1e.index2 (), t);
                 ++ it1e;
             }
@@ -1014,7 +1014,7 @@ namespace boost { namespace numeric { namespace ublas {
                                 break;
                         } else if (compare < 0) {
                             if (!functor_type::computed) {
-                                functor_type::apply (*it2, value_type (0));
+                                functor_type::apply (*it2, value_type/*zero*/());
                                 ++ it2;
                             } else
                                 increment (it2, it2_end, - compare);
@@ -1033,7 +1033,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
                 if (!functor_type::computed) {
                     while (it2 != it2_end) {    // zeroing
-                        functor_type::apply (*it2, value_type (0));
+                        functor_type::apply (*it2, value_type/*zero*/());
                         ++ it2;
                     }
                 } else {
@@ -1050,7 +1050,7 @@ namespace boost { namespace numeric { namespace ublas {
                     typename M::iterator2 it2_end (end (it1, iterator1_tag ()));
 #endif
                     while (it2 != it2_end) {    // zeroing
-                        functor_type::apply (*it2, value_type (0));
+                        functor_type::apply (*it2, value_type/*zero*/());
                         ++ it2;
                     }
                     ++ it1;
@@ -1071,7 +1071,7 @@ namespace boost { namespace numeric { namespace ublas {
                 typename M::iterator2 it2_end (end (it1, iterator1_tag ()));
 #endif
                 while (it2 != it2_end) {    // zeroing
-                    functor_type::apply (*it2, value_type (0));
+                    functor_type::apply (*it2, value_type/*zero*/());
                     ++ it2;
                 }
                 ++ it1;
@@ -1139,7 +1139,7 @@ namespace boost { namespace numeric { namespace ublas {
                                 break;
                         } else if (compare < 0) {
                             if (!functor_type::computed) {
-                                functor_type::apply (*it1, value_type (0)); // zeroing
+                                functor_type::apply (*it1, value_type/*zero*/()); // zeroing
                                 ++ it1;
                             } else
                                 increment (it1, it1_end, - compare);
@@ -1158,7 +1158,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
                 if (!functor_type::computed) {
                     while (it1 != it1_end) {    // zeroing
-                        functor_type::apply (*it1, value_type (0));
+                        functor_type::apply (*it1, value_type/*zero*/());
                         ++ it1;
                     }
                 } else {
@@ -1175,7 +1175,7 @@ namespace boost { namespace numeric { namespace ublas {
                     typename M::iterator1 it1_end (end (it2, iterator2_tag ()));
 #endif
                     while (it1 != it1_end) {    // zeroing
-                        functor_type::apply (*it1, value_type (0));
+                        functor_type::apply (*it1, value_type/*zero*/());
                         ++ it1;
                     }
                     ++ it2;
@@ -1196,7 +1196,7 @@ namespace boost { namespace numeric { namespace ublas {
                 typename M::iterator1 it1_end (end (it2, iterator2_tag ()));
 #endif
                 while (it1 != it1_end) {    // zeroing
-                    functor_type::apply (*it1, value_type (0));
+                    functor_type::apply (*it1, value_type/*zero*/());
                     ++ it1;
                 }
                 ++ it2;

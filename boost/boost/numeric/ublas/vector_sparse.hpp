@@ -44,7 +44,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (p)
                 d_ = *p;
             else
-                d_ = value_type (0);
+                d_ = value_type/*zero*/();
         }
 
         void set (const value_type &s) const {
@@ -140,7 +140,7 @@ namespace boost { namespace numeric { namespace ublas {
         value_type& ref () const {
             pointer p = (*this) ().find_element (i_);
             if (!p)
-                (*this) ().insert_element (i_, value_type (0));
+                (*this) ().insert_element (i_, value_type/*zero*/());
             return *p;
         }
 
@@ -388,7 +388,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         true_reference ref (size_type i) {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
-            std::pair<subiterator_type, bool> ii (data ().insert (typename array_type::value_type (i, value_type (0))));
+            std::pair<subiterator_type, bool> ii (data ().insert (typename array_type::value_type (i, value_type/*zero*/())));
             BOOST_UBLAS_CHECK ((ii->first).first == i, internal_logic ());   // broken map
             return (ii.first)->second;
         }
@@ -897,7 +897,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
             subiterator_type it (detail::lower_bound (index_data_.begin (), index_data_.begin () + filled_, k_based (i), std::less<size_type> ()));
             if (it == index_data_.begin () + filled_ || *it != k_based (i))
-                return insert_element (i, value_type (0));
+                return insert_element (i, value_type/*zero*/());
             else
                 return value_data_ [it - index_data_.begin ()];
         }
@@ -1490,7 +1490,7 @@ namespace boost { namespace numeric { namespace ublas {
             sort ();
             subiterator_type it (detail::lower_bound (index_data_.begin (), index_data_.begin () + filled_, k_based (i), std::less<size_type> ()));
             if (it == index_data_.begin () + filled_ || *it != k_based (i))
-                return insert_element (i, value_type (0));
+                return insert_element (i, value_type/*zero*/());
             else
                 return value_data_ [it - index_data_.begin ()];
         }

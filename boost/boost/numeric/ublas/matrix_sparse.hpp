@@ -45,7 +45,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (p)
                 d_ = *p;
             else
-                d_ = value_type (0);
+                d_ = value_type/*zero*/();
         }
 
         void set (const value_type &s) const {
@@ -142,7 +142,7 @@ namespace boost { namespace numeric { namespace ublas {
         value_type& ref () const {
             pointer p = (*this) ().find_element (i_, i_);
             if (!p)
-                (*this) ().insert_element (i_, j_, value_type (0));
+                (*this) ().insert_element (i_, j_, value_type/*zero*/());
             return *p;
         }
 
@@ -385,7 +385,7 @@ namespace boost { namespace numeric { namespace ublas {
         reference operator () (size_type i, size_type j) {
 #ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
             const size_type element = layout_type::element (i, size1_, j, size2_);
-            std::pair<subiterator_type, bool> ii (data ().insert (typename array_type::value_type (element, value_type (0))));
+            std::pair<subiterator_type, bool> ii (data ().insert (typename array_type::value_type (element, value_type/*zero*/())));
             BOOST_UBLAS_CHECK ((ii.first)->first == element, internal_logic ());   // broken map
             return (ii.first)->second;
 #else
@@ -1432,7 +1432,7 @@ namespace boost { namespace numeric { namespace ublas {
             const size_type element1 = layout_type::element1 (i, size1_, j, size2_);
             const size_type element2 = layout_type::element2 (i, size1_, j, size2_);
             vector_data_value_type& vd (data () [element1]);
-            std::pair<subiterator_type, bool> ii (vd.insert (typename array_type::value_type::second_type::value_type (element2, value_type (0))));
+            std::pair<subiterator_type, bool> ii (vd.insert (typename array_type::value_type::second_type::value_type (element2, value_type/*zero*/())));
             BOOST_UBLAS_CHECK ((ii.first)->first == element2, internal_logic ());   // broken map
             return (ii.first)->second;
 #else
@@ -2681,12 +2681,12 @@ namespace boost { namespace numeric { namespace ublas {
             size_type element1 (layout_type::element1 (i, size1_, j, size2_));
             size_type element2 (layout_type::element2 (i, size1_, j, size2_));
             if (filled1_ <= element1 + 1)
-                return insert_element (i, j, value_type (0));
+                return insert_element (i, j, value_type/*zero*/());
             pointer p = find_element (i, j);
             if (p)
                 return *p;
             else
-                return insert_element (i, j, value_type (0));
+                return insert_element (i, j, value_type/*zero*/());
 #else
             return reference (*this, i, j);
 #endif
@@ -3989,7 +3989,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (p)
                 return *p;
             else
-                return insert_element (i, j, value_type (0));
+                return insert_element (i, j, value_type/*zero*/());
 #else
             return reference (*this, i, j);
 #endif

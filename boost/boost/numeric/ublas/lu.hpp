@@ -99,7 +99,7 @@ namespace boost { namespace numeric { namespace ublas {
         for (size_type i = 0; i < size; ++ i) {
             matrix_column<M> mci (column (m, i));
             matrix_row<M> mri (row (m, i));
-            if (m (i, i) != value_type (0)) {
+            if (m (i, i) != value_type/*zero*/()) {
                 project (mci, range (i + 1, size1)) *= value_type (1) / m (i, i);
             } else if (singular == 0) {
                 singular = i + 1;
@@ -135,7 +135,7 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_row<M> mri (row (m, i));
             size_type i_norm_inf = i + index_norm_inf (project (mci, range (i, size1)));
             BOOST_UBLAS_CHECK (i_norm_inf < size1, external_logic ());
-            if (m (i_norm_inf, i) != value_type (0)) {
+            if (m (i_norm_inf, i) != value_type/*zero*/()) {
                 if (i_norm_inf != i) {
                     pm (i) = i_norm_inf;
                     row (m, i_norm_inf).swap (mri);
@@ -186,7 +186,7 @@ namespace boost { namespace numeric { namespace ublas {
                 axpy_prod<vector_type> (project (mr, range (i, size1), range (0, i)), urr));
             size_type i_norm_inf = i + index_norm_inf (project (v, range (i, size1)));
             BOOST_UBLAS_CHECK (i_norm_inf < size1, external_logic ());
-            if (v (i_norm_inf) != value_type (0)) {
+            if (v (i_norm_inf) != value_type/*zero*/()) {
                 if (i_norm_inf != i) {
                     pm (i) = i_norm_inf;
                     std::swap (v (i_norm_inf), v (i));
@@ -221,7 +221,7 @@ namespace boost { namespace numeric { namespace ublas {
                 axpy_prod<vector_type> (project (lr, range (i, size1), range (0, i)), urr));
             size_type i_norm_inf = i + index_norm_inf (project (v, range (i, size1)));
             BOOST_UBLAS_CHECK (i_norm_inf < size1, external_logic ());
-            if (v (i_norm_inf) != value_type (0)) {
+            if (v (i_norm_inf) != value_type/*zero*/()) {
                 if (i_norm_inf != i) {
                     pm (i) = i_norm_inf;
                     std::swap (v (i_norm_inf), v (i));

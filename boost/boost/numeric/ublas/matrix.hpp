@@ -179,7 +179,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Zeroing
         BOOST_UBLAS_INLINE
         void clear () {
-            std::fill (data ().begin (), data ().end (), value_type (0));
+            std::fill (data ().begin (), data ().end (), value_type/*zero*/());
         }
 
         // Assignment
@@ -1092,7 +1092,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void clear () {
             for (size_type k = 0; k < layout_type::size1 (size1_, size2_); ++ k)
-                std::fill (data () [k].begin (), data () [k].end (), value_type (0));
+                std::fill (data () [k].begin (), data () [k].end (), value_type/*zero*/());
         }
 
         // Assignment
@@ -3188,7 +3188,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void clear () {
             for (size_type i = 0; i < size1_; ++ i)
-                std::fill (data_ [i], data_ [i] + size2_, value_type (0));
+                std::fill (data_ [i], data_ [i] + size2_, value_type/*zero*/());
         }
 
         // Assignment
