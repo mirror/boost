@@ -92,7 +92,7 @@ namespace std {
   using ::wmemset;
 #endif
 #if !(defined(__linux) && defined(__DECCXX_VER) && __DECCXX_VER <= 60390005)
-#if !(defined(__DECCXX_VER) && __DECCXX_VER <= 60290024)
+#if !(defined(__DECCXX_VER) && __DECCXX_VER <= 60390012)
 #if !(defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730)
   using ::fwide;
 #endif
