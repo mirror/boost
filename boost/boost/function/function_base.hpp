@@ -59,7 +59,7 @@ namespace boost { namespace python { namespace objects {
 #endif
 
 // Metrowerks 7.2 doesn't support enable_if
-#if BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
+#if BOOST_WORKAROUND(__MWERKS__, <= 0x3000)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
