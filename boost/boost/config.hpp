@@ -266,8 +266,11 @@
 //  Intel on Linux ---------------------------------------------------------
 
 #elif defined __ICC
-#   define BOOST_NO_SLIST
-#   define BOOST_NO_HASH
+#   include <iterator>
+#   ifdef _CPPLIB_VER 
+      // shipped with Dinkumware 3.10, which has a different hash_map
+#     define BOOST_NO_HASH
+#   endif
 
 //  Kai C++ ----------------------------------------------------------------
 
