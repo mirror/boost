@@ -96,7 +96,7 @@ When documenting the feature, the library author will simply state:
 <h4 style="margin-left: 20pt;">template&lt;class It, class R, class T&gt; void for_each(It first, It last, R (T::*pmf) ());</h4>
 
 <p style="margin-left: 20pt;">
-<b>Effects:</b> equivalent to std::for_each(first, last, boost::mem_fn(pmf));</tt>
+<b>Effects:</b> equivalent to std::for_each(first, last, boost::mem_fn(pmf));
 </p>
 
 <p>
@@ -271,7 +271,7 @@ the return type of the member function pointer passed as an argument to <b>mem_f
 <b>Throws:</b> Nothing.
 </p>
 
-<a name="mem_fn"><h3>mem_fn</h3></a>
+<h3><a name="mem_fn">mem_fn</a></h3>
 
 <h4><a name="mem_fn_1">template&lt;class R, class T&gt; <i>implementation-defined-1</i> mem_fn(R (T::*pmf) ())</a></h4>
 

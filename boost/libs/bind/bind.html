@@ -268,7 +268,7 @@ int i = 5;
 
 bind(&amp;X::f, ref(x), _1)(i);            // x.f(i)
 
-bind(&amp;X::f, &x, _1)(i);                // (&x)->f(i)
+bind(&amp;X::f, &amp;x, _1)(i);                // (&amp;x)->f(i)
 
 bind(&amp;X::f, x, _1)(i);                 // (<i>internal copy of x</i>).f(i)
 
@@ -653,6 +653,7 @@ syntax for functions and member function pointers.
 
 <h3><a name="err_msvc_using">MSVC specific: using boost::bind;</a></h3>
 
+<p>
 On MSVC (up to version 7.0), when <b>boost::bind</b> is brought into scope
 with an using declaration:
 </p>
