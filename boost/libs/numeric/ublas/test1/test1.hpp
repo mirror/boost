@@ -48,15 +48,4 @@ void test_matrix_vector ();
 void test_matrix ();
 
 
-// Disable some tests for truly broken compilers
-    // MSVC Version 6.0 & 7.0 have problems compiling with std::complex
-#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
-#undef USE_STD_COMPLEX
-#endif
-
-    // Intel for Windows fails to link when a std::complex is returned!
-#if defined(BOOST_INTEL_CXX_VERSION) && (BOOST_INTEL_CXX_VERSION <= 800) && defined(__ICL)
-#undef USE_STD_COMPLEX
-#endif
-
 #endif
