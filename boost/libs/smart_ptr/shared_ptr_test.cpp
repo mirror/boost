@@ -1701,7 +1701,7 @@ struct Y
     int dummy2;
 };
 
-struct Z: public X, public Y
+struct Z: public X, public virtual Y
 {
 };
 
@@ -1788,6 +1788,14 @@ void test()
         BOOST_TEST(py != pz);
         BOOST_TEST(!(py == pz));
 
+        BOOST_TEST(px < py || py < px);
+        BOOST_TEST(px < pz || pz < px);
+        BOOST_TEST(py < pz || pz < py);
+
+        BOOST_TEST(!(px < py && py < px));
+        BOOST_TEST(!(px < pz && pz < px));
+        BOOST_TEST(!(py < pz && pz < py));
+
         boost::shared_ptr<void> pvx(px);
 
         BOOST_TEST(pvx == pvx);
@@ -1823,6 +1831,10 @@ void test()
         BOOST_TEST(py.get() == pz.get());
         BOOST_TEST(py == pz);
         BOOST_TEST(!(py != pz));
+
+        BOOST_TEST(!(px < py || py < px));
+        BOOST_TEST(!(px < pz || pz < px));
+        BOOST_TEST(!(py < pz || pz < py));
 
         boost::shared_ptr<void> pvx(px);
         boost::shared_ptr<void> pvy(py);
@@ -2376,7 +2388,7 @@ void test()
         BOOST_TEST(wp3.use_count() == 1);
         test_shared(wp2, wp3);
 
-		weak_ptr<X> wp4 = boost::make_shared(wp3);
+        weak_ptr<X> wp4 = boost::make_shared(wp3);
 
         BOOST_TEST(wp4.use_count() == 1);
         test_shared(wp2, wp4);
