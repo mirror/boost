@@ -52,8 +52,12 @@ int cpp_main(int argc, char* argv[])
    value_test(false, (boost::is_convertible<non_pointer, int*>::value));
    value_test(true, (boost::is_convertible<non_int_pointer, int*>::value));
    value_test(true, (boost::is_convertible<non_int_pointer, void*>::value));
-   //value_test(true, (boost::is_convertible<int, int_constructible>::value));
+   #ifndef __BORLANDC__
+   value_test(true, (boost::is_convertible<int, int_constructible>::value));
+   #endif
    value_test(false, (boost::is_convertible<test_abc1&, test_abc2&>::value));
+   value_test(false, (boost::is_convertible<test_abc1&, int_constructible>::value));
+   value_test(false, (boost::is_convertible<int_constructible, test_abc1&>::value));
 
    value_test(false, (boost::is_base_and_derived<Derived,Base>::value));
    value_test(true, (boost::is_base_and_derived<Derived,Derived>::value));
