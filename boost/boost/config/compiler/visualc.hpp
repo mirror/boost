@@ -18,7 +18,6 @@
 #  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
 #  define BOOST_NO_VOID_RETURNS
 #  define BOOST_NO_EXCEPTION_STD_NAMESPACE
-#  define BOOST_NO_DEDUCED_TYPENAME
    // disable min/max macro defines on vc6:
    //
 #endif
@@ -33,6 +32,7 @@
 #  define BOOST_NO_PRIVATE_IN_AGGREGATE
 #  define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #  define BOOST_NO_INTEGRAL_INT64_T
+#  define BOOST_NO_DEDUCED_TYPENAME
 
 //    VC++ 6/7 has member templates but they have numerous problems including
 //    cases of silent failure, so for safety we define:
