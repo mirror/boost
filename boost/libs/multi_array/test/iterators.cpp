@@ -66,46 +66,6 @@ struct ittraits_mutable {
   riterator1;
 };
 
-/////////////////////////////////////////////////////////////////////////
-// choose ittraits begins
-//
-
-#if 0
-
-struct choose_ittraits_const {
-  template <typename Array>
-  struct bind {
-    typedef ittraits_const<Array> type;
-  };
-};
-
-struct choose_ittraits_mutable {
-  template <typename Array>
-  struct bind {
-    typedef ittraits_mutable<Array> type;
-  };
-};
-
-
-template <typename ConstnessTag>
-struct ittraits_gen_helper {
-  typedef choose_ittraits_mutable choice;
-};
-
-template <>
-struct ittraits_gen_helper<const_array_tag> {
-  typedef choose_ittraits_const choice;
-};
-
-template <typename Array, typename ConstTag>
-struct ittraits_generator {
-private:
-  typedef typename ittraits_gen_helper<ConstTag>::choice Choice;
-public:
-  typedef typename Choice::template bind<Array>::type type;
-};
-
-#else
 
 // Meta-program chooses ittraits implementation.
 template <typename Array, typename ConstTag>
@@ -114,13 +74,6 @@ struct ittraits_generator :
                    ittraits_const<Array>,
                    ittraits_mutable<Array> >
 {};
-
-
-#endif // 0
-
-//
-// choose ittraits ends
-/////////////////////////////////////////////////////////////////////////
 
 
 template <typename Array>
