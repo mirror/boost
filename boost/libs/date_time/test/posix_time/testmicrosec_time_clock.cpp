@@ -42,7 +42,7 @@ main()
     
   }
 #else
-  std::cout << "Get time of day micro second clock not supported" << std::endl;
+  check("Get time of day micro second clock not supported due to inadequate compiler", false);
 #endif
   return printTestStats();
 
