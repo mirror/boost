@@ -261,17 +261,19 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
             BOOST_UBLAS_CHECK (j < size_, bad_index ());
 #ifndef BOOST_UBLAS_USE_ET
-            if (t == value_type ()) 
+            if (t == value_type ())
                 return;
 #endif
             if (functor1_type::other (i, j)) {
-                BOOST_UBLAS_CHECK (data () [functor1_type::element (functor2_type (), i, size_, j, size_)] == value_type (), bad_index ());
-                // data ().insert (data ().begin () + functor1_type::element (functor2_type (), i, size_, j, size_), t);
-                data () [functor1_type::element (functor2_type (), i, size_, j, size_)] = t;
+                size_type k = functor1_type::element (functor2_type (), i, size_, j, size_);
+                BOOST_UBLAS_CHECK (data () [k] == value_type () || data () [k] == t, bad_index ());
+                // data ().insert (data ().begin () + k, t);
+                data () [k] = t;
             } else {
-                BOOST_UBLAS_CHECK (data () [functor1_type::element (functor2_type (), j, size_, i, size_)] == value_type (), bad_index ());
-                // data ().insert (data ().begin () + functor1_type::element (functor2_type (), j, size_, i, size_), t);
-                data () [functor1_type::element (functor2_type (), j, size_, i, size_)] = t;
+                size_type k = functor1_type::element (functor2_type (), j, size_, i, size_);
+                BOOST_UBLAS_CHECK (data () [k] == value_type () || data () [k] == t, bad_index ());
+                // data ().insert (data ().begin () + k, t);
+                data () [k] = t;
             }
         }
         BOOST_UBLAS_INLINE
@@ -279,13 +281,13 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
             BOOST_UBLAS_CHECK (j < size_, bad_index ());
             if (functor1_type::other (i, j)) {
-                BOOST_UBLAS_CHECK (data () [functor1_type::element (functor2_type (), i, size_, j, size_)] == value_type (), bad_index ());
-                // data ().erase (data ().begin () + functor1_type::element (functor2_type (), i, size_, j, size_));
+                size_type k = functor1_type::element (functor2_type (), i, size_, j, size_);
+                // data ().erase (data ().begin () + k));
                 data () [functor1_type::element (functor2_type (), i, size_, j, size_)] = value_type ();
             } else {
-                BOOST_UBLAS_CHECK (data () [functor1_type::element (functor2_type (), j, size_, i, size_)] == value_type (), bad_index ());
-                // data ().erase (data ().begin () + functor1_type::element (functor2_type (), j, size_, i, size_));
-                data () [functor1_type::element (functor2_type (), j, size_, i, size_)] = value_type ();
+                size_type k = functor1_type::element (functor2_type (), j, size_, i, size_);
+                // data ().erase (data ().begin () + k);
+                data () [k] = value_type ();
             }
         }
         BOOST_UBLAS_INLINE
@@ -346,7 +348,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator1 find_first1 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 i = functor1_type::restrict1 (i, j);
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
             return iterator1 (*this, i);
@@ -364,7 +366,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator1 find_last1 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 i = functor1_type::restrict1 (i, j);
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
             return iterator1 (*this, i);
@@ -382,7 +384,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator2 find_first2 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 j = functor1_type::restrict2 (i, j);
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
             return iterator2 (*this, j);
@@ -469,7 +471,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) () (it1_, it2_); 
+                return (*this) () (it1_, it2_);
             }
 
             BOOST_UBLAS_INLINE
@@ -499,7 +501,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator1 &operator = (const const_iterator1 &it) {
                 container_const_reference<symmetric_matrix>::assign (&it ());
@@ -588,7 +590,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) () (it1_, it2_); 
+                return (*this) () (it1_, it2_);
             }
 
             BOOST_UBLAS_INLINE
@@ -714,7 +716,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) () (it1_, it2_); 
+                return (*this) () (it1_, it2_);
             }
 
             BOOST_UBLAS_INLINE
@@ -833,7 +835,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) () (it1_, it2_); 
+                return (*this) () (it1_, it2_);
             }
 
             BOOST_UBLAS_INLINE

@@ -14,8 +14,8 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef BOOST_UBLAS_STORAGE_SP_H
-#define BOOST_UBLAS_STORAGE_SP_H
+#ifndef BOOST_UBLAS_STORAGE_SPARSE_H
+#define BOOST_UBLAS_STORAGE_SPARSE_H
 
 #include <algorithm>
 #include <map>
@@ -43,53 +43,51 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifdef BOOST_UBLAS_STRICT_SPARSE_ELEMENT_ASSIGN
     template<class D>
-    struct inner_map_traits {
+    struct map_value_traits {
         typedef typename D::index_type index_type;
         typedef typename D::data_const_reference data_const_reference;
         typedef typename D::data_reference data_reference;
     };
     template<>
-    struct inner_map_traits<float> {
+    struct map_value_traits<float> {
         typedef std::size_t index_type;
         typedef void data_const_reference;
         typedef void data_reference;
     };
     template<>
-    struct inner_map_traits<double> {
+    struct map_value_traits<double> {
         typedef std::size_t index_type;
         typedef void data_const_reference;
         typedef void data_reference;
     };
 #ifdef BOOST_UBLAS_USE_LONG_DOUBLE
     template<>
-    struct inner_map_traits<long double> {
+    struct map_value_traits<long double> {
         typedef std::size_t index_type;
         typedef void data_const_reference;
         typedef void data_reference;
     };
 #endif
     template<>
-    struct inner_map_traits<std::complex<float> > {
+    struct map_value_traits<std::complex<float> > {
         typedef std::size_t index_type;
         typedef void data_const_reference;
         typedef void data_reference;
     };
     template<>
-    struct inner_map_traits<std::complex<double> > {
+    struct map_value_traits<std::complex<double> > {
         typedef std::size_t index_type;
         typedef void data_const_reference;
         typedef void data_reference;
     };
 #ifdef BOOST_UBLAS_USE_LONG_DOUBLE
     template<>
-    struct inner_map_traits<std::complex<long double> > {
+    struct map_value_traits<std::complex<long double> > {
         typedef std::size_t index_type;
         typedef void data_const_reference;
         typedef void data_reference;
     };
-#endif
 #endif
 
     // Map array
@@ -161,6 +159,25 @@ namespace boost { namespace numeric { namespace ublas {
                 data_ = data;
             }
             size_ = size;
+            BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
+        }
+
+        // Reserving
+        BOOST_UBLAS_INLINE
+        void reserve (size_type capacity) {
+            if (capacity > capacity_) {
+                pointer data = new value_type [capacity];
+                // Assuming std compliant allocator as requested during review.
+                // if (! data)
+                //     throw std::bad_alloc ();
+                // if (! data_)
+                //     throw std::bad_alloc ();
+                std::copy (data_, data_ + size_, data);
+                delete [] data_;
+                capacity_ = capacity;
+                data_ = data;
+            }
+            BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
         }
 
         BOOST_UBLAS_INLINE
@@ -204,19 +221,20 @@ namespace boost { namespace numeric { namespace ublas {
             ~proxy () {
                 if (! it_)
                     it_ = (*this) ().find (i_);
+                BOOST_UBLAS_CHECK (it_ != (*this) ().end (), internal_logic ());
                 it_->second = d_;
             }
 
             // Element access
             // FIXME: GCC 3.1 warn's, if enabled
             // BOOST_UBLAS_INLINE
-            // const inner_map_traits<data_value_type>::data_const_reference
-            // operator [] (typename inner_map_traits<data_value_type>::index_type i) const {
+            // const map_value_traits<data_value_type>::data_const_reference
+            // operator [] (typename map_value_traits<data_value_type>::index_type i) const {
             //     return d_ [i];
             // }
             BOOST_UBLAS_INLINE
-            typename inner_map_traits<data_value_type>::data_reference
-            operator [] (typename inner_map_traits<data_value_type>::index_type i) {
+            typename map_value_traits<data_value_type>::data_reference
+            operator [] (typename map_value_traits<data_value_type>::index_type i) {
                 return d_ [i];
             }
 
@@ -302,6 +320,7 @@ namespace boost { namespace numeric { namespace ublas {
             pointer it = find (i);
             if (it == end ())
                 it = insert (end (), value_type (i, data_value_type ()));
+            BOOST_UBLAS_CHECK (it != end (), internal_logic ());
             return it->second;
 #else
             // This fixes a [1] = a [0] = 1.
@@ -542,7 +561,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class I, class T>
     BOOST_UBLAS_INLINE
-    map_array<I, T> &assign_temporary (map_array<I, T> &a1, map_array<I, T> &a2) { 
+    map_array<I, T> &assign_temporary (map_array<I, T> &a1, map_array<I, T> &a2) {
         return a1.assign_temporary (a2);
     }
 
@@ -551,7 +570,7 @@ namespace boost { namespace numeric { namespace ublas {
     std::map<I, T, F> &assign_temporary (std::map<I, T, F> &a1, std::map<I, T, F> &a2) {
         // Too unusual semantic.
         // BOOST_UBLAS_CHECK (&a1 != &a2, external_logic ());
-        if (&a1 != &a2) 
+        if (&a1 != &a2)
             a1.swap (a2);
         return  a1;
     }
@@ -565,21 +584,31 @@ namespace boost { namespace numeric { namespace ublas {
             a1.swap (a2);
     }
 
-#ifdef BOOST_UBLAS_STRICT_SPARSE_ELEMENT_ASSIGN
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     template<class A>
     struct map_traits {
         typedef void proxy;
     };
     template<class I, class T>
     struct map_traits<std::map<I, T> > {
+        typedef typename std::map<I, T>::size_type size_type;
         typedef typename std::map<I, T>::mapped_type &reference;
+
+        static void reserve (std::map<I, T> &a, size_type capacity) {}
+
         static reference make_reference (std::map<I, T> &a, typename std::map<I, T>::iterator it) {
             return (*it).second;
         }
     };
     template<class I, class T>
     struct map_traits<map_array<I, T> > {
+        typedef typename map_array<I, T>::size_type size_type;
         typedef typename map_array<I, T>::data_reference reference;
+
+        static void reserve (map_array<I, T> &a, size_type capacity) {
+            a.reserve (capacity);
+        }
+
         static reference make_reference (map_array<I, T> &a, typename map_array<I, T>::iterator it) {
             return reference (a, it);
         }
@@ -623,11 +652,11 @@ namespace boost { namespace numeric { namespace ublas {
             *this = a;
         }
         BOOST_UBLAS_INLINE
-        ~set_array () { 
+        ~set_array () {
             // Assuming std compliant allocator as requested during review.
             // if (! data_)
             //     throw std::bad_alloc ();
-            delete [] data_; 
+            delete [] data_;
         }
 
         // Resizing
@@ -646,6 +675,25 @@ namespace boost { namespace numeric { namespace ublas {
                 data_ = data;
             }
             size_ = size;
+            BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
+        }
+
+        // Reserving
+        BOOST_UBLAS_INLINE
+        void reserve (size_type capacity) {
+            if (capacity > capacity_) {
+                pointer data = new value_type [capacity];
+                // Assuming std compliant allocator as requested during review.
+                // if (! data)
+                //     throw std::bad_alloc ();
+                // if (! data_)
+                //     throw std::bad_alloc ();
+                std::copy (data_, data_ + size_, data);
+                delete [] data_;
+                capacity_ = capacity;
+                data_ = data;
+            }
+            BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
         }
 
         BOOST_UBLAS_INLINE
@@ -659,6 +707,7 @@ namespace boost { namespace numeric { namespace ublas {
             pointer it = find (i);
             if (it == end ())
                 it = insert (end (), i);
+            BOOST_UBLAS_CHECK (it != end (), internal_logic ());
             return *it;
         }
 
@@ -886,13 +935,13 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class I>
     BOOST_UBLAS_INLINE
-    set_array<I> &assign_temporary (set_array<I> &a1, set_array<I> &a2) { 
+    set_array<I> &assign_temporary (set_array<I> &a1, set_array<I> &a2) {
         return a1.assign_temporary (a2);
     }
 
     template<class I, class F>
     BOOST_UBLAS_INLINE
-    std::set<I, F> &assign_temporary (std::set<I, F> &a1, std::set<I, F> &a2) { 
+    std::set<I, F> &assign_temporary (std::set<I, F> &a1, std::set<I, F> &a2) {
         // Too unusual semantic.
         // BOOST_UBLAS_CHECK (&a1 != &a2, external_logic ());
         if (&a1 != &a2)

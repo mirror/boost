@@ -61,7 +61,12 @@ namespace boost { namespace numeric { namespace ublas {
             size_ (0), non_zeros_ (0), data_ () {}
         BOOST_UBLAS_INLINE
         sparse_vector (size_type size, size_type non_zeros = 0):
-            size_ (size), non_zeros_ (non_zeros), data_ () {}
+            size_ (size), non_zeros_ (non_zeros), data_ () {
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+            non_zeros_ = std::max (non_zeros_, size_type (1));
+            map_traits<array_type>::reserve (data_, non_zeros_);
+#endif
+        }
         BOOST_UBLAS_INLINE
         sparse_vector (const sparse_vector &v):
             size_ (v.size_), non_zeros_ (v.non_zeros_), data_ (v.data_) {}
@@ -69,6 +74,10 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         sparse_vector (const vector_expression<AE> &ae, size_type non_zeros = 0):
             size_ (ae ().size ()), non_zeros_ (non_zeros), data_ () {
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+            non_zeros_ = std::max (non_zeros_, size_type (1));
+            map_traits<array_type>::reserve (data_, non_zeros_);
+#endif
             vector_assign<scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> > () (*this, ae);
         }
 
@@ -95,6 +104,10 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size, size_type non_zeros = 0) {
             size_ = size;
             non_zeros_ = non_zeros;
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+            non_zeros_ = std::max (non_zeros_, size_type (1));
+            map_traits<array_type>::reserve (data (), non_zeros_);
+#endif
             data ().clear ();
         }
 
@@ -127,7 +140,6 @@ namespace boost { namespace numeric { namespace ublas {
             // BOOST_UBLAS_CHECK (this != &v, external_logic ());
             if (this != &v) {
                 BOOST_UBLAS_CHECK (size_ == v.size_, bad_size ());
-                BOOST_UBLAS_CHECK (non_zeros_ == v.non_zeros_, bad_size ());
                 size_ = v.size_;
                 non_zeros_ = v.non_zeros_;
                 data () = v.data ();
@@ -493,7 +505,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, class A>
     typename sparse_vector<T, A>::value_type sparse_vector<T, A>::zero_ = 0;
 
-    // Array based sparse vector class 
+    // Array based sparse vector class
     template<class T, class IA, class TA>
     class compressed_vector:
         public vector_expression<compressed_vector<T, IA, TA> > {
@@ -525,7 +537,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_ (0), non_zeros_ (0), filled_ (0),
             index_data_ (), value_data_ () {}
         BOOST_UBLAS_INLINE
-        compressed_vector (size_type size, size_type non_zeros = 0): 
+        compressed_vector (size_type size, size_type non_zeros = 0):
             size_ (size), non_zeros_ (non_zeros), filled_ (0),
             index_data_ (non_zeros), value_data_ (non_zeros) {}
         BOOST_UBLAS_INLINE
@@ -534,7 +546,7 @@ namespace boost { namespace numeric { namespace ublas {
             index_data_ (v.index_data_), value_data_ (v.value_data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
-        compressed_vector (const vector_expression<AE> &ae, size_type non_zeros = 0): 
+        compressed_vector (const vector_expression<AE> &ae, size_type non_zeros = 0):
             size_ (ae ().size ()), non_zeros_ (non_zeros), filled_ (0),
             index_data_ (non_zeros), value_data_ (non_zeros) { 
             vector_assign<scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> > () (*this, ae);
@@ -581,7 +593,7 @@ namespace boost { namespace numeric { namespace ublas {
         const_reference operator () (size_type i) const {
             const_iterator_type it (std::lower_bound (index_data ().begin (), index_data ().begin () + filled_, i + 1, std::less<size_type> ()));
             if (it == index_data ().begin () + filled_ || *it != i + 1)
-                return value_type ();
+                return zero_;
             return value_data () [it - index_data ().begin ()];
         }
         BOOST_UBLAS_INLINE
@@ -608,7 +620,6 @@ namespace boost { namespace numeric { namespace ublas {
             // BOOST_UBLAS_CHECK (this != &v, external_logic ());
             if (this != &v) {
                 BOOST_UBLAS_CHECK (size_ == v.size_, bad_size ());
-                BOOST_UBLAS_CHECK (non_zeros_ == v.non_zeros_, bad_size ());
                 size_ = v.size_;
                 non_zeros_ = v.non_zeros_;
                 filled_ = v.filled_;
@@ -970,7 +981,11 @@ namespace boost { namespace numeric { namespace ublas {
         size_type filled_;
         index_array_type index_data_;
         value_array_type value_data_;
+        static value_type zero_;
     };
+
+    template<class T, class IA, class TA>
+    typename compressed_vector<T, IA, TA>::value_type compressed_vector<T, IA, TA>::zero_ = 0;
 
 }}}
 

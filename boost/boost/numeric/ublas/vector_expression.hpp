@@ -805,10 +805,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_iterator find_first (size_type i) const {
             const_iterator1_type it1 (e1_.find_first (i));
-            const_iterator1_type it1_end (e1_.find_last (size ()));
+            const_iterator1_type it1_end (e1_.find_first (size ()));
             const_iterator2_type it2 (e2_.find_first (i));
-            const_iterator2_type it2_end (e2_.find_last (size ()));
-            i = std::min (it1.index (), it2.index ());
+            const_iterator2_type it2_end (e2_.find_first (size ()));
+            i = std::min (it1 != it1_end ? it1.index () : size (),
+                          it2 != it2_end ? it2.index () : size ());
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator (*this, i);
 #else
@@ -818,10 +819,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_iterator find_last (size_type i) const {
             const_iterator1_type it1 (e1_.find_last (i));
-            const_iterator1_type it1_end (e1_.find_first (0));
+            const_iterator1_type it1_end (e1_.find_last (size ()));
             const_iterator2_type it2 (e2_.find_last (i));
-            const_iterator2_type it2_end (e2_.find_first (0));
-            i = std::max (it1.index (), it2.index ());
+            const_iterator2_type it2_end (e2_.find_last (size ()));
+            i = std::max (it1 != it1_end ? it1.index () : size (),
+                          it2 != it2_end ? it2.index () : size ());
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator (*this, i);
 #else
@@ -993,7 +995,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return dereference (iterator_category ()); 
+                return dereference (iterator_category ());
             }
 
             // Index
@@ -1002,12 +1004,15 @@ namespace boost { namespace numeric { namespace ublas {
                 return i_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator &operator = (const const_iterator &it) {
                 container_const_reference<vector_binary>::assign (&it ());
+                i_ = it.i_;
                 it1_ = it.it1_;
+                it1_end_ = it.it1_end_;
                 it2_ = it.it2_;
+                it2_end_ = it.it2_end_;
                 return *this;
             }
 

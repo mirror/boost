@@ -5753,20 +5753,38 @@ namespace boost { namespace numeric { namespace ublas {
     }
 #endif
 #endif
-    template<class M, class IA>
+    // These signatures are to general for MSVC
+    // template<class M, class IA>
+    // BOOST_UBLAS_INLINE
+    // matrix_indirect<M, IA> project (M &data, const IA &ia1, const IA &ia2) {
+    //     return matrix_indirect<M, IA> (data, ia1, ia2);
+    // }
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+    // template<class M, class IA>
+    // BOOST_UBLAS_INLINE
+    // const matrix_indirect<const M, IA> project (const M &data, const IA &ia1, const IA &ia2) {
+    //     return matrix_indirect<const M, IA> (data, ia1, ia2);
+    // }
+    // template<class M, class IA>
+    // BOOST_UBLAS_INLINE
+    // matrix_indirect<M, IA> project (const matrix_indirect<M, IA> &data, const IA &ia1, const IA &ia2) {
+    //     return data.project (ia1, ia2);
+    // }
+#endif
+    template<class M, class A>
     BOOST_UBLAS_INLINE
-    matrix_indirect<M, IA> project (M &data, const IA &ia1, const IA &ia2) {
-        return matrix_indirect<M, IA> (data, ia1, ia2);
+    matrix_indirect<M, indirect_array<A> > project (M &data, const indirect_array<A> &ia1, const indirect_array<A> &ia2) {
+        return matrix_indirect<M, indirect_array<A> > (data, ia1, ia2);
     }
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    template<class M, class IA>
+    template<class M, class A>
     BOOST_UBLAS_INLINE
-    const matrix_indirect<const M, IA> project (const M &data, const IA &ia1, const IA &ia2) {
-        return matrix_indirect<const M, IA> (data, ia1, ia2);
+    const matrix_indirect<const M, indirect_array<A> > project (const M &data, const indirect_array<A> &ia1, const indirect_array<A> &ia2) {
+        return matrix_indirect<const M, indirect_array<A> > (data, ia1, ia2);
     }
-    template<class M, class IA>
+    template<class M, class A>
     BOOST_UBLAS_INLINE
-    matrix_indirect<M, IA> project (const matrix_indirect<M, IA> &data, const IA &ia1, const IA &ia2) {
+    matrix_indirect<M, indirect_array<A> > project (const matrix_indirect<M, indirect_array<A> > &data, const indirect_array<A> &ia1, const indirect_array<A> &ia2) {
         return data.project (ia1, ia2);
     }
 #endif

@@ -1645,20 +1645,38 @@ namespace boost { namespace numeric { namespace ublas {
     }
 #endif
 #endif
-    template<class V, class IA>
+    // These signatures are to general for MSVC
+    // template<class V, class IA>
+    // BOOST_UBLAS_INLINE
+    // vector_indirect<V, IA > project (V &data, const IA &ia) {
+    //     return vector_indirect<V, IA > (data, ia);
+    // }
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+    // template<class V, class IA>
+    // BOOST_UBLAS_INLINE
+    // const vector_indirect<const V, IA> project (const V &data, const IA &ia) {
+    //     return vector_indirect<const V, IA> (data, ia);
+    // }
+    // template<class V, class IA>
+    // BOOST_UBLAS_INLINE
+    // vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const IA &ia) {
+    //     return data.project (ia);
+    // }
+#endif
+    template<class V, class A>
     BOOST_UBLAS_INLINE
-    vector_indirect<V, IA > project (V &data, const IA &ia) {
-        return vector_indirect<V, IA > (data, ia);
+    vector_indirect<V, indirect_array<A> > project (V &data, const indirect_array<A> &ia) {
+        return vector_indirect<V, indirect_array<A> > (data, ia);
     }
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    template<class V, class IA>
+    template<class V, class A>
     BOOST_UBLAS_INLINE
-    const vector_indirect<const V, IA> project (const V &data, const IA &ia) {
-        return vector_indirect<const V, IA> (data, ia);
+    const vector_indirect<const V, indirect_array<A> > project (const V &data, const indirect_array<A> &ia) {
+        return vector_indirect<const V, indirect_array<A> > (data, ia);
     }
-    template<class V, class IA>
+    template<class V, class A>
     BOOST_UBLAS_INLINE
-    vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const IA &ia) {
+    vector_indirect<V, indirect_array<A> > project (const vector_indirect<V, indirect_array<A> > &data, const indirect_array<A> &ia) {
         return data.project (ia);
     }
 #endif

@@ -32,10 +32,17 @@ namespace boost { namespace numeric { namespace ublas {
                                                                                      BOOST_UBLAS_TYPENAME E2::value_type>::promote_type>::real_type real_type;
         // Check, that the values match at least half.
         static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
+#ifndef __GNUC__
         return norm_inf (e1 - e2) < sqrt_epsilon *
                std::max<real_type> (std::max<real_type> (norm_inf (e1),
                                                          norm_inf (e2)),
                                     std::numeric_limits<real_type>::min ());
+#else
+        // GCC 3.1, oops?!
+        return norm_inf (e1 - e2) < sqrt_epsilon *
+               std::max (real_type (std::max (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
+                         real_type (std::numeric_limits<real_type>::min ()));
+#endif
     }
 
 #ifdef BOOST_UBLAS_ENABLE_SPECIALIZED_ASSIGN
@@ -523,11 +530,20 @@ namespace boost { namespace numeric { namespace ublas {
         // BOOST_UBLAS_INLINE
         void operator () (V &v, const vector_expression<E> &e, sparse_tag) {
             BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
+            typedef typename V::value_type value_type;
+#ifdef BOOST_UBLAS_TYPE_CHECK
+            vector<value_type> cv (v.size ());
+            vector_assign<scalar_assign<value_type, value_type> > ().indexing_assign (cv, v);
+            vector_assign<functor_type> ().indexing_assign  (cv, e);
+#endif
             v.clear ();
             typename E::const_iterator ite (e ().begin ());
             typename E::const_iterator ite_end (e ().end ());
             while (ite != ite_end)
                 v.insert (ite.index (), *ite), ++ ite;
+#ifdef BOOST_UBLAS_TYPE_CHECK
+            BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
+#endif
         }
         // Sparse proxy case
         template<class V, class E>
@@ -585,6 +601,7 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
+
 
 
 

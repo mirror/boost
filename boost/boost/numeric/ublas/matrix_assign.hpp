@@ -32,10 +32,17 @@ namespace boost { namespace numeric { namespace ublas {
                                                                                      BOOST_UBLAS_TYPENAME E2::value_type>::promote_type>::real_type real_type;
         // Check, that the values match at least half.
         static real_type sqrt_epsilon (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()));
+#ifndef __GNUC__
         return norm_inf (e1 - e2) < sqrt_epsilon *
                std::max<real_type> (std::max<real_type> (norm_inf (e1),
                                                          norm_inf (e2)),
                                     std::numeric_limits<real_type>::min ());
+#else
+        // GCC 3.1, oops?!
+        return norm_inf (e1 - e2) < sqrt_epsilon *
+               std::max (real_type (std::max (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
+                         real_type (std::numeric_limits<real_type>::min ()));
+#endif
     }
 
 #ifdef BOOST_UBLAS_ENABLE_SPECIALIZED_ASSIGN
@@ -648,6 +655,19 @@ namespace boost { namespace numeric { namespace ublas {
         typedef sparse_proxy_tag storage_category;
     };
 
+    template<>
+    struct matrix_assign_traits<sparse_tag, computed_assign_tag, dense_random_access_iterator_tag, dense_random_access_iterator_tag> {
+        typedef sparse_proxy_tag storage_category;
+    };
+    template<>
+    struct matrix_assign_traits<sparse_tag, computed_assign_tag, packed_random_access_iterator_tag, packed_random_access_iterator_tag> {
+        typedef sparse_proxy_tag storage_category;
+    };
+    template<>
+    struct matrix_assign_traits<sparse_tag, computed_assign_tag, sparse_bidirectional_iterator_tag, sparse_bidirectional_iterator_tag> {
+        typedef sparse_proxy_tag storage_category;
+    };
+
 #ifdef BOOST_UBLAS_ENABLE_SPECIALIZED_ASSIGN
     // Iterating row major case
     template<class F, class M, class E>
@@ -1075,30 +1095,56 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F functor_type;
+        typedef typename M::value_type value_type;
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
+        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, row_major_tag ());
+        indexing_matrix_assign (functor_type (), cm, e, row_major_tag ());
+#endif
         m.clear ();
         typename E::const_iterator1 it1e (e ().begin1 ());
         typename E::const_iterator1 it1e_end (e ().end1 ());
         while (it1e != it1e_end) {
             typename matrix_row<const E>::const_iterator it2e ((*it1e).begin ());
             typename matrix_row<const E>::const_iterator it2e_end ((*it1e).end ());
-            while (it2e != it2e_end)
-                m.insert (it1e.index (), it2e.index (), *it2e), ++ it2e;
+            while (it2e != it2e_end) {
+                value_type t (*it2e);
+                if (t != value_type ())
+                    m.insert (it1e.index (), it2e.index (), t);
+                ++ it2e;
+            }
             ++ it1e;
         }
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+#endif
 #else
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F functor_type;
+        typedef typename M::value_type value_type;
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
+        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, row_major_tag ());
+        indexing_matrix_assign (functor_type (), cm, e, row_major_tag ());
+#endif
         m.clear ();
         typename E::const_iterator1 it1e (e ().begin1 ());
         typename E::const_iterator1 it1e_end (e ().end1 ());
         while (it1e != it1e_end) {
             typename E::const_iterator2 it2e (it1e.begin ());
             typename E::const_iterator2 it2e_end (it1e.end ());
-            while (it2e != it2e_end)
-                m.insert (it2e.index1 (), it2e.index2 (), *it2e), ++ it2e;
+            while (it2e != it2e_end) {
+                value_type t (*it2e);
+                if (t != value_type ())
+                    m.insert (it2e.index1 (), it2e.index2 (), t);
+                ++ it2e;
+            }
             ++ it1e;
         }
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+#endif
 #endif
     }
     // Sparse column major case
@@ -1110,30 +1156,56 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F functor_type;
+        typedef typename M::value_type value_type;
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
+        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, column_major_tag ());
+        indexing_matrix_assign (functor_type (), cm, e, column_major_tag ());
+#endif
         m.clear ();
         typename E::const_iterator2 it2e (e ().begin2 ());
         typename E::const_iterator2 it2e_end (e ().end2 ());
         while (it2e != it2e_end) {
             typename matrix_column<const E>::const_iterator it1e ((*it2e).begin ());
             typename matrix_column<const E>::const_iterator it1e_end ((*it2e).end ());
-            while (it1e != it1e_end)
-                m.insert (it1e.index (), it2e.index (), *it1e), ++ it1e;
+            while (it1e != it1e_end) {
+                value_type t (*it1e);
+                if (t != value_type ())
+                    m.insert (it1e.index (), it2e.index (), t);
+                ++ it1e;
+            }
             ++ it2e;
         }
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+#endif
 #else
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F functor_type;
+        typedef typename M::value_type value_type;
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
+        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, column_major_tag ());
+        indexing_matrix_assign (functor_type (), cm, e, column_major_tag ());
+#endif
         m.clear ();
         typename E::const_iterator2 it2e (e ().begin2 ());
         typename E::const_iterator2 it2e_end (e ().end2 ());
         while (it2e != it2e_end) {
             typename E::const_iterator1 it1e (it2e.begin ());
             typename E::const_iterator1 it1e_end (it2e.end ());
-            while (it1e != it1e_end)
-                m.insert (it1e.index1 (), it1e.index2 (), *it1e), ++ it1e;
+            while (it1e != it1e_end) {
+                value_type t (*it1e);
+                if (t != value_type ())
+                    m.insert (it1e.index1 (), it1e.index2 (), t);
+                ++ it1e;
+            }
             ++ it2e;
         }
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+#endif
 #endif
     }
     // Sparse proxy row major case
@@ -1819,6 +1891,12 @@ namespace boost { namespace numeric { namespace ublas {
         // BOOST_UBLAS_INLINE
         void operator () (M &m, const matrix_expression<E> &e, sparse_tag, row_major_tag) {
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
+            typedef typename M::value_type value_type;
+#ifdef BOOST_UBLAS_TYPE_CHECK
+            matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
+            indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, row_major_tag ());
+            indexing_matrix_assign (functor_type (), cm, e, row_major_tag ());
+#endif
             BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
             BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
             m.clear ();
@@ -1827,11 +1905,24 @@ namespace boost { namespace numeric { namespace ublas {
             while (it1e != it1e_end) {
                 typename matrix_row<const E>::const_iterator it2e ((*it1e).begin ());
                 typename matrix_row<const E>::const_iterator it2e_end ((*it1e).end ());
-                while (it2e != it2e_end)
-                    m.insert (it1e.index (), it2e.index (), *it2e), ++ it2e;
+                while (it2e != it2e_end) {
+                    value_type t (*it2e);
+                    if (t != value_type ())
+                        m.insert (it1e.index (), it2e.index (), t);
+                    ++ it2e;
+                }
                 ++ it1e;
             }
+#ifdef BOOST_UBLAS_TYPE_CHECK
+            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+#endif
 #else
+            typedef typename M::value_type value_type;
+#ifdef BOOST_UBLAS_TYPE_CHECK
+            matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
+            indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, row_major_tag ());
+            indexing_matrix_assign (functor_type (), cm, e, row_major_tag ());
+#endif
             BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
             BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
             m.clear ();
@@ -1840,10 +1931,17 @@ namespace boost { namespace numeric { namespace ublas {
             while (it1e != it1e_end) {
                 typename E::const_iterator2 it2e (it1e.begin ());
                 typename E::const_iterator2 it2e_end (it1e.end ());
-                while (it2e != it2e_end)
-                    m.insert (it2e.index1 (), it2e.index2 (), *it2e), ++ it2e;
+                while (it2e != it2e_end) {
+                    value_type t (*it2e);
+                    if (t != value_type ())
+                        m.insert (it2e.index1 (), it2e.index2 (), t);
+                    ++ it2e;
+                }
                 ++ it1e;
             }
+#ifdef BOOST_UBLAS_TYPE_CHECK
+            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+#endif
 #endif
         }
         // Sparse column major case
@@ -1852,6 +1950,12 @@ namespace boost { namespace numeric { namespace ublas {
         // BOOST_UBLAS_INLINE
         void operator () (M &m, const matrix_expression<E> &e, sparse_tag, column_major_tag) {
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
+            typedef typename M::value_type value_type;
+#ifdef BOOST_UBLAS_TYPE_CHECK
+            matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
+            indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, column_major_tag ());
+            indexing_matrix_assign (functor_type (), cm, e, column_major_tag ());
+#endif
             BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
             BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
             m.clear ();
@@ -1860,11 +1964,24 @@ namespace boost { namespace numeric { namespace ublas {
             while (it2e != it2e_end) {
                 typename matrix_column<const E>::const_iterator it1e ((*it2e).begin ());
                 typename matrix_column<const E>::const_iterator it1e_end ((*it2e).end ());
-                while (it1e != it1e_end)
-                    m.insert (it1e.index (), it2e.index (), *it1e), ++ it1e;
+                while (it1e != it1e_end) {
+                    value_type t (*it1e);
+                    if (t != value_type ())
+                        m.insert (it1e.index (), it2e.index (), t);
+                    ++ it1e;
+                }
                 ++ it2e;
             }
+#ifdef BOOST_UBLAS_TYPE_CHECK
+            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+#endif
 #else
+            typedef typename M::value_type value_type;
+#ifdef BOOST_UBLAS_TYPE_CHECK
+            matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
+            indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, column_major_tag ());
+            indexing_matrix_assign (functor_type (), cm, e, column_major_tag ());
+#endif
             BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
             BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
             m.clear ();
@@ -1873,10 +1990,17 @@ namespace boost { namespace numeric { namespace ublas {
             while (it2e != it2e_end) {
                 typename E::const_iterator1 it1e (it2e.begin ());
                 typename E::const_iterator1 it1e_end (it2e.end ());
-                while (it1e != it1e_end)
-                    m.insert (it1e.index1 (), it1e.index2 (), *it1e), ++ it1e;
+                while (it1e != it1e_end) {
+                    value_type t (*it1e);
+                    if (t != value_type ())
+                        m.insert (it1e.index1 (), it1e.index2 (), t);
+                    ++ it1e;
+                }
                 ++ it2e;
             }
+#ifdef BOOST_UBLAS_TYPE_CHECK
+            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+#endif
 #endif
         }
         // Sparse proxy row major case

@@ -17,6 +17,7 @@
 #ifndef BOOST_UBLAS_TRAITS_H
 #define BOOST_UBLAS_TRAITS_H
 
+#include <algorithm>
 #include <cmath>
 #include <complex>
 

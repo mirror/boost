@@ -853,7 +853,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T1, class T2, class TR>
-    struct matrix_matrix_prod: 
+    struct matrix_matrix_prod:
         public matrix_matrix_binary_functor<T1, T2, TR> {
         typedef typename matrix_matrix_binary_functor<T1, T2, TR>::size_type size_type;
         typedef typename matrix_matrix_binary_functor<T1, T2, TR>::difference_type difference_type;
@@ -862,24 +862,24 @@ namespace boost { namespace numeric { namespace ublas {
 
         template<class E1, class E2>
         BOOST_UBLAS_INLINE
-        result_type operator () (const matrix_expression<E1> &e1, 
-                                 const matrix_expression<E2> &e2, 
-                                 size_type i, size_type j) const { 
+        result_type operator () (const matrix_expression<E1> &e1,
+                                 const matrix_expression<E2> &e2,
+                                 size_type i, size_type j) const {
             size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ());
             result_type t (0);
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
-            for (size_type k = 0; k < size; ++ k) 
+            for (size_type k = 0; k < size; ++ k)
                 t += e1 () (i, k) * e2 () (k, j);
 #else
             size_type k (0);
             DD (size, 4, r, (t += e1 () (i, k) * e2 () (k, j), ++ k));
 #endif
-            return t; 
+            return t;
         }
         // Dense case
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
-        result_type operator () (difference_type size, I1 it1, I2 it2) const { 
+        result_type operator () (difference_type size, I1 it1, I2 it2) const {
             result_type t (0);
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             while (-- size >= 0)
@@ -910,14 +910,14 @@ namespace boost { namespace numeric { namespace ublas {
             result_type t (0);
             while (it1 != it1_end && it2 != it2_end) {
                 difference_type compare = it1.index2 () - it2.index1 ();
-                if (compare < 0) 
+                if (compare < 0)
                     ++ it1;
-                else if (compare == 0) 
+                else if (compare == 0)
                     t += *it1 * *it2, ++ it1, ++ it2;
                 else if (compare > 0)
                     ++ it2;
             }
-            return t; 
+            return t;
         }
     };
 
@@ -932,7 +932,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T>
-    struct matrix_norm_1: 
+    struct matrix_norm_1:
         public matrix_scalar_real_unary_functor<T> {
         typedef typename matrix_scalar_real_unary_functor<T>::size_type size_type;
         typedef typename matrix_scalar_real_unary_functor<T>::difference_type difference_type;
@@ -942,7 +942,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         template<class E>
         BOOST_UBLAS_INLINE
-        result_type operator () (const matrix_expression<E> &e) const { 
+        result_type operator () (const matrix_expression<E> &e) const {
             real_type t (0);
             size_type size2 (e ().size2 ());
             for (size_type j = 0; j < size2; ++ j) {
@@ -952,8 +952,8 @@ namespace boost { namespace numeric { namespace ublas {
                     real_type v (type_traits<value_type>::norm_1 (e () (i, j)));
                     u += v;
                 }
-                if (u > t) 
-                    t = u;  
+                if (u > t)
+                    t = u;
             }
             return t; 
         }

@@ -63,7 +63,12 @@ namespace boost { namespace numeric { namespace ublas {
             size1_ (0), size2_ (0), non_zeros_ (0), data_ () {}
         BOOST_UBLAS_INLINE
         sparse_matrix (size_type size1, size_type size2, size_type non_zeros = 0):
-            size1_ (size1), size2_ (size2), non_zeros_ (non_zeros), data_ () {}
+            size1_ (size1), size2_ (size2), non_zeros_ (non_zeros), data_ () {
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+            non_zeros_ = std::max (non_zeros_, std::min (size1_, size2_));
+            map_traits<array_type>::reserve (data_, non_zeros_);
+#endif
+        }
         BOOST_UBLAS_INLINE
         sparse_matrix (const sparse_matrix &m):
             size1_ (m.size1_), size2_ (m.size2_), non_zeros_ (m.non_zeros_), data_ (m.data_) {}
@@ -71,6 +76,10 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         sparse_matrix (const matrix_expression<AE> &ae, size_type non_zeros = 0):
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), non_zeros_ (non_zeros), data_ () {
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+            non_zeros_ = std::max (non_zeros_, std::min (size1_, size2_));
+            map_traits<array_type>::reserve (data_, non_zeros_);
+#endif
             matrix_assign<scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> > () (*this, ae);
         }
 
@@ -102,6 +111,10 @@ namespace boost { namespace numeric { namespace ublas {
             size1_ = size1;
             size2_ = size2;
             non_zeros_ = non_zeros;
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+            non_zeros_ = std::max (non_zeros_, std::min (size1_, size2_));
+            map_traits<array_type>::reserve (data (), non_zeros_);
+#endif
             data ().clear ();
         }
 
@@ -126,7 +139,6 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &m) {
                 BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
                 BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
-                BOOST_UBLAS_CHECK (non_zeros_ == m.non_zeros_, bad_size ());
                 size1_ = m.size1_;
                 size2_ = m.size2_;
                 non_zeros_ = m.non_zeros_;
@@ -1152,10 +1164,10 @@ namespace boost { namespace numeric { namespace ublas {
         const_reference operator () (size_type i, size_type j) const {
             vector_const_iterator_type itv (data ().find (functor_type::element1 (i, size1_, j, size2_)));
             if (itv == data ().end () || (*itv).first != functor_type::element1 (i, size1_, j, size2_))
-                return value_type ();
+                return zero_;
             const_iterator_type it ((*itv).second.find (functor_type::element2 (i, size1_, j, size2_)));
             if (it == (*itv).second.end () || (*it).first != functor_type::element2 (i, size1_, j, size2_))
-                return value_type ();
+                return zero_;
             return (*it).second;
         }
         BOOST_UBLAS_INLINE
@@ -1171,7 +1183,6 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &m) {
                 BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
                 BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
-                BOOST_UBLAS_CHECK (non_zeros_ == m.non_zeros_, bad_size ());
                 size1_ = m.size1_;
                 size2_ = m.size2_;
                 non_zeros_ = m.non_zeros_;
@@ -2202,9 +2213,13 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size2_;
         size_type non_zeros_;
         array_type data_;
+        static value_type zero_;
     };
 
-    // Array based sparse matrix class 
+    template<class T, class F, class A>
+    typename sparse_vector_of_sparse_vector<T, F, A>::value_type sparse_vector_of_sparse_vector<T, F, A>::zero_ = 0;
+
+    // Array based sparse matrix class
     template<class T, class F, class IA, class TA>
     class compressed_matrix:
         public matrix_expression<compressed_matrix<T, F, IA, TA> > {
@@ -2329,14 +2344,14 @@ namespace boost { namespace numeric { namespace ublas {
             size_type element2 (functor_type::element2 (i, size1_, j, size2_));
             vector_const_iterator_type itv (index1_data ().begin () + element1);
             if (filled1_ <= element1)
-                return value_type ();
+                return zero_;
             const_iterator_type it_begin (index2_data ().begin () + *itv - 1);
             const_iterator_type it_end (index2_data ().begin () + filled2_);
             if (filled1_ > element1 + 1)
                 it_end = index2_data ().begin () + *(itv + 1) - 1;
             const_iterator_type it (std::lower_bound (it_begin, it_end, element2 + 1, std::less<size_type> ()));
             if (it == it_end || *it != element2 + 1)
-                return value_type ();
+                return zero_;
             return value_data () [it - index2_data ().begin ()];
         }
         BOOST_UBLAS_INLINE
@@ -2364,7 +2379,6 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &m) {
                 BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
                 BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
-                BOOST_UBLAS_CHECK (non_zeros_ == m.non_zeros_, bad_size ());
                 size1_ = m.size1_;
                 size2_ = m.size2_;
                 non_zeros_ = m.non_zeros_;
@@ -2483,7 +2497,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void insert (size_type i, size_type j, const_reference t) {
 // FIXME: Doesn't work if the first element is zero.
-// #ifdef BOOST_UBLAS_CHECK_FOR_NULL
+// #ifdef BOOST_UBLAS_CHECK_FOR_ZERO
 //            if (t == value_type ())
 //                return;
 // #endif
@@ -3398,11 +3412,17 @@ namespace boost { namespace numeric { namespace ublas {
         index_array_type index1_data_;
         index_array_type index2_data_;
         value_array_type value_data_;
+        static value_type zero_;
     };
+
+    template<class T, class F, class IA, class TA>
+    typename compressed_matrix<T, F, IA, TA>::value_type compressed_matrix<T, F, IA, TA>::zero_ = 0;
+
+#ifdef BOOST_UBLAS_USE_SPARSE_MATRIX_PROD_SPECIALIZATION
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     template<class T1, class A1, class T2, class E2>
-    struct matrix_vector_binary1_traits<T1, sparse_matrix<T1, column_major, A1>, 
+    struct matrix_vector_binary1_traits<T1, sparse_matrix<T1, column_major, A1>,
                                         T2, E2> {
         typedef sparse_tag storage_category;
         typedef column_major_tag orientation_category;
@@ -4055,6 +4075,8 @@ namespace boost { namespace numeric { namespace ublas {
         return r;
 #endif
     }
+
+#endif
 
 }}}
 

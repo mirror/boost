@@ -277,17 +277,19 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
             BOOST_UBLAS_CHECK (j < size_, bad_index ());
 #ifndef BOOST_UBLAS_USE_ET
-            if (t == value_type ()) 
+            if (t == value_type ())
                 return;
 #endif
             if (functor1_type::other (i, j)) {
-                BOOST_UBLAS_CHECK (data () [functor1_type::element (functor2_type (), i, size_, j, size_)] == value_type (), bad_index ());
-                // data ().insert (data ().begin () + functor1_type::element (functor2_type (), i, size_, j, size_), t);
-                data () [functor1_type::element (functor2_type (), i, size_, j, size_)] = t;
+                size_type k = functor1_type::element (functor2_type (), i, size_, j, size_);
+                BOOST_UBLAS_CHECK (data () [k] == value_type () || data () [k] == t, bad_index ());
+                // data ().insert (data ().begin () + k, t);
+                data () [k] = t;
             } else {
-                BOOST_UBLAS_CHECK (data () [functor1_type::element (functor2_type (), j, size_, i, size_)] == value_type (), bad_index ());
-                // data ().insert (data ().begin () + functor1_type::element (functor2_type (), j, size_, i, size_), type_traits<value_type>::conj (t));
-                data () [functor1_type::element (functor2_type (), j, size_, i, size_)] = type_traits<value_type>::conj (t);
+                size_type k = functor1_type::element (functor2_type (), j, size_, i, size_);
+                BOOST_UBLAS_CHECK (data () [k] == value_type () || data () [k] == type_traits<value_type>::conj (t), bad_index ());
+                // data ().insert (data ().begin () + k, type_traits<value_type>::conj (t));
+                data () [k] = type_traits<value_type>::conj (t);
             }
         }
         BOOST_UBLAS_INLINE
@@ -295,13 +297,13 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
             BOOST_UBLAS_CHECK (j < size_, bad_index ());
             if (functor1_type::other (i, j)) {
-                BOOST_UBLAS_CHECK (data () [functor1_type::element (functor2_type (), i, size_, j, size_)] == value_type (), bad_index ());
-                // data ().erase (data ().begin () + functor1_type::element (functor2_type (), i, size_, j, size_));
-                data () [functor1_type::element (functor2_type (), i, size_, j, size_)] = value_type ();
+                size_type k = functor1_type::element (functor2_type (), i, size_, j, size_);
+                // data ().erase (data ().begin () + k);
+                data () [k] = value_type ();
             } else {
-                BOOST_UBLAS_CHECK (data () [functor1_type::element (functor2_type (), j, size_, i, size_)] == value_type (), bad_index ());
-                // data ().erase (data ().begin () + functor1_type::element (functor2_type (), j, size_, i, size_));
-                data () [functor1_type::element (functor2_type (), j, size_, i, size_)] = value_type ();
+                size_type k = functor1_type::element (functor2_type (), j, size_, i, size_);
+                // data ().erase (data ().begin () + k);
+                data () [k] = value_type ();
             }
         }
         BOOST_UBLAS_INLINE

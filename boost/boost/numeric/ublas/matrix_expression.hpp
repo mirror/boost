@@ -401,12 +401,12 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Element access
         BOOST_UBLAS_INLINE
-        const_reference operator () (size_type i, size_type j) const { 
-            return e_ (i, j); 
+        const_reference operator () (size_type i, size_type j) const {
+            return e_ (i, j);
         }
         BOOST_UBLAS_INLINE
-        reference operator () (size_type i, size_type j) { 
-            return e_ (i, j); 
+        reference operator () (size_type i, size_type j) {
+            return e_ (i, j);
         }
 
         typedef const_iterator1_type const_iterator1;
@@ -659,7 +659,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 #else
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-        typedef typename iterator_restrict_traits<typename const_iterator1_type::iterator_category, 
+        typedef typename iterator_restrict_traits<typename const_iterator1_type::iterator_category,
                                                   typename const_iterator2_type::iterator_category>::iterator_category iterator_category;
         typedef indexed_const_iterator1<const_closure_type, iterator_category> const_iterator1;
         typedef const_iterator1 iterator1;
@@ -688,11 +688,13 @@ namespace boost { namespace numeric { namespace ublas {
             return const_iterator1 (*this, it1.index ());
 #else
             const_iterator2_type it2 (e2_.find_first (j));
+            const_iterator2_type it2_end (e2_.find_last (size2 ()));
+            if (it2 != it2_end && it2.index () != j)
+                it2 = it2_end;
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator1 (*this, it1.index (), it2.index ());
 #else
 #ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
-            const_iterator2_type it2_end (e2_.end ());
             return const_iterator1 (*this, it1, it2, it2 != it2_end ? *it2 : value_type ());
 #else
             return const_iterator1 (*this, it1, it2);
@@ -706,12 +708,14 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
             return const_iterator1 (*this, it1.index ());
 #else
-            const_iterator2_type it2 (e2_.find_last (j));
+            const_iterator2_type it2 (e2_.find_first (j));
+            const_iterator2_type it2_end (e2_.find_last (size2 ()));
+            if (it2 != it2_end && it2.index () != j)
+                it2 = it2_end;
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator1 (*this, it1.index (), it2.index ());
 #else
 #ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
-            const_iterator2_type it2_end (e2_.end ());
             return const_iterator1 (*this, it1, it2, it2 != it2_end ? *it2 : value_type ());
 #else
             return const_iterator1 (*this, it1, it2);
@@ -726,11 +730,13 @@ namespace boost { namespace numeric { namespace ublas {
             return const_iterator2 (*this, it2.index ());
 #else
             const_iterator1_type it1 (e1_.find_first (i));
+            const_iterator1_type it1_end (e1_.find_last (size1 ()));
+            if (it1 != it1_end && it1.index () != i)
+                it1 = it1_end;
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator2 (*this, it1.index (), it2.index ());
 #else
 #ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
-            const_iterator1_type it1_end (e1_.end ());
             return const_iterator2 (*this, it1, it2, it1 != it1_end ? *it1 : value_type ());
 #else
             return const_iterator2 (*this, it1, it2);
@@ -744,12 +750,14 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
             return const_iterator2 (*this, it2.index ());
 #else
-            const_iterator1_type it1 (e1_.find_last (i));
+            const_iterator1_type it1 (e1_.find_first (i));
+            const_iterator1_type it1_end (e1_.find_last (size1 ()));
+            if (it1 != it1_end && it1.index () != i)
+                it1 = it1_end;
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator2 (*this, it1.index (), it2.index ());
 #else
 #ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
-            const_iterator1_type it1_end (e1_.end ());
             return const_iterator2 (*this, it1, it2, it1 != it1_end ? *it1 : value_type ());
 #else
             return const_iterator2 (*this, it1, it2);
@@ -2127,10 +2135,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_iterator1 find_first1 (int rank, size_type i, size_type j) const {
             const_iterator11_type it11 (e1_.find_first1 (rank, i, j));
-            const_iterator11_type it11_end (e1_.find_last1 (rank, size1 (), j));
+            const_iterator11_type it11_end (e1_.find_first1 (rank, size1 (), j));
             const_iterator21_type it21 (e2_.find_first1 (rank, i, j));
-            const_iterator21_type it21_end (e2_.find_last1 (rank, size1 (), j));
-            i = std::min (it11.index1 (), it21.index1 ());
+            const_iterator21_type it21_end (e2_.find_first1 (rank, size1 (), j));
+            i = std::min (it11 != it11_end ? it11.index1 () : size1 (),
+                          it21 != it21_end ? it21.index1 () : size1 ());
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
             return const_iterator1 (*this, i);
 #else
@@ -2144,10 +2153,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_iterator1 find_last1 (int rank, size_type i, size_type j) const {
             const_iterator11_type it11 (e1_.find_last1 (rank, i, j));
-            const_iterator11_type it11_end (e1_.find_first1 (rank, 0, j));
+            const_iterator11_type it11_end (e1_.find_last1 (rank, size1 (), j));
             const_iterator21_type it21 (e2_.find_last1 (rank, i, j));
-            const_iterator21_type it21_end (e2_.find_first1 (rank, 0, j));
-            i = std::max (it11.index1 (), it21.index1 ());
+            const_iterator21_type it21_end (e2_.find_last1 (rank, size1 (), j));
+            i = std::max (it11 != it11_end ? it11.index1 () : size1 (),
+                          it21 != it21_end ? it21.index1 () : size1 ());
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
             return const_iterator1 (*this, i);
 #else
@@ -2161,10 +2171,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_iterator2 find_first2 (int rank, size_type i, size_type j) const {
             const_iterator12_type it12 (e1_.find_first2 (rank, i, j));
-            const_iterator12_type it12_end (e1_.find_last2 (rank, i, size2 ()));
+            const_iterator12_type it12_end (e1_.find_first2 (rank, i, size2 ()));
             const_iterator22_type it22 (e2_.find_first2 (rank, i, j));
-            const_iterator22_type it22_end (e2_.find_last2 (rank, i, size2 ()));
-            j = std::min (it12.index2 (), it22.index2 ());
+            const_iterator22_type it22_end (e2_.find_first2 (rank, i, size2 ()));
+            j = std::min (it12 != it12_end ? it12.index2 () : size2 (),
+                          it22 != it22_end ? it22.index2 () : size2 ());
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
             return const_iterator2 (*this, j);
 #else
@@ -2178,10 +2189,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_iterator2 find_last2 (int rank, size_type i, size_type j) const {
             const_iterator12_type it12 (e1_.find_last2 (rank, i, j));
-            const_iterator12_type it12_end (e1_.find_first2 (rank, i, 0));
+            const_iterator12_type it12_end (e1_.find_last2 (rank, i, size2 ()));
             const_iterator22_type it22 (e2_.find_last2 (rank, i, j));
-            const_iterator22_type it22_end (e2_.find_first2 (rank, i, 0));
-            j = std::max (it12.index2 (), it22.index2 ());
+            const_iterator22_type it22_end (e2_.find_last2 (rank, i, size2 ()));
+            j = std::max (it12 != it12_end ? it12.index2 () : size2 (),
+                          it22 != it22_end ? it22.index2 () : size2 ());
 #ifdef BOOST_UBLAS_USE_CANONICAL_ITERATOR
             return const_iterator2 (*this, j);
 #else
@@ -2270,13 +2282,17 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             value_type dereference (packed_random_access_iterator_tag) const {
                 value_type t1 = value_type ();
-                if (it1_ != it1_end_)
+                if (it1_ != it1_end_) {
+                    BOOST_UBLAS_CHECK (it1_.index2 () == j_, internal_logic ());
                     if (it1_.index1 () == i_)
                         t1 = *it1_;
+                }
                 value_type t2 = value_type ();
-                if (it2_ != it2_end_)
+                if (it2_ != it2_end_) {
+                    BOOST_UBLAS_CHECK (it2_.index2 () == j_, internal_logic ());
                     if (it2_.index1 () == i_)
                         t2 = *it2_;
+                }
                 return functor_type () (t1, t2);
             }
 
@@ -2320,13 +2336,17 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             value_type dereference (sparse_bidirectional_iterator_tag) const {
                 value_type t1 = value_type ();
-                if (it1_ != it1_end_)
+                if (it1_ != it1_end_) {
+                    BOOST_UBLAS_CHECK (it1_.index2 () == j_, internal_logic ());
                     if (it1_.index1 () == i_)
                         t1 = *it1_;
+                }
                 value_type t2 = value_type ();
-                if (it2_ != it2_end_)
+                if (it2_ != it2_end_) {
+                    BOOST_UBLAS_CHECK (it2_.index2 () == j_, internal_logic ());
                     if (it2_.index1 () == i_)
                         t2 = *it2_;
+                }
                 return functor_type () (t1, t2);
             }
 
@@ -2396,8 +2416,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             const_iterator1 &operator = (const const_iterator1 &it) {
                 container_const_reference<matrix_binary>::assign (&it ());
+                i_ = it.i_;
+                j_ = it.j_;
                 it1_ = it.it1_;
+                it1_end_ = it.it1_end_;
                 it2_ = it.it2_;
+                it2_end_ = it.it2_end_;
                 return *this;
             }
 
@@ -2506,13 +2530,17 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             value_type dereference (packed_random_access_iterator_tag) const {
                 value_type t1 = value_type ();
-                if (it1_ != it1_end_)
+                if (it1_ != it1_end_) {
+                    BOOST_UBLAS_CHECK (it1_.index1 () == i_, internal_logic ());
                     if (it1_.index2 () == j_)
                         t1 = *it1_;
+                }
                 value_type t2 = value_type ();
-                if (it2_ != it2_end_)
+                if (it2_ != it2_end_) {
+                    BOOST_UBLAS_CHECK (it2_.index1 () == i_, internal_logic ());
                     if (it2_.index2 () == j_)
                         t2 = *it2_;
+                }
                 return functor_type () (t1, t2);
             }
 
@@ -2556,13 +2584,17 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             value_type dereference (sparse_bidirectional_iterator_tag) const {
                 value_type t1 = value_type ();
-                if (it1_ != it1_end_)
+                if (it1_ != it1_end_) {
+                    BOOST_UBLAS_CHECK (it1_.index1 () == i_, internal_logic ());
                     if (it1_.index2 () == j_)
                         t1 = *it1_;
+                }
                 value_type t2 = value_type ();
-                if (it2_ != it2_end_)
+                if (it2_ != it2_end_) {
+                    BOOST_UBLAS_CHECK (it2_.index1 () == i_, internal_logic ());
                     if (it2_.index2 () == j_)
                         t2 = *it2_;
+                }
                 return functor_type () (t1, t2);
             }
 
@@ -2632,8 +2664,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             const_iterator2 &operator = (const const_iterator2 &it) {
                 container_const_reference<matrix_binary>::assign (&it ());
+                i_ = it.i_;
+                j_ = it.j_;
                 it1_ = it.it1_;
+                it1_end_ = it.it1_end_;
                 it2_ = it.it2_;
+                it2_end_ = it.it2_end_;
                 return *this;
             }
 
@@ -4659,7 +4695,7 @@ sparse_bidirectional_iterator_tag ());
             public random_access_iterator_base<typename iterator_restrict_traits<typename E1::const_iterator1::iterator_category,
                                                                                  typename E2::const_iterator2::iterator_category>::iterator_category,
                                                const_iterator1, value_type> {
-#endif                                               
+#endif
         public:
             typedef typename iterator_restrict_traits<typename E1::const_iterator1::iterator_category,
                                                       typename E2::const_iterator2::iterator_category>::iterator_category iterator_category;
@@ -4681,7 +4717,7 @@ sparse_bidirectional_iterator_tag ());
                 container_const_reference<matrix_matrix_binary> (), it1_ (), it2_ (), it2_begin_ (), it2_end_ () {}
             BOOST_UBLAS_INLINE
             const_iterator1 (const matrix_matrix_binary &mmb, const const_iterator11_type &it1, const const_iterator22_type &it2):
-                container_const_reference<matrix_matrix_binary> (mmb), it1_ (it1), it2_ (it2), it2_begin_ (it2.begin ()), it2_end_ (it2.end 
+                container_const_reference<matrix_matrix_binary> (mmb), it1_ (it1), it2_ (it2), it2_begin_ (it2.begin ()), it2_end_ (it2.end
 ()) {}
 #else
             BOOST_UBLAS_INLINE
@@ -4722,7 +4758,7 @@ sparse_bidirectional_iterator_tag ());
             BOOST_UBLAS_INLINE
             value_type dereference (packed_random_access_iterator_tag) const {
 #ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
-                return functor_type () (it1_.begin (), it1_.end (), it2_begin_, it2_end_, packed_random_access_iterator_tag ()); 
+                return functor_type () (it1_.begin (), it1_.end (), it2_begin_, it2_end_, packed_random_access_iterator_tag ());
 #else
                 return functor_type () (it1_.begin (), it1_.end (), it2_.begin (), it2_.end (), packed_random_access_iterator_tag ()); 
 #endif
@@ -4732,9 +4768,9 @@ sparse_bidirectional_iterator_tag ());
             BOOST_UBLAS_INLINE
             value_type dereference (sparse_bidirectional_iterator_tag) const {
 #ifdef BOOST_UBLAS_USE_INVARIANT_HOISTING
-                return functor_type () (it1_.begin (), it1_.end (), it2_begin_, it2_end_, sparse_bidirectional_iterator_tag ()); 
+                return functor_type () (it1_.begin (), it1_.end (), it2_begin_, it2_end_, sparse_bidirectional_iterator_tag ());
 #else
-                return functor_type () (it1_.begin (), it1_.end (), it2_.begin (), it2_.end (), sparse_bidirectional_iterator_tag ()); 
+                return functor_type () (it1_.begin (), it1_.end (), it2_.begin (), it2_.end (), sparse_bidirectional_iterator_tag ());
 #endif
             }
 
@@ -4797,7 +4833,7 @@ sparse_bidirectional_iterator_tag ());
                 return it2_.index2 ();
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator1 &operator = (const const_iterator1 &it) {
                 container_const_reference<matrix_matrix_binary>::assign (&it ());

@@ -21,7 +21,7 @@
 #include <valarray>
 #include <vector>
 
-#define BOOST_UBLAS_SIMPLE_ARRAY_ADAPTOR
+// #define BOOST_UBLAS_SIMPLE_ARRAY_ADAPTOR
 #ifndef BOOST_UBLAS_SIMPLE_ARRAY_ADAPTOR
 #include <boost/shared_array.hpp>
 #endif
@@ -83,28 +83,34 @@ namespace boost { namespace numeric { namespace ublas {
             // Assuming std compliant allocator as requested during review.
             // if (! data_)
             //     throw std::bad_alloc ();
+#ifdef BOOST_UBLAS_SAFE
+            std::fill (data_, data_ + size_, value_type ());
+#endif
         }
         BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
-        unbounded_array (size_type size): 
-            size_ (size), data_ (new value_type [size]) { 
+        unbounded_array (size_type size):
+            size_ (size), data_ (new value_type [size]) {
             // Assuming std compliant allocator as requested during review.
             // if (! data_)
             //     throw std::bad_alloc ();
+#ifdef BOOST_UBLAS_SAFE
+            std::fill (data_, data_ + size_, value_type ());
+#endif
         }
         BOOST_UBLAS_INLINE
-        unbounded_array (const unbounded_array &a): 
-            size_ (a.size_), data_ (new value_type [a.size_]) { 
+        unbounded_array (const unbounded_array &a):
+            size_ (a.size_), data_ (new value_type [a.size_]) {
             // Assuming std compliant allocator as requested during review.
             // if (! data_)
             //     throw std::bad_alloc ();
             *this = a;
         }
         BOOST_UBLAS_INLINE
-        ~unbounded_array () { 
+        ~unbounded_array () {
             // Assuming std compliant allocator as requested during review.
             // if (! data_)
             //     throw std::bad_alloc ();
-            delete [] data_; 
+            delete [] data_;
         }
 
         // Resizing
@@ -122,6 +128,9 @@ namespace boost { namespace numeric { namespace ublas {
                 size_ = size;
                 data_ = data;
             }
+#ifdef BOOST_UBLAS_SAFE
+            std::fill (data_, data_ + size_, value_type ());
+#endif
         }
 
         BOOST_UBLAS_INLINE
@@ -283,7 +292,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Bounded array 
     template<class T, std::size_t N>
     class bounded_array {
-    public:      
+    public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -295,20 +304,27 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        bounded_array (): 
-            size_ (N) /* , data_ () */ {}
+        bounded_array ():
+            size_ (0) /* , data_ () */ {
+#ifdef BOOST_UBLAS_SAFE
+            std::fill (data_, data_ + size_, value_type ());
+#endif
+        }
         BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
-        bounded_array (size_type size): 
+        bounded_array (size_type size):
             size_ (size) /* , data_ () */ {
-            if (size_ > N) 
+            if (size_ > N)
                 // Raising exceptions abstracted as requested during review.
                 // throw std::bad_alloc ();
                 bad_size ().raise ();
+#ifdef BOOST_UBLAS_SAFE
+            std::fill (data_, data_ + size_, value_type ());
+#endif
         }
         BOOST_UBLAS_INLINE
-        bounded_array (const bounded_array &a): 
-            size_ (a.size_) /* , data_ () */ { 
-            if (size_ > N) 
+        bounded_array (const bounded_array &a):
+            size_ (a.size_) /* , data_ () */ {
+            if (size_ > N)
                 // Raising exceptions abstracted as requested during review.
                 // throw std::bad_alloc ();
                 bad_size ().raise ();
@@ -318,17 +334,20 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
-            if (size > N) 
+            if (size > N)
                 // Raising exceptions abstracted as requested during review.
                 // throw std::bad_alloc ();
                 bad_size ().raise ();
             // The content of the array is intentionally not copied.
             size_ = size;
+#ifdef BOOST_UBLAS_SAFE
+            std::fill (data_, data_ + size_, value_type ());
+#endif
         }
 
         BOOST_UBLAS_INLINE
         size_type size () const {
-            return size_; 
+            return size_;
         }
 
         // Element access
@@ -500,13 +519,20 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         array_adaptor ():
-            size_ (0), own_ (true), data_ (new value_type [0]) {}
+            size_ (0), own_ (true), data_ (new value_type [0]) {
+#ifdef BOOST_UBLAS_SAFE
+            std::fill (data_, data_ + size_, value_type ());
+#endif
+        }
         BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
         array_adaptor (size_type size):
             size_ (size), own_ (true), data_ (new value_type [size]) {
             // Assuming std compliant allocator as requested during review.
             // if (! data_)
             //     throw std::bad_alloc ();
+#ifdef BOOST_UBLAS_SAFE
+            std::fill (data_, data_ + size_, value_type ());
+#endif
         }
         BOOST_UBLAS_INLINE
         array_adaptor (size_type size, pointer data):
@@ -555,6 +581,9 @@ namespace boost { namespace numeric { namespace ublas {
             // Assuming std compliant allocator as requested during review.
             // if (! data_)
             //     throw std::bad_alloc ();
+#ifdef BOOST_UBLAS_SAFE
+            std::fill (data_, data_ + size_, value_type ());
+#endif
         }
         BOOST_UBLAS_INLINE
         void resize (size_type size, pointer data) {
@@ -751,13 +780,20 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         array_adaptor ():
-            size_ (0), own_ (true), data_ (new value_type [0]) {}
+            size_ (0), own_ (true), data_ (new value_type [0]) {
+#ifdef BOOST_UBLAS_SAFE
+            std::fill (data_, data_ + size_, value_type ());
+#endif
+        }
         BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
         array_adaptor (size_type size):
             size_ (size), own_ (true), data_ (new value_type [size]) {
             // Assuming std compliant allocator as requested during review.
             // if (! data_.get ())
             //     throw std::bad_alloc ();
+#ifdef BOOST_UBLAS_SAFE
+            std::fill (data_, data_ + size_, value_type ());
+#endif
         }
         BOOST_UBLAS_INLINE
         array_adaptor (size_type size, pointer data):
@@ -794,6 +830,9 @@ namespace boost { namespace numeric { namespace ublas {
             // Assuming std compliant allocator as requested during review.
             // if (! data_.get ())
             //     throw std::bad_alloc ();
+#ifdef BOOST_UBLAS_SAFE
+            std::fill (data_.get (), data_.get () + size_, value_type ());
+#endif
         }
         BOOST_UBLAS_INLINE
         void resize (size_type size, pointer data) {
