@@ -4,6 +4,11 @@
 // "as is" without express or implied warranty, and with no claim as
 // to its suitability for any purpose.
 
+// Revision History:
+
+// 04 Oct 2001   David Abrahams
+//      Changed name of "bind" to "select" to avoid problems with MSVC.
+
 #ifndef BOOST_DETAIL_NAMED_TEMPLATE_PARAMS_HPP
 #define BOOST_DETAIL_NAMED_TEMPLATE_PARAMS_HPP
 
@@ -20,7 +25,7 @@ namespace boost {
 
     struct dummy_default_gen {
       template <class Base, class Traits>
-      struct bind {
+      struct select {
         typedef default_argument type;
       };
     };
@@ -41,14 +46,14 @@ namespace boost {
 
     struct choose_default {
       template <class Arg, class DefaultGen, class Base, class Traits>
-      struct bind {
+      struct select {
         typedef typename default_generator<DefaultGen>::type Gen;
-        typedef typename Gen::template bind<Base,Traits>::type type;
+        typedef typename Gen::template select<Base,Traits>::type type;
       };
     };
     struct choose_arg {
       template <class Arg, class DefaultGen, class Base, class Traits>
-      struct bind {
+      struct select {
         typedef Arg type;
       };
     };
@@ -81,7 +86,7 @@ namespace boost {
 #endif
     public:
       typedef typename Selector
-        ::template bind<Arg, DefaultGen, Base, Traits>::type type;
+        ::template select<Arg, DefaultGen, Base, Traits>::type type;
     };
 
     // To differentiate an unnamed parameter from a traits generator
@@ -94,10 +99,10 @@ namespace boost {
     };
     
     struct choose_named_params {
-      template <class Prev> struct bind { typedef Prev type; };
+      template <class Prev> struct select { typedef Prev type; };
     };
     struct choose_default_arg {
-      template <class Prev> struct bind { 
+      template <class Prev> struct select { 
         typedef detail::default_argument type;
       };
     };
@@ -117,15 +122,15 @@ namespace boost {
     struct choose_default_argument {
       enum { is_named = is_named_param_list<PreviousArg>::value };
       typedef typename choose_default_dispatch<is_named>::type Selector;
-      typedef typename Selector::template bind<PreviousArg>::type type;
+      typedef typename Selector::template select<PreviousArg>::type type;
     };
 
     // This macro assumes that there is a class named default_##TYPE
     // defined before the application of the macro.  This class should
-    // have a single member class template named "bind" with two
+    // have a single member class template named "select" with two
     // template parameters: the type of the class being created (e.g.,
     // the iterator_adaptor type when creating iterator adaptors) and
-    // a traits class. The bind class should have a single typedef
+    // a traits class. The select class should have a single typedef
     // named "type" that produces the default for TYPE.  See
     // boost/iterator_adaptors.hpp for an example usage.  Also,
     // applications of this macro must be placed in namespace
@@ -134,7 +139,7 @@ namespace boost {
 #define BOOST_NAMED_TEMPLATE_PARAM(TYPE) \
     struct get_##TYPE##_from_named { \
       template <class Base, class NamedParams, class Traits> \
-      struct bind { \
+      struct select { \
           typedef typename NamedParams::traits NamedTraits; \
           typedef typename NamedTraits::TYPE TYPE; \
           typedef typename resolve_default<TYPE, \
@@ -142,7 +147,7 @@ namespace boost {
       }; \
     }; \
     struct pass_thru_##TYPE { \
-      template <class Base, class Arg, class Traits> struct bind { \
+      template <class Base, class Arg, class Traits> struct select { \
           typedef typename resolve_default<Arg, \
             default_##TYPE, Base, Traits>::type type; \
       };\
@@ -160,7 +165,7 @@ namespace boost {
       enum { is_named = is_named_param_list<X>::value }; \
       typedef typename get_##TYPE##_dispatch<is_named>::type Selector; \
     public: \
-      typedef typename Selector::template bind<Base, X, Traits>::type type; \
+      typedef typename Selector::template select<Base, X, Traits>::type type; \
     }; \
     template <> struct default_generator<default_##TYPE> { \
       typedef default_##TYPE type; \
