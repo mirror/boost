@@ -243,7 +243,7 @@ int cpp_main(int argc, char* argv[])
    soft_value_test(false, boost::is_empty<int*>::value)
    soft_value_test(false, boost::is_empty<int&>::value)
    soft_value_test(false, boost::is_empty<void>::value)
-#if defined(__MWERKS__)
+#if defined(__MWERKS__) || defined(__HP_aCC)
    // apparent compiler bug causes this to fail to compile:
    value_fail(false, boost::is_empty<int[2]>::value)
 #else
@@ -258,7 +258,7 @@ int cpp_main(int argc, char* argv[])
    // because we can't tell the difference between
    // unions and classes:
    value_fail(true, boost::is_empty<empty_union_UDT>::value)
-#if defined(__MWERKS__)
+#if defined(__MWERKS__) || defined(__HP_aCC)
    // apparent compiler bug causes this to fail to compile:
    value_fail(false, boost::is_empty<enum_UDT>::value)
 #else
@@ -281,13 +281,17 @@ unsigned int expected_failures = 9;
 #if (__SUNPRO_CC <= 0x520)
 unsigned int expected_failures = 55;
 #else // (__SUNPRO_CC <= 0x530)
-unsigned int expected_failures = 20;
+unsigned int expected_failures = 25;
 #endif
 #elif defined(__MWERKS__)
 unsigned int expected_failures = 10;
 #elif defined(BOOST_MSVC)
 // can't handle classes that are POD's or arrays that are POD's
 unsigned int expected_failures = 24;
+#elif defined(__HP_aCC)
+unsigned int expected_failures = 2;
+#elif defined(__EDG_VERSION__)
+unsigned int expected_failures = 3;
 #else
 unsigned int expected_failures = 0;
 #endif
