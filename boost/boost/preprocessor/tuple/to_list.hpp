@@ -39,13 +39,13 @@ BOOST_PP_LIST_NIL)))
 */
 #define BOOST_PP_TUPLE_TO_LIST(SIZE_OF_TUPLE,TUPLE) BOOST_PP_TUPLE_TO_LIST_DELAY(SIZE_OF_TUPLE,TUPLE)
 
-#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
+#if defined(BOOST_NO_COMPILER_CONFIG) || !defined(__MWERKS__) || __MWERKS__ > 0x3002
+#  define BOOST_PP_TUPLE_TO_LIST_DELAY(N,T) BOOST_PP_TUPLE##N##_TO_LIST T
+#else
 /* This is a workaround for a CodeWarrior PP bug. Strictly speaking
  * this workaround invokes undefined behavior, but it works as desired.
  */
 #  define BOOST_PP_TUPLE_TO_LIST_DELAY(N,T) BOOST_PP_TUPLE##N##_TO_LIST##T
-#else
-#  define BOOST_PP_TUPLE_TO_LIST_DELAY(N,T) BOOST_PP_TUPLE##N##_TO_LIST T
 #endif
 #define BOOST_PP_TUPLE0_TO_LIST() (_,_,0)
 #define BOOST_PP_TUPLE1_TO_LIST(A) (A,(_,_,0),1)

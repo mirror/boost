@@ -25,13 +25,13 @@ BOOST_PP_TUPLE_REVERSE(3,(A,B,C))
 */
 #define BOOST_PP_TUPLE_REVERSE(SIZE_OF_TUPLE,TUPLE) BOOST_PP_TUPLE_REVERSE_DELAY(SIZE_OF_TUPLE,TUPLE)
 
-#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
+#if defined(BOOST_NO_COMPILER_CONFIG) || !defined(__MWERKS__) || __MWERKS__ > 0x3002
+#  define BOOST_PP_TUPLE_REVERSE_DELAY(N,T) BOOST_PP_TUPLE##N##_REVERSE T
+#else
 /* This is a workaround for a CodeWarrior PP bug. Strictly speaking
  * this workaround invokes undefined behavior, but it works as desired.
  */
 #  define BOOST_PP_TUPLE_REVERSE_DELAY(N,T) BOOST_PP_TUPLE##N##_REVERSE##T
-#else
-#  define BOOST_PP_TUPLE_REVERSE_DELAY(N,T) BOOST_PP_TUPLE##N##_REVERSE T
 #endif
 #define BOOST_PP_TUPLE0_REVERSE() ()
 #define BOOST_PP_TUPLE1_REVERSE(A) (A)
