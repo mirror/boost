@@ -28,7 +28,7 @@ template<
     >
 struct protect : T
 {
-    typedef protect type;
+    typedef mpl::protect type;
 };
 
 #if defined(BOOST_MPL_CFG_BROKEN_DEFAULT_PARAMETERS_IN_NESTED_TEMPLATES)

@@ -41,7 +41,7 @@ struct single_iter_base
     template< typename D >
     struct BOOST_MPL_AUX_ITERATOR_ADVANCE
     {
-        typedef plus< int_<N>,D > n_;
+        typedef plus< mpl::int_<N>,D > n_;
         typedef single_element_iter<
               T
             , BOOST_MPL_AUX_VALUE_WKND(n_)::value
@@ -53,7 +53,7 @@ struct single_iter_base
     {
         typedef typename minus<
               typename U::position
-            , int_<N>
+            , mpl::int_<N>
             >::type type;
     };
 };
