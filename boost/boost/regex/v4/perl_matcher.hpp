@@ -271,7 +271,7 @@ template <class BidiIterator, class Allocator, class traits, class Allocator2>
 class perl_matcher
 {
 public:
-   typedef typename boost::re_detail::regex_iterator_traits<BidiIterator>::value_type char_type;
+   typedef typename traits::char_type char_type;
    typedef perl_matcher<BidiIterator, Allocator, traits, Allocator2> self_type;
    typedef bool (self_type::*matcher_proc_type)(void);
    typedef access_t<char_type, traits, Allocator2> access;
