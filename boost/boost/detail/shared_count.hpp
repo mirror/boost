@@ -11,6 +11,7 @@
 //  detail/shared_count.hpp
 //
 //  Copyright (c) 2001, 2002, 2003 Peter Dimov and Multi Media Ltd.
+//  Copyright 2004-2005 Peter Dimov
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -25,7 +26,8 @@
 
 #include <boost/checked_delete.hpp>
 #include <boost/throw_exception.hpp>
-#include <boost/detail/lightweight_mutex.hpp>
+#include <boost/detail/bad_weak_ptr.hpp>
+#include <boost/detail/sp_counted_base.hpp>
 
 #if defined(BOOST_SP_USE_QUICK_ALLOCATOR)
 #include <boost/detail/quick_allocator.hpp>
@@ -33,13 +35,11 @@
 
 #include <memory>           // std::auto_ptr, std::allocator
 #include <functional>       // std::less
-#include <exception>        // std::exception
 #include <new>              // std::bad_alloc
 #include <typeinfo>         // std::type_info in get_deleter
 #include <cstddef>          // std::size_t
 
 #ifdef __BORLANDC__
-# pragma warn -8026     // Functions with excep. spec. are not expanded inline
 # pragma warn -8027     // Functions containing try are not expanded inline
 #endif
 
@@ -57,141 +57,8 @@ void sp_array_destructor_hook(void * px);
 
 #endif
 
-
-// The standard library that comes with Borland C++ 5.5.1, 5.6.4
-// defines std::exception and its members as having C calling
-// convention (-pc). When the definition of bad_weak_ptr
-// is compiled with -ps, the compiler issues an error.
-// Hence, the temporary #pragma option -pc below.
-
-#if defined(__BORLANDC__) && __BORLANDC__ <= 0x564
-# pragma option push -pc
-#endif
-
-class bad_weak_ptr: public std::exception
-{
-public:
-
-    virtual char const * what() const throw()
-    {
-        return "boost::bad_weak_ptr";
-    }
-};
-
-#if defined(__BORLANDC__) && __BORLANDC__ <= 0x564
-# pragma option pop
-#endif
-
 namespace detail
 {
-
-class sp_counted_base
-{
-private:
-
-    typedef detail::lightweight_mutex mutex_type;
-
-public:
-
-    sp_counted_base(): use_count_(1), weak_count_(1)
-    {
-    }
-
-    virtual ~sp_counted_base() // nothrow
-    {
-    }
-
-    // dispose() is called when use_count_ drops to zero, to release
-    // the resources managed by *this.
-
-    virtual void dispose() = 0; // nothrow
-
-    // destruct() is called when weak_count_ drops to zero.
-
-    virtual void destruct() // nothrow
-    {
-        delete this;
-    }
-
-    virtual void * get_deleter(std::type_info const & ti) = 0;
-
-    void add_ref_copy()
-    {
-#if defined(BOOST_HAS_THREADS)
-        mutex_type::scoped_lock lock(mtx_);
-#endif
-        ++use_count_;
-    }
-
-    void add_ref_lock()
-    {
-#if defined(BOOST_HAS_THREADS)
-        mutex_type::scoped_lock lock(mtx_);
-#endif
-        if(use_count_ == 0) boost::throw_exception(boost::bad_weak_ptr());
-        ++use_count_;
-    }
-
-    void release() // nothrow
-    {
-        {
-#if defined(BOOST_HAS_THREADS)
-            mutex_type::scoped_lock lock(mtx_);
-#endif
-            long new_use_count = --use_count_;
-
-            if(new_use_count != 0) return;
-        }
-
-        dispose();
-        weak_release();
-    }
-
-    void weak_add_ref() // nothrow
-    {
-#if defined(BOOST_HAS_THREADS)
-        mutex_type::scoped_lock lock(mtx_);
-#endif
-        ++weak_count_;
-    }
-
-    void weak_release() // nothrow
-    {
-        long new_weak_count;
-
-        {
-#if defined(BOOST_HAS_THREADS)
-            mutex_type::scoped_lock lock(mtx_);
-#endif
-            new_weak_count = --weak_count_;
-        }
-
-        if(new_weak_count == 0)
-        {
-            destruct();
-        }
-    }
-
-    long use_count() const // nothrow
-    {
-#if defined(BOOST_HAS_THREADS)
-        mutex_type::scoped_lock lock(mtx_);
-#endif
-        return use_count_;
-    }
-
-private:
-
-    sp_counted_base(sp_counted_base const &);
-    sp_counted_base & operator= (sp_counted_base const &);
-
-    long use_count_;        // #shared
-    long weak_count_;       // #weak + (#shared != 0)
-
-#if defined(BOOST_HAS_THREADS) || defined(BOOST_LWM_WIN32)
-    mutable mutex_type mtx_;
-#endif
-};
 
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
 
@@ -535,13 +402,9 @@ inline shared_count::shared_count(weak_count const & r): pi_(r.pi_)
         , id_(shared_count_id)
 #endif
 {
-    if(pi_ != 0)
+    if( pi_ == 0 || !pi_->add_ref_lock() )
     {
-        pi_->add_ref_lock();
-    }
-    else
-    {
-        boost::throw_exception(boost::bad_weak_ptr());
+        boost::throw_exception( boost::bad_weak_ptr() );
     }
 }
 
@@ -551,7 +414,6 @@ inline shared_count::shared_count(weak_count const & r): pi_(r.pi_)
 
 #ifdef __BORLANDC__
 # pragma warn .8027     // Functions containing try are not expanded inline
-# pragma warn .8026     // Functions with excep. spec. are not expanded inline
 #endif
 
 #endif  // #ifndef BOOST_DETAIL_SHARED_COUNT_HPP_INCLUDED
