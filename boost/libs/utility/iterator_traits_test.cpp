@@ -86,34 +86,43 @@ struct my_iterator3 : my_iterator1
         : my_iterator1(p) {}
 };
 
-template <bool> struct assertion;
-template <> struct assertion<true> { typedef char type; };
+//
+// Assertion tools.  Used instead of BOOST_STATIC_ASSERT because that
+// doesn't give us a nice stack backtrace
+//
+template <bool = false> struct assertion;
 
+template <> struct assertion<true>
+{
+    typedef char type;
+};
+
+template <class T, class U>
+struct assert_same
+    : assertion<(::boost::is_same<T,U>::value)>
+{
+};
+
+
+// Iterator tests
 template <class Iterator,
     class value_type, class difference_type, class pointer, class reference, class category>
 struct non_portable_tests
 {
     typedef typename boost::detail::iterator_traits<Iterator>::pointer test_pt;
     typedef typename boost::detail::iterator_traits<Iterator>::reference test_rt;
-    
-    non_portable_tests()
-    {
-        BOOST_STATIC_ASSERT((::boost::is_same<test_pt, pointer>::value));
-        BOOST_STATIC_ASSERT((::boost::is_same<test_rt, reference>::value));
-    }
+    typedef typename assert_same<test_pt, pointer>::type a1;
+    typedef typename assert_same<test_rt, reference>::type a2;
 };
 
 template <class Iterator,
     class value_type, class difference_type, class pointer, class reference, class category>
 struct portable_tests
 {
-    portable_tests()
-    {
-        typedef typename boost::detail::iterator_traits<Iterator>::difference_type test_dt;
-        typedef typename boost::detail::iterator_traits<Iterator>::iterator_category test_cat;
-        BOOST_STATIC_ASSERT((::boost::is_same<test_dt, difference_type>::value));
-        BOOST_STATIC_ASSERT((::boost::is_same<test_cat, category>::value));
-    }
+    typedef typename boost::detail::iterator_traits<Iterator>::difference_type test_dt;
+    typedef typename boost::detail::iterator_traits<Iterator>::iterator_category test_cat;
+    typedef typename assert_same<test_dt, difference_type>::type a1;
+    typedef typename assert_same<test_cat, category>::type a2;
 };
 
 // Test iterator_traits
@@ -122,15 +131,8 @@ template <class Iterator,
 struct input_iterator_test
     : portable_tests<Iterator,value_type,difference_type,pointer,reference,category>
 {
-    input_iterator_test()
-    {
-        typedef typename boost::detail::iterator_traits<Iterator>::value_type test_vt;
-        BOOST_STATIC_ASSERT((
-                                ::boost::is_same<
-                                test_vt,
-                                value_type
-                                >::value));
-    }
+    typedef typename boost::detail::iterator_traits<Iterator>::value_type test_vt;
+    typedef typename assert_same<test_vt, value_type>::type a1;
 };
 
 template <class Iterator,
@@ -189,7 +191,7 @@ non_pointer_test<my_iterator1, char, long, const char*, const char&, std::forwar
                     
 non_pointer_test<my_iterator2, char, long, const char*, const char&, std::forward_iterator_tag>
        my_iterator2_test;
-                    
+
 non_pointer_test<my_iterator3, char, int, const char*, const char&, std::forward_iterator_tag>
        my_iterator3_test;
 
