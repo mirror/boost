@@ -17,6 +17,8 @@
 #ifndef TEST4_H
 #define TEST4_H
 
+#include <boost/minmax.hpp>
+
 #define USE_BANDED
 // #define USE_DIAGONAL
 
@@ -35,10 +37,10 @@ void initialize_matrix (M &m) {
     int size2 = m.size2 ();
     for (int i = 0; i < size1; ++ i)
 #ifdef USE_BANDED
-        for (int j = std::max (i - 1, 0); j < std::min (i + 2, size2); ++ j)
+        for (int j = boost::std_max (i - 1, 0); j < boost::std_min (i + 2, size2); ++ j)
 #endif
 #ifdef USE_DIAGONAL
-        for (int j = std::max (i, 0); j < std::min (i + 1, size2); ++ j)
+        for (int j = boost::std_max (i, 0); j < boost::std_min (i + 1, size2); ++ j)
 #endif
             m (i, j) = i * size1 + j + 1.f;
 }

@@ -31,6 +31,7 @@
 #include <boost/random/linear_congruential.hpp>
 #include <boost/random/uniform_01.hpp>
 #include <boost/random/detail/pass_through_engine.hpp>
+#include <boost/minmax.hpp>
 
 namespace boost {
 namespace random {
@@ -84,8 +85,8 @@ public:
   BOOST_STATIC_CONSTANT(unsigned int, long_lag = p);
   BOOST_STATIC_CONSTANT(unsigned int, short_lag = q);
 
-  result_type min() const { return 0; }
-  result_type max() const { return wordmask; }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return 0; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return wordmask; }
 
   lagged_fibonacci() { init_wordmask(); seed(); }
   explicit lagged_fibonacci(uint32_t value) { init_wordmask(); seed(value); }
@@ -232,7 +233,7 @@ struct fibonacci_validation<T, P, Q>  \
   BOOST_STATIC_CONSTANT(bool, is_specialized = true);     \
   static T value() { return V; }      \
   static T tolerance()                \
-    { return std::max(E, static_cast<T>(5*std::numeric_limits<T>::epsilon())); } \
+    { return std_max(E, static_cast<T>(5*std::numeric_limits<T>::epsilon())); } \
 };
 // (The extra static_cast<T> in the std::max call above is actually
 // unnecessary except for HP aCC 1.30, which claims that
@@ -324,8 +325,8 @@ public:
       throw std::invalid_argument("lagged_fibonacci_01::seed");
   }
 
-  result_type min() const { return result_type(0); }
-  result_type max() const { return result_type(1); }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return result_type(0); }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return result_type(1); }
 
   result_type operator()()
   {

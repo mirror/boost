@@ -22,6 +22,7 @@
 #include <iostream>
 #include <cassert>
 #include <stdexcept>
+#include <boost/config.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/limits.hpp>
 
@@ -41,8 +42,8 @@ public:
   BOOST_STATIC_CONSTANT(int, exponent2 = q);
   BOOST_STATIC_CONSTANT(int, step_size = s);
 
-  result_type min() const { return 0; }
-  result_type max() const { return wordmask; }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return 0; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return wordmask; }
 
   // MSVC 6 and possibly others crash when encountering complicated integral
   // constant expressions.  Avoid the checks for now.

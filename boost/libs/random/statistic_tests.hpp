@@ -26,6 +26,7 @@
 
 #include <boost/random.hpp>
 #include <boost/config.hpp>
+#include <boost/minmax.hpp>
 
 
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
@@ -91,8 +92,8 @@ public:
   template<class NumberGenerator, class Counter>
   void run(NumberGenerator f, Counter & count, int n) const
   {
-    assert(f.min() == 0 &&
-           static_cast<unsigned int>(f.max()) == classes()-1);
+    assert((f.min)() == 0 &&
+           static_cast<unsigned int>((f.max)()) == classes()-1);
     for(int i = 0; i < n; ++i)
       count(f());
   }
@@ -109,8 +110,8 @@ public:
   template<class NumberGenerator, class Counter>
   void run(NumberGenerator f, Counter & count, int n) const
   {
-    unsigned int range = f.max()+1;
-    assert(f.min() == 0 && range*range == classes());
+    unsigned int range = (f.max)()+1;
+    assert((f.min)() == 0 && range*range == classes());
     for(int i = 0; i < n; ++i) {
       int y1 = f();
       int y2 = f();
@@ -131,8 +132,8 @@ public:
     for(unsigned int i = 0; i < classes-1; ++i)
       limit[i] = invert_monotone_inc(probability, (i+1)*0.05, 0, 1000);
     limit[classes-1] = std::numeric_limits<double>::infinity();
-    if(limit[classes-1] < std::numeric_limits<double>::max())
-      limit[classes-1] = std::numeric_limits<double>::max();
+    if(limit[classes-1] < (std::numeric_limits<double>::max)())
+      limit[classes-1] = (std::numeric_limits<double>::max)();
 #if 0
     std::cout << __PRETTY_FUNCTION__ << ": ";
     for(unsigned int i = 0; i < classes; ++i)
@@ -166,7 +167,7 @@ public:
   void run(UniformRandomNumberGenerator f, Counter & count, int n) const
   {
     typedef typename UniformRandomNumberGenerator::result_type result_type;
-    result_type init = (up ? f.min() : f.max());
+    result_type init = (up ? (f.min)() : (f.max)());
     result_type previous = init;
     unsigned int length = 0;
     for(int i = 0; i < n; ++i) {
@@ -175,7 +176,7 @@ public:
         previous = val;
         ++length;
       } else {
-        count(std::min(length, classes())-1);
+        count(std_min(length, classes())-1);
         length = 0;
         previous = init;
         // don't use this value, so that runs are independent
@@ -202,16 +203,16 @@ public:
   void run(UniformRandomNumberGenerator f, Counter & count, int n) const
   {
     typedef typename UniformRandomNumberGenerator::result_type result_type;
-    double range = f.max() - f.min() + 1.0;
+    double range = (f.max)() - (f.min)() + 1.0;
     result_type low = static_cast<result_type>(alpha * range);
     result_type high = static_cast<result_type>(beta * range);
     unsigned int length = 0;
     for(int i = 0; i < n; ) {
-      result_type value = f() - f.min();
+      result_type value = f() - (f.min)();
       if(value < low || value > high)
         ++length;
       else {
-        count(std::min(length, classes()-1));
+        count(std_min(length, classes()-1));
         length = 0;
         ++i;
       }
@@ -244,8 +245,8 @@ public:
   {
     typedef typename UniformRandomNumberGenerator::result_type result_type;
     assert(std::numeric_limits<result_type>::is_integer);
-    assert(f.min() == 0);
-    assert(f.max() == static_cast<result_type>(range-1));
+    assert((f.min)() == 0);
+    assert((f.max)() == static_cast<result_type>(range-1));
     std::vector<result_type> v(classes());
     for(int i = 0; i < n; ++i) {
       for(unsigned int j = 0; j < classes(); ++j)
@@ -291,8 +292,8 @@ public:
   {
     typedef typename UniformRandomNumberGenerator::result_type result_type;
     assert(std::numeric_limits<result_type>::is_integer);
-    assert(f.min() == 0);
-    assert(f.max() == static_cast<result_type>(d-1));
+    assert((f.min)() == 0);
+    assert((f.max)() == static_cast<result_type>(d-1));
     std::vector<bool> occurs(d);
     for(int i = 0; i < n; ++i) {
       occurs.assign(d, false);
@@ -308,7 +309,7 @@ public:
             break;     // one complete set
         }
       }
-      count(std::min(r-d, classes()-1));
+      count(std_min(r-d, classes()-1));
     }
   }
   double probability(unsigned int r) const
@@ -369,8 +370,8 @@ public:
   {
     typedef typename UniformRandomNumberGenerator::result_type result_type;
     assert(std::numeric_limits<result_type>::is_integer);
-    assert(f.min() == 0);
-    assert(f.max() == static_cast<result_type>(m-1));
+    assert((f.min)() == 0);
+    assert((f.max)() == static_cast<result_type>(m-1));
    
     for(int j = 0; j < n_total; j++) {
       std::vector<result_type> v(n);
@@ -386,7 +387,7 @@ public:
         if(spacing[i] == spacing[i+1])
           ++k;
       }
-      count(std::min(k, classes()-1));
+      count(std_min(k, classes()-1));
     }
   }
 
@@ -469,17 +470,17 @@ public:
       int k = static_cast<int>(std::floor(m*y));
       if(k >= m)
         --k;    // should not happen
-      a[k] = std::min(a[k], y);
-      b[k] = std::max(b[k], y);
+      a[k] = std_min(a[k], y);
+      b[k] = std_max(b[k], y);
       ++c[k];
     }
     double kplus = 0, kminus = 0;
     int j = 0;
     for(int k = 0; k < m; ++k) {
       if(c[k] > 0) {
-        kminus = std::max(kminus, a[k]-j/static_cast<double>(n));
+        kminus = std_max(kminus, a[k]-j/static_cast<double>(n));
         j += c[k];
-        kplus = std::max(kplus, j/static_cast<double>(n) - b[k]);
+        kplus = std_max(kplus, j/static_cast<double>(n) - b[k]);
       }
     }
     kplus *= std::sqrt(double(n));
@@ -519,7 +520,7 @@ private:
     {
       double mx = f();
       for(int i = 1; i < t; ++i)
-        mx = std::max(mx, f());
+        mx = std_max(mx, f());
       return mx;
     }
   private:

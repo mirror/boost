@@ -5,6 +5,7 @@
  * Author: Jeff Garland 
  */
 
+#include "boost/config.hpp"
 #include "boost/date_time/constrained_value.hpp"
 #include "boost/date_time/testfrmwk.hpp"
 #include <iostream>
@@ -16,8 +17,8 @@ class day_value_policies
 {
 public:
   typedef unsigned int value_type;
-  static unsigned int min() { return 0; };
-  static unsigned int max() { return 31;};
+  static unsigned int min BOOST_PREVENT_MACRO_SUBSTITUTION () { return 0; };
+  static unsigned int max BOOST_PREVENT_MACRO_SUBSTITUTION () { return 31;};
   static void on_error(unsigned int&, unsigned int, boost::CV::violation_enum)
   {
     throw bad_day();

@@ -8,6 +8,7 @@
 #include <numeric>
 #include <boost/concept_check.hpp>
 #include <boost/concept_archetype.hpp>
+#include <boost/minmax.hpp>
 
 /*
 
@@ -790,8 +791,8 @@ main()
   {
     typedef less_than_comparable_archetype<> T;
     T a(dummy_cons), b(dummy_cons);
-    const T& c = std::min(a, b);
-    const T& d = std::max(a, b);
+    const T& c = std_min(a, b);
+    const T& d = std_max(a, b);
     ignore_unused_variable_warning(c);
     ignore_unused_variable_warning(d);
   }
@@ -800,8 +801,8 @@ main()
     binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
     typedef convertible_to_archetype<Arg> T;
     T a(dummy_cons), b(dummy_cons);
-    const T& c = std::min(a, b, comp);
-    const T& d = std::max(a, b, comp);
+    const T& c = std_min(a, b, comp);
+    const T& d = std_max(a, b, comp);
     ignore_unused_variable_warning(c);
     ignore_unused_variable_warning(d);
   }

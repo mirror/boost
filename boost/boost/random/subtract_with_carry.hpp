@@ -118,8 +118,8 @@ public:
     k = 0;
    }
 
-  result_type min() const { return min_value; }
-  result_type max() const { return max_value; }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return min_value; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return max_value; }
 
   result_type operator()()
   {
@@ -313,8 +313,8 @@ public:
     k = 0;
   }
 
-  result_type min() const { return result_type(0); }
-  result_type max() const { return result_type(1); }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return result_type(0); }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return result_type(1); }
 
   result_type operator()()
   {

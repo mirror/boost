@@ -74,7 +74,7 @@ class pool_allocator
     static const_pointer address(const_reference s)
     { return &s; }
     static size_type max_size()
-    { return std::numeric_limits<size_type>::max(); }
+    { return (std::numeric_limits<size_type>::max)(); }
     static void construct(const pointer ptr, const value_type & t)
     { new (ptr) T(t); }
     static void destroy(const pointer ptr)
@@ -157,7 +157,7 @@ class fast_pool_allocator
     static const_pointer address(const_reference s)
     { return &s; }
     static size_type max_size()
-    { return std::numeric_limits<size_type>::max(); }
+    { return (std::numeric_limits<size_type>::max)(); }
     void construct(const pointer ptr, const value_type & t)
     { new (ptr) T(t); }
     void destroy(const pointer ptr)

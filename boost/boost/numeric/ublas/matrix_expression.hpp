@@ -21,6 +21,7 @@
 #include <boost/numeric/ublas/exception.hpp>
 #include <boost/numeric/ublas/functional.hpp>
 #include <boost/numeric/ublas/noalias.hpp>
+#include <boost/minmax.hpp>
 
 // Expression templates based on ideas of Todd Veldhuizen and Geoffrey Furnish
 // Iterators based on ideas of Jeremy Siek
@@ -2114,7 +2115,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator21_type it21_end (e2_.find1 (rank, size1 (), j));
             BOOST_UBLAS_CHECK (rank == 0 || it11 == it11_end || it11.index2 () == j, internal_logic ())
             BOOST_UBLAS_CHECK (rank == 0 || it21 == it21_end || it21.index2 () == j, internal_logic ())
-            i = std::min (it11 != it11_end ? it11.index1 () : size1 (),
+            i = std_min (it11 != it11_end ? it11.index1 () : size1 (),
                           it21 != it21_end ? it21.index1 () : size1 ());
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator1 (*this, i, j);
@@ -2130,7 +2131,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator22_type it22_end (e2_.find2 (rank, i, size2 ()));
             BOOST_UBLAS_CHECK (rank == 0 || it12 == it12_end || it12.index1 () == i, internal_logic ())
             BOOST_UBLAS_CHECK (rank == 0 || it22 == it22_end || it22.index1 () == i, internal_logic ())
-            j = std::min (it12 != it12_end ? it12.index2 () : size2 (),
+            j = std_min (it12 != it12_end ? it12.index2 () : size2 (),
                           it22 != it22_end ? it22.index2 () : size2 ());
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator2 (*this, i, j);
@@ -2247,7 +2248,7 @@ namespace boost { namespace numeric { namespace ublas {
                     if (it2_ != it2_end_) {
                         index2 = it2_.index1 ();
                 }
-                i_ = std::min (index1, index2);
+                i_ = std_min (index1, index2);
             }
             BOOST_UBLAS_INLINE
             void decrement (sparse_bidirectional_iterator_tag) {
@@ -2265,7 +2266,7 @@ namespace boost { namespace numeric { namespace ublas {
                     if (it2_ != it2_end_)
                         index2 = it2_.index1 ();
                 }
-                i_ = std::max (index1, index2);
+                i_ = std_max (index1, index2);
             }
             BOOST_UBLAS_INLINE
             value_type dereference (sparse_bidirectional_iterator_tag) const {
@@ -2513,7 +2514,7 @@ namespace boost { namespace numeric { namespace ublas {
                     if (it2_ != it2_end_)
                         index2 = it2_.index2 ();
                 }
-                j_ = std::min (index1, index2);
+                j_ = std_min (index1, index2);
             }
             BOOST_UBLAS_INLINE
             void decrement (sparse_bidirectional_iterator_tag) {
@@ -2531,7 +2532,7 @@ namespace boost { namespace numeric { namespace ublas {
                     if (it2_ != it2_end_)
                         index2 = it2_.index2 ();
                 }
-                j_ = std::max (index1, index2);
+                j_ = std_max (index1, index2);
             }
             BOOST_UBLAS_INLINE
             value_type dereference (sparse_bidirectional_iterator_tag) const {

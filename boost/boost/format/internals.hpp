@@ -81,7 +81,7 @@ namespace detail {
         void compute_states(); // sets states  according to truncate and pad_scheme.
 
         static std::streamsize max_streamsize() { 
-            return std::numeric_limits<std::streamsize>::max();
+            return (std::numeric_limits<std::streamsize>::max)();
         }
 
         // --- data ---

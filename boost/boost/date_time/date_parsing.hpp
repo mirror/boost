@@ -96,7 +96,7 @@ namespace date_time {
       typedef typename date_type::year_type year_type;
       typedef typename date_type::month_type month_type;
       unsigned pos = 0;
-      typename date_type::ymd_type ymd(year_type::min(),1,1);
+      typename date_type::ymd_type ymd((year_type::min)(),1,1);
       boost::tokenizer<boost::char_delimiters_separator<char> > tok(s);
       for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end(), pos < spec_str.size(); ++beg, ++pos) {
         unsigned short i =0;
@@ -130,7 +130,7 @@ namespace date_time {
       int offsets[] = {4,2,2};
       int pos = 0;
       typedef typename date_type::year_type year_type;
-      typename date_type::ymd_type ymd(year_type::min(),1,1);
+      typename date_type::ymd_type ymd((year_type::min)(),1,1);
       boost::offset_separator osf(offsets, offsets+3);
       boost::tokenizer<boost::offset_separator> tok(s, osf);
       for(boost::tokenizer<boost::offset_separator>::iterator ti=tok.begin(); ti!=tok.end();++ti) {

@@ -38,8 +38,8 @@ test_day()
     check("Bad day creation2", true); //good
     
   }
-  check("traits min day", greg_day::min() == 1);
-  check("traits max day", greg_day::max() == 31);
+  check("traits min day", (greg_day::min)() == 1);
+  check("traits max day", (greg_day::max)() == 31);
 
   greg_weekday sunday(0);
   greg_weekday monday(1);

@@ -25,6 +25,7 @@
 #include <boost/numeric/ublas/exception.hpp>
 #include <boost/numeric/ublas/iterator.hpp>
 #include <boost/numeric/ublas/storage.hpp>
+#include <boost/minmax.hpp>
 
 namespace boost { namespace numeric { namespace ublas {
 
@@ -350,8 +351,8 @@ namespace boost { namespace numeric { namespace ublas {
                 //     throw std::bad_alloc ();
                 // if (! data_)
                 //     throw std::bad_alloc ();
-                std::copy (data_, data_ + std::min (size, size_), data);
-                std::fill (data + std::min (size, size_), data + size, value_type ());
+                std::copy (data_, data_ + std_min (size, size_), data);
+                std::fill (data + std_min (size, size_), data + size, value_type ());
                 delete [] data_;
                 capacity_ = size << 1;
                 data_ = data;
@@ -760,8 +761,8 @@ namespace boost { namespace numeric { namespace ublas {
                 //     throw std::bad_alloc ();
                 // if (! data_)
                 //     throw std::bad_alloc ();
-                std::copy (data_, data_ + std::min (size, size_), data);
-                std::fill (data + std::min (size, size_), data + size, value_type ());
+                std::copy (data_, data_ + std_min (size, size_), data);
+                std::fill (data + std_min (size, size_), data + size, value_type ());
                 delete [] data_;
                 capacity_ = size << 1;
                 data_ = data;

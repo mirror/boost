@@ -88,8 +88,8 @@ public:
     _x = (_modulus ? (value % _modulus) : value);
   }
 
-  result_type min() const { return c == 0 ? 1 : 0; }
-  result_type max() const { return modulus-1; }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return c == 0 ? 1 : 0; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return modulus-1; }
 
   IntType operator()()
   {
@@ -209,8 +209,8 @@ public:
 #else
   enum { has_fixed_range = false };
 #endif
-  int32_t min() const { return 0; }
-  int32_t max() const { return std::numeric_limits<int32_t>::max(); }
+  int32_t min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return 0; }
+  int32_t max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (std::numeric_limits<int32_t>::max)(); }
   
   explicit rand48(int32_t x0 = 1) : lcf(cnv(x0)) { }
   explicit rand48(uint64_t x0) : lcf(x0) { }

@@ -11,6 +11,7 @@
 #define BOOST_POOL_HPP
 
 #include <boost/config.hpp>  // for workarounds
+#include <boost/minmax.hpp>
 
 // std::less, std::less_equal, std::greater
 #include <functional>
@@ -497,7 +498,7 @@ void * pool<UserAllocator>::ordered_malloc(const size_type n)
     return ret;
 
   // Not enougn memory in our storages; make a new storage,
-  next_size = std::max(next_size, num_chunks);
+  next_size = std_max(next_size, num_chunks);
   const size_type POD_size = next_size * partition_size +
       details::pool::ct_lcm<sizeof(size_type), sizeof(void *)>::value + sizeof(size_type);
   char * const ptr = UserAllocator::malloc(POD_size);

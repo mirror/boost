@@ -50,8 +50,8 @@ public:
 
   // compiler-generated copy ctor and assignment operator are fine
 
-  result_type min() const { return _min; }
-  result_type max() const { return _max; }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _min; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _max; }
   void reset() { }
 
   template<class Engine>

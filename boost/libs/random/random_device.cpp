@@ -101,7 +101,7 @@ private:
 boost::random_device::random_device(const std::string& token)
   : pimpl(new impl(token))
 {
-  assert(std::numeric_limits<result_type>::max() == max_value);
+  assert((std::numeric_limits<result_type>::max)() == max_value);
 }
 
 boost::random_device::~random_device()

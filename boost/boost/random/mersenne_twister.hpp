@@ -113,8 +113,8 @@ public:
       throw std::invalid_argument("mersenne_twister::seed");
   }
   
-  result_type min() const { return 0; }
-  result_type max() const
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return 0; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const
   {
     // avoid "left shift count >= with of type" warning
     result_type res = 0;

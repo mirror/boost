@@ -21,6 +21,7 @@
 #define BOOST_REGEX_V4_PERL_MATCHER_NON_RECURSIVE_HPP
 
 #include <new>
+#include <boost/minmax.hpp>
 
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
@@ -546,7 +547,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_dot_repeat
       return match_dot_repeat_slow();
 
    const re_repeat* rep = static_cast<const re_repeat*>(pstate);
-   unsigned count = std::min(static_cast<unsigned>(re_detail::distance(position, last)), static_cast<unsigned>(rep->greedy ? rep->max : rep->min));
+   unsigned count = std_min(static_cast<unsigned>(re_detail::distance(position, last)), static_cast<unsigned>(rep->greedy ? rep->max : rep->min));
    if(rep->min > count)
       return false;  // not enough text left to match
    std::advance(position, count);
@@ -593,7 +594,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_char_repea
    if(::boost::is_random_access_iterator<BidiIterator>::value)
    {
       BidiIterator end = position;
-      std::advance(end, std::min((unsigned)re_detail::distance(position, last), desired));
+      std::advance(end, std_min((unsigned)re_detail::distance(position, last), desired));
       BidiIterator origin(position);
       while((position != end) && (traits_inst.translate(*position, icase) == what))
       {
@@ -660,7 +661,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_set_repeat
    if(::boost::is_random_access_iterator<BidiIterator>::value)
    {
       BidiIterator end = position;
-      std::advance(end, std::min((unsigned)re_detail::distance(position, last), desired));
+      std::advance(end, std_min((unsigned)re_detail::distance(position, last), desired));
       BidiIterator origin(position);
       while((position != end) && map[(traits_uchar_type)traits_inst.translate(*position, icase)])
       {
@@ -727,7 +728,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_long_set_r
    if(::boost::is_random_access_iterator<BidiIterator>::value)
    {
       BidiIterator end = position;
-      std::advance(end, std::min((unsigned)re_detail::distance(position, last), desired));
+      std::advance(end, std_min((unsigned)re_detail::distance(position, last), desired));
       BidiIterator origin(position);
       while((position != end) && (position != re_is_set_member(position, last, set, re)))
       {

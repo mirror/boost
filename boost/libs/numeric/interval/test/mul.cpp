@@ -16,23 +16,24 @@
 
 #include <boost/numeric/interval.hpp>
 #include <boost/test/minimal.hpp>
+#include <boost/minmax.hpp>
 #include "bugs.hpp"
 
 typedef boost::numeric::interval<double> I;
 
-static double min(double a, double b, double c, double d) {
-  return std::min(std::min(a, b), std::min(c, d));
+static double min BOOST_PREVENT_MACRO_SUBSTITUTION (double a, double b, double c, double d) {
+  return boost::std_min(boost::std_min(a, b), boost::std_min(c, d));
 }
 
-static double max(double a, double b, double c, double d) {
-  return std::max(std::max(a, b), std::max(c, d));
+static double max BOOST_PREVENT_MACRO_SUBSTITUTION (double a, double b, double c, double d) {
+  return boost::std_max(boost::std_max(a, b), boost::std_max(c, d));
 }
 
 static bool test_mul(double al, double au, double bl, double bu) {
   I a(al, au), b(bl, bu);
   I c = a * b;
-  return c.lower() == min(al*bl, al*bu, au*bl, au*bu)
-      && c.upper() == max(al*bl, al*bu, au*bl, au*bu);
+  return c.lower() == (min)(al*bl, al*bu, au*bl, au*bu)
+      && c.upper() == (max)(al*bl, al*bu, au*bl, au*bu);
 }
 
 static bool test_mul1(double ac, double bl, double bu) {
@@ -46,8 +47,8 @@ static bool test_mul1(double ac, double bl, double bu) {
 static bool test_div(double al, double au, double bl, double bu) {
   I a(al, au), b(bl, bu);
   I c = a / b;
-  return c.lower() == min(al/bl, al/bu, au/bl, au/bu)
-      && c.upper() == max(al/bl, al/bu, au/bl, au/bu);
+  return c.lower() == (min)(al/bl, al/bu, au/bl, au/bu)
+      && c.upper() == (max)(al/bl, al/bu, au/bl, au/bu);
 }
 
 static bool test_div1(double al, double au, double bc) {

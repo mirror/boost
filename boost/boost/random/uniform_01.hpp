@@ -47,20 +47,20 @@ public:
   explicit uniform_01(base_type rng)
     : _rng(rng),
       _factor(result_type(1) /
-              (result_type(_rng.max()-_rng.min()) +
+              (result_type((_rng.max)()-(_rng.min)()) +
                result_type(std::numeric_limits<base_result>::is_integer ? 1 : 0)))
   {
   }
   // compiler-generated copy ctor and copy assignment are fine
 
-  result_type min() const { return result_type(0); }
-  result_type max() const { return result_type(1); }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return result_type(0); }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return result_type(1); }
   base_type& base() { return _rng; }
   const base_type& base() const { return _rng; }
   void reset() { }
 
   result_type operator()() {
-    return result_type(_rng() - _rng.min()) * _factor;
+    return result_type(_rng() - (_rng.min)()) * _factor;
   }
 
 #if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)

@@ -40,8 +40,8 @@ int test_main(int, char *[]) {
   BOOST_TEST(in((float) PI, pi_f));
   BOOST_TEST(in((double)PI, pi_d));
   BOOST_TEST(subset(pi_i, widen(I_i((int)   PI), 1)));
-  BOOST_TEST(subset(pi_f, widen(I_f((float) PI), std::numeric_limits<float> ::min())));
-  BOOST_TEST(subset(pi_d, widen(I_d((double)PI), std::numeric_limits<double>::min())));
+  BOOST_TEST(subset(pi_f, widen(I_f((float) PI), (std::numeric_limits<float> ::min)())));
+  BOOST_TEST(subset(pi_d, widen(I_d((double)PI), (std::numeric_limits<double>::min)())));
 
   // We can't test the following equalities for interval<int>.
   I_f pi_f_half = pi_half<I_f>();

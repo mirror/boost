@@ -24,6 +24,7 @@
 #include <boost/numeric/interval/constants.hpp>
 #include <boost/numeric/interval/arith.hpp>
 #include <boost/numeric/interval/arith2.hpp>
+#include <boost/minmax.hpp>
 #include <algorithm>
 
 namespace boost {
@@ -72,13 +73,11 @@ interval<T, Policies> cos(const interval<T, Policies>& x)
   T l = tmp.lower();
   T u = tmp.upper();
 
-  BOOST_NUMERIC_INTERVAL_using_max(min);
-
   // separate into monotone subintervals
   if (u <= interval_lib::constants::pi_lower<T>())
     return I(rnd.cos_down(u), rnd.cos_up(l), true);
   else if (u <= pi2.lower())
-    return I(static_cast<T>(-1), rnd.cos_up(min(rnd.sub_down(pi2.lower(), u), l)), true);
+    return I(static_cast<T>(-1), rnd.cos_up(std_min(rnd.sub_down(pi2.lower(), u), l)), true);
   else
     return I(static_cast<T>(-1), static_cast<T>(1), true);
 }

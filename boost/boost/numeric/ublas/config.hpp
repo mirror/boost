@@ -369,7 +369,7 @@ static bool disable_type_check = false;
 #define BOOST_UBLAS_TYPE_CHECK_EPSILON (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()))
 #endif
 #ifndef BOOST_UBLAS_TYPE_CHECK_MIN
-#define BOOST_UBLAS_TYPE_CHECK_MIN (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::min ()))
+#define BOOST_UBLAS_TYPE_CHECK_MIN (type_traits<real_type>::sqrt ((std::numeric_limits<real_type>::min) ()))
 #endif
 
 
@@ -384,7 +384,7 @@ static bool disable_type_check = false;
 #define BOOST_UBLAS_USE_INDEXING
 // #define BOOST_UBLAS_USE_ITERATING
 // #define BOOST_UBLAS_ITERATOR_THRESHOLD 0
-// #define BOOST_UBLAS_ITERATOR_THRESHOLD (std::numeric_limits<std::ptrdiff_t>::max ())
+// #define BOOST_UBLAS_ITERATOR_THRESHOLD ((std::numeric_limits<std::ptrdiff_t>::max) ())
 
 // Use indexed iterators.
 // #define BOOST_UBLAS_USE_INDEXED_ITERATOR

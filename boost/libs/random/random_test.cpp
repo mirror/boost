@@ -252,9 +252,9 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   BOOST_TEST(have_exception);
 
   // check for min/max members
-  ResultType min = urng3.min();
+  ResultType min = (urng3.min)();
   (void) &min;
-  ResultType max = urng3.max();
+  ResultType max = (urng3.max)();
   (void) &max;
 
 #if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
@@ -390,16 +390,16 @@ void instantiate_all()
 template<class Generator>
 void check_uniform_int(Generator & gen, int iter)
 {
-  std::cout << "testing uniform_int(" << gen.min() << "," << gen.max() 
+  std::cout << "testing uniform_int(" << (gen.min)() << "," << (gen.max)() 
             << ")" << std::endl;
-  int range = gen.max()-gen.min()+1;
+  int range = (gen.max)()-(gen.min)()+1;
   std::vector<int> bucket(range);
   for(int j = 0; j < iter; j++) {
     int result = gen();
-    if(result < gen.min() || result > gen.max())
+    if(result < (gen.min)() || result > (gen.max)())
       std::cerr << "   ... delivers " << result << std::endl;
     else
-      bucket[result-gen.min()]++;
+      bucket[result-(gen.min)()]++;
   }
   int sum = 0;
   // use a different variable name "k", because MSVC has broken "for" scoping
@@ -426,8 +426,8 @@ void test_uniform_int(Generator & gen)
   typedef boost::variate_generator<Generator&, int_gen> level_one;
 
   level_one uint12(gen, int_gen(1,2));
-  BOOST_TEST(uint12.distribution().min() == 1);
-  BOOST_TEST(uint12.distribution().max() == 2);
+  BOOST_TEST((uint12.distribution().min)() == 1);
+  BOOST_TEST((uint12.distribution().max)() == 2);
   check_uniform_int(uint12, 100000);
   level_one uint16(gen, int_gen(1,6));
   check_uniform_int(uint16, 100000);
@@ -483,9 +483,9 @@ class ruetti_gen
 {
 public:
   typedef boost::uint64_t result_type;
-  result_type min() const { return 0; }
-  result_type max() const { return std::numeric_limits<result_type>::max(); }
-  result_type operator()() { return max()-1; }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return 0; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (std::numeric_limits<result_type>::max)(); }
+  result_type operator()() { return (max)()-1; }
 };
 
 void test_overflow_range()

@@ -53,6 +53,9 @@
 #  include BOOST_PLATFORM_CONFIG
 #endif
 
+// used in various places to guard against the min/max macros
+#define BOOST_PREVENT_MACRO_SUBSTITUTION
+
 // get config suffix code:
 #include <boost/config/suffix.hpp>
 

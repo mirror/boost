@@ -21,6 +21,7 @@
 #include <boost/numeric/interval/detail/bugs.hpp>
 #include <boost/numeric/interval/detail/test_input.hpp>
 #include <boost/numeric/interval/detail/division.hpp>
+#include <boost/minmax.hpp>
 #include <algorithm>
 
 namespace boost {
@@ -176,8 +177,6 @@ template<class T, class Policies> inline
 interval<T, Policies> operator*(const interval<T, Policies>& x,
                                 const interval<T, Policies>& y)
 {
-  BOOST_NUMERIC_INTERVAL_using_max(min);
-  BOOST_NUMERIC_INTERVAL_using_max(max);
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
     return I::empty();
@@ -191,8 +190,8 @@ interval<T, Policies> operator*(const interval<T, Policies>& x,
     if (interval_lib::user::is_pos(xu))
       if (interval_lib::user::is_neg(yl))
         if (interval_lib::user::is_pos(yu)) // M * M
-          return I(min(rnd.mul_down(xl, yu), rnd.mul_down(xu, yl)),
-                   max(rnd.mul_up  (xl, yl), rnd.mul_up  (xu, yu)), true);
+          return I(std_min(rnd.mul_down(xl, yu), rnd.mul_down(xu, yl)),
+                   std_max(rnd.mul_up  (xl, yl), rnd.mul_up  (xu, yu)), true);
         else                    // M * N
           return I(rnd.mul_down(xu, yl), rnd.mul_up(xl, yl), true);
       else

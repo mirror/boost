@@ -16,6 +16,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <boost/config.hpp>
 #include <boost/random.hpp>
 #include <boost/progress.hpp>
 #include <boost/shared_ptr.hpp>
@@ -64,8 +65,8 @@ public:
     { _x = x0; _a = a; _c = c; _m = m; }
   void seed(IntType x0) { _x = x0; }
   result_type operator()() { _x = (_a*_x+_c) % _m; return _x; }
-  result_type min() const { return _c == 0 ? 1 : 0; }
-  result_type max() const { return _m -1; }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _c == 0 ? 1 : 0; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _m -1; }
 
 private:
   IntType _x, _a, _c, _m;
@@ -82,8 +83,8 @@ public:
 
   counting() : _x(0) { }
   result_type operator()() { return ++_x; }
-  result_type min() const { return 1; }
-  result_type max() const { return std::numeric_limits<result_type>::max(); }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return 1; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (std::numeric_limits<result_type>::max)(); }
 
 private:
   int _x;

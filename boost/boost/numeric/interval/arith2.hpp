@@ -22,6 +22,7 @@
 #include <boost/numeric/interval/detail/division.hpp>
 #include <boost/numeric/interval/arith.hpp>
 #include <boost/numeric/interval/policies.hpp>
+#include <boost/minmax.hpp>
 #include <algorithm>
 #include <cmath>
 
@@ -171,8 +172,7 @@ interval<T, Policies> pow(const interval<T, Policies>& x, int pwr)
     if (pwr & 1) {   // [-1,1]^1
       return I(-pow_aux(-x.lower(), pwr, rnd), pow_aux(x.upper(), pwr, rnd), true);
     } else {         // [-1,1]^2
-      BOOST_NUMERIC_INTERVAL_using_max(max);
-      return I(static_cast<T>(0), pow_aux(max(-x.lower(), x.upper()), pwr, rnd), true);
+      return I(static_cast<T>(0), pow_aux(std_max(-x.lower(), x.upper()), pwr, rnd), true);
     }
   } else {                                // [1,2]
     return I(pow_aux(x.lower(), pwr, rnd), pow_aux(x.upper(), pwr, rnd), true);

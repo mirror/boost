@@ -16,12 +16,13 @@
 
 #include <boost/numeric/ublas/triangular.hpp>
 #include <boost/numeric/ublas/io.hpp>
+#include <boost/minmax.hpp>
 
 int main () {
     using namespace boost::numeric::ublas;
     matrix<double> m (3, 3);
     vector<double> v (3);
-    for (unsigned i = 0; i < std::min (m.size1 (), v.size ()); ++ i) {
+    for (unsigned i = 0; i < std_min (m.size1 (), v.size ()); ++ i) {
         for (unsigned j = 0; j <= i; ++ j)
             m (i, j) = 3 * i + j + 1;
         v (i) = i;

@@ -62,14 +62,14 @@ public:
 
   void set(result_type min, result_type max);
   
-  result_type min() const { return _min; }
-  result_type max() const { return _max; }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _min; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _max; }
   base_type& base() const { return *_rng; }
   
   result_type operator()()
   {
     // we must not use the low bits here, because LCGs get very bad then
-    return (((*_rng)() - _rng->min()) / _factor) % _range + _min;
+    return (((*_rng)() - (_rng->min)()) / _factor) % _range + _min;
   }
 
 private:
@@ -95,8 +95,8 @@ set(result_type min, result_type max)
   // (probably put this logic into a partial template specialization)
   // Check how many low bits we can ignore before we get too much
   // quantization error.
-  base_result r_base = _rng->max() - _rng->min();
-  if(r_base == std::numeric_limits<base_result>::max()) {
+  base_result r_base = (_rng->max)() - (_rng->min)();
+  if(r_base == (std::numeric_limits<base_result>::max)()) {
     _factor = 2;
     r_base /= 2;
   }
@@ -137,8 +137,8 @@ public:
     _range = static_cast<base_result>(_max-_min)+1;
   }
 
-  result_type min() const { return _min; }
-  result_type max() const { return _max; }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _min; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _max; }
   base_type& base() const { return _rng.base(); }
 
   result_type operator()()
@@ -175,8 +175,8 @@ public:
 #endif
  }
 
-  result_type min() const { return _min; }
-  result_type max() const { return _max; }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _min; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return _max; }
   void reset() { }
 
   template<class Engine>
@@ -190,8 +190,8 @@ public:
     // (probably put this logic into a partial template specialization)
     // Check how many low bits we can ignore before we get too much
     // quantization error.
-    base_result r_base = eng.max() - eng.min();
-    if(r_base == std::numeric_limits<base_result>::max()) {
+    base_result r_base = (eng.max)() - (eng.min)();
+    if(r_base == (std::numeric_limits<base_result>::max)()) {
       _factor = 2;
       r_base /= 2;
     }
@@ -205,7 +205,7 @@ public:
         r_base /= 2;
     }
 
-    return ((eng() - eng.min()) / _factor) % _range + _min;
+    return ((eng() - (eng.min)()) / _factor) % _range + _min;
   }
 
 #if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)

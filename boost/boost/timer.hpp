@@ -55,7 +55,7 @@ class timer
   // Portability warning: elapsed_max() may return too high a value on systems
   // where std::clock_t overflows or resets at surprising values.
   {
-    return (double(std::numeric_limits<std::clock_t>::max())
+    return (double((std::numeric_limits<std::clock_t>::max)())
        - double(_start_time)) / double(CLOCKS_PER_SEC); 
   }
 

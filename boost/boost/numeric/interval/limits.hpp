@@ -33,8 +33,8 @@ private:
   typedef boost::numeric::interval<T, Policies> I;
   typedef numeric_limits<T> bl;
 public:
-  static I min() throw() { return I(bl::min(), bl::min()); }
-  static I max() throw() { return I(bl::max(), bl::max()); }
+  static I min BOOST_PREVENT_MACRO_SUBSTITUTION () throw() { return I((bl::min)(), (bl::min)()); }
+  static I max BOOST_PREVENT_MACRO_SUBSTITUTION () throw() { return I((bl::max)(), (bl::max)()); }
   static I epsilon() throw() { return I(bl::epsilon(), bl::epsilon()); }
 
   BOOST_STATIC_CONSTANT(float_round_style, round_style = round_indeterminate);

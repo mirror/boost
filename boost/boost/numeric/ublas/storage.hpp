@@ -30,6 +30,7 @@
 #include <boost/numeric/ublas/exception.hpp>
 #include <boost/numeric/ublas/iterator.hpp>
 #include <boost/numeric/ublas/traits.hpp>
+#include <boost/minmax.hpp>
 
 namespace boost { namespace numeric { namespace ublas {
 
@@ -39,7 +40,7 @@ namespace boost { namespace numeric { namespace ublas {
 //    BOOST_UBLAS_INLINE
 //    const T &same_impl (const T &size1, const T &size2) {
 //        BOOST_UBLAS_CHECK (size1 == size2, bad_argument ());
-//        return std::min (size1, size2);
+//        return std_min (size1, size2);
 //    }
 // #define BOOST_UBLAS_SAME(size1, size2) same_impl ((size1), (size2))
     template<class T>
@@ -49,7 +50,7 @@ namespace boost { namespace numeric { namespace ublas {
     // const T &same_impl_ex (const T &size1, const T &size2, const char *file, int line) {
     T same_impl_ex (const T &size1, const T &size2, const char *file, int line) {
         BOOST_UBLAS_CHECK_EX (size1 == size2, file, line, bad_argument ());
-        return std::min (size1, size2);
+        return std_min (size1, size2);
     }
 #define BOOST_UBLAS_SAME(size1, size2) same_impl_ex ((size1), (size2), __FILE__, __LINE__)
 #else
@@ -136,8 +137,8 @@ namespace boost { namespace numeric { namespace ublas {
                 // if (! data_)
                 //     throw std::bad_alloc ();
                 if (preserve) {
-                    std::copy (data_, data_ + std::min (size, size_), data);
-                    std::fill (data + std::min (size, size_), data + size, value_type ());
+                    std::copy (data_, data_ + std_min (size, size_), data);
+                    std::fill (data + std_min (size, size_), data + size, value_type ());
                 }
                 delete [] data_;
                 size_ = size;
@@ -358,7 +359,7 @@ namespace boost { namespace numeric { namespace ublas {
                 // throw std::bad_alloc ();
                 bad_size ().raise ();
             if (preserve)
-                std::fill (data_ + std::min (size, size_), data_ + size, value_type ());
+                std::fill (data_ + std_min (size, size_), data_ + size, value_type ());
             size_ = size;
         }
 
@@ -408,7 +409,7 @@ namespace boost { namespace numeric { namespace ublas {
                 // Precondition for container relaxed as requested during review.
                 // BOOST_UBLAS_CHECK (size_ == a.size_, bad_size ());
                 std::swap (size_, a.size_);
-                std::swap_ranges (data_, data_ + std::max (size_, a.size_), a.data_);
+                std::swap_ranges (data_, data_ + std_max (size_, a.size_), a.data_);
             }
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -596,8 +597,8 @@ namespace boost { namespace numeric { namespace ublas {
                 // if (! data_)
                 //     throw std::bad_alloc ();
                 if (preserve) {
-                    std::copy (data_, data_ + std::min (size, size_), data);
-                    std::fill (data + std::min (size, size_), data + size, value_type ());
+                    std::copy (data_, data_ + std_min (size, size_), data);
+                    std::fill (data + std_min (size, size_), data + size, value_type ());
                 }
                 if (own_)
                     delete [] data_;
@@ -612,8 +613,8 @@ namespace boost { namespace numeric { namespace ublas {
             // if (! data_)
             //     throw std::bad_alloc ();
             if (preserve) {
-                std::copy (data_, data_ + std::min (size, size_), data);
-                std::fill (data + std::min (size, size_), data + size, value_type ());
+                std::copy (data_, data_ + std_min (size, size_), data);
+                std::fill (data + std_min (size, size_), data + size, value_type ());
             }
             if (own_)
                 delete [] data_;
@@ -862,8 +863,8 @@ namespace boost { namespace numeric { namespace ublas {
                 // if (! data_.get ())
                 //     throw std::bad_alloc ();
                 if (preserve) {
-                    std::copy (data_.get (), data_.get () + std::min (size, size_), data.get ());
-                    std::fill (data.get () + std::min (size, size_), data.get () + size, value_type ());
+                    std::copy (data_.get (), data_.get () + std_min (size, size_), data.get ());
+                    std::fill (data.get () + std_min (size, size_), data.get () + size, value_type ());
                 }
                 size_ = size;
                 data_ = data;
@@ -875,8 +876,8 @@ namespace boost { namespace numeric { namespace ublas {
             // if (! data_.get ())
             //     throw std::bad_alloc ();
             if (preserve) {
-                std::copy (data_.get (), data_.get () + std::min (size, size_), data);
-                std::fill (data + std::min (size, size_), data + size, value_type ());
+                std::copy (data_.get (), data_.get () + std_min (size, size_), data);
+                std::fill (data + std_min (size, size_), data + size, value_type ());
             }
             size_ = size;
             data_ = data;

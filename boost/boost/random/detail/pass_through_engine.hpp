@@ -42,8 +42,8 @@ public:
     : _rng(static_cast<typename helper_type::rvalue_type>(rng))
   { }
 
-  result_type min() const { return base().min(); }
-  result_type max() const { return base().max(); }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (base().min)(); }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (base().max)(); }
   base_type& base() { return helper_type::ref(_rng); }
   const base_type& base() const { return helper_type::ref(_rng); }
 

@@ -332,7 +332,7 @@ public:
     // generator_reference_t<RNG> gen_ref(rng);
     RNG& gen_ref(rng);
     kolmogorov_experiment ks(n1);
-    uniform_distribution ud(rng.min(), rng.max());
+    uniform_distribution ud((rng.min)(), (rng.max)());
     check(run_experiment(test_distrib_chi_square,
                          ks_experiment_generator(ks, gen_ref, ud), n2));
     check(run_experiment(test_distrib_chi_square,

@@ -53,8 +53,8 @@ test_month()
         sm1.as_short_string() == std::string("Jan"));
   check("short construction -- 12", 
         sm12.as_short_string() == std::string("Dec"));
-  check("month traits min", greg_month::min() == 1);
-  check("month traits max", greg_month::max() == 12);
+  check("month traits min", (greg_month::min)() == 1);
+  check("month traits max", (greg_month::max)() == 12);
 
 }
 

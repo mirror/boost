@@ -17,6 +17,7 @@
 #include <boost/throw_exception.hpp>
 #include <boost/assert.hpp>
 #include <boost/format/format_class.hpp>
+#include <boost/minmax.hpp>
 #include <algorithm> // std::swap
 
 namespace boost {
@@ -207,7 +208,7 @@ namespace boost {
             const format_item_t& item = items_[i];
             sz += item.res_.size();
             if( item.argN_ == format_item_t::argN_tabulation)
-                sz = std::max(sz, item.fmtstate_.width_);
+                sz = std_max(sz, item.fmtstate_.width_);
             sz +=  + item.appendix_.size();
         }
         return static_cast<typename string_type::size_type> (sz);

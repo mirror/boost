@@ -19,6 +19,7 @@
 
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/vector_expression.hpp>
+#include <boost/minmax.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 
@@ -37,7 +38,7 @@ namespace boost { namespace numeric { namespace ublas {
 #else
         // GCC 3.1, oops?!
         return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-               std::max (real_type (std::max (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
+               std_max (real_type (std_max (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
                          real_type (BOOST_UBLAS_TYPE_CHECK_MIN));
 #endif
     }
@@ -299,14 +300,14 @@ namespace boost { namespace numeric { namespace ublas {
         difference_type it_size (it_end - it);
         difference_type ite_size (ite_end - ite);
         if (it_size > 0 && ite_size > 0) {
-            difference_type size (std::min (difference_type (it.index () - ite.index ()), ite_size));
+            difference_type size (std_min (difference_type (it.index () - ite.index ()), ite_size));
             if (size > 0) {
                 ite += size;
                 ite_size -= size;
             }
         }
         if (it_size > 0 && ite_size > 0) {
-            difference_type size (std::min (difference_type (ite.index () - it.index ()), it_size));
+            difference_type size (std_min (difference_type (ite.index () - it.index ()), it_size));
             if (size > 0) {
                 it_size -= size;
                 if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
@@ -317,7 +318,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        difference_type size (std::min (it_size, ite_size));
+        difference_type size (std_min (it_size, ite_size));
         it_size -= size;
         ite_size -= size;
         while (-- size >= 0)
@@ -504,18 +505,18 @@ namespace boost { namespace numeric { namespace ublas {
         difference_type it_size (it_end - it);
         difference_type ite_size (ite_end - ite);
         if (it_size > 0 && ite_size > 0) {
-            difference_type size (std::min (difference_type (it.index () - ite.index ()), ite_size));
+            difference_type size (std_min (difference_type (it.index () - ite.index ()), ite_size));
             if (size > 0) {
                 ite += size;
                 ite_size -= size;
             }
         }
         if (it_size > 0 && ite_size > 0) {
-            difference_type size (std::min (difference_type (ite.index () - it.index ()), it_size));
+            difference_type size (std_min (difference_type (ite.index () - it.index ()), it_size));
             if (size > 0)
                 it_size -= size;
         }
-        difference_type size (std::min (it_size, ite_size));
+        difference_type size (std_min (it_size, ite_size));
         it_size -= size;
         ite_size -= size;
         while (-- size >= 0)

@@ -92,8 +92,8 @@ void test_conversion_to_int()
     BOOST_CHECK_THROW(lexical_cast<int>('A'),boost::bad_lexical_cast);
     BOOST_CHECK_EQUAL(1,lexical_cast<int>(1));
     BOOST_CHECK_EQUAL(
-        std::numeric_limits<int>::max(),
-        lexical_cast<int>(std::numeric_limits<int>::max()));
+        (std::numeric_limits<int>::max)(),
+        lexical_cast<int>((std::numeric_limits<int>::max)()));
     BOOST_CHECK_EQUAL(1,lexical_cast<int>(1.0));
 
     BOOST_CHECK_THROW(lexical_cast<int>(1.23), boost::bad_lexical_cast);
@@ -123,8 +123,8 @@ void test_conversion_to_double()
     BOOST_CHECK_EQUAL(1.0, lexical_cast<double>(1));
     BOOST_CHECK_EQUAL(1.23, lexical_cast<double>(1.23));
     BOOST_CHECK_CLOSE(
-        std::numeric_limits<double>::max() / 2,
-        lexical_cast<double>(std::numeric_limits<double>::max() / 2),
+        (std::numeric_limits<double>::max)() / 2,
+        lexical_cast<double>((std::numeric_limits<double>::max)() / 2),
         std::numeric_limits<double>::epsilon());
     BOOST_CHECK_EQUAL(1.0, lexical_cast<double>(true));
     BOOST_CHECK_EQUAL(0.0, lexical_cast<double>(false));

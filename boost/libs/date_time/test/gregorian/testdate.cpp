@@ -57,9 +57,9 @@ main()
   
   //The max function will not compile with Borland 5.5
   //Complains about must specialize basic_data<limits> ??? 
-//   std::cout << "Max date is " << date::max() << std::endl;
-//   //std::cout << "Max date is " << basic_date< date_limits<unsigned int,1900> >::max() << std::endl;
-//   //std::cout << "Max date is " << date_limits<unsigned int, 1900>::max() << std::endl;
+//   std::cout << "Max date is " << (date::max)() << std::endl;
+//   //std::cout << "Max date is " << (basic_date< date_limits<unsigned int,1900> >::max)() << std::endl;
+//   //std::cout << "Max date is " << (date_limits<unsigned int, 1900>::max)() << std::endl;
 
   const date answers[] = {date(1900,Jan,1),date(1900,Jan,4),date(1900,Jan,7),
                           date(1900,Jan,10),date(1900,Jan,13)};

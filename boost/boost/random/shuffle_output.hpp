@@ -74,16 +74,16 @@ public:
   result_type operator()() {
     // calculating the range every time may seem wasteful.  However, this
     // makes the information locally available for the optimizer.
-    result_type range = max()-min()+1;
-    int j = k*(y-min())/range;
+    result_type range = (max)()-(min)()+1;
+    int j = k*(y-(min)())/range;
     // assert(0 <= j && j < k);
     y = v[j];
     v[j] = _rng();
     return y;
   }
 
-  result_type min() const { return _rng.min(); }
-  result_type max() const { return _rng.max(); }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (_rng.min)(); }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (_rng.max)(); }
   static bool validation(result_type x) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
@@ -127,7 +127,7 @@ private:
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
     BOOST_STATIC_ASSERT(std::numeric_limits<result_type>::is_integer);
 #endif
-    result_type range = max()-min();
+    result_type range = (max)()-(min)();
     assert(range > 0);      // otherwise there would be little choice
     if(static_cast<unsigned long>(k * range) < 
        static_cast<unsigned long>(range))  // not a sufficient condition

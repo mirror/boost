@@ -25,6 +25,7 @@
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/cstdint.hpp>     // uint32_t
+#include <boost/minmax.hpp>
 
 
 namespace boost {
@@ -75,8 +76,8 @@ public:
     return (_rng1() << s1) ^ (_rng2() << s2);
   }
 
-  result_type min() const { return std::min(_rng1.min(), _rng2.min()); }
-  result_type max() const { return std::max(_rng1.min(), _rng2.max()); }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return std_min((_rng1.min)(), (_rng2.min)()); }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return std_max((_rng1.min)(), (_rng2.max)()); }
   static bool validation(result_type x) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE

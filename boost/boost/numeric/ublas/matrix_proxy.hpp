@@ -20,6 +20,7 @@
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/vector_expression.hpp>
 #include <boost/numeric/ublas/matrix_expression.hpp>
+#include <boost/minmax.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 
@@ -1880,7 +1881,7 @@ namespace boost { namespace numeric { namespace ublas {
                 // One of the slices may be stationary.
                 // Thanks to Michael Stevens for this extension.
                 // return BOOST_UBLAS_SAME (it1_ - it.it1_, it2_ - it.it2_);
-                return std::max (it1_ - it.it1_, it2_ - it.it2_);
+                return std_max (it1_ - it.it1_, it2_ - it.it2_);
             }
 
             // Dereference
@@ -1895,7 +1896,7 @@ namespace boost { namespace numeric { namespace ublas {
                 // One of the slices may be stationary.
                 // Thanks to Michael Stevens for this extension.
                 // return BOOST_UBLAS_SAME (it1_.index (), it2_.index ());
-                return std::max (it1_.index (), it2_.index ());
+                return std_max (it1_.index (), it2_.index ());
             }
 
             // Assignment 
@@ -1993,7 +1994,7 @@ namespace boost { namespace numeric { namespace ublas {
                 // One of the slices may be stationary.
                 // Thanks to Michael Stevens for this extension.
                 // return BOOST_UBLAS_SAME (it1_ - it.it1_, it2_ - it.it2_);
-                return std::max (it1_ - it.it1_, it2_ - it.it2_);
+                return std_max (it1_ - it.it1_, it2_ - it.it2_);
             }
 
             // Dereference
@@ -2008,7 +2009,7 @@ namespace boost { namespace numeric { namespace ublas {
                 // One of the slices may be stationary.
                 // Thanks to Michael Stevens for this extension.
                 // return BOOST_UBLAS_SAME (it1_.index (), it2_.index ());
-                return std::max (it1_.index (), it2_.index ());
+                return std_max (it1_.index (), it2_.index ());
             }
 
             // Assignment

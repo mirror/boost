@@ -19,6 +19,8 @@
 #ifndef BOOST_UBLAS_LU_H
 #define BOOST_UBLAS_LU_H
 
+#include <boost/minmax.hpp>
+
 namespace boost { namespace numeric { namespace ublas {
 
     template<class T = std::size_t, class A = unbounded_array<T> >
@@ -90,7 +92,7 @@ namespace boost { namespace numeric { namespace ublas {
         int singular = 0;
         size_type size1 = m.size1 ();
         size_type size2 = m.size2 ();
-        size_type size = std::min (size1, size2);
+        size_type size = std_min (size1, size2);
         for (size_type i = 0; i < size; ++ i) {
             matrix_column<M> mci (column (m, i));
             matrix_row<M> mri (row (m, i));
@@ -124,7 +126,7 @@ namespace boost { namespace numeric { namespace ublas {
         int singular = 0;
         size_type size1 = m.size1 ();
         size_type size2 = m.size2 ();
-        size_type size = std::min (size1, size2);
+        size_type size = std_min (size1, size2);
         for (size_type i = 0; i < size; ++ i) {
             matrix_column<M> mci (column (m, i));
             matrix_row<M> mri (row (m, i));
@@ -167,7 +169,7 @@ namespace boost { namespace numeric { namespace ublas {
         int singular = 0;
         size_type size1 = m.size1 ();
         size_type size2 = m.size2 ();
-        size_type size = std::min (size1, size2);
+        size_type size = std_min (size1, size2);
 #ifndef BOOST_UBLAS_LU_WITH_INPLACE_SOLVE
         matrix_type mr (m);
         mr.assign (zero_matrix<value_type> (size1, size2));

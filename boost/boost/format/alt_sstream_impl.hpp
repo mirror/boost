@@ -238,7 +238,7 @@ namespace boost {
                 Ch * newptr = NULL,  *oldptr = eback();
 
                 // make sure adding add_size wont overflow size_t
-                while (0 < add_size && (std::numeric_limits<std::size_t>::max()
+                while (0 < add_size && ((std::numeric_limits<std::size_t>::max)()
                                         - add_size < new_size) )
                     add_size /= 2;
                 if(0 < add_size) {

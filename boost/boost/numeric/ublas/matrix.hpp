@@ -23,6 +23,7 @@
 #include <boost/numeric/ublas/matrix_expression.hpp>
 #include <boost/numeric/ublas/matrix_assign.hpp>
 #include <boost/numeric/ublas/matrix_proxy.hpp>
+#include <boost/minmax.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 
@@ -2066,16 +2067,16 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_iterator1 find1 (int rank, size_type i, size_type j) const {
             if (rank == 1) {
-                i = std::max (i, j);
-                i = std::min (i, j + 1);
+                i = std_max (i, j);
+                i = std_min (i, j + 1);
             }
             return const_iterator1 (*this, i, j);
         }
         BOOST_UBLAS_INLINE
         const_iterator2 find2 (int rank, size_type i, size_type j) const {
             if (rank == 1) {
-                j = std::max (j, i);
-                j = std::min (j, i + 1);
+                j = std_max (j, i);
+                j = std_min (j, i + 1);
             }
             return const_iterator2 (*this, i, j);
         }

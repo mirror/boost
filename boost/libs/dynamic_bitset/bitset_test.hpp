@@ -9,6 +9,7 @@
 #include <algorithm> // for std::min
 #include <fstream>
 #include <boost/test/test_tools.hpp>
+#include <boost/minmax.hpp>
 
 // Extract the bit at position n from num.
 template <typename Block>
@@ -42,7 +43,7 @@ struct bitset_test {
     //   if M < N then the remaining bit positions are initialized to zero
 
     std::size_t N = b.size();
-    std::size_t M = std::min(N, CHAR_BIT * sizeof(unsigned long));
+    std::size_t M = boost::std_min(N, CHAR_BIT * sizeof(unsigned long));
     std::size_t I;
     for (I = 0; I < M; ++I)
       BOOST_CHECK(b[I] == nth_bit(num, I));
@@ -57,7 +58,7 @@ struct bitset_test {
     if (pos > str.size()) {
       // Not in range, doesn't satisfy precondition.
     } else {
-      std::size_t rlen = std::min(n, str.size() - pos);
+      std::size_t rlen = boost::std_min(n, str.size() - pos);
 
       // Throws invalid_argument if any of the rlen characters in str
       // beginning at position pos is other than 0 or 1.
@@ -77,7 +78,7 @@ struct bitset_test {
 
         Bitset b(str, pos, n);
         std::size_t N = b.size();
-        std::size_t M = std::min(N, rlen);
+        std::size_t M = boost::std_min(N, rlen);
         std::size_t j;
         for (j = 0; j < M; ++j)
           BOOST_CHECK(b[j] == (str[pos + M - 1 - j] == '1'));

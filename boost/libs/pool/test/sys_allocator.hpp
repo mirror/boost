@@ -44,7 +44,7 @@ struct malloc_allocator
   }
   static void deallocate(const pointer p, const size_type)
   { std::free(p); }
-  static size_type max_size() { return std::numeric_limits<size_type>::max(); }
+  static size_type max_size() { return (std::numeric_limits<size_type>::max)(); }
 
   bool operator==(const malloc_allocator &) const { return true; }
   bool operator!=(const malloc_allocator &) const { return false; }
@@ -83,7 +83,7 @@ struct new_delete_allocator
   { return (pointer) new char[n * sizeof(T)]; }
   static void deallocate(const pointer p, const size_type)
   { delete [] p; }
-  static size_type max_size() { return std::numeric_limits<size_type>::max(); }
+  static size_type max_size() { return (std::numeric_limits<size_type>::max)(); }
 
   bool operator==(const new_delete_allocator &) const { return true; }
   bool operator!=(const new_delete_allocator &) const { return false; }

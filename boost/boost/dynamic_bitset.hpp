@@ -41,6 +41,7 @@
 #include <cctype>               // for isspace
 #endif
 
+#include "boost/minmax.hpp"
 #include "boost/dynamic_bitset_fwd.hpp" //G.P.S.
 #include "boost/detail/dynamic_bitset.hpp"
 
@@ -185,7 +186,7 @@ public:
                std::string::size_type n = std::string::npos,
                const Allocator& alloc = Allocator())
         : detail::dynamic_bitset_base<Block, Allocator>
-            (std::min(n, s.size() - pos), alloc)
+            (std_min(n, s.size() - pos), alloc)
 #else
     // The parenthesis around std::basic_string<CharT, Traits, Alloc>::npos
     // in the code below are to avoid a g++ 3.2 bug and a Borland bug. -JGS
@@ -197,12 +198,12 @@ public:
             = (std::basic_string<CharT, Traits, Alloc>::npos),
         const Allocator& alloc = Allocator())
         : detail::dynamic_bitset_base<Block, Allocator>
-            (std::min(n, s.size() - pos), alloc)
+            (std_min(n, s.size() - pos), alloc)
 #endif
     {
         // Locate sub string
         assert(pos <= s.length());
-        from_string(s, pos, std::min(n, s.size() - pos));
+        from_string(s, pos, std_min(n, s.size() - pos));
     }
 
     // The first bit in *first is the least significant bit, and the
@@ -343,7 +344,7 @@ public:
                      typename String::size_type rlen)
     {
         reset(); // bugfix [gps]
-        size_type const tot = std::min (rlen, s.length()); // bugfix [gps]
+        size_type const tot = std_min(rlen, s.length()); // bugfix [gps]
 
         // Assumes string contains only 0's and 1's
         for (size_type i = 0; i < tot; ++i) {
@@ -466,7 +467,7 @@ dynamic_bitset<Block, Allocator>::
 dynamic_bitset(size_type num_bits, unsigned long value, const Allocator& alloc)
   : detail::dynamic_bitset_base<Block, Allocator>(num_bits, alloc)
 {
-  const size_type M = std::min(sizeof(unsigned long) * CHAR_BIT, num_bits);
+  const size_type M = std_min(sizeof(unsigned long) * CHAR_BIT, num_bits);
   for(size_type i = 0; i < M; ++i, value >>= 1) // [G.P.S.] to be optimized
     if ( value & 0x1 )
       set_(i);
@@ -1028,7 +1029,7 @@ to_ulong() const
     const Block mask = static_cast<Block>(static_cast<unsigned long>(-1));
     if (this->m_bits[0] & ~mask)
       throw overflow;
-    size_type N = std::min(sizeof(unsigned long) * CHAR_BIT, this->size());
+    size_type N = std_min(sizeof(unsigned long) * CHAR_BIT, this->size());
     unsigned long num = 0;
     for (size_type j = 0; j < N; ++j)
       if (this->test(j))
@@ -1046,7 +1047,7 @@ to_ulong() const
     }
 
     unsigned long result = 0;
-    size_type N = std::min(sizeof(unsigned long) * CHAR_BIT, this->size());
+    size_type N = std_min(sizeof(unsigned long) * CHAR_BIT, this->size());
     for (size_type i = 0; i < N; ++i)
       if (this->test(i))
         result |= (1 << i);

@@ -31,6 +31,7 @@
 #include <boost/numeric/ublas/traits.hpp>
 #include <boost/numeric/ublas/duff.hpp>
 #include <boost/numeric/ublas/raw.hpp>
+#include <boost/minmax.hpp>
 
 namespace boost { namespace numeric { namespace ublas {
 
@@ -727,20 +728,20 @@ namespace boost { namespace numeric { namespace ublas {
             if (it1_size > 0 && it2_size > 0)
                 diff = it2.index () - it1.index ();
             if (diff != 0) {
-                difference_type size = std::min (diff, it1_size);
+                difference_type size = std_min (diff, it1_size);
                 if (size > 0) {
                     it1 += size;
                     it1_size -= size;
                     diff -= size;
                 }
-                size = std::min (- diff, it2_size);
+                size = std_min (- diff, it2_size);
                 if (size > 0) {
                     it2 += size;
                     it2_size -= size;
                     diff += size;
                 }
             }
-            difference_type size (std::min (it1_size, it2_size));
+            difference_type size (std_min (it1_size, it2_size));
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
             return t;
@@ -868,20 +869,20 @@ namespace boost { namespace numeric { namespace ublas {
             if (it1_size > 0 && it2_size > 0)
                 diff = it2.index () - it1.index2 ();
             if (diff != 0) {
-                difference_type size = std::min (diff, it1_size);
+                difference_type size = std_min (diff, it1_size);
                 if (size > 0) {
                     it1 += size;
                     it1_size -= size;
                     diff -= size;
                 }
-                size = std::min (- diff, it2_size);
+                size = std_min (- diff, it2_size);
                 if (size > 0) {
                     it2 += size;
                     it2_size -= size;
                     diff += size;
                 }
             }
-            difference_type size (std::min (it1_size, it2_size));
+            difference_type size (std_min (it1_size, it2_size));
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
             return t;
@@ -1032,20 +1033,20 @@ namespace boost { namespace numeric { namespace ublas {
             if (it1_size > 0 && it2_size > 0)
                 diff = it2.index1 () - it1.index ();
             if (diff != 0) {
-                difference_type size = std::min (diff, it1_size);
+                difference_type size = std_min (diff, it1_size);
                 if (size > 0) {
                     it1 += size;
                     it1_size -= size;
                     diff -= size;
                 }
-                size = std::min (- diff, it2_size);
+                size = std_min (- diff, it2_size);
                 if (size > 0) {
                     it2 += size;
                     it2_size -= size;
                     diff += size;
                 }
             }
-            difference_type size (std::min (it1_size, it2_size));
+            difference_type size (std_min (it1_size, it2_size));
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
             return t;
@@ -1205,20 +1206,20 @@ namespace boost { namespace numeric { namespace ublas {
             if (it1_size > 0 && it2_size > 0)
                 diff = it2.index1 () - it1.index2 ();
             if (diff != 0) {
-                difference_type size = std::min (diff, it1_size);
+                difference_type size = std_min (diff, it1_size);
                 if (size > 0) {
                     it1 += size;
                     it1_size -= size;
                     diff -= size;
                 }
-                size = std::min (- diff, it2_size);
+                size = std_min (- diff, it2_size);
                 if (size > 0) {
                     it2 += size;
                     it2_size -= size;
                     diff += size;
                 }
             }
-            difference_type size (std::min (it1_size, it2_size));
+            difference_type size (std_min (it1_size, it2_size));
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
             return t;
@@ -1415,7 +1416,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (i <= j, bad_index ());
             // sigma_i (size - i) = size * i - i * (i - 1) / 2
             // i = 0 1 2 3, sigma = 0 4 7 9
-            return (i * (2 * std::max (size1, size2) - i + 1)) / 2 + j - i;
+            return (i * (2 * std_max (size1, size2) - i + 1)) / 2 + j - i;
         }
 
         static
@@ -1565,7 +1566,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (i >= j, bad_index ());
             // sigma_j (size - j) = size * j - j * (j - 1) / 2
             // j = 0 1 2 3, sigma = 0 4 7 9
-            return i - j + (j * (2 * std::max (size1, size2) - j + 1)) / 2;
+            return i - j + (j * (2 * std_max (size1, size2) - j + 1)) / 2;
         }
         static
         BOOST_UBLAS_INLINE
@@ -1683,7 +1684,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type packed_size (size_type size1, size_type size2) {
-            size_type size = std::max (size1, size2);
+            size_type size = std_max (size1, size2);
             return ((size + 1) * size) / 2;
         }
 
@@ -1712,22 +1713,22 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return std::max (i, j);
+            return std_max (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return std::min (i + 1, j);
+            return std_min (i + 1, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return std::max (i, j);
+            return std_max (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return std::min (i + 1, j);
+            return std_min (i + 1, j);
         }
     };
     struct upper {
@@ -1737,7 +1738,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type packed_size (size_type size1, size_type size2) {
-            size_type size = std::max (size1, size2);
+            size_type size = std_max (size1, size2);
             return ((size + 1) * size) / 2;
         }
 
@@ -1766,22 +1767,22 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return std::min (i, j + 1);
+            return std_min (i, j + 1);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return std::max (i, j);
+            return std_max (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return std::min (i, j + 1);
+            return std_min (i, j + 1);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return std::max (i, j);
+            return std_max (i, j);
         }
     };
     struct unit_lower {
@@ -1791,7 +1792,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type packed_size (size_type size1, size_type size2) {
-            size_type size = std::max (size1, size2);
+            size_type size = std_max (size1, size2);
             return ((size + 1) * size) / 2;
         }
 
@@ -1820,22 +1821,22 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return std::max (i, j);
+            return std_max (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return std::min (i + 1, j);
+            return std_min (i + 1, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return std::max (i, j);
+            return std_max (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return std::min (i, j);
+            return std_min (i, j);
         }
     };
     struct unit_upper {
@@ -1845,7 +1846,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type packed_size (size_type size1, size_type size2) {
-            size_type size = std::max (size1, size2);
+            size_type size = std_max (size1, size2);
             return ((size + 1) * size) / 2;
         }
 
@@ -1874,22 +1875,22 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return std::min (i, j + 1);
+            return std_min (i, j + 1);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return std::max (i, j);
+            return std_max (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return std::min (i, j);
+            return std_min (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return std::max (i, j);
+            return std_max (i, j);
         }
     };
     struct strict_lower {
@@ -1899,7 +1900,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type packed_size (size_type size1, size_type size2) {
-            size_type size = std::max (size1, size2);
+            size_type size = std_max (size1, size2);
             return ((size + 1) * size) / 2;
         }
 
@@ -1928,22 +1929,22 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return std::max (i, j);
+            return std_max (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return std::min (i, j);
+            return std_min (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return std::max (i, j);
+            return std_max (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return std::min (i, j);
+            return std_min (i, j);
         }
     };
     struct strict_upper {
@@ -1953,7 +1954,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type packed_size (size_type size1, size_type size2) {
-            size_type size = std::max (size1, size2);
+            size_type size = std_max (size1, size2);
             return ((size + 1) * size) / 2;
         }
 
@@ -1982,22 +1983,22 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type restrict1 (size_type i, size_type j) {
-            return std::min (i, j);
+            return std_min (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type restrict2 (size_type i, size_type j) {
-            return std::max (i, j);
+            return std_max (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict1 (size_type i, size_type j) {
-            return std::min (i, j);
+            return std_min (i, j);
         }
         static
         BOOST_UBLAS_INLINE
         size_type mutable_restrict2 (size_type i, size_type j) {
-            return std::max (i, j);
+            return std_max (i, j);
         }
     };
 

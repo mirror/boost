@@ -17,6 +17,8 @@
 #ifndef BOOST_UBLAS_OPERATION_BLOCKED_H
 #define BOOST_UBLAS_OPERATION_BLOCKED_H
 
+#include <boost/minmax.hpp>
+
 namespace boost { namespace numeric { namespace ublas {
 
     template<class V, std::size_t BS, class E1, class E2>
@@ -39,7 +41,7 @@ namespace boost { namespace numeric { namespace ublas {
         size_type i_size = e1 ().size1 ();
         size_type j_size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size ());
         for (size_type i_begin = 0; i_begin < i_size; i_begin += block_size) {
-            size_type i_end = i_begin + std::min (i_size - i_begin, block_size);
+            size_type i_end = i_begin + std_min (i_size - i_begin, block_size);
             // FIX: never ignore Martin Weiser's advice ;-(
 #ifdef BOOST_UBLAS_NO_CACHE
             vector_range<vector_type> v_range (v, range (i_begin, i_end));
@@ -49,7 +51,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
             v_range.assign (zero_vector<value_type> (i_end - i_begin));
             for (size_type j_begin = 0; j_begin < j_size; j_begin += block_size) {
-                size_type j_end = j_begin + std::min (j_size - j_begin, block_size);
+                size_type j_end = j_begin + std_min (j_size - j_begin, block_size);
 #ifdef BOOST_UBLAS_NO_CACHE
                 const matrix_range<expression1_type> e1_range (e1 (), range (i_begin, i_end), range (j_begin, j_end));
                 const vector_range<expression2_type> e2_range (e2 (), range (j_begin, j_end));
@@ -92,7 +94,7 @@ namespace boost { namespace numeric { namespace ublas {
         size_type i_size = BOOST_UBLAS_SAME (e1 ().size (), e2 ().size1 ());
         size_type j_size = e2 ().size2 ();
         for (size_type j_begin = 0; j_begin < j_size; j_begin += block_size) {
-            size_type j_end = j_begin + std::min (j_size - j_begin, block_size);
+            size_type j_end = j_begin + std_min (j_size - j_begin, block_size);
             // FIX: never ignore Martin Weiser's advice ;-(
 #ifdef BOOST_UBLAS_NO_CACHE
             vector_range<vector_type> v_range (v, range (j_begin, j_end));
@@ -102,7 +104,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
             v_range.assign (zero_vector<value_type> (j_end - j_begin));
             for (size_type i_begin = 0; i_begin < i_size; i_begin += block_size) {
-                size_type i_end = i_begin + std::min (i_size - i_begin, block_size);
+                size_type i_end = i_begin + std_min (i_size - i_begin, block_size);
 #ifdef BOOST_UBLAS_NO_CACHE
                 const vector_range<expression1_type> e1_range (e1 (), range (i_begin, i_end));
                 const matrix_range<expression2_type> e2_range (e2 (), range (i_begin, i_end), range (j_begin, j_end));
@@ -147,9 +149,9 @@ namespace boost { namespace numeric { namespace ublas {
         size_type j_size = e2 ().size2 ();
         size_type k_size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ());
         for (size_type i_begin = 0; i_begin < i_size; i_begin += block_size) {
-            size_type i_end = i_begin + std::min (i_size - i_begin, block_size);
+            size_type i_end = i_begin + std_min (i_size - i_begin, block_size);
             for (size_type j_begin = 0; j_begin < j_size; j_begin += block_size) {
-                size_type j_end = j_begin + std::min (j_size - j_begin, block_size);
+                size_type j_end = j_begin + std_min (j_size - j_begin, block_size);
                 // FIX: never ignore Martin Weiser's advice ;-(
 #ifdef BOOST_UBLAS_NO_CACHE
                 matrix_range<matrix_type> m_range (m, range (i_begin, i_end), range (j_begin, j_end));
@@ -159,7 +161,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
                 m_range.assign (zero_matrix<value_type> (i_end - i_begin, j_end - j_begin));
                 for (size_type k_begin = 0; k_begin < k_size; k_begin += block_size) {
-                    size_type k_end = k_begin + std::min (k_size - k_begin, block_size);
+                    size_type k_end = k_begin + std_min (k_size - k_begin, block_size);
 #ifdef BOOST_UBLAS_NO_CACHE
                     const matrix_range<expression1_type> e1_range (e1 (), range (i_begin, i_end), range (k_begin, k_end));
                     const matrix_range<expression2_type> e2_range (e2 (), range (k_begin, k_end), range (j_begin, j_end));
@@ -206,9 +208,9 @@ namespace boost { namespace numeric { namespace ublas {
         size_type j_size = e2 ().size2 ();
         size_type k_size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ());
         for (size_type j_begin = 0; j_begin < j_size; j_begin += block_size) {
-            size_type j_end = j_begin + std::min (j_size - j_begin, block_size);
+            size_type j_end = j_begin + std_min (j_size - j_begin, block_size);
             for (size_type i_begin = 0; i_begin < i_size; i_begin += block_size) {
-                size_type i_end = i_begin + std::min (i_size - i_begin, block_size);
+                size_type i_end = i_begin + std_min (i_size - i_begin, block_size);
                 // FIX: never ignore Martin Weiser's advice ;-(
 #ifdef BOOST_UBLAS_NO_CACHE
                 matrix_range<matrix_type> m_range (m, range (i_begin, i_end), range (j_begin, j_end));
@@ -218,7 +220,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
                 m_range.assign (zero_matrix<value_type> (i_end - i_begin, j_end - j_begin));
                 for (size_type k_begin = 0; k_begin < k_size; k_begin += block_size) {
-                    size_type k_end = k_begin + std::min (k_size - k_begin, block_size);
+                    size_type k_end = k_begin + std_min (k_size - k_begin, block_size);
 #ifdef BOOST_UBLAS_NO_CACHE
                     const matrix_range<expression1_type> e1_range (e1 (), range (i_begin, i_end), range (k_begin, k_end));
                     const matrix_range<expression2_type> e2_range (e2 (), range (k_begin, k_end), range (j_begin, j_end));

@@ -22,6 +22,7 @@
 #include <boost/numeric/ublas/vector_expression.hpp>
 #include <boost/numeric/ublas/vector_assign.hpp>
 #include <boost/numeric/ublas/vector_proxy.hpp>
+#include <boost/minmax.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 
@@ -670,8 +671,8 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator find (size_type i) const {
-            i = std::max (i, index_);
-            i = std::min (i, index_ + 1);
+            i = std_max (i, index_);
+            i = std_min (i, index_ + 1);
             return const_iterator (*this, i);
         }
 

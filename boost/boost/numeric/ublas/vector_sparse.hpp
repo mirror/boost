@@ -20,6 +20,7 @@
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/storage_sparse.hpp>
 #include <boost/numeric/ublas/vector.hpp>
+#include <boost/minmax.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 
@@ -371,8 +372,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void resize (size_type size, size_type non_zeros = 0) {
             size_ = size;
-            non_zeros_ = std::max (non_zeros, size_type (1));
-            non_zeros_ = std::min (non_zeros_, size_);
+            non_zeros_ = std_max (non_zeros, size_type (1));
+            non_zeros_ = std_min (non_zeros_, size_);
             detail::reserve (data (), non_zeros_);
             data ().clear ();
         }
@@ -380,8 +381,8 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0) {
-            non_zeros_ = std::max (non_zeros, size_type (1));
-            non_zeros_ = std::min (non_zeros_, size_);
+            non_zeros_ = std_max (non_zeros, size_type (1));
+            non_zeros_ = std_min (non_zeros_, size_);
             detail::reserve (data (), non_zeros_);
         }
 
@@ -882,8 +883,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void resize (size_type size, size_type non_zeros = 0, bool preserve = true) {
             size_ = size;
-            non_zeros_ = std::max (non_zeros, size_type (1));
-            non_zeros_ = std::min (non_zeros_, size_);
+            non_zeros_ = std_max (non_zeros, size_type (1));
+            non_zeros_ = std_min (non_zeros_, size_);
             filled_ = 0;
             detail::resize (index_data (), non_zeros_, preserve);
             detail::resize (value_data (), non_zeros_, preserve);
@@ -892,8 +893,8 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0, bool preserve = true) {
-            non_zeros_ = std::max (non_zeros, size_type (1));
-            non_zeros_ = std::min (non_zeros_, size_);
+            non_zeros_ = std_max (non_zeros, size_type (1));
+            non_zeros_ = std_min (non_zeros_, size_);
             detail::resize (index_data (), non_zeros_, preserve);
             detail::resize (value_data (), non_zeros_, preserve);
         }
@@ -1451,9 +1452,9 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void resize (size_type size, size_type non_zeros = 0, bool preserve = true) {
             size_ = size;
-            non_zeros_ = std::max (non_zeros, size_type (1));
+            non_zeros_ = std_max (non_zeros, size_type (1));
             // FIX: coordinate_vector may contain duplicate elements.
-            // non_zeros_ = std::min (non_zeros_, size_);
+            // non_zeros_ = std_min (non_zeros_, size_);
             filled_ = 0;
             detail::resize (index_data (), non_zeros_, preserve);
             detail::resize (value_data (), non_zeros_, preserve);
@@ -1462,9 +1463,9 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0, bool preserve = true) {
-            non_zeros_ = std::max (non_zeros, size_type (1));
+            non_zeros_ = std_max (non_zeros, size_type (1));
             // FIX: coordinate_vector may contain duplicate elements.
-            // non_zeros_ = std::min (non_zeros_, size_);
+            // non_zeros_ = std_min (non_zeros_, size_);
             detail::resize (index_data (), non_zeros_, preserve);
             detail::resize (value_data (), non_zeros_, preserve);
         }

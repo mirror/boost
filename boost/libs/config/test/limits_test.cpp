@@ -65,14 +65,14 @@ void test_integral_limits(const T &, const char * msg)
   typedef std::numeric_limits<T> lim;
   std::cout << "Testing " << msg
             << " (size " << sizeof(T) << ")"
-            << " min: " << make_char_numeric_for_streaming(lim::min())
-            << ", max: " << make_char_numeric_for_streaming(lim::max())
+            << " min: " << make_char_numeric_for_streaming((lim::min)())
+            << ", max: " << make_char_numeric_for_streaming((lim::max)())
             << std::endl;
 
   BOOST_TEST(lim::is_specialized);
   BOOST_TEST(lim::is_integer);
   // BOOST_TEST(lim::is_modulo);
-  BOOST_TEST(lim::min() < lim::max());
+  BOOST_TEST((lim::min)() < (lim::max)());
 }
 
 template <class T>
@@ -107,16 +107,16 @@ void test_float_limits(const T &, const char * msg)
        << ", traps: " << lim::traps
        << ", bounded: " << lim::is_bounded
        << ", exact: " << lim::is_exact << '\n'
-       << "min: " << lim::min() << ", max: " << lim::max() << '\n'
+       << "min: " << (lim::min)() << ", max: " << (lim::max)() << '\n'
        << "infinity: " << infinity << ", QNaN: " << qnan << '\n';
-  print_hex_val(lim::max(), "max");
+  print_hex_val((lim::max)(), "max");
   print_hex_val(infinity, "infinity");
   print_hex_val(qnan, "qnan");
   print_hex_val(snan, "snan");
 
-  BOOST_TEST(lim::max() > 1000);
-  BOOST_TEST(lim::min() > 0);
-  BOOST_TEST(lim::min() < 0.001);
+  BOOST_TEST((lim::max)() > 1000);
+  BOOST_TEST((lim::min)() > 0);
+  BOOST_TEST((lim::min)() < 0.001);
   BOOST_TEST(lim::epsilon() > 0);
 
   if(lim::is_iec559) {
@@ -130,8 +130,8 @@ void test_float_limits(const T &, const char * msg)
   if(lim::has_infinity) {
     // Make sure those values are not 0 or similar nonsense.
     // Infinity must compare as if larger than the maximum representable value.
-    BOOST_TEST(infinity > lim::max());
-    BOOST_TEST(-infinity < -lim::max());
+    BOOST_TEST(infinity > (lim::max)());
+    BOOST_TEST(-infinity < -(lim::max)());
   } else {
     std::cout << "Does not have infinity" << std::endl;
   }

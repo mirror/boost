@@ -67,7 +67,7 @@ int main ()
 
     // Do we avoid overflow?
 #ifndef BOOST_NO_LIMITS
-    int maxint = std::numeric_limits<int>::max();
+    int maxint = (std::numeric_limits<int>::max)();
 #else
     int maxint = INT_MAX;
 #endif

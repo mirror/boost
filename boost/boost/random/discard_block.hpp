@@ -67,8 +67,8 @@ public:
     return _rng();
   }
 
-  result_type min() const { return _rng.min(); }
-  result_type max() const { return _rng.max(); }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (_rng.min)(); }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (_rng.max)(); }
   static bool validation(result_type x) { return true; }  // dummy
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE

@@ -35,6 +35,7 @@ using std::getline;
 #include <boost/regex.hpp>
 #include <boost/timer.hpp> 
 #include <boost/smart_ptr.hpp>
+#include <boost/minmax.hpp>
 
 #if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || defined(__sgi)
 // maybe no Koenig lookup, use using declaration instead:
@@ -145,7 +146,7 @@ int main(int argc, char**argv)
    double tim;
    bool result;
    int iters = 100;
-   double wait_time = std::min(t.elapsed_min() * 1000, 1.0);
+   double wait_time = boost::std_min(t.elapsed_min() * 1000, 1.0);
 
    while(true)
    {

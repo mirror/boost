@@ -21,6 +21,7 @@
 #include <boost/numeric/ublas/storage_sparse.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector_sparse.hpp>
+#include <boost/minmax.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 
@@ -380,10 +381,10 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size1, size_type size2, size_type non_zeros = 0) {
             size1_ = size1;
             size2_ = size2;
-            non_zeros_ = std::max (non_zeros, std::min (size1_, size2_));
+            non_zeros_ = std_max (non_zeros, std_min (size1_, size2_));
             // Guarding against overflow.
             // Thanks to Alexei Novakov for the hint.
-            // non_zeros_ = std::min (non_zeros_, size1_ * size2_);
+            // non_zeros_ = std_min (non_zeros_, size1_ * size2_);
             if (size1_ > 0 && non_zeros_ / size1_ >= size2_)
                 non_zeros_ = size1_ * size2_;
             detail::reserve (data (), non_zeros_);
@@ -393,10 +394,10 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0) {
-            non_zeros_ = std::max (non_zeros, std::min (size1_, size2_));
+            non_zeros_ = std_max (non_zeros, std_min (size1_, size2_));
             // Guarding against overflow.
             // Thanks to Alexei Novakov for the hint.
-            // non_zeros_ = std::min (non_zeros_, size1_ * size2_);
+            // non_zeros_ = std_min (non_zeros_, size1_ * size2_);
             if (size1_ > 0 && non_zeros_ / size1_ >= size2_)
                 non_zeros_ = size1_ * size2_;
             detail::reserve (data (), non_zeros_);
@@ -2698,10 +2699,10 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size1, size_type size2, size_type non_zeros = 0, bool preserve = true) {
             size1_ = size1;
             size2_ = size2;
-            non_zeros_ = std::max (non_zeros, std::min (size1_, size2_));
+            non_zeros_ = std_max (non_zeros, std_min (size1_, size2_));
             // Guarding against overflow.
             // Thanks to Alexei Novakov for the hint.
-            // non_zeros_ = std::min (non_zeros_, size1_ * size2_);
+            // non_zeros_ = std_min (non_zeros_, size1_ * size2_);
             if (size1_ > 0 && non_zeros_ / size1_ >= size2_)
                 non_zeros_ = size1_ * size2_;
             filled1_ = 1;
@@ -2715,10 +2716,10 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0, bool preserve = true) {
-            non_zeros_ = std::max (non_zeros, std::min (size1_, size2_));
+            non_zeros_ = std_max (non_zeros, std_min (size1_, size2_));
             // Guarding against overflow.
             // Thanks to Alexei Novakov for the hint.
-            // non_zeros_ = std::min (non_zeros_, size1_ * size2_);
+            // non_zeros_ = std_min (non_zeros_, size1_ * size2_);
             if (size1_ > 0 && non_zeros_ / size1_ >= size2_)
                 non_zeros_ = size1_ * size2_;
             detail::resize (index2_data (), non_zeros_, preserve);
@@ -3032,7 +3033,7 @@ namespace boost { namespace numeric { namespace ublas {
             for (;;) {
                 size_type address1 (functor_type::address1 (i, size1_, j, size2_));
                 size_type address2 (functor_type::address2 (i, size1_, j, size2_));
-                vector_const_iterator_type itv (index1_data ().begin () + std::min (filled1_ - 1, address1));
+                vector_const_iterator_type itv (index1_data ().begin () + std_min (filled1_ - 1, address1));
                 if (filled1_ <= address1 + 1)
                     return const_iterator1 (*this, rank, i, j, itv, index2_data ().begin () + filled2_);
 
@@ -3069,7 +3070,7 @@ namespace boost { namespace numeric { namespace ublas {
             for (;;) {
                 size_type address1 (functor_type::address1 (i, size1_, j, size2_));
                 size_type address2 (functor_type::address2 (i, size1_, j, size2_));
-                vector_iterator_type itv (index1_data ().begin () + std::min (filled1_ - 1, address1));
+                vector_iterator_type itv (index1_data ().begin () + std_min (filled1_ - 1, address1));
                 if (filled1_ <= address1 + 1)
                     return iterator1 (*this, rank, i, j, itv, index2_data ().begin () + filled2_);
 
@@ -3106,7 +3107,7 @@ namespace boost { namespace numeric { namespace ublas {
             for (;;) {
                 size_type address1 (functor_type::address1 (i, size1_, j, size2_));
                 size_type address2 (functor_type::address2 (i, size1_, j, size2_));
-                vector_const_iterator_type itv (index1_data ().begin () + std::min (filled1_ - 1, address1));
+                vector_const_iterator_type itv (index1_data ().begin () + std_min (filled1_ - 1, address1));
                 if (filled1_ <= address1 + 1)
                     return const_iterator2 (*this, rank, i, j, itv, index2_data ().begin () + filled2_);
 
@@ -3143,7 +3144,7 @@ namespace boost { namespace numeric { namespace ublas {
             for (;;) {
                 size_type address1 (functor_type::address1 (i, size1_, j, size2_));
                 size_type address2 (functor_type::address2 (i, size1_, j, size2_));
-                vector_iterator_type itv (index1_data ().begin () + std::min (filled1_ - 1, address1));
+                vector_iterator_type itv (index1_data ().begin () + std_min (filled1_ - 1, address1));
                 if (filled1_ <= address1 + 1)
                     return iterator2 (*this, rank, i, j, itv, index2_data ().begin () + filled2_);
 
@@ -4006,10 +4007,10 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size1, size_type size2, size_type non_zeros = 0, bool preserve = true) {
             size1_ = size1;
             size2_ = size2;
-            non_zeros_ = std::max (non_zeros, std::min (size1_, size2_));
+            non_zeros_ = std_max (non_zeros, std_min (size1_, size2_));
             // Guarding against overflow.
             // Thanks to Alexei Novakov for the hint.
-            // non_zeros_ = std::min (non_zeros_, size1_ * size2_);
+            // non_zeros_ = std_min (non_zeros_, size1_ * size2_);
             // FIX: coordinate_vector may contain duplicate elements.
             // if (size1_ > 0 && non_zeros_ / size1_ >= size2_)
             //     non_zeros_ = size1_ * size2_;
@@ -4022,10 +4023,10 @@ namespace boost { namespace numeric { namespace ublas {
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0, bool preserve = true) {
-            non_zeros_ = std::max (non_zeros, std::min (size1_, size2_));
+            non_zeros_ = std_max (non_zeros, std_min (size1_, size2_));
             // Guarding against overflow.
             // Thanks to Alexei Novakov for the hint.
-            // non_zeros_ = std::min (non_zeros_, size1_ * size2_);
+            // non_zeros_ = std_min (non_zeros_, size1_ * size2_);
             // FIX: coordinate_vector may contain duplicate elements.
             // if (size1_ > 0 && non_zeros_ / size1_ >= size2_)
             //     non_zeros_ = size1_ * size2_;

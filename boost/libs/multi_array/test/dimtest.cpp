@@ -141,10 +141,10 @@ typedef std::size_t size_type;
 
   private:
     static Index from_start()
-      { return std::numeric_limits<Index>::min(); }
+      { return (std::numeric_limits<Index>::min)(); }
 
     static Index to_end()
-      { return std::numeric_limits<Index>::max(); }
+      { return (std::numeric_limits<Index>::max)(); }
   public:
     Index start_, finish_, stride_;
     bool degenerate_;

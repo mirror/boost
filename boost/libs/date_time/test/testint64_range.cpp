@@ -20,10 +20,10 @@ main()
 #else
 
   std::cout << "int64_t  max:  "
-            << std::numeric_limits<boost::int64_t>::max() 
+            << (std::numeric_limits<boost::int64_t>::max)() 
             << std::endl;
   std::cout << "uint64_t max: "
-            << std::numeric_limits<boost::uint64_t>::max() 
+            << (std::numeric_limits<boost::uint64_t>::max)() 
             << std::endl;
 
 
@@ -34,7 +34,7 @@ main()
             << microsec_per_day
             << std::endl;
 
-  boost::uint64_t total_days = std::numeric_limits<boost::int64_t>::max() / microsec_per_day;
+  boost::uint64_t total_days = (std::numeric_limits<boost::int64_t>::max)() / microsec_per_day;
 
   std::cout << "Representable days: " 
             << total_days

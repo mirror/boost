@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include <cassert>
+#include <boost/config.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/random/detail/const_mod.hpp>
 
@@ -46,8 +47,8 @@ public:
   BOOST_STATIC_CONSTANT(result_type, increment = b);
   BOOST_STATIC_CONSTANT(result_type, modulus = p);
 
-  result_type min() const { return b == 0 ? 1 : 0; }
-  result_type max() const { return p-1; }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return b == 0 ? 1 : 0; }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return p-1; }
 
   explicit inversive_congruential(IntType y0 = 1) : value(y0)
   {

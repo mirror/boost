@@ -112,8 +112,8 @@ public:
   distribution_type& distribution() { return _dist; }
   const distribution_type& distribution() const { return _dist; }
 
-  result_type min() const { return distribution().min(); }
-  result_type max() const { return distribution().max(); }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (distribution().min)(); }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (distribution().max)(); }
 
 private:
 #if BOOST_WORKAROUND(__BORLANDC__, <= 0x564)

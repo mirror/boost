@@ -39,8 +39,8 @@ main()
     check("Bad year creation2", true); //good
     
   }
-  check("traits min year", greg_year::min() ==  1400);
-  check("traits max year", greg_year::max() == 10000);
+  check("traits min year", (greg_year::min)() ==  1400);
+  check("traits max year", (greg_year::max)() == 10000);
 
   printTestStats();
   return 0;

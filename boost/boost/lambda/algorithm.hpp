@@ -1200,12 +1200,12 @@ struct min {
   template <class A>
   A
   operator()(const A& a, const A& b) const
-  { return ::std::min(a, b); }
+  { return (::std::min)(a, b); }
 
   template <class A, class C>
   A
   operator()(const A& a, const A& b, C c) const
-  { return ::std::min(a, b, c); }
+  { return (::std::min)(a, b, c); }
 
 };
 
@@ -1223,12 +1223,12 @@ struct max {
   template <class A>
   A
   operator()(const A& a, const A& b) const
-  { return ::std::max(a, b); }
+  { return (::std::max)(a, b); }
 
   template <class A, class C>
   A
   operator()(const A& a, const A& b, C c) const
-  { return ::std::max(a, b, c); }
+  { return (::std::max)(a, b, c); }
 
 };
 

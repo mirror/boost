@@ -19,8 +19,8 @@ void print()
 #if (defined(BOOST_DATE_TIME_NO_LOCALE)) || (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
 
 #else
-  std::cout << "min:       " << int_type::min().as_number() << std::endl;
-  std::cout << "max:       " << int_type::max().as_number() << std::endl;
+  std::cout << "min:       " << (int_type::min)().as_number() << std::endl;
+  std::cout << "max:       " << (int_type::max)().as_number() << std::endl;
   std::cout << "neg_infin: " << 
     int_type::neg_infinity().as_number() << std::endl;
   std::cout << "pos_infin: " << 
@@ -134,9 +134,9 @@ void test_int()
   check("from special ", 
         int_type::from_special(boost::date_time::not_a_date_time) == int_type::not_a_number());
   check("from special ", 
-        int_type::from_special(boost::date_time::min_date_time) == int_type::min());
+        int_type::from_special(boost::date_time::min_date_time) == (int_type::min)());
   check("from special ", 
-        int_type::from_special(boost::date_time::max_date_time) == int_type::max());
+        int_type::from_special(boost::date_time::max_date_time) == (int_type::max)());
 }
 
 int

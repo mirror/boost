@@ -78,7 +78,7 @@ void perl_matcher<BidiIterator, Allocator, traits, Allocator2>::estimate_max_sta
    difference_type dist = boost::re_detail::distance(base, last);
    traits_size_type states = static_cast<traits_size_type>(re.size());
    states *= states;
-   difference_type lim = std::numeric_limits<difference_type>::max() - 1000 - states;
+   difference_type lim = (std::numeric_limits<difference_type>::max)() - 1000 - states;
    if(dist > (difference_type)(lim / states))
       max_state_count = lim;
    else

@@ -17,6 +17,8 @@
 #ifndef BOOST_UBLAS_OPERATION_SPARSE_H
 #define BOOST_UBLAS_OPERATION_SPARSE_H
 
+#include <boost/minmax.hpp>
+
 // These scaled additions were borrowed from MTL unashamedly.
 // But Alexei Novakov had a lot of ideas to improve these. Thanks.
 
@@ -60,8 +62,8 @@ namespace boost { namespace numeric { namespace ublas {
                 while (itr != itr_end) {
                     size_type j (itr.index ());
                     temporary (j) += *it2 * *itr;
-                    jb = std::min (jb, j);
-                    je = std::max (je, j);
+                    jb = std_min (jb, j);
+                    je = std_max (je, j);
                     ++ itr;
                 }
                 ++ it2;
@@ -123,8 +125,8 @@ namespace boost { namespace numeric { namespace ublas {
                 while (itc != itc_end) {
                     size_type i (itc.index ());
                     temporary (i) += *it1 * *itc;
-                    ib = std::min (ib, i);
-                    ie = std::max (ie, i);
+                    ib = std_min (ib, i);
+                    ie = std_max (ie, i);
                     ++ itc;
                 }
                 ++ it1;
