@@ -21,7 +21,7 @@
 <H2>Unavoidable Trade-offs</H2>
 
 <p>
-The library does its best to provide everything a user could want, but there are certain inherent constraints that limit what <i>any</i> temporal library can do.  Specifically, a user much choose which two of the following three capabilities are desired in any particular application:
+The library does its best to provide everything a user could want, but there are certain inherent constraints that limit what <i>any</i> temporal library can do.  Specifically, a user must choose which two of the following three capabilities are desired in any particular application:
 <UL>
  <li>exact agreement with wall-clock time
  <li>accurate math, e.g. duration calculations
@@ -143,7 +143,7 @@ which is generally possible and for most purposes will be
 good enough.  Of course the documentation must specify when
 an answer will be approximate (and thus unstable) and how
 big the error may be.  In many respects calculating with unpredictable sets is analogous to the use of floating point numbers, for which results are expected to only be approximately correct.  Calculating with predictable sets would then be
-analagous to the user of integers, where results are expected
+analogous to the user of integers, where results are expected
 to be exact.
 <p>
 For situations where exact answers are required or instability cannot be tolerated, the user must
