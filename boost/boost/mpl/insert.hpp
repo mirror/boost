@@ -28,14 +28,14 @@ namespace mpl {
 
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Pos)
+    , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Pos_or_T)
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T)
     >
 struct insert
     : insert_traits< typename BOOST_MPL_AUX_SEQUENCE_TAG(Sequence) >
-        ::template algorithm< Sequence,Pos,T >
+        ::template algorithm< Sequence,Pos_or_T,T >
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,insert,(Sequence,Pos,T))
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,insert,(Sequence,Pos_or_T,T))
 };
 
 BOOST_MPL_AUX_VOID_SPEC(3, insert)

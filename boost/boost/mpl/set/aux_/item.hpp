@@ -19,6 +19,7 @@
 // See http://www.boost.org/libs/mpl for documentation.
 
 #include "boost/mpl/long.hpp"
+#include "boost/mpl/void_fwd.hpp"
 #include "boost/mpl/set/aux_/set0.hpp"
 #include "boost/mpl/aux_/yes_no.hpp"
 #include "boost/mpl/aux_/type_wrapper.hpp"
@@ -61,8 +62,9 @@ template< typename T, typename Base >
 struct s_item
     : Base
 {
-    typedef T item;
-    typedef Base base;
+    typedef void_   last_masked;
+    typedef T       item;
+    typedef Base    base;
     
     BOOST_STATIC_CONSTANT(long, order = Base::order + 1);
 
@@ -87,6 +89,7 @@ template< typename T, typename Base >
 struct s_mask
     : Base
 {
+    typedef T last_masked;
 #if BOOST_WORKAROUND(__GNUC__, > 2) && BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(3))
     // to make GCC happy
     friend aux::no_tag operator%<>(s_mask const&, aux::type_wrapper<T>*);

@@ -18,7 +18,7 @@
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/void.hpp"
+#include "boost/mpl/void_fwd.hpp"
 #include "boost/mpl/set/aux_/tag.hpp"
 #include "boost/mpl/aux_/config/static_constant.hpp"
 
@@ -27,8 +27,10 @@ namespace mpl {
 
 template< int p_ = 0 > struct set0
 {
-    typedef aux::set_tag tag;
-    typedef void_ item;
+    typedef aux::set_tag    tag;
+    typedef void_           last_masked;
+    typedef void_           item;
+
     BOOST_STATIC_CONSTANT(long, order = 0);
 };
 

@@ -27,6 +27,8 @@
 //#include "boost/mpl/set/aux_/O1_size.hpp"
 //#include "boost/mpl/set/aux_/size.hpp"
 //#include "boost/mpl/set/aux_/empty.hpp"
+//#include "boost/mpl/set/aux_/empty.hpp"
+#include "boost/mpl/set/aux_/insert_impl.hpp"
 #include "boost/mpl/set/aux_/order_impl.hpp"
 #include "boost/mpl/set/aux_/has_key_impl.hpp"
 #include "boost/mpl/set/aux_/begin_end_impl.hpp"

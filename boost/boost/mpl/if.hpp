@@ -115,7 +115,7 @@ struct if_
 // on the result of is_reference.
 
 template <class T1, class T2, class T3, class T4> struct bind3;
-template <template <class T1, class T2, class T3> class> struct quote3;
+template <template <class T1, class T2, class T3> class F> struct quote3;
 
 namespace aux
 {
