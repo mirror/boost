@@ -53,7 +53,7 @@ namespace boost
           (Bits-1 <= std::numeric_limits<short>::digits) +
           (Bits-1 <= std::numeric_limits<signed char>::digits)
         >::least  least;
-      typedef int_fast_t<least>::fast  fast;
+      typedef typename int_fast_t<least>::fast  fast;
   };
 
   //  unsigned
@@ -68,7 +68,7 @@ namespace boost
           (Bits <= std::numeric_limits<unsigned short>::digits) +
           (Bits <= std::numeric_limits<unsigned char>::digits)
         >::least  least;
-      typedef int_fast_t<least>::fast  fast;
+      typedef typename int_fast_t<least>::fast  fast;
   };
 
 //  The same dispatching technique can be used to select types based on
