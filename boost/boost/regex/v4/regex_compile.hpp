@@ -2100,6 +2100,8 @@ template <class charT, class traits, class Allocator>
 unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_leading_rep(re_detail::re_syntax_base* dat, re_detail::re_syntax_base* arg_end)
 {
    unsigned int len = 0;
+   if((_restart_type >= restart_word) || (_restart_type <= restart_continue))
+      return 0;
    bool leading_lit = arg_end ? false : true;
    while(dat != arg_end)
    {
