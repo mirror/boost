@@ -95,13 +95,13 @@ inline BOOST_DEDUCED_TYPENAME range_size<T>::type size( const T& r )
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
 // BCB is not able to overload pointer when class overloads are also available
 template<>
-inline range_size<const char*>::type size<const char*>( const char* const& r )
+inline range_size<const char*>::type size<const char*>( const char*& r )
 {
     return range_detail::str_size( r );
 }
 
 template<>
-inline range_size<const wchar_t*>::type size<const wchar_t*>( const wchar_t* const& r )
+inline range_size<const wchar_t*>::type size<const wchar_t*>( const wchar_t*& r )
 {
     return range_detail::str_size( r );
 }
