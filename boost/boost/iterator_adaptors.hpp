@@ -12,6 +12,8 @@
 //
 // Revision History:
 
+// 11 Feb 2001   David Abrahams
+//      Borland fixes up the wazoo. It finally works!
 // 10 Feb 2001   David Abrahams
 //      Removed traits argument from iterator_adaptor<> and switched to
 //        explicit trait specification for maximum ease-of-use.
@@ -21,74 +23,56 @@
 //
 // 10 Feb 2001   David Abrahams
 //      Rolled in supposed Borland fixes from John Maddock, but not seeing any
-//      improvement yet
-//
+//        improvement yet
 //      Changed argument order to indirect_ generator, for convenience in the
-//      case of input iterators (where Reference must be a value type).
-//
+//        case of input iterators (where Reference must be a value type).
 //      Removed derivation of filter_iterator_policies from
-//      default_iterator_policies, since the iterator category is likely to be
-//      reduced (we don't want to allow illegal operations like decrement).
-//
+//        default_iterator_policies, since the iterator category is likely to be
+//        reduced (we don't want to allow illegal operations like decrement).
 //      Support for a simpler filter iterator interface.
 //
 // 09 Feb 2001   David Abrahams
 //      Improved interface to indirect_ and reverse_ iterators
-//
 //      Rolled back Jeremy's new constructor for now; it was causing
-//      problems with counting_iterator_test
-//
+//        problems with counting_iterator_test
 //      Attempted fix for Borland
 //
 // 09 Feb 2001   Jeremy Siek
 //      Added iterator constructor to allow const adaptor
-//      from non-const adaptee.
-//
+//        from non-const adaptee.
 //      Changed make_xxx to pass iterators by-value to
-//      get arrays converted to pointers.
-//
+//        get arrays converted to pointers.
 //      Removed InnerIterator template parameter from
-//      indirect_iterator_generator.
-//
+//        indirect_iterator_generator.
 //      Rearranged parameters for make_filter_iterator
 //
 // 07 Feb 2001   Jeremy Siek
 //      Removed some const iterator adaptor generators.
-//
 //      Added make_xxx_iterator() helper functions for remaining
-//      iterator adaptors.
-//
+//        iterator adaptors.
 //      Removed some traits template parameters where they
-//      where no longer needed thanks to detail::iterator_traits.
-//
+//        where no longer needed thanks to detail::iterator_traits.
 //      Moved some of the compile-time logic into enums for
 //      EDG compatibility.
 //
 // 07 Feb 2001  David Abrahams
 //      Removed iterator_adaptor_pair_generator and
-//      reverse_iterator_pair_generator (more such culling to come)
-//
+//        reverse_iterator_pair_generator (more such culling to come)
 //      Improved comments
-//
 //      Changed all uses of std::iterator_traits as default arguments
-//      to boost::detail::iterator_traits for improved utility in
-//      non-generic contexts
-//
+//        to boost::detail::iterator_traits for improved utility in
+//        non-generic contexts
 //      Fixed naming convention of non-template parameter names
 //
 // 06 Feb 2001   David Abrahams
 //      Produce operator-> proxy objects for InputIterators
-//
 //      Added static assertions to do some basic concept checks
-//
 //      Renamed single-type generators -> xxx_generator
 //      Renamed const/nonconst iterator generators -> xxx_pair_generator
-//
 //      Added make_transform_iterator(iter, function)
-//                
 //      The existence of boost::detail::iterator_traits allowed many
-//      template arguments to be defaulted. Some arguments had to be
-//      moved to accomplish it.
+//        template arguments to be defaulted. Some arguments had to be
+//        moved to accomplish it.
 //
 // 04 Feb 2001  MWERKS bug workaround, concept checking for proper
 //              reference types (David Abrahams)
@@ -358,7 +342,11 @@ namespace detail {
   template <class Iter>
   inline operator_arrow_proxy<typename Iter::value_type>
   operator_arrow(const Iter& i, std::input_iterator_tag) {
-      return operator_arrow_proxy<typename Iter::value_type>(*i);
+      return operator_arrow_proxy<
+#ifndef BOOST_MSVC
+          typename
+#endif
+          Iter::value_type>(*i);
   }
 
   template <class Iter>
@@ -431,6 +419,7 @@ namespace detail {
    struct iterator_defaults
    {
        enum { is_ptr = boost::is_pointer<Iterator>::value };
+
        typedef iterator_defaults_select<is_ptr>::template traits<Iterator,Value> traits;
        typedef typename traits::pointer pointer;
        typedef typename traits::reference reference;
@@ -439,20 +428,17 @@ namespace detail {
    template <class Iterator,class Value>
    struct iterator_defaults : iterator_traits<Iterator>
    {
-       enum {
-           is_iterator_value_type = 
-              ::boost::is_same<Value,typename iterator_traits<Iterator>::value_type>::value
-       };
-       
+       // Trying to factor the common is_same expression into an enum or a
+       // static bool constant confused Borland.
        typedef typename if_true<(
-               is_iterator_value_type
+               ::boost::is_same<Value,typename iterator_traits<Iterator>::value_type>::value
            )>::template then<
                 typename iterator_traits<Iterator>::pointer,
                 Value*
        >::type pointer;
        
        typedef typename if_true<(
-               is_iterator_value_type
+               ::boost::is_same<Value,typename iterator_traits<Iterator>::value_type>::value
            )>::template then<
                 typename iterator_traits<Iterator>::reference,
                 Value&
@@ -1046,10 +1032,17 @@ template <class Predicate, class Iterator,
     class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::difference_type
          >
 class filter_iterator_generator {
+#ifndef __BORLANDC__
     enum {
+#else
+        static const bool
+#endif
         is_bidirectional
            = boost::is_convertible<Category*, std::bidirectional_iterator_tag*>::value
-    };
+#ifndef __BORLANDC__
+    }
+#endif
+    ;
 #ifndef BOOST_MSVC // I don't have any idea why this occurs, but it doesn't seem to hurt too badly.
     BOOST_STATIC_ASSERT(!is_bidirectional);
 #endif
