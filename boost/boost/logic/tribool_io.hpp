@@ -129,7 +129,7 @@ inline std::basic_string<wchar_t> get_default_indeterminate_name<wchar_t>()
  * locales.
  */
 template<typename CharT>
-class indeterminate_name : public std::locale::facet, boost::noncopyable
+class indeterminate_name : public std::locale::facet, private boost::noncopyable
 {
 public:
   typedef CharT char_type;
