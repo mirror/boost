@@ -20,6 +20,7 @@
 #include <boost/type_traits/object_traits.hpp>
 #include <boost/type_traits/transform_traits.hpp>
 #include <boost/type_traits/same_traits.hpp>
+#include <boost/type_traits/function_traits.hpp>
 
 /**************************************************************************/
 
