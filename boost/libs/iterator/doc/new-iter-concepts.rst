@@ -264,9 +264,9 @@ bundled into a single type using the following `iterator_tag` class.
   enum iterator_access { readable_iterator = 1, writable_iterator = 2, 
       swappable_iterator = 4, lvalue_iterator = 8 };
 
-  template <iterator_access x, class TraversalTag>
+  template <unsigned int access_bits, class TraversalTag>
   struct iterator_tag : /* appropriate old category or categories */ {
-    static const iterator_access access = x;
+    static const iterator_access access = (iterator_access)access_bits;
     typedef TraversalTag traversal;
   };
 

@@ -282,9 +282,9 @@ bundled into a single type using the following <cite>iterator_tag</cite> class.<
 enum iterator_access { readable_iterator = 1, writable_iterator = 2, 
     swappable_iterator = 4, lvalue_iterator = 8 };
 
-template &lt;iterator_access x, class TraversalTag&gt;
+template &lt;unsigned int access_bits, class TraversalTag&gt;
 struct iterator_tag : /* appropriate old category or categories */ {
-  static const iterator_access access = x;
+  static const iterator_access access = (iterator_access)access_bits;
   typedef TraversalTag traversal;
 };
 </pre>
