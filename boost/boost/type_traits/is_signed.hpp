@@ -21,7 +21,7 @@ namespace boost {
 
 namespace detail{
 
-#if (defined(__EDG_VERSION__) && __EDG_VERSION__ <= 238)
+#if !(defined(__EDG_VERSION__) && __EDG_VERSION__ <= 238)
 
 template <class T>
 struct is_signed_helper
