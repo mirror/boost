@@ -30,10 +30,10 @@ Rational Numbers</h1>
     <li><a href="#Internal representation">Internal representation</a></li>
     <li><a href="#Design notes">Design notes</a></li>
     <ul>
+	<li><a href="#Minimal Implementation">Minimal Implementation</a></li>
 	<li><a href="#Limited-range integer types">Limited-range integer types</a></li>
 	<li><a href="#Conversion from floating point">Conversion from floating point</a></li>
 	<li><a href="#Absolute Value">Absolute Value</a></li>
-	<li><a href="#Swap operation">Swap operation</a></li>
     </ul>
     <li><a href="#References">References</a></li>
     <li><a href="#History and Acknowledgements">History and Acknowledgements</a></li>
@@ -317,9 +317,39 @@ type. However, there is an explicit type-conversion function,
     double nearly_pi = boost::rational_cast&lt;double&gt;(r);
 </pre>
 
+The <tt>rational_cast&lt;T&gt;</tt> function's behaviour is undefined if the
+source rational's numerator or denominator cannot be safely cast to the
+appropriate floating point type, or if the division of the numerator and
+denominator (in the target floating point type) does not evaluate correctly.
+
+In essence, all required conversions should be value-preserving, and all
+operations should behave "sensibly". If these constraints cannot be met, a
+separate user-defined conversion will be more appropriate.
+
+<p><em>Implementation note:</em>
+
+<p>The actual implementation of the rational_cast function is
+
+<pre>
+    template &lt;typename Float, typename Int&gt;
+    Float rational_cast(const rational&lt;Int&gt;&amp; src)
+    {
+        return static_cast&lt;Float&gt;(src.numerator()) / src.denominator();
+    }
+</pre>
+
+Programs should not be written to depend upon this implementation, however.
+
 <h3><a name="Numerator and Denominator">Numerator and Denominator</h3>
 Finally, access to the internal representation of rationals is provided by
 the two member functions <tt>numerator()</tt> and <tt>denominator()</tt>.
+
+<p>These functions allow user code to implement any additional required
+functionality. In particular, it should be noted that there may be cases where
+the above rational_cast operation is inappropriate - particularly in cases
+where the rational type is based on an unlimited-precision integer type. In
+this case, a specially-written user-defined conversion to floating point will
+be more appropriate.
 
 <h2><a name="Performance">Performance</h2>
 The rational class has been designed with the implicit assumption that the
@@ -426,6 +456,23 @@ rational type). Rationals are always stored in fully normalized form (ie,
 gcd(numerator,denominator) = 1, and the denominator is always positive).
 
 <h2><a name="Design notes">Design notes</h2>
+<h3><a name="Minimal Implementation">Minimal Implementation</h3>
+The rational number class is designed to keep to the basics. The minimal
+operations required of a numeric class are provided, along with access to the
+underlying representation in the form of the numerator() and denominator()
+member functions. With these building-blocks, it is possible to implement any
+additional functionality required.
+
+<p>Areas where this minimality consideration has been relaxed are in providing
+input/output operators, and rational_cast. The former is generally
+uncontroversial. However, there are a number of cases where rational_cast is
+not the best possible method for converting a rational to a floating point
+value (notably where user-defined types are involved). In those cases, a
+user-defined conversion can and should be implemented. There is no need
+for such an operation to be named rational_cast, and so the rational_cast
+function does <em>not</em> provide the necessary infrastructure to allow for
+specialisation/overloading.
+
 <h3><a name="Limited-range integer types">Limited-range integer types</h3>
 The rational number class is designed for use in conjunction with an
 unlimited precision integer class. With such a class, rationals are always
@@ -546,102 +593,6 @@ implementation with an inline implementation of abs() is used:
 
 <p>The same arguments imply that where the absolute value of an IntType is
 required elsewhere, the calculation is performed inline.
-
-<h3><a name="Swap operation">Swap operation</h3>
-Many user-defined types will implement a specialised swap operation, which is
-optimised for efficiency, and which can be guaranteed not to throw exceptions.
-Indeed, the std::swap() function is defined as the canonical form of such a
-swap operation.
-
-<p>Assuming a reasonable optimising compiler, it will often be the case that
-replacing an assignment where the "source" variable's value is no longer used
-with a std::swap() operation can provide valuable efficiency improvements, and
-will never degrade performance (for this to be the case, the compiler must
-successfully omit unnecessary assignments which would otherwise be generated).
-
-<p>It therefore would seem sensible for the rational class to use swap() in a
-number of areas when moving values of the underlying integer type about. The
-most obvious example of this is in the inner loop of the gcd() function, which
-looks like this:
-
-<pre>
-    while (m != 0) {
-	IntType r(n % m);
-	n = m;
-	m = r;
-    }
-</pre>
-
-<p>This could be optimised as
-
-<pre>
-    while (m != 0) {
-	IntType r(n % m);
-	std::swap(n, m);
-	std::swap(m, r);
-    }
-</pre>
-
-<p>There are, however, some technical issues with this approach. First note
-that, as written, it requires swap(IntType&amp;, IntType&amp;) to be
-implemented in namespace <tt>std</tt>. If the <tt>std::</tt> qualifier was
-omitted, we would be dealing with the Koenig lookup issues discussed above in
-the section on the absolute value function.
-
-<p>For many cases, the use of <tt>std::</tt> is not an issue. The standard
-allows for additional specialisations to be inserted into the <tt>std</tt>
-namespace. Hence, the user is fully able to implement an integer type MyInt,
-and to define
-
-<pre>
-    namespace std {
-        template&lt;&gt; void swap&lt;MyInt&gt;(MyInt&amp; i1, MyInt&amp; i2)
-	{
-	    // ...
-	}
-    }
-</pre>
-
-<p>This should provide ideal performance.
-
-<p>However, if MyInt is itself a template type, possibly templated on the
-number of bits of precision, as in <tt>MyInt&lt;n&gt;</tt>, then this option is no
-longer available. The problem is that the implementation of std::swap() is no
-longer a specialisation, but is instead an <em>overload</em> of the
-std::swap() function. And user-defined overloads are not permitted in
-namespace <tt>std</tt> by the standard.
-
-<p>As this issue does not affect the actual validity of the algorithms, merely
-their performance, a decision has been taken to avoid the use of std::swap()
-in this manner for the time being. To provide some assistance for users who
-need the best possible performance for rationals based on their own integer
-types, a number of options are available:
-
-<ul>
-    <li>A preprocessor macro is available, <tt>BOOST_RATIONAL_USE_STD_SWAP</tt>.
-    If this stymbol is defined prior to the inclusion of the
-    &lt;boost/rational.hpp&gt; header, the alternative gcd code using
-    std::swap() will be used. <em>Note:</em> As with any use of preprocessor
-    macros to affect code generation, users of this feature shoult take care
-    to avoid inadvertant violation of the One Definition Rule. Furthermore, it
-    should be noted that this feature is unsupported, and may be removed at a
-    future date.
-
-    <li>Users can always specialise the boost::gcd() function for their own
-    integer type. As there is no restriction on introducing overloads into the
-    boost namespace, this will be acceptable, even if IntType is a template
-    type.
-</ul>
-
-<p>It is expected that at some point in the future, a resolution for this
-issue with the standard may be forthcoming. At such time, this area will be
-revisited.
-
-<p>It should also be noted that, as boost::rational is a template type itself,
-this issue also precludes the provision of a specialisation of std::swap() for
-boost::rational&lt;IntType&gt;. (And it also precludes a useful
-implementation, for the same reasons as above, because we cannot find an
-appropriate swap() function for IntType).
 
 <h2><a name="References">References</h2>
 <ul>
