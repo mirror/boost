@@ -329,7 +329,7 @@ namespace detail
   } // namespace detail
 
     template <typename Iterator, typename ConstIterator>
-    class InteroperableConcept
+    class InteroperableIteratorConcept
     {
      public:
         typedef typename boost::detail::pure_traversal_tag<
@@ -362,9 +362,7 @@ namespace detail
                 (boost::is_same< traversal_category, const_traversal_category>::value)
             );
 
-            // ToDo check what the std really requires
-
-            // detail::Operations<traversal_category>::constraints(i, ci);
+            detail::Operations<traversal_category>::constraints(i, ci);
 
             ci = i;
 
