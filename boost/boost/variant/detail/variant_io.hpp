@@ -3,8 +3,8 @@
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
-// Copyright (c) 2003
-// Eric Friedman
+// Copyright (c) 2002-2003
+// Eric Friedman, Itay Maman
 //
 // Permission to use, copy, modify, distribute and sell this software
 // and its documentation for any purpose is hereby granted without fee, 
@@ -18,6 +18,8 @@
 #define BOOST_VARIANT_DETAIL_VARIANT_IO_HPP
 
 #include <iosfwd> // for std::basic_ostream forward declare
+
+#include "boost/variant/variant_fwd.hpp"
 
 #include "boost/detail/templated_streams.hpp"
 #include "boost/variant/static_visitor.hpp"
