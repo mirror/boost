@@ -158,12 +158,14 @@ result of a match contains a number of sub-expression matches in
 addition to the overall match. When the library needs to report a
 regular expression match it does so using an instance of the
 class <a href="template_class_ref.htm#reg_match">match_results</a>,
-as before there are typedefs of this class for the two most
-common cases: </p>
+as before there are typedefs of this class for the most common
+cases: </p>
 
 <pre><b>namespace </b>boost{
 <b>typedef</b> match_results&lt;<b>const</b> <b>char</b>*&gt; cmatch;
 <b>typedef</b> match_results&lt;<b>const</b> <b>wchar_t</b>*&gt; wcmatch;
+<strong>typedef</strong> match_results&lt;std::string::const_iterator&gt; smatch;
+<strong>typedef</strong> match_results&lt;std::wstring::const_iterator&gt; wsmatch; 
 }</pre>
 
 <p>The algorithms <a href="template_class_ref.htm#reg_search">regex_search</a>

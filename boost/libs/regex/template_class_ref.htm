@@ -871,7 +871,9 @@ each sub-expression match being contained in an object of type <i>sub_match</i>.
 &nbsp;&nbsp; <b>bool</b> <b>operator</b>&lt;(<b>const</b> match_results&amp; that)<b>const</b>; 
 };
 <strong>typedef</strong> match_results&lt;<strong>const</strong> <strong>char</strong>*&gt; cmatch;
-<strong>typedef</strong> match_results&lt;<strong>const</strong> <strong>wchar_t</strong>*&gt; wcmatch; </pre>
+<strong>typedef</strong> match_results&lt;<strong>const</strong> <strong>wchar_t</strong>*&gt; wcmatch; 
+<strong>typedef</strong> match_results&lt;std::string::const_iterator&gt; smatch;
+<strong>typedef</strong> match_results&lt;std::wstring::const_iterator&gt; wsmatch; </pre>
 
 <p>Class match_results is used for reporting what matched a
 regular expression, it is passed to the matching algorithms <a
@@ -1128,10 +1130,10 @@ properties. </p>
 
 <p>The algorithm regex _match determines whether a given regular
 expression matches a given sequence denoted by a pair of
-bidirectional-iterators, the algorithm is defined as follows,
-note that the result is true only if the expression matches the
-whole of the input sequence, the main use of this function is
-data input validation: </p>
+bidirectional-iterators, the algorithm is defined as follows, <em>note
+that the result is true only if the expression matches the whole
+of the input sequence</em>, the main use of this function is data
+input validation: </p>
 
 <pre><b>template</b> &lt;<b>class</b> iterator, <b>class</b> Allocator, <b>class</b> charT, <b>class</b> traits, <b>class</b> Allocator2&gt;
 <b>bool</b> regex_match(iterator first,&nbsp;
@@ -1205,7 +1207,12 @@ return true or false and do not indicate what matched: </p>
         will be less than or equal to last. m[1] denotes the
         first subexpression m[2] the second subexpression and so
         on. If no match occurred then m[0].first = m[0].second =
-        last.</td>
+        last.<p>Note that since the match_results structure
+        stores only iterators, and not strings, the iterators/strings
+        passed to regex_match must be valid for as long as the
+        result is to be used. For that reason never pass
+        temporary string objects to regex_match.</p>
+        </td>
         <td>&nbsp;</td>
     </tr>
     <tr>
@@ -1456,7 +1463,13 @@ upon your compilers capabilities]: </p>
         that matched, m[0].first and m[0].second will be less
         than or equal to last. m[1] denotes the first sub-expression
         m[2] the second sub-expression and so on. If no match
-        occurred then m[0].first = m[0].second = last.</td>
+        occurred then m[0].first = m[0].second = last.<p>Note
+        that since the match_results structure stores only
+        iterators, and not strings, the iterators/strings passed
+        to regex_search must be valid for as long as the result
+        is to be used. For that reason never pass temporary
+        string objects to regex_search.</p>
+        </td>
         <td>&nbsp;</td>
     </tr>
     <tr>
