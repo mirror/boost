@@ -54,7 +54,7 @@ void assertion_failed (char const * expr, char const * func, char const * file, 
 
 using boost::optional ;
 
-template<class T> inline void unused_variable ( T ) {}
+template<class T> inline void unused_variable ( T const& ) {}
 
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 using boost::swap ;
@@ -63,7 +63,7 @@ using boost::get_pointer ;
 
 // MSVC6.0 does not support comparisons of optional against a literal null pointer value (0)
 // via the safe_bool operator.
-#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1200 ) // 1200 == VC++ 6.0
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) // 1200 == VC++ 6.0
 #define BOOST_OPTIONAL_NO_NULL_COMPARE
 #endif
 
@@ -237,7 +237,7 @@ inline void check_value_const ( optional<T> const& opt, T const& v, T const& z )
 template<class T>
 inline void check_value ( optional<T>& opt, T const& v, T const& z )
 {
-#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1200 ) // 1200 == VC++ 6.0
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) // 1200 == VC++ 6.0
   // For some reason, VC6.0 is creating a temporary while evaluating (*opt == v),
   // so we need to turn throw on copy off first.
   reset_throw_on_copy( ARG(T) ) ;
@@ -263,7 +263,7 @@ void test_basics( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION  );
 
-  T z(-1);
+  T z(0);
 
   T a(1);
 
@@ -366,7 +366,7 @@ void test_direct_value_manip( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
   
-  T x(1);
+  T x(3);
 
   optional<T> const c_opt0(x) ;
   optional<T>         opt0(x);
@@ -377,7 +377,7 @@ void test_direct_value_manip( T const* )
   BOOST_CHECK( (*c_opt0).V() == x.V() ) ;
   BOOST_CHECK( (*  opt0).V() == x.V() ) ;
 
-  T y(2);
+  T y(4);
   *opt0 = y ;
   BOOST_CHECK( (*opt0).V() == y.V() ) ;
 
@@ -408,7 +408,7 @@ void test_uninitialized_access( T const* )
   passed = false ;
   try
   {
-    T v(1) ;
+    T v(5) ;
     unused_variable(v);
     // This should throw because 'def' is uninitialized
     *def = v ;
@@ -429,6 +429,10 @@ void test_uninitialized_access( T const* )
   BOOST_CHECK(!passed);
 }
 
+#if BOOST_WORKAROUND( BOOST_INTEL_CXX_VERSION, <= 700) // Intel C++ 7.0
+void prevent_buggy_optimization( bool v ) {}
+#endif
+
 //
 // Test Direct Initialization of optional for a T with throwing copy-ctor.
 //
@@ -437,7 +441,7 @@ void test_throwing_direct_init( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
-  T a(1234);
+  T a(6);
 
   int count = get_instance_count( ARG(T) ) ;
 
@@ -450,6 +454,18 @@ void test_throwing_direct_init( T const* )
     //   Attempt to copy construct 'a' and throw.
     // 'opt' won't be constructed.
     set_pending_copy( ARG(T) ) ;
+
+#if BOOST_WORKAROUND( BOOST_INTEL_CXX_VERSION, <= 700) // Intel C++ 7.0
+    // Intel C++ 7.0 specific:
+    //    For some reason, when "check_is_not_pending_copy",
+    //    after the exception block is reached,
+    //    X::pending_copy==true even though X's copy ctor set it to false.
+    //    I guessed there is some sort of optimization bug,
+    //    and it seems to be the since the following additional line just
+    //    solves the problem (!?)
+    prevent_buggy_optimization(X::pending_copy);
+#endif
+
     optional<T> opt(a) ;
     passed = true ;
   }
@@ -468,7 +484,7 @@ void test_throwing_val_assign_on_uninitialized( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
-  T a(1234);
+  T a(7);
 
   int count = get_instance_count( ARG(T) ) ;
 
@@ -503,9 +519,9 @@ void test_throwing_val_assign_on_initialized( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
-  T z(-1);
-  T a(1234);
-  T b(5678);
+  T z(0);
+  T a(8);
+  T b(9);
 
   int count = get_instance_count( ARG(T) ) ;
 
@@ -551,8 +567,8 @@ void test_throwing_copy_initialization( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
-  T z(-1);
-  T a(1234);
+  T z(0);
+  T a(10);
 
   reset_throw_on_copy( ARG(T) ) ;
 
@@ -593,8 +609,8 @@ void test_throwing_assign_to_uninitialized( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
-  T z(-1);
-  T a(1234);
+  T z(0);
+  T a(11);
 
   reset_throw_on_copy( ARG(T) ) ;
 
@@ -633,9 +649,9 @@ void test_throwing_assign_to_initialized( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
-  T z(-1);
-  T a(1234);
-  T b(5678);
+  T z(0);
+  T a(12);
+  T b(13);
 
   reset_throw_on_copy( ARG(T) ) ;
 
@@ -677,9 +693,9 @@ void test_no_throwing_swap( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
   
-  T z(-1);
-  T a(1234);
-  T b(5678);
+  T z(0);
+  T a(14);
+  T b(15);
 
   reset_throw_on_copy( ARG(T) ) ;
 
@@ -720,8 +736,8 @@ void test_throwing_swap( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
   
-  T a(1234);
-  T b(5678);
+  T a(16);
+  T b(17);
 
   reset_throw_on_copy( ARG(T) ) ;
 
@@ -787,9 +803,9 @@ void test_relops( T const* )
   
   reset_throw_on_copy( ARG(T) ) ;
   
-  T v0(1);
-  T v1(2);
-  T v2(2);
+  T v0(18);
+  T v1(19);
+  T v2(19);
 
   optional<T> def0 ;
   optional<T> def1 ;
@@ -881,18 +897,21 @@ void test_conversions()
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION );
 
-  char c = 123 ;
+#ifndef BOOST_OPTIONAL_NO_CONVERTING_COPY_CTOR
+  char c = 20 ;
   optional<char> opt0(c);
-
   optional<int> opt1(opt0);
   BOOST_CHECK(*opt1 == static_cast<int>(c));
+#endif
 
-  float f = 1.234f ;
+#ifndef BOOST_OPTIONAL_NO_CONVERTING_ASSIGNMENT
+  float f = 21.22f ;
   double d = f ;
   optional<float> opt2(f) ;
   optional<double> opt3 ;
   opt3 = opt2 ;
   BOOST_CHECK(*opt3 == d);
+#endif  
 }
 
 int test_main( int, char* [] )

@@ -25,6 +25,27 @@
 #include "boost/type_traits/alignment_of.hpp"
 #include "boost/type_traits/type_with_alignment.hpp"
 
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+// VC6.0 has the following bug:
+//   When a templated assignment operator exist, an implicit conversion
+//   constructing an optional<T> is used when assigment of the form:
+//     optional<T> opt ; opt = T(...);
+//   is compiled.
+//   However, optional's ctor is _explicit_ and the assignemt shouldn't compile.
+//   Therefore, for VC6.0 templated assignment is disabled.
+//
+#define BOOST_OPTIONAL_NO_CONVERTING_ASSIGNMENT
+#endif
+
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+// VC7.0 has the following bug:
+//   When both a non-template and a template copy-ctor exist
+//   and the templated version is made 'explicit', the explicit is also
+//   given to the non-templated version, making the class non-implicitely-copyable.
+//
+#define BOOST_OPTIONAL_NO_CONVERTING_COPY_CTOR
+#endif
+
 namespace boost
 {
   namespace optional_detail
@@ -74,8 +95,9 @@ class optional
       construct(val);
     }
 
+#ifndef BOOST_OPTIONAL_NO_CONVERTING_COPY_CTOR
     // NOTE: MSVC needs templated versions first
-    
+
     // Creates a deep copy of another convertible optional<U>
     // Requires a valid conversion from U to T.
     // Can throw if T::T(U const&) does
@@ -87,6 +109,7 @@ class optional
       if ( rhs )
         construct(*rhs);
     }
+#endif
 
     // Creates a deep copy of another optional<T>
     // Can throw if T::T(T const&) does
@@ -98,10 +121,10 @@ class optional
         construct(*rhs);
     }
 
-
     // No-throw (assuming T::~T() doesn't)
     ~optional() { destroy() ; }
 
+#ifndef BOOST_OPTIONAL_NO_CONVERTING_ASSIGNMENT
     // Assigns from another convertible optional<U> (converts && deep-copies the rhs value)
     // Requires a valid conversion from U to T.
     // Basic Guarantee: If T::T( U const& ) throws, this is left UNINITIALIZED
@@ -118,6 +141,7 @@ class optional
         }
         return *this ;
       }
+#endif
 
     // Assigns from another optional<T> (deep-copies the rhs value)
     // Basic Guarantee: If T::T( T const& ) throws, this is left UNINITIALIZED
@@ -133,7 +157,6 @@ class optional
         }
         return *this ;
       }
-
 
     // Destroys the current value, if any, leaving this UNINITIALIZED
     // No-throw (assuming T::~T() doesn't)
