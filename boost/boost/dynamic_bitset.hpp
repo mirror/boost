@@ -665,7 +665,7 @@ dynamic_bitset<Block, Allocator>::operator<<=(size_type n)
         
         
         // div blocks are zero filled at the less significant end
-        std::fill(m_bits, m_bits+div, static_cast<block_type>(0));
+        std::fill(this->m_bits, this->m_bits+div, static_cast<block_type>(0));
         
         
     }
@@ -732,18 +732,18 @@ dynamic_bitset<B, A> & dynamic_bitset<B, A>::operator>>=(size_type n) {
             block_type const ls = bits_per_block - r;
 
             for (size_type i = div; i < last; ++i) {
-                m_bits[i-div] = (m_bits[i] >> r) | (m_bits[i+1]  << ls);
+                this->m_bits[i-div] = (this->m_bits[i] >> r) | (this->m_bits[i+1]  << ls);
             }
             // r bits go to zero
-            m_bits[last-div] = m_bits[last] >> r;
+            this->m_bits[last-div] = this->m_bits[last] >> r;
         }
 
         else {
             for (size_type i = div; i <= last; ++i) {
-                m_bits[i-div] = m_bits[i];
+                this->m_bits[i-div] = this->m_bits[i];
             }
             // note the '<=': the last iteration 'absorbs'
-            // m_bits[last-div] = m_bits[last] >> 0;
+            // this->m_bits[last-div] = this->m_bits[last] >> 0;
         }
 
         
@@ -927,7 +927,7 @@ dynamic_bitset<Block, Allocator>::count() const
     using detail::byte_t;
 
     const byte_t * p = reinterpret_cast<const byte_t*>(this->m_bits);
-    const byte_t * past_end = p + m_num_blocks * sizeof(Block);
+    const byte_t * past_end = p + this->m_num_blocks * sizeof(Block);
 
     size_type num = 0;
     unsigned int const max_bit = detail::count<>::max_bit;
@@ -1355,12 +1355,6 @@ template <typename Block, typename Allocator>
 inline void dynamic_bitset<Block, Allocator>::
 set_block_(size_type blocknum, Block value)
 {
-  /*for (std::size_t i = 0; i < bits_per_block; ++i, value >>= 1)
-    if (value & 0x1) {
-      size_type bit = blocknum * bits_per_block + i;
-      set_(bit);
-    }*/
-    // [gps]
     m_bits[blocknum] = value;
 }
 
@@ -1396,13 +1390,13 @@ bool dynamic_bitset<Block, Allocator>::set_(size_type n, bool value)
 template <typename Block, typename Allocator>
 inline void dynamic_bitset<Block, Allocator>::m_zero_unused_bits()
 {
-    assert (m_num_blocks == this->calc_num_blocks(m_num_bits));
+    assert (this->m_num_blocks == this->calc_num_blocks(this->m_num_bits));
 
     // if != 0 this is the number of bits used in the last block
-    const size_type used_bits = m_num_bits % bits_per_block;
+    const size_type used_bits = this->m_num_bits % bits_per_block;
 
     if (used_bits != 0)
-        m_bits[m_num_blocks - 1] &= ~(~static_cast<Block>(0) << used_bits);
+        this->m_bits[this->m_num_blocks - 1] &= ~(~static_cast<Block>(0) << used_bits);
 
 }
 
