@@ -82,18 +82,15 @@ class integer_traits<unsigned char>
 { };
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-#if defined(__BORLANDC__)
-#ifndef WCHAR_MIN
-#define WCHAR_MIN 0
-#endif
-#ifndef WCHAR_MAX
-#define WCHAR_MAX 0xFFFF
-#endif
-#endif
 template<>
 class integer_traits<wchar_t>
   : public std::numeric_limits<wchar_t>,
+#if !defined(__BORLANDC__)
     public detail::integer_traits_base<wchar_t, WCHAR_MIN, WCHAR_MAX>
+#else
+    // Borland C++ does not have WCHAR_MIN and WCHAR_MAX
+    public detail::integer_traits_base<wchar_t, 0, 0xffff>
+#endif
 { };
 #endif // BOOST_NO_INTRINSIC_WCHAR_T
 
