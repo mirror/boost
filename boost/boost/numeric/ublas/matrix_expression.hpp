@@ -202,7 +202,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_USING matrix_expression<matrix_const_reference<E> >::operator ();
 #endif
         typedef E expression_type;
-        typedef typename E::simd_category simd_category;
         typedef typename E::size_type size_type;
         typedef typename E::difference_type difference_type;
         typedef typename E::value_type value_type;
@@ -213,7 +212,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename E::orientation_category orientation_category;
         typedef typename E::const_iterator1 const_iterator1_type;
         typedef typename E::const_iterator2 const_iterator2_type;
-        typedef unknown_storage_tag storage_category;
+        typedef typename E::storage_category storage_category;
+        typedef typename E::simd_category simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -345,7 +345,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_USING matrix_expression<matrix_reference<E> >::operator ();
 #endif
         typedef E expression_type;
-        typedef typename E::simd_category simd_category;
         typedef typename E::size_type size_type;
         typedef typename E::difference_type difference_type;
         typedef typename E::value_type value_type;
@@ -384,7 +383,8 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename E::const_iterator2,
                                           typename E::iterator2>::type iterator2_type;
 #endif
-        typedef unknown_storage_tag storage_category;
+        typedef typename E::storage_category storage_category;
+        typedef typename E::simd_category simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
