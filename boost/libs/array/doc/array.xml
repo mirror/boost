@@ -66,9 +66,13 @@
     <para>After considering different names, we decided to name this
     class simply <code><classname>array</classname></code>.</para>
 
-    <para>Class <code><classname>array</classname></code> fulfills
-    most but not all of the requirements of "reversible containers"
-    (see Section 23.1, [lib.container.requirements] of the C++
+    <para>Note that this class is suggested to be part of the next
+    Technical Report, which will extend the C++ Standard (see
+    <ulink>http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1548.htm</ulink>).</para>
+
+    <para>Class <code><classname>array</classname></code> fulfills most
+    but not all of the requirements of "reversible containers" (see
+    Section 23.1, [lib.container.requirements] of the C++
     Standard). The reasons array is not an reversible STL container is
     because:
       <itemizedlist spacing="compact">
@@ -478,51 +482,39 @@
 
       <simpara>Note that if there are fewer elements in the
       initializer list, then each remaining element gets
-      default-initialized (thus, it has a defined value). However,
-      passing no initializer list means that the elements have an
-      indetermined initial value.</simpara></listitem>
+      default-initialized (thus, it has a defined value).</simpara>
+  </listitem></itemizedlist></para>
 
-      <listitem><simpara>It has no user-declared constructors.</simpara></listitem>
-      <listitem><simpara>It has no private or protected non-static data members.</simpara></listitem>
-      <listitem><simpara>It has no base classes.</simpara></listitem>
-      <listitem><simpara>It has no virtual functions.</simpara></listitem>
+  <para>However, this approach has its drawbacks: <emphasis
+  role="bold"> passing no initializer list means that the elements
+  have an indetermined initial value</emphasis>, because the rule says
+  that aggregates may have:
+    <itemizedlist>
+      <listitem><simpara>No user-declared constructors.</simpara></listitem>
+      <listitem><simpara>No private or protected non-static data members.</simpara></listitem>
+      <listitem><simpara>No base classes.</simpara></listitem>
+      <listitem><simpara>No virtual functions.</simpara></listitem>
     </itemizedlist>
-
   </para>
-  <para>The current implementation uses this approach. However, being
-  able to have indeterminate initial values is a big drawback. So,
-  please give me some feedback, how useful you consider this feature
-  to be.</para>
-</section>
 
-<section id="array.issues">
-  <title>Open Issues</title>
+  <para>Nevertheless, The current implementation uses this approach.</para>
 
-  <itemizedlist> 
+  <para>Note that for standard conforming compilers it is possible to
+  use fewer braces (according to 8.5.1 (11) of the Standard). That is,
+  you can initialize an array as follows:</para>
 
-    <listitem>
-      <simpara> Do we want initializer list support or would the
-      following be OK?:</simpara>
+<programlisting>
+<classname>boost::array</classname>&lt;int,4&gt; a = { 1, 2, 3 };
+</programlisting>
 
-      <programlisting>int data[] = { 1, 2, 3, 4 }
-<classname>boost::array</classname>&lt;int,5&gt; x(data); // or <classname>boost::array</classname>&lt;int,data&gt; x;</programlisting>
-    </listitem>
+  <para>I'd appreciate any constructive feedback. <emphasis
+  role="bold">Please note: I don't have time to read all boost
+  mails. Thus, to make sure that feedback arrives to me, please send
+  me a copy of each mail regarding this class.</emphasis></para>
 
-    <listitem><simpara>Could "{ ... }" be used portably instead of "{
-    { ... } }" to initialize values? 8.5.1 (11) of the Standard seems
-    to allow it; however, gcc 2.95.2 prints a warning
-    message.</simpara></listitem>
+  <para>The code is provided "as is" without expressed or implied
+  warranty.</para>
 
-    <listitem><simpara>Any way to have determinate initial values and
-    initializer list support?</simpara></listitem>
-
-    <listitem><simpara>Static_casts for reverse iterator stuff?</simpara></listitem>
-  </itemizedlist>
-
-  <para>I'd appreciate any constructive feedback. Please note: I don't
-  have time to read all boost mails. Thus, to make sure that <ulink
-  url="mailto:solutions@josuttis.com">feedback</ulink> arrives me,
-  please send me a copy of each mail regarding this class.</para>
 </section>
 
 <section id="array.more.info">
