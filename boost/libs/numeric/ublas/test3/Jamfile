@@ -22,9 +22,7 @@ exe test3
     : $(SOURCES).cpp
     : <include>$(BOOST_ROOT)
       <sysinclude>$(BOOST_ROOT)
-      <define>BOOST_UBLAS_SAFE
-      <define>USE_RANGE
-      <intel-linux><*><cxxflags>"-Xc"
 #      <gcc><*><cxxflags>"-fabi-version=0"
+      <intel-linux><*><cxxflags>"-Xc"
     ;
 

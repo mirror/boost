@@ -23,8 +23,6 @@ exe test7
     : <include>$(BOOST_ROOT)
       <sysinclude>$(BOOST_ROOT)
       <define>BOOST_UBLAS_USE_INTERVAL
-      <define>BOOST_UBLAS_SAFE
-      <define>USE_RANGE
 #      <gcc><*><cxxflags>"-fabi-version=0"
       <intel-linux><*><cxxflags>"-Xc"
 ;

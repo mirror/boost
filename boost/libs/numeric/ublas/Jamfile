@@ -27,6 +27,7 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
+            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test2/test2.cpp
@@ -36,6 +37,7 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
+            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test3/test3.cpp
@@ -45,6 +47,9 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
+            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
+			<define>USE_MAP_ARRAY <define>USE_STD_MAP
+            <define>USE_SPARSE_VECTOR <define>USE_COMPRESSED_VECTOR <define>USE_COORDINATE_VECTOR <define>USE_SPARSE_MATRIX <define>USE_COMPRESSED_MATRIX <define>USE_COORDINATE_MATRIX
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test4/test4.cpp
@@ -54,6 +59,7 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
+            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test5/test5.cpp
@@ -63,6 +69,7 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
+            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test6/test6.cpp
@@ -72,6 +79,7 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
+            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
 # Test7 checks uBLAS operation with interval types.
@@ -84,6 +92,8 @@ test-suite numeric/uBLAS
 #        : # input files
 #        : # requirements
 #            <define>BOOST_UBLAS_USE_INTERVAL
+#            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
+#            <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
 #      ]
       [ compile concepts.cpp
         : # requirements

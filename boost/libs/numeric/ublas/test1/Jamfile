@@ -22,10 +22,6 @@ exe test1
     : $(SOURCES).cpp
     : <include>$(BOOST_ROOT)
       <sysinclude>$(BOOST_ROOT)
-      <define>BOOST_UBLAS_SAFE
-#      <define>USE_BOUNDED_VECTOR
-#      <define>USE_BOUNDED_MATRIX
-      <define>USE_RANGE
 #      <gcc><*><cxxflags>"-fabi-version=0"
       <intel-linux><*><cxxflags>"-Xc"
     ;

@@ -36,24 +36,9 @@ void initialize_matrix (M &m) {
 }
 
 void test_vector ();
-
 void test_matrix_vector ();
-
 void test_matrix ();
 
-// #define USE_FLOAT
-#define USE_DOUBLE
-#define USE_STD_COMPLEX
-
-#define USE_RANGE
-#define USE_SLICE
-
-// #define USE_BOUNDED_ARRAY
-#define USE_UNBOUNDED_ARRAY
-// #define USE_STD_VECTOR
-
-#define USE_MATRIX
-// #define USE_VECTOR_OF_VECTOR
 
 #endif
 

@@ -36,36 +36,22 @@ void initialize_matrix (M &m) {
 }
 
 void test_vector ();
-
 void test_matrix_vector ();
-
 void test_matrix ();
 
-// #define USE_FLOAT
-#define USE_DOUBLE
-#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1300)
-#define USE_STD_COMPLEX
+// FIXME range and slice are failing
+#undef USE_RANGE
+#undef USE_SLICE
+
+// Disable some tests for truly broken compilers
+	// MSVC Version 6.0 & 7.0 have problems compiling with std::complex
+#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
+#undef USE_STD_COMPLEX
 #endif
 
-//FIXME range and slice are failing
-//#define USE_RANGE
-//#define USE_SLICE
-
-#define USE_MAP_ARRAY
-#define USE_STD_MAP
-
-#define USE_SPARSE_VECTOR
-#define USE_COMPRESSED_VECTOR
-#define USE_COORDINATE_VECTOR
-
-#define USE_SPARSE_MATRIX
-// #define USE_SPARSE_VECTOR_OF_SPARSE_VECTOR
-// #define USE_GENERALIZED_VECTOR_OF_VECTOR
-#define USE_COMPRESSED_MATRIX
-#define USE_COORDINATE_MATRIX
-
+	// Intel for Windows fails to link when a std::complex is returned!
+#if defined(BOOST_INTEL_CXX_VERSION) && (BOOST_INTEL_CXX_VERSION <= 800) && defined(__ICL)
+#undef USE_STD_COMPLEX
 #endif
 
-
-
-
+#endif
