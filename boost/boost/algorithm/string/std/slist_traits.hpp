@@ -12,6 +12,7 @@
 
 #include <boost/algorithm/string/yes_no_type.hpp>
 #include <slist>
+#include <boost/algorithm/string/sequence_traits.hpp>
 
 namespace boost {
     namespace algorithm {
