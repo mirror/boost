@@ -27,6 +27,7 @@ using std::ostream;
 using std::endl;
 using std::ifstream;
 using std::streambuf;
+using std::getline;
 #endif
 
 #include <algorithm>
@@ -38,8 +39,8 @@ using std::streambuf;
 #include <boost/timer.hpp> 
 #include <boost/smart_ptr.hpp>
 
-#ifdef BOOST_MSVC
-// no Koenig lookup, use using declaration instead:
+#if defined(_MSC_VER) && (_MSC_VER <= 1300)
+// maybe no Koenig lookup, use using declaration instead:
 using namespace boost;
 #endif
 
@@ -353,6 +354,7 @@ int main(int argc, char**argv)
 
    return 0;
 }
+
 
 
 
