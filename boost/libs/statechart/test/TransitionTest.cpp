@@ -668,7 +668,7 @@ int test_main( int, char* [] )
   machine.ThrowAction( Entry< S211 > );
   machine.initiate();
   BOOST_CHECK_THROW( machine.process_event( C() ), TransitionTestException );
-  ActionArray c1Throw =
+  ActionArray c1Throw1 =
   {
     Entry< S0 >,
     Entry< S1 >,
@@ -697,7 +697,31 @@ int test_main( int, char* [] )
     Dtor< S2 >,
     Dtor< S0 >
   };
-  machine.CompareToExpectedActionSequence( c1Throw );
+  machine.CompareToExpectedActionSequence( c1Throw1 );
+  BOOST_REQUIRE( machine.terminated() );
+
+  machine.ThrowAction( ExitFn< S11 > );
+  machine.initiate();
+  BOOST_CHECK_THROW( machine.process_event( C() ), TransitionTestException );
+  ActionArray c1Throw2 =
+  {
+    Entry< S0 >,
+    Entry< S1 >,
+    Entry< Default0< S1 > >,
+    Entry< S11 >,
+    Entry< Default2< S1 > >,
+    Entry< Default1< S0 > >,
+    Entry< Default2< S0 > >,
+    Exit< Default2< S1 > >,
+    Throw< ExitFn< S11 > >,
+    Dtor< S11 >,
+    Dtor< Default2< S0 > >,
+    Dtor< Default1< S0 > >,
+    Dtor< Default0< S1 > >,
+    Dtor< S1 >,
+    Dtor< S0 >
+  };
+  machine.CompareToExpectedActionSequence( c1Throw2 );
   BOOST_REQUIRE( machine.terminated() );
 
   return 0;
