@@ -19,43 +19,38 @@
 
 <hr>
 
-<a href="list_for_each_i.htm">Prev</a> <a href="list_rest_n.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<a href="list_for_each.htm">Prev</a> <a href="list_for_each_product.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
 <hr>
 
-<h1>#include &lt;<a href="../../../../boost/preprocessor/list/for_each_product.hpp">boost/preprocessor/list/for_each_product.hpp</a>&gt;</h1>
+<h1>#include &lt;<a href="../../../../boost/preprocessor/list/for_each_i.hpp">boost/preprocessor/list/for_each_i.hpp</a>&gt;</h1>
 
 <hr>
 
-<h2><a name="BOOST_PP_LIST_FOR_EACH_PRODUCT">#define BOOST_PP_LIST_FOR_EACH_PRODUCT</a>(F,N,T_OF_L)</h2>
- <p>Repeats <code>F(R,X)</code> for each element <code>X</code> of the
-cartesian product of the lists of the <code>N</code>-tuple <code>T_OF_L</code>.</p>
+<h2><a name="BOOST_PP_LIST_FOR_EACH_I">#define BOOST_PP_LIST_FOR_EACH_I</a>(F,P,L)</h2>
+ <p>Repeats <code>F(R,P,I,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,I))</code> for each I = [0,
+<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(L)[.</p>
 
-<p>This macro is useful for generating code to avoid combinatorial
-explosion.</p>
+<p>In other words, expands to the sequence:</p>
 
-<h3>Example</h3>
-<ul>
-  <li><a href="../../example/is_integral.cpp">is_integral.cpp</a></li>
-  <li><a href="../../example/array_arithmetic.c">array_arithmetic.c</a></li>
-</ul>
+<pre>
+  F(R,P,0,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,0))
+  F(R,P,1,<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,1))
+  ...
+  F(R,P,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(L)),<a href="list_at.htm#BOOST_PP_LIST_AT">BOOST_PP_LIST_AT</a>(L,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(<a href="list_size.htm#BOOST_PP_LIST_SIZE">BOOST_PP_LIST_SIZE</a>(L))))
+</pre>
 
 <h3>Uses</h3>
 <ul>
   <li><a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>()</li>
 </ul>
 
-<h3>Test</h3>
-<ul>
-  <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
-</ul>
-
 <hr>
 
-<h2><a name="BOOST_PP_LIST_FOR_EACH_PRODUCT_R">#define BOOST_PP_LIST_FOR_EACH_PRODUCT_R</a>(R,F,N,T_OF_L)</h2>
+<h2><a name="BOOST_PP_LIST_FOR_EACH_I_R">#define BOOST_PP_LIST_FOR_EACH_I_R</a>(R,F,P,L)</h2>
  <p>Can be used inside <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>().</p> 
 <hr>
 
-<a href="list_for_each_i.htm">Prev</a> <a href="list_rest_n.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<a href="list_for_each.htm">Prev</a> <a href="list_for_each_product.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
 <hr>
 
 <p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>

@@ -13,8 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-#include <boost/preprocessor/list/adt.hpp>
-#include <boost/preprocessor/for.hpp>
+#include <boost/preprocessor/list/for_each_i.hpp>
 
 /** <p>Repeats <code>F(R,P,BOOST_PP_LIST_AT(L,I))</code> for each I = [0,
 BOOST_PP_LIST_SIZE(L)[.</p>
@@ -35,7 +34,7 @@ BOOST_PP_LIST_SIZE(L)[.</p>
 
 <h3>Uses</h3>
 <ul>
-  <li>BOOST_PP_FOR()</li>
+  <li>BOOST_PP_LIST_FOR_EACH_I()</li>
 </ul>
 
 <h3>Test</h3>
@@ -46,8 +45,6 @@ BOOST_PP_LIST_SIZE(L)[.</p>
 #define BOOST_PP_LIST_FOR_EACH(F,P,L) BOOST_PP_LIST_FOR_EACH_R(0,F,P,L)
 
 /** <p>Can be used inside BOOST_PP_FOR().</p> */
-#define BOOST_PP_LIST_FOR_EACH_R(R,F,P,L) BOOST_PP_FOR##R((F,P,L),BOOST_PP_LIST_FOR_EACH_C,BOOST_PP_LIST_FOR_EACH_F,BOOST_PP_LIST_FOR_EACH_I)
-#define BOOST_PP_LIST_FOR_EACH_C(R,FPL) BOOST_PP_TUPLE_ELEM(3,2,BOOST_PP_TUPLE_ELEM(3,2,FPL))
-#define BOOST_PP_LIST_FOR_EACH_F(R,FPL) (BOOST_PP_TUPLE_ELEM(3,0,FPL),BOOST_PP_TUPLE_ELEM(3,1,FPL),BOOST_PP_TUPLE_ELEM(3,1,BOOST_PP_TUPLE_ELEM(3,2,FPL)))
-#define BOOST_PP_LIST_FOR_EACH_I(R,FPL) BOOST_PP_TUPLE_ELEM(3,0,FPL)(R,BOOST_PP_TUPLE_ELEM(3,1,FPL),BOOST_PP_TUPLE_ELEM(3,0,BOOST_PP_TUPLE_ELEM(3,2,FPL)))
+#define BOOST_PP_LIST_FOR_EACH_R(R,F,P,L) BOOST_PP_LIST_FOR_EACH_I_R(R,BOOST_PP_LIST_FOR_EACH_F,(F,P),L)
+#define BOOST_PP_LIST_FOR_EACH_F(R,FP,I,X) BOOST_PP_TUPLE_ELEM(2,0,FP)(R,BOOST_PP_TUPLE_ELEM(2,1,FP),X)
 #endif

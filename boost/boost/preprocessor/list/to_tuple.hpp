@@ -44,5 +44,5 @@
 #define BOOST_PP_LIST_TO_TUPLE(L) BOOST_PP_LIST_TO_TUPLE_R(0,L)
 
 /** <p>Can be used inside BOOST_PP_FOR().</p> */
-#define BOOST_PP_LIST_TO_TUPLE_R(D,L) (BOOST_PP_LIST_ENUM_R(D,L))
+#define BOOST_PP_LIST_TO_TUPLE_R(R,L) (BOOST_PP_LIST_ENUM_R(R,L))
 #endif
