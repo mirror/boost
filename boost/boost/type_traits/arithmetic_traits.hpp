@@ -10,7 +10,7 @@
 //  is_void, is_integral, is_float, is_arithmetic, is_fundamental.
 //
 
-/  Revision History:
+//  Revision History:
 // Feb 19 2001 Added #include <climits> (David Abrahams)
 
 #ifndef BOOST_ARITHMETIC_TYPE_TRAITS_HPP
