@@ -127,7 +127,7 @@ iterator_adaptor(Base) has no Requires clause, although the Returns clause says 
 member is copy construced from the argument (this may actually be an oversight in N1550, 
 which doesn't require iterators to be copy constructible or assignable). 
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work **** (Jeremy)
 Add a requirements section for the template parameters of
 iterator_adaptor, and state that Base must be Copy Constructible and
 Assignable.
@@ -151,7 +151,7 @@ as in the current standard. Something like: "iterates through the controlled seq
 opposite direction" 
 N1541 50 
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work **** (Jeremy)
 We agree and need to find wording.
 
 
@@ -162,7 +162,7 @@ Status: New
 reverse_iterator::dereference is specified as calling a function named 'prior' which has no 
 specification. 
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work ****(Jeremy)
 Replace use of prior with what it does.
 
 
@@ -172,7 +172,7 @@ Status: New
 Transform iterator has a two-part specification: it does this, in other words, it does that. "In other 
 words" always means "I didn't say it right, so I'll try again." We need to say it once. 
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work ****(Jeremy)
 Reword.
 
 9.12 Transform_iterator shouldnt mandate private member 
@@ -191,7 +191,7 @@ The description of Counting iterator is unclear. "The counting iterator adaptor 
 dereference by returning a reference to the base object. The other operations are implemented by 
 the base m_iterator, as per the inheritance from iterator_adaptor." 
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work ****(Jeremy)
 Reword.
 
 
@@ -206,7 +206,7 @@ I'm not sure what this means. The user provides a template argument named Differ
 there's no difference_type. I assume this is just a glitch in the wording. But if implementors are 
 encouraged to ignore this argument if it won't work right, why is it there? 
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work ****(Jeremy)
 Reword.
 
 
@@ -561,7 +561,7 @@ and to increment such an object. It's only when you try to assign through a dere
 that f(x) has to work, and then only for the particular function object that the iterator holds and 
 for the particular value that is being assigned. 
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work ****(Jeremy)
 Agree, need to find wording.
 
 
@@ -574,7 +574,7 @@ This means someone can store an output_proxy object for later use, whatever that
 constrains output_proxy to hold a copy of the function object, rather than a pointer to the iterator 
 object. Is all this mechanism really necessary? 
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work ****(Jeremy)
 Agree, need to find wording.
 
 
@@ -588,7 +588,7 @@ iterator_traits<X>::reference. istreambuf_iterator::operator* returns charT, but
 istreambuf_iterator::reference is charT&. So am I overlooking something, or is 
 istreambuf_iterator not Readable 
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work ****(Jeremy)
 Remove requirements on the reference type from Readable Iterator.
 
 
@@ -680,7 +680,8 @@ function prototypes. In the other adaptors, that means making sure we
 state what concepts are modeled. Also, we will need an Interoperable
 Iterator concept to accomplish this.
 
-
+I'll start on the work of changing the specification for the
+specialized adaptors. -Jeremy
 
 
 Problem with specification of a->m in Readable Iterator
@@ -718,7 +719,7 @@ categories. There is no description of what the argument to
 iterator_adaptor should be.
 
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work **** (Jeremy)
 
 
 
@@ -756,7 +757,7 @@ pun, or is iterator_traits<Iterator>::value_type required to be some form
 of iterator? If it's the former we need to find a different way to say it. 
 If it's the latter we need to say so.
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work ****(Jeremy)
 
 
 
@@ -792,7 +793,7 @@ There's probably a better way to specify that last alternative, but I've
 been at this too long, and it's all turning into a maze of twisty passages,
 all alike.
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work ****(Jeremy)
 
 
 
@@ -819,4 +820,4 @@ arguments. The only specification for any of these in the details is:
  
 Needs more.
 
-Proposed resolution:  **** Needs work ****
+Proposed resolution:  **** Needs work ****(Jeremy)
