@@ -382,7 +382,7 @@ public:
 
     void * get_deleter(std::type_info const & ti) const
     {
-        return pi_->get_deleter(ti);
+        return pi_? pi_->get_deleter(ti): 0;
     }
 };
 
