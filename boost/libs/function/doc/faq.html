@@ -5,7 +5,7 @@
   </head>
 
   <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
-<h1><IMG SRC="../../c++boost.gif" WIDTH="276" HEIGHT="86">boost::function Frequently Asked Questions</h1>
+<h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86">boost::function Frequently Asked Questions</h1>
 
 <h2>Q: I see void pointers; is this [mess] type safe?</h2>
 <p>Yes, <code>boost::function</code> is type safe even though it uses void pointers and pointers to functions returning void and taking no arguments. Essentially, all type information is encoded in the functions that manage and invoke function pointers and function objects. Only these functions are instantiated with the exact type that is pointed to by the void pointer or pointer to void function. The reason that both are required is that one may cast between void pointers and object pointers safely or between different types of function pointers (provided you don't invoke a function pointer with the wrong type). 
@@ -35,13 +35,13 @@ void g() { return f(); }
 <p> In November and December of 2000, the issue of cloning vs. reference counting was debated at length and it was decided that cloning gave more predictable semantics. I won't rehash the discussion here, but if it cloning is incorrect for a particular application a reference-counting allocator could be used. 
 
 <h2>Q: How do I assign from a member function?</h2>
-<p> Member function assignments are not included directly in <code>boost::function</code> because they do not conform to the syntax of function objects. Several libraries exist to wrap member functions in a function object and/or bind the first argument to the member function (the <code>this</code> pointer). A few libraries are <a href="index.html#member_func">described</a> in the <a href="index.html">Boost.Function</a> documentation.
+<p> Member function assignments are not included directly in <code>boost::function</code> because they do not conform to the syntax of function objects. Several libraries exist to wrap member functions in a function object and/or bind the first argument to the member function (the <code>this</code> pointer). A few libraries are <a href="tutorial.html#member_func">described</a> in the <a href="../index.html">Boost.Function</a> documentation.
 
     <hr>
     <address><a href="mailto:gregod@cs.rpi.edu">Doug Gregor</a></address>
 <!-- Created: Fri Feb 16 09:30:41 EST 2001 -->
 <!-- hhmts start -->
-Last modified: Sun Jun 17 10:06:31 EDT 2001
+Last modified: Sat Jul 14 16:00:11 EDT 2001
 <!-- hhmts end -->
   </body>
 </html>
