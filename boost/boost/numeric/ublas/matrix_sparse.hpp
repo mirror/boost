@@ -17,11 +17,12 @@
 #ifndef BOOST_UBLAS_MATRIX_SPARSE_H
 #define BOOST_UBLAS_MATRIX_SPARSE_H
 
+#include <algorithm> // for std::min and std::max
+#include <boost/config.hpp>
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/storage_sparse.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector_sparse.hpp>
-#include <boost/minmax.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 

@@ -17,7 +17,8 @@
 #ifndef BOOST_UBLAS_OPERATION_SPARSE_H
 #define BOOST_UBLAS_OPERATION_SPARSE_H
 
-#include <boost/minmax.hpp>
+#include <algorithm> // for std::min and std::max
+#include <boost/config.hpp>
 
 // These scaled additions were borrowed from MTL unashamedly.
 // But Alexei Novakov had a lot of ideas to improve these. Thanks.

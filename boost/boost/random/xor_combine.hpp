@@ -21,11 +21,11 @@
 
 #include <iostream>
 #include <cassert>
+#include <algorithm> // for std::min and std::max
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/cstdint.hpp>     // uint32_t
-#include <boost/minmax.hpp>
 
 
 namespace boost {

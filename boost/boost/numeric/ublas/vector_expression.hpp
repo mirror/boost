@@ -17,11 +17,12 @@
 #ifndef VECTOR_EXPRESSION_H
 #define VECTOR_EXPRESSION_H
 
+#include <algorithm> // for std::min and std::max
+#include <boost/config.hpp>
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/exception.hpp>
 #include <boost/numeric/ublas/functional.hpp>
 #include <boost/numeric/ublas/noalias.hpp>
-#include <boost/minmax.hpp>
 
 // Expression templates based on ideas of Todd Veldhuizen and Geoffrey Furnish
 // Iterators based on ideas of Jeremy Siek

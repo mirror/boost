@@ -17,10 +17,11 @@
 #ifndef BOOST_UBLAS_MATRIX_PROXY_H
 #define BOOST_UBLAS_MATRIX_PROXY_H
 
+#include <algorithm> // for std::min and std::max
+#include <boost/config.hpp>
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/vector_expression.hpp>
 #include <boost/numeric/ublas/matrix_expression.hpp>
-#include <boost/minmax.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 

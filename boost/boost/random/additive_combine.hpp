@@ -22,10 +22,10 @@
 #define BOOST_RANDOM_ADDITIVE_COMBINE_HPP
 
 #include <iostream>
+#include <algorithm> // for std::min and std::max
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/random/linear_congruential.hpp>
-#include <boost/minmax.hpp>
 
 namespace boost {
 namespace random {

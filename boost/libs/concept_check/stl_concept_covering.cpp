@@ -6,9 +6,9 @@
 
 #include <algorithm>
 #include <numeric>
+#include <boost/config.hpp>
 #include <boost/concept_check.hpp>
 #include <boost/concept_archetype.hpp>
-#include <boost/minmax.hpp>
 
 /*
 

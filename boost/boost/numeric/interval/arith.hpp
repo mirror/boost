@@ -17,11 +17,11 @@
 #ifndef BOOST_NUMERIC_INTERVAL_ARITH_HPP
 #define BOOST_NUMERIC_INTERVAL_ARITH_HPP
 
+#include <boost/config.hpp>
 #include <boost/numeric/interval/detail/interval_prototype.hpp>
 #include <boost/numeric/interval/detail/bugs.hpp>
 #include <boost/numeric/interval/detail/test_input.hpp>
 #include <boost/numeric/interval/detail/division.hpp>
-#include <boost/minmax.hpp>
 #include <algorithm>
 
 namespace boost {

@@ -11,7 +11,6 @@
 #define BOOST_POOL_HPP
 
 #include <boost/config.hpp>  // for workarounds
-#include <boost/minmax.hpp>
 
 // std::less, std::less_equal, std::greater
 #include <functional>

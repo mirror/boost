@@ -21,8 +21,8 @@
 #include <cmath>
 #include <complex>
 
+#include <boost/config.hpp>
 #include <boost/numeric/ublas/config.hpp>
-#include <boost/minmax.hpp>
 
 // Promote traits borrowed from Todd Veldhuizen
 

@@ -26,11 +26,11 @@
 #include <boost/shared_array.hpp>
 #endif
 
+#include <boost/config.hpp>
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/exception.hpp>
 #include <boost/numeric/ublas/iterator.hpp>
 #include <boost/numeric/ublas/traits.hpp>
-#include <boost/minmax.hpp>
 
 namespace boost { namespace numeric { namespace ublas {
 

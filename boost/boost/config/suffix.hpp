@@ -285,6 +285,18 @@
     namespace std { using ::ptrdiff_t; using ::size_t; }
 # endif
 
+//  Workaround for the unfortunate min/max macros defined by some platform headers
+
+#define BOOST_PREVENT_MACRO_SUBSTITUTION
+
+#ifndef BOOST_USING_STD_MIN
+#  define BOOST_USING_STD_MIN() using std::min
+#endif
+
+#ifndef BOOST_USING_STD_MAX
+#  define BOOST_USING_STD_MAX() using std::max
+#endif
+
 //  BOOST_NO_STD_MIN_MAX workaround  -----------------------------------------//
 
 #  ifdef BOOST_NO_STD_MIN_MAX

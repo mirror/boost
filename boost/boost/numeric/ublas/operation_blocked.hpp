@@ -17,7 +17,8 @@
 #ifndef BOOST_UBLAS_OPERATION_BLOCKED_H
 #define BOOST_UBLAS_OPERATION_BLOCKED_H
 
-#include <boost/minmax.hpp>
+#include <algorithm> // for std::min and std::max
+#include <boost/config.hpp>
 
 namespace boost { namespace numeric { namespace ublas {
 

@@ -18,7 +18,9 @@
 #define BOOST_UBLAS_FUNCTIONAL_H
 
 #include <functional>
+#include <algorithm> // for std::min and std::max
 
+#include <boost/config.hpp>
 #ifdef BOOST_UBLAS_HAVE_BINDINGS
 #include <boost/numeric/bindings/traits/std_vector.hpp>
 #include <boost/numeric/bindings/traits/ublas_vector.hpp>
@@ -31,7 +33,6 @@
 #include <boost/numeric/ublas/traits.hpp>
 #include <boost/numeric/ublas/duff.hpp>
 #include <boost/numeric/ublas/raw.hpp>
-#include <boost/minmax.hpp>
 
 namespace boost { namespace numeric { namespace ublas {
 

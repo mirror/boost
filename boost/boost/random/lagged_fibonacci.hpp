@@ -31,7 +31,6 @@
 #include <boost/random/linear_congruential.hpp>
 #include <boost/random/uniform_01.hpp>
 #include <boost/random/detail/pass_through_engine.hpp>
-#include <boost/minmax.hpp>
 
 namespace boost {
 namespace random {

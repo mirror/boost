@@ -21,11 +21,11 @@
 #include <map>
 #include <set>
 
+#include <boost/config.hpp>
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/exception.hpp>
 #include <boost/numeric/ublas/iterator.hpp>
 #include <boost/numeric/ublas/storage.hpp>
-#include <boost/minmax.hpp>
 
 namespace boost { namespace numeric { namespace ublas {
 

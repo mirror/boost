@@ -14,9 +14,9 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
+#include "boost/config.hpp"
 #include "boost/test/minimal.hpp"
 #include "boost/variant.hpp"
-#include "boost/minmax.hpp"
 
 #include "jobs.h"
 

@@ -19,7 +19,8 @@
 #ifndef BOOST_UBLAS_LU_H
 #define BOOST_UBLAS_LU_H
 
-#include <boost/minmax.hpp>
+#include <algorithm> // for std::min and std::max
+#include <boost/config.hpp>
 
 namespace boost { namespace numeric { namespace ublas {
 
