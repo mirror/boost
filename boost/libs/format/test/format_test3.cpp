@@ -1,14 +1,16 @@
-// -*- C++ -*-
-//  Boost general library 'format'   ---------------------------
-//  See http://www.boost.org for updates, documentation, and revision history.
+// ------------------------------------------------------------------------------
+// format_test3.cpp :  complicated format strings  and / or advanced uses
+// ------------------------------------------------------------------------------
 
-//  (C) Samuel Krempp 2001
-//                  krempp@crans.ens-cachan.fr
-//  Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  Copyright Samuel Krempp 2003. Use, modification, and distribution are
+//  subject to the Boost Software License, Version 1.0. (See accompanying
+//  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+// see http://www.boost.org/libs/format for library home page
+
+// ------------------------------------------------------------------------------
+
+#define BOOST_FORMAT_STATIC_STREAM
 #include "boost/format.hpp"
 
 #include <iostream> 
@@ -27,7 +29,6 @@ std::ostream& operator<<( std::ostream& os, const Rational& r) {
   return os;
 }
 
-
 int test_main(int, char* [])
 {
     using namespace std;
@@ -35,9 +36,7 @@ int test_main(int, char* [])
     using boost::io::group;
     using boost::io::str;
 
-    Rational r(16,9);
-
-    string s;
+    string s, s2;
     // special paddings 
     s = str( format("[%=6s] [%+6s] [%+6s] [% 6s] [%+6s]\n") 
                       % 123
@@ -51,6 +50,40 @@ int test_main(int, char* [])
       BOOST_ERROR("formatting error. (with special paddings)");
     }
 
+    s = str( format("[% 6.8s] [% 8.6s] [% 7.7s]\n") 
+                      % group(internal, setfill('x'), Rational(12345,54321))
+                      % group(internal, setfill('x'), Rational(123,45))
+                      % group(internal, setfill('x'), Rational(123,321))
+             );
+    if(s != (s2="[ 12345/5] [ xx123/4] [ 123/32]\n" )) {
+        cerr << s << s2;
+      BOOST_ERROR("formatting error. (with special paddings)");
+    }
+
+    s = str( format("[% 6.8s] [% 6.8s] [% 6.8s] [% 6.8s] [%6.8s]\n") 
+                      % 1234567897
+                      % group(setfill('x'), 12)
+                      % group(internal, setfill('x'), 12)
+                      % group(internal, setfill('x'), 1234567890)
+                      % group(internal, setfill('x'), 123456) 
+             );
+    if(s != (s2="[ 1234567] [xxx 12] [ xxx12] [ 1234567] [123456]\n") ) {
+        cerr << s << s2;
+      BOOST_ERROR("formatting error. (with special paddings)");
+    }
+
+    s = str( format("[% 8.6s] [% 6.4s] [% 6.4s] [% 8.6s] [% 8.6s]\n")
+                      % 1234567897
+                      % group(setfill('x'), 12)
+                      % group(internal, setfill('x'), 12)
+                      % group(internal, setfill('x'), 1234567890)
+                      % group(internal, setfill('x'), 12345) 
+             );
+    if(s != (s2="[   12345] [xxx 12] [ xxx12] [ xx12345] [ xx12345]\n") ) {
+        cerr << s << s2;
+      BOOST_ERROR("formatting error. (with special paddings)");
+    }
+
     // nesting formats :
     s = str( format("%2$014x [%1%] %|2$05|\n") % (format("%05s / %s") % -18 % 7)
              %group(showbase, -100)
@@ -59,5 +92,6 @@ int test_main(int, char* [])
       cerr << s ;
       BOOST_ERROR("nesting did not work");
     }
+   
     return 0;
 }

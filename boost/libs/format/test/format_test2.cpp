@@ -1,13 +1,14 @@
-// -*- C++ -*-
-//  Boost general library 'format'   ---------------------------
-//  See http://www.boost.org for updates, documentation, and revision history.
+// ------------------------------------------------------------------------------
+// format_test2.cpp :  a few real, simple tests.
+// ------------------------------------------------------------------------------
 
-//  (C) Samuel Krempp 2001
-//                  krempp@crans.ens-cachan.fr
-//  Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  Copyright Samuel Krempp 2003. Use, modification, and distribution are
+//  subject to the Boost Software License, Version 1.0. (See accompanying
+//  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+// see http://www.boost.org/libs/format for library home page
+
+// ------------------------------------------------------------------------------
 
 #include "boost/format.hpp"
 
