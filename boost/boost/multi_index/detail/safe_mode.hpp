@@ -9,6 +9,10 @@
 #ifndef BOOST_MULTI_INDEX_DETAIL_SAFE_MODE_HPP
 #define BOOST_MULTI_INDEX_DETAIL_SAFE_MODE_HPP
 
+#if defined(_MSC_VER)&&(_MSC_VER>=1200)
+#pragma once
+#endif
+
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <algorithm>
@@ -124,7 +128,7 @@ protected:
 BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS:
   friend class safe_container_base;
 
-#if !defined(BOOST_MULTI_INDEX_NO_MEMBER_TEMPLATE_FRIENDS)
+#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<typename Iterator> friend
     void safe_mode::detach_equivalent_iterators(Iterator&);
 #endif
@@ -143,6 +147,11 @@ public:
 
   ~safe_container_base()
   {
+    detach_all_iterators();
+  }
+
+  void detach_all_iterators()
+  {
     for(safe_iterator_base* it=header.next;it;it=it->next)it->cont=0;
   }
 
@@ -157,7 +166,7 @@ public:
 BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS:
   friend class safe_iterator_base;
 
-#if !defined(BOOST_MULTI_INDEX_NO_MEMBER_TEMPLATE_FRIENDS)
+#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template<typename Iterator> friend
     void safe_mode::detach_equivalent_iterators(Iterator&);
 #endif
