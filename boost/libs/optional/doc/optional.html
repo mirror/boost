@@ -35,7 +35,7 @@ HREF="../../../boost/optional/optional.hpp">boost/optional/optional.hpp</A>&gt; 
 
 <P>Consider these functions which should return a value but which might not have
   a value to return:</P>
-<pre>(A) double sqrt(double n );
+<pre>(A) double sqrt( double n );
 (B) char get_async_input();
 (C) point polygon::get_any_point_effectively_inside();</pre>
 <P>There are different approaches to the issue of not having a value to return.</P>
@@ -1152,7 +1152,7 @@ type to be <a href="../../utility/CopyConstructible.html">Copy Constructible</a>
 constructed object, often temporary, just to follow the copy from:</p>
 <pre>struct X
 {
-  X ( int, std:::string ) ;
+  X ( int, std::string ) ;
 } ;</pre>
 <pre>class W
 {
@@ -1222,7 +1222,7 @@ public:
 {
   // Wrapped object constructed in-place via a TypedInPlaceFactory.
   // No temporary created.
-  W ( TypedInPlaceFactory2&lt;X,int,std::string&rt;(123,"hello")) ;
+  W ( TypedInPlaceFactory2&lt;X,int,std::string&gt;(123,"hello")) ;
 }
 </pre>
 <p>The factories are divided in two groups:<ul>
@@ -1303,7 +1303,7 @@ of the assignment methods:</p>
   InPlaceFactory const&amp; ) </code></li>
   <li> <code>template&lt;class TypedInPlaceFactory&gt; optional&lt;T&gt;::operator= (
   TypedInPlaceFactory const&amp; ) </code></li>
-  <li> <code>optional&lt;T&gt;:::reset ( T const&amp;)</code></li>
+  <li> <code>optional&lt;T&gt;::reset ( T const&amp; )</code></li>
 </ul>
 <p>Can only <i>guarantee</i> the <u>basic exception safety</u>: The lvalue optional is left <u>uninitialized</u>
 if an exception is thrown (any previous value is <i>first</i> destroyed using T::~T())</p>
@@ -1320,11 +1320,11 @@ for T::T ( T const&amp; ), you know that optional's assignment and reset has the
 // Case 1: Exception thrown during assignment.
 //
 T v0(123);
-optional&ltT&gt opt0(v0);
+optional&lt;T&gt opt0(v0);
 try
 {
 &nbsp; T v1(456);
-&nbsp; optional&ltT&gt opt1(v1);
+&nbsp; optional&lt;T&gt opt1(v1);
 &nbsp; opt0 = opt1 ;
 
 &nbsp; // If no exception was thrown, assignment succeeded.
@@ -1340,7 +1340,7 @@ catch(...)
 // Case 2: Exception thrown during reset(v)
 //
 T v0(123);
-optional&ltT&gt opt(v0);
+optional&lt;T&gt opt(v0);
 try
 {
 &nbsp; T v1(456);
