@@ -864,8 +864,6 @@ tie(T1& t1, T2& t2, T3& t3, T4& t4, T5& t5, T6& t6, T7& t7, T8& t8,
 } // end of namespace tuples
 } // end of namespace boost
 
-#undef BOOST_TUPLE_DUMMY_PARM
-#undef BOOST_TUPLE_SINGLE_DUMMY_PARM
 
 #endif // BOOST_TUPLE_BASIC_HPP
 
