@@ -7,7 +7,7 @@
 
 //  sun specific config options:
 
-#define BOOST_PLATFORM "sun"
+#define BOOST_PLATFORM "Sun Solaris"
 
 #define BOOST_HAS_GETTIMEOFDAY
 
