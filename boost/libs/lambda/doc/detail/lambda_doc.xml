@@ -1857,7 +1857,7 @@ and the effect of evaluating that expression.
 </row>
 <row>
 <entry><literal>destructor()(pa)</literal></entry>
-<entry><literal>pa.->A()</literal>, where <literal>pa</literal> is of type <literal>A*</literal></entry>
+<entry><literal>pa->~A()</literal>, where <literal>pa</literal> is of type <literal>A*</literal></entry>
 </row>
 <row>
 <entry><literal>new_ptr&lt;T&gt;()(<parameter>arg_list</parameter>)</literal></entry>
