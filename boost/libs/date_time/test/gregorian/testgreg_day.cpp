@@ -39,19 +39,19 @@ test_day()
   greg_weekday monday(1);
 
   check("Weekday 0 short name == Sun", 
-	sunday.as_short_string() == std::string("Sun"));
+        sunday.as_short_string() == std::string("Sun"));
   check("Weekday 1 short name == Mon", 
-	monday.as_short_string() == std::string("Mon"));
+        monday.as_short_string() == std::string("Mon"));
   check("Weekday 2 short name == Tue", 
-	greg_weekday(2).as_short_string() == std::string("Tue"));
+        greg_weekday(2).as_short_string() == std::string("Tue"));
   check("Weekday 3 short name == Wed", 
-	greg_weekday(3).as_short_string() == std::string("Wed"));
+        greg_weekday(3).as_short_string() == std::string("Wed"));
   check("Weekday 4 short name == Thu", 
-	greg_weekday(4).as_short_string() == std::string("Thu"));
+        greg_weekday(4).as_short_string() == std::string("Thu"));
   check("Weekday 5 short name == Fri", 
-	greg_weekday(5).as_short_string() == std::string("Fri"));
+        greg_weekday(5).as_short_string() == std::string("Fri"));
   check("Weekday 6 short name == Sat", 
-	greg_weekday(6).as_short_string() == std::string("Sat"));
+        greg_weekday(6).as_short_string() == std::string("Sat"));
   try {
     greg_weekday bad(7);
     check("Bad weekday creation", false); //oh oh, fail

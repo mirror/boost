@@ -9,25 +9,25 @@ int
 main() 
 {
   typedef boost::date_time::year_month_day_base<unsigned long, 
-                                           unsigned short, 
-				           unsigned short > simple_ymd_type;
+                                                unsigned short, 
+                                                unsigned short > simple_ymd_type;
 
   typedef boost::date_time::gregorian_calendar_base<simple_ymd_type, unsigned long> 
     gregorian_calendar;
 
   //  using namespace boost::gregorian;
   check("Day of week 2000-09-24 == 0 (Sun)", 
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,24))==0);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,24))==0);
   check("Day of week 2000-09-25 == 1 (Mon)", 
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,25))==1);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,25))==1);
   check("Day of week 2000-09-26 == 2 (Tue)", 
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,26))==2);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,26))==2);
   check("Day of week 2000-09-27 == 3 (Wed)", 
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,27))==3);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,27))==3);
   check("Day of week 2000-09-28 == 4 (Thu)", 
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,28))==4);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,28))==4);
   check("Day of week 2000-09-29 == 5 (Fri)", 
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,29))==5);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,29))==5);
   check("Day of week 2000-09-30 == 6 (Sat)", gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,30))==6);
   //see calendar FAQ 2.2 for reference
   check("Day of week 1953-08-02 == 0 (Sun)", gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,2))==0);
@@ -41,38 +41,38 @@ main()
   
   //Checked against Caledrical Calc M. Edition p 396 and www site
   check("Day of week 1400-01-01 == 3 (Wed)", 
- 	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1400,1,1))==3);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1400,1,1))==3);
   check("Day of week 1436-02-03 == 3 (Wed)", 
- 	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1436,2,3))==3);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1436,2,3))==3);
   check("Day of week 1492-04-9 == 6 (Sat)", 
- 	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1492,4,9))==6);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1492,4,9))==6);
   check("Day of week 1560-03-5 == 6 (Sat)", 
- 	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1560,3,5))==6);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1560,3,5))==6);
   check("Day of week 1716-07-24 == 5 (Fri)", 
- 	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1716,7,24))==5);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1716,7,24))==5);
   check("Day of week 1768-06-19 == 0 (Sun)", 
- 	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1768,6,19))==0);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1768,6,19))==0);
   check("Day of week 1839-03-27 == 3 (Wed)", 
- 	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1839,3,27))==3);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1839,3,27))==3);
   check("Day of week 1819-08-02 == 1 (Mon)", 
-  	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1819,8,2))==1);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1819,8,2))==1);
   check("Day of week 1903-04-19 == 0 (Sun)", 
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1903,4,19))==0);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1903,4,19))==0);
   check("Day of week 1929-08-25 == 0 (Sun)", 
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1929,8,25))==0);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1929,8,25))==0);
   check("Day of week 2038-11-10 == 3 (Wed)", 
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2038,11,10))==3);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2038,11,10))==3);
   check("Day of week 2094-07-18 == 0 (Sun)", 
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2094,7,18))==0);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2094,7,18))==0);
   //verified against website applet
   check("Day of week 3002-07-10 == 6 (Sat)",
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(3002,7,10))==6);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(3002,7,10))==6);
   //verified against website applet
   check("Day of week 4002-07-10 == 3 (Wed)",
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(4002,7,10))==3);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(4002,7,10))==3);
   //verified against website applet
   check("Day of week 5002-07-10 == 6 (Sat)",
-	gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(5002,7,10))==6);
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(5002,7,10))==6);
 
   check("1404 is a leap year", gregorian_calendar::is_leap_year(1404));
   check("2000 is a leap year", gregorian_calendar::is_leap_year(2000));
@@ -94,8 +94,8 @@ main()
   check("ToDayNumber 2001-1-1 is day 2451911", jday2 == 2451911);
   gregorian_calendar::ymd_type ymd = gregorian_calendar::from_day_number(jday1);
   check("from_day_number test 2000-1-1",  (ymd.year==2000)&&
-	                                  (ymd.month==1) &&
-	                                  (ymd.day==1) );
+                                          (ymd.month==1) &&
+                                          (ymd.day==1) );
 
   unsigned long jday3 = gregorian_calendar::day_number(gregorian_calendar::ymd_type(1999,1,1));
   check("366 days between 2000-1-1 and 2001-1-1", (jday2-jday1) == 366);

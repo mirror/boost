@@ -44,9 +44,9 @@ test_month()
   greg_month sm12(12);
   //check("check not a month value", sm0.as_short_string() == "NAM");
   check("short construction -- 1", 
-	sm1.as_short_string() == std::string("Jan"));
+        sm1.as_short_string() == std::string("Jan"));
   check("short construction -- 12", 
-	sm12.as_short_string() == std::string("Dec"));
+        sm12.as_short_string() == std::string("Dec"));
   check("month traits min", greg_month::min() == 1);
   check("month traits max", greg_month::max() == 12);
 

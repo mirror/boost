@@ -26,10 +26,10 @@ main()
   check("check local calculation",   td == hours(5));
   ptime t10_local = t10 + td;
   std::cout << to_simple_string(t10_local)
- 	    << std::endl;
+            << std::endl;
   check("check local calculation",   t10_local == t10_check);
   check("check utc is dst",          
-	us_eastern::utc_to_local_offset(t10) == hours(-5));
+        us_eastern::utc_to_local_offset(t10) == hours(-5));
   
 
   //something clearly IN dst
@@ -40,49 +40,49 @@ main()
   ptime t11_check(d4, hours(7));//now utc offset is only 4 hours
   ptime t11_local = t11 + us_eastern::local_to_utc_offset(t11);
   std::cout << to_simple_string(t11_local) << " "
-	    << to_simple_string(t11_check)
- 	    << std::endl;
+            << to_simple_string(t11_check)
+            << std::endl;
   check("check local calculation", t11_local == t11_check);
   //should get same offset with DST flag set
   check("check local offset-dst flag on",   
-	us_eastern::local_to_utc_offset(t11, boost::date_time::is_dst) == hours(4));
+        us_eastern::local_to_utc_offset(t11, boost::date_time::is_dst) == hours(4));
   check("check local offset-dst flag override",   
-	us_eastern::local_to_utc_offset(t11, boost::date_time::not_dst) == hours(5));
+        us_eastern::local_to_utc_offset(t11, boost::date_time::not_dst) == hours(5));
  
 
   //Check the start of dst boundary
   ptime l_not_dst(dst_start, time_duration(1,59,59)); //2002-Apr-07 01:59:59
   check("check local dst start boundary case",   
-	us_eastern::local_to_utc_offset(l_not_dst) == hours(5));
+        us_eastern::local_to_utc_offset(l_not_dst) == hours(5));
   ptime u_not_dst(dst_start, time_duration(6,59,59));
   check("check utc dst start boundary case",   
-	us_eastern::utc_to_local_offset(u_not_dst) == hours(-5));
+        us_eastern::utc_to_local_offset(u_not_dst) == hours(-5));
   ptime l_in_dst(dst_start, hours(3)); //2002-Apr-07 03:00:00 1st sec of dst
   check("check local dst start boundary case",   
-	us_eastern::local_to_utc_offset(l_in_dst, boost::date_time::is_dst) == hours(4));
+        us_eastern::local_to_utc_offset(l_in_dst, boost::date_time::is_dst) == hours(4));
   ptime u_in_dst(dst_start, hours(7));
   check("check utc dst start boundary case",   
-	us_eastern::utc_to_local_offset(u_in_dst) == hours(-4));
+        us_eastern::utc_to_local_offset(u_in_dst) == hours(-4));
 
 
   //Check the end of dst boundary
   ptime dst_end(dst_end_day, time_duration(1,59,59)); //2002-Oct-27 01:00:00 DST
   check("check local dst end boundary case - still dst",   
-	us_eastern::local_to_utc_offset(dst_end, boost::date_time::is_dst) == hours(4));
+        us_eastern::local_to_utc_offset(dst_end, boost::date_time::is_dst) == hours(4));
   check("check local dst end boundary case - still dst",   
-	us_eastern::local_to_utc_offset(dst_end, boost::date_time::not_dst) == hours(5));
+        us_eastern::local_to_utc_offset(dst_end, boost::date_time::not_dst) == hours(5));
   ptime u_dst_end1(dst_end_day, time_duration(5,59,59));
   check("check utc dst end boundary case",   
-	us_eastern::utc_to_local_offset(u_dst_end1) == hours(-4));
+        us_eastern::utc_to_local_offset(u_dst_end1) == hours(-4));
   ptime u_dst_end2(dst_end_day, time_duration(6,0,0));
   check("check utc dst end boundary case",   
-	us_eastern::utc_to_local_offset(u_dst_end2) == hours(-5));
+        us_eastern::utc_to_local_offset(u_dst_end2) == hours(-5));
   ptime u_dst_end3(dst_end_day, time_duration(6,59,59));
   check("check utc dst end boundary case",   
-	us_eastern::utc_to_local_offset(u_dst_end3) == hours(-5));
+        us_eastern::utc_to_local_offset(u_dst_end3) == hours(-5));
   ptime u_dst_end4(dst_end_day, time_duration(7,0,0));
   check("check utc dst end boundary case",   
-	us_eastern::utc_to_local_offset(u_dst_end4) == hours(-5));
+        us_eastern::utc_to_local_offset(u_dst_end4) == hours(-5));
   
 
   //Now try a local adjustments without dst
@@ -94,13 +94,13 @@ main()
                                                   us_az_offset_adj> us_az;
 
   check("check local offset - no dst",   
-	us_az::local_to_utc_offset(t10) == hours(7));
+        us_az::local_to_utc_offset(t10) == hours(7));
   check("check local offset - no dst",   
-	us_az::local_to_utc_offset(t11) == hours(7));
+        us_az::local_to_utc_offset(t11) == hours(7));
   check("check local offset - no dst",   
-	us_az::utc_to_local_offset(t10) == hours(-7));
+        us_az::utc_to_local_offset(t10) == hours(-7));
   check("check local offset - no dst",   
-	us_az::utc_to_local_offset(t11) == hours(-7));
+        us_az::utc_to_local_offset(t11) == hours(-7));
 
 
   //Arizona timezone is utc-7 with no dst
@@ -122,8 +122,8 @@ main()
 
 
 //   std::cout << to_simple_string(t7) << " in Arizona is " 
-// 	    << to_simple_string(t8) << " UTC time "
-// 	    << std::endl;
+//             << to_simple_string(t8) << " UTC time "
+//             << std::endl;
 
 
   //still experimental

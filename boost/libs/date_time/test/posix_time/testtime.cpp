@@ -54,11 +54,11 @@ main()
   check("add 2001-Dec-01 0:0:0 + 24:00:00", t8+td3 == ptime(date(2001,Dec,2)));
   time_duration td4(24,0,1); // a day, 1 second
   check("add 2001-Dec-01 0:0:0 + 24:00:01", t8+td4
-	== ptime(date(2001,Dec,2), time_duration(0,0,1)));
+        == ptime(date(2001,Dec,2), time_duration(0,0,1)));
   //looks like this fails b/c limits are exceeded now that we have subseconds..
   time_duration td5(168,0,1);  //one week 24X7
    check("add 2001-Dec-01 0:0:0 + 168:00:01", t8+td5
-	 == ptime(date(2001,Dec,8), time_duration(0,0,1)));
+         == ptime(date(2001,Dec,8), time_duration(0,0,1)));
 
 //   ptime t10a = t8+td5;
 //   std::cout << to_simple_string(t10a) << std::endl;
@@ -68,11 +68,11 @@ main()
   time_duration td6(12,0,1);
   ptime t12 = t11-td6;
   check("sub 2001-Dec-01 12:0:0 - 12:00:01", 
-	t12 == ptime(date(2001,Nov,30), time_duration(23,59,59)));
+        t12 == ptime(date(2001,Nov,30), time_duration(23,59,59)));
 
   check("sub 2001-Dec-01 12:0:0 - 13:00:00", 
-	(t11-time_duration(13,0,0))== ptime(date(2001,Nov,30), 
-					    time_duration(23,0,0)));
+        (t11-time_duration(13,0,0))== ptime(date(2001,Nov,30), 
+                                            time_duration(23,0,0)));
   //  std::cout << to_simple_string(t12.date()) << std::endl;
 
   ptime t13(d, hours(3));
@@ -82,20 +82,20 @@ main()
   std::cout << to_simple_string(t14-t13) << std::endl;
   //  time_duration td7 = 
   check("time subtraction positive result", 
-	t14-t13 == hours(1));
+        t14-t13 == hours(1));
   std::cout << to_simple_string(t13-t14) << std::endl;
   check("time subtraction negative result", 
-	t13-t14 == hours(-1));
+        t13-t14 == hours(-1));
   check("time subtraction positive result", 
-	t14a-t14 == hours(24));
+        t14a-t14 == hours(24));
   
 
   ptime t15(d, time_duration(0,0,0,1));
   ptime t16(d, time_duration(0,0,0,2));
   check("time subsecond add test", 
-	t15 + time_duration::unit() == t16);
+        t15 + time_duration::unit() == t16);
   check("time subsecond sub test", 
-	t16 - time_duration::unit() == t15);
+        t16 - time_duration::unit() == t15);
  
   ptime t17 = ptime(d) - time_duration::unit();
   std::cout << to_simple_string(t17) << std::endl;

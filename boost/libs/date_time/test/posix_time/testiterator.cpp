@@ -15,7 +15,7 @@ main()
   date d(2000,Jan,20);
   ptime start(d);
   const ptime answer1[] = {ptime(d), ptime(d,seconds(1)),
-			   ptime(d,seconds(2)), ptime(d,seconds(3))};
+                           ptime(d,seconds(2)), ptime(d,seconds(3))};
   int i=0;
   time_iterator titr(start,seconds(1)); 
   for (; titr < ptime(d,seconds(4)); ++titr) {
@@ -28,7 +28,7 @@ main()
 
   //iterate by hours
   const ptime answer2[] = {ptime(d), ptime(d,hours(1)),
-			   ptime(d,hours(2)), ptime(d,hours(3))};
+                           ptime(d,hours(2)), ptime(d,hours(3))};
   i=0;
   time_iterator titr2(start,hours(1)); 
   for (; titr2 < ptime(d,hours(4)); ++titr2) {
@@ -41,8 +41,8 @@ main()
 
   //iterate by 15 mintues
   const ptime answer3[] = {ptime(d), ptime(d,minutes(15)),
-			   ptime(d,minutes(30)), ptime(d,minutes(45)),
-			   ptime(d,minutes(60)), ptime(d,minutes(75))};
+                           ptime(d,minutes(30)), ptime(d,minutes(45)),
+                           ptime(d,minutes(60)), ptime(d,minutes(75))};
   i=0;
   time_iterator titr3(start,minutes(15)); 
   for (; titr3 < ptime(d,time_duration(1,20,0)); ++titr3) {
@@ -54,8 +54,8 @@ main()
 
   //iterate by .1 seconds
   const ptime answer4[] = {ptime(d), ptime(d,time_duration(0,0,0,1000)),
-			   ptime(d,time_duration(0,0,0,2000)),
-			   ptime(d,time_duration(0,0,0,3000))};
+                           ptime(d,time_duration(0,0,0,2000)),
+                           ptime(d,time_duration(0,0,0,3000))};
   i=0;
   time_iterator titr4(start,time_duration(0,0,0,1000)); 
   for (; titr4 < ptime(d,time_duration(0,0,0,4000)); ++titr4) {

@@ -29,7 +29,7 @@ main()
     ptime t4(d1,hours(1)+minutes(2)+seconds(3)+millisec(4));
     std::string r3 = to_simple_string(t4);
     check("simple subsecond: "+r3 , 
-	  std::string("2002-Jan-01 01:02:03.004000") == r3);
+          std::string("2002-Jan-01 01:02:03.004000") == r3);
   }
 
 #endif
@@ -40,13 +40,13 @@ main()
     ptime t3(d1,hours(1)+minutes(2)+seconds(3)+microsec(4));
     std::string result = to_simple_string(t3);
     check("simple subsecond: "+result , 
-	  std::string("2002-Jan-01 01:02:03.000004") == to_simple_string(t3));
+          std::string("2002-Jan-01 01:02:03.000004") == to_simple_string(t3));
     
     time_duration td2 =  hours(-12)+minutes(4)+seconds(2)+microsec(1);
     //  time_duration td2 =  hours(-12)+minutes(4)+seconds(2)+millisec(1);
     std::string r2 = to_simple_string(td2);
     check("neg subsecond duration: "+r2 , 
-	  std::string("-11:55:57.999999") == r2);
+          std::string("-11:55:57.999999") == r2);
   }
 #endif
 
@@ -61,17 +61,17 @@ main()
     ptime t3(d1,hours(1)+minutes(2)+seconds(3)+nanosec(4));
     std::string result = to_simple_string(t3);
     check("simple subsecond: "+result , 
-	  std::string("2002-Jan-01 01:02:03.000000004") == to_simple_string(t3));
+          std::string("2002-Jan-01 01:02:03.000000004") == to_simple_string(t3));
     
     time_duration td2 =  hours(-12)+minutes(4)+seconds(2)+nanosec(100);
     std::string r2 = to_simple_string(td2);
     check("neg subsecond duration: "+r2 , 
-	  std::string("-11:55:57.999999900") == r2);
+          std::string("-11:55:57.999999900") == r2);
     
     ptime t4(d1,hours(1)+minutes(2)+seconds(3)+millisec(4));
     std::string r3 = to_simple_string(t4);
     check("simple subsecond: "+r3 , 
-	  std::string("2002-Jan-01 01:02:03.004000000") == r3);
+          std::string("2002-Jan-01 01:02:03.004000000") == r3);
   }
 #endif
 

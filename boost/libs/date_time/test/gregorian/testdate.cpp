@@ -56,7 +56,7 @@ main()
 //   //std::cout << "Max date is " << date_limits<unsigned int, 1900>::max() << std::endl;
 
   const date answers[] = {date(1900,Jan,1),date(1900,Jan,4),date(1900,Jan,7),
-			  date(1900,Jan,10),date(1900,Jan,13)};
+                          date(1900,Jan,10),date(1900,Jan,13)};
   date_duration off(3);
   date d5(1900,1,1);
   for (int i=0; i < 5; ++i) {

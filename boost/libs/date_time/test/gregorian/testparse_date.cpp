@@ -36,7 +36,7 @@ main()
     //The line below won't execute, but make the compiler think
     //we are using bad day....
     std::cout << "Oh oh, this shouldn't be reached: "
-	      << boost::gregorian::to_iso_string(bad_day) << std::endl;
+              << boost::gregorian::to_iso_string(bad_day) << std::endl;
 
   }
   catch(boost::gregorian::bad_day_of_month) { //expected
@@ -55,7 +55,7 @@ main()
     //The line below won't execute, but make the compiler think
     //we are using bad day....
     std::cout << "Oh oh, this shouldn't be reached: "
-	      << boost::gregorian::to_iso_string(bad_month) << std::endl;
+              << boost::gregorian::to_iso_string(bad_month) << std::endl;
 
   }
   catch(boost::gregorian::bad_month) { //expected

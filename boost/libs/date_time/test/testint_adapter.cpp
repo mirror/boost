@@ -63,15 +63,15 @@ void test_int()
   check("sub from 5-2 ",         (5 - 2) == 3);
   //  std::cout << i.as_number() << std::endl;
   check("from special ", 
-	int_type::from_special(boost::date_time::pos_infin) == int_type::pos_infinity());
+        int_type::from_special(boost::date_time::pos_infin) == int_type::pos_infinity());
   check("from special ", 
-	int_type::from_special(boost::date_time::neg_infin) == int_type::neg_infinity());
+        int_type::from_special(boost::date_time::neg_infin) == int_type::neg_infinity());
   check("from special ", 
-	int_type::from_special(boost::date_time::not_a_date_time) == int_type::not_a_number());
+        int_type::from_special(boost::date_time::not_a_date_time) == int_type::not_a_number());
   check("from special ", 
-	int_type::from_special(boost::date_time::min_date_time) == int_type::min());
+        int_type::from_special(boost::date_time::min_date_time) == int_type::min());
   check("from special ", 
-	int_type::from_special(boost::date_time::max_date_time) == int_type::max());
+        int_type::from_special(boost::date_time::max_date_time) == int_type::max());
 }
 
 int

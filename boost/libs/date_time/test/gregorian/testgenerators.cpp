@@ -39,7 +39,7 @@ main()
   typedef boost::date_time::first_kday_after<date> firstkdayafter;
   firstkdayafter fkaf(Monday);
   std::cout << to_simple_string(fkaf.get_date(date(2002,Feb,1)))
-	    << std::endl; //feb 4
+            << std::endl; //feb 4
   check("kday after",date(2002,Feb,4) == fkaf.get_date(date(2002,Feb,1)));
   firstkdayafter fkaf2(Thursday);
   check("kday after",date(2002,Feb,7) == fkaf2.get_date(date(2002,Feb,1)));
@@ -48,7 +48,7 @@ main()
   typedef boost::date_time::first_kday_before<date> firstkdaybefore;
   firstkdaybefore fkbf(Monday);
   std::cout << to_simple_string(fkaf.get_date(date(2002,Feb,10)))
- 	    << std::endl; //feb 4
+            << std::endl; //feb 4
   check("kday before",date(2002,Feb,4) == fkbf.get_date(date(2002,Feb,10)));
   firstkdaybefore fkbf2(Thursday);
   check("kday before",date(2002,Jan,31) == fkbf2.get_date(date(2002,Feb,1)));

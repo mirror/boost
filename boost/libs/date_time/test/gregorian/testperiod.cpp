@@ -40,7 +40,7 @@ int main()
   p1.shift(fourDays); //from 2000-Jan-01--2000-Jan-04
   date_period shifted(date(2000,Jan,5),date(2000,Jan,8));
   //   std::cout << to_string(p1.begin()) <<"--" 
-  // 	    << to_string(p1.last()) << std::endl;
+  //             << to_string(p1.last()) << std::endl;
   check("shift", p1 == shifted);
   
 
