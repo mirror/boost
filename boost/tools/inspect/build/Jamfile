@@ -16,3 +16,12 @@ exe inspect
   :
         release
   ;
+
+stage run
+    :
+        <exe>inspect
+    :
+    :
+        release
+        <suppress>true
+    ;
