@@ -774,8 +774,8 @@ template <class OuterIterator,      // Mutable or Immutable, does not matter
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::value_type_of_value_type<OuterIterator>::type
 #endif
           , class Reference = Value&
-          , class Pointer = Value*
           , class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<OuterIterator>::iterator_category
+          , class Pointer = Value*
          >
 struct indirect_iterator_generator
 {
@@ -788,18 +788,18 @@ template <class OuterIterator,      // Mutable or Immutable, does not matter
 #if !defined(BOOST_MSVC)
                 = BOOST_ARG_DEPENDENT_TYPENAME detail::value_type_of_value_type<OuterIterator>::type
 #endif
-          , class Pointer = Value*
           , class Reference = Value&
-          , class ConstPointer = const Value*
           , class ConstReference = const Value&
           , class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<OuterIterator>::iterator_category
+          , class Pointer = Value*
+          , class ConstPointer = const Value*
            >
 struct indirect_iterator_pair_generator
 {
   typedef typename indirect_iterator_generator<OuterIterator,
-    Value, Reference, Pointer,Category>::type iterator;
+    Value, Reference,Category,Pointer>::type iterator;
   typedef typename indirect_iterator_generator<OuterIterator,
-    Value, ConstReference, ConstPointer,Category>::type const_iterator;
+    Value, ConstReference,Category,ConstPointer>::type const_iterator;
 };
 
 #ifndef BOOST_MSVC
