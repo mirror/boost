@@ -204,7 +204,6 @@ namespace boost
         >
         type;
     };
-    template <class T> int static_assert_convertible_to(T);
   }
   
   //
@@ -302,8 +301,7 @@ namespace boost
       >::type my_traversal;
 
 # define BOOST_ITERATOR_ADAPTOR_ASSERT_TRAVERSAL(cat) \
-      typedef int assertion[sizeof(detail::static_assert_convertible_to<cat>(my_traversal()))];
-//      BOOST_STATIC_ASSERT((is_convertible<my_traversal,cat>::value));
+      BOOST_STATIC_ASSERT((is_convertible<my_traversal,cat>::value));
 
       void advance(typename super_t::difference_type n)
       {
