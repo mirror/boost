@@ -16,6 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/config.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/detail/polymorphic_oarchive_impl.hpp>
 

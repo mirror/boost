@@ -16,6 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/config.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/detail/polymorphic_iarchive_impl.hpp>
 

@@ -141,14 +141,14 @@ class back_insert_iterator<basic_string<char> > : public
 {
 public:
     typedef basic_string<char> container_type;
-    typedef /* typename */ container_type::reference reference;
+    typedef container_type::reference reference;
 
     explicit back_insert_iterator(container_type & s)
         : container(& s)
     {}    // construct with container
     
     back_insert_iterator<container_type> & operator=(
-        /* typename */ container_type::const_reference Val_
+        container_type::const_reference Val_
     ){    // push value into container
         //container->push_back(Val_);
         *container += Val_;
@@ -186,14 +186,14 @@ class back_insert_iterator<basic_string<wchar_t> > : public
 {
 public:
     typedef basic_string<wchar_t> container_type;
-    typedef /* typename */ container_type::reference reference;
+    typedef container_type::reference reference;
 
     explicit back_insert_iterator(container_type & s)
         : container(& s)
     {}    // construct with container
     
     back_insert_iterator<container_type> & operator=(
-        /* typename */ container_type::const_reference Val_
+        container_type::const_reference Val_
     ){    // push value into container
         //container->push_back(Val_);
         *container += Val_;

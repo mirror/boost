@@ -153,6 +153,7 @@ protected:
 
     basic_xml_iarchive(unsigned int flags = 0) :
         header(false),
+        no_checking(false),
         depth(0)
     {}
 };

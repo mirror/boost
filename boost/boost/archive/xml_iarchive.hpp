@@ -19,7 +19,7 @@
 #include <istream>
 
 //#include <boost/scoped_ptr.hpp>
-#include <boost/pfto.hpp>
+#include <boost/config.hpp>
 #include <boost/archive/basic_xml_iarchive.hpp>
 #include <boost/archive/basic_text_iprimitive.hpp>
 
