@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="test_simple_derived_class"
+	Name="demo_portable_archive"
 	ProjectGUID="{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
 	Keyword="Win32Proj">
 	<Platforms>
@@ -21,15 +21,16 @@
 				AdditionalOptions="/Zm800"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/../../..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_archive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
+				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
+				ObjectFile="$(ProjectDir)../example/bin/$(InputName).exe/vc7/$(OutDir)/runtime-link-static/$(InputName).obj"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="4"/>
@@ -37,7 +38,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7.1/$(OutDir)/runtime-link-static/libboost_serialization.lib $(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_wserialization.lib/vc7.1/$(OutDir)/runtime-link-static/libboost_wserialization.lib c:/boost/lib/libboost_test_exec_monitor-vc71-sgd.lib"
+				AdditionalDependencies="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7.1/debug/threading-multi/libboost_serialization.lib $(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc7.1/$(OutDir)/threading-multi/libboost_test_exec_monitor.lib"
+				OutputFile="$(ProjectDir)../example/bin/$(InputName).exe/vc7/$(OutDir)/runtime-link-static/demo_portable_archive.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
@@ -78,12 +80,13 @@
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/../../..&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="4"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
+				ObjectFile="$(ProjectDir)../example/bin/$(InputName).exe/vc7/$(OutDir)/runtime-link-static/$(InputName).obj"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"/>
@@ -92,7 +95,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7/$(OutDir)/runtime-link-static/libboost_serialization.lib $(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_wserialization.lib/vc7/$(OutDir)/runtime-link-static/libboost_wserialization.lib $(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc7/$(OutDir)/runtime-link-static/libboost_test_exec_monitor.lib"
-				OutputFile="$(OutDir)/test_simple_derived_class.exe"
+				OutputFile="$(OutDir)/demo_portable_archive.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="FALSE"
 				SubSystem="1"
@@ -125,13 +128,13 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\test\A.hpp">
+			RelativePath="..\example\demo_portable_archive.cpp">
 		</File>
 		<File
-			RelativePath="..\test\B.hpp">
+			RelativePath="..\example\portable_iarchive.hpp">
 		</File>
 		<File
-			RelativePath="..\test\test_simple_derived_class.cpp">
+			RelativePath="..\example\portable_oarchive.hpp">
 		</File>
 	</Files>
 	<Globals>

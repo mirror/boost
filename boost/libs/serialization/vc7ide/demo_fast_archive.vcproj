@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="demo_portable_binary_archive"
+	Name="demo_fast_archive"
 	ProjectGUID="{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
 	Keyword="Win32Proj">
 	<Platforms>
@@ -24,9 +24,9 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
+				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="TRUE"
-				TreatWChar_tAsBuiltInType="TRUE"
+				TreatWChar_tAsBuiltInType="FALSE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
@@ -38,8 +38,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7.1/$(OutDir)/runtime-link-static/libboost_serialization.lib c:/boost/lib/libboost_test_exec_monitor-vc71-sgd.lib"
-				OutputFile="$(ProjectDir)../example/bin/$(InputName).exe/vc7/$(OutDir)/runtime-link-static/demo_portable_binary_archive.exe"
+				AdditionalDependencies="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7.1/debug/threading-multi/libboost_serialization.lib $(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc7.1/$(OutDir)/threading-multi/libboost_test_exec_monitor.lib"
+				OutputFile="$(ProjectDir)../example/bin/$(InputName).exe/vc7/$(OutDir)/runtime-link-static/demo_fast_archive.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
@@ -95,7 +95,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7/$(OutDir)/runtime-link-static/libboost_serialization.lib $(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_wserialization.lib/vc7/$(OutDir)/runtime-link-static/libboost_wserialization.lib $(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc7/$(OutDir)/runtime-link-static/libboost_test_exec_monitor.lib"
-				OutputFile="$(OutDir)/demo_portable_binary_archive.exe"
+				OutputFile="$(OutDir)/demo_fast_archive.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="FALSE"
 				SubSystem="1"
@@ -128,13 +128,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\example\demo_portable_binary_archive.cpp">
-		</File>
-		<File
-			RelativePath="..\example\portable_binary_iarchive.hpp">
-		</File>
-		<File
-			RelativePath="..\example\portable_binary_oarchive.hpp">
+			RelativePath="..\example\demo_fast_archive.cpp">
 		</File>
 	</Files>
 	<Globals>

@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="test_polymorphic_archive"
+	Name="test_derived_class"
 	ProjectGUID="{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
 	Keyword="Win32Proj">
 	<Platforms>
@@ -21,10 +21,10 @@
 				AdditionalOptions="/Zm800"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/../../..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=polymorphic_text_warchive.hpp"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ARCHIVE_TEST=xml_archive.hpp"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
+				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
@@ -32,13 +32,13 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="3"/>
+				DebugInformationFormat="4"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7.1/$(OutDir)/runtime-link-static/libboost_serialization.lib $(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_wserialization.lib/vc7.1/$(OutDir)/runtime-link-static/libboost_wserialization.lib c:/boost/lib/libboost_test_exec_monitor-vc71-sgd.lib"
-				LinkIncremental="1"
+				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				TargetMachine="1"/>
@@ -92,7 +92,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7/$(OutDir)/runtime-link-static/libboost_serialization.lib $(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_wserialization.lib/vc7/$(OutDir)/runtime-link-static/libboost_wserialization.lib $(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc7/$(OutDir)/runtime-link-static/libboost_test_exec_monitor.lib"
-				OutputFile="$(OutDir)/test_polymorphic_archive.exe"
+				OutputFile="$(OutDir)/test_derived_class.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="FALSE"
 				SubSystem="1"
@@ -128,13 +128,10 @@
 			RelativePath="..\test\A.hpp">
 		</File>
 		<File
-			RelativePath="..\test\test_polymorphic_archive.cpp">
+			RelativePath="..\test\B.hpp">
 		</File>
 		<File
-			RelativePath="..\test\test_polymorphic_archive_data.cpp">
-		</File>
-		<File
-			RelativePath="..\test\test_polymorphic_archive_data.hpp">
+			RelativePath="..\test\test_derived_class.cpp">
 		</File>
 	</Files>
 	<Globals>
