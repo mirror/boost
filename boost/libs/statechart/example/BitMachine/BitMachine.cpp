@@ -295,7 +295,7 @@ int main()
 
   while ( key != 'e' )
   {
-    if ( ( key >= '0' ) && ( key < '0' + noOfBits ) )
+    if ( ( key >= '0' ) && ( key < static_cast< char >( '0' + noOfBits ) ) )
     {
       bitMachine.process_event( *pFlipBitEvents[ key - '0' ] );
       ++eventsSentTotal;
