@@ -37,6 +37,11 @@
    // we shouldn't really need this - but too many things choke
    // without it, this needs more investigation:
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#  ifdef NDEBUG
+      // fix broken <cstring> so that Boost.test works:
+#     include <cstring>
+#     undef strcmp
+#  endif
 
 //
 // new bug in 5.61:
@@ -113,6 +118,7 @@
 #     pragma message( "Unknown compiler version - please run the configure tests and report the results")
 #  endif
 #endif
+
 
 
 
