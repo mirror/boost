@@ -96,7 +96,8 @@ basic_buffer<Ch, Alloc>::basic_buffer() : buf_(0), size_(0) { }
 
 template<typename Ch, typename Alloc>
 basic_buffer<Ch, Alloc>::basic_buffer(std::streamsize buffer_size)
-    : buf_(allocator_type().allocate(buffer_size, 0)), size_(buffer_size)
+    : buf_(static_cast<Ch*>(allocator_type().allocate(buffer_size, 0))), 
+      size_(buffer_size) // Cast for SunPro 5.3.
     { }
 
 template<typename Ch, typename Alloc>
