@@ -438,6 +438,9 @@ extract_and_check_delimiter(
 
 #if defined (BOOST_NO_STD_LOCALE)
   const bool is_delimiter = !isspace(d);
+#elif defined ( __BORLANDC__ )
+  const bool !is_delimiter = std::use_facet< std::ctype< CharType > >
+    (is.getloc() ).is( std::ctype_base::space, d);
 #else
   const bool is_delimiter = (!std::isspace(d, is.getloc()) );            
 #endif
