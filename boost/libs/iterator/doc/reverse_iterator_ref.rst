@@ -48,37 +48,33 @@ tag given by the following algorithm.  Let ``T`` be
 ``reverse_iterator`` requirements
 .................................
 
-The base ``Iterator`` must be a model of Bidirectional Traversal
-Iterator and Readable Iterator.
+``Iterator`` must be a model of Bidirectional Traversal Iterator
+and Readable Iterator.
 
 
 ``reverse_iterator`` models
 ...........................
 
-``reverse_iterator`` models the same standard traversal and access
-iterator concepts that the ``Iterator`` argument models.  In addition,
-``reverse_iterator`` models the old iterator concepts specified in the
-following table, depnding on what the ``Iterator`` argument models.
+A specialization of ``reverse_iterator`` models the same standard
+traversal and access iterator concepts modeled by its ``Iterator``
+argument.  In addition, it models the old iterator concepts
+specified in the following table:
 
-
-+-------------------------------------------------------+----------------------------------+
-| If ``Iterator`` models                                | then ``reverse_iterator`` models |
-+=======================================================+==================================+
-| Readable Lvalue Iterator,                             | Bidirectional Iterator           |
-| Bidirectional Traversal Iterator                      |                                  |
-+-------------------------------------------------------+----------------------------------+
-| Writable Lvalue Iterator,                             | Mutable Bidirectional Iterator   |
-| Bidirectional Traversal Iterator                      |                                  |
-+-------------------------------------------------------+----------------------------------+
-| Readable Lvalue Iterator,                             | Random Access Iterator           |
-| Random Access Traversal Iterator                      |                                  |
-+-------------------------------------------------------+----------------------------------+
-| Writable Lvalue Iterator,                             | Mutable Random Access Iterator   |
-| Random Access Traversal Iterator                      |                                  |
-+-------------------------------------------------------+----------------------------------+
-
-
-
++---------------------------------------+-----------------------------------+
+| If ``I`` models                       |then ``reverse_iterator<I>`` models|
++=======================================+===================================+
+| Readable Lvalue Iterator,             | Bidirectional Iterator            |
+| Bidirectional Traversal Iterator      |                                   |
++---------------------------------------+-----------------------------------+
+| Writable Lvalue Iterator,             | Mutable Bidirectional Iterator    |
+| Bidirectional Traversal Iterator      |                                   |
++---------------------------------------+-----------------------------------+
+| Readable Lvalue Iterator,             | Random Access Iterator            |
+| Random Access Traversal Iterator      |                                   |
++---------------------------------------+-----------------------------------+
+| Writable Lvalue Iterator,             | Mutable Random Access Iterator    |
+| Random Access Traversal Iterator      |                                   |
++---------------------------------------+-----------------------------------+
 
 
 ``reverse_iterator`` operations
