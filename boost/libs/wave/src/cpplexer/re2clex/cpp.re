@@ -193,6 +193,7 @@ uchar *fill(Scanner *s, uchar *cursor)
             uchar *buf = (uchar*) malloc(((s->lim - s->bot) + BSIZE)*sizeof(uchar));
             if (buf == 0)
             {
+                using namespace std;      // some systems have printf in std
                 if (0 != s->error_proc)
                     (*s->error_proc)(s, "Out of memory!");
                 else 
@@ -615,6 +616,7 @@ Pound              = "#" | "??=" | "%:";
     {
         if(cursor != s->eof) 
         {
+            using namespace std;      // some systems have printf in std
             if (0 != s->error_proc)
                 (*s->error_proc)(s, "'\\000' in input stream");
             else
@@ -650,6 +652,7 @@ ccomment:
 
     "\000"
     {
+        using namespace std;      // some systems have printf in std
         yyaccept = 0;   /* avoid warning about unreferenced variable */
         if(cursor == s->eof) 
         {
@@ -687,6 +690,7 @@ cppcomment:
 
     "\000"
     {
+        using namespace std;      // some systems have printf in std
         yyaccept = 0;   /* avoid warning about unreferenced variable */
         if(cursor != s->eof) 
         {
