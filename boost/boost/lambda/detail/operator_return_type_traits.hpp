@@ -19,6 +19,8 @@
 #include "boost/lambda/detail/is_instance_of.hpp"
 #include "boost/type_traits/same_traits.hpp"
 
+#include "boost/indirect_reference.hpp"
+
 #include <cstddef> // needed for the ptrdiff_t
 #include <iosfwd>  // for istream and ostream
 
@@ -221,7 +223,7 @@ namespace detail {
 
   // A is a nonreference type
 template <class A> struct contentsof_type {
-  typedef typename std::iterator_traits<A>::reference type; 
+  typedef typename boost::indirect_reference<A>::type type; 
 };
 
   // this is since the nullary () in lambda_functor is always instantiated
