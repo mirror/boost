@@ -14,7 +14,7 @@
 #include <boost/fsm/detail/node_state.hpp>
 #include <boost/fsm/detail/constructor.hpp>
 
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/is_sequence.hpp>
@@ -65,7 +65,7 @@ typedef mpl::clear< mpl::list<> >::type empty_list;
 
 //////////////////////////////////////////////////////////////////////////////
 template< class T >
-struct make_list : public mpl::apply_if<
+struct make_list : public mpl::eval_if<
   mpl::is_sequence< T >,
   mpl::identity< T >,
   mpl::identity< mpl::list< T > > > {};
@@ -85,7 +85,7 @@ struct simple_state_base_type
       inner_initial_list_size;
 
   public:
-    typedef typename mpl::apply_if<
+    typedef typename mpl::eval_if<
       mpl::empty< inner_initial_list >,
       mpl::identity< typename rtti_policy_type::
         template rtti_derived_type< MostDerived, leaf_state<

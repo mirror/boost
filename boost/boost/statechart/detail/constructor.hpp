@@ -8,7 +8,7 @@
 
 
 
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/size.hpp>
@@ -61,7 +61,7 @@ struct outer_constructor
   typedef typename mpl::erase<
     inner_initial_list,
     typename mpl::begin< inner_initial_list >::type,
-    typename to_construct_iter::next
+    typename mpl::next< to_construct_iter >::type
   >::type last_inner_initial_list;
 
   static void construct(
@@ -96,7 +96,7 @@ struct inner_constructor
 
 //////////////////////////////////////////////////////////////////////////////
 template< class ContextList, class OutermostContextBase >
-struct constructor_impl : public mpl::apply_if<
+struct constructor_impl : public mpl::eval_if<
   mpl::equal_to< mpl::size< ContextList >, mpl::long_< 1 > >,
   mpl::identity< inner_constructor< ContextList, OutermostContextBase > >,
   mpl::identity< outer_constructor< ContextList, OutermostContextBase > > >
