@@ -14,6 +14,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
+#include <boost/type_traits/ice.hpp>
 
 #ifndef BOOST_NO_AUTO_PTR
 # include <memory>          // for std::auto_ptr

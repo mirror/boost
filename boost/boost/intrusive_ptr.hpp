@@ -20,6 +20,7 @@
 #endif
 
 #include <functional> // std::less
+#include <boost/type_traits/ice.hpp>
 
 namespace boost
 {
