@@ -62,7 +62,7 @@ apply_visitor(Visitor& visitor, Visitable& visitable)
 // const-visitor version:
 //
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
 template <typename Visitor, typename Visitable>
 inline
@@ -72,7 +72,7 @@ apply_visitor(const Visitor& visitor, Visitable& visitable)
     return visitable.apply_visitor(visitor);
 }
 
-#endif // MSVC6 exclusion
+#endif // MSVC7 and below exclusion
 
 } // namespace boost
 
