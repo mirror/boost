@@ -29,7 +29,7 @@ compile erase_range.cpp ;
 compile filter_view.cpp ;
 compile find.cpp ;
 compile find_if.cpp ;
-compile for_each.cpp ;
+run for_each.cpp ;
 compile front.cpp ;
 compile identity.cpp ;
 compile if.cpp ;
