@@ -484,7 +484,7 @@ namespace detail {
     struct select {
       typedef typename Traits::value_type Value;
       typedef typename boost::detail::iterator_defaults<Base,Value>::pointer
-	type;
+        type;
     };
   };
   template <> struct default_generator<default_pointer>
@@ -495,7 +495,7 @@ namespace detail {
     struct select {
       typedef typename Traits::value_type Value;
       typedef typename boost::detail::iterator_defaults<Base,Value>::reference
-	type;
+        type;
     };
   };
   template <> struct default_generator<default_reference>
