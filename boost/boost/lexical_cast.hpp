@@ -13,11 +13,18 @@
 // where: tested with MSVC 6.0, BCC 5.5, and g++ 2.91
 
 #include <boost/config.hpp>
-# ifndef BOOST_NO_STRINGSTREAM
-#  include <sstream>
-# else
-#  include <strstream>
+
+// The GNU sstream implementation is broken for the purposes of lexical cast.
+# if defined(BOOST_NO_STRINGSTREAM) || (defined(__GNUC__) && !defined(__STL_USE_NEW_IOSTREAMS) || defined(__APPLE_CC__))
+#  define BOOST_LEXICAL_CAST_USE_STRSTREAM
 # endif
+
+#ifdef BOOST_LEXICAL_CAST_USE_STRSTREAM
+# include <strstream>
+#else
+# include <sstream>
+#endif
+
 #include <typeinfo>
 
 namespace boost
@@ -39,10 +46,10 @@ namespace boost
     template<typename Target, typename Source>
     Target lexical_cast(Source arg)
     {
-# ifndef BOOST_NO_STRINGSTREAM
-        std::stringstream interpreter;
-# else
+# ifdef BOOST_LEXICAL_CAST_USE_STRSTREAM
         std::strstream interpreter; // for out-of-the-box g++ 2.95.2
+# else
+        std::stringstream interpreter;
 # endif
         Target result;
 
@@ -63,5 +70,9 @@ namespace boost
 // cost of distribution.
 //
 // This software is provided "as is" without express or implied warranty.
+
+#ifdef BOOST_LEXICAL_CAST_USE_STRSTREAM
+# undef BOOST_LEXICAL_CAST_USE_STRSTREAM
+#endif
 
 #endif
