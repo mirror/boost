@@ -54,11 +54,9 @@
 // compilers. (Thus, only types w/ MPL lambda workarounds can be accepted.)
 //
 
-#include "boost/mpl/aux_/config/ctps.hpp"
-#include "boost/mpl/aux_/config/ttp.hpp"
+#include "boost/variant/detail/substitute_fwd.hpp"
 
-#if defined(BOOST_NO_TEMPLATE_TEMPLATE_PARAMETERS) \
- || defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+#if defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE) \
  && !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
 #   define BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT
 #endif

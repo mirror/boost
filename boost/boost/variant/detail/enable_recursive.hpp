@@ -1,8 +1,3 @@
-
-#if !defined(BOOST_PP_IS_ITERATING)
-
-///// header body
-
 //-----------------------------------------------------------------------------
 // boost variant/detail/enable_recursive.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
@@ -22,27 +17,17 @@
 #ifndef BOOST_VARIANT_DETAIL_ENABLE_RECURSIVE_HPP
 #define BOOST_VARIANT_DETAIL_ENABLE_RECURSIVE_HPP
 
-#include "boost/mpl/aux_/config/ctps.hpp"
-
 #include "boost/variant/detail/enable_recursive_fwd.hpp"
 #include "boost/variant/variant_fwd.hpp"
 
 #if !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
-#   include "boost/mpl/aux_/lambda_arity_param.hpp"
-#   include "boost/mpl/aux_/template_arity.hpp"
-#   include "boost/mpl/aux_/preprocessor/params.hpp"
-#   include "boost/mpl/aux_/preprocessor/repeat.hpp"
-#   include "boost/mpl/int_fwd.hpp"
-#   include "boost/preprocessor/cat.hpp"
-#   include "boost/preprocessor/empty.hpp"
-#   include "boost/preprocessor/arithmetic/inc.hpp"
-#   include "boost/preprocessor/iterate.hpp"
-#else
 #   include "boost/mpl/apply.hpp"
 #   include "boost/mpl/apply_if.hpp"
 #   include "boost/mpl/lambda.hpp"
 #endif
 
+#include "boost/variant/detail/substitute.hpp"
+#include "boost/mpl/aux_/config/ctps.hpp"
 #include "boost/mpl/bool_fwd.hpp"
 #include "boost/mpl/if.hpp"
 #include "boost/mpl/or.hpp"
@@ -55,112 +40,19 @@
 namespace boost {
 namespace detail { namespace variant {
 
+#if !defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE)
+
+#   define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL(T,Dest,Source) \
+    substitute< T , Dest , Source > \
+    /**/
+
+#else // defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE)
+
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) class specialization template enable_recursive_impl
+// (detail) class template rebind1
 //
-// Performs recursive variant substitution.
+// Limited workaround in case 'substitute' metafunction unavailable.
 //
-
-#if !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
-
-//
-// primary template
-//
-template <
-      typename T, typename RecursiveVariant
-      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(
-          typename Arity = mpl::int_< mpl::aux::template_arity<T>::value >
-        )
-    >
-struct enable_recursive_impl
-{
-    typedef T type;
-};
-
-//
-// tag substitution specializations
-//
-
-#define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(CV_) \
-    template <typename RecursiveVariant> \
-    struct enable_recursive_impl< \
-          CV_ ::boost::recursive_variant_ \
-        , RecursiveVariant \
-          BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>) \
-        > \
-    { \
-        typedef CV_ RecursiveVariant type; \
-    }; \
-    /**/
-
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG( BOOST_PP_EMPTY() )
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(const)
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(volatile)
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(const volatile)
-
-#undef BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG
-
-//
-// pointer specializations
-//
-#define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER(CV_) \
-    template <typename T, typename RecursiveVariant> \
-    struct enable_recursive_impl< \
-          T * CV_ \
-        , RecursiveVariant \
-        BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>) \
-        > \
-    { \
-        typedef typename enable_recursive_impl< \
-            T, RecursiveVariant \
-            >::type * CV_ type; \
-    }; \
-    /**/
-
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER( BOOST_PP_EMPTY() )
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER(const)
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER(volatile)
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER(const volatile)
-
-#undef BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER
-
-//
-// reference specializations
-//
-template <typename T, typename RecursiveVariant>
-struct enable_recursive_impl<
-      T&
-    , RecursiveVariant
-      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>)
-    >
-{
-    typedef typename enable_recursive_impl<
-          T, RecursiveVariant
-        >::type & type;
-};
-
-//
-// template expression (i.e., F<...>) specializations
-//
-
-#define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEF_IMPL(N) \
-    typedef typename enable_recursive_impl<   \
-          BOOST_PP_CAT(U,N), RecursiveVariant \
-        >::type BOOST_PP_CAT(u,N);            \
-    /**/
-
-#define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEF(z, N, _) \
-    BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEF_IMPL( BOOST_PP_INC(N) ) \
-    /**/
-
-#define BOOST_PP_ITERATION_LIMITS (1,BOOST_VARIANT_RECURSIVE_VARIANT_MAX_ARITY)
-#define BOOST_PP_FILENAME_1 "boost/variant/detail/enable_recursive.hpp"
-#include BOOST_PP_ITERATE()
-
-#undef BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEF_IMPL
-#undef BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEF
-
-#else // defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
 
 template <typename T, typename U1>
 struct rebind1
@@ -178,13 +70,11 @@ public:
         >::type type;
 };
 
-template <typename T, typename RecursiveVariant>
-struct enable_recursive_impl
-    : rebind1< T,RecursiveVariant >
-{
-};
+#   define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL(T,Dest,Source) \
+    rebind1< T , Dest > \
+    /**/
 
-#endif // !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
+#endif // !defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE)
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction enable_recursive
@@ -196,7 +86,9 @@ struct enable_recursive_impl
 
 template <typename T, typename RecursiveVariant, typename NoWrapper>
 struct enable_recursive
-    : enable_recursive_impl<T,RecursiveVariant>
+    : BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL(
+          T, RecursiveVariant, ::boost::recursive_variant_
+        )
 {
 };
 
@@ -205,7 +97,9 @@ struct enable_recursive< T,RecursiveVariant,mpl::false_ >
 {
 private: // helpers, for metafunction result (below)
 
-    typedef typename enable_recursive_impl<T,RecursiveVariant>::type t_;
+    typedef typename BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL(
+          T, RecursiveVariant, ::boost::recursive_variant_
+        )::type t_;
 
 public: // metafunction result
 
@@ -229,7 +123,9 @@ struct enable_recursive
 {
 private: // helpers, for metafunction result (below)
 
-    typedef typename enable_recursive_impl<T,RecursiveVariant>::type t_;
+    typedef typename BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL(
+          T, RecursiveVariant, ::boost::recursive_variant_
+        )::type t_;
 
 public: // metafunction result
 
@@ -268,29 +164,3 @@ struct quoted_enable_recursive
 } // namespace boost
 
 #endif // BOOST_VARIANT_DETAIL_ENABLE_RECURSIVE_HPP
-
-///// iteration, depth == 1
-
-#elif BOOST_PP_ITERATION_DEPTH() == 1
-#define i BOOST_PP_FRAME_ITERATION(1)
-
-template <
-      template < BOOST_MPL_PP_PARAMS(i,typename P) > class T
-    , BOOST_MPL_PP_PARAMS(i,typename U)
-    , typename RecursiveVariant
-    >
-struct enable_recursive_impl<
-      T< BOOST_MPL_PP_PARAMS(i,U) >
-    , RecursiveVariant
-      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<( i )>)
-    >
-{
-private:
-    BOOST_MPL_PP_REPEAT(i, BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEF, _)
-
-public:
-    typedef T< BOOST_MPL_PP_PARAMS(i,u) > type;
-};
-
-#undef i
-#endif // BOOST_PP_IS_ITERATING

@@ -19,6 +19,7 @@
 
 #include "boost/variant/variant_fwd.hpp"
 #include "boost/variant/detail/enable_recursive.hpp"
+#include "boost/variant/detail/substitute_fwd.hpp"
 #include "boost/variant/detail/make_variant_list.hpp"
 
 #include "boost/mpl/aux_/lambda_arity_param.hpp"
@@ -42,24 +43,25 @@ namespace boost {
 namespace detail { namespace variant {
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) metafunction specialization enable_recursive_impl
+// (detail) metafunction specialization substitute
 //
-// Handles embedded variant types.
+// Handles embedded variant types when substituting for recursive_variant_.
 //
 
-#if !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
+#if !defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE)
 
 template <
       BOOST_VARIANT_ENUM_PARAMS(typename T)
     , typename RecursiveVariant
       BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(typename Arity)
     >
-struct enable_recursive_impl<
+struct substitute<
       ::boost::variant<
           recursive_flag< T0 >
         , BOOST_VARIANT_ENUM_SHIFTED_PARAMS(T)
         >
     , RecursiveVariant
+    , ::boost::recursive_variant_
       BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(Arity)
     >
 {
@@ -74,9 +76,10 @@ template <
     , typename RecursiveVariant
       BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(typename Arity)
     >
-struct enable_recursive_impl<
+struct substitute<
       ::boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >
     , RecursiveVariant
+    , ::boost::recursive_variant_
       BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(Arity)
     >
 {
@@ -128,13 +131,13 @@ public: // metafunction result
 
 };
 
-#else // defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
+#else // defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE)
 
 //
 // no specializations: embedded variants unsupported on these compilers!
 //
 
-#endif // !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
+#endif // !defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE)
 
 }} // namespace detail::variant
 
