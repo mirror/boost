@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for copying and assignment.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -81,11 +81,11 @@ void test_copy_assignment()
 
   ss.assign(&a[0],&a[sa]);
 
-  BOOST_CHECK(ss.size()==ss.size()&&std::equal(ss.begin(),ss.end(),&a[0]));
+  BOOST_CHECK(ss.size()==sa&&std::equal(ss.begin(),ss.end(),&a[0]));
 
   ss.assign(&a[0],&a[sa]);
 
-  BOOST_CHECK(ss.size()==ss.size()&&std::equal(ss.begin(),ss.end(),&a[0]));
+  BOOST_CHECK(ss.size()==sa&&std::equal(ss.begin(),ss.end(),&a[0]));
 
   ss.assign((std::size_t)18,37);
   BOOST_CHECK(ss.size()==18&&std::accumulate(ss.begin(),ss.end(),0)==666);
