@@ -137,7 +137,7 @@ class integer_traits<unsigned long>
     public detail::integer_traits_base<unsigned long, 0, ULONG_MAX>
 { };
 
-#ifdef ULLONG_MAX
+#if defined(ULLONG_MAX) && !defined(__SUNPRO_CC)
 template<>
 class integer_traits<long long>
   : public std::numeric_limits<long long>,
