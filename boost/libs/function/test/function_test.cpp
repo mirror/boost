@@ -635,6 +635,7 @@ test_ref()
 static void
 test_new_syntax()
 {
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   write_five_obj five;
   function<void()> v2;
 
@@ -654,6 +655,7 @@ test_new_syntax()
   typedef int Fsum(short lhs, short rhs);
   function<Fsum> sum(&sum_ints);
   BOOST_TEST(sum(2, 3) == 5);
+#endif
 }
 
 int test_main(int, char* [])
