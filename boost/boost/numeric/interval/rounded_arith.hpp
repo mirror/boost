@@ -32,6 +32,8 @@ namespace interval_lib {
 template<class T, class Rounding>
 struct rounded_arith_exact: Rounding {
   void init() { }
+  template<class U> T conv_down(U const &v) { return v; }
+  template<class U> T conv_up  (U const &v) { return v; }
   T add_down (const T& x, const T& y) { return x + y; }
   T add_up   (const T& x, const T& y) { return x + y; }
   T sub_down (const T& x, const T& y) { return x - y; }
@@ -57,6 +59,8 @@ struct rounded_arith_std: Rounding {
 # define BOOST_NR(EXPR) this->to_nearest(); return this->force_rounding(EXPR)
 # define BOOST_UP(EXPR) this->upward();     return this->force_rounding(EXPR)
   void init() { }
+  template<class U> T conv_down(U const &v) { BOOST_DN(v); }
+  template<class U> T conv_up  (U const &v) { BOOST_UP(v); }
   T add_down(const T& x, const T& y) { BOOST_DN(x + y); }
   T sub_down(const T& x, const T& y) { BOOST_DN(x - y); }
   T mul_down(const T& x, const T& y) { BOOST_DN(x * y); }
@@ -92,6 +96,8 @@ struct rounded_arith_opp: Rounding {
     return r
 # define BOOST_UP(EXPR) return this->force_rounding(EXPR)
 # define BOOST_UP_NEG(EXPR) return -this->force_rounding(EXPR)
+  template<class U> T conv_down(U const &v) { BOOST_UP_NEG(-v); }
+  template<class U> T conv_up  (U const &v) { BOOST_UP(v); }
   T add_down(const T& x, const T& y) { BOOST_UP_NEG((-x) - y); }
   T sub_down(const T& x, const T& y) { BOOST_UP_NEG(y - x); }
   T mul_down(const T& x, const T& y) { BOOST_UP_NEG(x * (-y)); }
