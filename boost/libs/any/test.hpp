@@ -35,12 +35,12 @@ namespace test // failure exception used to indicate checked test failures
     {
     public: // struction (default cases are OK)
 
-        failure(const std::string & why)
+        failure(const std::string & why) throw()
           : reason(why)
         {
         }
 
-	~failure() throw() {}
+	      ~failure() throw() {}
 
     public: // usage
 
