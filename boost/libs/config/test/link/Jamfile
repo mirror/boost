@@ -1,0 +1,12 @@
+# copyright John Maddock 2003
+
+subproject libs/config/test/link ;
+
+dll link_test : link_test.cpp 
+    : 
+    <runtime-link>dynamic
+    <define>BOOST_DYN_LINK=1
+    <sysinclude>$(BOOST_ROOT)
+    : 
+        debug release
+    ;

@@ -32,6 +32,7 @@ include \$(BOOST_ROOT)/libs/config/test/options.jam ;
 run config_info.cpp <template>config_options ;
 run config_test.cpp <lib>../../test/build/boost_test_exec_monitor <template>config_options ;
 run limits_test.cpp <template>config_test_options ;
+run abi/abi_test.cpp abi/main.cpp <template>config_options ;
 
 EOF
 

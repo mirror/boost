@@ -21,6 +21,7 @@
    <a href="#features">Macros that describe optional features</a>
    <a href="#helpers">Boost Helper Macros</a>
    <a href="#info_macros">Boost Informational Macros</a>
+   <a href="#source">Macros for libraries with separate source code</a>
 <a href="#guidelines">Guidelines for Boost Authors</a>
    <a href="#defect_guidelines">Adding New Defect Macros</a>
    <a href="#feature_guidelines">Adding New Feature Test Macros</a>
@@ -216,6 +217,22 @@ export LIBS="-lpthread"
                BOOST_HAS_PTHREADS is set. This option may be set automatically by the config 
                system when it detects that the compiler is in "strict mode".</td>
          </tr>
+         <TR>
+            <TD vAlign="top">BOOST_DISABLE_ABI_HEADERS</TD>
+            <TD>Stops boost headers from including any prefix/suffix headers that normally 
+               control things like struct packing and alignment.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top">BOOST_ABI_PREFIX</TD>
+            <TD>A prefix header to include in place of whatever boost.config would normally 
+               select, any replacement should set up struct packing and alignment options as 
+               required.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top">BOOST_ABI_SUFFIX</TD>
+            <TD>A suffix header to include in place of whatever boost.config would normally 
+               select, any replacement should undo the effects of the prefix header.</TD>
+         </TR>
       </table>
       <h4><a name="advanced_config"></a>Advanced configuration usage</h4>
       <p>By setting various macros on the compiler command line or by editing &lt;<a href="../../boost/config/user.hpp">boost/config/user.hpp</a>&gt;, 
@@ -709,6 +726,13 @@ void g() { return f(); }</pre>
             <td>Platform</td>
             <td>The platform has the POSIX API clock_gettime.</td>
          </tr>
+         <TR>
+            <TD>BOOST_HAS_DECLSPEC
+            </TD>
+            <TD>Compiler</TD>
+            <TD>The compiler uses __declspec(dllexport) and __declspec(dllimport) to 
+               export/import symbols from dll's.</TD>
+         </TR>
          <tr>
             <td>BOOST_HAS_DIRENT_H</td>
             <td>Platform</td>
@@ -913,23 +937,21 @@ void g() { return f(); }</pre>
          </tr>
          <tr>
             <td>BOOST_EXPLICIT_TEMPLATE_TYPE(t)<br>
-                BOOST_EXPLICIT_TEMPLATE_NON_TYPE(t, v)<br>
-
-                BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(t)<br>
-                BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(t, v)<br>
+               BOOST_EXPLICIT_TEMPLATE_NON_TYPE(t, v)<br>
+               BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(t)<br>
+               BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(t, v)<br>
             </td>
-            <td>Some compilers silently "fold" different function template
-                instantiations if some of the template parameters don't appear
-                in the function parameter list. For instance:
-<pre>
-  #include &lt;iostream&gt;
+            <td>Some compilers silently "fold" different function template instantiations if 
+               some of the template parameters don't appear in the function parameter list. 
+               For instance:
+               <pre>  #include &lt;iostream&gt;
   #include &lt;ostream&gt;
   #include &lt;typeinfo&gt;
 
   template &lt;int n&gt;
   void f() { std::cout &lt;&lt; n &lt;&lt; ' '; }
 
-  template &lt;typename T>
+  template &lt;typename T&gt;
   void g() { std::cout &lt;&lt; typeid(T).name() &lt;&lt; ' '; }
 
   int main() {
@@ -940,29 +962,28 @@ void g() { return f(); }</pre>
     g&lt;double&gt;();
   }
 </pre>
-                incorrectly outputs <tt>"2 2 double double "</tt> on VC++ 6.
-
-                These macros, to be used in the function parameter list, fix the
-                problem without effects on the calling syntax. For instance, in
-                the case above write:
-<pre>
+               incorrectly outputs <tt>"2 2 double double "</tt> on VC++ 6. These macros, to 
+               be used in the function parameter list, fix the problem without effects on the 
+               calling syntax. For instance, in the case above write:
+               <pre>
   template &lt;int n&gt;
   void f(BOOST_EXPLICIT_TEMPLATE_NON_TYPE(int, n)) { ... }
 
   template &lt;typename T&gt;
   void g(BOOST_EXPLICIT_TEMPLATE_TYPE(T)) { ... }
 </pre>
-
-                Beware that they can declare (for affected compilers) a dummy <i>
-                defaulted</i> parameter, so they
-                <br><br>a) should be always invoked *at the end* of the parameter list
-                <br>    b) can't be used if your function template is multiply declared.
-                <br><br>
-
-                Furthermore, in order to add any needed comma separator, an "APPEND_*"
-                version must be used when the macro invocation appears after a normal
-                parameter declaration or after the invocation of another macro of this
-                same group. 
+               Beware that they can declare (for affected compilers) a dummy <i>defaulted</i> parameter, 
+               so they
+               <br>
+               <br>
+               a) should be always invoked *at the end* of the parameter list
+               <br>
+               b) can't be used if your function template is multiply declared.
+               <br>
+               <br>
+               Furthermore, in order to add any needed comma separator, an "APPEND_*" version 
+               must be used when the macro invocation appears after a normal parameter 
+               declaration or after the invocation of another macro of this same group.
             </td>
          </tr>
          <tr>
@@ -1076,7 +1097,93 @@ void g() { return f(); }</pre>
          </tr>
       </table>
       <h2><a name="guidelines"></a></h2>
-      <h2>Guidelines for Boost Authors</h2>
+      <H4><A name="source"></A>Macros for libraries with separate source code</H4>
+      <P>The following macros and helper headers are of use to authors whose libraries 
+         include separate source code, and are intended to address two issues: fixing 
+         the ABI of the compiled library, and selecting which compiled library to link 
+         against based upon the compilers settings.</P>
+      <H5>ABI Fixing</H5>
+      <P>When linking against a pre-compiled library it vital that the ABI used by the 
+         compiler when building the library <EM>matches</EM> <EM>exactly</EM> the ABI 
+         used by the code using the library.&nbsp; In this case ABI means things like 
+         the struct packing arrangement used, the name mangling scheme used, or the size 
+         of some types (enum types for example).&nbsp; This is separate from things like 
+         threading support, or runtime library variations, which have to be dealt with 
+         by build variants.&nbsp; To put this in perspective there is one compiler 
+         (Borland's) that has so many compiler options that make subtle changes to the 
+         ABI, that at least in theory there 3200 combinations, and that's without 
+         considering runtime library variations.&nbsp; Fortunately these variations can 
+         be managed by #pragma's that tell the compiler what ABI to use for the types 
+         declared in your library, in order to avoid sprinkling #pragma's all over the 
+         boost headers, there are some prefix and suffix headers that do the job, 
+         typical usage would be:</P>
+      <PRE>
+#ifndef MY_INCLUDE_GUARD
+#define MY_INCLUDE_GUARD
+
+// all includes go here:
+#include &lt;boost/config.hpp&gt;
+#include &lt;whatever&gt;
+
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+
+namespace boost{
+// your code goes here
+} 
+
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
+
+
+#endif // include guard
+</PRE>
+      <P>The user can disable this mechanism by defining BOOST_DISABLE_ABI_HEADERS, or 
+         they can define BOOST_ABI_PREFIX and/or BOOST_ABI_SUFFIX to point to their own 
+         prefix/suffix headers if they so wish.</P>
+      <H5>Automatic library selection</H5>
+      <P>It is essential that users link to a build of a library which was built against 
+         the same runtime library that their application will be built against - if this 
+         does not happen then the library will not be binary compatible with their own 
+         code - and there is a high likelihood &nbsp;that their application will 
+         experience&nbsp;runtime crashes.&nbsp; These kinds of problems can be extremely 
+         time consuming and difficult to debug, and often lead to frustrated users and 
+         authors alike (simply selecting the right library to link against is not as 
+         easy as it seems when their are 6-8 of them to chose from, and some users seem 
+         to be blissfully unaware that there even are different runtimes available to 
+         them).</P>
+      <P>To solve this issue, some compilers allow source code to contain #pragma's that 
+         instruct the linker which library to link against, all the user need do is 
+         include the headers they need, place the compiled libraries in their library 
+         search path, and the compiler and linker do the rest.&nbsp; Boost.config 
+         supports this via the header &lt;boost/config/auto_link.hpp&gt;, before 
+         including this header one or more of the following macros need to be defined:</P>
+      <P>
+         <TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="1">
+            <TR>
+               <TD>BOOST_LIB_NAME</TD>
+               <TD>Required: A string containing the basename of the library, for example 
+                  "boost_regex".</TD>
+            </TR>
+            <TR>
+               <TD>BOOST_DYN_LINK</TD>
+               <TD>Optional: when set link to dll rather than static library.</TD>
+            </TR>
+            <TR>
+               <TD>BOOST_LIB_DIAGNOSTIC</TD>
+               <TD>Optional: when set the header will print out the name of the library selected 
+                  (useful for debugging).</TD>
+            </TR>
+         </TABLE>
+      </P>
+      <P>If the compiler supports this mechanism, then it will be told to link against 
+         the appropriately named library, the actual algorithm used to mangle the name 
+         of the library is documented inside &lt;boost/config/auto_link.hpp&gt; and has 
+         to match that used to create the libraries via bjam (see boost.regex Jamfile 
+         for an example: we're working on simplifying this).</P>
+      <H2>Guidelines for Boost Authors</H2>
       <p>The <a href="../../boost/config.hpp">boost/config.hpp</a> header is used to 
          pass configuration information to other boost files, allowing them to cope with 
          platform dependencies such as arithmetic byte ordering, compiler pragmas, or 
