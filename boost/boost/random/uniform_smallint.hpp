@@ -165,13 +165,14 @@ public:
   typedef IntType input_type;
   typedef IntType result_type;
 
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-  BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
-#endif
-
   explicit uniform_smallint(IntType min = 0, IntType max = 9)
     : _min(min), _max(max)
-  { }
+  {
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+    // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
+    BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
+#endif
+ }
 
   result_type min() const { return _min; }
   result_type max() const { return _max; }
