@@ -27,12 +27,13 @@ void write_bidirectional_filter_test()
 
     {
         temp_file                        lower2;
+        filebuf                          dest;
         filtering_stream<bidirectional>  out;
-        out.push(combine(toupper_filter(), tolower_filter()));
-        filebuf dest;
         dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
+        out.push(combine(toupper_filter(), tolower_filter()));
         out.push(dest);
         write_data_in_chars(out);
+        out.reset();
         dest.close();
         BOOST_CHECK_MESSAGE(
             compare_files(lower2.name(), lower.name()),
@@ -41,16 +42,16 @@ void write_bidirectional_filter_test()
         );
     }
 
-
     {
         // OutputFilter.
         temp_file                        lower2;
+        filebuf                          dest;
         filtering_stream<bidirectional>  out;
         out.push(combine(toupper_filter(), tolower_filter()));
-        filebuf dest;
         dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
         out.push(dest);
         write_data_in_chunks(out);
+        out.reset();
         dest.close();
         BOOST_CHECK_MESSAGE(
             compare_files(lower2.name(), lower.name()),
@@ -61,13 +62,13 @@ void write_bidirectional_filter_test()
 
     {
         temp_file                        lower2;
-        filtering_stream<bidirectional>  out(
-            combine(toupper_filter(), tolower_multichar_filter()), 0
-        );
-        filebuf dest;
+        filebuf                          dest;
+        filtering_stream<bidirectional>  out;
+        out.push(combine(toupper_filter(), tolower_multichar_filter()), 0);
         dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
         out.push(dest);
         write_data_in_chars(out);
+        out.reset();
         dest.close();
         BOOST_CHECK_MESSAGE(
             compare_files(lower2.name(), lower.name()),
@@ -78,13 +79,13 @@ void write_bidirectional_filter_test()
 
     {
         temp_file                        lower2;
-        filtering_stream<bidirectional>  out(
-            combine(toupper_filter(), tolower_multichar_filter()), 0
-        );
-        filebuf dest;
+        filebuf                          dest;
+        filtering_stream<bidirectional>  out;
+        out.push(combine(toupper_filter(), tolower_multichar_filter()), 0);
         dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
         out.push(dest);
         write_data_in_chunks(out);
+        out.reset();
         dest.close();
         BOOST_CHECK_MESSAGE(
             compare_files(lower2.name(), lower.name()),
@@ -95,13 +96,13 @@ void write_bidirectional_filter_test()
 
     {
         temp_file                        lower2;
-        filtering_stream<bidirectional>  out(
-            combine(toupper_filter(), tolower_multichar_filter())
-        );
-        filebuf dest;
+        filebuf                          dest;
+        filtering_stream<bidirectional>  out;
+        out.push(combine(toupper_filter(), tolower_multichar_filter()));
         dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
         out.push(dest);
         write_data_in_chars(out);
+        out.reset();
         dest.close();
         BOOST_CHECK_MESSAGE(
             compare_files(lower2.name(), lower.name()),
@@ -112,13 +113,13 @@ void write_bidirectional_filter_test()
 
     {
         temp_file                        lower2;
-        filtering_stream<bidirectional>  out(
-            combine(toupper_filter(), tolower_multichar_filter())
-        );
-        filebuf dest;
+        filebuf                          dest;
+        filtering_stream<bidirectional>  out;
+        out.push(combine(toupper_filter(), tolower_multichar_filter()));
         dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
         out.push(dest);
         write_data_in_chunks(out);
+        out.reset();
         dest.close();
         BOOST_CHECK_MESSAGE(
             compare_files(lower2.name(), lower.name()),
