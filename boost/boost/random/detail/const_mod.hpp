@@ -25,6 +25,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/integer_traits.hpp>
+#include <boost/detail/workaround.hpp>
 
 namespace boost {
 namespace random {
@@ -150,7 +151,9 @@ private:
   {
     // we are interested in the gcd factor for c, because this is our inverse
     BOOST_STATIC_ASSERT(m > 0);
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
+    assert(boost::integer_traits<IntType>::is_signed);
+#elif !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS)
     BOOST_STATIC_ASSERT(boost::integer_traits<IntType>::is_signed);
 #endif
     assert(c > 0);
