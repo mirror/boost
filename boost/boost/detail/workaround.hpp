@@ -34,8 +34,8 @@
 # ifndef BOOST_STRICT_CONFIG
 
 #  define BOOST_WORKAROUND(symbol, test)                \
-        (symbol != 0) && (1 % (( (symbol test) ) + 1))
-//                             ^ ^           ^ ^
+        ((symbol != 0) && (1 % (( (symbol test) ) + 1)))
+//                              ^ ^           ^ ^
 // The extra level of parenthesis nesting above, along with the
 // BOOST_OPEN_PAREN indirection below, is required to satisfy the
 // broken preprocessor in MWCW 8.3 and earlier.
