@@ -23,6 +23,10 @@
        mask from within Doxygen. This is a hack (big surprise). -->
   <xsl:param name="boost.doxygen.detail">detail::</xsl:param>
 
+  <!-- The title that will be used for the BoostBook library reference emitted. 
+       If left blank, BoostBook will assign a default title. -->
+  <xsl:param name="boost.doxygen.reftitle" select="''"/>
+  
   <xsl:output method="xml" indent="yes" standalone="yes"/>
 
   <xsl:key name="compounds-by-kind" match="compounddef" use="@kind"/>
@@ -37,6 +41,9 @@
 
   <xsl:template match="doxygen">
     <library-reference>
+	  <xsl:if test="string($boost.doxygen.reftitle) != ''">
+	    <title><xsl:copy-of select="$boost.doxygen.reftitle"/></title>
+	  </xsl:if>
       <xsl:apply-templates select="key('compounds-by-kind', 'file')"/>
     </library-reference>
   </xsl:template>
