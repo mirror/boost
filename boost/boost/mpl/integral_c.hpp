@@ -49,7 +49,7 @@ struct integral_c
     typedef integral_c<T, prior_value> prior;
 #elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
     || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(502)) \
-    || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(53800))
+    || BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(53800))
     typedef integral_c<T, (N + 1)> next;
     typedef integral_c<T, (N - 1)> prior;
 #else
