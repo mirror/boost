@@ -642,9 +642,9 @@ Addition to [lib.iterator.synopsis]
   enum iterator_access { readable_iterator = 1, writable_iterator = 2, 
       swappable_iterator = 4, lvalue_iterator = 8 };
 
-  template <iterator_access x, class TraversalTag>
+  template <unsigned int access_bits, class TraversalTag>
   struct iterator_tag : /* appropriate old category or categories */ {
-    static const iterator_access access = x;
+    static const iterator_access access = (iterator_access)access_bits;
     typedef TraversalTag traversal;
   };
 
@@ -696,9 +696,13 @@ pseudo-code.
              return output_iterator_tag;
          else
              return null_category_tag;
-     
-If the argument for ``TraversalTag`` is not convertible to
-``incrementable_iterator_tag`` then the programm is ill-formed.
+
+The access argument is declared to be ``unsigned int`` instead of the
+enum ``iterator_access`` for convenience of use. For example, the
+expression ``(readable_iterator | writable_iterator)`` produces an
+unsigned int, not ``iterator_access``.  If the argument for
+``TraversalTag`` is not convertible to ``incrementable_iterator_tag``
+then the programm is ill-formed.
 
 The ``is_readable``, ``is_writable``, ``is_swappable``, and
 ``traversal_category`` class templates are traits classes. For

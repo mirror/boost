@@ -807,9 +807,9 @@ template &lt;class Iterator&gt; struct traversal_category;
 enum iterator_access { readable_iterator = 1, writable_iterator = 2, 
     swappable_iterator = 4, lvalue_iterator = 8 };
 
-template &lt;iterator_access x, class TraversalTag&gt;
+template &lt;unsigned int access_bits, class TraversalTag&gt;
 struct iterator_tag : /* appropriate old category or categories */ {
-  static const iterator_access access = x;
+  static const iterator_access access = (iterator_access)access_bits;
   typedef TraversalTag traversal;
 };
 
@@ -860,8 +860,12 @@ inherit-category(access, traversal-tag) =
      else
          return null_category_tag;
 </pre>
-<p>If the argument for <tt class="literal"><span class="pre">TraversalTag</span></tt> is not convertible to
-<tt class="literal"><span class="pre">incrementable_iterator_tag</span></tt> then the programm is ill-formed.</p>
+<p>The access argument is declared to be <tt class="literal"><span class="pre">unsigned</span> <span class="pre">int</span></tt> instead of the
+enum <tt class="literal"><span class="pre">iterator_access</span></tt> for convenience of use. For example, the
+expression <tt class="literal"><span class="pre">(readable_iterator</span> <span class="pre">|</span> <span class="pre">writable_iterator)</span></tt> produces an
+unsigned int, not <tt class="literal"><span class="pre">iterator_access</span></tt>.  If the argument for
+<tt class="literal"><span class="pre">TraversalTag</span></tt> is not convertible to <tt class="literal"><span class="pre">incrementable_iterator_tag</span></tt>
+then the programm is ill-formed.</p>
 <p>The <tt class="literal"><span class="pre">is_readable</span></tt>, <tt class="literal"><span class="pre">is_writable</span></tt>, <tt class="literal"><span class="pre">is_swappable</span></tt>, and
 <tt class="literal"><span class="pre">traversal_category</span></tt> class templates are traits classes. For
 iterators whose <tt class="literal"><span class="pre">iterator_traits&lt;Iter&gt;::iterator_category</span></tt> type is
