@@ -142,7 +142,7 @@ namespace boost
       template <class T, bool specialized>
       struct fixed_numeric_limits_base
           : public if_true< std::numeric_limits<T>::is_signed >
-           ::template then< signed_numeric_limits<T>,
+           ::BOOST_NESTED_TEMPLATE then< signed_numeric_limits<T>,
                             std::numeric_limits<T>
                    >::type
       {};
@@ -337,7 +337,10 @@ namespace boost
         typedef detail::fixed_numeric_limits<Source> arg_traits;
         typedef detail::fixed_numeric_limits<Target> result_traits;
         
-#if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) || defined(BOOST_SGI_CPP_LIMITS)
+#if defined(BOOST_STRICT_CONFIG) \
+    || (!defined(__HP_aCC) || __HP_aCC > 33900) \
+         && (!defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) \
+             || defined(BOOST_SGI_CPP_LIMITS))
         // typedefs that act as compile time assertions
         // (to be replaced by boost compile time assertions
         // as and when they become available and are stable)
