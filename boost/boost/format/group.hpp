@@ -23,7 +23,7 @@
 #ifndef BOOST_FORMAT_GROUP_HPP
 #define BOOST_FORMAT_GROUP_HPP
 
-#include "boost/config.hpp"
+#include <boost/config.hpp>
 
 
 namespace boost {

@@ -13,8 +13,8 @@
 #ifndef BOOST_FORMAT_FUNCS_HPP
 #define BOOST_FORMAT_FUNCS_HPP
 
-#include "boost/format/format_class.hpp"
-#include "boost/throw_exception.hpp"
+#include <boost/format/format_class.hpp>
+#include <boost/throw_exception.hpp>
 
 namespace boost {
 
@@ -25,7 +25,7 @@ namespace boost {
     }
     namespace io {
          using ::boost::str; // keep compatibility with when it was defined in this N.S.
-     }   // - namespace io
+    }   // - namespace io
 
     template< class Ch, class Tr, class Alloc> 
     typename io::CompatOStream<std::basic_ostream<Ch, Tr> >::type_for_string & 

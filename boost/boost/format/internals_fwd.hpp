@@ -13,8 +13,8 @@
 #ifndef BOOST_FORMAT_INTERNAL_FWD_HPP
 #define BOOST_FORMAT_INTERNAL_FWD_HPP
 
-#include "boost/format/format_fwd.hpp"
-#include "boost/config.hpp"
+#include <boost/format/format_fwd.hpp>
+#include <boost/config.hpp>
 
 
 namespace boost {
