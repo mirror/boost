@@ -42,7 +42,6 @@ namespace std{
 #include <boost/throw_exception.hpp>
 
 #include <boost/archive/archive_exception.hpp>
-#include <boost/archive/codecvt_null.hpp>
 
 namespace boost {
 namespace archive {
