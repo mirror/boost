@@ -59,7 +59,7 @@
 // We permanently turn off the following level 4 warnings because users will
 // have to do so themselves anyway if we turn them back on
 #  pragma warning( disable: 4511 ) // copy constructor could not be generated
-#  pragma warning( disable: 4512 ) // assignment operator could not be generated
+#  pragma warning( disable: 4512 ) // assignment op could not be generated
 #endif
 
 
@@ -432,7 +432,8 @@ class state_machine : noncopyable
       no_of_orthogonal_regions;
 
     typedef MostDerived outermost_context_type;
-    typedef MostDerived * inner_context_ptr_type;
+    typedef state_machine outermost_context_base_type;
+    typedef state_machine * inner_context_ptr_type;
     typedef typename state_base_type::node_state_base_ptr_type
       node_state_base_ptr_type;
     typedef typename state_base_type::leaf_state_ptr_type leaf_state_ptr_type;
@@ -490,6 +491,16 @@ class state_machine : noncopyable
     const outermost_context_type & outermost_context() const
     {
       return *polymorphic_downcast< const MostDerived * >( this );
+    }
+
+    outermost_context_base_type & outermost_context_base()
+    {
+      return *this;
+    }
+
+    const outermost_context_base_type & outermost_context_base() const
+    {
+      return *this;
     }
 
     void terminate_as_reaction( state_base_type & theState )
@@ -552,6 +563,14 @@ class state_machine : noncopyable
       BOOST_ASSERT( position == 0 );
       detail::avoid_unused_warning( position );
       pOutermostState_ = 0;
+    }
+
+
+    void defer_event(
+      const event_base_type & evt,
+      const state_base_type * pForState )
+    {
+      deferredMap_[ pForState ].push_back( evt.intrusive_from_this() );
     }
 
     void release_events( const state_base_type * pForState )
@@ -621,7 +640,7 @@ class state_machine : noncopyable
         typename HistorizedState::context_type,
         LeafState >::type history_context_list;
       typedef detail::constructor< 
-        history_context_list, outermost_context_type > constructor_type;
+        history_context_list, outermost_context_base_type > constructor_type;
       // 5.2.10.6 declares that reinterpret_casting a function pointer to a
       // different function pointer and back must yield the same value. The
       // following reinterpret_cast is the first half of such a sequence.
@@ -803,12 +822,14 @@ class state_machine : noncopyable
       terminator guard( *this );
       BOOST_ASSERT( get_pointer( pOutermostUnstableState_ ) == 0 );
       isExceptionPending_ = false;
-      typename rtti_policy_type::id_type eventType = evt.dynamic_type();
+      const typename rtti_policy_type::id_type eventType = evt.dynamic_type();
       result reactionResult = do_forward_event;
-      typename state_list_type::iterator pState = currentStates_.begin();
-
-      while ( ( reactionResult == do_forward_event ) &&
-        ( pState != currentStatesEnd_ ) )
+      
+      for (
+        typename state_list_type::iterator pState = currentStates_.begin();
+        ( reactionResult == do_forward_event ) &&
+          ( pState != currentStatesEnd_ );
+        ++pState )
       {
         // CAUTION: The following statement could modify our state list!
         // We must not continue iterating if the event was consumed
@@ -817,27 +838,9 @@ class state_machine : noncopyable
             **pState, evt, eventType ),
           exception_event_handler( *this, get_pointer( *pState ) ),
           do_discard_event );
-
-        switch ( reactionResult )
-        {
-          case do_defer_event:
-            defer_event( evt, get_pointer( *pState ) ); break;
-          case do_forward_event:
-            ++pState; break;
-          default:
-            break;
-        }
       }
 
       guard.dismiss();
-    }
-
-
-    void defer_event(
-      const event_base_type & evt,
-      const state_base_type * pForState )
-    {
-      deferredMap_[ pForState ].push_back( evt.intrusive_from_this() );
     }
 
 
@@ -973,7 +976,7 @@ class state_machine : noncopyable
       {
         typedef void construct_function(
           const typename DefaultState::context_ptr_type &,
-          typename DefaultState::outermost_context_type & );
+          typename DefaultState::outermost_context_base_type & );
         // 5.2.10.6 declares that reinterpret_casting a function pointer to a
         // different function pointer and back must yield the same value. The
         // following reinterpret_cast is the second half of such a sequence.
@@ -1001,8 +1004,8 @@ class state_machine : noncopyable
         !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
       // TODO: Add allocator support for broken std libs when
       // the workaround is available in boost::detail
-      , typename allocator_type::template rebind<
-          std::pair< const state_base_type * const, event_queue_type > >::other
+      , typename allocator_type::template rebind< std::pair<
+          const state_base_type * const, event_queue_type > >::other
       #endif
     > deferred_map_type;
 

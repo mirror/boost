@@ -32,11 +32,11 @@ namespace detail
 
 
 
-template< class ContextList, class OutermostContext >
+template< class ContextList, class OutermostContextBase >
 struct constructor;
 
 //////////////////////////////////////////////////////////////////////////////
-template< class ContextList, class OutermostContext >
+template< class ContextList, class OutermostContextBase >
 struct outer_constructor
 {
   typedef typename mpl::front< ContextList >::type to_construct;
@@ -65,45 +65,49 @@ struct outer_constructor
   >::type last_inner_initial_list;
 
   static void construct(
-    const context_ptr_type & pContext, OutermostContext & outermostContext )
+    const context_ptr_type & pContext,
+    OutermostContextBase & outermostContextBase )
   {
     const inner_context_ptr_type pInnerContext =
-      to_construct::shallow_construct( pContext, outermostContext );
+      to_construct::shallow_construct( pContext, outermostContextBase );
     to_construct::template deep_construct_inner<
-      first_inner_initial_list >( pInnerContext, outermostContext );
-    constructor< inner_context_list, OutermostContext >::construct(
-      pInnerContext, outermostContext );
+      first_inner_initial_list >( pInnerContext, outermostContextBase );
+    constructor< inner_context_list, OutermostContextBase >::construct(
+      pInnerContext, outermostContextBase );
     to_construct::template deep_construct_inner<
-      last_inner_initial_list >( pInnerContext, outermostContext );
+      last_inner_initial_list >( pInnerContext, outermostContextBase );
   }
 };
 
 //////////////////////////////////////////////////////////////////////////////
-template< class ContextList, class OutermostContext >
+template< class ContextList, class OutermostContextBase >
 struct inner_constructor
 {
   typedef typename mpl::front< ContextList >::type to_construct;
   typedef typename to_construct::context_ptr_type context_ptr_type;
 
   static void construct(
-    const context_ptr_type & pContext, OutermostContext & outermostContext )
+    const context_ptr_type & pContext,
+    OutermostContextBase & outermostContextBase )
   {
-    to_construct::deep_construct( pContext, outermostContext );
+    to_construct::deep_construct( pContext, outermostContextBase );
   }
 };
 
 //////////////////////////////////////////////////////////////////////////////
-template< class ContextList, class OutermostContext >
+template< class ContextList, class OutermostContextBase >
 struct constructor_impl : public mpl::apply_if<
   mpl::equal_to< mpl::size< ContextList >, mpl::long_< 1 > >,
-  mpl::identity< inner_constructor< ContextList, OutermostContext > >,
-  mpl::identity< outer_constructor< ContextList, OutermostContext > > > {};
+  mpl::identity< inner_constructor< ContextList, OutermostContextBase > >,
+  mpl::identity< outer_constructor< ContextList, OutermostContextBase > > >
+{
+};
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class ContextList, class OutermostContext >
+template< class ContextList, class OutermostContextBase >
 struct constructor :
-  constructor_impl< ContextList, OutermostContext >::type {};
+  constructor_impl< ContextList, OutermostContextBase >::type {};
 
 //////////////////////////////////////////////////////////////////////////////
 template< class CommonContext, class DestinationState >

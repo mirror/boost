@@ -35,8 +35,8 @@ class shallow_history
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
-    typedef typename DefaultState::outermost_context_type
-      outermost_context_type;
+    typedef typename DefaultState::outermost_context_base_type
+      outermost_context_base_type;
     typedef typename DefaultState::context_type context_type;
     typedef typename DefaultState::context_ptr_type context_ptr_type;
     typedef typename DefaultState::context_type_list context_type_list;
@@ -46,9 +46,9 @@ class shallow_history
 
     static void deep_construct(
       const context_ptr_type & pContext,
-      outermost_context_type & outermostContext )
+      outermost_context_base_type & outermostContextBase )
     {
-      outermostContext.template construct_with_shallow_history<
+      outermostContextBase.template construct_with_shallow_history<
         DefaultState >( pContext );
     }
 };
