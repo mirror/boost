@@ -61,7 +61,7 @@ void print_expression(const char* expression, T val)
 #define PRINT_EXPRESSION(E) print_expression(#E, E);
 
 template <class T>
-void print_byte_order(const char* what, T t)
+void print_byte_order(const char* what, T /* t */ )
 {
    T val = 0;
    unsigned i;
