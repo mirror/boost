@@ -32,6 +32,7 @@
 #  define BOOST_NO_SWPRINTF
 #  define BOOST_NO_USING_TEMPLATE
 #  define BOOST_BCB_PARTIAL_SPECIALIZATION_BUG
+#  define BOOST_NO_TEMPLATE_TEMPLATES
    // we shouldn't really need this - but too many things choke
    // without it, this needs more investigation:
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -84,5 +85,6 @@
 #     pragma message( "Unknown compiler version - please run the configure tests and report the results")
 #  endif
 #endif
+
 
 

@@ -484,6 +484,12 @@ the standard.</p>
         </td>
     </tr>
     <tr>
+        <td>BOOST_BCB_PARTIAL_SPECIALIZATION_BUG</td>
+        <td>Compiler</td>
+        <td>The compiler exibits certain partial specialisation
+        bug - probably Borland C++ Builder specific.</td>
+    </tr>
+    <tr>
         <td valign="top" width="51%">BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP</td>
         <td valign="top" width="16%">Compiler</td>
         <td valign="top" width="33%">Compiler does not implement
@@ -608,6 +614,12 @@ f(&amp;bar); // should choose #2.</pre>
         <td valign="top" width="33%">Constants such as
         numeric_limits&lt;T&gt;::is_signed are not available for
         use at compile-time.</td>
+    </tr>
+    <tr>
+        <td>BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS</td>
+        <td>Compiler</td>
+        <td>The compiler does not support the specialization of
+        individual member functions of template classes.</td>
     </tr>
     <tr>
         <td valign="top" width="51%">BOOST_NO_MEMBER_TEMPLATE_KEYWORD</td>
@@ -754,6 +766,12 @@ f(&amp;bar); // should choose #2.</pre>
         containers.</td>
     </tr>
     <tr>
+        <td>BOOST_NO_TEMPLATE_TEMPLATES</td>
+        <td>Compiler</td>
+        <td>The compiler does not support template template
+        parameters.</td>
+    </tr>
+    <tr>
         <td valign="top" width="51%">BOOST_NO_USING_TEMPLATE</td>
         <td valign="top" width="16%">Compiler</td>
         <td valign="top" width="33%">The compiler will not accept
@@ -799,6 +817,11 @@ present.</p>
         <td>BOOST_HAS_CLOCK_GETTIME</td>
         <td>Platform</td>
         <td>The platform has the POSIX API clock_gettime.</td>
+    </tr>
+    <tr>
+        <td>BOOST_HAS_DIRENT_H</td>
+        <td>Platform</td>
+        <td>The platform has the POSIX header &lt;dirent.h&gt;.</td>
     </tr>
     <tr>
         <td>BOOST_HAS_FTIME</td>

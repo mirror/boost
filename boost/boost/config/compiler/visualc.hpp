@@ -47,6 +47,10 @@
 #  define BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 #  define BOOST_NO_USING_TEMPLATE
 #  define BOOST_NO_SWPRINTF
+#  define BOOST_NO_TEMPLATE_TEMPLATES
+#  if (_MSC_VER > 1200)
+#     define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
+#  endif
    //
    // disable min/max macros if defined:
    //
@@ -106,6 +110,7 @@
 #     pragma message("Unknown compiler version - please run the configure tests and report the results")
 #  endif
 #endif
+
 
 
 
