@@ -545,17 +545,15 @@ namespace boost { namespace numeric { namespace ublas {
         // reserve helpers for map_array and generic maps
         // ISSUE should be in map_traits but want to use on all compilers
 
+        template<class M>
+        BOOST_UBLAS_INLINE
+        void map_reserve (M &/* m */, typename M::size_type /* capacity */) {
+        }
         template<class I, class T, class ALLOC>
         BOOST_UBLAS_INLINE
-        void reserve (map_array<I, T, ALLOC> &m, typename map_array<I, T, ALLOC>::size_type capacity) {
+        void map_reserve (map_array<I, T, ALLOC> &m, typename map_array<I, T, ALLOC>::size_type capacity) {
             m.reserve (capacity);
         }
-
-        // Some helpers for std::map
-
-        template<class I, class T, class ALLOC>
-        BOOST_UBLAS_INLINE
-        void reserve (std::map<I, T, ALLOC> &/* m */, typename std::map<I, T, ALLOC>::size_type /* capacity */) {}
 
     }
 
