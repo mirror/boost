@@ -33,6 +33,11 @@
 // a consistent setting of BOOST_HAS_THREADS across
 // all translation units (needed for shared_ptr etc).
 //
+
+#ifdef _WIN32_WCE
+#  define BOOST_NO_ANSI_APIS
+#endif
+
 #ifndef BOOST_HAS_PTHREADS
 #  define BOOST_HAS_WINTHREADS
 #endif
