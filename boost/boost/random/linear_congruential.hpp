@@ -215,7 +215,7 @@ public:
   void seed(uint64_t x0) { lcf.seed(x0); }
   template<class It> void seed(It& first, It last) { lcf.seed(first,last); }
 
-  int32_t operator()() { return lcf() >> 17; }
+  int32_t operator()() { return static_cast<int32_t>(lcf() >> 17); }
   // by experiment from lrand48()
   static bool validation(int32_t x) { return x == 1993516219; }
 
