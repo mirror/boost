@@ -39,7 +39,7 @@
 // agurt, 18/jan/03: old EDG-based compilers actually enforce 11.4 para 9
 // (in strict mode), so we have to provide an alternative to the 
 // MSVC-optimized implementation
-#if defined(__EDG_VERSION__)
+#if defined(__EDG_VERSION__) && !defined(BOOST_INTEL_CXX_VERSION)
 
 #   define BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(i, name, params) \
     BOOST_STATIC_CONSTANT(int, arity = i); \
