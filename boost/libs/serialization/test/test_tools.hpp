@@ -110,9 +110,6 @@ leak_reporter leak_reporter::instance;
 #define BOOST_ARCHIVE_TEST text_archive.hpp
 #endif
 
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
-
 #include <boost/test/test_tools.hpp>
 
 #endif // BOOST_SERIALIZATION_TEST_TOOLS_HPP

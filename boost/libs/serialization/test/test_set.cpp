@@ -15,7 +15,7 @@
 #include <cstdio> // remove
 #include <boost/config.hpp>
 
-#if defined __COMO__
+#if defined (__LIBCOMO__)
 #error - this test fails on comeau with disatrous results
 #endif
 
@@ -26,14 +26,16 @@ namespace std{
 }
 #endif
 
+#include <boost/archive/archive_exception.hpp>
+
+#include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
+
 #include <boost/serialization/set.hpp>
 #ifdef BOOST_HAS_HASH
 #include <boost/serialization/hash_set.hpp>
 #endif
-#include <boost/archive/archive_exception.hpp>
-
-#include "test_tools.hpp"
-
 #include "A.hpp"
 
 #if defined(__LIBCOMO__) || (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
@@ -102,7 +104,16 @@ int test_main( int /* argc */, char* /* argv */[] )
     }
     BOOST_CHECK(amultiset == amultiset1);
     
-    #ifdef BOOST_HAS_HASH
+    #if defined(BOOST_HAS_HASH)
+    #if defined(_STLPORT_VERSION) \
+    && _STLPORT_VERSION \
+    && (__SGI_STL_PORT <= 0x453)
+        BOOST_FAIL( 
+            "Hash sets known to fail in a catastrophic way with STLPort 4.5.3,\n"
+            "test skipped" 
+        );
+    #else
+
     // test array of objects
     BOOST_STD_EXTENSION_NAMESPACE::hash_set<A> ahash_set;
     ahash_set.insert(A());
@@ -125,6 +136,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     std::vector<A> tvec, tvec1;
     std::copy(ahash_set.begin(), ahash_set.end(), std::back_inserter(tvec));
     std::sort(tvec.begin(), tvec.end());
+    tvec1.reserve(ahash_set1.size());
     std::copy(ahash_set1.begin(), ahash_set1.end(), std::back_inserter(tvec1));
     std::sort(tvec1.begin(), tvec1.end());
     BOOST_CHECK(tvec == tvec1);
@@ -148,13 +160,14 @@ int test_main( int /* argc */, char* /* argv */[] )
     // does it anyway even though it doesn't seem to work.  So sort into
     // vectors and then compare.
     tvec.clear();
-    tvec1.clear();
     std::copy(ahash_multiset.begin(), ahash_multiset.end(), std::back_inserter(tvec));
     std::sort(tvec.begin(), tvec.end());
+    tvec1.clear();
+    tvec1.reserve(ahash_multiset1.size());
     std::copy(ahash_multiset1.begin(), ahash_multiset1.end(), std::back_inserter(tvec1));
     std::sort(tvec1.begin(), tvec1.end());
     BOOST_CHECK(tvec == tvec1);
-    
+    #endif // STLPort 4.5.3
     #endif
 
     std::remove(testfile);

@@ -18,13 +18,13 @@ namespace std{
 }
 #endif
 
-#include <boost/serialization/deque.hpp>
-
 #include <boost/archive/archive_exception.hpp>
-
-#include "A.hpp"
-
 #include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
+
+#include <boost/serialization/deque.hpp>
+#include "A.hpp"
 
 int test_main( int /* argc */, char* /* argv */[] )
 {

@@ -24,13 +24,15 @@ namespace std{
 }
 #endif
 
+#include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
+
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/map.hpp>
 #ifdef BOOST_HAS_HASH
 #include <boost/serialization/hash_map.hpp>
 #endif
-
-#include "test_tools.hpp"
 
 #include "A.hpp"
 
@@ -180,5 +182,3 @@ int test_main( int /* argc */, char* /* argv */[] )
     std::remove(testfile);
     return boost::exit_success;
 }
-
-// EOF

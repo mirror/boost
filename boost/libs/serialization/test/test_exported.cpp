@@ -18,11 +18,12 @@ namespace std{
 }
 #endif
 
-#include <boost/serialization/base_object.hpp>
 #include <boost/archive/archive_exception.hpp>
-
 #include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
+#include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 
 class polymorphic_base

@@ -9,20 +9,20 @@
 // test implementation level "object_class_info"
 // should pass compilation and execution
 
-#include <cstdio>
 #include <string>
 #include <fstream>
 
+#include <boost/archive/tmpdir.hpp>
+#include <boost/preprocessor/stringize.hpp>
+#include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 #include <boost/static_assert.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
-
-#include <boost/archive/tmpdir.hpp>
-#include <boost/preprocessor/stringize.hpp>
-#include "test_tools.hpp"
 
 class A
 {

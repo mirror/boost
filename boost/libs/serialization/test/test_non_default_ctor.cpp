@@ -28,6 +28,8 @@ namespace std{
 #include <boost/archive/archive_exception.hpp>
 #include "throw_exception.hpp"
 #include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 ///////////////////////////////////////////////////////
 // simple class test - using non-intrusive syntax
@@ -114,12 +116,8 @@ bool A::operator<(const A &rhs) const
     return false;
 }
 
-// function specializations must be defined in the appropriate
-// namespace - boost::serialization
-
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-namespace boost { namespace serialization {
-#endif
+namespace boost { 
+namespace serialization {
 
 template<class Archive>
 inline void save_construct_data(
@@ -142,9 +140,8 @@ inline void load_construct_data(
     ::new(a)A(i);
 }
 
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-}} // namespace boost::serialization
-#endif
+} // serialization
+} // namespace boost
 
 void save(const char * testfile){
     test_ostream os(testfile, TEST_STREAM_FLAGS);

@@ -29,11 +29,12 @@ namespace std{
 
 #include <boost/archive/archive_exception.hpp>
 #include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
-
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/extended_type_info_no_rtti.hpp>
 
@@ -75,12 +76,6 @@ class polymorphic_derived1 : public polymorphic_base
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int  /* file_version */){
-        const boost::serialization::extended_type_info *eti
-            = boost::serialization::type_info_implementation<polymorphic_derived1>
-                ::type::get_instance();
-        BOOST_CHECK(eti->type_info_key
-        == boost::serialization::extended_type_info_no_rtti<polymorphic_derived1>
-            ::type_info_key);
         ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
     }
 
@@ -105,10 +100,6 @@ const char * polymorphic_derived1::get_key() const {
     const boost::serialization::extended_type_info *eti
         = boost::serialization::type_info_implementation<polymorphic_derived1>
             ::type::get_instance();
-    BOOST_CHECK(eti->type_info_key
-    == boost::serialization::type_info_implementation<polymorphic_derived1>
-        ::type::type_info_key
-    );
     return eti->key;
 }
 

@@ -22,14 +22,16 @@ namespace std{
 #include <boost/static_assert.hpp>
 #include <boost/checked_delete.hpp>
 
+#include <boost/archive/archive_exception.hpp>
+#include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
+
 #include <boost/serialization/list.hpp>
 #ifdef BOOST_HAS_SLIST
 #include <boost/serialization/slist.hpp>
 #endif
 #include <boost/serialization/nvp.hpp>
-
-#include <boost/archive/archive_exception.hpp>
-#include "test_tools.hpp"
 
 #include "A.hpp"
 
@@ -53,24 +55,32 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
 
     std::list<A *> alist;
-    alist.push_back(new A);
-    alist.push_back(new A);
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os);
+        A * free_a_ptr = new A;
+        alist.push_back(free_a_ptr);
         alist.push_back(new A);
-        alist.push_back(new A);
+        // verify that first element is the same as the free pointer
+        BOOST_CHECK((*alist.begin()) == free_a_ptr);
         oa << boost::serialization::make_nvp("alist", alist);
+        oa << boost::serialization::make_nvp("free_a_ptr", free_a_ptr);
     }
     std::list<A *> alist1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
-        ia >> boost::serialization::make_nvp("alist", alist1);
+		A * free_a_ptr1;
+		ia >> boost::serialization::make_nvp("alist", alist1);
+        ia >> boost::serialization::make_nvp("free_a_ptr", free_a_ptr1);
+		BOOST_CHECK(
+			alist.size() == alist1.size() 
+			&& std::equal(alist.begin(),alist.end(),alist1.begin(),ptr_equal_to<A *>())
+		);
+		// verify that first element is the same as the free pointer
+		BOOST_CHECK((*alist1.begin()) == free_a_ptr1);
     }
-    BOOST_CHECK(alist.size() == alist1.size() &&
-        std::equal(alist.begin(),alist.end(),alist1.begin(),ptr_equal_to<A *>())
-    );
+
     std::for_each(
         alist.begin(), 
         alist.end(), 
@@ -84,23 +94,24 @@ int test_main( int /* argc */, char* /* argv */[] )
     
     #ifdef BOOST_HAS_SLIST
     std::list<A *> aslist;
-    aslist.push_back(new A);
-    aslist.push_back(new A);
     {   
+		aslist.push_back(new A);
+		aslist.push_back(new A);
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os);
         aslist.push_back(new A);
         aslist.push_back(new A);
         oa << boost::serialization::make_nvp("aslist", aslist);
     }
-    std::list<A *> aslist1;{
+    std::list<A *> aslist1;
+	{
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
         ia >> boost::serialization::make_nvp("aslist", aslist1);
+		BOOST_CHECK(aslist.size() == aslist1.size() &&
+			std::equal(aslist.begin(),aslist.end(),aslist1.begin(),ptr_equal_to<A *>())
+		);
     }
-    BOOST_CHECK(aslist.size() == aslist1.size() &&
-        std::equal(aslist.begin(),aslist.end(),aslist1.begin(),ptr_equal_to<A *>())
-    );
     std::for_each(
         aslist.begin(), 
         aslist.end(), 

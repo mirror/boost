@@ -20,10 +20,12 @@ namespace std{
 
 #include <boost/serialization/shared_ptr.hpp>
 #include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
+
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/type_traits/broken_compiler_spec.hpp>
-
 
 // This is a simple class.  It contains a counter of the number
 // of objects of this class which have been instantiated.

@@ -13,14 +13,16 @@
 #include <string>
 
 #include <boost/static_assert.hpp>
+#include <boost/archive/tmpdir.hpp>
+#include <boost/preprocessor/stringize.hpp>
+#include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
+
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/nvp.hpp>
-
-#include <boost/archive/tmpdir.hpp>
-#include <boost/preprocessor/stringize.hpp>
-#include "test_tools.hpp"
 
 // first case : serialize WITHOUT class information
 class A
@@ -62,6 +64,8 @@ public:
 BOOST_CLASS_IMPLEMENTATION(B, ::boost::serialization::object_class_info)
 BOOST_CLASS_TRACKING(B, boost::serialization::track_always)
 
+#include <iostream>
+
 void out(const char *testfile, const A & a, const B & b)
 {
     test_ostream os(testfile, TEST_STREAM_FLAGS);
@@ -70,10 +74,15 @@ void out(const char *testfile, const A & a, const B & b)
     oa << BOOST_SERIALIZATION_NVP(a);
     oa << BOOST_SERIALIZATION_NVP(a);
     BOOST_CHECK(a.count == 2);  // no tracking => redundant saves
+    BOOST_MESSAGE( "a.count=" << a.count );
+    std::cout << "a.count=" << a.count << '\n' ;
     oa << BOOST_SERIALIZATION_NVP(b);
     oa << BOOST_SERIALIZATION_NVP(b);
     BOOST_CHECK(b.count == 1);  // tracking => no redundant saves
+    std::cout << "b.count=" << b.count << '\n' ;
+    BOOST_MESSAGE( "b.count=" << b.count );
 }
+
 
 int
 test_main( int /* argc */, char* /* argv */[] )

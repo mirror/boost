@@ -20,12 +20,14 @@ namespace std{
 
 #include "A.hpp"
 
+#include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
+#include "throw_exception.hpp"
+
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/base_object.hpp>
-
-#include "test_tools.hpp"
-#include "throw_exception.hpp"
 
 ///////////////////////////////////////////////////////
 // class with a member which refers to itself

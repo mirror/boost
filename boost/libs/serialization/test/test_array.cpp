@@ -18,12 +18,12 @@ namespace std{
 #endif
 
 #include "test_tools.hpp"
-
-#include <boost/serialization/nvp.hpp>
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 #include "throw_exception.hpp"
-
 #include <boost/archive/archive_exception.hpp>
 
+#include <boost/serialization/nvp.hpp>
 #include "A.hpp"
 
 template<class T>

@@ -18,8 +18,10 @@ namespace std{
 }
 #endif
 
-#include <boost/serialization/nvp.hpp>
 #include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
+#include <boost/serialization/nvp.hpp>
 
 #include "B.hpp"
 

@@ -17,12 +17,14 @@ namespace std{
 }
 #endif
 
+#include "test_tools.hpp"
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
+#include "throw_exception.hpp"
+
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/vector.hpp>
-
-#include "test_tools.hpp"
-#include "throw_exception.hpp"
 
 //A holds a pointer to another A, but doesn't own the pointer.
 //objCount
@@ -65,6 +67,7 @@ public:
     A* next_;
     static int objcount;
 };
+
 
 int A::objcount = 0;
 
