@@ -72,6 +72,7 @@
 #define BOOST_UBLAS_NO_CMATH
 #endif
 
+// We must disable element proxies as they require template partial specialisation
 #define BOOST_UBLAS_NO_ELEMENT_PROXIES
 
 // This seems to be a problem in boost.config, but won't be fixed.
