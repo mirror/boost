@@ -240,9 +240,11 @@ namespace boost {
   >
   class BOOST_FUNCTION_FUNCTION : public function_base
   {
+  public:
     typedef typename detail::function::function_return_type<R>::type
       internal_result_type;
 
+  private:
     struct clear_type {};
 
   public:
@@ -254,7 +256,6 @@ namespace boost {
     {
       typedef internal_result_type type;
     };
-    friend struct sig;
 
 #if BOOST_FUNCTION_NUM_ARGS == 1
     typedef T0 argument_type;
