@@ -180,7 +180,7 @@ namespace boost {
 
       // The trivial manager does nothing but return the same pointer (if we
       // are cloning) or return the null pointer (if we are deleting).
-      any_pointer trivial_manager(any_pointer f, 
+      inline any_pointer trivial_manager(any_pointer f, 
 				  functor_manager_operation_type op)
       {
 	if (op == clone_functor_tag)
