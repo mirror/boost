@@ -51,8 +51,7 @@ void experiment(base_generator_type & generator)
 #if !defined(__SUNPRO_CC) || (__SUNPRO_CC > 0x530)
   // If you want to use an STL iterator interface, use iterator_adaptors.hpp.
   // Unfortunately, this doesn't work on SunCC yet.
-  boost::generator_iterator_generator<gen_type>::type
-    die = boost::make_generator_iterator(die_gen);
+  boost::generator_iterator<gen_type> die(&die_gen);
   for(int i = 0; i < 10; i++)
     std::cout << *die++ << " ";
   std::cout << '\n';
