@@ -296,7 +296,8 @@ void optional_swap ( optional<T>& x, optional<T>& y )
   }
   else if ( !!x && !!y )
   {
-#ifndef __GNUC__
+#ifndef BOOST_NO_STDC_NAMESPACE
+    // allow for Koenig lookup
     using std::swap ;
 #endif
     swap(*x,*y);
