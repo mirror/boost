@@ -43,20 +43,6 @@ void run_string_tests(const String& s
 
 }
 
-// The following array could just be defined in run_test_cases<>() but
-// doing so causes CW 8.3 to choke on the sizeof/sizeof calculation; thus
-// we wrap it in a function. Thanks to Howard Hinnant.
-//
-inline const unsigned long * get_numbers(std::size_t & array_count)
-{
-  const unsigned long ulong_max =(std::numeric_limits<unsigned long>::max)();
-  static const unsigned long
-    numbers[] = { 0, 1, 40247, ulong_max >> 1, ulong_max };
-  array_count = sizeof numbers / sizeof numbers[0];
-  return numbers;
-}
-
-
 template <typename Block>
 void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
 {
@@ -70,9 +56,10 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
   // Test construction from unsigned long
   {
     const std::size_t ulong_width = std::numeric_limits<unsigned long>::digits;
+    const unsigned long ulong_max =(std::numeric_limits<unsigned long>::max)();
 
-    std::size_t array_count;
-    const unsigned long * numbers = get_numbers(array_count);
+    unsigned long numbers[]   = { 0, 1, 40247, ulong_max >> 1, ulong_max };
+    const std::size_t array_count = sizeof(numbers) / sizeof(numbers[0]);
 
     for (std::size_t i = 0; i < array_count; ++i) {
       unsigned long number = numbers[i];
@@ -326,15 +313,7 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
     a.append(Block(1));
     a.append(Block(2));
     Block x[] = {3, 4, 5};
-
-    const std::size_t sz
-#if defined __MWERKS__
-                        = 3; // MWCW 8.3 can't manage the calculation.
-                             // Maintain carefully! - gps
-#else
-                         = sizeof(x) / sizeof(x[0]);
-#endif
-
+    std::size_t sz = sizeof(x) / sizeof(x[0]);
     std::vector<Block> blocks(x, x + sz);
     Tests::append_block_range(a, blocks);
   }
