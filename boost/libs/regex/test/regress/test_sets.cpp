@@ -138,6 +138,8 @@ void test_sets()
 }
 
 void test_sets2b();
+void test_sets2c();
+
 void test_sets2()
 {
    using namespace boost::regex_constants;
@@ -245,7 +247,12 @@ void test_sets2()
    TEST_REGEX_SEARCH("[\\s]+", perl, "AB   AB", match_default, make_array(2, 5, -2, -2));
    TEST_INVALID_REGEX("[\\S]", perl);
    TEST_REGEX_SEARCH("\\S+", perl, "  abc  ", match_default, make_array(2, 5, -2, -2));
+   test_sets2c();
+}
 
+void test_sets2c()
+{
+   using namespace boost::regex_constants;
    // and some Perl style properties:
    TEST_REGEX_SEARCH("\\pl+", perl, "ABabcAB", match_default, make_array(2, 5, -2, -2));
    TEST_REGEX_SEARCH("\\Pl+", perl, "abABCab", match_default, make_array(2, 5, -2, -2));
