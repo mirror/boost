@@ -15,7 +15,7 @@ DEPENDS all : test ;
 
   test-suite function
     : 
-  [ run libs/function/test/function_test.cpp ]
+  [ run libs/function/test/function_test.cpp : : : : lib_function_test ]
 
   [ run libs/function/test/function_n_test.cpp ]
 
