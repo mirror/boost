@@ -128,7 +128,7 @@ the indicated results:</p>
     <td width="14%"><code>const S *</code></td>
     <td width="35%"><code>0</code> if <code>cs</code> is an
     <a href="definitions.html#Outermost state">outermost state</a>, a pointer 
-    to the outer state of <code>cs</code> otherwise</td>
+    to the direct outer state of <code>cs</code> otherwise</td>
   </tr>
   <tr>
     <td width="25%"><code>cs.dynamic_type()</code></td>
@@ -396,7 +396,8 @@ namespace fsm
     <li>Should an exception be thrown during exception event reaction search 
     or reaction execution then the exception is propagated out of the <code>
     exceptionEventHandler</code> function object (that is, <code>
-    ExceptionTranslator</code> is not used to process exception events)</li>
+    ExceptionTranslator</code> is <b>not</b> used to translate exceptions 
+    thrown while processing an exception event)</li>
     <li>If no reaction could be found for the exception event or if the state 
     machine is not stable after processing the exception event, <code>false</code> 
     is returned from the <code>exceptionEventHandler</code> function object. 
@@ -469,15 +470,16 @@ all history information.</p>
     <li>Should an exception be thrown during exception event reaction search 
     or reaction execution then the exception is propagated out of the <code>
     exceptionEventHandler</code> function object (that is, <code>
-    ExceptionTranslator</code> is <b>not</b> used to process exception events)</li>
+    ExceptionTranslator</code> is <b>not</b> used to translate exceptions 
+    thrown while processing an exception event)</li>
     <li>If no reaction could be found for the exception event or if the state 
     machine is not stable after processing the exception event, <code>false</code> 
     is returned from the <code>exceptionEventHandler</code> function object. 
     Otherwise, <code>true</code> is returned</li>
   </ul>
   </li>
-  <li>Passes <code>action</code>, an <code>exceptionEventHandler</code> 
-  callback and the <code><a href="#Enum result">result</a></code> value <code>
+  <li>Passes <code>action</code>, <code>exceptionEventHandler</code> and the
+  <code><a href="#Enum result">result</a></code> value <code>
   handlerSuccessResult</code> to <code>ExceptionTranslator::operator()()</code>. 
   If <code>ExceptionTranslator::operator()()</code> throws an exception then 
   calls <code>terminate()</code> and propagates the exception to the caller</li>
@@ -636,8 +638,8 @@ subclass objects directly. This can only be done through an object of the
 <h1>Header &lt;boost/fsm/<a name="event_processor.hpp">event_processor.hpp</a>&gt;</h1>
 <h2><a name="Class template event_processor">Class template <code>
 event_processor</code></a></h2>
-<p>This is the base class template of all classes processing events. An 
-asynchronous state machine is just one possible event processor 
+<p>This is the base class template of all classes that process events. <code>
+asynchronous_state_machine&lt;&gt;</code> is just one possible event processor 
 implementation.</p>
 <h3>Class template <code>event_processor</code> parameters</h3>
 <table border="3" cellpadding="2" width="100%" id="AutoNumber15">
@@ -826,8 +828,6 @@ object as the only argument<br>
 <b>Returns</b>: A <code>processor_handle</code> object that henceforth 
 identifies the created event processor object<br>
 <b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code><br>
-<b>Note</b>: <code>boost::ref()</code> and <code>boost::cref()</code> can be 
-used to pass arguments by reference rather than by copy<br>
 <b>Caution</b>: The current implementation of this function makes an 
 (indirect) call to global <code>operator new()</code>. Unless global <code>
 operator new()</code> is replaced, care must be taken when to call this 
@@ -1863,7 +1863,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->20 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28862" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 April, 2004<!--webbot bot="Timestamp" endspan i-checksum="29901" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file
