@@ -30,22 +30,25 @@
 <h2>Synopsis</h2>
 
 <p>
-The Boost Multidimensional Array Library provides 
-a multidimensional container of elements and semantically equivalent
+The Boost Multidimensional Array Library provides a class template for
+multidimensional arrays, as well as  semantically equivalent
 adaptors for arrays of contiguous data. The classes in this library
-behave as closely as possible to STL Containers, providing a more
-convenient and efficient implementation than the equivalent "vectors
-of vectors" formulation of N-dimensional arrays.  Arrays are not
-re-sizable once constructed, but may be sliced and shaped, providing
-alternate views of the contained data.
+implement a common interface, formalized as a generic programming
+concept. The interface design is in line with the precedent set by the
+C++ Standard Library containers.  Boost MultiArray is a more efficient
+and convenient way to express N-dimensional arrays than existing
+alternatives (especially the
+<tt>std::vector&lt;std::vector&lt;...&gt;&gt;</tt> formulation 
+of N-dimensional arrays).  The arrays provided by the library may be
+accessed using the familiar syntax of native C++ arrays.  Additional
+features, such as resizing, reshaping, and creating views are
+available (and described below).  
 
 
 <h2>Table of Contents</h2>
 
 <ol>
-      <li><a href="#sec_rationale">Rationale</a>
-
-      <li><a href="#sec_related">Related Work</a>
+      <li><a href="#sec_introduction">Introduction</a>
 
       <li><a href="#sec_example">Short Example</a>
 
@@ -70,55 +73,48 @@ alternate views of the contained data.
       <li><a href="#sec_concepts">MultiArray Concept</a>
 
       <li><a href="#sec_testcases">Test Cases</a>
+
+      <li><a href="#sec_related">Related Work</a>
+      <li><a href="#sec_credits">Credits</a>
 </ol>  
 
 
-<a name="sec_rationale"></a>
-<h2>Rationale</h2>
+<a name="sec_introduction"></a>
+<h2>Introduction</h2>
 
-The C++ standard library provides several generic containers, but
-it does not provide any multidimensional array types.
-Using <tt>std::vector</tt>, you can simulate N-dimensional arrays as  
-"nested vectors", but the
-interface is unwieldy and the memory overhead can be quite high. You can also
-use a native C++ arrays (i.e. <tt>int arr[2][2][2];</tt>), 
-or a dynamically allocated array of contigous data which you treat as
-a multidimensional array.  
-However, dimensional data may be lost if it is
-passed to a function that is not properly specialized to accept
-it. Beyond the above, neither the <tt>std::vector</tt> nor C++ array-based
-solution provides a convenient method of honing in upon a specific
-subset or "view" of a multi-dimensional array.
+<p>
+The C++ standard library provides several generic containers, but it
+does not provide any multidimensional array types.  The
+<tt>std::vector</tt> class template can be used to implement
+N-dimensional arrays, for example expressing a 2-dimensional array of
+<tt>double</tt> elements using the type
+<tt>std::vector&lt;std::vector&lt;double&gt;&gt;</tt>, but the
+resulting interface is unwieldy and the memory overhead can be quite
+high. Native C++ arrays (i.e. <tt>int arr[2][2][2];</tt>) do not
+immediately interoperate well with the C++ Standard Library, and they
+also lose information at function call boundaries (specifically the
+extent of the last dimension).  Finally, a dynamically allocated
+contiguous block of elements can be treated as an array, though this
+method requires manual bookkeeping that is error prone and obfuscates
+the intent of the programmer.
+</p>
 
-<p>Boost.MultiArray defines the MultiArray concept, a generic 
-interface for N-dimensional containers.  The primary components of
-      this library model MultiArray and support adapting user data 
-      to model MultiArray as well.
+<p>
+The Boost MultiArray library enhances the C++ standard containers with
+versatile multi-dimensional array abstractions. It includes a general
+array class template and native array adaptors that support idiomatic
+array operations and interoperate with C++ Standard Library containers
+and algorithms.  The arrays share a common interface, expressed as a
+generic programming in terms of which generic array algorithms can be
+implemented.
+</p>
 
-
-<a name="sec_related"></a>
-<h2>Related Work</h2>
-
-<a href="../../array/index.htm">boost::array</a>
- and <a href="http://www.sgi.com/tech/stl/Vector.html">std::vector</a> are
-    one-dimensional containers of user data.  Both manage their own
-    memory. <tt>std::valarray</tt> is a low-level 
-    C++ Standard Library component
-    meant to provide portable high performance for numerical applications.
-<a href="http://www.oonumerics.org/blitz/">Blitz++</a> is 
-    an array library developed by Todd
-    Veldhuizen. It uses
-    advanced C++ techniques to provide near-Fortran performance for
-    array-based numerical applications.
-<a href="../../array_traits/index.html">array_traits</a> is a beta
-    library distributed with Boost that provides a means to create
-    iterators over native  C++ arrays.
-
-
-This library is analogous to 
-<a href="">boost::array</a> in that it augments C style N-dimensional
-arrays, as <tt>boost::array</tt> does for C one-dimensional arrays.
-
+<p>
+This document is meant to provide an introductory tutorial and user's
+guide for the most basic and common usage patterns of MultiArray
+components.  The <a href="doc/reference.html">reference manual</a>
+provides more complete and formal documentation of library features.
+</p>
 
 <a name="sec_example"></a>
 <h2>Short Example</h2>
@@ -567,6 +563,30 @@ Boost.MultiArray comes with a suite of test cases meant to exercise
 the features and semantics of the library.  A description of the test
 cases can be found <a href="./test_cases.html">here</a>.
 
+<a name="sec_related"></a>
+<h2>Related Work</h2>
+
+<a href="../../array/index.htm">boost::array</a>
+ and <a href="http://www.sgi.com/tech/stl/Vector.html">std::vector</a> are
+    one-dimensional containers of user data.  Both manage their own
+    memory. <tt>std::valarray</tt> is a low-level 
+    C++ Standard Library component
+    meant to provide portable high performance for numerical applications.
+<a href="http://www.oonumerics.org/blitz/">Blitz++</a> is 
+    an array library developed by Todd
+    Veldhuizen. It uses
+    advanced C++ techniques to provide near-Fortran performance for
+    array-based numerical applications.
+    <b>array_traits</b> is a beta library, formerly distributed with
+    Boost, that provides a means to create iterators over native C++
+    arrays.
+
+This library is analogous to 
+<a href="">boost::array</a> in that it augments C style N-dimensional
+arrays, as <tt>boost::array</tt> does for C one-dimensional arrays.
+
+
+<a name="sec_credits"></a>
 <h2>Credits</h2>
 <ul>
       
