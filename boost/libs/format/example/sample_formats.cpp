@@ -34,10 +34,11 @@ namespace MyNS_Manips {
   using std::setw;
   using std::hex ;
   using std::dec ;
-  using std::showbase ;
-  using std::left ;
-  using std::right ;
-  using std::internal ;
+// gcc-2.95 doesnt define the next ones
+//  using std::showbase ;
+//  using std::left ;
+//  using std::right ;
+//  using std::internal ;
 }
 
 int main(){
