@@ -14,6 +14,7 @@ test-suite program_options :
     [ run cmdline_test.cpp ]
     [ run positional_options_test.cpp ]
     [ run unicode_test.cpp ] 
+    [ run winmain.cpp ] 
     ;
         
 exe test_convert : test_convert.cpp ../build//program_options ;   

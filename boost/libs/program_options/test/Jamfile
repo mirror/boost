@@ -33,12 +33,14 @@ test-suite program_options :
     [ program-options-test cmdline_test ]
     [ program-options-test positional_options_test ]
     [ program-options-test unicode_test ]
+    [ program-options-test winmain ] 
     [ program-options-dll-test options_description_test ]
     [ program-options-dll-test parsers_test ]
     [ program-options-dll-test variable_map_test ]
     [ program-options-dll-test cmdline_test ]
     [ program-options-dll-test positional_options_test ]
     [ program-options-dll-test unicode_test ]
+    [ program-options-dll-test winmain ] 
     
     
     ;

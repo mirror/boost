@@ -3,6 +3,7 @@ subproject libs/program_options/build ;
 
 SOURCES = cmdline config_file options_description parsers variables_map 
           value_semantic positional_options utf8_codecvt_facet convert
+          winmain
 ;
 
 lib boost_program_options

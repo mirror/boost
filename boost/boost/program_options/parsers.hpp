@@ -173,6 +173,21 @@ namespace boost { namespace program_options {
     BOOST_PROGRAM_OPTIONS_DECL parsed_options
     parse_environment(const options_description&, const char* prefix);
 
+    #ifdef _WIN32
+    /** Parses the char* string which is passed to WinMain function on
+        windows. This function is provided for convenience, and because it's
+        not clear how to portably access split command line string from
+        runtime library and if it always exists.
+        This function is available only on Windows.
+    */
+    BOOST_PROGRAM_OPTIONS_DECL std::vector<std::string>
+    split_winmain(const std::string& cmdline);
+
+    /** @overload */
+    BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring>
+    split_winmain(const std::wstring& cmdline);
+    #endif
+
 }}
 
 #undef DECL
