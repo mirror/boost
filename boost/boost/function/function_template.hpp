@@ -508,7 +508,7 @@ namespace boost {
           invoker_type;
 
         invoker = &invoker_type::invoke;
-        this->manager = &detail::function::trivial_manager<FunctionObj>;
+        this->manager = &detail::function::trivial_manager<FunctionObj>::get;
         this->functor =
           this->manager(
             detail::function::make_any_pointer(
@@ -529,7 +529,7 @@ namespace boost {
                      >::type
           invoker_type;
       invoker = &invoker_type::invoke;
-      this->manager = &detail::function::trivial_manager<FunctionObj>;
+      this->manager = &detail::function::trivial_manager<FunctionObj>::get;
       this->functor = detail::function::make_any_pointer(this);
     }
 

@@ -188,8 +188,10 @@ namespace boost {
       // The trivial manager does nothing but return the same pointer (if we
       // are cloning) or return the null pointer (if we are deleting).
       template<typename F>
-        inline any_pointer
-        trivial_manager(any_pointer f, functor_manager_operation_type op)
+      struct trivial_manager
+      {
+        static inline any_pointer
+        get(any_pointer f, functor_manager_operation_type op)
         {
           switch (op) {
           case clone_functor_tag: return f;
@@ -209,6 +211,7 @@ namespace boost {
           // Clears up a warning with GCC 3.2.3
           return make_any_pointer(reinterpret_cast<void*>(0));
         }
+      };
 
       /**
        * The functor_manager class contains a static function "manage" which
