@@ -19,7 +19,7 @@
 #include <boost/format/detail/compat_workarounds.hpp>
 #include <boost/utility/base_from_member.hpp>
 #include <boost/shared_ptr.hpp>
-
+#include <boost/assert.hpp>
 
 namespace boost {
     namespace io {

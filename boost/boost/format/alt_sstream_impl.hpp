@@ -24,13 +24,11 @@ namespace boost {
             const Ch * b = pbase();
             if(p != NULL && p != b) {
                 pos_type pos = seekpos(0, ::std::ios_base::out); 
-                assert( pos != pos_type(std::streamoff(-1)) ); 
             }
             p = gptr();
             b = eback();
             if(p != NULL && p != b) {
                 pos_type pos = seekpos(0, ::std::ios_base::in); 
-                assert( pos != pos_type(std::streamoff(-1)) ); 
             }
         }
 
@@ -103,7 +101,7 @@ namespace boost {
                 else if(way == ::std::ios_base::cur && (which & ::std::ios_base::out) == 0)
                     off += gptr() - eback();
                 else if(way != ::std::ios_base::beg)
-                    off = std::streamoff(-1);
+                    off = off_type(-1);
                 if(0 <= off && off <= putend_ - eback()) {
                     // set gptr
                     streambuf_t::gbump(off + (eback() - gptr()));
@@ -112,7 +110,7 @@ namespace boost {
                         streambuf_t::pbump(gptr()-pptr());
                 }
                 else
-                    off = std::streamoff(-1);
+                    off = off_type(-1);
             }
             else if(which & ::std::ios_base::out && pptr() != NULL) {
                 // put area
@@ -121,18 +119,18 @@ namespace boost {
                 else if(way == ::std::ios_base::cur)
                     off += pptr() - eback();
                 else if(way != ::std::ios_base::beg)
-                    off = std::streamoff(-1);
+                    off = off_type(-1);
 
                 if(0 <= off && off <= putend_ - eback())
                     // set pptr
                     streambuf_t::pbump((int)(eback() - pptr() + off)); 
                 else
-                    off = std::streamoff(-1);
+                    off = off_type(-1);
             }
             else // neither in nor out
-                off = std::streamoff(-1);
+                off = off_type(-1);
             return (pos_type(off));
-        } 
+        }
         //- end seekoff(..)
 
         
@@ -140,32 +138,35 @@ namespace boost {
         typename basic_altstringbuf<Ch, Tr, Alloc>::pos_type 
         basic_altstringbuf<Ch, Tr, Alloc>:: 
         seekpos (pos_type pos, ::std::ios_base::openmode which) {
-            std::streamoff off = pos; // properly converted by operator
+            off_type off = off_type(pos); // operation guaranteed by §27.4.3.2 table 88
             if(pptr() != NULL && putend_ < pptr())
                 putend_ = pptr();
-            if(off == std::streamoff(-1)) ;
-            else if(which & ::std::ios_base::in && gptr() != NULL) {
-                // get area
-                if(0 <= off && off <= putend_ - eback()) {
-                    streambuf_t::gbump((int)(eback() - gptr() + off));
-                    if(which & ::std::ios_base::out && pptr() != NULL) {
-                        // update pptr to match gptr
-                        streambuf_t::pbump(gptr()-pptr());
+            if(off == off_type(-1))
+                BOOST_ASSERT(0); // §27.4.3.2 allows undefined-behaviour here
+            else {
+                if(which & ::std::ios_base::in && gptr() != NULL) {
+                    // get area
+                    if(0 <= off && off <= putend_ - eback()) {
+                        streambuf_t::gbump((int)(eback() - gptr() + off));
+                        if(which & ::std::ios_base::out && pptr() != NULL) {
+                            // update pptr to match gptr
+                            streambuf_t::pbump(gptr()-pptr());
+                        }
                     }
+                    else
+                        off = off_type(-1);
                 }
-                else
-                    off = std::streamoff(-1);
+                else if(which & ::std::ios_base::out && pptr() != NULL) {
+                    // put area
+                    if(0 <= off && off <= putend_ - eback())
+                        streambuf_t::pbump(eback() - pptr() + off);
+                    else
+                        off = off_type(-1);
+                }
+                else // neither in nor out
+                    off = off_type(-1);
+                return (pos_type(off));
             }
-            else if(which & ::std::ios_base::out && pptr() != NULL) {
-                // put area
-                if(0 <= off && off <= putend_ - eback())
-                    streambuf_t::pbump(eback() - pptr() + off);
-                else
-                    off = std::streamoff(-1);
-            }
-            else // neither in nor out
-                off = std::streamoff(-1);
-            return (std::streampos(off));
         }
         // -end seekpos(..)
 
@@ -205,7 +206,7 @@ namespace boost {
                     //  put-back meta into get area
                     *gptr() = compat_traits_type::to_char_type(meta);
                 return (compat_traits_type::not_eof(meta));
-                }
+            }
             else
                 return (compat_traits_type::eof());  // failed putback
         }
