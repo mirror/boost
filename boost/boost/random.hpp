@@ -10,10 +10,12 @@
  * software for any purpose. It is provided "as is" without express or
  * implied warranty.
  *
+ * See http://www.boost.org for most recent version including documentation.
+ *
  * $Id$
  *
  * Revision history
- *  2000-02-18  Portability fixes (thanks to Beman Dawes)
+ *  2000-02-18  portability fixes (thanks to Beman Dawes)
  *  2000-02-21  shuffle_output, inversive_congruential_schrage,
  *              generator_iterator, uniform_smallint
  *  2000-02-23  generic modulus arithmetic helper, removed *_schrage classes,
@@ -27,6 +29,7 @@
  *  2000-05-10  adapted to BCC and MSVC
  *  2000-06-13  incorporated review results
  *  2000-07-06  moved basic templates from namespace detail to random
+ *  2000-09-23  warning removals and int64 fixes (Ed Brey)
  */
 
 #ifndef BOOST_RANDOM_HPP
@@ -233,7 +236,7 @@ private:                      // don't instantiate
 
 // the modulus is some power of 2: rely partly on machine overflow handling
 // we only specialize for rand48 at the moment
-#ifdef BOOST_STDINT_H_HAS_UINT64_T
+#ifndef BOOST_NO_INT64_T
 template<>
 class const_mod<uint64_t, uint64_t(1) << 48>
 {
@@ -249,7 +252,7 @@ public:
 private:                      // don't instantiate
   const_mod();
 };
-#endif /* BOOST_STDINT_H_HAS_UINT64_T */
+#endif /* !BOOST_NO_INT64_T */
 
 
 // compile-time configurable linear congruential generator
@@ -314,7 +317,8 @@ typedef random::linear_congruential<int32_t, 48271, 0, 2147483647,
   399268537> minstd_rand;
 
 
-#ifdef BOOST_STDINT_H_HAS_UINT64_T
+#if !defined(BOOST_NO_INT64_T) && \
+    !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)
 // emulate the lrand48() C library function; requires support for uint64_t
 class rand48 
 {
@@ -357,7 +361,7 @@ private:
   static uint64_t cnv(int32_t x) 
   { return (static_cast<uint64_t>(x) << 16) | 0x330e;  }
 };
-#endif /*  BOOST_STDINT_H_HAS_UINT64_T */
+#endif /* !BOOST_NO_INT64_T && !BOOST_NO_INCLASS_MEMBER_INITIALIZATION */
 
 
 namespace random {
@@ -589,6 +593,7 @@ private:
 typedef random::inversive_congruential<int32_t, 9102, 2147483647-36884165,
   2147483647, 0> hellekalek1995;
 
+
 namespace random {
 
 // http://www.math.keio.ac.jp/matumoto/emt.html
@@ -733,7 +738,6 @@ typedef random::mersenne_twister<uint32_t,351,175,19,0xccab8ee7,11,
 // validation by experiment from mt19937.c
 typedef random::mersenne_twister<uint32_t,624,397,31,0x9908b0df,11,
   7,0x9d2c5680,15,0xefc60000,18, 3346425566U> mt19937;
-
 
 
 /*
