@@ -68,6 +68,8 @@ namespace quickbook
             , memberref_post(phrase, memberref_post_)
             , enumref_pre(phrase, enumref_pre_)
             , enumref_post(phrase, enumref_post_)
+            , headerref_pre(phrase, headerref_pre_)
+            , headerref_post(phrase, headerref_post_)
             , bold_pre(phrase, bold_pre_)
             , bold_post(phrase, bold_post_)
             , italic_pre(phrase, italic_pre_)
@@ -179,6 +181,8 @@ namespace quickbook
         markup_action           memberref_post;
         link_action             enumref_pre;
         markup_action           enumref_post;
+        link_action             headerref_pre;
+        markup_action           headerref_post;
 
         markup_action           bold_pre;
         markup_action           bold_post;

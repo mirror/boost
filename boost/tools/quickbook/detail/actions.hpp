@@ -557,6 +557,8 @@ namespace quickbook
         const char* memberref_post_     = "</methodname>";
         const char* enumref_pre_        = "<enumname alt=\"";
         const char* enumref_post_       = "</enumname>";
+        const char* headerref_pre_      = "<headername alt=\"";
+        const char* headerref_post_     = "</headername>";
     }
 
     struct raw_char_action

@@ -283,16 +283,17 @@ automatically be the refentry. Example:
 
 This gets converted into [^<link linkend="xml.refentry">xml.refentry</link>].
 
-[h3 function, class or member links]
+[h3 function, class, member, enum or header links]
 
-If you want to link to a function, class, member or enum in the reference section, you
-can use:
+If you want to link to a function, class, member, enum or header in the reference
+section, you can use:
 
 [pre'''
 [funcref fully::qualified::function_name The link text]
 [classref fully::qualified::class_name The link text]
 [memberref fully::qualified::member_name The link text]
 [enumref fully::qualified::enum_name The link text]
+[headerref path/to/header.hpp The link text]
 ''']
 
 Again, the link text is optional. If this is not present, the link text will
@@ -822,6 +823,7 @@ will recognize this as a "definition list".
     [[class link]           [[^'''[classref fully::qualified::class_name Link text]''']]]
     [[member link]          [[^'''[memberref fully::qualified::member_name Link text]''']]]
     [[enum link]            [[^'''[enumref fully::qualified::enum_name Link text]''']]]
+    [[header link]          [[^'''[headerref path/to/header.hpp Link text]''']]]
     [[escape]               [[^\'\'\'escaped text (no processing/formatting)\'\'\']]]
     [[single char escape]   [[^\\c]]]
     [[images]               [[^'''[$image.jpg]''']]]
@@ -1373,6 +1375,7 @@ will recognize this as a "definition list".
             |   classref
             |   memberref
             |   enumref
+            |   headerref
             |   bold
             |   italic
             |   underline
@@ -1453,6 +1456,15 @@ will recognize this as a "definition list".
 
     enumref =
         "enumref" >> hard_space
+        >>  (*(anychar_p -
+                (']' | hard_space)))
+        >>  (   eps_p(']')
+            |   (hard_space >> phrase)
+            )
+        ;
+
+    headerref =
+        "headerref" >> hard_space
         >>  (*(anychar_p -
                 (']' | hard_space)))
         >>  (   eps_p(']')

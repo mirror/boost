@@ -417,6 +417,7 @@ phrase_markup</span><span class="special"> =</span><span class="char">
         |</span><span class="identifier">   classref</span><span class="special">
         |</span><span class="identifier">   memberref</span><span class="special">
         |</span><span class="identifier">   enumref</span><span class="special">
+        |</span><span class="identifier">   headerref</span><span class="special">
         |</span><span class="identifier">   bold</span><span class="special">
         |</span><span class="identifier">   italic</span><span class="special">
         |</span><span class="identifier">   underline</span><span class="special">
@@ -497,6 +498,15 @@ memberref</span><span class="special"> =</span><span class="string">
 
 enumref</span><span class="special"> =</span><span class="string">
     "enumref"</span><span class="special"> &gt;&gt;</span><span class="identifier"> hard_space</span><span class="special">
+    &gt;&gt;</span><span class="special">  (*(</span><span class="identifier">anychar_p</span><span class="special"> -</span><span class="special">
+            (</span><span class="char">']'</span><span class="special"> |</span><span class="identifier"> hard_space</span><span class="special">)))</span><span class="special">
+    &gt;&gt;</span><span class="special">  (</span><span class="identifier">   eps_p</span><span class="special">(</span><span class="char">']'</span><span class="special">)</span><span class="special">
+        |</span><span class="special">   (</span><span class="identifier">hard_space</span><span class="special"> &gt;&gt;</span><span class="identifier"> phrase</span><span class="special">)</span><span class="special">
+        )</span><span class="special">
+    ;</span><span class="identifier">
+
+headerref</span><span class="special"> =</span><span class="string">
+    "headerref"</span><span class="special"> &gt;&gt;</span><span class="identifier"> hard_space</span><span class="special">
     &gt;&gt;</span><span class="special">  (*(</span><span class="identifier">anychar_p</span><span class="special"> -</span><span class="special">
             (</span><span class="char">']'</span><span class="special"> |</span><span class="identifier"> hard_space</span><span class="special">)))</span><span class="special">
     &gt;&gt;</span><span class="special">  (</span><span class="identifier">   eps_p</span><span class="special">(</span><span class="char">']'</span><span class="special">)</span><span class="special">

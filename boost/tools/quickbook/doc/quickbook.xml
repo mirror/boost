@@ -295,13 +295,14 @@ automatically be the refentry. Example:</para>
 <programlisting><literal>[link xml.refentry]
 </literal></programlisting><para>
 This gets converted into <literal>&lt;link linkend=&quot;xml.refentry&quot;&gt;xml.refentry&lt;/link&gt;</literal>.</para>
-<anchor id="syntax.function__class_or_member_links" /><bridgehead renderas="sect3">function, class or member links</bridgehead><para>
-If you want to link to a function, class, member or enum in the reference section, you
-can use:</para>
+<anchor id="syntax.function__class__member__enum_or_header_links" /><bridgehead renderas="sect3">function, class, member, enum or header links</bridgehead><para>
+If you want to link to a function, class, member, enum or header in the reference
+section, you can use:</para>
 <programlisting><literal>[funcref fully::qualified::function_name The link text]
 [classref fully::qualified::class_name The link text]
 [memberref fully::qualified::member_name The link text]
 [enumref fully::qualified::enum_name The link text]
+[headerref path/to/header.hpp The link text]
 </literal></programlisting><para>
 Again, the link text is optional. If this is not present, the link text will
 automatically be the function, class, member or enum. Example:</para>
@@ -654,8 +655,8 @@ Quickbook has some predefined macros that you can already use.</para>
 <thead><row><entry>Macro</entry><entry>Meaning</entry><entry>Example</entry></row>
 </thead>
 <tbody>
-<row><entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Jan-26</entry></row>
-<row><entry>__TIME__</entry><entry>The current time</entry><entry>10:59:00 AM</entry></row>
+<row><entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Jan-30</entry></row>
+<row><entry>__TIME__</entry><entry>The current time</entry><entry>02:48:36 PM</entry></row>
 <row><entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>quickbook.qbk</entry></row>
 </tbody>
 </tgroup>
@@ -789,6 +790,7 @@ will recognize this as a &quot;definition list&quot;.</para>
 <row><entry>class link</entry><entry><literal>[classref fully::qualified::class_name Link text]</literal></entry></row>
 <row><entry>member link</entry><entry><literal>[memberref fully::qualified::member_name Link text]</literal></entry></row>
 <row><entry>enum link</entry><entry><literal>[enumref fully::qualified::enum_name Link text]</literal></entry></row>
+<row><entry>header link</entry><entry><literal>[headerref path/to/header.hpp Link text]</literal></entry></row>
 <row><entry>escape</entry><entry><literal>'''escaped text (no processing/formatting)'''</literal></entry></row>
 <row><entry>single char escape</entry><entry><literal>\c</literal></entry></row>
 <row><entry>images</entry><entry><literal>[$image.jpg]</literal></entry></row>
@@ -1358,6 +1360,7 @@ phrase_markup</phrase><phrase role="special"> =</phrase><phrase role="char">
         |</phrase><phrase role="identifier">   classref</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   memberref</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   enumref</phrase><phrase role="special">
+        |</phrase><phrase role="identifier">   headerref</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   bold</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   italic</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   underline</phrase><phrase role="special">
@@ -1438,6 +1441,15 @@ memberref</phrase><phrase role="special"> =</phrase><phrase role="string">
 
 enumref</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;enumref&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
+    &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
+            (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
+    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   eps_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
+        |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
+        )</phrase><phrase role="special">
+    ;</phrase><phrase role="identifier">
+
+headerref</phrase><phrase role="special"> =</phrase><phrase role="string">
+    &quot;headerref&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
             (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   eps_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">

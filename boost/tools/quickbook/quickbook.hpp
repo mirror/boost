@@ -428,6 +428,7 @@ namespace quickbook
                         |   classref
                         |   memberref
                         |   enumref
+                        |   headerref
                         |   bold
                         |   italic
                         |   underline
@@ -515,6 +516,15 @@ namespace quickbook
                         )                               [self.actions.enumref_post]
                     ;
 
+                headerref =
+                    "headerref" >> hard_space
+                    >>  (*(anychar_p -
+                            (']' | hard_space)))        [self.actions.headerref_pre]
+                    >>  (   eps_p(']')
+                        |   (hard_space >> phrase)
+                        )                               [self.actions.headerref_post]
+                    ;
+
                 bold =
                         ch_p('*')                       [self.actions.bold_pre]
                     >>  blank >> phrase                 [self.actions.bold_post]
@@ -546,7 +556,7 @@ namespace quickbook
                             escape, def_macro, identifier, url, table, table_row,
                             variablelist, varlistentry, varlistterm, varlistitem,
                             table_cell, preformatted, list_item, common,
-                            funcref, classref, memberref, enumref, anchor, link,
+                            funcref, classref, memberref, enumref, headerref, anchor, link,
                             begin_section, end_section, xinclude, hard_space, eol,
                             inline_code, simple_format, simple_bold, simple_italic,
                             simple_underline, simple_teletype;
