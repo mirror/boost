@@ -22,8 +22,10 @@
 
 #include <cstdio>
 
+#if !defined(_STLP_MSVC) || _STLP_MSVC >= 1300
 namespace std { }
 using namespace std;
+#endif
 
 int main(void) {
     printf("pass " __TIME__);
