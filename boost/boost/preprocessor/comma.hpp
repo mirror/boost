@@ -33,6 +33,6 @@ for separating macro parameters.</p>
 */
 #define BOOST_PP_COMMA() ,
 
-/** <p>Obsolete. Use BOOST_PP_COMMA().</p> */
+/* <p>Obsolete. Use BOOST_PP_COMMA().</p> */
 #define BOOST_PREPROCESSOR_COMMA() ,
 #endif

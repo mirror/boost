@@ -28,6 +28,6 @@
 */
 #define BOOST_PP_NOT(X) BOOST_PP_NOR(X,X)
 
-/** <p>Obsolete. Use BOOST_PP_NOT().</p> */
+/* <p>Obsolete. Use BOOST_PP_NOT().</p> */
 #define BOOST_PREPROCESSOR_NOT(X) BOOST_PP_NOT(X)
 #endif

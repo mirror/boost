@@ -35,6 +35,6 @@
 */
 #define BOOST_PP_EMPTY()
 
-/** <p>Obsolete. Use BOOST_PP_EMPTY().</p> */
+/* <p>Obsolete. Use BOOST_PP_EMPTY().</p> */
 #define BOOST_PREPROCESSOR_EMPTY()
 #endif

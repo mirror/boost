@@ -155,6 +155,6 @@
 #define BOOST_PP_BOOL127 1
 #define BOOST_PP_BOOL128 1
 
-/** <p>Obsolete. Use BOOST_PP_BOOL().</p> */
+/* <p>Obsolete. Use BOOST_PP_BOOL().</p> */
 #define BOOST_PREPROCESSOR_BOOL(X) BOOST_PP_BOOL(X)
 #endif

@@ -184,6 +184,6 @@ BOOST_PP_REPEAT_3RD() macros.</p>
 #define BOOST_PP_REPEAT127(M,P) BOOST_PP_REPEAT126(M,P) M(126,P)
 #define BOOST_PP_REPEAT128(M,P) BOOST_PP_REPEAT127(M,P) M(127,P)
 
-/** <p>Obsolete. Use BOOST_PP_REPEAT().</p> */
+/* <p>Obsolete. Use BOOST_PP_REPEAT().</p> */
 #define BOOST_PREPROCESSOR_REPEAT(N,M,P) BOOST_PP_REPEAT(N,M,P)
 #endif

@@ -39,6 +39,6 @@ in the range [0, BOOST_PP_LIMIT_MAG].</p>
 /** <p>Can be used inside BOOST_PP_WHILE().</p> */
 #define BOOST_PP_EQUAL_D(D,X,Y) BOOST_PP_NOT(BOOST_PP_NOT_EQUAL_D(D,X,Y))
 
-/** <p>Obsolete. Use BOOST_PP_EQUAL().</p> */
+/* <p>Obsolete. Use BOOST_PP_EQUAL().</p> */
 #define BOOST_PREPROCESSOR_EQUAL(X,Y) BOOST_PP_EQUAL(X,Y)
 #endif

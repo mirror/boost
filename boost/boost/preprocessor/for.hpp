@@ -22,7 +22,11 @@
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  MACRO(R,STATE)  MACRO(R,OP(R,STATE))  MACRO(R,OP(R,OP(R,STATE)))  ...  MACRO(R,OP(R,OP(...OP(R,STATE)...)))
+  MACRO(R,STATE)
+  MACRO(R,OP(R,STATE))
+  MACRO(R,OP(R,OP(R,STATE)))
+  ...
+  MACRO(R,OP(R,OP(...OP(R,STATE)...)))
 </pre>
 
 <p>The length of the sequence is determined by <code>PRED(R,STATE)</code>.</p>

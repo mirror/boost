@@ -29,6 +29,6 @@ in the range [0, BOOST_PP_LIMIT_MAG].</p>
 */
 #define BOOST_PP_AND(X,Y) BOOST_PP_NOR(BOOST_PP_NOT(X),BOOST_PP_NOT(Y))
 
-/** <p>Obsolete. Use BOOST_PP_AND().</p> */
+/* <p>Obsolete. Use BOOST_PP_AND().</p> */
 #define BOOST_PREPROCESSOR_AND(X,Y) BOOST_PP_AND(X,Y)
 #endif

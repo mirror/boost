@@ -50,6 +50,6 @@
 
 #define BOOST_PP_ENUM_PARAMS_F(I,P) BOOST_PP_CAT(P,I)
 
-/** <p>Obsolete. Use BOOST_PP_ENUM_PARAMS().</p> */
+/* <p>Obsolete. Use BOOST_PP_ENUM_PARAMS().</p> */
 #define BOOST_PREPROCESSOR_ENUM_PARAMS(N,P) BOOST_PP_ENUM_PARAMS(N,P)
 #endif

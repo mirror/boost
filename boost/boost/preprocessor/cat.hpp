@@ -33,6 +33,6 @@ expanded.</p>
 #define BOOST_PP_CAT_DELAY(X,Y) BOOST_PP_DO_CAT(X,Y)
 #define BOOST_PP_DO_CAT(X,Y) X##Y
 
-/** <p>Obsolete. Use BOOST_PP_CAT().</p> */
+/* <p>Obsolete. Use BOOST_PP_CAT().</p> */
 #define BOOST_PREPROCESSOR_CAT(X,Y) BOOST_PP_CAT(X,Y)
 #endif

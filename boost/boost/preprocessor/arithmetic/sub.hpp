@@ -47,6 +47,6 @@ single token).</p>
 #  define BOOST_PP_SUB_F(D,P) (BOOST_PP_DEC(BOOST_PP_TUPLE2_ELEM0 P),BOOST_PP_DEC(BOOST_PP_TUPLE2_ELEM1 P))
 #endif
 
-/** <p>Obsolete. Use BOOST_PP_SUB(X,Y).</p> */
+/* <p>Obsolete. Use BOOST_PP_SUB(X,Y).</p> */
 #define BOOST_PREPROCESSOR_SUB(X,Y) BOOST_PP_SUB(X,Y)
 #endif

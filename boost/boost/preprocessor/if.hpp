@@ -38,6 +38,6 @@
 #define BOOST_PP_IF_BOOL(C) BOOST_PP_IF_BOOL_DELAY(C)
 #define BOOST_PP_IF_BOOL_DELAY(C) BOOST_PP_TUPLE2_ELEM##C
 
-/** <p>Obsolete. Use BOOST_PP_IF().</p> */
+/* <p>Obsolete. Use BOOST_PP_IF().</p> */
 #define BOOST_PREPROCESSOR_IF(C,T,E) BOOST_PP_IF(C,T,E)
 #endif

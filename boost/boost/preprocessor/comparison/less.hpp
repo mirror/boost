@@ -40,6 +40,6 @@ in the range [0, BOOST_PP_LIMIT_MAG].</p>
 /** <p>Can be used inside BOOST_PP_WHILE().</p> */
 #define BOOST_PP_LESS_D(D,X,Y) BOOST_PP_AND(BOOST_PP_NOT_EQUAL_D(D,X,Y),BOOST_PP_LESS_EQUAL_D(D,X,Y))
 
-/** <p>Obsolete. Use BOOST_PP_LESS().</p> */
+/* <p>Obsolete. Use BOOST_PP_LESS().</p> */
 #define BOOST_PREPROCESSOR_LESS(X,Y) BOOST_PP_LESS(X,Y)
 #endif

@@ -39,6 +39,6 @@ invoked.</p>
 */
 #define BOOST_PP_IDENTITY(X) X BOOST_PP_EMPTY
 
-/** <p>Obsolete. Use BOOST_PP_IDENTITY().</p> */
+/* <p>Obsolete. Use BOOST_PP_IDENTITY().</p> */
 #define BOOST_PREPROCESSOR_IDENTITY(X) BOOST_PP_IDENTITY(X)
 #endif

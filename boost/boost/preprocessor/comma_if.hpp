@@ -26,6 +26,6 @@
 */
 #define BOOST_PP_COMMA_IF(COND) BOOST_PP_IF(COND,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
 
-/** <p>Obsolete. Use BOOST_PP_COMMA_IF().</p> */
+/* <p>Obsolete. Use BOOST_PP_COMMA_IF().</p> */
 #define BOOST_PREPROCESSOR_COMMA_IF(C) BOOST_PP_COMMA_IF(C)
 #endif

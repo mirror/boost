@@ -36,6 +36,6 @@ in the range [0, BOOST_PP_LIMIT_MAG].</p>
 #define BOOST_PP_NOR_BOOL10 0
 #define BOOST_PP_NOR_BOOL11 0
 
-/** <p>Obsolete. Use BOOST_PP_NOR().</p> */
+/* <p>Obsolete. Use BOOST_PP_NOR().</p> */
 #define BOOST_PREPROCESSOR_NOR(X,Y) BOOST_PP_NOR(X,Y)
 #endif

@@ -200,6 +200,6 @@
 #define BOOST_PP_TUPLE16_ELEM14(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P) O
 #define BOOST_PP_TUPLE16_ELEM15(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P) P
 
-/** <p>Obsolete. Use BOOST_PP_TUPLE_ELEM().</p> */
+/* <p>Obsolete. Use BOOST_PP_TUPLE_ELEM().</p> */
 #define BOOST_PREPROCESSOR_TUPLE_ELEM(N,I,T) BOOST_PP_TUPLE_ELEM(N,I,T)
 #endif

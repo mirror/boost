@@ -45,6 +45,6 @@ single token).</p>
 #  define BOOST_PP_MUL_F(D,P) (BOOST_PP_ADD_D(D,BOOST_PP_TUPLE3_ELEM0 P,BOOST_PP_TUPLE3_ELEM1 P),BOOST_PP_TUPLE3_ELEM1 P,BOOST_PP_DEC(BOOST_PP_TUPLE3_ELEM2 P))
 #endif
 
-/** <p>Obsolete. Use BOOST_PP_MUL().</p> */
+/* <p>Obsolete. Use BOOST_PP_MUL().</p> */
 #define BOOST_PREPROCESSOR_MUL(X,Y) BOOST_PP_MUL(X,Y)
 #endif

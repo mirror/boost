@@ -39,6 +39,6 @@ single token).</p>
 /** <p>Can be used inside BOOST_PP_WHILE().</p> */
 #define BOOST_PP_MIN_D(D,X,Y) BOOST_PP_IF(BOOST_PP_LESS_EQUAL_D(D,Y,X),Y,X)
 
-/** <p>Obsolete. Use BOOST_PP_MIN().</p> */
+/* <p>Obsolete. Use BOOST_PP_MIN().</p> */
 #define BOOST_PREPROCESSOR_MIN(X,Y) BOOST_PP_MIN(X,Y)
 #endif

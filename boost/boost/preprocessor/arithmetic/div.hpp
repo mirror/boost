@@ -46,6 +46,6 @@ single token).</p>
 #  define BOOST_PP_DIV_F(D,P) (BOOST_PP_INC(BOOST_PP_TUPLE3_ELEM0 P),BOOST_PP_SUB_D(D,BOOST_PP_TUPLE3_ELEM1 P,BOOST_PP_TUPLE3_ELEM2 P),BOOST_PP_TUPLE3_ELEM2 P)
 #endif
 
-/** <p>Obsolete. Use BOOST_PP_DIV().</p> */
+/* <p>Obsolete. Use BOOST_PP_DIV().</p> */
 #define BOOST_PREPROCESSOR_DIV(X,Y) BOOST_PP_DIV(X,Y)
 #endif

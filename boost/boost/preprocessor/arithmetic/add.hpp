@@ -48,6 +48,6 @@ single token).</p>
 #  define BOOST_PP_ADD_F(D,P) (BOOST_PP_INC(BOOST_PP_TUPLE2_ELEM0 P),BOOST_PP_DEC(BOOST_PP_TUPLE2_ELEM1 P))
 #endif
 
-/** <p>Obsolete. Use BOOST_PP_ADD().</p> */
+/* <p>Obsolete. Use BOOST_PP_ADD().</p> */
 #define BOOST_PREPROCESSOR_ADD(X,Y) BOOST_PP_ADD(X,Y)
 #endif
