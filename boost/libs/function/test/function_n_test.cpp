@@ -631,7 +631,7 @@ test_ref()
   catch(std::runtime_error e) {
     BOOST_ERROR("Nonthrowing constructor threw an exception");
   }
-};
+}
 
 int test_main(int, char* [])
 {
