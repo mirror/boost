@@ -7,6 +7,7 @@
 //  TITLE:         std::allocator
 //  DESCRIPTION:   The C++ standard library does not provide
 //                 a standards conforming std::allocator.
+
 #ifndef BOOST_NESTED_TEMPLATE
 #define BOOST_NESTED_TEMPLATE template
 #endif
@@ -33,7 +34,7 @@ int foo(const T& i)
    alloc1_t a1;
    alloc1_t a2(a1);
 
-   pointer p = a1.allocate(1,0);
+   pointer p = a1.allocate(1);
    const_pointer cp = p;
    a1.construct(p,i);
    size_type s = a1.max_size();
