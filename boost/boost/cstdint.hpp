@@ -144,11 +144,8 @@ namespace boost
 
 //  64-bit types + intmax_t and uintmax_t  ----------------------------------//
 
-// GCC 3.0 supports "long long" and has the proper defines.  However, the
-// library shipped with GCC 3.0 doesn't have operator<<(ostream&, long long).
-// For now, disable "long long" here.
 # if !defined(BOOST_MSVC) && !defined(__BORLANDC__) && \
-   !(defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ == 0 && defined(__GLIBCPP__)) && \
+   (!defined(__GLIBCPP__) || defined(_GLIBCPP_USE_LONG_LONG)) && \
    (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
 #    if (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615U) || (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615U) || (defined(ULONGLONG_MAX) && ULONGLONG_MAX == 18446744073709551615U)
                                                                  // 2**64 - 1
