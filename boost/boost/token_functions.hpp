@@ -249,10 +249,11 @@ namespace boost{
   public:
 
      explicit char_delimiters_separator(bool return_delims = false, 
-		 const Char * returnable = 0,const char * nonreturnable = 0)
-		 :nonreturnable_(nonreturnable?nonreturnable:""),
-		 returnable_(returnable?returnable:""),no_ispunct_(returnable),
-		 no_isspace_(nonreturnable),return_delims_(return_delims){}
+		 const Char * returnable = 0,const Char * nonreturnable = 0)
+		 :nonreturnable_(nonreturnable?nonreturnable:string_type().c_str()),
+		 returnable_(returnable?returnable:string_type().c_str()),
+		 no_ispunct_(returnable),no_isspace_(nonreturnable),
+		 return_delims_(return_delims){}
 
      void reset(){}
 
