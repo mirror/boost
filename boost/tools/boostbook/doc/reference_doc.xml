@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE section SYSTEM "../../dtd/boostbook.dtd">
+<section xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Documenting C++ Constructs</title>
+
+  <para>This section describes the documentation of C++ constructs
+  within BoostBook. BoostBook provides elements that describe C++
+  classes, functions, namespaces, and other declarative constructs in
+  a presentation-independent manner. From these descriptions, the
+  BoostBook XSL stylesheets generate cross-referenced reference
+  documentation for C++ libraries with a consistent look and
+  feel.</para>
+
+  <section>
+    <title>Library references and headers</title>
+
+    <para>Reference documentation for a library is contained with a
+    &lt;library-reference&gt; element. The &lt;library-reference&gt;
+    element has no attributes, and contains as children only
+    &lt;header&gt; elements.</para>
+
+    <para>The &lt;header&gt; element defines a C++ header file. Within
+    each C++ header file lie the definitions of C++ constructs to be
+    documented. The <code>name</code> attribute of the &lt;header&gt;
+    element gives the name of the header, as one would specify when
+    including the header. For instance, the &lt;library-reference&gt;
+    for the <libraryname>Any</libraryname> library may look like
+    this:</para>
+
+    <programlisting>
+&lt;library-reference&gt;
+  &lt;header name="boost/any.hpp"&gt;
+    &lt;!-- C++ constructs in this header --&gt;
+  &lt;/header&gt;
+&lt;/library-reference&gt;
+</programlisting>
+
+    <para>If the <libraryname>Any</libraryname> library contained
+    multiple headers, we would list them all as children of the
+    &lt;library-reference&gt; element.</para>
+  </section>
+
+  <section>
+    <title>Namespaces</title>
+
+    <para>BoostBook namespaces are declared via the &lt;namespace&gt;
+    element. As in C++, namespaces can be nested and contain other C++
+    constructs, such as classes or functions. The <code>name</code>
+    attribute of a &lt;namespace&gt; element gives the namespace name
+    (e.g., "boost"). The <libraryname>Any</libraryname> library is
+    defined entirely within namespace boost by:</para>
+
+    <programlisting>
+&lt;library-reference&gt;
+  &lt;header name="boost/any.hpp"&gt;
+    &lt;namespace name="boost"&gt;  
+      &lt;!-- C++ constructs in the boost namespace --&gt;
+    &lt;/namespace&gt;
+  &lt;/header&gt;
+&lt;/library-reference&gt;
+</programlisting>
+  </section>
+
+  <section id="boostbook.classes">
+    <title>Classes</title>
+   
+    <para>C++ classes and class templates are described via the
+    &lt;class&gt; element. Each class has a name (e.g., "any") given
+    by the <code>name</code> attribute, a purpose given by the
+    &lt;purpose&gt; element, documentation, and a set of types,
+    functions, base classes, and data members. Here is a minimal
+    definition of the <classname>boost::any</classname> class:</para>
+    <programlisting>
+&lt;namespace name="boost"&gt;
+  &lt;class name="any"&gt;
+    &lt;purpose&gt;
+      A class whose instances can hold instances of any type that satisfies
+      ValueType requirements.
+    &lt;/purpose&gt;
+  &lt;/class&gt;
+&lt;/namespace&gt;
+</programlisting>
+
+    <para>Additional class documentation can be contained in
+    &lt;para&gt; elements following the &lt;purpose&gt; element. This
+    documentation will be typeset prior to documentation for specific
+    elements in the class (e.g., constructors or methods).</para>
+
+    <para>Class inheritance is described via the &lt;inherit&gt;
+    element. The &lt;inherit&gt; element requires an
+    <code>access</code> attribute which must be one of
+    <emphasis>public</emphasis>, <emphasis>protected</emphasis>, or
+    <emphasis>private</emphasis>. The content of the &lt;inherited&gt;
+    element in C++ code that names the class inherited, and may
+    contain markup to link to the class. The following description of
+    the class <classname>boost::bad_any_cast</classname> describes
+    public inheritance from the class
+    <classname>std::bad_cast</classname>. It also defines the
+    &lt;purpose&gt; element, which contains a short description of the
+    use of the class.</para>
+    
+    <programlisting>
+&lt;class name="bad_any_cast"&gt;
+  &lt;inherit access="public"&gt;&lt;classname&gt;std::bad_cast&lt;/classname&gt;&lt;/inherit&gt;
+  &lt;purpose&gt;&lt;para&gt;The exception thrown in the event of a failed
+  &lt;functionname&gt;any_cast&lt;/functionname&gt; of an
+  &lt;classname&gt;any&lt;/classname&gt; value.&lt;/para&gt;&lt;/purpose&gt;
+&lt;/class&gt;
+</programlisting>
+
+    <para>Information about constructors, methods, and other functions
+    can be found in <xref linkend="boostbook.functions"/>. Note that
+    free functions and free function groups are allowed at class
+    level, and will be documented along with the class, for instance
+    see the documentation of
+    <functionname>boost::any_cast</functionname>.</para>
+
+    <para>Class templates are defined by &lt;class&gt; elements with a
+    &lt;template&gt; child element at the beginning. Templates are
+    discussed <xref linkend="boostbook.templates"/>.</para>
+  </section>
+
+  <section id="boostbook.functions">
+    <title>Functions</title>
+
+    <para>BoostBook functions are documented by specifying the
+    function's interface (e.g., its C++ signature) and its
+    behavior. Constructors, destructors, member functions, and free
+    functions all use the same documentation method, although the
+    top-level tags differ; <xref linkend="boostbook.function.types"/>
+    gives the elements for each C++ function type.</para>
+    
+    <para>The behavior of functions in BoostBook is documenting using
+    a style similar to that of the C++ standard, with clauses
+    describing the requirements, effects, postconditions, exception
+    behavior, and return values of functions. The names and uses of
+    the XML elements for each clause type are given in <xref
+    linkend="boostbook.function.clauses"/>.</para>
+
+    <para>The following example illustrates some constructors and a
+    destructor for <classname>boost::any</classname>. We note that in
+    each of the clauses from <xref
+    linkend="boostbook.function.clauses"/> there is a (required!)
+    &lt;simpara&gt; element containing the text for that clause. We
+    also note that one of the constructors takes a single parameter
+    whose name is "other" and whose type, <code>const any&amp;</code>
+    is contained in the &lt;paramtype&gt; element; any number of
+    parameters may be specified in this way.</para>
+
+    <programlisting>
+&lt;class name="any"&gt;
+  &lt;constructor&gt;
+    &lt;postconditions&gt;&lt;para&gt;&lt;this-&gt;empty()&gt;&lt;/para&gt;&lt;/postconditions&gt;
+  &lt;/constructor&gt;
+
+  &lt;constructor&gt;
+    &lt;parameter name="other"&gt;
+      &lt;paramtype&gt;const &lt;classname&gt;any&lt;/classname&gt;&amp;amp;&lt;/paramtype&gt;
+    &lt;/parameter&gt;
+
+    &lt;effects&gt;
+      &lt;simpara&gt; Copy constructor that copies
+        content of &lt;code&gt;other&lt;/code&gt; into the new instance,
+        so that any content is equivalent in both type and value to the
+        content of &lt;code&gt;other&lt;/code&gt;, or empty if
+        &lt;code&gt;other&lt;/code&gt; is
+        empty. 
+      &lt;/simpara&gt;
+    &lt;/effects&gt;
+
+    &lt;throws&gt;
+      &lt;simpara&gt;May fail with a 
+        &lt;classname&gt;std::bad_alloc&lt;/classname&gt; exception or any
+        exceptions arising from the copy constructor of the
+        contained type.
+      &lt;/simpara&gt;
+    &lt;/throws&gt;
+  &lt;/constructor&gt;
+
+  &lt;destructor&gt;
+     &lt;effects&gt;&lt;simpara&gt;Releases any and all resources used in
+     management of instance.&lt;/simpara&gt;&lt;/effects&gt;
+
+     &lt;throws&gt;&lt;simpara&gt;Nothing.&lt;/simpara&gt;&lt;/throws&gt;
+  &lt;/destructor&gt;
+&lt;/class&gt;
+</programlisting>
+
+    <table id="boostbook.function.types">
+      <title>BoostBook Function Types</title>
+      
+      <tgroup cols="2">
+        <thead>
+          <row>
+            <entry><simpara>C++ Function</simpara></entry>
+            <entry><simpara>BoostBook Element</simpara></entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><simpara>Constructor</simpara></entry>
+            <entry><simpara>&lt;constructor&gt;</simpara></entry>
+          </row>
+          <row>
+            <entry><simpara>Destructor</simpara></entry>
+            <entry><simpara>&lt;destructor&gt;</simpara></entry>
+          </row>
+          <row>
+            <entry><simpara>Copy assignment operator</simpara></entry>
+            <entry><simpara>&lt;copy-assignment&gt;</simpara></entry>
+          </row>
+          <row>
+            <entry><simpara>Member function</simpara></entry>
+            <entry><simpara>&lt;method&gt;</simpara></entry>
+          </row>
+          <row>
+            <entry><simpara>Free function</simpara></entry>
+            <entry><simpara>&lt;function&gt;</simpara></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <table id="boostbook.function.clauses">
+      <title>BoostBook Function Semantics Clauses</title>
+
+      <tgroup cols="2">
+        <thead>
+          <row>
+            <entry><simpara>BoostBook element</simpara></entry>
+            <entry><simpara>Description</simpara></entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><simpara>&lt;requires&gt;</simpara></entry>
+            <entry><simpara>A set of requirements that must be met
+            prior to execution of the function (a.k.a.,
+            preconditions). If any of these requirements is not met
+            and the function is executed, then the behavior is
+            undefined.</simpara></entry>
+          </row>
+          <row>
+            <entry><simpara>&lt;effects&gt;</simpara></entry>
+            <entry><simpara>The effects of executing the function. For
+            instance, this may include documenting changes in state,
+            other functions executed, or output written to
+            files.</simpara></entry>
+          </row>
+          <row>
+            <entry><simpara>&lt;postconditions&gt;</simpara></entry>
+            <entry><simpara>Conditions that are guaranteed to hold
+            after execution of the function, assuming that all
+            requirements have been met.</simpara></entry>
+          </row>
+          <row>
+            <entry><simpara>&lt;returns&gt;</simpara></entry>
+            <entry><simpara>A description of the value returned from
+            the function.</simpara></entry>
+          </row>
+          <row>
+            <entry><simpara>&lt;throws&gt;</simpara></entry>
+            <entry><simpara>A description of the exceptions that may
+            be thrown from this function.</simpara></entry>
+          </row>
+          <row>
+            <entry><simpara>&lt;complexity&gt;</simpara></entry>
+            <entry><simpara>The computational complexity of this
+            function.</simpara></entry>
+          </row>
+          <row>
+            <entry><simpara>&lt;notes&gt;</simpara></entry>
+            <entry><simpara>Additional notes that clarify the behavior
+            of the function.</simpara></entry>
+          </row>
+          <row>
+            <entry><simpara>&lt;rationale&gt;</simpara></entry>
+            <entry><simpara>Reasons for the current semantics,
+            including an explanation of potential alternative
+            semantics and reasons why the alternatives have not bee
+            used.</simpara></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+
+  <section id="boostbook.templates">
+    <title>Templates</title>
+    <para>To be written...</para>
+  </section>
+</section>

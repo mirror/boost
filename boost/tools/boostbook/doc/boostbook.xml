@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter SYSTEM "../../dtd/boostbook.dtd">
+<chapter xmlns:xi="http://www.w3.org/2001/XInclude" id="boostbook">
+  <chapterinfo>
+    <author>
+      <firstname>Douglas</firstname>
+      <surname>Gregor</surname>
+    </author>
+    
+    <copyright>
+      <year>2003</year>
+      <holder>Douglas Gregor</holder>
+    </copyright>
+
+    <legalnotice>
+      <para>Permission to copy, use, sell and distribute this software
+      is granted provided this copyright notice appears in all copies.
+      Permission to modify the code and to distribute modified code is
+      granted provided this copyright notice appears in all copies,
+      and a notice that the code was modified is included with the
+      copyright notice. </para>
+
+      <para> This software is provided "as is" without express or
+      implied warranty, and with no claim as to its suitability for
+      any purpose. </para> 
+    </legalnotice>
+  </chapterinfo>
+
+  <title>The BoostBook Documentation Format</title>
+
+  <section>
+    <title>Introduction</title>
+   
+    <para>The BoostBook documentation format is an extension of <ulink
+    url="http://www.docbook.org">DocBook</ulink>, an SGML- or
+    XML-based format for describing documentation. BoostBook augments
+    DocBook with semantic markup that aids in the documentation of C++
+    libraries, specifically the <ulink
+    url="http://www.boost.org">Boost C++ libraries</ulink>, by
+    providing the ability to express and refer to C++ constructs such
+    as namespaces, classes, overloaded functions, templates, and
+    specializations.</para>
+
+    <para>
+    BoostBook offers additional features more specific to its use for
+    documenting the <ulink url="http://www.boost.org">Boost C++
+    libraries</ulink>. These features are intended to eliminate or
+    reduce the need for duplication of information and to aid in
+    documenting portions of Boost that might otherwise not be
+    documented. Examples of Boost-centric features include:
+      <itemizedlist>
+        <listitem>
+          <para><emphasis role="bold">Testsuites</emphasis>:
+          Testsuites in Boost are created by writing an appropriate
+          Jamfile and including that Jamfile in the list of Jamfiles
+          including for testing. If the testsuites are documented
+          (<ulink
+          url="http://www.boost.org/libs/multi_array/doc/test_cases.html">as
+          in the MultiArray library</ulink>), the documentation is
+          maintained separately from the testcase Jamfile, leading to
+          duplication of information and the possibility of having the
+          documentation out of sync with the Jamfile. BoostBook
+          contains elements that describe a testsuite for both
+          purposes: the BoostBook stylesheets can generate
+          documentation for the testcases and also generate an
+          appropriate Jamfile to integrate the testcases with the
+          regression testing system.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis role="bold">Example programs</emphasis>:
+          Example programs in documentation need to be duplicated in
+          testcases to ensure that the examples compile and execute
+          correctly. Keeping the two copies in sync is a tedious and
+          error-prone task. For instance, the following code snippet
+          persisted for six months:</para>
+<programlisting>
+std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
+</programlisting>
+          <para>The BoostBook format allows testcases to be generated
+          by weaving together program fragments from example programs
+          in the documentation. This capability is integrated with
+          testsuite generation so that example programs are normal
+          tests in BoostBook.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis role="bold">Library
+          categorization</emphasis>: BoostBook contains primitives for
+          placing libraries into categories and generating categorized
+          and alphabetized lists of libraries.</para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </section>
+
+  <section id="boostbook.getting.started">
+    <title>Getting Started</title>
+
+    <para>To use the Boost documentation tools, you will need an
+    <ulink url="http://www.w3c.org/Style/XSL/">XSLT</ulink>
+    processor. There are many XSLT processors available, but for now
+    we suggest that you use <code>xsltproc</code>, part of <ulink
+    url="http://xmlsoft.org/XSLT/">libxslt</ulink>. There are several
+    ways to get libxslt, depending on your platform:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>On Unix: Build and install <ulink
+        url="http://xmlsoft.org/">libxml2</ulink>) and then <ulink
+        url="http://xmlsoft.org/XSLT/">libxslt</ulink>)</para>
+      </listitem>
+      <listitem>
+        <para>On Windows:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>With <ulink
+            url="http://www.cygwin.com/">Cygwin</ulink>, select the
+            libxml2 and libxslt packages</para>
+          </listitem>
+          <listitem>
+            <para>Without Cygwin, you can at <ulink
+            url="http://www.zlatkovic.com/projects/libxml/binaries.html">download
+            the libxml2, libxslt, and iconv binaries</ulink>. Or, use
+            my <ulink
+            url="http://www.cs.rpi.edu/~gregod/boost/doc/xsltproc-win32.zip">minimal
+            repackaged version</ulink>.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>You will also need a recent checkout of Boost from <ulink
+    url="http://www.boost.org/more/download.html#CVS">CVS</ulink> and
+    a very recent checkout from the <ulink
+    url="http://www.boost.org/more/mailing_lists.htm#sandbox">Boost
+    Sandbox CVS</ulink>. Finally, you will need Norman Walsh's DocBook
+    XSL stylesheets, available at the (<ulink
+    url="http://docbook.sourceforge.net">DocBook sourceforge
+    site</ulink>. Extract the DocBook XSL stylesheets to a directory
+    on your hard disk (which we'll refer to as the
+    <code>DOCBOOK_XSL_PATH</code>).</para>
+
+    <para>The current BoostBook documentation encompasses only a few
+    libraries. The documentation for these libraries is stored in the
+    directory
+    <code>boost-sandbox/libs/documentation/examples</code>. From that
+    directory, we can generate DocBook XML from the BoostBook XML by
+    invoking <code>xsltproc</code>:</para>
+
+    <programlisting>
+  xsltproc --xinclude ../boostbook-xsl/docbook.xsl boost.xml > boost.docbook
+</programlisting>
+
+    <para>This command parses the BoostBook XML in the file
+    <code>boost.xml</code>, using <ulink
+    url="http://www.w3.org/TR/xinclude/">XIncludes</ulink> to bring in
+    other library documentation (e.g.,
+    <code>function/function.xml</code> for the Function library), and
+    then translates the XML via the XSL stylesheet docbook.xsl into
+    DocBook XML, which is written to <code>boost.docbook</code>. You
+    will probably see several warnings like these while
+    <code>xsltproc</code> executes:</para>
+
+    <programlisting>
+  Cannot find function named 'checked_delete'
+  Cannot find function named 'checked_array_delete'
+  Cannot find function named 'next'
+</programlisting>
+
+    <para>These warnings are emitted when the Boost documentation
+    tools cannot find documentation for functions, methods, or classes
+    that are referenced in the source, and are not harmful in any
+    way.</para>
+
+    <para>With DocBook XML, we can generate several other
+    documentation formats. To generate HTML, we invoke xsltproc to
+    transform the DocBook XML into HTML with the following command
+    (replace <code>&lt;html-output-dir&gt;</code> with a directory of your
+    choice):</para>
+
+    <programlisting>
+  xsltproc -o &lt;html-output-dir&gt; &lt;DOCBOOK_XSL_PATH&gt;/html/chunk.xsl boost.docbook 
+</programlisting>
+
+    <para>Once this command completes, you will have HTML
+    documentation. There are many options that can be used to
+    customize the output HTML; please see the Makefile for the set of
+    commands used to generate the <ulink
+    url="http://www.cs.rpi.edu/~gregod/boost/doc/html/libraries.html">nightly
+    documentation</ulink>.</para>
+
+    <para>The DocBook XSL stylesheets support other output formats,
+    such as Unix man pages, XHTML, HTML as a single file, and XSL
+    Formatting Objects (which can in turn be used to generate, e.g.,
+    PDF or PostScript documentation). To generate these other formats,
+    please refer to the <ulink
+    url="http://docbook.sourceforge.net">DocBook XSL stylesheets
+    documentation</ulink>.</para>
+
+    <para>For users of Unix-based systems, the Makefile supplied in
+    the <code>examples/</code> directory can help generate DocBook,
+    HTML, man pages, and FO. To generate the necessary files
+    (<code>Makefile.def</code> and <code>catalog.xml</code>),
+    invoke:</para>
+
+    <programlisting>
+  ./configure DOCBOOK_XSL_PATH
+</programlisting>
+
+    <para>Now run any of:</para>
+    <programlisting>
+  make html
+  make fo
+  make man
+  make docbook
+</programlisting>
+  </section>
+
+  <xi:include href="documenting.xml"/>
+  <xi:include href="reference_doc.xml"/>
+  <xi:include href="together.xml"/>
+</chapter>
