@@ -149,12 +149,23 @@ namespace detail
       template <class Derived,class Value> struct archetype;
   };
 
+  // Constructor argument for those iterators that
+  // are not default constructible
+  struct ctor_arg {};
+
   template <class Derived, class Value, class TraversalCategory>
   struct traversal_archetype_
     : mpl::aux::msvc_eti_base<
           typename traversal_archetype_impl<TraversalCategory>::template archetype<Derived,Value>
       >::type
-  {};
+  {
+    traversal_archetype_() {}
+    traversal_archetype_(ctor_arg arg)
+      : mpl::aux::msvc_eti_base<
+            typename traversal_archetype_impl<TraversalCategory>::template archetype<Derived,Value>
+        >::type(arg) 
+    {}
+  };
 
   template <>
   struct traversal_archetype_impl<incrementable_traversal_tag>
@@ -162,6 +173,8 @@ namespace detail
       template<class Derived, class Value>
       struct archetype
       {
+          explicit archetype(ctor_arg) {}
+
           struct bogus { }; // This use to be void, but that causes trouble for iterator_facade. Need more research. -JGS
           typedef bogus difference_type;
 
@@ -178,6 +191,9 @@ namespace detail
         : public equality_comparable< traversal_archetype_<Derived, Value, single_pass_traversal_tag> >,
           public traversal_archetype_<Derived, Value, incrementable_traversal_tag>
       {
+          explicit archetype(ctor_arg arg)
+            : traversal_archetype_<Derived, Value, incrementable_traversal_tag>(arg)
+          {}
       };
   };
 
@@ -198,6 +214,9 @@ namespace detail
       struct archetype
         : public traversal_archetype_<Derived, Value, single_pass_traversal_tag>
       {
+          archetype() 
+            : traversal_archetype_<Derived, Value, single_pass_traversal_tag>(ctor_arg())
+          {}
           typedef std::ptrdiff_t difference_type;
       };
   };
