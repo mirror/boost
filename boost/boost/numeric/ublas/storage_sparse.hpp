@@ -286,20 +286,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         map_array ():
             capacity_ (0), data_ (new value_type [0]), size_ (0) {
-            std::fill (data_, data_ + size_, value_type ());
-        }
-        BOOST_UBLAS_INLINE
-        map_array (no_init):
-            capacity_ (0), data_ (new value_type [0]), size_ (0) {
-        }
-        explicit BOOST_UBLAS_INLINE
-        map_array (size_type size):
-            capacity_ (size), data_ (new value_type [size]), size_ (0) {
-            std::fill (data_, data_ + size_, value_type ());
-        }
-        explicit BOOST_UBLAS_INLINE
-        map_array (size_type size, no_init):
-            capacity_ (size), data_ (new value_type [size]), size_ (0) {
         }
         BOOST_UBLAS_INLINE
         map_array (const map_array &a):
@@ -625,20 +611,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         set_array ():
             capacity_ (0), data_ (new value_type [0]), size_ (0) {
-            std::fill (data_, data_ + size_, value_type ());
-        }
-        BOOST_UBLAS_INLINE
-        set_array (no_init):
-            capacity_ (0), data_ (new value_type [0]), size_ (0) {
-        }
-        explicit BOOST_UBLAS_INLINE
-        set_array (size_type size):
-            capacity_ (size), data_ (new value_type [size]), size_ (0) {
-            std::fill (data_, data_ + size_, value_type ());
-        }
-        explicit BOOST_UBLAS_INLINE
-        set_array (size_type size, no_init):
-            capacity_ (size), data_ (new value_type [size]), size_ (0) {
         }
         BOOST_UBLAS_INLINE
         set_array (const set_array &a):
