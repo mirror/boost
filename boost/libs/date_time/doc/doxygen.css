@@ -3,6 +3,13 @@ H2 { margin-top: 0; margin-bottom: 0; color: slateblue; }
 .bold { font-weight: bold; }
 .el { text-decoration: none; font-weight: bold; color: lightslateblue }
 .func { text-decoration: none; font-weight: bold; color: lightslateblue }
+
+/* table stuff */
+.row_title {font-weight: bold; background-color: #6699CC; text-align: left;}
+.content {background-color: #B0E2FF; text-align: left;}
+.centered {text-align: center;}
+.nowrap {white-space: nowrap;}
+
 A.qindex { color: seagreen }
 A.qindexRef {}
 A.el { text-decoration: none; font-weight: bold; color: lightslateblue }
