@@ -669,6 +669,7 @@ static void do_nothing() {}
 
 static void test_allocator()
 {
+#ifndef BOOST_NO_STD_ALLOCATOR
   boost::function<int (int, int), counting_allocator<int> > f;
   f = plus<int>();
   f.clear();
@@ -692,6 +693,7 @@ static void test_allocator()
   dealloc_count = 0;
   fv = &do_nothing;
   fv.clear();
+#endif // ndef BOOST_NO_STD_ALLOCATOR
 }
 
 int test_main(int, char* [])
