@@ -30,12 +30,16 @@
   };
 
 
-If the ``Iterator`` argument models Readable Lvalue Iterator and
-Forward Traversal Iterator then the ``iterator_category`` member is a
-type convertible to ``std::forward_iterator_tag``. Otherwise
+If ``iterator_traits<Iterator>::reference`` is a reference to
+``iterator_traits<Iterator>::value_type`` and
+``iterator_traversal<Iterator>::type`` is convertible to
+``forward_traversal_tag`` then the ``iterator_category`` member is a
+type convertible to ``forward_iterator_tag``.  Otherwise
 ``iterator_category`` is a type convertible to
-``std::input_iterator_tag``.
+``input_iterator_tag``.
 
+.. In that last case, I think the implementation produces a tag
+   convertible to both input and output, which seems wrong. -JGS
 
 
 ``filter_iterator`` requirements
