@@ -34,6 +34,10 @@
 #  include <boost/config/posix_features.hpp>
 #endif
 
+#if _MWMT
+#  define BOOST_HAS_THREADS
+#endif
+
 
 #define BOOST_STDLIB "Metrowerks Standard Library version " BOOST_STRINGIZE(__MSL_CPP__)
 
