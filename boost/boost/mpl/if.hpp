@@ -23,11 +23,12 @@
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/mpl/aux_/config/workaround.hpp"
-#include "boost/mpl/aux_/config/use_preprocessed.hpp"
 #include "boost/config.hpp"
 
 #if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
 #   include "boost/mpl/arg_fwd.hpp"
+#   include "boost/mpl/aux_/preprocessor/params.hpp"
+#   include "boost/mpl/aux_/preprocessor/default_params.hpp"
 #endif
 
 namespace boost {
@@ -142,8 +143,7 @@ BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
 BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(3, if_)
 
 
-#if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT) \
-    && !defined(BOOST_MPL_NO_PREPROCESSED_HEADERS)
+#if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
 
 // Aleksey, check it out: lazy if_ evaluation in lambdas!
 // I think this doesn't handle the case of
@@ -179,6 +179,21 @@ BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(3, if_)
 // so that after the 2nd bind we have a different function depending
 // on the result of is_reference.
 
+#   define AUX_BIND_PARAMS(param) \
+    BOOST_MPL_PP_PARAMS( \
+          BOOST_MPL_METAFUNCTION_MAX_ARITY \
+        , param \
+        ) \
+    /**/
+
+#   define AUX_BIND_DEFAULT_PARAMS(param, value) \
+    BOOST_MPL_PP_DEFAULT_PARAMS( \
+          BOOST_MPL_METAFUNCTION_MAX_ARITY \
+        , param \
+        , value \
+        ) \
+    /**/
+
 template <class T1, class T2, class T3, class T4> struct bind3;
 template <template <class T1, class T2, class T3> class F, class tag> struct quote3;
 
@@ -186,7 +201,7 @@ namespace aux
 {
   template <
       typename T
-    , BOOST_MPL_PP_PARAMS(BOOST_MPL_METAFUNCTION_MAX_ARITY, typename U)
+    , AUX_BIND_PARAMS(typename U)
   > struct resolve_bind_arg;
 
   template<
@@ -202,8 +217,7 @@ template<
 struct bind3<quote3<if_, void_>, T1, T2, T3>
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          AUX_BIND_DEFAULT_PARAMS(typename U, void_)
         >
     struct apply
     {
@@ -214,17 +228,17 @@ struct bind3<quote3<if_, void_>, T1, T2, T3>
         typedef aux::replace_unnamed_arg< T1,n1 > r1;
         typedef typename r1::type a1;
         typedef typename r1::next_arg n2;
-        typedef typename aux::resolve_bind_arg< a1,U1,U2,U3,U4,U5 >::type t1;
+        typedef typename aux::resolve_bind_arg< a1,AUX_BIND_PARAMS(U) >::type t1;
 
         typedef aux::replace_unnamed_arg< T2,n2 > r2;
         typedef typename r2::type a2;
         typedef typename r2::next_arg n3;
-        typedef typename aux::resolve_bind_arg< a2,U1,U2,U3,U4,U5 > f2;
+        typedef typename aux::resolve_bind_arg< a2,AUX_BIND_PARAMS(U) > f2;
 
         typedef aux::replace_unnamed_arg< T3,n3 > r3;
         typedef typename r3::type a3;
         typedef typename r3::next_arg n4;
-        typedef typename aux::resolve_bind_arg< a3,U1,U2,U3,U4,U5 > f3;
+        typedef typename aux::resolve_bind_arg< a3,AUX_BIND_PARAMS(U) > f3;
 
         typedef typename if_<t1,f2,f3>::type f_;
      public:
@@ -232,7 +246,10 @@ struct bind3<quote3<if_, void_>, T1, T2, T3>
     };
 };
 
-#endif
+#   undef AUX_BIND_PARAMS
+#   undef AUX_BIND_DEFAULT_PARAMS
+
+#endif // BOOST_MPL_NO_FULL_LAMBDA_SUPPORT
 
 } // namespace mpl
 } // namespace boost
