@@ -19,9 +19,15 @@
 
 #include <exception>
 
+#include "boost/detail/workaround.hpp"
 #include "boost/preprocessor/enum_params.hpp"
 #include "boost/utility/addressof.hpp"
 #include "boost/variant/variant_fwd.hpp"
+
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#   include "boost/mpl/bool.hpp"
+#   include "boost/type_traits/is_same.hpp"
+#endif
 
 namespace boost {
 
@@ -60,11 +66,13 @@ namespace detail { namespace variant {
 template <typename T>
 struct get_visitor
 {
-public: // typedefs
+public: // visitor typedefs
 
     typedef T* result_type;
 
 public: // visitor interfaces
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
     template <typename U>
     T* operator()(U&) const
@@ -76,6 +84,37 @@ public: // visitor interfaces
     {
         return boost::addressof(operand);
     }
+
+#else // MSVC6
+
+private: // helpers, for visitor interfaces (below)
+
+    T* execute_impl(T& operand, mpl::true_) const
+    {
+        return boost::addressof(operand);
+    }
+
+    template <typename U>
+    T* execute_impl(U& operand, mpl::false_) const
+    {
+        return static_cast<T*>(0);
+    }
+
+public: // visitor interfaces
+
+    template <typename U>
+    T* operator()(U& operand) const
+    {
+        // MSVC6 finds normal implementation (above) ambiguous,
+        // so we must explicitly disambiguate
+
+        typedef typename is_same<U,T>::type
+            U_is_T;
+
+        return execute_impl(operand, U_is_T());
+    }
+
+#endif // MSVC6 workaround
 
 };
 

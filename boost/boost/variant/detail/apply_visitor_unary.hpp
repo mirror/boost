@@ -19,6 +19,7 @@
 
 #include "boost/detail/workaround.hpp"
 #include "boost/variant/detail/define_forwarding_func.hpp"
+#include "boost/variant/detail/generic_result_type.hpp"
 
 namespace boost {
 
@@ -34,7 +35,9 @@ namespace boost {
         , BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T)   \
         >                                                               \
     inline                                                              \
-        typename Visitor::result_type                                   \
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(                          \
+              typename Visitor::result_type                             \
+            )                                                           \
     apply_visitor(                                                      \
           CV1_ Visitor& visitor                                         \
         , CV2_ boost::variant<                                          \

@@ -22,8 +22,9 @@
 #include <typeinfo> // for std::type_info
 
 #include "boost/variant/variant_fwd.hpp"
-#include "boost/variant/detail/move.hpp"
+#include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/variant/detail/has_nothrow_move.hpp"
+#include "boost/variant/detail/move.hpp"
 
 #include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
@@ -126,19 +127,19 @@ public: // metafunction result
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
-    typedef aligned_storage<
+    typedef ::boost::aligned_storage<
           BOOST_MPL_AUX_VALUE_WKND(max_size)::value
         , BOOST_MPL_AUX_VALUE_WKND(max_alignment)::value
         > type;
 
 #else // MSVC7 and below
 
-    BOOST_STATIC_CONSTANT(std::size_t, max_size_c = max_size::value);
-    BOOST_STATIC_CONSTANT(std::size_t, max_alignment_c = max_alignment::value);
+    BOOST_STATIC_CONSTANT(std::size_t, msvc_max_size_c = max_size::value);
+    BOOST_STATIC_CONSTANT(std::size_t, msvc_max_alignment_c = max_alignment::value);
 
-    typedef aligned_storage<
-          max_size_c
-        , max_alignment_c
+    typedef ::boost::aligned_storage<
+          msvc_max_size_c
+        , msvc_max_alignment_c
         > type;
 
 #endif // MSVC workaround
@@ -169,31 +170,32 @@ public: // queries
         return 0;
     }
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
     const void* address() const
     {
         return 0;
     }
 
+#else // MSVC6
+
+    const void* address() const;
+
+#endif // MSVC6 workaround
+
 };
 
-//////////////////////////////////////////////////////////////////////////
-// (detail) typedef visitor_void_result
-//
-// Visitor result type to be used by detail visitors in event of 
-// BOOST_NO_VOID_RETURNS configuration.
-//
-// Rationale: variant::raw_apply_visitor does not provide the workaround.
-//
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
-#if !defined(BOOST_NO_VOID_RETURNS)
+// MSVC6 seems not to like inline functions with const void* returns, so we
+// declare the following here:
 
-typedef void visitor_void_result;
+const void* null_storage::address() const
+{
+    return 0;
+}
 
-#else // defined(BOOST_NO_VOID_RETURNS)
-
-typedef mpl::void_ visitor_void_result;
-
-#endif // BOOST_NO_VOID_RETURNS workaround
+#endif // MSVC6 workaround
 
 //////////////////////////////////////////////////////////////////////////
 // (detail) class destroyer
@@ -201,18 +203,21 @@ typedef mpl::void_ visitor_void_result;
 // Generic static visitor that destroys the value it visits.
 //
 struct destroyer
-    : public static_visitor<visitor_void_result>
+    : public static_visitor<>
 {
 public: // visitor interfaces
 
     template <typename T>
-    result_type operator()(T& operand) const
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(T& operand) const
     {
         operand.~T();
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
         operand; // suppresses warnings
 #endif
+
+        BOOST_VARIANT_AUX_RETURN_VOID;
     }
 
 };
@@ -223,7 +228,7 @@ public: // visitor interfaces
 // Generic static visitor that copies the value it visits into the given buffer.
 //
 class copy_into
-    : public static_visitor<visitor_void_result>
+    : public static_visitor<>
 {
 private: // representation
 
@@ -239,9 +244,11 @@ public: // structors
 public: // visitor interfaces
 
     template <typename T>
-    result_type operator()(const T& operand) const
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(const T& operand) const
     {
         new(storage_) T(operand);
+        BOOST_VARIANT_AUX_RETURN_VOID;
     }
 
 };
@@ -252,7 +259,7 @@ public: // visitor interfaces
 // Generic static visitor that swaps the value it visits with the given value.
 //
 struct swap_with
-    : public static_visitor<visitor_void_result>
+    : public static_visitor<>
 {
 private: // representation
 
@@ -268,9 +275,11 @@ public: // structors
 public: // visitor interfaces
 
     template <typename T>
-    result_type operator()(T& operand) const
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(T& operand) const
     {
-        boost::detail::variant::move_swap(operand, *static_cast<T*>(toswap_));
+        ::boost::detail::variant::move_swap(operand, *static_cast<T*>(toswap_));
+        BOOST_VARIANT_AUX_RETURN_VOID;
     }
 
 };
@@ -310,27 +319,8 @@ private: // representation
 
 public: // visitor typedefs
 
-#if !defined(BOOST_NO_VOID_RETURNS)
-
     typedef typename Visitor::result_type
         result_type;
-
-#else // defined(BOOST_NO_VOID_RETURNS)
-
-private: // helpers, for visitor typedefs (below)
-
-    typedef typename is_void< typename Visitor::result_type >::type
-        has_void_result_type;
-
-public: // visitor typedefs
-
-    typedef typename mpl::if_<
-          has_void_result_type
-        , mpl::void_
-        , typename Visitor::result_type
-        > result_type;
-
-#endif // BOOST_NO_VOID_RETURNS workaround
 
 public: // structors
 
@@ -352,21 +342,27 @@ private: // helpers, for visitor interfaces (below)
 #else // defined(BOOST_NO_VOID_RETURNS)
 
     template <typename T>
-    result_type visit_impl(T& operand, mpl::false_)
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    visit_impl(T& operand, mpl::false_)
     {
         return visitor_(operand);
     }
 
     template <typename T>
-    mpl::void_ visit_impl(T& operand, mpl::true_)
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    visit_impl(T& operand, mpl::true_)
     {
         visitor_(operand);
-        return mpl::void_();
+        BOOST_VARIANT_AUX_RETURN_VOID;
     }
 
     template <typename T>
-    result_type visit(T& operand)
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    visit(T& operand)
     {
+        typedef typename is_same<result_type, void>::type
+            has_void_result_type;
+
         return visit_impl(operand, has_void_result_type());
     }
 
@@ -377,19 +373,22 @@ public: // visitor interfaces
 #if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 
     template <typename T>
-    result_type operator()(incomplete<T>& operand)
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(incomplete<T>& operand)
     {
         return visit(operand.get());
     }
 
     template <typename T>
-    result_type operator()(const incomplete<T>& operand)
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(const incomplete<T>& operand)
     {
         return visit(operand.get());
     }
 
     template <typename T>
-    result_type operator()(T& operand)
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(T& operand)
     {
         return visit(operand);
     }
@@ -399,19 +398,22 @@ public: // visitor interfaces
 private: // helpers, for visitor interfaces (below)
 
     template <typename T>
-    result_type execute_impl(incomplete<T>& operand, long)
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    execute_impl(incomplete<T>& operand, long)
     {
         return visit(operand.get());
     }
 
     template <typename T>
-    result_type execute_impl(const incomplete<T>& operand, long)
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    execute_impl(const incomplete<T>& operand, long)
     {
         return visit(operand.get());
     }
 
     template <typename T>
-    result_type execute_impl(T& operand, int)
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    execute_impl(T& operand, int)
     {
         return visit(operand);
     }
@@ -419,7 +421,8 @@ private: // helpers, for visitor interfaces (below)
 public: // visitor interfaces
 
     template <typename T>
-    result_type operator()(T& operand)
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(T& operand)
     {
         return execute_impl(operand, 1L);
     }
@@ -523,8 +526,9 @@ private: // static precondition assertions
 
 #else
 
-    // temporarily nothing: maybe this will work for MSVC6
-    /**/
+    BOOST_STATIC_CONSTANT(bool, not_is_sequence_T0 = mpl::not_< mpl::is_sequence<T0> >::value);
+
+    BOOST_STATIC_ASSERT(not_is_sequence_T0);
 
 #endif
 
@@ -567,7 +571,7 @@ private: // static precondition assertions, cont.
 
 #endif // avoid on MSVC7 and below
 
-private: // representation
+private: // typedefs, for representation (below)
 
     typedef typename detail::variant::make_storage<types>::type
         storage1_t;
@@ -584,6 +588,8 @@ private: // representation
         , detail::variant::make_storage<throwing_types>
         >::type storage2_t;
 
+private: // representation (int which_)
+
     // which_ on:
     // * [0,  size<types>) indicates storage1
     // * [-size<types>, 0) indicates storage2
@@ -591,7 +597,6 @@ private: // representation
     // * then which() -> which_
     // * else which() -> -(which_ + 1)
     int which_;
-    compressed_pair< storage1_t,storage2_t > storage_;
 
     static bool using_storage1_impl(mpl::true_)
     {
@@ -623,25 +628,52 @@ private: // representation
         which_ = -(which + 1);
     }
 
+private: // representation (aligned double-storage)
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
+    compressed_pair< storage1_t,storage2_t > storage_;
+
+    void* storage1() { return storage_.first().address(); }
+    void* storage2() { return storage_.second().address(); }
+
+    const void* storage1() const { return storage_.first().address(); }
+    const void* storage2() const { return storage_.second().address(); }
+
+#else // MSVC6
+
+    storage1_t msvc_storage1_;
+    storage2_t msvc_storage2_;
+
+    void* storage1() { return msvc_storage1_.address(); }
+    void* storage2() { return msvc_storage2_.address(); }
+
+    const void* storage1() const;
+    const void* storage2() const;
+
+#endif // MSVC6 workaround
+
     void* active_storage()
     {
-        if (using_storage1() == false)
-            return storage_.second().address();
-        
-        return storage_.first().address();
+        return using_storage1() ? storage1() : storage2();
     }
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
     const void* active_storage() const
     {
-        return const_cast<variant *>(this)->active_storage();
+        return using_storage1() ? storage1() : storage2();
     }
+
+#else // MSVC6
+
+    const void* active_storage() const;
+
+#endif // MSVC6 workaround
 
     void* inactive_storage()
     {
-        if (using_storage1() == false)
-            return storage_.first().address();
- 
-        return storage_.second().address();
+        return using_storage1() ? storage2() : storage1();
     }
 
 public: // queries
@@ -780,17 +812,17 @@ public: // structors
     {
         // NOTE TO USER :
         // Compile error from here indicates that the first bound
-        // type is default-constructible, and so variant cannot
-        // support its own default-construction
+        // type is not default-constructible, and so variant cannot
+        // support its own default-construction.
 
-        new(storage_.first().address()) T0();
+        new( storage1() ) T0();
         activate_storage1(0); // zero is the index of the first bounded type
     }
 
     variant(const variant& operand)
     {
         // Copy the value of operand into *this...
-        detail::variant::copy_into visitor(storage_.first().address());
+        detail::variant::copy_into visitor( storage1() );
         operand.raw_apply_visitor(visitor);
 
         // ...and activate the *this's primary storage on success:
@@ -843,7 +875,7 @@ private: // helpers, for structors, cont. (below)
         //
         activate_storage1(
               initializer::initialize(
-                  storage_.first().address()
+                  storage1()
                 , operand
                 )
             );
@@ -855,7 +887,7 @@ private: // helpers, for structors, cont. (below)
         , mpl::true_// from_foreign_variant
         )
     {
-        convert_copy_into visitor(storage_.first().address());
+        convert_copy_into visitor(storage1());
         activate_storage1(
               operand.raw_apply_visitor(visitor)
             );
@@ -907,7 +939,7 @@ private: // helpers, for modifiers (below)
     //
 
     class assign_into
-        : public static_visitor<detail::variant::visitor_void_result>
+        : public static_visitor<>
     {
     private: // representation
 
@@ -937,7 +969,7 @@ private: // helpers, for modifiers (below)
             target_.destroy_content(); // nothrow
 
             // ...move the temporary copy into the target's storage1...
-            new(target_.storage_.first().address())  // nothrow
+            new(target_.storage1())  // nothrow
                 T( detail::variant::move(temp) );
 
             // ...and activate the target's storage1:
@@ -968,7 +1000,8 @@ private: // helpers, for modifiers (below)
     public: // visitor interfaces
 
         template <typename T>
-        result_type operator()(const T& operand)
+            BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+        operator()(const T& operand)
         {
             typedef typename detail::variant::has_nothrow_move_constructor<T>::type
                 has_nothrow_move_constructor;
@@ -977,6 +1010,8 @@ private: // helpers, for modifiers (below)
                   operand
                 , has_nothrow_move_constructor()
                 );
+
+            BOOST_VARIANT_AUX_RETURN_VOID;
         }
 
     };
@@ -1019,7 +1054,7 @@ private: // helpers, for modifiers, cont. (below)
     //
 
     class swap_variants
-        : public static_visitor<detail::variant::visitor_void_result>
+        : public static_visitor<>
     {
     private: // representation
 
@@ -1067,7 +1102,7 @@ private: // helpers, for modifiers, cont. (below)
             lhs_.destroy_content(); // nothrow
 
             // ...move rhs's old contents to lhs's storage1...
-            new(lhs_.storage_.first().address())   // nothrow
+            new(lhs_.storage1())   // nothrow
                 T( detail::variant::move(rhs_old_content) );
 
             // ...and activate lhs's storage1:
@@ -1116,7 +1151,8 @@ private: // helpers, for modifiers, cont. (below)
     public: // visitor interfaces
 
         template <typename T>
-        result_type operator()(T& rhs_content)
+            BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+        operator()(T& rhs_content)
         {
             typedef typename detail::variant::has_nothrow_move_constructor<T>::type
                 has_nothrow_move_constructor;
@@ -1125,6 +1161,8 @@ private: // helpers, for modifiers, cont. (below)
                   rhs_content
                 , has_nothrow_move_constructor()
                 );
+
+            BOOST_VARIANT_AUX_RETURN_VOID;
         }
 
     };
@@ -1179,24 +1217,16 @@ public: // queries
 
 private: // helpers, for visitation support (below)
 
-    template <typename T, typename Visitor>
-    static
-        typename Visitor::result_type
-    apply_visitor_impl(Visitor& visitor, void* storage, T* = 0)
+    template <typename T>
+    static T& cast_storage(void* storage, T* = 0)
     {
-        return visitor(
-              *static_cast< T* >( storage )
-            );
+        return *static_cast<T*>(storage);
     }
 
-    template <typename T, typename Visitor>
-    static
-        typename Visitor::result_type
-    apply_visitor_impl(Visitor& visitor, const void* storage, T* = 0)
+    template <typename T>
+    static const T& cast_storage(const void* storage, T* = 0)
     {
-        return visitor(
-              *static_cast< const T* >( storage )
-            );
+        return *static_cast<const T*>(storage);
     }
 
     template <
@@ -1205,7 +1235,9 @@ private: // helpers, for visitation support (below)
         , typename Visitor, typename VoidPtrCV
         >
     static
-        typename Visitor::result_type
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
+              typename Visitor::result_type
+            )
     apply_visitor_impl(
           const int var_which // [const-ness may aid in optimization by compiler]
         , Visitor& visitor
@@ -1218,7 +1250,7 @@ private: // helpers, for visitation support (below)
         if (var_which == Which::value)
         {
             // ...then apply visitor to the variant content:
-            return apply_visitor_impl(visitor, storage, type);
+            return visitor( cast_storage(storage, type) );
         }
 
         // Otherwise, tail recurse, checking next iteration:
@@ -1240,7 +1272,9 @@ private: // helpers, for visitation support (below)
         , typename Visitor, typename VoidPtrCV
         >
     static
-        typename Visitor::result_type
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
+              typename Visitor::result_type
+            )
     apply_visitor_impl(
           const int var_which
         , Visitor& visitor
@@ -1249,9 +1283,9 @@ private: // helpers, for visitation support (below)
         , Which* = 0, T* type = 0, NI* = 0, LI* = 0
         )
     {
-        // No prior iterations matched, so variant content is last type:
+        // No prior iterations matched, so variant content must be last type:
         BOOST_ASSERT(var_which == Which::value);
-        return apply_visitor_impl(visitor, storage, type);
+        return visitor( cast_storage(storage, type) );
     }
 
 // helpers, for visitation support (below) -- private when possible
@@ -1269,7 +1303,9 @@ public:
 #endif// !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 
     template <typename Visitor>
-        typename Visitor::result_type
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
+              typename Visitor::result_type
+            )
     raw_apply_visitor(Visitor& visitor)
     {
         mpl::int_<0>* first_which = 0;
@@ -1285,7 +1321,9 @@ public:
     }
 
     template <typename Visitor>
-        typename Visitor::result_type
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
+              typename Visitor::result_type
+            )
     raw_apply_visitor(Visitor& visitor) const
     {
         mpl::int_<0>* first_which = 0;
@@ -1303,7 +1341,9 @@ public:
 public: // visitation support
 
     template <typename Visitor>
-        typename detail::variant::invoke_visitor<Visitor>::result_type
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
+              typename Visitor::result_type
+            )
     apply_visitor(Visitor& visitor)
     {
         detail::variant::invoke_visitor<Visitor> invoker(visitor);
@@ -1311,14 +1351,50 @@ public: // visitation support
     }
 
     template <typename Visitor>
-        typename detail::variant::invoke_visitor<Visitor>::result_type
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
+              typename Visitor::result_type
+            )
     apply_visitor(Visitor& visitor) const
     {
         detail::variant::invoke_visitor<Visitor> invoker(visitor);
         return raw_apply_visitor(invoker);
     }
 
-};
+}; // class variant
+
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
+// MSVC6 seems not to like inline functions with const void* returns, so we
+// declare the following here:
+
+template < BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T) >
+const void*
+variant<
+      BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T)
+    >::storage1() const
+{
+    return msvc_storage1_.address();
+}
+
+template < BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T) >
+const void*
+variant<
+      BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T)
+    >::storage2() const
+{
+    return msvc_storage2_.address();
+}
+
+template < BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, typename T) >
+const void*
+variant<
+      BOOST_PP_ENUM_PARAMS(BOOST_VARIANT_LIMIT_TYPES, T)
+    >::active_storage() const
+{
+    return const_cast<variant*>(this)->active_storage();
+}
+
+#endif // MSVC6 workaround
 
 //////////////////////////////////////////////////////////////////////////
 // function template swap

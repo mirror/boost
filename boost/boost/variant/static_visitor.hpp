@@ -18,9 +18,14 @@
 #define BOOST_VARIANT_STATIC_VISITOR_HPP
 
 #include "boost/config.hpp"
+#include "boost/detail/workaround.hpp"
+
 #include "boost/mpl/if.hpp"
 #include "boost/type_traits/is_base_and_derived.hpp"
-#include "boost/type_traits/is_same.hpp"
+
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#   include "boost/type_traits/is_same.hpp"
+#endif
 
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
@@ -37,7 +42,12 @@ namespace boost {
 namespace detail {
 
     struct is_static_visitor_tag { };
-    struct static_visitor_default_return { };
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+    typedef void static_visitor_default_return;
+#else
+    typedef struct { } static_visitor_default_return;
+#endif
 
 } // namespace detail
 
@@ -47,12 +57,19 @@ class static_visitor
 {
 public: // typedefs
 
-    // for MSVC6 (and possibly others):
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
+    typedef R result_type;
+
+#else // MSVC6
+
     typedef typename mpl::if_<
           is_same<R, detail::static_visitor_default_return>
         , void
         , R
         >::type result_type;
+
+#endif // MSVC6 workaround
 
 protected: // for use as base class only
 
