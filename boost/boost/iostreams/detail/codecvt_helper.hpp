@@ -31,14 +31,72 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp>  // Make sure size_t is in std.
+#include <boost/config.hpp>  // Make sure size_t is in std, BOOST_MSVC.
 #include <boost/detail/workaround.hpp>
 #include <algorithm>         // min.
 #include <cstddef>           // size_t.
 #include <locale>            // locale, codecvt_base, codecvt.
 #include <boost/iostreams/detail/config/locale.hpp>
 
-//------------------Definition of codecvt_impl---------------------------------//
+//------------------Definition of add_facet-----------------------------------//
+
+// Borrowed from <boost/archive/add_facet.hpp>
+
+// does STLport uses native STL for locales?
+#if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) \
+&& defined(_STLP_NO_OWN_IOSTREAMS)
+// and this native STL lib is old Dinkumware (has not defined _CPPLIB_VER)
+#  if (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
+#    define BOOST_IOSTREMS_OLD_DINKUMWARE_BENEATH_STLPORT
+#  endif
+#endif
+
+namespace boost { namespace iostreams { namespace detail {
+
+template<class Facet>
+inline std::locale add_facet(const std::locale &l, Facet * f)
+{
+    return
+        #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) || \
+            defined BOOST_ARCHIVE_OLD_DINKUMWARE_BENEATH_STLPORT \
+            /**/
+            std::locale(std::_Addfac(l, f));
+        #else
+            // standard compatible
+            std::locale(l, f);
+        #endif
+}
+
+} } } // End namespaces iostreams, boost.
+
+//------------------Definition of traits--------------------------------------//
+
+namespace boost { namespace iostreams { namespace detail {
+
+#if !BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) //-----------------------//
+
+template<typename T>
+struct codecvt_intern { typedef typename T::intern_type type; };
+
+template<typename T>
+struct codecvt_extern { typedef typename T::extern_type type; };
+
+#else // #if !BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) //--------------//
+
+template<typename T>
+struct codecvt_intern { typedef typename T::from_type type; };
+
+template<typename T>
+struct codecvt_extern { typedef typename T::to_type type; };
+
+#endif // #if !BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) //-------------//
+
+template<typename T>
+struct codecvt_state { typedef typename T::state_type type; };
+
+} } } // End namespaces detail, iostreams, boost.
+
+//------------------Definition of codecvt_impl--------------------------------//
 
 #if defined(BOOST_NO_PRIMARY_CODECVT_DEFINITION) || \
     defined(BOOST_EMPTY_PRIMARY_CODECVT_DEFINITION) || \
