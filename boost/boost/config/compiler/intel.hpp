@@ -29,6 +29,12 @@
 #define BOOST_COMPILER "Intel C++ version " BOOST_STRINGIZE(BOOST_INTEL_CXX_VERSION)
 #define BOOST_INTEL BOOST_INTEL_CXX_VERSION
 
+#if defined(_WIN32) || defined(_WIN64)
+#  define BOOST_INTEL_WIN BOOST_INTEL
+#else
+#  define BOOST_INTEL_LINUX BOOST_INTEL
+#endif
+
 #if (BOOST_INTEL_CXX_VERSION <= 500) && defined(_MSC_VER)
 #  define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 #  define BOOST_NO_TEMPLATE_TEMPLATES
@@ -131,7 +137,7 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #endif
 //
 // last known and checked version:
-#if (BOOST_INTEL_CXX_VERSION > 800)
+#if (BOOST_INTEL_CXX_VERSION > 810)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  elif defined(_MSC_VER)
