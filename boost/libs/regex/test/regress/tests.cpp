@@ -419,9 +419,9 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
 #if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
          if(!recurse)
          {
-            std::basic_string<char_t> s(search_text.begin(), search_text.end());
+            std::basic_string<char_t> s2(search_text.begin(), search_text.end());
             match_results<std::basic_string<char_t>::const_iterator> sm;
-            if(regex_search(s, sm, e, static_cast<boost::match_flag_type>(flags[3])))
+            if(regex_search(s2, sm, e, static_cast<boost::match_flag_type>(flags[3])))
             {
                if(compare_result(sm, m) == false)
                {
@@ -434,8 +434,8 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
                begin_error();
                cout << "regex++ API result mismatch in regex_search(const std::string&, match_results&, const basic_regex&, int)" << endl;
             }
-            if(!regex_search(s, e, static_cast<boost::match_flag_type>(flags[3]))
-               || !regex_search(s.begin(), s.end(), e, static_cast<boost::match_flag_type>(flags[3])))
+            if(!regex_search(s2, e, static_cast<boost::match_flag_type>(flags[3]))
+               || !regex_search(s2.begin(), s2.end(), e, static_cast<boost::match_flag_type>(flags[3])))
             {
                begin_error();
                cout << "regex++ API result mismatch in regex_search(const std::string&, const basic_regex&, int)" << endl;
@@ -460,7 +460,7 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
                   cout << "regex++ API result: match not found when match_partial specified" << endl;
                }
             }
-            if(s.find(char_t(0)) == std::basic_string<char_t>::npos)
+            if(s2.find(char_t(0)) == std::basic_string<char_t>::npos)
             {
                match_results<const char_t*> ssm;
                if(regex_search(search_text.c_str(), ssm, e, static_cast<boost::match_flag_type>(flags[3])))
@@ -505,9 +505,9 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
                begin_error();
                cout << "regex++ API result mismatch in regex_match(iterator, iterator, match_results&, const basic_regex&, int)" << endl;
             }
-            std::basic_string<char_t> s(search_text.begin(), search_text.end());
+            std::basic_string<char_t> s3(search_text.begin(), search_text.end());
             match_results<std::basic_string<char_t>::const_iterator> sm;
-            if(regex_match(s, sm, e, static_cast<boost::match_flag_type>(flags[3])))
+            if(regex_match(s3, sm, e, static_cast<boost::match_flag_type>(flags[3])))
             {
                if(compare_result(sm, m) == false)
                {
@@ -520,7 +520,7 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
                begin_error();
                cout << "regex++ API result mismatch in regex_match(const std::string&, match_results&, const basic_regex&, int)" << endl;
             }
-            if(s.find(char_t(0)) == std::basic_string<char_t>::npos)
+            if(s3.find(char_t(0)) == std::basic_string<char_t>::npos)
             {
                match_results<const char_t*> ssm;
                if(regex_match(search_text.c_str(), ssm, e, static_cast<boost::match_flag_type>(flags[3])))

@@ -96,11 +96,11 @@ public:
       return *this;
    }
 
-   reg_expression& assign(const charT* first,
-                          const charT* last,
+   reg_expression& assign(const charT* arg_first,
+                          const charT* arg_last,
                           flag_type f = regex_constants::normal)
    {
-      set_expression(first, last, f | regex_constants::use_except);
+      set_expression(arg_first, arg_last, f | regex_constants::use_except);
       return *this;
    }
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(__IBMCPP__)
@@ -114,10 +114,10 @@ public:
     : data(a), pkmp(0), error_code_(REG_EMPTY), _expression(0) { set_expression(p, f | regex_constants::use_except); }
 
    template <class InputIterator>
-   reg_expression(InputIterator first, InputIterator last, flag_type f = regex_constants::normal, const Allocator& al = Allocator())
+   reg_expression(InputIterator arg_first, InputIterator arg_last, flag_type f = regex_constants::normal, const Allocator& al = Allocator())
     : data(al), pkmp(0), error_code_(REG_EMPTY), _expression(0)
    {
-      std::basic_string<charT> a(first, last);
+      std::basic_string<charT> a(arg_first, arg_last);
       set_expression(a.data(), a.data() + a.size(), f | regex_constants::use_except);
    }
 
@@ -138,11 +138,11 @@ public:
    }
 
    template <class InputIterator>
-   reg_expression& BOOST_REGEX_CALL assign(InputIterator first,
-                          InputIterator last,
+   reg_expression& BOOST_REGEX_CALL assign(InputIterator arg_first,
+                          InputIterator arg_last,
                           flag_type f = regex_constants::normal)
    {
-      std::basic_string<charT> a(first, last);
+      std::basic_string<charT> a(arg_first, arg_last);
       set_expression(a.data(), a.data() + a.size(), f | regex_constants::use_except);
       return *this;
    }
@@ -361,8 +361,8 @@ public:
       : reg_expression<charT, traits, Allocator>(p,f,a){}
 
    template <class I>
-   basic_regex(I first, I last, flag_type f = regex_constants::normal, const Allocator& al = Allocator())
-      : reg_expression<charT, traits, Allocator>(first, last, f, al){}
+   basic_regex(I arg_first, I arg_last, flag_type f = regex_constants::normal, const Allocator& al = Allocator())
+      : reg_expression<charT, traits, Allocator>(arg_first, arg_last, f, al){}
 
    template <class ST, class SA>
    basic_regex& BOOST_REGEX_CALL operator=(const std::basic_string<charT, ST, SA>& p)

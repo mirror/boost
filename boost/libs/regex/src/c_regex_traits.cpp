@@ -717,11 +717,11 @@ void BOOST_REGEX_CALL c_regex_traits<char>::transform_primary(std::string& out, 
       out.erase((int)sort_delim);
       break;
    case re_detail::sort_delim:
-      for(unsigned int i = 0; i < out.size(); ++i)
+      for(unsigned int j = 0; j < out.size(); ++j)
       {
-         if((out[i] == sort_delim) && (i+1 < out.size()))
+         if((out[j] == sort_delim) && (j+1 < out.size()))
          {
-            out.erase(i+1);
+            out.erase(j+1);
             break;
          }
       }

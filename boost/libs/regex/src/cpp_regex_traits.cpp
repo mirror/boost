@@ -115,7 +115,6 @@ template<class charT, class traits>
 typename parser_buf<charT, traits>::pos_type
 parser_buf<charT, traits>::seekoff(off_type off, ::std::ios_base::seekdir way, ::std::ios_base::openmode which)
 {
-   typedef typename parser_buf<charT, traits>::pos_type pos_type;
    if(which & ::std::ios_base::out)
       return pos_type(off_type(-1));
    std::ptrdiff_t size = this->egptr() - this->eback();
@@ -612,8 +611,8 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
       cat = msgs.open(regex_message_catalogue, l);
       if(cat < 0)
       {
-         std::string m("Unable to open message catalog: ");
-         std::runtime_error err(m + regex_message_catalogue);
+         std::string mess("Unable to open message catalog: ");
+         std::runtime_error err(mess + regex_message_catalogue);
          boost::throw_exception(err);
       }
    }

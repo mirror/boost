@@ -215,11 +215,11 @@ public:
    typedef std::random_access_iterator_tag iterator_category;
 
    mapfile_iterator() { node = 0; file = 0; offset = 0; }
-   mapfile_iterator(const mapfile* f, long position)
+   mapfile_iterator(const mapfile* f, long arg_position)
    {
       file = f;
-      node = f->_first + position / mapfile::buf_size;
-      offset = position % mapfile::buf_size;
+      node = f->_first + arg_position / mapfile::buf_size;
+      offset = arg_position % mapfile::buf_size;
       if(file)
          file->lock(node);
    }

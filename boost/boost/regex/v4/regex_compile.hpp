@@ -205,25 +205,25 @@ Allocator BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::get_allocat
 }
 
 template <class charT, class traits, class Allocator>
-unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_inner_set(const charT*& first, const charT* last)
+unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_inner_set(const charT*& arg_first, const charT* arg_last)
 {
    //
    // we have an inner [...] construct
    //
-   jm_assert(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*first) == traits_type::syntax_open_set);
-   const charT* base = first;
-   while( (first != last)
-      && (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*first) != traits_type::syntax_close_set) )
-         ++first;
-   if(first == last)
+   jm_assert(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*arg_first) == traits_type::syntax_open_set);
+   const charT* base = arg_first;
+   while( (arg_first != arg_last)
+      && (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*arg_first) != traits_type::syntax_close_set) )
+         ++arg_first;
+   if(arg_first == arg_last)
       return 0;
-   ++first;
-   if((first-base) < 5)
+   ++arg_first;
+   if((arg_first-base) < 5)
       return 0;
-   if(*(base+1) != *(first-2))
+   if(*(base+1) != *(arg_first-2))
       return 0;
    unsigned int result = traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*(base+1));
-   if((result == traits_type::syntax_colon) && ((first-base) == 5))
+   if((result == traits_type::syntax_colon) && ((arg_first-base) == 5))
    {
       unsigned type = traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*(base+2));
       if((type == traits_type::syntax_left_word) || (type == traits_type::syntax_right_word))
@@ -234,20 +234,20 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_in
 
 
 template <class charT, class traits, class Allocator>
-bool BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::skip_space(const charT*& first, const charT* last)
+bool BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::skip_space(const charT*& arg_first, const charT* arg_last)
 {
    //
-   // returns true if we get to last:
+   // returns true if we get to arg_last:
    //
-   while((first != last) && (traits_inst.is_class(*first, traits_type::char_class_space) == true))
+   while((arg_first != arg_last) && (traits_inst.is_class(*arg_first, traits_type::char_class_space) == true))
    {
-      ++first;
+      ++arg_first;
    }
-   return first == last;
+   return arg_first == arg_last;
 }
 
 template <class charT, class traits, class Allocator>
-void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_range(const charT*& ptr, const charT* end, unsigned& min, unsigned& max)
+void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_range(const charT*& ptr, const charT* arg_end, unsigned& min, unsigned& max)
 {
    //
    // we have {x} or {x,} or {x,y} NB no spaces inside braces
@@ -255,7 +255,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_range(cons
    // On input ptr points to "{"
    //
    ++ptr;
-   if(skip_space(ptr, end))
+   if(skip_space(ptr, arg_end))
    {
       fail(REG_EBRACE);
       return;
@@ -265,8 +265,8 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_range(cons
       fail(REG_BADBR);
       return;
    }
-   min = traits_inst.toi(ptr, end, 10);
-   if(skip_space(ptr, end))
+   min = traits_inst.toi(ptr, arg_end, 10);
+   if(skip_space(ptr, arg_end))
    {
       fail(REG_EBRACE);
       return;
@@ -275,13 +275,13 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_range(cons
    {
       //we have a second interval:
       ++ptr;
-      if(skip_space(ptr, end))
+      if(skip_space(ptr, arg_end))
       {
          fail(REG_EBRACE);
          return;
       }
       if(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*ptr) == traits_type::syntax_digit)
-         max = traits_inst.toi(ptr, end, 10);
+         max = traits_inst.toi(ptr, arg_end, 10);
       else
          max = (unsigned)-1;
    }
@@ -289,7 +289,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_range(cons
       max = min;
 
    // validate input:
-   if(skip_space(ptr, end))
+   if(skip_space(ptr, arg_end))
    {
       fail(REG_EBRACE);
       return;
@@ -310,7 +310,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_range(cons
       {
          // back\ is OK now check the }
          ++ptr;
-         if((ptr == end) || (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*ptr) != traits_type::syntax_close_brace))
+         if((ptr == arg_end) || (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*ptr) != traits_type::syntax_close_brace))
          {
             fail(REG_BADBR);
             return;
@@ -325,10 +325,10 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_range(cons
 }
 
 template <class charT, class traits, class Allocator>
-charT BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_escape(const charT*& first, const charT* last)
+charT BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_escape(const charT*& arg_first, const charT* arg_last)
 {
-   charT c(*first);
-   traits_size_type c_unsigned = (traits_size_type)(traits_uchar_type)*first;
+   charT c(*arg_first);
+   traits_size_type c_unsigned = (traits_size_type)(traits_uchar_type)*arg_first;
    // this is only used for the switch(), but cannot be folded in
    // due to a bug in Comeau 4.2.44beta3
    traits_size_type syntax = traits_inst.syntax_type(c_unsigned);
@@ -336,93 +336,93 @@ charT BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_escape(co
    {
    case traits_type::syntax_a:
       c = '\a';
-      ++first;
+      ++arg_first;
       break;
    case traits_type::syntax_f:
       c = '\f';
-      ++first;
+      ++arg_first;
       break;
    case traits_type::syntax_n:
       c = '\n';
-      ++first;
+      ++arg_first;
       break;
    case traits_type::syntax_r:
       c = '\r';
-      ++first;
+      ++arg_first;
       break;
    case traits_type::syntax_t:
       c = '\t';
-      ++first;
+      ++arg_first;
       break;
    case traits_type::syntax_v:
       c = '\v';
-      ++first;
+      ++arg_first;
       break;
    case traits_type::syntax_x:
-      ++first;
-      if(first == last)
+      ++arg_first;
+      if(arg_first == arg_last)
       {
          fail(REG_EESCAPE);
          break;
       }
       // maybe have \x{ddd}
-      if(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*first)) == traits_type::syntax_open_brace)
+      if(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*arg_first)) == traits_type::syntax_open_brace)
       {
-         ++first;
-         if(first == last)
+         ++arg_first;
+         if(arg_first == arg_last)
          {
             fail(REG_EESCAPE);
             break;
          }
-         if(traits_inst.is_class(*first, traits_type::char_class_xdigit) == false)
+         if(traits_inst.is_class(*arg_first, traits_type::char_class_xdigit) == false)
          {
             fail(REG_BADBR);
             break;
          }
-         c = (charT)traits_inst.toi(first, last, -16);
-         if((first == last) || (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*first)) != traits_type::syntax_close_brace))
+         c = (charT)traits_inst.toi(arg_first, arg_last, -16);
+         if((arg_first == arg_last) || (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*arg_first)) != traits_type::syntax_close_brace))
          {
             fail(REG_BADBR);
          }
-         ++first;
+         ++arg_first;
          break;
       }
       else
       {
-         if(traits_inst.is_class(*first, traits_type::char_class_xdigit) == false)
+         if(traits_inst.is_class(*arg_first, traits_type::char_class_xdigit) == false)
          {
             fail(REG_BADBR);
             break;
          }
-         c = (charT)traits_inst.toi(first, last, -16);
+         c = (charT)traits_inst.toi(arg_first, arg_last, -16);
       }
       break;
    case traits_type::syntax_c:
-      ++first;
-      if(first == last)
+      ++arg_first;
+      if(arg_first == arg_last)
       {
          fail(REG_EESCAPE);
          break;
       }
-      if(((traits_uchar_type)(*first) < (traits_uchar_type)'@')
-            || ((traits_uchar_type)(*first) > (traits_uchar_type)127) )
+      if(((traits_uchar_type)(*arg_first) < (traits_uchar_type)'@')
+            || ((traits_uchar_type)(*arg_first) > (traits_uchar_type)127) )
       {
          fail(REG_EESCAPE);
          return (charT)0;
       }
-      c = (charT)((traits_uchar_type)(*first) - (traits_uchar_type)'@');
-      ++first;
+      c = (charT)((traits_uchar_type)(*arg_first) - (traits_uchar_type)'@');
+      ++arg_first;
       break;
    case traits_type::syntax_e:
       c = (charT)27;
-      ++first;
+      ++arg_first;
       break;
    case traits_type::syntax_digit:
-      c = (charT)traits_inst.toi(first, last, -8);
+      c = (charT)traits_inst.toi(arg_first, arg_last, -8);
       break;
    default:
-      //c = *first;
-      ++first;
+      //c = *arg_first;
+      ++arg_first;
    }
    return c;
 }
@@ -678,13 +678,13 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::compile_map(
 }
   
 template <class charT, class traits, class Allocator>
-void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::move_offsets(re_detail::re_syntax_base* j, unsigned size)
+void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::move_offsets(re_detail::re_syntax_base* j, unsigned arg_size)
 {
 # ifdef BOOST_MSVC
 #  pragma warning(push)
 #  pragma warning(disable: 4127)
 #endif
-   // move all offsets starting with j->link forward by size
+   // move all offsets starting with j->link forward by arg_size
    // called after an insert:
    j = reinterpret_cast<re_detail::re_syntax_base*>(reinterpret_cast<char*>(data.data()) + j->next.i);
    while(true)
@@ -692,19 +692,19 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::move_offsets(re_
       switch(j->type)
       {
       case re_detail::syntax_element_rep:
-         static_cast<re_detail::re_jump*>(j)->alt.i += size;
-         j->next.i += size;
+         static_cast<re_detail::re_jump*>(j)->alt.i += arg_size;
+         j->next.i += arg_size;
          break;
       case re_detail::syntax_element_jump:
       case re_detail::syntax_element_alt:
-         static_cast<re_detail::re_jump*>(j)->alt.i += size;
-         j->next.i += size;
+         static_cast<re_detail::re_jump*>(j)->alt.i += arg_size;
+         j->next.i += arg_size;
          break;
       default:
-         j->next.i += size;
+         j->next.i += arg_size;
          break;
       }
-      if(j->next.i == size)
+      if(j->next.i == arg_size)
          break;
       j = reinterpret_cast<re_detail::re_syntax_base*>(reinterpret_cast<char*>(data.data()) + j->next.i);
    }
@@ -731,15 +731,15 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
 }
 
 template <class charT, class traits, class Allocator>
-re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::compile_set(const charT*& first, const charT* last)
+re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::compile_set(const charT*& arg_first, const charT* arg_last)
 {
    re_detail::jstack<traits_string_type, Allocator> singles(64, data.allocator());
    re_detail::jstack<traits_string_type, Allocator> ranges(64, data.allocator());
    re_detail::jstack<boost::uint_fast32_t, Allocator> classes(64, data.allocator());
    re_detail::jstack<traits_string_type, Allocator> equivalents(64, data.allocator());
    bool has_digraphs = false;
-   jm_assert(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*first) == traits_type::syntax_open_set);
-   ++first;
+   jm_assert(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*arg_first) == traits_type::syntax_open_set);
+   ++arg_first;
    bool started = false;
    bool done = false;
    bool isnot = false;
@@ -754,9 +754,9 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
    unsigned l = last_none;
    traits_string_type s;
 
-   while((first != last) && !done)
+   while((arg_first != arg_last) && !done)
    {
-      traits_size_type c = (traits_size_type)(traits_uchar_type)*first;
+      traits_size_type c = (traits_size_type)(traits_uchar_type)*arg_first;
       // this is only used for the switch(), but cannot be folded in
       // due to a bug in Comeau 4.2.44beta3
       traits_size_type syntax = traits_inst.syntax_type(c);
@@ -781,10 +781,10 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
             goto char_set_literal;
          }
          // check to see if we really have a class:
-         const charT* base = first;
+         const charT* base = arg_first;
          // this is only used for the switch(), but cannot be folded in
          // due to a bug in Comeau 4.2.44beta3
-    unsigned int inner_set = parse_inner_set(first, last);
+    unsigned int inner_set = parse_inner_set(arg_first, arg_last);
          switch(inner_set)
          {
          case traits_type::syntax_colon:
@@ -794,7 +794,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
                   fail(REG_ERANGE);
                   return 0;
                }
-               boost::uint_fast32_t id = traits_inst.lookup_classname(base+2, first-2);
+               boost::uint_fast32_t id = traits_inst.lookup_classname(base+2, arg_first-2);
                if(_flags & regex_constants::icase)
                {
                   if((id == traits_type::char_class_upper) || (id == traits_type::char_class_lower))
@@ -816,9 +816,9 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
             //
             // we have a collating element [.collating-name.]
             //
-            if(traits_inst.lookup_collatename(s, base+2, first-2))
+            if(traits_inst.lookup_collatename(s, base+2, arg_first-2))
             {
-               --first;
+               --arg_first;
                if(s.size() > 1)
                   has_digraphs = true;
                if(s.size())goto char_set_literal;
@@ -829,7 +829,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
             //
             // we have an equivalence class [=collating-name=]
             //
-            if(traits_inst.lookup_collatename(s, base+2, first-2))
+            if(traits_inst.lookup_collatename(s, base+2, arg_first-2))
             {
                std::size_t len = s.size();
                if(len)
@@ -851,17 +851,17 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
             fail(REG_ECOLLATE);
             return 0;
          case traits_type::syntax_left_word:
-            if((started == false) && (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*first) == traits_type::syntax_close_set))
+            if((started == false) && (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*arg_first) == traits_type::syntax_close_set))
             {
-               ++first;
+               ++arg_first;
                return add_simple(0, re_detail::syntax_element_word_start);
             }
             fail(REG_EBRACK);
             return 0;
          case traits_type::syntax_right_word:
-            if((started == false) && (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*first) == traits_type::syntax_close_set))
+            if((started == false) && (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*arg_first) == traits_type::syntax_close_set))
             {
-               ++first;
+               ++arg_first;
                return add_simple(0, re_detail::syntax_element_word_end);
             }
             fail(REG_EBRACK);
@@ -872,7 +872,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
                unsigned int t = traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*(base+1));
                if((t != traits_type::syntax_colon) && (t != traits_type::syntax_dot) && (t != traits_type::syntax_equal))
                {
-                  first = base;
+                  arg_first = base;
                   s = (charT)c;
                   goto char_set_literal;
                }
@@ -880,7 +880,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
             fail(REG_EBRACK);
             return 0;
          }
-         if(first == last)
+         if(arg_first == arg_last)
          {
             fail(REG_EBRACK);
             return 0;
@@ -901,10 +901,10 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
             s = (charT)c;
             goto char_set_literal;
          }
-         ++first;
-         if(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*first) == traits_type::syntax_close_set)
+         ++arg_first;
+         if(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*arg_first) == traits_type::syntax_close_set)
          {
-            --first;
+            --arg_first;
             s = (charT)c;
             goto char_set_literal;
          }
@@ -921,14 +921,14 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
       case traits_type::syntax_slash:
          if(_flags & regex_constants::escape_in_lists)
          {
-            ++first;
-            if(first == last)
+            ++arg_first;
+            if(arg_first == arg_last)
                continue;
-            traits_size_type c = (traits_size_type)(traits_uchar_type)*first;
+            /*traits_size_type*/ c = (traits_size_type)(traits_uchar_type)*arg_first;
             // this is only used for the switch(), but cannot be folded in
             // due to a bug in Comeau 4.2.44beta3
-            traits_size_type syntax = traits_inst.syntax_type(c);
-            switch(syntax)
+            traits_size_type syntax4 = traits_inst.syntax_type(c);
+            switch(syntax4)
             {
             case traits_type::syntax_w:
                if(l == last_dash)
@@ -939,7 +939,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
                classes.push(traits_type::char_class_word);
                started = true;
                l = last_none;
-               ++first;
+               ++arg_first;
                continue;
             case traits_type::syntax_d:
                if(l == last_dash)
@@ -950,7 +950,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
                classes.push(traits_type::char_class_digit);
                started = true;
                l = last_none;
-               ++first;
+               ++arg_first;
                continue;
             case traits_type::syntax_s:
                if(l == last_dash)
@@ -961,7 +961,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
                classes.push(traits_type::char_class_space);
                started = true;
                l = last_none;
-               ++first;
+               ++arg_first;
                continue;
             case traits_type::syntax_l:
                if(l == last_dash)
@@ -972,7 +972,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
                classes.push(traits_type::char_class_lower);
                started = true;
                l = last_none;
-               ++first;
+               ++arg_first;
                continue;
             case traits_type::syntax_u:
                if(l == last_dash)
@@ -983,7 +983,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
                classes.push(traits_type::char_class_upper);
                started = true;
                l = last_none;
-               ++first;
+               ++arg_first;
                continue;
             case traits_type::syntax_W:
             case traits_type::syntax_D:
@@ -993,8 +993,8 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
                fail(REG_EESCAPE);
                return 0;
             default:
-               c = parse_escape(first, last);
-               --first;
+               c = parse_escape(arg_first, arg_last);
+               --arg_first;
                s = (charT)c;
                goto char_set_literal;
             }
@@ -1029,7 +1029,7 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
             l = last_single;
          }
       }
-      ++first;
+      ++arg_first;
    }
    if(!done)
       return 0;
@@ -1198,17 +1198,17 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
       equivalents.pop();
    }
 
-   boost::uint_fast32_t flags = 0;
+   boost::uint_fast32_t l_flags = 0;
    while(classes.empty() == false)
    {
-      flags |= classes.peek();
+      l_flags |= classes.peek();
       classes.pop();
    }
-   if(flags)
+   if(l_flags)
    {
       for(unsigned int i = 0; i < 256; ++i)
       {
-         if(traits_inst.is_class(charT(i), flags))
+         if(traits_inst.is_class(charT(i), l_flags))
             dat->_map[(traits_uchar_type)traits_inst.translate((charT)i, (_flags & regex_constants::icase))] = re_detail::mask_all;
       }
    }
@@ -1326,7 +1326,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_d
 
 
 template <class charT, class traits, class Allocator>
-unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expression(const charT* p, const charT* end, flag_type f)
+unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expression(const charT* arg_first, const charT* arg_last, flag_type f)
 {
 # ifdef BOOST_MSVC
 #  pragma warning(push)
@@ -1337,27 +1337,27 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
    f &= ~regex_constants::collate; 
 #endif 
 
-   if(p == expression())
+   if(arg_first == expression())
    {
-      traits_string_type s(p, end);
+      traits_string_type s(arg_first, arg_last);
       return set_expression(s.c_str(), s.c_str() + s.size(), f);
    }
    typedef typename traits_type::sentry sentry_t;
    sentry_t sent(traits_inst);
    if(sent){
 
-   const charT* base = p;
+   const charT* base = arg_first;
    data.clear();
    _flags = f;
    fail(REG_NOERROR);  // clear any error
 
-   if(p >= end)
+   if(arg_first >= arg_last)
    {
       fail(REG_EMPTY);
       return error_code();
    }
 
-   const charT* ptr = p;
+   const charT* ptr = arg_first;
    marks = 0;
    re_detail::jstack<std::size_t, Allocator> mark(64, data.allocator());
    re_detail::jstack<int, Allocator> markid(64, data.allocator());
@@ -1376,14 +1376,14 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
 
    if(_flags & regex_constants::literal)
    {
-      while(ptr != end)
+      while(ptr != arg_last)
       {
          dat = add_literal(dat, traits_inst.translate(*ptr, (_flags & regex_constants::icase)));
          ++ptr;
       }
    }
 
-   while (ptr < end)
+   while (ptr < arg_last)
    {
       c = (traits_size_type)(traits_uchar_type)*ptr;
       // this is only used for the switch(), but cannot be folded in
@@ -1422,8 +1422,8 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
             c = (traits_size_type)(traits_uchar_type)*ptr;
             // this is only used for the switch(), but cannot be folded in
             // due to a bug in Comeau 4.2.44beta3
-            traits_size_type syntax = traits_inst.syntax_type(c);
-            switch(syntax)
+            traits_size_type syntax2 = traits_inst.syntax_type(c);
+            switch(syntax2)
             {
             case traits_type::syntax_colon:
                static_cast<re_detail::re_brace*>(dat)->index = 0;
@@ -1510,7 +1510,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
             }
          }
 
-         // pop any pushed alternatives and set the target end destination:
+         // pop any pushed alternatives and set the target arg_last destination:
          dat = reinterpret_cast<re_detail::re_syntax_base*>(reinterpret_cast<unsigned char*>(data.data()) + mark.peek());
          while(dat->type == re_detail::syntax_element_jump)
          {
@@ -1537,7 +1537,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
          break;
       case traits_type::syntax_slash:
       {
-         if(++ptr == end)
+         if(++ptr == arg_last)
          {
             fail(REG_EESCAPE);
             return error_code();
@@ -1545,8 +1545,8 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
          c = (traits_size_type)(traits_uchar_type)*ptr;
          // this is only used for the switch(), but cannot be folded in
          // due to a bug in Comeau 4.2.44beta3
-         traits_size_type syntax = traits_inst.syntax_type(c);
-         switch(syntax)
+         traits_size_type syntax3 = traits_inst.syntax_type(c);
+         switch(syntax3)
          {
          case traits_type::syntax_open_bracket:
             if(_flags & bk_parens)
@@ -1581,7 +1581,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
                break;
 
             // we have {x} or {x,} or {x,y}:
-            parse_range(ptr, end, rep_min, rep_max);
+            parse_range(ptr, arg_last, rep_min, rep_max);
             goto repeat_jump;
 
          case traits_type::syntax_digit:
@@ -1593,7 +1593,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
                {
                   // we can have \025 which means take char whose
                   // code is 25 (octal), so parse string:
-                  c = traits_inst.toi(ptr, end, -8);
+                  c = traits_inst.toi(ptr, arg_last, -8);
                   --ptr;
                   break;
                }
@@ -1663,7 +1663,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
             ++ptr;
             while(true)
             {
-               if(ptr == end)
+               if(ptr == arg_last)
                {
                   fail(REG_EESCAPE);
                   return error_code();
@@ -1671,7 +1671,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
                if(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*ptr) == traits_type::syntax_slash)
                {
                   ++ptr;
-                  if((ptr != end) && (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*ptr) == traits_type::syntax_E))
+                  if((ptr != arg_last) && (traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*ptr) == traits_type::syntax_E))
                      break;
                   else
                   {
@@ -1709,7 +1709,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
             ++ptr;
             continue;
          default:
-            c = (traits_size_type)(traits_uchar_type)parse_escape(ptr, end);
+            c = (traits_size_type)(traits_uchar_type)parse_escape(ptr, arg_last);
             dat = add_literal(dat, (charT)c);
             continue;
          }
@@ -1791,7 +1791,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
             ++ptr;
             //
             // now check to see if we have a non-greedy repeat:
-            if((ptr != end) && (_flags & (perlex | limited_ops | bk_plus_qm | bk_braces)) == perlex)
+            if((ptr != arg_last) && (_flags & (perlex | limited_ops | bk_plus_qm | bk_braces)) == perlex)
             {
                c = (traits_size_type)(traits_uchar_type)*ptr;
                if(traits_type::syntax_question == traits_inst.syntax_type(c))
@@ -1833,7 +1833,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
             dat->next.i = data.size();
          }
          // extend:
-         dat = compile_set(ptr, end);
+         dat = compile_set(ptr, arg_last);
          if(dat == 0)
          {
             if((_flags & regex_constants::failbit) == 0)
@@ -1881,8 +1881,8 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
          {
             // we have a '(' or '|' to go back to:
             offset = mark.peek();
-            re_detail::re_syntax_base* base = reinterpret_cast<re_detail::re_syntax_base*>(reinterpret_cast<unsigned char*>(data.data()) + offset);
-            offset = base->next.i;
+            re_detail::re_syntax_base* base2 = reinterpret_cast<re_detail::re_syntax_base*>(reinterpret_cast<unsigned char*>(data.data()) + offset);
+            offset = base2->next.i;
          }
          re_detail::re_jump* j = static_cast<re_detail::re_jump*>(data.insert(offset, re_detail::re_jump_size));
          j->type = re_detail::syntax_element_alt;
@@ -1902,7 +1902,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
             continue;
          }
          // we have {x} or {x,} or {x,y}:
-         parse_range(ptr, end, rep_min, rep_max);
+         parse_range(ptr, arg_last, rep_min, rep_max);
          goto repeat_jump;
       case traits_type::syntax_newline:
          if(_flags & newline_alt)
@@ -1950,7 +1950,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
    //
    if(mark.empty() == false)
    {
-      // pop any pushed alternatives and set the target end destination:
+      // pop any pushed alternatives and set the target arg_last destination:
       dat = reinterpret_cast<re_detail::re_syntax_base*>(reinterpret_cast<unsigned char*>(data.data()) + mark.peek());
       while(dat->type == re_detail::syntax_element_jump)
       {
@@ -1974,11 +1974,11 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
 
    //
    // allocate space for start _map:
-   startmap = reinterpret_cast<unsigned char*>(data.extend(256 + ((end - base + 1) * sizeof(charT))));
+   startmap = reinterpret_cast<unsigned char*>(data.extend(256 + ((arg_last - base + 1) * sizeof(charT))));
    //
    // and copy the expression we just compiled:
    _expression = reinterpret_cast<charT*>(reinterpret_cast<char*>(startmap) + 256);
-   _expression_len = end - base;
+   _expression_len = arg_last - base;
    std::memcpy(_expression, base, _expression_len * sizeof(charT));
    *(_expression + _expression_len) = charT(0);
 
@@ -2025,16 +2025,16 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
 }
 
 template <class charT, class traits, class Allocator>
-re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::add_simple(re_detail::re_syntax_base* dat, re_detail::syntax_element_type type, unsigned int size)
+re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::add_simple(re_detail::re_syntax_base* dat, re_detail::syntax_element_type type, unsigned int arg_size)
 {
    if(dat)
    {
       data.align();
       dat->next.i = data.size();
    }
-   if(size < sizeof(re_detail::re_syntax_base))
-      size = sizeof(re_detail::re_syntax_base);
-   dat = static_cast<re_detail::re_syntax_base*>(data.extend(size));
+   if(arg_size < sizeof(re_detail::re_syntax_base))
+      arg_size = sizeof(re_detail::re_syntax_base);
+   dat = static_cast<re_detail::re_syntax_base*>(data.extend(arg_size));
    dat->type = type;
    dat->next.i = 0;
    return dat;
@@ -2085,11 +2085,11 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::probe_re
 }
 
 template <class charT, class traits, class Allocator>
-unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_leading_rep(re_detail::re_syntax_base* dat, re_detail::re_syntax_base* end)
+unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_leading_rep(re_detail::re_syntax_base* dat, re_detail::re_syntax_base* arg_end)
 {
    unsigned int len = 0;
-   bool leading_lit = end ? false : true;
-   while(dat != end)
+   bool leading_lit = arg_end ? false : true;
+   while(dat != arg_end)
    {
       switch(dat->type)
       {

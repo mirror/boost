@@ -106,8 +106,8 @@ struct saved_single_repeat : public saved_state
    unsigned count;
    const re_repeat* rep;
    BidiIterator last_position;
-   saved_single_repeat(unsigned c, const re_repeat* r, BidiIterator lp, int id) 
-      : saved_state(id), count(c), rep(r), last_position(lp){}
+   saved_single_repeat(unsigned c, const re_repeat* r, BidiIterator lp, int arg_id) 
+      : saved_state(arg_id), count(c), rep(r), last_position(lp){}
 };
 
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
