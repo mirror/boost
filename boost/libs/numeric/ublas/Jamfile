@@ -15,9 +15,34 @@
 #
 
 subproject libs/numeric/ublas ;
-
 # bring in rules for testing
 import testing ;
+
+# Define features to test:
+#  Value types: USE_FLOAT USE_DOUBLE USE_STD_COMPLEX
+#  Proxies: USE_RANGE USE_SLICE
+#  Storage types: USE_BOUNDED_ARRAY USE_UNBOUNDED_ARRAY
+#  Vector types: USE_STD_VECTOR USE_BOUNDED_VECTOR
+#  Matrix types: USE_MATRIX USE_BOUNDED_MATRIX USE_VECTOR_OF_VECTOR
+#  Adaptors: USE_ADAPTOR
+
+UBLAS_TESTSET ?=
+            <define>USE_DOUBLE <define>USE_STD_COMPLEX
+            <define>USE_RANGE <define>USE_SLICE
+            <define>USE_UNBOUNDED_ARRAY <define>USE_MATRIX ;
+
+#  Sparse storage: USE_MAP_ARRAY USE_STD_MAP
+#  Sparse vectors: USE_SPARSE_VECTOR USE_COMPRESSED_VECTOR USE_COORDINATE_VECTOR
+#  Sparse matrices: USE_SPARSE_MATRIX USE_COMPRESSED_MATRIX USE_COORDINATE_MATRIX USE_SPARSE_VECTOR_OF_SPARSE_VECTOR USE_GENERALIZED_VECTOR_OF_VECTOR
+
+UBLAS_TESTSET_SPARSE ?= 
+            <define>USE_DOUBLE <define>USE_STD_COMPLEX
+#            <define>USE_RANGE <define>USE_SLICE	Too complex for regression testing
+            <define>USE_UNBOUNDED_ARRAY
+			<define>USE_STD_MAP
+            <define>USE_SPARSE_VECTOR <define>USE_COMPRESSED_VECTOR <define>USE_COORDINATE_VECTOR
+            <define>USE_SPARSE_MATRIX <define>USE_COMPRESSED_MATRIX <define>USE_COORDINATE_MATRIX ;
+
 
 test-suite numeric/uBLAS
     : [ run test1/test1.cpp
@@ -27,7 +52,7 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
-            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
+            $(UBLAS_TESTSET)
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test2/test2.cpp
@@ -37,7 +62,7 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
-            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
+            $(UBLAS_TESTSET)
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test3/test3.cpp
@@ -47,9 +72,7 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
-            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
-			<define>USE_MAP_ARRAY <define>USE_STD_MAP
-            <define>USE_SPARSE_VECTOR <define>USE_COMPRESSED_VECTOR <define>USE_COORDINATE_VECTOR <define>USE_SPARSE_MATRIX <define>USE_COMPRESSED_MATRIX <define>USE_COORDINATE_MATRIX
+            $(UBLAS_TESTSET_SPARSE)
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test4/test4.cpp
@@ -59,7 +82,7 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
-            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
+            $(UBLAS_TESTSET)
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test5/test5.cpp
@@ -69,7 +92,7 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
-            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
+            $(UBLAS_TESTSET)
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test6/test6.cpp
@@ -79,7 +102,7 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
-            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
+            $(UBLAS_TESTSET)
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
 # Test7 checks uBLAS operation with interval types.
@@ -92,7 +115,7 @@ test-suite numeric/uBLAS
 #        : # input files
 #        : # requirements
 #            <define>BOOST_UBLAS_USE_INTERVAL
-#            <define>USE_DOUBLE <define>USE_STD_COMPLEX <define>USE_RANGE <define>USE_SLICE <define>USE_UNBOUNDED_ARRAY
+#            $(UBLAS_TESTSET)
 #            <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
 #      ]
       [ compile concepts.cpp
