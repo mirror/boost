@@ -31,6 +31,8 @@
 <b>std::mem_fun[_ref]</b> adaptors?</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#Q2">Should I replace every occurence of <b>std::mem_fun[_ref]</b>
 with <b>mem_fn</b> in my existing code?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q3">Will <b>mem_fn</b> work with COM methods?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q4">Why isn't BOOST_MEM_FN_ENABLE_STDCALL defined automatically?</a></h4>
 <h3 style="margin-left: 20pt;"><a href="#Interface">Interface</a></h3>
 <h4 style="margin-left: 40pt;"><a href="#Synopsis">Synopsis</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#CommonRequirements">Common requirements</a></h4>
@@ -192,6 +194,21 @@ not possible to fully describe the type of the first argument using the standard
 <b>argument_type</b> and <b>first_argument_type</b> nested typedefs. Libraries
 that need adaptable function objects in order to function might not like
 <b>mem_fn</b>.
+</p>
+
+<h3><a name="Q3">Will <b>mem_fn</b> work with COM methods?</a></h3>
+
+<p>
+Yes, if you <a href="#stdcall">#define BOOST_MEM_FN_ENABLE_STDCALL</a>.
+</p>
+
+<h3><a name="Q4">Why isn't BOOST_MEM_FN_ENABLE_STDCALL defined automatically?</a></h3>
+
+<p>
+Non-portable extensions, in general, should default to off to prevent vendor
+lock-in. Had BOOST_MEM_FN_ENABLE_STDCALL been defined automatically, you could
+have accidentally taken advantage of it without realizing that your code is,
+perhaps, no longer portable.
 </p>
 
 <h2><a name="Interface">Interface</a></h2>
