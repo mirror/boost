@@ -237,7 +237,7 @@ private:
     typedef symmetric_filter_adapter<impl_type, Alloc>  base_type;
 public:
     typedef typename base_type::char_type               char_type;
-    typedef typename base_type::category                category;
+    typedef typename base_type::category                io_category;
     basic_zlib_compressor( const zlib_params& = zlib::default_compression, 
                            std::streamsize buffer_size = default_buffer_size );
                            // Note: use large buffer.
@@ -262,7 +262,7 @@ private:
     typedef symmetric_filter_adapter<impl_type, Alloc>  base_type;
 public:
     typedef typename base_type::char_type               char_type;
-    typedef typename base_type::category                category;
+    typedef typename base_type::category                io_category;
     basic_zlib_decompressor( int window_bits = zlib::default_window_bits,
                              std::streamsize buffer_size = 
                                  default_buffer_size );

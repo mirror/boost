@@ -70,7 +70,7 @@ public:
     typedef Ch                              char_type;
     typedef std::char_traits<Ch>            traits_type;
     typedef typename traits_type::int_type  int_type;
-    struct category 
+    struct io_category 
         : dual_use, 
           filter_tag, 
           closable_tag 

@@ -20,7 +20,7 @@ template<typename Container>
 class back_insert_device {
 public:
     typedef typename Container::value_type  char_type;
-    typedef sink_tag                        category;
+    typedef sink_tag                        io_category;
     back_insert_device(Container& cnt) : container(&cnt) { }
     void write(const char_type* s, std::streamsize n)
     { container->insert(container->end(), s, s + n); }

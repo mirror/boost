@@ -45,7 +45,7 @@
 #include <boost/iostreams/constants.hpp>           // buffer size.
 #include <boost/iostreams/detail/buffer.hpp>
 #include <boost/iostreams/detail/scope_guard.hpp>
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>          // read, write.
 #include <boost/shared_ptr.hpp>
 
@@ -188,7 +188,7 @@ private:
             >                                       impl_type;
 public:
     typedef typename impl_type::char_type           char_type;
-    typedef typename impl_type::category            category;
+    typedef typename impl_type::category            io_category;
     symmetric_filter_adapter( SymmetricFilter* filter,     // Takes ownership.
                               std::streamsize buffer_size =
                                   default_buffer_size )    // Use large buffer.

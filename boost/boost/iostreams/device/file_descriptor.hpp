@@ -28,7 +28,7 @@ namespace boost { namespace iostreams {
 class BOOST_IOSTREAMS_DECL file_descriptor {
 public:
     typedef char char_type;
-    struct category : public seekable_device_tag, closable_tag { };
+    struct io_category : public seekable_device_tag, closable_tag { };
     file_descriptor() : fd_(-1), close_(false) { }
     file_descriptor(int fd, bool close = false) 
         : fd_(fd), close_(close) { }
@@ -54,7 +54,7 @@ private:
 
 struct file_descriptor_source : private file_descriptor {
     typedef char char_type;
-    struct category : public source_tag, closable_tag { };
+    struct io_category : public source_tag, closable_tag { };
     using file_descriptor::read;
     using file_descriptor::open;
     using file_descriptor::close;
@@ -69,7 +69,7 @@ struct file_descriptor_source : private file_descriptor {
 
 struct file_descriptor_sink : private file_descriptor {
     typedef char char_type;
-    struct category : public sink_tag, closable_tag { };
+    struct io_category : public sink_tag, closable_tag { };
     using file_descriptor::write;
     using file_descriptor::open;
     using file_descriptor::close;

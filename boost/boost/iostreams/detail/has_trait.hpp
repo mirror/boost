@@ -12,7 +12,7 @@
 #endif              
 
 #include <boost/config.hpp> // BOOST_STATIC_CONSTANT.
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>   
 #include <boost/mpl/bool.hpp>   
 #include <boost/type_traits/is_convertible.hpp> 

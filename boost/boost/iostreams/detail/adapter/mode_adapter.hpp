@@ -28,8 +28,6 @@ template<typename T, typename Mode>
 class mode_adapter {
 private:
     struct empty_base { };
-    struct base2 { };
-    typedef BOOST_IOSTREAMS_CATEGORY(T)                         base_category;
 public:
     typedef BOOST_IOSTREAMS_CHAR_TYPE(T)                        char_type;
     struct io_category 
@@ -37,7 +35,8 @@ public:
           device_tag,
           mpl::if_<is_filter<T>, filter_tag, device_tag>,
           mpl::if_<is_filter<T>, multichar_tag, empty_base>,
-          closable_tag
+          closable_tag,
+          localizable_tag
         { };
     mode_adapter(T t) : t_(t) { }
 
@@ -53,29 +52,33 @@ public:
         // Filter member functions.
 
     template<typename Source>
-    std::streamsize read(char_type* s, std::streamsize n, Source& src)
-    { return iostreams::read(src, s, n); }
+    std::streamsize read(Source& src, char_type* s, std::streamsize n)
+    { return iostreams::read(t_, src, s, n); }
 
     template<typename Sink>
-    void write(const char_type* s, std::streamsize n, Sink& snk)
-    { return iostreams::write(snk, s, n); }
+    void write(Sink& snk, const char_type* s, std::streamsize n)
+    { return iostreams::write(t_, snk, s, n); }
 
     template<typename Device>
-    void seek( std::streamoff off, std::ios::seekdir way, Device& dev)
-    { return iostreams::seek(dev, off, way); }
+    void seek(Device& dev, std::streamoff off, std::ios::seekdir way)
+    { return iostreams::seek(t_, dev, off, way); }
 
     template<typename Device>
     void seek( Device& dev, std::streamoff off, std::ios::seekdir way,
                std::ios::openmode which  )
-    { return iostreams::seek(dev, off, way, which); }
+    { return iostreams::seek(t_, dev, off, way, which); }
 
     template<typename Device>
     void close(Device& dev)
-    { return iostreams::close(dev); }
+    { return iostreams::close(t_, dev); }
 
     template<typename Device>
     void close(Device& dev, std::ios::openmode which)
-    { return iostreams::close(dev, which); }
+    { return iostreams::close(t_, dev, which); }
+
+    template<typename Locale>
+    void imbue(const Locale& loc)
+    { return iostreams::imbue(t_, loc); }
 private:
     T t_;
 };

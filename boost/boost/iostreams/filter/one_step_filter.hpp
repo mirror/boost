@@ -39,7 +39,7 @@ template<typename Ch, typename Alloc = std::allocator<Ch> >
 class one_step_filter  {
 public:
     typedef Ch char_type;
-    struct category
+    struct io_category
         : dual_use,
           filter_tag,
           multichar_tag,

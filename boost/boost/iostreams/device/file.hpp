@@ -33,7 +33,7 @@ template<typename Ch>
 class basic_file {
 public:
     typedef Ch char_type;
-    struct category
+    struct io_category
         : public seekable_device_tag,
           public closable_tag,
           public localizable_tag
@@ -66,7 +66,7 @@ typedef basic_file<wchar_t>  wfile;
 template<typename Ch>
 struct basic_file_source : private basic_file<Ch> {
     typedef Ch char_type;
-    struct category
+    struct io_category
         : public source_tag,
           public closable_tag
         { };
@@ -84,7 +84,7 @@ typedef basic_file_source<wchar_t>  wfile_source;
 template<typename Ch>
 struct basic_file_sink : private basic_file<Ch> {
     typedef Ch char_type;
-    struct category
+    struct io_category
         : public sink_tag,
           public closable_tag
         { };

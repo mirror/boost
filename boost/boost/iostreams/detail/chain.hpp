@@ -22,7 +22,7 @@
 #include <boost/config.hpp>                     // BOOST_MSVC, template friends.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>
-#include <boost/iostreams/io_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/is_device.hpp>
 #include <boost/iostreams/is_filter.hpp>
 #include <boost/iostreams/detail/access_control.hpp>
@@ -85,7 +85,7 @@ public:
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
     typedef Alloc                                  allocator_type;
     typedef Mode                                   mode;
-    struct category
+    struct io_category
         : Mode,
           device_tag,
           closable_tag 
@@ -266,7 +266,7 @@ private:
                          > \
     { \
     public: \
-        struct category : device_tag, Mode { }; \
+        struct io_category : device_tag, Mode { }; \
         typedef Mode                                                     mode; \
     private: \
         typedef boost::iostreams::detail::chain_base< \

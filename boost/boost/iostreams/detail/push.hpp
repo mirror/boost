@@ -30,6 +30,12 @@
     /**/
 
 #define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL1(mode, ch, name, helper, result, has_return ) \
+    template<typename T> \
+    BOOST_PP_EXPR_IF(has_return, result) \
+    name(const T& t BOOST_IOSTREAMS_PUSH_PARAMS()) \
+    { BOOST_PP_EXPR_IF(has_return, return) \
+      this->helper( boost::iostreams::detail::resolve<mode, ch>(t) \
+                    BOOST_IOSTREAMS_PUSH_ARGS() ); } \
     template<typename IteratorType> \
     BOOST_PP_EXPR_IF(has_return, result) \
     name(IteratorType first, IteratorType last BOOST_IOSTREAMS_PUSH_PARAMS()) \
@@ -47,24 +53,12 @@
 # define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL2(mode, ch, name, helper, result, has_return ) \
     template<typename T> \
     BOOST_PP_EXPR_IF(has_return, result) \
-    name(const T& t BOOST_IOSTREAMS_PUSH_PARAMS() BOOST_IOSTREAMS_DISABLE_IF_STREAM(T)) \
-    { BOOST_PP_EXPR_IF(has_return, return) \
-      this->helper( boost::iostreams::detail::resolve<mode, ch>(t) \
-                    BOOST_IOSTREAMS_PUSH_ARGS() ); } \
-    template<typename T> \
-    BOOST_PP_EXPR_IF(has_return, result) \
     name( T& t BOOST_IOSTREAMS_PUSH_PARAMS() \
           BOOST_IOSTREAMS_ENABLE_IF_STREAM(T)) \
     { BOOST_IOSTREAMS_ADAPT_STREAM(helper, has_return, t) } \
     /**/
 #else // #ifndef BOOST_NO_SFINAE
 # define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL2(mode, ch, name, helper, result, has_return )  \
-    template<typename T> \
-    BOOST_PP_EXPR_IF(has_return, result) \
-    name(const T& t BOOST_IOSTREAMS_PUSH_PARAMS()) \
-    { BOOST_PP_EXPR_IF(has_return, return) \
-      this->helper( boost::iostreams::detail::resolve<mode, ch>(t) \
-                    BOOST_IOSTREAMS_PUSH_ARGS() ); } \
     template<typename CharType, typename TraitsType> \
     BOOST_PP_EXPR_IF(has_return, result) \
     name(std::basic_streambuf<CharType, TraitsType>& sb BOOST_IOSTREAMS_PUSH_PARAMS()) \

@@ -161,7 +161,7 @@ private:
     typedef basic_zlib_compressor<Alloc>  base_type;
 public:
     typedef char char_type;
-    struct category
+    struct io_category
         : dual_use,
           filter_tag,
           multichar_tag,
@@ -296,7 +296,7 @@ template<typename Alloc = std::allocator<char> >
 class basic_gzip_decompressor : basic_zlib_decompressor<Alloc> {
 public:
     typedef char char_type;
-    struct category
+    struct io_category
         : multichar_input_filter_tag,
           closable_tag
         { };

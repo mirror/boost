@@ -71,7 +71,7 @@ private:
     friend std::pair<char*, char*> input_sequence(mapped_file_source&);
 public:
     typedef char               char_type;
-    struct category
+    struct io_category
         : public source_tag,
           public direct_tag,
           public closable_tag
@@ -129,7 +129,7 @@ private:
     friend std::pair<char*, char*> output_sequence(mapped_file&);
 public:
     typedef char                           char_type;
-    struct category
+    struct io_category
         : public seekable_device_tag,
           public direct_tag,
           public closable_tag
@@ -184,7 +184,7 @@ public:
 
 struct mapped_file_sink : private mapped_file {
     typedef char char_type;
-    struct category
+    struct io_category
         : public sink_tag,
           public direct_tag,
           public closable_tag

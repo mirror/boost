@@ -22,7 +22,7 @@ template<typename Ch, typename Mode>
 class basic_null_device {
 public:
     typedef Ch char_type;
-    struct category
+    struct io_category
         : public Mode,
           public device_tag,
           public closable_tag
