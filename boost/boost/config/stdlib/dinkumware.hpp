@@ -61,6 +61,15 @@
 #  endif
 #endif
 
+//
+// std extension namespace is stdext for vc7.1 and later, 
+// the same applies to other compilers that sit on top
+// of vc7.1 (Intel and Comeau):
+//
+#if defined(_MSC_VER) && (_MSC_VER >= 1310) && !defined(__BORLANDC__)
+#  define BOOST_STD_EXTENSION_NAMESPACE stdext
+#endif
+
 
 #if (defined(_MSC_VER) && (_MSC_VER <= 1300) && !defined(__BORLANDC__)) || !defined(_CPPLIB_VER) || (_CPPLIB_VER < 306)
    // if we're using a dinkum lib that's
