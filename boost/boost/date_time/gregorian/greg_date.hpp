@@ -114,6 +114,13 @@ namespace gregorian {
     {
       return days_;
     }
+    //! Return the last day of the current month
+    date end_of_month() const
+    {
+      ymd_type ymd = year_month_day(); 
+      short eom_day =  gregorian_calendar::end_of_month_day(ymd.year, ymd.month);
+      return date(ymd.year, ymd.month, eom_day);
+    }
 
    private:
 
