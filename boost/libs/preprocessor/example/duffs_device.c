@@ -25,15 +25,17 @@
 #define DUFFS_DEVICE(UNROLLING_FACTOR,COUNTER_TYPE,N,STATEMENT)\
   do\
   {\
-    COUNTER_TYPE\
-      duffs_device_initial_cnt = (N),\
-      duffs_device_running_cnt = (duffs_device_initial_cnt + (UNROLLING_FACTOR-1))/UNROLLING_FACTOR;\
-    switch (duffs_device_initial_cnt % UNROLLING_FACTOR)\
+    COUNTER_TYPE duffs_device_initial_cnt = (N);\
+    if (duffs_device_initial_cnt > 0)\
     {\
-      do\
+      COUNTER_TYPE duffs_device_running_cnt = (duffs_device_initial_cnt + (UNROLLING_FACTOR-1))/UNROLLING_FACTOR;\
+      switch (duffs_device_initial_cnt % UNROLLING_FACTOR)\
       {\
-        BOOST_PP_REPEAT(UNROLLING_FACTOR,DUFFS_DEVICE_C,(UNROLLING_FACTOR,{STATEMENT}))\
-      } while (--duffs_device_running_cnt);\
+        do\
+        {\
+          BOOST_PP_REPEAT(UNROLLING_FACTOR,DUFFS_DEVICE_C,(UNROLLING_FACTOR,{STATEMENT}))\
+        } while (--duffs_device_running_cnt);\
+      }\
     }\
   } while (0)
 
@@ -52,9 +54,9 @@
 int main(void)
 {
   int i=0;
-
+  DUFFS_DEVICE(UNROLLING_FACTOR, int, 0, ++i;);
+  assert(i == 0);
   DUFFS_DEVICE(UNROLLING_FACTOR, int, N, ++i;);
-
   assert(i == N);
 
   return 0;
