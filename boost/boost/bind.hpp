@@ -127,7 +127,7 @@ template<class F> inline F & unwrap(reference_wrapper<F> const * f, int)
     return f->get();
 }
 
-#if !( defined(__MWERKS__) && BOOST_WORKAROUND(__MWERKS__, <= 0x3003) )
+#if !( defined(__MWERKS__) && BOOST_WORKAROUND(__MWERKS__, <= 0x3004) )
 
 template<class R, class T> inline _mfi::dm<R, T> unwrap(R T::* * pm, int)
 {
