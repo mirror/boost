@@ -150,6 +150,8 @@ Do not change this file unless you really really have to, add options to
    #define BOOST_RE_INT64t __int64
    #define BOOST_RE_IMM64(val) val##i64
    #define BOOST_RE_NO_CAT
+   // broken wide character support:
+   #define BOOST_RE_NO_SWPRINTF
 
    #ifdef __MT__
       #define BOOST_RE_THREADS
@@ -213,6 +215,7 @@ Do not change this file unless you really really have to, add options to
    #define BOOST_RE_NO_CAT
    #define BOOST_RE_NO_PARTIAL_FUNC_SPEC
    #define BOOST_RE_NO_TEMPLATE_FRIEND
+   #define BOOST_RE_NO_SWPRINTF
 
    #ifdef _MT
       #define BOOST_RE_THREADS
@@ -266,6 +269,7 @@ Do not change this file unless you really really have to, add options to
    #define BOOST_RE_OLD_IOSTREAM
    #define BOOST_RE_NESTED_TEMPLATE_DECL
    #define BOOST_RE_NO_WCSTRING
+   #define BOOST_RE_NO_SWPRINTF
 
 #endif
 
@@ -304,6 +308,7 @@ Do not change this file unless you really really have to, add options to
    #define BOOST_RE_IMM64(val) val##LL
    #define BOOST_RE_NESTED_TEMPLATE_DECL
    #define BOOST_RE_NO_TEMPLATE_FRIEND
+   #define BOOST_RE_NO_SWPRINTF
 #endif
 
 

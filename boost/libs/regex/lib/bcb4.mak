@@ -344,7 +344,7 @@ bcb4\bcb4re300lv.lib : bcb4\bcb4re300lv\c_regex_traits.obj bcb4\bcb4re300lv\c_re
 	bcc32 @&&|
 -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; -ebcb4\bcb4re300lv.dll  bcb4\bcb4re300lv\c_regex_traits.obj bcb4\bcb4re300lv\c_regex_traits_common.obj bcb4\bcb4re300lv\cpp_regex_traits.obj bcb4\bcb4re300lv\cregex.obj bcb4\bcb4re300lv\fileiter.obj bcb4\bcb4re300lv\posix_api.obj bcb4\bcb4re300lv\regex.obj bcb4\bcb4re300lv\regex_debug.obj bcb4\bcb4re300lv\regex_synch.obj bcb4\bcb4re300lv\w32_regex_traits.obj bcb4\bcb4re300lv\wide_posix_api.obj $(XLFLAGS)
 |
-	implib bcb4\bcb4re300lv.lib -c bcb4\bcb4re300lv.dll
+	implib -c bcb4\bcb4re300lv.lib bcb4\bcb4re300lv.dll
 
 ########################################################
 #
@@ -420,7 +420,7 @@ bcb4\bcb4re300lm.lib : bcb4\bcb4re300lm\c_regex_traits.obj bcb4\bcb4re300lm\c_re
 	bcc32 @&&|
 -DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; -ebcb4\bcb4re300lm.dll  bcb4\bcb4re300lm\c_regex_traits.obj bcb4\bcb4re300lm\c_regex_traits_common.obj bcb4\bcb4re300lm\cpp_regex_traits.obj bcb4\bcb4re300lm\cregex.obj bcb4\bcb4re300lm\fileiter.obj bcb4\bcb4re300lm\posix_api.obj bcb4\bcb4re300lm\regex.obj bcb4\bcb4re300lm\regex_debug.obj bcb4\bcb4re300lm\regex_synch.obj bcb4\bcb4re300lm\w32_regex_traits.obj bcb4\bcb4re300lm\wide_posix_api.obj $(XLFLAGS)
 |
-	implib bcb4\bcb4re300lm.lib -c bcb4\bcb4re300lm.dll
+	implib -c bcb4\bcb4re300lm.lib bcb4\bcb4re300lm.dll
 
 ########################################################
 #
@@ -496,5 +496,5 @@ bcb4\bcb4re300l.lib : bcb4\bcb4re300l\c_regex_traits.obj bcb4\bcb4re300l\c_regex
 	bcc32 @&&|
 -DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I$(BCROOT)\include;../../../; -L$(BCROOT)\lib;$(BCROOT)\lib\release; -ebcb4\bcb4re300l.dll  bcb4\bcb4re300l\c_regex_traits.obj bcb4\bcb4re300l\c_regex_traits_common.obj bcb4\bcb4re300l\cpp_regex_traits.obj bcb4\bcb4re300l\cregex.obj bcb4\bcb4re300l\fileiter.obj bcb4\bcb4re300l\posix_api.obj bcb4\bcb4re300l\regex.obj bcb4\bcb4re300l\regex_debug.obj bcb4\bcb4re300l\regex_synch.obj bcb4\bcb4re300l\w32_regex_traits.obj bcb4\bcb4re300l\wide_posix_api.obj $(XLFLAGS)
 |
-	implib bcb4\bcb4re300l.lib -c bcb4\bcb4re300l.dll
+	implib -c bcb4\bcb4re300l.lib bcb4\bcb4re300l.dll
 

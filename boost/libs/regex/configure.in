@@ -559,38 +559,13 @@ AC_TRY_LINK(
 ],
 [
  wchar_t c[50];
- swprintf(c, L"abcd");
+ swprintf(c, 50, L"abcd");
 ],
 [AC_MSG_RESULT(yes)],
 [AC_DEFINE(BOOST_RE_NO_SWPRINTF,[])
 AC_MSG_RESULT(no)]
 enable_swprintf="no")
 fi
-
-if test "$enable_wstring" != "no" && test "$enable_swprintf" = "no"; then
-AC_MSG_CHECKING(for wsprintf support)
-AC_TRY_LINK(
-[ 
-#include "confdefs.h"
-#ifndef BOOST_RE_NO_WCHAR_H
-#include <wchar.h>
-#endif
-#ifndef BOOST_RE_NO_WCTYPE_H
-#include <wctype.h>
-#endif
-#include <string.h>
-#include <stdio.h>
-#include <widec.h>
-],
-[
- wchar_t c[50];
- wsprintf(c, "abcd");
-],
-[AC_MSG_RESULT(yes)],
-[AC_DEFINE(BOOST_RE_NO_WSPRINTF,[])
-AC_MSG_RESULT(no)])
-fi
-
 
 
 AC_ARG_ENABLE(member-templates, [--disable-member-templates turns off member template class and function support])
@@ -1720,6 +1695,7 @@ cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
 sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/re_detail/regex_options.hpp > jm_opt.out
 cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
 rm -f jm_opt.out
+
 
 
 

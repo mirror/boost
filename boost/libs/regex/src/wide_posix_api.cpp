@@ -29,15 +29,8 @@
 #ifndef BOOST_RE_NO_WCHAR_H
 #include <cwchar>
 #endif
-#ifndef BOOST_RE_NO_WCTYPE_H
-#include <cwctype>
-#endif
 #include <cstring>
 #include <cstdio>
-
-#if defined(BOOST_RE_NO_SWPRINTF) && !defined(BOOST_RE_NO_WSPRINTF)
-#include <widec.h>
-#endif
 
 namespace boost{
 
@@ -124,7 +117,7 @@ BOOST_RE_IX_DECL unsigned int BOOST_RE_CCALL regerrorW(int code, const regex_tW*
       }
       return result;
    }
-#if !defined(BOOST_RE_NO_SWPRINTF) || !defined(BOOST_RE_NO_WSPRINTF)
+#if !defined(BOOST_RE_NO_SWPRINTF)
    if(code == REG_ATOI)
    {
       wchar_t localbuf[5];
@@ -134,21 +127,13 @@ BOOST_RE_IX_DECL unsigned int BOOST_RE_CCALL regerrorW(int code, const regex_tW*
       {
          if(std::wcscmp(e->re_endp, wnames[i]) == 0)
          {
-#if defined(BOOST_RE_NO_SWPRINTF)
-            wsprintf(localbuf, "%d", i);
-#else
-            std::swprintf(localbuf, L"%d", i);
-#endif
+            std::swprintf(localbuf, 5, L"%d", i);
             if(std::wcslen(localbuf) < buf_size)
                std::wcscpy(buf, localbuf);
             return std::wcslen(localbuf) + 1;
          }
       }
-#if defined(BOOST_RE_NO_SWPRINTF)
-      wsprintf(localbuf, "%d", 0);
-#else
-      std::swprintf(localbuf, L"%d", 0);
-#endif
+      std::swprintf(localbuf, 5, L"%d", 0);
       if(std::wcslen(localbuf) < buf_size)
          std::wcscpy(buf, localbuf);
       return std::wcslen(localbuf) + 1;

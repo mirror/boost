@@ -434,7 +434,7 @@ EOF
 	echo "	bcc32 @&&|" >> $tout
 	echo "$opts -e$subdir\\$libname.dll $all_obj \$(XLFLAGS)" >> $tout
 	echo "|" >> $tout
-	echo "	implib $subdir\\$libname.lib -c $subdir\\$libname.dll" >> $tout
+	echo "	implib -c $subdir\\$libname.lib $subdir\\$libname.dll" >> $tout
 	echo "" >> $tout
 }
 
@@ -598,6 +598,7 @@ bcb_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
 
 
 
