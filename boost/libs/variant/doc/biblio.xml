@@ -1,45 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<section id="variant.credits">
-  <title>Credits</title>
-
-<using-namespace name="boost"/>
-
-<section id="variant.ack">
-  <title>Acknowledgments</title>
-
-<para>Eric Friedman and Itay Maman designed the initial submission; Eric was
-  the primary implementer.</para>
-
-<para>Eric is also the library maintainer and has expanded upon the initial
-  submission -- adding
-  <code><classname>make_recursive_variant</classname></code>,
-  <code><classname>make_variant_over</classname></code>, support for
-  reference content, etc.</para>
-
-<para>Andrei Alexandrescu's work in
-    [<link linkend="variant.refs.ale01a">Ale01a</link>]
-and
-    [<link linkend="variant.refs.ale02">Ale02</link>]
-inspired the library's design.</para>
-
-<para>Jeff Garland was the formal review manager.</para>
-
-<para>Douglas Gregor,
-Dave Abrahams,
-Anthony Williams,
-Fernando Cacciola,
-Joel de Guzman,
-Dirk Schreib,
-Brad King,
-Giovanni Bajo,
-Eugene Gladyshev,
-and others provided helpful feedback and suggestions to refine the semantics,
-interface, and implementation of the library.</para>
-
-</section>
-
 <section id="variant.refs">
   <title>References</title>
 
@@ -96,12 +57,12 @@ interface, and implementation of the library.</para>
   ISO/IEC:14882.
   1998.
 </para>
-<para id="variant.refs.fri02">
-    <ulink url="http://groups.yahoo.com/group/boost/files/variant-20020701.zip">[Fri02]</ulink>
-    Eric Friedman.
-    &quot;Variant (aka Discriminated Union).&quot;
-    Early implementation.
-    2002.
+<para id="variant.refs.gof95">
+    [GoF95]
+    Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides.
+    <emphasis>Design Patterns: Elements of Reusable Object-Oriented Software</emphasis>.
+    Addison-Wesley.
+    1995.
 </para>
 <para id="variant.refs.gre02">
     <ulink url="http://www.crystalclearsoftware.com/cgi-bin/boost_wiki/wiki.pl?variant">[Gre02]</ulink>
@@ -130,7 +91,7 @@ interface, and implementation of the library.</para>
 </para>
 <para id="variant.refs.mcd+01">
     <libraryname alt="Type Traits">[MCD+01]</libraryname>
-    Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat Marcus, John Maddock, and Jeremy Siek.
+    Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat Marcus, John Maddock, Jeremy Siek.
     <emphasis>Boost Type Traits Library</emphasis>.
     2001.
 </para>
@@ -147,7 +108,5 @@ interface, and implementation of the library.</para>
     Double-Storage Proposal.
     2002.
 </para>
-
-</section>
 
 </section>

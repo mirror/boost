@@ -50,5 +50,5 @@
 <!--
   <xi:include href="tests.xml"/>
 -->
-  <xi:include href="credits.xml"/>
+  <xi:include href="biblio.xml"/>
 </library>

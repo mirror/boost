@@ -197,4 +197,38 @@
 
 </section>
 
+<section id="variant.ack">
+  <title>Acknowledgments</title>
+
+<para>Eric Friedman and Itay Maman designed the initial submission; Eric was
+  the primary implementer.</para>
+
+<para>Eric is also the library maintainer and has expanded upon the initial
+  submission -- adding
+  <code><classname>make_recursive_variant</classname></code>,
+  <code><classname>make_variant_over</classname></code>, support for
+  reference content, etc.</para>
+
+<para>Andrei Alexandrescu's work in
+    [<link linkend="variant.refs.ale01a">Ale01a</link>]
+and
+    [<link linkend="variant.refs.ale02">Ale02</link>]
+inspired the library's design.</para>
+
+<para>Jeff Garland was the formal review manager.</para>
+
+<para>Douglas Gregor,
+Dave Abrahams,
+Anthony Williams,
+Fernando Cacciola,
+Joel de Guzman,
+Dirk Schreib,
+Brad King,
+Giovanni Bajo,
+Eugene Gladyshev,
+and others provided helpful feedback and suggestions to refine the semantics,
+interface, and implementation of the library.</para>
+
+</section>
+
 </section>
