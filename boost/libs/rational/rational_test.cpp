@@ -280,6 +280,7 @@ using boost::abs;
     CHECK(( r0 == rat(16,15) ));
     r0 /= 4;
     CHECK(( r0 == rat(4,15) ));
+    CHECK(( rat(-1)/rat(-3) == rat(1,3) ));
 
     /* tests for operations on self */
     r0 = rat(4,3);

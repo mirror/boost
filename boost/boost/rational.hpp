@@ -298,6 +298,11 @@ rational<IntType>& rational<IntType>::operator/= (const rational<IntType>& r)
     IntType gcd2 = gcd<IntType>(r_den, den);
     num = (num/gcd1) * (r_den/gcd2);
     den = (den/gcd2) * (r_num/gcd1);
+
+    if (den < zero) {
+        num = -num;
+        den = -den;
+    }
     return *this;
 }
 
