@@ -413,8 +413,10 @@
 //  Metrowerks CodeWarrior  -------------------------------------------------//
 
 # elif defined  __MWERKS__
-#   if __MWERKS__ <= 0x2401  // 6.2
+#   if __MWERKS__ <= 0x2402  // 7
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#   endif
+#   if __MWERKS__ <= 0x2401  // 6.2
 #     define BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
 #   endif
 #   if __MWERKS__ <= 0x2301  // 5.3
