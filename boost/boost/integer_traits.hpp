@@ -21,7 +21,9 @@
 
 // These are an implementation detail and not part of the interface
 #include <limits.h>
-#if !defined(BOOST_NO_INTRINSIC_WCHAR_T) && !defined(BOOST_NO_CWCHAR)
+// we need wchar.h for WCHAR_MAX/MIN but not all platforms provide it, 
+// and some may have <wchar.h> but not <cwchar> ...
+#if !defined(BOOST_NO_INTRINSIC_WCHAR_T) && (!defined(BOOST_NO_CWCHAR) || defined(sun) || defined(__sun))
 #include <wchar.h>
 #endif
 
