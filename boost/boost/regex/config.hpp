@@ -223,7 +223,7 @@ namespace boost{ typedef wchar_t regex_wchar_type; }
 #  define BOOST_REGEX_DECL
 #endif
 
-#if (defined(BOOST_MSVC) || defined(__BORLANDC__)) && !defined(BOOST_REGEX_NO_LIB) && !defined(BOOST_REGEX_SOURCE) && !defined(BOOST_ALL_NO_LIB) && defined(__cplusplus)
+#if !defined(BOOST_REGEX_NO_LIB) && !defined(BOOST_REGEX_SOURCE) && !defined(BOOST_ALL_NO_LIB) && defined(__cplusplus)
 #  define BOOST_LIB_NAME boost_regex
 #  if defined(BOOST_REGEX_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)
 #     define BOOST_DYN_LINK
