@@ -59,5 +59,21 @@ class lambda_functor_base;
 #define CALL_REFERENCE_TYPES A&, B&, C&, Env&
 #define CALL_PLAIN_TYPES A, B, C, Env
 
+namespace boost {
+namespace lambda {
+namespace detail {
+
+template<class A1, class A2, class A3, class A4>
+void do_nothing(A1&, A2&, A3&, A4&) {}
+
+} // detail
+} // lambda
+} // boost
+
+// prevent the warnings from unused argumetns
+#define CALL_USE_ARGS \
+::boost::lambda::detail::do_nothing(a, b, c, env)
+
+
 
 #endif

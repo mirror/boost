@@ -63,6 +63,7 @@ template<> struct placeholder<FIRST> {
   template<class RET, CALL_TEMPLATE_ARGS> 
   RET call(CALL_FORMAL_ARGS) const { 
     BOOST_STATIC_ASSERT(boost::is_reference<RET>::value); 
+    CALL_USE_ARGS; // does nothing, prevents warnings for unused args
     return a; 
   }
 };
@@ -74,7 +75,7 @@ template<> struct placeholder<SECOND> {
   };
 
   template<class RET, CALL_TEMPLATE_ARGS> 
-  RET call(CALL_FORMAL_ARGS) const { return b; }
+  RET call(CALL_FORMAL_ARGS) const { CALL_USE_ARGS; return b; }
 };
 
 template<> struct placeholder<THIRD> {
@@ -84,7 +85,7 @@ template<> struct placeholder<THIRD> {
   };
 
   template<class RET, CALL_TEMPLATE_ARGS> 
-  RET call(CALL_FORMAL_ARGS) const { return c; }
+  RET call(CALL_FORMAL_ARGS) const { CALL_USE_ARGS; return c; }
 };
 
 template<> struct placeholder<EXCEPTION> {
@@ -94,7 +95,7 @@ template<> struct placeholder<EXCEPTION> {
   };
 
   template<class RET, CALL_TEMPLATE_ARGS> 
-  RET call(CALL_FORMAL_ARGS) const { return env; }
+  RET call(CALL_FORMAL_ARGS) const { CALL_USE_ARGS; return env; }
 };
    
 typedef const lambda_functor<placeholder<FIRST> >  placeholder1_type;

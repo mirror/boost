@@ -24,7 +24,7 @@ namespace detail {
 
 // select functions -------------------------------
 template<class Any, CALL_TEMPLATE_ARGS>
-inline Any& select(Any& any, CALL_FORMAL_ARGS) { return any; }
+inline Any& select(Any& any, CALL_FORMAL_ARGS) { CALL_USE_ARGS; return any; }
 
 
 template<class Arg, CALL_TEMPLATE_ARGS>
@@ -57,7 +57,7 @@ template<class RET> struct r_select {
 // Any == RET
   template<class Any, CALL_TEMPLATE_ARGS>
   static 
-  inline RET go (Any& any, CALL_FORMAL_ARGS) { return any; }
+  inline RET go (Any& any, CALL_FORMAL_ARGS) { CALL_USE_ARGS; return any; }
 
 
   template<class Arg, CALL_TEMPLATE_ARGS> 

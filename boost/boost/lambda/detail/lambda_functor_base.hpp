@@ -44,7 +44,7 @@ public:
   struct sig { typedef element_t type; };
 
   template<class RET, CALL_TEMPLATE_ARGS>
-  RET call(CALL_FORMAL_ARGS) const { return elem; }
+  RET call(CALL_FORMAL_ARGS) const { CALL_USE_ARGS; return elem; }
 };
 
 template <class T> 
@@ -293,6 +293,7 @@ public:
   template<class RET, CALL_TEMPLATE_ARGS>
   RET call(CALL_FORMAL_ARGS) const 
   {
+     CALL_USE_ARGS;
      return boost::tuples::get<0>(args);
   }
 
@@ -311,7 +312,9 @@ class lambda_functor_base<do_nothing_action, Args> {
 public:
   explicit lambda_functor_base(const Args& a) {}
 
-  template<class RET, CALL_TEMPLATE_ARGS> RET call(CALL_FORMAL_ARGS) const {}
+  template<class RET, CALL_TEMPLATE_ARGS> RET call(CALL_FORMAL_ARGS) const {
+    CALL_USE_ARGS;
+  }
 
   template<class SigArgs> struct sig { typedef void type; };
 };  
@@ -345,6 +348,7 @@ public:
   
   template<class RET, CALL_TEMPLATE_ARGS>  
   RET call(CALL_FORMAL_ARGS) const {  
+    CALL_USE_ARGS;
     return Act::template apply<RET>();
   }
 };
