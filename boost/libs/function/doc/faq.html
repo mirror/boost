@@ -34,14 +34,11 @@ void g() { return f(); }
 <h2>Q: Why (function) cloning? </h2>
 <p> In November and December of 2000, the issue of cloning vs. reference counting was debated at length and it was decided that cloning gave more predictable semantics. I won't rehash the discussion here, but if it cloning is incorrect for a particular application a reference-counting allocator could be used. 
 
-<h2>Q: How do I assign from a member function?</h2>
-<p> Member function assignments are not included directly in <code>boost::function</code> because they do not conform to the syntax of function objects. Several libraries exist to wrap member functions in a function object and/or bind the first argument to the member function (the <code>this</code> pointer). A few libraries are <a href="tutorial.html#member_func">described</a> in the <a href="../index.html">Boost.Function</a> documentation.
-
     <hr>
     <address><a href="mailto:gregod@cs.rpi.edu">Doug Gregor</a></address>
 <!-- Created: Fri Feb 16 09:30:41 EST 2001 -->
 <!-- hhmts start -->
-Last modified: Sat Jul 14 16:00:11 EDT 2001
+Last modified: Wed Nov  7 15:11:52 EST 2001
 <!-- hhmts end -->
   </body>
 </html>
