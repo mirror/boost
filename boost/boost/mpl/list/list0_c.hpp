@@ -23,6 +23,7 @@ template< typename T > struct list0_c
     : l_end
 {
     typedef l_end type;
+    typedef T value_type;
 };
 
 }}
