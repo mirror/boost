@@ -995,6 +995,24 @@ private: // helpers, for structors, cont. (below)
             return execute( operand.get() );
         }
 
+        template <typename T>
+        int execute(
+              boost::recursive_wrapper<T>& operand
+            , long
+            ) const
+        {
+            return execute( operand.get() );
+        }
+
+        template <typename T>
+        int execute(
+              const boost::recursive_wrapper<T>& operand
+            , long
+            ) const
+        {
+            return execute( operand.get() );
+        }
+
     public: // visitor interfaces
 
         template <typename T>
