@@ -268,6 +268,8 @@ class numeric_limits<unsigned char>
   : public _Integer_limits<unsigned char, 0, UCHAR_MAX>
 {};
 
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T
+#if !defined(WCHAR_MAX) || !defined(WCHAR_MIN)
 #if !defined(_WIN32) && !defined(__CYGWIN__)
 template<>
 class numeric_limits<wchar_t>
@@ -278,6 +280,13 @@ template<>
 class numeric_limits<wchar_t>
   : public _Integer_limits<wchar_t, 0, USHRT_MAX>
 {};
+#endif
+#else
+template<>
+class numeric_limits<wchar_t>
+  : public _Integer_limits<wchar_t, WCHAR_MIN, WCHAR_MAX>
+{};
+#endif
 #endif
 
 template<>
