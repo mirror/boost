@@ -218,6 +218,7 @@ test_main( int /* argc */, char* /* argv */[] )
     load_unregistered2(testfile);
     save_registered(testfile);
     load_registered(testfile);
+	std::remove(testfile);
     return boost::exit_success;
 }
 

@@ -103,6 +103,7 @@ void test_save_and_load2(boost::shared_ptr<A>& first, boost::shared_ptr<A>& seco
         ia >> BOOST_SERIALIZATION_NVP(second);
     }
     BOOST_CHECK(boost::get_pointer(first) == boost::get_pointer(second));
+	std::remove(testfile);
 }
 
 // This does the tests

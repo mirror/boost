@@ -35,6 +35,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     }
     BOOST_CHECK(ta != ta1);
     BOOST_CHECK(*ta == *ta1);
+	std::remove(testfile);
     return boost::exit_success;
 }
 

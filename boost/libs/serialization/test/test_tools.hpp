@@ -17,6 +17,13 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
+#include <cstdio> // remove
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::tmpnam;
+	using ::remove;
+}
+#endif
 
 #if defined(BOOST_MSVC)
 

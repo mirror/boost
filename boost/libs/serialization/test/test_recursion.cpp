@@ -34,6 +34,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         ia >> BOOST_SERIALIZATION_NVP(j1);
     }
     BOOST_CHECK(j == j1);
+	std::remove(testfile);
     return boost::exit_success;
 }
 

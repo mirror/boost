@@ -34,5 +34,6 @@ test_main( int /* argc */, char* /* argv */[] )
         test_iarchive ia(is);
         ia >> boost::serialization::make_nvp("a", a1);
     }
+    std::remove(testfile);
     return (a == a1) ? boost::exit_success : boost::exit_failure;
 }

@@ -119,6 +119,7 @@ test_main( int /* argc */, char* /* argv */[] )
 
     out(testfile);
     in(testfile);
+	std::remove(testfile);
     return boost::exit_success;
 }
 

@@ -93,5 +93,6 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_CHECK(ahash_multiset == ahash_multiset1);
     
 #endif
+	std::remove(testfile);
     return boost::exit_success;
 }

@@ -44,6 +44,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         ia >> boost::serialization::make_nvp("avector", avector1);
     }
     BOOST_CHECK(avector == avector1);
+	std::remove(testfile);
     return boost::exit_success;
 }
 
