@@ -4,15 +4,18 @@
 
 :Author: David Abrahams, Jeremy Siek, Thomas Witt
 :Contact: dave@boost-consulting.com, jsiek@osl.iu.edu, witt@acm.org
-:organization: `Boost Consulting`_, Indiana University `Open Systems Lab`_, University of Hanover `Institute for Transport Railway Operation and Construction`_
+:organization: `Boost Consulting`_, Indiana University `Open
+               Systems Lab`_, University of Hanover `Institute for
+               Transport Railway Operation and Construction`_
 :date: $Date$
-:Number: revised from `N1531=03-0114`__
+:Number: N1530=03-0133
 :copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved
 
-.. __: n1531_
 .. _`Boost Consulting`: http://www.boost-consulting.com
 .. _`Open Systems Lab`: http://www.osl.iu.edu
-.. _`Institute for Transport Railway Operation and Construction`: http://www.ive.uni-hannover.de
+
+.. _`Institute for Transport Railway Operation and Construction`:
+   http://www.ive.uni-hannover.de 
 
 :Abstract: We propose a new system of iterator concepts that treat
            access and positioning independently. This allows the
@@ -118,6 +121,9 @@ things happen:
  Impact on the Standard
 ========================
 
+Proposed Changes for TR1
+========================
+
 The new iterator concepts are backward-compatible with the old
 iterator requirements, and old iterators are forward-compatible with
 the new iterator concepts. That is to say, iterators that satisfy the
@@ -134,12 +140,107 @@ appropriate old requirements.
    a tag that is not input_iterator_tag but that
    is convertible to input_iterator_tag? -JGS
 
-The algorithms in the standard library could benefit from the new
-iterator concepts because the new concepts provide a more accurate way
-to express their type requirements. The result is algorithms that are
-usable in more situations, have fewer type requirements, and that are
-backward compatible. However, this proposal does not include making
-these changes.
+The algorithms in the standard library benefit from the new iterator
+concepts because the new concepts provide a more accurate way to
+express their type requirements. The result is algorithms that are
+usable in more situations and have fewer type requirements.
+
+Possible (but not proposed) Changes to the Working Paper
+========================================================
+
+The extensions in this paper suggest several changes we might make
+to the working paper for the next standard.  These changes are not
+a formal part of this proposal for TR1.
+
+Changes to Algorithm Requirements
++++++++++++++++++++++++++++++++++
+
+For the next working paper (but not for TR1), the committee should
+consider the following changes to the type requirements of
+algorithms.  These changes are phrased as phrased as textual
+substitutions, listing the algorithms to which each textual
+substitution applies.
+
+Forward Iterator -> Forward Traversal Iterator and Readable Iterator
+
+  ``find_end, adjacent_find, search, search_n, rotate_copy,
+  lower_bound, upper_bound, equal_range, binary_search,
+  min_element, max_element``
+
+Forward Iterator (1) -> Single Pass Iterator and Readable Iterator,
+Forward Iterator (2) -> Forward Traversal Iterator and Readable Iterator
+
+  ``find_first_of``
+
+Forward Iterator -> Readable Iterator and Writable Iterator
+
+  ``iter_swap``
+
+Forward Iterator -> Single Pass Iterator and Writable Iterator
+
+  ``fill, generate``
+
+Forward Iterator -> Forward Traversal Iterator and Swappable Iterator
+
+  ``rotate``
+
+Forward Iterator (1) -> Swappable Iterator and Single Pass Iterator,
+Forward Iterator (2) -> Swappable Iterator and  Incrementable Iterator
+
+  ``swap_ranges``
+
+Forward Iterator -> Forward Traversal Iterator and Readable Iterator and Writable Iterator
+  ``remove, remove_if, unique``
+
+Forward Iterator -> Single Pass Iterator and Readable Iterator and Writable Iterator
+
+  ``replace, replace_if``
+
+Bidirectional Iterator -> Bidirectional Traversal Iterator and Swappable Iterator
+  ``reverse``
+
+Bidirectional Iterator -> Bidirectional Traversal Iterator and Readable and Swappable Iterator
+  ``partition``
+
+Bidirectional Iterator (1) -> Bidirectional Traversal Iterator and Readable Iterator, 
+Bidirectional Iterator (2) -> Bidirectional Traversal Iterator and Writable Iterator
+
+  ``copy_backwards``
+
+Bidirectional Iterator -> Bidirectional Traversal Iterator and Swappable Iterator and Readable Iterator
+  ``next_permutation, prev_permutation``
+
+Bidirectional Iterator -> Bidirectional Traversal Iterator and Readable Iterator and Writable Iterator
+  ``stable_partition, inplace_merge``
+
+Bidirectional Iterator -> Bidirectional Traversal Iterator and Readable Iterator
+  ``reverse_copy``
+
+Random Access Iterator -> Random Access Traversal Iterator and Readable and Writable Iterator
+  ``random_shuffle, sort, stable_sort, partial_sort, nth_element, push_heap, pop_heap
+  make_heap, sort_heap``
+
+Input Iterator (2) -> Incrementable Iterator and Readable Iterator
+  ``equal, mismatch``
+
+Input Iterator (2) -> Incrementable Iterator and Readable Iterator
+  ``transform``
+
+Deprecations
+++++++++++++
+
+For the next working paper (but not for TR1), the committee should
+consider deprecating the old iterator tags, and
+std::iterator_traits, since it will be superceded by individual
+traits metafunctions.
+
+``vector<bool>``
+++++++++++++++++
+
+For the next working paper (but not for TR1), the committee should
+consider reclassifying ``vector<bool>::iterator`` as a Random
+Access Traversal Iterator and Readable Iterator and Writable
+Iterator.
 
 ========
  Design
