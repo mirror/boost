@@ -12,17 +12,23 @@
 
 namespace boost { namespace mpl {
 
-template< typename Map>
-struct m_at< Map,40 >
+template<>
+struct m_at_impl<40>
 {
-    typedef typename Map::item40 type;
+    template< typename Map > struct result_
+    {
+        typedef typename Map::item40 type;
+    };
 };
 
-template< typename Key, typename T, typename Base >
-struct m_item< 41,Key,T,Base >
-    : m_item_< Key,T,Base >
+template<>
+struct m_item_impl<41>
 {
-    typedef pair< Key,T > item40;
+    template< typename Key, typename T, typename Base > struct result_
+        : m_item_< Key,T,Base >
+    {
+        typedef pair< Key,T > item40;
+    };
 };
 
 template<
@@ -47,17 +53,23 @@ struct map41
     typedef map41 type;
 };
 
-template< typename Map>
-struct m_at< Map,41 >
+template<>
+struct m_at_impl<41>
 {
-    typedef typename Map::item41 type;
+    template< typename Map > struct result_
+    {
+        typedef typename Map::item41 type;
+    };
 };
 
-template< typename Key, typename T, typename Base >
-struct m_item< 42,Key,T,Base >
-    : m_item_< Key,T,Base >
+template<>
+struct m_item_impl<42>
 {
-    typedef pair< Key,T > item41;
+    template< typename Key, typename T, typename Base > struct result_
+        : m_item_< Key,T,Base >
+    {
+        typedef pair< Key,T > item41;
+    };
 };
 
 template<
@@ -82,17 +94,23 @@ struct map42
     typedef map42 type;
 };
 
-template< typename Map>
-struct m_at< Map,42 >
+template<>
+struct m_at_impl<42>
 {
-    typedef typename Map::item42 type;
+    template< typename Map > struct result_
+    {
+        typedef typename Map::item42 type;
+    };
 };
 
-template< typename Key, typename T, typename Base >
-struct m_item< 43,Key,T,Base >
-    : m_item_< Key,T,Base >
+template<>
+struct m_item_impl<43>
 {
-    typedef pair< Key,T > item42;
+    template< typename Key, typename T, typename Base > struct result_
+        : m_item_< Key,T,Base >
+    {
+        typedef pair< Key,T > item42;
+    };
 };
 
 template<
@@ -117,17 +135,23 @@ struct map43
     typedef map43 type;
 };
 
-template< typename Map>
-struct m_at< Map,43 >
+template<>
+struct m_at_impl<43>
 {
-    typedef typename Map::item43 type;
+    template< typename Map > struct result_
+    {
+        typedef typename Map::item43 type;
+    };
 };
 
-template< typename Key, typename T, typename Base >
-struct m_item< 44,Key,T,Base >
-    : m_item_< Key,T,Base >
+template<>
+struct m_item_impl<44>
 {
-    typedef pair< Key,T > item43;
+    template< typename Key, typename T, typename Base > struct result_
+        : m_item_< Key,T,Base >
+    {
+        typedef pair< Key,T > item43;
+    };
 };
 
 template<
@@ -152,17 +176,23 @@ struct map44
     typedef map44 type;
 };
 
-template< typename Map>
-struct m_at< Map,44 >
+template<>
+struct m_at_impl<44>
 {
-    typedef typename Map::item44 type;
+    template< typename Map > struct result_
+    {
+        typedef typename Map::item44 type;
+    };
 };
 
-template< typename Key, typename T, typename Base >
-struct m_item< 45,Key,T,Base >
-    : m_item_< Key,T,Base >
+template<>
+struct m_item_impl<45>
 {
-    typedef pair< Key,T > item44;
+    template< typename Key, typename T, typename Base > struct result_
+        : m_item_< Key,T,Base >
+    {
+        typedef pair< Key,T > item44;
+    };
 };
 
 template<
@@ -187,17 +217,23 @@ struct map45
     typedef map45 type;
 };
 
-template< typename Map>
-struct m_at< Map,45 >
+template<>
+struct m_at_impl<45>
 {
-    typedef typename Map::item45 type;
+    template< typename Map > struct result_
+    {
+        typedef typename Map::item45 type;
+    };
 };
 
-template< typename Key, typename T, typename Base >
-struct m_item< 46,Key,T,Base >
-    : m_item_< Key,T,Base >
+template<>
+struct m_item_impl<46>
 {
-    typedef pair< Key,T > item45;
+    template< typename Key, typename T, typename Base > struct result_
+        : m_item_< Key,T,Base >
+    {
+        typedef pair< Key,T > item45;
+    };
 };
 
 template<
@@ -223,17 +259,23 @@ struct map46
     typedef map46 type;
 };
 
-template< typename Map>
-struct m_at< Map,46 >
+template<>
+struct m_at_impl<46>
 {
-    typedef typename Map::item46 type;
+    template< typename Map > struct result_
+    {
+        typedef typename Map::item46 type;
+    };
 };
 
-template< typename Key, typename T, typename Base >
-struct m_item< 47,Key,T,Base >
-    : m_item_< Key,T,Base >
+template<>
+struct m_item_impl<47>
 {
-    typedef pair< Key,T > item46;
+    template< typename Key, typename T, typename Base > struct result_
+        : m_item_< Key,T,Base >
+    {
+        typedef pair< Key,T > item46;
+    };
 };
 
 template<
@@ -259,17 +301,23 @@ struct map47
     typedef map47 type;
 };
 
-template< typename Map>
-struct m_at< Map,47 >
+template<>
+struct m_at_impl<47>
 {
-    typedef typename Map::item47 type;
+    template< typename Map > struct result_
+    {
+        typedef typename Map::item47 type;
+    };
 };
 
-template< typename Key, typename T, typename Base >
-struct m_item< 48,Key,T,Base >
-    : m_item_< Key,T,Base >
+template<>
+struct m_item_impl<48>
 {
-    typedef pair< Key,T > item47;
+    template< typename Key, typename T, typename Base > struct result_
+        : m_item_< Key,T,Base >
+    {
+        typedef pair< Key,T > item47;
+    };
 };
 
 template<
@@ -295,17 +343,23 @@ struct map48
     typedef map48 type;
 };
 
-template< typename Map>
-struct m_at< Map,48 >
+template<>
+struct m_at_impl<48>
 {
-    typedef typename Map::item48 type;
+    template< typename Map > struct result_
+    {
+        typedef typename Map::item48 type;
+    };
 };
 
-template< typename Key, typename T, typename Base >
-struct m_item< 49,Key,T,Base >
-    : m_item_< Key,T,Base >
+template<>
+struct m_item_impl<49>
 {
-    typedef pair< Key,T > item48;
+    template< typename Key, typename T, typename Base > struct result_
+        : m_item_< Key,T,Base >
+    {
+        typedef pair< Key,T > item48;
+    };
 };
 
 template<
@@ -331,17 +385,23 @@ struct map49
     typedef map49 type;
 };
 
-template< typename Map>
-struct m_at< Map,49 >
+template<>
+struct m_at_impl<49>
 {
-    typedef typename Map::item49 type;
+    template< typename Map > struct result_
+    {
+        typedef typename Map::item49 type;
+    };
 };
 
-template< typename Key, typename T, typename Base >
-struct m_item< 50,Key,T,Base >
-    : m_item_< Key,T,Base >
+template<>
+struct m_item_impl<50>
 {
-    typedef pair< Key,T > item49;
+    template< typename Key, typename T, typename Base > struct result_
+        : m_item_< Key,T,Base >
+    {
+        typedef pair< Key,T > item49;
+    };
 };
 
 template<
