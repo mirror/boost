@@ -17,6 +17,12 @@
 // The time complexity of DELAY(N) is O(pow(2,N)).
 //
 // Handy when recompiles are too fast to take a coffee break. :)
+//
+// Template metaprogramming can be used for implementing similar
+// delays. Unfortunately template instantiation consumes memory,
+// therefore compilers usually fail to fully compile long template
+// based delays, because they run out of memory. This macro takes
+// only small (O(N)) amount of memory to preprocess.
 
 #ifndef DELAY_MAX
 #define DELAY_MAX 16
