@@ -40,7 +40,7 @@
 // end up using a proxy for operator[] when we otherwise shouldn't.
 // Using reference constness gives it an extra hint that it can
 // return the value_type from operator[] directly, but is not
-// strictly neccessary.  Not sure how best to resolve this one.
+// strictly necessary.  Not sure how best to resolve this one.
 
 # define BOOST_ITERATOR_REF_CONSTNESS_KILLS_WRITABILITY 1
 

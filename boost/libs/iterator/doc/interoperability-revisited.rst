@@ -67,7 +67,7 @@ Mutable  m;
 c == m; // ok, dispatched to Constant::equal_to
 m == c; // !! error, dispatched to Mutable::equal_to
 
-Instead the following "slightly" more complicated implementation is neccessary
+Instead the following "slightly" more complicated implementation is necessary
 
 struct Mutable : Facade<Mutable>
 {
@@ -87,7 +87,7 @@ struct Constant : Tag<Constant>
 
 Beside the fact that the code is significantly more complex to understand and to teach there is
 a major design problem lurking here. Note that in both types equal_to is a function template with 
-an unconstrained argument T. This is neccessary so that further types can be made interoperable with
+an unconstrained argument T. This is necessary so that further types can be made interoperable with
 Mutable or Constant. Would Mutable be defined as  
 
 struct Mutable : Facade<Mutable>

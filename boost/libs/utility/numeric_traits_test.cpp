@@ -57,7 +57,7 @@ struct complement
     struct traits
     {
      private:
-        // indirection through complement_traits_aux neccessary to keep MSVC happy
+        // indirection through complement_traits_aux necessary to keep MSVC happy
         typedef complement_traits_aux<Number, size - 1> prev;
      public:
         BOOST_STATIC_CONSTANT(Number, max =

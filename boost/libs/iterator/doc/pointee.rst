@@ -42,7 +42,7 @@ determine the appropriate ``::type`` reliably for all
 ``Dereferenceable``\ s, but it makes very good guesses (it works
 for all pointers, standard and boost smart pointers, and
 iterators), and when it guesses wrongly, it can be specialized as
-neccessary::
+necessary::
 
   namespace boost
   {
