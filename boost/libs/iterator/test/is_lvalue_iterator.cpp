@@ -56,32 +56,32 @@ BOOST_TT_BROKEN_COMPILER_SPEC(proxy_iterator::proxy)
 
 int main()
 {
-    BOOST_STATIC_ASSERT(boost::is_readable_lvalue_iterator<v*>::value);
-    BOOST_STATIC_ASSERT(boost::is_readable_lvalue_iterator<v const*>::value);
-    BOOST_STATIC_ASSERT(boost::is_readable_lvalue_iterator<std::deque<v>::iterator>::value);
-    BOOST_STATIC_ASSERT(boost::is_readable_lvalue_iterator<std::deque<v>::const_iterator>::value);
-    BOOST_STATIC_ASSERT(!boost::is_readable_lvalue_iterator<std::back_insert_iterator<std::deque<v> > >::value);
-    BOOST_STATIC_ASSERT(!boost::is_readable_lvalue_iterator<std::ostream_iterator<v> >::value);
-    BOOST_STATIC_ASSERT(!boost::is_readable_lvalue_iterator<proxy_iterator>::value);
+    BOOST_STATIC_ASSERT(boost::is_lvalue_iterator<v*>::value);
+    BOOST_STATIC_ASSERT(boost::is_lvalue_iterator<v const*>::value);
+    BOOST_STATIC_ASSERT(boost::is_lvalue_iterator<std::deque<v>::iterator>::value);
+    BOOST_STATIC_ASSERT(boost::is_lvalue_iterator<std::deque<v>::const_iterator>::value);
+    BOOST_STATIC_ASSERT(!boost::is_lvalue_iterator<std::back_insert_iterator<std::deque<v> > >::value);
+    BOOST_STATIC_ASSERT(!boost::is_lvalue_iterator<std::ostream_iterator<v> >::value);
+    BOOST_STATIC_ASSERT(!boost::is_lvalue_iterator<proxy_iterator>::value);
 #ifndef BOOST_NO_LVALUE_RETURN_DETECTION
-    BOOST_STATIC_ASSERT(!boost::is_readable_lvalue_iterator<value_iterator>::value);
+    BOOST_STATIC_ASSERT(!boost::is_lvalue_iterator<value_iterator>::value);
 #endif
     // Make sure inaccessible copy constructor doesn't prevent
     // reference binding
-    BOOST_STATIC_ASSERT(boost::is_readable_lvalue_iterator<noncopyable_iterator>::value);
+    BOOST_STATIC_ASSERT(boost::is_lvalue_iterator<noncopyable_iterator>::value);
 
     
-    BOOST_STATIC_ASSERT(boost::is_writable_lvalue_iterator<v*>::value);
-    BOOST_STATIC_ASSERT(!boost::is_writable_lvalue_iterator<v const*>::value);
-    BOOST_STATIC_ASSERT(boost::is_writable_lvalue_iterator<std::deque<v>::iterator>::value);
-    BOOST_STATIC_ASSERT(!boost::is_writable_lvalue_iterator<std::deque<v>::const_iterator>::value);
-    BOOST_STATIC_ASSERT(!boost::is_writable_lvalue_iterator<std::back_insert_iterator<std::deque<v> > >::value);
-    BOOST_STATIC_ASSERT(!boost::is_writable_lvalue_iterator<std::ostream_iterator<v> >::value);
-    BOOST_STATIC_ASSERT(!boost::is_writable_lvalue_iterator<proxy_iterator>::value);
+    BOOST_STATIC_ASSERT(boost::is_mutable_lvalue_iterator<v*>::value);
+    BOOST_STATIC_ASSERT(!boost::is_mutable_lvalue_iterator<v const*>::value);
+    BOOST_STATIC_ASSERT(boost::is_mutable_lvalue_iterator<std::deque<v>::iterator>::value);
+    BOOST_STATIC_ASSERT(!boost::is_mutable_lvalue_iterator<std::deque<v>::const_iterator>::value);
+    BOOST_STATIC_ASSERT(!boost::is_mutable_lvalue_iterator<std::back_insert_iterator<std::deque<v> > >::value);
+    BOOST_STATIC_ASSERT(!boost::is_mutable_lvalue_iterator<std::ostream_iterator<v> >::value);
+    BOOST_STATIC_ASSERT(!boost::is_mutable_lvalue_iterator<proxy_iterator>::value);
 #ifndef BOOST_NO_LVALUE_RETURN_DETECTION
-    BOOST_STATIC_ASSERT(!boost::is_writable_lvalue_iterator<value_iterator>::value);
+    BOOST_STATIC_ASSERT(!boost::is_mutable_lvalue_iterator<value_iterator>::value);
 #endif
-    BOOST_STATIC_ASSERT(!boost::is_writable_lvalue_iterator<noncopyable_iterator>::value);
+    BOOST_STATIC_ASSERT(!boost::is_mutable_lvalue_iterator<noncopyable_iterator>::value);
     
     return 0;
 }
