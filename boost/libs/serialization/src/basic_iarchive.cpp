@@ -10,11 +10,11 @@
 
 #include <boost/config.hpp> // msvc 6.0 needs this to suppress warnings
 
-#include <cstddef> // size_t
 #include <cassert>
 #include <set>
 #include <list>
 #include <vector>
+#include <cstddef> // size_t
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
