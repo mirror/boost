@@ -142,8 +142,8 @@ The question arises as to which <code>namespace</code> free serialization functi
 The options for this depend on:
 <ul>
 <li>Whether or not the compiler implements Argument Dependent Lookup.
-<li>whether not the compiler implements Two Phase Lookup
-<li>whether or the the type to be serialized is a dependent type.
+<li>whether or not the compiler implements Two Phase Lookup
+<li>whether or not the type to be serialized is a dependent type.
 </ul>
 according to the following table:
 <p>
@@ -166,6 +166,40 @@ namespace boost { namespace serialization {
 #endif
 </code></pre>
 which works for all compilers.
+<p>
+
+From Vandervoorde and Josuttis book 
+"C++ Templates - A Complete Guide"<a href="bibliograph.html#14">[14]</a>
+page 509:
+<blockquote>
+<strong>dependant name</strong><br>
+A name the meaning of which depends on a template parameter.
+For example, A<T>::x is a dependant name when A or T is a template parameter.
+The name of a function in a function call is also dependant if any of the arguments in the call
+has a type that depends on a template parameter.
+For example, f in f((T*)0) is dependent if T is a template parameter.
+The name of a template parameter is not considered dependent, however.
+</blockquote>
+
+and page 515:
+<blockquote>
+<strong>two-phase lookup</strong><br>
+The name lookup mechanism used for names in templates. The "two phases" are 
+(1) the phase during which a template definition is first encountered by a compiler, and
+(2) the instantiation of a template. <i>Nondependant names</i> are looked up only in the first phase,
+but during this first phase <i>nondepdendent</i> base class are not considered.
+<i>Dependant</i> names with a scope qualifier(::) are looked up only in the second phase.
+Dependant names without a scop qualifier may be looked up in both places, but in the 
+second phase only argument-dependant lookup is performed.
+</blockquote>
+
+In this library, the file <code style="white-space: normal">serialization.hpp</code>,
+which calls the serialization override,
+is included by including any archive classes. This would suggest that all serialization 
+overrides could be in any of the three possible namespaces if the serialization code is
+included before the archives.  However, this is not always possible.  Our implementation 
+of "export" functionality requires just the opposite.
+
 <p>
 This is consided inelegant to say the least. Hopefully, this may be improved in the future.
 
