@@ -177,6 +177,9 @@ test-suite regex
       : : : <test-info>always_show_run_output
       : regex_dll_config_info ]
 
+      [ run collate_info/collate_info.cpp <template>test <lib>../../test/build/boost_prg_exec_monitor
+      : : : <test-info>always_show_run_output ]
+      
       [ regex-test regex_regress_dll
           : <template>regression-dll     # sources
           :                              # requirements

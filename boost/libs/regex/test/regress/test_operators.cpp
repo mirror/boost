@@ -1,9 +1,19 @@
+/*
+ *
+ * Copyright (c) 2004
+ * John Maddock
+ *
+ * Use, modification and distribution are subject to the 
+ * Boost Software License, Version 1.0. (See accompanying file 
+ * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ *
+ */
 
 #include "test.hpp"
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)\
    && !BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(55500))\
-   && !(defined(__GNUC__) && !(defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)))
+   && !(defined(__GNUC__) && (__GNUC__ < 3) && !(defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)))
 
 template <class T1, class T2>
 void test_less(const T1& t1, const T2& t2)

@@ -68,6 +68,7 @@ test-suite regex
       ]
       
       [ run config_info/regex_config_info.cpp ../build//boost_regex ]
+      [ run collate_info/collate_info.cpp ../build//boost_regex ../../test/build//boost_prg_exec_monitor ]
 
       [ compile concepts/concept_check.cpp ../build//boost_regex
       ]
