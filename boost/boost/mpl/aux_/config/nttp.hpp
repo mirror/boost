@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost mpl/aux_/config/ntp.hpp header file
+// boost mpl/aux_/config/nttp.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -14,43 +14,41 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_MPL_AUX_CONFIG_NTP_HPP_INCLUDED
-#define BOOST_MPL_AUX_CONFIG_NTP_HPP_INCLUDED
+#ifndef BOOST_MPL_AUX_CONFIG_NTTP_HPP_INCLUDED
+#define BOOST_MPL_AUX_CONFIG_NTTP_HPP_INCLUDED
 
-#include "boost/config.hpp"
+#include "boost/mpl/aux_/config/msvc.hpp"
 
 // MSVC 6.5 ICE-s on the code as simple as this:
-/*
-    namespace std {
-    template< typename Char > struct string;
-    }
-
-    void foo(std::string<char>);
-
-    namespace boost {
-    namespace mpl {
-
-    template< int > struct arg;
-
-    }}
-*/
-// the only way to get around the bug is to replace the normal non-type
-// template parameter ('int', 'long', etc.) by an 'enum' type
+//
+//    namespace std {
+//    template< typename Char > struct string;
+//    }
+//
+//    void foo(std::string<char>);
+//
+//    namespace boost { namespace mpl {
+//    template< int > struct arg;
+//    }}
+//
+// fortunately, a workaround is simple as well:
+//
+//    typedef int nttp_int;
+//    template< nttp_int > struct arg;
 
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1300
 
-namespace boost { namespace mpl { namespace aux {
-enum ntp { max_value = 0xffffffff };
-}}}
-
-#   define BOOST_MPL_AUX_NTP_DECL(T, x) aux::ntp x /**/
-#   define BOOST_MPL_AUX_NTP_VALUE(n) aux::ntp(n) /**/
-
-#else
-
-#   define BOOST_MPL_AUX_NTP_DECL(T, x) T x /**/
-#   define BOOST_MPL_AUX_NTP_VALUE(n) n /**/
-
+#if !defined(BOOST_MPL_PREPROCESSING_MODE)
+namespace boost { namespace mpl {
+typedef int     nttp_int;
+typedef long    nttp_long;
+}}
 #endif
 
-#endif // BOOST_MPL_AUX_CONFIG_NTP_HPP_INCLUDED
+#   define BOOST_MPL_AUX_NTTP_DECL(T, x) nttp_##T x /**/
+
+#else
+#   define BOOST_MPL_AUX_NTTP_DECL(T, x) T x /**/
+#endif
+
+#endif // BOOST_MPL_AUX_CONFIG_NTTP_HPP_INCLUDED
