@@ -25,7 +25,7 @@ for_each(v.begin(), v.end(), _1 = 1);</pre>
 	Next, we create a container of pointers and make them point to the elements in the first container <tt>v</tt>:
 
 	<pre class="programlisting">
-list&lt;int*&gt; vp(10); 
+vector&lt;int*&gt; vp(10); 
 transform(v.begin(), v.end(), vp.begin(), &amp;_1);</pre>
 
 The expression <tt>&amp;_1</tt> creates a function object for getting the address of each element in <tt>v</tt>.

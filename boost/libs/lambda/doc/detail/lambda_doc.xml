@@ -444,7 +444,7 @@ Nevertheless, it is straightforward to provide another function template with th
 	Next, we create a container of pointers and make them point to the elements in the first container <literal>v</literal>:
 
 	<programlisting>
-<![CDATA[list<int*> vp(10); 
+<![CDATA[vector<int*> vp(10); 
 transform(v.begin(), v.end(), vp.begin(), &_1);]]></programlisting>
 
 The expression <literal><![CDATA[&_1]]></literal> creates a function object for getting the address of each element in <literal>v</literal>.
