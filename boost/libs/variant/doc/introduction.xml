@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-
 <section id="variant.intro">
   <title>Introduction</title>
+
+  <using-namespace name="boost"/>
 
 <section id="variant.abstract">
   <title>Abstract</title>
@@ -29,7 +30,8 @@ include:</para>
   <listitem>Support for recursive variant types via both
     <code><classname>boost::make_recursive_variant</classname></code> and
     <code><classname>boost::recursive_wrapper</classname></code>.</listitem>
-  <listitem>Efficient, stack-based implementation.</listitem>
+  <listitem>Efficient implementation -- stack-based when possible (see
+    <xref linkend="variant.design.never-empty"/> for more details).</listitem>
 </itemizedlist>
 
 </section>
@@ -68,7 +70,8 @@ manipulated through a common base type (often a virtual base class
     [<link linkend="variant.refs.hen01">Hen01</link>]
 or, more dangerously, a <code>void*</code>). Objects of
 concrete type may be then retrieved by way of a polymorphic downcast
-construct (e.g., <code>dynamic_cast</code>).</para>
+construct (e.g., <code>dynamic_cast</code>,
+<code><functionname>boost::any_cast</functionname></code>, etc.).</para>
 
 <para>However, solutions of this sort are highly error-prone, due
 to the following:</para>
@@ -121,7 +124,7 @@ int main()
     std::cout &lt;&lt; u; // output: hello world
 
     int result = <functionname>boost::apply_visitor</functionname>( my_visitor(), u );
-    std::cout &lt;&lt; result; // output: 11 (i.e. length of "hello world")
+    std::cout &lt;&lt; result; // output: 11 (i.e., length of "hello world")
 }
 </programlisting>
 
