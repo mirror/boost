@@ -138,7 +138,9 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
     you would like to limit your network bandwidth or limit delays in
     building documentation, now might be a good time to download the
     DocBook DTD and XSL stylesheets as described in <xref
-    linkend="boostbook.docbook.config"/>.</para>
+    linkend="boostbook.docbook.config"/>. You should delete or make
+    writable the <code>.html</code> files in
+    <code>$BOOST_ROOT/doc/html</code> before continuing.</para>
 
     <para>Now we can build some documentation. Change to the directory
     <code>$BOOST_ROOT/doc</code> and run <code>bjam --v2</code> to
