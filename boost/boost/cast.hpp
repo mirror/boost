@@ -175,7 +175,7 @@ namespace boost
 #  ifdef LONGLONG_MIN
               return LONGLONG_MIN;
 #  else  
-              return -9223372036854775808LL; // hope this is portable
+               return -( 9223372036854775807LL )-1; // hope this is portable
 #  endif 
           }
       };
