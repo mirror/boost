@@ -49,12 +49,21 @@ struct outer_constructor
   typedef typename mpl::pop_front< ContextList >::type inner_context_list;
   typedef typename mpl::front< inner_context_list >::type::orthogonal_position
     inner_orthogonal_position;
+  typedef typename mpl::advance<
+    typename mpl::begin< inner_initial_list >::type,
+    inner_orthogonal_position >::type to_construct_iter;
 
   typedef typename mpl::erase<
     inner_initial_list,
-    typename mpl::advance<
-      typename mpl::begin< inner_initial_list >::type,
-      inner_orthogonal_position >::type >::type remaining_inner_initial_list;
+    to_construct_iter,
+    typename mpl::end< inner_initial_list >::type
+  >::type first_inner_initial_list;
+
+  typedef typename mpl::erase<
+    inner_initial_list,
+    typename mpl::begin< inner_initial_list >::type,
+    typename to_construct_iter::next
+  >::type last_inner_initial_list;
 
   static void construct(
     const context_ptr_type & pContext, OutermostContext & outermostContext )
@@ -63,11 +72,13 @@ struct outer_constructor
     const inner_context_ptr_type pInnerContext =
       to_construct::shallow_construct( pContext );
     to_construct::template deep_construct_inner<
-      remaining_inner_initial_list >( pInnerContext, outermostContext );
+      first_inner_initial_list >( pInnerContext, outermostContext );
     mpl::front< inner_context_list >::type::reserve_history_slot(
       outermostContext );
     constructor< inner_context_list, OutermostContext >::construct(
       pInnerContext, outermostContext );
+    to_construct::template deep_construct_inner<
+      last_inner_initial_list >( pInnerContext, outermostContext );
   }
 };
 
