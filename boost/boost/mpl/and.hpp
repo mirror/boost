@@ -31,7 +31,7 @@
 // agurt, 19/may/04: workaround a conflict with <iso646.h> header's 
 // 'or' and 'and' macros, see http://tinyurl.com/3et69; 'defined(or)'
 // has to be checked in a separate condition, otherwise GCC complains 
-// about 'or' being an alternative token
+// about 'and' being an alternative token
 #if defined(_MSC_VER) 
 #if defined(and) 
 #   pragma push_macro("and")
