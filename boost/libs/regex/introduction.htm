@@ -87,7 +87,7 @@ tended to be hard-coded to the C-locale, consequently this was
 not an issue for them). That leaves us with the following regular
 expression to validate credit card number formats:</p>
 
-<p>(\d{4}[- ]){3}\d</p>
+<p>(\d{4}[- ]){3}\d{4}</p>
 
 <p>Here the parenthesis act to group (and mark for future
 reference) sub-expressions, and the {4} means &quot;repeat
