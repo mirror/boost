@@ -113,7 +113,7 @@ public:
     ) const {
         // make sure call is routed through the higest interface that might
         // be specialized by the user.
-        boost::serialization::serialize(
+        boost::serialization::serialize_adl(
             boost::smart_cast_reference<Archive &>(ar),
             * static_cast<T *>(x), 
             file_version
