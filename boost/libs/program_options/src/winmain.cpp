@@ -80,6 +80,7 @@ namespace boost { namespace program_options {
         return result;
     }
 
+#ifndef BOOST_NO_STD_WSTRING
     BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring>
     split_winmain(const std::wstring& cmdline)
     {
@@ -89,6 +90,7 @@ namespace boost { namespace program_options {
             result.push_back(from_utf8(aux[i]));
         return result;        
     }
+#endif
 
 }}
 #endif

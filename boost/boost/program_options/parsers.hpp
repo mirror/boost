@@ -183,10 +183,12 @@ namespace boost { namespace program_options {
     BOOST_PROGRAM_OPTIONS_DECL std::vector<std::string>
     split_winmain(const std::string& cmdline);
 
+#ifndef BOOST_NO_STD_WSTRING
     /** @overload */
     BOOST_PROGRAM_OPTIONS_DECL std::vector<std::wstring>
     split_winmain(const std::wstring& cmdline);
     #endif
+#endif
 
 }}
 
