@@ -120,8 +120,9 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
             if (size != size_) {
+                pointer data;
                 if  (size) {
-                    pointer data = alloc.allocate (size);
+                    data = alloc.allocate (size);
                     if (preserve) {
                         const_iterator si = begin();
                         pointer di = data;
