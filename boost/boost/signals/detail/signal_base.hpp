@@ -10,7 +10,7 @@
 //
 // This software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
- 
+
 // For more information, see http://www.boost.org
 
 #ifndef BOOST_SIGNALS_SIGNAL_BASE_HEADER
@@ -75,11 +75,11 @@ namespace boost {
       public:
         call_notification(const shared_ptr<signal_base_impl>&);
         ~call_notification();
-        
+
         shared_ptr<signal_base_impl> impl;
       };
-        
-      // Implementation of base class for all signals. It handles the 
+
+      // Implementation of base class for all signals. It handles the
       // management of the underlying slot lists.
       class BOOST_SIGNALS_DECL signal_base_impl {
       public:
@@ -116,6 +116,9 @@ namespace boost {
         // Are there any connected slots?
         bool empty() const;
 
+        // The number of connected slots
+        std::size_t num_slots() const;
+
         // Disconnect all slots in the given group
         void disconnect(const any&);
 
@@ -133,17 +136,17 @@ namespace boost {
       public:
         // Our call depth when invoking slots (> 1 when we have a loop)
         mutable int call_depth;
-        
+
         struct {
           // True if some slots have disconnected, but we were not able to
-          // remove them from the list of slots because there are valid 
+          // remove them from the list of slots because there are valid
           // iterators into the slot list
           mutable bool delayed_disconnect:1;
-          
+
           // True if we are disconnecting all disconnected slots
           bool clearing:1;
         } flags;
-        
+
         // Slots
         typedef std::multimap<any, connection_slot_pair, compare_type>
           slot_container_type;
@@ -171,7 +174,10 @@ namespace boost {
 
         // Are there any connected slots?
         bool empty() const { return impl->empty(); }
-       
+
+        // How many slots are connected?
+        std::size_t num_slots() const { return impl->num_slots(); }
+
       protected:
         connection connect_slot(const any& slot,
                                 const any& name,

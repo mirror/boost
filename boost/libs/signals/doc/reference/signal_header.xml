@@ -192,6 +192,22 @@
           through a list of disconnected slots to determine if any
           slots are still connected.</simpara></rationale>
         </method>
+
+        <method name="num_slots" cv="const">
+          <type>std::size_t</type>
+          <returns><simpara>The number of slots connected to the signal</simpara></returns>
+
+          <throws><simpara>Will not throw.</simpara></throws>
+
+          <complexity><simpara>Linear in the number of slots known to the
+          signal.</simpara></complexity>
+
+          <rationale><simpara>Slots can disconnect at any point in time,
+          including while those same slots are being invoked. It is
+          therefore possible that the implementation must search
+          through a list of disconnected slots to determine how many
+          slots are still connected.</simpara></rationale>
+        </method>
       </method-group>
 
       <method-group name="invocation">

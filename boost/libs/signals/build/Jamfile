@@ -22,3 +22,10 @@ lib boost_signals : ../src/$(CPP_SOURCES).cpp
     : <sysinclude>$(BOOST_ROOT) <define>BOOST_SIGNALS_STATIC_LINK
     : debug release 
     ;
+
+stage ../../../lib
+    : <dll>boost_signals
+    : <tag><debug>"d"
+    : debug release
+    ;
+

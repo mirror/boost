@@ -80,7 +80,7 @@ test_remove_self()
   BOOST_TEST(test_output == "012");
 
   s0.disconnect_all_slots();
-  BOOST_TEST(s0.empty());
+  BOOST_TEST(s0.num_slots() == 0);
 
   connections[0] = s0.connect(remove_connection(0, 0));
   connections[1] = s0.connect(remove_connection(1));
