@@ -1,3 +1,4 @@
+#include <boost/config.hpp> /* prevents some nasty warns in MSVC */
 #include <utility>
 #include <functional>
 #include <algorithm>
@@ -33,6 +34,8 @@ std::ostream& operator<<(std::ostream& str, custom const& x)
     str << x.m_x;
     return str;
 }
+
+BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(custom)
 
 namespace std {
 
