@@ -69,7 +69,17 @@ The length of the sequence is determined by C(R,X).
 <p>
 <b>I</b> is the state instantiation macro.
 <p>
-<b>R</b> is the recursion depth and should only be used as a parameter to other macros implemented using <a class="el" href="for_8hpp.html#a0">BOOST_PP_FOR</a>() or for invoking BOOST_PP_FOR#R() directly. For each macro implemented using <a class="el" href="for_8hpp.html#a0">BOOST_PP_FOR</a>(), there is a version of the macro, distinguished by the _R suffix, that accepts an additional recursion depth as the first parameter. This technique is necessary to avoid recursively expanding the same macro again, which is not permitted by the C/C++ preprocessor.     </td>
+<b>R</b> is the recursion depth and should only be used as a parameter to other macros implemented using <a class="el" href="for_8hpp.html#a0">BOOST_PP_FOR</a>() or for invoking BOOST_PP_FOR#R() directly. For each macro implemented using <a class="el" href="for_8hpp.html#a0">BOOST_PP_FOR</a>(), there is a version of the macro, distinguished by the _R suffix, that accepts an additional recursion depth as the first parameter. This technique is necessary to avoid recursively expanding the same macro again, which is not permitted by the C++ preprocessor.
+<p>
+<h3><a class="el" href="repeat_8hpp.html#a0">BOOST_PP_REPEAT</a>() vs <a class="el" href="for_8hpp.html#a0">BOOST_PP_FOR</a>()</h3>
+
+<p>
+<a class="el" href="for_8hpp.html#a0">BOOST_PP_FOR</a>() is a generalization of <a class="el" href="repeat_8hpp.html#a0">BOOST_PP_REPEAT</a>(). This means that <a class="el" href="repeat_8hpp.html#a0">BOOST_PP_REPEAT</a>() can be implemented using <a class="el" href="for_8hpp.html#a0">BOOST_PP_FOR</a>(). Unfortunately, <a class="el" href="for_8hpp.html#a0">BOOST_PP_FOR</a>() is slower than <a class="el" href="repeat_8hpp.html#a0">BOOST_PP_REPEAT</a>(). In addition, <a class="el" href="repeat_8hpp.html#a0">BOOST_PP_REPEAT</a>() was introduced earlier, is generally easier to use, and is still quite useful on its own.
+<p>
+<h3>2D and 3D repetition</h3>
+
+<p>
+<a class="el" href="for_8hpp.html#a0">BOOST_PP_FOR</a>() can be used for multidimensional repetition simply by invoking BOOST_PP_FOR#R() directly.     </td>
   </tr>
 </table>
 <hr>

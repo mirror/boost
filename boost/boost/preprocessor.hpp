@@ -28,6 +28,7 @@ Includes all PREPROCESSOR library headers.
 #include <boost/preprocessor/enum_shifted_params.hpp>
 #include <boost/preprocessor/for.hpp>
 #include <boost/preprocessor/limits.hpp>
+#include <boost/preprocessor/list.hpp>
 #include <boost/preprocessor/logical.hpp>
 #include <boost/preprocessor/max.hpp>
 #include <boost/preprocessor/min.hpp>

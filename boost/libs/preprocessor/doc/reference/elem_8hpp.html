@@ -49,6 +49,14 @@
 <p>
 Expands to the I:th element of an N-tuple.
 <p>
+For example,
+<p>
+<pre><div class="fragment"><pre>
+  BOOST_PP_TUPLE_ELEM(2,1,(A,B))
+</pre></div></pre>
+<p>
+expands to B.
+<p>
 Tuples can be used for representing structured data.
 <p>
 Examples of tuples:
@@ -59,15 +67,7 @@ Examples of tuples:
   4-tuple: (A B C, D, EF, 34)
 </pre></div></pre>
 <p>
-Example:
-<p>
-<pre><div class="fragment"><pre>
-  BOOST_PP_TUPLE_ELEM(2,1,(A,B))
-</pre></div></pre>
-<p>
-The above expands to B.
-<p>
-See also BOOST_PP_LIMIT_TUPLE.     </td>
+See BOOST_PP_LIMIT_TUPLE.     </td>
   </tr>
 </table>
 <a name="a1" doxytag="elem.hpp::BOOST_PREPROCESSOR_TUPLE_ELEM"></a><p>

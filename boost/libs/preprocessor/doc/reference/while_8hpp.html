@@ -56,14 +56,14 @@ Iterates F(D,X) while C(D,X) is true.
 <p>
 <b>F</b> is the iterated macro. Note that if the state is a tuple, then F(D,X) usually expands to a tuple of the same number of elements.
 <p>
-<b>D</b> is the recursion depth and should only be used as a parameter to other macros implemented using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>(). Such macros include <a class="el" href="add_8hpp.html#a0">BOOST_PP_ADD</a>() and other arithmetic operations. For each macro implemented using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>(), there is a version of the macro, distinguished by the _D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion depth as the first parameter. This technique is necessary to avoid recursively expanding the same macro again, which is not permitted by the C/C++ preprocessor.
+<b>D</b> is the recursion depth and should only be used as a parameter to other macros implemented using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>(). Such macros include <a class="el" href="add_8hpp.html#a0">BOOST_PP_ADD</a>() and other arithmetic operations. For each macro implemented using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>(), there is a version of the macro, distinguished by the _D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion depth as the first parameter. This technique is necessary to avoid recursively expanding the same macro again, which is not permitted by the C++ preprocessor.
 <p>
 NOTE: The value of the D parameter may exceed BOOST_PP_LIMIT_MAG.
 <p>
 <h3>Usage</h3>
 
 <p>
-Using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>() is a bit tricky. This is due to the C/C++ preprocessor limitations. It is recommended to take a look at the implementations of the various PREPROCESSOR library primitives such as <a class="el" href="add_8hpp.html#a0">BOOST_PP_ADD</a>() for additional examples.
+Using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>() is a bit tricky. This is due to the C++ preprocessor limitations. It is recommended to take a look at the implementations of the various PREPROCESSOR library primitives such as <a class="el" href="add_8hpp.html#a0">BOOST_PP_ADD</a>() for additional examples.
 <p>
 Here is a trivial example that simply counts down from N to 0 ultimately expanding to a 0:
 <p>
@@ -99,7 +99,7 @@ For a more complex example, let's take a look at an implementation of <a class="
   // element of the tuple is the result.
   //
   // #2) The WHILE primitive is "invoked" directly. BOOST_PP_WHILE(D,...)
-  // can't be used because it would not be expanded by the C preprocessor.
+  // can't be used because it would not be expanded by the C++ preprocessor.
   //
   // #3) ???_C is the condition and ???_F is the iteration macro.
 
