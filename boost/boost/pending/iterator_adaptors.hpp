@@ -221,13 +221,18 @@ inline bool operator<=(const iterator_comparisons<D1,Base1>& xb,
 
 namespace detail {
 
-  // Dummy version for iterators that don't support member access
-  template <class Iter, class Cat>
+  // Dummy versions for iterators that don't support member access
+  template <class Iter>
   inline typename Iter::pointer
-  operator_arrow(const Iter&, Cat) {
-    typedef typename Iter::pointer Pointer;
-    return Pointer();
+  operator_arrow(const Iter&, std::input_iterator_tag) {
+    return typename Iter::pointer();
   }
+  template <class Iter>
+  inline typename Iter::pointer
+  operator_arrow(const Iter&, std::output_iterator_tag) {
+    return typename Iter::pointer();
+  }
+
   // Real version
   template <class Iter>
   inline typename Iter::pointer
@@ -236,8 +241,10 @@ namespace detail {
   }
 
   // Dummy version for non-random access iterators 
-  template <class Iter, class Diff, class Cat>
-  inline void advance_impl(Iter&, Diff, Cat) { }
+  template <class Iter, class Diff>
+  inline void advance_impl(Iter&, Diff, std::input_iterator_tag) { }
+  template <class Iter, class Diff>
+  inline void advance_impl(Iter&, Diff, std::output_iterator_tag) { }
 
   // Real version
   template <class Iter, class Diff>
@@ -250,9 +257,11 @@ namespace detail {
 #endif
   }
 
-  // Dummy version for non-bidirectional iterators 
-  template <class Iter, class Cat>
-  inline void decrement_impl(Iter&, Cat) { }
+  // Dummy versions for non-bidirectional iterators 
+  template <class Iter>
+  inline void decrement_impl(Iter&, std::input_iterator_tag) { }
+  template <class Iter>
+  inline void decrement_impl(Iter&, std::output_iterator_tag) { }
 
   // Real version
   template <class Iter>
