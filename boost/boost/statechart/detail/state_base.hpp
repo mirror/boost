@@ -1,7 +1,7 @@
 #ifndef BOOST_FSM_DETAIL_STATE_BASE_HPP_INCLUDED
 #define BOOST_FSM_DETAIL_STATE_BASE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,9 @@ typedef unsigned char orthogonal_position_type;
 //////////////////////////////////////////////////////////////////////////////
 template< class Allocator, class RttiPolicy >
 class state_base :
+  #ifndef NDEBUG
   noncopyable,
+  #endif
   public RttiPolicy::template rtti_base_type<
     // Derived class objects will be created, handled and destroyed by exactly
     // one thread --> locking is not necessary
@@ -86,6 +88,9 @@ class state_base :
     {
     }
 
+    // This destructor is not virtual for performance reasons. The library
+    // ensures that a state object is never deleted through a state_base
+    // pointer but only through a pointer to the most-derived type.
     ~state_base() {}
 
   protected:
