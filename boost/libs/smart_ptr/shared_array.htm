@@ -15,13 +15,13 @@
 			requirements of the C++ Standard Library, and so can be used in standard 
 			library containers. Comparison operators are supplied so that <b>shared_array</b>
 			works with the standard library's associative containers.</p>
-		<p>Normally, a <b>shared_array</b> cannot correctly hold a pointer to a single 
-			dynamically allocated object. See <a href="shared_ptr.htm"><b>shared_ptr</b></a>
-			for that usage.</p>
-		<p>Because the implementation uses reference counting, <b>shared_array</b> will not 
-			work correctly with cyclic data structures. For example, if <b>main()</b> holds 
-			a <b>shared_array</b> to <b>A</b>, which directly or indirectly holds a <b>shared_array</b>
-			back to <b>A</b>, <b>A</b>'s use count will be 2. Destruction of the original <b>shared_array</b>
+		<p>Normally, a <b>shared_array</b> cannot correctly hold a pointer to an object 
+			that has been allocated with the non-array form of <STRONG>new</STRONG>. See <a href="shared_ptr.htm">
+				<b>shared_ptr</b></a> for that usage.</p>
+		<p>Because the implementation uses reference counting, cycles of <b>shared_array</b>
+			instances will not be reclaimed. For example, if <b>main()</b> holds a <b>shared_array</b>
+			to <b>A</b>, which directly or indirectly holds a <b>shared_array</b> back to <b>A</b>,
+			<b>A</b>'s use count will be 2. Destruction of the original <b>shared_array</b> 
 			will leave <b>A</b> dangling with a use count of 1.</p>
 		<p>A <b>shared_ptr</b> to a <b>std::vector</b> is an alternative to a <b>shared_array</b>
 			that is a bit heavier duty but far more flexible.</p>
