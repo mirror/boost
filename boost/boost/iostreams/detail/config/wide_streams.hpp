@@ -29,7 +29,8 @@
 //------------------Wide stream support---------------------------------------//
 
 #ifndef BOOST_IOSTREAMS_NO_WIDE_STREAMS
-# if defined (BOOST_NO_STD_WSTREAMBUF) && \
+# if defined(BOOST_IOSTREAMS_NO_STREAM_TEMPLATES) || \
+     defined (BOOST_NO_STD_WSTREAMBUF) && \
      ( !defined(__MSL_CPP__) || defined(_MSL_NO_WCHART_CPP_SUPPORT) ) \
      /**/
 #  define BOOST_IOSTREAMS_NO_WIDE_STREAMS

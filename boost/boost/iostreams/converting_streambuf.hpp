@@ -11,7 +11,14 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif          
+
+#include <boost/iostreams/detail/config/wide_streams.hpp>
+#if defined(BOOST_IOSTREAMS_NO_WIDE_STREAMS) || \
+    defined(BOOST_IOSTREAMS_NO_LOCALE) \
+    /**/
+# error code conversion not supported on this platform
+#endif
 
 #include <boost/iostreams/filtering_streambuf.hpp>
 #include <boost/detail/converting_chain.hpp>

@@ -5,121 +5,114 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #include <boost/iostreams/detail/config/wide_streams.hpp>
+#ifdef BOOST_IOSTREAMS_NO_WIDE_STREAMS
+# error wide streams not supported on this platform
+#endif
+
+#include <algorithm>         // equal.
+#include <locale>
+#include <string>
+#include <boost/config.hpp>  // BOOST_DEDUCED_TYPENAME.
+#include <boost/iostreams/code_converter.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/detail/add_facet.hpp>
+#include <boost/iostreams/device/back_inserter.hpp>
+#include <boost/iostreams/device/file.hpp>
+#include <boost/iostreams/device/file_descriptor.hpp>
+#include <boost/iostreams/stream_facade.hpp>
+#include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
-
-using boost::unit_test_framework::test_suite;     
-
-#if defined(BOOST_IOSTREAMS_NO_LOCALE) || \
-    defined(BOOST_IOSTREAMS_NO_WIDE_STREAMS) \
-    /**/
-    void code_converter_test()
-    {
-        const bool wide_streams_unsupported_on_this_platform = false;
-        BOOST_CHECK(wide_streams_unsupported_on_this_platform);
-    }
-#else 
-# include <algorithm>                     // equal.
-# include <locale>
-# include <string>
-# include <boost/config.hpp> // BOOST_DEDUCED_TYPENAME.
-# include <boost/iostreams/code_converter.hpp>
-# include <boost/iostreams/copy.hpp>
-# include <boost/iostreams/detail/add_facet.hpp>
-# include <boost/iostreams/device/back_inserter.hpp>
-# include <boost/iostreams/device/file.hpp>
-# include <boost/iostreams/device/file_descriptor.hpp>
-# include <boost/iostreams/stream_facade.hpp>
-# include <boost/test/test_tools.hpp>
-# include "detail/temp_file.hpp"
+#include "detail/temp_file.hpp"
 
     // Include codevct facets
 
-# include "detail/null_padded_codecvt.hpp"
-# include "detail/utf8_codecvt_facet.hpp"
-#  ifdef BOOST_IOSTREAMS_USE_DINKUM_COREX
-#  include <codecvt/8859_1>  
-#  include <codecvt/8859_10> 
-#  include <codecvt/8859_13> 
-#  include <codecvt/8859_14> 
-#  include <codecvt/8859_15> 
-#  include <codecvt/8859_16> 
-#  include <codecvt/8859_2>  
-#  include <codecvt/8859_3>  
-#  include <codecvt/8859_4>  
-#  include <codecvt/8859_5>  
-#  include <codecvt/8859_6> 
-#  include <codecvt/8859_7> 
-#  include <codecvt/8859_8> 
-#  include <codecvt/8859_9> 
-#  include <codecvt/baltic> 
-#  include <codecvt/big5>   
-#  include <codecvt/cp037>  
-#  include <codecvt/cp1006> 
-#  include <codecvt/cp1026> 
-#  include <codecvt/cp1250> 
-#  include <codecvt/cp1251> 
-#  include <codecvt/cp1252> 
-#  include <codecvt/cp1253> 
-#  include <codecvt/cp1254> 
-#  include <codecvt/cp1255> 
-#  include <codecvt/cp1256> 
-#  include <codecvt/cp1257> 
-#  include <codecvt/cp1258> 
-#  include <codecvt/cp424>  
-#  include <codecvt/cp437>  
-#  include <codecvt/cp500> 
-#  include <codecvt/cp737> 
-#  include <codecvt/cp775> 
-#  include <codecvt/cp850> 
-#  include <codecvt/cp852> 
-#  include <codecvt/cp855> 
-#  include <codecvt/cp856> 
-#  include <codecvt/cp857> 
-#  include <codecvt/cp860> 
-#  include <codecvt/cp861> 
-#  include <codecvt/cp862> 
-#  include <codecvt/cp863> 
-#  include <codecvt/cp864> 
-#  include <codecvt/cp865> 
-#  include <codecvt/cp866> 
-#  include <codecvt/cp869> 
-#  include <codecvt/cp874> 
-#  include <codecvt/cp875> 
-#  include <codecvt/cp932> 
-#  include <codecvt/cp936> 
-#  include <codecvt/cp949>    
-#  include <codecvt/cp950>    
-#  include <codecvt/cyrillic> 
-#  include <codecvt/ebcdic>   
-#  include <codecvt/euc>      
-#  include <codecvt/euc_0208> 
-#  include <codecvt/gb12345>  
-#  include <codecvt/gb2312>   
-#  include <codecvt/greek>    
-#  include <codecvt/iceland>  
-#  include <codecvt/jis>       
-#  include <codecvt/jis_0208>  
-#  include <codecvt/jis0201>   
-#  include <codecvt/ksc5601>   
-#  include <codecvt/latin2>    
-#  include <codecvt/one_one>   
-#  include <codecvt/roman>     
-#  include <codecvt/sjis>      
-#  include <codecvt/sjis_0208> 
-#  include <codecvt/turkish>
-#  include <codecvt/utf16>
-#  include <codecvt/utf8>
-#  include <codecvt/utf8_utf16>
-#  include <codecvt/xjis>
-# endif // #ifdef BOOST_IOSTREAMS_USE_DINKUM_COREX
+#include "detail/null_padded_codecvt.hpp"
+#include "detail/utf8_codecvt_facet.hpp"
+#ifdef BOOST_IOSTREAMS_USE_DINKUM_COREX
+# include <codecvt/8859_1> 
+# include <codecvt/8859_10> 
+# include <codecvt/8859_13> 
+# include <codecvt/8859_14> 
+# include <codecvt/8859_15> 
+# include <codecvt/8859_16> 
+# include <codecvt/8859_2>  
+# include <codecvt/8859_3>  
+# include <codecvt/8859_4>  
+# include <codecvt/8859_5>  
+# include <codecvt/8859_6> 
+# include <codecvt/8859_7> 
+# include <codecvt/8859_8> 
+# include <codecvt/8859_9> 
+# include <codecvt/baltic> 
+# include <codecvt/big5>   
+# include <codecvt/cp037>  
+# include <codecvt/cp1006> 
+# include <codecvt/cp1026> 
+# include <codecvt/cp1250> 
+# include <codecvt/cp1251> 
+# include <codecvt/cp1252> 
+# include <codecvt/cp1253> 
+# include <codecvt/cp1254> 
+# include <codecvt/cp1255> 
+# include <codecvt/cp1256> 
+# include <codecvt/cp1257> 
+# include <codecvt/cp1258> 
+# include <codecvt/cp424>  
+# include <codecvt/cp437>  
+# include <codecvt/cp500> 
+# include <codecvt/cp737> 
+# include <codecvt/cp775> 
+# include <codecvt/cp850> 
+# include <codecvt/cp852> 
+# include <codecvt/cp855> 
+# include <codecvt/cp856> 
+# include <codecvt/cp857> 
+# include <codecvt/cp860> 
+# include <codecvt/cp861> 
+# include <codecvt/cp862> 
+# include <codecvt/cp863> 
+# include <codecvt/cp864> 
+# include <codecvt/cp865> 
+# include <codecvt/cp866> 
+# include <codecvt/cp869> 
+# include <codecvt/cp874> 
+# include <codecvt/cp875> 
+# include <codecvt/cp932> 
+# include <codecvt/cp936> 
+# include <codecvt/cp949>    
+# include <codecvt/cp950>    
+# include <codecvt/cyrillic> 
+# include <codecvt/ebcdic>   
+# include <codecvt/euc>      
+# include <codecvt/euc_0208> 
+# include <codecvt/gb12345>  
+# include <codecvt/gb2312>   
+# include <codecvt/greek>    
+# include <codecvt/iceland>  
+# include <codecvt/jis>       
+# include <codecvt/jis_0208>  
+# include <codecvt/jis0201>   
+# include <codecvt/ksc5601>   
+# include <codecvt/latin2>    
+# include <codecvt/one_one>   
+# include <codecvt/roman>     
+# include <codecvt/sjis>      
+# include <codecvt/sjis_0208> 
+# include <codecvt/turkish>
+# include <codecvt/utf16>
+# include <codecvt/utf8>
+# include <codecvt/utf8_utf16>
+# include <codecvt/xjis>
+#endif // #ifdef BOOST_IOSTREAMS_USE_DINKUM_COREX
 
 using namespace std;
 using namespace boost::iostreams;
 using namespace boost::iostreams::detail;
 using namespace boost::iostreams::test;
+using boost::unit_test_framework::test_suite;     
 
 const int max_length = 30;
-const int string_length = 100;
+const unsigned int string_length = 100;
 
 template<typename Codecvt>
 bool valid_char(typename codecvt_intern<Codecvt>::type c)
@@ -299,8 +292,6 @@ void code_converter_test()
     BOOST_CHECK(codecvt_test< codecvt_utf8_utf16<wchar_t> >());
 #endif
 }
-
-#endif // #ifdef BOOST_IOSTREAMS_NO_LOCALE
 
 test_suite* init_unit_test_suite(int, char* []) 
 {

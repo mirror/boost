@@ -4,38 +4,28 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-#include <boost/iostreams/detail/config/wide_streams.hpp> // BOOST_IOSTREAMS_NO_WIDE_STREAMS
+#include <boost/iostreams/detail/config/wide_streams.hpp>
+#ifdef BOOST_IOSTREAMS_NO_WIDE_STREAMS 
+# error wide streams not supported on this platform
+#endif
+
+#include <sstream>
+#include <vector>
+#include <boost/iostreams/device/back_inserter.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
+#include <boost/range/iterator_range.hpp>
+#include "detail/filters.hpp"
+#include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
-
-using boost::unit_test_framework::test_suite;     
-
-#ifdef BOOST_IOSTREAMS_NO_WIDE_STREAMS //-------------------------------------//
-    void read_wide_input_test()
-    {
-        const bool wide_streams_unsupported_on_this_platform = false;
-        BOOST_CHECK(wide_streams_unsupported_on_this_platform);
-    }
-    void write_wide_output_test()
-    {
-        const bool wide_streams_unsupported_on_this_platform = false;
-        BOOST_CHECK(wide_streams_unsupported_on_this_platform);
-    }
-#else // #ifdef BOOST_IOSTREAMS_NO_WIDE_STREAMS //----------------------------//
-# include <sstream>
-# include <vector>
-# include <boost/iostreams/device/back_inserter.hpp>
-# include <boost/iostreams/filtering_stream.hpp>
-# include <boost/range/iterator_range.hpp>
-# include "detail/filters.hpp"
-# include <boost/test/test_tools.hpp>
-# include "detail/sequence.hpp"
-# include "detail/temp_file.hpp"
-# include "detail/verification.hpp"
+#include "detail/sequence.hpp"
+#include "detail/temp_file.hpp"
+#include "detail/verification.hpp"
 
 using namespace std;
 using namespace boost;
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
+using boost::unit_test_framework::test_suite;   
 
 void read_wide_input_test()
 {
@@ -136,8 +126,6 @@ void write_wide_output_test()
         );
     }
 }
-
-#endif // #ifdef BOOST_IOSTREAMS_NO_WIDE_STREAMS //---------------------------//
 
 test_suite* init_unit_test_suite(int, char* []) 
 {
