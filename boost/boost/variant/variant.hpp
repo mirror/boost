@@ -29,7 +29,6 @@
 #include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/variant/detail/has_nothrow_move.hpp"
 #include "boost/variant/detail/move.hpp"
-#include "boost/variant/detail/reference_content.hpp"
 
 #include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
@@ -37,6 +36,7 @@
 #include "boost/mpl/aux_/deref_wknd.hpp"
 #include "boost/mpl/aux_/value_wknd.hpp"
 
+#include "boost/detail/reference_content.hpp"
 #include "boost/aligned_storage.hpp"
 #include "boost/compressed_pair.hpp"
 #include "boost/empty.hpp"
@@ -52,7 +52,6 @@
 #include "boost/type_traits/add_const.hpp"
 #include "boost/type_traits/is_const.hpp"
 #include "boost/type_traits/is_same.hpp"
-#include "boost/type_traits/is_reference.hpp"
 #include "boost/variant/static_visitor.hpp"
 
 #include "boost/mpl/apply_if.hpp"
@@ -442,28 +441,28 @@ public: // visitor interfaces
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(incomplete<T>& operand)
+    operator()(boost::incomplete<T>& operand)
     {
         return visit(operand.get());
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(const incomplete<T>& operand)
+    operator()(const boost::incomplete<T>& operand)
     {
         return visit(operand.get());
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(reference_content<T>& operand)
+    operator()(boost::detail::reference_content<T>& operand)
     {
         return visit(operand.get());
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(const reference_content<T>& operand)
+    operator()(const boost::detail::reference_content<T>& operand)
     {
         return visit(operand.get());
     }
@@ -481,28 +480,28 @@ private: // helpers, for visitor interfaces (below)
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    execute_impl(incomplete<T>& operand, long)
+    execute_impl(boost::incomplete<T>& operand, long)
     {
         return visit(operand.get());
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    execute_impl(const incomplete<T>& operand, long)
+    execute_impl(const boost::incomplete<T>& operand, long)
     {
         return visit(operand.get());
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    execute_impl(reference_content<T>& operand, long)
+    execute_impl(boost::detail::reference_content<T>& operand, long)
     {
         return visit(operand.get());
     }
 
     template <typename T>
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    execute_impl(const reference_content<T>& operand, long)
+    execute_impl(const boost::detail::reference_content<T>& operand, long)
     {
         return visit(operand.get());
     }
@@ -607,83 +606,19 @@ public: // static functions
 #endif // !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) metafunction handle_reference
+// (detail) metafunction class handle_recursive_reference_content
 //
-// Wraps with reference_content if specified type is reference.
-//
-// No-op (identity) if BOOST_VARIANT_NO_REFERENCE_SUPPORT is defined.
-//
-
-#if defined(BOOST_VARIANT_NO_REFERENCE_SUPPORT)
-
-template <typename T>
-struct handle_reference
-{
-    typedef T type;
-};
-
-#elif !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-
-template <typename T>
-struct handle_reference
-{
-    typedef T type;
-};
-
-template <typename T>
-struct handle_reference< T& >
-{
-    typedef reference_content<T&> type;
-};
-
-#else // defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-
-template <typename T>
-struct handle_reference
-    : mpl::if_<
-          is_reference<T>
-        , reference_content<T>
-        , T
-        >
-{
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION workaround
-
-///////////////////////////////////////////////////////////////////////////////
-// (detail) metafunction class quoted_handle_reference
-//
-// Same behavior as handle_reference metafunction (see above).
-//
-struct quoted_handle_reference
-{
-    template <typename T>
-    struct apply
-        : handle_reference<T>
-    {
-    };
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// (detail) metafunction class quoted_handle_reference_recursive
-//
-// Applies handle_reference to result of enable_recursive.
+// Applies make_reference_content to result of enable_recursive.
 //
 template <typename RecursiveVariant>
-struct quoted_handle_reference_recursive
+struct handle_recursive_reference_content
 {
     template <typename T>
     struct apply
+        : boost::detail::make_reference_content<
+              typename enable_recursive<T,RecursiveVariant>::type
+            >
     {
-    private:
-        typedef typename enable_recursive<
-              T,RecursiveVariant
-            >::type recursive_enabled_;
-
-    public:
-        typedef typename handle_reference<
-              recursive_enabled_
-            >::type type;
     };
 };
 
@@ -717,8 +652,8 @@ private: // helpers, for typedefs (below)
 
     typedef typename mpl::if_<
           is_recursive_
-        , detail::variant::quoted_handle_reference_recursive<wknd_self_t>
-        , detail::variant::quoted_handle_reference
+        , detail::variant::handle_recursive_reference_content<wknd_self_t>
+        , detail::make_reference_content<>
         >::type transform_op_;
 
     typedef typename mpl::apply_if<
@@ -1105,13 +1040,13 @@ private: // helpers, for structors, cont. (below)
     public: // visitor interfaces
 
         template <typename T>
-        int operator()(detail::variant::reference_content<T>& operand) const
+        int operator()(boost::detail::reference_content<T>& operand) const
         {
             return execute( operand.get() );
         }
 
         template <typename T>
-        int operator()(const detail::variant::reference_content<T>& operand) const
+        int operator()(const boost::detail::reference_content<T>& operand) const
         {
             return execute( operand.get() );
         }
@@ -1267,7 +1202,7 @@ private: // helpers, for structors, cont. (below)
         , int
         )
     {
-        detail::variant::reference_content<T&> r(operand);
+        boost::detail::reference_content<T&> r(operand);
         convert_construct(r);
     }
 
@@ -1278,7 +1213,7 @@ public: // structors, cont.
     {
         typedef typename mpl::contains<
               internal_types
-            , detail::variant::reference_content<T&>
+            , boost::detail::reference_content<T&>
             >::type ref_is_bounded;
 
         reference_construct(operand, ref_is_bounded(), 1L);
