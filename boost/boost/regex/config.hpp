@@ -205,7 +205,7 @@ using std::distance;
 #  define BOOST_REGEX_HAS_DLL_RUNTIME
 #endif
 
-#if defined(__ICL) && defined(_DLL)
+#if (defined(__ICL) || defined(__COMO__)) && defined(_DLL)
 #  define BOOST_REGEX_HAS_DLL_RUNTIME
 #endif
 
@@ -576,6 +576,10 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block(void*);
  *  Diagnostics:
  *
  ****************************************************************************/
+
+#ifdef BOOST_REGEX_CONFIG_INFO
+BOOST_REGEX_DECL void BOOST_REGEX_CALL print_regex_library_info();
+#endif
  
 #if defined(BOOST_REGEX_DIAG)
 #  pragma message ("BOOST_REGEX_DECL set as: " BOOST_STRINGIZE(BOOST_REGEX_DECL))
