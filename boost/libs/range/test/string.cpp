@@ -8,7 +8,8 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
-#include <boost/range.hpp>
+#include <boost/range/functions.hpp>
+#include <boost/range/types.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/test/test_tools.hpp>
@@ -82,7 +83,8 @@ void check_char()
     
     BOOST_CHECK_EQUAL( begin( my_string ), my_string );
     const char* end2 = begin( my_string ) + size( my_string );
-    BOOST_CHECK_EQUAL( end( my_string ), end2 );
+	const char* end3 = end( my_string );
+    BOOST_CHECK_EQUAL( end3, end2 );
     BOOST_CHECK_EQUAL( empty( my_string ), (my_string == 0 || my_string[0] == char()) );
     BOOST_CHECK_EQUAL( size( my_string ), my_string_length );
     BOOST_CHECK_EQUAL( size( my_string ), std::char_traits<char>::length( my_string ) );
@@ -91,6 +93,7 @@ void check_char()
     char to_search = 'n';
     BOOST_CHECK( find( char_s, to_search ) != end( char_s ) );
     BOOST_CHECK( find( my_string, to_search ) != end( my_string ) );
+	
 }
 
 
@@ -129,7 +132,7 @@ void check_string()
 #endif  
     
     find( check_rvalue_return(), 'n' );
-    
+ 
 }
 
 
