@@ -9,10 +9,10 @@
 
 /*
 
-  This file verifies that the BOOST_FUNCTION_REQUIRES macros of the
-  Boost Concept Checking Library do not cause errors when they are not
-  suppose to and verifies that the concept archetypes meet the
-  requirements of their matching concepts.
+  This file verifies that function_requires() of the Boost Concept
+  Checking Library does not cause errors when it is not suppose to
+  and verifies that the concept archetypes meet the requirements of
+  their matching concepts.
 
 */
 
