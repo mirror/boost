@@ -9,6 +9,9 @@
 
 #define BOOST_PLATFORM "linux"
 
+// make sure we have __GLIBC_PREREQ if available at all
+#include <cstdlib>
+
 //
 // stdint.h added to glibc 2.1.1
 // We can only test for 2.1 though:
@@ -17,8 +20,15 @@
 #define BOOST_HAS_STDINT_H
 #endif
 
-#if !defined(__GLIBC__) || !defined(__GLIBC_PREREQ) || !__GLIBC_PREREQ(2,2) || (!defined(__USE_ISOC99) && !defined(__USE_UNIX98))
-#define BOOST_NO_SWPRINTF
+#if defined(__GLIBC__) && defined(__GLIBC_PREREQ)
+// __GLIBC_PREREQ is available since 2.1.2
+
+   // swprintf added to glibc 2.2.0
+#  if !__GLIBC_PREREQ(2,2) || (!defined(__USE_ISOC99) && !defined(__USE_UNIX98))
+#    define BOOST_NO_SWPRINTF
+#  endif
+#else
+#  define BOOST_NO_SWPRINTF
 #endif
 
 #ifndef __GNUC__
@@ -46,8 +56,4 @@
 #     define __inline__ inline
 #  endif
 #endif
-
- 
-
-
 
