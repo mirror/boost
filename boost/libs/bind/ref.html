@@ -91,6 +91,7 @@ public:
     <a href="#rt_operator">operator T &amp;</a> () const;
 
     T &amp; <a href="#rt_get">get</a>() const;
+    T* <a href="#rt_get_pointer">get_pointer</a>() const;
 };
 </pre>
 			<h4><a name="rt_construct">explicit reference_wrapper(T &amp; t)</a></h4>
@@ -116,6 +117,15 @@ public:
 			<blockquote>
 				<p>
 					<b>Returns:</b> the stored reference.
+				</p>
+				<p>
+					<b>Throws:</b> Nothing.
+				</p>
+			</blockquote>
+<h4><a name="rt_get_pointer">T* get_pointer() const</a></h4>
+			<blockquote>
+				<p>
+					<b>Returns:</b> a pointer to the stored object.
 				</p>
 				<p>
 					<b>Throws:</b> Nothing.
