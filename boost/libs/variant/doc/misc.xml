@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+  "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+
+<section id="variant.misc">
+  <title>Miscellaneous Notes</title>
+
+<section id="variant.versus-any">
+  <title>Boost.Variant vs. Boost.Any</title>
+
+  <para>TODO</para>
+
+</section>
+
+<section>
+  <title>Portability</title>
+
+  <para>The library aims for 100% ANSI/ISO C++ conformance. However, this is
+    strictly impossible due to the inherently non-portable nature of the
+    <libraryname>Type Traits</libraryname> library's
+    <code>type_with_alignment</code> facility. In practice though, no
+    compilers or platforms have been discovered where this reliance on
+    undefined behavior has been an issue.</para>
+
+  <para>Additionally, significant effort has been expended to ensure proper
+    functioning despite various compiler bugs and other conformance problems.
+    To date the library <link linkend="variant.tests">testsuite</link> has
+    been compiled and tested successfully for basic functionality on at least
+    the following compilers:</para>
+
+  <itemizedlist>
+    <listitem>Microsoft Visual C++, versions 6 SP5, 7.0, and 7.1</listitem>
+    <listitem>GNU GCC, versions 2.95.3, 3.1, 3.2.3, and 3.3.1</listitem>
+    <listitem>Metrowerks CodeWarrior Pro 8.3</listitem>
+    <listitem>Intel C++ 7.1</listitem>
+    <listitem>Comeau C++ 4.3.0</listitem>
+    <listitem>Borland C++Builder versions 5.5.1 and 5.6.4</listitem>
+  </itemizedlist>
+
+  <para>The current state of the testsuite in CVS may be found on the
+    <ulink url="http://boost.sourceforge.net/regression-logs">Test Summary</ulink>
+    page. Please note, however, that this page reports on pre-release code
+    found in the Boost CVS and likely does not match the state of code found
+    in Boost releases.</para>
+
+</section>
+
+<section id="variant.troubleshooting">
+  <title>Troubleshooting</title>
+
+<para>Due to the heavy use of templates in the implementation of
+  <code>variant</code>, it is not uncommon when compiling to encounter
+  problems related to template instantiaton depth, compiler memory, etc. This
+  section attempts to provide advice to common problems experienced on several
+  popular compilers.</para>
+  
+<para>(This section is still in progress, with additional advice/feedback
+  welcome. Please post to the Boost-Users list with any useful experiences you
+  may have.)</para>
+
+  <section id="variant.troubleshooting.template-depth">
+    <title>&quot;Template instantiation depth exceeds maximum&quot;</title>
+    
+    <section id="variant.troubleshooting.template-depth.gcc">
+      <title>GNU GCC</title>
+      <para>The compiler option
+        <code>-ftemplate-depth-<emphasis>NN</emphasis></code> can increase the
+        maximum allowed instantiation depth. (Try
+        <code>-ftemplate-depth-50</code>.)</para>
+    </section>
+  </section>
+  
+  <section id="variant.troubleshooting.compiler-memory">
+    <title>&quot;Internal heap limit reached&quot;</title>
+    
+    <section id="variant.troubleshooting.compiler-memory.msvc">
+      <title>Microsoft Visual C++</title>
+      <para>The compiler option <code>/Zm<emphasis>NNN</emphasis></code> can
+        increase the memory allocation limit. The <code>NNN</code> is a
+        scaling percentage (i.e., <code>100</code> denotes the default limit).
+        (Try <code>/Zm200</code>.)</para>
+    </section>
+  </section>
+
+</section>
+
+</section>

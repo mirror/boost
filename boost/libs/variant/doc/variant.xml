@@ -45,6 +45,9 @@
 <!--
   <xi:include href="design.xml"/>
   <xi:include href="rationale.xml"/>
+-->
+  <xi:include href="misc.xml"/>
+<!--
   <xi:include href="tests.xml"/>
 -->
   <xi:include href="credits.xml"/>
