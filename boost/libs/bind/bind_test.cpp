@@ -1,4 +1,4 @@
-#if defined(_MSC_VER) && !defined(__ICL)
+#if defined(_MSC_VER) && !defined(__ICL) && !defined(__COMO__)
 #pragma warning(disable: 4786)  // identifier truncated in debug info
 #pragma warning(disable: 4710)  // function not inlined
 #pragma warning(disable: 4711)  // function selected for automatic inline expansion
