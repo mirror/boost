@@ -15,7 +15,7 @@
 
 #include <boost/config.hpp>
 
-#if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
+#if !defined(BOOST_MSVC)
 #define BOOST_USE_ITERATOR_ADAPTORS
 #endif
 
