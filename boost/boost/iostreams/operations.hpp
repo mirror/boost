@@ -446,9 +446,17 @@ struct close_impl
 template<>
 struct close_impl<any_tag> {
     template<typename T>
-    static void close(T&, BOOST_IOS::openmode) { }
+    static void close(T& t, BOOST_IOS::openmode which) 
+    { 
+        if ((which & BOOST_IOS::out) != 0)
+            iostreams::flush(t); 
+    }
     template<typename T, typename Sink>
-    static void close(T&, Sink&, BOOST_IOS::openmode) { }
+    static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
+    { 
+        if ((which & BOOST_IOS::out) != 0)
+            iostreams::flush(t, snk); 
+    }
 };
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // Borland.
@@ -504,18 +512,14 @@ template<>
 struct flush_device_impl<ostream_tag> {
     template<typename T>
     static bool flush(T& t)
-    { 
-        bool result;
-        if (!(result = t.flush()))
-            t.clear();
-        return result;
-    }
+    { return t.rdbuf()->BOOST_IOSTREAMS_PUBSYNC() == 0; }
 };
 
 template<>
 struct flush_device_impl<streambuf_tag> {
     template<typename T>
-    static bool flush(T& t) { return t.BOOST_IOSTREAMS_PUBSYNC(); }
+    static bool flush(T& t) 
+    { return t.BOOST_IOSTREAMS_PUBSYNC() == 0; }
 };
 
 template<>
@@ -527,10 +531,10 @@ struct flush_device_impl<flushable_tag> {
 template<>
 struct flush_device_impl<any_tag> {
     template<typename T>
-    static bool flush(T& t) { return false; }
+    static bool flush(T& t) { return true; }
 };
 
-//------------------Definition of flush_impl----------------------------------//
+//------------------Definition of flush_filter_impl---------------------------//
 
 template<typename T>
 struct flush_filter_impl 
