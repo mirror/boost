@@ -122,7 +122,7 @@ bool is_char_ptr(const boost::any &amp; operand)
 {
     try
     {
-        any_ptr&lt;const char *&gt;(operand);
+        any_cast&lt;const char *&gt;(operand);
         return true;
     }
     catch(const boost::bad_any_cast &amp;)
@@ -133,7 +133,7 @@ bool is_char_ptr(const boost::any &amp; operand)
 
 bool is_string(const boost::any &amp; operand)
 {
-    return any_ptr&lt;std::string&gt;(&amp;operand);
+    return any_cast&lt;std::string&gt;(&amp;operand);
 }
 
 void count_all(many &amp; values, std::ostream &amp; out)
