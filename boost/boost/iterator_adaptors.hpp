@@ -777,25 +777,6 @@ struct reverse_iterator_policies : public default_iterator_policies
         { return y < x; }
 };
   
-template <class Iterator,
-          class Traits = boost::detail::iterator_traits<Iterator>
-         >
-struct reverse_iterator_generator
-{
-    typedef iterator_adaptor<Iterator, reverse_iterator_policies,
-        Traits> type;
-};
-
-template <class Iterator>
-inline typename reverse_iterator_generator<Iterator>::type
-make_reverse_iterator(Iterator base)
-{
-    typedef typename reverse_iterator_generator<Iterator>::type result_t;
-    return result_t(base);
-}
-
-template <class T> struct undefined;
-
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 namespace detail {
    template <bool is_pointer>
@@ -845,22 +826,20 @@ template <class Iterator,
     class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::iterator_category,
     class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::difference_type
          >
-struct reverse_iterator_generator2
+struct reverse_iterator_generator
 {
     typedef typename boost::remove_const<Value>::type value_type;
     typedef typename boost::iterator<Category,value_type,Distance,Pointer,Reference> traits;
     typedef iterator_adaptor<Iterator,reverse_iterator_policies,traits> type;
 };
 
-//#ifndef BOOST_MSVC
 template <class Iterator>
-inline typename reverse_iterator_generator2<Iterator>::type
-make_reverse_iterator2(Iterator base)
+inline typename reverse_iterator_generator<Iterator>::type
+make_reverse_iterator(Iterator base)
 {
-    typedef typename reverse_iterator_generator2<Iterator>::type result_t;
+    typedef typename reverse_iterator_generator<Iterator>::type result_t;
     return result_t(base);
 }
-//#endif
 
 //=============================================================================
 // Projection Iterators Adaptor
